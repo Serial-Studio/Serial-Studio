@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=SigLAB
+Comment=Serial data processing & visualization software
+Exec=siglab
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Electronics;Engineering;Science;
+Icon=siglab

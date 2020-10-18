@@ -1,0 +1,25 @@
+{
+  "updates": {
+    "windows": {
+      "open-url": "https://github.com/alex-spataru/SigLAB/releases/latest",
+      "latest-version": "1.0.1",
+      "download-url": "",
+      "changelog": "",
+      "mandatory": true
+    },
+    "osx": {
+      "open-url": "https://github.com/alex-spataru/SigLAB/releases/latest",
+      "latest-version": "1.0.1",
+      "download-url": "",
+      "changelog": "",
+      "mandatory": true
+    },
+    "linux": {
+      "open-url": "https://github.com/alex-spataru/SigLAB/releases/latest",
+      "latest-version": "1.0.1",
+      "download-url": "",
+      "changelog": "",
+      "mandatory": true
+    }
+  }
+}
