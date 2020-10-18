@@ -1,6 +1,4 @@
 mkdir build
 cd build
-g++ --version
-qmake --version
-qmake ../*.pro
-make -j 4
+/opt/qt515/bin/qmake PREFIX=/usr
+make

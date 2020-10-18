@@ -3,8 +3,7 @@ git:
   depth: 1
 root: required
 dist: xenial
-env:
-  - VERSION="1.2.0"
+
 install:
 - bash ci-scripts/$TRAVIS_OS_NAME/install.sh
 script:
@@ -12,6 +11,6 @@ script:
 jobs:
   include:
   - os: osx
-    osx_image: xcode10.1
-  #- os: linux
-  #  compiler: gcc
+    osx_image: xcode12.0.1
+  - os: linux
+    compiler: gcc
