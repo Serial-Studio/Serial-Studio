@@ -34,37 +34,48 @@ ApplicationWindow {
     title: qsTr("About")
     minimumWidth: 320
     maximumWidth: 320
-    minimumHeight: 480
-    maximumHeight: 480
+    minimumHeight: column.implicitHeight * 1.25
+    maximumHeight: column.implicitHeight * 1.25
 
     background: Rectangle {
         color: Qt.darker(palette.base)
     }
 
     ColumnLayout {
+        id: column
         anchors.fill: parent
         spacing: app.spacing
         anchors.margins: 2 * app.spacing
 
-        Image {
-            width: sourceSize.width
-            height: sourceSize.height
-            sourceSize.width: parent.width
-            source: "qrc:/images/logo.svg"
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        Label {
-            opacity: 0.5
-            font.pixelSize: 18
+        RowLayout {
+            spacing: app.spacing
             Layout.fillWidth: true
-            font.family: app.monoFont
-            horizontalAlignment: Text.AlignRight
-            text: qsTr("Version %1").arg(CppAppVersion)
-        }
 
-        Item {
-            height: app.spacing
+            Image {
+                width: 96
+                height: 96
+                source: "qrc:/images/icon.png"
+                Layout.alignment: Qt.AlignVCenter
+                sourceSize: Qt.size(width, height)
+            }
+
+            ColumnLayout {
+                spacing: app.spacing
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+
+                Label {
+                    font.bold: true
+                    text: CppAppName
+                    font.pixelSize: 28
+                }
+
+                Label {
+                    opacity: 0.5
+                    font.pixelSize: 16
+                    text: qsTr("Version %1").arg(CppAppVersion)
+                }
+            }
         }
 
         Label {
@@ -80,7 +91,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             color: palette.highlightedText
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            text: "The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE."
+            text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.")
         }
 
         Item {
@@ -101,13 +112,16 @@ ApplicationWindow {
 
         Button {
             Layout.fillWidth: true
-            text: qsTr("Latest releases")
-            onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/releases/latest")
+            text: qsTr("Check for updates")
+            onClicked: {
+                CppUpdater.setNotifyOnFinish(CppAppUpdaterUrl, true)
+                CppUpdater.checkForUpdates(CppAppUpdaterUrl)
+            }
         }
 
         Button {
             Layout.fillWidth: true
-            text: qsTr("SigLAB/MCU communication tutorial")
+            text: qsTr("Documentation")
             onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
         }
 

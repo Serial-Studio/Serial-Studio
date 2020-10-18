@@ -27,5 +27,6 @@
 #define APP_VERSION "1.0.1"
 #define APP_DEVELOPER "Alex Spataru"
 #define APP_SUPPORT_URL "https://github.com/serial-studio"
+#define APP_UPDATER_URL "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json"
 
 #endif

@@ -62,6 +62,7 @@ int main(int argc, char **argv)
    QQmlApplicationEngine engine;
    auto csvExport = Export::getInstance();
    auto qmlBridge = QmlBridge::getInstance();
+   auto updater = QSimpleUpdater::getInstance();
    auto graphProvider = GraphProvider::getInstance();
    auto serialManager = SerialManager::getInstance();
 
@@ -72,10 +73,12 @@ int main(int argc, char **argv)
    // Init QML interface
    QQuickStyle::setStyle("Fusion");
    engine.rootContext()->setContextProperty("CppExport", csvExport);
+   engine.rootContext()->setContextProperty("CppUpdater", updater);
    engine.rootContext()->setContextProperty("CppQmlBridge", qmlBridge);
    engine.rootContext()->setContextProperty("CppGraphProvider", graphProvider);
    engine.rootContext()->setContextProperty("CppSerialManager", serialManager);
    engine.rootContext()->setContextProperty("CppAppName", app.applicationName());
+   engine.rootContext()->setContextProperty("CppAppUpdaterUrl", APP_UPDATER_URL);
    engine.rootContext()->setContextProperty("CppAppVersion", app.applicationVersion());
    engine.rootContext()->setContextProperty("CppAppOrganization", app.organizationName());
    engine.rootContext()->setContextProperty("CppAppOrganizationDomain", app.organizationDomain());
@@ -91,10 +94,9 @@ int main(int argc, char **argv)
    Q_UNUSED(moduleManager);
 
    // Check for updates
-   QString url = "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json";
-   QSimpleUpdater::getInstance()->setNotifyOnUpdate(url, true);
-   QSimpleUpdater::getInstance()->setNotifyOnFinish(url, false);
-   QSimpleUpdater::getInstance()->checkForUpdates(url);
+   updater->setNotifyOnUpdate(APP_UPDATER_URL, true);
+   updater->setNotifyOnFinish(APP_UPDATER_URL, false);
+   updater->checkForUpdates(APP_UPDATER_URL);
 
    // Enter application event loop
    return app.exec();

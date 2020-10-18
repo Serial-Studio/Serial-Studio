@@ -5,6 +5,7 @@
         <file>icons/backspace.svg</file>
         <file>icons/battery.svg</file>
         <file>icons/bug.svg</file>
+        <file>icons/chart.svg</file>
         <file>icons/code.svg</file>
         <file>icons/copy.svg</file>
         <file>icons/delete.svg</file>
@@ -35,22 +36,21 @@
         <file>icons/terminal.svg</file>
         <file>icons/update.svg</file>
         <file>icons/usb.svg</file>
+        <file>icons/visibility.svg</file>
         <file>icons/warning.svg</file>
-        <file>images/logo.svg</file>
+        <file>images/icon.png</file>
         <file>qml/Components/Console.qml</file>
         <file>qml/Components/DataGrid.qml</file>
         <file>qml/Components/DeviceManager.qml</file>
         <file>qml/Components/ToolBar.qml</file>
-        <file>qml/main.qml</file>
-        <file>qml/UI.qml</file>
         <file>qml/Widgets/DataDelegate.qml</file>
         <file>qml/Widgets/GraphDelegate.qml</file>
         <file>qml/Widgets/GroupDelegate.qml</file>
         <file>qml/Widgets/LED.qml</file>
         <file>qml/Widgets/MapDelegate.qml</file>
         <file>qml/Widgets/Window.qml</file>
-        <file>icons/chart.svg</file>
-        <file>icons/visibility.svg</file>
         <file>qml/About.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/UI.qml</file>
     </qresource>
 </RCC>
