@@ -183,7 +183,7 @@ ColumnLayout {
             }
 
             plugin: Plugin {
-                name: "osm"
+                name: "mapboxgl"
             }
         }
     }

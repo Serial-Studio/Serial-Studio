@@ -69,6 +69,8 @@ win32* {
 }
 
 macx* {
+    CONFIG += sdk_no_version_check
+
     TARGET = SerialStudio
 
     ICON = deploy/macOS/icon.icns
