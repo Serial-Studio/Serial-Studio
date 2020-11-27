@@ -43,11 +43,17 @@
         <file>qml/Components/DataGrid.qml</file>
         <file>qml/Components/DeviceManager.qml</file>
         <file>qml/Components/ToolBar.qml</file>
+        <file>qml/Components/WidgetGrid.qml</file>
+        <file>qml/Widgets/AccelerometerDelegate.qml</file>
+        <file>qml/Widgets/BarDelegate.qml</file>
         <file>qml/Widgets/DataDelegate.qml</file>
+        <file>qml/Widgets/GaugeDelegate.qml</file>
         <file>qml/Widgets/GraphDelegate.qml</file>
         <file>qml/Widgets/GroupDelegate.qml</file>
+        <file>qml/Widgets/GyroDelegate.qml</file>
         <file>qml/Widgets/LED.qml</file>
         <file>qml/Widgets/MapDelegate.qml</file>
+        <file>qml/Widgets/TankDelegate.qml</file>
         <file>qml/Widgets/Window.qml</file>
         <file>qml/About.qml</file>
         <file>qml/main.qml</file>

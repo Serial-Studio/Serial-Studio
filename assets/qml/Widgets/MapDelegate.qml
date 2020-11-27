@@ -37,8 +37,8 @@ ColumnLayout {
     //
     // Real-time GPS coordinates components
     //
-    property real latitude: CppQmlBridge.gpsLatitude
-    property real longitude: CppQmlBridge.gpsLongitude
+    property real latitude: 0
+    property real longitude: 0
 
     //
     // Will be true if GPS coordinates are different from (0,0)

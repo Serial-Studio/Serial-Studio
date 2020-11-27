@@ -32,6 +32,7 @@
 
 #include "Export.h"
 #include "AppInfo.h"
+#include "Widgets.h"
 #include "QmlBridge.h"
 #include "GraphProvider.h"
 #include "SerialManager.h"
@@ -60,6 +61,7 @@ int main(int argc, char **argv)
 
    // Init application modules
    QQmlApplicationEngine engine;
+   auto widgets = Widgets::getInstance();
    auto csvExport = Export::getInstance();
    auto qmlBridge = QmlBridge::getInstance();
    auto updater = QSimpleUpdater::getInstance();
@@ -72,8 +74,9 @@ int main(int argc, char **argv)
 
    // Init QML interface
    QQuickStyle::setStyle("Fusion");
-   engine.rootContext()->setContextProperty("CppExport", csvExport);
    engine.rootContext()->setContextProperty("CppUpdater", updater);
+   engine.rootContext()->setContextProperty("CppWidgets", widgets);
+   engine.rootContext()->setContextProperty("CppExport", csvExport);
    engine.rootContext()->setContextProperty("CppQmlBridge", qmlBridge);
    engine.rootContext()->setContextProperty("CppGraphProvider", graphProvider);
    engine.rootContext()->setContextProperty("CppSerialManager", serialManager);

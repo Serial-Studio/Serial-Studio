@@ -27,63 +27,72 @@
 #include <QObject>
 
 class Group;
-class Widgets : public QObject {
-    Q_OBJECT
+class Widgets : public QObject
+{
+   Q_OBJECT
 
 signals:
-    void dataChanged();
+   void dataChanged();
 
 public:
-    static Widgets* getInstance();
+   static Widgets *getInstance();
 
-    QList<Group*> barGroups() const;
-    QList<Group*> mapGroups() const;
-    QList<Group*> gyroGroups() const;
-    QList<Group*> tankGroups() const;
-    QList<Group*> gaugeGroups() const;
-    QList<Group*> accelerometerGroups() const;
+   QList<Group *> barGroup() const;
+   QList<Group *> mapGroup() const;
+   QList<Group *> gyroGroup() const;
+   QList<Group *> tankGroup() const;
+   QList<Group *> gaugeGroup() const;
+   QList<Group *> accelerometerGroup() const;
 
-    Group* barGroupAt(const int index);
-    Group* mapGroupAt(const int index);
-    Group* gyroGroupAt(const int index);
-    Group* tankGroupAt(const int index);
-    Group* gaugeGroupAt(const int index);
-    Group* accelerometerGroupAt(const int index);
+   int barGroupCount() const;
+   int mapGroupCount() const;
+   int gyroGroupCount() const;
+   int tankGroupCount() const;
+   int gaugeGroupCount() const;
+   int accelerometerGroupCount() const;
 
-    qreal gyroX(const int index) const;
-    qreal gyroY(const int index) const;
-    qreal gyroZ(const int index) const;
+   Group *barGroupAt(const int index);
+   Group *mapGroupAt(const int index);
+   Group *gyroGroupAt(const int index);
+   Group *tankGroupAt(const int index);
+   Group *gaugeGroupAt(const int index);
+   Group *accelerometerGroupAt(const int index);
 
-    qreal accelerometerX(const int index) const;
-    qreal accelerometerY(const int index) const;
-    qreal accelerometerZ(const int index) const;
+   double gyroX(const int index);
+   double gyroY(const int index);
+   double gyroZ(const int index);
 
-    qreal bar(const int index) const;
-    qreal tank(const int index) const;
-    qreal gauge(const int index) const;
-    qreal barMin(const int index) const;
-    qreal barMax(const int index) const;
-    qreal tankMin(const int index) const;
-    qreal tankMax(const int index) const;
-    qreal gaugeMin(const int index) const;
-    qreal gaugeMax(const int index) const;
+   double accelerometerX(const int index);
+   double accelerometerY(const int index);
+   double accelerometerZ(const int index);
 
-    qreal mapLatitude(const int index) const;
-    qreal mapLongitude(const int index) const;
+   double bar(const int index);
+   double tank(const int index);
+   double gauge(const int index);
+   double barMin(const int index);
+   double barMax(const int index);
+   double tankMin(const int index);
+   double tankMax(const int index);
+   double gaugeMin(const int index);
+   double gaugeMax(const int index);
+
+   double mapLatitude(const int index);
+   double mapLongitude(const int index);
 
 private slots:
-    void updateModels();
+   void updateModels();
 
 private:
-    QList<Group*> getWidgetGroup(const QString& handle);
+   Widgets();
+   QList<Group *> getWidgetGroup(const QString &handle);
 
 private:
-    QList<Group*> m_barGroups;
-    QList<Group*> m_mapGroups;
-    QList<Group*> m_gyroGroups;
-    QList<Group*> m_tankGroups;
-    QList<Group*> m_gaugeGroups;
-    QList<Group*> m_accelerometerGroups;
+   QList<Group *> m_barGroups;
+   QList<Group *> m_mapGroups;
+   QList<Group *> m_gyroGroups;
+   QList<Group *> m_tankGroups;
+   QList<Group *> m_gaugeGroups;
+   QList<Group *> m_accelerometerGroups;
 };
 
 #endif

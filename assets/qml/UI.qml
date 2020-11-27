@@ -70,13 +70,11 @@ Page {
                 TabBar {
                     id: tabBar
                     contentHeight: 32
-                    palette.button: Qt.rgba(45/255, 96/255, 115/255, 1)
-                    visible: CppQmlBridge.gpsSupported
-                    enabled: CppQmlBridge.groupCount > 0
-                    opacity: CppQmlBridge.groupCount > 0 ? 1 : 0
-                    Behavior on opacity {NumberAnimation{}}
-
+                    enabled: opacity > 0
                     onVisibleChanged: dataButton.clicked()
+                    opacity: CppSerialManager.connected ? 1 : 0
+                    palette.button: Qt.rgba(45/255, 96/255, 115/255, 1)
+                    Behavior on opacity {NumberAnimation{}}
 
                     anchors {
                         leftMargin: 3
@@ -93,8 +91,7 @@ Page {
                     }
 
                     TabButton {
-                        text: qsTr("GPS Map")
-                        enabled: CppQmlBridge.gpsSupported
+                        text: qsTr("Widgets")
                     }
                 }
 

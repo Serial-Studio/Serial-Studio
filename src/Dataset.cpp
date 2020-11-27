@@ -82,7 +82,7 @@ bool Dataset::read(const QJsonObject &object)
       auto units = object.value("u").toVariant().toString();
       auto widget = object.value("w").toVariant().toString();
 
-      if (!title.isEmpty() && !value.isEmpty())
+      if (!value.isEmpty())
       {
          m_graph = graph;
          m_title = title;

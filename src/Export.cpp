@@ -114,10 +114,7 @@ bool Export::isOpen() const
 /**
  * Open a CSV file in the Explorer/Finder window
  */
-void Export::openCsv()
-{
-
-}
+void Export::openCsv() { }
 
 /**
  * Open the current CSV file in the Explorer/Finder window

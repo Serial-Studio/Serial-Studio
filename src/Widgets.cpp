@@ -21,120 +21,457 @@
  */
 
 #include "Group.h"
+#include "Dataset.h"
 #include "Widgets.h"
 #include "QmlBridge.h"
 
-static Widgets* INSTANCE = Q_NULLPTR;
+#include <cfloat>
+#include <climits>
 
-Widgets* Widgets::getInstance() {
-    if (!INSTANCE)
-        INSTANCE = new Widgets;
+static Widgets *INSTANCE = Q_NULLPTR;
 
-    return INSTANCE;
+Widgets::Widgets()
+{
+   auto bridge = QmlBridge::getInstance();
+   connect(bridge, SIGNAL(updated()), this, SLOT(updateModels()));
 }
 
-QList<Group*> Widgets::barGroups() const {
-    return m_barGroups;
+Widgets *Widgets::getInstance()
+{
+   if (!INSTANCE)
+      INSTANCE = new Widgets;
+
+   return INSTANCE;
 }
 
-QList<Group*> Widgets::mapGroups() const {
-    return m_mapGroups;
+QList<Group *> Widgets::barGroup() const
+{
+   return m_barGroups;
 }
 
-QList<Group*> Widgets::gyroGroups() const {
-    return m_gyroGroups;
+QList<Group *> Widgets::mapGroup() const
+{
+   return m_mapGroups;
 }
 
-QList<Group*> Widgets::tankGroups() const {
-    return m_tankGroups;
+QList<Group *> Widgets::gyroGroup() const
+{
+   return m_gyroGroups;
 }
 
-QList<Group*> Widgets::gaugeGroups() const {
-    return m_gaugeGroups;
+QList<Group *> Widgets::tankGroup() const
+{
+   return m_tankGroups;
 }
 
-QList<Group*> Widgets::accelerometerGroups() const {
-    return m_accelerometerGroups;
+QList<Group *> Widgets::gaugeGroup() const
+{
+   return m_gaugeGroups;
 }
 
-Group* Widgets::barGroupAt(const int index) {
-    if (barGroups().count() > index)
-        return barGroups().at(index);
-
-    return Q_NULLPTR;
+QList<Group *> Widgets::accelerometerGroup() const
+{
+   return m_accelerometerGroups;
 }
 
-Group* Widgets::mapGroupAt(const int index) {
-    if (mapGroups().count() > index)
-        return mapGroups().at(index);
-
-    return Q_NULLPTR;
+int Widgets::barGroupCount() const
+{
+   return barGroup().count();
 }
 
-Group* Widgets::gyroGroupAt(const int index) {
-    if (gyroGroups().count() > index)
-        return gyroGroups().at(index);
-
-    return Q_NULLPTR;
+int Widgets::mapGroupCount() const
+{
+   return mapGroup().count();
 }
 
-Group* Widgets::tankGroupAt(const int index) {
-    if (tankGroups().count() > index)
-        return tankGroups().at(index);
-
-    return Q_NULLPTR;
+int Widgets::gyroGroupCount() const
+{
+   return gyroGroup().count();
 }
 
-Group* Widgets::gaugeGroupAt(const int index) {
-    if (gaugeGroups().count() > index)
-        return gaugeGroups().at(index);
-
-    return Q_NULLPTR;
+int Widgets::tankGroupCount() const
+{
+   return tankGroup().count();
 }
 
-Group* Widgets::accelerometerGroupAt(const int index) {
-    if (accelerometerGroups().count() > index)
-        return accelerometerGroups().at(index);
-
-    return Q_NULLPTR;
+int Widgets::gaugeGroupCount() const
+{
+   return gaugeGroup().count();
 }
 
-qreal Widgets::gyroX(const int index) const {}
+int Widgets::accelerometerGroupCount() const
+{
+   return accelerometerGroup().count();
+}
 
-qreal Widgets::gyroY(const int index) const {}
+Group *Widgets::barGroupAt(const int index)
+{
+   if (barGroup().count() > index)
+      return barGroup().at(index);
 
-qreal Widgets::gyroZ(const int index) const {}
+   return Q_NULLPTR;
+}
 
-qreal Widgets::accelerometerX(const int index) const {}
+Group *Widgets::mapGroupAt(const int index)
+{
+   if (mapGroup().count() > index)
+      return mapGroup().at(index);
 
-qreal Widgets::accelerometerY(const int index) const {}
+   return Q_NULLPTR;
+}
 
-qreal Widgets::accelerometerZ(const int index) const {}
+Group *Widgets::gyroGroupAt(const int index)
+{
+   if (gyroGroup().count() > index)
+      return gyroGroup().at(index);
 
-qreal Widgets::bar(const int index) const {}
+   return Q_NULLPTR;
+}
 
-qreal Widgets::tank(const int index) const {}
+Group *Widgets::tankGroupAt(const int index)
+{
+   if (tankGroup().count() > index)
+      return tankGroup().at(index);
 
-qreal Widgets::gauge(const int index) const {}
+   return Q_NULLPTR;
+}
 
-qreal Widgets::barMin(const int index) const {}
+Group *Widgets::gaugeGroupAt(const int index)
+{
+   if (gaugeGroup().count() > index)
+      return gaugeGroup().at(index);
 
-qreal Widgets::barMax(const int index) const {}
+   return Q_NULLPTR;
+}
 
-qreal Widgets::tankMin(const int index) const {}
+Group *Widgets::accelerometerGroupAt(const int index)
+{
+   if (accelerometerGroup().count() > index)
+      return accelerometerGroup().at(index);
 
-qreal Widgets::tankMax(const int index) const {}
+   return Q_NULLPTR;
+}
 
-qreal Widgets::gaugeMin(const int index) const {}
+double Widgets::gyroX(const int index)
+{
+   auto gyro = gyroGroupAt(index);
 
-qreal Widgets::gaugeMax(const int index) const {}
+   if (gyro)
+   {
+      foreach (auto dataset, gyro->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "x")
+            return dataset->value().toDouble();
+      }
+   }
 
-qreal Widgets::mapLatitude(const int index) const {}
+   return DBL_MAX;
+}
 
-qreal Widgets::mapLongitude(const int index) const {}
+double Widgets::gyroY(const int index)
+{
+   auto gyro = gyroGroupAt(index);
 
-void Widgets::updateModels() {}
+   if (gyro)
+   {
+      foreach (auto dataset, gyro->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "y")
+            return dataset->value().toDouble();
+      }
+   }
 
-QList<Group*> Widgets::getWidgetGroup(const QString& handle) {
+   return DBL_MAX;
+}
 
+double Widgets::gyroZ(const int index)
+{
+   auto gyro = gyroGroupAt(index);
+
+   if (gyro)
+   {
+      foreach (auto dataset, gyro->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "z")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::accelerometerX(const int index)
+{
+   auto accelerometer = accelerometerGroupAt(index);
+
+   if (accelerometer)
+   {
+      foreach (auto dataset, accelerometer->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "x")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::accelerometerY(const int index)
+{
+   auto accelerometer = accelerometerGroupAt(index);
+
+   if (accelerometer)
+   {
+      foreach (auto dataset, accelerometer->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "y")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::accelerometerZ(const int index)
+{
+   auto accelerometer = accelerometerGroupAt(index);
+
+   if (accelerometer)
+   {
+      foreach (auto dataset, accelerometer->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "z")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::bar(const int index)
+{
+   auto bar = barGroupAt(index);
+
+   if (bar)
+   {
+      foreach (auto dataset, bar->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "value")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::tank(const int index)
+{
+   auto tank = tankGroupAt(index);
+
+   if (tank)
+   {
+      foreach (auto dataset, tank->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "value")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::gauge(const int index)
+{
+   auto gauge = gaugeGroupAt(index);
+
+   if (gauge)
+   {
+      foreach (auto dataset, gauge->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "value")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::barMin(const int index)
+{
+   auto bar = barGroupAt(index);
+
+   if (bar)
+   {
+      foreach (auto dataset, bar->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "min")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::barMax(const int index)
+{
+   auto bar = barGroupAt(index);
+
+   if (bar)
+   {
+      foreach (auto dataset, bar->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "max")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::tankMin(const int index)
+{
+   auto tank = tankGroupAt(index);
+
+   if (tank)
+   {
+      foreach (auto dataset, tank->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "min")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::tankMax(const int index)
+{
+   auto tank = tankGroupAt(index);
+
+   if (tank)
+   {
+      foreach (auto dataset, tank->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "max")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::gaugeMin(const int index)
+{
+   auto gauge = gaugeGroupAt(index);
+
+   if (gauge)
+   {
+      foreach (auto dataset, gauge->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "min")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::gaugeMax(const int index)
+{
+   auto gauge = gaugeGroupAt(index);
+
+   if (gauge)
+   {
+      foreach (auto dataset, gauge->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "max")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::mapLatitude(const int index)
+{
+   auto map = mapGroupAt(index);
+
+   if (map)
+   {
+      foreach (auto dataset, map->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "lat")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+double Widgets::mapLongitude(const int index)
+{
+   auto map = mapGroupAt(index);
+
+   if (map)
+   {
+      foreach (auto dataset, map->datasets())
+      {
+         auto widget = dataset->widget();
+         if (widget.toLower() == "lon")
+            return dataset->value().toDouble();
+      }
+   }
+
+   return DBL_MAX;
+}
+
+void Widgets::updateModels()
+{
+   // Clear current groups
+   m_barGroups.clear();
+   m_mapGroups.clear();
+   m_gyroGroups.clear();
+   m_tankGroups.clear();
+   m_gaugeGroups.clear();
+   m_accelerometerGroups.clear();
+
+   // Update groups
+   m_barGroups = getWidgetGroup("bar");
+   m_mapGroups = getWidgetGroup("map");
+   m_gyroGroups = getWidgetGroup("gyro");
+   m_tankGroups = getWidgetGroup("tank");
+   m_gaugeGroups = getWidgetGroup("gauge");
+   m_accelerometerGroups = getWidgetGroup("accelerometer");
+
+   // Update UI
+   emit dataChanged();
+}
+
+QList<Group *> Widgets::getWidgetGroup(const QString &handle)
+{
+   QList<Group *> widgetGroup;
+
+   foreach (auto group, QmlBridge::getInstance()->groups())
+   {
+      if (group->widget().toLower() == handle)
+         widgetGroup.append(group);
+   }
+
+   return widgetGroup;
 }

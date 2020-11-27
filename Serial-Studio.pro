@@ -140,17 +140,22 @@ SOURCES += \
     src/main.cpp
 
 DISTFILES += \
+    assets/qml/About.qml \
     assets/qml/Components/Console.qml \
     assets/qml/Components/DataGrid.qml \
     assets/qml/Components/DeviceManager.qml \
-    assets/qml/Components/GraphGrid.qml \
     assets/qml/Components/ToolBar.qml \
+    assets/qml/Components/WidgetGrid.qml \
     assets/qml/UI.qml \
+    assets/qml/Widgets/AccelerometerDelegate.qml \
+    assets/qml/Widgets/BarDelegate.qml \
     assets/qml/Widgets/DataDelegate.qml \
+    assets/qml/Widgets/GaugeDelegate.qml \
     assets/qml/Widgets/GraphDelegate.qml \
     assets/qml/Widgets/GroupDelegate.qml \
+    assets/qml/Widgets/GyroDelegate.qml \
     assets/qml/Widgets/LED.qml \
     assets/qml/Widgets/MapDelegate.qml \
+    assets/qml/Widgets/TankDelegate.qml \
     assets/qml/Widgets/Window.qml \
-    assets/qml/main.qml \
-    assets/qml/About.qml
+    assets/qml/main.qml

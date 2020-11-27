@@ -62,7 +62,7 @@ QString Group::title() const
  */
 QString Group::widget() const
 {
-    return m_widget;
+   return m_widget;
 }
 
 /**
