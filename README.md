@@ -101,13 +101,32 @@ The `%s` values are replaced with real-time data from each sensor and subsystem.
 - Project title (*string*, obligatory)
 - Groups (*array*)
   - Group title (*string*, obligatory)
-  - Widget type (*string*; optional - can be "map", "bar", "gauge", "gyro", "accelerometer" or "tank")
+  - Widget type (*string*; optional - can be:)
+    - `map`: create a widget showing a location on a map
+    - `bar`: vertical progress bar (with `max` & `min` values)
+    - `gauge`: semi-circular gauge (with `max` & `min` values)
+    - `gyro`: gyroscope indicator (with `x`, `y` & `z` values)
+    - `accelerometer`: accelerometer indicator (with `x`, `y`, & `z` values)
+    - `tank`: vertical tank indicator (with `max` & `min` values)
   - Group data (*array*)
     - Dataset title (*string*, optional)
     - Dataset value (*variant*, obligatory)
     - Dataset unit (*string*, optional)
     - Dataset graph (*boolean*, optional)
-    - Widget type (*string*, depends group widget type)
+    - Widget type (*string*, depends group widget type, posible values are:)
+        - For `gyro` & `accelerometer` widgets: 
+            - `x`: value for X axis
+            - `y`: value for Y axis
+            - `z`: value for Z axis
+        - For `map` widget: 
+            - `lat`: latitude
+            - `lon`: longitude
+        - For `bar`, `tank` & `gauge` widgets:
+            - `max`: maximum value
+            - `min`: minimum value
+            - `value`: current value
+
+**NOTE:** widget types can be repeated without any problem
     
 This information is processed by Serial Studio, which builds the user interface according to the information contained in each frame. This information is also used to generate a CSV file with all the readings received from the serial device, the CSV file can be used for analysis and data-processing within MATLAB.
 
