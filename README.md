@@ -14,106 +14,26 @@ Furthermore, this approach can be extended to almost any type of project that in
 
 ![Screenshot](doc/screenshot.png)
 
-## Communication Protocol
+## Communication protocol
 
-The communication protocol is implemented through a JSON document. For example, my CanSat team uses the following template:
+The communication protocol is implemented through a JSON document with the following structure:
 
-```
-{
-    "t":"CanSat 2020",					/* Project title */
-    "g":[						/* Project data group array */
-        {
-            "t":"Mission Status",			/* Group title */
-            "d":[					/* Group dataset array */
-                {
-                    "t":"Mission Time",			/* Dataset title */
-                    "v":"%s"			        /* Dataset value */
-                },
-                {
-                    "t":"Packet Count",			/* Dataset title */
-                    "v":"%s"				/* Dataset value */
-                },
-                {
-                    "t":"Software State",		/* Dataset title */
-                    "v":"%s"				/* Dataset value */
-                },
-                {
-                    "t":"Battery Voltage",		/* Dataset title */
-                    "v":"%s",			        /* Dataset value */
-                    "g":true,				/* Graph dataset */
-                    "u":"mV"				/* Dataset units */
-                }
-            ]
-        },
-        {
-            "t":"Sensor Readings",			/* Group title */
-            "d":[					/* Group dataset array */
-                {	
-                    "t":"Altitude",			/* Dataset title */
-                    "v":"%s",				/* Dataset value */
-                    "u":"m"				/* Dataset units */
-                },
-                {
-                    "t":"Pressure",			/* Dataset title */
-                    "v":"%s",				/* Dataset value */
-                    "g":true,				/* Graph dataset */
-                    "u":"KPa"				/* Dataset units */
-                },
-                {
-                    "t":"Temperature",			/* Dataset title */
-                    "v":"%s",				/* Dataset value */
-                    "g":true,				/* Graph dataset */
-                    "u":"ºC"				/* Dataset units */
-                }
-            ]
-        },
-        {
-            "t":"GPS",					/* GPS Group title */
-            "d":[					/* Group dataset array */
-                {
-                    "t":"UTC Time",			/* Dataset title */
-                    "v":"%s"				/* Dataset value */
-                },
-                {
-                    "t":"Longitude",			/* Dataset title */
-                    "v":"%s"				/* Dataset value */
-                },
-                {
-                    "t":"Latitude",			/* Dataset title */
-                    "v":"%s"				/* Dataset value */
-                },
-                {
-                    "t":"Altitude",			/* Dataset title */
-                    "v":"%s"				/* Dataset value */
-                },
-                {
-                    "t":"Num. Sats",			/* Dataset title */
-                    "v":"%s"				/* Dataset value */
-                }
-            ]
-        }
-    ]
-}
-```
-    
-The `%s` values are replaced with real-time data from each sensor and subsystem. As you can see, the data frame contains the following information:
-
-- Project title (*string*, obligatory)
-- Groups (*array*)
-  - Group title (*string*, obligatory)
-  - Widget type (*string*; optional - can be:)
+- **`t`**: project title (*string*, obligatory)
+- **`d`**: groups (*array*)
+  - **`t`**: group title (*string*, obligatory)
+  - **`w`**: Widget type (*string*; optional - can be:)
     - `map`: create a widget showing a location on a map
     - `bar`: vertical progress bar (with `max` & `min` values)
     - `gauge`: semi-circular gauge (with `max` & `min` values)
     - `gyro`: gyroscope indicator (with `x`, `y` & `z` values)
     - `accelerometer`: accelerometer indicator (with `x`, `y`, & `z` values)
     - `tank`: vertical tank indicator (with `max` & `min` values)
-  - Group data (*array*)
-    - Dataset title (*string*, optional)
-    - Dataset value (*variant*, obligatory)
-    - Dataset unit (*string*, optional)
-    - Dataset graph (*boolean*, optional)
-    - Widget type (*string*, depends group widget type, posible values are:)
+  - **`d`**:  droup data (*array*)
+    - **`t`**:  dataset title (*string*, optional)
+    - **`v`**:  dataset value (*variant*, obligatory)
+    - **`u`**:  dataset unit (*string*, optional)
+    - **`g`**:  dataset graph (*boolean*, optional)
+    - **`w`**:  widget type (*string*, depends group widget type, posible values are:)
         - For `gyro` & `accelerometer` widgets: 
             - `x`: value for X axis
             - `y`: value for Y axis
@@ -125,10 +45,10 @@ The `%s` values are replaced with real-time data from each sensor and subsystem.
             - `max`: maximum value
             - `min`: minimum value
             - `value`: current value
-
-**NOTE:** widget types can be repeated without any problem
     
 This information is processed by Serial Studio, which builds the user interface according to the information contained in each frame. This information is also used to generate a CSV file with all the readings received from the serial device, the CSV file can be used for analysis and data-processing within MATLAB.
+
+**NOTE:** widget types can be repeated across different groups without any problem.
 
 ## Build instructions
 
