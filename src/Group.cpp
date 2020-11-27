@@ -26,6 +26,7 @@
 Group::Group(QObject *parent)
    : QObject(parent)
 {
+   m_widget = "";
    m_title = tr("Invalid");
 }
 
@@ -54,6 +55,14 @@ int Group::count() const
 QString Group::title() const
 {
    return m_title;
+}
+
+/**
+ * @return The widget type of this group (if any)
+ */
+QString Group::widget() const
+{
+    return m_widget;
 }
 
 /**
@@ -86,12 +95,14 @@ bool Group::read(const QJsonObject &object)
 {
    if (!object.isEmpty())
    {
-      auto title = object.value("t").toVariant().toString();
       auto array = object.value("d").toArray();
+      auto title = object.value("t").toVariant().toString();
+      auto widget = object.value("w").toVariant().toString();
 
       if (!title.isEmpty() && !array.isEmpty())
       {
          m_title = title;
+         m_widget = widget;
          m_datasets.clear();
 
          for (auto i = 0; i < array.count(); ++i)

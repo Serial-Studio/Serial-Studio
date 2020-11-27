@@ -112,9 +112,17 @@ bool Export::isOpen() const
 }
 
 /**
- * Open the CSV file in the Explorer/Finder window
+ * Open a CSV file in the Explorer/Finder window
  */
 void Export::openCsv()
+{
+
+}
+
+/**
+ * Open the current CSV file in the Explorer/Finder window
+ */
+void Export::openCurrentCsv()
 {
    if (isOpen())
       RevealFile(m_csvFile.fileName());

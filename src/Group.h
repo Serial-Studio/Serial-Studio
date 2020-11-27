@@ -35,6 +35,7 @@ class Group : public QObject
    Q_OBJECT
 
    Q_PROPERTY(QString title READ title CONSTANT)
+   Q_PROPERTY(QString widget READ widget CONSTANT)
    Q_PROPERTY(int datasetCount READ count CONSTANT)
    Q_PROPERTY(QList<Dataset *> datasets READ datasets CONSTANT)
 
@@ -44,6 +45,7 @@ public:
 
    int count() const;
    QString title() const;
+   QString widget() const;
    QList<Dataset *> datasets() const;
    Q_INVOKABLE Dataset *getDataset(const int index);
 
@@ -51,6 +53,7 @@ public:
 
 private:
    QString m_title;
+   QString m_widget;
    QList<Dataset *> m_datasets;
 };
 

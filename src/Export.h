@@ -47,6 +47,7 @@ private:
 
 public slots:
    void openCsv();
+   void openCurrentCsv();
 
 private slots:
    void closeFile();

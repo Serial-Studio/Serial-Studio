@@ -52,11 +52,19 @@ QString Dataset::value() const
 }
 
 /**
- * @return The units of this datasheet
+ * @return The units of this dataset
  */
 QString Dataset::units() const
 {
    return m_units;
+}
+
+/**
+ * @return The widget value of this dataset
+ */
+QString Dataset::widget() const
+{
+   return m_widget;
 }
 
 /**
@@ -72,6 +80,7 @@ bool Dataset::read(const QJsonObject &object)
       auto title = object.value("t").toVariant().toString();
       auto value = object.value("v").toVariant().toString();
       auto units = object.value("u").toVariant().toString();
+      auto widget = object.value("w").toVariant().toString();
 
       if (!title.isEmpty() && !value.isEmpty())
       {
@@ -79,6 +88,8 @@ bool Dataset::read(const QJsonObject &object)
          m_title = title;
          m_value = value;
          m_units = units;
+         m_widget = widget;
+
          return true;
       }
    }

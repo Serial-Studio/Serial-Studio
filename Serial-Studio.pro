@@ -124,7 +124,8 @@ HEADERS += \
     src/JsonParser.h \
     src/ModuleManager.h \
     src/QmlBridge.h \
-    src/SerialManager.h
+    src/SerialManager.h \
+    src/Widgets.h
 
 SOURCES += \
     src/Dataset.cpp \
@@ -135,6 +136,7 @@ SOURCES += \
     src/ModuleManager.cpp \
     src/QmlBridge.cpp \
     src/SerialManager.cpp \
+    src/Widgets.cpp \
     src/main.cpp
 
 DISTFILES += \

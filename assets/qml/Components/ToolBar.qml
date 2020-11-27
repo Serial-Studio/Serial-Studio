@@ -157,11 +157,26 @@ ToolBar {
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
-            enabled: CppExport.isOpen
             opacity: enabled ? 1 : 0.5
             onClicked: CppExport.openCsv()
+            icon.source: "qrc:/icons/update.svg"
+            text: qsTr("Open past CSV") + _btSpacer
+
+            Behavior on opacity {NumberAnimation{}}
+        }
+
+        Button {
+            id: _openCurrentCsv
+            flat: true
+            icon.width: 24
+            icon.height: 24
+            Layout.fillHeight: true
+            icon.color: palette.text
+            enabled: CppExport.isOpen
+            opacity: enabled ? 1 : 0.5
             icon.source: "qrc:/icons/open.svg"
-            text: qsTr("Open CSV File") + _btSpacer
+            onClicked: CppExport.openCurrentCsv()
+            text: qsTr("Open current CSV") + _btSpacer
 
             Behavior on opacity {NumberAnimation{}}
         }
