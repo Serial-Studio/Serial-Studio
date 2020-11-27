@@ -98,14 +98,16 @@ The communication protocol is implemented through a JSON document. For example, 
     
 The `%s` values are replaced with real-time data from each sensor and subsystem. As you can see, the data frame contains the following information:
 
-- Project title
-- Groups
-  - Group title
-  - Group data
-    - Dataset title
-    - Dataset value
-    - Dataset unit
-    - Dataset graph (or not)
+- Project title (*string*, obligatory)
+- Groups (*array*)
+  - Group title (*string*, obligatory)
+  - Widget type (*string*; optional - can be "map", "bar", "gauge", "gyro", "accelerometer" or "tank")
+  - Group data (*array*)
+    - Dataset title (*string*, optional)
+    - Dataset value (*variant*, obligatory)
+    - Dataset unit (*string*, optional)
+    - Dataset graph (*boolean*, optional)
+    - Widget type (*string*, depends group widget type)
     
 This information is processed by Serial Studio, which builds the user interface according to the information contained in each frame. This information is also used to generate a CSV file with all the readings received from the serial device, the CSV file can be used for analysis and data-processing within MATLAB.
 
