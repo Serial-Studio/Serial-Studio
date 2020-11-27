@@ -93,7 +93,7 @@ macx* {
           --hdiutil-quiet \
           --app-drop-link 450 218 \
           $${DMG_FILENAME} \
-          $${BUNDLE_FILENAME}"
+          \"$${BUNDLE_FILENAME}\""
 
     QMAKE_EXTRA_TARGETS += dmg
 }
