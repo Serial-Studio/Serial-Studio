@@ -28,7 +28,7 @@ The communication protocol is implemented through a JSON document with the follo
     - `gyro`: gyroscope indicator (with `x`, `y` & `z` values)
     - `accelerometer`: accelerometer indicator (with `x`, `y`, & `z` values)
     - `tank`: vertical tank indicator (with `max` & `min` values)
-  - **`d`**:  droup data (*array*)
+  - **`d`**: group datasets (*array*)
     - **`t`**:  dataset title (*string*, optional)
     - **`v`**:  dataset value (*variant*, obligatory)
     - **`u`**:  dataset unit (*string*, optional)
