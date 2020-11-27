@@ -19,7 +19,7 @@ Furthermore, this approach can be extended to almost any type of project that in
 The communication protocol is implemented through a JSON document with the following structure:
 
 - **`t`**: project title (*string*, obligatory)
-- **`d`**: groups (*array*)
+- **`g`**: groups (*array*)
   - **`t`**: group title (*string*, obligatory)
   - **`w`**: Widget type (*string*; optional - can be:)
     - `map`: create a widget showing a location on a map
