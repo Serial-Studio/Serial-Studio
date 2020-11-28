@@ -28,14 +28,23 @@
 #include <cfloat>
 #include <climits>
 
+/*
+ * Pointer to the only instance of the class
+ */
 static Widgets *INSTANCE = Q_NULLPTR;
 
+/**
+ * Initialization code of the @c Widgets class
+ */
 Widgets::Widgets()
 {
    auto bridge = QmlBridge::getInstance();
    connect(bridge, SIGNAL(updated()), this, SLOT(updateModels()));
 }
 
+/**
+ * Returns a pointer to the only instance of the class
+ */
 Widgets *Widgets::getInstance()
 {
    if (!INSTANCE)
@@ -44,66 +53,106 @@ Widgets *Widgets::getInstance()
    return INSTANCE;
 }
 
+/**
+ * Returns a list with all the JSON groups that implement a bar widget
+ */
 QList<Group *> Widgets::barGroup() const
 {
    return m_barGroups;
 }
 
+/**
+ * Returns a list with all the JSON groups that implement a map widget
+ */
 QList<Group *> Widgets::mapGroup() const
 {
    return m_mapGroups;
 }
 
+/**
+ * Returns a list with all the JSON groups that implement a gyro widget
+ */
 QList<Group *> Widgets::gyroGroup() const
 {
    return m_gyroGroups;
 }
 
+/**
+ * Returns a list with all the JSON groups that implement a tank widget
+ */
 QList<Group *> Widgets::tankGroup() const
 {
    return m_tankGroups;
 }
 
+/**
+ * Returns a list with all the JSON groups that implement a gauge widget
+ */
 QList<Group *> Widgets::gaugeGroup() const
 {
    return m_gaugeGroups;
 }
 
+/**
+ * Returns a list with all the JSON groups that implement an accelerometer widget
+ */
 QList<Group *> Widgets::accelerometerGroup() const
 {
    return m_accelerometerGroups;
 }
 
+/**
+ * Returns the number of JSON groups that implement a bar widget
+ */
 int Widgets::barGroupCount() const
 {
    return barGroup().count();
 }
 
+/**
+ * Returns the number of JSON groups that implement a map widget
+ */
 int Widgets::mapGroupCount() const
 {
    return mapGroup().count();
 }
 
+/**
+ * Returns the number of JSON groups that implement a gyro widget
+ */
 int Widgets::gyroGroupCount() const
 {
    return gyroGroup().count();
 }
 
+/**
+ * Returns the number of JSON groups that implement a tank widget
+ */
 int Widgets::tankGroupCount() const
 {
    return tankGroup().count();
 }
 
+/**
+ * Returns the number of JSON groups that implement a gauge widget
+ */
 int Widgets::gaugeGroupCount() const
 {
    return gaugeGroup().count();
 }
 
+/**
+ * Returns the number of JSON groups that implement an accelerometer widget
+ */
 int Widgets::accelerometerGroupCount() const
 {
    return accelerometerGroup().count();
 }
 
+/**
+ * Returns a pointer to the JSON group that implements a bar widget
+ * with the given @a index
+ */
 Group *Widgets::barGroupAt(const int index)
 {
    if (barGroup().count() > index)
@@ -112,6 +161,10 @@ Group *Widgets::barGroupAt(const int index)
    return Q_NULLPTR;
 }
 
+/**
+ * Returns a pointer to the JSON group that implements a map widget
+ * with the given @a index
+ */
 Group *Widgets::mapGroupAt(const int index)
 {
    if (mapGroup().count() > index)
@@ -120,6 +173,10 @@ Group *Widgets::mapGroupAt(const int index)
    return Q_NULLPTR;
 }
 
+/**
+ * Returns a pointer to the JSON group that implements a gyro widget
+ * with the given @a index
+ */
 Group *Widgets::gyroGroupAt(const int index)
 {
    if (gyroGroup().count() > index)
@@ -128,6 +185,10 @@ Group *Widgets::gyroGroupAt(const int index)
    return Q_NULLPTR;
 }
 
+/**
+ * Returns a pointer to the JSON group that implements a tank widget
+ * with the given @a index
+ */
 Group *Widgets::tankGroupAt(const int index)
 {
    if (tankGroup().count() > index)
@@ -136,6 +197,10 @@ Group *Widgets::tankGroupAt(const int index)
    return Q_NULLPTR;
 }
 
+/**
+ * Returns a pointer to the JSON group that implements a gauge widget
+ * with the given @a index
+ */
 Group *Widgets::gaugeGroupAt(const int index)
 {
    if (gaugeGroup().count() > index)
@@ -144,6 +209,10 @@ Group *Widgets::gaugeGroupAt(const int index)
    return Q_NULLPTR;
 }
 
+/**
+ * Returns a pointer to the JSON group that implements an accelerometer
+ * widget with the given @a index
+ */
 Group *Widgets::accelerometerGroupAt(const int index)
 {
    if (accelerometerGroup().count() > index)
@@ -152,6 +221,9 @@ Group *Widgets::accelerometerGroupAt(const int index)
    return Q_NULLPTR;
 }
 
+/**
+ * Returns the value of the X axis for the gyro widget at the given @a index
+ */
 double Widgets::gyroX(const int index)
 {
    auto gyro = gyroGroupAt(index);
@@ -169,6 +241,9 @@ double Widgets::gyroX(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the value of the Y axis for the gyro widget at the given @a index
+ */
 double Widgets::gyroY(const int index)
 {
    auto gyro = gyroGroupAt(index);
@@ -186,6 +261,9 @@ double Widgets::gyroY(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the value of the Z axis for the gyro widget at the given @a index
+ */
 double Widgets::gyroZ(const int index)
 {
    auto gyro = gyroGroupAt(index);
@@ -203,6 +281,9 @@ double Widgets::gyroZ(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the value of the X axis for the accelerometer widget at the given @a index
+ */
 double Widgets::accelerometerX(const int index)
 {
    auto accelerometer = accelerometerGroupAt(index);
@@ -220,6 +301,9 @@ double Widgets::accelerometerX(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the value of the Y axis for the accelerometer widget at the given @a index
+ */
 double Widgets::accelerometerY(const int index)
 {
    auto accelerometer = accelerometerGroupAt(index);
@@ -237,6 +321,9 @@ double Widgets::accelerometerY(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the value of the Z axis for the accelerometer widget at the given @a index
+ */
 double Widgets::accelerometerZ(const int index)
 {
    auto accelerometer = accelerometerGroupAt(index);
@@ -254,6 +341,9 @@ double Widgets::accelerometerZ(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the value for the bar widget at the given @a index
+ */
 double Widgets::bar(const int index)
 {
    auto bar = barGroupAt(index);
@@ -271,6 +361,9 @@ double Widgets::bar(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the value for the tank widget at the given @a index
+ */
 double Widgets::tank(const int index)
 {
    auto tank = tankGroupAt(index);
@@ -288,6 +381,9 @@ double Widgets::tank(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the value for the gauge widget at the given @a index
+ */
 double Widgets::gauge(const int index)
 {
    auto gauge = gaugeGroupAt(index);
@@ -305,6 +401,9 @@ double Widgets::gauge(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the minimum value for the bar widget at the given @a index
+ */
 double Widgets::barMin(const int index)
 {
    auto bar = barGroupAt(index);
@@ -322,6 +421,9 @@ double Widgets::barMin(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the maximum value for the bar widget at the given @a index
+ */
 double Widgets::barMax(const int index)
 {
    auto bar = barGroupAt(index);
@@ -339,6 +441,9 @@ double Widgets::barMax(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the minimum value for the tank widget at the given @a index
+ */
 double Widgets::tankMin(const int index)
 {
    auto tank = tankGroupAt(index);
@@ -356,6 +461,9 @@ double Widgets::tankMin(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the maximum value for the tank widget at the given @a index
+ */
 double Widgets::tankMax(const int index)
 {
    auto tank = tankGroupAt(index);
@@ -373,6 +481,9 @@ double Widgets::tankMax(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the minimum value for the gauge widget at the given @a index
+ */
 double Widgets::gaugeMin(const int index)
 {
    auto gauge = gaugeGroupAt(index);
@@ -390,6 +501,9 @@ double Widgets::gaugeMin(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the maximum value for the gauge widget at the given @a index
+ */
 double Widgets::gaugeMax(const int index)
 {
    auto gauge = gaugeGroupAt(index);
@@ -407,6 +521,9 @@ double Widgets::gaugeMax(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the latitude value for the map widget at the given @a index
+ */
 double Widgets::mapLatitude(const int index)
 {
    auto map = mapGroupAt(index);
@@ -424,6 +541,9 @@ double Widgets::mapLatitude(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Returns the longitude value for the map widget at the given @a index
+ */
 double Widgets::mapLongitude(const int index)
 {
    auto map = mapGroupAt(index);
@@ -441,6 +561,10 @@ double Widgets::mapLongitude(const int index)
    return DBL_MAX;
 }
 
+/**
+ * Regenerates the widget groups with the latest data given
+ * by the @c QmlBridge class
+ */
 void Widgets::updateModels()
 {
    // Clear current groups
@@ -463,6 +587,12 @@ void Widgets::updateModels()
    emit dataChanged();
 }
 
+/**
+ * Obtains all the JSON groups that implement the given
+ * widget @a handle ID.
+ *
+ * The JSON groups are provided by the @c QmlBridge class.
+ */
 QList<Group *> Widgets::getWidgetGroup(const QString &handle)
 {
    QList<Group *> widgetGroup;
