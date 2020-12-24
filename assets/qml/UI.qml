@@ -66,6 +66,9 @@ Page {
                 opacity: enabled ? 1 : 0
                 title: qsTr("Data Display")
                 enabled: toolbar.dataDisChecked
+                Layout.minimumHeight: !consoleWindow.enabled ? page.height * 0.8 : implicitHeight
+
+                Behavior on Layout.minimumHeight {NumberAnimation{}}
 
                 TabBar {
                     id: tabBar
@@ -147,20 +150,18 @@ Page {
                         width: sourceSize.width
                         height: sourceSize.height
                         sourceSize: Qt.size(128, 128)
-                        source: "qrc:/icons/warning.svg"
+                        source: "qrc:/images/IC_Blank.svg"
                         Layout.alignment: Qt.AlignHCenter
+                    }
 
-                        ColorOverlay {
-                            source: parent
-                            color: "#ffaa44"
-                            anchors.fill: parent
-                        }
+                    Item {
+                        height: app.spacing * 2
                     }
 
                     Label {
                         font.pixelSize: 18
-                        text: qsTr("No data available")
                         Layout.alignment: Qt.AlignHCenter
+                        text: CppSerialManager.connected ? qsTr("Data parse error") : qsTr("No device connected")
                     }
 
                     Label {
@@ -169,7 +170,7 @@ Page {
                         Layout.alignment: Qt.AlignHCenter
                         text: CppSerialManager.connected ?
                                   qsTr("Check the serial console to troubleshoot the problem") :
-                                  qsTr("No device connected, please select a COM port in the device manager pane")
+                                  qsTr("Select a COM port in the device manager pane")
                     }
                 }
             }

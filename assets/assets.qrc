@@ -58,5 +58,7 @@
         <file>qml/About.qml</file>
         <file>qml/main.qml</file>
         <file>qml/UI.qml</file>
+        <file>images/IC_Blank.svg</file>
+        <file>images/IC.svg</file>
     </qresource>
 </RCC>

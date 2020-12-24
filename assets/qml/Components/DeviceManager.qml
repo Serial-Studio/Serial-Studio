@@ -58,6 +58,39 @@ Widgets.Window {
         spacing: app.spacing / 2
 
         //
+        // Comm mode selector
+        //
+        Label {
+            text: qsTr("Communication Mode") + ":"
+        } RadioButton {
+            id: commAuto
+            checked: true
+            text: qsTr("Auto (JSON from serial device)")
+        } RadioButton {
+            id: commManual
+            checked: false
+            text: qsTr("Manual (use JSON map file)")
+        }
+
+        //
+        // Map file selector button
+        //
+        Button {
+            Layout.fillWidth: true
+            opacity: enabled ? 1 : 0.5
+            enabled: commManual.checked
+            text: qsTr("Select map file") + "..."
+            Behavior on opacity {NumberAnimation{}}
+        }
+
+        //
+        // Spacer
+        //
+        Item {
+            height: app.spacing * 2
+        }
+
+        //
         // COM port selector
         //
         Label {
