@@ -66,10 +66,18 @@ Widgets.Window {
             id: commAuto
             checked: true
             text: qsTr("Auto (JSON from serial device)")
+            onCheckedChanged: {
+                if (checked)
+                    CppJsonParser.setOperationMode(CppJsonParser.kAutomatic)
+            }
         } RadioButton {
             id: commManual
             checked: false
             text: qsTr("Manual (use JSON map file)")
+            onCheckedChanged: {
+                if (checked)
+                    CppJsonParser.setOperationMode(CppJsonParser.kManual)
+            }
         }
 
         //
@@ -79,8 +87,10 @@ Widgets.Window {
             Layout.fillWidth: true
             opacity: enabled ? 1 : 0.5
             enabled: commManual.checked
-            text: qsTr("Select map file") + "..."
+            onClicked: CppJsonParser.loadJsonMap()
             Behavior on opacity {NumberAnimation{}}
+            text: CppJsonParser.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(CppJsonParser.jsonMapFilename) :
+                                                         qsTr("Select map file") + "..."
         }
 
         //

@@ -23,7 +23,9 @@
 #ifndef JSON_PARSER_H
 #define JSON_PARSER_H
 
+#include <QFile>
 #include <QObject>
+#include <QQmlEngine>
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QJsonObject>
@@ -32,13 +34,36 @@
 class JsonParser : public QObject
 {
    Q_OBJECT
+   Q_PROPERTY(QString jsonMapFilename READ jsonMapFilename NOTIFY jsonFileMapChanged)
+   Q_PROPERTY(QString jsonMapFilepath READ jsonMapFilepath NOTIFY jsonFileMapChanged)
+   Q_PROPERTY(OperationMode operationMode READ operationMode WRITE setOperationMode NOTIFY operationModeChanged)
 
 signals:
    void packetReceived();
+   void jsonFileMapChanged();
+   void operationModeChanged();
+
+public:
+   enum OperationMode
+   {
+      kManual,
+      kAutomatic,
+   };
+   Q_ENUMS(OperationMode)
 
 public:
    static JsonParser *getInstance();
-   QJsonDocument document();
+
+   QByteArray jsonMapData() const;
+   QJsonDocument document() const;
+   QString jsonMapFilename() const;
+   QString jsonMapFilepath() const;
+   OperationMode operationMode() const;
+
+public slots:
+   void loadJsonMap();
+   void loadJsonMap(const QString &path);
+   void setOperationMode(const OperationMode mode);
 
 private:
    JsonParser();
@@ -47,7 +72,10 @@ private slots:
    void readData(const QByteArray &data);
 
 private:
+   QFile m_jsonMap;
+   OperationMode m_opMode;
    QJsonDocument m_document;
+   QByteArray m_jsonMapData;
 };
 
 #endif

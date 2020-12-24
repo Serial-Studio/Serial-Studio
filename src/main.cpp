@@ -34,6 +34,7 @@
 #include "AppInfo.h"
 #include "Widgets.h"
 #include "QmlBridge.h"
+#include "JsonParser.h"
 #include "GraphProvider.h"
 #include "SerialManager.h"
 
@@ -64,6 +65,7 @@ int main(int argc, char **argv)
    auto widgets = Widgets::getInstance();
    auto csvExport = Export::getInstance();
    auto qmlBridge = QmlBridge::getInstance();
+   auto jsonParser = JsonParser::getInstance();
    auto updater = QSimpleUpdater::getInstance();
    auto graphProvider = GraphProvider::getInstance();
    auto serialManager = SerialManager::getInstance();
@@ -78,6 +80,7 @@ int main(int argc, char **argv)
    engine.rootContext()->setContextProperty("CppWidgets", widgets);
    engine.rootContext()->setContextProperty("CppExport", csvExport);
    engine.rootContext()->setContextProperty("CppQmlBridge", qmlBridge);
+   engine.rootContext()->setContextProperty("CppJsonParser", jsonParser);
    engine.rootContext()->setContextProperty("CppGraphProvider", graphProvider);
    engine.rootContext()->setContextProperty("CppSerialManager", serialManager);
    engine.rootContext()->setContextProperty("CppAppName", app.applicationName());
