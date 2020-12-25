@@ -14,7 +14,7 @@ Furthermore, this approach can be extended to almost any type of project that in
 
 ![Screenshot](doc/screenshot.png)
 
-## Communication protocol
+## Communication protocol (OBLIGATORY READ)
 
 The communication protocol is implemented through a JSON document with the following structure:
 
@@ -49,6 +49,175 @@ The communication protocol is implemented through a JSON document with the follo
 This information is processed by Serial Studio, which builds the user interface according to the information contained in each frame. This information is also used to generate a CSV file with all the readings received from the serial device, the CSV file can be used for analysis and data-processing within MATLAB.
 
 **NOTE:** widget types can be repeated across different groups without any problem.
+
+### Communication modes
+
+Serial Studio can process incoming serial information in two ways:
+
+1. The serial device sends a full JSON data frame periodically (**auto mode**).
+2. User specifies the JSON structure in a file, and the serial device only sends data in a comma separated manner (**manual mode**).
+
+The manual mode is useful if you don't want to use a JSON library in your microcontroller program, or if you need to send large ammounts of information. An example of a JSON *map* file is:
+
+```json
+{
+   "t":"%1",
+   "g":[
+      {
+         "t":"Mission Status",
+         "d":[
+            {
+               "t":"Runtime",
+               "v":"%2",
+               "u":"ms"
+            },
+            {
+               "t":"Packet count",
+               "v":"%3"
+            },
+            {
+               "t":"Battery voltage",
+               "v":"%4",
+               "g":true,
+               "u":"V"
+            }
+         ]
+      },
+      {
+         "t":"Sensor Readings",
+         "d":[
+            {
+               "t":"Temperature",
+               "v":"%5",
+               "g":true,
+               "u":"°C"
+            },
+            {
+               "t":"Altitude",
+               "v":"%6",
+               "u":"m"
+            },
+            {
+               "t":"Pressure",
+               "v":"%7",
+               "u":"KPa",
+               "g":true
+            },
+            {
+               "t":"External Temperature",
+               "v":"%8",
+               "g":true,
+               "u":"°C"
+            },
+            {
+               "t":"Humidity",
+               "v":"%9",
+               "g":true,
+               "u":"°C"
+            }
+         ]
+      },
+      {
+         "t":"GPS",
+         "w":"map",
+         "d":[
+            {
+               "t":"GPS Time",
+               "v":"%10"
+            },
+            {
+               "t":"Longitude",
+               "v":"%11",
+               "u":"°N",
+               "w":"lon"
+            },
+            {
+               "t":"Latitude",
+               "v":"%12",
+               "u":"°E",
+               "w":"lat"
+            },
+            {
+               "t":"Altitude",
+               "v":"%13",
+               "u":"m"
+            },
+            {
+               "t":"No. Sats",
+               "v":"%14"
+            }
+         ]
+      },
+      {
+         "t":"Accelerometer",
+         "w":"accelerometer",
+         "d":[
+            {
+               "t":"X",
+               "v":"%15",
+               "u":"m/s^2",
+               "g":true,
+               "w":"x"
+            },
+            {
+               "t":"Y",
+               "v":"%16",
+               "u":"m/s^2",
+               "g":true,
+               "w":"y"
+            },
+            {
+               "t":"Z",
+               "v":"%17",
+               "u":"m/s^2",
+               "g":true,
+               "w":"z"
+            }
+         ]
+      },
+      {
+         "t":"Gyroscope",
+         "w":"gyro",
+         "d":[
+            {
+               "t":"X",
+               "v":"%18",
+               "u":"rad/s",
+               "g":true,
+               "w":"x"
+            },
+            {
+               "t":"Y",
+               "v":"%19",
+               "u":"rad/s",
+               "g":true,
+               "w":"y"
+            },
+            {
+               "t":"Z",
+               "v":"%20",
+               "u":"rad/s",
+               "g":true,
+               "w":"z"
+            }
+         ]
+      }
+   ]
+}
+```
+
+As you can guess, *Serial Studio* will replace the `%1`, `%2`, `%3`, `...`, `%20` values with the values at the corresponding index in a comma-separated data frame. The corresponding data format sent by the microcontroller for the given JSON map is:
+
+`/*KAANSATQRO,%s,%s,%s,%s,%s,%s,%,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s*/`
+
+### Frame start/end sequences
+
+To process all data frames, Serial Studio needs to have a reliable way to know when a frame starts and when a frame ends. The solution that I came with is to have a specific start/end sequence, which corresponds to:
+
+- `/*` Frame start sequence
+- `*/` Frame end sequence
+
+The start/end sequences apply both to the **auto** & **manual** communication modes.
 
 ## Build instructions
 
