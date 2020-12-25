@@ -1,7 +1,7 @@
 name: Compile
 on: [push]
 jobs:
-  check-bats-version:
+  compile:
     runs-on: ubuntu-latest
     steps:
       - uses: jurplel/install-qt-action@v2.11.1
