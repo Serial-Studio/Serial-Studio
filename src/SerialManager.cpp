@@ -388,6 +388,47 @@ void SerialManager::clearTempBuffer()
 }
 
 /**
+ * Disconnects from the current serial device and clears temp. data
+ */
+void SerialManager::disconnectDevice()
+{
+   // Check if serial port pointer is valid
+   if (port() != nullptr)
+   {
+      // Get serial port name (used for warning messages)
+      auto name = portName();
+
+      // Disconnect signals/slots
+      port()->disconnect(this, SLOT(onDataReceived()));
+      port()->disconnect(this, SLOT(disconnectDevice()));
+
+      // Close & delete serial port handler
+      port()->close();
+      port()->deleteLater();
+
+      // Reset pointer
+      m_port = nullptr;
+
+      // Reset received bytes
+      m_receivedBytes = 0;
+      emit receivedBytesChanged();
+
+      // Warn user
+      if (!name.isEmpty())
+         emit connectionError(name);
+
+      // Log changes
+      qInfo() << Q_FUNC_INFO << "Disconnected from" << name;
+
+      // Clear buffer
+      clearTempBuffer();
+   }
+
+   // Update user interface
+   emit connectedChanged();
+}
+
+/**
  * Tries to write the given @a data to the current serial port device.
  * Upon data write, the class emits the @a rx() signal for UI updating
  * or for write verification purposes.
@@ -897,47 +938,6 @@ void SerialManager::onDataReceived()
          }
       }
    }
-}
-
-/**
- * Disconnects from the current serial device and clears temp. data
- */
-void SerialManager::disconnectDevice()
-{
-   // Check if serial port pointer is valid
-   if (port() != nullptr)
-   {
-      // Get serial port name (used for warning messages)
-      auto name = portName();
-
-      // Disconnect signals/slots
-      port()->disconnect(this, SLOT(onDataReceived()));
-      port()->disconnect(this, SLOT(disconnectDevice()));
-
-      // Close & delete serial port handler
-      port()->close();
-      port()->deleteLater();
-
-      // Reset pointer
-      m_port = nullptr;
-
-      // Reset received bytes
-      m_receivedBytes = 0;
-      emit receivedBytesChanged();
-
-      // Warn user
-      if (!name.isEmpty())
-         emit connectionError(name);
-
-      // Log changes
-      qInfo() << Q_FUNC_INFO << "Disconnected from" << name;
-
-      // Clear buffer
-      clearTempBuffer();
-   }
-
-   // Update user interface
-   emit connectedChanged();
 }
 
 /**

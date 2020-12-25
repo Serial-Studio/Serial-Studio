@@ -34,7 +34,7 @@ public:
    ModuleManager();
 
 private slots:
-   void deleteModules();
+   void stopOperations();
 
 private:
    QQmlEngine *m_engine;

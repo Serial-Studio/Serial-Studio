@@ -114,6 +114,7 @@ public:
 
 public slots:
    void clearTempBuffer();
+   void disconnectDevice();
    void sendData(const QString &data);
    void setPort(const quint8 portIndex);
    void setParity(const quint8 parityIndex);
@@ -128,7 +129,6 @@ public slots:
 
 private slots:
    void onDataReceived();
-   void disconnectDevice();
    void reduceDocumentSize();
    void refreshSerialDevices();
 

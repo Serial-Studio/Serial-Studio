@@ -30,9 +30,13 @@ import Dataset 1.0
 import "../Widgets"
 
 Item {
+    Rectangle {
+        anchors.fill: parent
+        color: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
+    }
+
     AccelerometerDelegate {
-        width: 250
-        height: 250
+        index: 0
         anchors.centerIn: parent
     }
 }

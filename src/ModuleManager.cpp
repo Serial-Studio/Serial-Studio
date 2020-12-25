@@ -35,13 +35,14 @@
  */
 ModuleManager::ModuleManager()
 {
-   connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(deleteModules()));
+   connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
 }
 
 /**
- * Calls the destructor functions of the singleton classes.
+ * Calls the functions needed to safely quit the application
  */
-void ModuleManager::deleteModules()
+void ModuleManager::stopOperations()
 {
    Export::getInstance()->closeFile();
+   SerialManager::getInstance()->disconnectDevice();
 }
