@@ -1,8 +1,20 @@
 name: Compile
 on: [push]
 jobs:
-  compile:
+  build-linux:
     runs-on: ubuntu-latest
+    steps:
+      - uses: jurplel/install-qt-action@v2.11.1
+      - run: qmake
+      - run: make
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: jurplel/install-qt-action@v2.11.1
+      - run: qmake
+      - run: make
+  build-windows:
+    runs-on: windows-latest
     steps:
       - uses: jurplel/install-qt-action@v2.11.1
       - run: qmake
