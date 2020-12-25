@@ -50,7 +50,7 @@ El protocolo de comunicación se implementa a través de un documento JSON con l
     
 Esta información es procesada por Serial Studio, que construye la interfaz de usuario de acuerdo con la información contenida en cada marco. Esta información también se utiliza para generar un archivo CSV con todas las lecturas recibidas del dispositivo en serie, el archivo CSV se puede utilizar para análisis y procesamiento de datos dentro de MATLAB.
 
-** NOTA: ** los tipos de widgets se pueden repetir en diferentes grupos sin ningún problema.
+**NOTA:** los tipos de widgets se pueden repetir en diferentes grupos sin ningún problema.
 
 ### Modos de comunicación
 
