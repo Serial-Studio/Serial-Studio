@@ -1,4 +1,4 @@
-name: Serial-Studio
+name: Build
 on: [push]
 jobs:
   build-linux:
