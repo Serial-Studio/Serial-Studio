@@ -44,40 +44,40 @@ public:
    QList<Group *> gaugeGroup() const;
    QList<Group *> accelerometerGroup() const;
 
-   int barGroupCount() const;
-   int mapGroupCount() const;
-   int gyroGroupCount() const;
-   int tankGroupCount() const;
-   int gaugeGroupCount() const;
-   int accelerometerGroupCount() const;
+   Q_INVOKABLE int barGroupCount() const;
+   Q_INVOKABLE int mapGroupCount() const;
+   Q_INVOKABLE int gyroGroupCount() const;
+   Q_INVOKABLE int tankGroupCount() const;
+   Q_INVOKABLE int gaugeGroupCount() const;
+   Q_INVOKABLE int accelerometerGroupCount() const;
 
-   Group *barGroupAt(const int index);
-   Group *mapGroupAt(const int index);
-   Group *gyroGroupAt(const int index);
-   Group *tankGroupAt(const int index);
-   Group *gaugeGroupAt(const int index);
-   Group *accelerometerGroupAt(const int index);
+   Q_INVOKABLE Group *barGroupAt(const int index);
+   Q_INVOKABLE Group *mapGroupAt(const int index);
+   Q_INVOKABLE Group *gyroGroupAt(const int index);
+   Q_INVOKABLE Group *tankGroupAt(const int index);
+   Q_INVOKABLE Group *gaugeGroupAt(const int index);
+   Q_INVOKABLE Group *accelerometerGroupAt(const int index);
 
-   double gyroX(const int index);
-   double gyroY(const int index);
-   double gyroZ(const int index);
+   Q_INVOKABLE double gyroX(const int index);
+   Q_INVOKABLE double gyroY(const int index);
+   Q_INVOKABLE double gyroZ(const int index);
 
-   double accelerometerX(const int index);
-   double accelerometerY(const int index);
-   double accelerometerZ(const int index);
+   Q_INVOKABLE double accelerometerX(const int index);
+   Q_INVOKABLE double accelerometerY(const int index);
+   Q_INVOKABLE double accelerometerZ(const int index);
 
-   double bar(const int index);
-   double tank(const int index);
-   double gauge(const int index);
-   double barMin(const int index);
-   double barMax(const int index);
-   double tankMin(const int index);
-   double tankMax(const int index);
-   double gaugeMin(const int index);
-   double gaugeMax(const int index);
+   Q_INVOKABLE double bar(const int index);
+   Q_INVOKABLE double tank(const int index);
+   Q_INVOKABLE double gauge(const int index);
+   Q_INVOKABLE double barMin(const int index);
+   Q_INVOKABLE double barMax(const int index);
+   Q_INVOKABLE double tankMin(const int index);
+   Q_INVOKABLE double tankMax(const int index);
+   Q_INVOKABLE double gaugeMin(const int index);
+   Q_INVOKABLE double gaugeMax(const int index);
 
-   double mapLatitude(const int index);
-   double mapLongitude(const int index);
+   Q_INVOKABLE double mapLatitude(const int index);
+   Q_INVOKABLE double mapLongitude(const int index);
 
 private slots:
    void updateModels();

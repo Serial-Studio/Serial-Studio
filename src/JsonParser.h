@@ -25,6 +25,7 @@
 
 #include <QFile>
 #include <QObject>
+#include <QSettings>
 #include <QQmlEngine>
 #include <QJsonArray>
 #include <QJsonValue>
@@ -62,17 +63,22 @@ public:
 
 public slots:
    void loadJsonMap();
-   void loadJsonMap(const QString &path);
    void setOperationMode(const OperationMode mode);
+   void loadJsonMap(const QString &path, const bool silent = false);
 
 private:
    JsonParser();
+
+public slots:
+   void readSettings();
+   void writeSettings(const QString &path);
 
 private slots:
    void readData(const QByteArray &data);
 
 private:
    QFile m_jsonMap;
+   QSettings m_settings;
    QString m_jsonMapData;
    OperationMode m_opMode;
    QJsonDocument m_document;

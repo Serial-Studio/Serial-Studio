@@ -30,5 +30,9 @@ import Dataset 1.0
 import "../Widgets"
 
 Item {
-
+    AccelerometerDelegate {
+        width: 250
+        height: 250
+        anchors.centerIn: parent
+    }
 }

@@ -42,6 +42,8 @@ Widgets.Window {
     //
     Settings {
         category: "Device Manager"
+        property alias dmAuto: commAuto.checked
+        property alias dmManual: commManual.checked
         property alias dmParity: parity.currentIndex
         property alias dmStopBits: stopBits.currentIndex
         property alias dmBaudRate: baudRate.currentIndex

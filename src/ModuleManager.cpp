@@ -43,8 +43,5 @@ ModuleManager::ModuleManager()
  */
 void ModuleManager::deleteModules()
 {
-   Export::getInstance()->deleteLater();
-   QmlBridge::getInstance()->deleteLater();
-   GraphProvider::getInstance()->deleteLater();
-   SerialManager::getInstance()->deleteLater();
+   Export::getInstance()->closeFile();
 }

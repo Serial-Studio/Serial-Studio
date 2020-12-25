@@ -139,7 +139,7 @@ void JsonParser::loadJsonMap()
 /**
  * Opens, validates & loads into memory the JSON file in the given @a path.
  */
-void JsonParser::loadJsonMap(const QString &path)
+void JsonParser::loadJsonMap(const QString &path, const bool silent)
 {
    // Validate path
    if (path.isEmpty())
@@ -163,23 +163,26 @@ void JsonParser::loadJsonMap(const QString &path)
       if (error.error != QJsonParseError::NoError)
       {
          m_jsonMap.close();
+         writeSettings("");
          NiceMessageBox(tr("JSON parse error"), error.errorString());
       }
 
-      // JSON contains no errors
+      // JSON contains no errors, load data & save settings
       else
       {
+         writeSettings(path);
          m_jsonMapData = QString::fromUtf8(data);
-         NiceMessageBox(tr("JSON map file loaded successfully!"),
-                        tr("File \"%1\" loaded into memory").arg(jsonMapFilename()));
+         if (!silent)
+            NiceMessageBox(tr("JSON map file loaded successfully!"),
+                           tr("File \"%1\" loaded into memory").arg(jsonMapFilename()));
       }
    }
 
    // Open error
    else
    {
-      NiceMessageBox(tr("Cannot read file contents"),
-                     tr("Failed to read contents of \"%1\", check file permissions").arg(jsonMapFilename()));
+      writeSettings("");
+      NiceMessageBox(tr("Cannot read JSON file"), tr("Please check file permissions & location"));
       m_jsonMap.close();
    }
 
@@ -202,6 +205,24 @@ void JsonParser::setOperationMode(const OperationMode mode)
 {
    m_opMode = mode;
    emit operationModeChanged();
+}
+
+/**
+ * Loads the last saved JSON map file (if any)
+ */
+void JsonParser::readSettings()
+{
+   auto path = m_settings.value("json_map_location", "").toString();
+   if (!path.isEmpty())
+      loadJsonMap(path, true);
+}
+
+/**
+ * Saves the location of the last valid JSON map file that was opened (if any)
+ */
+void JsonParser::writeSettings(const QString &path)
+{
+   m_settings.setValue("json_map_location", path);
 }
 
 /**

@@ -106,6 +106,9 @@ ApplicationWindow {
     Timer {
         id: timer
         interval: 500
-        onTriggered: app.visible = true
+        onTriggered: {
+            app.visible = true
+            CppJsonParser.readSettings()
+        }
     }
 }

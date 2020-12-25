@@ -138,6 +138,8 @@ void Export::closeFile()
          writeValues();
 
       m_csvFile.close();
+      m_textStream.setDevice(Q_NULLPTR);
+
       emit openChanged();
    }
 }
@@ -228,7 +230,7 @@ void Export::writeValues()
 
          // Open file
          m_csvFile.setFileName(dir.filePath(fileName));
-         if (!m_csvFile.open(QFile::WriteOnly))
+         if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
          {
             QMessageBox::critical(Q_NULLPTR, tr("CSV File Error"), tr("Cannot open CSV file for writing!"),
                                   QMessageBox::Ok);
@@ -236,14 +238,17 @@ void Export::writeValues()
             break;
          }
 
-         // Add cell titles
+         // Add cell titles & force UTF-8 codec
+         m_textStream.setDevice(&m_csvFile);
+         m_textStream.setCodec("UTF-8");
+         m_textStream.setGenerateByteOrderMark(true);
          for (int i = 0; i < titles.count(); ++i)
          {
-            m_csvFile.write(titles.at(i).toUtf8());
+            m_textStream << titles.at(i).toUtf8();
             if (i < titles.count() - 1)
-               m_csvFile.write(",");
+               m_textStream << ",";
             else
-               m_csvFile.write("\n");
+               m_textStream << "\n";
          }
 
          // Update UI
@@ -253,11 +258,11 @@ void Export::writeValues()
       // Write cell values
       for (int i = 0; i < values.count(); ++i)
       {
-         m_csvFile.write(values.at(i).toUtf8());
+         m_textStream << values.at(i).toUtf8();
          if (i < values.count() - 1)
-            m_csvFile.write(",");
+            m_textStream << ",";
          else
-            m_csvFile.write("\n");
+            m_textStream << "\n";
       }
 
       // Remove JSON from list

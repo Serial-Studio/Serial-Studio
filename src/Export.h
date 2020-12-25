@@ -47,15 +47,16 @@ private:
 
 public slots:
    void openCsv();
+   void closeFile();
    void openCurrentCsv();
 
 private slots:
-   void closeFile();
    void writeValues();
    void updateValues();
 
 private:
    QFile m_csvFile;
+   QTextStream m_textStream;
    QList<QPair<QDateTime, QJsonObject>> m_jsonList;
 };
 

@@ -61,29 +61,6 @@ ColumnLayout {
     readonly property var gpsCoordinates: QtPositioning.coordinate(latitude, longitude)
 
     //
-    // Center map when connecting with CanSat
-    //
-    Connections {
-        target: CppQmlBridge
-
-        function onUpdated() {
-            if (oldCoordinates === QtPositioning.coordinate(0,0)) {
-                map.center = gpsCoordinates
-                oldCoordinates = gpsCoordinates
-            }
-
-            gps.latitude = CppQmlBridge.gpsLatitude
-            gps.longitude = CppQmlBridge.gpsLongitude
-        }
-    } Connections {
-        target: CppSerialManager
-
-        function onPortChanged() {
-            oldCoordinates = QtPositioning.coordinate(0,0)
-        }
-    }
-
-    //
     // Centers the map to Queretaro if the GPS is not working,
     // otherwise, centers the map to the CanSat's position
     //

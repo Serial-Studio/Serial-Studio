@@ -127,15 +127,10 @@ Page {
                         Layout.fillHeight: true
                     }
 
-                    Item {
+                    Components.WidgetGrid {
+                        id: widgetGrid
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-
-                        Widgets.MapDelegate {
-                            id: gpsMap
-                            anchors.fill: parent
-                            anchors.margins: app.spacing * 2
-                        }
                     }
                 }
 

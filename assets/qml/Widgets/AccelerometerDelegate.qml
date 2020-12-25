@@ -21,7 +21,91 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Layouts 1.0
 
-Item {
+import Group 1.0
+import Dataset 1.0
 
+RowLayout {
+    id: accel
+    spacing: app.spacing
+
+    //
+    // Custom properties
+    //
+    property int index: 0
+    property real accX: 0
+    property real accY: 0
+    property real accZ: 0
+    property string title: ""
+    property real meanGForce: 0
+    property real gConstant: 9.80665
+
+    //
+    // Calculates the mean g force for all three axes using the pythagorean theorem
+    //
+    function calculateMeanGForce() {
+        if (CppWidgets.accelerometerGroupCount() > accel.index) {
+            accel.accX = CppWidgets.accelerometerX(accel.index)
+            accel.accY = CppWidgets.accelerometerY(accel.index)
+            accel.accZ = CppWidgets.accelerometerZ(accel.index)
+            accel.title = CppWidgets.accelerometerGroupAt(accel.index).title
+        }
+
+        else {
+            accel.accX = 0
+            accel.accY = 0
+            accel.accZ = 0
+            accel.title = 0
+        }
+
+        var gX = accel.accX / accel.gConstant
+        var gY = accel.accY / accel.gConstant
+        var gZ = accel.accZ / accel.gConstant
+
+        accel.meanGForce = Math.sqrt(Math.pow(gX, 2) + Math.pow(gY, 2) + Math.pow(gZ, 2))
+    }
+
+    //
+    // Accelerometer circle
+    //
+    Rectangle {
+        width: height
+        color: "#444"
+        border.width: 2
+        radius: width / 2
+        border.color: "#bebebe"
+        Layout.fillHeight: true
+    }
+
+    //
+    // Indicator controls
+    //
+    ColumnLayout {
+        spacing: app.spacing
+        Layout.fillHeight: true
+
+        Item {
+            Layout.fillHeight: true
+        }
+
+        LED {
+            onColor: "#f00"
+            text: qsTr("Cont. value")
+        }
+
+        LED {
+            onColor: "#0f0"
+            text: qsTr("Max. value")
+        }
+
+        LED {
+            onColor: "#00f"
+            text: qsTr("Min. value")
+        }
+
+        Item {
+            Layout.fillHeight: true
+        }
+    }
 }
