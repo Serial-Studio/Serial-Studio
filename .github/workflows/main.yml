@@ -1,21 +1,23 @@
-name: Compile
+name: Serial-Studio
 on: [push]
 jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: jurplel/install-qt-action@v2.11.1
-      - run: qmake
-      - run: make
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - uses: jurplel/install-qt-action@v2.11.1
-      - run: qmake
-      - run: make
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: jurplel/install-qt-action@v2.11.1
-      - run: qmake
-      - run: make
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-QtCache
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        
+      - name: Compile
+        run: mkdir build-linux 
+             cd build-linux
+             qmake ../Serial-Studio.pro
+             make
