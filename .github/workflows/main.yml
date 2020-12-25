@@ -1,2 +1,9 @@
-- name: Install Qt
-  uses: jurplel/install-qt-action@v2.11.1
+name: Compile
+on: [push]
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jurplel/install-qt-action@v2.11.1
+      - run: qmake
+      - run: make
