@@ -6,9 +6,7 @@
 
 [![Build Status](https://travis-ci.org/Serial-Studio/Serial-Studio.svg?branch=master)](https://travis-ci.org/Serial-Studio/Serial-Studio)
 
-Serial Studio es una aplicación de visualización y procesamiento de datos serial multi-plataforma y multi-propósito.
-
-Serial Studio es un programa de visualización de datos en serie multiplataforma y multipropósito. El objetivo de este proyecto es permitir a los desarrolladores y creadores de sistemas embebidos visualizar, presentar y analizar fácilmente los datos generados por sus proyectos y dispositivos, sin la necesidad de escribir software especializado para cada proyecto.
+Serial Studio es un programa de visualización de datos de puertos serial multiplataforma y multipropósito. El objetivo de este proyecto es permitir a los desarrolladores y creadores de sistemas embebidos visualizar, presentar y analizar fácilmente los datos generados por sus proyectos y dispositivos, sin la necesidad de escribir software especializado para cada proyecto.
 
 La necesidad de este proyecto surgió durante el desarrollo del software de estación terrestre para varios concursos de CanSat. Simplemente no es sostenible desarrollar y mantener diferentes programas para cada competencia. La solución inteligente es tener un software de estación terrestre común y permitir que cada CanSat defina cómo se presentan los datos al usuario final mediante un protocolo de comunicación extensible.
 
