@@ -17,7 +17,8 @@ jobs:
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
         
       - name: Compile
-        run: mkdir build-linux 
+        run: rm -rf build-linux
+             mkdir build-linux 
              cd build-linux
              qmake ../Serial-Studio.pro
              make
