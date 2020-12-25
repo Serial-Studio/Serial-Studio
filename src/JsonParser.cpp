@@ -75,7 +75,7 @@ JsonParser *JsonParser::getInstance()
 /**
  * Returns the JSON map data from the loaded file as a string
  */
-QByteArray JsonParser::jsonMapData() const
+QString JsonParser::jsonMapData() const
 {
    return m_jsonMapData;
 }
@@ -169,7 +169,7 @@ void JsonParser::loadJsonMap(const QString &path)
       // JSON contains no errors
       else
       {
-         m_jsonMapData = data;
+         m_jsonMapData = QString::fromUtf8(data);
          NiceMessageBox(tr("JSON map file loaded successfully!"),
                         tr("File \"%1\" loaded into memory").arg(jsonMapFilename()));
       }
@@ -218,15 +218,39 @@ void JsonParser::setOperationMode(const OperationMode mode)
  */
 void JsonParser::readData(const QByteArray &data)
 {
-   if (!data.isEmpty())
-   {
-      QJsonParseError error;
-      auto document = QJsonDocument::fromJson(data, &error);
+   // Data empty, abort
+   if (data.isEmpty())
+      return;
 
-      if (error.error == QJsonParseError::NoError)
-      {
-         m_document = document;
-         emit packetReceived();
-      }
+   // Init variables
+   QJsonParseError error;
+   QJsonDocument document;
+
+   // Serial device sends JSON (auto mode)
+   if (operationMode() == kAutomatic)
+      document = QJsonDocument::fromJson(data, &error);
+
+   // We need to use a map file, check if its loaded & replace values into map file
+   else
+   {
+      // Empty JSON map data
+      if (jsonMapData().isEmpty())
+         return;
+
+      // Separate incoming data & add it to the JSON map
+      auto json = jsonMapData();
+      auto list = QString::fromUtf8(data).split(',');
+      foreach (auto str, list)
+         json = json.arg(str);
+
+      // Create json document
+      document = QJsonDocument::fromJson(json.toUtf8(), &error);
+   }
+
+   // No parse error, update UI
+   if (error.error == QJsonParseError::NoError)
+   {
+      m_document = document;
+      emit packetReceived();
    }
 }

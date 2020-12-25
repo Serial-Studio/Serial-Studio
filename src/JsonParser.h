@@ -54,7 +54,7 @@ public:
 public:
    static JsonParser *getInstance();
 
-   QByteArray jsonMapData() const;
+   QString jsonMapData() const;
    QJsonDocument document() const;
    QString jsonMapFilename() const;
    QString jsonMapFilepath() const;
@@ -73,9 +73,9 @@ private slots:
 
 private:
    QFile m_jsonMap;
+   QString m_jsonMapData;
    OperationMode m_opMode;
    QJsonDocument m_document;
-   QByteArray m_jsonMapData;
 };
 
 #endif

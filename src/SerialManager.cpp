@@ -865,8 +865,6 @@ void SerialManager::onDataReceived()
       if (m_textCursor)
       {
          auto text = QString::fromUtf8(data);
-         text.replace("\r\n", "<br/>");
-         text.replace("\n", "<br/>");
          m_textCursor->insertText(text);
       }
 
