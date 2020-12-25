@@ -217,7 +217,7 @@ To process all data frames, Serial Studio needs to have a reliable way to know w
 - `/*` Frame start sequence
 - `*/` Frame end sequence
 
-The start/end sequences apply both to the **auto** & **manual** communication modes.
+The start/end sequences **apply both** to the **auto** & **manual** communication modes.
 
 ### Example
 
