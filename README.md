@@ -12,6 +12,8 @@ The need for this project arose during the development of the Ground Station Sof
 
 Furthermore, this approach can be extended to almost any type of project that involves some kind of data acquisition & measurement.
 
+*Read this in other languages*: [Español](README_ES.md)
+
 ![Screenshot](doc/screenshot.png)
 
 ## Communication protocol (OBLIGATORY READ)
@@ -57,7 +59,7 @@ Serial Studio can process incoming serial information in two ways:
 1. The serial device sends a full JSON data frame periodically (**auto mode**).
 2. User specifies the JSON structure in a file, and the serial device only sends data in a comma separated manner (**manual mode**).
 
-The manual mode is useful if you don't want to use a JSON library in your microcontroller program, or if you need to send large ammounts of information. An example of a JSON *map* file is:
+The manual mode is useful if you don't want to use a JSON library in your microcontroller program, or if you need to send large amounts of information. An example of a JSON *map* file is:
 
 ```json
 {
@@ -221,16 +223,16 @@ The start/end sequences **apply both** to the **auto** & **manual** communicatio
 
 ### Example
 
-Supose that you are receiving the following data from a microcontroller:
+Suppose that you are receiving the following data from a microcontroller:
 
 `/*KAANSATQRO,2051,2,5,26,10,101.26,27,32,1001,21.1619,86.8515,10,4,1.23,9.81,0.23,0,0,0*/`
 
 Serial Studio is configured to interpret incoming data using the JSON map file presented above. The data will be separated as:
 
-| Index                        |  0           |  1     |  2   |  3   |  4    |  5    |  6        |  7    |  8    |  9      |  10        |  11        |  12   |  13   |  14     |  15     |  16     |  17   |  18   |  19   |
-|------------------------------|--------------|--------|------|------|-------|-------|-----------|-------|-------|---------|------------|------------|-------|-------|---------|---------|---------|-------|-------|-------|
-| JSON map match       | `%1`         | `%2`   | `%3` | `%4` | `%5`  | `%6`  | `%7`      | `%8`  | `%9`  | `%10`   | `%11`      | `%12`      | `%13` | `%14` | `%15`   | `%16`   | `%17`   | `%18` | `%19` | `%20` |
-| Replaced with         | `KAANSATQRO` | `2051` | `2`  | `5`  | `26`  | `10`  | `101.26`  | `27`  | `32`  | `1001`  | `21.1619`  | `86.8515`  | `10`  | `4`   | `1.23`  | `9.81`  | `0.23`  | `0`   | `0`   | `0`   | 
+| Index          |  0           |  1     |  2   |  3   |  4    |  5    |  6        |  7    |  8    |  9      |  10        |  11        |  12   |  13   |  14     |  15     |  16     |  17   |  18   |  19   |
+|----------------|--------------|--------|------|------|-------|-------|-----------|-------|-------|---------|------------|------------|-------|-------|---------|---------|---------|-------|-------|-------|
+| JSON map match | `%1`         | `%2`   | `%3` | `%4` | `%5`  | `%6`  | `%7`      | `%8`  | `%9`  | `%10`   | `%11`      | `%12`      | `%13` | `%14` | `%15`   | `%16`   | `%17`   | `%18` | `%19` | `%20` |
+| Replaced with  | `KAANSATQRO` | `2051` | `2`  | `5`  | `26`  | `10`  | `101.26`  | `27`  | `32`  | `1001`  | `21.1619`  | `86.8515`  | `10`  | `4`   | `1.23`  | `9.81`  | `0.23`  | `0`   | `0`   | `0`   | 
 
 All incoming data frames will be automatically registered in a CSV file, which can be used for later analysis.
 
