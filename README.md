@@ -210,7 +210,7 @@ As you can guess, *Serial Studio* will replace the `%1`, `%2`, `%3`, `...`, `%20
 
 `/*KAANSATQRO,%s,%s,%s,%s,%s,%s,%,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s*/`
 
-### Frame start/end sequences
+### Frame start/end sequences
 
 To process all data frames, Serial Studio needs to have a reliable way to know when a frame starts and when a frame ends. The solution that I came with is to have a specific start/end sequence, which corresponds to:
 
@@ -218,6 +218,21 @@ To process all data frames, Serial Studio needs to have a reliable way to know w
 - `*/` Frame end sequence
 
 The start/end sequences apply both to the **auto** & **manual** communication modes.
+
+### Example
+
+Supose that you are receiving the following data from a microcontroller:
+
+`/*KAANSATQRO,2051,2,5,26,10,101.26,27,32,1001,21.1619,86.8515,10,4,1.23,9.81,0.23,0,0,0*/`
+
+Serial Studio is configured to interpret incoming data using the JSON map file presented above. The data will be separated as:
+
+| Index                        |  0           |  1     |  2   |  3   |  4    |  5    |  6        |  7    |  8    |  9      |  10        |  11        |  12   |  13   |  14     |  15     |  16     |  17   |  18   |  19   |
+|------------------------------|--------------|--------|------|------|-------|-------|-----------|-------|-------|---------|------------|------------|-------|-------|---------|---------|---------|-------|-------|-------|
+| Index in JSON map file       | `%1`         | `%2`   | `%3` | `%4` | `%5`  | `%6`  | `%7`      | `%8`  | `%9`  | `%10`   | `%11`      | `%12`      | `%13` | `%14` | `%15`   | `%16`   | `%17`   | `%18` | `%19` | `%20` |
+| Value in serial data         | `KAANSATQRO` | `2051` | `2`  | `5`  | `26`  | `10`  | `101.26`  | `27`  | `32`  | `1001`  | `21.1619`  | `86.8515`  | `10`  | `4`   | `1.23`  | `9.81`  | `0.23`  | `0`   | `0`   | `0`   | 
+
+All incoming data frames will be automatically registered in a CSV file, which can be used for later analysis.
 
 ## Build instructions
 
