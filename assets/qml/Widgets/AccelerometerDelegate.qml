@@ -43,6 +43,7 @@ Window {
     implicitHeight: implicitWidth + 96
     Behavior on opacity {NumberAnimation{}}
     borderColor: Qt.rgba(81/255, 116/255, 151/255, 1)
+    backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
 
     //
     // Custom properties
