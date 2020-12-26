@@ -32,6 +32,7 @@ import "../Widgets" as Widgets
 
 ApplicationWindow {
     title: qsTr("Devices")
+    flags: Qt.WindowStaysOnTopHint
 
     //
     // Window geometry & position

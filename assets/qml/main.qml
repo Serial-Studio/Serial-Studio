@@ -66,10 +66,12 @@ Item {
     //
     Console {
         id: consoleWindow
-        x: 2 * app.spacing
-        y: 2 * app.spacing + mainWindow.y + mainWindow.height + 32
-        height: Screen.desktopAvailableHeight - y - 2 * app.spacing
-        width: Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
+        Component.onCompleted: {
+            x = 2 * app.spacing
+            y = 2 * app.spacing + mainWindow.y + mainWindow.height + 32
+            height = Screen.desktopAvailableHeight - y - 2 * app.spacing
+            width = Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
+        }
     }
 
     //
@@ -77,27 +79,22 @@ Item {
     //
     DataGrid {
         id: dataWindow
-        x: 2 * app.spacing
-        y: 2 * app.spacing + mainWindow.y + mainWindow.height + 32
-        height: Screen.desktopAvailableHeight - y - 2 * app.spacing
-        width: Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
+        Component.onCompleted: {
+            x = 2 * app.spacing
+            y = 2 * app.spacing + mainWindow.y + mainWindow.height + 32
+            height = Screen.desktopAvailableHeight - y - 2 * app.spacing
+            width = Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
+        }
 
         property bool alreadyShown: false
-
-        Timer {
-            id: timer
-            interval: 1000
-            onTriggered: {
-                dataWindow.show()
-                dataWindow.alreadyShown = true
-            }
-        }
 
         Connections {
             target: CppJsonParser
             function onPacketReceived()  {
-                if (!dataWindow.visible && !dataWindow.alreadyShown)
-                    timer.start()
+                if (!dataWindow.visible && !dataWindow.alreadyShown) {
+                    dataWindow.show()
+                    dataWindow.alreadyShown = true
+                }
             }
         }
     }
@@ -133,9 +130,11 @@ Item {
     //
     Widgets {
         id: widgetsWindow
-        x: 2 * app.spacing
-        y: 2 * app.spacing + mainWindow.y + mainWindow.height + 32
-        height: Screen.desktopAvailableHeight - y - 2 * app.spacing
-        width: Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
+        Component.onCompleted: {
+            x = 2 * app.spacing
+            y = 2 * app.spacing + mainWindow.y + mainWindow.height + 32
+            height = Screen.desktopAvailableHeight - y - 2 * app.spacing
+            width = Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
+        }
     }
 }

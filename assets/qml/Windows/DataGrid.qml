@@ -45,7 +45,7 @@ ApplicationWindow {
     palette.buttonText: Qt.rgba(1, 1, 1, 1)
     palette.windowText: Qt.rgba(1, 1, 1, 1)
     background: Rectangle {
-        color: Qt.rgba(33/255, 55/255, 63/255, 1)
+        color: Qt.rgba(18/255, 25/255, 32/255, 1)
     }
 
     //
