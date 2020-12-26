@@ -22,3 +22,25 @@ jobs:
              cd build-linux
              qmake ../Serial-Studio.pro
              make
+             
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-QtCache
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        
+      - name: Compile
+        run: rm -rf build-mac
+             mkdir build-mac 
+             cd build-mac
+             qmake ../Serial-Studio.pro
+             make
