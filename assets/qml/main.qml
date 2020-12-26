@@ -36,7 +36,6 @@ ApplicationWindow {
     // Global properties
     //
     readonly property int spacing: 8
-    readonly property color consoleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
     readonly property string monoFont: {
         switch (Qt.platform.os) {
         case "osx":

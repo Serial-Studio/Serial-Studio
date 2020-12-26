@@ -28,6 +28,7 @@ import "../Widgets" as Widgets
 
 Widgets.Window {
     id: window
+    readonly property color consoleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
 
     //
     // Window properties
@@ -71,7 +72,7 @@ Widgets.Window {
                     id: _console
                     readOnly: true
                     font.pixelSize: 12
-                    color: app.consoleColor
+                    color: window.consoleColor
                     wrapMode: TextEdit.Wrap
                     textFormat: Text.RichText
                     font.family: app.monoFont
@@ -92,7 +93,7 @@ Widgets.Window {
                 height: 24
                 font.pixelSize: 12
                 Layout.fillWidth: true
-                color: app.consoleColor
+                color: window.consoleColor
                 font.family: app.monoFont
                 enabled: CppSerialManager.readWrite
                 palette.base: Qt.rgba(8/255, 22/255, 18/255, 1)

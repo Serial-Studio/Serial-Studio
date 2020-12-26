@@ -56,20 +56,6 @@ Window {
     property real accZ: 0
     property real meanGForce: 0
     property real gConstant: 9.80665
-    readonly property real indicatorWidth: 4
-    property color indicatorColor: Qt.rgba(230/255, 224/255, 178/255, 1)
-
-    //
-    // Redraw indicators automatically
-    //
-    onMeanGForceChanged: indicatorCanvas.requestPaint()
-
-    //
-    // Animations
-    //
-    Behavior on min {NumberAnimation{}}
-    Behavior on max {NumberAnimation{}}
-    Behavior on meanGForce {NumberAnimation{}}
 
     //
     // Connections with widget manager
@@ -130,142 +116,18 @@ Window {
         //
         // Gauge object
         //
-        Rectangle {
-            id: gauge
-            border.width: 2
-            radius: width / 2
+        GaugeDelegate {
+            firstNumber: 0
+            lastNumber: 8
+            title: qsTr("G Units")
+            minimumValue: accel.min
+            maximumValue: accel.max
+            currentValue: accel.meanGForce
+
             Layout.fillWidth: true
             Layout.minimumHeight: width
             Layout.maximumHeight: width
             Layout.alignment: Qt.AlignHCenter
-            color: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
-            border.color: Qt.rgba(230/255, 224/255, 178/255, 1)
-
-            //
-            // Redraw numbers automatically
-            //
-            onWidthChanged: numbersCanvas.requestPaint()
-            onHeightChanged: numbersCanvas.requestPaint()
-
-            //
-            // Units label
-            //
-            Label {
-                text: qsTr("G Units")
-                anchors.centerIn: parent
-                font.family: app.monoFont
-                anchors.verticalCenterOffset: 32
-                color: Qt.rgba(81/255, 116/255, 151/255, 1)
-            }
-
-            //
-            // Numbers painter
-            //
-            Canvas {
-                opacity: 0.8
-                id: numbersCanvas
-                anchors.fill: parent
-                Component.onCompleted: requestPaint()
-                onPaint: {
-                    var ctx = getContext('2d')
-
-                    for (var i = 0; i <= 7; ++i) {
-                        var radius = Math.min(gauge.width, gauge.height) / 2
-
-                        var startupTheta = -180
-                        var theta = (startupTheta + i * 360/8) * (Math.PI / 180)
-                        var dX = (radius - 18) * Math.cos(theta) + radius - 9
-                        var dY = (radius - 18) * Math.sin(theta) + radius + 9
-
-                        ctx.font = "bold 18px " + app.monoFont
-                        ctx.fillStyle = accel.indicatorColor
-                        ctx.fillText(i, dX, dY)
-
-                        if (i === 7) {
-                            var x = radius
-                            var y = radius
-                            var spacing = 10 * Math.PI / 180.0;
-                            var startAngle = theta + spacing
-                            var finishAngle = Math.PI - spacing
-
-                            ctx.lineWidth = 2
-                            ctx.strokeStyle = accel.indicatorColor
-
-                            ctx.beginPath();
-                            ctx.arc(x, y, radius - 21, startAngle, finishAngle)
-                            ctx.stroke()
-                            ctx.beginPath();
-                            ctx.arc(x, y, radius - 15, startAngle, finishAngle)
-                            ctx.stroke()
-                        }
-                    }
-                }
-            }
-
-            //
-            // Indicator painter
-            //
-            Canvas {
-                id: indicatorCanvas
-                anchors.fill: parent
-                Component.onCompleted: requestPaint()
-                onPaint: {
-                    var ctx = getContext('2d')
-
-                    function drawLineWithArrows(x0,y0,x1,y1,aWidth,aLength){
-                        var dx=x1-x0;
-                        var dy=y1-y0;
-                        var angle=Math.atan2(dy,dx);
-                        var length=Math.sqrt(dx*dx+dy*dy);
-
-                        ctx.translate(x0,y0);
-                        ctx.rotate(angle);
-                        ctx.beginPath();
-                        ctx.moveTo(0,0);
-                        ctx.lineTo(length,0);
-
-                        ctx.moveTo(length-aLength,-aWidth);
-                        ctx.lineTo(length,0);
-                        ctx.lineTo(length-aLength,aWidth);
-
-                        ctx.stroke();
-                        ctx.setTransform(1,0,0,1,0,0);
-                    }
-
-                    function drawIndicator(value, color, width, lenGain) {
-                        var deg = ((Math.min(value, 7.5) / 8) * 360) - 180
-                        var rad = deg * (Math.PI / 180)
-                        var len = Math.min(gauge.width, gauge.height) * lenGain
-
-                        var x = gauge.width / 2
-                        var y = gauge.height / 2
-                        var x1 = x + Math.cos(rad) * len
-                        var y1 = y + Math.sin(rad) * len
-
-                        ctx.lineWidth = width
-                        ctx.strokeStyle = color
-                        drawLineWithArrows(x, y, x1, y1, width, width * 2)
-                    }
-
-                    ctx.reset()
-                    drawIndicator(accel.max, Qt.rgba(215/255, 45/255, 96/255, 1), accel.indicatorWidth * 0.8, 0.20)
-                    drawIndicator(accel.min, Qt.rgba(45/255, 96/255, 115/255, 1), accel.indicatorWidth * 0.8, 0.20)
-                    drawIndicator(accel.meanGForce, accel.indicatorColor, accel.indicatorWidth, 0.28)
-                }
-            }
-
-            //
-            // Central gauge
-            //
-            Rectangle {
-                width: 24
-                height: 24
-                color: "#111"
-                radius: width / 2
-                anchors.centerIn: parent
-                border.color: accel.indicatorColor
-                border.width: accel.indicatorWidth - 1
-            }
         }
 
         //
