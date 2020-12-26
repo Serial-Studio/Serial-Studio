@@ -147,14 +147,14 @@ Window {
             var ctx = getContext('2d')
 
             for (var i = 0; i <= 7; ++i) {
-                var d = -60
-                var dd = (d + i * 45) * (Math.PI / 180)
-                var tx = (gauge.width * 0.4) * Math.cos(dd) + gauge.width / 2 - 9/2
-                var ty = (gauge.height * 0.4) * Math.sin(dd) + gauge.height / 2 + 9/2
+                var startupTheta = -180
+                var theta = (startupTheta + i * 360/8) * (Math.PI / 180)
+                var dX = (gauge.width * 0.4) * Math.cos(theta) + gauge.width / 2 - 9/2
+                var dY = (gauge.height * 0.4) * Math.sin(theta) + gauge.height / 2 + 9/2
 
                 ctx.font = "bold 18px " + app.monoFont
                 ctx.fillStyle = accel.indicatorColor
-                ctx.fillText(i, tx, ty)
+                ctx.fillText(i, dX, dY)
             }
         }
     }
@@ -191,7 +191,7 @@ Window {
             }
 
             function drawIndicator(value, color, width, lenGain) {
-                var deg = (Math.min(value, 7.5) / 8) * 360
+                var deg = ((Math.min(value, 7.5) / 8) * 360) - 180
                 var rad = deg * (Math.PI / 180)
                 var len = Math.min(gauge.width, gauge.height) * lenGain
 
