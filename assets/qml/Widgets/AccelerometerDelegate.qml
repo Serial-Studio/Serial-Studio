@@ -130,7 +130,7 @@ Window {
         text: qsTr("G Units")
         anchors.centerIn: parent
         font.family: app.monoFont
-        anchors.verticalCenterOffset: -32
+        anchors.verticalCenterOffset: 32
         color: Qt.rgba(81/255, 116/255, 151/255, 1)
     }
 
