@@ -36,10 +36,10 @@ Window {
     // Properties
     //
     spacing: -1
-    showIcon: false
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
+    icon.source: "qrc:/icons/tab.svg"
     implicitHeight: implicitWidth + 96
     Behavior on opacity {NumberAnimation{}}
     borderColor: Qt.rgba(81/255, 116/255, 151/255, 1)
