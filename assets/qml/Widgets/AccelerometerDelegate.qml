@@ -155,6 +155,20 @@ Window {
                 ctx.font = "bold 18px " + app.monoFont
                 ctx.fillStyle = accel.indicatorColor
                 ctx.fillText(i, dX, dY)
+
+                if (i === 7) {
+                    var x = gauge.width / 2
+                    var y = gauge.height / 2
+                    ctx.lineWidth = 2
+                    ctx.strokeStyle = accel.indicatorColor
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, Math.abs(dX - x) + 21, theta * 1.05, Math.PI * 0.95)
+                    ctx.stroke()
+                    ctx.beginPath();
+                    ctx.arc(x, y, Math.abs(dX - x) + 15, theta * 1.05, Math.PI * 0.95)
+                    ctx.stroke()
+                }
             }
         }
     }
