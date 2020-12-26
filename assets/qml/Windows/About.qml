@@ -25,9 +25,6 @@ import QtQuick.Window 2.0
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-import "Widgets" as Widgets
-import "Components" as Components
-
 ApplicationWindow {
     id: window
     flags: Qt.Dialog
@@ -37,8 +34,14 @@ ApplicationWindow {
     minimumHeight: column.implicitHeight * 1.25
     maximumHeight: column.implicitHeight * 1.25
 
+    //
+    // Theme options
+    //
+    palette.text: Qt.rgba(1, 1, 1, 1)
+    palette.buttonText: Qt.rgba(1, 1, 1, 1)
+    palette.windowText: Qt.rgba(1, 1, 1, 1)
     background: Rectangle {
-        color: Qt.darker(palette.base)
+        color: Qt.rgba(18/255, 25/255, 32/255, 1)
     }
 
     ColumnLayout {

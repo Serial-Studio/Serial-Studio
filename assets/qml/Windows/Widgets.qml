@@ -21,21 +21,28 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Window 2.0
 import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.3
 
-import Group 1.0
-import Dataset 1.0
+import "../Widgets" as Widgets
 
-import "../Widgets"
+ApplicationWindow {
+    title: qsTr("Widgets")
 
-Item {
-    Rectangle {
-        anchors.fill: parent
-        color: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
+    //
+    // Theme options
+    //
+    minimumWidth: 860
+    minimumHeight: 640
+    palette.text: Qt.rgba(1, 1, 1, 1)
+    palette.buttonText: Qt.rgba(1, 1, 1, 1)
+    palette.windowText: Qt.rgba(1, 1, 1, 1)
+    background: Rectangle {
+        color: Qt.rgba(18/255, 25/255, 32/255, 1)
     }
 
-    AccelerometerDelegate {
+    Widgets.AccelerometerDelegate {
         index: 0
         anchors.centerIn: parent
     }

@@ -21,15 +21,13 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Window 2.0
+import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-import Qt.labs.settings 1.0
+import "Windows"
 
-import "Widgets" as Widgets
-
-ApplicationWindow {
+Item {
     id: app
 
     //
@@ -48,66 +46,96 @@ ApplicationWindow {
     }
 
     //
-    // Window geometry
+    // Startup code
     //
-    minimumWidth: 960
-    minimumHeight: 640
-    title: CppAppName + " " + CppAppVersion
-
-    //
-    // Save/load settings
-    //
-    Settings {
-        property alias mwX: app.x
-        property alias mwY: app.y
-        property alias mwWidth: app.width
-        property alias mwHeight: app.height
+    Component.onCompleted: {
+        mainWindow.visible = true
+        devicesWindow.visible = true
+        CppJsonParser.readSettings()
     }
 
     //
-    // Set fusion palette
+    // About window
     //
-    palette.base: Qt.rgba(33/255, 55/255, 63/255, 1)
-    palette.text: Qt.rgba(255/255, 255/255, 255/255, 1)
-    palette.link: Qt.rgba(64/255, 157/255, 160/255, 1)
-    palette.button: Qt.rgba(33/255, 55/255, 63/255, 1)
-    palette.window: Qt.rgba(33/255, 55/255, 63/255, 1)
-    palette.highlight: Qt.rgba(64/255, 157/255, 160/255, 1)
-    palette.buttonText: Qt.rgba(255/255, 255/255, 255/255, 1)
-    palette.windowText: Qt.rgba(255/255, 255/255, 255/255, 1)
-    palette.toolTipBase: Qt.rgba(230/255, 224/255, 178/255, 1)
-    palette.toolTipText: Qt.rgba(230/255, 224/255, 178/255, 1)
-    palette.brightText: Qt.rgba(255/255, 255/255, 255/255, 1)
-    palette.highlightedText: Qt.rgba(230/255, 224/255, 178/255, 1)
+    About {
+        id: aboutWindow
+    }
 
     //
-    // User interface loader
+    // Console window
     //
-    Loader {
-        anchors.fill: parent
+    Console {
+        id: consoleWindow
+        x: 2 * app.spacing
+        y: 2 * app.spacing + mainWindow.y + mainWindow.height + 32
+        height: Screen.desktopAvailableHeight - y - 2 * app.spacing
+        width: Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
+    }
 
-        onStatusChanged: {
-            if (status == Loader.Ready)
-                timer.start()
+    //
+    // Data window
+    //
+    DataGrid {
+        id: dataWindow
+        x: 2 * app.spacing
+        y: 2 * app.spacing + mainWindow.y + mainWindow.height + 32
+        height: Screen.desktopAvailableHeight - y - 2 * app.spacing
+        width: Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
+
+        property bool alreadyShown: false
+
+        Timer {
+            id: timer
+            interval: 1000
+            onTriggered: {
+                dataWindow.show()
+                dataWindow.alreadyShown = true
+            }
         }
 
-        sourceComponent: UI {
-            anchors.fill: parent
-            background: Rectangle {
-                color: "#111"
+        Connections {
+            target: CppJsonParser
+            function onPacketReceived()  {
+                if (!dataWindow.visible && !dataWindow.alreadyShown)
+                    timer.start()
             }
         }
     }
 
     //
-    // Window loader timer
+    // Devices window
     //
-    Timer {
-        id: timer
-        interval: 500
-        onTriggered: {
-            app.visible = true
-            CppJsonParser.readSettings()
-        }
+    DeviceManager {
+        id: devicesWindow
+        x: Screen.desktopAvailableWidth - width - 2 * app.spacing
+        y: 2 * app.spacing + mainWindow.y + mainWindow.height + 32
+    }
+
+    //
+    // Main window
+    //
+    MainWindow {
+        id: mainWindow
+        dataChecked: dataWindow.visible
+        aboutChecked: aboutWindow.visible
+        consoleChecked: consoleWindow.visible
+        widgetsChecked: widgetsWindow.visible
+        devicesChecked: devicesWindow.visible
+        onDataClicked: dataWindow.visible ? dataWindow.hide() : dataWindow.show()
+        onAboutClicked: aboutWindow.visible ? aboutWindow.hide() : aboutWindow.show()
+        onConsoleClicked: consoleWindow.visible ? consoleWindow.hide() : consoleWindow.show()
+        onWidgetsClicked: widgetsWindow.visible ? widgetsWindow.hide() : widgetsWindow.show()
+        onDevicesClicked: devicesWindow.visible ? devicesWindow.hide() : devicesWindow.show()
+    }
+
+    //
+    // Widgets window
+    //
+    Widgets {
+        id: widgetsWindow
+        x: 2 * app.spacing
+        y: 2 * app.spacing + mainWindow.y + mainWindow.height + 32
+        height: Screen.desktopAvailableHeight - y - 2 * app.spacing
+        width: Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
     }
 }

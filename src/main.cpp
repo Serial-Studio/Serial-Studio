@@ -21,8 +21,10 @@
  */
 
 #include <QtQml>
+#include <QPalette>
 #include <QQuickStyle>
 #include <QApplication>
+#include <QStyleFactory>
 #include <QQmlApplicationEngine>
 
 #include <QSimpleUpdater.h>
@@ -59,6 +61,23 @@ int main(int argc, char **argv)
    app.setApplicationVersion(APP_VERSION);
    app.setOrganizationName(APP_DEVELOPER);
    app.setOrganizationDomain(APP_SUPPORT_URL);
+   app.setStyle(QStyleFactory::create("Fusion"));
+
+   // Change application palette
+   QPalette p;
+   p.setColor(QPalette::Base, QColor(33, 55, 63));
+   p.setColor(QPalette::Text, QColor(255, 255, 255));
+   p.setColor(QPalette::Link, QColor(64, 157, 160));
+   p.setColor(QPalette::Button, QColor(33, 55, 63));
+   p.setColor(QPalette::Window, QColor(33, 55, 63));
+   p.setColor(QPalette::Highlight, QColor(64, 157, 160));
+   p.setColor(QPalette::ButtonText, QColor(255, 255, 255));
+   p.setColor(QPalette::WindowText, QColor(255, 255, 255));
+   p.setColor(QPalette::ToolTipBase, QColor(230, 224, 178));
+   p.setColor(QPalette::ToolTipText, QColor(230, 224, 178));
+   p.setColor(QPalette::BrightText, QColor(255, 255, 255));
+   p.setColor(QPalette::HighlightedText, QColor(230, 224, 178));
+   app.setPalette(p);
 
    // Init application modules
    QQmlApplicationEngine engine;

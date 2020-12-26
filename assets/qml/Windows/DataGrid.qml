@@ -21,19 +21,32 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
-import Group 1.0
-import Dataset 1.0
+import "../Widgets" as Widgets
 
-import "../Widgets"
-
-Item {
+ApplicationWindow {
     id: dataGrid
+    title: qsTr("Data")
 
-    property string title: ""
+    //
+    // Window geometry & position
+    //
+    minimumWidth: 860
+    minimumHeight: 640
+
+    //
+    // Theme options
+    //
+    palette.text: Qt.rgba(1, 1, 1, 1)
+    palette.buttonText: Qt.rgba(1, 1, 1, 1)
+    palette.windowText: Qt.rgba(1, 1, 1, 1)
+    background: Rectangle {
+        color: Qt.rgba(33/255, 55/255, 63/255, 1)
+    }
 
     //
     // Group/dataset updating
@@ -79,7 +92,7 @@ Item {
         x: 2 * app.spacing
         anchors.fill: parent
         spacing: app.spacing * 2
-        anchors.margins: app.spacing * 2
+        anchors.margins: app.spacing * 1.5
 
         //
         // Group data & graphs
@@ -92,7 +105,7 @@ Item {
             //
             // View options
             //
-            Window {
+            Widgets.Window {
                 id: viewOptions
                 title: qsTr("View")
                 Layout.fillHeight: true
@@ -301,7 +314,7 @@ Item {
             //
             // Data grid
             //
-            Window {
+            Widgets.Window {
                 id: dataWin
                 title: qsTr("Data")
                 Layout.fillWidth: true
@@ -359,7 +372,7 @@ Item {
 
                                     Behavior on Layout.minimumHeight {NumberAnimation{}}
 
-                                    GroupDelegate {
+                                    Widgets.GroupDelegate {
                                         id: groupDelegate
                                         groupIndex: index
                                         anchors.fill: parent
@@ -387,7 +400,7 @@ Item {
 
                                     Behavior on Layout.minimumHeight {NumberAnimation{}}
 
-                                    GraphDelegate {
+                                    Widgets.GraphDelegate {
                                         id: graphDelegate
                                         graphId: index
                                         anchors.fill: parent

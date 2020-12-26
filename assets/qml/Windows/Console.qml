@@ -21,21 +21,32 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Window 2.0
 import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.12
 
 import "../Widgets" as Widgets
 
-Widgets.Window {
+ApplicationWindow {
     id: window
+    minimumWidth: 640
+    minimumHeight: 480
+    title: qsTr("Console")
+
+    //
+    // Console text color
+    //
     readonly property color consoleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
 
     //
-    // Window properties
+    // Theme options
     //
-    implicitHeight: 256
-    title: qsTr("Console")
-    icon.source: "qrc:/icons/code.svg"
+    palette.text: Qt.rgba(1, 1, 1, 1)
+    palette.buttonText: Qt.rgba(1, 1, 1, 1)
+    palette.windowText: Qt.rgba(1, 1, 1, 1)
+    background: Rectangle {
+        color: Qt.rgba(33/255, 55/255, 63/255, 1)
+    }
 
     //
     // Set the CppSerialManager's text document pointer so that the console

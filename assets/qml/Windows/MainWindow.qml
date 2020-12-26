@@ -21,22 +21,35 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-import Qt.labs.settings 1.0
-
-ToolBar {
-    id: toolbar
-    height: 48
+ApplicationWindow {
+    id: mw
+    flags: Qt.WindowStaysOnTopHint
 
     //
-    // Custom properties
+    // Set window size
     //
-    property alias devicesChecked: _devices.checked
-    property alias consoleChecked: _console.checked
-    property alias dataDisChecked: _dataDis.checked
-    property alias fullscrChecked: _fullScr.checked
+    minimumHeight: 48
+    maximumHeight: 48
+    title: CppAppName + " " + CppAppVersion
+    minimumWidth: Screen.desktopAvailableWidth - 4 * app.spacing
+    maximumWidth: Screen.desktopAvailableWidth - 4 * app.spacing
+
+    //
+    // Set window position top-right corner
+    //
+    x: 2 * app.spacing
+    y: 2 * app.spacing
+
+    //
+    // Fix button colors
+    //
+    palette.text: Qt.rgba(1, 1, 1, 1)
+    palette.buttonText: Qt.rgba(1, 1, 1, 1)
+    palette.windowText: Qt.rgba(1, 1, 1, 1)
 
     //
     // Dummy string to increase width of buttons
@@ -46,17 +59,20 @@ ToolBar {
     //
     // Custom signals
     //
+    signal dataClicked()
     signal aboutClicked()
+    signal devicesClicked()
+    signal consoleClicked()
+    signal widgetsClicked()
 
     //
-    // Settings handler
+    // Aliases to button check status
     //
-    Settings {
-        category: "Toolbar"
-        property alias devices: toolbar.devicesChecked
-        property alias console: toolbar.consoleChecked
-        property alias dataDis: toolbar.dataDisChecked
-    }
+    property alias dataChecked: dataBt.checked
+    property alias aboutChecked: aboutBt.checked
+    property alias consoleChecked: consoleBt.checked
+    property alias widgetsChecked: widgetsBt.checked
+    property alias devicesChecked: devicesBt.checked
 
     //
     // Background gradient
@@ -83,66 +99,67 @@ ToolBar {
         anchors.margins: app.spacing
 
         Button {
-            id: _devices
+            id: devicesBt
+
             flat: true
-            checked: true
             icon.width: 24
             icon.height: 24
-            checkable: true
             Layout.fillHeight: true
             icon.color: palette.text
+            onClicked: mw.devicesClicked()
             icon.source: "qrc:/icons/usb.svg"
-            text: qsTr("Device Manager") + _btSpacer
+            text: qsTr("Devices") + _btSpacer
         }
 
         Button {
-            id: _console
+            id: consoleBt
+
             flat: true
-            checked: true
             icon.width: 24
             icon.height: 24
-            checkable: true
             Layout.fillHeight: true
             icon.color: palette.text
+            onClicked: mw.consoleClicked()
             icon.source: "qrc:/icons/code.svg"
             text: qsTr("Console") + _btSpacer
         }
 
         Button {
-            id: _dataDis
+            id: dataBt
+
             flat: true
-            checked: true
             icon.width: 24
             icon.height: 24
-            checkable: true
             Layout.fillHeight: true
             icon.color: palette.text
+            onClicked: mw.dataClicked()
             icon.source: "qrc:/icons/equalizer.svg"
             text: qsTr("Data Display") + _btSpacer
         }
 
         Button {
-            id: _fullScr
+            id: widgetsBt
+
             flat: true
-            checkable: true
             icon.width: 24
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
-            onCheckedChanged: checked ? app.showFullScreen() : app.showNormal()
-            text: (checked ? qsTr("Exit Fullscreen") : qsTr("Enter Fullscreen")) + _btSpacer
-            icon.source: checked ? "qrc:/icons/fullscreen-exit.svg" :
-                                   "qrc:/icons/fullscreen.svg"
+            onClicked: mw.widgetsClicked()
+            icon.source: "qrc:/icons/chart.svg"
+            text: qsTr("Widgets") + _btSpacer
         }
 
         Button {
+            id: aboutBt
+
             flat: true
             icon.width: 24
             icon.height: 24
             text: qsTr("About")
             Layout.fillHeight: true
             icon.color: palette.text
-            onClicked: toolbar.aboutClicked()
+            onClicked: mw.aboutClicked()
             icon.source: "qrc:/icons/info.svg"
         }
 
@@ -151,7 +168,6 @@ ToolBar {
         }
 
         Button {
-            id: _openCsv
             flat: true
             icon.width: 24
             icon.height: 24
@@ -166,7 +182,6 @@ ToolBar {
         }
 
         Button {
-            id: _openCurrentCsv
             flat: true
             icon.width: 24
             icon.height: 24
@@ -182,4 +197,3 @@ ToolBar {
         }
     }
 }
-

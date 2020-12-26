@@ -21,21 +21,35 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.0
 
 import Qt.labs.settings 1.0
+import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
 
-Widgets.Window {
+ApplicationWindow {
+    title: qsTr("Devices")
+
     //
-    // Window properties
+    // Window geometry & position
     //
-    implicitWidth: 256
-    title: qsTr("Device Manager")
-    icon.source: "qrc:/icons/usb.svg"
+    minimumWidth: 320
+    maximumWidth: 320
+    minimumHeight: column.implicitHeight * 1.25
+    maximumHeight: column.implicitHeight * 1.25
+
+    //
+    // Theme options
+    //
+    palette.text: Qt.rgba(1, 1, 1, 1)
+    palette.buttonText: Qt.rgba(1, 1, 1, 1)
+    palette.windowText: Qt.rgba(1, 1, 1, 1)
+    background: Rectangle {
+        color: Qt.rgba(18/255, 25/255, 32/255, 1)
+    }
 
     //
     // Save settings
@@ -55,9 +69,10 @@ Widgets.Window {
     // Control arrangement
     //
     ColumnLayout {
+        id: column
         anchors.fill: parent
-        anchors.margins: app.spacing * 1.5
         spacing: app.spacing / 2
+        anchors.margins: app.spacing * 1.5
 
         //
         // Comm mode selector
