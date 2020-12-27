@@ -32,7 +32,7 @@ Rectangle {
     property string title: ""
     property int lastNumber: 8
     property int firstNumber: 0
-    property real numberSize: 18
+    property real numberSize: 16
     property real currentValue: 0
     property real maximumValue: 0
     property real minimumValue: 0

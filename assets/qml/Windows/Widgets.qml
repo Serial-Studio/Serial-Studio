@@ -42,18 +42,146 @@ ApplicationWindow {
         color: Qt.rgba(18/255, 25/255, 32/255, 1)
     }
 
+    //
+    // Group/dataset updating
+    //
+    Connections {
+        target: CppWidgets
+        function onDataChanged() {
+            // Generate accelerometer widgets
+            if (accGenerator.model !== CppWidgets.accelerometerGroupCount()) {
+                accGenerator.model = 0
+                accGenerator.model = CppWidgets.accelerometerGroupCount()
+            }
 
+            // Generate gyro widgets
+            if (gyroGenerator.model !== CppWidgets.gyroGroupCount()) {
+                gyroGenerator.model = 0
+                gyroGenerator.model = CppWidgets.gyroGroupCount()
+            }
 
-    RowLayout {
-        spacing: app.spacing * 2
-        anchors.centerIn: parent
+            // Generate bar widgets
+            if (barGenerator.model !== CppWidgets.barDatasetCount()) {
+                barGenerator.model = 0
+                barGenerator.model = CppWidgets.barDatasetCount()
+            }
 
-        Widgets.AccelerometerDelegate {
-            index: 0
+            // Generate map widgets
+            if (mapGenerator.model !== CppWidgets.mapGroupCount()) {
+                mapGenerator.model = 0
+                mapGenerator.model = CppWidgets.mapGroupCount()
+            }
         }
+    }
 
-        Widgets.BarDelegate {
-            index: 0
+    //
+    // UI inside scrollview
+    //
+    ScrollView {
+        z: 0
+        id: _sv
+        clip: false
+        contentWidth: -1
+        anchors.fill: parent
+        anchors.rightMargin: 10
+        anchors.margins: app.spacing * 2
+        anchors.leftMargin: app.spacing * 2 + 10
+
+        ColumnLayout {
+            width: _sv.width - 2 * app.spacing
+
+            Item {
+                Layout.minimumHeight: 10
+            }
+
+            GridLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                rowSpacing: app.spacing
+                columnSpacing: app.spacing
+                columns: Math.floor(_sv.width / (260 + 2 * app.spacing))
+
+                Repeater {
+                    id: accGenerator
+
+                    delegate: Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: 260
+                        Layout.minimumHeight: 260
+
+                        Widgets.AccelerometerDelegate {
+                            groupIndex: groupIndex
+                            anchors.fill: parent
+                        }
+                    }
+                }
+
+                Repeater {
+                    id: gyroGenerator
+
+                    delegate: Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: 260
+                        Layout.minimumHeight: 260
+
+                        /*
+                            Widgets.GyroDelegate {
+                                groupIndex: index
+                                anchors.fill: parent
+                            }
+                            */
+                    }
+                }
+
+                Repeater {
+                    id: barGenerator
+
+                    delegate: Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: 260
+                        Layout.minimumHeight: 260
+
+                        Widgets.BarDelegate {
+                            datasetIndex: index
+                            anchors.fill: parent
+                        }
+                    }
+                }
+            }
+
+            Item {
+                Layout.minimumHeight: 10
+            }
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                Repeater {
+                    id: mapGenerator
+
+                    delegate: Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: 320
+                        Layout.minimumHeight: 320
+                        Layout.alignment: Qt.AlignHCenter
+
+                        /*
+                        Widgets.MapDelegate {
+                            groupIndex: groupIndex
+                            anchors.fill: parent
+                        }*/
+                    }
+                }
+            }
+
+            Item {
+                Layout.minimumHeight: 10
+            }
         }
     }
 }

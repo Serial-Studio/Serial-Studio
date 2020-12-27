@@ -49,10 +49,10 @@ Window {
     //
     property real max: 0
     property real min: 0
-    property int index: 0
     property real accX: 0
     property real accY: 0
     property real accZ: 0
+    property int groupIndex: 0
     property real meanGForce: 0
     property real gConstant: 9.80665
 
@@ -70,11 +70,11 @@ Window {
     // Calculates the mean g force for all three axes using the pythagorean theorem
     //
     function calculateMeanGForce() {
-        if (CppWidgets.accelerometerGroupCount() > accel.index) {
-            accel.accX = CppWidgets.accelerometerX(accel.index)
-            accel.accY = CppWidgets.accelerometerY(accel.index)
-            accel.accZ = CppWidgets.accelerometerZ(accel.index)
-            accel.title = CppWidgets.accelerometerGroupAt(accel.index).title
+        if (CppWidgets.accelerometerGroupCount() > accel.groupIndex) {
+            accel.accX = CppWidgets.accelerometerX(accel.groupIndex)
+            accel.accY = CppWidgets.accelerometerY(accel.groupIndex)
+            accel.accZ = CppWidgets.accelerometerZ(accel.groupIndex)
+            accel.title = CppWidgets.accelerometerGroupAt(accel.groupIndex).title
         }
 
         else {
@@ -99,53 +99,95 @@ Window {
     //
     // Gauge & reset button
     //
-    ColumnLayout {
+    RowLayout {
         spacing: 0
         anchors.fill: parent
-        anchors.margins: app.spacing * 2
+        anchors.margins: app.spacing
 
         //
         // Spacer
         //
         Item {
-            Layout.fillHeight: true
-            Layout.minimumHeight: app.spacing * 2
+            Layout.fillWidth: true
         }
 
         //
         // Gauge object
         //
         GaugeDelegate {
-            firstNumber: 0
+            id: gauge
             lastNumber: 8
+            firstNumber: 0
             title: qsTr("G Units")
             minimumValue: accel.min
             maximumValue: accel.max
+            valueLabelVisible: false
             currentValue: accel.meanGForce
-
-            Layout.fillWidth: true
-            Layout.minimumHeight: width
-            Layout.maximumHeight: width
             Layout.alignment: Qt.AlignHCenter
+            Layout.minimumWidth: Math.min(accel.height, accel.width) - 12 * app.spacing
+            Layout.maximumWidth: Math.min(accel.height, accel.width) - 12 * app.spacing
+            Layout.minimumHeight: Math.min(accel.height, accel.width) - 12 * app.spacing
+            Layout.maximumHeight: Math.min(accel.height, accel.width) - 12 * app.spacing
         }
 
         //
         // Spacer
         //
         Item {
-            Layout.fillHeight: true
-            Layout.minimumHeight: app.spacing * 2
+            Layout.fillWidth: true
         }
 
         //
-        // Reset button
+        // Reset button & values
         //
-        Button {
-            text: qsTr("Reset")
-            Layout.alignment: Qt.AlignHCenter
-            onClicked: {
-                accel.max = 0
-                accel.min = 0
+        ColumnLayout {
+            spacing: app.spacing
+            Layout.alignment: Qt.AlignVCenter
+
+            Label {
+                font.pixelSize: 12
+                color: gauge.valueColor
+                font.family: app.monoFont
+                text: qsTr("Maximum: %1 G").arg(accel.max.toFixed(2))
+            }
+
+            Label {
+                font.pixelSize: 12
+                color: gauge.valueColor
+                font.family: app.monoFont
+                text: qsTr("Minimum: %1 G").arg(accel.min.toFixed(2))
+            }
+
+            Item {
+                height: app.spacing
+            }
+
+            Label {
+                font.bold: true
+                font.pixelSize: 12
+                color: gauge.valueColor
+                font.family: app.monoFont
+                text: qsTr("Current: %1 G").arg(accel.meanGForce.toFixed(2))
+
+                Rectangle {
+                    border.width: 1
+                    color: "transparent"
+                    anchors.fill: parent
+                    anchors.margins: -app.spacing
+                    border.color: gauge.valueColor
+                }
+            }
+
+            Item {
+                height: app.spacing
+            }
+
+            Button {
+                text: qsTr("Reset")
+                onClicked: {
+                    accel.max = 0
+                    accel.min = 0
+                }
             }
         }
 
@@ -153,8 +195,7 @@ Window {
         // Spacer
         //
         Item {
-            Layout.fillHeight: true
-            Layout.minimumHeight: app.spacing * 2
+            Layout.fillWidth: true
         }
     }
 }

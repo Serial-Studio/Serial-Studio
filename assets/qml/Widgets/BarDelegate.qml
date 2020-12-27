@@ -56,8 +56,8 @@ Window {
     //
     // Custom properties
     //
-    property int index: 0
     property string units: ""
+    property int datasetIndex: 0
     property real tankRadius: 20
     property real currentValue: 0
     property real minimumValue: 0
@@ -78,12 +78,12 @@ Window {
     // Updates the internal values of the bar widget
     //
     function updateValues() {
-        if (CppWidgets.barDatasetCount() > bar.index) {
-            bar.currentValue = CppWidgets.bar(bar.index)
-            bar.minimumValue = CppWidgets.barMin(bar.index)
-            bar.maximumValue = CppWidgets.barMax(bar.index)
-            bar.title = CppWidgets.barDatasetAt(bar.index).title
-            bar.units = CppWidgets.barDatasetAt(bar.index).units
+        if (CppWidgets.barDatasetCount() > bar.datasetIndex) {
+            bar.currentValue = CppWidgets.bar(bar.datasetIndex)
+            bar.minimumValue = CppWidgets.barMin(bar.datasetIndex)
+            bar.maximumValue = CppWidgets.barMax(bar.datasetIndex)
+            bar.title = CppWidgets.barDatasetAt(bar.datasetIndex).title
+            bar.units = CppWidgets.barDatasetAt(bar.datasetIndex).units
         }
 
         else {
@@ -104,7 +104,7 @@ Window {
     // Layout
     //
     RowLayout {
-        spacing: app.spacing * 2
+        spacing: app.spacing * 4
 
         anchors {
             fill: parent
@@ -141,6 +141,7 @@ Window {
         // Level text
         //
         ColumnLayout {
+            spacing: app.spacing
             Layout.fillHeight: true
 
             Label {
@@ -158,12 +159,21 @@ Window {
             }
 
             Label {
+                font.bold: true
                 font.pixelSize: 16
                 color: bar.titleColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
                 text: (bar.currentValue > bar.maximumValue ? bar.maximumValue.toFixed(2) :
                                                              bar.currentValue.toFixed(2)) + " " + bar.units
+
+                Rectangle {
+                    border.width: 1
+                    anchors.fill: parent
+                    color: "transparent"
+                    border.color: bar.titleColor
+                    anchors.margins: -app.spacing
+                }
             }
 
             Rectangle {
