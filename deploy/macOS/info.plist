@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>icon</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.alexspataru.serial-studio</string>
+        <string>org.alexspataru.serial-studio</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -26,5 +26,7 @@
 	<string>NSApplication</string>
 	<key>NSSupportsSuddenTermination</key>
 	<false/>
+        <key>NSRequiresAquaSystemAppearance</key>
+        <string>False</string>
 </dict>
 </plist>

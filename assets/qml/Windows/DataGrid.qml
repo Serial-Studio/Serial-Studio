@@ -21,31 +21,16 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
 
-ApplicationWindow {
-    id: dataGrid
-    title: qsTr("Data")
-
-    //
-    // Window geometry & position
-    //
-    minimumWidth: 860
-    minimumHeight: 640
-
-    //
-    // Theme options
-    //
-    palette.text: Qt.rgba(1, 1, 1, 1)
-    palette.buttonText: Qt.rgba(1, 1, 1, 1)
-    palette.windowText: Qt.rgba(1, 1, 1, 1)
+Page {
+    id: root
     background: Rectangle {
-        color: Qt.rgba(18/255, 25/255, 32/255, 1)
+        color: app.windowBackgroundColor
     }
 
     //
@@ -54,7 +39,7 @@ ApplicationWindow {
     Connections {
         target: CppQmlBridge
         function onUpdated() {
-            dataGrid.title = CppQmlBridge.projectTitle
+            root.title = CppQmlBridge.projectTitle
             if (groupGenerator.model !== CppQmlBridge.groupCount) {
                 var list = []
                 for (var i = 0; i < CppQmlBridge.groupCount; ++i)
@@ -368,9 +353,7 @@ ApplicationWindow {
                                 delegate: Item {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Layout.minimumHeight: groupDelegate.visible ? 196 : 0
-
-                                    Behavior on Layout.minimumHeight {NumberAnimation{}}
+                                    Layout.minimumHeight: 196
 
                                     Widgets.GroupDelegate {
                                         id: groupDelegate
@@ -396,9 +379,7 @@ ApplicationWindow {
                                 delegate: Item {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Layout.minimumHeight: graphDelegate.visible ? 196 : 0
-
-                                    Behavior on Layout.minimumHeight {NumberAnimation{}}
+                                    Layout.minimumHeight: 196
 
                                     Widgets.GraphDelegate {
                                         id: graphDelegate
@@ -461,7 +442,7 @@ ApplicationWindow {
                 Label {
                     font.bold: true
                     font.pixelSize: 16
-                    text: dataGrid.title
+                    text: root.title
                     color: palette.brightText
                     font.family: app.monoFont
                 }

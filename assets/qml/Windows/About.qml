@@ -21,16 +21,15 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Window 2.0
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 ApplicationWindow {
     id: window
     flags: Qt.Dialog
-    title: qsTr("About")
     minimumWidth: 320
     maximumWidth: 320
+    title: qsTr("About")
     minimumHeight: column.implicitHeight * 1.25
     maximumHeight: column.implicitHeight * 1.25
 
@@ -41,9 +40,12 @@ ApplicationWindow {
     palette.buttonText: Qt.rgba(1, 1, 1, 1)
     palette.windowText: Qt.rgba(1, 1, 1, 1)
     background: Rectangle {
-        color: Qt.rgba(18/255, 25/255, 32/255, 1)
+        color: app.windowBackgroundColor
     }
 
+    //
+    // Window controls
+    //
     ColumnLayout {
         id: column
         anchors.fill: parent

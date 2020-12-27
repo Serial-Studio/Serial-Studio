@@ -871,6 +871,7 @@ void SerialManager::setTextDocument(QQuickTextDocument *textDocument)
    // Re-assign pointer & register text cursor
    m_textDocument = textDocument;
    m_textCursor = new QTextCursor(m_textDocument->textDocument());
+   m_textCursor->movePosition(QTextCursor::End);
 
    // Connect signals/slots
    connect(m_textDocument->textDocument(), SIGNAL(contentsChanged()), this, SLOT(reduceDocumentSize()));
@@ -906,7 +907,9 @@ void SerialManager::onDataReceived()
       if (m_textCursor)
       {
          auto text = QString::fromUtf8(data);
-         m_textCursor->insertText(text);
+         m_textCursor->insertHtml("<font color=#0f8>" + text + "</font>");
+         if (text.contains('\n'))
+            m_textCursor->insertHtml("<br>");
       }
 
       // Add data to temp. buffer

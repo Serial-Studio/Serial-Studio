@@ -21,7 +21,6 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
@@ -30,26 +29,10 @@ import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
 
-ApplicationWindow {
-    title: qsTr("Devices")
-    flags: Qt.WindowStaysOnTopHint
-
-    //
-    // Window geometry & position
-    //
-    minimumWidth: 320
-    maximumWidth: 320
-    minimumHeight: column.implicitHeight * 1.25
-    maximumHeight: column.implicitHeight * 1.25
-
-    //
-    // Theme options
-    //
-    palette.text: Qt.rgba(1, 1, 1, 1)
-    palette.buttonText: Qt.rgba(1, 1, 1, 1)
-    palette.windowText: Qt.rgba(1, 1, 1, 1)
+Page {
+    id: root
     background: Rectangle {
-        color: Qt.rgba(18/255, 25/255, 32/255, 1)
+        color: app.windowBackgroundColor
     }
 
     //

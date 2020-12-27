@@ -41,7 +41,7 @@ Window {
     opacity: enabled ? 1 : 0
     icon.source: "qrc:/icons/tab.svg"
     implicitHeight: implicitWidth + 96
-    borderColor: Qt.rgba(81/255, 116/255, 151/255, 1)
+    borderColor: Qt.rgba(45/255, 96/255, 115/255, 1)
     backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
 
     //
@@ -55,6 +55,13 @@ Window {
     property int groupIndex: 0
     property real meanGForce: 0
     property real gConstant: 9.80665
+    property real gaugeSize: calculateGaugeSize()
+
+    //
+    // Update gauge size automatically
+    //
+    onWidthChanged: calculateGaugeSize()
+    onHeightChanged: calculateGaugeSize()
 
     //
     // Connections with widget manager
@@ -97,6 +104,17 @@ Window {
     }
 
     //
+    // Redraws accelerator gauge
+    //
+    function calculateGaugeSize() {
+        if (accel.width < accel.height)
+            accel.gaugeSize = Math.max(140, accel.width - controls.implicitWidth - 12 * app.spacing)
+
+        else
+            accel.gaugeSize = Math.max(140, accel.height - controls.implicitWidth - 2 * app.spacing)
+    }
+
+    //
     // Gauge & reset button
     //
     RowLayout {
@@ -124,10 +142,10 @@ Window {
             valueLabelVisible: false
             currentValue: accel.meanGForce
             Layout.alignment: Qt.AlignHCenter
-            Layout.minimumWidth: Math.min(accel.height, accel.width) - 12 * app.spacing
-            Layout.maximumWidth: Math.min(accel.height, accel.width) - 12 * app.spacing
-            Layout.minimumHeight: Math.min(accel.height, accel.width) - 12 * app.spacing
-            Layout.maximumHeight: Math.min(accel.height, accel.width) - 12 * app.spacing
+            Layout.minimumWidth: accel.gaugeSize
+            Layout.maximumWidth: accel.gaugeSize
+            Layout.minimumHeight: accel.gaugeSize
+            Layout.maximumHeight: accel.gaugeSize
         }
 
         //
@@ -141,6 +159,7 @@ Window {
         // Reset button & values
         //
         ColumnLayout {
+            id: controls
             spacing: app.spacing
             Layout.alignment: Qt.AlignVCenter
 

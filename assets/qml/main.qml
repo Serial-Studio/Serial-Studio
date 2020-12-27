@@ -25,15 +25,18 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import Qt.labs.settings 1.0
+
 import "Windows"
 
-Item {
+ApplicationWindow {
     id: app
 
     //
     // Global properties
     //
     readonly property int spacing: 8
+    readonly property color windowBackgroundColor: Qt.rgba(18/255, 25/255, 32/255, 1)
     readonly property string monoFont: {
         switch (Qt.platform.os) {
         case "osx":
@@ -46,108 +49,205 @@ Item {
     }
 
     //
+    // Window geometry
+    //
+    visible: false
+    minimumWidth: 960
+    minimumHeight: 640
+    title: CppAppName + " v" + CppAppVersion
+
+    //
+    // Theme options
+    //
+    palette.text: Qt.rgba(1, 1, 1, 1)
+    palette.buttonText: Qt.rgba(1, 1, 1, 1)
+    palette.windowText: Qt.rgba(1, 1, 1, 1)
+    background: Rectangle {
+        color: app.windowBackgroundColor
+    }
+
+    //
     // Startup code
     //
     Component.onCompleted: {
-        mainWindow.visible = true
-        devicesWindow.visible = true
+        timer.start()
+
+        about.hide()
+        devices.show()
+
+        data.opacity = 0
+        console.opacity = 1
+        widgets.opacity = 0
+
         CppJsonParser.readSettings()
+    }
+
+    //
+    // Startup timer
+    //
+    Timer {
+        id: timer
+        interval: 500
+        onTriggered: {
+            // Startup verifications to ensure that bad settings
+            // do not make our app reside outside screen
+            if (x < 0 || x >= Screen.desktopAvailableWidth)
+                x = 100
+            if (y < 0 || y >= Screen.desktopAvailableHeight)
+                y = 100
+
+            // Startup verifications to ensure that app fits in current screen
+            if (width > Screen.desktopAvailableWidth) {
+                x = 100
+                width = Screen.desktopAvailableWidth - x
+            }
+
+            // Startup verifications to ensure that app fits in current screen
+            if (height > Screen.desktopAvailableHeight) {
+                y = 100
+                height = Screen.desktopAvailableHeight - y
+            }
+
+            // Show app window
+            app.visible = true
+        }
+    }
+
+    //
+    // Save window size & position
+    //
+    Settings {
+        property alias appX: app.x
+        property alias appY: app.y
+        property alias appW: app.width
+        property alias appH: app.height
     }
 
     //
     // About window
     //
     About {
-        id: aboutWindow
+        id: about
     }
 
     //
-    // Console window
+    // Main layout
     //
-    Console {
-        id: consoleWindow
-        Component.onCompleted: {
-            x = 2 * app.spacing
-            y = 2 * app.spacing + mainWindow.y + mainWindow.height + 32
-            height = Screen.desktopAvailableHeight - y - 2 * app.spacing
-            width = Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
-        }
+    ColumnLayout {
+        spacing: 0
+        anchors.fill: parent
 
-        property bool alreadyShown: false
+        Toolbar {
+            z: 1
+            id: toolbar
+            Layout.fillWidth: true
+            Layout.minimumHeight: 48
+            Layout.maximumHeight: 48
+            dataChecked: data.visible
+            aboutChecked: about.visible
+            consoleChecked: console.visible
+            widgetsChecked: widgets.visible
+            devicesChecked: devices.visible
+            onAboutClicked: about.visible ? about.hide() : about.show()
+            onDevicesClicked: devices.visible ? devices.hide() : devices.show()
 
-        Connections {
-            target: CppSerialManager
-            function onConnectedChanged()  {
-                if (!consoleWindow.visible && !consoleWindow.alreadyShown && CppSerialManager.connected) {
-                    consoleWindow.show()
-                    consoleWindow.alreadyShown = true
-                }
+            onDataClicked: {
+                data.opacity = 1
+                console.opacity = 0
+                widgets.opacity = 0
+            }
+
+            onConsoleClicked: {
+                data.opacity = 0
+                console.opacity = 1
+                widgets.opacity = 0
+            }
+
+            onWidgetsClicked: {
+                data.opacity = 0
+                console.opacity = 0
+                widgets.opacity = 1
             }
         }
-    }
 
-    //
-    // Data window
-    //
-    DataGrid {
-        id: dataWindow
-        Component.onCompleted: {
-            x = 2 * app.spacing
-            y = 2 * app.spacing + mainWindow.y + mainWindow.height + 32
-            height = Screen.desktopAvailableHeight - y - 2 * app.spacing
-            width = Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
-        }
+        RowLayout {
+            spacing: 0
+            clip: true
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-        property bool alreadyShown: false
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-        Connections {
-            target: CppJsonParser
-            function onPacketReceived()  {
-                if (!dataWindow.visible && !dataWindow.alreadyShown) {
-                    dataWindow.show()
-                    dataWindow.alreadyShown = true
-                    consoleWindow.hide()
+                Console {
+                    id: console
+                    anchors.fill: parent
+                    text: CppWelcomeText + "\n\n"
+
+                    // Animate on show
+                    enabled: opacity > 0
+                    visible: opacity > 0
+                    Behavior on opacity {NumberAnimation{}}
+                }
+
+                DataGrid {
+                    id: data
+                    anchors.fill: parent
+                    property bool alreadyShown: false
+
+                    // Animate on show
+                    visible: opacity > 0
+                    Behavior on opacity {NumberAnimation{}}
+
+                    // Show data view when first valid packet is received
+                    Connections {
+                        target: CppJsonParser
+                        function onPacketReceived()  {
+                            if (!data.visible && !data.alreadyShown) {
+                                data.alreadyShown = true
+
+                                data.opacity = 1
+                                console.opacity = 0
+                                widgets.opacity = 0
+                            }
+                        }
+                    }
+                }
+
+                Widgets {
+                    id: widgets
+                    anchors.fill: parent
+
+                    // Animate on show
+                    enabled: opacity > 0
+                    visible: opacity > 0
+                    Behavior on opacity {NumberAnimation{}}
                 }
             }
-        }
-    }
 
-    //
-    // Devices window
-    //
-    DeviceManager {
-        id: devicesWindow
-        x: Screen.desktopAvailableWidth - width - 2 * app.spacing
-        y: 2 * app.spacing + mainWindow.y + mainWindow.height + 32
-    }
+            DeviceManager {
+                id: devices
+                property int displayedWidth: 320
 
-    //
-    // Main window
-    //
-    MainWindow {
-        id: mainWindow
-        dataChecked: dataWindow.visible
-        aboutChecked: aboutWindow.visible
-        consoleChecked: consoleWindow.visible
-        widgetsChecked: widgetsWindow.visible
-        devicesChecked: devicesWindow.visible
-        onDataClicked: dataWindow.visible ? dataWindow.hide() : dataWindow.show()
-        onAboutClicked: aboutWindow.visible ? aboutWindow.hide() : aboutWindow.show()
-        onConsoleClicked: consoleWindow.visible ? consoleWindow.hide() : consoleWindow.show()
-        onWidgetsClicked: widgetsWindow.visible ? widgetsWindow.hide() : widgetsWindow.show()
-        onDevicesClicked: devicesWindow.visible ? devicesWindow.hide() : devicesWindow.show()
-    }
+                function show() {
+                    opacity = 1
+                    displayedWidth = 320
+                }
 
-    //
-    // Widgets window
-    //
-    Widgets {
-        id: widgetsWindow
-        Component.onCompleted: {
-            x = 2 * app.spacing
-            y = 2 * app.spacing + mainWindow.y + mainWindow.height + 32
-            height = Screen.desktopAvailableHeight - y - 2 * app.spacing
-            width = Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
+                function hide() {
+                    opacity = 0
+                    displayedWidth = 0
+                }
+
+                visible: opacity > 0
+                Layout.fillHeight: true
+                Layout.minimumWidth: displayedWidth
+                Layout.maximumWidth: displayedWidth
+
+                Behavior on opacity {NumberAnimation{}}
+                Behavior on displayedWidth {NumberAnimation{}}
+            }
         }
     }
 }

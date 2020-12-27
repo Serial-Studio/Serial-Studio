@@ -1,0 +1,27 @@
+________           _____       ______   ____________       _____________       
+__  ___/______________(_)_____ ___  /   __  ___/_  /____  _______  /__(_)_____ 
+_____ \_  _ \_  ___/_  /_  __ `/_  /    _____ \_  __/  / / /  __  /__  /_  __ \
+____/ //  __/  /   _  / / /_/ /_  /     ____/ // /_ / /_/ // /_/ / _  / / /_/ /
+/____/ \___//_/    /_/  \__,_/ /_/      /____/ \__/ \__,_/ \__,_/  /_/  \____/ 
+                                                                               
+                                                 
+Welcome to Serial Studio! To start, please select a COM port & baud rate in the
+devices window. If serial connection is successful & incoming data is
+interpreted correctly, this pane shall be automatically closed and the
+dashboard shall be generated automatically. Otherwise, you can use the console
+to find the source of your problem.
+
+Use the toolbar buttons to display the features that you want to use.
+If encounter a problem with Serial Studio, please report it at:
+	
+	https://github.com/Serial-Studio/Serial-Studio/issues
+
+You can also use the links in the "About" window. For documentation regarding
+usage of Serial Studio & integration with your current MCU projects, please
+read the wiki:
+
+	https://github.com/Serial-Studio/Serial-Studio/wiki
+
+Have fun!
+Alex Spataru (https://github.com/alex-spataru)
+

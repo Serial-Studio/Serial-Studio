@@ -21,32 +21,23 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Window 2.0
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 import "../Widgets" as Widgets
 
-ApplicationWindow {
-    id: window
-    minimumWidth: 640
-    minimumHeight: 480
-    title: qsTr("Console")
+Page {
+    id: root
+    background: Rectangle {
+        color: app.windowBackgroundColor
+    }
 
     //
     // Console text color
     //
+    property alias text: _console.text
+    property alias autoscroll: _autoscr.checked
     readonly property color consoleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
-
-    //
-    // Theme options
-    //
-    palette.text: Qt.rgba(1, 1, 1, 1)
-    palette.buttonText: Qt.rgba(1, 1, 1, 1)
-    palette.windowText: Qt.rgba(1, 1, 1, 1)
-    background: Rectangle {
-        color: Qt.rgba(18/255, 25/255, 32/255, 1)
-    }
 
     //
     // Set the CppSerialManager's text document pointer so that the console
@@ -83,12 +74,17 @@ ApplicationWindow {
                     id: _console
                     readOnly: true
                     font.pixelSize: 12
-                    color: window.consoleColor
+                    color: root.consoleColor
                     wrapMode: TextEdit.Wrap
-                    textFormat: Text.RichText
+                    textFormat: Text.PlainText
                     font.family: app.monoFont
                     width: _scrollView.contentWidth
                     placeholderText: qsTr("No data received so far...")
+
+                    onTextChanged: {
+                        if (root.autoscroll && _scrollView.contentHeight > _scrollView.height)
+                            _console.cursorPosition = _console.length - 1
+                    }
                 }
             }
         }
@@ -99,12 +95,18 @@ ApplicationWindow {
         RowLayout {
             Layout.fillWidth: true
 
+            CheckBox {
+                id: _autoscr
+                checked: true
+                text: qsTr("Autoscroll")
+            }
+
             TextField {
                 id: _tf
                 height: 24
                 font.pixelSize: 12
                 Layout.fillWidth: true
-                color: window.consoleColor
+                color: root.consoleColor
                 font.family: app.monoFont
                 enabled: CppSerialManager.readWrite
                 palette.base: Qt.rgba(18/255, 18/255, 24/255, 1)

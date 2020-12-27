@@ -21,7 +21,93 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
-Item {
+import Group 1.0
+import Dataset 1.0
 
+import "."
+
+Window {
+    id: gyro
+
+    //
+    // Window properties
+    //
+    spacing: -1
+    implicitWidth: 260
+    visible: opacity > 0
+    opacity: enabled ? 1 : 0
+    icon.source: "qrc:/icons/chart.svg"
+    implicitHeight: implicitWidth + 96
+    borderColor: Qt.rgba(45/255, 96/255, 115/255, 1)
+    backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
+
+    //
+    // Custom properties
+    //
+    property real xAngle: 0
+    property real yAngle: 0
+    property real zAngle: 0
+    property int groupIndex: 0
+
+    //
+    // Colors
+    //
+    property color gyroColor: Qt.rgba(230/255, 224/255, 178/255, 1)
+
+    //
+    // Connections with widget manager
+    //
+    Connections {
+        target: CppWidgets
+        function onDataChanged() {
+            gyro.updateValues()
+        }
+    }
+
+    //
+    // Updates the internal values of the bar widget
+    //
+    function updateValues() {
+        if (CppWidgets.gyroGroupCount() > gyro.groupIndex) {
+            gyro.xAngle = CppWidgets.gyroX(gyro.groupIndex)
+            gyro.yAngle = CppWidgets.gyroY(gyro.groupIndex)
+            gyro.zAngle = CppWidgets.gyroZ(gyro.groupIndex)
+            gyro.title = CppWidgets.gyroGroupAt(gyro.groupIndex).title
+        }
+
+        else {
+            gyro.title = ""
+            gyro.xAngle = 0
+            gyro.yAngle = 0
+            gyro.zAngle = 0
+        }
+    }
+
+    //
+    // Animations
+    //
+    Behavior on xAngle {NumberAnimation{}}
+    Behavior on yAngle {NumberAnimation{}}
+    Behavior on zAngle {NumberAnimation{}}
+
+    //
+    // Artificial horizon
+    //
+    Rectangle {
+        border.width: 2
+        radius: width / 2
+        anchors.centerIn: parent
+        border.color: gyro.gyroColor
+        color: Qt.rgba(81/255, 116/255, 151/255, 1)
+        width: Math.min(gyro.width, gyro.height) * 0.7
+        height: Math.min(gyro.width, gyro.height) * 0.7
+
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: app.spacing
+        }
+    }
 }

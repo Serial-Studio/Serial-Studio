@@ -93,6 +93,15 @@ int main(int argc, char **argv)
    qmlRegisterType<Group>("Group", 1, 0, "Group");
    qmlRegisterType<Dataset>("Dataset", 1, 0, "Dataset");
 
+   // Get console welcome text string
+   QString welcomeText = QObject::tr("Failed to load welcome text :(");
+   QFile file(QObject::tr(":/messages/Welcome_EN.txt"));
+   if (file.open(QFile::ReadOnly))
+   {
+      welcomeText = QString::fromUtf8(file.readAll());
+      file.close();
+   }
+
    // Init QML interface
    QQuickStyle::setStyle("Fusion");
    engine.rootContext()->setContextProperty("CppUpdater", updater);
@@ -100,6 +109,7 @@ int main(int argc, char **argv)
    engine.rootContext()->setContextProperty("CppExport", csvExport);
    engine.rootContext()->setContextProperty("CppQmlBridge", qmlBridge);
    engine.rootContext()->setContextProperty("CppJsonParser", jsonParser);
+   engine.rootContext()->setContextProperty("CppWelcomeText", welcomeText);
    engine.rootContext()->setContextProperty("CppGraphProvider", graphProvider);
    engine.rootContext()->setContextProperty("CppSerialManager", serialManager);
    engine.rootContext()->setContextProperty("CppAppName", app.applicationName());

@@ -41,17 +41,33 @@ Window {
     opacity: enabled ? 1 : 0
     icon.source: "qrc:/icons/chart.svg"
     implicitHeight: implicitWidth + 96
-    borderColor: Qt.rgba(81/255, 116/255, 151/255, 1)
+    borderColor: Qt.rgba(45/255, 96/255, 115/255, 1)
     backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
+
+    //
+    // Set the level color randomly from an array
+    //
+    property var colorPalette: [
+        "#f94144",
+        "#f3722c",
+        "#f8961e",
+        "#f9844a",
+        "#f9c74f",
+        "#90be6d",
+        "#43aa8b",
+        "#4d908e",
+        "#577590",
+        "#277da1"
+    ]
 
     //
     // Colors
     //
-    property color levelColor: Qt.rgba(215/255, 45/255, 96/255, 1)
     property color tankColor: Qt.rgba(230/255, 224/255, 178/255, 1)
     property color valueColor: Qt.rgba(81/255, 116/255, 151/255, 1)
     property color titleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
     property color emptyColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
+    property color levelColor: colorPalette[colorPalette.length % (index + 1)]
 
     //
     // Custom properties
@@ -120,9 +136,10 @@ Window {
             id: tank
             border.width: 2
             color: bar.emptyColor
-            Layout.fillWidth: true
             Layout.fillHeight: true
             border.color: bar.tankColor
+            Layout.minimumWidth: bar.width * 0.17
+            Layout.maximumWidth: bar.width * 0.17
 
             //
             // Level indicator

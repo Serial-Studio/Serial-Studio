@@ -21,35 +21,11 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-ApplicationWindow {
-    id: mw
-    flags: Qt.WindowStaysOnTopHint
-
-    //
-    // Set window size
-    //
-    minimumHeight: 48
-    maximumHeight: 48
-    title: CppAppName + " " + CppAppVersion
-    minimumWidth: Screen.desktopAvailableWidth - 4 * app.spacing
-    maximumWidth: Screen.desktopAvailableWidth - 4 * app.spacing
-
-    //
-    // Set window position top-right corner
-    //
-    x: 2 * app.spacing
-    y: 2 * app.spacing
-
-    //
-    // Fix button colors
-    //
-    palette.text: Qt.rgba(1, 1, 1, 1)
-    palette.buttonText: Qt.rgba(1, 1, 1, 1)
-    palette.windowText: Qt.rgba(1, 1, 1, 1)
+Page {
+    id: root
 
     //
     // Dummy string to increase width of buttons
@@ -106,7 +82,7 @@ ApplicationWindow {
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
-            onClicked: mw.devicesClicked()
+            onClicked: root.devicesClicked()
             icon.source: "qrc:/icons/usb.svg"
             text: qsTr("Devices") + _btSpacer
         }
@@ -119,9 +95,10 @@ ApplicationWindow {
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
-            onClicked: mw.consoleClicked()
+            onClicked: root.consoleClicked()
             icon.source: "qrc:/icons/code.svg"
             text: qsTr("Console") + _btSpacer
+            enabled: dataBt.enabled || widgetsBt.enabled
         }
 
         Button {
@@ -132,9 +109,13 @@ ApplicationWindow {
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
-            onClicked: mw.dataClicked()
+            onClicked: root.dataClicked()
+            enabled: CppQmlBridge.groupCount > 0
             icon.source: "qrc:/icons/equalizer.svg"
             text: qsTr("Data Display") + _btSpacer
+
+            opacity: enabled ? 1 : 0.5
+            Behavior on opacity {NumberAnimation{}}
         }
 
         Button {
@@ -145,9 +126,13 @@ ApplicationWindow {
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
-            onClicked: mw.widgetsClicked()
+            onClicked: root.widgetsClicked()
             icon.source: "qrc:/icons/chart.svg"
             text: qsTr("Widgets") + _btSpacer
+            enabled: CppWidgets.totalWidgetCount > 0
+
+            opacity: enabled ? 1 : 0.5
+            Behavior on opacity {NumberAnimation{}}
         }
 
         Button {
@@ -159,7 +144,7 @@ ApplicationWindow {
             text: qsTr("About")
             Layout.fillHeight: true
             icon.color: palette.text
-            onClicked: mw.aboutClicked()
+            onClicked: root.aboutClicked()
             icon.source: "qrc:/icons/info.svg"
         }
 

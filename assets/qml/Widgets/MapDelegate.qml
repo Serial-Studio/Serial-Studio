@@ -29,49 +29,73 @@ import QtQuick.Controls.Universal 2.0
 
 import Qt.labs.settings 1.0
 
-ColumnLayout {
-    id: gps
-    spacing: app.spacing
-    Component.onCompleted: centerMap()
+import Group 1.0
+import Dataset 1.0
+
+import "."
+
+Window {
+    id: window
 
     //
-    // Real-time GPS coordinates components
+    // Window properties
+    //
+    spacing: -1
+    implicitWidth: 260
+    visible: opacity > 0
+    opacity: enabled ? 1 : 0
+    implicitHeight: implicitWidth + 96
+    icon.source: "qrc:/icons/location-on.svg"
+    borderColor: Qt.rgba(45/255, 96/255, 115/255, 1)
+    backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
+
+    //
+    // Custom properties
     //
     property real latitude: 0
     property real longitude: 0
-
-    //
-    // Will be true if GPS coordinates are different from (0,0)
-    //
-    readonly property bool gpsWorking: latitude != 0 || longitude != 0
-
-    //
-    // Location of Queretaro
-    //
-    readonly property var qroCoordinates: QtPositioning.coordinate(20.5846129, -100.385372)
-
-    //
-    // Used to know if we need to center the map
-    //
-    property var oldCoordinates: QtPositioning.coordinate(0,0)
-
-    //
-    // Real-time position
-    //
+    property int groupIndex: 0
     readonly property var gpsCoordinates: QtPositioning.coordinate(latitude, longitude)
 
     //
-    // Centers the map to Queretaro if the GPS is not working,
-    // otherwise, centers the map to the CanSat's position
+    // Connections with widget manager
+    //
+    Connections {
+        target: CppWidgets
+        function onDataChanged() {
+            window.updateValues()
+        }
+    }
+
+    //
+    // Updates the internal values of the map widget
+    //
+    function updateValues() {
+        if (CppWidgets.mapGroupCount() > window.groupIndex) {
+            window.latitude = CppWidgets.mapLatitude(window.groupIndex)
+            window.longitude = CppWidgets.mapLongitude(window.groupIndex)
+            window.title = CppWidgets.mapGroupAt(window.groupIndex).title
+            window.centerMap()
+        }
+
+        else {
+            window.title = ""
+            window.latitude = 0
+            window.longitude = 0
+        }
+    }
+
+    //
+    // Animations
+    //
+    Behavior on latitude {NumberAnimation{}}
+    Behavior on longitude {NumberAnimation{}}
+
+    //
+    // Centers the map to the current coordinates
     //
     function centerMap() {
-        // GPS not responding, go to QRO
-        if (!gpsWorking)
-            map.center = qroCoordinates
-
-        // Show GPS position
-        else
-            map.center = gpsCoordinates
+        map.center = gpsCoordinates
     }
 
     //
@@ -82,85 +106,75 @@ ColumnLayout {
     }
 
     //
-    // Controls
+    // UI controls
     //
-    RowLayout {
+    ColumnLayout {
         spacing: app.spacing
-        Layout.fillWidth: true
+        anchors.fill: parent
+        anchors.margins: app.spacing
 
-        ComboBox {
-            id: mapTypeSelector
-            textRole: "description"
+        //
+        // Controls
+        //
+        RowLayout {
+            spacing: app.spacing
             Layout.fillWidth: true
-            model: map.supportedMapTypes
-            onCurrentIndexChanged: map.activeMapType = map.supportedMapTypes[currentIndex]
+
+            ComboBox {
+                id: mapTypeSelector
+                textRole: "description"
+                Layout.fillWidth: true
+                model: map.supportedMapTypes
+                onCurrentIndexChanged: map.activeMapType = map.supportedMapTypes[currentIndex]
+            }
+
+            Button {
+                text: qsTr("Re-center")
+                icon.color: palette.buttonText
+                icon.source: "qrc:/icons/location-on.svg"
+                onClicked: centerMap()
+            }
         }
 
-        Button {
-            text: qsTr("Re-center")
-            icon.color: palette.buttonText
-            icon.source: "qrc:/icons/location-on.svg"
-            onClicked: centerMap()
-        }
-    }
+        //
+        // Map
+        //
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-    //
-    // Map
-    //
-    Rectangle {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+            border {
+                width: 2
+                color: "#646464"
+            }
 
-        border {
-            width: 2
-            color: "#646464"
-        }
+            Map {
+                id: map
+                anchors.fill: parent
+                copyrightsVisible: false
+                color: Universal.background
+                anchors.margins: parent.border.width
+                zoomLevel: (map.minimumZoomLevel + map.maximumZoomLevel) * 0.8
 
-        Map {
-            id: map
-            anchors.fill: parent
-            copyrightsVisible: false
-            color: Universal.background
-            anchors.margins: parent.border.width
-            zoomLevel: (map.minimumZoomLevel + map.maximumZoomLevel) * 0.8
+                MapQuickItem {
+                    coordinate: gpsCoordinates
+                    anchorPoint: Qt.point(sourceItem.width / 2, sourceItem.height/ 2)
 
-            MapQuickItem {
-                sourceItem: Rectangle {
-                    id: dot
-                    width: 20
-                    height: 20
-                    opacity: 0.1
-                    color: "#f00"
-                    border.width: 2
-                    radius: width / 2
-                    border.color: "#fff"
-
-                    Connections {
-                        target: CppSerialManager
-                        function onPacketReceived() {
-                            timer.restart()
-                            dot.opacity = 0.8
-                        }
-                    }
-
-                    Behavior on opacity { NumberAnimation { duration: 500 } }
-
-                    Timer {
-                        id: timer
-                        repeat: true
-                        interval: 500
-                        Component.onCompleted: start()
-                        onTriggered: dot.opacity = CppSerialManager.connected ? 0.25 : 0.1
+                    sourceItem: Rectangle {
+                        id: dot
+                        width: 20
+                        height: 20
+                        opacity: 0.8
+                        color: "#f00"
+                        border.width: 2
+                        radius: width / 2
+                        border.color: "#fff"
                     }
                 }
 
-                coordinate: gpsWorking ? gpsCoordinates : qroCoordinates
-                anchorPoint: Qt.point(sourceItem.width / 2,
-                                      sourceItem.height/ 2)
-            }
-
-            plugin: Plugin {
-                name: "mapboxgl"
+                plugin: Plugin {
+                    name: "mapboxgl"
+                }
             }
         }
     }

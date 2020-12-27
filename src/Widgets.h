@@ -32,6 +32,7 @@ class Dataset;
 class Widgets : public QObject
 {
    Q_OBJECT
+   Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY dataChanged)
 
 signals:
    void dataChanged();
@@ -43,6 +44,8 @@ public:
    QList<Group *> gyroGroup() const;
    QList<Dataset *> barDatasets() const;
    QList<Group *> accelerometerGroup() const;
+
+   int totalWidgetCount() const;
 
    Q_INVOKABLE int mapGroupCount() const;
    Q_INVOKABLE int gyroGroupCount() const;

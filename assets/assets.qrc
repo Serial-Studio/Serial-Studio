@@ -56,8 +56,9 @@
         <file>qml/Windows/Console.qml</file>
         <file>qml/Windows/DataGrid.qml</file>
         <file>qml/Windows/DeviceManager.qml</file>
-        <file>qml/Windows/MainWindow.qml</file>
+        <file>qml/Windows/Toolbar.qml</file>
         <file>qml/Windows/Widgets.qml</file>
         <file>qml/main.qml</file>
+        <file>messages/Welcome_EN.txt</file>
     </qresource>
 </RCC>

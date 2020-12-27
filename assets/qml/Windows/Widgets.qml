@@ -21,27 +21,21 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Window 2.0
 import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.12
 
 import "../Widgets" as Widgets
 
-ApplicationWindow {
-    id: widgets
-    title: qsTr("Widgets")
+Page {
+    id: root
+    background: Rectangle {
+        color: app.windowBackgroundColor
+    }
 
     //
-    // Theme options
+    // Custom properties
     //
-    minimumWidth: 860
-    minimumHeight: 640
-    palette.text: Qt.rgba(1, 1, 1, 1)
-    palette.buttonText: Qt.rgba(1, 1, 1, 1)
-    palette.windowText: Qt.rgba(1, 1, 1, 1)
-    background: Rectangle {
-        color: Qt.rgba(18/255, 25/255, 32/255, 1)
-    }
+    readonly property int minimumWidgetSize: 320
 
     //
     // Group/dataset updating
@@ -50,7 +44,7 @@ ApplicationWindow {
         target: CppWidgets
         function onDataChanged() {
             // Update window title
-            widgets.title = CppQmlBridge.projectTitle
+            root.title = CppQmlBridge.projectTitle
 
             // Generate accelerometer widgets
             if (accGenerator.model !== CppWidgets.accelerometerGroupCount()) {
@@ -88,7 +82,7 @@ ApplicationWindow {
         contentWidth: -1
         anchors.fill: parent
         anchors.rightMargin: 10
-        anchors.margins: app.spacing * 2
+        anchors.margins: app.spacing * 1.5
         anchors.leftMargin: app.spacing * 2 + 10
 
         ColumnLayout {
@@ -103,7 +97,7 @@ ApplicationWindow {
                 Layout.fillHeight: true
                 rowSpacing: app.spacing
                 columnSpacing: app.spacing
-                columns: Math.floor(_sv.width / (260 + 2 * app.spacing))
+                columns: Math.floor(_sv.width / (root.minimumWidgetSize + 2 * app.spacing))
 
                 Repeater {
                     id: accGenerator
@@ -111,8 +105,8 @@ ApplicationWindow {
                     delegate: Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.minimumWidth: 260
-                        Layout.minimumHeight: 260
+                        Layout.minimumWidth: root.minimumWidgetSize
+                        Layout.minimumHeight: root.minimumWidgetSize
 
                         Widgets.AccelerometerDelegate {
                             groupIndex: groupIndex
@@ -127,15 +121,13 @@ ApplicationWindow {
                     delegate: Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.minimumWidth: 260
-                        Layout.minimumHeight: 260
+                        Layout.minimumWidth: root.minimumWidgetSize
+                        Layout.minimumHeight: root.minimumWidgetSize
 
-                        /*
-                            Widgets.GyroDelegate {
-                                groupIndex: index
-                                anchors.fill: parent
-                            }
-                            */
+                        Widgets.GyroDelegate {
+                            groupIndex: index
+                            anchors.fill: parent
+                        }
                     }
                 }
 
@@ -145,8 +137,8 @@ ApplicationWindow {
                     delegate: Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.minimumWidth: 260
-                        Layout.minimumHeight: 260
+                        Layout.minimumWidth: root.minimumWidgetSize
+                        Layout.minimumHeight: root.minimumWidgetSize
 
                         Widgets.BarDelegate {
                             datasetIndex: index
@@ -154,15 +146,6 @@ ApplicationWindow {
                         }
                     }
                 }
-            }
-
-            Item {
-                Layout.minimumHeight: 10
-            }
-
-            ColumnLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
 
                 Repeater {
                     id: mapGenerator
@@ -170,15 +153,14 @@ ApplicationWindow {
                     delegate: Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        Layout.minimumWidth: 320
-                        Layout.minimumHeight: 320
+                        Layout.minimumWidth: root.minimumWidgetSize
+                        Layout.minimumHeight: root.minimumWidgetSize
                         Layout.alignment: Qt.AlignHCenter
 
-                        /*
                         Widgets.MapDelegate {
-                            groupIndex: groupIndex
+                            groupIndex: index
                             anchors.fill: parent
-                        }*/
+                        }
                     }
                 }
             }

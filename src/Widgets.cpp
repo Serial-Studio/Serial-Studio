@@ -86,6 +86,14 @@ QList<Group *> Widgets::accelerometerGroup() const
 }
 
 /**
+ * Returns the total number of widgets that should be generated
+ */
+int Widgets::totalWidgetCount() const
+{
+   return barDatasetCount() + mapGroupCount() + gyroGroupCount() + accelerometerGroupCount();
+}
+
+/**
  * Returns the number of JSON groups that implement a bar widget
  */
 int Widgets::barDatasetCount() const
