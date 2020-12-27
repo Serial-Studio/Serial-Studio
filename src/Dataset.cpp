@@ -68,6 +68,14 @@ QString Dataset::widget() const
 }
 
 /**
+ * Returns the JSON data that represents this widget
+ */
+QJsonObject Dataset::jsonData() const
+{
+   return m_jsonData;
+}
+
+/**
  * Reads dataset information from the given @a object.
  *
  * @return @c true on read success, @c false on failure
@@ -89,6 +97,7 @@ bool Dataset::read(const QJsonObject &object)
          m_value = value;
          m_units = units;
          m_widget = widget;
+         m_jsonData = object;
 
          return true;
       }

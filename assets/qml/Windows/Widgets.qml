@@ -42,8 +42,18 @@ ApplicationWindow {
         color: Qt.rgba(18/255, 25/255, 32/255, 1)
     }
 
-    Widgets.AccelerometerDelegate {
-        index: 0
+
+
+    RowLayout {
+        spacing: app.spacing * 2
         anchors.centerIn: parent
+
+        Widgets.AccelerometerDelegate {
+            index: 0
+        }
+
+        Widgets.BarDelegate {
+            index: 0
+        }
     }
 }

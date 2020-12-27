@@ -36,6 +36,7 @@ class Dataset : public QObject
    Q_PROPERTY(QString value READ value CONSTANT)
    Q_PROPERTY(QString units READ units CONSTANT)
    Q_PROPERTY(QString widget READ widget CONSTANT)
+   Q_PROPERTY(QJsonObject jsonData READ jsonData CONSTANT)
 
 public:
    Dataset(QObject *parent = nullptr);
@@ -45,6 +46,7 @@ public:
    QString value() const;
    QString units() const;
    QString widget() const;
+   QJsonObject jsonData() const;
 
    bool read(const QJsonObject &object);
 
@@ -54,6 +56,7 @@ private:
    QString m_value;
    QString m_units;
    QString m_widget;
+   QJsonObject m_jsonData;
 };
 
 #endif

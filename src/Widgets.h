@@ -27,6 +27,8 @@
 #include <QObject>
 
 class Group;
+class Dataset;
+
 class Widgets : public QObject
 {
    Q_OBJECT
@@ -37,25 +39,19 @@ signals:
 public:
    static Widgets *getInstance();
 
-   QList<Group *> barGroup() const;
    QList<Group *> mapGroup() const;
    QList<Group *> gyroGroup() const;
-   QList<Group *> tankGroup() const;
-   QList<Group *> gaugeGroup() const;
+   QList<Dataset *> barDatasets() const;
    QList<Group *> accelerometerGroup() const;
 
-   Q_INVOKABLE int barGroupCount() const;
    Q_INVOKABLE int mapGroupCount() const;
    Q_INVOKABLE int gyroGroupCount() const;
-   Q_INVOKABLE int tankGroupCount() const;
-   Q_INVOKABLE int gaugeGroupCount() const;
+   Q_INVOKABLE int barDatasetCount() const;
    Q_INVOKABLE int accelerometerGroupCount() const;
 
-   Q_INVOKABLE Group *barGroupAt(const int index);
    Q_INVOKABLE Group *mapGroupAt(const int index);
    Q_INVOKABLE Group *gyroGroupAt(const int index);
-   Q_INVOKABLE Group *tankGroupAt(const int index);
-   Q_INVOKABLE Group *gaugeGroupAt(const int index);
+   Q_INVOKABLE Dataset *barDatasetAt(const int index);
    Q_INVOKABLE Group *accelerometerGroupAt(const int index);
 
    Q_INVOKABLE double gyroX(const int index);
@@ -67,14 +63,8 @@ public:
    Q_INVOKABLE double accelerometerZ(const int index);
 
    Q_INVOKABLE double bar(const int index);
-   Q_INVOKABLE double tank(const int index);
-   Q_INVOKABLE double gauge(const int index);
    Q_INVOKABLE double barMin(const int index);
    Q_INVOKABLE double barMax(const int index);
-   Q_INVOKABLE double tankMin(const int index);
-   Q_INVOKABLE double tankMax(const int index);
-   Q_INVOKABLE double gaugeMin(const int index);
-   Q_INVOKABLE double gaugeMax(const int index);
 
    Q_INVOKABLE double mapLatitude(const int index);
    Q_INVOKABLE double mapLongitude(const int index);
@@ -85,13 +75,12 @@ private slots:
 private:
    Widgets();
    QList<Group *> getWidgetGroup(const QString &handle);
+   QList<Dataset *> getWidgetDatasets(const QString &handle);
 
 private:
-   QList<Group *> m_barGroups;
    QList<Group *> m_mapGroups;
    QList<Group *> m_gyroGroups;
-   QList<Group *> m_tankGroups;
-   QList<Group *> m_gaugeGroups;
+   QList<Dataset *> m_barDatasets;
    QList<Group *> m_accelerometerGroups;
 };
 

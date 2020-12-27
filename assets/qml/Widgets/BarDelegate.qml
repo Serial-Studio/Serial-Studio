@@ -21,7 +21,164 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
-Item {
+import Group 1.0
+import Dataset 1.0
 
+import "."
+
+Window {
+    id: bar
+
+    //
+    // Window properties
+    //
+    spacing: -1
+    implicitWidth: 260
+    visible: opacity > 0
+    opacity: enabled ? 1 : 0
+    icon.source: "qrc:/icons/chart.svg"
+    implicitHeight: implicitWidth + 96
+    borderColor: Qt.rgba(81/255, 116/255, 151/255, 1)
+    backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
+
+    //
+    // Colors
+    //
+    property color levelColor: Qt.rgba(215/255, 45/255, 96/255, 1)
+    property color tankColor: Qt.rgba(230/255, 224/255, 178/255, 1)
+    property color valueColor: Qt.rgba(81/255, 116/255, 151/255, 1)
+    property color titleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
+    property color emptyColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
+
+    //
+    // Custom properties
+    //
+    property int index: 0
+    property string units: ""
+    property real tankRadius: 20
+    property real currentValue: 0
+    property real minimumValue: 0
+    property real maximumValue: 10
+    readonly property real level: Math.min(1, currentValue / Math.max(1, (maximumValue - minimumValue)))
+
+    //
+    // Connections with widget manager
+    //
+    Connections {
+        target: CppWidgets
+        function onDataChanged() {
+            bar.updateValues()
+        }
+    }
+
+    //
+    // Updates the internal values of the bar widget
+    //
+    function updateValues() {
+        if (CppWidgets.barDatasetCount() > bar.index) {
+            bar.currentValue = CppWidgets.bar(bar.index)
+            bar.minimumValue = CppWidgets.barMin(bar.index)
+            bar.maximumValue = CppWidgets.barMax(bar.index)
+            bar.title = CppWidgets.barDatasetAt(bar.index).title
+            bar.units = CppWidgets.barDatasetAt(bar.index).units
+        }
+
+        else {
+            bar.title = ""
+            bar.units = ""
+            bar.currentValue = 0
+            bar.minimumValue = 0
+            bar.maximumValue = 0
+        }
+    }
+
+    //
+    // Animations
+    //
+    Behavior on currentValue {NumberAnimation{}}
+
+    //
+    // Layout
+    //
+    RowLayout {
+        spacing: app.spacing * 2
+
+        anchors {
+            fill: parent
+            margins: app.spacing * 4
+            leftMargin: app.spacing * 8
+            rightMargin: app.spacing * 8
+        }
+
+        //
+        // Bar/Tank rectangle
+        //
+        Rectangle {
+            id: tank
+            border.width: 2
+            color: bar.emptyColor
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            border.color: bar.tankColor
+
+            //
+            // Level indicator
+            //
+            Rectangle {
+                anchors.fill: parent
+                anchors.topMargin: (1 - bar.level) * tank.height
+
+                border.width: 2
+                color: bar.levelColor
+                border.color: bar.tankColor
+            }
+        }
+
+        //
+        // Level text
+        //
+        ColumnLayout {
+            Layout.fillHeight: true
+
+            Label {
+                color: bar.titleColor
+                font.family: app.monoFont
+                Layout.alignment: Qt.AlignHCenter
+                text: bar.maximumValue.toFixed(2) + " " + bar.units
+            }
+
+            Rectangle {
+                width: 2
+                color: bar.valueColor
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            Label {
+                font.pixelSize: 16
+                color: bar.titleColor
+                font.family: app.monoFont
+                Layout.alignment: Qt.AlignHCenter
+                text: (bar.currentValue > bar.maximumValue ? bar.maximumValue.toFixed(2) :
+                                                             bar.currentValue.toFixed(2)) + " " + bar.units
+            }
+
+            Rectangle {
+                width: 2
+                color: bar.valueColor
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            Label {
+                color: bar.titleColor
+                font.family: app.monoFont
+                Layout.alignment: Qt.AlignHCenter
+                text: bar.minimumValue.toFixed(2) + " " + bar.units
+            }
+        }
+    }
 }
