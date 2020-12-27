@@ -28,6 +28,7 @@ import QtQuick.Controls 2.3
 import "../Widgets" as Widgets
 
 ApplicationWindow {
+    id: widgets
     title: qsTr("Widgets")
 
     //
@@ -48,6 +49,9 @@ ApplicationWindow {
     Connections {
         target: CppWidgets
         function onDataChanged() {
+            // Update window title
+            widgets.title = CppQmlBridge.projectTitle
+
             // Generate accelerometer widgets
             if (accGenerator.model !== CppWidgets.accelerometerGroupCount()) {
                 accGenerator.model = 0
