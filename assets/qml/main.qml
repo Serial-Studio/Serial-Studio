@@ -72,6 +72,18 @@ Item {
             height = Screen.desktopAvailableHeight - y - 2 * app.spacing
             width = Screen.desktopAvailableWidth - 6 * app.spacing - devicesWindow.width
         }
+
+        property bool alreadyShown: false
+
+        Connections {
+            target: CppSerialManager
+            function onConnectedChanged()  {
+                if (!consoleWindow.visible && !consoleWindow.alreadyShown && CppSerialManager.connected) {
+                    consoleWindow.show()
+                    consoleWindow.alreadyShown = true
+                }
+            }
+        }
     }
 
     //
@@ -94,6 +106,7 @@ Item {
                 if (!dataWindow.visible && !dataWindow.alreadyShown) {
                     dataWindow.show()
                     dataWindow.alreadyShown = true
+                    consoleWindow.hide()
                 }
             }
         }
