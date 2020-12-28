@@ -77,16 +77,16 @@ Window {
     //
     function updateValues() {
         if (CppWidgets.gyroGroupCount() > root.groupIndex) {
-            root.yawAngle = CppWidgets.gyroYaw(root.groupIndex)
-            root.rollAngle = CppWidgets.gyroRoll(root.groupIndex)
+            root.yawAngle   = CppWidgets.gyroYaw(root.groupIndex)
+            root.rollAngle  = CppWidgets.gyroRoll(root.groupIndex)
             root.pitchAngle = CppWidgets.gyroPitch(root.groupIndex)
-            root.title = CppWidgets.gyroGroupAt(root.groupIndex).title
+            root.title      = CppWidgets.gyroGroupAt(root.groupIndex).title
         }
 
         else {
-            root.title = ""
-            root.yawAngle = 0
-            root.rollAngle = 0
+            root.title      = ""
+            root.yawAngle   = 0
+            root.rollAngle  = 0
             root.pitchAngle = 0
         }
 

@@ -16,7 +16,7 @@ Furthermore, this approach can be extended to almost any type of project that in
 
 *Read this in other languages*: [Español](README_ES.md)
 
-![Software usage](doc/usage.gif)
+![Software usage](doc/app-usage.gif)
 
 ## Build instructions
 

@@ -152,21 +152,30 @@ ApplicationWindow {
             onDevicesClicked: devices.visible ? devices.hide() : devices.show()
 
             onDataClicked: {
-                data.opacity = 1
+                data.opacity    = 1
                 console.opacity = 0
                 widgets.opacity = 0
+                dataChecked     = true
+                consoleChecked  = false
+                widgetsChecked  = false
             }
 
             onConsoleClicked: {
-                data.opacity = 0
+                data.opacity    = 0
                 console.opacity = 1
                 widgets.opacity = 0
+                dataChecked     = false
+                consoleChecked  = true
+                widgetsChecked  = false
             }
 
             onWidgetsClicked: {
-                data.opacity = 0
+                data.opacity    = 0
                 console.opacity = 0
                 widgets.opacity = 1
+                dataChecked     = false
+                widgetsChecked  = true
+                consoleChecked  = false
             }
         }
 
@@ -206,10 +215,10 @@ ApplicationWindow {
                         function onPacketReceived()  {
                             if (!data.visible && !data.alreadyShown) {
                                 data.alreadyShown = true
-
-                                data.opacity = 1
-                                console.opacity = 0
-                                widgets.opacity = 0
+                                data.opacity      = 1
+                                console.opacity   = 0
+                                widgets.opacity   = 0
+                                devices.hide()
                             }
                         }
                     }

@@ -16,7 +16,7 @@ Además, este enfoque se puede extender a casi cualquier tipo de proyecto que im
 
 *Lea esto en otros idiomas:* [English](README.md)
 
-![Software usage](doc/usage.gif)
+![Software usage](doc/app-usage.gif)
 
 ## Instrucciones de complicación
 

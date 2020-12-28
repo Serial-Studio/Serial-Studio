@@ -78,16 +78,16 @@ Window {
     //
     function calculateMeanGForce() {
         if (CppWidgets.accelerometerGroupCount() > root.groupIndex) {
-            root.accX = CppWidgets.accelerometerX(root.groupIndex)
-            root.accY = CppWidgets.accelerometerY(root.groupIndex)
-            root.accZ = CppWidgets.accelerometerZ(root.groupIndex)
+            root.accX  = CppWidgets.accelerometerX(root.groupIndex)
+            root.accY  = CppWidgets.accelerometerY(root.groupIndex)
+            root.accZ  = CppWidgets.accelerometerZ(root.groupIndex)
             root.title = CppWidgets.accelerometerGroupAt(root.groupIndex).title
         }
 
         else {
-            root.accX = 0
-            root.accY = 0
-            root.accZ = 0
+            root.accX  = 0
+            root.accY  = 0
+            root.accZ  = 0
             root.title = 0
         }
 
