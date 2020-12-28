@@ -57,9 +57,9 @@ public:
    Q_INVOKABLE Dataset *barDatasetAt(const int index);
    Q_INVOKABLE Group *accelerometerGroupAt(const int index);
 
-   Q_INVOKABLE double gyroX(const int index);
-   Q_INVOKABLE double gyroY(const int index);
-   Q_INVOKABLE double gyroZ(const int index);
+   Q_INVOKABLE double gyroYaw(const int index);
+   Q_INVOKABLE double gyroRoll(const int index);
+   Q_INVOKABLE double gyroPitch(const int index);
 
    Q_INVOKABLE double accelerometerX(const int index);
    Q_INVOKABLE double accelerometerY(const int index);

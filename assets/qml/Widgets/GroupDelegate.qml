@@ -29,7 +29,7 @@ import Group 1.0
 import Dataset 1.0
 
 Window {
-    id: groupWindow
+    id: root
 
     spacing: -1
     showIcon: false
@@ -45,7 +45,7 @@ Window {
     Connections {
         target: CppQmlBridge
         function onUpdated() {
-            if (groupWindow.enabled)
+            if (root.enabled)
                 group = CppQmlBridge.getGroup(groupIndex)
         }
     }

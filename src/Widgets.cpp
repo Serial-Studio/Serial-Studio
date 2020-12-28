@@ -174,9 +174,9 @@ Group *Widgets::accelerometerGroupAt(const int index)
 }
 
 /**
- * Returns the value of the X axis for the gyro widget at the given @a index
+ * Returns the yaw angle for the gyro widget at the given @a index
  */
-double Widgets::gyroX(const int index)
+double Widgets::gyroYaw(const int index)
 {
    auto gyro = gyroGroupAt(index);
 
@@ -185,7 +185,7 @@ double Widgets::gyroX(const int index)
       foreach (auto dataset, gyro->datasets())
       {
          auto widget = dataset->widget();
-         if (widget.toLower() == "x")
+         if (widget.toLower() == "yaw")
             return dataset->value().toDouble();
       }
    }
@@ -194,9 +194,9 @@ double Widgets::gyroX(const int index)
 }
 
 /**
- * Returns the value of the Y axis for the gyro widget at the given @a index
+ * Returns the roll angle for the gyro widget at the given @a index
  */
-double Widgets::gyroY(const int index)
+double Widgets::gyroRoll(const int index)
 {
    auto gyro = gyroGroupAt(index);
 
@@ -205,7 +205,7 @@ double Widgets::gyroY(const int index)
       foreach (auto dataset, gyro->datasets())
       {
          auto widget = dataset->widget();
-         if (widget.toLower() == "y")
+         if (widget.toLower() == "roll")
             return dataset->value().toDouble();
       }
    }
@@ -214,9 +214,9 @@ double Widgets::gyroY(const int index)
 }
 
 /**
- * Returns the value of the Z axis for the gyro widget at the given @a index
+ * Returns the pitch angle for the gyro widget at the given @a index
  */
-double Widgets::gyroZ(const int index)
+double Widgets::gyroPitch(const int index)
 {
    auto gyro = gyroGroupAt(index);
 
@@ -225,7 +225,7 @@ double Widgets::gyroZ(const int index)
       foreach (auto dataset, gyro->datasets())
       {
          auto widget = dataset->widget();
-         if (widget.toLower() == "z")
+         if (widget.toLower() == "pitch")
             return dataset->value().toDouble();
       }
    }

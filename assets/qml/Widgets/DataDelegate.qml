@@ -28,6 +28,8 @@ import QtGraphicalEffects 1.0
 import Dataset 1.0
 
 Item {
+    id: root
+
     height: 14
     property Dataset dataset: null
 

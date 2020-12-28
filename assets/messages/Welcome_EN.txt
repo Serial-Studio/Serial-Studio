@@ -6,9 +6,9 @@ ____/ //  __/  /   _  / / /_/ /_  /     ____/ // /_ / /_/ // /_/ / _  / / /_/ /
                                                                                
                                                  
 Welcome to Serial Studio! To start, please select a COM port & baud rate in the
-devices window. If serial connection is successful & incoming data is
-interpreted correctly, this pane shall be automatically closed and the
-dashboard shall be generated automatically. Otherwise, you can use the console
+devices pane on the right. If serial connection is successful & incoming data
+is interpreted correctly, this pane shall be automatically closed and the
+dashboard shall be shown automatically. Otherwise, you can use the console
 to find the source of your problem.
 
 Use the toolbar buttons to display the features that you want to use.

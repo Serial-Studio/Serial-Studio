@@ -35,7 +35,7 @@ import Dataset 1.0
 import "."
 
 Window {
-    id: window
+    id: root
 
     //
     // Window properties
@@ -63,7 +63,7 @@ Window {
     Connections {
         target: CppWidgets
         function onDataChanged() {
-            window.updateValues()
+            root.updateValues()
         }
     }
 
@@ -71,17 +71,17 @@ Window {
     // Updates the internal values of the map widget
     //
     function updateValues() {
-        if (CppWidgets.mapGroupCount() > window.groupIndex) {
-            window.latitude = CppWidgets.mapLatitude(window.groupIndex)
-            window.longitude = CppWidgets.mapLongitude(window.groupIndex)
-            window.title = CppWidgets.mapGroupAt(window.groupIndex).title
-            window.centerMap()
+        if (CppWidgets.mapGroupCount() > root.groupIndex) {
+            root.latitude = CppWidgets.mapLatitude(root.groupIndex)
+            root.longitude = CppWidgets.mapLongitude(root.groupIndex)
+            root.title = CppWidgets.mapGroupAt(root.groupIndex).title
+            root.centerMap()
         }
 
         else {
-            window.title = ""
-            window.latitude = 0
-            window.longitude = 0
+            root.title = ""
+            root.latitude = 0
+            root.longitude = 0
         }
     }
 

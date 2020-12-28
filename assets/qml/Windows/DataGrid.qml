@@ -27,8 +27,9 @@ import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
 
-Page {
+Control {
     id: root
+    property string title
     background: Rectangle {
         color: app.windowBackgroundColor
     }
@@ -441,8 +442,8 @@ Page {
 
                 Label {
                     font.bold: true
-                    font.pixelSize: 16
                     text: root.title
+                    font.pixelSize: 16
                     color: palette.brightText
                     font.family: app.monoFont
                 }

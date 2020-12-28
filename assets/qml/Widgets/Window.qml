@@ -25,9 +25,8 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 Page {
+    id: root
     clip: true
-    id: window
-
 
     //
     // Custom properties
@@ -39,7 +38,7 @@ Page {
     property color titleColor: palette.brightText
     property color borderColor: palette.highlight
     property color backgroundColor: Qt.darker(palette.base)
-    property color gradientColor: window.gradient ? Qt.rgba(5/255, 139/255, 167/255, 1) : window.borderColor
+    property color gradientColor: root.gradient ? Qt.rgba(5/255, 139/255, 167/255, 1) : root.borderColor
 
     //
     // Animations
@@ -59,10 +58,10 @@ Page {
     // Background widget
     //
     background: Rectangle {
-        color: window.backgroundColor
-        radius: window.borderWidth + 2
-        border.width: window.borderWidth
-        border.color: window.gradientColor
+        color: root.backgroundColor
+        radius: root.borderWidth + 2
+        border.width: root.borderWidth
+        border.color: root.gradientColor
     }
 
     //
@@ -70,25 +69,25 @@ Page {
     //
     header: Rectangle {
         height: 32
-        color: window.borderColor
-        radius: window.borderWidth + 2
+        color: root.borderColor
+        radius: root.borderWidth + 2
 
         gradient: Gradient {
             GradientStop {
                 position: 0
-                color: window.borderColor
+                color: root.borderColor
             }
 
             GradientStop {
                 position: 1
-                color: window.gradientColor
+                color: root.gradientColor
             }
         }
 
         Rectangle {
             z: 5
-            color: window.gradientColor
-            height: window.gradient ? 1 : parent.radius
+            color: root.gradientColor
+            height: root.gradient ? 1 : parent.radius
 
             anchors {
                 left: parent.left
@@ -109,7 +108,7 @@ Page {
                 icon.height: 24
                 Layout.minimumWidth: 32
                 Layout.maximumWidth: 32
-                icon.color: window.titleColor
+                icon.color: root.titleColor
                 Layout.alignment: Qt.AlignVCenter
                 Layout.maximumHeight: parent.height
                 Layout.minimumHeight: parent.height
@@ -118,11 +117,11 @@ Page {
 
             Label {
                 font.bold: true
-                text: window.title
+                text: root.title
                 Layout.fillWidth: true
-                color: window.titleColor
+                color: root.titleColor
                 Layout.alignment: Qt.AlignVCenter
-                horizontalAlignment: window.showIcon ? Label.AlignLeft : Label.AlignHCenter
+                horizontalAlignment: root.showIcon ? Label.AlignLeft : Label.AlignHCenter
             }
         }
     }

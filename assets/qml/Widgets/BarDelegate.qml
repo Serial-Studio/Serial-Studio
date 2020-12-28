@@ -30,7 +30,7 @@ import Dataset 1.0
 import "."
 
 Window {
-    id: bar
+    id: root
 
     //
     // Window properties
@@ -67,7 +67,12 @@ Window {
     property color valueColor: Qt.rgba(81/255, 116/255, 151/255, 1)
     property color titleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
     property color emptyColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
-    property color levelColor: colorPalette[colorPalette.length % (index + 1)]
+    property color levelColor:  {
+        if (colorPalette.length > index)
+            return colorPalette[index]
+
+        return colorPalette[colorPalette.length % index]
+    }
 
     //
     // Custom properties
@@ -86,7 +91,7 @@ Window {
     Connections {
         target: CppWidgets
         function onDataChanged() {
-            bar.updateValues()
+            root.updateValues()
         }
     }
 
@@ -94,20 +99,20 @@ Window {
     // Updates the internal values of the bar widget
     //
     function updateValues() {
-        if (CppWidgets.barDatasetCount() > bar.datasetIndex) {
-            bar.currentValue = CppWidgets.bar(bar.datasetIndex)
-            bar.minimumValue = CppWidgets.barMin(bar.datasetIndex)
-            bar.maximumValue = CppWidgets.barMax(bar.datasetIndex)
-            bar.title = CppWidgets.barDatasetAt(bar.datasetIndex).title
-            bar.units = CppWidgets.barDatasetAt(bar.datasetIndex).units
+        if (CppWidgets.barDatasetCount() > root.datasetIndex) {
+            root.currentValue = CppWidgets.bar(root.datasetIndex)
+            root.minimumValue = CppWidgets.barMin(root.datasetIndex)
+            root.maximumValue = CppWidgets.barMax(root.datasetIndex)
+            root.title = CppWidgets.barDatasetAt(root.datasetIndex).title
+            root.units = CppWidgets.barDatasetAt(root.datasetIndex).units
         }
 
         else {
-            bar.title = ""
-            bar.units = ""
-            bar.currentValue = 0
-            bar.minimumValue = 0
-            bar.maximumValue = 0
+            root.title = ""
+            root.units = ""
+            root.currentValue = 0
+            root.minimumValue = 0
+            root.maximumValue = 0
         }
     }
 
@@ -135,22 +140,22 @@ Window {
         Rectangle {
             id: tank
             border.width: 2
-            color: bar.emptyColor
+            color: root.emptyColor
             Layout.fillHeight: true
-            border.color: bar.tankColor
-            Layout.minimumWidth: bar.width * 0.17
-            Layout.maximumWidth: bar.width * 0.17
+            border.color: root.tankColor
+            Layout.minimumWidth: root.width * 0.17
+            Layout.maximumWidth: root.width * 0.17
 
             //
             // Level indicator
             //
             Rectangle {
                 anchors.fill: parent
-                anchors.topMargin: (1 - bar.level) * tank.height
+                anchors.topMargin: (1 - root.level) * tank.height
 
                 border.width: 2
-                color: bar.levelColor
-                border.color: bar.tankColor
+                color: root.levelColor
+                border.color: root.tankColor
             }
         }
 
@@ -162,15 +167,15 @@ Window {
             Layout.fillHeight: true
 
             Label {
-                color: bar.titleColor
+                color: root.titleColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: bar.maximumValue.toFixed(2) + " " + bar.units
+                text: root.maximumValue.toFixed(2) + " " + root.units
             }
 
             Rectangle {
                 width: 2
-                color: bar.valueColor
+                color: root.valueColor
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter
             }
@@ -178,33 +183,33 @@ Window {
             Label {
                 font.bold: true
                 font.pixelSize: 16
-                color: bar.titleColor
+                color: root.titleColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: (bar.currentValue > bar.maximumValue ? bar.maximumValue.toFixed(2) :
-                                                             bar.currentValue.toFixed(2)) + " " + bar.units
+                text: (root.currentValue > root.maximumValue ? root.maximumValue.toFixed(2) :
+                                                             root.currentValue.toFixed(2)) + " " + root.units
 
                 Rectangle {
                     border.width: 1
                     anchors.fill: parent
                     color: "transparent"
-                    border.color: bar.titleColor
+                    border.color: root.titleColor
                     anchors.margins: -app.spacing
                 }
             }
 
             Rectangle {
                 width: 2
-                color: bar.valueColor
+                color: root.valueColor
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignHCenter
             }
 
             Label {
-                color: bar.titleColor
+                color: root.titleColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: bar.minimumValue.toFixed(2) + " " + bar.units
+                text: root.minimumValue.toFixed(2) + " " + root.units
             }
         }
     }

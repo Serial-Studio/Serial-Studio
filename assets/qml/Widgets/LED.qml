@@ -25,7 +25,7 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 RowLayout {
-    id: _led
+    id: root
     spacing: app.spacing
 
     //
@@ -43,7 +43,7 @@ RowLayout {
     // Turns on the LED for a short period of time
     //
     function flash() {
-        _led.enabled = true
+        root.enabled = true
         if (_timer.running)
             _timer.restart()
         else
@@ -56,7 +56,7 @@ RowLayout {
     Timer {
         id: _timer
         interval: 50
-        onTriggered: _led.enabled = false
+        onTriggered: root.enabled = false
     }
 
     //
@@ -68,7 +68,7 @@ RowLayout {
         height: 18
         radius: width / 2
         Layout.alignment: Qt.AlignVCenter
-        color: _led.enabled ? _led.onColor : _led.offColor
+        color: root.enabled ? root.onColor : root.offColor
     }
 
     //

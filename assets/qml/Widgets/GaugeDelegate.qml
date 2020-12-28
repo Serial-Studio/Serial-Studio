@@ -24,7 +24,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 
 Rectangle {
-    id: gauge
+    id: root
 
     //
     // Custom properties
@@ -84,8 +84,8 @@ Rectangle {
     //
     Label {
         font.pixelSize: 14
-        text: gauge.title
-        color: gauge.titleColor
+        text: root.title
+        color: root.titleColor
         anchors.centerIn: parent
         font.family: app.monoFont
         anchors.verticalCenterOffset: 32
@@ -96,12 +96,12 @@ Rectangle {
     //
     Label {
         font.pixelSize: 14
-        color: gauge.valueColor
+        color: root.valueColor
         anchors.centerIn: parent
         font.family: app.monoFont
-        visible: gauge.valueLabelVisible
+        visible: root.valueLabelVisible
         anchors.verticalCenterOffset: 56
-        text: gauge.currentValue.toFixed(3)
+        text: root.currentValue.toFixed(3)
     }
 
     //
@@ -116,20 +116,20 @@ Rectangle {
             var ctx = getContext('2d')
             ctx.reset()
 
-            if (!gauge.numbersVisible)
+            if (!root.numbersVisible)
                 return
 
             var range = lastNumber - firstNumber
             for (var i = 0; i <= range; ++i) {
-                var radius = Math.min(gauge.width, gauge.height) / 2
+                var radius = Math.min(root.width, root.height) / 2
 
                 var startupTheta = -180
                 var theta = (startupTheta + i * 360 / (range + 1)) * (Math.PI / 180)
-                var dX = (radius - gauge.numberSize) * Math.cos(theta) + radius - gauge.numberSize / 2
-                var dY = (radius - gauge.numberSize) * Math.sin(theta) + radius + gauge.numberSize / 2
+                var dX = (radius - root.numberSize) * Math.cos(theta) + radius - root.numberSize / 2
+                var dY = (radius - root.numberSize) * Math.sin(theta) + radius + root.numberSize / 2
 
-                ctx.font = "bold " + gauge.numberSize + "px " + app.monoFont
-                ctx.fillStyle = gauge.indicatorColor
+                ctx.font = "bold " + root.numberSize + "px " + app.monoFont
+                ctx.fillStyle = root.indicatorColor
                 ctx.fillText(i + firstNumber, dX, dY)
 
                 if (i === range) {
@@ -140,13 +140,13 @@ Rectangle {
                     var finishAngle = Math.PI - spacing
 
                     ctx.lineWidth = 2
-                    ctx.strokeStyle = gauge.indicatorColor
+                    ctx.strokeStyle = root.indicatorColor
 
                     ctx.beginPath();
-                    ctx.arc(x, y, radius - (gauge.numberSize + 3), startAngle, finishAngle)
+                    ctx.arc(x, y, radius - (root.numberSize + 3), startAngle, finishAngle)
                     ctx.stroke()
                     ctx.beginPath();
-                    ctx.arc(x, y, radius - (gauge.numberSize - 3), startAngle, finishAngle)
+                    ctx.arc(x, y, radius - (root.numberSize - 3), startAngle, finishAngle)
                     ctx.stroke()
                 }
             }
@@ -184,12 +184,12 @@ Rectangle {
             }
 
             function drawIndicator(value, color, width, lenGain) {
-                var deg = ((Math.min(value, gauge.lastNumber) / (gauge.lastNumber + 1)) * 360) - 180
+                var deg = ((Math.min(value, root.lastNumber) / (root.lastNumber + 1)) * 360) - 180
                 var rad = deg * (Math.PI / 180)
-                var len = Math.min(gauge.width, gauge.height) * lenGain
+                var len = Math.min(root.width, root.height) * lenGain
 
-                var x = gauge.width / 2
-                var y = gauge.height / 2
+                var x = root.width / 2
+                var y = root.height / 2
                 var x1 = x + Math.cos(rad) * len
                 var y1 = y + Math.sin(rad) * len
 
@@ -200,14 +200,14 @@ Rectangle {
 
             ctx.reset()
 
-            if (gauge.maximumVisible)
-                drawIndicator(gauge.maximumValue, gauge.indicatorMaxColor, gauge.indicatorWidth * 0.8, 0.20)
+            if (root.maximumVisible)
+                drawIndicator(root.maximumValue, root.indicatorMaxColor, root.indicatorWidth * 0.8, 0.20)
 
-            if (gauge.minimumVisible)
-                drawIndicator(gauge.minimumValue, gauge.indicatorMinColor, gauge.indicatorWidth * 0.8, 0.20)
+            if (root.minimumVisible)
+                drawIndicator(root.minimumValue, root.indicatorMinColor, root.indicatorWidth * 0.8, 0.20)
 
-            if (gauge.currentVisible)
-                drawIndicator(gauge.currentValue, gauge.indicatorColor, gauge.indicatorWidth, 0.28)
+            if (root.currentVisible)
+                drawIndicator(root.currentValue, root.indicatorColor, root.indicatorWidth, 0.28)
         }
     }
 
@@ -220,7 +220,7 @@ Rectangle {
         color: "#111"
         radius: width / 2
         anchors.centerIn: parent
-        border.color: gauge.indicatorColor
-        border.width: gauge.indicatorWidth - 1
+        border.color: root.indicatorColor
+        border.width: root.indicatorWidth - 1
     }
 }

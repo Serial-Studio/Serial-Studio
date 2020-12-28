@@ -26,7 +26,7 @@ import QtCharts 2.3
 import Dataset 1.0
 
 Window {
-    id: graphWindow
+    id: root
 
     property int graphId: -1
     property real maximumValue: -Infinity
@@ -45,7 +45,7 @@ Window {
         target: CppGraphProvider
         function onDataUpdated() {
             // Cancel if window is not enabled
-            if (!graphWindow.enabled)
+            if (!root.enabled)
                 return
 
             // Update maximum value (if required)
@@ -80,9 +80,9 @@ Window {
         anchors.fill: parent
         legend.visible: false
         backgroundRoundness: 0
-        enabled: graphWindow.enabled
-        visible: graphWindow.enabled
-        backgroundColor: graphWindow.backgroundColor
+        enabled: root.enabled
+        visible: root.enabled
+        backgroundColor: root.backgroundColor
 
         margins {
             top: 0

@@ -26,7 +26,7 @@ import QtQuick.Controls 2.12
 
 import "../Widgets" as Widgets
 
-Page {
+Control {
     id: root
     background: Rectangle {
         color: app.windowBackgroundColor
@@ -43,9 +43,6 @@ Page {
     Connections {
         target: CppWidgets
         function onDataChanged() {
-            // Update window title
-            root.title = CppQmlBridge.projectTitle
-
             // Generate accelerometer widgets
             if (accGenerator.model !== CppWidgets.accelerometerGroupCount()) {
                 accGenerator.model = 0

@@ -29,7 +29,7 @@ import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
 
-Page {
+Control {
     id: root
     background: Rectangle {
         color: app.windowBackgroundColor

@@ -23,6 +23,7 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
+import QtGraphicalEffects 1.0
 
 import Group 1.0
 import Dataset 1.0
@@ -30,7 +31,7 @@ import Dataset 1.0
 import "."
 
 Window {
-    id: gyro
+    id: root
 
     //
     // Window properties
@@ -47,9 +48,9 @@ Window {
     //
     // Custom properties
     //
-    property real xAngle: 0
-    property real yAngle: 0
-    property real zAngle: 0
+    property real yawAngle: 0
+    property real rollAngle: 0
+    property real pitchAngle: 0
     property int groupIndex: 0
 
     //
@@ -63,7 +64,7 @@ Window {
     Connections {
         target: CppWidgets
         function onDataChanged() {
-            gyro.updateValues()
+            root.updateValues()
         }
     }
 
@@ -71,43 +72,107 @@ Window {
     // Updates the internal values of the bar widget
     //
     function updateValues() {
-        if (CppWidgets.gyroGroupCount() > gyro.groupIndex) {
-            gyro.xAngle = CppWidgets.gyroX(gyro.groupIndex)
-            gyro.yAngle = CppWidgets.gyroY(gyro.groupIndex)
-            gyro.zAngle = CppWidgets.gyroZ(gyro.groupIndex)
-            gyro.title = CppWidgets.gyroGroupAt(gyro.groupIndex).title
+        if (CppWidgets.gyroGroupCount() > root.groupIndex) {
+            //root.yawAngle = CppWidgets.gyroYaw(root.groupIndex)
+            //root.rollAngle = CppWidgets.gyroRoll(root.groupIndex)
+            //root.pitchAngle = CppWidgets.gyroPitch(root.groupIndex)
+            root.title = CppWidgets.gyroGroupAt(root.groupIndex).title
         }
 
         else {
-            gyro.title = ""
-            gyro.xAngle = 0
-            gyro.yAngle = 0
-            gyro.zAngle = 0
+            root.title = ""
+            root.yawAngle = 0
+            root.rollAngle = 0
+            root.pitchAngle = 0
         }
     }
 
     //
     // Animations
     //
-    Behavior on xAngle {NumberAnimation{}}
-    Behavior on yAngle {NumberAnimation{}}
-    Behavior on zAngle {NumberAnimation{}}
+    Behavior on yawAngle {NumberAnimation{}}
+    Behavior on rollAngle {NumberAnimation{}}
+    Behavior on pitchAngle {NumberAnimation{}}
 
     //
-    // Artificial horizon
+    // Instrument
+    //
+    Item {
+        id: instrument
+        visible: false
+        anchors.centerIn: parent
+        width: Math.min(root.width, root.height) * 0.7
+        height: Math.min(root.width, root.height) * 0.7
+
+        //
+        // Artificial horizon
+        //
+        Item {
+            anchors.fill: parent
+            id: artificialHorizon
+
+            Rectangle {
+                id: sky
+                smooth: true
+                antialiasing: true
+                anchors.fill: parent
+                color: Qt.rgba(92/255, 147/255, 197/255, 1)
+                anchors.topMargin: -artificialHorizon.height
+            }
+
+            Rectangle {
+                id: ground
+                smooth: true
+                antialiasing: true
+                height: artificialHorizon.height * 1.5
+                color: Qt.rgba(125/255, 82/255, 51/255, 1)
+
+                anchors {
+                    left: sky.left
+                    right: sky.right
+                    bottom: sky.bottom
+                    bottomMargin: -artificialHorizon.height
+                }
+            }
+
+            transform: [
+                Translate {
+                    y: root.pitchAngle * instrument.height / 45
+                },
+                Rotation {
+                    angle: -rollAngle
+                    origin.x: artificialHorizon.width  / 2
+                    origin.y: artificialHorizon.height / 2
+                }
+            ]
+        }
+    }
+
+    //
+    // Circular mask over artificial horizon
+    //
+    Rectangle {
+        id: mask
+        color: "black"
+        visible: false
+        radius: width / 2
+        anchors.fill: instrument
+    } OpacityMask {
+        maskSource: mask
+        source: instrument
+        anchors.fill: instrument
+    }
+
+    //
+    // Border rectangle
     //
     Rectangle {
         border.width: 2
         radius: width / 2
+        color: "transparent"
         anchors.centerIn: parent
-        border.color: gyro.gyroColor
-        color: Qt.rgba(81/255, 116/255, 151/255, 1)
-        width: Math.min(gyro.width, gyro.height) * 0.7
-        height: Math.min(gyro.width, gyro.height) * 0.7
-
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: app.spacing
-        }
+        border.color: root.gyroColor
+        width: instrument.width + 2
+        height: instrument.height + 2
     }
 }

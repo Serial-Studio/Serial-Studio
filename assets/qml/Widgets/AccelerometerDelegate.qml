@@ -30,7 +30,7 @@ import Dataset 1.0
 import "."
 
 Window {
-    id: accel
+    id: root
 
     //
     // Properties
@@ -69,7 +69,7 @@ Window {
     Connections {
         target: CppWidgets
         function onDataChanged() {
-            accel.calculateMeanGForce()
+            root.calculateMeanGForce()
         }
     }
 
@@ -77,41 +77,44 @@ Window {
     // Calculates the mean g force for all three axes using the pythagorean theorem
     //
     function calculateMeanGForce() {
-        if (CppWidgets.accelerometerGroupCount() > accel.groupIndex) {
-            accel.accX = CppWidgets.accelerometerX(accel.groupIndex)
-            accel.accY = CppWidgets.accelerometerY(accel.groupIndex)
-            accel.accZ = CppWidgets.accelerometerZ(accel.groupIndex)
-            accel.title = CppWidgets.accelerometerGroupAt(accel.groupIndex).title
+        if (CppWidgets.accelerometerGroupCount() > root.groupIndex) {
+            root.accX = CppWidgets.accelerometerX(root.groupIndex)
+            root.accY = CppWidgets.accelerometerY(root.groupIndex)
+            root.accZ = CppWidgets.accelerometerZ(root.groupIndex)
+            root.title = CppWidgets.accelerometerGroupAt(root.groupIndex).title
         }
 
         else {
-            accel.accX = 0
-            accel.accY = 0
-            accel.accZ = 0
-            accel.title = 0
+            root.accX = 0
+            root.accY = 0
+            root.accZ = 0
+            root.title = 0
         }
 
-        var gX = accel.accX / accel.gConstant
-        var gY = accel.accY / accel.gConstant
-        var gZ = accel.accZ / accel.gConstant
+        var gX = root.accX / root.gConstant
+        var gY = root.accY / root.gConstant
+        var gZ = root.accZ / root.gConstant
 
-        accel.meanGForce = Math.sqrt(Math.pow(gX, 2) + Math.pow(gY, 2) + Math.pow(gZ, 2))
+        root.meanGForce = Math.sqrt(Math.pow(gX, 2) + Math.pow(gY, 2) + Math.pow(gZ, 2))
 
-        if (accel.meanGForce > accel.max)
-            accel.max = accel.meanGForce
-        else if (accel.meanGForce < accel.min)
-            accel.min = accel.meanGForce
+        if (root.meanGForce > root.max)
+            root.max = root.meanGForce
+        else if (root.meanGForce < root.min)
+            root.min = root.meanGForce
+
+        calculateGaugeSize()
     }
 
     //
     // Redraws accelerator gauge
     //
     function calculateGaugeSize() {
-        if (accel.width < accel.height)
-            accel.gaugeSize = Math.max(140, accel.width - controls.implicitWidth - 12 * app.spacing)
+        if (root.width < root.height)
+            root.gaugeSize = Math.max(120, root.width - controls.implicitWidth - 12 * app.spacing)
 
         else
-            accel.gaugeSize = Math.max(140, accel.height - controls.implicitWidth - 2 * app.spacing)
+            root.gaugeSize = Math.max(120, root.height - controls.implicitWidth - 4 * app.spacing)
+
     }
 
     //
@@ -137,15 +140,15 @@ Window {
             lastNumber: 8
             firstNumber: 0
             title: qsTr("G Units")
-            minimumValue: accel.min
-            maximumValue: accel.max
+            minimumValue: root.min
+            maximumValue: root.max
             valueLabelVisible: false
-            currentValue: accel.meanGForce
+            currentValue: root.meanGForce
             Layout.alignment: Qt.AlignHCenter
-            Layout.minimumWidth: accel.gaugeSize
-            Layout.maximumWidth: accel.gaugeSize
-            Layout.minimumHeight: accel.gaugeSize
-            Layout.maximumHeight: accel.gaugeSize
+            Layout.minimumWidth: root.gaugeSize
+            Layout.maximumWidth: root.gaugeSize
+            Layout.minimumHeight: root.gaugeSize
+            Layout.maximumHeight: root.gaugeSize
         }
 
         //
@@ -167,14 +170,14 @@ Window {
                 font.pixelSize: 12
                 color: gauge.valueColor
                 font.family: app.monoFont
-                text: qsTr("Maximum: %1 G").arg(accel.max.toFixed(2))
+                text: qsTr("Maximum: %1 G").arg(root.max.toFixed(2))
             }
 
             Label {
                 font.pixelSize: 12
                 color: gauge.valueColor
                 font.family: app.monoFont
-                text: qsTr("Minimum: %1 G").arg(accel.min.toFixed(2))
+                text: qsTr("Minimum: %1 G").arg(root.min.toFixed(2))
             }
 
             Item {
@@ -186,7 +189,7 @@ Window {
                 font.pixelSize: 12
                 color: gauge.valueColor
                 font.family: app.monoFont
-                text: qsTr("Current: %1 G").arg(accel.meanGForce.toFixed(2))
+                text: qsTr("Current: %1 G").arg(root.meanGForce.toFixed(2))
 
                 Rectangle {
                     border.width: 1
@@ -204,8 +207,8 @@ Window {
             Button {
                 text: qsTr("Reset")
                 onClicked: {
-                    accel.max = 0
-                    accel.min = 0
+                    root.max = 0
+                    root.min = 0
                 }
             }
         }
