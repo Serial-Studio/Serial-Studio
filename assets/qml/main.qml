@@ -36,6 +36,7 @@ ApplicationWindow {
     // Global properties
     //
     readonly property int spacing: 8
+    property bool firstValidPacket: false
     readonly property color windowBackgroundColor: Qt.rgba(18/255, 25/255, 32/255, 1)
     readonly property string monoFont: {
         switch (Qt.platform.os) {
@@ -114,6 +115,25 @@ ApplicationWindow {
     }
 
     //
+    // Hide console & device manager when we receive first valid packet
+    //
+    Connections {
+        target: CppJsonParser
+        enabled: !app.firstValidPacket
+        function onPacketReceived()  {
+            app.firstValidPacket = true
+            uiConfigTimer.start()
+        }
+    } Timer {
+        id: uiConfigTimer
+        interval: 250
+        onTriggered: {
+            devices.hide()
+            toolbar.dataClicked()
+        }
+    }
+
+    //
     // Save window size & position
     //
     Settings {
@@ -164,8 +184,8 @@ ApplicationWindow {
                 data.opacity    = 0
                 console.opacity = 1
                 widgets.opacity = 0
-                dataChecked     = false
                 consoleChecked  = true
+                dataChecked     = false
                 widgetsChecked  = false
             }
 
@@ -203,25 +223,10 @@ ApplicationWindow {
                 DataGrid {
                     id: data
                     anchors.fill: parent
-                    property bool alreadyShown: false
 
                     // Animate on show
                     visible: opacity > 0
                     Behavior on opacity {NumberAnimation{}}
-
-                    // Show data view when first valid packet is received
-                    Connections {
-                        target: CppJsonParser
-                        function onPacketReceived()  {
-                            if (!data.visible && !data.alreadyShown) {
-                                data.alreadyShown = true
-                                data.opacity      = 1
-                                console.opacity   = 0
-                                widgets.opacity   = 0
-                                devices.hide()
-                            }
-                        }
-                    }
                 }
 
                 Widgets {
