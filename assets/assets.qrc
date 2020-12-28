@@ -38,9 +38,11 @@
         <file>icons/usb.svg</file>
         <file>icons/visibility.svg</file>
         <file>icons/warning.svg</file>
-        <file>images/IC.svg</file>
-        <file>images/IC_Blank.svg</file>
         <file>images/icon.png</file>
+        <file>instruments/AttitudeDial.svg</file>
+        <file>instruments/AttitudePointer.svg</file>
+        <file>instruments/Crosshair.svg</file>
+        <file>messages/Welcome_EN.txt</file>
         <file>qml/Widgets/AccelerometerDelegate.qml</file>
         <file>qml/Widgets/BarDelegate.qml</file>
         <file>qml/Widgets/DataDelegate.qml</file>
@@ -58,6 +60,6 @@
         <file>qml/Windows/Toolbar.qml</file>
         <file>qml/Windows/Widgets.qml</file>
         <file>qml/main.qml</file>
-        <file>messages/Welcome_EN.txt</file>
+        <file>qml/Widgets/ArtificialHorizonDelegate.qml</file>
     </qresource>
 </RCC>

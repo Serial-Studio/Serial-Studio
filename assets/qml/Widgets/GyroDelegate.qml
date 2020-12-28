@@ -40,8 +40,8 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    icon.source: "qrc:/icons/chart.svg"
     implicitHeight: implicitWidth + 96
+    icon.source: "qrc:/icons/refresh.svg"
     borderColor: Qt.rgba(45/255, 96/255, 115/255, 1)
     backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
 
@@ -52,11 +52,15 @@ Window {
     property real rollAngle: 0
     property real pitchAngle: 0
     property int groupIndex: 0
+    property real gaugeSize: calculateGaugeSize()
+    property color valueColor: Qt.rgba(142/255, 205/255, 157/255, 1)
 
     //
-    // Colors
+    // Update root size automatically
     //
-    property color gyroColor: Qt.rgba(230/255, 224/255, 178/255, 1)
+    onWidthChanged: calculateGaugeSize()
+    onHeightChanged: calculateGaugeSize()
+
 
     //
     // Connections with widget manager
@@ -73,9 +77,9 @@ Window {
     //
     function updateValues() {
         if (CppWidgets.gyroGroupCount() > root.groupIndex) {
-            //root.yawAngle = CppWidgets.gyroYaw(root.groupIndex)
-            //root.rollAngle = CppWidgets.gyroRoll(root.groupIndex)
-            //root.pitchAngle = CppWidgets.gyroPitch(root.groupIndex)
+            root.yawAngle = CppWidgets.gyroYaw(root.groupIndex)
+            root.rollAngle = CppWidgets.gyroRoll(root.groupIndex)
+            root.pitchAngle = CppWidgets.gyroPitch(root.groupIndex)
             root.title = CppWidgets.gyroGroupAt(root.groupIndex).title
         }
 
@@ -85,6 +89,19 @@ Window {
             root.rollAngle = 0
             root.pitchAngle = 0
         }
+
+        calculateGaugeSize()
+    }
+
+    //
+    // Redraws accelerator root
+    //
+    function calculateGaugeSize() {
+        if (root.width < root.height)
+            root.gaugeSize = Math.max(120, root.width - controls.implicitWidth - 12 * app.spacing)
+
+        else
+            root.gaugeSize = Math.max(120, root.height - controls.implicitWidth - 4 * app.spacing)
     }
 
     //
@@ -95,84 +112,107 @@ Window {
     Behavior on pitchAngle {NumberAnimation{}}
 
     //
-    // Instrument
+    // Layout
     //
-    Item {
-        id: instrument
-        visible: false
-        anchors.centerIn: parent
-        width: Math.min(root.width, root.height) * 0.7
-        height: Math.min(root.width, root.height) * 0.7
+    RowLayout {
+        anchors.fill: parent
+        anchors.margins: app.spacing
+
+        //
+        // Spacer
+        //
+        Item {
+            Layout.fillWidth: true
+        }
 
         //
         // Artificial horizon
         //
-        Item {
-            anchors.fill: parent
+        ArtificialHorizonDelegate {
             id: artificialHorizon
-
-            Rectangle {
-                id: sky
-                smooth: true
-                antialiasing: true
-                anchors.fill: parent
-                color: Qt.rgba(92/255, 147/255, 197/255, 1)
-                anchors.topMargin: -artificialHorizon.height
-            }
-
-            Rectangle {
-                id: ground
-                smooth: true
-                antialiasing: true
-                height: artificialHorizon.height * 1.5
-                color: Qt.rgba(125/255, 82/255, 51/255, 1)
-
-                anchors {
-                    left: sky.left
-                    right: sky.right
-                    bottom: sky.bottom
-                    bottomMargin: -artificialHorizon.height
-                }
-            }
-
-            transform: [
-                Translate {
-                    y: root.pitchAngle * instrument.height / 45
-                },
-                Rotation {
-                    angle: -rollAngle
-                    origin.x: artificialHorizon.width  / 2
-                    origin.y: artificialHorizon.height / 2
-                }
-            ]
+            rollAngle: root.rollAngle
+            pitchAngle: root.pitchAngle
+            Layout.alignment: Qt.AlignHCenter
+            Layout.minimumWidth: root.gaugeSize
+            Layout.maximumWidth: root.gaugeSize
+            Layout.minimumHeight: root.gaugeSize
+            Layout.maximumHeight: root.gaugeSize
         }
-    }
 
-    //
-    // Circular mask over artificial horizon
-    //
-    Rectangle {
-        id: mask
-        color: "black"
-        visible: false
-        radius: width / 2
-        anchors.fill: instrument
-    } OpacityMask {
-        maskSource: mask
-        source: instrument
-        anchors.fill: instrument
-    }
+        //
+        // Spacer
+        //
+        Item {
+            Layout.fillWidth: true
+        }
 
-    //
-    // Border rectangle
-    //
-    Rectangle {
-        border.width: 2
-        radius: width / 2
-        color: "transparent"
-        anchors.centerIn: parent
-        border.color: root.gyroColor
-        width: instrument.width + 2
-        height: instrument.height + 2
+        //
+        // Values
+        //
+        Rectangle {
+            id: controls
+            border.width: 1
+            color: "transparent"
+            implicitWidth: 120
+            Layout.minimumWidth: 120
+            Layout.maximumWidth: 120
+            Layout.minimumHeight: 120
+            Layout.maximumHeight: 120
+            border.color: root.valueColor
+            Layout.alignment: Qt.AlignVCenter
+
+            function formatAngle(angle) {
+                var str
+
+                if (angle < 0)
+                    str = '- '
+                else
+                    str = '+ '
+
+                if (Math.abs(angle) < 100)
+                    str += '0'
+
+                if (Math.abs(angle) < 10)
+                    str += '0'
+
+                return str + Math.abs(Math.floor(angle))
+            }
+
+            ColumnLayout {
+                spacing: app.spacing
+                anchors.centerIn: parent
+
+                Label {
+                    font.pixelSize: 12
+                    color: root.valueColor
+                    font.family: app.monoFont
+                    Layout.alignment: Qt.AlignLeft
+                    text: qsTr("%1° YAW").arg(controls.formatAngle(root.yawAngle))
+                }
+
+                Label {
+                    font.pixelSize: 12
+                    color: root.valueColor
+                    font.family: app.monoFont
+                    Layout.alignment: Qt.AlignLeft
+                    text: qsTr("%1° ROLL").arg(controls.formatAngle(root.rollAngle))
+                }
+
+                Label {
+                    font.pixelSize: 12
+                    color: root.valueColor
+                    font.family: app.monoFont
+                    Layout.alignment: Qt.AlignLeft
+                    text: qsTr("%1° PITCH").arg(controls.formatAngle(root.pitchAngle))
+                }
+            }
+        }
+
+        //
+        // Spacer
+        //
+        Item {
+            Layout.fillWidth: true
+        }
     }
 }

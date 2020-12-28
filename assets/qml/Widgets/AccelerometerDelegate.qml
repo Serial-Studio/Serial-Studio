@@ -114,7 +114,6 @@ Window {
 
         else
             root.gaugeSize = Math.max(120, root.height - controls.implicitWidth - 4 * app.spacing)
-
     }
 
     //
@@ -170,14 +169,16 @@ Window {
                 font.pixelSize: 12
                 color: gauge.valueColor
                 font.family: app.monoFont
-                text: qsTr("Maximum: %1 G").arg(root.max.toFixed(2))
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("%1 G MAX").arg(root.max.toFixed(2))
             }
 
             Label {
                 font.pixelSize: 12
                 color: gauge.valueColor
                 font.family: app.monoFont
-                text: qsTr("Minimum: %1 G").arg(root.min.toFixed(2))
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("%1 G MIN").arg(root.min.toFixed(2))
             }
 
             Item {
@@ -189,7 +190,8 @@ Window {
                 font.pixelSize: 12
                 color: gauge.valueColor
                 font.family: app.monoFont
-                text: qsTr("Current: %1 G").arg(root.meanGForce.toFixed(2))
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("%1 G ACT").arg(root.meanGForce.toFixed(2))
 
                 Rectangle {
                     border.width: 1
@@ -206,6 +208,8 @@ Window {
 
             Button {
                 text: qsTr("Reset")
+                Layout.alignment: Qt.AlignHCenter
+
                 onClicked: {
                     root.max = 0
                     root.min = 0

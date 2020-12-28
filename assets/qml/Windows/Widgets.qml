@@ -35,7 +35,7 @@ Control {
     //
     // Custom properties
     //
-    readonly property int minimumWidgetSize: 320
+    readonly property int minimumWidgetSize: 340
 
     //
     // Group/dataset updating
