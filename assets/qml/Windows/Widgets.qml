@@ -97,22 +97,6 @@ Control {
                 columns: Math.floor(_sv.width / (root.minimumWidgetSize + 2 * app.spacing))
 
                 Repeater {
-                    id: accGenerator
-
-                    delegate: Item {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        Layout.minimumWidth: root.minimumWidgetSize
-                        Layout.minimumHeight: root.minimumWidgetSize
-
-                        Widgets.AccelerometerDelegate {
-                            groupIndex: groupIndex
-                            anchors.fill: parent
-                        }
-                    }
-                }
-
-                Repeater {
                     id: gyroGenerator
 
                     delegate: Item {
@@ -129,7 +113,7 @@ Control {
                 }
 
                 Repeater {
-                    id: barGenerator
+                    id: accGenerator
 
                     delegate: Item {
                         Layout.fillWidth: true
@@ -137,8 +121,8 @@ Control {
                         Layout.minimumWidth: root.minimumWidgetSize
                         Layout.minimumHeight: root.minimumWidgetSize
 
-                        Widgets.BarDelegate {
-                            datasetIndex: index
+                        Widgets.AccelerometerDelegate {
+                            groupIndex: groupIndex
                             anchors.fill: parent
                         }
                     }
@@ -156,6 +140,22 @@ Control {
 
                         Widgets.MapDelegate {
                             groupIndex: index
+                            anchors.fill: parent
+                        }
+                    }
+                }
+
+                Repeater {
+                    id: barGenerator
+
+                    delegate: Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: root.minimumWidgetSize
+                        Layout.minimumHeight: root.minimumWidgetSize
+
+                        Widgets.BarDelegate {
+                            datasetIndex: index
                             anchors.fill: parent
                         }
                     }

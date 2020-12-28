@@ -354,7 +354,7 @@ Control {
                                 delegate: Item {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Layout.minimumHeight: 196
+                                    Layout.minimumHeight: groupDelegate.visible ? 196 : 0
 
                                     Widgets.GroupDelegate {
                                         id: groupDelegate
@@ -380,7 +380,7 @@ Control {
                                 delegate: Item {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Layout.minimumHeight: 196
+                                    Layout.minimumHeight: graphDelegate.visible ? 196 : 0
 
                                     Widgets.GraphDelegate {
                                         id: graphDelegate
