@@ -16,7 +16,7 @@ Además, este enfoque se puede extender a casi cualquier tipo de proyecto que im
 
 *Lea esto en otros idiomas:* [English](README.md)
 
-![Screenshot](doc/screenshot.png)
+![Software usage](doc/usage.gif)
 
 ## Instrucciones de complicación
 
