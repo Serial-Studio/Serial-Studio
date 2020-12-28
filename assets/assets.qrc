@@ -50,7 +50,6 @@
         <file>qml/Widgets/GyroDelegate.qml</file>
         <file>qml/Widgets/LED.qml</file>
         <file>qml/Widgets/MapDelegate.qml</file>
-        <file>qml/Widgets/TankDelegate.qml</file>
         <file>qml/Widgets/Window.qml</file>
         <file>qml/Windows/About.qml</file>
         <file>qml/Windows/Console.qml</file>
