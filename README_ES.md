@@ -41,7 +41,7 @@ Procedimiento normal:
     
 ###### Compilación
 
-Una vez que haya instalado Qt, abra * Serial-Studio.pro * en Qt Creator y haga clic en el botón de "Ejecutar".
+Una vez que haya instalado Qt, abra *Serial-Studio.pro* en Qt Creator y haga clic en el botón de "Ejecutar".
 
 Alternativamente, también puede utilizar los siguientes comandos:
 
