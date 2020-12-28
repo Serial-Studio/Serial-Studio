@@ -77,13 +77,13 @@ Window {
     //
     // Custom properties
     //
+    property real level: 0
     property string units: ""
     property int datasetIndex: 0
     property real tankRadius: 20
     property real currentValue: 0
     property real minimumValue: 0
     property real maximumValue: 10
-    readonly property real level: Math.min(1, currentValue / Math.max(1, (maximumValue - minimumValue)))
 
     //
     // Connections with widget manager
@@ -100,11 +100,23 @@ Window {
     //
     function updateValues() {
         if (CppWidgets.barDatasetCount() > root.datasetIndex) {
-            root.currentValue = CppWidgets.bar(root.datasetIndex)
             root.minimumValue = CppWidgets.barMin(root.datasetIndex)
             root.maximumValue = CppWidgets.barMax(root.datasetIndex)
+            root.currentValue = CppWidgets.bar(root.datasetIndex)
             root.title = CppWidgets.barDatasetAt(root.datasetIndex).title
             root.units = CppWidgets.barDatasetAt(root.datasetIndex).units
+
+            if (root.maximumValue > root.minimumValue)  {
+                var range = root.maximumValue - root.minimumValue
+                var relat = root.currentValue - root.minimumValue
+                root.level = relat / range
+            }
+
+            else
+                root.level = 0
+
+            if (root.level > 1)
+                root.level = 1
         }
 
         else {
@@ -187,7 +199,7 @@ Window {
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
                 text: (root.currentValue > root.maximumValue ? root.maximumValue.toFixed(2) :
-                                                             root.currentValue.toFixed(2)) + " " + root.units
+                                                               root.currentValue.toFixed(2)) + " " + root.units
 
                 Rectangle {
                     border.width: 1
