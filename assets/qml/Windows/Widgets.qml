@@ -35,7 +35,7 @@ Control {
     //
     // Custom properties
     //
-    readonly property int minimumWidgetSize: 340
+    readonly property int minimumWidgetSize: 320
 
     //
     // Group/dataset updating
@@ -78,16 +78,12 @@ Control {
         clip: false
         contentWidth: -1
         anchors.fill: parent
-        anchors.rightMargin: 10
+        anchors.rightMargin: 5
         anchors.margins: app.spacing * 1.5
-        anchors.leftMargin: app.spacing * 2 + 10
 
         ColumnLayout {
-            width: _sv.width - 2 * app.spacing
-
-            Item {
-                Layout.minimumHeight: 10
-            }
+            x: 0
+            width: _sv.width - 15
 
             GridLayout {
                 Layout.fillWidth: true

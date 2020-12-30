@@ -76,7 +76,7 @@ Window {
     }
 
     ChartView {
-        antialiasing: false
+        antialiasing: true
         anchors.fill: parent
         legend.visible: false
         backgroundRoundness: 0

@@ -41,12 +41,12 @@ Window {
     // Window properties
     //
     spacing: -1
+    gradient: true
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
     implicitHeight: implicitWidth + 96
     icon.source: "qrc:/icons/location-on.svg"
-    borderColor: Qt.rgba(45/255, 96/255, 115/255, 1)
     backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
 
     //

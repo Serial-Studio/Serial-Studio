@@ -167,6 +167,7 @@ Control {
             text: qsTr("CSV Export")
             Layout.alignment: Qt.AlignVCenter
             onCheckedChanged: CppExport.exportEnabled = checked
+            palette.highlight: Qt.rgba(46/255, 137/255, 92/255, 1)
         }
 
         Button {

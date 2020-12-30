@@ -25,6 +25,7 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
+import Qt.labs.settings 1.0
 import "../Widgets" as Widgets
 
 Control {
@@ -32,6 +33,13 @@ Control {
     property string title
     background: Rectangle {
         color: app.windowBackgroundColor
+    }
+
+    //
+    // Settings
+    //
+    Settings {
+        property alias horizontalRange: slider.value
     }
 
     //
@@ -93,11 +101,11 @@ Control {
             //
             Widgets.Window {
                 id: viewOptions
+                gradient: true
                 title: qsTr("View")
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 icon.source: "qrc:/icons/visibility.svg"
-                borderColor: Qt.rgba(45/255, 96/255, 115/255, 1)
                 backgroundColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
 
                 property var groups: []
@@ -108,6 +116,8 @@ Control {
                     contentWidth: -1
                     anchors.fill: parent
                     anchors.margins: app.spacing
+                    anchors.topMargin: viewOptions.borderWidth
+                    anchors.bottomMargin: viewOptions.borderWidth
 
                     ColumnLayout {
                         x: app.spacing
@@ -302,12 +312,12 @@ Control {
             //
             Widgets.Window {
                 id: dataWin
+                gradient: true
                 title: qsTr("Data")
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 icon.source: "qrc:/icons/scatter-plot.svg"
-                borderColor:  Qt.rgba(45/255, 96/255, 115/255, 1)
                 backgroundColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
 
                 Rectangle {
@@ -415,7 +425,18 @@ Control {
             radius: 5
             height: 32
             Layout.fillWidth: true
-            color: Qt.rgba(45/255, 96/255, 115/255, 1)
+
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: palette.highlight
+                }
+
+                GradientStop {
+                    position: 1
+                    color: Qt.rgba(5/255, 139/255, 167/255, 1)
+                }
+            }
 
             RowLayout {
                 spacing: app.spacing
