@@ -87,6 +87,8 @@ Export *Export::getInstance()
  */
 Export::Export()
 {
+   m_exportEnabled = true;
+
    auto jp = JsonParser::getInstance();
    auto sp = SerialManager::getInstance();
    connect(jp, SIGNAL(packetReceived()), this, SLOT(updateValues()));
@@ -112,6 +114,14 @@ bool Export::isOpen() const
 }
 
 /**
+ * Returns @c true if CSV export is enabled
+ */
+bool Export::exportEnabled() const
+{
+   return m_exportEnabled;
+}
+
+/**
  * Open a CSV file in the Explorer/Finder window
  */
 void Export::openCsv() { }
@@ -125,6 +135,21 @@ void Export::openCurrentCsv()
       RevealFile(m_csvFile.fileName());
    else
       QMessageBox::critical(Q_NULLPTR, tr("CSV file not open"), tr("Cannot find CSV export file!"), QMessageBox::Ok);
+}
+
+/**
+ * Enables or disables data export
+ */
+void Export::setExportEnabled(const bool enabled)
+{
+   m_exportEnabled = enabled;
+   emit enabledChanged();
+
+   if (!exportEnabled() && isOpen())
+   {
+      m_jsonList.clear();
+      closeFile();
+   }
 }
 
 /**
@@ -216,7 +241,7 @@ void Export::writeValues()
       values.prepend(dateTime.toString("yyyy/MMM/dd/ HH:mm:ss::zzz"));
 
       // File not open, create it & add cell titles
-      if (!isOpen())
+      if (!isOpen() && exportEnabled())
       {
          // Get file name and path
          QString format = dateTime.toString("yyyy/MMM/dd/");
@@ -281,6 +306,10 @@ void Export::updateValues()
 {
    // Ignore if serial device is not connected
    if (!SerialManager::getInstance()->connected())
+      return;
+
+   // Ignore is CSV export is disabled
+   if (!exportEnabled())
       return;
 
    // Get & validate JSON document

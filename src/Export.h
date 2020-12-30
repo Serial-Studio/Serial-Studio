@@ -33,13 +33,17 @@ class Export : public QObject
 {
    Q_OBJECT
    Q_PROPERTY(bool isOpen READ isOpen NOTIFY openChanged)
+   Q_PROPERTY(bool exportEnabled READ exportEnabled WRITE setExportEnabled NOTIFY enabledChanged)
 
 signals:
    void openChanged();
+   void enabledChanged();
 
 public:
    static Export *getInstance();
+
    bool isOpen() const;
+   bool exportEnabled() const;
 
 private:
    Export();
@@ -49,6 +53,7 @@ public slots:
    void openCsv();
    void closeFile();
    void openCurrentCsv();
+   void setExportEnabled(const bool enabled);
 
 private slots:
    void writeValues();
@@ -56,6 +61,7 @@ private slots:
 
 private:
    QFile m_csvFile;
+   bool m_exportEnabled;
    QTextStream m_textStream;
    QList<QPair<QDateTime, QJsonObject>> m_jsonList;
 };

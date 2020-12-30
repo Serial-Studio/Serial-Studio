@@ -24,6 +24,8 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import Qt.labs.settings 1.0
+
 Control {
     id: root
 
@@ -49,6 +51,13 @@ Control {
     property alias consoleChecked: consoleBt.checked
     property alias widgetsChecked: widgetsBt.checked
     property alias devicesChecked: devicesBt.checked
+
+    //
+    // Settings
+    //
+    Settings {
+        property alias dataExport: csvLogging.checked
+    }
 
     //
     // Background gradient
@@ -150,6 +159,14 @@ Control {
 
         Item {
             Layout.fillWidth: true
+        }
+
+        Switch {
+            id: csvLogging
+            checked: true
+            text: qsTr("CSV Export")
+            Layout.alignment: Qt.AlignVCenter
+            onCheckedChanged: CppExport.exportEnabled = checked
         }
 
         Button {
