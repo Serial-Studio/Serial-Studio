@@ -117,6 +117,7 @@ RESOURCES += \
 
 HEADERS += \
     src/AppInfo.h \
+    src/DataReplay.h \
     src/Dataset.h \
     src/Export.h \
     src/GraphProvider.h \
@@ -128,6 +129,7 @@ HEADERS += \
     src/Widgets.h
 
 SOURCES += \
+    src/DataReplay.cpp \
     src/Dataset.cpp \
     src/Export.cpp \
     src/GraphProvider.cpp \
