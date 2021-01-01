@@ -61,5 +61,8 @@
         <file>qml/Windows/Widgets.qml</file>
         <file>qml/main.qml</file>
         <file>qml/Widgets/ArtificialHorizonDelegate.qml</file>
+        <file>translations/en.qm</file>
+        <file>translations/es.qm</file>
+        <file>messages/Welcome_ES.txt</file>
     </qresource>
 </RCC>

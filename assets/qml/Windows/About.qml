@@ -25,7 +25,16 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 ApplicationWindow {
-    id: window
+    id: root
+
+    //
+    // Custom properties
+    //
+    readonly property int year: new Date().getFullYear()
+
+    //
+    // Window options
+    //
     flags: Qt.Dialog
     minimumWidth: 320
     maximumWidth: 320
@@ -87,7 +96,7 @@ ApplicationWindow {
             opacity: 0.8
             Layout.fillWidth: true
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            text: qsTr("Copyright © 2020 %1, released under the MIT License.").arg(CppAppOrganization)
+            text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(CppAppOrganization)
         }
 
         Label {
@@ -137,7 +146,7 @@ ApplicationWindow {
         Button {
             Layout.fillWidth: true
             text: qsTr("Close")
-            onClicked: window.close()
+            onClicked: root.close()
         }
 
         Item {

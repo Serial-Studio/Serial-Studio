@@ -121,7 +121,7 @@ Control {
             onClicked: root.dataClicked()
             enabled: CppQmlBridge.groupCount > 0
             icon.source: "qrc:/icons/equalizer.svg"
-            text: qsTr("Data Display") + _btSpacer
+            text: qsTr("Dashboard") + _btSpacer
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}

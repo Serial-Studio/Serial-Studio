@@ -1,0 +1,28 @@
+________           _____       ______   ____________       _____________       
+__  ___/______________(_)_____ ___  /   __  ___/_  /____  _______  /__(_)_____ 
+_____ \_  _ \_  ___/_  /_  __ `/_  /    _____ \_  __/  / / /  __  /__  /_  __ \
+____/ //  __/  /   _  / / /_/ /_  /     ____/ // /_ / /_/ // /_/ / _  / / /_/ /
+/____/ \___//_/    /_/  \__,_/ /_/      /____/ \__/ \__,_/ \__,_/  /_/  \____/ 
+                                                                               
+                                                 
+¡Bienvenido a Serial Studio! Para comenzar, seleccione un puerto COM y velocidad
+en baudios en el panel de dispositivos a la derecha. Si la conexión en serie es
+exitosa y los datos entrantes se interpretan correctamente, este panel se
+cerrará automáticamente y el el tablero de instrumentos se mostrará
+automáticamente. De lo contrario, puede usar la consola para encontrar el origen
+de su problema.
+
+Utilice los botones de la barra de herramientas para mostrar las funciones que
+desea utilizar. Si encuentra un problema con Serial Studio, infórmelo en:
+	
+	https://github.com/Serial-Studio/Serial-Studio/issues
+
+También puede utilizar los enlaces de la ventana "Acerca de". Para obtener
+documentación sobre uso de Serial Studio e integración con sus proyectos
+actuales, por favor lea la wiki:
+
+	https://github.com/Serial-Studio/Serial-Studio/wiki
+
+¡Que te diviertas!
+Alex Spataru (https://github.com/alex-spataru)
+

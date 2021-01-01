@@ -126,6 +126,7 @@ HEADERS += \
     src/ModuleManager.h \
     src/QmlBridge.h \
     src/SerialManager.h \
+    src/Translator.h \
     src/Widgets.h
 
 SOURCES += \
@@ -138,6 +139,7 @@ SOURCES += \
     src/ModuleManager.cpp \
     src/QmlBridge.cpp \
     src/SerialManager.cpp \
+    src/Translator.cpp \
     src/Widgets.cpp \
     src/main.cpp
 
@@ -145,3 +147,7 @@ DISTFILES += \
     assets/qml/Widgets/*.qml \
     assets/qml/Windows/*.qml \
     assets/qml/*.qml
+
+TRANSLATIONS += \
+    assets/translations/en.ts \
+    assets/translations/es.ts

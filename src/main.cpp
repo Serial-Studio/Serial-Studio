@@ -40,6 +40,7 @@
 #include "GraphProvider.h"
 #include "SerialManager.h"
 
+#include "Translator.h"
 #include "ModuleManager.h"
 
 /**
@@ -92,6 +93,11 @@ int main(int argc, char **argv)
    // Register QML types
    qmlRegisterType<Group>("Group", 1, 0, "Group");
    qmlRegisterType<Dataset>("Dataset", 1, 0, "Dataset");
+
+   // Start translator & set lenguage
+   Translator translator;
+   // QLocale locale(QLocale::Spanish, QLocale::Mexico);
+   // translator.setLanguage(locale, "es");
 
    // Get console welcome text string
    QString welcomeText = QObject::tr("Failed to load welcome text :(");
