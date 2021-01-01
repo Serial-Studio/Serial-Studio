@@ -114,26 +114,14 @@ Window {
         anchors.margins: app.spacing
 
         //
-        // Controls
+        // Map type selector
         //
-        RowLayout {
-            spacing: app.spacing
+        ComboBox {
+            id: mapTypeSelector
+            textRole: "description"
             Layout.fillWidth: true
-
-            ComboBox {
-                id: mapTypeSelector
-                textRole: "description"
-                Layout.fillWidth: true
-                model: map.supportedMapTypes
-                onCurrentIndexChanged: map.activeMapType = map.supportedMapTypes[currentIndex]
-            }
-
-            Button {
-                text: qsTr("Re-center")
-                icon.color: palette.buttonText
-                icon.source: "qrc:/icons/location-on.svg"
-                onClicked: centerMap()
-            }
+            model: map.supportedMapTypes
+            onCurrentIndexChanged: map.activeMapType = map.supportedMapTypes[currentIndex]
         }
 
         //
