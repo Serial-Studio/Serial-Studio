@@ -23,14 +23,43 @@
 #ifndef DATA_REPLAY_H
 #define DATA_REPLAY_H
 
+#include <QFile>
+#include <QTimer>
 #include <QObject>
 
-class DataReplay : public QObject
+class CsvPlayer : public QObject
 {
    Q_OBJECT
 
+signals:
+   void openChanged();
+   void progressChanged();
+   void timestampChanged();
+
 public:
-   static DataReplay *getInstance();
+   static CsvPlayer *getInstance();
+
+   bool isOpen();
+   int progress() const;
+   bool isPlaying() const;
+   QString timestamp() const;
+
+private:
+   CsvPlayer();
+
+public slots:
+   void play();
+   void pause();
+   void toggle();
+   void openFile();
+   void closeFile();
+   void nextFrame();
+   void previousFrame();
+
+private:
+   bool m_playing;
+   QFile m_csvFile;
+   QTimer m_frameTimer;
 };
 
 #endif

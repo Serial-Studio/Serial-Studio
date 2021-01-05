@@ -177,9 +177,9 @@ Control {
             Layout.fillHeight: true
             icon.color: palette.text
             opacity: enabled ? 1 : 0.5
-            onClicked: CppExport.openCsv()
+            onClicked: CppCsvPlayer.openFile()
             icon.source: "qrc:/icons/update.svg"
-            text: qsTr("Open past CSV") + _btSpacer + CppTranslator.dummy
+            text: qsTr("CSV Player") + _btSpacer + CppTranslator.dummy
 
             Behavior on opacity {NumberAnimation{}}
         }

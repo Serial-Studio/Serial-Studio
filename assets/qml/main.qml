@@ -279,4 +279,11 @@ ApplicationWindow {
             }
         }
     }
+
+    //
+    // CSV player window
+    //
+    CsvPlayer {
+        id: csvPlayer
+    }
 }

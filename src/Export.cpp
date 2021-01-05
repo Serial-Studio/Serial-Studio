@@ -122,11 +122,6 @@ bool Export::exportEnabled() const
 }
 
 /**
- * Open a CSV file in the Explorer/Finder window
- */
-void Export::openCsv() { }
-
-/**
  * Open the current CSV file in the Explorer/Finder window
  */
 void Export::openCurrentCsv()

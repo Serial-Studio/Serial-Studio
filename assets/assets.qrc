@@ -22,6 +22,10 @@
         <file>icons/link.svg</file>
         <file>icons/location-off.svg</file>
         <file>icons/location-on.svg</file>
+        <file>icons/media-next.svg</file>
+        <file>icons/media-pause.svg</file>
+        <file>icons/media-play.svg</file>
+        <file>icons/media-prev.svg</file>
         <file>icons/open.svg</file>
         <file>icons/power.svg</file>
         <file>icons/ram.svg</file>
@@ -43,7 +47,9 @@
         <file>instruments/AttitudePointer.svg</file>
         <file>instruments/Crosshair.svg</file>
         <file>messages/Welcome_EN.txt</file>
+        <file>messages/Welcome_ES.txt</file>
         <file>qml/Widgets/AccelerometerDelegate.qml</file>
+        <file>qml/Widgets/ArtificialHorizonDelegate.qml</file>
         <file>qml/Widgets/BarDelegate.qml</file>
         <file>qml/Widgets/DataDelegate.qml</file>
         <file>qml/Widgets/GaugeDelegate.qml</file>
@@ -55,14 +61,13 @@
         <file>qml/Widgets/Window.qml</file>
         <file>qml/Windows/About.qml</file>
         <file>qml/Windows/Console.qml</file>
+        <file>qml/Windows/CsvPlayer.qml</file>
         <file>qml/Windows/DataGrid.qml</file>
         <file>qml/Windows/DeviceManager.qml</file>
         <file>qml/Windows/Toolbar.qml</file>
         <file>qml/Windows/Widgets.qml</file>
         <file>qml/main.qml</file>
-        <file>qml/Widgets/ArtificialHorizonDelegate.qml</file>
         <file>translations/en.qm</file>
         <file>translations/es.qm</file>
-        <file>messages/Welcome_ES.txt</file>
     </qresource>
 </RCC>

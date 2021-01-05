@@ -39,8 +39,8 @@ ApplicationWindow {
     minimumWidth: 320
     maximumWidth: 320
     title: qsTr("About") + CppTranslator.dummy
-    minimumHeight: column.implicitHeight * 1.25
-    maximumHeight: column.implicitHeight * 1.25
+    minimumHeight: column.implicitHeight + 4 * app.spacing
+    maximumHeight: column.implicitHeight + 4 * app.spacing
 
     //
     // Theme options

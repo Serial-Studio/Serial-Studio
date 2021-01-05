@@ -23,8 +23,7 @@
 #include "ModuleManager.h"
 
 #include "Export.h"
-#include "QmlBridge.h"
-#include "GraphProvider.h"
+#include "CsvPlayer.h"
 #include "SerialManager.h"
 
 #include <QApplication>
@@ -44,5 +43,6 @@ ModuleManager::ModuleManager()
 void ModuleManager::stopOperations()
 {
    Export::getInstance()->closeFile();
+   CsvPlayer::getInstance()->closeFile();
    SerialManager::getInstance()->disconnectDevice();
 }

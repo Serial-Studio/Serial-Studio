@@ -57,6 +57,7 @@ QTPLUGIN += qsvg
 # Libraries
 #-------------------------------------------------------------------------------
 
+include(libs/qtcsv/qtcsv.pri)
 include(libs/QSimpleUpdater/QSimpleUpdater.pri)
 
 #-------------------------------------------------------------------------------
@@ -117,7 +118,7 @@ RESOURCES += \
 
 HEADERS += \
     src/AppInfo.h \
-    src/DataReplay.h \
+    src/CsvPlayer.h \
     src/Dataset.h \
     src/Export.h \
     src/GraphProvider.h \
@@ -130,7 +131,7 @@ HEADERS += \
     src/Widgets.h
 
 SOURCES += \
-    src/DataReplay.cpp \
+    src/CsvPlayer.cpp \
     src/Dataset.cpp \
     src/Export.cpp \
     src/GraphProvider.cpp \

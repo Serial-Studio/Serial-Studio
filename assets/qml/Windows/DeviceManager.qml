@@ -70,7 +70,9 @@ Control {
             text: qsTr("Auto (JSON from serial device)") + CppTranslator.dummy
             onCheckedChanged: {
                 if (checked)
-                    CppJsonParser.setOperationMode(CppJsonParser.kAutomatic)
+                    CppJsonParser.setOperationMode(1)
+                else
+                    CppJsonParser.setOperationMode(0)
             }
         } RadioButton {
             id: commManual
@@ -78,7 +80,9 @@ Control {
             text: qsTr("Manual (use JSON map file)") + CppTranslator.dummy
             onCheckedChanged: {
                 if (checked)
-                    CppJsonParser.setOperationMode(CppJsonParser.kManual)
+                    CppJsonParser.setOperationMode(0)
+                else
+                    CppJsonParser.setOperationMode(1)
             }
         }
 

@@ -50,7 +50,6 @@ private:
    ~Export();
 
 public slots:
-   void openCsv();
    void closeFile();
    void openCurrentCsv();
    void setExportEnabled(const bool enabled);

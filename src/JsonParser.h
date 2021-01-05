@@ -47,8 +47,8 @@ signals:
 public:
    enum OperationMode
    {
-      kManual,
-      kAutomatic,
+      kManual = 0x00,
+      kAutomatic = 0x01,
    };
    Q_ENUMS(OperationMode)
 
