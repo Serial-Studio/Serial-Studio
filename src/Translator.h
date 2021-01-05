@@ -51,6 +51,7 @@ public:
    int systemLanguage() const;
    QString dummyString() const;
    QStringList availableLanguages() const;
+   Q_INVOKABLE QString welcomeConsoleText() const;
 
 public slots:
    void setLanguage(const int language);

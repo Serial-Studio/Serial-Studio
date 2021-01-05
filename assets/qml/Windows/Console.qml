@@ -79,7 +79,7 @@ Control {
                     textFormat: Text.PlainText
                     font.family: app.monoFont
                     width: _scrollView.contentWidth
-                    placeholderText: qsTr("No data received so far...")
+                    placeholderText: qsTr("No data received so far...") + CppTranslator.dummy
 
                     onTextChanged: {
                         if (root.autoscroll && _scrollView.contentHeight > _scrollView.height)
@@ -98,7 +98,7 @@ Control {
             CheckBox {
                 id: _autoscr
                 checked: true
-                text: qsTr("Autoscroll")
+                text: qsTr("Autoscroll") + CppTranslator.dummy
             }
 
             TextField {
@@ -110,7 +110,7 @@ Control {
                 font.family: app.monoFont
                 enabled: CppSerialManager.readWrite
                 palette.base: Qt.rgba(18/255, 18/255, 24/255, 1)
-                placeholderText: qsTr("Send data to device") + "..."
+                placeholderText: qsTr("Send data to device") + "..." + CppTranslator.dummy
                 Keys.onReturnPressed: {
                     CppSerialManager.sendData(_tf.text)
                     _tf.clear()

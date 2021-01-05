@@ -54,7 +54,7 @@ ApplicationWindow {
     //
     visible: false
     minimumWidth: 1080
-    minimumHeight: minimumWidth * 9/16
+    minimumHeight: 680
     title: CppAppName + " v" + CppAppVersion
 
     //
@@ -81,6 +81,13 @@ ApplicationWindow {
         widgets.opacity = 0
 
         CppJsonParser.readSettings()
+    }
+
+    //
+    // Clears the console text & displays a mini-tutorial
+    //
+    function showWelcomeGuide() {
+        console.text = CppTranslator.welcomeConsoleText()  + "\n\n"
     }
 
     //
@@ -111,6 +118,7 @@ ApplicationWindow {
 
             // Show app window
             app.visible = true
+            app.showWelcomeGuide()
         }
     }
 
@@ -212,12 +220,19 @@ ApplicationWindow {
                 Console {
                     id: console
                     anchors.fill: parent
-                    text: CppWelcomeText + "\n\n"
 
                     // Animate on show
                     enabled: opacity > 0
                     visible: opacity > 0
                     Behavior on opacity {NumberAnimation{}}
+
+                    // Show translated welcome text on lang. change
+                    Connections {
+                        target: CppTranslator
+                        function onLanguageChanged() {
+                            app.showWelcomeGuide()
+                        }
+                    }
                 }
 
                 DataGrid {

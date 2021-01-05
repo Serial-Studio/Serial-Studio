@@ -93,7 +93,7 @@ Control {
             icon.color: palette.text
             onClicked: root.devicesClicked()
             icon.source: "qrc:/icons/usb.svg"
-            text: qsTr("Devices") + _btSpacer
+            text: qsTr("Devices") + _btSpacer + CppTranslator.dummy
         }
 
         Button {
@@ -106,8 +106,8 @@ Control {
             icon.color: palette.text
             onClicked: root.consoleClicked()
             icon.source: "qrc:/icons/code.svg"
-            text: qsTr("Console") + _btSpacer
             enabled: dataBt.enabled || widgetsBt.enabled
+            text: qsTr("Console") + _btSpacer + CppTranslator.dummy
         }
 
         Button {
@@ -121,7 +121,7 @@ Control {
             onClicked: root.dataClicked()
             enabled: CppQmlBridge.groupCount > 0
             icon.source: "qrc:/icons/equalizer.svg"
-            text: qsTr("Dashboard") + _btSpacer
+            text: qsTr("Dashboard") + _btSpacer + CppTranslator.dummy
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
@@ -137,8 +137,8 @@ Control {
             icon.color: palette.text
             onClicked: root.widgetsClicked()
             icon.source: "qrc:/icons/chart.svg"
-            text: qsTr("Widgets") + _btSpacer
             enabled: CppWidgets.totalWidgetCount > 0
+            text: qsTr("Widgets") + _btSpacer + CppTranslator.dummy
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
@@ -150,11 +150,11 @@ Control {
             flat: true
             icon.width: 24
             icon.height: 24
-            text: qsTr("About")
             Layout.fillHeight: true
             icon.color: palette.text
             onClicked: root.aboutClicked()
             icon.source: "qrc:/icons/info.svg"
+            text: qsTr("About") + CppTranslator.dummy
         }
 
         Item {
@@ -164,8 +164,8 @@ Control {
         Switch {
             id: csvLogging
             checked: true
-            text: qsTr("CSV Export")
             Layout.alignment: Qt.AlignVCenter
+            text: qsTr("CSV Export") + CppTranslator.dummy
             onCheckedChanged: CppExport.exportEnabled = checked
             palette.highlight: Qt.rgba(46/255, 137/255, 92/255, 1)
         }
@@ -179,7 +179,7 @@ Control {
             opacity: enabled ? 1 : 0.5
             onClicked: CppExport.openCsv()
             icon.source: "qrc:/icons/update.svg"
-            text: qsTr("Open past CSV") + _btSpacer
+            text: qsTr("Open past CSV") + _btSpacer + CppTranslator.dummy
 
             Behavior on opacity {NumberAnimation{}}
         }
@@ -194,7 +194,7 @@ Control {
             opacity: enabled ? 1 : 0.5
             icon.source: "qrc:/icons/open.svg"
             onClicked: CppExport.openCurrentCsv()
-            text: qsTr("Open current CSV") + _btSpacer
+            text: qsTr("Open current CSV") + _btSpacer + CppTranslator.dummy
 
             Behavior on opacity {NumberAnimation{}}
         }

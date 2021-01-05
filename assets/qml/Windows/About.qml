@@ -38,7 +38,7 @@ ApplicationWindow {
     flags: Qt.Dialog
     minimumWidth: 320
     maximumWidth: 320
-    title: qsTr("About")
+    title: qsTr("About") + CppTranslator.dummy
     minimumHeight: column.implicitHeight * 1.25
     maximumHeight: column.implicitHeight * 1.25
 
@@ -87,7 +87,7 @@ ApplicationWindow {
                 Label {
                     opacity: 0.5
                     font.pixelSize: 16
-                    text: qsTr("Version %1").arg(CppAppVersion)
+                    text: qsTr("Version %1").arg(CppAppVersion) + CppTranslator.dummy
                 }
             }
         }
@@ -96,7 +96,7 @@ ApplicationWindow {
             opacity: 0.8
             Layout.fillWidth: true
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(CppAppOrganization)
+            text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(CppAppOrganization) + CppTranslator.dummy
         }
 
         Label {
@@ -105,7 +105,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             color: palette.highlightedText
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.")
+            text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.") + CppTranslator.dummy
         }
 
         Item {
@@ -114,19 +114,19 @@ ApplicationWindow {
 
         Button {
             Layout.fillWidth: true
-            text: qsTr("Contact author")
+            text: qsTr("Contact author") + CppTranslator.dummy
             onClicked: Qt.openUrlExternally("mailto:alex_spataru@outlook.com")
         }
 
         Button {
             Layout.fillWidth: true
-            text: qsTr("Report bug")
+            text: qsTr("Report bug") + CppTranslator.dummy
             onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
         }
 
         Button {
             Layout.fillWidth: true
-            text: qsTr("Check for updates")
+            text: qsTr("Check for updates") + CppTranslator.dummy
             onClicked: {
                 CppUpdater.setNotifyOnFinish(CppAppUpdaterUrl, true)
                 CppUpdater.checkForUpdates(CppAppUpdaterUrl)
@@ -135,7 +135,7 @@ ApplicationWindow {
 
         Button {
             Layout.fillWidth: true
-            text: qsTr("Documentation")
+            text: qsTr("Documentation") + CppTranslator.dummy
             onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
         }
 
@@ -145,8 +145,8 @@ ApplicationWindow {
 
         Button {
             Layout.fillWidth: true
-            text: qsTr("Close")
             onClicked: root.close()
+            text: qsTr("Close") + CppTranslator.dummy
         }
 
         Item {

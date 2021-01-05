@@ -27,7 +27,7 @@
  */
 Translator::Translator()
 {
-   m_language = 0;
+   m_language = systemLanguage();
 }
 
 /**
@@ -74,6 +74,26 @@ int Translator::systemLanguage() const
 QString Translator::dummyString() const
 {
    return "";
+}
+
+/**
+ * Returns the welcome text displayed on the console
+ */
+QString Translator::welcomeConsoleText() const
+{
+   QString lang = "EN";
+   if (language() == 1)
+      lang = "ES";
+
+   QString text = QObject::tr("Failed to load welcome text :(");
+   QFile file(":/messages/Welcome_" + lang + ".txt");
+   if (file.open(QFile::ReadOnly))
+   {
+      text = QString::fromUtf8(file.readAll());
+      file.close();
+   }
+
+   return text;
 }
 
 /**

@@ -102,10 +102,10 @@ Control {
             Widgets.Window {
                 id: viewOptions
                 gradient: true
-                title: qsTr("View")
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 icon.source: "qrc:/icons/visibility.svg"
+                title: qsTr("View") + CppTranslator.dummy
                 backgroundColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
 
                 property var groups: []
@@ -149,7 +149,7 @@ Control {
 
                             Label {
                                 font.bold: true
-                                text: qsTr("Horizontal Range") + ":"
+                                text: qsTr("Horizontal Range") + ":" + CppTranslator.dummy
                             }
 
                             Item {
@@ -211,7 +211,7 @@ Control {
 
                             Label {
                                 font.bold: true
-                                text: qsTr("Data Groups") + ":"
+                                text: qsTr("Data Groups") + ":" + CppTranslator.dummy
                             }
 
                             Item {
@@ -272,7 +272,7 @@ Control {
 
                             Label {
                                 font.bold: true
-                                text: qsTr("Data Plots") + ":"
+                                text: qsTr("Data Plots") + ":" + CppTranslator.dummy
                             }
 
                             Item {
@@ -313,11 +313,11 @@ Control {
             Widgets.Window {
                 id: dataWin
                 gradient: true
-                title: qsTr("Data")
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 icon.source: "qrc:/icons/scatter-plot.svg"
+                title: qsTr("Data") + CppTranslator.dummy
                 backgroundColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
 
                 Rectangle {

@@ -138,7 +138,6 @@ Window {
             id: gauge
             lastNumber: 8
             firstNumber: 0
-            title: qsTr("G Units")
             minimumValue: root.min
             maximumValue: root.max
             valueLabelVisible: false
@@ -148,6 +147,7 @@ Window {
             Layout.maximumWidth: root.gaugeSize
             Layout.minimumHeight: root.gaugeSize
             Layout.maximumHeight: root.gaugeSize
+            title: qsTr("G Units") + CppTranslator.dummy
         }
 
         //
@@ -170,7 +170,7 @@ Window {
                 color: gauge.valueColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("%1 G MAX").arg(root.max.toFixed(2))
+                text: qsTr("%1 G MAX").arg(root.max.toFixed(2)) + CppTranslator.dummy
             }
 
             Label {
@@ -178,7 +178,7 @@ Window {
                 color: gauge.valueColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("%1 G MIN").arg(root.min.toFixed(2))
+                text: qsTr("%1 G MIN").arg(root.min.toFixed(2)) + CppTranslator.dummy
             }
 
             Item {
@@ -191,7 +191,7 @@ Window {
                 color: gauge.valueColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("%1 G ACT").arg(root.meanGForce.toFixed(2))
+                text: qsTr("%1 G ACT").arg(root.meanGForce.toFixed(2)) + CppTranslator.dummy
 
                 Rectangle {
                     border.width: 1
@@ -207,7 +207,7 @@ Window {
             }
 
             Button {
-                text: qsTr("Reset")
+                text: qsTr("Reset") + CppTranslator.dummy
                 Layout.alignment: Qt.AlignHCenter
 
                 onClicked: {

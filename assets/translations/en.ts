@@ -147,6 +147,10 @@
         <source>Flow Control</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Language</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Downloader</name>
@@ -351,10 +355,6 @@
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>:/messages/Welcome_EN.txt</source>
         <translation></translation>
     </message>
 </context>

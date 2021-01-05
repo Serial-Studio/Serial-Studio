@@ -23,7 +23,7 @@
 #ifndef APP_INFO_H
 #define APP_INFO_H
 
-#define APP_VERSION "1.0.4"
+#define APP_VERSION "1.0.5"
 #define APP_NAME "Serial Studio"
 #define APP_DEVELOPER "Alex Spataru"
 #define APP_SUPPORT_URL "https://github.com/serial-studio"

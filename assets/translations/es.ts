@@ -151,6 +151,10 @@
         <source>Flow Control</source>
         <translation>Control de flujo</translation>
     </message>
+    <message>
+        <source>Language</source>
+        <translation>Idioma</translation>
+    </message>
 </context>
 <context>
     <name>Downloader</name>
@@ -359,7 +363,7 @@
     </message>
     <message>
         <source>:/messages/Welcome_EN.txt</source>
-        <translation>:/messages/Welcome_ES.txt</translation>
+        <translation type="vanished">:/messages/Welcome_ES.txt</translation>
     </message>
 </context>
 <context>

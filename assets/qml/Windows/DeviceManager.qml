@@ -47,6 +47,7 @@ Control {
         property alias dmBaudRate: baudRate.currentIndex
         property alias dmDataBits: dataBits.currentIndex
         property alias dmFlowControl: flowControl.currentIndex
+        property alias appLanguage: languageCombo.currentIndex
     }
 
     //
@@ -62,11 +63,11 @@ Control {
         // Comm mode selector
         //
         Label {
-            text: qsTr("Communication Mode") + ":"
+            text: qsTr("Communication Mode") + ":" + CppTranslator.dummy
         } RadioButton {
             id: commAuto
             checked: true
-            text: qsTr("Auto (JSON from serial device)")
+            text: qsTr("Auto (JSON from serial device)") + CppTranslator.dummy
             onCheckedChanged: {
                 if (checked)
                     CppJsonParser.setOperationMode(CppJsonParser.kAutomatic)
@@ -74,7 +75,7 @@ Control {
         } RadioButton {
             id: commManual
             checked: false
-            text: qsTr("Manual (use JSON map file)")
+            text: qsTr("Manual (use JSON map file)") + CppTranslator.dummy
             onCheckedChanged: {
                 if (checked)
                     CppJsonParser.setOperationMode(CppJsonParser.kManual)
@@ -90,8 +91,9 @@ Control {
             enabled: commManual.checked
             onClicked: CppJsonParser.loadJsonMap()
             Behavior on opacity {NumberAnimation{}}
-            text: CppJsonParser.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(CppJsonParser.jsonMapFilename) :
-                                                         qsTr("Select map file") + "..."
+            text: CppTranslator.dummy +
+                  (CppJsonParser.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(CppJsonParser.jsonMapFilename) :
+                                                          qsTr("Select map file") + "...")
         }
 
         //
@@ -105,7 +107,7 @@ Control {
         // COM port selector
         //
         Label {
-            text: qsTr("COM Port") + ":"
+            text: qsTr("COM Port") + ":" + CppTranslator.dummy
         } ComboBox {
             Layout.fillWidth: true
             model: CppSerialManager.portList
@@ -120,7 +122,7 @@ Control {
         // Baud rate selector
         //
         Label {
-            text: qsTr("Baud Rate") + ":"
+            text: qsTr("Baud Rate") + ":" + CppTranslator.dummy
         } ComboBox {
             id: baudRate
             Layout.fillWidth: true
@@ -143,7 +145,7 @@ Control {
         // Data bits selector
         //
         Label {
-            text: qsTr("Data Bits") + ":"
+            text: qsTr("Data Bits") + ":" + CppTranslator.dummy
         } ComboBox {
             id: dataBits
             Layout.fillWidth: true
@@ -159,7 +161,7 @@ Control {
         // Parity selector
         //
         Label {
-            text: qsTr("Parity") + ":"
+            text: qsTr("Parity") + ":" + CppTranslator.dummy
         } ComboBox {
             id: parity
             Layout.fillWidth: true
@@ -175,7 +177,7 @@ Control {
         // Stop bits selector
         //
         Label {
-            text: qsTr("Stop Bits") + ":"
+            text: qsTr("Stop Bits") + ":" + CppTranslator.dummy
         } ComboBox {
             id: stopBits
             Layout.fillWidth: true
@@ -191,7 +193,7 @@ Control {
         // Flow control selector
         //
         Label {
-            text: qsTr("Flow Control") + ":"
+            text: qsTr("Flow Control") + ":" + CppTranslator.dummy
         } ComboBox {
             id: flowControl
             Layout.fillWidth: true
@@ -207,7 +209,27 @@ Control {
         // Spacer
         //
         Item {
+            height: app.spacing * 2
+        }
+
+        //
+        // Language selector
+        //
+        Label {
+            text: qsTr("Language") + ":" + CppTranslator.dummy
+        } ComboBox {
+            id: languageCombo
+            Layout.fillWidth: true
+            model: CppTranslator.availableLanguages
+            onCurrentIndexChanged: CppTranslator.setLanguage(currentIndex)
+        }
+
+        //
+        // Spacer
+        //
+        Item {
             Layout.fillHeight: true
+            Layout.minimumHeight: app.spacing * 2
         }
 
         //
@@ -282,6 +304,7 @@ Control {
         //
         Item {
             Layout.fillHeight: true
+            Layout.minimumHeight: app.spacing * 2
         }
     }
 }
