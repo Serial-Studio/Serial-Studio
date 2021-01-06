@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,8 +39,8 @@ ApplicationWindow {
     minimumWidth: 320
     maximumWidth: 320
     title: qsTr("About") + CppTranslator.dummy
-    minimumHeight: column.implicitHeight + 4 * app.spacing
-    maximumHeight: column.implicitHeight + 4 * app.spacing
+    minimumHeight: column.implicitHeight + 12 * app.spacing
+    maximumHeight: column.implicitHeight + 12 * app.spacing
 
     //
     // Theme options
@@ -140,7 +140,7 @@ ApplicationWindow {
         }
 
         Item {
-            Layout.fillHeight: true
+            height: app.spacing
         }
 
         Button {

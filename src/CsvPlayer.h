@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,37 +29,54 @@
 
 class CsvPlayer : public QObject
 {
-   Q_OBJECT
+    Q_OBJECT
+    Q_PROPERTY(bool isOpen READ isOpen NOTIFY openChanged)
+    Q_PROPERTY(qreal progress READ progress NOTIFY timestampChanged)
+    Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY playerStateChanged)
+    Q_PROPERTY(QString timestamp READ timestamp NOTIFY timestampChanged)
 
 signals:
-   void openChanged();
-   void progressChanged();
-   void timestampChanged();
+    void openChanged();
+    void timestampChanged();
+    void playerStateChanged();
 
 public:
-   static CsvPlayer *getInstance();
+    static CsvPlayer *getInstance();
 
-   bool isOpen();
-   int progress() const;
-   bool isPlaying() const;
-   QString timestamp() const;
+    bool isOpen();
+    qreal progress() const;
+    bool isPlaying() const;
+    int frameCount() const;
+    int framePosition() const;
+    QString timestamp() const;
 
 private:
-   CsvPlayer();
+    CsvPlayer();
 
 public slots:
-   void play();
-   void pause();
-   void toggle();
-   void openFile();
-   void closeFile();
-   void nextFrame();
-   void previousFrame();
+    void play();
+    void pause();
+    void toggle();
+    void openFile();
+    void closeFile();
+    void nextFrame();
+    void previousFrame();
+    void setProgress(const qreal progress);
+
+private slots:
+    void updateData();
 
 private:
-   bool m_playing;
-   QFile m_csvFile;
-   QTimer m_frameTimer;
+    bool validateRow(const int row);
+    QString getCellValue(int row, int cell, bool *error = nullptr);
+
+private:
+    int m_framePos;
+    bool m_playing;
+    QFile m_csvFile;
+    QTimer m_frameTimer;
+    QString m_timestamp;
+    QList<QStringList> m_csvData;
 };
 
 #endif

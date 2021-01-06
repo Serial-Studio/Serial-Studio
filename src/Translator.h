@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,38 +28,39 @@
 #include <QTranslator>
 
 #ifdef QT_QML_LIB
-#   include <QtQml>
+#    include <QtQml>
 #endif
 
 class Translator : public QObject
 {
-   Q_OBJECT
+    Q_OBJECT
 
 #ifdef QT_QML_LIB
-   Q_PROPERTY(int language READ language WRITE setLanguage NOTIFY languageChanged)
-   Q_PROPERTY(QString dummy READ dummyString NOTIFY languageChanged)
-   Q_PROPERTY(QStringList availableLanguages READ availableLanguages CONSTANT)
+    Q_PROPERTY(
+        int language READ language WRITE setLanguage NOTIFY languageChanged)
+    Q_PROPERTY(QString dummy READ dummyString NOTIFY languageChanged)
+    Q_PROPERTY(QStringList availableLanguages READ availableLanguages CONSTANT)
 #endif
 
 signals:
-   void languageChanged();
+    void languageChanged();
 
 public:
-   explicit Translator();
+    explicit Translator();
 
-   int language() const;
-   int systemLanguage() const;
-   QString dummyString() const;
-   QStringList availableLanguages() const;
-   Q_INVOKABLE QString welcomeConsoleText() const;
+    int language() const;
+    int systemLanguage() const;
+    QString dummyString() const;
+    QStringList availableLanguages() const;
+    Q_INVOKABLE QString welcomeConsoleText() const;
 
 public slots:
-   void setLanguage(const int language);
-   void setLanguage(const QLocale &locale, const QString &language);
+    void setLanguage(const int language);
+    void setLanguage(const QLocale &locale, const QString &language);
 
 private:
-   int m_language;
-   QTranslator m_translator;
+    int m_language;
+    QTranslator m_translator;
 };
 
 #endif

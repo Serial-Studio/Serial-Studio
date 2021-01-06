@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "Logger.h"
 #include "JsonParser.h"
 #include "SerialManager.h"
 
@@ -35,30 +36,36 @@ static JsonParser *INSTANCE = nullptr;
 /**
  * Shows a macOS-like message box with the given properties
  */
-static int NiceMessageBox(QString text, QString informativeText, QString windowTitle = qAppName(),
-                          QMessageBox::StandardButtons buttons = QMessageBox::Ok)
+static int NiceMessageBox(QString text, QString informativeText,
+                          QString windowTitle = qAppName(),
+                          QMessageBox::StandardButtons buttons
+                          = QMessageBox::Ok)
 {
-   auto icon = QPixmap(":/images/icon.png").scaled(64, 64, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    auto icon
+        = QPixmap(":/images/icon.png")
+              .scaled(64, 64, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-   QMessageBox box;
-   box.setIconPixmap(icon);
-   box.setWindowTitle(windowTitle);
-   box.setStandardButtons(buttons);
-   box.setText("<h3>" + text + "</h3>");
-   box.setInformativeText(informativeText);
+    QMessageBox box;
+    box.setIconPixmap(icon);
+    box.setWindowTitle(windowTitle);
+    box.setStandardButtons(buttons);
+    box.setText("<h3>" + text + "</h3>");
+    box.setInformativeText(informativeText);
 
-   return box.exec();
+    return box.exec();
 }
 
 /**
- * Initializes the JSON Parser class and connects
- * appropiate SIGNALS/SLOTS
+ * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
 JsonParser::JsonParser()
 {
-   m_opMode = kAutomatic;
-   auto sm = SerialManager::getInstance();
-   connect(sm, SIGNAL(packetReceived(QByteArray)), this, SLOT(readData(QByteArray)));
+    m_opMode = kAutomatic;
+    auto sm = SerialManager::getInstance();
+    connect(sm, SIGNAL(packetReceived(QByteArray)), this,
+            SLOT(readData(QByteArray)));
+
+    LOG_INFO() << "Initialized JsonParser module";
 }
 
 /**
@@ -66,10 +73,10 @@ JsonParser::JsonParser()
  */
 JsonParser *JsonParser::getInstance()
 {
-   if (!INSTANCE)
-      INSTANCE = new JsonParser();
+    if (!INSTANCE)
+        INSTANCE = new JsonParser();
 
-   return INSTANCE;
+    return INSTANCE;
 }
 
 /**
@@ -77,7 +84,7 @@ JsonParser *JsonParser::getInstance()
  */
 QString JsonParser::jsonMapData() const
 {
-   return m_jsonMapData;
+    return m_jsonMapData;
 }
 
 /**
@@ -85,22 +92,21 @@ QString JsonParser::jsonMapData() const
  */
 QJsonDocument JsonParser::document() const
 {
-   return m_document;
+    return m_document;
 }
 
 /**
- * Returns the file name (e.g. "JsonMap.json") of the loaded JSON
- * map file
+ * Returns the file name (e.g. "JsonMap.json") of the loaded JSON map file
  */
 QString JsonParser::jsonMapFilename() const
 {
-   if (m_jsonMap.isOpen())
-   {
-      auto fileInfo = QFileInfo(m_jsonMap.fileName());
-      return fileInfo.fileName();
-   }
+    if (m_jsonMap.isOpen())
+    {
+        auto fileInfo = QFileInfo(m_jsonMap.fileName());
+        return fileInfo.fileName();
+    }
 
-   return "";
+    return "";
 }
 
 /**
@@ -108,13 +114,13 @@ QString JsonParser::jsonMapFilename() const
  */
 QString JsonParser::jsonMapFilepath() const
 {
-   if (m_jsonMap.isOpen())
-   {
-      auto fileInfo = QFileInfo(m_jsonMap.fileName());
-      return fileInfo.filePath();
-   }
+    if (m_jsonMap.isOpen())
+    {
+        auto fileInfo = QFileInfo(m_jsonMap.fileName());
+        return fileInfo.filePath();
+    }
 
-   return "";
+    return "";
 }
 
 /**
@@ -122,7 +128,7 @@ QString JsonParser::jsonMapFilepath() const
  */
 JsonParser::OperationMode JsonParser::operationMode() const
 {
-   return m_opMode;
+    return m_opMode;
 }
 
 /**
@@ -130,10 +136,12 @@ JsonParser::OperationMode JsonParser::operationMode() const
  */
 void JsonParser::loadJsonMap()
 {
-   auto file = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Select JSON map file"), QDir::homePath(),
-                                            tr("JSON files (*.json)"));
-   if (!file.isEmpty())
-      loadJsonMap(file);
+    auto file = QFileDialog::getOpenFileName(
+        Q_NULLPTR, tr("Select JSON map file"), QDir::homePath(),
+        tr("JSON files (*.json)"));
+
+    if (!file.isEmpty())
+        loadJsonMap(file);
 }
 
 /**
@@ -141,70 +149,85 @@ void JsonParser::loadJsonMap()
  */
 void JsonParser::loadJsonMap(const QString &path, const bool silent)
 {
-   // Validate path
-   if (path.isEmpty())
-      return;
+    // Log information
+    LOG_INFO() << "Loading JSON file, silent flag set to" << silent;
 
-   // Close previous file (if open)
-   if (m_jsonMap.isOpen())
-   {
-      m_jsonMap.close();
-      emit jsonFileMapChanged();
-   }
+    // Validate path
+    if (path.isEmpty())
+        return;
 
-   // Try to open the file (read only mode)
-   m_jsonMap.setFileName(path);
-   if (m_jsonMap.open(QFile::ReadOnly))
-   {
-      // Read data & validate JSON from file
-      QJsonParseError error;
-      auto data = m_jsonMap.readAll();
-      auto document = QJsonDocument::fromJson(data, &error);
-      if (error.error != QJsonParseError::NoError)
-      {
-         m_jsonMap.close();
-         writeSettings("");
-         NiceMessageBox(tr("JSON parse error"), error.errorString());
-      }
+    // Close previous file (if open)
+    if (m_jsonMap.isOpen())
+    {
+        m_jsonMap.close();
+        emit jsonFileMapChanged();
+    }
 
-      // JSON contains no errors, load data & save settings
-      else
-      {
-         writeSettings(path);
-         m_jsonMapData = QString::fromUtf8(data);
-         if (!silent)
-            NiceMessageBox(tr("JSON map file loaded successfully!"),
-                           tr("File \"%1\" loaded into memory").arg(jsonMapFilename()));
-      }
-   }
+    // Try to open the file (read only mode)
+    m_jsonMap.setFileName(path);
+    if (m_jsonMap.open(QFile::ReadOnly))
+    {
+        // Read data & validate JSON from file
+        QJsonParseError error;
+        auto data = m_jsonMap.readAll();
+        auto document = QJsonDocument::fromJson(data, &error);
+        if (error.error != QJsonParseError::NoError)
+        {
+            LOG_INFO() << "JSON parse error" << error.errorString();
 
-   // Open error
-   else
-   {
-      writeSettings("");
-      NiceMessageBox(tr("Cannot read JSON file"), tr("Please check file permissions & location"));
-      m_jsonMap.close();
-   }
+            m_jsonMap.close();
+            writeSettings("");
+            NiceMessageBox(tr("JSON parse error"), error.errorString());
+        }
 
-   // Update UI
-   emit jsonFileMapChanged();
+        // JSON contains no errors, load data & save settings
+        else
+        {
+            LOG_INFO() << "JSON map loaded successfully";
+
+            writeSettings(path);
+            m_jsonMapData = QString::fromUtf8(data);
+            if (!silent)
+                NiceMessageBox(tr("JSON map file loaded successfully!"),
+                               tr("File \"%1\" loaded into memory")
+                                   .arg(jsonMapFilename()));
+        }
+    }
+
+    // Open error
+    else
+    {
+        LOG_INFO() << "JSON file error" << m_jsonMap.errorString();
+
+        writeSettings("");
+        NiceMessageBox(tr("Cannot read JSON file"),
+                       tr("Please check file permissions & location"));
+        m_jsonMap.close();
+    }
+
+    // Update UI
+    emit jsonFileMapChanged();
 }
 
 /**
- * Changes the operation mode of the JSON parser. There are two possible op. modes:
+ * Changes the operation mode of the JSON parser. There are two possible op.
+ * modes:
  *
  * @c kManual serial data only contains the comma-separated values, and we need
- *            to use a JSON map file (given by the user) to know what each value means.
- *            This method is recommended when we need to transfer & display a large amount
- *            of information from the microcontroller unit to the computer.
+ *            to use a JSON map file (given by the user) to know what each value
+ *            means. This method is recommended when we need to transfer &
+ *            display a large amount of information from the microcontroller
+ *            unit to the computer.
  *
- * @c kAuto serial data contains the JSON data frame, good for simple applications or
- *          for prototyping.
+ * @c kAutomatic serial data contains the JSON data frame, good for simple
+ *               applications or for prototyping.
  */
 void JsonParser::setOperationMode(const OperationMode mode)
 {
-   m_opMode = mode;
-   emit operationModeChanged();
+    m_opMode = mode;
+    emit operationModeChanged();
+
+    LOG_INFO() << "Operation mode set to" << mode;
 }
 
 /**
@@ -212,9 +235,9 @@ void JsonParser::setOperationMode(const OperationMode mode)
  */
 void JsonParser::readSettings()
 {
-   auto path = m_settings.value("json_map_location", "").toString();
-   if (!path.isEmpty())
-      loadJsonMap(path, true);
+    auto path = m_settings.value("json_map_location", "").toString();
+    if (!path.isEmpty())
+        loadJsonMap(path, true);
 }
 
 /**
@@ -222,7 +245,7 @@ void JsonParser::readSettings()
  */
 void JsonParser::writeSettings(const QString &path)
 {
-   m_settings.setValue("json_map_location", path);
+    m_settings.setValue("json_map_location", path);
 }
 
 /**
@@ -230,48 +253,49 @@ void JsonParser::writeSettings(const QString &path)
  * operation mode.
  *
  * Possible operation modes:
- * - Auto: serial data contains the JSON data frame
+ * - Auto:   serial data contains the JSON data frame
  * - Manual: serial data only contains the comma-separated values, and we need
- *           to use a JSON map file (given by the user) to know what each value means
+ *           to use a JSON map file (given by the user) to know what each value
+ *           means
  *
  * If JSON parsing is successfull, then the class shall notify the rest of the
  * application in order to process packet data.
  */
 void JsonParser::readData(const QByteArray &data)
 {
-   // Data empty, abort
-   if (data.isEmpty())
-      return;
+    // Data empty, abort
+    if (data.isEmpty())
+        return;
 
-   // Init variables
-   QJsonParseError error;
-   QJsonDocument document;
+    // Init variables
+    QJsonParseError error;
+    QJsonDocument document;
 
-   // Serial device sends JSON (auto mode)
-   if (operationMode() == kAutomatic)
-      document = QJsonDocument::fromJson(data, &error);
+    // Serial device sends JSON (auto mode)
+    if (operationMode() == kAutomatic)
+        document = QJsonDocument::fromJson(data, &error);
 
-   // We need to use a map file, check if its loaded & replace values into map file
-   else
-   {
-      // Empty JSON map data
-      if (jsonMapData().isEmpty())
-         return;
+    // We need to use a map file, check if its loaded & replace values into map
+    else
+    {
+        // Empty JSON map data
+        if (jsonMapData().isEmpty())
+            return;
 
-      // Separate incoming data & add it to the JSON map
-      auto json = jsonMapData();
-      auto list = QString::fromUtf8(data).split(',');
-      foreach (auto str, list)
-         json = json.arg(str);
+        // Separate incoming data & add it to the JSON map
+        auto json = jsonMapData();
+        auto list = QString::fromUtf8(data).split(',');
+        foreach (auto str, list)
+            json = json.arg(str);
 
-      // Create json document
-      document = QJsonDocument::fromJson(json.toUtf8(), &error);
-   }
+        // Create json document
+        document = QJsonDocument::fromJson(json.toUtf8(), &error);
+    }
 
-   // No parse error, update UI
-   if (error.error == QJsonParseError::NoError)
-   {
-      m_document = document;
-      emit packetReceived();
-   }
+    // No parse error, update UI
+    if (error.error == QJsonParseError::NoError)
+    {
+        m_document = document;
+        emit packetReceived();
+    }
 }

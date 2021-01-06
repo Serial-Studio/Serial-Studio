@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,43 +34,44 @@ QT_CHARTS_USE_NAMESPACE
 class Dataset;
 class GraphProvider : public QObject
 {
-   Q_OBJECT
+    Q_OBJECT
 
-   Q_PROPERTY(int graphCount READ graphCount NOTIFY dataUpdated)
-   Q_PROPERTY(QList<Dataset *> datasets READ datasets NOTIFY dataUpdated)
-   Q_PROPERTY(int displayedPoints READ displayedPoints WRITE setDisplayedPoints NOTIFY displayedPointsUpdated)
+    Q_PROPERTY(int graphCount READ graphCount NOTIFY dataUpdated)
+    Q_PROPERTY(QList<Dataset *> datasets READ datasets NOTIFY dataUpdated)
+    Q_PROPERTY(int displayedPoints READ displayedPoints WRITE setDisplayedPoints
+                   NOTIFY displayedPointsUpdated)
 
 signals:
-   void dataUpdated();
-   void displayedPointsUpdated();
+    void dataUpdated();
+    void displayedPointsUpdated();
 
 public:
-   static GraphProvider *getInstance();
+    static GraphProvider *getInstance();
 
-   int graphCount() const;
-   int displayedPoints() const;
-   QList<Dataset *> datasets() const;
-   Q_INVOKABLE double getValue(const int index) const;
-   Q_INVOKABLE double minimumValue(const int index) const;
-   Q_INVOKABLE double maximumValue(const int index) const;
-   Q_INVOKABLE Dataset *getDataset(const int index) const;
+    int graphCount() const;
+    int displayedPoints() const;
+    QList<Dataset *> datasets() const;
+    Q_INVOKABLE double getValue(const int index) const;
+    Q_INVOKABLE double minimumValue(const int index) const;
+    Q_INVOKABLE double maximumValue(const int index) const;
+    Q_INVOKABLE Dataset *getDataset(const int index) const;
 
 public slots:
-   void setDisplayedPoints(const int points);
-   void updateGraph(QAbstractSeries *series, const int index);
+    void setDisplayedPoints(const int points);
+    void updateGraph(QAbstractSeries *series, const int index);
 
 private:
-   GraphProvider();
+    GraphProvider();
 
 private slots:
-   void updateValues();
+    void updateValues();
 
 private:
-   int m_displayedPoints;
-   QList<Dataset *> m_datasets;
-   QList<double> m_maximumValues;
-   QList<double> m_minimumValues;
-   QList<QVector<double> *> m_pointVectors;
+    int m_displayedPoints;
+    QList<Dataset *> m_datasets;
+    QList<double> m_maximumValues;
+    QList<double> m_minimumValues;
+    QList<QVector<double> *> m_pointVectors;
 };
 
 #endif

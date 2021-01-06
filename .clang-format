@@ -52,7 +52,7 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeComma
 
 # Indent initializers by 3 spaces
-ConstructorInitializerIndentWidth: 3
+ConstructorInitializerIndentWidth: 4
 
 # No indentation for namespaces.
 NamespaceIndentation: None
@@ -82,13 +82,13 @@ IndentPPDirectives: AfterHash
 
 AlignAfterOpenBracket: Align
 
-AccessModifierOffset: -3
+AccessModifierOffset: -4
 
-IndentWidth: 3
+IndentWidth: 4
 
 #StatementMacros ['Q_OBJECT', 'Q_UNUSED']
 
-ColumnLimit: 120
+ColumnLimit: 80
 
 
 

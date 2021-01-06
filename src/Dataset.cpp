@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
 #include "Dataset.h"
 
 Dataset::Dataset(QObject *parent)
-   : QObject(parent)
+    : QObject(parent)
 {
 }
 
@@ -32,7 +32,7 @@ Dataset::Dataset(QObject *parent)
  */
 bool Dataset::graph() const
 {
-   return m_graph;
+    return m_graph;
 }
 
 /**
@@ -40,7 +40,7 @@ bool Dataset::graph() const
  */
 QString Dataset::title() const
 {
-   return m_title;
+    return m_title;
 }
 
 /**
@@ -48,7 +48,7 @@ QString Dataset::title() const
  */
 QString Dataset::value() const
 {
-   return m_value;
+    return m_value;
 }
 
 /**
@@ -56,7 +56,7 @@ QString Dataset::value() const
  */
 QString Dataset::units() const
 {
-   return m_units;
+    return m_units;
 }
 
 /**
@@ -64,7 +64,7 @@ QString Dataset::units() const
  */
 QString Dataset::widget() const
 {
-   return m_widget;
+    return m_widget;
 }
 
 /**
@@ -72,7 +72,7 @@ QString Dataset::widget() const
  */
 QJsonObject Dataset::jsonData() const
 {
-   return m_jsonData;
+    return m_jsonData;
 }
 
 /**
@@ -82,26 +82,26 @@ QJsonObject Dataset::jsonData() const
  */
 bool Dataset::read(const QJsonObject &object)
 {
-   if (!object.isEmpty())
-   {
-      auto graph = object.value("g").toVariant().toBool();
-      auto title = object.value("t").toVariant().toString();
-      auto value = object.value("v").toVariant().toString();
-      auto units = object.value("u").toVariant().toString();
-      auto widget = object.value("w").toVariant().toString();
+    if (!object.isEmpty())
+    {
+        auto graph = object.value("g").toVariant().toBool();
+        auto title = object.value("t").toVariant().toString();
+        auto value = object.value("v").toVariant().toString();
+        auto units = object.value("u").toVariant().toString();
+        auto widget = object.value("w").toVariant().toString();
 
-      if (!value.isEmpty())
-      {
-         m_graph = graph;
-         m_title = title;
-         m_value = value;
-         m_units = units;
-         m_widget = widget;
-         m_jsonData = object;
+        if (!value.isEmpty())
+        {
+            m_graph = graph;
+            m_title = title;
+            m_value = value;
+            m_units = units;
+            m_widget = widget;
+            m_jsonData = object;
 
-         return true;
-      }
-   }
+            return true;
+        }
+    }
 
-   return false;
+    return false;
 }

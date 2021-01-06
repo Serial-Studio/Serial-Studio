@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "Logger.h"
 #include "Translator.h"
 
 /**
@@ -27,53 +28,56 @@
  */
 Translator::Translator()
 {
-   m_language = systemLanguage();
+    m_language = systemLanguage();
+    LOG_INFO() << "Initialized Translator module";
+    LOG_INFO() << "System language" << systemLanguage();
 }
 
 /**
- * Returns the current language ID, which corresponds to the indexes of the languages returned
- * by the \c availableLanguages() function.
+ * Returns the current language ID, which corresponds to the indexes of the
+ * languages returned by the \c availableLanguages() function.
  */
 int Translator::language() const
 {
-   return m_language;
+    return m_language;
 }
 
 /**
- * Returns the appropiate language ID based on the current locale settings of the host's operating
- * system.
+ * Returns the appropiate language ID based on the current locale settings of
+ * the host's operating system.
  */
 int Translator::systemLanguage() const
 {
-   int lang;
-   switch (QLocale::system().language())
-   {
-      case QLocale::English:
-         lang = 0;
-         break;
-      case QLocale::Spanish:
-         lang = 1;
-         break;
-      default:
-         lang = 0;
-         break;
-   }
+    int lang;
+    switch (QLocale::system().language())
+    {
+        case QLocale::English:
+            lang = 0;
+            break;
+        case QLocale::Spanish:
+            lang = 1;
+            break;
+        default:
+            lang = 0;
+            break;
+    }
 
-   return lang;
+    return lang;
 }
 
 /**
- * Returns an empty string, this function should be used with QML to automatically update
- * all the strings without the need of restarting the application. For example, the following
- * QML code:
+ * Returns an empty string, this function should be used with QML to
+ * automatically update all the strings without the need of restarting the
+ * application. For example, the following QML code:
  *
  *      text: qsTr("Text") + CppTranslator.dummyString
  *
- * Will force the QML interface to update the value of @a text when the language is changed.
+ * Will force the QML interface to update the value of @a text when the language
+ * is changed.
  */
 QString Translator::dummyString() const
 {
-   return "";
+    return "";
 }
 
 /**
@@ -81,19 +85,19 @@ QString Translator::dummyString() const
  */
 QString Translator::welcomeConsoleText() const
 {
-   QString lang = "EN";
-   if (language() == 1)
-      lang = "ES";
+    QString lang = "EN";
+    if (language() == 1)
+        lang = "ES";
 
-   QString text = QObject::tr("Failed to load welcome text :(");
-   QFile file(":/messages/Welcome_" + lang + ".txt");
-   if (file.open(QFile::ReadOnly))
-   {
-      text = QString::fromUtf8(file.readAll());
-      file.close();
-   }
+    QString text = QObject::tr("Failed to load welcome text :(");
+    QFile file(":/messages/Welcome_" + lang + ".txt");
+    if (file.open(QFile::ReadOnly))
+    {
+        text = QString::fromUtf8(file.readAll());
+        file.close();
+    }
 
-   return text;
+    return text;
 }
 
 /**
@@ -101,51 +105,54 @@ QString Translator::welcomeConsoleText() const
  */
 QStringList Translator::availableLanguages() const
 {
-   return QStringList { "English", "Español" };
+    return QStringList { "English", "Español" };
 }
 
 /**
- * Changes the language of the application and emits the signals appropiate to reload every
- * string that uses the Qt translator system.
+ * Changes the language of the application and emits the signals appropiate to
+ * reload every string that uses the Qt translator system.
  *
- * @param language language ID based on the indexes of the \a availableLanguages() function
+ * @param language language ID based on the indexes of the \a
+ * availableLanguages() function
  */
 void Translator::setLanguage(const int language)
 {
-   QString langName;
-   QLocale locale;
-   switch (language)
-   {
-      case 0:
-         langName = "en";
-         locale = QLocale(QLocale::English);
-         break;
-      case 1:
-         langName = "es";
-         locale = QLocale(QLocale::Spanish);
-         break;
-      default:
-         langName = "en";
-         locale = QLocale(QLocale::English);
-         break;
-   }
+    QString langName;
+    QLocale locale;
+    switch (language)
+    {
+        case 0:
+            langName = "en";
+            locale = QLocale(QLocale::English);
+            break;
+        case 1:
+            langName = "es";
+            locale = QLocale(QLocale::Spanish);
+            break;
+        default:
+            langName = "en";
+            locale = QLocale(QLocale::English);
+            break;
+    }
 
-   m_language = language;
-   setLanguage(locale, langName);
+    m_language = language;
+    setLanguage(locale, langName);
 }
 
 /**
- * Changes the language of the application and emits the signals neccesary to reload every
- * string that uses the Qt translator system.
+ * Changes the language of the application and emits the signals neccesary to
+ * reload every string that uses the Qt translator system.
  *
  * @param locale    user-set locale
- * @param language  name of the *.qm file to load from the "translations" directory inside the
- *                  application's resources
+ * @param language  name of the *.qm file to load from the "translations"
+ *                  directory inside the application's resources
  */
 void Translator::setLanguage(const QLocale &locale, const QString &language)
 {
-   qApp->removeTranslator(&m_translator);
-   m_translator.load(locale, ":/translations/" + language + ".qm");
-   qApp->installTranslator(&m_translator);
-   emit languageChanged();
+    qApp->removeTranslator(&m_translator);
+    m_translator.load(locale, ":/translations/" + language + ".qm");
+    qApp->installTranslator(&m_translator);
+    emit languageChanged();
+
+    LOG_INFO() << "Language set to" << language;
 }

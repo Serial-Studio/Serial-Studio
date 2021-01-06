@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,60 +31,60 @@ class Dataset;
 
 class Widgets : public QObject
 {
-   Q_OBJECT
-   Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY dataChanged)
+    Q_OBJECT
+    Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY dataChanged)
 
 signals:
-   void dataChanged();
+    void dataChanged();
 
 public:
-   static Widgets *getInstance();
+    static Widgets *getInstance();
 
-   QList<Group *> mapGroup() const;
-   QList<Group *> gyroGroup() const;
-   QList<Dataset *> barDatasets() const;
-   QList<Group *> accelerometerGroup() const;
+    QList<Group *> mapGroup() const;
+    QList<Group *> gyroGroup() const;
+    QList<Dataset *> barDatasets() const;
+    QList<Group *> accelerometerGroup() const;
 
-   int totalWidgetCount() const;
+    int totalWidgetCount() const;
 
-   Q_INVOKABLE int mapGroupCount() const;
-   Q_INVOKABLE int gyroGroupCount() const;
-   Q_INVOKABLE int barDatasetCount() const;
-   Q_INVOKABLE int accelerometerGroupCount() const;
+    Q_INVOKABLE int mapGroupCount() const;
+    Q_INVOKABLE int gyroGroupCount() const;
+    Q_INVOKABLE int barDatasetCount() const;
+    Q_INVOKABLE int accelerometerGroupCount() const;
 
-   Q_INVOKABLE Group *mapGroupAt(const int index);
-   Q_INVOKABLE Group *gyroGroupAt(const int index);
-   Q_INVOKABLE Dataset *barDatasetAt(const int index);
-   Q_INVOKABLE Group *accelerometerGroupAt(const int index);
+    Q_INVOKABLE Group *mapGroupAt(const int index);
+    Q_INVOKABLE Group *gyroGroupAt(const int index);
+    Q_INVOKABLE Dataset *barDatasetAt(const int index);
+    Q_INVOKABLE Group *accelerometerGroupAt(const int index);
 
-   Q_INVOKABLE double gyroYaw(const int index);
-   Q_INVOKABLE double gyroRoll(const int index);
-   Q_INVOKABLE double gyroPitch(const int index);
+    Q_INVOKABLE double gyroYaw(const int index);
+    Q_INVOKABLE double gyroRoll(const int index);
+    Q_INVOKABLE double gyroPitch(const int index);
 
-   Q_INVOKABLE double accelerometerX(const int index);
-   Q_INVOKABLE double accelerometerY(const int index);
-   Q_INVOKABLE double accelerometerZ(const int index);
+    Q_INVOKABLE double accelerometerX(const int index);
+    Q_INVOKABLE double accelerometerY(const int index);
+    Q_INVOKABLE double accelerometerZ(const int index);
 
-   Q_INVOKABLE double bar(const int index);
-   Q_INVOKABLE double barMin(const int index);
-   Q_INVOKABLE double barMax(const int index);
+    Q_INVOKABLE double bar(const int index);
+    Q_INVOKABLE double barMin(const int index);
+    Q_INVOKABLE double barMax(const int index);
 
-   Q_INVOKABLE double mapLatitude(const int index);
-   Q_INVOKABLE double mapLongitude(const int index);
+    Q_INVOKABLE double mapLatitude(const int index);
+    Q_INVOKABLE double mapLongitude(const int index);
 
 private slots:
-   void updateModels();
+    void updateModels();
 
 private:
-   Widgets();
-   QList<Group *> getWidgetGroup(const QString &handle);
-   QList<Dataset *> getWidgetDatasets(const QString &handle);
+    Widgets();
+    QList<Group *> getWidgetGroup(const QString &handle);
+    QList<Dataset *> getWidgetDatasets(const QString &handle);
 
 private:
-   QList<Group *> m_mapGroups;
-   QList<Group *> m_gyroGroups;
-   QList<Dataset *> m_barDatasets;
-   QList<Group *> m_accelerometerGroups;
+    QList<Group *> m_mapGroups;
+    QList<Group *> m_gyroGroups;
+    QList<Dataset *> m_barDatasets;
+    QList<Group *> m_accelerometerGroups;
 };
 
 #endif

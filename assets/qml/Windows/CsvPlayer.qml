@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +48,27 @@ ApplicationWindow {
     }
 
     //
+    // Automatically display the window when the CSV file is opened
+    //
+    Connections {
+        target: CppCsvPlayer
+        function onOpenChanged() {
+            if (CppCsvPlayer.isOpen)
+                root.visible = true
+            else
+                root.visible = false
+        }
+    }
+
+    //
+    // Close CSV file when window is closed
+    //
+    onVisibleChanged: {
+        if (!visible && CppCsvPlayer.isOpen)
+            CppCsvPlayer.closeFile()
+    }
+
+    //
     // Window controls
     //
     ColumnLayout {
@@ -71,8 +92,8 @@ ApplicationWindow {
             }
 
             Label {
-                text: qsTr("Timestamp")
                 font.family: app.monoFont
+                text: CppCsvPlayer.timestamp
                 Layout.alignment: Qt.AlignVCenter
             }
 
@@ -82,11 +103,15 @@ ApplicationWindow {
         }
 
         //
-        // Progressbar display
+        // Progress display
         //
-        ProgressBar {
-            value: 0.5
+        Slider {
             Layout.fillWidth: true
+            value: CppCsvPlayer.progress
+            onValueChanged: {
+                if (value != CppCsvPlayer.progress)
+                    CppCsvPlayer.setProgress(value)
+            }
         }
 
         //
@@ -100,22 +125,34 @@ ApplicationWindow {
 
             Button {
                 icon.color: "#fff"
+                opacity: enabled ? 1 : 0.5
                 Layout.alignment: Qt.AlignVCenter
+                onClicked: CppCsvPlayer.previousFrame()
                 icon.source: "qrc:/icons/media-prev.svg"
+                enabled: CppCsvPlayer.progress > 0 && !CppCsvPlayer.isPlaying
+
+                Behavior on opacity {NumberAnimation{}}
             }
 
             Button {
                 icon.width: 32
                 icon.height: 32
                 icon.color: "#fff"
+                onClicked: CppCsvPlayer.toggle()
                 Layout.alignment: Qt.AlignVCenter
-                icon.source: "qrc:/icons/media-play.svg"
+                icon.source: CppCsvPlayer.isPlaying ? "qrc:/icons/media-pause.svg" :
+                                                      "qrc:/icons/media-play.svg"
             }
 
             Button {
                 icon.color: "#fff"
+                opacity: enabled ? 1 : 0.5
                 Layout.alignment: Qt.AlignVCenter
+                onClicked: CppCsvPlayer.nextFrame()
                 icon.source: "qrc:/icons/media-next.svg"
+                enabled: CppCsvPlayer.progress < 1 && !CppCsvPlayer.isPlaying
+
+                Behavior on opacity {NumberAnimation{}}
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ ApplicationWindow {
     //
     visible: false
     minimumWidth: 1080
-    minimumHeight: 680
+    minimumHeight: 660
     title: CppAppName + " v" + CppAppVersion
 
     //

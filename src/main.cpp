@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,13 +21,16 @@
  */
 
 #include <QtQml>
+#include <QSysInfo>
 #include <QPalette>
 #include <QQuickStyle>
 #include <QApplication>
 #include <QStyleFactory>
 #include <QQmlApplicationEngine>
 
+#include <Logger.h>
 #include <QSimpleUpdater.h>
+#include <ConsoleAppender.h>
 
 #include "Group.h"
 #include "Dataset.h"
@@ -53,81 +56,104 @@
  */
 int main(int argc, char **argv)
 {
-   // Set application attributes
-   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    // Set application attributes
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-   // Init. application
-   QApplication app(argc, argv);
-   app.setApplicationName(APP_NAME);
-   app.setApplicationVersion(APP_VERSION);
-   app.setOrganizationName(APP_DEVELOPER);
-   app.setOrganizationDomain(APP_SUPPORT_URL);
-   app.setStyle(QStyleFactory::create("Fusion"));
+    // Init. application
+    QApplication app(argc, argv);
+    app.setApplicationName(APP_NAME);
+    app.setApplicationVersion(APP_VERSION);
+    app.setOrganizationName(APP_DEVELOPER);
+    app.setOrganizationDomain(APP_SUPPORT_URL);
+    app.setStyle(QStyleFactory::create("Fusion"));
 
-   // Change application palette
-   QPalette p;
-   p.setColor(QPalette::Base, QColor(33, 55, 63));
-   p.setColor(QPalette::Text, QColor(255, 255, 255));
-   p.setColor(QPalette::Link, QColor(64, 157, 160));
-   p.setColor(QPalette::Button, QColor(33, 55, 63));
-   p.setColor(QPalette::Window, QColor(33, 55, 63));
-   p.setColor(QPalette::Highlight, QColor(64, 157, 160));
-   p.setColor(QPalette::ButtonText, QColor(255, 255, 255));
-   p.setColor(QPalette::WindowText, QColor(255, 255, 255));
-   p.setColor(QPalette::ToolTipBase, QColor(230, 224, 178));
-   p.setColor(QPalette::ToolTipText, QColor(230, 224, 178));
-   p.setColor(QPalette::BrightText, QColor(255, 255, 255));
-   p.setColor(QPalette::HighlightedText, QColor(230, 224, 178));
-   app.setPalette(p);
+    // Configure CuteLogger
+    ConsoleAppender *consoleAppender = new ConsoleAppender;
+    consoleAppender->setFormat(
+        "[%{time}] %{message:-48} [%{TypeOne}] [%{function}]\n");
+    cuteLogger->registerAppender(consoleAppender);
 
-   // Init application modules
-   Translator translator;
-   QQmlApplicationEngine engine;
-   auto widgets = Widgets::getInstance();
-   auto csvExport = Export::getInstance();
-   auto qmlBridge = QmlBridge::getInstance();
-   auto csvPlayer = CsvPlayer::getInstance();
-   auto jsonParser = JsonParser::getInstance();
-   auto updater = QSimpleUpdater::getInstance();
-   auto graphProvider = GraphProvider::getInstance();
-   auto serialManager = SerialManager::getInstance();
+    // Begin logging
+    LOG_INFO() << "Running on"
+               << QSysInfo::prettyProductName().toStdString().c_str();
 
-   // Register QML types
-   qmlRegisterType<Group>("Group", 1, 0, "Group");
-   qmlRegisterType<Dataset>("Dataset", 1, 0, "Dataset");
+    // Change application palette
+    QPalette p;
+    p.setColor(QPalette::Base, QColor(33, 55, 63));
+    p.setColor(QPalette::Text, QColor(255, 255, 255));
+    p.setColor(QPalette::Link, QColor(64, 157, 160));
+    p.setColor(QPalette::Button, QColor(33, 55, 63));
+    p.setColor(QPalette::Window, QColor(33, 55, 63));
+    p.setColor(QPalette::Highlight, QColor(64, 157, 160));
+    p.setColor(QPalette::ButtonText, QColor(255, 255, 255));
+    p.setColor(QPalette::WindowText, QColor(255, 255, 255));
+    p.setColor(QPalette::ToolTipBase, QColor(230, 224, 178));
+    p.setColor(QPalette::ToolTipText, QColor(230, 224, 178));
+    p.setColor(QPalette::BrightText, QColor(255, 255, 255));
+    p.setColor(QPalette::HighlightedText, QColor(230, 224, 178));
+    app.setPalette(p);
 
-   // Init QML interface
-   QQuickStyle::setStyle("Fusion");
-   engine.rootContext()->setContextProperty("CppUpdater", updater);
-   engine.rootContext()->setContextProperty("CppWidgets", widgets);
-   engine.rootContext()->setContextProperty("CppExport", csvExport);
-   engine.rootContext()->setContextProperty("CppQmlBridge", qmlBridge);
-   engine.rootContext()->setContextProperty("CppCsvPlayer", csvPlayer);
-   engine.rootContext()->setContextProperty("CppJsonParser", jsonParser);
-   engine.rootContext()->setContextProperty("CppTranslator", &translator);
-   engine.rootContext()->setContextProperty("CppGraphProvider", graphProvider);
-   engine.rootContext()->setContextProperty("CppSerialManager", serialManager);
-   engine.rootContext()->setContextProperty("CppAppName", app.applicationName());
-   engine.rootContext()->setContextProperty("CppAppUpdaterUrl", APP_UPDATER_URL);
-   engine.rootContext()->setContextProperty("CppAppVersion", app.applicationVersion());
-   engine.rootContext()->setContextProperty("CppAppOrganization", app.organizationName());
-   engine.rootContext()->setContextProperty("CppAppOrganizationDomain", app.organizationDomain());
-   engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    // Init application modules
+    Translator translator;
+    QQmlApplicationEngine engine;
+    auto widgets = Widgets::getInstance();
+    auto csvExport = Export::getInstance();
+    auto qmlBridge = QmlBridge::getInstance();
+    auto csvPlayer = CsvPlayer::getInstance();
+    auto jsonParser = JsonParser::getInstance();
+    auto updater = QSimpleUpdater::getInstance();
+    auto graphProvider = GraphProvider::getInstance();
+    auto serialManager = SerialManager::getInstance();
 
-   // QML error, exit
-   if (engine.rootObjects().isEmpty())
-      return EXIT_FAILURE;
+    // Log status
+    LOG_INFO() << "Finished creating application modules";
 
-   // Create instance of module manager to automatically
-   // call destructors of singleton application modules
-   ModuleManager moduleManager;
-   Q_UNUSED(moduleManager);
+    // Register QML types
+    qmlRegisterType<Group>("Group", 1, 0, "Group");
+    qmlRegisterType<Dataset>("Dataset", 1, 0, "Dataset");
 
-   // Check for updates
-   updater->setNotifyOnUpdate(APP_UPDATER_URL, true);
-   updater->setNotifyOnFinish(APP_UPDATER_URL, false);
-   updater->checkForUpdates(APP_UPDATER_URL);
+    // Init QML interface
+    auto c = engine.rootContext();
+    QQuickStyle::setStyle("Fusion");
+    c->setContextProperty("CppUpdater", updater);
+    c->setContextProperty("CppWidgets", widgets);
+    c->setContextProperty("CppExport", csvExport);
+    c->setContextProperty("CppQmlBridge", qmlBridge);
+    c->setContextProperty("CppCsvPlayer", csvPlayer);
+    c->setContextProperty("CppJsonParser", jsonParser);
+    c->setContextProperty("CppTranslator", &translator);
+    c->setContextProperty("CppGraphProvider", graphProvider);
+    c->setContextProperty("CppSerialManager", serialManager);
+    c->setContextProperty("CppAppName", app.applicationName());
+    c->setContextProperty("CppAppUpdaterUrl", APP_UPDATER_URL);
+    c->setContextProperty("CppAppVersion", app.applicationVersion());
+    c->setContextProperty("CppAppOrganization", app.organizationName());
+    c->setContextProperty("CppAppOrganizationDomain", app.organizationDomain());
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
-   // Enter application event loop
-   return app.exec();
+    // Log QML engine status
+    LOG_INFO() << "Finished loading QML interface";
+
+    // QML error, exit
+    if (engine.rootObjects().isEmpty())
+    {
+        LOG_WARNING() << "QML engine error";
+        return EXIT_FAILURE;
+    }
+
+    // Create instance of module manager to automatically
+    // call destructors of singleton application modules
+    ModuleManager moduleManager;
+    Q_UNUSED(moduleManager);
+
+    // Check for updates
+    LOG_INFO() << "Checking for updates...";
+    updater->setNotifyOnUpdate(APP_UPDATER_URL, true);
+    updater->setNotifyOnFinish(APP_UPDATER_URL, false);
+    updater->checkForUpdates(APP_UPDATER_URL);
+
+    // Enter application event loop
+    auto code = app.exec();
+    LOG_INFO() << "Application exit code" << code;
+    return code;
 }

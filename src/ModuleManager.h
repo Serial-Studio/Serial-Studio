@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,16 +28,16 @@
 
 class ModuleManager : public QObject
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   ModuleManager();
+    ModuleManager();
 
 private slots:
-   void stopOperations();
+    void stopOperations();
 
 private:
-   QQmlEngine *m_engine;
+    QQmlEngine *m_engine;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@
 
 #include "ModuleManager.h"
 
+#include "Logger.h"
 #include "Export.h"
 #include "CsvPlayer.h"
 #include "SerialManager.h"
@@ -29,12 +30,13 @@
 #include <QApplication>
 
 /**
- * Connect SIGNALS/SLOTS to call singleton destructors before
- * the application quits.
+ * Connect SIGNALS/SLOTS to call singleton destructors before the application
+ * quits.
  */
 ModuleManager::ModuleManager()
 {
-   connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
+    LOG_INFO() << "Initialized module manager class";
 }
 
 /**
@@ -42,7 +44,11 @@ ModuleManager::ModuleManager()
  */
 void ModuleManager::stopOperations()
 {
-   Export::getInstance()->closeFile();
-   CsvPlayer::getInstance()->closeFile();
-   SerialManager::getInstance()->disconnectDevice();
+    LOG_INFO() << "Stopping application modules...";
+
+    Export::getInstance()->closeFile();
+    CsvPlayer::getInstance()->closeFile();
+    SerialManager::getInstance()->disconnectDevice();
+
+    LOG_INFO() << "Application modules stopped";
 }

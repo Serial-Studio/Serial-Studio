@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+# Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -57,8 +57,7 @@ QTPLUGIN += qsvg
 # Libraries
 #-------------------------------------------------------------------------------
 
-include(libs/qtcsv/qtcsv.pri)
-include(libs/QSimpleUpdater/QSimpleUpdater.pri)
+include(libs/Libraries.pri)
 
 #-------------------------------------------------------------------------------
 # Deploy options

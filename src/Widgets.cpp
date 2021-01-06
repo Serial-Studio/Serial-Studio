@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,7 @@
  */
 
 #include "Group.h"
+#include "Logger.h"
 #include "Dataset.h"
 #include "Widgets.h"
 #include "QmlBridge.h"
@@ -38,8 +39,10 @@ static Widgets *INSTANCE = Q_NULLPTR;
  */
 Widgets::Widgets()
 {
-   auto bridge = QmlBridge::getInstance();
-   connect(bridge, SIGNAL(updated()), this, SLOT(updateModels()));
+    auto bridge = QmlBridge::getInstance();
+    connect(bridge, SIGNAL(updated()), this, SLOT(updateModels()));
+
+    LOG_INFO() << "Initialized Widgets module";
 }
 
 /**
@@ -47,10 +50,10 @@ Widgets::Widgets()
  */
 Widgets *Widgets::getInstance()
 {
-   if (!INSTANCE)
-      INSTANCE = new Widgets;
+    if (!INSTANCE)
+        INSTANCE = new Widgets;
 
-   return INSTANCE;
+    return INSTANCE;
 }
 
 /**
@@ -58,7 +61,7 @@ Widgets *Widgets::getInstance()
  */
 QList<Dataset *> Widgets::barDatasets() const
 {
-   return m_barDatasets;
+    return m_barDatasets;
 }
 
 /**
@@ -66,7 +69,7 @@ QList<Dataset *> Widgets::barDatasets() const
  */
 QList<Group *> Widgets::mapGroup() const
 {
-   return m_mapGroups;
+    return m_mapGroups;
 }
 
 /**
@@ -74,15 +77,16 @@ QList<Group *> Widgets::mapGroup() const
  */
 QList<Group *> Widgets::gyroGroup() const
 {
-   return m_gyroGroups;
+    return m_gyroGroups;
 }
 
 /**
- * Returns a list with all the JSON groups that implement an accelerometer widget
+ * Returns a list with all the JSON groups that implement an accelerometer
+ * widget
  */
 QList<Group *> Widgets::accelerometerGroup() const
 {
-   return m_accelerometerGroups;
+    return m_accelerometerGroups;
 }
 
 /**
@@ -90,7 +94,8 @@ QList<Group *> Widgets::accelerometerGroup() const
  */
 int Widgets::totalWidgetCount() const
 {
-   return barDatasetCount() + mapGroupCount() + gyroGroupCount() + accelerometerGroupCount();
+    return barDatasetCount() + mapGroupCount() + gyroGroupCount()
+        + accelerometerGroupCount();
 }
 
 /**
@@ -98,7 +103,7 @@ int Widgets::totalWidgetCount() const
  */
 int Widgets::barDatasetCount() const
 {
-   return barDatasets().count();
+    return barDatasets().count();
 }
 
 /**
@@ -106,7 +111,7 @@ int Widgets::barDatasetCount() const
  */
 int Widgets::mapGroupCount() const
 {
-   return mapGroup().count();
+    return mapGroup().count();
 }
 
 /**
@@ -114,7 +119,7 @@ int Widgets::mapGroupCount() const
  */
 int Widgets::gyroGroupCount() const
 {
-   return gyroGroup().count();
+    return gyroGroup().count();
 }
 
 /**
@@ -122,7 +127,7 @@ int Widgets::gyroGroupCount() const
  */
 int Widgets::accelerometerGroupCount() const
 {
-   return accelerometerGroup().count();
+    return accelerometerGroup().count();
 }
 
 /**
@@ -131,10 +136,10 @@ int Widgets::accelerometerGroupCount() const
  */
 Dataset *Widgets::barDatasetAt(const int index)
 {
-   if (barDatasets().count() > index)
-      return barDatasets().at(index);
+    if (barDatasets().count() > index)
+        return barDatasets().at(index);
 
-   return Q_NULLPTR;
+    return Q_NULLPTR;
 }
 
 /**
@@ -143,10 +148,10 @@ Dataset *Widgets::barDatasetAt(const int index)
  */
 Group *Widgets::mapGroupAt(const int index)
 {
-   if (mapGroup().count() > index)
-      return mapGroup().at(index);
+    if (mapGroup().count() > index)
+        return mapGroup().at(index);
 
-   return Q_NULLPTR;
+    return Q_NULLPTR;
 }
 
 /**
@@ -155,10 +160,10 @@ Group *Widgets::mapGroupAt(const int index)
  */
 Group *Widgets::gyroGroupAt(const int index)
 {
-   if (gyroGroup().count() > index)
-      return gyroGroup().at(index);
+    if (gyroGroup().count() > index)
+        return gyroGroup().at(index);
 
-   return Q_NULLPTR;
+    return Q_NULLPTR;
 }
 
 /**
@@ -167,10 +172,10 @@ Group *Widgets::gyroGroupAt(const int index)
  */
 Group *Widgets::accelerometerGroupAt(const int index)
 {
-   if (accelerometerGroup().count() > index)
-      return accelerometerGroup().at(index);
+    if (accelerometerGroup().count() > index)
+        return accelerometerGroup().at(index);
 
-   return Q_NULLPTR;
+    return Q_NULLPTR;
 }
 
 /**
@@ -178,19 +183,19 @@ Group *Widgets::accelerometerGroupAt(const int index)
  */
 double Widgets::gyroYaw(const int index)
 {
-   auto gyro = gyroGroupAt(index);
+    auto gyro = gyroGroupAt(index);
 
-   if (gyro)
-   {
-      foreach (auto dataset, gyro->datasets())
-      {
-         auto widget = dataset->widget();
-         if (widget.toLower() == "yaw")
-            return dataset->value().toDouble();
-      }
-   }
+    if (gyro)
+    {
+        foreach (auto dataset, gyro->datasets())
+        {
+            auto widget = dataset->widget();
+            if (widget.toLower() == "yaw")
+                return dataset->value().toDouble();
+        }
+    }
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
@@ -198,19 +203,19 @@ double Widgets::gyroYaw(const int index)
  */
 double Widgets::gyroRoll(const int index)
 {
-   auto gyro = gyroGroupAt(index);
+    auto gyro = gyroGroupAt(index);
 
-   if (gyro)
-   {
-      foreach (auto dataset, gyro->datasets())
-      {
-         auto widget = dataset->widget();
-         if (widget.toLower() == "roll")
-            return dataset->value().toDouble();
-      }
-   }
+    if (gyro)
+    {
+        foreach (auto dataset, gyro->datasets())
+        {
+            auto widget = dataset->widget();
+            if (widget.toLower() == "roll")
+                return dataset->value().toDouble();
+        }
+    }
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
@@ -218,79 +223,82 @@ double Widgets::gyroRoll(const int index)
  */
 double Widgets::gyroPitch(const int index)
 {
-   auto gyro = gyroGroupAt(index);
+    auto gyro = gyroGroupAt(index);
 
-   if (gyro)
-   {
-      foreach (auto dataset, gyro->datasets())
-      {
-         auto widget = dataset->widget();
-         if (widget.toLower() == "pitch")
-            return dataset->value().toDouble();
-      }
-   }
+    if (gyro)
+    {
+        foreach (auto dataset, gyro->datasets())
+        {
+            auto widget = dataset->widget();
+            if (widget.toLower() == "pitch")
+                return dataset->value().toDouble();
+        }
+    }
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
- * Returns the value of the X axis for the accelerometer widget at the given @a index
+ * Returns the value of the X axis for the accelerometer widget at the given @a
+ * index
  */
 double Widgets::accelerometerX(const int index)
 {
-   auto accelerometer = accelerometerGroupAt(index);
+    auto accelerometer = accelerometerGroupAt(index);
 
-   if (accelerometer)
-   {
-      foreach (auto dataset, accelerometer->datasets())
-      {
-         auto widget = dataset->widget();
-         if (widget.toLower() == "x")
-            return dataset->value().toDouble();
-      }
-   }
+    if (accelerometer)
+    {
+        foreach (auto dataset, accelerometer->datasets())
+        {
+            auto widget = dataset->widget();
+            if (widget.toLower() == "x")
+                return dataset->value().toDouble();
+        }
+    }
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
- * Returns the value of the Y axis for the accelerometer widget at the given @a index
+ * Returns the value of the Y axis for the accelerometer widget at the given @a
+ * index
  */
 double Widgets::accelerometerY(const int index)
 {
-   auto accelerometer = accelerometerGroupAt(index);
+    auto accelerometer = accelerometerGroupAt(index);
 
-   if (accelerometer)
-   {
-      foreach (auto dataset, accelerometer->datasets())
-      {
-         auto widget = dataset->widget();
-         if (widget.toLower() == "y")
-            return dataset->value().toDouble();
-      }
-   }
+    if (accelerometer)
+    {
+        foreach (auto dataset, accelerometer->datasets())
+        {
+            auto widget = dataset->widget();
+            if (widget.toLower() == "y")
+                return dataset->value().toDouble();
+        }
+    }
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
- * Returns the value of the Z axis for the accelerometer widget at the given @a index
+ * Returns the value of the Z axis for the accelerometer widget at the given @a
+ * index
  */
 double Widgets::accelerometerZ(const int index)
 {
-   auto accelerometer = accelerometerGroupAt(index);
+    auto accelerometer = accelerometerGroupAt(index);
 
-   if (accelerometer)
-   {
-      foreach (auto dataset, accelerometer->datasets())
-      {
-         auto widget = dataset->widget();
-         if (widget.toLower() == "z")
-            return dataset->value().toDouble();
-      }
-   }
+    if (accelerometer)
+    {
+        foreach (auto dataset, accelerometer->datasets())
+        {
+            auto widget = dataset->widget();
+            if (widget.toLower() == "z")
+                return dataset->value().toDouble();
+        }
+    }
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
@@ -298,11 +306,11 @@ double Widgets::accelerometerZ(const int index)
  */
 double Widgets::bar(const int index)
 {
-   auto bar = barDatasetAt(index);
-   if (bar)
-      return bar->value().toDouble();
+    auto bar = barDatasetAt(index);
+    if (bar)
+        return bar->value().toDouble();
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
@@ -310,11 +318,11 @@ double Widgets::bar(const int index)
  */
 double Widgets::barMin(const int index)
 {
-   auto bar = barDatasetAt(index);
-   if (bar)
-      return bar->jsonData().value("min").toDouble();
+    auto bar = barDatasetAt(index);
+    if (bar)
+        return bar->jsonData().value("min").toDouble();
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
@@ -322,11 +330,11 @@ double Widgets::barMin(const int index)
  */
 double Widgets::barMax(const int index)
 {
-   auto bar = barDatasetAt(index);
-   if (bar)
-      return bar->jsonData().value("max").toDouble();
+    auto bar = barDatasetAt(index);
+    if (bar)
+        return bar->jsonData().value("max").toDouble();
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
@@ -334,19 +342,19 @@ double Widgets::barMax(const int index)
  */
 double Widgets::mapLatitude(const int index)
 {
-   auto map = mapGroupAt(index);
+    auto map = mapGroupAt(index);
 
-   if (map)
-   {
-      foreach (auto dataset, map->datasets())
-      {
-         auto widget = dataset->widget();
-         if (widget.toLower() == "lat")
-            return dataset->value().toDouble();
-      }
-   }
+    if (map)
+    {
+        foreach (auto dataset, map->datasets())
+        {
+            auto widget = dataset->widget();
+            if (widget.toLower() == "lat")
+                return dataset->value().toDouble();
+        }
+    }
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
@@ -354,80 +362,76 @@ double Widgets::mapLatitude(const int index)
  */
 double Widgets::mapLongitude(const int index)
 {
-   auto map = mapGroupAt(index);
+    auto map = mapGroupAt(index);
 
-   if (map)
-   {
-      foreach (auto dataset, map->datasets())
-      {
-         auto widget = dataset->widget();
-         if (widget.toLower() == "lon")
-            return dataset->value().toDouble();
-      }
-   }
+    if (map)
+    {
+        foreach (auto dataset, map->datasets())
+        {
+            auto widget = dataset->widget();
+            if (widget.toLower() == "lon")
+                return dataset->value().toDouble();
+        }
+    }
 
-   return DBL_MAX;
+    return DBL_MAX;
 }
 
 /**
- * Regenerates the widget groups with the latest data given
- * by the @c QmlBridge class
+ * Regenerates the widget groups with the latest data given by the @c QmlBridge
+ * class.
  */
 void Widgets::updateModels()
 {
-   // Clear current groups
-   m_barDatasets.clear();
-   m_mapGroups.clear();
-   m_gyroGroups.clear();
-   m_accelerometerGroups.clear();
+    // Clear current groups
+    m_barDatasets.clear();
+    m_mapGroups.clear();
+    m_gyroGroups.clear();
+    m_accelerometerGroups.clear();
 
-   // Update groups
-   m_mapGroups = getWidgetGroup("map");
-   m_gyroGroups = getWidgetGroup("gyro");
-   m_barDatasets = getWidgetDatasets("bar");
-   m_accelerometerGroups = getWidgetGroup("accelerometer");
+    // Update groups
+    m_mapGroups = getWidgetGroup("map");
+    m_gyroGroups = getWidgetGroup("gyro");
+    m_barDatasets = getWidgetDatasets("bar");
+    m_accelerometerGroups = getWidgetGroup("accelerometer");
 
-   // Update UI
-   emit dataChanged();
+    // Update UI
+    emit dataChanged();
 }
 
 /**
- * Obtains all the JSON groups that implement the given
- * widget @a handle ID.
- *
+ * Obtains all the JSON groups that implement the given widget @a handle ID.
  * The JSON groups are provided by the @c QmlBridge class.
  */
 QList<Group *> Widgets::getWidgetGroup(const QString &handle)
 {
-   QList<Group *> widgetGroup;
+    QList<Group *> widgetGroup;
 
-   foreach (auto group, QmlBridge::getInstance()->groups())
-   {
-      if (group->widget().toLower() == handle)
-         widgetGroup.append(group);
-   }
+    foreach (auto group, QmlBridge::getInstance()->groups())
+    {
+        if (group->widget().toLower() == handle)
+            widgetGroup.append(group);
+    }
 
-   return widgetGroup;
+    return widgetGroup;
 }
 
 /**
- * Obtains all the JSON datasets that implement the given
- * widget @a handle ID.
- *
+ * Obtains all the JSON datasets that implement the given widget @a handle ID.
  * The JSON groups & datasets are provided by the @c QmlBridge class.
  */
 QList<Dataset *> Widgets::getWidgetDatasets(const QString &handle)
 {
-   QList<Dataset *> widgetDatasets;
+    QList<Dataset *> widgetDatasets;
 
-   foreach (auto group, QmlBridge::getInstance()->groups())
-   {
-      foreach (auto dataset, group->datasets())
-      {
-         if (dataset->widget() == handle)
-            widgetDatasets.append(dataset);
-      }
-   }
+    foreach (auto group, QmlBridge::getInstance()->groups())
+    {
+        foreach (auto dataset, group->datasets())
+        {
+            if (dataset->widget() == handle)
+                widgetDatasets.append(dataset);
+        }
+    }
 
-   return widgetDatasets;
+    return widgetDatasets;
 }

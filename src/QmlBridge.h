@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,33 +29,33 @@
 class Group;
 class QmlBridge : public QObject
 {
-   Q_OBJECT
+    Q_OBJECT
 
-   Q_PROPERTY(QString projectTitle READ projectTitle NOTIFY updated)
-   Q_PROPERTY(int groupCount READ groupCount NOTIFY updated)
-   Q_PROPERTY(QList<Group *> groups READ groups NOTIFY updated)
+    Q_PROPERTY(QString projectTitle READ projectTitle NOTIFY updated)
+    Q_PROPERTY(int groupCount READ groupCount NOTIFY updated)
+    Q_PROPERTY(QList<Group *> groups READ groups NOTIFY updated)
 
 signals:
-   void updated();
+    void updated();
 
 public:
-   static QmlBridge *getInstance();
+    static QmlBridge *getInstance();
 
-   QString projectTitle() const;
+    QString projectTitle() const;
 
-   int groupCount() const;
-   QList<Group *> groups() const;
-   Q_INVOKABLE Group *getGroup(const int index);
+    int groupCount() const;
+    QList<Group *> groups() const;
+    Q_INVOKABLE Group *getGroup(const int index);
 
 private:
-   QmlBridge();
+    QmlBridge();
 
 private slots:
-   void update();
+    void update();
 
 private:
-   QString m_title;
-   QList<Group *> m_groups;
+    QString m_title;
+    QList<Group *> m_groups;
 };
 
 #endif

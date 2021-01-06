@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -76,7 +76,6 @@ Control {
                     font.pixelSize: 12
                     color: root.consoleColor
                     wrapMode: TextEdit.Wrap
-                    textFormat: Text.PlainText
                     font.family: app.monoFont
                     width: _scrollView.contentWidth
                     placeholderText: qsTr("No data received so far...") + CppTranslator.dummy

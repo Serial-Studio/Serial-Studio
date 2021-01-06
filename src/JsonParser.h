@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,54 +34,57 @@
 
 class JsonParser : public QObject
 {
-   Q_OBJECT
-   Q_PROPERTY(QString jsonMapFilename READ jsonMapFilename NOTIFY jsonFileMapChanged)
-   Q_PROPERTY(QString jsonMapFilepath READ jsonMapFilepath NOTIFY jsonFileMapChanged)
-   Q_PROPERTY(OperationMode operationMode READ operationMode WRITE setOperationMode NOTIFY operationModeChanged)
+    Q_OBJECT
+    Q_PROPERTY(
+        QString jsonMapFilename READ jsonMapFilename NOTIFY jsonFileMapChanged)
+    Q_PROPERTY(
+        QString jsonMapFilepath READ jsonMapFilepath NOTIFY jsonFileMapChanged)
+    Q_PROPERTY(OperationMode operationMode READ operationMode WRITE
+                   setOperationMode NOTIFY operationModeChanged)
 
 signals:
-   void packetReceived();
-   void jsonFileMapChanged();
-   void operationModeChanged();
+    void packetReceived();
+    void jsonFileMapChanged();
+    void operationModeChanged();
 
 public:
-   enum OperationMode
-   {
-      kManual = 0x00,
-      kAutomatic = 0x01,
-   };
-   Q_ENUMS(OperationMode)
+    enum OperationMode
+    {
+        kManual = 0x00,
+        kAutomatic = 0x01,
+    };
+    Q_ENUMS(OperationMode)
 
 public:
-   static JsonParser *getInstance();
+    static JsonParser *getInstance();
 
-   QString jsonMapData() const;
-   QJsonDocument document() const;
-   QString jsonMapFilename() const;
-   QString jsonMapFilepath() const;
-   OperationMode operationMode() const;
+    QString jsonMapData() const;
+    QJsonDocument document() const;
+    QString jsonMapFilename() const;
+    QString jsonMapFilepath() const;
+    OperationMode operationMode() const;
 
 public slots:
-   void loadJsonMap();
-   void setOperationMode(const OperationMode mode);
-   void loadJsonMap(const QString &path, const bool silent = false);
+    void loadJsonMap();
+    void setOperationMode(const OperationMode mode);
+    void loadJsonMap(const QString &path, const bool silent = false);
 
 private:
-   JsonParser();
+    JsonParser();
 
 public slots:
-   void readSettings();
-   void writeSettings(const QString &path);
+    void readSettings();
+    void writeSettings(const QString &path);
 
 private slots:
-   void readData(const QByteArray &data);
+    void readData(const QByteArray &data);
 
 private:
-   QFile m_jsonMap;
-   QSettings m_settings;
-   QString m_jsonMapData;
-   OperationMode m_opMode;
-   QJsonDocument m_document;
+    QFile m_jsonMap;
+    QSettings m_settings;
+    QString m_jsonMapData;
+    OperationMode m_opMode;
+    QJsonDocument m_document;
 };
 
 #endif

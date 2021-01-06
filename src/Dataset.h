@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,34 +29,34 @@
 
 class Dataset : public QObject
 {
-   Q_OBJECT
+    Q_OBJECT
 
-   Q_PROPERTY(bool graph READ graph CONSTANT)
-   Q_PROPERTY(QString title READ title CONSTANT)
-   Q_PROPERTY(QString value READ value CONSTANT)
-   Q_PROPERTY(QString units READ units CONSTANT)
-   Q_PROPERTY(QString widget READ widget CONSTANT)
-   Q_PROPERTY(QJsonObject jsonData READ jsonData CONSTANT)
+    Q_PROPERTY(bool graph READ graph CONSTANT)
+    Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QString value READ value CONSTANT)
+    Q_PROPERTY(QString units READ units CONSTANT)
+    Q_PROPERTY(QString widget READ widget CONSTANT)
+    Q_PROPERTY(QJsonObject jsonData READ jsonData CONSTANT)
 
 public:
-   Dataset(QObject *parent = nullptr);
+    Dataset(QObject *parent = nullptr);
 
-   bool graph() const;
-   QString title() const;
-   QString value() const;
-   QString units() const;
-   QString widget() const;
-   QJsonObject jsonData() const;
+    bool graph() const;
+    QString title() const;
+    QString value() const;
+    QString units() const;
+    QString widget() const;
+    QJsonObject jsonData() const;
 
-   bool read(const QJsonObject &object);
+    bool read(const QJsonObject &object);
 
 private:
-   bool m_graph;
-   QString m_title;
-   QString m_value;
-   QString m_units;
-   QString m_widget;
-   QJsonObject m_jsonData;
+    bool m_graph;
+    QString m_title;
+    QString m_value;
+    QString m_units;
+    QString m_widget;
+    QJsonObject m_jsonData;
 };
 
 #endif

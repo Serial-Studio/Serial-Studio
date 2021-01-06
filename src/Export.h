@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,38 +31,39 @@
 
 class Export : public QObject
 {
-   Q_OBJECT
-   Q_PROPERTY(bool isOpen READ isOpen NOTIFY openChanged)
-   Q_PROPERTY(bool exportEnabled READ exportEnabled WRITE setExportEnabled NOTIFY enabledChanged)
+    Q_OBJECT
+    Q_PROPERTY(bool isOpen READ isOpen NOTIFY openChanged)
+    Q_PROPERTY(bool exportEnabled READ exportEnabled WRITE setExportEnabled
+                   NOTIFY enabledChanged)
 
 signals:
-   void openChanged();
-   void enabledChanged();
+    void openChanged();
+    void enabledChanged();
 
 public:
-   static Export *getInstance();
+    static Export *getInstance();
 
-   bool isOpen() const;
-   bool exportEnabled() const;
+    bool isOpen() const;
+    bool exportEnabled() const;
 
 private:
-   Export();
-   ~Export();
+    Export();
+    ~Export();
 
 public slots:
-   void closeFile();
-   void openCurrentCsv();
-   void setExportEnabled(const bool enabled);
+    void closeFile();
+    void openCurrentCsv();
+    void setExportEnabled(const bool enabled);
 
 private slots:
-   void writeValues();
-   void updateValues();
+    void writeValues();
+    void updateValues();
 
 private:
-   QFile m_csvFile;
-   bool m_exportEnabled;
-   QTextStream m_textStream;
-   QList<QPair<QDateTime, QJsonObject>> m_jsonList;
+    QFile m_csvFile;
+    bool m_exportEnabled;
+    QTextStream m_textStream;
+    QList<QPair<QDateTime, QJsonObject>> m_jsonList;
 };
 
 #endif
