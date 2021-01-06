@@ -23,6 +23,7 @@
 #include "Group.h"
 #include "Logger.h"
 #include "Dataset.h"
+#include "CsvPlayer.h"
 #include "QmlBridge.h"
 #include "JsonParser.h"
 #include "SerialManager.h"
@@ -35,10 +36,15 @@
  */
 static QmlBridge *INSTANCE = nullptr;
 
+/**
+ * Constructor of the class
+ */
 QmlBridge::QmlBridge()
 {
+    auto cp = CsvPlayer::getInstance();
     auto jp = JsonParser::getInstance();
     auto sm = SerialManager::getInstance();
+    connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(jp, SIGNAL(packetReceived()), this, SLOT(update()));
     connect(sm, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 
@@ -152,6 +158,11 @@ void QmlBridge::update()
  */
 void QmlBridge::resetData()
 {
+    // Stop if dev. man is not disconnected or if CSV file is open
+    if (SerialManager::getInstance()->connected()
+        || CsvPlayer::getInstance()->isOpen())
+        return;
+
     // Delete existing groups
     for (int i = 0; i < groupCount(); ++i)
         m_groups.at(i)->deleteLater();
@@ -162,6 +173,7 @@ void QmlBridge::resetData()
 
     // Update UI
     emit updated();
+    emit dataReset();
 
     // Log to console
     LOG_INFO() << "QML bridge data reset";

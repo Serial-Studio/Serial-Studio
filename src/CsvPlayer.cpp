@@ -358,13 +358,19 @@ void CsvPlayer::updateData()
         return;
 
     // Update timestamp string
-    m_timestamp = getCellValue(framePosition() + 1, 0);
-    emit timestampChanged();
+    bool error;
+    auto timestamp = getCellValue(framePosition() + 1, 0, &error);
+    if (!error)
+    {
+        m_timestamp = timestamp;
+        emit timestampChanged();
+    }
 
     // Construct JSON from CSV & instruct the parser to use this document as
     // input source for the QML bridge
     auto json = getJsonFrame(framePosition() + 1);
-    JsonParser::getInstance()->setJsonDocument(json);
+    if (!json.isEmpty())
+        JsonParser::getInstance()->setJsonDocument(json);
 
     // If the user wants to 'play' the CSV, get time difference between this
     // frame and the next frame & schedule an automated update
@@ -448,7 +454,7 @@ bool CsvPlayer::validateRow(const int position)
  * row & the structure of the JSON map file loaded in the @c JsonParser class.
  *
  * The details of how this is done are a bit fuzzy, and the methods used here
- * are pretty ugly & unorthodox, but they work. Brutality works my dear friend.
+ * are pretty ugly & unorthodox, but they work. Brutality works.
  */
 QJsonDocument CsvPlayer::getJsonFrame(const int row)
 {
@@ -510,6 +516,13 @@ QJsonDocument CsvPlayer::getJsonFrame(const int row)
         }
 
         LOG_INFO() << "Group/dataset model created successfully";
+    }
+
+    // Check that row is valid
+    if (m_csvData.count() <= row)
+    {
+        LOG_WARNING() << "Invalid row requested";
+        return QJsonDocument();
     }
 
     // Read CSV row & JSON template from JSON parser

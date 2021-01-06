@@ -473,6 +473,7 @@ Control {
             Label {
                 font.family: app.monoFont
                 color: palette.brightText
+                visible: !CppCsvPlayer.isOpen
                 text: CppSerialManager.receivedBytes
 
                 anchors {

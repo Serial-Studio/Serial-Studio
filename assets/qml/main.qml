@@ -145,10 +145,11 @@ ApplicationWindow {
     // Show console tab on serial disconnect
     //
     Connections {
-        target: CppSerialManager
-        function onConnectedChanged() {
+        target: CppQmlBridge
+        function onDataReset() {
             toolbar.consoleClicked()
             devices.show()
+            app.firstValidPacket = false
         }
     }
 

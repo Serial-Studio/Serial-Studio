@@ -80,26 +80,10 @@ ApplicationWindow {
         //
         // Timestamp display
         //
-        RowLayout {
-            spacing: 0
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            Label {
-                font.bold: true
-                text: qsTr("Timestamp") + ": "
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            Label {
-                font.family: app.monoFont
-                text: CppCsvPlayer.timestamp
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            Item {
-                Layout.fillWidth: true
-            }
+        Label {
+            font.family: app.monoFont
+            text: CppCsvPlayer.timestamp
+            Layout.alignment: Qt.AlignLeft
         }
 
         //

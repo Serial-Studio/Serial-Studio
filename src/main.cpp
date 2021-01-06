@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     // Configure CuteLogger
     ConsoleAppender *consoleAppender = new ConsoleAppender;
     consoleAppender->setFormat(
-        "[%{time}] %{message:-48} [%{TypeOne}] [%{function}]\n");
+        "[%{time}] %{message:-72} [%{TypeOne}] [%{function}]\n");
     cuteLogger->registerAppender(consoleAppender);
 
     // Begin logging

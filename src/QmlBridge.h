@@ -37,6 +37,7 @@ class QmlBridge : public QObject
 
 signals:
     void updated();
+    void dataReset();
 
 public:
     static QmlBridge *getInstance();
