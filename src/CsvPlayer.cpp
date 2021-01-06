@@ -510,9 +510,22 @@ QJsonDocument CsvPlayer::getJsonFrame(const int row)
                 m_model.insert(group, set);
             }
 
-            // Register dataset index
-            if (!m_datasetIndexes.contains(dataset))
-                m_datasetIndexes.insert(dataset, i);
+            // Register dataset index with group key
+            if (!m_datasetIndexes.contains(group))
+            {
+                QMap<QString, int> map;
+                map.insert(dataset, i);
+                m_datasetIndexes.insert(group, map);
+            }
+
+            // Register dataset index with existing group key
+            else
+            {
+                auto map = m_datasetIndexes.value(group);
+                map.insert(dataset, i);
+                m_datasetIndexes.remove(group);
+                m_datasetIndexes.insert(group, map);
+            }
         }
 
         LOG_INFO() << "Group/dataset model created successfully";
@@ -554,8 +567,8 @@ QJsonDocument CsvPlayer::getJsonFrame(const int row)
                         auto dataset = datasets.at(j).toObject();
                         if (dataset.value("t") == datasetKey)
                         {
-                            auto value
-                                = values.at(m_datasetIndexes.value(datasetKey));
+                            auto value = values.at(
+                                getDatasetIndex(groupKey, datasetKey));
                             dataset.remove("v");
                             dataset.insert("v", value);
                         }
@@ -603,4 +616,21 @@ QString CsvPlayer::getCellValue(int row, int column, bool *error)
         *error = true;
 
     return "";
+}
+
+/**
+ * Returns the column/index for the dataset key that belongs to the given
+ * group key.
+ */
+int CsvPlayer::getDatasetIndex(const QString &groupKey,
+                               const QString &datasetKey)
+{
+    if (m_datasetIndexes.contains(groupKey))
+    {
+        auto map = m_datasetIndexes.value(groupKey);
+        if (map.contains(datasetKey))
+            return map.value(datasetKey);
+    }
+
+    return 0;
 }

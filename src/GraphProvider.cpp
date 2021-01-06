@@ -103,7 +103,7 @@ double GraphProvider::minimumValue(const int index) const
     if (min != INT_MAX)
         return min;
 
-    return 0;
+    return -1;
 }
 
 /**

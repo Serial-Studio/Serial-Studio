@@ -64,6 +64,18 @@ Window {
             if (minimumValue < 0)
                 min = max * -1
 
+            // Fix issues when min & max are equal
+            if (min === max) {
+                max = Math.abs(max)
+                min = max * -1
+            }
+
+            // Fix issues on min = max = (0,0)
+            if (min === 0 && max === 0) {
+                max = 1
+                min = -1
+            }
+
             // Update axes only if needed
             if (positionAxis.min !== min)
                 positionAxis.min = min

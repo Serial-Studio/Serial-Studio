@@ -77,7 +77,7 @@ ApplicationWindow {
         devices.show()
 
         data.opacity = 0
-        console.opacity = 1
+        terminal.opacity = 1
         widgets.opacity = 0
 
         CppJsonParser.readSettings()
@@ -87,7 +87,7 @@ ApplicationWindow {
     // Clears the console text & displays a mini-tutorial
     //
     function showWelcomeGuide() {
-        console.text = CppTranslator.welcomeConsoleText()  + "\n\n"
+        terminal.text = CppTranslator.welcomeConsoleText()  + "\n\n"
     }
 
     //
@@ -185,7 +185,7 @@ ApplicationWindow {
             Layout.maximumHeight: 48
             dataChecked: data.visible
             aboutChecked: about.visible
-            consoleChecked: console.visible
+            consoleChecked: terminal.visible
             widgetsChecked: widgets.visible
             devicesChecked: devices.visible
             onAboutClicked: about.visible ? about.hide() : about.show()
@@ -193,7 +193,7 @@ ApplicationWindow {
 
             onDataClicked: {
                 data.opacity    = 1
-                console.opacity = 0
+                terminal.opacity = 0
                 widgets.opacity = 0
                 dataChecked     = true
                 consoleChecked  = false
@@ -202,7 +202,7 @@ ApplicationWindow {
 
             onConsoleClicked: {
                 data.opacity    = 0
-                console.opacity = 1
+                terminal.opacity = 1
                 widgets.opacity = 0
                 consoleChecked  = true
                 dataChecked     = false
@@ -211,7 +211,7 @@ ApplicationWindow {
 
             onWidgetsClicked: {
                 data.opacity    = 0
-                console.opacity = 0
+                terminal.opacity = 0
                 widgets.opacity = 1
                 dataChecked     = false
                 widgetsChecked  = true
@@ -230,7 +230,7 @@ ApplicationWindow {
                 Layout.fillHeight: true
 
                 Console {
-                    id: console
+                    id: terminal
                     anchors.fill: parent
 
                     // Animate on show

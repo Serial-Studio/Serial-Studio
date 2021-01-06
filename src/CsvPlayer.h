@@ -72,6 +72,7 @@ private:
     bool validateRow(const int row);
     QJsonDocument getJsonFrame(const int row);
     QString getCellValue(int row, int column, bool *error = nullptr);
+    int getDatasetIndex(const QString &groupKey, const QString &datasetKey);
 
 private:
     int m_framePos;
@@ -80,8 +81,8 @@ private:
     QTimer m_frameTimer;
     QString m_timestamp;
     QList<QStringList> m_csvData;
-    QMap<QString, int> m_datasetIndexes;
     QMap<QString, QSet<QString>> m_model;
+    QMap<QString, QMap<QString, int>> m_datasetIndexes;
 };
 
 #endif
