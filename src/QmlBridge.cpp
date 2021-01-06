@@ -25,6 +25,7 @@
 #include "Dataset.h"
 #include "QmlBridge.h"
 #include "JsonParser.h"
+#include "SerialManager.h"
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -37,7 +38,9 @@ static QmlBridge *INSTANCE = nullptr;
 QmlBridge::QmlBridge()
 {
     auto jp = JsonParser::getInstance();
+    auto sm = SerialManager::getInstance();
     connect(jp, SIGNAL(packetReceived()), this, SLOT(update()));
+    connect(sm, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 
     LOG_INFO() << "Initialized QML Bridge module";
 }
@@ -141,4 +144,22 @@ void QmlBridge::update()
             emit updated();
         }
     }
+}
+
+/**
+ * Clears the project title, deletes all groups & notifies the UI. This function
+ * is used when the serial device connection state is changed to avoid errors.
+ */
+void QmlBridge::resetData()
+{
+    // Delete existing groups
+    for (int i = 0; i < groupCount(); ++i)
+        m_groups.at(i)->deleteLater();
+
+    // Clear group list
+    m_title.clear();
+    m_groups.clear();
+
+    // Update UI
+    emit updated();
 }

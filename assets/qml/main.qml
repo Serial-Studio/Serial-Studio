@@ -142,6 +142,17 @@ ApplicationWindow {
     }
 
     //
+    // Show console tab on serial disconnect
+    //
+    Connections {
+        target: CppSerialManager
+        function onConnectedChanged() {
+            toolbar.consoleClicked()
+            devices.show()
+        }
+    }
+
+    //
     // Save window size & position
     //
     Settings {

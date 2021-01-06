@@ -52,6 +52,7 @@ private:
 
 private slots:
     void update();
+    void resetData();
 
 private:
     QString m_title;

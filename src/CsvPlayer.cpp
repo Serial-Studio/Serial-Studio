@@ -29,6 +29,7 @@
 #include "Logger.h"
 #include "CsvPlayer.h"
 #include "JsonParser.h"
+#include "SerialManager.h"
 
 /*
  * Only instance of the class
@@ -59,8 +60,8 @@ static int NiceMessageBox(QString text, QString informativeText,
 
 CsvPlayer::CsvPlayer()
 {
-    // Connect internal signals/slots
     connect(this, SIGNAL(playerStateChanged()), this, SLOT(updateData()));
+    LOG_INFO() << "Initialized CSV Player module";
 }
 
 CsvPlayer *CsvPlayer::getInstance()
@@ -144,18 +145,64 @@ void CsvPlayer::openFile()
     // Close previous file
     closeFile();
 
+    // Serial device is connected, warn user & disconnect
+    auto sm = SerialManager::getInstance();
+    if (sm->connected())
+    {
+        LOG_INFO() << "Serial device open, asking user what to do...";
+        auto response
+            = NiceMessageBox(tr("Serial port open, do you want to continue?"),
+                             tr("In order to use this feature, its necessary "
+                                "to disconnect from the serial port"),
+                             qAppName(), QMessageBox::No | QMessageBox::Yes);
+        if (response == QMessageBox::Yes)
+            sm->disconnectDevice();
+        else
+            return;
+    }
+
     // Try to open the current file
     m_csvFile.setFileName(file);
+    LOG_INFO() << "Trying to open CSV file...";
     if (m_csvFile.open(QIODevice::ReadOnly))
     {
+        // Read CSV file into string matrix
+        LOG_INFO() << "CSV file read, processing CSV data...";
         m_csvData = QtCSV::Reader::readToList(m_csvFile);
-        updateData();
-        emit openChanged();
+
+        // Validate CSV file
+        LOG_INFO() << "CSV frame count" << frameCount();
+        LOG_INFO() << "Validating CSV file...";
+        bool valid = true;
+        for (int i = 1; i < frameCount(); ++i)
+        {
+            valid &= validateRow(i);
+            if (!valid)
+                break;
+        }
+        LOG_INFO() << "CSV valid:" << valid;
+
+        // Read first row & update UI
+        if (valid)
+        {
+            updateData();
+            emit openChanged();
+        }
+
+        // Show error to the user
+        else
+        {
+            NiceMessageBox(
+                tr("There is an error with the data in the CSV file"),
+                tr("Please verify that the CSV file was created with Serial "
+                   "Studio"));
+        }
     }
 
     // Open error
     else
     {
+        LOG_INFO() << "CSV file read error" << m_csvFile.errorString();
         NiceMessageBox(tr("Cannot read CSV file"),
                        tr("Please check file permissions & location"));
         closeFile();
@@ -172,6 +219,8 @@ void CsvPlayer::closeFile()
 
     emit openChanged();
     emit timestampChanged();
+
+    LOG_INFO() << "CSV file closed";
 }
 
 void CsvPlayer::nextFrame()
@@ -218,8 +267,8 @@ void CsvPlayer::setProgress(const qreal progress)
 
 void CsvPlayer::updateData()
 {
-    // Validate current row data
-    if (!validateRow(framePosition() + 1))
+    // File not open, abort
+    if (!isOpen())
         return;
 
     // Update timestamp string
