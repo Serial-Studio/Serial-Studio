@@ -62,12 +62,18 @@ static int NiceMessageBox(QString text, QString informativeText,
     return box.exec();
 }
 
+/**
+ * Constructor function
+ */
 CsvPlayer::CsvPlayer()
 {
     connect(this, SIGNAL(playerStateChanged()), this, SLOT(updateData()));
     LOG_INFO() << "Initialized CSV Player module";
 }
 
+/**
+ * Returns the only instance of the class
+ */
 CsvPlayer *CsvPlayer::getInstance()
 {
     if (!INSTANCE)
@@ -76,21 +82,34 @@ CsvPlayer *CsvPlayer::getInstance()
     return INSTANCE;
 }
 
+/**
+ * Returns @c true if an CSV file is open for reading
+ */
 bool CsvPlayer::isOpen() const
 {
     return m_csvFile.isOpen();
 }
 
+/**
+ * Returns the CSV playback progress in a range from 0.0 to 1.0
+ */
 qreal CsvPlayer::progress() const
 {
     return ((qreal)framePosition()) / frameCount();
 }
 
+/**
+ * Returns @c true if the user is currently re-playing the CSV file at live
+ * speed.
+ */
 bool CsvPlayer::isPlaying() const
 {
     return m_playing;
 }
 
+/**
+ * Returns the short filename of the current CSV file
+ */
 QString CsvPlayer::filename() const
 {
     if (isOpen())
@@ -102,39 +121,67 @@ QString CsvPlayer::filename() const
     return "";
 }
 
+/**
+ * Returns the total number of frames in the CSV file. This can be calculated
+ * by getting the number of rows of the CSV and substracting 1 (because the
+ * title cells do not count as a valid frame).
+ */
 int CsvPlayer::frameCount() const
 {
     return m_csvData.count() - 1;
 }
 
+/**
+ * Returns the current row that we are using to create the JSON data that is
+ * feed to the JsonParser class.
+ */
 int CsvPlayer::framePosition() const
 {
     return m_framePos;
 }
 
+/**
+ * Returns the timestamp of the current data frame / row.
+ */
 QString CsvPlayer::timestamp() const
 {
     return m_timestamp;
 }
 
+/**
+ * Enables CSV playback at 'live' speed (as it happened when CSV file was
+ * saved to the computer).
+ */
 void CsvPlayer::play()
 {
     m_playing = true;
     emit playerStateChanged();
 }
 
+/**
+ * Pauses the CSV playback so that the user can see WTF happened at
+ * certain point of the mission.
+ */
 void CsvPlayer::pause()
 {
     m_playing = false;
     emit playerStateChanged();
 }
 
+/**
+ * Toggles play/pause state
+ */
 void CsvPlayer::toggle()
 {
     m_playing = !m_playing;
     emit playerStateChanged();
 }
 
+/**
+ * Opens a CSV file and valitates it by comparing every data row with the title
+ * row. If one of the data rows does not correspond to the title row, the CSV
+ * is considered to be invalid.
+ */
 void CsvPlayer::openFile()
 {
     // Check that manual JSON mode is activaded
@@ -185,7 +232,7 @@ void CsvPlayer::openFile()
         LOG_INFO() << "CSV file read, processing CSV data...";
         m_csvData = QtCSV::Reader::readToList(m_csvFile);
 
-        // Validate CSV file
+        // Validate CSV file (brutality works sometimes)
         LOG_INFO() << "CSV frame count" << frameCount();
         LOG_INFO() << "Validating CSV file...";
         bool valid = true;
@@ -224,6 +271,10 @@ void CsvPlayer::openFile()
     }
 }
 
+/**
+ * Closes the file & cleans up internal variables. This helps us to reduice
+ * memory usage & prepare the module to load another CSV file.
+ */
 void CsvPlayer::closeFile()
 {
     m_framePos = 0;
@@ -240,6 +291,9 @@ void CsvPlayer::closeFile()
     LOG_INFO() << "CSV file closed";
 }
 
+/**
+ * Reads & processes the next CSV row (until we get to the last row)
+ */
 void CsvPlayer::nextFrame()
 {
     if (framePosition() < frameCount())
@@ -249,6 +303,9 @@ void CsvPlayer::nextFrame()
     }
 }
 
+/**
+ * Reads & processes the previous CSV row (until we get to the first row)
+ */
 void CsvPlayer::previousFrame()
 {
     if (framePosition() > 0)
@@ -258,6 +315,10 @@ void CsvPlayer::previousFrame()
     }
 }
 
+/**
+ * Reads a specific row from the @a progress range (which can have a value
+ * ranging from 0.0 to 1.0).
+ */
 void CsvPlayer::setProgress(const qreal progress)
 {
     // Ensure that progress value is between 0 and 1
@@ -282,6 +343,14 @@ void CsvPlayer::setProgress(const qreal progress)
     updateData();
 }
 
+/**
+ * Generates a JSON data frame by combining the values of the current CSV
+ * row & the structure of the JSON map file loaded in the @c JsonParser class.
+ *
+ * If playback is enabled, this function calculates the difference in
+ * milliseconds between the current row and the next row & schedules a re-call
+ * of this function using a timer.
+ */
 void CsvPlayer::updateData()
 {
     // File not open, abort
@@ -336,6 +405,12 @@ void CsvPlayer::updateData()
     }
 }
 
+/**
+ * Checks that the row at the given @a position has the same number of elements
+ * as the title row (the first row of the CSV file). Also, we do another
+ * validation by checking that the timestamp cell has the correct title as the
+ * one used in the @c Export class.
+ */
 bool CsvPlayer::validateRow(const int position)
 {
     // Ensure that position is valid
@@ -368,9 +443,16 @@ bool CsvPlayer::validateRow(const int position)
     return true;
 }
 
+/**
+ * Generates a JSON data frame by combining the values of the current CSV
+ * row & the structure of the JSON map file loaded in the @c JsonParser class.
+ *
+ * The details of how this is done are a bit fuzzy, and the methods used here
+ * are pretty ugly & unorthodox, but they work. Brutality works my dear friend.
+ */
 QJsonDocument CsvPlayer::getJsonFrame(const int row)
 {
-    // Create group & dataset model from CSV file
+    // Create the group/dataset model only one time
     if (m_model.isEmpty())
     {
         LOG_INFO() << "Generating group/dataset model from CSV...";
@@ -485,17 +567,22 @@ QJsonDocument CsvPlayer::getJsonFrame(const int row)
     return QJsonDocument(json);
 }
 
-QString CsvPlayer::getCellValue(int row, int cell, bool *error)
+/**
+ * Safely returns the value in the cell at the given @a row & @a column. If an
+ * error occurs or the cell does not exist, the value of @a error shall be set
+ * to @c true.
+ */
+QString CsvPlayer::getCellValue(int row, int column, bool *error)
 {
     if (m_csvData.count() > row)
     {
         auto list = m_csvData.at(row);
-        if (list.count() > cell)
+        if (list.count() > column)
         {
             if (error)
                 *error = false;
 
-            return list.at(cell);
+            return list.at(column);
         }
     }
 

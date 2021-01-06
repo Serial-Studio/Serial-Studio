@@ -71,7 +71,7 @@ private slots:
 private:
     bool validateRow(const int row);
     QJsonDocument getJsonFrame(const int row);
-    QString getCellValue(int row, int cell, bool *error = nullptr);
+    QString getCellValue(int row, int column, bool *error = nullptr);
 
 private:
     int m_framePos;
