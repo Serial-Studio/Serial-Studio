@@ -21,6 +21,7 @@
  */
 
 #include "Logger.h"
+#include "CsvPlayer.h"
 #include "JsonParser.h"
 #include "SerialManager.h"
 
@@ -249,6 +250,17 @@ void JsonParser::writeSettings(const QString &path)
 }
 
 /**
+ * Changes the JSON document to be used to generate the user interface.
+ * This function is set to public in order to allow the CSV-replay feature to
+ * work by replacing the data/json input source.
+ */
+void JsonParser::setJsonDocument(const QJsonDocument &document)
+{
+    m_document = document;
+    emit packetReceived();
+}
+
+/**
  * Tries to parse the given data as a JSON document according to the selected
  * operation mode.
  *
@@ -263,6 +275,10 @@ void JsonParser::writeSettings(const QString &path)
  */
 void JsonParser::readData(const QByteArray &data)
 {
+    // CSV-replay active, abort
+    if (CsvPlayer::getInstance()->isOpen())
+        return;
+
     // Data empty, abort
     if (data.isEmpty())
         return;
@@ -294,8 +310,5 @@ void JsonParser::readData(const QByteArray &data)
 
     // No parse error, update UI
     if (error.error == QJsonParseError::NoError)
-    {
-        m_document = document;
-        emit packetReceived();
-    }
+        setJsonDocument(document);
 }

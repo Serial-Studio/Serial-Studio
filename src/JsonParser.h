@@ -75,6 +75,7 @@ private:
 public slots:
     void readSettings();
     void writeSettings(const QString &path);
+    void setJsonDocument(const QJsonDocument &document);
 
 private slots:
     void readData(const QByteArray &data);

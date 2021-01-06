@@ -26,6 +26,10 @@
 #include <QApplication>
 #include <qtcsv/reader.h>
 
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QJsonObject>
+
 #include "Logger.h"
 #include "CsvPlayer.h"
 #include "JsonParser.h"
@@ -72,7 +76,7 @@ CsvPlayer *CsvPlayer::getInstance()
     return INSTANCE;
 }
 
-bool CsvPlayer::isOpen()
+bool CsvPlayer::isOpen() const
 {
     return m_csvFile.isOpen();
 }
@@ -85,6 +89,17 @@ qreal CsvPlayer::progress() const
 bool CsvPlayer::isPlaying() const
 {
     return m_playing;
+}
+
+QString CsvPlayer::filename() const
+{
+    if (isOpen())
+    {
+        auto fileInfo = QFileInfo(m_csvFile.fileName());
+        return fileInfo.fileName();
+    }
+
+    return "";
 }
 
 int CsvPlayer::frameCount() const
@@ -212,9 +227,11 @@ void CsvPlayer::openFile()
 void CsvPlayer::closeFile()
 {
     m_framePos = 0;
+    m_model.clear();
     m_csvFile.close();
     m_csvData.clear();
     m_playing = false;
+    m_datasetIndexes.clear();
     m_timestamp = "--.--";
 
     emit openChanged();
@@ -274,6 +291,11 @@ void CsvPlayer::updateData()
     // Update timestamp string
     m_timestamp = getCellValue(framePosition() + 1, 0);
     emit timestampChanged();
+
+    // Construct JSON from CSV & instruct the parser to use this document as
+    // input source for the QML bridge
+    auto json = getJsonFrame(framePosition() + 1);
+    JsonParser::getInstance()->setJsonDocument(json);
 
     // If the user wants to 'play' the CSV, get time difference between this
     // frame and the next frame & schedule an automated update
@@ -344,6 +366,123 @@ bool CsvPlayer::validateRow(const int position)
 
     // Valid row
     return true;
+}
+
+QJsonDocument CsvPlayer::getJsonFrame(const int row)
+{
+    // Create group & dataset model from CSV file
+    if (m_model.isEmpty())
+    {
+        LOG_INFO() << "Generating group/dataset model from CSV...";
+
+        auto titles = m_csvData.at(0);
+        for (int i = 1; i < titles.count(); ++i)
+        {
+            // Construct group string
+            QString group;
+            auto title = titles.at(i);
+            auto glist = title.split(")");
+            for (int j = 0; j < glist.count() - 1; ++j)
+                group.append(glist.at(j));
+
+            // Remove the '(' from group name
+            if (!group.isEmpty())
+                group.remove(0, 1);
+
+            // Get dataset name & remove units
+            QString dataset = glist.last();
+            if (dataset.endsWith("]"))
+            {
+                while (!dataset.endsWith("["))
+                    dataset.chop(1);
+            }
+
+            // Remove extra spaces from dataset
+            while (dataset.startsWith(" "))
+                dataset.remove(0, 1);
+            while (dataset.endsWith(" ") || dataset.endsWith("["))
+                dataset.chop(1);
+
+            // Register group with dataset map
+            if (!m_model.contains(group))
+            {
+                QSet<QString> set;
+                set.insert(dataset);
+                m_model.insert(group, set);
+            }
+
+            // Update existing group/dataset model
+            else if (!m_model.value(group).contains(dataset))
+            {
+                auto set = m_model.value(group);
+                if (!set.contains(dataset))
+                    set.insert(dataset);
+
+                m_model.remove(group);
+                m_model.insert(group, set);
+            }
+
+            // Register dataset index
+            if (!m_datasetIndexes.contains(dataset))
+                m_datasetIndexes.insert(dataset, i);
+        }
+
+        LOG_INFO() << "Group/dataset model created successfully";
+    }
+
+    // Read CSV row & JSON template from JSON parser
+    auto values = m_csvData.at(row);
+    auto mapData = JsonParser::getInstance()->jsonMapData();
+    QJsonDocument jsonTemplate = QJsonDocument::fromJson(mapData.toUtf8());
+
+    // Replace JSON title
+    auto json = jsonTemplate.object();
+    json["t"] = tr("Replay of %1").arg(filename());
+
+    // Replace values in JSON  with values in row using the model.
+    // This is very ugly code, somebody please fix it :(
+    auto groups = json.value("g").toArray();
+    foreach (auto groupKey, m_model.keys())
+    {
+        for (int i = 0; i < groups.count(); ++i)
+        {
+            auto group = groups.at(i).toObject();
+
+            if (group.value("t") == groupKey)
+            {
+                auto datasetKeys = m_model.value(groupKey);
+                auto datasets = group.value("d").toArray();
+                foreach (auto datasetKey, datasetKeys)
+                {
+                    for (int j = 0; j < datasets.count(); ++j)
+                    {
+                        auto dataset = datasets.at(j).toObject();
+                        if (dataset.value("t") == datasetKey)
+                        {
+                            auto value
+                                = values.at(m_datasetIndexes.value(datasetKey));
+                            dataset.remove("v");
+                            dataset.insert("v", value);
+                        }
+
+                        datasets.replace(j, dataset);
+                    }
+                }
+
+                group.remove("d");
+                group.insert("d", datasets);
+            }
+
+            groups.replace(i, group);
+        }
+    }
+
+    // Update groups from JSON
+    json.remove("g");
+    json.insert("g", groups);
+
+    // Return new JSON document
+    return QJsonDocument(json);
 }
 
 QString CsvPlayer::getCellValue(int row, int cell, bool *error)

@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QTimer>
 #include <QObject>
+#include <QJsonDocument>
 
 class CsvPlayer : public QObject
 {
@@ -43,10 +44,11 @@ signals:
 public:
     static CsvPlayer *getInstance();
 
-    bool isOpen();
+    bool isOpen() const;
     qreal progress() const;
     bool isPlaying() const;
     int frameCount() const;
+    QString filename() const;
     int framePosition() const;
     QString timestamp() const;
 
@@ -68,6 +70,7 @@ private slots:
 
 private:
     bool validateRow(const int row);
+    QJsonDocument getJsonFrame(const int row);
     QString getCellValue(int row, int cell, bool *error = nullptr);
 
 private:
@@ -77,6 +80,8 @@ private:
     QTimer m_frameTimer;
     QString m_timestamp;
     QList<QStringList> m_csvData;
+    QMap<QString, int> m_datasetIndexes;
+    QMap<QString, QSet<QString>> m_model;
 };
 
 #endif

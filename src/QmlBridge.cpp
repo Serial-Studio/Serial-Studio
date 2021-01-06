@@ -162,4 +162,7 @@ void QmlBridge::resetData()
 
     // Update UI
     emit updated();
+
+    // Log to console
+    LOG_INFO() << "QML bridge data reset";
 }
