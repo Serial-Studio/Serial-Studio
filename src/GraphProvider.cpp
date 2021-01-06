@@ -4,6 +4,7 @@
 
 #include "GraphProvider.h"
 #include "QmlBridge.h"
+#include "CsvPlayer.h"
 #include "Group.h"
 #include "Dataset.h"
 
@@ -26,6 +27,7 @@ Q_DECLARE_METATYPE(QAbstractAxis *)
 GraphProvider::GraphProvider()
 {
     // Start with 10 points
+    m_prevFramePos = 0;
     m_displayedPoints = 10;
 
     // Register data types
@@ -35,6 +37,10 @@ GraphProvider::GraphProvider()
     // Update graph values as soon as QML Bridge interprets data
     connect(QmlBridge::getInstance(), SIGNAL(updated()), this,
             SLOT(updateValues()));
+
+    // Avoid issues when CSV player goes backwards
+    connect(CsvPlayer::getInstance(), SIGNAL(timestampChanged()), this,
+            SLOT(csvPlayerFixes()));
 }
 
 /**
@@ -136,7 +142,7 @@ void GraphProvider::setDisplayedPoints(const int points)
     if (points != displayedPoints() && points > 0)
     {
         m_displayedPoints = points;
-        m_pointVectors.clear();
+        m_points.clear();
 
         emit displayedPointsUpdated();
         emit dataUpdated();
@@ -167,10 +173,10 @@ void GraphProvider::updateValues()
     for (int i = 0; i < graphCount(); ++i)
     {
         // Register dataset for this graph
-        if (m_pointVectors.count() < (i + 1))
+        if (m_points.count() < (i + 1))
         {
             auto vector = new QVector<double>;
-            m_pointVectors.append(vector);
+            m_points.append(vector);
         }
 
         // Register min. values list
@@ -190,16 +196,45 @@ void GraphProvider::updateValues()
             m_maximumValues.replace(i, getValue(i));
 
         // Remove older items
-        if (m_pointVectors.at(i)->count() >= displayedPoints())
-            m_pointVectors.at(i)->remove(
-                0, m_pointVectors.at(i)->count() - displayedPoints());
+        if (m_points.at(i)->count() >= displayedPoints())
+            m_points.at(i)->remove(0,
+                                   m_points.at(i)->count() - displayedPoints());
 
         // Add values
-        m_pointVectors.at(i)->append(getValue(i));
+        m_points.at(i)->append(getValue(i));
     }
 
     // Update graphs
     QTimer::singleShot(10, this, SIGNAL(dataUpdated()));
+}
+
+/**
+ * Removes graph points that are ahead of current data frame that is being
+ * displayed/processed by the CSV Player.
+ */
+void GraphProvider::csvPlayerFixes()
+{
+    // If current frame comes before last-recorded frame, remove extra data
+    auto currentFrame = CsvPlayer::getInstance()->framePosition();
+    if (m_prevFramePos > currentFrame)
+    {
+        auto diff = m_prevFramePos - currentFrame;
+        for (int i = 0; i < graphCount(); ++i)
+        {
+            for (int j = 0; j < diff; ++j)
+            {
+                if (!m_points.at(i)->isEmpty())
+                    m_points.at(i)->removeLast();
+                else
+                    break;
+            }
+        }
+
+        emit dataUpdated();
+    }
+
+    // Update frame position
+    m_prevFramePos = currentFrame;
 }
 
 /**
@@ -215,11 +250,11 @@ void GraphProvider::updateGraph(QAbstractSeries *series, const int index)
     // Update data
     if (series->isVisible())
     {
-        if (m_pointVectors.count() > index && index >= 0)
+        if (m_points.count() > index && index >= 0)
         {
             QVector<QPointF> data;
-            for (int i = 0; i < m_pointVectors.at(index)->count(); ++i)
-                data.append(QPointF(i, m_pointVectors.at(index)->at(i)));
+            for (int i = 0; i < m_points.at(index)->count(); ++i)
+                data.append(QPointF(i, m_points.at(index)->at(i)));
 
             static_cast<QXYSeries *>(series)->replace(data);
         }

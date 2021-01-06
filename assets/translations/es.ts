@@ -83,6 +83,57 @@
     </message>
 </context>
 <context>
+    <name>CsvPlayer</name>
+    <message>
+        <source>CSV Player</source>
+        <translation>Reproductor CSV</translation>
+    </message>
+    <message>
+        <source>Invalid configuration for CSV player</source>
+        <translation>Configuración inválida para el reproductor CSV</translation>
+    </message>
+    <message>
+        <source>You need to select a JSON map file in order to use this feature</source>
+        <translation>Debe seleccionar un archivo de mapa JSON para utilizar esta función</translation>
+    </message>
+    <message>
+        <source>Select CSV file</source>
+        <translation>Seleccionar archivo CSV</translation>
+    </message>
+    <message>
+        <source>CSV files (*.csv)</source>
+        <translation>Archivos CSV (* .csv)</translation>
+    </message>
+    <message>
+        <source>Serial port open, do you want to continue?</source>
+        <translation>Puerto serie abierto, ¿quieres continuar?</translation>
+    </message>
+    <message>
+        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
+        <translation>Para utilizar esta función, es necesario desconectarse del puerto serie</translation>
+    </message>
+    <message>
+        <source>There is an error with the data in the CSV file</source>
+        <translation>Hay un error con los datos en el archivo CSV</translation>
+    </message>
+    <message>
+        <source>Please verify that the CSV file was created with Serial Studio</source>
+        <translation>Verifique que el archivo CSV haya sido creado con Serial Studio</translation>
+    </message>
+    <message>
+        <source>Cannot read CSV file</source>
+        <translation>No se puede leer el archivo CSV</translation>
+    </message>
+    <message>
+        <source>Please check file permissions &amp; location</source>
+        <translation>Verifique los permisos y la ubicación del archivo</translation>
+    </message>
+    <message>
+        <source>Replay of %1</source>
+        <translation>Reproducción de %1</translation>
+    </message>
+</context>
+<context>
     <name>DataGrid</name>
     <message>
         <source>View</source>
@@ -453,7 +504,7 @@
     </message>
     <message>
         <source>Open past CSV</source>
-        <translation>Abrir CSV pasado</translation>
+        <translation type="vanished">Abrir CSV pasado</translation>
     </message>
     <message>
         <source>Open current CSV</source>
@@ -462,6 +513,10 @@
     <message>
         <source>Dashboard</source>
         <translation>Tablero</translation>
+    </message>
+    <message>
+        <source>CSV Player</source>
+        <translation>Reproductor CSV</translation>
     </message>
 </context>
 <context>

@@ -99,7 +99,7 @@ qreal CsvPlayer::progress() const
 }
 
 /**
- * Returns @c true if the user is currently re-playing the CSV file at live
+ * Returns @c true if the user is currently re-playing the CSV file at real-time
  * speed.
  */
 bool CsvPlayer::isPlaying() const

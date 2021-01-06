@@ -79,6 +79,57 @@
     </message>
 </context>
 <context>
+    <name>CsvPlayer</name>
+    <message>
+        <source>CSV Player</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Invalid configuration for CSV player</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>You need to select a JSON map file in order to use this feature</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Select CSV file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>CSV files (*.csv)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Serial port open, do you want to continue?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>There is an error with the data in the CSV file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Please verify that the CSV file was created with Serial Studio</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Cannot read CSV file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Please check file permissions &amp; location</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Replay of %1</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>DataGrid</name>
     <message>
         <source>View</source>
@@ -440,15 +491,15 @@
         <translation></translation>
     </message>
     <message>
-        <source>Open past CSV</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Open current CSV</source>
         <translation></translation>
     </message>
     <message>
         <source>Dashboard</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>CSV Player</source>
         <translation></translation>
     </message>
 </context>

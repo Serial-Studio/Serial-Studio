@@ -65,13 +65,15 @@ private:
 
 private slots:
     void updateValues();
+    void csvPlayerFixes();
 
 private:
+    int m_prevFramePos;
     int m_displayedPoints;
     QList<Dataset *> m_datasets;
     QList<double> m_maximumValues;
     QList<double> m_minimumValues;
-    QList<QVector<double> *> m_pointVectors;
+    QList<QVector<double> *> m_points;
 };
 
 #endif
