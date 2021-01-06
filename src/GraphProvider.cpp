@@ -225,8 +225,6 @@ void GraphProvider::csvPlayerFixes()
             {
                 if (!m_points.at(i)->isEmpty())
                     m_points.at(i)->removeLast();
-                else
-                    break;
             }
         }
 
