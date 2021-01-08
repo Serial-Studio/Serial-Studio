@@ -43,6 +43,7 @@ CONFIG += resources_big
 CONFIG += qtquickcompiler
 
 QT += xml
+QT += sql
 QT += svg
 QT += core
 QT += quick
