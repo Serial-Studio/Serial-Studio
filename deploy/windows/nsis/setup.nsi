@@ -17,6 +17,8 @@
 ;  USA
 ;
 
+Unicode True
+
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
 
