@@ -4,8 +4,8 @@
 
 # Serial Studio
 
-[![Build Status](https://github.com/Serial-Studio/Serial-Studio/workflows/Build/badge.svg)]()
-[![Github All Releases](https://img.shields.io/github/downloads/Serial-Studio/Serial-Studio/total.svg)]()
+[![Build Status](https://github.com/Serial-Studio/Serial-Studio/workflows/Build/badge.svg)](#)
+[![Github All Releases](https://img.shields.io/github/downloads/Serial-Studio/Serial-Studio/total.svg)](#)
 
 Serial Studio es un programa de visualización de datos de puertos serial multiplataforma y multipropósito. El objetivo de este proyecto es permitir a los desarrolladores y creadores de sistemas embebidos visualizar, presentar y analizar fácilmente los datos generados por sus proyectos y dispositivos, sin la necesidad de escribir software especializado para cada proyecto.
 
