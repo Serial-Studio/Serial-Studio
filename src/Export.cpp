@@ -25,6 +25,7 @@
 #include "Export.h"
 #include "JsonParser.h"
 #include "SerialManager.h"
+#include "ConsoleAppender.h"
 
 #include <QDir>
 #include <QUrl>

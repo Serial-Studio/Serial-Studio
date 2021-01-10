@@ -1,9 +1,0 @@
-[submodule "libs/QSimpleUpdater"]
-	path = libs/QSimpleUpdater
-	url = https://github.com/alex-spataru/QSimpleUpdater
-[submodule "libs/qtcsv"]
-	path = libs/qtcsv
-	url = https://github.com/iamantony/qtcsv
-[submodule "libs/CuteLogger"]
-	path = libs/CuteLogger
-	url = https://github.com/dept2/CuteLogger

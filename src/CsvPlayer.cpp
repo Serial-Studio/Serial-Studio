@@ -24,6 +24,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QApplication>
+
+#include <qtcsv/stringdata.h>
 #include <qtcsv/reader.h>
 
 #include <QJsonValue>
@@ -34,6 +36,7 @@
 #include "CsvPlayer.h"
 #include "JsonParser.h"
 #include "SerialManager.h"
+#include "ConsoleAppender.h"
 
 /*
  * Only instance of the class

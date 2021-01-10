@@ -1,0 +1,91 @@
+version: '{build}'
+
+init:
+- git config --global core.autocrlf input
+
+environment:
+  matrix:
+  - QT5: C:\Qt\5.3\mingw482_32
+    MINGW: C:\Qt\Tools\mingw482_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+    use_cmake: "false"
+  #- QT5: C:\Qt\5.3\mingw482_32
+  #  MINGW: C:\Qt\Tools\mingw482_32
+  #  use_cmake: "true"
+  - QT5: C:\Qt\5.4\mingw491_32
+    MINGW: C:\Qt\Tools\mingw491_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+    use_cmake: "false"
+  - QT5: C:\Qt\5.5\mingw492_32
+    MINGW: C:\Qt\Tools\mingw492_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+    use_cmake: "false"
+  - QT5: C:\Qt\5.6.3\mingw49_32
+    MINGW: C:\Qt\Tools\mingw530_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    use_cmake: "false"
+  - QT5: C:\Qt\5.7\mingw53_32
+    MINGW: C:\Qt\Tools\mingw530_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+    use_cmake: "false"
+  - QT5: C:\Qt\5.8\mingw53_32
+    MINGW: C:\Qt\Tools\mingw530_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+    use_cmake: "false"
+  - QT5: C:\Qt\5.9\mingw53_32
+    MINGW: C:\Qt\Tools\mingw530_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    use_cmake: "false"
+  - QT5: C:\Qt\5.10\mingw53_32
+    MINGW: C:\Qt\Tools\mingw530_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    use_cmake: "false"
+  - QT5: C:\Qt\5.11\mingw53_32
+    MINGW: C:\Qt\Tools\mingw530_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    use_cmake: "false"
+  - QT5: C:\Qt\5.12\mingw73_32
+    MINGW: C:\Qt\Tools\mingw730_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    use_cmake: "false"
+  - QT5: C:\Qt\5.13\mingw73_32
+    MINGW: C:\Qt\Tools\mingw730_32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    use_cmake: "false"
+
+matrix:
+  fast_finish: true
+
+before_build:
+- set PATH=%MINGW%\bin;%QT5%\bin;%PATH%
+
+build_script:
+- mkdir .\build
+- cd .\build
+
+# build library and tests
+- if [%use_cmake%]==[true] (
+    cmake --version &&
+    cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release .. &&
+    make &&
+    dir /s &&
+    cd .\tests)
+  else (
+    qmake -v &&
+    qmake ..\qtcsv.pro CONFIG+=release DESTDIR=%cd% &&
+    mingw32-make &&
+    dir /s &&
+    mkdir .\tests &&
+    cd .\tests &&
+    copy ..\*qtcsv.dll .\ &&
+    qmake ..\..\tests\tests.pro CONFIG+=release DESTDIR=%cd%\tests &&
+    mingw32-make)
+
+# download test file
+#- wget -O worldcitiespop.txt.gz https://raw.github.com/apache/commons-csv/master/src/test/resources/perf/worldcitiespop.txt.gz
+#- 7z e worldcitiespop.txt.gz
+#- move worldcitiespop.txt data\
+
+# run tests
+- dir /s
+- qtcsv_tests.exe

@@ -24,6 +24,7 @@
 #include "CsvPlayer.h"
 #include "JsonParser.h"
 #include "SerialManager.h"
+#include "ConsoleAppender.h"
 
 #include <QFileInfo>
 #include <QFileDialog>

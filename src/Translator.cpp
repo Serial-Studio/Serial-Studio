@@ -22,6 +22,7 @@
 
 #include "Logger.h"
 #include "Translator.h"
+#include "ConsoleAppender.h"
 
 /**
  * Constructor function

@@ -25,6 +25,7 @@
 #include "Dataset.h"
 #include "Widgets.h"
 #include "QmlBridge.h"
+#include "ConsoleAppender.h"
 
 #include <cfloat>
 #include <climits>

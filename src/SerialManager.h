@@ -32,8 +32,6 @@
 #include <QTextCursor>
 #include <QQuickTextDocument>
 
-#include <Logger.h>
-
 class SerialManager : public QObject
 {
     Q_OBJECT

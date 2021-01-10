@@ -26,6 +26,7 @@
 #include "Export.h"
 #include "CsvPlayer.h"
 #include "SerialManager.h"
+#include "ConsoleAppender.h"
 
 #include <QApplication>
 

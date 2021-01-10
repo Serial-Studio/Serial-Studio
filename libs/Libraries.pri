@@ -31,6 +31,7 @@ include($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
 # CuteLogger stuff
 #-------------------------------------------------------------------------------
 
+DEFINES += CUTELOGGER_SRC
 INCLUDEPATH += $$PWD/CuteLogger/include
 
 SOURCES += $$PWD/CuteLogger/src/Logger.cpp \

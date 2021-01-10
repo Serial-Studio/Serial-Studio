@@ -23,21 +23,6 @@ Además, este enfoque se puede extender a casi cualquier tipo de proyecto que im
 ##### Requisitos
 
 El único requisito para compilar la aplicación es tener [Qt](http://www.qt.io/download-open-source/) instalado en su sistema. La aplicación se compilará con Qt 5.15 o superior.
-
-### Clonado de este repositorio
-
-Este repositorio hace uso de [`git submodule`](https://git-scm.com/docs/git-submodule). Para clonarlo, tiene dos opciones:
-
-Comando breve:
-
-    git clone --recursive https://github.com/Serial-Studio/Serial-Studio
-
-Procedimiento normal:
-
-    git clone https://github.com/Serial-Studio/Serial-Studio
-    cd Serial-Studio
-    git submodule init
-    git submodule update
     
 ###### Compilación
 

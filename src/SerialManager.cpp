@@ -20,7 +20,9 @@
  * THE SOFTWARE.
  */
 
+#include "Logger.h"
 #include "SerialManager.h"
+#include "ConsoleAppender.h"
 
 /**
  * Pointer to the only instance of the class.
