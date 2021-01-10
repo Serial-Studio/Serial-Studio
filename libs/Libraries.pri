@@ -21,6 +21,13 @@
 #
 
 #-------------------------------------------------------------------------------
+# Definitions to avoid adding DLL imports/exports
+#-------------------------------------------------------------------------------
+
+DEFINES += CUTELOGGER_SRC
+DEFINES += QTCSV_STATIC_LIB
+
+#-------------------------------------------------------------------------------
 # Some libs already come with their *.pri files, include them
 #-------------------------------------------------------------------------------
 
@@ -31,7 +38,6 @@ include($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
 # CuteLogger stuff
 #-------------------------------------------------------------------------------
 
-DEFINES += CUTELOGGER_SRC
 INCLUDEPATH += $$PWD/CuteLogger/include
 
 SOURCES += $$PWD/CuteLogger/src/Logger.cpp \
