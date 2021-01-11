@@ -60,7 +60,7 @@ jobs:
       #
       - name: Compile
         run: |
-             qmake ${PRO_FILE}.pro CONFIG+=release PREFIX=/usr
+             qmake ${PRO_FILE} CONFIG+=release PREFIX=/usr
              make -j8
              
       #
@@ -119,7 +119,7 @@ jobs:
       #
       - name: Compile
         run: |
-             qmake ${PRO_FILE}.pro CONFIG+=release
+             qmake ${PRO_FILE} CONFIG+=release
              make -j8
       
       #
