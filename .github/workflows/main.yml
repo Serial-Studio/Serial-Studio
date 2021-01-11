@@ -20,6 +20,7 @@ env:
   APP_NAME: SerialStudio
   PRO_FILE: Serial-Studio.pro
   APP_VERSION: 1.0.5
+  APP_QMLDIR: assets/qml
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -71,7 +72,7 @@ jobs:
              make INSTALL_ROOT=appdir install
              wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
              chmod a+x linuxdeployqt
-             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir=assets/qml
+             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir=${APP_QMLDIR}
      
       #
       # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
