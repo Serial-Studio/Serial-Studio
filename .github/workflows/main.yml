@@ -33,7 +33,7 @@ jobs:
         run: rm -rf build-linux;
              mkdir build-linux;
              cd build-linux;
-             qmake CONFIG+=release PREFIX=/usr ../Serial-Studio.pro;
+             qmake ../Serial-Studio.pro CONFIG+=release PREFIX=/usr ;
              make INSTALL_ROOT=appdir install;
              wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt;
              chmod a+x linuxdeployqt;
@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: SerialStudio-1.0.5-Linux.AppImage
-          path: build-linux/SerialStudio-1.0.5-Linux.AppImage
+          path: SerialStudio-1.0.5-Linux.AppImage
              
   build-mac:
     runs-on: macos-latest
