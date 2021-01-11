@@ -29,14 +29,14 @@ jobs:
       - name: Compile
         run: |
              qmake Serial-Studio.pro CONFIG+=release PREFIX=/usr
-             make
-             make INSTALL_ROOT=appdir install
+             make -j8
              
       - name: Create AppImage
         run: | 
+             make INSTALL_ROOT=appdir install
              wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
              chmod a+x linuxdeployqt
-             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir=../assets/qml
+             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir=assets/qml
              ./linuxdeployqt --appimage-extract
              export PATH=$(readlink -f ./squashfs-root/usr/bin/):$PATH
              ./squashfs-root/usr/bin/appimagetool appdir/
