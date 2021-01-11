@@ -30,18 +30,18 @@ jobs:
              sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev;
         
       - name: Create AppImage
-        run: rm -rf build-linux
-             mkdir build-linux
-             cd build-linux
-             qmake CONFIG+=release PREFIX=/usr ../Serial-Studio.pro
-             make INSTALL_ROOT=appdir install
-             wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
-             chmod a+x linuxdeployqt
-             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so
-             ./linuxdeployqt --appimage-extract
-             export PATH=$(readlink -f ./squashfs-root/usr/bin/):$PATH
-             ./squashfs-root/usr/bin/appimagetool appdir/
-             find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
+        run: rm -rf build-linux;
+             mkdir build-linux;
+             cd build-linux;
+             qmake CONFIG+=release PREFIX=/usr ../Serial-Studio.pro;
+             make INSTALL_ROOT=appdir install;
+             wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt;
+             chmod a+x linuxdeployqt;
+             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so;
+             ./linuxdeployqt --appimage-extract;
+             export PATH=$(readlink -f ./squashfs-root/usr/bin/):$PATH;
+             ./squashfs-root/usr/bin/appimagetool appdir/;
+             find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq;
              mv *.AppImage SerialStudio-1.0.5-Linux.AppImage
                 
       - name: Upload AppImage
@@ -69,16 +69,16 @@ jobs:
         run: brew install create-dmg
                 
       - name: Compile
-        run: rm -rf build-mac
-             mkdir build-mac 
-             cd build-mac
-             qmake ../Serial-Studio.pro
-             make
-             make dmg
-             mv *.dmg SerialStudio-1.0.5-macOS.dmg
+        run: rm -rf build-mac;
+             mkdir build-mac;
+             cd build-mac;
+             qmake ../Serial-Studio.pro;
+             make;
+             make dmg;
+             mv *.dmg SerialStudio-1.0.5-macOS.dmg;
              
       - name: Upload DMG
         uses: actions/upload-artifact@v2
         with:
           name: SerialStudio-1.0.5-macOS.dmg
-          path: build-mac/SerialStudio-1.0.5-macOS.dmg
+          path: SerialStudio-1.0.5-macOS.dmg
