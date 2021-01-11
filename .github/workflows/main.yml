@@ -13,28 +13,25 @@ jobs:
   build-linux:
     runs-on: ubuntu-16.04
     steps:
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{ runner.os }}-QtCache
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
-        with:
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
           
       - name: Install dependencies
-        run: sudo apt-get update
+        run: |
+             sudo apt-get update
              sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev
         
-      - name: Create AppImage
-        run: rm -rf build-linux
-             mkdir build-linux
-             cd build-linux
-             qmake ../Serial-Studio.pro CONFIG+=release PREFIX=/usr
+      - name: Compile
+        run: |
+             qmake Serial-Studio.pro CONFIG+=release PREFIX=/usr
+             make
              make INSTALL_ROOT=appdir install
+             
+      - name: Create AppImage
+        run: | 
              wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
              chmod a+x linuxdeployqt
              ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir=../assets/qml
@@ -53,31 +50,24 @@ jobs:
   build-mac:
     runs-on: macos-latest
     steps:
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{ runner.os }}-QtCache
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
-        with:
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
           
       - name: Install create-dmg
         run: brew install create-dmg
                 
       - name: Compile
-        run: rm -rf build-mac
-             mkdir build-mac
-             cd build-mac
-             qmake ../Serial-Studio.pro
+        run: |
+             qmake Serial-Studio.pro
              make
+             
+      - name: Create DMG
+        run: |       
              make dmg
              mv *.dmg SerialStudio-1.0.5-macOS.dmg
-             ls
-             pwd
              
       - name: Upload DMG
         uses: actions/upload-artifact@v2
