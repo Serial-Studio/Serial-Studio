@@ -86,8 +86,8 @@ jobs:
       - name: Upload AppImage
         uses: actions/upload-artifact@v2
         with:
-          name: ${APP_NAME}-${APP_VERSION}-Linux.AppImage
-          path: ${APP_NAME}-${APP_VERSION}-Linux.AppImage
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
              
   #
   # macOS build
@@ -137,5 +137,5 @@ jobs:
       - name: Upload DMG
         uses: actions/upload-artifact@v2
         with:
-          name: ${APP_NAME}-${APP_VERSION}-macOS.dmg
-          path: ${APP_NAME}-${APP_VERSION}-macOS.dmg
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.dmg
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.dmg
