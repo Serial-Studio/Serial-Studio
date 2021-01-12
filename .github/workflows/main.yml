@@ -127,7 +127,8 @@ jobs:
       # Create DMG file & rename it to "%AppName%-%Version%-macOS.dmg"
       #
       - name: Create DMG
-        run: |       
+        run: |
+             mv -r "*.app" "Serial Studio.app"       
              make dmg
              mv *.dmg ${APP_NAME}-${APP_VERSION}-macOS.dmg
      
