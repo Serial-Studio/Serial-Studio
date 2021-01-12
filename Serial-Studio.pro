@@ -72,15 +72,15 @@ win32* {
 macx* {
     CONFIG += sdk_no_version_check
 
-    TARGET = Serial-Studio
+    TARGET = SerialStudio
 
     ICON = deploy/macOS/icon.icns
     RC_FILE = deploy/macOS/icon.icns
     QMAKE_INFO_PLIST = deploy/macOS/info.plist
 
     # DMG generation constants
-    DMG_FILENAME = SerialStudio.dmg
-    BUNDLE_FILENAME = "Serial Studio.app"
+    DMG_FILENAME = $$TARGET.dmg
+    BUNDLE_FILENAME = $$TARGET.app
    
     # Target for pretty DMG generation
     dmg.commands += "macdeployqt $$BUNDLE_FILENAME -qmldir=$$PWD/assets/qml &&"
