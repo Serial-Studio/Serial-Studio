@@ -17,10 +17,11 @@ on:
 #--------------------------------------------------------------------------------
 
 env:
-  APP_NAME: SerialStudio
-  PRO_FILE: Serial-Studio.pro
-  APP_VERSION: 1.0.5
-  APP_QMLDIR: assets/qml
+  APP_NAME: "SerialStudio"
+  PRO_FILE: "Serial-Studio.pro"
+  NICE_APP_NAME: "Serial Studio"
+  APP_VERSION: "1.0.5"
+  APP_QMLDIR: "assets/qml"
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -128,7 +129,7 @@ jobs:
       #
       - name: Create DMG
         run: |
-             mv -r "*.app" "Serial Studio.app"       
+             mv "*.app" "${NICE_APP_NAME}.app"       
              make dmg
              mv *.dmg ${APP_NAME}-${APP_VERSION}-macOS.dmg
      
