@@ -71,32 +71,10 @@ win32* {
 
 macx* {
     CONFIG += sdk_no_version_check
-
     TARGET = SerialStudio
-
     ICON = deploy/macOS/icon.icns
     RC_FILE = deploy/macOS/icon.icns
     QMAKE_INFO_PLIST = deploy/macOS/info.plist
-
-    # DMG generation constants
-    DMG_FILENAME = $$TARGET.dmg
-    BUNDLE_FILENAME = $$TARGET.app
-   
-    # Target for pretty DMG generation
-    dmg.commands += "macdeployqt $$BUNDLE_FILENAME -qmldir=$$PWD/assets/qml &&"
-    dmg.commands += "create-dmg \
-          --volname $${TARGET} \
-          --background $${PWD}/deploy/macOS/dmg_bg.png \
-          --icon $${BUNDLE_FILENAME} 150 218 \
-          --window-pos 200 120 \
-          --window-size 600 450 \
-          --icon-size 100 \
-          --hdiutil-quiet \
-          --app-drop-link 450 218 \
-          $${DMG_FILENAME} \
-          $${BUNDLE_FILENAME}"
-
-    QMAKE_EXTRA_TARGETS += dmg
 }
 
 linux:!android {
