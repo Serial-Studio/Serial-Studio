@@ -111,12 +111,6 @@ jobs:
           modules: qtcharts
       
       #
-      # Install "create-dmg" with homebrew, we need it later
-      #
-      - name: Install create-dmg
-        run: brew install create-dmg
-      
-      #
       # Compile application
       #
       - name: Compile
@@ -133,12 +127,12 @@ jobs:
              mv "${APP_NAME}.app" "${NICE_APP_NAME}.app"  
       
       #
-      # Create DMG file & rename it to "%AppName%-%Version%-macOS.dmg"
+      # ZIP application "%AppName%-%Version%-macOS.zip"
+      # We use ditto instead of zip to use the same commands as Finder
       #
-      - name: Create DMG
+      - name: Create ZIP file
         run: |
-             create-dmg --volname ${APP_NAME} --background deploy/macOS/dmg_bg.png --icon "${NICE_APP_NAME}.app" 150 218 --window-pos 200 120 --window-size 600 450 --icon-size 100 --hdiutil-quiet --app-drop-link 450 218 ${APP_NAME} "${NICE_APP_NAME}.app"   
-             mv ${APP_NAME}.dmg ${APP_NAME}-${APP_VERSION}-macOS.dmg
+             ditto -c -k --sequesterRsrc --keepParent "${NICE_APP_NAME}.app" ${APP_NAME}-${APP_VERSION}-macOS.zip
      
       #
       # Upload DMG to build artifacts
@@ -146,5 +140,5 @@ jobs:
       - name: Upload DMG
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.dmg
-          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.dmg
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.zip
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.zip
