@@ -79,16 +79,22 @@ jobs:
       # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
       #
       - name: Rename AppImage
-        run: mv *.AppImage ${APP_NAME}-${APP_VERSION}-Linux.AppImage
+        run: mv *.AppImage "${NICE_APP_NAME}.AppImage"
+      
+      #
+      # Create Tarball file
+      #
+      - name: Create Tarball
+        run: tar -czvf ${APP_NAME}-${APP_VERSION}-Linux.tar.gz "${NICE_APP_NAME}.AppImage"
         
       #
-      # Upload AppImage to build artifacts
+      # Upload Tarball to build artifacts
       #
-      - name: Upload AppImage
+      - name: Upload Tarball
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
-          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.tar.gz
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.tar.gz
              
   #
   # macOS build
@@ -135,9 +141,9 @@ jobs:
              ditto -c -k --sequesterRsrc --keepParent "${NICE_APP_NAME}.app" ${APP_NAME}-${APP_VERSION}-macOS.zip
      
       #
-      # Upload DMG to build artifacts
+      # Upload ZIP to build artifacts
       #
-      - name: Upload DMG
+      - name: Upload ZIP
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.zip
