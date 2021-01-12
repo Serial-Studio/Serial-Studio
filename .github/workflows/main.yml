@@ -129,8 +129,9 @@ jobs:
       #
       - name: Create DMG
         run: |
-             mv "${APP_NAME}.app" "${NICE_APP_NAME}.app"       
-             make dmg
+             macdeployqt ${APP_NAME}.app -qmldir=${APP_QMLDIR}
+             mv "${APP_NAME}.app" "${NICE_APP_NAME}.app"  
+             create-dmg --volname ${APP_NAME} --background deploy/macOS/dmg_bg.png --icon ${APP_NAME} 150 218 --window-pos 200 120 --window-size 600 450 --icon-size 100 --hdiutil-quiet --app-drop-link 450 218 ${APP_NAME} \"${NICE_APP_NAME}\""     
              mv *.dmg ${APP_NAME}-${APP_VERSION}-macOS.dmg
      
       #
