@@ -129,7 +129,7 @@ jobs:
       #
       - name: Create DMG
         run: |
-             mv "*.app" "${NICE_APP_NAME}.app"       
+             mv "${APP_NAME}.app" "${NICE_APP_NAME}.app"       
              make dmg
              mv *.dmg ${APP_NAME}-${APP_VERSION}-macOS.dmg
      
