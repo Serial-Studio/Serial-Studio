@@ -79,22 +79,16 @@ jobs:
       # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
       #
       - name: Rename AppImage
-        run: mv *.AppImage "${NICE_APP_NAME}.AppImage"
-      
-      #
-      # Create Tarball file
-      #
-      - name: Create Tarball
-        run: tar -czvf ${APP_NAME}-${APP_VERSION}-Linux.tar.gz "${NICE_APP_NAME}.AppImage"
+        run: mv *.AppImage ${APP_NAME}-${APP_VERSION}-Linux.AppImage
         
       #
-      # Upload Tarball to build artifacts
+      # Upload AppImage to build artifacts
       #
-      - name: Upload Tarball
+      - name: Upload AppImage
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.tar.gz
-          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.tar.gz
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
              
   #
   # macOS build
