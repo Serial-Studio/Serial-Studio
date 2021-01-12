@@ -79,8 +79,8 @@ macx* {
     QMAKE_INFO_PLIST = deploy/macOS/info.plist
 
     # DMG generation constants
-    DMG_FILENAME = $${TARGET}.dmg
-    BUNDLE_FILENAME = $${TARGET}.app
+    DMG_FILENAME = SerialStudio.dmg
+    BUNDLE_FILENAME = "Serial Studio.app"
    
     # Target for pretty DMG generation
     dmg.commands += "macdeployqt $$BUNDLE_FILENAME -qmldir=$$PWD/assets/qml &&"
