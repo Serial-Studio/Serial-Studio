@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>Serial-Studio</string>
+	<string>SerialStudio</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Copyright © 2020 Alex Spataru</string>
 	<key>CFBundleIconFile</key>
