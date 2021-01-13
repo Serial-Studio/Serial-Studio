@@ -1,5 +1,5 @@
 ;
-;  Copyright (c) 2015 Alex Spataru <alex-spataru.com>
+;  Copyright (c) 2021 Alex Spataru <alex-spataru.com>
 ;
 ;  This program is free software; you can redistribute it and/or modify
 ;  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ Unicode True
 !include "LogicLib.nsh"
 
 !define APPNAME                      "Serial Studio"
-!define INSTNAME                     "SerialStudio"
+!define EXECNAME                     "SerialStudio"
 !define COMPANYNAME                  "Alex Spataru"
 !define DESCRIPTION                  "Dashboard software for serial port devices"
 !define VERSIONMAJOR                 1
@@ -63,7 +63,7 @@ Name "${APPNAME}"
 ManifestDPIAware true
 InstallDir "${INSTALL_DIR}"
 RequestExecutionLevel admin
-OutFile "${INSTNAME}-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-Windows.exe"
+OutFile "${EXECNAME}-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-Windows.exe"
 
 Function .onInit
 	setShellVarContext all
@@ -93,11 +93,11 @@ Section "${APPNAME} (required)" SecDummy
 SectionEnd
 
 Section "Start Menu Shortcuts"
-  CreateShortCut  "$SMPROGRAMS\${APPNAME}.lnk" "${INSTALL_DIR}\bin\${APPNAME}.exe" "" "${INSTALL_DIR}\bin\${APPNAME}.exe" 0
+  CreateShortCut  "$SMPROGRAMS\${APPNAME}.lnk" "${INSTALL_DIR}\bin\${EXECNAME}.exe" "" "${INSTALL_DIR}\bin\${EXECNAME}.exe" 0
 SectionEnd
 
 Function RunApplication
-  ExecShell "" "${INSTALL_DIR}\bin\${APPNAME}.exe"
+  ExecShell "" "${INSTALL_DIR}\bin\${EXECNAME}.exe"
 FunctionEnd
 
 Function un.onInit

@@ -33,10 +33,10 @@ Window {
     //
     minimumWidth: 420
     maximumWidth: 420
-    flags: Qt.Dialog | Qt.WindowStaysOnTopHint
     title: qsTr("CSV Player") + CppTranslator.dummy
     minimumHeight: column.implicitHeight + 4 * app.spacing
     maximumHeight: column.implicitHeight + 4 * app.spacing
+	flags: Qt.Dialog | Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
 
     //
     // Use page item to set application palette
