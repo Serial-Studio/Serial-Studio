@@ -148,7 +148,7 @@ jobs:
   # Windows build
   #
   build-windows:
-    runs-on: macos-latest
+    runs-on: windows-latest
     steps:
       #
       # Checkout the repository
@@ -171,7 +171,7 @@ jobs:
       - name: Compile
         run: |
              qmake ${PRO_FILE} CONFIG+=release
-             make -j8
+             mingw32-make -j8
              
       #
       # Create deploy directory and copy binary & NSIS files
@@ -179,9 +179,9 @@ jobs:
       - name: Create deploy directory
         run: |
              mkdir "deploy\\${NICE_APP_NAME}\\bin"
-             cp "release\\${APP_NAME}.exe" "deploy\\${NICE_APP_NAME}\\bin"
-             cp deploy\windows\nsis\setup.nsi deploy
-             cp deploy\windows\nsis\license.txt deploy
+             xcopy "release\\${APP_NAME}.exe" "deploy\\${NICE_APP_NAME}\\bin"
+             xcopy deploy\windows\nsis\setup.nsi deploy
+             xcopy deploy\windows\nsis\license.txt deploy
      
       #
       # Deploy application using windeployqt
