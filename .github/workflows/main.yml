@@ -157,12 +157,13 @@ jobs:
         uses: actions/checkout@v2
 
       #
-      # Install Qt
+      # Install Qt (win64_mingw81)
       #
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
+          arch: win64_mingw81
       
       #
       # Compile application
