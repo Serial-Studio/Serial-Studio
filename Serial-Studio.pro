@@ -30,6 +30,7 @@ RCC_DIR = qrc
 OBJECTS_DIR = obj
 
 CONFIG += c++11
+QMAKE_CXXFLAGS += -Ofast
 
 #-------------------------------------------------------------------------------
 # Qt configuration
