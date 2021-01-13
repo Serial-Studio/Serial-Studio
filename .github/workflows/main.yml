@@ -17,11 +17,11 @@ on:
 #--------------------------------------------------------------------------------
 
 env:
-  EXE_NAME: "SerialStudio"
-  PRO_FILE: "Serial-Studio.pro"
-  APP_NAME: "Serial Studio"
-  APP_VERSION: "1.0.6"
-  APP_QMLDIR: "assets/qml"
+  VERSION: "1.0.6"
+  QML_DIR: "assets/qml"
+  EXECUTABLE: "SerialStudio"
+  APPLICATION: "Serial Studio"
+  QMAKE_PROJECT: "Serial-Studio.pro"
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -62,7 +62,7 @@ jobs:
       #
       - name: Compile
         run: |
-             qmake ${PRO_FILE} CONFIG+=release PREFIX=/usr
+             qmake ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
              make -j8
              
       #
@@ -73,13 +73,13 @@ jobs:
              make INSTALL_ROOT=appdir install
              wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
              chmod a+x linuxdeployqt
-             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir=${APP_QMLDIR}
+             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir=${{env.QML_DIR}}
      
       #
       # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
       #
       - name: Rename AppImage
-        run: mv *.AppImage ${EXE_NAME}-${APP_VERSION}-Linux.AppImage
+        run: mv *.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
         
       #
       # Upload AppImage to build artifacts
@@ -87,8 +87,8 @@ jobs:
       - name: Upload AppImage
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
-          path: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
+          name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+          path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
              
   #
   # macOS build
@@ -115,7 +115,7 @@ jobs:
       #
       - name: Compile
         run: |
-             qmake ${PRO_FILE} CONFIG+=release
+             qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
              make -j8
              
       #
@@ -123,8 +123,8 @@ jobs:
       #
       - name: Deploy app
         run: |
-             macdeployqt ${EXE_NAME}.app -qmldir=${APP_QMLDIR}
-             mv "${EXE_NAME}.app" "${APP_NAME}.app"  
+             macdeployqt ${{env.EXECUTABLE}}.app -qmldir=${{env.QML_DIR}}
+             mv "${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"  
       
       #
       # ZIP application "%AppName%-%Version%-macOS.zip"
@@ -132,7 +132,7 @@ jobs:
       #
       - name: Create ZIP file
         run: |
-             ditto -c -k --sequesterRsrc --keepParent "${APP_NAME}.app" ${EXE_NAME}-${APP_VERSION}-macOS.zip
+             ditto -c -k --sequesterRsrc --keepParent "${{env.APPLICATION}}.app" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
      
       #
       # Upload ZIP to build artifacts
@@ -140,8 +140,8 @@ jobs:
       - name: Upload ZIP
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-macOS.zip
-          path: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-macOS.zip
+          name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+          path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
           
   #
   # Windows build
@@ -178,7 +178,7 @@ jobs:
       #
       - name: Compile
         run: |
-             qmake Serial-Studio.pro CONFIG+=release
+             qmake ${{env.QMAKE_PROJECT}}.pro CONFIG+=release
              mingw32-make -j8
              
       #
@@ -188,21 +188,21 @@ jobs:
         run: |
              ren release bin
              cd bin
-             windeployqt SerialStudio.exe -qmldir="..\assets\qml"
+             windeployqt ${{env.EXECUTABLE}}.exe -qmldir=../${{env.QML_DIR}}
              cd ..
-             mkdir "Serial Studio"
-             move bin "Serial Studio"
+             mkdir "${{env.APPLICATION}}"
+             move bin "${{env.APPLICATION}}"
       
       #
       # Create NSIS installer
       #
       - name: Make NSIS installer
         run: |
-             move "Serial Studio" deploy\windows\nsis\
+             move "${{env.APPLICATION}}" deploy\windows\nsis\
              cd deploy\windows\nsis
              makensis /X"SetCompressor /FINAL lzma" setup.nsi
-             ren *.exe ${EXE_NAME}-${APP_VERSION}-Windows.exe
-             move ${EXE_NAME}-${APP_VERSION}-Windows.exe ../../../
+             ren *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+             move ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe ../../../
              
       #
       # Upload installer to build artifacts
@@ -210,5 +210,5 @@ jobs:
       - name: Upload NSIS installer
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-Windows.exe
-          path: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-Windows.exe
+          name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+          path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
