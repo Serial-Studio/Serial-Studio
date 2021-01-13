@@ -20,8 +20,9 @@ env:
   APP_NAME: "SerialStudio"
   PRO_FILE: "Serial-Studio.pro"
   NICE_APP_NAME: "Serial Studio"
-  APP_VERSION: "1.0.5"
+  APP_VERSION: "1.0.6"
   APP_QMLDIR: "assets/qml"
+  APP_QMLDIR_WINDOWS: "..\\..\\..\\assets\\qml"
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -142,3 +143,71 @@ jobs:
         with:
           name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.zip
           path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.zip
+          
+  #
+  # Windows build
+  #
+  build-windows:
+    runs-on: macos-latest
+    steps:
+      #
+      # Checkout the repository
+      #
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      #
+      # Install Qt
+      #
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          modules: qtcharts
+      
+      #
+      # Compile application
+      #
+      - name: Compile
+        run: |
+             qmake ${PRO_FILE} CONFIG+=release
+             mingw32-make
+             
+      #
+      # Deploy application using windeployqt
+      #       
+      - name: Deploy
+        run: |
+             mkdir "deploy\\${NICE_APP_NAME}\\bin"
+             xcopy "release\\${APP_NAME}" "deploy\\${NICE_APP_NAME}\\bin"
+             cd "deploy\\${NICE_APP_NAME}\\bin"
+             windeployqt ${APP_NAME}.exe -qmldir="${APP_QMLDIR_WINDOWS}"
+             cd ..
+             cd ..
+             
+      #
+      # Install NSIS
+      #  
+      - name: Install NSIS
+        run: |
+             Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+             scoop bucket add extras
+             scoop install nsis
+      
+      #
+      # Create NSIS installer
+      #
+      - name: Make NSIS installer
+        run: |
+             xcopy deploy\windows\nsis\setup.nsi windeploy
+             xcopy deploy\windows\nsis\license.txt windeploy
+             makensis /X"SetCompressor /FINAL lzma" setup.nsi
+             ren *.exe ${APP_NAME}-${APP_VERSION}-Windows.exe
+             
+      #
+      # Upload installer to build artifacts
+      #
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Windows.exe
+          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Windows.exe
