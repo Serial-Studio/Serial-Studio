@@ -163,29 +163,7 @@ jobs:
         with:
           modules: qtcharts
           arch: win64_mingw81
-      
-      #
-      # Compile application
-      #
-      - name: Compile
-        run: |
-             qmake ${PRO_FILE} CONFIG+=release
-             mingw32-make -j8
-             
-      #
-      # Create deploy directory and copy binary & NSIS files
-      #       
-      - name: Deploy
-        run: |
-             mkdir "windeploy\${APP_NAME}\bin"
-             xcopy release\${EXE_NAME}.exe "windeploy\${APP_NAME}\bin"
-             xcopy deploy\windows\nsis\setup.nsi windeploy
-             xcopy deploy\windows\nsis\license.txt windeploy
-             cd "windeploy\${APP_NAME}\bin"
-             windeployqt ${EXE_NAME}.exe -qmldir="..\..\..\assets\qml"
-             cd ..
-             cd ..
-             
+          
       #
       # Install NSIS
       #  
@@ -196,14 +174,35 @@ jobs:
              scoop install nsis
       
       #
+      # Compile application
+      #
+      - name: Compile
+        run: |
+             qmake ${PRO_FILE} CONFIG+=release
+             mingw32-make -j8
+             
+      #
+      # Deploy Qt DLLs to release directory
+      #       
+      - name: Deploy
+        run: |
+             REN release bin
+             CD bin
+             WINDEPLOYQT ${EXE_NAME}.exe -qmldir="..\assets\qml"
+             CD ..
+             MKDIR "${APP_NAME}"
+             MOVE bin "${APP_NAME}"
+      
+      #
       # Create NSIS installer
       #
       - name: Make NSIS installer
         run: |
-             makensis /X"SetCompressor /FINAL lzma" setup.nsi
-             ren *.exe ${EXE_NAME}-${APP_VERSION}-Windows.exe
-             move *.exe ../
-             cd ..
+             MOVE "${APP_NAME}" deploy\windows\nsis\
+             CD deploy\windows\nsis
+             MAKENSIS /X"SetCompressor /FINAL lzma" setup.nsi
+             REN *.exe ${EXE_NAME}-${APP_VERSION}-Windows.exe
+             MOVE *.exe ../../../
              
       #
       # Upload installer to build artifacts
