@@ -179,11 +179,11 @@ jobs:
       - name: Deploy
         run: |
              mkdir "windeploy\\${APP_NAME}\\bin"
-             xcopy "release\\${EXE_NAME}.exe" "windeploy\\${APP_NAME}\\bin"
+             xcopy "release\\SerialStudio.exe" "windeploy\\${APP_NAME}\\bin"
              xcopy deploy\windows\nsis\setup.nsi windeploy
              xcopy deploy\windows\nsis\license.txt windeploy
              cd "windeploy\\${APP_NAME}\\bin"
-             windeployqt ${EXE_NAME}.exe -qmldir="${APP_QMLDIR_WINDOWS}"
+             windeployqt SerialStudio.exe -qmldir="${APP_QMLDIR_WINDOWS}"
              cd ..
              cd ..
              
