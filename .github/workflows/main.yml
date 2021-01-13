@@ -169,7 +169,6 @@ jobs:
       # Compile application
       #
       - name: Compile
-        shell: cmd
         run: |
              qmake ${PRO_FILE} CONFIG+=release
              mingw32-make -j8
@@ -178,20 +177,18 @@ jobs:
       # Create deploy directory and copy binary & NSIS files
       #       
       - name: Create deploy directory
-        shell: cmd
         run: |
-             mkdir "windeploy\\${NICE_APP_NAME}\\bin"
-             xcopy "release\\${APP_NAME}.exe" "windeploy\\${NICE_APP_NAME}\\bin"
-             xcopy deploy\windows\nsis\setup.nsi windeploy
-             xcopy deploy\windows\nsis\license.txt windeploy
+             mkdir "windeploy/${NICE_APP_NAME}/bin"
+             xcopy "release/*.exe" "windeploy/${NICE_APP_NAME}/bin"
+             xcopy deploy/windows/nsis/setup.nsi windeploy
+             xcopy deploy/windows/nsis/license.txt windeploy
      
       #
       # Deploy application using windeployqt
       #   
       - name: Deploy
-        shell: cmd
         run: |
-             cd "windeploy\\${NICE_APP_NAME}\\bin"
+             cd "windeploy/${NICE_APP_NAME}/bin"
              windeployqt ${APP_NAME}.exe -qmldir="${APP_QMLDIR_WINDOWS}"
              cd ..
              cd ..
@@ -200,7 +197,6 @@ jobs:
       # Install NSIS
       #  
       - name: Install NSIS
-        shell: pwsh
         run: |
              Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
              scoop bucket add extras
@@ -210,12 +206,11 @@ jobs:
       # Create NSIS installer
       #
       - name: Make NSIS installer
-        shell: cmd
         run: |
              makensis /X"SetCompressor /FINAL lzma" setup.nsi
              ren *.exe ${APP_NAME}-${APP_VERSION}-Windows.exe
              move *.exe ../
-             cd ../
+             cd ..
              
       #
       # Upload installer to build artifacts
