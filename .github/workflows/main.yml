@@ -178,17 +178,17 @@ jobs:
       #       
       - name: Create deploy directory
         run: |
-             mkdir "deploy\\${NICE_APP_NAME}\\bin"
-             xcopy "release\\${APP_NAME}.exe" "deploy\\${NICE_APP_NAME}\\bin"
-             xcopy deploy\windows\nsis\setup.nsi deploy
-             xcopy deploy\windows\nsis\license.txt deploy
+             mkdir "windeploy\\${NICE_APP_NAME}\\bin"
+             xcopy "release\\${APP_NAME}.exe" "windeploy\\${NICE_APP_NAME}\\bin"
+             xcopy deploy\windows\nsis\setup.nsi windeploy
+             xcopy deploy\windows\nsis\license.txt windeploy
      
       #
       # Deploy application using windeployqt
       #   
       - name: Deploy
         run: |
-             cd "deploy\\${NICE_APP_NAME}\\bin"
+             cd "windeploy\\${NICE_APP_NAME}\\bin"
              windeployqt ${APP_NAME}.exe -qmldir="${APP_QMLDIR_WINDOWS}"
              cd ..
              cd ..
