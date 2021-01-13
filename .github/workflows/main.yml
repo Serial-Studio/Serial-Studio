@@ -179,7 +179,7 @@ jobs:
       - name: Create deploy directory
         run: |
              mkdir "deploy\\${NICE_APP_NAME}\\bin"
-             cp "release\\${APP_NAME}" "deploy\\${NICE_APP_NAME}\\bin"
+             cp "release\\${APP_NAME}.exe" "deploy\\${NICE_APP_NAME}\\bin"
              cp deploy\windows\nsis\setup.nsi deploy
              cp deploy\windows\nsis\license.txt deploy
      
