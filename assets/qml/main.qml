@@ -37,7 +37,7 @@ ApplicationWindow {
     //
     readonly property int spacing: 8
     property bool firstValidPacket: false
-    readonly property color windowBackgroundColor: Qt.rgba(18/255, 25/255, 32/255, 1)
+    readonly property color windowBackgroundColor: "#121920"
     readonly property string monoFont: {
         switch (Qt.platform.os) {
         case "osx":
@@ -60,12 +60,10 @@ ApplicationWindow {
     //
     // Theme options
     //
-    palette.text: Qt.rgba(1, 1, 1, 1)
-    palette.buttonText: Qt.rgba(1, 1, 1, 1)
-    palette.windowText: Qt.rgba(1, 1, 1, 1)
-    background: Rectangle {
-        color: app.windowBackgroundColor
-    }
+    palette.text: "#fff"
+    palette.buttonText: "#fff"
+    palette.windowText: "#fff"
+    palette.window: app.windowBackgroundColor
 
     //
     // Startup code
@@ -80,7 +78,7 @@ ApplicationWindow {
         terminal.opacity = 1
         widgets.opacity = 0
 
-        CppJsonParser.readSettings()
+        CppJsonGenerator.readSettings()
     }
 
     //
@@ -126,7 +124,7 @@ ApplicationWindow {
     // Hide console & device manager when we receive first valid packet
     //
     Connections {
-        target: CppJsonParser
+        target: CppJsonGenerator
         enabled: !app.firstValidPacket
         function onPacketReceived()  {
             app.firstValidPacket = true
@@ -145,7 +143,7 @@ ApplicationWindow {
     // Show console tab on serial disconnect
     //
     Connections {
-        target: CppQmlBridge
+        target: CppDataProvider
         function onDataReset() {
             toolbar.consoleClicked()
             devices.show()

@@ -23,12 +23,12 @@
 #ifndef APP_INFO_H
 #define APP_INFO_H
 
-#define APP_VERSION "1.0.5"
-#define APP_NAME "Serial Studio"
-#define APP_DEVELOPER "Alex Spataru"
+// clang-format off
+#define APP_VERSION     "1.0.6"
+#define APP_DEVELOPER   "Alex Spataru"
+#define APP_NAME        "Serial Studio"
 #define APP_SUPPORT_URL "https://github.com/serial-studio"
-#define APP_UPDATER_URL                                                        \
-    "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/"    \
-    "updates.json"
+#define APP_UPDATER_URL "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json"
+// clang-format on
 
 #endif

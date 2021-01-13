@@ -34,37 +34,78 @@
 
 class SerialManager : public QObject
 {
+    // clang-format off
     Q_OBJECT
-
-    Q_PROPERTY(QString portName READ portName NOTIFY portChanged)
-    Q_PROPERTY(bool readOnly READ readOnly NOTIFY connectedChanged)
-    Q_PROPERTY(bool readWrite READ readWrite NOTIFY connectedChanged)
-    Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
-    Q_PROPERTY(
-        QString receivedBytes READ receivedBytes NOTIFY receivedBytesChanged)
-    Q_PROPERTY(int maxBufferSize READ maxBufferSize WRITE setMaxBufferSize
-                   NOTIFY maxBufferSizeChanged)
-    Q_PROPERTY(QString startSequence READ startSequence WRITE setStartSequence
-                   NOTIFY startSequenceChanged)
-    Q_PROPERTY(QString finishSequence READ finishSequence WRITE
-                   setFinishSequence NOTIFY finishSequenceChanged)
-    Q_PROPERTY(quint8 portIndex READ portIndex WRITE setPort NOTIFY portChanged)
-    Q_PROPERTY(quint8 parityIndex READ parityIndex WRITE setParity NOTIFY
-                   parityChanged)
-    Q_PROPERTY(quint8 baudRateIndex READ baudRateIndex WRITE setBaudRate NOTIFY
-                   baudRateChanged)
-    Q_PROPERTY(quint8 dataBitsIndex READ dataBitsIndex WRITE setDataBits NOTIFY
-                   dataBitsChanged)
-    Q_PROPERTY(quint8 stopBitsIndex READ stopBitsIndex WRITE setStopBits NOTIFY
-                   stopBitsChanged)
-    Q_PROPERTY(quint8 flowControlIndex READ flowControlIndex WRITE
-                   setFlowControl NOTIFY flowControlChanged)
-    Q_PROPERTY(QStringList portList READ portList NOTIFY availablePortsChanged)
-    Q_PROPERTY(QStringList parityList READ parityList CONSTANT)
-    Q_PROPERTY(QStringList baudRateList READ baudRateList CONSTANT)
-    Q_PROPERTY(QStringList dataBitsList READ dataBitsList CONSTANT)
-    Q_PROPERTY(QStringList stopBitsList READ stopBitsList CONSTANT)
-    Q_PROPERTY(QStringList flowControlList READ flowControlList CONSTANT)
+    Q_PROPERTY(QString portName
+               READ portName
+               NOTIFY portChanged)
+    Q_PROPERTY(bool readOnly
+               READ readOnly
+               NOTIFY connectedChanged)
+    Q_PROPERTY(bool readWrite
+               READ readWrite
+               NOTIFY connectedChanged)
+    Q_PROPERTY(bool connected
+               READ connected
+               NOTIFY connectedChanged)
+    Q_PROPERTY(QString receivedBytes
+               READ receivedBytes
+               NOTIFY receivedBytesChanged)
+    Q_PROPERTY(int maxBufferSize
+               READ maxBufferSize
+               WRITE setMaxBufferSize
+               NOTIFY maxBufferSizeChanged)
+    Q_PROPERTY(QString startSequence
+               READ startSequence
+               WRITE setStartSequence
+               NOTIFY startSequenceChanged)
+    Q_PROPERTY(QString finishSequence
+               READ finishSequence
+               WRITE setFinishSequence
+               NOTIFY finishSequenceChanged)
+    Q_PROPERTY(quint8 portIndex
+               READ portIndex
+               WRITE setPort
+               NOTIFY portChanged)
+    Q_PROPERTY(quint8 parityIndex
+               READ parityIndex
+               WRITE setParity
+               NOTIFY parityChanged)
+    Q_PROPERTY(quint8 baudRateIndex
+               READ baudRateIndex
+               WRITE setBaudRate
+               NOTIFY baudRateChanged)
+    Q_PROPERTY(quint8 dataBitsIndex
+               READ dataBitsIndex
+               WRITE setDataBits
+               NOTIFY dataBitsChanged)
+    Q_PROPERTY(quint8 stopBitsIndex
+               READ stopBitsIndex
+               WRITE setStopBits
+               NOTIFY stopBitsChanged)
+    Q_PROPERTY(quint8 flowControlIndex
+               READ flowControlIndex
+               WRITE setFlowControl
+               NOTIFY flowControlChanged)
+    Q_PROPERTY(QStringList portList
+               READ portList
+               NOTIFY availablePortsChanged)
+    Q_PROPERTY(QStringList parityList
+               READ parityList
+               CONSTANT)
+    Q_PROPERTY(QStringList baudRateList
+               READ baudRateList
+               CONSTANT)
+    Q_PROPERTY(QStringList dataBitsList
+               READ dataBitsList
+               CONSTANT)
+    Q_PROPERTY(QStringList stopBitsList
+               READ stopBitsList
+               CONSTANT)
+    Q_PROPERTY(QStringList flowControlList
+               READ flowControlList
+               CONSTANT)
+    // clang-format on
 
 signals:
     void portChanged();

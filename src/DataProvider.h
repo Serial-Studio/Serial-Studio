@@ -20,27 +20,34 @@
  * THE SOFTWARE.
  */
 
-#ifndef QML_BRIDGE_H
-#define QML_BRIDGE_H
+#ifndef DATA_PROVIDER_H
+#define DATA_PROVIDER_H
 
 #include <QObject>
 #include <QVariant>
 
 class Group;
-class QmlBridge : public QObject
+class DataProvider : public QObject
 {
+    // clang-format off
     Q_OBJECT
-
-    Q_PROPERTY(QString projectTitle READ projectTitle NOTIFY updated)
-    Q_PROPERTY(int groupCount READ groupCount NOTIFY updated)
-    Q_PROPERTY(QList<Group *> groups READ groups NOTIFY updated)
+    Q_PROPERTY(QString projectTitle
+               READ projectTitle
+               NOTIFY updated)
+    Q_PROPERTY(int groupCount
+               READ groupCount
+               NOTIFY updated)
+    Q_PROPERTY(QList<Group *> groups
+               READ groups
+               NOTIFY updated)
+    // clang-format on
 
 signals:
     void updated();
     void dataReset();
 
 public:
-    static QmlBridge *getInstance();
+    static DataProvider *getInstance();
 
     QString projectTitle() const;
 
@@ -49,7 +56,7 @@ public:
     Q_INVOKABLE Group *getGroup(const int index);
 
 private:
-    QmlBridge();
+    DataProvider();
 
 private slots:
     void update();

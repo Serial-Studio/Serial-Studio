@@ -22,13 +22,13 @@ Unicode True
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
 
-!define APPNAME                      "Serial-Studio"
-!define UNIXNAME                     "serial-studio"
+!define APPNAME                      "Serial Studio"
+!define INSTNAME                     "SerialStudio"
 !define COMPANYNAME                  "Alex Spataru"
-!define DESCRIPTION                  "Open source alternative to the FRC DriverStation"
+!define DESCRIPTION                  "Dashboard software for serial port devices"
 !define VERSIONMAJOR                 1
 !define VERSIONMINOR                 0
-!define VERSIONBUILD                 5
+!define VERSIONBUILD                 6
 !define ESTIMATED_SIZE               60000
 !define MUI_ABORTWARNING
 !define INSTALL_DIR                  "$PROGRAMFILES64\${APPNAME}"
@@ -37,7 +37,7 @@ Unicode True
 !define MUI_FINISHPAGE_RUN_FUNCTION  "RunApplication"
 !define MUI_FINISHPAGE_LINK          "Visit project website"
 !define MUI_FINISHPAGE_LINK_LOCATION "http://github.com/serial-studio/serial-studio"
-!define MUI_WELCOMEPAGE_TITLE        "Welcome to the Serial Studio installer!"
+!define MUI_WELCOMEPAGE_TITLE        "Welcome to the ${APPNAME} installer!"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "license.txt"
@@ -63,7 +63,7 @@ Name "${APPNAME}"
 ManifestDPIAware true
 InstallDir "${INSTALL_DIR}"
 RequestExecutionLevel admin
-OutFile "${UNIXNAME}-${VERSIONMAJOR}.${VERSIONMINOR}${VERSIONBUILD}-setup.exe"
+OutFile "${INSTNAME}-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-Windows.exe"
 
 Function .onInit
 	setShellVarContext all

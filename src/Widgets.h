@@ -31,8 +31,12 @@ class Dataset;
 
 class Widgets : public QObject
 {
+    // clang-format off
     Q_OBJECT
-    Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY dataChanged)
+    Q_PROPERTY(int totalWidgetCount
+               READ totalWidgetCount
+               NOTIFY dataChanged)
+    // clang-format on
 
 signals:
     void dataChanged();

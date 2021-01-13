@@ -376,7 +376,7 @@
     </message>
 </context>
 <context>
-    <name>JsonParser</name>
+    <name>JsonGenerator</name>
     <message>
         <source>Select JSON map file</source>
         <translation>Seleccionar mapa JSON</translation>
@@ -404,6 +404,45 @@
     <message>
         <source>Please check file permissions &amp; location</source>
         <translation>Verifique los permisos y la ubicación del archivo</translation>
+    </message>
+    <message>
+        <source>JSON/serial data format mismatch</source>
+        <translation>El formato de los datos recibidos no coincide</translation>
+    </message>
+    <message>
+        <source>The format of the received data does not correspond to the selected JSON map file.</source>
+        <translation>El formato de los datos recibidos no se corresponde con el archivo de mapa JSON seleccionado.</translation>
+    </message>
+</context>
+<context>
+    <name>JsonParser</name>
+    <message>
+        <source>Select JSON map file</source>
+        <translation type="vanished">Seleccionar mapa JSON</translation>
+    </message>
+    <message>
+        <source>JSON files (*.json)</source>
+        <translation type="vanished">Archivos JSON (*.json)</translation>
+    </message>
+    <message>
+        <source>JSON parse error</source>
+        <translation type="vanished">Error de lectura de JSON</translation>
+    </message>
+    <message>
+        <source>JSON map file loaded successfully!</source>
+        <translation type="vanished">¡El archivo de mapa JSON se cargó correctamente!</translation>
+    </message>
+    <message>
+        <source>File &quot;%1&quot; loaded into memory</source>
+        <translation type="vanished">Archivo &quot;%1&quot; cargado en memoria</translation>
+    </message>
+    <message>
+        <source>Cannot read JSON file</source>
+        <translation type="vanished">Error de lectura del archivo JSON</translation>
+    </message>
+    <message>
+        <source>Please check file permissions &amp; location</source>
+        <translation type="vanished">Verifique los permisos y la ubicación del archivo</translation>
     </message>
 </context>
 <context>

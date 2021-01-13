@@ -46,17 +46,17 @@ Control {
     // Group/dataset updating
     //
     Connections {
-        target: CppQmlBridge
+        target: CppDataProvider
         function onUpdated() {
-            root.title = CppQmlBridge.projectTitle
-            if (groupGenerator.model !== CppQmlBridge.groupCount) {
+            root.title = CppDataProvider.projectTitle
+            if (groupGenerator.model !== CppDataProvider.groupCount) {
                 var list = []
-                for (var i = 0; i < CppQmlBridge.groupCount; ++i)
+                for (var i = 0; i < CppDataProvider.groupCount; ++i)
                     list.push(true)
 
                 groupGenerator.model = 0
                 viewOptions.groups = list
-                groupGenerator.model = CppQmlBridge.groupCount
+                groupGenerator.model = CppDataProvider.groupCount
             }
         }
     }
@@ -234,7 +234,7 @@ Control {
                             delegate: Switch {
                                 Layout.fillWidth: true
                                 Component.onCompleted: checked = true
-                                text: CppQmlBridge.getGroup(index).title
+                                text: CppDataProvider.getGroup(index).title
                                 palette.highlight: Qt.rgba(215/255, 45/255, 96/255, 1)
                                 onCheckedChanged: {
                                     viewOptions.groups[index] = checked
@@ -371,7 +371,7 @@ Control {
                                         groupIndex: index
                                         anchors.fill: parent
                                         anchors.margins: app.spacing
-                                        group: CppQmlBridge.getGroup(index)
+                                        group: CppDataProvider.getGroup(index)
                                         enabled: viewOptions.groups[groupIndex]
 
                                         Connections {

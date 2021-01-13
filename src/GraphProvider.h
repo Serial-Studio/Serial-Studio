@@ -34,12 +34,19 @@ QT_CHARTS_USE_NAMESPACE
 class Dataset;
 class GraphProvider : public QObject
 {
+    // clang-format off
     Q_OBJECT
-
-    Q_PROPERTY(int graphCount READ graphCount NOTIFY dataUpdated)
-    Q_PROPERTY(QList<Dataset *> datasets READ datasets NOTIFY dataUpdated)
-    Q_PROPERTY(int displayedPoints READ displayedPoints WRITE setDisplayedPoints
-                   NOTIFY displayedPointsUpdated)
+    Q_PROPERTY(int graphCount
+               READ graphCount
+               NOTIFY dataUpdated)
+    Q_PROPERTY(QList<Dataset *> datasets
+               READ datasets
+               NOTIFY dataUpdated)
+    Q_PROPERTY(int displayedPoints
+               READ displayedPoints
+               WRITE setDisplayedPoints
+               NOTIFY displayedPointsUpdated)
+    // clang-format on
 
 signals:
     void dataUpdated();

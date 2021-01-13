@@ -31,10 +31,16 @@
 
 class Export : public QObject
 {
+    // clang-format off
     Q_OBJECT
-    Q_PROPERTY(bool isOpen READ isOpen NOTIFY openChanged)
-    Q_PROPERTY(bool exportEnabled READ exportEnabled WRITE setExportEnabled
-                   NOTIFY enabledChanged)
+    Q_PROPERTY(bool isOpen
+               READ isOpen
+               NOTIFY openChanged)
+    Q_PROPERTY(bool exportEnabled
+               READ exportEnabled
+               WRITE setExportEnabled
+               NOTIFY enabledChanged)
+    // clang-format on
 
 signals:
     void openChanged();

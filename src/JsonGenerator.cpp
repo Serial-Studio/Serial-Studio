@@ -22,7 +22,7 @@
 
 #include "Logger.h"
 #include "CsvPlayer.h"
-#include "JsonParser.h"
+#include "JsonGenerator.h"
 #include "SerialManager.h"
 #include "ConsoleAppender.h"
 
@@ -33,37 +33,42 @@
 /*
  * Only instance of the class
  */
-static JsonParser *INSTANCE = nullptr;
+static JsonGenerator *INSTANCE = nullptr;
 
 /**
  * Shows a macOS-like message box with the given properties
  */
 static int NiceMessageBox(QString text, QString informativeText,
                           QString windowTitle = qAppName(),
-                          QMessageBox::StandardButtons buttons
-                          = QMessageBox::Ok)
+                          QMessageBox::StandardButtons bt = QMessageBox::Ok)
 {
-    auto icon
-        = QPixmap(":/images/icon.png")
-              .scaled(64, 64, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    // clang-format off
+    auto icon = QPixmap(":/images/icon.png").scaled(64, 64,
+                                                    Qt::IgnoreAspectRatio,
+                                                    Qt::SmoothTransformation);
+    // clang-format on
 
+    // Create message box & set options
     QMessageBox box;
     box.setIconPixmap(icon);
+    box.setStandardButtons(bt);
     box.setWindowTitle(windowTitle);
-    box.setStandardButtons(buttons);
     box.setText("<h3>" + text + "</h3>");
     box.setInformativeText(informativeText);
 
+    // Show message box & return user decision to caller
     return box.exec();
 }
 
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
-JsonParser::JsonParser()
+JsonGenerator::JsonGenerator()
 {
     m_opMode = kAutomatic;
+    m_dataFormatErrors = 0;
     auto sm = SerialManager::getInstance();
+    connect(sm, SIGNAL(portChanged()), this, SLOT(reset()));
     connect(sm, SIGNAL(packetReceived(QByteArray)), this,
             SLOT(readData(QByteArray)));
 
@@ -73,10 +78,10 @@ JsonParser::JsonParser()
 /**
  * Returns the only instance of the class
  */
-JsonParser *JsonParser::getInstance()
+JsonGenerator *JsonGenerator::getInstance()
 {
     if (!INSTANCE)
-        INSTANCE = new JsonParser();
+        INSTANCE = new JsonGenerator();
 
     return INSTANCE;
 }
@@ -84,7 +89,7 @@ JsonParser *JsonParser::getInstance()
 /**
  * Returns the JSON map data from the loaded file as a string
  */
-QString JsonParser::jsonMapData() const
+QString JsonGenerator::jsonMapData() const
 {
     return m_jsonMapData;
 }
@@ -92,7 +97,7 @@ QString JsonParser::jsonMapData() const
 /**
  * Returns the parsed JSON document from the received packet
  */
-QJsonDocument JsonParser::document() const
+QJsonDocument JsonGenerator::document() const
 {
     return m_document;
 }
@@ -100,7 +105,7 @@ QJsonDocument JsonParser::document() const
 /**
  * Returns the file name (e.g. "JsonMap.json") of the loaded JSON map file
  */
-QString JsonParser::jsonMapFilename() const
+QString JsonGenerator::jsonMapFilename() const
 {
     if (m_jsonMap.isOpen())
     {
@@ -114,7 +119,7 @@ QString JsonParser::jsonMapFilename() const
 /**
  * Returns the file path of the loaded JSON map file
  */
-QString JsonParser::jsonMapFilepath() const
+QString JsonGenerator::jsonMapFilepath() const
 {
     if (m_jsonMap.isOpen())
     {
@@ -128,7 +133,7 @@ QString JsonParser::jsonMapFilepath() const
 /**
  * Returns the operation mode
  */
-JsonParser::OperationMode JsonParser::operationMode() const
+JsonGenerator::OperationMode JsonGenerator::operationMode() const
 {
     return m_opMode;
 }
@@ -136,7 +141,7 @@ JsonParser::OperationMode JsonParser::operationMode() const
 /**
  * Creates a file dialog & lets the user select the JSON file map
  */
-void JsonParser::loadJsonMap()
+void JsonGenerator::loadJsonMap()
 {
     auto file = QFileDialog::getOpenFileName(
         Q_NULLPTR, tr("Select JSON map file"), QDir::homePath(),
@@ -149,7 +154,7 @@ void JsonParser::loadJsonMap()
 /**
  * Opens, validates & loads into memory the JSON file in the given @a path.
  */
-void JsonParser::loadJsonMap(const QString &path, const bool silent)
+void JsonGenerator::loadJsonMap(const QString &path, const bool silent)
 {
     // Log information
     LOG_INFO() << "Loading JSON file, silent flag set to" << silent;
@@ -224,7 +229,7 @@ void JsonParser::loadJsonMap(const QString &path, const bool silent)
  * @c kAutomatic serial data contains the JSON data frame, good for simple
  *               applications or for prototyping.
  */
-void JsonParser::setOperationMode(const OperationMode mode)
+void JsonGenerator::setOperationMode(const OperationMode mode)
 {
     m_opMode = mode;
     emit operationModeChanged();
@@ -235,7 +240,7 @@ void JsonParser::setOperationMode(const OperationMode mode)
 /**
  * Loads the last saved JSON map file (if any)
  */
-void JsonParser::readSettings()
+void JsonGenerator::readSettings()
 {
     auto path = m_settings.value("json_map_location", "").toString();
     if (!path.isEmpty())
@@ -245,7 +250,7 @@ void JsonParser::readSettings()
 /**
  * Saves the location of the last valid JSON map file that was opened (if any)
  */
-void JsonParser::writeSettings(const QString &path)
+void JsonGenerator::writeSettings(const QString &path)
 {
     m_settings.setValue("json_map_location", path);
 }
@@ -255,10 +260,21 @@ void JsonParser::writeSettings(const QString &path)
  * This function is set to public in order to allow the CSV-replay feature to
  * work by replacing the data/json input source.
  */
-void JsonParser::setJsonDocument(const QJsonDocument &document)
+void JsonGenerator::setJsonDocument(const QJsonDocument &document)
 {
     m_document = document;
-    emit packetReceived();
+    if (!m_document.object().isEmpty())
+        emit packetReceived();
+}
+
+/**
+ * Resets all the statistics related to the current serial port device and
+ * the JSON map file
+ */
+void JsonGenerator::reset()
+{
+    m_dataFormatErrors = 0;
+    setJsonDocument(QJsonDocument::fromJson(QByteArray("{}")));
 }
 
 /**
@@ -274,7 +290,7 @@ void JsonParser::setJsonDocument(const QJsonDocument &document)
  * If JSON parsing is successfull, then the class shall notify the rest of the
  * application in order to process packet data.
  */
-void JsonParser::readData(const QByteArray &data)
+void JsonGenerator::readData(const QByteArray &data)
 {
     // CSV-replay active, abort
     if (CsvPlayer::getInstance()->isOpen())
@@ -305,11 +321,30 @@ void JsonParser::readData(const QByteArray &data)
         foreach (auto str, list)
             json = json.arg(str);
 
+        // Test that string format is complete
+        auto test = json.arg("gagaga");
+        if (test != json)
+        {
+            // Avoid nagging the user too much
+            if (m_dataFormatErrors < 1)
+            {
+                ++m_dataFormatErrors;
+                NiceMessageBox(tr("JSON/serial data format mismatch"),
+                               tr("The format of the received data does not "
+                                  "correspond to the selected JSON map file."));
+            }
+
+            return;
+        }
+
         // Create json document
         document = QJsonDocument::fromJson(json.toUtf8(), &error);
     }
 
-    // No parse error, update UI
+    // No parse error, update UI & reset error counter
     if (error.error == QJsonParseError::NoError)
+    {
         setJsonDocument(document);
+        m_dataFormatErrors = 0;
+    }
 }

@@ -65,16 +65,16 @@ include(libs/Libraries.pri)
 #-------------------------------------------------------------------------------
 
 win32* {
-    TARGET = Serial-Studio
+    TARGET = SerialStudio
     RC_FILE = deploy/windows/resources/info.rc
 }
 
 macx* {
-    CONFIG += sdk_no_version_check
     TARGET = SerialStudio
     ICON = deploy/macOS/icon.icns
     RC_FILE = deploy/macOS/icon.icns
     QMAKE_INFO_PLIST = deploy/macOS/info.plist
+    CONFIG += sdk_no_version_check # To avoid warnings with Big Sur
 }
 
 linux:!android {
@@ -97,26 +97,26 @@ RESOURCES += \
 HEADERS += \
     src/AppInfo.h \
     src/CsvPlayer.h \
+    src/DataProvider.h \
     src/Dataset.h \
     src/Export.h \
     src/GraphProvider.h \
     src/Group.h \
-    src/JsonParser.h \
+    src/JsonGenerator.h \
     src/ModuleManager.h \
-    src/QmlBridge.h \
     src/SerialManager.h \
     src/Translator.h \
     src/Widgets.h
 
 SOURCES += \
     src/CsvPlayer.cpp \
+    src/DataProvider.cpp \
     src/Dataset.cpp \
     src/Export.cpp \
     src/GraphProvider.cpp \
     src/Group.cpp \
-    src/JsonParser.cpp \
+    src/JsonGenerator.cpp \
     src/ModuleManager.cpp \
-    src/QmlBridge.cpp \
     src/SerialManager.cpp \
     src/Translator.cpp \
     src/Widgets.cpp \

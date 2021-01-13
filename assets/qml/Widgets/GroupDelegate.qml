@@ -43,10 +43,10 @@ Window {
     property Group group: null
 
     Connections {
-        target: CppQmlBridge
+        target: CppDataProvider
         function onUpdated() {
             if (root.enabled)
-                group = CppQmlBridge.getGroup(groupIndex)
+                group = CppDataProvider.getGroup(groupIndex)
         }
     }
 
@@ -69,7 +69,7 @@ Window {
             width: _sv.width - (_sv.ScrollBar.vertical.visible ? 10 : 0)
 
             Repeater {
-                model: group.datasetCount
+                model: group.onPacketReceived
                 delegate: DataDelegate {
                     Layout.fillWidth: true
                     dataset: group.getDataset(index)

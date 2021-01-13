@@ -34,7 +34,7 @@
 
 #include "Logger.h"
 #include "CsvPlayer.h"
-#include "JsonParser.h"
+#include "JsonGenerator.h"
 #include "SerialManager.h"
 #include "ConsoleAppender.h"
 
@@ -48,20 +48,23 @@ static CsvPlayer *INSTANCE = nullptr;
  */
 static int NiceMessageBox(QString text, QString informativeText,
                           QString windowTitle = qAppName(),
-                          QMessageBox::StandardButtons buttons
-                          = QMessageBox::Ok)
+                          QMessageBox::StandardButtons bt = QMessageBox::Ok)
 {
-    auto icon
-        = QPixmap(":/images/icon.png")
-              .scaled(64, 64, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    // clang-format off
+    auto icon = QPixmap(":/images/icon.png").scaled(64, 64,
+                                                    Qt::IgnoreAspectRatio,
+                                                    Qt::SmoothTransformation);
+    // clang-format on
 
+    // Create message box & set options
     QMessageBox box;
     box.setIconPixmap(icon);
+    box.setStandardButtons(bt);
     box.setWindowTitle(windowTitle);
-    box.setStandardButtons(buttons);
     box.setText("<h3>" + text + "</h3>");
     box.setInformativeText(informativeText);
 
+    // Show message box & return user decision to caller
     return box.exec();
 }
 
@@ -188,9 +191,9 @@ void CsvPlayer::toggle()
 void CsvPlayer::openFile()
 {
     // Check that manual JSON mode is activaded
-    auto opMode = JsonParser::getInstance()->operationMode();
-    auto jsonOpen = !JsonParser::getInstance()->jsonMapData().isEmpty();
-    if (opMode != JsonParser::kManual || !jsonOpen)
+    auto opMode = JsonGenerator::getInstance()->operationMode();
+    auto jsonOpen = !JsonGenerator::getInstance()->jsonMapData().isEmpty();
+    if (opMode != JsonGenerator::kManual || !jsonOpen)
     {
         NiceMessageBox(tr("Invalid configuration for CSV player"),
                        tr("You need to select a JSON map file in order to use "
@@ -373,7 +376,7 @@ void CsvPlayer::updateData()
     // input source for the QML bridge
     auto json = getJsonFrame(framePosition() + 1);
     if (!json.isEmpty())
-        JsonParser::getInstance()->setJsonDocument(json);
+        JsonGenerator::getInstance()->setJsonDocument(json);
 
     // If the user wants to 'play' the CSV, get time difference between this
     // frame and the next frame & schedule an automated update
@@ -543,7 +546,7 @@ QJsonDocument CsvPlayer::getJsonFrame(const int row)
 
     // Read CSV row & JSON template from JSON parser
     auto values = m_csvData.at(row);
-    auto mapData = JsonParser::getInstance()->jsonMapData();
+    auto mapData = JsonGenerator::getInstance()->jsonMapData();
     QJsonDocument jsonTemplate = QJsonDocument::fromJson(mapData.toUtf8());
 
     // Replace JSON title

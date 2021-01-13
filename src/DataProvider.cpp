@@ -24,8 +24,8 @@
 #include "Logger.h"
 #include "Dataset.h"
 #include "CsvPlayer.h"
-#include "QmlBridge.h"
-#include "JsonParser.h"
+#include "DataProvider.h"
+#include "JsonGenerator.h"
 #include "SerialManager.h"
 
 #include <QJsonArray>
@@ -34,15 +34,15 @@
 /*
  * Only instance of the class
  */
-static QmlBridge *INSTANCE = nullptr;
+static DataProvider *INSTANCE = nullptr;
 
 /**
  * Constructor of the class
  */
-QmlBridge::QmlBridge()
+DataProvider::DataProvider()
 {
     auto cp = CsvPlayer::getInstance();
-    auto jp = JsonParser::getInstance();
+    auto jp = JsonGenerator::getInstance();
     auto sm = SerialManager::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(jp, SIGNAL(packetReceived()), this, SLOT(update()));
@@ -54,10 +54,10 @@ QmlBridge::QmlBridge()
 /**
  * Returns the only instance of the class
  */
-QmlBridge *QmlBridge::getInstance()
+DataProvider *DataProvider::getInstance()
 {
     if (!INSTANCE)
-        INSTANCE = new QmlBridge();
+        INSTANCE = new DataProvider();
 
     return INSTANCE;
 }
@@ -65,7 +65,7 @@ QmlBridge *QmlBridge::getInstance()
 /**
  * @return The title of the project/frame sent by the serial device
  */
-QString QmlBridge::projectTitle() const
+QString DataProvider::projectTitle() const
 {
     return m_title;
 }
@@ -73,7 +73,7 @@ QString QmlBridge::projectTitle() const
 /**
  * @return The number of groups contained in the last frame.
  */
-int QmlBridge::groupCount() const
+int DataProvider::groupCount() const
 {
     return groups().count();
 }
@@ -82,7 +82,7 @@ int QmlBridge::groupCount() const
  * @return A list with all the @c Group objects generated
  *         after reading the last received frame.
  */
-QList<Group *> QmlBridge::groups() const
+QList<Group *> DataProvider::groups() const
 {
     return m_groups;
 }
@@ -91,7 +91,7 @@ QList<Group *> QmlBridge::groups() const
  * Returns a pointer to the group object registered with the given @a index.
  * If @a index is invalid, then @c Q_NULLPTR is returned.
  */
-Group *QmlBridge::getGroup(const int index)
+Group *DataProvider::getGroup(const int index)
 {
     if (index < groupCount() && index >= 0)
         return groups().at(index);
@@ -110,10 +110,10 @@ Group *QmlBridge::getGroup(const int index)
  * @note The function shall only re-generate @c Group & @c Dataset objects if
  *       the current JSON data frame is valid.
  */
-void QmlBridge::update()
+void DataProvider::update()
 {
     // Get JSON document
-    auto document = JsonParser::getInstance()->document();
+    auto document = JsonGenerator::getInstance()->document();
 
     // Validate JSON document
     if (!document.isEmpty())
@@ -156,7 +156,7 @@ void QmlBridge::update()
  * Clears the project title, deletes all groups & notifies the UI. This function
  * is used when the serial device connection state is changed to avoid errors.
  */
-void QmlBridge::resetData()
+void DataProvider::resetData()
 {
     // Stop if dev. man is not disconnected or if CSV file is open
     if (SerialManager::getInstance()->connected()

@@ -24,7 +24,7 @@
 #include "Logger.h"
 #include "Dataset.h"
 #include "Widgets.h"
-#include "QmlBridge.h"
+#include "DataProvider.h"
 #include "ConsoleAppender.h"
 
 #include <cfloat>
@@ -40,7 +40,7 @@ static Widgets *INSTANCE = Q_NULLPTR;
  */
 Widgets::Widgets()
 {
-    auto bridge = QmlBridge::getInstance();
+    auto bridge = DataProvider::getInstance();
     connect(bridge, SIGNAL(updated()), this, SLOT(updateModels()));
 
     LOG_INFO() << "Initialized Widgets module";
@@ -95,8 +95,12 @@ QList<Group *> Widgets::accelerometerGroup() const
  */
 int Widgets::totalWidgetCount() const
 {
-    return barDatasetCount() + mapGroupCount() + gyroGroupCount()
-        + accelerometerGroupCount();
+    // clang-format off
+    return mapGroupCount() +
+            gyroGroupCount() +
+            barDatasetCount() +
+            accelerometerGroupCount();
+    // clang-format on
 }
 
 /**
@@ -408,7 +412,7 @@ QList<Group *> Widgets::getWidgetGroup(const QString &handle)
 {
     QList<Group *> widgetGroup;
 
-    foreach (auto group, QmlBridge::getInstance()->groups())
+    foreach (auto group, DataProvider::getInstance()->groups())
     {
         if (group->widget().toLower() == handle)
             widgetGroup.append(group);
@@ -425,7 +429,7 @@ QList<Dataset *> Widgets::getWidgetDatasets(const QString &handle)
 {
     QList<Dataset *> widgetDatasets;
 
-    foreach (auto group, QmlBridge::getInstance()->groups())
+    foreach (auto group, DataProvider::getInstance()->groups())
     {
         foreach (auto dataset, group->datasets())
         {

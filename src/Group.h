@@ -32,12 +32,21 @@
 class Dataset;
 class Group : public QObject
 {
+    // clang-format off
     Q_OBJECT
-
-    Q_PROPERTY(QString title READ title CONSTANT)
-    Q_PROPERTY(QString widget READ widget CONSTANT)
-    Q_PROPERTY(int datasetCount READ count CONSTANT)
-    Q_PROPERTY(QList<Dataset *> datasets READ datasets CONSTANT)
+    Q_PROPERTY(QString title
+               READ title
+               CONSTANT)
+    Q_PROPERTY(QString widget
+               READ widget
+               CONSTANT)
+    Q_PROPERTY(int onPacketReceived
+               READ count
+               CONSTANT)
+    Q_PROPERTY(QList<Dataset *> datasets
+               READ datasets
+               CONSTANT)
+    // clang-format on
 
 public:
     Group(QObject *parent = nullptr);

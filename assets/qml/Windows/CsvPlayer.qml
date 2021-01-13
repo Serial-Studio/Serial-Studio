@@ -21,10 +21,11 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-ApplicationWindow {
+Window {
     id: root
 
     //
@@ -38,105 +39,106 @@ ApplicationWindow {
     maximumHeight: column.implicitHeight + 4 * app.spacing
 
     //
-    // Theme options
+    // Use page item to set application palette
     //
-    palette.text: Qt.rgba(1, 1, 1, 1)
-    palette.buttonText: Qt.rgba(1, 1, 1, 1)
-    palette.windowText: Qt.rgba(1, 1, 1, 1)
-    background: Rectangle {
-        color: app.windowBackgroundColor
-    }
-
-    //
-    // Automatically display the window when the CSV file is opened
-    //
-    Connections {
-        target: CppCsvPlayer
-        function onOpenChanged() {
-            if (CppCsvPlayer.isOpen)
-                root.visible = true
-            else
-                root.visible = false
-        }
-    }
-
-    //
-    // Close CSV file when window is closed
-    //
-    onVisibleChanged: {
-        if (!visible && CppCsvPlayer.isOpen)
-            CppCsvPlayer.closeFile()
-    }
-
-    //
-    // Window controls
-    //
-    ColumnLayout {
-        id: column
+    Page {
+        anchors.margins: 0
         anchors.fill: parent
-        spacing: app.spacing * 2
-        anchors.margins: 2 * app.spacing
+        palette.text: "#fff"
+        palette.buttonText: "#fff"
+        palette.windowText: "#fff"
+        palette.window: app.windowBackgroundColor
 
         //
-        // Timestamp display
+        // Automatically display the window when the CSV file is opened
         //
-        Label {
-            font.family: app.monoFont
-            text: CppCsvPlayer.timestamp
-            Layout.alignment: Qt.AlignLeft
-        }
-
-        //
-        // Progress display
-        //
-        Slider {
-            Layout.fillWidth: true
-            value: CppCsvPlayer.progress
-            onValueChanged: {
-                if (value != CppCsvPlayer.progress)
-                    CppCsvPlayer.setProgress(value)
+        Connections {
+            target: CppCsvPlayer
+            function onOpenChanged() {
+                if (CppCsvPlayer.isOpen)
+                    root.visible = true
+                else
+                    root.visible = false
             }
         }
 
         //
-        // Play/pause buttons
+        // Close CSV file when window is closed
         //
-        RowLayout {
-            spacing: app.spacing
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignHCenter
+        onVisibleChanged: {
+            if (!visible && CppCsvPlayer.isOpen)
+                CppCsvPlayer.closeFile()
+        }
 
-            Button {
-                icon.color: "#fff"
-                opacity: enabled ? 1 : 0.5
-                Layout.alignment: Qt.AlignVCenter
-                onClicked: CppCsvPlayer.previousFrame()
-                icon.source: "qrc:/icons/media-prev.svg"
-                enabled: CppCsvPlayer.progress > 0 && !CppCsvPlayer.isPlaying
+        //
+        // Window controls
+        //
+        ColumnLayout {
+            id: column
+            anchors.centerIn: parent
+            spacing: app.spacing * 2
 
-                Behavior on opacity {NumberAnimation{}}
+            //
+            // Timestamp display
+            //
+            Label {
+                font.family: app.monoFont
+                text: CppCsvPlayer.timestamp
+                Layout.alignment: Qt.AlignLeft
             }
 
-            Button {
-                icon.width: 32
-                icon.height: 32
-                icon.color: "#fff"
-                onClicked: CppCsvPlayer.toggle()
-                Layout.alignment: Qt.AlignVCenter
-                icon.source: CppCsvPlayer.isPlaying ? "qrc:/icons/media-pause.svg" :
-                                                      "qrc:/icons/media-play.svg"
+            //
+            // Progress display
+            //
+            Slider {
+                Layout.fillWidth: true
+                value: CppCsvPlayer.progress
+                onValueChanged: {
+                    if (value != CppCsvPlayer.progress)
+                        CppCsvPlayer.setProgress(value)
+                }
             }
 
-            Button {
-                icon.color: "#fff"
-                opacity: enabled ? 1 : 0.5
-                Layout.alignment: Qt.AlignVCenter
-                onClicked: CppCsvPlayer.nextFrame()
-                icon.source: "qrc:/icons/media-next.svg"
-                enabled: CppCsvPlayer.progress < 1 && !CppCsvPlayer.isPlaying
+            //
+            // Play/pause buttons
+            //
+            RowLayout {
+                spacing: app.spacing
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignHCenter
 
-                Behavior on opacity {NumberAnimation{}}
+                Button {
+                    icon.color: "#fff"
+                    opacity: enabled ? 1 : 0.5
+                    Layout.alignment: Qt.AlignVCenter
+                    onClicked: CppCsvPlayer.previousFrame()
+                    icon.source: "qrc:/icons/media-prev.svg"
+                    enabled: CppCsvPlayer.progress > 0 && !CppCsvPlayer.isPlaying
+
+                    Behavior on opacity {NumberAnimation{}}
+                }
+
+                Button {
+                    icon.width: 32
+                    icon.height: 32
+                    icon.color: "#fff"
+                    onClicked: CppCsvPlayer.toggle()
+                    Layout.alignment: Qt.AlignVCenter
+                    icon.source: CppCsvPlayer.isPlaying ? "qrc:/icons/media-pause.svg" :
+                                                          "qrc:/icons/media-play.svg"
+                }
+
+                Button {
+                    icon.color: "#fff"
+                    opacity: enabled ? 1 : 0.5
+                    Layout.alignment: Qt.AlignVCenter
+                    onClicked: CppCsvPlayer.nextFrame()
+                    icon.source: "qrc:/icons/media-next.svg"
+                    enabled: CppCsvPlayer.progress < 1 && !CppCsvPlayer.isPlaying
+
+                    Behavior on opacity {NumberAnimation{}}
+                }
             }
         }
     }

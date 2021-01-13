@@ -25,7 +25,7 @@
 #include <QMetaType>
 
 #include "GraphProvider.h"
-#include "QmlBridge.h"
+#include "DataProvider.h"
 #include "CsvPlayer.h"
 #include "Group.h"
 #include "Dataset.h"
@@ -57,7 +57,7 @@ GraphProvider::GraphProvider()
     qRegisterMetaType<QAbstractAxis *>();
 
     // Update graph values as soon as QML Bridge interprets data
-    connect(QmlBridge::getInstance(), SIGNAL(updated()), this,
+    connect(DataProvider::getInstance(), SIGNAL(updated()), this,
             SLOT(updateValues()));
 
     // Avoid issues when CSV player goes backwards
@@ -180,9 +180,9 @@ void GraphProvider::updateValues()
     m_datasets.clear();
 
     // Create list with datasets that need to be graphed
-    for (int i = 0; i < QmlBridge::getInstance()->groupCount(); ++i)
+    for (int i = 0; i < DataProvider::getInstance()->groupCount(); ++i)
     {
-        auto group = QmlBridge::getInstance()->getGroup(i);
+        auto group = DataProvider::getInstance()->getGroup(i);
         for (int j = 0; j < group->count(); ++j)
         {
             auto dataset = group->getDataset(j);

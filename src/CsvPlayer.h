@@ -30,11 +30,21 @@
 
 class CsvPlayer : public QObject
 {
+    // clang-format off
     Q_OBJECT
-    Q_PROPERTY(bool isOpen READ isOpen NOTIFY openChanged)
-    Q_PROPERTY(qreal progress READ progress NOTIFY timestampChanged)
-    Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY playerStateChanged)
-    Q_PROPERTY(QString timestamp READ timestamp NOTIFY timestampChanged)
+    Q_PROPERTY(bool isOpen
+               READ isOpen
+               NOTIFY openChanged)
+    Q_PROPERTY(qreal progress
+               READ progress
+               NOTIFY timestampChanged)
+    Q_PROPERTY(bool isPlaying
+               READ isPlaying
+               NOTIFY playerStateChanged)
+    Q_PROPERTY(QString timestamp
+               READ timestamp
+               NOTIFY timestampChanged)
+    // clang-format on
 
 signals:
     void openChanged();

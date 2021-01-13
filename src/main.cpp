@@ -39,8 +39,8 @@
 #include "AppInfo.h"
 #include "Widgets.h"
 #include "CsvPlayer.h"
-#include "QmlBridge.h"
-#include "JsonParser.h"
+#include "DataProvider.h"
+#include "JsonGenerator.h"
 #include "Translator.h"
 #include "GraphProvider.h"
 #include "SerialManager.h"
@@ -98,10 +98,10 @@ int main(int argc, char **argv)
     QQmlApplicationEngine engine;
     auto widgets = Widgets::getInstance();
     auto csvExport = Export::getInstance();
-    auto qmlBridge = QmlBridge::getInstance();
     auto csvPlayer = CsvPlayer::getInstance();
-    auto jsonParser = JsonParser::getInstance();
     auto updater = QSimpleUpdater::getInstance();
+    auto dataProvider = DataProvider::getInstance();
+    auto jsonGenerator = JsonGenerator::getInstance();
     auto graphProvider = GraphProvider::getInstance();
     auto serialManager = SerialManager::getInstance();
 
@@ -118,10 +118,10 @@ int main(int argc, char **argv)
     c->setContextProperty("CppUpdater", updater);
     c->setContextProperty("CppWidgets", widgets);
     c->setContextProperty("CppExport", csvExport);
-    c->setContextProperty("CppQmlBridge", qmlBridge);
     c->setContextProperty("CppCsvPlayer", csvPlayer);
-    c->setContextProperty("CppJsonParser", jsonParser);
     c->setContextProperty("CppTranslator", &translator);
+    c->setContextProperty("CppDataProvider", dataProvider);
+    c->setContextProperty("CppJsonGenerator", jsonGenerator);
     c->setContextProperty("CppGraphProvider", graphProvider);
     c->setContextProperty("CppSerialManager", serialManager);
     c->setContextProperty("CppAppName", app.applicationName());

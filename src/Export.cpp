@@ -22,7 +22,7 @@
 
 #include "Logger.h"
 #include "Export.h"
-#include "JsonParser.h"
+#include "JsonGenerator.h"
 #include "SerialManager.h"
 #include "ConsoleAppender.h"
 
@@ -92,7 +92,7 @@ Export::Export()
 {
     m_exportEnabled = true;
 
-    auto jp = JsonParser::getInstance();
+    auto jp = JsonGenerator::getInstance();
     auto sp = SerialManager::getInstance();
     connect(jp, SIGNAL(packetReceived()), this, SLOT(updateValues()));
     connect(sp, SIGNAL(connectedChanged()), this, SLOT(closeFile()));
@@ -320,7 +320,7 @@ void Export::updateValues()
         return;
 
     // Get & validate JSON document
-    auto json = JsonParser::getInstance()->document().object();
+    auto json = JsonGenerator::getInstance()->document().object();
     if (json.isEmpty())
         return;
 

@@ -70,9 +70,9 @@ Control {
             text: qsTr("Auto (JSON from serial device)") + CppTranslator.dummy
             onCheckedChanged: {
                 if (checked)
-                    CppJsonParser.setOperationMode(1)
+                    CppJsonGenerator.setOperationMode(1)
                 else
-                    CppJsonParser.setOperationMode(0)
+                    CppJsonGenerator.setOperationMode(0)
             }
         } RadioButton {
             id: commManual
@@ -80,9 +80,9 @@ Control {
             text: qsTr("Manual (use JSON map file)") + CppTranslator.dummy
             onCheckedChanged: {
                 if (checked)
-                    CppJsonParser.setOperationMode(0)
+                    CppJsonGenerator.setOperationMode(0)
                 else
-                    CppJsonParser.setOperationMode(1)
+                    CppJsonGenerator.setOperationMode(1)
             }
         }
 
@@ -93,10 +93,10 @@ Control {
             Layout.fillWidth: true
             opacity: enabled ? 1 : 0.5
             enabled: commManual.checked
-            onClicked: CppJsonParser.loadJsonMap()
+            onClicked: CppJsonGenerator.loadJsonMap()
             Behavior on opacity {NumberAnimation{}}
             text: CppTranslator.dummy +
-                  (CppJsonParser.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(CppJsonParser.jsonMapFilename) :
+                  (CppJsonGenerator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(CppJsonGenerator.jsonMapFilename) :
                                                           qsTr("Select map file") + "...")
         }
 

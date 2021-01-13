@@ -372,7 +372,7 @@
     </message>
 </context>
 <context>
-    <name>JsonParser</name>
+    <name>JsonGenerator</name>
     <message>
         <source>Select JSON map file</source>
         <translation></translation>
@@ -399,6 +399,14 @@
     </message>
     <message>
         <source>Please check file permissions &amp; location</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>JSON/serial data format mismatch</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>The format of the received data does not correspond to the selected JSON map file.</source>
         <translation></translation>
     </message>
 </context>

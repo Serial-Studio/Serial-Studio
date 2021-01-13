@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#ifndef JSON_PARSER_H
-#define JSON_PARSER_H
+#ifndef JSON_GENERATOR_H
+#define JSON_GENERATOR_H
 
 #include <QFile>
 #include <QObject>
@@ -32,15 +32,21 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-class JsonParser : public QObject
+class JsonGenerator : public QObject
 {
+    // clang-format off
     Q_OBJECT
-    Q_PROPERTY(
-        QString jsonMapFilename READ jsonMapFilename NOTIFY jsonFileMapChanged)
-    Q_PROPERTY(
-        QString jsonMapFilepath READ jsonMapFilepath NOTIFY jsonFileMapChanged)
-    Q_PROPERTY(OperationMode operationMode READ operationMode WRITE
-                   setOperationMode NOTIFY operationModeChanged)
+    Q_PROPERTY(QString jsonMapFilename
+               READ jsonMapFilename
+               NOTIFY jsonFileMapChanged)
+    Q_PROPERTY(QString jsonMapFilepath
+               READ jsonMapFilepath
+               NOTIFY jsonFileMapChanged)
+    Q_PROPERTY(OperationMode operationMode
+               READ operationMode
+               WRITE setOperationMode
+               NOTIFY operationModeChanged)
+    // clang-format on
 
 signals:
     void packetReceived();
@@ -56,7 +62,7 @@ public:
     Q_ENUMS(OperationMode)
 
 public:
-    static JsonParser *getInstance();
+    static JsonGenerator *getInstance();
 
     QString jsonMapData() const;
     QJsonDocument document() const;
@@ -70,7 +76,7 @@ public slots:
     void loadJsonMap(const QString &path, const bool silent = false);
 
 private:
-    JsonParser();
+    JsonGenerator();
 
 public slots:
     void readSettings();
@@ -78,12 +84,14 @@ public slots:
     void setJsonDocument(const QJsonDocument &document);
 
 private slots:
+    void reset();
     void readData(const QByteArray &data);
 
 private:
     QFile m_jsonMap;
     QSettings m_settings;
     QString m_jsonMapData;
+    int m_dataFormatErrors;
     OperationMode m_opMode;
     QJsonDocument m_document;
 };

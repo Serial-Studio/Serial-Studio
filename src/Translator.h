@@ -33,14 +33,19 @@
 
 class Translator : public QObject
 {
+    // clang-format off
     Q_OBJECT
-
-#ifdef QT_QML_LIB
-    Q_PROPERTY(
-        int language READ language WRITE setLanguage NOTIFY languageChanged)
-    Q_PROPERTY(QString dummy READ dummyString NOTIFY languageChanged)
-    Q_PROPERTY(QStringList availableLanguages READ availableLanguages CONSTANT)
-#endif
+    Q_PROPERTY(int language
+               READ language
+               WRITE setLanguage
+               NOTIFY languageChanged)
+    Q_PROPERTY(QString dummy
+               READ dummyString
+               NOTIFY languageChanged)
+    Q_PROPERTY(QStringList availableLanguages
+               READ availableLanguages
+               CONSTANT)
+    // clang-format on
 
 signals:
     void languageChanged();

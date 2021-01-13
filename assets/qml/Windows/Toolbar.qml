@@ -119,7 +119,7 @@ Control {
             Layout.fillHeight: true
             icon.color: palette.text
             onClicked: root.dataClicked()
-            enabled: CppQmlBridge.groupCount > 0
+            enabled: CppDataProvider.groupCount > 0
             icon.source: "qrc:/icons/equalizer.svg"
             text: qsTr("Dashboard") + _btSpacer + CppTranslator.dummy
 
