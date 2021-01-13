@@ -17,9 +17,9 @@ on:
 #--------------------------------------------------------------------------------
 
 env:
-  APP_NAME: "SerialStudio"
+  EXE_NAME: "SerialStudio"
   PRO_FILE: "Serial-Studio.pro"
-  NICE_APP_NAME: "Serial Studio"
+  APP_NAME: "Serial Studio"
   APP_VERSION: "1.0.6"
   APP_QMLDIR: "assets/qml"
   APP_QMLDIR_WINDOWS: "..\\..\\..\\assets\\qml"
@@ -80,7 +80,7 @@ jobs:
       # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
       #
       - name: Rename AppImage
-        run: mv *.AppImage ${APP_NAME}-${APP_VERSION}-Linux.AppImage
+        run: mv *.AppImage ${EXE_NAME}-${APP_VERSION}-Linux.AppImage
         
       #
       # Upload AppImage to build artifacts
@@ -88,8 +88,8 @@ jobs:
       - name: Upload AppImage
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
-          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
+          name: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
+          path: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-Linux.AppImage
              
   #
   # macOS build
@@ -124,8 +124,8 @@ jobs:
       #
       - name: Deploy app
         run: |
-             macdeployqt ${APP_NAME}.app -qmldir=${APP_QMLDIR}
-             mv "${APP_NAME}.app" "${NICE_APP_NAME}.app"  
+             macdeployqt ${EXE_NAME}.app -qmldir=${APP_QMLDIR}
+             mv "${EXE_NAME}.app" "${APP_NAME}.app"  
       
       #
       # ZIP application "%AppName%-%Version%-macOS.zip"
@@ -133,7 +133,7 @@ jobs:
       #
       - name: Create ZIP file
         run: |
-             ditto -c -k --sequesterRsrc --keepParent "${NICE_APP_NAME}.app" ${APP_NAME}-${APP_VERSION}-macOS.zip
+             ditto -c -k --sequesterRsrc --keepParent "${APP_NAME}.app" ${EXE_NAME}-${APP_VERSION}-macOS.zip
      
       #
       # Upload ZIP to build artifacts
@@ -141,8 +141,8 @@ jobs:
       - name: Upload ZIP
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.zip
-          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macOS.zip
+          name: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-macOS.zip
+          path: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-macOS.zip
           
   #
   # Windows build
@@ -178,12 +178,12 @@ jobs:
       #       
       - name: Deploy
         run: |
-             mkdir "windeploy\\${NICE_APP_NAME}\\bin"
-             xcopy "release\\${APP_NAME}.exe" "windeploy\\${NICE_APP_NAME}\\bin"
+             mkdir "windeploy\\${APP_NAME}\\bin"
+             xcopy "release\\${EXE_NAME}.exe" "windeploy\\${APP_NAME}\\bin"
              xcopy deploy\windows\nsis\setup.nsi windeploy
              xcopy deploy\windows\nsis\license.txt windeploy
-             cd "windeploy\\${NICE_APP_NAME}\\bin"
-             windeployqt ${APP_NAME}.exe -qmldir="${APP_QMLDIR_WINDOWS}"
+             cd "windeploy\\${APP_NAME}\\bin"
+             windeployqt ${EXE_NAME}.exe -qmldir="${APP_QMLDIR_WINDOWS}"
              cd ..
              cd ..
              
@@ -202,7 +202,7 @@ jobs:
       - name: Make NSIS installer
         run: |
              makensis /X"SetCompressor /FINAL lzma" setup.nsi
-             ren *.exe ${APP_NAME}-${APP_VERSION}-Windows.exe
+             ren *.exe ${EXE_NAME}-${APP_VERSION}-Windows.exe
              move *.exe ../
              cd ..
              
@@ -212,5 +212,5 @@ jobs:
       - name: Upload NSIS installer
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Windows.exe
-          path: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-Windows.exe
+          name: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-Windows.exe
+          path: ${{ env.EXE_NAME }}-${{ env.APP_VERSION }}-Windows.exe
