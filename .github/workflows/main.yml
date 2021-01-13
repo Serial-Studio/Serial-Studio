@@ -171,7 +171,7 @@ jobs:
       - name: Compile
         run: |
              qmake ${PRO_FILE} CONFIG+=release
-             mingw32-make
+             make -j8
              
       #
       # Create deploy directory and copy binary & NSIS files
