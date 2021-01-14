@@ -178,7 +178,7 @@ jobs:
       #
       - name: Compile
         run: |
-             qmake ${{env.QMAKE_PROJECT}}.pro CONFIG+=release
+             qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
              mingw32-make -j8
              
       #
@@ -202,7 +202,6 @@ jobs:
              cd deploy\windows\nsis
              makensis /X"SetCompressor /FINAL lzma" setup.nsi
              ren *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-             move ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe ../../../
              
       #
       # Upload installer to build artifacts
@@ -211,4 +210,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-          path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+          path: deploy/windows/nsis/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
