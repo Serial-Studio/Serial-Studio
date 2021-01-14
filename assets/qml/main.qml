@@ -21,6 +21,7 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Dialogs 1.1
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
@@ -50,6 +51,13 @@ ApplicationWindow {
     }
 
     //
+    // We use this variable to ask the user if he/she wants to enable/disable
+    // automatic update checking on the second run
+    //
+    property int appLaunchStatus: 0
+    property bool automaticUpdates: false
+
+    //
     // Window geometry
     //
     visible: false
@@ -69,16 +77,22 @@ ApplicationWindow {
     // Startup code
     //
     Component.onCompleted: {
-        timer.start()
-
+        // Hide dialogs, show devices pane
         about.hide()
         devices.show()
+        csvPlayer.hide()
 
+        // Hide everything except the terminal
         data.opacity = 0
-        terminal.opacity = 1
         widgets.opacity = 0
+        terminal.opacity = 1
 
+        // Load JSON map file (if any)
         CppJsonGenerator.readSettings()
+
+        // Display the window & check for updates in 500 ms (we do this so that
+        // we wait for the window to read settings before showing it)
+        timer.start()
     }
 
     //
@@ -117,6 +131,22 @@ ApplicationWindow {
             // Show app window
             app.visible = true
             app.showWelcomeGuide()
+
+            // Increment app launch count until 3:
+            // Value & meaning:
+            // - 1: first launch
+            // - 2: second launch, ask to enable automatic updater
+            // - 3: we don't care the number of times the user launched the app
+            if (appLaunchStatus < 3)
+                ++appLaunchStatus
+
+            // Second launch ask user if he/she wants to enable automatic updates
+            if (appLaunchStatus == 2)
+                automaticUpdatesMessageDialog.visible = true
+
+            // Check for updates (if we are allowed)
+            if (automaticUpdates)
+                CppUpdater.checkForUpdates(CppAppUpdaterUrl)
         }
     }
 
@@ -159,13 +189,8 @@ ApplicationWindow {
         property alias appY: app.y
         property alias appW: app.width
         property alias appH: app.height
-    }
-
-    //
-    // About window
-    //
-    About {
-        id: about
+        property alias appStatus: app.appLaunchStatus
+        property alias autoUpdater: app.automaticUpdates
     }
 
     //
@@ -291,9 +316,43 @@ ApplicationWindow {
     }
 
     //
+    // About window
+    //
+    About {
+        id: about
+    }
+
+    //
     // CSV player window
     //
     CsvPlayer {
         id: csvPlayer
+    }
+
+    //
+    // Enable/disable automatic updates dialog
+    //
+    MessageDialog {
+        id: automaticUpdatesMessageDialog
+
+        title: CppAppName
+        icon: StandardIcon.Question
+        modality: Qt.ApplicationModal
+        standardButtons: StandardButton.Yes | StandardButton.No
+        text: "<h3>" + qsTr("Check for updates automatically?") + "</h3>"
+        informativeText: qsTr("Should %1 automatically check for updates? " +
+                              "You can always check for updates manually from " +
+                              "the \"About\" dialog").arg(CppAppName);
+
+        // Behavior when the user clicks on "Yes"
+        onAccepted: {
+            app.automaticUpdates = true
+            CppUpdater.checkForUpdates(CppAppUpdaterUrl)
+        }
+
+        // Behavior when the user clicks on "No"
+        onRejected: {
+            app.automaticUpdates = false
+        }
     }
 }

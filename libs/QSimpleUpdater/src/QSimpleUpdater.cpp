@@ -387,7 +387,10 @@ void QSimpleUpdater::setUseCustomInstallProcedures (const QString& url,
     getUpdater (url)->setUseCustomInstallProcedures (custom);
 }
 
-
+/**
+ * If the \a mandatory_update is set to \c true, the \c Updater has to download and install the
+ * update. If the user cancels or exits, the application will close
+ */
 void QSimpleUpdater::setMandatoryUpdate(const QString& url,
         const bool mandatory_update)
 {

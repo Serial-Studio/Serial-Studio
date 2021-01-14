@@ -146,11 +146,12 @@ int main(int argc, char **argv)
     ModuleManager moduleManager;
     Q_UNUSED(moduleManager);
 
-    // Check for updates
-    LOG_INFO() << "Checking for updates...";
+    // Configure the updater
+    LOG_INFO() << "Configuring QSimpleUpdater...";
     updater->setNotifyOnUpdate(APP_UPDATER_URL, true);
     updater->setNotifyOnFinish(APP_UPDATER_URL, false);
-    updater->checkForUpdates(APP_UPDATER_URL);
+    updater->setMandatoryUpdate(APP_UPDATER_URL, false);
+    LOG_INFO() << "QSimpleUpdater configuration finished!";
 
     // Enter application event loop
     auto code = app.exec();
