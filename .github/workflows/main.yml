@@ -18,10 +18,11 @@ on:
 
 env:
   VERSION: "1.0.6"
-  QML_DIR: "assets/qml"
   EXECUTABLE: "SerialStudio"
   APPLICATION: "Serial Studio"
   QMAKE_PROJECT: "Serial-Studio.pro"
+  QML_DIR: "${{env.GITHUB_WORKSPACE}}/assets/qml"
+  QML_DIR_WIN: "${{env.GITHUB_WORKSPACE}}\\assets\\qml"
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -194,9 +195,10 @@ jobs:
       #       
       - name: Deploy
         run: |
-             ren release bin
+             mkdir bin
+             move relase/${{env.EXECUTABLE}}.exe bin
              cd bin
-             windeployqt ${{env.EXECUTABLE}}.exe -qmldir=../${{env.QML_DIR}} --compiler-runtime
+             windeployqt ${{env.EXECUTABLE}}.exe -qmldir=${{env.QML_DIR}} --compiler-runtime
              cd ..
              mkdir "${{env.APPLICATION}}"
              move bin "${{env.APPLICATION}}"
