@@ -5,21 +5,21 @@
          "latest-version":"1.0.6",
          "download-url":"",
          "changelog":"",
-         "mandatory":true
+         "mandatory":false
       },
       "osx":{
          "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.6",
          "latest-version":"1.0.6",
          "download-url":"",
          "changelog":"",
-         "mandatory":true
+         "mandatory":false
       },
       "linux":{
          "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.6",
          "latest-version":"1.0.6",
          "download-url":"",
          "changelog":"",
-         "mandatory":true
+         "mandatory":false
       }
    }
 }
