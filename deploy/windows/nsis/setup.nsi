@@ -20,6 +20,7 @@
 Unicode True
 
 !include "MUI2.nsh"
+!include "FileFunc.nsh"
 !include "LogicLib.nsh"
 
 !define APPNAME                      "Serial Studio"
@@ -29,7 +30,6 @@ Unicode True
 !define VERSIONMAJOR                 1
 !define VERSIONMINOR                 0
 !define VERSIONBUILD                 6
-!define ESTIMATED_SIZE               60000
 !define MUI_ABORTWARNING
 !define INSTALL_DIR                  "$PROGRAMFILES64\${APPNAME}"
 !define MUI_FINISHPAGE_RUN
@@ -87,9 +87,10 @@ Section "${APPNAME} (required)" SecDummy
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "VersionMajor"     ${VERSIONMAJOR}
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "VersionMinor"     ${VERSIONMINOR}
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoModify"         1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoRepair"         1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "EstimatedSize"    ${ESTIMATED_SIZE}
-
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoRepair"         1${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+  IntFmt $0 "0x%08X" $0
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "EstimatedSize"    "$0"
+	
 SectionEnd
 
 Section "Start Menu Shortcuts"
