@@ -162,6 +162,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
+          arch: win64_msvc2019_64
           
       #
       # Install NSIS
@@ -174,12 +175,18 @@ jobs:
      
       
       #
+      # Setup MSVC
+      #
+      - name: Setup MSVC environment
+        run: |
+             cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build"
+             vcvars64.bat
+             cd ${{env:GITHUB_WORKSPACE}}
+      #
       # Compile application
       #
       - name: Compile
-        shell: powershell
         run: |
-             Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
              qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
              nmake
              
