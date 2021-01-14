@@ -163,6 +163,12 @@ jobs:
         with:
           modules: qtcharts
           arch: win64_msvc2019_64
+      
+      #
+      # Setup visual studio tools
+      #
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
           
       #
       # Install NSIS
