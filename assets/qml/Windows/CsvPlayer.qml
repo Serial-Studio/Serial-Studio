@@ -39,6 +39,14 @@ Window {
 	flags: Qt.Dialog | Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
 
     //
+    // Close CSV file when window is closed
+    //
+    onVisibleChanged: {
+        if (!visible && CppCsvPlayer.isOpen)
+            CppCsvPlayer.closeFile()
+    }
+
+    //
     // Use page item to set application palette
     //
     Page {
@@ -60,14 +68,6 @@ Window {
                 else
                     root.visible = false
             }
-        }
-
-        //
-        // Close CSV file when window is closed
-        //
-        onVisibleChanged: {
-            if (!visible && CppCsvPlayer.isOpen)
-                CppCsvPlayer.closeFile()
         }
 
         //
