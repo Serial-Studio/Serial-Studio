@@ -191,7 +191,7 @@ jobs:
              nmake
              
       #
-      # Deploy Qt DLLs to release directory
+      # Copy Qt DLLs, compiler runtime & application icon
       #       
       - name: Deploy
         run: |
@@ -200,6 +200,7 @@ jobs:
              windeployqt bin/${{env.EXECUTABLE}}.exe -qmldir="${{env.QML_DIR_WIN}}" --compiler-runtime
              mkdir "${{env.APPLICATION}}"
              move bin "${{env.APPLICATION}}"
+             xcopy deploy/windows/resources/icon.ico "${{env.APPLICATION}}"
       
       #
       # Create NSIS installer
