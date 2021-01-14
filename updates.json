@@ -8,16 +8,16 @@
          "mandatory":true
       },
       "osx":{
-         "open-url":"",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.6",
          "latest-version":"1.0.6",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v1.0.6/SerialStudio-1.0.6-macOS.zip",
+         "download-url":"",
          "changelog":"",
          "mandatory":true
       },
       "linux":{
-         "open-url":"",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.6",
          "latest-version":"1.0.6",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v1.0.6/SerialStudio-1.0.6-Linux.AppImage",
+         "download-url":"",
          "changelog":"",
          "mandatory":true
       }
