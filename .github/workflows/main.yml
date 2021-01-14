@@ -154,6 +154,15 @@ jobs:
       #
       - name: Checkout repository
         uses: actions/checkout@v2
+      
+      #
+      # Configure MSVC
+      #
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+          spectre: true
 
       #
       # Install Qt
@@ -171,15 +180,7 @@ jobs:
              Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
              scoop bucket add extras
              scoop install nsis
-     
-      #
-      # Setup MSVC
-      #
-      - name: Setup MSVC environment
-        run: |
-             cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build"
-             vcvars64.bat
-             cd ${{env.GITHUB_WORKSPACE}}
+ 
       #
       # Compile application
       #
