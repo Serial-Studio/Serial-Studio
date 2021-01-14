@@ -21,9 +21,8 @@ env:
   EXECUTABLE: "SerialStudio"
   APPLICATION: "Serial Studio"
   QMAKE_PROJECT: "Serial-Studio.pro"
-  QML_DIR_MAC: "/Users/runner/work/Serial-Studio/assets/qml"
-  QML_DIR_LINUX: "/home/runner/work/Serial-Studio/assets/qml"
-  QML_DIR_WIN: "D:\\a\\Serial-Studio\\Serial-Studio\\assets\\qml"
+  QML_DIR_NIX: "assets/qml"
+  QML_DIR_WIN: "assets\\qml"
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -75,7 +74,7 @@ jobs:
              make INSTALL_ROOT=appdir install
              wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
              chmod a+x linuxdeployqt
-             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir="${{env.QML_DIR_LINUX}}"
+             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir="${{env.QML_DIR_NIX}}"
      
       #
       # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
@@ -125,7 +124,7 @@ jobs:
       #
       - name: Deploy app
         run: |
-             macdeployqt ${{env.EXECUTABLE}}.app -qmldir="${{env.QML_DIR_MAC}}"
+             macdeployqt ${{env.EXECUTABLE}}.app -qmldir="${{env.QML_DIR_NIX}}"
              mv "${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"  
       
       #
@@ -199,7 +198,7 @@ jobs:
              mkdir bin
              move release/${{env.EXECUTABLE}}.exe bin
              cd bin
-             windeployqt ${{env.EXECUTABLE}}.exe -qmldir="${{env.QML_DIR_WIN}}" --compiler-runtime
+             windeployqt bin/${{env.EXECUTABLE}}.exe -qmldir="${{env.QML_DIR_WIN}}" --compiler-runtime
              cd ..
              mkdir "${{env.APPLICATION}}"
              move bin "${{env.APPLICATION}}"
