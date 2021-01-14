@@ -24,7 +24,7 @@
 #define APP_INFO_H
 
 // clang-format off
-#define APP_VERSION     "1.0.6"
+#define APP_VERSION     "1.0.7"
 #define APP_DEVELOPER   "Alex Spataru"
 #define APP_NAME        "Serial Studio"
 #define APP_SUPPORT_URL "https://github.com/serial-studio"
