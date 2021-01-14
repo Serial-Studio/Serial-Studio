@@ -162,7 +162,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
-          arch: win64_msvc2019_64
+          arch: win64_mingw81
           
       #
       # Install NSIS
@@ -178,9 +178,8 @@ jobs:
       #
       - name: Compile
         run: |
-             "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat amd64"
              qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
-             nmake
+             mingw32-make
              
       #
       # Deploy Qt DLLs to release directory
