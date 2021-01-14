@@ -162,7 +162,6 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
-          arch: win64_msvc2019_64
           
       #
       # Install NSIS
@@ -173,7 +172,6 @@ jobs:
              scoop bucket add extras
              scoop install nsis
      
-      
       #
       # Setup MSVC
       #
