@@ -171,15 +171,20 @@ jobs:
              Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
              scoop bucket add extras
              scoop install nsis
+             
+      #
+      # Setup MSVC
+      #
+      - name: Setup MSVC
+        run: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
       
       #
       # Compile application
       #
       - name: Compile
         run: |
-             choco install jom -y
              qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
-             jom
+             nmake
              
       #
       # Deploy Qt DLLs to release directory
