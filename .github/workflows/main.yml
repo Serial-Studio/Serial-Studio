@@ -163,12 +163,6 @@ jobs:
         with:
           modules: qtcharts
           arch: win64_msvc2019_64
-      
-      #
-      # Setup visual studio tools
-      #
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.2
           
       #
       # Install NSIS
@@ -184,6 +178,7 @@ jobs:
       #
       - name: Compile
         run: |
+             Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
              qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
              nmake
              
