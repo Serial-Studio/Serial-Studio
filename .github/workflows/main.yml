@@ -179,7 +179,7 @@ jobs:
         run: |
              cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build"
              vcvars64.bat
-             cd ${{env:GITHUB_WORKSPACE}}
+             cd ${{env.GITHUB_WORKSPACE}}
       #
       # Compile application
       #
