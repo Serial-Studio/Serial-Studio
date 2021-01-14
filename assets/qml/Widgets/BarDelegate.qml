@@ -86,6 +86,11 @@ Window {
     property real maximumValue: 10
 
     //
+    // Animations
+    //
+    Behavior on currentValue {NumberAnimation{}}
+
+    //
     // Connections with widget manager
     //
     Connections {

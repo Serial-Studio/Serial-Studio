@@ -315,15 +315,40 @@ void JsonGenerator::readData(const QByteArray &data)
         if (jsonMapData().isEmpty())
             return;
 
+        // Init conversion status boolean
+        bool ok = true;
+
         // Separate incoming data & add it to the JSON map
         auto json = jsonMapData();
         auto list = QString::fromUtf8(data).split(',');
-        foreach (auto str, list)
-            json = json.arg(str);
+        for (int i = 0; i < list.count(); ++i)
+        {
+            // Get value at i & insert it into json
+            auto str = list.at(i);
+            auto mod = json.arg(str);
 
-        // Test that string format is complete
-        auto test = json.arg("gagaga");
-        if (test != json)
+            // If JSON after insertion is different we're good to go
+            if (json != mod)
+                json = mod;
+
+            // JSON is the same after insertion -> format error
+            else
+            {
+                ok = false;
+                break;
+            }
+        }
+
+        // Test JSON does not contain unmatched values
+        if (ok)
+        {
+            const QRegExp regex("(%\b([0-9]|[1-9][0-9])\b)");
+            ok &= !(json.contains(regex));
+        }
+
+        // There was an error & the JSON map is incomplete (or misses received
+        // info from the microcontroller.
+        if (!ok)
         {
             // Avoid nagging the user too much
             if (m_dataFormatErrors < 1)

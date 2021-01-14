@@ -55,6 +55,7 @@ Window {
     property int groupIndex: 0
     property real meanGForce: 0
     property real gConstant: 9.80665
+    property bool firstReading: true
     property real gaugeSize: calculateGaugeSize()
 
     //
@@ -77,6 +78,7 @@ Window {
     // Calculates the mean g force for all three axes using the pythagorean theorem
     //
     function calculateMeanGForce() {
+        // Update values
         if (CppWidgets.accelerometerGroupCount() > root.groupIndex) {
             root.accX  = CppWidgets.accelerometerX(root.groupIndex)
             root.accY  = CppWidgets.accelerometerY(root.groupIndex)
@@ -84,25 +86,43 @@ Window {
             root.title = CppWidgets.accelerometerGroupAt(root.groupIndex).title
         }
 
+        // Invalid widget index, reset everything
         else {
             root.accX  = 0
             root.accY  = 0
             root.accZ  = 0
             root.title = 0
+            root.firstReading = true
         }
 
+        // Obtain g-forces for each axis
         var gX = root.accX / root.gConstant
         var gY = root.accY / root.gConstant
         var gZ = root.accZ / root.gConstant
 
+        // Calculate mean force by squared normalization
         root.meanGForce = Math.sqrt(Math.pow(gX, 2) + Math.pow(gY, 2) + Math.pow(gZ, 2))
 
-        if (root.meanGForce > root.max)
-            root.max = root.meanGForce
-        else if (root.meanGForce < root.min)
-            root.min = root.meanGForce
+        // Update min/max values
+        if (!firstReading) {
+            if (root.meanGForce > root.max)
+                root.max = root.meanGForce
+            else if (root.meanGForce < root.min)
+                root.min = root.meanGForce
+        }
 
-        calculateGaugeSize()
+        // This is first reading, set min/max to current value
+        else {
+            // Update min/max and ensure that this is called only once
+            if (root.meanGForce != 0) {
+                root.max = root.meanGForce
+                root.min = root.meanGForce
+                root.firstReading = false
+            }
+
+            // Just to be sure re-calculate gauge size on first reading
+            calculateGaugeSize()
+        }
     }
 
     //
@@ -213,6 +233,7 @@ Window {
                 onClicked: {
                     root.max = 0
                     root.min = 0
+                    root.firstReading = true
                 }
             }
         }

@@ -118,7 +118,7 @@ Control {
                         Layout.minimumHeight: root.minimumWidgetSize
 
                         Widgets.AccelerometerDelegate {
-                            groupIndex: groupIndex
+                            groupIndex: index
                             anchors.fill: parent
                         }
                     }
@@ -132,7 +132,6 @@ Control {
                         Layout.fillHeight: true
                         Layout.minimumWidth: root.minimumWidgetSize
                         Layout.minimumHeight: root.minimumWidgetSize
-                        Layout.alignment: Qt.AlignHCenter
 
                         Widgets.MapDelegate {
                             groupIndex: index
