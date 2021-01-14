@@ -156,13 +156,12 @@ jobs:
         uses: actions/checkout@v2
 
       #
-      # Install Qt (win64_mingw81)
+      # Install Qt
       #
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
-          arch: win64_mingw81
           
       #
       # Install NSIS
@@ -178,8 +177,9 @@ jobs:
       #
       - name: Compile
         run: |
+             choco install jom -y
              qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
-             mingw32-make
+             jom
              
       #
       # Deploy Qt DLLs to release directory
