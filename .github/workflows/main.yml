@@ -162,7 +162,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
-          arch: win64_mingw81
+          arch: win64_msvc2019_64
           
       #
       # Install NSIS
@@ -179,7 +179,7 @@ jobs:
       - name: Compile
         run: |
              qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
-             mingw32-make -j8
+             nmake
              
       #
       # Deploy Qt DLLs to release directory
@@ -188,7 +188,7 @@ jobs:
         run: |
              ren release bin
              cd bin
-             windeployqt ${{env.EXECUTABLE}}.exe -qmldir=../${{env.QML_DIR}}
+             windeployqt ${{env.EXECUTABLE}}.exe -qmldir=../${{env.QML_DIR}} --compiler-runtime
              cd ..
              mkdir "${{env.APPLICATION}}"
              move bin "${{env.APPLICATION}}"
