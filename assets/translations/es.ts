@@ -581,4 +581,15 @@
         <translation>¡Felicidades! Estás ejecutando la última versión de %1</translation>
     </message>
 </context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation>¿Buscar actualizaciones automaticamente?</translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation>¿Debería %1 buscar actualizaciones automáticamente? También puedes buscar actualizaciones manualmente desde el cuadro de diálogo &quot;Acerca de&quot;</translation>
+    </message>
+</context>
 </TS>
