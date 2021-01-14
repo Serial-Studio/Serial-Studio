@@ -178,7 +178,7 @@ jobs:
       #
       - name: Compile
         run: |
-             Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+             "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
              qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
              nmake
              
