@@ -197,9 +197,7 @@ jobs:
         run: |
              mkdir bin
              move release/${{env.EXECUTABLE}}.exe bin
-             cd bin
              windeployqt bin/${{env.EXECUTABLE}}.exe -qmldir="${{env.QML_DIR_WIN}}" --compiler-runtime
-             cd ..
              mkdir "${{env.APPLICATION}}"
              move bin "${{env.APPLICATION}}"
       
