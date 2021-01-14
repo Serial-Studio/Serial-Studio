@@ -64,7 +64,7 @@ ManifestDPIAware true
 InstallDir "${INSTALL_DIR}"
 RequestExecutionLevel admin
 OutFile "${EXECNAME}-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-Windows.exe"
-
+	
 Function .onInit
 	setShellVarContext all
 	!insertmacro VerifyUserIsAdmin
@@ -88,6 +88,8 @@ Section "${APPNAME} (required)" SecDummy
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "VersionMinor"     ${VERSIONMINOR}
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoModify"         1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" "NoRepair"         1
+	
+  ExecWait '${INSTALL_DIR}\vc_redist.x64' /q
 SectionEnd
 
 Section "Start Menu Shortcuts"
