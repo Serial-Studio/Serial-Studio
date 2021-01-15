@@ -51,6 +51,23 @@ Control {
     }
 
     //
+    // Update listbox models when translation is changed
+    //
+    Connections {
+        target: CppTranslator
+        function onLanguageChanged() {
+            var oldParityIndex = parity.currentIndex
+            var oldFlowControlIndex = flowControl.currentIndex
+
+            parity.model = CppSerialManager.parityList
+            flowControl.model = CppSerialManager.flowControlList
+
+            parity.currentIndex = oldParityIndex
+            flowControl.currentIndex = oldFlowControlIndex
+        }
+    }
+
+    //
     // Control arrangement
     //
     ColumnLayout {

@@ -372,10 +372,7 @@ QSerialPort::FlowControl SerialManager::flowControl() const
 void SerialManager::configureTextDocument(QQuickTextDocument *doc)
 {
     if (doc)
-    {
         doc->textDocument()->setUndoRedoEnabled(false);
-        doc->textDocument()->setMaximumBlockCount(100);
-    }
 }
 
 /**

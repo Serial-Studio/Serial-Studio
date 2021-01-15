@@ -68,7 +68,6 @@ Control {
 
             ScrollView {
                 id: _scrollView
-                clip: true
                 anchors.fill: parent
                 contentWidth: parent.width
                 ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
@@ -77,6 +76,7 @@ Control {
                     id: _console
                     readOnly: true
                     font.pixelSize: 12
+                    cursorVisible: true
                     color: root.consoleColor
                     wrapMode: TextEdit.Wrap
                     font.family: app.monoFont
@@ -85,6 +85,13 @@ Control {
                     Component.onCompleted: CppSerialManager.configureTextDocument(textDocument)
 
                     onTextChanged: {
+                        // Ensure that console line count stays in check
+                        while (_console.lineCount > 200) {
+                            var lineWidth = _console.width / 12
+                            _console.text = _console.text.substring(lineWidth)
+                        }
+
+                        // Scroll to bottom
                         if (_scrollView.contentHeight > _scrollView.height)
                             _console.cursorPosition = _console.length - 1
                     }

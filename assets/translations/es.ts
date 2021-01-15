@@ -75,7 +75,7 @@
     </message>
     <message>
         <source>Autoscroll</source>
-        <translation>Desplazamiento automático</translation>
+        <translation type="vanished">Desplazamiento automático</translation>
     </message>
     <message>
         <source>Send data to device</source>
@@ -460,15 +460,15 @@
     <name>SerialManager</name>
     <message>
         <source>No Parity</source>
-        <translation>Sin Paridad</translation>
+        <translation type="vanished">Sin Paridad</translation>
     </message>
     <message>
         <source>One</source>
-        <translation>Uno</translation>
+        <translation type="vanished">Uno</translation>
     </message>
     <message>
         <source>No Flow Control</source>
-        <translation>Sin control de flujo</translation>
+        <translation type="vanished">Sin control de flujo</translation>
     </message>
     <message>
         <source>No Device</source>
@@ -516,23 +516,23 @@
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Ninguno</translation>
     </message>
     <message>
         <source>Even</source>
-        <translation type="unfinished"></translation>
+        <translation>Par</translation>
     </message>
     <message>
         <source>Odd</source>
-        <translation type="unfinished"></translation>
+        <translation>Impar</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Espacio</translation>
     </message>
     <message>
         <source>Mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Marca</translation>
     </message>
 </context>
 <context>

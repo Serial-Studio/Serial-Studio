@@ -70,10 +70,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Autoscroll</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Send data to device</source>
         <translation></translation>
     </message>
@@ -420,18 +416,6 @@
 <context>
     <name>SerialManager</name>
     <message>
-        <source>No Parity</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>One</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>No Flow Control</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>No Device</source>
         <translation></translation>
     </message>
@@ -445,23 +429,23 @@
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Even</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Odd</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Mark</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
