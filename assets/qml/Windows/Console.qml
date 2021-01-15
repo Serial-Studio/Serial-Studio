@@ -36,14 +36,17 @@ Control {
     // Console text color
     //
     property alias text: _console.text
-    property alias autoscroll: _autoscr.checked
     readonly property color consoleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
 
     //
-    // Set the CppSerialManager's text document pointer so that the console
-    // ouput is handled automatically by the CppSerialManager
+    // Connections with serial manager
     //
-    Component.onCompleted: CppSerialManager.setTextDocument(_console.textDocument)
+    Connections {
+        target: CppSerialManager
+        function onRx(rxData) {
+            _console.text += rxData
+        }
+    }
 
     //
     // Controls
@@ -79,9 +82,10 @@ Control {
                     font.family: app.monoFont
                     width: _scrollView.contentWidth
                     placeholderText: qsTr("No data received so far...") + CppTranslator.dummy
+                    Component.onCompleted: CppSerialManager.configureTextDocument(textDocument)
 
                     onTextChanged: {
-                        if (root.autoscroll && _scrollView.contentHeight > _scrollView.height)
+                        if (_scrollView.contentHeight > _scrollView.height)
                             _console.cursorPosition = _console.length - 1
                     }
                 }
@@ -93,12 +97,6 @@ Control {
         //
         RowLayout {
             Layout.fillWidth: true
-
-            CheckBox {
-                id: _autoscr
-                checked: true
-                text: qsTr("Autoscroll") + CppTranslator.dummy
-            }
 
             TextField {
                 id: _tf
@@ -112,6 +110,11 @@ Control {
                 placeholderText: qsTr("Send data to device") + "..." + CppTranslator.dummy
                 Keys.onReturnPressed: {
                     CppSerialManager.sendData(_tf.text)
+
+                    _console.text += "\n\n"
+                    _console.text += _tf.text
+                    _console.text += "\n\n"
+
                     _tf.clear()
                 }
 

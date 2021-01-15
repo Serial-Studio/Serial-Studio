@@ -38,16 +38,14 @@ SerialManager::SerialManager()
     // Ensure that pointers are NULL
     m_port = nullptr;
     m_receivedBytes = 0;
-    m_textCursor = nullptr;
-    m_textDocument = nullptr;
 
     // Init serial port configuration variables
     setPort(0);
-    setParity(parityList().indexOf(tr("No Parity")));
+    setParity(parityList().indexOf(tr("None")));
     setBaudRate(baudRateList().indexOf("9600"));
     setDataBits(dataBitsList().indexOf("8"));
-    setStopBits(stopBitsList().indexOf(tr("One")));
-    setFlowControl(flowControlList().indexOf(tr("No Flow Control")));
+    setStopBits(stopBitsList().indexOf("1"));
+    setFlowControl(flowControlList().indexOf(tr("None")));
 
     // Init start/finish sequence strings
     setStartSequence("/*");
@@ -56,6 +54,9 @@ SerialManager::SerialManager()
 
     // Build serial devices list
     refreshSerialDevices();
+
+    // Start frame interpretation loop (~60 Hz)
+    readFrames();
 }
 
 /**
@@ -271,12 +272,11 @@ QStringList SerialManager::portList() const
 QStringList SerialManager::parityList() const
 {
     QStringList list;
-    list.append(tr("No Parity"));
-    list.append(tr("Even Parity"));
-    list.append(tr("Odd Parity"));
-    list.append(tr("Space Parity"));
-    list.append(tr("Mark Parity"));
-
+    list.append(tr("None"));
+    list.append(tr("Even"));
+    list.append(tr("Odd"));
+    list.append(tr("Space"));
+    list.append(tr("Mark"));
     return list;
 }
 
@@ -287,7 +287,7 @@ QStringList SerialManager::parityList() const
 QStringList SerialManager::baudRateList() const
 {
     return QStringList { "1200",  "2400",  "4800",  "9600",
-                         "19200", "38400", "57600", "115200" };
+        "19200", "38400", "57600", "115200" };
 }
 
 /**
@@ -305,11 +305,7 @@ QStringList SerialManager::dataBitsList() const
  */
 QStringList SerialManager::stopBitsList() const
 {
-    QStringList list;
-    list.append(tr("One"));
-    list.append(tr("One and Half"));
-    list.append(tr("Two"));
-    return list;
+    return QStringList { "1", "1.5", "2" };
 }
 
 /**
@@ -319,9 +315,9 @@ QStringList SerialManager::stopBitsList() const
 QStringList SerialManager::flowControlList() const
 {
     QStringList list;
-    list.append(tr("No Flow Control"));
-    list.append(tr("Hardware Control"));
-    list.append(tr("Software Control"));
+    list.append(tr("None"));
+    list.append("RTS/CTS");
+    list.append("XON/XOFF");
     return list;
 }
 
@@ -371,12 +367,14 @@ QSerialPort::FlowControl SerialManager::flowControl() const
 }
 
 /**
- * Returns the pointer to the text document object, which is used by the
- * class to add RX/TX data and handle document size automatically.
+ * Configures the text document to make it fit for logging purposes
  */
-QQuickTextDocument *SerialManager::textDocument() const
+void SerialManager::configureTextDocument(QQuickTextDocument* doc)
 {
-    return m_textDocument;
+    if (doc) {
+        doc->textDocument()->setUndoRedoEnabled(false);
+        doc->textDocument()->setMaximumBlockCount(100);
+    }
 }
 
 /**
@@ -386,6 +384,7 @@ QQuickTextDocument *SerialManager::textDocument() const
  */
 void SerialManager::clearTempBuffer()
 {
+    LOG_INFO() << "Deleting temp. buffer to avoid excesive memory usage..";
     m_tempBuffer.clear();
     LOG_INFO() << "Temporary data buffer cleared";
 }
@@ -450,21 +449,16 @@ void SerialManager::sendData(const QString &data)
             // Get sent byte array
             auto sent = bin;
             sent.chop(bin.length() - bytes);
-            emit tx(sent, bytes);
             LOG_INFO() << "Written" << bytes << "bytes to serial port";
-
-            // Update text document
-            if (m_textCursor)
-            {
-                auto text = QString::fromUtf8(sent);
-                m_textCursor->insertHtml("<br><font color=#f08>" + text
-                                         + "</font><br>");
-            }
 
             // Bytes not equal to data length
             if (bytes != bin.length())
                 LOG_WARNING()
-                    << "Written data length not equal to request data length";
+                        << "Written data length not equal to request data length";
+
+            // Emit signals
+            else
+                emit tx(data);
         }
 
         // Write error
@@ -570,24 +564,24 @@ void SerialManager::setParity(const quint8 parityIndex)
     // Set parity based on current index
     switch (parityIndex)
     {
-        case 0:
-            m_parity = QSerialPort::NoParity;
-            break;
-        case 1:
-            m_parity = QSerialPort::EvenParity;
-            break;
-        case 2:
-            m_parity = QSerialPort::OddParity;
-            break;
-        case 3:
-            m_parity = QSerialPort::SpaceParity;
-            break;
-        case 4:
-            m_parity = QSerialPort::MarkParity;
-            break;
-        default:
-            m_parity = QSerialPort::UnknownParity;
-            break;
+    case 0:
+        m_parity = QSerialPort::NoParity;
+        break;
+    case 1:
+        m_parity = QSerialPort::EvenParity;
+        break;
+    case 2:
+        m_parity = QSerialPort::OddParity;
+        break;
+    case 3:
+        m_parity = QSerialPort::SpaceParity;
+        break;
+    case 4:
+        m_parity = QSerialPort::MarkParity;
+        break;
+    default:
+        m_parity = QSerialPort::UnknownParity;
+        break;
     }
 
     // Update serial port config.
@@ -618,33 +612,33 @@ void SerialManager::setBaudRate(const quint8 baudRateIndex)
     // Obtain baud rate value from current index
     switch (baudRateIndex)
     {
-        case 0:
-            m_baudRate = QSerialPort::Baud1200;
-            break;
-        case 1:
-            m_baudRate = QSerialPort::Baud2400;
-            break;
-        case 2:
-            m_baudRate = QSerialPort::Baud4800;
-            break;
-        case 3:
-            m_baudRate = QSerialPort::Baud9600;
-            break;
-        case 4:
-            m_baudRate = QSerialPort::Baud19200;
-            break;
-        case 5:
-            m_baudRate = QSerialPort::Baud38400;
-            break;
-        case 6:
-            m_baudRate = QSerialPort::Baud57600;
-            break;
-        case 7:
-            m_baudRate = QSerialPort::Baud115200;
-            break;
-        default:
-            m_baudRate = QSerialPort::UnknownBaud;
-            break;
+    case 0:
+        m_baudRate = QSerialPort::Baud1200;
+        break;
+    case 1:
+        m_baudRate = QSerialPort::Baud2400;
+        break;
+    case 2:
+        m_baudRate = QSerialPort::Baud4800;
+        break;
+    case 3:
+        m_baudRate = QSerialPort::Baud9600;
+        break;
+    case 4:
+        m_baudRate = QSerialPort::Baud19200;
+        break;
+    case 5:
+        m_baudRate = QSerialPort::Baud38400;
+        break;
+    case 6:
+        m_baudRate = QSerialPort::Baud57600;
+        break;
+    case 7:
+        m_baudRate = QSerialPort::Baud115200;
+        break;
+    default:
+        m_baudRate = QSerialPort::UnknownBaud;
+        break;
     }
 
     // Update serial port config
@@ -675,21 +669,21 @@ void SerialManager::setDataBits(const quint8 dataBitsIndex)
     // Obtain data bits value from current index
     switch (dataBitsIndex)
     {
-        case 0:
-            m_dataBits = QSerialPort::Data5;
-            break;
-        case 1:
-            m_dataBits = QSerialPort::Data6;
-            break;
-        case 2:
-            m_dataBits = QSerialPort::Data7;
-            break;
-        case 3:
-            m_dataBits = QSerialPort::Data8;
-            break;
-        default:
-            m_dataBits = QSerialPort::UnknownDataBits;
-            break;
+    case 0:
+        m_dataBits = QSerialPort::Data5;
+        break;
+    case 1:
+        m_dataBits = QSerialPort::Data6;
+        break;
+    case 2:
+        m_dataBits = QSerialPort::Data7;
+        break;
+    case 3:
+        m_dataBits = QSerialPort::Data8;
+        break;
+    default:
+        m_dataBits = QSerialPort::UnknownDataBits;
+        break;
     }
 
     // Update serial port configuration
@@ -720,18 +714,18 @@ void SerialManager::setStopBits(const quint8 stopBitsIndex)
     // Obtain stop bits value from current index
     switch (stopBitsIndex)
     {
-        case 0:
-            m_stopBits = QSerialPort::OneStop;
-            break;
-        case 1:
-            m_stopBits = QSerialPort::OneAndHalfStop;
-            break;
-        case 2:
-            m_stopBits = QSerialPort::TwoStop;
-            break;
-        default:
-            m_stopBits = QSerialPort::UnknownStopBits;
-            break;
+    case 0:
+        m_stopBits = QSerialPort::OneStop;
+        break;
+    case 1:
+        m_stopBits = QSerialPort::OneAndHalfStop;
+        break;
+    case 2:
+        m_stopBits = QSerialPort::TwoStop;
+        break;
+    default:
+        m_stopBits = QSerialPort::UnknownStopBits;
+        break;
     }
 
     // Update serial port configuration
@@ -836,18 +830,18 @@ void SerialManager::setFlowControl(const quint8 flowControlIndex)
     // Obtain flow control value from current index
     switch (flowControlIndex)
     {
-        case 0:
-            m_flowControl = QSerialPort::NoFlowControl;
-            break;
-        case 1:
-            m_flowControl = QSerialPort::HardwareControl;
-            break;
-        case 2:
-            m_flowControl = QSerialPort::SoftwareControl;
-            break;
-        case 3:
-            m_flowControl = QSerialPort::UnknownFlowControl;
-            break;
+    case 0:
+        m_flowControl = QSerialPort::NoFlowControl;
+        break;
+    case 1:
+        m_flowControl = QSerialPort::HardwareControl;
+        break;
+    case 2:
+        m_flowControl = QSerialPort::SoftwareControl;
+        break;
+    case 3:
+        m_flowControl = QSerialPort::UnknownFlowControl;
+        break;
     }
 
     // Update serial port configuration
@@ -862,35 +856,6 @@ void SerialManager::setFlowControl(const quint8 flowControlIndex)
 }
 
 /**
- * Sets the text document object to be used as a serial console printout.
- * We need to do this from  C++ so that we have greater control over
- * the memory consumption of the text console.
- */
-void SerialManager::setTextDocument(QQuickTextDocument *textDocument)
-{
-    // Delete previous text cursor
-    if (m_textCursor)
-        delete m_textCursor;
-
-    // Disconnect previous signals/slots
-    if (m_textDocument)
-        m_textDocument->textDocument()->disconnect(this,
-                                                   SLOT(reduceDocumentSize()));
-
-    // Re-assign pointer & register text cursor
-    m_textDocument = textDocument;
-    m_textCursor = new QTextCursor(m_textDocument->textDocument());
-    m_textCursor->movePosition(QTextCursor::End);
-
-    // Connect signals/slots
-    connect(m_textDocument->textDocument(), SIGNAL(contentsChanged()), this,
-            SLOT(reduceDocumentSize()));
-
-    // Update UI
-    emit textDocumentChanged();
-}
-
-/**
  * Reads incoming data from the serial device, updates the serial console
  * object, registers incoming data to temporary buffer & extracts valid data
  * frames from the buffer.
@@ -898,71 +863,24 @@ void SerialManager::setTextDocument(QQuickTextDocument *textDocument)
 void SerialManager::onDataReceived()
 {
     // Verify that port is still alive
-    if (port() != nullptr)
-    {
-        // Get data & calculate received bytes
-        auto data = port()->readAll();
-        auto bytes = data.length();
+    if (port() == nullptr)
+        return;
 
-        // Update received bytes indicator
-        m_receivedBytes += bytes;
-        if (m_receivedBytes >= UINT64_MAX)
-            m_receivedBytes = 0;
+    // Get data & calculate received bytes
+    auto data = port()->readAll();
+    auto bytes = data.length();
 
-        // Notify user interface
-        emit rx(data, bytes);
-        emit receivedBytesChanged();
+    // Add data to temp. buffer
+    m_tempBuffer.append(data);
 
-        // Update text document
-        if (m_textCursor)
-        {
-            auto text = QString::fromUtf8(data);
-            m_textCursor->insertHtml("<font color=#0f8>" + text + "</font>");
-            if (text.contains('\n'))
-                m_textCursor->insertHtml("<br>");
-        }
+    // Update received bytes indicator
+    m_receivedBytes += bytes;
+    if (m_receivedBytes >= UINT64_MAX)
+        m_receivedBytes = 0;
 
-        // Add data to temp. buffer
-        m_tempBuffer.append(data);
-
-        // Check if data contains start sequence
-        auto start = startSequence().toUtf8();
-        auto finish = finishSequence().toUtf8();
-        while (m_tempBuffer.contains(start))
-        {
-            // Begin reading from start sequence index
-            auto buffer = m_tempBuffer;
-            auto sIndex = m_tempBuffer.indexOf(start);
-            buffer.remove(0, sIndex + start.length());
-
-            // Check that new buffer contains finish sequence
-            if (!buffer.contains(finish))
-                return;
-
-            // Remove bytes outside start/end sequence range
-            auto fIndex = buffer.indexOf(finish);
-            buffer.remove(fIndex, buffer.length() - fIndex);
-
-            // Buffer is not empty, notify app & remove read data from buffer
-            if (!buffer.isEmpty())
-            {
-                emit packetReceived(buffer);
-                m_tempBuffer.remove(0, sIndex + fIndex + finish.length());
-            }
-        }
-    }
-}
-
-/**
- * Clears data from the serial console object if log length exceeds 10 KB.
- */
-void SerialManager::reduceDocumentSize()
-{
-    if (m_textDocument && m_textCursor)
-    {
-        if (m_textCursor->position() > 10 * (1024))
-            m_textDocument->textDocument()->clear();
-    }
+    // Notify user interface
+    emit receivedBytesChanged();
+    emit rx(QString::fromUtf8(data));
 }
 
 /**
@@ -992,4 +910,48 @@ void SerialManager::refreshSerialDevices()
 
     // Call this function again in one second
     QTimer::singleShot(100, this, SLOT(refreshSerialDevices()));
+}
+
+/**
+ * Read frames from temporary buffer, every frame that contains the appropiate
+ * start/end sequence is removed from the buffer as soon as its read.
+ *
+ * This function also checks that the buffer size does not exceed specified
+ * size limitations.
+ */
+void SerialManager::readFrames() {
+    // Only execute code if we are connected to a serial device
+    if (connected()) {
+        auto start = startSequence().toUtf8();
+        auto finish = finishSequence().toUtf8();
+        while (m_tempBuffer.contains(start) && m_tempBuffer.contains(finish))
+        {
+            // Begin reading from start sequence index
+            auto buffer = m_tempBuffer;
+            auto sIndex = m_tempBuffer.indexOf(start);
+            buffer.remove(0, sIndex + start.length());
+
+            // Check that new buffer contains finish sequence
+            if (!buffer.contains(finish))
+                break;
+
+            // Remove bytes outside start/end sequence range
+            auto fIndex = buffer.indexOf(finish);
+            buffer.remove(fIndex, buffer.length() - fIndex);
+
+            // Buffer is not empty, notify app & remove read data from buffer
+            if (!buffer.isEmpty())
+            {
+                emit packetReceived(buffer);
+                m_tempBuffer.remove(0, sIndex + fIndex + finish.length());
+            }
+        }
+    }
+
+    // Clear temp. buffer
+    if (m_tempBuffer.size() > maxBufferSize())
+        clearTempBuffer();
+
+    // Execute this function at about 100 Hz
+    QTimer::singleShot(10, Qt::PreciseTimer, this, SLOT(readFrames()));
 }

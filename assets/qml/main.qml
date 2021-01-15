@@ -58,6 +58,31 @@ ApplicationWindow {
     property bool automaticUpdates: false
 
     //
+    // Hacks to fix window maximized behavior
+    //
+    property bool firstChange: true
+    property bool windowMaximized: false
+    onVisibilityChanged: {
+        if (visibility == Window.Maximized) {
+            if (!windowMaximized)
+                firstChange = false
+
+            windowMaximized = true
+        }
+
+        else if (visibility !== Window.Hidden) {
+            if (windowMaximized && firstChange) {
+                app.x = 100
+                app.y = 100
+                app.width = app.minimumWidth
+                app.height = app.minimumHeight
+            }
+
+            windowMaximized = false
+        }
+    }
+
+    //
     // Window geometry
     //
     visible: false
@@ -129,8 +154,11 @@ ApplicationWindow {
             }
 
             // Show app window
-            app.visible = true
             app.showWelcomeGuide()
+            if (app.windowMaximized)
+                app.showMaximized()
+            else
+                app.showNormal()
 
             // Increment app launch count until 3:
             // Value & meaning:
@@ -191,6 +219,7 @@ ApplicationWindow {
         property alias appH: app.height
         property alias appStatus: app.appLaunchStatus
         property alias autoUpdater: app.automaticUpdates
+        property alias appMaximized: app.windowMaximized
     }
 
     //

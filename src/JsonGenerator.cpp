@@ -353,17 +353,19 @@ void JsonGenerator::readData(const QByteArray &data)
         // info from the microcontroller).
         if (!ok)
         {
+            // Increment error counter
+            ++m_dataFormatErrors;
+
             // Avoid nagging the user too much (only display once, and only
             // after two continous errors have been detected)
-            if (m_dataFormatErrors == 1)
+            if (m_dataFormatErrors == 2)
             {
                 NiceMessageBox(tr("JSON/serial data format mismatch"),
                                tr("The format of the received data does not "
                                   "correspond to the selected JSON map file."));
             }
 
-            // Increase format error counter
-            ++m_dataFormatErrors;
+            // Stop executing function
             return;
         }
 

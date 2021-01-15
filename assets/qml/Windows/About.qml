@@ -41,7 +41,7 @@ Window {
     maximumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing
     maximumHeight: column.implicitHeight + 4 * app.spacing
-	flags: Qt.Dialog | Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
+    flags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
 
     //
     // Use page item to set application palette

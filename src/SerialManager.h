@@ -121,10 +121,10 @@ signals:
     void receivedBytesChanged();
     void finishSequenceChanged();
     void availablePortsChanged();
+    void rx(const QString& rxData);
+    void tx(const QString& txData);
     void connectionError(const QString &name);
     void packetReceived(const QByteArray &packet);
-    void rx(const QByteArray &data, const quint64 bytes);
-    void tx(const QByteArray &data, const quint64 bytes);
 
 public:
     static SerialManager *getInstance();
@@ -160,7 +160,7 @@ public:
     QSerialPort::StopBits stopBits() const;
     QSerialPort::FlowControl flowControl() const;
 
-    QQuickTextDocument *textDocument() const;
+    Q_INVOKABLE void configureTextDocument(QQuickTextDocument* doc);
 
 public slots:
     void clearTempBuffer();
@@ -175,11 +175,10 @@ public slots:
     void setStartSequence(const QString &sequence);
     void setFinishSequence(const QString &sequence);
     void setFlowControl(const quint8 flowControlIndex);
-    void setTextDocument(QQuickTextDocument *textDocument);
 
 private slots:
+    void readFrames();
     void onDataReceived();
-    void reduceDocumentSize();
     void refreshSerialDevices();
 
 private:
@@ -193,9 +192,6 @@ private:
     QSerialPort::DataBits m_dataBits;
     QSerialPort::StopBits m_stopBits;
     QSerialPort::FlowControl m_flowControl;
-
-    QTextCursor *m_textCursor;
-    QQuickTextDocument *m_textDocument;
 
     quint8 m_portIndex;
     quint8 m_parityIndex;

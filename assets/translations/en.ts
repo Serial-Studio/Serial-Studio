@@ -440,40 +440,28 @@
         <translation></translation>
     </message>
     <message>
-        <source>Even Parity</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Odd Parity</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Space Parity</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Mark Parity</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>One and Half</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Two</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hardware Control</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Software Control</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Select Port</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Even</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Odd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mark</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
