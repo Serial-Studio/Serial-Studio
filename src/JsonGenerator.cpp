@@ -35,6 +35,12 @@
  */
 static JsonGenerator *INSTANCE = nullptr;
 
+/*
+ * Regular expresion used to check if there are still unmatched values
+ * on the JSON map file.
+ */
+static const QRegExp UNMATCHED_VALUES_REGEX("(%\b([0-9]|[1-9][0-9])\b)");
+
 /**
  * Shows a macOS-like message box with the given properties
  */
@@ -339,26 +345,25 @@ void JsonGenerator::readData(const QByteArray &data)
             }
         }
 
-        // Test JSON does not contain unmatched values
+        // Test that JSON does not contain unmatched values
         if (ok)
-        {
-            const QRegExp regex("(%\b([0-9]|[1-9][0-9])\b)");
-            ok &= !(json.contains(regex));
-        }
+            ok = !(json.contains(UNMATCHED_VALUES_REGEX));
 
         // There was an error & the JSON map is incomplete (or misses received
-        // info from the microcontroller.
+        // info from the microcontroller).
         if (!ok)
         {
-            // Avoid nagging the user too much
-            if (m_dataFormatErrors < 1)
+            // Avoid nagging the user too much (only display once, and only
+            // after two continous errors have been detected)
+            if (m_dataFormatErrors == 1)
             {
-                ++m_dataFormatErrors;
                 NiceMessageBox(tr("JSON/serial data format mismatch"),
                                tr("The format of the received data does not "
                                   "correspond to the selected JSON map file."));
             }
 
+            // Increase format error counter
+            ++m_dataFormatErrors;
             return;
         }
 
