@@ -121,8 +121,8 @@ signals:
     void receivedBytesChanged();
     void finishSequenceChanged();
     void availablePortsChanged();
-    void rx(const QString& rxData);
-    void tx(const QString& txData);
+    void rx(const QString &rxData);
+    void tx(const QString &txData);
     void connectionError(const QString &name);
     void packetReceived(const QByteArray &packet);
 
@@ -160,7 +160,7 @@ public:
     QSerialPort::StopBits stopBits() const;
     QSerialPort::FlowControl flowControl() const;
 
-    Q_INVOKABLE void configureTextDocument(QQuickTextDocument* doc);
+    Q_INVOKABLE void configureTextDocument(QQuickTextDocument *doc);
 
 public slots:
     void clearTempBuffer();

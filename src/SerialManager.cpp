@@ -287,7 +287,7 @@ QStringList SerialManager::parityList() const
 QStringList SerialManager::baudRateList() const
 {
     return QStringList { "1200",  "2400",  "4800",  "9600",
-        "19200", "38400", "57600", "115200" };
+                         "19200", "38400", "57600", "115200" };
 }
 
 /**
@@ -369,9 +369,10 @@ QSerialPort::FlowControl SerialManager::flowControl() const
 /**
  * Configures the text document to make it fit for logging purposes
  */
-void SerialManager::configureTextDocument(QQuickTextDocument* doc)
+void SerialManager::configureTextDocument(QQuickTextDocument *doc)
 {
-    if (doc) {
+    if (doc)
+    {
         doc->textDocument()->setUndoRedoEnabled(false);
         doc->textDocument()->setMaximumBlockCount(100);
     }
@@ -454,7 +455,7 @@ void SerialManager::sendData(const QString &data)
             // Bytes not equal to data length
             if (bytes != bin.length())
                 LOG_WARNING()
-                        << "Written data length not equal to request data length";
+                    << "Written data length not equal to request data length";
 
             // Emit signals
             else
@@ -564,24 +565,24 @@ void SerialManager::setParity(const quint8 parityIndex)
     // Set parity based on current index
     switch (parityIndex)
     {
-    case 0:
-        m_parity = QSerialPort::NoParity;
-        break;
-    case 1:
-        m_parity = QSerialPort::EvenParity;
-        break;
-    case 2:
-        m_parity = QSerialPort::OddParity;
-        break;
-    case 3:
-        m_parity = QSerialPort::SpaceParity;
-        break;
-    case 4:
-        m_parity = QSerialPort::MarkParity;
-        break;
-    default:
-        m_parity = QSerialPort::UnknownParity;
-        break;
+        case 0:
+            m_parity = QSerialPort::NoParity;
+            break;
+        case 1:
+            m_parity = QSerialPort::EvenParity;
+            break;
+        case 2:
+            m_parity = QSerialPort::OddParity;
+            break;
+        case 3:
+            m_parity = QSerialPort::SpaceParity;
+            break;
+        case 4:
+            m_parity = QSerialPort::MarkParity;
+            break;
+        default:
+            m_parity = QSerialPort::UnknownParity;
+            break;
     }
 
     // Update serial port config.
@@ -612,33 +613,33 @@ void SerialManager::setBaudRate(const quint8 baudRateIndex)
     // Obtain baud rate value from current index
     switch (baudRateIndex)
     {
-    case 0:
-        m_baudRate = QSerialPort::Baud1200;
-        break;
-    case 1:
-        m_baudRate = QSerialPort::Baud2400;
-        break;
-    case 2:
-        m_baudRate = QSerialPort::Baud4800;
-        break;
-    case 3:
-        m_baudRate = QSerialPort::Baud9600;
-        break;
-    case 4:
-        m_baudRate = QSerialPort::Baud19200;
-        break;
-    case 5:
-        m_baudRate = QSerialPort::Baud38400;
-        break;
-    case 6:
-        m_baudRate = QSerialPort::Baud57600;
-        break;
-    case 7:
-        m_baudRate = QSerialPort::Baud115200;
-        break;
-    default:
-        m_baudRate = QSerialPort::UnknownBaud;
-        break;
+        case 0:
+            m_baudRate = QSerialPort::Baud1200;
+            break;
+        case 1:
+            m_baudRate = QSerialPort::Baud2400;
+            break;
+        case 2:
+            m_baudRate = QSerialPort::Baud4800;
+            break;
+        case 3:
+            m_baudRate = QSerialPort::Baud9600;
+            break;
+        case 4:
+            m_baudRate = QSerialPort::Baud19200;
+            break;
+        case 5:
+            m_baudRate = QSerialPort::Baud38400;
+            break;
+        case 6:
+            m_baudRate = QSerialPort::Baud57600;
+            break;
+        case 7:
+            m_baudRate = QSerialPort::Baud115200;
+            break;
+        default:
+            m_baudRate = QSerialPort::UnknownBaud;
+            break;
     }
 
     // Update serial port config
@@ -669,21 +670,21 @@ void SerialManager::setDataBits(const quint8 dataBitsIndex)
     // Obtain data bits value from current index
     switch (dataBitsIndex)
     {
-    case 0:
-        m_dataBits = QSerialPort::Data5;
-        break;
-    case 1:
-        m_dataBits = QSerialPort::Data6;
-        break;
-    case 2:
-        m_dataBits = QSerialPort::Data7;
-        break;
-    case 3:
-        m_dataBits = QSerialPort::Data8;
-        break;
-    default:
-        m_dataBits = QSerialPort::UnknownDataBits;
-        break;
+        case 0:
+            m_dataBits = QSerialPort::Data5;
+            break;
+        case 1:
+            m_dataBits = QSerialPort::Data6;
+            break;
+        case 2:
+            m_dataBits = QSerialPort::Data7;
+            break;
+        case 3:
+            m_dataBits = QSerialPort::Data8;
+            break;
+        default:
+            m_dataBits = QSerialPort::UnknownDataBits;
+            break;
     }
 
     // Update serial port configuration
@@ -714,18 +715,18 @@ void SerialManager::setStopBits(const quint8 stopBitsIndex)
     // Obtain stop bits value from current index
     switch (stopBitsIndex)
     {
-    case 0:
-        m_stopBits = QSerialPort::OneStop;
-        break;
-    case 1:
-        m_stopBits = QSerialPort::OneAndHalfStop;
-        break;
-    case 2:
-        m_stopBits = QSerialPort::TwoStop;
-        break;
-    default:
-        m_stopBits = QSerialPort::UnknownStopBits;
-        break;
+        case 0:
+            m_stopBits = QSerialPort::OneStop;
+            break;
+        case 1:
+            m_stopBits = QSerialPort::OneAndHalfStop;
+            break;
+        case 2:
+            m_stopBits = QSerialPort::TwoStop;
+            break;
+        default:
+            m_stopBits = QSerialPort::UnknownStopBits;
+            break;
     }
 
     // Update serial port configuration
@@ -830,18 +831,18 @@ void SerialManager::setFlowControl(const quint8 flowControlIndex)
     // Obtain flow control value from current index
     switch (flowControlIndex)
     {
-    case 0:
-        m_flowControl = QSerialPort::NoFlowControl;
-        break;
-    case 1:
-        m_flowControl = QSerialPort::HardwareControl;
-        break;
-    case 2:
-        m_flowControl = QSerialPort::SoftwareControl;
-        break;
-    case 3:
-        m_flowControl = QSerialPort::UnknownFlowControl;
-        break;
+        case 0:
+            m_flowControl = QSerialPort::NoFlowControl;
+            break;
+        case 1:
+            m_flowControl = QSerialPort::HardwareControl;
+            break;
+        case 2:
+            m_flowControl = QSerialPort::SoftwareControl;
+            break;
+        case 3:
+            m_flowControl = QSerialPort::UnknownFlowControl;
+            break;
     }
 
     // Update serial port configuration
@@ -919,9 +920,11 @@ void SerialManager::refreshSerialDevices()
  * This function also checks that the buffer size does not exceed specified
  * size limitations.
  */
-void SerialManager::readFrames() {
+void SerialManager::readFrames()
+{
     // Only execute code if we are connected to a serial device
-    if (connected()) {
+    if (connected())
+    {
         auto start = startSequence().toUtf8();
         auto finish = finishSequence().toUtf8();
         while (m_tempBuffer.contains(start) && m_tempBuffer.contains(finish))
