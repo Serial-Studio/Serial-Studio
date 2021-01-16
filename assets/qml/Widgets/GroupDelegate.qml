@@ -58,7 +58,7 @@ Window {
         anchors.margins: app.spacing
 
         ScrollBar.vertical.z: 5
-        enabled: contentHeight > parent.width
+        enabled: ScrollBar.vertical.size < 1
         ScrollBar.vertical.policy: ScrollBar.AlwaysOn
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         ScrollBar.vertical.visible: ScrollBar.vertical.size < 1

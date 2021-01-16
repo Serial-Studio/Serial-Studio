@@ -22,6 +22,7 @@
 
 #include "Logger.h"
 #include "Export.h"
+#include "AppInfo.h"
 #include "JsonGenerator.h"
 #include "SerialManager.h"
 #include "ConsoleAppender.h"
@@ -122,6 +123,14 @@ bool Export::isOpen() const
 bool Export::exportEnabled() const
 {
     return m_exportEnabled;
+}
+
+/**
+ * Opens the current application log file
+ */
+void Export::openLogFile()
+{
+    RevealFile(LOG_FILE);
 }
 
 /**

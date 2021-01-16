@@ -58,6 +58,7 @@ private:
 
 public slots:
     void closeFile();
+    void openLogFile();
     void openCurrentCsv();
     void setExportEnabled(const bool enabled);
 

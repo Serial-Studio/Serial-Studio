@@ -31,6 +31,7 @@
 #include <Logger.h>
 #include <QSimpleUpdater.h>
 #include <ConsoleAppender.h>
+#include <FileAppender.h>
 
 #include "Group.h"
 #include "Dataset.h"
@@ -68,14 +69,15 @@ int main(int argc, char **argv)
     app.setStyle(QStyleFactory::create("Fusion"));
 
     // Configure CuteLogger
-    ConsoleAppender *consoleAppender = new ConsoleAppender;
-    consoleAppender->setFormat(
-        "[%{time}] %{message:-72} [%{TypeOne}] [%{function}]\n");
-    cuteLogger->registerAppender(consoleAppender);
+    auto fileAppender = new FileAppender;
+    fileAppender->setFormat(LOG_FORMAT);
+    fileAppender->setFileName(LOG_FILE);
+    cuteLogger->registerAppender(fileAppender);
 
     // Begin logging
     LOG_INFO() << "Running on"
-               << QSysInfo::prettyProductName().toStdString().c_str();
+               << QSysInfo::prettyProductName().toStdString().c_str()
+               << "date/time" << QDateTime::currentDateTime();
 
     // Change application palette
     QPalette p;

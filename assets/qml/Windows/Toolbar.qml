@@ -176,6 +176,19 @@ Control {
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
+            icon.source: "qrc:/icons/bug.svg"
+            onClicked: CppExport.openLogFile()
+            text: qsTr("Log") + _btSpacer + CppTranslator.dummy
+
+            Behavior on opacity {NumberAnimation{}}
+        }
+
+        Button {
+            flat: true
+            icon.width: 24
+            icon.height: 24
+            Layout.fillHeight: true
+            icon.color: palette.text
             opacity: enabled ? 1 : 0.5
             onClicked: CppCsvPlayer.openFile()
             icon.source: "qrc:/icons/update.svg"
