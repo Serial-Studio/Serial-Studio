@@ -48,6 +48,7 @@
         <file>instruments/Crosshair.svg</file>
         <file>messages/Welcome_EN.txt</file>
         <file>messages/Welcome_ES.txt</file>
+        <file>messages/Welcome_ZH.txt</file>
         <file>qml/Widgets/AccelerometerDelegate.qml</file>
         <file>qml/Widgets/ArtificialHorizonDelegate.qml</file>
         <file>qml/Widgets/BarDelegate.qml</file>
@@ -68,6 +69,10 @@
         <file>qml/Windows/Widgets.qml</file>
         <file>qml/main.qml</file>
         <file>translations/en.qm</file>
+        <file>translations/en.ts</file>
         <file>translations/es.qm</file>
+        <file>translations/es.ts</file>
+        <file>translations/zh.qm</file>
+        <file>translations/zh.ts</file>
     </qresource>
 </RCC>

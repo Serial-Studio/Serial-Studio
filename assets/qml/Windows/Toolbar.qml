@@ -207,7 +207,7 @@ Control {
             opacity: enabled ? 1 : 0.5
             icon.source: "qrc:/icons/open.svg"
             onClicked: CppExport.openCurrentCsv()
-            text: qsTr("Open current CSV") + _btSpacer + CppTranslator.dummy
+            text: qsTr("Open CSV") + _btSpacer + CppTranslator.dummy
 
             Behavior on opacity {NumberAnimation{}}
         }

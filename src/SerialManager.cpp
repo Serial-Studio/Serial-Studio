@@ -953,7 +953,7 @@ void SerialManager::handleError(QSerialPort::SerialPortError error)
 
     if (error == QSerialPort::ResourceError)
     {
-        NiceMessageBox(tr("Critical error"), port()->errorString());
+        NiceMessageBox(tr("Critical serial port error"), port()->errorString());
         setPort(0);
     }
 }

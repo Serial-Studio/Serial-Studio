@@ -143,4 +143,5 @@ DISTFILES += \
 
 TRANSLATIONS += \
     assets/translations/en.ts \
-    assets/translations/es.ts
+    assets/translations/es.ts \
+    assets/translations/zh.ts

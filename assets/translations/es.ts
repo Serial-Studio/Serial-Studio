@@ -534,6 +534,10 @@
         <source>Mark</source>
         <translation>Marca</translation>
     </message>
+    <message>
+        <source>Critical serial port error</source>
+        <translation>Error crítico del puerto serie</translation>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>
@@ -567,7 +571,7 @@
     </message>
     <message>
         <source>Open current CSV</source>
-        <translation>Abrir CSV actual</translation>
+        <translation type="vanished">Abrir CSV actual</translation>
     </message>
     <message>
         <source>Dashboard</source>
@@ -576,6 +580,14 @@
     <message>
         <source>CSV Player</source>
         <translation>Reproductor CSV</translation>
+    </message>
+    <message>
+        <source>Log</source>
+        <translation>Registro</translation>
+    </message>
+    <message>
+        <source>Open CSV</source>
+        <translation>Abrir CSV</translation>
     </message>
 </context>
 <context>

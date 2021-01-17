@@ -58,6 +58,9 @@ int Translator::systemLanguage() const
         case QLocale::Spanish:
             lang = 1;
             break;
+        case QLocale::Chinese:
+            lang = 2;
+            break;
         default:
             lang = 0;
             break;
@@ -86,9 +89,22 @@ QString Translator::dummyString() const
  */
 QString Translator::welcomeConsoleText() const
 {
-    QString lang = "EN";
-    if (language() == 1)
-        lang = "ES";
+    QString lang;
+    switch (language())
+    {
+        case 0:
+            lang = "EN";
+            break;
+        case 1:
+            lang = "ES";
+            break;
+        case 2:
+            lang = "ZH";
+            break;
+        default:
+            lang = "EN";
+            break;
+    }
 
     QString text = QObject::tr("Failed to load welcome text :(");
     QFile file(":/messages/Welcome_" + lang + ".txt");
@@ -106,7 +122,7 @@ QString Translator::welcomeConsoleText() const
  */
 QStringList Translator::availableLanguages() const
 {
-    return QStringList { "English", "Español" };
+    return QStringList { "English", "Español", "简体中文" };
 }
 
 /**
@@ -129,6 +145,10 @@ void Translator::setLanguage(const int language)
         case 1:
             langName = "es";
             locale = QLocale(QLocale::Spanish);
+            break;
+        case 2:
+            langName = "zh";
+            locale = QLocale(QLocale::Chinese);
             break;
         default:
             langName = "en";
