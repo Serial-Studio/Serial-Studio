@@ -151,7 +151,7 @@ void JsonGenerator::loadJsonMap()
 {
     auto file = QFileDialog::getOpenFileName(
         Q_NULLPTR, tr("Select JSON map file"), QDir::homePath(),
-        tr("JSON files (*.json)"));
+        tr("JSON files") + " (*.json)");
 
     if (!file.isEmpty())
         loadJsonMap(file);

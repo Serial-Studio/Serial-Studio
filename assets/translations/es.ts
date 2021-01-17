@@ -102,7 +102,7 @@
     </message>
     <message>
         <source>CSV files (*.csv)</source>
-        <translation>Archivos CSV (* .csv)</translation>
+        <translation type="vanished">Archivos CSV (* .csv)</translation>
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
@@ -131,6 +131,10 @@
     <message>
         <source>Replay of %1</source>
         <translation>Reproducción de %1</translation>
+    </message>
+    <message>
+        <source>CSV files</source>
+        <translation>Archivos CSV</translation>
     </message>
 </context>
 <context>
@@ -383,7 +387,7 @@
     </message>
     <message>
         <source>JSON files (*.json)</source>
-        <translation>Archivos JSON (*.json)</translation>
+        <translation type="vanished">Archivos JSON (*.json)</translation>
     </message>
     <message>
         <source>JSON parse error</source>
@@ -412,6 +416,10 @@
     <message>
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
         <translation>El formato de los datos recibidos no se corresponde con el archivo de mapa JSON seleccionado.</translation>
+    </message>
+    <message>
+        <source>JSON files</source>
+        <translation>Archivos JSON</translation>
     </message>
 </context>
 <context>

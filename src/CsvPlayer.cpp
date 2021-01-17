@@ -204,7 +204,7 @@ void CsvPlayer::openFile()
     // Get file name
     auto file = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Select CSV file"),
                                              QDir::homePath(),
-                                             tr("CSV files (*.csv)"));
+                                             tr("CSV files") + " (*.csv)");
 
     // File name empty, abort
     if (file.isEmpty())

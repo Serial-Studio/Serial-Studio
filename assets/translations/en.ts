@@ -93,10 +93,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>CSV files (*.csv)</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Serial port open, do you want to continue?</source>
         <translation></translation>
     </message>
@@ -123,6 +119,10 @@
     <message>
         <source>Replay of %1</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>CSV files</source>
+        <translation>CSV files</translation>
     </message>
 </context>
 <context>
@@ -374,10 +374,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>JSON files (*.json)</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>JSON parse error</source>
         <translation></translation>
     </message>
@@ -403,6 +399,10 @@
     </message>
     <message>
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>JSON files</source>
         <translation></translation>
     </message>
 </context>
