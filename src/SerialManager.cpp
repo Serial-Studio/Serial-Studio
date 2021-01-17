@@ -24,10 +24,37 @@
 #include "SerialManager.h"
 #include "ConsoleAppender.h"
 
+#include <QMessageBox>
+
 /**
  * Pointer to the only instance of the class.
  */
 static SerialManager *INSTANCE = nullptr;
+
+/**
+ * Shows a macOS-like message box with the given properties
+ */
+static int NiceMessageBox(QString text, QString informativeText,
+                          QString windowTitle = qAppName(),
+                          QMessageBox::StandardButtons bt = QMessageBox::Ok)
+{
+    // clang-format off
+    auto icon = QPixmap(":/images/icon.png").scaled(64, 64,
+                                                    Qt::IgnoreAspectRatio,
+                                                    Qt::SmoothTransformation);
+    // clang-format on
+
+    // Create message box & set options
+    QMessageBox box;
+    box.setIconPixmap(icon);
+    box.setStandardButtons(bt);
+    box.setWindowTitle(windowTitle);
+    box.setText("<h3>" + text + "</h3>");
+    box.setInformativeText(informativeText);
+
+    // Show message box & return user decision to caller
+    return box.exec();
+}
 
 /**
  * Constructor function, initializes the serial port configuration and
@@ -399,6 +426,7 @@ void SerialManager::disconnectDevice()
         auto name = portName();
 
         // Disconnect signals/slots
+        port()->disconnect(this, SLOT(handleError()));
         port()->disconnect(this, SLOT(onDataReceived()));
         port()->disconnect(this, SLOT(disconnectDevice()));
 
@@ -513,24 +541,29 @@ void SerialManager::setPort(const quint8 portIndex)
             port()->setFlowControl(flowControl());
 
             // Connect signals/slots
-            connect(port(), SIGNAL(readyRead()), this, SLOT(onDataReceived()));
-            connect(port(), SIGNAL(aboutToClose()), this,
-                    SLOT(disconnectDevice()));
+            // clang-format off
+            connect(port(), SIGNAL(readyRead()),
+                    this,     SLOT(onDataReceived()));
+            connect(port(), SIGNAL(aboutToClose()),
+                    this,     SLOT(disconnectDevice()));
+            connect(port(), SIGNAL(errorOccurred(QSerialPort::SerialPortError)),
+                    this,     SLOT(handleError(QSerialPort::SerialPortError)));
+            // clang-format on
 
             // Try to open the serial port in R/W mode
             if (port()->open(QIODevice::ReadWrite))
             {
                 emit connectedChanged();
-                qInfo() << Q_FUNC_INFO
-                        << "Serial port opened successfully in READ/WRITE mode";
+                LOG_INFO() << Q_FUNC_INFO
+                           << "Serial port opened successfully in RW mode";
             }
 
             // Try to open the serial port only for reading
             else if (port()->open(QIODevice::ReadOnly))
             {
                 emit connectedChanged();
-                qInfo() << Q_FUNC_INFO
-                        << "Serial port opened successfully in READ mode";
+                LOG_INFO() << Q_FUNC_INFO
+                           << "Serial port opened successfully in READ mode";
             }
 
             // Close serial port on error
@@ -908,6 +941,21 @@ void SerialManager::refreshSerialDevices()
 
     // Call this function again in one second
     QTimer::singleShot(100, this, SLOT(refreshSerialDevices()));
+}
+
+/**
+ * @brief SerialManager::handleError
+ * @param error
+ */
+void SerialManager::handleError(QSerialPort::SerialPortError error)
+{
+    LOG_INFO() << "Serial port error" << port()->errorString();
+
+    if (error == QSerialPort::ResourceError)
+    {
+        NiceMessageBox(tr("Critical error"), port()->errorString());
+        setPort(0);
+    }
 }
 
 /**

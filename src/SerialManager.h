@@ -180,6 +180,7 @@ private slots:
     void readFrames();
     void onDataReceived();
     void refreshSerialDevices();
+    void handleError(QSerialPort::SerialPortError error);
 
 private:
     SerialManager();
