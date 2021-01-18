@@ -82,10 +82,10 @@ win32* {
     TARGET = SerialStudio
     RC_FILE = deploy/windows/resources/info.rc
     
+    # MSYS2 integration
     target.path = /bin
     license.path = /share/licenses/
     license.files += LICENSE.md
-    
     INSTALLS += target license
 }
 
