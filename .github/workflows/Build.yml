@@ -196,3 +196,92 @@ jobs:
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
         path: deploy/windows/nsis/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+
+
+  # Windows MSYS2 build
+  msys2-makepkg:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { icon: '🟪', msystem: MINGW64, arch: x86_64 }
+          - { icon: '🟦', msystem: MINGW32, arch: i686   }
+    name:  ${{ matrix.icon }} ${{ matrix.msystem }} | ${{ matrix.arch }} | makepkg
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+
+    - run: git config --global core.autocrlf input
+      shell: bash
+
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: '${{ matrix.icon }} Setup MSYS2'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.msystem }}
+        update: true
+        install: >
+          base-devel
+          mingw-w64-${{ matrix.arch }}-toolchain
+
+    - name: '🚧 Build'
+      run: |
+        cd msys2
+        makepkg-mingw --noconfirm --noprogressbar -sCLf --nocheck
+      env:
+        MINGW_INSTALLS: ${{ matrix.msystem }}
+
+    - name: '📤 Upload artifact: MSYS2 ${{ matrix.arch }} package'
+      uses: actions/upload-artifact@v2
+      with:
+        name: msys2-pkgs
+        path: msys2/*.zst
+
+  # Test Windows MSYS2 packages
+  msys2-test:
+    needs: msys2-makepkg
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { icon: '🟪', msystem: MINGW64, arch: x86_64 }
+          - { icon: '🟦', msystem: MINGW32, arch: i686   }
+    name: ${{ matrix.icon }} ${{ matrix.msystem }} | ${{ matrix.arch }} | Test
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+
+    - name: '${{ matrix.icon }} Setup MSYS2'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.msystem }}
+        update: true
+        install: >
+          tree
+          tar
+          zstd
+
+    - name: '📥 Download artifacts: MSYS2 packages'
+      uses: actions/download-artifact@v2
+      with:
+        name: msys2-pkgs
+
+    - name: 'Install MSYS2 package'
+      run: |
+        pacman -U --noconfirm --noprogressbar *${{ matrix.arch }}*.zst
+
+    - name: 'List contents of package'
+      run: |
+        mkdir tmp
+        cd tmp
+        /usr/bin/tar xf ../*${{ matrix.arch }}*.zst
+        tree ${{ matrix.msystem }}
