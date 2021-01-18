@@ -44,7 +44,7 @@ Control {
     Connections {
         target: CppSerialManager
         function onRx(rxData) {
-            _console.text += rxData
+            root.text += rxData
         }
     }
 
@@ -86,7 +86,7 @@ Control {
 
                     onTextChanged: {
                         // Ensure that console line count stays in check
-                        while (_console.lineCount > 200) {
+                        while (_console.lineCount > 200 || root.text.length > 5000) {
                             var lineWidth = _console.width / 12
                             _console.text = _console.text.substring(lineWidth)
                         }
@@ -118,9 +118,9 @@ Control {
                 Keys.onReturnPressed: {
                     CppSerialManager.sendData(_tf.text)
 
-                    _console.text += "\n\n"
-                    _console.text += _tf.text
-                    _console.text += "\n\n"
+                    root.text += "\n\n"
+                    root.text += _tf.text
+                    root.text += "\n\n"
 
                     _tf.clear()
                 }

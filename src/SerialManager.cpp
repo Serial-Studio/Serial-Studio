@@ -81,9 +81,6 @@ SerialManager::SerialManager()
 
     // Build serial devices list
     refreshSerialDevices();
-
-    // Start frame interpretation loop (~60 Hz)
-    readFrames();
 }
 
 /**
@@ -903,6 +900,7 @@ void SerialManager::onDataReceived()
 
     // Add data to temp. buffer
     m_tempBuffer.append(data);
+    readFrames();
 
     // Update received bytes indicator
     m_receivedBytes += bytes;
@@ -999,7 +997,4 @@ void SerialManager::readFrames()
     // Clear temp. buffer
     if (m_tempBuffer.size() > maxBufferSize())
         clearTempBuffer();
-
-    // Execute this function at about 100 Hz
-    QTimer::singleShot(10, Qt::PreciseTimer, this, SLOT(readFrames()));
 }
