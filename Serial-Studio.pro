@@ -81,6 +81,12 @@ include(libs/Libraries.pri)
 win32* {
     TARGET = SerialStudio
     RC_FILE = deploy/windows/resources/info.rc
+    
+    target.path = /bin
+    license.path = /share/licenses/
+    license.files += LICENSE.md
+    
+    INSTALLS += target license
 }
 
 macx* {
