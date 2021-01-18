@@ -27,7 +27,7 @@ The only requirement to compile the application is to have [Qt](http://www.qt.io
 
 #### Cloning
 
-This repository makes use of [`git submodule`](https://git-scm.com/book/en/v2/Git-Tools-Submodules). In order to clone it, execute this commands on your Terminal:
+This repository makes use of [`git submodule`](https://git-scm.com/book/en/v2/Git-Tools-Submodules). In order to clone it, execute these commands on your Terminal:
 
 	git clone https://github.com/Serial-Studio/Serial-Studio
 	cd Serial-Studio
