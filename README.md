@@ -21,11 +21,24 @@ Furthermore, this approach can be extended to almost any type of project that in
 
 ## Build instructions
 
-##### Requirements
+#### Requirements
 
 The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with Qt 5.15 or greater.
+
+#### Cloning
+
+This repository makes use of [`git submodule`](https://git-scm.com/book/en/v2/Git-Tools-Submodules). In order to clone it, execute this commands on your Terminal:
+
+	git clone https://github.com/Serial-Studio/Serial-Studio
+	cd Serial-Studio
+	git submodule init
+	git submodule update
+	
+Alternatively, just run:
+
+	git clone --recursive https://github.com/Serial-Studio/Serial-Studio
     
-###### Compiling the application
+#### Compiling the application
 
 Once you have Qt installed, open *Serial-Studio.pro* in Qt Creator and click the "Run" button.
 
