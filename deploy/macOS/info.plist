@@ -7,11 +7,11 @@
 	<key>CFBundleExecutable</key>
 	<string>SerialStudio</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Copyright © 2020 Alex Spataru</string>
+	<string>Copyright © 2020-2021 Alex Spataru</string>
 	<key>CFBundleIconFile</key>
 	<string>icon</string>
 	<key>CFBundleIdentifier</key>
-        <string>org.alexspataru.serial-studio</string>
+	<string>org.alexspataru.serial-studio</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -19,14 +19,14 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-        <string>1.0.8</string>
+	<string>1.0.9</string>
 	<key>LSHasLocalizedDisplayName</key>
 	<true/>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSSupportsSuddenTermination</key>
 	<false/>
-        <key>NSRequiresAquaSystemAppearance</key>
-        <string>False</string>
+	<key>NSRequiresAquaSystemAppearance</key>
+	<string>False</string>
 </dict>
 </plist>
