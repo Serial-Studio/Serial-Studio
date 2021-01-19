@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>Report bug</source>
-        <translation>报告软件缺陷</translation>
+        <translation>反馈问题</translation>
     </message>
     <message>
         <source>Check for updates</source>
@@ -37,14 +37,14 @@
     </message>
     <message>
         <source>Close</source>
-        <translation>关</translation>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
     <name>AccelerometerDelegate</name>
     <message>
         <source>G Units</source>
-        <translation>G单位</translation>
+        <translation>G 单位</translation>
     </message>
     <message>
         <source>%1 G MAX</source>
@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>%1 G MIN</source>
-        <translation>%1 G 极少</translation>
+        <translation>%1 G 最小</translation>
     </message>
     <message>
         <source>%1 G ACT</source>
@@ -60,14 +60,14 @@
     </message>
     <message>
         <source>Reset</source>
-        <translation>重启</translation>
+        <translation>重置</translation>
     </message>
 </context>
 <context>
     <name>Console</name>
     <message>
         <source>No data received so far...</source>
-        <translation>到目前为止尚未收到任何数据...</translation>
+        <translation>目前未收到任何数据...</translation>
     </message>
     <message>
         <source>Send data to device</source>
@@ -98,7 +98,7 @@
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
-        <translation>串行端口打开，您要继续吗？</translation>
+        <translation>串行端口已打开，您要继续吗？</translation>
     </message>
     <message>
         <source>In order to use this feature, its necessary to disconnect from the serial port</source>
@@ -118,7 +118,7 @@
     </message>
     <message>
         <source>Please check file permissions &amp; location</source>
-        <translation>请检查文件权限和位置</translation>
+        <translation>请检查文件的权限和位置</translation>
     </message>
     <message>
         <source>Replay of %1</source>
@@ -164,7 +164,7 @@
     </message>
     <message>
         <source>Manual (use JSON map file)</source>
-        <translation>手册（使用JSON映射文件）</translation>
+        <translation>手动（使用JSON映射文件）</translation>
     </message>
     <message>
         <source>Change map file (%1)</source>
@@ -188,7 +188,7 @@
     </message>
     <message>
         <source>Parity</source>
-        <translation>平价</translation>
+        <translation>校验位</translation>
     </message>
     <message>
         <source>Stop Bits</source>
@@ -196,7 +196,7 @@
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>流量控制</translation>
+        <translation>流控位</translation>
     </message>
     <message>
         <source>Language</source>
@@ -243,7 +243,7 @@
     </message>
     <message>
         <source>Close</source>
-        <translation>关</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <source>Download complete!</source>
@@ -267,7 +267,7 @@
     </message>
     <message>
         <source>Click the &quot;Open&quot; button to apply the update</source>
-        <translation>点击“打开”按钮以应用更新</translation>
+        <translation>点击“打开”按钮开始更新</translation>
     </message>
     <message>
         <source>Are you sure you want to cancel the download?</source>
@@ -319,7 +319,7 @@
     </message>
     <message>
         <source>1 minute</source>
-        <translation>等一下</translation>
+        <translation>1分钟</translation>
     </message>
     <message>
         <source>%1 seconds</source>
@@ -338,7 +338,7 @@
     </message>
     <message>
         <source>Cannot find CSV export file!</source>
-        <translation>找不到CSV导出文件！</translation>
+        <translation>找不到CSV导出的文件！</translation>
     </message>
     <message>
         <source>CSV File Error</source>
@@ -360,15 +360,15 @@
     <name>GyroDelegate</name>
     <message>
         <source>%1° YAW</source>
-        <translation>%1°偏航</translation>
+        <translation>%1°偏航角</translation>
     </message>
     <message>
         <source>%1° ROLL</source>
-        <translation>%1°滚</translation>
+        <translation>%1°翻滚角</translation>
     </message>
     <message>
         <source>%1° PITCH</source>
-        <translation>%1°音高</translation>
+        <translation>%1°俯仰角</translation>
     </message>
 </context>
 <context>
@@ -425,7 +425,7 @@
     <name>SerialManager</name>
     <message>
         <source>None</source>
-        <translation>没有</translation>
+        <translation>无(None)</translation>
     </message>
     <message>
         <source>No Device</source>
@@ -433,23 +433,23 @@
     </message>
     <message>
         <source>Received: %1 %2</source>
-        <translation>已收到 %1 %2</translation>
+        <translation>已接收 %1 %2</translation>
     </message>
     <message>
         <source>Even</source>
-        <translation>对</translation>
+        <translation>偶校验(Even)</translation>
     </message>
     <message>
         <source>Odd</source>
-        <translation>英帕</translation>
+        <translation>奇校验(Odd)</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation>空间</translation>
+        <translation>校验位总为0(Space)</translation>
     </message>
     <message>
         <source>Mark</source>
-        <translation>标记</translation>
+        <translation>校验位总为1(Mark)</translation>
     </message>
     <message>
         <source>Select Port</source>
@@ -468,11 +468,11 @@
     </message>
     <message>
         <source>Console</source>
-        <translation>安慰</translation>
+        <translation>控制台</translation>
     </message>
     <message>
         <source>Dashboard</source>
-        <translation>仪表板</translation>
+        <translation>仪表盘</translation>
     </message>
     <message>
         <source>Widgets</source>
@@ -484,11 +484,11 @@
     </message>
     <message>
         <source>CSV Export</source>
-        <translation>CSV导出</translation>
+        <translation>导出CSV</translation>
     </message>
     <message>
         <source>Log</source>
-        <translation>注册</translation>
+        <translation>日志</translation>
     </message>
     <message>
         <source>CSV Player</source>
@@ -496,7 +496,7 @@
     </message>
     <message>
         <source>Open CSV</source>
-        <translation>开启CSV</translation>
+        <translation>打开CSV</translation>
     </message>
 </context>
 <context>
