@@ -31,6 +31,15 @@
  */
 static SerialManager *INSTANCE = nullptr;
 
+/*
+ * QStringList of all known control characters
+ */
+static const QStringList CONTROL_STR
+    = { "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL",
+        " BS", " HT", " LF", " VT", " FF", " CR", " SO", " SI",
+        "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB",
+        "CAN", " EM", "SUB", "ESC", " FS", " GS", " RS", " US" };
+
 /**
  * Returns a string that displays unknown characters in hexadecimal format
  */
@@ -46,14 +55,13 @@ static QString SAFE_STRING(const QByteArray &data)
 
         if (code >= 0 && code <= 31 && byte != '\n')
         {
-            auto hex = QString::number(code, 16);
-            if (hex.length() < 2)
-                hex.prepend("0");
-
-            hexString.append(" 0x");
-            hexString.append(hex);
+            hexString.append(" ");
+            hexString.append(CONTROL_STR.at(code));
             hexString.append(" ");
         }
+
+        else if (code == 127)
+            hexString.append(" DEL ");
 
         else
             hexString.append(byte);
