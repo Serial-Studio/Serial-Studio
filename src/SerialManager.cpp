@@ -32,6 +32,37 @@
 static SerialManager *INSTANCE = nullptr;
 
 /**
+ * Returns a string that displays unknown characters in hexadecimal format
+ */
+static QString SAFE_STRING(const QByteArray &data)
+{
+    QString hexString;
+    QString string = QString::fromUtf8(data);
+
+    for (int i = 0; i < string.length(); ++i)
+    {
+        auto byte = string.at(i);
+        auto code = byte.unicode();
+
+        if (code >= 0 && code <= 31 && byte != '\n')
+        {
+            auto hex = QString::number(code, 16);
+            if (hex.length() < 2)
+                hex.prepend("0");
+
+            hexString.append(" 0x");
+            hexString.append(hex);
+            hexString.append(" ");
+        }
+
+        else
+            hexString.append(byte);
+    }
+
+    return hexString;
+}
+
+/**
  * Shows a macOS-like message box with the given properties
  */
 static int NiceMessageBox(QString text, QString informativeText,
@@ -423,9 +454,10 @@ void SerialManager::disconnectDevice()
         auto name = portName();
 
         // Disconnect signals/slots
-        port()->disconnect(this, SLOT(handleError()));
         port()->disconnect(this, SLOT(onDataReceived()));
         port()->disconnect(this, SLOT(disconnectDevice()));
+        port()->disconnect(this,
+                           SLOT(handleError(QSerialPort::SerialPortError)));
 
         // Close & delete serial port handler
         port()->close();
@@ -909,7 +941,7 @@ void SerialManager::onDataReceived()
 
     // Notify user interface
     emit receivedBytesChanged();
-    emit rx(QString::fromUtf8(data));
+    emit rx(SAFE_STRING(data));
 }
 
 /**
@@ -949,10 +981,11 @@ void SerialManager::handleError(QSerialPort::SerialPortError error)
 {
     LOG_INFO() << "Serial port error" << port()->errorString();
 
-    if (error == QSerialPort::ResourceError)
+    if (error != QSerialPort::NoError)
     {
-        NiceMessageBox(tr("Critical serial port error"), port()->errorString());
+        auto errorStr = port()->errorString();
         setPort(0);
+        NiceMessageBox(tr("Critical serial port error"), errorStr);
     }
 }
 

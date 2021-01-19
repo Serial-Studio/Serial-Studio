@@ -29,9 +29,9 @@
 #include <QQmlApplicationEngine>
 
 #include <Logger.h>
+#include <FileAppender.h>
 #include <QSimpleUpdater.h>
 #include <ConsoleAppender.h>
-#include <FileAppender.h>
 
 #include "Group.h"
 #include "Dataset.h"
@@ -70,9 +70,12 @@ int main(int argc, char **argv)
 
     // Configure CuteLogger
     auto fileAppender = new FileAppender;
+    auto consoleAppender = new ConsoleAppender;
     fileAppender->setFormat(LOG_FORMAT);
     fileAppender->setFileName(LOG_FILE);
+    consoleAppender->setFormat(LOG_FORMAT);
     cuteLogger->registerAppender(fileAppender);
+    cuteLogger->registerAppender(consoleAppender);
 
     // Begin logging
     LOG_INFO() << "Running on"
