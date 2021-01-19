@@ -45,6 +45,16 @@ jobs:
           submodules: recursive
 
       #
+      # Cache Qt
+      #
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{runner.os}}-QtCache
+
+      #
       # Install Qt
       #
       - name: Install Qt
@@ -52,6 +62,7 @@ jobs:
         with:
           modules: qtcharts
           mirror: ${{env.QT_DOWNLOAD_MIRROR}}
+          cached: ${{steps.cache-qt.outputs.cache-hit}}
           
       #
       # Install additional dependencies, stolen from:
@@ -110,6 +121,16 @@ jobs:
           submodules: recursive
 
       #
+      # Cache Qt
+      #
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{runner.os}}-QtCache
+
+      #
       # Install Qt
       #
       - name: Install Qt
@@ -117,6 +138,7 @@ jobs:
         with:
           modules: qtcharts
           mirror: ${{env.QT_DOWNLOAD_MIRROR}}
+          cached: ${{steps.cache-qt.outputs.cache-hit}}
       
       #
       # Compile application
@@ -175,6 +197,16 @@ jobs:
           spectre: true
 
       #
+      # Cache Qt
+      #
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{runner.os}}-QtCache
+
+      #
       # Install Qt
       #
       - name: Install Qt
@@ -182,6 +214,7 @@ jobs:
         with:
           modules: qtcharts
           mirror: ${{env.QT_DOWNLOAD_MIRROR}}
+          cached: ${{steps.cache-qt.outputs.cache-hit}}
           
       #
       # Install NSIS
