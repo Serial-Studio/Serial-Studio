@@ -23,6 +23,7 @@ env:
   QMAKE_PROJECT: "Serial-Studio.pro"
   QML_DIR_NIX: "assets/qml"
   QML_DIR_WIN: "assets\\qml"
+  QT_DOWNLOAD_MIRROR: http://mirrors.ocf.berkeley.edu/qt/
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -50,6 +51,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
+          mirror: ${{env.QT_DOWNLOAD_MIRROR}}
           
       #
       # Install additional dependencies, stolen from:
@@ -114,6 +116,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
+          mirror: ${{env.QT_DOWNLOAD_MIRROR}}
       
       #
       # Compile application
@@ -178,6 +181,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
+          mirror: ${{env.QT_DOWNLOAD_MIRROR}}
           
       #
       # Install NSIS
