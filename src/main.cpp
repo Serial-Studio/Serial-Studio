@@ -84,20 +84,21 @@ int main(int argc, char **argv)
                << QSysInfo::prettyProductName().toStdString().c_str();
 
     // Change application palette
-    QPalette p;
-    p.setColor(QPalette::Base, QColor(33, 55, 63));
-    p.setColor(QPalette::Text, QColor(255, 255, 255));
-    p.setColor(QPalette::Link, QColor(64, 157, 160));
-    p.setColor(QPalette::Button, QColor(33, 55, 63));
-    p.setColor(QPalette::Window, QColor(33, 55, 63));
-    p.setColor(QPalette::Highlight, QColor(64, 157, 160));
-    p.setColor(QPalette::ButtonText, QColor(255, 255, 255));
-    p.setColor(QPalette::WindowText, QColor(255, 255, 255));
-    p.setColor(QPalette::ToolTipBase, QColor(230, 224, 178));
-    p.setColor(QPalette::ToolTipText, QColor(230, 224, 178));
-    p.setColor(QPalette::BrightText, QColor(255, 255, 255));
-    p.setColor(QPalette::HighlightedText, QColor(230, 224, 178));
-    app.setPalette(p);
+    QPalette palette;
+    palette.setColor(QPalette::Base, QColor(33, 55, 63));
+    palette.setColor(QPalette::Link, QColor(64, 157, 160));
+    palette.setColor(QPalette::Button, QColor(33, 55, 63));
+    palette.setColor(QPalette::Window, QColor(33, 55, 63));
+    palette.setColor(QPalette::Text, QColor(255, 255, 255));
+    palette.setColor(QPalette::Midlight, QColor(14, 20, 25));
+    palette.setColor(QPalette::Highlight, QColor(64, 157, 160));
+    palette.setColor(QPalette::BrightText, QColor(255, 255, 255));
+    palette.setColor(QPalette::ButtonText, QColor(255, 255, 255));
+    palette.setColor(QPalette::WindowText, QColor(255, 255, 255));
+    palette.setColor(QPalette::ToolTipBase, QColor(230, 224, 178));
+    palette.setColor(QPalette::ToolTipText, QColor(230, 224, 178));
+    palette.setColor(QPalette::HighlightedText, QColor(230, 224, 178));
+    app.setPalette(palette);
 
     // Init application modules
     Translator translator;

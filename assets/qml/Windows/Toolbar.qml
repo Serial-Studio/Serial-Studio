@@ -64,8 +64,12 @@ Control {
     //
     Rectangle {
         border.width: 1
-        color: Qt.rgba(33/255, 55/255, 63/255, 1)
-        border.color: Qt.darker(color)
+        border.color: palette.midlight
+
+        gradient: Gradient {
+            GradientStop { position: 0; color: "#21373f" }
+            GradientStop { position: 1; color: "#11272f" }
+        }
 
         anchors {
             fill: parent
