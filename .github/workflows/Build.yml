@@ -23,6 +23,7 @@ env:
   QMAKE_PROJECT: "Serial-Studio.pro"
   QML_DIR_NIX: "assets/qml"
   QML_DIR_WIN: "assets\\qml"
+  QT_DOWNLOAD_MIRROR: http://mirrors.ocf.berkeley.edu/qt/
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -44,12 +45,24 @@ jobs:
           submodules: recursive
 
       #
+      # Cache Qt
+      #
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{runner.os}}-QtCache
+
+      #
       # Install Qt
       #
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
+          mirror: ${{env.QT_DOWNLOAD_MIRROR}}
+          cached: ${{steps.cache-qt.outputs.cache-hit}}
           
       #
       # Install additional dependencies, stolen from:
@@ -108,12 +121,24 @@ jobs:
           submodules: recursive
 
       #
+      # Cache Qt
+      #
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{runner.os}}-QtCache
+
+      #
       # Install Qt
       #
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
+          mirror: ${{env.QT_DOWNLOAD_MIRROR}}
+          cached: ${{steps.cache-qt.outputs.cache-hit}}
       
       #
       # Compile application
@@ -172,12 +197,24 @@ jobs:
           spectre: true
 
       #
+      # Cache Qt
+      #
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{runner.os}}-QtCache
+
+      #
       # Install Qt
       #
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
+          mirror: ${{env.QT_DOWNLOAD_MIRROR}}
+          cached: ${{steps.cache-qt.outputs.cache-hit}}
           
       #
       # Install NSIS

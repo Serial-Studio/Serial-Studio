@@ -55,6 +55,10 @@ class SerialManager : public QObject
                READ maxBufferSize
                WRITE setMaxBufferSize
                NOTIFY maxBufferSizeChanged)
+    Q_PROPERTY(bool writeEnabled
+               READ writeEnabled
+               WRITE setWriteEnabled
+               NOTIFY writeEnabledChanged)
     Q_PROPERTY(QString startSequence
                READ startSequence
                WRITE setStartSequence
@@ -115,6 +119,7 @@ signals:
     void stopBitsChanged();
     void connectedChanged();
     void flowControlChanged();
+    void writeEnabledChanged();
     void textDocumentChanged();
     void maxBufferSizeChanged();
     void startSequenceChanged();
@@ -136,6 +141,7 @@ public:
     bool connected() const;
     QString portName() const;
     int maxBufferSize() const;
+    bool writeEnabled() const;
     QString receivedBytes() const;
     QString startSequence() const;
     QString finishSequence() const;
@@ -167,6 +173,7 @@ public slots:
     void disconnectDevice();
     void sendData(const QString &data);
     void setPort(const quint8 portIndex);
+    void setWriteEnabled(const bool enabled);
     void setParity(const quint8 parityIndex);
     void setBaudRate(const quint8 baudRateIndex);
     void setDataBits(const quint8 dataBitsIndex);
@@ -202,6 +209,7 @@ private:
     quint64 m_receivedBytes;
     quint8 m_flowControlIndex;
 
+    bool m_writeEnabled;
     int m_maxBufferSize;
 
     QString m_startSeq;

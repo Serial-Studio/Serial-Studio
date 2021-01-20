@@ -21,6 +21,7 @@
  */
 
 import QtQuick 2.12
+import Qt.labs.settings 1.0
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
@@ -37,6 +38,14 @@ Control {
     //
     property alias text: _console.text
     readonly property color consoleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
+
+    //
+    // Save settings
+    //
+    Settings {
+        category: "Console"
+        property alias writeEnabled: writeSw.checked
+    }
 
     //
     // Connections with serial manager
@@ -105,6 +114,15 @@ Control {
         RowLayout {
             Layout.fillWidth: true
 
+            Switch {
+                id: writeSw
+                checked: true
+                Layout.alignment: Qt.AlignHCenter
+                onCheckedChanged: CppSerialManager.writeEnabled = checked
+                opacity: CppSerialManager.readWrite ? 1 : (CppSerialManager.connected ? 0.5 : 1)
+                Behavior on opacity {NumberAnimation{}}
+            }
+
             TextField {
                 id: _tf
                 height: 24
@@ -112,6 +130,7 @@ Control {
                 Layout.fillWidth: true
                 color: root.consoleColor
                 font.family: app.monoFont
+                opacity: enabled ? 1 : 0.5
                 enabled: CppSerialManager.readWrite
                 palette.base: Qt.rgba(18/255, 18/255, 24/255, 1)
                 placeholderText: qsTr("Send data to device") + "..." + CppTranslator.dummy

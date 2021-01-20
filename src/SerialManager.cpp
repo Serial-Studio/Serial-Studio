@@ -31,6 +31,45 @@
  */
 static SerialManager *INSTANCE = nullptr;
 
+/*
+ * QStringList of all known control characters
+ */
+static const QStringList CONTROL_STR
+    = { "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL",
+        " BS", " HT", " LF", " VT", " FF", " CR", " SO", " SI",
+        "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB",
+        "CAN", " EM", "SUB", "ESC", " FS", " GS", " RS", " US" };
+
+/**
+ * Returns a string that displays unknown characters in hexadecimal format
+ */
+static QString SAFE_STRING(const QByteArray &data)
+{
+    QString hexString;
+    QString string = QString::fromUtf8(data);
+
+    for (int i = 0; i < string.length(); ++i)
+    {
+        auto byte = string.at(i);
+        auto code = byte.unicode();
+
+        if (code >= 0 && code <= 31 && byte != '\n')
+        {
+            hexString.append(" ");
+            hexString.append(CONTROL_STR.at(code));
+            hexString.append(" ");
+        }
+
+        else if (code == 127)
+            hexString.append(" DEL ");
+
+        else
+            hexString.append(byte);
+    }
+
+    return hexString;
+}
+
 /**
  * Shows a macOS-like message box with the given properties
  */
@@ -169,6 +208,14 @@ QString SerialManager::portName() const
 int SerialManager::maxBufferSize() const
 {
     return m_maxBufferSize;
+}
+
+/**
+ * Returns @c true if we want to open the port in RW mode
+ */
+bool SerialManager::writeEnabled() const
+{
+    return m_writeEnabled;
 }
 
 /**
@@ -423,9 +470,10 @@ void SerialManager::disconnectDevice()
         auto name = portName();
 
         // Disconnect signals/slots
-        port()->disconnect(this, SLOT(handleError()));
         port()->disconnect(this, SLOT(onDataReceived()));
         port()->disconnect(this, SLOT(disconnectDevice()));
+        port()->disconnect(this,
+                           SLOT(handleError(QSerialPort::SerialPortError)));
 
         // Close & delete serial port handler
         port()->close();
@@ -433,6 +481,8 @@ void SerialManager::disconnectDevice()
 
         // Reset pointer
         m_port = nullptr;
+        m_portIndex = 0;
+        emit availablePortsChanged();
 
         // Reset received bytes
         m_receivedBytes = 0;
@@ -514,8 +564,8 @@ void SerialManager::setPort(const quint8 portIndex)
         return;
 
     // Update port index variable & disconnect from current serial port
-    m_portIndex = portIndex;
     disconnectDevice();
+    m_portIndex = portIndex;
 
     // Ignore the first item of the list (Select Port)
     if (portIndex > 0)
@@ -547,34 +597,45 @@ void SerialManager::setPort(const quint8 portIndex)
                     this,     SLOT(handleError(QSerialPort::SerialPortError)));
             // clang-format on
 
-            // Try to open the serial port in R/W mode
-            if (port()->open(QIODevice::ReadWrite))
+            // Select open mode for serial port
+            auto mode = QIODevice::ReadOnly;
+            if (writeEnabled())
+                mode = QIODevice::ReadWrite;
+
+            // Try to open the port in R/RW
+            if (port()->open(mode))
             {
                 emit connectedChanged();
                 LOG_INFO() << Q_FUNC_INFO
                            << "Serial port opened successfully in RW mode";
             }
 
-            // Try to open the serial port only for reading
-            else if (port()->open(QIODevice::ReadOnly))
-            {
-                emit connectedChanged();
-                LOG_INFO() << Q_FUNC_INFO
-                           << "Serial port opened successfully in READ mode";
-            }
-
             // Close serial port on error
             else
-            {
                 disconnectDevice();
-                LOG_INFO() << "Serial port open error" << port()->errorString();
-            }
         }
     }
 
     // Notify UI that the port status changed
     emit portChanged();
     LOG_INFO() << "Serial port selection set to" << portName();
+}
+
+/**
+ * Enables/disables RW mode
+ */
+void SerialManager::setWriteEnabled(const bool enabled)
+{
+    m_writeEnabled = enabled;
+
+    if (connected())
+    {
+        auto index = portIndex();
+        disconnectDevice();
+        setPort(index);
+    }
+
+    emit writeEnabledChanged();
 }
 
 /**
@@ -909,7 +970,7 @@ void SerialManager::onDataReceived()
 
     // Notify user interface
     emit receivedBytesChanged();
-    emit rx(QString::fromUtf8(data));
+    emit rx(SAFE_STRING(data));
 }
 
 /**
@@ -949,10 +1010,11 @@ void SerialManager::handleError(QSerialPort::SerialPortError error)
 {
     LOG_INFO() << "Serial port error" << port()->errorString();
 
-    if (error == QSerialPort::ResourceError)
+    if (error != QSerialPort::NoError)
     {
-        NiceMessageBox(tr("Critical serial port error"), port()->errorString());
-        setPort(0);
+        auto errorStr = port()->errorString();
+        disconnectDevice();
+        NiceMessageBox(tr("Critical serial port error"), errorStr);
     }
 }
 
