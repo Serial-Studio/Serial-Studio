@@ -160,6 +160,16 @@ Control {
 
                 Behavior on opacity {NumberAnimation{}}
             }
+
+            Button {
+                height: 24
+                icon.color: palette.text
+                opacity: enabled ? 1 : 0.5
+                onClicked: _console.clear()
+                enabled: _console.length > 0
+                icon.source: "qrc:/icons/delete.svg"
+                Behavior on opacity {NumberAnimation{}}
+            }
         }
     }
 }

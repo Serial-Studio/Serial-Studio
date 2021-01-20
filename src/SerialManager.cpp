@@ -53,6 +53,8 @@ static QString SAFE_STRING(const QByteArray &data)
         auto byte = string.at(i);
         auto code = byte.unicode();
 
+        qDebug() << byte << code;
+
         if (code >= 0 && code <= 31 && byte != '\n')
         {
             hexString.append(" ");
@@ -62,6 +64,9 @@ static QString SAFE_STRING(const QByteArray &data)
 
         else if (code == 127)
             hexString.append(" DEL ");
+
+        else if (code > 127)
+            hexString.append(" 0x" + QString::number(code, 16) + " ");
 
         else
             hexString.append(byte);
