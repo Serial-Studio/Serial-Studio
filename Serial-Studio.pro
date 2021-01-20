@@ -81,12 +81,6 @@ include(libs/Libraries.pri)
 win32* {
     TARGET = SerialStudio
     RC_FILE = deploy/windows/resources/info.rc
-    
-    # MSYS2 integration
-    target.path = /bin
-    license.path = /share/licenses/
-    license.files += LICENSE.md
-    INSTALLS += target license
 }
 
 macx* {
@@ -105,6 +99,18 @@ linux:!android {
     desktop.files += deploy/linux/serial-studio.desktop
 
     INSTALLS += target desktop icon
+}
+
+
+#-------------------------------------------------------------------------------
+# MSYS2 integration
+#-------------------------------------------------------------------------------
+
+win32-g++ {
+    target.path = $$(pkgdir)$$(MINGW_PREFIX)/bin
+    license.path = $$(pkgdir)$$(MINGW_PREFIX)/share/licenses/$$(_realname)
+    license.files += LICENSE.md
+    INSTALLS += target license
 }
 
 #-------------------------------------------------------------------------------
