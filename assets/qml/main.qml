@@ -468,6 +468,9 @@ ApplicationWindow {
         // Open *.json & *.csv files on drag drop
         //
         onDropped: {
+            // Hide rectangle
+            dropRectangle.hide()
+            
             // Get dropped file URL and remove prefixed "file://"
             var path = drop.urls[0].toString()
             if (Qt.platform.os != "windows")
@@ -487,9 +490,6 @@ ApplicationWindow {
             // Process CSV files
             else if (cleanPath.endsWith(".csv"))
                 CppCsvPlayer.openFile(cleanPath)
-
-            // Hide rectangle
-            dropRectangle.hide()
         }
 
         //
