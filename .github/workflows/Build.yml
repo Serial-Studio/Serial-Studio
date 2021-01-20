@@ -12,6 +12,8 @@ on:
     paths-ignore:     # File-patterns to ignore
     - '**.md'         # Ignore changes to *.md files
 
+  workflow_dispatch:
+
 #--------------------------------------------------------------------------------
 # Define application name & version
 #--------------------------------------------------------------------------------
