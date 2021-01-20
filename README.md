@@ -15,7 +15,7 @@ Furthermore, this approach can be extended to almost any type of project that in
 
 **NOTE:** Information regarding the communication protocol is provided in the [wiki](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol).
 
-*Read this in other languages*: [Español](README_ES.md)
+*Read this in other languages*: [Español](README_ES.md) [简体中文](README_ZH.md)
 
 ![Software usage](doc/app-usage.gif)
 
@@ -33,11 +33,11 @@ This repository makes use of [`git submodule`](https://git-scm.com/book/en/v2/Gi
 	cd Serial-Studio
 	git submodule init
 	git submodule update
-	
+
 Alternatively, just run:
 
 	git clone --recursive https://github.com/Serial-Studio/Serial-Studio
-    
+
 #### Compiling the application
 
 Once you have Qt installed, open *Serial-Studio.pro* in Qt Creator and click the "Run" button.
