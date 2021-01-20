@@ -6,7 +6,7 @@
 
 [![Build Status](https://github.com/Serial-Studio/Serial-Studio/workflows/Build/badge.svg)](https://github.com/Serial-Studio/Serial-Studio/actions/)
 [![Github All Releases](https://img.shields.io/github/downloads/Serial-Studio/Serial-Studio/total.svg)](https://github.com/Serial-Studio/Serial-Studio/releases/)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 
 Serial Studio是一个多平台，多用途的串行数据可视化的应用软件。本项目的目标是使嵌入式开发人员和制造商可以轻松地可视化的呈现和分析其项目和设备生成的数据，而无需为每个项目编写专用的计算机软件。
 
