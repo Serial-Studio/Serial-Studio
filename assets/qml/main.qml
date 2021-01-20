@@ -391,20 +391,21 @@ ApplicationWindow {
     Rectangle {
         id: dropRectangle
 
-        function hide(color, interval) {
-            dropRectangle.color = color
-            rectTimer.interval = interval
+        function hide() {
             rectTimer.start()
         }
 
         opacity: 0
-        border.width: 2
+        border.width: 1
         border.color: "#fff"
-        anchors.fill: parent
         color: palette.highlight
-        anchors.margins: app.spacing * 10
+        anchors.centerIn: parent
+        width: dropLayout.implicitWidth + 6 * app.spacing
+        height: dropLayout.implicitHeight + 6 * app.spacing
+
 
         ColumnLayout {
+            id: dropLayout
             spacing: app.spacing * 2
             anchors.centerIn: parent
 
@@ -423,12 +424,13 @@ ApplicationWindow {
                 font.bold: true
                 font.pixelSize: 24
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("Drop *.json and *.csv files here") + CppTranslator.dummy
+                text: qsTr("Drop JSON and CSV files here") + CppTranslator.dummy
             }
         }
 
         Timer {
             id: rectTimer
+            interval: 200
             onTriggered: dropRectangle.opacity = 0
         }
 
@@ -441,18 +443,29 @@ ApplicationWindow {
     DropArea {
         id: dropArea
         anchors.fill: parent
+        enabled: terminal.visible
 
         //
-        // Change rectangle color when file is about the be dropped
+        // Show rectangle and set color based on file extension on drag enter
         //
         onEntered: {
-            drag.accept(Qt.LinkAction)
+            // Get file name & set color of rectangle accordingly
+            var path = drag.urls[0].toString()
+            if (path.endsWith(".json") || path.endsWith(".csv")) {
+                drag.accept(Qt.LinkAction)
+                dropRectangle.color = Qt.darker(palette.highlight, 1.4)
+            }
+
+            // Invalid file name, show red rectangle
+            else
+                dropRectangle.color = Qt.rgba(215/255, 45/255, 96/255, 1)
+
+            // Show drag&drop rectangle
             dropRectangle.opacity = 0.8
-            dropRectangle.color = palette.highlight
         }
 
         //
-        // Open *.json & *.csv files
+        // Open *.json & *.csv files on drag drop
         //
         onDropped: {
             // Get dropped file URL and remove prefixed "file://"
@@ -467,28 +480,23 @@ ApplicationWindow {
 
             // Process JSON files
             if (cleanPath.endsWith(".json")) {
-                dropRectangle.hide(palette.highlight, 200)
                 CppJsonGenerator.setOperationMode(0)
                 CppJsonGenerator.loadJsonMap(cleanPath, false)
             }
 
             // Process CSV files
-            else if (cleanPath.endsWith(".csv")) {
-                dropRectangle.hide(palette.highlight, 200)
+            else if (cleanPath.endsWith(".csv"))
                 CppCsvPlayer.openFile(cleanPath)
-            }
 
-            // Make recangle red
-            else {
-                dropRectangle.hide(Qt.rgba(215/255, 45/255, 96/255, 1), 500)
-            }
+            // Hide rectangle
+            dropRectangle.hide()
         }
 
         //
-        // Hide drag & drop rectangle
+        // Hide drag & drop rectangle on drag exit
         //
         onExited: {
-            dropRectangle.hide(palette.highlight, 200)
+            dropRectangle.hide()
         }
     }
 }

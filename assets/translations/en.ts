@@ -525,7 +525,7 @@
         <translation></translation>
     </message>
     <message>
-        <source>Drop *.json and *.csv files here</source>
+        <source>Drop JSON and CSV files here</source>
         <translation></translation>
     </message>
 </context>

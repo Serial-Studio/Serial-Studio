@@ -534,7 +534,11 @@
     </message>
     <message>
         <source>Drop *.json and *.csv files here</source>
-        <translation>拖放*.json和*.csv文件</translation>
+        <translation type="vanished">拖放*.json和*.csv文件</translation>
+    </message>
+    <message>
+        <source>Drop JSON and CSV files here</source>
+        <translation>拖放JSON和CSV文件</translation>
     </message>
 </context>
 </TS>

@@ -32,7 +32,7 @@
 #define APP_NAME        "Serial Studio"
 #define APP_SUPPORT_URL "https://github.com/serial-studio"
 #define APP_UPDATER_URL "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json"
-#define LOG_FORMAT      "[%{time}] %{message:-120} [%{TypeOne}] [%{function}]\n"
+#define LOG_FORMAT      "[%{time}] %{message:-72} [%{TypeOne}] [%{function}]\n"
 #define LOG_FILE        QString("%1/%2.log").arg(QDir::tempPath(), APP_NAME)
 // clang-format on
 

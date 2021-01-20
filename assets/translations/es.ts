@@ -633,7 +633,11 @@
     </message>
     <message>
         <source>Drop *.json and *.csv files here</source>
-        <translation>Arrastre archivos *.json y *.csv aquí</translation>
+        <translation type="vanished">Arrastre archivos *.json y *.csv aquí</translation>
+    </message>
+    <message>
+        <source>Drop JSON and CSV files here</source>
+        <translation>Arrastre archivos JSON y CSV aquí</translation>
     </message>
 </context>
 </TS>

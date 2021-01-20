@@ -40,9 +40,9 @@
 #include "AppInfo.h"
 #include "Widgets.h"
 #include "CsvPlayer.h"
+#include "Translator.h"
 #include "DataProvider.h"
 #include "JsonGenerator.h"
-#include "Translator.h"
 #include "GraphProvider.h"
 #include "SerialManager.h"
 #include "ModuleManager.h"
@@ -78,9 +78,10 @@ int main(int argc, char **argv)
     cuteLogger->registerAppender(consoleAppender);
 
     // Begin logging
+    LOG_INFO() << QDateTime::currentDateTime();
+    LOG_INFO() << APP_NAME << APP_VERSION;
     LOG_INFO() << "Running on"
-               << QSysInfo::prettyProductName().toStdString().c_str()
-               << "date/time" << QDateTime::currentDateTime();
+               << QSysInfo::prettyProductName().toStdString().c_str();
 
     // Change application palette
     QPalette p;
