@@ -39,7 +39,7 @@ Control {
     // Save settings
     //
     Settings {
-        category: "Device Manager"
+        category: "Setup"
         property alias dmAuto: commAuto.checked
         property alias dmManual: commManual.checked
         property alias dmParity: parity.currentIndex

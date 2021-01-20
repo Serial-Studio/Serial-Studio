@@ -64,7 +64,7 @@
         <file>qml/Windows/Console.qml</file>
         <file>qml/Windows/CsvPlayer.qml</file>
         <file>qml/Windows/DataGrid.qml</file>
-        <file>qml/Windows/DeviceManager.qml</file>
+        <file>qml/Windows/Setup.qml</file>
         <file>qml/Windows/Toolbar.qml</file>
         <file>qml/Windows/Widgets.qml</file>
         <file>qml/main.qml</file>

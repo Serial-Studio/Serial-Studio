@@ -164,51 +164,51 @@
     <name>DeviceManager</name>
     <message>
         <source>Communication Mode</source>
-        <translation>Modo de comunicación</translation>
+        <translation type="vanished">Modo de comunicación</translation>
     </message>
     <message>
         <source>Auto (JSON from serial device)</source>
-        <translation>Automático (JSON desde puerto serial)</translation>
+        <translation type="vanished">Automático (JSON desde puerto serial)</translation>
     </message>
     <message>
         <source>Manual (use JSON map file)</source>
-        <translation>Manual (usar archivo de mapa JSON)</translation>
+        <translation type="vanished">Manual (usar archivo de mapa JSON)</translation>
     </message>
     <message>
         <source>Change map file (%1)</source>
-        <translation>Cambiar archivo (%1)</translation>
+        <translation type="vanished">Cambiar archivo (%1)</translation>
     </message>
     <message>
         <source>Select map file</source>
-        <translation>Seleccionar archivo de mapa</translation>
+        <translation type="vanished">Seleccionar archivo de mapa</translation>
     </message>
     <message>
         <source>COM Port</source>
-        <translation>Puerto COM</translation>
+        <translation type="vanished">Puerto COM</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>Baudios</translation>
+        <translation type="vanished">Baudios</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>Bits de datos</translation>
+        <translation type="vanished">Bits de datos</translation>
     </message>
     <message>
         <source>Parity</source>
-        <translation>Paridad</translation>
+        <translation type="vanished">Paridad</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>Bits de parada</translation>
+        <translation type="vanished">Bits de parada</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>Control de flujo</translation>
+        <translation type="vanished">Control de flujo</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Idioma</translation>
+        <translation type="vanished">Idioma</translation>
     </message>
 </context>
 <context>
@@ -548,10 +548,61 @@
     </message>
 </context>
 <context>
+    <name>Setup</name>
+    <message>
+        <source>Communication Mode</source>
+        <translation>Modo de comunicación</translation>
+    </message>
+    <message>
+        <source>Auto (JSON from serial device)</source>
+        <translation>Automático (JSON desde puerto serial)</translation>
+    </message>
+    <message>
+        <source>Manual (use JSON map file)</source>
+        <translation>Manual (usar archivo de mapa JSON)</translation>
+    </message>
+    <message>
+        <source>Change map file (%1)</source>
+        <translation>Cambiar archivo (%1)</translation>
+    </message>
+    <message>
+        <source>Select map file</source>
+        <translation>Seleccionar archivo de mapa</translation>
+    </message>
+    <message>
+        <source>COM Port</source>
+        <translation>Puerto COM</translation>
+    </message>
+    <message>
+        <source>Baud Rate</source>
+        <translation>Baudios</translation>
+    </message>
+    <message>
+        <source>Data Bits</source>
+        <translation>Bits de datos</translation>
+    </message>
+    <message>
+        <source>Parity</source>
+        <translation>Paridad</translation>
+    </message>
+    <message>
+        <source>Stop Bits</source>
+        <translation>Bits de parada</translation>
+    </message>
+    <message>
+        <source>Flow Control</source>
+        <translation>Control de flujo</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Idioma</translation>
+    </message>
+</context>
+<context>
     <name>Toolbar</name>
     <message>
         <source>Devices</source>
-        <translation>Dispositivos</translation>
+        <translation type="vanished">Dispositivos</translation>
     </message>
     <message>
         <source>Console</source>
@@ -596,6 +647,10 @@
     <message>
         <source>Open CSV</source>
         <translation>Abrir CSV</translation>
+    </message>
+    <message>
+        <source>Setup</source>
+        <translation>Configuración</translation>
     </message>
 </context>
 <context>

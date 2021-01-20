@@ -152,51 +152,27 @@
     <name>DeviceManager</name>
     <message>
         <source>Communication Mode</source>
-        <translation>Communication mode</translation>
-    </message>
-    <message>
-        <source>Auto (JSON from serial device)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Manual (use JSON map file)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Change map file (%1)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Select map file</source>
-        <translation></translation>
+        <translation type="vanished">Communication mode</translation>
     </message>
     <message>
         <source>COM Port</source>
-        <translation>COM port</translation>
+        <translation type="vanished">COM port</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>Baud rate</translation>
+        <translation type="vanished">Baud rate</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>Data bits</translation>
-    </message>
-    <message>
-        <source>Parity</source>
-        <translation></translation>
+        <translation type="vanished">Data bits</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>Stop bits</translation>
+        <translation type="vanished">Stop bits</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>Flow control</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation></translation>
+        <translation type="vanished">Flow control</translation>
     </message>
 </context>
 <context>
@@ -453,11 +429,58 @@
     </message>
 </context>
 <context>
-    <name>Toolbar</name>
+    <name>Setup</name>
     <message>
-        <source>Devices</source>
+        <source>Communication Mode</source>
+        <translation>Communication mode</translation>
+    </message>
+    <message>
+        <source>Auto (JSON from serial device)</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Manual (use JSON map file)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Change map file (%1)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Select map file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>COM Port</source>
+        <translation>COM port</translation>
+    </message>
+    <message>
+        <source>Baud Rate</source>
+        <translation>Baud rate</translation>
+    </message>
+    <message>
+        <source>Data Bits</source>
+        <translation>Data bits</translation>
+    </message>
+    <message>
+        <source>Parity</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Stop Bits</source>
+        <translation>Stop bits</translation>
+    </message>
+    <message>
+        <source>Flow Control</source>
+        <translation>Flow control</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Toolbar</name>
     <message>
         <source>Console</source>
         <translation></translation>
@@ -488,6 +511,10 @@
     </message>
     <message>
         <source>Open CSV</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Setup</source>
         <translation></translation>
     </message>
 </context>

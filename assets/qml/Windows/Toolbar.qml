@@ -39,7 +39,7 @@ Control {
     //
     signal dataClicked()
     signal aboutClicked()
-    signal devicesClicked()
+    signal setupClicked()
     signal consoleClicked()
     signal widgetsClicked()
 
@@ -48,9 +48,9 @@ Control {
     //
     property alias dataChecked: dataBt.checked
     property alias aboutChecked: aboutBt.checked
+    property alias setupChecked: setupBt.checked
     property alias consoleChecked: consoleBt.checked
     property alias widgetsChecked: widgetsBt.checked
-    property alias devicesChecked: devicesBt.checked
 
     //
     // Settings
@@ -88,16 +88,16 @@ Control {
         anchors.margins: app.spacing
 
         Button {
-            id: devicesBt
+            id: setupBt
 
             flat: true
             icon.width: 24
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
-            onClicked: root.devicesClicked()
-            icon.source: "qrc:/icons/usb.svg"
-            text: qsTr("Devices") + _btSpacer + CppTranslator.dummy
+            onClicked: root.setupClicked()
+            icon.source: "qrc:/icons/settings.svg"
+            text: qsTr("Setup") + _btSpacer + CppTranslator.dummy
         }
 
         Button {

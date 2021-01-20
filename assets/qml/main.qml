@@ -104,7 +104,7 @@ ApplicationWindow {
     Component.onCompleted: {
         // Hide dialogs, show devices pane
         about.hide()
-        devices.show()
+        setup.show()
         csvPlayer.hide()
 
         // Hide everything except the terminal
@@ -192,7 +192,7 @@ ApplicationWindow {
         id: uiConfigTimer
         interval: 250
         onTriggered: {
-            devices.hide()
+            setup.hide()
             toolbar.dataClicked()
         }
     }
@@ -204,7 +204,7 @@ ApplicationWindow {
         target: CppDataProvider
         function onDataReset() {
             toolbar.consoleClicked()
-            devices.show()
+            setup.show()
             app.firstValidPacket = false
         }
     }
@@ -239,9 +239,9 @@ ApplicationWindow {
             aboutChecked: about.visible
             consoleChecked: terminal.visible
             widgetsChecked: widgets.visible
-            devicesChecked: devices.visible
+            setupChecked: setup.visible
             onAboutClicked: about.visible ? about.hide() : about.show()
-            onDevicesClicked: devices.visible ? devices.hide() : devices.show()
+            onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
             onDataClicked: {
                 data.opacity    = 1
@@ -319,8 +319,8 @@ ApplicationWindow {
                 }
             }
 
-            DeviceManager {
-                id: devices
+            Setup {
+                id: setup
                 property int displayedWidth: 320
 
                 function show() {

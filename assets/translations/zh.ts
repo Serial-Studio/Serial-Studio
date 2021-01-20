@@ -156,51 +156,51 @@
     <name>DeviceManager</name>
     <message>
         <source>Communication Mode</source>
-        <translation>通讯方式</translation>
+        <translation type="vanished">通讯方式</translation>
     </message>
     <message>
         <source>Auto (JSON from serial device)</source>
-        <translation>自动（来自串行设备的JSON）</translation>
+        <translation type="vanished">自动（来自串行设备的JSON）</translation>
     </message>
     <message>
         <source>Manual (use JSON map file)</source>
-        <translation>手动（使用JSON映射文件）</translation>
+        <translation type="vanished">手动（使用JSON映射文件）</translation>
     </message>
     <message>
         <source>Change map file (%1)</source>
-        <translation>更改地图文件（%1）</translation>
+        <translation type="vanished">更改地图文件（%1）</translation>
     </message>
     <message>
         <source>Select map file</source>
-        <translation>选择地图文件</translation>
+        <translation type="vanished">选择地图文件</translation>
     </message>
     <message>
         <source>COM Port</source>
-        <translation>COM端口</translation>
+        <translation type="vanished">COM端口</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>波特率</translation>
+        <translation type="vanished">波特率</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>数据位</translation>
+        <translation type="vanished">数据位</translation>
     </message>
     <message>
         <source>Parity</source>
-        <translation>校验位</translation>
+        <translation type="vanished">校验位</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>停止位</translation>
+        <translation type="vanished">停止位</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>流控位</translation>
+        <translation type="vanished">流控位</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>语言</translation>
+        <translation type="vanished">语言</translation>
     </message>
 </context>
 <context>
@@ -461,10 +461,61 @@
     </message>
 </context>
 <context>
+    <name>Setup</name>
+    <message>
+        <source>Communication Mode</source>
+        <translation>通讯方式</translation>
+    </message>
+    <message>
+        <source>Auto (JSON from serial device)</source>
+        <translation>自动（来自串行设备的JSON）</translation>
+    </message>
+    <message>
+        <source>Manual (use JSON map file)</source>
+        <translation>手动（使用JSON映射文件）</translation>
+    </message>
+    <message>
+        <source>Change map file (%1)</source>
+        <translation>更改地图文件（%1）</translation>
+    </message>
+    <message>
+        <source>Select map file</source>
+        <translation>选择地图文件</translation>
+    </message>
+    <message>
+        <source>COM Port</source>
+        <translation>COM端口</translation>
+    </message>
+    <message>
+        <source>Baud Rate</source>
+        <translation>波特率</translation>
+    </message>
+    <message>
+        <source>Data Bits</source>
+        <translation>数据位</translation>
+    </message>
+    <message>
+        <source>Parity</source>
+        <translation>校验位</translation>
+    </message>
+    <message>
+        <source>Stop Bits</source>
+        <translation>停止位</translation>
+    </message>
+    <message>
+        <source>Flow Control</source>
+        <translation>流控位</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>语言</translation>
+    </message>
+</context>
+<context>
     <name>Toolbar</name>
     <message>
         <source>Devices</source>
-        <translation>设备</translation>
+        <translation type="vanished">设备</translation>
     </message>
     <message>
         <source>Console</source>
@@ -497,6 +548,10 @@
     <message>
         <source>Open CSV</source>
         <translation>打开CSV</translation>
+    </message>
+    <message>
+        <source>Setup</source>
+        <translation>体系</translation>
     </message>
 </context>
 <context>
