@@ -631,5 +631,9 @@
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
         <translation>¿Debería %1 buscar actualizaciones automáticamente? También puedes buscar actualizaciones manualmente desde el cuadro de diálogo &quot;Acerca de&quot;</translation>
     </message>
+    <message>
+        <source>Drop *.json and *.csv files here</source>
+        <translation>Arrastre archivos *.json y *.csv aquí</translation>
+    </message>
 </context>
 </TS>

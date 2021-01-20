@@ -160,8 +160,8 @@ public:
     QStringList stopBitsList() const;
     QStringList flowControlList() const;
 
+    qint32 baudRate() const;
     QSerialPort::Parity parity() const;
-    QSerialPort::BaudRate baudRate() const;
     QSerialPort::DataBits dataBits() const;
     QSerialPort::StopBits stopBits() const;
     QSerialPort::FlowControl flowControl() const;
@@ -195,8 +195,9 @@ private:
 
 private:
     QSerialPort *m_port;
+
+    qint32 m_baudRate;
     QSerialPort::Parity m_parity;
-    QSerialPort::BaudRate m_baudRate;
     QSerialPort::DataBits m_dataBits;
     QSerialPort::StopBits m_stopBits;
     QSerialPort::FlowControl m_flowControl;

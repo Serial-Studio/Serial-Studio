@@ -524,5 +524,9 @@
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Drop *.json and *.csv files here</source>
+        <translation></translation>
+    </message>
 </context>
 </TS>

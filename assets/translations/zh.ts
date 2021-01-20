@@ -532,5 +532,9 @@
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
         <translation>%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
     </message>
+    <message>
+        <source>Drop *.json and *.csv files here</source>
+        <translation>拖放*.json和*.csv文件</translation>
+    </message>
 </context>
 </TS>

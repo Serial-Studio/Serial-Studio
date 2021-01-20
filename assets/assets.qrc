@@ -74,5 +74,6 @@
         <file>translations/es.ts</file>
         <file>translations/zh.qm</file>
         <file>translations/zh.ts</file>
+        <file>icons/drag-drop.svg</file>
     </qresource>
 </RCC>

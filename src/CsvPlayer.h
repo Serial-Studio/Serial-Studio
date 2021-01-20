@@ -73,6 +73,7 @@ public slots:
     void closeFile();
     void nextFrame();
     void previousFrame();
+    void openFile(const QString &filePath);
     void setProgress(const qreal progress);
 
 private slots:

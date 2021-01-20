@@ -384,4 +384,111 @@ ApplicationWindow {
             app.automaticUpdates = false
         }
     }
+
+    //
+    // Intuitive UI stuff for drag and drop
+    //
+    Rectangle {
+        id: dropRectangle
+
+        function hide(color, interval) {
+            dropRectangle.color = color
+            rectTimer.interval = interval
+            rectTimer.start()
+        }
+
+        opacity: 0
+        border.width: 2
+        border.color: "#fff"
+        anchors.fill: parent
+        color: palette.highlight
+        anchors.margins: app.spacing * 10
+
+        ColumnLayout {
+            spacing: app.spacing * 2
+            anchors.centerIn: parent
+
+            ToolButton {
+                flat: true
+                enabled: false
+                icon.width: 128
+                icon.height: 128
+                icon.color: "#fff"
+                Layout.alignment: Qt.AlignHCenter
+                icon.source: "qrc:/icons/drag-drop.svg"
+            }
+
+            Label {
+                color: "#fff"
+                font.bold: true
+                font.pixelSize: 24
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("Drop *.json and *.csv files here") + CppTranslator.dummy
+            }
+        }
+
+        Timer {
+            id: rectTimer
+            onTriggered: dropRectangle.opacity = 0
+        }
+
+        Behavior on opacity {NumberAnimation{}}
+    }
+
+    //
+    // File drop area
+    //
+    DropArea {
+        id: dropArea
+        anchors.fill: parent
+
+        //
+        // Change rectangle color when file is about the be dropped
+        //
+        onEntered: {
+            drag.accept(Qt.LinkAction)
+            dropRectangle.opacity = 0.8
+            dropRectangle.color = palette.highlight
+        }
+
+        //
+        // Open *.json & *.csv files
+        //
+        onDropped: {
+            // Get dropped file URL and remove prefixed "file://"
+            var path = drop.urls[0].toString()
+            if (Qt.platform.os != "windows")
+                path = path.replace(/^(file:\/{2})/,"");
+            else
+                path = path.replace(/^(file:\/{3})/,"");
+
+            // Unescape html codes like '%23' for '#'
+            var cleanPath = decodeURIComponent(path);
+
+            // Process JSON files
+            if (cleanPath.endsWith(".json")) {
+                dropRectangle.hide(palette.highlight, 200)
+                CppJsonGenerator.setOperationMode(0)
+                CppJsonGenerator.loadJsonMap(cleanPath, false)
+            }
+
+            // Process CSV files
+            else if (cleanPath.endsWith(".csv")) {
+                dropRectangle.hide(palette.highlight, 200)
+                CppCsvPlayer.openFile(cleanPath)
+            }
+
+            // Make recangle red
+            else {
+                dropRectangle.hide(Qt.rgba(215/255, 45/255, 96/255, 1), 500)
+            }
+        }
+
+        //
+        // Hide drag & drop rectangle
+        //
+        onExited: {
+            dropRectangle.hide(palette.highlight, 200)
+        }
+    }
 }

@@ -106,12 +106,12 @@ SerialManager::SerialManager()
     m_receivedBytes = 0;
 
     // Init serial port configuration variables
-    setPort(0);
-    setParity(parityList().indexOf(tr("None")));
-    setBaudRate(baudRateList().indexOf("9600"));
     setDataBits(dataBitsList().indexOf("8"));
     setStopBits(stopBitsList().indexOf("1"));
+    setParity(parityList().indexOf(tr("None")));
+    setBaudRate(baudRateList().indexOf("9600"));
     setFlowControl(flowControlList().indexOf(tr("None")));
+    setPort(0);
 
     // Init start/finish sequence strings
     setStartSequence("/*");
@@ -357,8 +357,12 @@ QStringList SerialManager::parityList() const
  */
 QStringList SerialManager::baudRateList() const
 {
-    return QStringList { "1200",  "2400",  "4800",  "9600",
-                         "19200", "38400", "57600", "115200" };
+    QStringList list;
+    auto stdBaudRates = QSerialPortInfo::standardBaudRates();
+    foreach (auto baud, stdBaudRates)
+        list.append(QString::number(baud));
+
+    return list;
 }
 
 /**
@@ -405,7 +409,7 @@ QSerialPort::Parity SerialManager::parity() const
  * Returns the current baud rate configuration used by the serial port
  * handler object.
  */
-QSerialPort::BaudRate SerialManager::baudRate() const
+qint32 SerialManager::baudRate() const
 {
     return m_baudRate;
 }
@@ -697,38 +701,7 @@ void SerialManager::setBaudRate(const quint8 baudRateIndex)
 
     // Update current index
     m_baudRateIndex = baudRateIndex;
-
-    // Obtain baud rate value from current index
-    switch (baudRateIndex)
-    {
-        case 0:
-            m_baudRate = QSerialPort::Baud1200;
-            break;
-        case 1:
-            m_baudRate = QSerialPort::Baud2400;
-            break;
-        case 2:
-            m_baudRate = QSerialPort::Baud4800;
-            break;
-        case 3:
-            m_baudRate = QSerialPort::Baud9600;
-            break;
-        case 4:
-            m_baudRate = QSerialPort::Baud19200;
-            break;
-        case 5:
-            m_baudRate = QSerialPort::Baud38400;
-            break;
-        case 6:
-            m_baudRate = QSerialPort::Baud57600;
-            break;
-        case 7:
-            m_baudRate = QSerialPort::Baud115200;
-            break;
-        default:
-            m_baudRate = QSerialPort::UnknownBaud;
-            break;
-    }
+    m_baudRate = QSerialPortInfo::standardBaudRates().at(baudRateIndex);
 
     // Update serial port config
     if (port())
@@ -988,7 +961,14 @@ void SerialManager::refreshSerialDevices()
     foreach (QSerialPortInfo info, QSerialPortInfo::availablePorts())
     {
         if (!info.isNull())
-            ports.append(info.portName());
+        {
+            auto name = info.portName();
+            auto description = info.description();
+            if (!description.isEmpty())
+                ports.append(QString("%1 (%2)").arg(name, description));
+            else
+                ports.append(name);
+        }
     }
 
     // Update list only if necessary

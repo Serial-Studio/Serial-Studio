@@ -44,8 +44,8 @@ Control {
         property alias dmManual: commManual.checked
         property alias dmParity: parity.currentIndex
         property alias dmStopBits: stopBits.currentIndex
-        property alias dmBaudRate: baudRate.currentIndex
         property alias dmDataBits: dataBits.currentIndex
+        property alias dmBaudRateIndex: baudRate.currentIndex
         property alias dmFlowControl: flowControl.currentIndex
         property alias appLanguage: languageCombo.currentIndex
     }
@@ -64,6 +64,17 @@ Control {
 
             parity.currentIndex = oldParityIndex
             flowControl.currentIndex = oldFlowControlIndex
+        }
+    }
+
+    //
+    // Update manual/auto checkboxes
+    //
+    Connections {
+        target: CppJsonGenerator
+        function onOperationModeChanged() {
+            commAuto.checked = (CppJsonGenerator.operationMode == 1)
+            commManual.checked = (CppJsonGenerator.operationMode == 0)
         }
     }
 

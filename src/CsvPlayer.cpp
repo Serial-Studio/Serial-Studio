@@ -184,97 +184,18 @@ void CsvPlayer::toggle()
 }
 
 /**
- * Opens a CSV file and valitates it by comparing every data row with the title
- * row. If one of the data rows does not correspond to the title row, the CSV
- * is considered to be invalid.
+ * Lets the user select a CSV file
  */
 void CsvPlayer::openFile()
 {
-    // Check that manual JSON mode is activaded
-    auto opMode = JsonGenerator::getInstance()->operationMode();
-    auto jsonOpen = !JsonGenerator::getInstance()->jsonMapData().isEmpty();
-    if (opMode != JsonGenerator::kManual || !jsonOpen)
-    {
-        NiceMessageBox(tr("Invalid configuration for CSV player"),
-                       tr("You need to select a JSON map file in order to use "
-                          "this feature"));
-        return;
-    }
-
     // Get file name
     auto file = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Select CSV file"),
                                              QDir::homePath(),
                                              tr("CSV files") + " (*.csv)");
 
-    // File name empty, abort
-    if (file.isEmpty())
-        return;
-
-    // Close previous file
-    closeFile();
-
-    // Serial device is connected, warn user & disconnect
-    auto sm = SerialManager::getInstance();
-    if (sm->connected())
-    {
-        LOG_INFO() << "Serial device open, asking user what to do...";
-        auto response
-            = NiceMessageBox(tr("Serial port open, do you want to continue?"),
-                             tr("In order to use this feature, its necessary "
-                                "to disconnect from the serial port"),
-                             qAppName(), QMessageBox::No | QMessageBox::Yes);
-        if (response == QMessageBox::Yes)
-            sm->disconnectDevice();
-        else
-            return;
-    }
-
-    // Try to open the current file
-    m_csvFile.setFileName(file);
-    LOG_INFO() << "Trying to open CSV file...";
-    if (m_csvFile.open(QIODevice::ReadOnly))
-    {
-        // Read CSV file into string matrix
-        LOG_INFO() << "CSV file read, processing CSV data...";
-        m_csvData = QtCSV::Reader::readToList(m_csvFile);
-
-        // Validate CSV file (brutality works sometimes)
-        LOG_INFO() << "CSV frame count" << frameCount();
-        LOG_INFO() << "Validating CSV file...";
-        bool valid = true;
-        for (int i = 1; i < frameCount(); ++i)
-        {
-            valid &= validateRow(i);
-            if (!valid)
-                break;
-        }
-        LOG_INFO() << "CSV valid:" << valid;
-
-        // Read first row & update UI
-        if (valid)
-        {
-            updateData();
-            emit openChanged();
-        }
-
-        // Show error to the user
-        else
-        {
-            NiceMessageBox(
-                tr("There is an error with the data in the CSV file"),
-                tr("Please verify that the CSV file was created with Serial "
-                   "Studio"));
-        }
-    }
-
-    // Open error
-    else
-    {
-        LOG_INFO() << "CSV file read error" << m_csvFile.errorString();
-        NiceMessageBox(tr("Cannot read CSV file"),
-                       tr("Please check file permissions & location"));
-        closeFile();
-    }
+    // Open CSV file
+    if (!file.isEmpty())
+        openFile(file);
 }
 
 /**
@@ -318,6 +239,95 @@ void CsvPlayer::previousFrame()
     {
         --m_framePos;
         updateData();
+    }
+}
+
+/**
+ * Opens a CSV file and valitates it by comparing every data row with the title
+ * row. If one of the data rows does not correspond to the title row, the CSV
+ * is considered to be invalid.
+ */
+void CsvPlayer::openFile(const QString &filePath)
+{
+    // Check that manual JSON mode is activaded
+    auto opMode = JsonGenerator::getInstance()->operationMode();
+    auto jsonOpen = !JsonGenerator::getInstance()->jsonMapData().isEmpty();
+    if (opMode != JsonGenerator::kManual || !jsonOpen)
+    {
+        NiceMessageBox(tr("Invalid configuration for CSV player"),
+                       tr("You need to select a JSON map file in order to use "
+                          "this feature"));
+        return;
+    }
+
+    // File name empty, abort
+    if (filePath.isEmpty())
+        return;
+
+    // Close previous file
+    closeFile();
+
+    // Serial device is connected, warn user & disconnect
+    auto sm = SerialManager::getInstance();
+    if (sm->connected())
+    {
+        LOG_INFO() << "Serial device open, asking user what to do...";
+        auto response
+            = NiceMessageBox(tr("Serial port open, do you want to continue?"),
+                             tr("In order to use this feature, its necessary "
+                                "to disconnect from the serial port"),
+                             qAppName(), QMessageBox::No | QMessageBox::Yes);
+        if (response == QMessageBox::Yes)
+            sm->disconnectDevice();
+        else
+            return;
+    }
+
+    // Try to open the current file
+    m_csvFile.setFileName(filePath);
+    LOG_INFO() << "Trying to open CSV file...";
+    if (m_csvFile.open(QIODevice::ReadOnly))
+    {
+        // Read CSV file into string matrix
+        LOG_INFO() << "CSV file read, processing CSV data...";
+        m_csvData = QtCSV::Reader::readToList(m_csvFile);
+
+        // Validate CSV file (brutality works sometimes)
+        LOG_INFO() << "CSV frame count" << frameCount();
+        LOG_INFO() << "Validating CSV file...";
+        bool valid = true;
+        for (int i = 1; i < frameCount(); ++i)
+        {
+            valid &= validateRow(i);
+            if (!valid)
+                break;
+        }
+        LOG_INFO() << "CSV valid:" << valid;
+
+        // Read first row & update UI
+        if (valid)
+        {
+            updateData();
+            emit openChanged();
+        }
+
+        // Show error to the user
+        else
+        {
+            NiceMessageBox(
+                tr("There is an error with the data in the CSV file"),
+                tr("Please verify that the CSV file was created with Serial "
+                   "Studio"));
+        }
+    }
+
+    // Open error
+    else
+    {
+        LOG_INFO() << "CSV file read error" << m_csvFile.errorString();
+        NiceMessageBox(tr("Cannot read CSV file"),
+                       tr("Please check file permissions & location"));
+        closeFile();
     }
 }
 
