@@ -145,18 +145,7 @@ Control {
             Layout.fillWidth: true
             model: CppSerialManager.portList
             currentIndex: CppSerialManager.portIndex
-            onCurrentIndexChanged: {
-                if (CppSerialManager.portIndex !== currentIndex)
-                    CppSerialManager.portIndex = currentIndex
-            }
-
-            Connections {
-                target: CppSerialManager
-                function onAvailablePortsChanged() {
-                    if (portSelector.currentIndex !== CppSerialManager.portIndex)
-                        portSelector.currentIndex = CppSerialManager.portIndex
-                }
-            }
+            onCurrentIndexChanged: CppSerialManager.setPort(currentIndex)
         }
 
         //

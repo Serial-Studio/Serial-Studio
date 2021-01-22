@@ -193,6 +193,8 @@ private:
     SerialManager();
     ~SerialManager();
 
+    QList<QSerialPortInfo> validPorts() const;
+
 private:
     QSerialPort *m_port;
 
