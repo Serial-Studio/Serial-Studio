@@ -53,7 +53,16 @@ Control {
     Connections {
         target: CppSerialManager
         function onRx(rxData) {
+            // Add data to console buffer
             root.text += rxData
+
+            // Ensure that console line count stays in check
+            if (_console.height > _scrollView.height)
+                root.text = root.text.substring(rxData.length)
+
+            // Scroll to bottom
+            if (_scrollView.contentHeight > _scrollView.height)
+                _console.cursorPosition = _console.length - 1
         }
     }
 
@@ -66,7 +75,8 @@ Control {
         anchors.margins: app.spacing * 1.5
 
         //
-        // Console display
+        // Console display (HACK: we use the scrollview to know if there is text that is
+        // no longer visible in the console buffer)
         //
         TextField {
             id: _cont
@@ -79,6 +89,7 @@ Control {
                 id: _scrollView
                 anchors.fill: parent
                 contentWidth: parent.width
+                ScrollBar.vertical.policy: ScrollBar.AlwaysOff
                 ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
                 TextArea {
@@ -92,18 +103,6 @@ Control {
                     width: _scrollView.contentWidth
                     placeholderText: qsTr("No data received so far...") + CppTranslator.dummy
                     Component.onCompleted: CppSerialManager.configureTextDocument(textDocument)
-
-                    onTextChanged: {
-                        // Ensure that console line count stays in check
-                        while (_console.lineCount > 200 || root.text.length > 5000) {
-                            var lineWidth = _console.width / 12
-                            _console.text = _console.text.substring(lineWidth)
-                        }
-
-                        // Scroll to bottom
-                        if (_scrollView.contentHeight > _scrollView.height)
-                            _console.cursorPosition = _console.length - 1
-                    }
                 }
             }
         }

@@ -65,8 +65,15 @@ static QString SAFE_STRING(const QByteArray &data)
         else if (code == 127)
             hexString.append(" DEL ");
 
-        else if (code > 127)
-            hexString.append(" 0x" + QString::number(code, 16) + " ");
+        else if (code > 127) {
+            auto hexByte = QString::number(code, 16);
+            while (hexByte.length() < 4)
+                hexByte.prepend("0");
+
+            hexString.append(" 0x");
+            hexString.append(hexByte.toUpper());
+            hexString.append(" ");
+        }
 
         else
             hexString.append(byte);
