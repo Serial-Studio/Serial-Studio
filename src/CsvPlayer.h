@@ -23,9 +23,12 @@
 #ifndef DATA_REPLAY_H
 #define DATA_REPLAY_H
 
+#include <QMap>
+#include <QSet>
 #include <QFile>
 #include <QTimer>
 #include <QObject>
+#include <QStringList>
 #include <QJsonDocument>
 
 class CsvPlayer : public QObject

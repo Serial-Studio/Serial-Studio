@@ -27,6 +27,7 @@
 #include <QList>
 #include <QObject>
 #include <QVariant>
+#include <QTextStream>
 #include <QJsonObject>
 
 class Export : public QObject
