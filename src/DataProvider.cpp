@@ -159,8 +159,7 @@ void DataProvider::update()
 void DataProvider::resetData()
 {
     // Stop if dev. man is not disconnected or if CSV file is open
-    if (SerialManager::getInstance()->connected()
-        || CsvPlayer::getInstance()->isOpen())
+    if (SerialManager::getInstance()->connected() || CsvPlayer::getInstance()->isOpen())
         return;
 
     // Delete existing groups

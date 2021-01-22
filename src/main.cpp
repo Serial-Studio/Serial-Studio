@@ -80,8 +80,7 @@ int main(int argc, char **argv)
     // Begin logging
     LOG_INFO() << QDateTime::currentDateTime();
     LOG_INFO() << APP_NAME << APP_VERSION;
-    LOG_INFO() << "Running on"
-               << QSysInfo::prettyProductName().toStdString().c_str();
+    LOG_INFO() << "Running on" << QSysInfo::prettyProductName().toStdString().c_str();
 
     // Change application palette
     QPalette palette;

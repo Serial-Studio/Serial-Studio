@@ -142,8 +142,7 @@ void Export::openCurrentCsv()
         RevealFile(m_csvFile.fileName());
     else
         QMessageBox::critical(Q_NULLPTR, tr("CSV file not open"),
-                              tr("Cannot find CSV export file!"),
-                              QMessageBox::Ok);
+                              tr("Cannot find CSV export file!"), QMessageBox::Ok);
 }
 
 /**
@@ -228,8 +227,7 @@ void Export::writeValues()
                 // Construct dataset title from group, dataset title & units
                 QString title;
                 if (datasetUnits.isEmpty())
-                    title
-                        = QString("(%1) %2").arg(groupTitle).arg(datasetTitle);
+                    title = QString("(%1) %2").arg(groupTitle).arg(datasetTitle);
                 else
                     title = QString("(%1) %2 [%3]")
                                 .arg(groupTitle)

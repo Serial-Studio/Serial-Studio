@@ -189,9 +189,8 @@ void CsvPlayer::toggle()
 void CsvPlayer::openFile()
 {
     // Get file name
-    auto file = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Select CSV file"),
-                                             QDir::homePath(),
-                                             tr("CSV files") + " (*.csv)");
+    auto file = QFileDialog::getOpenFileName(
+        Q_NULLPTR, tr("Select CSV file"), QDir::homePath(), tr("CSV files") + " (*.csv)");
 
     // Open CSV file
     if (!file.isEmpty())
@@ -272,11 +271,10 @@ void CsvPlayer::openFile(const QString &filePath)
     if (sm->connected())
     {
         LOG_INFO() << "Serial device open, asking user what to do...";
-        auto response
-            = NiceMessageBox(tr("Serial port open, do you want to continue?"),
-                             tr("In order to use this feature, its necessary "
-                                "to disconnect from the serial port"),
-                             qAppName(), QMessageBox::No | QMessageBox::Yes);
+        auto response = NiceMessageBox(tr("Serial port open, do you want to continue?"),
+                                       tr("In order to use this feature, its necessary "
+                                          "to disconnect from the serial port"),
+                                       qAppName(), QMessageBox::No | QMessageBox::Yes);
         if (response == QMessageBox::Yes)
             sm->disconnectDevice();
         else
@@ -314,10 +312,9 @@ void CsvPlayer::openFile(const QString &filePath)
         // Show error to the user
         else
         {
-            NiceMessageBox(
-                tr("There is an error with the data in the CSV file"),
-                tr("Please verify that the CSV file was created with Serial "
-                   "Studio"));
+            NiceMessageBox(tr("There is an error with the data in the CSV file"),
+                           tr("Please verify that the CSV file was created with Serial "
+                              "Studio"));
         }
     }
 
@@ -583,8 +580,7 @@ QJsonDocument CsvPlayer::getJsonFrame(const int row)
                         auto dataset = datasets.at(j).toObject();
                         if (dataset.value("t") == datasetKey)
                         {
-                            auto value = values.at(
-                                getDatasetIndex(groupKey, datasetKey));
+                            auto value = values.at(getDatasetIndex(groupKey, datasetKey));
                             dataset.remove("v");
                             dataset.insert("v", value);
                         }
@@ -638,8 +634,7 @@ QString CsvPlayer::getCellValue(int row, int column, bool *error)
  * Returns the column/index for the dataset key that belongs to the given
  * group key.
  */
-int CsvPlayer::getDatasetIndex(const QString &groupKey,
-                               const QString &datasetKey)
+int CsvPlayer::getDatasetIndex(const QString &groupKey, const QString &datasetKey)
 {
     if (m_datasetIndexes.contains(groupKey))
     {

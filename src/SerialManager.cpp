@@ -35,10 +35,9 @@ static SerialManager *INSTANCE = nullptr;
  * QStringList of all known control characters
  */
 static const QStringList CONTROL_STR
-    = { "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL",
-        " BS", " HT", " LF", " VT", " FF", " CR", " SO", " SI",
-        "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB",
-        "CAN", " EM", "SUB", "ESC", " FS", " GS", " RS", " US" };
+    = { "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL", " BS", " HT", " LF",
+        " VT", " FF", " CR", " SO", " SI", "DLE", "DC1", "DC2", "DC3", "DC4", "NAK",
+        "SYN", "ETB", "CAN", " EM", "SUB", "ESC", " FS", " GS", " RS", " US" };
 
 /**
  * Returns a string that displays unknown characters in hexadecimal format
@@ -481,8 +480,7 @@ void SerialManager::disconnectDevice()
         // Disconnect signals/slots
         port()->disconnect(this, SLOT(onDataReceived()));
         port()->disconnect(this, SLOT(disconnectDevice()));
-        port()->disconnect(this,
-                           SLOT(handleError(QSerialPort::SerialPortError)));
+        port()->disconnect(this, SLOT(handleError(QSerialPort::SerialPortError)));
 
         // Close & delete serial port handler
         port()->close();
@@ -535,8 +533,7 @@ void SerialManager::sendData(const QString &data)
 
             // Bytes not equal to data length
             if (bytes != bin.length())
-                LOG_WARNING()
-                    << "Written data length not equal to request data length";
+                LOG_WARNING() << "Written data length not equal to request data length";
 
             // Emit signals
             else
@@ -615,8 +612,7 @@ void SerialManager::setPort(const quint8 portIndex)
             if (port()->open(mode))
             {
                 emit connectedChanged();
-                LOG_INFO() << Q_FUNC_INFO
-                           << "Serial port opened successfully in RW mode";
+                LOG_INFO() << Q_FUNC_INFO << "Serial port opened successfully in RW mode";
             }
 
             // Close serial port on error

@@ -57,8 +57,7 @@ GraphProvider::GraphProvider()
     qRegisterMetaType<QAbstractAxis *>();
 
     // Update graph values as soon as QML Bridge interprets data
-    connect(DataProvider::getInstance(), SIGNAL(updated()), this,
-            SLOT(updateValues()));
+    connect(DataProvider::getInstance(), SIGNAL(updated()), this, SLOT(updateValues()));
 
     // Avoid issues when CSV player goes backwards
     connect(CsvPlayer::getInstance(), SIGNAL(timestampChanged()), this,
@@ -219,8 +218,7 @@ void GraphProvider::updateValues()
 
         // Remove older items
         if (m_points.at(i)->count() >= displayedPoints())
-            m_points.at(i)->remove(0,
-                                   m_points.at(i)->count() - displayedPoints());
+            m_points.at(i)->remove(0, m_points.at(i)->count() - displayedPoints());
 
         // Add values
         m_points.at(i)->append(getValue(i));

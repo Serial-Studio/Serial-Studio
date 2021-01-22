@@ -75,8 +75,7 @@ JsonGenerator::JsonGenerator()
     m_dataFormatErrors = 0;
     auto sm = SerialManager::getInstance();
     connect(sm, SIGNAL(portChanged()), this, SLOT(reset()));
-    connect(sm, SIGNAL(packetReceived(QByteArray)), this,
-            SLOT(readData(QByteArray)));
+    connect(sm, SIGNAL(packetReceived(QByteArray)), this, SLOT(readData(QByteArray)));
 
     LOG_INFO() << "Initialized JsonParser module";
 }
@@ -149,9 +148,9 @@ JsonGenerator::OperationMode JsonGenerator::operationMode() const
  */
 void JsonGenerator::loadJsonMap()
 {
-    auto file = QFileDialog::getOpenFileName(
-        Q_NULLPTR, tr("Select JSON map file"), QDir::homePath(),
-        tr("JSON files") + " (*.json)");
+    auto file
+        = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Select JSON map file"),
+                                       QDir::homePath(), tr("JSON files") + " (*.json)");
 
     if (!file.isEmpty())
         loadJsonMap(file);
@@ -201,9 +200,9 @@ void JsonGenerator::loadJsonMap(const QString &path, const bool silent)
             writeSettings(path);
             m_jsonMapData = QString::fromUtf8(data);
             if (!silent)
-                NiceMessageBox(tr("JSON map file loaded successfully!"),
-                               tr("File \"%1\" loaded into memory")
-                                   .arg(jsonMapFilename()));
+                NiceMessageBox(
+                    tr("JSON map file loaded successfully!"),
+                    tr("File \"%1\" loaded into memory").arg(jsonMapFilename()));
         }
     }
 
