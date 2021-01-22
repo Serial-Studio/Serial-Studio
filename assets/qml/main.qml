@@ -458,7 +458,7 @@ ApplicationWindow {
 
             // Invalid file name, show red rectangle
             else
-                dropRectangle.color = Qt.rgba(215/255, 45/255, 96/255, 1)
+                dropRectangle.color = "#d72d60"
 
             // Show drag&drop rectangle
             dropRectangle.opacity = 0.8

@@ -35,9 +35,9 @@ Window {
     spacing: -1
     showIcon: false
     visible: opacity > 0
+    borderColor: "#517497"
     opacity: enabled ? 1 : 0
     Behavior on opacity {NumberAnimation{}}
-    borderColor: Qt.rgba(81/255, 116/255, 151/255, 1)
     title: CppGraphProvider.getDataset(graphId).title +
            " (" + CppGraphProvider.getDataset(graphId).units + ")"
 
@@ -109,10 +109,10 @@ Window {
             labelFormat: " "
             lineVisible: false
             labelsVisible: false
+            gridLineColor: "#517497"
             tickType: ValueAxis.TicksFixed
             labelsFont.family: app.monoFont
             max: CppGraphProvider.displayedPoints
-            gridLineColor: Qt.rgba(81/255, 116/255, 151/255, 1)
         }
 
         ValueAxis {
@@ -120,10 +120,10 @@ Window {
             min: 0
             max: 1
             lineVisible: false
+            labelsColor: "#517497"
+            gridLineColor: "#517497"
             tickType: ValueAxis.TicksFixed
             labelsFont.family: app.monoFont
-            labelsColor: Qt.rgba(81/255, 116/255, 151/255, 1)
-            gridLineColor: Qt.rgba(81/255, 116/255, 151/255, 1)
         }
 
         LineSeries {
@@ -131,9 +131,9 @@ Window {
             width: 2
             axisX: timeAxis
             useOpenGL: true
+            color: "#e6e0b2"
             capStyle: Qt.RoundCap
             axisYRight: positionAxis
-            color: Qt.rgba(230/255, 224/255, 178/255, 1)
         }
     }
 }

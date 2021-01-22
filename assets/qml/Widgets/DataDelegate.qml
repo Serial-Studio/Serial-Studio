@@ -34,11 +34,11 @@ Item {
     property Dataset dataset: null
 
     Label {
+        color: "#e6e0b2"
         text: dataset.title
         elide: Label.ElideRight
         font.family: app.monoFont
         horizontalAlignment: Text.AlignLeft
-        color: Qt.rgba(230/255, 224/255, 178/255, 0.6)
 
         anchors {
             leftMargin: 0
@@ -62,17 +62,17 @@ Item {
 
         ColorOverlay {
             source: parent
+            color: "#517497"
             anchors.fill: parent
-            color: Qt.rgba(81/255, 116/255, 151/255, 1)
         }
     }
 
     Label {
+        color: "#e6e0b2"
         text: dataset.value
         elide: Label.ElideRight
         font.family: app.monoFont
         horizontalAlignment: Text.AlignLeft
-        color: Qt.rgba(230/255, 224/255, 178/255, 1)
 
         anchors {
             left: center.right
@@ -84,11 +84,11 @@ Item {
 
     Label {
         id: units
+        color: "#517497"
         font.family: app.monoFont
         text: "[" + dataset.units + "]"
         visible: dataset.units.length > 0
         horizontalAlignment: Text.AlignRight
-        color: Qt.rgba(81/255, 116/255, 151/255, 1)
 
         anchors {
             rightMargin: 0

@@ -40,9 +40,9 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
+    backgroundColor: "#09090c"
     icon.source: "qrc:/icons/chart.svg"
     implicitHeight: implicitWidth + 96
-    backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
 
     //
     // Set the level color randomly from an array
@@ -63,10 +63,10 @@ Window {
     //
     // Colors
     //
-    property color tankColor: Qt.rgba(230/255, 224/255, 178/255, 1)
-    property color valueColor: Qt.rgba(81/255, 116/255, 151/255, 1)
-    property color titleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
-    property color emptyColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
+    property color tankColor: "#e6e0b2"
+    property color valueColor: "#517497"
+    property color titleColor: "#8ecd9d"
+    property color emptyColor: "#121218"
     property color levelColor:  {
         if (colorPalette.length > index)
             return colorPalette[index]
@@ -94,7 +94,7 @@ Window {
     // Connections with widget manager
     //
     Connections {
-        target: CppWidgets
+        target: CppWidgetProvider
         function onDataChanged() {
             root.updateValues()
         }
@@ -104,12 +104,12 @@ Window {
     // Updates the internal values of the bar widget
     //
     function updateValues() {
-        if (CppWidgets.barDatasetCount() > root.datasetIndex) {
-            root.minimumValue = CppWidgets.barMin(root.datasetIndex)
-            root.maximumValue = CppWidgets.barMax(root.datasetIndex)
-            root.currentValue = CppWidgets.bar(root.datasetIndex)
-            root.title = CppWidgets.barDatasetAt(root.datasetIndex).title
-            root.units = CppWidgets.barDatasetAt(root.datasetIndex).units
+        if (CppWidgetProvider.barDatasetCount() > root.datasetIndex) {
+            root.minimumValue = CppWidgetProvider.barMin(root.datasetIndex)
+            root.maximumValue = CppWidgetProvider.barMax(root.datasetIndex)
+            root.currentValue = CppWidgetProvider.bar(root.datasetIndex)
+            root.title = CppWidgetProvider.barDatasetAt(root.datasetIndex).title
+            root.units = CppWidgetProvider.barDatasetAt(root.datasetIndex).units
 
             if (root.maximumValue > root.minimumValue)  {
                 var range = root.maximumValue - root.minimumValue

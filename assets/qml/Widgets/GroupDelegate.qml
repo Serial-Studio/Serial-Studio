@@ -35,9 +35,9 @@ Window {
     showIcon: false
     title: group.title
     visible: opacity > 0
+    borderColor: "#517497"
     opacity: enabled ? 1 : 0
     Behavior on opacity {NumberAnimation{}}
-    borderColor: Qt.rgba(81/255, 116/255, 151/255, 1)
 
     property int groupIndex: 0
     property Group group: null

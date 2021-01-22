@@ -41,19 +41,19 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
+    backgroundColor: "#09090c"
     implicitHeight: implicitWidth + 96
     icon.source: "qrc:/icons/refresh.svg"
-    backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
 
     //
     // Custom properties
     //
     property real yawAngle: 0
     property real rollAngle: 0
-    property real pitchAngle: 0
     property int groupIndex: 0
+    property real pitchAngle: 0
+    property color valueColor: "#8eccff"
     property real gaugeSize: calculateGaugeSize()
-    property color valueColor: Qt.rgba(142/255, 205/255, 157/255, 1)
 
     //
     // Update root size automatically
@@ -66,7 +66,7 @@ Window {
     // Connections with widget manager
     //
     Connections {
-        target: CppWidgets
+        target: CppWidgetProvider
         function onDataChanged() {
             root.updateValues()
         }
@@ -76,11 +76,11 @@ Window {
     // Updates the internal values of the bar widget
     //
     function updateValues() {
-        if (CppWidgets.gyroGroupCount() > root.groupIndex) {
-            root.yawAngle   = CppWidgets.gyroYaw(root.groupIndex)
-            root.rollAngle  = CppWidgets.gyroRoll(root.groupIndex)
-            root.pitchAngle = CppWidgets.gyroPitch(root.groupIndex)
-            root.title      = CppWidgets.gyroGroupAt(root.groupIndex).title
+        if (CppWidgetProvider.gyroGroupCount() > root.groupIndex) {
+            root.yawAngle   = CppWidgetProvider.gyroYaw(root.groupIndex)
+            root.rollAngle  = CppWidgetProvider.gyroRoll(root.groupIndex)
+            root.pitchAngle = CppWidgetProvider.gyroPitch(root.groupIndex)
+            root.title      = CppWidgetProvider.gyroGroupAt(root.groupIndex).title
         }
 
         else {

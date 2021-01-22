@@ -38,7 +38,6 @@
 
 #include "Export.h"
 #include "AppInfo.h"
-#include "Widgets.h"
 #include "CsvPlayer.h"
 #include "Translator.h"
 #include "DataProvider.h"
@@ -46,6 +45,7 @@
 #include "GraphProvider.h"
 #include "SerialManager.h"
 #include "ModuleManager.h"
+#include "WidgetProvider.h"
 
 /**
  * @brief Entry-point function of the application
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     // Init application modules
     Translator translator;
     QQmlApplicationEngine engine;
-    auto widgets = Widgets::getInstance();
+    auto widgetProvider = WidgetProvider::getInstance();
     auto csvExport = Export::getInstance();
     auto csvPlayer = CsvPlayer::getInstance();
     auto updater = QSimpleUpdater::getInstance();
@@ -122,7 +122,6 @@ int main(int argc, char **argv)
     auto c = engine.rootContext();
     QQuickStyle::setStyle("Fusion");
     c->setContextProperty("CppUpdater", updater);
-    c->setContextProperty("CppWidgets", widgets);
     c->setContextProperty("CppExport", csvExport);
     c->setContextProperty("CppCsvPlayer", csvPlayer);
     c->setContextProperty("CppTranslator", &translator);
@@ -132,6 +131,7 @@ int main(int argc, char **argv)
     c->setContextProperty("CppSerialManager", serialManager);
     c->setContextProperty("CppAppName", app.applicationName());
     c->setContextProperty("CppAppUpdaterUrl", APP_UPDATER_URL);
+    c->setContextProperty("CppWidgetProvider", widgetProvider);
     c->setContextProperty("CppAppVersion", app.applicationVersion());
     c->setContextProperty("CppAppOrganization", app.organizationName());
     c->setContextProperty("CppAppOrganizationDomain", app.organizationDomain());

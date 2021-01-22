@@ -141,7 +141,7 @@ Control {
             icon.color: palette.text
             onClicked: root.widgetsClicked()
             icon.source: "qrc:/icons/chart.svg"
-            enabled: CppWidgets.totalWidgetCount > 0
+            enabled: CppWidgetProvider.totalWidgetCount > 0
             text: qsTr("Widgets") + _btSpacer + CppTranslator.dummy
 
             opacity: enabled ? 1 : 0.5
@@ -168,10 +168,10 @@ Control {
         Switch {
             id: csvLogging
             checked: true
+            palette.highlight: "#2e895c"
             Layout.alignment: Qt.AlignVCenter
             text: qsTr("CSV Export") + CppTranslator.dummy
             onCheckedChanged: CppExport.exportEnabled = checked
-            palette.highlight: Qt.rgba(46/255, 137/255, 92/255, 1)
         }
 
         Button {

@@ -32,7 +32,7 @@ Item {
     //
     property real rollAngle: 0
     property real pitchAngle: 0
-    property color borderColor: Qt.rgba(230/255, 224/255, 178/255, 1)
+    property color borderColor: "#e6e0b2"
 
     //
     // Instrument
@@ -53,18 +53,18 @@ Item {
             Rectangle {
                 id: sky
                 smooth: true
+                color: "#5c93c5"
                 antialiasing: true
                 anchors.fill: parent
-                color: Qt.rgba(92/255, 147/255, 197/255, 1)
                 anchors.topMargin: -artificialHorizon.height
             }
 
             Rectangle {
                 id: ground
                 smooth: true
+                color: "#7d5233"
                 antialiasing: true
                 height: artificialHorizon.height * 1.5
-                color: Qt.rgba(125/255, 82/255, 51/255, 1)
 
                 anchors {
                     left: sky.left

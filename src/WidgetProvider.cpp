@@ -23,8 +23,8 @@
 #include "Group.h"
 #include "Logger.h"
 #include "Dataset.h"
-#include "Widgets.h"
 #include "DataProvider.h"
+#include "WidgetProvider.h"
 #include "ConsoleAppender.h"
 
 #include <cfloat>
@@ -33,12 +33,12 @@
 /*
  * Pointer to the only instance of the class
  */
-static Widgets *INSTANCE = Q_NULLPTR;
+static WidgetProvider *INSTANCE = Q_NULLPTR;
 
 /**
  * Initialization code of the @c Widgets class
  */
-Widgets::Widgets()
+WidgetProvider::WidgetProvider()
 {
     auto bridge = DataProvider::getInstance();
     connect(bridge, SIGNAL(updated()), this, SLOT(updateModels()));
@@ -49,10 +49,10 @@ Widgets::Widgets()
 /**
  * Returns a pointer to the only instance of the class
  */
-Widgets *Widgets::getInstance()
+WidgetProvider *WidgetProvider::getInstance()
 {
     if (!INSTANCE)
-        INSTANCE = new Widgets;
+        INSTANCE = new WidgetProvider;
 
     return INSTANCE;
 }
@@ -60,7 +60,7 @@ Widgets *Widgets::getInstance()
 /**
  * Returns a list with all the JSON datasets that implement a bar widget
  */
-QList<Dataset *> Widgets::barDatasets() const
+QList<Dataset *> WidgetProvider::barDatasets() const
 {
     return m_barDatasets;
 }
@@ -68,7 +68,7 @@ QList<Dataset *> Widgets::barDatasets() const
 /**
  * Returns a list with all the JSON groups that implement a map widget
  */
-QList<Group *> Widgets::mapGroup() const
+QList<Group *> WidgetProvider::mapGroup() const
 {
     return m_mapGroups;
 }
@@ -76,7 +76,7 @@ QList<Group *> Widgets::mapGroup() const
 /**
  * Returns a list with all the JSON groups that implement a gyro widget
  */
-QList<Group *> Widgets::gyroGroup() const
+QList<Group *> WidgetProvider::gyroGroup() const
 {
     return m_gyroGroups;
 }
@@ -85,7 +85,7 @@ QList<Group *> Widgets::gyroGroup() const
  * Returns a list with all the JSON groups that implement an accelerometer
  * widget
  */
-QList<Group *> Widgets::accelerometerGroup() const
+QList<Group *> WidgetProvider::accelerometerGroup() const
 {
     return m_accelerometerGroups;
 }
@@ -93,7 +93,7 @@ QList<Group *> Widgets::accelerometerGroup() const
 /**
  * Returns the total number of widgets that should be generated
  */
-int Widgets::totalWidgetCount() const
+int WidgetProvider::totalWidgetCount() const
 {
     // clang-format off
     return mapGroupCount() +
@@ -106,7 +106,7 @@ int Widgets::totalWidgetCount() const
 /**
  * Returns the number of JSON groups that implement a bar widget
  */
-int Widgets::barDatasetCount() const
+int WidgetProvider::barDatasetCount() const
 {
     return barDatasets().count();
 }
@@ -114,7 +114,7 @@ int Widgets::barDatasetCount() const
 /**
  * Returns the number of JSON groups that implement a map widget
  */
-int Widgets::mapGroupCount() const
+int WidgetProvider::mapGroupCount() const
 {
     return mapGroup().count();
 }
@@ -122,7 +122,7 @@ int Widgets::mapGroupCount() const
 /**
  * Returns the number of JSON groups that implement a gyro widget
  */
-int Widgets::gyroGroupCount() const
+int WidgetProvider::gyroGroupCount() const
 {
     return gyroGroup().count();
 }
@@ -130,7 +130,7 @@ int Widgets::gyroGroupCount() const
 /**
  * Returns the number of JSON groups that implement an accelerometer widget
  */
-int Widgets::accelerometerGroupCount() const
+int WidgetProvider::accelerometerGroupCount() const
 {
     return accelerometerGroup().count();
 }
@@ -139,7 +139,7 @@ int Widgets::accelerometerGroupCount() const
  * Returns a pointer to the JSON dataset that implements a bar widget
  * with the given @a index
  */
-Dataset *Widgets::barDatasetAt(const int index)
+Dataset *WidgetProvider::barDatasetAt(const int index)
 {
     if (barDatasets().count() > index)
         return barDatasets().at(index);
@@ -151,7 +151,7 @@ Dataset *Widgets::barDatasetAt(const int index)
  * Returns a pointer to the JSON group that implements a map widget
  * with the given @a index
  */
-Group *Widgets::mapGroupAt(const int index)
+Group *WidgetProvider::mapGroupAt(const int index)
 {
     if (mapGroup().count() > index)
         return mapGroup().at(index);
@@ -163,7 +163,7 @@ Group *Widgets::mapGroupAt(const int index)
  * Returns a pointer to the JSON group that implements a gyro widget
  * with the given @a index
  */
-Group *Widgets::gyroGroupAt(const int index)
+Group *WidgetProvider::gyroGroupAt(const int index)
 {
     if (gyroGroup().count() > index)
         return gyroGroup().at(index);
@@ -175,7 +175,7 @@ Group *Widgets::gyroGroupAt(const int index)
  * Returns a pointer to the JSON group that implements an accelerometer
  * widget with the given @a index
  */
-Group *Widgets::accelerometerGroupAt(const int index)
+Group *WidgetProvider::accelerometerGroupAt(const int index)
 {
     if (accelerometerGroup().count() > index)
         return accelerometerGroup().at(index);
@@ -186,7 +186,7 @@ Group *Widgets::accelerometerGroupAt(const int index)
 /**
  * Returns the yaw angle for the gyro widget at the given @a index
  */
-double Widgets::gyroYaw(const int index)
+double WidgetProvider::gyroYaw(const int index)
 {
     auto gyro = gyroGroupAt(index);
 
@@ -206,7 +206,7 @@ double Widgets::gyroYaw(const int index)
 /**
  * Returns the roll angle for the gyro widget at the given @a index
  */
-double Widgets::gyroRoll(const int index)
+double WidgetProvider::gyroRoll(const int index)
 {
     auto gyro = gyroGroupAt(index);
 
@@ -226,7 +226,7 @@ double Widgets::gyroRoll(const int index)
 /**
  * Returns the pitch angle for the gyro widget at the given @a index
  */
-double Widgets::gyroPitch(const int index)
+double WidgetProvider::gyroPitch(const int index)
 {
     auto gyro = gyroGroupAt(index);
 
@@ -247,7 +247,7 @@ double Widgets::gyroPitch(const int index)
  * Returns the value of the X axis for the accelerometer widget at the given @a
  * index
  */
-double Widgets::accelerometerX(const int index)
+double WidgetProvider::accelerometerX(const int index)
 {
     auto accelerometer = accelerometerGroupAt(index);
 
@@ -268,7 +268,7 @@ double Widgets::accelerometerX(const int index)
  * Returns the value of the Y axis for the accelerometer widget at the given @a
  * index
  */
-double Widgets::accelerometerY(const int index)
+double WidgetProvider::accelerometerY(const int index)
 {
     auto accelerometer = accelerometerGroupAt(index);
 
@@ -289,7 +289,7 @@ double Widgets::accelerometerY(const int index)
  * Returns the value of the Z axis for the accelerometer widget at the given @a
  * index
  */
-double Widgets::accelerometerZ(const int index)
+double WidgetProvider::accelerometerZ(const int index)
 {
     auto accelerometer = accelerometerGroupAt(index);
 
@@ -309,7 +309,7 @@ double Widgets::accelerometerZ(const int index)
 /**
  * Returns the value for the bar widget at the given @a index
  */
-double Widgets::bar(const int index)
+double WidgetProvider::bar(const int index)
 {
     auto bar = barDatasetAt(index);
     if (bar)
@@ -321,7 +321,7 @@ double Widgets::bar(const int index)
 /**
  * Returns the minimum value for the bar widget at the given @a index
  */
-double Widgets::barMin(const int index)
+double WidgetProvider::barMin(const int index)
 {
     auto bar = barDatasetAt(index);
     if (bar)
@@ -333,7 +333,7 @@ double Widgets::barMin(const int index)
 /**
  * Returns the maximum value for the bar widget at the given @a index
  */
-double Widgets::barMax(const int index)
+double WidgetProvider::barMax(const int index)
 {
     auto bar = barDatasetAt(index);
     if (bar)
@@ -345,7 +345,7 @@ double Widgets::barMax(const int index)
 /**
  * Returns the latitude value for the map widget at the given @a index
  */
-double Widgets::mapLatitude(const int index)
+double WidgetProvider::mapLatitude(const int index)
 {
     auto map = mapGroupAt(index);
 
@@ -365,7 +365,7 @@ double Widgets::mapLatitude(const int index)
 /**
  * Returns the longitude value for the map widget at the given @a index
  */
-double Widgets::mapLongitude(const int index)
+double WidgetProvider::mapLongitude(const int index)
 {
     auto map = mapGroupAt(index);
 
@@ -386,7 +386,7 @@ double Widgets::mapLongitude(const int index)
  * Regenerates the widget groups with the latest data given by the @c QmlBridge
  * class.
  */
-void Widgets::updateModels()
+void WidgetProvider::updateModels()
 {
     // Clear current groups
     m_barDatasets.clear();
@@ -408,7 +408,7 @@ void Widgets::updateModels()
  * Obtains all the JSON groups that implement the given widget @a handle ID.
  * The JSON groups are provided by the @c QmlBridge class.
  */
-QList<Group *> Widgets::getWidgetGroup(const QString &handle)
+QList<Group *> WidgetProvider::getWidgetGroup(const QString &handle)
 {
     QList<Group *> widgetGroup;
 
@@ -425,7 +425,7 @@ QList<Group *> Widgets::getWidgetGroup(const QString &handle)
  * Obtains all the JSON datasets that implement the given widget @a handle ID.
  * The JSON groups & datasets are provided by the @c QmlBridge class.
  */
-QList<Dataset *> Widgets::getWidgetDatasets(const QString &handle)
+QList<Dataset *> WidgetProvider::getWidgetDatasets(const QString &handle)
 {
     QList<Dataset *> widgetDatasets;
 

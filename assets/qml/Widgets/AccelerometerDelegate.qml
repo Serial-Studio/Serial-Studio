@@ -40,9 +40,9 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
+    backgroundColor: "#09090c"
     icon.source: "qrc:/icons/tab.svg"
     implicitHeight: implicitWidth + 96
-    backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
 
     //
     // Custom properties
@@ -68,7 +68,7 @@ Window {
     // Connections with widget manager
     //
     Connections {
-        target: CppWidgets
+        target: CppWidgetProvider
         function onDataChanged() {
             root.calculateMeanGForce()
         }
@@ -79,11 +79,11 @@ Window {
     //
     function calculateMeanGForce() {
         // Update values
-        if (CppWidgets.accelerometerGroupCount() > root.groupIndex) {
-            root.accX  = CppWidgets.accelerometerX(root.groupIndex)
-            root.accY  = CppWidgets.accelerometerY(root.groupIndex)
-            root.accZ  = CppWidgets.accelerometerZ(root.groupIndex)
-            root.title = CppWidgets.accelerometerGroupAt(root.groupIndex).title
+        if (CppWidgetProvider.accelerometerGroupCount() > root.groupIndex) {
+            root.accX  = CppWidgetProvider.accelerometerX(root.groupIndex)
+            root.accY  = CppWidgetProvider.accelerometerY(root.groupIndex)
+            root.accZ  = CppWidgetProvider.accelerometerZ(root.groupIndex)
+            root.title = CppWidgetProvider.accelerometerGroupAt(root.groupIndex).title
         }
 
         // Invalid widget index, reset everything

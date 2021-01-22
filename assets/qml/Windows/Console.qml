@@ -37,7 +37,7 @@ Control {
     // Console text color
     //
     property alias text: _console.text
-    readonly property color consoleColor: Qt.rgba(142/255, 205/255, 157/255, 1)
+    readonly property color consoleColor: "#8ecd9d"
 
     //
     // Save settings
@@ -73,7 +73,7 @@ Control {
             readOnly: true
             Layout.fillWidth: true
             Layout.fillHeight: true
-            palette.base: Qt.rgba(18/255, 18/255, 24/255, 1)
+            palette.base: "#121218"
 
             ScrollView {
                 id: _scrollView
@@ -128,11 +128,11 @@ Control {
                 height: 24
                 font.pixelSize: 12
                 Layout.fillWidth: true
+                palette.base: "#121218"
                 color: root.consoleColor
                 font.family: app.monoFont
                 opacity: enabled ? 1 : 0.5
                 enabled: CppSerialManager.readWrite
-                palette.base: Qt.rgba(18/255, 18/255, 24/255, 1)
                 placeholderText: qsTr("Send data to device") + "..." + CppTranslator.dummy
                 Keys.onReturnPressed: {
                     CppSerialManager.sendData(_tf.text)

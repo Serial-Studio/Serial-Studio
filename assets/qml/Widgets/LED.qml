@@ -35,9 +35,9 @@ RowLayout {
     property alias indicator: _dot
     property alias text: _label.text
     property alias font: _label.font
+    property color onColor: "#d72d60"
+    property color offColor: "#2d6073"
     property alias flashDuration: _timer.interval
-    property color onColor: Qt.rgba(215/255, 45/255, 96/255, 1)
-    property color offColor: Qt.rgba(45/255, 96/255, 115/255, 1)
 
     //
     // Turns on the LED for a short period of time

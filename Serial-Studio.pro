@@ -132,7 +132,7 @@ HEADERS += \
     src/ModuleManager.h \
     src/SerialManager.h \
     src/Translator.h \
-    src/Widgets.h
+    src/WidgetProvider.h
 
 SOURCES += \
     src/CsvPlayer.cpp \
@@ -145,7 +145,7 @@ SOURCES += \
     src/ModuleManager.cpp \
     src/SerialManager.cpp \
     src/Translator.cpp \
-    src/Widgets.cpp \
+    src/WidgetProvider.cpp \
     src/main.cpp
 
 DISTFILES += \

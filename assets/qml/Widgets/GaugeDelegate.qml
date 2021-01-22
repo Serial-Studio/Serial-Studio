@@ -46,12 +46,12 @@ Rectangle {
     //
     // Colors
     //
-    property color valueColor: Qt.rgba(142/255, 205/255, 157/255, 1)
-    property color titleColor: Qt.rgba(81/255, 116/255, 151/255, 1)
-    property color numbersColor: Qt.rgba(230/255, 224/255, 178/255, 1)
-    property color indicatorColor: Qt.rgba(230/255, 224/255, 178/255, 1)
-    property color indicatorMaxColor: Qt.rgba(215/255, 45/255, 96/255, 1)
-    property color indicatorMinColor: Qt.rgba(45/255, 96/255, 115/255, 1)
+    property color valueColor: "#8ecd9d"
+    property color titleColor: "#517497"
+    property color numbersColor: "#e6e0b2"
+    property color indicatorColor: "#e6e0b2"
+    property color indicatorMaxColor: "#d72d60"
+    property color indicatorMinColor: "#2d6073"
 
     //
     // Redraw indicators automatically
@@ -69,9 +69,9 @@ Rectangle {
     // Properties
     //
     border.width: 2
+    color: "#121218"
     radius: width / 2
-    color: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
-    border.color: Qt.rgba(230/255, 224/255, 178/255, 1)
+    border.color: "#e6e0b2"
 
     //
     // Redraw numbers automatically

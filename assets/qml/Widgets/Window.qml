@@ -38,7 +38,7 @@ Page {
     property color titleColor: palette.brightText
     property color borderColor: palette.highlight
     property color backgroundColor: Qt.darker(palette.base)
-    property color gradientColor: root.gradient ? Qt.rgba(5/255, 139/255, 167/255, 1) : root.borderColor
+    property color gradientColor: root.gradient ? "#058ca7" : root.borderColor
 
     //
     // Animations

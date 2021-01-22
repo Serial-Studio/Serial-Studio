@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_H
-#define WIDGETS_H
+#ifndef WIDGETPROVIDER_H
+#define WIDGETPROVIDER_H
 
 #include <QList>
 #include <QObject>
@@ -29,7 +29,7 @@
 class Group;
 class Dataset;
 
-class Widgets : public QObject
+class WidgetProvider : public QObject
 {
     // clang-format off
     Q_OBJECT
@@ -42,7 +42,7 @@ signals:
     void dataChanged();
 
 public:
-    static Widgets *getInstance();
+    static WidgetProvider *getInstance();
 
     QList<Group *> mapGroup() const;
     QList<Group *> gyroGroup() const;
@@ -80,7 +80,7 @@ private slots:
     void updateModels();
 
 private:
-    Widgets();
+    WidgetProvider();
     QList<Group *> getWidgetGroup(const QString &handle);
     QList<Dataset *> getWidgetDatasets(const QString &handle);
 

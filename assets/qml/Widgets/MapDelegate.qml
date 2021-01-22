@@ -45,9 +45,9 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
+    backgroundColor: "#09090c"
     implicitHeight: implicitWidth + 96
     icon.source: "qrc:/icons/location-on.svg"
-    backgroundColor: Qt.rgba(9 / 255, 9 / 255, 12 / 255, 1)
 
     //
     // Custom properties
@@ -61,7 +61,7 @@ Window {
     // Connections with widget manager
     //
     Connections {
-        target: CppWidgets
+        target: CppWidgetProvider
         function onDataChanged() {
             root.updateValues()
         }
@@ -71,10 +71,10 @@ Window {
     // Updates the internal values of the map widget
     //
     function updateValues() {
-        if (CppWidgets.mapGroupCount() > root.groupIndex) {
-            root.latitude = CppWidgets.mapLatitude(root.groupIndex)
-            root.longitude = CppWidgets.mapLongitude(root.groupIndex)
-            root.title = CppWidgets.mapGroupAt(root.groupIndex).title
+        if (CppWidgetProvider.mapGroupCount() > root.groupIndex) {
+            root.latitude = CppWidgetProvider.mapLatitude(root.groupIndex)
+            root.longitude = CppWidgetProvider.mapLongitude(root.groupIndex)
+            root.title = CppWidgetProvider.mapGroupAt(root.groupIndex).title
             root.centerMap()
         }
 

@@ -104,9 +104,9 @@ Control {
                 gradient: true
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
+                backgroundColor: "#121218"
                 icon.source: "qrc:/icons/visibility.svg"
                 title: qsTr("View") + CppTranslator.dummy
-                backgroundColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
 
                 property var groups: []
                 property var graphs: []
@@ -233,9 +233,9 @@ Control {
                             model: groupGenerator.model
                             delegate: Switch {
                                 Layout.fillWidth: true
+                                palette.highlight: "#d72d60"
                                 Component.onCompleted: checked = true
                                 text: CppDataProvider.getGroup(index).title
-                                palette.highlight: Qt.rgba(215/255, 45/255, 96/255, 1)
                                 onCheckedChanged: {
                                     viewOptions.groups[index] = checked
                                     viewOptions.groupsChanged()
@@ -294,9 +294,9 @@ Control {
                             model: graphGenerator.model
                             delegate: Switch {
                                 Layout.fillWidth: true
+                                palette.highlight: "#d72d60"
                                 Component.onCompleted: checked = true
                                 text: CppGraphProvider.getDataset(index).title
-                                palette.highlight: Qt.rgba(215/255, 45/255, 96/255, 1)
                                 onCheckedChanged: {
                                     viewOptions.graphs[index] = checked
                                     viewOptions.graphsChanged()
@@ -316,9 +316,9 @@ Control {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
+                backgroundColor: "#121218"
                 icon.source: "qrc:/icons/scatter-plot.svg"
                 title: qsTr("Data") + CppTranslator.dummy
-                backgroundColor: Qt.rgba(18 / 255, 18 / 255, 24 / 255, 1)
 
                 Rectangle {
                     z: 1
@@ -434,7 +434,7 @@ Control {
 
                 GradientStop {
                     position: 1
-                    color: Qt.rgba(5/255, 139/255, 167/255, 1)
+                    color: "#058ca7"
                 }
             }
 
