@@ -52,7 +52,7 @@ Window {
     property real rollAngle: 0
     property int groupIndex: 0
     property real pitchAngle: 0
-    property color valueColor: "#8eccff"
+    property color valueColor: "#8ecd9d"
     property real gaugeSize: calculateGaugeSize()
 
     //
