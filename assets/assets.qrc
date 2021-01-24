@@ -49,6 +49,7 @@
         <file>messages/Welcome_EN.txt</file>
         <file>messages/Welcome_ES.txt</file>
         <file>messages/Welcome_ZH.txt</file>
+        <file>messages/Welcome_DE.txt</file>
         <file>qml/Widgets/AccelerometerDelegate.qml</file>
         <file>qml/Widgets/ArtificialHorizonDelegate.qml</file>
         <file>qml/Widgets/BarDelegate.qml</file>
@@ -75,5 +76,7 @@
         <file>translations/zh.qm</file>
         <file>translations/zh.ts</file>
         <file>icons/drag-drop.svg</file>
+        <file>translations/de.qm</file>
+        <file>translations/de.ts</file>
     </qresource>
 </RCC>

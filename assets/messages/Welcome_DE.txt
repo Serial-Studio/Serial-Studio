@@ -1,0 +1,23 @@
+________           _____       ______   ____________       _____________       
+__  ___/______________(_)_____ ___  /   __  ___/_  /____  _______  /__(_)_____ 
+_____ \_  _ \_  ___/_  /_  __ `/_  /    _____ \_  __/  / / /  __  /__  /_  __ \
+____/ //  __/  /   _  / / /_/ /_  /     ____/ // /_ / /_/ // /_/ / _  / / /_/ /
+/____/ \___//_/    /_/  \__,_/ /_/      /____/ \__/ \__,_/ \__,_/  /_/  \____/ 
+                                                                               
+                                                 
+Willkommen bei Serial Studio! Um zu beginnen, wählen Sie bitte einen COM-Port und eine Baudrate in dem
+Geräte-Fenster auf der rechten Seite. Wenn die serielle Verbindung erfolgreich ist und die eingehenden Daten
+korrekt interpretiert werden, wird dieses Fenster automatisch geschlossen und das Dashboard
+wird angezeigt. Andernfalls können Sie die Konsole verwenden, um die Quelle Ihres Problemes zu finden.
+
+Verwenden Sie die Schaltflächen der Symbolleiste, um die Funktionen anzuzeigen die Sie verwenden möchten.
+Wenn Sie ein Problem mit Serial Studio haben, melden Sie es bitte an:
+
+→ https://github.com/Serial-Studio/Serial-Studio/issues
+
+Sie können auch die Links im Fenster "Über" verwenden. Für Dokumentation bezüglich der
+Verwendung von Serial Studio und Integration mit Ihren aktuellen MCU-Projekten, lesen Sie bitte das Wiki:
+
+→ https://github.com/Serial-Studio/Serial-Studio/wiki
+
+
