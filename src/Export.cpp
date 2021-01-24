@@ -249,7 +249,7 @@ void Export::writeValues()
 
         // Prepend current time
         titles.prepend("RX Date/Time");
-        values.prepend(dateTime.toString("yyyy/MMM/dd/ HH:mm:ss::zzz"));
+        values.prepend(dateTime.toString("yyyy/MM/dd/ HH:mm:ss::zzz"));
 
         // File not open, create it & add cell titles
         if (!isOpen() && exportEnabled())
@@ -333,5 +333,5 @@ void Export::updateValues()
 
     // Update JSON list
     m_jsonList.append(
-        qMakePair<QDateTime, QJsonObject>(QDateTime::currentDateTime(), json));
+        qMakePair<QDateTime, QJsonObject>(QDateTime::currentDateTimeUtc(), json));
 }

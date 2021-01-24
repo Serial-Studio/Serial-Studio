@@ -65,7 +65,8 @@ static QString SAFE_STRING(const QByteArray &data)
         else if (code == 127)
             hexString.append(" DEL ");
 
-        else if (code > 127) {
+        else if (code > 127)
+        {
             auto hexByte = QString::number(code, 16);
             while (hexByte.length() < 4)
                 hexByte.prepend("0");

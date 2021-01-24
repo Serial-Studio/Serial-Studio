@@ -128,7 +128,7 @@ QString Translator::welcomeConsoleText() const
  */
 QStringList Translator::availableLanguages() const
 {
-    return QStringList { "English", "Español", "简体中文", "Deutsch"};
+    return QStringList { "English", "Español", "简体中文", "Deutsch" };
 }
 
 /**

@@ -399,7 +399,7 @@ void CsvPlayer::updateData()
             // No error, calculate difference & schedule update
             if (!error)
             {
-                auto format = "yyyy/MMM/dd/ HH:mm:ss::zzz";
+                auto format = "yyyy/MM/dd/ HH:mm:ss::zzz";
                 auto currDateTime = QDateTime::fromString(currTime, format);
                 auto nextDateTime = QDateTime::fromString(nextTime, format);
                 auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
