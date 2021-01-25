@@ -38,6 +38,17 @@ Control {
     //
     property alias text: _console.text
     readonly property color consoleColor: "#8ecd9d"
+    
+    //
+    // Function to send through serial port data
+    //
+    function sendData(data) {
+        CppSerialManager.sendData(data)
+        root.text += "\n\n"
+        root.text += data
+        root.text += "\n\n"
+        _tf.clear()
+    }
 
     //
     // Save settings
@@ -132,16 +143,8 @@ Control {
                 font.family: app.monoFont
                 opacity: enabled ? 1 : 0.5
                 enabled: CppSerialManager.readWrite
+                Keys.onReturnPressed: root.sendData(_tf.text)
                 placeholderText: qsTr("Send data to device") + "..." + CppTranslator.dummy
-                Keys.onReturnPressed: {
-                    CppSerialManager.sendData(_tf.text)
-
-                    root.text += "\n\n"
-                    root.text += _tf.text
-                    root.text += "\n\n"
-
-                    _tf.clear()
-                }
 
                 Behavior on opacity {NumberAnimation{}}
             }
@@ -151,12 +154,8 @@ Control {
                 icon.color: palette.text
                 opacity: enabled ? 1 : 0.5
                 icon.source: "qrc:/icons/send.svg"
+                onClicked: root.sendData(_tf.text)
                 enabled: CppSerialManager.readWrite
-                onClicked: {
-                    CppSerialManager.sendData(_tf.text)
-                    _tf.clear()
-                }
-
                 Behavior on opacity {NumberAnimation{}}
             }
 
