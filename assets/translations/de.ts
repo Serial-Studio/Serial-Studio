@@ -478,6 +478,18 @@
         <source>Language</source>
         <translation>Sprache</translation>
     </message>
+    <message>
+        <source>Open mode</source>
+        <translation>Öffnungsmodus</translation>
+    </message>
+    <message>
+        <source>Read-only</source>
+        <translation>Schreibgeschützt</translation>
+    </message>
+    <message>
+        <source>Read/write</source>
+        <translation>Lesen/schreiben</translation>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>
@@ -553,7 +565,7 @@
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
-        <translation type="unfinished">JSON und CSV Dateien hierher Ziehen</translation>
+        <translation>JSON und CSV Dateien hierher Ziehen</translation>
     </message>
 </context>
 </TS>

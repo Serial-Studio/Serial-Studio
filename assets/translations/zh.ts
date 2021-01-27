@@ -510,6 +510,18 @@
         <source>Language</source>
         <translation>语言</translation>
     </message>
+    <message>
+        <source>Open mode</source>
+        <translation>开放模式</translation>
+    </message>
+    <message>
+        <source>Read-only</source>
+        <translation>只读</translation>
+    </message>
+    <message>
+        <source>Read/write</source>
+        <translation>读/写</translation>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

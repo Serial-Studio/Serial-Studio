@@ -11,13 +11,13 @@
 
 Serial Studio es un programa de visualización de datos de puertos serial multiplataforma y multipropósito. El objetivo de este proyecto es permitir a los desarrolladores y creadores de sistemas embebidos visualizar, presentar y analizar fácilmente los datos generados por sus proyectos y dispositivos, sin la necesidad de escribir software especializado para cada proyecto.
 
-La necesidad de este proyecto surgió durante el desarrollo del software de estación terrestre para varios concursos de CanSat. Simplemente no es sostenible desarrollar y mantener diferentes programas para cada competencia. La solución inteligente es tener un software de estación terrestre común y permitir que cada CanSat defina cómo se presentan los datos al usuario final mediante un protocolo de comunicación extensible.
+La necesidad de este proyecto surgió durante el desarrollo del software de estación terrena para varios concursos de CanSat. Simplemente no es sostenible desarrollar y mantener diferentes programas para cada competencia. La solución inteligente es tener un software de estación terrena común y permitir que cada CanSat defina cómo se presentan los datos al usuario final mediante un protocolo de comunicación extensible.
 
 Además, este enfoque se puede extender a casi cualquier tipo de proyecto que implique algún tipo de adquisición y medición de datos. Si desea una explicación más detallada de por qué existe este proyecto y de qué se trata, consulte [esta publicación de blog](https://www.alex-spataru.com/blog/introducing-serial-studio) (en inglés).
 
 **NOTA:** en el [wiki](https://github.com/Serial-Studio/Serial-Studio/wiki/Protocolo-de-Comunicación) se muestra más información acerca del protocolo de comunicación utilizado por Serial Studio.
 
-*Lea esto en otros idiomas:* [English](README.md)
+*Lea esto en otros idiomas:* [English](README.md) [简体中文](README_ZH.md)
 
 ![Software usage](doc/app-usage.gif)
 

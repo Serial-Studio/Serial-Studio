@@ -21,7 +21,6 @@
  */
 
 import QtQuick 2.12
-import Qt.labs.settings 1.0
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
@@ -48,14 +47,6 @@ Control {
         root.text += data
         root.text += "\n\n"
         _tf.clear()
-    }
-
-    //
-    // Save settings
-    //
-    Settings {
-        category: "Console"
-        property alias writeEnabled: writeSw.checked
     }
 
     //
@@ -123,15 +114,6 @@ Control {
         //
         RowLayout {
             Layout.fillWidth: true
-
-            Switch {
-                id: writeSw
-                checked: true
-                Layout.alignment: Qt.AlignHCenter
-                onCheckedChanged: CppSerialManager.writeEnabled = checked
-                opacity: CppSerialManager.readWrite ? 1 : (CppSerialManager.connected ? 0.5 : 1)
-                Behavior on opacity {NumberAnimation{}}
-            }
 
             TextField {
                 id: _tf

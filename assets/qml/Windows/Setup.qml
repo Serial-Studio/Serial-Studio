@@ -36,6 +36,11 @@ Control {
     }
 
     //
+    // Serial-open modes list
+    //
+    property var serialOpenModes: [qsTr("Read-only"), qsTr("Read/write")]
+
+    //
     // Save settings
     //
     Settings {
@@ -45,6 +50,7 @@ Control {
         property alias dmParity: parity.currentIndex
         property alias dmStopBits: stopBits.currentIndex
         property alias dmDataBits: dataBits.currentIndex
+        property alias dmOpenMode: openMode.currentIndex
         property alias dmBaudRateIndex: baudRate.currentIndex
         property alias dmFlowControl: flowControl.currentIndex
         property alias appLanguage: languageCombo.currentIndex
@@ -57,12 +63,17 @@ Control {
         target: CppTranslator
         function onLanguageChanged() {
             var oldParityIndex = parity.currentIndex
+            var oldOpenModeIndex = openMode.currentIndex
             var oldFlowControlIndex = flowControl.currentIndex
+
+            root.serialOpenModes = [qsTr("Read-only"), qsTr("Read/write")]
+            openMode.model = root.serialOpenModes
 
             parity.model = CppSerialManager.parityList
             flowControl.model = CppSerialManager.flowControlList
 
             parity.currentIndex = oldParityIndex
+            openMode.currentIndex = oldOpenModeIndex
             flowControl.currentIndex = oldFlowControlIndex
         }
     }
@@ -91,6 +102,7 @@ Control {
         // Comm mode selector
         //
         Label {
+            font.bold: true
             text: qsTr("Communication Mode") + ":" + CppTranslator.dummy
         } RadioButton {
             id: commAuto
@@ -125,7 +137,7 @@ Control {
             Behavior on opacity {NumberAnimation{}}
             text: CppTranslator.dummy +
                   (CppJsonGenerator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(CppJsonGenerator.jsonMapFilename) :
-                                                          qsTr("Select map file") + "...")
+                                                             qsTr("Select map file") + "...")
         }
 
         //
@@ -136,122 +148,157 @@ Control {
         }
 
         //
-        // COM port selector
+        // A lot of comboboxes
         //
-        Label {
-            text: qsTr("COM Port") + ":" + CppTranslator.dummy
-        } ComboBox {
-            id: portSelector
+        GridLayout {
+            columns: 2
             Layout.fillWidth: true
-            model: CppSerialManager.portList
-            currentIndex: CppSerialManager.portIndex
-            onCurrentIndexChanged: CppSerialManager.setPort(currentIndex)
-        }
+            rowSpacing: app.spacing
+            columnSpacing: app.spacing
 
-        //
-        // Baud rate selector
-        //
-        Label {
-            text: qsTr("Baud Rate") + ":" + CppTranslator.dummy
-        } ComboBox {
-            id: baudRate
-            Layout.fillWidth: true
-            model: CppSerialManager.baudRateList
-            currentIndex: CppSerialManager.baudRateIndex
-            onCurrentIndexChanged: {
-                if (CppSerialManager.baudRateIndex !== currentIndex)
-                    CppSerialManager.baudRateIndex = currentIndex
+            //
+            // COM port selector
+            //
+            Label {
+                text: qsTr("COM Port") + ":" + CppTranslator.dummy
+            } ComboBox {
+                id: portSelector
+                Layout.fillWidth: true
+                model: CppSerialManager.portList
+                currentIndex: CppSerialManager.portIndex
+                onCurrentIndexChanged: CppSerialManager.setPort(currentIndex)
             }
-        }
 
-        //
-        // Spacer
-        //
-        Item {
-            height: app.spacing * 2
-        }
-
-        //
-        // Data bits selector
-        //
-        Label {
-            text: qsTr("Data Bits") + ":" + CppTranslator.dummy
-        } ComboBox {
-            id: dataBits
-            Layout.fillWidth: true
-            model: CppSerialManager.dataBitsList
-            currentIndex: CppSerialManager.dataBitsIndex
-            onCurrentIndexChanged: {
-                if (CppSerialManager.dataBitsIndex !== currentIndex)
-                    CppSerialManager.dataBitsIndex = currentIndex
+            //
+            // Baud rate selector
+            //
+            Label {
+                text: qsTr("Baud Rate") + ":" + CppTranslator.dummy
+            } ComboBox {
+                id: baudRate
+                Layout.fillWidth: true
+                model: CppSerialManager.baudRateList
+                currentIndex: CppSerialManager.baudRateIndex
+                onCurrentIndexChanged: {
+                    if (CppSerialManager.baudRateIndex !== currentIndex)
+                        CppSerialManager.baudRateIndex = currentIndex
+                }
             }
-        }
 
-        //
-        // Parity selector
-        //
-        Label {
-            text: qsTr("Parity") + ":" + CppTranslator.dummy
-        } ComboBox {
-            id: parity
-            Layout.fillWidth: true
-            model: CppSerialManager.parityList
-            currentIndex: CppSerialManager.parityIndex
-            onCurrentIndexChanged: {
-                if (CppSerialManager.parityIndex !== currentIndex)
-                    CppSerialManager.parityIndex = currentIndex
+            //
+            // Open mode
+            //
+            Label {
+                text: qsTr("Open mode") + ":" + CppTranslator.dummy
+            } ComboBox {
+                id: openMode
+                Layout.fillWidth: true
+                model: root.serialOpenModes
+                onCurrentIndexChanged: {
+                    if (currentIndex == 0)
+                        CppSerialManager.setWriteEnabled(false)
+                    else
+                        CppSerialManager.setWriteEnabled(true)
+                }
             }
-        }
 
-        //
-        // Stop bits selector
-        //
-        Label {
-            text: qsTr("Stop Bits") + ":" + CppTranslator.dummy
-        } ComboBox {
-            id: stopBits
-            Layout.fillWidth: true
-            model: CppSerialManager.stopBitsList
-            currentIndex: CppSerialManager.stopBitsIndex
-            onCurrentIndexChanged: {
-                if (CppSerialManager.stopBitsIndex !== currentIndex)
-                    CppSerialManager.stopBitsIndex = currentIndex
+            //
+            // Spacer
+            //
+            Item {
+                Layout.minimumHeight: app.spacing / 2
+                Layout.maximumHeight: app.spacing / 2
+            } Item {
+                Layout.minimumHeight: app.spacing / 2
+                Layout.maximumHeight: app.spacing / 2
             }
-        }
 
-        //
-        // Flow control selector
-        //
-        Label {
-            text: qsTr("Flow Control") + ":" + CppTranslator.dummy
-        } ComboBox {
-            id: flowControl
-            Layout.fillWidth: true
-            model: CppSerialManager.flowControlList
-            currentIndex: CppSerialManager.flowControlIndex
-            onCurrentIndexChanged: {
-                if (CppSerialManager.flowControlIndex !== currentIndex)
-                    CppSerialManager.flowControlIndex = currentIndex
+            //
+            // Data bits selector
+            //
+            Label {
+                text: qsTr("Data Bits") + ":" + CppTranslator.dummy
+            } ComboBox {
+                id: dataBits
+                Layout.fillWidth: true
+                model: CppSerialManager.dataBitsList
+                currentIndex: CppSerialManager.dataBitsIndex
+                onCurrentIndexChanged: {
+                    if (CppSerialManager.dataBitsIndex !== currentIndex)
+                        CppSerialManager.dataBitsIndex = currentIndex
+                }
             }
-        }
 
-        //
-        // Spacer
-        //
-        Item {
-            height: app.spacing * 2
-        }
+            //
+            // Parity selector
+            //
+            Label {
+                text: qsTr("Parity") + ":" + CppTranslator.dummy
+            } ComboBox {
+                id: parity
+                Layout.fillWidth: true
+                model: CppSerialManager.parityList
+                currentIndex: CppSerialManager.parityIndex
+                onCurrentIndexChanged: {
+                    if (CppSerialManager.parityIndex !== currentIndex)
+                        CppSerialManager.parityIndex = currentIndex
+                }
+            }
 
-        //
-        // Language selector
-        //
-        Label {
-            text: qsTr("Language") + ":" + CppTranslator.dummy
-        } ComboBox {
-            id: languageCombo
-            Layout.fillWidth: true
-            model: CppTranslator.availableLanguages
-            onCurrentIndexChanged: CppTranslator.setLanguage(currentIndex)
+            //
+            // Stop bits selector
+            //
+            Label {
+                text: qsTr("Stop Bits") + ":" + CppTranslator.dummy
+            } ComboBox {
+                id: stopBits
+                Layout.fillWidth: true
+                model: CppSerialManager.stopBitsList
+                currentIndex: CppSerialManager.stopBitsIndex
+                onCurrentIndexChanged: {
+                    if (CppSerialManager.stopBitsIndex !== currentIndex)
+                        CppSerialManager.stopBitsIndex = currentIndex
+                }
+            }
+
+            //
+            // Flow control selector
+            //
+            Label {
+                text: qsTr("Flow Control") + ":" + CppTranslator.dummy
+            } ComboBox {
+                id: flowControl
+                Layout.fillWidth: true
+                model: CppSerialManager.flowControlList
+                currentIndex: CppSerialManager.flowControlIndex
+                onCurrentIndexChanged: {
+                    if (CppSerialManager.flowControlIndex !== currentIndex)
+                        CppSerialManager.flowControlIndex = currentIndex
+                }
+            }
+
+            //
+            // Spacer
+            //
+            Item {
+                Layout.minimumHeight: app.spacing / 2
+                Layout.maximumHeight: app.spacing / 2
+            } Item {
+                Layout.minimumHeight: app.spacing / 2
+                Layout.maximumHeight: app.spacing / 2
+            }
+
+            //
+            // Language selector
+            //
+            Label {
+                text: qsTr("Language") + ":" + CppTranslator.dummy
+            } ComboBox {
+                id: languageCombo
+                Layout.fillWidth: true
+                model: CppTranslator.availableLanguages
+                onCurrentIndexChanged: CppTranslator.setLanguage(currentIndex)
+            }
         }
 
         //

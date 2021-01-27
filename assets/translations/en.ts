@@ -478,6 +478,18 @@
         <source>Language</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Open mode</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Read-only</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Read/write</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>

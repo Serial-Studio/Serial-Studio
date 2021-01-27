@@ -597,6 +597,18 @@
         <source>Language</source>
         <translation>Idioma</translation>
     </message>
+    <message>
+        <source>Open mode</source>
+        <translation>Modo de apertura</translation>
+    </message>
+    <message>
+        <source>Read-only</source>
+        <translation>Solo lectura</translation>
+    </message>
+    <message>
+        <source>Read/write</source>
+        <translation>Lectura/escritura</translation>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>
