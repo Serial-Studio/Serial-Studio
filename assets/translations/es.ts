@@ -546,6 +546,18 @@
         <source>Critical serial port error</source>
         <translation>Error crítico del puerto serie</translation>
     </message>
+    <message>
+        <source>Plain text (as it comes)</source>
+        <translation>Texto sin formato (como viene)</translation>
+    </message>
+    <message>
+        <source>Plain text (remove control characters)</source>
+        <translation>Texto sin formato (eliminar caracteres de control)</translation>
+    </message>
+    <message>
+        <source>Hex display</source>
+        <translation>Hexadecimal</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -608,6 +620,10 @@
     <message>
         <source>Read/write</source>
         <translation>Lectura/escritura</translation>
+    </message>
+    <message>
+        <source>Display mode</source>
+        <translation>Visualización</translation>
     </message>
 </context>
 <context>

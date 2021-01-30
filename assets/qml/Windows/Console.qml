@@ -24,6 +24,8 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import Qt.labs.settings 1.0
+
 import "../Widgets" as Widgets
 
 Control {
@@ -43,10 +45,14 @@ Control {
     //
     function sendData(data) {
         CppSerialManager.sendData(data)
-        root.text += "\n\n"
-        root.text += data
-        root.text += "\n\n"
         _tf.clear()
+    }
+
+    //
+    // Save settings
+    //
+    Settings {
+        property alias hex: hexCheckbox.checked
     }
 
     //
@@ -65,6 +71,27 @@ Control {
             // Scroll to bottom
             if (_scrollView.contentHeight > _scrollView.height)
                 _console.cursorPosition = _console.length - 1
+        }
+
+        function onTx(txData) {
+            // Add data to console buffer
+            root.text += "\n\n"
+            root.text += txData
+            root.text += "\n\n"
+
+            // Ensure that console line count stays in check
+            if (_console.height > _scrollView.height)
+                root.text = root.text.substring(txData.length)
+
+            // Scroll to bottom
+            if (_scrollView.contentHeight > _scrollView.height)
+                _console.cursorPosition = _console.length - 1
+        }
+
+        function onSendHexChanged() {
+            _tf.clear()
+            _tf.cursorPosition = ""
+            _tf.inputMask = CppSerialManager.inputMask
         }
     }
 
@@ -114,6 +141,18 @@ Control {
         //
         RowLayout {
             Layout.fillWidth: true
+
+            CheckBox {
+                id: hexCheckbox
+                text: "HEX"
+                opacity: enabled ? 1 : 0.5
+                enabled: CppSerialManager.readWrite
+                checked: CppSerialManager.sendHexData
+                onCheckedChanged: {
+                    if (CppSerialManager.sendHexData !== checked)
+                        CppSerialManager.sendHexData = checked
+                }
+            }
 
             TextField {
                 id: _tf

@@ -84,6 +84,67 @@ static QString SAFE_STRING(const QByteArray &data)
 }
 
 /**
+ * Returns the hexadecimal representation of the given @a data
+ */
+static QString HEX_STRING(const QByteArray &data)
+{
+    QString niceHex;
+    QString hex = QString::fromUtf8(data.toHex());
+    for (int i = 0; i < hex.length(); ++i)
+    {
+        niceHex.append(hex.at(i));
+        if ((i + 1) % 2 == 0)
+            niceHex.append(" ");
+    }
+
+    return niceHex;
+}
+
+/**
+ * Returns the representation of the given data as it should be displayed on the console
+ */
+static QString CONSOLE_STRING(const QByteArray &data)
+{
+    switch (SerialManager::getInstance()->displayMode())
+    {
+        case 0:
+            return QString::fromUtf8(data);
+            break;
+        case 1:
+            return SAFE_STRING(data);
+            break;
+        case 2:
+            return HEX_STRING(data);
+            break;
+        default:
+            return QString::fromUtf8(data);
+            break;
+    }
+}
+
+/**
+ * Converts the input hex @a data to a byte array
+ */
+static const QByteArray HEX_TO_BYTES(const QString &data)
+{
+    // Remove spaces from string
+    QString withoutSpaces = data;
+    withoutSpaces.replace(" ", "");
+
+    // Convert HEX string to byte array
+    QByteArray bin;
+    for (int i = 0; i < withoutSpaces.length(); i += 2)
+    {
+        auto chr1 = withoutSpaces.at(i);
+        auto chr2 = withoutSpaces.at(i + 1);
+        auto byte = QString("%1%2").arg(chr1, chr2).toInt(nullptr, 16);
+        bin.append(byte);
+    }
+
+    return bin;
+}
+
+/**
  * Shows a macOS-like message box with the given properties
  */
 static int NiceMessageBox(QString text, QString informativeText,
@@ -119,6 +180,7 @@ SerialManager::SerialManager()
     m_receivedBytes = 0;
 
     // Init serial port configuration variables
+    setDisplayMode(0);
     setDataBits(dataBitsList().indexOf("8"));
     setStopBits(stopBitsList().indexOf("1"));
     setParity(parityList().indexOf(tr("None")));
@@ -197,6 +259,14 @@ bool SerialManager::connected() const
 }
 
 /**
+ * Returns @c true if input data is in hex format and should be converted to binary
+ */
+bool SerialManager::sendHexData() const
+{
+    return m_sendHexData;
+}
+
+/**
  * Returns the name of the current serial port device
  */
 QString SerialManager::portName() const
@@ -229,6 +299,22 @@ int SerialManager::maxBufferSize() const
 bool SerialManager::writeEnabled() const
 {
     return m_writeEnabled;
+}
+
+/**
+ * Returns the input mask code that should be used by the 'send data' textfield
+ */
+QString SerialManager::inputMask() const
+{
+    if (!sendHexData())
+        return "";
+
+    QString mask;
+    for (int i = 0; i < 0xff; ++i)
+        mask += "hh ";
+
+    mask.chop(1);
+    return mask;
 }
 
 /**
@@ -298,6 +384,15 @@ quint8 SerialManager::portIndex() const
 quint8 SerialManager::parityIndex() const
 {
     return m_parityIndex;
+}
+
+/**
+ * Returns the correspoding index of the parity configuration in relation
+ * to the @c QStringList returned by the @c consoleDisplayModes() function.
+ */
+quint8 SerialManager::displayMode() const
+{
+    return m_displayMode;
 }
 
 /**
@@ -406,6 +501,18 @@ QStringList SerialManager::flowControlList() const
     list.append(tr("None"));
     list.append("RTS/CTS");
     list.append("XON/XOFF");
+    return list;
+}
+
+/**
+ * Returns a list with the available console display modes
+ */
+QStringList SerialManager::consoleDisplayModes() const
+{
+    QStringList list;
+    list.append(tr("Plain text (as it comes)"));
+    list.append(tr("Plain text (remove control characters)"));
+    list.append(tr("Hex display"));
     return list;
 }
 
@@ -524,8 +631,14 @@ void SerialManager::sendData(const QString &data)
 {
     if (!data.isEmpty() && connected())
     {
-        // Convert string to byte array and write to serial port
-        auto bin = data.toUtf8();
+        // Convert string to byte array
+        QByteArray bin;
+        if (sendHexData())
+            bin = HEX_TO_BYTES(data);
+        else
+            bin = data.toUtf8();
+
+        // Write data to serial port
         auto bytes = port()->write(bin);
 
         // Write success, notify UI & log bytes written
@@ -542,7 +655,7 @@ void SerialManager::sendData(const QString &data)
 
             // Emit signals
             else
-                emit tx(data);
+                emit tx(CONSOLE_STRING(sent));
         }
 
         // Write error
@@ -627,6 +740,15 @@ void SerialManager::setPort(const quint8 portIndex)
         emit portChanged();
         LOG_INFO() << "Serial port selection set to" << portName();
     }
+}
+
+/**
+ * Allows/disallows user to send binary data through console
+ */
+void SerialManager::setSendHexData(const bool &sendHex)
+{
+    m_sendHexData = sendHex;
+    emit sendHexChanged();
 }
 
 /**
@@ -806,6 +928,31 @@ void SerialManager::setStopBits(const quint8 stopBitsIndex)
 }
 
 /**
+ * Changes the console display mode
+ *
+ * @note This function is meant to be used with a combobox in the
+ *       QML interface
+ */
+void SerialManager::setDisplayMode(const quint8 displayMode)
+{
+    // Change display mode
+    m_displayMode = displayMode;
+
+    // Ensure that display mode is in range
+    if (m_displayMode > consoleDisplayModes().count() - 1)
+        m_displayMode = consoleDisplayModes().count() - 1;
+    else if (m_displayMode < 0)
+        m_displayMode = 0;
+
+    // Log changes
+    LOG_INFO() << "Console display mode set to"
+               << consoleDisplayModes().at(m_displayMode);
+
+    // Update UI
+    emit displayModeChanged();
+}
+
+/**
  * Changes the maximum allowed size of the incoming data buffer.
  *
  * @note Incoming data is stored instide a temp. buffer, which is
@@ -947,7 +1094,7 @@ void SerialManager::onDataReceived()
 
     // Notify user interface
     emit receivedBytesChanged();
-    emit rx(SAFE_STRING(data));
+    emit rx(CONSOLE_STRING(data));
 }
 
 /**

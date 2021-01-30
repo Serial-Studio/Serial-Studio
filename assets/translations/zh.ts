@@ -459,6 +459,18 @@
         <source>Critical serial port error</source>
         <translation>严重的串行端口错误</translation>
     </message>
+    <message>
+        <source>Plain text (as it comes)</source>
+        <translation>纯文本（随它而来）</translation>
+    </message>
+    <message>
+        <source>Plain text (remove control characters)</source>
+        <translation>纯文本（删除控制字符）</translation>
+    </message>
+    <message>
+        <source>Hex display</source>
+        <translation>十六进制</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -521,6 +533,10 @@
     <message>
         <source>Read/write</source>
         <translation>读/写</translation>
+    </message>
+    <message>
+        <source>Display mode</source>
+        <translation>可视化模式</translation>
     </message>
 </context>
 <context>

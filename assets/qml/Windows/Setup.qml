@@ -54,6 +54,7 @@ Control {
         property alias dmBaudRateIndex: baudRate.currentIndex
         property alias dmFlowControl: flowControl.currentIndex
         property alias appLanguage: languageCombo.currentIndex
+        property alias dmDisplayMode: displayMode.currentIndex
     }
 
     //
@@ -64,6 +65,7 @@ Control {
         function onLanguageChanged() {
             var oldParityIndex = parity.currentIndex
             var oldOpenModeIndex = openMode.currentIndex
+            var oldDisplayModeIndex = displayMode.currentIndex
             var oldFlowControlIndex = flowControl.currentIndex
 
             root.serialOpenModes = [qsTr("Read-only"), qsTr("Read/write")]
@@ -71,10 +73,12 @@ Control {
 
             parity.model = CppSerialManager.parityList
             flowControl.model = CppSerialManager.flowControlList
+            displayMode.model = CppSerialManager.consoleDisplayModes
 
             parity.currentIndex = oldParityIndex
             openMode.currentIndex = oldOpenModeIndex
             flowControl.currentIndex = oldFlowControlIndex
+            displayMode.currentIndex = oldDisplayModeIndex
         }
     }
 
@@ -199,6 +203,22 @@ Control {
                         CppSerialManager.setWriteEnabled(false)
                     else
                         CppSerialManager.setWriteEnabled(true)
+                }
+            }
+
+            //
+            // Display mode selector
+            //
+            Label {
+                text: qsTr("Display mode") + ":" + CppTranslator.dummy
+            } ComboBox {
+                id: displayMode
+                Layout.fillWidth: true
+                model: CppSerialManager.consoleDisplayModes
+                currentIndex: CppSerialManager.displayMode
+                onCurrentIndexChanged: {
+                    if (CppSerialManager.displayMode !== currentIndex)
+                        CppSerialManager.displayMode = currentIndex
                 }
             }
 

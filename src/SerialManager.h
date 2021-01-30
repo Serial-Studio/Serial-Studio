@@ -55,6 +55,13 @@ class SerialManager : public QObject
                READ maxBufferSize
                WRITE setMaxBufferSize
                NOTIFY maxBufferSizeChanged)
+    Q_PROPERTY(bool sendHexData
+               READ sendHexData
+               WRITE setSendHexData
+               NOTIFY sendHexChanged)
+    Q_PROPERTY(QString inputMask
+               READ inputMask
+               NOTIFY sendHexChanged)
     Q_PROPERTY(bool writeEnabled
                READ writeEnabled
                WRITE setWriteEnabled
@@ -75,6 +82,10 @@ class SerialManager : public QObject
                READ parityIndex
                WRITE setParity
                NOTIFY parityChanged)
+    Q_PROPERTY(quint8 displayMode
+               READ displayMode
+               WRITE setDisplayMode
+               NOTIFY displayModeChanged)
     Q_PROPERTY(quint8 baudRateIndex
                READ baudRateIndex
                WRITE setBaudRate
@@ -109,15 +120,20 @@ class SerialManager : public QObject
     Q_PROPERTY(QStringList flowControlList
                READ flowControlList
                CONSTANT)
+    Q_PROPERTY(QStringList consoleDisplayModes
+               READ consoleDisplayModes
+               CONSTANT)
     // clang-format on
 
 signals:
     void portChanged();
     void parityChanged();
+    void sendHexChanged();
     void baudRateChanged();
     void dataBitsChanged();
     void stopBitsChanged();
     void connectedChanged();
+    void displayModeChanged();
     void flowControlChanged();
     void writeEnabledChanged();
     void textDocumentChanged();
@@ -139,15 +155,18 @@ public:
     bool readOnly() const;
     bool readWrite() const;
     bool connected() const;
+    bool sendHexData() const;
     QString portName() const;
     int maxBufferSize() const;
     bool writeEnabled() const;
+    QString inputMask() const;
     QString receivedBytes() const;
     QString startSequence() const;
     QString finishSequence() const;
 
     quint8 portIndex() const;
     quint8 parityIndex() const;
+    quint8 displayMode() const;
     quint8 baudRateIndex() const;
     quint8 dataBitsIndex() const;
     quint8 stopBitsIndex() const;
@@ -159,6 +178,7 @@ public:
     QStringList dataBitsList() const;
     QStringList stopBitsList() const;
     QStringList flowControlList() const;
+    QStringList consoleDisplayModes() const;
 
     qint32 baudRate() const;
     QSerialPort::Parity parity() const;
@@ -173,11 +193,13 @@ public slots:
     void disconnectDevice();
     void sendData(const QString &data);
     void setPort(const quint8 portIndex);
+    void setSendHexData(const bool &sendHex);
     void setWriteEnabled(const bool enabled);
     void setParity(const quint8 parityIndex);
     void setBaudRate(const quint8 baudRateIndex);
     void setDataBits(const quint8 dataBitsIndex);
     void setStopBits(const quint8 stopBitsIndex);
+    void setDisplayMode(const quint8 displayMode);
     void setMaxBufferSize(const int maxBufferSize);
     void setStartSequence(const QString &sequence);
     void setFinishSequence(const QString &sequence);
@@ -205,6 +227,7 @@ private:
     QSerialPort::FlowControl m_flowControl;
 
     quint8 m_portIndex;
+    quint8 m_displayMode;
     quint8 m_parityIndex;
     quint8 m_baudRateIndex;
     quint8 m_dataBitsIndex;
@@ -214,6 +237,7 @@ private:
 
     bool m_writeEnabled;
     int m_maxBufferSize;
+    bool m_sendHexData;
 
     QString m_startSeq;
     QString m_finishSeq;

@@ -427,6 +427,18 @@
         <source>Critical serial port error</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Plain text (as it comes)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Plain text (remove control characters)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Hex display</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -488,6 +500,10 @@
     </message>
     <message>
         <source>Read/write</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Display mode</source>
         <translation></translation>
     </message>
 </context>
