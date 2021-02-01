@@ -25,7 +25,21 @@ Además, este enfoque se puede extender a casi cualquier tipo de proyecto que im
 
 #### Requisitos
 
-El único requisito para compilar la aplicación es tener [Qt](http://www.qt.io/download-open-source/) instalado en su sistema. La aplicación se compilará con Qt 5.15 o superior.
+El único requisito para compilar la aplicación es tener [Qt](http://www.qt.io/download-open-source/) instalado en su sistema. La aplicación se compilará con Qt 5.15 o superior. También necesitará tener instalados los siguientes módulos de Qt:
+
+- Qt Charts
+
+En sistemas GNU/Linux, también necesitará instalar `libgl1-mesa-dev` para compilar la aplicación.
+
+Lista completa de módulos Qt usados:
+
+- Qt SQL
+- Qt Quick
+- Qt Widgets
+- Qt Charts
+- Qt Serial Port
+- Qt Quick Controls 2
+- Qt Graphical Effects
 
 #### Clonado
 
