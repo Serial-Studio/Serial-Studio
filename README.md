@@ -38,6 +38,7 @@ Full list of used Qt modules:
 - Qt Widgets
 - Qt Charts
 - Qt Serial Port
+- Qt Quick Controls
 - Qt Quick Controls 2
 - Qt Graphical Effects
 

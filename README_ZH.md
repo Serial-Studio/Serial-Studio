@@ -38,6 +38,7 @@ Serial Studio是一个多平台，多用途的串行数据可视化的应用软�
 - Qt Widgets
 - Qt Charts
 - Qt Serial Port
+- Qt Quick Controls
 - Qt Quick Controls 2
 - Qt Graphical Effects
 
