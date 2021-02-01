@@ -88,8 +88,8 @@ class SerialManager : public QObject
                NOTIFY displayModeChanged)
     Q_PROPERTY(quint8 baudRateIndex
                READ baudRateIndex
-               WRITE setBaudRate
-               NOTIFY baudRateChanged)
+               WRITE setBaudRateIndex
+               NOTIFY baudRateIndexChanged)
     Q_PROPERTY(quint8 dataBitsIndex
                READ dataBitsIndex
                WRITE setDataBits
@@ -102,6 +102,10 @@ class SerialManager : public QObject
                READ flowControlIndex
                WRITE setFlowControl
                NOTIFY flowControlChanged)
+    Q_PROPERTY(qint32 baudRate
+               READ baudRate
+               WRITE setBaudRate
+               NOTIFY baudRateChanged)
     Q_PROPERTY(QStringList portList
                READ portList
                NOTIFY availablePortsChanged)
@@ -137,6 +141,7 @@ signals:
     void flowControlChanged();
     void writeEnabledChanged();
     void textDocumentChanged();
+    void baudRateIndexChanged();
     void maxBufferSizeChanged();
     void startSequenceChanged();
     void receivedBytesChanged();
@@ -192,11 +197,12 @@ public slots:
     void clearTempBuffer();
     void disconnectDevice();
     void sendData(const QString &data);
+    void setBaudRate(const qint32 rate);
     void setPort(const quint8 portIndex);
     void setSendHexData(const bool &sendHex);
     void setWriteEnabled(const bool enabled);
     void setParity(const quint8 parityIndex);
-    void setBaudRate(const quint8 baudRateIndex);
+    void setBaudRateIndex(const quint8 index);
     void setDataBits(const quint8 dataBitsIndex);
     void setStopBits(const quint8 stopBitsIndex);
     void setDisplayMode(const quint8 displayMode);

@@ -184,7 +184,7 @@ SerialManager::SerialManager()
     setDataBits(dataBitsList().indexOf("8"));
     setStopBits(stopBitsList().indexOf("1"));
     setParity(parityList().indexOf(tr("None")));
-    setBaudRate(baudRateList().indexOf("9600"));
+    setBaudRateIndex(baudRateList().indexOf("9600"));
     setFlowControl(flowControlList().indexOf(tr("None")));
     disconnectDevice();
 
@@ -466,10 +466,14 @@ QStringList SerialManager::parityList() const
 QStringList SerialManager::baudRateList() const
 {
     QStringList list;
-    auto stdBaudRates = QSerialPortInfo::standardBaudRates();
-    foreach (auto baud, stdBaudRates)
-        list.append(QString::number(baud));
-
+    list.append("1200");
+    list.append("2400");
+    list.append("4800");
+    list.append("9600");
+    list.append("19200");
+    list.append("38400");
+    list.append("57600");
+    list.append("115200");
     return list;
 }
 
@@ -665,6 +669,28 @@ void SerialManager::sendData(const QString &data)
 }
 
 /**
+ * Changes the baud @a rate of the serial port
+ */
+void SerialManager::setBaudRate(const qint32 rate)
+{
+    // Asserts
+    Q_ASSERT(rate > 10);
+
+    // Update baud rate
+    m_baudRate = rate;
+
+    // Update serial port config
+    if (port())
+        port()->setBaudRate(baudRate());
+
+    // Update user interface
+    emit baudRateChanged();
+
+    // Log information
+    LOG_INFO() << "Baud rate set to" << rate;
+}
+
+/**
  * Closes the current serial port and tries to open & configure a new serial
  * port connection with the device at the given @a port index.
  *
@@ -820,24 +846,17 @@ void SerialManager::setParity(const quint8 parityIndex)
  * @note This function is meant to be used with a combobox in the
  *       QML interface
  */
-void SerialManager::setBaudRate(const quint8 baudRateIndex)
+void SerialManager::setBaudRateIndex(const quint8 index)
 {
-    // Argument verifications
-    Q_ASSERT(baudRateIndex < baudRateList().count());
+    if (index < baudRateList().count())
+    {
+        m_baudRateIndex = index;
+        setBaudRate(baudRateList().at(index).toInt());
+        emit baudRateIndexChanged();
+    }
 
-    // Update current index
-    m_baudRateIndex = baudRateIndex;
-    m_baudRate = QSerialPortInfo::standardBaudRates().at(baudRateIndex);
-
-    // Update serial port config
-    if (port())
-        port()->setBaudRate(baudRate());
-
-    // Update user interface
-    emit baudRateChanged();
-
-    // Log changes
-    LOG_INFO() << "Baud rate set to" << baudRate();
+    else
+        setBaudRateIndex(baudRateList().indexOf("9600"));
 }
 
 /**

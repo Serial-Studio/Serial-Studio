@@ -51,7 +51,9 @@ Control {
         property alias dmStopBits: stopBits.currentIndex
         property alias dmDataBits: dataBits.currentIndex
         property alias dmOpenMode: openMode.currentIndex
-        property alias dmBaudRateIndex: baudRate.currentIndex
+        property alias dmBaudIndex: baudRate.currentIndex
+        property alias dmCustomBrEnabled: customBr.checked
+        property alias dmCustomBaudRate: customBaudRateValue.value
         property alias dmFlowControl: flowControl.currentIndex
         property alias appLanguage: languageCombo.currentIndex
         property alias dmDisplayMode: displayMode.currentIndex
@@ -178,15 +180,24 @@ Control {
             //
             Label {
                 text: qsTr("Baud Rate") + ":" + CppTranslator.dummy
+
+                enabled: !customBr.checked
+                opacity: enabled ? 1 : 0.5
+                Behavior on opacity {NumberAnimation{}}
+
             } ComboBox {
                 id: baudRate
                 Layout.fillWidth: true
                 model: CppSerialManager.baudRateList
                 currentIndex: CppSerialManager.baudRateIndex
                 onCurrentIndexChanged: {
-                    if (CppSerialManager.baudRateIndex !== currentIndex)
+                    if (CppSerialManager.baudRateIndex !== currentIndex && enabled)
                         CppSerialManager.baudRateIndex = currentIndex
                 }
+
+                enabled: !customBr.checked
+                opacity: enabled ? 1 : 0.5
+                Behavior on opacity {NumberAnimation{}}
             }
 
             //
@@ -219,6 +230,32 @@ Control {
                 onCurrentIndexChanged: {
                     if (CppSerialManager.displayMode !== currentIndex)
                         CppSerialManager.displayMode = currentIndex
+                }
+            }
+
+            //
+            // Custom baud rate
+            //
+            CheckBox {
+                id: customBr
+                Layout.leftMargin: -app.spacing
+                text: qsTr("Custom baud rate") + CppTranslator.dummy
+            } SpinBox {
+                id: customBaudRateValue
+
+                from: 1
+                stepSize: 1
+                to: 10000000
+                value: 9600
+                editable: true
+                Layout.fillWidth: true
+                enabled: customBr.checked
+                opacity: enabled ? 1 : 0.5
+                Behavior on opacity {NumberAnimation{}}
+
+                onValueChanged: {
+                    if (enabled)
+                        CppSerialManager.setBaudRate(value)
                 }
             }
 
