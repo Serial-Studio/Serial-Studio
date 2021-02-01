@@ -514,9 +514,9 @@ QStringList SerialManager::flowControlList() const
 QStringList SerialManager::consoleDisplayModes() const
 {
     QStringList list;
-    list.append(tr("Plain text (as it comes)"));
-    list.append(tr("Plain text (remove control characters)"));
-    list.append(tr("Hex display"));
+    list.append(tr("As it comes"));
+    list.append(tr("Remove control characters"));
+    list.append(tr("Hexadecimal"));
     return list;
 }
 

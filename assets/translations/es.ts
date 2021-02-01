@@ -548,14 +548,26 @@
     </message>
     <message>
         <source>Plain text (as it comes)</source>
-        <translation>Texto sin formato (como viene)</translation>
+        <translation type="vanished">Texto sin formato (como viene)</translation>
     </message>
     <message>
         <source>Plain text (remove control characters)</source>
-        <translation>Texto sin formato (eliminar caracteres de control)</translation>
+        <translation type="vanished">Texto sin formato (eliminar caracteres de control)</translation>
     </message>
     <message>
         <source>Hex display</source>
+        <translation type="vanished">Hexadecimal</translation>
+    </message>
+    <message>
+        <source>As it comes</source>
+        <translation>Como viene</translation>
+    </message>
+    <message>
+        <source>Remove control characters</source>
+        <translation>Eliminar caracteres de control</translation>
+    </message>
+    <message>
+        <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
 </context>
@@ -624,6 +636,10 @@
     <message>
         <source>Display mode</source>
         <translation>Visualización</translation>
+    </message>
+    <message>
+        <source>Custom baud rate</source>
+        <translation>Otra tasa de baudios</translation>
     </message>
 </context>
 <context>

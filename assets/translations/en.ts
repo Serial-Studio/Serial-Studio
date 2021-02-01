@@ -428,15 +428,15 @@
         <translation></translation>
     </message>
     <message>
-        <source>Plain text (as it comes)</source>
+        <source>As it comes</source>
         <translation></translation>
     </message>
     <message>
-        <source>Plain text (remove control characters)</source>
+        <source>Remove control characters</source>
         <translation></translation>
     </message>
     <message>
-        <source>Hex display</source>
+        <source>Hexadecimal</source>
         <translation></translation>
     </message>
 </context>
@@ -504,6 +504,10 @@
     </message>
     <message>
         <source>Display mode</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Custom baud rate</source>
         <translation></translation>
     </message>
 </context>

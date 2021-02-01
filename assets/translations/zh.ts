@@ -461,14 +461,26 @@
     </message>
     <message>
         <source>Plain text (as it comes)</source>
-        <translation>纯文本（随它而来）</translation>
+        <translation type="vanished">纯文本（随它而来）</translation>
     </message>
     <message>
         <source>Plain text (remove control characters)</source>
-        <translation>纯文本（删除控制字符）</translation>
+        <translation type="vanished">纯文本（删除控制字符）</translation>
     </message>
     <message>
         <source>Hex display</source>
+        <translation type="vanished">十六进制</translation>
+    </message>
+    <message>
+        <source>As it comes</source>
+        <translation>随它而来</translation>
+    </message>
+    <message>
+        <source>Remove control characters</source>
+        <translation>删除控制字符</translation>
+    </message>
+    <message>
+        <source>Hexadecimal</source>
         <translation>十六进制</translation>
     </message>
 </context>
@@ -537,6 +549,10 @@
     <message>
         <source>Display mode</source>
         <translation>可视化模式</translation>
+    </message>
+    <message>
+        <source>Custom baud rate</source>
+        <translation>另一个波特率</translation>
     </message>
 </context>
 <context>
