@@ -24,8 +24,6 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-import Qt.labs.settings 1.0
-
 Control {
     id: root
 
@@ -51,13 +49,6 @@ Control {
     property alias setupChecked: setupBt.checked
     property alias consoleChecked: consoleBt.checked
     property alias widgetsChecked: widgetsBt.checked
-
-    //
-    // Settings
-    //
-    Settings {
-        property alias dataExport: csvLogging.checked
-    }
 
     //
     // Background gradient
@@ -165,42 +156,6 @@ Control {
             Layout.fillWidth: true
         }
 
-        Switch {
-            id: csvLogging
-            checked: true
-            palette.highlight: "#2e895c"
-            Layout.alignment: Qt.AlignVCenter
-            text: qsTr("CSV Export") + CppTranslator.dummy
-            onCheckedChanged: CppExport.exportEnabled = checked
-        }
-
-        Button {
-            flat: true
-            icon.width: 24
-            icon.height: 24
-            Layout.fillHeight: true
-            icon.color: palette.text
-            icon.source: "qrc:/icons/bug.svg"
-            onClicked: CppExport.openLogFile()
-            text: qsTr("Log") + _btSpacer + CppTranslator.dummy
-
-            Behavior on opacity {NumberAnimation{}}
-        }
-
-        Button {
-            flat: true
-            icon.width: 24
-            icon.height: 24
-            Layout.fillHeight: true
-            icon.color: palette.text
-            opacity: enabled ? 1 : 0.5
-            onClicked: CppCsvPlayer.openFile()
-            icon.source: "qrc:/icons/update.svg"
-            text: qsTr("CSV Player") + _btSpacer + CppTranslator.dummy
-
-            Behavior on opacity {NumberAnimation{}}
-        }
-
         Button {
             flat: true
             icon.width: 24
@@ -214,6 +169,50 @@ Control {
             text: qsTr("Open CSV") + _btSpacer + CppTranslator.dummy
 
             Behavior on opacity {NumberAnimation{}}
+        }
+
+        Button {
+            id: connectBt
+
+            //
+            // Button properties
+            //
+            flat: true
+            icon.width: 24
+            icon.height: 24
+            font.bold: true
+            Layout.fillHeight: true
+            icon.color: palette.buttonText
+
+            //
+            // Device dependent properties
+            //
+            checked: CppSerialManager.connected
+            palette.buttonText: checked ? "#d72d60" : "#2eed5c"
+            text: (checked ? qsTr("Disconnect") : qsTr("Connect")) + _btSpacer
+            icon.source: checked ? "qrc:/icons/disconnect.svg" : "qrc:/icons/connect.svg"
+
+            //
+            // Only enable button if it can be clicked
+            //
+            opacity: enabled ? 1 : 0.5
+            Behavior on opacity {NumberAnimation{}}
+            enabled: CppSerialManager.serialConfigurationOk
+
+            //
+            // Connect to the device through serial port
+            //
+            onClicked: {
+                // Not connected, connect appropiate device
+                if (!CppSerialManager.connected) {
+                    if (CppSerialManager.serialConfigurationOk)
+                        CppSerialManager.connectDevice()
+                }
+
+                // We are already connected, remove device
+                else
+                    CppSerialManager.disconnectDevice()
+            }
         }
     }
 }

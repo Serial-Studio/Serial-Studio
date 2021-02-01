@@ -138,6 +138,12 @@ Window {
 
             Button {
                 Layout.fillWidth: true
+                onClicked: CppExport.openLogFile()
+                text: qsTr("Open log file") + CppTranslator.dummy
+            }
+
+            Button {
+                Layout.fillWidth: true
                 text: qsTr("Documentation") + CppTranslator.dummy
                 onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
             }

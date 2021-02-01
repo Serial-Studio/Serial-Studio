@@ -43,6 +43,10 @@
         <source>Copyright © 2020-%1 %2, released under the MIT License.</source>
         <translation>Copyright © 2020-%1 %2, distribuido bajo la licencia MIT.</translation>
     </message>
+    <message>
+        <source>Open log file</source>
+        <translation>Abrir archivo de log</translation>
+    </message>
 </context>
 <context>
     <name>AccelerometerDelegate</name>
@@ -570,6 +574,14 @@
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
+    <message>
+        <source>Baud rate registered successfully</source>
+        <translation>Nueva tasa de baudios registrada correctamente</translation>
+    </message>
+    <message>
+        <source>Rate &quot;%1&quot; has been added to baud rate list</source>
+        <translation>Se ha añadido la velocidad &quot;%1&quot; a la lista de tasa de baudios</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -639,7 +651,30 @@
     </message>
     <message>
         <source>Custom baud rate</source>
-        <translation>Otra tasa de baudios</translation>
+        <translation type="vanished">Otra tasa de baudios</translation>
+    </message>
+    <message>
+        <source>CSV Export</source>
+        <translation>Exportación CSV</translation>
+    </message>
+    <message>
+        <source>CSV Player</source>
+        <translation>Reproductor CSV</translation>
+    </message>
+</context>
+<context>
+    <name>Sidebar</name>
+    <message>
+        <source>CSV Player</source>
+        <translation type="obsolete">Reproductor CSV</translation>
+    </message>
+    <message>
+        <source>Open CSV</source>
+        <translation type="obsolete">Abrir CSV</translation>
+    </message>
+    <message>
+        <source>Log</source>
+        <translation type="obsolete">Registro</translation>
     </message>
 </context>
 <context>
@@ -666,7 +701,7 @@
     </message>
     <message>
         <source>CSV Export</source>
-        <translation>Exportación CSV</translation>
+        <translation type="vanished">Exportación CSV</translation>
     </message>
     <message>
         <source>Open past CSV</source>
@@ -682,11 +717,11 @@
     </message>
     <message>
         <source>CSV Player</source>
-        <translation>Reproductor CSV</translation>
+        <translation type="vanished">Reproductor CSV</translation>
     </message>
     <message>
         <source>Log</source>
-        <translation>Registro</translation>
+        <translation type="vanished">Registro</translation>
     </message>
     <message>
         <source>Open CSV</source>
@@ -695,6 +730,14 @@
     <message>
         <source>Setup</source>
         <translation>Configuración</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation>Desconectar</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>Conectar</translation>
     </message>
 </context>
 <context>

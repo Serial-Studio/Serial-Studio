@@ -48,12 +48,11 @@ Control {
         property alias dmAuto: commAuto.checked
         property alias dmManual: commManual.checked
         property alias dmParity: parity.currentIndex
+        property alias dmCsvExport: csvLogging.checked
         property alias dmStopBits: stopBits.currentIndex
         property alias dmDataBits: dataBits.currentIndex
         property alias dmOpenMode: openMode.currentIndex
-        property alias dmBaudIndex: baudRate.currentIndex
-        property alias dmCustomBrEnabled: customBr.checked
-        property alias dmCustomBaudRate: customBaudRateValue.value
+        property alias dmBaudValue: baudRate.currentIndex
         property alias dmFlowControl: flowControl.currentIndex
         property alias appLanguage: languageCombo.currentIndex
         property alias dmDisplayMode: displayMode.currentIndex
@@ -147,6 +146,34 @@ Control {
         }
 
         //
+        // CSV options
+        //
+        RowLayout {
+            Layout.fillWidth: true
+
+            CheckBox {
+                id: csvLogging
+                checked: true
+                palette.highlight: "#2e895c"
+                Layout.leftMargin: -app.spacing
+                Layout.alignment: Qt.AlignVCenter
+                text: qsTr("CSV Export") + CppTranslator.dummy
+                onCheckedChanged: CppExport.exportEnabled = checked
+            }
+
+            Button {
+                Layout.fillWidth: true
+                opacity: enabled ? 1 : 0.5
+                enabled: commManual.checked
+                onClicked: CppCsvPlayer.openFile()
+                Layout.alignment: Qt.AlignVCenter
+                text: qsTr("CSV Player") + CppTranslator.dummy
+
+                Behavior on opacity {NumberAnimation{}}
+            }
+        }
+
+        //
         // Spacer
         //
         Item {
@@ -166,36 +193,55 @@ Control {
             // COM port selector
             //
             Label {
+                opacity: enabled ? 1 : 0.5
+                enabled: !CppSerialManager.connected
+                Behavior on opacity {NumberAnimation{}}
                 text: qsTr("COM Port") + ":" + CppTranslator.dummy
             } ComboBox {
                 id: portSelector
                 Layout.fillWidth: true
                 model: CppSerialManager.portList
                 currentIndex: CppSerialManager.portIndex
-                onCurrentIndexChanged: CppSerialManager.setPort(currentIndex)
+                onCurrentIndexChanged: {
+                    if (currentIndex !== CppSerialManager.portIndex)
+                        CppSerialManager.portIndex = currentIndex
+                }
+
+                opacity: enabled ? 1 : 0.5
+                enabled: !CppSerialManager.connected
+                Behavior on opacity {NumberAnimation{}}
             }
 
             //
             // Baud rate selector
             //
             Label {
-                text: qsTr("Baud Rate") + ":" + CppTranslator.dummy
-
-                enabled: !customBr.checked
                 opacity: enabled ? 1 : 0.5
+                enabled: !CppSerialManager.connected
                 Behavior on opacity {NumberAnimation{}}
-
+                text: qsTr("Baud Rate") + ":" + CppTranslator.dummy
             } ComboBox {
                 id: baudRate
+                editable: true
+                currentIndex: 3
                 Layout.fillWidth: true
+                enabled: !CppSerialManager.connected
                 model: CppSerialManager.baudRateList
-                currentIndex: CppSerialManager.baudRateIndex
-                onCurrentIndexChanged: {
-                    if (CppSerialManager.baudRateIndex !== currentIndex && enabled)
-                        CppSerialManager.baudRateIndex = currentIndex
+
+                validator: IntValidator {
+                    bottom: 1
                 }
 
-                enabled: !customBr.checked
+                onAccepted: {
+                    if (find(editText) === -1)
+                        CppSerialManager.appendBaudRate(editText)
+                }
+
+                onCurrentTextChanged: {
+                    var value = currentText
+                    CppSerialManager.baudRate = value
+                }
+
                 opacity: enabled ? 1 : 0.5
                 Behavior on opacity {NumberAnimation{}}
             }
@@ -207,6 +253,7 @@ Control {
                 text: qsTr("Open mode") + ":" + CppTranslator.dummy
             } ComboBox {
                 id: openMode
+                currentIndex: 1
                 Layout.fillWidth: true
                 model: root.serialOpenModes
                 onCurrentIndexChanged: {
@@ -230,32 +277,6 @@ Control {
                 onCurrentIndexChanged: {
                     if (CppSerialManager.displayMode !== currentIndex)
                         CppSerialManager.displayMode = currentIndex
-                }
-            }
-
-            //
-            // Custom baud rate
-            //
-            CheckBox {
-                id: customBr
-                Layout.leftMargin: -app.spacing
-                text: qsTr("Custom baud rate") + CppTranslator.dummy
-            } SpinBox {
-                id: customBaudRateValue
-
-                from: 1
-                stepSize: 1
-                to: 10000000
-                value: 9600
-                editable: true
-                Layout.fillWidth: true
-                enabled: customBr.checked
-                opacity: enabled ? 1 : 0.5
-                Behavior on opacity {NumberAnimation{}}
-
-                onValueChanged: {
-                    if (enabled)
-                        CppSerialManager.setBaudRate(value)
                 }
             }
 

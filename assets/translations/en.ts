@@ -39,6 +39,10 @@
         <source>Copyright © 2020-%1 %2, released under the MIT License.</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Open log file</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>AccelerometerDelegate</name>
@@ -439,6 +443,14 @@
         <source>Hexadecimal</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Baud rate registered successfully</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Rate &quot;%1&quot; has been added to baud rate list</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -507,7 +519,11 @@
         <translation></translation>
     </message>
     <message>
-        <source>Custom baud rate</source>
+        <source>CSV Export</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>CSV Player</source>
         <translation></translation>
     </message>
 </context>
@@ -526,19 +542,7 @@
         <translation></translation>
     </message>
     <message>
-        <source>CSV Export</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Dashboard</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>CSV Player</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Log</source>
         <translation></translation>
     </message>
     <message>
@@ -547,6 +551,14 @@
     </message>
     <message>
         <source>Setup</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Connect</source>
         <translation></translation>
     </message>
 </context>

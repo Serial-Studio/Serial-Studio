@@ -237,9 +237,9 @@ ApplicationWindow {
             Layout.maximumHeight: 48
             dataChecked: data.visible
             aboutChecked: about.visible
-            consoleChecked: terminal.visible
-            widgetsChecked: widgets.visible
             setupChecked: setup.visible
+            widgetsChecked: widgets.visible
+            consoleChecked: terminal.visible
             onAboutClicked: about.visible ? about.hide() : about.show()
             onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
@@ -321,7 +321,7 @@ ApplicationWindow {
 
             Setup {
                 id: setup
-                property int displayedWidth: 320
+                property int displayedWidth: 340
 
                 function show() {
                     opacity = 1

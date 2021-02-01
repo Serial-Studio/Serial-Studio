@@ -179,14 +179,18 @@ SerialManager::SerialManager()
     m_port = nullptr;
     m_receivedBytes = 0;
 
+    // Read settings
+    readSettings();
+
     // Init serial port configuration variables
     setDisplayMode(0);
+    setBaudRate(9600);
+    setWriteEnabled(true);
+    disconnectDevice();
     setDataBits(dataBitsList().indexOf("8"));
     setStopBits(stopBitsList().indexOf("1"));
     setParity(parityList().indexOf(tr("None")));
-    setBaudRateIndex(baudRateList().indexOf("9600"));
     setFlowControl(flowControlList().indexOf(tr("None")));
-    disconnectDevice();
 
     // Init start/finish sequence strings
     setStartSequence("/*");
@@ -370,6 +374,15 @@ QString SerialManager::finishSequence() const
 }
 
 /**
+ * Returns @c true if the user selects the appropiate controls & options to be able
+ * to connect to a serial device
+ */
+bool SerialManager::serialConfigurationOk() const
+{
+    return portIndex() > 0;
+}
+
+/**
  * Returns the index of the current serial device selected by the program.
  */
 quint8 SerialManager::portIndex() const
@@ -393,15 +406,6 @@ quint8 SerialManager::parityIndex() const
 quint8 SerialManager::displayMode() const
 {
     return m_displayMode;
-}
-
-/**
- * Returns the correspoding index of the baud rate configuration in relation
- * to the @c QStringList returned by the @c baudRateList() function.
- */
-quint8 SerialManager::baudRateIndex() const
-{
-    return m_baudRateIndex;
 }
 
 /**
@@ -465,16 +469,7 @@ QStringList SerialManager::parityList() const
  */
 QStringList SerialManager::baudRateList() const
 {
-    QStringList list;
-    list.append("1200");
-    list.append("2400");
-    list.append("4800");
-    list.append("9600");
-    list.append("19200");
-    list.append("38400");
-    list.append("57600");
-    list.append("115200");
-    return list;
+    return m_baudRateList;
 }
 
 /**
@@ -572,6 +567,67 @@ void SerialManager::configureTextDocument(QQuickTextDocument *doc)
 {
     if (doc)
         doc->textDocument()->setUndoRedoEnabled(false);
+}
+
+/**
+ * Closes the current serial port and tries to open & configure a new serial
+ * port connection with the device at the given port index returned by the @c portIndex()
+ * function.
+ *
+ * @note If another device is connected through a serial port, then the
+ *       connection with that device will be canceled/closed before configuring the
+ *       new serial port connection.
+ */
+void SerialManager::connectDevice()
+{
+    // Ignore the first item of the list (Select Port)
+    auto ports = validPorts();
+    auto portId = portIndex() - 1;
+    if (portId >= 0 && portId < validPorts().count())
+    {
+        // Update port index variable & disconnect from current serial port
+        disconnectDevice();
+
+        // Create new serial port handler
+        m_port = new QSerialPort(ports.at(portId));
+
+        // Configure serial port
+        port()->setParity(parity());
+        port()->setBaudRate(baudRate());
+        port()->setDataBits(dataBits());
+        port()->setStopBits(stopBits());
+        port()->setFlowControl(flowControl());
+
+        // Connect signals/slots
+        // clang-format off
+        connect(port(), SIGNAL(readyRead()),
+                this,     SLOT(onDataReceived()));
+        connect(port(), SIGNAL(aboutToClose()),
+                this,     SLOT(disconnectDevice()));
+        connect(port(), SIGNAL(errorOccurred(QSerialPort::SerialPortError)),
+                this,     SLOT(handleError(QSerialPort::SerialPortError)));
+        // clang-format on
+
+        // Select open mode for serial port
+        auto mode = QIODevice::ReadOnly;
+        if (writeEnabled())
+            mode = QIODevice::ReadWrite;
+
+        // Try to open the port
+        if (port()->open(mode))
+        {
+            emit connectedChanged();
+            LOG_INFO() << Q_FUNC_INFO << "Serial port opened successfully in " << mode;
+        }
+
+        // Close serial port on error
+        else
+            disconnectDevice();
+
+        // Notify UI that the port status changed
+        emit portChanged();
+        LOG_INFO() << "Serial port selection set to" << portName();
+    }
 }
 
 /**
@@ -683,6 +739,10 @@ void SerialManager::setBaudRate(const qint32 rate)
     if (port())
         port()->setBaudRate(baudRate());
 
+    // Update baud rate index
+    // if (baudRateList().contains(QString::number(rate)))
+    //    setBaudRateIndex(baudRateList().indexOf(QString::number(rate)));
+
     // Update user interface
     emit baudRateChanged();
 
@@ -690,82 +750,16 @@ void SerialManager::setBaudRate(const qint32 rate)
     LOG_INFO() << "Baud rate set to" << rate;
 }
 
-/**
- * Closes the current serial port and tries to open & configure a new serial
- * port connection with the device at the given @a port index.
- *
- * Upon serial port configuration the function emits the @c connectionChanged()
- * signal and the portChanged() signal.
- *
- * @note If the @a portIndex is the same as the current port index, then the
- *       function shall not try to reconfigure or close the current serial port.
- *
- * @note If another device is connected through a serial port, then the
- * connection with that device will be canceled/closed before configuring the
- * new serial port connection.
- */
-void SerialManager::setPort(const quint8 portIndex)
+void SerialManager::setPortIndex(const quint8 portIndex)
 {
-    // Port index is equal to 0 -> disconnect current device
-    if (portIndex == 0)
-    {
-        m_portIndex = 0;
-        disconnectDevice();
-    }
-
-    // Abort if portIndex is the same as the actual port index
-    else if (portIndex == m_portIndex)
-        return;
-
-    // Ignore the first item of the list (Select Port)
     auto ports = validPorts();
     auto portId = portIndex - 1;
     if (portId >= 0 && portId < validPorts().count())
-    {
-        // Update port index variable & disconnect from current serial port
-        disconnectDevice();
         m_portIndex = portIndex;
+    else
+        m_portIndex = 0;
 
-        // Create new serial port handler
-        m_port = new QSerialPort(ports.at(portId));
-
-        // Configure serial port
-        port()->setParity(parity());
-        port()->setBaudRate(baudRate());
-        port()->setDataBits(dataBits());
-        port()->setStopBits(stopBits());
-        port()->setFlowControl(flowControl());
-
-        // Connect signals/slots
-        // clang-format off
-        connect(port(), SIGNAL(readyRead()),
-                this,     SLOT(onDataReceived()));
-        connect(port(), SIGNAL(aboutToClose()),
-                this,     SLOT(disconnectDevice()));
-        connect(port(), SIGNAL(errorOccurred(QSerialPort::SerialPortError)),
-                this,     SLOT(handleError(QSerialPort::SerialPortError)));
-        // clang-format on
-
-        // Select open mode for serial port
-        auto mode = QIODevice::ReadOnly;
-        if (writeEnabled())
-            mode = QIODevice::ReadWrite;
-
-        // Try to open the port in R/RW
-        if (port()->open(mode))
-        {
-            emit connectedChanged();
-            LOG_INFO() << Q_FUNC_INFO << "Serial port opened successfully in RW mode";
-        }
-
-        // Close serial port on error
-        else
-            disconnectDevice();
-
-        // Notify UI that the port status changed
-        emit portChanged();
-        LOG_INFO() << "Serial port selection set to" << portName();
-    }
+    emit portIndexChanged();
 }
 
 /**
@@ -788,7 +782,7 @@ void SerialManager::setWriteEnabled(const bool enabled)
     {
         auto index = portIndex();
         disconnectDevice();
-        setPort(index);
+        setPortIndex(index);
     }
 
     emit writeEnabledChanged();
@@ -841,22 +835,19 @@ void SerialManager::setParity(const quint8 parityIndex)
 }
 
 /**
- * Changes the baud rate of the serial port.
- *
- * @note This function is meant to be used with a combobox in the
- *       QML interface
+ * Registers the new baud rate to the list
  */
-void SerialManager::setBaudRateIndex(const quint8 index)
+void SerialManager::appendBaudRate(const QString &baudRate)
 {
-    if (index < baudRateList().count())
+    if (!m_baudRateList.contains(baudRate))
     {
-        m_baudRateIndex = index;
-        setBaudRate(baudRateList().at(index).toInt());
-        emit baudRateIndexChanged();
-    }
+        m_baudRateList.append(baudRate);
+        writeSettings();
+        emit baudRateListChanged();
 
-    else
-        setBaudRateIndex(baudRateList().indexOf("9600"));
+        NiceMessageBox(tr("Baud rate registered successfully"),
+                       tr("Rate \"%1\" has been added to baud rate list").arg(baudRate));
+    }
 }
 
 /**
@@ -1236,6 +1227,68 @@ void SerialManager::readFrames()
         clearTempBuffer();
 }
 
+/**
+ * Read saved settings (if any)
+ */
+void SerialManager::readSettings()
+{
+    // Register standard baud rates
+    QStringList stdBaudRates;
+    stdBaudRates.append("1200");
+    stdBaudRates.append("2400");
+    stdBaudRates.append("4800");
+    stdBaudRates.append("9600");
+    stdBaudRates.append("19200");
+    stdBaudRates.append("38400");
+    stdBaudRates.append("57600");
+    stdBaudRates.append("115200");
+
+    // Get value from settings
+    m_baudRateList = m_settings.value("BaudRateList", stdBaudRates).toStringList();
+
+    // Sort baud rate list
+    for (auto i = 0; i < m_baudRateList.count() - 1; ++i)
+    {
+        for (auto j = 0; j < m_baudRateList.count() - i - 1; ++j)
+        {
+            auto a = m_baudRateList.at(j).toInt();
+            auto b = m_baudRateList.at(j + 1).toInt();
+            if (a > b)
+                m_baudRateList.swapItemsAt(j, j + 1);
+        }
+    }
+
+    // Notify UI
+    emit baudRateListChanged();
+}
+
+/**
+ * Save settings between application runs
+ */
+void SerialManager::writeSettings()
+{
+    // Sort baud rate list
+    for (auto i = 0; i < m_baudRateList.count() - 1; ++i)
+    {
+        for (auto j = 0; j < m_baudRateList.count() - i - 1; ++j)
+        {
+            auto a = m_baudRateList.at(j).toInt();
+            auto b = m_baudRateList.at(j + 1).toInt();
+            if (a > b)
+            {
+                m_baudRateList.swapItemsAt(j, j + 1);
+                emit baudRateListChanged();
+            }
+        }
+    }
+
+    // Save list to memory
+    m_settings.setValue("BaudRateList", baudRateList());
+}
+
+/**
+ * Returns a list with all the valid serial port objects
+ */
 QList<QSerialPortInfo> SerialManager::validPorts() const
 {
     // Search for available ports and add them to the lsit

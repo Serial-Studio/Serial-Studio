@@ -39,6 +39,10 @@
         <source>Close</source>
         <translation>关闭</translation>
     </message>
+    <message>
+        <source>Open log file</source>
+        <translation>打开日志文件</translation>
+    </message>
 </context>
 <context>
     <name>AccelerometerDelegate</name>
@@ -483,6 +487,14 @@
         <source>Hexadecimal</source>
         <translation>十六进制</translation>
     </message>
+    <message>
+        <source>Baud rate registered successfully</source>
+        <translation>波特率注册成功</translation>
+    </message>
+    <message>
+        <source>Rate &quot;%1&quot; has been added to baud rate list</source>
+        <translation>速率&quot;%1&quot;已添加到波特率列表中</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -552,7 +564,30 @@
     </message>
     <message>
         <source>Custom baud rate</source>
-        <translation>另一个波特率</translation>
+        <translation type="vanished">另一个波特率</translation>
+    </message>
+    <message>
+        <source>CSV Export</source>
+        <translation>导出CSV</translation>
+    </message>
+    <message>
+        <source>CSV Player</source>
+        <translation>CSV 播放器</translation>
+    </message>
+</context>
+<context>
+    <name>Sidebar</name>
+    <message>
+        <source>CSV Player</source>
+        <translation type="obsolete">CSV 播放器</translation>
+    </message>
+    <message>
+        <source>Open CSV</source>
+        <translation type="obsolete">打开CSV</translation>
+    </message>
+    <message>
+        <source>Log</source>
+        <translation type="obsolete">日志</translation>
     </message>
 </context>
 <context>
@@ -579,15 +614,15 @@
     </message>
     <message>
         <source>CSV Export</source>
-        <translation>导出CSV</translation>
+        <translation type="vanished">导出CSV</translation>
     </message>
     <message>
         <source>Log</source>
-        <translation>日志</translation>
+        <translation type="vanished">日志</translation>
     </message>
     <message>
         <source>CSV Player</source>
-        <translation>CSV 播放器</translation>
+        <translation type="vanished">CSV 播放器</translation>
     </message>
     <message>
         <source>Open CSV</source>
@@ -596,6 +631,14 @@
     <message>
         <source>Setup</source>
         <translation>体系</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation>断开</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>连接</translation>
     </message>
 </context>
 <context>

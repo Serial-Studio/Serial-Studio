@@ -39,6 +39,10 @@
         <source>Copyright © 2020-%1 %2, released under the MIT License.</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Open log file</source>
+        <translation>Logdatei öffnen</translation>
+    </message>
 </context>
 <context>
     <name>AccelerometerDelegate</name>
@@ -451,6 +455,14 @@
         <source>Hexadecimal</source>
         <translation>Hexadezimal</translation>
     </message>
+    <message>
+        <source>Baud rate registered successfully</source>
+        <translation>Baudrate erfolgreich registriert</translation>
+    </message>
+    <message>
+        <source>Rate &quot;%1&quot; has been added to baud rate list</source>
+        <translation>Rate &quot;%1&quot; wurde zur Baudratenliste hinzugefügt</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -520,7 +532,22 @@
     </message>
     <message>
         <source>Custom baud rate</source>
-        <translation>Andere Baudrate</translation>
+        <translation type="vanished">Andere Baudrate</translation>
+    </message>
+    <message>
+        <source>CSV Export</source>
+        <translation>CSV-Export</translation>
+    </message>
+    <message>
+        <source>CSV Player</source>
+        <translation>CSV Player</translation>
+    </message>
+</context>
+<context>
+    <name>Sidebar</name>
+    <message>
+        <source>Open CSV</source>
+        <translation type="obsolete">CSV Öffnen</translation>
     </message>
 </context>
 <context>
@@ -538,19 +565,7 @@
         <translation>Über</translation>
     </message>
     <message>
-        <source>CSV Export</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Dashboard</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>CSV Player</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Log</source>
         <translation></translation>
     </message>
     <message>
@@ -560,6 +575,14 @@
     <message>
         <source>Setup</source>
         <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation>Trennen</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>Verbinden</translation>
     </message>
 </context>
 <context>

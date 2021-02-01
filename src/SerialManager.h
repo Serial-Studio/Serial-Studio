@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QObject>
 #include <QString>
+#include <QSettings>
 #include <QByteArray>
 #include <QStringList>
 #include <QtSerialPort>
@@ -76,8 +77,8 @@ class SerialManager : public QObject
                NOTIFY finishSequenceChanged)
     Q_PROPERTY(quint8 portIndex
                READ portIndex
-               WRITE setPort
-               NOTIFY portChanged)
+               WRITE setPortIndex
+               NOTIFY portIndexChanged)
     Q_PROPERTY(quint8 parityIndex
                READ parityIndex
                WRITE setParity
@@ -86,10 +87,6 @@ class SerialManager : public QObject
                READ displayMode
                WRITE setDisplayMode
                NOTIFY displayModeChanged)
-    Q_PROPERTY(quint8 baudRateIndex
-               READ baudRateIndex
-               WRITE setBaudRateIndex
-               NOTIFY baudRateIndexChanged)
     Q_PROPERTY(quint8 dataBitsIndex
                READ dataBitsIndex
                WRITE setDataBits
@@ -114,7 +111,7 @@ class SerialManager : public QObject
                CONSTANT)
     Q_PROPERTY(QStringList baudRateList
                READ baudRateList
-               CONSTANT)
+               NOTIFY baudRateListChanged)
     Q_PROPERTY(QStringList dataBitsList
                READ dataBitsList
                CONSTANT)
@@ -127,6 +124,9 @@ class SerialManager : public QObject
     Q_PROPERTY(QStringList consoleDisplayModes
                READ consoleDisplayModes
                CONSTANT)
+    Q_PROPERTY(bool serialConfigurationOk
+               READ serialConfigurationOk
+               NOTIFY portIndexChanged)
     // clang-format on
 
 signals:
@@ -137,8 +137,10 @@ signals:
     void dataBitsChanged();
     void stopBitsChanged();
     void connectedChanged();
+    void portIndexChanged();
     void displayModeChanged();
     void flowControlChanged();
+    void baudRateListChanged();
     void writeEnabledChanged();
     void textDocumentChanged();
     void baudRateIndexChanged();
@@ -168,11 +170,11 @@ public:
     QString receivedBytes() const;
     QString startSequence() const;
     QString finishSequence() const;
+    bool serialConfigurationOk() const;
 
     quint8 portIndex() const;
     quint8 parityIndex() const;
     quint8 displayMode() const;
-    quint8 baudRateIndex() const;
     quint8 dataBitsIndex() const;
     quint8 stopBitsIndex() const;
     quint8 flowControlIndex() const;
@@ -194,15 +196,16 @@ public:
     Q_INVOKABLE void configureTextDocument(QQuickTextDocument *doc);
 
 public slots:
+    void connectDevice();
     void clearTempBuffer();
     void disconnectDevice();
     void sendData(const QString &data);
     void setBaudRate(const qint32 rate);
-    void setPort(const quint8 portIndex);
+    void setPortIndex(const quint8 portIndex);
     void setSendHexData(const bool &sendHex);
     void setWriteEnabled(const bool enabled);
     void setParity(const quint8 parityIndex);
-    void setBaudRateIndex(const quint8 index);
+    void appendBaudRate(const QString &baudRate);
     void setDataBits(const quint8 dataBitsIndex);
     void setStopBits(const quint8 stopBitsIndex);
     void setDisplayMode(const quint8 displayMode);
@@ -213,6 +216,8 @@ public slots:
 
 private slots:
     void readFrames();
+    void readSettings();
+    void writeSettings();
     void onDataReceived();
     void refreshSerialDevices();
     void handleError(QSerialPort::SerialPortError error);
@@ -227,6 +232,7 @@ private:
     QSerialPort *m_port;
 
     qint32 m_baudRate;
+    QSettings m_settings;
     QSerialPort::Parity m_parity;
     QSerialPort::DataBits m_dataBits;
     QSerialPort::StopBits m_stopBits;
@@ -235,7 +241,6 @@ private:
     quint8 m_portIndex;
     quint8 m_displayMode;
     quint8 m_parityIndex;
-    quint8 m_baudRateIndex;
     quint8 m_dataBitsIndex;
     quint8 m_stopBitsIndex;
     quint64 m_receivedBytes;
@@ -249,6 +254,7 @@ private:
     QString m_finishSeq;
     QByteArray m_tempBuffer;
     QStringList m_portList;
+    QStringList m_baudRateList;
 };
 
 #endif
