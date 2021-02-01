@@ -99,7 +99,7 @@ Section "Start Menu Shortcuts"
 SectionEnd
 
 Section "Install Visual C++ Redistributable"
-  ExecWait "${INSTALL_DIR}\bin\vc_redist.x64.exe /quiet"
+  ExecWait "${INSTALL_DIR}\bin\vc_redist.x64.exe /quiet /norestart"
   Delete "${INSTALL_DIR}\bin\vc_redist.x64.exe"
 SectionEnd
 
