@@ -25,7 +25,21 @@ Furthermore, this approach can be extended to almost any type of project that in
 
 #### Requirements
 
-The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with Qt 5.15 or greater.
+The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with Qt 5.15 or greater. You will also need to have the following Qt non-LGPL modules installed:
+
+- Qt Charts
+
+On GNU/Linux systems, you will also need to install `libgl1-mesa-dev` in order to compile the application.
+
+Full list of used Qt modules:
+
+- Qt SQL
+- Qt Quick
+- Qt Widgets
+- Qt Charts
+- Qt Serial Port
+- Qt Quick Controls 2
+- Qt Graphical Effects
 
 #### Cloning
 
