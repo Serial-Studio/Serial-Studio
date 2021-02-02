@@ -1244,6 +1244,11 @@ void SerialManager::readSettings()
     stdBaudRates.append("38400");
     stdBaudRates.append("57600");
     stdBaudRates.append("115200");
+    stdBaudRates.append("250000");
+    stdBaudRates.append("460800");
+    stdBaudRates.append("500000");
+    stdBaudRates.append("921600");
+    stdBaudRates.append("1000000");
 
     // Get value from settings
     m_baudRateList = m_settings.value("BaudRateList", stdBaudRates).toStringList();
