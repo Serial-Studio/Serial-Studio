@@ -21,11 +21,10 @@
  */
 
 import QtQuick 2.0
-import QtLocation 5.11
+import QtLocation 5.12
 import QtPositioning 5.11
-import QtQuick.Layouts 1.0
-import QtQuick.Controls 2.0
-import QtQuick.Controls.Universal 2.0
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
 import Qt.labs.settings 1.0
 
@@ -48,6 +47,15 @@ Window {
     backgroundColor: "#09090c"
     implicitHeight: implicitWidth + 96
     icon.source: "qrc:/icons/location-on.svg"
+
+    //
+    // Settings
+    //
+    Settings {
+        property alias mapTilt: map.tilt
+        property alias mapZoom: map.zoomLevel
+        property alias autoCenter: autoCenter.checked
+    }
 
     //
     // Custom properties
@@ -75,7 +83,9 @@ Window {
             root.latitude = CppWidgetProvider.mapLatitude(root.groupIndex)
             root.longitude = CppWidgetProvider.mapLongitude(root.groupIndex)
             root.title = CppWidgetProvider.mapGroupAt(root.groupIndex).title
-            root.centerMap()
+
+            if (autoCenter.checked)
+                root.centerMap()
         }
 
         else {
@@ -99,13 +109,6 @@ Window {
     }
 
     //
-    // Save settings between runs
-    //
-    Settings {
-        property alias mapType: mapTypeSelector.currentIndex
-    }
-
-    //
     // UI controls
     //
     ColumnLayout {
@@ -114,54 +117,159 @@ Window {
         anchors.margins: app.spacing
 
         //
-        // Map type selector
+        // Center map + zoom slider
         //
-        ComboBox {
-            id: mapTypeSelector
-            textRole: "description"
-            Layout.fillWidth: true
-            model: map.supportedMapTypes
-            onCurrentIndexChanged: map.activeMapType = map.supportedMapTypes[currentIndex]
+        RowLayout {
+            CheckBox {
+                id: autoCenter
+                checked: true
+                checkable: true
+                Layout.leftMargin: -6
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("Center on coordinate") + CppTranslator.dummy
+                onCheckedChanged: {
+                    if (checked)
+                        root.centerMap()
+                }
+            }
+
+            Slider {
+                value: map.zoomLevel
+                Layout.fillWidth: true
+                to: map.maximumZoomLevel
+                from: map.minimumZoomLevel
+                Layout.alignment: Qt.AlignHCenter
+                onValueChanged: {
+                    if (map.zoomLevel !== value)
+                        map.zoomLevel = value
+                }
+            }
         }
 
         //
         // Map
         //
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            border {
-                width: 2
-                color: "#646464"
+        RowLayout {
+            //
+            // Tilt slider
+            //
+            Slider {
+                orientation: Qt.Vertical
+                Layout.fillHeight: true
+                from: map.minimumTilt
+                to: map.maximumTilt
+                value: map.tilt
+                Component.onCompleted: value = 0.8 * to
+                onValueChanged: {
+                    if (map.tilt != value)
+                        map.tilt = value
+                }
             }
 
-            Map {
-                id: map
-                anchors.fill: parent
-                copyrightsVisible: false
-                color: Universal.background
-                anchors.margins: parent.border.width
-                zoomLevel: (map.minimumZoomLevel + map.maximumZoomLevel) * 0.8
+            //
+            // Map
+            //
+            Rectangle {
+                id: mapRect
+                clip: true
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                MapQuickItem {
-                    coordinate: gpsCoordinates
-                    anchorPoint: Qt.point(sourceItem.width / 2, sourceItem.height/ 2)
+                border {
+                    width: 2
+                    color: "#646464"
+                }
 
-                    sourceItem: Rectangle {
-                        id: dot
-                        width: 20
-                        height: 20
-                        opacity: 0.8
-                        color: "#f00"
-                        border.width: 2
-                        radius: width / 2
-                        border.color: "#fff"
+                gradient: Gradient {
+                    GradientStop {
+                        position: Math.max(0.4, (map.maximumTilt - map.tilt) / map.maximumTilt)
+                        color: "#6Ba9d1"
+                    }
+
+                    GradientStop {
+                        position: 0
+                        color: "#283E51"
                     }
                 }
 
-                plugin: Plugin {
-                    preferred: ["mapboxgl", "mapbox", "osm"]
+                Map {
+                    id: map
+                    smooth: true
+                    antialiasing: true
+                    color: "transparent"
+                    anchors.fill: parent
+                    copyrightsVisible: false
+                    anchors.margins: parent.border.width
+                    onActiveMapTypeChanged: console.log(map.activeMapType)
+
+                    tilt: 27
+                    zoomLevel: 16
+
+                    MapQuickItem {
+                        coordinate: gpsCoordinates
+                        anchorPoint: Qt.point(sourceItem.width / 2, sourceItem.height/ 2)
+
+                        sourceItem: Rectangle {
+                            id: dot
+                            width: 20
+                            height: 20
+                            opacity: 0.8
+                            color: "#f00"
+                            border.width: 2
+                            radius: width / 2
+                            border.color: "#fff"
+                        }
+                    }
+
+                    plugin: Plugin {
+                        name: "mapbox"
+
+                        PluginParameter {
+                            name: "mapbox.map_id"
+                            value: "mapbox.satellite"
+                        }
+
+                        PluginParameter {
+                            name: "mapbox.access_token"
+                            value: "pk.eyJ1IjoiYWxleC1zcGF0YXJ1IiwiYSI6ImNra29icjU1bDAxbTEyb2tsemZ1OGtnajgifQ.N75tGLUx5G2HmSeVXHmBGw"
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: smog
+                    height: 32
+                    opacity: 0.5
+
+                    Connections {
+                        target: map
+                        function onTiltChanged() {
+                            var x = map.tilt / map.maximumTilt
+                            smog.y = (1.666 * x - 1.416) * mapRect.height
+                        }
+                    }
+
+                    gradient: Gradient {
+                        GradientStop {
+                            position: 0
+                            color: "transparent"
+                        }
+
+                        GradientStop {
+                            position: 0.5
+                            color: "#dedede"
+                        }
+
+                        GradientStop {
+                            position: 1
+                            color: "transparent"
+                        }
+                    }
+
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                    }
                 }
             }
         }

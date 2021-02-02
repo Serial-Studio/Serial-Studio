@@ -419,6 +419,13 @@
     </message>
 </context>
 <context>
+    <name>MapDelegate</name>
+    <message>
+        <source>Center on coordinate</source>
+        <translation>以坐标为中心</translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>

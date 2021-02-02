@@ -458,6 +458,13 @@
     </message>
 </context>
 <context>
+    <name>MapDelegate</name>
+    <message>
+        <source>Center on coordinate</source>
+        <translation>Centrar en coordenada</translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>

@@ -64,6 +64,7 @@ Control {
     Connections {
         target: CppTranslator
         function onLanguageChanged() {
+            var portIndex = portSelector.currentIndex
             var oldParityIndex = parity.currentIndex
             var oldOpenModeIndex = openMode.currentIndex
             var oldDisplayModeIndex = displayMode.currentIndex
@@ -73,6 +74,7 @@ Control {
             openMode.model = root.serialOpenModes
 
             parity.model = CppSerialManager.parityList
+            portSelector.model = CppSerialManager.portList
             flowControl.model = CppSerialManager.flowControlList
             displayMode.model = CppSerialManager.consoleDisplayModes
 
@@ -80,6 +82,7 @@ Control {
             openMode.currentIndex = oldOpenModeIndex
             flowControl.currentIndex = oldFlowControlIndex
             displayMode.currentIndex = oldDisplayModeIndex
+            portSelector.currentIndex = portIndex
         }
     }
 
