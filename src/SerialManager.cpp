@@ -185,8 +185,8 @@ SerialManager::SerialManager()
     // Init serial port configuration variables
     setDisplayMode(0);
     setBaudRate(9600);
-    setWriteEnabled(true);
     disconnectDevice();
+    setWriteEnabled(true);
     setDataBits(dataBitsList().indexOf("8"));
     setStopBits(stopBitsList().indexOf("1"));
     setParity(parityList().indexOf(tr("None")));
@@ -587,6 +587,8 @@ void SerialManager::connectDevice()
     {
         // Update port index variable & disconnect from current serial port
         disconnectDevice();
+        m_portIndex = portId + 1;
+        emit portIndexChanged();
 
         // Create new serial port handler
         m_port = new QSerialPort(ports.at(portId));
@@ -668,7 +670,7 @@ void SerialManager::disconnectDevice()
 
     // Reset pointer
     m_port = nullptr;
-    m_portIndex = 0;
+    emit portChanged();
     emit availablePortsChanged();
 
     // Reset received bytes
