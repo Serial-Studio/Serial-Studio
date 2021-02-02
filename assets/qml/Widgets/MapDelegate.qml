@@ -161,7 +161,7 @@ Window {
                 }
 
                 plugin: Plugin {
-                    name: "mapboxgl"
+                    preferred: ["mapboxgl", "mapbox", "osm"]
                 }
             }
         }
