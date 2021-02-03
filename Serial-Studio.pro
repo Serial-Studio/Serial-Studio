@@ -31,6 +31,10 @@ OBJECTS_DIR = obj
 
 CONFIG += c++11
 
+isEmpty(PREFIX) {
+    PREFIX = /usr
+}
+
 #-------------------------------------------------------------------------------
 # Qt configuration
 #-------------------------------------------------------------------------------
@@ -67,7 +71,7 @@ QTPLUGIN += qsvg
     QMAKE_CXXFLAGS_RELEASE -= /O
     QMAKE_CXXFLAGS_RELEASE *= /O2
 }
-    
+
 #-------------------------------------------------------------------------------
 # Libraries
 #-------------------------------------------------------------------------------
@@ -91,24 +95,19 @@ macx* {
     CONFIG += sdk_no_version_check # To avoid warnings with Big Sur
 }
 
+target.path = $$PREFIX/bin
+
 linux:!android {
-    target.path = /usr/bin
-    icon.path = /usr/share/pixmaps
-    desktop.path = /usr/share/applications
+    icon.path = $$PREFIX/share/pixmaps
+    desktop.path = $$PREFIX/share/applications
     icon.files += deploy/linux/serial-studio.png
     desktop.files += deploy/linux/serial-studio.desktop
 
     INSTALLS += target desktop icon
 }
 
-
-#-------------------------------------------------------------------------------
-# MSYS2 integration
-#-------------------------------------------------------------------------------
-
-win32-g++ {
-    target.path = $$(pkgdir)$$(MINGW_PREFIX)/bin
-    license.path = $$(pkgdir)$$(MINGW_PREFIX)/share/licenses/$$(_realname)
+mingw {
+    license.path = $$PREFIX/share/licenses/$$TARGET
     license.files += LICENSE.md
     INSTALLS += target license
 }
