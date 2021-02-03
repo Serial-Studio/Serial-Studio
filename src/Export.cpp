@@ -333,5 +333,5 @@ void Export::updateValues()
 
     // Update JSON list
     m_jsonList.append(
-        qMakePair<QDateTime, QJsonObject>(QDateTime::currentDateTimeUtc(), json));
+        qMakePair<QDateTime, QJsonObject>(QDateTime::currentDateTime(), json));
 }
