@@ -234,7 +234,7 @@ jobs:
     - name: '🚧 Build'
       run: |
         cd msys2
-        makepkg-mingw --noconfirm --noprogressbar -sCLf --nocheck
+        makepkg-mingw --noconfirm --noprogressbar -sCLf
       env:
         MINGW_INSTALLS: ${{ matrix.msystem }}
 
