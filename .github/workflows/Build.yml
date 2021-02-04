@@ -7,7 +7,7 @@ on:
   push:               # Run on push
     paths-ignore:     # File patterns to ignore
     - '**.md'         # Ignore changes to *.md files
-    
+
   pull_request:       # Run on pull-request
     paths-ignore:     # File-patterns to ignore
     - '**.md'         # Ignore changes to *.md files
@@ -29,234 +29,168 @@ env:
 #--------------------------------------------------------------------------------
 
 jobs:
-  #
+
+
   # GNU/Linux build (we run on Ubuntu 16.04 to generate AppImage)
-  #
   build-linux:
     runs-on: ubuntu-16.04
+    name: '🐧 Ubuntu 16.04'
     steps:
-      #
-      # Checkout the repository
-      #
-      - name: Checkout repository and submodules
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
 
-      #
-      # Cache Qt
-      #
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{runner.os}}-QtCache
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
-      #
-      # Install Qt
-      #
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          modules: qtcharts
-          cached: ${{steps.cache-qt.outputs.cache-hit}}
-          
-      #
-      # Install additional dependencies, stolen from:
-      # https://github.com/mapeditor/tiled/blob/master/.github/workflows/packages.yml
-      #
-      - name: Install dependencies
-        run: |
-             sudo apt-get update
-             sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev
-        
-      #
-      # Compile the application
-      #
-      - name: Compile
-        run: |
-             qmake ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
-             make -j8
-             
-      #
-      # Create the AppImage
-      #
-      - name: Create AppImage
-        run: | 
-             make INSTALL_ROOT=appdir install
-             wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
-             chmod a+x linuxdeployqt
-             ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir="${{env.QML_DIR_NIX}}"
-     
-      #
-      # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
-      #
-      - name: Rename AppImage
-        run: mv *.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-        
-      #
-      # Upload AppImage to build artifacts
-      #
-      - name: Upload AppImage
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-          path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-             
-  #
+    - name: '⚙️ Cache Qt'
+      id: cache-qt
+      uses: actions/cache@v1
+      with:
+        path: ../Qt
+        key: ${{runner.os}}-QtCache
+
+    - name: '⚙️ Install Qt'
+      uses: jurplel/install-qt-action@v2
+      with:
+        modules: qtcharts
+        cached: ${{steps.cache-qt.outputs.cache-hit}}
+
+    # Install additional dependencies, stolen from:
+    # https://github.com/mapeditor/tiled/blob/master/.github/workflows/packages.yml
+    - name: '⚙️ Install dependencies'
+      run: |
+        sudo apt-get update
+        sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev
+
+    - name: '🚧 Compile application'
+      run: |
+          qmake ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+          make -j8
+
+    - name: '📦 Create AppImage'
+      run: |
+        make INSTALL_ROOT=appdir install
+
+        wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
+        chmod a+x linuxdeployqt
+        ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir="${{env.QML_DIR_NIX}}"
+
+        # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
+        mv *.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+
+    - name: '📤 Upload artifact: AppImage'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+
+
   # macOS build
-  #
   build-mac:
     runs-on: macos-latest
+    name: '🍎 macOS'
     steps:
-      #
-      # Checkout the repository
-      #
-      - name: Checkout repository and submodules
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
 
-      #
-      # Cache Qt
-      #
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{runner.os}}-QtCache
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
-      #
-      # Install Qt
-      #
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          modules: qtcharts
-          cached: ${{steps.cache-qt.outputs.cache-hit}}
-      
-      #
-      # Compile application
-      #
-      - name: Compile
-        run: |
-             qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
-             make -j8
-             
-      #
-      # Deploy application
-      #
-      - name: Deploy app
-        run: |
-             macdeployqt ${{env.EXECUTABLE}}.app -qmldir="${{env.QML_DIR_NIX}}"
-             mv "${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"  
-      
-      #
-      # ZIP application "%AppName%-%Version%-macOS.zip"
-      # We use ditto instead of zip to use the same commands as Finder
-      #
-      - name: Create ZIP file
-        run: |
-             ditto -c -k --sequesterRsrc --keepParent "${{env.APPLICATION}}.app" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
-     
-      #
-      # Upload ZIP to build artifacts
-      #
-      - name: Upload ZIP
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
-          path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
-          
-  #
+    - name: '⚙️ Cache Qt'
+      id: cache-qt
+      uses: actions/cache@v1
+      with:
+        path: ../Qt
+        key: ${{runner.os}}-QtCache
+
+    - name: '⚙️ Install Qt'
+      uses: jurplel/install-qt-action@v2
+      with:
+        modules: qtcharts
+        cached: ${{steps.cache-qt.outputs.cache-hit}}
+
+    - name: '🚧 Compile application'
+      run: |
+           qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
+           make -j8
+
+    - name: '📦 Package application (macdeployqt and zipfile)'
+      run: |
+        macdeployqt ${{env.EXECUTABLE}}.app -qmldir="${{env.QML_DIR_NIX}}"
+        mv "${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
+
+        # ZIP application "%AppName%-%Version%-macOS.zip"
+        # We use ditto instead of zip to use the same commands as Finder
+        ditto -c -k --sequesterRsrc --keepParent "${{env.APPLICATION}}.app" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+
+    - name: '📤 Upload artifact: ZIP'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+
+
   # Windows build
-  #
   build-windows:
     runs-on: windows-latest
+    name: '🧊 Windows'
     steps:
-      #
-      # Checkout the repository
-      #
-      - name: Checkout repository and submodules
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-      
-      #
-      # Configure MSVC
-      #
-      - name: Configure MSVC
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: x64
-          spectre: true
 
-      #
-      # Cache Qt
-      #
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{runner.os}}-QtCache
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
 
-      #
-      # Install Qt
-      #
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          modules: qtcharts
-          cached: ${{steps.cache-qt.outputs.cache-hit}}
-          
-      #
-      # Install NSIS
-      #  
-      - name: Install NSIS
-        run: |
-             Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-             scoop bucket add extras
-             scoop install nsis
- 
-      #
-      # Compile application
-      #
-      - name: Compile
-        run: |
-             qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
-             nmake
-             
-      #
-      # Copy Qt & OpenSSL DLLs, compiler runtime & application icon
-      #       
-      - name: Deploy
-        run: |
-             mkdir bin
-             move release/${{env.EXECUTABLE}}.exe bin
-             windeployqt bin/${{env.EXECUTABLE}}.exe -qmldir="${{env.QML_DIR_WIN}}" --compiler-runtime
-             mkdir "${{env.APPLICATION}}"
-             move bin "${{env.APPLICATION}}"
-             xcopy deploy\windows\resources\icon.ico "${{env.APPLICATION}}"
-             xcopy deploy\windows\openssl\*.dll "${{env.APPLICATION}}\bin"
-      
-      #
-      # Create NSIS installer
-      #
-      - name: Make NSIS installer
-        run: |
-             move "${{env.APPLICATION}}" deploy\windows\nsis\
-             cd deploy\windows\nsis
-             makensis /X"SetCompressor /FINAL lzma" setup.nsi
-             ren *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-             
-      #
-      # Upload installer to build artifacts
-      #
-      - name: Upload NSIS installer
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-          path: deploy/windows/nsis/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+    - name: '⚙️ Configure MSVC'
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+        spectre: true
+
+    - name: '⚙️ Cache Qt'
+      id: cache-qt
+      uses: actions/cache@v1
+      with:
+        path: ../Qt
+        key: ${{runner.os}}-QtCache
+
+    - name: '⚙️ Install Qt'
+      uses: jurplel/install-qt-action@v2
+      with:
+        modules: qtcharts
+        cached: ${{steps.cache-qt.outputs.cache-hit}}
+
+    - name: '⚙️ Install NSIS'
+      run: |
+        Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+        scoop bucket add extras
+        scoop install nsis
+
+    - name: '🚧 Compile application'
+      run: |
+        qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
+        nmake
+
+    # Copy Qt DLLs, compiler runtime & application icon
+    - name: '📦 Package application (windeployqt)'
+      run: |
+        mkdir bin
+        move release/${{env.EXECUTABLE}}.exe bin
+        windeployqt bin/${{env.EXECUTABLE}}.exe -qmldir="${{env.QML_DIR_WIN}}" --compiler-runtime
+        mkdir "${{env.APPLICATION}}"
+        move bin "${{env.APPLICATION}}"
+        xcopy deploy\windows\resources\icon.ico "${{env.APPLICATION}}"
+        xcopy deploy\windows\openssl\*.dll "${{env.APPLICATION}}\bin"
+
+    - name: '📦 Make NSIS installer'
+      run: |
+        move "${{env.APPLICATION}}" deploy\windows\nsis\
+        cd deploy\windows\nsis
+        makensis /X"SetCompressor /FINAL lzma" setup.nsi
+        ren *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+
+    - name: '📤 Upload artifact: NSIS installer'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+        path: deploy/windows/nsis/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
