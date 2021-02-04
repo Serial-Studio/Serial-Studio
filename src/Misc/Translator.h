@@ -20,51 +20,58 @@
  * THE SOFTWARE.
  */
 
-#ifndef DATA_PROVIDER_H
-#define DATA_PROVIDER_H
+#ifndef TRANSLATOR_H
+#define TRANSLATOR_H
 
+#include <QLocale>
 #include <QObject>
-#include <QVariant>
+#include <QTranslator>
 
-class Group;
-class DataProvider : public QObject
+#ifdef QT_QML_LIB
+#    include <QtQml>
+#endif
+
+namespace Misc
+{
+class Translator : public QObject
 {
     // clang-format off
     Q_OBJECT
-    Q_PROPERTY(QString projectTitle
-               READ projectTitle
-               NOTIFY updated)
-    Q_PROPERTY(int groupCount
-               READ groupCount
-               NOTIFY updated)
-    Q_PROPERTY(QList<Group *> groups
-               READ groups
-               NOTIFY updated)
+    Q_PROPERTY(int language
+               READ language
+               WRITE setLanguage
+               NOTIFY languageChanged)
+    Q_PROPERTY(QString dummy
+               READ dummyString
+               NOTIFY languageChanged)
+    Q_PROPERTY(QStringList availableLanguages
+               READ availableLanguages
+               CONSTANT)
     // clang-format on
 
 signals:
-    void updated();
-    void dataReset();
+    void languageChanged();
+
+private:
+    Translator();
 
 public:
-    static DataProvider *getInstance();
+    static Translator *getInstance();
 
-    QString projectTitle() const;
+    int language() const;
+    int systemLanguage() const;
+    QString dummyString() const;
+    QStringList availableLanguages() const;
+    Q_INVOKABLE QString welcomeConsoleText() const;
 
-    int groupCount() const;
-    QList<Group *> groups() const;
-    Q_INVOKABLE Group *getGroup(const int index);
-
-private:
-    DataProvider();
-
-private slots:
-    void update();
-    void resetData();
+public slots:
+    void setLanguage(const int language);
+    void setLanguage(const QLocale &locale, const QString &language);
 
 private:
-    QString m_title;
-    QList<Group *> m_groups;
+    int m_language;
+    QTranslator m_translator;
 };
+}
 
 #endif

@@ -20,50 +20,31 @@
  * THE SOFTWARE.
  */
 
-#ifndef GROUP_H
-#define GROUP_H
+#ifndef MODULE_MANAGER_H
+#define MODULE_MANAGER_H
 
-#include <QList>
 #include <QObject>
-#include <QVariant>
-#include <QJsonArray>
-#include <QJsonObject>
+#include <QQmlApplicationEngine>
 
-class Dataset;
-class Group : public QObject
+class ModuleManager : public QObject
 {
-    // clang-format off
     Q_OBJECT
-    Q_PROPERTY(QString title
-               READ title
-               CONSTANT)
-    Q_PROPERTY(QString widget
-               READ widget
-               CONSTANT)
-    Q_PROPERTY(int onPacketReceived
-               READ count
-               CONSTANT)
-    Q_PROPERTY(QList<Dataset *> datasets
-               READ datasets
-               CONSTANT)
-    // clang-format on
 
 public:
-    Group(QObject *parent = nullptr);
-    ~Group();
+    ModuleManager();
 
-    int count() const;
-    QString title() const;
-    QString widget() const;
-    QList<Dataset *> datasets() const;
-    Q_INVOKABLE Dataset *getDataset(const int index);
+    void configureLogger();
+    void configureUpdater();
+    void registerQmlTypes();
+    void initializeQmlInterface();
 
-    bool read(const QJsonObject &object);
+    QQmlApplicationEngine *engine();
+
+private slots:
+    void stopOperations();
 
 private:
-    QString m_title;
-    QString m_widget;
-    QList<Dataset *> m_datasets;
+    QQmlApplicationEngine m_engine;
 };
 
 #endif

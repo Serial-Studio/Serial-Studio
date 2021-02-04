@@ -20,10 +20,9 @@
  * THE SOFTWARE.
  */
 
-#ifndef SERIAL_MANAGER_H
-#define SERIAL_MANAGER_H
+#ifndef IO_DATA_SOURCES_SERIAL_H
+#define IO_DATA_SOURCES_SERIAL_H
 
-#include <QDebug>
 #include <QObject>
 #include <QString>
 #include <QSettings>
@@ -33,48 +32,18 @@
 #include <QTextCursor>
 #include <QQuickTextDocument>
 
-class SerialManager : public QObject
+namespace IO
+{
+namespace DataSources
+{
+class Serial : public QObject
 {
     // clang-format off
     Q_OBJECT
     Q_PROPERTY(QString portName
                READ portName
                NOTIFY portChanged)
-    Q_PROPERTY(bool readOnly
-               READ readOnly
-               NOTIFY connectedChanged)
-    Q_PROPERTY(bool readWrite
-               READ readWrite
-               NOTIFY connectedChanged)
-    Q_PROPERTY(bool connected
-               READ connected
-               NOTIFY connectedChanged)
-    Q_PROPERTY(QString receivedBytes
-               READ receivedBytes
-               NOTIFY receivedBytesChanged)
-    Q_PROPERTY(int maxBufferSize
-               READ maxBufferSize
-               WRITE setMaxBufferSize
-               NOTIFY maxBufferSizeChanged)
-    Q_PROPERTY(bool sendHexData
-               READ sendHexData
-               WRITE setSendHexData
-               NOTIFY sendHexChanged)
-    Q_PROPERTY(QString inputMask
-               READ inputMask
-               NOTIFY sendHexChanged)
-    Q_PROPERTY(bool writeEnabled
-               READ writeEnabled
-               WRITE setWriteEnabled
-               NOTIFY writeEnabledChanged)
-    Q_PROPERTY(QString startSequence
-               READ startSequence
-               WRITE setStartSequence
-               NOTIFY startSequenceChanged)
-    Q_PROPERTY(QString finishSequence
-               READ finishSequence
-               WRITE setFinishSequence
-               NOTIFY finishSequenceChanged)
+
     Q_PROPERTY(quint8 portIndex
                READ portIndex
                WRITE setPortIndex
@@ -83,10 +52,6 @@ class SerialManager : public QObject
                READ parityIndex
                WRITE setParity
                NOTIFY parityChanged)
-    Q_PROPERTY(quint8 displayMode
-               READ displayMode
-               WRITE setDisplayMode
-               NOTIFY displayModeChanged)
     Q_PROPERTY(quint8 dataBitsIndex
                READ dataBitsIndex
                WRITE setDataBits
@@ -121,9 +86,6 @@ class SerialManager : public QObject
     Q_PROPERTY(QStringList flowControlList
                READ flowControlList
                CONSTANT)
-    Q_PROPERTY(QStringList consoleDisplayModes
-               READ consoleDisplayModes
-               CONSTANT)
     Q_PROPERTY(bool serialConfigurationOk
                READ serialConfigurationOk
                NOTIFY portIndexChanged)
@@ -132,44 +94,21 @@ class SerialManager : public QObject
 signals:
     void portChanged();
     void parityChanged();
-    void sendHexChanged();
     void baudRateChanged();
     void dataBitsChanged();
     void stopBitsChanged();
-    void connectedChanged();
     void portIndexChanged();
-    void displayModeChanged();
     void flowControlChanged();
     void baudRateListChanged();
-    void writeEnabledChanged();
-    void textDocumentChanged();
     void baudRateIndexChanged();
-    void maxBufferSizeChanged();
-    void startSequenceChanged();
-    void receivedBytesChanged();
-    void finishSequenceChanged();
     void availablePortsChanged();
-    void rx(const QString &rxData);
-    void tx(const QString &txData);
     void connectionError(const QString &name);
-    void packetReceived(const QByteArray &packet);
 
 public:
-    static SerialManager *getInstance();
+    static Serial *getInstance();
 
-    QSerialPort *port() const;
-
-    bool readOnly() const;
-    bool readWrite() const;
-    bool connected() const;
-    bool sendHexData() const;
     QString portName() const;
-    int maxBufferSize() const;
-    bool writeEnabled() const;
-    QString inputMask() const;
-    QString receivedBytes() const;
-    QString startSequence() const;
-    QString finishSequence() const;
+    QSerialPort *port() const;
     bool serialConfigurationOk() const;
 
     quint8 portIndex() const;
@@ -185,7 +124,6 @@ public:
     QStringList dataBitsList() const;
     QStringList stopBitsList() const;
     QStringList flowControlList() const;
-    QStringList consoleDisplayModes() const;
 
     qint32 baudRate() const;
     QSerialPort::Parity parity() const;
@@ -193,39 +131,27 @@ public:
     QSerialPort::StopBits stopBits() const;
     QSerialPort::FlowControl flowControl() const;
 
-    Q_INVOKABLE void configureTextDocument(QQuickTextDocument *doc);
+    QSerialPort *openSerialPort();
 
 public slots:
-    void connectDevice();
-    void clearTempBuffer();
     void disconnectDevice();
-    void sendData(const QString &data);
     void setBaudRate(const qint32 rate);
-    void setPortIndex(const quint8 portIndex);
-    void setSendHexData(const bool &sendHex);
-    void setWriteEnabled(const bool enabled);
     void setParity(const quint8 parityIndex);
+    void setPortIndex(const quint8 portIndex);
     void appendBaudRate(const QString &baudRate);
     void setDataBits(const quint8 dataBitsIndex);
     void setStopBits(const quint8 stopBitsIndex);
-    void setDisplayMode(const quint8 displayMode);
-    void setMaxBufferSize(const int maxBufferSize);
-    void setStartSequence(const QString &sequence);
-    void setFinishSequence(const QString &sequence);
     void setFlowControl(const quint8 flowControlIndex);
 
 private slots:
-    void readFrames();
     void readSettings();
     void writeSettings();
-    void onDataReceived();
     void refreshSerialDevices();
     void handleError(QSerialPort::SerialPortError error);
 
 private:
-    SerialManager();
-    ~SerialManager();
-
+    Serial();
+    ~Serial();
     QList<QSerialPortInfo> validPorts() const;
 
 private:
@@ -239,22 +165,15 @@ private:
     QSerialPort::FlowControl m_flowControl;
 
     quint8 m_portIndex;
-    quint8 m_displayMode;
     quint8 m_parityIndex;
     quint8 m_dataBitsIndex;
     quint8 m_stopBitsIndex;
-    quint64 m_receivedBytes;
     quint8 m_flowControlIndex;
 
-    bool m_writeEnabled;
-    int m_maxBufferSize;
-    bool m_sendHexData;
-
-    QString m_startSeq;
-    QString m_finishSeq;
-    QByteArray m_tempBuffer;
     QStringList m_portList;
     QStringList m_baudRateList;
 };
+}
+}
 
 #endif

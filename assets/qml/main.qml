@@ -88,7 +88,7 @@ ApplicationWindow {
     visible: false
     minimumWidth: 980
     minimumHeight: 620
-    title: CppAppName + " v" + CppAppVersion
+    title: Cpp_AppName + " v" + Cpp_AppVersion
 
     //
     // Theme options
@@ -113,7 +113,7 @@ ApplicationWindow {
         terminal.opacity = 1
 
         // Load JSON map file (if any)
-        CppJsonGenerator.readSettings()
+        Cpp_JSON_Generator.readSettings()
 
         // Display the window & check for updates in 500 ms (we do this so that
         // we wait for the window to read settings before showing it)
@@ -124,7 +124,7 @@ ApplicationWindow {
     // Clears the console text & displays a mini-tutorial
     //
     function showWelcomeGuide() {
-        terminal.text = CppTranslator.welcomeConsoleText()  + "\n\n"
+        terminal.text = Cpp_Misc_Translator.welcomeConsoleText()  + "\n\n"
     }
 
     //
@@ -174,7 +174,7 @@ ApplicationWindow {
 
             // Check for updates (if we are allowed)
             if (automaticUpdates)
-                CppUpdater.checkForUpdates(CppAppUpdaterUrl)
+                CppUpdater.checkForUpdates(Cpp_AppUpdaterUrl)
         }
     }
 
@@ -182,9 +182,9 @@ ApplicationWindow {
     // Hide console & device manager when we receive first valid packet
     //
     Connections {
-        target: CppJsonGenerator
+        target: Cpp_JSON_Generator
         enabled: !app.firstValidPacket
-        function onPacketReceived()  {
+        function onJsonChanged()  {
             app.firstValidPacket = true
             uiConfigTimer.start()
         }
@@ -201,7 +201,7 @@ ApplicationWindow {
     // Show console tab on serial disconnect
     //
     Connections {
-        target: CppDataProvider
+        target: Cpp_UI_Provider
         function onDataReset() {
             toolbar.consoleClicked()
             setup.show()
@@ -292,7 +292,7 @@ ApplicationWindow {
 
                     // Show translated welcome text on lang. change
                     Connections {
-                        target: CppTranslator
+                        target: Cpp_Misc_Translator
                         function onLanguageChanged() {
                             app.showWelcomeGuide()
                         }
@@ -364,19 +364,19 @@ ApplicationWindow {
     MessageDialog {
         id: automaticUpdatesMessageDialog
 
-        title: CppAppName
+        title: Cpp_AppName
         icon: StandardIcon.Question
         modality: Qt.ApplicationModal
         standardButtons: StandardButton.Yes | StandardButton.No
         text: "<h3>" + qsTr("Check for updates automatically?") + "</h3>"
         informativeText: qsTr("Should %1 automatically check for updates? " +
                               "You can always check for updates manually from " +
-                              "the \"About\" dialog").arg(CppAppName);
+                              "the \"About\" dialog").arg(Cpp_AppName);
 
         // Behavior when the user clicks on "Yes"
         onAccepted: {
             app.automaticUpdates = true
-            CppUpdater.checkForUpdates(CppAppUpdaterUrl)
+            CppUpdater.checkForUpdates(Cpp_AppUpdaterUrl)
         }
 
         // Behavior when the user clicks on "No"
@@ -424,7 +424,7 @@ ApplicationWindow {
                 font.bold: true
                 font.pixelSize: 24
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("Drop JSON and CSV files here") + CppTranslator.dummy
+                text: qsTr("Drop JSON and CSV files here") + Cpp_Misc_Translator.dummy
             }
         }
 
@@ -483,13 +483,13 @@ ApplicationWindow {
 
             // Process JSON files
             if (cleanPath.endsWith(".json")) {
-                CppJsonGenerator.setOperationMode(0)
-                CppJsonGenerator.loadJsonMap(cleanPath, false)
+                Cpp_JSON_Generator.setOperationMode(0)
+                Cpp_JSON_Generator.loadJsonMap(cleanPath, false)
             }
 
             // Process CSV files
             else if (cleanPath.endsWith(".csv"))
-                CppCsvPlayer.openFile(cleanPath)
+                Cpp_CSV_Player.openFile(cleanPath)
         }
 
         //

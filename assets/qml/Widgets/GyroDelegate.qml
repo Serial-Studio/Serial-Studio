@@ -25,8 +25,8 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
-import Group 1.0
-import Dataset 1.0
+import SerialStudio 1.0
+import SerialStudio 1.0
 
 import "."
 
@@ -66,7 +66,7 @@ Window {
     // Connections with widget manager
     //
     Connections {
-        target: CppWidgetProvider
+        target: Cpp_UI_WidgetProvider
         function onDataChanged() {
             root.updateValues()
         }
@@ -76,11 +76,11 @@ Window {
     // Updates the internal values of the bar widget
     //
     function updateValues() {
-        if (CppWidgetProvider.gyroGroupCount() > root.groupIndex) {
-            root.yawAngle   = CppWidgetProvider.gyroYaw(root.groupIndex)
-            root.rollAngle  = CppWidgetProvider.gyroRoll(root.groupIndex)
-            root.pitchAngle = CppWidgetProvider.gyroPitch(root.groupIndex)
-            root.title      = CppWidgetProvider.gyroGroupAt(root.groupIndex).title
+        if (Cpp_UI_WidgetProvider.gyroGroupCount() > root.groupIndex) {
+            root.yawAngle   = Cpp_UI_WidgetProvider.gyroYaw(root.groupIndex)
+            root.rollAngle  = Cpp_UI_WidgetProvider.gyroRoll(root.groupIndex)
+            root.pitchAngle = Cpp_UI_WidgetProvider.gyroPitch(root.groupIndex)
+            root.title      = Cpp_UI_WidgetProvider.gyroGroupAt(root.groupIndex).title
         }
 
         else {
@@ -187,7 +187,7 @@ Window {
                     color: root.valueColor
                     font.family: app.monoFont
                     Layout.alignment: Qt.AlignLeft
-                    text: qsTr("%1° YAW").arg(controls.formatAngle(root.yawAngle)) + CppTranslator.dummy
+                    text: qsTr("%1° YAW").arg(controls.formatAngle(root.yawAngle)) + Cpp_Misc_Translator.dummy
                 }
 
                 Label {
@@ -195,7 +195,7 @@ Window {
                     color: root.valueColor
                     font.family: app.monoFont
                     Layout.alignment: Qt.AlignLeft
-                    text: qsTr("%1° ROLL").arg(controls.formatAngle(root.rollAngle)) + CppTranslator.dummy
+                    text: qsTr("%1° ROLL").arg(controls.formatAngle(root.rollAngle)) + Cpp_Misc_Translator.dummy
                 }
 
                 Label {
@@ -203,7 +203,7 @@ Window {
                     color: root.valueColor
                     font.family: app.monoFont
                     Layout.alignment: Qt.AlignLeft
-                    text: qsTr("%1° PITCH").arg(controls.formatAngle(root.pitchAngle)) + CppTranslator.dummy
+                    text: qsTr("%1° PITCH").arg(controls.formatAngle(root.pitchAngle)) + Cpp_Misc_Translator.dummy
                 }
             }
         }

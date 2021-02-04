@@ -41,30 +41,30 @@ Control {
     // Group/dataset updating
     //
     Connections {
-        target: CppWidgetProvider
+        target: Cpp_UI_WidgetProvider
         function onDataChanged() {
             // Generate accelerometer widgets
-            if (accGenerator.model !== CppWidgetProvider.accelerometerGroupCount()) {
+            if (accGenerator.model !== Cpp_UI_WidgetProvider.accelerometerGroupCount()) {
                 accGenerator.model = 0
-                accGenerator.model = CppWidgetProvider.accelerometerGroupCount()
+                accGenerator.model = Cpp_UI_WidgetProvider.accelerometerGroupCount()
             }
 
             // Generate gyro widgets
-            if (gyroGenerator.model !== CppWidgetProvider.gyroGroupCount()) {
+            if (gyroGenerator.model !== Cpp_UI_WidgetProvider.gyroGroupCount()) {
                 gyroGenerator.model = 0
-                gyroGenerator.model = CppWidgetProvider.gyroGroupCount()
+                gyroGenerator.model = Cpp_UI_WidgetProvider.gyroGroupCount()
             }
 
             // Generate bar widgets
-            if (barGenerator.model !== CppWidgetProvider.barDatasetCount()) {
+            if (barGenerator.model !== Cpp_UI_WidgetProvider.barDatasetCount()) {
                 barGenerator.model = 0
-                barGenerator.model = CppWidgetProvider.barDatasetCount()
+                barGenerator.model = Cpp_UI_WidgetProvider.barDatasetCount()
             }
 
             // Generate map widgets
-            if (mapGenerator.model !== CppWidgetProvider.mapGroupCount()) {
+            if (mapGenerator.model !== Cpp_UI_WidgetProvider.mapGroupCount()) {
                 mapGenerator.model = 0
-                mapGenerator.model = CppWidgetProvider.mapGroupCount()
+                mapGenerator.model = Cpp_UI_WidgetProvider.mapGroupCount()
             }
         }
     }

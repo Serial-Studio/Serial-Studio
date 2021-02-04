@@ -20,15 +20,18 @@
  * THE SOFTWARE.
  */
 
-#include "Logger.h"
 #include "Export.h"
-#include "AppInfo.h"
-#include "JsonGenerator.h"
-#include "SerialManager.h"
-#include "ConsoleAppender.h"
+
+#include <Logger.h>
+#include <AppInfo.h>
+#include <IO/Manager.h>
+#include <Misc/Utilities.h>
+#include <ConsoleAppender.h>
+#include <JSON/Generator.h>
 
 #include <QDir>
 #include <QUrl>
+#include <QTimer>
 #include <QProcess>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -36,67 +39,21 @@
 #include <QJsonDocument>
 #include <QDesktopServices>
 
-/*
- * Only instance of the class
- */
-static Export *INSTANCE = Q_NULLPTR;
+using namespace CSV;
 
-/**
- * Reveals the file contained in @a pathToReveal in Explorer/Finder.
- * On GNU/Linux, this function shall open the file directly with the desktop
- * services.
- *
- * Hacking details:
- * http://stackoverflow.com/questions/3490336/how-to-reveal-in-finder-or-show-in-explorer-with-qt
- */
-static void RevealFile(const QString &pathToReveal)
-{
-#if defined(Q_OS_WIN)
-    QStringList param;
-    const QFileInfo fileInfo(pathToReveal);
-    if (!fileInfo.isDir())
-        param += QLatin1String("/select,");
-    param += QDir::toNativeSeparators(fileInfo.canonicalFilePath());
-    QProcess::startDetached("explorer.exe", param);
-#elif defined(Q_OS_MAC)
-    QStringList scriptArgs;
-    scriptArgs << QLatin1String("-e")
-               << QString::fromLatin1(
-                      "tell application \"Finder\" to reveal POSIX file \"%1\"")
-                      .arg(pathToReveal);
-    QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
-    scriptArgs.clear();
-    scriptArgs << QLatin1String("-e")
-               << QLatin1String("tell application \"Finder\" to activate");
-    QProcess::execute("/usr/bin/osascript", scriptArgs);
-#else
-    QDesktopServices::openUrl(QUrl::fromLocalFile(pathToReveal));
-#endif
-}
-
-/**
- * Returns the only instance of the class
- */
-Export *Export::getInstance()
-{
-    if (!INSTANCE)
-        INSTANCE = new Export();
-
-    return INSTANCE;
-}
+static Export *INSTANCE = nullptr;
 
 /**
  * Connect JSON Parser & Serial Manager signals to begin registering JSON
  * dataframes into JSON list.
  */
 Export::Export()
+    : m_exportEnabled(true)
 {
-    m_exportEnabled = true;
-
-    auto jp = JsonGenerator::getInstance();
-    auto sp = SerialManager::getInstance();
-    connect(jp, SIGNAL(packetReceived()), this, SLOT(updateValues()));
-    connect(sp, SIGNAL(connectedChanged()), this, SLOT(closeFile()));
+    auto io = IO::Manager::getInstance();
+    auto jp = JSON::Generator::getInstance();
+    connect(jp, SIGNAL(jsonChanged()), this, SLOT(updateValues()));
+    connect(io, SIGNAL(connectedChanged()), this, SLOT(closeFile()));
 
     QTimer::singleShot(1000, this, SLOT(writeValues()));
 }
@@ -107,6 +64,14 @@ Export::Export()
 Export::~Export()
 {
     closeFile();
+}
+
+Export *Export::getInstance()
+{
+    if (!INSTANCE)
+        INSTANCE = new Export;
+
+    return INSTANCE;
 }
 
 /**
@@ -130,7 +95,7 @@ bool Export::exportEnabled() const
  */
 void Export::openLogFile()
 {
-    RevealFile(LOG_FILE);
+    Misc::Utilities::openLogFile();
 }
 
 /**
@@ -139,10 +104,10 @@ void Export::openLogFile()
 void Export::openCurrentCsv()
 {
     if (isOpen())
-        RevealFile(m_csvFile.fileName());
+        Misc::Utilities::revealFile(m_csvFile.fileName());
     else
-        QMessageBox::critical(Q_NULLPTR, tr("CSV file not open"),
-                              tr("Cannot find CSV export file!"), QMessageBox::Ok);
+        Misc::Utilities::showMessageBox(tr("CSV file not open"),
+                                        tr("Cannot find CSV export file!"));
 }
 
 /**
@@ -318,8 +283,8 @@ void Export::writeValues()
  */
 void Export::updateValues()
 {
-    // Ignore if serial device is not connected
-    if (!SerialManager::getInstance()->connected())
+    // Ignore if device is not connected
+    if (!IO::Manager::getInstance()->connected())
         return;
 
     // Ignore is CSV export is disabled
@@ -327,11 +292,11 @@ void Export::updateValues()
         return;
 
     // Get & validate JSON document
-    auto json = JsonGenerator::getInstance()->document().object();
+    auto json = JSON::Generator::getInstance()->document().object();
     if (json.isEmpty())
         return;
 
     // Update JSON list
-    m_jsonList.append(
-        qMakePair<QDateTime, QJsonObject>(QDateTime::currentDateTime(), json));
+    auto pair = qMakePair<QDateTime, QJsonObject>(QDateTime::currentDateTime(), json);
+    m_jsonList.append(pair);
 }

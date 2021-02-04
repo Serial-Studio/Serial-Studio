@@ -22,8 +22,15 @@
 
 #include "Dataset.h"
 
+using namespace JSON;
+
 Dataset::Dataset(QObject *parent)
     : QObject(parent)
+    , m_graph(false)
+    , m_title("")
+    , m_value("")
+    , m_units("")
+    , m_widget("")
 {
 }
 

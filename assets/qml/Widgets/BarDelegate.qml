@@ -24,8 +24,8 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-import Group 1.0
-import Dataset 1.0
+import SerialStudio 1.0
+import SerialStudio 1.0
 
 import "."
 
@@ -94,7 +94,7 @@ Window {
     // Connections with widget manager
     //
     Connections {
-        target: CppWidgetProvider
+        target: Cpp_UI_WidgetProvider
         function onDataChanged() {
             root.updateValues()
         }
@@ -104,12 +104,12 @@ Window {
     // Updates the internal values of the bar widget
     //
     function updateValues() {
-        if (CppWidgetProvider.barDatasetCount() > root.datasetIndex) {
-            root.minimumValue = CppWidgetProvider.barMin(root.datasetIndex)
-            root.maximumValue = CppWidgetProvider.barMax(root.datasetIndex)
-            root.currentValue = CppWidgetProvider.bar(root.datasetIndex)
-            root.title = CppWidgetProvider.barDatasetAt(root.datasetIndex).title
-            root.units = CppWidgetProvider.barDatasetAt(root.datasetIndex).units
+        if (Cpp_UI_WidgetProvider.barDatasetCount() > root.datasetIndex) {
+            root.minimumValue = Cpp_UI_WidgetProvider.barMin(root.datasetIndex)
+            root.maximumValue = Cpp_UI_WidgetProvider.barMax(root.datasetIndex)
+            root.currentValue = Cpp_UI_WidgetProvider.bar(root.datasetIndex)
+            root.title = Cpp_UI_WidgetProvider.barDatasetAt(root.datasetIndex).title
+            root.units = Cpp_UI_WidgetProvider.barDatasetAt(root.datasetIndex).units
 
             if (root.maximumValue > root.minimumValue)  {
                 var range = root.maximumValue - root.minimumValue

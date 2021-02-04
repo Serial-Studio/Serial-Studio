@@ -36,7 +36,7 @@ Window {
     //
     // Window options
     //
-    title: qsTr("About") + CppTranslator.dummy
+    title: qsTr("About") + Cpp_Misc_Translator.dummy
     minimumWidth: column.implicitWidth + 4 * app.spacing
     maximumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing
@@ -81,14 +81,14 @@ Window {
 
                     Label {
                         font.bold: true
-                        text: CppAppName
+                        text: Cpp_AppName
                         font.pixelSize: 28
                     }
 
                     Label {
                         opacity: 0.5
                         font.pixelSize: 16
-                        text: qsTr("Version %1").arg(CppAppVersion) + CppTranslator.dummy
+                        text: qsTr("Version %1").arg(Cpp_AppVersion) + Cpp_Misc_Translator.dummy
                     }
                 }
             }
@@ -98,7 +98,7 @@ Window {
                 Layout.fillWidth: true
                 Layout.maximumWidth: 288
                 wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(CppAppOrganization) + CppTranslator.dummy
+                text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(Cpp_AppOrganization) + Cpp_Misc_Translator.dummy
             }
 
             Label {
@@ -108,7 +108,7 @@ Window {
                 Layout.maximumWidth: 288
                 color: palette.highlightedText
                 wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.") + CppTranslator.dummy
+                text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.") + Cpp_Misc_Translator.dummy
             }
 
             Item {
@@ -117,34 +117,34 @@ Window {
 
             Button {
                 Layout.fillWidth: true
-                text: qsTr("Contact author") + CppTranslator.dummy
+                text: qsTr("Contact author") + Cpp_Misc_Translator.dummy
                 onClicked: Qt.openUrlExternally("mailto:alex_spataru@outlook.com")
             }
 
             Button {
                 Layout.fillWidth: true
-                text: qsTr("Report bug") + CppTranslator.dummy
+                text: qsTr("Report bug") + Cpp_Misc_Translator.dummy
                 onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
             }
 
             Button {
                 Layout.fillWidth: true
-                text: qsTr("Check for updates") + CppTranslator.dummy
+                text: qsTr("Check for updates") + Cpp_Misc_Translator.dummy
                 onClicked: {
-                    CppUpdater.setNotifyOnFinish(CppAppUpdaterUrl, true)
-                    CppUpdater.checkForUpdates(CppAppUpdaterUrl)
+                    CppUpdater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
+                    CppUpdater.checkForUpdates(Cpp_AppUpdaterUrl)
                 }
             }
 
             Button {
                 Layout.fillWidth: true
-                onClicked: CppExport.openLogFile()
-                text: qsTr("Open log file") + CppTranslator.dummy
+                onClicked: Cpp_CSV_Export.openLogFile()
+                text: qsTr("Open log file") + Cpp_Misc_Translator.dummy
             }
 
             Button {
                 Layout.fillWidth: true
-                text: qsTr("Documentation") + CppTranslator.dummy
+                text: qsTr("Documentation") + Cpp_Misc_Translator.dummy
                 onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
             }
 
@@ -155,7 +155,7 @@ Window {
             Button {
                 Layout.fillWidth: true
                 onClicked: root.close()
-                text: qsTr("Close") + CppTranslator.dummy
+                text: qsTr("Close") + Cpp_Misc_Translator.dummy
             }
 
             Item {

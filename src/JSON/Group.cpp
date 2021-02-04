@@ -23,11 +23,13 @@
 #include "Group.h"
 #include "Dataset.h"
 
+using namespace JSON;
+
 Group::Group(QObject *parent)
     : QObject(parent)
+    , m_title("")
+    , m_widget("")
 {
-    m_widget = "";
-    m_title = tr("Invalid");
 }
 
 /**
@@ -35,18 +37,10 @@ Group::Group(QObject *parent)
  */
 Group::~Group()
 {
-    for (int i = 0; i < count(); ++i)
+    for (int i = 0; i < datasetCount(); ++i)
         m_datasets.at(i)->deleteLater();
 
     m_datasets.clear();
-}
-
-/**
- * @return The number of datasets inside this group
- */
-int Group::count() const
-{
-    return datasets().count();
 }
 
 /**
@@ -66,20 +60,27 @@ QString Group::widget() const
 }
 
 /**
+ * @return The number of datasets inside this group
+ */
+int Group::datasetCount() const
+{
+    return datasets().count();
+}
+
+/**
  * @return A list with all the dataset objects contained in this group
  */
-QList<Dataset *> Group::datasets() const
+QVector<Dataset *> Group::datasets() const
 {
     return m_datasets;
 }
 
 /**
- * @return The dataset object at the given @a index,
- *         returns @c Q_NULLPTR on invalid index
+ * @return The dataset at the given @a index,vreturns @c Q_NULLPTR on invalid index
  */
 Dataset *Group::getDataset(const int index)
 {
-    if (index < count() && index >= 0)
+    if (index < datasetCount() && index >= 0)
         return m_datasets.at(index);
 
     return Q_NULLPTR;
@@ -110,7 +111,7 @@ bool Group::read(const QJsonObject &object)
                 auto object = array.at(i).toObject();
                 if (!object.isEmpty())
                 {
-                    auto dataset = new Dataset(this);
+                    Dataset *dataset = new Dataset(this);
                     if (dataset->read(object))
                         m_datasets.append(dataset);
                     else
@@ -118,7 +119,7 @@ bool Group::read(const QJsonObject &object)
                 }
             }
 
-            return count() > 0;
+            return datasetCount() > 0;
         }
     }
 

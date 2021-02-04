@@ -23,7 +23,7 @@
 import QtQuick 2.12
 import QtCharts 2.3
 
-import Dataset 1.0
+import SerialStudio 1.0
 
 Window {
     id: root
@@ -38,19 +38,19 @@ Window {
     borderColor: "#517497"
     opacity: enabled ? 1 : 0
     Behavior on opacity {NumberAnimation{}}
-    title: CppGraphProvider.getDataset(graphId).title +
-           " (" + CppGraphProvider.getDataset(graphId).units + ")"
+    title: Cpp_UI_GraphProvider.getDataset(graphId).title +
+           " (" + Cpp_UI_GraphProvider.getDataset(graphId).units + ")"
 
     Connections {
-        target: CppGraphProvider
+        target: Cpp_UI_GraphProvider
         function onDataUpdated() {
             // Cancel if window is not enabled
             if (!root.enabled)
                 return
 
             // Update maximum value (if required)
-            maximumValue = CppGraphProvider.maximumValue(graphId)
-            minimumValue = CppGraphProvider.minimumValue(graphId)
+            maximumValue = Cpp_UI_GraphProvider.maximumValue(graphId)
+            minimumValue = Cpp_UI_GraphProvider.minimumValue(graphId)
 
             // Get central value
             var medianValue = Math.max(1, (maximumValue + minimumValue)) / 2
@@ -83,7 +83,7 @@ Window {
                 positionAxis.max = max
 
             // Draw graph
-            CppGraphProvider.updateGraph(series, graphId)
+            Cpp_UI_GraphProvider.updateGraph(series, graphId)
         }
     }
 
@@ -112,7 +112,7 @@ Window {
             gridLineColor: "#517497"
             tickType: ValueAxis.TicksFixed
             labelsFont.family: app.monoFont
-            max: CppGraphProvider.displayedPoints
+            max: Cpp_UI_GraphProvider.displayedPoints
         }
 
         ValueAxis {

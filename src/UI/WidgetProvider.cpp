@@ -20,15 +20,13 @@
  * THE SOFTWARE.
  */
 
-#include "Group.h"
-#include "Logger.h"
-#include "Dataset.h"
-#include "DataProvider.h"
 #include "WidgetProvider.h"
-#include "ConsoleAppender.h"
 
 #include <cfloat>
 #include <climits>
+#include <JSON/Generator.h>
+
+using namespace UI;
 
 /*
  * Pointer to the only instance of the class
@@ -40,10 +38,8 @@ static WidgetProvider *INSTANCE = Q_NULLPTR;
  */
 WidgetProvider::WidgetProvider()
 {
-    auto bridge = DataProvider::getInstance();
-    connect(bridge, SIGNAL(updated()), this, SLOT(updateModels()));
-
-    LOG_INFO() << "Initialized Widgets module";
+    auto ge = JSON::Generator::getInstance();
+    connect(ge, SIGNAL(jsonChanged()), this, SLOT(updateModels()));
 }
 
 /**
@@ -60,7 +56,7 @@ WidgetProvider *WidgetProvider::getInstance()
 /**
  * Returns a list with all the JSON datasets that implement a bar widget
  */
-QList<Dataset *> WidgetProvider::barDatasets() const
+QList<JSON::Dataset *> WidgetProvider::barDatasets() const
 {
     return m_barDatasets;
 }
@@ -68,7 +64,7 @@ QList<Dataset *> WidgetProvider::barDatasets() const
 /**
  * Returns a list with all the JSON groups that implement a map widget
  */
-QList<Group *> WidgetProvider::mapGroup() const
+QList<JSON::Group *> WidgetProvider::mapGroup() const
 {
     return m_mapGroups;
 }
@@ -76,7 +72,7 @@ QList<Group *> WidgetProvider::mapGroup() const
 /**
  * Returns a list with all the JSON groups that implement a gyro widget
  */
-QList<Group *> WidgetProvider::gyroGroup() const
+QList<JSON::Group *> WidgetProvider::gyroGroup() const
 {
     return m_gyroGroups;
 }
@@ -85,7 +81,7 @@ QList<Group *> WidgetProvider::gyroGroup() const
  * Returns a list with all the JSON groups that implement an accelerometer
  * widget
  */
-QList<Group *> WidgetProvider::accelerometerGroup() const
+QList<JSON::Group *> WidgetProvider::accelerometerGroup() const
 {
     return m_accelerometerGroups;
 }
@@ -139,7 +135,7 @@ int WidgetProvider::accelerometerGroupCount() const
  * Returns a pointer to the JSON dataset that implements a bar widget
  * with the given @a index
  */
-Dataset *WidgetProvider::barDatasetAt(const int index)
+JSON::Dataset *WidgetProvider::barDatasetAt(const int index)
 {
     if (barDatasets().count() > index)
         return barDatasets().at(index);
@@ -151,7 +147,7 @@ Dataset *WidgetProvider::barDatasetAt(const int index)
  * Returns a pointer to the JSON group that implements a map widget
  * with the given @a index
  */
-Group *WidgetProvider::mapGroupAt(const int index)
+JSON::Group *WidgetProvider::mapGroupAt(const int index)
 {
     if (mapGroup().count() > index)
         return mapGroup().at(index);
@@ -163,7 +159,7 @@ Group *WidgetProvider::mapGroupAt(const int index)
  * Returns a pointer to the JSON group that implements a gyro widget
  * with the given @a index
  */
-Group *WidgetProvider::gyroGroupAt(const int index)
+JSON::Group *WidgetProvider::gyroGroupAt(const int index)
 {
     if (gyroGroup().count() > index)
         return gyroGroup().at(index);
@@ -175,7 +171,7 @@ Group *WidgetProvider::gyroGroupAt(const int index)
  * Returns a pointer to the JSON group that implements an accelerometer
  * widget with the given @a index
  */
-Group *WidgetProvider::accelerometerGroupAt(const int index)
+JSON::Group *WidgetProvider::accelerometerGroupAt(const int index)
 {
     if (accelerometerGroup().count() > index)
         return accelerometerGroup().at(index);
@@ -408,11 +404,11 @@ void WidgetProvider::updateModels()
  * Obtains all the JSON groups that implement the given widget @a handle ID.
  * The JSON groups are provided by the @c QmlBridge class.
  */
-QList<Group *> WidgetProvider::getWidgetGroup(const QString &handle)
+QList<JSON::Group *> WidgetProvider::getWidgetGroup(const QString &handle)
 {
-    QList<Group *> widgetGroup;
+    QList<JSON::Group *> widgetGroup;
 
-    foreach (auto group, DataProvider::getInstance()->groups())
+    foreach (auto group, JSON::Generator::getInstance()->frame()->groups())
     {
         if (group->widget().toLower() == handle)
             widgetGroup.append(group);
@@ -425,11 +421,11 @@ QList<Group *> WidgetProvider::getWidgetGroup(const QString &handle)
  * Obtains all the JSON datasets that implement the given widget @a handle ID.
  * The JSON groups & datasets are provided by the @c QmlBridge class.
  */
-QList<Dataset *> WidgetProvider::getWidgetDatasets(const QString &handle)
+QList<JSON::Dataset *> WidgetProvider::getWidgetDatasets(const QString &handle)
 {
-    QList<Dataset *> widgetDatasets;
+    QList<JSON::Dataset *> widgetDatasets;
 
-    foreach (auto group, DataProvider::getInstance()->groups())
+    foreach (auto group, JSON::Generator::getInstance()->frame()->groups())
     {
         foreach (auto dataset, group->datasets())
         {

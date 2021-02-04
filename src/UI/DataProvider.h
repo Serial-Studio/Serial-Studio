@@ -20,52 +20,44 @@
  * THE SOFTWARE.
  */
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#ifndef UI_DATA_PROVIDER_H
+#define UI_DATA_PROVIDER_H
 
-#include <QLocale>
 #include <QObject>
-#include <QTranslator>
+#include <JSON/Frame.h>
 
-#ifdef QT_QML_LIB
-#    include <QtQml>
-#endif
-
-class Translator : public QObject
+namespace UI
+{
+class DataProvider : public QObject
 {
     // clang-format off
     Q_OBJECT
-    Q_PROPERTY(int language
-               READ language
-               WRITE setLanguage
-               NOTIFY languageChanged)
-    Q_PROPERTY(QString dummy
-               READ dummyString
-               NOTIFY languageChanged)
-    Q_PROPERTY(QStringList availableLanguages
-               READ availableLanguages
-               CONSTANT)
+    Q_PROPERTY(QString title
+               READ title
+               NOTIFY updated)
+    Q_PROPERTY(int groupCount
+               READ groupCount
+               NOTIFY updated)
     // clang-format on
 
 signals:
-    void languageChanged();
+    void updated();
+    void dataReset();
 
 public:
-    explicit Translator();
+    static DataProvider *getInstance();
 
-    int language() const;
-    int systemLanguage() const;
-    QString dummyString() const;
-    QStringList availableLanguages() const;
-    Q_INVOKABLE QString welcomeConsoleText() const;
+    QString title();
+    int groupCount();
 
-public slots:
-    void setLanguage(const int language);
-    void setLanguage(const QLocale &locale, const QString &language);
+    Q_INVOKABLE JSON::Group *getGroup(const int index);
 
 private:
-    int m_language;
-    QTranslator m_translator;
+    DataProvider();
+
+private slots:
+    void resetData();
 };
+}
 
 #endif

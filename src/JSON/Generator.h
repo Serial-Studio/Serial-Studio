@@ -32,7 +32,11 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-class JsonGenerator : public QObject
+#include "Frame.h"
+
+namespace JSON
+{
+class Generator : public QObject
 {
     // clang-format off
     Q_OBJECT
@@ -49,7 +53,7 @@ class JsonGenerator : public QObject
     // clang-format on
 
 signals:
-    void packetReceived();
+    void jsonChanged();
     void jsonFileMapChanged();
     void operationModeChanged();
 
@@ -62,8 +66,9 @@ public:
     Q_ENUMS(OperationMode)
 
 public:
-    static JsonGenerator *getInstance();
+    static Generator *getInstance();
 
+    Frame *frame();
     QString jsonMapData() const;
     QJsonDocument document() const;
     QString jsonMapFilename() const;
@@ -76,7 +81,7 @@ public slots:
     void loadJsonMap(const QString &path, const bool silent = false);
 
 private:
-    JsonGenerator();
+    Generator();
 
 public slots:
     void readSettings();
@@ -88,6 +93,7 @@ private slots:
     void readData(const QByteArray &data);
 
 private:
+    Frame m_frame;
     QFile m_jsonMap;
     QSettings m_settings;
     QString m_jsonMapData;
@@ -95,5 +101,6 @@ private:
     OperationMode m_opMode;
     QJsonDocument m_document;
 };
+}
 
 #endif

@@ -20,15 +20,16 @@
  * THE SOFTWARE.
  */
 
+#include "GraphProvider.h"
+
 #include <QTimer>
 #include <QXYSeries>
 #include <QMetaType>
 
-#include "GraphProvider.h"
-#include "DataProvider.h"
-#include "CsvPlayer.h"
-#include "Group.h"
-#include "Dataset.h"
+#include <CSV/Player.h>
+#include <JSON/Generator.h>
+
+using namespace UI;
 
 /*
  * Only instance of the class
@@ -39,8 +40,8 @@ static GraphProvider *INSTANCE = nullptr;
 // Magic
 //
 QT_CHARTS_USE_NAMESPACE
-Q_DECLARE_METATYPE(QAbstractSeries *)
 Q_DECLARE_METATYPE(QAbstractAxis *)
+Q_DECLARE_METATYPE(QAbstractSeries *)
 
 /**
  * Sets the maximum displayed points to 10, connects SIGNALS/SLOTS & calls
@@ -48,20 +49,25 @@ Q_DECLARE_METATYPE(QAbstractAxis *)
  */
 GraphProvider::GraphProvider()
 {
+    // clang-format off
+
     // Start with 10 points
     m_prevFramePos = 0;
     m_displayedPoints = 10;
 
     // Register data types
-    qRegisterMetaType<QAbstractSeries *>();
     qRegisterMetaType<QAbstractAxis *>();
+    qRegisterMetaType<QAbstractSeries *>();
 
-    // Update graph values as soon as QML Bridge interprets data
-    connect(DataProvider::getInstance(), SIGNAL(updated()), this, SLOT(updateValues()));
+    // Update graph values as soon as JSON manager reads data
+    connect(JSON::Generator::getInstance(), SIGNAL(jsonChanged()),
+            this, SLOT(updateValues()));
 
     // Avoid issues when CSV player goes backwards
-    connect(CsvPlayer::getInstance(), SIGNAL(timestampChanged()), this,
-            SLOT(csvPlayerFixes()));
+    connect(CSV::Player::getInstance(), SIGNAL(timestampChanged()),
+            this, SLOT(csvPlayerFixes()));
+
+    // clang-format on
 }
 
 /**
@@ -95,7 +101,7 @@ int GraphProvider::displayedPoints() const
  * Returns a list with the @a Dataset objects that act as data sources for the
  * graph views
  */
-QList<Dataset *> GraphProvider::datasets() const
+QVector<JSON::Dataset *> GraphProvider::datasets() const
 {
     return m_datasets;
 }
@@ -146,7 +152,7 @@ double GraphProvider::maximumValue(const int index) const
 /**
  * Returns a pointer to the dataset object at the given @a index
  */
-Dataset *GraphProvider::getDataset(const int index) const
+JSON::Dataset *GraphProvider::getDataset(const int index) const
 {
     if (index < graphCount() && index >= 0)
         return datasets().at(index);
@@ -179,12 +185,13 @@ void GraphProvider::updateValues()
     m_datasets.clear();
 
     // Create list with datasets that need to be graphed
-    for (int i = 0; i < DataProvider::getInstance()->groupCount(); ++i)
+    auto frame = JSON::Generator::getInstance()->frame();
+    for (int i = 0; i < frame->groupCount(); ++i)
     {
-        auto group = DataProvider::getInstance()->getGroup(i);
-        for (int j = 0; j < group->count(); ++j)
+        auto group = frame->groups().at(i);
+        for (int j = 0; j < group->datasetCount(); ++j)
         {
-            auto dataset = group->getDataset(j);
+            auto dataset = group->datasets().at(j);
             if (dataset->graph())
                 m_datasets.append(dataset);
         }
@@ -235,7 +242,7 @@ void GraphProvider::updateValues()
 void GraphProvider::csvPlayerFixes()
 {
     // If current frame comes before last-recorded frame, remove extra data
-    auto currentFrame = CsvPlayer::getInstance()->framePosition();
+    auto currentFrame = CSV::Player::getInstance()->framePosition();
     if (m_prevFramePos > currentFrame)
     {
         auto diff = m_prevFramePos - currentFrame;

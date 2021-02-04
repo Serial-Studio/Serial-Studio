@@ -20,24 +20,59 @@
  * THE SOFTWARE.
  */
 
-#ifndef MODULE_MANAGER_H
-#define MODULE_MANAGER_H
+#ifndef DATASET_H
+#define DATASET_H
 
 #include <QObject>
-#include <QQmlEngine>
+#include <QVariant>
+#include <QJsonObject>
 
-class ModuleManager : public QObject
+namespace JSON
 {
+class Dataset : public QObject
+{
+    // clang-format off
     Q_OBJECT
+    Q_PROPERTY(bool graph
+               READ graph
+               CONSTANT)
+    Q_PROPERTY(QString title
+               READ title
+               CONSTANT)
+    Q_PROPERTY(QString value
+               READ value
+               CONSTANT)
+    Q_PROPERTY(QString units
+               READ units
+               CONSTANT)
+    Q_PROPERTY(QString widget
+               READ widget
+               CONSTANT)
+    Q_PROPERTY(QJsonObject jsonData
+               READ jsonData
+               CONSTANT)
+    // clang-format on
 
 public:
-    ModuleManager();
+    Dataset(QObject *parent = nullptr);
 
-private slots:
-    void stopOperations();
+    bool graph() const;
+    QString title() const;
+    QString value() const;
+    QString units() const;
+    QString widget() const;
+    QJsonObject jsonData() const;
+
+    bool read(const QJsonObject &object);
 
 private:
-    QQmlEngine *m_engine;
+    bool m_graph;
+    QString m_title;
+    QString m_value;
+    QString m_units;
+    QString m_widget;
+    QJsonObject m_jsonData;
 };
+}
 
 #endif

@@ -88,7 +88,7 @@ Control {
             icon.color: palette.text
             onClicked: root.setupClicked()
             icon.source: "qrc:/icons/settings.svg"
-            text: qsTr("Setup") + _btSpacer + CppTranslator.dummy
+            text: qsTr("Setup") + _btSpacer + Cpp_Misc_Translator.dummy
         }
 
         Button {
@@ -102,7 +102,7 @@ Control {
             onClicked: root.consoleClicked()
             icon.source: "qrc:/icons/code.svg"
             enabled: dataBt.enabled || widgetsBt.enabled
-            text: qsTr("Console") + _btSpacer + CppTranslator.dummy
+            text: qsTr("Console") + _btSpacer + Cpp_Misc_Translator.dummy
         }
 
         Button {
@@ -114,9 +114,9 @@ Control {
             Layout.fillHeight: true
             icon.color: palette.text
             onClicked: root.dataClicked()
-            enabled: CppDataProvider.groupCount > 0
+            enabled: Cpp_UI_Provider.groupCount > 0
             icon.source: "qrc:/icons/equalizer.svg"
-            text: qsTr("Dashboard") + _btSpacer + CppTranslator.dummy
+            text: qsTr("Dashboard") + _btSpacer + Cpp_Misc_Translator.dummy
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
@@ -132,8 +132,8 @@ Control {
             icon.color: palette.text
             onClicked: root.widgetsClicked()
             icon.source: "qrc:/icons/chart.svg"
-            enabled: CppWidgetProvider.totalWidgetCount > 0
-            text: qsTr("Widgets") + _btSpacer + CppTranslator.dummy
+            enabled: Cpp_UI_WidgetProvider.totalWidgetCount > 0
+            text: qsTr("Widgets") + _btSpacer + Cpp_Misc_Translator.dummy
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
@@ -149,7 +149,7 @@ Control {
             icon.color: palette.text
             onClicked: root.aboutClicked()
             icon.source: "qrc:/icons/info.svg"
-            text: qsTr("About") + CppTranslator.dummy
+            text: qsTr("About") + Cpp_Misc_Translator.dummy
         }
 
         Item {
@@ -162,11 +162,11 @@ Control {
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
-            enabled: CppExport.isOpen
+            enabled: Cpp_CSV_Export.isOpen
             opacity: enabled ? 1 : 0.5
             icon.source: "qrc:/icons/open.svg"
-            onClicked: CppExport.openCurrentCsv()
-            text: qsTr("Open CSV") + _btSpacer + CppTranslator.dummy
+            onClicked: Cpp_CSV_Export.openCurrentCsv()
+            text: qsTr("Open CSV") + _btSpacer + Cpp_Misc_Translator.dummy
 
             Behavior on opacity {NumberAnimation{}}
         }
@@ -185,9 +185,9 @@ Control {
             icon.color: palette.buttonText
 
             //
-            // Device dependent properties
+            // Connection-dependent
             //
-            checked: CppSerialManager.connected
+            checked: Cpp_IO_Manager.connected
             palette.buttonText: checked ? "#d72d60" : "#2eed5c"
             text: (checked ? qsTr("Disconnect") : qsTr("Connect")) + _btSpacer
             icon.source: checked ? "qrc:/icons/disconnect.svg" : "qrc:/icons/connect.svg"
@@ -197,22 +197,12 @@ Control {
             //
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
-            enabled: CppSerialManager.serialConfigurationOk
+            enabled: Cpp_IO_Serial.serialConfigurationOk
 
             //
-            // Connect to the device through serial port
+            // Connect/disconnect device when button is clicked
             //
-            onClicked: {
-                // Not connected, connect appropiate device
-                if (!CppSerialManager.connected) {
-                    if (CppSerialManager.serialConfigurationOk)
-                        CppSerialManager.connectDevice()
-                }
-
-                // We are already connected, remove device
-                else
-                    CppSerialManager.disconnectDevice()
-            }
+            onClicked: Cpp_IO_Manager.toggleConnection()
         }
     }
 }

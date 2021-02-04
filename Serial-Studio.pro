@@ -116,36 +116,10 @@ mingw {
 # Import source code
 #-------------------------------------------------------------------------------
 
+INCLUDEPATH += src
+
 RESOURCES += \
     assets/assets.qrc
-
-HEADERS += \
-    src/AppInfo.h \
-    src/CsvPlayer.h \
-    src/DataProvider.h \
-    src/Dataset.h \
-    src/Export.h \
-    src/GraphProvider.h \
-    src/Group.h \
-    src/JsonGenerator.h \
-    src/ModuleManager.h \
-    src/SerialManager.h \
-    src/Translator.h \
-    src/WidgetProvider.h
-
-SOURCES += \
-    src/CsvPlayer.cpp \
-    src/DataProvider.cpp \
-    src/Dataset.cpp \
-    src/Export.cpp \
-    src/GraphProvider.cpp \
-    src/Group.cpp \
-    src/JsonGenerator.cpp \
-    src/ModuleManager.cpp \
-    src/SerialManager.cpp \
-    src/Translator.cpp \
-    src/WidgetProvider.cpp \
-    src/main.cpp
 
 DISTFILES += \
     assets/qml/Widgets/*.qml \
@@ -157,3 +131,41 @@ TRANSLATIONS += \
     assets/translations/es.ts \
     assets/translations/zh.ts \
     assets/translations/de.ts
+
+HEADERS += \
+    src/AppInfo.h \
+    src/CSV/Export.h \
+    src/CSV/Player.h \
+    src/IO/Console.h \
+    src/IO/DataSources/Network.h \
+    src/IO/DataSources/Serial.h \
+    src/IO/Manager.h \
+    src/JSON/Dataset.h \
+    src/JSON/Frame.h \
+    src/JSON/Generator.h \
+    src/JSON/Group.h \
+    src/Misc/ModuleManager.h \
+    src/Misc/Translator.h \
+    src/Misc/Utilities.h \
+    src/UI/DataProvider.h \
+    src/UI/GraphProvider.h \
+    src/UI/WidgetProvider.h
+
+SOURCES += \
+    src/CSV/Export.cpp \
+    src/CSV/Player.cpp \
+    src/IO/Console.cpp \
+    src/IO/DataSources/Network.cpp \
+    src/IO/DataSources/Serial.cpp \
+    src/IO/Manager.cpp \
+    src/JSON/Dataset.cpp \
+    src/JSON/Frame.cpp \
+    src/JSON/Generator.cpp \
+    src/JSON/Group.cpp \
+    src/Misc/ModuleManager.cpp \
+    src/Misc/Translator.cpp \
+    src/Misc/Utilities.cpp \
+    src/UI/DataProvider.cpp \
+    src/UI/GraphProvider.cpp \
+    src/UI/WidgetProvider.cpp \
+    src/main.cpp

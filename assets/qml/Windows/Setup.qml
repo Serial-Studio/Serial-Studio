@@ -36,11 +36,6 @@ Control {
     }
 
     //
-    // Serial-open modes list
-    //
-    property var serialOpenModes: [qsTr("Read-only"), qsTr("Read/write")]
-
-    //
     // Save settings
     //
     Settings {
@@ -51,35 +46,28 @@ Control {
         property alias dmCsvExport: csvLogging.checked
         property alias dmStopBits: stopBits.currentIndex
         property alias dmDataBits: dataBits.currentIndex
-        property alias dmOpenMode: openMode.currentIndex
         property alias dmBaudValue: baudRate.currentIndex
         property alias dmFlowControl: flowControl.currentIndex
         property alias appLanguage: languageCombo.currentIndex
-        property alias dmDisplayMode: displayMode.currentIndex
     }
 
     //
     // Update listbox models when translation is changed
     //
     Connections {
-        target: CppTranslator
+        target: Cpp_Misc_Translator
         function onLanguageChanged() {
             var portIndex = portSelector.currentIndex
             var oldParityIndex = parity.currentIndex
-            var oldOpenModeIndex = openMode.currentIndex
             var oldDisplayModeIndex = displayMode.currentIndex
             var oldFlowControlIndex = flowControl.currentIndex
 
-            root.serialOpenModes = [qsTr("Read-only"), qsTr("Read/write")]
-            openMode.model = root.serialOpenModes
-
-            parity.model = CppSerialManager.parityList
-            portSelector.model = CppSerialManager.portList
-            flowControl.model = CppSerialManager.flowControlList
-            displayMode.model = CppSerialManager.consoleDisplayModes
+            parity.model = Cpp_IO_Serial.parityList
+            portSelector.model = Cpp_IO_Serial.portList
+            flowControl.model = Cpp_IO_Serial.flowControlList
+            displayMode.model = Cpp_IO_Serial.consoleDisplayModes
 
             parity.currentIndex = oldParityIndex
-            openMode.currentIndex = oldOpenModeIndex
             flowControl.currentIndex = oldFlowControlIndex
             displayMode.currentIndex = oldDisplayModeIndex
             portSelector.currentIndex = portIndex
@@ -90,10 +78,10 @@ Control {
     // Update manual/auto checkboxes
     //
     Connections {
-        target: CppJsonGenerator
+        target: Cpp_JSON_Generator
         function onOperationModeChanged() {
-            commAuto.checked = (CppJsonGenerator.operationMode == 1)
-            commManual.checked = (CppJsonGenerator.operationMode == 0)
+            commAuto.checked = (Cpp_JSON_Generator.operationMode == 1)
+            commManual.checked = (Cpp_JSON_Generator.operationMode == 0)
         }
     }
 
@@ -111,26 +99,26 @@ Control {
         //
         Label {
             font.bold: true
-            text: qsTr("Communication Mode") + ":" + CppTranslator.dummy
+            text: qsTr("Communication Mode") + ":" + Cpp_Misc_Translator.dummy
         } RadioButton {
             id: commAuto
             checked: true
-            text: qsTr("Auto (JSON from serial device)") + CppTranslator.dummy
+            text: qsTr("Auto (JSON from serial device)") + Cpp_Misc_Translator.dummy
             onCheckedChanged: {
                 if (checked)
-                    CppJsonGenerator.setOperationMode(1)
+                    Cpp_JSON_Generator.setOperationMode(1)
                 else
-                    CppJsonGenerator.setOperationMode(0)
+                    Cpp_JSON_Generator.setOperationMode(0)
             }
         } RadioButton {
             id: commManual
             checked: false
-            text: qsTr("Manual (use JSON map file)") + CppTranslator.dummy
+            text: qsTr("Manual (use JSON map file)") + Cpp_Misc_Translator.dummy
             onCheckedChanged: {
                 if (checked)
-                    CppJsonGenerator.setOperationMode(0)
+                    Cpp_JSON_Generator.setOperationMode(0)
                 else
-                    CppJsonGenerator.setOperationMode(1)
+                    Cpp_JSON_Generator.setOperationMode(1)
             }
         }
 
@@ -141,10 +129,10 @@ Control {
             Layout.fillWidth: true
             opacity: enabled ? 1 : 0.5
             enabled: commManual.checked
-            onClicked: CppJsonGenerator.loadJsonMap()
+            onClicked: Cpp_JSON_Generator.loadJsonMap()
             Behavior on opacity {NumberAnimation{}}
-            text: CppTranslator.dummy +
-                  (CppJsonGenerator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(CppJsonGenerator.jsonMapFilename) :
+            text: Cpp_Misc_Translator.dummy +
+                  (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
                                                              qsTr("Select map file") + "...")
         }
 
@@ -160,17 +148,17 @@ Control {
                 palette.highlight: "#2e895c"
                 Layout.leftMargin: -app.spacing
                 Layout.alignment: Qt.AlignVCenter
-                text: qsTr("CSV Export") + CppTranslator.dummy
-                onCheckedChanged: CppExport.exportEnabled = checked
+                text: qsTr("CSV Export") + Cpp_Misc_Translator.dummy
+                onCheckedChanged: Cpp_CSV_Export.exportEnabled = checked
             }
 
             Button {
                 Layout.fillWidth: true
                 opacity: enabled ? 1 : 0.5
                 enabled: commManual.checked
-                onClicked: CppCsvPlayer.openFile()
+                onClicked: Cpp_CSV_Player.openFile()
                 Layout.alignment: Qt.AlignVCenter
-                text: qsTr("CSV Player") + CppTranslator.dummy
+                text: qsTr("CSV Player") + Cpp_Misc_Translator.dummy
 
                 Behavior on opacity {NumberAnimation{}}
             }
@@ -197,21 +185,21 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !CppSerialManager.connected
+                enabled: !Cpp_IO_Serial.connected
                 Behavior on opacity {NumberAnimation{}}
-                text: qsTr("COM Port") + ":" + CppTranslator.dummy
+                text: qsTr("COM Port") + ":" + Cpp_Misc_Translator.dummy
             } ComboBox {
                 id: portSelector
                 Layout.fillWidth: true
-                model: CppSerialManager.portList
-                currentIndex: CppSerialManager.portIndex
+                model: Cpp_IO_Serial.portList
+                currentIndex: Cpp_IO_Serial.portIndex
                 onCurrentIndexChanged: {
-                    if (currentIndex !== CppSerialManager.portIndex)
-                        CppSerialManager.portIndex = currentIndex
+                    if (currentIndex !== Cpp_IO_Serial.portIndex)
+                        Cpp_IO_Serial.portIndex = currentIndex
                 }
 
                 opacity: enabled ? 1 : 0.5
-                enabled: !CppSerialManager.connected
+                enabled: !Cpp_IO_Serial.connected
                 Behavior on opacity {NumberAnimation{}}
             }
 
@@ -220,16 +208,15 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !CppSerialManager.connected
+                enabled: !Cpp_IO_Serial.connected
                 Behavior on opacity {NumberAnimation{}}
-                text: qsTr("Baud Rate") + ":" + CppTranslator.dummy
+                text: qsTr("Baud Rate") + ":" + Cpp_Misc_Translator.dummy
             } ComboBox {
                 id: baudRate
                 editable: true
                 currentIndex: 3
                 Layout.fillWidth: true
-                enabled: !CppSerialManager.connected
-                model: CppSerialManager.baudRateList
+                model: Cpp_IO_Serial.baudRateList
 
                 validator: IntValidator {
                     bottom: 1
@@ -237,49 +224,12 @@ Control {
 
                 onAccepted: {
                     if (find(editText) === -1)
-                        CppSerialManager.appendBaudRate(editText)
+                        Cpp_IO_Serial.appendBaudRate(editText)
                 }
 
                 onCurrentTextChanged: {
                     var value = currentText
-                    CppSerialManager.baudRate = value
-                }
-
-                opacity: enabled ? 1 : 0.5
-                Behavior on opacity {NumberAnimation{}}
-            }
-
-            //
-            // Open mode
-            //
-            Label {
-                text: qsTr("Open mode") + ":" + CppTranslator.dummy
-            } ComboBox {
-                id: openMode
-                currentIndex: 1
-                Layout.fillWidth: true
-                model: root.serialOpenModes
-                onCurrentIndexChanged: {
-                    if (currentIndex == 0)
-                        CppSerialManager.setWriteEnabled(false)
-                    else
-                        CppSerialManager.setWriteEnabled(true)
-                }
-            }
-
-            //
-            // Display mode selector
-            //
-            Label {
-                text: qsTr("Display mode") + ":" + CppTranslator.dummy
-            } ComboBox {
-                id: displayMode
-                Layout.fillWidth: true
-                model: CppSerialManager.consoleDisplayModes
-                currentIndex: CppSerialManager.displayMode
-                onCurrentIndexChanged: {
-                    if (CppSerialManager.displayMode !== currentIndex)
-                        CppSerialManager.displayMode = currentIndex
+                    Cpp_IO_Serial.baudRate = value
                 }
             }
 
@@ -298,15 +248,15 @@ Control {
             // Data bits selector
             //
             Label {
-                text: qsTr("Data Bits") + ":" + CppTranslator.dummy
+                text: qsTr("Data Bits") + ":" + Cpp_Misc_Translator.dummy
             } ComboBox {
                 id: dataBits
                 Layout.fillWidth: true
-                model: CppSerialManager.dataBitsList
-                currentIndex: CppSerialManager.dataBitsIndex
+                model: Cpp_IO_Serial.dataBitsList
+                currentIndex: Cpp_IO_Serial.dataBitsIndex
                 onCurrentIndexChanged: {
-                    if (CppSerialManager.dataBitsIndex !== currentIndex)
-                        CppSerialManager.dataBitsIndex = currentIndex
+                    if (Cpp_IO_Serial.dataBitsIndex !== currentIndex)
+                        Cpp_IO_Serial.dataBitsIndex = currentIndex
                 }
             }
 
@@ -314,15 +264,15 @@ Control {
             // Parity selector
             //
             Label {
-                text: qsTr("Parity") + ":" + CppTranslator.dummy
+                text: qsTr("Parity") + ":" + Cpp_Misc_Translator.dummy
             } ComboBox {
                 id: parity
                 Layout.fillWidth: true
-                model: CppSerialManager.parityList
-                currentIndex: CppSerialManager.parityIndex
+                model: Cpp_IO_Serial.parityList
+                currentIndex: Cpp_IO_Serial.parityIndex
                 onCurrentIndexChanged: {
-                    if (CppSerialManager.parityIndex !== currentIndex)
-                        CppSerialManager.parityIndex = currentIndex
+                    if (Cpp_IO_Serial.parityIndex !== currentIndex)
+                        Cpp_IO_Serial.parityIndex = currentIndex
                 }
             }
 
@@ -330,15 +280,15 @@ Control {
             // Stop bits selector
             //
             Label {
-                text: qsTr("Stop Bits") + ":" + CppTranslator.dummy
+                text: qsTr("Stop Bits") + ":" + Cpp_Misc_Translator.dummy
             } ComboBox {
                 id: stopBits
                 Layout.fillWidth: true
-                model: CppSerialManager.stopBitsList
-                currentIndex: CppSerialManager.stopBitsIndex
+                model: Cpp_IO_Serial.stopBitsList
+                currentIndex: Cpp_IO_Serial.stopBitsIndex
                 onCurrentIndexChanged: {
-                    if (CppSerialManager.stopBitsIndex !== currentIndex)
-                        CppSerialManager.stopBitsIndex = currentIndex
+                    if (Cpp_IO_Serial.stopBitsIndex !== currentIndex)
+                        Cpp_IO_Serial.stopBitsIndex = currentIndex
                 }
             }
 
@@ -346,15 +296,15 @@ Control {
             // Flow control selector
             //
             Label {
-                text: qsTr("Flow Control") + ":" + CppTranslator.dummy
+                text: qsTr("Flow Control") + ":" + Cpp_Misc_Translator.dummy
             } ComboBox {
                 id: flowControl
                 Layout.fillWidth: true
-                model: CppSerialManager.flowControlList
-                currentIndex: CppSerialManager.flowControlIndex
+                model: Cpp_IO_Serial.flowControlList
+                currentIndex: Cpp_IO_Serial.flowControlIndex
                 onCurrentIndexChanged: {
-                    if (CppSerialManager.flowControlIndex !== currentIndex)
-                        CppSerialManager.flowControlIndex = currentIndex
+                    if (Cpp_IO_Serial.flowControlIndex !== currentIndex)
+                        Cpp_IO_Serial.flowControlIndex = currentIndex
                 }
             }
 
@@ -373,12 +323,12 @@ Control {
             // Language selector
             //
             Label {
-                text: qsTr("Language") + ":" + CppTranslator.dummy
+                text: qsTr("Language") + ":" + Cpp_Misc_Translator.dummy
             } ComboBox {
                 id: languageCombo
                 Layout.fillWidth: true
-                model: CppTranslator.availableLanguages
-                onCurrentIndexChanged: CppTranslator.setLanguage(currentIndex)
+                model: Cpp_Misc_Translator.availableLanguages
+                onCurrentIndexChanged: Cpp_Misc_Translator.setLanguage(currentIndex)
             }
         }
 
@@ -403,7 +353,7 @@ Control {
                 Layout.alignment: Qt.AlignVCenter
 
                 Connections {
-                    target: CppSerialManager
+                    target: Cpp_IO_Manager
                     function onRx() {
                         _rx.flash()
                     }
@@ -449,7 +399,7 @@ Control {
                 Layout.alignment: Qt.AlignVCenter
 
                 Connections {
-                    target: CppSerialManager
+                    target: Cpp_IO_Manager
                     function onTx() {
                         _tx.flash()
                     }

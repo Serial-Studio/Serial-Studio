@@ -20,58 +20,86 @@
  * THE SOFTWARE.
  */
 
-#ifndef EXPORT_H
-#define EXPORT_H
+#ifndef CSV_PLAYER_H
+#define CSV_PLAYER_H
 
+#include <QMap>
+#include <QSet>
 #include <QFile>
-#include <QList>
+#include <QTimer>
 #include <QObject>
-#include <QVariant>
-#include <QTextStream>
-#include <QJsonObject>
+#include <QStringList>
+#include <QJsonDocument>
 
-class Export : public QObject
+namespace CSV
+{
+class Player : public QObject
 {
     // clang-format off
     Q_OBJECT
     Q_PROPERTY(bool isOpen
                READ isOpen
                NOTIFY openChanged)
-    Q_PROPERTY(bool exportEnabled
-               READ exportEnabled
-               WRITE setExportEnabled
-               NOTIFY enabledChanged)
+    Q_PROPERTY(qreal progress
+               READ progress
+               NOTIFY timestampChanged)
+    Q_PROPERTY(bool isPlaying
+               READ isPlaying
+               NOTIFY playerStateChanged)
+    Q_PROPERTY(QString timestamp
+               READ timestamp
+               NOTIFY timestampChanged)
     // clang-format on
 
 signals:
     void openChanged();
-    void enabledChanged();
+    void timestampChanged();
+    void playerStateChanged();
 
 public:
-    static Export *getInstance();
+    static Player *getInstance();
 
     bool isOpen() const;
-    bool exportEnabled() const;
+    qreal progress() const;
+    bool isPlaying() const;
+    int frameCount() const;
+    QString filename() const;
+    int framePosition() const;
+    QString timestamp() const;
 
 private:
-    Export();
-    ~Export();
+    Player();
 
 public slots:
+    void play();
+    void pause();
+    void toggle();
+    void openFile();
     void closeFile();
-    void openLogFile();
-    void openCurrentCsv();
-    void setExportEnabled(const bool enabled);
+    void nextFrame();
+    void previousFrame();
+    void openFile(const QString &filePath);
+    void setProgress(const qreal progress);
 
 private slots:
-    void writeValues();
-    void updateValues();
+    void updateData();
 
 private:
+    bool validateRow(const int row);
+    QJsonDocument getJsonFrame(const int row);
+    QString getCellValue(int row, int column, bool *error = nullptr);
+    int getDatasetIndex(const QString &groupKey, const QString &datasetKey);
+
+private:
+    int m_framePos;
+    bool m_playing;
     QFile m_csvFile;
-    bool m_exportEnabled;
-    QTextStream m_textStream;
-    QList<QPair<QDateTime, QJsonObject>> m_jsonList;
+    QTimer m_frameTimer;
+    QString m_timestamp;
+    QList<QStringList> m_csvData;
+    QMap<QString, QSet<QString>> m_model;
+    QMap<QString, QMap<QString, int>> m_datasetIndexes;
 };
+}
 
 #endif

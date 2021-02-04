@@ -20,9 +20,17 @@
  * THE SOFTWARE.
  */
 
-#include "Logger.h"
 #include "Translator.h"
-#include "ConsoleAppender.h"
+
+#include <Logger.h>
+#include <ConsoleAppender.h>
+
+using namespace Misc;
+
+/**
+ * Only instance of the class
+ */
+static Translator *INSTANCE = nullptr;
 
 /**
  * Constructor function
@@ -32,6 +40,17 @@ Translator::Translator()
     m_language = systemLanguage();
     LOG_INFO() << "Initialized Translator module";
     LOG_INFO() << "System language" << systemLanguage();
+}
+
+/**
+ * Returns the only instance of the class
+ */
+Translator *Translator::getInstance()
+{
+    if (!INSTANCE)
+        INSTANCE = new Translator;
+
+    return INSTANCE;
 }
 
 /**
@@ -77,7 +96,7 @@ int Translator::systemLanguage() const
  * automatically update all the strings without the need of restarting the
  * application. For example, the following QML code:
  *
- *      text: qsTr("Text") + CppTranslator.dummyString
+ *      text: qsTr("Text") + Cpp_Misc_Translator.dummyString
  *
  * Will force the QML interface to update the value of @a text when the language
  * is changed.

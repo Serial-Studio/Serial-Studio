@@ -28,8 +28,8 @@ import QtQuick.Controls 2.12
 
 import Qt.labs.settings 1.0
 
-import Group 1.0
-import Dataset 1.0
+import SerialStudio 1.0
+import SerialStudio 1.0
 
 import "."
 
@@ -69,7 +69,7 @@ Window {
     // Connections with widget manager
     //
     Connections {
-        target: CppWidgetProvider
+        target: Cpp_UI_WidgetProvider
         function onDataChanged() {
             root.updateValues()
         }
@@ -79,10 +79,10 @@ Window {
     // Updates the internal values of the map widget
     //
     function updateValues() {
-        if (CppWidgetProvider.mapGroupCount() > root.groupIndex) {
-            root.latitude = CppWidgetProvider.mapLatitude(root.groupIndex)
-            root.longitude = CppWidgetProvider.mapLongitude(root.groupIndex)
-            root.title = CppWidgetProvider.mapGroupAt(root.groupIndex).title
+        if (Cpp_UI_WidgetProvider.mapGroupCount() > root.groupIndex) {
+            root.latitude = Cpp_UI_WidgetProvider.mapLatitude(root.groupIndex)
+            root.longitude = Cpp_UI_WidgetProvider.mapLongitude(root.groupIndex)
+            root.title = Cpp_UI_WidgetProvider.mapGroupAt(root.groupIndex).title
 
             if (autoCenter.checked)
                 root.centerMap()
@@ -126,7 +126,7 @@ Window {
                 checkable: true
                 Layout.leftMargin: -6
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("Center on coordinate") + CppTranslator.dummy
+                text: qsTr("Center on coordinate") + Cpp_Misc_Translator.dummy
                 onCheckedChanged: {
                     if (checked)
                         root.centerMap()

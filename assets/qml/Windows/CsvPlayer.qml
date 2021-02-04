@@ -31,7 +31,7 @@ Window {
     //
     // Window options
     //
-    title: qsTr("CSV Player") + CppTranslator.dummy
+    title: qsTr("CSV Player") + Cpp_Misc_Translator.dummy
     minimumWidth: column.implicitWidth + 4 * app.spacing
     maximumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing
@@ -42,8 +42,8 @@ Window {
     // Close CSV file when window is closed
     //
     onVisibleChanged: {
-        if (!visible && CppCsvPlayer.isOpen)
-            CppCsvPlayer.closeFile()
+        if (!visible && Cpp_CSV_Player.isOpen)
+            Cpp_CSV_Player.closeFile()
     }
 
     //
@@ -61,9 +61,9 @@ Window {
         // Automatically display the window when the CSV file is opened
         //
         Connections {
-            target: CppCsvPlayer
+            target: Cpp_CSV_Player
             function onOpenChanged() {
-                if (CppCsvPlayer.isOpen)
+                if (Cpp_CSV_Player.isOpen)
                     root.visible = true
                 else
                     root.visible = false
@@ -83,7 +83,7 @@ Window {
             //
             Label {
                 font.family: app.monoFont
-                text: CppCsvPlayer.timestamp
+                text: Cpp_CSV_Player.timestamp
                 Layout.alignment: Qt.AlignLeft
             }
 
@@ -92,10 +92,10 @@ Window {
             //
             Slider {
                 Layout.fillWidth: true
-                value: CppCsvPlayer.progress
+                value: Cpp_CSV_Player.progress
                 onValueChanged: {
-                    if (value != CppCsvPlayer.progress)
-                        CppCsvPlayer.setProgress(value)
+                    if (value != Cpp_CSV_Player.progress)
+                        Cpp_CSV_Player.setProgress(value)
                 }
             }
 
@@ -112,9 +112,9 @@ Window {
                     icon.color: "#fff"
                     opacity: enabled ? 1 : 0.5
                     Layout.alignment: Qt.AlignVCenter
-                    onClicked: CppCsvPlayer.previousFrame()
+                    onClicked: Cpp_CSV_Player.previousFrame()
                     icon.source: "qrc:/icons/media-prev.svg"
-                    enabled: CppCsvPlayer.progress > 0 && !CppCsvPlayer.isPlaying
+                    enabled: Cpp_CSV_Player.progress > 0 && !Cpp_CSV_Player.isPlaying
 
                     Behavior on opacity {NumberAnimation{}}
                 }
@@ -123,9 +123,9 @@ Window {
                     icon.width: 32
                     icon.height: 32
                     icon.color: "#fff"
-                    onClicked: CppCsvPlayer.toggle()
+                    onClicked: Cpp_CSV_Player.toggle()
                     Layout.alignment: Qt.AlignVCenter
-                    icon.source: CppCsvPlayer.isPlaying ? "qrc:/icons/media-pause.svg" :
+                    icon.source: Cpp_CSV_Player.isPlaying ? "qrc:/icons/media-pause.svg" :
                                                           "qrc:/icons/media-play.svg"
                 }
 
@@ -133,9 +133,9 @@ Window {
                     icon.color: "#fff"
                     opacity: enabled ? 1 : 0.5
                     Layout.alignment: Qt.AlignVCenter
-                    onClicked: CppCsvPlayer.nextFrame()
+                    onClicked: Cpp_CSV_Player.nextFrame()
                     icon.source: "qrc:/icons/media-next.svg"
-                    enabled: CppCsvPlayer.progress < 1 && !CppCsvPlayer.isPlaying
+                    enabled: Cpp_CSV_Player.progress < 1 && !Cpp_CSV_Player.isPlaying
 
                     Behavior on opacity {NumberAnimation{}}
                 }

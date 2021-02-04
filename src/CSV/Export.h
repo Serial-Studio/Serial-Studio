@@ -20,56 +20,61 @@
  * THE SOFTWARE.
  */
 
-#ifndef DATASET_H
-#define DATASET_H
+#ifndef CSV_EXPORT_H
+#define CSV_EXPORT_H
 
+#include <QFile>
+#include <QList>
 #include <QObject>
 #include <QVariant>
+#include <QTextStream>
 #include <QJsonObject>
 
-class Dataset : public QObject
+namespace CSV
+{
+class Export : public QObject
 {
     // clang-format off
     Q_OBJECT
-    Q_PROPERTY(bool graph
-               READ graph
-               CONSTANT)
-    Q_PROPERTY(QString title
-               READ title
-               CONSTANT)
-    Q_PROPERTY(QString value
-               READ value
-               CONSTANT)
-    Q_PROPERTY(QString units
-               READ units
-               CONSTANT)
-    Q_PROPERTY(QString widget
-               READ widget
-               CONSTANT)
-    Q_PROPERTY(QJsonObject jsonData
-               READ jsonData
-               CONSTANT)
+    Q_PROPERTY(bool isOpen
+               READ isOpen
+               NOTIFY openChanged)
+    Q_PROPERTY(bool exportEnabled
+               READ exportEnabled
+               WRITE setExportEnabled
+               NOTIFY enabledChanged)
     // clang-format on
 
+signals:
+    void openChanged();
+    void enabledChanged();
+
 public:
-    Dataset(QObject *parent = nullptr);
+    static Export *getInstance();
 
-    bool graph() const;
-    QString title() const;
-    QString value() const;
-    QString units() const;
-    QString widget() const;
-    QJsonObject jsonData() const;
-
-    bool read(const QJsonObject &object);
+    bool isOpen() const;
+    bool exportEnabled() const;
 
 private:
-    bool m_graph;
-    QString m_title;
-    QString m_value;
-    QString m_units;
-    QString m_widget;
-    QJsonObject m_jsonData;
+    Export();
+    ~Export();
+
+public slots:
+    void closeFile();
+    void openLogFile();
+    void openCurrentCsv();
+    void setExportEnabled(const bool enabled);
+
+private slots:
+    void writeValues();
+    void updateValues();
+
+private:
+    QFile m_csvFile;
+    bool m_exportEnabled;
+    QTextStream m_textStream;
+    QList<QPair<QDateTime, QJsonObject>> m_jsonList;
 };
+}
 
 #endif

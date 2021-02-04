@@ -25,9 +25,10 @@
 
 #include <QList>
 #include <QObject>
+#include <JSON/Frame.h>
 
-class Group;
-class Dataset;
+namespace UI
+{
 
 class WidgetProvider : public QObject
 {
@@ -44,10 +45,10 @@ signals:
 public:
     static WidgetProvider *getInstance();
 
-    QList<Group *> mapGroup() const;
-    QList<Group *> gyroGroup() const;
-    QList<Dataset *> barDatasets() const;
-    QList<Group *> accelerometerGroup() const;
+    QList<JSON::Group *> mapGroup() const;
+    QList<JSON::Group *> gyroGroup() const;
+    QList<JSON::Dataset *> barDatasets() const;
+    QList<JSON::Group *> accelerometerGroup() const;
 
     int totalWidgetCount() const;
 
@@ -56,10 +57,10 @@ public:
     Q_INVOKABLE int barDatasetCount() const;
     Q_INVOKABLE int accelerometerGroupCount() const;
 
-    Q_INVOKABLE Group *mapGroupAt(const int index);
-    Q_INVOKABLE Group *gyroGroupAt(const int index);
-    Q_INVOKABLE Dataset *barDatasetAt(const int index);
-    Q_INVOKABLE Group *accelerometerGroupAt(const int index);
+    Q_INVOKABLE JSON::Group *mapGroupAt(const int index);
+    Q_INVOKABLE JSON::Group *gyroGroupAt(const int index);
+    Q_INVOKABLE JSON::Dataset *barDatasetAt(const int index);
+    Q_INVOKABLE JSON::Group *accelerometerGroupAt(const int index);
 
     Q_INVOKABLE double gyroYaw(const int index);
     Q_INVOKABLE double gyroRoll(const int index);
@@ -81,14 +82,15 @@ private slots:
 
 private:
     WidgetProvider();
-    QList<Group *> getWidgetGroup(const QString &handle);
-    QList<Dataset *> getWidgetDatasets(const QString &handle);
+    QList<JSON::Group *> getWidgetGroup(const QString &handle);
+    QList<JSON::Dataset *> getWidgetDatasets(const QString &handle);
 
 private:
-    QList<Group *> m_mapGroups;
-    QList<Group *> m_gyroGroups;
-    QList<Dataset *> m_barDatasets;
-    QList<Group *> m_accelerometerGroups;
+    QList<JSON::Group *> m_mapGroups;
+    QList<JSON::Group *> m_gyroGroups;
+    QList<JSON::Dataset *> m_barDatasets;
+    QList<JSON::Group *> m_accelerometerGroups;
 };
+}
 
 #endif

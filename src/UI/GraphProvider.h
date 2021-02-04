@@ -23,15 +23,18 @@
 #ifndef GRAPH_PROVIDER_H
 #define GRAPH_PROVIDER_H
 
-#include <QList>
+#include <QVector>
 #include <QObject>
 #include <QVector>
 #include <QVariant>
 #include <QAbstractSeries>
 
+#include <JSON/Dataset.h>
+
 QT_CHARTS_USE_NAMESPACE
 
-class Dataset;
+namespace UI
+{
 class GraphProvider : public QObject
 {
     // clang-format off
@@ -39,7 +42,7 @@ class GraphProvider : public QObject
     Q_PROPERTY(int graphCount
                READ graphCount
                NOTIFY dataUpdated)
-    Q_PROPERTY(QList<Dataset *> datasets
+    Q_PROPERTY(QVector<JSON::Dataset *> datasets
                READ datasets
                NOTIFY dataUpdated)
     Q_PROPERTY(int displayedPoints
@@ -57,11 +60,11 @@ public:
 
     int graphCount() const;
     int displayedPoints() const;
-    QList<Dataset *> datasets() const;
+    QVector<JSON::Dataset *> datasets() const;
     Q_INVOKABLE double getValue(const int index) const;
     Q_INVOKABLE double minimumValue(const int index) const;
     Q_INVOKABLE double maximumValue(const int index) const;
-    Q_INVOKABLE Dataset *getDataset(const int index) const;
+    Q_INVOKABLE JSON::Dataset *getDataset(const int index) const;
 
 public slots:
     void setDisplayedPoints(const int points);
@@ -77,10 +80,11 @@ private slots:
 private:
     int m_prevFramePos;
     int m_displayedPoints;
-    QList<Dataset *> m_datasets;
-    QList<double> m_maximumValues;
-    QList<double> m_minimumValues;
-    QList<QVector<double> *> m_points;
+    QVector<double> m_maximumValues;
+    QVector<double> m_minimumValues;
+    QVector<QVector<double> *> m_points;
+    QVector<JSON::Dataset *> m_datasets;
 };
+}
 
 #endif

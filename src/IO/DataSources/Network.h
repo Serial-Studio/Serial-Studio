@@ -20,36 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include "ModuleManager.h"
+#ifndef IO_DATA_SOURCES_NETWORK_H
+#define IO_DATA_SOURCES_NETWORK_H
 
-#include "Logger.h"
-#include "Export.h"
-#include "CsvPlayer.h"
-#include "SerialManager.h"
-#include "ConsoleAppender.h"
-
-#include <QApplication>
-
-/**
- * Connect SIGNALS/SLOTS to call singleton destructors before the application
- * quits.
- */
-ModuleManager::ModuleManager()
-{
-    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
-    LOG_INFO() << "Initialized module manager class";
-}
-
-/**
- * Calls the functions needed to safely quit the application
- */
-void ModuleManager::stopOperations()
-{
-    LOG_INFO() << "Stopping application modules...";
-
-    Export::getInstance()->closeFile();
-    CsvPlayer::getInstance()->closeFile();
-    SerialManager::getInstance()->disconnectDevice();
-
-    LOG_INFO() << "Application modules stopped";
-}
+#endif

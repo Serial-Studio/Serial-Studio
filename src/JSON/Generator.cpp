@@ -20,20 +20,23 @@
  * THE SOFTWARE.
  */
 
-#include "Logger.h"
-#include "CsvPlayer.h"
-#include "JsonGenerator.h"
-#include "SerialManager.h"
-#include "ConsoleAppender.h"
+#include "Generator.h"
+
+#include <Logger.h>
+#include <CSV/Player.h>
+#include <IO/Manager.h>
+#include <Misc/Utilities.h>
+#include <ConsoleAppender.h>
 
 #include <QFileInfo>
 #include <QFileDialog>
-#include <QMessageBox>
+
+using namespace JSON;
 
 /*
  * Only instance of the class
  */
-static JsonGenerator *INSTANCE = nullptr;
+static Generator *INSTANCE = nullptr;
 
 /*
  * Regular expresion used to check if there are still unmatched values
@@ -42,59 +45,42 @@ static JsonGenerator *INSTANCE = nullptr;
 static const QRegExp UNMATCHED_VALUES_REGEX("(%\b([0-9]|[1-9][0-9])\b)");
 
 /**
- * Shows a macOS-like message box with the given properties
- */
-static int NiceMessageBox(QString text, QString informativeText,
-                          QString windowTitle = qAppName(),
-                          QMessageBox::StandardButtons bt = QMessageBox::Ok)
-{
-    // clang-format off
-    auto icon = QPixmap(":/images/icon.png").scaled(64, 64,
-                                                    Qt::IgnoreAspectRatio,
-                                                    Qt::SmoothTransformation);
-    // clang-format on
-
-    // Create message box & set options
-    QMessageBox box;
-    box.setIconPixmap(icon);
-    box.setStandardButtons(bt);
-    box.setWindowTitle(windowTitle);
-    box.setText("<h3>" + text + "</h3>");
-    box.setInformativeText(informativeText);
-
-    // Show message box & return user decision to caller
-    return box.exec();
-}
-
-/**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
-JsonGenerator::JsonGenerator()
+Generator::Generator()
+    : m_dataFormatErrors(0)
+    , m_opMode(kAutomatic)
 {
-    m_opMode = kAutomatic;
-    m_dataFormatErrors = 0;
-    auto sm = SerialManager::getInstance();
-    connect(sm, SIGNAL(portChanged()), this, SLOT(reset()));
-    connect(sm, SIGNAL(packetReceived(QByteArray)), this, SLOT(readData(QByteArray)));
+    auto io = IO::Manager::getInstance();
+    connect(io, SIGNAL(deviceChanged()), this, SLOT(reset()));
+    connect(io, SIGNAL(frameReceived(QByteArray)), this, SLOT(readData(QByteArray)));
 
-    LOG_INFO() << "Initialized JsonParser module";
+    LOG_INFO() << "Initialized JSON::FrameGenerator module";
 }
 
 /**
  * Returns the only instance of the class
  */
-JsonGenerator *JsonGenerator::getInstance()
+Generator *Generator::getInstance()
 {
     if (!INSTANCE)
-        INSTANCE = new JsonGenerator();
+        INSTANCE = new Generator();
 
     return INSTANCE;
 }
 
 /**
+ * Returns the current frame object
+ */
+Frame *Generator::frame()
+{
+    return &m_frame;
+}
+
+/**
  * Returns the JSON map data from the loaded file as a string
  */
-QString JsonGenerator::jsonMapData() const
+QString Generator::jsonMapData() const
 {
     return m_jsonMapData;
 }
@@ -102,7 +88,7 @@ QString JsonGenerator::jsonMapData() const
 /**
  * Returns the parsed JSON document from the received packet
  */
-QJsonDocument JsonGenerator::document() const
+QJsonDocument Generator::document() const
 {
     return m_document;
 }
@@ -110,7 +96,7 @@ QJsonDocument JsonGenerator::document() const
 /**
  * Returns the file name (e.g. "JsonMap.json") of the loaded JSON map file
  */
-QString JsonGenerator::jsonMapFilename() const
+QString Generator::jsonMapFilename() const
 {
     if (m_jsonMap.isOpen())
     {
@@ -124,7 +110,7 @@ QString JsonGenerator::jsonMapFilename() const
 /**
  * Returns the file path of the loaded JSON map file
  */
-QString JsonGenerator::jsonMapFilepath() const
+QString Generator::jsonMapFilepath() const
 {
     if (m_jsonMap.isOpen())
     {
@@ -138,7 +124,7 @@ QString JsonGenerator::jsonMapFilepath() const
 /**
  * Returns the operation mode
  */
-JsonGenerator::OperationMode JsonGenerator::operationMode() const
+Generator::OperationMode Generator::operationMode() const
 {
     return m_opMode;
 }
@@ -146,11 +132,14 @@ JsonGenerator::OperationMode JsonGenerator::operationMode() const
 /**
  * Creates a file dialog & lets the user select the JSON file map
  */
-void JsonGenerator::loadJsonMap()
+void Generator::loadJsonMap()
 {
-    auto file
-        = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Select JSON map file"),
-                                       QDir::homePath(), tr("JSON files") + " (*.json)");
+    // clang-format off
+    auto file = QFileDialog::getOpenFileName(Q_NULLPTR,
+                                             tr("Select JSON map file"),
+                                             QDir::homePath(),
+                                             tr("JSON files") + " (*.json)");
+    // clang-format on
 
     if (!file.isEmpty())
         loadJsonMap(file);
@@ -159,7 +148,7 @@ void JsonGenerator::loadJsonMap()
 /**
  * Opens, validates & loads into memory the JSON file in the given @a path.
  */
-void JsonGenerator::loadJsonMap(const QString &path, const bool silent)
+void Generator::loadJsonMap(const QString &path, const bool silent)
 {
     // Log information
     LOG_INFO() << "Loading JSON file, silent flag set to" << silent;
@@ -189,7 +178,7 @@ void JsonGenerator::loadJsonMap(const QString &path, const bool silent)
 
             m_jsonMap.close();
             writeSettings("");
-            NiceMessageBox(tr("JSON parse error"), error.errorString());
+            Misc::Utilities::showMessageBox(tr("JSON parse error"), error.errorString());
         }
 
         // JSON contains no errors, load data & save settings
@@ -200,10 +189,13 @@ void JsonGenerator::loadJsonMap(const QString &path, const bool silent)
             writeSettings(path);
             m_jsonMapData = QString::fromUtf8(data);
             if (!silent)
-                NiceMessageBox(
+                Misc::Utilities::showMessageBox(
                     tr("JSON map file loaded successfully!"),
                     tr("File \"%1\" loaded into memory").arg(jsonMapFilename()));
         }
+
+        // Get rid of warnings
+        Q_UNUSED(document);
     }
 
     // Open error
@@ -212,8 +204,8 @@ void JsonGenerator::loadJsonMap(const QString &path, const bool silent)
         LOG_INFO() << "JSON file error" << m_jsonMap.errorString();
 
         writeSettings("");
-        NiceMessageBox(tr("Cannot read JSON file"),
-                       tr("Please check file permissions & location"));
+        Misc::Utilities::showMessageBox(tr("Cannot read JSON file"),
+                                        tr("Please check file permissions & location"));
         m_jsonMap.close();
     }
 
@@ -234,7 +226,7 @@ void JsonGenerator::loadJsonMap(const QString &path, const bool silent)
  * @c kAutomatic serial data contains the JSON data frame, good for simple
  *               applications or for prototyping.
  */
-void JsonGenerator::setOperationMode(const OperationMode mode)
+void Generator::setOperationMode(const OperationMode mode)
 {
     m_opMode = mode;
     emit operationModeChanged();
@@ -245,7 +237,7 @@ void JsonGenerator::setOperationMode(const OperationMode mode)
 /**
  * Loads the last saved JSON map file (if any)
  */
-void JsonGenerator::readSettings()
+void Generator::readSettings()
 {
     auto path = m_settings.value("json_map_location", "").toString();
     if (!path.isEmpty())
@@ -255,7 +247,7 @@ void JsonGenerator::readSettings()
 /**
  * Saves the location of the last valid JSON map file that was opened (if any)
  */
-void JsonGenerator::writeSettings(const QString &path)
+void Generator::writeSettings(const QString &path)
 {
     m_settings.setValue("json_map_location", path);
 }
@@ -264,19 +256,22 @@ void JsonGenerator::writeSettings(const QString &path)
  * Changes the JSON document to be used to generate the user interface.
  * This function is set to public in order to allow the CSV-replay feature to
  * work by replacing the data/json input source.
+ *
+ * As soon as the JSON document is changed, the @c frame() object is automatically
+ * generated.
  */
-void JsonGenerator::setJsonDocument(const QJsonDocument &document)
+void Generator::setJsonDocument(const QJsonDocument &document)
 {
     m_document = document;
-    if (!m_document.object().isEmpty())
-        emit packetReceived();
+    if (m_frame.read(m_document.object()))
+        emit jsonChanged();
 }
 
 /**
  * Resets all the statistics related to the current serial port device and
  * the JSON map file
  */
-void JsonGenerator::reset()
+void Generator::reset()
 {
     m_dataFormatErrors = 0;
     setJsonDocument(QJsonDocument::fromJson(QByteArray("{}")));
@@ -295,10 +290,10 @@ void JsonGenerator::reset()
  * If JSON parsing is successfull, then the class shall notify the rest of the
  * application in order to process packet data.
  */
-void JsonGenerator::readData(const QByteArray &data)
+void Generator::readData(const QByteArray &data)
 {
     // CSV-replay active, abort
-    if (CsvPlayer::getInstance()->isOpen())
+    if (CSV::Player::getInstance()->isOpen())
         return;
 
     // Data empty, abort
@@ -359,9 +354,10 @@ void JsonGenerator::readData(const QByteArray &data)
             // after two continous errors have been detected)
             if (m_dataFormatErrors == 2)
             {
-                NiceMessageBox(tr("JSON/serial data format mismatch"),
-                               tr("The format of the received data does not "
-                                  "correspond to the selected JSON map file."));
+                Misc::Utilities::showMessageBox(
+                    tr("JSON/serial data format mismatch"),
+                    tr("The format of the received data does not "
+                       "correspond to the selected JSON map file."));
             }
 
             // Stop executing function

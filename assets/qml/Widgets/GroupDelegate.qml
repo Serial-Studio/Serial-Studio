@@ -25,8 +25,8 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
-import Group 1.0
-import Dataset 1.0
+import SerialStudio 1.0
+import SerialStudio 1.0
 
 Window {
     id: root
@@ -43,10 +43,10 @@ Window {
     property Group group: null
 
     Connections {
-        target: CppDataProvider
+        target: Cpp_UI_Provider
         function onUpdated() {
             if (root.enabled)
-                group = CppDataProvider.getGroup(groupIndex)
+                group = Cpp_UI_Provider.getGroup(groupIndex)
         }
     }
 
@@ -69,10 +69,10 @@ Window {
             width: _sv.width - (_sv.ScrollBar.vertical.visible ? 10 : 0)
 
             Repeater {
-                model: group.onPacketReceived
+                model: group.datasetCount
                 delegate: DataDelegate {
                     Layout.fillWidth: true
-                    dataset: group.getDataset(index)
+                    dataset: group.datasets[index]
                 }
             }
         }

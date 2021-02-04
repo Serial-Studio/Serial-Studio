@@ -46,17 +46,17 @@ Control {
     // Group/dataset updating
     //
     Connections {
-        target: CppDataProvider
+        target: Cpp_UI_Provider
         function onUpdated() {
-            root.title = CppDataProvider.projectTitle
-            if (groupGenerator.model !== CppDataProvider.groupCount) {
+            root.title = Cpp_UI_Provider.title
+            if (groupGenerator.model !== Cpp_UI_Provider.groupCount) {
                 var list = []
-                for (var i = 0; i < CppDataProvider.groupCount; ++i)
+                for (var i = 0; i < Cpp_UI_Provider.groupCount; ++i)
                     list.push(true)
 
                 groupGenerator.model = 0
                 viewOptions.groups = list
-                groupGenerator.model = CppDataProvider.groupCount
+                groupGenerator.model = Cpp_UI_Provider.groupCount
             }
         }
     }
@@ -65,16 +65,16 @@ Control {
     // Graph data updating
     //
     Connections {
-        target: CppGraphProvider
+        target: Cpp_UI_GraphProvider
         function onDataUpdated() {
-            if (graphGenerator.model !== CppGraphProvider.graphCount) {
+            if (graphGenerator.model !== Cpp_UI_GraphProvider.graphCount) {
                 var list = []
-                for (var i = 0; i < CppGraphProvider.graphCount; ++i)
+                for (var i = 0; i < Cpp_UI_GraphProvider.graphCount; ++i)
                     list.push(true)
 
                 graphGenerator.model = 0
                 viewOptions.graphs = list
-                graphGenerator.model = CppGraphProvider.graphCount
+                graphGenerator.model = Cpp_UI_GraphProvider.graphCount
             }
         }
     }
@@ -106,7 +106,7 @@ Control {
                 Layout.minimumWidth: 240
                 backgroundColor: "#121218"
                 icon.source: "qrc:/icons/visibility.svg"
-                title: qsTr("View") + CppTranslator.dummy
+                title: qsTr("View") + Cpp_Misc_Translator.dummy
 
                 property var groups: []
                 property var graphs: []
@@ -149,7 +149,7 @@ Control {
 
                             Label {
                                 font.bold: true
-                                text: qsTr("Horizontal Range") + ":" + CppTranslator.dummy
+                                text: qsTr("Horizontal Range") + ":" + Cpp_Misc_Translator.dummy
                             }
 
                             Item {
@@ -171,8 +171,8 @@ Control {
                                 live: false
                                 Layout.fillWidth: true
                                 Layout.alignment: Qt.AlignVCenter
-                                value: CppGraphProvider.displayedPoints
-                                onValueChanged: CppGraphProvider.displayedPoints = value
+                                value: Cpp_UI_GraphProvider.displayedPoints
+                                onValueChanged: Cpp_UI_GraphProvider.displayedPoints = value
                             }
 
                             Label {
@@ -211,7 +211,7 @@ Control {
 
                             Label {
                                 font.bold: true
-                                text: qsTr("Data Groups") + ":" + CppTranslator.dummy
+                                text: qsTr("Data Groups") + ":" + Cpp_Misc_Translator.dummy
                             }
 
                             Item {
@@ -235,7 +235,7 @@ Control {
                                 Layout.fillWidth: true
                                 palette.highlight: "#d72d60"
                                 Component.onCompleted: checked = true
-                                text: CppDataProvider.getGroup(index).title
+                                text: Cpp_UI_Provider.getGroup(index).title
                                 onCheckedChanged: {
                                     viewOptions.groups[index] = checked
                                     viewOptions.groupsChanged()
@@ -272,7 +272,7 @@ Control {
 
                             Label {
                                 font.bold: true
-                                text: qsTr("Data Plots") + ":" + CppTranslator.dummy
+                                text: qsTr("Data Plots") + ":" + Cpp_Misc_Translator.dummy
                             }
 
                             Item {
@@ -296,7 +296,7 @@ Control {
                                 Layout.fillWidth: true
                                 palette.highlight: "#d72d60"
                                 Component.onCompleted: checked = true
-                                text: CppGraphProvider.getDataset(index).title
+                                text: Cpp_UI_GraphProvider.getDataset(index).title
                                 onCheckedChanged: {
                                     viewOptions.graphs[index] = checked
                                     viewOptions.graphsChanged()
@@ -318,7 +318,7 @@ Control {
                 Layout.minimumWidth: 240
                 backgroundColor: "#121218"
                 icon.source: "qrc:/icons/scatter-plot.svg"
-                title: qsTr("Data") + CppTranslator.dummy
+                title: qsTr("Data") + Cpp_Misc_Translator.dummy
 
                 Rectangle {
                     z: 1
@@ -371,7 +371,7 @@ Control {
                                         groupIndex: index
                                         anchors.fill: parent
                                         anchors.margins: app.spacing
-                                        group: CppDataProvider.getGroup(index)
+                                        group: Cpp_UI_Provider.getGroup(index)
                                         enabled: viewOptions.groups[groupIndex]
 
                                         Connections {
@@ -473,8 +473,8 @@ Control {
             Label {
                 font.family: app.monoFont
                 color: palette.brightText
-                visible: !CppCsvPlayer.isOpen
-                text: CppSerialManager.receivedBytes
+                visible: !Cpp_CSV_Player.isOpen
+                text: Cpp_IO_Manager.receivedDataLength
 
                 anchors {
                     right: parent.right

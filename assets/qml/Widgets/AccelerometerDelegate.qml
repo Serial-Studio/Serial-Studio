@@ -24,8 +24,8 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-import Group 1.0
-import Dataset 1.0
+import SerialStudio 1.0
+import SerialStudio 1.0
 
 import "."
 
@@ -68,7 +68,7 @@ Window {
     // Connections with widget manager
     //
     Connections {
-        target: CppWidgetProvider
+        target: Cpp_UI_WidgetProvider
         function onDataChanged() {
             root.calculateMeanGForce()
         }
@@ -79,11 +79,11 @@ Window {
     //
     function calculateMeanGForce() {
         // Update values
-        if (CppWidgetProvider.accelerometerGroupCount() > root.groupIndex) {
-            root.accX  = CppWidgetProvider.accelerometerX(root.groupIndex)
-            root.accY  = CppWidgetProvider.accelerometerY(root.groupIndex)
-            root.accZ  = CppWidgetProvider.accelerometerZ(root.groupIndex)
-            root.title = CppWidgetProvider.accelerometerGroupAt(root.groupIndex).title
+        if (Cpp_UI_WidgetProvider.accelerometerGroupCount() > root.groupIndex) {
+            root.accX  = Cpp_UI_WidgetProvider.accelerometerX(root.groupIndex)
+            root.accY  = Cpp_UI_WidgetProvider.accelerometerY(root.groupIndex)
+            root.accZ  = Cpp_UI_WidgetProvider.accelerometerZ(root.groupIndex)
+            root.title = Cpp_UI_WidgetProvider.accelerometerGroupAt(root.groupIndex).title
         }
 
         // Invalid widget index, reset everything
@@ -167,7 +167,7 @@ Window {
             Layout.maximumWidth: root.gaugeSize
             Layout.minimumHeight: root.gaugeSize
             Layout.maximumHeight: root.gaugeSize
-            title: qsTr("G Units") + CppTranslator.dummy
+            title: qsTr("G Units") + Cpp_Misc_Translator.dummy
         }
 
         //
@@ -190,7 +190,7 @@ Window {
                 color: gauge.valueColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("%1 G MAX").arg(root.max.toFixed(2)) + CppTranslator.dummy
+                text: qsTr("%1 G MAX").arg(root.max.toFixed(2)) + Cpp_Misc_Translator.dummy
             }
 
             Label {
@@ -198,7 +198,7 @@ Window {
                 color: gauge.valueColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("%1 G MIN").arg(root.min.toFixed(2)) + CppTranslator.dummy
+                text: qsTr("%1 G MIN").arg(root.min.toFixed(2)) + Cpp_Misc_Translator.dummy
             }
 
             Item {
@@ -211,7 +211,7 @@ Window {
                 color: gauge.valueColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("%1 G ACT").arg(root.meanGForce.toFixed(2)) + CppTranslator.dummy
+                text: qsTr("%1 G ACT").arg(root.meanGForce.toFixed(2)) + Cpp_Misc_Translator.dummy
 
                 Rectangle {
                     border.width: 1
@@ -227,7 +227,7 @@ Window {
             }
 
             Button {
-                text: qsTr("Reset") + CppTranslator.dummy
+                text: qsTr("Reset") + Cpp_Misc_Translator.dummy
                 Layout.alignment: Qt.AlignHCenter
 
                 onClicked: {

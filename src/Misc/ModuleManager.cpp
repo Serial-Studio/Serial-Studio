@@ -1,0 +1,174 @@
+/*
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+#include "ModuleManager.h"
+
+#include <AppInfo.h>
+
+#include <CSV/Export.h>
+#include <CSV/Player.h>
+
+#include <UI/DataProvider.h>
+#include <UI/GraphProvider.h>
+#include <UI/WidgetProvider.h>
+
+#include <JSON/Frame.h>
+#include <JSON/Group.h>
+#include <JSON/Dataset.h>
+#include <JSON/Generator.h>
+
+#include <IO/Manager.h>
+#include <IO/Console.h>
+#include <IO/DataSources/Serial.h>
+#include <IO/DataSources/Network.h>
+
+#include <Misc/Translator.h>
+#include <Misc/ModuleManager.h>
+
+#include <Logger.h>
+#include <FileAppender.h>
+#include <QSimpleUpdater.h>
+#include <ConsoleAppender.h>
+
+/**
+ * Connect SIGNALS/SLOTS to call singleton destructors before the application
+ * quits.
+ */
+ModuleManager::ModuleManager()
+{
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
+    LOG_INFO() << "Initialized module manager class";
+}
+
+/**
+ * Configures the CuteLogger library to write application logs to the console and
+ * to a file in the system's temp. folder.
+ */
+void ModuleManager::configureLogger()
+{
+    auto fileAppender = new FileAppender;
+    auto consoleAppender = new ConsoleAppender;
+    fileAppender->setFormat(LOG_FORMAT);
+    fileAppender->setFileName(LOG_FILE);
+    consoleAppender->setFormat(LOG_FORMAT);
+    cuteLogger->registerAppender(fileAppender);
+    cuteLogger->registerAppender(consoleAppender);
+}
+
+/**
+ * Sets the default options for QSimpleUpdater, which are:
+ * - Notify user when a new update is found
+ * - Do not notify user when we finish checking for updates
+ * - Do not close application if update is found
+ */
+void ModuleManager::configureUpdater()
+{
+    LOG_INFO() << "Configuring QSimpleUpdater...";
+    QSimpleUpdater::getInstance()->setNotifyOnUpdate(APP_UPDATER_URL, true);
+    QSimpleUpdater::getInstance()->setNotifyOnFinish(APP_UPDATER_URL, false);
+    QSimpleUpdater::getInstance()->setMandatoryUpdate(APP_UPDATER_URL, false);
+    LOG_INFO() << "QSimpleUpdater configuration finished!";
+}
+
+/**
+ * Register custom QML types, for the moment, we have:
+ * - JSON Frame object
+ * - JSON Group object
+ * - JSON Dataset object
+ */
+void ModuleManager::registerQmlTypes()
+{
+    qmlRegisterType<JSON::Frame>("SerialStudio", 1, 0, "Frame");
+    qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
+    qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
+}
+
+/**
+ * Initializes all the application modules, registers them with the QML engine and loads
+ * the "main.qml" file as the root QML file.
+ */
+void ModuleManager::initializeQmlInterface()
+{
+    // Initialize modules
+    LOG_INFO() << "Initializing C++ modules";
+    auto translator = Misc::Translator::getInstance();
+    auto csvExport = CSV::Export::getInstance();
+    auto csvPlayer = CSV::Player::getInstance();
+    auto updater = QSimpleUpdater::getInstance();
+    auto uiDataProvider = UI::DataProvider::getInstance();
+    auto uiGraphProvider = UI::GraphProvider::getInstance();
+    auto uiWidgetProvider = UI::WidgetProvider::getInstance();
+    auto ioManager = IO::Manager::getInstance();
+    auto ioConsole = IO::Console::getInstance();
+    auto ioSerial = IO::DataSources::Serial::getInstance();
+    auto jsonGenerator = JSON::Generator::getInstance();
+    LOG_INFO() << "Finished initializing C++ modules";
+
+    // Register C++ modules with QML
+    auto c = engine()->rootContext();
+    c->setContextProperty("CppUpdater", updater);
+    c->setContextProperty("Cpp_Misc_Translator", translator);
+    c->setContextProperty("Cpp_CSV_Export", csvExport);
+    c->setContextProperty("Cpp_CSV_Player", csvPlayer);
+    c->setContextProperty("Cpp_UI_Provider", uiDataProvider);
+    c->setContextProperty("Cpp_UI_GraphProvider", uiGraphProvider);
+    c->setContextProperty("Cpp_UI_WidgetProvider", uiWidgetProvider);
+    c->setContextProperty("Cpp_IO_Console", ioConsole);
+    c->setContextProperty("Cpp_IO_Manager", ioManager);
+    c->setContextProperty("Cpp_IO_Serial", ioSerial);
+    c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
+
+    // Register app info with QML
+    c->setContextProperty("Cpp_AppName", qApp->applicationName());
+    c->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
+    c->setContextProperty("Cpp_AppVersion", qApp->applicationVersion());
+    c->setContextProperty("Cpp_AppOrganization", qApp->organizationName());
+    c->setContextProperty("Cpp_AppOrganizationDomain", qApp->organizationDomain());
+
+    // Load main.qml
+    engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
+    // Log QML engine status
+    LOG_INFO() << "Finished loading QML interface";
+}
+
+/**
+ * Returns a pointer to the QML application engine
+ */
+QQmlApplicationEngine *ModuleManager::engine()
+{
+    return &m_engine;
+}
+
+/**
+ * Calls the functions needed to safely quit the application
+ */
+void ModuleManager::stopOperations()
+{
+    LOG_INFO() << "Stopping application modules...";
+
+    CSV::Export::getInstance()->closeFile();
+    CSV::Player::getInstance()->closeFile();
+    IO::Manager::getInstance()->disconnectDevice();
+
+    LOG_INFO() << "Application modules stopped";
+}
