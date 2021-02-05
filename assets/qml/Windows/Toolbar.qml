@@ -162,11 +162,17 @@ Control {
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
-            enabled: Cpp_CSV_Export.isOpen
             opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_CSV_Player.isOpen
             icon.source: "qrc:/icons/open.svg"
-            onClicked: Cpp_CSV_Export.openCurrentCsv()
             text: qsTr("Open CSV") + _btSpacer + Cpp_Misc_Translator.dummy
+
+            onClicked: {
+                if (Cpp_CSV_Export.isOpen)
+                    Cpp_CSV_Export.openCurrentCsv()
+                else
+                    Cpp_CSV_Player.openFile()
+            }
 
             Behavior on opacity {NumberAnimation{}}
         }

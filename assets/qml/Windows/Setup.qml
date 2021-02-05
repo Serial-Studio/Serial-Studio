@@ -133,11 +133,18 @@ Control {
             Behavior on opacity {NumberAnimation{}}
             text: Cpp_Misc_Translator.dummy +
                   (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
-                                                             qsTr("Select map file") + "...")
+                                                               qsTr("Select map file") + "...")
         }
 
         //
-        // CSV options
+        // Spacer
+        //
+        Item {
+            height: app.spacing / 2
+        }
+
+        //
+        // Enable/disable CSV logging
         //
         RowLayout {
             Layout.fillWidth: true
@@ -148,19 +155,21 @@ Control {
                 palette.highlight: "#2e895c"
                 Layout.leftMargin: -app.spacing
                 Layout.alignment: Qt.AlignVCenter
-                text: qsTr("CSV Export") + Cpp_Misc_Translator.dummy
+                text: qsTr("Create CSV file") + Cpp_Misc_Translator.dummy
                 onCheckedChanged: Cpp_CSV_Export.exportEnabled = checked
             }
 
-            Button {
+            Item {
                 Layout.fillWidth: true
-                opacity: enabled ? 1 : 0.5
-                enabled: commManual.checked
-                onClicked: Cpp_CSV_Player.openFile()
-                Layout.alignment: Qt.AlignVCenter
-                text: qsTr("CSV Player") + Cpp_Misc_Translator.dummy
+            }
 
-                Behavior on opacity {NumberAnimation{}}
+            RoundButton {
+                icon.width: 24
+                icon.height: 24
+                icon.color: "#fff"
+                icon.source: "qrc:/icons/help.svg"
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
             }
         }
 
@@ -168,7 +177,7 @@ Control {
         // Spacer
         //
         Item {
-            height: app.spacing * 2
+            height: app.spacing / 2
         }
 
         //
