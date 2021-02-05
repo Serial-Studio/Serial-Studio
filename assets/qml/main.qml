@@ -124,7 +124,8 @@ ApplicationWindow {
     // Clears the console text & displays a mini-tutorial
     //
     function showWelcomeGuide() {
-        terminal.text = Cpp_Misc_Translator.welcomeConsoleText()  + "\n\n"
+        Cpp_IO_Console.clear()
+        Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText()  + "\n")
     }
 
     //

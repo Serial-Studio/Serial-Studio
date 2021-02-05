@@ -31,20 +31,20 @@ import "../Widgets" as Widgets
 
 Control {
     id: root
-    Component.onCompleted: Cpp_IO_Console.setTextDocument(textArea.textDocument)
+    //Component.onCompleted: Cpp_IO_Console.setTextDocument(textArea.textDocument)
     background: Rectangle {
         color: app.windowBackgroundColor
     }
-	
-	//
-	// Enable/disable text rendering when visibility changes
-	//
-	onVisibleChanged: Cpp_IO_Console.enableRender = visible
+
+    //
+    // Enable/disable text rendering when visibility changes
+    //
+    onVisibleChanged: Cpp_IO_Console.enableRender = visible
 
     //
     // Console text color
     //
-    property alias text: textArea.text
+    property int fontSize: 12
     readonly property color consoleColor: "#8ecd9d"
 
     //
@@ -83,34 +83,6 @@ Control {
     }
 
     //
-    // Right-click context menu
-    //
-    Menu {
-        id: contextMenu
-
-        MenuItem {
-            text: qsTr("Copy")
-            opacity: enabled ? 1 : 0.5
-            onTriggered: textArea.copy()
-            enabled: textArea.selectedText
-        }
-
-        MenuItem {
-            text: qsTr("Clear")
-            opacity: enabled ? 1 : 0.5
-            enabled: textArea.length > 0
-            onTriggered: Cpp_IO_Console.clear()
-        }
-
-        MenuItem {
-            opacity: enabled ? 1 : 0.5
-            text: qsTr("Save as") + "..."
-            onTriggered: Cpp_IO_Console.save()
-            enabled: Cpp_IO_Console.saveAvailable
-        }
-    }
-
-    //
     // Controls
     //
     ColumnLayout {
@@ -128,75 +100,54 @@ Control {
             Layout.fillHeight: true
             border.color: palette.midlight
 
-            Flickable {
-                id: flick
+            Text {
+                opacity: 0.5
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.margins: app.spacing
+
+                color: root.consoleColor
+                font.family: app.monoFont
+                font.pixelSize: root.fontSize
+                visible: Cpp_IO_Console.lineCount == 0
+                text: qsTr("No data received so far...")
+            }
+
+            ListView {
+                id: model
                 clip: true
                 anchors.fill: parent
                 anchors.margins: app.spacing
-                contentWidth: textArea.paintedWidth
-                contentHeight: textArea.paintedHeight
-                boundsMovement: Flickable.StopAtBounds
-                boundsBehavior: Flickable.DragOverBounds
+                model: Cpp_IO_Console.lineCount
 
                 ScrollBar.vertical: ScrollBar {
-                    policy: ScrollBar.AsNeeded
+                    id: scrollbar
                 }
 
-                function ensureVisible(x, y, w, h)
-                {
-                    if (contentX >= x)
-                        contentX = x;
-                    else if (contentX + width <= x + w)
-                        contentX = x + w - width;
-                    if (contentY >= y)
-                        contentY = y;
-                    else if (contentY + height <= y + h)
-                        contentY = y + h - height;
-                }
+                Connections {
+                    target: Cpp_IO_Console
 
-                TextEdit {
-                    id: textArea
-                    readOnly: true
-                    font.pixelSize: 12
-                    selectByMouse: true
-                    selectByKeyboard: true
-                    color: root.consoleColor
-                    persistentSelection: true
-                    wrapMode: TextEdit.NoWrap
-                    font.family: app.monoFont
-                    width: parent.contentWidth
-                    textFormat: TextEdit.PlainText
-                    selectionColor: palette.highlight
-                    selectedTextColor: palette.highlightedText
-
-                    onTextChanged: {
-                         if (Cpp_IO_Console.autoscroll)
-                             flick.ensureVisible(0, textArea.contentHeight, 1, 14)
+                    function onDataReceived() {
+                        if (Cpp_IO_Console.autoscroll)
+                            model.positionViewAtEnd()
                     }
+                }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        acceptedButtons: Qt.RightButton
+                delegate: Text {
+                    id: line
+                    width: parent.width
+                    color: root.consoleColor
+                    font.family: app.monoFont
+                    font.pixelSize: root.fontSize
+                    text: Cpp_IO_Console.getLine(index)
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
-                        onClicked: {
-                            root.selectStart = textArea.selectionStart;
-                            root.selectEnd = textArea.selectionEnd;
-                            root.curPos = textArea.cursorPosition;
-                            contextMenu.popup()
-                            textArea.cursorPosition = root.curPos;
-                            textArea.select(root.selectStart, root.selectEnd);
-                        }
+                    Connections {
+                        target: Cpp_IO_Console
+                        enabled: Cpp_IO_Console.lineCount == (index + 1)
 
-                        onPressAndHold: {
-                            if (mouse.source === Qt.MouseEventNotSynthesized) {
-                                root.selectStart = textArea.selectionStart;
-                                root.selectEnd = textArea.selectionEnd;
-                                root.curPos = textArea.cursorPosition;
-                                contextMenu.popup();
-                                textArea.cursorPosition = root.curPos;
-                                textArea.select(root.selectStart, root.selectEnd);
-                            }
+                        function onDataReceived() {
+                            line.text = Cpp_IO_Console.getLine(index)
                         }
                     }
                 }
@@ -336,9 +287,9 @@ Control {
                 Layout.maximumWidth: 32
                 icon.color: palette.text
                 opacity: enabled ? 1 : 0.5
-                enabled: textArea.length > 0
                 onClicked: Cpp_IO_Console.clear()
                 icon.source: "qrc:/icons/delete.svg"
+                enabled: Cpp_IO_Console.lineCount > 0
                 Behavior on opacity {NumberAnimation{}}
             }
         }

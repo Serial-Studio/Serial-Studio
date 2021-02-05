@@ -24,14 +24,10 @@
 #define IO_CONSOLE_H
 
 #include <QObject>
-#include <QWidget>
-#include <QTextCursor>
-#include <QQuickTextDocument>
-#include <QtQuick/QQuickPaintedItem>
+#include <QStringList>
 
 namespace IO
 {
-
 class Console : public QObject
 {
     // clang-format off
@@ -66,10 +62,9 @@ class Console : public QObject
     Q_PROPERTY(QString currentHistoryString
                READ currentHistoryString
                NOTIFY historyItemChanged)
-	Q_PROPERTY(bool enableRender
-	           READ enableRender
-			   WRITE setEnableRender
-			   NOTIFY enableRenderChanged)
+    Q_PROPERTY(int lineCount
+               READ lineCount
+               NOTIFY dataReceived)
     // clang-format on
 
 signals:
@@ -80,7 +75,6 @@ signals:
     void lineEndingChanged();
     void displayModeChanged();
     void historyItemChanged();
-    void enableRenderChanged();
     void textDocumentChanged();
     void showTimestampChanged();
 
@@ -112,7 +106,6 @@ public:
 
     bool echo() const;
     bool autoscroll() const;
-    bool enableRender() const;
     bool saveAvailable() const;
     bool showTimestamp() const;
 
@@ -121,7 +114,8 @@ public:
     DisplayMode displayMode() const;
     QString currentHistoryString() const;
 
-    QTextDocument *document();
+    int lineCount() const;
+    Q_INVOKABLE QString getLine(const int line) const;
 
     Q_INVOKABLE QStringList dataModes() const;
     Q_INVOKABLE QStringList lineEndings() const;
@@ -136,14 +130,12 @@ public slots:
     void setEcho(const bool enabled);
     void setDataMode(const DataMode mode);
     void setAutoscroll(const bool enabled);
-    void setEnableRender(const bool enabled);
     void setShowTimestamp(const bool enabled);
     void setLineEnding(const LineEnding mode);
     void setDisplayMode(const DisplayMode mode);
-    void setTextDocument(QQuickTextDocument *document);
+    void append(const QString &str, const bool addTimestamp = false);
 
 private slots:
-    void append(const QString &str);
     void addToHistory(const QString &command);
     void onDataReceived(const QByteArray &data);
 
@@ -156,7 +148,6 @@ private:
 
 private:
     DataMode m_dataMode;
-    QByteArray m_dataBuffer;
     LineEnding m_lineEnding;
     DisplayMode m_displayMode;
 
@@ -164,14 +155,11 @@ private:
 
     bool m_echo;
     bool m_autoscroll;
-    bool m_enableRender;
     bool m_showTimestamp;
     bool m_timestampAdded;
 
+    QStringList m_data;
     QStringList m_historyItems;
-
-    QTextCursor *m_cursor;
-    QQuickTextDocument *m_document;
 };
 }
 

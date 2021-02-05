@@ -34,15 +34,9 @@ using namespace IO;
 static Console *INSTANCE = nullptr;
 
 /**
- * Set buffer size to 15 MB
+ * Set maximum scrollback to 10'000 lines
  */
-static const int MAX_BUFFER_SIZE = 1024 * 1024 * 15;
-
-/**
- * Allow console to process at most 100 lines, more than that will probably slow down
- * the computer. Read https://bugreports.qt.io/browse/QTBUG-37872 for more information.
- */
-static const int MAX_BLOCK_COUNT = 100;
+static const int SCROLLBACK = 10 * 1000;
 
 /**
  * Constructor function
@@ -54,11 +48,8 @@ Console::Console()
     , m_historyItem(0)
     , m_echo(false)
     , m_autoscroll(true)
-    , m_enableRender(false)
     , m_showTimestamp(true)
     , m_timestampAdded(false)
-    , m_cursor(nullptr)
-    , m_document(nullptr)
 {
     clear();
     auto m = Manager::getInstance();
@@ -96,20 +87,11 @@ bool Console::autoscroll() const
 }
 
 /**
- * Returns @c true if current incoming data shall be shown in the console display.
- * We use this values to avoid unnecesary processing when the console is not visible.
- */
-bool Console::enableRender() const
-{
-    return m_enableRender;
-}
-
-/**
  * Returns @c true if data buffer contains information that the user can export.
  */
 bool Console::saveAvailable() const
 {
-    return m_dataBuffer.size() > 0;
+    return lineCount() > 0;
 }
 
 /**
@@ -173,14 +155,22 @@ QString Console::currentHistoryString() const
 }
 
 /**
- * Returns a pointer to the @c
+ * Returns the number of lines of the log file
  */
-QTextDocument *Console::document()
+int Console::lineCount() const
 {
-    if (m_document)
-        return m_document->textDocument();
+    return m_data.count();
+}
 
-    return Q_NULLPTR;
+/**
+ * Returns the string at the given @a line of the log file
+ */
+QString Console::getLine(const int line) const
+{
+    if (line < lineCount())
+        return m_data.at(line);
+
+    return "";
 }
 
 /**
@@ -241,7 +231,15 @@ void Console::save()
         QFile file(path);
         if (file.open(QFile::WriteOnly))
         {
-            file.write(m_dataBuffer);
+            QByteArray data;
+            for (int i = 0; i < lineCount(); ++i)
+            {
+                data.append(getLine(i).toUtf8());
+                data.append("\r");
+                data.append("\n");
+            }
+
+            file.write(data);
             file.close();
 
             Misc::Utilities::revealFile(path);
@@ -257,13 +255,9 @@ void Console::save()
  */
 void Console::clear()
 {
-    // Clear console display
-    if (document())
-        document()->clear();
-
-    // Reserve 15 MB for data buffer
-    m_dataBuffer.clear();
-    m_dataBuffer.reserve(MAX_BUFFER_SIZE);
+    m_data.clear();
+    m_data.reserve(SCROLLBACK);
+    emit dataReceived();
 }
 
 /**
@@ -351,10 +345,8 @@ void Console::send(const QString &data)
         // Display sent data on console (if allowed)
         if (echo())
         {
-            append(dataToString(bin));
+            append(dataToString(bin), showTimestamp());
             m_timestampAdded = false;
-            if (m_cursor && lineEnding() == LineEnding::NoLineEnding)
-                m_cursor->insertBlock();
         }
     }
 
@@ -401,16 +393,6 @@ void Console::setAutoscroll(const bool enabled)
 }
 
 /**
- * Enables/disables text rendering in the console. See @c enableRender() for
- * more information.
- */
-void Console::setEnableRender(const bool enabled)
-{
-    m_enableRender = enabled;
-    emit enableRenderChanged();
-}
-
-/**
  * Changes line ending mode for sent user commands. See @c lineEnding() for more
  * information.
  */
@@ -430,108 +412,69 @@ void Console::setDisplayMode(const DisplayMode mode)
 }
 
 /**
- * Changes the QML text document managed by the console. Data input in the text document
- * is managed automatically by this class, so that the QML interface focuses on arranging
- * the controls nicely, while we focus to make the console display data correctly.
+ * Inserts the given @a string into the list of lines of the console, if @a addTimestamp
+ * is set to @c true, an timestamp is added for each line.
  */
-void Console::setTextDocument(QQuickTextDocument *document)
+void Console::append(const QString &string, const bool addTimestamp)
 {
-    // Delete previous text cursor
-    if (m_cursor)
-        delete m_cursor;
+    // Get current date
+    QString timestamp;
+    if (addTimestamp)
+    {
+        QDateTime dateTime = QDateTime::currentDateTime();
+        timestamp = dateTime.toString("HH:mm:ss.zzz -> ");
+    }
 
-    // Re-assign pointer & register text cursor
-    m_document = document;
-    m_cursor = new QTextCursor(m_document->textDocument());
-    m_cursor->movePosition(QTextCursor::End);
+    // Change CR + NL to new line
+    QString data = string;
+    data = data.replace("\r\n", "\n");
 
-    // Configure text doucment
-    setAutoscroll(autoscroll());
-    m_document->textDocument()->setUndoRedoEnabled(false);
-    m_document->textDocument()->setMaximumBlockCount(MAX_BLOCK_COUNT);
-    emit textDocumentChanged();
+    // Add first item if necessary
+    if (lineCount() == 0)
+        m_data.append("");
+
+    // Construct string to insert
+    QString str;
+    for (int i = 0; i < data.length(); ++i)
+    {
+        if (!m_timestampAdded)
+        {
+            str = m_data.last();
+            str.append(timestamp);
+            m_data.replace(lineCount() - 1, str);
+            m_timestampAdded = true;
+        }
+
+        if (string.at(i) == "\n" || string.at(i) == "\r")
+        {
+            m_data.append("");
+            m_timestampAdded = false;
+        }
+
+        else
+        {
+            str = m_data.last();
+            str.append(data.at(i));
+            m_data.replace(lineCount() - 1, str);
+        }
+    }
+
+    // Remove extra lines
+    while (lineCount() > SCROLLBACK)
+        m_data.removeFirst();
+
+    // Update UI
+    emit dataReceived();
 }
 
 /**
  * Displays the given @a data in the console. @c QByteArray to ~@c QString conversion is
  * done by the @c dataToString() function, which displays incoming data either in UTF-8
  * or in hexadecimal mode.
- *
- * The incoming data is also added to a buffer so that the user can save the file if
- * needed.
  */
 void Console::onDataReceived(const QByteArray &data)
 {
-    // Display data
-    if (enableRender())
-        append(dataToString(data));
-
-    // Append data to buffer
-    m_dataBuffer.append(data);
-    if (m_dataBuffer.size() > MAX_BUFFER_SIZE)
-    {
-        m_dataBuffer.clear();
-        m_dataBuffer.reserve(MAX_BUFFER_SIZE);
-    }
-
-    // Notify UI
-    emit dataReceived();
-}
-
-/**
- * Inserts the given @a string into the QML text document. We use some regex magic to
- * avoid issues with line break formats and we also add the timestamp (if needed).
- */
-void Console::append(const QString &string)
-{
-    // Text cursor invalid, abort
-    if (!m_cursor)
-        return;
-
-    // Get current date
-    QDateTime dateTime = QDateTime::currentDateTime();
-    auto now = dateTime.toString("HH:mm:ss.zzz -> ");
-    if (!showTimestamp())
-        now = "";
-
-    // Change all line breaks to "\n"
-    QString displayedText;
-    QString data = string;
-    data = data.replace(QRegExp("\r?\n"), QChar('\n'));
-
-    // Construct string to insert
-    int lineCount = 0;
-    for (int i = 0; i < data.length(); ++i)
-    {
-        if (!m_timestampAdded)
-        {
-            displayedText.append(now);
-            m_timestampAdded = true;
-        }
-
-        if (string.at(i) == "\n")
-        {
-            ++lineCount;
-            displayedText.append("\n");
-            m_timestampAdded = false;
-        }
-
-        else
-            displayedText.append(data.at(i));
-    }
-
-    // Insert text on console
-    m_cursor->insertText(displayedText);
-
-    //
-    // Clear the document if autoscroll is disabled. We need to do this because if we
-    // set the blockCount() to 0 (infinite num. of lines), we risk overloading the
-    // computer's resources and slowing everything down.
-    //
-    // We need to find a way to deal with large text files in the QML interface...
-    //
-    if (!autoscroll() && document()->blockCount() > MAX_BLOCK_COUNT - 1)
-        document()->clear();
+    append(dataToString(data), showTimestamp());
 }
 
 /**
@@ -610,12 +553,12 @@ QString Console::hexadecimalStr(const QByteArray &data)
     {
         str.append(hex.at(i));
         if ((i + 1) % 2 == 0)
-            str.append("");
+            str.append(" ");
     }
 
     // Add new line & carriage returns
-    str.replace("0a ", "0a\r");
-    str.replace("0d ", "0d\n");
+    str.replace("0a", "0a\r");
+    str.replace("0d", "0d\n");
 
     // Return string
     return str;
