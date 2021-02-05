@@ -66,6 +66,10 @@ class Console : public QObject
     Q_PROPERTY(QString currentHistoryString
                READ currentHistoryString
                NOTIFY historyItemChanged)
+	Q_PROPERTY(bool enableRender
+	           READ enableRender
+			   WRITE setEnableRender
+			   NOTIFY enableRenderChanged)
     // clang-format on
 
 signals:
@@ -76,6 +80,7 @@ signals:
     void lineEndingChanged();
     void displayModeChanged();
     void historyItemChanged();
+	void enableRenderChanged();
     void textDocumentChanged();
     void showTimestampChanged();
 
@@ -107,6 +112,7 @@ public:
 
     bool echo() const;
     bool autoscroll() const;
+	bool enableRender() const;
     bool saveAvailable() const;
     bool showTimestamp() const;
 
@@ -130,6 +136,7 @@ public slots:
     void setEcho(const bool enabled);
     void setDataMode(const DataMode mode);
     void setAutoscroll(const bool enabled);
+	void setEnableRender(const bool enabled);
     void setShowTimestamp(const bool enabled);
     void setLineEnding(const LineEnding mode);
     void setDisplayMode(const DisplayMode mode);
@@ -157,6 +164,7 @@ private:
 
     bool m_echo;
     bool m_autoscroll;
+	bool m_enableRender;
     bool m_showTimestamp;
     bool m_timestampAdded;
 

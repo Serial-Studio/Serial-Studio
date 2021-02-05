@@ -35,6 +35,11 @@ Control {
     background: Rectangle {
         color: app.windowBackgroundColor
     }
+	
+	//
+	// Enable/disable text rendering when visibility changes
+	//
+	onVisibleChanged: Cpp_IO_Console.enableRender = visible
 
     //
     // Console text color

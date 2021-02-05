@@ -39,10 +39,10 @@ static Console *INSTANCE = nullptr;
 static const int MAX_BUFFER_SIZE = 1024 * 1024 * 15;
 
 /**
- * Allow console to process at most 250 lines, more than that will probably slow down
+ * Allow console to process at most 100 lines, more than that will probably slow down
  * the computer. Read https://bugreports.qt.io/browse/QTBUG-37872 for more information.
  */
-static const int MAX_BLOCK_COUNT = 250;
+static const int MAX_BLOCK_COUNT = 100;
 
 /**
  * Constructor function
@@ -54,6 +54,7 @@ Console::Console()
     , m_historyItem(0)
     , m_echo(false)
     , m_autoscroll(true)
+	, m_enableRender(false)
     , m_showTimestamp(true)
     , m_timestampAdded(false)
     , m_cursor(nullptr)
@@ -92,6 +93,15 @@ bool Console::echo() const
 bool Console::autoscroll() const
 {
     return m_autoscroll;
+}
+
+/**
+ * Returns @c true if current incoming data shall be shown in the console display.
+ * We use this values to avoid unnecesary processing when the console is not visible.
+ */ 
+bool Console::enableRender() const
+{
+	return m_enableRender;
 }
 
 /**
@@ -391,6 +401,16 @@ void Console::setAutoscroll(const bool enabled)
 }
 
 /**
+ * Enables/disables text rendering in the console. See @c enableRender() for
+ * more information.
+ */
+void Console::setEnableRender(const bool enabled)
+{
+	m_enableRender = enabled;
+	emit enableRenderChanged();
+}
+
+/**
  * Changes line ending mode for sent user commands. See @c lineEnding() for more
  * information.
  */
@@ -443,7 +463,8 @@ void Console::setTextDocument(QQuickTextDocument *document)
 void Console::onDataReceived(const QByteArray &data)
 {
     // Display data
-    append(dataToString(data));
+	if (enableRender())
+        append(dataToString(data));
 
     // Append data to buffer
     m_dataBuffer.append(data);
@@ -479,6 +500,7 @@ void Console::append(const QString &string)
     data = data.replace(QRegExp("\r?\n"), QChar('\n'));
 
     // Construct string to insert
+	int lineCount = 0;
     for (int i = 0; i < data.length(); ++i)
     {
         if (!m_timestampAdded)
@@ -489,6 +511,7 @@ void Console::append(const QString &string)
 
         if (string.at(i) == "\n")
         {
+			++lineCount;
             displayedText.append("\n");
             m_timestampAdded = false;
         }
