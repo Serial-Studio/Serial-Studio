@@ -55,7 +55,7 @@ Generator::Generator()
     connect(io, SIGNAL(deviceChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(frameReceived(QByteArray)), this, SLOT(readData(QByteArray)));
 
-    LOG_INFO() << "Initialized JSON::FrameGenerator module";
+    LOG_INFO() << "Class initialized";
 }
 
 /**

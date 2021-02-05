@@ -31,7 +31,7 @@ Window {
     //
     // Window options
     //
-    title: qsTr("CSV Player") + Cpp_Misc_Translator.dummy
+    title: qsTr("CSV Player")
     minimumWidth: column.implicitWidth + 4 * app.spacing
     maximumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing

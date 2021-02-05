@@ -36,7 +36,7 @@ Window {
     //
     // Window options
     //
-    title: qsTr("About") + Cpp_Misc_Translator.dummy
+    title: qsTr("About")
     minimumWidth: column.implicitWidth + 4 * app.spacing
     maximumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing
@@ -88,7 +88,7 @@ Window {
                     Label {
                         opacity: 0.5
                         font.pixelSize: 16
-                        text: qsTr("Version %1").arg(Cpp_AppVersion) + Cpp_Misc_Translator.dummy
+                        text: qsTr("Version %1").arg(Cpp_AppVersion)
                     }
                 }
             }
@@ -98,7 +98,7 @@ Window {
                 Layout.fillWidth: true
                 Layout.maximumWidth: 288
                 wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(Cpp_AppOrganization) + Cpp_Misc_Translator.dummy
+                text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(Cpp_AppOrganization)
             }
 
             Label {
@@ -108,7 +108,7 @@ Window {
                 Layout.maximumWidth: 288
                 color: palette.highlightedText
                 wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.") + Cpp_Misc_Translator.dummy
+                text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.")
             }
 
             Item {
@@ -117,13 +117,13 @@ Window {
 
             Button {
                 Layout.fillWidth: true
-                text: qsTr("Contact author") + Cpp_Misc_Translator.dummy
+                text: qsTr("Contact author")
                 onClicked: Qt.openUrlExternally("mailto:alex_spataru@outlook.com")
             }
 
             Button {
                 Layout.fillWidth: true
-                text: qsTr("Report bug") + Cpp_Misc_Translator.dummy
+                text: qsTr("Report bug")
                 onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
             }
 
@@ -131,7 +131,7 @@ Window {
                 Layout.fillWidth: true
                 visible: Cpp_UpdaterEnabled
                 enabled: Cpp_UpdaterEnabled
-                text: qsTr("Check for updates") + Cpp_Misc_Translator.dummy
+                text: qsTr("Check for updates")
                 onClicked: {
                     Cpp_Updater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
                     Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
@@ -141,12 +141,12 @@ Window {
             Button {
                 Layout.fillWidth: true
                 onClicked: Cpp_CSV_Export.openLogFile()
-                text: qsTr("Open log file") + Cpp_Misc_Translator.dummy
+                text: qsTr("Open log file")
             }
 
             Button {
                 Layout.fillWidth: true
-                text: qsTr("Documentation") + Cpp_Misc_Translator.dummy
+                text: qsTr("Documentation")
                 onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
             }
 
@@ -157,7 +157,7 @@ Window {
             Button {
                 Layout.fillWidth: true
                 onClicked: root.close()
-                text: qsTr("Close") + Cpp_Misc_Translator.dummy
+                text: qsTr("Close")
             }
 
             Item {

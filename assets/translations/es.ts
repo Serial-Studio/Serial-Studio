@@ -72,25 +72,33 @@
     </message>
 </context>
 <context>
-    <name>Console</name>
+    <name>CSV::Export</name>
     <message>
-        <source>No data received so far...</source>
-        <translation>No se han recibido datos hasta ahora ...</translation>
+        <source>CSV file not open</source>
+        <translation>Archivo CSV no abierto</translation>
     </message>
     <message>
-        <source>Autoscroll</source>
-        <translation type="vanished">Desplazamiento automático</translation>
+        <source>Cannot find CSV export file!</source>
+        <translation>¡No se puede encontrar el archivo de exportación CSV!</translation>
     </message>
     <message>
-        <source>Send data to device</source>
-        <translation>Enviar datos al dispositivo</translation>
+        <source>CSV File Error</source>
+        <translation>Error de archivo CSV</translation>
+    </message>
+    <message>
+        <source>Cannot open CSV file for writing!</source>
+        <translation>¡No se puede abrir el archivo CSV en modo de escritura!</translation>
     </message>
 </context>
 <context>
-    <name>CsvPlayer</name>
+    <name>CSV::Player</name>
     <message>
-        <source>CSV Player</source>
-        <translation>Reproductor CSV</translation>
+        <source>Select CSV file</source>
+        <translation>Seleccionar archivo CSV</translation>
+    </message>
+    <message>
+        <source>CSV files</source>
+        <translation>Archivos CSV</translation>
     </message>
     <message>
         <source>Invalid configuration for CSV player</source>
@@ -99,14 +107,6 @@
     <message>
         <source>You need to select a JSON map file in order to use this feature</source>
         <translation>Debe seleccionar un archivo de mapa JSON para utilizar esta función</translation>
-    </message>
-    <message>
-        <source>Select CSV file</source>
-        <translation>Seleccionar archivo CSV</translation>
-    </message>
-    <message>
-        <source>CSV files (*.csv)</source>
-        <translation type="vanished">Archivos CSV (* .csv)</translation>
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
@@ -136,9 +136,83 @@
         <source>Replay of %1</source>
         <translation>Reproducción de %1</translation>
     </message>
+</context>
+<context>
+    <name>Console</name>
+    <message>
+        <source>No data received so far...</source>
+        <translation type="vanished">No se han recibido datos hasta ahora ...</translation>
+    </message>
+    <message>
+        <source>Autoscroll</source>
+        <translation>Desplazamiento automático</translation>
+    </message>
+    <message>
+        <source>Send data to device</source>
+        <translation>Enviar datos al dispositivo</translation>
+    </message>
+    <message>
+        <source>Echo</source>
+        <translation>Eco</translation>
+    </message>
+    <message>
+        <source>Show timestamp</source>
+        <translation>Marca de tiempo</translation>
+    </message>
+</context>
+<context>
+    <name>CsvPlayer</name>
+    <message>
+        <source>CSV Player</source>
+        <translation>Reproductor CSV</translation>
+    </message>
+    <message>
+        <source>Invalid configuration for CSV player</source>
+        <translation type="vanished">Configuración inválida para el reproductor CSV</translation>
+    </message>
+    <message>
+        <source>You need to select a JSON map file in order to use this feature</source>
+        <translation type="vanished">Debe seleccionar un archivo de mapa JSON para utilizar esta función</translation>
+    </message>
+    <message>
+        <source>Select CSV file</source>
+        <translation type="vanished">Seleccionar archivo CSV</translation>
+    </message>
+    <message>
+        <source>CSV files (*.csv)</source>
+        <translation type="vanished">Archivos CSV (* .csv)</translation>
+    </message>
+    <message>
+        <source>Serial port open, do you want to continue?</source>
+        <translation type="vanished">Puerto serie abierto, ¿quieres continuar?</translation>
+    </message>
+    <message>
+        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
+        <translation type="vanished">Para utilizar esta función, es necesario desconectarse del puerto serie</translation>
+    </message>
+    <message>
+        <source>There is an error with the data in the CSV file</source>
+        <translation type="vanished">Hay un error con los datos en el archivo CSV</translation>
+    </message>
+    <message>
+        <source>Please verify that the CSV file was created with Serial Studio</source>
+        <translation type="vanished">Verifique que el archivo CSV haya sido creado con Serial Studio</translation>
+    </message>
+    <message>
+        <source>Cannot read CSV file</source>
+        <translation type="vanished">No se puede leer el archivo CSV</translation>
+    </message>
+    <message>
+        <source>Please check file permissions &amp; location</source>
+        <translation type="vanished">Verifique los permisos y la ubicación del archivo</translation>
+    </message>
+    <message>
+        <source>Replay of %1</source>
+        <translation type="vanished">Reproducción de %1</translation>
+    </message>
     <message>
         <source>CSV files</source>
-        <translation>Archivos CSV</translation>
+        <translation type="vanished">Archivos CSV</translation>
     </message>
 </context>
 <context>
@@ -346,26 +420,26 @@
     <name>Export</name>
     <message>
         <source>CSV file not open</source>
-        <translation>Archivo CSV no abierto</translation>
+        <translation type="vanished">Archivo CSV no abierto</translation>
     </message>
     <message>
         <source>Cannot find CSV export file!</source>
-        <translation>¡No se puede encontrar el archivo de exportación CSV!</translation>
+        <translation type="vanished">¡No se puede encontrar el archivo de exportación CSV!</translation>
     </message>
     <message>
         <source>CSV File Error</source>
-        <translation>Error de archivo CSV</translation>
+        <translation type="vanished">Error de archivo CSV</translation>
     </message>
     <message>
         <source>Cannot open CSV file for writing!</source>
-        <translation>¡No se puede abrir el archivo CSV en modo de escritura!</translation>
+        <translation type="vanished">¡No se puede abrir el archivo CSV en modo de escritura!</translation>
     </message>
 </context>
 <context>
     <name>Group</name>
     <message>
         <source>Invalid</source>
-        <translation>Inválido</translation>
+        <translation type="vanished">Inválido</translation>
     </message>
 </context>
 <context>
@@ -384,14 +458,103 @@
     </message>
 </context>
 <context>
-    <name>JsonGenerator</name>
+    <name>IO::Console</name>
+    <message>
+        <source>ASCII</source>
+        <translation>ASCII</translation>
+    </message>
+    <message>
+        <source>HEX</source>
+        <translation>HEX</translation>
+    </message>
+    <message>
+        <source>No line ending</source>
+        <translation>Sin ajuste de línea</translation>
+    </message>
+    <message>
+        <source>New line</source>
+        <translation>Nueva línea</translation>
+    </message>
+    <message>
+        <source>Carriage return</source>
+        <translation>Retorno de carro</translation>
+    </message>
+    <message>
+        <source>NL + CR</source>
+        <translation>Ambos NL &amp; CR</translation>
+    </message>
+    <message>
+        <source>Plain text</source>
+        <translation>Texto sin formato</translation>
+    </message>
+    <message>
+        <source>Hexadecimal</source>
+        <translation>Hexadecimal</translation>
+    </message>
+</context>
+<context>
+    <name>IO::DataSources::Serial</name>
+    <message>
+        <source>None</source>
+        <translation>Ninguno</translation>
+    </message>
+    <message>
+        <source>No Device</source>
+        <translation>Sin Dispositivo</translation>
+    </message>
+    <message>
+        <source>Even</source>
+        <translation>Par</translation>
+    </message>
+    <message>
+        <source>Odd</source>
+        <translation>Impar</translation>
+    </message>
+    <message>
+        <source>Space</source>
+        <translation>Espacio</translation>
+    </message>
+    <message>
+        <source>Mark</source>
+        <translation>Marca</translation>
+    </message>
+    <message>
+        <source>Baud rate registered successfully</source>
+        <translation>Nueva tasa de baudios registrada correctamente</translation>
+    </message>
+    <message>
+        <source>Rate &quot;%1&quot; has been added to baud rate list</source>
+        <translation>Se ha añadido la velocidad &quot;%1&quot; a la lista de tasa de baudios</translation>
+    </message>
+    <message>
+        <source>Select Port</source>
+        <translation>Seleccionar Puerto</translation>
+    </message>
+    <message>
+        <source>Critical serial port error</source>
+        <translation>Error crítico del puerto serie</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Manager</name>
+    <message>
+        <source>Serial port</source>
+        <translation>Puerto serial</translation>
+    </message>
+    <message>
+        <source>Network port</source>
+        <translation>Puerto de red</translation>
+    </message>
+</context>
+<context>
+    <name>JSON::Generator</name>
     <message>
         <source>Select JSON map file</source>
         <translation>Seleccionar mapa JSON</translation>
     </message>
     <message>
-        <source>JSON files (*.json)</source>
-        <translation type="vanished">Archivos JSON (*.json)</translation>
+        <source>JSON files</source>
+        <translation>Archivos JSON</translation>
     </message>
     <message>
         <source>JSON parse error</source>
@@ -421,9 +584,48 @@
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
         <translation>El formato de los datos recibidos no se corresponde con el archivo de mapa JSON seleccionado.</translation>
     </message>
+</context>
+<context>
+    <name>JsonGenerator</name>
+    <message>
+        <source>Select JSON map file</source>
+        <translation type="vanished">Seleccionar mapa JSON</translation>
+    </message>
+    <message>
+        <source>JSON files (*.json)</source>
+        <translation type="vanished">Archivos JSON (*.json)</translation>
+    </message>
+    <message>
+        <source>JSON parse error</source>
+        <translation type="vanished">Error de lectura de JSON</translation>
+    </message>
+    <message>
+        <source>JSON map file loaded successfully!</source>
+        <translation type="vanished">¡El archivo de mapa JSON se cargó correctamente!</translation>
+    </message>
+    <message>
+        <source>File &quot;%1&quot; loaded into memory</source>
+        <translation type="vanished">Archivo &quot;%1&quot; cargado en memoria</translation>
+    </message>
+    <message>
+        <source>Cannot read JSON file</source>
+        <translation type="vanished">Error de lectura del archivo JSON</translation>
+    </message>
+    <message>
+        <source>Please check file permissions &amp; location</source>
+        <translation type="vanished">Verifique los permisos y la ubicación del archivo</translation>
+    </message>
+    <message>
+        <source>JSON/serial data format mismatch</source>
+        <translation type="vanished">El formato de los datos recibidos no coincide</translation>
+    </message>
+    <message>
+        <source>The format of the received data does not correspond to the selected JSON map file.</source>
+        <translation type="vanished">El formato de los datos recibidos no se corresponde con el archivo de mapa JSON seleccionado.</translation>
+    </message>
     <message>
         <source>JSON files</source>
-        <translation>Archivos JSON</translation>
+        <translation type="vanished">Archivos JSON</translation>
     </message>
 </context>
 <context>
@@ -491,11 +693,11 @@
     </message>
     <message>
         <source>No Device</source>
-        <translation>Sin Dispositivo</translation>
+        <translation type="vanished">Sin Dispositivo</translation>
     </message>
     <message>
         <source>Received: %1 %2</source>
-        <translation>Recibido: %1 %2</translation>
+        <translation type="vanished">Recibido: %1 %2</translation>
     </message>
     <message>
         <source>Even Parity</source>
@@ -531,31 +733,31 @@
     </message>
     <message>
         <source>Select Port</source>
-        <translation>Seleccionar Puerto</translation>
+        <translation type="vanished">Seleccionar Puerto</translation>
     </message>
     <message>
         <source>None</source>
-        <translation>Ninguno</translation>
+        <translation type="vanished">Ninguno</translation>
     </message>
     <message>
         <source>Even</source>
-        <translation>Par</translation>
+        <translation type="vanished">Par</translation>
     </message>
     <message>
         <source>Odd</source>
-        <translation>Impar</translation>
+        <translation type="vanished">Impar</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation>Espacio</translation>
+        <translation type="vanished">Espacio</translation>
     </message>
     <message>
         <source>Mark</source>
-        <translation>Marca</translation>
+        <translation type="vanished">Marca</translation>
     </message>
     <message>
         <source>Critical serial port error</source>
-        <translation>Error crítico del puerto serie</translation>
+        <translation type="vanished">Error crítico del puerto serie</translation>
     </message>
     <message>
         <source>Plain text (as it comes)</source>
@@ -571,23 +773,23 @@
     </message>
     <message>
         <source>As it comes</source>
-        <translation>Como viene</translation>
+        <translation type="vanished">Como viene</translation>
     </message>
     <message>
         <source>Remove control characters</source>
-        <translation>Eliminar caracteres de control</translation>
+        <translation type="vanished">Eliminar caracteres de control</translation>
     </message>
     <message>
         <source>Hexadecimal</source>
-        <translation>Hexadecimal</translation>
+        <translation type="vanished">Hexadecimal</translation>
     </message>
     <message>
         <source>Baud rate registered successfully</source>
-        <translation>Nueva tasa de baudios registrada correctamente</translation>
+        <translation type="vanished">Nueva tasa de baudios registrada correctamente</translation>
     </message>
     <message>
         <source>Rate &quot;%1&quot; has been added to baud rate list</source>
-        <translation>Se ha añadido la velocidad &quot;%1&quot; a la lista de tasa de baudios</translation>
+        <translation type="vanished">Se ha añadido la velocidad &quot;%1&quot; a la lista de tasa de baudios</translation>
     </message>
 </context>
 <context>
@@ -642,19 +844,19 @@
     </message>
     <message>
         <source>Open mode</source>
-        <translation>Modo de apertura</translation>
+        <translation type="vanished">Modo de apertura</translation>
     </message>
     <message>
         <source>Read-only</source>
-        <translation>Solo lectura</translation>
+        <translation type="vanished">Solo lectura</translation>
     </message>
     <message>
         <source>Read/write</source>
-        <translation>Lectura/escritura</translation>
+        <translation type="vanished">Lectura/escritura</translation>
     </message>
     <message>
         <source>Display mode</source>
-        <translation>Visualización</translation>
+        <translation type="vanished">Visualización</translation>
     </message>
     <message>
         <source>Custom baud rate</source>
@@ -662,11 +864,15 @@
     </message>
     <message>
         <source>CSV Export</source>
-        <translation>Exportación CSV</translation>
+        <translation type="vanished">Exportación CSV</translation>
     </message>
     <message>
         <source>CSV Player</source>
-        <translation>Reproductor CSV</translation>
+        <translation type="vanished">Reproductor CSV</translation>
+    </message>
+    <message>
+        <source>Create CSV file</source>
+        <translation>Crear archivo CSV</translation>
     </message>
 </context>
 <context>

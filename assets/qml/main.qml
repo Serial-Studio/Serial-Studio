@@ -424,7 +424,7 @@ ApplicationWindow {
                 font.bold: true
                 font.pixelSize: 24
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("Drop JSON and CSV files here") + Cpp_Misc_Translator.dummy
+                text: qsTr("Drop JSON and CSV files here")
             }
         }
 

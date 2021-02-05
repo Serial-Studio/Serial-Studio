@@ -24,7 +24,9 @@
 
 #include <cfloat>
 #include <climits>
+#include <Logger.h>
 #include <JSON/Generator.h>
+#include <ConsoleAppender.h>
 
 using namespace UI;
 
@@ -40,6 +42,7 @@ WidgetProvider::WidgetProvider()
 {
     auto ge = JSON::Generator::getInstance();
     connect(ge, SIGNAL(jsonChanged()), this, SLOT(updateModels()));
+    LOG_INFO() << "Class initialized";
 }
 
 /**

@@ -166,7 +166,7 @@ Window {
             Layout.maximumWidth: root.gaugeSize
             Layout.minimumHeight: root.gaugeSize
             Layout.maximumHeight: root.gaugeSize
-            title: qsTr("G Units") + Cpp_Misc_Translator.dummy
+            title: qsTr("G Units")
         }
 
         //
@@ -189,7 +189,7 @@ Window {
                 color: gauge.valueColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("%1 G MAX").arg(root.max.toFixed(2)) + Cpp_Misc_Translator.dummy
+                text: qsTr("%1 G MAX").arg(root.max.toFixed(2))
             }
 
             Label {
@@ -197,7 +197,7 @@ Window {
                 color: gauge.valueColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("%1 G MIN").arg(root.min.toFixed(2)) + Cpp_Misc_Translator.dummy
+                text: qsTr("%1 G MIN").arg(root.min.toFixed(2))
             }
 
             Item {
@@ -210,7 +210,7 @@ Window {
                 color: gauge.valueColor
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("%1 G ACT").arg(root.meanGForce.toFixed(2)) + Cpp_Misc_Translator.dummy
+                text: qsTr("%1 G ACT").arg(root.meanGForce.toFixed(2))
 
                 Rectangle {
                     border.width: 1
@@ -226,7 +226,7 @@ Window {
             }
 
             Button {
-                text: qsTr("Reset") + Cpp_Misc_Translator.dummy
+                text: qsTr("Reset")
                 Layout.alignment: Qt.AlignHCenter
 
                 onClicked: {

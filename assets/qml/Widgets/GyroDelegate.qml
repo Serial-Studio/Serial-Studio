@@ -186,7 +186,7 @@ Window {
                     color: root.valueColor
                     font.family: app.monoFont
                     Layout.alignment: Qt.AlignLeft
-                    text: qsTr("%1° YAW").arg(controls.formatAngle(root.yawAngle)) + Cpp_Misc_Translator.dummy
+                    text: qsTr("%1° YAW").arg(controls.formatAngle(root.yawAngle))
                 }
 
                 Label {
@@ -194,7 +194,7 @@ Window {
                     color: root.valueColor
                     font.family: app.monoFont
                     Layout.alignment: Qt.AlignLeft
-                    text: qsTr("%1° ROLL").arg(controls.formatAngle(root.rollAngle)) + Cpp_Misc_Translator.dummy
+                    text: qsTr("%1° ROLL").arg(controls.formatAngle(root.rollAngle))
                 }
 
                 Label {
@@ -202,7 +202,7 @@ Window {
                     color: root.valueColor
                     font.family: app.monoFont
                     Layout.alignment: Qt.AlignLeft
-                    text: qsTr("%1° PITCH").arg(controls.formatAngle(root.pitchAngle)) + Cpp_Misc_Translator.dummy
+                    text: qsTr("%1° PITCH").arg(controls.formatAngle(root.pitchAngle))
                 }
             }
         }

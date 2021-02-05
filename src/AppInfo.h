@@ -27,7 +27,7 @@
 #include <QString>
 
 // clang-format off
-#define APP_VERSION     "1.0.12"
+#define APP_VERSION     "1.0.14"
 #define APP_DEVELOPER   "Alex Spataru"
 #define APP_NAME        "Serial Studio"
 #define APP_ICON        ":/images/icon.png"

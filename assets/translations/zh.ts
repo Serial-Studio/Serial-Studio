@@ -68,21 +68,33 @@
     </message>
 </context>
 <context>
-    <name>Console</name>
+    <name>CSV::Export</name>
     <message>
-        <source>No data received so far...</source>
-        <translation>目前未收到任何数据...</translation>
+        <source>CSV file not open</source>
+        <translation>CSV文件未打开</translation>
     </message>
     <message>
-        <source>Send data to device</source>
-        <translation>发送数据到设备</translation>
+        <source>Cannot find CSV export file!</source>
+        <translation>找不到CSV导出的文件！</translation>
+    </message>
+    <message>
+        <source>CSV File Error</source>
+        <translation>CSV文件错误</translation>
+    </message>
+    <message>
+        <source>Cannot open CSV file for writing!</source>
+        <translation>无法打开CSV文件进行写入！</translation>
     </message>
 </context>
 <context>
-    <name>CsvPlayer</name>
+    <name>CSV::Player</name>
     <message>
-        <source>CSV Player</source>
-        <translation>CSV 播放器</translation>
+        <source>Select CSV file</source>
+        <translation>选择CSV文件</translation>
+    </message>
+    <message>
+        <source>CSV files</source>
+        <translation>CSV档案</translation>
     </message>
     <message>
         <source>Invalid configuration for CSV player</source>
@@ -91,14 +103,6 @@
     <message>
         <source>You need to select a JSON map file in order to use this feature</source>
         <translation>您需要选择一个JSON映射文件才能使用此功能</translation>
-    </message>
-    <message>
-        <source>Select CSV file</source>
-        <translation>选择CSV文件</translation>
-    </message>
-    <message>
-        <source>CSV files (*.csv)</source>
-        <translation type="vanished">CSV档案 (*.csv)</translation>
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
@@ -128,9 +132,83 @@
         <source>Replay of %1</source>
         <translation>重播%1</translation>
     </message>
+</context>
+<context>
+    <name>Console</name>
+    <message>
+        <source>No data received so far...</source>
+        <translation type="vanished">目前未收到任何数据...</translation>
+    </message>
+    <message>
+        <source>Send data to device</source>
+        <translation>发送数据到设备</translation>
+    </message>
+    <message>
+        <source>Echo</source>
+        <translation>回声</translation>
+    </message>
+    <message>
+        <source>Autoscroll</source>
+        <translation>自动滚屏</translation>
+    </message>
+    <message>
+        <source>Show timestamp</source>
+        <translation>显示时间戳</translation>
+    </message>
+</context>
+<context>
+    <name>CsvPlayer</name>
+    <message>
+        <source>CSV Player</source>
+        <translation>CSV 播放器</translation>
+    </message>
+    <message>
+        <source>Invalid configuration for CSV player</source>
+        <translation type="vanished">CSV播放器的配置无效</translation>
+    </message>
+    <message>
+        <source>You need to select a JSON map file in order to use this feature</source>
+        <translation type="vanished">您需要选择一个JSON映射文件才能使用此功能</translation>
+    </message>
+    <message>
+        <source>Select CSV file</source>
+        <translation type="vanished">选择CSV文件</translation>
+    </message>
+    <message>
+        <source>CSV files (*.csv)</source>
+        <translation type="vanished">CSV档案 (*.csv)</translation>
+    </message>
+    <message>
+        <source>Serial port open, do you want to continue?</source>
+        <translation type="vanished">串行端口已打开，您要继续吗？</translation>
+    </message>
+    <message>
+        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
+        <translation type="vanished">为了使用此功能，必须断开与串行端口的连接</translation>
+    </message>
+    <message>
+        <source>There is an error with the data in the CSV file</source>
+        <translation type="vanished">CSV文件中的数据有误</translation>
+    </message>
+    <message>
+        <source>Please verify that the CSV file was created with Serial Studio</source>
+        <translation type="vanished">请确认CSV文件是使用Serial Studio创建的</translation>
+    </message>
+    <message>
+        <source>Cannot read CSV file</source>
+        <translation type="vanished">无法读取CSV文件</translation>
+    </message>
+    <message>
+        <source>Please check file permissions &amp; location</source>
+        <translation type="vanished">请检查文件的权限和位置</translation>
+    </message>
+    <message>
+        <source>Replay of %1</source>
+        <translation type="vanished">重播%1</translation>
+    </message>
     <message>
         <source>CSV files</source>
-        <translation>CSV档案</translation>
+        <translation type="vanished">CSV档案</translation>
     </message>
 </context>
 <context>
@@ -338,26 +416,26 @@
     <name>Export</name>
     <message>
         <source>CSV file not open</source>
-        <translation>CSV文件未打开</translation>
+        <translation type="vanished">CSV文件未打开</translation>
     </message>
     <message>
         <source>Cannot find CSV export file!</source>
-        <translation>找不到CSV导出的文件！</translation>
+        <translation type="vanished">找不到CSV导出的文件！</translation>
     </message>
     <message>
         <source>CSV File Error</source>
-        <translation>CSV文件错误</translation>
+        <translation type="vanished">CSV文件错误</translation>
     </message>
     <message>
         <source>Cannot open CSV file for writing!</source>
-        <translation>无法打开CSV文件进行写入！</translation>
+        <translation type="vanished">无法打开CSV文件进行写入！</translation>
     </message>
 </context>
 <context>
     <name>Group</name>
     <message>
         <source>Invalid</source>
-        <translation>无效</translation>
+        <translation type="vanished">无效</translation>
     </message>
 </context>
 <context>
@@ -376,14 +454,103 @@
     </message>
 </context>
 <context>
-    <name>JsonGenerator</name>
+    <name>IO::Console</name>
+    <message>
+        <source>ASCII</source>
+        <translation>ASCII</translation>
+    </message>
+    <message>
+        <source>HEX</source>
+        <translation>HEX</translation>
+    </message>
+    <message>
+        <source>No line ending</source>
+        <translation>无行结尾</translation>
+    </message>
+    <message>
+        <source>New line</source>
+        <translation>新队</translation>
+    </message>
+    <message>
+        <source>Carriage return</source>
+        <translation>回车</translation>
+    </message>
+    <message>
+        <source>NL + CR</source>
+        <translation>新行和回车</translation>
+    </message>
+    <message>
+        <source>Plain text</source>
+        <translation>纯文本</translation>
+    </message>
+    <message>
+        <source>Hexadecimal</source>
+        <translation>十六进制</translation>
+    </message>
+</context>
+<context>
+    <name>IO::DataSources::Serial</name>
+    <message>
+        <source>None</source>
+        <translation>无(None)</translation>
+    </message>
+    <message>
+        <source>No Device</source>
+        <translation>没有设备</translation>
+    </message>
+    <message>
+        <source>Even</source>
+        <translation>偶校验(Even)</translation>
+    </message>
+    <message>
+        <source>Odd</source>
+        <translation>奇校验(Odd)</translation>
+    </message>
+    <message>
+        <source>Space</source>
+        <translation>校验位总为0(Space)</translation>
+    </message>
+    <message>
+        <source>Mark</source>
+        <translation>校验位总为1(Mark)</translation>
+    </message>
+    <message>
+        <source>Baud rate registered successfully</source>
+        <translation>波特率注册成功</translation>
+    </message>
+    <message>
+        <source>Rate &quot;%1&quot; has been added to baud rate list</source>
+        <translation>速率&quot;%1&quot;已添加到波特率列表中</translation>
+    </message>
+    <message>
+        <source>Select Port</source>
+        <translation>选择端口</translation>
+    </message>
+    <message>
+        <source>Critical serial port error</source>
+        <translation>严重的串行端口错误</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Manager</name>
+    <message>
+        <source>Serial port</source>
+        <translation>选择端口</translation>
+    </message>
+    <message>
+        <source>Network port</source>
+        <translation>网络端口</translation>
+    </message>
+</context>
+<context>
+    <name>JSON::Generator</name>
     <message>
         <source>Select JSON map file</source>
         <translation>选择JSON映射文件</translation>
     </message>
     <message>
-        <source>JSON files (*.json)</source>
-        <translation type="vanished">JSON文件 (*.json)</translation>
+        <source>JSON files</source>
+        <translation>JSON文件</translation>
     </message>
     <message>
         <source>JSON parse error</source>
@@ -403,7 +570,7 @@
     </message>
     <message>
         <source>Please check file permissions &amp; location</source>
-        <translation>请检查文件权限和位置</translation>
+        <translation>请检查文件的权限和位置</translation>
     </message>
     <message>
         <source>JSON/serial data format mismatch</source>
@@ -413,9 +580,48 @@
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
         <translation>接收到的数据格式与所选的JSON映射文件不对应。</translation>
     </message>
+</context>
+<context>
+    <name>JsonGenerator</name>
+    <message>
+        <source>Select JSON map file</source>
+        <translation type="vanished">选择JSON映射文件</translation>
+    </message>
+    <message>
+        <source>JSON files (*.json)</source>
+        <translation type="vanished">JSON文件 (*.json)</translation>
+    </message>
+    <message>
+        <source>JSON parse error</source>
+        <translation type="vanished">JSON解析错误</translation>
+    </message>
+    <message>
+        <source>JSON map file loaded successfully!</source>
+        <translation type="vanished">JSON映射文件已成功加载！</translation>
+    </message>
+    <message>
+        <source>File &quot;%1&quot; loaded into memory</source>
+        <translation type="vanished">文件“%1”已加载到内存中</translation>
+    </message>
+    <message>
+        <source>Cannot read JSON file</source>
+        <translation type="vanished">无法读取JSON文件</translation>
+    </message>
+    <message>
+        <source>Please check file permissions &amp; location</source>
+        <translation type="vanished">请检查文件权限和位置</translation>
+    </message>
+    <message>
+        <source>JSON/serial data format mismatch</source>
+        <translation type="vanished">JSON /串行数据格式不匹配</translation>
+    </message>
+    <message>
+        <source>The format of the received data does not correspond to the selected JSON map file.</source>
+        <translation type="vanished">接收到的数据格式与所选的JSON映射文件不对应。</translation>
+    </message>
     <message>
         <source>JSON files</source>
-        <translation>JSON文件</translation>
+        <translation type="vanished">JSON文件</translation>
     </message>
 </context>
 <context>
@@ -436,39 +642,39 @@
     <name>SerialManager</name>
     <message>
         <source>None</source>
-        <translation>无(None)</translation>
+        <translation type="vanished">无(None)</translation>
     </message>
     <message>
         <source>No Device</source>
-        <translation>没有设备</translation>
+        <translation type="vanished">没有设备</translation>
     </message>
     <message>
         <source>Received: %1 %2</source>
-        <translation>已接收 %1 %2</translation>
+        <translation type="vanished">已接收 %1 %2</translation>
     </message>
     <message>
         <source>Even</source>
-        <translation>偶校验(Even)</translation>
+        <translation type="vanished">偶校验(Even)</translation>
     </message>
     <message>
         <source>Odd</source>
-        <translation>奇校验(Odd)</translation>
+        <translation type="vanished">奇校验(Odd)</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation>校验位总为0(Space)</translation>
+        <translation type="vanished">校验位总为0(Space)</translation>
     </message>
     <message>
         <source>Mark</source>
-        <translation>校验位总为1(Mark)</translation>
+        <translation type="vanished">校验位总为1(Mark)</translation>
     </message>
     <message>
         <source>Select Port</source>
-        <translation>选择端口</translation>
+        <translation type="vanished">选择端口</translation>
     </message>
     <message>
         <source>Critical serial port error</source>
-        <translation>严重的串行端口错误</translation>
+        <translation type="vanished">严重的串行端口错误</translation>
     </message>
     <message>
         <source>Plain text (as it comes)</source>
@@ -484,23 +690,23 @@
     </message>
     <message>
         <source>As it comes</source>
-        <translation>随它而来</translation>
+        <translation type="vanished">随它而来</translation>
     </message>
     <message>
         <source>Remove control characters</source>
-        <translation>删除控制字符</translation>
+        <translation type="vanished">删除控制字符</translation>
     </message>
     <message>
         <source>Hexadecimal</source>
-        <translation>十六进制</translation>
+        <translation type="vanished">十六进制</translation>
     </message>
     <message>
         <source>Baud rate registered successfully</source>
-        <translation>波特率注册成功</translation>
+        <translation type="vanished">波特率注册成功</translation>
     </message>
     <message>
         <source>Rate &quot;%1&quot; has been added to baud rate list</source>
-        <translation>速率&quot;%1&quot;已添加到波特率列表中</translation>
+        <translation type="vanished">速率&quot;%1&quot;已添加到波特率列表中</translation>
     </message>
 </context>
 <context>
@@ -555,19 +761,19 @@
     </message>
     <message>
         <source>Open mode</source>
-        <translation>开放模式</translation>
+        <translation type="vanished">开放模式</translation>
     </message>
     <message>
         <source>Read-only</source>
-        <translation>只读</translation>
+        <translation type="vanished">只读</translation>
     </message>
     <message>
         <source>Read/write</source>
-        <translation>读/写</translation>
+        <translation type="vanished">读/写</translation>
     </message>
     <message>
         <source>Display mode</source>
-        <translation>可视化模式</translation>
+        <translation type="vanished">可视化模式</translation>
     </message>
     <message>
         <source>Custom baud rate</source>
@@ -575,11 +781,15 @@
     </message>
     <message>
         <source>CSV Export</source>
-        <translation>导出CSV</translation>
+        <translation type="vanished">导出CSV</translation>
     </message>
     <message>
         <source>CSV Player</source>
-        <translation>CSV 播放器</translation>
+        <translation type="vanished">CSV 播放器</translation>
+    </message>
+    <message>
+        <source>Create CSV file</source>
+        <translation>创建CSV文件</translation>
     </message>
 </context>
 <context>

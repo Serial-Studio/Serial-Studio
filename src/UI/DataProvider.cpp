@@ -22,9 +22,11 @@
 
 #include "DataProvider.h"
 
+#include <Logger.h>
 #include <IO/Manager.h>
 #include <CSV/Player.h>
 #include <JSON/Generator.h>
+#include <ConsoleAppender.h>
 
 using namespace UI;
 
@@ -44,6 +46,7 @@ DataProvider::DataProvider()
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(ge, SIGNAL(jsonChanged()), this, SIGNAL(updated()));
     connect(sm, SIGNAL(connectedChanged()), this, SLOT(resetData()));
+    LOG_INFO() << "Class initialized";
 }
 
 /**

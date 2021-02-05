@@ -68,21 +68,33 @@
     </message>
 </context>
 <context>
-    <name>Console</name>
+    <name>CSV::Export</name>
     <message>
-        <source>No data received so far...</source>
+        <source>CSV file not open</source>
         <translation></translation>
     </message>
     <message>
-        <source>Send data to device</source>
+        <source>Cannot find CSV export file!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>CSV File Error</source>
+        <translation>CSV file error</translation>
+    </message>
+    <message>
+        <source>Cannot open CSV file for writing!</source>
         <translation></translation>
     </message>
 </context>
 <context>
-    <name>CsvPlayer</name>
+    <name>CSV::Player</name>
     <message>
-        <source>CSV Player</source>
+        <source>Select CSV file</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>CSV files</source>
+        <translation>CSV files</translation>
     </message>
     <message>
         <source>Invalid configuration for CSV player</source>
@@ -90,10 +102,6 @@
     </message>
     <message>
         <source>You need to select a JSON map file in order to use this feature</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Select CSV file</source>
         <translation></translation>
     </message>
     <message>
@@ -124,9 +132,35 @@
         <source>Replay of %1</source>
         <translation></translation>
     </message>
+</context>
+<context>
+    <name>Console</name>
+    <message>
+        <source>Send data to device</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Echo</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Autoscroll</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Show timestamp</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>CsvPlayer</name>
+    <message>
+        <source>CSV Player</source>
+        <translation></translation>
+    </message>
     <message>
         <source>CSV files</source>
-        <translation>CSV files</translation>
+        <translation type="vanished">CSV files</translation>
     </message>
 </context>
 <context>
@@ -309,27 +343,8 @@
 <context>
     <name>Export</name>
     <message>
-        <source>CSV file not open</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cannot find CSV export file!</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>CSV File Error</source>
-        <translation>CSV file error</translation>
-    </message>
-    <message>
-        <source>Cannot open CSV file for writing!</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>Group</name>
-    <message>
-        <source>Invalid</source>
-        <translation></translation>
+        <translation type="vanished">CSV file error</translation>
     </message>
 </context>
 <context>
@@ -348,9 +363,102 @@
     </message>
 </context>
 <context>
-    <name>JsonGenerator</name>
+    <name>IO::Console</name>
+    <message>
+        <source>ASCII</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>HEX</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>No line ending</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>New line</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Carriage return</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>NL + CR</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Plain text</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Hexadecimal</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>IO::DataSources::Serial</name>
+    <message>
+        <source>None</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>No Device</source>
+        <translation>No device</translation>
+    </message>
+    <message>
+        <source>Even</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Odd</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Space</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mark</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Baud rate registered successfully</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Rate &quot;%1&quot; has been added to baud rate list</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Select Port</source>
+        <translation>Select port</translation>
+    </message>
+    <message>
+        <source>Critical serial port error</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>IO::Manager</name>
+    <message>
+        <source>Serial port</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Network port</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>JSON::Generator</name>
     <message>
         <source>Select JSON map file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>JSON files</source>
         <translation></translation>
     </message>
     <message>
@@ -381,10 +489,6 @@
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
         <translation></translation>
     </message>
-    <message>
-        <source>JSON files</source>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>MapDelegate</name>
@@ -404,59 +508,11 @@
     <name>SerialManager</name>
     <message>
         <source>No Device</source>
-        <translation>No device</translation>
-    </message>
-    <message>
-        <source>Received: %1 %2</source>
-        <translation></translation>
+        <translation type="vanished">No device</translation>
     </message>
     <message>
         <source>Select Port</source>
-        <translation>Select port</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Even</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Odd</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Space</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Mark</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Critical serial port error</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>As it comes</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Remove control characters</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hexadecimal</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Baud rate registered successfully</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Rate &quot;%1&quot; has been added to baud rate list</source>
-        <translation></translation>
+        <translation type="vanished">Select port</translation>
     </message>
 </context>
 <context>
@@ -510,27 +566,7 @@
         <translation></translation>
     </message>
     <message>
-        <source>Open mode</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Read-only</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Read/write</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Display mode</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>CSV Export</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>CSV Player</source>
+        <source>Create CSV file</source>
         <translation></translation>
     </message>
 </context>

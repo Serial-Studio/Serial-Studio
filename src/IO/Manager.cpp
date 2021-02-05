@@ -46,6 +46,7 @@ Manager::Manager()
     , m_finishSequence("*/")
 {
     setWatchdogInterval(15);
+    LOG_INFO() << "Class initialized";
 }
 
 /**
@@ -313,6 +314,9 @@ void Manager::disconnectDevice()
         // Update UI
         emit deviceChanged();
         emit connectedChanged();
+
+        // Log changes
+        LOG_INFO() << "Device disconnected";
     }
 }
 
@@ -495,4 +499,6 @@ void Manager::setDevice(QIODevice *device)
     disconnectDevice();
     m_device = device;
     emit deviceChanged();
+
+    LOG_INFO() << "Device pointer set to" << m_device;
 }

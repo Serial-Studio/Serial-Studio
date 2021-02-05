@@ -55,8 +55,7 @@
  */
 ModuleManager::ModuleManager()
 {
-    connect(engine(), SIGNAL(quit()), this, SLOT(stopOperations()));
-    LOG_INFO() << "Initialized module manager class";
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
 }
 
 /**
@@ -100,9 +99,11 @@ void ModuleManager::configureUpdater()
  */
 void ModuleManager::registerQmlTypes()
 {
+    LOG_INFO() << "Registering QML types...";
     qmlRegisterType<JSON::Frame>("SerialStudio", 1, 0, "Frame");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
+    LOG_INFO() << "QML types registered!";
 }
 
 /**
@@ -143,8 +144,8 @@ void ModuleManager::initializeQmlInterface()
     LOG_INFO() << "Finished initializing C++ modules";
 
     // Retranslate the QML interface automagically
-    connect(translator, &Misc::Translator::languageChanged,
-            engine(), &QQmlEngine::retranslate);
+    LOG_INFO() << "Loading QML interface...";
+    connect(translator, SIGNAL(languageChanged()), engine(), SLOT(retranslate()));
 
     // Register C++ modules with QML
     auto c = engine()->rootContext();

@@ -56,7 +56,7 @@ Player::Player()
     , m_timestamp("")
 {
     connect(this, SIGNAL(playerStateChanged()), this, SLOT(updateData()));
-    LOG_INFO() << "Initialized CSV Player module";
+    LOG_INFO() << "Class initialized";
 }
 
 /**

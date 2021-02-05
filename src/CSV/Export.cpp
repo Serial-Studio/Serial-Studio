@@ -56,6 +56,7 @@ Export::Export()
     connect(io, SIGNAL(connectedChanged()), this, SLOT(closeFile()));
 
     QTimer::singleShot(1000, this, SLOT(writeValues()));
+    LOG_INFO() << "Class initialized";
 }
 
 /**

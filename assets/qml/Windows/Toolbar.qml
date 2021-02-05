@@ -88,7 +88,7 @@ Control {
             icon.color: palette.text
             onClicked: root.setupClicked()
             icon.source: "qrc:/icons/settings.svg"
-            text: qsTr("Setup") + _btSpacer + Cpp_Misc_Translator.dummy
+            text: qsTr("Setup") + _btSpacer
         }
 
         Button {
@@ -102,7 +102,7 @@ Control {
             onClicked: root.consoleClicked()
             icon.source: "qrc:/icons/code.svg"
             enabled: dataBt.enabled || widgetsBt.enabled
-            text: qsTr("Console") + _btSpacer + Cpp_Misc_Translator.dummy
+            text: qsTr("Console") + _btSpacer
         }
 
         Button {
@@ -116,7 +116,7 @@ Control {
             onClicked: root.dataClicked()
             enabled: Cpp_UI_Provider.groupCount > 0
             icon.source: "qrc:/icons/equalizer.svg"
-            text: qsTr("Dashboard") + _btSpacer + Cpp_Misc_Translator.dummy
+            text: qsTr("Dashboard") + _btSpacer
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
@@ -133,7 +133,7 @@ Control {
             onClicked: root.widgetsClicked()
             icon.source: "qrc:/icons/chart.svg"
             enabled: Cpp_UI_WidgetProvider.totalWidgetCount > 0
-            text: qsTr("Widgets") + _btSpacer + Cpp_Misc_Translator.dummy
+            text: qsTr("Widgets") + _btSpacer
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
@@ -149,7 +149,7 @@ Control {
             icon.color: palette.text
             onClicked: root.aboutClicked()
             icon.source: "qrc:/icons/info.svg"
-            text: qsTr("About") + Cpp_Misc_Translator.dummy
+            text: qsTr("About")
         }
 
         Item {
@@ -165,7 +165,7 @@ Control {
             opacity: enabled ? 1 : 0.5
             enabled: !Cpp_CSV_Player.isOpen
             icon.source: "qrc:/icons/open.svg"
-            text: qsTr("Open CSV") + _btSpacer + Cpp_Misc_Translator.dummy
+            text: qsTr("Open CSV") + _btSpacer
 
             onClicked: {
                 if (Cpp_CSV_Export.isOpen)

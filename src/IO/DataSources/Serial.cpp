@@ -54,6 +54,7 @@ Serial::Serial()
 
     // Build serial devices list
     refreshSerialDevices();
+    LOG_INFO() << "Class initialized";
 }
 
 /**
@@ -344,10 +345,6 @@ void Serial::setBaudRate(const qint32 rate)
     // Update serial port config
     if (port())
         port()->setBaudRate(baudRate());
-
-    // Update baud rate index
-    // if (baudRateList().contains(QString::number(rate)))
-    //    setBaudRateIndex(baudRateList().indexOf(QString::number(rate)));
 
     // Update user interface
     emit baudRateChanged();

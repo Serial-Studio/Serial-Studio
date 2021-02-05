@@ -47,6 +47,7 @@ Console::Console()
 {
     auto m = Manager::getInstance();
     connect(m, &Manager::dataReceived, this, &Console::onDataReceived);
+    LOG_INFO() << "Class initialized";
 }
 
 /**

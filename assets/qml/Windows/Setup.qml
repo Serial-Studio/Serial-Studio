@@ -57,20 +57,14 @@ Control {
     Connections {
         target: Cpp_Misc_Translator
         function onLanguageChanged() {
-            var portIndex = portSelector.currentIndex
             var oldParityIndex = parity.currentIndex
-            var oldDisplayModeIndex = displayMode.currentIndex
             var oldFlowControlIndex = flowControl.currentIndex
 
             parity.model = Cpp_IO_Serial.parityList
-            portSelector.model = Cpp_IO_Serial.portList
             flowControl.model = Cpp_IO_Serial.flowControlList
-            displayMode.model = Cpp_IO_Serial.consoleDisplayModes
 
             parity.currentIndex = oldParityIndex
             flowControl.currentIndex = oldFlowControlIndex
-            displayMode.currentIndex = oldDisplayModeIndex
-            portSelector.currentIndex = portIndex
         }
     }
 
@@ -99,11 +93,11 @@ Control {
         //
         Label {
             font.bold: true
-            text: qsTr("Communication Mode") + ":" + Cpp_Misc_Translator.dummy
+            text: qsTr("Communication Mode") + ":"
         } RadioButton {
             id: commAuto
             checked: true
-            text: qsTr("Auto (JSON from serial device)") + Cpp_Misc_Translator.dummy
+            text: qsTr("Auto (JSON from serial device)")
             onCheckedChanged: {
                 if (checked)
                     Cpp_JSON_Generator.setOperationMode(1)
@@ -113,7 +107,7 @@ Control {
         } RadioButton {
             id: commManual
             checked: false
-            text: qsTr("Manual (use JSON map file)") + Cpp_Misc_Translator.dummy
+            text: qsTr("Manual (use JSON map file)")
             onCheckedChanged: {
                 if (checked)
                     Cpp_JSON_Generator.setOperationMode(0)
@@ -131,8 +125,7 @@ Control {
             enabled: commManual.checked
             onClicked: Cpp_JSON_Generator.loadJsonMap()
             Behavior on opacity {NumberAnimation{}}
-            text: Cpp_Misc_Translator.dummy +
-                  (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
+            text: (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
                                                                qsTr("Select map file") + "...")
         }
 
@@ -149,13 +142,12 @@ Control {
         RowLayout {
             Layout.fillWidth: true
 
-            CheckBox {
+            Switch {
                 id: csvLogging
                 checked: true
                 palette.highlight: "#2e895c"
-                Layout.leftMargin: -app.spacing
+                text: qsTr("Create CSV file")
                 Layout.alignment: Qt.AlignVCenter
-                text: qsTr("Create CSV file") + Cpp_Misc_Translator.dummy
                 onCheckedChanged: Cpp_CSV_Export.exportEnabled = checked
             }
 
@@ -196,7 +188,7 @@ Control {
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Serial.connected
                 Behavior on opacity {NumberAnimation{}}
-                text: qsTr("COM Port") + ":" + Cpp_Misc_Translator.dummy
+                text: qsTr("COM Port") + ":"
             } ComboBox {
                 id: portSelector
                 Layout.fillWidth: true
@@ -219,7 +211,7 @@ Control {
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Serial.connected
                 Behavior on opacity {NumberAnimation{}}
-                text: qsTr("Baud Rate") + ":" + Cpp_Misc_Translator.dummy
+                text: qsTr("Baud Rate") + ":"
             } ComboBox {
                 id: baudRate
                 editable: true
@@ -257,7 +249,7 @@ Control {
             // Data bits selector
             //
             Label {
-                text: qsTr("Data Bits") + ":" + Cpp_Misc_Translator.dummy
+                text: qsTr("Data Bits") + ":"
             } ComboBox {
                 id: dataBits
                 Layout.fillWidth: true
@@ -273,7 +265,7 @@ Control {
             // Parity selector
             //
             Label {
-                text: qsTr("Parity") + ":" + Cpp_Misc_Translator.dummy
+                text: qsTr("Parity") + ":"
             } ComboBox {
                 id: parity
                 Layout.fillWidth: true
@@ -289,7 +281,7 @@ Control {
             // Stop bits selector
             //
             Label {
-                text: qsTr("Stop Bits") + ":" + Cpp_Misc_Translator.dummy
+                text: qsTr("Stop Bits") + ":"
             } ComboBox {
                 id: stopBits
                 Layout.fillWidth: true
@@ -305,7 +297,7 @@ Control {
             // Flow control selector
             //
             Label {
-                text: qsTr("Flow Control") + ":" + Cpp_Misc_Translator.dummy
+                text: qsTr("Flow Control") + ":"
             } ComboBox {
                 id: flowControl
                 Layout.fillWidth: true
@@ -332,7 +324,7 @@ Control {
             // Language selector
             //
             Label {
-                text: qsTr("Language") + ":" + Cpp_Misc_Translator.dummy
+                text: qsTr("Language") + ":"
             } ComboBox {
                 id: languageCombo
                 Layout.fillWidth: true

@@ -26,8 +26,10 @@
 #include <QXYSeries>
 #include <QMetaType>
 
+#include <Logger.h>
 #include <CSV/Player.h>
 #include <JSON/Generator.h>
+#include <ConsoleAppender.h>
 
 using namespace UI;
 
@@ -68,6 +70,7 @@ GraphProvider::GraphProvider()
             this, SLOT(csvPlayerFixes()));
 
     // clang-format on
+    LOG_INFO() << "Class initialized";
 }
 
 /**

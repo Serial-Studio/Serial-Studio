@@ -143,7 +143,11 @@ Control {
                 font.family: app.monoFont
                 opacity: enabled ? 1 : 0.5
                 enabled: Cpp_IO_Manager.readWrite
-                placeholderText: qsTr("Send data to device") + "..." + Cpp_Misc_Translator.dummy
+                placeholderText: qsTr("Send data to device") + "..."
+
+                validator: RegExpValidator {
+                    regExp: hexCheckbox.checked ? /^[a-fA-F0-9]+$/ : /[\s\S]*/
+                }
 
                 Keys.onReturnPressed: root.sendData()
 

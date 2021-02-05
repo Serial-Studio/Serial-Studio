@@ -125,7 +125,7 @@ Window {
                 checkable: true
                 Layout.leftMargin: -6
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("Center on coordinate") + Cpp_Misc_Translator.dummy
+                text: qsTr("Center on coordinate")
                 onCheckedChanged: {
                     if (checked)
                         root.centerMap()

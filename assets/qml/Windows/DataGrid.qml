@@ -106,7 +106,7 @@ Control {
                 Layout.minimumWidth: 240
                 backgroundColor: "#121218"
                 icon.source: "qrc:/icons/visibility.svg"
-                title: qsTr("View") + Cpp_Misc_Translator.dummy
+                title: qsTr("View")
 
                 property var groups: []
                 property var graphs: []
@@ -149,7 +149,7 @@ Control {
 
                             Label {
                                 font.bold: true
-                                text: qsTr("Horizontal Range") + ":" + Cpp_Misc_Translator.dummy
+                                text: qsTr("Horizontal Range") + ":"
                             }
 
                             Item {
@@ -211,7 +211,7 @@ Control {
 
                             Label {
                                 font.bold: true
-                                text: qsTr("Data Groups") + ":" + Cpp_Misc_Translator.dummy
+                                text: qsTr("Data Groups") + ":"
                             }
 
                             Item {
@@ -272,7 +272,7 @@ Control {
 
                             Label {
                                 font.bold: true
-                                text: qsTr("Data Plots") + ":" + Cpp_Misc_Translator.dummy
+                                text: qsTr("Data Plots") + ":"
                             }
 
                             Item {
@@ -318,7 +318,7 @@ Control {
                 Layout.minimumWidth: 240
                 backgroundColor: "#121218"
                 icon.source: "qrc:/icons/scatter-plot.svg"
-                title: qsTr("Data") + Cpp_Misc_Translator.dummy
+                title: qsTr("Data")
 
                 Rectangle {
                     z: 1

@@ -38,7 +38,7 @@ static Translator *INSTANCE = nullptr;
 Translator::Translator()
 {
     m_language = systemLanguage();
-    LOG_INFO() << "Initialized Translator module";
+    LOG_INFO() << "Class initialized";
     LOG_INFO() << "System language" << systemLanguage();
 }
 
@@ -89,21 +89,6 @@ int Translator::systemLanguage() const
     }
 
     return lang;
-}
-
-/**
- * Returns an empty string, this function should be used with QML to
- * automatically update all the strings without the need of restarting the
- * application. For example, the following QML code:
- *
- *      text: qsTr("Text") + Cpp_Misc_Translator.dummyString
- *
- * Will force the QML interface to update the value of @a text when the language
- * is changed.
- */
-QString Translator::dummyString() const
-{
-    return "";
 }
 
 /**
