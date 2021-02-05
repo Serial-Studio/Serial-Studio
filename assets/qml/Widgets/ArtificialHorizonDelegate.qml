@@ -19,6 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+ 
+//
+// NOTE: This file heavily based on some of the widgets created by the developers
+//       of QGroundControl (https://github.com/mavlink/qgroundcontrol)
+//       Kudos to them!
+//
 
 import QtQuick 2.12
 import QtQuick.Controls 2.12
