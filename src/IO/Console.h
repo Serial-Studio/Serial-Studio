@@ -63,10 +63,6 @@ class Console : public QObject
     Q_PROPERTY(QString currentHistoryString
                READ currentHistoryString
                NOTIFY historyItemChanged)
-    Q_PROPERTY(QQuickTextDocument* document
-               READ document
-               WRITE setTextDocument
-               NOTIFY textDocumentChanged)
     // clang-format on
 
 signals:
@@ -114,7 +110,7 @@ public:
     DisplayMode displayMode() const;
     QString currentHistoryString() const;
 
-    QQuickTextDocument *document();
+    QTextDocument *document();
 
     Q_INVOKABLE QStringList dataModes() const;
     Q_INVOKABLE QStringList lineEndings() const;
@@ -136,9 +132,9 @@ public slots:
     void setTextDocument(QQuickTextDocument *document);
 
 private slots:
-    void addToHistory(const QString &history);
-    void onDataReceived(const QByteArray &data);
     void append(const QString &str);
+    void addToHistory(const QString &command);
+    void onDataReceived(const QByteArray &data);
 
 private:
     Console();
@@ -157,7 +153,7 @@ private:
     bool m_echo;
     bool m_autoscroll;
     bool m_showTimestamp;
-    bool m_dateAdded;
+    bool m_timestampAdded;
 
     QStringList m_historyItems;
 
