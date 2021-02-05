@@ -30,6 +30,27 @@
 #include <Misc/ModuleManager.h>
 
 /**
+ * Prints the current application version to the console
+ */
+static void cliShowVersion()
+{
+    auto appver = QString("%1 version %2").arg(APP_NAME).arg(APP_VERSION);
+    auto author = QString("Written by Alex Spataru <https://github.com/alex-spataru>");
+
+    qDebug() << appver.toStdString().c_str();
+    qDebug() << author.toStdString().c_str();
+}
+
+/**
+ * Removes all application settings
+ */
+static void cliResetSettings()
+{
+    QSettings(APP_DEVELOPER, APP_NAME).clear();
+    qDebug() << APP_NAME << "settings cleared!";
+}
+
+/**
  * @brief Entry-point function of the application
  *
  * @param argc argument count
@@ -48,6 +69,27 @@ int main(int argc, char **argv)
     app.setApplicationVersion(APP_VERSION);
     app.setOrganizationName(APP_DEVELOPER);
     app.setOrganizationDomain(APP_SUPPORT_URL);
+
+    // Read arguments
+    QString arguments;
+    if (app.arguments().count() >= 2)
+        arguments = app.arguments().at(1);
+
+    // There are some CLI arguments, read them
+    if (!arguments.isEmpty() && arguments.startsWith("-"))
+    {
+        if (arguments == "-v" || arguments == "--version")
+        {
+            cliShowVersion();
+            return EXIT_SUCCESS;
+        }
+
+        else if (arguments == "-r" || arguments == "--reset")
+        {
+            cliResetSettings();
+            return EXIT_SUCCESS;
+        }
+    }
 
     // Create module manager & configure the logger
     ModuleManager moduleManager;
