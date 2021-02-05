@@ -48,6 +48,9 @@ class Console : public QObject
                READ showTimestamp
                WRITE setShowTimestamp
                NOTIFY showTimestampChanged)
+    Q_PROPERTY(bool saveAvailable
+               READ saveAvailable
+               NOTIFY dataReceived)
     Q_PROPERTY(IO::Console::DataMode dataMode
                READ dataMode
                WRITE setDataMode
@@ -67,6 +70,7 @@ class Console : public QObject
 
 signals:
     void echoChanged();
+    void dataReceived();
     void dataModeChanged();
     void autoscrollChanged();
     void lineEndingChanged();
@@ -103,6 +107,7 @@ public:
 
     bool echo() const;
     bool autoscroll() const;
+    bool saveAvailable() const;
     bool showTimestamp() const;
 
     DataMode dataMode() const;
@@ -145,6 +150,7 @@ private:
 
 private:
     DataMode m_dataMode;
+    QByteArray m_dataBuffer;
     LineEnding m_lineEnding;
     DisplayMode m_displayMode;
 

@@ -41,6 +41,13 @@ Control {
     //
     property alias text: textArea.text
     readonly property color consoleColor: "#8ecd9d"
+
+    //
+    // Hacks to allow context menu to work
+    //
+    property int curPos
+    property int selectEnd
+    property int selectStart
     
     //
     // Function to send through serial port data
@@ -60,6 +67,42 @@ Control {
         property alias autoscroll: autoscrollCheck.checked
         property alias lineEnding: lineEndingCombo.currentIndex
         property alias displayMode: displayModeCombo.currentIndex
+    }
+
+    //
+    // Shortcut to copy selection of console
+    //
+    Shortcut {
+        sequence: StandardKey.Copy
+        onActivated: textArea.copy()
+    }
+
+    //
+    // Right-click context menu
+    //
+    Menu {
+        id: contextMenu
+
+        MenuItem {
+            text: qsTr("Copy")
+            opacity: enabled ? 1 : 0.5
+            onTriggered: textArea.copy()
+            enabled: textArea.selectedText
+        }
+
+        MenuItem {
+            text: qsTr("Clear")
+            opacity: enabled ? 1 : 0.5
+            enabled: textArea.length > 0
+            onTriggered: Cpp_IO_Console.clear()
+        }
+
+        MenuItem {
+            opacity: enabled ? 1 : 0.5
+            text: qsTr("Save as") + "..."
+            onTriggered: Cpp_IO_Console.save()
+            enabled: Cpp_IO_Console.saveAvailable
+        }
     }
 
     //
@@ -111,17 +154,53 @@ Control {
 
                 TextEdit {
                     id: textArea
+                    focus: true
                     readOnly: true
                     font.pixelSize: 12
                     width: flick.width
                     height: flick.height
+                    selectByMouse: true
+                    selectByKeyboard: true
                     color: root.consoleColor
+                    persistentSelection: true
                     wrapMode: TextEdit.NoWrap
                     font.family: app.monoFont
+                    selectionColor: palette.highlight
+                    selectedTextColor: palette.highlightedText
                     onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
                     onTextChanged: {
                         if (Cpp_IO_Console.autoscroll)
                             textArea.cursorPosition = textArea.length
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        acceptedButtons: Qt.RightButton
+
+                        onClicked: {
+                            root.selectStart = textArea.selectionStart;
+                            root.selectEnd = textArea.selectionEnd;
+                            root.curPos = textArea.cursorPosition;
+                            contextMenu.x = mouse.x;
+                            contextMenu.y = mouse.y;
+                            contextMenu.open();
+                            textArea.cursorPosition = root.curPos;
+                            textArea.select(root.selectStart, root.selectEnd);
+                        }
+
+                        onPressAndHold: {
+                            if (mouse.source === Qt.MouseEventNotSynthesized) {
+                                root.selectStart = textArea.selectionStart;
+                                root.selectEnd = textArea.selectionEnd;
+                                root.curPos = textArea.cursorPosition;
+                                contextMenu.x = mouse.x;
+                                contextMenu.y = mouse.y;
+                                contextMenu.open();
+                                textArea.cursorPosition = root.curPos;
+                                textArea.select(root.selectStart, root.selectEnd);
+                            }
+                        }
                     }
                 }
             }
@@ -246,6 +325,18 @@ Control {
 
             Button {
                 height: 24
+                Layout.maximumWidth: 32
+                icon.color: palette.text
+                opacity: enabled ? 1 : 0.5
+                onClicked: Cpp_IO_Console.save()
+                icon.source: "qrc:/icons/save.svg"
+                enabled: Cpp_IO_Console.saveAvailable
+                Behavior on opacity {NumberAnimation{}}
+            }
+
+            Button {
+                height: 24
+                Layout.maximumWidth: 32
                 icon.color: palette.text
                 opacity: enabled ? 1 : 0.5
                 enabled: textArea.length > 0

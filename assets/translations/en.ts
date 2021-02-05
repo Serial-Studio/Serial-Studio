@@ -151,6 +151,18 @@
         <source>Show timestamp</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Copy</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>CsvPlayer</name>
@@ -394,6 +406,18 @@
     </message>
     <message>
         <source>Hexadecimal</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Export console data</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Text files</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>File save error</source>
         <translation></translation>
     </message>
 </context>

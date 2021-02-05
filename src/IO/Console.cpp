@@ -23,12 +23,20 @@
 #include "Console.h"
 #include "Manager.h"
 
+#include <QFile>
 #include <Logger.h>
 #include <QTextCodec>
+#include <QFileDialog>
+#include <Misc/Utilities.h>
 #include <ConsoleAppender.h>
 
 using namespace IO;
 static Console *INSTANCE = nullptr;
+
+/**
+ * Set buffer size to 15 MB
+ */
+static const int MAX_BUFFER_SIZE = 1024 * 1024 * 15;
 
 /**
  * Constructor function
@@ -45,6 +53,7 @@ Console::Console()
     , m_cursor(nullptr)
     , m_document(nullptr)
 {
+    clear();
     auto m = Manager::getInstance();
     connect(m, &Manager::dataReceived, this, &Console::onDataReceived);
     LOG_INFO() << "Class initialized";
@@ -77,6 +86,14 @@ bool Console::echo() const
 bool Console::autoscroll() const
 {
     return m_autoscroll;
+}
+
+/**
+ * Returns @c true if data buffer contains information that the user can export.
+ */
+bool Console::saveAvailable() const
+{
+    return m_dataBuffer.size() > 0;
 }
 
 /**
@@ -190,15 +207,49 @@ QStringList Console::displayModes() const
 
 void Console::copy() { }
 
-void Console::save() { }
+/**
+ * Allows the user to export the information displayed on the console
+ */
+void Console::save()
+{
+    // No data buffer received, abort
+    if (!saveAvailable())
+        return;
+
+    // Get file name
+    auto path
+        = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Export console data"),
+                                       QDir::homePath(), tr("Text files") + " (*.txt)");
+
+    // Create file
+    if (!path.isEmpty())
+    {
+        QFile file(path);
+        if (file.open(QFile::WriteOnly))
+        {
+            file.write(m_dataBuffer);
+            file.close();
+
+            Misc::Utilities::revealFile(path);
+        }
+
+        else
+            Misc::Utilities::showMessageBox(tr("File save error"), file.errorString());
+    }
+}
 
 /**
  * Deletes all the text displayed by the current QML text document
  */
 void Console::clear()
 {
+    // Clear console display
     if (document())
         document()->clear();
+
+    // Reserve 15 MB for data buffer
+    m_dataBuffer.clear();
+    m_dataBuffer.reserve(MAX_BUFFER_SIZE);
 }
 
 /**
@@ -383,10 +434,25 @@ void Console::setTextDocument(QQuickTextDocument *document)
  * Displays the given @a data in the console. @c QByteArray to ~@c QString conversion is
  * done by the @c dataToString() function, which displays incoming data either in UTF-8
  * or in hexadecimal mode.
+ *
+ * The incoming data is also added to a buffer so that the user can save the file if
+ * needed.
  */
 void Console::onDataReceived(const QByteArray &data)
 {
+    // Display data
     append(dataToString(data));
+
+    // Append data to buffer
+    m_dataBuffer.append(data);
+    if (m_dataBuffer.size() > MAX_BUFFER_SIZE)
+    {
+        m_dataBuffer.clear();
+        m_dataBuffer.reserve(MAX_BUFFER_SIZE);
+    }
+
+    // Notify UI
+    emit dataReceived();
 }
 
 /**

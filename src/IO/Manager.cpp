@@ -46,6 +46,7 @@ Manager::Manager()
     , m_finishSequence("*/")
 {
     setWatchdogInterval(15);
+    setMaxBufferSize(1024 * 1024);
     LOG_INFO() << "Class initialized";
 }
 
@@ -310,6 +311,7 @@ void Manager::disconnectDevice()
         m_device = nullptr;
         m_receivedBytes = 0;
         m_dataBuffer.clear();
+        m_dataBuffer.reserve(maxBufferSize());
 
         // Update UI
         emit deviceChanged();
@@ -351,6 +353,8 @@ void Manager::setMaxBufferSize(const int maxBufferSize)
 {
     m_maxBuzzerSize = maxBufferSize;
     emit maxBufferSizeChanged();
+
+    m_dataBuffer.reserve(maxBufferSize);
 }
 
 /**

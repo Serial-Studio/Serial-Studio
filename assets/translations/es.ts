@@ -159,6 +159,18 @@
         <source>Show timestamp</source>
         <translation>Marca de tiempo</translation>
     </message>
+    <message>
+        <source>Copy</source>
+        <translation>Copiar</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Limpiar</translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation>Guardar como</translation>
+    </message>
 </context>
 <context>
     <name>CsvPlayer</name>
@@ -490,6 +502,18 @@
     <message>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
+    </message>
+    <message>
+        <source>Export console data</source>
+        <translation>Exportar datos de la consola</translation>
+    </message>
+    <message>
+        <source>Text files</source>
+        <translation>Archivos de texto</translation>
+    </message>
+    <message>
+        <source>File save error</source>
+        <translation>Error al intentar guardar el archivo</translation>
     </message>
 </context>
 <context>

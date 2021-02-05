@@ -186,7 +186,7 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Serial.connected
+                enabled: !Cpp_IO_Manager.connected
                 Behavior on opacity {NumberAnimation{}}
                 text: qsTr("COM Port") + ":"
             } ComboBox {
@@ -200,7 +200,7 @@ Control {
                 }
 
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Serial.connected
+                enabled: !Cpp_IO_Manager.connected
                 Behavior on opacity {NumberAnimation{}}
             }
 
@@ -209,7 +209,6 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Serial.connected
                 Behavior on opacity {NumberAnimation{}}
                 text: qsTr("Baud Rate") + ":"
             } ComboBox {

@@ -155,6 +155,18 @@
         <source>Show timestamp</source>
         <translation>显示时间戳</translation>
     </message>
+    <message>
+        <source>Copy</source>
+        <translation>复制</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation>另存为</translation>
+    </message>
 </context>
 <context>
     <name>CsvPlayer</name>
@@ -486,6 +498,18 @@
     <message>
         <source>Hexadecimal</source>
         <translation>十六进制</translation>
+    </message>
+    <message>
+        <source>Export console data</source>
+        <translation>导出控制台数据</translation>
+    </message>
+    <message>
+        <source>Text files</source>
+        <translation>文字档</translation>
+    </message>
+    <message>
+        <source>File save error</source>
+        <translation>文件保存错误</translation>
     </message>
 </context>
 <context>
