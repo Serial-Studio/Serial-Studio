@@ -24,17 +24,28 @@
 
 using namespace JSON;
 
+/**
+ * Constructor function
+ */
 Frame::Frame(QObject *parent)
     : QObject(parent)
     , m_title("")
 {
 }
 
+/**
+ * Destructor function, free memory used by the @c Group objects before destroying an
+ * instance of this class.
+ */
 Frame::~Frame()
 {
     clear();
 }
 
+/**
+ * Resets the frame title and frees the memory used by the @c Group objects associated
+ * to the instance of the @c Frame object.
+ */
 void Frame::clear()
 {
     for (int i = 0; i < groupCount(); ++i)
@@ -44,21 +55,36 @@ void Frame::clear()
     m_groups.clear();
 }
 
+/**
+ * Returns the title of the frame.
+ */
 QString Frame::title() const
 {
     return m_title;
 }
 
+/**
+ * Returns the number of groups contained in the frame.
+ */
 int Frame::groupCount() const
 {
     return groups().count();
 }
 
+/**
+ * Returns a vector of pointers to the @c Group objects associated to this frame.
+ */
 QVector<Group *> Frame::groups() const
 {
     return m_groups;
 }
 
+/**
+ * Reads the frame information and all its asociated groups (and datatsets) from the given
+ * JSON @c object.
+ *
+ * @return @c true on success, @c false on failure
+ */
 bool Frame::read(const QJsonObject &object)
 {
     // Rest frame data

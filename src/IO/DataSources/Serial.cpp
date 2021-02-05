@@ -356,9 +356,12 @@ void Serial::setBaudRate(const qint32 rate)
     LOG_INFO() << "Baud rate set to" << rate;
 }
 
+/**
+ * Changes the port index value, this value is later used by the @c openSerialPort()
+ * function.
+ */
 void Serial::setPortIndex(const quint8 portIndex)
 {
-    auto ports = validPorts();
     auto portId = portIndex - 1;
     if (portId >= 0 && portId < validPorts().count())
         m_portIndex = portIndex;

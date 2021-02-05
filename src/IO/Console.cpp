@@ -287,7 +287,7 @@ void Console::send(const QString &data)
         {
             append(dataToString(bin));
             m_timestampAdded = false;
-            if (m_cursor)
+            if (m_cursor && lineEnding() == LineEnding::NoLineEnding)
                 m_cursor->insertBlock();
         }
     }
