@@ -29,6 +29,10 @@
 #include <Misc/Utilities.h>
 #include <Misc/ModuleManager.h>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 /**
  * Prints the current application version to the console
  */
@@ -59,7 +63,16 @@ static void cliResetSettings()
  * @return qApp exit code
  */
 int main(int argc, char **argv)
-{
+{	
+    // Fix console output on Windows
+#ifdef _WIN32
+	if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+		freopen("CONOUT$", "w", stdout);
+		freopen("CONOUT$", "w", stderr);
+		qDebug() << "";
+	}
+#endif
+
     // Set application attributes
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
@@ -90,7 +103,7 @@ int main(int argc, char **argv)
             return EXIT_SUCCESS;
         }
     }
-
+	
     // Create module manager & configure the logger
     ModuleManager moduleManager;
     moduleManager.configureLogger();
