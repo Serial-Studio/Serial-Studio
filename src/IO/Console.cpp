@@ -54,7 +54,7 @@ Console::Console()
     , m_historyItem(0)
     , m_echo(false)
     , m_autoscroll(true)
-	, m_enableRender(false)
+    , m_enableRender(false)
     , m_showTimestamp(true)
     , m_timestampAdded(false)
     , m_cursor(nullptr)
@@ -98,10 +98,10 @@ bool Console::autoscroll() const
 /**
  * Returns @c true if current incoming data shall be shown in the console display.
  * We use this values to avoid unnecesary processing when the console is not visible.
- */ 
+ */
 bool Console::enableRender() const
 {
-	return m_enableRender;
+    return m_enableRender;
 }
 
 /**
@@ -232,8 +232,8 @@ void Console::save()
 
     // Get file name
     auto path
-            = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Export console data"),
-                                           QDir::homePath(), tr("Text files") + " (*.txt)");
+        = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Export console data"),
+                                       QDir::homePath(), tr("Text files") + " (*.txt)");
 
     // Create file
     if (!path.isEmpty())
@@ -324,18 +324,18 @@ void Console::send(const QString &data)
     // Add EOL character
     switch (lineEnding())
     {
-    case LineEnding::NoLineEnding:
-        break;
-    case LineEnding::NewLine:
-        bin.append("\n");
-        break;
-    case LineEnding::CarriageReturn:
-        bin.append("\r");
-        break;
-    case LineEnding::BothNewLineAndCarriageReturn:
-        bin.append("\r");
-        bin.append("\n");
-        break;
+        case LineEnding::NoLineEnding:
+            break;
+        case LineEnding::NewLine:
+            bin.append("\n");
+            break;
+        case LineEnding::CarriageReturn:
+            bin.append("\r");
+            break;
+        case LineEnding::BothNewLineAndCarriageReturn:
+            bin.append("\r");
+            bin.append("\n");
+            break;
     }
 
     // Write data to device
@@ -406,8 +406,8 @@ void Console::setAutoscroll(const bool enabled)
  */
 void Console::setEnableRender(const bool enabled)
 {
-	m_enableRender = enabled;
-	emit enableRenderChanged();
+    m_enableRender = enabled;
+    emit enableRenderChanged();
 }
 
 /**
@@ -463,7 +463,7 @@ void Console::setTextDocument(QQuickTextDocument *document)
 void Console::onDataReceived(const QByteArray &data)
 {
     // Display data
-	if (enableRender())
+    if (enableRender())
         append(dataToString(data));
 
     // Append data to buffer
@@ -500,7 +500,7 @@ void Console::append(const QString &string)
     data = data.replace(QRegExp("\r?\n"), QChar('\n'));
 
     // Construct string to insert
-	int lineCount = 0;
+    int lineCount = 0;
     for (int i = 0; i < data.length(); ++i)
     {
         if (!m_timestampAdded)
@@ -511,7 +511,7 @@ void Console::append(const QString &string)
 
         if (string.at(i) == "\n")
         {
-			++lineCount;
+            ++lineCount;
             displayedText.append("\n");
             m_timestampAdded = false;
         }
@@ -577,15 +577,15 @@ QString Console::dataToString(const QByteArray &data)
 {
     switch (displayMode())
     {
-    case DisplayMode::DisplayPlainText:
-        return plainTextStr(data);
-        break;
-    case DisplayMode::DisplayHexadecimal:
-        return hexadecimalStr(data);
-        break;
-    default:
-        return "";
-        break;
+        case DisplayMode::DisplayPlainText:
+            return plainTextStr(data);
+            break;
+        case DisplayMode::DisplayHexadecimal:
+            return hexadecimalStr(data);
+            break;
+        default:
+            return "";
+            break;
     }
 }
 
