@@ -122,7 +122,6 @@ public:
     Q_INVOKABLE QStringList displayModes() const;
 
 public slots:
-    void copy();
     void save();
     void clear();
     void historyUp();

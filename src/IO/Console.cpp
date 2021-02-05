@@ -39,6 +39,12 @@ static Console *INSTANCE = nullptr;
 static const int MAX_BUFFER_SIZE = 1024 * 1024 * 15;
 
 /**
+ * Allow console to process at most 250 lines, more than that will probably slow down
+ * the computer. Read https://bugreports.qt.io/browse/QTBUG-37872 for more information.
+ */
+static const int MAX_BLOCK_COUNT = 250;
+
+/**
  * Constructor function
  */
 Console::Console()
@@ -205,8 +211,6 @@ QStringList Console::displayModes() const
     return list;
 }
 
-void Console::copy() { }
-
 /**
  * Allows the user to export the information displayed on the console
  */
@@ -218,8 +222,8 @@ void Console::save()
 
     // Get file name
     auto path
-        = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Export console data"),
-                                       QDir::homePath(), tr("Text files") + " (*.txt)");
+            = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Export console data"),
+                                           QDir::homePath(), tr("Text files") + " (*.txt)");
 
     // Create file
     if (!path.isEmpty())
@@ -310,18 +314,18 @@ void Console::send(const QString &data)
     // Add EOL character
     switch (lineEnding())
     {
-        case LineEnding::NoLineEnding:
-            break;
-        case LineEnding::NewLine:
-            bin.append("\n");
-            break;
-        case LineEnding::CarriageReturn:
-            bin.append("\r");
-            break;
-        case LineEnding::BothNewLineAndCarriageReturn:
-            bin.append("\r");
-            bin.append("\n");
-            break;
+    case LineEnding::NoLineEnding:
+        break;
+    case LineEnding::NewLine:
+        bin.append("\n");
+        break;
+    case LineEnding::CarriageReturn:
+        bin.append("\r");
+        break;
+    case LineEnding::BothNewLineAndCarriageReturn:
+        bin.append("\r");
+        bin.append("\n");
+        break;
     }
 
     // Write data to device
@@ -384,9 +388,6 @@ void Console::setAutoscroll(const bool enabled)
 {
     m_autoscroll = enabled;
     emit autoscrollChanged();
-
-    if (document())
-        document()->setMaximumBlockCount(autoscroll() ? 500 : 0);
 }
 
 /**
@@ -425,8 +426,9 @@ void Console::setTextDocument(QQuickTextDocument *document)
     m_cursor->movePosition(QTextCursor::End);
 
     // Configure text doucment
-    m_document->textDocument()->setMaximumBlockCount(autoscroll() ? 500 : 0);
+    setAutoscroll(autoscroll());
     m_document->textDocument()->setUndoRedoEnabled(false);
+    m_document->textDocument()->setMaximumBlockCount(MAX_BLOCK_COUNT);
     emit textDocumentChanged();
 }
 
@@ -497,6 +499,16 @@ void Console::append(const QString &string)
 
     // Insert text on console
     m_cursor->insertText(displayedText);
+
+    //
+    // Clear the document if autoscroll is disabled. We need to do this because if we
+    // set the blockCount() to 0 (infinite num. of lines), we risk overloading the
+    // computer's resources and slowing everything down.
+    //
+    // We need to find a way to deal with large text files in the QML interface...
+    //
+    if (!autoscroll() && document()->blockCount() > MAX_BLOCK_COUNT - 1)
+        document()->clear();
 }
 
 /**
@@ -542,15 +554,15 @@ QString Console::dataToString(const QByteArray &data)
 {
     switch (displayMode())
     {
-        case DisplayMode::DisplayPlainText:
-            return plainTextStr(data);
-            break;
-        case DisplayMode::DisplayHexadecimal:
-            return hexadecimalStr(data);
-            break;
-        default:
-            return "";
-            break;
+    case DisplayMode::DisplayPlainText:
+        return plainTextStr(data);
+        break;
+    case DisplayMode::DisplayHexadecimal:
+        return hexadecimalStr(data);
+        break;
+    default:
+        return "";
+        break;
     }
 }
 
