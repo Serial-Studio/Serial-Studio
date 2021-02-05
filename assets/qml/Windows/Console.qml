@@ -53,6 +53,7 @@ Control {
     property int curPos
     property int selectEnd
     property int selectStart
+    property TextEdit textArea: null
     
     //
     // Function to send through serial port data
@@ -72,14 +73,6 @@ Control {
         property alias autoscroll: autoscrollCheck.checked
         property alias lineEnding: lineEndingCombo.currentIndex
         property alias displayMode: displayModeCombo.currentIndex
-    }
-
-    //
-    // Shortcut to copy selection of console
-    //
-    Shortcut {
-        sequence: StandardKey.Copy
-        onActivated: textArea.copy()
     }
 
     //
@@ -124,18 +117,22 @@ Control {
                     id: scrollbar
                 }
 
-                Connections {
-                    target: Cpp_IO_Console
+                property int currentContentY
 
-                    function onDataReceived() {
-                        if (Cpp_IO_Console.autoscroll)
-                            model.positionViewAtEnd()
-                    }
+                onMovementEnded: {
+                    currentContentY = contentY
+                }
+
+                onCountChanged: {
+                    if (Cpp_IO_Console.autoscroll)
+                        model.positionViewAtEnd()
+                    else
+                        contentY = currentContentY
                 }
 
                 delegate: Text {
                     id: line
-                    width: parent.width
+                    width: model.width
                     color: root.consoleColor
                     font.family: app.monoFont
                     font.pixelSize: root.fontSize

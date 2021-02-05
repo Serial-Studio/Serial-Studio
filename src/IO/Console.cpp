@@ -34,9 +34,9 @@ using namespace IO;
 static Console *INSTANCE = nullptr;
 
 /**
- * Set maximum scrollback to 10'000 lines
+ * Set maximum scrollback to 10000 lines
  */
-static const int SCROLLBACK = 10 * 1000;
+static const int SCROLLBACK = 10000;
 
 /**
  * Constructor function
@@ -461,7 +461,10 @@ void Console::append(const QString &string, const bool addTimestamp)
 
     // Remove extra lines
     while (lineCount() > SCROLLBACK)
-        m_data.removeFirst();
+    {
+        for (int i = 0; i < SCROLLBACK * 0.1; ++i)
+            m_data.takeFirst();
+    }
 
     // Update UI
     emit dataReceived();
