@@ -20,9 +20,9 @@
 # THE SOFTWARE.
 #
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 # Make options
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 
 UI_DIR = uic
 MOC_DIR = moc
@@ -35,16 +35,16 @@ isEmpty(PREFIX) {
     PREFIX = /usr
 }
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 # Qt configuration
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 
-TEMPLATE = app
-TARGET = serial-studio
+TEMPLATE = app                                           # Project template
+TARGET = serial-studio                                   # Set default target name
+CONFIG += resources_big                                  # Avoid isses with large *.qrc
+CONFIG += qtquickcompiler                                # Pre-compile QML interface
 
-CONFIG += qtc_runnable
-CONFIG += resources_big
-CONFIG += qtquickcompiler
+QTPLUGIN += qsvg                                         # Fixes issues with windeployqt
 
 QT += xml
 QT += sql
@@ -56,11 +56,9 @@ QT += widgets
 QT += serialport
 QT += quickcontrols2
 
-QTPLUGIN += qsvg
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 # Compiler options
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 
 *g++*: {
     QMAKE_CXXFLAGS_RELEASE -= -O
@@ -72,49 +70,49 @@ QTPLUGIN += qsvg
     QMAKE_CXXFLAGS_RELEASE *= /O2
 }
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 # Libraries
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 
 include(libs/Libraries.pri)
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 # Deploy options
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 
 win32* {
-    TARGET = SerialStudio
-    RC_FILE = deploy/windows/resources/info.rc
+    TARGET = SerialStudio                                # Change target name
+    RC_FILE = deploy/windows/resources/info.rc           # Set applicaiton icon
 }
 
 macx* {
-    TARGET = SerialStudio
-    ICON = deploy/macOS/icon.icns
-    RC_FILE = deploy/macOS/icon.icns
-    QMAKE_INFO_PLIST = deploy/macOS/info.plist
-    CONFIG += sdk_no_version_check # To avoid warnings with Big Sur
+    TARGET = SerialStudio                                # Change target name
+    ICON = deploy/macOS/icon.icns                        # icon file
+    RC_FILE = deploy/macOS/icon.icns                     # icon file
+    QMAKE_INFO_PLIST = deploy/macOS/info.plist           # Add info.plist file
+    CONFIG += sdk_no_version_check                       # Avoid warnings with Big Sur
 }
 
 target.path = $$PREFIX/bin
 
 linux:!android {
-    icon.path = $$PREFIX/share/pixmaps
-    desktop.path = $$PREFIX/share/applications
-    icon.files += deploy/linux/serial-studio.png
-    desktop.files += deploy/linux/serial-studio.desktop
-
-    INSTALLS += target desktop icon
+    icon.path = $$PREFIX/share/pixmaps                   # icon instalation path
+    desktop.path = $$PREFIX/share/applications           # *.desktop instalation path
+    icon.files += deploy/linux/serial-studio.png         # Add application icon
+    desktop.files += deploy/linux/serial-studio.desktop  # Add *.desktop file
+    INSTALLS += target desktop icon                      # make install targets
 }
 
 mingw {
-    license.path = $$PREFIX/share/licenses/$$TARGET
-    license.files += LICENSE.md
-    INSTALLS += target license
+    license.path = $$PREFIX/share/licenses/$$TARGET      # Set license install path
+    license.files += LICENSE.md                          # Add LICENSE.md file
+    INSTALLS += target license                           # Install target+licence (MSYS2)
+    DEFINES += DISABLE_QSU                               # Disable QSimpleUpdater (MSYS2)
 }
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 # Import source code
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 
 INCLUDEPATH += src
 

@@ -55,7 +55,7 @@
  */
 ModuleManager::ModuleManager()
 {
-    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
+    connect(engine(), SIGNAL(quit()), this, SLOT(stopOperations()));
     LOG_INFO() << "Initialized module manager class";
 }
 
@@ -82,6 +82,9 @@ void ModuleManager::configureLogger()
  */
 void ModuleManager::configureUpdater()
 {
+    if (!autoUpdaterEnabled())
+        return;
+
     LOG_INFO() << "Configuring QSimpleUpdater...";
     QSimpleUpdater::getInstance()->setNotifyOnUpdate(APP_UPDATER_URL, true);
     QSimpleUpdater::getInstance()->setNotifyOnFinish(APP_UPDATER_URL, false);
@@ -100,6 +103,22 @@ void ModuleManager::registerQmlTypes()
     qmlRegisterType<JSON::Frame>("SerialStudio", 1, 0, "Frame");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
+}
+
+/**
+ * Enables or disables the auto-updater system (QSimpleUpdater).
+ *
+ * To disable QSimpleUpdater, you need to add DEFINES += DISABLE_QSU in the qmake project
+ * file. This option is provided for package managers, users are expected to update the
+ * application using the same package manager they used for installing it.
+ */
+bool ModuleManager::autoUpdaterEnabled()
+{
+#ifdef DISABLE_QSU
+    return false;
+#else
+    return true;
+#endif
 }
 
 /**
@@ -123,9 +142,14 @@ void ModuleManager::initializeQmlInterface()
     auto jsonGenerator = JSON::Generator::getInstance();
     LOG_INFO() << "Finished initializing C++ modules";
 
+    // Retranslate the QML interface automagically
+    connect(translator, &Misc::Translator::languageChanged,
+            engine(), &QQmlEngine::retranslate);
+
     // Register C++ modules with QML
     auto c = engine()->rootContext();
-    c->setContextProperty("CppUpdater", updater);
+    c->setContextProperty("Cpp_Updater", updater);
+    c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
     c->setContextProperty("Cpp_Misc_Translator", translator);
     c->setContextProperty("Cpp_CSV_Export", csvExport);
     c->setContextProperty("Cpp_CSV_Player", csvPlayer);

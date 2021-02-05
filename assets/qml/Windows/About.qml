@@ -129,10 +129,12 @@ Window {
 
             Button {
                 Layout.fillWidth: true
+                visible: Cpp_UpdaterEnabled
+                enabled: Cpp_UpdaterEnabled
                 text: qsTr("Check for updates") + Cpp_Misc_Translator.dummy
                 onClicked: {
-                    CppUpdater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
-                    CppUpdater.checkForUpdates(Cpp_AppUpdaterUrl)
+                    Cpp_Updater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
+                    Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
                 }
             }
 

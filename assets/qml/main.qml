@@ -170,11 +170,11 @@ ApplicationWindow {
 
             // Second launch ask user if he/she wants to enable automatic updates
             if (appLaunchStatus == 2)
-                automaticUpdatesMessageDialog.visible = true
+                automaticUpdatesMessageDialog.visible = Cpp_UpdaterEnabled
 
             // Check for updates (if we are allowed)
-            if (automaticUpdates)
-                CppUpdater.checkForUpdates(Cpp_AppUpdaterUrl)
+            if (automaticUpdates && Cpp_UpdaterEnabled)
+                Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
         }
     }
 
@@ -376,7 +376,7 @@ ApplicationWindow {
         // Behavior when the user clicks on "Yes"
         onAccepted: {
             app.automaticUpdates = true
-            CppUpdater.checkForUpdates(Cpp_AppUpdaterUrl)
+            Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
         }
 
         // Behavior when the user clicks on "No"

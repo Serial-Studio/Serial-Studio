@@ -36,6 +36,7 @@ public:
     void configureLogger();
     void configureUpdater();
     void registerQmlTypes();
+    bool autoUpdaterEnabled();
     void initializeQmlInterface();
 
     QQmlApplicationEngine *engine();
