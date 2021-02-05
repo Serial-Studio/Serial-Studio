@@ -87,6 +87,12 @@ Control {
                 anchors.margins: app.spacing
                 contentWidth: textArea.paintedWidth
                 contentHeight: textArea.paintedHeight
+                boundsMovement: Flickable.StopAtBounds
+                boundsBehavior: Flickable.DragOverBounds
+
+                Keys.onUpPressed: scrollBar.decrease()
+                Keys.onDownPressed: scrollBar.increase()
+                ScrollBar.vertical: ScrollBar { id: scrollBar }
 
                 function ensureVisible(r)
                 {

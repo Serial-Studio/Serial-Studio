@@ -501,14 +501,20 @@ QString Console::plainTextStr(const QByteArray &data)
  */
 QString Console::hexadecimalStr(const QByteArray &data)
 {
+    // Convert to hex string with spaces between bytes
     QString str;
     QString hex = QString::fromUtf8(data.toHex());
     for (int i = 0; i < hex.length(); ++i)
     {
         str.append(hex.at(i));
         if ((i + 1) % 2 == 0)
-            str.append(" ");
+            str.append("");
     }
 
+    // Add new line & carriage returns
+    str.replace("0a ", "0a\r");
+    str.replace("0d ", "0d\n");
+
+    // Return string
     return str;
 }
