@@ -133,44 +133,40 @@ Control {
                 boundsMovement: Flickable.StopAtBounds
                 boundsBehavior: Flickable.DragOverBounds
 
-                Keys.onUpPressed: scrollBar.decrease()
-                Keys.onDownPressed: scrollBar.increase()
-                ScrollBar.vertical: ScrollBar { id: scrollBar }
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AsNeeded
+                }
 
-                function ensureVisible(r)
+                function ensureVisible(x, y, w, h)
                 {
-                    if (!Cpp_IO_Console.autoscroll)
-                        return
-
-                    if (contentX >= r.x)
-                        contentX = r.x;
-                    else if (contentX + width <= r.x + r.width)
-                        contentX = r.x + r.width - width;
-                    if (contentY >= r.y)
-                        contentY = r.y;
-                    else if (contentY + height <= r.y + r.height)
-                        contentY = r.y + r.height - height;
+                    if (contentX >= x)
+                        contentX = x;
+                    else if (contentX + width <= x + w)
+                        contentX = x + w - width;
+                    if (contentY >= y)
+                        contentY = y;
+                    else if (contentY + height <= y + h)
+                        contentY = y + h - height;
                 }
 
                 TextEdit {
                     id: textArea
-                    focus: true
                     readOnly: true
                     font.pixelSize: 12
-                    width: flick.width
-                    height: flick.height
                     selectByMouse: true
                     selectByKeyboard: true
                     color: root.consoleColor
                     persistentSelection: true
                     wrapMode: TextEdit.NoWrap
                     font.family: app.monoFont
+                    width: parent.contentWidth
+                    textFormat: TextEdit.PlainText
                     selectionColor: palette.highlight
                     selectedTextColor: palette.highlightedText
-                    onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+
                     onTextChanged: {
-                        if (Cpp_IO_Console.autoscroll)
-                            textArea.cursorPosition = textArea.length
+                         if (Cpp_IO_Console.autoscroll)
+                             flick.ensureVisible(0, textArea.contentHeight, 1, 14)
                     }
 
                     MouseArea {
@@ -182,9 +178,7 @@ Control {
                             root.selectStart = textArea.selectionStart;
                             root.selectEnd = textArea.selectionEnd;
                             root.curPos = textArea.cursorPosition;
-                            contextMenu.x = mouse.x;
-                            contextMenu.y = mouse.y;
-                            contextMenu.open();
+                            contextMenu.popup()
                             textArea.cursorPosition = root.curPos;
                             textArea.select(root.selectStart, root.selectEnd);
                         }
@@ -194,9 +188,7 @@ Control {
                                 root.selectStart = textArea.selectionStart;
                                 root.selectEnd = textArea.selectionEnd;
                                 root.curPos = textArea.cursorPosition;
-                                contextMenu.x = mouse.x;
-                                contextMenu.y = mouse.y;
-                                contextMenu.open();
+                                contextMenu.popup();
                                 textArea.cursorPosition = root.curPos;
                                 textArea.select(root.selectStart, root.selectEnd);
                             }
