@@ -29,7 +29,6 @@ import QtQuick.Controls 2.12
 import Qt.labs.settings 1.0
 
 import SerialStudio 1.0
-import SerialStudio 1.0
 
 import "."
 
@@ -52,8 +51,8 @@ Window {
     // Settings
     //
     Settings {
-        property alias mapTilt: map.tilt
-        property alias mapZoom: map.zoomLevel
+        property alias mapTilt: tiltSlider.value
+        property alias mapZoom: zoomSlider.value
         property alias autoCenter: autoCenter.checked
     }
 
@@ -134,6 +133,7 @@ Window {
             }
 
             Slider {
+                id: zoomSlider
                 value: map.zoomLevel
                 Layout.fillWidth: true
                 to: map.maximumZoomLevel
@@ -154,12 +154,12 @@ Window {
             // Tilt slider
             //
             Slider {
+                id: tiltSlider
                 orientation: Qt.Vertical
                 Layout.fillHeight: true
                 from: map.minimumTilt
                 to: map.maximumTilt
                 value: map.tilt
-                Component.onCompleted: value = 0.8 * to
                 onValueChanged: {
                     if (map.tilt != value)
                         map.tilt = value

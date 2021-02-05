@@ -24,15 +24,14 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import SerialStudio 1.0
 import Qt.labs.settings 1.0
 
-import SerialStudio 1.0
 import "../Widgets" as Widgets
 
 Control {
     id: root
     Component.onCompleted: Cpp_IO_Console.setTextDocument(textArea.textDocument)
-
     background: Rectangle {
         color: app.windowBackgroundColor
     }
@@ -55,7 +54,12 @@ Control {
     // Save settings
     //
     Settings {
+        property alias echo: echoCheck.checked
         property alias hex: hexCheckbox.checked
+        property alias timestamp: timestampCheck.checked
+        property alias autoscroll: autoscrollCheck.checked
+        property alias lineEnding: lineEndingCombo.currentIndex
+        property alias displayMode: displayModeCombo.currentIndex
     }
 
     //
@@ -147,8 +151,6 @@ Control {
                     send.text = Cpp_IO_Console.currentHistoryString
                 }
 
-
-
                 Behavior on opacity {NumberAnimation{}}
             }
 
@@ -211,6 +213,7 @@ Control {
             }
 
             ComboBox {
+                id: lineEndingCombo
                 Layout.alignment: Qt.AlignVCenter
                 model: Cpp_IO_Console.lineEndings()
                 currentIndex: Cpp_IO_Console.lineEnding
@@ -221,6 +224,7 @@ Control {
             }
 
             ComboBox {
+                id: displayModeCombo
                 Layout.alignment: Qt.AlignVCenter
                 model: Cpp_IO_Console.displayModes()
                 currentIndex: Cpp_IO_Console.displayMode
