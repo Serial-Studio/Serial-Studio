@@ -13,7 +13,7 @@
     </message>
     <message>
         <source>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</source>
-        <translation></translation>
+        <translation>Das Programm wird OHNE JEGLICHE GEWÄHRLEISTUNG geliefert, EINSCHLIESSLICH DER GEWÄHRLEISTUNG FÜR DESIGN, MARKTGÄNGIGKEIT UND EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.</translation>
     </message>
     <message>
         <source>Contact author</source>
@@ -37,7 +37,7 @@
     </message>
     <message>
         <source>Copyright © 2020-%1 %2, released under the MIT License.</source>
-        <translation></translation>
+        <translation>Copyright © 2020-%1 %2, veröffentlicht unter der MIT-Lizenz.</translation>
     </message>
     <message>
         <source>Open log file</source>
