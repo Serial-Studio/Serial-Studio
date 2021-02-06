@@ -125,8 +125,11 @@ Rectangle {
                 listView.positionViewAtEnd()
                 listView.currentIndex = listView.count - 2
                 currentContentY = contentY
-                previousCurrentIndex = currentIndex
-                root.selectedText = root.model[currentIndex]
+
+                if (currentIndex >= 0) {
+                    previousCurrentIndex = currentIndex
+                    root.selectedText = root.model[currentIndex]
+                }
             }
 
             else {
@@ -142,7 +145,7 @@ Rectangle {
             z: 0
             width: listView.width
             height: lineNumber.height
-            y: listView.currentItem.y
+            y: listView.currentItem !== null ? listView.currentItem.y : 0
             color: root.caretLineColor
             implicitWidth: listView.width
 

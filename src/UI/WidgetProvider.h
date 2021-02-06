@@ -78,6 +78,7 @@ public:
     Q_INVOKABLE double mapLongitude(const int index);
 
 private slots:
+    void resetData();
     void updateModels();
 
 private:

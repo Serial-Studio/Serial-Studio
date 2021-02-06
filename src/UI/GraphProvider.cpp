@@ -28,6 +28,7 @@
 
 #include <Logger.h>
 #include <CSV/Player.h>
+#include <IO/Manager.h>
 #include <JSON/Generator.h>
 #include <ConsoleAppender.h>
 
@@ -62,8 +63,12 @@ GraphProvider::GraphProvider()
     qRegisterMetaType<QAbstractSeries *>();
 
     // Update graph values as soon as JSON manager reads data
-    connect(JSON::Generator::getInstance(), SIGNAL(jsonChanged()),
-            this, SLOT(updateValues()));
+    auto cp = CSV::Player::getInstance();
+    auto io = IO::Manager::getInstance();
+    auto ge = JSON::Generator::getInstance();
+    connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
+    connect(ge, SIGNAL(jsonChanged()), this, SLOT(updateValues()));
+    connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 
     // Avoid issues when CSV player goes backwards
     connect(CSV::Player::getInstance(), SIGNAL(timestampChanged()),
@@ -177,6 +182,19 @@ void GraphProvider::setDisplayedPoints(const int points)
         emit displayedPointsUpdated();
         emit dataUpdated();
     }
+}
+
+/**
+ * Deletes all stored information
+ */
+void GraphProvider::resetData()
+{
+    m_points.clear();
+    m_datasets.clear();
+    m_maximumValues.clear();
+    m_minimumValues.clear();
+
+    emit dataUpdated();
 }
 
 /**

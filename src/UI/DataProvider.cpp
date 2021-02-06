@@ -41,11 +41,11 @@ static DataProvider *INSTANCE = nullptr;
 DataProvider::DataProvider()
 {
     auto cp = CSV::Player::getInstance();
-    auto sm = IO::Manager::getInstance();
+    auto io = IO::Manager::getInstance();
     auto ge = JSON::Generator::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(ge, SIGNAL(jsonChanged()), this, SIGNAL(updated()));
-    connect(sm, SIGNAL(connectedChanged()), this, SLOT(resetData()));
+    connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
     LOG_INFO() << "Class initialized";
 }
 

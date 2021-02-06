@@ -74,6 +74,7 @@ private:
     GraphProvider();
 
 private slots:
+    void resetData();
     void updateValues();
     void csvPlayerFixes();
 
