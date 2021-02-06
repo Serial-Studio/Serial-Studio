@@ -65,12 +65,19 @@ class Console : public QObject
     Q_PROPERTY(int lineCount
                READ lineCount
                NOTIFY dataReceived)
+    Q_PROPERTY(QStringList dataModel
+               READ dataModel
+               NOTIFY dataReceived)
+    Q_PROPERTY(quint32 lineOffset
+               READ lineOffset
+               NOTIFY lineOffsetChanged)
     // clang-format on
 
 signals:
     void echoChanged();
     void dataReceived();
     void dataModeChanged();
+    void lineOffsetChanged();
     void autoscrollChanged();
     void lineEndingChanged();
     void displayModeChanged();
@@ -115,7 +122,8 @@ public:
     QString currentHistoryString() const;
 
     int lineCount() const;
-    Q_INVOKABLE QString getLine(const int line) const;
+    quint32 lineOffset() const;
+    QStringList dataModel() const;
 
     Q_INVOKABLE QStringList dataModes() const;
     Q_INVOKABLE QStringList lineEndings() const;
@@ -126,6 +134,7 @@ public slots:
     void clear();
     void historyUp();
     void historyDown();
+    void copy(const QString &data);
     void send(const QString &data);
     void setEcho(const bool enabled);
     void setDataMode(const DataMode mode);
@@ -152,6 +161,7 @@ private:
     DisplayMode m_displayMode;
 
     int m_historyItem;
+    quint32 m_lineOffset;
 
     bool m_echo;
     bool m_autoscroll;

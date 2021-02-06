@@ -31,30 +31,10 @@ import "../Widgets" as Widgets
 
 Control {
     id: root
-    //Component.onCompleted: Cpp_IO_Console.setTextDocument(textArea.textDocument)
     background: Rectangle {
         color: app.windowBackgroundColor
     }
 
-    //
-    // Enable/disable text rendering when visibility changes
-    //
-    onVisibleChanged: Cpp_IO_Console.enableRender = visible
-
-    //
-    // Console text color
-    //
-    property int fontSize: 12
-    readonly property color consoleColor: "#8ecd9d"
-
-    //
-    // Hacks to allow context menu to work
-    //
-    property int curPos
-    property int selectEnd
-    property int selectStart
-    property TextEdit textArea: null
-    
     //
     // Function to send through serial port data
     //
@@ -76,6 +56,49 @@ Control {
     }
 
     //
+    // Copy shortcut
+    //
+    Shortcut {
+        sequence: StandardKey.Copy
+        onActivated: Cpp_IO_Console.copy(logView.selectedText)
+    }
+
+    //
+    // Copy shortcut
+    //
+    Shortcut {
+        sequence: StandardKey.Save
+        onActivated: Cpp_IO_Console.save()
+    }
+
+    //
+    // Right-click context menu
+    //
+    Menu {
+        id: menu
+
+        MenuItem {
+            text: qsTr("Copy")
+            enabled: logView.selectedText.length > 0
+            onClicked: Cpp_IO_Console.copy(logView.selectedText)
+        }
+
+        MenuItem {
+            text: qsTr("Clear")
+            opacity: enabled ? 1 : 0.5
+            onTriggered: Cpp_IO_Console.clear()
+            enabled: Cpp_IO_Console.saveAvailable
+        }
+
+        MenuItem {
+            opacity: enabled ? 1 : 0.5
+            text: qsTr("Save as") + "..."
+            onTriggered: Cpp_IO_Console.save()
+            enabled: Cpp_IO_Console.saveAvailable
+        }
+    }
+
+    //
     // Controls
     //
     ColumnLayout {
@@ -86,69 +109,19 @@ Control {
         //
         // Console display
         //
-        Rectangle {
+        Widgets.LogView {
+            id: logView
             border.width: 1
-            color: "#121218"
+            contextMenu: menu
+            font.pixelSize: 12
             Layout.fillWidth: true
+            border.color: caretLineColor
             Layout.fillHeight: true
-            border.color: palette.midlight
-
-            Text {
-                opacity: 0.5
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.margins: app.spacing
-
-                color: root.consoleColor
-                font.family: app.monoFont
-                font.pixelSize: root.fontSize
-                visible: Cpp_IO_Console.lineCount == 0
-                text: qsTr("No data received so far...")
-            }
-
-            ListView {
-                id: model
-                clip: true
-                anchors.fill: parent
-                anchors.margins: app.spacing
-                model: Cpp_IO_Console.lineCount
-
-                ScrollBar.vertical: ScrollBar {
-                    id: scrollbar
-                }
-
-                property int currentContentY
-
-                onMovementEnded: {
-                    currentContentY = contentY
-                }
-
-                onCountChanged: {
-                    if (Cpp_IO_Console.autoscroll)
-                        model.positionViewAtEnd()
-                    else
-                        contentY = currentContentY
-                }
-
-                delegate: Text {
-                    id: line
-                    width: model.width
-                    color: root.consoleColor
-                    font.family: app.monoFont
-                    font.pixelSize: root.fontSize
-                    text: Cpp_IO_Console.getLine(index)
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-                    Connections {
-                        target: Cpp_IO_Console
-                        enabled: Cpp_IO_Console.lineCount == (index + 1)
-
-                        function onDataReceived() {
-                            line.text = Cpp_IO_Console.getLine(index)
-                        }
-                    }
-                }
-            }
+            font.family: app.monoFont
+            model: Cpp_IO_Console.dataModel
+            lineOffset: Cpp_IO_Console.lineOffset
+            autoscroll: Cpp_IO_Console.autoscroll
+            placeholderText: qsTr("No data received so far...")
         }
 
         //
@@ -160,32 +133,47 @@ Control {
             TextField {
                 id: send
                 height: 24
-                font.pixelSize: 12
+                font: logView.font
                 Layout.fillWidth: true
-                palette.base: "#121218"
-                color: root.consoleColor
-                font.family: app.monoFont
+                color: logView.textColor
                 opacity: enabled ? 1 : 0.5
                 enabled: Cpp_IO_Manager.readWrite
+                palette.base: logView.backgroundColor
                 placeholderText: qsTr("Send data to device") + "..."
 
+                background: Rectangle {
+                    border.width: 1
+                    color: logView.backgroundColor
+                    border.color: logView.border.color
+                }
+
+                //
+                // Validate hex strings
+                //
                 validator: RegExpValidator {
                     regExp: hexCheckbox.checked ? /^[a-fA-F0-9]+$/ : /[\s\S]*/
                 }
 
+                //
+                // Send data on <enter>
+                //
                 Keys.onReturnPressed: root.sendData()
 
+                //
+                // Navigate command history upwards with <up>
+                //
                 Keys.onUpPressed: {
                     Cpp_IO_Console.historyUp()
                     send.text = Cpp_IO_Console.currentHistoryString
                 }
 
+                //
+                // Navigate command history downwards with <down>
+                //
                 Keys.onDownPressed: {
                     Cpp_IO_Console.historyDown()
                     send.text = Cpp_IO_Console.currentHistoryString
                 }
-
-                Behavior on opacity {NumberAnimation{}}
             }
 
             CheckBox {

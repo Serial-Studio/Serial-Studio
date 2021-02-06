@@ -25,6 +25,7 @@
 
 #include <QFile>
 #include <Logger.h>
+#include <QClipboard>
 #include <QTextCodec>
 #include <QFileDialog>
 #include <Misc/Utilities.h>
@@ -34,9 +35,9 @@ using namespace IO;
 static Console *INSTANCE = nullptr;
 
 /**
- * Set maximum scrollback to 10000 lines
+ * Set maximum scrollback to 5000 lines
  */
-static const int SCROLLBACK = 10000;
+static const int SCROLLBACK = 5000;
 
 /**
  * Constructor function
@@ -46,6 +47,7 @@ Console::Console()
     , m_lineEnding(LineEnding::NoLineEnding)
     , m_displayMode(DisplayMode::DisplayPlainText)
     , m_historyItem(0)
+    , m_lineOffset(0)
     , m_echo(false)
     , m_autoscroll(true)
     , m_showTimestamp(true)
@@ -163,14 +165,20 @@ int Console::lineCount() const
 }
 
 /**
- * Returns the string at the given @a line of the log file
+ * Returns the starting line number of the data model
  */
-QString Console::getLine(const int line) const
+quint32 Console::lineOffset() const
 {
-    if (line < lineCount())
-        return m_data.at(line);
+    return m_lineOffset;
+}
 
-    return "";
+/**
+ * Returns a pointer to the string list model, which is used by the QML interface to
+ * display the console data.
+ */
+QStringList Console::dataModel() const
+{
+    return m_data;
 }
 
 /**
@@ -234,7 +242,7 @@ void Console::save()
             QByteArray data;
             for (int i = 0; i < lineCount(); ++i)
             {
-                data.append(getLine(i).toUtf8());
+                data.append(m_data.at(i).toUtf8());
                 data.append("\r");
                 data.append("\n");
             }
@@ -256,8 +264,11 @@ void Console::save()
 void Console::clear()
 {
     m_data.clear();
+    m_lineOffset = 0;
     m_data.reserve(SCROLLBACK);
+
     emit dataReceived();
+    emit lineOffsetChanged();
 }
 
 /**
@@ -290,6 +301,15 @@ void Console::historyDown()
         ++m_historyItem;
         emit historyItemChanged();
     }
+}
+
+/**
+ * Adds the given data to the system clipboard
+ */
+void Console::copy(const QString &data)
+{
+    if (!data.isEmpty())
+        qApp->clipboard()->setText(data);
 }
 
 /**
@@ -463,7 +483,12 @@ void Console::append(const QString &string, const bool addTimestamp)
     while (lineCount() > SCROLLBACK)
     {
         for (int i = 0; i < SCROLLBACK * 0.1; ++i)
+        {
+            ++m_lineOffset;
             m_data.takeFirst();
+        }
+
+        emit lineOffsetChanged();
     }
 
     // Update UI
