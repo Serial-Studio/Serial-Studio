@@ -40,7 +40,7 @@ Rectangle {
     property string selectedText: ""
     property string placeholderText: ""
     property alias model: listView.model
-    readonly property int digits: listView.count.toString().length
+    readonly property int digits: Math.max(3, listView.count.toString().length)
 
     //
     // Set colors
@@ -50,17 +50,6 @@ Rectangle {
     property color backgroundColor: "#060601"
     property color lineCountTextColor: "#545454"
     property color lineCountBackgroundColor: "#121212"
-
-    //
-    // Gets the line number for the given @a index
-    //
-    function getLineNumber(index) {
-        var lIndex = listView.indexAt(0, 0)
-        if (lIndex < 0)
-            lIndex = 0
-
-        return lIndex + index + 1 + root.lineOffset
-    }
 
     //
     // Placeholder text & font source for rest of widget
@@ -81,7 +70,6 @@ Rectangle {
     //
     Rectangle {
         id: lineCountRect
-
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.bottom: parent.bottom
@@ -139,15 +127,16 @@ Rectangle {
         }
 
         //
-        // Highlight item
+        // Caret line + line number
         //
         highlight: Rectangle {
             z: 0
             width: listView.width
-            height: lineNumber.height
-            y: listView.currentItem !== null ? listView.currentItem.y : 0
             color: root.caretLineColor
             implicitWidth: listView.width
+            y: listView.currentItem !== null ? listView.currentItem.y : 0
+            height: listView.currentItem !== null ? listView.currentItem.height :
+                                                    lineNumber.implicitHeight
 
             Text {
                 id: lineNumber
@@ -167,7 +156,7 @@ Rectangle {
             font: root.font
             text: modelData
             color: root.textColor
-            height: font.pixelSize
+            height: implicitHeight
             width: listView.width - x
             x: app.spacing + lineCountRect.width
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
