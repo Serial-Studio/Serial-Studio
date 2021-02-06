@@ -34,10 +34,10 @@ Rectangle {
     // Custom properties
     //
     property int lineOffset: 0
-    property string selectedText
     property Menu contextMenu: null
     property alias font: label.font
     property bool autoscroll: false
+    property string selectedText: ""
     property string placeholderText: ""
     property alias model: listView.model
     readonly property int digits: listView.count.toString().length
@@ -100,8 +100,8 @@ Rectangle {
         model: root.model
         anchors.fill: parent
         anchors.leftMargin: 0
-        highlightMoveDuration: 0
         anchors.margins: app.spacing
+        highlightFollowsCurrentItem: false
 
         //
         // Scrollbar
@@ -136,6 +136,28 @@ Rectangle {
         }
 
         //
+        // Highlight item
+        //
+        highlight: Rectangle {
+            z: 0
+            width: listView.width
+            height: lineNumber.height
+            y: listView.currentItem.y
+            color: root.caretLineColor
+            implicitWidth: listView.width
+
+            Text {
+                id: lineNumber
+                font: root.font
+                width: lineCountRect.width
+                color: root.lineCountTextColor
+                horizontalAlignment: Qt.AlignHCenter
+                anchors.verticalCenter: parent.verticalCenter
+                text: listView.currentIndex + root.lineOffset + 1
+            }
+        }
+
+        //
         // Line delegate
         //
         delegate: Text {
@@ -147,39 +169,21 @@ Rectangle {
             x: app.spacing + lineCountRect.width
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }
-
-        //
-        // Highlight item
-        //
-        highlight: Rectangle {
-            z: 0
-            color: root.caretLineColor
-
-            Text {
-                font: root.font
-                width: lineCountRect.width
-                color: root.lineCountTextColor
-                horizontalAlignment: Qt.AlignHCenter
-                anchors.verticalCenter: parent.verticalCenter
-                text: listView.currentIndex + root.lineOffset + 1
-            }
-        }
     }
 
     //
-    // Simple implementation of a mouse cursor
+    // Simple implementation of a vertical text cursor
     //
     MouseArea {
-        id: mouseArea
-        anchors.fill: parent
         hoverEnabled: true
-        acceptedButtons: Qt.RightButton
-
+        anchors.fill: parent
         onClicked: contextMenu.popup()
+        acceptedButtons: Qt.RightButton
         onMouseYChanged: {
             if (containsMouse && (!autoscroll || !Cpp_IO_Manager.connected)) {
-                var index = listView.indexAt(lineCountRect.width + 2 * app.spacing,
-                                             mouseY + listView.contentY)
+                var contentX = lineCountRect.width + 2 * app.spacing
+                var contentY = mouseY + listView.contentY - root.font.pixelSize
+                var index = listView.indexAt(contentX, contentY)
 
                 if (index >= 0) {
                     listView.currentIndex = index

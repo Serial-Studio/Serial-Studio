@@ -86,7 +86,7 @@ ApplicationWindow {
     // Window geometry
     //
     visible: false
-    minimumWidth: 980
+    minimumWidth: 1040
     minimumHeight: 620
     title: Cpp_AppName + " v" + Cpp_AppVersion
 
