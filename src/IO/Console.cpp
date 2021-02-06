@@ -436,7 +436,7 @@ void Console::setDisplayMode(const DisplayMode mode)
  * is set to @c true, an timestamp is added for each line.
  */
 void Console::append(const QString &string, const bool addTimestamp)
-{	
+{
     // Get current date
     QString timestamp;
     if (addTimestamp)
@@ -478,7 +478,7 @@ void Console::append(const QString &string, const bool addTimestamp)
             m_data.replace(lineCount() - 1, str);
         }
     }
-	
+
     // Remove extra lines
     while (lineCount() > SCROLLBACK)
     {
