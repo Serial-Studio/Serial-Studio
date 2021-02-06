@@ -23,6 +23,7 @@
 #ifndef IO_CONSOLE_H
 #define IO_CONSOLE_H
 
+#include <QTimer>
 #include <QObject>
 #include <QStringList>
 
@@ -76,6 +77,7 @@ class Console : public QObject
 signals:
     void echoChanged();
     void dataReceived();
+    void enabledChanged();
     void dataModeChanged();
     void lineOffsetChanged();
     void autoscrollChanged();
@@ -112,6 +114,7 @@ public:
     static Console *getInstance();
 
     bool echo() const;
+    bool enabled() const;
     bool autoscroll() const;
     bool saveAvailable() const;
     bool showTimestamp() const;
@@ -137,6 +140,7 @@ public slots:
     void copy(const QString &data);
     void send(const QString &data);
     void setEcho(const bool enabled);
+    void setEnabled(const bool enabled);
     void setDataMode(const DataMode mode);
     void setAutoscroll(const bool enabled);
     void setShowTimestamp(const bool enabled);
@@ -145,6 +149,7 @@ public slots:
     void append(const QString &str, const bool addTimestamp = false);
 
 private slots:
+    void displayData();
     void addToHistory(const QString &command);
     void onDataReceived(const QByteArray &data);
 
@@ -164,9 +169,13 @@ private:
     quint32 m_lineOffset;
 
     bool m_echo;
+    bool m_enabled;
     bool m_autoscroll;
     bool m_showTimestamp;
     bool m_timestampAdded;
+
+    QTimer m_timer;
+    QByteArray m_tempBuffer;
 
     QStringList m_data;
     QStringList m_historyItems;

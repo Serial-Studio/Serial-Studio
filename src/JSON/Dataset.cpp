@@ -35,6 +35,20 @@ Dataset::Dataset(QObject *parent)
 }
 
 /**
+ * Copies the values of the given @a dataset to this instance
+ */
+void Dataset::copy(Dataset *dataset)
+{
+    Q_ASSERT(dataset);
+
+    m_graph = dataset->graph();
+    m_title = dataset->title();
+    m_value = dataset->value();
+    m_units = dataset->units();
+    m_widget = dataset->widget();
+}
+
+/**
  * @return @c true if the UI should graph this dataset
  */
 bool Dataset::graph() const

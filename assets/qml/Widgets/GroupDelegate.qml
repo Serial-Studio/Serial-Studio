@@ -32,10 +32,10 @@ Window {
 
     spacing: -1
     showIcon: false
-    title: group.title
     visible: opacity > 0
     borderColor: "#517497"
     opacity: enabled ? 1 : 0
+    title: group !== null ? group.title : ""
     Behavior on opacity {NumberAnimation{}}
 
     property int groupIndex: 0
@@ -44,8 +44,11 @@ Window {
     Connections {
         target: Cpp_UI_Provider
         function onUpdated() {
-            if (root.enabled)
-                group = Cpp_UI_Provider.getGroup(groupIndex)
+            if (root.enabled) {
+                var g = Cpp_UI_Provider.getGroup(groupIndex)
+                if (g !== null)
+                    root.group = g
+            }
         }
     }
 
@@ -68,7 +71,7 @@ Window {
             width: _sv.width - (_sv.ScrollBar.vertical.visible ? 10 : 0)
 
             Repeater {
-                model: group.datasetCount
+                model: group !== null  ? group.datasetCount : 0
                 delegate: DataDelegate {
                     Layout.fillWidth: true
                     dataset: group.datasets[index]

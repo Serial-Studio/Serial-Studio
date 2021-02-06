@@ -24,6 +24,7 @@
 #define WIDGETPROVIDER_H
 
 #include <QList>
+#include <QTimer>
 #include <QObject>
 #include <JSON/Frame.h>
 
@@ -87,6 +88,7 @@ private:
     QList<JSON::Dataset *> getWidgetDatasets(const QString &handle);
 
 private:
+    QTimer m_timer;
     QList<JSON::Group *> m_mapGroups;
     QList<JSON::Group *> m_gyroGroups;
     QList<JSON::Dataset *> m_barDatasets;

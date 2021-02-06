@@ -43,6 +43,23 @@ Frame::~Frame()
 }
 
 /**
+ * Copies the data of the given @a frame into this instance
+ */
+void Frame::copy(Frame *frame)
+{
+    Q_ASSERT(frame);
+
+    m_title = frame->title();
+
+    for (int i = 0; i < frame->groupCount(); ++i)
+    {
+        Group *group = new Group(this);
+        group->copy(frame->groups().at(i));
+        m_groups.append(group);
+    }
+}
+
+/**
  * Resets the frame title and frees the memory used by the @c Group objects associated
  * to the instance of the @c Frame object.
  */

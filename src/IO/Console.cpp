@@ -49,13 +49,25 @@ Console::Console()
     , m_historyItem(0)
     , m_lineOffset(0)
     , m_echo(false)
+    , m_enabled(true)
     , m_autoscroll(true)
     , m_showTimestamp(true)
     , m_timestampAdded(false)
 {
+    // Clear buffer & reserve memory
     clear();
+
+    // Read received data automatically
     auto m = Manager::getInstance();
     connect(m, &Manager::dataReceived, this, &Console::onDataReceived);
+
+    // Configure display update function
+    m_timer.setInterval(1000 / 40);
+    m_timer.setTimerType(Qt::PreciseTimer);
+    connect(&m_timer, &QTimer::timeout, this, &Console::displayData);
+    m_timer.start();
+
+    // Log something to look like a pro
     LOG_INFO() << "Class initialized";
 }
 
@@ -77,6 +89,15 @@ Console *Console::getInstance()
 bool Console::echo() const
 {
     return m_echo;
+}
+
+/**
+ * Returns @c true if we should display console output in the QML interface. Check the
+ * @c setEnabled() function for more information.
+ */
+bool Console::enabled() const
+{
+    return m_enabled;
 }
 
 /**
@@ -265,7 +286,9 @@ void Console::clear()
 {
     m_data.clear();
     m_lineOffset = 0;
+    m_tempBuffer.clear();
     m_data.reserve(SCROLLBACK);
+    m_tempBuffer.reserve(80 * SCROLLBACK);
 
     emit dataReceived();
     emit lineOffsetChanged();
@@ -386,6 +409,20 @@ void Console::setEcho(const bool enabled)
 }
 
 /**
+ * Enables/disables the console output. This function is done because we still need to
+ * find a fool-proof way of displaying console data in the QML interface without slowing
+ * down the application.
+ *
+ * To avoid noticable delays, the console is disabled while the user is taking a look
+ * at the graphs and/or the widgets.
+ */
+void Console::setEnabled(const bool enabled)
+{
+    m_enabled = enabled;
+    emit enabledChanged();
+}
+
+/**
  * Changes the data mode for user commands. See @c dataMode() for more information.
  */
 void Console::setDataMode(const DataMode mode)
@@ -502,7 +539,23 @@ void Console::append(const QString &string, const bool addTimestamp)
  */
 void Console::onDataReceived(const QByteArray &data)
 {
-    append(dataToString(data), showTimestamp());
+    if (enabled())
+        m_tempBuffer.append(data);
+    else if (m_tempBuffer.size())
+        m_tempBuffer.clear();
+}
+
+/**
+ * Displays the data on the UI (if allowed). This function is called periodically by a
+ * timer at a freq. of ~40 Hz.
+ */
+void Console::displayData()
+{
+    if (enabled())
+    {
+        append(dataToString(m_tempBuffer), showTimestamp());
+        m_tempBuffer.clear();
+    }
 }
 
 /**

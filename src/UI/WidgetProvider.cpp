@@ -27,6 +27,7 @@
 #include <Logger.h>
 #include <CSV/Player.h>
 #include <IO/Manager.h>
+#include <IO/Console.h>
 #include <JSON/Generator.h>
 #include <ConsoleAppender.h>
 
@@ -42,12 +43,19 @@ static WidgetProvider *INSTANCE = Q_NULLPTR;
  */
 WidgetProvider::WidgetProvider()
 {
+    // React to open/close of devices & files
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
-    auto ge = JSON::Generator::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(ge, SIGNAL(jsonChanged()), this, SLOT(updateModels()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
+
+    // Update user interface at a frequency of ~40 Hz
+    m_timer.setInterval(1000 / 40);
+    m_timer.setTimerType(Qt::PreciseTimer);
+    connect(&m_timer, &QTimer::timeout, this, &WidgetProvider::updateModels);
+    m_timer.start();
+
+    // Look like a pro
     LOG_INFO() << "Class initialized";
 }
 
@@ -404,6 +412,14 @@ void WidgetProvider::resetData()
  */
 void WidgetProvider::updateModels()
 {
+    // Abort if console is currently in use
+    if (IO::Console::getInstance()->enabled())
+        return;
+
+    // Abort if not connected to device
+    if (!IO::Manager::getInstance()->connected())
+        return;
+
     // Clear current groups
     m_barDatasets.clear();
     m_mapGroups.clear();

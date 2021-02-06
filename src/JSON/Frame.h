@@ -52,6 +52,8 @@ public:
     Frame(QObject *parent = nullptr);
     ~Frame();
 
+    void copy(Frame *frame);
+
     void clear();
     QString title() const;
     int groupCount() const;

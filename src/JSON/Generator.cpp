@@ -262,6 +262,9 @@ void Generator::writeSettings(const QString &path)
  */
 void Generator::setJsonDocument(const QJsonDocument &document)
 {
+    if (document.object().isEmpty())
+        return;
+
     m_document = document;
     if (m_frame.read(m_document.object()))
         emit jsonChanged();

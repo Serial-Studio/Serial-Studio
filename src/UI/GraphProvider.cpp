@@ -29,6 +29,7 @@
 #include <Logger.h>
 #include <CSV/Player.h>
 #include <IO/Manager.h>
+#include <IO/Console.h>
 #include <JSON/Generator.h>
 #include <ConsoleAppender.h>
 
@@ -65,14 +66,18 @@ GraphProvider::GraphProvider()
     // Update graph values as soon as JSON manager reads data
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
-    auto ge = JSON::Generator::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(ge, SIGNAL(jsonChanged()), this, SLOT(updateValues()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 
     // Avoid issues when CSV player goes backwards
     connect(CSV::Player::getInstance(), SIGNAL(timestampChanged()),
             this, SLOT(csvPlayerFixes()));
+
+    // Update user interface at a frequency of ~40 Hz
+    m_timer.setInterval(1000 / 40);
+    m_timer.setTimerType(Qt::PreciseTimer);
+    connect(&m_timer, &QTimer::timeout, this, &GraphProvider::updateValues);
+    m_timer.start();
 
     // clang-format on
     LOG_INFO() << "Class initialized";
@@ -202,6 +207,14 @@ void GraphProvider::resetData()
  */
 void GraphProvider::updateValues()
 {
+    // Abort if console is currently in use
+    if (IO::Console::getInstance()->enabled())
+        return;
+
+    // Abort if we are not connected to a device
+    if (!IO::Manager::getInstance()->connected())
+        return;
+
     // Clear dataset & latest values list
     m_datasets.clear();
 
@@ -253,7 +266,7 @@ void GraphProvider::updateValues()
     }
 
     // Update graphs
-    QTimer::singleShot(10, this, SIGNAL(dataUpdated()));
+    QTimer::singleShot(25, this, SIGNAL(dataUpdated()));
 }
 
 /**

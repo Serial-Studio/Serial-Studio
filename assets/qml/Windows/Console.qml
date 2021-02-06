@@ -31,6 +31,8 @@ import "../Widgets" as Widgets
 
 Control {
     id: root
+    onOpacityChanged: Cpp_IO_Console.setEnabled(opacity === 1)
+
     background: Rectangle {
         color: app.windowBackgroundColor
     }
