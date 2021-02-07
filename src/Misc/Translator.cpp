@@ -121,6 +121,11 @@ QString Translator::welcomeConsoleText() const
     if (file.open(QFile::ReadOnly))
     {
         text = QString::fromUtf8(file.readAll());
+
+#ifdef Q_OS_MAC
+        text = text.replace("Ctrl", "⌘");
+#endif
+
         file.close();
     }
 

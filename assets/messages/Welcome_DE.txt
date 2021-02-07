@@ -29,4 +29,3 @@ Tastatürkürzel:
   Ctrl + S    Konsolenpuffer speichern      Ctrl + T    Konsole anzeigen
   Ctrl + O    CSV-Datei abspielen           Ctrl + D    Dashboard anzeigen
   Ctrl + ,    Setup-Bereich umschalten      Ctrl + W    Widgets anzeigen
-  Del         Konsolenpuffer löschen        F1          Info fenster anzeigen

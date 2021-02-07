@@ -27,4 +27,3 @@ Keyboard shortcuts:
   Ctrl + S    Save console buffer             Ctrl + T    Show console tab
   Ctrl + O    Open CSV file for playback      Ctrl + D    Show dashboard tab
   Ctrl + ,    Toggle setup pane               Ctrl + W    Show widgets tab
-  Del         Clear console buffer            F1          Show "About" window
