@@ -159,7 +159,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.margins: root.border.width
         color: root.lineCountBackgroundColor
-        width: root.font.pixelSize * (root.digits + 1)
+        width: root.font.pixelSize * (root.digits)
     }
 
     //

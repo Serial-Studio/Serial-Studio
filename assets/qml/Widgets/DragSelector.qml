@@ -83,12 +83,11 @@ MouseArea {
         z: 99
         width: 0
         height: 0
-        radius: 5
         rotation: 0
         visible: false
         border.width: 1
         color: "#5F227CEB"
-        border.color: "#103A6E"
+        border.color: "#404AFE"
         transformOrigin: Item.TopLeft
     }
 
