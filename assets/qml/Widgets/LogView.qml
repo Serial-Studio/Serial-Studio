@@ -169,8 +169,10 @@ Rectangle {
     MouseArea {
         hoverEnabled: true
         anchors.fill: parent
+        cursorShape: Qt.IBeamCursor
         onClicked: contextMenu.popup()
         acceptedButtons: Qt.RightButton
+
         onMouseYChanged: {
             if (containsMouse && (!autoscroll || !Cpp_IO_Manager.connected)) {
                 var contentX = lineCountRect.width + 2 * app.spacing

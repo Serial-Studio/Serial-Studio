@@ -80,7 +80,7 @@ GraphProvider::GraphProvider()
     m_timer.start();
 
     // clang-format on
-    LOG_INFO() << "Class initialized";
+    LOG_TRACE() << "Class initialized";
 }
 
 /**

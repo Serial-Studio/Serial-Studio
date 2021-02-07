@@ -84,11 +84,11 @@ void ModuleManager::configureUpdater()
     if (!autoUpdaterEnabled())
         return;
 
-    LOG_INFO() << "Configuring QSimpleUpdater...";
+    LOG_TRACE() << "Configuring QSimpleUpdater...";
     QSimpleUpdater::getInstance()->setNotifyOnUpdate(APP_UPDATER_URL, true);
     QSimpleUpdater::getInstance()->setNotifyOnFinish(APP_UPDATER_URL, false);
     QSimpleUpdater::getInstance()->setMandatoryUpdate(APP_UPDATER_URL, false);
-    LOG_INFO() << "QSimpleUpdater configuration finished!";
+    LOG_TRACE() << "QSimpleUpdater configuration finished!";
 }
 
 /**
@@ -99,11 +99,11 @@ void ModuleManager::configureUpdater()
  */
 void ModuleManager::registerQmlTypes()
 {
-    LOG_INFO() << "Registering QML types...";
+    LOG_TRACE() << "Registering QML types...";
     qmlRegisterType<JSON::Frame>("SerialStudio", 1, 0, "Frame");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
-    LOG_INFO() << "QML types registered!";
+    LOG_TRACE() << "QML types registered!";
 }
 
 /**

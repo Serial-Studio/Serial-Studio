@@ -47,7 +47,7 @@ Manager::Manager()
 {
     setWatchdogInterval(15);
     setMaxBufferSize(1024 * 1024);
-    LOG_INFO() << "Class initialized";
+    LOG_TRACE() << "Class initialized";
 }
 
 /**
@@ -504,5 +504,5 @@ void Manager::setDevice(QIODevice *device)
     m_device = device;
     emit deviceChanged();
 
-    LOG_INFO() << "Device pointer set to" << m_device;
+    LOG_TRACE() << "Device pointer set to" << m_device;
 }

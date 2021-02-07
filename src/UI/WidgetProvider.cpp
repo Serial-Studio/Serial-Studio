@@ -56,7 +56,7 @@ WidgetProvider::WidgetProvider()
     m_timer.start();
 
     // Look like a pro
-    LOG_INFO() << "Class initialized";
+    LOG_TRACE() << "Class initialized";
 }
 
 /**

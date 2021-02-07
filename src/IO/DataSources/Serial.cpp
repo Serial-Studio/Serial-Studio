@@ -54,7 +54,7 @@ Serial::Serial()
 
     // Build serial devices list
     refreshSerialDevices();
-    LOG_INFO() << "Class initialized";
+    LOG_TRACE() << "Class initialized";
 }
 
 /**

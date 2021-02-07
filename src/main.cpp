@@ -64,13 +64,17 @@ static void cliResetSettings()
  */
 int main(int argc, char **argv)
 {
-    // Fix console output on Windows
+    // Fix console output on Windows (https://stackoverflow.com/a/41701133)
+    // This code will only execute if the application is started from the comamnd prompt
 #ifdef _WIN32
     if (AttachConsole(ATTACH_PARENT_PROCESS))
     {
-        freopen("CONOUT$", "w", stdout);
-        freopen("CONOUT$", "w", stderr);
-        qDebug() << "";
+        // Open the console's active buffer
+        (void)freopen("CONOUT$", "w", stdout);
+        (void)freopen("CONOUT$", "w", stderr);
+
+        // Force print new-line (to avoid printing text over user commands)
+        printf("\n");
     }
 #endif
 

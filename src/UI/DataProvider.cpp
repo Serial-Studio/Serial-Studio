@@ -50,7 +50,7 @@ DataProvider::DataProvider()
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 
     // Try to look like a pro
-    LOG_INFO() << "Class initialized";
+    LOG_TRACE() << "Class initialized";
 }
 
 /**

@@ -68,7 +68,7 @@ Console::Console()
     m_timer.start();
 
     // Log something to look like a pro
-    LOG_INFO() << "Class initialized";
+    LOG_TRACE() << "Class initialized";
 }
 
 /**

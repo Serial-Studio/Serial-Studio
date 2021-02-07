@@ -56,7 +56,7 @@ Player::Player()
     , m_timestamp("")
 {
     connect(this, SIGNAL(playerStateChanged()), this, SLOT(updateData()));
-    LOG_INFO() << "Class initialized";
+    LOG_TRACE() << "Class initialized";
 }
 
 /**
@@ -253,7 +253,7 @@ void Player::openFile(const QString &filePath)
     auto sm = IO::Manager::getInstance();
     if (sm->connected())
     {
-        LOG_INFO() << "Serial device open, asking user what to do...";
+        LOG_TRACE() << "Serial device open, asking user what to do...";
         auto response = Misc::Utilities::showMessageBox(
             tr("Serial port open, do you want to continue?"),
             tr("In order to use this feature, its necessary "
@@ -306,7 +306,7 @@ void Player::openFile(const QString &filePath)
     // Open error
     else
     {
-        LOG_INFO() << "CSV file read error" << m_csvFile.errorString();
+        LOG_TRACE() << "CSV file read error" << m_csvFile.errorString();
         Misc::Utilities::showMessageBox(tr("Cannot read CSV file"),
                                         tr("Please check file permissions & location"));
         closeFile();
@@ -396,7 +396,7 @@ void Player::updateData()
             else
             {
                 pause();
-                LOG_INFO() << "Error getting timestamp difference";
+                LOG_WARNING() << "Error getting timestamp difference";
             }
         }
 
@@ -459,7 +459,7 @@ QJsonDocument Player::getJsonFrame(const int row)
     // Create the group/dataset model only one time
     if (m_model.isEmpty())
     {
-        LOG_INFO() << "Generating group/dataset model from CSV...";
+        LOG_TRACE() << "Generating group/dataset model from CSV...";
 
         auto titles = m_csvData.at(0);
         for (int i = 1; i < titles.count(); ++i)
@@ -526,7 +526,7 @@ QJsonDocument Player::getJsonFrame(const int row)
             }
         }
 
-        LOG_INFO() << "Group/dataset model created successfully";
+        LOG_TRACE() << "Group/dataset model created successfully";
     }
 
     // Check that row is valid

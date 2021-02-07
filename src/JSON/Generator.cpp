@@ -55,7 +55,7 @@ Generator::Generator()
     connect(io, SIGNAL(deviceChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(frameReceived(QByteArray)), this, SLOT(readData(QByteArray)));
 
-    LOG_INFO() << "Class initialized";
+    LOG_TRACE() << "Class initialized";
 }
 
 /**
@@ -151,7 +151,7 @@ void Generator::loadJsonMap()
 void Generator::loadJsonMap(const QString &path, const bool silent)
 {
     // Log information
-    LOG_INFO() << "Loading JSON file, silent flag set to" << silent;
+    LOG_TRACE() << "Loading JSON file, silent flag set to" << silent;
 
     // Validate path
     if (path.isEmpty())
@@ -174,7 +174,7 @@ void Generator::loadJsonMap(const QString &path, const bool silent)
         auto document = QJsonDocument::fromJson(data, &error);
         if (error.error != QJsonParseError::NoError)
         {
-            LOG_INFO() << "JSON parse error" << error.errorString();
+            LOG_TRACE() << "JSON parse error" << error.errorString();
 
             m_jsonMap.close();
             writeSettings("");
@@ -184,7 +184,7 @@ void Generator::loadJsonMap(const QString &path, const bool silent)
         // JSON contains no errors, load data & save settings
         else
         {
-            LOG_INFO() << "JSON map loaded successfully";
+            LOG_TRACE() << "JSON map loaded successfully";
 
             writeSettings(path);
             m_jsonMapData = QString::fromUtf8(data);
@@ -201,7 +201,7 @@ void Generator::loadJsonMap(const QString &path, const bool silent)
     // Open error
     else
     {
-        LOG_INFO() << "JSON file error" << m_jsonMap.errorString();
+        LOG_TRACE() << "JSON file error" << m_jsonMap.errorString();
 
         writeSettings("");
         Misc::Utilities::showMessageBox(tr("Cannot read JSON file"),
@@ -231,7 +231,7 @@ void Generator::setOperationMode(const OperationMode mode)
     m_opMode = mode;
     emit operationModeChanged();
 
-    LOG_INFO() << "Operation mode set to" << mode;
+    LOG_TRACE() << "Operation mode set to" << mode;
 }
 
 /**
