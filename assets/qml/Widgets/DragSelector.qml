@@ -24,6 +24,7 @@ import QtQuick 2.12
 
 MouseArea {
     id: root
+
     property alias selectionRect : selectionRect
 
     property int xStart: 0
@@ -87,7 +88,7 @@ MouseArea {
         visible: false
         border.width: 1
         color: "#5F227CEB"
-        border.color: "#404AFE"
+        border.color: "#4284d0"
         transformOrigin: Item.TopLeft
     }
 
@@ -157,8 +158,11 @@ MouseArea {
         }
 
         if (selectionRect.visible === true) {
-            mouseX = mouse.x
-            mouseY = mouse.y
+            var mX = Math.min(root.width, Math.max(0, mouse.x))
+            var mY = Math.min(root.height, Math.max(0, mouse.y))
+
+            mouseX = mX
+            mouseY = mY
 
             if (Math.abs(mouseX, initialXPos) > 30)
                 wasHeld = true
@@ -166,15 +170,15 @@ MouseArea {
             if (Math.abs(mouseY, initialYPos) > 30)
                 wasHeld = true
 
-            if (mouse.x >= initialXPos) {
-                if (mouse.y + listView.contentY >= initialYPos)
+            if (mX >= initialXPos) {
+                if (mY + listView.contentY >= initialYPos)
                     selectionRect.rotation = 0
                 else
                     selectionRect.rotation = -90
             }
 
-            else if (mouse.x <= initialXPos) {
-                if (mouse.y + listView.contentY >= initialYPos)
+            else if (mX <= initialXPos) {
+                if (mY + listView.contentY >= initialYPos)
                     selectionRect.rotation = 90
                 else
                     selectionRect.rotation = -180
@@ -182,14 +186,14 @@ MouseArea {
 
             if (selectionRect.rotation == 0 || selectionRect.rotation == -180) {
                 selectionRect.y = initialYPos - listView.contentY
-                selectionRect.height = Math.abs(mouse.y - initialYPos + listView.contentY)
-                selectionRect.width = Math.abs(mouse.x - selectionRect.x)
+                selectionRect.height = Math.abs(mY - initialYPos + listView.contentY)
+                selectionRect.width = Math.abs(mX - selectionRect.x)
             }
 
             else {
                 selectionRect.y = initialYPos - listView.contentY
-                selectionRect.height = Math.abs(mouse.x - selectionRect.x)
-                selectionRect.width = Math.abs(mouse.y - selectionRect.y)
+                selectionRect.height = Math.abs(mX - selectionRect.x)
+                selectionRect.width = Math.abs(mY - selectionRect.y)
             }
         }
     }

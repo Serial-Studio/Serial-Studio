@@ -210,6 +210,8 @@ Rectangle {
                 contentY = currentContentY
                 currentIndex = previousCurrentIndex
             }
+
+            dragSelector.resetSelection()
         }
 
         //
@@ -279,10 +281,13 @@ Rectangle {
     // is "touched" by the selector rectangle
     //
     DragSelector {
+        id: dragSelector
         listView: listView
         anchors.fill: parent
+        anchors.margins: app.spacing
         verticalTolerance: font.pixelSize
         xStart: lineCountRect.width + 2 * app.spacing
         onMouseYChanged: root.updateCaretLineLocation(this)
+        anchors.leftMargin: lineCountRect.width + app.spacing
     }
 }
