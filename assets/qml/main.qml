@@ -129,6 +129,54 @@ ApplicationWindow {
     }
 
     //
+    // Shortcut to show/hide setup panel
+    //
+    Shortcut {
+        sequence: "Ctrl+,"
+        onActivated: toolbar.setupClicked()
+    }
+
+    //
+    // Shortcut to show/hide dashboard
+    //
+    Shortcut {
+        sequence: "Ctrl+d"
+        onActivated: toolbar.dataClicked()
+    }
+
+    //
+    // Shortcut to show/hide widgets
+    //
+    Shortcut {
+        sequence: "Ctrl+w"
+        onActivated: toolbar.widgetsClicked()
+    }
+
+    //
+    // Shortcut to show/hide terminal
+    //
+    Shortcut {
+        sequence: "Ctrl+t"
+        onActivated: toolbar.consoleClicked()
+    }
+
+    //
+    // Shortcut to show/hide terminal
+    //
+    Shortcut {
+        sequence: "F1"
+        onActivated: about.show()
+    }
+
+    //
+    // Shortcut to open CSV file
+    //
+    Shortcut {
+        sequence: StandardKey.Open
+        onActivated: Cpp_CSV_Player.openFile()
+    }
+
+    //
     // Startup timer
     //
     Timer {

@@ -94,7 +94,7 @@ Rectangle {
     }
 
     //
-    //  Selects all the text
+    // Selects all the text
     //
     function selectAll() {
         var item = null
@@ -102,6 +102,18 @@ Rectangle {
             item = listView.itemAtIndex(i)
             if (item !== null)
                 item.selected = true
+        }
+    }
+
+    //
+    // De-selects all the text
+    //
+    function deselect() {
+        var item = null
+        for (var i = 0; i < listView.count; ++i) {
+            item = listView.itemAtIndex(i)
+            if (item !== null)
+                item.selected = false
         }
     }
 

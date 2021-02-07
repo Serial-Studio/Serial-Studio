@@ -82,6 +82,22 @@ Control {
     }
 
     //
+    // Clear console data shortcut
+    //
+    Shortcut {
+        sequence: StandardKey.Delete
+        onActivated: Cpp_IO_Console.clear()
+    }
+
+    //
+    // Deselect text with escape key
+    //
+    Shortcut {
+        sequences: ["escape", "space"]
+        onActivated: logView.deselect()
+    }
+
+    //
     // Right-click context menu
     //
     Menu {
