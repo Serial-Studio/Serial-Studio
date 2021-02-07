@@ -62,7 +62,15 @@ Control {
     //
     Shortcut {
         sequence: StandardKey.Copy
-        onActivated: Cpp_IO_Console.copy(logView.selectedText)
+        onActivated: Cpp_IO_Console.copy(logView.getTextToCopy())
+    }
+
+    //
+    // Select all shortcut
+    //
+    Shortcut {
+        sequence: StandardKey.SelectAll
+        onActivated: logView.selectAll()
     }
 
     //
@@ -79,10 +87,16 @@ Control {
     Menu {
         id: menu
 
+        onVisibleChanged: {
+            if (visible)
+                copyMenu.enabled = logView.copyAvailable()
+        }
+
         MenuItem {
+            id: copyMenu
             text: qsTr("Copy")
-            enabled: logView.selectedText.length > 0
-            onClicked: Cpp_IO_Console.copy(logView.selectedText)
+            opacity: enabled ? 1 : 0.5
+            onClicked: Cpp_IO_Console.copy(logView.getTextToCopy())
         }
 
         MenuItem {

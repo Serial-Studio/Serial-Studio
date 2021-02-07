@@ -57,6 +57,7 @@
         <file>qml/Widgets/ArtificialHorizonDelegate.qml</file>
         <file>qml/Widgets/BarDelegate.qml</file>
         <file>qml/Widgets/DataDelegate.qml</file>
+        <file>qml/Widgets/DragSelector.qml</file>
         <file>qml/Widgets/GaugeDelegate.qml</file>
         <file>qml/Widgets/GraphDelegate.qml</file>
         <file>qml/Widgets/GroupDelegate.qml</file>

@@ -52,6 +52,78 @@ Rectangle {
     property color lineCountBackgroundColor: "#121212"
 
     //
+    // Returns @c true if text is selected
+    //
+    function copyAvailable() {
+        if (selectedText.length > 0)
+            return true
+
+        var item = null
+        var selected = false;
+        for (var i = 0; i < listView.count; ++i) {
+            item = listView.itemAtIndex(i)
+            if (item !== null) {
+                if (item.selected) {
+                    selected = true
+                    break
+                }
+            }
+        }
+
+        return selected
+    }
+
+    //
+    // Copy text
+    //
+    function getTextToCopy() {
+        var text = ""
+        var item = null
+        for (var i = 0; i < listView.count; ++i) {
+            item = listView.itemAtIndex(i)
+            if (item !== null) {
+                if (item.selected)
+                    text += item.text + "\n"
+            }
+        }
+
+        if (text.length <= 0)
+            return root.selectedText
+
+        return text
+    }
+
+    //
+    //  Selects all the text
+    //
+    function selectAll() {
+        var item = null
+        for (var i = 0; i < listView.count; ++i) {
+            item = listView.itemAtIndex(i)
+            if (item !== null)
+                item.selected = true
+        }
+    }
+
+    //
+    // Updates the caret line location so that its shown in the vertical location of
+    // the given @a mouse area
+    //
+    function updateCaretLineLocation(mouseArea) {
+        if (mouseArea.containsMouse && (!autoscroll || !Cpp_IO_Manager.connected)) {
+            var contentX = lineCountRect.width + 2 * app.spacing
+            var contentY = mouseArea.mouseY + listView.contentY - root.font.pixelSize
+            var index = listView.indexAt(contentX, contentY)
+
+            if (index >= 0) {
+                listView.currentIndex = index
+                listView.previousCurrentIndex = index
+                root.selectedText = listView.currentItem.text
+            }
+        }
+    }
+
+    //
     // Placeholder text & font source for rest of widget
     //
     Text {
@@ -85,6 +157,7 @@ Rectangle {
         id: listView
         cacheBuffer: 0
         currentIndex: 0
+        interactive: false
         model: root.model
         anchors.fill: parent
         anchors.leftMargin: 0
@@ -104,6 +177,7 @@ Rectangle {
         //
         property int currentContentY
         property int previousCurrentIndex
+
         onMovementEnded: {
             currentContentY = contentY
         }
@@ -153,6 +227,7 @@ Rectangle {
         // Line delegate
         //
         delegate: Text {
+            z: 1
             font: root.font
             text: modelData
             color: root.textColor
@@ -160,6 +235,18 @@ Rectangle {
             width: listView.width - x
             x: app.spacing + lineCountRect.width
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+            property bool selected: false
+
+            Rectangle {
+                z: 0
+                x: 0
+                y: 0
+                opacity: 0.5
+                width: parent.width
+                height: parent.height
+                color: parent.selected ? "#5F227CEB" : "transparent"
+            }
         }
     }
 
@@ -170,21 +257,20 @@ Rectangle {
         hoverEnabled: true
         anchors.fill: parent
         cursorShape: Qt.IBeamCursor
-        onClicked: contextMenu.popup()
         acceptedButtons: Qt.RightButton
+        onClicked: contextMenu.popup()
+        onMouseYChanged: root.updateCaretLineLocation(this)
+    }
 
-        onMouseYChanged: {
-            if (containsMouse && (!autoscroll || !Cpp_IO_Manager.connected)) {
-                var contentX = lineCountRect.width + 2 * app.spacing
-                var contentY = mouseY + listView.contentY - root.font.pixelSize
-                var index = listView.indexAt(contentX, contentY)
-
-                if (index >= 0) {
-                    listView.currentIndex = index
-                    listView.previousCurrentIndex = index
-                    root.selectedText = root.model[index]
-                }
-            }
-        }
+    //
+    // Implementation of a rectangular selection that selects any line that is
+    // is "touched" by the selector rectangle
+    //
+    DragSelector {
+        listView: listView
+        anchors.fill: parent
+        verticalTolerance: font.pixelSize
+        xStart: lineCountRect.width + 2 * app.spacing
+        onMouseYChanged: root.updateCaretLineLocation(this)
     }
 }
