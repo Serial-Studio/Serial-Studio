@@ -17,4 +17,9 @@ ____/ //  __/  /   _  / / /_/ /_  /     ____/ // /_ / /_/ // /_/ / _  / / /_/ /
 
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
+键盘快捷键：
 
+  Ctrl + S    保存控制台缓冲区         Ctrl + T    显示控制台标签
+  Ctrl + O    打开CSV文件进行播放      Ctrl + D    显示仪表板选项卡
+  Ctrl + ,    切换设置窗格            Ctrl + W    显示小部件选项卡
+  Del         清除控制台缓冲区         F1          显示“关于”窗口
