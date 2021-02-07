@@ -25,57 +25,78 @@ import QtQuick 2.12
 MouseArea {
     id: root
 
-    property alias selectionRect : selectionRect
-
+    //
+    // Declare custom properties
+    //
     property int xStart: 0
     property int mouseX: 0
     property int mouseY: 0
+    property int itemHeight: 0
     property int initialXPos: 0
     property int initialYPos: 0
     property bool wasHeld: false
+    property var selectedLines: []
     property ListView listView: null
-    property int verticalTolerance: 0
 
-    property alias selected: selectionRect.visible
-    property alias selectionStart: selectionRect.y
-    property alias selectionEnd: selectionRect.height
+    //
+    // Signals
+    //
+    signal selectionChanged()
 
-    onSelectionEndChanged: resetSelection()
-    onSelectionStartChanged: resetSelection()
-
+    //
+    // Selects all the items that are "touched" by the selection rectangle
+    //
     function resetSelection() {
+        // Get rectangle *displayed* height
+        var rectHeight = selectionRect.height
+        if (Math.abs(selectionRect.rotation) == 90)
+            rectHeight = selectionRect.width
+
+        // Get start & end y coordinate of rectangle
+        var y1 = selectionRect.y
+        var y2 = y1 + rectHeight
+        if (selectionRect.rotation < 0)
+            y2 = y1 - rectHeight
+
+        // Add tolerances & order Y coordinates
+        var yStart = Math.min(y1, y2)
+        var yEnd = Math.max(y1, y2)
+
+        // Check if item is selected
         for (var i = 0; i < listView.count; ++i) {
+            // Get item & validate it
             var item = listView.itemAtIndex(i)
             if (item === null)
                 continue
 
-            if (!selectionRect.visible)
-                item.selected = false
+            // Get item relative vertical position
+            var itemY = item.y - listView.contentY
 
-            else {
-                var itemY = item.y - listView.contentY + font.pixelSize
+            // Check if item is positioned inside the rectangle
+            var inSelectionStart = (itemY >= yStart || itemY + root.itemHeight >= yStart)
+            var inSelectionEnd = (itemY <= yEnd || itemY + root.itemHeight <= yEnd)
 
-                var rectHeight = selectionRect.height
-                if (Math.abs(selectionRect.rotation) == 90)
-                    rectHeight = selectionRect.width
-
-                var y1 = selectionRect.y
-                var y2 = y1 + rectHeight
-
-                if (selectionRect.rotation < 0)
-                    y2 = y1 - rectHeight
-
-                var yStart = Math.min(y1, y2) - verticalTolerance
-                var yEnd = Math.max(y1, y2)
-
-                var inSelectionStart = (itemY >= yStart)
-                var inSelectionEnd = (itemY <= yEnd)
-
-                item.selected = inSelectionStart && inSelectionEnd
+            // Check if selected lines already contains this line, if not,
+            // add it to the selected lines array
+            var index = root.selectedLines.indexOf(i)
+            if (inSelectionStart && inSelectionEnd) {
+                if (index < 0)
+                    root.selectedLines.push(i)
             }
+
+            // Selection does not contain this line, remove it from the array
+            else if (index >= 0)
+                root.selectedLines.splice(root.selectedLines.indexOf(i), 1)
+
         }
+
+        // Update UI
+        root.selectionChanged()
     }
 
+    //
+    // Draw the rectangle
+    //
     Rectangle {
         id: selectionRect
 
@@ -90,8 +111,13 @@ MouseArea {
         color: "#5F227CEB"
         border.color: "#4284d0"
         transformOrigin: Item.TopLeft
+        onYChanged: root.resetSelection()
+        onHeightChanged: root.resetSelection()
     }
 
+    //
+    //
+    //
     onClicked: {
         if (mouse.button == Qt.RightButton) {
             mouse.accepted = false
@@ -107,12 +133,18 @@ MouseArea {
         initialYPos = mouse.y
     }
 
+    //
+    // Select line by double clicking it
+    //
     onDoubleClicked: {
-        var item = listView.itemAt(root.xStart, mouseY + listView.contentY - verticalTolerance)
-        if (item !== null)
-            item.selected = true
+        var index = listView.indexAt(root.xStart, mouseY + listView.contentY - root.itemHeight / 2)
+        if (index >= 0)
+            root.selectedLines.push(index)
     }
 
+    //
+    //
+    //
     onPressed: {
         if(mouse.button == Qt.RightButton) {
             mouse.accepted = false
@@ -136,6 +168,9 @@ MouseArea {
         }
     }
 
+    //
+    //
+    //
     onPositionChanged: {
         if (mouse.button == Qt.RightButton) {
             mouse.accepted = false
@@ -198,6 +233,9 @@ MouseArea {
         }
     }
 
+    //
+    //
+    //
     onReleased: {
         listView.interactive = true
         selectionRect.visible = false

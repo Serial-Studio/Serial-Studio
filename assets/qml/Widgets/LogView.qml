@@ -43,6 +43,11 @@ Rectangle {
     readonly property int digits: Math.max(3, listView.count.toString().length)
 
     //
+    // Line properties
+    //
+    readonly property int lineHeight: root.font.pixelSize + 2
+
+    //
     // Set colors
     //
     property color textColor: "#72d084"
@@ -58,19 +63,7 @@ Rectangle {
         if (selectedText.length > 0)
             return true
 
-        var item = null
-        var selected = false;
-        for (var i = 0; i < listView.count; ++i) {
-            item = listView.itemAtIndex(i)
-            if (item !== null) {
-                if (item.selected) {
-                    selected = true
-                    break
-                }
-            }
-        }
-
-        return selected
+        return dragSelector.selectedLines.length > 0
     }
 
     //
@@ -79,12 +72,11 @@ Rectangle {
     function getTextToCopy() {
         var text = ""
         var item = null
-        for (var i = 0; i < listView.count; ++i) {
-            item = listView.itemAtIndex(i)
-            if (item !== null) {
-                if (item.selected)
-                    text += item.text + "\n"
-            }
+        for (var i = 0; i < dragSelector.selectedLines.length; ++i) {
+            item = listView.itemAtIndex(dragSelector.selectedLines[i])
+
+            if (item !== null)
+                text += item.text + "\n"
         }
 
         if (text.length <= 0)
@@ -97,24 +89,19 @@ Rectangle {
     // Selects all the text
     //
     function selectAll() {
-        var item = null
-        for (var i = 0; i < listView.count; ++i) {
-            item = listView.itemAtIndex(i)
-            if (item !== null)
-                item.selected = true
-        }
+        dragSelector.selectedLines = []
+        for (var i = 0; i < listView.count; ++i)
+            dragSelector.selectedLines.push(i)
+
+        dragSelector.selectionChanged()
     }
 
     //
     // De-selects all the text
     //
     function deselect() {
-        var item = null
-        for (var i = 0; i < listView.count; ++i) {
-            item = listView.itemAtIndex(i)
-            if (item !== null)
-                item.selected = false
-        }
+        dragSelector.selectedLines = []
+        dragSelector.selectionChanged()
     }
 
     //
@@ -169,10 +156,11 @@ Rectangle {
         id: listView
         cacheBuffer: 0
         currentIndex: 0
-        interactive: false
         model: root.model
+        interactive: true
         anchors.fill: parent
         anchors.leftMargin: 0
+        snapMode: ListView.SnapToItem
         anchors.margins: app.spacing
         highlightFollowsCurrentItem: false
 
@@ -181,6 +169,7 @@ Rectangle {
         //
         ScrollBar.vertical: ScrollBar {
             id: scrollbar
+            snapMode: ScrollBar.SnapAlways
         }
 
         //
@@ -210,6 +199,9 @@ Rectangle {
                 contentY = currentContentY
                 currentIndex = previousCurrentIndex
             }
+
+            if (count == 0)
+                root.deselect()
 
             dragSelector.resetSelection()
         }
@@ -245,23 +237,77 @@ Rectangle {
             font: root.font
             text: modelData
             color: root.textColor
-            height: implicitHeight
+            height: root.lineHeight
             width: listView.width - x
             x: app.spacing + lineCountRect.width
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        }
+    }
 
-            property bool selected: false
+    //
+    // Line selector rectangles
+    //
+    ColumnLayout {
+        spacing: 0
+        anchors.fill: listView
+        anchors.leftMargin: app.spacing + lineCountRect.width
 
-            Rectangle {
-                z: 0
-                x: 0
-                y: 0
+        Repeater {
+            model: Math.floor(root.height / root.lineHeight)
+
+            delegate: Rectangle {
+                id: rect
                 opacity: 0.5
+                color: "transparent"
                 width: parent.width
-                height: parent.height
-                color: parent.selected ? "#5F227CEB" : "transparent"
+                height: root.lineHeight
+                Component.onCompleted: update()
+
+                function update() {
+                    var i = index + Math.round(listView.contentY / root.lineHeight)
+                    var s = dragSelector.selectedLines.indexOf(i)
+
+                    if (s >= 0)
+                        rect.color = "#5F227CEB"
+                    else
+                        rect.color = "transparent"
+                }
+
+                Connections {
+                    target: dragSelector
+                    function onSelectionChanged() {
+                        rect.update()
+                    }
+                }
+
+                Connections {
+                    target: listView
+
+                    function onCountChanged() {
+                        rect.update()
+                    }
+
+                    function onContentYChanged() {
+                        rect.update()
+                    }
+                }
             }
         }
+    }
+
+    //
+    // Implementation of a rectangular selection that selects any line that is
+    // is "touched" by the selector rectangle
+    //
+    DragSelector {
+        id: dragSelector
+        listView: listView
+        anchors.fill: parent
+        anchors.margins: app.spacing
+        itemHeight: root.lineHeight
+        xStart: lineCountRect.width + 2 * app.spacing
+        onMouseYChanged: root.updateCaretLineLocation(this)
+        anchors.leftMargin: lineCountRect.width + app.spacing
     }
 
     //
@@ -276,18 +322,4 @@ Rectangle {
         onMouseYChanged: root.updateCaretLineLocation(this)
     }
 
-    //
-    // Implementation of a rectangular selection that selects any line that is
-    // is "touched" by the selector rectangle
-    //
-    DragSelector {
-        id: dragSelector
-        listView: listView
-        anchors.fill: parent
-        anchors.margins: app.spacing
-        verticalTolerance: font.pixelSize
-        xStart: lineCountRect.width + 2 * app.spacing
-        onMouseYChanged: root.updateCaretLineLocation(this)
-        anchors.leftMargin: lineCountRect.width + app.spacing
-    }
 }

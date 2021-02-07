@@ -62,7 +62,8 @@ Window {
     property real latitude: 0
     property real longitude: 0
     property int groupIndex: 0
-    readonly property var gpsCoordinates: QtPositioning.coordinate(latitude, longitude)
+    readonly property var gpsCoordinates: QtPositioning.coordinate(latitude,
+                                                                   longitude)
 
     //
     // Connections with widget manager
@@ -182,8 +183,10 @@ Window {
 
                 gradient: Gradient {
                     GradientStop {
-                        position: Math.max(0.4, (map.maximumTilt - map.tilt) / map.maximumTilt)
                         color: "#6Ba9d1"
+                        position: Math.max(0.4,
+                                           (map.maximumTilt - map.tilt) /
+                                            map.maximumTilt)
                     }
 
                     GradientStop {
@@ -207,7 +210,8 @@ Window {
 
                     MapQuickItem {
                         coordinate: gpsCoordinates
-                        anchorPoint: Qt.point(sourceItem.width / 2, sourceItem.height/ 2)
+                        anchorPoint: Qt.point(sourceItem.width / 2,
+                                              sourceItem.height/ 2)
 
                         sourceItem: Rectangle {
                             id: dot
