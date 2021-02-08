@@ -28,4 +28,5 @@ Atajos de teclado:
   Ctrl + O    Reproducir archivo CSV          Ctrl + D    Mostrar el dashboard
   Ctrl + ,    Mostar panel de configuración   Ctrl + W    Mostrar los widgets
 
-Consejo: haga doble clic en cualquier grupo o gráfico para verlo en otra ventana.
+Consejo: haga doble clic en cualquier grupo, gráfico o widget para verlo en
+         otra ventana.

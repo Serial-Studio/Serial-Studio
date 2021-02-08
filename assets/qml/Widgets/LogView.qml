@@ -318,18 +318,6 @@ Rectangle {
     }
 
     //
-    // Simple implementation of a vertical text cursor
-    //
-    MouseArea {
-        hoverEnabled: true
-        anchors.fill: parent
-        cursorShape: Qt.IBeamCursor
-        acceptedButtons: Qt.RightButton
-        onClicked: contextMenu.popup()
-        //onMouseYChanged: root.updateCaretLineLocation(this)
-    }
-
-    //
     // Implementation of a rectangular selection that selects any line that is
     // is "touched" by the selector rectangle
     //
@@ -343,6 +331,7 @@ Rectangle {
         //onMouseYChanged: root.updateCaretLineLocation(this)
         anchors.leftMargin: lineCountRect.width + app.spacing
         anchors.rightMargin: scrollbar.width + app.spacing - 2
+        onRightClicked: contextMenu.popup()
 
         onDoubleClicked: {
             var index = listView.currentIndex
@@ -352,6 +341,17 @@ Rectangle {
                 dragSelector.selectedLines.push(index)
                 dragSelector.selectionChanged()
             }
+        }
+
+        onWheel: {
+            var yValue = wheel.angleDelta.y / 15
+            if (Math.abs(yValue) < 2)
+                return
+
+            if (yValue > 0)
+                root.scrollUp(yValue, true)
+            else
+                root.scrollDown(Math.abs(yValue), true)
         }
     }
 
@@ -372,23 +372,6 @@ Rectangle {
         onClicked: {
             root.deselect()
             dragSelector.wasHeld = false
-        }
-    }
-
-    //
-    // Mouse wheel navigation
-    //
-    MouseArea {
-        anchors.fill: parent
-        onWheel: {
-            var yValue = wheel.angleDelta.y / 15
-            if (Math.abs(yValue) < 2)
-                return
-
-            if (yValue > 0)
-                root.scrollUp(yValue, true)
-            else
-                root.scrollDown(Math.abs(yValue), true)
         }
     }
 

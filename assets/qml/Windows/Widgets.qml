@@ -24,6 +24,8 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import QtQuick.Window 2.12 as QtWindow
+
 import "../Widgets" as Widgets
 
 Control {
@@ -105,6 +107,39 @@ Control {
                             groupIndex: index
                             anchors.fill: parent
                         }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onDoubleClicked: windowGyro.show()
+                        }
+
+                        QtWindow.Window {
+                            id: windowGyro
+                            minimumWidth: root.minimumWidgetSize * 1.2
+                            minimumHeight: root.minimumWidgetSize * 1.2
+                            title: gyro.title
+
+                            flags: Qt.Dialog |
+                                   Qt.WindowStaysOnTopHint |
+                                   Qt.WindowCloseButtonHint |
+                                   Qt.WindowTitleHint
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: gyro.backgroundColor
+                            }
+
+                            Widgets.GyroDelegate {
+                                id: gyro
+                                showIcon: true
+                                gradient: false
+                                headerHeight: 48
+                                groupIndex: index
+                                anchors.margins: 0
+                                anchors.fill: parent
+                                borderColor: backgroundColor
+                            }
+                        }
                     }
                 }
 
@@ -120,6 +155,39 @@ Control {
                         Widgets.AccelerometerDelegate {
                             groupIndex: index
                             anchors.fill: parent
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onDoubleClicked: windowAcc.show()
+                        }
+
+                        QtWindow.Window {
+                            id: windowAcc
+                            minimumWidth: root.minimumWidgetSize * 1.2
+                            minimumHeight: root.minimumWidgetSize * 1.2
+                            title: acc.title
+
+                            flags: Qt.Dialog |
+                                   Qt.WindowStaysOnTopHint |
+                                   Qt.WindowCloseButtonHint |
+                                   Qt.WindowTitleHint
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: acc.backgroundColor
+                            }
+
+                            Widgets.AccelerometerDelegate {
+                                id: acc
+                                showIcon: true
+                                gradient: false
+                                headerHeight: 48
+                                groupIndex: index
+                                anchors.margins: 0
+                                anchors.fill: parent
+                                borderColor: backgroundColor
+                            }
                         }
                     }
                 }
@@ -137,6 +205,39 @@ Control {
                             groupIndex: index
                             anchors.fill: parent
                         }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onDoubleClicked: windowMap.show()
+                        }
+
+                        QtWindow.Window {
+                            id: windowMap
+                            minimumWidth: root.minimumWidgetSize * 1.2
+                            minimumHeight: root.minimumWidgetSize * 1.2
+                            title: map.title
+
+                            flags: Qt.Dialog |
+                                   Qt.WindowStaysOnTopHint |
+                                   Qt.WindowCloseButtonHint |
+                                   Qt.WindowTitleHint
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: map.backgroundColor
+                            }
+
+                            Widgets.MapDelegate {
+                                id: map
+                                showIcon: true
+                                gradient: false
+                                headerHeight: 48
+                                groupIndex: index
+                                anchors.margins: 0
+                                anchors.fill: parent
+                                borderColor: backgroundColor
+                            }
+                        }
                     }
                 }
 
@@ -152,6 +253,39 @@ Control {
                         Widgets.BarDelegate {
                             datasetIndex: index
                             anchors.fill: parent
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onDoubleClicked: windowBar.show()
+                        }
+
+                        QtWindow.Window {
+                            id: windowBar
+                            minimumWidth: root.minimumWidgetSize * 1.2
+                            minimumHeight: root.minimumWidgetSize * 1.2
+                            title: bar.title
+
+                            flags: Qt.Dialog |
+                                   Qt.WindowStaysOnTopHint |
+                                   Qt.WindowCloseButtonHint |
+                                   Qt.WindowTitleHint
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: bar.backgroundColor
+                            }
+
+                            Widgets.BarDelegate {
+                                id: bar
+                                showIcon: true
+                                gradient: false
+                                headerHeight: 48
+                                datasetIndex: index
+                                anchors.margins: 0
+                                anchors.fill: parent
+                                borderColor: backgroundColor
+                            }
                         }
                     }
                 }

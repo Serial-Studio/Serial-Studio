@@ -28,4 +28,4 @@ Keyboard shortcuts:
   Ctrl + O    Open CSV file for playback      Ctrl + D    Show dashboard tab
   Ctrl + ,    Toggle setup pane               Ctrl + W    Show widgets tab
 
-Tip: Double-click on any group or chart to view it in another window.
+Tip: Double-click on any group, chart or widget to view it in another window.

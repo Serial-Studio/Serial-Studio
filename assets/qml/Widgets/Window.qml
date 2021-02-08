@@ -108,15 +108,15 @@ Page {
                 id: _bt
                 flat: true
                 enabled: false
-                icon.width: 24
-                icon.height: 24
-                Layout.minimumWidth: 32
-                Layout.maximumWidth: 32
                 icon.color: root.titleColor
                 Layout.alignment: Qt.AlignVCenter
                 Layout.maximumHeight: parent.height
                 Layout.minimumHeight: parent.height
+                Layout.minimumWidth: root.headerHeight
+                Layout.maximumWidth: root.headerHeight
                 icon.source: "qrc:/icons/equalizer.svg"
+                icon.width: root.headerHeight * 24 / 32
+                icon.height: root.headerHeight * 24 / 32
             }
 
             Label {

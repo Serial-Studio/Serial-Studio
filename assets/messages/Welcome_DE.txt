@@ -30,5 +30,5 @@ Tastatürkürzel:
   Ctrl + O    CSV-Datei abspielen           Ctrl + D    Dashboard anzeigen
   Ctrl + ,    Setup-Bereich umschalten      Ctrl + W    Widgets anzeigen
 
-Tipp: Doppelklicken Sie auf eine Gruppe oder ein Diagramm, um es in einem
-      anderen Fenster anzuzeigen.
+Tipp: Doppelklicken Sie auf eine Gruppe, ein Diagramm oder ein Widget, um es in
+      einem anderen Fenster anzuzeigen.

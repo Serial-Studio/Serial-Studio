@@ -41,7 +41,13 @@ MouseArea {
     //
     // Signals
     //
+    signal rightClicked()
     signal selectionChanged()
+
+    //
+    // Accepted buttons
+    //
+    acceptedButtons: Qt.RightButton | Qt.LeftButton
 
     //
     // Selects all the items that are "touched" by the selection rectangle
@@ -124,6 +130,7 @@ MouseArea {
     //
     onClicked: {
         if (mouse.button == Qt.RightButton) {
+            root.rightClicked()
             mouse.accepted = false
             return
         }
@@ -142,6 +149,7 @@ MouseArea {
     //
     onPressed: {
         if(mouse.button == Qt.RightButton) {
+            root.rightClicked()
             mouse.accepted = false
             return
         }

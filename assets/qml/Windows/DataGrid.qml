@@ -41,7 +41,8 @@ Control {
     // Settings
     //
     Settings {
-        property alias horizontalRange: slider.value
+        property alias numPoints: slider.value
+        property alias multiplier: mult.value
     }
 
     //
@@ -163,24 +164,45 @@ Control {
                         // Horizontal range slider
                         //
                         RowLayout {
-                            spacing: app.spacing
+                            spacing: 0
                             visible: graphGenerator.count > 0
 
                             Slider {
                                 id: slider
-                                to: 100
+                                to: 25
                                 from: 1
+                                value: 10
                                 live: false
                                 Layout.fillWidth: true
                                 Layout.alignment: Qt.AlignVCenter
-                                value: Cpp_UI_GraphProvider.displayedPoints
-                                onValueChanged: Cpp_UI_GraphProvider.displayedPoints = value
+                                onValueChanged: Cpp_UI_GraphProvider.displayedPoints = value * Math.pow(10, mult.value)
+                            }
+
+                            Item {
+                                width: app.spacing
                             }
 
                             Label {
+                                font.pixelSize: 12
                                 font.family: app.monoFont
                                 Layout.alignment: Qt.AlignVCenter
-                                text: Math.ceil(slider.position * (slider.to))
+                                text: Math.ceil(slider.position * (slider.to)) + "×10^"
+                            }
+
+                            Item {
+                                width: app.spacing
+                            }
+
+                            SpinBox {
+                                id: mult
+                                to: 6
+                                from: 0
+                                value: 1
+                                editable: true
+                                Layout.maximumWidth: 42
+                                font.family: app.monoFont
+                                Layout.alignment: Qt.AlignVCenter
+                                onValueChanged: Cpp_UI_GraphProvider.displayedPoints = slider.value * Math.pow(10, mult.value)
                             }
                         }
 
@@ -402,7 +424,7 @@ Control {
 
                                         Rectangle {
                                             anchors.fill: parent
-                                            color: app.windowBackgroundColor
+                                            color: group.backgroundColor
                                         }
 
                                         Widgets.GroupDelegate {
@@ -459,7 +481,7 @@ Control {
 
                                         Rectangle {
                                             anchors.fill: parent
-                                            color: app.windowBackgroundColor
+                                            color: graph.backgroundColor
                                         }
 
                                         Widgets.GraphDelegate {
