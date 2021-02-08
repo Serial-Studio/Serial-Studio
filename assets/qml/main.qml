@@ -125,7 +125,7 @@ ApplicationWindow {
     //
     function showWelcomeGuide() {
         Cpp_IO_Console.clear()
-        Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText())
+        Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
     }
 
     //

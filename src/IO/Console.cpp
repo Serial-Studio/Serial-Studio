@@ -541,8 +541,6 @@ void Console::onDataReceived(const QByteArray &data)
 {
     if (enabled())
         m_tempBuffer.append(data);
-    else if (m_tempBuffer.size())
-        m_tempBuffer.clear();
 }
 
 /**
@@ -552,10 +550,9 @@ void Console::onDataReceived(const QByteArray &data)
 void Console::displayData()
 {
     if (enabled())
-    {
         append(dataToString(m_tempBuffer), showTimestamp());
-        m_tempBuffer.clear();
-    }
+
+    m_tempBuffer.clear();
 }
 
 /**

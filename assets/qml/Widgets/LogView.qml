@@ -36,7 +36,6 @@ Rectangle {
     property int lineOffset: 0
     property Menu contextMenu: null
     property alias font: label.font
-    property bool autoscroll: false
     property string selectedText: ""
     property string placeholderText: ""
     property alias model: listView.model
@@ -45,7 +44,11 @@ Rectangle {
     //
     // Line properties
     //
-    readonly property int lineHeight: root.font.pixelSize + 2
+    readonly property int lineHeight: metrics.height
+    FontMetrics {
+        id: metrics
+        font: root.font
+    }
 
     //
     // Set colors
@@ -109,10 +112,12 @@ Rectangle {
     // the given @a mouse area
     //
     function updateCaretLineLocation(mouseArea) {
-        if (mouseArea.containsMouse && (!autoscroll || !Cpp_IO_Manager.connected)) {
+        if (mouseArea.containsMouse && (!Cpp_IO_Console.autoscroll || !Cpp_IO_Manager.connected)) {
             var contentX = lineCountRect.width + 2 * app.spacing
-            var contentY = mouseArea.mouseY + listView.contentY - root.font.pixelSize
+            var contentY = mouseArea.mouseY + listView.contentY
             var index = listView.indexAt(contentX, contentY)
+            if (index < 0)
+                index = listView.indexAt(contentX, contentY + root.lineHeight)
 
             if (index >= 0) {
                 listView.currentIndex = index
@@ -157,7 +162,6 @@ Rectangle {
         cacheBuffer: 0
         currentIndex: 0
         model: root.model
-        interactive: true
         anchors.fill: parent
         anchors.leftMargin: 0
         snapMode: ListView.SnapToItem
@@ -169,7 +173,11 @@ Rectangle {
         //
         ScrollBar.vertical: ScrollBar {
             id: scrollbar
-            snapMode: ScrollBar.SnapAlways
+            snapMode: ScrollBar.SnapOnRelease
+            onActiveChanged: {
+                if (active && Cpp_IO_Console.autoscroll)
+                    Cpp_IO_Console.autoscroll = false
+            }
         }
 
         //
@@ -184,7 +192,7 @@ Rectangle {
         }
 
         onCountChanged: {
-            if (root.autoscroll) {
+            if (Cpp_IO_Console.autoscroll) {
                 listView.positionViewAtEnd()
                 listView.currentIndex = listView.count - 2
                 currentContentY = contentY
@@ -210,7 +218,6 @@ Rectangle {
         // Caret line + line number
         //
         highlight: Rectangle {
-            z: 0
             width: listView.width
             color: root.caretLineColor
             implicitWidth: listView.width
@@ -233,7 +240,6 @@ Rectangle {
         // Line delegate
         //
         delegate: Text {
-            z: 1
             font: root.font
             text: modelData
             color: root.textColor
@@ -241,57 +247,6 @@ Rectangle {
             width: listView.width - x
             x: app.spacing + lineCountRect.width
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        }
-    }
-
-    //
-    // Line selector rectangles
-    //
-    ColumnLayout {
-        spacing: 0
-        anchors.fill: listView
-        anchors.leftMargin: app.spacing + lineCountRect.width
-
-        Repeater {
-            model: Math.floor(root.height / root.lineHeight)
-
-            delegate: Rectangle {
-                id: rect
-                opacity: 0.5
-                color: "transparent"
-                width: parent.width
-                height: root.lineHeight
-                Component.onCompleted: update()
-
-                function update() {
-                    var i = index + Math.round(listView.contentY / root.lineHeight)
-                    var s = dragSelector.selectedLines.indexOf(i)
-
-                    if (s >= 0)
-                        rect.color = "#5F227CEB"
-                    else
-                        rect.color = "transparent"
-                }
-
-                Connections {
-                    target: dragSelector
-                    function onSelectionChanged() {
-                        rect.update()
-                    }
-                }
-
-                Connections {
-                    target: listView
-
-                    function onCountChanged() {
-                        rect.update()
-                    }
-
-                    function onContentYChanged() {
-                        rect.update()
-                    }
-                }
-            }
         }
     }
 
@@ -322,4 +277,58 @@ Rectangle {
         onMouseYChanged: root.updateCaretLineLocation(this)
     }
 
+    //
+    // Line selector rectangles
+    //
+    ColumnLayout {
+        spacing: 0
+        anchors.fill: parent
+        anchors.margins: app.spacing
+        anchors.leftMargin: app.spacing + lineCountRect.width
+
+        Repeater {
+            model: Math.floor(parent.height / root.lineHeight)
+
+            delegate: Rectangle {
+                id: rect
+                color: "transparent"
+                Layout.fillWidth: true
+                Layout.minimumHeight: root.lineHeight
+                Layout.maximumHeight: root.lineHeight
+
+                function update() {
+                    if (dragSelector.selectedLines.length == 0)
+                        return
+
+                    var i = index + Math.round(listView.contentY / root.lineHeight)
+                    var s = dragSelector.selectedLines.indexOf(i)
+
+                    if (s >= 0)
+                        rect.color = "#2F227CEB"
+                    else
+                        rect.color = "transparent"
+                }
+
+                Connections {
+                    target: dragSelector
+
+                    function onSelectionChanged() {
+                        rect.update()
+                    }
+                }
+
+                Connections {
+                    target: listView
+
+                    function onContentYChanged() {
+                        rect.update()
+                    }
+                }
+            }
+        }
+
+        Item {
+            Layout.fillHeight: true
+        }
+    }
 }

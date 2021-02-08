@@ -34,7 +34,10 @@ Page {
     property int borderWidth: 3
     property alias icon: _bt.icon
     property bool gradient: false
+    property int headerHeight: 32
+    property bool headerVisible: true
     property alias showIcon: _bt.visible
+    property int radius: root.borderWidth + 2
     property color titleColor: palette.brightText
     property color borderColor: palette.highlight
     property color backgroundColor: Qt.darker(palette.base)
@@ -58,8 +61,8 @@ Page {
     // Background widget
     //
     background: Rectangle {
+        radius: root.radius
         color: root.backgroundColor
-        radius: root.borderWidth + 2
         border.width: root.borderWidth
         border.color: root.gradientColor
     }
@@ -68,9 +71,10 @@ Page {
     // Window title & controls
     //
     header: Rectangle {
-        height: 32
+        radius: root.radius
         color: root.borderColor
-        radius: root.borderWidth + 2
+        height: root.headerHeight
+        visible: root.headerVisible
 
         gradient: Gradient {
             GradientStop {
@@ -121,6 +125,7 @@ Page {
                 Layout.fillWidth: true
                 color: root.titleColor
                 Layout.alignment: Qt.AlignVCenter
+                font.pixelSize: root.headerHeight * 14 / 32
                 horizontalAlignment: root.showIcon ? Label.AlignLeft : Label.AlignHCenter
             }
         }

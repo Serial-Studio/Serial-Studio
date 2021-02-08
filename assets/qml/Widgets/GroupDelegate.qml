@@ -38,14 +38,14 @@ Window {
     title: group !== null ? group.title : ""
     Behavior on opacity {NumberAnimation{}}
 
-    property int groupIndex: 0
+    property int groupId: 0
     property Group group: null
 
     Connections {
         target: Cpp_UI_Provider
         function onUpdated() {
             if (root.enabled) {
-                var g = Cpp_UI_Provider.getGroup(groupIndex)
+                var g = Cpp_UI_Provider.getGroup(groupId)
                 if (g !== null)
                     root.group = g
             }

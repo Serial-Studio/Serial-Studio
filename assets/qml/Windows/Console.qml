@@ -152,7 +152,6 @@ Control {
             font.family: app.monoFont
             model: Cpp_IO_Console.dataModel
             lineOffset: Cpp_IO_Console.lineOffset
-            autoscroll: Cpp_IO_Console.autoscroll
             placeholderText: qsTr("No data received so far...")
         }
 

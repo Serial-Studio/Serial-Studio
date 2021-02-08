@@ -35,8 +35,9 @@ Window {
     spacing: -1
     showIcon: false
     visible: opacity > 0
-    borderColor: "#517497"
     opacity: enabled ? 1 : 0
+    borderColor: root.headerVisible ? "#517497" : "transparent"
+
     Behavior on opacity {NumberAnimation{}}
     title: Cpp_UI_GraphProvider.getDataset(graphId).title +
            " (" + Cpp_UI_GraphProvider.getDataset(graphId).units + ")"

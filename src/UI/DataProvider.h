@@ -58,9 +58,6 @@ private:
 
 private slots:
     void resetData();
-
-private:
-    QTimer m_timer;
 };
 }
 

@@ -62,6 +62,10 @@ MouseArea {
         var yStart = Math.min(y1, y2)
         var yEnd = Math.max(y1, y2)
 
+        // Selection rectangle visible
+        if (!selectionRect.visible)
+            return;
+
         // Check if item is selected
         for (var i = 0; i < listView.count; ++i) {
             // Get item & validate it
@@ -116,7 +120,7 @@ MouseArea {
     }
 
     //
-    //
+    // Update values when the user clicks anywhere on the screen
     //
     onClicked: {
         if (mouse.button == Qt.RightButton) {
@@ -137,13 +141,17 @@ MouseArea {
     // Select line by double clicking it
     //
     onDoubleClicked: {
-        var index = listView.indexAt(root.xStart, mouseY + listView.contentY - root.itemHeight / 2)
-        if (index >= 0)
-            root.selectedLines.push(index)
+        var index = listView.indexAt(root.xStart, mouseY + listView.contentY)
+        if (index >= 0) {
+            if (root.selectedLines.indexOf(index) < 0) {
+                root.selectedLines.push(index)
+                root.selectionChanged()
+            }
+        }
     }
 
     //
-    //
+    // Anchor the rectangle when the user clicks and begins dragging
     //
     onPressed: {
         if(mouse.button == Qt.RightButton) {
@@ -169,7 +177,7 @@ MouseArea {
     }
 
     //
-    //
+    // Draw selection rectangle when position is changed
     //
     onPositionChanged: {
         if (mouse.button == Qt.RightButton) {
@@ -234,10 +242,9 @@ MouseArea {
     }
 
     //
-    //
+    // Hide selection rectangle when the user stops touching the mouse
     //
     onReleased: {
-        listView.interactive = true
         selectionRect.visible = false
     }
 }

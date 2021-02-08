@@ -25,6 +25,8 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
+import QtQuick.Window 2.12 as QtWindow
+
 import Qt.labs.settings 1.0
 import "../Widgets" as Widgets
 
@@ -356,7 +358,7 @@ Control {
                             columnSpacing: 0
                             Layout.fillHeight: true
                             Layout.fillWidth: true
-                            columns: Math.floor(width / 224)
+                            columns: Math.floor(width / 256)
 
                             Repeater {
                                 id: groupGenerator
@@ -368,17 +370,48 @@ Control {
 
                                     Widgets.GroupDelegate {
                                         id: groupDelegate
-                                        groupIndex: index
+                                        groupId: index
                                         anchors.fill: parent
                                         anchors.margins: app.spacing
                                         group: Cpp_UI_Provider.getGroup(index)
-                                        enabled: viewOptions.groups[groupIndex]
+                                        enabled: viewOptions.groups[groupId]
 
                                         Connections {
                                             target: viewOptions
                                             function onGroupsChanged() {
-                                                groupDelegate.enabled = viewOptions.groups[groupDelegate.groupIndex]
+                                                groupDelegate.enabled = viewOptions.groups[groupDelegate.groupId]
                                             }
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onDoubleClicked: {
+                                            groupWindow.groupId = index
+                                            groupWindow.show()
+                                        }
+                                    }
+
+                                    QtWindow.Window {
+                                        id: groupWindow
+                                        minimumWidth: 320
+                                        minimumHeight: 256
+                                        title: graph.title
+
+                                        property alias groupId: group.groupId
+
+                                        Rectangle {
+                                            anchors.fill: parent
+                                            color: app.windowBackgroundColor
+                                        }
+
+                                        Widgets.GroupDelegate {
+                                            id: group
+                                            showIcon: true
+                                            headerHeight: 48
+                                            anchors.margins: 0
+                                            anchors.fill: parent
+                                            borderColor: backgroundColor
                                         }
                                     }
                                 }
@@ -404,6 +437,38 @@ Control {
                                             function onGraphsChanged() {
                                                 graphDelegate.enabled = viewOptions.graphs[graphDelegate.graphId]
                                             }
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onDoubleClicked: {
+                                            graphWindow.graphId = index
+                                            graphWindow.show()
+                                        }
+                                    }
+
+                                    QtWindow.Window {
+                                        id: graphWindow
+                                        minimumWidth: 320
+                                        minimumHeight: 256
+                                        title: graph.title
+
+                                        property alias graphId: graph.graphId
+
+                                        Rectangle {
+                                            anchors.fill: parent
+                                            color: app.windowBackgroundColor
+                                        }
+
+                                        Widgets.GraphDelegate {
+                                            id: graph
+                                            showIcon: true
+                                            headerHeight: 48
+                                            anchors.margins: 0
+                                            anchors.fill: parent
+                                            borderColor: backgroundColor
+                                            icon.source: "qrc:/icons/chart.svg"
                                         }
                                     }
                                 }
