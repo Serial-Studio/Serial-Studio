@@ -64,7 +64,7 @@ Rectangle {
 
         // Get current index
         var index = listView.indexAt(dragSelector.xStart, listView.contentY)
-        if (currentIndex)
+        if (currentIndex || index < 0)
             index = listView.currentIndex
 
         // Get new index
@@ -94,7 +94,7 @@ Rectangle {
 
         // Get current index
         var index = listView.indexAt(dragSelector.xStart, listView.contentY + listView.height)
-        if (currentIndex)
+        if (currentIndex || index < 0)
             index = listView.currentIndex
 
         // Get new index
@@ -181,6 +181,26 @@ Rectangle {
     }
 
     //
+    // Updates the caret line location so that its shown in the vertical location of
+    // the given @a mouse area
+    //
+    function updateCurrentIndex(mouseArea) {
+        if (mouseArea.containsMouse && (!Cpp_IO_Console.autoscroll || !Cpp_IO_Manager.connected)) {
+            var contentX = 2 * app.spacing
+            var contentY = mouseArea.mouseY + listView.contentY
+            var index = listView.indexAt(contentX, contentY)
+            if (index < 0)
+                index = listView.indexAt(contentX, contentY + root.lineHeight)
+
+            if (index >= 0) {
+                listView.currentIndex = index
+                listView.previousCurrentIndex = index
+                root.selectedText = listView.currentItem.text
+            }
+        }
+    }
+
+    //
     // Placeholder text & font source for rest of widget
     //
     Text {
@@ -256,6 +276,26 @@ Rectangle {
     }
 
     //
+    // Hack to allow scrollbar buttons to work on all times
+    //
+    MouseArea {
+        hoverEnabled: true
+        anchors.fill: parent
+        onMouseYChanged: root.updateCurrentIndex(this)
+
+        onWheel: {
+            var yValue = wheel.angleDelta.y / 15
+            if (Math.abs(yValue) < 1)
+                return
+
+            if (yValue > 0)
+                root.scrollUp(yValue, true)
+            else
+                root.scrollDown(Math.abs(yValue), true)
+        }
+    }
+
+    //
     // Implementation of a rectangular selection that selects any line that is
     // is "touched" by the selector rectangle
     //
@@ -267,7 +307,7 @@ Rectangle {
         itemHeight: root.lineHeight
         anchors.margins: app.spacing
         anchors.leftMargin: app.spacing
-        //onMouseYChanged: root.updateCaretLineLocation(this)
+        onMouseYChanged: root.updateCurrentIndex(this)
         anchors.rightMargin: scrollbar.width + app.spacing - 2
         onRightClicked: contextMenu.popup()
 
@@ -283,7 +323,7 @@ Rectangle {
 
         onWheel: {
             var yValue = wheel.angleDelta.y / 15
-            if (Math.abs(yValue) < 2)
+            if (Math.abs(yValue) < 1)
                 return
 
             if (yValue > 0)

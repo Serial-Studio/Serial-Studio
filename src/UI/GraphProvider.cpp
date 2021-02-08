@@ -211,8 +211,8 @@ void GraphProvider::updateValues()
     if (IO::Console::getInstance()->enabled())
         return;
 
-    // Abort if we are not connected to a device
-    if (!IO::Manager::getInstance()->connected())
+    // Abort if not connected to device or reproducing CSV file
+    if (!IO::Manager::getInstance()->connected() && !CSV::Player::getInstance()->isOpen())
         return;
 
     // Clear dataset & latest values list
