@@ -261,7 +261,7 @@ Rectangle {
         anchors.margins: app.spacing
         itemHeight: root.lineHeight
         xStart: lineCountRect.width + 2 * app.spacing
-        onMouseYChanged: root.updateCaretLineLocation(this)
+        //nMouseYChanged: root.updateCaretLineLocation(this)
         anchors.leftMargin: lineCountRect.width + app.spacing
     }
 
@@ -274,7 +274,7 @@ Rectangle {
         cursorShape: Qt.IBeamCursor
         acceptedButtons: Qt.RightButton
         onClicked: contextMenu.popup()
-        onMouseYChanged: root.updateCaretLineLocation(this)
+        //onMouseYChanged: root.updateCaretLineLocation(this)
     }
 
     //

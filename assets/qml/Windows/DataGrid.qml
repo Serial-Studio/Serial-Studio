@@ -386,19 +386,19 @@ Control {
 
                                     MouseArea {
                                         anchors.fill: parent
-                                        onDoubleClicked: {
-                                            groupWindow.groupId = index
-                                            groupWindow.show()
-                                        }
+                                        onDoubleClicked: groupWindow.show()
                                     }
 
                                     QtWindow.Window {
                                         id: groupWindow
                                         minimumWidth: 320
                                         minimumHeight: 256
-                                        title: graph.title
+                                        title: group.title
 
-                                        property alias groupId: group.groupId
+                                        flags: Qt.Dialog |
+                                               Qt.WindowStaysOnTopHint |
+                                               Qt.WindowCloseButtonHint |
+                                               Qt.WindowTitleHint
 
                                         Rectangle {
                                             anchors.fill: parent
@@ -407,6 +407,7 @@ Control {
 
                                         Widgets.GroupDelegate {
                                             id: group
+                                            groupId: index
                                             showIcon: true
                                             headerHeight: 48
                                             anchors.margins: 0
@@ -442,10 +443,7 @@ Control {
 
                                     MouseArea {
                                         anchors.fill: parent
-                                        onDoubleClicked: {
-                                            graphWindow.graphId = index
-                                            graphWindow.show()
-                                        }
+                                        onDoubleClicked: graphWindow.show()
                                     }
 
                                     QtWindow.Window {
@@ -454,7 +452,10 @@ Control {
                                         minimumHeight: 256
                                         title: graph.title
 
-                                        property alias graphId: graph.graphId
+                                        flags: Qt.Dialog |
+                                               Qt.WindowStaysOnTopHint |
+                                               Qt.WindowCloseButtonHint |
+                                               Qt.WindowTitleHint
 
                                         Rectangle {
                                             anchors.fill: parent
@@ -463,6 +464,7 @@ Control {
 
                                         Widgets.GraphDelegate {
                                             id: graph
+                                            graphId: index
                                             showIcon: true
                                             headerHeight: 48
                                             anchors.margins: 0
