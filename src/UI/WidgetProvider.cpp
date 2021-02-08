@@ -417,7 +417,8 @@ void WidgetProvider::updateModels()
         return;
 
     // Abort if not connected to device or reproducing CSV file
-    if (!IO::Manager::getInstance()->connected() && !CSV::Player::getInstance()->isOpen())
+    if (!IO::Manager::getInstance()->connected()
+        && !CSV::Player::getInstance()->isPlaying())
         return;
 
     // Clear current groups
