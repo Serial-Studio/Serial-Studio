@@ -63,21 +63,19 @@ GraphProvider::GraphProvider()
     qRegisterMetaType<QAbstractAxis *>();
     qRegisterMetaType<QAbstractSeries *>();
 
-    // Update graph values as soon as JSON manager reads data
+    // Module signals/slots
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
+    auto co = IO::Console::getInstance();
+    auto ge = JSON::Generator::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
+    connect(ge, SIGNAL(jsonChanged()), this, SLOT(updateValues()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
+    connect(co, SIGNAL(enabledChanged()), this, SLOT(updateValues()));
 
     // Avoid issues when CSV player goes backwards
     connect(CSV::Player::getInstance(), SIGNAL(timestampChanged()),
             this, SLOT(csvPlayerFixes()));
-
-    // Update user interface at a frequency of ~40 Hz
-    m_timer.setInterval(1000 / 40);
-    m_timer.setTimerType(Qt::PreciseTimer);
-    connect(&m_timer, &QTimer::timeout, this, &GraphProvider::updateValues);
-    m_timer.start();
 
     // clang-format on
     LOG_TRACE() << "Class initialized";
@@ -209,11 +207,6 @@ void GraphProvider::updateValues()
 {
     // Abort if console is currently in use
     if (IO::Console::getInstance()->enabled())
-        return;
-
-    // Abort if not connected to device or reproducing CSV file
-    if (!IO::Manager::getInstance()->connected()
-        && !CSV::Player::getInstance()->isPlaying())
         return;
 
     // Clear dataset & latest values list

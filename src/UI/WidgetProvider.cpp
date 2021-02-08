@@ -43,17 +43,15 @@ static WidgetProvider *INSTANCE = Q_NULLPTR;
  */
 WidgetProvider::WidgetProvider()
 {
-    // React to open/close of devices & files
+    // Module signals/slots
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
+    auto co = IO::Console::getInstance();
+    auto ge = JSON::Generator::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
+    connect(ge, SIGNAL(jsonChanged()), this, SLOT(updateModels()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
-
-    // Update user interface at a frequency of ~40 Hz
-    m_timer.setInterval(1000 / 40);
-    m_timer.setTimerType(Qt::PreciseTimer);
-    connect(&m_timer, &QTimer::timeout, this, &WidgetProvider::updateModels);
-    m_timer.start();
+    connect(co, SIGNAL(enabledChanged()), this, SLOT(updateModels()));
 
     // Look like a pro
     LOG_TRACE() << "Class initialized";
@@ -414,11 +412,6 @@ void WidgetProvider::updateModels()
 {
     // Abort if console is currently in use
     if (IO::Console::getInstance()->enabled())
-        return;
-
-    // Abort if not connected to device or reproducing CSV file
-    if (!IO::Manager::getInstance()->connected()
-        && !CSV::Player::getInstance()->isPlaying())
         return;
 
     // Clear current groups
