@@ -141,7 +141,7 @@
     <name>Console</name>
     <message>
         <source>No data received so far...</source>
-        <translation type="vanished">No se han recibido datos hasta ahora ...</translation>
+        <translation>No se han recibido datos hasta ahora ...</translation>
     </message>
     <message>
         <source>Autoscroll</source>
@@ -248,6 +248,14 @@
     <message>
         <source>Data</source>
         <translation>Datos</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>Puntos</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation>Escala</translation>
     </message>
 </context>
 <context>

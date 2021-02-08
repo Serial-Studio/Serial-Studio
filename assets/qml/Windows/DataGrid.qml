@@ -41,8 +41,8 @@ Control {
     // Settings
     //
     Settings {
-        property alias numPoints: slider.value
-        property alias multiplier: mult.value
+        property alias numPoints: points.value
+        property alias multiplier: scale.value
     }
 
     //
@@ -164,45 +164,72 @@ Control {
                         // Horizontal range slider
                         //
                         RowLayout {
-                            spacing: 0
+                            id: ranges
+                            spacing: app.spacing * 2
                             visible: graphGenerator.count > 0
 
-                            Slider {
-                                id: slider
-                                to: 25
-                                from: 1
-                                value: 10
-                                live: false
+                            function updateGraphValue() {
+                                Cpp_UI_GraphProvider.displayedPoints = points.value * Math.pow(10, scale.value)
+                            }
+
+                            ColumnLayout {
+                                spacing: app.spacing
                                 Layout.fillWidth: true
-                                Layout.alignment: Qt.AlignVCenter
-                                onValueChanged: Cpp_UI_GraphProvider.displayedPoints = value * Math.pow(10, mult.value)
+                                Layout.fillHeight: true
+                                Layout.alignment: Qt.AlignHCenter
+
+                                Widgets.SimpleDial {
+                                    id: points
+
+                                    to: 25
+                                    from: 1
+                                    value: 10
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    Layout.alignment: Qt.AlignHCenter
+                                    onPressedChanged: ranges.updateGraphValue()
+                                    Component.onCompleted: ranges.updateGraphValue()
+                                }
+
+                                Label {
+                                    font.pixelSize: 12
+                                    text: qsTr("Points")
+                                    Layout.fillWidth: true
+                                    font.family: app.monoFont
+                                    Layout.alignment: Qt.AlignHCenter
+                                    horizontalAlignment: Label.AlignHCenter
+                                }
                             }
 
-                            Item {
-                                width: app.spacing
-                            }
+                            ColumnLayout {
+                                spacing: app.spacing
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Layout.alignment: Qt.AlignHCenter
 
-                            Label {
-                                font.pixelSize: 12
-                                font.family: app.monoFont
-                                Layout.alignment: Qt.AlignVCenter
-                                text: Math.ceil(slider.position * (slider.to)) + "×10^"
-                            }
+                                Widgets.SimpleDial {
+                                    id: scale
 
-                            Item {
-                                width: app.spacing
-                            }
+                                    to: 6
+                                    from: 0
+                                    value: 1
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    snapMode: Dial.SnapOnRelease
+                                    text: "10^" + Math.ceil(scale.value)
+                                    Layout.alignment: Qt.AlignHCenter
+                                    onPressedChanged: ranges.updateGraphValue()
+                                    Component.onCompleted: ranges.updateGraphValue()
+                                }
 
-                            SpinBox {
-                                id: mult
-                                to: 6
-                                from: 0
-                                value: 1
-                                editable: true
-                                Layout.maximumWidth: 42
-                                font.family: app.monoFont
-                                Layout.alignment: Qt.AlignVCenter
-                                onValueChanged: Cpp_UI_GraphProvider.displayedPoints = slider.value * Math.pow(10, mult.value)
+                                Label {
+                                    font.pixelSize: 12
+                                    Layout.fillWidth: true
+                                    font.family: app.monoFont
+                                    Layout.alignment: Qt.AlignHCenter
+                                    horizontalAlignment: Label.AlignHCenter
+                                    text: qsTr("Scale")
+                                }
                             }
                         }
 

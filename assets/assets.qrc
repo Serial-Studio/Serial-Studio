@@ -86,5 +86,6 @@
         <file>icons/scroll-down.svg</file>
         <file>icons/scroll-top.svg</file>
         <file>icons/scroll-up.svg</file>
+        <file>qml/Widgets/SimpleDial.qml</file>
     </qresource>
 </RCC>

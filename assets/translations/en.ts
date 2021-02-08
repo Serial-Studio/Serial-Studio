@@ -163,6 +163,10 @@
         <source>Save as</source>
         <translation></translation>
     </message>
+    <message>
+        <source>No data received so far...</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>CsvPlayer</name>
@@ -195,6 +199,14 @@
     </message>
     <message>
         <source>Data</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Scale</source>
         <translation></translation>
     </message>
 </context>

@@ -137,7 +137,7 @@
     <name>Console</name>
     <message>
         <source>No data received so far...</source>
-        <translation type="vanished">Noch keine Daten verfügbar...</translation>
+        <translation>Noch keine Daten verfügbar...</translation>
     </message>
     <message>
         <source>Send data to device</source>
@@ -240,6 +240,14 @@
     <message>
         <source>Data</source>
         <translation>Daten</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>Punkte</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation>Multiplikator</translation>
     </message>
 </context>
 <context>

@@ -137,7 +137,7 @@
     <name>Console</name>
     <message>
         <source>No data received so far...</source>
-        <translation type="vanished">目前未收到任何数据...</translation>
+        <translation>目前未收到任何数据...</translation>
     </message>
     <message>
         <source>Send data to device</source>
@@ -244,6 +244,14 @@
     <message>
         <source>Data</source>
         <translation>数据</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>点数</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation>乘数</translation>
     </message>
 </context>
 <context>

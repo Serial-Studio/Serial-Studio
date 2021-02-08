@@ -203,7 +203,6 @@ Window {
                     anchors.fill: parent
                     copyrightsVisible: false
                     anchors.margins: parent.border.width
-                    onActiveMapTypeChanged: console.log(map.activeMapType)
 
                     tilt: 27
                     zoomLevel: 16
