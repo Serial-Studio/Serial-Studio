@@ -139,9 +139,9 @@ Control {
             contextMenu: menu
             font.pixelSize: 12
             Layout.fillWidth: true
-            border.color: caretLineColor
             Layout.fillHeight: true
             font.family: app.monoFont
+            border.color: palette.midlight
             model: Cpp_IO_Console.dataModel
             lineOffset: Cpp_IO_Console.lineOffset
             placeholderText: qsTr("No data received so far...")

@@ -413,6 +413,8 @@ Control {
 
                                     QtWindow.Window {
                                         id: groupWindow
+                                        width: 640
+                                        height: 480
                                         minimumWidth: 320
                                         minimumHeight: 256
                                         title: group.title
@@ -470,6 +472,8 @@ Control {
 
                                     QtWindow.Window {
                                         id: graphWindow
+                                        width: 640
+                                        height: 480
                                         minimumWidth: 320
                                         minimumHeight: 256
                                         title: graph.title

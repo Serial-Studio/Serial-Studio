@@ -39,7 +39,6 @@ Rectangle {
     property string selectedText: ""
     property string placeholderText: ""
     property alias model: listView.model
-    readonly property int digits: Math.max(3, listView.count.toString().length)
 
     //
     // Line properties
@@ -53,11 +52,8 @@ Rectangle {
     //
     // Set colors
     //
-    property color textColor: "#72d084"
-    property color caretLineColor: "#222228"
-    property color backgroundColor: "#060601"
-    property color lineCountTextColor: "#545454"
-    property color lineCountBackgroundColor: "#121212"
+    property color textColor: "#8ecd9d"
+    property color backgroundColor: "#121218"
 
     //
     // Scroll up x positions
@@ -185,26 +181,6 @@ Rectangle {
     }
 
     //
-    // Updates the caret line location so that its shown in the vertical location of
-    // the given @a mouse area
-    //
-    function updateCaretLineLocation(mouseArea) {
-        if (mouseArea.containsMouse && (!Cpp_IO_Console.autoscroll || !Cpp_IO_Manager.connected)) {
-            var contentX = lineCountRect.width + 2 * app.spacing
-            var contentY = mouseArea.mouseY + listView.contentY
-            var index = listView.indexAt(contentX, contentY)
-            if (index < 0)
-                index = listView.indexAt(contentX, contentY + root.lineHeight)
-
-            if (index >= 0) {
-                listView.currentIndex = index
-                listView.previousCurrentIndex = index
-                root.selectedText = listView.currentItem.text
-            }
-        }
-    }
-
-    //
     // Placeholder text & font source for rest of widget
     //
     Text {
@@ -215,20 +191,6 @@ Rectangle {
         text: root.placeholderText
         visible: listView.count == 0
         anchors.margins: app.spacing
-        anchors.leftMargin: lineCountRect.width
-    }
-
-    //
-    // Line count rectangle
-    //
-    Rectangle {
-        id: lineCountRect
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.margins: root.border.width
-        color: root.lineCountBackgroundColor
-        width: root.font.pixelSize * (root.digits)
     }
 
     //
@@ -241,7 +203,6 @@ Rectangle {
         model: root.model
         interactive: false
         anchors.fill: parent
-        anchors.leftMargin: 0
         snapMode: ListView.SnapToItem
         anchors.margins: app.spacing
         highlightFollowsCurrentItem: false
@@ -282,37 +243,14 @@ Rectangle {
         }
 
         //
-        // Caret line + line number
-        //
-        highlight: Rectangle {
-            width: listView.width
-            color: root.caretLineColor
-            implicitWidth: listView.width
-            y: listView.currentItem !== null ? listView.currentItem.y : 0
-            height: listView.currentItem !== null ? listView.currentItem.height :
-                                                    lineNumber.implicitHeight
-
-            Text {
-                id: lineNumber
-                font: root.font
-                width: lineCountRect.width
-                color: root.lineCountTextColor
-                horizontalAlignment: Qt.AlignHCenter
-                anchors.verticalCenter: parent.verticalCenter
-                text: listView.currentIndex + root.lineOffset + 1
-            }
-        }
-
-        //
         // Line delegate
         //
         delegate: Text {
             font: root.font
             text: modelData
+            width: listView.width
             color: root.textColor
             height: root.lineHeight
-            width: listView.width - x
-            x: app.spacing + lineCountRect.width
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }
     }
@@ -325,11 +263,11 @@ Rectangle {
         id: dragSelector
         listView: listView
         anchors.fill: parent
-        anchors.margins: app.spacing
+        xStart: 2 * app.spacing
         itemHeight: root.lineHeight
-        xStart: lineCountRect.width + 2 * app.spacing
+        anchors.margins: app.spacing
+        anchors.leftMargin: app.spacing
         //onMouseYChanged: root.updateCaretLineLocation(this)
-        anchors.leftMargin: lineCountRect.width + app.spacing
         anchors.rightMargin: scrollbar.width + app.spacing - 2
         onRightClicked: contextMenu.popup()
 
@@ -382,7 +320,6 @@ Rectangle {
         spacing: 0
         anchors.fill: parent
         anchors.margins: app.spacing
-        anchors.leftMargin: app.spacing + lineCountRect.width
         anchors.rightMargin: scrollbar.width + app.spacing - 2
 
         Repeater {
@@ -442,7 +379,7 @@ Rectangle {
 
         property real position: listView.contentY / Math.max(listView.height, listView.contentHeight)
 
-        width: 24
+        width: 18
         spacing: 0
         opacity: enabled ? 1 : 0.5
         enabled: listView.contentHeight > listView.height
@@ -479,6 +416,8 @@ Rectangle {
             Layout.fillWidth: true
             icon.color: palette.text
             onClicked: root.scrollToTop()
+            Layout.minimumHeight: scrollbar.width
+            Layout.maximumHeight: scrollbar.width
             icon.source: "qrc:/icons/scroll-top.svg"
         }
 
@@ -490,6 +429,8 @@ Rectangle {
             Layout.fillWidth: true
             icon.color: palette.text
             onClicked: root.scrollUp(10, false)
+            Layout.minimumHeight: scrollbar.width
+            Layout.maximumHeight: scrollbar.width
             icon.source: "qrc:/icons/scroll-up.svg"
         }
 
@@ -536,6 +477,8 @@ Rectangle {
             Layout.fillWidth: true
             icon.color: palette.text
             onClicked: root.scrollDown(10, false)
+            Layout.minimumHeight: scrollbar.width
+            Layout.maximumHeight: scrollbar.width
             icon.source: "qrc:/icons/scroll-down.svg"
         }
 
@@ -546,6 +489,8 @@ Rectangle {
             Layout.fillWidth: true
             icon.color: palette.text
             onClicked: root.scrollToBottom()
+            Layout.minimumHeight: scrollbar.width
+            Layout.maximumHeight: scrollbar.width
             icon.source: "qrc:/icons/scroll-bottom.svg"
         }
     }

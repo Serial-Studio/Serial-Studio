@@ -115,6 +115,8 @@ Control {
 
                         QtWindow.Window {
                             id: windowGyro
+                            width: 640
+                            height: 480
                             minimumWidth: root.minimumWidgetSize * 1.2
                             minimumHeight: root.minimumWidgetSize * 1.2
                             title: gyro.title
@@ -164,6 +166,8 @@ Control {
 
                         QtWindow.Window {
                             id: windowAcc
+                            width: 640
+                            height: 480
                             minimumWidth: root.minimumWidgetSize * 1.2
                             minimumHeight: root.minimumWidgetSize * 1.2
                             title: acc.title
@@ -213,6 +217,8 @@ Control {
 
                         QtWindow.Window {
                             id: windowMap
+                            width: 640
+                            height: 480
                             minimumWidth: root.minimumWidgetSize * 1.2
                             minimumHeight: root.minimumWidgetSize * 1.2
                             title: map.title
@@ -262,6 +268,8 @@ Control {
 
                         QtWindow.Window {
                             id: windowBar
+                            width: 640
+                            height: 480
                             minimumWidth: root.minimumWidgetSize * 1.2
                             minimumHeight: root.minimumWidgetSize * 1.2
                             title: bar.title
