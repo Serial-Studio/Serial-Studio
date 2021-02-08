@@ -162,23 +162,13 @@ Rectangle {
         cacheBuffer: 0
         currentIndex: 0
         model: root.model
+        interactive: false
         anchors.fill: parent
         anchors.leftMargin: 0
         snapMode: ListView.SnapToItem
         anchors.margins: app.spacing
         highlightFollowsCurrentItem: false
-
-        //
-        // Scrollbar
-        //
-        ScrollBar.vertical: ScrollBar {
-            id: scrollbar
-            snapMode: ScrollBar.SnapOnRelease
-            onActiveChanged: {
-                if (active && Cpp_IO_Console.autoscroll)
-                    Cpp_IO_Console.autoscroll = false
-            }
-        }
+        anchors.rightMargin: scrollbar.width + app.spacing - 2
 
         //
         // Hacks to implement auto-scrolling & position preservation when new data is
@@ -251,6 +241,18 @@ Rectangle {
     }
 
     //
+    // Simple implementation of a vertical text cursor
+    //
+    MouseArea {
+        hoverEnabled: true
+        anchors.fill: parent
+        cursorShape: Qt.IBeamCursor
+        acceptedButtons: Qt.RightButton
+        onClicked: contextMenu.popup()
+        onMouseYChanged: root.updateCaretLineLocation(this)
+    }
+
+    //
     // Implementation of a rectangular selection that selects any line that is
     // is "touched" by the selector rectangle
     //
@@ -261,20 +263,39 @@ Rectangle {
         anchors.margins: app.spacing
         itemHeight: root.lineHeight
         xStart: lineCountRect.width + 2 * app.spacing
-        //nMouseYChanged: root.updateCaretLineLocation(this)
+        onMouseYChanged: root.updateCaretLineLocation(this)
         anchors.leftMargin: lineCountRect.width + app.spacing
+        anchors.rightMargin: scrollbar.width + app.spacing - 2
+
+        onDoubleClicked: {
+            var index = listView.currentIndex
+
+            if (index >= 0) {
+                dragSelector.selectedLines = []
+                dragSelector.selectedLines.push(index)
+                dragSelector.selectionChanged()
+            }
+        }
     }
 
     //
-    // Simple implementation of a vertical text cursor
+    // Click-to-deselect mouse area
     //
     MouseArea {
-        hoverEnabled: true
+        id: deselector
         anchors.fill: parent
-        cursorShape: Qt.IBeamCursor
-        acceptedButtons: Qt.RightButton
-        onClicked: contextMenu.popup()
-        //onMouseYChanged: root.updateCaretLineLocation(this)
+
+        Connections {
+            target: dragSelector
+            function onSelectionChanged() {
+                deselector.enabled = dragSelector.selectedLines.length > 0
+            }
+        }
+
+        onClicked: {
+            root.deselect()
+            dragSelector.wasHeld = false
+        }
     }
 
     //
@@ -285,6 +306,7 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: app.spacing
         anchors.leftMargin: app.spacing + lineCountRect.width
+        anchors.rightMargin: scrollbar.width + app.spacing - 2
 
         Repeater {
             model: Math.floor(parent.height / root.lineHeight)
@@ -297,8 +319,10 @@ Rectangle {
                 Layout.maximumHeight: root.lineHeight
 
                 function update() {
-                    if (dragSelector.selectedLines.length == 0)
+                    if (dragSelector.selectedLines.length == 0) {
+                        rect.color = "transparent"
                         return
+                    }
 
                     var i = index + Math.round(listView.contentY / root.lineHeight)
                     var s = dragSelector.selectedLines.indexOf(i)
@@ -320,6 +344,7 @@ Rectangle {
                 Connections {
                     target: listView
 
+
                     function onContentYChanged() {
                         rect.update()
                     }
@@ -329,6 +354,114 @@ Rectangle {
 
         Item {
             Layout.fillHeight: true
+        }
+    }
+
+    //
+    // Navigation buttons
+    //
+    ColumnLayout {
+        id: scrollbar
+
+        width: 24
+        spacing: 0
+        opacity: enabled ? 1 : 0.5
+        enabled: listView.contentHeight > listView.height
+
+        anchors {
+            top: parent.top
+            right: parent.right
+            bottom: parent.bottom
+        }
+
+        Button {
+            Layout.fillWidth: true
+            icon.color: palette.text
+            icon.source: "qrc:/icons/scroll-top.svg"
+            onClicked: {
+                Cpp_IO_Console.autoscroll = false
+                listView.currentIndex = 0
+                listView.currentContentY = 0
+                listView.previousCurrentIndex = 0
+                listView.positionViewAtBeginning()
+            }
+        }
+
+        Button {
+            Layout.fillWidth: true
+            icon.color: palette.text
+            icon.source: "qrc:/icons/scroll-up.svg"
+            onClicked: {
+                Cpp_IO_Console.autoscroll = false
+
+                var topMostIndex = listView.indexAt(dragSelector.xStart, listView.contentY)
+                var newIndex = topMostIndex - 10
+
+                if (newIndex > 0) {
+                    listView.currentIndex = newIndex
+                    listView.previousCurrentIndex = listView.currentIndex
+                }
+
+                else {
+                    listView.currentIndex = 0
+                    listView.currentContentY = 0
+                    listView.previousCurrentIndex = 0
+                    listView.positionViewAtBeginning()
+                }
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Button {
+                opacity: 0.5
+                checked: true
+                anchors.fill: parent
+            }
+
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: Math.max(32, ratio * parent.height)
+                y: Math.max(0, parent.height * Math.min(1, position) - height)
+                property real ratio: Math.min(1, listView.height / listView.contentHeight)
+                property real position: (listView.contentY + listView.height) / listView.contentHeight
+            }
+        }
+
+        Button {
+            Layout.fillWidth: true
+            icon.color: palette.text
+            icon.source: "qrc:/icons/scroll-down.svg"
+
+            onClicked: {
+                Cpp_IO_Console.autoscroll = false
+
+                var bottomIndex = listView.indexAt(dragSelector.xStart, listView.contentY + listView.height)
+                var newIndex = bottomIndex + 10
+
+                if (newIndex < listView.count) {
+                    listView.currentIndex = newIndex
+                    listView.previousCurrentIndex = listView.currentIndex
+                }
+
+                else {
+                    Cpp_IO_Console.autoscroll = true
+                    listView.positionViewAtEnd()
+                }
+            }
+        }
+
+        Button {
+            Layout.fillWidth: true
+            icon.color: palette.text
+            icon.source: "qrc:/icons/scroll-bottom.svg"
+            onClicked: {
+                Cpp_IO_Console.autoscroll = true
+                listView.positionViewAtEnd()
+            }
         }
     }
 }

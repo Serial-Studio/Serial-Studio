@@ -74,7 +74,7 @@ Control {
     }
 
     //
-    // Copy shortcut
+    // Save shortcut
     //
     Shortcut {
         sequence: StandardKey.Save

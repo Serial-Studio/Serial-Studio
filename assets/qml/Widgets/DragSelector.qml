@@ -138,19 +138,6 @@ MouseArea {
     }
 
     //
-    // Select line by double clicking it
-    //
-    onDoubleClicked: {
-        var index = listView.indexAt(root.xStart, mouseY + listView.contentY)
-        if (index >= 0) {
-            if (root.selectedLines.indexOf(index) < 0) {
-                root.selectedLines.push(index)
-                root.selectionChanged()
-            }
-        }
-    }
-
-    //
     // Anchor the rectangle when the user clicks and begins dragging
     //
     onPressed: {

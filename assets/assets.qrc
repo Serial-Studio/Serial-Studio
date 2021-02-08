@@ -82,5 +82,9 @@
         <file>translations/es.ts</file>
         <file>translations/zh.qm</file>
         <file>translations/zh.ts</file>
+        <file>icons/scroll-bottom.svg</file>
+        <file>icons/scroll-down.svg</file>
+        <file>icons/scroll-top.svg</file>
+        <file>icons/scroll-up.svg</file>
     </qresource>
 </RCC>
