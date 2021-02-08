@@ -90,14 +90,6 @@ Control {
     }
 
     //
-    // Deselect text with escape key
-    //
-    Shortcut {
-        sequences: ["escape", "space"]
-        onActivated: logView.deselect()
-    }
-
-    //
     // Right-click context menu
     //
     Menu {

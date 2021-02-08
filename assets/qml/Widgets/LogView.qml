@@ -60,6 +60,83 @@ Rectangle {
     property color lineCountBackgroundColor: "#121212"
 
     //
+    // Scroll up x positions
+    //
+    function scrollUp(position, currentIndex) {
+        // Disable autoscroll
+        Cpp_IO_Console.autoscroll = false
+
+        // Get current index
+        var index = listView.indexAt(dragSelector.xStart, listView.contentY)
+        if (currentIndex)
+            index = listView.currentIndex
+
+        // Get new index
+        var newIndex = index - position
+
+        // Assign new index
+        if (newIndex > 0) {
+            listView.currentIndex = newIndex
+            listView.previousCurrentIndex = listView.currentIndex
+        }
+
+        // We already reached the top of the document
+        else {
+            listView.currentIndex = 0
+            listView.currentContentY = 0
+            listView.previousCurrentIndex = 0
+            listView.positionViewAtBeginning()
+        }
+    }
+
+    //
+    // Scroll down x positions
+    //
+    function scrollDown(position, currentIndex) {
+        // Disable autoscroll
+        Cpp_IO_Console.autoscroll = false
+
+        // Get current index
+        var index = listView.indexAt(dragSelector.xStart, listView.contentY + listView.height)
+        if (currentIndex)
+            index = listView.currentIndex
+
+        // Get new index
+        var newIndex = index + position
+
+        // Assign new index
+        if (newIndex < (listView.count - 1)) {
+            listView.currentIndex = newIndex
+            listView.previousCurrentIndex = listView.currentIndex
+        }
+
+        // Reached bottom of document, enable autoscroll
+        else {
+            Cpp_IO_Console.autoscroll = true
+            listView.positionViewAtEnd()
+        }
+    }
+
+    //
+    // Goes to the bottom of the text & enables autoscroll
+    //
+    function scrollToBottom() {
+        Cpp_IO_Console.autoscroll = true
+        listView.positionViewAtEnd()
+    }
+
+    //
+    // Scroll to the top of the document
+    //
+    function scrollToTop() {
+        Cpp_IO_Console.autoscroll = false
+        listView.currentIndex = 0
+        listView.currentContentY = 0
+        listView.previousCurrentIndex = 0
+        listView.positionViewAtBeginning()
+    }
+
+    //
     // Returns @c true if text is selected
     //
     function copyAvailable() {
@@ -249,7 +326,7 @@ Rectangle {
         cursorShape: Qt.IBeamCursor
         acceptedButtons: Qt.RightButton
         onClicked: contextMenu.popup()
-        onMouseYChanged: root.updateCaretLineLocation(this)
+        //onMouseYChanged: root.updateCaretLineLocation(this)
     }
 
     //
@@ -263,7 +340,7 @@ Rectangle {
         anchors.margins: app.spacing
         itemHeight: root.lineHeight
         xStart: lineCountRect.width + 2 * app.spacing
-        onMouseYChanged: root.updateCaretLineLocation(this)
+        //onMouseYChanged: root.updateCaretLineLocation(this)
         anchors.leftMargin: lineCountRect.width + app.spacing
         anchors.rightMargin: scrollbar.width + app.spacing - 2
 
@@ -295,6 +372,23 @@ Rectangle {
         onClicked: {
             root.deselect()
             dragSelector.wasHeld = false
+        }
+    }
+
+    //
+    // Mouse wheel navigation
+    //
+    MouseArea {
+        anchors.fill: parent
+        onWheel: {
+            var yValue = wheel.angleDelta.y / 15
+            if (Math.abs(yValue) < 2)
+                return
+
+            if (yValue > 0)
+                root.scrollUp(yValue, true)
+            else
+                root.scrollDown(Math.abs(yValue), true)
         }
     }
 
@@ -363,6 +457,8 @@ Rectangle {
     ColumnLayout {
         id: scrollbar
 
+        property real position: listView.contentY / Math.max(listView.height, listView.contentHeight)
+
         width: 24
         spacing: 0
         opacity: enabled ? 1 : 0.5
@@ -374,44 +470,51 @@ Rectangle {
             bottom: parent.bottom
         }
 
+        function setPosition(ratio) {
+            Cpp_IO_Console.autoscroll = false
+            var fixedRatio = Math.max(0, Math.min(1, ratio))
+
+            if (fixedRatio === 1)
+                scrollToBottom()
+            else if (fixedRatio === 0)
+                scrollToTop()
+
+            else {
+                var yPos = fixedRatio * listView.contentHeight
+                listView.currentIndex = listView.indexAt(100, yPos)
+                listView.previousCurrentIndex = listView.currentIndex
+                listView.contentY = yPos
+                listView.currentContentY = yPos
+            }
+
+        }
+
+        //
+        // Scroll to top
+        //
         Button {
             Layout.fillWidth: true
             icon.color: palette.text
+            onClicked: root.scrollToTop()
             icon.source: "qrc:/icons/scroll-top.svg"
-            onClicked: {
-                Cpp_IO_Console.autoscroll = false
-                listView.currentIndex = 0
-                listView.currentContentY = 0
-                listView.previousCurrentIndex = 0
-                listView.positionViewAtBeginning()
-            }
         }
 
+        //
+        // Scroll up
+        //
         Button {
+            id: scrollUp
             Layout.fillWidth: true
             icon.color: palette.text
+            onClicked: root.scrollUp(10, false)
             icon.source: "qrc:/icons/scroll-up.svg"
-            onClicked: {
-                Cpp_IO_Console.autoscroll = false
-
-                var topMostIndex = listView.indexAt(dragSelector.xStart, listView.contentY)
-                var newIndex = topMostIndex - 10
-
-                if (newIndex > 0) {
-                    listView.currentIndex = newIndex
-                    listView.previousCurrentIndex = listView.currentIndex
-                }
-
-                else {
-                    listView.currentIndex = 0
-                    listView.currentContentY = 0
-                    listView.previousCurrentIndex = 0
-                    listView.positionViewAtBeginning()
-                }
-            }
         }
 
+        //
+        // Handle
+        //
         Item {
+            id: handleArea
             Layout.fillWidth: true
             Layout.fillHeight: true
 
@@ -422,46 +525,56 @@ Rectangle {
             }
 
             Button {
+                id: handle
+                height: 32
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: Math.max(32, ratio * parent.height)
-                y: Math.max(0, parent.height * Math.min(1, position) - height)
-                property real ratio: Math.min(1, listView.height / listView.contentHeight)
-                property real position: (listView.contentY + listView.height) / listView.contentHeight
+                y: Math.max(0, scrollbar.position * (handleArea.height - height))
+
+                MouseArea {
+                    anchors.fill: parent
+                    drag.target: parent
+                    drag.axis: Drag.YAxis
+                    drag.minimumY: 0
+                    drag.maximumY: scrollbar.height - handle.height
+
+                    onPositionChanged: {
+                        scrollbar.setPosition(handle.y / handleArea.height)
+                    }
+                }
             }
         }
 
+        //
+        // Scroll down
+        //
         Button {
+            id: scrollDown
             Layout.fillWidth: true
             icon.color: palette.text
+            onClicked: root.scrollDown(10, false)
             icon.source: "qrc:/icons/scroll-down.svg"
-
-            onClicked: {
-                Cpp_IO_Console.autoscroll = false
-
-                var bottomIndex = listView.indexAt(dragSelector.xStart, listView.contentY + listView.height)
-                var newIndex = bottomIndex + 10
-
-                if (newIndex < listView.count) {
-                    listView.currentIndex = newIndex
-                    listView.previousCurrentIndex = listView.currentIndex
-                }
-
-                else {
-                    Cpp_IO_Console.autoscroll = true
-                    listView.positionViewAtEnd()
-                }
-            }
         }
 
+        //
+        // Scroll to bottom
+        //
         Button {
             Layout.fillWidth: true
             icon.color: palette.text
+            onClicked: root.scrollToBottom()
             icon.source: "qrc:/icons/scroll-bottom.svg"
-            onClicked: {
-                Cpp_IO_Console.autoscroll = true
-                listView.positionViewAtEnd()
-            }
         }
     }
+
+    //
+    // Key navigation
+    //
+    focus: true
+    Shortcut { sequence: "up";        onActivated: root.scrollUp(1, true) }
+    Shortcut { sequence: "down";      onActivated: root.scrollDown(1, true) }
+    Shortcut { sequence: "escape";    onActivated: deselect() }
+    Shortcut { sequence: "space";     onActivated: deselect() }
+    Shortcut { sequence: StandardKey.MoveToPreviousPage; onActivated: root.scrollUp(50, true) }
+    Shortcut { sequence: StandardKey.MoveToNextPage;     onActivated: root.scrollDown(50, true) }
 }
