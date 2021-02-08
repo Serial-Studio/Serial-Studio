@@ -60,7 +60,8 @@ Rectangle {
     //
     function scrollUp(position, currentIndex) {
         // Disable autoscroll
-        Cpp_IO_Console.autoscroll = false
+        if (Cpp_IO_Manager.connected)
+            Cpp_IO_Console.autoscroll = false
 
         // Get current index
         var index = listView.indexAt(dragSelector.xStart, listView.contentY)
@@ -90,7 +91,8 @@ Rectangle {
     //
     function scrollDown(position, currentIndex) {
         // Disable autoscroll
-        Cpp_IO_Console.autoscroll = false
+        if (Cpp_IO_Manager.connected)
+            Cpp_IO_Console.autoscroll = false
 
         // Get current index
         var index = listView.indexAt(dragSelector.xStart, listView.contentY + listView.height)
@@ -539,8 +541,6 @@ Rectangle {
     // Key navigation
     //
     focus: true
-    Shortcut { sequence: "up";        onActivated: root.scrollUp(1, true) }
-    Shortcut { sequence: "down";      onActivated: root.scrollDown(1, true) }
     Shortcut { sequence: "escape";    onActivated: deselect() }
     Shortcut { sequence: "space";     onActivated: deselect() }
     Shortcut { sequence: StandardKey.MoveToPreviousPage; onActivated: root.scrollUp(50, true) }
