@@ -23,7 +23,6 @@
 #ifndef IO_CONSOLE_H
 #define IO_CONSOLE_H
 
-#include <QTimer>
 #include <QObject>
 #include <QStringList>
 

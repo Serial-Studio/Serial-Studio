@@ -36,7 +36,6 @@ Window {
     borderColor: "#517497"
     opacity: enabled ? 1 : 0
     title: group !== null ? group.title : ""
-    Behavior on opacity {NumberAnimation{}}
 
     property int groupId: 0
     property Group group: null

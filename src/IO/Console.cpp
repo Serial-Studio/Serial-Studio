@@ -430,7 +430,6 @@ void Console::setDisplayMode(const DisplayMode mode)
  */
 void Console::append(const QString &string, const bool addTimestamp)
 {
-    // Get current date
     QString timestamp;
     if (addTimestamp)
     {

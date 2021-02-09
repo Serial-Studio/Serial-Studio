@@ -66,16 +66,17 @@ GraphProvider::GraphProvider()
     // Module signals/slots
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
-    auto co = IO::Console::getInstance();
     auto ge = JSON::Generator::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(ge, SIGNAL(jsonChanged()), this, SLOT(updateValues()));
+    connect(ge, SIGNAL(frameChanged()), this, SLOT(updateValues()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
-    connect(co, SIGNAL(enabledChanged()), this, SLOT(updateValues()));
 
     // Avoid issues when CSV player goes backwards
     connect(CSV::Player::getInstance(), SIGNAL(timestampChanged()),
             this, SLOT(csvPlayerFixes()));
+
+    // Draw data every 50 ms
+    QTimer::singleShot(50, this, SLOT(drawData()));
 
     // clang-format on
     LOG_TRACE() << "Class initialized";
@@ -187,6 +188,12 @@ void GraphProvider::setDisplayedPoints(const int points)
     }
 }
 
+void GraphProvider::drawData()
+{
+    emit dataUpdated();
+    QTimer::singleShot(500, this, SLOT(drawData()));
+}
+
 /**
  * Deletes all stored information
  */
@@ -208,8 +215,10 @@ void GraphProvider::updateValues()
     // Clear dataset & latest values list
     m_datasets.clear();
 
-    // Create list with datasets that need to be graphed
+    // Get latest frame
     auto frame = JSON::Generator::getInstance()->frame();
+
+    // Create list with datasets that need to be graphed
     for (int i = 0; i < frame->groupCount(); ++i)
     {
         auto group = frame->groups().at(i);
@@ -254,9 +263,6 @@ void GraphProvider::updateValues()
         // Add values
         m_points.at(i)->append(getValue(i));
     }
-
-    // Update graphs
-    QTimer::singleShot(25, this, SIGNAL(dataUpdated()));
 }
 
 /**

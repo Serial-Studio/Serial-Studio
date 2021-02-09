@@ -23,6 +23,7 @@
 #ifndef HACKS_QML_PLAINTEXTEDIT_H
 #define HACKS_QML_PLAINTEXTEDIT_H
 
+#include <QThread>
 #include <QPointer>
 #include <QPainter>
 #include <QPlainTextEdit>
@@ -75,12 +76,17 @@ class QmlPlainTextEdit : public QQuickPaintedItem
                READ widgetEnabled
                WRITE setWidgetEnabled
                NOTIFY widgetEnabledChanged)
+    Q_PROPERTY(QPalette palette
+               READ palette
+               WRITE setPalette
+               NOTIFY paletteChanged)
     // clang-format on
 
 signals:
     void textChanged();
     void fontChanged();
     void colorChanged();
+    void paletteChanged();
     void readOnlyChanged();
     void autoscrollChanged();
     void wordWrapModeChanged();
@@ -103,17 +109,20 @@ public:
 
     bool readOnly() const;
     bool autoscroll() const;
+    QPalette palette() const;
     int wordWrapMode() const;
     bool widgetEnabled() const;
     bool centerOnScroll() const;
     bool undoRedoEnabled() const;
     QString placeholderText() const;
+    Q_INVOKABLE bool copyAvailable() const;
 
 protected:
     void routeMouseEvents(QMouseEvent *event);
     void routeWheelEvents(QWheelEvent *event);
 
 public slots:
+    void copy();
     void clear();
     void selectAll();
     void setReadOnly(const bool ro);
@@ -123,6 +132,7 @@ public slots:
     void setColor(const QColor &color);
     void setWordWrapMode(const int mode);
     void setAutoscroll(const bool enabled);
+    void setPalette(const QPalette &palette);
     void setWidgetEnabled(const bool enabled);
     void setCenterOnScroll(const bool enabled);
     void setUndoRedoEnabled(const bool enabled);
@@ -134,7 +144,8 @@ private slots:
 private:
     QColor m_color;
     bool m_autoscroll;
-    QPointer<QPlainTextEdit> m_textEdit;
+    QThread m_thread;
+    QPlainTextEdit *m_textEdit;
 };
 }
 

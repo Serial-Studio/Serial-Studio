@@ -104,13 +104,6 @@ Window {
     }
 
     //
-    // Animations
-    //
-    Behavior on yawAngle {NumberAnimation{}}
-    Behavior on rollAngle {NumberAnimation{}}
-    Behavior on pitchAngle {NumberAnimation{}}
-
-    //
     // Layout
     //
     RowLayout {

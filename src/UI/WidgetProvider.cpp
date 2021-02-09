@@ -46,12 +46,10 @@ WidgetProvider::WidgetProvider()
     // Module signals/slots
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
-    auto co = IO::Console::getInstance();
     auto ge = JSON::Generator::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(ge, SIGNAL(jsonChanged()), this, SLOT(updateModels()));
+    connect(ge, SIGNAL(frameChanged()), this, SLOT(updateModels()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
-    connect(co, SIGNAL(enabledChanged()), this, SLOT(updateModels()));
 
     // Look like a pro
     LOG_TRACE() << "Class initialized";
@@ -434,7 +432,8 @@ QList<JSON::Group *> WidgetProvider::getWidgetGroup(const QString &handle)
 {
     QList<JSON::Group *> widgetGroup;
 
-    foreach (auto group, JSON::Generator::getInstance()->frame()->groups())
+    auto frame = JSON::Generator::getInstance()->frame();
+    foreach (auto group, frame->groups())
     {
         if (group->widget().toLower() == handle)
             widgetGroup.append(group);
@@ -451,7 +450,8 @@ QList<JSON::Dataset *> WidgetProvider::getWidgetDatasets(const QString &handle)
 {
     QList<JSON::Dataset *> widgetDatasets;
 
-    foreach (auto group, JSON::Generator::getInstance()->frame()->groups())
+    auto frame = JSON::Generator::getInstance()->frame();
+    foreach (auto group, frame->groups())
     {
         foreach (auto dataset, group->datasets())
         {

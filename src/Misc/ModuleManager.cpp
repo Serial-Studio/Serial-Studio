@@ -102,7 +102,7 @@ void ModuleManager::configureUpdater()
 void ModuleManager::registerQmlTypes()
 {
     LOG_TRACE() << "Registering QML types...";
-    qmlRegisterType<JSON::Frame>("SerialStudio", 1, 0, "Frame");
+    qRegisterMetaType<JSON::Frame>("Frame");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
     qmlRegisterType<Hacks::QmlPlainTextEdit>("Hacks.QmlPlainTextEdit", 1, 0,

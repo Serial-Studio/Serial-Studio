@@ -59,13 +59,6 @@ Rectangle {
     onCurrentValueChanged: indicatorCanvas.requestPaint()
 
     //
-    // Animations
-    //
-    Behavior on minimumValue {NumberAnimation{}}
-    Behavior on maximumValue {NumberAnimation{}}
-    Behavior on currentValue {NumberAnimation{}}
-
-    //
     // Properties
     //
     border.width: 2

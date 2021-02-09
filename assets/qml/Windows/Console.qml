@@ -32,7 +32,6 @@ import "../Widgets" as Widgets
 
 Control {
     id: root
-    onOpacityChanged: Cpp_IO_Console.setEnabled(opacity === 1)
 
     background: Rectangle {
         color: app.windowBackgroundColor
@@ -90,14 +89,14 @@ Control {
 
         onVisibleChanged: {
             if (visible)
-                copyMenu.enabled = logView.copyAvailable()
+                copyMenu.enabled = textEdit.copyAvailable()
         }
 
         MenuItem {
             id: copyMenu
             text: qsTr("Copy")
             opacity: enabled ? 1 : 0.5
-            onClicked: Cpp_IO_Console.copy(textEdit.text)
+            onClicked: textEdit.copy()
         }
 
         MenuItem {

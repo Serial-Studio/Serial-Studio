@@ -48,12 +48,6 @@ Manager::Manager()
     setWatchdogInterval(15);
     setMaxBufferSize(1024 * 1024);
     LOG_TRACE() << "Class initialized";
-
-    // Update user interface at a frequency of ~200 Hz
-    m_timer.setInterval(1000 / 200);
-    m_timer.setTimerType(Qt::PreciseTimer);
-    connect(&m_timer, &QTimer::timeout, this, &Manager::readFrames);
-    m_timer.start();
 }
 
 /**
@@ -468,6 +462,7 @@ void Manager::onDataReceived()
 
     // Obtain frames from data buffer
     m_dataBuffer.append(data);
+    readFrames();
 
     // Update received bytes indicator
     m_receivedBytes += bytes;

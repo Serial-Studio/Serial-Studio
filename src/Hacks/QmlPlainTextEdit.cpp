@@ -22,6 +22,7 @@
 
 #include <QScrollBar>
 #include <QApplication>
+#include <IO/Console.h>
 
 #include "QmlPlainTextEdit.h"
 
@@ -30,18 +31,31 @@ using namespace Hacks;
 QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
+    // Set item flags
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
 
+    // Initialize the text edit widget
     m_textEdit = new QPlainTextEdit();
     m_textEdit->installEventFilter(this);
 
+    // Move widget to another thread
+    m_thread.setPriority(QThread::LowPriority);
+    m_textEdit->moveToThread(&m_thread);
+    m_thread.start();
+
+    // Set focus to the text edit
+    m_textEdit->setContextMenuPolicy(Qt::DefaultContextMenu);
+
+    // Set the QML item's implicit size
     auto hint = m_textEdit->sizeHint();
     setImplicitSize(hint.width(), hint.height());
 
+    // Get default text color
     m_color = qApp->palette().color(QPalette::Text);
 
+    // Resize QPlainTextEdit to fit QML item
     connect(this, &QQuickPaintedItem::widthChanged, this,
             &QmlPlainTextEdit::updateWidgetSize);
     connect(this, &QQuickPaintedItem::heightChanged, this,
@@ -50,6 +64,8 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
 
 QmlPlainTextEdit::~QmlPlainTextEdit()
 {
+    m_thread.exit();
+    m_thread.wait();
     m_textEdit->deleteLater();
 }
 
@@ -81,11 +97,14 @@ bool QmlPlainTextEdit::event(QEvent *event)
 
 void QmlPlainTextEdit::paint(QPainter *painter)
 {
-    m_textEdit->render(painter);
+    if (m_textEdit && painter)
+        m_textEdit->render(painter);
 }
 
 bool QmlPlainTextEdit::eventFilter(QObject *watched, QEvent *event)
 {
+    Q_ASSERT(m_textEdit);
+
     if (watched == m_textEdit)
     {
         switch (event->type())
@@ -127,6 +146,11 @@ bool QmlPlainTextEdit::autoscroll() const
     return m_autoscroll;
 }
 
+QPalette QmlPlainTextEdit::palette() const
+{
+    return m_textEdit->palette();
+}
+
 int QmlPlainTextEdit::wordWrapMode() const
 {
     return static_cast<int>(m_textEdit->wordWrapMode());
@@ -152,11 +176,17 @@ QString QmlPlainTextEdit::placeholderText() const
     return m_textEdit->placeholderText();
 }
 
+bool QmlPlainTextEdit::copyAvailable() const
+{
+    return text().length() > 0;
+}
+
 void QmlPlainTextEdit::routeMouseEvents(QMouseEvent *event)
 {
     QMouseEvent *newEvent
         = new QMouseEvent(event->type(), event->localPos(), event->button(),
                           event->buttons(), event->modifiers());
+    m_textEdit->setFocus(Qt::ActiveWindowFocusReason);
     QApplication::postEvent(m_textEdit, newEvent);
 }
 
@@ -168,9 +198,14 @@ void QmlPlainTextEdit::routeWheelEvents(QWheelEvent *event)
     QApplication::postEvent(m_textEdit, newEvent);
 }
 
+void QmlPlainTextEdit::copy()
+{
+    m_textEdit->copy();
+}
+
 void QmlPlainTextEdit::clear()
 {
-    m_textEdit.clear();
+    m_textEdit->clear();
     update();
 
     emit textChanged();
@@ -236,6 +271,14 @@ void QmlPlainTextEdit::setColor(const QColor &color)
     update();
 
     emit colorChanged();
+}
+
+void QmlPlainTextEdit::setPalette(const QPalette &palette)
+{
+    m_textEdit->setPalette(palette);
+    update();
+
+    emit paletteChanged();
 }
 
 void QmlPlainTextEdit::setWidgetEnabled(const bool enabled)

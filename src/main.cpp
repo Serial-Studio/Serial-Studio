@@ -26,6 +26,7 @@
 
 #include <Logger.h>
 #include <AppInfo.h>
+#include <JSON/Frame.h>
 #include <Misc/Utilities.h>
 #include <Misc/ModuleManager.h>
 

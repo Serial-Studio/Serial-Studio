@@ -96,12 +96,6 @@ Window {
     }
 
     //
-    // Animations
-    //
-    Behavior on latitude {NumberAnimation{}}
-    Behavior on longitude {NumberAnimation{}}
-
-    //
     // Centers the map to the current coordinates
     //
     function centerMap() {

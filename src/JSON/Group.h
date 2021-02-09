@@ -55,8 +55,6 @@ public:
     Group(QObject *parent = nullptr);
     ~Group();
 
-    void copy(Group *group);
-
     QString title() const;
     QString widget() const;
     int datasetCount() const;

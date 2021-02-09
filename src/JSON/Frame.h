@@ -33,26 +33,11 @@
 
 namespace JSON
 {
-class Frame : public QObject
+class Frame
 {
-    // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(QString title
-               READ title
-               CONSTANT)
-    Q_PROPERTY(int groupCount
-               READ groupCount
-               CONSTANT)
-    Q_PROPERTY(QVector<Group*> groups
-               READ groups
-               CONSTANT)
-    // clang-format on
-
 public:
-    Frame(QObject *parent = nullptr);
+    Frame();
     ~Frame();
-
-    void copy(Frame *frame);
 
     void clear();
     QString title() const;

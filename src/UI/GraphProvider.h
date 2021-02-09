@@ -29,6 +29,7 @@
 #include <QVariant>
 #include <QAbstractSeries>
 
+#include <JSON/Frame.h>
 #include <JSON/Dataset.h>
 
 QT_CHARTS_USE_NAMESPACE
@@ -74,6 +75,7 @@ private:
     GraphProvider();
 
 private slots:
+    void drawData();
     void resetData();
     void updateValues();
     void csvPlayerFixes();

@@ -46,7 +46,7 @@ DataProvider::DataProvider()
     auto io = IO::Manager::getInstance();
     auto ge = JSON::Generator::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(ge, SIGNAL(jsonChanged()), this, SIGNAL(updated()));
+    connect(ge, SIGNAL(frameChanged()), this, SIGNAL(updated()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 
     // Try to look like a pro
@@ -102,7 +102,7 @@ void DataProvider::resetData()
         return;
 
     // Clear frame object
-    JSON::Generator::getInstance()->frame()->clear();
+    // JSON::Generator::getInstance()->frame()->clear();
 
     // Update UI
     emit updated();

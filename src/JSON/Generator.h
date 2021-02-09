@@ -24,7 +24,9 @@
 #define JSON_GENERATOR_H
 
 #include <QFile>
+#include <QTimer>
 #include <QObject>
+#include <QThread>
 #include <QSettings>
 #include <QQmlEngine>
 #include <QJsonArray>
@@ -36,6 +38,24 @@
 
 namespace JSON
 {
+class JSONWorker : public QObject
+{
+    Q_OBJECT
+
+signals:
+    void finished();
+    void jsonReady(const QJsonDocument &document);
+
+public:
+    JSONWorker(const QByteArray &data);
+
+public slots:
+    void process();
+
+private:
+    QByteArray m_data;
+};
+
 class Generator : public QObject
 {
     // clang-format off
@@ -54,6 +74,7 @@ class Generator : public QObject
 
 signals:
     void jsonChanged();
+    void frameChanged();
     void jsonFileMapChanged();
     void operationModeChanged();
 
@@ -95,11 +116,15 @@ private slots:
 private:
     Frame m_frame;
     QFile m_jsonMap;
+    bool m_jsonChanged;
     QSettings m_settings;
     QString m_jsonMapData;
     int m_dataFormatErrors;
     OperationMode m_opMode;
     QJsonDocument m_document;
+
+    QThread m_workerThread;
+    JSONWorker *m_jsonWorker;
 };
 }
 

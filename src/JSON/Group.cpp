@@ -44,24 +44,6 @@ Group::~Group()
 }
 
 /**
- * Copies the data of the given @a group to this group
- */
-void Group::copy(Group *group)
-{
-    Q_ASSERT(group);
-
-    m_title = group->title();
-    m_widget = group->widget();
-
-    for (int i = 0; i < group->datasetCount(); ++i)
-    {
-        auto dataset = new Dataset(this);
-        dataset->copy(group->getDataset(i));
-        m_datasets.append(dataset);
-    }
-}
-
-/**
  * @return The title/description of this group
  */
 QString Group::title() const

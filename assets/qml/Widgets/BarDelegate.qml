@@ -85,11 +85,6 @@ Window {
     property real maximumValue: 10
 
     //
-    // Animations
-    //
-    Behavior on currentValue {NumberAnimation{}}
-
-    //
     // Connections with widget manager
     //
     Connections {
@@ -131,11 +126,6 @@ Window {
             root.maximumValue = 0
         }
     }
-
-    //
-    // Animations
-    //
-    Behavior on currentValue {NumberAnimation{}}
 
     //
     // Layout

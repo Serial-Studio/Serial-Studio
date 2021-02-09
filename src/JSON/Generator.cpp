@@ -48,12 +48,14 @@ static const QRegExp UNMATCHED_VALUES_REGEX("(%\b([0-9]|[1-9][0-9])\b)");
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
 Generator::Generator()
-    : m_dataFormatErrors(0)
+    : m_jsonChanged(false)
+    , m_dataFormatErrors(0)
     , m_opMode(kAutomatic)
 {
     auto io = IO::Manager::getInstance();
     connect(io, SIGNAL(deviceChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(frameReceived(QByteArray)), this, SLOT(readData(QByteArray)));
+    m_workerThread.start();
 
     LOG_TRACE() << "Class initialized";
 }
@@ -70,7 +72,7 @@ Generator *Generator::getInstance()
 }
 
 /**
- * Returns the current frame object
+ * Returns the current JSON frame
  */
 Frame *Generator::frame()
 {
@@ -256,18 +258,19 @@ void Generator::writeSettings(const QString &path)
  * Changes the JSON document to be used to generate the user interface.
  * This function is set to public in order to allow the CSV-replay feature to
  * work by replacing the data/json input source.
- *
- * As soon as the JSON document is changed, the @c frame() object is automatically
- * generated.
  */
 void Generator::setJsonDocument(const QJsonDocument &document)
 {
     if (document.object().isEmpty())
         return;
 
+    m_jsonChanged = true;
     m_document = document;
+
     if (m_frame.read(m_document.object()))
-        emit jsonChanged();
+        emit frameChanged();
+
+    emit jsonChanged();
 }
 
 /**
@@ -303,27 +306,46 @@ void Generator::readData(const QByteArray &data)
     if (data.isEmpty())
         return;
 
+    // Create new worker thread to read JSON data
+    QThread *thread = new QThread;
+    JSONWorker *worker = new JSONWorker(data);
+    worker->moveToThread(thread);
+    connect(thread, SIGNAL(started()), worker, SLOT(process()));
+    connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
+    connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+    connect(worker, &JSONWorker::jsonReady, this, &Generator::setJsonDocument);
+    thread->start();
+}
+
+JSONWorker::JSONWorker(const QByteArray &data)
+{
+    m_data = data;
+}
+
+void JSONWorker::process()
+{
     // Init variables
     QJsonParseError error;
     QJsonDocument document;
 
     // Serial device sends JSON (auto mode)
-    if (operationMode() == kAutomatic)
-        document = QJsonDocument::fromJson(data, &error);
+    if (Generator::getInstance()->operationMode() == Generator::kAutomatic)
+        document = QJsonDocument::fromJson(m_data, &error);
 
     // We need to use a map file, check if its loaded & replace values into map
     else
     {
         // Empty JSON map data
-        if (jsonMapData().isEmpty())
+        if (Generator::getInstance()->jsonMapData().isEmpty())
             return;
 
         // Init conversion status boolean
         bool ok = true;
 
         // Separate incoming data & add it to the JSON map
-        auto json = jsonMapData();
-        auto list = QString::fromUtf8(data).split(',');
+        auto json = Generator::getInstance()->jsonMapData();
+        auto list = QString::fromUtf8(m_data).split(',');
         for (int i = 0; i < list.count(); ++i)
         {
             // Get value at i & insert it into json
@@ -349,23 +371,7 @@ void Generator::readData(const QByteArray &data)
         // There was an error & the JSON map is incomplete (or misses received
         // info from the microcontroller).
         if (!ok)
-        {
-            // Increment error counter
-            ++m_dataFormatErrors;
-
-            // Avoid nagging the user too much (only display once, and only
-            // after two continous errors have been detected)
-            if (m_dataFormatErrors == 2)
-            {
-                Misc::Utilities::showMessageBox(
-                    tr("JSON/serial data format mismatch"),
-                    tr("The format of the received data does not "
-                       "correspond to the selected JSON map file."));
-            }
-
-            // Stop executing function
             return;
-        }
 
         // Create json document
         document = QJsonDocument::fromJson(json.toUtf8(), &error);
@@ -373,8 +379,8 @@ void Generator::readData(const QByteArray &data)
 
     // No parse error, update UI & reset error counter
     if (error.error == QJsonParseError::NoError)
-    {
-        setJsonDocument(document);
-        m_dataFormatErrors = 0;
-    }
+        emit jsonReady(document);
+
+    // Delete object in 500 ms
+    QTimer::singleShot(500, this, SIGNAL(finished()));
 }

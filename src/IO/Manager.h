@@ -123,7 +123,6 @@ private:
     ~Manager();
 
 private:
-    QTimer m_timer;
     QTimer m_watchdog;
     bool m_writeEnabled;
     int m_maxBuzzerSize;

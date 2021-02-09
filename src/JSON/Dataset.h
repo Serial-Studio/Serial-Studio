@@ -56,8 +56,6 @@ class Dataset : public QObject
 public:
     Dataset(QObject *parent = nullptr);
 
-    void copy(Dataset *dataset);
-
     bool graph() const;
     QString title() const;
     QString value() const;
