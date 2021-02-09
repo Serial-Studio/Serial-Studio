@@ -205,10 +205,6 @@ void GraphProvider::resetData()
  */
 void GraphProvider::updateValues()
 {
-    // Abort if console is currently in use
-    if (IO::Console::getInstance()->enabled())
-        return;
-
     // Clear dataset & latest values list
     m_datasets.clear();
 

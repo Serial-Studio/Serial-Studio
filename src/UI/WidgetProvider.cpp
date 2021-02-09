@@ -410,10 +410,6 @@ void WidgetProvider::resetData()
  */
 void WidgetProvider::updateModels()
 {
-    // Abort if console is currently in use
-    if (IO::Console::getInstance()->enabled())
-        return;
-
     // Clear current groups
     m_barDatasets.clear();
     m_mapGroups.clear();

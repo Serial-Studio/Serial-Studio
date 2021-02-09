@@ -35,9 +35,9 @@ using namespace IO;
 static Console *INSTANCE = nullptr;
 
 /**
- * Set maximum scrollback to 5000 lines
+ * Set initial scrollback memory reservation to 10000 lines
  */
-static const int SCROLLBACK = 5000;
+static const int SCROLLBACK = 10000;
 
 /**
  * Constructor function
@@ -47,9 +47,7 @@ Console::Console()
     , m_lineEnding(LineEnding::NoLineEnding)
     , m_displayMode(DisplayMode::DisplayPlainText)
     , m_historyItem(0)
-    , m_lineOffset(0)
     , m_echo(false)
-    , m_enabled(true)
     , m_autoscroll(true)
     , m_showTimestamp(true)
     , m_timestampAdded(false)
@@ -60,12 +58,6 @@ Console::Console()
     // Read received data automatically
     auto m = Manager::getInstance();
     connect(m, &Manager::dataReceived, this, &Console::onDataReceived);
-
-    // Configure display update function
-    m_timer.setInterval(1000 / 40);
-    m_timer.setTimerType(Qt::PreciseTimer);
-    connect(&m_timer, &QTimer::timeout, this, &Console::displayData);
-    m_timer.start();
 
     // Log something to look like a pro
     LOG_TRACE() << "Class initialized";
@@ -89,15 +81,6 @@ Console *Console::getInstance()
 bool Console::echo() const
 {
     return m_echo;
-}
-
-/**
- * Returns @c true if we should display console output in the QML interface. Check the
- * @c setEnabled() function for more information.
- */
-bool Console::enabled() const
-{
-    return m_enabled;
 }
 
 /**
@@ -178,28 +161,19 @@ QString Console::currentHistoryString() const
 }
 
 /**
- * Returns the number of lines of the log file
+ * Returns the total number of lines received
  */
 int Console::lineCount() const
 {
-    return m_data.count();
+    return m_lines.count();
 }
 
 /**
- * Returns the starting line number of the data model
+ * Returns all the data received
  */
-quint32 Console::lineOffset() const
+QStringList Console::lines() const
 {
-    return m_lineOffset;
-}
-
-/**
- * Returns a pointer to the string list model, which is used by the QML interface to
- * display the console data.
- */
-QStringList Console::dataModel() const
-{
-    return m_data;
+    return m_lines;
 }
 
 /**
@@ -263,7 +237,7 @@ void Console::save()
             QByteArray data;
             for (int i = 0; i < lineCount(); ++i)
             {
-                data.append(m_data.at(i).toUtf8());
+                data.append(m_lines.at(i).toUtf8());
                 data.append("\r");
                 data.append("\n");
             }
@@ -284,14 +258,10 @@ void Console::save()
  */
 void Console::clear()
 {
-    m_data.clear();
-    m_lineOffset = 0;
-    m_tempBuffer.clear();
-    m_data.reserve(SCROLLBACK);
-    m_tempBuffer.reserve(80 * SCROLLBACK);
+    m_lines.clear();
+    m_lines.reserve(SCROLLBACK);
 
     emit dataReceived();
-    emit lineOffsetChanged();
 }
 
 /**
@@ -409,20 +379,6 @@ void Console::setEcho(const bool enabled)
 }
 
 /**
- * Enables/disables the console output. This function is done because we still need to
- * find a fool-proof way of displaying console data in the QML interface without slowing
- * down the application.
- *
- * To avoid noticable delays, the console is disabled while the user is taking a look
- * at the graphs and/or the widgets.
- */
-void Console::setEnabled(const bool enabled)
-{
-    m_enabled = enabled;
-    emit enabledChanged();
-}
-
-/**
  * Changes the data mode for user commands. See @c dataMode() for more information.
  */
 void Console::setDataMode(const DataMode mode)
@@ -488,7 +444,10 @@ void Console::append(const QString &string, const bool addTimestamp)
 
     // Add first item if necessary
     if (lineCount() == 0)
-        m_data.append("");
+        m_lines.append("");
+
+    // Get current line count
+    auto oldLineCount = lineCount();
 
     // Construct string to insert
     QString str;
@@ -496,37 +455,30 @@ void Console::append(const QString &string, const bool addTimestamp)
     {
         if (!m_timestampAdded)
         {
-            str = m_data.last();
+            str = m_lines.last();
             str.append(timestamp);
-            m_data.replace(lineCount() - 1, str);
+            m_lines.replace(lineCount() - 1, str);
             m_timestampAdded = true;
         }
 
         if (data.at(i) == "\n" || data.at(i) == "\r")
         {
-            m_data.append("");
+            m_lines.append("");
             m_timestampAdded = false;
         }
 
         else
         {
-            str = m_data.last();
+            str = m_lines.last();
             str.append(data.at(i));
-            m_data.replace(lineCount() - 1, str);
+            m_lines.replace(lineCount() - 1, str);
         }
     }
 
-    // Remove extra lines
-    while (lineCount() > SCROLLBACK)
-    {
-        for (int i = 0; i < SCROLLBACK * 0.1; ++i)
-        {
-            ++m_lineOffset;
-            m_data.takeFirst();
-        }
-
-        emit lineOffsetChanged();
-    }
+    // Emit signals
+    auto newLineCount = lineCount();
+    for (int i = oldLineCount; i < newLineCount; ++i)
+        emit lineReceived(m_lines.at(i - 1));
 
     // Update UI
     emit dataReceived();
@@ -539,20 +491,7 @@ void Console::append(const QString &string, const bool addTimestamp)
  */
 void Console::onDataReceived(const QByteArray &data)
 {
-    if (enabled())
-        m_tempBuffer.append(data);
-}
-
-/**
- * Displays the data on the UI (if allowed). This function is called periodically by a
- * timer at a freq. of ~40 Hz.
- */
-void Console::displayData()
-{
-    if (enabled())
-        append(dataToString(m_tempBuffer), showTimestamp());
-
-    m_tempBuffer.clear();
+    append(dataToString(data), showTimestamp());
 }
 
 /**

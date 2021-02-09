@@ -26,6 +26,7 @@ import QtQuick.Controls 2.12
 
 import SerialStudio 1.0
 import Qt.labs.settings 1.0
+import Hacks.QmlPlainTextEdit 1.0
 
 import "../Widgets" as Widgets
 
@@ -46,6 +47,14 @@ Control {
     }
 
     //
+    // Clears console output
+    //
+    function clearConsole() {
+        Cpp_IO_Console.clear()
+        textEdit.clear()
+    }
+
+    //
     // Save settings
     //
     Settings {
@@ -55,22 +64,6 @@ Control {
         property alias autoscroll: autoscrollCheck.checked
         property alias lineEnding: lineEndingCombo.currentIndex
         property alias displayMode: displayModeCombo.currentIndex
-    }
-
-    //
-    // Copy shortcut
-    //
-    Shortcut {
-        sequence: StandardKey.Copy
-        onActivated: Cpp_IO_Console.copy(logView.getTextToCopy())
-    }
-
-    //
-    // Select all shortcut
-    //
-    Shortcut {
-        sequence: StandardKey.SelectAll
-        onActivated: logView.selectAll()
     }
 
     //
@@ -86,13 +79,13 @@ Control {
     //
     Shortcut {
         sequence: StandardKey.Delete
-        onActivated: Cpp_IO_Console.clear()
+        onActivated: root.clearConsole()
     }
 
     //
     // Right-click context menu
     //
-    Menu {
+    /*Menu {
         id: menu
 
         onVisibleChanged: {
@@ -120,7 +113,7 @@ Control {
             onTriggered: Cpp_IO_Console.save()
             enabled: Cpp_IO_Console.saveAvailable
         }
-    }
+    }*/
 
     //
     // Controls
@@ -133,18 +126,27 @@ Control {
         //
         // Console display
         //
-        Widgets.LogView {
-            id: logView
-            border.width: 1
-            contextMenu: menu
+        QmlPlainTextEdit {
+            id: textEdit
+            focus: true
+            readOnly: true
+            color: "#8ecd9d"
             font.pixelSize: 12
+            centerOnScroll: true
+            undoRedoEnabled: false
             Layout.fillWidth: true
             Layout.fillHeight: true
             font.family: app.monoFont
-            border.color: palette.midlight
-            model: Cpp_IO_Console.dataModel
-            lineOffset: Cpp_IO_Console.lineOffset
-            placeholderText: qsTr("No data received so far...")
+            autoscroll: Cpp_IO_Console.autoscroll
+            wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            placeholderText: qsTr("No data received so far") + "..."
+
+            Connections {
+                target: Cpp_IO_Console
+                function onLineReceived(line) {
+                    textEdit.append(line)
+                }
+            }
         }
 
         //
@@ -156,19 +158,11 @@ Control {
             TextField {
                 id: send
                 height: 24
-                font: logView.font
+                font: textEdit.font
+                color: textEdit.color
                 Layout.fillWidth: true
-                color: logView.textColor
-                opacity: enabled ? 1 : 0.5
                 enabled: Cpp_IO_Manager.readWrite
-                palette.base: logView.backgroundColor
                 placeholderText: qsTr("Send data to device") + "..."
-
-                background: Rectangle {
-                    border.width: 1
-                    color: logView.backgroundColor
-                    border.color: logView.border.color
-                }
 
                 //
                 // Validate hex strings
@@ -295,7 +289,7 @@ Control {
                 Layout.maximumWidth: 32
                 icon.color: palette.text
                 opacity: enabled ? 1 : 0.5
-                onClicked: Cpp_IO_Console.clear()
+                onClicked: root.clearConsole()
                 icon.source: "qrc:/icons/delete.svg"
                 enabled: Cpp_IO_Console.lineCount > 0
                 Behavior on opacity {NumberAnimation{}}

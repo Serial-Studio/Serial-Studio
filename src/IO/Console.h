@@ -66,26 +66,22 @@ class Console : public QObject
     Q_PROPERTY(int lineCount
                READ lineCount
                NOTIFY dataReceived)
-    Q_PROPERTY(QStringList dataModel
-               READ dataModel
+    Q_PROPERTY(QStringList lines
+               READ lines
                NOTIFY dataReceived)
-    Q_PROPERTY(quint32 lineOffset
-               READ lineOffset
-               NOTIFY lineOffsetChanged)
     // clang-format on
 
 signals:
     void echoChanged();
     void dataReceived();
-    void enabledChanged();
     void dataModeChanged();
-    void lineOffsetChanged();
     void autoscrollChanged();
     void lineEndingChanged();
     void displayModeChanged();
     void historyItemChanged();
     void textDocumentChanged();
     void showTimestampChanged();
+    void lineReceived(const QString &text);
 
 public:
     enum class DisplayMode
@@ -114,7 +110,6 @@ public:
     static Console *getInstance();
 
     bool echo() const;
-    bool enabled() const;
     bool autoscroll() const;
     bool saveAvailable() const;
     bool showTimestamp() const;
@@ -125,8 +120,7 @@ public:
     QString currentHistoryString() const;
 
     int lineCount() const;
-    quint32 lineOffset() const;
-    QStringList dataModel() const;
+    QStringList lines() const;
 
     Q_INVOKABLE QStringList dataModes() const;
     Q_INVOKABLE QStringList lineEndings() const;
@@ -140,7 +134,6 @@ public slots:
     void copy(const QString &data);
     void send(const QString &data);
     void setEcho(const bool enabled);
-    void setEnabled(const bool enabled);
     void setDataMode(const DataMode mode);
     void setAutoscroll(const bool enabled);
     void setShowTimestamp(const bool enabled);
@@ -149,7 +142,6 @@ public slots:
     void append(const QString &str, const bool addTimestamp = false);
 
 private slots:
-    void displayData();
     void addToHistory(const QString &command);
     void onDataReceived(const QByteArray &data);
 
@@ -166,18 +158,13 @@ private:
     DisplayMode m_displayMode;
 
     int m_historyItem;
-    quint32 m_lineOffset;
 
     bool m_echo;
-    bool m_enabled;
     bool m_autoscroll;
     bool m_showTimestamp;
     bool m_timestampAdded;
 
-    QTimer m_timer;
-    QByteArray m_tempBuffer;
-
-    QStringList m_data;
+    QStringList m_lines;
     QStringList m_historyItems;
 };
 }

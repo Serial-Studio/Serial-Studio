@@ -44,6 +44,8 @@
 #include <Misc/Translator.h>
 #include <Misc/ModuleManager.h>
 
+#include <Hacks/QmlPlainTextEdit.h>
+
 #include <Logger.h>
 #include <FileAppender.h>
 #include <QSimpleUpdater.h>
@@ -103,6 +105,8 @@ void ModuleManager::registerQmlTypes()
     qmlRegisterType<JSON::Frame>("SerialStudio", 1, 0, "Frame");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
+    qmlRegisterType<Hacks::QmlPlainTextEdit>("Hacks.QmlPlainTextEdit", 1, 0,
+                                             "QmlPlainTextEdit");
     LOG_TRACE() << "QML types registered!";
 }
 
