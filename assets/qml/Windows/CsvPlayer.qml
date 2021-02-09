@@ -36,7 +36,7 @@ Window {
     maximumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing
     maximumHeight: column.implicitHeight + 4 * app.spacing
-	flags: Qt.Dialog | Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
+    flags: Qt.Dialog | Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
 
     //
     // Close CSV file when window is closed
@@ -126,7 +126,7 @@ Window {
                     onClicked: Cpp_CSV_Player.toggle()
                     Layout.alignment: Qt.AlignVCenter
                     icon.source: Cpp_CSV_Player.isPlaying ? "qrc:/icons/media-pause.svg" :
-                                                          "qrc:/icons/media-play.svg"
+                                                            "qrc:/icons/media-play.svg"
                 }
 
                 Button {

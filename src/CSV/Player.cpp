@@ -195,6 +195,7 @@ void Player::closeFile()
 
     emit openChanged();
     emit timestampChanged();
+    emit playerStateChanged();
 
     LOG_INFO() << "CSV file closed";
 }
