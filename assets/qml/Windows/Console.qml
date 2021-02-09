@@ -85,7 +85,7 @@ Control {
     //
     // Right-click context menu
     //
-    /*Menu {
+    Menu {
         id: menu
 
         onVisibleChanged: {
@@ -97,13 +97,20 @@ Control {
             id: copyMenu
             text: qsTr("Copy")
             opacity: enabled ? 1 : 0.5
-            onClicked: Cpp_IO_Console.copy(logView.getTextToCopy())
+            onClicked: Cpp_IO_Console.copy(textEdit.text)
+        }
+
+        MenuItem {
+            text: qsTr("Select all")
+            opacity: enabled ? 1 : 0.5
+            onTriggered: textEdit.selectAll()
+            enabled: textEdit.text.length > 0
         }
 
         MenuItem {
             text: qsTr("Clear")
             opacity: enabled ? 1 : 0.5
-            onTriggered: Cpp_IO_Console.clear()
+            onTriggered: root.clearConsole()
             enabled: Cpp_IO_Console.saveAvailable
         }
 
@@ -113,7 +120,7 @@ Control {
             onTriggered: Cpp_IO_Console.save()
             enabled: Cpp_IO_Console.saveAvailable
         }
-    }*/
+    }
 
     //
     // Controls
@@ -145,6 +152,16 @@ Control {
                 target: Cpp_IO_Console
                 function onLineReceived(line) {
                     textEdit.append(line)
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                propagateComposedEvents: false
+                acceptedButtons: Qt.RightButton | Qt.LeftButton
+                onClicked: {
+                    if (mouse.button == Qt.RightButton)
+                        menu.popup()
                 }
             }
         }

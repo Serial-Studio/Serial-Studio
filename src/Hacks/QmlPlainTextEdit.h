@@ -115,6 +115,7 @@ protected:
 
 public slots:
     void clear();
+    void selectAll();
     void setReadOnly(const bool ro);
     void setFont(const QFont &font);
     void append(const QString &text);

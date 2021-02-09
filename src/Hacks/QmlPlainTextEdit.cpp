@@ -154,7 +154,6 @@ QString QmlPlainTextEdit::placeholderText() const
 
 void QmlPlainTextEdit::routeMouseEvents(QMouseEvent *event)
 {
-    qDebug() << event;
     QMouseEvent *newEvent
         = new QMouseEvent(event->type(), event->localPos(), event->button(),
                           event->buttons(), event->modifiers());
@@ -172,6 +171,14 @@ void QmlPlainTextEdit::routeWheelEvents(QWheelEvent *event)
 void QmlPlainTextEdit::clear()
 {
     m_textEdit.clear();
+    update();
+
+    emit textChanged();
+}
+
+void QmlPlainTextEdit::selectAll()
+{
+    m_textEdit->selectAll();
     update();
 
     emit textChanged();
