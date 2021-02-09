@@ -23,6 +23,7 @@
 #ifndef GRAPH_PROVIDER_H
 #define GRAPH_PROVIDER_H
 
+#include <QTimer>
 #include <QVector>
 #include <QObject>
 #include <QVector>
@@ -75,12 +76,12 @@ private:
     GraphProvider();
 
 private slots:
-    void drawData();
     void resetData();
     void updateValues();
     void csvPlayerFixes();
 
 private:
+    QTimer m_timer;
     int m_prevFramePos;
     int m_displayedPoints;
     QVector<double> m_maximumValues;

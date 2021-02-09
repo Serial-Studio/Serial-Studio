@@ -23,7 +23,6 @@
 #ifndef UI_DATA_PROVIDER_H
 #define UI_DATA_PROVIDER_H
 
-#include <QTimer>
 #include <QObject>
 #include <JSON/Frame.h>
 

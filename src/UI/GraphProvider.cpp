@@ -75,8 +75,9 @@ GraphProvider::GraphProvider()
     connect(CSV::Player::getInstance(), SIGNAL(timestampChanged()),
             this, SLOT(csvPlayerFixes()));
 
-    // Draw data every 50 ms
-    QTimer::singleShot(50, this, SLOT(drawData()));
+    // Draw data at 24 FPS
+    connect(&m_timer, &QTimer::timeout, this, &GraphProvider::dataUpdated);
+    m_timer.start(1000 / 24);
 
     // clang-format on
     LOG_TRACE() << "Class initialized";
@@ -186,12 +187,6 @@ void GraphProvider::setDisplayedPoints(const int points)
         emit displayedPointsUpdated();
         emit dataUpdated();
     }
-}
-
-void GraphProvider::drawData()
-{
-    emit dataUpdated();
-    QTimer::singleShot(500, this, SLOT(drawData()));
 }
 
 /**

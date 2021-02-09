@@ -51,6 +51,10 @@ WidgetProvider::WidgetProvider()
     connect(ge, SIGNAL(frameChanged()), this, SLOT(updateModels()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 
+    // Draw data at 24 FPS
+    connect(&m_timer, &QTimer::timeout, this, &WidgetProvider::dataChanged);
+    m_timer.start(1000 / 24);
+
     // Look like a pro
     LOG_TRACE() << "Class initialized";
 }
@@ -419,9 +423,6 @@ void WidgetProvider::updateModels()
     m_gyroGroups = getWidgetGroup("gyro");
     m_barDatasets = getWidgetDatasets("bar");
     m_accelerometerGroups = getWidgetGroup("accelerometer");
-
-    // Update UI
-    emit dataChanged();
 }
 
 /**
