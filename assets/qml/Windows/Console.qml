@@ -145,8 +145,13 @@ Control {
 
             Connections {
                 target: Cpp_IO_Console
-                function onLineReceived(line) {
-                    textEdit.append(line)
+
+                function onLineReceived(text) {
+                    textEdit.append(text)
+                }
+
+                function onStringReceived(text) {
+                    textEdit.insertText(text)
                 }
             }
 

@@ -138,6 +138,7 @@ public slots:
     void append(const QString &text);
     void setText(const QString &text);
     void setColor(const QColor &color);
+    void insertText(const QString &text);
     void setWordWrapMode(const int mode);
     void setAutoscroll(const bool enabled);
     void setPalette(const QPalette &palette);

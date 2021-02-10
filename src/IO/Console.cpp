@@ -435,6 +435,10 @@ void Console::setDisplayMode(const DisplayMode mode)
  */
 void Console::append(const QString &string, const bool addTimestamp)
 {
+    // Abort on empty strings
+    if (string.isEmpty())
+        return;
+
     QString timestamp;
     if (addTimestamp)
     {
@@ -483,6 +487,10 @@ void Console::append(const QString &string, const bool addTimestamp)
     auto newLineCount = lineCount();
     for (int i = oldLineCount; i < newLineCount; ++i)
         emit lineReceived(m_lines.at(i - 1));
+
+    // We did not receive new lines, just write received data
+    if (newLineCount == oldLineCount)
+        emit stringReceived(data);
 
     // Update UI
     emit dataReceived();
@@ -568,8 +576,12 @@ QString Console::dataToString(const QByteArray &data)
  */
 QString Console::plainTextStr(const QByteArray &data)
 {
-    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-    return codec->toUnicode(data);
+    QString str = QString::fromUtf8(data);
+
+    if (str.toUtf8() != data)
+        str = QString::fromLatin1(data);
+
+    return str;
 }
 
 /**

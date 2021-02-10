@@ -45,7 +45,7 @@ Manager::Manager()
     , m_startSequence("/*")
     , m_finishSequence("*/")
 {
-    setWatchdogInterval(15);
+    // setWatchdogInterval(15);
     setMaxBufferSize(1024 * 1024);
     LOG_TRACE() << "Class initialized";
 }

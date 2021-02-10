@@ -424,6 +424,20 @@ void QmlPlainTextEdit::setAutoscroll(const bool enabled)
 }
 
 /**
+ * Inserts the given @a text directly, no additional line breaks added.
+ */
+void QmlPlainTextEdit::insertText(const QString &text)
+{
+    m_textEdit->insertPlainText(text);
+
+    if (autoscroll())
+        scrollToBottom(false);
+
+    update();
+    emit textChanged();
+}
+
+/**
  * Changes the word wrap mode of the text editor.
  *
  * This property holds the mode QPlainTextEdit will use when wrapping text by words.
@@ -482,7 +496,7 @@ void QmlPlainTextEdit::scrollToBottom(const bool repaint)
 {
     auto *bar = m_textEdit->verticalScrollBar();
 
-    auto textHeight = m_textEdit->height() / m_textEdit->fontMetrics().height();
+    auto textHeight = height() / m_textEdit->fontMetrics().height();
     auto scrollIndex = bar->maximum() - textHeight;
     if (scrollIndex < 0)
         scrollIndex = 0;

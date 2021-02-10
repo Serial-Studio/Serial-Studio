@@ -81,6 +81,7 @@ signals:
     void textDocumentChanged();
     void showTimestampChanged();
     void lineReceived(const QString &text);
+    void stringReceived(const QString &text);
 
 public:
     enum class DisplayMode
