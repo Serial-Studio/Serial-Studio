@@ -155,13 +155,16 @@ Control {
             id: textEdit
             focus: true
             readOnly: true
-            color: "#8ecd9d"
             font.pixelSize: 12
             centerOnScroll: false
             undoRedoEnabled: false
             Layout.fillWidth: true
             Layout.fillHeight: true
             maximumBlockCount: 5000
+            palette.text: "#8ecd9d"
+            palette.base: "#121218"
+            palette.button: "#16232a"
+            palette.window: "#0d1217"
             font.family: app.monoFont
             autoscroll: Cpp_IO_Console.autoscroll
             wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -211,8 +214,9 @@ Control {
                 id: send
                 height: 24
                 font: textEdit.font
-                color: textEdit.color
                 Layout.fillWidth: true
+                palette.text: "#8ecd9d"
+                palette.base: "#121218"
                 enabled: Cpp_IO_Manager.readWrite
                 placeholderText: qsTr("Send data to device") + "..."
 
