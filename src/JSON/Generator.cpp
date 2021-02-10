@@ -327,9 +327,9 @@ void Generator::readData(const QByteArray &data)
  * was received.
  */
 JSONWorker::JSONWorker(const QByteArray &data, const QDateTime &time)
+    : m_time(time)
+    , m_data(data)
 {
-    m_data = data;
-    m_time = time;
 }
 
 /**

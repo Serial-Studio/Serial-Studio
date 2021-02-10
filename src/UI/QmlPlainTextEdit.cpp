@@ -291,8 +291,17 @@ void QmlPlainTextEdit::selectAll()
 {
     m_textEdit->selectAll();
     update();
+}
 
-    emit textChanged();
+/**
+ * Clears the text selection
+ */
+void QmlPlainTextEdit::clearSelection()
+{
+    auto cursor = QTextCursor(m_textEdit->document());
+    cursor.clearSelection();
+    m_textEdit->setTextCursor(cursor);
+    update();
 }
 
 /**
@@ -422,11 +431,19 @@ void QmlPlainTextEdit::setAutoscroll(const bool enabled)
  */
 void QmlPlainTextEdit::insertText(const QString &text)
 {
+    // Move the cursor to the end of the document
+    auto cursor = QTextCursor(m_textEdit->document());
+    cursor.movePosition(QTextCursor::End);
+    m_textEdit->setTextCursor(cursor);
+
+    // Insert text at the end of the document
     m_textEdit->insertPlainText(text);
 
+    // Auto-scroll if needed
     if (autoscroll())
         scrollToBottom(false);
 
+    // Redraw UI
     update();
     emit textChanged();
 }

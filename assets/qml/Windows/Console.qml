@@ -81,10 +81,34 @@ Control {
     }
 
     //
+    // Select all shortcut
+    //
+    Shortcut {
+        sequence: StandardKey.SelectAll
+        onActivated: textEdit.selectAll()
+    }
+
+    //
+    // Remove selection
+    //
+    Shortcut {
+        sequence: "escape"
+        onActivated: textEdit.clearSelection()
+    }
+
+    //
+    // Copy
+    //
+    Shortcut {
+        sequence: StandardKey.Copy
+        onActivated: textEdit.copy()
+    }
+
+    //
     // Right-click context menu
     //
     Menu {
-        id: menu
+        id: contextMenu
 
         MenuItem {
             id: copyMenu
@@ -137,16 +161,11 @@ Control {
             undoRedoEnabled: false
             Layout.fillWidth: true
             Layout.fillHeight: true
-            maximumBlockCount: 1000
+            maximumBlockCount: 5000
             font.family: app.monoFont
             autoscroll: Cpp_IO_Console.autoscroll
             wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
             placeholderText: qsTr("No data received so far") + "..."
-
-            onFocusChanged: {
-                textEdit.focusWidget()
-                textEdit.forceActiveFocus()
-            }
 
             Connections {
                 target: Cpp_IO_Console
@@ -161,13 +180,21 @@ Control {
             }
 
             MouseArea {
+                id: mouseArea
+                hoverEnabled: true
                 anchors.fill: parent
-                enabled: false
-                propagateComposedEvents: false
-                acceptedButtons: Qt.RightButton | Qt.LeftButton
+                propagateComposedEvents: true
+                acceptedButtons: Qt.RightButton
+                onContainsMouseChanged: {
+                    if (mouseArea.containsMouse)
+                        textEdit.forceActiveFocus()
+                }
+
                 onClicked: {
-                    if (mouse.button == Qt.RightButton)
-                        menu.popup()
+                    if (mouse.button == Qt.RightButton) {
+                        contextMenu.popup()
+                        mouse.accepted = true
+                    }
                 }
             }
         }
