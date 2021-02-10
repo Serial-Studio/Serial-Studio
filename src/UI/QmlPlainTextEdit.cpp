@@ -49,6 +49,7 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     // Set item flags
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsInputMethod, true);
+    setFlag(ItemIsFocusScope, true);
     setAcceptedMouseButtons(Qt::AllButtons);
 
     // Initialize the text edit widget
@@ -92,15 +93,15 @@ bool QmlPlainTextEdit::event(QEvent *event)
             forceActiveFocus();
             return QQuickPaintedItem::event(event);
             break;
-        case QEvent::MouseButtonDblClick:
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseMove:
-            routeMouseEvents(static_cast<QMouseEvent *>(event));
+        case QEvent::Wheel:
+            processWheelEvents(static_cast<QWheelEvent *>(event));
             return true;
             break;
-        case QEvent::Wheel:
-            routeWheelEvents(static_cast<QWheelEvent *>(event));
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonDblClick:
+        case QEvent::MouseMove:
+            processMouseEvents(static_cast<QMouseEvent *>(event));
             return true;
             break;
         default:
@@ -262,30 +263,6 @@ int QmlPlainTextEdit::maximumBlockCount() const
 QString QmlPlainTextEdit::placeholderText() const
 {
     return m_textEdit->placeholderText();
-}
-
-/**
- * Process mouse incoming from the QML interface
- */
-void QmlPlainTextEdit::routeMouseEvents(QMouseEvent *event)
-{
-    QMouseEvent *newEvent
-        = new QMouseEvent(event->type(), event->localPos(), event->button(),
-                          event->buttons(), event->modifiers());
-    m_textEdit->setFocus(Qt::ActiveWindowFocusReason);
-    m_textEdit->grabMouse();
-    QApplication::postEvent(m_textEdit, newEvent);
-}
-
-/**
- * Process mouse wheel incoming from the QML interface
- */
-void QmlPlainTextEdit::routeWheelEvents(QWheelEvent *event)
-{
-    QWheelEvent *newEvent
-        = new QWheelEvent(event->position(), event->delta(), event->buttons(),
-                          event->modifiers(), event->orientation());
-    QApplication::postEvent(m_textEdit, newEvent);
 }
 
 /**
@@ -559,4 +536,53 @@ void QmlPlainTextEdit::setCopyAvailable(const bool yes)
 {
     m_copyAvailable = yes;
     emit copyAvailableChanged();
+}
+
+/**
+ * Hack: call the appropiate protected mouse event handler function of the QPlainTextEdit
+ *       item depending on event type
+ */
+void QmlPlainTextEdit::processMouseEvents(QMouseEvent *event)
+{
+    class Hack : public QPlainTextEdit
+    {
+    public:
+        using QPlainTextEdit::mouseDoubleClickEvent;
+        using QPlainTextEdit::mouseMoveEvent;
+        using QPlainTextEdit::mousePressEvent;
+        using QPlainTextEdit::mouseReleaseEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_textEdit);
+    switch (event->type())
+    {
+        case QEvent::MouseButtonPress:
+            hack->mousePressEvent(event);
+            break;
+        case QEvent::MouseMove:
+            hack->mouseMoveEvent(event);
+            break;
+        case QEvent::MouseButtonRelease:
+            hack->mouseReleaseEvent(event);
+            break;
+        case QEvent::MouseButtonDblClick:
+            hack->mouseDoubleClickEvent(event);
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * Hack: call the protected wheel event handler function of the QPlainTextEdit item
+ */
+void QmlPlainTextEdit::processWheelEvents(QWheelEvent *event)
+{
+    class Hack : public QPlainTextEdit
+    {
+    public:
+        using QPlainTextEdit::wheelEvent;
+    };
+
+    static_cast<Hack *>(m_textEdit)->wheelEvent(event);
 }

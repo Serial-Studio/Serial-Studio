@@ -143,6 +143,11 @@ Control {
             wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
             placeholderText: qsTr("No data received so far") + "..."
 
+            onFocusChanged: {
+                textEdit.focusWidget()
+                textEdit.forceActiveFocus()
+            }
+
             Connections {
                 target: Cpp_IO_Console
 
@@ -157,6 +162,7 @@ Control {
 
             MouseArea {
                 anchors.fill: parent
+                enabled: false
                 propagateComposedEvents: false
                 acceptedButtons: Qt.RightButton | Qt.LeftButton
                 onClicked: {

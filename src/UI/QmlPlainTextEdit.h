@@ -125,10 +125,6 @@ public:
     int maximumBlockCount() const;
     QString placeholderText() const;
 
-protected:
-    void routeMouseEvents(QMouseEvent *event);
-    void routeWheelEvents(QWheelEvent *event);
-
 public slots:
     void copy();
     void clear();
@@ -153,6 +149,10 @@ public slots:
 private slots:
     void updateWidgetSize();
     void setCopyAvailable(const bool yes);
+
+protected:
+    void processMouseEvents(QMouseEvent *event);
+    void processWheelEvents(QWheelEvent *event);
 
 private:
     QColor m_color;
