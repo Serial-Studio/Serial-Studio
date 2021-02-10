@@ -349,6 +349,9 @@ void JSONWorker::process()
     // We need to use a map file, check if its loaded & replace values into map
     else
     {
+        // Initialize javscript engine
+        m_engine = new QJSEngine(this);
+
         // Empty JSON map data
         if (Generator::getInstance()->jsonMapData().isEmpty())
             return;
@@ -387,7 +390,51 @@ void JSONWorker::process()
             return;
 
         // Create json document
-        document = QJsonDocument::fromJson(json.toUtf8(), &error);
+        auto jsonDocument = QJsonDocument::fromJson(json.toUtf8(), &error);
+
+        // Calculate dynamically generated values
+        auto root = jsonDocument.object();
+        auto groups = root.value("g").toArray();
+        for (int i = 0; i < groups.count(); ++i)
+        {
+            // Get group
+            auto group = groups.at(i).toObject();
+
+            // Evaluate each dataset of the current group
+            auto datasets = group.value("d").toArray();
+            for (int j = 0; j < datasets.count(); ++j)
+            {
+                // Get dataset object & value
+                auto dataset = datasets.at(j).toObject();
+                auto value = dataset.value("v").toString();
+
+                // Evaluate code in dataset value (if any)
+                auto jsValue = m_engine->evaluate(value);
+
+                // Code execution correct, replace value in JSON
+                if (!jsValue.isError())
+                {
+                    dataset.remove("v");
+                    dataset.insert("v", jsValue.toString());
+                    datasets.replace(j, dataset);
+                }
+            }
+
+            // Replace group datasets
+            group.remove("d");
+            group.insert("d", datasets);
+            groups.replace(i, group);
+        }
+
+        // Replace root document group objects
+        root.remove("g");
+        root.insert("g", groups);
+
+        // Create JSON document
+        document = QJsonDocument(root);
+
+        // Delete javacript engine
+        m_engine->deleteLater();
     }
 
     // No parse error, update UI & reset error counter

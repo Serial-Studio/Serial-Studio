@@ -21,6 +21,7 @@
  */
 
 #include "Dataset.h"
+#include "Generator.h"
 
 using namespace JSON;
 
@@ -83,12 +84,15 @@ QJsonObject Dataset::jsonData() const
 }
 
 /**
- * Reads dataset information from the given @a object.
+ * Reads dataset information from the given @a object and evaluates any JS code in the
+ * "value" field of the dataset.
  *
  * @return @c true on read success, @c false on failure
  */
 bool Dataset::read(const QJsonObject &object)
 {
+    static QJSEngine JAVASCRIPT_ENGINE;
+
     if (!object.isEmpty())
     {
         auto graph = object.value("g").toVariant().toBool();
@@ -101,8 +105,8 @@ bool Dataset::read(const QJsonObject &object)
         {
             m_graph = graph;
             m_title = title;
-            m_value = value;
             m_units = units;
+            m_value = value;
             m_widget = widget;
             m_jsonData = object;
 

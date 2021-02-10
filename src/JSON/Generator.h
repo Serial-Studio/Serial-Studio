@@ -27,6 +27,8 @@
 #include <QTimer>
 #include <QObject>
 #include <QThread>
+#include <QJSValue>
+#include <QJSEngine>
 #include <QSettings>
 #include <QQmlEngine>
 #include <QJsonArray>
@@ -55,6 +57,7 @@ public slots:
 private:
     QDateTime m_time;
     QByteArray m_data;
+    QJSEngine *m_engine;
 };
 
 class Generator : public QObject
@@ -97,6 +100,8 @@ public:
     QString jsonMapFilepath() const;
     OperationMode operationMode() const;
 
+    QJSEngine *javaScriptEngine() { return &m_engine; }
+
 public slots:
     void loadJsonMap();
     void setOperationMode(const OperationMode mode);
@@ -127,6 +132,8 @@ private:
 
     QThread m_workerThread;
     JSONWorker *m_jsonWorker;
+
+    QJSEngine m_engine;
 };
 }
 
