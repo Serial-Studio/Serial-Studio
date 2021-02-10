@@ -322,12 +322,20 @@ void Generator::readData(const QByteArray &data)
 // JSON worker object (executed for each frame on a new thread)
 //----------------------------------------------------------------------------------------
 
+/**
+ * Constructor function, stores received frame data & the date/time that the frame data
+ * was received.
+ */
 JSONWorker::JSONWorker(const QByteArray &data, const QDateTime &time)
 {
     m_data = data;
     m_time = time;
 }
 
+/**
+ * Reads the frame & inserts its values on the JSON map, and/or extracts the JSON frame
+ * directly from the serial data.
+ */
 void JSONWorker::process()
 {
     // Init variables
