@@ -133,6 +133,7 @@ public slots:
     void copy();
     void clear();
     void selectAll();
+    void resetScrollbarSize();
     void setReadOnly(const bool ro);
     void setFont(const QFont &font);
     void append(const QString &text);

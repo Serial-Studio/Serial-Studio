@@ -319,6 +319,23 @@ void QmlPlainTextEdit::selectAll()
 }
 
 /**
+ * Changes the scrollbar size to fit the document window
+ */
+void QmlPlainTextEdit::resetScrollbarSize()
+{
+    auto *bar = m_textEdit->verticalScrollBar();
+
+    auto textHeight = height() / m_textEdit->fontMetrics().height();
+    auto scrollIndex = bar->maximum() - textHeight;
+    if (scrollIndex < 0)
+        scrollIndex = 0;
+
+    bar->setMaximum(scrollIndex);
+    bar->setValue(scrollIndex);
+    update();
+}
+
+/**
  * Changes the read-only state of the text edit.
  *
  * In a read-only text edit the user can only navigate through the text and select text;
@@ -497,12 +514,13 @@ void QmlPlainTextEdit::scrollToBottom(const bool repaint)
     auto *bar = m_textEdit->verticalScrollBar();
 
     auto textHeight = height() / m_textEdit->fontMetrics().height();
-    auto scrollIndex = bar->maximum() - textHeight;
-    if (scrollIndex < 0)
-        scrollIndex = 0;
+    auto scrollIndex = bar->minimum() + bar->maximum() - textHeight;
 
-    bar->setValue(scrollIndex);
-    bar->setMaximum(scrollIndex);
+    if (scrollIndex >= 0)
+    {
+        bar->setMaximum(scrollIndex);
+        bar->setValue(scrollIndex);
+    }
 
     if (repaint)
         update();
