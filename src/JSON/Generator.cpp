@@ -318,6 +318,10 @@ void Generator::readData(const QByteArray &data)
     thread->start();
 }
 
+//----------------------------------------------------------------------------------------
+// JSON worker object (executed for each frame on a new thread)
+//----------------------------------------------------------------------------------------
+
 JSONWorker::JSONWorker(const QByteArray &data)
 {
     m_data = data;

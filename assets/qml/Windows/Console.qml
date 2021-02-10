@@ -86,16 +86,12 @@ Control {
     Menu {
         id: menu
 
-        onVisibleChanged: {
-            if (visible)
-                copyMenu.enabled = textEdit.copyAvailable()
-        }
-
         MenuItem {
             id: copyMenu
             text: qsTr("Copy")
             opacity: enabled ? 1 : 0.5
             onClicked: textEdit.copy()
+            enabled: textEdit.copyAvailable
         }
 
         MenuItem {
@@ -137,7 +133,7 @@ Control {
             readOnly: true
             color: "#8ecd9d"
             font.pixelSize: 12
-            centerOnScroll: true
+            centerOnScroll: false
             undoRedoEnabled: false
             Layout.fillWidth: true
             Layout.fillHeight: true

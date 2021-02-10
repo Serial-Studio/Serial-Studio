@@ -82,6 +82,9 @@ class QmlPlainTextEdit : public QQuickPaintedItem
                READ maximumBlockCount
                WRITE setMaximumBlockCount
                NOTIFY maximumBlockCountChanged)
+    Q_PROPERTY(bool copyAvailable
+               READ copyAvailable
+               NOTIFY copyAvailableChanged)
     // clang-format on
 
 signals:
@@ -92,6 +95,7 @@ signals:
     void readOnlyChanged();
     void autoscrollChanged();
     void wordWrapModeChanged();
+    void copyAvailableChanged();
     void widgetEnabledChanged();
     void centerOnScrollChanged();
     void placeholderTextChanged();
@@ -114,12 +118,12 @@ public:
     bool autoscroll() const;
     QPalette palette() const;
     int wordWrapMode() const;
+    bool copyAvailable() const;
     bool widgetEnabled() const;
     bool centerOnScroll() const;
     bool undoRedoEnabled() const;
     int maximumBlockCount() const;
     QString placeholderText() const;
-    Q_INVOKABLE bool copyAvailable() const;
 
 protected:
     void routeMouseEvents(QMouseEvent *event);
@@ -141,14 +145,17 @@ public slots:
     void setCenterOnScroll(const bool enabled);
     void setUndoRedoEnabled(const bool enabled);
     void setPlaceholderText(const QString &text);
+    void scrollToBottom(const bool repaint = true);
     void setMaximumBlockCount(const int maxBlockCount);
 
 private slots:
     void updateWidgetSize();
+    void setCopyAvailable(const bool yes);
 
 private:
     QColor m_color;
     bool m_autoscroll;
+    bool m_copyAvailable;
     QPlainTextEdit *m_textEdit;
 };
 }
