@@ -40,6 +40,7 @@ RowLayout {
     property alias flashDuration: _timer.interval
 
     //
+    //*! Optimize this function
     // Turns on the LED for a short period of time
     //
     function flash() {

@@ -70,6 +70,8 @@ Window {
     //
     Connections {
         target: Cpp_UI_WidgetProvider
+
+        //*! Optimize this function
         function onDataChanged() {
             root.updateValues()
         }

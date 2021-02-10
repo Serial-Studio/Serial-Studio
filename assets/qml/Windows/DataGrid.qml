@@ -50,6 +50,8 @@ Control {
     //
     Connections {
         target: Cpp_UI_Provider
+
+        //*! Optimize this function
         function onUpdated() {
             root.title = Cpp_UI_Provider.title
             if (groupGenerator.model !== Cpp_UI_Provider.groupCount) {
@@ -592,7 +594,7 @@ Control {
                 font.family: app.monoFont
                 color: palette.brightText
                 visible: !Cpp_CSV_Player.isOpen
-                text: Cpp_IO_Manager.receivedDataLength
+                text: Cpp_IO_Manager.receivedDataLength //*! Optimize this function
 
                 anchors {
                     right: parent.right

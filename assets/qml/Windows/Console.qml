@@ -170,6 +170,8 @@ Control {
             Connections {
                 target: Cpp_IO_Console
 
+                //*! Optimize these functions
+                //*! Over 50% of the UI thread time is lost here
                 function onLineReceived(text) {
                     textEdit.append(text)
                 }

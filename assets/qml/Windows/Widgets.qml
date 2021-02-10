@@ -44,6 +44,8 @@ Control {
     //
     Connections {
         target: Cpp_UI_WidgetProvider
+
+        //*! Optimize this function
         function onDataChanged() {
             // Generate accelerometer widgets
             if (accGenerator.model !== Cpp_UI_WidgetProvider.accelerometerGroupCount()) {

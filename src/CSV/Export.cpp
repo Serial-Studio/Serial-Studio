@@ -146,8 +146,7 @@ void Export::closeFile()
 
 /**
  * Creates a CSV file based on the JSON frames contained in the JSON list.
- * @note This function is called periodically every 1 second. It shall write
- *       at maximum 10 rows to avoid blocking the rest of the program.
+ * @note This function is called periodically every 1 second.
  */
 void Export::writeValues()
 {

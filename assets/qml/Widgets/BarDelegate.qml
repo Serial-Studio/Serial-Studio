@@ -89,6 +89,9 @@ Window {
     //
     Connections {
         target: Cpp_UI_WidgetProvider
+
+        //*! Optimize this function
+        //   About 6% of the UI thread is spent here
         function onDataChanged() {
             root.updateValues()
         }
@@ -97,6 +100,8 @@ Window {
     //
     // Updates the internal values of the bar widget
     //
+    //*! Optimize this function
+    //   About 6% of the UI thread is spent here
     function updateValues() {
         if (Cpp_UI_WidgetProvider.barDatasetCount() > root.datasetIndex) {
             root.minimumValue = Cpp_UI_WidgetProvider.barMin(root.datasetIndex)

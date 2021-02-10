@@ -42,6 +42,9 @@ Window {
 
     Connections {
         target: Cpp_UI_Provider
+
+        //*! Optimize this function
+        //   About 14% of the UI thread time is spent here
         function onUpdated() {
             if (root.enabled) {
                 var g = Cpp_UI_Provider.getGroup(groupId)
@@ -73,6 +76,9 @@ Window {
                 model: group !== null  ? group.datasetCount : 0
                 delegate: DataDelegate {
                     Layout.fillWidth: true
+
+                    //*! Optimize this function
+                    //   About 11% of UI thread time is spent here
                     dataset: group.datasets[index]
                 }
             }
