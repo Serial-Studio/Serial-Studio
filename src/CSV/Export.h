@@ -67,7 +67,7 @@ public slots:
 
 private slots:
     void writeValues();
-    void updateValues();
+    void updateValues(const QJsonDocument &document, const QDateTime &time);
 
 private:
     QFile m_csvFile;

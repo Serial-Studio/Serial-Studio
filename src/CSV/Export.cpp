@@ -53,9 +53,9 @@ Export::Export()
     auto io = IO::Manager::getInstance();
     auto jp = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
-    connect(te, SIGNAL(timeout1Hz()), this, SLOT(writeValues()));
-    connect(jp, SIGNAL(jsonChanged()), this, SLOT(updateValues()));
-    connect(io, SIGNAL(connectedChanged()), this, SLOT(closeFile()));
+    connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
+    connect(jp, &JSON::Generator::jsonChanged, this, &Export::updateValues);
+    connect(te, &Misc::TimerEvents::timeout1Hz, this, &Export::writeValues);
 
     LOG_TRACE() << "Class initialized";
 }
@@ -151,7 +151,7 @@ void Export::closeFile()
  */
 void Export::writeValues()
 {
-    for (int k = 0; k < qMin(m_jsonList.count(), 10); ++k)
+    for (int k = 0; k < m_jsonList.count(); ++k)
     {
         // Get project title & cell values
         auto json = m_jsonList.first().second;
@@ -280,7 +280,7 @@ void Export::writeValues()
  * Obtains the latest JSON dataframe & appends it to the JSON list
  * (which is later read & written to the CSV file).
  */
-void Export::updateValues()
+void Export::updateValues(const QJsonDocument &document, const QDateTime &time)
 {
     // Ignore if device is not connected
     if (!IO::Manager::getInstance()->connected())
@@ -291,11 +291,11 @@ void Export::updateValues()
         return;
 
     // Get & validate JSON document
-    auto json = JSON::Generator::getInstance()->document().object();
+    auto json = document.object();
     if (json.isEmpty())
         return;
 
     // Update JSON list
-    auto pair = qMakePair<QDateTime, QJsonObject>(QDateTime::currentDateTime(), json);
+    auto pair = qMakePair<QDateTime, QJsonObject>(time, json);
     m_jsonList.append(pair);
 }

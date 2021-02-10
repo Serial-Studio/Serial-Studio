@@ -44,15 +44,16 @@ class JSONWorker : public QObject
 
 signals:
     void finished();
-    void jsonReady(const QJsonDocument &document);
+    void jsonReady(const QJsonDocument &document, const QDateTime &time);
 
 public:
-    JSONWorker(const QByteArray &data);
+    JSONWorker(const QByteArray &data, const QDateTime &time);
 
 public slots:
     void process();
 
 private:
+    QDateTime m_time;
     QByteArray m_data;
 };
 
@@ -73,10 +74,10 @@ class Generator : public QObject
     // clang-format on
 
 signals:
-    void jsonChanged();
     void frameChanged();
     void jsonFileMapChanged();
     void operationModeChanged();
+    void jsonChanged(const QJsonDocument &document, const QDateTime &time);
 
 public:
     enum OperationMode
@@ -107,7 +108,8 @@ private:
 public slots:
     void readSettings();
     void writeSettings(const QString &path);
-    void setJsonDocument(const QJsonDocument &document);
+    void setJsonDocument(const QJsonDocument &document,
+                         const QDateTime &time = QDateTime::currentDateTime());
 
 private slots:
     void reset();

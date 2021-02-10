@@ -259,7 +259,7 @@ void Generator::writeSettings(const QString &path)
  * This function is set to public in order to allow the CSV-replay feature to
  * work by replacing the data/json input source.
  */
-void Generator::setJsonDocument(const QJsonDocument &document)
+void Generator::setJsonDocument(const QJsonDocument &document, const QDateTime &time)
 {
     if (document.object().isEmpty())
         return;
@@ -270,7 +270,7 @@ void Generator::setJsonDocument(const QJsonDocument &document)
     if (m_frame.read(m_document.object()))
         emit frameChanged();
 
-    emit jsonChanged();
+    emit jsonChanged(document, time);
 }
 
 /**
@@ -308,7 +308,7 @@ void Generator::readData(const QByteArray &data)
 
     // Create new worker thread to read JSON data
     QThread *thread = new QThread;
-    JSONWorker *worker = new JSONWorker(data);
+    JSONWorker *worker = new JSONWorker(data, QDateTime::currentDateTime());
     worker->moveToThread(thread);
     connect(thread, SIGNAL(started()), worker, SLOT(process()));
     connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
@@ -322,9 +322,10 @@ void Generator::readData(const QByteArray &data)
 // JSON worker object (executed for each frame on a new thread)
 //----------------------------------------------------------------------------------------
 
-JSONWorker::JSONWorker(const QByteArray &data)
+JSONWorker::JSONWorker(const QByteArray &data, const QDateTime &time)
 {
     m_data = data;
+    m_time = time;
 }
 
 void JSONWorker::process()
@@ -383,7 +384,7 @@ void JSONWorker::process()
 
     // No parse error, update UI & reset error counter
     if (error.error == QJsonParseError::NoError)
-        emit jsonReady(document);
+        emit jsonReady(document, m_time);
 
     // Delete object in 500 ms
     QTimer::singleShot(500, this, SIGNAL(finished()));
