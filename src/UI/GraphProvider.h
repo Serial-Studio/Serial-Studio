@@ -23,7 +23,6 @@
 #ifndef GRAPH_PROVIDER_H
 #define GRAPH_PROVIDER_H
 
-#include <QTimer>
 #include <QVector>
 #include <QObject>
 #include <QVector>
@@ -64,6 +63,7 @@ public:
     int displayedPoints() const;
     QVector<JSON::Dataset *> datasets() const;
     Q_INVOKABLE double getValue(const int index) const;
+    Q_INVOKABLE QPointF graphRange(const int index) const;
     Q_INVOKABLE double minimumValue(const int index) const;
     Q_INVOKABLE double maximumValue(const int index) const;
     Q_INVOKABLE JSON::Dataset *getDataset(const int index) const;
@@ -81,7 +81,6 @@ private slots:
     void csvPlayerFixes();
 
 private:
-    QTimer m_timer;
     int m_prevFramePos;
     int m_displayedPoints;
     QVector<double> m_maximumValues;

@@ -20,16 +20,14 @@
  * THE SOFTWARE.
  */
 
-#ifndef HACKS_QML_PLAINTEXTEDIT_H
-#define HACKS_QML_PLAINTEXTEDIT_H
+#ifndef UI_QML_PLAINTEXTEDIT_H
+#define UI_QML_PLAINTEXTEDIT_H
 
-#include <QThread>
-#include <QPointer>
 #include <QPainter>
 #include <QPlainTextEdit>
 #include <QQuickPaintedItem>
 
-namespace Hacks
+namespace UI
 {
 class QmlPlainTextEdit : public QQuickPaintedItem
 {
@@ -80,6 +78,10 @@ class QmlPlainTextEdit : public QQuickPaintedItem
                READ palette
                WRITE setPalette
                NOTIFY paletteChanged)
+    Q_PROPERTY(int maximumBlockCount
+               READ maximumBlockCount
+               WRITE setMaximumBlockCount
+               NOTIFY maximumBlockCountChanged)
     // clang-format on
 
 signals:
@@ -94,6 +96,7 @@ signals:
     void centerOnScrollChanged();
     void placeholderTextChanged();
     void undoRedoEnabledChanged();
+    void maximumBlockCountChanged();
 
 public:
     QmlPlainTextEdit(QQuickItem *parent = 0);
@@ -114,6 +117,7 @@ public:
     bool widgetEnabled() const;
     bool centerOnScroll() const;
     bool undoRedoEnabled() const;
+    int maximumBlockCount() const;
     QString placeholderText() const;
     Q_INVOKABLE bool copyAvailable() const;
 
@@ -137,6 +141,7 @@ public slots:
     void setCenterOnScroll(const bool enabled);
     void setUndoRedoEnabled(const bool enabled);
     void setPlaceholderText(const QString &text);
+    void setMaximumBlockCount(const int maxBlockCount);
 
 private slots:
     void updateWidgetSize();
@@ -144,7 +149,6 @@ private slots:
 private:
     QColor m_color;
     bool m_autoscroll;
-    QThread m_thread;
     QPlainTextEdit *m_textEdit;
 };
 }

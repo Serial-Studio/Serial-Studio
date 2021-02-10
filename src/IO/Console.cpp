@@ -30,6 +30,7 @@
 #include <QFileDialog>
 #include <Misc/Utilities.h>
 #include <ConsoleAppender.h>
+#include <Misc/TimerEvents.h>
 
 using namespace IO;
 static Console *INSTANCE = nullptr;
@@ -56,8 +57,10 @@ Console::Console()
     clear();
 
     // Read received data automatically
-    auto m = Manager::getInstance();
-    connect(m, &Manager::dataReceived, this, &Console::onDataReceived);
+    auto dm = Manager::getInstance();
+    auto te = Misc::TimerEvents::getInstance();
+    connect(te, SIGNAL(timeout24Hz()), this, SLOT(displayData()));
+    connect(dm, &Manager::dataReceived, this, &Console::onDataReceived);
 
     // Log something to look like a pro
     LOG_TRACE() << "Class initialized";
@@ -259,7 +262,9 @@ void Console::save()
 void Console::clear()
 {
     m_lines.clear();
+    m_dataBuffer.clear();
     m_lines.reserve(SCROLLBACK);
+    m_dataBuffer.reserve(120 * SCROLLBACK);
 
     emit dataReceived();
 }
@@ -488,9 +493,19 @@ void Console::append(const QString &string, const bool addTimestamp)
  * done by the @c dataToString() function, which displays incoming data either in UTF-8
  * or in hexadecimal mode.
  */
+void Console::displayData()
+{
+    append(dataToString(m_dataBuffer), showTimestamp());
+    m_dataBuffer.clear();
+}
+
+/**
+ * Adds the given @a data to the incoming data buffer, which is read later by the UI
+ * refresh functions (displayData())
+ */
 void Console::onDataReceived(const QByteArray &data)
 {
-    append(dataToString(data), showTimestamp());
+    m_dataBuffer.append(data);
 }
 
 /**

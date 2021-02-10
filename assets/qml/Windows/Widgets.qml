@@ -106,11 +106,7 @@ Control {
                         Widgets.GyroDelegate {
                             groupIndex: index
                             anchors.fill: parent
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onDoubleClicked: windowGyro.show()
+                            onHeaderDoubleClicked: windowGyro.show()
                         }
 
                         QtWindow.Window {
@@ -140,6 +136,7 @@ Control {
                                 anchors.margins: 0
                                 anchors.fill: parent
                                 borderColor: backgroundColor
+                                headerDoubleClickEnabled: false
                             }
                         }
                     }
@@ -157,11 +154,7 @@ Control {
                         Widgets.AccelerometerDelegate {
                             groupIndex: index
                             anchors.fill: parent
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onDoubleClicked: windowAcc.show()
+                            onHeaderDoubleClicked: windowAcc.show()
                         }
 
                         QtWindow.Window {
@@ -191,6 +184,7 @@ Control {
                                 anchors.margins: 0
                                 anchors.fill: parent
                                 borderColor: backgroundColor
+                                headerDoubleClickEnabled: false
                             }
                         }
                     }
@@ -208,11 +202,7 @@ Control {
                         Widgets.MapDelegate {
                             groupIndex: index
                             anchors.fill: parent
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onDoubleClicked: windowMap.show()
+                            onHeaderDoubleClicked: windowMap.show()
                         }
 
                         QtWindow.Window {
@@ -242,6 +232,7 @@ Control {
                                 anchors.margins: 0
                                 anchors.fill: parent
                                 borderColor: backgroundColor
+                                headerDoubleClickEnabled: false
                             }
                         }
                     }
@@ -259,11 +250,7 @@ Control {
                         Widgets.BarDelegate {
                             datasetIndex: index
                             anchors.fill: parent
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onDoubleClicked: windowBar.show()
+                            onHeaderDoubleClicked: windowBar.show()
                         }
 
                         QtWindow.Window {
@@ -293,6 +280,7 @@ Control {
                                 anchors.margins: 0
                                 anchors.fill: parent
                                 borderColor: backgroundColor
+                                headerDoubleClickEnabled: false
                             }
                         }
                     }

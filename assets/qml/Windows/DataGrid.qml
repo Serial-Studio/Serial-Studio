@@ -108,6 +108,7 @@ Control {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 backgroundColor: "#121218"
+                headerDoubleClickEnabled: false
                 icon.source: "qrc:/icons/visibility.svg"
                 title: qsTr("View")
 
@@ -368,6 +369,7 @@ Control {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 backgroundColor: "#121218"
+                headerDoubleClickEnabled: false
                 icon.source: "qrc:/icons/scatter-plot.svg"
                 title: qsTr("Data")
 
@@ -422,8 +424,9 @@ Control {
                                         groupId: index
                                         anchors.fill: parent
                                         anchors.margins: app.spacing
-                                        group: Cpp_UI_Provider.getGroup(index)
                                         enabled: viewOptions.groups[groupId]
+                                        group: Cpp_UI_Provider.getGroup(index)
+                                        onHeaderDoubleClicked: groupWindow.show()
 
                                         Connections {
                                             target: viewOptions
@@ -431,11 +434,6 @@ Control {
                                                 groupDelegate.enabled = viewOptions.groups[groupDelegate.groupId]
                                             }
                                         }
-                                    }
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onDoubleClicked: groupWindow.show()
                                     }
 
                                     QtWindow.Window {
@@ -464,6 +462,8 @@ Control {
                                             anchors.margins: 0
                                             anchors.fill: parent
                                             borderColor: backgroundColor
+                                            enabled: groupWindow.visible
+                                            headerDoubleClickEnabled: false
                                         }
                                     }
                                 }
@@ -483,6 +483,7 @@ Control {
                                         anchors.fill: parent
                                         anchors.margins: app.spacing
                                         enabled: viewOptions.graphs[graphId]
+                                        onHeaderDoubleClicked: graphWindow.show()
 
                                         Connections {
                                             target: viewOptions
@@ -490,11 +491,6 @@ Control {
                                                 graphDelegate.enabled = viewOptions.graphs[graphDelegate.graphId]
                                             }
                                         }
-                                    }
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onDoubleClicked: graphWindow.show()
                                     }
 
                                     QtWindow.Window {
@@ -522,7 +518,9 @@ Control {
                                             headerHeight: 48
                                             anchors.margins: 0
                                             anchors.fill: parent
+                                            enabled: graphWindow.visible
                                             borderColor: backgroundColor
+                                            headerDoubleClickEnabled: false
                                             icon.source: "qrc:/icons/chart.svg"
                                         }
                                     }

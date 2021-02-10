@@ -134,7 +134,6 @@ HEADERS += \
     src/AppInfo.h \
     src/CSV/Export.h \
     src/CSV/Player.h \
-    src/Hacks/QmlPlainTextEdit.h \
     src/IO/Console.h \
     src/IO/DataSources/Network.h \
     src/IO/DataSources/Serial.h \
@@ -144,16 +143,17 @@ HEADERS += \
     src/JSON/Generator.h \
     src/JSON/Group.h \
     src/Misc/ModuleManager.h \
+    src/Misc/TimerEvents.h \
     src/Misc/Translator.h \
     src/Misc/Utilities.h \
     src/UI/DataProvider.h \
     src/UI/GraphProvider.h \
+    src/UI/QmlPlainTextEdit.h \
     src/UI/WidgetProvider.h
 
 SOURCES += \
     src/CSV/Export.cpp \
     src/CSV/Player.cpp \
-    src/Hacks/QmlPlainTextEdit.cpp \
     src/IO/Console.cpp \
     src/IO/DataSources/Network.cpp \
     src/IO/DataSources/Serial.cpp \
@@ -163,9 +163,11 @@ SOURCES += \
     src/JSON/Generator.cpp \
     src/JSON/Group.cpp \
     src/Misc/ModuleManager.cpp \
+    src/Misc/TimerEvents.cpp \
     src/Misc/Translator.cpp \
     src/Misc/Utilities.cpp \
     src/UI/DataProvider.cpp \
     src/UI/GraphProvider.cpp \
+    src/UI/QmlPlainTextEdit.cpp \
     src/UI/WidgetProvider.cpp \
     src/main.cpp

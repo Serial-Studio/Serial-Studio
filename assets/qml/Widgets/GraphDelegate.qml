@@ -29,8 +29,6 @@ Window {
     id: root
 
     property int graphId: -1
-    property real maximumValue: -Infinity
-    property real minimumValue: +Infinity
 
     spacing: -1
     showIcon: false
@@ -48,33 +46,10 @@ Window {
             if (!root.enabled)
                 return
 
-            // Update maximum value (if required)
-            maximumValue = Cpp_UI_GraphProvider.maximumValue(graphId)
-            minimumValue = Cpp_UI_GraphProvider.minimumValue(graphId)
-
-            // Get central value
-            var medianValue = Math.max(1, (maximumValue + minimumValue)) / 2
-            if (maximumValue == minimumValue)
-                medianValue = maximumValue
-
-            // Center graph verticaly
-            var mostDiff = Math.max(Math.abs(minimumValue), Math.abs(maximumValue))
-            var min = medianValue * (1 - 0.5) - Math.abs(medianValue - mostDiff)
-            var max = medianValue * (1 + 0.5) + Math.abs(medianValue - mostDiff)
-            if (minimumValue < 0)
-                min = max * -1
-
-            // Fix issues when min & max are equal
-            if (min === max) {
-                max = Math.abs(max)
-                min = max * -1
-            }
-
-            // Fix issues on min = max = (0,0)
-            if (min === 0 && max === 0) {
-                max = 1
-                min = -1
-            }
+            // Get min/max values
+            var point = Cpp_UI_GraphProvider.graphRange(graphId)
+            var min = point.x
+            var max = point.y
 
             // Update axes only if needed
             if (positionAxis.min !== min)

@@ -141,6 +141,7 @@ public slots:
     void append(const QString &str, const bool addTimestamp = false);
 
 private slots:
+    void displayData();
     void addToHistory(const QString &command);
     void onDataReceived(const QByteArray &data);
 
@@ -165,6 +166,8 @@ private:
 
     QStringList m_lines;
     QStringList m_historyItems;
+
+    QByteArray m_dataBuffer;
 };
 }
 

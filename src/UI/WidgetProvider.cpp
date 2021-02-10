@@ -30,6 +30,7 @@
 #include <IO/Console.h>
 #include <JSON/Generator.h>
 #include <ConsoleAppender.h>
+#include <Misc/TimerEvents.h>
 
 using namespace UI;
 
@@ -47,15 +48,11 @@ WidgetProvider::WidgetProvider()
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
     auto ge = JSON::Generator::getInstance();
+    auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
+    connect(te, SIGNAL(timeout24Hz()), this, SIGNAL(dataChanged()));
     connect(ge, SIGNAL(frameChanged()), this, SLOT(updateModels()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
-
-    // Draw data at 24 FPS
-    connect(&m_timer, &QTimer::timeout, this, &WidgetProvider::dataChanged);
-    m_timer.start(1000 / 24);
-
-    // Look like a pro
     LOG_TRACE() << "Class initialized";
 }
 

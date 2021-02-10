@@ -26,7 +26,6 @@ import QtQuick.Controls 2.12
 
 import SerialStudio 1.0
 import Qt.labs.settings 1.0
-import Hacks.QmlPlainTextEdit 1.0
 
 import "../Widgets" as Widgets
 
@@ -142,6 +141,7 @@ Control {
             undoRedoEnabled: false
             Layout.fillWidth: true
             Layout.fillHeight: true
+            maximumBlockCount: 1000
             font.family: app.monoFont
             autoscroll: Cpp_IO_Console.autoscroll
             wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere

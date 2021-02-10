@@ -30,6 +30,7 @@
 #include <UI/DataProvider.h>
 #include <UI/GraphProvider.h>
 #include <UI/WidgetProvider.h>
+#include <UI/QmlPlainTextEdit.h>
 
 #include <JSON/Frame.h>
 #include <JSON/Group.h>
@@ -42,9 +43,8 @@
 #include <IO/DataSources/Network.h>
 
 #include <Misc/Translator.h>
+#include <Misc/TimerEvents.h>
 #include <Misc/ModuleManager.h>
-
-#include <Hacks/QmlPlainTextEdit.h>
 
 #include <Logger.h>
 #include <FileAppender.h>
@@ -105,8 +105,7 @@ void ModuleManager::registerQmlTypes()
     qRegisterMetaType<JSON::Frame>("Frame");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
-    qmlRegisterType<Hacks::QmlPlainTextEdit>("Hacks.QmlPlainTextEdit", 1, 0,
-                                             "QmlPlainTextEdit");
+    qmlRegisterType<UI::QmlPlainTextEdit>("SerialStudio", 1, 0, "QmlPlainTextEdit");
     LOG_TRACE() << "QML types registered!";
 }
 
@@ -176,6 +175,9 @@ void ModuleManager::initializeQmlInterface()
     // Load main.qml
     engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
+    // Start common event timers
+    Misc::TimerEvents::getInstance()->startTimers();
+
     // Log QML engine status
     LOG_INFO() << "Finished loading QML interface";
 }
@@ -198,6 +200,7 @@ void ModuleManager::stopOperations()
     CSV::Export::getInstance()->closeFile();
     CSV::Player::getInstance()->closeFile();
     IO::Manager::getInstance()->disconnectDevice();
+    Misc::TimerEvents::getInstance()->stopTimers();
 
     LOG_INFO() << "Application modules stopped";
 }

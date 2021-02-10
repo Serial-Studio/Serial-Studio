@@ -22,7 +22,7 @@
 
 #include "GraphProvider.h"
 
-#include <QTimer>
+#include <QtMath>
 #include <QXYSeries>
 #include <QMetaType>
 
@@ -32,6 +32,7 @@
 #include <IO/Console.h>
 #include <JSON/Generator.h>
 #include <ConsoleAppender.h>
+#include <Misc/TimerEvents.h>
 
 using namespace UI;
 
@@ -67,17 +68,15 @@ GraphProvider::GraphProvider()
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
     auto ge = JSON::Generator::getInstance();
+    auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
+    connect(te, SIGNAL(timeout24Hz()), this, SIGNAL(dataUpdated()));
     connect(ge, SIGNAL(frameChanged()), this, SLOT(updateValues()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 
     // Avoid issues when CSV player goes backwards
     connect(CSV::Player::getInstance(), SIGNAL(timestampChanged()),
             this, SLOT(csvPlayerFixes()));
-
-    // Draw data at 24 FPS
-    connect(&m_timer, &QTimer::timeout, this, &GraphProvider::dataUpdated);
-    m_timer.start(1000 / 24);
 
     // clang-format on
     LOG_TRACE() << "Class initialized";
@@ -128,6 +127,46 @@ double GraphProvider::getValue(const int index) const
         return getDataset(index)->value().toDouble();
 
     return 0;
+}
+
+/**
+ * Returns a point object with the recommended min/max values for the graph at the
+ * given @a index
+ */
+QPointF GraphProvider::graphRange(const int index) const
+{
+    // Update maximum value (if required)
+    double maxV = maximumValue(index);
+    double minV = minimumValue(index);
+
+    // Get central value
+    double medianValue = qMax<double>(1, (maxV + minV)) / 2;
+    if (maxV == minV)
+        medianValue = maxV;
+
+    // Center graph verticaly
+    double mostDiff = qMax<double>(qAbs<double>(minV), qAbs<double>(maxV));
+    double min = medianValue * (1 - 0.5) - qAbs<double>(medianValue - mostDiff);
+    double max = medianValue * (1 + 0.5) + qAbs<double>(medianValue - mostDiff);
+    if (minV < 0)
+        min = max * -1;
+
+    // Fix issues when min & max are equal
+    if (min == max)
+    {
+        max = qAbs<double>(max);
+        min = max * -1;
+    }
+
+    // Fix issues on min = max = (0,0)
+    if (min == 0 && max == 0)
+    {
+        max = 1;
+        min = -1;
+    }
+
+    // Return point as (min, max)
+    return QPointF(min, max);
 }
 
 /**

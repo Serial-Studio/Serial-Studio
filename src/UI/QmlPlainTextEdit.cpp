@@ -26,7 +26,7 @@
 
 #include "QmlPlainTextEdit.h"
 
-using namespace Hacks;
+using namespace UI;
 
 QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     : QQuickPaintedItem(parent)
@@ -39,11 +39,6 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     // Initialize the text edit widget
     m_textEdit = new QPlainTextEdit();
     m_textEdit->installEventFilter(this);
-
-    // Move widget to another thread
-    m_thread.setPriority(QThread::LowPriority);
-    m_textEdit->moveToThread(&m_thread);
-    m_thread.start();
 
     // Set focus to the text edit
     m_textEdit->setContextMenuPolicy(Qt::DefaultContextMenu);
@@ -64,8 +59,6 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
 
 QmlPlainTextEdit::~QmlPlainTextEdit()
 {
-    m_thread.exit();
-    m_thread.wait();
     m_textEdit->deleteLater();
 }
 
@@ -169,6 +162,11 @@ bool QmlPlainTextEdit::centerOnScroll() const
 bool QmlPlainTextEdit::undoRedoEnabled() const
 {
     return m_textEdit->isUndoRedoEnabled();
+}
+
+int QmlPlainTextEdit::maximumBlockCount() const
+{
+    return m_textEdit->maximumBlockCount();
 }
 
 QString QmlPlainTextEdit::placeholderText() const
@@ -325,6 +323,14 @@ void QmlPlainTextEdit::setPlaceholderText(const QString &text)
     update();
 
     emit placeholderTextChanged();
+}
+
+void QmlPlainTextEdit::setMaximumBlockCount(const int maxBlockCount)
+{
+    m_textEdit->setMaximumBlockCount(maxBlockCount);
+    update();
+
+    emit maximumBlockCountChanged();
 }
 
 void QmlPlainTextEdit::updateWidgetSize()

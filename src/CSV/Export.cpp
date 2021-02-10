@@ -25,13 +25,13 @@
 #include <Logger.h>
 #include <AppInfo.h>
 #include <IO/Manager.h>
+#include <JSON/Generator.h>
 #include <Misc/Utilities.h>
 #include <ConsoleAppender.h>
-#include <JSON/Generator.h>
+#include <Misc/TimerEvents.h>
 
 #include <QDir>
 #include <QUrl>
-#include <QTimer>
 #include <QProcess>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -52,10 +52,11 @@ Export::Export()
 {
     auto io = IO::Manager::getInstance();
     auto jp = JSON::Generator::getInstance();
+    auto te = Misc::TimerEvents::getInstance();
+    connect(te, SIGNAL(timeout1Hz()), this, SLOT(writeValues()));
     connect(jp, SIGNAL(jsonChanged()), this, SLOT(updateValues()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(closeFile()));
 
-    QTimer::singleShot(1000, this, SLOT(writeValues()));
     LOG_TRACE() << "Class initialized";
 }
 
@@ -239,8 +240,8 @@ void Export::writeValues()
                 QMessageBox::critical(Q_NULLPTR, tr("CSV File Error"),
                                       tr("Cannot open CSV file for writing!"),
                                       QMessageBox::Ok);
-                QTimer::singleShot(1000, this, SLOT(writeValues()));
-                break;
+                closeFile();
+                return;
             }
 
             // Add cell titles & force UTF-8 codec
@@ -273,9 +274,6 @@ void Export::writeValues()
         // Remove JSON from list
         m_jsonList.removeFirst();
     }
-
-    // Call this function again in one second
-    QTimer::singleShot(1000, this, SLOT(writeValues()));
 }
 
 /**

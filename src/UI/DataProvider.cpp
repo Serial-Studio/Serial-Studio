@@ -41,15 +41,12 @@ static DataProvider *INSTANCE = nullptr;
  */
 DataProvider::DataProvider()
 {
-    // React to open/close of devices & files
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
     auto ge = JSON::Generator::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(ge, SIGNAL(frameChanged()), this, SIGNAL(updated()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
-
-    // Try to look like a pro
     LOG_TRACE() << "Class initialized";
 }
 

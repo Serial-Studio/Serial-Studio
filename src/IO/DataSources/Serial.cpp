@@ -26,6 +26,7 @@
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 #include <ConsoleAppender.h>
+#include <Misc/TimerEvents.h>
 
 using namespace IO::DataSources;
 
@@ -53,7 +54,10 @@ Serial::Serial()
     setFlowControl(flowControlList().indexOf(tr("None")));
 
     // Build serial devices list
-    refreshSerialDevices();
+    auto te = Misc::TimerEvents::getInstance();
+    connect(te, SIGNAL(timeout1Hz()), this, SLOT(refreshSerialDevices()));
+
+    // Log class init
     LOG_TRACE() << "Class initialized";
 }
 
@@ -614,9 +618,6 @@ void Serial::refreshSerialDevices()
         // Update UI
         emit availablePortsChanged();
     }
-
-    // Call this function again in one second
-    QTimer::singleShot(100, this, SLOT(refreshSerialDevices()));
 }
 
 /**

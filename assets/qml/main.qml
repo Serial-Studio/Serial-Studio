@@ -141,7 +141,10 @@ ApplicationWindow {
     //
     Shortcut {
         sequence: "Ctrl+d"
-        onActivated: toolbar.dataClicked()
+        onActivated: {
+            if (Cpp_UI_Provider.groupCount > 0)
+                toolbar.dataClicked()
+        }
     }
 
     //
@@ -149,7 +152,10 @@ ApplicationWindow {
     //
     Shortcut {
         sequence: "Ctrl+w"
-        onActivated: toolbar.widgetsClicked()
+        onActivated: {
+            if (Cpp_UI_WidgetProvider.totalWidgetCount > 0)
+                toolbar.widgetsClicked()
+        }
     }
 
     //
