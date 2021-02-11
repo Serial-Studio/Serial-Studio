@@ -134,7 +134,6 @@ public slots:
     void clear();
     void selectAll();
     void clearSelection();
-    void resetScrollbarSize();
     void setReadOnly(const bool ro);
     void setFont(const QFont &font);
     void append(const QString &text);

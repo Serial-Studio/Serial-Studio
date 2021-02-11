@@ -439,61 +439,21 @@ void Console::append(const QString &string, const bool addTimestamp)
     if (string.isEmpty())
         return;
 
-    QString timestamp;
+    // Add timestamp
+    auto data = string;
     if (addTimestamp)
     {
         QDateTime dateTime = QDateTime::currentDateTime();
-        timestamp = dateTime.toString("HH:mm:ss.zzz -> ");
+        auto timestamp = dateTime.toString("HH:mm:ss.zzz -> ");
+        data.prepend(timestamp);
     }
 
-    // Change CR + NL to new line
-    QString data = string;
-    data = data.replace("\r\n", "\n");
-
-    // Add first item if necessary
-    if (lineCount() == 0)
-        m_lines.append("");
-
-    // Get current line count
-    auto oldLineCount = lineCount();
-
-    // Construct string to insert
-    QString str;
-    for (int i = 0; i < data.length(); ++i)
-    {
-        if (!m_timestampAdded)
-        {
-            str = m_lines.last();
-            str.append(timestamp);
-            m_lines.replace(lineCount() - 1, str);
-            m_timestampAdded = true;
-        }
-
-        if (data.at(i) == "\n" || data.at(i) == "\r")
-        {
-            m_lines.append("");
-            m_timestampAdded = false;
-        }
-
-        else
-        {
-            str = m_lines.last();
-            str.append(data.at(i));
-            m_lines.replace(lineCount() - 1, str);
-        }
-    }
-
-    // Emit signals
-    auto newLineCount = lineCount();
-    for (int i = oldLineCount; i < newLineCount; ++i)
-        emit lineReceived(m_lines.at(i - 1));
-
-    // We did not receive new lines, just write received data
-    if (newLineCount == oldLineCount)
-        emit stringReceived(data);
+    // Add to lines
+    m_lines.append(data);
 
     // Update UI
     emit dataReceived();
+    emit lineReceived(data);
 }
 
 /**
@@ -503,8 +463,34 @@ void Console::append(const QString &string, const bool addTimestamp)
  */
 void Console::displayData()
 {
-    append(dataToString(m_dataBuffer), showTimestamp());
-    m_dataBuffer.clear();
+    // Ensure that the only line separator is \n
+    m_dataBuffer.replace("\r\n", "\n");
+    m_dataBuffer.replace("\r", "\n");
+
+    // Data has line breaks, separate them & add each line separately
+    if (m_dataBuffer.contains('\n'))
+    {
+        QList<QByteArray> list;
+        QByteArray line;
+        for (int i = 0; i < m_dataBuffer.count(); ++i)
+        {
+            if (m_dataBuffer.at(i) == '\n')
+            {
+                list.append(line);
+                line.clear();
+            }
+
+            else
+                line.append(m_dataBuffer.at(i));
+        }
+
+        // Add each line
+        for (int i = 0; i < list.count(); ++i)
+            append(dataToString(list.at(i)), showTimestamp());
+
+        // Clear buffer & remain with last line (which can be incomplete)
+        m_dataBuffer = line;
+    }
 }
 
 /**

@@ -319,23 +319,6 @@ void QmlPlainTextEdit::clearSelection()
 }
 
 /**
- * Changes the scrollbar size to fit the document window
- */
-void QmlPlainTextEdit::resetScrollbarSize()
-{
-    auto *bar = m_textEdit->verticalScrollBar();
-
-    auto textHeight = height() / m_textEdit->fontMetrics().height();
-    auto scrollIndex = bar->maximum() - textHeight;
-    if (scrollIndex < 0)
-        scrollIndex = 0;
-
-    bar->setMaximum(scrollIndex);
-    bar->setValue(scrollIndex);
-    update();
-}
-
-/**
  * Changes the read-only state of the text edit.
  *
  * In a read-only text edit the user can only navigate through the text and select text;
@@ -519,8 +502,10 @@ void QmlPlainTextEdit::setPlaceholderText(const QString &text)
  */
 void QmlPlainTextEdit::scrollToBottom(const bool repaint)
 {
-    auto *bar = m_textEdit->verticalScrollBar();
+    m_textEdit->moveCursor(QTextCursor::End);
+    m_textEdit->ensureCursorVisible();
 
+    auto *bar = m_textEdit->verticalScrollBar();
     auto textHeight = height() / m_textEdit->fontMetrics().height();
     auto scrollIndex = bar->minimum() + bar->maximum() - textHeight;
 
@@ -555,7 +540,7 @@ void QmlPlainTextEdit::setMaximumBlockCount(const int maxBlockCount)
  */
 void QmlPlainTextEdit::updateWidgetSize()
 {
-    m_textEdit->setGeometry(0, 0, static_cast<int>(width()), static_cast<int>(height()));
+    m_textEdit->setFixedSize(width(), height());
     update();
 }
 

@@ -98,9 +98,6 @@ void DataProvider::resetData()
     if (IO::Manager::getInstance()->connected() || CSV::Player::getInstance()->isOpen())
         return;
 
-    // Clear frame object
-    // JSON::Generator::getInstance()->frame()->clear();
-
     // Update UI
     emit updated();
     emit dataReset();

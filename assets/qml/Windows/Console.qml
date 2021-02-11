@@ -154,9 +154,9 @@ Control {
         QmlPlainTextEdit {
             id: textEdit
             focus: true
-            readOnly: true
+            readOnly: false
             font.pixelSize: 12
-            centerOnScroll: false
+            centerOnScroll: true
             undoRedoEnabled: false
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -174,6 +174,7 @@ Control {
                 id: mouseArea
                 hoverEnabled: true
                 anchors.fill: parent
+                cursorShape: Qt.IBeamCursor
                 propagateComposedEvents: true
                 acceptedButtons: Qt.RightButton
                 onContainsMouseChanged: {
