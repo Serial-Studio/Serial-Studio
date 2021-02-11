@@ -52,6 +52,14 @@ class Manager : public QObject
     Q_PROPERTY(QString receivedDataLength
                READ receivedDataLength
                NOTIFY receivedBytesChanged)
+    Q_PROPERTY(QString startSequence
+               READ startSequence
+               WRITE setStartSequence
+               NOTIFY startSequenceChanged)
+    Q_PROPERTY(QString finishSequence
+               READ finishSequence
+               WRITE setFinishSequence
+               NOTIFY finishSequenceChanged)
     // clang-format on
 
 signals:

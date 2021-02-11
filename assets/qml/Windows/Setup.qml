@@ -48,6 +48,8 @@ Control {
         property alias dmDataBits: dataBits.currentIndex
         property alias dmBaudValue: baudRate.currentIndex
         property alias dmFlowControl: flowControl.currentIndex
+        property alias dmStartSequence: startSeqText.text
+        property alias dmEndSequence: endSeqText.text
         property alias appLanguage: languageCombo.currentIndex
     }
 
@@ -329,6 +331,38 @@ Control {
                 Layout.fillWidth: true
                 model: Cpp_Misc_Translator.availableLanguages
                 onCurrentIndexChanged: Cpp_Misc_Translator.setLanguage(currentIndex)
+            }
+
+            //
+            // Start sequence
+            //
+            Label {
+                text: qsTr("Start sequence") + ": "
+            } TextField {
+                id: startSeqText
+                Layout.fillWidth: true
+                placeholderText: "/*"
+                text: "/*"
+                onTextChanged: {
+                    if (text !== Cpp_IO_Manager.startSequence)
+                        Cpp_IO_Manager.startSequence = text
+                }
+            }
+
+            //
+            // End sequence
+            //
+            Label {
+                text: qsTr("End sequence") + ": "
+            } TextField {
+                id: endSeqText
+                Layout.fillWidth: true
+                placeholderText: "*/"
+                text: "*/"
+                onTextChanged: {
+                    if (text !== Cpp_IO_Manager.finishSequence)
+                        Cpp_IO_Manager.finishSequence = text
+                }
             }
         }
 

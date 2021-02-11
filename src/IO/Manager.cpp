@@ -34,6 +34,28 @@ using namespace IO;
 static Manager *INSTANCE = nullptr;
 
 /**
+ * Adds support for C escape sequences to the given @a str.
+ * When user inputs "\n" in a textbox, Qt automatically converts that string to "\\n".
+ * For our purposes, we need to convert "\\n" back to "\n", and so on with the rest of
+ * the escape sequences supported by C.
+ *
+ * TODO: add support for numbers
+ */
+static QString ADD_ESCAPE_SEQUENCES(const QString &str)
+{
+    auto escapedStr = str;
+    escapedStr = escapedStr.replace("\\a", "\a");
+    escapedStr = escapedStr.replace("\\b", "\b");
+    escapedStr = escapedStr.replace("\\e", "\e");
+    escapedStr = escapedStr.replace("\\f", "\f");
+    escapedStr = escapedStr.replace("\\n", "\n");
+    escapedStr = escapedStr.replace("\\r", "\r");
+    escapedStr = escapedStr.replace("\\t", "\t");
+    escapedStr = escapedStr.replace("\\v", "\v");
+    return escapedStr;
+}
+
+/**
  * Constructor function
  */
 Manager::Manager()
@@ -363,7 +385,10 @@ void Manager::setMaxBufferSize(const int maxBufferSize)
  */
 void Manager::setStartSequence(const QString &sequence)
 {
-    m_startSequence = sequence;
+    m_startSequence = ADD_ESCAPE_SEQUENCES(sequence);
+    if (m_startSequence.isEmpty())
+        m_startSequence = "/*";
+
     emit startSequenceChanged();
 }
 
@@ -373,7 +398,10 @@ void Manager::setStartSequence(const QString &sequence)
  */
 void Manager::setFinishSequence(const QString &sequence)
 {
-    m_finishSequence = sequence;
+    m_finishSequence = ADD_ESCAPE_SEQUENCES(sequence);
+    if (m_finishSequence.isEmpty())
+        m_finishSequence = "/*";
+
     emit finishSequenceChanged();
 }
 
