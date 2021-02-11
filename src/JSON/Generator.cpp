@@ -329,6 +329,7 @@ void Generator::readData(const QByteArray &data)
 JSONWorker::JSONWorker(const QByteArray &data, const QDateTime &time)
     : m_time(time)
     , m_data(data)
+    , m_engine(nullptr)
 {
 }
 
