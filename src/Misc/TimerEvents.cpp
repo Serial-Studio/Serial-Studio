@@ -27,7 +27,7 @@
 #include <ConsoleAppender.h>
 
 using namespace Misc;
-#define HZ_PERIOD_MS(x) qCeil(1000 / x)
+#define HZ_TO_MS(x) qCeil(1000 / x)
 
 /**
  * Pointer to the only instance of the class
@@ -40,8 +40,8 @@ static TimerEvents *INSTANCE = nullptr;
 TimerEvents::TimerEvents()
 {
     // Configure timeout intevals
-    m_timer1Hz.setInterval(HZ_PERIOD_MS(1));
-    m_timer24Hz.setInterval(HZ_PERIOD_MS(24));
+    m_timer1Hz.setInterval(HZ_TO_MS(1));
+    m_timer24Hz.setInterval(HZ_TO_MS(40));
 
     // Configure timer precision
     m_timer1Hz.setTimerType(Qt::PreciseTimer);

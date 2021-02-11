@@ -22,6 +22,7 @@
 
 #include <QScrollBar>
 #include <QApplication>
+#include <IO/Console.h>
 
 #include "QmlPlainTextEdit.h"
 
@@ -69,6 +70,11 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
             &QmlPlainTextEdit::updateWidgetSize);
     connect(this, &QQuickPaintedItem::heightChanged, this,
             &QmlPlainTextEdit::updateWidgetSize);
+
+    // Connect console signals (doing this on QML uses about 50% of UI thread time)
+    auto console = IO::Console::getInstance();
+    connect(console, &IO::Console::lineReceived, this, &QmlPlainTextEdit::append);
+    connect(console, &IO::Console::stringReceived, this, &QmlPlainTextEdit::insertText);
 
     // React to widget events
     connect(m_textEdit, SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));
@@ -165,6 +171,14 @@ QColor QmlPlainTextEdit::color() const
 QString QmlPlainTextEdit::text() const
 {
     return m_textEdit->toPlainText();
+}
+
+/**
+ * Returns @c true if the text document is empty
+ */
+bool QmlPlainTextEdit::empty() const
+{
+    return m_textEdit->document()->isEmpty();
 }
 
 /**

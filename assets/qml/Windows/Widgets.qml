@@ -46,30 +46,22 @@ Control {
         target: Cpp_UI_WidgetProvider
 
         //*! Optimize this function
-        function onDataChanged() {
+        function onWidgetCountChanged() {
             // Generate accelerometer widgets
-            if (accGenerator.model !== Cpp_UI_WidgetProvider.accelerometerGroupCount()) {
-                accGenerator.model = 0
-                accGenerator.model = Cpp_UI_WidgetProvider.accelerometerGroupCount()
-            }
+            accGenerator.model = 0
+            accGenerator.model = Cpp_UI_WidgetProvider.accelerometerGroupCount()
 
             // Generate gyro widgets
-            if (gyroGenerator.model !== Cpp_UI_WidgetProvider.gyroGroupCount()) {
-                gyroGenerator.model = 0
-                gyroGenerator.model = Cpp_UI_WidgetProvider.gyroGroupCount()
-            }
+            gyroGenerator.model = 0
+            gyroGenerator.model = Cpp_UI_WidgetProvider.gyroGroupCount()
 
             // Generate bar widgets
-            if (barGenerator.model !== Cpp_UI_WidgetProvider.barDatasetCount()) {
-                barGenerator.model = 0
-                barGenerator.model = Cpp_UI_WidgetProvider.barDatasetCount()
-            }
+            barGenerator.model = 0
+            barGenerator.model = Cpp_UI_WidgetProvider.barDatasetCount()
 
             // Generate map widgets
-            if (mapGenerator.model !== Cpp_UI_WidgetProvider.mapGroupCount()) {
-                mapGenerator.model = 0
-                mapGenerator.model = Cpp_UI_WidgetProvider.mapGroupCount()
-            }
+            mapGenerator.model = 0
+            mapGenerator.model = Cpp_UI_WidgetProvider.mapGroupCount()
         }
     }
 

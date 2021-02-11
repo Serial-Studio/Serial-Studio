@@ -120,9 +120,9 @@ Control {
 
         MenuItem {
             text: qsTr("Select all")
+            enabled: !textEdit.empty
             opacity: enabled ? 1 : 0.5
             onTriggered: textEdit.selectAll()
-            enabled: textEdit.text.length > 0
         }
 
         MenuItem {
@@ -169,20 +169,6 @@ Control {
             autoscroll: Cpp_IO_Console.autoscroll
             wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
             placeholderText: qsTr("No data received so far") + "..."
-
-            Connections {
-                target: Cpp_IO_Console
-
-                //*! Optimize these functions
-                //*! Over 50% of the UI thread time is lost here
-                function onLineReceived(text) {
-                    textEdit.append(text)
-                }
-
-                function onStringReceived(text) {
-                    textEdit.insertText(text)
-                }
-            }
 
             MouseArea {
                 id: mouseArea

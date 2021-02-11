@@ -43,6 +43,7 @@ static WidgetProvider *INSTANCE = Q_NULLPTR;
  * Initialization code of the @c Widgets class
  */
 WidgetProvider::WidgetProvider()
+    : m_widgetCount(0)
 {
     // Module signals/slots
     auto cp = CSV::Player::getInstance();
@@ -397,11 +398,14 @@ double WidgetProvider::mapLongitude(const int index)
  */
 void WidgetProvider::resetData()
 {
+    m_widgetCount = 0;
     m_barDatasets.clear();
     m_mapGroups.clear();
     m_gyroGroups.clear();
     m_accelerometerGroups.clear();
+
     emit dataChanged();
+    emit widgetCountChanged();
 }
 
 /**
@@ -420,6 +424,15 @@ void WidgetProvider::updateModels()
     m_gyroGroups = getWidgetGroup("gyro");
     m_barDatasets = getWidgetDatasets("bar");
     m_accelerometerGroups = getWidgetGroup("accelerometer");
+
+    // Check if widget count has changed
+    auto count = mapGroupCount() + gyroGroupCount() + barDatasetCount()
+        + accelerometerGroupCount();
+    if (count != m_widgetCount)
+    {
+        m_widgetCount = count;
+        emit widgetCountChanged();
+    }
 }
 
 /**

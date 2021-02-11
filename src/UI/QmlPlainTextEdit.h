@@ -85,6 +85,9 @@ class QmlPlainTextEdit : public QQuickPaintedItem
     Q_PROPERTY(bool copyAvailable
                READ copyAvailable
                NOTIFY copyAvailableChanged)
+    Q_PROPERTY(bool empty
+               READ empty
+               NOTIFY textChanged)
     // clang-format on
 
 signals:
@@ -114,6 +117,7 @@ public:
     QColor color() const;
     QString text() const;
 
+    bool empty() const;
     bool readOnly() const;
     bool autoscroll() const;
     QPalette palette() const;

@@ -44,7 +44,6 @@ Window {
         target: Cpp_UI_Provider
 
         //*! Optimize this function
-        //   About 14% of the UI thread time is spent here
         function onUpdated() {
             if (root.enabled) {
                 var g = Cpp_UI_Provider.getGroup(groupId)

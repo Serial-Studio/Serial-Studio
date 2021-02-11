@@ -41,6 +41,7 @@ class WidgetProvider : public QObject
 
 signals:
     void dataChanged();
+    void widgetCountChanged();
 
 public:
     static WidgetProvider *getInstance();
@@ -87,6 +88,7 @@ private:
     QList<JSON::Dataset *> getWidgetDatasets(const QString &handle);
 
 private:
+    int m_widgetCount;
     QList<JSON::Group *> m_mapGroups;
     QList<JSON::Group *> m_gyroGroups;
     QList<JSON::Dataset *> m_barDatasets;

@@ -91,7 +91,6 @@ Window {
         target: Cpp_UI_WidgetProvider
 
         //*! Optimize this function
-        //   About 6% of the UI thread is spent here
         function onDataChanged() {
             root.updateValues()
         }

@@ -42,8 +42,7 @@ Window {
     Connections {
         target: Cpp_UI_GraphProvider
 
-        //*! Optimize this function
-        //   About 5% of the UI thread is spent here
+        //*! Optimize this function (this is the larger UI thread time consumer)
         function onDataUpdated() {
             // Cancel if window is not enabled
             if (!root.enabled)
