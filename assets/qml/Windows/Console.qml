@@ -156,7 +156,7 @@ Control {
             focus: true
             readOnly: false
             font.pixelSize: 12
-            centerOnScroll: true
+            centerOnScroll: false
             undoRedoEnabled: false
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -334,7 +334,7 @@ Control {
                 opacity: enabled ? 1 : 0.5
                 onClicked: root.clearConsole()
                 icon.source: "qrc:/icons/delete.svg"
-                enabled: Cpp_IO_Console.lineCount > 0
+                enabled: Cpp_IO_Console.saveAvailable
                 Behavior on opacity {NumberAnimation{}}
             }
         }

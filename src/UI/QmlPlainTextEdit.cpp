@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include <QtMath>
 #include <QScrollBar>
 #include <QApplication>
 #include <IO/Console.h>
@@ -46,6 +47,7 @@ using namespace UI;
 QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_copyAvailable(false)
+    , m_textEdit(new QPlainTextEdit)
 {
     // Set item flags
     setFlag(ItemHasContents, true);
@@ -53,13 +55,12 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     setFlag(ItemIsFocusScope, true);
     setAcceptedMouseButtons(Qt::AllButtons);
 
-    // Initialize the text edit widget
-    m_textEdit = new QPlainTextEdit();
-    m_textEdit->installEventFilter(this);
-    m_textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    // Configure text edit widget
+    textEdit()->installEventFilter(this);
+    textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     // Set the QML item's implicit size
-    auto hint = m_textEdit->sizeHint();
+    auto hint = textEdit()->sizeHint();
     setImplicitSize(hint.width(), hint.height());
 
     // Get default text color
@@ -73,11 +74,10 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
 
     // Connect console signals (doing this on QML uses about 50% of UI thread time)
     auto console = IO::Console::getInstance();
-    connect(console, &IO::Console::lineReceived, this, &QmlPlainTextEdit::append);
     connect(console, &IO::Console::stringReceived, this, &QmlPlainTextEdit::insertText);
 
     // React to widget events
-    connect(m_textEdit, SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));
+    connect(textEdit(), SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));
 }
 
 /**
@@ -114,7 +114,7 @@ bool QmlPlainTextEdit::event(QEvent *event)
             break;
     }
 
-    return QApplication::sendEvent(m_textEdit, event);
+    return QApplication::sendEvent(textEdit(), event);
 }
 
 /**
@@ -123,7 +123,7 @@ bool QmlPlainTextEdit::event(QEvent *event)
 void QmlPlainTextEdit::paint(QPainter *painter)
 {
     if (m_textEdit && painter)
-        m_textEdit->render(painter);
+        textEdit()->render(painter);
 }
 
 /**
@@ -133,7 +133,7 @@ bool QmlPlainTextEdit::eventFilter(QObject *watched, QEvent *event)
 {
     Q_ASSERT(m_textEdit);
 
-    if (watched == m_textEdit)
+    if (watched == textEdit())
     {
         switch (event->type())
         {
@@ -154,7 +154,7 @@ bool QmlPlainTextEdit::eventFilter(QObject *watched, QEvent *event)
  */
 QFont QmlPlainTextEdit::font() const
 {
-    return m_textEdit->font();
+    return textEdit()->font();
 }
 
 /**
@@ -170,7 +170,7 @@ QColor QmlPlainTextEdit::color() const
  */
 QString QmlPlainTextEdit::text() const
 {
-    return m_textEdit->toPlainText();
+    return textEdit()->toPlainText();
 }
 
 /**
@@ -178,7 +178,7 @@ QString QmlPlainTextEdit::text() const
  */
 bool QmlPlainTextEdit::empty() const
 {
-    return m_textEdit->document()->isEmpty();
+    return textEdit()->document()->isEmpty();
 }
 
 /**
@@ -186,7 +186,7 @@ bool QmlPlainTextEdit::empty() const
  */
 bool QmlPlainTextEdit::readOnly() const
 {
-    return m_textEdit->isReadOnly();
+    return textEdit()->isReadOnly();
 }
 
 /**
@@ -203,7 +203,7 @@ bool QmlPlainTextEdit::autoscroll() const
  */
 QPalette QmlPlainTextEdit::palette() const
 {
-    return m_textEdit->palette();
+    return textEdit()->palette();
 }
 
 /**
@@ -212,7 +212,7 @@ QPalette QmlPlainTextEdit::palette() const
  */
 int QmlPlainTextEdit::wordWrapMode() const
 {
-    return static_cast<int>(m_textEdit->wordWrapMode());
+    return static_cast<int>(textEdit()->wordWrapMode());
 }
 
 /**
@@ -229,7 +229,7 @@ bool QmlPlainTextEdit::copyAvailable() const
  */
 bool QmlPlainTextEdit::widgetEnabled() const
 {
-    return m_textEdit->isEnabled();
+    return textEdit()->isEnabled();
 }
 
 /**
@@ -240,7 +240,7 @@ bool QmlPlainTextEdit::widgetEnabled() const
  */
 bool QmlPlainTextEdit::centerOnScroll() const
 {
-    return m_textEdit->centerOnScroll();
+    return textEdit()->centerOnScroll();
 }
 
 /**
@@ -250,7 +250,7 @@ bool QmlPlainTextEdit::centerOnScroll() const
  */
 bool QmlPlainTextEdit::undoRedoEnabled() const
 {
-    return m_textEdit->isUndoRedoEnabled();
+    return textEdit()->isUndoRedoEnabled();
 }
 
 /**
@@ -265,7 +265,7 @@ bool QmlPlainTextEdit::undoRedoEnabled() const
  */
 int QmlPlainTextEdit::maximumBlockCount() const
 {
-    return m_textEdit->maximumBlockCount();
+    return textEdit()->maximumBlockCount();
 }
 
 /**
@@ -276,7 +276,23 @@ int QmlPlainTextEdit::maximumBlockCount() const
  */
 QString QmlPlainTextEdit::placeholderText() const
 {
-    return m_textEdit->placeholderText();
+    return textEdit()->placeholderText();
+}
+
+/**
+ * Returns the pointer to the text document
+ */
+QTextDocument *QmlPlainTextEdit::document() const
+{
+    return textEdit()->document();
+}
+
+/**
+ * Returns the pointer to the text edit object
+ */
+QPlainTextEdit *QmlPlainTextEdit::textEdit() const
+{
+    return m_textEdit;
 }
 
 /**
@@ -284,7 +300,7 @@ QString QmlPlainTextEdit::placeholderText() const
  */
 void QmlPlainTextEdit::copy()
 {
-    m_textEdit->copy();
+    textEdit()->copy();
 }
 
 /**
@@ -292,7 +308,7 @@ void QmlPlainTextEdit::copy()
  */
 void QmlPlainTextEdit::clear()
 {
-    m_textEdit->clear();
+    textEdit()->clear();
     update();
 
     emit textChanged();
@@ -303,7 +319,7 @@ void QmlPlainTextEdit::clear()
  */
 void QmlPlainTextEdit::selectAll()
 {
-    m_textEdit->selectAll();
+    textEdit()->selectAll();
     update();
 }
 
@@ -312,9 +328,9 @@ void QmlPlainTextEdit::selectAll()
  */
 void QmlPlainTextEdit::clearSelection()
 {
-    auto cursor = QTextCursor(m_textEdit->document());
+    auto cursor = QTextCursor(textEdit()->document());
     cursor.clearSelection();
-    m_textEdit->setTextCursor(cursor);
+    textEdit()->setTextCursor(cursor);
     update();
 }
 
@@ -326,7 +342,7 @@ void QmlPlainTextEdit::clearSelection()
  */
 void QmlPlainTextEdit::setReadOnly(const bool ro)
 {
-    m_textEdit->setReadOnly(ro);
+    textEdit()->setReadOnly(ro);
     update();
 
     emit readOnlyChanged();
@@ -337,7 +353,7 @@ void QmlPlainTextEdit::setReadOnly(const bool ro)
  */
 void QmlPlainTextEdit::setFont(const QFont &font)
 {
-    m_textEdit->setFont(font);
+    textEdit()->setFont(font);
     update();
 
     emit fontChanged();
@@ -351,7 +367,7 @@ void QmlPlainTextEdit::setFont(const QFont &font)
  */
 void QmlPlainTextEdit::append(const QString &text)
 {
-    m_textEdit->appendPlainText(text);
+    textEdit()->appendPlainText(text);
 
     if (autoscroll())
         scrollToBottom(false);
@@ -368,7 +384,7 @@ void QmlPlainTextEdit::append(const QString &text)
  */
 void QmlPlainTextEdit::setText(const QString &text)
 {
-    m_textEdit->setPlainText(text);
+    textEdit()->setPlainText(text);
 
     if (autoscroll())
         scrollToBottom(false);
@@ -384,7 +400,7 @@ void QmlPlainTextEdit::setColor(const QColor &color)
 {
     m_color = color;
     auto qss = QString("QPlainTextEdit{color: %1;}").arg(color.name());
-    m_textEdit->setStyleSheet(qss);
+    textEdit()->setStyleSheet(qss);
     update();
 
     emit colorChanged();
@@ -395,7 +411,7 @@ void QmlPlainTextEdit::setColor(const QColor &color)
  */
 void QmlPlainTextEdit::setPalette(const QPalette &palette)
 {
-    m_textEdit->setPalette(palette);
+    textEdit()->setPalette(palette);
     update();
 
     emit paletteChanged();
@@ -406,7 +422,7 @@ void QmlPlainTextEdit::setPalette(const QPalette &palette)
  */
 void QmlPlainTextEdit::setWidgetEnabled(const bool enabled)
 {
-    m_textEdit->setEnabled(enabled);
+    textEdit()->setEnabled(enabled);
     update();
 
     emit widgetEnabledChanged();
@@ -428,19 +444,34 @@ void QmlPlainTextEdit::setAutoscroll(const bool enabled)
  */
 void QmlPlainTextEdit::insertText(const QString &text)
 {
-    // Move the cursor to the end of the document
-    auto cursor = QTextCursor(m_textEdit->document());
+    // Get edit cursor
+    QTextCursor cursor(textEdit()->document());
+    cursor.beginEditBlock();
     cursor.movePosition(QTextCursor::End);
-    m_textEdit->setTextCursor(cursor);
 
-    // Insert text at the end of the document
-    m_textEdit->insertPlainText(text);
+    // Get current cursor, and set char format to edit cursor
+    auto savedCursor = textEdit()->textCursor();
+    auto charFormat = savedCursor.charFormat();
+    cursor.setCharFormat(charFormat);
 
-    // Auto-scroll if needed
+    // Insert text to the edit cursor
+    cursor.insertText(text);
+
+    // Restore old char format
+    if (!savedCursor.hasSelection())
+    {
+        savedCursor.setCharFormat(charFormat);
+        textEdit()->setTextCursor(savedCursor);
+    }
+
+    // End edit block
+    cursor.endEditBlock();
+
+    // Autoscroll to bottom (if needed)
     if (autoscroll())
         scrollToBottom(false);
 
-    // Redraw UI
+    // Redraw the control
     update();
     emit textChanged();
 }
@@ -452,7 +483,7 @@ void QmlPlainTextEdit::insertText(const QString &text)
  */
 void QmlPlainTextEdit::setWordWrapMode(const int mode)
 {
-    m_textEdit->setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
+    textEdit()->setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
     update();
 
     emit wordWrapModeChanged();
@@ -466,7 +497,7 @@ void QmlPlainTextEdit::setWordWrapMode(const int mode)
  */
 void QmlPlainTextEdit::setCenterOnScroll(const bool enabled)
 {
-    m_textEdit->setCenterOnScroll(enabled);
+    textEdit()->setCenterOnScroll(enabled);
     update();
 
     emit centerOnScrollChanged();
@@ -477,7 +508,7 @@ void QmlPlainTextEdit::setCenterOnScroll(const bool enabled)
  */
 void QmlPlainTextEdit::setUndoRedoEnabled(const bool enabled)
 {
-    m_textEdit->setUndoRedoEnabled(enabled);
+    textEdit()->setUndoRedoEnabled(enabled);
     update();
 
     emit undoRedoEnabledChanged();
@@ -489,7 +520,7 @@ void QmlPlainTextEdit::setUndoRedoEnabled(const bool enabled)
  */
 void QmlPlainTextEdit::setPlaceholderText(const QString &text)
 {
-    m_textEdit->setPlaceholderText(text);
+    textEdit()->setPlaceholderText(text);
     update();
 
     emit placeholderTextChanged();
@@ -502,16 +533,16 @@ void QmlPlainTextEdit::setPlaceholderText(const QString &text)
  */
 void QmlPlainTextEdit::scrollToBottom(const bool repaint)
 {
-    m_textEdit->moveCursor(QTextCursor::End);
-    m_textEdit->ensureCursorVisible();
+    textEdit()->moveCursor(QTextCursor::End);
+    textEdit()->ensureCursorVisible();
 
-    auto *bar = m_textEdit->verticalScrollBar();
-    auto textHeight = height() / m_textEdit->fontMetrics().height();
+    auto *bar = textEdit()->verticalScrollBar();
+    auto textHeight = qCeil(height() / textEdit()->fontMetrics().height());
     auto scrollIndex = bar->minimum() + bar->maximum() - textHeight;
 
     if (scrollIndex >= 0)
     {
-        bar->setMaximum(scrollIndex);
+        bar->setMaximum(scrollIndex + 1);
         bar->setValue(scrollIndex);
     }
 
@@ -529,7 +560,7 @@ void QmlPlainTextEdit::scrollToBottom(const bool repaint)
  */
 void QmlPlainTextEdit::setMaximumBlockCount(const int maxBlockCount)
 {
-    m_textEdit->setMaximumBlockCount(maxBlockCount);
+    textEdit()->setMaximumBlockCount(maxBlockCount);
     update();
 
     emit maximumBlockCountChanged();
@@ -540,7 +571,7 @@ void QmlPlainTextEdit::setMaximumBlockCount(const int maxBlockCount)
  */
 void QmlPlainTextEdit::updateWidgetSize()
 {
-    m_textEdit->setFixedSize(width(), height());
+    textEdit()->setFixedSize(width(), height());
     update();
 }
 
@@ -569,7 +600,7 @@ void QmlPlainTextEdit::processMouseEvents(QMouseEvent *event)
         using QPlainTextEdit::mouseReleaseEvent;
     };
 
-    auto hack = static_cast<Hack *>(m_textEdit);
+    auto hack = static_cast<Hack *>(textEdit());
     switch (event->type())
     {
         case QEvent::MouseButtonPress:
@@ -600,5 +631,5 @@ void QmlPlainTextEdit::processWheelEvents(QWheelEvent *event)
         using QPlainTextEdit::wheelEvent;
     };
 
-    static_cast<Hack *>(m_textEdit)->wheelEvent(event);
+    static_cast<Hack *>(textEdit())->wheelEvent(event);
 }

@@ -62,12 +62,6 @@ class Console : public QObject
     Q_PROPERTY(QString currentHistoryString
                READ currentHistoryString
                NOTIFY historyItemChanged)
-    Q_PROPERTY(int lineCount
-               READ lineCount
-               NOTIFY dataReceived)
-    Q_PROPERTY(QStringList lines
-               READ lines
-               NOTIFY dataReceived)
     // clang-format on
 
 signals:
@@ -80,7 +74,6 @@ signals:
     void historyItemChanged();
     void textDocumentChanged();
     void showTimestampChanged();
-    void lineReceived(const QString &text);
     void stringReceived(const QString &text);
 
 public:
@@ -118,9 +111,6 @@ public:
     LineEnding lineEnding() const;
     DisplayMode displayMode() const;
     QString currentHistoryString() const;
-
-    int lineCount() const;
-    QStringList lines() const;
 
     Q_INVOKABLE QStringList dataModes() const;
     Q_INVOKABLE QStringList lineEndings() const;
@@ -163,11 +153,12 @@ private:
     bool m_echo;
     bool m_autoscroll;
     bool m_showTimestamp;
-    bool m_timestampAdded;
+    bool m_isStartingLine;
 
     QStringList m_lines;
     QStringList m_historyItems;
 
+    QString m_textBuffer;
     QByteArray m_dataBuffer;
 };
 }

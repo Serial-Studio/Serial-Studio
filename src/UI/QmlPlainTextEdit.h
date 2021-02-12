@@ -129,6 +129,9 @@ public:
     int maximumBlockCount() const;
     QString placeholderText() const;
 
+    QTextDocument *document() const;
+    QPlainTextEdit *textEdit() const;
+
 public slots:
     void copy();
     void clear();

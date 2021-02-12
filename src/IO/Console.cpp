@@ -36,11 +36,6 @@ using namespace IO;
 static Console *INSTANCE = nullptr;
 
 /**
- * Set initial scrollback memory reservation to 10000 lines
- */
-static const int SCROLLBACK = 10000;
-
-/**
  * Constructor function
  */
 Console::Console()
@@ -51,7 +46,7 @@ Console::Console()
     , m_echo(false)
     , m_autoscroll(true)
     , m_showTimestamp(true)
-    , m_timestampAdded(false)
+    , m_isStartingLine(true)
 {
     // Clear buffer & reserve memory
     clear();
@@ -100,7 +95,7 @@ bool Console::autoscroll() const
  */
 bool Console::saveAvailable() const
 {
-    return lineCount() > 0;
+    return m_textBuffer.length() > 0;
 }
 
 /**
@@ -164,22 +159,6 @@ QString Console::currentHistoryString() const
 }
 
 /**
- * Returns the total number of lines received
- */
-int Console::lineCount() const
-{
-    return m_lines.count();
-}
-
-/**
- * Returns all the data received
- */
-QStringList Console::lines() const
-{
-    return m_lines;
-}
-
-/**
  * Returns a list with the available data (sending) modes. This list must be synchronized
  * with the order of the @c DataMode enums.
  */
@@ -237,17 +216,8 @@ void Console::save()
         QFile file(path);
         if (file.open(QFile::WriteOnly))
         {
-            QByteArray data;
-            for (int i = 0; i < lineCount(); ++i)
-            {
-                data.append(m_lines.at(i).toUtf8());
-                data.append("\r");
-                data.append("\n");
-            }
-
-            file.write(data);
+            file.write(m_textBuffer.toUtf8());
             file.close();
-
             Misc::Utilities::revealFile(path);
         }
 
@@ -261,10 +231,10 @@ void Console::save()
  */
 void Console::clear()
 {
-    m_lines.clear();
     m_dataBuffer.clear();
-    m_lines.reserve(SCROLLBACK);
-    m_dataBuffer.reserve(120 * SCROLLBACK);
+    m_textBuffer.clear();
+    m_isStartingLine = true;
+    m_dataBuffer.reserve(1200 * 1000);
 
     emit dataReceived();
 }
@@ -363,8 +333,9 @@ void Console::send(const QString &data)
         // Display sent data on console (if allowed)
         if (echo())
         {
+            m_isStartingLine = true;
             append(dataToString(bin), showTimestamp());
-            m_timestampAdded = false;
+            m_isStartingLine = true;
         }
     }
 
@@ -439,21 +410,61 @@ void Console::append(const QString &string, const bool addTimestamp)
     if (string.isEmpty())
         return;
 
-    // Add timestamp
+    // Only use \n as line separator
     auto data = string;
+    data = data.replace("\r\n", "\n");
+    data = data.replace("\r", "\n");
+
+    // Get timestamp
+    QString timestamp;
     if (addTimestamp)
     {
         QDateTime dateTime = QDateTime::currentDateTime();
-        auto timestamp = dateTime.toString("HH:mm:ss.zzz -> ");
-        data.prepend(timestamp);
+        timestamp = dateTime.toString("HH:mm:ss.zzz -> ");
     }
 
-    // Add to lines
-    m_lines.append(data);
+    // Initialize final string
+    QString processedString;
+    processedString.reserve(data.length() + timestamp.length());
+
+    // Create list with lines (keep separators)
+    QStringList tokens;
+    QString currentToken;
+    for (int i = 0; i < data.length(); ++i)
+    {
+        if (data.at(i) == "\n")
+        {
+            tokens.append(currentToken);
+            tokens.append("\n");
+            currentToken.clear();
+        }
+
+        else
+            currentToken += data.at(i);
+    }
+
+    // Add last item to list
+    if (!currentToken.isEmpty())
+        tokens.append(currentToken);
+
+    // Process lines
+    while (!tokens.isEmpty())
+    {
+        if (m_isStartingLine)
+            processedString.append(timestamp);
+
+        auto token = tokens.first();
+        processedString.append(token);
+        m_isStartingLine = (token == "\n");
+        tokens.removeFirst();
+    }
+
+    // Add data to saved text buffer
+    m_textBuffer.append(processedString);
 
     // Update UI
     emit dataReceived();
-    emit lineReceived(data);
+    emit stringReceived(processedString);
 }
 
 /**
@@ -463,34 +474,8 @@ void Console::append(const QString &string, const bool addTimestamp)
  */
 void Console::displayData()
 {
-    // Ensure that the only line separator is \n
-    m_dataBuffer.replace("\r\n", "\n");
-    m_dataBuffer.replace("\r", "\n");
-
-    // Data has line breaks, separate them & add each line separately
-    if (m_dataBuffer.contains('\n'))
-    {
-        QList<QByteArray> list;
-        QByteArray line;
-        for (int i = 0; i < m_dataBuffer.count(); ++i)
-        {
-            if (m_dataBuffer.at(i) == '\n')
-            {
-                list.append(line);
-                line.clear();
-            }
-
-            else
-                line.append(m_dataBuffer.at(i));
-        }
-
-        // Add each line
-        for (int i = 0; i < list.count(); ++i)
-            append(dataToString(list.at(i)), showTimestamp());
-
-        // Clear buffer & remain with last line (which can be incomplete)
-        m_dataBuffer = line;
-    }
+    append(dataToString(m_dataBuffer), showTimestamp());
+    m_dataBuffer.clear();
 }
 
 /**
@@ -581,7 +566,7 @@ QString Console::hexadecimalStr(const QByteArray &data)
     for (int i = 0; i < hex.length(); ++i)
     {
         str.append(hex.at(i));
-        if ((i + 1) % 2 == 0)
+        if ((i + 1) % 2 == 0 && i > 0)
             str.append(" ");
     }
 
