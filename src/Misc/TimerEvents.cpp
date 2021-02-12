@@ -49,7 +49,7 @@ TimerEvents::TimerEvents()
 
     // Configure signals/slots
     connect(&m_timer1Hz, &QTimer::timeout, this, &TimerEvents::timeout1Hz);
-    connect(&m_timer40Hz, &QTimer::timeout, this, &TimerEvents::timeout24Hz);
+    connect(&m_timer40Hz, &QTimer::timeout, this, &TimerEvents::timeout40Hz);
     LOG_TRACE() << "Class initialized";
 }
 
