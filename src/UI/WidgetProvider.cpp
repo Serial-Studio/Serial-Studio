@@ -51,7 +51,7 @@ WidgetProvider::WidgetProvider()
     auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(te, SIGNAL(timeout24Hz()), this, SIGNAL(dataChanged()));
+    connect(te, SIGNAL(timeout40Hz()), this, SIGNAL(dataChanged()));
     connect(ge, SIGNAL(frameChanged()), this, SLOT(updateModels()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
     LOG_TRACE() << "Class initialized";

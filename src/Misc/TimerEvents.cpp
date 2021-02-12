@@ -41,15 +41,15 @@ TimerEvents::TimerEvents()
 {
     // Configure timeout intevals
     m_timer1Hz.setInterval(HZ_TO_MS(1));
-    m_timer24Hz.setInterval(HZ_TO_MS(40));
+    m_timer40Hz.setInterval(HZ_TO_MS(40));
 
     // Configure timer precision
     m_timer1Hz.setTimerType(Qt::PreciseTimer);
-    m_timer24Hz.setTimerType(Qt::PreciseTimer);
+    m_timer40Hz.setTimerType(Qt::PreciseTimer);
 
     // Configure signals/slots
     connect(&m_timer1Hz, &QTimer::timeout, this, &TimerEvents::timeout1Hz);
-    connect(&m_timer24Hz, &QTimer::timeout, this, &TimerEvents::timeout24Hz);
+    connect(&m_timer40Hz, &QTimer::timeout, this, &TimerEvents::timeout24Hz);
     LOG_TRACE() << "Class initialized";
 }
 
@@ -70,7 +70,7 @@ TimerEvents *TimerEvents::getInstance()
 void TimerEvents::stopTimers()
 {
     m_timer1Hz.stop();
-    m_timer24Hz.stop();
+    m_timer40Hz.stop();
 
     LOG_INFO() << "Timers stopped";
 }
@@ -81,7 +81,7 @@ void TimerEvents::stopTimers()
 void TimerEvents::startTimers()
 {
     m_timer1Hz.start();
-    m_timer24Hz.start();
+    m_timer40Hz.start();
 
     LOG_TRACE() << "Timers started";
 }

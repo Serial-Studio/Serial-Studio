@@ -54,7 +54,7 @@ Console::Console()
     // Read received data automatically
     auto dm = Manager::getInstance();
     auto te = Misc::TimerEvents::getInstance();
-    connect(te, SIGNAL(timeout24Hz()), this, SLOT(displayData()));
+    connect(te, SIGNAL(timeout40Hz()), this, SLOT(displayData()));
     connect(dm, &Manager::dataReceived, this, &Console::onDataReceived);
 
     // Log something to look like a pro
