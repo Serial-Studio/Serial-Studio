@@ -162,6 +162,7 @@ public slots:
 
 private slots:
     void updateWidgetSize();
+    void updateScrollbarVisibility();
     void setCopyAvailable(const bool yes);
 
 protected:

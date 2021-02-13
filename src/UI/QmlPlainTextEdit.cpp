@@ -58,11 +58,14 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     // Configure text edit widget
     setScrollbarWidth(14);
     textEdit()->installEventFilter(this);
-    textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     // Set the QML item's implicit size
     auto hint = textEdit()->sizeHint();
     setImplicitSize(hint.width(), hint.height());
+
+    // Setup default options
+    textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    textEdit()->setSizeAdjustPolicy(QPlainTextEdit::AdjustToContents);
 
     // Get default text color
     m_color = qApp->palette().color(QPalette::Text);
@@ -318,6 +321,7 @@ void QmlPlainTextEdit::copy()
 void QmlPlainTextEdit::clear()
 {
     textEdit()->clear();
+    updateScrollbarVisibility();
     update();
 
     emit textChanged();
@@ -340,6 +344,7 @@ void QmlPlainTextEdit::clearSelection()
     auto cursor = QTextCursor(textEdit()->document());
     cursor.clearSelection();
     textEdit()->setTextCursor(cursor);
+    updateScrollbarVisibility();
     update();
 }
 
@@ -363,6 +368,7 @@ void QmlPlainTextEdit::setReadOnly(const bool ro)
 void QmlPlainTextEdit::setFont(const QFont &font)
 {
     textEdit()->setFont(font);
+    updateScrollbarVisibility();
     update();
 
     emit fontChanged();
@@ -377,6 +383,7 @@ void QmlPlainTextEdit::setFont(const QFont &font)
 void QmlPlainTextEdit::append(const QString &text)
 {
     textEdit()->appendPlainText(text);
+    updateScrollbarVisibility();
 
     if (autoscroll())
         scrollToBottom();
@@ -394,6 +401,7 @@ void QmlPlainTextEdit::append(const QString &text)
 void QmlPlainTextEdit::setText(const QString &text)
 {
     textEdit()->setPlainText(text);
+    updateScrollbarVisibility();
 
     if (autoscroll())
         scrollToBottom();
@@ -458,6 +466,7 @@ void QmlPlainTextEdit::setAutoscroll(const bool enabled)
 {
     // Change internal variables
     m_autoscroll = enabled;
+    updateScrollbarVisibility();
 
     // Scroll to bottom if autoscroll is enabled
     if (enabled)
@@ -466,12 +475,8 @@ void QmlPlainTextEdit::setAutoscroll(const bool enabled)
     // Update console configuration
     IO::Console::getInstance()->setAutoscroll(enabled);
 
-    // Hide vertical scrollbar if autoscroll is enabled
-    auto bar = textEdit()->verticalScrollBar();
-    bar->setVisible(!enabled);
-    update();
-
     // Update UI
+    update();
     emit autoscrollChanged();
 }
 
@@ -488,6 +493,7 @@ void QmlPlainTextEdit::insertText(const QString &text)
     cursor.endEditBlock();
 
     // Autoscroll to bottom (if needed)
+    updateScrollbarVisibility();
     if (autoscroll())
         scrollToBottom();
 
@@ -504,6 +510,7 @@ void QmlPlainTextEdit::insertText(const QString &text)
 void QmlPlainTextEdit::setWordWrapMode(const int mode)
 {
     textEdit()->setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
+    updateScrollbarVisibility();
     update();
 
     emit wordWrapModeChanged();
@@ -591,7 +598,26 @@ void QmlPlainTextEdit::setMaximumBlockCount(const int maxBlockCount)
 void QmlPlainTextEdit::updateWidgetSize()
 {
     textEdit()->setFixedSize(width(), height());
+    updateScrollbarVisibility();
     update();
+}
+
+/**
+ * Hides or shows the scrollbar
+ */
+void QmlPlainTextEdit::updateScrollbarVisibility()
+{
+    // Get current line count & visible lines
+    auto lineCount = textEdit()->document()->blockCount();
+    auto visibleLines = qCeil(height() / textEdit()->fontMetrics().height());
+
+    // Autoscroll enabled or text content is less than widget height
+    if (autoscroll() || visibleLines >= lineCount)
+        textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // Show the scrollbar if the text content is greater than the widget height
+    else
+        textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
 /**
@@ -653,30 +679,36 @@ void QmlPlainTextEdit::processWheelEvents(QWheelEvent *event)
         using QPlainTextEdit::wheelEvent;
     };
 
-    // Call wheel event function
-    static_cast<Hack *>(textEdit())->wheelEvent(event);
-
-    // Disable autoscroll if we are scrolling upwards
-    if (autoscroll())
+    // Call wheel event function only if linecount is larget than text height
+    auto lineCount = textEdit()->document()->blockCount();
+    auto visibleLines = qCeil(height() / textEdit()->fontMetrics().height());
+    if (lineCount > visibleLines)
     {
-        auto delta = event->angleDelta();
-        auto deltaY = delta.y();
+        // Call event
+        static_cast<Hack *>(textEdit())->wheelEvent(event);
 
-        if (deltaY > 0)
+        // Disable autoscroll if we are scrolling upwards
+        if (autoscroll())
         {
-            setAutoscroll(false);
-            update();
+            auto delta = event->angleDelta();
+            auto deltaY = delta.y();
+
+            if (deltaY > 0)
+            {
+                setAutoscroll(false);
+                update();
+            }
         }
-    }
 
-    // Enable autoscroll if scrolling to bottom
-    else
-    {
-        auto bar = textEdit()->verticalScrollBar();
-        if (bar->value() >= bar->maximum())
+        // Enable autoscroll if scrolling to bottom
+        else
         {
-            setAutoscroll(true);
-            update();
+            auto bar = textEdit()->verticalScrollBar();
+            if (bar->value() >= bar->maximum())
+            {
+                setAutoscroll(true);
+                update();
+            }
         }
     }
 }
