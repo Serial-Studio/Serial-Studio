@@ -34,7 +34,7 @@ class TimerEvents : public QObject
 
 signals:
     void timeout1Hz();
-    void timeout40Hz();
+    void timeout42Hz();
 
 public:
     static TimerEvents *getInstance();
@@ -47,8 +47,8 @@ private:
     TimerEvents();
 
 private:
-    QTimer m_timer40Hz;
     QTimer m_timer1Hz;
+    QTimer m_timer42Hz;
 };
 }
 

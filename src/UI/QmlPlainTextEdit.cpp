@@ -56,6 +56,7 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     setAcceptedMouseButtons(Qt::AllButtons);
 
     // Configure text edit widget
+    setScrollbarWidth(14);
     textEdit()->installEventFilter(this);
     textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
@@ -216,6 +217,14 @@ int QmlPlainTextEdit::wordWrapMode() const
 }
 
 /**
+ * Returns the width of the vertical scrollbar
+ */
+int QmlPlainTextEdit::scrollbarWidth() const
+{
+    return textEdit()->verticalScrollBar()->width();
+}
+
+/**
  * Returns @c true if the user is able to copy any text from the document. This value is
  * updated through the copyAvailable() signal sent by the QPlainTextEdit.
  */
@@ -370,7 +379,7 @@ void QmlPlainTextEdit::append(const QString &text)
     textEdit()->appendPlainText(text);
 
     if (autoscroll())
-        scrollToBottom(false);
+        scrollToBottom();
 
     update();
     emit textChanged();
@@ -387,7 +396,7 @@ void QmlPlainTextEdit::setText(const QString &text)
     textEdit()->setPlainText(text);
 
     if (autoscroll())
-        scrollToBottom(false);
+        scrollToBottom();
 
     update();
     emit textChanged();
@@ -404,6 +413,18 @@ void QmlPlainTextEdit::setColor(const QColor &color)
     update();
 
     emit colorChanged();
+}
+
+/**
+ * Changes the width of the vertical scrollbar
+ */
+void QmlPlainTextEdit::setScrollbarWidth(const int width)
+{
+    auto bar = textEdit()->verticalScrollBar();
+    bar->setFixedWidth(width);
+    update();
+
+    emit scrollbarWidthChanged();
 }
 
 /**
@@ -435,7 +456,22 @@ void QmlPlainTextEdit::setWidgetEnabled(const bool enabled)
  */
 void QmlPlainTextEdit::setAutoscroll(const bool enabled)
 {
+    // Change internal variables
     m_autoscroll = enabled;
+
+    // Scroll to bottom if autoscroll is enabled
+    if (enabled)
+        scrollToBottom(true);
+
+    // Update console configuration
+    IO::Console::getInstance()->setAutoscroll(enabled);
+
+    // Hide vertical scrollbar if autoscroll is enabled
+    auto bar = textEdit()->verticalScrollBar();
+    bar->setVisible(!enabled);
+    update();
+
+    // Update UI
     emit autoscrollChanged();
 }
 
@@ -444,32 +480,16 @@ void QmlPlainTextEdit::setAutoscroll(const bool enabled)
  */
 void QmlPlainTextEdit::insertText(const QString &text)
 {
-    // Get edit cursor
+    // Add text at the end of the text document
     QTextCursor cursor(textEdit()->document());
     cursor.beginEditBlock();
     cursor.movePosition(QTextCursor::End);
-
-    // Get current cursor, and set char format to edit cursor
-    auto savedCursor = textEdit()->textCursor();
-    auto charFormat = savedCursor.charFormat();
-    cursor.setCharFormat(charFormat);
-
-    // Insert text to the edit cursor
     cursor.insertText(text);
-
-    // Restore old char format
-    if (!savedCursor.hasSelection())
-    {
-        savedCursor.setCharFormat(charFormat);
-        textEdit()->setTextCursor(savedCursor);
-    }
-
-    // End edit block
     cursor.endEditBlock();
 
     // Autoscroll to bottom (if needed)
     if (autoscroll())
-        scrollToBottom(false);
+        scrollToBottom();
 
     // Redraw the control
     update();
@@ -533,18 +553,17 @@ void QmlPlainTextEdit::setPlaceholderText(const QString &text)
  */
 void QmlPlainTextEdit::scrollToBottom(const bool repaint)
 {
-    textEdit()->moveCursor(QTextCursor::End);
-    textEdit()->ensureCursorVisible();
-
     auto *bar = textEdit()->verticalScrollBar();
-    auto textHeight = qCeil(height() / textEdit()->fontMetrics().height());
-    auto scrollIndex = bar->minimum() + bar->maximum() - textHeight;
+    auto lineCount = textEdit()->document()->blockCount();
+    auto visibleLines = qCeil(height() / textEdit()->fontMetrics().height());
 
-    if (scrollIndex >= 0)
-    {
-        bar->setMaximum(scrollIndex + 1);
-        bar->setValue(scrollIndex);
-    }
+    bar->setMinimum(0);
+    bar->setMaximum(lineCount);
+
+    if (lineCount > visibleLines)
+        bar->setValue(lineCount - visibleLines);
+    else
+        bar->setValue(0);
 
     if (repaint)
         update();
@@ -591,6 +610,7 @@ void QmlPlainTextEdit::setCopyAvailable(const bool yes)
  */
 void QmlPlainTextEdit::processMouseEvents(QMouseEvent *event)
 {
+    // Subclass QPlainTextEdit so that we can call protected functions
     class Hack : public QPlainTextEdit
     {
     public:
@@ -600,6 +620,7 @@ void QmlPlainTextEdit::processMouseEvents(QMouseEvent *event)
         using QPlainTextEdit::mouseReleaseEvent;
     };
 
+    // Call appropiate function
     auto hack = static_cast<Hack *>(textEdit());
     switch (event->type())
     {
@@ -625,11 +646,37 @@ void QmlPlainTextEdit::processMouseEvents(QMouseEvent *event)
  */
 void QmlPlainTextEdit::processWheelEvents(QWheelEvent *event)
 {
+    // Subclass QPlainTextEdit so that we can call protected functions
     class Hack : public QPlainTextEdit
     {
     public:
         using QPlainTextEdit::wheelEvent;
     };
 
+    // Call wheel event function
     static_cast<Hack *>(textEdit())->wheelEvent(event);
+
+    // Disable autoscroll if we are scrolling upwards
+    if (autoscroll())
+    {
+        auto delta = event->angleDelta();
+        auto deltaY = delta.y();
+
+        if (deltaY > 0)
+        {
+            setAutoscroll(false);
+            update();
+        }
+    }
+
+    // Enable autoscroll if scrolling to bottom
+    else
+    {
+        auto bar = textEdit()->verticalScrollBar();
+        if (bar->value() >= bar->maximum())
+        {
+            setAutoscroll(true);
+            update();
+        }
+    }
 }

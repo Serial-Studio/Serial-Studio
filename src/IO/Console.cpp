@@ -54,7 +54,7 @@ Console::Console()
     // Read received data automatically
     auto dm = Manager::getInstance();
     auto te = Misc::TimerEvents::getInstance();
-    connect(te, SIGNAL(timeout40Hz()), this, SLOT(displayData()));
+    connect(te, SIGNAL(timeout42Hz()), this, SLOT(displayData()));
     connect(dm, &Manager::dataReceived, this, &Console::onDataReceived);
 
     // Log something to look like a pro
@@ -368,8 +368,11 @@ void Console::setDataMode(const DataMode mode)
  */
 void Console::setShowTimestamp(const bool enabled)
 {
-    m_showTimestamp = enabled;
-    emit showTimestampChanged();
+    if (showTimestamp() != enabled)
+    {
+        m_showTimestamp = enabled;
+        emit showTimestampChanged();
+    }
 }
 
 /**
@@ -377,8 +380,11 @@ void Console::setShowTimestamp(const bool enabled)
  */
 void Console::setAutoscroll(const bool enabled)
 {
-    m_autoscroll = enabled;
-    emit autoscrollChanged();
+    if (autoscroll() != enabled)
+    {
+        m_autoscroll = enabled;
+        emit autoscrollChanged();
+    }
 }
 
 /**

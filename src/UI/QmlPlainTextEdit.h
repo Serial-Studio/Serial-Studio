@@ -88,6 +88,10 @@ class QmlPlainTextEdit : public QQuickPaintedItem
     Q_PROPERTY(bool empty
                READ empty
                NOTIFY textChanged)
+    Q_PROPERTY(int scrollbarWidth
+               READ scrollbarWidth
+               WRITE setScrollbarWidth
+               NOTIFY scrollbarWidthChanged)
     // clang-format on
 
 signals:
@@ -100,6 +104,7 @@ signals:
     void wordWrapModeChanged();
     void copyAvailableChanged();
     void widgetEnabledChanged();
+    void scrollbarWidthChanged();
     void centerOnScrollChanged();
     void placeholderTextChanged();
     void undoRedoEnabledChanged();
@@ -122,6 +127,7 @@ public:
     bool autoscroll() const;
     QPalette palette() const;
     int wordWrapMode() const;
+    int scrollbarWidth() const;
     bool copyAvailable() const;
     bool widgetEnabled() const;
     bool centerOnScroll() const;
@@ -145,12 +151,13 @@ public slots:
     void insertText(const QString &text);
     void setWordWrapMode(const int mode);
     void setAutoscroll(const bool enabled);
+    void setScrollbarWidth(const int width);
     void setPalette(const QPalette &palette);
     void setWidgetEnabled(const bool enabled);
     void setCenterOnScroll(const bool enabled);
     void setUndoRedoEnabled(const bool enabled);
     void setPlaceholderText(const QString &text);
-    void scrollToBottom(const bool repaint = true);
+    void scrollToBottom(const bool repaint = false);
     void setMaximumBlockCount(const int maxBlockCount);
 
 private slots:

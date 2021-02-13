@@ -70,7 +70,7 @@ GraphProvider::GraphProvider()
     auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(te, SIGNAL(timeout40Hz()), this, SIGNAL(dataUpdated()));
+    connect(te, SIGNAL(timeout42Hz()), this, SIGNAL(dataUpdated()));
     connect(ge, SIGNAL(frameChanged()), this, SLOT(updateValues()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 

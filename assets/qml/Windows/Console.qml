@@ -177,6 +177,7 @@ Control {
                 cursorShape: Qt.IBeamCursor
                 propagateComposedEvents: true
                 acceptedButtons: Qt.RightButton
+                anchors.rightMargin: textEdit.scrollbarWidth
                 onContainsMouseChanged: {
                     if (mouseArea.containsMouse)
                         textEdit.forceActiveFocus()
