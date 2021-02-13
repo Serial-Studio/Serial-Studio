@@ -111,11 +111,6 @@ Control {
                             minimumHeight: root.minimumWidgetSize * 1.2
                             title: gyro.title
 
-                            flags: Qt.Dialog |
-                                   Qt.WindowStaysOnTopHint |
-                                   Qt.WindowCloseButtonHint |
-                                   Qt.WindowTitleHint
-
                             Rectangle {
                                 anchors.fill: parent
                                 color: gyro.backgroundColor
@@ -158,11 +153,6 @@ Control {
                             minimumWidth: root.minimumWidgetSize * 1.2
                             minimumHeight: root.minimumWidgetSize * 1.2
                             title: acc.title
-
-                            flags: Qt.Dialog |
-                                   Qt.WindowStaysOnTopHint |
-                                   Qt.WindowCloseButtonHint |
-                                   Qt.WindowTitleHint
 
                             Rectangle {
                                 anchors.fill: parent
@@ -207,11 +197,6 @@ Control {
                             minimumHeight: root.minimumWidgetSize * 1.2
                             title: map.title
 
-                            flags: Qt.Dialog |
-                                   Qt.WindowStaysOnTopHint |
-                                   Qt.WindowCloseButtonHint |
-                                   Qt.WindowTitleHint
-
                             Rectangle {
                                 anchors.fill: parent
                                 color: map.backgroundColor
@@ -254,11 +239,6 @@ Control {
                             minimumWidth: root.minimumWidgetSize * 1.2
                             minimumHeight: root.minimumWidgetSize * 1.2
                             title: bar.title
-
-                            flags: Qt.Dialog |
-                                   Qt.WindowStaysOnTopHint |
-                                   Qt.WindowCloseButtonHint |
-                                   Qt.WindowTitleHint
 
                             Rectangle {
                                 anchors.fill: parent

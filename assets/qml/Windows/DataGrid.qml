@@ -446,11 +446,6 @@ Control {
                                         minimumHeight: 256
                                         title: group.title
 
-                                        flags: Qt.Dialog |
-                                               Qt.WindowStaysOnTopHint |
-                                               Qt.WindowCloseButtonHint |
-                                               Qt.WindowTitleHint
-
                                         Rectangle {
                                             anchors.fill: parent
                                             color: group.backgroundColor
@@ -502,11 +497,6 @@ Control {
                                         minimumWidth: 320
                                         minimumHeight: 256
                                         title: graph.title
-
-                                        flags: Qt.Dialog |
-                                               Qt.WindowStaysOnTopHint |
-                                               Qt.WindowCloseButtonHint |
-                                               Qt.WindowTitleHint
 
                                         Rectangle {
                                             anchors.fill: parent
