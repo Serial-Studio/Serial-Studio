@@ -137,7 +137,7 @@
     <name>Console</name>
     <message>
         <source>No data received so far...</source>
-        <translation>目前未收到任何数据...</translation>
+        <translation type="vanished">目前未收到任何数据...</translation>
     </message>
     <message>
         <source>Send data to device</source>
@@ -166,6 +166,14 @@
     <message>
         <source>Save as</source>
         <translation>另存为</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>全选</translation>
+    </message>
+    <message>
+        <source>No data received so far</source>
+        <translation>目前未收到任何数据</translation>
     </message>
 </context>
 <context>
@@ -606,11 +614,11 @@
     </message>
     <message>
         <source>JSON/serial data format mismatch</source>
-        <translation>JSON /串行数据格式不匹配</translation>
+        <translation type="vanished">JSON /串行数据格式不匹配</translation>
     </message>
     <message>
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
-        <translation>接收到的数据格式与所选的JSON映射文件不对应。</translation>
+        <translation type="vanished">接收到的数据格式与所选的JSON映射文件不对应。</translation>
     </message>
 </context>
 <context>
@@ -822,6 +830,14 @@
     <message>
         <source>Create CSV file</source>
         <translation>创建CSV文件</translation>
+    </message>
+    <message>
+        <source>Start sequence</source>
+        <translation>启动顺序</translation>
+    </message>
+    <message>
+        <source>End sequence</source>
+        <translation>完成顺序</translation>
     </message>
 </context>
 <context>

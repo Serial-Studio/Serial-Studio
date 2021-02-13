@@ -137,7 +137,7 @@
     <name>Console</name>
     <message>
         <source>No data received so far...</source>
-        <translation>Noch keine Daten verfügbar...</translation>
+        <translation type="vanished">Noch keine Daten verfügbar...</translation>
     </message>
     <message>
         <source>Send data to device</source>
@@ -166,6 +166,14 @@
     <message>
         <source>Save as</source>
         <translation>Speichern als</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Wählen Sie Alle</translation>
+    </message>
+    <message>
+        <source>No data received so far</source>
+        <translation>Noch keine Daten verfügbar</translation>
     </message>
 </context>
 <context>
@@ -578,11 +586,11 @@
     </message>
     <message>
         <source>JSON/serial data format mismatch</source>
-        <translation>JSON/serielles Datenformat stimmt nicht überein</translation>
+        <translation type="vanished">JSON/serielles Datenformat stimmt nicht überein</translation>
     </message>
     <message>
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
-        <translation>Das Format der empfangenen Daten stimmt nicht mit der ausgewählten JSON Modelldatei überein.</translation>
+        <translation type="vanished">Das Format der empfangenen Daten stimmt nicht mit der ausgewählten JSON Modelldatei überein.</translation>
     </message>
 </context>
 <context>
@@ -782,6 +790,14 @@
     <message>
         <source>Create CSV file</source>
         <translation>CSV-Datei erstellen</translation>
+    </message>
+    <message>
+        <source>Start sequence</source>
+        <translation>Startsequenz</translation>
+    </message>
+    <message>
+        <source>End sequence</source>
+        <translation>Kündigungssequenz</translation>
     </message>
 </context>
 <context>

@@ -141,7 +141,7 @@
     <name>Console</name>
     <message>
         <source>No data received so far...</source>
-        <translation>No se han recibido datos hasta ahora ...</translation>
+        <translation type="vanished">No se han recibido datos hasta ahora ...</translation>
     </message>
     <message>
         <source>Autoscroll</source>
@@ -170,6 +170,14 @@
     <message>
         <source>Save as</source>
         <translation>Guardar como</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Seleccionar todo</translation>
+    </message>
+    <message>
+        <source>No data received so far</source>
+        <translation>No se han recibido datos hasta ahora</translation>
     </message>
 </context>
 <context>
@@ -610,11 +618,11 @@
     </message>
     <message>
         <source>JSON/serial data format mismatch</source>
-        <translation>El formato de los datos recibidos no coincide</translation>
+        <translation type="vanished">El formato de los datos recibidos no coincide</translation>
     </message>
     <message>
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
-        <translation>El formato de los datos recibidos no se corresponde con el archivo de mapa JSON seleccionado.</translation>
+        <translation type="vanished">El formato de los datos recibidos no se corresponde con el archivo de mapa JSON seleccionado.</translation>
     </message>
 </context>
 <context>
@@ -905,6 +913,14 @@
     <message>
         <source>Create CSV file</source>
         <translation>Crear archivo CSV</translation>
+    </message>
+    <message>
+        <source>Start sequence</source>
+        <translation>Secuencia de inicio</translation>
+    </message>
+    <message>
+        <source>End sequence</source>
+        <translation>Secuencia de terminación</translation>
     </message>
 </context>
 <context>

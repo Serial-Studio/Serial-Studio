@@ -160,7 +160,7 @@ Control {
             undoRedoEnabled: false
             Layout.fillWidth: true
             Layout.fillHeight: true
-            maximumBlockCount: 5000
+            maximumBlockCount: 12000
             palette.text: "#8ecd9d"
             palette.base: "#121218"
             palette.button: "#16232a"

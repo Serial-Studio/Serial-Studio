@@ -164,7 +164,11 @@
         <translation></translation>
     </message>
     <message>
-        <source>No data received so far...</source>
+        <source>Select all</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>No data received so far</source>
         <translation></translation>
     </message>
 </context>
@@ -517,14 +521,6 @@
         <source>Please check file permissions &amp; location</source>
         <translation></translation>
     </message>
-    <message>
-        <source>JSON/serial data format mismatch</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>The format of the received data does not correspond to the selected JSON map file.</source>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>MapDelegate</name>
@@ -603,6 +599,14 @@
     </message>
     <message>
         <source>Create CSV file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Start sequence</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>End sequence</source>
         <translation></translation>
     </message>
 </context>
