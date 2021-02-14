@@ -261,7 +261,7 @@ ApplicationWindow {
     //
     // Save window size & position
     //
-    /*Settings {
+    Settings {
         property alias appX: app.x
         property alias appY: app.y
         property alias appW: app.width
@@ -269,7 +269,7 @@ ApplicationWindow {
         property alias appStatus: app.appLaunchStatus
         property alias autoUpdater: app.automaticUpdates
         property alias appMaximized: app.windowMaximized
-    }*/
+    }
 
     //
     // Main layout
