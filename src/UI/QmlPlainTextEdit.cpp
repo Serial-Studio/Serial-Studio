@@ -560,18 +560,26 @@ void QmlPlainTextEdit::setPlaceholderText(const QString &text)
  */
 void QmlPlainTextEdit::scrollToBottom(const bool repaint)
 {
+    // Get scrollbar pointer, calculate line count & visible text lines
     auto *bar = textEdit()->verticalScrollBar();
     auto lineCount = textEdit()->document()->blockCount();
     auto visibleLines = qCeil(height() / textEdit()->fontMetrics().height());
 
+    // Abort operation if control is not visible
+    if (visibleLines <= 0)
+        return;
+
+    // Update scrolling range
     bar->setMinimum(0);
     bar->setMaximum(lineCount);
 
+    // Do not scroll to bottom if all text fits in current window
     if (lineCount > visibleLines)
         bar->setValue(lineCount - visibleLines);
     else
         bar->setValue(0);
 
+    // Trigger UI repaint
     if (repaint)
         update();
 }

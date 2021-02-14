@@ -48,8 +48,17 @@ Control {
     // Clears console output
     //
     function clearConsole() {
+        console.log("clear console")
         Cpp_IO_Console.clear()
         textEdit.clear()
+    }
+
+    //
+    // Load welcome guide
+    //
+    function showWelcomeGuide() {
+        clearConsole()
+        Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
     }
 
     //

@@ -112,20 +112,15 @@ ApplicationWindow {
         widgets.opacity = 0
         terminal.opacity = 1
 
+        // Load welcome guide
+        terminal.showWelcomeGuide()
+
         // Load JSON map file (if any)
         Cpp_JSON_Generator.readSettings()
 
         // Display the window & check for updates in 500 ms (we do this so that
         // we wait for the window to read settings before showing it)
         timer.start()
-    }
-
-    //
-    // Clears the console text & displays a mini-tutorial
-    //
-    function showWelcomeGuide() {
-        terminal.clearConsole()
-        Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
     }
 
     //
@@ -209,7 +204,6 @@ ApplicationWindow {
             }
 
             // Show app window
-            app.showWelcomeGuide()
             if (app.windowMaximized)
                 app.showMaximized()
             else
@@ -267,7 +261,7 @@ ApplicationWindow {
     //
     // Save window size & position
     //
-    Settings {
+    /*Settings {
         property alias appX: app.x
         property alias appY: app.y
         property alias appW: app.width
@@ -275,7 +269,7 @@ ApplicationWindow {
         property alias appStatus: app.appLaunchStatus
         property alias autoUpdater: app.automaticUpdates
         property alias appMaximized: app.windowMaximized
-    }
+    }*/
 
     //
     // Main layout
@@ -349,7 +343,7 @@ ApplicationWindow {
                     Connections {
                         target: Cpp_Misc_Translator
                         function onLanguageChanged() {
-                            app.showWelcomeGuide()
+                            terminal.showWelcomeGuide()
                         }
                     }
                 }
