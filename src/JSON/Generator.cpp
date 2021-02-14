@@ -48,11 +48,11 @@ static const QRegExp UNMATCHED_VALUES_REGEX("(%\b([0-9]|[1-9][0-9])\b)");
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
 Generator::Generator()
-    : m_jsonChanged(false)
-    , m_dataFormatErrors(0)
-    , m_opMode(kAutomatic)
+    : m_opMode(kAutomatic)
 {
     auto io = IO::Manager::getInstance();
+    auto cp = CSV::Player::getInstance();
+    connect(cp, SIGNAL(openChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(deviceChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(frameReceived(QByteArray)), this, SLOT(readData(QByteArray)));
     m_workerThread.start();
@@ -264,13 +264,20 @@ void Generator::setJsonDocument(const QJsonDocument &document, const QDateTime &
     if (document.object().isEmpty())
         return;
 
-    m_jsonChanged = true;
-    m_document = document;
+    bool csvOpen = CSV::Player::getInstance()->isOpen();
+    bool devOpen = IO::Manager::getInstance()->connected();
 
-    if (m_frame.read(m_document.object()))
-        emit frameChanged();
+    if (csvOpen || devOpen)
+    {
+        m_document = document;
+        if (m_frame.read(m_document.object()))
+            emit frameChanged();
 
-    emit jsonChanged(document, time);
+        emit jsonChanged(document, time);
+    }
+
+    else
+        reset();
 }
 
 /**
@@ -279,8 +286,11 @@ void Generator::setJsonDocument(const QJsonDocument &document, const QDateTime &
  */
 void Generator::reset()
 {
-    m_dataFormatErrors = 0;
-    setJsonDocument(QJsonDocument::fromJson(QByteArray("{}")));
+    m_frame.clear();
+    m_document = QJsonDocument::fromJson(QByteArray("{}"));
+
+    emit frameChanged();
+    emit jsonChanged(document(), QDateTime::currentDateTime());
 }
 
 /**

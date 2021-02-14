@@ -100,8 +100,6 @@ public:
     QString jsonMapFilepath() const;
     OperationMode operationMode() const;
 
-    QJSEngine *javaScriptEngine() { return &m_engine; }
-
 public slots:
     void loadJsonMap();
     void setOperationMode(const OperationMode mode);
@@ -123,17 +121,13 @@ private slots:
 private:
     Frame m_frame;
     QFile m_jsonMap;
-    bool m_jsonChanged;
     QSettings m_settings;
     QString m_jsonMapData;
-    int m_dataFormatErrors;
     OperationMode m_opMode;
     QJsonDocument m_document;
 
     QThread m_workerThread;
     JSONWorker *m_jsonWorker;
-
-    QJSEngine m_engine;
 };
 }
 

@@ -239,16 +239,16 @@ ApplicationWindow {
     Connections {
         target: Cpp_JSON_Generator
         enabled: !app.firstValidPacket
-        function onJsonChanged()  {
-            app.firstValidPacket = true
-            uiConfigTimer.start()
-        }
-    } Timer {
-        id: uiConfigTimer
-        interval: 250
-        onTriggered: {
-            setup.hide()
-            toolbar.dataClicked()
+        function onFrameChanged()  {
+            if (Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) {
+                app.firstValidPacket = true
+                setup.hide()
+                toolbar.dataClicked()
+            } else {
+                toolbar.consoleClicked()
+                setup.show()
+                app.firstValidPacket = false
+            }
         }
     }
 
