@@ -234,7 +234,12 @@ jobs:
     - name: '🚧 Build'
       run: |
         cd msys2
-        makepkg-mingw --noconfirm --noprogressbar -sCLf
+        tries=0
+        # Try building three times due to the arbitrary 'Bad address' error
+        while [ $tries -lt 3 ]; do
+          makepkg-mingw --noconfirm --noprogressbar -sCLf && break || tries=$((tries+1))
+        done
+
       env:
         MINGW_INSTALLS: ${{ matrix.msystem }}
 
