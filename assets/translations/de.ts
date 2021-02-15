@@ -865,7 +865,7 @@
     </message>
     <message>
         <source>Serial</source>
-        <translation>Serielle Schnittstelle</translation>
+        <translation>Serielle</translation>
     </message>
     <message>
         <source>Network</source>
