@@ -203,7 +203,7 @@ Control {
             //
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
-            enabled: Cpp_IO_Serial.serialConfigurationOk
+            enabled: Cpp_IO_Manager.configurationOk
 
             //
             // Connect/disconnect device when button is clicked

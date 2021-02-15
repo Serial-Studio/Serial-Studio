@@ -70,6 +70,14 @@ Manager::Manager()
     // setWatchdogInterval(15);
     setMaxBufferSize(1024 * 1024);
     LOG_TRACE() << "Class initialized";
+
+    // Configure signals/slots
+    auto serial = DataSources::Serial::getInstance();
+    auto netwrk = DataSources::Network::getInstance();
+    connect(netwrk, SIGNAL(hostChanged()), this, SIGNAL(configurationChanged()));
+    connect(netwrk, SIGNAL(portChanged()), this, SIGNAL(configurationChanged()));
+    connect(this, SIGNAL(dataSourceChanged()), this, SIGNAL(configurationChanged()));
+    connect(serial, SIGNAL(portIndexChanged()), this, SIGNAL(configurationChanged()));
 }
 
 /**
@@ -121,6 +129,19 @@ bool Manager::connected()
 bool Manager::deviceAvailable()
 {
     return device() != nullptr;
+}
+
+/**
+ * Returns @c true if we are able to connect to a device/port with the current config.
+ */
+bool Manager::configurationOk() const
+{
+    if (dataSource() == DataSource::Serial)
+        return DataSources::Serial::getInstance()->configurationOk();
+    else if (dataSource() == DataSource::Network)
+        return DataSources::Network::getInstance()->configurationOk();
+
+    return false;
 }
 
 /**
@@ -288,6 +309,10 @@ void Manager::connectDevice()
     if (dataSource() == DataSource::Serial)
         setDevice(DataSources::Serial::getInstance()->openSerialPort());
 
+    // Try to open a network connection
+    else if (dataSource() == DataSource::Network)
+        setDevice(DataSources::Network::getInstance()->openNetworkPort());
+
     // Configure current device
     if (deviceAvailable())
     {
@@ -328,6 +353,8 @@ void Manager::disconnectDevice()
         // Call-appropiate interface functions
         if (dataSource() == DataSource::Serial)
             DataSources::Serial::getInstance()->disconnectDevice();
+        else if (dataSource() == DataSource::Network)
+            DataSources::Network::getInstance()->disconnectDevice();
 
         // Update device pointer
         m_device = nullptr;

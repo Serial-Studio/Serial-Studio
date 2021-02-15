@@ -60,6 +60,9 @@ class Manager : public QObject
                READ finishSequence
                WRITE setFinishSequence
                NOTIFY finishSequenceChanged)
+    Q_PROPERTY(bool configurationOk
+               READ configurationOk
+               NOTIFY configurationChanged)
     // clang-format on
 
 signals:
@@ -70,6 +73,7 @@ signals:
     void watchdogTriggered();
     void dataSourceChanged();
     void writeEnabledChanged();
+    void configurationChanged();
     void receivedBytesChanged();
     void maxBufferSizeChanged();
     void startSequenceChanged();
@@ -93,6 +97,7 @@ public:
     bool readWrite();
     bool connected();
     bool deviceAvailable();
+    bool configurationOk() const;
 
     int maxBufferSize() const;
     int watchdogInterval() const;

@@ -86,9 +86,6 @@ class Serial : public QObject
     Q_PROPERTY(QStringList flowControlList
                READ flowControlList
                CONSTANT)
-    Q_PROPERTY(bool serialConfigurationOk
-               READ serialConfigurationOk
-               NOTIFY portIndexChanged)
     // clang-format on
 
 signals:
@@ -109,7 +106,7 @@ public:
 
     QString portName() const;
     QSerialPort *port() const;
-    bool serialConfigurationOk() const;
+    bool configurationOk() const;
 
     quint8 portIndex() const;
     quint8 parityIndex() const;

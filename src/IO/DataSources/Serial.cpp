@@ -107,7 +107,7 @@ QString Serial::portName() const
  * Returns @c true if the user selects the appropiate controls & options to be able
  * to connect to a serial device
  */
-bool Serial::serialConfigurationOk() const
+bool Serial::configurationOk() const
 {
     return portIndex() > 0;
 }

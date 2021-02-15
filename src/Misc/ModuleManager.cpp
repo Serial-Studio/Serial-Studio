@@ -143,6 +143,7 @@ void ModuleManager::initializeQmlInterface()
     auto ioManager = IO::Manager::getInstance();
     auto ioConsole = IO::Console::getInstance();
     auto ioSerial = IO::DataSources::Serial::getInstance();
+    auto ioNetwork = IO::DataSources::Network::getInstance();
     auto jsonGenerator = JSON::Generator::getInstance();
     LOG_INFO() << "Finished initializing C++ modules";
 
@@ -163,6 +164,7 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_IO_Console", ioConsole);
     c->setContextProperty("Cpp_IO_Manager", ioManager);
     c->setContextProperty("Cpp_IO_Serial", ioSerial);
+    c->setContextProperty("Cpp_IO_Network", ioNetwork);
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
 
     // Register app info with QML
