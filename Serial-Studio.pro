@@ -120,8 +120,12 @@ RESOURCES += \
     assets/assets.qrc
 
 DISTFILES += \
+    assets/qml/SetupPanes/Network.qml \
+    assets/qml/SetupPanes/Serial.qml \
+    assets/qml/SetupPanes/Settings.qml \
     assets/qml/Widgets/*.qml \
     assets/qml/Windows/*.qml \
+    assets/qml/SetupPanes/*.qml \
     assets/qml/*.qml
 
 TRANSLATIONS += \

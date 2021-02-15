@@ -234,7 +234,7 @@ ApplicationWindow {
         target: Cpp_JSON_Generator
         enabled: !app.firstValidPacket
         function onFrameChanged()  {
-            if (Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) {
+            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) && Cpp_JSON_Generator.frameValid()) {
                 app.firstValidPacket = true
                 setup.hide()
                 toolbar.dataClicked()

@@ -100,6 +100,14 @@ public:
     QString jsonMapFilepath() const;
     OperationMode operationMode() const;
 
+    Q_INVOKABLE bool frameValid()
+    {
+        if (frame())
+            return frame()->groupCount() > 0;
+
+        return false;
+    }
+
 public slots:
     void loadJsonMap();
     void setOperationMode(const OperationMode mode);

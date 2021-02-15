@@ -28,6 +28,7 @@ import Qt.labs.settings 1.0
 import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
+import "../SetupPanes" as SetupPanes
 
 Control {
     id: root
@@ -39,35 +40,36 @@ Control {
     // Save settings
     //
     Settings {
-        category: "Setup"
-        property alias dmAuto: commAuto.checked
-        property alias dmManual: commManual.checked
-        property alias dmParity: parity.currentIndex
-        property alias dmCsvExport: csvLogging.checked
-        property alias dmStopBits: stopBits.currentIndex
-        property alias dmDataBits: dataBits.currentIndex
-        property alias dmBaudValue: baudRate.currentIndex
-        property alias dmFlowControl: flowControl.currentIndex
-        property alias dmStartSequence: startSeqText.text
-        property alias dmEndSequence: endSeqText.text
-        property alias appLanguage: languageCombo.currentIndex
-    }
+        //
+        // Misc settings
+        //
+        property alias auto: commAuto.checked
+        property alias manual: commManual.checked
+        property alias csvExport: csvLogging.checked
+        property alias tabIndex: tab.currentIndex
 
-    //
-    // Update listbox models when translation is changed
-    //
-    Connections {
-        target: Cpp_Misc_Translator
-        function onLanguageChanged() {
-            var oldParityIndex = parity.currentIndex
-            var oldFlowControlIndex = flowControl.currentIndex
+        //
+        // Serial settings
+        //
+        property alias baudRate: serial.baudRate
+        property alias stopBits: serial.stopBits
+        property alias parity: serial.parity
+        property alias flowControl: serial.flowControl
+        property alias dataBits: serial.dataBits
 
-            parity.model = Cpp_IO_Serial.parityList
-            flowControl.model = Cpp_IO_Serial.flowControlList
+        //
+        // Network settings
+        //
+        property alias address: network.address
+        property alias port: network.port
+        property alias socketType: network.socketType
 
-            parity.currentIndex = oldParityIndex
-            flowControl.currentIndex = oldFlowControlIndex
-        }
+        //
+        // App settings
+        //
+        property alias language: settings.language
+        property alias endSequence: settings.endSequence
+        property alias startSequence: settings.startSequence
     }
 
     //
@@ -175,194 +177,55 @@ Control {
         }
 
         //
-        // A lot of comboboxes
+        // Tab bar
         //
-        GridLayout {
-            columns: 2
+        TabBar {
+            height: 24
+            id: tab
             Layout.fillWidth: true
-            rowSpacing: app.spacing
-            columnSpacing: app.spacing
-
-            //
-            // COM port selector
-            //
-            Label {
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
-                text: qsTr("COM Port") + ":"
-            } ComboBox {
-                id: portSelector
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.portList
-                currentIndex: Cpp_IO_Serial.portIndex
-                onCurrentIndexChanged: {
-                    if (currentIndex !== Cpp_IO_Serial.portIndex)
-                        Cpp_IO_Serial.portIndex = currentIndex
-                }
-
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
+            onCurrentIndexChanged: {
+                if (currentIndex < 2)
+                    Cpp_IO_Manager.dataSource = currentIndex
             }
 
-            //
-            // Baud rate selector
-            //
-            Label {
-                opacity: enabled ? 1 : 0.5
-                Behavior on opacity {NumberAnimation{}}
-                text: qsTr("Baud Rate") + ":"
-            } ComboBox {
-                id: baudRate
-                editable: true
-                currentIndex: 3
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.baudRateList
-
-                validator: IntValidator {
-                    bottom: 1
-                }
-
-                onAccepted: {
-                    if (find(editText) === -1)
-                        Cpp_IO_Serial.appendBaudRate(editText)
-                }
-
-                onCurrentTextChanged: {
-                    var value = currentText
-                    Cpp_IO_Serial.baudRate = value
-                }
+            TabButton {
+                text: qsTr("Serial")
+                height: tab.height + 3
+                width: implicitWidth + 2 * app.spacing
             }
 
-            //
-            // Spacer
-            //
-            Item {
-                Layout.minimumHeight: app.spacing / 2
-                Layout.maximumHeight: app.spacing / 2
-            } Item {
-                Layout.minimumHeight: app.spacing / 2
-                Layout.maximumHeight: app.spacing / 2
+            TabButton {
+                text: qsTr("Network")
+                height: tab.height + 3
+                width: implicitWidth + 2 * app.spacing
             }
 
-            //
-            // Data bits selector
-            //
-            Label {
-                text: qsTr("Data Bits") + ":"
-            } ComboBox {
-                id: dataBits
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.dataBitsList
-                currentIndex: Cpp_IO_Serial.dataBitsIndex
-                onCurrentIndexChanged: {
-                    if (Cpp_IO_Serial.dataBitsIndex !== currentIndex)
-                        Cpp_IO_Serial.dataBitsIndex = currentIndex
-                }
+            TabButton {
+                text: qsTr("Settings")
+                height: tab.height + 3
+                width: implicitWidth + 2 * app.spacing
+            }
+        }
+
+        //
+        // Tab bar contents
+        //
+        StackLayout {
+            clip: true
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            currentIndex: tab.currentIndex
+
+            SetupPanes.Serial {
+                id: serial
             }
 
-            //
-            // Parity selector
-            //
-            Label {
-                text: qsTr("Parity") + ":"
-            } ComboBox {
-                id: parity
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.parityList
-                currentIndex: Cpp_IO_Serial.parityIndex
-                onCurrentIndexChanged: {
-                    if (Cpp_IO_Serial.parityIndex !== currentIndex)
-                        Cpp_IO_Serial.parityIndex = currentIndex
-                }
+            SetupPanes.Network {
+                id: network
             }
 
-            //
-            // Stop bits selector
-            //
-            Label {
-                text: qsTr("Stop Bits") + ":"
-            } ComboBox {
-                id: stopBits
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.stopBitsList
-                currentIndex: Cpp_IO_Serial.stopBitsIndex
-                onCurrentIndexChanged: {
-                    if (Cpp_IO_Serial.stopBitsIndex !== currentIndex)
-                        Cpp_IO_Serial.stopBitsIndex = currentIndex
-                }
-            }
-
-            //
-            // Flow control selector
-            //
-            Label {
-                text: qsTr("Flow Control") + ":"
-            } ComboBox {
-                id: flowControl
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.flowControlList
-                currentIndex: Cpp_IO_Serial.flowControlIndex
-                onCurrentIndexChanged: {
-                    if (Cpp_IO_Serial.flowControlIndex !== currentIndex)
-                        Cpp_IO_Serial.flowControlIndex = currentIndex
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                Layout.minimumHeight: app.spacing / 2
-                Layout.maximumHeight: app.spacing / 2
-            } Item {
-                Layout.minimumHeight: app.spacing / 2
-                Layout.maximumHeight: app.spacing / 2
-            }
-
-            //
-            // Language selector
-            //
-            Label {
-                text: qsTr("Language") + ":"
-            } ComboBox {
-                id: languageCombo
-                Layout.fillWidth: true
-                model: Cpp_Misc_Translator.availableLanguages
-                onCurrentIndexChanged: Cpp_Misc_Translator.setLanguage(currentIndex)
-            }
-
-            //
-            // Start sequence
-            //
-            Label {
-                text: qsTr("Start sequence") + ": "
-            } TextField {
-                id: startSeqText
-                Layout.fillWidth: true
-                placeholderText: "/*"
-                text: "/*"
-                onTextChanged: {
-                    if (text !== Cpp_IO_Manager.startSequence)
-                        Cpp_IO_Manager.startSequence = text
-                }
-            }
-
-            //
-            // End sequence
-            //
-            Label {
-                text: qsTr("End sequence") + ": "
-            } TextField {
-                id: endSeqText
-                Layout.fillWidth: true
-                placeholderText: "*/"
-                text: "*/"
-                onTextChanged: {
-                    if (text !== Cpp_IO_Manager.finishSequence)
-                        Cpp_IO_Manager.finishSequence = text
-                }
+            SetupPanes.Settings {
+                id: settings
             }
         }
 
@@ -370,8 +233,8 @@ Control {
         // Spacer
         //
         Item {
-            Layout.fillHeight: true
-            Layout.minimumHeight: app.spacing * 2
+            Layout.minimumHeight: app.spacing / 2
+            Layout.maximumHeight: app.spacing / 2
         }
 
         //
@@ -445,8 +308,7 @@ Control {
         // Spacer
         //
         Item {
-            Layout.fillHeight: true
-            Layout.minimumHeight: app.spacing * 2
+            height: app.spacing * 2
         }
     }
 }

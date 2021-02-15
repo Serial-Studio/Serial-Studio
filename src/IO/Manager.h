@@ -80,6 +80,7 @@ signals:
     void finishSequenceChanged();
     void watchdogIntervalChanged();
     void frameValidationRegexChanged();
+    void dataSent(const QByteArray &data);
     void dataReceived(const QByteArray &data);
     void frameReceived(const QByteArray &frame);
 

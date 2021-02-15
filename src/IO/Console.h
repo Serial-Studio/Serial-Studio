@@ -133,6 +133,7 @@ public slots:
 
 private slots:
     void displayData();
+    void onDataSent(const QByteArray &data);
     void addToHistory(const QString &command);
     void onDataReceived(const QByteArray &data);
 

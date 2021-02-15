@@ -271,17 +271,23 @@ QStringList Manager::dataSourcesList() const
  */
 qint64 Manager::writeData(const QByteArray &data)
 {
-    // Write data to device
-    qint64 bytes = 0;
-    if (readWrite())
-        bytes = device()->write(data);
+    if (connected())
+    {
+        qint64 bytes = device()->write(data);
 
-    // Flash UI lights (if any)
-    if (bytes > 0)
-        emit tx();
+        if (bytes > 0)
+        {
+            auto writtenData = data;
+            writtenData.chop(data.length() - bytes);
 
-    // Return number of bytes written
-    return bytes;
+            emit tx();
+            emit dataSent(writtenData);
+        }
+
+        return bytes;
+    }
+
+    return -1;
 }
 
 /**
@@ -392,6 +398,9 @@ void Manager::setDataSource(const DataSource source)
     // Change data source
     m_dataSource = source;
     emit dataSourceChanged();
+
+    // Log changes
+    LOG_INFO() << "Data source set to" << source;
 }
 
 /**

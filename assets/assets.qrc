@@ -85,5 +85,8 @@
         <file>icons/scroll-top.svg</file>
         <file>icons/scroll-up.svg</file>
         <file>qml/Widgets/SimpleDial.qml</file>
+        <file>qml/SetupPanes/Network.qml</file>
+        <file>qml/SetupPanes/Serial.qml</file>
+        <file>qml/SetupPanes/Settings.qml</file>
     </qresource>
 </RCC>

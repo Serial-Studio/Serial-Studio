@@ -48,7 +48,6 @@ Control {
     // Clears console output
     //
     function clearConsole() {
-        console.log("clear console")
         Cpp_IO_Console.clear()
         textEdit.clear()
     }

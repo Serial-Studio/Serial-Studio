@@ -55,6 +55,7 @@ Console::Console()
     auto dm = Manager::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(te, SIGNAL(timeout42Hz()), this, SLOT(displayData()));
+    connect(dm, &Manager::dataSent, this, &Console::onDataSent);
     connect(dm, &Manager::dataReceived, this, &Console::onDataReceived);
 
     // Log something to look like a pro
@@ -321,27 +322,7 @@ void Console::send(const QString &data)
     }
 
     // Write data to device
-    auto bytes = Manager::getInstance()->writeData(bin);
-
-    // Write success, notify UI & log bytes written
-    if (bytes > 0)
-    {
-        // Get sent byte array
-        auto sent = bin;
-        sent.chop(bin.length() - bytes);
-
-        // Display sent data on console (if allowed)
-        if (echo())
-        {
-            m_isStartingLine = true;
-            append(dataToString(bin), showTimestamp());
-            m_isStartingLine = true;
-        }
-    }
-
-    // Write error
-    else
-        LOG_WARNING() << Manager::getInstance()->device()->errorString();
+    Manager::getInstance()->writeData(bin);
 }
 
 /**
@@ -482,6 +463,17 @@ void Console::displayData()
 {
     append(dataToString(m_dataBuffer), showTimestamp());
     m_dataBuffer.clear();
+}
+
+/**
+ * Displays the given @a data in the console. @c QByteArray to ~@c QString conversion is
+ * done by the @c dataToString() function, which displays incoming data either in UTF-8
+ * or in hexadecimal mode.
+ */
+void Console::onDataSent(const QByteArray &data)
+{
+    if (echo())
+        append(dataToString(data) + "\n", showTimestamp());
 }
 
 /**

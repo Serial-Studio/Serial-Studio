@@ -21,25 +21,34 @@
  */
 
 #include "Network.h"
+#include <Misc/Utilities.h>
 
 using namespace IO::DataSources;
-
 static Network *INSTANCE = nullptr;
 
+/**
+ * Constructor function
+ */
 Network::Network()
 {
-    setPort(0);
     setHost("");
+    setPort(defaultPort());
     setSocketType(QAbstractSocket::TcpSocket);
     connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &Network::onErrorOccurred);
     connect(&m_udpSocket, &QTcpSocket::errorOccurred, this, &Network::onErrorOccurred);
 }
 
+/**
+ * Destructor function
+ */
 Network::~Network()
 {
     disconnectDevice();
 }
 
+/**
+ * Returns the only instance of this class
+ */
 Network *Network::getInstance()
 {
     if (!INSTANCE)
@@ -48,26 +57,75 @@ Network *Network::getInstance()
     return INSTANCE;
 }
 
+/**
+ * Returns the host address
+ */
 QString Network::host() const
 {
     return m_host;
 }
 
+/**
+ * Returns the network port number
+ */
 quint16 Network::port() const
 {
     return m_port;
 }
 
-bool Network::configurationOk() const
+/**
+ * Returns the current socket type as an index of the list returned by the @c socketType
+ * function.
+ */
+int Network::socketTypeIndex() const
 {
-    return port() >= 0 && !QHostAddress(host()).isNull();
+    switch (socketType())
+    {
+        case QAbstractSocket::TcpSocket:
+            return 0;
+            break;
+        case QAbstractSocket::UdpSocket:
+            return 1;
+            break;
+        default:
+            return -1;
+            break;
+    }
 }
 
+/**
+ * Returns @c true if the port is greater than 0 and the host address is valid.
+ */
+bool Network::configurationOk() const
+{
+    return true;
+    // return port() > 0 && !QHostAddress(host()).isNull();
+}
+
+/**
+ * Returns a list with the available socket types
+ */
+QStringList Network::socketTypes() const
+{
+    return QStringList { "TCP", "UDP" };
+}
+
+/**
+ * Returns the socket type. Valid return values are:
+ *
+ * @c QAbstractSocket::TcpSocket
+ * @c QAbstractSocket::UdpSocket
+ * @c QAbstractSocket::SctpSocket
+ * @c QAbstractSocket::UnknownSocketType
+ */
 QAbstractSocket::SocketType Network::socketType() const
 {
     return m_socketType;
 }
 
+/**
+ * Attempts to make a connection to the given host, port and TCP/UDP socket type.
+ */
 QIODevice *Network::openNetworkPort()
 {
     // Disconnect all sockets
@@ -76,59 +134,122 @@ QIODevice *Network::openNetworkPort()
     // Init socket pointer
     QAbstractSocket *socket = nullptr;
 
+    // Get host & port
+    auto hostAddr = host();
+    auto portAddr = port();
+    if (hostAddr.isEmpty())
+        hostAddr = defaultHost();
+    if (portAddr <= 0)
+        portAddr = defaultPort();
+
     // TCP connection, assign socket pointer & connect to host
     if (socketType() == QAbstractSocket::TcpSocket)
     {
         socket = &m_tcpSocket;
-        m_tcpSocket.connectToHost(host(), port());
+        m_tcpSocket.connectToHost(hostAddr, portAddr);
     }
 
     // UDP connection, assign socket pointer & connect to host
     else if (socketType() == QAbstractSocket::UdpSocket)
     {
         socket = &m_udpSocket;
-        m_udpSocket.connectToHost(host(), port());
+        m_udpSocket.connectToHost(hostAddr, portAddr);
     }
 
     // Convert socket to IO device pointer
     return static_cast<QIODevice *>(socket);
 }
 
+/**
+ * Instructs the module to communicate via a TCP socket.
+ */
 void Network::setTcpSocket()
 {
     setSocketType(QAbstractSocket::TcpSocket);
 }
 
+/**
+ * Instructs the module to communicate via an UDP socket.
+ */
 void Network::setUdpSocket()
 {
     setSocketType(QAbstractSocket::UdpSocket);
 }
 
+/**
+ * Disconnects the TCP/UDP sockets from the host
+ */
 void Network::disconnectDevice()
 {
     m_tcpSocket.disconnectFromHost();
     m_udpSocket.disconnectFromHost();
 }
 
+/**
+ * Sets the @c port number
+ */
 void Network::setPort(const quint16 port)
 {
     m_port = port;
     emit portChanged();
 }
 
+/**
+ * Sets the IPv4 or IPv6 address specified by the input string representation
+ */
 void Network::setHost(const QString &host)
 {
     m_host = host;
     emit hostChanged();
 }
 
+/**
+ * Changes the current socket type given an index of the list returned by the
+ * @c socketType() function.
+ */
+void Network::setSocketTypeIndex(const int index)
+{
+    switch (index)
+    {
+        case 0:
+            setTcpSocket();
+            break;
+        case 1:
+            setUdpSocket();
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * Changes the socket type. Valid input values are:
+ *
+ * @c QAbstractSocket::TcpSocket
+ * @c QAbstractSocket::UdpSocket
+ * @c QAbstractSocket::SctpSocket
+ * @c QAbstractSocket::UnknownSocketType
+ */
 void Network::setSocketType(const QAbstractSocket::SocketType type)
 {
     m_socketType = type;
     emit socketTypeChanged();
 }
 
+/**
+ * This function is called whenever a socket error occurs, it disconnects the socket
+ * from the host and displays the error in a message box.
+ */
 void Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
-    qDebug() << socketError;
+    QString error;
+    if (socketType() == QAbstractSocket::TcpSocket)
+        error = m_tcpSocket.errorString();
+    else if (socketType() == QAbstractSocket::UdpSocket)
+        error = m_udpSocket.errorString();
+    else
+        error = QString::number(socketError);
+
+    Misc::Utilities::showMessageBox(tr("Socket error"), error);
+    disconnectDevice();
 }
