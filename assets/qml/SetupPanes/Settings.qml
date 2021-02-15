@@ -39,7 +39,7 @@ Control {
     //
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: app.spacing / 2
+        anchors.margins: app.spacing
 
         //
         // Controls

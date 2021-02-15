@@ -215,17 +215,31 @@ Control {
             Layout.fillWidth: true
             Layout.fillHeight: true
             currentIndex: tab.currentIndex
+            Layout.topMargin: -parent.spacing
+            Layout.minimumHeight: serial.implicitHeight + 14
 
             SetupPanes.Serial {
                 id: serial
+                background: TextField {
+                    enabled: false
+                    palette.base: "#16232a"
+                }
             }
 
             SetupPanes.Network {
                 id: network
+                background: TextField {
+                    enabled: false
+                    palette.base: "#16232a"
+                }
             }
 
             SetupPanes.Settings {
                 id: settings
+                background: TextField {
+                    enabled: false
+                    palette.base: "#16232a"
+                }
             }
         }
 
@@ -233,8 +247,8 @@ Control {
         // Spacer
         //
         Item {
-            Layout.minimumHeight: app.spacing / 2
-            Layout.maximumHeight: app.spacing / 2
+            Layout.fillHeight: true
+            Layout.minimumHeight: app.spacing
         }
 
         //
@@ -308,7 +322,8 @@ Control {
         // Spacer
         //
         Item {
-            height: app.spacing * 2
+            Layout.fillHeight: true
+            Layout.minimumHeight: app.spacing
         }
     }
 }

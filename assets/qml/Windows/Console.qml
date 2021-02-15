@@ -162,7 +162,7 @@ Control {
         QmlPlainTextEdit {
             id: textEdit
             focus: true
-            readOnly: false
+            readOnly: true
             font.pixelSize: 12
             centerOnScroll: false
             undoRedoEnabled: false
