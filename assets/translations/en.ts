@@ -438,6 +438,13 @@
     </message>
 </context>
 <context>
+    <name>IO::DataSources::Network</name>
+    <message>
+        <source>Socket error</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>IO::DataSources::Serial</name>
     <message>
         <source>None</source>
@@ -530,10 +537,52 @@
     </message>
 </context>
 <context>
+    <name>Network</name>
+    <message>
+        <source>Socket type</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>IP Address</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Serial</name>
+    <message>
+        <source>COM Port</source>
+        <translation>COM port</translation>
+    </message>
+    <message>
+        <source>Baud Rate</source>
+        <translation>Baud rate</translation>
+    </message>
+    <message>
+        <source>Data Bits</source>
+        <translation>Data bits</translation>
+    </message>
+    <message>
+        <source>Parity</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Stop Bits</source>
+        <translation>Stop bits</translation>
+    </message>
+    <message>
+        <source>Flow Control</source>
+        <translation>Flow control</translation>
     </message>
 </context>
 <context>
@@ -545,6 +594,21 @@
     <message>
         <source>Select Port</source>
         <translation type="vanished">Select port</translation>
+    </message>
+</context>
+<context>
+    <name>Settings</name>
+    <message>
+        <source>Language</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Start sequence</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>End sequence</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -571,42 +635,38 @@
     </message>
     <message>
         <source>COM Port</source>
-        <translation>COM port</translation>
+        <translation type="vanished">COM port</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>Baud rate</translation>
+        <translation type="vanished">Baud rate</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>Data bits</translation>
-    </message>
-    <message>
-        <source>Parity</source>
-        <translation></translation>
+        <translation type="vanished">Data bits</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>Stop bits</translation>
+        <translation type="vanished">Stop bits</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>Flow control</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation></translation>
+        <translation type="vanished">Flow control</translation>
     </message>
     <message>
         <source>Create CSV file</source>
         <translation></translation>
     </message>
     <message>
-        <source>Start sequence</source>
+        <source>Serial</source>
         <translation></translation>
     </message>
     <message>
-        <source>End sequence</source>
+        <source>Network</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Settings</source>
         <translation></translation>
     </message>
 </context>

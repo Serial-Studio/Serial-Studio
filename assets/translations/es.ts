@@ -533,6 +533,13 @@
     </message>
 </context>
 <context>
+    <name>IO::DataSources::Network</name>
+    <message>
+        <source>Socket error</source>
+        <translation>Error de socket</translation>
+    </message>
+</context>
+<context>
     <name>IO::DataSources::Serial</name>
     <message>
         <source>None</source>
@@ -707,6 +714,21 @@
     </message>
 </context>
 <context>
+    <name>Network</name>
+    <message>
+        <source>Socket type</source>
+        <translation>Tipo de socket</translation>
+    </message>
+    <message>
+        <source>IP Address</source>
+        <translation>Direccion IP</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Puerto</translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>
@@ -715,6 +737,33 @@
     <message>
         <source>:/messages/Welcome_EN.txt</source>
         <translation type="vanished">:/messages/Welcome_ES.txt</translation>
+    </message>
+</context>
+<context>
+    <name>Serial</name>
+    <message>
+        <source>COM Port</source>
+        <translation>Puerto COM</translation>
+    </message>
+    <message>
+        <source>Baud Rate</source>
+        <translation>Baudios</translation>
+    </message>
+    <message>
+        <source>Data Bits</source>
+        <translation>Bits de datos</translation>
+    </message>
+    <message>
+        <source>Parity</source>
+        <translation>Paridad</translation>
+    </message>
+    <message>
+        <source>Stop Bits</source>
+        <translation>Bits de parada</translation>
+    </message>
+    <message>
+        <source>Flow Control</source>
+        <translation>Control de flujo</translation>
     </message>
 </context>
 <context>
@@ -833,6 +882,21 @@
     </message>
 </context>
 <context>
+    <name>Settings</name>
+    <message>
+        <source>Language</source>
+        <translation>Idioma</translation>
+    </message>
+    <message>
+        <source>Start sequence</source>
+        <translation>Secuencia de inicio</translation>
+    </message>
+    <message>
+        <source>End sequence</source>
+        <translation>Secuencia de terminación</translation>
+    </message>
+</context>
+<context>
     <name>Setup</name>
     <message>
         <source>Communication Mode</source>
@@ -856,31 +920,31 @@
     </message>
     <message>
         <source>COM Port</source>
-        <translation>Puerto COM</translation>
+        <translation type="vanished">Puerto COM</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>Baudios</translation>
+        <translation type="vanished">Baudios</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>Bits de datos</translation>
+        <translation type="vanished">Bits de datos</translation>
     </message>
     <message>
         <source>Parity</source>
-        <translation>Paridad</translation>
+        <translation type="vanished">Paridad</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>Bits de parada</translation>
+        <translation type="vanished">Bits de parada</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>Control de flujo</translation>
+        <translation type="vanished">Control de flujo</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Idioma</translation>
+        <translation type="vanished">Idioma</translation>
     </message>
     <message>
         <source>Open mode</source>
@@ -916,11 +980,23 @@
     </message>
     <message>
         <source>Start sequence</source>
-        <translation>Secuencia de inicio</translation>
+        <translation type="vanished">Secuencia de inicio</translation>
     </message>
     <message>
         <source>End sequence</source>
-        <translation>Secuencia de terminación</translation>
+        <translation type="vanished">Secuencia de terminación</translation>
+    </message>
+    <message>
+        <source>Serial</source>
+        <translation>Puerto serial</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation>Red</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Opciones</translation>
     </message>
 </context>
 <context>

@@ -529,6 +529,13 @@
     </message>
 </context>
 <context>
+    <name>IO::DataSources::Network</name>
+    <message>
+        <source>Socket error</source>
+        <translation>套接字错误</translation>
+    </message>
+</context>
+<context>
     <name>IO::DataSources::Serial</name>
     <message>
         <source>None</source>
@@ -672,10 +679,52 @@
     </message>
 </context>
 <context>
+    <name>Network</name>
+    <message>
+        <source>Socket type</source>
+        <translation>插座类型</translation>
+    </message>
+    <message>
+        <source>IP Address</source>
+        <translation>IP地址</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>港口</translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>
         <translation>无法加载欢迎文本</translation>
+    </message>
+</context>
+<context>
+    <name>Serial</name>
+    <message>
+        <source>COM Port</source>
+        <translation>COM端口</translation>
+    </message>
+    <message>
+        <source>Baud Rate</source>
+        <translation>波特率</translation>
+    </message>
+    <message>
+        <source>Data Bits</source>
+        <translation>数据位</translation>
+    </message>
+    <message>
+        <source>Parity</source>
+        <translation>校验位</translation>
+    </message>
+    <message>
+        <source>Stop Bits</source>
+        <translation>停止位</translation>
+    </message>
+    <message>
+        <source>Flow Control</source>
+        <translation>流控位</translation>
     </message>
 </context>
 <context>
@@ -750,6 +799,21 @@
     </message>
 </context>
 <context>
+    <name>Settings</name>
+    <message>
+        <source>Language</source>
+        <translation>语言</translation>
+    </message>
+    <message>
+        <source>Start sequence</source>
+        <translation>启动顺序</translation>
+    </message>
+    <message>
+        <source>End sequence</source>
+        <translation>完成顺序</translation>
+    </message>
+</context>
+<context>
     <name>Setup</name>
     <message>
         <source>Communication Mode</source>
@@ -773,31 +837,31 @@
     </message>
     <message>
         <source>COM Port</source>
-        <translation>COM端口</translation>
+        <translation type="vanished">COM端口</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>波特率</translation>
+        <translation type="vanished">波特率</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>数据位</translation>
+        <translation type="vanished">数据位</translation>
     </message>
     <message>
         <source>Parity</source>
-        <translation>校验位</translation>
+        <translation type="vanished">校验位</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>停止位</translation>
+        <translation type="vanished">停止位</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>流控位</translation>
+        <translation type="vanished">流控位</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>语言</translation>
+        <translation type="vanished">语言</translation>
     </message>
     <message>
         <source>Open mode</source>
@@ -833,11 +897,23 @@
     </message>
     <message>
         <source>Start sequence</source>
-        <translation>启动顺序</translation>
+        <translation type="vanished">启动顺序</translation>
     </message>
     <message>
         <source>End sequence</source>
-        <translation>完成顺序</translation>
+        <translation type="vanished">完成顺序</translation>
+    </message>
+    <message>
+        <source>Serial</source>
+        <translation>串行端口</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation>网络</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>设定值</translation>
     </message>
 </context>
 <context>

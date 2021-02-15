@@ -501,6 +501,13 @@
     </message>
 </context>
 <context>
+    <name>IO::DataSources::Network</name>
+    <message>
+        <source>Socket error</source>
+        <translation>Socket-Fehler</translation>
+    </message>
+</context>
+<context>
     <name>IO::DataSources::Serial</name>
     <message>
         <source>None</source>
@@ -640,10 +647,52 @@
     </message>
 </context>
 <context>
+    <name>Network</name>
+    <message>
+        <source>Socket type</source>
+        <translation>Steckdosentyp</translation>
+    </message>
+    <message>
+        <source>IP Address</source>
+        <translation>IP Adresse</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Port-Nummer</translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>
         <translation>Begrüßungstext konnte nicht geladen werden :(</translation>
+    </message>
+</context>
+<context>
+    <name>Serial</name>
+    <message>
+        <source>COM Port</source>
+        <translation>COM Schnittstelle</translation>
+    </message>
+    <message>
+        <source>Baud Rate</source>
+        <translation>Baud rate</translation>
+    </message>
+    <message>
+        <source>Data Bits</source>
+        <translation>Data bits</translation>
+    </message>
+    <message>
+        <source>Parity</source>
+        <translation>Parität</translation>
+    </message>
+    <message>
+        <source>Stop Bits</source>
+        <translation>Stop bits</translation>
+    </message>
+    <message>
+        <source>Flow Control</source>
+        <translation>Fluss-Kontrolle</translation>
     </message>
 </context>
 <context>
@@ -710,6 +759,21 @@
     </message>
 </context>
 <context>
+    <name>Settings</name>
+    <message>
+        <source>Language</source>
+        <translation>Sprache</translation>
+    </message>
+    <message>
+        <source>Start sequence</source>
+        <translation>Startsequenz</translation>
+    </message>
+    <message>
+        <source>End sequence</source>
+        <translation>Kündigungssequenz</translation>
+    </message>
+</context>
+<context>
     <name>Setup</name>
     <message>
         <source>Communication Mode</source>
@@ -733,31 +797,31 @@
     </message>
     <message>
         <source>COM Port</source>
-        <translation>COM Schnittstelle</translation>
+        <translation type="vanished">COM Schnittstelle</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>Baud rate</translation>
+        <translation type="vanished">Baud rate</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>Data bits</translation>
+        <translation type="vanished">Data bits</translation>
     </message>
     <message>
         <source>Parity</source>
-        <translation>Parität</translation>
+        <translation type="vanished">Parität</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>Stop bits</translation>
+        <translation type="vanished">Stop bits</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>Fluss-Kontrolle</translation>
+        <translation type="vanished">Fluss-Kontrolle</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Sprache</translation>
+        <translation type="vanished">Sprache</translation>
     </message>
     <message>
         <source>Open mode</source>
@@ -793,11 +857,23 @@
     </message>
     <message>
         <source>Start sequence</source>
-        <translation>Startsequenz</translation>
+        <translation type="vanished">Startsequenz</translation>
     </message>
     <message>
         <source>End sequence</source>
-        <translation>Kündigungssequenz</translation>
+        <translation type="vanished">Kündigungssequenz</translation>
+    </message>
+    <message>
+        <source>Serial</source>
+        <translation>Serielle Schnittstelle</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation>Netzwerk</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Einstellungen</translation>
     </message>
 </context>
 <context>
