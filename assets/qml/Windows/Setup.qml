@@ -184,7 +184,7 @@ Control {
             id: tab
             Layout.fillWidth: true
             onCurrentIndexChanged: {
-                if (currentIndex < 2)
+                if (currentIndex < 2 && currentIndex !== Cpp_IO_Manager.dataSource)
                     Cpp_IO_Manager.dataSource = currentIndex
             }
 
@@ -215,7 +215,7 @@ Control {
             Layout.fillWidth: true
             Layout.fillHeight: true
             currentIndex: tab.currentIndex
-            Layout.topMargin: -parent.spacing
+            Layout.topMargin: -parent.spacing - 1
             Layout.minimumHeight: serial.implicitHeight + 14
 
             SetupPanes.Serial {

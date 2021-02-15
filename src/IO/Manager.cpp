@@ -400,7 +400,7 @@ void Manager::setDataSource(const DataSource source)
     emit dataSourceChanged();
 
     // Log changes
-    LOG_INFO() << "Data source set to" << source;
+    LOG_TRACE() << "Data source set to" << source;
 }
 
 /**

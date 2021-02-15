@@ -111,6 +111,11 @@ Control {
                         Cpp_IO_Network.port = text
                 }
 
+                validator: IntValidator {
+                    bottom: 0
+                    top: 65535
+                }
+
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Manager.connected
                 Behavior on opacity {NumberAnimation{}}
