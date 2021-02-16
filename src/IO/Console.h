@@ -115,6 +115,7 @@ public:
     Q_INVOKABLE QStringList dataModes() const;
     Q_INVOKABLE QStringList lineEndings() const;
     Q_INVOKABLE QStringList displayModes() const;
+    Q_INVOKABLE QString formatUserHex(const QString &text);
 
 public slots:
     void save();

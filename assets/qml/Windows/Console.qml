@@ -222,13 +222,21 @@ Control {
                 // Validate hex strings
                 //
                 validator: RegExpValidator {
-                    regExp: hexCheckbox.checked ? /^[a-fA-F0-9]+$/ : /[\s\S]*/
+                    regExp: hexCheckbox.checked ? /^(?:([a-f0-9]{2})\s*)+$/i : /[\s\S]*/
                 }
 
                 //
                 // Send data on <enter>
                 //
                 Keys.onReturnPressed: root.sendData()
+
+                //
+                // Add space automatically in hex view
+                //
+                onTextChanged: {
+                    if (hexCheckbox.checked)
+                        send.text = Cpp_IO_Console.formatUserHex(send.text)
+                }
 
                 //
                 // Navigate command history upwards with <up>

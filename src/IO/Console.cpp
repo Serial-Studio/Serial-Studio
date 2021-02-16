@@ -198,6 +198,32 @@ QStringList Console::displayModes() const
 }
 
 /**
+ * Validates the given @a text and adds space to display the text in a byte-oriented view
+ */
+QString Console::formatUserHex(const QString &text)
+{
+    // Remove spaces & stuff
+    auto data = text.simplified();
+    data = data.replace(" ", "");
+
+    // Convert to hex string with spaces between bytes
+    QString str;
+    for (int i = 0; i < data.length(); ++i)
+    {
+        str.append(data.at(i));
+        if ((i + 1) % 2 == 0 && i > 0)
+            str.append(" ");
+    }
+
+    // Chop last space
+    while (str.endsWith(" "))
+        str.chop(1);
+
+    // Return string
+    return str;
+}
+
+/**
  * Allows the user to export the information displayed on the console
  */
 void Console::save()
