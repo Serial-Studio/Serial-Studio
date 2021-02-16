@@ -42,6 +42,10 @@
 
 using namespace CSV;
 
+//
+// Here be dragons...
+//
+
 /*
  * Only instance of the class
  */
@@ -290,8 +294,14 @@ void Player::openFile(const QString &filePath)
         // Read first row & update UI
         if (valid)
         {
+            // Read first data & emit UI signals
             updateData();
             emit openChanged();
+
+            // Play next frame (to force UI to generate groups, graphs & widgets)
+            // Note: nextFrame() MUST BE CALLED AFTER emiting the openChanged() signal in
+            //       order for this monstrosity to work
+            nextFrame();
         }
 
         // Show error to the user
@@ -385,7 +395,7 @@ void Player::updateData()
             // No error, calculate difference & schedule update
             if (!error)
             {
-                auto format = "yyyy/MM/dd/ HH:mm:ss::zzz";
+                auto format = "yyyy/MM/dd/ HH:mm:ss::zzz"; // Same as in Export.cpp
                 auto currDateTime = QDateTime::fromString(currTime, format);
                 auto nextDateTime = QDateTime::fromString(nextTime, format);
                 auto msecsToNextF = currDateTime.msecsTo(nextDateTime);

@@ -295,7 +295,8 @@ void Export::writeValues()
  */
 void Export::updateValues(const QJsonDocument &document, const QDateTime &time)
 {
-    // Ignore if device is not connected
+    // Ignore if device is not connected (we don't want to generate a CSV file when we
+    // are reading another CSV file don't we?)
     if (!IO::Manager::getInstance()->connected())
         return;
 
