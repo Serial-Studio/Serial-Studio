@@ -33,6 +33,8 @@ static Network *INSTANCE = nullptr;
  */
 Network::Network()
 {
+    m_lookupActive = false;
+
     setHost("");
     setPort(defaultPort());
     setSocketType(QAbstractSocket::TcpSocket);
@@ -73,6 +75,14 @@ QString Network::host() const
 quint16 Network::port() const
 {
     return m_port;
+}
+
+/**
+ * Returns @c true if we are currently performing a DNS lookup
+ */
+bool Network::lookupActive() const
+{
+    return m_lookupActive;
 }
 
 /**
@@ -207,8 +217,10 @@ void Network::setHost(const QString &host)
 /**
  * Performs a DNS lookup for the given @a host name
  */
-void Network::findIp(const QString &host)
+void Network::lookup(const QString &host)
 {
+    m_lookupActive = true;
+    emit lookupActiveChanged();
     QHostInfo::lookupHost(host.simplified(), this, &Network::lookupFinished);
 }
 
@@ -251,6 +263,9 @@ void Network::setSocketType(const QAbstractSocket::SocketType type)
  */
 void Network::lookupFinished(const QHostInfo &info)
 {
+    m_lookupActive = false;
+    emit lookupActiveChanged();
+
     if (info.error() == QHostInfo::NoError)
     {
         auto addresses = info.addresses();

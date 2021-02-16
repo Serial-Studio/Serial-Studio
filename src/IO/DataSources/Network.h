@@ -50,25 +50,29 @@ class Network : public QObject
     Q_PROPERTY(quint16 defaultPort
                READ defaultPort
                CONSTANT)
+    Q_PROPERTY(bool lookupActive
+               READ lookupActive
+               NOTIFY lookupActiveChanged)
     // clang-format on
 
 signals:
     void hostChanged();
     void portChanged();
     void socketTypeChanged();
+    void lookupActiveChanged();
 
 public:
     static Network *getInstance();
 
     QString host() const;
     quint16 port() const;
+    bool lookupActive() const;
     int socketTypeIndex() const;
     bool configurationOk() const;
     QStringList socketTypes() const;
     QAbstractSocket::SocketType socketType() const;
 
     static QString defaultHost() { return "127.0.0.1"; }
-
     static quint16 defaultPort() { return 23; }
 
     QIODevice *openNetworkPort();
@@ -79,7 +83,7 @@ public slots:
     void disconnectDevice();
     void setPort(const quint16 port);
     void setHost(const QString &host);
-    void findIp(const QString &host);
+    void lookup(const QString &host);
     void setSocketTypeIndex(const int index);
     void setSocketType(const QAbstractSocket::SocketType type);
 
@@ -94,6 +98,7 @@ private:
 private:
     QString m_host;
     quint16 m_port;
+    bool m_lookupActive;
     QIODevice *m_device;
     QTcpSocket m_tcpSocket;
     QUdpSocket m_udpSocket;

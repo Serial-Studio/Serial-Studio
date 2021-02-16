@@ -45,7 +45,7 @@ Console::Console()
     , m_historyItem(0)
     , m_echo(false)
     , m_autoscroll(true)
-    , m_showTimestamp(true)
+    , m_showTimestamp(false)
     , m_isStartingLine(true)
 {
     // Clear buffer & reserve memory

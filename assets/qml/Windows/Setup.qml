@@ -45,24 +45,25 @@ Control {
         //
         property alias auto: commAuto.checked
         property alias manual: commManual.checked
-        property alias csvExport: csvLogging.checked
         property alias tabIndex: tab.currentIndex
+        property alias csvExport: csvLogging.checked
 
         //
         // Serial settings
         //
-        property alias baudRate: serial.baudRate
-        property alias stopBits: serial.stopBits
         property alias parity: serial.parity
-        property alias flowControl: serial.flowControl
+        property alias baudRate: serial.baudRate
         property alias dataBits: serial.dataBits
+        property alias stopBits: serial.stopBits
+        property alias flowControl: serial.flowControl
 
         //
         // Network settings
         //
-        property alias address: network.address
         property alias port: network.port
+        property alias address: network.address
         property alias socketType: network.socketType
+        property alias addressLookup: network.addressLookup
 
         //
         // App settings

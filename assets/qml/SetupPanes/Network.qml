@@ -33,6 +33,7 @@ Control {
     //
     property alias port: _portText.text
     property alias address: _ipText.text
+    property alias addressLookup: _addrLookup.text
     property alias socketType: _typeCombo.currentIndex
 
     //
@@ -149,8 +150,8 @@ Control {
                 Layout.fillWidth: true
                 opacity: enabled ? 1 : 0.5
                 Layout.alignment: Qt.AlignVCenter
-                enabled: !Cpp_IO_Manager.connected
-                onAccepted: Cpp_IO_Network.findIp(text)
+                enabled: !Cpp_IO_Manager.connected && !Cpp_IO_Network.lookupActive
+                onAccepted: Cpp_IO_Network.lookup(text)
                 placeholderText: qsTr("Enter address (e.g. google.com)")
 
                 Behavior on opacity {NumberAnimation{}}
@@ -162,8 +163,8 @@ Control {
                 Layout.maximumWidth: height
                 Layout.alignment: Qt.AlignVCenter
                 icon.source: "qrc:/icons/search.svg"
-                onClicked: Cpp_IO_Network.findIp(_addrLookup.text)
-                enabled: _addrLookup.text.length > 0 && !Cpp_IO_Manager.connected
+                onClicked: Cpp_IO_Network.lookup(_addrLookup.text)
+                enabled: _addrLookup.text.length > 0 && !Cpp_IO_Manager.connected && !Cpp_IO_Network.lookupActive
 
                 Behavior on opacity {NumberAnimation{}}
             }
