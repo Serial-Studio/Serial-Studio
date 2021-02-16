@@ -26,6 +26,7 @@ import QtQuick.Controls 2.12
 
 Control {
     id: root
+    implicitHeight: layout.implicitHeight + app.spacing * 2
 
     //
     // Access to properties
@@ -38,6 +39,7 @@ Control {
     // Layout
     //
     ColumnLayout {
+        id: layout
         anchors.fill: parent
         anchors.margins: app.spacing
 
@@ -127,6 +129,7 @@ Control {
         //
         Item {
             Layout.fillHeight: true
+            Layout.minimumHeight: app.spacing
         }
 
         //
@@ -167,7 +170,7 @@ Control {
         }
 
         //
-        // Vertical spacer
+        // Spacer
         //
         Item {
             Layout.fillHeight: true

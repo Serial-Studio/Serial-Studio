@@ -211,13 +211,32 @@ Control {
         // Tab bar contents
         //
         StackLayout {
+            id: stack
             clip: true
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.minimumHeight: 218
-            Layout.maximumHeight: 218
+            Layout.fillHeight: false
             currentIndex: tab.currentIndex
             Layout.topMargin: -parent.spacing - 1
+            Layout.minimumHeight: implicitHeight
+            Layout.maximumHeight: implicitHeight
+            Layout.preferredHeight: implicitHeight
+            onCurrentIndexChanged: getImplicitHeight()
+            Component.onCompleted: getImplicitHeight()
+
+            function getImplicitHeight() {
+                stack.implicitHeight = 0
+
+                switch (currentIndex) {
+                case 0:
+                    stack.implicitHeight = serial.implicitHeight
+                    break
+                case 1:
+                    stack.implicitHeight = network.implicitHeight
+                    break
+                case 2:
+                    stack.implicitHeight = settings.implicitHeight
+                }
+            }
 
             SetupPanes.Serial {
                 id: serial
@@ -323,8 +342,7 @@ Control {
         // Spacer
         //
         Item {
-            Layout.fillHeight: true
-            Layout.minimumHeight: app.spacing
+            Layout.minimumHeight: app.spacing * 4
         }
     }
 }

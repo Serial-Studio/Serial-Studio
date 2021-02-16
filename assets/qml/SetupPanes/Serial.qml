@@ -26,6 +26,7 @@ import QtQuick.Controls 2.12
 
 Control {
     id: root
+    implicitHeight: layout.implicitHeight + app.spacing * 2
 
     //
     // Access to properties
@@ -65,6 +66,7 @@ Control {
         // Controls
         //
         GridLayout {
+            id: layout
             columns: 2
             Layout.fillWidth: true
             rowSpacing: app.spacing
