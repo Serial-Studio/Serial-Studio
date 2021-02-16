@@ -100,7 +100,6 @@ int Network::socketTypeIndex() const
  */
 bool Network::configurationOk() const
 {
-    return true;
     return port() > 0 && !QHostAddress(host()).isNull();
 }
 
