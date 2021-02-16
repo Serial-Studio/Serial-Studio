@@ -150,6 +150,20 @@ void Export::closeFile()
  */
 void Export::writeValues()
 {
+    // Bubble-sort the JSON frames so that they are ordered from earliest to most recent
+    for (int i = 0; i < m_jsonList.count() - 1; ++i)
+    {
+        for (int j = 0; j < m_jsonList.count() - i - 1; ++j)
+        {
+            auto dateTimeA = m_jsonList.at(j + 0).first;
+            auto dateTimeB = m_jsonList.at(j + 1).first;
+
+            if (dateTimeA > dateTimeB)
+                m_jsonList.swapItemsAt(j, j + 1);
+        }
+    }
+
+    // Export JSON frames
     for (int k = 0; k < m_jsonList.count(); ++k)
     {
         // Get project title & cell values
