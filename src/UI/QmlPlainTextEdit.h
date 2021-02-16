@@ -92,6 +92,10 @@ class QmlPlainTextEdit : public QQuickPaintedItem
                READ scrollbarWidth
                WRITE setScrollbarWidth
                NOTIFY scrollbarWidthChanged)
+    Q_PROPERTY(bool vt100emulation
+               READ vt100emulation
+               WRITE setVt100Emulation
+               NOTIFY vt100EmulationChanged)
     // clang-format on
 
 signals:
@@ -106,11 +110,21 @@ signals:
     void widgetEnabledChanged();
     void scrollbarWidthChanged();
     void centerOnScrollChanged();
+    void vt100EmulationChanged();
     void placeholderTextChanged();
     void undoRedoEnabledChanged();
     void maximumBlockCountChanged();
 
 public:
+    enum VT100_State
+    {
+        VT100_Text,
+        VT100_Escape,
+        VT100_Command,
+        VT100_ResetFont
+    };
+    Q_ENUM(VT100_State)
+
     QmlPlainTextEdit(QQuickItem *parent = 0);
     ~QmlPlainTextEdit();
 
@@ -131,6 +145,7 @@ public:
     bool copyAvailable() const;
     bool widgetEnabled() const;
     bool centerOnScroll() const;
+    bool vt100emulation() const;
     bool undoRedoEnabled() const;
     int maximumBlockCount() const;
     QString placeholderText() const;
@@ -155,6 +170,7 @@ public slots:
     void setPalette(const QPalette &palette);
     void setWidgetEnabled(const bool enabled);
     void setCenterOnScroll(const bool enabled);
+    void setVt100Emulation(const bool enabled);
     void setUndoRedoEnabled(const bool enabled);
     void setPlaceholderText(const QString &text);
     void scrollToBottom(const bool repaint = false);
@@ -164,16 +180,22 @@ private slots:
     void updateWidgetSize();
     void updateScrollbarVisibility();
     void setCopyAvailable(const bool yes);
+    void addText(const QString &text, const bool enableVt100);
 
 protected:
     void processMouseEvents(QMouseEvent *event);
     void processWheelEvents(QWheelEvent *event);
 
 private:
+    QString vt100Processing(const QString &data);
+
+private:
     QColor m_color;
     bool m_autoscroll;
+    bool m_emulateVt100;
     bool m_copyAvailable;
     QPlainTextEdit *m_textEdit;
+    VT100_State m_terminalState;
 };
 }
 

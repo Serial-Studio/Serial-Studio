@@ -46,8 +46,11 @@ using namespace UI;
  */
 QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     : QQuickPaintedItem(parent)
+    , m_autoscroll(true)
+    , m_emulateVt100(false)
     , m_copyAvailable(false)
     , m_textEdit(new QPlainTextEdit)
+    , m_terminalState(VT100_Text)
 {
     // Set item flags
     setFlag(ItemHasContents, true);
@@ -253,6 +256,15 @@ bool QmlPlainTextEdit::widgetEnabled() const
 bool QmlPlainTextEdit::centerOnScroll() const
 {
     return textEdit()->centerOnScroll();
+}
+
+/**
+ * Returns true if the control shall parse basic VT-100 escape secuences. This can be
+ * useful if you need to interface with a shell/CLI from Serial Studio.
+ */
+bool QmlPlainTextEdit::vt100emulation() const
+{
+    return m_emulateVt100;
 }
 
 /**
@@ -485,21 +497,7 @@ void QmlPlainTextEdit::setAutoscroll(const bool enabled)
  */
 void QmlPlainTextEdit::insertText(const QString &text)
 {
-    // Add text at the end of the text document
-    QTextCursor cursor(textEdit()->document());
-    cursor.beginEditBlock();
-    cursor.movePosition(QTextCursor::End);
-    cursor.insertText(text);
-    cursor.endEditBlock();
-
-    // Autoscroll to bottom (if needed)
-    updateScrollbarVisibility();
-    if (autoscroll())
-        scrollToBottom();
-
-    // Redraw the control
-    update();
-    emit textChanged();
+    addText(text, vt100emulation());
 }
 
 /**
@@ -528,6 +526,17 @@ void QmlPlainTextEdit::setCenterOnScroll(const bool enabled)
     update();
 
     emit centerOnScrollChanged();
+}
+
+/**
+ * Enables/disables interpretation of VT-100 escape secuences. This can be useful when
+ * interfacing through network ports or interfacing with a MCU that implements some
+ * kind of shell.
+ */
+void QmlPlainTextEdit::setVt100Emulation(const bool enabled)
+{
+    m_emulateVt100 = enabled;
+    emit vt100EmulationChanged();
 }
 
 /**
@@ -639,6 +648,33 @@ void QmlPlainTextEdit::setCopyAvailable(const bool yes)
 }
 
 /**
+ * Inserts the given @a text directly, no additional line breaks added.
+ */
+void QmlPlainTextEdit::addText(const QString &text, const bool enableVt100)
+{
+    // Get text to insert
+    QString textToInsert = text;
+    if (enableVt100)
+        textToInsert = vt100Processing(text);
+
+    // Add text at the end of the text document
+    QTextCursor cursor(textEdit()->document());
+    cursor.beginEditBlock();
+    cursor.movePosition(QTextCursor::End);
+    cursor.insertText(textToInsert);
+    cursor.endEditBlock();
+
+    // Autoscroll to bottom (if needed)
+    updateScrollbarVisibility();
+    if (autoscroll())
+        scrollToBottom();
+
+    // Redraw the control
+    update();
+    emit textChanged();
+}
+
+/**
  * Hack: call the appropiate protected mouse event handler function of the QPlainTextEdit
  *       item depending on event type
  */
@@ -719,4 +755,115 @@ void QmlPlainTextEdit::processWheelEvents(QWheelEvent *event)
             }
         }
     }
+}
+
+/**
+ * Processes the given @a data to remove the escape sequences from the text. Colors and
+ * text format is not processed.
+ *
+ * Implementation based on https://github.com/sebcaux/QVTerminal
+ * List of commands: https://espterm.github.io/docs/VT100%20escape%20codes.html
+ *
+ * I did the necessary stuff to be able to watch ASCII Star Wars from Serial Studio.
+ * If you want/need to do more stuff, please make a PR.
+ */
+QString QmlPlainTextEdit::vt100Processing(const QString &data)
+{
+    QString text;
+    QString command;
+    bool hasNumbers = false;
+    bool hasCommand = false;
+
+    for (int i = 0; i < data.length(); ++i)
+    {
+        QChar c = data.at(i);
+        switch (m_terminalState)
+        {
+            case VT100_Text:
+                if (c == 0x1B)
+                {
+                    addText(text, false);
+                    text.clear();
+                    m_terminalState = VT100_Escape;
+                }
+
+                else if (c == "\n")
+                {
+                    addText(text + "\n", false);
+                    text.clear();
+                }
+
+                else
+                    text.append(c);
+
+                break;
+            case VT100_Escape:
+                command.clear();
+                if (c == "[")
+                    m_terminalState = VT100_Command;
+                else if (c == "(")
+                    m_terminalState = VT100_ResetFont;
+                break;
+            case VT100_Command:
+                // Go to escape sequence
+                if (c == 0x1B)
+                {
+                    m_terminalState = VT100_Escape;
+                    break;
+                }
+
+                // Escape from command mode
+                hasNumbers = (c >= '0' && c <= '9');
+                hasCommand = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+                if (!hasNumbers && !hasCommand)
+                {
+                    m_terminalState = VT100_Text;
+                    break;
+                }
+
+                // Construct command
+                command.append(c);
+
+                // Clear screen
+                if (command == "2J")
+                {
+                    textEdit()->clear();
+                    m_terminalState = VT100_Text;
+                }
+
+                // Move cursor to upper left corner (ugly implementation)
+                else if (command == "H")
+                {
+                    textEdit()->clear();
+                    m_terminalState = VT100_Text;
+                }
+
+                // Clear line
+                else if (command == "2K")
+                {
+                    textEdit()->setFocus();
+                    auto storedCursor = textEdit()->textCursor();
+                    textEdit()->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+                    textEdit()->moveCursor(QTextCursor::StartOfLine,
+                                           QTextCursor::MoveAnchor);
+                    textEdit()->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
+                    textEdit()->textCursor().removeSelectedText();
+                    textEdit()->textCursor().deletePreviousChar();
+                    textEdit()->setTextCursor(storedCursor);
+                    m_terminalState = VT100_Text;
+                }
+
+                // Escape to normal text if command length >= 3 chars
+                else if (command.length() >= 3)
+                    m_terminalState = VT100_Text;
+
+                break;
+            case VT100_ResetFont:
+                m_terminalState = VT100_Text;
+                break;
+        }
+    }
+
+    // Return VT-100 processed text
+    return text;
 }

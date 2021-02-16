@@ -164,6 +164,7 @@ Control {
             focus: true
             readOnly: true
             font.pixelSize: 12
+            vt100emulation: true
             centerOnScroll: false
             undoRedoEnabled: false
             Layout.fillWidth: true
@@ -296,6 +297,17 @@ Control {
                 onCheckedChanged: {
                     if (Cpp_IO_Console.showTimestamp != checked)
                         Cpp_IO_Console.showTimestamp = checked
+                }
+            }
+
+            CheckBox {
+                id: filterVt100
+                text: qsTr("VT-100")
+                Layout.alignment: Qt.AlignVCenter
+                checked: textEdit.vt100emulation
+                onCheckedChanged: {
+                    if (textEdit.vt100emulation != checked)
+                        textEdit.vt100emulation = checked
                 }
             }
 
