@@ -66,6 +66,7 @@ Control {
     Settings {
         property alias echo: echoCheck.checked
         property alias hex: hexCheckbox.checked
+        property alias vt100Enabled: vt100.checked
         property alias timestamp: timestampCheck.checked
         property alias autoscroll: autoscrollCheck.checked
         property alias lineEnding: lineEndingCombo.currentIndex
@@ -301,7 +302,7 @@ Control {
             }
 
             CheckBox {
-                id: filterVt100
+                id: vt100
                 text: qsTr("VT-100")
                 Layout.alignment: Qt.AlignVCenter
                 checked: textEdit.vt100emulation
