@@ -214,9 +214,10 @@ Control {
             clip: true
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.minimumHeight: 218
+            Layout.maximumHeight: 218
             currentIndex: tab.currentIndex
             Layout.topMargin: -parent.spacing - 1
-            Layout.minimumHeight: serial.implicitHeight + 14
 
             SetupPanes.Serial {
                 id: serial

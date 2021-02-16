@@ -101,7 +101,7 @@ int Network::socketTypeIndex() const
 bool Network::configurationOk() const
 {
     return true;
-    // return port() > 0 && !QHostAddress(host()).isNull();
+    return port() > 0 && !QHostAddress(host()).isNull();
 }
 
 /**
@@ -210,7 +210,7 @@ void Network::setHost(const QString &host)
  */
 void Network::findIp(const QString &host)
 {
-    QHostInfo::lookupHost(host, this, &Network::lookupFinished);
+    QHostInfo::lookupHost(host.simplified(), this, &Network::lookupFinished);
 }
 
 /**

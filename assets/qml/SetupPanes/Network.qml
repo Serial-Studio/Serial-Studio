@@ -134,6 +134,9 @@ Control {
         //
         Label {
             text: qsTr("DNS lookup") + ": "
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_IO_Manager.connected
+            Behavior on opacity {NumberAnimation{}}
         } RowLayout {
             Layout.fillWidth: true
             spacing: app.spacing / 2
@@ -141,9 +144,13 @@ Control {
             TextField {
                 id: _addrLookup
                 Layout.fillWidth: true
+                opacity: enabled ? 1 : 0.5
                 Layout.alignment: Qt.AlignVCenter
+                enabled: !Cpp_IO_Manager.connected
                 onAccepted: Cpp_IO_Network.findIp(text)
                 placeholderText: qsTr("Enter address (e.g. google.com)")
+
+                Behavior on opacity {NumberAnimation{}}
             }
 
             Button {
@@ -152,8 +159,10 @@ Control {
                 Layout.maximumWidth: height
                 Layout.alignment: Qt.AlignVCenter
                 icon.source: "qrc:/icons/search.svg"
-                enabled: _addrLookup.text.length > 0
                 onClicked: Cpp_IO_Network.findIp(_addrLookup.text)
+                enabled: _addrLookup.text.length > 0 && !Cpp_IO_Manager.connected
+
+                Behavior on opacity {NumberAnimation{}}
             }
         }
 
