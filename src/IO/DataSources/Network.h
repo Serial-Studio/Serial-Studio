@@ -10,6 +10,7 @@
 #ifndef IO_DATA_SOURCES_NETWORK_H
 #define IO_DATA_SOURCES_NETWORK_H
 
+#include <QHostInfo>
 #include <QTcpSocket>
 #include <QUdpSocket>
 #include <QByteArray>
@@ -78,10 +79,12 @@ public slots:
     void disconnectDevice();
     void setPort(const quint16 port);
     void setHost(const QString &host);
+    void findIp(const QString &host);
     void setSocketTypeIndex(const int index);
     void setSocketType(const QAbstractSocket::SocketType type);
 
 private slots:
+    void lookupFinished(const QHostInfo &info);
     void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:

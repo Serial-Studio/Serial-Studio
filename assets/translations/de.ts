@@ -504,7 +504,15 @@
     <name>IO::DataSources::Network</name>
     <message>
         <source>Socket error</source>
-        <translation>Socket-Fehler</translation>
+        <translation type="vanished">Socket-Fehler</translation>
+    </message>
+    <message>
+        <source>IP address lookup error</source>
+        <translation>IP-Adressensuchfehler</translation>
+    </message>
+    <message>
+        <source>Network socket error</source>
+        <translation>Netzwerk-Socket-Fehler</translation>
     </message>
 </context>
 <context>
@@ -547,7 +555,11 @@
     </message>
     <message>
         <source>Critical serial port error</source>
-        <translation>Kritischer Fehler an der seriellen Schnittstelle</translation>
+        <translation type="vanished">Kritischer Fehler an der seriellen Schnittstelle</translation>
+    </message>
+    <message>
+        <source>Serial port error</source>
+        <translation>Fehler an der seriellen Schnittstelle</translation>
     </message>
 </context>
 <context>
@@ -659,6 +671,14 @@
     <message>
         <source>Port</source>
         <translation>Port-Nummer</translation>
+    </message>
+    <message>
+        <source>DNS lookup</source>
+        <translation>DNS-Suche</translation>
+    </message>
+    <message>
+        <source>Enter address (e.g. google.com)</source>
+        <translation>Adresse eingeben (z. B. google.com)</translation>
     </message>
 </context>
 <context>

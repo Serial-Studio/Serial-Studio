@@ -123,6 +123,41 @@ Control {
         }
 
         //
+        // Spacer
+        //
+        Item {
+            Layout.fillHeight: true
+        }
+
+        //
+        // Address lookup
+        //
+        Label {
+            text: qsTr("DNS lookup") + ": "
+        } RowLayout {
+            Layout.fillWidth: true
+            spacing: app.spacing / 2
+
+            TextField {
+                id: _addrLookup
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+                onAccepted: Cpp_IO_Network.findIp(text)
+                placeholderText: qsTr("Enter address (e.g. google.com)")
+            }
+
+            Button {
+                icon.color: palette.text
+                opacity: enabled ? 1 : 0.5
+                Layout.maximumWidth: height
+                Layout.alignment: Qt.AlignVCenter
+                icon.source: "qrc:/icons/search.svg"
+                enabled: _addrLookup.text.length > 0
+                onClicked: Cpp_IO_Network.findIp(_addrLookup.text)
+            }
+        }
+
+        //
         // Vertical spacer
         //
         Item {

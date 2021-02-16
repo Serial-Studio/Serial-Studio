@@ -536,7 +536,15 @@
     <name>IO::DataSources::Network</name>
     <message>
         <source>Socket error</source>
-        <translation>Error de socket</translation>
+        <translation type="vanished">Error de socket</translation>
+    </message>
+    <message>
+        <source>IP address lookup error</source>
+        <translation>Error de búsqueda de dirección IP</translation>
+    </message>
+    <message>
+        <source>Network socket error</source>
+        <translation>Error de conexión de red</translation>
     </message>
 </context>
 <context>
@@ -579,7 +587,11 @@
     </message>
     <message>
         <source>Critical serial port error</source>
-        <translation>Error crítico del puerto serie</translation>
+        <translation type="vanished">Error crítico del puerto serie</translation>
+    </message>
+    <message>
+        <source>Serial port error</source>
+        <translation>Error de puerto serie</translation>
     </message>
 </context>
 <context>
@@ -726,6 +738,14 @@
     <message>
         <source>Port</source>
         <translation>Puerto</translation>
+    </message>
+    <message>
+        <source>DNS lookup</source>
+        <translation>Búsqueda DNS</translation>
+    </message>
+    <message>
+        <source>Enter address (e.g. google.com)</source>
+        <translation>Ingresar dirección (p.ej. google.com)</translation>
     </message>
 </context>
 <context>

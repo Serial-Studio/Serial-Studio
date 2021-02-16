@@ -632,7 +632,7 @@ void Serial::handleError(QSerialPort::SerialPortError error)
     {
         auto errorStr = port()->errorString();
         Manager::getInstance()->disconnectDevice();
-        Misc::Utilities::showMessageBox(tr("Critical serial port error"), errorStr);
+        Misc::Utilities::showMessageBox(tr("Serial port error"), errorStr);
     }
 }
 

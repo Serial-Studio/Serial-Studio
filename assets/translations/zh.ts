@@ -532,7 +532,15 @@
     <name>IO::DataSources::Network</name>
     <message>
         <source>Socket error</source>
-        <translation>套接字错误</translation>
+        <translation type="vanished">套接字错误</translation>
+    </message>
+    <message>
+        <source>IP address lookup error</source>
+        <translation>IP地址查询错误</translation>
+    </message>
+    <message>
+        <source>Network socket error</source>
+        <translation>网络套接字错误</translation>
     </message>
 </context>
 <context>
@@ -575,7 +583,11 @@
     </message>
     <message>
         <source>Critical serial port error</source>
-        <translation>严重的串行端口错误</translation>
+        <translation type="vanished">严重的串行端口错误</translation>
+    </message>
+    <message>
+        <source>Serial port error</source>
+        <translation>串口错误</translation>
     </message>
 </context>
 <context>
@@ -691,6 +703,14 @@
     <message>
         <source>Port</source>
         <translation>港口</translation>
+    </message>
+    <message>
+        <source>DNS lookup</source>
+        <translation>DNS查询</translation>
+    </message>
+    <message>
+        <source>Enter address (e.g. google.com)</source>
+        <translation>输入地址（例如baidu.com）</translation>
     </message>
 </context>
 <context>

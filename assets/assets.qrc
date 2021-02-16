@@ -88,5 +88,6 @@
         <file>qml/SetupPanes/Network.qml</file>
         <file>qml/SetupPanes/Serial.qml</file>
         <file>qml/SetupPanes/Settings.qml</file>
+        <file>icons/search.svg</file>
     </qresource>
 </RCC>

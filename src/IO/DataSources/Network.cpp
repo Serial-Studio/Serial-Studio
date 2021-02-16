@@ -21,6 +21,8 @@
  */
 
 #include "Network.h"
+
+#include <IO/Manager.h>
 #include <Misc/Utilities.h>
 
 using namespace IO::DataSources;
@@ -204,6 +206,14 @@ void Network::setHost(const QString &host)
 }
 
 /**
+ * Performs a DNS lookup for the given @a host name
+ */
+void Network::findIp(const QString &host)
+{
+    QHostInfo::lookupHost(host, this, &Network::lookupFinished);
+}
+
+/**
  * Changes the current socket type given an index of the list returned by the
  * @c socketType() function.
  */
@@ -237,6 +247,25 @@ void Network::setSocketType(const QAbstractSocket::SocketType type)
 }
 
 /**
+ * Sets the host IP address when the lookup finishes.
+ * If the lookup fails, the error code/string shall be shown to the user in a messagebox.
+ */
+void Network::lookupFinished(const QHostInfo &info)
+{
+    if (info.error() == QHostInfo::NoError)
+    {
+        auto addresses = info.addresses();
+        if (addresses.count() >= 1)
+        {
+            setHost(addresses.first().toString());
+            return;
+        }
+    }
+
+    Misc::Utilities::showMessageBox(tr("IP address lookup error"), info.errorString());
+}
+
+/**
  * This function is called whenever a socket error occurs, it disconnects the socket
  * from the host and displays the error in a message box.
  */
@@ -250,6 +279,6 @@ void Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
     else
         error = QString::number(socketError);
 
-    Misc::Utilities::showMessageBox(tr("Socket error"), error);
-    disconnectDevice();
+    Manager::getInstance()->disconnectDevice();
+    Misc::Utilities::showMessageBox(tr("Network socket error"), error);
 }

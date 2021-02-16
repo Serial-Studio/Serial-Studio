@@ -440,7 +440,11 @@
 <context>
     <name>IO::DataSources::Network</name>
     <message>
-        <source>Socket error</source>
+        <source>IP address lookup error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Network socket error</source>
         <translation></translation>
     </message>
 </context>
@@ -483,7 +487,7 @@
         <translation>Select port</translation>
     </message>
     <message>
-        <source>Critical serial port error</source>
+        <source>Serial port error</source>
         <translation></translation>
     </message>
 </context>
@@ -548,6 +552,14 @@
     </message>
     <message>
         <source>Port</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>DNS lookup</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Enter address (e.g. google.com)</source>
         <translation></translation>
     </message>
 </context>
