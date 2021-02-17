@@ -94,6 +94,11 @@ ApplicationWindow {
     readonly property bool widgetsAvailable: Cpp_UI_WidgetProvider.totalWidgetCount > 0
 
     //
+    // Menubar status
+    //
+    property bool menubarEnabled: true
+
+    //
     // Check for updates (non-silent mode)
     //
     function checkForUpdates() {
@@ -148,6 +153,13 @@ ApplicationWindow {
     //
     function copyConsole() {
         terminal.copy()
+    }
+
+    //
+    // Hide/show menubar
+    //
+    function toggleMenubar() {
+        app.menubarEnabled = !app.menubarEnabled
     }
 
     //
@@ -303,6 +315,7 @@ ApplicationWindow {
         property alias appStatus: app.appLaunchStatus
         property alias autoUpdater: app.automaticUpdates
         property alias appMaximized: app.windowMaximized
+        property alias menubarVisible: app.menubarEnabled
     }
 
     //

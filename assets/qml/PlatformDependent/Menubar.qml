@@ -25,6 +25,7 @@ import QtQuick.Controls 2.12
 
 MenuBar {
     id: root
+    visible: app.menubarEnabled
 
     //
     // Set background color + border
@@ -207,7 +208,7 @@ MenuBar {
 
         DecentMenuItem {
             sequence: "alt+m"
-            onTriggered: root.visible = !root.visible
+            onTriggered: app.toggleMenubar()
             text: root.visible ? qsTr("Hide menubar") : qsTr("Show menubar")
         }
     }

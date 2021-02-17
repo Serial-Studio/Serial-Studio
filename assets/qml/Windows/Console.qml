@@ -143,11 +143,17 @@ Control {
             enabled: Cpp_IO_Console.saveAvailable
         }
 
-        MenuSeparator {}
+        MenuSeparator {
+            visible: app.menuBar !== null
+        }
 
         MenuItem {
-            //onTriggered: app.menuBar.visible = !app.menuBar.visible
-            //text: app.menuBar.visible ? qsTr("Hide menubar") : qsTr("Show menubar")
+            enabled: visible
+            visible: app.menuBar !== null
+            onTriggered: app.toggleMenubar()
+            height: visible ? implicitHeight : 0
+            text: visible && app.menuBar.visible ? qsTr("Hide menubar") :
+                                                   qsTr("Show menubar")
         }
     }
 
