@@ -31,16 +31,22 @@ namespace Misc
 {
 class Utilities : public QObject
 {
+    Q_OBJECT
+
 public:
     // clang-format off
-    Q_INVOKABLE static void openLogFile();
-    Q_INVOKABLE static void configureDarkUi();
-    Q_INVOKABLE static void revealFile(const QString& pathToReveal);
-    Q_INVOKABLE static int showMessageBox(QString text,
-                                          QString informativeText,
-                                          QString windowTitle = qAppName(),
-                                          QMessageBox::StandardButtons bt = QMessageBox::Ok);
+    static Utilities* getInstance();
+    static int showMessageBox(QString text,
+                              QString informativeText,
+                              QString windowTitle = qAppName(),
+                              QMessageBox::StandardButtons bt = QMessageBox::Ok);
     //clang-format on
+
+public slots:
+    static void aboutQt();
+    static void openLogFile();
+    static void configureDarkUi();
+    static void revealFile(const QString& pathToReveal);
 };
 }
 

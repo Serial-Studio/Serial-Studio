@@ -22,11 +22,5 @@ actuales, por favor lea la wiki:
 
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
-Atajos de teclado:
-
-  Ctrl + S    Guardar salida de la consola    Ctrl + T    Mostrar la consola
-  Ctrl + O    Reproducir archivo CSV          Ctrl + D    Mostrar el dashboard
-  Ctrl + ,    Mostar panel de configuración   Ctrl + W    Mostrar los widgets
-
 Consejo: haga doble clic en cualquier grupo, gráfico o widget para verlo en
          otra ventana.

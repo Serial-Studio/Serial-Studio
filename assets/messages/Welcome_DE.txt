@@ -24,11 +24,5 @@ MCU-Projekten, lesen Sie bitte das Wiki:
 
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
-Tastatürkürzel:
-
-  Ctrl + S    Konsolenpuffer speichern      Ctrl + T    Konsole anzeigen
-  Ctrl + O    CSV-Datei abspielen           Ctrl + D    Dashboard anzeigen
-  Ctrl + ,    Setup-Bereich umschalten      Ctrl + W    Widgets anzeigen
-
 Tipp: Doppelklicken Sie auf eine Gruppe, ein Diagramm oder ein Widget, um es in
       einem anderen Fenster anzuzeigen.

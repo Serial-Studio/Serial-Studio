@@ -89,5 +89,8 @@
         <file>qml/SetupPanes/Serial.qml</file>
         <file>qml/SetupPanes/Settings.qml</file>
         <file>icons/search.svg</file>
+        <file>qml/PlatformDependent/MenubarMacOS.qml</file>
+        <file>qml/PlatformDependent/Menubar.qml</file>
+        <file>qml/PlatformDependent/DecentMenuItem.qml</file>
     </qresource>
 </RCC>

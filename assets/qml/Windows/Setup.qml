@@ -149,11 +149,14 @@ Control {
 
             Switch {
                 id: csvLogging
-                checked: true
                 palette.highlight: "#2e895c"
                 text: qsTr("Create CSV file")
                 Layout.alignment: Qt.AlignVCenter
-                onCheckedChanged: Cpp_CSV_Export.exportEnabled = checked
+                checked: Cpp_CSV_Export.exportEnabled
+                onCheckedChanged:  {
+                    if (Cpp_CSV_Export.exportEnabled !== checked)
+                        Cpp_CSV_Export.exportEnabled = checked
+                }
             }
 
             Item {

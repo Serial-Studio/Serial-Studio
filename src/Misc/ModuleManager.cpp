@@ -42,6 +42,7 @@
 #include <IO/DataSources/Serial.h>
 #include <IO/DataSources/Network.h>
 
+#include <Misc/Utilities.h>
 #include <Misc/Translator.h>
 #include <Misc/TimerEvents.h>
 #include <Misc/ModuleManager.h>
@@ -145,6 +146,7 @@ void ModuleManager::initializeQmlInterface()
     auto ioSerial = IO::DataSources::Serial::getInstance();
     auto ioNetwork = IO::DataSources::Network::getInstance();
     auto jsonGenerator = JSON::Generator::getInstance();
+    auto utilities = Misc::Utilities::getInstance();
     LOG_INFO() << "Finished initializing C++ modules";
 
     // Retranslate the QML interface automagically
@@ -156,6 +158,7 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_Updater", updater);
     c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
     c->setContextProperty("Cpp_Misc_Translator", translator);
+    c->setContextProperty("Cpp_Misc_Utilities", utilities);
     c->setContextProperty("Cpp_CSV_Export", csvExport);
     c->setContextProperty("Cpp_CSV_Player", csvPlayer);
     c->setContextProperty("Cpp_UI_Provider", uiDataProvider);

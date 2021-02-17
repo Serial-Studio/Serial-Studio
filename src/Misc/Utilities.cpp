@@ -38,6 +38,18 @@
 using namespace Misc;
 
 /**
+ * Returns the onlt instance of the class, this is to be used by the QML interface
+ */
+static Utilities *INSTANCE = nullptr;
+Utilities *Utilities::getInstance()
+{
+    if (!INSTANCE)
+        INSTANCE = new Utilities;
+
+    return INSTANCE;
+}
+
+/**
  * Shows a macOS-like message box with the given properties
  */
 int Utilities::showMessageBox(QString text, QString informativeText, QString windowTitle,
@@ -57,6 +69,14 @@ int Utilities::showMessageBox(QString text, QString informativeText, QString win
 
     // Show message box & return user decision to caller
     return box.exec();
+}
+
+/**
+ * Displays the about Qt dialog
+ */
+void Utilities::aboutQt()
+{
+    qApp->aboutQt();
 }
 
 /**

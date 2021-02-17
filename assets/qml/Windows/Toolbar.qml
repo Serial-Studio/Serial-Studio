@@ -36,7 +36,6 @@ Control {
     // Custom signals
     //
     signal dataClicked()
-    signal aboutClicked()
     signal setupClicked()
     signal consoleClicked()
     signal widgetsClicked()
@@ -45,7 +44,6 @@ Control {
     // Aliases to button check status
     //
     property alias dataChecked: dataBt.checked
-    property alias aboutChecked: aboutBt.checked
     property alias setupChecked: setupBt.checked
     property alias consoleChecked: consoleBt.checked
     property alias widgetsChecked: widgetsBt.checked
@@ -114,7 +112,7 @@ Control {
             Layout.fillHeight: true
             icon.color: palette.text
             onClicked: root.dataClicked()
-            enabled: Cpp_UI_Provider.groupCount > 0
+            enabled: app.dashboardAvailable
             icon.source: "qrc:/icons/equalizer.svg"
             text: qsTr("Dashboard") + _btSpacer
 
@@ -130,26 +128,13 @@ Control {
             icon.height: 24
             Layout.fillHeight: true
             icon.color: palette.text
+            enabled: app.widgetsAvailable
             onClicked: root.widgetsClicked()
             icon.source: "qrc:/icons/chart.svg"
-            enabled: Cpp_UI_WidgetProvider.totalWidgetCount > 0
             text: qsTr("Widgets") + _btSpacer
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
-        }
-
-        Button {
-            id: aboutBt
-
-            flat: true
-            icon.width: 24
-            icon.height: 24
-            Layout.fillHeight: true
-            icon.color: palette.text
-            onClicked: root.aboutClicked()
-            icon.source: "qrc:/icons/info.svg"
-            text: qsTr("About")
         }
 
         Item {

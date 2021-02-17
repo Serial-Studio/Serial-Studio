@@ -20,60 +20,45 @@
  * THE SOFTWARE.
  */
 
-#ifndef CSV_EXPORT_H
-#define CSV_EXPORT_H
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
-#include <QFile>
-#include <QList>
-#include <QObject>
-#include <QVariant>
-#include <QTextStream>
-#include <QJsonObject>
+MenuItem {
+    id: root
 
-namespace CSV
-{
-class Export : public QObject
-{
-    // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(bool isOpen
-               READ isOpen
-               NOTIFY openChanged)
-    Q_PROPERTY(bool exportEnabled
-               READ exportEnabled
-               WRITE setExportEnabled
-               NOTIFY enabledChanged)
-    // clang-format on
+    property alias sequence: _shortcut.sequence
+    property bool indicatorVisible: root.icon.source.length > 0 || root.checkable
 
-signals:
-    void openChanged();
-    void enabledChanged();
+    Shortcut {
+        id: _shortcut
+        enabled: root.enabled
+        onActivated: root.triggered()
+    }
 
-public:
-    static Export *getInstance();
+    contentItem: RowLayout {
+        spacing: 0
+        width: root.width
+        opacity: root.enabled ? 1 : 0.5
 
-    bool isOpen() const;
-    bool exportEnabled() const;
+        Item {
+            width: root.indicatorVisible ? root.indicator.width + 4 : 0
+        }
 
-private:
-    Export();
-    ~Export();
+        Label {
+            text: root.text
+            Layout.fillWidth: true
+            elide: Label.ElideRight
+            verticalAlignment: Qt.AlignVCenter
+        }
 
-public slots:
-    void closeFile();
-    void openCurrentCsv();
-    void setExportEnabled(const bool enabled);
+        Item {
+            Layout.fillWidth: true
+        }
 
-private slots:
-    void writeValues();
-    void updateValues(const QJsonDocument &document, const QDateTime &time);
-
-private:
-    QFile m_csvFile;
-    bool m_exportEnabled;
-    QTextStream m_textStream;
-    QList<QPair<QDateTime, QJsonObject>> m_jsonList;
-};
+        Label {
+            text: _shortcut.nativeText
+            verticalAlignment: Qt.AlignVCenter
+        }
+    }
 }
-
-#endif

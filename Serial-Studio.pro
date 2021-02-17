@@ -120,6 +120,9 @@ RESOURCES += \
     assets/assets.qrc
 
 DISTFILES += \
+    assets/qml/PlatformDependent/DecentMenuItem.qml \
+    assets/qml/PlatformDependent/Menubar.qml \
+    assets/qml/PlatformDependent/MenubarMacOS.qml \
     assets/qml/SetupPanes/Network.qml \
     assets/qml/SetupPanes/Serial.qml \
     assets/qml/SetupPanes/Settings.qml \

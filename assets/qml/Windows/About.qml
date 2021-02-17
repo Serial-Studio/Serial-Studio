@@ -117,6 +117,12 @@ Window {
 
             Button {
                 Layout.fillWidth: true
+                text: qsTr("Website")
+                onClicked: Qt.openUrlExternally("https://www.alex-spataru.com/serial-studio")
+            }
+
+            Button {
+                Layout.fillWidth: true
                 text: qsTr("Contact author")
                 onClicked: Qt.openUrlExternally("mailto:alex_spataru@outlook.com")
             }
@@ -125,23 +131,6 @@ Window {
                 Layout.fillWidth: true
                 text: qsTr("Report bug")
                 onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
-            }
-
-            Button {
-                Layout.fillWidth: true
-                visible: Cpp_UpdaterEnabled
-                enabled: Cpp_UpdaterEnabled
-                text: qsTr("Check for updates")
-                onClicked: {
-                    Cpp_Updater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
-                    Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
-                }
-            }
-
-            Button {
-                Layout.fillWidth: true
-                onClicked: Cpp_CSV_Export.openLogFile()
-                text: qsTr("Open log file")
             }
 
             Button {

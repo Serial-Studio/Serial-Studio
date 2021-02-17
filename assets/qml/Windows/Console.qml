@@ -32,6 +32,10 @@ import "../Widgets" as Widgets
 Control {
     id: root
 
+    //
+    // Custom properties
+    //
+    property alias vt100emulation: textEdit.vt100emulation
     background: Rectangle {
         color: app.windowBackgroundColor
     }
@@ -53,6 +57,20 @@ Control {
     }
 
     //
+    // Copy function
+    //
+    function copy() {
+        textEdit.copy()
+    }
+
+    //
+    // Select all text
+    //
+    function selectAll() {
+        textEdit.selectAll()
+    }
+
+    //
     // Load welcome guide
     //
     function showWelcomeGuide() {
@@ -64,37 +82,13 @@ Control {
     // Save settings
     //
     Settings {
-        property alias echo: echoCheck.checked
         property alias hex: hexCheckbox.checked
-        property alias vt100Enabled: vt100.checked
+        property alias echo: echoCheckbox.checked
         property alias timestamp: timestampCheck.checked
         property alias autoscroll: autoscrollCheck.checked
+        property alias vt100Enabled: textEdit.vt100emulation
         property alias lineEnding: lineEndingCombo.currentIndex
         property alias displayMode: displayModeCombo.currentIndex
-    }
-
-    //
-    // Save shortcut
-    //
-    Shortcut {
-        sequence: StandardKey.Save
-        onActivated: Cpp_IO_Console.save()
-    }
-
-    //
-    // Clear console data shortcut
-    //
-    Shortcut {
-        sequence: StandardKey.Delete
-        onActivated: root.clearConsole()
-    }
-
-    //
-    // Select all shortcut
-    //
-    Shortcut {
-        sequence: StandardKey.SelectAll
-        onActivated: textEdit.selectAll()
     }
 
     //
@@ -103,14 +97,6 @@ Control {
     Shortcut {
         sequence: "escape"
         onActivated: textEdit.clearSelection()
-    }
-
-    //
-    // Copy
-    //
-    Shortcut {
-        sequence: StandardKey.Copy
-        onActivated: textEdit.copy()
     }
 
     //
@@ -141,11 +127,27 @@ Control {
             enabled: Cpp_IO_Console.saveAvailable
         }
 
+        MenuSeparator {}
+
+        MenuItem {
+            opacity: enabled ? 1 : 0.5
+            text: qsTr("Print")
+            onTriggered: Cpp_IO_Console.print()
+            enabled: Cpp_IO_Console.saveAvailable
+        }
+
         MenuItem {
             opacity: enabled ? 1 : 0.5
             text: qsTr("Save as") + "..."
             onTriggered: Cpp_IO_Console.save()
             enabled: Cpp_IO_Console.saveAvailable
+        }
+
+        MenuSeparator {}
+
+        MenuItem {
+            //onTriggered: app.menuBar.visible = !app.menuBar.visible
+            //text: app.menuBar.visible ? qsTr("Hide menubar") : qsTr("Show menubar")
         }
     }
 
@@ -256,8 +258,8 @@ Control {
             }
 
             CheckBox {
+                text: "HEX"
                 id: hexCheckbox
-                text: "Hex"
                 opacity: enabled ? 1 : 0.5
                 enabled: Cpp_IO_Manager.readWrite
                 checked: Cpp_IO_Console.dataMode === 1
@@ -270,9 +272,11 @@ Control {
             }
 
             CheckBox {
-                id: echoCheck
+                visible: false
                 text: qsTr("Echo")
-                Layout.alignment: Qt.AlignVCenter
+                id: echoCheckbox
+                opacity: enabled ? 1 : 0.5
+                enabled: Cpp_IO_Manager.readWrite
                 checked: Cpp_IO_Console.echo
                 onCheckedChanged: {
                     if (Cpp_IO_Console.echo != checked)
@@ -306,17 +310,6 @@ Control {
                 onCheckedChanged: {
                     if (Cpp_IO_Console.showTimestamp != checked)
                         Cpp_IO_Console.showTimestamp = checked
-                }
-            }
-
-            CheckBox {
-                id: vt100
-                text: qsTr("VT-100")
-                Layout.alignment: Qt.AlignVCenter
-                checked: textEdit.vt100emulation
-                onCheckedChanged: {
-                    if (textEdit.vt100emulation != checked)
-                        textEdit.vt100emulation = checked
                 }
             }
 

@@ -83,6 +83,81 @@ ApplicationWindow {
     }
 
     //
+    // Application UI status variables (used for the menubar)
+    //
+    property alias vt100emulation: terminal.vt100emulation
+    readonly property bool setupVisible: setup.visible
+    readonly property bool dashboardVisible: data.visible
+    readonly property bool widgetsVisible: widgets.visible
+    readonly property bool consoleVisible: terminal.visible
+    readonly property bool dashboardAvailable: Cpp_UI_Provider.groupCount > 0
+    readonly property bool widgetsAvailable: Cpp_UI_WidgetProvider.totalWidgetCount > 0
+
+    //
+    // Check for updates (non-silent mode)
+    //
+    function checkForUpdates() {
+        Cpp_Updater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
+        Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+    }
+
+    //
+    // Display about dialog
+    //
+    function showAbout() {
+        about.show()
+    }
+
+    //
+    // Display the console
+    //
+    function showConsole() {
+        toolbar.consoleClicked()
+    }
+
+    //
+    // Display the dashboard
+    //
+    function showDashboard() {
+        toolbar.dataClicked()
+    }
+
+    //
+    // Display the widgets
+    //
+    function showWidgets() {
+        toolbar.widgetsClicked()
+    }
+
+    //
+    // Toggle preferences pane
+    //
+    function togglePreferences() {
+        toolbar.setupClicked()
+    }
+
+    //
+    // Clears console output
+    //
+    function clearConsole() {
+        terminal.clearConsole()
+    }
+
+    //
+    // Copy console selection
+    //
+    function copyConsole() {
+        terminal.copy()
+    }
+
+    //
+    // Select all console text
+    //
+    function selectAllConsole() {
+        terminal.selectAll()
+    }
+
+    //
     // Window geometry
     //
     visible: false
@@ -124,57 +199,16 @@ ApplicationWindow {
     }
 
     //
-    // Shortcut to show/hide setup panel
+    // Application menubar loader (we need to use a different version in macOS)
     //
-    Shortcut {
-        sequence: "Ctrl+,"
-        onActivated: toolbar.setupClicked()
-    }
+    Loader {
+        asynchronous: false
+        source: {
+            if (Qt.platform.os === "osx")
+                return "qrc:/qml/PlatformDependent/MenubarMacOS.qml"
 
-    //
-    // Shortcut to show/hide dashboard
-    //
-    Shortcut {
-        sequence: "Ctrl+d"
-        onActivated: {
-            if (Cpp_UI_Provider.groupCount > 0)
-                toolbar.dataClicked()
+            return "qrc:/qml/PlatformDependent/Menubar.qml"
         }
-    }
-
-    //
-    // Shortcut to show/hide widgets
-    //
-    Shortcut {
-        sequence: "Ctrl+w"
-        onActivated: {
-            if (Cpp_UI_WidgetProvider.totalWidgetCount > 0)
-                toolbar.widgetsClicked()
-        }
-    }
-
-    //
-    // Shortcut to show/hide terminal
-    //
-    Shortcut {
-        sequence: "Ctrl+t"
-        onActivated: toolbar.consoleClicked()
-    }
-
-    //
-    // Shortcut to show/hide terminal
-    //
-    Shortcut {
-        sequence: "F1"
-        onActivated: about.show()
-    }
-
-    //
-    // Shortcut to open CSV file
-    //
-    Shortcut {
-        sequence: StandardKey.Open
-        onActivated: Cpp_CSV_Player.openFile()
     }
 
     //
@@ -284,39 +318,47 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.minimumHeight: 48
             Layout.maximumHeight: 48
-            dataChecked: data.visible
-            aboutChecked: about.visible
-            setupChecked: setup.visible
-            widgetsChecked: widgets.visible
-            consoleChecked: terminal.visible
-            onAboutClicked: about.visible ? about.hide() : about.show()
+            setupChecked: app.setupVisible
+            dataChecked: app.dashboardVisible
+            widgetsChecked: app.widgetsVisible
+            consoleChecked: app.consoleVisible
             onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
             onDataClicked: {
-                data.opacity    = 1
-                terminal.opacity = 0
-                widgets.opacity = 0
-                dataChecked     = true
-                consoleChecked  = false
-                widgetsChecked  = false
+                if (app.dashboardAvailable) {
+                    data.opacity     = 1
+                    terminal.opacity = 0
+                    widgets.opacity  = 0
+                    dataChecked      = true
+                    consoleChecked   = false
+                    widgetsChecked   = false
+                }
+
+                else
+                    app.showConsole()
             }
 
             onConsoleClicked: {
-                data.opacity    = 0
+                data.opacity     = 0
                 terminal.opacity = 1
-                widgets.opacity = 0
-                consoleChecked  = true
-                dataChecked     = false
-                widgetsChecked  = false
+                widgets.opacity  = 0
+                consoleChecked   = true
+                dataChecked      = false
+                widgetsChecked   = false
             }
 
             onWidgetsClicked: {
-                data.opacity    = 0
-                terminal.opacity = 0
-                widgets.opacity = 1
-                dataChecked     = false
-                widgetsChecked  = true
-                consoleChecked  = false
+                if (app.widgetsAvailable) {
+                    data.opacity     = 0
+                    terminal.opacity = 0
+                    widgets.opacity  = 1
+                    dataChecked      = false
+                    widgetsChecked   = true
+                    consoleChecked   = false
+                }
+
+                else
+                    app.showConsole()
             }
         }
 
@@ -420,7 +462,7 @@ ApplicationWindow {
         text: "<h3>" + qsTr("Check for updates automatically?") + "</h3>"
         informativeText: qsTr("Should %1 automatically check for updates? " +
                               "You can always check for updates manually from " +
-                              "the \"About\" dialog").arg(Cpp_AppName);
+                              "the \"Help\" menu").arg(Cpp_AppName);
 
         // Behavior when the user clicks on "Yes"
         onAccepted: {

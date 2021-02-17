@@ -22,10 +22,4 @@ the wiki:
 
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
-Keyboard shortcuts:
-
-  Ctrl + S    Save console buffer             Ctrl + T    Show console tab
-  Ctrl + O    Open CSV file for playback      Ctrl + D    Show dashboard tab
-  Ctrl + ,    Toggle setup pane               Ctrl + W    Show widgets tab
-
 Tip: Double-click on any group, chart or widget to view it in another window.

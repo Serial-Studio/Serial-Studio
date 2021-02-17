@@ -93,14 +93,6 @@ bool Export::exportEnabled() const
 }
 
 /**
- * Opens the current application log file
- */
-void Export::openLogFile()
-{
-    Misc::Utilities::openLogFile();
-}
-
-/**
  * Open the current CSV file in the Explorer/Finder window
  */
 void Export::openCurrentCsv()
