@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "DataProvider.h"
 #include "WidgetProvider.h"
 
 #include <cfloat>
@@ -28,7 +29,6 @@
 #include <CSV/Player.h>
 #include <IO/Manager.h>
 #include <IO/Console.h>
-#include <JSON/Generator.h>
 #include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
@@ -48,11 +48,9 @@ WidgetProvider::WidgetProvider()
     // Module signals/slots
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
-    auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(te, SIGNAL(timeout42Hz()), this, SIGNAL(dataChanged()));
-    connect(ge, SIGNAL(frameChanged()), this, SLOT(updateModels()));
+    connect(te, SIGNAL(timeout42Hz()), this, SLOT(updateModels()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
     LOG_TRACE() << "Class initialized";
 }
@@ -419,6 +417,10 @@ void WidgetProvider::updateModels()
     m_gyroGroups.clear();
     m_accelerometerGroups.clear();
 
+    // Check if frame is valid
+    if (!DataProvider::getInstance()->latestFrame()->isValid())
+        return;
+
     // Update groups
     m_mapGroups = getWidgetGroup("map");
     m_gyroGroups = getWidgetGroup("gyro");
@@ -433,6 +435,9 @@ void WidgetProvider::updateModels()
         m_widgetCount = count;
         emit widgetCountChanged();
     }
+
+    // Update UI
+    emit dataChanged();
 }
 
 /**
@@ -443,7 +448,7 @@ QList<JSON::Group *> WidgetProvider::getWidgetGroup(const QString &handle)
 {
     QList<JSON::Group *> widgetGroup;
 
-    auto frame = JSON::Generator::getInstance()->frame();
+    auto frame = DataProvider::getInstance()->latestFrame();
     foreach (auto group, frame->groups())
     {
         if (group->widget().toLower() == handle)
@@ -461,7 +466,7 @@ QList<JSON::Dataset *> WidgetProvider::getWidgetDatasets(const QString &handle)
 {
     QList<JSON::Dataset *> widgetDatasets;
 
-    auto frame = JSON::Generator::getInstance()->frame();
+    auto frame = DataProvider::getInstance()->latestFrame();
     foreach (auto group, frame->groups())
     {
         foreach (auto dataset, group->datasets())

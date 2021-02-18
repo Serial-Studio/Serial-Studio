@@ -50,6 +50,9 @@ public:
     QString title();
     int groupCount();
 
+    JSON::Frame *latestFrame();
+
+    Q_INVOKABLE bool frameValid() const;
     Q_INVOKABLE JSON::Group *getGroup(const int index);
 
 private:
@@ -57,6 +60,12 @@ private:
 
 private slots:
     void resetData();
+    void updateData();
+    void selectLatestJSON(const QJsonDocument &document, const QDateTime &time);
+
+private:
+    JSON::Frame m_latestFrame;
+    QPair<QDateTime, QJsonObject> m_latestJsonFrame;
 };
 }
 

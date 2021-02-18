@@ -77,7 +77,7 @@ private:
 
 private slots:
     void resetData();
-    void updateValues();
+    void drawGraphs();
     void csvPlayerFixes();
 
 private:

@@ -72,14 +72,6 @@ Generator *Generator::getInstance()
 }
 
 /**
- * Returns the current JSON frame
- */
-Frame *Generator::frame()
-{
-    return &m_frame;
-}
-
-/**
  * Returns the JSON map data from the loaded file as a string
  */
 QString Generator::jsonMapData() const
@@ -270,9 +262,6 @@ void Generator::setJsonDocument(const QJsonDocument &document, const QDateTime &
     if (csvOpen || devOpen)
     {
         m_document = document;
-        if (m_frame.read(m_document.object()))
-            emit frameChanged();
-
         emit jsonChanged(document, time);
     }
 
@@ -286,10 +275,7 @@ void Generator::setJsonDocument(const QJsonDocument &document, const QDateTime &
  */
 void Generator::reset()
 {
-    m_frame.clear();
     m_document = QJsonDocument::fromJson(QByteArray("{}"));
-
-    emit frameChanged();
     emit jsonChanged(document(), QDateTime::currentDateTime());
 }
 

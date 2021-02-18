@@ -28,6 +28,7 @@
 #include <CSV/Player.h>
 #include <JSON/Generator.h>
 #include <ConsoleAppender.h>
+#include <Misc/TimerEvents.h>
 
 using namespace UI;
 
@@ -44,9 +45,11 @@ DataProvider::DataProvider()
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
     auto ge = JSON::Generator::getInstance();
+    auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(ge, SIGNAL(frameChanged()), this, SIGNAL(updated()));
+    connect(te, SIGNAL(timeout42Hz()), this, SLOT(updateData()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
+    connect(ge, &JSON::Generator::jsonChanged, this, &DataProvider::selectLatestJSON);
     LOG_TRACE() << "Class initialized";
 }
 
@@ -66,7 +69,7 @@ DataProvider *DataProvider::getInstance()
  */
 QString DataProvider::title()
 {
-    return JSON::Generator::getInstance()->frame()->title();
+    return m_latestFrame.title();
 }
 
 /**
@@ -74,7 +77,23 @@ QString DataProvider::title()
  */
 int DataProvider::groupCount()
 {
-    return JSON::Generator::getInstance()->frame()->groupCount();
+    return m_latestFrame.groupCount();
+}
+
+/**
+ * Returns a pointer to the latest frame
+ */
+JSON::Frame *DataProvider::latestFrame()
+{
+    return &m_latestFrame;
+}
+
+/**
+ * Returns @c true if the latest frame contains data
+ */
+bool DataProvider::frameValid() const
+{
+    return m_latestFrame.isValid();
 }
 
 /**
@@ -83,7 +102,7 @@ int DataProvider::groupCount()
 JSON::Group *DataProvider::getGroup(const int index)
 {
     if (index < groupCount())
-        return JSON::Generator::getInstance()->frame()->groups().at(index);
+        return m_latestFrame.groups().at(index);
 
     return Q_NULLPTR;
 }
@@ -98,7 +117,37 @@ void DataProvider::resetData()
     if (IO::Manager::getInstance()->connected() || CSV::Player::getInstance()->isOpen())
         return;
 
+    // Make latest frame invalid
+    m_latestJsonFrame
+        = qMakePair<QDateTime, QJsonObject>(QDateTime::currentDateTime(), QJsonObject());
+
     // Update UI
     emit updated();
     emit dataReset();
+}
+
+/**
+ * Interprets the most recent JSON frame & signals the UI to regenerate itself.
+ */
+void DataProvider::updateData()
+{
+    if (m_latestFrame.read(m_latestJsonFrame.second))
+        emit updated();
+}
+
+/**
+ * Ensures that only the most recent JSON document will be displayed on the user
+ * interface.
+ */
+void DataProvider::selectLatestJSON(const QJsonDocument &document, const QDateTime &time)
+{
+    if (m_latestJsonFrame.first < time)
+    {
+        auto json = document.object();
+        if (json.isEmpty())
+            return;
+
+        auto pair = qMakePair<QDateTime, QJsonObject>(time, json);
+        m_latestJsonFrame = pair;
+    }
 }

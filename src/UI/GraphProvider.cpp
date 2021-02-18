@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "DataProvider.h"
 #include "GraphProvider.h"
 
 #include <QtMath>
@@ -30,7 +31,6 @@
 #include <CSV/Player.h>
 #include <IO/Manager.h>
 #include <IO/Console.h>
-#include <JSON/Generator.h>
 #include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
@@ -67,11 +67,9 @@ GraphProvider::GraphProvider()
     // Module signals/slots
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
-    auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(te, SIGNAL(timeout42Hz()), this, SIGNAL(dataUpdated()));
-    connect(ge, SIGNAL(frameChanged()), this, SLOT(updateValues()));
+    connect(te, SIGNAL(timeout42Hz()), this, SLOT(drawGraphs()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
 
     // Avoid issues when CSV player goes backwards
@@ -237,20 +235,21 @@ void GraphProvider::resetData()
     m_datasets.clear();
     m_maximumValues.clear();
     m_minimumValues.clear();
-
     emit dataUpdated();
 }
 
 /**
  * Gets the latest values from the datasets that support/need to be graphed
  */
-void GraphProvider::updateValues()
+void GraphProvider::drawGraphs()
 {
     // Clear dataset & latest values list
     m_datasets.clear();
 
-    // Get latest frame
-    auto frame = JSON::Generator::getInstance()->frame();
+    // Get frame, abort if frame is invalid
+    auto frame = DataProvider::getInstance()->latestFrame();
+    if (!frame->isValid())
+        return;
 
     // Create list with datasets that need to be graphed
     for (int i = 0; i < frame->groupCount(); ++i)
@@ -297,6 +296,9 @@ void GraphProvider::updateValues()
         // Add values
         m_points.at(i)->append(getValue(i));
     }
+
+    // Update UI
+    emit dataUpdated();
 }
 
 /**

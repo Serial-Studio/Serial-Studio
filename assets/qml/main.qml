@@ -277,13 +277,13 @@ ApplicationWindow {
     // Hide console & device manager when we receive first valid packet
     //
     Connections {
-        target: Cpp_JSON_Generator
+        target: Cpp_UI_Provider
         enabled: !app.firstValidPacket
-        function onFrameChanged()  {
-            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) && Cpp_JSON_Generator.frameValid()) {
+        function onUpdated()  {
+            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) && Cpp_UI_Provider.frameValid()) {
                 app.firstValidPacket = true
                 setup.hide()
-                toolbar.dataClicked()
+                app.showDashboard()
             } else {
                 toolbar.consoleClicked()
                 setup.show()

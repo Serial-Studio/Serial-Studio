@@ -77,7 +77,6 @@ class Generator : public QObject
     // clang-format on
 
 signals:
-    void frameChanged();
     void jsonFileMapChanged();
     void operationModeChanged();
     void jsonChanged(const QJsonDocument &document, const QDateTime &time);
@@ -93,20 +92,11 @@ public:
 public:
     static Generator *getInstance();
 
-    Frame *frame();
     QString jsonMapData() const;
     QJsonDocument document() const;
     QString jsonMapFilename() const;
     QString jsonMapFilepath() const;
     OperationMode operationMode() const;
-
-    Q_INVOKABLE bool frameValid()
-    {
-        if (frame())
-            return frame()->groupCount() > 0;
-
-        return false;
-    }
 
 public slots:
     void loadJsonMap();

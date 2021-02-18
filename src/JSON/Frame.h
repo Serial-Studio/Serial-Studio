@@ -46,6 +46,8 @@ public:
     bool read(const QJsonObject &object);
     Q_INVOKABLE Group *getGroup(const int index);
 
+    inline bool isValid() const { return !title().isEmpty() && groupCount() > 0; }
+
 private:
     QString m_title;
     QVector<Group *> m_groups;
