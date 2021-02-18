@@ -29,6 +29,7 @@
 #include <QVariant>
 #include <QTextStream>
 #include <QJsonObject>
+#include <JSON/FrameInfo.h>
 
 namespace CSV
 {
@@ -66,13 +67,13 @@ public slots:
 
 private slots:
     void writeValues();
-    void updateValues(const QJsonDocument &document, const QDateTime &time);
+    void registerFrame(const JFI_Object &info);
 
 private:
     QFile m_csvFile;
     bool m_exportEnabled;
     QTextStream m_textStream;
-    QList<QPair<QDateTime, QJsonObject>> m_jsonList;
+    QList<JFI_Object> m_jsonList;
 };
 }
 

@@ -379,7 +379,7 @@ void Player::updateData()
     // input source for the QML bridge
     auto json = getJsonFrame(framePosition() + 1);
     if (!json.isEmpty())
-        JSON::Generator::getInstance()->setJsonDocument(json);
+        JSON::Generator::getInstance()->loadJSON(json);
 
     // If the user wants to 'play' the CSV, get time difference between this
     // frame and the next frame & schedule an automated update

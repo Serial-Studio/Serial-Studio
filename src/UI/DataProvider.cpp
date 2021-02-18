@@ -42,6 +42,7 @@ static DataProvider *INSTANCE = nullptr;
  */
 DataProvider::DataProvider()
 {
+    m_latestJsonFrame = JFI_Empty();
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
     auto ge = JSON::Generator::getInstance();
@@ -118,8 +119,7 @@ void DataProvider::resetData()
         return;
 
     // Make latest frame invalid
-    m_latestJsonFrame
-        = qMakePair<QDateTime, QJsonObject>(QDateTime::currentDateTime(), QJsonObject());
+    m_latestJsonFrame = JFI_Empty();
 
     // Update UI
     emit updated();
@@ -131,7 +131,7 @@ void DataProvider::resetData()
  */
 void DataProvider::updateData()
 {
-    if (m_latestFrame.read(m_latestJsonFrame.second))
+    if (m_latestFrame.read(m_latestJsonFrame.jsonDocument.object()))
         emit updated();
 }
 
@@ -139,15 +139,14 @@ void DataProvider::updateData()
  * Ensures that only the most recent JSON document will be displayed on the user
  * interface.
  */
-void DataProvider::selectLatestJSON(const QJsonDocument &document, const QDateTime &time)
+void DataProvider::selectLatestJSON(const JFI_Object &frameInfo)
 {
-    if (m_latestJsonFrame.first < time)
-    {
-        auto json = document.object();
-        if (json.isEmpty())
-            return;
+    auto frameCount = frameInfo.frameNumber;
+    auto currFrameCount = m_latestJsonFrame.frameNumber;
 
-        auto pair = qMakePair<QDateTime, QJsonObject>(time, json);
-        m_latestJsonFrame = pair;
+    if (currFrameCount < frameCount)
+    {
+        if (JFI_Valid(frameInfo))
+            m_latestJsonFrame = frameInfo;
     }
 }

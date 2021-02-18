@@ -147,6 +147,7 @@ HEADERS += \
     src/IO/Manager.h \
     src/JSON/Dataset.h \
     src/JSON/Frame.h \
+    src/JSON/FrameInfo.h \
     src/JSON/Generator.h \
     src/JSON/Group.h \
     src/Misc/ModuleManager.h \
@@ -167,6 +168,7 @@ SOURCES += \
     src/IO/Manager.cpp \
     src/JSON/Dataset.cpp \
     src/JSON/Frame.cpp \
+    src/JSON/FrameInfo.cpp \
     src/JSON/Generator.cpp \
     src/JSON/Group.cpp \
     src/Misc/ModuleManager.cpp \

@@ -23,6 +23,7 @@
 #ifndef JSON_GENERATOR_H
 #define JSON_GENERATOR_H
 
+#include <QPair>
 #include <QFile>
 #include <QTimer>
 #include <QObject>
@@ -37,6 +38,7 @@
 #include <QJsonDocument>
 
 #include "Frame.h"
+#include "FrameInfo.h"
 
 namespace JSON
 {
@@ -46,10 +48,10 @@ class JSONWorker : public QObject
 
 signals:
     void finished();
-    void jsonReady(const QJsonDocument &document, const QDateTime &time);
+    void jsonReady(const JFI_Object &info);
 
 public:
-    JSONWorker(const QByteArray &data, const QDateTime &time);
+    JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time);
 
 public slots:
     void process();
@@ -57,6 +59,7 @@ public slots:
 private:
     QDateTime m_time;
     QByteArray m_data;
+    quint64 m_frame;
     QJSEngine *m_engine;
 };
 
@@ -79,7 +82,7 @@ class Generator : public QObject
 signals:
     void jsonFileMapChanged();
     void operationModeChanged();
-    void jsonChanged(const QJsonDocument &document, const QDateTime &time);
+    void jsonChanged(const JFI_Object &info);
 
 public:
     enum OperationMode
@@ -93,7 +96,6 @@ public:
     static Generator *getInstance();
 
     QString jsonMapData() const;
-    QJsonDocument document() const;
     QString jsonMapFilename() const;
     QString jsonMapFilepath() const;
     OperationMode operationMode() const;
@@ -108,21 +110,20 @@ private:
 
 public slots:
     void readSettings();
+    void loadJFI(const JFI_Object &info);
     void writeSettings(const QString &path);
-    void setJsonDocument(const QJsonDocument &document,
-                         const QDateTime &time = QDateTime::currentDateTime());
+    void loadJSON(const QJsonDocument &json);
 
 private slots:
     void reset();
     void readData(const QByteArray &data);
 
 private:
-    Frame m_frame;
     QFile m_jsonMap;
+    quint64 m_frameCount;
     QSettings m_settings;
     QString m_jsonMapData;
     OperationMode m_opMode;
-    QJsonDocument m_document;
 
     QThread m_workerThread;
     JSONWorker *m_jsonWorker;

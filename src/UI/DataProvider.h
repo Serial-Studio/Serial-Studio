@@ -25,6 +25,7 @@
 
 #include <QObject>
 #include <JSON/Frame.h>
+#include <JSON/FrameInfo.h>
 
 namespace UI
 {
@@ -61,11 +62,11 @@ private:
 private slots:
     void resetData();
     void updateData();
-    void selectLatestJSON(const QJsonDocument &document, const QDateTime &time);
+    void selectLatestJSON(const JFI_Object &frameInfo);
 
 private:
     JSON::Frame m_latestFrame;
-    QPair<QDateTime, QJsonObject> m_latestJsonFrame;
+    JFI_Object m_latestJsonFrame;
 };
 }
 

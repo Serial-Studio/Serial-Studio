@@ -31,6 +31,7 @@
 #include <CSV/Player.h>
 #include <IO/Manager.h>
 #include <IO/Console.h>
+#include <JSON/Generator.h>
 #include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
@@ -67,10 +68,12 @@ GraphProvider::GraphProvider()
     // Module signals/slots
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
+    auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(te, SIGNAL(timeout42Hz()), this, SLOT(drawGraphs()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
+    connect(ge, &JSON::Generator::jsonChanged, this, &GraphProvider::registerFrame);
 
     // Avoid issues when CSV player goes backwards
     connect(CSV::Player::getInstance(), SIGNAL(timestampChanged()),
@@ -243,59 +246,69 @@ void GraphProvider::resetData()
  */
 void GraphProvider::drawGraphs()
 {
-    // Clear dataset & latest values list
-    m_datasets.clear();
+    // Sort JSON frames so that they are ordered from least-recent to most-recent
+    JFI_SortList(&m_jsonList);
 
-    // Get frame, abort if frame is invalid
-    auto frame = DataProvider::getInstance()->latestFrame();
-    if (!frame->isValid())
-        return;
-
-    // Create list with datasets that need to be graphed
-    for (int i = 0; i < frame->groupCount(); ++i)
+    // Graph each frame
+    for (int f = 0; f < m_jsonList.count(); ++f)
     {
-        auto group = frame->groups().at(i);
-        for (int j = 0; j < group->datasetCount(); ++j)
+        // Clear dataset & latest values list
+        m_datasets.clear();
+
+        // Get frame, abort if frame is invalid
+        JSON::Frame frame;
+        if (!frame.read(m_jsonList.at(f).jsonDocument.object()))
+            continue;
+
+        // Create list with datasets that need to be graphed
+        for (int i = 0; i < frame.groupCount(); ++i)
         {
-            auto dataset = group->datasets().at(j);
-            if (dataset->graph())
-                m_datasets.append(dataset);
+            auto group = frame.groups().at(i);
+            for (int j = 0; j < group->datasetCount(); ++j)
+            {
+                auto dataset = group->datasets().at(j);
+                if (dataset->graph())
+                    m_datasets.append(dataset);
+            }
+        }
+
+        // Create list with dataset values (converted to double)
+        for (int i = 0; i < graphCount(); ++i)
+        {
+            // Register dataset for this graph
+            if (m_points.count() < (i + 1))
+            {
+                auto vector = new QVector<double>;
+                m_points.append(vector);
+            }
+
+            // Register min. values list
+            if (m_minimumValues.count() < (i + 1))
+                m_minimumValues.append(getValue(i));
+
+            // Register max. values list
+            if (m_maximumValues.count() < (i + 1))
+                m_maximumValues.append(getValue(i));
+
+            // Update minimum value
+            if (minimumValue(i) > getValue(i))
+                m_minimumValues.replace(i, getValue(i));
+
+            // Update minimum value
+            if (maximumValue(i) < getValue(i))
+                m_maximumValues.replace(i, getValue(i));
+
+            // Remove older items
+            if (m_points.at(i)->count() >= displayedPoints())
+                m_points.at(i)->remove(0, m_points.at(i)->count() - displayedPoints());
+
+            // Add values
+            m_points.at(i)->append(getValue(i));
         }
     }
 
-    // Create list with dataset values (converted to double)
-    for (int i = 0; i < graphCount(); ++i)
-    {
-        // Register dataset for this graph
-        if (m_points.count() < (i + 1))
-        {
-            auto vector = new QVector<double>;
-            m_points.append(vector);
-        }
-
-        // Register min. values list
-        if (m_minimumValues.count() < (i + 1))
-            m_minimumValues.append(getValue(i));
-
-        // Register max. values list
-        if (m_maximumValues.count() < (i + 1))
-            m_maximumValues.append(getValue(i));
-
-        // Update minimum value
-        if (minimumValue(i) > getValue(i))
-            m_minimumValues.replace(i, getValue(i));
-
-        // Update minimum value
-        if (maximumValue(i) < getValue(i))
-            m_maximumValues.replace(i, getValue(i));
-
-        // Remove older items
-        if (m_points.at(i)->count() >= displayedPoints())
-            m_points.at(i)->remove(0, m_points.at(i)->count() - displayedPoints());
-
-        // Add values
-        m_points.at(i)->append(getValue(i));
-    }
+    // Clear frame list
+    m_jsonList.clear();
 
     // Update UI
     emit dataUpdated();
@@ -350,4 +363,14 @@ void GraphProvider::updateGraph(QAbstractSeries *series, const int index)
             static_cast<QXYSeries *>(series)->replace(data);
         }
     }
+}
+
+/**
+ * Obtains the latest JSON dataframe & appends it to the JSON list, which is later read,
+ * sorted & graphed by the @c drawGraph() function.
+ */
+void GraphProvider::registerFrame(const JFI_Object &frameInfo)
+{
+    if (JFI_Valid(frameInfo))
+        m_jsonList.append(frameInfo);
 }

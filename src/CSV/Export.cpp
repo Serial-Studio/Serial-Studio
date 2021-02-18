@@ -51,11 +51,11 @@ Export::Export()
     : m_exportEnabled(true)
 {
     auto io = IO::Manager::getInstance();
-    auto jp = JSON::Generator::getInstance();
+    auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
-    connect(jp, &JSON::Generator::jsonChanged, this, &Export::updateValues);
     connect(te, &Misc::TimerEvents::timeout1Hz, this, &Export::writeValues);
+    connect(ge, &JSON::Generator::jsonChanged, this, &Export::registerFrame);
 
     LOG_TRACE() << "Class initialized";
 }
@@ -142,25 +142,15 @@ void Export::closeFile()
  */
 void Export::writeValues()
 {
-    // Bubble-sort the JSON frames so that they are ordered from earliest to most recent
-    for (int i = 0; i < m_jsonList.count() - 1; ++i)
-    {
-        for (int j = 0; j < m_jsonList.count() - i - 1; ++j)
-        {
-            auto dateTimeA = m_jsonList.at(j + 0).first;
-            auto dateTimeB = m_jsonList.at(j + 1).first;
-
-            if (dateTimeA > dateTimeB)
-                m_jsonList.swapItemsAt(j, j + 1);
-        }
-    }
+    // Sort JSON frames so that they are ordered from least-recent to most-recent
+    JFI_SortList(&m_jsonList);
 
     // Export JSON frames
     for (int k = 0; k < m_jsonList.count(); ++k)
     {
         // Get project title & cell values
-        auto json = m_jsonList.first().second;
-        auto dateTime = m_jsonList.first().first;
+        auto dateTime = m_jsonList.first().rxDateTime;
+        auto json = m_jsonList.first().jsonDocument.object();
         auto projectTitle = json.value("t").toVariant().toString();
 
         // Validate JSON & title
@@ -282,10 +272,10 @@ void Export::writeValues()
 }
 
 /**
- * Obtains the latest JSON dataframe & appends it to the JSON list
- * (which is later read & written to the CSV file).
+ * Obtains the latest JSON dataframe & appends it to the JSON list, which is later read,
+ * sorted and written to the CSV file by the @c writeValues() function.
  */
-void Export::updateValues(const QJsonDocument &document, const QDateTime &time)
+void Export::registerFrame(const JFI_Object &info)
 {
     // Ignore if device is not connected (we don't want to generate a CSV file when we
     // are reading another CSV file don't we?)
@@ -296,12 +286,7 @@ void Export::updateValues(const QJsonDocument &document, const QDateTime &time)
     if (!exportEnabled())
         return;
 
-    // Get & validate JSON document
-    auto json = document.object();
-    if (json.isEmpty())
-        return;
-
     // Update JSON list
-    auto pair = qMakePair<QDateTime, QJsonObject>(time, json);
-    m_jsonList.append(pair);
+    if (JFI_Valid(info))
+        m_jsonList.append(info);
 }

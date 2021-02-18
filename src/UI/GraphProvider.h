@@ -31,6 +31,7 @@
 
 #include <JSON/Frame.h>
 #include <JSON/Dataset.h>
+#include <JSON/FrameInfo.h>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -79,6 +80,7 @@ private slots:
     void resetData();
     void drawGraphs();
     void csvPlayerFixes();
+    void registerFrame(const JFI_Object &frameInfo);
 
 private:
     int m_prevFramePos;
@@ -87,6 +89,7 @@ private:
     QVector<double> m_minimumValues;
     QVector<QVector<double> *> m_points;
     QVector<JSON::Dataset *> m_datasets;
+    QList<JFI_Object> m_jsonList;
 };
 }
 

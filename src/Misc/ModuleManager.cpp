@@ -36,6 +36,7 @@
 #include <JSON/Group.h>
 #include <JSON/Dataset.h>
 #include <JSON/Generator.h>
+#include <JSON/FrameInfo.h>
 
 #include <IO/Manager.h>
 #include <IO/Console.h>
@@ -103,7 +104,7 @@ void ModuleManager::configureUpdater()
 void ModuleManager::registerQmlTypes()
 {
     LOG_TRACE() << "Registering QML types...";
-    qRegisterMetaType<JSON::Frame>("Frame");
+    qRegisterMetaType<JFI_Object>("JFI_Object");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
     qmlRegisterType<UI::QmlPlainTextEdit>("SerialStudio", 1, 0, "QmlPlainTextEdit");

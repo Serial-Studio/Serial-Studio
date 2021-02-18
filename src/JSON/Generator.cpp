@@ -48,7 +48,8 @@ static const QRegExp UNMATCHED_VALUES_REGEX("(%\b([0-9]|[1-9][0-9])\b)");
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
 Generator::Generator()
-    : m_opMode(kAutomatic)
+    : m_frameCount(0)
+    , m_opMode(kAutomatic)
 {
     auto io = IO::Manager::getInstance();
     auto cp = CSV::Player::getInstance();
@@ -77,14 +78,6 @@ Generator *Generator::getInstance()
 QString Generator::jsonMapData() const
 {
     return m_jsonMapData;
-}
-
-/**
- * Returns the parsed JSON document from the received packet
- */
-QJsonDocument Generator::document() const
-{
-    return m_document;
 }
 
 /**
@@ -247,22 +240,20 @@ void Generator::writeSettings(const QString &path)
 }
 
 /**
- * Changes the JSON document to be used to generate the user interface.
- * This function is set to public in order to allow the CSV-replay feature to
- * work by replacing the data/json input source.
+ * Notifies the rest of the application that a new JSON frame has been received. The JFI
+ * also contains RX date/time and frame number.
+ *
+ * Read the "FrameInfo.h" file for more information.
  */
-void Generator::setJsonDocument(const QJsonDocument &document, const QDateTime &time)
+void Generator::loadJFI(const JFI_Object &info)
 {
-    if (document.object().isEmpty())
-        return;
-
     bool csvOpen = CSV::Player::getInstance()->isOpen();
     bool devOpen = IO::Manager::getInstance()->connected();
 
     if (csvOpen || devOpen)
     {
-        m_document = document;
-        emit jsonChanged(document, time);
+        if (JFI_Valid(info))
+            emit jsonChanged(info);
     }
 
     else
@@ -270,13 +261,22 @@ void Generator::setJsonDocument(const QJsonDocument &document, const QDateTime &
 }
 
 /**
- * Resets all the statistics related to the current serial port device and
- * the JSON map file
+ * Create a new JFI event with the given @a JSON document and increment the frame count
+ */
+void Generator::loadJSON(const QJsonDocument &json)
+{
+    auto jfi = JFI_CreateNew(m_frameCount, QDateTime::currentDateTime(), json);
+    m_frameCount++;
+    loadJFI(jfi);
+}
+
+/**
+ * Resets all the statistics related to the current device and the JSON map file
  */
 void Generator::reset()
 {
-    m_document = QJsonDocument::fromJson(QByteArray("{}"));
-    emit jsonChanged(document(), QDateTime::currentDateTime());
+    m_frameCount = 0;
+    emit jsonChanged(JFI_Empty());
 }
 
 /**
@@ -302,15 +302,18 @@ void Generator::readData(const QByteArray &data)
     if (data.isEmpty())
         return;
 
+    // Increment received frames
+    m_frameCount++;
+
     // Create new worker thread to read JSON data
     QThread *thread = new QThread;
-    JSONWorker *worker = new JSONWorker(data, QDateTime::currentDateTime());
+    JSONWorker *worker = new JSONWorker(data, m_frameCount, QDateTime::currentDateTime());
     worker->moveToThread(thread);
     connect(thread, SIGNAL(started()), worker, SLOT(process()));
     connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
     connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-    connect(worker, &JSONWorker::jsonReady, this, &Generator::setJsonDocument);
+    connect(worker, &JSONWorker::jsonReady, this, &Generator::loadJFI);
     thread->start();
 }
 
@@ -322,9 +325,10 @@ void Generator::readData(const QByteArray &data)
  * Constructor function, stores received frame data & the date/time that the frame data
  * was received.
  */
-JSONWorker::JSONWorker(const QByteArray &data, const QDateTime &time)
+JSONWorker::JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time)
     : m_time(time)
     , m_data(data)
+    , m_frame(frame)
     , m_engine(nullptr)
 {
 }
@@ -436,7 +440,7 @@ void JSONWorker::process()
 
     // No parse error, update UI & reset error counter
     if (error.error == QJsonParseError::NoError)
-        emit jsonReady(document, m_time);
+        emit jsonReady(JFI_CreateNew(m_frame, m_time, document));
 
     // Delete object in 500 ms
     QTimer::singleShot(500, this, SIGNAL(finished()));
