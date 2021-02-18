@@ -100,6 +100,11 @@ bool Group::read(const QJsonObject &object)
         auto title = object.value("t").toVariant().toString();
         auto widget = object.value("w").toVariant().toString();
 
+        title = title.replace("\n", "");
+        title = title.replace("\r", "");
+        widget = widget.replace("\n", "");
+        widget = widget.replace("\r", "");
+
         if (!title.isEmpty() && !array.isEmpty())
         {
             m_title = title;

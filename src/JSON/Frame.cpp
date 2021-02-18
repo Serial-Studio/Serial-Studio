@@ -93,6 +93,10 @@ bool Frame::read(const QJsonObject &object)
     auto title = object.value("t").toString();
     auto groups = object.value("g").toArray();
 
+    // Remove line breaks from title
+    title = title.replace("\n", "");
+    title = title.replace("\r", "");
+
     // We need to have a project title and at least one group
     if (!title.isEmpty() && !groups.isEmpty())
     {

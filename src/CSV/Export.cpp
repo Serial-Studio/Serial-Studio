@@ -183,6 +183,13 @@ void Export::writeValues()
                 auto datasetUnits = dataset.value("u").toVariant().toString();
                 auto datasetValue = dataset.value("v").toVariant().toString();
 
+                datasetTitle = datasetTitle.replace("\n", "");
+                datasetUnits = datasetUnits.replace("\n", "");
+                datasetValue = datasetValue.replace("\n", "");
+                datasetTitle = datasetTitle.replace("\r", "");
+                datasetUnits = datasetUnits.replace("\r", "");
+                datasetValue = datasetValue.replace("\r", "");
+
                 if (datasetTitle.isEmpty())
                     continue;
 

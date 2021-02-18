@@ -101,6 +101,15 @@ bool Dataset::read(const QJsonObject &object)
         auto units = object.value("u").toVariant().toString();
         auto widget = object.value("w").toVariant().toString();
 
+        title = title.replace("\n", "");
+        title = title.replace("\r", "");
+        value = value.replace("\n", "");
+        value = value.replace("\r", "");
+        units = units.replace("\n", "");
+        units = units.replace("\r", "");
+        widget = widget.replace("\n", "");
+        widget = widget.replace("\r", "");
+
         if (!value.isEmpty())
         {
             m_graph = graph;
