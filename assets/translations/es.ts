@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Check for updates</source>
-        <translation>Buscar actualizaciones</translation>
+        <translation type="vanished">Buscar actualizaciones</translation>
     </message>
     <message>
         <source>Documentation</source>
@@ -45,7 +45,11 @@
     </message>
     <message>
         <source>Open log file</source>
-        <translation>Abrir archivo de log</translation>
+        <translation type="vanished">Abrir archivo de log</translation>
+    </message>
+    <message>
+        <source>Website</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -178,6 +182,18 @@
     <message>
         <source>No data received so far</source>
         <translation>No se han recibido datos hasta ahora</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide menubar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show menubar</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -726,6 +742,332 @@
     </message>
 </context>
 <context>
+    <name>Menubar</name>
+    <message>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select JSON file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CSV export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable CSV export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show CSV in explorer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replay CSV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print console output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export console output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Copiar</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation type="unfinished">Seleccionar todo</translation>
+    </message>
+    <message>
+        <source>Clear console output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Communication mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device sends JSON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load JSON from computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished">Vista</translation>
+    </message>
+    <message>
+        <source>Console</source>
+        <translation type="unfinished">Consola</translation>
+    </message>
+    <message>
+        <source>Dashboard</source>
+        <translation type="unfinished">Tablero</translation>
+    </message>
+    <message>
+        <source>Widgets</source>
+        <translation type="unfinished">Widgets</translation>
+    </message>
+    <message>
+        <source>Show setup pane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide menubar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show menubar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Autoscroll</source>
+        <translation type="unfinished">Desplazamiento automático</translation>
+    </message>
+    <message>
+        <source>Show timestamp</source>
+        <translation type="unfinished">Marca de tiempo</translation>
+    </message>
+    <message>
+        <source>VT-100 emulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Echo user commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display mode</source>
+        <translation type="unfinished">Visualización</translation>
+    </message>
+    <message>
+        <source>Normal (plain text)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Binary (hexadecimal)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line ending character</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto-updater</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check for updates</source>
+        <translation type="unfinished">Buscar actualizaciones</translation>
+    </message>
+    <message>
+        <source>Project website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Documentation/wiki</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show log file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Report bug</source>
+        <translation type="unfinished">Reportar un error</translation>
+    </message>
+</context>
+<context>
+    <name>MenubarMacOS</name>
+    <message>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select JSON file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CSV export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable CSV export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show CSV in explorer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replay CSV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print console output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export console output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Copiar</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation type="unfinished">Seleccionar todo</translation>
+    </message>
+    <message>
+        <source>Clear console output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Communication mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device sends JSON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load JSON from computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished">Vista</translation>
+    </message>
+    <message>
+        <source>Console</source>
+        <translation type="unfinished">Consola</translation>
+    </message>
+    <message>
+        <source>Dashboard</source>
+        <translation type="unfinished">Tablero</translation>
+    </message>
+    <message>
+        <source>Widgets</source>
+        <translation type="unfinished">Widgets</translation>
+    </message>
+    <message>
+        <source>Show setup pane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Autoscroll</source>
+        <translation type="unfinished">Desplazamiento automático</translation>
+    </message>
+    <message>
+        <source>Show timestamp</source>
+        <translation type="unfinished">Marca de tiempo</translation>
+    </message>
+    <message>
+        <source>VT-100 emulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Echo user commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display mode</source>
+        <translation type="unfinished">Visualización</translation>
+    </message>
+    <message>
+        <source>Normal (plain text)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Binary (hexadecimal)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line ending character</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto-updater</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check for updates</source>
+        <translation type="unfinished">Buscar actualizaciones</translation>
+    </message>
+    <message>
+        <source>Project website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Documentation/wiki</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show log file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Report bug</source>
+        <translation type="unfinished">Reportar un error</translation>
+    </message>
+</context>
+<context>
     <name>Network</name>
     <message>
         <source>Socket type</source>
@@ -1054,7 +1396,7 @@
     </message>
     <message>
         <source>About</source>
-        <translation>Acerca de</translation>
+        <translation type="vanished">Acerca de</translation>
     </message>
     <message>
         <source>CSV Export</source>
@@ -1128,7 +1470,7 @@
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
-        <translation>¿Debería %1 buscar actualizaciones automáticamente? También puedes buscar actualizaciones manualmente desde el cuadro de diálogo &quot;Acerca de&quot;</translation>
+        <translation type="vanished">¿Debería %1 buscar actualizaciones automáticamente? También puedes buscar actualizaciones manualmente desde el cuadro de diálogo &quot;Acerca de&quot;</translation>
     </message>
     <message>
         <source>Drop *.json and *.csv files here</source>
@@ -1137,6 +1479,10 @@
     <message>
         <source>Drop JSON and CSV files here</source>
         <translation>Arrastre archivos JSON y CSV aquí</translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

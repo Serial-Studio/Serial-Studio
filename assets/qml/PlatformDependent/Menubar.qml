@@ -211,6 +211,14 @@ MenuBar {
             onTriggered: app.toggleMenubar()
             text: root.visible ? qsTr("Hide menubar") : qsTr("Show menubar")
         }
+
+        MenuSeparator {}
+
+        DecentMenuItem {
+            sequence: StandardKey.FullScreen
+            onTriggered: app.toggleFullscreen()
+            text: app.fullScreen ? qsTr("Exit full screen") : qsTr("Enter full screen")
+        }
     }
 
     //

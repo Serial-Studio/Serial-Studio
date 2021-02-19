@@ -186,6 +186,14 @@ MenuBar {
             text: qsTr("Show setup pane")
             onTriggered: app.togglePreferences()
         }
+
+        MenuSeparator {}
+
+        DecentMenuItem {
+            sequence: StandardKey.FullScreen
+            onTriggered: app.toggleFullscreen()
+            text: app.fullScreen ? qsTr("Exit full screen") : qsTr("Enter full screen")
+        }
     }
 
     //

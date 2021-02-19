@@ -68,18 +68,29 @@ ApplicationWindow {
                 firstChange = false
 
             windowMaximized = true
+            fullScreen = false
+        }
+
+        else if (visibility === Window.FullScreen) {
+            if (!fullScreen)
+                firstChange = false
+
+            windowMaximized = false
+            fullScreen = true
         }
 
         else if (visibility !== Window.Hidden) {
-            if (windowMaximized && firstChange) {
+            if (windowMaximized || fullScreen && firstChange) {
                 app.x = 100
                 app.y = 100
                 app.width = app.minimumWidth
                 app.height = app.minimumHeight
             }
 
+            fullScreen = false
             windowMaximized = false
         }
+
     }
 
     //
@@ -97,6 +108,11 @@ ApplicationWindow {
     // Menubar status
     //
     property bool menubarEnabled: true
+
+    //
+    // Fullscreen status
+    //
+    property bool fullScreen: false
 
     //
     // Check for updates (non-silent mode)
@@ -167,6 +183,17 @@ ApplicationWindow {
     //
     function selectAllConsole() {
         terminal.selectAll()
+    }
+
+    //
+    // Toggle fullscreen state
+    //
+    function toggleFullscreen() {
+        app.fullScreen = !app.fullScreen
+        if (app.fullScreen)
+            app.showFullScreen()
+        else
+            app.showNormal()
     }
 
     //
@@ -250,7 +277,9 @@ ApplicationWindow {
             }
 
             // Show app window
-            if (app.windowMaximized)
+            if (app.fullScreen)
+                app.showFullScreen()
+            else if (app.windowMaximized)
                 app.showMaximized()
             else
                 app.showNormal()
@@ -313,6 +342,7 @@ ApplicationWindow {
         property alias appW: app.width
         property alias appH: app.height
         property alias appStatus: app.appLaunchStatus
+        property alias windowFullScreen: app.fullScreen
         property alias autoUpdater: app.automaticUpdates
         property alias appMaximized: app.windowMaximized
         property alias menubarVisible: app.menubarEnabled
