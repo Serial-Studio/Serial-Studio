@@ -24,10 +24,13 @@
 #include "Manager.h"
 
 #include <QFile>
-#include <Logger.h>
-#include <QClipboard>
+#include <QPrinter>
 #include <QTextCodec>
 #include <QFileDialog>
+#include <QPrintDialog>
+#include <QTextDocument>
+
+#include <Logger.h>
 #include <Misc/Utilities.h>
 #include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
@@ -299,15 +302,6 @@ void Console::historyDown()
 }
 
 /**
- * Adds the given data to the system clipboard
- */
-void Console::copy(const QString &data)
-{
-    if (!data.isEmpty())
-        qApp->clipboard()->setText(data);
-}
-
-/**
  * Sends the given @a data to the currently connected device using the options specified
  * by the user with the rest of the functions of this class.
  *
@@ -359,6 +353,36 @@ void Console::setEcho(const bool enabled)
 {
     m_echo = enabled;
     emit echoChanged();
+}
+
+/**
+ * Creates a text document with current console output & prints it using native
+ * system libraries/toolkits.
+ */
+void Console::print(const QString &fontFamily)
+{
+    // Get document font (specified by QML ui)
+    QFont font;
+    font.setPointSize(10);
+    font.setFamily(fontFamily);
+
+    // Create text document
+    QTextDocument document;
+    document.setDefaultFont(font);
+    document.setPlainText(m_textBuffer);
+
+    // Create printer object
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setFullPage(true);
+    printer.setDocName(qApp->applicationName());
+    printer.setPageOrientation(QPageLayout::Portrait);
+
+    // Show print dialog
+    QPrintDialog printDialog(&printer, Q_NULLPTR);
+    if (printDialog.exec() == QDialog::Accepted)
+    {
+        document.print(&printer);
+    }
 }
 
 /**

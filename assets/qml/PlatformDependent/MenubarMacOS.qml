@@ -67,9 +67,9 @@ MenuBar {
 
         MenuItem {
             shortcut: StandardKey.Print
-            onTriggered: Cpp_IO_Console.print()
+            text: qsTr("Print") + "..."
             enabled: Cpp_IO_Console.saveAvailable
-            text: qsTr("Print console output") + "..."
+            onTriggered: Cpp_IO_Console.print(app.monoFont)
         }
 
         MenuItem {

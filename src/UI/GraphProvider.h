@@ -63,6 +63,7 @@ public:
     int graphCount() const;
     int displayedPoints() const;
     QVector<JSON::Dataset *> datasets() const;
+
     Q_INVOKABLE double getValue(const int index) const;
     Q_INVOKABLE QPointF graphRange(const int index) const;
     Q_INVOKABLE double minimumValue(const int index) const;

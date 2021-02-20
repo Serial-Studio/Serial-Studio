@@ -122,9 +122,9 @@ public slots:
     void clear();
     void historyUp();
     void historyDown();
-    void copy(const QString &data);
     void send(const QString &data);
     void setEcho(const bool enabled);
+    void print(const QString &fontFamily);
     void setDataMode(const DataMode mode);
     void setAutoscroll(const bool enabled);
     void setShowTimestamp(const bool enabled);
@@ -161,6 +161,7 @@ private:
     QStringList m_historyItems;
 
     QString m_textBuffer;
+    QString m_printFont;
     QByteArray m_dataBuffer;
 };
 }

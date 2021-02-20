@@ -31,9 +31,17 @@ MenuBar {
     // Set background color + border
     //
     background: Rectangle {
-        border.width: 1
-        border.color: palette.midlight
-        color: Qt.lighter(app.windowBackgroundColor)
+        gradient: Gradient {
+            GradientStop {
+                position: 0
+                color: Qt.lighter(app.windowBackgroundColor)
+            }
+
+            GradientStop {
+                position: 1
+                color: app.windowBackgroundColor
+            }
+        }
     }
 
     //
@@ -84,9 +92,9 @@ MenuBar {
 
         DecentMenuItem {
             sequence: StandardKey.Print
-            onClicked: Cpp_IO_Console.print()
+            text: qsTr("Print") + "..."
             enabled: Cpp_IO_Console.saveAvailable
-            text: qsTr("Print console output") + "..."
+            onTriggered: Cpp_IO_Console.print(app.monoFont)
         }
 
         DecentMenuItem {

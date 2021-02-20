@@ -62,7 +62,6 @@ Control {
 
         anchors {
             fill: parent
-            topMargin: -border.width
             leftMargin: -border.width * 10
             rightMargin: -border.width * 10
         }

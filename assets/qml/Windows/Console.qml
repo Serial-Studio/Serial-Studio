@@ -132,8 +132,8 @@ Control {
         MenuItem {
             opacity: enabled ? 1 : 0.5
             text: qsTr("Print")
-            onTriggered: Cpp_IO_Console.print()
             enabled: Cpp_IO_Console.saveAvailable
+            onTriggered: Cpp_IO_Console.print(app.monoFont)
         }
 
         MenuItem {

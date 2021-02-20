@@ -54,6 +54,7 @@ QT += quick
 QT += charts
 QT += widgets
 QT += serialport
+QT += printsupport
 QT += quickcontrols2
 
 #-----------------------------------------------------------------------------------------

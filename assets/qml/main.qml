@@ -42,7 +42,7 @@ ApplicationWindow {
     readonly property string monoFont: {
         switch (Qt.platform.os) {
         case "osx":
-            return "Menlo"
+            return "Monaco"
         case "windows":
             return "Consolas"
         default:
@@ -211,6 +211,9 @@ ApplicationWindow {
     palette.buttonText: "#fff"
     palette.windowText: "#fff"
     palette.window: app.windowBackgroundColor
+    background: Rectangle {
+        color: app.windowBackgroundColor
+    }
 
     //
     // Startup code
