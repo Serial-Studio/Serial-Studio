@@ -68,6 +68,9 @@ Export::~Export()
     closeFile();
 }
 
+/**
+ * Returns a pointer to the only instance of this class
+ */
 Export *Export::getInstance()
 {
     if (!INSTANCE)

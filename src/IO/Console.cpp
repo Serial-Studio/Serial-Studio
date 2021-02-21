@@ -358,6 +358,8 @@ void Console::setEcho(const bool enabled)
 /**
  * Creates a text document with current console output & prints it using native
  * system libraries/toolkits.
+ *
+ * @param fontFamily the font family to use to render the text document
  */
 void Console::print(const QString &fontFamily)
 {

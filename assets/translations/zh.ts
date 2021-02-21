@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>Website</source>
-        <translation type="unfinished"></translation>
+        <translation>网站</translation>
     </message>
 </context>
 <context>
@@ -181,15 +181,15 @@
     </message>
     <message>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>打印</translation>
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation type="unfinished"></translation>
+        <translation>隐藏菜单栏</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation type="unfinished"></translation>
+        <translation>显示菜单栏</translation>
     </message>
 </context>
 <context>
@@ -710,326 +710,326 @@
     <name>Menubar</name>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>文件</translation>
     </message>
     <message>
         <source>Select JSON file</source>
-        <translation type="unfinished"></translation>
+        <translation>选择JSON映射文件</translation>
     </message>
     <message>
         <source>CSV export</source>
-        <translation type="unfinished"></translation>
+        <translation>导出CSV</translation>
     </message>
     <message>
         <source>Enable CSV export</source>
-        <translation type="unfinished"></translation>
+        <translation>启用CSV导出</translation>
     </message>
     <message>
         <source>Show CSV in explorer</source>
-        <translation type="unfinished"></translation>
+        <translation>在资源管理器中显示CSV</translation>
     </message>
     <message>
         <source>Replay CSV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Print console output</source>
-        <translation type="unfinished"></translation>
+        <translation>重播CSV</translation>
     </message>
     <message>
         <source>Export console output</source>
-        <translation type="unfinished"></translation>
+        <translation>导出控制台数据</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>辞职</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">复制</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="unfinished">全选</translation>
+        <translation>全选</translation>
     </message>
     <message>
         <source>Clear console output</source>
-        <translation type="unfinished"></translation>
+        <translation>清除控制台输出</translation>
     </message>
     <message>
         <source>Communication mode</source>
-        <translation type="unfinished"></translation>
+        <translation>通讯方式</translation>
     </message>
     <message>
         <source>Device sends JSON</source>
-        <translation type="unfinished"></translation>
+        <translation>设备发送JSON</translation>
     </message>
     <message>
         <source>Load JSON from computer</source>
-        <translation type="unfinished"></translation>
+        <translation>从计算机加载JSON</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished">视图</translation>
+        <translation>视图</translation>
     </message>
     <message>
         <source>Console</source>
-        <translation type="unfinished">控制台</translation>
+        <translation>控制台</translation>
     </message>
     <message>
         <source>Dashboard</source>
-        <translation type="unfinished">仪表盘</translation>
+        <translation>仪表盘</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation type="unfinished">小部件</translation>
+        <translation>小部件</translation>
     </message>
     <message>
         <source>Show setup pane</source>
-        <translation type="unfinished"></translation>
+        <translation>显示设置窗格</translation>
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation type="unfinished"></translation>
+        <translation>隐藏菜单栏</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation type="unfinished"></translation>
+        <translation>显示菜单栏</translation>
     </message>
     <message>
         <source>Exit full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>退出全屏</translation>
     </message>
     <message>
         <source>Enter full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>进入全屏</translation>
     </message>
     <message>
         <source>Autoscroll</source>
-        <translation type="unfinished">自动滚屏</translation>
+        <translation>自动滚屏</translation>
     </message>
     <message>
         <source>Show timestamp</source>
-        <translation type="unfinished">显示时间戳</translation>
+        <translation>显示时间戳</translation>
     </message>
     <message>
         <source>VT-100 emulation</source>
-        <translation type="unfinished"></translation>
+        <translation>VT-100仿真</translation>
     </message>
     <message>
         <source>Echo user commands</source>
-        <translation type="unfinished"></translation>
+        <translation>回显用户命令</translation>
     </message>
     <message>
         <source>Display mode</source>
-        <translation type="unfinished">可视化模式</translation>
+        <translation>可视化模式</translation>
     </message>
     <message>
         <source>Normal (plain text)</source>
-        <translation type="unfinished"></translation>
+        <translation>普通（纯文本）</translation>
     </message>
     <message>
         <source>Binary (hexadecimal)</source>
-        <translation type="unfinished"></translation>
+        <translation>二进制（十六进制）</translation>
     </message>
     <message>
         <source>Line ending character</source>
-        <translation type="unfinished"></translation>
+        <translation>行尾字符</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>关于%1</translation>
     </message>
     <message>
         <source>Auto-updater</source>
-        <translation type="unfinished"></translation>
+        <translation>自动更新</translation>
     </message>
     <message>
         <source>Check for updates</source>
-        <translation type="unfinished">检查更新</translation>
+        <translation>检查更新</translation>
     </message>
     <message>
         <source>Project website</source>
-        <translation type="unfinished"></translation>
+        <translation>项目网站</translation>
     </message>
     <message>
         <source>Documentation/wiki</source>
-        <translation type="unfinished"></translation>
+        <translation>文档/维基</translation>
     </message>
     <message>
         <source>Show log file</source>
-        <translation type="unfinished"></translation>
+        <translation>打开日志文件</translation>
     </message>
     <message>
         <source>Report bug</source>
-        <translation type="unfinished">反馈问题</translation>
+        <translation>反馈问题</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation>打印</translation>
     </message>
 </context>
 <context>
     <name>MenubarMacOS</name>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>文件</translation>
     </message>
     <message>
         <source>Select JSON file</source>
-        <translation type="unfinished"></translation>
+        <translation>选择JSON映射文件</translation>
     </message>
     <message>
         <source>CSV export</source>
-        <translation type="unfinished"></translation>
+        <translation>导出CSV</translation>
     </message>
     <message>
         <source>Enable CSV export</source>
-        <translation type="unfinished"></translation>
+        <translation>启用CSV导出</translation>
     </message>
     <message>
         <source>Show CSV in explorer</source>
-        <translation type="unfinished"></translation>
+        <translation>在资源管理器中显示CSV</translation>
     </message>
     <message>
         <source>Replay CSV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Print console output</source>
-        <translation type="unfinished"></translation>
+        <translation>重播CSV</translation>
     </message>
     <message>
         <source>Export console output</source>
-        <translation type="unfinished"></translation>
+        <translation>导出控制台数据</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>辞职</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">复制</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="unfinished">全选</translation>
+        <translation>全选</translation>
     </message>
     <message>
         <source>Clear console output</source>
-        <translation type="unfinished"></translation>
+        <translation>清除控制台输出</translation>
     </message>
     <message>
         <source>Communication mode</source>
-        <translation type="unfinished"></translation>
+        <translation>VT-100仿真</translation>
     </message>
     <message>
         <source>Device sends JSON</source>
-        <translation type="unfinished"></translation>
+        <translation>设备发送JSON</translation>
     </message>
     <message>
         <source>Load JSON from computer</source>
-        <translation type="unfinished"></translation>
+        <translation>从计算机加载JSON</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished">视图</translation>
+        <translation>视图</translation>
     </message>
     <message>
         <source>Console</source>
-        <translation type="unfinished">控制台</translation>
+        <translation>控制台</translation>
     </message>
     <message>
         <source>Dashboard</source>
-        <translation type="unfinished">仪表盘</translation>
+        <translation>仪表盘</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation type="unfinished">小部件</translation>
+        <translation>小部件</translation>
     </message>
     <message>
         <source>Show setup pane</source>
-        <translation type="unfinished"></translation>
+        <translation>显示设置窗格</translation>
     </message>
     <message>
         <source>Exit full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>退出全屏</translation>
     </message>
     <message>
         <source>Enter full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>进入全屏</translation>
     </message>
     <message>
         <source>Autoscroll</source>
-        <translation type="unfinished">自动滚屏</translation>
+        <translation>自动滚屏</translation>
     </message>
     <message>
         <source>Show timestamp</source>
-        <translation type="unfinished">显示时间戳</translation>
+        <translation>显示时间戳</translation>
     </message>
     <message>
         <source>VT-100 emulation</source>
-        <translation type="unfinished"></translation>
+        <translation>VT-100仿真</translation>
     </message>
     <message>
         <source>Echo user commands</source>
-        <translation type="unfinished"></translation>
+        <translation>回显用户命令</translation>
     </message>
     <message>
         <source>Display mode</source>
-        <translation type="unfinished">可视化模式</translation>
+        <translation>可视化模式</translation>
     </message>
     <message>
         <source>Normal (plain text)</source>
-        <translation type="unfinished"></translation>
+        <translation>普通（纯文本）</translation>
     </message>
     <message>
         <source>Binary (hexadecimal)</source>
-        <translation type="unfinished"></translation>
+        <translation>二进制（十六进制）</translation>
     </message>
     <message>
         <source>Line ending character</source>
-        <translation type="unfinished"></translation>
+        <translation>行尾字符</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>关于%1</translation>
     </message>
     <message>
         <source>Auto-updater</source>
-        <translation type="unfinished"></translation>
+        <translation>自动更新</translation>
     </message>
     <message>
         <source>Check for updates</source>
-        <translation type="unfinished">检查更新</translation>
+        <translation>检查更新</translation>
     </message>
     <message>
         <source>Project website</source>
-        <translation type="unfinished"></translation>
+        <translation>项目网站</translation>
     </message>
     <message>
         <source>Documentation/wiki</source>
-        <translation type="unfinished"></translation>
+        <translation>文档/维基</translation>
     </message>
     <message>
         <source>Show log file</source>
-        <translation type="unfinished"></translation>
+        <translation>打开日志文件</translation>
     </message>
     <message>
         <source>Report bug</source>
-        <translation type="unfinished">反馈问题</translation>
+        <translation>反馈问题</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation>打印</translation>
     </message>
 </context>
 <context>
@@ -1387,7 +1387,7 @@
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation type="unfinished"></translation>
+        <translation>%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
     </message>
 </context>
 </TS>
