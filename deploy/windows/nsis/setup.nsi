@@ -29,7 +29,7 @@ Unicode True
 !define DESCRIPTION                  "Dashboard software for serial port devices"
 !define VERSIONMAJOR                 1
 !define VERSIONMINOR                 0
-!define VERSIONBUILD                 16
+!define VERSIONBUILD                 18
 !define MUI_ABORTWARNING
 !define INSTALL_DIR                  "$PROGRAMFILES64\${APPNAME}"
 !define MUI_FINISHPAGE_RUN
@@ -77,7 +77,7 @@ Section "${APPNAME} (required)" SecDummy
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
   IntFmt $0 "0x%08X" $0
   
-  DeleteRegKey HKCU "Software\${COMPANYNAME}\${APPNAME}"
+  #DeleteRegKey HKCU "Software\${COMPANYNAME}\${APPNAME}"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}"
 
   WriteUninstaller "${INSTALL_DIR}\uninstall.exe"
