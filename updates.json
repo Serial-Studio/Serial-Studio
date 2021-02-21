@@ -1,22 +1,22 @@
 {
    "updates":{
       "windows":{
-         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.17",
-         "latest-version":"1.0.17",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.18",
+         "latest-version":"1.0.18",
          "download-url":"",
          "changelog":"",
          "mandatory":false
       },
       "osx":{
-         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.17",
-         "latest-version":"1.0.17",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.18",
+         "latest-version":"1.0.18",
          "download-url":"",
          "changelog":"",
          "mandatory":false
       },
       "linux":{
-         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.17",
-         "latest-version":"1.0.17",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.0.18",
+         "latest-version":"1.0.18",
          "download-url":"",
          "changelog":"",
          "mandatory":false
