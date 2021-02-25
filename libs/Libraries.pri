@@ -26,11 +26,13 @@
 
 DEFINES += CUTELOGGER_SRC
 DEFINES += QTCSV_STATIC_LIB
+DEFINES += QT_BUILD_QMQTT_SRC
 
 #-------------------------------------------------------------------------------
 # Include *.pri files
 #-------------------------------------------------------------------------------
 
 include($$PWD/qtcsv/qtcsv.pri)
+include($$PWD/qmqtt/qmqtt.pri)
 include($$PWD/CuteLogger/CuteLogger.pri)
 include($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
