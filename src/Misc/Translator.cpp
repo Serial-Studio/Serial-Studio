@@ -128,6 +128,22 @@ QString Translator::welcomeConsoleText() const
 }
 
 /**
+ * Returns the acknowledgements text.
+ */
+QString Translator::acknowledgementsText() const
+{
+    QString text = "";
+    QFile file(":/messages/Acknowledgements.txt");
+    if (file.open(QFile::ReadOnly))
+    {
+        text = QString::fromUtf8(file.readAll());
+        file.close();
+    }
+
+    return text;
+}
+
+/**
  * Returns a list with the available translation languages.
  */
 QStringList Translator::availableLanguages() const

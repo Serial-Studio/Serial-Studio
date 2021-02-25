@@ -49,6 +49,7 @@
         <file>instruments/AttitudeDial.svg</file>
         <file>instruments/AttitudePointer.svg</file>
         <file>instruments/Crosshair.svg</file>
+        <file>messages/Acknowledgements.txt</file>
         <file>messages/Welcome_DE.txt</file>
         <file>messages/Welcome_EN.txt</file>
         <file>messages/Welcome_ES.txt</file>
@@ -65,6 +66,7 @@
         <file>qml/Widgets/MapDelegate.qml</file>
         <file>qml/Widgets/Window.qml</file>
         <file>qml/Windows/About.qml</file>
+	<file>qml/Windows/Acknowledgements.qml</file>
         <file>qml/Windows/Console.qml</file>
         <file>qml/Windows/CsvPlayer.qml</file>
         <file>qml/Windows/DataGrid.qml</file>

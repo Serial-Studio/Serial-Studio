@@ -139,6 +139,12 @@ Window {
                 onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
             }
 
+            Button {
+                Layout.fillWidth: true
+                text: qsTr("Acknowledgements")
+                onClicked: acknowledgements.show()
+            }
+
             Item {
                 height: app.spacing
             }
@@ -153,5 +159,12 @@ Window {
                 height: app.spacing
             }
         }
+    }
+
+    //
+    // Acknowledgements dialog
+    //
+    Acknowledgements {
+        id: acknowledgements
     }
 }
