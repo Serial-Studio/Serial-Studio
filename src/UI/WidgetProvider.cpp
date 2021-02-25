@@ -48,9 +48,9 @@ WidgetProvider::WidgetProvider()
     // Module signals/slots
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
-    auto te = Misc::TimerEvents::getInstance();
+    auto dp = DataProvider::getInstance();
+    connect(dp, SIGNAL(updated()), this, SLOT(updateModels()));
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(te, SIGNAL(timeout42Hz()), this, SLOT(updateModels()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
     LOG_TRACE() << "Class initialized";
 }
@@ -419,7 +419,7 @@ void WidgetProvider::updateModels()
 
     // Check if frame is valid
     if (!DataProvider::getInstance()->latestFrame()->isValid())
-        return;
+       return;
 
     // Update groups
     m_mapGroups = getWidgetGroup("map");
