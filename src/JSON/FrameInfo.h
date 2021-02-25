@@ -32,7 +32,7 @@
  * to correctly process all received frames in a thread-worker manner.
  *
  * Every time we receive a frame from the serial/network device, we generate the JSON
- * in another thread in order to avoid putting to much pressure in the main (UI) thread.
+ * in another thread in order to avoid putting excessive pressure in the GUI thread.
  *
  * This results in a perceived increase of application performance. However, since each
  * JSON frame is generated in a different worker thread, the main thread may not receive
