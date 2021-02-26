@@ -77,18 +77,10 @@ Window {
                 }
             }
 
-            Item {
-                height: app.spacing
-            }
-
             Button {
                 text: qsTr("Close")
                 onClicked: root.close()
-                Layout.alignment: Qt.AlignHCenter
-            }
-
-            Item {
-                height: app.spacing
+                Layout.alignment: Qt.AlignRight
             }
         }
     }

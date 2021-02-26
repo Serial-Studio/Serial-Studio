@@ -39,6 +39,10 @@
         <source>Website</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Acknowledgements</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>AccelerometerDelegate</name>
@@ -60,6 +64,17 @@
     </message>
     <message>
         <source>Reset</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Acknowledgements</name>
+    <message>
+        <source>Acknowledgements</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Close</source>
         <translation></translation>
     </message>
 </context>

@@ -47,6 +47,10 @@
         <source>Website</source>
         <translation>网站</translation>
     </message>
+    <message>
+        <source>Acknowledgements</source>
+        <translation>致谢</translation>
+    </message>
 </context>
 <context>
     <name>AccelerometerDelegate</name>
@@ -69,6 +73,17 @@
     <message>
         <source>Reset</source>
         <translation>重置</translation>
+    </message>
+</context>
+<context>
+    <name>Acknowledgements</name>
+    <message>
+        <source>Acknowledgements</source>
+        <translation>致谢</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
