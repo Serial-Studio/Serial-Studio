@@ -1,6 +1,8 @@
+# Acknowledgements
+
 Serial Studio makes use of several libraries in order to provide functionality. Below, you can find the libraries used and their respective licenses:
 
-# CuteLogger
+## CuteLogger
 
 Copyright (c) 2010 Boris Moiseev (cyberbobs at gmail dot com)
 
@@ -8,7 +10,7 @@ This program is free software: you can redistribute it and/or modify it under th
   
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-# QSimpleUpdater
+## QSimpleUpdater
 
 Copyright (C) 2020 Alex Spataru ([https://alex-spataru.com/](https://alex-spataru.com))
 
@@ -33,7 +35,7 @@ creator(s) a pint.
 3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes
 you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
 
-# qtcsv
+## qtcsv
 
 Copyright (c) 2015 Antony Cherepanov (antony.cherepanov@gmail.com)
 
@@ -55,12 +57,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-# qmqtt
+## qmqtt
 
 This project is dual licensed under the Eclipse Public License 1.0 and the
 Eclipse Distribution License 1.0 as described in the epl-v10 and edl-v10 files.
 
-## Eclipse Distribution License - v 1.0
+### Eclipse Distribution License - v 1.0
 
 Copyright (c) 2007, Eclipse Foundation, Inc. and its licensors.
 
@@ -91,7 +93,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-## Eclipse Public License - v 1.0
+### Eclipse Public License - v 1.0
 
 THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE PUBLIC
 LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THE PROGRAM
