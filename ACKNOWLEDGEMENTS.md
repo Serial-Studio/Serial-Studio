@@ -1,3 +1,5 @@
+# Acknowledgements
+
 Serial Studio makes use of several libraries in order to provide functionality. Below, you can find the libraries used and their respective licenses:
 
 # CuteLogger
