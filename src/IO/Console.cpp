@@ -39,6 +39,48 @@ using namespace IO;
 static Console *INSTANCE = nullptr;
 
 /**
+ * Generates a hexdump of the given data
+ */
+static QString HexDump(const char *data, size_t size)
+{
+    char str[4096] = "";
+    char ascii[17];
+
+    size_t i, j;
+    ascii[16] = '\0';
+    for (i = 0; i < size; ++i)
+    {
+        sprintf(str + strlen(str), "%02X ", static_cast<quint8>(data[i]));
+
+        if (data[i] >= ' ' && data[i] <= '~')
+            ascii[i % 16] = data[i];
+        else
+            ascii[i % 16] = '.';
+
+        if ((i + 1) % 8 == 0 || i + 1 == size)
+        {
+            sprintf(str + strlen(str), " ");
+            if ((i + 1) % 16 == 0)
+                sprintf(str + strlen(str), "|  %s \n", ascii);
+
+            else if (i + 1 == size)
+            {
+                ascii[(i + 1) % 16] = '\0';
+
+                if ((i + 1) % 16 <= 8)
+                    sprintf(str + strlen(str), " ");
+                for (j = (i + 1) % 16; j < 16; ++j)
+                    sprintf(str + strlen(str), "   ");
+
+                sprintf(str + strlen(str), "|  %s \n", ascii);
+            }
+        }
+    }
+
+    return QString(str);
+}
+
+/**
  * Constructor function
  */
 Console::Console()
@@ -610,19 +652,18 @@ QString Console::plainTextStr(const QByteArray &data)
  */
 QString Console::hexadecimalStr(const QByteArray &data)
 {
-    // Convert to hex string with spaces between bytes
+    // Convert data to string with dump every ~80 chars
     QString str;
-    QString hex = QString::fromUtf8(data.toHex());
-    for (int i = 0; i < hex.length(); ++i)
+    const int characters = 80;
+    for (int i = 0; i < data.length(); ++i)
     {
-        str.append(hex.at(i));
-        if ((i + 1) % 2 == 0 && i > 0)
-            str.append(" ");
-    }
+        QByteArray line;
+        for (int j = 0; j < qMin(characters, data.length() - i); ++j)
+            line.append(data.at(i + j));
 
-    // Add new line & carriage returns
-    str.replace("0a", "0a\r");
-    str.replace("0d", "0d\n");
+        str.append(HexDump(line.data(), line.size()));
+        str.append("\n");
+    }
 
     // Return string
     return str;

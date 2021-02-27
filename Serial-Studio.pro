@@ -121,12 +121,8 @@ RESOURCES += \
     assets/assets.qrc
 
 DISTFILES += \
-    assets/qml/PlatformDependent/DecentMenuItem.qml \
-    assets/qml/PlatformDependent/Menubar.qml \
-    assets/qml/PlatformDependent/MenubarMacOS.qml \
-    assets/qml/SetupPanes/Network.qml \
-    assets/qml/SetupPanes/Serial.qml \
-    assets/qml/SetupPanes/Settings.qml \
+    assets/qml/PlatformDependent/*.qml \
+    assets/qml/SetupPanes/*.qml \
     assets/qml/Widgets/*.qml \
     assets/qml/Windows/*.qml \
     assets/qml/SetupPanes/*.qml \
@@ -151,6 +147,7 @@ HEADERS += \
     src/JSON/FrameInfo.h \
     src/JSON/Generator.h \
     src/JSON/Group.h \
+    src/MQTT/Publisher.h \
     src/Misc/ModuleManager.h \
     src/Misc/TimerEvents.h \
     src/Misc/Translator.h \
@@ -172,6 +169,7 @@ SOURCES += \
     src/JSON/FrameInfo.cpp \
     src/JSON/Generator.cpp \
     src/JSON/Group.cpp \
+    src/MQTT/Publisher.cpp \
     src/Misc/ModuleManager.cpp \
     src/Misc/TimerEvents.cpp \
     src/Misc/Translator.cpp \

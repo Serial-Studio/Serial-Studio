@@ -419,7 +419,7 @@ void WidgetProvider::updateModels()
 
     // Check if frame is valid
     if (!DataProvider::getInstance()->latestFrame()->isValid())
-       return;
+        return;
 
     // Update groups
     m_mapGroups = getWidgetGroup("map");

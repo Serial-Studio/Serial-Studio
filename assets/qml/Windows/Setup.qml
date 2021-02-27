@@ -66,6 +66,16 @@ Control {
         property alias addressLookup: network.addressLookup
 
         //
+        // MQTT settings
+        //
+        property alias mqttHost: mqttPublisher.host
+        property alias mqttPort: mqttPublisher.port
+        property alias mqttUser: mqttPublisher.user
+        property alias mqttTopic: mqttPublisher.topic
+        property alias mqttPassword: mqttPublisher.password
+        property alias mqttDnsAddress: mqttPublisher.dnsAddress
+
+        //
         // App settings
         //
         property alias language: settings.language
@@ -205,6 +215,12 @@ Control {
             }
 
             TabButton {
+                text: qsTr("MQTT")
+                height: tab.height + 3
+                width: implicitWidth + 2 * app.spacing
+            }
+
+            TabButton {
                 text: qsTr("Settings")
                 height: tab.height + 3
                 width: implicitWidth + 2 * app.spacing
@@ -238,7 +254,14 @@ Control {
                     stack.implicitHeight = network.implicitHeight
                     break
                 case 2:
+                    stack.implicitHeight = mqttPublisher.implicitHeight
+                    break
+                case 3:
                     stack.implicitHeight = settings.implicitHeight
+                    break
+                default:
+                    stack.implicitHeight = 0
+                    break
                 }
             }
 
@@ -252,6 +275,14 @@ Control {
 
             SetupPanes.Network {
                 id: network
+                background: TextField {
+                    enabled: false
+                    palette.base: "#16232a"
+                }
+            }
+
+            SetupPanes.MQTTPublisher {
+                id: mqttPublisher
                 background: TextField {
                     enabled: false
                     palette.base: "#16232a"
