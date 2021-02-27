@@ -68,6 +68,21 @@ Control {
             }
 
             //
+            // Client mode version
+            //
+            Label {
+                text: qsTr("Mode") + ":"
+            } ComboBox {
+                Layout.fillWidth: true
+                model: Cpp_MQTT_Publisher.clientModes
+                currentIndex: Cpp_MQTT_Publisher.clientMode
+                onCurrentIndexChanged: {
+                    if (Cpp_MQTT_Publisher.clientMode !== currentIndex)
+                        Cpp_MQTT_Publisher.clientMode = currentIndex
+                }
+            }
+
+            //
             // Host
             //
             Label {
@@ -172,19 +187,35 @@ Control {
                 enabled: !Cpp_MQTT_Publisher.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
                 text: qsTr("Password") + ":"
-            } TextField {
-                id: _password
+            } RowLayout {
                 Layout.fillWidth: true
-                text: Cpp_MQTT_Publisher.password
-                placeholderText: qsTr("MQTT password")
-                onTextChanged: {
-                    if (Cpp_MQTT_Publisher.password !== text)
-                        Cpp_MQTT_Publisher.password = text
+                spacing: app.spacing / 2
+
+                TextField {
+                    id: _password
+                    Layout.fillWidth: true
+                    echoMode: TextField.PasswordEchoOnEdit
+                    text: Cpp_MQTT_Publisher.password
+                    placeholderText: qsTr("MQTT password")
+                    onTextChanged: {
+                        if (Cpp_MQTT_Publisher.password !== text)
+                            Cpp_MQTT_Publisher.password = text
+                    }
+
+                    opacity: enabled ? 1 : 0.5
+                    enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                    Behavior on opacity {NumberAnimation{}}
                 }
 
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
-                Behavior on opacity {NumberAnimation{}}
+                Button {
+                    checkable: true
+                    icon.color: palette.text
+                    Layout.maximumWidth: height
+                    Layout.alignment: Qt.AlignVCenter
+                    icon.source: "qrc:/icons/visibility.svg"
+                    onCheckedChanged: _password.echoMode = (checked ? TextField.Normal :
+                                                                      TextField.PasswordEchoOnEdit)
+                }
             }
         }
 

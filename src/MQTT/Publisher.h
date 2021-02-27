@@ -35,6 +35,12 @@
 
 namespace MQTT
 {
+enum MQTTClientMode
+{
+    ClientPublisher = 0,
+    ClientSubscriber = 1
+};
+
 class Publisher : public QObject
 {
     // clang-format off
@@ -55,6 +61,10 @@ class Publisher : public QObject
                READ mqttVersion
                WRITE setMqttVersion
                NOTIFY mqttVersionChanged)
+    Q_PROPERTY(int clientMode
+               READ clientMode
+               WRITE setClientMode
+               NOTIFY clientModeChanged)
     Q_PROPERTY(QString username
                READ username
                WRITE setUsername
@@ -72,6 +82,9 @@ class Publisher : public QObject
     Q_PROPERTY(QStringList mqttVersions
                READ mqttVersions
                CONSTANT)
+    Q_PROPERTY(QStringList clientModes
+               READ clientModes
+               CONSTANT)
     Q_PROPERTY(quint16 defaultPort
                READ defaultPort
                CONSTANT)
@@ -87,6 +100,7 @@ signals:
     void usernameChanged();
     void passwordChanged();
     void connectedChanged();
+    void clientModeChanged();
     void mqttVersionChanged();
     void lookupActiveChanged();
 
@@ -96,11 +110,13 @@ public:
     quint16 port() const;
     QString host() const;
     QString topic() const;
+    int clientMode() const;
     int mqttVersion() const;
     QString username() const;
     QString password() const;
     bool lookupActive() const;
     bool isConnectedToHost() const;
+    QStringList clientModes() const;
     QStringList mqttVersions() const;
 
     quint16 defaultPort() const { return 1883; }
@@ -114,6 +130,7 @@ public slots:
     void lookup(const QString &host);
     void setPort(const quint16 port);
     void setHost(const QString &host);
+    void setClientMode(const int mode);
     void setTopic(const QString &topic);
     void setUsername(const QString &username);
     void setPassword(const QString &password);
@@ -134,6 +151,7 @@ private:
     bool m_lookupActive;
     QMQTT::Client m_client;
     QList<JFI_Object> m_jfiList;
+    MQTTClientMode m_clientMode;
 };
 }
 

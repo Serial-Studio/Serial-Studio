@@ -652,17 +652,22 @@ QString Console::plainTextStr(const QByteArray &data)
  */
 QString Console::hexadecimalStr(const QByteArray &data)
 {
+    // Remove line breaks from data
+    QByteArray copy = data;
+    copy.replace("\n", "");
+    copy.replace("\r", "");
+
     // Convert data to string with dump every ~80 chars
     QString str;
     const int characters = 80;
-    for (int i = 0; i < data.length(); ++i)
+    for (int i = 0; i < copy.length(); ++i)
     {
         QByteArray line;
-        for (int j = 0; j < qMin(characters, data.length() - i); ++j)
-            line.append(data.at(i + j));
+        for (int j = 0; j < qMin(characters, copy.length() - i); ++j)
+            line.append(copy.at(i + j));
 
+        i += characters;
         str.append(HexDump(line.data(), line.size()));
-        str.append("\n");
     }
 
     // Return string

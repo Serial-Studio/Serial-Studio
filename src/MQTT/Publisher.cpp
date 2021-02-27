@@ -32,6 +32,7 @@ static Publisher *INSTANCE = nullptr;
 Publisher::Publisher()
 {
     m_lookupActive = false;
+    m_clientMode = MQTTClientMode::ClientPublisher;
 
     connect(&m_client, &QMQTT::Client::connected, this, &Publisher::connectedChanged);
     connect(&m_client, &QMQTT::Client::disconnected, this, &Publisher::connectedChanged);
@@ -80,6 +81,11 @@ int Publisher::mqttVersion() const
     }
 }
 
+int Publisher::clientMode() const
+{
+    return m_clientMode;
+}
+
 QString Publisher::username() const
 {
     return m_client.username();
@@ -103,6 +109,11 @@ bool Publisher::lookupActive() const
 bool Publisher::isConnectedToHost() const
 {
     return m_client.isConnectedToHost();
+}
+
+QStringList Publisher::clientModes() const
+{
+    return QStringList { tr("Publisher"), tr("Suscriber") };
 }
 
 QStringList Publisher::mqttVersions() const
@@ -152,6 +163,12 @@ void Publisher::setHost(const QString &host)
 {
     m_client.setHost(QHostAddress(host));
     emit hostChanged();
+}
+
+void Publisher::setClientMode(const int mode)
+{
+    m_clientMode = (MQTTClientMode)mode;
+    emit clientModeChanged();
 }
 
 void Publisher::setTopic(const QString &topic)
