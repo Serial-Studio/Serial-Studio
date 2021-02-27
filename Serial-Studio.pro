@@ -127,13 +127,15 @@ DISTFILES += \
     assets/qml/Widgets/*.qml \
     assets/qml/Windows/*.qml \
     assets/qml/SetupPanes/*.qml \
-    assets/qml/*.qml
+    assets/qml/*.qml \
+    assets/translations/fr.ts
 
 TRANSLATIONS += \
     assets/translations/en.ts \
     assets/translations/es.ts \
     assets/translations/zh.ts \
-    assets/translations/de.ts
+    assets/translations/de.ts \
+    assets/translations/fr.ts
 
 HEADERS += \
     src/AppInfo.h \
