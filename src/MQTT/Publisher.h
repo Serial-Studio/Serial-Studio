@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#ifndef MQTT_PUBLISHER_H
-#define MQTT_PUBLISHER_H
+#ifndef MQTT_CLIENT_H
+#define MQTT_CLIENT_H
 
 #include <QObject>
 #include <QHostInfo>
@@ -41,7 +41,7 @@ enum MQTTClientMode
     ClientSubscriber = 1
 };
 
-class Publisher : public QObject
+class Client : public QObject
 {
     // clang-format off
     Q_OBJECT
@@ -105,7 +105,7 @@ signals:
     void lookupActiveChanged();
 
 public:
-    static Publisher *getInstance();
+    static Client *getInstance();
 
     quint16 port() const;
     QString host() const;
@@ -120,7 +120,6 @@ public:
     QStringList mqttVersions() const;
 
     quint16 defaultPort() const { return 1883; }
-
     QString defaultHost() const { return "127.0.0.1"; }
 
 public slots:
@@ -137,8 +136,8 @@ public slots:
     void setMqttVersion(const int versionIndex);
 
 private:
-    Publisher();
-    ~Publisher();
+    Client();
+    ~Client();
 
 private slots:
     void sendData();

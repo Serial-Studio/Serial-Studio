@@ -27,45 +27,45 @@
 
 using namespace MQTT;
 
-static Publisher *INSTANCE = nullptr;
+static Client *INSTANCE = nullptr;
 
-Publisher::Publisher()
+Client::Client()
 {
     m_lookupActive = false;
     m_clientMode = MQTTClientMode::ClientPublisher;
 
-    connect(&m_client, &QMQTT::Client::connected, this, &Publisher::connectedChanged);
-    connect(&m_client, &QMQTT::Client::disconnected, this, &Publisher::connectedChanged);
-    connect(&m_client, &QMQTT::Client::error, this, &Publisher::onError);
+    connect(&m_client, &QMQTT::Client::connected, this, &Client::connectedChanged);
+    connect(&m_client, &QMQTT::Client::disconnected, this, &Client::connectedChanged);
+    connect(&m_client, &QMQTT::Client::error, this, &Client::onError);
 
     setPort(defaultPort());
     setHost(defaultHost());
 }
 
-Publisher::~Publisher()
+Client::~Client()
 {
     disconnectFromHost();
 }
 
-Publisher *Publisher::getInstance()
+Client *Client::getInstance()
 {
     if (!INSTANCE)
-        INSTANCE = new Publisher;
+        INSTANCE = new Client;
 
     return INSTANCE;
 }
 
-quint16 Publisher::port() const
+quint16 Client::port() const
 {
     return m_client.port();
 }
 
-QString Publisher::topic() const
+QString Client::topic() const
 {
     return m_topic;
 }
 
-int Publisher::mqttVersion() const
+int Client::mqttVersion() const
 {
     switch (m_client.version())
     {
@@ -81,47 +81,47 @@ int Publisher::mqttVersion() const
     }
 }
 
-int Publisher::clientMode() const
+int Client::clientMode() const
 {
     return m_clientMode;
 }
 
-QString Publisher::username() const
+QString Client::username() const
 {
     return m_client.username();
 }
 
-QString Publisher::password() const
+QString Client::password() const
 {
     return QString::fromUtf8(m_client.password());
 }
 
-QString Publisher::host() const
+QString Client::host() const
 {
     return m_client.host().toString();
 }
 
-bool Publisher::lookupActive() const
+bool Client::lookupActive() const
 {
     return m_lookupActive;
 }
 
-bool Publisher::isConnectedToHost() const
+bool Client::isConnectedToHost() const
 {
     return m_client.isConnectedToHost();
 }
 
-QStringList Publisher::clientModes() const
+QStringList Client::clientModes() const
 {
     return QStringList { tr("Publisher"), tr("Suscriber") };
 }
 
-QStringList Publisher::mqttVersions() const
+QStringList Client::mqttVersions() const
 {
     return QStringList { "MQTT 3.1.0", "MQTT 3.1.1" };
 }
 
-void Publisher::connectToHost()
+void Client::connectToHost()
 {
     m_client.connectToHost();
 }
@@ -130,7 +130,7 @@ void Publisher::connectToHost()
  * Connects/disconnects the application from the current MQTT broker. This function is
  * used as a convenience for the connect/disconnect button.
  */
-void Publisher::toggleConnection()
+void Client::toggleConnection()
 {
     if (isConnectedToHost())
         disconnectFromHost();
@@ -138,7 +138,7 @@ void Publisher::toggleConnection()
         connectToHost();
 }
 
-void Publisher::disconnectFromHost()
+void Client::disconnectFromHost()
 {
     m_client.disconnectFromHost();
 }
@@ -146,50 +146,50 @@ void Publisher::disconnectFromHost()
 /**
  * Performs a DNS lookup for the given @a host name
  */
-void Publisher::lookup(const QString &host)
+void Client::lookup(const QString &host)
 {
     m_lookupActive = true;
     emit lookupActiveChanged();
-    QHostInfo::lookupHost(host.simplified(), this, &Publisher::lookupFinished);
+    QHostInfo::lookupHost(host.simplified(), this, &Client::lookupFinished);
 }
 
-void Publisher::setPort(const quint16 port)
+void Client::setPort(const quint16 port)
 {
     m_client.setPort(port);
     emit portChanged();
 }
 
-void Publisher::setHost(const QString &host)
+void Client::setHost(const QString &host)
 {
     m_client.setHost(QHostAddress(host));
     emit hostChanged();
 }
 
-void Publisher::setClientMode(const int mode)
+void Client::setClientMode(const int mode)
 {
     m_clientMode = (MQTTClientMode)mode;
     emit clientModeChanged();
 }
 
-void Publisher::setTopic(const QString &topic)
+void Client::setTopic(const QString &topic)
 {
     m_topic = topic;
     emit topicChanged();
 }
 
-void Publisher::setUsername(const QString &username)
+void Client::setUsername(const QString &username)
 {
     m_client.setUsername(username);
     emit usernameChanged();
 }
 
-void Publisher::setPassword(const QString &password)
+void Client::setPassword(const QString &password)
 {
     m_client.setPassword(password.toUtf8());
     emit passwordChanged();
 }
 
-void Publisher::setMqttVersion(const int versionIndex)
+void Client::setMqttVersion(const int versionIndex)
 {
     switch (versionIndex)
     {
@@ -206,19 +206,22 @@ void Publisher::setMqttVersion(const int versionIndex)
     emit mqttVersionChanged();
 }
 
-void Publisher::sendData()
+void Client::sendData()
 {
     // Sort JFI list from oldest to most recent
     JFI_SortList(&m_jfiList);
 
+    // Send data in CSV format
+
     // Clear JFI list
+    m_jfiList.clear();
 }
 
 /**
  * Sets the host IP address when the lookup finishes.
  * If the lookup fails, the error code/string shall be shown to the user in a messagebox.
  */
-void Publisher::lookupFinished(const QHostInfo &info)
+void Client::lookupFinished(const QHostInfo &info)
 {
     m_lookupActive = false;
     emit lookupActiveChanged();
@@ -236,12 +239,109 @@ void Publisher::lookupFinished(const QHostInfo &info)
     Misc::Utilities::showMessageBox(tr("IP address lookup error"), info.errorString());
 }
 
-void Publisher::onError(const QMQTT::ClientError error)
+void Client::onError(const QMQTT::ClientError error)
 {
-    qDebug() << error;
+    QString str;
+
+    switch (error)
+    {
+        case QMQTT::UnknownError:
+            str = tr("Unknown error");
+            break;
+        case QMQTT::SocketConnectionRefusedError:
+            str = tr("Connection refused");
+            break;
+        case QMQTT::SocketRemoteHostClosedError:
+            str = tr("Remote host closed the connection");
+            break;
+        case QMQTT::SocketHostNotFoundError:
+            str = tr("Host not found");
+            break;
+        case QMQTT::SocketAccessError:
+            str = tr("Socket access error");
+            break;
+        case QMQTT::SocketResourceError:
+            str = tr("Socket resource error");
+            break;
+        case QMQTT::SocketTimeoutError:
+            str = tr("Socket timeout");
+            break;
+        case QMQTT::SocketDatagramTooLargeError:
+            str = tr("Socket datagram too large");
+            break;
+        case QMQTT::SocketNetworkError:
+            str = tr("Network error");
+            break;
+        case QMQTT::SocketAddressInUseError:
+            str = tr("Address in use");
+            break;
+        case QMQTT::SocketAddressNotAvailableError:
+            str = tr("Address not available");
+            break;
+        case QMQTT::SocketUnsupportedSocketOperationError:
+            str = tr("Unsupported socket operation");
+            break;
+        case QMQTT::SocketUnfinishedSocketOperationError:
+            str = tr("Unfinished socket operation");
+            break;
+        case QMQTT::SocketProxyAuthenticationRequiredError:
+            str = tr("Proxy authentication required");
+            break;
+        case QMQTT::SocketSslHandshakeFailedError:
+            str = tr("SSL handshake failed");
+            break;
+        case QMQTT::SocketProxyConnectionRefusedError:
+            str = tr("Proxy connection refused");
+            break;
+        case QMQTT::SocketProxyConnectionClosedError:
+            str = tr("Proxy connection closed");
+            break;
+        case QMQTT::SocketProxyConnectionTimeoutError:
+            str = tr("Proxy connection timeout");
+            break;
+        case QMQTT::SocketProxyNotFoundError:
+            str = tr("Proxy not found");
+            break;
+        case QMQTT::SocketProxyProtocolError:
+            str = tr("Proxy protocol error");
+            break;
+        case QMQTT::SocketOperationError:
+            str = tr("Operation error");
+            break;
+        case QMQTT::SocketSslInternalError:
+            str = tr("SSL internal error");
+            break;
+        case QMQTT::SocketSslInvalidUserDataError:
+            str = tr("Invalid SSL user data");
+            break;
+        case QMQTT::SocketTemporaryError:
+            str = tr("Socket temprary error");
+            break;
+        case QMQTT::MqttUnacceptableProtocolVersionError:
+            str = tr("Unacceptable MQTT protocol");
+            break;
+        case QMQTT::MqttIdentifierRejectedError:
+            str = tr("MQTT identifier rejected");
+            break;
+        case QMQTT::MqttServerUnavailableError:
+            str = tr("MQTT server unavailable");
+            break;
+        case QMQTT::MqttBadUserNameOrPasswordError:
+            str = tr("Bad MQTT username or password");
+            break;
+        case QMQTT::MqttNotAuthorizedError:
+            str = tr("MQTT authorization error");
+            break;
+        case QMQTT::MqttNoPingResponse:
+            str = tr("MQTT no ping response");
+            break;
+    }
+
+    if (!str.isEmpty())
+        Misc::Utilities::showMessageBox(tr("MQTT client error"), str);
 }
 
-void Publisher::registerJsonFrame(const JFI_Object &frameInfo)
+void Client::registerJsonFrame(const JFI_Object &frameInfo)
 {
     m_jfiList.append(frameInfo);
 }

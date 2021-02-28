@@ -150,7 +150,7 @@ void ModuleManager::initializeQmlInterface()
     auto ioNetwork = IO::DataSources::Network::getInstance();
     auto jsonGenerator = JSON::Generator::getInstance();
     auto utilities = Misc::Utilities::getInstance();
-    auto mqttPublisher = MQTT::Publisher::getInstance();
+    auto mqttPublisher = MQTT::Client::getInstance();
     LOG_INFO() << "Finished initializing C++ modules";
 
     // Retranslate the QML interface automagically
@@ -173,7 +173,7 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_IO_Serial", ioSerial);
     c->setContextProperty("Cpp_IO_Network", ioNetwork);
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
-    c->setContextProperty("Cpp_MQTT_Publisher", mqttPublisher);
+    c->setContextProperty("Cpp_MQTT_Client", mqttPublisher);
 
     // Register app info with QML
     c->setContextProperty("Cpp_AppName", qApp->applicationName());
@@ -211,7 +211,7 @@ void ModuleManager::stopOperations()
     CSV::Player::getInstance()->closeFile();
     IO::Manager::getInstance()->disconnectDevice();
     Misc::TimerEvents::getInstance()->stopTimers();
-    MQTT::Publisher::getInstance()->disconnectFromHost();
+    MQTT::Client::getInstance()->disconnectFromHost();
 
     LOG_INFO() << "Application modules stopped";
 }

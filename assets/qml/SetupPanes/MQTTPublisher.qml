@@ -59,11 +59,11 @@ Control {
                 text: qsTr("Version") + ":"
             } ComboBox {
                 Layout.fillWidth: true
-                model: Cpp_MQTT_Publisher.mqttVersions
-                currentIndex: Cpp_MQTT_Publisher.mqttVersion
+                model: Cpp_MQTT_Client.mqttVersions
+                currentIndex: Cpp_MQTT_Client.mqttVersion
                 onCurrentIndexChanged: {
-                    if (Cpp_MQTT_Publisher.mqttVersion !== currentIndex)
-                        Cpp_MQTT_Publisher.mqttVersion = currentIndex
+                    if (Cpp_MQTT_Client.mqttVersion !== currentIndex)
+                        Cpp_MQTT_Client.mqttVersion = currentIndex
                 }
             }
 
@@ -74,11 +74,11 @@ Control {
                 text: qsTr("Mode") + ":"
             } ComboBox {
                 Layout.fillWidth: true
-                model: Cpp_MQTT_Publisher.clientModes
-                currentIndex: Cpp_MQTT_Publisher.clientMode
+                model: Cpp_MQTT_Client.clientModes
+                currentIndex: Cpp_MQTT_Client.clientMode
                 onCurrentIndexChanged: {
-                    if (Cpp_MQTT_Publisher.clientMode !== currentIndex)
-                        Cpp_MQTT_Publisher.clientMode = currentIndex
+                    if (Cpp_MQTT_Client.clientMode !== currentIndex)
+                        Cpp_MQTT_Client.clientMode = currentIndex
                 }
             }
 
@@ -87,21 +87,21 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
                 text: qsTr("Host") + ":"
             } TextField {
                 id: _host
                 Layout.fillWidth: true
-                text: Cpp_MQTT_Publisher.host
-                placeholderText: Cpp_MQTT_Publisher.defaultHost
+                text: Cpp_MQTT_Client.host
+                placeholderText: Cpp_MQTT_Client.defaultHost
                 onTextChanged: {
-                    if (Cpp_MQTT_Publisher.host !== text)
-                        Cpp_MQTT_Publisher.host = text
+                    if (Cpp_MQTT_Client.host !== text)
+                        Cpp_MQTT_Client.host = text
                 }
 
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
             }
 
@@ -110,17 +110,17 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
                 text: qsTr("Port") + ":"
             } TextField {
                 id: _port
                 Layout.fillWidth: true
-                text: Cpp_MQTT_Publisher.port
-                placeholderText: Cpp_MQTT_Publisher.defaultPort
+                text: Cpp_MQTT_Client.port
+                placeholderText: Cpp_MQTT_Client.defaultPort
                 onTextChanged: {
-                    if (Cpp_MQTT_Publisher.port !== text)
-                        Cpp_MQTT_Publisher.port = text
+                    if (Cpp_MQTT_Client.port !== text)
+                        Cpp_MQTT_Client.port = text
                 }
 
                 validator: IntValidator {
@@ -129,7 +129,7 @@ Control {
                 }
 
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
             }
 
@@ -138,21 +138,21 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
                 text: qsTr("Topic") + ":"
             } TextField {
                 id: _topic
                 Layout.fillWidth: true
-                text: Cpp_MQTT_Publisher.topic
+                text: Cpp_MQTT_Client.topic
                 placeholderText: qsTr("MQTT topic")
                 onTextChanged: {
-                    if (Cpp_MQTT_Publisher.topic !== text)
-                        Cpp_MQTT_Publisher.topic = text
+                    if (Cpp_MQTT_Client.topic !== text)
+                        Cpp_MQTT_Client.topic = text
                 }
 
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
             }
 
@@ -161,21 +161,21 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
                 text: qsTr("User") + ":"
             } TextField {
                 id: _user
                 Layout.fillWidth: true
-                text: Cpp_MQTT_Publisher.username
+                text: Cpp_MQTT_Client.username
                 placeholderText: qsTr("MQTT username")
                 onTextChanged: {
-                    if (Cpp_MQTT_Publisher.username !== text)
-                        Cpp_MQTT_Publisher.username = text
+                    if (Cpp_MQTT_Client.username !== text)
+                        Cpp_MQTT_Client.username = text
                 }
 
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
             }
 
@@ -184,7 +184,7 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
                 text: qsTr("Password") + ":"
             } RowLayout {
@@ -195,15 +195,15 @@ Control {
                     id: _password
                     Layout.fillWidth: true
                     echoMode: TextField.PasswordEchoOnEdit
-                    text: Cpp_MQTT_Publisher.password
+                    text: Cpp_MQTT_Client.password
                     placeholderText: qsTr("MQTT password")
                     onTextChanged: {
-                        if (Cpp_MQTT_Publisher.password !== text)
-                            Cpp_MQTT_Publisher.password = text
+                        if (Cpp_MQTT_Client.password !== text)
+                            Cpp_MQTT_Client.password = text
                     }
 
                     opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
                     Behavior on opacity {NumberAnimation{}}
                 }
 
@@ -233,7 +233,7 @@ Control {
         Label {
             text: qsTr("DNS lookup") + ": "
             opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Publisher.isConnectedToHost
+            enabled: !Cpp_MQTT_Client.isConnectedToHost
             Behavior on opacity {NumberAnimation{}}
         } RowLayout {
             Layout.fillWidth: true
@@ -244,10 +244,10 @@ Control {
                 Layout.fillWidth: true
                 opacity: enabled ? 1 : 0.5
                 Layout.alignment: Qt.AlignVCenter
-                onAccepted: Cpp_MQTT_Publisher.lookup(text)
+                onAccepted: Cpp_MQTT_Client.lookup(text)
                 placeholderText: qsTr("Enter address (e.g. google.com)")
-                enabled: !Cpp_MQTT_Publisher.isConnectedToHost &&
-                         !Cpp_MQTT_Publisher.lookupActive
+                enabled: !Cpp_MQTT_Client.isConnectedToHost &&
+                         !Cpp_MQTT_Client.lookupActive
 
                 Behavior on opacity {NumberAnimation{}}
             }
@@ -258,10 +258,10 @@ Control {
                 Layout.maximumWidth: height
                 Layout.alignment: Qt.AlignVCenter
                 icon.source: "qrc:/icons/search.svg"
-                onClicked: Cpp_MQTT_Publisher.lookup(_addrLookup.text)
+                onClicked: Cpp_MQTT_Client.lookup(_addrLookup.text)
                 enabled: _addrLookup.text.length > 0 &&
-                         !Cpp_MQTT_Publisher.isConnectedToHost &&
-                         !Cpp_MQTT_Publisher.lookupActive
+                         !Cpp_MQTT_Client.isConnectedToHost &&
+                         !Cpp_MQTT_Client.lookupActive
 
                 Behavior on opacity {NumberAnimation{}}
             }
@@ -283,8 +283,8 @@ Control {
             font.bold: true
             Layout.fillWidth: true
             icon.color: palette.buttonText
-            checked: Cpp_MQTT_Publisher.isConnectedToHost
-            onClicked: Cpp_MQTT_Publisher.toggleConnection()
+            checked: Cpp_MQTT_Client.isConnectedToHost
+            onClicked: Cpp_MQTT_Client.toggleConnection()
             palette.buttonText: checked ? "#d72d60" : "#2eed5c"
             text: (checked ? qsTr("Disconnect") : qsTr("Connect")) + "  "
             icon.source: checked ? "qrc:/icons/disconnect.svg" : "qrc:/icons/connect.svg"
