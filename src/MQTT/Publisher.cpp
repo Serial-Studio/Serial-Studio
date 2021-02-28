@@ -167,7 +167,7 @@ void Client::setHost(const QString &host)
 
 void Client::setClientMode(const int mode)
 {
-    m_clientMode = (MQTTClientMode)mode;
+    m_clientMode = static_cast<MQTTClientMode>(mode);
     emit clientModeChanged();
 }
 
@@ -251,9 +251,6 @@ void Client::onError(const QMQTT::ClientError error)
         case QMQTT::SocketConnectionRefusedError:
             str = tr("Connection refused");
             break;
-        case QMQTT::SocketRemoteHostClosedError:
-            str = tr("Remote host closed the connection");
-            break;
         case QMQTT::SocketHostNotFoundError:
             str = tr("Host not found");
             break;
@@ -334,6 +331,9 @@ void Client::onError(const QMQTT::ClientError error)
             break;
         case QMQTT::MqttNoPingResponse:
             str = tr("MQTT no ping response");
+            break;
+        default:
+            str = "";
             break;
     }
 
