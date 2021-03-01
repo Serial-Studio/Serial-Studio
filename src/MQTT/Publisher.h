@@ -145,6 +145,7 @@ private slots:
     void lookupFinished(const QHostInfo &info);
     void onError(const QMQTT::ClientError error);
     void registerJsonFrame(const JFI_Object &frameInfo);
+    void onMessageReceived(const QMQTT::Message &message);
 
 private:
     QString m_topic;

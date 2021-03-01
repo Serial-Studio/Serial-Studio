@@ -98,6 +98,9 @@ Control {
                 onTextChanged: {
                     if (Cpp_MQTT_Client.host !== text)
                         Cpp_MQTT_Client.host = text
+
+                    if (text == "")
+                        Cpp_MQTT_Client.host = Cpp_MQTT_Client.defaultHost
                 }
 
                 opacity: enabled ? 1 : 0.5
@@ -121,6 +124,9 @@ Control {
                 onTextChanged: {
                     if (Cpp_MQTT_Client.port !== text)
                         Cpp_MQTT_Client.port = text
+
+                    if (text == "")
+                        Cpp_MQTT_Client.port = Cpp_MQTT_Client.defaultPort
                 }
 
                 validator: IntValidator {
@@ -194,7 +200,7 @@ Control {
                 TextField {
                     id: _password
                     Layout.fillWidth: true
-                    echoMode: TextField.PasswordEchoOnEdit
+                    echoMode: TextField.Password
                     text: Cpp_MQTT_Client.password
                     placeholderText: qsTr("MQTT password")
                     onTextChanged: {
@@ -214,7 +220,7 @@ Control {
                     Layout.alignment: Qt.AlignVCenter
                     icon.source: "qrc:/icons/visibility.svg"
                     onCheckedChanged: _password.echoMode = (checked ? TextField.Normal :
-                                                                      TextField.PasswordEchoOnEdit)
+                                                                      TextField.Password)
                 }
             }
         }

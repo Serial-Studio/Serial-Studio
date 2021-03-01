@@ -38,9 +38,10 @@ Client::Client()
     m_clientMode = MQTTClientMode::ClientPublisher;
 
     // MQTT signals/slots
+    connect(&m_client, &QMQTT::Client::error, this, &Client::onError);
+    connect(&m_client, &QMQTT::Client::received, this, &Client::onMessageReceived);
     connect(&m_client, &QMQTT::Client::connected, this, &Client::connectedChanged);
     connect(&m_client, &QMQTT::Client::disconnected, this, &Client::connectedChanged);
-    connect(&m_client, &QMQTT::Client::error, this, &Client::onError);
 
     // Send data @ 1 Hz & reset statistics when disconnected/connected to a  device
     auto io = IO::Manager::getInstance();
@@ -126,7 +127,7 @@ bool Client::isConnectedToHost() const
 
 QStringList Client::clientModes() const
 {
-    return QStringList { tr("Publisher"), tr("Suscriber") };
+    return QStringList { tr("Publisher"), tr("Subscriber") };
 }
 
 QStringList Client::mqttVersions() const
@@ -186,8 +187,16 @@ void Client::setClientMode(const int mode)
 
 void Client::setTopic(const QString &topic)
 {
+    // Unsuscribe from previous topic
+    if (!m_topic.isEmpty())
+        m_client.unsubscribe(m_topic);
+
+    // Update topic
     m_topic = topic;
     emit topicChanged();
+
+    // Suscribe to new topic
+    m_client.subscribe(topic);
 }
 
 void Client::setUsername(const QString &username)
@@ -306,6 +315,9 @@ void Client::onError(const QMQTT::ClientError error)
         case QMQTT::SocketConnectionRefusedError:
             str = tr("Connection refused");
             break;
+        case QMQTT::SocketRemoteHostClosedError:
+            str = tr("Remote host closed the connection");
+            break;
         case QMQTT::SocketHostNotFoundError:
             str = tr("Host not found");
             break;
@@ -402,7 +414,29 @@ void Client::registerJsonFrame(const JFI_Object &frameInfo)
     if (!IO::Manager::getInstance()->connected())
         return;
 
+    // Ignore if mode is not set to publisher
+    else if (clientMode() != ClientPublisher)
+        return;
+
     // Validate JFI & register it
     if (JFI_Valid(frameInfo))
         m_jfiList.append(frameInfo);
+}
+
+void Client::onMessageReceived(const QMQTT::Message &message)
+{
+    // Ignore if client mode is not set to suscriber
+    if (clientMode() != ClientSubscriber)
+        return;
+
+    // Get message data
+    auto mtopic = message.topic();
+    auto mpayld = message.payload();
+
+    // Ignore if topic is not equal to current topic
+    if (topic() != mtopic)
+        return;
+
+    // Let IO manager process incoming data <todo>
+    qDebug() << mpayld;
 }
