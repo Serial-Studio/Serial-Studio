@@ -22,6 +22,9 @@
 
 #include "Publisher.h"
 
+#include <JSON/Frame.h>
+#include <IO/Manager.h>
+#include <JSON/Generator.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 
@@ -34,10 +37,20 @@ Client::Client()
     m_lookupActive = false;
     m_clientMode = MQTTClientMode::ClientPublisher;
 
+    // MQTT signals/slots
     connect(&m_client, &QMQTT::Client::connected, this, &Client::connectedChanged);
     connect(&m_client, &QMQTT::Client::disconnected, this, &Client::connectedChanged);
     connect(&m_client, &QMQTT::Client::error, this, &Client::onError);
 
+    // Send data @ 1 Hz & reset statistics when disconnected/connected to a  device
+    auto io = IO::Manager::getInstance();
+    auto ge = JSON::Generator::getInstance();
+    auto te = Misc::TimerEvents::getInstance();
+    connect(te, &Misc::TimerEvents::timeout42Hz, this, &Client::sendData);
+    connect(io, &IO::Manager::connectedChanged, this, &Client::resetStatistics);
+    connect(ge, &JSON::Generator::jsonChanged, this, &Client::registerJsonFrame);
+
+    // Set default port/host
     setPort(defaultPort());
     setHost(defaultHost());
 }
@@ -212,8 +225,50 @@ void Client::sendData()
     JFI_SortList(&m_jfiList);
 
     // Send data in CSV format
+    QString csv;
+    JSON::Frame frame;
+    JSON::Group *group;
+    JSON::Dataset *dataset;
+    for (int i = 0; i < m_jfiList.count(); ++i)
+    {
+        // Try to read frame
+        auto jfi = m_jfiList.at(i);
+        if (!frame.read(jfi.jsonDocument.object()))
+            continue;
+
+        // Write dataset values
+        QString str;
+        for (int j = 0; j < frame.groupCount(); ++j)
+        {
+            group = frame.getGroup(j);
+            for (int k = 0; k < group->datasetCount(); ++k)
+            {
+                dataset = group->getDataset(k);
+                str.append(dataset->value());
+                str.append(",");
+            }
+        }
+
+        // Remove last "," character & add data to CSV list
+        str.chop(1);
+        csv.append(str + "\n");
+    }
+
+    // Create & send MQTT message
+    if (!csv.isEmpty())
+    {
+        QMQTT::Message message(m_sentMessages, topic(), csv.toUtf8());
+        m_client.publish(message);
+        ++m_sentMessages;
+    }
 
     // Clear JFI list
+    m_jfiList.clear();
+}
+
+void Client::resetStatistics()
+{
+    m_sentMessages = 0;
     m_jfiList.clear();
 }
 
@@ -343,5 +398,11 @@ void Client::onError(const QMQTT::ClientError error)
 
 void Client::registerJsonFrame(const JFI_Object &frameInfo)
 {
-    m_jfiList.append(frameInfo);
+    // Ignore if device is not connected
+    if (!IO::Manager::getInstance()->connected())
+        return;
+
+    // Validate JFI & register it
+    if (JFI_Valid(frameInfo))
+        m_jfiList.append(frameInfo);
 }

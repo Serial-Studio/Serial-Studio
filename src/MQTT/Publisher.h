@@ -141,6 +141,7 @@ private:
 
 private slots:
     void sendData();
+    void resetStatistics();
     void lookupFinished(const QHostInfo &info);
     void onError(const QMQTT::ClientError error);
     void registerJsonFrame(const JFI_Object &frameInfo);
@@ -149,6 +150,7 @@ private:
     QString m_topic;
     bool m_lookupActive;
     QMQTT::Client m_client;
+    quint16 m_sentMessages;
     QList<JFI_Object> m_jfiList;
     MQTTClientMode m_clientMode;
 };
