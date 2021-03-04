@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include "Publisher.h"
+#include "Client.h"
 
 #include <JSON/Frame.h>
 #include <IO/Manager.h>
@@ -42,6 +42,8 @@ Client::Client()
     connect(&m_client, &QMQTT::Client::received, this, &Client::onMessageReceived);
     connect(&m_client, &QMQTT::Client::connected, this, &Client::connectedChanged);
     connect(&m_client, &QMQTT::Client::disconnected, this, &Client::connectedChanged);
+    connect(&m_client, &QMQTT::Client::connected, this, &Client::onConnectedChanged);
+    connect(&m_client, &QMQTT::Client::disconnected, this, &Client::onConnectedChanged);
 
     // Send data @ 1 Hz & reset statistics when disconnected/connected to a  device
     auto io = IO::Manager::getInstance();
@@ -120,6 +122,11 @@ bool Client::lookupActive() const
     return m_lookupActive;
 }
 
+bool Client::isSubscribed() const
+{
+    return isConnectedToHost() && !topic().isEmpty() && clientMode() == ClientSubscriber;
+}
+
 bool Client::isConnectedToHost() const
 {
     return m_client.isConnectedToHost();
@@ -187,16 +194,8 @@ void Client::setClientMode(const int mode)
 
 void Client::setTopic(const QString &topic)
 {
-    // Unsuscribe from previous topic
-    if (!m_topic.isEmpty())
-        m_client.unsubscribe(m_topic);
-
-    // Update topic
     m_topic = topic;
     emit topicChanged();
-
-    // Suscribe to new topic
-    m_client.subscribe(topic);
 }
 
 void Client::setUsername(const QString &username)
@@ -279,6 +278,14 @@ void Client::resetStatistics()
 {
     m_sentMessages = 0;
     m_jfiList.clear();
+}
+
+void Client::onConnectedChanged()
+{
+    if (isConnectedToHost())
+        m_client.subscribe(topic());
+    else
+        m_client.unsubscribe(topic());
 }
 
 /**
@@ -438,5 +445,5 @@ void Client::onMessageReceived(const QMQTT::Message &message)
         return;
 
     // Let IO manager process incoming data <todo>
-    qDebug() << mpayld;
+    IO::Manager::getInstance()->processPayload(mpayld);
 }

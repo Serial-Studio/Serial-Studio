@@ -147,7 +147,7 @@ HEADERS += \
     src/JSON/FrameInfo.h \
     src/JSON/Generator.h \
     src/JSON/Group.h \
-    src/MQTT/Publisher.h \
+    src/MQTT/Client.h \
     src/Misc/ModuleManager.h \
     src/Misc/TimerEvents.h \
     src/Misc/Translator.h \
@@ -169,7 +169,7 @@ SOURCES += \
     src/JSON/FrameInfo.cpp \
     src/JSON/Generator.cpp \
     src/JSON/Group.cpp \
-    src/MQTT/Publisher.cpp \
+    src/MQTT/Client.cpp \
     src/Misc/ModuleManager.cpp \
     src/Misc/TimerEvents.cpp \
     src/Misc/Translator.cpp \

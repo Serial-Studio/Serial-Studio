@@ -48,7 +48,7 @@
 #include <Misc/TimerEvents.h>
 #include <Misc/ModuleManager.h>
 
-#include <MQTT/Publisher.h>
+#include <MQTT/Client.h>
 
 #include <Logger.h>
 #include <FileAppender.h>

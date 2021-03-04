@@ -23,6 +23,7 @@
 #include "Manager.h"
 
 #include <Logger.h>
+#include <MQTT/Client.h>
 #include <IO/DataSources/Serial.h>
 #include <IO/DataSources/Network.h>
 
@@ -113,14 +114,15 @@ bool Manager::readWrite()
 }
 
 /**
- * Returns @c true if a device is currently selected and opened
+ * Returns @c true if a device is currently selected and opened or if the MQTT client
+ * is currently connected as a subscriber.
  */
 bool Manager::connected()
 {
     if (device())
         return device()->isOpen();
 
-    return false;
+    return MQTT::Client::getInstance()->isSubscribed();
 }
 
 /**
@@ -401,6 +403,30 @@ void Manager::setDataSource(const DataSource source)
 
     // Log changes
     LOG_TRACE() << "Data source set to" << source;
+}
+
+/**
+ * Reads the given payload and emits it as if it were received from a device.
+ * This function is for convenience to interact with other application modules & plugins.
+ */
+void Manager::processPayload(const QByteArray &payload)
+{
+    if (!payload.isEmpty())
+    {
+        // Reset watchdog
+        feedWatchdog();
+
+        // Update received bytes indicator
+        m_receivedBytes += payload.size();
+        if (m_receivedBytes >= UINT64_MAX)
+            m_receivedBytes = 0;
+
+        // Notify user interface & application modules
+        emit rx();
+        emit dataReceived(payload);
+        emit frameReceived(payload);
+        emit receivedBytesChanged();
+    }
 }
 
 /**

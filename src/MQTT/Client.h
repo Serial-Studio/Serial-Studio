@@ -115,6 +115,7 @@ public:
     QString username() const;
     QString password() const;
     bool lookupActive() const;
+    bool isSubscribed() const;
     bool isConnectedToHost() const;
     QStringList clientModes() const;
     QStringList mqttVersions() const;
@@ -142,6 +143,7 @@ private:
 private slots:
     void sendData();
     void resetStatistics();
+    void onConnectedChanged();
     void lookupFinished(const QHostInfo &info);
     void onError(const QMQTT::ClientError error);
     void registerJsonFrame(const JFI_Object &frameInfo);
