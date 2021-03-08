@@ -547,6 +547,10 @@ void Client::onMessageReceived(const QMQTT::Message &message)
     if (topic() != mtopic)
         return;
 
-    // Let IO manager process incoming data <todo>
+    // Add EOL character
+    if (!mpayld.endsWith('\n'))
+        mpayld.append('\n');
+
+    // Let IO manager process incoming data
     IO::Manager::getInstance()->processPayload(mpayld);
 }
