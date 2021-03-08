@@ -37,6 +37,8 @@ Control {
     property alias user: _user.text
     property alias password: _password.text
     property alias dnsAddress: _addrLookup.text
+    property alias version: _version.currentIndex
+    property alias mode: _mode.currentIndex
 
     //
     // Layout
@@ -58,6 +60,7 @@ Control {
             Label {
                 text: qsTr("Version") + ":"
             } ComboBox {
+                id: _version
                 Layout.fillWidth: true
                 model: Cpp_MQTT_Client.mqttVersions
                 currentIndex: Cpp_MQTT_Client.mqttVersion
@@ -73,6 +76,7 @@ Control {
             Label {
                 text: qsTr("Mode") + ":"
             } ComboBox {
+                id: _mode
                 Layout.fillWidth: true
                 model: Cpp_MQTT_Client.clientModes
                 currentIndex: Cpp_MQTT_Client.clientMode
