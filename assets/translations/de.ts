@@ -683,6 +683,204 @@
     </message>
 </context>
 <context>
+    <name>MQTT</name>
+    <message>
+        <source>Version</source>
+        <translation>Ausführung</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Modus</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>Server</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <source>Topic</source>
+        <translation>Thema</translation>
+    </message>
+    <message>
+        <source>MQTT topic</source>
+        <translation>MQTT-Thema</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Nutzer</translation>
+    </message>
+    <message>
+        <source>MQTT username</source>
+        <translation>MQTT-Benutzername</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Kennwort</translation>
+    </message>
+    <message>
+        <source>MQTT password</source>
+        <translation>MQTT-Kennwort</translation>
+    </message>
+    <message>
+        <source>DNS lookup</source>
+        <translation>DNS-Suche</translation>
+    </message>
+    <message>
+        <source>Enter address (e.g. google.com)</source>
+        <translation>Adresse eingeben (z. B. google.com)</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation>Trennen</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>Verbinden</translation>
+    </message>
+</context>
+<context>
+    <name>MQTT::Client</name>
+    <message>
+        <source>Publisher</source>
+        <translation>Publisher</translation>
+    </message>
+    <message>
+        <source>Subscriber</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>IP address lookup error</source>
+        <translation>IP-Adressensuchfehler</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation>Unbekannter Fehler</translation>
+    </message>
+    <message>
+        <source>Connection refused</source>
+        <translation>Verbindung abgelehnt</translation>
+    </message>
+    <message>
+        <source>Remote host closed the connection</source>
+        <translation>Verbindung abgelehnt</translation>
+    </message>
+    <message>
+        <source>Host not found</source>
+        <translation>Host nicht gefunden</translation>
+    </message>
+    <message>
+        <source>Socket access error</source>
+        <translation>Socket-Zugriffsfehler</translation>
+    </message>
+    <message>
+        <source>Socket resource error</source>
+        <translation>Socket-Ressourcenfehler</translation>
+    </message>
+    <message>
+        <source>Socket timeout</source>
+        <translation>Socket-Timeout</translation>
+    </message>
+    <message>
+        <source>Socket datagram too large</source>
+        <translation>Socket-Datagramm zu groß</translation>
+    </message>
+    <message>
+        <source>Network error</source>
+        <translation>Netzwerkfehler</translation>
+    </message>
+    <message>
+        <source>Address in use</source>
+        <translation>Verwendete Adresse</translation>
+    </message>
+    <message>
+        <source>Address not available</source>
+        <translation>Adresse nicht verfügbar</translation>
+    </message>
+    <message>
+        <source>Unsupported socket operation</source>
+        <translation>Nicht unterstützter Socket-Betrieb</translation>
+    </message>
+    <message>
+        <source>Unfinished socket operation</source>
+        <translation>Unfertiger Sockelbetrieb</translation>
+    </message>
+    <message>
+        <source>Proxy authentication required</source>
+        <translation>Proxy-Authentifizierung erforderlich</translation>
+    </message>
+    <message>
+        <source>SSL handshake failed</source>
+        <translation>SSL-Handshake fehlgeschlagen</translation>
+    </message>
+    <message>
+        <source>Proxy connection refused</source>
+        <translation>Proxy-Verbindung abgelehnt</translation>
+    </message>
+    <message>
+        <source>Proxy connection closed</source>
+        <translation>Proxy-Verbindung geschlossen</translation>
+    </message>
+    <message>
+        <source>Proxy connection timeout</source>
+        <translation>Zeitlimit für Proxy-Verbindung</translation>
+    </message>
+    <message>
+        <source>Proxy not found</source>
+        <translation>Proxy nicht gefunden</translation>
+    </message>
+    <message>
+        <source>Proxy protocol error</source>
+        <translation>Proxy-Protokollfehler</translation>
+    </message>
+    <message>
+        <source>Operation error</source>
+        <translation>Betriebsfehler</translation>
+    </message>
+    <message>
+        <source>SSL internal error</source>
+        <translation>Interner SSL-Fehler</translation>
+    </message>
+    <message>
+        <source>Invalid SSL user data</source>
+        <translation>Ungültige SSL-Benutzerdaten</translation>
+    </message>
+    <message>
+        <source>Socket temprary error</source>
+        <translation>Socket temporärer Fehler</translation>
+    </message>
+    <message>
+        <source>Unacceptable MQTT protocol</source>
+        <translation>Inakzeptables MQTT-Protokoll</translation>
+    </message>
+    <message>
+        <source>MQTT identifier rejected</source>
+        <translation>MQTT-Kennung abgelehnt</translation>
+    </message>
+    <message>
+        <source>MQTT server unavailable</source>
+        <translation>MQTT-Server nicht verfügbar</translation>
+    </message>
+    <message>
+        <source>Bad MQTT username or password</source>
+        <translation>Ungültiger MQTT-Benutzername oder Passwort</translation>
+    </message>
+    <message>
+        <source>MQTT authorization error</source>
+        <translation>MQTT-Autorisierungsfehler</translation>
+    </message>
+    <message>
+        <source>MQTT no ping response</source>
+        <translation>MQTT keine Ping-Antwort</translation>
+    </message>
+    <message>
+        <source>MQTT client error</source>
+        <translation>MQTT-Clientfehler</translation>
+    </message>
+</context>
+<context>
     <name>MapDelegate</name>
     <message>
         <source>Center on coordinate</source>
@@ -1251,6 +1449,10 @@
     <message>
         <source>Settings</source>
         <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <source>MQTT</source>
+        <translation>MQTT</translation>
     </message>
 </context>
 <context>

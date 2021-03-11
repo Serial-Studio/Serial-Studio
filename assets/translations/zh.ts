@@ -715,6 +715,204 @@
     </message>
 </context>
 <context>
+    <name>MQTT</name>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished">港口</translation>
+    </message>
+    <message>
+        <source>Topic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MQTT topic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MQTT username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MQTT password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DNS lookup</source>
+        <translation type="unfinished">DNS查询</translation>
+    </message>
+    <message>
+        <source>Enter address (e.g. google.com)</source>
+        <translation type="unfinished">输入地址（例如baidu.com）</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation type="unfinished">断开</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation type="unfinished">连接</translation>
+    </message>
+</context>
+<context>
+    <name>MQTT::Client</name>
+    <message>
+        <source>Publisher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subscriber</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IP address lookup error</source>
+        <translation type="unfinished">IP地址查询错误</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection refused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remote host closed the connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Socket access error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Socket resource error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Socket timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Socket datagram too large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Address in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Address not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsupported socket operation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unfinished socket operation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy authentication required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SSL handshake failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy connection refused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy connection closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy connection timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy protocol error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Operation error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SSL internal error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid SSL user data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Socket temprary error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unacceptable MQTT protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MQTT identifier rejected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MQTT server unavailable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad MQTT username or password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MQTT authorization error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MQTT no ping response</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MQTT client error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MapDelegate</name>
     <message>
         <source>Center on coordinate</source>
@@ -1291,6 +1489,10 @@
     <message>
         <source>Settings</source>
         <translation>设定值</translation>
+    </message>
+    <message>
+        <source>MQTT</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
