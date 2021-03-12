@@ -97,5 +97,7 @@
         <file>qml/SetupPanes/MQTT.qml</file>
         <file>qml/Widgets/CompassDelegate.qml</file>
         <file>icons/compass.svg</file>
+        <file>instruments/Compass.svg</file>
+        <file>instruments/CompassCase.svg</file>
     </qresource>
 </RCC>

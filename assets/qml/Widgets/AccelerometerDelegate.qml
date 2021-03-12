@@ -129,10 +129,10 @@ Window {
     //
     function calculateGaugeSize() {
         if (root.width < root.height)
-            root.gaugeSize = Math.max(120, root.width - controls.implicitWidth - 12 * app.spacing)
+            root.gaugeSize = Math.max(120, root.width - controls.implicitWidth - 12 * app.spacing) * 0.8
 
         else
-            root.gaugeSize = Math.max(120, root.height - controls.implicitWidth - 4 * app.spacing)
+            root.gaugeSize = Math.max(120, root.height - controls.implicitWidth - 4 * app.spacing) * 0.8
     }
 
     //

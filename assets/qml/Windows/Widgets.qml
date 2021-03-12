@@ -263,54 +263,54 @@ Control {
                         }
                     }
                 }
-            }
 
-            Repeater {
-                id: compassGenerator
+                Repeater {
+                    id: compassGenerator
 
-                delegate: Item {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.minimumWidth: root.minimumWidgetSize
-                    Layout.minimumHeight: root.minimumWidgetSize
-
-                    Widgets.CompassDelegate {
-                        datasetIndex: index
-                        anchors.fill: parent
-                        onHeaderDoubleClicked: windowCompass.show()
-                    }
-
-                    QtWindow.Window {
-                        id: windowCompass
-                        width: 640
-                        height: 480
-                        minimumWidth: root.minimumWidgetSize * 1.2
-                        minimumHeight: root.minimumWidgetSize * 1.2
-                        title: compass.title
-
-                        Rectangle {
-                            anchors.fill: parent
-                            color: compass.backgroundColor
-                        }
+                    delegate: Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: root.minimumWidgetSize
+                        Layout.minimumHeight: root.minimumWidgetSize
 
                         Widgets.CompassDelegate {
-                            id: compass
-                            showIcon: true
-                            gradient: false
-                            headerHeight: 48
                             datasetIndex: index
-                            anchors.margins: 0
                             anchors.fill: parent
-                            borderColor: backgroundColor
-                            headerDoubleClickEnabled: false
+                            onHeaderDoubleClicked: windowCompass.show()
+                        }
+
+                        QtWindow.Window {
+                            id: windowCompass
+                            width: 640
+                            height: 480
+                            minimumWidth: root.minimumWidgetSize * 1.2
+                            minimumHeight: root.minimumWidgetSize * 1.2
+                            title: compass.title
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: compass.backgroundColor
+                            }
+
+                            Widgets.CompassDelegate {
+                                id: compass
+                                showIcon: true
+                                gradient: false
+                                headerHeight: 48
+                                datasetIndex: index
+                                anchors.margins: 0
+                                anchors.fill: parent
+                                borderColor: backgroundColor
+                                headerDoubleClickEnabled: false
+                            }
                         }
                     }
                 }
             }
-        }
 
-        Item {
-            Layout.minimumHeight: 10
+            Item {
+                Layout.minimumHeight: 10
+            }
         }
     }
 }

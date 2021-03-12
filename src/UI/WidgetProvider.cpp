@@ -228,7 +228,7 @@ int WidgetProvider::compass(const int index)
 {
     auto compass = compassDatasetAt(index);
     if (compass)
-        return compass->value().toInt();
+        return qMax(0, qMin(360, compass->value().toInt()));
 
     return INT_MAX;
 }
