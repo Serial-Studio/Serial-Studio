@@ -49,6 +49,7 @@ public:
     QList<JSON::Group *> mapGroup() const;
     QList<JSON::Group *> gyroGroup() const;
     QList<JSON::Dataset *> barDatasets() const;
+    QList<JSON::Dataset *> compassDatasets() const;
     QList<JSON::Group *> accelerometerGroup() const;
 
     int totalWidgetCount() const;
@@ -56,12 +57,16 @@ public:
     Q_INVOKABLE int mapGroupCount() const;
     Q_INVOKABLE int gyroGroupCount() const;
     Q_INVOKABLE int barDatasetCount() const;
+    Q_INVOKABLE int compassDatasetCount() const;
     Q_INVOKABLE int accelerometerGroupCount() const;
 
     Q_INVOKABLE JSON::Group *mapGroupAt(const int index);
     Q_INVOKABLE JSON::Group *gyroGroupAt(const int index);
     Q_INVOKABLE JSON::Dataset *barDatasetAt(const int index);
+    Q_INVOKABLE JSON::Dataset *compassDatasetAt(const int index);
     Q_INVOKABLE JSON::Group *accelerometerGroupAt(const int index);
+
+    Q_INVOKABLE int compass(const int index);
 
     Q_INVOKABLE double gyroYaw(const int index);
     Q_INVOKABLE double gyroRoll(const int index);
@@ -92,6 +97,7 @@ private:
     QList<JSON::Group *> m_mapGroups;
     QList<JSON::Group *> m_gyroGroups;
     QList<JSON::Dataset *> m_barDatasets;
+    QList<JSON::Dataset *> m_compassDatasets;
     QList<JSON::Group *> m_accelerometerGroups;
 };
 }
