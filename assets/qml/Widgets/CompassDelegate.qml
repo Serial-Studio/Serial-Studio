@@ -66,8 +66,6 @@ Window {
     //
     // Updates the internal values of the compass widget
     //
-    //*! Optimize this function
-    //   About 6% of the UI thread is spent here
     function updateValues() {
         if (Cpp_UI_WidgetProvider.compassDatasetCount() > root.datasetIndex) {
             root.angle = Cpp_UI_WidgetProvider.compass(root.datasetIndex)
