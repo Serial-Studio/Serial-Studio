@@ -152,6 +152,7 @@ HEADERS += \
     src/Misc/TimerEvents.h \
     src/Misc/Translator.h \
     src/Misc/Utilities.h \
+    src/Plugins/Bridge.h \
     src/UI/DataProvider.h \
     src/UI/GraphProvider.h \
     src/UI/QmlPlainTextEdit.h \
@@ -174,6 +175,7 @@ SOURCES += \
     src/Misc/TimerEvents.cpp \
     src/Misc/Translator.cpp \
     src/Misc/Utilities.cpp \
+    src/Plugins/Bridge.cpp \
     src/UI/DataProvider.cpp \
     src/UI/GraphProvider.cpp \
     src/UI/QmlPlainTextEdit.cpp \
