@@ -83,6 +83,7 @@ Control {
         property alias language: settings.language
         property alias endSequence: settings.endSequence
         property alias startSequence: settings.startSequence
+        property alias tcpPlugins: settings.tcpPlugins
     }
 
     //

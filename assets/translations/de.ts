@@ -1237,6 +1237,21 @@
     </message>
 </context>
 <context>
+    <name>Plugins::Bridge</name>
+    <message>
+        <source>Unable to start plugin TCP server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugin server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid pending connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>
@@ -1346,6 +1361,14 @@
     <message>
         <source>End sequence</source>
         <translation>Kündigungssequenz</translation>
+    </message>
+    <message>
+        <source>Plugin system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

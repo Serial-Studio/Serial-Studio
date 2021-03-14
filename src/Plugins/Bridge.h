@@ -40,12 +40,18 @@ namespace Plugins
 class Bridge : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+
+signals:
+    void enabledChanged();
 
 public:
     static Bridge *getInstance();
+    bool enabled() const;
 
 public slots:
-    void stop();
+    void removeConnection();
+    void setEnabled(const bool enabled);
 
 private slots:
     void onDataReceived();
@@ -60,9 +66,10 @@ private:
     ~Bridge();
 
 private:
+    bool m_enabled;
     QTcpServer m_server;
-    QTcpSocket *m_socket;
     QList<JFI_Object> m_frames;
+    QList<QTcpSocket *> m_sockets;
 };
 }
 

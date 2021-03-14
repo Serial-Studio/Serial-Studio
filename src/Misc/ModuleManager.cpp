@@ -210,7 +210,7 @@ void ModuleManager::stopOperations()
 {
     LOG_INFO() << "Stopping application modules...";
 
-    Plugins::Bridge::getInstance()->stop();
+    Plugins::Bridge::getInstance()->removeConnection();
     CSV::Export::getInstance()->closeFile();
     CSV::Player::getInstance()->closeFile();
     IO::Manager::getInstance()->disconnectDevice();

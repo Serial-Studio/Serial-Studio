@@ -27,9 +27,9 @@
 #include <QJsonDocument>
 
 #include <IO/Manager.h>
+#include <JSON/Generator.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
-#include <JSON/Generator.h>
 
 using namespace Plugins;
 
@@ -43,8 +43,8 @@ static Bridge *INSTANCE = nullptr;
  */
 Bridge::Bridge()
 {
-    // Set socket to NULL
-    m_socket = nullptr;
+    // Set internal variables
+    m_enabled = false;
 
     // Send processed data at 42 Hz
     auto ge = JSON::Generator::getInstance();
@@ -71,7 +71,7 @@ Bridge::Bridge()
  */
 Bridge::~Bridge()
 {
-    stop();
+    removeConnection();
 }
 
 /**
@@ -86,12 +86,63 @@ Bridge *Bridge::getInstance()
 }
 
 /**
+ * Returns @c true if the plugin sub-system is enabled
+ */
+bool Bridge::enabled() const
+{
+    return m_enabled;
+}
+
+/**
  * Disconnects the socket used for communicating with plugins.
  */
-void Bridge::stop()
+void Bridge::removeConnection()
 {
-    m_socket->deleteLater();
-    m_socket = nullptr;
+    // Get caller socket
+    auto socket = static_cast<QTcpSocket *>(QObject::sender());
+
+    // Remove socket from registered sockets
+    if (socket)
+    {
+        for (int i = 0; i < m_sockets.count(); ++i)
+        {
+            if (m_sockets.at(i) == socket)
+            {
+                m_sockets.removeAt(i);
+                i = 0;
+            }
+        }
+
+        // Delete socket handler
+        socket->deleteLater();
+    }
+}
+
+/**
+ * Enables/disables the plugin subsystem
+ */
+void Bridge::setEnabled(const bool enabled)
+{
+    // Change value
+    m_enabled = enabled;
+    emit enabledChanged();
+
+    // If not enabled, remove all connections
+    if (!enabled)
+    {
+        for (int i = 0; i < m_sockets.count(); ++i)
+        {
+            auto socket = m_sockets.at(i);
+
+            if (socket)
+            {
+                socket->abort();
+                socket->deleteLater();
+            }
+        }
+
+        m_sockets.clear();
+    }
 }
 
 /**
@@ -99,34 +150,44 @@ void Bridge::stop()
  */
 void Bridge::onDataReceived()
 {
-    // Stop if socket is NULL
-    if (!m_socket)
-        return;
+    // Get caller socket
+    auto socket = static_cast<QTcpSocket *>(QObject::sender());
 
-    // Read incoming data
-    auto data = m_socket->readAll();
-
-    // Todo validate incoming JSON data & process it
+    // Write incoming data to manager
+    if (enabled() && socket)
+        IO::Manager::getInstance()->writeData(socket->readAll());
 }
 
+/**
+ * Configures incoming connection requests
+ */
 void Bridge::acceptConnection()
 {
     // Get & validate socket
-    m_socket = m_server.nextPendingConnection();
-    if (!m_socket)
+    auto socket = m_server.nextPendingConnection();
+    if (!socket && enabled())
     {
         Misc::Utilities::showMessageBox(tr("Plugin server"),
                                         tr("Invalid pending connection"));
         return;
     }
 
-    // Connect socket signals/slots
-    connect(m_socket, &QTcpSocket::readyRead, this, &Bridge::onDataReceived);
-    connect(m_socket, &QTcpSocket::errorOccurred, this, &Bridge::onErrorOccurred);
-    connect(m_socket, &QTcpSocket::disconnected, this, &Bridge::stop);
+    // Close connection if system is not enabled
+    if (!enabled())
+    {
+        socket->close();
+        socket->deleteLater();
+        return;
+    }
 
-    // Close TCP server
-    m_server.close();
+    // Connect socket signals/slots
+    connect(socket, &QTcpSocket::readyRead, this, &Bridge::onDataReceived);
+    connect(socket, &QTcpSocket::errorOccurred, this, &Bridge::onErrorOccurred);
+    connect(socket, &QTcpSocket::disconnected, this, &Bridge::removeConnection);
+
+    // Add socket to sockets list
+    m_sockets.append(socket);
+    qDebug() << m_sockets;
 }
 
 /**
@@ -137,12 +198,16 @@ void Bridge::acceptConnection()
  */
 void Bridge::sendProcessedData()
 {
+    // Stop if system is not enabled
+    if (!enabled())
+        return;
+
     // Stop if frame list is empty
     if (m_frames.count() <= 0)
         return;
 
-    // Stop if socket is NULL
-    if (!m_socket)
+    // Stop if no sockets are available
+    if (m_sockets.count() < 1)
         return;
 
     // Create JSON array with frame data
@@ -160,11 +225,21 @@ void Bridge::sendProcessedData()
     // Create JSON document with frame arrays
     if (array.count() > 0)
     {
+        // Construct QByteArray with data
         QJsonObject object;
         object.insert("frames", array);
         QJsonDocument document(object);
-        if (m_socket->isWritable())
-            m_socket->write(document.toJson(QJsonDocument::Compact) + "\n");
+        auto json = document.toJson(QJsonDocument::Compact) + "\n";
+
+        // Send data to each plugin
+        foreach (auto socket, m_sockets)
+        {
+            if (!socket)
+                continue;
+
+            if (socket->isWritable())
+                socket->write(json);
+        }
     }
 
     // Clear frame list
@@ -177,8 +252,12 @@ void Bridge::sendProcessedData()
  */
 void Bridge::sendRawData(const QByteArray &data)
 {
-    // Stop if socket is NULL
-    if (!m_socket)
+    // Stop if system is not enabled
+    if (!enabled())
+        return;
+
+    // Stop if no sockets are available
+    if (m_sockets.count() < 1)
         return;
 
     // Create JSON structure with incoming data encoded in Base-64
@@ -187,8 +266,17 @@ void Bridge::sendRawData(const QByteArray &data)
 
     // Get JSON string in compact format & send it over the TCP socket
     QJsonDocument document(object);
-    if (m_socket->isWritable())
-        m_socket->write(document.toJson(QJsonDocument::Compact) + "\n");
+    auto json = document.toJson(QJsonDocument::Compact) + "\n";
+
+    // Send data to each plugin
+    foreach (auto socket, m_sockets)
+    {
+        if (!socket)
+            continue;
+
+        if (socket->isWritable())
+            socket->write(json);
+    }
 }
 
 /**
@@ -206,7 +294,12 @@ void Bridge::registerFrame(const JFI_Object &frameInfo)
  */
 void Bridge::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
-    (void)socketError;
-    Misc::Utilities::showMessageBox(tr("TCP plugin socket error"),
-                                    m_socket->errorString());
+    // Get caller socket
+    auto socket = static_cast<QTcpSocket *>(QObject::sender());
+
+    // Print error
+    if (socket)
+        qDebug() << socket->errorString();
+    else
+        qDebug() << socketError;
 }
