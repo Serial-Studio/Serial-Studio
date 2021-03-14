@@ -1240,15 +1240,15 @@
     <name>Plugins::Bridge</name>
     <message>
         <source>Unable to start plugin TCP server</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin-TCP-Server kann nicht gestartet werden</translation>
     </message>
     <message>
         <source>Plugin server</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin Server</translation>
     </message>
     <message>
         <source>Invalid pending connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige ausstehende Verbindung</translation>
     </message>
 </context>
 <context>
@@ -1364,11 +1364,15 @@
     </message>
     <message>
         <source>Plugin system</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin-System</translation>
     </message>
     <message>
         <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Anwendungen / Plugins können mit %1 interagieren, indem sie eine TCP-Verbindung an Port 7777 herstellen</translation>
+    </message>
+    <message>
+        <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777.</source>
+        <translation>Anwendungen/Plugins können mit %1 interagieren, indem sie eine TCP-Verbindung an Port 7777 herstellen.</translation>
     </message>
 </context>
 <context>

@@ -718,59 +718,59 @@
     <name>MQTT</name>
     <message>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>版本</translation>
     </message>
     <message>
         <source>Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>模式</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished">港口</translation>
+        <translation>港口</translation>
     </message>
     <message>
         <source>Topic</source>
-        <translation type="unfinished"></translation>
+        <translation>话题</translation>
     </message>
     <message>
         <source>MQTT topic</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT主题</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>用户</translation>
     </message>
     <message>
         <source>MQTT username</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT用户名</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>密码</translation>
     </message>
     <message>
         <source>MQTT password</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT密码</translation>
     </message>
     <message>
         <source>DNS lookup</source>
-        <translation type="unfinished">DNS查询</translation>
+        <translation>DNS查询</translation>
     </message>
     <message>
         <source>Enter address (e.g. google.com)</source>
-        <translation type="unfinished">输入地址（例如baidu.com）</translation>
+        <translation>输入地址（例如baidu.com）</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation type="unfinished">断开</translation>
+        <translation>断开</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation type="unfinished">连接</translation>
+        <translation>连接</translation>
     </message>
 </context>
 <context>
@@ -1272,15 +1272,15 @@
     <name>Plugins::Bridge</name>
     <message>
         <source>Unable to start plugin TCP server</source>
-        <translation type="unfinished"></translation>
+        <translation>无法启动插件TCP服务器</translation>
     </message>
     <message>
         <source>Plugin server</source>
-        <translation type="unfinished"></translation>
+        <translation>插件服务器</translation>
     </message>
     <message>
         <source>Invalid pending connection</source>
-        <translation type="unfinished"></translation>
+        <translation>无效的挂起连接</translation>
     </message>
 </context>
 <context>
@@ -1404,11 +1404,11 @@
     </message>
     <message>
         <source>Plugin system</source>
-        <translation type="unfinished"></translation>
+        <translation>插件系统</translation>
     </message>
     <message>
-        <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777</source>
-        <translation type="unfinished"></translation>
+        <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777.</source>
+        <translation>通过在端口7777上建立TCP连接，应用程序/插件可以与%1进行交互。</translation>
     </message>
 </context>
 <context>
@@ -1515,7 +1515,7 @@
     </message>
     <message>
         <source>MQTT</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT</translation>
     </message>
 </context>
 <context>
