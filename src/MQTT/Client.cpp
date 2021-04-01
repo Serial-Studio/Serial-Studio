@@ -150,7 +150,7 @@ QString Client::password() const
  */
 QString Client::host() const
 {
-    return m_client.host().toString();
+    return m_client.hostName();
 }
 
 /**
@@ -247,7 +247,7 @@ void Client::setPort(const quint16 port)
  */
 void Client::setHost(const QString &host)
 {
-    m_client.setHost(QHostAddress(host));
+    m_client.setHostName(host);
     emit hostChanged();
 }
 

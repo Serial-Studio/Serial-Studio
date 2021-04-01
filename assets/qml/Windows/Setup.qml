@@ -63,7 +63,6 @@ Control {
         property alias port: network.port
         property alias address: network.address
         property alias socketType: network.socketType
-        property alias addressLookup: network.addressLookup
 
         //
         // MQTT settings
@@ -75,7 +74,6 @@ Control {
         property alias mqttTopic: mqtt.topic
         property alias mqttVersion: mqtt.version
         property alias mqttPassword: mqtt.password
-        property alias mqttDnsAddress: mqtt.dnsAddress
 
         //
         // App settings

@@ -111,6 +111,7 @@ private:
 private:
     QString m_host;
     quint16 m_port;
+    bool m_hostExists;
     bool m_lookupActive;
     QIODevice *m_device;
     QTcpSocket m_tcpSocket;

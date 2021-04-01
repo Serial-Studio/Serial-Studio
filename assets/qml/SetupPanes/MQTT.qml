@@ -36,7 +36,6 @@ Control {
     property alias topic: _topic.text
     property alias user: _user.text
     property alias password: _password.text
-    property alias dnsAddress: _addrLookup.text
     property alias version: _version.currentIndex
     property alias mode: _mode.currentIndex
 
@@ -235,46 +234,6 @@ Control {
         Item {
             Layout.fillHeight: true
             Layout.minimumHeight: app.spacing
-        }
-
-        //
-        // Address lookup
-        //
-        Label {
-            text: qsTr("DNS lookup") + ": "
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-            Behavior on opacity {NumberAnimation{}}
-        } RowLayout {
-            Layout.fillWidth: true
-            spacing: app.spacing / 2
-
-            TextField {
-                id: _addrLookup
-                Layout.fillWidth: true
-                opacity: enabled ? 1 : 0.5
-                Layout.alignment: Qt.AlignVCenter
-                onAccepted: Cpp_MQTT_Client.lookup(text)
-                placeholderText: qsTr("Enter address (e.g. google.com)")
-                enabled: !Cpp_MQTT_Client.isConnectedToHost &&
-                         !Cpp_MQTT_Client.lookupActive
-
-                Behavior on opacity {NumberAnimation{}}
-            }
-
-            Button {
-                icon.color: palette.text
-                opacity: enabled ? 1 : 0.5
-                Layout.maximumWidth: height
-                Layout.alignment: Qt.AlignVCenter
-                icon.source: "qrc:/icons/search.svg"
-                onClicked: Cpp_MQTT_Client.lookup(_addrLookup.text)
-                enabled: _addrLookup.text.length > 0 &&
-                         !Cpp_MQTT_Client.isConnectedToHost &&
-                         !Cpp_MQTT_Client.lookupActive
-
-                Behavior on opacity {NumberAnimation{}}
-            }
         }
 
         //

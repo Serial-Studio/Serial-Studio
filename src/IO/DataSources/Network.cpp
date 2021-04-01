@@ -33,6 +33,7 @@ static Network *INSTANCE = nullptr;
  */
 Network::Network()
 {
+    m_hostExists = false;
     m_lookupActive = false;
 
     setHost("");
@@ -110,7 +111,7 @@ int Network::socketTypeIndex() const
  */
 bool Network::configurationOk() const
 {
-    return port() > 0 && !QHostAddress(host()).isNull();
+    return port() > 0 && m_hostExists;
 }
 
 /**
@@ -210,6 +211,17 @@ void Network::setPort(const quint16 port)
  */
 void Network::setHost(const QString &host)
 {
+    // Check if host name exists
+    if (QHostAddress(host).isNull()) {
+        m_hostExists = false;
+        lookup(host);
+    }
+
+    // Host is an IP address, host should exist
+    else
+        m_hostExists = true;
+
+    // Change host
     m_host = host;
     emit hostChanged();
 }
@@ -271,12 +283,11 @@ void Network::lookupFinished(const QHostInfo &info)
         auto addresses = info.addresses();
         if (addresses.count() >= 1)
         {
-            setHost(addresses.first().toString());
+            m_hostExists = true;
+            emit hostChanged();
             return;
         }
     }
-
-    Misc::Utilities::showMessageBox(tr("IP address lookup error"), info.errorString());
 }
 
 /**
