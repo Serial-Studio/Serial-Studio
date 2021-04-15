@@ -65,6 +65,16 @@ Alternatively, you can also use the following commands:
 	qmake
 	make -j4
 
+### Prebuilt Packages
+
+Arch Linux users can install [serial-studio-git](https://aur.archlinux.org/packages/serial-studio-git/) from the aur, e.g. with [aurutils](https://aur.archlinux.org/packages/aurutils/):
+
+```bash
+aur fetch serial-studio-git
+aur build
+sudo pacman -S serial-studio-git
+```
+
 ## Licence
 
 This project is released under the MIT license, for more information, check the [LICENSE](LICENSE.md) file.
