@@ -16,6 +16,8 @@ The need for this project arose during the development of the Ground Station Sof
 
 Furthermore, this approach can be extended to almost any type of project that involves some kind of data acquisition & measurement. If you want a more in-depth explanation of why this project exists, and what its all about, check [this blog post](https://www.alex-spataru.com/blog/introducing-serial-studio).
 
+Serial studio started out receiving data over a hardware serial port, but can now receive data over serial, MQTT and websockets (TCP/UDP).
+
 **NOTE:** Information regarding the communication protocol is provided in the [wiki](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol).
 
 *Read this in other languages*: [Español](README_ES.md) [简体中文](README_ZH.md) [Deutsch](README_DE.md)
