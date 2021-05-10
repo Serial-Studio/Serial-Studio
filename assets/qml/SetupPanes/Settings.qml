@@ -34,11 +34,13 @@ Control {
     property alias endSequence: _endSequence.text
     property alias language: _langCombo.currentIndex
     property alias startSequence: _startSequence.text
+    property alias tcpPlugins: _tcpPlugins.checked
 
     //
     // Layout
     //
     ColumnLayout {
+        id: layout
         anchors.fill: parent
         anchors.margins: app.spacing
 
@@ -46,7 +48,6 @@ Control {
         // Controls
         //
         GridLayout {
-            id: layout
             columns: 2
             Layout.fillWidth: true
             rowSpacing: app.spacing
@@ -95,6 +96,35 @@ Control {
                         Cpp_IO_Manager.finishSequence = text
                 }
             }
+
+            //
+            // Plugins enabled
+            //
+            Label {
+                text: qsTr("Plugin system") + ": "
+            } Switch {
+                id: _tcpPlugins
+                Layout.leftMargin: -app.spacing
+                Layout.alignment: Qt.AlignLeft
+                checked: Cpp_Plugins_Bridge.enabled
+                onCheckedChanged: {
+                    if (checked !== Cpp_Plugins_Bridge.enabled)
+                        Cpp_Plugins_Bridge.enabled = checked
+                }
+            }
+        }
+
+        //
+        // Plugins label
+        //
+        Label {
+            opacity: 0.8
+            font.pixelSize: 12
+            Layout.fillWidth: true
+            color: palette.highlightedText
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("Applications/plugins can interact with %1 by " +
+                       "establishing a TCP connection on port 7777.").arg(Cpp_AppName)
         }
 
         //

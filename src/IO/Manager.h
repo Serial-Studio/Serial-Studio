@@ -119,6 +119,7 @@ public slots:
     void disconnectDevice();
     void setWriteEnabled(const bool enabled);
     void setDataSource(const DataSource source);
+    void processPayload(const QByteArray &payload);
     void setMaxBufferSize(const int maxBufferSize);
     void setStartSequence(const QString &sequence);
     void setFinishSequence(const QString &sequence);

@@ -9,4 +9,4 @@
 	url = https://github.com/iamantony/qtcsv
 [submodule "libs/qmqtt"]
 	path = libs/qmqtt
-	url = https://github.com/alex-spataru/qmqtt
+	url = https://github.com/emqx/qmqtt

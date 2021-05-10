@@ -84,6 +84,7 @@ include(libs/Libraries.pri)
 win32* {
     TARGET = SerialStudio                                # Change target name
     RC_FILE = deploy/windows/resources/info.rc           # Set applicaiton icon
+    OTHER_FILES += deploy/windows/nsis/setup.nsi         # Setup script
 }
 
 macx* {
@@ -149,11 +150,12 @@ HEADERS += \
     src/JSON/FrameInfo.h \
     src/JSON/Generator.h \
     src/JSON/Group.h \
-    src/MQTT/Publisher.h \
+    src/MQTT/Client.h \
     src/Misc/ModuleManager.h \
     src/Misc/TimerEvents.h \
     src/Misc/Translator.h \
     src/Misc/Utilities.h \
+    src/Plugins/Bridge.h \
     src/UI/DataProvider.h \
     src/UI/GraphProvider.h \
     src/UI/QmlPlainTextEdit.h \
@@ -171,13 +173,24 @@ SOURCES += \
     src/JSON/FrameInfo.cpp \
     src/JSON/Generator.cpp \
     src/JSON/Group.cpp \
-    src/MQTT/Publisher.cpp \
+    src/MQTT/Client.cpp \
     src/Misc/ModuleManager.cpp \
     src/Misc/TimerEvents.cpp \
     src/Misc/Translator.cpp \
     src/Misc/Utilities.cpp \
+    src/Plugins/Bridge.cpp \
     src/UI/DataProvider.cpp \
     src/UI/GraphProvider.cpp \
     src/UI/QmlPlainTextEdit.cpp \
     src/UI/WidgetProvider.cpp \
     src/main.cpp
+
+#-------------------------------------------------------------------------------
+# Deploy files
+#-------------------------------------------------------------------------------
+
+OTHER_FILES += \
+    deploy/linux/* \
+    deploy/macOS/* \
+    deploy/windows/nsis/* \
+    deploy/windows/resources/*

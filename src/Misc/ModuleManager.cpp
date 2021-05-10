@@ -48,7 +48,8 @@
 #include <Misc/TimerEvents.h>
 #include <Misc/ModuleManager.h>
 
-#include <MQTT/Publisher.h>
+#include <MQTT/Client.h>
+#include <Plugins/Bridge.h>
 
 #include <Logger.h>
 #include <FileAppender.h>
@@ -150,7 +151,8 @@ void ModuleManager::initializeQmlInterface()
     auto ioNetwork = IO::DataSources::Network::getInstance();
     auto jsonGenerator = JSON::Generator::getInstance();
     auto utilities = Misc::Utilities::getInstance();
-    auto mqttPublisher = MQTT::Publisher::getInstance();
+    auto mqttPublisher = MQTT::Client::getInstance();
+    auto pluginsBridge = Plugins::Bridge::getInstance();
     LOG_INFO() << "Finished initializing C++ modules";
 
     // Retranslate the QML interface automagically
@@ -173,7 +175,8 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_IO_Serial", ioSerial);
     c->setContextProperty("Cpp_IO_Network", ioNetwork);
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
-    c->setContextProperty("Cpp_MQTT_Publisher", mqttPublisher);
+    c->setContextProperty("Cpp_MQTT_Client", mqttPublisher);
+    c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
 
     // Register app info with QML
     c->setContextProperty("Cpp_AppName", qApp->applicationName());
@@ -207,11 +210,12 @@ void ModuleManager::stopOperations()
 {
     LOG_INFO() << "Stopping application modules...";
 
+    Plugins::Bridge::getInstance()->removeConnection();
     CSV::Export::getInstance()->closeFile();
     CSV::Player::getInstance()->closeFile();
     IO::Manager::getInstance()->disconnectDevice();
     Misc::TimerEvents::getInstance()->stopTimers();
-    MQTT::Publisher::getInstance()->disconnectFromHost();
+    MQTT::Client::getInstance()->disconnectFromHost();
 
     LOG_INFO() << "Application modules stopped";
 }

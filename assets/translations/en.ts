@@ -557,6 +557,204 @@
     </message>
 </context>
 <context>
+    <name>MQTT</name>
+    <message>
+        <source>Version</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Topic</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT topic</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT username</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT password</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>DNS lookup</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Enter address (e.g. google.com)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>MQTT::Client</name>
+    <message>
+        <source>Publisher</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Subscriber</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>IP address lookup error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Connection refused</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Remote host closed the connection</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Host not found</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Socket access error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Socket resource error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Socket timeout</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Socket datagram too large</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Network error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Address in use</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Address not available</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Unsupported socket operation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Unfinished socket operation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Proxy authentication required</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>SSL handshake failed</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Proxy connection refused</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Proxy connection closed</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Proxy connection timeout</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Proxy not found</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Proxy protocol error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Operation error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>SSL internal error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Invalid SSL user data</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Socket temprary error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Unacceptable MQTT protocol</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT identifier rejected</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT server unavailable</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Bad MQTT username or password</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT authorization error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT no ping response</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT client error</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>MapDelegate</name>
     <message>
         <source>Center on coordinate</source>
@@ -913,6 +1111,21 @@
     </message>
 </context>
 <context>
+    <name>Plugins::Bridge</name>
+    <message>
+        <source>Unable to start plugin TCP server</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Plugin server</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Invalid pending connection</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>
@@ -969,6 +1182,14 @@
     </message>
     <message>
         <source>End sequence</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Plugin system</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777.</source>
         <translation></translation>
     </message>
 </context>
@@ -1028,6 +1249,10 @@
     </message>
     <message>
         <source>Settings</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT</source>
         <translation></translation>
     </message>
 </context>

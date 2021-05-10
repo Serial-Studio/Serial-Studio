@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#ifndef MQTT_PUBLISHER_H
-#define MQTT_PUBLISHER_H
+#ifndef MQTT_CLIENT_H
+#define MQTT_CLIENT_H
 
 #include <QObject>
 #include <QHostInfo>
@@ -41,7 +41,7 @@ enum MQTTClientMode
     ClientSubscriber = 1
 };
 
-class Publisher : public QObject
+class Client : public QObject
 {
     // clang-format off
     Q_OBJECT
@@ -105,7 +105,7 @@ signals:
     void lookupActiveChanged();
 
 public:
-    static Publisher *getInstance();
+    static Client *getInstance();
 
     quint16 port() const;
     QString host() const;
@@ -115,12 +115,12 @@ public:
     QString username() const;
     QString password() const;
     bool lookupActive() const;
+    bool isSubscribed() const;
     bool isConnectedToHost() const;
     QStringList clientModes() const;
     QStringList mqttVersions() const;
 
     quint16 defaultPort() const { return 1883; }
-
     QString defaultHost() const { return "127.0.0.1"; }
 
 public slots:
@@ -137,19 +137,23 @@ public slots:
     void setMqttVersion(const int versionIndex);
 
 private:
-    Publisher();
-    ~Publisher();
+    Client();
+    ~Client();
 
 private slots:
     void sendData();
+    void resetStatistics();
+    void onConnectedChanged();
     void lookupFinished(const QHostInfo &info);
     void onError(const QMQTT::ClientError error);
     void registerJsonFrame(const JFI_Object &frameInfo);
+    void onMessageReceived(const QMQTT::Message &message);
 
 private:
     QString m_topic;
     bool m_lookupActive;
     QMQTT::Client m_client;
+    quint16 m_sentMessages;
     QList<JFI_Object> m_jfiList;
     MQTTClientMode m_clientMode;
 };

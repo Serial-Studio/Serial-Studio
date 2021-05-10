@@ -75,6 +75,14 @@ QList<JSON::Dataset *> WidgetProvider::barDatasets() const
 }
 
 /**
+ * Returns a list with all the JSON datasets that implement a compass widget
+ */
+QList<JSON::Dataset *> WidgetProvider::compassDatasets() const
+{
+    return m_compassDatasets;
+}
+
+/**
  * Returns a list with all the JSON groups that implement a map widget
  */
 QList<JSON::Group *> WidgetProvider::mapGroup() const
@@ -106,9 +114,10 @@ int WidgetProvider::totalWidgetCount() const
 {
     // clang-format off
     return mapGroupCount() +
-            gyroGroupCount() +
-            barDatasetCount() +
-            accelerometerGroupCount();
+           gyroGroupCount() +
+           barDatasetCount() +
+           compassDatasetCount() +
+           accelerometerGroupCount();
     // clang-format on
 }
 
@@ -137,6 +146,14 @@ int WidgetProvider::gyroGroupCount() const
 }
 
 /**
+ * Returns the number of JSON datasets that implement a compass widget
+ */
+int WidgetProvider::compassDatasetCount() const
+{
+    return compassDatasets().count();
+}
+
+/**
  * Returns the number of JSON groups that implement an accelerometer widget
  */
 int WidgetProvider::accelerometerGroupCount() const
@@ -152,6 +169,18 @@ JSON::Dataset *WidgetProvider::barDatasetAt(const int index)
 {
     if (barDatasets().count() > index)
         return barDatasets().at(index);
+
+    return Q_NULLPTR;
+}
+
+/**
+ * Returns a pointer to the JSON dataset that implements a compass widget
+ * with the given @a index.
+ */
+JSON::Dataset *WidgetProvider::compassDatasetAt(const int index)
+{
+    if (compassDatasets().count() > index)
+        return compassDatasets().at(index);
 
     return Q_NULLPTR;
 }
@@ -190,6 +219,18 @@ JSON::Group *WidgetProvider::accelerometerGroupAt(const int index)
         return accelerometerGroup().at(index);
 
     return Q_NULLPTR;
+}
+
+/**
+ * Returns the direction in degrees for the compass widget at the given @a index
+ */
+int WidgetProvider::compass(const int index)
+{
+    auto compass = compassDatasetAt(index);
+    if (compass)
+        return qMax(0, qMin(360, compass->value().toInt()));
+
+    return INT_MAX;
 }
 
 /**
@@ -397,9 +438,10 @@ double WidgetProvider::mapLongitude(const int index)
 void WidgetProvider::resetData()
 {
     m_widgetCount = 0;
-    m_barDatasets.clear();
     m_mapGroups.clear();
     m_gyroGroups.clear();
+    m_barDatasets.clear();
+    m_compassDatasets.clear();
     m_accelerometerGroups.clear();
 
     emit dataChanged();
@@ -412,9 +454,10 @@ void WidgetProvider::resetData()
 void WidgetProvider::updateModels()
 {
     // Clear current groups
-    m_barDatasets.clear();
     m_mapGroups.clear();
     m_gyroGroups.clear();
+    m_barDatasets.clear();
+    m_compassDatasets.clear();
     m_accelerometerGroups.clear();
 
     // Check if frame is valid
@@ -425,11 +468,19 @@ void WidgetProvider::updateModels()
     m_mapGroups = getWidgetGroup("map");
     m_gyroGroups = getWidgetGroup("gyro");
     m_barDatasets = getWidgetDatasets("bar");
+    m_compassDatasets = getWidgetDatasets("compass");
     m_accelerometerGroups = getWidgetGroup("accelerometer");
 
-    // Check if widget count has changed
-    auto count = mapGroupCount() + gyroGroupCount() + barDatasetCount()
-        + accelerometerGroupCount();
+    // Calculate total widget count
+    // clang-format off
+    auto count = mapGroupCount() +
+                 gyroGroupCount() +
+                 barDatasetCount() +
+                 compassDatasetCount() +
+                 accelerometerGroupCount();
+    // clang-format on
+
+    // Tell UI to regenerate widget models if widget count has changed from last frame
     if (count != m_widgetCount)
     {
         m_widgetCount = count;

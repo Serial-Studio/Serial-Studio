@@ -38,6 +38,8 @@ bool JFI_Valid(const JFI_Object &info)
 void JFI_SortList(QList<JFI_Object> *list)
 {
     Q_ASSERT(list);
+    if (list->count() <= 1)
+        return;
 
     for (int i = 0; i < list->count() - 1; ++i)
     {

@@ -26,7 +26,6 @@
 
 DEFINES += CUTELOGGER_SRC
 DEFINES += QTCSV_STATIC_LIB
-DEFINES += QT_BUILD_QMQTT_SRC
 
 #-------------------------------------------------------------------------------
 # Include *.pri files

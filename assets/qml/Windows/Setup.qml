@@ -63,17 +63,17 @@ Control {
         property alias port: network.port
         property alias address: network.address
         property alias socketType: network.socketType
-        property alias addressLookup: network.addressLookup
 
         //
         // MQTT settings
         //
-        property alias mqttHost: mqttPublisher.host
-        property alias mqttPort: mqttPublisher.port
-        property alias mqttUser: mqttPublisher.user
-        property alias mqttTopic: mqttPublisher.topic
-        property alias mqttPassword: mqttPublisher.password
-        property alias mqttDnsAddress: mqttPublisher.dnsAddress
+        property alias mqttHost: mqtt.host
+        property alias mqttPort: mqtt.port
+        property alias mqttUser: mqtt.user
+        property alias mqttMode: mqtt.mode
+        property alias mqttTopic: mqtt.topic
+        property alias mqttVersion: mqtt.version
+        property alias mqttPassword: mqtt.password
 
         //
         // App settings
@@ -81,6 +81,7 @@ Control {
         property alias language: settings.language
         property alias endSequence: settings.endSequence
         property alias startSequence: settings.startSequence
+        property alias tcpPlugins: settings.tcpPlugins
     }
 
     //
@@ -254,7 +255,7 @@ Control {
                     stack.implicitHeight = network.implicitHeight
                     break
                 case 2:
-                    stack.implicitHeight = mqttPublisher.implicitHeight
+                    stack.implicitHeight = mqtt.implicitHeight
                     break
                 case 3:
                     stack.implicitHeight = settings.implicitHeight
@@ -281,8 +282,8 @@ Control {
                 }
             }
 
-            SetupPanes.MQTTPublisher {
-                id: mqttPublisher
+            SetupPanes.MQTT {
+                id: mqtt
                 background: TextField {
                     enabled: false
                     palette.base: "#16232a"

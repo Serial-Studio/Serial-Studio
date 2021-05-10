@@ -95,21 +95,23 @@ void Utilities::configureDarkUi()
     qApp->setStyle(QStyleFactory::create("Fusion"));
     QQuickStyle::setStyle("Fusion");
 
+    // clang-format off
     QPalette palette;
-    palette.setColor(QPalette::Base, QColor(33, 55, 63));
-    palette.setColor(QPalette::Link, QColor(64, 157, 160));
-    palette.setColor(QPalette::Button, QColor(33, 55, 63));
-    palette.setColor(QPalette::Window, QColor(33, 55, 63));
-    palette.setColor(QPalette::Text, QColor(255, 255, 255));
-    palette.setColor(QPalette::Midlight, QColor(14, 20, 25));
-    palette.setColor(QPalette::Highlight, QColor(64, 157, 160));
-    palette.setColor(QPalette::BrightText, QColor(255, 255, 255));
-    palette.setColor(QPalette::ButtonText, QColor(255, 255, 255));
-    palette.setColor(QPalette::WindowText, QColor(255, 255, 255));
-    palette.setColor(QPalette::ToolTipBase, QColor(230, 224, 178));
-    palette.setColor(QPalette::ToolTipText, QColor(230, 224, 178));
-    palette.setColor(QPalette::HighlightedText, QColor(230, 224, 178));
+    palette.setColor(QPalette::Base,            QColor("#21373f"));
+    palette.setColor(QPalette::Link,            QColor("#409da0"));
+    palette.setColor(QPalette::Button,          QColor("#21373f"));
+    palette.setColor(QPalette::Window,          QColor("#21373f"));
+    palette.setColor(QPalette::Text,            QColor("#ffffff"));
+    palette.setColor(QPalette::Midlight,        QColor("#0e1419"));
+    palette.setColor(QPalette::Highlight,       QColor("#409da0"));
+    palette.setColor(QPalette::BrightText,      QColor("#ffffff"));
+    palette.setColor(QPalette::ButtonText,      QColor("#ffffff"));
+    palette.setColor(QPalette::WindowText,      QColor("#ffffff"));
+    palette.setColor(QPalette::ToolTipBase,     QColor("#e6e0b2"));
+    palette.setColor(QPalette::ToolTipText,     QColor("#e6e0b2"));
+    palette.setColor(QPalette::HighlightedText, QColor("#e6e0b2"));
     qApp->setPalette(palette);
+    // clang-format on
 }
 
 /**
