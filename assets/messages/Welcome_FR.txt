@@ -1,0 +1,27 @@
+________           _____       ______   ____________       _____________       
+__  ___/______________(_)_____ ___  /   __  ___/_  /____  _______  /__(_)_____ 
+_____ \_  _ \_  ___/_  /_  __ `/_  /    _____ \_  __/  / / /  __  /__  /_  __ \
+____/ //  __/  /   _  / / /_/ /_  /     ____/ // /_ / /_/ // /_/ / _  / / /_/ /
+/____/ \___//_/    /_/  \__,_/ /_/      /____/ \__/ \__,_/ \__,_/  /_/  \____/ 
+                                                                               
+
+Bienvenue dans Serial Studio ! Pour commencer, sélectionnez un port COM et un 
+débit en bauds dans l'onglet dispositif sur la droite. Si la connection série
+a réussi et que les données qui arrivent sont interprétées correctement, cet
+onglet devrait être fermé automatiquement et le tableau de bord devrait être affiché.
+Sinon, vous pouvez utiliser la console pour trouver la cause de votre problème.
+
+Utilisez les boutons de la barre d'outils pour afficher les fonctionnalités que
+vous souhaitez utiliser. Si vous rencontrez un problème avec Serial Studio, 
+signalez-le ici :
+
+→ https://github.com/Serial-Studio/Serial-Studio/issues
+
+Vous pouvez aussi utiliser les liens dans la fenêtre "A propos". Pour la documentation
+concernant l'utilisation de Serial Studio et l'intégration dans votre projet actuel, 
+vous trouvez les informations nécessaires dans le wiki : 
+
+→ https://github.com/Serial-Studio/Serial-Studio/wiki
+
+Astuce : Double-cliquez sur n'importe quel groupe, graphique ou widget pour
+l'afficher dans une autre fenêtre.
