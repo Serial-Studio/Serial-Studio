@@ -20,7 +20,7 @@ Serial studio started out receiving data over a hardware serial port, but can no
 
 **NOTE:** Information regarding the communication protocol is provided in the [wiki](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol).
 
-*Read this in other languages*: [Español](README_ES.md) [简体中文](README_ZH.md) [Deutsch](README_DE.md)
+*Read this in other languages*: [Español](README_ES.md) [简体中文](README_ZH.md) [Deutsch](README_DE.md) [Français](README_FR.md)
 
 ![Software usage](doc/app-usage.gif)
 
