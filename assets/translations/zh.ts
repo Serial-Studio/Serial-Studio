@@ -567,7 +567,7 @@
     </message>
     <message>
         <source>IP address lookup error</source>
-        <translation>IP地址查询错误</translation>
+        <translation type="vanished">IP地址查询错误</translation>
     </message>
     <message>
         <source>Network socket error</source>
@@ -730,7 +730,7 @@
     </message>
     <message>
         <source>Port</source>
-        <translation>港口</translation>
+        <translation>端口</translation>
     </message>
     <message>
         <source>Topic</source>
@@ -758,11 +758,11 @@
     </message>
     <message>
         <source>DNS lookup</source>
-        <translation>DNS查询</translation>
+        <translation type="vanished">DNS查询</translation>
     </message>
     <message>
         <source>Enter address (e.g. google.com)</source>
-        <translation>输入地址（例如baidu.com）</translation>
+        <translation type="vanished">输入地址（例如baidu.com）</translation>
     </message>
     <message>
         <source>Disconnect</source>
@@ -1253,19 +1253,23 @@
     </message>
     <message>
         <source>IP Address</source>
-        <translation>IP地址</translation>
+        <translation type="vanished">IP地址</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation>港口</translation>
+        <translation>端口</translation>
     </message>
     <message>
         <source>DNS lookup</source>
-        <translation>DNS查询</translation>
+        <translation type="vanished">DNS查询</translation>
     </message>
     <message>
         <source>Enter address (e.g. google.com)</source>
-        <translation>输入地址（例如baidu.com）</translation>
+        <translation type="vanished">输入地址（例如baidu.com）</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>服务器</translation>
     </message>
 </context>
 <context>

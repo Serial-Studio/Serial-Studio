@@ -571,7 +571,7 @@
     </message>
     <message>
         <source>IP address lookup error</source>
-        <translation>Error de búsqueda de dirección IP</translation>
+        <translation type="vanished">Error de búsqueda de dirección IP</translation>
     </message>
     <message>
         <source>Network socket error</source>
@@ -793,11 +793,11 @@
     </message>
     <message>
         <source>DNS lookup</source>
-        <translation>Búsqueda DNS</translation>
+        <translation type="vanished">Búsqueda DNS</translation>
     </message>
     <message>
         <source>Enter address (e.g. google.com)</source>
-        <translation>Ingresar dirección (p.ej. google.com)</translation>
+        <translation type="vanished">Ingresar dirección (p.ej. google.com)</translation>
     </message>
     <message>
         <source>Disconnect</source>
@@ -1288,7 +1288,7 @@
     </message>
     <message>
         <source>IP Address</source>
-        <translation>Direccion IP</translation>
+        <translation type="vanished">Direccion IP</translation>
     </message>
     <message>
         <source>Port</source>
@@ -1296,11 +1296,15 @@
     </message>
     <message>
         <source>DNS lookup</source>
-        <translation>Búsqueda DNS</translation>
+        <translation type="vanished">Búsqueda DNS</translation>
     </message>
     <message>
         <source>Enter address (e.g. google.com)</source>
-        <translation>Ingresar dirección (p.ej. google.com)</translation>
+        <translation type="vanished">Ingresar dirección (p.ej. google.com)</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>Servidor</translation>
     </message>
 </context>
 <context>

@@ -463,10 +463,6 @@
 <context>
     <name>IO::DataSources::Network</name>
     <message>
-        <source>IP address lookup error</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Network socket error</source>
         <translation></translation>
     </message>
@@ -596,14 +592,6 @@
     </message>
     <message>
         <source>MQTT password</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>DNS lookup</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Enter address (e.g. google.com)</source>
         <translation></translation>
     </message>
     <message>
@@ -1094,19 +1082,11 @@
         <translation></translation>
     </message>
     <message>
-        <source>IP Address</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Port</source>
         <translation></translation>
     </message>
     <message>
-        <source>DNS lookup</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Enter address (e.g. google.com)</source>
+        <source>Host</source>
         <translation></translation>
     </message>
 </context>
