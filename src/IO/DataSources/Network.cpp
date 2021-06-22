@@ -40,7 +40,7 @@ Network::Network()
     setPort(defaultPort());
     setSocketType(QAbstractSocket::TcpSocket);
     connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &Network::onErrorOccurred);
-    connect(&m_udpSocket, &QTcpSocket::errorOccurred, this, &Network::onErrorOccurred);
+    connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &Network::onErrorOccurred);
 }
 
 /**
