@@ -695,7 +695,7 @@ void Serial::writeSettings()
  */
 QList<QSerialPortInfo> Serial::validPorts() const
 {
-    // Search for available ports and add them to the lsit
+    // Search for available ports and add them to the list
     QList<QSerialPortInfo> ports;
     foreach (QSerialPortInfo info, QSerialPortInfo::availablePorts())
     {
