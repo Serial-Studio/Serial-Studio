@@ -25,7 +25,6 @@
 
 #include <QVector>
 #include <QObject>
-#include <QVector>
 #include <QVariant>
 #include <QAbstractSeries>
 
