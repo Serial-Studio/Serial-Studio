@@ -212,7 +212,8 @@ void Network::setPort(const quint16 port)
 void Network::setHost(const QString &host)
 {
     // Check if host name exists
-    if (QHostAddress(host).isNull()) {
+    if (QHostAddress(host).isNull())
+    {
         m_hostExists = false;
         lookup(host);
     }

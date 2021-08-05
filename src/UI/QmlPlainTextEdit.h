@@ -29,6 +29,39 @@
 
 namespace UI
 {
+class FormattedText
+{
+public:
+    FormattedText() = default;
+    FormattedText(const FormattedText &other) = default;
+    FormattedText(const QString &txt, const QTextCharFormat &fmt = QTextCharFormat())
+        : text(txt)
+        , format(fmt)
+    {
+    }
+
+    QString text;
+    QTextCharFormat format;
+};
+
+class AnsiEscapeCodeHandler
+{
+public:
+    QList<FormattedText> parseText(const FormattedText &input);
+    void setTextEdit(QPlainTextEdit *widget);
+    void endFormatScope();
+
+private:
+    void setFormatScope(const QTextCharFormat &charFormat);
+
+    QString m_pendingText;
+    QPlainTextEdit *textEdit;
+    QString m_alternateTerminator;
+    QTextCharFormat m_previousFormat;
+    bool m_previousFormatClosed = true;
+    bool m_waitingForTerminator = false;
+};
+
 class QmlPlainTextEdit : public QQuickPaintedItem
 {
     // clang-format off
@@ -116,15 +149,6 @@ signals:
     void maximumBlockCountChanged();
 
 public:
-    enum VT100_State
-    {
-        VT100_Text,
-        VT100_Escape,
-        VT100_Command,
-        VT100_ResetFont
-    };
-    Q_ENUM(VT100_State)
-
     QmlPlainTextEdit(QQuickItem *parent = 0);
     ~QmlPlainTextEdit();
 
@@ -195,7 +219,7 @@ private:
     bool m_emulateVt100;
     bool m_copyAvailable;
     QPlainTextEdit *m_textEdit;
-    VT100_State m_terminalState;
+    AnsiEscapeCodeHandler m_escapeCodeHandler;
 };
 }
 
