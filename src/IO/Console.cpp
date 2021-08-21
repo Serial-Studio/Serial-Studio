@@ -654,8 +654,6 @@ QString Console::hexadecimalStr(const QByteArray &data)
 {
     // Remove line breaks from data
     QByteArray copy = data;
-    copy.replace("\n", "");
-    copy.replace("\r", "");
 
     // Convert data to string with dump every ~80 chars
     QString str;
