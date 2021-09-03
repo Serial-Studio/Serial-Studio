@@ -131,6 +131,20 @@ double GraphProvider::getValue(const int index) const
 }
 
 /**
+ * Returns the title for the dataset at the given @a index
+ * The title contains the dataset units (if specified)
+ */
+QString GraphProvider::getTitle(const int index) const
+{
+    auto dataset = getDataset(index);
+    auto title = dataset->title();
+    if (!dataset->units().isEmpty())
+        title.append(QString(" (%1)").arg(dataset->title()));
+
+    return title;
+}
+
+/**
  * Returns a point object with the recommended min/max values for the graph at the
  * given @a index
  */

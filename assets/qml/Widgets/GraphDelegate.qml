@@ -36,9 +36,7 @@ Window {
     opacity: enabled ? 1 : 0
     borderColor: root.headerVisible ? "#517497" : "transparent"
 
-    title: Cpp_UI_GraphProvider.getDataset(graphId).title +
-           Cpp_UI_GraphProvider.getDataset(graphId).units.length > 0 ?
-               " (" + Cpp_UI_GraphProvider.getDataset(graphId).units + ")" : ""
+    title: Cpp_UI_GraphProvider.getTitle(graphId)
 
     Connections {
         target: Cpp_UI_GraphProvider

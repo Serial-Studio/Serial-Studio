@@ -64,6 +64,7 @@ public:
     QVector<JSON::Dataset *> datasets() const;
 
     Q_INVOKABLE double getValue(const int index) const;
+    Q_INVOKABLE QString getTitle(const int index) const;
     Q_INVOKABLE QPointF graphRange(const int index) const;
     Q_INVOKABLE double minimumValue(const int index) const;
     Q_INVOKABLE double maximumValue(const int index) const;
