@@ -584,11 +584,11 @@ void Serial::refreshSerialDevices()
             auto name = info.portName();
             auto description = info.description();
 
-            // Add port name with description (if possible)
+            // Show port description
             if (!description.isEmpty())
-                ports.append(QString("%1 (%2)").arg(name, description));
+                ports.append(description);
 
-            // Only add port name
+            // Show port name
             else
                 ports.append(name);
         }

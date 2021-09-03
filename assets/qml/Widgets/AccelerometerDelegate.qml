@@ -153,7 +153,7 @@ Window {
         //
         // Gauge object
         //
-        GaugeDelegate {
+        AccelerometerGaugeDelegate {
             id: gauge
             lastNumber: 8
             firstNumber: 0

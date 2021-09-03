@@ -75,6 +75,14 @@ QList<JSON::Dataset *> WidgetProvider::barDatasets() const
 }
 
 /**
+ * Returns a list with all the JSON datasets that implement a gauge widget
+ */
+QList<JSON::Dataset *> WidgetProvider::gaugeDatasets() const
+{
+    return m_gaugeDatasets;
+}
+
+/**
  * Returns a list with all the JSON datasets that implement a compass widget
  */
 QList<JSON::Dataset *> WidgetProvider::compassDatasets() const
@@ -130,6 +138,14 @@ int WidgetProvider::barDatasetCount() const
 }
 
 /**
+ * Returns the number of JSON groups that implement a gauge widget
+ */
+int WidgetProvider::gaugeDatasetCount() const
+{
+    return gaugeDatasets().count();
+}
+
+/**
  * Returns the number of JSON groups that implement a map widget
  */
 int WidgetProvider::mapGroupCount() const
@@ -169,6 +185,18 @@ JSON::Dataset *WidgetProvider::barDatasetAt(const int index)
 {
     if (barDatasets().count() > index)
         return barDatasets().at(index);
+
+    return Q_NULLPTR;
+}
+
+/**
+ * Returns a pointer to the JSON dataset that implements a gauge widget
+ * with the given @a index
+ */
+JSON::Dataset *WidgetProvider::gaugeDatasetAt(const int index)
+{
+    if (gaugeDatasets().count() > index)
+        return gaugeDatasets().at(index);
 
     return Q_NULLPTR;
 }
@@ -393,6 +421,42 @@ double WidgetProvider::barMax(const int index)
 }
 
 /**
+ * Returns the value for the gauge widget at the given @a index
+ */
+double WidgetProvider::gauge(const int index)
+{
+    auto gauge = gaugeDatasetAt(index);
+    if (gauge)
+        return gauge->value().toDouble();
+
+    return DBL_MAX;
+}
+
+/**
+ * Returns the minimum value for the gauge widget at the given @a index
+ */
+double WidgetProvider::gaugeMin(const int index)
+{
+    auto gauge = gaugeDatasetAt(index);
+    if (gauge)
+        return gauge->jsonData().value("min").toDouble();
+
+    return DBL_MAX;
+}
+
+/**
+ * Returns the maximum value for the gauge widget at the given @a index
+ */
+double WidgetProvider::gaugeMax(const int index)
+{
+    auto gauge = gaugeDatasetAt(index);
+    if (gauge)
+        return gauge->jsonData().value("max").toDouble();
+
+    return DBL_MAX;
+}
+
+/**
  * Returns the latitude value for the map widget at the given @a index
  */
 double WidgetProvider::mapLatitude(const int index)
@@ -441,6 +505,7 @@ void WidgetProvider::resetData()
     m_mapGroups.clear();
     m_gyroGroups.clear();
     m_barDatasets.clear();
+    m_gaugeDatasets.clear();
     m_compassDatasets.clear();
     m_accelerometerGroups.clear();
 
@@ -457,6 +522,7 @@ void WidgetProvider::updateModels()
     m_mapGroups.clear();
     m_gyroGroups.clear();
     m_barDatasets.clear();
+    m_gaugeDatasets.clear();
     m_compassDatasets.clear();
     m_accelerometerGroups.clear();
 
@@ -468,6 +534,7 @@ void WidgetProvider::updateModels()
     m_mapGroups = getWidgetGroup("map");
     m_gyroGroups = getWidgetGroup("gyro");
     m_barDatasets = getWidgetDatasets("bar");
+    m_gaugeDatasets = getWidgetDatasets("gauge");
     m_compassDatasets = getWidgetDatasets("compass");
     m_accelerometerGroups = getWidgetGroup("accelerometer");
 

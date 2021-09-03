@@ -85,6 +85,11 @@ Window {
     property real maximumValue: 10
 
     //
+    // Animations
+    //
+    Behavior on currentValue {NumberAnimation{duration: 200}}
+
+    //
     // Connections with widget manager
     //
     Connections {
@@ -123,6 +128,7 @@ Window {
         }
 
         else {
+            root.level = 0
             root.title = ""
             root.units = ""
             root.currentValue = 0

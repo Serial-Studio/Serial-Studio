@@ -21,199 +21,125 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Extras 1.4
+import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
+import QtQuick.Controls.Styles 1.4
 
-Rectangle {
+import SerialStudio 1.0
+
+import "."
+
+Window {
     id: root
 
     //
     // Custom properties
     //
-    property string title: ""
-    property int lastNumber: 8
-    property int firstNumber: 0
-    property real numberSize: 16
+    property string units: ""
+    property int datasetIndex: 0
     property real currentValue: 0
-    property real maximumValue: 0
     property real minimumValue: 0
-    property real indicatorWidth: 4
-    property bool maximumVisible: true
-    property bool minimumVisible: true
-    property bool currentVisible: true
-    property bool numbersVisible: true
-    property bool valueLabelVisible: true
+    property real maximumValue: 0
 
     //
     // Colors
     //
-    property color valueColor: "#8ecd9d"
-    property color titleColor: "#517497"
-    property color numbersColor: "#e6e0b2"
-    property color indicatorColor: "#e6e0b2"
-    property color indicatorMaxColor: "#d72d60"
-    property color indicatorMinColor: "#2d6073"
+    property color valueColor: "#517497"
+    property color titleColor: "#8ecd9d"
 
     //
-    // Redraw indicators automatically
+    // Window properties
     //
-    onCurrentValueChanged: indicatorCanvas.requestPaint()
-
-    //
-    // Properties
-    //
-    border.width: 2
-    color: "#121218"
-    radius: width / 2
-    border.color: "#e6e0b2"
-
-    //
-    // Redraw numbers automatically
-    //
-    onWidthChanged: numbersCanvas.requestPaint()
-    onHeightChanged: numbersCanvas.requestPaint()
+    spacing: -1
+    gradient: true
+    implicitWidth: 260
+    visible: opacity > 0
+    opacity: enabled ? 1 : 0
+    backgroundColor: "#09090c"
+    icon.source: "qrc:/icons/chart.svg"
+    implicitHeight: implicitWidth + 96
 
     //
-    // Label
+    // Connections with widget manager
     //
-    Label {
-        font.pixelSize: 14
-        text: root.title
-        color: root.titleColor
-        anchors.centerIn: parent
-        font.family: app.monoFont
-        anchors.verticalCenterOffset: 32
-    }
-
-    //
-    // Value label
-    //
-    Label {
-        font.pixelSize: 14
-        color: root.valueColor
-        anchors.centerIn: parent
-        font.family: app.monoFont
-        visible: root.valueLabelVisible
-        anchors.verticalCenterOffset: 56
-        text: root.currentValue.toFixed(3)
-    }
-
-    //
-    // Numbers painter
-    //
-    Canvas {
-        opacity: 0.8
-        id: numbersCanvas
-        anchors.fill: parent
-        Component.onCompleted: requestPaint()
-        onPaint: {
-            var ctx = getContext('2d')
-            ctx.reset()
-
-            if (!root.numbersVisible)
-                return
-
-            var range = lastNumber - firstNumber
-            for (var i = 0; i <= range; ++i) {
-                var radius = Math.min(root.width, root.height) / 2
-
-                var startupTheta = -180
-                var theta = (startupTheta + i * 360 / (range + 1)) * (Math.PI / 180)
-                var dX = (radius - root.numberSize) * Math.cos(theta) + radius - root.numberSize / 2
-                var dY = (radius - root.numberSize) * Math.sin(theta) + radius + root.numberSize / 2
-
-                ctx.font = "bold " + root.numberSize + "px " + app.monoFont
-                ctx.fillStyle = root.indicatorColor
-                ctx.fillText(i + firstNumber, dX, dY)
-
-                if (i === range) {
-                    var x = radius
-                    var y = radius
-                    var spacing = 10 * Math.PI / 180.0;
-                    var startAngle = theta + spacing
-                    var finishAngle = Math.PI - spacing
-
-                    ctx.lineWidth = 2
-                    ctx.strokeStyle = root.indicatorColor
-
-                    ctx.beginPath();
-                    ctx.arc(x, y, radius - (root.numberSize + 3), startAngle, finishAngle)
-                    ctx.stroke()
-                    ctx.beginPath();
-                    ctx.arc(x, y, radius - (root.numberSize - 3), startAngle, finishAngle)
-                    ctx.stroke()
-                }
-            }
+    Connections {
+        target: Cpp_UI_WidgetProvider
+        function onDataChanged() {
+            root.updateValues()
         }
     }
 
     //
-    // Indicator painter
+    // Updates the internal values of the gauge widget
     //
-    Canvas {
-        id: indicatorCanvas
-        anchors.fill: parent
-        Component.onCompleted: requestPaint()
-        onPaint: {
-            var ctx = getContext('2d')
+    function updateValues() {
+        if (Cpp_UI_WidgetProvider.gaugeDatasetCount() > root.datasetIndex) {
+            root.minimumValue = Cpp_UI_WidgetProvider.gaugeMin(root.datasetIndex)
+            root.maximumValue = Cpp_UI_WidgetProvider.gaugeMax(root.datasetIndex)
+            root.currentValue = Cpp_UI_WidgetProvider.gauge(root.datasetIndex)
+            root.title = Cpp_UI_WidgetProvider.gaugeDatasetAt(root.datasetIndex).title
+            root.units = Cpp_UI_WidgetProvider.gaugeDatasetAt(root.datasetIndex).units
+        }
 
-            function drawLineWithArrows(x0,y0,x1,y1,aWidth,aLength){
-                var dx=x1-x0;
-                var dy=y1-y0;
-                var angle=Math.atan2(dy,dx);
-                var length=Math.sqrt(dx*dx+dy*dy);
-
-                ctx.translate(x0,y0);
-                ctx.rotate(angle);
-                ctx.beginPath();
-                ctx.moveTo(0,0);
-                ctx.lineTo(length,0);
-
-                ctx.moveTo(length-aLength,-aWidth);
-                ctx.lineTo(length,0);
-                ctx.lineTo(length-aLength,aWidth);
-
-                ctx.stroke();
-                ctx.setTransform(1,0,0,1,0,0);
-            }
-
-            function drawIndicator(value, color, width, lenGain) {
-                var deg = ((Math.min(value, root.lastNumber) / (root.lastNumber + 1)) * 360) - 180
-                var rad = deg * (Math.PI / 180)
-                var len = Math.min(root.width, root.height) * lenGain
-
-                var x = root.width / 2
-                var y = root.height / 2
-                var x1 = x + Math.cos(rad) * len
-                var y1 = y + Math.sin(rad) * len
-
-                ctx.lineWidth = width
-                ctx.strokeStyle = color
-                drawLineWithArrows(x, y, x1, y1, width, width * 2)
-            }
-
-            ctx.reset()
-
-            if (root.maximumVisible)
-                drawIndicator(root.maximumValue, root.indicatorMaxColor, root.indicatorWidth * 0.8, 0.20)
-
-            if (root.minimumVisible)
-                drawIndicator(root.minimumValue, root.indicatorMinColor, root.indicatorWidth * 0.8, 0.20)
-
-            if (root.currentVisible)
-                drawIndicator(root.currentValue, root.indicatorColor, root.indicatorWidth, 0.28)
+        else {
+            root.title = ""
+            root.units = ""
+            root.currentValue = 0
+            root.minimumValue = 0
+            root.maximumValue = 0
         }
     }
 
     //
-    // Central gauge
+    // Layout
     //
-    Rectangle {
-        width: 24
-        height: 24
-        color: "#111"
-        radius: width / 2
-        anchors.centerIn: parent
-        border.color: root.indicatorColor
-        border.width: root.indicatorWidth - 1
+    ColumnLayout {
+        spacing: app.spacing * 4
+
+        anchors {
+            fill: parent
+            margins: app.spacing * 4
+            leftMargin: app.spacing * 8
+            rightMargin: app.spacing * 8
+        }
+
+        //
+        // Gauge
+        //
+        CircularGauge {
+            id: gauge
+            tickmarksVisible: true
+            Layout.fillHeight: true
+            value: root.currentValue
+            minimumValue: root.minimumValue
+            maximumValue: root.maximumValue
+            Layout.alignment: Qt.AlignHCenter
+            Layout.minimumWidth: root.width * 0.6
+            Layout.maximumWidth: root.width * 0.6
+
+            style: CircularGaugeStyle {
+                maximumValueAngle: 144
+                minimumValueAngle: -144
+                labelStepSize: (root.maximumValue - root.minimumValue) / 10
+                tickmarkStepSize: (root.maximumValue - root.minimumValue) / 20
+            }
+
+            Behavior on value {NumberAnimation{duration: 200}}
+
+            //
+            // Value text
+            //
+            Label {
+                font.bold: true
+                color: root.titleColor
+                font.family: app.monoFont
+                anchors.centerIn: parent
+                font.pixelSize: Math.max(12, gauge.height / 15)
+                anchors.verticalCenterOffset: parent.height * 0.17
+                text: (root.currentValue > root.maximumValue ? root.maximumValue.toFixed(2) :
+                                                               root.currentValue.toFixed(2)) + " " + root.units
+            }
+        }
     }
 }

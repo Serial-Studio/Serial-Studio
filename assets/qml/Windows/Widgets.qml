@@ -59,6 +59,10 @@ Control {
             barGenerator.model = 0
             barGenerator.model = Cpp_UI_WidgetProvider.barDatasetCount()
 
+            // Generate gauge widgets
+            gaugeGenerator.model = 0
+            gaugeGenerator.model = Cpp_UI_WidgetProvider.gaugeDatasetCount()
+
             // Generate compass widgets
             compassGenerator.model = 0
             compassGenerator.model = Cpp_UI_WidgetProvider.compassDatasetCount()
@@ -212,6 +216,49 @@ Control {
                                 gradient: false
                                 headerHeight: 48
                                 groupIndex: index
+                                anchors.margins: 0
+                                anchors.fill: parent
+                                borderColor: backgroundColor
+                                headerDoubleClickEnabled: false
+                            }
+                        }
+                    }
+                }
+
+                Repeater {
+                    id: gaugeGenerator
+
+                    delegate: Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: root.minimumWidgetSize
+                        Layout.minimumHeight: root.minimumWidgetSize
+
+                        Widgets.GaugeDelegate {
+                            datasetIndex: index
+                            anchors.fill: parent
+                            onHeaderDoubleClicked: windowBar.show()
+                        }
+
+                        QtWindow.Window {
+                            id: windowBar
+                            width: 640
+                            height: 480
+                            minimumWidth: root.minimumWidgetSize * 1.2
+                            minimumHeight: root.minimumWidgetSize * 1.2
+                            title: gauge.title
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: gauge.backgroundColor
+                            }
+
+                            Widgets.GaugeDelegate {
+                                id: gauge
+                                showIcon: true
+                                gradient: false
+                                headerHeight: 48
+                                datasetIndex: index
                                 anchors.margins: 0
                                 anchors.fill: parent
                                 borderColor: backgroundColor

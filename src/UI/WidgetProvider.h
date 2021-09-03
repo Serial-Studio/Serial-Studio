@@ -49,6 +49,7 @@ public:
     QList<JSON::Group *> mapGroup() const;
     QList<JSON::Group *> gyroGroup() const;
     QList<JSON::Dataset *> barDatasets() const;
+    QList<JSON::Dataset *> gaugeDatasets() const;
     QList<JSON::Dataset *> compassDatasets() const;
     QList<JSON::Group *> accelerometerGroup() const;
 
@@ -57,12 +58,14 @@ public:
     Q_INVOKABLE int mapGroupCount() const;
     Q_INVOKABLE int gyroGroupCount() const;
     Q_INVOKABLE int barDatasetCount() const;
+    Q_INVOKABLE int gaugeDatasetCount() const;
     Q_INVOKABLE int compassDatasetCount() const;
     Q_INVOKABLE int accelerometerGroupCount() const;
 
     Q_INVOKABLE JSON::Group *mapGroupAt(const int index);
     Q_INVOKABLE JSON::Group *gyroGroupAt(const int index);
     Q_INVOKABLE JSON::Dataset *barDatasetAt(const int index);
+    Q_INVOKABLE JSON::Dataset *gaugeDatasetAt(const int index);
     Q_INVOKABLE JSON::Dataset *compassDatasetAt(const int index);
     Q_INVOKABLE JSON::Group *accelerometerGroupAt(const int index);
 
@@ -79,6 +82,10 @@ public:
     Q_INVOKABLE double bar(const int index);
     Q_INVOKABLE double barMin(const int index);
     Q_INVOKABLE double barMax(const int index);
+
+    Q_INVOKABLE double gauge(const int index);
+    Q_INVOKABLE double gaugeMin(const int index);
+    Q_INVOKABLE double gaugeMax(const int index);
 
     Q_INVOKABLE double mapLatitude(const int index);
     Q_INVOKABLE double mapLongitude(const int index);
@@ -97,6 +104,7 @@ private:
     QList<JSON::Group *> m_mapGroups;
     QList<JSON::Group *> m_gyroGroups;
     QList<JSON::Dataset *> m_barDatasets;
+    QList<JSON::Dataset *> m_gaugeDatasets;
     QList<JSON::Dataset *> m_compassDatasets;
     QList<JSON::Group *> m_accelerometerGroups;
 };
