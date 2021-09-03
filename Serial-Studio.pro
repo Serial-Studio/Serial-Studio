@@ -133,7 +133,8 @@ TRANSLATIONS += \
     assets/translations/en.ts \
     assets/translations/es.ts \
     assets/translations/zh.ts \
-    assets/translations/de.ts
+    assets/translations/de.ts \
+    assets/translations/fr.ts
 
 HEADERS += \
     src/AppInfo.h \

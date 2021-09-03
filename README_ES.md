@@ -17,7 +17,7 @@ Además, este enfoque se puede extender a casi cualquier tipo de proyecto que im
 
 **NOTA:** en el [wiki](https://github.com/Serial-Studio/Serial-Studio/wiki/Protocolo-de-Comunicación) se muestra más información acerca del protocolo de comunicación utilizado por Serial Studio.
 
-*Lea esto en otros idiomas:* [English](README.md) [简体中文](README_ZH.md) [Deutsch](README_DE.md)
+*Lea esto en otros idiomas:* [English](README.md) [简体中文](README_ZH.md) [Deutsch](README_DE.md) [Français](README_FR.md)
 
 ![Software usage](doc/app-usage.gif)
 
