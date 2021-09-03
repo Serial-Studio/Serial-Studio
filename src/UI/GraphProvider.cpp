@@ -139,7 +139,7 @@ QString GraphProvider::getTitle(const int index) const
     auto dataset = getDataset(index);
     auto title = dataset->title();
     if (!dataset->units().isEmpty())
-        title.append(QString(" (%1)").arg(dataset->title()));
+        title.append(QString(" (%1)").arg(dataset->units()));
 
     return title;
 }
