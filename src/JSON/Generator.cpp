@@ -25,6 +25,7 @@
 #include <Logger.h>
 #include <CSV/Player.h>
 #include <IO/Manager.h>
+#include <MQTT/Client.h>
 #include <Misc/Utilities.h>
 #include <ConsoleAppender.h>
 
@@ -249,8 +250,9 @@ void Generator::loadJFI(const JFI_Object &info)
 {
     bool csvOpen = CSV::Player::getInstance()->isOpen();
     bool devOpen = IO::Manager::getInstance()->connected();
+    bool mqttSub = MQTT::Client::getInstance()->isSubscribed();
 
-    if (csvOpen || devOpen)
+    if (csvOpen || devOpen || mqttSub)
     {
         if (JFI_Valid(info))
             emit jsonChanged(info);
