@@ -22,7 +22,7 @@ Here is a breakdown of each subdirectory of the source code:
 
 - [`IO`](IO) implements the I/O manager, handlers for device data sources (serial port, network port) & console handler.
     - The I/O manager & console are implemented as [singleton classes](https://en.wikipedia.org/wiki/Singleton_pattern).
-- [`MQTT`](MQTT) contains a singleton class that allows Serial Studio to act as an MQTT client.
+- [`MQTT`](MQTT) contains a singleton class that allows Serial Studio to act as an [MQTT](https://en.wikipedia.org/wiki/MQTT) client.
 
 - TODO...
 
