@@ -24,7 +24,32 @@ Serial studio started out receiving data over a hardware serial port, but can no
 
 ![Software usage](doc/app-usage.gif)
 
-## Build instructions
+## Install
+
+You can [download](https://github.com/Serial-Studio/Serial-Studio/releases/latest) and install Serial Studio for your preffered platform.
+
+GNU/Linux users must enable the `executable` flag before attempting to run the application:
+
+```bash
+chmod +x SerialStudio-1.0.21-Linux.AppImage
+./SerialStudio-1.0.21-Linux.AppImage
+```
+
+### Prebuilt Linux packages
+
+Arch Linux users can install [serial-studio-git](https://aur.archlinux.org/packages/serial-studio-git/) from the aur, e.g. with [aurutils](https://aur.archlinux.org/packages/aurutils/):
+
+```bash
+aur fetch serial-studio-git
+aur build
+sudo pacman -S serial-studio-git
+```
+
+## Licence
+
+This project is released under the MIT license, for more information, check the [LICENSE](LICENSE.md) file.
+
+## Development
 
 #### Requirements
 
@@ -66,20 +91,9 @@ Alternatively, you can also use the following commands:
 
 	qmake
 	make -j4
+	
+## Tipping
 
-### Prebuilt Packages
-
-Arch Linux users can install [serial-studio-git](https://aur.archlinux.org/packages/serial-studio-git/) from the aur, e.g. with [aurutils](https://aur.archlinux.org/packages/aurutils/):
-
-```bash
-aur fetch serial-studio-git
-aur build
-sudo pacman -S serial-studio-git
-```
-
-## Licence
-
-This project is released under the MIT license, for more information, check the [LICENSE](LICENSE.md) file.
-
+If you find Serial Studio suitable for your needs, please consider [giving me a tip through PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE). Or, if you prefer to buy me a drink *personally* instead, just [send me a DM](https://instagram.com/aspatru) when you visit [Querétaro, Mexico](https://en.wikipedia.org/wiki/Querétaro), where I live. I look forward to meeting you!
 
 
