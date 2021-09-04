@@ -8,7 +8,7 @@ Think of this file as an *introductory document* for colaborators, hackers and g
 
 Of course, if this documentation is not clear enough (or you are a good writer), you are very welcome to fork this project, modify it & create a [pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests).
 
-### But I'm not a coder!
+### But I'm not a coder!
 
 Don't worry! You can help this project by reporting bugs, providing ideas, creating translations, writing about it in your blog/vlog, etc. You can also [donate](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE) through PayPal!
 
