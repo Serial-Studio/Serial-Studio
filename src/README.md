@@ -12,7 +12,7 @@ Of course, if the documentation is not clear enough (or you are a good writer), 
 
 Before explaining what each module does, please take a look at the "high-level" architecture of Serial Studio:
 
-![Architecture](doc/architecture/architecture.svg)
+![Architecture](/doc/architecture/architecture.svg)
 
 Honestly, explaining this with words would be pretty difficult. If you have any doubts, feel free to use any of the support channels provided by the maintainers of the project.
 
