@@ -53,7 +53,7 @@ This will apply the style defined in the [`.clang-format`](../.clang-format) fil
 
 **IMPORTANT! Please write explanatory comments to document your changes!**
 
-## TODOs for this document
+## TODOs for this document
 
 - Add README.md files for each subdirectory of this project
 
