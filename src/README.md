@@ -16,7 +16,7 @@ Before explaining what each module does, please take a look at the "high-level" 
 
 ### Source code organization
 
-Since there are over 30 source files that compromise this project (not including any libraries), it is important to keep the files organized in subdirectories corresponding to the their respective high-level functionalities.
+Since there are over 30 source files that compromise this project (not including any libraries or the [UI/QML](https://github.com/Serial-Studio/Serial-Studio/tree/master/assets/qml) part), it is important to keep the files organized in subdirectories corresponding to the their respective high-level functionalities.
 
 Here is a breakdown of each subdirectory of the source code:
 
@@ -25,6 +25,20 @@ Here is a breakdown of each subdirectory of the source code:
 - [`MQTT`](MQTT) contains a singleton class that allows Serial Studio to act as an [MQTT](https://en.wikipedia.org/wiki/MQTT) client.
 
 - TODO...
+
+**What about the user interface?** 
+
+The user interface is written in [QtQuick/QML](https://doc.qt.io/qt-5/qtquick-index.html). You can find the "source code" of the user interface in the [`$PROJ_ROOT/assets/qml`](https://github.com/Serial-Studio/Serial-Studio/tree/master/assets/qml) folder.
+
+## Coding styles
+
+If possible please follow the coding conventions defined in the [`.clang-format`](https://github.com/Serial-Studio/Serial-Studio/blob/master/.clang-format) file. If you want to be sure, you can download and install [clang-format-all](https://github.com/eklitzke/clang-format-all) and run the following command before making a commit:
+
+> `clang-format-all src`
+
+This will apply the style defined in the [`.clang-format`](https://github.com/Serial-Studio/Serial-Studio/blob/master/.clang-format) file recursively to all C++ headers and sources in the project.
+
+**Also, please write explanatory comments to document your changes!**
 
 
 
