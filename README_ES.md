@@ -90,4 +90,4 @@ Alternativamente, también puede utilizar los siguientes comandos:
 	
 ## Donaciones
 
-Si encuentras Serial Studio adecuado para tus necesidades, considera [darme una propina a través de PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE). O, si prefieres invitarme un trago, simplemente [envíame un DM](https://instagram.com/aspatru) cuando visites [Querétaro, México](https://en.wikipedia.org/wiki/Querétaro), donde vivo. Espero conocerte!
+Si encuentras Serial Studio útil para tus proyectos, considera [darme una propina a través de PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE). O, si prefieres invitarme un trago, simplemente [envíame un DM](https://instagram.com/aspatru) cuando visites [Querétaro, México](https://en.wikipedia.org/wiki/Querétaro), donde vivo. Espero conocerte!
