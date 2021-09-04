@@ -10,15 +10,22 @@ Of course, if this documentation is not clear enough (or you are a good writer),
 
 ## Software architecture
 
-Before explaining what each module does, please take a look at the "high-level" architecture of Serial Studio:
+Before explaining what each module does, please take a look at the "high-level" architecture of Serial Studio. If you have any doubts, feel free to use any of the support channels provided by the maintainers of the project.
 
 ![Architecture](/doc/architecture/architecture.svg)
 
-Honestly, explaining this with words would be pretty difficult. If you have any doubts, feel free to use any of the support channels provided by the maintainers of the project.
+### Source code organization
 
-## Source code organization
+Since there are over 30 source files that compromise this project (not including any libraries), it is important to keep the files organized in subdirectories corresponding to the their respective high-level functionalities.
 
-TODO...
+Here is a breakdown of each subdirectory of the source code:
+
+- [`IO`](IO) implements the I/O manager, handlers for device data sources (serial port, network port) & console handler.
+    - The I/O manager & console are implemented as [singleton classes](https://en.wikipedia.org/wiki/Singleton_pattern).
+- [`MQTT`](MQTT) contains a singleton class that allows Serial Studio to act as an MQTT client.
+
+- TODO...
+
 
 
 
