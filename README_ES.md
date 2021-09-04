@@ -21,7 +21,31 @@ Además, este enfoque se puede extender a casi cualquier tipo de proyecto que im
 
 ![Software usage](doc/app-usage.gif)
 
-## Instrucciones de complicación
+## Instalación
+
+Puedes [descargar](https://github.com/Serial-Studio/Serial-Studio/releases/latest) e instalar Serial Studio para tu sistema operativo preferido.
+
+Usuarios de GNU/Linux necesitan habilitar la bandera de  `ejecutable` antes de correr la aplicación:
+
+```bash
+chmod +x SerialStudio-1.0.21-Linux.AppImage
+./SerialStudio-1.0.21-Linux.AppImage
+```
+### Paquetes de Linux
+
+Usuarios de Arch Linux pueden instalar [serial-studio-git](https://aur.archlinux.org/packages/serial-studio-git/) desde el aur, e.g. con [aurutils](https://aur.archlinux.org/packages/aurutils/):
+
+```bash
+aur fetch serial-studio-git
+aur build
+sudo pacman -S serial-studio-git
+```
+
+## Licencia
+
+Este proyecto se publica bajo la licencia MIT, para obtener más información, consulte el archivo [LICENSE](LICENSE.md).
+
+## Desarrollo
 
 #### Requisitos
 
@@ -63,8 +87,7 @@ Alternativamente, también puede utilizar los siguientes comandos:
 
 	qmake
 	make -j4
+	
+## Donaciones
 
-## Licencia
-
-Este proyecto se publica bajo la licencia MIT, para obtener más información, consulte el archivo [LICENSE](LICENSE.md).
-
+Si encuentras Serial Studio adecuado para tus necesidades, considera [darme una propina a través de PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE). O, si prefieres invitarme un trago, simplemente [envíame un DM](https://instagram.com/aspatru) cuando visites [Querétaro, México](https://en.wikipedia.org/wiki/Querétaro), donde vivo. Espero conocerte!
