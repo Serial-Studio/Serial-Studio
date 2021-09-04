@@ -26,7 +26,7 @@ Serial studio started out receiving data over a hardware serial port, but can no
 
 ## Install
 
-You can [download](https://github.com/Serial-Studio/Serial-Studio/releases/latest) and install Serial Studio for your preffered platform.
+You can [download](https://github.com/Serial-Studio/Serial-Studio/releases/latest) and install Serial Studio for your preferred platform.
 
 GNU/Linux users must enable the `executable` flag before attempting to run the application:
 
