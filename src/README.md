@@ -32,7 +32,7 @@ The user interface is written in [QtQuick/QML](https://doc.qt.io/qt-5/qtquick-in
 
 ## Coding styles
 
-If possible please follow the coding conventions defined in the [`.clang-format`](https://github.com/Serial-Studio/Serial-Studio/blob/master/.clang-format) file. If you are as lazy as me, you can download and install [clang-format-all](https://github.com/eklitzke/clang-format-all) and run the following command before making a commit:
+If possible, please follow the coding conventions defined in the [`.clang-format`](https://github.com/Serial-Studio/Serial-Studio/blob/master/.clang-format) file. If you are as lazy as me, you can download and install [clang-format-all](https://github.com/eklitzke/clang-format-all) and run the following command before making a commit:
 
 > `clang-format-all src`
 
