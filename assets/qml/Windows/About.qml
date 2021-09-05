@@ -123,8 +123,8 @@ Window {
 
             Button {
                 Layout.fillWidth: true
-                text: qsTr("Contact author")
-                onClicked: Qt.openUrlExternally("mailto:alex_spataru@outlook.com")
+                text: qsTr("Make a donation")
+                onClicked: app.showDonationsDialog()
             }
 
             Button {

@@ -100,5 +100,7 @@
         <file>instruments/Compass.svg</file>
         <file>instruments/CompassCase.svg</file>
         <file>qml/Widgets/GaugeDelegate.qml</file>
+        <file>qml/Windows/Donate.qml</file>
+        <file>images/donate-qr.svg</file>
     </qresource>
 </RCC>

@@ -191,4 +191,24 @@ OTHER_FILES += \
     deploy/linux/* \
     deploy/macOS/* \
     deploy/windows/nsis/* \
-    deploy/windows/resources/*
+    deploy/windows/resources/* \
+    .github/workflows/Build.yml
+
+#-------------------------------------------------------------------------------
+# Markdown files
+#-------------------------------------------------------------------------------
+
+OTHER_FILES += \
+    src/*.md \
+    src/CSV/*.md \
+    src/IO/*.md \
+    src/JSON/*.md \
+    src/Misc/*.md \
+    src/MQTT/*.md \
+    src/Plugins/*.md \
+    src/UI/*.md \
+    assets/qml/*.md \
+    assets/qml/PlatformDependent/*.md \
+    assets/qml/SetupPanes/*.md \
+    assets/qml/Widgets/*.md \
+    assets/qml/Windows/.md
