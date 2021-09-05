@@ -27,6 +27,8 @@ import QtGraphicalEffects 1.0
 
 import SerialStudio 1.0
 
+import "../Config/Colors.js" as Colors
+
 Item {
     id: root
 
@@ -34,10 +36,10 @@ Item {
     property Dataset dataset: null
 
     Label {
-        color: "#e6e0b2"
         text: dataset.title
         elide: Label.ElideRight
         font.family: app.monoFont
+        color: Colors.DatasetText
         horizontalAlignment: Text.AlignLeft
 
         anchors {
@@ -62,16 +64,16 @@ Item {
 
         ColorOverlay {
             source: parent
-            color: "#517497"
             anchors.fill: parent
+            color: Colors.DatasetUnits
         }
     }
 
     Label {
-        color: "#e6e0b2"
         text: dataset.value
         elide: Label.ElideRight
         font.family: app.monoFont
+        color: Colors.DatasetText
         horizontalAlignment: Text.AlignLeft
 
         anchors {
@@ -84,8 +86,8 @@ Item {
 
     Label {
         id: units
-        color: "#517497"
         font.family: app.monoFont
+        color: Colors.DatasetUnits
         text: "[" + dataset.units + "]"
         visible: dataset.units.length > 0
         horizontalAlignment: Text.AlignRight

@@ -102,5 +102,6 @@
         <file>qml/Widgets/GaugeDelegate.qml</file>
         <file>qml/Windows/Donate.qml</file>
         <file>images/donate-qr.svg</file>
+        <file>qml/Config/Colors.js</file>
     </qresource>
 </RCC>

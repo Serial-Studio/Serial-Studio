@@ -28,6 +28,7 @@ import SerialStudio 1.0
 import Qt.labs.settings 1.0
 
 import "../Widgets" as Widgets
+import "../Config/Colors.js" as Colors
 
 Control {
     id: root
@@ -37,7 +38,7 @@ Control {
     //
     property alias vt100emulation: textEdit.vt100emulation
     background: Rectangle {
-        color: app.windowBackgroundColor
+        color: Colors.Background
     }
 
     //
@@ -179,11 +180,11 @@ Control {
             Layout.fillWidth: true
             Layout.fillHeight: true
             maximumBlockCount: 12000
-            palette.text: "#8ecd9d"
-            palette.base: "#121218"
-            palette.button: "#16232a"
-            palette.window: "#0d1217"
             font.family: app.monoFont
+            palette.text: Colors.ConsoleText
+            palette.base: Colors.ConsoleBase
+            palette.button: Colors.ConsoleCtrl
+            palette.window: Colors.ConsoleWndw
             autoscroll: Cpp_IO_Console.autoscroll
             wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
             placeholderText: qsTr("No data received so far") + "..."
@@ -221,8 +222,8 @@ Control {
                 height: 24
                 font: textEdit.font
                 Layout.fillWidth: true
-                palette.text: "#8ecd9d"
-                palette.base: "#121218"
+                palette.text: Colors.ConsoleText
+                palette.base: Colors.ConsoleBase
                 enabled: Cpp_IO_Manager.readWrite
                 placeholderText: qsTr("Send data to device") + "..."
 

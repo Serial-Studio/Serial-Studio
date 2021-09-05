@@ -29,11 +29,12 @@ import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
 import "../SetupPanes" as SetupPanes
+import "../Config/Colors.js" as Colors
 
 Control {
     id: root
     background: Rectangle {
-        color: app.windowBackgroundColor
+        color: Colors.Background
     }
 
     //
@@ -160,10 +161,11 @@ Control {
 
             Switch {
                 id: csvLogging
-                palette.highlight: "#2e895c"
                 text: qsTr("Create CSV file")
                 Layout.alignment: Qt.AlignVCenter
                 checked: Cpp_CSV_Export.exportEnabled
+                palette.highlight: Colors.CsvLoggingButton
+
                 onCheckedChanged:  {
                     if (Cpp_CSV_Export.exportEnabled !== checked)
                         Cpp_CSV_Export.exportEnabled = checked
@@ -177,9 +179,9 @@ Control {
             RoundButton {
                 icon.width: 24
                 icon.height: 24
-                icon.color: "#fff"
-                icon.source: "qrc:/icons/help.svg"
+                icon.color: Colors.Foreground
                 Layout.alignment: Qt.AlignVCenter
+                icon.source: "qrc:/icons/help.svg"
                 onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
             }
         }
@@ -270,7 +272,7 @@ Control {
                 id: serial
                 background: TextField {
                     enabled: false
-                    palette.base: "#16232a"
+                    palette.base: Colors.SetupBase
                 }
             }
 
@@ -278,7 +280,7 @@ Control {
                 id: network
                 background: TextField {
                     enabled: false
-                    palette.base: "#16232a"
+                    palette.base: Colors.SetupBase
                 }
             }
 
@@ -286,7 +288,7 @@ Control {
                 id: mqtt
                 background: TextField {
                     enabled: false
-                    palette.base: "#16232a"
+                    palette.base: Colors.SetupBase
                 }
             }
 
@@ -294,7 +296,7 @@ Control {
                 id: settings
                 background: TextField {
                     enabled: false
-                    palette.base: "#16232a"
+                    palette.base: Colors.SetupBase
                 }
             }
         }
@@ -333,7 +335,7 @@ Control {
                 font.pixelSize: 18
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignVCenter
-                color: _rx.enabled ? palette.highlight : _rx.offColor
+                color: _rx.enabled ? palette.highlight : Colors.LedDisabled
             }
 
             Image {
@@ -346,7 +348,7 @@ Control {
                 ColorOverlay {
                     source: parent
                     anchors.fill: parent
-                    color: _rx.offColor
+                    color: Colors.LedDisabled
                 }
             }
 
@@ -356,7 +358,7 @@ Control {
                 font.pixelSize: 18
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignVCenter
-                color: _tx.enabled ? palette.highlight : _tx.offColor
+                color: _tx.enabled ? palette.highlight : Colors.LedDisabled
             }
 
             Widgets.LED {

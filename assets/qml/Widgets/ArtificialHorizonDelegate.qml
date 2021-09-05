@@ -30,6 +30,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
+import "../Config/Colors.js" as Colors
+
 Item {
     id: root
 
@@ -38,7 +40,6 @@ Item {
     //
     property real rollAngle: 0
     property real pitchAngle: 0
-    property color borderColor: "#e6e0b2"
 
     //
     // Instrument
@@ -59,17 +60,17 @@ Item {
             Rectangle {
                 id: sky
                 smooth: true
-                color: "#5c93c5"
                 antialiasing: true
                 anchors.fill: parent
+                color: Colors.GyroSky
                 anchors.topMargin: -artificialHorizon.height
             }
 
             Rectangle {
                 id: ground
                 smooth: true
-                color: "#7d5233"
                 antialiasing: true
+                color: Colors.GyroGround
                 height: artificialHorizon.height * 1.5
 
                 anchors {
@@ -119,8 +120,8 @@ Item {
 
                         height: 1
                         smooth: true
-                        color: "#fff"
                         antialiasing: true
+                        color: Colors.GyroText
                         anchors.horizontalCenter: parent.horizontalCenter
                         width: (pitch % 10) === 0 ? 40 : 25
 
@@ -128,10 +129,10 @@ Item {
                         // Left pitch label
                         //
                         Label {
-                            color: "#fff"
                             smooth: true
                             font.pixelSize: 10
                             text: reticle.pitch
+                            color: Colors.GyroText
                             anchors.centerIn: parent
                             font.family: app.monoFont
                             anchors.horizontalCenterOffset: -40
@@ -142,10 +143,10 @@ Item {
                         // Right pitch label
                         //
                         Label {
-                            color: "#fff"
                             smooth: true
                             font.pixelSize: 10
                             text: reticle.pitch
+                            color: Colors.GyroText
                             anchors.centerIn: parent
                             font.family: app.monoFont
                             anchors.horizontalCenterOffset: 40
@@ -234,8 +235,8 @@ Item {
         radius: width / 2
         color: "transparent"
         anchors.centerIn: parent
-        border.color: root.borderColor
         width: instrument.width + 2
         height: instrument.height + 2
+        border.color: Colors.WidgetIndicatorColor
     }
 }

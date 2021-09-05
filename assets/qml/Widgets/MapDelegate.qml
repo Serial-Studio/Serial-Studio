@@ -31,6 +31,7 @@ import Qt.labs.settings 1.0
 import SerialStudio 1.0
 
 import "."
+import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -43,8 +44,8 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    backgroundColor: "#09090c"
     implicitHeight: implicitWidth + 96
+    backgroundColor: Colors.WidgetBackground
     icon.source: "qrc:/icons/location-on.svg"
 
     //
@@ -174,12 +175,12 @@ Window {
 
                 border {
                     width: 2
-                    color: "#646464"
+                    color: Colors.MapBorder
                 }
 
                 gradient: Gradient {
                     GradientStop {
-                        color: "#6Ba9d1"
+                        color: Colors.MapSkyLow
                         position: Math.max(0.4,
                                            (map.maximumTilt - map.tilt) /
                                             map.maximumTilt)
@@ -187,7 +188,7 @@ Window {
 
                     GradientStop {
                         position: 0
-                        color: "#283E51"
+                        color: Colors.MapSkyHigh
                     }
                 }
 
@@ -213,10 +214,10 @@ Window {
                             width: 20
                             height: 20
                             opacity: 0.8
-                            color: "#f00"
                             border.width: 2
                             radius: width / 2
-                            border.color: "#fff"
+                            color: Colors.MapDotBg
+                            border.color: Colors.MapDotFg
                         }
                     }
 
@@ -256,7 +257,7 @@ Window {
 
                         GradientStop {
                             position: 0.5
-                            color: "#dedede"
+                            color: Colors.MapSmog
                         }
 
                         GradientStop {

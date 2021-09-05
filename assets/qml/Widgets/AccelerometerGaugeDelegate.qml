@@ -23,6 +23,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
+import "../Config/Colors.js" as Colors
+
 Rectangle {
     id: root
 
@@ -44,16 +46,6 @@ Rectangle {
     property bool valueLabelVisible: true
 
     //
-    // Colors
-    //
-    property color valueColor: "#8ecd9d"
-    property color titleColor: "#517497"
-    property color numbersColor: "#e6e0b2"
-    property color indicatorColor: "#e6e0b2"
-    property color indicatorMaxColor: "#d72d60"
-    property color indicatorMinColor: "#2d6073"
-
-    //
     // Redraw indicators automatically
     //
     onCurrentValueChanged: indicatorCanvas.requestPaint()
@@ -62,9 +54,9 @@ Rectangle {
     // Properties
     //
     border.width: 2
-    color: "#121218"
     radius: width / 2
-    border.color: "#e6e0b2"
+    border.color: Colors.WidgetIndicatorColor
+    color: Colors.AccelerometerGaugeBackground
 
     //
     // Redraw numbers automatically
@@ -78,9 +70,9 @@ Rectangle {
     Label {
         font.pixelSize: 14
         text: root.title
-        color: root.titleColor
         anchors.centerIn: parent
         font.family: app.monoFont
+        color: Colors.WidgetTitleColor
         anchors.verticalCenterOffset: 32
     }
 
@@ -89,9 +81,9 @@ Rectangle {
     //
     Label {
         font.pixelSize: 14
-        color: root.valueColor
         anchors.centerIn: parent
         font.family: app.monoFont
+        color: Colors.WidgetValueColor
         visible: root.valueLabelVisible
         anchors.verticalCenterOffset: 56
         text: root.currentValue.toFixed(3)
@@ -122,7 +114,7 @@ Rectangle {
                 var dY = (radius - root.numberSize) * Math.sin(theta) + radius + root.numberSize / 2
 
                 ctx.font = "bold " + root.numberSize + "px " + app.monoFont
-                ctx.fillStyle = root.indicatorColor
+                ctx.fillStyle = Colors.WidgetIndicatorColor
                 ctx.fillText(i + firstNumber, dX, dY)
 
                 if (i === range) {
@@ -133,7 +125,7 @@ Rectangle {
                     var finishAngle = Math.PI - spacing
 
                     ctx.lineWidth = 2
-                    ctx.strokeStyle = root.indicatorColor
+                    ctx.strokeStyle = Colors.WidgetIndicatorColor
 
                     ctx.beginPath();
                     ctx.arc(x, y, radius - (root.numberSize + 3), startAngle, finishAngle)
@@ -194,13 +186,19 @@ Rectangle {
             ctx.reset()
 
             if (root.maximumVisible)
-                drawIndicator(root.maximumValue, root.indicatorMaxColor, root.indicatorWidth * 0.8, 0.20)
+                drawIndicator(root.maximumValue,
+                              Colors.WidgetIndicatorMaxColor,
+                              root.indicatorWidth * 0.8, 0.20)
 
             if (root.minimumVisible)
-                drawIndicator(root.minimumValue, root.indicatorMinColor, root.indicatorWidth * 0.8, 0.20)
+                drawIndicator(root.minimumValue,
+                              Colors.WidgetIndicatorMinColor,
+                              root.indicatorWidth * 0.8, 0.20)
 
             if (root.currentVisible)
-                drawIndicator(root.currentValue, root.indicatorColor, root.indicatorWidth, 0.28)
+                drawIndicator(root.currentValue,
+                              Colors.WidgetIndicatorColor,
+                              root.indicatorWidth, 0.28)
         }
     }
 
@@ -210,10 +208,10 @@ Rectangle {
     Rectangle {
         width: 24
         height: 24
-        color: "#111"
         radius: width / 2
         anchors.centerIn: parent
-        border.color: root.indicatorColor
+        color: Colors.AccelerometerGaugeKnob
         border.width: root.indicatorWidth - 1
+        border.color: Colors.WidgetIndicatorColor
     }
 }

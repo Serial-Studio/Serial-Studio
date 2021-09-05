@@ -28,13 +28,15 @@ import QtGraphicalEffects 1.0
 import QtQuick.Window 2.12 as QtWindow
 
 import Qt.labs.settings 1.0
+
 import "../Widgets" as Widgets
+import "../Config/Colors.js" as Colors
 
 Control {
     id: root
     property string title
     background: Rectangle {
-        color: app.windowBackgroundColor
+        color: Colors.Background
     }
 
     //
@@ -107,12 +109,12 @@ Control {
             Widgets.Window {
                 id: viewOptions
                 gradient: true
+                title: qsTr("View")
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
-                backgroundColor: "#121218"
                 headerDoubleClickEnabled: false
+                backgroundColor: Colors.ConsoleBase
                 icon.source: "qrc:/icons/visibility.svg"
-                title: qsTr("View")
 
                 property var groups: []
                 property var graphs: []
@@ -287,9 +289,10 @@ Control {
                             model: groupGenerator.model
                             delegate: Switch {
                                 Layout.fillWidth: true
-                                palette.highlight: "#d72d60"
                                 Component.onCompleted: checked = true
                                 text: Cpp_UI_Provider.getGroup(index).title
+                                palette.highlight: Colors.AlternativeHighlight
+
                                 onCheckedChanged: {
                                     viewOptions.groups[index] = checked
                                     viewOptions.groupsChanged()
@@ -348,9 +351,10 @@ Control {
                             model: graphGenerator.model
                             delegate: Switch {
                                 Layout.fillWidth: true
-                                palette.highlight: "#d72d60"
                                 Component.onCompleted: checked = true
+                                palette.highlight: Colors.AlternativeHighlight
                                 text: Cpp_UI_GraphProvider.getDataset(index).title
+
                                 onCheckedChanged: {
                                     viewOptions.graphs[index] = checked
                                     viewOptions.graphsChanged()
@@ -367,13 +371,13 @@ Control {
             Widgets.Window {
                 id: dataWin
                 gradient: true
+                title: qsTr("Data")
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
-                backgroundColor: "#121218"
                 headerDoubleClickEnabled: false
+                backgroundColor: Colors.ConsoleBase
                 icon.source: "qrc:/icons/scatter-plot.svg"
-                title: qsTr("Data")
 
                 Rectangle {
                     z: 1
@@ -544,7 +548,7 @@ Control {
 
                 GradientStop {
                     position: 1
-                    color: "#058ca7"
+                    color: Colors.WindowGradientColor
                 }
             }
 

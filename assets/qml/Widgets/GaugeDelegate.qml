@@ -29,6 +29,7 @@ import QtQuick.Controls.Styles 1.4
 import SerialStudio 1.0
 
 import "."
+import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -43,12 +44,6 @@ Window {
     property real maximumValue: 0
 
     //
-    // Colors
-    //
-    property color valueColor: "#517497"
-    property color titleColor: "#8ecd9d"
-
-    //
     // Window properties
     //
     spacing: -1
@@ -56,9 +51,9 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    backgroundColor: "#09090c"
     icon.source: "qrc:/icons/chart.svg"
     implicitHeight: implicitWidth + 96
+    backgroundColor: Colors.WidgetBackground
 
     //
     // Connections with widget manager
@@ -132,9 +127,9 @@ Window {
             //
             Label {
                 font.bold: true
-                color: root.titleColor
-                font.family: app.monoFont
                 anchors.centerIn: parent
+                font.family: app.monoFont
+                color: Colors.WidgetValueColor
                 font.pixelSize: Math.max(12, gauge.height / 15)
                 anchors.verticalCenterOffset: parent.height * 0.17
                 text: (root.currentValue > root.maximumValue ? root.maximumValue.toFixed(2) :

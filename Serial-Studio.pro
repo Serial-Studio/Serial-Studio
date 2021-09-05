@@ -127,7 +127,8 @@ DISTFILES += \
     assets/qml/Widgets/*.qml \
     assets/qml/Windows/*.qml \
     assets/qml/SetupPanes/*.qml \
-    assets/qml/*.qml
+    assets/qml/*.qml \
+    assets/qml/Config/*.js
 
 TRANSLATIONS += \
     assets/translations/en.ts \

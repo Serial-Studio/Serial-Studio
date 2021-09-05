@@ -24,6 +24,8 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import "../Config/Colors.js" as Colors
+
 Page {
     id: root
     clip: true
@@ -42,7 +44,8 @@ Page {
     property color borderColor: palette.highlight
     property color backgroundColor: Qt.darker(palette.base)
     property alias headerDoubleClickEnabled: headerMouseArea.enabled
-    property color gradientColor: root.gradient ? "#058ca7" : root.borderColor
+    property color gradientColor: root.gradient ? Colors.WindowGradientColor :
+                                                  root.borderColor
 
     //
     // Signals

@@ -27,6 +27,7 @@ import QtQuick.Controls 2.12
 import SerialStudio 1.0
 
 import "."
+import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -39,9 +40,9 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    backgroundColor: "#09090c"
     icon.source: "qrc:/icons/tab.svg"
     implicitHeight: implicitWidth + 96
+    backgroundColor: Colors.WidgetBackground
 
     //
     // Custom properties
@@ -186,16 +187,16 @@ Window {
 
             Label {
                 font.pixelSize: 12
-                color: gauge.valueColor
                 font.family: app.monoFont
+                color: Colors.WidgetValueColor
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("%1 G MAX").arg(root.max.toFixed(2))
             }
 
             Label {
                 font.pixelSize: 12
-                color: gauge.valueColor
                 font.family: app.monoFont
+                color: Colors.WidgetValueColor
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("%1 G MIN").arg(root.min.toFixed(2))
             }
@@ -207,8 +208,8 @@ Window {
             Label {
                 font.bold: true
                 font.pixelSize: 12
-                color: gauge.valueColor
                 font.family: app.monoFont
+                color: Colors.WidgetValueColor
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("%1 G ACT").arg(root.meanGForce.toFixed(2))
 
@@ -217,7 +218,7 @@ Window {
                     color: "transparent"
                     anchors.fill: parent
                     anchors.margins: -app.spacing
-                    border.color: gauge.valueColor
+                    border.color: Colors.WidgetValueColor
                 }
             }
 

@@ -28,6 +28,7 @@ import QtGraphicalEffects 1.0
 import SerialStudio 1.0
 
 import "."
+import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -40,9 +41,9 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    backgroundColor: "#09090c"
     implicitHeight: implicitWidth + 96
     icon.source: "qrc:/icons/refresh.svg"
+    backgroundColor: Colors.WidgetBackground
 
     //
     // Custom properties
@@ -51,7 +52,6 @@ Window {
     property real rollAngle: 0
     property int groupIndex: 0
     property real pitchAngle: 0
-    property color valueColor: "#8ecd9d"
     property real gaugeSize: calculateGaugeSize()
 
     //
@@ -150,8 +150,8 @@ Window {
             Layout.maximumWidth: 120
             Layout.minimumHeight: 120
             Layout.maximumHeight: 120
-            border.color: root.valueColor
             Layout.alignment: Qt.AlignVCenter
+            border.color: Colors.WidgetValueColor
 
             function formatAngle(angle) {
                 var str
@@ -176,24 +176,24 @@ Window {
 
                 Label {
                     font.pixelSize: 12
-                    color: root.valueColor
                     font.family: app.monoFont
+                    color: Colors.WidgetValueColor
                     Layout.alignment: Qt.AlignLeft
                     text: qsTr("%1° YAW").arg(controls.formatAngle(root.yawAngle))
                 }
 
                 Label {
                     font.pixelSize: 12
-                    color: root.valueColor
                     font.family: app.monoFont
+                    color: Colors.WidgetValueColor
                     Layout.alignment: Qt.AlignLeft
                     text: qsTr("%1° ROLL").arg(controls.formatAngle(root.rollAngle))
                 }
 
                 Label {
                     font.pixelSize: 12
-                    color: root.valueColor
                     font.family: app.monoFont
+                    color: Colors.WidgetValueColor
                     Layout.alignment: Qt.AlignLeft
                     text: qsTr("%1° PITCH").arg(controls.formatAngle(root.pitchAngle))
                 }

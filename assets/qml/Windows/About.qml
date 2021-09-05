@@ -25,6 +25,8 @@ import QtQuick.Window 2.0
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import "../Config/Colors.js" as Colors
+
 Window {
     id: root
 
@@ -49,10 +51,10 @@ Window {
     Page {
         anchors.margins: 0
         anchors.fill: parent
-        palette.text: "#fff"
-        palette.buttonText: "#fff"
-        palette.windowText: "#fff"
-        palette.window: app.windowBackgroundColor
+        palette.text: Colors.Foreground
+        palette.window: Colors.Background
+        palette.buttonText: Colors.Foreground
+        palette.windowText: Colors.Foreground
 
         //
         // Window controls

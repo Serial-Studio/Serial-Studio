@@ -29,6 +29,7 @@ import QtQuick.Controls 2.12
 import Qt.labs.settings 1.0
 
 import "Windows"
+import "Config/Colors.js" as Colors
 
 ApplicationWindow {
     id: app
@@ -38,7 +39,6 @@ ApplicationWindow {
     //
     readonly property int spacing: 8
     property bool firstValidPacket: false
-    readonly property color windowBackgroundColor: "#121920"
     readonly property string monoFont: {
         switch (Qt.platform.os) {
         case "osx":
@@ -214,12 +214,12 @@ ApplicationWindow {
     //
     // Theme options
     //
-    palette.text: "#fff"
-    palette.buttonText: "#fff"
-    palette.windowText: "#fff"
-    palette.window: app.windowBackgroundColor
+    palette.text: Colors.Foreground
+    palette.window: Colors.Background
+    palette.buttonText: Colors.Foreground
+    palette.windowText: Colors.Foreground
     background: Rectangle {
-        color: app.windowBackgroundColor
+        color: Colors.Background
     }
 
     //
@@ -547,9 +547,9 @@ ApplicationWindow {
 
         opacity: 0
         border.width: 1
-        border.color: "#fff"
         color: palette.highlight
         anchors.centerIn: parent
+        border.color: Colors.Foreground
         width: dropLayout.implicitWidth + 6 * app.spacing
         height: dropLayout.implicitHeight + 6 * app.spacing
 
@@ -564,15 +564,15 @@ ApplicationWindow {
                 enabled: false
                 icon.width: 128
                 icon.height: 128
-                icon.color: "#fff"
+                icon.color: Colors.Foreground
                 Layout.alignment: Qt.AlignHCenter
                 icon.source: "qrc:/icons/drag-drop.svg"
             }
 
             Label {
-                color: "#fff"
                 font.bold: true
                 font.pixelSize: 24
+                color: Colors.Foreground
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("Drop JSON and CSV files here")
             }
@@ -608,7 +608,7 @@ ApplicationWindow {
 
             // Invalid file name, show red rectangle
             else
-                dropRectangle.color = "#d72d60"
+                dropRectangle.color = Colors.AlternativeHighlight
 
             // Show drag&drop rectangle
             dropRectangle.opacity = 0.8

@@ -24,6 +24,8 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import "../Config/Colors.js" as Colors
+
 RowLayout {
     id: root
     spacing: app.spacing
@@ -35,8 +37,6 @@ RowLayout {
     property alias indicator: _dot
     property alias text: _label.text
     property alias font: _label.font
-    property color onColor: "#d72d60"
-    property color offColor: "#2d6073"
     property alias flashDuration: _timer.interval
 
     //
@@ -68,7 +68,7 @@ RowLayout {
         height: 18
         radius: width / 2
         Layout.alignment: Qt.AlignVCenter
-        color: root.enabled ? root.onColor : root.offColor
+        color: root.enabled ? Colors.LedEnabled : Colors.LedDisabled
     }
 
     //

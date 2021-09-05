@@ -27,6 +27,7 @@ import QtQuick.Controls 2.12
 import SerialStudio 1.0
 
 import "."
+import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -39,38 +40,18 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    backgroundColor: "#09090c"
     icon.source: "qrc:/icons/chart.svg"
     implicitHeight: implicitWidth + 96
+    backgroundColor: Colors.WidgetBackground
 
     //
-    // Set the level color randomly from an array
+    // Select level color depending on widget index
     //
-    property var colorPalette: [
-        "#f94144",
-        "#f3722c",
-        "#f8961e",
-        "#f9844a",
-        "#f9c74f",
-        "#90be6d",
-        "#43aa8b",
-        "#4d908e",
-        "#577590",
-        "#277da1"
-    ]
-
-    //
-    // Colors
-    //
-    property color tankColor: "#e6e0b2"
-    property color valueColor: "#517497"
-    property color titleColor: "#8ecd9d"
-    property color emptyColor: "#121218"
     property color levelColor:  {
-        if (colorPalette.length > index)
-            return colorPalette[index]
+        if (Colors.BarColors.length > index)
+            return olors.BarColors[index]
 
-        return colorPalette[colorPalette.length % index]
+        return Colors.BarColors[Colors.BarColors.length % index]
     }
 
     //
@@ -156,11 +137,11 @@ Window {
         Rectangle {
             id: tank
             border.width: 2
-            color: root.emptyColor
             Layout.fillHeight: true
-            border.color: root.tankColor
+            color: Colors.BarTankBackground
             Layout.minimumWidth: root.width * 0.17
             Layout.maximumWidth: root.width * 0.17
+            border.color: Colors.WidgetIndicatorColor
 
             //
             // Level indicator
@@ -171,7 +152,7 @@ Window {
 
                 border.width: 2
                 color: root.levelColor
-                border.color: root.tankColor
+                border.color: Colors.WidgetIndicatorColor
             }
         }
 
@@ -183,24 +164,24 @@ Window {
             Layout.fillHeight: true
 
             Label {
-                color: root.titleColor
                 font.family: app.monoFont
+                color: Colors.WidgetValueColor
                 Layout.alignment: Qt.AlignHCenter
                 text: root.maximumValue.toFixed(2) + " " + root.units
             }
 
             Rectangle {
                 width: 2
-                color: root.valueColor
                 Layout.fillHeight: true
+                color: Colors.WidgetTitleColor
                 Layout.alignment: Qt.AlignHCenter
             }
 
             Label {
                 font.bold: true
                 font.pixelSize: 16
-                color: root.titleColor
                 font.family: app.monoFont
+                color: Colors.WidgetValueColor
                 Layout.alignment: Qt.AlignHCenter
                 text: (root.currentValue > root.maximumValue ? root.maximumValue.toFixed(2) :
                                                                root.currentValue.toFixed(2)) + " " + root.units
@@ -209,21 +190,21 @@ Window {
                     border.width: 1
                     anchors.fill: parent
                     color: "transparent"
-                    border.color: root.titleColor
                     anchors.margins: -app.spacing
+                    border.color: Colors.WidgetValueColor
                 }
             }
 
             Rectangle {
                 width: 2
-                color: root.valueColor
                 Layout.fillHeight: true
+                color: Colors.WidgetTitleColor
                 Layout.alignment: Qt.AlignHCenter
             }
 
             Label {
-                color: root.titleColor
                 font.family: app.monoFont
+                color: Colors.WidgetValueColor
                 Layout.alignment: Qt.AlignHCenter
                 text: root.minimumValue.toFixed(2) + " " + root.units
             }

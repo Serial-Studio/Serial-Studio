@@ -25,6 +25,8 @@ import QtCharts 2.3
 
 import SerialStudio 1.0
 
+import "../Config/Colors.js" as Colors
+
 Window {
     id: root
 
@@ -34,7 +36,7 @@ Window {
     showIcon: false
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    borderColor: root.headerVisible ? "#517497" : "transparent"
+    borderColor: root.headerVisible ? Colors.DatasetGraphBorder : "transparent"
 
     title: Cpp_UI_GraphProvider.getTitle(graphId)
 
@@ -85,9 +87,9 @@ Window {
             labelFormat: " "
             lineVisible: false
             labelsVisible: false
-            gridLineColor: "#517497"
             tickType: ValueAxis.TicksFixed
             labelsFont.family: app.monoFont
+            gridLineColor: Colors.DatasetGraphBorder
             max: Cpp_UI_GraphProvider.displayedPoints
         }
 
@@ -96,10 +98,10 @@ Window {
             min: 0
             max: 1
             lineVisible: false
-            labelsColor: "#517497"
-            gridLineColor: "#517497"
             tickType: ValueAxis.TicksFixed
             labelsFont.family: app.monoFont
+            labelsColor: Colors.DatasetGraphBorder
+            gridLineColor: Colors.DatasetGraphBorder
         }
 
         LineSeries {
@@ -107,9 +109,9 @@ Window {
             width: 2
             axisX: timeAxis
             useOpenGL: true
-            color: "#e6e0b2"
             capStyle: Qt.RoundCap
             axisYRight: positionAxis
+            color: Colors.GraphStroke
         }
     }
 }

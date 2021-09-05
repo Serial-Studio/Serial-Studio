@@ -24,6 +24,8 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import "../Config/Colors.js" as Colors
+
 Control {
     id: root
 
@@ -56,8 +58,8 @@ Control {
         border.color: palette.midlight
 
         gradient: Gradient {
-            GradientStop { position: 0; color: "#21373f" }
-            GradientStop { position: 1; color: "#11272f" }
+            GradientStop { position: 0; color: Colors.ToolbarA }
+            GradientStop { position: 1; color: Colors.ToolbarB }
         }
 
         anchors {
@@ -178,9 +180,12 @@ Control {
             // Connection-dependent
             //
             checked: Cpp_IO_Manager.connected
-            palette.buttonText: checked ? "#d72d60" : "#2eed5c"
-            text: (checked ? qsTr("Disconnect") : qsTr("Connect")) + _btSpacer
-            icon.source: checked ? "qrc:/icons/disconnect.svg" : "qrc:/icons/connect.svg"
+            text: (checked ? qsTr("Disconnect") :
+                             qsTr("Connect")) + _btSpacer
+            icon.source: checked ? "qrc:/icons/disconnect.svg" :
+                                   "qrc:/icons/connect.svg"
+            palette.buttonText: checked ? Colors.ConnectButtonChecked :
+                                          Colors.ConnectButtonUnchecked
 
             //
             // Only enable button if it can be clicked
