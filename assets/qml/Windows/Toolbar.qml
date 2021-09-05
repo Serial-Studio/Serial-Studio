@@ -57,7 +57,7 @@ Control {
 
         Rectangle {
             height: parent.border.width
-            color: Cpp_ThemeManager.toolbarGradient1
+            color: Cpp_ThemeManager.toolbarGradient2
 
             anchors {
                 top: parent.top

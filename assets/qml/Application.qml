@@ -252,7 +252,7 @@ ApplicationWindow {
     Loader {
         asynchronous: false
         source: {
-            if (Qt.platform.os === "osx")
+            if (Qt.platform.os == "osx")
                 return "qrc:/qml/PlatformDependent/MenubarMacOS.qml"
 
             return "qrc:/qml/PlatformDependent/Menubar.qml"

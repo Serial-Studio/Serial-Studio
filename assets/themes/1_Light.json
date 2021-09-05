@@ -28,7 +28,7 @@
       "windowGradient1":"#105087",
       "windowGradient2":"#004077",
       "alternativeHighlight":"#f8961e",
-      "setupPanelBackground":"#fafafa",
+      "setupPanelBackground":"#f3f3f3",
       "graphDialBorder":"#666666",
       "datasetTextPrimary":"#0072C3",
       "datasetTextSecondary":"#666666",
@@ -55,7 +55,7 @@
       "mapHorizon":"#dedede",
       "mapSkyLowAltitude":"#6ba9d1",
       "mapSkyHighAltitude":"#283e51",
-      "connectButtonChecked":"#FE392E",
+      "connectButtonChecked":"#FE696E",
       "connectButtonUnchecked":"#26CD40",
       "barWidgetColors":[
          "#f94144",
