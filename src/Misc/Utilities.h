@@ -27,6 +27,8 @@
 #include <QMessageBox>
 #include <QApplication>
 
+#include "AppInfo.h"
+
 namespace Misc
 {
 class Utilities : public QObject
@@ -38,7 +40,7 @@ public:
     static Utilities* getInstance();
     static int showMessageBox(QString text,
                               QString informativeText,
-                              QString windowTitle = qAppName(),
+                              QString windowTitle = APP_NAME,
                               QMessageBox::StandardButtons bt = QMessageBox::Ok);
     //clang-format on
 

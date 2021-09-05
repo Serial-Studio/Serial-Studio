@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "AppInfo.h"
 #include "Utilities.h"
 #include "ThemeManager.h"
 
@@ -67,8 +68,8 @@ void ThemeManager::setTheme(const int id)
     // Ask user to quit application
     auto resp
         = Utilities::showMessageBox(tr("The theme change will take effect after restart"),
-                                    tr("Do you want to restart %1 now?").arg(qAppName()),
-                                    qAppName(), QMessageBox::Yes | QMessageBox::No);
+                                    tr("Do you want to restart %1 now?").arg(APP_NAME),
+                                    APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
     // Restart application
     if (resp == QMessageBox::Yes)

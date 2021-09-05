@@ -45,9 +45,9 @@ Window {
         anchors.margins: 0
         anchors.fill: parent
         palette.text: Cpp_ThemeManager.text
-        palette.window: Cpp_ThemeManager.windowBackground
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
+        palette.window: Cpp_ThemeManager.dialogBackground
 
         //
         // Window controls
