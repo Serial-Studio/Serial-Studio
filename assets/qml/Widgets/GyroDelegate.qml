@@ -150,7 +150,7 @@ Window {
             Layout.minimumHeight: 120
             Layout.maximumHeight: 120
             Layout.alignment: Qt.AlignVCenter
-            border.color: Cpp_ThemeManager.widgettextPrimary
+            border.color: Cpp_ThemeManager.widgetForegroundPrimary
 
             function formatAngle(angle) {
                 var str
@@ -176,7 +176,7 @@ Window {
                 Label {
                     font.pixelSize: 12
                     font.family: app.monoFont
-                    color: Cpp_ThemeManager.widgettextPrimary
+                    color: Cpp_ThemeManager.widgetForegroundPrimary
                     Layout.alignment: Qt.AlignLeft
                     text: qsTr("%1° YAW").arg(controls.formatAngle(root.yawAngle))
                 }
@@ -184,7 +184,7 @@ Window {
                 Label {
                     font.pixelSize: 12
                     font.family: app.monoFont
-                    color: Cpp_ThemeManager.widgettextPrimary
+                    color: Cpp_ThemeManager.widgetForegroundPrimary
                     Layout.alignment: Qt.AlignLeft
                     text: qsTr("%1° ROLL").arg(controls.formatAngle(root.rollAngle))
                 }
@@ -192,7 +192,7 @@ Window {
                 Label {
                     font.pixelSize: 12
                     font.family: app.monoFont
-                    color: Cpp_ThemeManager.widgettextPrimary
+                    color: Cpp_ThemeManager.widgetForegroundPrimary
                     Layout.alignment: Qt.AlignLeft
                     text: qsTr("%1° PITCH").arg(controls.formatAngle(root.pitchAngle))
                 }

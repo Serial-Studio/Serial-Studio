@@ -187,7 +187,7 @@ Window {
             Label {
                 font.pixelSize: 12
                 font.family: app.monoFont
-                color: Cpp_ThemeManager.widgettextPrimary
+                color: Cpp_ThemeManager.widgetForegroundPrimary
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("%1 G MAX").arg(root.max.toFixed(2))
             }
@@ -195,7 +195,7 @@ Window {
             Label {
                 font.pixelSize: 12
                 font.family: app.monoFont
-                color: Cpp_ThemeManager.widgettextPrimary
+                color: Cpp_ThemeManager.widgetForegroundPrimary
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("%1 G MIN").arg(root.min.toFixed(2))
             }
@@ -208,7 +208,7 @@ Window {
                 font.bold: true
                 font.pixelSize: 12
                 font.family: app.monoFont
-                color: Cpp_ThemeManager.widgettextPrimary
+                color: Cpp_ThemeManager.widgetForegroundPrimary
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("%1 G ACT").arg(root.meanGForce.toFixed(2))
 
@@ -217,7 +217,7 @@ Window {
                     color: "transparent"
                     anchors.fill: parent
                     anchors.margins: -app.spacing
-                    border.color: Cpp_ThemeManager.widgettextPrimary
+                    border.color: Cpp_ThemeManager.widgetForegroundPrimary
                 }
             }
 

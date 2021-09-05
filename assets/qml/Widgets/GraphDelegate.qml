@@ -34,7 +34,7 @@ Window {
     showIcon: false
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    borderColor: root.headerVisible ? Cpp_ThemeManager.datasetTextPrimarySecondary : "transparent"
+    borderColor: root.headerVisible ? Cpp_ThemeManager.datasetTextSecondary : "transparent"
 
     title: Cpp_UI_GraphProvider.getTitle(graphId)
 
@@ -87,7 +87,7 @@ Window {
             labelsVisible: false
             tickType: ValueAxis.TicksFixed
             labelsFont.family: app.monoFont
-            gridLineColor: Cpp_ThemeManager.datasetTextPrimarySecondary
+            gridLineColor: Cpp_ThemeManager.datasetTextSecondary
             max: Cpp_UI_GraphProvider.displayedPoints
         }
 
@@ -98,8 +98,8 @@ Window {
             lineVisible: false
             tickType: ValueAxis.TicksFixed
             labelsFont.family: app.monoFont
-            labelsColor: Cpp_ThemeManager.datasetTextPrimarySecondary
-            gridLineColor: Cpp_ThemeManager.datasetTextPrimarySecondary
+            labelsColor: Cpp_ThemeManager.datasetTextSecondary
+            gridLineColor: Cpp_ThemeManager.datasetTextSecondary
         }
 
         LineSeries {
@@ -109,7 +109,7 @@ Window {
             useOpenGL: true
             capStyle: Qt.RoundCap
             axisYRight: positionAxis
-            color: Cpp_ThemeManager.datasetTextPrimaryPrimary
+            color: Cpp_ThemeManager.datasetTextPrimary
         }
     }
 }

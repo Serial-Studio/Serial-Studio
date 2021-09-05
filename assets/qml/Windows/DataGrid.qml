@@ -463,6 +463,7 @@ Control {
                                             borderColor: backgroundColor
                                             enabled: groupWindow.visible
                                             headerDoubleClickEnabled: false
+                                            titleColor: Cpp_ThemeManager.text
                                         }
                                     }
                                 }
@@ -516,6 +517,7 @@ Control {
                                             borderColor: backgroundColor
                                             headerDoubleClickEnabled: false
                                             icon.source: "qrc:/icons/chart.svg"
+                                            titleColor: Cpp_ThemeManager.text
                                         }
                                     }
                                 }

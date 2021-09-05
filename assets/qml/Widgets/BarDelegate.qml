@@ -164,7 +164,7 @@ Window {
 
             Label {
                 font.family: app.monoFont
-                color: Cpp_ThemeManager.widgettextPrimary
+                color: Cpp_ThemeManager.widgetForegroundPrimary
                 Layout.alignment: Qt.AlignHCenter
                 text: root.maximumValue.toFixed(2) + " " + root.units
             }
@@ -172,7 +172,7 @@ Window {
             Rectangle {
                 width: 2
                 Layout.fillHeight: true
-                color: Cpp_ThemeManager.widgettextSecondary
+                color: Cpp_ThemeManager.widgetForegroundSecondary
                 Layout.alignment: Qt.AlignHCenter
             }
 
@@ -180,7 +180,7 @@ Window {
                 font.bold: true
                 font.pixelSize: 16
                 font.family: app.monoFont
-                color: Cpp_ThemeManager.widgettextPrimary
+                color: Cpp_ThemeManager.widgetForegroundPrimary
                 Layout.alignment: Qt.AlignHCenter
                 text: (root.currentValue > root.maximumValue ? root.maximumValue.toFixed(2) :
                                                                root.currentValue.toFixed(2)) + " " + root.units
@@ -190,20 +190,20 @@ Window {
                     anchors.fill: parent
                     color: "transparent"
                     anchors.margins: -app.spacing
-                    border.color: Cpp_ThemeManager.widgettextPrimary
+                    border.color: Cpp_ThemeManager.widgetForegroundPrimary
                 }
             }
 
             Rectangle {
                 width: 2
                 Layout.fillHeight: true
-                color: Cpp_ThemeManager.widgettextSecondary
+                color: Cpp_ThemeManager.widgetForegroundSecondary
                 Layout.alignment: Qt.AlignHCenter
             }
 
             Label {
                 font.family: app.monoFont
-                color: Cpp_ThemeManager.widgettextPrimary
+                color: Cpp_ThemeManager.widgetForegroundPrimary
                 Layout.alignment: Qt.AlignHCenter
                 text: root.minimumValue.toFixed(2) + " " + root.units
             }

@@ -128,7 +128,7 @@ Window {
                 font.bold: true
                 anchors.centerIn: parent
                 font.family: app.monoFont
-                color: Cpp_ThemeManager.widgettextPrimary
+                color: Cpp_ThemeManager.widgetForegroundPrimary
                 font.pixelSize: Math.max(12, gauge.height / 15)
                 anchors.verticalCenterOffset: parent.height * 0.17
                 text: (root.currentValue > root.maximumValue ? root.maximumValue.toFixed(2) :

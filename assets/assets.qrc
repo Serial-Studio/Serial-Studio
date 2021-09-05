@@ -109,5 +109,6 @@
         <file>themes/4_macOS_Light.json</file>
         <file>themes/5_macOS_Dark.json</file>
         <file>qml/Application.qml</file>
+        <file>themes/6_TVA.json</file>
     </qresource>
 </RCC>

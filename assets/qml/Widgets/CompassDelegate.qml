@@ -131,7 +131,7 @@ Window {
             font.pixelSize: 24
             text: root.direction
             font.family: app.monoFont
-            color: Cpp_ThemeManager.widgettextPrimary
+            color: Cpp_ThemeManager.widgetForegroundPrimary
             Layout.alignment: Qt.AlignHCenter
         }
     }

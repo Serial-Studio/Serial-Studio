@@ -34,7 +34,7 @@ Window {
     showIcon: false
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    borderColor: Cpp_ThemeManager.datasetTextPrimarySecondary
+    borderColor: Cpp_ThemeManager.datasetTextSecondary
     title: group != null ? group.title : ""
 
     property int groupId: 0
@@ -72,7 +72,7 @@ Window {
             width: _sv.width - (_sv.ScrollBar.vertical.visible ? 10 : 0)
 
             Repeater {
-                model: group !== null  ? group.datasetCount : 0
+                model: group != null  ? group.datasetCount : 0
                 delegate: DataDelegate {
                     Layout.fillWidth: true
 

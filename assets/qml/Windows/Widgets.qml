@@ -134,6 +134,7 @@ Control {
                                 anchors.fill: parent
                                 borderColor: backgroundColor
                                 headerDoubleClickEnabled: false
+                                titleColor: Cpp_ThemeManager.text
                             }
                         }
                     }
@@ -177,6 +178,7 @@ Control {
                                 anchors.fill: parent
                                 borderColor: backgroundColor
                                 headerDoubleClickEnabled: false
+                                titleColor: Cpp_ThemeManager.text
                             }
                         }
                     }
@@ -220,6 +222,7 @@ Control {
                                 anchors.fill: parent
                                 borderColor: backgroundColor
                                 headerDoubleClickEnabled: false
+                                titleColor: Cpp_ThemeManager.text
                             }
                         }
                     }
@@ -237,11 +240,11 @@ Control {
                         Widgets.GaugeDelegate {
                             datasetIndex: index
                             anchors.fill: parent
-                            onHeaderDoubleClicked: windowBar.show()
+                            onHeaderDoubleClicked: windowGauge.show()
                         }
 
                         QtWindow.Window {
-                            id: windowBar
+                            id: windowGauge
                             width: 640
                             height: 480
                             minimumWidth: root.minimumWidgetSize * 1.2
@@ -263,6 +266,7 @@ Control {
                                 anchors.fill: parent
                                 borderColor: backgroundColor
                                 headerDoubleClickEnabled: false
+                                titleColor: Cpp_ThemeManager.text
                             }
                         }
                     }
@@ -306,6 +310,7 @@ Control {
                                 anchors.fill: parent
                                 borderColor: backgroundColor
                                 headerDoubleClickEnabled: false
+                                titleColor: Cpp_ThemeManager.text
                             }
                         }
                     }
@@ -349,6 +354,7 @@ Control {
                                 anchors.fill: parent
                                 borderColor: backgroundColor
                                 headerDoubleClickEnabled: false
+                                titleColor: Cpp_ThemeManager.text
                             }
                         }
                     }

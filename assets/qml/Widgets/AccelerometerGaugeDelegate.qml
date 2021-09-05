@@ -70,7 +70,7 @@ Rectangle {
         text: root.title
         anchors.centerIn: parent
         font.family: app.monoFont
-        color: Cpp_ThemeManager.widgettextSecondary
+        color: Cpp_ThemeManager.widgetForegroundSecondary
         anchors.verticalCenterOffset: 32
     }
 
@@ -81,7 +81,7 @@ Rectangle {
         font.pixelSize: 14
         anchors.centerIn: parent
         font.family: app.monoFont
-        color: Cpp_ThemeManager.widgettextPrimary
+        color: Cpp_ThemeManager.widgetForegroundPrimary
         visible: root.valueLabelVisible
         anchors.verticalCenterOffset: 56
         text: root.currentValue.toFixed(3)

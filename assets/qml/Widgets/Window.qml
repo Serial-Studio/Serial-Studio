@@ -40,7 +40,7 @@ Page {
     property int radius: root.borderWidth + 2
     property color titleColor: palette.brightText
     property color borderColor: palette.highlight
-    property color backgroundColor: Qt.darker(palette.base)
+    property color backgroundColor: Cpp_ThemeManager.windowBackground
     property alias headerDoubleClickEnabled: headerMouseArea.enabled
     property color gradientColor: root.gradient ? Cpp_ThemeManager.windowGradient :
                                                   root.borderColor
