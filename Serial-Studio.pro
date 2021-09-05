@@ -78,6 +78,12 @@ QT += quickcontrols2
 include(libs/Libraries.pri)
 
 #-----------------------------------------------------------------------------------------
+# Assets
+#-----------------------------------------------------------------------------------------
+
+include(assets/Assets.pri)
+
+#-----------------------------------------------------------------------------------------
 # Deploy options
 #-----------------------------------------------------------------------------------------
 
@@ -117,24 +123,6 @@ mingw {
 #-----------------------------------------------------------------------------------------
 
 INCLUDEPATH += src
-
-RESOURCES += \
-    assets/assets.qrc
-
-DISTFILES += \
-    assets/qml/PlatformDependent/*.qml \
-    assets/qml/SetupPanes/*.qml \
-    assets/qml/Widgets/*.qml \
-    assets/qml/Windows/*.qml \
-    assets/qml/SetupPanes/*.qml \
-    assets/qml/*.qml \
-    assets/qml/Config/*.js
-
-TRANSLATIONS += \
-    assets/translations/en.ts \
-    assets/translations/es.ts \
-    assets/translations/zh.ts \
-    assets/translations/de.ts
 
 HEADERS += \
     src/AppInfo.h \
@@ -196,22 +184,3 @@ OTHER_FILES += \
     deploy/windows/nsis/* \
     deploy/windows/resources/* \
     .github/workflows/Build.yml
-
-#-------------------------------------------------------------------------------
-# Markdown files
-#-------------------------------------------------------------------------------
-
-OTHER_FILES += \
-    src/*.md \
-    src/CSV/*.md \
-    src/IO/*.md \
-    src/JSON/*.md \
-    src/Misc/*.md \
-    src/MQTT/*.md \
-    src/Plugins/*.md \
-    src/UI/*.md \
-    assets/qml/*.md \
-    assets/qml/PlatformDependent/*.md \
-    assets/qml/SetupPanes/*.md \
-    assets/qml/Widgets/*.md \
-    assets/qml/Windows/.md

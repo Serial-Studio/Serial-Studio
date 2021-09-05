@@ -106,8 +106,8 @@ Window {
                 font.pixelSize: 12
                 Layout.fillWidth: true
                 Layout.maximumWidth: 288
-                color: palette.highlightedText
                 wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                color: Cpp_ThemeManager.highlightedTextAlternative
                 text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.")
             }
 

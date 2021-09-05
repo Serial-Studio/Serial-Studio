@@ -75,6 +75,9 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor highlightedText
                READ highlightedText
                NOTIFY themeChanged)
+    Q_PROPERTY(QColor highlightedTextAlternative
+               READ highlightedTextAlternative
+               NOTIFY themeChanged)
     Q_PROPERTY(QColor toolbarGradient1
                READ toolbarGradient1
                NOTIFY themeChanged)
@@ -93,11 +96,20 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor consoleWindow
                READ consoleWindow
                NOTIFY themeChanged)
+    Q_PROPERTY(QColor consoleHighlight
+               READ consoleHighlight
+               NOTIFY themeChanged)
+    Q_PROPERTY(QColor consoleHighlightedText
+               READ consoleHighlightedText
+               NOTIFY themeChanged)
     Q_PROPERTY(QColor windowBackground
                READ windowBackground
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor windowGradient
-               READ windowGradient
+    Q_PROPERTY(QColor windowGradient1
+               READ windowGradient1
+               NOTIFY themeChanged)
+    Q_PROPERTY(QColor windowGradient2
+               READ windowGradient2
                NOTIFY themeChanged)
     Q_PROPERTY(QColor alternativeHighlight
                READ alternativeHighlight
@@ -113,6 +125,15 @@ class ThemeManager : public QObject
                NOTIFY themeChanged)
     Q_PROPERTY(QColor datasetTextSecondary
                READ datasetTextSecondary
+               NOTIFY themeChanged)
+    Q_PROPERTY(QColor datasetWindowBackground
+               READ datasetWindowBackground
+               NOTIFY themeChanged)
+    Q_PROPERTY(QColor datasetWindowBorder
+               READ datasetWindowBorder
+               NOTIFY themeChanged)
+    Q_PROPERTY(QColor datagridBackground
+               READ datagridBackground
                NOTIFY themeChanged)
     Q_PROPERTY(QColor ledEnabled
                READ ledEnabled
@@ -210,19 +231,26 @@ public:
     QColor tooltipText() const;
     QColor tooltipBase() const;
     QColor highlightedText() const;
+    QColor highlightedTextAlternative() const;
     QColor toolbarGradient1() const;
     QColor toolbarGradient2() const;
     QColor consoleText() const;
     QColor consoleBase() const;
     QColor consoleButton() const;
     QColor consoleWindow() const;
+    QColor consoleHighlight() const;
+    QColor consoleHighlightedText() const;
     QColor windowBackground() const;
-    QColor windowGradient() const;
+    QColor windowGradient1() const;
+    QColor windowGradient2() const;
     QColor alternativeHighlight() const;
     QColor setupPanelBackground() const;
     QColor graphDialBorder() const;
     QColor datasetTextPrimary() const;
     QColor datasetTextSecondary() const;
+    QColor datasetWindowBackground() const;
+    QColor datasetWindowBorder() const;
+    QColor datagridBackground() const;
     QColor ledEnabled() const;
     QColor ledDisabled() const;
     QColor csvHighlight() const;
@@ -278,19 +306,26 @@ private:
     QColor m_tooltipText;
     QColor m_tooltipBase;
     QColor m_highlightedText;
+    QColor m_highlightedTextAlternative;
     QColor m_toolbarGradient1;
     QColor m_toolbarGradient2;
     QColor m_consoleText;
     QColor m_consoleBase;
     QColor m_consoleButton;
     QColor m_consoleWindow;
+    QColor m_consoleHighlight;
+    QColor m_consoleHighlightedText;
     QColor m_windowBackground;
-    QColor m_windowGradient;
+    QColor m_windowGradient1;
+    QColor m_windowGradient2;
     QColor m_alternativeHighlight;
     QColor m_setupPanelBackground;
     QColor m_graphDialBorder;
     QColor m_datasetTextPrimary;
     QColor m_datasetTextSecondary;
+    QColor m_datasetWindowBackground;
+    QColor m_datasetWindowBorder;
+    QColor m_datagridBackground;
     QColor m_ledEnabled;
     QColor m_ledDisabled;
     QColor m_csvHighlight;

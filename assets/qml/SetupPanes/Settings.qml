@@ -137,8 +137,8 @@ Control {
             opacity: 0.8
             font.pixelSize: 12
             Layout.fillWidth: true
-            color: palette.highlightedText
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+            color: Cpp_ThemeManager.highlightedTextAlternative
             text: qsTr("Applications/plugins can interact with %1 by " +
                        "establishing a TCP connection on port 7777.").arg(Cpp_AppName)
         }

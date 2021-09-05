@@ -1,0 +1,36 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>Application.qml</file>
+        <file>main.qml</file>
+        <file>PlatformDependent/DecentMenuItem.qml</file>
+        <file>PlatformDependent/Menubar.qml</file>
+        <file>PlatformDependent/MenubarMacOS.qml</file>
+        <file>SetupPanes/MQTT.qml</file>
+        <file>SetupPanes/Network.qml</file>
+        <file>SetupPanes/Serial.qml</file>
+        <file>SetupPanes/Settings.qml</file>
+        <file>Widgets/AccelerometerDelegate.qml</file>
+        <file>Widgets/AccelerometerGaugeDelegate.qml</file>
+        <file>Widgets/ArtificialHorizonDelegate.qml</file>
+        <file>Widgets/BarDelegate.qml</file>
+        <file>Widgets/CompassDelegate.qml</file>
+        <file>Widgets/DataDelegate.qml</file>
+        <file>Widgets/GaugeDelegate.qml</file>
+        <file>Widgets/GraphDelegate.qml</file>
+        <file>Widgets/GroupDelegate.qml</file>
+        <file>Widgets/GyroDelegate.qml</file>
+        <file>Widgets/LED.qml</file>
+        <file>Widgets/MapDelegate.qml</file>
+        <file>Widgets/SimpleDial.qml</file>
+        <file>Widgets/Window.qml</file>
+        <file>Windows/About.qml</file>
+        <file>Windows/Acknowledgements.qml</file>
+        <file>Windows/Console.qml</file>
+        <file>Windows/CsvPlayer.qml</file>
+        <file>Windows/DataGrid.qml</file>
+        <file>Windows/Donate.qml</file>
+        <file>Windows/Setup.qml</file>
+        <file>Windows/Toolbar.qml</file>
+        <file>Windows/Widgets.qml</file>
+    </qresource>
+</RCC>

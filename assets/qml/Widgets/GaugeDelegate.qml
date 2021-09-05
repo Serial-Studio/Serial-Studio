@@ -117,6 +117,28 @@ Window {
                 minimumValueAngle: -144
                 labelStepSize: (root.maximumValue - root.minimumValue) / 10
                 tickmarkStepSize: (root.maximumValue - root.minimumValue) / 20
+
+                tickmark: Rectangle {
+                    antialiasing: true
+                    implicitWidth: outerRadius * 0.02
+                    implicitHeight: outerRadius * 0.06
+                    visible: styleData.value % labelStepSize == 0
+                    color: Cpp_ThemeManager.widgetForegroundSecondary
+                }
+
+                minorTickmark: Rectangle {
+                    antialiasing: true
+                    implicitWidth: outerRadius * 0.01
+                    implicitHeight: outerRadius * 0.03
+                    color: Cpp_ThemeManager.widgetForegroundSecondary
+                }
+
+                tickmarkLabel: Text {
+                    antialiasing: true
+                    text: styleData.value
+                    font.pixelSize: Math.max(6, outerRadius * 0.1)
+                    color: Cpp_ThemeManager.widgetForegroundSecondary
+                }
             }
 
             Behavior on value {NumberAnimation{duration: 200}}

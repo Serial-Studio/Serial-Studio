@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/messages">
+        <file>Acknowledgements.txt</file>
+        <file>Welcome_DE.txt</file>
+        <file>Welcome_EN.txt</file>
+        <file>Welcome_ES.txt</file>
+        <file>Welcome_ZH.txt</file>
+    </qresource>
+</RCC>

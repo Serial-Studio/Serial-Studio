@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>donate-qr.svg</file>
+        <file>icon.png</file>
+    </qresource>
+</RCC>

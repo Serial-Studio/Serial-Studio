@@ -34,7 +34,7 @@ Window {
     showIcon: false
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    borderColor: root.headerVisible ? Cpp_ThemeManager.datasetTextSecondary : "transparent"
+    borderColor: root.headerVisible ? Cpp_ThemeManager.datasetWindowBorder : "transparent"
 
     title: Cpp_UI_GraphProvider.getTitle(graphId)
 

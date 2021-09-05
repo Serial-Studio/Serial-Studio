@@ -157,8 +157,8 @@ Window {
             id: gauge
             lastNumber: 8
             firstNumber: 0
-            minimumValue: root.min
-            maximumValue: root.max
+            minimumValue: root.min * 0.5
+            maximumValue: root.max * 2
             valueLabelVisible: false
             currentValue: root.meanGForce
             Layout.alignment: Qt.AlignHCenter

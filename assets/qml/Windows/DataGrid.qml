@@ -111,8 +111,8 @@ Control {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 headerDoubleClickEnabled: false
-                backgroundColor: Cpp_ThemeManager.consoleBase
                 icon.source: "qrc:/icons/visibility.svg"
+                backgroundColor: Cpp_ThemeManager.datagridBackground
 
                 property var groups: []
                 property var graphs: []
@@ -374,8 +374,8 @@ Control {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 headerDoubleClickEnabled: false
-                backgroundColor: Cpp_ThemeManager.consoleBase
                 icon.source: "qrc:/icons/scatter-plot.svg"
+                backgroundColor: Cpp_ThemeManager.datagridBackground
 
                 Rectangle {
                     z: 1
@@ -543,12 +543,12 @@ Control {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: palette.highlight
+                    color: Cpp_ThemeManager.windowGradient1
                 }
 
                 GradientStop {
                     position: 1
-                    color: Cpp_ThemeManager.windowGradient
+                    color: Cpp_ThemeManager.windowGradient2
                 }
             }
 

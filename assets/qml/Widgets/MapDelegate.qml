@@ -213,7 +213,7 @@ Window {
                             border.width: 2
                             radius: width / 2
                             color: Cpp_ThemeManager.mapDotBackground
-                            border.color: Cpp_ThemeManager.mapDottext
+                            border.color: Cpp_ThemeManager.mapDotForeground
                         }
                     }
 

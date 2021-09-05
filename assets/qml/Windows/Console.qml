@@ -144,12 +144,12 @@ Control {
         }
 
         MenuSeparator {
-            visible: app.menuBar !== null
+            visible: app.menuBar != null
         }
 
         MenuItem {
             enabled: visible
-            visible: app.menuBar !== null
+            visible: app.menuBar != null
             onTriggered: app.toggleMenubar()
             height: visible ? implicitHeight : 0
             text: visible && app.menuBar.visible ? qsTr("Hide menubar") :
@@ -184,6 +184,8 @@ Control {
             palette.base: Cpp_ThemeManager.consoleBase
             palette.button: Cpp_ThemeManager.consoleButton
             palette.window: Cpp_ThemeManager.consoleWindow
+            palette.highlight: Cpp_ThemeManager.consoleHighlight
+            palette.highlightedText: Cpp_ThemeManager.consoleHighlightedText
             autoscroll: Cpp_IO_Console.autoscroll
             wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
             placeholderText: qsTr("No data received so far") + "..."

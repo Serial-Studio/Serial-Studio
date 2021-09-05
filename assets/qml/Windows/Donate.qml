@@ -135,9 +135,9 @@ Window {
                         opacity: 0.8
                         font.pixelSize: 12
                         Layout.fillWidth: true
-                        color: palette.highlightedText
                         Layout.maximumWidth: title.implicitWidth
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                        color: Cpp_ThemeManager.highlightedTextAlternative
                         text: qsTr("You can also support this project by sharing it, reporting bugs and proposing new features!")
                     }
                 }

@@ -114,19 +114,26 @@ void ThemeManager::loadTheme(const int id)
     m_tooltipText = QColor(colors.value("tooltipText").toString());
     m_tooltipBase = QColor(colors.value("tooltipBase").toString());
     m_highlightedText = QColor(colors.value("highlightedText").toString());
+    m_highlightedTextAlternative = QColor(colors.value("highlightedTextAlternative").toString());
     m_toolbarGradient1 = QColor(colors.value("toolbarGradient1").toString());
     m_toolbarGradient2 = QColor(colors.value("toolbarGradient2").toString());
     m_consoleText = QColor(colors.value("consoleText").toString());
     m_consoleBase = QColor(colors.value("consoleBase").toString());
     m_consoleButton = QColor(colors.value("consoleButton").toString());
     m_consoleWindow = QColor(colors.value("consoleWindow").toString());
+    m_consoleHighlight = QColor(colors.value("consoleHighlight").toString());
+    m_consoleHighlightedText = QColor(colors.value("consoleHighlightedText").toString());
     m_windowBackground = QColor(colors.value("windowBackground").toString());
-    m_windowGradient = QColor(colors.value("windowGradient").toString());
+    m_windowGradient1 = QColor(colors.value("windowGradient1").toString());
+    m_windowGradient2 = QColor(colors.value("windowGradient2").toString());
     m_alternativeHighlight = QColor(colors.value("alternativeHighlight").toString());
     m_setupPanelBackground = QColor(colors.value("setupPanelBackground").toString());
     m_graphDialBorder = QColor(colors.value("graphDialBorder").toString());
     m_datasetTextPrimary = QColor(colors.value("datasetTextPrimary").toString());
     m_datasetTextSecondary = QColor(colors.value("datasetTextSecondary").toString());
+    m_datasetWindowBackground = QColor(colors.value("datasetWindowBackground").toString());
+    m_datasetWindowBorder = QColor(colors.value("datasetWindowBorder").toString());
+    m_datagridBackground = QColor(colors.value("datagridBackground").toString());
     m_ledEnabled = QColor(colors.value("ledEnabled").toString());
     m_ledDisabled = QColor(colors.value("ledDisabled").toString());
     m_csvHighlight = QColor(colors.value("csvHighlight").toString());
@@ -280,6 +287,11 @@ QColor ThemeManager::highlightedText() const
     return m_highlightedText;
 }
 
+QColor ThemeManager::highlightedTextAlternative() const
+{
+    return m_highlightedTextAlternative;
+}
+
 QColor ThemeManager::toolbarGradient1() const
 {
     return m_toolbarGradient1;
@@ -310,14 +322,29 @@ QColor ThemeManager::consoleWindow() const
     return m_consoleWindow;
 }
 
+QColor ThemeManager::consoleHighlight() const
+{
+    return m_consoleHighlight;
+}
+
+QColor ThemeManager::consoleHighlightedText() const
+{
+    return m_consoleHighlightedText;
+}
+
 QColor ThemeManager::windowBackground() const
 {
     return m_windowBackground;
 }
 
-QColor ThemeManager::windowGradient() const
+QColor ThemeManager::windowGradient1() const
 {
-    return m_windowGradient;
+    return m_windowGradient1;
+}
+
+QColor ThemeManager::windowGradient2() const
+{
+    return m_windowGradient2;
 }
 
 QColor ThemeManager::alternativeHighlight() const
@@ -343,6 +370,21 @@ QColor ThemeManager::datasetTextPrimary() const
 QColor ThemeManager::datasetTextSecondary() const
 {
     return m_datasetTextSecondary;
+}
+
+QColor ThemeManager::datasetWindowBackground() const
+{
+    return m_datasetWindowBackground;
+}
+
+QColor ThemeManager::datasetWindowBorder() const
+{
+    return m_datasetWindowBorder;
+}
+
+QColor ThemeManager::datagridBackground() const
+{
+    return m_datagridBackground;
 }
 
 QColor ThemeManager::ledEnabled() const

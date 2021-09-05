@@ -34,8 +34,8 @@ Window {
     showIcon: false
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    borderColor: Cpp_ThemeManager.datasetTextSecondary
     title: group != null ? group.title : ""
+    borderColor: root.headerVisible ? Cpp_ThemeManager.datasetWindowBorder : "transparent"
 
     property int groupId: 0
     property Group group: null

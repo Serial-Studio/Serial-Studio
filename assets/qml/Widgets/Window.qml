@@ -40,10 +40,12 @@ Page {
     property int radius: root.borderWidth + 2
     property color titleColor: palette.brightText
     property color borderColor: palette.highlight
-    property color backgroundColor: Cpp_ThemeManager.windowBackground
     property alias headerDoubleClickEnabled: headerMouseArea.enabled
-    property color gradientColor: root.gradient ? Cpp_ThemeManager.windowGradient :
-                                                  root.borderColor
+    property color backgroundColor: Cpp_ThemeManager.datasetWindowBackground
+    property color gradientColor1: root.gradient ? Cpp_ThemeManager.windowGradient1 :
+                                                   root.borderColor
+    property color gradientColor2: root.gradient ? Cpp_ThemeManager.windowGradient2 :
+                                                   root.borderColor
 
     //
     // Signals
@@ -71,7 +73,7 @@ Page {
         radius: root.radius
         color: root.backgroundColor
         border.width: root.borderWidth
-        border.color: root.gradientColor
+        border.color: root.gradientColor1
     }
 
     //
@@ -86,18 +88,18 @@ Page {
         gradient: Gradient {
             GradientStop {
                 position: 0
-                color: root.borderColor
+                color: root.gradientColor1
             }
 
             GradientStop {
                 position: 1
-                color: root.gradientColor
+                color: root.gradientColor2
             }
         }
 
         Rectangle {
             z: 5
-            color: root.gradientColor
+            color: root.gradientColor1
             height: root.gradient ? 1 : parent.radius
 
             anchors {
