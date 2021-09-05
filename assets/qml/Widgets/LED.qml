@@ -24,8 +24,6 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-import "../Config/Colors.js" as Colors
-
 RowLayout {
     id: root
     spacing: app.spacing
@@ -68,7 +66,7 @@ RowLayout {
         height: 18
         radius: width / 2
         Layout.alignment: Qt.AlignVCenter
-        color: root.enabled ? Colors.LedEnabled : Colors.LedDisabled
+        color: root.enabled ? Cpp_ThemeManager.ledEnabled : Cpp_ThemeManager.ledDisabled
     }
 
     //

@@ -25,18 +25,16 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
+import Qt.labs.settings 1.0
 import QtQuick.Window 2.12 as QtWindow
 
-import Qt.labs.settings 1.0
-
 import "../Widgets" as Widgets
-import "../Config/Colors.js" as Colors
 
 Control {
     id: root
     property string title
     background: Rectangle {
-        color: Colors.Background
+        color: Cpp_ThemeManager.windowBackground
     }
 
     //
@@ -113,7 +111,7 @@ Control {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 headerDoubleClickEnabled: false
-                backgroundColor: Colors.ConsoleBase
+                backgroundColor: Cpp_ThemeManager.consoleBase
                 icon.source: "qrc:/icons/visibility.svg"
 
                 property var groups: []
@@ -291,7 +289,7 @@ Control {
                                 Layout.fillWidth: true
                                 Component.onCompleted: checked = true
                                 text: Cpp_UI_Provider.getGroup(index).title
-                                palette.highlight: Colors.AlternativeHighlight
+                                palette.highlight: Cpp_ThemeManager.alternativeHighlight
 
                                 onCheckedChanged: {
                                     viewOptions.groups[index] = checked
@@ -352,7 +350,7 @@ Control {
                             delegate: Switch {
                                 Layout.fillWidth: true
                                 Component.onCompleted: checked = true
-                                palette.highlight: Colors.AlternativeHighlight
+                                palette.highlight: Cpp_ThemeManager.alternativeHighlight
                                 text: Cpp_UI_GraphProvider.getDataset(index).title
 
                                 onCheckedChanged: {
@@ -376,7 +374,7 @@ Control {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 headerDoubleClickEnabled: false
-                backgroundColor: Colors.ConsoleBase
+                backgroundColor: Cpp_ThemeManager.consoleBase
                 icon.source: "qrc:/icons/scatter-plot.svg"
 
                 Rectangle {
@@ -548,7 +546,7 @@ Control {
 
                 GradientStop {
                     position: 1
-                    color: Colors.WindowGradientColor
+                    color: Cpp_ThemeManager.windowGradient
                 }
             }
 

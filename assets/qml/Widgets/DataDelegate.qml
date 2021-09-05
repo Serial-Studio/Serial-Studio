@@ -27,8 +27,6 @@ import QtGraphicalEffects 1.0
 
 import SerialStudio 1.0
 
-import "../Config/Colors.js" as Colors
-
 Item {
     id: root
 
@@ -39,7 +37,7 @@ Item {
         text: dataset.title
         elide: Label.ElideRight
         font.family: app.monoFont
-        color: Colors.DatasetText
+        color: Cpp_ThemeManager.datasetTextPrimary
         horizontalAlignment: Text.AlignLeft
 
         anchors {
@@ -65,7 +63,7 @@ Item {
         ColorOverlay {
             source: parent
             anchors.fill: parent
-            color: Colors.DatasetUnits
+            color: Cpp_ThemeManager.datasetTextSecondary
         }
     }
 
@@ -73,7 +71,7 @@ Item {
         text: dataset.value
         elide: Label.ElideRight
         font.family: app.monoFont
-        color: Colors.DatasetText
+        color: Cpp_ThemeManager.datasetTextPrimary
         horizontalAlignment: Text.AlignLeft
 
         anchors {
@@ -87,7 +85,7 @@ Item {
     Label {
         id: units
         font.family: app.monoFont
-        color: Colors.DatasetUnits
+        color: Cpp_ThemeManager.datasetTextSecondary
         text: "[" + dataset.units + "]"
         visible: dataset.units.length > 0
         horizontalAlignment: Text.AlignRight

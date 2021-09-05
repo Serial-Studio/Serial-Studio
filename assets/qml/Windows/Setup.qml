@@ -29,12 +29,11 @@ import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
 import "../SetupPanes" as SetupPanes
-import "../Config/Colors.js" as Colors
 
 Control {
     id: root
     background: Rectangle {
-        color: Colors.Background
+        color: Cpp_ThemeManager.windowBackground
     }
 
     //
@@ -164,7 +163,7 @@ Control {
                 text: qsTr("Create CSV file")
                 Layout.alignment: Qt.AlignVCenter
                 checked: Cpp_CSV_Export.exportEnabled
-                palette.highlight: Colors.CsvLoggingButton
+                palette.highlight: Cpp_ThemeManager.csvHighlight
 
                 onCheckedChanged:  {
                     if (Cpp_CSV_Export.exportEnabled !== checked)
@@ -179,7 +178,7 @@ Control {
             RoundButton {
                 icon.width: 24
                 icon.height: 24
-                icon.color: Colors.Foreground
+                icon.color: Cpp_ThemeManager.text
                 Layout.alignment: Qt.AlignVCenter
                 icon.source: "qrc:/icons/help.svg"
                 onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
@@ -272,7 +271,7 @@ Control {
                 id: serial
                 background: TextField {
                     enabled: false
-                    palette.base: Colors.SetupBase
+                    palette.base: Cpp_ThemeManager.setupPanelBackground
                 }
             }
 
@@ -280,7 +279,7 @@ Control {
                 id: network
                 background: TextField {
                     enabled: false
-                    palette.base: Colors.SetupBase
+                    palette.base: Cpp_ThemeManager.setupPanelBackground
                 }
             }
 
@@ -288,7 +287,7 @@ Control {
                 id: mqtt
                 background: TextField {
                     enabled: false
-                    palette.base: Colors.SetupBase
+                    palette.base: Cpp_ThemeManager.setupPanelBackground
                 }
             }
 
@@ -296,7 +295,7 @@ Control {
                 id: settings
                 background: TextField {
                     enabled: false
-                    palette.base: Colors.SetupBase
+                    palette.base: Cpp_ThemeManager.setupPanelBackground
                 }
             }
         }
@@ -335,7 +334,7 @@ Control {
                 font.pixelSize: 18
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignVCenter
-                color: _rx.enabled ? palette.highlight : Colors.LedDisabled
+                color: _rx.enabled ? palette.highlight : Cpp_ThemeManager.ledDisabled
             }
 
             Image {
@@ -348,7 +347,7 @@ Control {
                 ColorOverlay {
                     source: parent
                     anchors.fill: parent
-                    color: Colors.LedDisabled
+                    color: Cpp_ThemeManager.ledDisabled
                 }
             }
 
@@ -358,7 +357,7 @@ Control {
                 font.pixelSize: 18
                 font.family: app.monoFont
                 Layout.alignment: Qt.AlignVCenter
-                color: _tx.enabled ? palette.highlight : Colors.LedDisabled
+                color: _tx.enabled ? palette.highlight : Cpp_ThemeManager.ledDisabled
             }
 
             Widgets.LED {

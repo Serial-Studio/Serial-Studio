@@ -23,8 +23,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
-import "../Config/Colors.js" as Colors
-
 Rectangle {
     id: root
 
@@ -55,8 +53,8 @@ Rectangle {
     //
     border.width: 2
     radius: width / 2
-    border.color: Colors.WidgetIndicatorColor
-    color: Colors.AccelerometerGaugeBackground
+    border.color: Cpp_ThemeManager.widgetIndicator1
+    color: Cpp_ThemeManager.widgetAlternativeBackground
 
     //
     // Redraw numbers automatically
@@ -72,7 +70,7 @@ Rectangle {
         text: root.title
         anchors.centerIn: parent
         font.family: app.monoFont
-        color: Colors.WidgetTitleColor
+        color: Cpp_ThemeManager.widgettextSecondary
         anchors.verticalCenterOffset: 32
     }
 
@@ -83,7 +81,7 @@ Rectangle {
         font.pixelSize: 14
         anchors.centerIn: parent
         font.family: app.monoFont
-        color: Colors.WidgetValueColor
+        color: Cpp_ThemeManager.widgettextPrimary
         visible: root.valueLabelVisible
         anchors.verticalCenterOffset: 56
         text: root.currentValue.toFixed(3)
@@ -114,7 +112,7 @@ Rectangle {
                 var dY = (radius - root.numberSize) * Math.sin(theta) + radius + root.numberSize / 2
 
                 ctx.font = "bold " + root.numberSize + "px " + app.monoFont
-                ctx.fillStyle = Colors.WidgetIndicatorColor
+                ctx.fillStyle = Cpp_ThemeManager.widgetIndicator1
                 ctx.fillText(i + firstNumber, dX, dY)
 
                 if (i === range) {
@@ -125,7 +123,7 @@ Rectangle {
                     var finishAngle = Math.PI - spacing
 
                     ctx.lineWidth = 2
-                    ctx.strokeStyle = Colors.WidgetIndicatorColor
+                    ctx.strokeStyle = Cpp_ThemeManager.widgetIndicator1
 
                     ctx.beginPath();
                     ctx.arc(x, y, radius - (root.numberSize + 3), startAngle, finishAngle)
@@ -187,17 +185,17 @@ Rectangle {
 
             if (root.maximumVisible)
                 drawIndicator(root.maximumValue,
-                              Colors.WidgetIndicatorMaxColor,
+                              Cpp_ThemeManager.widgetIndicator2,
                               root.indicatorWidth * 0.8, 0.20)
 
             if (root.minimumVisible)
                 drawIndicator(root.minimumValue,
-                              Colors.WidgetIndicatorMinColor,
+                              Cpp_ThemeManager.widgetIndicator3,
                               root.indicatorWidth * 0.8, 0.20)
 
             if (root.currentVisible)
                 drawIndicator(root.currentValue,
-                              Colors.WidgetIndicatorColor,
+                              Cpp_ThemeManager.widgetIndicator1,
                               root.indicatorWidth, 0.28)
         }
     }
@@ -210,8 +208,8 @@ Rectangle {
         height: 24
         radius: width / 2
         anchors.centerIn: parent
-        color: Colors.AccelerometerGaugeKnob
+        color: Cpp_ThemeManager.widgetControlBackground
         border.width: root.indicatorWidth - 1
-        border.color: Colors.WidgetIndicatorColor
+        border.color: Cpp_ThemeManager.widgetIndicator1
     }
 }

@@ -45,7 +45,6 @@ public:
 public slots:
     static void aboutQt();
     static void openLogFile();
-    static void configureDarkUi();
     static void revealFile(const QString& pathToReveal);
 };
 }

@@ -152,6 +152,7 @@ HEADERS += \
     src/MQTT/Client.h \
     src/Misc/ModuleManager.h \
     src/Misc/TimerEvents.h \
+    src/Misc/ThemeManager.h \
     src/Misc/Translator.h \
     src/Misc/Utilities.h \
     src/Plugins/Bridge.h \
@@ -175,6 +176,7 @@ SOURCES += \
     src/MQTT/Client.cpp \
     src/Misc/ModuleManager.cpp \
     src/Misc/TimerEvents.cpp \
+    src/Misc/ThemeManager.cpp \
     src/Misc/Translator.cpp \
     src/Misc/Utilities.cpp \
     src/Plugins/Bridge.cpp \

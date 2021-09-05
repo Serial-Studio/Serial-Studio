@@ -26,7 +26,6 @@ import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
 import SerialStudio 1.0
-import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -35,7 +34,7 @@ Window {
     showIcon: false
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    borderColor: Colors.DatasetGraphBorder
+    borderColor: Cpp_ThemeManager.datasetTextPrimarySecondary
     title: group != null ? group.title : ""
 
     property int groupId: 0

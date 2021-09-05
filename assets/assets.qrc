@@ -102,6 +102,12 @@
         <file>qml/Widgets/GaugeDelegate.qml</file>
         <file>qml/Windows/Donate.qml</file>
         <file>images/donate-qr.svg</file>
-        <file>qml/Config/Colors.js</file>
+        <file>themes/0_Classic.json</file>
+        <file>themes/1_Light.json</file>
+        <file>themes/2_SolarizedDark.json</file>
+        <file>themes/3_SolarizedLight.json</file>
+        <file>themes/4_macOS_Light.json</file>
+        <file>themes/5_macOS_Dark.json</file>
+        <file>qml/Application.qml</file>
     </qresource>
 </RCC>

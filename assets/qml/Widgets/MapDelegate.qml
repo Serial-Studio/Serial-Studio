@@ -25,13 +25,9 @@ import QtLocation 5.12
 import QtPositioning 5.11
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
-
 import Qt.labs.settings 1.0
-
 import SerialStudio 1.0
-
 import "."
-import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -45,7 +41,7 @@ Window {
     visible: opacity > 0
     opacity: enabled ? 1 : 0
     implicitHeight: implicitWidth + 96
-    backgroundColor: Colors.WidgetBackground
+    backgroundColor: Cpp_ThemeManager.widgetBackground
     icon.source: "qrc:/icons/location-on.svg"
 
     //
@@ -175,12 +171,12 @@ Window {
 
                 border {
                     width: 2
-                    color: Colors.MapBorder
+                    color: Cpp_ThemeManager.mapBorder
                 }
 
                 gradient: Gradient {
                     GradientStop {
-                        color: Colors.MapSkyLow
+                        color: Cpp_ThemeManager.mapSkyLowAltitude
                         position: Math.max(0.4,
                                            (map.maximumTilt - map.tilt) /
                                             map.maximumTilt)
@@ -188,7 +184,7 @@ Window {
 
                     GradientStop {
                         position: 0
-                        color: Colors.MapSkyHigh
+                        color: Cpp_ThemeManager.mapSkyHighAltitude
                     }
                 }
 
@@ -216,8 +212,8 @@ Window {
                             opacity: 0.8
                             border.width: 2
                             radius: width / 2
-                            color: Colors.MapDotBg
-                            border.color: Colors.MapDotFg
+                            color: Cpp_ThemeManager.mapDotBackground
+                            border.color: Cpp_ThemeManager.mapDottext
                         }
                     }
 
@@ -257,7 +253,7 @@ Window {
 
                         GradientStop {
                             position: 0.5
-                            color: Colors.MapSmog
+                            color: Cpp_ThemeManager.mapHorizon
                         }
 
                         GradientStop {

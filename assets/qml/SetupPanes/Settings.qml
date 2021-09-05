@@ -66,6 +66,22 @@ Control {
             }
 
             //
+            // Theme selector
+            //
+            Label {
+                text: qsTr("Theme") + ":"
+            } ComboBox {
+                id: _themeCombo
+                Layout.fillWidth: true
+                model: Cpp_ThemeManager.availableThemes
+                currentIndex: Cpp_ThemeManager.themeId
+                onCurrentIndexChanged: {
+                    if (currentIndex !== Cpp_ThemeManager.themeId)
+                        Cpp_ThemeManager.setTheme(currentIndex)
+                }
+            }
+
+            //
             // Start sequence
             //
             Label {

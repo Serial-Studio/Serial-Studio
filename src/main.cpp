@@ -30,6 +30,9 @@
 #include <Misc/Utilities.h>
 #include <Misc/ModuleManager.h>
 
+#include <QQuickStyle>
+#include <QStyleFactory>
+
 #ifdef Q_OS_WIN
 #    include <windows.h>
 #endif
@@ -89,6 +92,10 @@ int main(int argc, char **argv)
     app.setOrganizationName(APP_DEVELOPER);
     app.setOrganizationDomain(APP_SUPPORT_URL);
 
+    // Set application style
+    app.setStyle(QStyleFactory::create("Fusion"));
+    QQuickStyle::setStyle("Fusion");
+
     // Read arguments
     QString arguments;
     if (app.arguments().count() >= 2)
@@ -113,9 +120,6 @@ int main(int argc, char **argv)
     // Create module manager & configure the logger
     ModuleManager moduleManager;
     moduleManager.configureLogger();
-
-    // Configure dark UI
-    Misc::Utilities::configureDarkUi();
 
     // Begin logging
     LOG_INFO() << QDateTime::currentDateTime();

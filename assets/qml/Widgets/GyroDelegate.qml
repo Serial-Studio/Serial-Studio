@@ -28,7 +28,6 @@ import QtGraphicalEffects 1.0
 import SerialStudio 1.0
 
 import "."
-import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -43,7 +42,7 @@ Window {
     opacity: enabled ? 1 : 0
     implicitHeight: implicitWidth + 96
     icon.source: "qrc:/icons/refresh.svg"
-    backgroundColor: Colors.WidgetBackground
+    backgroundColor: Cpp_ThemeManager.widgetBackground
 
     //
     // Custom properties
@@ -151,7 +150,7 @@ Window {
             Layout.minimumHeight: 120
             Layout.maximumHeight: 120
             Layout.alignment: Qt.AlignVCenter
-            border.color: Colors.WidgetValueColor
+            border.color: Cpp_ThemeManager.widgettextPrimary
 
             function formatAngle(angle) {
                 var str
@@ -177,7 +176,7 @@ Window {
                 Label {
                     font.pixelSize: 12
                     font.family: app.monoFont
-                    color: Colors.WidgetValueColor
+                    color: Cpp_ThemeManager.widgettextPrimary
                     Layout.alignment: Qt.AlignLeft
                     text: qsTr("%1° YAW").arg(controls.formatAngle(root.yawAngle))
                 }
@@ -185,7 +184,7 @@ Window {
                 Label {
                     font.pixelSize: 12
                     font.family: app.monoFont
-                    color: Colors.WidgetValueColor
+                    color: Cpp_ThemeManager.widgettextPrimary
                     Layout.alignment: Qt.AlignLeft
                     text: qsTr("%1° ROLL").arg(controls.formatAngle(root.rollAngle))
                 }
@@ -193,7 +192,7 @@ Window {
                 Label {
                     font.pixelSize: 12
                     font.family: app.monoFont
-                    color: Colors.WidgetValueColor
+                    color: Cpp_ThemeManager.widgettextPrimary
                     Layout.alignment: Qt.AlignLeft
                     text: qsTr("%1° PITCH").arg(controls.formatAngle(root.pitchAngle))
                 }

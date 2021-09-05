@@ -27,7 +27,6 @@ import QtQuick.Controls 2.12
 import SerialStudio 1.0
 
 import "."
-import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -42,16 +41,16 @@ Window {
     opacity: enabled ? 1 : 0
     icon.source: "qrc:/icons/chart.svg"
     implicitHeight: implicitWidth + 96
-    backgroundColor: Colors.WidgetBackground
+    backgroundColor: Cpp_ThemeManager.widgetBackground
 
     //
     // Select level color depending on widget index
     //
     property color levelColor:  {
-        if (Colors.BarColors.length > index)
-            return olors.BarColors[index]
+        if (Cpp_ThemeManager.barWidgetColors.length > index)
+            return Cpp_ThemeManager.barWidgetColors[index]
 
-        return Colors.BarColors[Colors.BarColors.length % index]
+        return Cpp_ThemeManager.barWidgetColors[Cpp_ThemeManager.barWidgetColors.length % index]
     }
 
     //
@@ -138,10 +137,10 @@ Window {
             id: tank
             border.width: 2
             Layout.fillHeight: true
-            color: Colors.BarTankBackground
+            color: Cpp_ThemeManager.widgetAlternativeBackground
             Layout.minimumWidth: root.width * 0.17
             Layout.maximumWidth: root.width * 0.17
-            border.color: Colors.WidgetIndicatorColor
+            border.color: Cpp_ThemeManager.widgetIndicator1
 
             //
             // Level indicator
@@ -152,7 +151,7 @@ Window {
 
                 border.width: 2
                 color: root.levelColor
-                border.color: Colors.WidgetIndicatorColor
+                border.color: Cpp_ThemeManager.widgetIndicator1
             }
         }
 
@@ -165,7 +164,7 @@ Window {
 
             Label {
                 font.family: app.monoFont
-                color: Colors.WidgetValueColor
+                color: Cpp_ThemeManager.widgettextPrimary
                 Layout.alignment: Qt.AlignHCenter
                 text: root.maximumValue.toFixed(2) + " " + root.units
             }
@@ -173,7 +172,7 @@ Window {
             Rectangle {
                 width: 2
                 Layout.fillHeight: true
-                color: Colors.WidgetTitleColor
+                color: Cpp_ThemeManager.widgettextSecondary
                 Layout.alignment: Qt.AlignHCenter
             }
 
@@ -181,7 +180,7 @@ Window {
                 font.bold: true
                 font.pixelSize: 16
                 font.family: app.monoFont
-                color: Colors.WidgetValueColor
+                color: Cpp_ThemeManager.widgettextPrimary
                 Layout.alignment: Qt.AlignHCenter
                 text: (root.currentValue > root.maximumValue ? root.maximumValue.toFixed(2) :
                                                                root.currentValue.toFixed(2)) + " " + root.units
@@ -191,20 +190,20 @@ Window {
                     anchors.fill: parent
                     color: "transparent"
                     anchors.margins: -app.spacing
-                    border.color: Colors.WidgetValueColor
+                    border.color: Cpp_ThemeManager.widgettextPrimary
                 }
             }
 
             Rectangle {
                 width: 2
                 Layout.fillHeight: true
-                color: Colors.WidgetTitleColor
+                color: Cpp_ThemeManager.widgettextSecondary
                 Layout.alignment: Qt.AlignHCenter
             }
 
             Label {
                 font.family: app.monoFont
-                color: Colors.WidgetValueColor
+                color: Cpp_ThemeManager.widgettextPrimary
                 Layout.alignment: Qt.AlignHCenter
                 text: root.minimumValue.toFixed(2) + " " + root.units
             }

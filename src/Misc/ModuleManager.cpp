@@ -46,6 +46,7 @@
 #include <Misc/Utilities.h>
 #include <Misc/Translator.h>
 #include <Misc/TimerEvents.h>
+#include <Misc/ThemeManager.h>
 #include <Misc/ModuleManager.h>
 
 #include <MQTT/Client.h>
@@ -151,6 +152,7 @@ void ModuleManager::initializeQmlInterface()
     auto ioNetwork = IO::DataSources::Network::getInstance();
     auto jsonGenerator = JSON::Generator::getInstance();
     auto utilities = Misc::Utilities::getInstance();
+    auto themeManager = Misc::ThemeManager::getInstance();
     auto mqttPublisher = MQTT::Client::getInstance();
     auto pluginsBridge = Plugins::Bridge::getInstance();
     LOG_INFO() << "Finished initializing C++ modules";
@@ -165,6 +167,7 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
     c->setContextProperty("Cpp_Misc_Translator", translator);
     c->setContextProperty("Cpp_Misc_Utilities", utilities);
+    c->setContextProperty("Cpp_ThemeManager", themeManager);
     c->setContextProperty("Cpp_CSV_Export", csvExport);
     c->setContextProperty("Cpp_CSV_Player", csvPlayer);
     c->setContextProperty("Cpp_UI_Provider", uiDataProvider);

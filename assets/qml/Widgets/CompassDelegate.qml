@@ -27,7 +27,6 @@ import QtQuick.Controls 2.12
 import SerialStudio 1.0
 
 import "."
-import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -42,7 +41,7 @@ Window {
     opacity: enabled ? 1 : 0
     implicitHeight: implicitWidth + 96
     icon.source: "qrc:/icons/compass.svg"
-    backgroundColor: Colors.WidgetBackground
+    backgroundColor: Cpp_ThemeManager.widgetBackground
 
     //
     // Custom properties
@@ -132,7 +131,7 @@ Window {
             font.pixelSize: 24
             text: root.direction
             font.family: app.monoFont
-            color: Colors.WidgetValueColor
+            color: Cpp_ThemeManager.widgettextPrimary
             Layout.alignment: Qt.AlignHCenter
         }
     }

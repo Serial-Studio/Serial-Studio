@@ -29,7 +29,6 @@ import QtQuick.Controls.Styles 1.4
 import SerialStudio 1.0
 
 import "."
-import "../Config/Colors.js" as Colors
 
 Window {
     id: root
@@ -53,7 +52,7 @@ Window {
     opacity: enabled ? 1 : 0
     icon.source: "qrc:/icons/chart.svg"
     implicitHeight: implicitWidth + 96
-    backgroundColor: Colors.WidgetBackground
+    backgroundColor: Cpp_ThemeManager.widgetBackground
 
     //
     // Connections with widget manager
@@ -129,7 +128,7 @@ Window {
                 font.bold: true
                 anchors.centerIn: parent
                 font.family: app.monoFont
-                color: Colors.WidgetValueColor
+                color: Cpp_ThemeManager.widgettextPrimary
                 font.pixelSize: Math.max(12, gauge.height / 15)
                 anchors.verticalCenterOffset: parent.height * 0.17
                 text: (root.currentValue > root.maximumValue ? root.maximumValue.toFixed(2) :

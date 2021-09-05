@@ -23,13 +23,11 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.0
 
-import "../Config/Colors.js" as Colors
-
 Dial {
     id: control
 
     property string text: control.value.toFixed(1)
-    property color dialColor: pressed ? palette.highlight : Colors.DialBorder
+    property color dialColor: pressed ? palette.highlight : Cpp_ThemeManager.graphDialBorder
 
     background: Rectangle {
         border.width: 2

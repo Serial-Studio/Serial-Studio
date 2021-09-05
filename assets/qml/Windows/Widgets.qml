@@ -27,12 +27,11 @@ import QtQuick.Controls 2.12
 import QtQuick.Window 2.12 as QtWindow
 
 import "../Widgets" as Widgets
-import "../Config/Colors.js" as Colors
 
 Control {
     id: root
     background: Rectangle {
-        color: Colors.Background
+        color: Cpp_ThemeManager.windowBackground
     }
 
     //

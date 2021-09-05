@@ -25,8 +25,6 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-import "../Config/Colors.js" as Colors
-
 Window {
     id: root
 
@@ -54,10 +52,10 @@ Window {
     Page {
         anchors.margins: 0
         anchors.fill: parent
-        palette.text: Colors.Foreground
-        palette.window: Colors.Background
-        palette.buttonText: Colors.Foreground
-        palette.windowText: Colors.Foreground
+        palette.text: Cpp_ThemeManager.text
+        palette.window: Cpp_ThemeManager.windowBackground
+        palette.buttonText: Cpp_ThemeManager.text
+        palette.windowText: Cpp_ThemeManager.text
 
         //
         // Automatically display the window when the CSV file is opened
@@ -112,7 +110,7 @@ Window {
 
                 Button {
                     opacity: enabled ? 1 : 0.5
-                    icon.color: Colors.Foreground
+                    icon.color: Cpp_ThemeManager.text
                     Layout.alignment: Qt.AlignVCenter
                     onClicked: Cpp_CSV_Player.previousFrame()
                     icon.source: "qrc:/icons/media-prev.svg"
@@ -124,7 +122,7 @@ Window {
                 Button {
                     icon.width: 32
                     icon.height: 32
-                    icon.color: Colors.Foreground
+                    icon.color: Cpp_ThemeManager.text
                     onClicked: Cpp_CSV_Player.toggle()
                     Layout.alignment: Qt.AlignVCenter
                     icon.source: Cpp_CSV_Player.isPlaying ? "qrc:/icons/media-pause.svg" :
@@ -133,7 +131,7 @@ Window {
 
                 Button {
                     opacity: enabled ? 1 : 0.5
-                    icon.color: Colors.Foreground
+                    icon.color: Cpp_ThemeManager.text
                     Layout.alignment: Qt.AlignVCenter
                     onClicked: Cpp_CSV_Player.nextFrame()
                     icon.source: "qrc:/icons/media-next.svg"
