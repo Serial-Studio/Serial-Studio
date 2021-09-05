@@ -126,6 +126,10 @@ void ThemeManager::loadTheme(const int id)
     m_windowBackground = QColor(colors.value("windowBackground").toString());
     m_windowGradient1 = QColor(colors.value("windowGradient1").toString());
     m_windowGradient2 = QColor(colors.value("windowGradient2").toString());
+    m_menubarGradient1 = QColor(colors.value("menubarGradient1").toString());
+    m_menubarGradient2 = QColor(colors.value("menubarGradient2").toString());
+    m_menubarText = QColor(colors.value("menubarText").toString());
+    m_dialogBackground = QColor(colors.value("dialogBackground").toString());
     m_alternativeHighlight = QColor(colors.value("alternativeHighlight").toString());
     m_setupPanelBackground = QColor(colors.value("setupPanelBackground").toString());
     m_graphDialBorder = QColor(colors.value("graphDialBorder").toString());
@@ -300,6 +304,26 @@ QColor ThemeManager::toolbarGradient1() const
 QColor ThemeManager::toolbarGradient2() const
 {
     return m_toolbarGradient2;
+}
+
+QColor ThemeManager::menubarGradient1() const
+{
+    return m_menubarGradient1;
+}
+
+QColor ThemeManager::menubarGradient2() const
+{
+    return m_menubarGradient2;
+}
+
+QColor ThemeManager::menubarText() const
+{
+    return m_menubarText;
+}
+
+QColor ThemeManager::dialogBackground() const
+{
+    return m_dialogBackground;
 }
 
 QColor ThemeManager::consoleText() const

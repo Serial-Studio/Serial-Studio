@@ -57,6 +57,7 @@ Control {
 
         Rectangle {
             height: parent.border.width
+            visible: Qt.platform.os === "osx"
             color: Cpp_ThemeManager.toolbarGradient2
 
             anchors {

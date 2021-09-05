@@ -34,12 +34,12 @@ MenuBar {
         gradient: Gradient {
             GradientStop {
                 position: 0
-                color: Qt.lighter(Cpp_ThemeManager.windowBackground)
+                color: Cpp_ThemeManager.menubarGradient1
             }
 
             GradientStop {
                 position: 1
-                color: Cpp_ThemeManager.windowBackground
+                color: Cpp_ThemeManager.menubarGradient2
             }
         }
     }
