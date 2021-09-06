@@ -45,7 +45,7 @@ ApplicationWindow {
         case "windows":
             return "Consolas"
         default:
-            return "Monospace"
+            return "Noto Sans Mono"
         }
     }
 
@@ -209,6 +209,13 @@ ApplicationWindow {
     minimumWidth: 1040
     title: Cpp_AppName + " v" + Cpp_AppVersion
     minimumHeight: Qt.platform.os == "osx" ? 660 : 680
+    
+    //
+    // Define default window size to avoid issues with
+    // special window managers (such as Haiku)
+    //
+    width: minimumWidth
+    height: minimumHeight
 
     //
     // Theme options

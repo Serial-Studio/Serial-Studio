@@ -37,6 +37,8 @@ Window {
     // Window options
     //
     title: qsTr("About")
+    width: minimumWidth
+    height: minimumHeight
     minimumWidth: column.implicitWidth + 4 * app.spacing
     maximumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing

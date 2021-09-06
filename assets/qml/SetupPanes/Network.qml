@@ -34,6 +34,23 @@ Control {
     property alias port: _portText.text
     property alias address: _address.text
     property alias socketType: _typeCombo.currentIndex
+    
+    //
+    // React to network manager events
+    //
+    Connections {
+    	target: Cpp_IO_Network
+    	
+    	function onHostChanged() {
+    		if (_address.text != "")
+    			_address.text = Cpp_IO_Network.host
+    	}
+    	
+    	function onPortChanged() {
+    		if (_portText.text != "")
+    			_portText.text = Cpp_IO_Network.port
+    	}
+    }
 
     //
     // Layout
@@ -84,10 +101,13 @@ Control {
                 id: _address
                 Layout.fillWidth: true
                 placeholderText: Cpp_IO_Network.defaultHost
-                text: Cpp_IO_Network.host
+                Component.onCompleted: text = Cpp_IO_Network.host
                 onTextChanged: {
-                    if (Cpp_IO_Network.host !== text)
+                    if (Cpp_IO_Network.host !== text && text != "")
                         Cpp_IO_Network.host = text
+                        
+                    if (text == "")
+                    	Cpp_IO_Network.host = Cpp_IO_Network.defaultHost
                 }
 
                 opacity: enabled ? 1 : 0.5
@@ -106,11 +126,14 @@ Control {
             } TextField {
                 id: _portText
                 Layout.fillWidth: true
-                text: Cpp_IO_Network.port
                 placeholderText: Cpp_IO_Network.defaultPort
+                Component.onCompleted: text = Cpp_IO_Network.port
                 onTextChanged: {
-                    if (Cpp_IO_Network.port !== text)
+                    if (Cpp_IO_Network.port !== text && text != "")
                         Cpp_IO_Network.port = text
+                        
+                    if (text == "")
+                    	Cpp_IO_Network.port = Cpp_IO_Network.defaultPort
                 }
 
                 validator: IntValidator {

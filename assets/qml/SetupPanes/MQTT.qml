@@ -38,6 +38,23 @@ Control {
     property alias password: _password.text
     property alias version: _version.currentIndex
     property alias mode: _mode.currentIndex
+    
+    //
+    // React to events from MQTT module
+    //
+    Connections {
+        target: Cpp_MQTT_Client
+        
+        function onHostChanged() {
+            if (_host.text != "")
+                _host.text = Cpp_MQTT_Client.host
+        }
+        
+        function onPortChanged() {
+        	if (_port.text != "")
+        		_port.text = Cpp_MQTT_Client.port
+        }
+    }
 
     //
     // Layout
@@ -96,10 +113,10 @@ Control {
             } TextField {
                 id: _host
                 Layout.fillWidth: true
-                text: Cpp_MQTT_Client.host
                 placeholderText: Cpp_MQTT_Client.defaultHost
+                Component.onCompleted: text = Cpp_MQTT_Client.host
                 onTextChanged: {
-                    if (Cpp_MQTT_Client.host !== text)
+                    if (Cpp_MQTT_Client.host !== text && text != "")
                         Cpp_MQTT_Client.host = text
 
                     if (text == "")
@@ -122,10 +139,10 @@ Control {
             } TextField {
                 id: _port
                 Layout.fillWidth: true
-                text: Cpp_MQTT_Client.port
                 placeholderText: Cpp_MQTT_Client.defaultPort
+                Component.onCompleted: text = Cpp_MQTT_Client.port
                 onTextChanged: {
-                    if (Cpp_MQTT_Client.port !== text)
+                    if (Cpp_MQTT_Client.port !== text && text != "")
                         Cpp_MQTT_Client.port = text
 
                     if (text == "")

@@ -94,11 +94,11 @@ Control {
             icon.width: 24
             icon.height: 24
             Layout.fillHeight: true
-            icon.color: palette.brightText
             onClicked: root.setupClicked()
             text: qsTr("Setup") + _btSpacer
-            palette.buttonText: palette.brightText
             icon.source: "qrc:/icons/settings.svg"
+            icon.color: Cpp_ThemeManager.brightText
+            palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
         }
@@ -110,12 +110,12 @@ Control {
             icon.width: 24
             icon.height: 24
             Layout.fillHeight: true
-            icon.color: palette.brightText
             onClicked: root.consoleClicked()
             icon.source: "qrc:/icons/code.svg"
             text: qsTr("Console") + _btSpacer
-            palette.buttonText: palette.brightText
             enabled: dataBt.enabled || widgetsBt.enabled
+            icon.color: Cpp_ThemeManager.brightText
+            palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
         }
@@ -128,11 +128,11 @@ Control {
             icon.height: 24
             Layout.fillHeight: true
             onClicked: root.dataClicked()
-            icon.color: palette.brightText
             enabled: app.dashboardAvailable
             text: qsTr("Dashboard") + _btSpacer
             icon.source: "qrc:/icons/equalizer.svg"
-            palette.buttonText: palette.brightText
+            icon.color: Cpp_ThemeManager.brightText
+            palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
 
@@ -148,11 +148,11 @@ Control {
             icon.height: 24
             Layout.fillHeight: true
             enabled: app.widgetsAvailable
-            icon.color: palette.brightText
             onClicked: root.widgetsClicked()
-            icon.source: "qrc:/icons/chart.svg"
             text: qsTr("Widgets") + _btSpacer
-            palette.buttonText: palette.brightText
+            icon.source: "qrc:/icons/chart.svg"
+            icon.color: Cpp_ThemeManager.brightText
+            palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
 
@@ -169,14 +169,15 @@ Control {
             icon.width: 24
             icon.height: 24
             Layout.fillHeight: true
-            icon.color: palette.brightText
             opacity: enabled ? 1 : 0.5
             enabled: !Cpp_CSV_Player.isOpen
             icon.source: "qrc:/icons/open.svg"
             text: qsTr("Open CSV") + _btSpacer
-            palette.buttonText: palette.brightText
+            icon.color: Cpp_ThemeManager.brightText
+            palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
+            
 
             onClicked: {
                 if (Cpp_CSV_Export.isOpen)

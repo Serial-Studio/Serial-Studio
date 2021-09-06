@@ -34,14 +34,25 @@
 #include <QJsonDocument>
 
 using namespace Misc;
+
+/**
+ * Pointer to the single instance of this class
+ */
 static ThemeManager *INSTANCE = Q_NULLPTR;
 
+/**
+ * Constructor function, searches for available themes & loads
+ * the theme variant selected by the user.
+ */
 ThemeManager::ThemeManager()
 {
     populateThemes();
     loadTheme(m_settings.value("themeId", 0).toInt());
 }
 
+/**
+ * Returns a pointer to the only instance of this class
+ */
 ThemeManager *ThemeManager::getInstance()
 {
     if (!INSTANCE)
@@ -50,11 +61,24 @@ ThemeManager *ThemeManager::getInstance()
     return INSTANCE;
 }
 
+/**
+ * Returns the ID of the theme that the user has selected.
+ */
 int ThemeManager::themeId() const
 {
     return m_themeId;
 }
 
+/**
+ * Updates the theme ID to be used & saves the changes to the
+ * application settings.
+ *
+ * Finally, this function prompts the user to restart the application
+ * in order to apply changes.
+ *
+ * Unfortunately, an app restart is required because the application
+ * palette must be set before the GUI is initialized. 
+ */
 void ThemeManager::setTheme(const int id)
 {
     // Validate theme ID
@@ -79,6 +103,11 @@ void ThemeManager::setTheme(const int id)
     }
 }
 
+/**
+ * Parses the JSON theme definition file for the given theme ID.
+ * The colors are then "extracted" from the JSON file & loaded into the
+ * class, which is later used to set the colors of the QML user interface.
+ */
 void ThemeManager::loadTheme(const int id)
 {
     // Validate theme ID
@@ -191,6 +220,11 @@ void ThemeManager::loadTheme(const int id)
     emit themeChanged();
 }
 
+/**
+ * Reads all the available theme files from the application resources
+ * folder.
+ * @note theme definitions are bundled during the compilatopn process.
+ */
 void ThemeManager::populateThemes()
 {
     // Clear available thems
