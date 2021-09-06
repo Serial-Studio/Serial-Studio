@@ -45,7 +45,7 @@ ApplicationWindow {
         case "windows":
             return "Consolas"
         default:
-            return "Monospace"
+            return "Noto Sans Mono"
         }
     }
 
