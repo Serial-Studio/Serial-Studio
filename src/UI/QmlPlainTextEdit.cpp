@@ -567,9 +567,7 @@ void QmlPlainTextEdit::setPlaceholderText(const QString &text)
 }
 
 /**
- * Moves the position of the vertical scrollbar to the end of the document. However, this
- * function also ensures that the last line of the document is shown at the bottom of
- * the widget to mimic a terminal.
+ * Moves the position of the vertical scrollbar to the end of the document.
  */
 void QmlPlainTextEdit::scrollToBottom(const bool repaint)
 {
@@ -584,11 +582,13 @@ void QmlPlainTextEdit::scrollToBottom(const bool repaint)
 
     // Update scrolling range
     bar->setMinimum(0);
-    bar->setMaximum(lineCount + 1);
+    bar->setMaximum(lineCount);
 
     // Do not scroll to bottom if all text fits in current window
+    // Note the +3 is necessary to ensure that the latest line
+    // is visible, the value was obtained by trial-and-error
     if (lineCount > visibleLines)
-        bar->setValue(lineCount - visibleLines + 1);
+        bar->setValue(lineCount - visibleLines + 3);
     else
         bar->setValue(0);
 
@@ -914,12 +914,8 @@ QList<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &input
             m_pendingText += strippedText.mid(0, escape.length());
             strippedText.remove(0, escape.length());
 
-            // Clear screen
-            if (strippedText == "2J" || strippedText == "H")
-                textEdit->clear();
-
             // Clear line
-            else if (strippedText == "2K")
+            if (strippedText == "2K")
             {
                 textEdit->setFocus();
                 auto storedCursor = textEdit->textCursor();

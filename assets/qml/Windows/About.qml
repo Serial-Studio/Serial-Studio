@@ -21,7 +21,7 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Window 2.0
+import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
@@ -39,6 +39,8 @@ Window {
     title: qsTr("About")
     width: minimumWidth
     height: minimumHeight
+    x: (Screen.desktopAvailableWidth - width) / 2
+    y: (Screen.desktopAvailableHeight - height) / 2
     minimumWidth: column.implicitWidth + 4 * app.spacing
     maximumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing
