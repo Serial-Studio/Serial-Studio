@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/images">
         <file>donate-qr.svg</file>
-        <file>icon.png</file>
+        <file>icon.svg</file>
     </qresource>
 </RCC>

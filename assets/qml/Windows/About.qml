@@ -73,7 +73,7 @@ Window {
                 Image {
                     width: 96
                     height: 96
-                    source: "qrc:/images/icon.png"
+                    source: "qrc:/images/icon.svg"
                     Layout.alignment: Qt.AlignVCenter
                     sourceSize: Qt.size(width, height)
                 }
