@@ -114,12 +114,13 @@ JSON::Group *DataProvider::getGroup(const int index)
  */
 void DataProvider::resetData()
 {
-    // Stop if dev. man is not disconnected or if CSV file is open
+    // Stop if dev a device is connected or if CSV file is open
     if (IO::Manager::getInstance()->connected() || CSV::Player::getInstance()->isOpen())
         return;
 
     // Make latest frame invalid
     m_latestJsonFrame = JFI_Empty();
+    m_latestFrame.read(m_latestJsonFrame.jsonDocument.object());
 
     // Update UI
     emit updated();

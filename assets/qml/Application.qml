@@ -207,7 +207,7 @@ ApplicationWindow {
     //
     visible: false
     minimumWidth: 1040
-    title: Cpp_AppName + " v" + Cpp_AppVersion
+    title: Cpp_AppName
     minimumHeight: Qt.platform.os == "osx" ? 660 : 680
     
     //

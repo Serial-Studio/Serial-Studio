@@ -574,7 +574,7 @@ void QmlPlainTextEdit::scrollToBottom(const bool repaint)
     // Get scrollbar pointer, calculate line count & visible text lines
     auto *bar = textEdit()->verticalScrollBar();
     auto lineCount = textEdit()->document()->blockCount();
-    auto visibleLines = qFloor(height() / textEdit()->fontMetrics().height());
+    auto visibleLines = qRound(height() / textEdit()->fontMetrics().height());
 
     // Abort operation if control is not visible
     if (visibleLines <= 0)
@@ -585,10 +585,8 @@ void QmlPlainTextEdit::scrollToBottom(const bool repaint)
     bar->setMaximum(lineCount);
 
     // Do not scroll to bottom if all text fits in current window
-    // Note the +3 is necessary to ensure that the latest line
-    // is visible, the value was obtained by trial-and-error
     if (lineCount > visibleLines)
-        bar->setValue(lineCount - visibleLines + 3);
+        bar->setValue(lineCount - visibleLines + 1);
     else
         bar->setValue(0);
 
@@ -779,7 +777,7 @@ QString QmlPlainTextEdit::vt100Processing(const QString &data)
 }
 
 //--------------------------------------------------------------------------------------------------
-// VT-100 / ANSI terminal hacksºº
+// VT-100 / ANSI terminal hacks
 // https://code.qt.io/cgit/qt-creator/qt-creator.git/tree/src/libs/utils/ansiescapecodehandler.cpp
 //---------------------------------------------------------º-----------------------------------------
 
