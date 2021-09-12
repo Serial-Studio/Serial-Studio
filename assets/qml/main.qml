@@ -23,7 +23,13 @@
 import QtQuick 2.12
 
 Item {
-    id: root
+    id: qmlMain
+    readonly property string monoFont: fontLoader.name
+
+    FontLoader {
+        id: fontLoader
+        source: "qrc:/fonts/NotoSansMono-Regular.ttf"
+    }
 
     Loader {
         asynchronous: true

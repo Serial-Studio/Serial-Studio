@@ -77,7 +77,7 @@ int ThemeManager::themeId() const
  * in order to apply changes.
  *
  * Unfortunately, an app restart is required because the application
- * palette must be set before the GUI is initialized. 
+ * palette must be set before the GUI is initialized.
  */
 void ThemeManager::setTheme(const int id)
 {

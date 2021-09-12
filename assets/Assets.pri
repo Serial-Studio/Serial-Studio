@@ -29,6 +29,7 @@ TRANSLATIONS += \
 RESOURCES += \
     $$PWD/icons/rcc_icons.qrc \
     $$PWD/images/rcc_images.qrc \
+    $$PWD/fonts/rcc_fonts.qrc \
     $$PWD/instruments/rcc_instruments.qrc \
     $$PWD/messages/rcc_messages.qrc \
     $$PWD/qml/rcc_qml.qrc \

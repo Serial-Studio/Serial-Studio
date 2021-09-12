@@ -38,16 +38,7 @@ ApplicationWindow {
     //
     readonly property int spacing: 8
     property bool firstValidPacket: false
-    readonly property string monoFont: {
-        switch (Qt.platform.os) {
-        case "osx":
-            return "Monaco"
-        case "windows":
-            return "Consolas"
-        default:
-            return "Noto Sans Mono"
-        }
-    }
+    readonly property string monoFont: qmlMain.monoFont
 
     //
     // We use this variable to ask the user if he/she wants to enable/disable
