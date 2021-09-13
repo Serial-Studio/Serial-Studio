@@ -401,6 +401,7 @@ Control {
                     anchors.margins: app.spacing * 2
                     anchors.leftMargin: app.spacing * 2 + 10
 
+
                     ColumnLayout {
                         width: _sv.width - 2 * app.spacing
 
@@ -421,14 +422,19 @@ Control {
                                 delegate: Item {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Layout.minimumHeight: groupDelegate.visible ? 196 : 0
+                                    Layout.minimumHeight: visible ? 196 : 0
+
+                                    visible: opacity > 0
+                                    enabled: opacity > 0
+                                    opacity: viewOptions.groups[index] ? 1 : 0
+
+                                    Behavior on opacity {NumberAnimation{}}
 
                                     Widgets.GroupDelegate {
                                         id: groupDelegate
                                         groupId: index
                                         anchors.fill: parent
                                         anchors.margins: app.spacing
-                                        enabled: viewOptions.groups[groupId]
                                         group: Cpp_UI_Provider.getGroup(index)
                                         onHeaderDoubleClicked: groupWindow.show()
 
@@ -475,7 +481,13 @@ Control {
                                 delegate: Item {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    Layout.minimumHeight: graphDelegate.visible ? 196 : 0
+                                    Layout.minimumHeight: visible ? 196 : 0
+
+                                    visible: opacity > 0
+                                    enabled: opacity > 0
+                                    opacity: viewOptions.graphs[index] ? 1 : 0
+
+                                    Behavior on opacity {NumberAnimation{}}
 
                                     Widgets.GraphDelegate {
                                         id: graphDelegate

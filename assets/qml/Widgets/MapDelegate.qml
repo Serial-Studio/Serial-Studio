@@ -36,13 +36,12 @@ Window {
     // Window properties
     //
     spacing: -1
-    gradient: true
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
     implicitHeight: implicitWidth + 96
-    backgroundColor: Cpp_ThemeManager.widgetBackground
     icon.source: "qrc:/icons/location-on.svg"
+    borderColor: root.headerVisible ? Cpp_ThemeManager.datasetWindowBorder : "transparent"
 
     //
     // Settings

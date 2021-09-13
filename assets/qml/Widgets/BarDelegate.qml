@@ -35,13 +35,12 @@ Window {
     // Window properties
     //
     spacing: -1
-    gradient: true
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
     icon.source: "qrc:/icons/chart.svg"
     implicitHeight: implicitWidth + 96
-    backgroundColor: Cpp_ThemeManager.widgetBackground
+    borderColor: root.headerVisible ? Cpp_ThemeManager.datasetWindowBorder : "transparent"
 
     //
     // Select level color depending on widget index

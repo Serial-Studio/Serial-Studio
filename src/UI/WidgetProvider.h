@@ -42,6 +42,7 @@ class WidgetProvider : public QObject
 signals:
     void dataChanged();
     void widgetCountChanged();
+    void widgetVisiblityChanged();
 
 public:
     static WidgetProvider *getInstance();
@@ -54,6 +55,8 @@ public:
     QList<JSON::Group *> accelerometerGroup() const;
 
     int totalWidgetCount() const;
+    Q_INVOKABLE QStringList widgetNames() const;
+    Q_INVOKABLE bool widgetVisible(const int index) const;
 
     Q_INVOKABLE int mapGroupCount() const;
     Q_INVOKABLE int gyroGroupCount() const;
@@ -90,6 +93,9 @@ public:
     Q_INVOKABLE double mapLatitude(const int index);
     Q_INVOKABLE double mapLongitude(const int index);
 
+public slots:
+    void updateWidgetVisibility(const int index, const bool visible);
+
 private slots:
     void resetData();
     void updateModels();
@@ -101,6 +107,7 @@ private:
 
 private:
     int m_widgetCount;
+    QList<bool> m_widgetVisibility;
     QList<JSON::Group *> m_mapGroups;
     QList<JSON::Group *> m_gyroGroups;
     QList<JSON::Dataset *> m_barDatasets;

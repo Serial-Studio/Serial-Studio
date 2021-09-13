@@ -172,7 +172,6 @@ void ThemeManager::loadTheme(const int id)
     m_ledEnabled = QColor(colors.value("ledEnabled").toString());
     m_ledDisabled = QColor(colors.value("ledDisabled").toString());
     m_csvHighlight = QColor(colors.value("csvHighlight").toString());
-    m_widgetBackground = QColor(colors.value("widgetBackground").toString());
     m_widgetForegroundPrimary = QColor(colors.value("widgetForegroundPrimary").toString());
     m_widgetForegroundSecondary = QColor(colors.value("widgetForegroundSecondary").toString());
     m_widgetIndicator1 = QColor(colors.value("widgetIndicator1").toString());
@@ -465,11 +464,6 @@ QColor ThemeManager::ledDisabled() const
 QColor ThemeManager::csvHighlight() const
 {
     return m_csvHighlight;
-}
-
-QColor ThemeManager::widgetBackground() const
-{
-    return m_widgetBackground;
 }
 
 QColor ThemeManager::widgetForegroundPrimary() const

@@ -159,9 +159,6 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor csvHighlight
                READ csvHighlight
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor widgetBackground
-               READ widgetBackground
-               NOTIFY themeChanged)
     Q_PROPERTY(QColor widgetForegroundPrimary
                READ widgetForegroundPrimary
                NOTIFY themeChanged)
@@ -274,7 +271,6 @@ public:
     QColor ledEnabled() const;
     QColor ledDisabled() const;
     QColor csvHighlight() const;
-    QColor widgetBackground() const;
     QColor widgetForegroundPrimary() const;
     QColor widgetForegroundSecondary() const;
     QColor widgetIndicator1() const;
@@ -354,7 +350,6 @@ private:
     QColor m_ledEnabled;
     QColor m_ledDisabled;
     QColor m_csvHighlight;
-    QColor m_widgetBackground;
     QColor m_widgetForegroundPrimary;
     QColor m_widgetForegroundSecondary;
     QColor m_widgetIndicator1;

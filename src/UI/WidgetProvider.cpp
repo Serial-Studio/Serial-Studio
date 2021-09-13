@@ -122,12 +122,51 @@ int WidgetProvider::totalWidgetCount() const
 {
     // clang-format off
     return mapGroupCount() +
-           gyroGroupCount() +
-           barDatasetCount() +
-           gaugeDatasetCount() +
-           compassDatasetCount() +
-           accelerometerGroupCount();
+            gyroGroupCount() +
+            barDatasetCount() +
+            gaugeDatasetCount() +
+            compassDatasetCount() +
+            accelerometerGroupCount();
     // clang-format on
+}
+
+/**
+ * Returns a list with all the available widgets
+ */
+QStringList WidgetProvider::widgetNames() const
+{
+    QStringList names;
+
+    foreach (auto widget, m_mapGroups)
+        names.append(widget->title());
+
+    foreach (auto widget, m_gyroGroups)
+        names.append(widget->title());
+
+    foreach (auto widget, m_accelerometerGroups)
+        names.append(widget->title());
+
+    foreach (auto widget, m_barDatasets)
+        names.append(widget->title());
+
+    foreach (auto widget, m_gaugeDatasets)
+        names.append(widget->title());
+
+    foreach (auto widget, m_compassDatasets)
+        names.append(widget->title());
+
+    return names;
+}
+
+/**
+ * Returns the visibility status for the widget at the given @a index
+ */
+bool WidgetProvider::widgetVisible(const int index) const
+{
+    if (index < totalWidgetCount())
+        return m_widgetVisibility.at(index);
+
+    return false;
 }
 
 /**
@@ -498,6 +537,17 @@ double WidgetProvider::mapLongitude(const int index)
 }
 
 /**
+ * Updates the visibility status for the given @a index
+ */
+void WidgetProvider::updateWidgetVisibility(const int index, const bool visible)
+{
+    if (index < totalWidgetCount())
+        m_widgetVisibility.replace(index, visible);
+
+    emit widgetVisiblityChanged();
+}
+
+/**
  * Deletes all stored widget information
  */
 void WidgetProvider::resetData()
@@ -542,8 +592,13 @@ void WidgetProvider::updateModels()
     // Tell UI to regenerate widget models if widget count has changed from last frame
     if (totalWidgetCount() != m_widgetCount)
     {
+        m_widgetVisibility.clear();
         m_widgetCount = totalWidgetCount();
+        for (int i = 0; i < m_widgetCount; ++i)
+            m_widgetVisibility.append(true);
+
         emit widgetCountChanged();
+        emit widgetVisiblityChanged();
     }
 
     // Update UI
