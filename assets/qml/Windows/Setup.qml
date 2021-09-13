@@ -31,8 +31,72 @@ import "../Widgets" as Widgets
 import "../SetupPanes" as SetupPanes
 
 Item {
+    id: root
+
+    //
+    // Save settings
+    //
+    Settings {
+        //
+        // Misc settings
+        //
+        property alias auto: commAuto.checked
+        property alias manual: commManual.checked
+        property alias tabIndex: tab.currentIndex
+        property alias csvExport: csvLogging.checked
+
+        //
+        // Serial settings
+        //
+        property alias parity: serial.parity
+        property alias baudRate: serial.baudRate
+        property alias dataBits: serial.dataBits
+        property alias stopBits: serial.stopBits
+        property alias flowControl: serial.flowControl
+
+        //
+        // Network settings
+        //
+        property alias port: network.port
+        property alias address: network.address
+        property alias socketType: network.socketType
+
+        //
+        // MQTT settings
+        //
+        property alias mqttHost: mqtt.host
+        property alias mqttPort: mqtt.port
+        property alias mqttUser: mqtt.user
+        property alias mqttMode: mqtt.mode
+        property alias mqttTopic: mqtt.topic
+        property alias mqttVersion: mqtt.version
+        property alias mqttPassword: mqtt.password
+
+        //
+        // App settings
+        //
+        property alias language: settings.language
+        property alias endSequence: settings.endSequence
+        property alias startSequence: settings.startSequence
+        property alias tcpPlugins: settings.tcpPlugins
+    }
+
+    //
+    // Update manual/auto checkboxes
+    //
+    Connections {
+        target: Cpp_JSON_Generator
+        function onOperationModeChanged() {
+            commAuto.checked = (Cpp_JSON_Generator.operationMode == 1)
+            commManual.checked = (Cpp_JSON_Generator.operationMode == 0)
+        }
+    }
+
+    //
+    // Window
+    //
     Widgets.Window {
-        id: root
+        id: window
         gradient: true
         title: qsTr("Setup")
         anchors.fill: parent
@@ -41,65 +105,6 @@ Item {
         anchors.margins: app.spacing * 1.5
         icon.source: "qrc:/icons/settings.svg"
         backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
-
-        //
-        // Save settings
-        //
-        Settings {
-            //
-            // Misc settings
-            //
-            property alias auto: commAuto.checked
-            property alias manual: commManual.checked
-            property alias tabIndex: tab.currentIndex
-            property alias csvExport: csvLogging.checked
-
-            //
-            // Serial settings
-            //
-            property alias parity: serial.parity
-            property alias baudRate: serial.baudRate
-            property alias dataBits: serial.dataBits
-            property alias stopBits: serial.stopBits
-            property alias flowControl: serial.flowControl
-
-            //
-            // Network settings
-            //
-            property alias port: network.port
-            property alias address: network.address
-            property alias socketType: network.socketType
-
-            //
-            // MQTT settings
-            //
-            property alias mqttHost: mqtt.host
-            property alias mqttPort: mqtt.port
-            property alias mqttUser: mqtt.user
-            property alias mqttMode: mqtt.mode
-            property alias mqttTopic: mqtt.topic
-            property alias mqttVersion: mqtt.version
-            property alias mqttPassword: mqtt.password
-
-            //
-            // App settings
-            //
-            property alias language: settings.language
-            property alias endSequence: settings.endSequence
-            property alias startSequence: settings.startSequence
-            property alias tcpPlugins: settings.tcpPlugins
-        }
-
-        //
-        // Update manual/auto checkboxes
-        //
-        Connections {
-            target: Cpp_JSON_Generator
-            function onOperationModeChanged() {
-                commAuto.checked = (Cpp_JSON_Generator.operationMode == 1)
-                commManual.checked = (Cpp_JSON_Generator.operationMode == 0)
-            }
-        }
 
         //
         // Control arrangement
@@ -391,5 +396,18 @@ Item {
                 }
             }
         }
+    }
+
+    //
+    // Window shadow
+    //
+    DropShadow {
+        anchors.fill: window
+        horizontalOffset: 3
+        verticalOffset: 3
+        radius: 8.0
+        samples: 17
+        color: "#80000000"
+        source: window
     }
 }

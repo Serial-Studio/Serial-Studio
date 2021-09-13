@@ -28,12 +28,9 @@ import QtQuick.Window 2.12 as QtWindow
 
 import "../Widgets" as Widgets
 
-Control {
+Item {
     id: root
     property string title
-    background: Rectangle {
-        color: Cpp_ThemeManager.windowBackground
-    }
 
     //
     // Custom properties
@@ -97,512 +94,606 @@ Control {
             //
             // View options
             //
-            Widgets.Window {
-                id: viewOptions
-                gradient: true
-                title: qsTr("View")
+            Item {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
-                headerDoubleClickEnabled: false
-                icon.source: "qrc:/icons/visibility.svg"
-                backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
-                ScrollView {
-                    clip: true
-                    contentWidth: -1
+                Widgets.Window {
+                    id: viewOptions
+                    gradient: true
+                    title: qsTr("View")
                     anchors.fill: parent
-                    anchors.margins: app.spacing
-                    anchors.topMargin: viewOptions.borderWidth
-                    anchors.bottomMargin: viewOptions.borderWidth
+                    headerDoubleClickEnabled: false
+                    icon.source: "qrc:/icons/visibility.svg"
+                    backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
-                    ColumnLayout {
-                        x: app.spacing
-                        width: parent.width - 10 - 2 * app.spacing
+                    ScrollView {
+                        clip: true
+                        contentWidth: -1
+                        anchors.fill: parent
+                        anchors.margins: app.spacing
+                        anchors.topMargin: viewOptions.borderWidth
+                        anchors.bottomMargin: viewOptions.borderWidth
 
-                        Item {
-                            height: app.spacing
-                        }
+                        ColumnLayout {
+                            x: app.spacing
+                            width: parent.width - 10 - 2 * app.spacing
 
-                        //
-                        // Widgets title
-                        //
-                        RowLayout {
-                            spacing: app.spacing
-                            visible: Cpp_UI_WidgetProvider.totalWidgetCount > 0
+                            Item {
+                                height: app.spacing
+                            }
 
-                            Image {
-                                width: sourceSize.width
-                                height: sourceSize.height
-                                sourceSize: Qt.size(18, 18)
-                                source: "qrc:/icons/scatter-plot.svg"
+                            //
+                            // Widgets title
+                            //
+                            RowLayout {
+                                spacing: app.spacing
+                                visible: Cpp_UI_WidgetProvider.totalWidgetCount > 0
 
-                                ColorOverlay {
-                                    source: parent
-                                    color: palette.text
-                                    anchors.fill: parent
+                                Image {
+                                    width: sourceSize.width
+                                    height: sourceSize.height
+                                    sourceSize: Qt.size(18, 18)
+                                    source: "qrc:/icons/scatter-plot.svg"
+
+                                    ColorOverlay {
+                                        source: parent
+                                        color: palette.text
+                                        anchors.fill: parent
+                                    }
+                                }
+
+                                Label {
+                                    font.bold: true
+                                    text: qsTr("Widgets") + ":"
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
                                 }
                             }
 
-                            Label {
-                                font.bold: true
-                                text: qsTr("Widgets") + ":"
-                            }
-
+                            //
+                            // Semi-spacer
+                            //
                             Item {
-                                Layout.fillWidth: true
+                                height: app.spacing / 2
                             }
-                        }
 
-                        //
-                        // Semi-spacer
-                        //
-                        Item {
-                            height: app.spacing / 2
-                        }
+                            //
+                            // Widget switches
+                            //
+                            Repeater {
+                                model: Cpp_UI_WidgetProvider.totalWidgetCount
 
-                        //
-                        // Widget switches
-                        //
-                        Repeater {
-                            model: Cpp_UI_WidgetProvider.totalWidgetCount
-
-                            delegate: Switch {
-                                checked: true
-                                Layout.fillWidth: true
-                                text: Cpp_UI_WidgetProvider.widgetNames()[index]
-                                palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                                onCheckedChanged: Cpp_UI_WidgetProvider.updateWidgetVisibility(index, checked)
+                                delegate: Switch {
+                                    checked: true
+                                    Layout.fillWidth: true
+                                    text: Cpp_UI_WidgetProvider.widgetNames()[index]
+                                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
+                                    onCheckedChanged: Cpp_UI_WidgetProvider.updateWidgetVisibility(index, checked)
+                                }
                             }
                         }
                     }
+                }
+
+                DropShadow {
+                    anchors.fill: viewOptions
+                    horizontalOffset: 0
+                    verticalOffset: 3
+                    radius: 8.0
+                    samples: 17
+                    color: "#80000000"
+                    source: viewOptions
                 }
             }
 
             //
             // Widget grid
             //
-            Widgets.Window {
-                id: dataWin
-                gradient: true
-                title: qsTr("Widgets")
+            Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
-                headerDoubleClickEnabled: false
-                icon.source: "qrc:/icons/scatter-plot.svg"
-                backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
-                Rectangle {
-                    z: 1
-                    color: dataWin.borderColor
-                    height: dataWin.borderWidth
-
-                    anchors {
-                        leftMargin: 5
-                        rightMargin: 5
-                        left: parent.left
-                        right: parent.right
-                        bottom: parent.bottom
-                    }
-                }
-
-                ScrollView {
-                    z: 0
-                    id: _sv
-                    clip: false
-                    contentWidth: -1
+                Widgets.Window {
+                    id: dataWin
+                    gradient: true
                     anchors.fill: parent
-                    anchors.rightMargin: 10
-                    anchors.margins: app.spacing * 2
-                    anchors.leftMargin: app.spacing * 2 + 10
+                    title: qsTr("Widgets")
+                    headerDoubleClickEnabled: false
+                    icon.source: "qrc:/icons/scatter-plot.svg"
+                    backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
-                    //
-                    // WARNING: the widget generators must be in the same
-                    //          order as the list returned by
-                    //          Cpp_UI_WidgetProvider.widgetNames()!
-                    //
+                    Rectangle {
+                        z: 1
+                        color: dataWin.borderColor
+                        height: dataWin.borderWidth
 
-                    ColumnLayout {
-                        width: _sv.width - 2 * app.spacing
-
-                        Item {
-                            Layout.minimumHeight: 10
+                        anchors {
+                            leftMargin: 5
+                            rightMargin: 5
+                            left: parent.left
+                            right: parent.right
+                            bottom: parent.bottom
                         }
+                    }
 
-                        GridLayout {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            rowSpacing: app.spacing * 1.5
-                            columnSpacing: app.spacing * 1.5
-                            columns: Math.floor(_sv.width / (root.minimumWidgetSize + 2 * app.spacing))
+                    ScrollView {
+                        z: 0
+                        id: _sv
+                        clip: false
+                        contentWidth: -1
+                        anchors.fill: parent
+                        anchors.rightMargin: 10
+                        anchors.margins: app.spacing * 2
+                        anchors.leftMargin: app.spacing * 2 + 10
 
-                            Repeater {
-                                id: mapGenerator
+                        //
+                        // WARNING: the widget generators must be in the same
+                        //          order as the list returned by
+                        //          Cpp_UI_WidgetProvider.widgetNames()!
+                        //
 
-                                delegate: Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Layout.minimumWidth: root.minimumWidgetSize
-                                    Layout.minimumHeight: root.minimumWidgetSize
+                        ColumnLayout {
+                            width: _sv.width - 2 * app.spacing
 
-                                    id: mapWidget
-                                    visible: opacity > 0
-                                    enabled: opacity > 0
-                                    Behavior on opacity {NumberAnimation{}}
+                            Item {
+                                Layout.minimumHeight: 10
+                            }
 
-                                    Connections {
-                                        target: Cpp_UI_WidgetProvider
+                            GridLayout {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                rowSpacing: app.spacing * 1.5
+                                columnSpacing: app.spacing * 1.5
+                                columns: Math.floor(_sv.width / (root.minimumWidgetSize + 2 * app.spacing))
 
-                                        function onWidgetVisiblityChanged() {
-                                            mapWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(index) ? 1 : 0
-                                        }
-                                    }
+                                Repeater {
+                                    id: mapGenerator
 
-                                    Widgets.MapDelegate {
-                                        groupIndex: index
-                                        anchors.fill: parent
-                                        onHeaderDoubleClicked: windowMap.show()
-                                    }
+                                    delegate: Item {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.minimumWidth: root.minimumWidgetSize
+                                        Layout.minimumHeight: root.minimumWidgetSize
 
-                                    QtWindow.Window {
-                                        id: windowMap
-                                        width: 640
-                                        height: 480
-                                        minimumWidth: root.minimumWidgetSize * 1.2
-                                        minimumHeight: root.minimumWidgetSize * 1.2
-                                        title: map.title
+                                        id: mapWidget
+                                        visible: opacity > 0
+                                        enabled: opacity > 0
+                                        Behavior on opacity {NumberAnimation{}}
 
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            color: map.backgroundColor
+                                        Connections {
+                                            target: Cpp_UI_WidgetProvider
+
+                                            function onWidgetVisiblityChanged() {
+                                                mapWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(index) ? 1 : 0
+                                            }
                                         }
 
                                         Widgets.MapDelegate {
-                                            id: map
-                                            showIcon: true
-                                            gradient: false
-                                            headerHeight: 48
+                                            id: mapDelegate
                                             groupIndex: index
-                                            anchors.margins: 0
                                             anchors.fill: parent
-                                            borderColor: backgroundColor
-                                            headerDoubleClickEnabled: false
-                                            titleColor: Cpp_ThemeManager.text
+                                            onHeaderDoubleClicked: windowMap.show()
+                                        }
+
+                                        DropShadow {
+                                            anchors.fill: mapDelegate
+                                            horizontalOffset: 0
+                                            verticalOffset: 3
+                                            radius: 8.0
+                                            samples: 17
+                                            color: "#80000000"
+                                            source: mapDelegate
+                                        }
+
+                                        QtWindow.Window {
+                                            id: windowMap
+                                            width: 640
+                                            height: 480
+                                            minimumWidth: root.minimumWidgetSize * 1.2
+                                            minimumHeight: root.minimumWidgetSize * 1.2
+                                            title: map.title
+
+                                            Rectangle {
+                                                anchors.fill: parent
+                                                color: map.backgroundColor
+                                            }
+
+                                            Widgets.MapDelegate {
+                                                id: map
+                                                showIcon: true
+                                                gradient: false
+                                                headerHeight: 48
+                                                groupIndex: index
+                                                anchors.margins: 0
+                                                anchors.fill: parent
+                                                borderColor: backgroundColor
+                                                headerDoubleClickEnabled: false
+                                                titleColor: Cpp_ThemeManager.text
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            Repeater {
-                                id: gyroGenerator
+                                Repeater {
+                                    id: gyroGenerator
 
-                                delegate: Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Layout.minimumWidth: root.minimumWidgetSize
-                                    Layout.minimumHeight: root.minimumWidgetSize
+                                    delegate: Item {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.minimumWidth: root.minimumWidgetSize
+                                        Layout.minimumHeight: root.minimumWidgetSize
 
-                                    id: gyroWidget
-                                    visible: opacity > 0
-                                    enabled: opacity > 0
-                                    Behavior on opacity {NumberAnimation{}}
+                                        id: gyroWidget
+                                        visible: opacity > 0
+                                        enabled: opacity > 0
+                                        Behavior on opacity {NumberAnimation{}}
 
-                                    Connections {
-                                        target: Cpp_UI_WidgetProvider
+                                        Connections {
+                                            target: Cpp_UI_WidgetProvider
 
-                                        function onWidgetVisiblityChanged() {
-                                            gyroWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
-                                                        mapGenerator.count +
-                                                        index) ? 1 : 0
-                                        }
-                                    }
-
-                                    Widgets.GyroDelegate {
-                                        groupIndex: index
-                                        anchors.fill: parent
-                                        onHeaderDoubleClicked: windowGyro.show()
-                                    }
-
-                                    QtWindow.Window {
-                                        id: windowGyro
-                                        width: 640
-                                        height: 480
-                                        minimumWidth: root.minimumWidgetSize * 1.2
-                                        minimumHeight: root.minimumWidgetSize * 1.2
-                                        title: gyro.title
-
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            color: gyro.backgroundColor
+                                            function onWidgetVisiblityChanged() {
+                                                gyroWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
+                                                            mapGenerator.count +
+                                                            index) ? 1 : 0
+                                            }
                                         }
 
                                         Widgets.GyroDelegate {
-                                            id: gyro
-                                            showIcon: true
-                                            gradient: false
-                                            headerHeight: 48
+                                            id: gyroDelegate
                                             groupIndex: index
-                                            anchors.margins: 0
                                             anchors.fill: parent
-                                            borderColor: backgroundColor
-                                            headerDoubleClickEnabled: false
-                                            titleColor: Cpp_ThemeManager.text
+                                            onHeaderDoubleClicked: windowGyro.show()
+                                        }
+
+                                        DropShadow {
+                                            anchors.fill: gyroDelegate
+                                            horizontalOffset: 0
+                                            verticalOffset: 3
+                                            radius: 8.0
+                                            samples: 17
+                                            color: "#80000000"
+                                            source: gyroDelegate
+                                        }
+
+                                        QtWindow.Window {
+                                            id: windowGyro
+                                            width: 640
+                                            height: 480
+                                            minimumWidth: root.minimumWidgetSize * 1.2
+                                            minimumHeight: root.minimumWidgetSize * 1.2
+                                            title: gyro.title
+
+                                            Rectangle {
+                                                anchors.fill: parent
+                                                color: gyro.backgroundColor
+                                            }
+
+                                            Widgets.GyroDelegate {
+                                                id: gyro
+                                                showIcon: true
+                                                gradient: false
+                                                headerHeight: 48
+                                                groupIndex: index
+                                                anchors.margins: 0
+                                                anchors.fill: parent
+                                                borderColor: backgroundColor
+                                                headerDoubleClickEnabled: false
+                                                titleColor: Cpp_ThemeManager.text
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            Repeater {
-                                id: accGenerator
+                                Repeater {
+                                    id: accGenerator
 
-                                delegate: Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Layout.minimumWidth: root.minimumWidgetSize
-                                    Layout.minimumHeight: root.minimumWidgetSize
+                                    delegate: Item {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.minimumWidth: root.minimumWidgetSize
+                                        Layout.minimumHeight: root.minimumWidgetSize
 
-                                    id: accWidget
-                                    visible: opacity > 0
-                                    enabled: opacity > 0
-                                    Behavior on opacity {NumberAnimation{}}
+                                        id: accWidget
+                                        visible: opacity > 0
+                                        enabled: opacity > 0
+                                        Behavior on opacity {NumberAnimation{}}
 
-                                    Connections {
-                                        target: Cpp_UI_WidgetProvider
+                                        Connections {
+                                            target: Cpp_UI_WidgetProvider
 
-                                        function onWidgetVisiblityChanged() {
-                                            accWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
-                                                        mapGenerator.count +
-                                                        gyroGenerator.count +
-                                                        index) ? 1 : 0
-                                        }
-                                    }
-
-                                    Widgets.AccelerometerDelegate {
-                                        groupIndex: index
-                                        anchors.fill: parent
-                                        onHeaderDoubleClicked: windowAcc.show()
-                                    }
-
-                                    QtWindow.Window {
-                                        id: windowAcc
-                                        width: 640
-                                        height: 480
-                                        minimumWidth: root.minimumWidgetSize * 1.2
-                                        minimumHeight: root.minimumWidgetSize * 1.2
-                                        title: acc.title
-
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            color: acc.backgroundColor
+                                            function onWidgetVisiblityChanged() {
+                                                accWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
+                                                            mapGenerator.count +
+                                                            gyroGenerator.count +
+                                                            index) ? 1 : 0
+                                            }
                                         }
 
                                         Widgets.AccelerometerDelegate {
-                                            id: acc
-                                            showIcon: true
-                                            gradient: false
-                                            headerHeight: 48
+                                            id: accDelegate
                                             groupIndex: index
-                                            anchors.margins: 0
                                             anchors.fill: parent
-                                            borderColor: backgroundColor
-                                            headerDoubleClickEnabled: false
-                                            titleColor: Cpp_ThemeManager.text
+                                            onHeaderDoubleClicked: windowAcc.show()
+                                        }
+
+                                        DropShadow {
+                                            anchors.fill: accDelegate
+                                            horizontalOffset: 0
+                                            verticalOffset: 3
+                                            radius: 8.0
+                                            samples: 17
+                                            color: "#80000000"
+                                            source: accDelegate
+                                        }
+
+                                        QtWindow.Window {
+                                            id: windowAcc
+                                            width: 640
+                                            height: 480
+                                            minimumWidth: root.minimumWidgetSize * 1.2
+                                            minimumHeight: root.minimumWidgetSize * 1.2
+                                            title: acc.title
+
+                                            Rectangle {
+                                                anchors.fill: parent
+                                                color: acc.backgroundColor
+                                            }
+
+                                            Widgets.AccelerometerDelegate {
+                                                id: acc
+                                                showIcon: true
+                                                gradient: false
+                                                headerHeight: 48
+                                                groupIndex: index
+                                                anchors.margins: 0
+                                                anchors.fill: parent
+                                                borderColor: backgroundColor
+                                                headerDoubleClickEnabled: false
+                                                titleColor: Cpp_ThemeManager.text
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            Repeater {
-                                id: barGenerator
+                                Repeater {
+                                    id: barGenerator
 
-                                delegate: Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Layout.minimumWidth: root.minimumWidgetSize
-                                    Layout.minimumHeight: root.minimumWidgetSize
+                                    delegate: Item {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.minimumWidth: root.minimumWidgetSize
+                                        Layout.minimumHeight: root.minimumWidgetSize
 
-                                    id: barWidget
-                                    visible: opacity > 0
-                                    enabled: opacity > 0
-                                    Behavior on opacity {NumberAnimation{}}
+                                        id: barWidget
+                                        visible: opacity > 0
+                                        enabled: opacity > 0
+                                        Behavior on opacity {NumberAnimation{}}
 
-                                    Connections {
-                                        target: Cpp_UI_WidgetProvider
+                                        Connections {
+                                            target: Cpp_UI_WidgetProvider
 
-                                        function onWidgetVisiblityChanged() {
-                                            barWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
-                                                        mapGenerator.count +
-                                                        gyroGenerator.count +
-                                                        accGenerator.count +
-                                                        index) ? 1 : 0
-                                        }
-                                    }
-
-                                    Widgets.BarDelegate {
-                                        datasetIndex: index
-                                        anchors.fill: parent
-                                        onHeaderDoubleClicked: windowBar.show()
-                                    }
-
-                                    QtWindow.Window {
-                                        id: windowBar
-                                        width: 640
-                                        height: 480
-                                        minimumWidth: root.minimumWidgetSize * 1.2
-                                        minimumHeight: root.minimumWidgetSize * 1.2
-                                        title: bar.title
-
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            color: bar.backgroundColor
+                                            function onWidgetVisiblityChanged() {
+                                                barWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
+                                                            mapGenerator.count +
+                                                            gyroGenerator.count +
+                                                            accGenerator.count +
+                                                            index) ? 1 : 0
+                                            }
                                         }
 
                                         Widgets.BarDelegate {
-                                            id: bar
-                                            showIcon: true
-                                            gradient: false
-                                            headerHeight: 48
+                                            id: barDelegate
                                             datasetIndex: index
-                                            anchors.margins: 0
                                             anchors.fill: parent
-                                            borderColor: backgroundColor
-                                            headerDoubleClickEnabled: false
-                                            titleColor: Cpp_ThemeManager.text
+                                            onHeaderDoubleClicked: windowBar.show()
+                                        }
+
+                                        DropShadow {
+                                            anchors.fill: barDelegate
+                                            horizontalOffset: 0
+                                            verticalOffset: 3
+                                            radius: 8.0
+                                            samples: 17
+                                            color: "#80000000"
+                                            source: barDelegate
+                                        }
+
+                                        QtWindow.Window {
+                                            id: windowBar
+                                            width: 640
+                                            height: 480
+                                            minimumWidth: root.minimumWidgetSize * 1.2
+                                            minimumHeight: root.minimumWidgetSize * 1.2
+                                            title: bar.title
+
+                                            Rectangle {
+                                                anchors.fill: parent
+                                                color: bar.backgroundColor
+                                            }
+
+                                            Widgets.BarDelegate {
+                                                id: bar
+                                                showIcon: true
+                                                gradient: false
+                                                headerHeight: 48
+                                                datasetIndex: index
+                                                anchors.margins: 0
+                                                anchors.fill: parent
+                                                borderColor: backgroundColor
+                                                headerDoubleClickEnabled: false
+                                                titleColor: Cpp_ThemeManager.text
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            Repeater {
-                                id: gaugeGenerator
+                                Repeater {
+                                    id: gaugeGenerator
 
-                                delegate: Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Layout.minimumWidth: root.minimumWidgetSize
-                                    Layout.minimumHeight: root.minimumWidgetSize
+                                    delegate: Item {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.minimumWidth: root.minimumWidgetSize
+                                        Layout.minimumHeight: root.minimumWidgetSize
 
-                                    id: gaugeWidget
-                                    visible: opacity > 0
-                                    enabled: opacity > 0
-                                    Behavior on opacity {NumberAnimation{}}
+                                        id: gaugeWidget
+                                        visible: opacity > 0
+                                        enabled: opacity > 0
+                                        Behavior on opacity {NumberAnimation{}}
 
-                                    Connections {
-                                        target: Cpp_UI_WidgetProvider
+                                        Connections {
+                                            target: Cpp_UI_WidgetProvider
 
-                                        function onWidgetVisiblityChanged() {
-                                            gaugeWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
-                                                        mapGenerator.count +
-                                                        gyroGenerator.count +
-                                                        accGenerator.count +
-                                                        barGenerator.count +
-                                                        index) ? 1 : 0
-                                        }
-                                    }
-
-                                    Widgets.GaugeDelegate {
-                                        datasetIndex: index
-                                        anchors.fill: parent
-                                        onHeaderDoubleClicked: windowGauge.show()
-                                    }
-
-                                    QtWindow.Window {
-                                        id: windowGauge
-                                        width: 640
-                                        height: 480
-                                        minimumWidth: root.minimumWidgetSize * 1.2
-                                        minimumHeight: root.minimumWidgetSize * 1.2
-                                        title: gauge.title
-
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            color: gauge.backgroundColor
+                                            function onWidgetVisiblityChanged() {
+                                                gaugeWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
+                                                            mapGenerator.count +
+                                                            gyroGenerator.count +
+                                                            accGenerator.count +
+                                                            barGenerator.count +
+                                                            index) ? 1 : 0
+                                            }
                                         }
 
                                         Widgets.GaugeDelegate {
-                                            id: gauge
-                                            showIcon: true
-                                            gradient: false
-                                            headerHeight: 48
+                                            id: gaugeDelegate
                                             datasetIndex: index
-                                            anchors.margins: 0
                                             anchors.fill: parent
-                                            borderColor: backgroundColor
-                                            headerDoubleClickEnabled: false
-                                            titleColor: Cpp_ThemeManager.text
+                                            onHeaderDoubleClicked: windowGauge.show()
+                                        }
+
+                                        DropShadow {
+                                            anchors.fill: gaugeDelegate
+                                            horizontalOffset: 0
+                                            verticalOffset: 3
+                                            radius: 8.0
+                                            samples: 17
+                                            color: "#80000000"
+                                            source: gaugeDelegate
+                                        }
+
+                                        QtWindow.Window {
+                                            id: windowGauge
+                                            width: 640
+                                            height: 480
+                                            minimumWidth: root.minimumWidgetSize * 1.2
+                                            minimumHeight: root.minimumWidgetSize * 1.2
+                                            title: gauge.title
+
+                                            Rectangle {
+                                                anchors.fill: parent
+                                                color: gauge.backgroundColor
+                                            }
+
+                                            Widgets.GaugeDelegate {
+                                                id: gauge
+                                                showIcon: true
+                                                gradient: false
+                                                headerHeight: 48
+                                                datasetIndex: index
+                                                anchors.margins: 0
+                                                anchors.fill: parent
+                                                borderColor: backgroundColor
+                                                headerDoubleClickEnabled: false
+                                                titleColor: Cpp_ThemeManager.text
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            Repeater {
-                                id: compassGenerator
+                                Repeater {
+                                    id: compassGenerator
 
-                                delegate: Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Layout.minimumWidth: root.minimumWidgetSize
-                                    Layout.minimumHeight: root.minimumWidgetSize
+                                    delegate: Item {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.minimumWidth: root.minimumWidgetSize
+                                        Layout.minimumHeight: root.minimumWidgetSize
 
-                                    id: compassWidget
-                                    visible: opacity > 0
-                                    enabled: opacity > 0
-                                    Behavior on opacity {NumberAnimation{}}
+                                        id: compassWidget
+                                        visible: opacity > 0
+                                        enabled: opacity > 0
+                                        Behavior on opacity {NumberAnimation{}}
 
-                                    Connections {
-                                        target: Cpp_UI_WidgetProvider
+                                        Connections {
+                                            target: Cpp_UI_WidgetProvider
 
-                                        function onWidgetVisiblityChanged() {
-                                            compassWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
-                                                        mapGenerator.count +
-                                                        gyroGenerator.count +
-                                                        accGenerator.count +
-                                                        barGenerator.count +
-                                                        gaugeGenerator.count +
-                                                        index) ? 1 : 0
-                                        }
-                                    }
-
-                                    Widgets.CompassDelegate {
-                                        datasetIndex: index
-                                        anchors.fill: parent
-                                        onHeaderDoubleClicked: windowCompass.show()
-                                    }
-
-                                    QtWindow.Window {
-                                        id: windowCompass
-                                        width: 640
-                                        height: 480
-                                        minimumWidth: root.minimumWidgetSize * 1.2
-                                        minimumHeight: root.minimumWidgetSize * 1.2
-                                        title: compass.title
-
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            color: compass.backgroundColor
+                                            function onWidgetVisiblityChanged() {
+                                                compassWidget.opacity = Cpp_UI_WidgetProvider.widgetVisible(
+                                                            mapGenerator.count +
+                                                            gyroGenerator.count +
+                                                            accGenerator.count +
+                                                            barGenerator.count +
+                                                            gaugeGenerator.count +
+                                                            index) ? 1 : 0
+                                            }
                                         }
 
                                         Widgets.CompassDelegate {
-                                            id: compass
-                                            showIcon: true
-                                            gradient: false
-                                            headerHeight: 48
+                                            id: compassDelegate
                                             datasetIndex: index
-                                            anchors.margins: 0
                                             anchors.fill: parent
-                                            borderColor: backgroundColor
-                                            headerDoubleClickEnabled: false
-                                            titleColor: Cpp_ThemeManager.text
+                                            onHeaderDoubleClicked: windowCompass.show()
+                                        }
+
+                                        DropShadow {
+                                            anchors.fill: compassDelegate
+                                            horizontalOffset: 0
+                                            verticalOffset: 3
+                                            radius: 8.0
+                                            samples: 17
+                                            color: "#80000000"
+                                            source: compassDelegate
+                                        }
+
+                                        QtWindow.Window {
+                                            id: windowCompass
+                                            width: 640
+                                            height: 480
+                                            minimumWidth: root.minimumWidgetSize * 1.2
+                                            minimumHeight: root.minimumWidgetSize * 1.2
+                                            title: compass.title
+
+                                            Rectangle {
+                                                anchors.fill: parent
+                                                color: compass.backgroundColor
+                                            }
+
+                                            Widgets.CompassDelegate {
+                                                id: compass
+                                                showIcon: true
+                                                gradient: false
+                                                headerHeight: 48
+                                                datasetIndex: index
+                                                anchors.margins: 0
+                                                anchors.fill: parent
+                                                borderColor: backgroundColor
+                                                headerDoubleClickEnabled: false
+                                                titleColor: Cpp_ThemeManager.text
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        Item {
-                            Layout.minimumHeight: 10
+                            Item {
+                                Layout.minimumHeight: 10
+                            }
                         }
                     }
+                }
+
+                DropShadow {
+                    anchors.fill: dataWin
+                    horizontalOffset: 0
+                    verticalOffset: 3
+                    radius: 8.0
+                    samples: 17
+                    color: "#80000000"
+                    source: dataWin
                 }
             }
         }
@@ -610,66 +701,81 @@ Control {
         //
         // Title
         //
-        Rectangle {
-            radius: 5
+        Item {
             height: 32
             Layout.fillWidth: true
 
-            gradient: Gradient {
-                GradientStop {
-                    position: 0
-                    color: Cpp_ThemeManager.windowGradient1
+            Rectangle {
+                id: titleWin
+                radius: 5
+                anchors.fill: parent
+
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: Cpp_ThemeManager.windowGradient1
+                    }
+
+                    GradientStop {
+                        position: 1
+                        color: Cpp_ThemeManager.windowGradient2
+                    }
                 }
 
-                GradientStop {
-                    position: 1
-                    color: Cpp_ThemeManager.windowGradient2
-                }
-            }
+                RowLayout {
+                    spacing: app.spacing
 
-            RowLayout {
-                spacing: app.spacing
+                    anchors {
+                        left: parent.left
+                        leftMargin: app.spacing
+                        verticalCenter: parent.verticalCenter
+                    }
 
-                anchors {
-                    left: parent.left
-                    leftMargin: app.spacing
-                    verticalCenter: parent.verticalCenter
-                }
+                    Image {
+                        width: sourceSize.width
+                        height: sourceSize.height
+                        sourceSize: Qt.size(24, 24)
+                        source: "qrc:/icons/arrow-right.svg"
+                        Layout.alignment: Qt.AlignVCenter
 
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(24, 24)
-                    source: "qrc:/icons/arrow-right.svg"
-                    Layout.alignment: Qt.AlignVCenter
+                        ColorOverlay {
+                            source: parent
+                            anchors.fill: parent
+                            color: palette.brightText
+                        }
+                    }
 
-                    ColorOverlay {
-                        source: parent
-                        anchors.fill: parent
+                    Label {
+                        font.bold: true
+                        text: root.title
+                        font.pixelSize: 16
                         color: palette.brightText
+                        font.family: app.monoFont
                     }
                 }
 
                 Label {
-                    font.bold: true
-                    text: root.title
-                    font.pixelSize: 16
-                    color: palette.brightText
                     font.family: app.monoFont
+                    color: palette.brightText
+                    visible: !Cpp_CSV_Player.isOpen
+                    text: Cpp_IO_Manager.receivedDataLength //*! Optimize this function
+
+                    anchors {
+                        right: parent.right
+                        rightMargin: app.spacing
+                        verticalCenter: parent.verticalCenter
+                    }
                 }
             }
 
-            Label {
-                font.family: app.monoFont
-                color: palette.brightText
-                visible: !Cpp_CSV_Player.isOpen
-                text: Cpp_IO_Manager.receivedDataLength //*! Optimize this function
-
-                anchors {
-                    right: parent.right
-                    rightMargin: app.spacing
-                    verticalCenter: parent.verticalCenter
-                }
+            DropShadow {
+                anchors.fill: titleWin
+                horizontalOffset: 0
+                verticalOffset: 3
+                radius: 8.0
+                samples: 17
+                color: "#80000000"
+                source: titleWin
             }
         }
     }

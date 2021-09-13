@@ -23,6 +23,7 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
+import QtGraphicalEffects 1.0
 
 Control {
     id: root
@@ -52,8 +53,9 @@ Control {
     // Background gradient
     //
     Rectangle {
+        id: bg
         border.width: 1
-        border.color: palette.midlight
+        border.color: Cpp_ThemeManager.toolbarGradient1
 
         Rectangle {
             height: parent.border.width
@@ -77,6 +79,19 @@ Control {
             leftMargin: -border.width * 10
             rightMargin: -border.width * 10
         }
+    }
+
+    //
+    // Toolbar shadow
+    //
+    DropShadow {
+        anchors.fill: bg
+        horizontalOffset: 0
+        verticalOffset: 3
+        radius: 8.0
+        samples: 17
+        color: "#80000000"
+        source: bg
     }
 
     //

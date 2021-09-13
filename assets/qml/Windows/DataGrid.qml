@@ -30,12 +30,9 @@ import QtQuick.Window 2.12 as QtWindow
 
 import "../Widgets" as Widgets
 
-Control {
+Item {
     id: root
     property string title
-    background: Rectangle {
-        color: Cpp_ThemeManager.windowBackground
-    }
 
     //
     // Settings
@@ -104,442 +101,490 @@ Control {
             //
             // View options
             //
-            Widgets.Window {
-                id: viewOptions
-                gradient: true
-                title: qsTr("View")
+            Item {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
-                headerDoubleClickEnabled: false
-                icon.source: "qrc:/icons/visibility.svg"
-                backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
-                property var groups: []
-                property var graphs: []
-
-                ScrollView {
-                    clip: true
-                    contentWidth: -1
+                Widgets.Window {
+                    id: viewOptions
+                    gradient: true
+                    title: qsTr("View")
                     anchors.fill: parent
-                    anchors.margins: app.spacing
-                    anchors.topMargin: viewOptions.borderWidth
-                    anchors.bottomMargin: viewOptions.borderWidth
+                    headerDoubleClickEnabled: false
+                    icon.source: "qrc:/icons/visibility.svg"
+                    backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
-                    ColumnLayout {
-                        x: app.spacing
-                        width: parent.width - 10 - 2 * app.spacing
+                    property var groups: []
+                    property var graphs: []
 
-                        Item {
-                            height: app.spacing
-                        }
+                    ScrollView {
+                        clip: true
+                        contentWidth: -1
+                        anchors.fill: parent
+                        anchors.margins: app.spacing
+                        anchors.topMargin: viewOptions.borderWidth
+                        anchors.bottomMargin: viewOptions.borderWidth
 
-                        //
-                        // Horizontal range title
-                        //
-                        RowLayout {
-                            spacing: app.spacing
-                            visible: graphGenerator.count > 0
-
-                            Image {
-                                width: sourceSize.width
-                                height: sourceSize.height
-                                sourceSize: Qt.size(18, 18)
-                                source: "qrc:/icons/scatter-plot.svg"
-
-                                ColorOverlay {
-                                    source: parent
-                                    color: palette.text
-                                    anchors.fill: parent
-                                }
-                            }
-
-                            Label {
-                                font.bold: true
-                                text: qsTr("Horizontal Range") + ":"
-                            }
+                        ColumnLayout {
+                            x: app.spacing
+                            width: parent.width - 10 - 2 * app.spacing
 
                             Item {
-                                Layout.fillWidth: true
-                            }
-                        }
-
-                        //
-                        // Horizontal range slider
-                        //
-                        RowLayout {
-                            id: ranges
-                            spacing: app.spacing * 2
-                            visible: graphGenerator.count > 0
-
-                            function updateGraphValue() {
-                                Cpp_UI_GraphProvider.displayedPoints = points.value * Math.pow(10, scale.value)
+                                height: app.spacing
                             }
 
-                            ColumnLayout {
+                            //
+                            // Horizontal range title
+                            //
+                            RowLayout {
                                 spacing: app.spacing
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                Layout.alignment: Qt.AlignHCenter
+                                visible: graphGenerator.count > 0
 
-                                Widgets.SimpleDial {
-                                    id: points
+                                Image {
+                                    width: sourceSize.width
+                                    height: sourceSize.height
+                                    sourceSize: Qt.size(18, 18)
+                                    source: "qrc:/icons/scatter-plot.svg"
 
-                                    to: 25
-                                    from: 1
-                                    value: 10
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Layout.alignment: Qt.AlignHCenter
-                                    onPressedChanged: ranges.updateGraphValue()
-                                    Component.onCompleted: ranges.updateGraphValue()
+                                    ColorOverlay {
+                                        source: parent
+                                        color: palette.text
+                                        anchors.fill: parent
+                                    }
                                 }
 
                                 Label {
-                                    font.pixelSize: 12
-                                    text: qsTr("Points")
+                                    font.bold: true
+                                    text: qsTr("Horizontal Range") + ":"
+                                }
+
+                                Item {
                                     Layout.fillWidth: true
-                                    font.family: app.monoFont
-                                    Layout.alignment: Qt.AlignHCenter
-                                    horizontalAlignment: Label.AlignHCenter
                                 }
                             }
 
-                            ColumnLayout {
-                                spacing: app.spacing
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                Layout.alignment: Qt.AlignHCenter
+                            //
+                            // Horizontal range slider
+                            //
+                            RowLayout {
+                                id: ranges
+                                spacing: app.spacing * 2
+                                visible: graphGenerator.count > 0
 
-                                Widgets.SimpleDial {
-                                    id: scale
+                                function updateGraphValue() {
+                                    Cpp_UI_GraphProvider.displayedPoints = points.value * Math.pow(10, scale.value)
+                                }
 
-                                    to: 6
-                                    from: 0
-                                    value: 1
+                                ColumnLayout {
+                                    spacing: app.spacing
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    snapMode: Dial.SnapOnRelease
-                                    text: "10^" + Math.ceil(scale.value)
                                     Layout.alignment: Qt.AlignHCenter
-                                    onPressedChanged: ranges.updateGraphValue()
-                                    Component.onCompleted: ranges.updateGraphValue()
+
+                                    Widgets.SimpleDial {
+                                        id: points
+
+                                        to: 25
+                                        from: 1
+                                        value: 10
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.alignment: Qt.AlignHCenter
+                                        onPressedChanged: ranges.updateGraphValue()
+                                        Component.onCompleted: ranges.updateGraphValue()
+                                    }
+
+                                    Label {
+                                        font.pixelSize: 12
+                                        text: qsTr("Points")
+                                        Layout.fillWidth: true
+                                        font.family: app.monoFont
+                                        Layout.alignment: Qt.AlignHCenter
+                                        horizontalAlignment: Label.AlignHCenter
+                                    }
+                                }
+
+                                ColumnLayout {
+                                    spacing: app.spacing
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    Layout.alignment: Qt.AlignHCenter
+
+                                    Widgets.SimpleDial {
+                                        id: scale
+
+                                        to: 6
+                                        from: 0
+                                        value: 1
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        snapMode: Dial.SnapOnRelease
+                                        text: "10^" + Math.ceil(scale.value)
+                                        Layout.alignment: Qt.AlignHCenter
+                                        onPressedChanged: ranges.updateGraphValue()
+                                        Component.onCompleted: ranges.updateGraphValue()
+                                    }
+
+                                    Label {
+                                        font.pixelSize: 12
+                                        Layout.fillWidth: true
+                                        font.family: app.monoFont
+                                        Layout.alignment: Qt.AlignHCenter
+                                        horizontalAlignment: Label.AlignHCenter
+                                        text: qsTr("Scale")
+                                    }
+                                }
+                            }
+
+                            //
+                            // Spacer
+                            //
+                            Item {
+                                height: app.spacing
+                            }
+
+                            //
+                            // Group title
+                            //
+                            RowLayout {
+                                spacing: app.spacing
+                                visible: groupGenerator.count > 0
+
+                                Image {
+                                    width: sourceSize.width
+                                    height: sourceSize.height
+                                    sourceSize: Qt.size(18, 18)
+                                    source: "qrc:/icons/group.svg"
+
+                                    ColorOverlay {
+                                        source: parent
+                                        color: palette.text
+                                        anchors.fill: parent
+                                    }
                                 }
 
                                 Label {
-                                    font.pixelSize: 12
+                                    font.bold: true
+                                    text: qsTr("Data Groups") + ":"
+                                }
+
+                                Item {
                                     Layout.fillWidth: true
-                                    font.family: app.monoFont
-                                    Layout.alignment: Qt.AlignHCenter
-                                    horizontalAlignment: Label.AlignHCenter
-                                    text: qsTr("Scale")
-                                }
-                            }
-                        }
-
-                        //
-                        // Spacer
-                        //
-                        Item {
-                            height: app.spacing
-                        }
-
-                        //
-                        // Group title
-                        //
-                        RowLayout {
-                            spacing: app.spacing
-                            visible: groupGenerator.count > 0
-
-                            Image {
-                                width: sourceSize.width
-                                height: sourceSize.height
-                                sourceSize: Qt.size(18, 18)
-                                source: "qrc:/icons/group.svg"
-
-                                ColorOverlay {
-                                    source: parent
-                                    color: palette.text
-                                    anchors.fill: parent
                                 }
                             }
 
-                            Label {
-                                font.bold: true
-                                text: qsTr("Data Groups") + ":"
-                            }
-
+                            //
+                            // Semi-spacer
+                            //
                             Item {
-                                Layout.fillWidth: true
+                                height: app.spacing / 2
                             }
-                        }
 
-                        //
-                        // Semi-spacer
-                        //
-                        Item {
-                            height: app.spacing / 2
-                        }
+                            //
+                            // Group switches
+                            //
+                            Repeater {
+                                model: groupGenerator.model
+                                delegate: Switch {
+                                    Layout.fillWidth: true
+                                    Component.onCompleted: checked = true
+                                    text: Cpp_UI_Provider.getGroup(index).title
+                                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
 
-                        //
-                        // Group switches
-                        //
-                        Repeater {
-                            model: groupGenerator.model
-                            delegate: Switch {
-                                Layout.fillWidth: true
-                                Component.onCompleted: checked = true
-                                text: Cpp_UI_Provider.getGroup(index).title
-                                palette.highlight: Cpp_ThemeManager.alternativeHighlight
-
-                                onCheckedChanged: {
-                                    viewOptions.groups[index] = checked
-                                    viewOptions.groupsChanged()
-                                }
-                            }
-                        }
-
-                        //
-                        // Spacer
-                        //
-                        Item {
-                            height: app.spacing
-                        }
-
-                        //
-                        // Graphs title
-                        //
-                        RowLayout {
-                            spacing: app.spacing
-                            visible: groupGenerator.count > 0
-
-                            Image {
-                                width: sourceSize.width
-                                height: sourceSize.height
-                                sourceSize: Qt.size(18, 18)
-                                source: "qrc:/icons/chart.svg"
-
-                                ColorOverlay {
-                                    source: parent
-                                    color: palette.text
-                                    anchors.fill: parent
+                                    onCheckedChanged: {
+                                        viewOptions.groups[index] = checked
+                                        viewOptions.groupsChanged()
+                                    }
                                 }
                             }
 
-                            Label {
-                                font.bold: true
-                                text: qsTr("Data Plots") + ":"
-                            }
-
+                            //
+                            // Spacer
+                            //
                             Item {
-                                Layout.fillWidth: true
+                                height: app.spacing
                             }
-                        }
 
-                        //
-                        // Semi-spacer
-                        //
-                        Item {
-                            height: app.spacing / 2
-                        }
+                            //
+                            // Graphs title
+                            //
+                            RowLayout {
+                                spacing: app.spacing
+                                visible: groupGenerator.count > 0
 
-                        //
-                        // Graph switches
-                        //
-                        Repeater {
-                            model: graphGenerator.model
-                            delegate: Switch {
-                                Layout.fillWidth: true
-                                Component.onCompleted: checked = true
-                                palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                                text: Cpp_UI_GraphProvider.getDataset(index).title
+                                Image {
+                                    width: sourceSize.width
+                                    height: sourceSize.height
+                                    sourceSize: Qt.size(18, 18)
+                                    source: "qrc:/icons/chart.svg"
 
-                                onCheckedChanged: {
-                                    viewOptions.graphs[index] = checked
-                                    viewOptions.graphsChanged()
+                                    ColorOverlay {
+                                        source: parent
+                                        color: palette.text
+                                        anchors.fill: parent
+                                    }
+                                }
+
+                                Label {
+                                    font.bold: true
+                                    text: qsTr("Data Plots") + ":"
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                            }
+
+                            //
+                            // Semi-spacer
+                            //
+                            Item {
+                                height: app.spacing / 2
+                            }
+
+                            //
+                            // Graph switches
+                            //
+                            Repeater {
+                                model: graphGenerator.model
+                                delegate: Switch {
+                                    Layout.fillWidth: true
+                                    Component.onCompleted: checked = true
+                                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
+                                    text: Cpp_UI_GraphProvider.getDataset(index).title
+
+                                    onCheckedChanged: {
+                                        viewOptions.graphs[index] = checked
+                                        viewOptions.graphsChanged()
+                                    }
                                 }
                             }
                         }
                     }
+                }
+
+                DropShadow {
+                    anchors.fill: viewOptions
+                    horizontalOffset: 0
+                    verticalOffset: 3
+                    radius: 8.0
+                    samples: 17
+                    color: "#80000000"
+                    source: viewOptions
                 }
             }
 
             //
             // Data grid
             //
-            Widgets.Window {
-                id: dataWin
-                gradient: true
-                title: qsTr("Data")
+            Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
-                headerDoubleClickEnabled: false
-                icon.source: "qrc:/icons/scatter-plot.svg"
-                backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
-                Rectangle {
-                    z: 1
-                    color: dataWin.borderColor
-                    height: dataWin.borderWidth
+                Widgets.Window {
+                    id: dataWin
+                    gradient: true
+                    title: qsTr("Data")
+                    anchors.fill: parent
+                    headerDoubleClickEnabled: false
+                    icon.source: "qrc:/icons/scatter-plot.svg"
+                    backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
-                    anchors {
-                        leftMargin: 5
-                        rightMargin: 5
-                        left: parent.left
-                        right: parent.right
-                        bottom: parent.bottom
+                    Rectangle {
+                        z: 1
+                        color: dataWin.borderColor
+                        height: dataWin.borderWidth
+
+                        anchors {
+                            leftMargin: 5
+                            rightMargin: 5
+                            left: parent.left
+                            right: parent.right
+                            bottom: parent.bottom
+                        }
+                    }
+
+                    ScrollView {
+                        z: 0
+                        id: _sv
+                        clip: false
+                        contentWidth: -1
+                        anchors.fill: parent
+                        anchors.rightMargin: 10
+                        anchors.margins: app.spacing * 2
+                        anchors.leftMargin: app.spacing * 2 + 10
+
+
+                        ColumnLayout {
+                            width: _sv.width - 2 * app.spacing
+
+                            Item {
+                                Layout.minimumHeight: 10
+                            }
+
+                            GridLayout {
+                                rowSpacing: 0
+                                columnSpacing: 0
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+                                columns: Math.floor(width / 256)
+
+                                Repeater {
+                                    id: groupGenerator
+
+                                    delegate: Item {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.minimumHeight: visible ? 196 : 0
+
+                                        visible: opacity > 0
+                                        enabled: opacity > 0
+                                        opacity: viewOptions.groups[index] ? 1 : 0
+
+                                        Behavior on opacity {NumberAnimation{}}
+
+                                        Widgets.GroupDelegate {
+                                            id: groupDelegate
+                                            groupId: index
+                                            anchors.fill: parent
+                                            anchors.margins: app.spacing
+                                            group: Cpp_UI_Provider.getGroup(index)
+                                            onHeaderDoubleClicked: groupWindow.show()
+
+                                            Connections {
+                                                target: viewOptions
+                                                function onGroupsChanged() {
+                                                    groupDelegate.enabled = viewOptions.groups[groupDelegate.groupId]
+                                                }
+                                            }
+                                        }
+
+                                        DropShadow {
+                                            anchors.fill: groupDelegate
+                                            horizontalOffset: 3
+                                            verticalOffset: 3
+                                            radius: 8.0
+                                            samples: 17
+                                            color: "#80000000"
+                                            source: groupDelegate
+                                        }
+
+                                        QtWindow.Window {
+                                            id: groupWindow
+                                            width: 640
+                                            height: 480
+                                            minimumWidth: 320
+                                            minimumHeight: 256
+                                            title: group.title
+
+                                            Rectangle {
+                                                anchors.fill: parent
+                                                color: group.backgroundColor
+                                            }
+
+                                            Widgets.GroupDelegate {
+                                                id: group
+                                                groupId: index
+                                                showIcon: true
+                                                headerHeight: 48
+                                                anchors.margins: 0
+                                                anchors.fill: parent
+                                                borderColor: backgroundColor
+                                                enabled: groupWindow.visible
+                                                headerDoubleClickEnabled: false
+                                                titleColor: Cpp_ThemeManager.text
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Repeater {
+                                    id: graphGenerator
+
+                                    delegate: Item {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.minimumHeight: visible ? 196 : 0
+
+                                        visible: opacity > 0
+                                        enabled: opacity > 0
+                                        opacity: viewOptions.graphs[index] ? 1 : 0
+
+                                        Behavior on opacity {NumberAnimation{}}
+
+                                        Widgets.GraphDelegate {
+                                            id: graphDelegate
+                                            graphId: index
+                                            anchors.fill: parent
+                                            anchors.margins: app.spacing
+                                            enabled: viewOptions.graphs[graphId]
+                                            onHeaderDoubleClicked: graphWindow.show()
+
+                                            Connections {
+                                                target: viewOptions
+                                                function onGraphsChanged() {
+                                                    graphDelegate.enabled = viewOptions.graphs[graphDelegate.graphId]
+                                                }
+                                            }
+                                        }
+
+                                        DropShadow {
+                                            anchors.fill: graphDelegate
+                                            horizontalOffset: 3
+                                            verticalOffset: 3
+                                            radius: 8.0
+                                            samples: 17
+                                            color: "#80000000"
+                                            source: graphDelegate
+                                        }
+
+                                        QtWindow.Window {
+                                            id: graphWindow
+                                            width: 640
+                                            height: 480
+                                            minimumWidth: 320
+                                            minimumHeight: 256
+                                            title: graph.title
+
+                                            Rectangle {
+                                                anchors.fill: parent
+                                                color: graph.backgroundColor
+                                            }
+
+                                            Widgets.GraphDelegate {
+                                                id: graph
+                                                graphId: index
+                                                showIcon: true
+                                                headerHeight: 48
+                                                anchors.margins: 0
+                                                anchors.fill: parent
+                                                enabled: graphWindow.visible
+                                                borderColor: backgroundColor
+                                                headerDoubleClickEnabled: false
+                                                icon.source: "qrc:/icons/chart.svg"
+                                                titleColor: Cpp_ThemeManager.text
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Item {
+                                Layout.minimumHeight: 10
+                            }
+                        }
                     }
                 }
 
-                ScrollView {
-                    z: 0
-                    id: _sv
-                    clip: false
-                    contentWidth: -1
-                    anchors.fill: parent
-                    anchors.rightMargin: 10
-                    anchors.margins: app.spacing * 2
-                    anchors.leftMargin: app.spacing * 2 + 10
-
-
-                    ColumnLayout {
-                        width: _sv.width - 2 * app.spacing
-
-                        Item {
-                            Layout.minimumHeight: 10
-                        }
-
-                        GridLayout {
-                            rowSpacing: 0
-                            columnSpacing: 0
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            columns: Math.floor(width / 256)
-
-                            Repeater {
-                                id: groupGenerator
-
-                                delegate: Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Layout.minimumHeight: visible ? 196 : 0
-
-                                    visible: opacity > 0
-                                    enabled: opacity > 0
-                                    opacity: viewOptions.groups[index] ? 1 : 0
-
-                                    Behavior on opacity {NumberAnimation{}}
-
-                                    Widgets.GroupDelegate {
-                                        id: groupDelegate
-                                        groupId: index
-                                        anchors.fill: parent
-                                        anchors.margins: app.spacing
-                                        group: Cpp_UI_Provider.getGroup(index)
-                                        onHeaderDoubleClicked: groupWindow.show()
-
-                                        Connections {
-                                            target: viewOptions
-                                            function onGroupsChanged() {
-                                                groupDelegate.enabled = viewOptions.groups[groupDelegate.groupId]
-                                            }
-                                        }
-                                    }
-
-                                    QtWindow.Window {
-                                        id: groupWindow
-                                        width: 640
-                                        height: 480
-                                        minimumWidth: 320
-                                        minimumHeight: 256
-                                        title: group.title
-
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            color: group.backgroundColor
-                                        }
-
-                                        Widgets.GroupDelegate {
-                                            id: group
-                                            groupId: index
-                                            showIcon: true
-                                            headerHeight: 48
-                                            anchors.margins: 0
-                                            anchors.fill: parent
-                                            borderColor: backgroundColor
-                                            enabled: groupWindow.visible
-                                            headerDoubleClickEnabled: false
-                                            titleColor: Cpp_ThemeManager.text
-                                        }
-                                    }
-                                }
-                            }
-
-                            Repeater {
-                                id: graphGenerator
-
-                                delegate: Item {
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    Layout.minimumHeight: visible ? 196 : 0
-
-                                    visible: opacity > 0
-                                    enabled: opacity > 0
-                                    opacity: viewOptions.graphs[index] ? 1 : 0
-
-                                    Behavior on opacity {NumberAnimation{}}
-
-                                    Widgets.GraphDelegate {
-                                        id: graphDelegate
-                                        graphId: index
-                                        anchors.fill: parent
-                                        anchors.margins: app.spacing
-                                        enabled: viewOptions.graphs[graphId]
-                                        onHeaderDoubleClicked: graphWindow.show()
-
-                                        Connections {
-                                            target: viewOptions
-                                            function onGraphsChanged() {
-                                                graphDelegate.enabled = viewOptions.graphs[graphDelegate.graphId]
-                                            }
-                                        }
-                                    }
-
-                                    QtWindow.Window {
-                                        id: graphWindow
-                                        width: 640
-                                        height: 480
-                                        minimumWidth: 320
-                                        minimumHeight: 256
-                                        title: graph.title
-
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            color: graph.backgroundColor
-                                        }
-
-                                        Widgets.GraphDelegate {
-                                            id: graph
-                                            graphId: index
-                                            showIcon: true
-                                            headerHeight: 48
-                                            anchors.margins: 0
-                                            anchors.fill: parent
-                                            enabled: graphWindow.visible
-                                            borderColor: backgroundColor
-                                            headerDoubleClickEnabled: false
-                                            icon.source: "qrc:/icons/chart.svg"
-                                            titleColor: Cpp_ThemeManager.text
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        Item {
-                            Layout.minimumHeight: 10
-                        }
-                    }
+                DropShadow {
+                    anchors.fill: dataWin
+                    horizontalOffset: 0
+                    verticalOffset: 3
+                    radius: 8.0
+                    samples: 17
+                    color: "#80000000"
+                    source: dataWin
                 }
             }
         }
@@ -547,66 +592,81 @@ Control {
         //
         // Title
         //
-        Rectangle {
-            radius: 5
+        Item {
             height: 32
             Layout.fillWidth: true
 
-            gradient: Gradient {
-                GradientStop {
-                    position: 0
-                    color: Cpp_ThemeManager.windowGradient1
+            Rectangle {
+                id: titleWin
+                radius: 5
+                anchors.fill: parent
+
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: Cpp_ThemeManager.windowGradient1
+                    }
+
+                    GradientStop {
+                        position: 1
+                        color: Cpp_ThemeManager.windowGradient2
+                    }
                 }
 
-                GradientStop {
-                    position: 1
-                    color: Cpp_ThemeManager.windowGradient2
-                }
-            }
+                RowLayout {
+                    spacing: app.spacing
 
-            RowLayout {
-                spacing: app.spacing
+                    anchors {
+                        left: parent.left
+                        leftMargin: app.spacing
+                        verticalCenter: parent.verticalCenter
+                    }
 
-                anchors {
-                    left: parent.left
-                    leftMargin: app.spacing
-                    verticalCenter: parent.verticalCenter
-                }
+                    Image {
+                        width: sourceSize.width
+                        height: sourceSize.height
+                        sourceSize: Qt.size(24, 24)
+                        source: "qrc:/icons/arrow-right.svg"
+                        Layout.alignment: Qt.AlignVCenter
 
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(24, 24)
-                    source: "qrc:/icons/arrow-right.svg"
-                    Layout.alignment: Qt.AlignVCenter
+                        ColorOverlay {
+                            source: parent
+                            anchors.fill: parent
+                            color: palette.brightText
+                        }
+                    }
 
-                    ColorOverlay {
-                        source: parent
-                        anchors.fill: parent
+                    Label {
+                        font.bold: true
+                        text: root.title
+                        font.pixelSize: 16
                         color: palette.brightText
+                        font.family: app.monoFont
                     }
                 }
 
                 Label {
-                    font.bold: true
-                    text: root.title
-                    font.pixelSize: 16
-                    color: palette.brightText
                     font.family: app.monoFont
+                    color: palette.brightText
+                    visible: !Cpp_CSV_Player.isOpen
+                    text: Cpp_IO_Manager.receivedDataLength //*! Optimize this function
+
+                    anchors {
+                        right: parent.right
+                        rightMargin: app.spacing
+                        verticalCenter: parent.verticalCenter
+                    }
                 }
             }
 
-            Label {
-                font.family: app.monoFont
-                color: palette.brightText
-                visible: !Cpp_CSV_Player.isOpen
-                text: Cpp_IO_Manager.receivedDataLength //*! Optimize this function
-
-                anchors {
-                    right: parent.right
-                    rightMargin: app.spacing
-                    verticalCenter: parent.verticalCenter
-                }
+            DropShadow {
+                anchors.fill: titleWin
+                horizontalOffset: 0
+                verticalOffset: 3
+                radius: 8.0
+                samples: 17
+                color: "#80000000"
+                source: titleWin
             }
         }
     }

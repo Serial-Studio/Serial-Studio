@@ -194,12 +194,13 @@ ApplicationWindow {
     }
 
     //
-    // Window geometry
+    // Window geometry (different minimum size for non-macOS
+    // operating systems because of the global menubar in macOS)
     //
     visible: false
-    minimumWidth: 1040
+    minimumWidth: 1100
     title: Cpp_AppName
-    minimumHeight: Qt.platform.os == "osx" ? 660 : 680
+    minimumHeight: Qt.platform.os == "osx" ? 720 : 740
     
     //
     // Define default window size to avoid issues with
@@ -461,11 +462,11 @@ ApplicationWindow {
 
             Setup {
                 id: setup
-                property int displayedWidth: 320 + app.spacing * 1.5
+                property int displayedWidth: 340 + app.spacing * 1.5
 
                 function show() {
                     opacity = 1
-                    displayedWidth = 320 + app.spacing * 1.5
+                    displayedWidth = 340 + app.spacing * 1.5
                 }
 
                 function hide() {
