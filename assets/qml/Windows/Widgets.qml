@@ -38,10 +38,7 @@ Control {
     //
     // Custom properties
     //
-    property var visibleWidgets: []
     readonly property int minimumWidgetSize: 320
-
-
 
     //
     // Group/dataset updating
@@ -77,15 +74,6 @@ Control {
 
             // Update project title
             root.title = Cpp_UI_Provider.title
-
-            // Regenerate visibility switcher
-            if (visibleWidgets.length !== Cpp_UI_WidgetProvider.totalWidgetCount) {
-                var list = []
-                for (var i = 0; i < Cpp_UI_WidgetProvider.totalWidgetCount; ++i)
-                    list.push(true)
-
-                visibleWidgets = list
-            }
         }
     }
 
