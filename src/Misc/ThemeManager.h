@@ -129,6 +129,9 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor setupPanelBackground
                READ setupPanelBackground
                NOTIFY themeChanged)
+    Q_PROPERTY(QColor datasetValue
+               READ datasetValue
+               NOTIFY themeChanged)
     Q_PROPERTY(QColor graphDialBorder
                READ graphDialBorder
                NOTIFY themeChanged)
@@ -144,8 +147,8 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor datasetWindowBorder
                READ datasetWindowBorder
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor datagridBackground
-               READ datagridBackground
+    Q_PROPERTY(QColor embeddedWindowBackground
+               READ embeddedWindowBackground
                NOTIFY themeChanged)
     Q_PROPERTY(QColor ledEnabled
                READ ledEnabled
@@ -261,12 +264,13 @@ public:
     QColor windowGradient2() const;
     QColor alternativeHighlight() const;
     QColor setupPanelBackground() const;
+    QColor datasetValue() const;
     QColor graphDialBorder() const;
     QColor datasetTextPrimary() const;
     QColor datasetTextSecondary() const;
     QColor datasetWindowBackground() const;
     QColor datasetWindowBorder() const;
-    QColor datagridBackground() const;
+    QColor embeddedWindowBackground() const;
     QColor ledEnabled() const;
     QColor ledDisabled() const;
     QColor csvHighlight() const;
@@ -340,12 +344,13 @@ private:
     QColor m_windowGradient2;
     QColor m_alternativeHighlight;
     QColor m_setupPanelBackground;
+    QColor m_datasetValue;
     QColor m_graphDialBorder;
     QColor m_datasetTextPrimary;
     QColor m_datasetTextSecondary;
     QColor m_datasetWindowBackground;
     QColor m_datasetWindowBorder;
-    QColor m_datagridBackground;
+    QColor m_embeddedWindowBackground;
     QColor m_ledEnabled;
     QColor m_ledDisabled;
     QColor m_csvHighlight;

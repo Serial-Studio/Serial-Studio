@@ -30,356 +30,366 @@ import QtGraphicalEffects 1.0
 import "../Widgets" as Widgets
 import "../SetupPanes" as SetupPanes
 
-Control {
-    id: root
-    background: Rectangle {
-        color: Cpp_ThemeManager.windowBackground
-    }
-
-    //
-    // Save settings
-    //
-    Settings {
-        //
-        // Misc settings
-        //
-        property alias auto: commAuto.checked
-        property alias manual: commManual.checked
-        property alias tabIndex: tab.currentIndex
-        property alias csvExport: csvLogging.checked
-
-        //
-        // Serial settings
-        //
-        property alias parity: serial.parity
-        property alias baudRate: serial.baudRate
-        property alias dataBits: serial.dataBits
-        property alias stopBits: serial.stopBits
-        property alias flowControl: serial.flowControl
-
-        //
-        // Network settings
-        //
-        property alias port: network.port
-        property alias address: network.address
-        property alias socketType: network.socketType
-
-        //
-        // MQTT settings
-        //
-        property alias mqttHost: mqtt.host
-        property alias mqttPort: mqtt.port
-        property alias mqttUser: mqtt.user
-        property alias mqttMode: mqtt.mode
-        property alias mqttTopic: mqtt.topic
-        property alias mqttVersion: mqtt.version
-        property alias mqttPassword: mqtt.password
-
-        //
-        // App settings
-        //
-        property alias language: settings.language
-        property alias endSequence: settings.endSequence
-        property alias startSequence: settings.startSequence
-        property alias tcpPlugins: settings.tcpPlugins
-    }
-
-    //
-    // Update manual/auto checkboxes
-    //
-    Connections {
-        target: Cpp_JSON_Generator
-        function onOperationModeChanged() {
-            commAuto.checked = (Cpp_JSON_Generator.operationMode == 1)
-            commManual.checked = (Cpp_JSON_Generator.operationMode == 0)
-        }
-    }
-
-    //
-    // Control arrangement
-    //
-    ColumnLayout {
-        id: column
+Item {
+    Widgets.Window {
+        id: root
+        gradient: true
+        title: qsTr("Setup")
         anchors.fill: parent
-        spacing: app.spacing / 2
+        anchors.leftMargin: 0
+        headerDoubleClickEnabled: false
         anchors.margins: app.spacing * 1.5
+        icon.source: "qrc:/icons/settings.svg"
+        backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
         //
-        // Comm mode selector
+        // Save settings
         //
-        Label {
-            font.bold: true
-            text: qsTr("Communication Mode") + ":"
-        } RadioButton {
-            id: commAuto
-            checked: true
-            text: qsTr("Auto (JSON from serial device)")
-            onCheckedChanged: {
-                if (checked)
-                    Cpp_JSON_Generator.setOperationMode(1)
-                else
-                    Cpp_JSON_Generator.setOperationMode(0)
+        Settings {
+            //
+            // Misc settings
+            //
+            property alias auto: commAuto.checked
+            property alias manual: commManual.checked
+            property alias tabIndex: tab.currentIndex
+            property alias csvExport: csvLogging.checked
+
+            //
+            // Serial settings
+            //
+            property alias parity: serial.parity
+            property alias baudRate: serial.baudRate
+            property alias dataBits: serial.dataBits
+            property alias stopBits: serial.stopBits
+            property alias flowControl: serial.flowControl
+
+            //
+            // Network settings
+            //
+            property alias port: network.port
+            property alias address: network.address
+            property alias socketType: network.socketType
+
+            //
+            // MQTT settings
+            //
+            property alias mqttHost: mqtt.host
+            property alias mqttPort: mqtt.port
+            property alias mqttUser: mqtt.user
+            property alias mqttMode: mqtt.mode
+            property alias mqttTopic: mqtt.topic
+            property alias mqttVersion: mqtt.version
+            property alias mqttPassword: mqtt.password
+
+            //
+            // App settings
+            //
+            property alias language: settings.language
+            property alias endSequence: settings.endSequence
+            property alias startSequence: settings.startSequence
+            property alias tcpPlugins: settings.tcpPlugins
+        }
+
+        //
+        // Update manual/auto checkboxes
+        //
+        Connections {
+            target: Cpp_JSON_Generator
+            function onOperationModeChanged() {
+                commAuto.checked = (Cpp_JSON_Generator.operationMode == 1)
+                commManual.checked = (Cpp_JSON_Generator.operationMode == 0)
             }
-        } RadioButton {
-            id: commManual
-            checked: false
-            text: qsTr("Manual (use JSON map file)")
-            onCheckedChanged: {
-                if (checked)
-                    Cpp_JSON_Generator.setOperationMode(0)
-                else
-                    Cpp_JSON_Generator.setOperationMode(1)
-            }
         }
 
         //
-        // Map file selector button
+        // Control arrangement
         //
-        Button {
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            enabled: commManual.checked
-            onClicked: Cpp_JSON_Generator.loadJsonMap()
-            Behavior on opacity {NumberAnimation{}}
-            text: (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
-                                                               qsTr("Select map file") + "...")
-        }
+        ColumnLayout {
+            id: column
+            anchors.fill: parent
+            spacing: app.spacing / 2
+            anchors.margins: app.spacing * 1.5
 
-        //
-        // Spacer
-        //
-        Item {
-            height: app.spacing / 2
-        }
-
-        //
-        // Enable/disable CSV logging
-        //
-        RowLayout {
-            Layout.fillWidth: true
-
-            Switch {
-                id: csvLogging
-                text: qsTr("Create CSV file")
-                Layout.alignment: Qt.AlignVCenter
-                checked: Cpp_CSV_Export.exportEnabled
-                palette.highlight: Cpp_ThemeManager.csvHighlight
-
-                onCheckedChanged:  {
-                    if (Cpp_CSV_Export.exportEnabled !== checked)
-                        Cpp_CSV_Export.exportEnabled = checked
+            //
+            // Comm mode selector
+            //
+            Label {
+                font.bold: true
+                text: qsTr("Communication Mode") + ":"
+            } RadioButton {
+                id: commAuto
+                checked: true
+                text: qsTr("Auto (JSON from serial device)")
+                onCheckedChanged: {
+                    if (checked)
+                        Cpp_JSON_Generator.setOperationMode(1)
+                    else
+                        Cpp_JSON_Generator.setOperationMode(0)
+                }
+            } RadioButton {
+                id: commManual
+                checked: false
+                text: qsTr("Manual (use JSON map file)")
+                onCheckedChanged: {
+                    if (checked)
+                        Cpp_JSON_Generator.setOperationMode(0)
+                    else
+                        Cpp_JSON_Generator.setOperationMode(1)
                 }
             }
 
+            //
+            // Map file selector button
+            //
+            Button {
+                Layout.fillWidth: true
+                opacity: enabled ? 1 : 0.5
+                enabled: commManual.checked
+                onClicked: Cpp_JSON_Generator.loadJsonMap()
+                Behavior on opacity {NumberAnimation{}}
+                text: (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
+                                                                   qsTr("Select map file") + "...")
+            }
+
+            //
+            // Spacer
+            //
+            Item {
+                height: app.spacing / 2
+            }
+
+            //
+            // Enable/disable CSV logging
+            //
+            RowLayout {
+                Layout.fillWidth: true
+
+                Switch {
+                    id: csvLogging
+                    text: qsTr("Create CSV file")
+                    Layout.alignment: Qt.AlignVCenter
+                    checked: Cpp_CSV_Export.exportEnabled
+                    palette.highlight: Cpp_ThemeManager.csvHighlight
+
+                    onCheckedChanged:  {
+                        if (Cpp_CSV_Export.exportEnabled !== checked)
+                            Cpp_CSV_Export.exportEnabled = checked
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+
+                RoundButton {
+                    icon.width: 24
+                    icon.height: 24
+                    icon.color: Cpp_ThemeManager.text
+                    Layout.alignment: Qt.AlignVCenter
+                    icon.source: "qrc:/icons/help.svg"
+                    onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
+                }
+            }
+
+            //
+            // Spacer
+            //
+            Item {
+                height: app.spacing / 2
+            }
+
+            //
+            // Tab bar
+            //
+            TabBar {
+                height: 24
+                id: tab
+                Layout.fillWidth: true
+                onCurrentIndexChanged: {
+                    if (currentIndex < 2 && currentIndex !== Cpp_IO_Manager.dataSource)
+                        Cpp_IO_Manager.dataSource = currentIndex
+                }
+
+                TabButton {
+                    text: qsTr("Serial")
+                    height: tab.height + 3
+                    width: implicitWidth + 2 * app.spacing
+                }
+
+                TabButton {
+                    text: qsTr("Network")
+                    height: tab.height + 3
+                    width: implicitWidth + 2 * app.spacing
+                }
+
+                TabButton {
+                    text: qsTr("MQTT")
+                    height: tab.height + 3
+                    width: implicitWidth + 2 * app.spacing
+                }
+
+                TabButton {
+                    text: qsTr("Settings")
+                    height: tab.height + 3
+                    width: implicitWidth + 2 * app.spacing
+                }
+            }
+
+            //
+            // Tab bar contents
+            //
+            StackLayout {
+                id: stack
+                clip: true
+                Layout.fillWidth: true
+                Layout.fillHeight: false
+                currentIndex: tab.currentIndex
+                Layout.topMargin: -parent.spacing - 1
+                Layout.minimumHeight: implicitHeight
+                Layout.maximumHeight: implicitHeight
+                Layout.preferredHeight: implicitHeight
+                onCurrentIndexChanged: getImplicitHeight()
+                Component.onCompleted: getImplicitHeight()
+
+                function getImplicitHeight() {
+                    stack.implicitHeight = 0
+
+                    switch (currentIndex) {
+                    case 0:
+                        stack.implicitHeight = serial.implicitHeight
+                        break
+                    case 1:
+                        stack.implicitHeight = network.implicitHeight
+                        break
+                    case 2:
+                        stack.implicitHeight = mqtt.implicitHeight
+                        break
+                    case 3:
+                        stack.implicitHeight = settings.implicitHeight
+                        break
+                    default:
+                        stack.implicitHeight = 0
+                        break
+                    }
+                }
+
+                SetupPanes.Serial {
+                    id: serial
+                    background: TextField {
+                        enabled: false
+                        palette.base: Cpp_ThemeManager.setupPanelBackground
+                    }
+                }
+
+                SetupPanes.Network {
+                    id: network
+                    background: TextField {
+                        enabled: false
+                        palette.base: Cpp_ThemeManager.setupPanelBackground
+                    }
+                }
+
+                SetupPanes.MQTT {
+                    id: mqtt
+                    background: TextField {
+                        enabled: false
+                        palette.base: Cpp_ThemeManager.setupPanelBackground
+                    }
+                }
+
+                SetupPanes.Settings {
+                    id: settings
+                    background: TextField {
+                        enabled: false
+                        palette.base: Cpp_ThemeManager.setupPanelBackground
+                    }
+                }
+            }
+
+            //
+            // RX/TX LEDs
+            //
             Item {
                 Layout.fillWidth: true
-            }
+                Layout.fillHeight: true
 
-            RoundButton {
-                icon.width: 24
-                icon.height: 24
-                icon.color: Cpp_ThemeManager.text
-                Layout.alignment: Qt.AlignVCenter
-                icon.source: "qrc:/icons/help.svg"
-                onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
-            }
-        }
+                RowLayout {
+                    spacing: app.spacing
 
-        //
-        // Spacer
-        //
-        Item {
-            height: app.spacing / 2
-        }
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        verticalCenter: parent.verticalCenter
+                    }
 
-        //
-        // Tab bar
-        //
-        TabBar {
-            height: 24
-            id: tab
-            Layout.fillWidth: true
-            onCurrentIndexChanged: {
-                if (currentIndex < 2 && currentIndex !== Cpp_IO_Manager.dataSource)
-                    Cpp_IO_Manager.dataSource = currentIndex
-            }
+                    Item {
+                        Layout.fillWidth: true
+                    }
 
-            TabButton {
-                text: qsTr("Serial")
-                height: tab.height + 3
-                width: implicitWidth + 2 * app.spacing
-            }
+                    Widgets.LED {
+                        id: _rx
+                        enabled: false
+                        Layout.alignment: Qt.AlignVCenter
 
-            TabButton {
-                text: qsTr("Network")
-                height: tab.height + 3
-                width: implicitWidth + 2 * app.spacing
-            }
+                        Connections {
+                            target: Cpp_IO_Manager
+                            function onRx() {
+                                _rx.flash()
+                            }
+                        }
+                    }
 
-            TabButton {
-                text: qsTr("MQTT")
-                height: tab.height + 3
-                width: implicitWidth + 2 * app.spacing
-            }
+                    Label {
+                        text: "RX"
+                        font.bold: true
+                        font.pixelSize: 18
+                        font.family: app.monoFont
+                        Layout.alignment: Qt.AlignVCenter
+                        color: _rx.enabled ? palette.highlight : Cpp_ThemeManager.ledDisabled
+                    }
 
-            TabButton {
-                text: qsTr("Settings")
-                height: tab.height + 3
-                width: implicitWidth + 2 * app.spacing
-            }
-        }
+                    Image {
+                        width: sourceSize.width
+                        height: sourceSize.height
+                        sourceSize: Qt.size(32, 32)
+                        source: "qrc:/icons/ethernet.svg"
+                        Layout.alignment: Qt.AlignVCenter
 
-        //
-        // Tab bar contents
-        //
-        StackLayout {
-            id: stack
-            clip: true
-            Layout.fillWidth: true
-            Layout.fillHeight: false
-            currentIndex: tab.currentIndex
-            Layout.topMargin: -parent.spacing - 1
-            Layout.minimumHeight: implicitHeight
-            Layout.maximumHeight: implicitHeight
-            Layout.preferredHeight: implicitHeight
-            onCurrentIndexChanged: getImplicitHeight()
-            Component.onCompleted: getImplicitHeight()
+                        ColorOverlay {
+                            source: parent
+                            anchors.fill: parent
+                            color: Cpp_ThemeManager.ledDisabled
+                        }
+                    }
 
-            function getImplicitHeight() {
-                stack.implicitHeight = 0
+                    Label {
+                        text: "TX"
+                        font.bold: true
+                        font.pixelSize: 18
+                        font.family: app.monoFont
+                        Layout.alignment: Qt.AlignVCenter
+                        color: _tx.enabled ? palette.highlight : Cpp_ThemeManager.ledDisabled
+                    }
 
-                switch (currentIndex) {
-                case 0:
-                    stack.implicitHeight = serial.implicitHeight
-                    break
-                case 1:
-                    stack.implicitHeight = network.implicitHeight
-                    break
-                case 2:
-                    stack.implicitHeight = mqtt.implicitHeight
-                    break
-                case 3:
-                    stack.implicitHeight = settings.implicitHeight
-                    break
-                default:
-                    stack.implicitHeight = 0
-                    break
-                }
-            }
+                    Widgets.LED {
+                        id: _tx
+                        enabled: false
+                        layoutDirection: Qt.RightToLeft
+                        Layout.alignment: Qt.AlignVCenter
 
-            SetupPanes.Serial {
-                id: serial
-                background: TextField {
-                    enabled: false
-                    palette.base: Cpp_ThemeManager.setupPanelBackground
-                }
-            }
+                        Connections {
+                            target: Cpp_IO_Manager
+                            function onTx() {
+                                _tx.flash()
+                            }
+                        }
+                    }
 
-            SetupPanes.Network {
-                id: network
-                background: TextField {
-                    enabled: false
-                    palette.base: Cpp_ThemeManager.setupPanelBackground
-                }
-            }
-
-            SetupPanes.MQTT {
-                id: mqtt
-                background: TextField {
-                    enabled: false
-                    palette.base: Cpp_ThemeManager.setupPanelBackground
-                }
-            }
-
-            SetupPanes.Settings {
-                id: settings
-                background: TextField {
-                    enabled: false
-                    palette.base: Cpp_ThemeManager.setupPanelBackground
-                }
-            }
-        }
-
-        //
-        // Spacer
-        //
-        Item {
-            Layout.fillHeight: true
-            Layout.minimumHeight: app.spacing
-        }
-
-        //
-        // RX/TX LEDs
-        //
-        RowLayout {
-            spacing: app.spacing
-            Layout.alignment: Qt.AlignHCenter
-
-            Widgets.LED {
-                id: _rx
-                enabled: false
-                Layout.alignment: Qt.AlignVCenter
-
-                Connections {
-                    target: Cpp_IO_Manager
-                    function onRx() {
-                        _rx.flash()
+                    Item {
+                        Layout.fillWidth: true
                     }
                 }
             }
-
-            Label {
-                text: "RX"
-                font.bold: true
-                font.pixelSize: 18
-                font.family: app.monoFont
-                Layout.alignment: Qt.AlignVCenter
-                color: _rx.enabled ? palette.highlight : Cpp_ThemeManager.ledDisabled
-            }
-
-            Image {
-                width: sourceSize.width
-                height: sourceSize.height
-                sourceSize: Qt.size(32, 32)
-                source: "qrc:/icons/ethernet.svg"
-                Layout.alignment: Qt.AlignVCenter
-
-                ColorOverlay {
-                    source: parent
-                    anchors.fill: parent
-                    color: Cpp_ThemeManager.ledDisabled
-                }
-            }
-
-            Label {
-                text: "TX"
-                font.bold: true
-                font.pixelSize: 18
-                font.family: app.monoFont
-                Layout.alignment: Qt.AlignVCenter
-                color: _tx.enabled ? palette.highlight : Cpp_ThemeManager.ledDisabled
-            }
-
-            Widgets.LED {
-                id: _tx
-                enabled: false
-                layoutDirection: Qt.RightToLeft
-                Layout.alignment: Qt.AlignVCenter
-
-                Connections {
-                    target: Cpp_IO_Manager
-                    function onTx() {
-                        _tx.flash()
-                    }
-                }
-            }
-        }
-
-        //
-        // Spacer
-        //
-        Item {
-            Layout.minimumHeight: app.spacing * 4
         }
     }
 }

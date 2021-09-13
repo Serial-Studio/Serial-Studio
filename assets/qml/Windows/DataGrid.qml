@@ -112,7 +112,7 @@ Control {
                 Layout.minimumWidth: 240
                 headerDoubleClickEnabled: false
                 icon.source: "qrc:/icons/visibility.svg"
-                backgroundColor: Cpp_ThemeManager.datagridBackground
+                backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
                 property var groups: []
                 property var graphs: []
@@ -375,7 +375,7 @@ Control {
                 Layout.minimumWidth: 240
                 headerDoubleClickEnabled: false
                 icon.source: "qrc:/icons/scatter-plot.svg"
-                backgroundColor: Cpp_ThemeManager.datagridBackground
+                backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
                 Rectangle {
                     z: 1

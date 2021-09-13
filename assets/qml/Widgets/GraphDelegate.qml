@@ -109,7 +109,7 @@ Window {
             useOpenGL: true
             capStyle: Qt.RoundCap
             axisYRight: positionAxis
-            color: Cpp_ThemeManager.datasetTextPrimary
+            color: Cpp_ThemeManager.datasetValue
         }
     }
 }

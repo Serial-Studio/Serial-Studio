@@ -461,11 +461,11 @@ ApplicationWindow {
 
             Setup {
                 id: setup
-                property int displayedWidth: 340
+                property int displayedWidth: 320 + app.spacing * 1.5
 
                 function show() {
                     opacity = 1
-                    displayedWidth = 320
+                    displayedWidth = 320 + app.spacing * 1.5
                 }
 
                 function hide() {

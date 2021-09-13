@@ -30,7 +30,7 @@
 #define APP_VERSION     "1.0.22"
 #define APP_DEVELOPER   "Alex Spataru"
 #define APP_NAME        "Serial Studio"
-#define APP_ICON        ":/images/icon.png"
+#define APP_ICON        ":/images/icon.svg"
 #define APP_SUPPORT_URL "https://github.com/serial-studio"
 #define APP_UPDATER_URL "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json"
 #define LOG_FORMAT      "[%{time}] %{message:-100} [%{TypeOne}] [%{function}]\n"

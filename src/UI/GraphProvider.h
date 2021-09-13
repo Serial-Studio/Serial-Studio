@@ -86,11 +86,11 @@ private slots:
 private:
     int m_prevFramePos;
     int m_displayedPoints;
+    QList<JFI_Object> m_jsonList;
     QVector<double> m_maximumValues;
     QVector<double> m_minimumValues;
     QVector<QVector<double> *> m_points;
     QVector<JSON::Dataset *> m_datasets;
-    QList<JFI_Object> m_jsonList;
 };
 }
 

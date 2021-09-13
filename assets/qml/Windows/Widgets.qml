@@ -92,8 +92,8 @@ Control {
             GridLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                rowSpacing: app.spacing
-                columnSpacing: app.spacing
+                rowSpacing: app.spacing * 1.5
+                columnSpacing: app.spacing * 1.5
                 columns: Math.floor(_sv.width / (root.minimumWidgetSize + 2 * app.spacing))
 
                 Repeater {

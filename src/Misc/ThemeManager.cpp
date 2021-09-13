@@ -162,12 +162,13 @@ void ThemeManager::loadTheme(const int id)
     m_dialogBackground = QColor(colors.value("dialogBackground").toString());
     m_alternativeHighlight = QColor(colors.value("alternativeHighlight").toString());
     m_setupPanelBackground = QColor(colors.value("setupPanelBackground").toString());
+    m_datasetValue = QColor(colors.value("datasetValue").toString());
     m_graphDialBorder = QColor(colors.value("graphDialBorder").toString());
     m_datasetTextPrimary = QColor(colors.value("datasetTextPrimary").toString());
     m_datasetTextSecondary = QColor(colors.value("datasetTextSecondary").toString());
     m_datasetWindowBackground = QColor(colors.value("datasetWindowBackground").toString());
     m_datasetWindowBorder = QColor(colors.value("datasetWindowBorder").toString());
-    m_datagridBackground = QColor(colors.value("datagridBackground").toString());
+    m_embeddedWindowBackground = QColor(colors.value("embeddedWindowBackground").toString());
     m_ledEnabled = QColor(colors.value("ledEnabled").toString());
     m_ledDisabled = QColor(colors.value("ledDisabled").toString());
     m_csvHighlight = QColor(colors.value("csvHighlight").toString());
@@ -416,6 +417,11 @@ QColor ThemeManager::setupPanelBackground() const
     return m_setupPanelBackground;
 }
 
+QColor ThemeManager::datasetValue() const
+{
+    return m_datasetValue;
+}
+
 QColor ThemeManager::graphDialBorder() const
 {
     return m_graphDialBorder;
@@ -441,9 +447,9 @@ QColor ThemeManager::datasetWindowBorder() const
     return m_datasetWindowBorder;
 }
 
-QColor ThemeManager::datagridBackground() const
+QColor ThemeManager::embeddedWindowBackground() const
 {
-    return m_datagridBackground;
+    return m_embeddedWindowBackground;
 }
 
 QColor ThemeManager::ledEnabled() const

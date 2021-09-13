@@ -71,7 +71,7 @@ Item {
         text: dataset.value
         elide: Label.ElideRight
         font.family: app.monoFont
-        color: Cpp_ThemeManager.datasetTextPrimary
+        color: Cpp_ThemeManager.datasetValue
         horizontalAlignment: Text.AlignLeft
 
         anchors {
