@@ -17,7 +17,7 @@
     </message>
     <message>
         <source>Contact author</source>
-        <translation>Autor kontaktieren</translation>
+        <translation type="vanished">Autor kontaktieren</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -50,6 +50,10 @@
     <message>
         <source>Acknowledgements</source>
         <translation>Danksagung</translation>
+    </message>
+    <message>
+        <source>Make a donation</source>
+        <translation>Spenden</translation>
     </message>
 </context>
 <context>
@@ -84,6 +88,21 @@
     <message>
         <source>Close</source>
         <translation>Schließen</translation>
+    </message>
+</context>
+<context>
+    <name>Application</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation>Automatish auf Updates prüfen?</translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation>Soll %1 Automatish auf Updates prüfen? Sie können jederzeit manuell über das Menü &quot;Hilfe&quot; nach Updates suchen</translation>
+    </message>
+    <message>
+        <source>Drop JSON and CSV files here</source>
+        <translation>JSON und CSV Dateien hierher Ziehen</translation>
     </message>
 </context>
 <context>
@@ -206,6 +225,10 @@
         <source>Show menubar</source>
         <translation>Menüleiste anzeigen</translation>
     </message>
+    <message>
+        <source>Console</source>
+        <translation>Konsole</translation>
+    </message>
 </context>
 <context>
     <name>CsvPlayer</name>
@@ -314,6 +337,37 @@
     <message>
         <source>Flow Control</source>
         <translation type="vanished">Fluss-Kontrolle</translation>
+    </message>
+</context>
+<context>
+    <name>Donate</name>
+    <message>
+        <source>Donate</source>
+        <translation>Spende</translation>
+    </message>
+    <message>
+        <source>Later</source>
+        <translation>Später</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Schließen</translation>
+    </message>
+    <message>
+        <source>Support the development of %1!</source>
+        <translation>Unterstützen Sie die Entwicklung von %1!</translation>
+    </message>
+    <message>
+        <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating to support development efforts :)</source>
+        <translation>Serial Studio ist eine freie &amp; Open-Source-Software, die von Freiwilligen unterstützt wird. Ziehen Sie eine Spende zur Unterstützung der Entwicklung in Betracht :)</translation>
+    </message>
+    <message>
+        <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
+        <translation>Sie können dieses Projekt auch unterstützen, indem Sie es teilen, Fehler melden und neue Funktionen vorschlagen!</translation>
+    </message>
+    <message>
+        <source>Don&apos;t annoy me again!</source>
+        <translation>Ärgern Sie mich nicht mehr!</translation>
     </message>
 </context>
 <context>
@@ -1214,6 +1268,17 @@
     </message>
 </context>
 <context>
+    <name>Misc::ThemeManager</name>
+    <message>
+        <source>The theme change will take effect after restart</source>
+        <translation>Die Änderung des Themas wird nach dem Neustart wirksam</translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation>Möchten Sie %1 jetzt neu starten?</translation>
+    </message>
+</context>
+<context>
     <name>Network</name>
     <message>
         <source>Socket type</source>
@@ -1378,6 +1443,10 @@
         <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777.</source>
         <translation>Anwendungen/Plugins können mit %1 interagieren, indem sie eine TCP-Verbindung an Port 7777 herstellen.</translation>
     </message>
+    <message>
+        <source>Theme</source>
+        <translation>Thema</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -1485,6 +1554,10 @@
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
+    <message>
+        <source>Setup</source>
+        <translation>Einstellungen</translation>
+    </message>
 </context>
 <context>
     <name>Sidebar</name>
@@ -1552,10 +1625,21 @@
     </message>
 </context>
 <context>
+    <name>Widgets</name>
+    <message>
+        <source>View</source>
+        <translation>Ansicht</translation>
+    </message>
+    <message>
+        <source>Widgets</source>
+        <translation>Widgets</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <source>Check for updates automatically?</source>
-        <translation>Automatish auf Updates prüfen?</translation>
+        <translation type="vanished">Automatish auf Updates prüfen?</translation>
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
@@ -1563,11 +1647,11 @@
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
-        <translation>JSON und CSV Dateien hierher Ziehen</translation>
+        <translation type="vanished">JSON und CSV Dateien hierher Ziehen</translation>
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>Soll %1 Automatish auf Updates prüfen? Sie können jederzeit manuell über das Menü &quot;Hilfe&quot; nach Updates suchen</translation>
+        <translation type="vanished">Soll %1 Automatish auf Updates prüfen? Sie können jederzeit manuell über das Menü &quot;Hilfe&quot; nach Updates suchen</translation>
     </message>
 </context>
 </TS>

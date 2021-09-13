@@ -16,10 +16,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Contact author</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Report bug</source>
         <translation></translation>
     </message>
@@ -41,6 +37,10 @@
     </message>
     <message>
         <source>Acknowledgements</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Make a donation</source>
         <translation></translation>
     </message>
 </context>
@@ -75,6 +75,21 @@
     </message>
     <message>
         <source>Close</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Application</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Drop JSON and CSV files here</source>
         <translation></translation>
     </message>
 </context>
@@ -194,6 +209,10 @@
         <source>Show menubar</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Console</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>CsvPlayer</name>
@@ -262,6 +281,37 @@
     <message>
         <source>Flow Control</source>
         <translation type="vanished">Flow control</translation>
+    </message>
+</context>
+<context>
+    <name>Donate</name>
+    <message>
+        <source>Donate</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Later</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Support the development of %1!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating to support development efforts :)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Don&apos;t annoy me again!</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1076,6 +1126,17 @@
     </message>
 </context>
 <context>
+    <name>Misc::ThemeManager</name>
+    <message>
+        <source>The theme change will take effect after restart</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>Network</name>
     <message>
         <source>Socket type</source>
@@ -1172,6 +1233,10 @@
         <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777.</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Theme</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -1235,6 +1300,10 @@
         <source>MQTT</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Setup</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Toolbar</name>
@@ -1291,17 +1360,13 @@
     </message>
 </context>
 <context>
-    <name>main</name>
+    <name>Widgets</name>
     <message>
-        <source>Check for updates automatically?</source>
+        <source>View</source>
         <translation></translation>
     </message>
     <message>
-        <source>Drop JSON and CSV files here</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <source>Widgets</source>
         <translation></translation>
     </message>
 </context>

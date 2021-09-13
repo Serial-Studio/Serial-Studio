@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Contact author</source>
-        <translation>联系作者</translation>
+        <translation type="vanished">联系作者</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -50,6 +50,10 @@
     <message>
         <source>Acknowledgements</source>
         <translation>致谢</translation>
+    </message>
+    <message>
+        <source>Make a donation</source>
+        <translation>进行捐赠</translation>
     </message>
 </context>
 <context>
@@ -84,6 +88,21 @@
     <message>
         <source>Close</source>
         <translation>关闭</translation>
+    </message>
+</context>
+<context>
+    <name>Application</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation>自动检查更新？</translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation>%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
+    </message>
+    <message>
+        <source>Drop JSON and CSV files here</source>
+        <translation>拖放JSON和CSV文件</translation>
     </message>
 </context>
 <context>
@@ -205,6 +224,10 @@
     <message>
         <source>Show menubar</source>
         <translation>显示菜单栏</translation>
+    </message>
+    <message>
+        <source>Console</source>
+        <translation>控制台</translation>
     </message>
 </context>
 <context>
@@ -342,6 +365,37 @@
     <message>
         <source>Language</source>
         <translation type="vanished">语言</translation>
+    </message>
+</context>
+<context>
+    <name>Donate</name>
+    <message>
+        <source>Donate</source>
+        <translation>捐赠</translation>
+    </message>
+    <message>
+        <source>Later</source>
+        <translation>后来</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <source>Support the development of %1!</source>
+        <translation>支持发展%1!</translation>
+    </message>
+    <message>
+        <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating to support development efforts :)</source>
+        <translation>Serial Studio是由志愿者支持的免费和开源软件。请考虑捐赠以支持开发工作 :)</translation>
+    </message>
+    <message>
+        <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
+        <translation>你也可以通过分享、报告错误和提出新的功能来支持这个项目!</translation>
+    </message>
+    <message>
+        <source>Don&apos;t annoy me again!</source>
+        <translation>别再烦我了!</translation>
     </message>
 </context>
 <context>
@@ -777,139 +831,139 @@
     <name>MQTT::Client</name>
     <message>
         <source>Publisher</source>
-        <translation type="unfinished"></translation>
+        <translation>著作人</translation>
     </message>
     <message>
         <source>Subscriber</source>
-        <translation type="unfinished"></translation>
+        <translation>订阅者</translation>
     </message>
     <message>
         <source>IP address lookup error</source>
-        <translation type="unfinished">IP地址查询错误</translation>
+        <translation>IP地址查询错误</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>未知错误</translation>
     </message>
     <message>
         <source>Connection refused</source>
-        <translation type="unfinished"></translation>
+        <translation>拒绝连接</translation>
     </message>
     <message>
         <source>Remote host closed the connection</source>
-        <translation type="unfinished"></translation>
+        <translation>远程主机关闭连接</translation>
     </message>
     <message>
         <source>Host not found</source>
-        <translation type="unfinished"></translation>
+        <translation>未找到主机</translation>
     </message>
     <message>
         <source>Socket access error</source>
-        <translation type="unfinished"></translation>
+        <translation>插座访问错误</translation>
     </message>
     <message>
         <source>Socket resource error</source>
-        <translation type="unfinished"></translation>
+        <translation>插座资源错误</translation>
     </message>
     <message>
         <source>Socket timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>插座超时</translation>
     </message>
     <message>
         <source>Socket datagram too large</source>
-        <translation type="unfinished"></translation>
+        <translation>套接字数据包太大</translation>
     </message>
     <message>
         <source>Network error</source>
-        <translation type="unfinished"></translation>
+        <translation>网络错误</translation>
     </message>
     <message>
         <source>Address in use</source>
-        <translation type="unfinished"></translation>
+        <translation>使用中的地址</translation>
     </message>
     <message>
         <source>Address not available</source>
-        <translation type="unfinished"></translation>
+        <translation>地址不详</translation>
     </message>
     <message>
         <source>Unsupported socket operation</source>
-        <translation type="unfinished"></translation>
+        <translation>不支持的套接字操作</translation>
     </message>
     <message>
         <source>Unfinished socket operation</source>
-        <translation type="unfinished"></translation>
+        <translation>未完成的插座操作</translation>
     </message>
     <message>
         <source>Proxy authentication required</source>
-        <translation type="unfinished"></translation>
+        <translation>需要代理认证</translation>
     </message>
     <message>
         <source>SSL handshake failed</source>
-        <translation type="unfinished"></translation>
+        <translation>SSL握手失败</translation>
     </message>
     <message>
         <source>Proxy connection refused</source>
-        <translation type="unfinished"></translation>
+        <translation>拒绝代理连接</translation>
     </message>
     <message>
         <source>Proxy connection closed</source>
-        <translation type="unfinished"></translation>
+        <translation>代理连接关闭</translation>
     </message>
     <message>
         <source>Proxy connection timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>代理连接超时</translation>
     </message>
     <message>
         <source>Proxy not found</source>
-        <translation type="unfinished"></translation>
+        <translation>未找到代理机构</translation>
     </message>
     <message>
         <source>Proxy protocol error</source>
-        <translation type="unfinished"></translation>
+        <translation>代理协议错误</translation>
     </message>
     <message>
         <source>Operation error</source>
-        <translation type="unfinished"></translation>
+        <translation>操作错误</translation>
     </message>
     <message>
         <source>SSL internal error</source>
-        <translation type="unfinished"></translation>
+        <translation>SSL内部错误</translation>
     </message>
     <message>
         <source>Invalid SSL user data</source>
-        <translation type="unfinished"></translation>
+        <translation>无效的SSL用户数据</translation>
     </message>
     <message>
         <source>Socket temprary error</source>
-        <translation type="unfinished"></translation>
+        <translation>插座临时错误</translation>
     </message>
     <message>
         <source>Unacceptable MQTT protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>不可接受的MQTT协议</translation>
     </message>
     <message>
         <source>MQTT identifier rejected</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT标识符被拒绝</translation>
     </message>
     <message>
         <source>MQTT server unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT服务器不可用</translation>
     </message>
     <message>
         <source>Bad MQTT username or password</source>
-        <translation type="unfinished"></translation>
+        <translation>错误的MQTT用户名或密码</translation>
     </message>
     <message>
         <source>MQTT authorization error</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT授权错误</translation>
     </message>
     <message>
         <source>MQTT no ping response</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT没有PING响应</translation>
     </message>
     <message>
         <source>MQTT client error</source>
-        <translation type="unfinished"></translation>
+        <translation>MQTT客户端错误</translation>
     </message>
 </context>
 <context>
@@ -1246,6 +1300,17 @@
     </message>
 </context>
 <context>
+    <name>Misc::ThemeManager</name>
+    <message>
+        <source>The theme change will take effect after restart</source>
+        <translation>主题变更将在重启后生效</translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation>你现在想重新启动%1吗？</translation>
+    </message>
+</context>
+<context>
     <name>Network</name>
     <message>
         <source>Socket type</source>
@@ -1414,6 +1479,10 @@
         <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777.</source>
         <translation>通过在端口7777上建立TCP连接，应用程序/插件可以与%1进行交互。</translation>
     </message>
+    <message>
+        <source>Theme</source>
+        <translation>主题</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -1521,6 +1590,10 @@
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
+    <message>
+        <source>Setup</source>
+        <translation>体系</translation>
+    </message>
 </context>
 <context>
     <name>Sidebar</name>
@@ -1612,10 +1685,21 @@
     </message>
 </context>
 <context>
+    <name>Widgets</name>
+    <message>
+        <source>View</source>
+        <translation>视图</translation>
+    </message>
+    <message>
+        <source>Widgets</source>
+        <translation>小部件</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <source>Check for updates automatically?</source>
-        <translation>自动检查更新？</translation>
+        <translation type="vanished">自动检查更新？</translation>
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
@@ -1627,11 +1711,11 @@
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
-        <translation>拖放JSON和CSV文件</translation>
+        <translation type="vanished">拖放JSON和CSV文件</translation>
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
+        <translation type="vanished">%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
     </message>
 </context>
 </TS>
