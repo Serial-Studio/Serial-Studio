@@ -124,6 +124,7 @@ int WidgetProvider::totalWidgetCount() const
     return mapGroupCount() +
            gyroGroupCount() +
            barDatasetCount() +
+           gaugeDatasetCount() +
            compassDatasetCount() +
            accelerometerGroupCount();
     // clang-format on
@@ -538,19 +539,10 @@ void WidgetProvider::updateModels()
     m_compassDatasets = getWidgetDatasets("compass");
     m_accelerometerGroups = getWidgetGroup("accelerometer");
 
-    // Calculate total widget count
-    // clang-format off
-    auto count = mapGroupCount() +
-                 gyroGroupCount() +
-                 barDatasetCount() +
-                 compassDatasetCount() +
-                 accelerometerGroupCount();
-    // clang-format on
-
     // Tell UI to regenerate widget models if widget count has changed from last frame
-    if (count != m_widgetCount)
+    if (totalWidgetCount() != m_widgetCount)
     {
-        m_widgetCount = count;
+        m_widgetCount = totalWidgetCount();
         emit widgetCountChanged();
     }
 
