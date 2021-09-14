@@ -134,7 +134,7 @@ Item {
                                     width: sourceSize.width
                                     height: sourceSize.height
                                     sourceSize: Qt.size(18, 18)
-                                    source: "qrc:/icons/scatter-plot.svg"
+                                    source: "qrc:/icons/widget.svg"
 
                                     ColorOverlay {
                                         source: parent
@@ -203,7 +203,7 @@ Item {
                     anchors.fill: parent
                     title: qsTr("Widgets")
                     headerDoubleClickEnabled: false
-                    icon.source: "qrc:/icons/scatter-plot.svg"
+                    icon.source: "qrc:/icons/widget.svg"
                     backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
                     Rectangle {

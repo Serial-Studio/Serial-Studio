@@ -49,7 +49,7 @@ Window {
     implicitWidth: 260
     visible: opacity > 0
     opacity: enabled ? 1 : 0
-    icon.source: "qrc:/icons/chart.svg"
+    icon.source: "qrc:/icons/gauge.svg"
     implicitHeight: implicitWidth + 96
     borderColor: root.headerVisible ? Cpp_ThemeManager.datasetWindowBorder : "transparent"
 

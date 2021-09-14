@@ -347,12 +347,13 @@ void GraphProvider::csvPlayerFixes()
                     m_points.at(i)->removeLast();
             }
         }
-
-        emit dataUpdated();
     }
 
     // Update frame position
     m_prevFramePos = currentFrame;
+
+    // Update UI
+    emit dataUpdated();
 }
 
 /**

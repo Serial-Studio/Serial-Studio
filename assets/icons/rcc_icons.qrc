@@ -51,5 +51,7 @@
         <file>usb.svg</file>
         <file>visibility.svg</file>
         <file>warning.svg</file>
+        <file>gauge.svg</file>
+        <file>widget.svg</file>
     </qresource>
 </RCC>

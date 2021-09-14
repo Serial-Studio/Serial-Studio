@@ -165,7 +165,7 @@ Control {
             enabled: app.widgetsAvailable
             onClicked: root.widgetsClicked()
             text: qsTr("Widgets") + _btSpacer
-            icon.source: "qrc:/icons/chart.svg"
+            icon.source: "qrc:/icons/widget.svg"
             icon.color: Cpp_ThemeManager.brightText
             palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
