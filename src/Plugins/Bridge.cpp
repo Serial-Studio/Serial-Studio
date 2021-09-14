@@ -71,7 +71,7 @@ Bridge::Bridge()
  */
 Bridge::~Bridge()
 {
-    removeConnection();
+    m_server.close();
 }
 
 /**
