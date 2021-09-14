@@ -34,4 +34,5 @@ RESOURCES += \
     $$PWD/messages/rcc_messages.qrc \
     $$PWD/qml/rcc_qml.qrc \
     $$PWD/themes/rcc_themes.qrc \
+    $$PWD/mac-icons/rcc_mac-icons.qrc \
     $$PWD/translations/rcc_translations.qrc

@@ -138,6 +138,7 @@ HEADERS += \
     src/JSON/Generator.h \
     src/JSON/Group.h \
     src/MQTT/Client.h \
+    src/Misc/MacExtras.h \
     src/Misc/ModuleManager.h \
     src/Misc/TimerEvents.h \
     src/Misc/ThemeManager.h \
@@ -162,6 +163,7 @@ SOURCES += \
     src/JSON/Generator.cpp \
     src/JSON/Group.cpp \
     src/MQTT/Client.cpp \
+    src/Misc/MacExtras.cpp \
     src/Misc/ModuleManager.cpp \
     src/Misc/TimerEvents.cpp \
     src/Misc/ThemeManager.cpp \

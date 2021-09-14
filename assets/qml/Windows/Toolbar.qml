@@ -44,10 +44,37 @@ Control {
     //
     // Aliases to button check status
     //
-    property alias dataChecked: dataBt.checked
+    property alias dataChecked: dashboardBt.checked
     property alias setupChecked: setupBt.checked
     property alias consoleChecked: consoleBt.checked
     property alias widgetsChecked: widgetsBt.checked
+
+    //
+    // Connections with mac touchbar
+    //
+    Connections {
+        target: Cpp_Misc_MacExtras
+
+        function onSetupClicked() {
+            setupBt.clicked()
+            Cpp_Misc_MacExtras.setSetupChecked(setupBt.checked)
+        }
+
+        function onConsoleClicked() {
+            consoleBt.clicked()
+            Cpp_Misc_MacExtras.setConsoleChecked(consoleBt.checked)
+        }
+
+        function onWidgetsClicked() {
+            widgetsBt.clicked()
+            Cpp_Misc_MacExtras.setWidgetsChecked(widgetsBt.checked)
+        }
+
+        function onDashboardClicked() {
+            dashboardBt.clicked()
+            Cpp_Misc_MacExtras.setDashboardChecked(dashboardBt.checked)
+        }
+    }
 
     //
     // Background gradient
@@ -116,6 +143,7 @@ Control {
             palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
+            onCheckedChanged: Cpp_Misc_MacExtras.setSetupChecked(checked)
         }
 
         Button {
@@ -128,15 +156,16 @@ Control {
             onClicked: root.consoleClicked()
             icon.source: "qrc:/icons/code.svg"
             text: qsTr("Console") + _btSpacer
-            enabled: dataBt.enabled || widgetsBt.enabled
+            enabled: dashboardBt.enabled || widgetsBt.enabled
             icon.color: Cpp_ThemeManager.brightText
             palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
+            onCheckedChanged: Cpp_Misc_MacExtras.setConsoleChecked(checked)
         }
 
         Button {
-            id: dataBt
+            id: dashboardBt
 
             flat: true
             icon.width: 24
@@ -150,6 +179,8 @@ Control {
             palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
+            onCheckedChanged: Cpp_Misc_MacExtras.setDashboardChecked(checked)
+            onEnabledChanged: Cpp_Misc_MacExtras.setDashboardEnabled(enabled)
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
@@ -170,6 +201,8 @@ Control {
             palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
+            onCheckedChanged: Cpp_Misc_MacExtras.setWidgetsChecked(checked)
+            onEnabledChanged: Cpp_Misc_MacExtras.setWidgetsEnabled(enabled)
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}

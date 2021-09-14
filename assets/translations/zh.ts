@@ -1300,6 +1300,25 @@
     </message>
 </context>
 <context>
+    <name>Misc::MacExtras</name>
+    <message>
+        <source>Setup</source>
+        <translation>体系</translation>
+    </message>
+    <message>
+        <source>Console</source>
+        <translation>控制台</translation>
+    </message>
+    <message>
+        <source>Widgets</source>
+        <translation>小部件</translation>
+    </message>
+    <message>
+        <source>Dashboard</source>
+        <translation>仪表盘</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ThemeManager</name>
     <message>
         <source>The theme change will take effect after restart</source>

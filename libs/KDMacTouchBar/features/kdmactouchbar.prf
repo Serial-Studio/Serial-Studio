@@ -1,0 +1,4 @@
+LIBPATH=$$clean_path($$PWD/../../../lib)
+LIBS += -F$$LIBPATH -framework KDMacTouchBar
+QMAKE_LFLAGS += '-Wl,-rpath,\'$$LIBPATH\''
+INCLUDEPATH += $$LIBPATH/KDMacTouchBar.framework/Headers

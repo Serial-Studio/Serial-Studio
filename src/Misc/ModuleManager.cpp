@@ -43,6 +43,7 @@
 #include <IO/DataSources/Serial.h>
 #include <IO/DataSources/Network.h>
 
+#include <Misc/MacExtras.h>
 #include <Misc/Utilities.h>
 #include <Misc/Translator.h>
 #include <Misc/TimerEvents.h>
@@ -155,6 +156,7 @@ void ModuleManager::initializeQmlInterface()
     auto themeManager = Misc::ThemeManager::getInstance();
     auto mqttPublisher = MQTT::Client::getInstance();
     auto pluginsBridge = Plugins::Bridge::getInstance();
+    auto macExtras = Misc::MacExtras::getInstance();
     LOG_INFO() << "Finished initializing C++ modules";
 
     // Retranslate the QML interface automagically
@@ -180,6 +182,7 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
     c->setContextProperty("Cpp_MQTT_Client", mqttPublisher);
     c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
+    c->setContextProperty("Cpp_Misc_MacExtras", macExtras);
 
     // Register app info with QML
     c->setContextProperty("Cpp_AppName", qApp->applicationName());

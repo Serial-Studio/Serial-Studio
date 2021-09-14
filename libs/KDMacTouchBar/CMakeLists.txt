@@ -1,0 +1,46 @@
+cmake_minimum_required(VERSION 2.8.12)
+
+if("${CMAKE_INSTALL_PREFIX}" STREQUAL "")
+  set(USE_DEFAULT_INSTALL_LOCATION True)
+else()
+  set(USE_DEFAULT_INSTALL_LOCATION False)
+endif()
+
+project(KDMacTouchBar CXX)
+
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "" FORCE)
+endif()
+
+set(${PROJECT_NAME}_VERSION_MAJOR 1)
+set(${PROJECT_NAME}_VERSION_MINOR 0)
+set(${PROJECT_NAME}_VERSION_PATCH 0)
+set(${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH})
+
+if(CMAKE_VERSION VERSION_LESS "3.1")
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    endif ()
+else()
+    set(CMAKE_CXX_STANDARD 11)
+endif()
+
+if(USE_DEFAULT_INSTALL_LOCATION)
+    set(CMAKE_INSTALL_PREFIX "/usr/local/KDAB/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}" CACHE STRING "" FORCE)
+endif()
+
+message(STATUS "Building ${PROJECT_NAME} ${${PROJECT_NAME}_VERSION} in ${CMAKE_BUILD_TYPE} mode. Installing to ${CMAKE_INSTALL_PREFIX}")
+
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+
+set(CMAKE_AUTOMOC TRUE)
+set(QT_LIBRARIES Qt5::Widgets)
+set(QT_USE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Qt5Portability.cmake")
+
+install(FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/KDMacTouchBarConfig.cmake"
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake")
+
+add_subdirectory(src)
+add_subdirectory(examples)

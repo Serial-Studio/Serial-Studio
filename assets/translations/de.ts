@@ -1268,6 +1268,25 @@
     </message>
 </context>
 <context>
+    <name>Misc::MacExtras</name>
+    <message>
+        <source>Setup</source>
+        <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <source>Console</source>
+        <translation>Konsole</translation>
+    </message>
+    <message>
+        <source>Widgets</source>
+        <translation>Widgets</translation>
+    </message>
+    <message>
+        <source>Dashboard</source>
+        <translation>Dashboard</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ThemeManager</name>
     <message>
         <source>The theme change will take effect after restart</source>
