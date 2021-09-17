@@ -79,5 +79,8 @@ OTHER_FILES += \
     $$PWD/qml/Windows/Widgets.qml \
     $$PWD/qml/main.qml \
     $$PWD/themes/0_Dark.json \
-    $$PWD/themes/1_Light.json
+    $$PWD/themes/1_Light.json \
+    $$PWD/qml/JsonEditor/JsonDatasetDelegate.qml \
+    $$PWD/qml/JsonEditor/JsonEditor.qml \
+    $$PWD/qml/JsonEditor/JsonGroupDelegate.qml
 

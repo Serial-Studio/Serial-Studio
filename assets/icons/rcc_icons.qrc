@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/icons">
         <file>ac-power.svg</file>
+        <file>add.svg</file>
         <file>arrow-right.svg</file>
         <file>backspace.svg</file>
         <file>battery.svg</file>
@@ -10,19 +11,23 @@
         <file>compass.svg</file>
         <file>connect.svg</file>
         <file>copy.svg</file>
+        <file>dataset.svg</file>
         <file>delete.svg</file>
         <file>developer-board.svg</file>
         <file>device-hub.svg</file>
         <file>disconnect.svg</file>
+        <file>down.svg</file>
         <file>drag-drop.svg</file>
         <file>equalizer.svg</file>
         <file>error.svg</file>
         <file>ethernet.svg</file>
         <file>fullscreen-exit.svg</file>
         <file>fullscreen.svg</file>
+        <file>gauge.svg</file>
         <file>group.svg</file>
         <file>help.svg</file>
         <file>info.svg</file>
+        <file>json.svg</file>
         <file>link.svg</file>
         <file>location-off.svg</file>
         <file>location-on.svg</file>
@@ -34,6 +39,7 @@
         <file>power.svg</file>
         <file>ram.svg</file>
         <file>refresh.svg</file>
+        <file>registration.svg</file>
         <file>right.svg</file>
         <file>save.svg</file>
         <file>scatter-plot.svg</file>
@@ -47,11 +53,14 @@
         <file>settings.svg</file>
         <file>tab.svg</file>
         <file>terminal.svg</file>
+        <file>up.svg</file>
         <file>update.svg</file>
         <file>usb.svg</file>
         <file>visibility.svg</file>
         <file>warning.svg</file>
-        <file>gauge.svg</file>
         <file>widget.svg</file>
+        <file>end-sequence.svg</file>
+        <file>separator.svg</file>
+        <file>start-sequence.svg</file>
     </qresource>
 </RCC>

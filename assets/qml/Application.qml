@@ -29,6 +29,7 @@ import QtQuick.Controls 2.12
 import Qt.labs.settings 1.0
 
 import "Windows"
+import "JsonEditor"
 
 ApplicationWindow {
     id: app
@@ -377,6 +378,7 @@ ApplicationWindow {
             dataChecked: app.dashboardVisible
             widgetsChecked: app.widgetsVisible
             consoleChecked: app.consoleVisible
+            onJsonEditorClicked: jsonEditor.show()
             onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
             onDataClicked: {
@@ -502,6 +504,13 @@ ApplicationWindow {
     //
     CsvPlayer {
         id: csvPlayer
+    }
+
+    //
+    // JSON Editor dialog
+    //
+    JsonEditor {
+        id: jsonEditor
     }
 
     //

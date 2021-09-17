@@ -133,6 +133,7 @@ HEADERS += \
     src/IO/DataSources/Serial.h \
     src/IO/Manager.h \
     src/JSON/Dataset.h \
+    src/JSON/Editor.h \
     src/JSON/Frame.h \
     src/JSON/FrameInfo.h \
     src/JSON/Generator.h \
@@ -158,6 +159,7 @@ SOURCES += \
     src/IO/DataSources/Serial.cpp \
     src/IO/Manager.cpp \
     src/JSON/Dataset.cpp \
+    src/JSON/Editor.cpp \
     src/JSON/Frame.cpp \
     src/JSON/FrameInfo.cpp \
     src/JSON/Generator.cpp \

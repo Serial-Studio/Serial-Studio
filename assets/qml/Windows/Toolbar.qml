@@ -40,6 +40,7 @@ Control {
     signal setupClicked()
     signal consoleClicked()
     signal widgetsClicked()
+    signal jsonEditorClicked()
 
     //
     // Aliases to button check status
@@ -210,6 +211,20 @@ Control {
 
         Item {
             Layout.fillWidth: true
+        }
+
+        Button {
+            flat: true
+            icon.width: 24
+            icon.height: 24
+            Layout.fillHeight: true
+            icon.source: "qrc:/icons/json.svg"
+            onClicked: root.jsonEditorClicked()
+            text: qsTr("JSON Editor") + _btSpacer
+            icon.color: Cpp_ThemeManager.brightText
+            palette.buttonText: Cpp_ThemeManager.brightText
+            palette.button: Cpp_ThemeManager.toolbarGradient1
+            palette.window: Cpp_ThemeManager.toolbarGradient1
         }
 
         Button {

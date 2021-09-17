@@ -32,5 +32,8 @@
         <file>Windows/Setup.qml</file>
         <file>Windows/Toolbar.qml</file>
         <file>Windows/Widgets.qml</file>
+        <file>JsonEditor/JsonDatasetDelegate.qml</file>
+        <file>JsonEditor/JsonEditor.qml</file>
+        <file>JsonEditor/JsonGroupDelegate.qml</file>
     </qresource>
 </RCC>
