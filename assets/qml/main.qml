@@ -24,11 +24,22 @@ import QtQuick 2.12
 
 Item {
     id: qmlMain
-    readonly property string monoFont: fontLoader.name
+    readonly property string uiFont: uiFontLoader.name
+    readonly property string monoFont: monoFontLoader.name
 
     FontLoader {
-        id: fontLoader
-        source: "qrc:/fonts/NotoSansMono-Regular.ttf"
+        id: uiFontLoader
+        source: "qrc:/fonts/Roboto-Regular.ttf"
+    }
+
+    FontLoader {
+        id: uiFontLoaderBold
+        source: "qrc:/fonts/Roboto-Bold.ttf"
+    }
+
+    FontLoader {
+        id: monoFontLoader
+        source: "qrc:/fonts/RobotoMono-Regular.ttf"
     }
 
     Loader {

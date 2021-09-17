@@ -586,7 +586,7 @@ void QmlPlainTextEdit::scrollToBottom(const bool repaint)
 
     // Do not scroll to bottom if all text fits in current window
     if (lineCount > visibleLines)
-        bar->setValue(lineCount - visibleLines + 1);
+        bar->setValue(lineCount - visibleLines + 2);
     else
         bar->setValue(0);
 
@@ -912,8 +912,11 @@ QList<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &input
             m_pendingText += strippedText.mid(0, escape.length());
             strippedText.remove(0, escape.length());
 
+            // Get stripped text in uppercase
+            auto upperCase = strippedText.toUpper();
+
             // Clear line
-            if (strippedText == "2K")
+            if (upperCase.contains("2K"))
             {
                 textEdit->setFocus();
                 auto storedCursor = textEdit->textCursor();
@@ -923,6 +926,14 @@ QList<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &input
                 textEdit->textCursor().removeSelectedText();
                 textEdit->textCursor().deletePreviousChar();
                 textEdit->setTextCursor(storedCursor);
+                return outputData;
+            }
+
+            // Clear screen
+            if (upperCase.contains("2J"))
+            {
+                textEdit->clear();
+                return QList<FormattedText>();
             }
 
             // \e[K is not supported. Just strip it.

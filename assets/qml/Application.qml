@@ -201,6 +201,11 @@ ApplicationWindow {
     minimumWidth: 1100
     title: Cpp_AppName
     minimumHeight: Qt.platform.os == "osx" ? 720 : 740
+
+    //
+    // Set user interface font
+    //
+    font.family: qmlMain.uiFont
     
     //
     // Define default window size to avoid issues with

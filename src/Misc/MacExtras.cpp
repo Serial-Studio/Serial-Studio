@@ -52,6 +52,12 @@ MacExtras::MacExtras()
     m_widgetsAction.setCheckable(true);
     m_dashboardAction.setCheckable(true);
 
+    // Set initial button status(es)
+    m_setupAction.setChecked(true);
+    m_consoleAction.setChecked(true);
+    m_widgetsAction.setEnabled(false);
+    m_dashboardAction.setEnabled(false);
+
     // Configure signals
     connect(&m_setupAction, SIGNAL(triggered()), this, SIGNAL(setupClicked()));
     connect(&m_consoleAction, SIGNAL(triggered()), this, SIGNAL(consoleClicked()));
