@@ -32,15 +32,28 @@ Widgets.Window {
     Layout.minimumHeight: height
     headerDoubleClickEnabled: false
     icon.source: "qrc:/icons/group.svg"
-    title: qsTr("Group %1").arg(groupIndex + 1)
     backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
     height: column.implicitHeight + headerHeight + 4 * app.spacing
+    title: qsTr("Group %1 - %2").arg(group + 1).arg(Cpp_JSON_Editor.groupTitle(group))
 
     //
     // Custom properties
     //
-    property int groupIndex
-    property int totalGroupCount
+    property int group
+
+    //
+    // Connections with JSON editor
+    //
+    Connections {
+        target: Cpp_JSON_Editor
+
+        function onGroupChanged(id) {
+            if (id === group) {
+                repeater.model = 0
+                repeater.model = Cpp_JSON_Editor.datasetCount(group)
+            }
+        }
+    }
 
     //
     // Main layout
@@ -65,26 +78,35 @@ Widgets.Window {
             TextField {
                 Layout.fillWidth: true
                 placeholderText: qsTr("Title")
+                text: Cpp_JSON_Editor.groupTitle(group)
+                onTextChanged: {
+                    Cpp_JSON_Editor.setGroupTitle(group, text)
+                    root.title = qsTr("Group %1 - %2").arg(group + 1).arg(Cpp_JSON_Editor.groupTitle(group))
+                }
             }
 
             ComboBox {
                 id: widget
                 Layout.minimumWidth: 180
-                model: [
-                    qsTr("Dataset widgets"),
-                    qsTr("Accelerometer"),
-                    qsTr("Gyroscope"),
-                    qsTr("Map")
-                ]
+                model: Cpp_JSON_Editor.availableGroupLevelWidgets()
+                currentIndex: Cpp_JSON_Editor.groupWidgetIndex(group)
+                onCurrentIndexChanged: {
+                    var prevIndex = Cpp_JSON_Editor.groupWidgetIndex(group)
+                    if (currentIndex !== prevIndex) {
+                        if (!Cpp_JSON_Editor.setGroupWidget(group, currentIndex))
+                            currentIndex = prevIndex
+                    }
+                }
             }
 
             RoundButton {
                 icon.width: 18
                 icon.height: 18
-                enabled: groupIndex > 0
+                enabled: group > 0
                 opacity: enabled ? 1 : 0.5
-                icon.color: Cpp_ThemeManager.text
                 icon.source: "qrc:/icons/up.svg"
+                icon.color: Cpp_ThemeManager.text
+                onClicked: Cpp_JSON_Editor.moveGroupUp(group)
 
                 Behavior on opacity {NumberAnimation{}}
             }
@@ -95,7 +117,9 @@ Widgets.Window {
                 opacity: enabled ? 1 : 0.5
                 icon.color: Cpp_ThemeManager.text
                 icon.source: "qrc:/icons/down.svg"
-                enabled: groupIndex < totalGroupCount - 1
+                enabled: group < Cpp_JSON_Editor.groupCount - 1
+                onClicked: Cpp_JSON_Editor.moveGroupDown(group)
+
                 Behavior on opacity {NumberAnimation{}}
             }
 
@@ -104,18 +128,32 @@ Widgets.Window {
                 icon.height: 18
                 icon.color: Cpp_ThemeManager.text
                 icon.source: "qrc:/icons/delete.svg"
+                onClicked: Cpp_JSON_Editor.deleteGroup(group)
             }
         }
 
         //
         // Datasets
         //
-        Repeater {
-            id: repeater
-            model: 0
-            delegate: JsonDatasetDelegate {
-                datasetIndex: index
-                Layout.fillWidth: true
+        GridLayout {
+            Layout.fillWidth: true
+            rowSpacing: app.spacing
+            columnSpacing: app.spacing
+            Layout.fillHeight: repeater.model > 0
+            columns: Math.floor(column.width / 320)
+            Layout.minimumHeight: (repeater.model / columns) * 300
+
+            Repeater {
+                id: repeater
+                model: Cpp_JSON_Editor.datasetCount(group)
+                delegate: JsonDatasetDelegate {
+                    dataset: index
+                    group: root.group
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 320
+                    Layout.minimumHeight: 300
+                    showGroupWidget: widget.currentIndex > 0
+                }
             }
         }
 
@@ -130,7 +168,7 @@ Widgets.Window {
             icon.source: "qrc:/icons/add.svg"
             icon.color: Cpp_ThemeManager.text
             visible: widget.currentIndex == 0
-            onClicked: repeater.model = repeater.model + 1
+            onClicked: Cpp_JSON_Editor.addDataset(group)
         }
     }
 }

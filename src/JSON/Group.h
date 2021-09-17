@@ -67,6 +67,8 @@ private:
     QString m_title;
     QString m_widget;
     QVector<Dataset *> m_datasets;
+
+    friend class Editor;
 };
 }
 

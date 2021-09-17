@@ -72,6 +72,12 @@ private:
     QString m_units;
     QString m_widget;
     QJsonObject m_jsonData;
+
+    // Editor-related variables
+    int m_index;
+    QString m_max;
+    QString m_min;
+    friend class Editor;
 };
 }
 

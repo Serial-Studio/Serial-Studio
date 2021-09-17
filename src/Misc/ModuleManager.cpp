@@ -34,6 +34,7 @@
 
 #include <JSON/Frame.h>
 #include <JSON/Group.h>
+#include <JSON/Editor.h>
 #include <JSON/Dataset.h>
 #include <JSON/Generator.h>
 #include <JSON/FrameInfo.h>
@@ -152,6 +153,7 @@ void ModuleManager::initializeQmlInterface()
     auto ioSerial = IO::DataSources::Serial::getInstance();
     auto ioNetwork = IO::DataSources::Network::getInstance();
     auto jsonGenerator = JSON::Generator::getInstance();
+    auto jsonEditor = JSON::Editor::getInstance();
     auto utilities = Misc::Utilities::getInstance();
     auto themeManager = Misc::ThemeManager::getInstance();
     auto mqttPublisher = MQTT::Client::getInstance();
@@ -179,6 +181,7 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_IO_Manager", ioManager);
     c->setContextProperty("Cpp_IO_Serial", ioSerial);
     c->setContextProperty("Cpp_IO_Network", ioNetwork);
+    c->setContextProperty("Cpp_JSON_Editor", jsonEditor);
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
     c->setContextProperty("Cpp_MQTT_Client", mqttPublisher);
     c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);

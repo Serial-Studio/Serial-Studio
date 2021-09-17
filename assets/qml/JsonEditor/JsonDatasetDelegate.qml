@@ -28,98 +28,149 @@ import "../Widgets" as Widgets
 
 Widgets.Window {
     id: root
-    Layout.minimumHeight: height
+    altButtonEnabled: true
+    headerDoubleClickEnabled: false
     icon.source: "qrc:/icons/dataset.svg"
-    title: qsTr("Dataset %1").arg(datasetIndex + 1)
+    altButtonIcon.source: "qrc:/icons/delete.svg"
     borderColor: Cpp_ThemeManager.datasetWindowBorder
     palette.window: Cpp_ThemeManager.datasetWindowBackground
-    height: grid.implicitHeight + headerHeight + 4 * app.spacing
+    onAltButtonClicked: Cpp_JSON_Editor.deleteDataset(group, dataset)
+    title: qsTr("Dataset %1 - %2").arg(dataset + 1).arg(Cpp_JSON_Editor.datasetTitle(group, dataset))
 
-    property int datasetIndex
+    //
+    // Custom properties
+    //
+    property int group
+    property int dataset
+    property bool showGroupWidget
 
+    //
+    // User interface
+    //
     GridLayout {
-        id: grid
+        x: 0
         columns: 2
+        anchors.fill: parent
         rowSpacing: app.spacing
         columnSpacing: app.spacing
+        anchors.margins: app.spacing * 2
 
-        anchors {
-            left: parent.left
-            right: parent.right
-            margins: 2 * app.spacing
-            verticalCenter: parent.verticalCenter
-        }
-
+        //
+        // Dataset title
+        //
         Label {
             text: qsTr("Title:")
-        }
-
-        TextField {
+        } TextField {
             Layout.fillWidth: true
+            text: Cpp_JSON_Editor.datasetTitle(group, dataset)
             placeholderText: qsTr("Sensor reading, uptime, etc...")
+            onTextChanged: {
+                Cpp_JSON_Editor.setDatasetTitle(group, dataset, text)
+                root.title = qsTr("Dataset %1 - %2").arg(dataset + 1).arg(Cpp_JSON_Editor.datasetTitle(group, dataset))
+            }
         }
 
+        //
+        // Dataset units
+        //
         Label {
             text: qsTr("Units:")
-        }
-
-        TextField {
+        } TextField {
             Layout.fillWidth: true
+            text: Cpp_JSON_Editor.datasetUnits(group, dataset)
             placeholderText: qsTr("Volts, meters, seconds, etc...")
+            onTextChanged: Cpp_JSON_Editor.setDatasetUnits(group, dataset, text)
         }
 
+        //
+        // Frame index
+        //
         Label {
             text: qsTr("Frame index:")
-        }
-
-        SpinBox {
+        } SpinBox {
             from: 0
             editable: true
             Layout.fillWidth: true
+            value: Cpp_JSON_Editor.datasetIndex(group, dataset)
+            onValueChanged: Cpp_JSON_Editor.setDatasetIndex(group, dataset, value)
         }
 
+        //
+        // Dataset graph
+        //
+        Label {
+            text: qsTr("Generate graph:")
+        } Switch {
+            Layout.leftMargin: -app.spacing
+            checked: Cpp_JSON_Editor.datasetGraph(group, dataset)
+            onCheckedChanged: Cpp_JSON_Editor.setDatasetGraph(group, dataset, checked)
+        }
+
+        //
+        // Dataset widget (user selectable or group-level constant)
+        //
         Label {
             text: qsTr("Widget:")
-        }
-
-        ComboBox {
+        } ComboBox {
             id: widget
+            visible: !showGroupWidget
             Layout.fillWidth: true
-            model: [
-                qsTr("None"),
-                qsTr("Bar/level"),
-                qsTr("Gauge"),
-                qsTr("Compass")
-            ]
+            model: Cpp_JSON_Editor.availableDatasetLevelWidgets()
+            currentIndex: Cpp_JSON_Editor.datasetWidgetIndex(group, dataset)
+            onCurrentIndexChanged: {
+                if (visible)
+                    Cpp_JSON_Editor.setDatasetWidget(group, dataset, currentIndex)
+            }
+        } TextField {
+            readOnly: true
+            Layout.fillWidth: true
+            visible: showGroupWidget
+            text: Cpp_JSON_Editor.datasetWidget(group, dataset)
         }
 
+        //
+        // Widget minimum value
+        //
         Label {
             text: qsTr("Min value:")
             visible: widget.currentIndex == 1 || widget.currentIndex == 2
-        }
-
-        SpinBox {
+        } TextField {
             id: min
-            from: 0
-            value: 0
-            to: max.value
-            editable: true
             Layout.fillWidth: true
+            text: Cpp_JSON_Editor.datasetWidgetMin(group, dataset)
             visible: widget.currentIndex == 1 || widget.currentIndex == 2
+            onTextChanged: Cpp_JSON_Editor.setDatasetWidgetMin(group, dataset, text)
+            validator: DoubleValidator {
+                bottom: 0
+                top: parseFloat(max.text)
+            }
         }
 
+        //
+        // Widget maximum value
+        //
         Label {
             text: qsTr("Max value:")
             visible: widget.currentIndex == 1 || widget.currentIndex == 2
+        } TextField {
+            id: max
+            Layout.fillWidth: true
+            text: Cpp_JSON_Editor.datasetWidgetMax(group, dataset)
+            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+            onTextChanged: Cpp_JSON_Editor.setDatasetWidgetMax(group, dataset, text)
+
+            validator: DoubleValidator {
+                bottom: parseFloat(min.text)
+            }
         }
 
-        SpinBox {
-            id: max
-            value: 100
-            editable: true
-            from: min.value
-            Layout.fillWidth: true
-            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+        //
+        // Vertical spacer
+        //
+        Item {
+            Layout.fillHeight: true
+        } Item {
+            Layout.fillHeight: true
         }
     }
 }

@@ -136,11 +136,8 @@ void Generator::loadJsonMap()
 /**
  * Opens, validates & loads into memory the JSON file in the given @a path.
  */
-void Generator::loadJsonMap(const QString &path, const bool silent)
+void Generator::loadJsonMap(const QString &path)
 {
-    // Log information
-    LOG_TRACE() << "Loading JSON file, silent flag set to" << silent;
-
     // Validate path
     if (path.isEmpty())
         return;
@@ -176,10 +173,6 @@ void Generator::loadJsonMap(const QString &path, const bool silent)
 
             writeSettings(path);
             m_jsonMapData = QString::fromUtf8(data);
-            if (!silent)
-                Misc::Utilities::showMessageBox(
-                    tr("JSON map file loaded successfully!"),
-                    tr("File \"%1\" loaded into memory").arg(jsonMapFilename()));
         }
 
         // Get rid of warnings
@@ -229,7 +222,7 @@ void Generator::readSettings()
 {
     auto path = m_settings.value("json_map_location", "").toString();
     if (!path.isEmpty())
-        loadJsonMap(path, true);
+        loadJsonMap(path);
 }
 
 /**

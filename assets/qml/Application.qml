@@ -646,7 +646,7 @@ ApplicationWindow {
             // Process JSON files
             if (cleanPath.endsWith(".json")) {
                 Cpp_JSON_Generator.setOperationMode(0)
-                Cpp_JSON_Generator.loadJsonMap(cleanPath, false)
+                Cpp_JSON_Generator.loadJsonMap(cleanPath)
             }
 
             // Process CSV files

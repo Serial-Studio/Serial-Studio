@@ -27,15 +27,28 @@ import QtQuick.Controls 2.12
 
 import Qt.labs.settings 1.0
 
-Window {
+ApplicationWindow {
     id: root
 
     //
     // Window options
     //
-    title: qsTr("JSON Editor")
     minimumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing
+    title: qsTr("JSON Editor - %1").arg(Cpp_JSON_Editor.jsonFileName)
+
+    //
+    // Ensure that current JSON file is shown
+    //
+    onVisibleChanged: {
+        if (visible)
+            Cpp_JSON_Editor.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
+    }
+
+    //
+    // Ask user to save changes before closing the window
+    //
+    onClosing: close.accepted = Cpp_JSON_Editor.askSave()
 
     //
     // Save window size
@@ -46,6 +59,23 @@ Window {
         property alias windowY: root.y
         property alias windowWidth: root.width
         property alias windowHeight: root.height
+    }
+
+    //
+    // Connections with JSON editor model
+    //
+    Connections {
+        target: Cpp_JSON_Editor
+
+        function onGroupCountChanged() {
+            view.model = 0
+            view.model = Cpp_JSON_Editor.groupCount
+        }
+
+        function onGroupOrderChanged() {
+            view.model = 0
+            view.model = Cpp_JSON_Editor.groupCount
+        }
     }
 
     //
@@ -69,94 +99,112 @@ Window {
             anchors.margins: app.spacing * 2
 
             //
-            // Project title
+            // Project properties
             //
-            RowLayout {
-                spacing: app.spacing
+            GridLayout {
+                columns: 2
                 Layout.fillWidth: true
+                rowSpacing: app.spacing
+                columnSpacing: app.spacing * 2
 
-                ToolButton {
-                    flat: true
-                    enabled: false
-                    icon.width: 24
-                    icon.height: 24
-                    icon.color: Cpp_ThemeManager.text
-                    icon.source: "qrc:/icons/registration.svg"
-                }
-
-                TextField {
+                //
+                // Project title
+                //
+                RowLayout {
+                    spacing: app.spacing
                     Layout.fillWidth: true
-                    Layout.minimumWidth: 320
-                    placeholderText: qsTr("Project title (required)")
-                }
-            }
 
-            //
-            // Separator character
-            //
-            RowLayout {
-                spacing: app.spacing
-                Layout.fillWidth: true
+                    ToolButton {
+                        flat: true
+                        enabled: false
+                        icon.width: 24
+                        icon.height: 24
+                        icon.color: Cpp_ThemeManager.text
+                        icon.source: "qrc:/icons/registration.svg"
+                    }
 
-                ToolButton {
-                    flat: true
-                    enabled: false
-                    icon.width: 24
-                    icon.height: 24
-                    icon.color: Cpp_ThemeManager.text
-                    icon.source: "qrc:/icons/separator.svg"
+                    TextField {
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 320
+                        text: Cpp_JSON_Editor.title
+                        onTextChanged: Cpp_JSON_Editor.setTitle(text)
+                        placeholderText: qsTr("Project title (required)")
+                    }
                 }
 
-                TextField {
+                //
+                // Separator character
+                //
+                RowLayout {
+                    spacing: app.spacing
                     Layout.fillWidth: true
-                    Layout.minimumWidth: 420
-                    placeholderText: qsTr("Data separator (default is ',')")
-                }
-            }
 
-            //
-            // Start sequence
-            //
-            RowLayout {
-                spacing: app.spacing
-                Layout.fillWidth: true
+                    ToolButton {
+                        flat: true
+                        enabled: false
+                        icon.width: 24
+                        icon.height: 24
+                        icon.color: Cpp_ThemeManager.text
+                        icon.source: "qrc:/icons/separator.svg"
+                    }
 
-                ToolButton {
-                    flat: true
-                    enabled: false
-                    icon.width: 24
-                    icon.height: 24
-                    icon.color: Cpp_ThemeManager.text
-                    icon.source: "qrc:/icons/start-sequence.svg"
+                    TextField {
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 420
+                        text: Cpp_JSON_Editor.separator
+                        onTextChanged: Cpp_JSON_Editor.setSeparator(text)
+                        placeholderText: qsTr("Data separator (default is ',')")
+                    }
                 }
 
-                TextField {
+                //
+                // Start sequence
+                //
+                RowLayout {
+                    spacing: app.spacing
                     Layout.fillWidth: true
-                    Layout.minimumWidth: 256
-                    placeholderText: qsTr("Frame start sequence (default is '%1')").arg(Cpp_IO_Manager.startSequence)
-                }
-            }
 
-            //
-            // End sequence
-            //
-            RowLayout {
-                spacing: app.spacing
-                Layout.fillWidth: true
+                    ToolButton {
+                        flat: true
+                        enabled: false
+                        icon.width: 24
+                        icon.height: 24
+                        icon.color: Cpp_ThemeManager.text
+                        icon.source: "qrc:/icons/start-sequence.svg"
+                    }
 
-                ToolButton {
-                    flat: true
-                    enabled: false
-                    icon.width: 24
-                    icon.height: 24
-                    icon.color: Cpp_ThemeManager.text
-                    icon.source: "qrc:/icons/end-sequence.svg"
+                    TextField {
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 256
+                        text: Cpp_JSON_Editor.frameStartSequence
+                        onTextChanged: Cpp_JSON_Editor.setFrameStartSequence(text)
+                        placeholderText: qsTr("Frame start sequence (default is '%1')").arg(Cpp_IO_Manager.startSequence)
+                    }
                 }
 
-                TextField {
+                //
+                // End sequence
+                //
+                RowLayout {
+                    spacing: app.spacing
                     Layout.fillWidth: true
-                    Layout.minimumWidth: 256
-                    placeholderText: qsTr("Frame end sequence (default is '%1')").arg(Cpp_IO_Manager.finishSequence)
+
+                    ToolButton {
+                        flat: true
+                        enabled: false
+                        icon.width: 24
+                        icon.height: 24
+                        icon.color: Cpp_ThemeManager.text
+                        icon.source: "qrc:/icons/end-sequence.svg"
+                    }
+
+                    TextField {
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 256
+                        text: Cpp_JSON_Editor.frameEndSequence
+                        onTextChanged: Cpp_JSON_Editor.setFrameEndSequence(text)
+                        placeholderText: qsTr("Frame end sequence (default is '%1')").arg(Cpp_IO_Manager.finishSequence)
+                    }
                 }
             }
 
@@ -182,8 +230,8 @@ Window {
 
                 ListView {
                     id: view
-                    model: 0
                     anchors.fill: parent
+                    model: Cpp_JSON_Editor.groupCount
                     anchors.bottomMargin: app.spacing
 
                     ScrollBar.vertical: ScrollBar {
@@ -198,8 +246,7 @@ Window {
 
                         JsonGroupDelegate {
                             id: group
-                            groupIndex: index
-                            totalGroupCount: view.model
+                            group: index
                             anchors {
                                 left: parent.left
                                 right: parent.right
@@ -228,7 +275,7 @@ Window {
                 icon.source: "qrc:/icons/add.svg"
                 icon.color: Cpp_ThemeManager.text
                 onClicked: {
-                    view.model = view.model + 1
+                    Cpp_JSON_Editor.addGroup()
                     scroll.position = 1
                 }
             }
@@ -249,6 +296,7 @@ Window {
 
                 Button {
                     text: qsTr("Close")
+                    onClicked: root.close()
                 }
 
                 Item {
@@ -256,11 +304,21 @@ Window {
                 }
 
                 Button {
-                    text: qsTr("Open")
+                    text: qsTr("Open existing project...")
+                    onClicked: Cpp_JSON_Editor.openJsonFile()
+                }
+
+                Button {
+                    text: qsTr("Create new project")
+                    onClicked: Cpp_JSON_Editor.newJsonFile()
                 }
 
                 Button {
                     text: qsTr("Save")
+                    opacity: enabled ? 1: 0.5
+                    enabled: Cpp_JSON_Editor.modified
+                    onClicked: Cpp_JSON_Editor.saveJsonFile()
+                    Behavior on opacity {NumberAnimation{}}
                 }
             }
         }

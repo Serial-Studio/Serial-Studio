@@ -102,8 +102,8 @@ public:
 
 public slots:
     void loadJsonMap();
+    void loadJsonMap(const QString &path);
     void setOperationMode(const OperationMode mode);
-    void loadJsonMap(const QString &path, const bool silent = false);
 
 private:
     Generator();

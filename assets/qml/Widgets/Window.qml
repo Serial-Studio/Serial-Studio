@@ -40,6 +40,8 @@ Page {
     property int radius: root.borderWidth + 2
     property color titleColor: palette.brightText
     property color borderColor: palette.highlight
+    property bool altButtonEnabled: false
+    property alias altButtonIcon: altBt.icon
     property alias headerDoubleClickEnabled: headerMouseArea.enabled
     property color backgroundColor: Cpp_ThemeManager.datasetWindowBackground
     property color gradientColor1: root.gradient ? Cpp_ThemeManager.windowGradient1 :
@@ -50,6 +52,7 @@ Page {
     //
     // Signals
     //
+    signal altButtonClicked()
     signal headerDoubleClicked()
 
     //
@@ -175,6 +178,23 @@ Page {
                 icon.width: root.headerHeight * 24 / 32
                 icon.height: root.headerHeight * 24 / 32
                 Behavior on opacity {NumberAnimation{}}
+            }
+
+            Button {
+                id: altBt
+                flat: true
+                enabled: visible
+                icon.color: root.titleColor
+                visible: root.altButtonEnabled
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: root.altButtonClicked()
+                Layout.maximumHeight: parent.height
+                Layout.minimumHeight: parent.height
+                Layout.minimumWidth: root.headerHeight
+                Layout.maximumWidth: root.headerHeight
+                icon.width: root.headerHeight * 24 / 32
+                icon.height: root.headerHeight * 24 / 32
+                background: Item {}
             }
         }
     }
