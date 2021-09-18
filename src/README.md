@@ -33,6 +33,7 @@ Here is a breakdown of each subdirectory of the source code:
 		- The [`Dataset`](JSON/Dataset.h) class represents a dataset object. Datasets contain a title, a value and the units in which the dataset is measured (e.g. volts, meters, seconds, etc).
 	- The [`Generator`](JSON/Generator.h) class receives data from the [`I/O Manager`](IO/Manager.h) and uses the JSON map file to generate a JSON document that is used to create a [`Frame`](JSON/Frame.h) object.
 	- [`FrameInfo`](JSON/FrameInfo.h) (JFI) implements a structure that contains a JSON frame, the RX date/time and the frame ID number. This structure is needed because the [`Generator`](JSON/Generator.h) class builds each frame in a different thread (to avoid freezing the UI thread at high baud-rates).
+	- The JSON [`Editor`](JSON/Editor.h) provides the necessary logic to allow users to build JSON files directly from the user interface.
 - The [`Misc`](Misc) directory contains several utility classes, such as the global [`TimerEvents`](Misc/TimerEvents.h) class, which is used to update the UI elements at a given frequency.
 - [`MQTT`](MQTT) contains a singleton class that allows Serial Studio to act as an [MQTT](https://en.wikipedia.org/wiki/MQTT) client.
 - The [`Plugins`](Plugins) folder contains a simple [`TCP client`](Plugins/Bridge.h) that allows Serial Studio to interact with external applications/plugins.
