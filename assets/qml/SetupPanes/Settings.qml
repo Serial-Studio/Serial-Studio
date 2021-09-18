@@ -35,6 +35,7 @@ Control {
     property alias language: _langCombo.currentIndex
     property alias startSequence: _startSequence.text
     property alias tcpPlugins: _tcpPlugins.checked
+    property alias separatorSequence: _separatorSequence.text
 
     //
     // Layout
@@ -110,6 +111,22 @@ Control {
                 onTextChanged: {
                     if (text !== Cpp_IO_Manager.finishSequence)
                         Cpp_IO_Manager.finishSequence = text
+                }
+            }
+
+            //
+            // End sequence
+            //
+            Label {
+                text: qsTr("Data separator") + ": "
+            } TextField {
+                id: _separatorSequence
+                Layout.fillWidth: true
+                placeholderText: ","
+                text: ","
+                onTextChanged: {
+                    if (text !== Cpp_IO_Manager.separatorSequence)
+                        Cpp_IO_Manager.separatorSequence = text
                 }
             }
 

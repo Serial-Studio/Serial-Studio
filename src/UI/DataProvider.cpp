@@ -50,6 +50,7 @@ DataProvider::DataProvider()
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(te, SIGNAL(timeout42Hz()), this, SLOT(updateData()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
+    connect(ge, SIGNAL(jsonFileMapChanged()), this, SLOT(resetData()));
     connect(ge, &JSON::Generator::jsonChanged, this, &DataProvider::selectLatestJSON);
     LOG_TRACE() << "Class initialized";
 }

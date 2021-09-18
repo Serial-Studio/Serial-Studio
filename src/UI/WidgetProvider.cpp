@@ -29,6 +29,7 @@
 #include <CSV/Player.h>
 #include <IO/Manager.h>
 #include <IO/Console.h>
+#include <JSON/Generator.h>
 #include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
@@ -49,9 +50,11 @@ WidgetProvider::WidgetProvider()
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
     auto dp = DataProvider::getInstance();
+    auto jg = JSON::Generator::getInstance();
     connect(dp, SIGNAL(updated()), this, SLOT(updateModels()));
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
+    connect(jg, SIGNAL(jsonFileMapChanged()), this, SLOT(resetData()));
     LOG_TRACE() << "Class initialized";
 }
 

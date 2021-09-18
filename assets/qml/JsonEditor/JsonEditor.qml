@@ -51,6 +51,11 @@ ApplicationWindow {
     onClosing: close.accepted = Cpp_JSON_Editor.askSave()
 
     //
+    // Dummy string to increase width of buttons
+    //
+    readonly property string _btSpacer: "  "
+
+    //
     // Save window size
     //
     Settings {
@@ -226,7 +231,6 @@ ApplicationWindow {
                 Layout.minimumHeight: 320
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: TextField.WrapAtWordBoundaryOrAnywhere
-                placeholderText: view.model === 0 ? qsTr("Click on the \"Add group\" button to begin.") : ""
 
                 ListView {
                     id: view
@@ -255,6 +259,36 @@ ApplicationWindow {
                         }
                     }
                 }
+
+                ColumnLayout {
+                    spacing: app.spacing
+                    anchors.centerIn: parent
+                    visible: Cpp_JSON_Editor.groupCount === 0
+
+                    Button {
+                        flat: true
+                        enabled: false
+                        icon.width: 128
+                        icon.height: 128
+                        Layout.alignment: Qt.AlignHCenter
+                        icon.color: Cpp_ThemeManager.text
+                        icon.source: "qrc:/icons/developer-board.svg"
+                    }
+
+                    Label {
+                        font.bold: true
+                        font.pixelSize: 24
+                        Layout.alignment: Qt.AlignHCenter
+                        text: qsTr("Start something awesome")
+                    }
+
+                    Label {
+                        opacity: 0.8
+                        font.pixelSize: 18
+                        Layout.alignment: Qt.AlignHCenter
+                        text: qsTr("Click on the \"%1\" button to begin").arg(addGrp.text)
+                    }
+                }
             }
 
             //
@@ -265,29 +299,6 @@ ApplicationWindow {
             }
 
             //
-            // Add group button
-            //
-            Button {
-                icon.width: 24
-                icon.height: 24
-                Layout.fillWidth: true
-                text: qsTr("Add group")
-                icon.source: "qrc:/icons/add.svg"
-                icon.color: Cpp_ThemeManager.text
-                onClicked: {
-                    Cpp_JSON_Editor.addGroup()
-                    scroll.position = 1
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                height: app.spacing * 3
-            }
-
-            //
             // Dialog buttons
             //
             RowLayout {
@@ -295,8 +306,12 @@ ApplicationWindow {
                 Layout.fillWidth: true
 
                 Button {
-                    text: qsTr("Close")
+                    icon.width: 24
+                    icon.height: 24
                     onClicked: root.close()
+                    text: qsTr("Close") + _btSpacer
+                    icon.color: Cpp_ThemeManager.text
+                    icon.source: "qrc:/icons/close.svg"
                 }
 
                 Item {
@@ -304,20 +319,56 @@ ApplicationWindow {
                 }
 
                 Button {
-                    text: qsTr("Open existing project...")
+                    id: addGrp
+                    icon.width: 24
+                    icon.height: 24
+                    highlighted: true
+                    Layout.fillWidth: true
+                    text: qsTr("Add group")
+                    icon.source: "qrc:/icons/add.svg"
+                    icon.color: Cpp_ThemeManager.text
+                    onClicked: {
+                        Cpp_JSON_Editor.addGroup()
+                        scroll.position = 1
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+
+                Button {
+                    icon.width: 24
+                    icon.height: 24
+                    icon.color: Cpp_ThemeManager.text
+                    icon.source: "qrc:/icons/open.svg"
                     onClicked: Cpp_JSON_Editor.openJsonFile()
+                    text: qsTr("Open existing project...") + _btSpacer
                 }
 
                 Button {
-                    text: qsTr("Create new project")
+                    icon.width: 24
+                    icon.height: 24
+                    icon.source: "qrc:/icons/new.svg"
+                    icon.color: Cpp_ThemeManager.text
                     onClicked: Cpp_JSON_Editor.newJsonFile()
+                    text: qsTr("Create new project") + _btSpacer
                 }
 
                 Button {
-                    text: qsTr("Save")
+                    icon.width: 24
+                    icon.height: 24
                     opacity: enabled ? 1: 0.5
+                    icon.color: Cpp_ThemeManager.text
                     enabled: Cpp_JSON_Editor.modified
-                    onClicked: Cpp_JSON_Editor.saveJsonFile()
+                    icon.source: "qrc:/icons/apply.svg"
+                    text: (Cpp_JSON_Editor.jsonFilePath.length > 0 ? qsTr("Apply") : qsTr("Save")) + _btSpacer
+
+                    onClicked: {
+                        if (Cpp_JSON_Editor.saveJsonFile())
+                            root.close()
+                    }
+
                     Behavior on opacity {NumberAnimation{}}
                 }
             }

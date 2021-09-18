@@ -357,7 +357,8 @@ void JSONWorker::process()
 
         // Separate incoming data & add it to the JSON map
         auto json = Generator::getInstance()->jsonMapData();
-        auto list = QString::fromUtf8(m_data).split(',');
+        auto list = QString::fromUtf8(m_data).split(
+            IO::Manager::getInstance()->separatorSequence());
         for (int i = 0; i < list.count(); ++i)
         {
             // Get value at i & insert it into json

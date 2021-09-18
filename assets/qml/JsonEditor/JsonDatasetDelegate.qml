@@ -28,14 +28,22 @@ import "../Widgets" as Widgets
 
 Widgets.Window {
     id: root
-    altButtonEnabled: true
+
+    //
+    // Window properties
+    //
     headerDoubleClickEnabled: false
     icon.source: "qrc:/icons/dataset.svg"
-    altButtonIcon.source: "qrc:/icons/delete.svg"
     borderColor: Cpp_ThemeManager.datasetWindowBorder
     palette.window: Cpp_ThemeManager.datasetWindowBackground
-    onAltButtonClicked: Cpp_JSON_Editor.deleteDataset(group, dataset)
     title: qsTr("Dataset %1 - %2").arg(dataset + 1).arg(Cpp_JSON_Editor.datasetTitle(group, dataset))
+
+    //
+    // Delete dataset button
+    //
+    altButtonEnabled: true
+    altButtonIcon.source: "qrc:/icons/close.svg"
+    onAltButtonClicked: Cpp_JSON_Editor.deleteDataset(group, dataset)
 
     //
     // Custom properties
@@ -87,12 +95,14 @@ Widgets.Window {
         //
         Label {
             text: qsTr("Frame index:")
-        } SpinBox {
-            from: 0
-            editable: true
+        } TextField {
             Layout.fillWidth: true
-            value: Cpp_JSON_Editor.datasetIndex(group, dataset)
-            onValueChanged: Cpp_JSON_Editor.setDatasetIndex(group, dataset, value)
+            text: Cpp_JSON_Editor.datasetIndex(group, dataset)
+            onTextChanged: Cpp_JSON_Editor.setDatasetIndex(group, dataset, text)
+            validator: IntValidator {
+                bottom: 1
+                top: 100
+            }
         }
 
         //

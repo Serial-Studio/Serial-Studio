@@ -28,6 +28,10 @@ import "../Widgets" as Widgets
 
 Widgets.Window {
     id: root
+
+    //
+    // Window properties
+    //
     gradient: true
     Layout.minimumHeight: height
     headerDoubleClickEnabled: false
@@ -35,6 +39,13 @@ Widgets.Window {
     backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
     height: column.implicitHeight + headerHeight + 4 * app.spacing
     title: qsTr("Group %1 - %2").arg(group + 1).arg(Cpp_JSON_Editor.groupTitle(group))
+
+    //
+    // Delete group button
+    //
+    altButtonEnabled: true
+    altButtonIcon.source: "qrc:/icons/delete-item.svg"
+    onAltButtonClicked: Cpp_JSON_Editor.deleteGroup(group)
 
     //
     // Custom properties
@@ -121,14 +132,6 @@ Widgets.Window {
                 onClicked: Cpp_JSON_Editor.moveGroupDown(group)
 
                 Behavior on opacity {NumberAnimation{}}
-            }
-
-            RoundButton {
-                icon.width: 18
-                icon.height: 18
-                icon.color: Cpp_ThemeManager.text
-                icon.source: "qrc:/icons/delete.svg"
-                onClicked: Cpp_JSON_Editor.deleteGroup(group)
             }
         }
 

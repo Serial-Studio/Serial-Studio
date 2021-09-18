@@ -168,10 +168,10 @@ Page {
                 opacity: 0
                 enabled: false
                 icon.color: root.titleColor
-                icon.source: "qrc:/icons/open.svg"
                 Layout.alignment: Qt.AlignVCenter
                 Layout.maximumHeight: parent.height
                 Layout.minimumHeight: parent.height
+                icon.source: "qrc:/icons/expand.svg"
                 onClicked: root.headerDoubleClicked()
                 Layout.minimumWidth: root.headerHeight
                 Layout.maximumWidth: root.headerHeight

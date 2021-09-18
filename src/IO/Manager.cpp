@@ -67,6 +67,7 @@ Manager::Manager()
     , m_receivedBytes(0)
     , m_startSequence("/*")
     , m_finishSequence("*/")
+    , m_separatorSequence(",")
 {
     // setWatchdogInterval(15);
     setMaxBufferSize(1024 * 1024);
@@ -220,6 +221,15 @@ QString Manager::startSequence() const
 QString Manager::finishSequence() const
 {
     return m_finishSequence;
+}
+
+/**
+ * Returns the separator sequence string used by the application to know where to consider
+ * that a data item ends.
+ */
+QString Manager::separatorSequence() const
+{
+    return m_separatorSequence;
 }
 
 /**
@@ -465,6 +475,19 @@ void Manager::setFinishSequence(const QString &sequence)
         m_finishSequence = "/*";
 
     emit finishSequenceChanged();
+}
+
+/**
+ * Changes the frame separator sequence. Check the @c separatorSequence() function for
+ * more information.
+ */
+void Manager::setSeparatorSequence(const QString &sequence)
+{
+    m_separatorSequence = ADD_ESCAPE_SEQUENCES(sequence);
+    if (m_separatorSequence.isEmpty())
+        m_separatorSequence = ",";
+
+    emit separatorSequenceChanged();
 }
 
 /**

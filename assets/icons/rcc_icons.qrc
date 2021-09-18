@@ -2,22 +2,26 @@
     <qresource prefix="/icons">
         <file>ac-power.svg</file>
         <file>add.svg</file>
+        <file>apply.svg</file>
         <file>arrow-right.svg</file>
         <file>backspace.svg</file>
         <file>battery.svg</file>
         <file>bug.svg</file>
         <file>chart.svg</file>
+        <file>close.svg</file>
         <file>code.svg</file>
         <file>compass.svg</file>
         <file>connect.svg</file>
         <file>copy.svg</file>
         <file>dataset.svg</file>
+        <file>delete-item.svg</file>
         <file>delete.svg</file>
         <file>developer-board.svg</file>
         <file>device-hub.svg</file>
         <file>disconnect.svg</file>
         <file>down.svg</file>
         <file>drag-drop.svg</file>
+        <file>end-sequence.svg</file>
         <file>equalizer.svg</file>
         <file>error.svg</file>
         <file>ethernet.svg</file>
@@ -35,6 +39,7 @@
         <file>media-pause.svg</file>
         <file>media-play.svg</file>
         <file>media-prev.svg</file>
+        <file>new.svg</file>
         <file>open.svg</file>
         <file>power.svg</file>
         <file>ram.svg</file>
@@ -50,7 +55,9 @@
         <file>scroll-up.svg</file>
         <file>search.svg</file>
         <file>send.svg</file>
+        <file>separator.svg</file>
         <file>settings.svg</file>
+        <file>start-sequence.svg</file>
         <file>tab.svg</file>
         <file>terminal.svg</file>
         <file>up.svg</file>
@@ -59,8 +66,6 @@
         <file>visibility.svg</file>
         <file>warning.svg</file>
         <file>widget.svg</file>
-        <file>end-sequence.svg</file>
-        <file>separator.svg</file>
-        <file>start-sequence.svg</file>
+        <file>expand.svg</file>
     </qresource>
 </RCC>

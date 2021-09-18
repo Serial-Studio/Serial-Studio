@@ -134,7 +134,14 @@ Window {
 
                 tickmarkLabel: Text {
                     antialiasing: true
-                    text: styleData.value
+                    text: {
+                        var value = styleData.value
+                        if (value.toString().indexOf('.') !== -1)
+                            return value.toFixed(2)
+
+                        return value
+                    }
+
                     font.pixelSize: Math.max(6, outerRadius * 0.1)
                     color: Cpp_ThemeManager.widgetForegroundSecondary
                 }

@@ -22,6 +22,7 @@
 
 #include "Editor.h"
 #include "Generator.h"
+#include "IO/Manager.h"
 #include "Misc/Utilities.h"
 
 #include <QFile>
@@ -143,6 +144,7 @@ bool Editor::askSave()
         tr("Do you want to save your changes?"),
         tr("You have unsaved modifications in this project!"), APP_NAME,
         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
     if (ret == QMessageBox::Cancel)
         return false;
 
@@ -154,6 +156,130 @@ bool Editor::askSave()
 
 bool Editor::saveJsonFile()
 {
+    // Validate project title
+    if (title().isEmpty())
+    {
+        Misc::Utilities::showMessageBox(tr("Project error"),
+                                        tr("Project title cannot be empty!"));
+        return false;
+    }
+
+    // Validate group titles
+    for (int i = 0; i < groupCount(); ++i)
+    {
+        if (groupTitle(i).isEmpty())
+        {
+            Misc::Utilities::showMessageBox(tr("Project error - Group %1").arg(i + 1),
+                                            tr("Group title cannot be empty!"));
+            return false;
+        }
+    }
+
+    // Validate dataset titles
+    for (int i = 0; i < groupCount(); ++i)
+    {
+        for (int j = 0; j < datasetCount(i); ++j)
+        {
+            if (datasetTitle(i, j).isEmpty())
+            {
+                Misc::Utilities::showMessageBox(
+                    tr("Project error - Group %1, Dataset %2").arg(i + 1).arg(j + 1),
+                    tr("Dataset title cannot be empty!"));
+                return false;
+            }
+        }
+    }
+
+    // Validate dataset indexes
+    QList<int> indexes;
+    for (int i = 0; i < groupCount(); ++i)
+    {
+        for (int j = 0; j < datasetCount(i); ++j)
+        {
+            if (!indexes.contains(datasetIndex(i, j)))
+                indexes.append(datasetIndex(i, j));
+
+            else
+            {
+                auto ret = Misc::Utilities::showMessageBox(
+                    tr("Warning - Group %1, Dataset %2").arg(i + 1).arg(j + 1),
+                    tr("Dataset contains duplicate frame index position! Continue?"),
+                    APP_NAME, QMessageBox::Yes | QMessageBox::No);
+
+                if (ret == QMessageBox::No)
+                    return false;
+            }
+        }
+    }
+
+    // Get file save path
+    if (jsonFilePath().isEmpty())
+    {
+        auto path = QFileDialog::getSaveFileName(nullptr, tr("Save JSON project"),
+                                                 QDir::homePath(), "*.json");
+        if (path.isEmpty())
+            return false;
+
+        m_filePath = path;
+    }
+
+    // Open file for writing
+    QFile file(m_filePath);
+    if (!file.open(QFile::WriteOnly))
+    {
+        Misc::Utilities::showMessageBox(tr("File open error"), file.errorString());
+        return false;
+    }
+
+    // Create JSON document & add properties
+    QJsonObject json;
+    json.insert("t", title());
+    json.insert("s", separator());
+    json.insert("fe", frameEndSequence());
+    json.insert("fs", frameStartSequence());
+
+    // Create group array
+    QJsonArray groups;
+    for (int i = 0; i < groupCount(); ++i)
+    {
+        // Create group
+        QJsonObject group;
+        group.insert("t", groupTitle(i));
+        group.insert("w", groupWidget(i));
+
+        // Create dataset array
+        QJsonArray datasets;
+        for (int j = 0; j < datasetCount(i); ++j)
+        {
+            // Create dataset
+            QJsonObject dataset;
+            dataset.insert("t", datasetTitle(i, j));
+            dataset.insert("u", datasetUnits(i, j));
+            dataset.insert("g", datasetGraph(i, j));
+            dataset.insert("w", datasetWidget(i, j));
+            dataset.insert("v", "%" + QString::number(datasetIndex(i, j)));
+            dataset.insert("min", datasetWidgetMin(i, j).toDouble());
+            dataset.insert("max", datasetWidgetMax(i, j).toDouble());
+
+            // Add dataset to array
+            datasets.append(dataset);
+        }
+
+        // Add datasets to group
+        group.insert("d", datasets);
+        groups.append(group);
+    }
+
+    // Add groups array to JSON
+    json.insert("g", groups);
+
+    // Write JSON data to file
+    file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
+    file.close();
+
+    // Load JSON file to Serial Studio
+    openJsonFile(file.fileName());
+    Generator::getInstance()->loadJsonMap(file.fileName());
     return true;
 }
 
@@ -186,6 +312,15 @@ QString Editor::groupTitle(const int group)
     auto grp = getGroup(group);
     if (grp)
         return grp->m_title;
+
+    return "";
+}
+
+QString Editor::groupWidget(const int group)
+{
+    auto grp = getGroup(group);
+    if (grp)
+        return grp->m_widget;
 
     return "";
 }
@@ -312,9 +447,14 @@ void Editor::newJsonFile()
 
 void Editor::openJsonFile()
 {
-    // Let user select the file
-    auto path
-        = QFileDialog::getOpenFileName(nullptr, tr("Select JSON file"), "", "*.json");
+    // clang-format off
+    auto path = QFileDialog::getOpenFileName(nullptr,
+                                             tr("Select JSON file"),
+                                             QDir::homePath(),
+                                             "*.json");
+    // clang-format on
+
+    // Invalid path, abort
     if (path.isEmpty())
         return;
 
@@ -355,6 +495,12 @@ void Editor::openJsonFile(const QString &path)
     setSeparator(json.value("s").toString());
     setFrameEndSequence(json.value("fe").toString());
     setFrameStartSequence(json.value("fs").toString());
+
+    // Modify IO manager settings
+    auto manager = IO::Manager::getInstance();
+    manager->setSeparatorSequence(separator());
+    manager->setFinishSequence(frameEndSequence());
+    manager->setStartSequence(frameStartSequence());
 
     // Read groups from JSON document
     auto groups = json.value("g").toArray();
@@ -601,8 +747,27 @@ void Editor::addDataset(const int group)
     auto grp = getGroup(group);
     if (grp)
     {
+        // Calculate frame index for dataset
+        int maxIndex = 1;
+        for (int i = 0; i < groupCount(); ++i)
+        {
+            for (int j = 0; j < datasetCount(i); ++j)
+            {
+                auto dataset = getDataset(i, j);
+                if (dataset)
+                {
+                    if (dataset->m_index >= maxIndex)
+                        maxIndex = dataset->m_index + 1;
+                }
+            }
+        }
+
+        // Add dataset
         grp->m_datasets.append(new Dataset);
+        setDatasetIndex(group, grp->m_datasets.count() - 1, maxIndex);
         setDatasetTitle(group, grp->m_datasets.count() - 1, tr("New dataset"));
+
+        // Update UI
         emit groupChanged(group);
     }
 }

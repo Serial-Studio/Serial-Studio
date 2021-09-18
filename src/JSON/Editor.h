@@ -101,6 +101,7 @@ public:
     Q_INVOKABLE Dataset *getDataset(const int group, const int index);
 
     Q_INVOKABLE QString groupTitle(const int group);
+    Q_INVOKABLE QString groupWidget(const int group);
     Q_INVOKABLE int groupWidgetIndex(const int group);
 
     Q_INVOKABLE int datasetIndex(const int group, const int dataset);

@@ -60,6 +60,10 @@ class Manager : public QObject
                READ finishSequence
                WRITE setFinishSequence
                NOTIFY finishSequenceChanged)
+    Q_PROPERTY(QString separatorSequence
+               READ separatorSequence
+               WRITE setSeparatorSequence
+               NOTIFY separatorSequenceChanged)
     Q_PROPERTY(bool configurationOk
                READ configurationOk
                NOTIFY configurationChanged)
@@ -79,6 +83,7 @@ signals:
     void startSequenceChanged();
     void finishSequenceChanged();
     void watchdogIntervalChanged();
+    void separatorSequenceChanged();
     void frameValidationRegexChanged();
     void dataSent(const QByteArray &data);
     void dataReceived(const QByteArray &data);
@@ -108,6 +113,7 @@ public:
 
     QString startSequence() const;
     QString finishSequence() const;
+    QString separatorSequence() const;
     QString receivedDataLength() const;
 
     Q_INVOKABLE QStringList dataSourcesList() const;
@@ -123,6 +129,7 @@ public slots:
     void setMaxBufferSize(const int maxBufferSize);
     void setStartSequence(const QString &sequence);
     void setFinishSequence(const QString &sequence);
+    void setSeparatorSequence(const QString &sequence);
     void setWatchdogInterval(const int interval = 15);
 
 private slots:
@@ -147,6 +154,7 @@ private:
     quint64 m_receivedBytes;
     QString m_startSequence;
     QString m_finishSequence;
+    QString m_separatorSequence;
 };
 }
 
