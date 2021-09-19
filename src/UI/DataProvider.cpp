@@ -41,8 +41,8 @@ static DataProvider *INSTANCE = nullptr;
  * Constructor of the class
  */
 DataProvider::DataProvider()
+    : m_latestJsonFrame(JFI_Empty())
 {
-    m_latestJsonFrame = JFI_Empty();
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
     auto ge = JSON::Generator::getInstance();

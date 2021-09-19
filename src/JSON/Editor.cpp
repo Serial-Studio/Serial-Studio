@@ -46,15 +46,13 @@ static Editor *INSTANCE = nullptr;
  * document file.
  */
 Editor::Editor()
+    : m_title("")
+    , m_separator("")
+    , m_frameEndSequence("")
+    , m_frameStartSequence("")
+    , m_modified(false)
+    , m_filePath("")
 {
-    // Set default values
-    m_title = "";
-    m_filePath = "";
-    m_separator = "";
-    m_frameEndSequence = "";
-    m_frameStartSequence = "";
-    m_modified = false;
-
     // Connect signals/slots
     connect(this, &Editor::groupChanged, this, &Editor::onGroupChanged);
     connect(this, &Editor::titleChanged, this, &Editor::onModelChanged);
