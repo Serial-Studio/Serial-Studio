@@ -29,7 +29,7 @@ Unicode True
 !define DESCRIPTION                  "Dashboard software for serial port devices"
 !define VERSIONMAJOR                 1
 !define VERSIONMINOR                 0
-!define VERSIONBUILD                 22
+!define VERSIONBUILD                 23
 !define MUI_ABORTWARNING
 !define INSTALL_DIR                  "$PROGRAMFILES64\${APPNAME}"
 !define MUI_FINISHPAGE_RUN
