@@ -39,6 +39,12 @@ static Editor *INSTANCE = nullptr;
 // Constructor/deconstructor & singleton
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * Constructor function. Initializes internal members and configures the signals/slots so
+ * that the editor can know if the user modified the JSON document. Finally, the
+ * constructor configures signals/slots with the JSON Generator to share the same JSON
+ * document file.
+ */
 Editor::Editor()
 {
     // Set default values
@@ -66,6 +72,9 @@ Editor::Editor()
 
 Editor::~Editor() { }
 
+/**
+ * Returns a pointer to the only instance of the editor class.
+ */
 Editor *Editor::getInstance()
 {
     if (!INSTANCE)
@@ -78,52 +87,88 @@ Editor *Editor::getInstance()
 // Member access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * Returns a list with the available group-level widgets. This list is used by the user
+ * interface to allow the user to build accelerometer, gyro & map widgets directly from
+ * the UI.
+ */
 QStringList Editor::availableGroupLevelWidgets()
 {
     return QStringList { tr("Dataset widgets"), tr("Accelerometer"), tr("Gyroscope"),
                          tr("Map") };
 }
 
+/**
+ * Returns a list with the available dataset-level widgets. This list is used by the user
+ * interface to allow the user to build gauge, bar & compass widgets directly from the UI.
+ */
 QStringList Editor::availableDatasetLevelWidgets()
 {
     return QStringList { tr("None"), tr("Gauge"), tr("Bar/level"), tr("Compass") };
 }
 
+/**
+ * Returns the title of the current project
+ */
 QString Editor::title() const
 {
     return m_title;
 }
 
+/**
+ * Returns the data separator sequence for the current project.
+ */
 QString Editor::separator() const
 {
     return m_separator;
 }
 
+/**
+ * Returns the frame end sequence for the current project.
+ */
 QString Editor::frameEndSequence() const
 {
     return m_frameEndSequence;
 }
 
+/**
+ * Returns the frame start sequence for the current project.
+ */
 QString Editor::frameStartSequence() const
 {
     return m_frameStartSequence;
 }
 
+/**
+ * Returns @c true if the user modified the current project. This is
+ * used to know if Serial Studio shall prompt the user to save his/her
+ * modifications before closing the editor window.
+ */
 bool Editor::modified() const
 {
     return m_modified;
 }
 
+/**
+ * Returns the number of groups contained in the current JSON project.
+ */
 int Editor::groupCount() const
 {
     return m_groups.count();
 }
 
+/**
+ * Returns the full path of the current JSON project file.
+ */
 QString Editor::jsonFilePath() const
 {
     return m_filePath;
 }
 
+/**
+ * Returns the simplified file name of the current JSON project file.
+ * This is used to change the title of the Editor window.
+ */
 QString Editor::jsonFileName() const
 {
     if (!jsonFilePath().isEmpty())
@@ -135,6 +180,10 @@ QString Editor::jsonFileName() const
     return tr("New Project");
 }
 
+/**
+ * Checks if the current project has been modified and prompts the
+ * user to save his/her changes.
+ */
 bool Editor::askSave()
 {
     if (!modified())
@@ -154,6 +203,10 @@ bool Editor::askSave()
     return saveJsonFile();
 }
 
+/**
+ * Validates the configuration of the current JSON project and saves the JSON
+ * document on the hard disk.
+ */
 bool Editor::saveJsonFile()
 {
     // Validate project title
@@ -274,7 +327,7 @@ bool Editor::saveJsonFile()
     json.insert("g", groups);
 
     // Write JSON data to file
-    file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
+    file.write(QJsonDocument(json).toJson(QJsonDocument::Compact));
     file.close();
 
     // Load JSON file to Serial Studio
@@ -283,6 +336,9 @@ bool Editor::saveJsonFile()
     return true;
 }
 
+/**
+ * Returns the number of datasets contained by the given @a group index.
+ */
 int Editor::datasetCount(const int group) const
 {
     if (group < groupCount())
@@ -291,6 +347,9 @@ int Editor::datasetCount(const int group) const
     return 0;
 }
 
+/**
+ * Returns a pointer to the group object positioned at the given @a index
+ */
 Group *Editor::getGroup(const int index)
 {
     if (index < groupCount())
@@ -299,6 +358,10 @@ Group *Editor::getGroup(const int index)
     return nullptr;
 }
 
+/**
+ * Returns a pointer to the dataset object contained by the @a group at
+ * the given @a index
+ */
 Dataset *Editor::getDataset(const int group, const int index)
 {
     if (index < datasetCount(group))
@@ -307,6 +370,9 @@ Dataset *Editor::getDataset(const int group, const int index)
     return nullptr;
 }
 
+/**
+ * Returns the title of the given @a group.
+ */
 QString Editor::groupTitle(const int group)
 {
     auto grp = getGroup(group);
@@ -316,6 +382,9 @@ QString Editor::groupTitle(const int group)
     return "";
 }
 
+/**
+ * Returns the widget of the given @a group.
+ */
 QString Editor::groupWidget(const int group)
 {
     auto grp = getGroup(group);
@@ -325,6 +394,12 @@ QString Editor::groupWidget(const int group)
     return "";
 }
 
+/**
+ * Returns the widget ID of the given @a group. The widget ID is a number
+ * that represents a group-level widget. The ID depends on the widget type
+ * and the order of the widgets returned by the @c availableGroupLevelWidgets()
+ * function.
+ */
 int Editor::groupWidgetIndex(const int group)
 {
     auto grp = getGroup(group);
@@ -345,6 +420,13 @@ int Editor::groupWidgetIndex(const int group)
     return 0;
 }
 
+/**
+ * Returns the position in the frame that holds the value for the given
+ * @a dataset (which is contained by the specified @a group).
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 int Editor::datasetIndex(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
@@ -354,6 +436,13 @@ int Editor::datasetIndex(const int group, const int dataset)
     return 0;
 }
 
+/**
+ * Returns @c true if Serial Studio should graph the data of the given
+ * @a dataset (which is contained by the specified @a group).
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 bool Editor::datasetGraph(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
@@ -363,6 +452,12 @@ bool Editor::datasetGraph(const int group, const int dataset)
     return 0;
 }
 
+/**
+ * Returns the title of the specified dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 QString Editor::datasetTitle(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
@@ -372,6 +467,12 @@ QString Editor::datasetTitle(const int group, const int dataset)
     return 0;
 }
 
+/**
+ * Returns the measurement units of the specified dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 QString Editor::datasetUnits(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
@@ -381,6 +482,12 @@ QString Editor::datasetUnits(const int group, const int dataset)
     return 0;
 }
 
+/**
+ * Returns the widget string of the specified dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 QString Editor::datasetWidget(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
@@ -390,6 +497,14 @@ QString Editor::datasetWidget(const int group, const int dataset)
     return 0;
 }
 
+/**
+ * Returns the widget ID of the specified dataset. The widget ID
+ * corresponds to the list returned by the
+ * @c availableDatasetLevelWidgets() function.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 int Editor::datasetWidgetIndex(const int group, const int dataset)
 {
     auto widget = datasetWidget(group, dataset);
@@ -403,6 +518,13 @@ int Editor::datasetWidgetIndex(const int group, const int dataset)
     return 0;
 }
 
+/**
+ * Returns the minimum widget value of the specified dataset.
+ * This option is used by the bar & gauge widgets.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 QString Editor::datasetWidgetMin(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
@@ -412,6 +534,13 @@ QString Editor::datasetWidgetMin(const int group, const int dataset)
     return 0;
 }
 
+/**
+ * Returns the maximum widget value of the specified dataset.
+ * This option is used by the bar & gauge widgets.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 QString Editor::datasetWidgetMax(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
@@ -425,6 +554,9 @@ QString Editor::datasetWidgetMax(const int group, const int dataset)
 // Public slots
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * Resets the C++ model used to represent the JSON project file.
+ */
 void Editor::newJsonFile()
 {
     // Clear groups list
@@ -445,6 +577,10 @@ void Editor::newJsonFile()
     setModified(false);
 }
 
+/**
+ * Prompts the user to select a JSON project file & generates the appropiate C++
+ * model that represents the JSON document.
+ */
 void Editor::openJsonFile()
 {
     // clang-format off
@@ -462,6 +598,10 @@ void Editor::openJsonFile()
     openJsonFile(path);
 }
 
+/**
+ * Opens the JSON document at the given @a path & generates the appropiate C++
+ * model that represents the JSON document.
+ */
 void Editor::openJsonFile(const QString &path)
 {
     // Open file
@@ -546,6 +686,9 @@ void Editor::openJsonFile(const QString &path)
     setModified(false);
 }
 
+/**
+ * Changes the title of the JSON project file.
+ */
 void Editor::setTitle(const QString &title)
 {
     if (title != m_title)
@@ -555,6 +698,9 @@ void Editor::setTitle(const QString &title)
     }
 }
 
+/**
+ * Changes the data separator sequence of the JSON project file.
+ */
 void Editor::setSeparator(const QString &separator)
 {
     if (separator != m_separator)
@@ -564,6 +710,9 @@ void Editor::setSeparator(const QString &separator)
     }
 }
 
+/**
+ * Changes the frame end sequence of the JSON project file.
+ */
 void Editor::setFrameEndSequence(const QString &sequence)
 {
     if (sequence != m_frameEndSequence)
@@ -573,6 +722,9 @@ void Editor::setFrameEndSequence(const QString &sequence)
     }
 }
 
+/**
+ * Changes the frame start sequence of the JSON project file.
+ */
 void Editor::setFrameStartSequence(const QString &sequence)
 {
     if (sequence != m_frameStartSequence)
@@ -582,6 +734,9 @@ void Editor::setFrameStartSequence(const QString &sequence)
     }
 }
 
+/**
+ * Adds a new group to the C++ model that represents the JSON project file.
+ */
 void Editor::addGroup()
 {
     m_groups.append(new Group);
@@ -590,6 +745,10 @@ void Editor::addGroup()
     emit groupCountChanged();
 }
 
+/**
+ * Removes the given @a group from the C++ model that represents the JSON
+ * project file.
+ */
 void Editor::deleteGroup(const int group)
 {
     auto grp = getGroup(group);
@@ -607,6 +766,9 @@ void Editor::deleteGroup(const int group)
     }
 }
 
+/**
+ * Changes the position of the given @a group in the C++ model.
+ */
 void Editor::moveGroupUp(const int group)
 {
     if (group > 0)
@@ -616,6 +778,9 @@ void Editor::moveGroupUp(const int group)
     }
 }
 
+/**
+ * Changes the position of the given @a group in the C++ model.
+ */
 void Editor::moveGroupDown(const int group)
 {
     if (group < groupCount() - 1)
@@ -625,6 +790,11 @@ void Editor::moveGroupDown(const int group)
     }
 }
 
+/**
+ * Changes the group-level widget for the specified @a group.
+ * If necessary, this function shall generate the appropiate datasets
+ * needed to implement the widget (e.g. x,y,z for accelerometer widgets).
+ */
 bool Editor::setGroupWidget(const int group, const int widgetId)
 {
     auto grp = getGroup(group);
@@ -722,6 +892,9 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
     return false;
 }
 
+/**
+ * Changes the @a title for the given @a group in the C++ model
+ */
 void Editor::setGroupTitle(const int group, const QString &title)
 {
     auto grp = getGroup(group);
@@ -732,6 +905,9 @@ void Editor::setGroupTitle(const int group, const QString &title)
     }
 }
 
+/**
+ * Changes the @a widget for the given @a group in the C++ model
+ */
 void Editor::setGroupWidgetData(const int group, const QString &widget)
 {
     auto grp = getGroup(group);
@@ -742,6 +918,11 @@ void Editor::setGroupWidgetData(const int group, const QString &widget)
     }
 }
 
+/**
+ * Adds a new dataset to the given @a group & increments the frame
+ * index counter (to avoid having datasets that pull data from the
+ * same position in the MCU frame).
+ */
 void Editor::addDataset(const int group)
 {
     auto grp = getGroup(group);
@@ -772,6 +953,12 @@ void Editor::addDataset(const int group)
     }
 }
 
+/**
+ * Removes the given @a dataset from the specified @a group.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::deleteDataset(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
@@ -793,6 +980,12 @@ void Editor::moveDatasetUp(const int group, const int dataset) { }
 
 void Editor::moveDatasetDown(const int group, const int dataset) { }
 
+/**
+ * Updates the @a title of the given @a dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::setDatasetTitle(const int group, const int dataset, const QString &title)
 {
     auto set = getDataset(group, dataset);
@@ -803,6 +996,12 @@ void Editor::setDatasetTitle(const int group, const int dataset, const QString &
     }
 }
 
+/**
+ * Updates the measurement @a units of the given @a dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::setDatasetUnits(const int group, const int dataset, const QString &units)
 {
     auto set = getDataset(group, dataset);
@@ -813,6 +1012,12 @@ void Editor::setDatasetUnits(const int group, const int dataset, const QString &
     }
 }
 
+/**
+ * Updates the @a frameIndex of the given @a dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::setDatasetIndex(const int group, const int dataset, const int frameIndex)
 {
     auto set = getDataset(group, dataset);
@@ -823,6 +1028,12 @@ void Editor::setDatasetIndex(const int group, const int dataset, const int frame
     }
 }
 
+/**
+ * Updates the @a generateGraph flag of the given @a dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::setDatasetGraph(const int group, const int dataset, const bool generateGraph)
 {
     auto set = getDataset(group, dataset);
@@ -833,6 +1044,13 @@ void Editor::setDatasetGraph(const int group, const int dataset, const bool gene
     }
 }
 
+/**
+ * Updates the @a widgetId of the given @a dataset. The widget ID is dependent on
+ * the order of the widgets returned by the @c availableDatasetLevelWidgets() function.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::setDatasetWidget(const int group, const int dataset, const int widgetId)
 {
     auto set = getDataset(group, dataset);
@@ -851,6 +1069,14 @@ void Editor::setDatasetWidget(const int group, const int dataset, const int widg
     }
 }
 
+/**
+ * Updates the @a minimum value used by the bar & gauge widgets for the given
+ * @a dataset. The value is specified in a @c QString to facilitate integration
+ * with the QML user interface.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::setDatasetWidgetMin(const int group, const int dataset,
                                  const QString &minimum)
 {
@@ -862,6 +1088,14 @@ void Editor::setDatasetWidgetMin(const int group, const int dataset,
     }
 }
 
+/**
+ * Updates the @a maximum value used by the bar & gauge widgets for the given
+ * @a dataset. The value is specified in a @c QString to facilitate integration
+ * with the QML user interface.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::setDatasetWidgetMax(const int group, const int dataset,
                                  const QString &maximum)
 {
@@ -873,6 +1107,12 @@ void Editor::setDatasetWidgetMax(const int group, const int dataset,
     }
 }
 
+/**
+ * Updates the @a widget string of the given @a dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::setDatasetWidgetData(const int group, const int dataset,
                                   const QString &widget)
 {
@@ -884,6 +1124,11 @@ void Editor::setDatasetWidgetData(const int group, const int dataset,
     }
 }
 
+/**
+ * Updates the @a modified flag of the current JSON project.
+ * This flag is used to know if we should ask the user to save
+ * his/her modifications to the project file.
+ */
 void Editor::setModified(const bool modified)
 {
     if (m_modified != modified)
@@ -893,23 +1138,42 @@ void Editor::setModified(const bool modified)
     }
 }
 
+/**
+ * Ensures that the JSON project file is the same as the one used by
+ * the JSON Generator class.
+ */
 void Editor::onJsonLoaded()
 {
     if (jsonFilePath() != Generator::getInstance()->jsonMapFilepath())
         openJsonFile(Generator::getInstance()->jsonMapFilepath());
 }
 
+/**
+ * Sets the modified flag to @c true when the user adds/removes/moves
+ * one of the groups contained in the JSON project.
+ */
 void Editor::onModelChanged()
 {
     setModified(true);
 }
 
+/**
+ * Sets the modified flag to @c true when the user changes the title
+ * or the widget of one of the groups contained in the JSON project.
+ */
 void Editor::onGroupChanged(const int group)
 {
     (void)group;
     setModified(true);
 }
 
+/**
+ * Sets the modified flag to @c true when the user modifies the
+ * properties of one of the datasets contained in the JSON project.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
 void Editor::onDatasetChanged(const int group, const int dataset)
 {
     (void)group;
