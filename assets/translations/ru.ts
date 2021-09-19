@@ -1444,7 +1444,7 @@
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>Скорость передачи данных</translation>
+        <translation>Скорость передачи</translation>
     </message>
     <message>
         <source>Data Bits</source>
