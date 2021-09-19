@@ -159,6 +159,7 @@ void ModuleManager::initializeQmlInterface()
     auto mqttPublisher = MQTT::Client::getInstance();
     auto pluginsBridge = Plugins::Bridge::getInstance();
     auto macExtras = Misc::MacExtras::getInstance();
+    auto timerEvents = Misc::TimerEvents::getInstance();
     LOG_INFO() << "Finished initializing C++ modules";
 
     // Retranslate the QML interface automagically
@@ -186,6 +187,7 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_MQTT_Client", mqttPublisher);
     c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
     c->setContextProperty("Cpp_Misc_MacExtras", macExtras);
+    c->setContextProperty("Cpp_Misc_TimerEvents", timerEvents);
 
     // Register app info with QML
     c->setContextProperty("Cpp_AppName", qApp->applicationName());
@@ -198,7 +200,7 @@ void ModuleManager::initializeQmlInterface()
     engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     // Start common event timers
-    Misc::TimerEvents::getInstance()->startTimers();
+    timerEvents->startTimers();
 
     // Log QML engine status
     LOG_INFO() << "Finished loading QML interface";

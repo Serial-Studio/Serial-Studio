@@ -4,5 +4,6 @@
         <file>en.qm</file>
         <file>es.qm</file>
         <file>zh.qm</file>
+        <file>ru.qm</file>
     </qresource>
 </RCC>

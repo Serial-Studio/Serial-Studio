@@ -48,7 +48,7 @@ DataProvider::DataProvider()
     auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(te, SIGNAL(timeout42Hz()), this, SLOT(updateData()));
+    connect(te, SIGNAL(highFreqTimeout()), this, SLOT(updateData()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
     connect(ge, SIGNAL(jsonFileMapChanged()), this, SLOT(resetData()));
     connect(ge, &JSON::Generator::jsonChanged, this, &DataProvider::selectLatestJSON);
@@ -115,10 +115,6 @@ JSON::Group *DataProvider::getGroup(const int index)
  */
 void DataProvider::resetData()
 {
-    // Stop if dev a device is connected or if CSV file is open
-    if (IO::Manager::getInstance()->connected() || CSV::Player::getInstance()->isOpen())
-        return;
-
     // Make latest frame invalid
     m_latestJsonFrame = JFI_Empty();
     m_latestFrame.read(m_latestJsonFrame.jsonDocument.object());

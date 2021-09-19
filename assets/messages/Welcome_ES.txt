@@ -22,5 +22,4 @@ actuales, por favor lea la wiki:
 
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
-Consejo: haga doble clic en cualquier grupo, gráfico o widget para verlo en
-         otra ventana.
+Consejo: utilice el Editor JSON para crear y editar proyectos de Serial Studio.

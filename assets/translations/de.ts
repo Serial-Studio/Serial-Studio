@@ -659,6 +659,145 @@
     </message>
 </context>
 <context>
+    <name>JSON::Editor</name>
+    <message>
+        <source>Dataset widgets</source>
+        <translation>Widgets für Datensätze</translation>
+    </message>
+    <message>
+        <source>Accelerometer</source>
+        <translation>Beschleunigungsmesser</translation>
+    </message>
+    <message>
+        <source>Gyroscope</source>
+        <translation>Gyroskop</translation>
+    </message>
+    <message>
+        <source>Map</source>
+        <translation>Karte</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation>Keine</translation>
+    </message>
+    <message>
+        <source>Gauge</source>
+        <translation>Messgerät</translation>
+    </message>
+    <message>
+        <source>Bar/level</source>
+        <translation>Bar/Niveau</translation>
+    </message>
+    <message>
+        <source>Compass</source>
+        <translation>Kompass</translation>
+    </message>
+    <message>
+        <source>New Project</source>
+        <translation>Neues Projekt</translation>
+    </message>
+    <message>
+        <source>Do you want to save your changes?</source>
+        <translation>Möchten Sie Ihre Änderungen speichern?</translation>
+    </message>
+    <message>
+        <source>You have unsaved modifications in this project!</source>
+        <translation>Sie haben nicht gespeicherte Änderungen in diesem Projekt!</translation>
+    </message>
+    <message>
+        <source>Project error</source>
+        <translation>Projektfehler</translation>
+    </message>
+    <message>
+        <source>Project title cannot be empty!</source>
+        <translation>Der Projekttitel darf nicht leer sein!</translation>
+    </message>
+    <message>
+        <source>Project error - Group %1</source>
+        <translation>Projektfehler - Gruppe %1</translation>
+    </message>
+    <message>
+        <source>Group title cannot be empty!</source>
+        <translation>Der Gruppentitel darf nicht leer sein!</translation>
+    </message>
+    <message>
+        <source>Project error - Group %1, Dataset %2</source>
+        <translation>Projektfehler - Gruppe %1, Datensatz %2</translation>
+    </message>
+    <message>
+        <source>Dataset title cannot be empty!</source>
+        <translation>Der Titel des Datensatzes darf nicht leer sein!</translation>
+    </message>
+    <message>
+        <source>Warning - Group %1, Dataset %2</source>
+        <translation>Warnung - Gruppe %1, Datensatz %2</translation>
+    </message>
+    <message>
+        <source>Dataset contains duplicate frame index position! Continue?</source>
+        <translation>Der Datensatz enthält eine doppelte Frame-Indexposition! Weiter?</translation>
+    </message>
+    <message>
+        <source>Save JSON project</source>
+        <translation>JSON-Projekt speichern</translation>
+    </message>
+    <message>
+        <source>File open error</source>
+        <translation>Fehler beim Öffnen einer Datei</translation>
+    </message>
+    <message>
+        <source>Select JSON file</source>
+        <translation>JSON Modelldatei auswählen</translation>
+    </message>
+    <message>
+        <source>New Group</source>
+        <translation>Neue Gruppe</translation>
+    </message>
+    <message>
+        <source>Delete group &quot;%1&quot;</source>
+        <translation>Gruppe &quot;%1&quot; löschen</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete this group?</source>
+        <translation>Sind Sie sicher, dass Sie diese Gruppe löschen wollen?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to change the group-level widget?</source>
+        <translation>Sind Sie sicher, dass Sie das Widget auf Gruppenebene ändern möchten?</translation>
+    </message>
+    <message>
+        <source>Existing datasets for this group will be deleted</source>
+        <translation>Vorhandene Datensätze für diese Gruppe werden gelöscht</translation>
+    </message>
+    <message>
+        <source>Accelerometer %1</source>
+        <translation>Beschleunigungsmesser %1</translation>
+    </message>
+    <message>
+        <source>Gyro %1</source>
+        <translation>Kreisel %1</translation>
+    </message>
+    <message>
+        <source>Latitude</source>
+        <translation>Breitengrad</translation>
+    </message>
+    <message>
+        <source>Longitude</source>
+        <translation>Längengrad</translation>
+    </message>
+    <message>
+        <source>New dataset</source>
+        <translation>Neuer Datensatz</translation>
+    </message>
+    <message>
+        <source>Delete dataset &quot;%1&quot;</source>
+        <translation>Datensatz &quot;%1&quot; löschen</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete this dataset?</source>
+        <translation>Sind Sie sicher, dass Sie diesen Datensatz löschen wollen?</translation>
+    </message>
+</context>
+<context>
     <name>JSON::Generator</name>
     <message>
         <source>Select JSON map file</source>
@@ -674,11 +813,11 @@
     </message>
     <message>
         <source>JSON map file loaded successfully!</source>
-        <translation>JSON Modelldatei erfolgreich geladen!</translation>
+        <translation type="vanished">JSON Modelldatei erfolgreich geladen!</translation>
     </message>
     <message>
         <source>File &quot;%1&quot; loaded into memory</source>
-        <translation>Datei %1 geladen</translation>
+        <translation type="vanished">Datei %1 geladen</translation>
     </message>
     <message>
         <source>Cannot read JSON file</source>
@@ -695,6 +834,104 @@
     <message>
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
         <translation type="vanished">Das Format der empfangenen Daten stimmt nicht mit der ausgewählten JSON Modelldatei überein.</translation>
+    </message>
+</context>
+<context>
+    <name>JsonDatasetDelegate</name>
+    <message>
+        <source>Dataset %1 - %2</source>
+        <translation>Datensatz %1 - %2</translation>
+    </message>
+    <message>
+        <source>Title:</source>
+        <translation>Titel:</translation>
+    </message>
+    <message>
+        <source>Sensor reading, uptime, etc...</source>
+        <translation>Sensormesswerte, Betriebszeit usw...</translation>
+    </message>
+    <message>
+        <source>Units:</source>
+        <translation>Einheiten:</translation>
+    </message>
+    <message>
+        <source>Volts, meters, seconds, etc...</source>
+        <translation>Volt, Meter, Sekunden, usw...</translation>
+    </message>
+    <message>
+        <source>Frame index:</source>
+        <translation>Frame-Index:</translation>
+    </message>
+    <message>
+        <source>Generate graph:</source>
+        <translation>Erzeugen Sie ein Diagramm:</translation>
+    </message>
+    <message>
+        <source>Widget:</source>
+        <translation>Widget:</translation>
+    </message>
+    <message>
+        <source>Min value:</source>
+        <translation>Minimaler Wert:</translation>
+    </message>
+    <message>
+        <source>Max value:</source>
+        <translation>Maximaler Wert:</translation>
+    </message>
+</context>
+<context>
+    <name>JsonEditor</name>
+    <message>
+        <source>JSON Editor - %1</source>
+        <translation>JSON-Editor - %1</translation>
+    </message>
+    <message>
+        <source>Project title (required)</source>
+        <translation>Projekttitel (erforderlich)</translation>
+    </message>
+    <message>
+        <source>Data separator (default is &apos;,&apos;)</source>
+        <translation>Datentrennzeichen (Standard ist &apos;,&apos;)</translation>
+    </message>
+    <message>
+        <source>Frame start sequence (default is &apos;%1&apos;)</source>
+        <translation>Startsequenz des Rahmens (Standard ist &apos;%1&apos;)</translation>
+    </message>
+    <message>
+        <source>Frame end sequence (default is &apos;%1&apos;)</source>
+        <translation>Rahmenendsequenz (Standard ist &apos;%1&apos;)</translation>
+    </message>
+    <message>
+        <source>Start something awesome</source>
+        <translation>Starten Sie etwas Großartiges</translation>
+    </message>
+    <message>
+        <source>Click on the &quot;%1&quot; button to begin</source>
+        <translation>Klicken Sie auf die Schaltfläche &quot;%1&quot;, um zu beginnen</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Schließen</translation>
+    </message>
+    <message>
+        <source>Add group</source>
+        <translation>Gruppe hinzufügen</translation>
+    </message>
+    <message>
+        <source>Open existing project...</source>
+        <translation>Vorhandenes Projekt öffnen...</translation>
+    </message>
+    <message>
+        <source>Create new project</source>
+        <translation>Neues Projekt erstellen</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>Bewerbung</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Speichern</translation>
     </message>
 </context>
 <context>
@@ -734,6 +971,21 @@
     <message>
         <source>JSON files</source>
         <translation type="vanished">JSON Dateien</translation>
+    </message>
+</context>
+<context>
+    <name>JsonGroupDelegate</name>
+    <message>
+        <source>Group %1 - %2</source>
+        <translation>Gruppe %1 - %2</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation>Titel</translation>
+    </message>
+    <message>
+        <source>Add dataset</source>
+        <translation>Datensatz hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -1466,6 +1718,14 @@
         <source>Theme</source>
         <translation>Thema</translation>
     </message>
+    <message>
+        <source>Data separator</source>
+        <translation>Daten-Trennzeichen</translation>
+    </message>
+    <message>
+        <source>UI refresh rate</source>
+        <translation>UI-Aktualisierungsrate</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -1618,6 +1878,10 @@
     <message>
         <source>Connect</source>
         <translation>Verbinden</translation>
+    </message>
+    <message>
+        <source>JSON Editor</source>
+        <translation>JSON-Editor</translation>
     </message>
 </context>
 <context>

@@ -71,8 +71,9 @@ GraphProvider::GraphProvider()
     auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(te, SIGNAL(timeout42Hz()), this, SLOT(drawGraphs()));
+    connect(te, SIGNAL(highFreqTimeout()), this, SLOT(drawGraphs()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
+    connect(ge, SIGNAL(jsonFileMapChanged()), this, SLOT(resetData()));
     connect(ge, &JSON::Generator::jsonChanged, this, &GraphProvider::registerFrame);
 
     // Avoid issues when CSV player goes backwards

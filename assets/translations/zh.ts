@@ -687,6 +687,145 @@
     </message>
 </context>
 <context>
+    <name>JSON::Editor</name>
+    <message>
+        <source>Dataset widgets</source>
+        <translation>数据集小工具</translation>
+    </message>
+    <message>
+        <source>Accelerometer</source>
+        <translation>加速器</translation>
+    </message>
+    <message>
+        <source>Gyroscope</source>
+        <translation>陀螺仪</translation>
+    </message>
+    <message>
+        <source>Map</source>
+        <translation>地图</translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation>无</translation>
+    </message>
+    <message>
+        <source>Gauge</source>
+        <translation>仪表盘</translation>
+    </message>
+    <message>
+        <source>Bar/level</source>
+        <translation>酒吧/楼层</translation>
+    </message>
+    <message>
+        <source>Compass</source>
+        <translation>指南针</translation>
+    </message>
+    <message>
+        <source>New Project</source>
+        <translation>新项目</translation>
+    </message>
+    <message>
+        <source>Do you want to save your changes?</source>
+        <translation>你想保存你的改动吗？</translation>
+    </message>
+    <message>
+        <source>You have unsaved modifications in this project!</source>
+        <translation>你在这个项目中有未保存的修改!</translation>
+    </message>
+    <message>
+        <source>Project error</source>
+        <translation>项目错误</translation>
+    </message>
+    <message>
+        <source>Project title cannot be empty!</source>
+        <translation>项目标题不能是空的!</translation>
+    </message>
+    <message>
+        <source>Project error - Group %1</source>
+        <translation>Project error - Group %1</translation>
+    </message>
+    <message>
+        <source>Group title cannot be empty!</source>
+        <translation>组的标题不能是空的!</translation>
+    </message>
+    <message>
+        <source>Project error - Group %1, Dataset %2</source>
+        <translation>项目错误 - 组%1，数据集%2</translation>
+    </message>
+    <message>
+        <source>Dataset title cannot be empty!</source>
+        <translation>数据集的标题不能是空的!</translation>
+    </message>
+    <message>
+        <source>Warning - Group %1, Dataset %2</source>
+        <translation>警告 - 组 %1, 数据集 %2</translation>
+    </message>
+    <message>
+        <source>Dataset contains duplicate frame index position! Continue?</source>
+        <translation>数据集包含重复的帧索引位置! 继续吗？</translation>
+    </message>
+    <message>
+        <source>Save JSON project</source>
+        <translation>保存JSON项目</translation>
+    </message>
+    <message>
+        <source>File open error</source>
+        <translation>文件打开错误</translation>
+    </message>
+    <message>
+        <source>Select JSON file</source>
+        <translation>选择JSON映射文件</translation>
+    </message>
+    <message>
+        <source>New Group</source>
+        <translation>新集团</translation>
+    </message>
+    <message>
+        <source>Delete group &quot;%1&quot;</source>
+        <translation>删除组&quot;%1&quot;</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete this group?</source>
+        <translation>你确定要删除这个组吗？</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to change the group-level widget?</source>
+        <translation>你确定你要改变组级小部件吗？</translation>
+    </message>
+    <message>
+        <source>Existing datasets for this group will be deleted</source>
+        <translation>该组的现有数据集将被删除</translation>
+    </message>
+    <message>
+        <source>Accelerometer %1</source>
+        <translation>加速器%1</translation>
+    </message>
+    <message>
+        <source>Gyro %1</source>
+        <translation>陀螺仪 %1</translation>
+    </message>
+    <message>
+        <source>Latitude</source>
+        <translation>纬度</translation>
+    </message>
+    <message>
+        <source>Longitude</source>
+        <translation>经度</translation>
+    </message>
+    <message>
+        <source>New dataset</source>
+        <translation>新的数据集</translation>
+    </message>
+    <message>
+        <source>Delete dataset &quot;%1&quot;</source>
+        <translation>删除数据集&quot;%1&quot;</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete this dataset?</source>
+        <translation>你确定要删除这个数据集吗？</translation>
+    </message>
+</context>
+<context>
     <name>JSON::Generator</name>
     <message>
         <source>Select JSON map file</source>
@@ -702,11 +841,11 @@
     </message>
     <message>
         <source>JSON map file loaded successfully!</source>
-        <translation>JSON映射文件已成功加载！</translation>
+        <translation type="vanished">JSON映射文件已成功加载！</translation>
     </message>
     <message>
         <source>File &quot;%1&quot; loaded into memory</source>
-        <translation>文件“%1”已加载到内存中</translation>
+        <translation type="vanished">文件“%1”已加载到内存中</translation>
     </message>
     <message>
         <source>Cannot read JSON file</source>
@@ -723,6 +862,104 @@
     <message>
         <source>The format of the received data does not correspond to the selected JSON map file.</source>
         <translation type="vanished">接收到的数据格式与所选的JSON映射文件不对应。</translation>
+    </message>
+</context>
+<context>
+    <name>JsonDatasetDelegate</name>
+    <message>
+        <source>Dataset %1 - %2</source>
+        <translation>数据集 %1 - %2</translation>
+    </message>
+    <message>
+        <source>Title:</source>
+        <translation>标题：</translation>
+    </message>
+    <message>
+        <source>Sensor reading, uptime, etc...</source>
+        <translation>传感器读数、正常运行时间等...</translation>
+    </message>
+    <message>
+        <source>Units:</source>
+        <translation>单位：</translation>
+    </message>
+    <message>
+        <source>Volts, meters, seconds, etc...</source>
+        <translation>伏特，米，秒，等等...</translation>
+    </message>
+    <message>
+        <source>Frame index:</source>
+        <translation>框架指数：</translation>
+    </message>
+    <message>
+        <source>Generate graph:</source>
+        <translation>生成图形：</translation>
+    </message>
+    <message>
+        <source>Widget:</source>
+        <translation>小工具：</translation>
+    </message>
+    <message>
+        <source>Min value:</source>
+        <translation>最小值：</translation>
+    </message>
+    <message>
+        <source>Max value:</source>
+        <translation>最大值：</translation>
+    </message>
+</context>
+<context>
+    <name>JsonEditor</name>
+    <message>
+        <source>JSON Editor - %1</source>
+        <translation>JSON编辑器 - %1</translation>
+    </message>
+    <message>
+        <source>Project title (required)</source>
+        <translation>项目名称（必填）</translation>
+    </message>
+    <message>
+        <source>Data separator (default is &apos;,&apos;)</source>
+        <translation>数据分隔符（默认为&apos;，&apos;）</translation>
+    </message>
+    <message>
+        <source>Frame start sequence (default is &apos;%1&apos;)</source>
+        <translation>帧开始顺序（默认为&apos;%1&apos;）</translation>
+    </message>
+    <message>
+        <source>Frame end sequence (default is &apos;%1&apos;)</source>
+        <translation>帧结束序列（默认为&apos;%1&apos;）</translation>
+    </message>
+    <message>
+        <source>Start something awesome</source>
+        <translation>开始做一些了不起的事情</translation>
+    </message>
+    <message>
+        <source>Click on the &quot;%1&quot; button to begin</source>
+        <translation>点击&quot;%1 &quot;按钮，开始</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <source>Add group</source>
+        <translation>添加组别</translation>
+    </message>
+    <message>
+        <source>Open existing project...</source>
+        <translation>打开现有的项目...</translation>
+    </message>
+    <message>
+        <source>Create new project</source>
+        <translation>创建新项目</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>申请</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>拯救</translation>
     </message>
 </context>
 <context>
@@ -766,6 +1003,21 @@
     <message>
         <source>JSON files</source>
         <translation type="vanished">JSON文件</translation>
+    </message>
+</context>
+<context>
+    <name>JsonGroupDelegate</name>
+    <message>
+        <source>Group %1 - %2</source>
+        <translation>组别 %1 - %2</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation>标题</translation>
+    </message>
+    <message>
+        <source>Add dataset</source>
+        <translation>添加数据集</translation>
     </message>
 </context>
 <context>
@@ -1502,6 +1754,14 @@
         <source>Theme</source>
         <translation>主题</translation>
     </message>
+    <message>
+        <source>Data separator</source>
+        <translation>数据分离器</translation>
+    </message>
+    <message>
+        <source>UI refresh rate</source>
+        <translation>UI刷新率</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -1678,6 +1938,10 @@
     <message>
         <source>Connect</source>
         <translation>连接</translation>
+    </message>
+    <message>
+        <source>JSON Editor</source>
+        <translation>JSON编辑器</translation>
     </message>
 </context>
 <context>

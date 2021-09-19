@@ -50,7 +50,7 @@ Bridge::Bridge()
     auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(ge, &JSON::Generator::jsonChanged, this, &Bridge::registerFrame);
-    connect(te, &Misc::TimerEvents::timeout42Hz, this, &Bridge::sendProcessedData);
+    connect(te, &Misc::TimerEvents::highFreqTimeout, this, &Bridge::sendProcessedData);
 
     // Send I/O "raw" data directly
     auto io = IO::Manager::getInstance();

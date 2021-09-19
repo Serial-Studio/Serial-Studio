@@ -54,7 +54,7 @@ Export::Export()
     auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
-    connect(te, &Misc::TimerEvents::timeout1Hz, this, &Export::writeValues);
+    connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &Export::writeValues);
     connect(ge, &JSON::Generator::jsonChanged, this, &Export::registerFrame);
 
     LOG_TRACE() << "Class initialized";

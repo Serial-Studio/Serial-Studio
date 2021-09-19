@@ -30,25 +30,34 @@ namespace Misc
 {
 class TimerEvents : public QObject
 {
+    // clang-format off
     Q_OBJECT
+    Q_PROPERTY(int highFreqTimeoutHz
+               READ highFreqTimeoutHz
+               WRITE setHighFreqTimeout
+               NOTIFY highFreqTimeoutChanged)
+    // clang-format on
 
 signals:
-    void timeout1Hz();
-    void timeout42Hz();
+    void lowFreqTimeout();
+    void highFreqTimeout();
+    void highFreqTimeoutChanged();
 
 public:
     static TimerEvents *getInstance();
+    int highFreqTimeoutHz() const;
 
 public slots:
     void stopTimers();
     void startTimers();
+    void setHighFreqTimeout(const int hz);
 
 private:
     TimerEvents();
 
 private:
-    QTimer m_timer1Hz;
-    QTimer m_timer42Hz;
+    QTimer m_timerLowFreq;
+    QTimer m_timerHighFreq;
 };
 }
 

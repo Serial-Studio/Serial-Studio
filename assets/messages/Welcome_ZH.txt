@@ -17,4 +17,4 @@ ____/ //  __/  /   _  / / /_/ /_  /     ____/ // /_ / /_/ // /_/ / _  / / /_/ /
 
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
-提示：双击任何组，图表或小部件以在另一个窗口中查看它。
+提示：使用JSON编辑器来创建和编辑Serial Studio项目文件。

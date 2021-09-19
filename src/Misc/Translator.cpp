@@ -83,6 +83,9 @@ int Translator::systemLanguage() const
         case QLocale::German:
             lang = 3;
             break;
+        case QLocale::Russian:
+            lang = 4;
+            break;
         default:
             lang = 0;
             break;
@@ -110,6 +113,9 @@ QString Translator::welcomeConsoleText() const
             break;
         case 3:
             lang = "DE";
+            break;
+        case 4:
+            lang = "RU";
             break;
         default:
             lang = "EN";
@@ -148,7 +154,7 @@ QString Translator::acknowledgementsText() const
  */
 QStringList Translator::availableLanguages() const
 {
-    return QStringList { "English", "Español", "简体中文", "Deutsch" };
+    return QStringList { "English", "Español", "简体中文", "Deutsch", "Русский" };
 }
 
 /**
@@ -179,6 +185,10 @@ void Translator::setLanguage(const int language)
         case 3:
             langName = "de";
             locale = QLocale(QLocale::German);
+            break;
+        case 4:
+            langName = "ru";
+            locale = QLocale(QLocale::Russian);
             break;
         default:
             langName = "en";

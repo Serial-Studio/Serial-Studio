@@ -22,4 +22,4 @@ the wiki:
 
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
-Tip: Double-click on any group, chart or widget to view it in another window.
+Tip: use the JSON Editor to create and edit Serial Studio project files.

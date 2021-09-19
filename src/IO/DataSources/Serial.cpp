@@ -55,7 +55,7 @@ Serial::Serial()
 
     // Build serial devices list
     auto te = Misc::TimerEvents::getInstance();
-    connect(te, SIGNAL(timeout1Hz()), this, SLOT(refreshSerialDevices()));
+    connect(te, SIGNAL(lowFreqTimeout()), this, SLOT(refreshSerialDevices()));
 
     // Log class init
     LOG_TRACE() << "Class initialized";

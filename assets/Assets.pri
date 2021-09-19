@@ -24,7 +24,8 @@ TRANSLATIONS += \
     $$PWD/translations/en.ts \
     $$PWD/translations/es.ts \
     $$PWD/translations/zh.ts \
-    $$PWD/translations/de.ts
+    $$PWD/translations/de.ts \
+    $$PWD/translations/ru.ts
 
 RESOURCES += \
     $$PWD/icons/rcc_icons.qrc \

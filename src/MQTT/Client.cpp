@@ -55,7 +55,7 @@ Client::Client()
     auto io = IO::Manager::getInstance();
     auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
-    connect(te, &Misc::TimerEvents::timeout42Hz, this, &Client::sendData);
+    connect(te, &Misc::TimerEvents::highFreqTimeout, this, &Client::sendData);
     connect(io, &IO::Manager::connectedChanged, this, &Client::resetStatistics);
     connect(ge, &JSON::Generator::jsonChanged, this, &Client::registerJsonFrame);
 

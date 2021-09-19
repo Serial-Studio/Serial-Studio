@@ -27,12 +27,21 @@
 #include <ConsoleAppender.h>
 
 using namespace Misc;
-#define HZ_TO_MS(x) qCeil(1000 / x)
 
-/**
+/**º
  * Pointer to the only instance of the class
  */
 static TimerEvents *INSTANCE = nullptr;
+
+/**
+ * Converts the given @a hz to milliseconds
+ */
+static int HZ_TO_MS(const int hz)
+{
+    const double rHz = hz;
+    const double uHz = 1000;
+    return qRound(uHz / rHz);
+}
 
 /**
  * Constructor function
@@ -40,16 +49,16 @@ static TimerEvents *INSTANCE = nullptr;
 TimerEvents::TimerEvents()
 {
     // Configure timeout intevals
-    m_timer1Hz.setInterval(HZ_TO_MS(1));
-    m_timer42Hz.setInterval(HZ_TO_MS(42));
+    m_timerLowFreq.setInterval(HZ_TO_MS(1));
+    m_timerHighFreq.setInterval(HZ_TO_MS(21));
 
     // Configure timer precision
-    m_timer1Hz.setTimerType(Qt::PreciseTimer);
-    m_timer42Hz.setTimerType(Qt::PreciseTimer);
+    m_timerLowFreq.setTimerType(Qt::PreciseTimer);
+    m_timerHighFreq.setTimerType(Qt::PreciseTimer);
 
     // Configure signals/slots
-    connect(&m_timer1Hz, &QTimer::timeout, this, &TimerEvents::timeout1Hz);
-    connect(&m_timer42Hz, &QTimer::timeout, this, &TimerEvents::timeout42Hz);
+    connect(&m_timerLowFreq, &QTimer::timeout, this, &TimerEvents::lowFreqTimeout);
+    connect(&m_timerHighFreq, &QTimer::timeout, this, &TimerEvents::highFreqTimeout);
     LOG_TRACE() << "Class initialized";
 }
 
@@ -65,12 +74,20 @@ TimerEvents *TimerEvents::getInstance()
 }
 
 /**
+ * Returns the target UI refresh frequency
+ */
+int TimerEvents::highFreqTimeoutHz() const
+{
+    return HZ_TO_MS(m_timerHighFreq.interval());
+}
+
+/**
  * Stops all the timers of this module
  */
 void TimerEvents::stopTimers()
 {
-    m_timer1Hz.stop();
-    m_timer42Hz.stop();
+    m_timerLowFreq.stop();
+    m_timerHighFreq.stop();
 
     LOG_INFO() << "Timers stopped";
 }
@@ -80,8 +97,26 @@ void TimerEvents::stopTimers()
  */
 void TimerEvents::startTimers()
 {
-    m_timer1Hz.start();
-    m_timer42Hz.start();
+    m_timerLowFreq.start();
+    m_timerHighFreq.start();
 
     LOG_TRACE() << "Timers started";
+}
+
+/**
+ * Updates the target UI refresh frequency
+ */
+void TimerEvents::setHighFreqTimeout(const int hz)
+{
+    if (hz > 0)
+    {
+        m_timerHighFreq.setInterval(HZ_TO_MS(hz));
+        emit highFreqTimeoutChanged();
+    }
+
+    else
+    {
+        m_timerHighFreq.setInterval(HZ_TO_MS(1));
+        emit highFreqTimeoutChanged();
+    }
 }

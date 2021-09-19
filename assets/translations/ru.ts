@@ -1,404 +1,404 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en" sourcelanguage="en">
+<TS version="2.1" language="ru_RU" sourcelanguage="en">
 <context>
     <name>About</name>
     <message>
         <source>About</source>
-        <translation></translation>
+        <translation>О</translation>
     </message>
     <message>
         <source>Version %1</source>
-        <translation></translation>
+        <translation>Версия %1</translation>
     </message>
     <message>
         <source>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</source>
-        <translation></translation>
+        <translation>Программа предоставляется КАК ЕСТЬ без каких-либо гарантий, включая гарантии дизайна, товарного качества и пригодности для конкретной цели.</translation>
     </message>
     <message>
         <source>Report bug</source>
-        <translation></translation>
+        <translation>Сообщить об ошибке</translation>
     </message>
     <message>
         <source>Documentation</source>
-        <translation></translation>
+        <translation>Документация</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation></translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <source>Copyright © 2020-%1 %2, released under the MIT License.</source>
-        <translation></translation>
+        <translation>Авторское право © 2020-%1 %2, выпущено под лицензией MIT.</translation>
     </message>
     <message>
         <source>Website</source>
-        <translation></translation>
+        <translation>Сайт</translation>
     </message>
     <message>
         <source>Acknowledgements</source>
-        <translation></translation>
+        <translation>Благодарности</translation>
     </message>
     <message>
         <source>Make a donation</source>
-        <translation></translation>
+        <translation>Сделать пожертвование</translation>
     </message>
 </context>
 <context>
     <name>AccelerometerDelegate</name>
     <message>
         <source>G Units</source>
-        <translation></translation>
+        <translation>G Units</translation>
     </message>
     <message>
         <source>%1 G MAX</source>
-        <translation></translation>
+        <translation>%1 G MAX</translation>
     </message>
     <message>
         <source>%1 G MIN</source>
-        <translation></translation>
+        <translation>%1 G MIN</translation>
     </message>
     <message>
         <source>%1 G ACT</source>
-        <translation></translation>
+        <translation>%1 G ACT</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation></translation>
+        <translation>Сбросить</translation>
     </message>
 </context>
 <context>
     <name>Acknowledgements</name>
     <message>
         <source>Acknowledgements</source>
-        <translation></translation>
+        <translation>Благодарности</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation></translation>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>
     <name>Application</name>
     <message>
         <source>Check for updates automatically?</source>
-        <translation></translation>
+        <translation>Проверять обновления автоматически?</translation>
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation></translation>
+        <translation>Должен ли %1 автоматически проверять наличие обновлений? Вы всегда можете проверить наличие обновлений вручную из меню &quot;Помощь&quot;</translation>
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
-        <translation></translation>
+        <translation>Скиньте сюда файлы JSON и CSV</translation>
     </message>
 </context>
 <context>
     <name>CSV::Export</name>
     <message>
         <source>CSV file not open</source>
-        <translation></translation>
+        <translation>CSV-файл не открывается</translation>
     </message>
     <message>
         <source>Cannot find CSV export file!</source>
-        <translation></translation>
+        <translation>Не удается найти файл экспорта CSV!</translation>
     </message>
     <message>
         <source>CSV File Error</source>
-        <translation>CSV file error</translation>
+        <translation>Ошибка файла CSV</translation>
     </message>
     <message>
         <source>Cannot open CSV file for writing!</source>
-        <translation></translation>
+        <translation>Невозможно открыть CSV-файл для записи!</translation>
     </message>
 </context>
 <context>
     <name>CSV::Player</name>
     <message>
         <source>Select CSV file</source>
-        <translation></translation>
+        <translation>Выберите CSV-файл</translation>
     </message>
     <message>
         <source>CSV files</source>
-        <translation>CSV files</translation>
+        <translation>Файлы CSV</translation>
     </message>
     <message>
         <source>Invalid configuration for CSV player</source>
-        <translation></translation>
+        <translation>Неверная конфигурация для CSV-плеера</translation>
     </message>
     <message>
         <source>You need to select a JSON map file in order to use this feature</source>
-        <translation></translation>
+        <translation>Вам необходимо выбрать файл карты JSON, чтобы использовать эту функцию</translation>
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
-        <translation></translation>
+        <translation>Последовательный порт открыт, вы хотите продолжить?</translation>
     </message>
     <message>
         <source>In order to use this feature, its necessary to disconnect from the serial port</source>
-        <translation></translation>
+        <translation>Чтобы использовать эту функцию, необходимо отключиться от последовательного порта</translation>
     </message>
     <message>
         <source>There is an error with the data in the CSV file</source>
-        <translation></translation>
+        <translation>Возникла ошибка с данными в CSV-файле</translation>
     </message>
     <message>
         <source>Please verify that the CSV file was created with Serial Studio</source>
-        <translation></translation>
+        <translation>Убедитесь, что CSV-файл был создан с помощью Serial Studio</translation>
     </message>
     <message>
         <source>Cannot read CSV file</source>
-        <translation></translation>
+        <translation>Невозможно прочитать CSV-файл</translation>
     </message>
     <message>
         <source>Please check file permissions &amp; location</source>
-        <translation></translation>
+        <translation>Проверьте разрешения и расположение файла</translation>
     </message>
     <message>
         <source>Replay of %1</source>
-        <translation></translation>
+        <translation>Воспроизведение %1</translation>
     </message>
 </context>
 <context>
     <name>Console</name>
     <message>
         <source>Send data to device</source>
-        <translation></translation>
+        <translation>Отправьте данные на устройство</translation>
     </message>
     <message>
         <source>Echo</source>
-        <translation></translation>
+        <translation>Эхо</translation>
     </message>
     <message>
         <source>Autoscroll</source>
-        <translation></translation>
+        <translation>Автопрокрутка</translation>
     </message>
     <message>
         <source>Show timestamp</source>
-        <translation></translation>
+        <translation>Показать метку времени</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation></translation>
+        <translation>Копировать</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation></translation>
+        <translation>Очистить</translation>
     </message>
     <message>
         <source>Save as</source>
-        <translation></translation>
+        <translation>Сохранить как</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation></translation>
+        <translation>Выбрать все</translation>
     </message>
     <message>
         <source>No data received so far</source>
-        <translation></translation>
+        <translation>Данные пока не получены</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation></translation>
+        <translation>Печать</translation>
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation></translation>
+        <translation>Скрыть меню</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation></translation>
+        <translation>Показать меню</translation>
     </message>
     <message>
         <source>Console</source>
-        <translation></translation>
+        <translation>Консоль</translation>
     </message>
 </context>
 <context>
     <name>CsvPlayer</name>
     <message>
         <source>CSV Player</source>
-        <translation></translation>
+        <translation>Проигрыватель CSV</translation>
     </message>
     <message>
         <source>CSV files</source>
-        <translation type="vanished">CSV files</translation>
+        <translation>Файлы CSV</translation>
     </message>
 </context>
 <context>
     <name>DataGrid</name>
     <message>
         <source>View</source>
-        <translation></translation>
+        <translation>Просмотр</translation>
     </message>
     <message>
         <source>Horizontal Range</source>
-        <translation>Horizontal range</translation>
+        <translation>Горизонтальный диапазон</translation>
     </message>
     <message>
         <source>Data Groups</source>
-        <translation>Data groups</translation>
+        <translation>Группы данных</translation>
     </message>
     <message>
         <source>Data Plots</source>
-        <translation>Data plots</translation>
+        <translation>Графики данных</translation>
     </message>
     <message>
         <source>Data</source>
-        <translation></translation>
+        <translation>Данные</translation>
     </message>
     <message>
         <source>Points</source>
-        <translation></translation>
+        <translation>Точки</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation></translation>
+        <translation>Масштаб</translation>
     </message>
 </context>
 <context>
     <name>DeviceManager</name>
     <message>
         <source>Communication Mode</source>
-        <translation type="vanished">Communication mode</translation>
+        <translation>Режим связи</translation>
     </message>
     <message>
         <source>COM Port</source>
-        <translation type="vanished">COM port</translation>
+        <translation>COM-порт</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation type="vanished">Baud rate</translation>
+        <translation>Скорость передачи данных</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation type="vanished">Data bits</translation>
+        <translation>Биты данных</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation type="vanished">Stop bits</translation>
+        <translation>Стоп-биты</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation type="vanished">Flow control</translation>
+        <translation>Управление потоком</translation>
     </message>
 </context>
 <context>
     <name>Donate</name>
     <message>
         <source>Donate</source>
-        <translation></translation>
+        <translation>Донат</translation>
     </message>
     <message>
         <source>Later</source>
-        <translation></translation>
+        <translation>Позже</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation></translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <source>Support the development of %1!</source>
-        <translation></translation>
+        <translation>Поддержите разработку %1!</translation>
     </message>
     <message>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating to support development efforts :)</source>
-        <translation></translation>
+        <translation>Serial Studio - это бесплатное программное обеспечение с открытым исходным кодом, поддерживаемое добровольцами. Рассмотрите возможность пожертвования для поддержки усилий по разработке :)</translation>
     </message>
     <message>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
-        <translation></translation>
+        <translation>Вы также можете поддержать этот проект, поделившись им, сообщив об ошибках и предложив новые возможности!</translation>
     </message>
     <message>
         <source>Don&apos;t annoy me again!</source>
-        <translation></translation>
+        <translation>Не раздражайте меня больше!</translation>
     </message>
 </context>
 <context>
     <name>Downloader</name>
     <message>
         <source>Updater</source>
-        <translation></translation>
+        <translation>Updater</translation>
     </message>
     <message>
         <source>Downloading updates</source>
-        <translation></translation>
+        <translation>Загрузка обновлений</translation>
     </message>
     <message>
         <source>Time remaining: 0 minutes</source>
-        <translation></translation>
+        <translation>Оставшееся время: 0 минут</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation></translation>
+        <translation>Открыть</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation></translation>
+        <translation>Остановить</translation>
     </message>
     <message>
         <source>Time remaining</source>
-        <translation></translation>
+        <translation>Оставшееся время</translation>
     </message>
     <message>
         <source>unknown</source>
-        <translation></translation>
+        <translation>неизвестно</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation></translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <source>Cannot find downloaded update!</source>
-        <translation></translation>
+        <translation>Не удается найти загруженное обновление!</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation></translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <source>Download complete!</source>
-        <translation></translation>
+        <translation>Загрузка завершена!</translation>
     </message>
     <message>
         <source>The installer will open separately</source>
-        <translation></translation>
+        <translation>Программа установки откроется отдельно</translation>
     </message>
     <message>
         <source>Click &quot;OK&quot; to begin installing the update</source>
-        <translation></translation>
+        <translation>Нажмите &quot;OK&quot;, чтобы начать установку обновления</translation>
     </message>
     <message>
         <source>In order to install the update, you may need to quit the application.</source>
-        <translation></translation>
+        <translation>Для установки обновления может потребоваться выйти из приложения.</translation>
     </message>
     <message>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
-        <translation></translation>
+        <translation>Для установки обновления может потребоваться выйти из приложения. Это обязательное обновление, выход сейчас приведет к закрытию приложения</translation>
     </message>
     <message>
         <source>Click the &quot;Open&quot; button to apply the update</source>
-        <translation></translation>
+        <translation>Нажмите кнопку &quot;Открыть&quot;, чтобы применить обновление</translation>
     </message>
     <message>
         <source>Are you sure you want to cancel the download?</source>
-        <translation></translation>
+        <translation>Вы уверены, что хотите отменить загрузку?</translation>
     </message>
     <message>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation></translation>
+        <translation>Вы уверены, что хотите отменить загрузку? Это обязательное обновление, выход сейчас приведет к закрытию приложения</translation>
     </message>
     <message>
         <source>%1 bytes</source>
-        <translation></translation>
+        <translation>%1 байт</translation>
     </message>
     <message>
         <source>%1 KB</source>
-        <translation></translation>
+        <translation>%1 КБ</translation>
     </message>
     <message>
         <source>%1 MB</source>
-        <translation></translation>
+        <translation>%1 МБ</translation>
     </message>
     <message>
         <source>of</source>
@@ -406,1243 +406,1243 @@
     </message>
     <message>
         <source>Downloading Updates</source>
-        <translation></translation>
+        <translation>Загрузка обновлений</translation>
     </message>
     <message>
         <source>Time Remaining</source>
-        <translation></translation>
+        <translation>Оставшееся время</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation></translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <source>about %1 hours</source>
-        <translation></translation>
+        <translation>около %1 часа</translation>
     </message>
     <message>
         <source>about one hour</source>
-        <translation></translation>
+        <translation>около одного часа</translation>
     </message>
     <message>
         <source>%1 minutes</source>
-        <translation></translation>
+        <translation>%1 минут</translation>
     </message>
     <message>
         <source>1 minute</source>
-        <translation></translation>
+        <translation>1 минута</translation>
     </message>
     <message>
         <source>%1 seconds</source>
-        <translation></translation>
+        <translation>%1 секунды</translation>
     </message>
     <message>
         <source>1 second</source>
-        <translation></translation>
+        <translation>1 секунда</translation>
     </message>
 </context>
 <context>
     <name>Export</name>
     <message>
         <source>CSV File Error</source>
-        <translation type="vanished">CSV file error</translation>
+        <translation>Ошибка файла CSV</translation>
     </message>
 </context>
 <context>
     <name>GyroDelegate</name>
     <message>
         <source>%1° YAW</source>
-        <translation></translation>
+        <translation>%1° ЯВ</translation>
     </message>
     <message>
         <source>%1° ROLL</source>
-        <translation></translation>
+        <translation>%1° КРУГ</translation>
     </message>
     <message>
         <source>%1° PITCH</source>
-        <translation></translation>
+        <translation>%1° PITCH</translation>
     </message>
 </context>
 <context>
     <name>IO::Console</name>
     <message>
         <source>ASCII</source>
-        <translation></translation>
+        <translation>ASCII</translation>
     </message>
     <message>
         <source>HEX</source>
-        <translation></translation>
+        <translation>HEX</translation>
     </message>
     <message>
         <source>No line ending</source>
-        <translation></translation>
+        <translation>Нет окончания строки</translation>
     </message>
     <message>
         <source>New line</source>
-        <translation></translation>
+        <translation>Новая строка</translation>
     </message>
     <message>
         <source>Carriage return</source>
-        <translation></translation>
+        <translation>Возврат каретки</translation>
     </message>
     <message>
         <source>NL + CR</source>
-        <translation></translation>
+        <translation>NL + CR</translation>
     </message>
     <message>
         <source>Plain text</source>
-        <translation></translation>
+        <translation>Обычный текст</translation>
     </message>
     <message>
         <source>Hexadecimal</source>
-        <translation></translation>
+        <translation>Шестнадцатеричный</translation>
     </message>
     <message>
         <source>Export console data</source>
-        <translation></translation>
+        <translation>Экспорт данных консоли</translation>
     </message>
     <message>
         <source>Text files</source>
-        <translation></translation>
+        <translation>Текстовые файлы</translation>
     </message>
     <message>
         <source>File save error</source>
-        <translation></translation>
+        <translation>Ошибка сохранения файла</translation>
     </message>
 </context>
 <context>
     <name>IO::DataSources::Network</name>
     <message>
         <source>Network socket error</source>
-        <translation></translation>
+        <translation>Ошибка сетевого сокета</translation>
     </message>
 </context>
 <context>
     <name>IO::DataSources::Serial</name>
     <message>
         <source>None</source>
-        <translation></translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <source>No Device</source>
-        <translation>No device</translation>
+        <translation>Нет Устройство</translation>
     </message>
     <message>
         <source>Even</source>
-        <translation></translation>
+        <translation>Четный</translation>
     </message>
     <message>
         <source>Odd</source>
-        <translation></translation>
+        <translation>Нечетные</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation></translation>
+        <translation>Пробел</translation>
     </message>
     <message>
         <source>Mark</source>
-        <translation></translation>
+        <translation>Отметка</translation>
     </message>
     <message>
         <source>Baud rate registered successfully</source>
-        <translation></translation>
+        <translation>Скорость передачи данных зарегистрирована успешно</translation>
     </message>
     <message>
         <source>Rate &quot;%1&quot; has been added to baud rate list</source>
-        <translation></translation>
+        <translation>Скорость &quot;%1&quot; была добавлена в список скоростей передачи данных</translation>
     </message>
     <message>
         <source>Select Port</source>
-        <translation>Select port</translation>
+        <translation>Выберите порт</translation>
     </message>
     <message>
         <source>Serial port error</source>
-        <translation></translation>
+        <translation>Ошибка последовательного порта</translation>
     </message>
 </context>
 <context>
     <name>IO::Manager</name>
     <message>
         <source>Serial port</source>
-        <translation></translation>
+        <translation>Последовательный порт</translation>
     </message>
     <message>
         <source>Network port</source>
-        <translation></translation>
+        <translation>Сетевой порт</translation>
     </message>
 </context>
 <context>
     <name>JSON::Editor</name>
     <message>
         <source>Dataset widgets</source>
-        <translation></translation>
+        <translation>Виджеты набора данных</translation>
     </message>
     <message>
         <source>Accelerometer</source>
-        <translation></translation>
+        <translation>Акселерометр</translation>
     </message>
     <message>
         <source>Gyroscope</source>
-        <translation></translation>
+        <translation>Гироскоп</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation></translation>
+        <translation>Карта</translation>
     </message>
     <message>
         <source>None</source>
-        <translation></translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <source>Gauge</source>
-        <translation></translation>
+        <translation>Измеритель</translation>
     </message>
     <message>
         <source>Bar/level</source>
-        <translation></translation>
+        <translation>Бар/уровень</translation>
     </message>
     <message>
         <source>Compass</source>
-        <translation></translation>
+        <translation>Компас</translation>
     </message>
     <message>
         <source>New Project</source>
-        <translation></translation>
+        <translation>Новый проект</translation>
     </message>
     <message>
         <source>Do you want to save your changes?</source>
-        <translation></translation>
+        <translation>Вы хотите сохранить изменения?</translation>
     </message>
     <message>
         <source>You have unsaved modifications in this project!</source>
-        <translation></translation>
+        <translation>У вас есть несохраненные изменения в этом проекте!</translation>
     </message>
     <message>
         <source>Project error</source>
-        <translation></translation>
+        <translation>Ошибка проекта</translation>
     </message>
     <message>
         <source>Project title cannot be empty!</source>
-        <translation></translation>
+        <translation>Название проекта не может быть пустым!</translation>
     </message>
     <message>
         <source>Project error - Group %1</source>
-        <translation></translation>
+        <translation>Ошибка проекта - Группа %1</translation>
     </message>
     <message>
         <source>Group title cannot be empty!</source>
-        <translation></translation>
+        <translation>Название группы не может быть пустым!</translation>
     </message>
     <message>
         <source>Project error - Group %1, Dataset %2</source>
-        <translation></translation>
+        <translation>Ошибка проекта - Группа %1, набор данных %2</translation>
     </message>
     <message>
         <source>Dataset title cannot be empty!</source>
-        <translation></translation>
+        <translation>Название набора данных не может быть пустым!</translation>
     </message>
     <message>
         <source>Warning - Group %1, Dataset %2</source>
-        <translation></translation>
+        <translation>Предупреждение - Группа %1, набор данных %2</translation>
     </message>
     <message>
         <source>Dataset contains duplicate frame index position! Continue?</source>
-        <translation></translation>
+        <translation>Набор данных содержит дублирующуюся позицию индекса кадра! Продолжить?</translation>
     </message>
     <message>
         <source>Save JSON project</source>
-        <translation></translation>
+        <translation>Сохранить проект JSON</translation>
     </message>
     <message>
         <source>File open error</source>
-        <translation></translation>
+        <translation>Ошибка открытия файла</translation>
     </message>
     <message>
         <source>Select JSON file</source>
-        <translation></translation>
+        <translation>Выберите файл JSON</translation>
     </message>
     <message>
         <source>New Group</source>
-        <translation></translation>
+        <translation>Новая группа</translation>
     </message>
     <message>
         <source>Delete group &quot;%1&quot;</source>
-        <translation></translation>
+        <translation>Удалить группу &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this group?</source>
-        <translation></translation>
+        <translation>Вы уверены, что хотите удалить эту группу?</translation>
     </message>
     <message>
         <source>Are you sure you want to change the group-level widget?</source>
-        <translation></translation>
+        <translation>Вы уверены, что хотите изменить виджет на уровне группы?</translation>
     </message>
     <message>
         <source>Existing datasets for this group will be deleted</source>
-        <translation></translation>
+        <translation>Существующие наборы данных для этой группы будут удалены</translation>
     </message>
     <message>
         <source>Accelerometer %1</source>
-        <translation></translation>
+        <translation>Акселерометр %1</translation>
     </message>
     <message>
         <source>Gyro %1</source>
-        <translation></translation>
+        <translation>Гироскоп %1</translation>
     </message>
     <message>
         <source>Latitude</source>
-        <translation></translation>
+        <translation>Широта</translation>
     </message>
     <message>
         <source>Longitude</source>
-        <translation></translation>
+        <translation>Долгота</translation>
     </message>
     <message>
         <source>New dataset</source>
-        <translation></translation>
+        <translation>Новый набор данных</translation>
     </message>
     <message>
         <source>Delete dataset &quot;%1&quot;</source>
-        <translation></translation>
+        <translation>Удалить набор данных &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this dataset?</source>
-        <translation></translation>
+        <translation>Вы уверены, что хотите удалить этот набор данных?</translation>
     </message>
 </context>
 <context>
     <name>JSON::Generator</name>
     <message>
         <source>Select JSON map file</source>
-        <translation></translation>
+        <translation>Выберите файл карты JSON</translation>
     </message>
     <message>
         <source>JSON files</source>
-        <translation></translation>
+        <translation>Файлы JSON</translation>
     </message>
     <message>
         <source>JSON parse error</source>
-        <translation></translation>
+        <translation>Ошибка разбора JSON</translation>
     </message>
     <message>
         <source>Cannot read JSON file</source>
-        <translation></translation>
+        <translation>Невозможно прочитать файл JSON</translation>
     </message>
     <message>
         <source>Please check file permissions &amp; location</source>
-        <translation></translation>
+        <translation>Проверьте разрешения и расположение файла</translation>
     </message>
 </context>
 <context>
     <name>JsonDatasetDelegate</name>
     <message>
         <source>Dataset %1 - %2</source>
-        <translation></translation>
+        <translation>Набор данных %1 - %2</translation>
     </message>
     <message>
         <source>Title:</source>
-        <translation></translation>
+        <translation>Название:</translation>
     </message>
     <message>
         <source>Sensor reading, uptime, etc...</source>
-        <translation></translation>
+        <translation>Показания датчиков, время работы и т.д....</translation>
     </message>
     <message>
         <source>Units:</source>
-        <translation></translation>
+        <translation>Единицы измерения:</translation>
     </message>
     <message>
         <source>Volts, meters, seconds, etc...</source>
-        <translation></translation>
+        <translation>Вольты, метры, секунды и т.д...</translation>
     </message>
     <message>
         <source>Frame index:</source>
-        <translation></translation>
+        <translation>Индекс кадра:</translation>
     </message>
     <message>
         <source>Generate graph:</source>
-        <translation></translation>
+        <translation>Генерировать график:</translation>
     </message>
     <message>
         <source>Widget:</source>
-        <translation></translation>
+        <translation>Виджет:</translation>
     </message>
     <message>
         <source>Min value:</source>
-        <translation></translation>
+        <translation>Минимальное значение:</translation>
     </message>
     <message>
         <source>Max value:</source>
-        <translation></translation>
+        <translation>Максимальное значение:</translation>
     </message>
 </context>
 <context>
     <name>JsonEditor</name>
     <message>
         <source>JSON Editor - %1</source>
-        <translation></translation>
+        <translation>Редактор JSON - %1</translation>
     </message>
     <message>
         <source>Project title (required)</source>
-        <translation></translation>
+        <translation>Название проекта (обязательно)</translation>
     </message>
     <message>
         <source>Data separator (default is &apos;,&apos;)</source>
-        <translation></translation>
+        <translation>Разделитель данных (по умолчанию &apos;,&apos;)</translation>
     </message>
     <message>
         <source>Frame start sequence (default is &apos;%1&apos;)</source>
-        <translation></translation>
+        <translation>Последовательность начала кадра (по умолчанию &apos;%1&apos;)</translation>
     </message>
     <message>
         <source>Frame end sequence (default is &apos;%1&apos;)</source>
-        <translation></translation>
+        <translation>Последовательность окончания кадра (по умолчанию &apos;%1&apos;)</translation>
     </message>
     <message>
         <source>Start something awesome</source>
-        <translation></translation>
+        <translation>Начните что-то потрясающее</translation>
     </message>
     <message>
         <source>Click on the &quot;%1&quot; button to begin</source>
-        <translation></translation>
+        <translation>Нажмите на кнопку &quot;%1&quot;, чтобы начать работу</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation></translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <source>Add group</source>
-        <translation></translation>
+        <translation>Добавить группу</translation>
     </message>
     <message>
         <source>Open existing project...</source>
-        <translation></translation>
+        <translation>Открыть существующий проект...</translation>
     </message>
     <message>
         <source>Create new project</source>
-        <translation></translation>
+        <translation>Создать новый проект</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation></translation>
+        <translation>Применить</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation></translation>
+        <translation>Сохранить</translation>
     </message>
 </context>
 <context>
     <name>JsonGroupDelegate</name>
     <message>
         <source>Group %1 - %2</source>
-        <translation></translation>
+        <translation>Группа %1 - %2</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation></translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>Add dataset</source>
-        <translation></translation>
+        <translation>Добавить набор данных</translation>
     </message>
 </context>
 <context>
     <name>MQTT</name>
     <message>
         <source>Version</source>
-        <translation></translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <source>Mode</source>
-        <translation></translation>
+        <translation>Режим</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation></translation>
+        <translation>Хост</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation></translation>
+        <translation>Порт</translation>
     </message>
     <message>
         <source>Topic</source>
-        <translation></translation>
+        <translation>Тема</translation>
     </message>
     <message>
         <source>MQTT topic</source>
-        <translation></translation>
+        <translation>Тема MQTT</translation>
     </message>
     <message>
         <source>User</source>
-        <translation></translation>
+        <translation>Пользователь</translation>
     </message>
     <message>
         <source>MQTT username</source>
-        <translation></translation>
+        <translation>Имя пользователя MQTT</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation></translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <source>MQTT password</source>
-        <translation></translation>
+        <translation>Пароль MQTT</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation></translation>
+        <translation>Отключить</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation></translation>
+        <translation>Подключиться</translation>
     </message>
 </context>
 <context>
     <name>MQTT::Client</name>
     <message>
         <source>Publisher</source>
-        <translation></translation>
+        <translation>Издатель</translation>
     </message>
     <message>
         <source>Subscriber</source>
-        <translation></translation>
+        <translation>Подписчик</translation>
     </message>
     <message>
         <source>IP address lookup error</source>
-        <translation></translation>
+        <translation>Ошибка поиска IP-адреса</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation></translation>
+        <translation>Неизвестная ошибка</translation>
     </message>
     <message>
         <source>Connection refused</source>
-        <translation></translation>
+        <translation>Отказ в подключении</translation>
     </message>
     <message>
         <source>Remote host closed the connection</source>
-        <translation></translation>
+        <translation>Удаленный хост закрыл соединение</translation>
     </message>
     <message>
         <source>Host not found</source>
-        <translation></translation>
+        <translation>Хост не найден</translation>
     </message>
     <message>
         <source>Socket access error</source>
-        <translation></translation>
+        <translation>Ошибка доступа к сокету</translation>
     </message>
     <message>
         <source>Socket resource error</source>
-        <translation></translation>
+        <translation>Ошибка ресурса сокета</translation>
     </message>
     <message>
         <source>Socket timeout</source>
-        <translation></translation>
+        <translation>Таймаут сокета</translation>
     </message>
     <message>
         <source>Socket datagram too large</source>
-        <translation></translation>
+        <translation>Слишком большая датаграмма сокета</translation>
     </message>
     <message>
         <source>Network error</source>
-        <translation></translation>
+        <translation>Ошибка сети</translation>
     </message>
     <message>
         <source>Address in use</source>
-        <translation></translation>
+        <translation>Используемый адрес</translation>
     </message>
     <message>
         <source>Address not available</source>
-        <translation></translation>
+        <translation>Адрес недоступен</translation>
     </message>
     <message>
         <source>Unsupported socket operation</source>
-        <translation></translation>
+        <translation>Неподдерживаемая операция с сокетом</translation>
     </message>
     <message>
         <source>Unfinished socket operation</source>
-        <translation></translation>
+        <translation>Незавершенная операция с сокетом</translation>
     </message>
     <message>
         <source>Proxy authentication required</source>
-        <translation></translation>
+        <translation>Требуется аутентификация прокси-сервера</translation>
     </message>
     <message>
         <source>SSL handshake failed</source>
-        <translation></translation>
+        <translation>SSL квитирование не удалось</translation>
     </message>
     <message>
         <source>Proxy connection refused</source>
-        <translation></translation>
+        <translation>Прокси-соединение отклонено</translation>
     </message>
     <message>
         <source>Proxy connection closed</source>
-        <translation></translation>
+        <translation>Прокси-соединение закрыто</translation>
     </message>
     <message>
         <source>Proxy connection timeout</source>
-        <translation></translation>
+        <translation>Таймаут прокси-соединения</translation>
     </message>
     <message>
         <source>Proxy not found</source>
-        <translation></translation>
+        <translation>Прокси не найден</translation>
     </message>
     <message>
         <source>Proxy protocol error</source>
-        <translation></translation>
+        <translation>Ошибка протокола прокси</translation>
     </message>
     <message>
         <source>Operation error</source>
-        <translation></translation>
+        <translation>Ошибка операции</translation>
     </message>
     <message>
         <source>SSL internal error</source>
-        <translation></translation>
+        <translation>Внутренняя ошибка SSL</translation>
     </message>
     <message>
         <source>Invalid SSL user data</source>
-        <translation></translation>
+        <translation>Неверные данные пользователя SSL</translation>
     </message>
     <message>
         <source>Socket temprary error</source>
-        <translation></translation>
+        <translation>Ошибка шаблона сокета</translation>
     </message>
     <message>
         <source>Unacceptable MQTT protocol</source>
-        <translation></translation>
+        <translation>Неприемлемый протокол MQTT</translation>
     </message>
     <message>
         <source>MQTT identifier rejected</source>
-        <translation></translation>
+        <translation>Идентификатор MQTT отклонен</translation>
     </message>
     <message>
         <source>MQTT server unavailable</source>
-        <translation></translation>
+        <translation>Сервер MQTT недоступен</translation>
     </message>
     <message>
         <source>Bad MQTT username or password</source>
-        <translation></translation>
+        <translation>Плохое имя пользователя или пароль MQTT</translation>
     </message>
     <message>
         <source>MQTT authorization error</source>
-        <translation></translation>
+        <translation>Ошибка авторизации MQTT</translation>
     </message>
     <message>
         <source>MQTT no ping response</source>
-        <translation></translation>
+        <translation>MQTT не отвечает на запрос ping</translation>
     </message>
     <message>
         <source>MQTT client error</source>
-        <translation></translation>
+        <translation>Ошибка клиента MQTT</translation>
     </message>
 </context>
 <context>
     <name>MapDelegate</name>
     <message>
         <source>Center on coordinate</source>
-        <translation></translation>
+        <translation>Центр на координате</translation>
     </message>
 </context>
 <context>
     <name>Menubar</name>
     <message>
         <source>File</source>
-        <translation></translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <source>Select JSON file</source>
-        <translation></translation>
+        <translation>Выберите файл JSON</translation>
     </message>
     <message>
         <source>CSV export</source>
-        <translation></translation>
+        <translation>Экспорт CSV</translation>
     </message>
     <message>
         <source>Enable CSV export</source>
-        <translation></translation>
+        <translation>Включить экспорт CSV</translation>
     </message>
     <message>
         <source>Show CSV in explorer</source>
-        <translation></translation>
+        <translation>Показать CSV в проводнике</translation>
     </message>
     <message>
         <source>Replay CSV</source>
-        <translation></translation>
+        <translation>Воспроизвести CSV</translation>
     </message>
     <message>
         <source>Export console output</source>
-        <translation></translation>
+        <translation>Экспортировать вывод консоли</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation></translation>
+        <translation>Выйти из</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation></translation>
+        <translation>Редактировать</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation></translation>
+        <translation>Копировать</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation></translation>
+        <translation>Выбрать все</translation>
     </message>
     <message>
         <source>Clear console output</source>
-        <translation></translation>
+        <translation>Очистить вывод консоли</translation>
     </message>
     <message>
         <source>Communication mode</source>
-        <translation></translation>
+        <translation>Режим связи</translation>
     </message>
     <message>
         <source>Device sends JSON</source>
-        <translation></translation>
+        <translation>Устройство отправляет JSON</translation>
     </message>
     <message>
         <source>Load JSON from computer</source>
-        <translation></translation>
+        <translation>Загрузить JSON с компьютера</translation>
     </message>
     <message>
         <source>View</source>
-        <translation></translation>
+        <translation>Просмотр</translation>
     </message>
     <message>
         <source>Console</source>
-        <translation></translation>
+        <translation>Консоль</translation>
     </message>
     <message>
         <source>Dashboard</source>
-        <translation></translation>
+        <translation>Приборная панель</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation></translation>
+        <translation>Виджеты</translation>
     </message>
     <message>
         <source>Show setup pane</source>
-        <translation></translation>
+        <translation>Показать панель настроек</translation>
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation></translation>
+        <translation>Скрыть меню</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation></translation>
+        <translation>Показать меню</translation>
     </message>
     <message>
         <source>Exit full screen</source>
-        <translation></translation>
+        <translation>Выход из полноэкранного режима</translation>
     </message>
     <message>
         <source>Enter full screen</source>
-        <translation></translation>
+        <translation>Вход в полный экран</translation>
     </message>
     <message>
         <source>Autoscroll</source>
-        <translation></translation>
+        <translation>Автопрокрутка</translation>
     </message>
     <message>
         <source>Show timestamp</source>
-        <translation></translation>
+        <translation>Показать метку времени</translation>
     </message>
     <message>
         <source>VT-100 emulation</source>
-        <translation></translation>
+        <translation>Эмуляция VT-100</translation>
     </message>
     <message>
         <source>Echo user commands</source>
-        <translation></translation>
+        <translation>Эхо-команды пользователя</translation>
     </message>
     <message>
         <source>Display mode</source>
-        <translation></translation>
+        <translation>Режим отображения</translation>
     </message>
     <message>
         <source>Normal (plain text)</source>
-        <translation></translation>
+        <translation>Обычный (простой текст)</translation>
     </message>
     <message>
         <source>Binary (hexadecimal)</source>
-        <translation></translation>
+        <translation>Двоичный (шестнадцатеричный)</translation>
     </message>
     <message>
         <source>Line ending character</source>
-        <translation></translation>
+        <translation>Символ окончания строки</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation></translation>
+        <translation>Справка</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation></translation>
+        <translation>О %1</translation>
     </message>
     <message>
         <source>Auto-updater</source>
-        <translation></translation>
+        <translation>Автообновление</translation>
     </message>
     <message>
         <source>Check for updates</source>
-        <translation></translation>
+        <translation>Проверка наличия обновлений</translation>
     </message>
     <message>
         <source>Project website</source>
-        <translation></translation>
+        <translation>Веб-сайт проекта</translation>
     </message>
     <message>
         <source>Documentation/wiki</source>
-        <translation></translation>
+        <translation>Документация/вики</translation>
     </message>
     <message>
         <source>Show log file</source>
-        <translation></translation>
+        <translation>Показать файл журнала</translation>
     </message>
     <message>
         <source>Report bug</source>
-        <translation></translation>
+        <translation>Сообщить об ошибке</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation></translation>
+        <translation>Печать</translation>
     </message>
 </context>
 <context>
     <name>MenubarMacOS</name>
     <message>
         <source>File</source>
-        <translation></translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <source>Select JSON file</source>
-        <translation></translation>
+        <translation>Выберите файл JSON</translation>
     </message>
     <message>
         <source>CSV export</source>
-        <translation></translation>
+        <translation>Экспорт CSV</translation>
     </message>
     <message>
         <source>Enable CSV export</source>
-        <translation></translation>
+        <translation>Включить экспорт CSV</translation>
     </message>
     <message>
         <source>Show CSV in explorer</source>
-        <translation></translation>
+        <translation>Показать CSV в проводнике</translation>
     </message>
     <message>
         <source>Replay CSV</source>
-        <translation></translation>
+        <translation>Воспроизвести CSV</translation>
     </message>
     <message>
         <source>Export console output</source>
-        <translation></translation>
+        <translation>Экспортировать вывод консоли</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation></translation>
+        <translation>Выйти из</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation></translation>
+        <translation>Редактировать</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation></translation>
+        <translation>Копировать</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation></translation>
+        <translation>Выбрать все</translation>
     </message>
     <message>
         <source>Clear console output</source>
-        <translation></translation>
+        <translation>Очистить вывод консоли</translation>
     </message>
     <message>
         <source>Communication mode</source>
-        <translation></translation>
+        <translation>Режим связи</translation>
     </message>
     <message>
         <source>Device sends JSON</source>
-        <translation></translation>
+        <translation>Устройство отправляет JSON</translation>
     </message>
     <message>
         <source>Load JSON from computer</source>
-        <translation></translation>
+        <translation>Загрузить JSON с компьютера</translation>
     </message>
     <message>
         <source>View</source>
-        <translation></translation>
+        <translation>Просмотр</translation>
     </message>
     <message>
         <source>Console</source>
-        <translation></translation>
+        <translation>Консоль</translation>
     </message>
     <message>
         <source>Dashboard</source>
-        <translation></translation>
+        <translation>Приборная панель</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation></translation>
+        <translation>Виджеты</translation>
     </message>
     <message>
         <source>Show setup pane</source>
-        <translation></translation>
+        <translation>Показать панель настроек</translation>
     </message>
     <message>
         <source>Exit full screen</source>
-        <translation></translation>
+        <translation>Выход из полноэкранного режима</translation>
     </message>
     <message>
         <source>Enter full screen</source>
-        <translation></translation>
+        <translation>Вход в полный экран</translation>
     </message>
     <message>
         <source>Autoscroll</source>
-        <translation></translation>
+        <translation>Автопрокрутка</translation>
     </message>
     <message>
         <source>Show timestamp</source>
-        <translation></translation>
+        <translation>Показать метку времени</translation>
     </message>
     <message>
         <source>VT-100 emulation</source>
-        <translation></translation>
+        <translation>Эмуляция VT-100</translation>
     </message>
     <message>
         <source>Echo user commands</source>
-        <translation></translation>
+        <translation>Эхо-команды пользователя</translation>
     </message>
     <message>
         <source>Display mode</source>
-        <translation></translation>
+        <translation>Режим отображения</translation>
     </message>
     <message>
         <source>Normal (plain text)</source>
-        <translation></translation>
+        <translation>Обычный (простой текст)</translation>
     </message>
     <message>
         <source>Binary (hexadecimal)</source>
-        <translation></translation>
+        <translation>Двоичный (шестнадцатеричный)</translation>
     </message>
     <message>
         <source>Line ending character</source>
-        <translation></translation>
+        <translation>Символ окончания строки</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation></translation>
+        <translation>Справка</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation></translation>
+        <translation>О %1</translation>
     </message>
     <message>
         <source>Auto-updater</source>
-        <translation></translation>
+        <translation>Автообновление</translation>
     </message>
     <message>
         <source>Check for updates</source>
-        <translation></translation>
+        <translation>Проверка наличия обновлений</translation>
     </message>
     <message>
         <source>Project website</source>
-        <translation></translation>
+        <translation>Веб-сайт проекта</translation>
     </message>
     <message>
         <source>Documentation/wiki</source>
-        <translation></translation>
+        <translation>Документация/вики</translation>
     </message>
     <message>
         <source>Show log file</source>
-        <translation></translation>
+        <translation>Показать файл журнала</translation>
     </message>
     <message>
         <source>Report bug</source>
-        <translation></translation>
+        <translation>Сообщить об ошибке</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation></translation>
+        <translation>Печать</translation>
     </message>
 </context>
 <context>
     <name>Misc::MacExtras</name>
     <message>
         <source>Setup</source>
-        <translation></translation>
+        <translation>Установка</translation>
     </message>
     <message>
         <source>Console</source>
-        <translation></translation>
+        <translation>Консоль</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation></translation>
+        <translation>Виджеты</translation>
     </message>
     <message>
         <source>Dashboard</source>
-        <translation></translation>
+        <translation>Приборная панель</translation>
     </message>
 </context>
 <context>
     <name>Misc::ThemeManager</name>
     <message>
         <source>The theme change will take effect after restart</source>
-        <translation></translation>
+        <translation>Изменение темы вступит в силу после перезапуска</translation>
     </message>
     <message>
         <source>Do you want to restart %1 now?</source>
-        <translation></translation>
+        <translation>Хотите ли вы перезапустить %1 сейчас?</translation>
     </message>
 </context>
 <context>
     <name>Network</name>
     <message>
         <source>Socket type</source>
-        <translation></translation>
+        <translation>Тип сокета</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation></translation>
+        <translation>Порт</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation></translation>
+        <translation>Хост</translation>
     </message>
 </context>
 <context>
     <name>Plugins::Bridge</name>
     <message>
         <source>Unable to start plugin TCP server</source>
-        <translation></translation>
+        <translation>Невозможно запустить TCP-сервер плагина</translation>
     </message>
     <message>
         <source>Plugin server</source>
-        <translation></translation>
+        <translation>Сервер плагина</translation>
     </message>
     <message>
         <source>Invalid pending connection</source>
-        <translation></translation>
+        <translation>Недействительное ожидающее соединение</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>
-        <translation></translation>
+        <translation>Не удалось загрузить приветственный текст :(</translation>
     </message>
 </context>
 <context>
     <name>Serial</name>
     <message>
         <source>COM Port</source>
-        <translation>COM port</translation>
+        <translation>COM-порт</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>Baud rate</translation>
+        <translation>Скорость передачи данных</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>Data bits</translation>
+        <translation>Биты данных</translation>
     </message>
     <message>
         <source>Parity</source>
-        <translation></translation>
+        <translation>Четность</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>Stop bits</translation>
+        <translation>Стоп-биты</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>Flow control</translation>
+        <translation>Управление потоком</translation>
     </message>
 </context>
 <context>
     <name>SerialManager</name>
     <message>
         <source>No Device</source>
-        <translation type="vanished">No device</translation>
+        <translation>Нет Устройство</translation>
     </message>
     <message>
         <source>Select Port</source>
-        <translation type="vanished">Select port</translation>
+        <translation>Выберите порт</translation>
     </message>
 </context>
 <context>
     <name>Settings</name>
     <message>
         <source>Language</source>
-        <translation></translation>
+        <translation>Язык</translation>
     </message>
     <message>
         <source>Start sequence</source>
-        <translation></translation>
+        <translation>Код начала кадра</translation>
     </message>
     <message>
         <source>End sequence</source>
-        <translation></translation>
+        <translation>Код конца кадра</translation>
     </message>
     <message>
         <source>Plugin system</source>
-        <translation></translation>
+        <translation>Система плагинов</translation>
     </message>
     <message>
         <source>Applications/plugins can interact with %1 by establishing a TCP connection on port 7777.</source>
-        <translation></translation>
+        <translation>Приложения/плагины могут взаимодействовать с %1, устанавливая TCP-соединение на порту 7777.</translation>
     </message>
     <message>
         <source>Theme</source>
-        <translation></translation>
+        <translation>Тема</translation>
     </message>
     <message>
         <source>Data separator</source>
-        <translation></translation>
+        <translation>Разделитель данных</translation>
     </message>
     <message>
         <source>UI refresh rate</source>
-        <translation></translation>
+        <translation>Частота обновления</translation>
     </message>
 </context>
 <context>
     <name>Setup</name>
     <message>
         <source>Communication Mode</source>
-        <translation>Communication mode</translation>
+        <translation>Режим связи</translation>
     </message>
     <message>
         <source>Auto (JSON from serial device)</source>
-        <translation></translation>
+        <translation>Авто (JSON с последовательного устройства)</translation>
     </message>
     <message>
         <source>Manual (use JSON map file)</source>
-        <translation></translation>
+        <translation>Вручную (использование файла карты JSON)</translation>
     </message>
     <message>
         <source>Change map file (%1)</source>
-        <translation></translation>
+        <translation>Изменить файл карты (%1)</translation>
     </message>
     <message>
         <source>Select map file</source>
-        <translation></translation>
+        <translation>Выберите файл карты</translation>
     </message>
     <message>
         <source>COM Port</source>
-        <translation type="vanished">COM port</translation>
+        <translation>COM-порт</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation type="vanished">Baud rate</translation>
+        <translation>Скорость передачи данных</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation type="vanished">Data bits</translation>
+        <translation>Биты данных</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation type="vanished">Stop bits</translation>
+        <translation>Стоп-биты</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation type="vanished">Flow control</translation>
+        <translation>Управление потоком</translation>
     </message>
     <message>
         <source>Create CSV file</source>
-        <translation></translation>
+        <translation>Создать CSV-файл</translation>
     </message>
     <message>
         <source>Serial</source>
-        <translation></translation>
+        <translation>Серийный</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation></translation>
+        <translation>Сеть</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation></translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <source>MQTT</source>
-        <translation></translation>
+        <translation>MQTT</translation>
     </message>
     <message>
         <source>Setup</source>
-        <translation></translation>
+        <translation>Установка</translation>
     </message>
 </context>
 <context>
     <name>Toolbar</name>
     <message>
         <source>Console</source>
-        <translation></translation>
+        <translation>Консоль</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation></translation>
+        <translation>Виджеты</translation>
     </message>
     <message>
         <source>Dashboard</source>
-        <translation></translation>
+        <translation>Приборная панель</translation>
     </message>
     <message>
         <source>Open CSV</source>
-        <translation></translation>
+        <translation>Открыть CSV</translation>
     </message>
     <message>
         <source>Setup</source>
-        <translation></translation>
+        <translation>Установка</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation></translation>
+        <translation>Отключить</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation></translation>
+        <translation>Подключиться</translation>
     </message>
     <message>
         <source>JSON Editor</source>
-        <translation></translation>
+        <translation>Редактор JSON</translation>
     </message>
 </context>
 <context>
     <name>Updater</name>
     <message>
         <source>Would you like to download the update now?</source>
-        <translation></translation>
+        <translation>Хотите загрузить обновление сейчас?</translation>
     </message>
     <message>
         <source>Would you like to download the update now? This is a mandatory update, exiting now will close the application</source>
-        <translation></translation>
+        <translation>Вы хотите загрузить обновление сейчас? Это обязательное обновление, выход сейчас приведет к закрытию приложения</translation>
     </message>
     <message>
         <source>Version %1 of %2 has been released!</source>
-        <translation></translation>
+        <translation>Выпущена версия %1 от %2!</translation>
     </message>
     <message>
         <source>No updates are available for the moment</source>
-        <translation></translation>
+        <translation>На данный момент обновления недоступны</translation>
     </message>
     <message>
         <source>Congratulations! You are running the latest version of %1</source>
-        <translation></translation>
+        <translation>Поздравляем! Вы используете последнюю версию %1</translation>
     </message>
 </context>
 <context>
     <name>Widgets</name>
     <message>
         <source>View</source>
-        <translation></translation>
+        <translation>Просмотр</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation></translation>
+        <translation>Виджеты</translation>
     </message>
 </context>
 </TS>
