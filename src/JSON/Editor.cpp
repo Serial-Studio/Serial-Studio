@@ -974,10 +974,6 @@ void Editor::deleteDataset(const int group, const int dataset)
     }
 }
 
-void Editor::moveDatasetUp(const int group, const int dataset) { }
-
-void Editor::moveDatasetDown(const int group, const int dataset) { }
-
 /**
  * Updates the @a title of the given @a dataset.
  *
