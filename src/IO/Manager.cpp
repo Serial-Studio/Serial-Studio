@@ -472,7 +472,7 @@ void Manager::setFinishSequence(const QString &sequence)
 {
     m_finishSequence = ADD_ESCAPE_SEQUENCES(sequence);
     if (m_finishSequence.isEmpty())
-        m_finishSequence = "/*";
+        m_finishSequence = "*/";
 
     emit finishSequenceChanged();
 }
