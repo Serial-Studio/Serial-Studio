@@ -134,8 +134,6 @@ public slots:
 
     void addDataset(const int group);
     void deleteDataset(const int group, const int dataset);
-    void moveDatasetUp(const int group, const int dataset);
-    void moveDatasetDown(const int group, const int dataset);
     void setDatasetTitle(const int group, const int dataset, const QString &title);
     void setDatasetUnits(const int group, const int dataset, const QString &units);
     void setDatasetIndex(const int group, const int dataset, const int frameIndex);

@@ -261,7 +261,7 @@ QString Manager::receivedDataLength() const
         units = "MB";
     }
 
-    return QString("%1 %2").arg(value).arg(units);
+    return QString("%1 %2").arg(value, units);
 }
 
 /**
