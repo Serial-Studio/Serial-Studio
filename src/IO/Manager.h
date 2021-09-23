@@ -27,8 +27,6 @@
 #include <QObject>
 #include <QIODevice>
 
-#include "Checksum.h"
-
 namespace IO
 {
 class Manager : public QObject
@@ -117,8 +115,6 @@ public:
     QString finishSequence() const;
     QString separatorSequence() const;
     QString receivedDataLength() const;
-
-    bool validateCrc(const QByteArray &buffer, quint32 crc, ChecksumType type);
 
     Q_INVOKABLE QStringList dataSourcesList() const;
     Q_INVOKABLE qint64 writeData(const QByteArray &data);

@@ -22,9 +22,7 @@
 
 #include "Checksum.h"
 
-using namespace IO;
-
-quint8 crc8(const QByteArray &data)
+quint8 IO::crc8(const QByteArray &data)
 {
     quint8 crc = 0xff;
     for (auto i = 0; i < data.length(); i++)
@@ -42,7 +40,7 @@ quint8 crc8(const QByteArray &data)
     return crc;
 }
 
-quint16 crc16(const QByteArray &data)
+quint16 IO::crc16(const QByteArray &data)
 {
     quint8 x;
     quint16 crc = 0xFFFF;
@@ -57,7 +55,7 @@ quint16 crc16(const QByteArray &data)
     return crc;
 }
 
-quint32 crc32(const QByteArray &data)
+quint32 IO::crc32(const QByteArray &data)
 {
     quint32 mask;
     quint32 crc = 0xFFFFFFFF;

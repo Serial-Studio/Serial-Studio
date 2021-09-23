@@ -21,6 +21,7 @@
  */
 
 #include "Manager.h"
+#include "Checksum.h"
 
 #include <Logger.h>
 #include <MQTT/Client.h>
