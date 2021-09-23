@@ -535,8 +535,55 @@ void Manager::readFrames()
         // Buffer is not empty, notify app & remove read data from buffer
         if (!buffer.isEmpty())
         {
-            emit frameReceived(buffer);
-            m_dataBuffer.remove(0, sIndex + fIndex + finish.length());
+            // Remove frame from buffer
+            auto index = sIndex + fIndex + finish.length();
+            m_dataBuffer.remove(0, index);
+
+            // Check CRC-8
+            if (m_dataBuffer.startsWith("crc8:"))
+            {
+                if (m_dataBuffer.length() >= 5)
+                {
+                    quint8 crc = m_dataBuffer.at(4);
+                    if (crc8(buffer) == crc)
+                        emit frameReceived(buffer);
+                }
+            }
+
+            // Check CRC-16
+            else if (m_dataBuffer.startsWith("crc16:"))
+            {
+                if (m_dataBuffer.length() >= 7)
+                {
+                    quint8 crcA = m_dataBuffer.at(5);
+                    quint8 crcB = m_dataBuffer.at(6);
+                    quint16 crc = (crcA << 8) | (crcB & 0xff);
+
+                    if (crc16(buffer) == crc)
+                        emit frameReceived(buffer);
+                }
+            }
+
+            // Check CRC-32
+            else if (m_dataBuffer.startsWith("crc32:"))
+            {
+                if (m_dataBuffer.length() >= 9)
+                {
+                    quint8 crcA = m_dataBuffer.at(5);
+                    quint8 crcB = m_dataBuffer.at(6);
+                    quint8 crcD = m_dataBuffer.at(7);
+                    quint8 crcC = m_dataBuffer.at(8);
+                    quint32 crc
+                        = (crcA << 24) | (crcB << 16) | (crcC << 8) | (crcD & 0xff);
+
+                    if (crc32(buffer) == crc)
+                        emit frameReceived(buffer);
+                }
+            }
+
+            // Buffer does not contain CRC code
+            else
+                emit frameReceived(buffer);
         }
     }
 

@@ -128,6 +128,7 @@ HEADERS += \
     src/AppInfo.h \
     src/CSV/Export.h \
     src/CSV/Player.h \
+    src/IO/Checksum.h \
     src/IO/Console.h \
     src/IO/DataSources/Network.h \
     src/IO/DataSources/Serial.h \
@@ -154,6 +155,7 @@ HEADERS += \
 SOURCES += \
     src/CSV/Export.cpp \
     src/CSV/Player.cpp \
+    src/IO/Checksum.cpp \
     src/IO/Console.cpp \
     src/IO/DataSources/Network.cpp \
     src/IO/DataSources/Serial.cpp \
