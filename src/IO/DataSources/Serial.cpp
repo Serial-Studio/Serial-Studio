@@ -40,6 +40,8 @@ static Serial *INSTANCE = nullptr;
  */
 Serial::Serial()
     : m_port(nullptr)
+    , m_autoReconnect(false)
+    , m_lastSerialDeviceIndex(0)
     , m_portIndex(0)
 {
     // Read settings
@@ -101,6 +103,14 @@ QString Serial::portName() const
         return port()->portName();
 
     return tr("No Device");
+}
+
+/**
+ * Returns @c true if auto-reconnect is enabled
+ */
+bool Serial::autoReconnect() const
+{
+    return m_autoReconnect;
 }
 
 /**
@@ -282,6 +292,7 @@ QSerialPort *Serial::openSerialPort()
         // Update port index variable & disconnect from current serial port
         disconnectDevice();
         m_portIndex = portId + 1;
+        m_lastSerialDeviceIndex = m_portIndex;
         emit portIndexChanged();
 
         // Create new serial port handler
@@ -519,6 +530,15 @@ void Serial::setStopBits(const quint8 stopBitsIndex)
 
     // Log changes
     LOG_INFO() << "Stop bits set to" << stopBits();
+}
+
+/**
+ * Enables or disables the auto-reconnect feature
+ */
+void Serial::setAutoReconnect(const bool autoreconnect)
+{
+    m_autoReconnect = autoreconnect;
+    emit autoReconnectChanged();
 }
 
 /**

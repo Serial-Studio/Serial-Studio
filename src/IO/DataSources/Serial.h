@@ -43,7 +43,10 @@ class Serial : public QObject
     Q_PROPERTY(QString portName
                READ portName
                NOTIFY portChanged)
-
+    Q_PROPERTY(bool autoReconnect
+               READ autoReconnect
+               WRITE setAutoReconnect
+               NOTIFY autoReconnectChanged)
     Q_PROPERTY(quint8 portIndex
                READ portIndex
                WRITE setPortIndex
@@ -97,6 +100,7 @@ signals:
     void portIndexChanged();
     void flowControlChanged();
     void baudRateListChanged();
+    void autoReconnectChanged();
     void baudRateIndexChanged();
     void availablePortsChanged();
     void connectionError(const QString &name);
@@ -106,6 +110,7 @@ public:
 
     QString portName() const;
     QSerialPort *port() const;
+    bool autoReconnect() const;
     bool configurationOk() const;
 
     quint8 portIndex() const;
@@ -138,6 +143,7 @@ public slots:
     void appendBaudRate(const QString &baudRate);
     void setDataBits(const quint8 dataBitsIndex);
     void setStopBits(const quint8 stopBitsIndex);
+    void setAutoReconnect(const bool autoreconnect);
     void setFlowControl(const quint8 flowControlIndex);
 
 private slots:
@@ -153,6 +159,9 @@ private:
 
 private:
     QSerialPort *m_port;
+
+    bool m_autoReconnect;
+    int m_lastSerialDeviceIndex;
 
     qint32 m_baudRate;
     QSettings m_settings;

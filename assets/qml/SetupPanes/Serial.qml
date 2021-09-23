@@ -125,6 +125,22 @@ Control {
             }
 
             //
+            // Auto-reconnect
+            //
+            Label {
+                text: qsTr("Auto-reconnect") + ":"
+            } CheckBox {
+                id: _autoreconnect
+                Layout.alignment: Qt.AlignLeft
+                Layout.leftMargin: -app.spacing
+                checked: Cpp_IO_Serial.autoReconnect
+                onCheckedChanged: {
+                    if (Cpp_IO_Serial.autoReconnect !== checked)
+                        Cpp_IO_Serial.autoReconnect = checked
+                }
+            }
+
+            //
             // Spacer
             //
             Item {
