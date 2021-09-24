@@ -25,12 +25,10 @@
 
 #include <cfloat>
 #include <climits>
-#include <Logger.h>
 #include <CSV/Player.h>
 #include <IO/Manager.h>
 #include <IO/Console.h>
 #include <JSON/Generator.h>
-#include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
 using namespace UI;

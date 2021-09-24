@@ -54,10 +54,7 @@
 #include <MQTT/Client.h>
 #include <Plugins/Bridge.h>
 
-#include <Logger.h>
-#include <FileAppender.h>
 #include <QSimpleUpdater.h>
-#include <ConsoleAppender.h>
 
 /**
  * Connect SIGNALS/SLOTS to call singleton destructors before the application
@@ -92,23 +89,6 @@ ModuleManager::ModuleManager()
 }
 
 /**
- * Configures the CuteLogger library to write application logs to the console and
- * to a file in the system's temp. folder.
- */
-void ModuleManager::configureLogger()
-{
-    setSplashScreenMessage(tr("Configuring logger..."));
-
-    auto fileAppender = new FileAppender;
-    auto consoleAppender = new ConsoleAppender;
-    fileAppender->setFormat(LOG_FORMAT);
-    fileAppender->setFileName(LOG_FILE);
-    consoleAppender->setFormat(LOG_FORMAT);
-    cuteLogger->registerAppender(fileAppender);
-    cuteLogger->registerAppender(consoleAppender);
-}
-
-/**
  * Sets the default options for QSimpleUpdater, which are:
  * - Notify user when a new update is found
  * - Do not notify user when we finish checking for updates
@@ -120,12 +100,9 @@ void ModuleManager::configureUpdater()
         return;
 
     setSplashScreenMessage(tr("Configuring updater..."));
-
-    LOG_INFO() << "Configuring QSimpleUpdater...";
     QSimpleUpdater::getInstance()->setNotifyOnUpdate(APP_UPDATER_URL, true);
     QSimpleUpdater::getInstance()->setNotifyOnFinish(APP_UPDATER_URL, false);
     QSimpleUpdater::getInstance()->setMandatoryUpdate(APP_UPDATER_URL, false);
-    LOG_INFO() << "QSimpleUpdater configuration finished!";
 }
 
 /**
@@ -136,12 +113,10 @@ void ModuleManager::configureUpdater()
  */
 void ModuleManager::registerQmlTypes()
 {
-    LOG_INFO() << "Registering QML types...";
     qRegisterMetaType<JFI_Object>("JFI_Object");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
     qmlRegisterType<UI::QmlPlainTextEdit>("SerialStudio", 1, 0, "QmlPlainTextEdit");
-    LOG_INFO() << "QML types registered!";
 }
 
 /**
@@ -167,7 +142,6 @@ bool ModuleManager::autoUpdaterEnabled()
 void ModuleManager::initializeQmlInterface()
 {
     // Initialize modules
-    LOG_INFO() << "Initializing C++ modules";
     setSplashScreenMessage(tr("Initializing modules..."));
     auto translator = Misc::Translator::getInstance();
     auto csvExport = CSV::Export::getInstance();
@@ -188,10 +162,8 @@ void ModuleManager::initializeQmlInterface()
     auto pluginsBridge = Plugins::Bridge::getInstance();
     auto macExtras = Misc::MacExtras::getInstance();
     auto timerEvents = Misc::TimerEvents::getInstance();
-    LOG_INFO() << "Finished initializing C++ modules";
 
     // Retranslate the QML interface automagically
-    LOG_INFO() << "Loading QML interface...";
     connect(translator, SIGNAL(languageChanged()), engine(), SLOT(retranslate()));
 
     // Register C++ modules with QML
@@ -233,7 +205,6 @@ void ModuleManager::initializeQmlInterface()
     timerEvents->startTimers();
 
     // Log QML engine status
-    LOG_INFO() << "Finished loading QML interface";
     setSplashScreenMessage(tr("Loading user interface..."));
 }
 
@@ -272,14 +243,10 @@ void ModuleManager::setSplashScreenMessage(const QString &message)
  */
 void ModuleManager::stopOperations()
 {
-    LOG_INFO() << "Stopping application modules...";
-
     Plugins::Bridge::getInstance()->removeConnection();
     CSV::Export::getInstance()->closeFile();
     CSV::Player::getInstance()->closeFile();
     IO::Manager::getInstance()->disconnectDevice();
     Misc::TimerEvents::getInstance()->stopTimers();
     MQTT::Client::getInstance()->disconnectFromHost();
-
-    LOG_INFO() << "Application modules stopped";
 }

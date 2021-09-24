@@ -24,7 +24,6 @@
 #include "Manager.h"
 #include "Checksum.h"
 
-#include <Logger.h>
 #include <MQTT/Client.h>
 #include <IO/DataSources/Serial.h>
 #include <IO/DataSources/Network.h>
@@ -343,17 +342,11 @@ void Manager::connectDevice()
 
         // Open device
         if (device()->open(mode))
-        {
             connect(device(), &QIODevice::readyRead, this, &Manager::onDataReceived);
-            LOG_INFO() << "Device opened successfully";
-        }
 
         // Error opening the device
         else
-        {
-            LOG_WARNING() << "Failed to open device, closing...";
             disconnectDevice();
-        }
 
         // Update UI
         emit connectedChanged();
@@ -385,9 +378,6 @@ void Manager::disconnectDevice()
         // Update UI
         emit deviceChanged();
         emit connectedChanged();
-
-        // Log changes
-        LOG_INFO() << "Device disconnected";
     }
 
     // Disable CRC checking
@@ -415,9 +405,6 @@ void Manager::setDataSource(const DataSource source)
     // Change data source
     m_dataSource = source;
     emit dataSourceChanged();
-
-    // Log changes
-    LOG_INFO() << "Data source set to" << source;
 }
 
 /**
@@ -638,8 +625,6 @@ void Manager::setDevice(QIODevice *device)
     disconnectDevice();
     m_device = device;
     emit deviceChanged();
-
-    LOG_INFO() << "Device pointer set to" << m_device;
 }
 
 /**

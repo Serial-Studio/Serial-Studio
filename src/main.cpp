@@ -24,7 +24,6 @@
 #include <QSysInfo>
 #include <QApplication>
 
-#include <Logger.h>
 #include <AppInfo.h>
 #include <JSON/Frame.h>
 #include <Misc/Utilities.h>
@@ -83,7 +82,9 @@ int main(int argc, char **argv)
 #endif
 
     // Set application attributes
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
     // Init. application
     QApplication app(argc, argv);
@@ -119,25 +120,17 @@ int main(int argc, char **argv)
 
     // Create module manager
     ModuleManager moduleManager;
-    moduleManager.configureLogger();
     moduleManager.configureUpdater();
-
-    // Begin logging
-    LOG_INFO() << QDateTime::currentDateTime();
-    LOG_INFO() << APP_NAME << APP_VERSION;
-    LOG_INFO() << "Running on" << QSysInfo::prettyProductName().toStdString().c_str();
 
     // Initialize QML interface
     moduleManager.registerQmlTypes();
     moduleManager.initializeQmlInterface();
     if (moduleManager.engine()->rootObjects().isEmpty())
     {
-        LOG_FATAL() << "Critical QML error";
+        qCritical() << "Critical QML error";
         return EXIT_FAILURE;
     }
 
     // Enter application event loop
-    auto code = app.exec();
-    LOG_INFO() << "Application exit code" << code;
-    return code;
+    return app.exec();
 }

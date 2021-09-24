@@ -22,12 +22,10 @@
 
 #include "DataProvider.h"
 
-#include <Logger.h>
 #include <IO/Manager.h>
 #include <IO/Console.h>
 #include <CSV/Player.h>
 #include <JSON/Generator.h>
-#include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
 using namespace UI;

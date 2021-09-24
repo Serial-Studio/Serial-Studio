@@ -187,7 +187,6 @@ void Bridge::acceptConnection()
 
     // Add socket to sockets list
     m_sockets.append(socket);
-    qDebug() << m_sockets;
 }
 
 /**

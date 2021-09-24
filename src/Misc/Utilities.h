@@ -38,6 +38,7 @@ class Utilities : public QObject
 public:
     // clang-format off
     static Utilities* getInstance();
+    Q_INVOKABLE bool askAutomaticUpdates();
     static int showMessageBox(QString text,
                               QString informativeText,
                               QString windowTitle = APP_NAME,
@@ -46,7 +47,6 @@ public:
 
 public slots:
     static void aboutQt();
-    static void openLogFile();
     static void revealFile(const QString& pathToReveal);
 };
 }

@@ -23,8 +23,6 @@
 #include "TimerEvents.h"
 
 #include <QtMath>
-#include <Logger.h>
-#include <ConsoleAppender.h>
 
 using namespace Misc;
 
@@ -87,8 +85,6 @@ void TimerEvents::stopTimers()
 {
     m_timerLowFreq.stop();
     m_timerHighFreq.stop();
-
-    LOG_INFO() << "Timers stopped";
 }
 
 /**
@@ -98,8 +94,6 @@ void TimerEvents::startTimers()
 {
     m_timerLowFreq.start();
     m_timerHighFreq.start();
-
-    LOG_INFO() << "Timers started";
 }
 
 /**

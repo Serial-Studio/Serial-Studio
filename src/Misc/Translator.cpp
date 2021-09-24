@@ -22,9 +22,6 @@
 
 #include "Translator.h"
 
-#include <Logger.h>
-#include <ConsoleAppender.h>
-
 using namespace Misc;
 
 /**
@@ -38,7 +35,6 @@ static Translator *INSTANCE = nullptr;
 Translator::Translator()
 {
     m_language = systemLanguage();
-    LOG_INFO() << "System language" << systemLanguage();
 }
 
 /**
@@ -213,6 +209,4 @@ void Translator::setLanguage(const QLocale &locale, const QString &language)
     m_translator.load(locale, ":/translations/" + language + ".qm");
     qApp->installTranslator(&m_translator);
     emit languageChanged();
-
-    LOG_INFO() << "Language set to" << language;
 }

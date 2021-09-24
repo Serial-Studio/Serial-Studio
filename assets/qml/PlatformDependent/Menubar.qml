@@ -363,11 +363,6 @@ MenuBar {
         MenuSeparator{}
 
         DecentMenuItem {
-            text: qsTr("Show log file") + "..."
-            onTriggered: Cpp_Misc_Utilities.openLogFile()
-        }
-
-        DecentMenuItem {
             text: qsTr("Report bug") + "..."
             onTriggered: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
         }

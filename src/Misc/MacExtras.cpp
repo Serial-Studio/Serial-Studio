@@ -23,9 +23,6 @@
 #include "MacExtras.h"
 #include "Translator.h"
 
-#include <Logger.h>
-#include <ConsoleAppender.h>
-
 #ifdef Q_OS_MAC
 #    include <kdmactouchbar.h>
 #endif

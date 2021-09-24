@@ -23,9 +23,6 @@
 #ifndef APP_INFO_H
 #define APP_INFO_H
 
-#include <QDir>
-#include <QString>
-
 // clang-format off
 #define APP_VERSION     "1.0.24"
 #define APP_DEVELOPER   "Alex Spataru"
@@ -33,8 +30,6 @@
 #define APP_ICON        ":/images/icon.svg"
 #define APP_SUPPORT_URL "https://github.com/serial-studio"
 #define APP_UPDATER_URL "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json"
-#define LOG_FORMAT      "[%{time}] %{message:-100} [%{TypeOne}] [%{function}]\n"
-#define LOG_FILE        QString("%1/%2.log").arg(QDir::tempPath(), APP_NAME)
 // clang-format on
 
 #endif

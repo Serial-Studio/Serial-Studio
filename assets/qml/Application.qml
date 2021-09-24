@@ -21,7 +21,6 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Dialogs 1.1
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
@@ -308,8 +307,15 @@ ApplicationWindow {
                 donations.showAutomatically()
 
             // Ask user if he/she wants to enable automatic updates
-            if (appLaunchCount == 2)
-                automaticUpdatesMessageDialog.visible = Cpp_UpdaterEnabled
+            if (appLaunchCount == 2 && Cpp_UpdaterEnabled) {
+                if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
+                    app.automaticUpdates = true
+                    Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+                }
+
+                else
+                    app.automaticUpdates = false
+            }
 
             // Check for updates (if we are allowed)
             if (automaticUpdates && Cpp_UpdaterEnabled)
@@ -513,33 +519,6 @@ ApplicationWindow {
     //
     JsonEditor {
         id: jsonEditor
-    }
-
-    //
-    // Enable/disable automatic updates dialog
-    //
-    MessageDialog {
-        id: automaticUpdatesMessageDialog
-
-        title: Cpp_AppName
-        icon: StandardIcon.Question
-        modality: Qt.ApplicationModal
-        standardButtons: StandardButton.Yes | StandardButton.No
-        text: "<h3>" + qsTr("Check for updates automatically?") + "</h3>"
-        informativeText: qsTr("Should %1 automatically check for updates? " +
-                              "You can always check for updates manually from " +
-                              "the \"Help\" menu").arg(Cpp_AppName);
-
-        // Behavior when the user clicks on "Yes"
-        onAccepted: {
-            app.automaticUpdates = true
-            Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
-        }
-
-        // Behavior when the user clicks on "No"
-        onRejected: {
-            app.automaticUpdates = false
-        }
     }
 
     //

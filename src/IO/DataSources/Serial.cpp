@@ -22,10 +22,8 @@
 
 #include "Serial.h"
 
-#include <Logger.h>
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
-#include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
 using namespace IO::DataSources;
@@ -332,9 +330,6 @@ void Serial::disconnectDevice()
         // Close & delete serial port handler
         port()->close();
         port()->deleteLater();
-
-        // Log changes
-        LOG_INFO() << "Disconnected from" << name;
     }
 
     // Reset pointer
@@ -360,9 +355,6 @@ void Serial::setBaudRate(const qint32 rate)
 
     // Update user interface
     emit baudRateChanged();
-
-    // Log information
-    LOG_INFO() << "Baud rate set to" << rate;
 }
 
 /**
@@ -410,9 +402,6 @@ void Serial::setParity(const quint8 parityIndex)
         case 4:
             m_parity = QSerialPort::MarkParity;
             break;
-        default:
-            m_parity = QSerialPort::UnknownParity;
-            break;
     }
 
     // Update serial port config.
@@ -421,9 +410,6 @@ void Serial::setParity(const quint8 parityIndex)
 
     // Notify user interface
     emit parityChanged();
-
-    // Log changes
-    LOG_INFO() << "Serial port parity set to" << parity();
 }
 
 /**
@@ -471,9 +457,6 @@ void Serial::setDataBits(const quint8 dataBitsIndex)
         case 3:
             m_dataBits = QSerialPort::Data8;
             break;
-        default:
-            m_dataBits = QSerialPort::UnknownDataBits;
-            break;
     }
 
     // Update serial port configuration
@@ -482,9 +465,6 @@ void Serial::setDataBits(const quint8 dataBitsIndex)
 
     // Update user interface
     emit dataBitsChanged();
-
-    // Log changes
-    LOG_INFO() << "Data bits set to" << dataBits();
 }
 
 /**
@@ -513,9 +493,6 @@ void Serial::setStopBits(const quint8 stopBitsIndex)
         case 2:
             m_stopBits = QSerialPort::TwoStop;
             break;
-        default:
-            m_stopBits = QSerialPort::UnknownStopBits;
-            break;
     }
 
     // Update serial port configuration
@@ -524,9 +501,6 @@ void Serial::setStopBits(const quint8 stopBitsIndex)
 
     // Update user interface
     emit stopBitsChanged();
-
-    // Log changes
-    LOG_INFO() << "Stop bits set to" << stopBits();
 }
 
 /**
@@ -564,9 +538,6 @@ void Serial::setFlowControl(const quint8 flowControlIndex)
         case 2:
             m_flowControl = QSerialPort::SoftwareControl;
             break;
-        case 3:
-            m_flowControl = QSerialPort::UnknownFlowControl;
-            break;
     }
 
     // Update serial port configuration
@@ -575,9 +546,6 @@ void Serial::setFlowControl(const quint8 flowControlIndex)
 
     // Update user interface
     emit flowControlChanged();
-
-    // Log changes
-    LOG_INFO() << "Flow control set to" << flowControl();
 }
 
 /**
@@ -643,8 +611,6 @@ void Serial::refreshSerialDevices()
  */
 void Serial::handleError(QSerialPort::SerialPortError error)
 {
-    LOG_INFO() << "Serial port error" << port()->error();
-
     if (error != QSerialPort::NoError)
     {
         auto errorStr = port()->errorString();

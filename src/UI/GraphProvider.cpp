@@ -27,12 +27,10 @@
 #include <QXYSeries>
 #include <QMetaType>
 
-#include <Logger.h>
 #include <CSV/Player.h>
 #include <IO/Manager.h>
 #include <IO/Console.h>
 #include <JSON/Generator.h>
-#include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
 using namespace UI;
@@ -45,9 +43,11 @@ static GraphProvider *INSTANCE = nullptr;
 //
 // Magic
 //
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 QT_CHARTS_USE_NAMESPACE
 Q_DECLARE_METATYPE(QAbstractAxis *)
 Q_DECLARE_METATYPE(QAbstractSeries *)
+#endif
 
 /**
  * Sets the maximum displayed points to 10, connects SIGNALS/SLOTS & calls

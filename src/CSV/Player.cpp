@@ -33,9 +33,6 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-#include <Logger.h>
-#include <ConsoleAppender.h>
-
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 #include <JSON/Generator.h>
@@ -199,8 +196,6 @@ void Player::closeFile()
     emit openChanged();
     emit timestampChanged();
     emit playerStateChanged();
-
-    LOG_INFO() << "CSV file closed";
 }
 
 /**
@@ -257,7 +252,6 @@ void Player::openFile(const QString &filePath)
     auto sm = IO::Manager::getInstance();
     if (sm->connected())
     {
-        LOG_INFO() << "Serial device open, asking user what to do...";
         auto response = Misc::Utilities::showMessageBox(
             tr("Serial port open, do you want to continue?"),
             tr("In order to use this feature, its necessary "
@@ -271,16 +265,12 @@ void Player::openFile(const QString &filePath)
 
     // Try to open the current file
     m_csvFile.setFileName(filePath);
-    LOG_INFO() << "Trying to open CSV file...";
     if (m_csvFile.open(QIODevice::ReadOnly))
     {
         // Read CSV file into string matrix
-        LOG_INFO() << "CSV file read, processing CSV data...";
         m_csvData = QtCSV::Reader::readToList(m_csvFile);
 
         // Validate CSV file (brutality works sometimes)
-        LOG_INFO() << "CSV frame count" << frameCount();
-        LOG_INFO() << "Validating CSV file...";
         bool valid = true;
         for (int i = 1; i < frameCount(); ++i)
         {
@@ -288,7 +278,6 @@ void Player::openFile(const QString &filePath)
             if (!valid)
                 break;
         }
-        LOG_INFO() << "CSV valid:" << valid;
 
         // Read first row & update UI
         if (valid)
@@ -316,7 +305,6 @@ void Player::openFile(const QString &filePath)
     // Open error
     else
     {
-        LOG_INFO() << "CSV file read error" << m_csvFile.errorString();
         Misc::Utilities::showMessageBox(tr("Cannot read CSV file"),
                                         tr("Please check file permissions & location"));
         closeFile();
@@ -406,16 +394,13 @@ void Player::updateData()
             else
             {
                 pause();
-                LOG_WARNING() << "Error getting timestamp difference";
+                qWarning() << "Error getting timestamp difference";
             }
         }
 
         // Pause at end of CSV
         else
-        {
             pause();
-            LOG_INFO() << "CSV playback finished";
-        }
     }
 }
 
@@ -438,7 +423,7 @@ bool Player::validateRow(const int position)
     // Check that row value count is the same
     if (titles.count() != list.count())
     {
-        LOG_WARNING() << "Mismatched CSV data on frame" << framePosition();
+        qWarning() << "Mismatched CSV data on frame" << framePosition();
         closeFile();
         return false;
     }
@@ -448,7 +433,7 @@ bool Player::validateRow(const int position)
     auto rxTitle = "RX Date/Time";
     if (titles.first() != rxTitle)
     {
-        LOG_WARNING() << "Invalid CSV file (title format does not match)";
+        qWarning() << "Invalid CSV file (title format does not match)";
         closeFile();
         return false;
     }
@@ -469,8 +454,6 @@ QJsonDocument Player::getJsonFrame(const int row)
     // Create the group/dataset model only one time
     if (m_model.isEmpty())
     {
-        LOG_INFO() << "Generating group/dataset model from CSV...";
-
         auto titles = m_csvData.at(0);
         for (int i = 1; i < titles.count(); ++i)
         {
@@ -535,16 +518,11 @@ QJsonDocument Player::getJsonFrame(const int row)
                 m_datasetIndexes.insert(group, map);
             }
         }
-
-        LOG_INFO() << "Group/dataset model created successfully";
     }
 
     // Check that row is valid
     if (m_csvData.count() <= row)
-    {
-        LOG_WARNING() << "Invalid row requested";
         return QJsonDocument();
-    }
 
     // Read CSV row & JSON template from JSON parser
     auto values = m_csvData.at(row);

@@ -47,6 +47,17 @@ Utilities *Utilities::getInstance()
     return INSTANCE;
 }
 
+bool Utilities::askAutomaticUpdates()
+{
+    const int result = showMessageBox(tr("Check for updates automatically?"),
+                                      tr("Should %1 automatically check for updates? "
+                                         "You can always check for updates manually from "
+                                         "the \"Help\" menu")
+                                          .arg(APP_NAME),
+                                      APP_NAME, QMessageBox::Yes | QMessageBox::No);
+    return result == QMessageBox::Yes;
+}
+
 /**
  * Shows a macOS-like message box with the given properties
  */
@@ -75,14 +86,6 @@ int Utilities::showMessageBox(QString text, QString informativeText, QString win
 void Utilities::aboutQt()
 {
     qApp->aboutQt();
-}
-
-/**
- * Displays the location of the current log file in the Finder window
- */
-void Utilities::openLogFile()
-{
-    revealFile(LOG_FILE);
 }
 
 /**

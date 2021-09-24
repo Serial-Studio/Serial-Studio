@@ -32,7 +32,9 @@
 #include <JSON/Dataset.h>
 #include <JSON/FrameInfo.h>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 QT_CHARTS_USE_NAMESPACE
+#endif
 
 namespace UI
 {

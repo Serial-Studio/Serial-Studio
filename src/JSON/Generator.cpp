@@ -22,15 +22,14 @@
 
 #include "Generator.h"
 
-#include <Logger.h>
 #include <CSV/Player.h>
 #include <IO/Manager.h>
 #include <MQTT/Client.h>
 #include <Misc/Utilities.h>
-#include <ConsoleAppender.h>
 
 #include <QFileInfo>
 #include <QFileDialog>
+#include <QRegularExpression>
 
 using namespace JSON;
 
@@ -43,7 +42,7 @@ static Generator *INSTANCE = nullptr;
  * Regular expresion used to check if there are still unmatched values
  * on the JSON map file.
  */
-static const QRegExp UNMATCHED_VALUES_REGEX("(%\b([0-9]|[1-9][0-9])\b)");
+static const QRegularExpression UNMATCHED_VALUES_REGEX("(%\b([0-9]|[1-9][0-9])\b)");
 
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
@@ -158,8 +157,6 @@ void Generator::loadJsonMap(const QString &path)
         auto document = QJsonDocument::fromJson(data, &error);
         if (error.error != QJsonParseError::NoError)
         {
-            LOG_INFO() << "JSON parse error" << error.errorString();
-
             m_jsonMap.close();
             writeSettings("");
             Misc::Utilities::showMessageBox(tr("JSON parse error"), error.errorString());
@@ -168,8 +165,6 @@ void Generator::loadJsonMap(const QString &path)
         // JSON contains no errors, load data & save settings
         else
         {
-            LOG_INFO() << "JSON map loaded successfully";
-
             writeSettings(path);
             m_jsonMapData = QString::fromUtf8(data);
         }
@@ -182,8 +177,6 @@ void Generator::loadJsonMap(const QString &path)
     else
     {
         m_jsonMapData = "";
-        LOG_INFO() << "JSON file error" << m_jsonMap.errorString();
-
         writeSettings("");
         Misc::Utilities::showMessageBox(tr("Cannot read JSON file"),
                                         tr("Please check file permissions & location"));
@@ -211,8 +204,6 @@ void Generator::setOperationMode(const OperationMode mode)
 {
     m_opMode = mode;
     emit operationModeChanged();
-
-    LOG_INFO() << "Operation mode set to" << mode;
 }
 
 /**

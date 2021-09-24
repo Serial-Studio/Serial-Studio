@@ -25,14 +25,12 @@
 
 #include <QFile>
 #include <QPrinter>
-#include <QTextCodec>
+#include <QDateTime>
 #include <QFileDialog>
 #include <QPrintDialog>
 #include <QTextDocument>
 
-#include <Logger.h>
 #include <Misc/Utilities.h>
-#include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
 using namespace IO;
@@ -510,7 +508,7 @@ void Console::append(const QString &string, const bool addTimestamp)
     QString currentToken;
     for (int i = 0; i < data.length(); ++i)
     {
-        if (data.at(i) == "\n")
+        if (data.at(i) == '\n')
         {
             tokens.append(currentToken);
             tokens.append("\n");

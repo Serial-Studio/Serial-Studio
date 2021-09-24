@@ -33,13 +33,10 @@ class ModuleManager : public QObject
 
 public:
     ModuleManager();
-
-    void configureLogger();
     void configureUpdater();
     void registerQmlTypes();
     bool autoUpdaterEnabled();
     void initializeQmlInterface();
-
     QQmlApplicationEngine *engine();
 
 public slots:

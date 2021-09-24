@@ -24,7 +24,6 @@
 # Definitions to avoid adding DLL imports/exports
 #-------------------------------------------------------------------------------
 
-DEFINES += CUTELOGGER_SRC
 DEFINES += QTCSV_STATIC_LIB
 
 #-------------------------------------------------------------------------------
@@ -33,7 +32,6 @@ DEFINES += QTCSV_STATIC_LIB
 
 include($$PWD/qtcsv/qtcsv.pri)
 include($$PWD/qmqtt/qmqtt.pri)
-include($$PWD/CuteLogger/CuteLogger.pri)
 include($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
 
 macx* {

@@ -23,7 +23,8 @@
 
 #include "kdmactouchbar_global.h"
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
+#include <QAction>
 
 QT_BEGIN_NAMESPACE
 

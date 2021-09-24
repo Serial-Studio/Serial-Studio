@@ -22,12 +22,10 @@
 
 #include "Export.h"
 
-#include <Logger.h>
 #include <AppInfo.h>
 #include <IO/Manager.h>
 #include <JSON/Generator.h>
 #include <Misc/Utilities.h>
-#include <ConsoleAppender.h>
 #include <Misc/TimerEvents.h>
 
 #include <QDir>
@@ -249,7 +247,11 @@ void Export::writeValues()
 
             // Add cell titles & force UTF-8 codec
             m_textStream.setDevice(&m_csvFile);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             m_textStream.setCodec("UTF-8");
+#else
+            m_textStream.setEncoding(QStringConverter::Utf8);
+#endif
             m_textStream.setGenerateByteOrderMark(true);
             for (int i = 0; i < titles.count(); ++i)
             {
