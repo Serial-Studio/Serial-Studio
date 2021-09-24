@@ -148,7 +148,7 @@ private:
     QTimer m_watchdog;
     bool m_enableCrc;
     bool m_writeEnabled;
-    int m_maxBuzzerSize;
+    int m_maxBufferSize;
     QIODevice *m_device;
     DataSource m_dataSource;
     QByteArray m_dataBuffer;
