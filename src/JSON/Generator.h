@@ -88,7 +88,6 @@ private:
 
 public slots:
     void readSettings();
-    void loadJFI(const JFI_Object &info);
     void writeSettings(const QString &path);
     void loadJSON(const QJsonDocument &json);
 

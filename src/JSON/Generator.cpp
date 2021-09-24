@@ -218,35 +218,12 @@ void Generator::writeSettings(const QString &path)
 }
 
 /**
- * Notifies the rest of the application that a new JSON frame has been received. The JFI
- * also contains RX date/time and frame number.
- *
- * Read the "FrameInfo.h" file for more information.
- */
-void Generator::loadJFI(const JFI_Object &info)
-{
-    bool csvOpen = CSV::Player::getInstance()->isOpen();
-    bool devOpen = IO::Manager::getInstance()->connected();
-    bool mqttSub = MQTT::Client::getInstance()->isSubscribed();
-
-    if (csvOpen || devOpen || mqttSub)
-    {
-        if (JFI_Valid(info))
-            emit jsonChanged(info);
-    }
-
-    else
-        reset();
-}
-
-/**
  * Create a new JFI event with the given @a JSON document and increment the frame count
  */
 void Generator::loadJSON(const QJsonDocument &json)
 {
-    auto jfi = JFI_CreateNew(m_frameCount, QDateTime::currentDateTime(), json);
     m_frameCount++;
-    loadJFI(jfi);
+    emit jsonChanged(JFI_CreateNew(m_frameCount, QDateTime::currentDateTime(), json));
 }
 
 /**
@@ -362,5 +339,5 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
 
     // No parse error, update UI & reset error counter
     if (error.error == QJsonParseError::NoError)
-        loadJFI(JFI_CreateNew(frame, time, document));
+        emit jsonChanged(JFI_CreateNew(frame, time, document));
 }

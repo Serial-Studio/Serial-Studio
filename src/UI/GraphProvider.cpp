@@ -386,6 +386,5 @@ void GraphProvider::updateGraph(QAbstractSeries *series, const int index)
  */
 void GraphProvider::registerFrame(const JFI_Object &frameInfo)
 {
-    if (JFI_Valid(frameInfo))
-        m_jsonList.append(frameInfo);
+    m_jsonList.append(frameInfo);
 }

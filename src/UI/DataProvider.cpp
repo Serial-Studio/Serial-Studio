@@ -140,8 +140,5 @@ void DataProvider::selectLatestJSON(const JFI_Object &frameInfo)
     auto currFrameCount = m_latestJsonFrame.frameNumber;
 
     if (currFrameCount < frameCount)
-    {
-        if (JFI_Valid(frameInfo))
-            m_latestJsonFrame = frameInfo;
-    }
+        m_latestJsonFrame = frameInfo;
 }
