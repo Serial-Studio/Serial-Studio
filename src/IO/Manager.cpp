@@ -64,7 +64,7 @@ static QString ADD_ESCAPE_SEQUENCES(const QString &str)
 Manager::Manager()
     : m_enableCrc(false)
     , m_writeEnabled(true)
-    , m_maxBuzzerSize(1024 * 1024)
+    , m_maxBufferSize(1024 * 1024)
     , m_device(nullptr)
     , m_dataSource(DataSource::Serial)
     , m_receivedBytes(0)
@@ -182,7 +182,7 @@ int Manager::watchdogInterval() const
  */
 int Manager::maxBufferSize() const
 {
-    return m_maxBuzzerSize;
+    return m_maxBufferSize;
 }
 
 /**
@@ -451,7 +451,7 @@ void Manager::processPayload(const QByteArray &payload)
  */
 void Manager::setMaxBufferSize(const int maxBufferSize)
 {
-    m_maxBuzzerSize = maxBufferSize;
+    m_maxBufferSize = maxBufferSize;
     emit maxBufferSizeChanged();
 
     m_dataBuffer.reserve(maxBufferSize);
@@ -644,6 +644,10 @@ void Manager::readFrames()
 
     // Remove parsed data from master buffer
     m_dataBuffer.remove(0, bytes);
+
+    // Clear temp. buffer (e.g. device sends a lot of invalid data)
+    if (m_dataBuffer.size() > maxBufferSize())
+        clearTempBuffer();
 }
 
 /**
