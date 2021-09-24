@@ -65,14 +65,22 @@
  */
 ModuleManager::ModuleManager()
 {
-    // Set application font
+    // Load application font
     int id = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont roboto(family);
-#ifdef Q_OS_WIN
-    roboto.setPointSize(9);
+    QFont customFont(family);
+
+    // Set font size
+#if defined(Q_OS_WIN)
+    customFont.setPointSize(9);
+#elif defined(Q_OS_MAC)
+    customFont.setPointSize(13);
+#else
+    customFont.setPointSize(12);
 #endif
-    qApp->setFont(roboto);
+
+    // Use custom font globally
+    qApp->setFont(customFont);
 
     // Show splash screen
     m_splash.setPixmap(QPixmap(":/images/splash.png"));
