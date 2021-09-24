@@ -22,9 +22,7 @@
 
 #include "Client.h"
 
-#include <JSON/Frame.h>
 #include <IO/Manager.h>
-#include <JSON/Generator.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 
@@ -39,10 +37,11 @@ static Client *INSTANCE = nullptr;
  * Constructor function
  */
 Client::Client()
+    : m_topic("")
+    , m_lookupActive(false)
+    , m_sentMessages(0)
+    , m_clientMode(MQTTClientMode::ClientPublisher)
 {
-    m_lookupActive = false;
-    m_clientMode = MQTTClientMode::ClientPublisher;
-
     // MQTT signals/slots
     connect(&m_client, &QMQTT::Client::error, this, &Client::onError);
     connect(&m_client, &QMQTT::Client::received, this, &Client::onMessageReceived);
@@ -51,13 +50,12 @@ Client::Client()
     connect(&m_client, &QMQTT::Client::connected, this, &Client::onConnectedChanged);
     connect(&m_client, &QMQTT::Client::disconnected, this, &Client::onConnectedChanged);
 
-    // Send data @ 42 Hz & reset statistics when disconnected/connected to a  device
+    // Send data periodically & reset statistics when disconnected/connected to a device
     auto io = IO::Manager::getInstance();
-    auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(te, &Misc::TimerEvents::highFreqTimeout, this, &Client::sendData);
     connect(io, &IO::Manager::connectedChanged, this, &Client::resetStatistics);
-    connect(ge, &JSON::Generator::jsonChanged, this, &Client::registerJsonFrame);
+    connect(io, &IO::Manager::frameReceived, this, &Client::onFrameReceived);
 
     // Set default port/host
     setPort(defaultPort());
@@ -310,54 +308,28 @@ void Client::setMqttVersion(const int versionIndex)
 }
 
 /**
- * Sorts all the received JSON frames and generates a partial CSV-file that is published
- * to the MQTT broker/server
+ * Publishes all the received data to the MQTT broker
  */
 void Client::sendData()
 {
-    // Sort JFI list from oldest to most recent
-    JFI_SortList(&m_jfiList);
-
-    // Send data in CSV format
-    QString csv;
-    JSON::Frame frame;
-    JSON::Group *group;
-    JSON::Dataset *dataset;
-    for (int i = 0; i < m_jfiList.count(); ++i)
+    // Create data byte array
+    QByteArray data;
+    for (int i = 0; i < m_frames.count(); ++i)
     {
-        // Try to read frame
-        auto jfi = m_jfiList.at(i);
-        if (!frame.read(jfi.jsonDocument.object()))
-            continue;
-
-        // Write dataset values
-        QString str;
-        for (int j = 0; j < frame.groupCount(); ++j)
-        {
-            group = frame.getGroup(j);
-            for (int k = 0; k < group->datasetCount(); ++k)
-            {
-                dataset = group->getDataset(k);
-                str.append(dataset->value());
-                str.append(",");
-            }
-        }
-
-        // Remove last "," character & add data to CSV list
-        str.chop(1);
-        csv.append(str + "\n");
+        data.append(m_frames.at(i));
+        data.append("\n");
     }
 
     // Create & send MQTT message
-    if (!csv.isEmpty())
+    if (!data.isEmpty())
     {
-        QMQTT::Message message(m_sentMessages, topic(), csv.toUtf8());
+        QMQTT::Message message(m_sentMessages, topic(), data);
         m_client.publish(message);
         ++m_sentMessages;
     }
 
-    // Clear JFI list
-    m_jfiList.clear();
+    // Clear frame list
+    m_frames.clear();
 }
 
 /**
@@ -366,7 +338,7 @@ void Client::sendData()
 void Client::resetStatistics()
 {
     m_sentMessages = 0;
-    m_jfiList.clear();
+    m_frames.clear();
 }
 
 /**
@@ -514,7 +486,7 @@ void Client::onError(const QMQTT::ClientError error)
  * Registers the given @a frameInfo structure to the JSON frames that shall be published
  * to the MQTT broker/server
  */
-void Client::registerJsonFrame(const JFI_Object &frameInfo)
+void Client::onFrameReceived(const QByteArray &frame)
 {
     // Ignore if device is not connected
     if (!IO::Manager::getInstance()->connected())
@@ -524,9 +496,9 @@ void Client::registerJsonFrame(const JFI_Object &frameInfo)
     else if (clientMode() != ClientPublisher)
         return;
 
-    // Validate JFI & register it
-    if (JFI_Valid(frameInfo))
-        m_jfiList.append(frameInfo);
+    // Validate frame & append it to frame list
+    if (!frame.isEmpty())
+        m_frames.append(frame);
 }
 
 /**

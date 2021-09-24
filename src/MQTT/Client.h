@@ -28,9 +28,6 @@
 #include <QByteArray>
 #include <QHostAddress>
 
-#include <JSON/Frame.h>
-#include <JSON/FrameInfo.h>
-
 #include <qmqtt.h>
 
 namespace MQTT
@@ -146,7 +143,7 @@ private slots:
     void onConnectedChanged();
     void lookupFinished(const QHostInfo &info);
     void onError(const QMQTT::ClientError error);
-    void registerJsonFrame(const JFI_Object &frameInfo);
+    void onFrameReceived(const QByteArray &frame);
     void onMessageReceived(const QMQTT::Message &message);
 
 private:
@@ -154,7 +151,7 @@ private:
     bool m_lookupActive;
     QMQTT::Client m_client;
     quint16 m_sentMessages;
-    QList<JFI_Object> m_jfiList;
+    QList<QByteArray> m_frames;
     MQTTClientMode m_clientMode;
 };
 }
