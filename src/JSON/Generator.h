@@ -27,7 +27,6 @@
 #include <QFile>
 #include <QTimer>
 #include <QObject>
-#include <QThread>
 #include <QJSValue>
 #include <QJSEngine>
 #include <QSettings>
@@ -42,27 +41,6 @@
 
 namespace JSON
 {
-class JSONWorker : public QObject
-{
-    Q_OBJECT
-
-signals:
-    void finished();
-    void jsonReady(const JFI_Object &info);
-
-public:
-    JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time);
-
-public slots:
-    void process();
-
-private:
-    QDateTime m_time;
-    QByteArray m_data;
-    quint64 m_frame;
-    QJSEngine *m_engine;
-};
-
 class Generator : public QObject
 {
     // clang-format off
@@ -117,16 +95,15 @@ public slots:
 private slots:
     void reset();
     void readData(const QByteArray &data);
+    void processFrame(const QByteArray &data, const quint64 frame, const QDateTime &time);
 
 private:
     QFile m_jsonMap;
+    QJSEngine m_engine;
     quint64 m_frameCount;
     QSettings m_settings;
     QString m_jsonMapData;
     OperationMode m_opMode;
-
-    QThread m_workerThread;
-    JSONWorker *m_jsonWorker;
 };
 }
 

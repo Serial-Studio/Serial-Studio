@@ -50,7 +50,6 @@ Generator::Generator()
     connect(cp, SIGNAL(openChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(deviceChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(frameReceived(QByteArray)), this, SLOT(readData(QByteArray)));
-    m_workerThread.start();
 }
 
 /**
@@ -282,65 +281,37 @@ void Generator::readData(const QByteArray &data)
     if (data.isEmpty())
         return;
 
-    // Increment received frames
+    // Increment received frames and process frame
     m_frameCount++;
-
-    // Create new worker thread to read JSON data
-    QThread *thread = new QThread;
-    JSONWorker *worker = new JSONWorker(data, m_frameCount, QDateTime::currentDateTime());
-    worker->moveToThread(thread);
-    connect(thread, SIGNAL(started()), worker, SLOT(process()));
-    connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
-    connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
-    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-    connect(worker, &JSONWorker::jsonReady, this, &Generator::loadJFI);
-    thread->start();
-}
-
-//----------------------------------------------------------------------------------------
-// JSON worker object (executed for each frame on a new thread)
-//----------------------------------------------------------------------------------------
-
-/**
- * Constructor function, stores received frame data & the date/time that the frame data
- * was received.
- */
-JSONWorker::JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time)
-    : m_time(time)
-    , m_data(data)
-    , m_frame(frame)
-    , m_engine(nullptr)
-{
+    processFrame(data, m_frameCount, QDateTime::currentDateTime());
 }
 
 /**
  * Reads the frame & inserts its values on the JSON map, and/or extracts the JSON frame
  * directly from the serial data.
  */
-void JSONWorker::process()
+void Generator::processFrame(const QByteArray &data, const quint64 frame,
+                             const QDateTime &time)
 {
     // Init variables
     QJsonParseError error;
     QJsonDocument document;
 
     // Serial device sends JSON (auto mode)
-    if (Generator::getInstance()->operationMode() == Generator::kAutomatic)
-        document = QJsonDocument::fromJson(m_data, &error);
+    if (operationMode() == Generator::kAutomatic)
+        document = QJsonDocument::fromJson(data, &error);
 
     // We need to use a map file, check if its loaded & replace values into map
     else
     {
-        // Initialize javscript engine
-        m_engine = new QJSEngine(this);
-
         // Empty JSON map data
-        if (Generator::getInstance()->jsonMapData().isEmpty())
+        if (jsonMapData().isEmpty())
             return;
 
         // Separate incoming data & add it to the JSON map
-        auto json = Generator::getInstance()->jsonMapData();
+        auto json = jsonMapData();
         auto sepr = IO::Manager::getInstance()->separatorSequence();
-        auto list = QString::fromUtf8(m_data).split(sepr);
+        auto list = QString::fromUtf8(data).split(sepr);
         for (int i = 0; i < list.size(); ++i)
             json.replace(QString("%%1").arg(i + 1), list.at(i));
 
@@ -364,7 +335,7 @@ void JSONWorker::process()
                 auto value = dataset.value("v").toString();
 
                 // Evaluate code in dataset value (if any)
-                auto jsValue = m_engine->evaluate(value);
+                auto jsValue = m_engine.evaluate(value);
 
                 // Code execution correct, replace value in JSON
                 if (!jsValue.isError())
@@ -387,15 +358,9 @@ void JSONWorker::process()
 
         // Create JSON document
         document = QJsonDocument(root);
-
-        // Delete javacript engine
-        m_engine->deleteLater();
     }
 
     // No parse error, update UI & reset error counter
     if (error.error == QJsonParseError::NoError)
-        emit jsonReady(JFI_CreateNew(m_frame, m_time, document));
-
-    // Delete object in 100 ms
-    QTimer::singleShot(100, this, SIGNAL(finished()));
+        loadJFI(JFI_CreateNew(frame, time, document));
 }
