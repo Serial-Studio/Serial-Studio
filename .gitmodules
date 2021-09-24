@@ -1,6 +1,3 @@
-[submodule "libs/CuteLogger"]
-	path = libs/CuteLogger
-	url = https://github.com/alex-spataru/CuteLogger
 [submodule "libs/QSimpleUpdater"]
 	path = libs/QSimpleUpdater
 	url = https://github.com/alex-spataru/QSimpleUpdater
