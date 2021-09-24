@@ -38,12 +38,6 @@ using namespace JSON;
  */
 static Generator *INSTANCE = nullptr;
 
-/*
- * Regular expresion used to check if there are still unmatched values
- * on the JSON map file.
- */
-static const QRegularExpression UNMATCHED_VALUES_REGEX("(%\b([0-9]|[1-9][0-9])\b)");
-
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
@@ -343,39 +337,12 @@ void JSONWorker::process()
         if (Generator::getInstance()->jsonMapData().isEmpty())
             return;
 
-        // Init conversion status boolean
-        bool ok = true;
-
         // Separate incoming data & add it to the JSON map
         auto json = Generator::getInstance()->jsonMapData();
-        auto list = QString::fromUtf8(m_data).split(
-            IO::Manager::getInstance()->separatorSequence());
-        for (int i = 0; i < list.count(); ++i)
-        {
-            // Get value at i & insert it into json
-            auto str = list.at(i);
-            auto mod = json.arg(str);
-
-            // If JSON after insertion is different we're good to go
-            if (json != mod)
-                json = mod;
-
-            // JSON is the same after insertion -> format error
-            else
-            {
-                ok = false;
-                break;
-            }
-        }
-
-        // Test that JSON does not contain unmatched values
-        if (ok)
-            ok = !(json.contains(UNMATCHED_VALUES_REGEX));
-
-        // There was an error & the JSON map is incomplete (or misses received
-        // info from the microcontroller).
-        if (!ok)
-            return;
+        auto sepr = IO::Manager::getInstance()->separatorSequence();
+        auto list = QString::fromUtf8(m_data).split(sepr);
+        for (int i = 0; i < list.size(); ++i)
+            json.replace(QString("%%1").arg(i + 1), list.at(i));
 
         // Create json document
         auto jsonDocument = QJsonDocument::fromJson(json.toUtf8(), &error);
@@ -429,6 +396,6 @@ void JSONWorker::process()
     if (error.error == QJsonParseError::NoError)
         emit jsonReady(JFI_CreateNew(m_frame, m_time, document));
 
-    // Delete object in 500 ms
-    QTimer::singleShot(500, this, SIGNAL(finished()));
+    // Delete object in 100 ms
+    QTimer::singleShot(100, this, SIGNAL(finished()));
 }
