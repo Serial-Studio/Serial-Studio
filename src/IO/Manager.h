@@ -97,6 +97,14 @@ public:
     };
     Q_ENUM(DataSource)
 
+    enum class ValidationStatus
+    {
+        FrameOk,
+        ChecksumError,
+        ChecksumIncomplete
+    };
+    Q_ENUM(ValidationStatus)
+
     static Manager *getInstance();
 
     bool readOnly();
@@ -143,6 +151,9 @@ private slots:
 private:
     Manager();
     ~Manager();
+
+    ValidationStatus integrityChecks(const QByteArray &frame,
+                                   const QByteArray &masterBuffer, int *bytesToChop);
 
 private:
     QTimer m_watchdog;

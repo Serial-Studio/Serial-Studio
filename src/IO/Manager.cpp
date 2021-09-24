@@ -543,102 +543,20 @@ void Manager::readFrames()
         cursor = cursor.mid(fIndex + finish.length(), -1);
         bytes += fIndex + finish.length();
 
-        // Check CRC-8
-        if (cursor.startsWith("crc8:"))
-        {
-            // Enable the CRC flag
-            m_enableCrc = true;
-
-            // Check if we have enough data in the buffer
-            if (cursor.length() >= 6)
-            {
-                // Increment the number of bytes to remove from master buffer
-                bytes += 6;
-
-                // Get 8-bit checksum
-                quint8 crc = cursor.at(5);
-
-                // Compare checksums
-                if (crc8(frame.data(), frame.length()) == crc)
-                    emit frameReceived(frame);
-            }
-
-            // Not enough data, check next time...
-            else
-            {
-                bytes = prevBytes;
-                break;
-            }
-        }
-
-        // Check CRC-16
-        else if (cursor.startsWith("crc16:"))
-        {
-            // Enable the CRC flag
-            m_enableCrc = true;
-
-            // Check if we have enough data in the buffer
-            if (cursor.length() >= 8)
-            {
-                // Increment the number of bytes to remove from master buffer
-                bytes += 8;
-
-                // Get 16-bit checksum
-                quint8 a = cursor.at(6);
-                quint8 b = cursor.at(7);
-                quint16 crc = (a << 8) | (b & 0xff);
-
-                // Compare checksums
-                if (crc16(frame.data(), frame.length()) == crc)
-                    emit frameReceived(frame);
-            }
-
-            // Not enough data, check next time...
-            else
-            {
-                bytes = prevBytes;
-                break;
-            }
-        }
-
-        // Check CRC-32
-        else if (cursor.startsWith("crc32:"))
-        {
-            // Enable the CRC flag
-            m_enableCrc = true;
-
-            // Check if we have enough data in the buffer
-            if (cursor.length() >= 10)
-            {
-                // Increment the number of bytes to remove from master buffer
-                bytes += 10;
-
-                // Get 32-bit checksum
-                quint8 a = cursor.at(6);
-                quint8 b = cursor.at(7);
-                quint8 c = cursor.at(8);
-                quint8 d = cursor.at(9);
-                quint32 crc = (a << 24) | (b << 16) | (c << 8) | (d & 0xff);
-
-                // Compare checksums
-                if (crc32(frame.data(), frame.length()) == crc)
-                    emit frameReceived(frame);
-            }
-
-            // Not enough data, check next time...
-            else
-            {
-                bytes = prevBytes;
-                break;
-            }
-        }
-
-        // Buffer does not contain CRC code
-        else if (!m_enableCrc)
+        // Checksum verification & emit RX frame
+        auto result = integrityChecks(frame, cursor, &bytes);
+        if (result == ValidationStatus::FrameOk)
             emit frameReceived(frame);
 
+        // Checksum data incomplete, try next time...
+        else if (result == ValidationStatus::ChecksumIncomplete)
+        {
+            bytes = prevBytes;
+            break;
+        }
+
         // Frame read successfully, save the number of bytes to chop.
-        // This is used to manage incomplete frames with checksums
+        // This is used to manage frames with incomplete checksums
         prevBytes = bytes;
     }
 
@@ -723,4 +641,100 @@ void Manager::setDevice(QIODevice *device)
     emit deviceChanged();
 
     LOG_TRACE() << "Device pointer set to" << m_device;
+}
+
+/**
+ * Checks if the @c cursor has a checksum corresponding to the given @a frame.
+ * If so, the function shall calculate the appropiate checksum to for the @a frame and
+ * compare it with the sent checksum to ensure data integrity.
+ *
+ * @param frame data in which we shall perform integrity checks
+ * @param cursor master buffer, should start with checksum type header
+ * @param bytes pointer to the number of bytes that we need to chop from the master buffer
+ * @return
+ */
+Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
+                                                 const QByteArray &cursor, int *bytes)
+{
+    // Check CRC-8
+    if (cursor.startsWith("crc8:"))
+    {
+        // Enable the CRC flag
+        m_enableCrc = true;
+
+        // Check if we have enough data in the buffer
+        if (cursor.length() >= 6)
+        {
+            // Increment the number of bytes to remove from master buffer
+            *bytes += 6;
+
+            // Get 8-bit checksum
+            quint8 crc = cursor.at(5);
+
+            // Compare checksums
+            if (crc8(frame.data(), frame.length()) == crc)
+                return ValidationStatus::FrameOk;
+            else
+                return ValidationStatus::ChecksumError;
+        }
+    }
+
+    // Check CRC-16
+    else if (cursor.startsWith("crc16:"))
+    {
+        // Enable the CRC flag
+        m_enableCrc = true;
+
+        // Check if we have enough data in the buffer
+        if (cursor.length() >= 8)
+        {
+            // Increment the number of bytes to remove from master buffer
+            *bytes += 8;
+
+            // Get 16-bit checksum
+            quint8 a = cursor.at(6);
+            quint8 b = cursor.at(7);
+            quint16 crc = (a << 8) | (b & 0xff);
+
+            // Compare checksums
+            if (crc16(frame.data(), frame.length()) == crc)
+                return ValidationStatus::FrameOk;
+            else
+                return ValidationStatus::ChecksumError;
+        }
+    }
+
+    // Check CRC-32
+    else if (cursor.startsWith("crc32:"))
+    {
+        // Enable the CRC flag
+        m_enableCrc = true;
+
+        // Check if we have enough data in the buffer
+        if (cursor.length() >= 10)
+        {
+            // Increment the number of bytes to remove from master buffer
+            *bytes += 10;
+
+            // Get 32-bit checksum
+            quint8 a = cursor.at(6);
+            quint8 b = cursor.at(7);
+            quint8 c = cursor.at(8);
+            quint8 d = cursor.at(9);
+            quint32 crc = (a << 24) | (b << 16) | (c << 8) | (d & 0xff);
+
+            // Compare checksums
+            if (crc32(frame.data(), frame.length()) == crc)
+                return ValidationStatus::FrameOk;
+            else
+                return ValidationStatus::ChecksumError;
+        }
+    }
+
+    // Buffer does not contain CRC code
+    else if (!m_enableCrc)
+        return ValidationStatus::FrameOk;
+
+    // Checksum data incomplete
+    return ValidationStatus::ChecksumIncomplete;
 }
