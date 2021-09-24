@@ -22,13 +22,13 @@
 
 #include "Checksum.h"
 
-quint8 IO::crc8(const QByteArray &data)
+uint8_t IO::crc8(const char *data, const int length)
 {
-    quint8 crc = 0xff;
-    for (auto i = 0; i < data.length(); i++)
+    uint8_t crc = 0xff;
+    for (int i = 0; i < length; i++)
     {
-        crc ^= data.at(i);
-        for (auto j = 0; j < 8; j++)
+        crc ^= data[i];
+        for (int j = 0; j < 8; j++)
         {
             if ((crc & 0x80) != 0)
                 crc = (uint8_t)((crc << 1) ^ 0x31);
@@ -40,29 +40,29 @@ quint8 IO::crc8(const QByteArray &data)
     return crc;
 }
 
-quint16 IO::crc16(const QByteArray &data)
+uint16_t IO::crc16(const char *data, const int length)
 {
-    quint8 x;
-    quint16 crc = 0xFFFF;
+    uint8_t x;
+    uint16_t crc = 0xFFFF;
 
-    for (auto i = 0; i < data.length(); ++i)
+    for (int i = 0; i < length; ++i)
     {
-        x = crc >> 8 ^ data.at(i);
+        x = crc >> 8 ^ data[i];
         x ^= x >> 4;
-        crc = (crc << 8) ^ ((quint16)(x << 12)) ^ ((quint16)(x << 5)) ^ ((quint16)x);
+        crc = (crc << 8) ^ ((uint16_t)(x << 12)) ^ ((uint16_t)(x << 5)) ^ ((uint16_t)x);
     }
 
     return crc;
 }
 
-quint32 IO::crc32(const QByteArray &data)
+uint32_t IO::crc32(const char *data, const int length)
 {
-    quint32 mask;
-    quint32 crc = 0xFFFFFFFF;
-    for (auto i = 0; i < data.length(); ++i)
+    uint32_t mask;
+    uint32_t crc = 0xFFFFFFFF;
+    for (int i = 0; i < length; ++i)
     {
-        crc = crc ^ data.at(i);
-        for (auto j = 8; j >= 0; j--)
+        crc = crc ^ data[i];
+        for (int j = 8; j >= 0; j--)
         {
             mask = -(crc & 1);
             crc = (crc >> 1) ^ (0xEDB88320 & mask);

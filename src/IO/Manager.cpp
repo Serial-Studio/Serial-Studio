@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2021 JP Norair <https://github.com/jpnorair>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -61,7 +62,8 @@ static QString ADD_ESCAPE_SEQUENCES(const QString &str)
  * Constructor function
  */
 Manager::Manager()
-    : m_writeEnabled(true)
+    : m_enableCrc(false)
+    , m_writeEnabled(true)
     , m_maxBuzzerSize(1024 * 1024)
     , m_device(nullptr)
     , m_dataSource(DataSource::Serial)
@@ -388,6 +390,9 @@ void Manager::disconnectDevice()
         // Log changes
         LOG_INFO() << "Device disconnected";
     }
+
+    // Disable CRC checking
+    m_enableCrc = false;
 }
 
 /**
@@ -508,6 +513,8 @@ void Manager::setWatchdogInterval(const int interval)
  *
  * This function also checks that the buffer size does not exceed specified size
  * limitations.
+ *
+ * Implemementation credits: @jpnorair and @alex-spataru
  */
 void Manager::readFrames()
 {
@@ -516,81 +523,127 @@ void Manager::readFrames()
         return;
 
     // Read until start/finish combinations are not found
+    auto bytes = 0;
+    auto prevBytes = 0;
+    auto cursor = m_dataBuffer;
     auto start = startSequence().toUtf8();
     auto finish = finishSequence().toUtf8();
-    while (m_dataBuffer.contains(start) && m_dataBuffer.contains(finish))
+    while (cursor.contains(start) && cursor.contains(finish))
     {
-        // Begin reading from start sequence index
-        auto buffer = m_dataBuffer;
-        auto sIndex = m_dataBuffer.indexOf(start);
-        buffer.remove(0, sIndex + start.length());
+        // Remove the part of the buffer prior to, and including, the start sequence.
+        auto sIndex = cursor.indexOf(start);
+        cursor = cursor.mid(sIndex + start.length(), -1);
+        bytes += sIndex + start.length();
 
-        // Check that new buffer contains finish sequence
-        if (!buffer.contains(finish))
-            break;
+        // Copy a sub-buffer that goes until the finish sequence
+        auto fIndex = cursor.indexOf(finish);
+        auto frame = cursor.left(fIndex);
 
-        // Remove bytes outside start/end sequence range
-        auto fIndex = buffer.indexOf(finish);
-        buffer.remove(fIndex, buffer.length() - fIndex);
+        // Remove the data including the finish sequence from the master buffer
+        cursor = cursor.mid(fIndex + finish.length(), -1);
+        bytes += fIndex + finish.length();
 
-        // Buffer is not empty, notify app & remove read data from buffer
-        if (!buffer.isEmpty())
+        // Check CRC-8
+        if (cursor.startsWith("crc8:"))
         {
-            // Remove frame from buffer
-            auto index = sIndex + fIndex + finish.length();
-            m_dataBuffer.remove(0, index);
+            // Enable the CRC flag
+            m_enableCrc = true;
 
-            // Check CRC-8
-            if (m_dataBuffer.startsWith("crc8:"))
+            // Check if we have enough data in the buffer
+            if (cursor.length() >= 6)
             {
-                if (m_dataBuffer.length() >= 5)
-                {
-                    quint8 crc = m_dataBuffer.at(4);
-                    if (crc8(buffer) == crc)
-                        emit frameReceived(buffer);
-                }
+                // Increment the number of bytes to remove from master buffer
+                bytes += 6;
+
+                // Get 8-bit checksum
+                quint8 crc = cursor.at(5);
+
+                // Compare checksums
+                if (crc8(frame.data(), frame.length()) == crc)
+                    emit frameReceived(frame);
             }
 
-            // Check CRC-16
-            else if (m_dataBuffer.startsWith("crc16:"))
-            {
-                if (m_dataBuffer.length() >= 7)
-                {
-                    quint8 crcA = m_dataBuffer.at(5);
-                    quint8 crcB = m_dataBuffer.at(6);
-                    quint16 crc = (crcA << 8) | (crcB & 0xff);
-
-                    if (crc16(buffer) == crc)
-                        emit frameReceived(buffer);
-                }
-            }
-
-            // Check CRC-32
-            else if (m_dataBuffer.startsWith("crc32:"))
-            {
-                if (m_dataBuffer.length() >= 9)
-                {
-                    quint8 crcA = m_dataBuffer.at(5);
-                    quint8 crcB = m_dataBuffer.at(6);
-                    quint8 crcD = m_dataBuffer.at(7);
-                    quint8 crcC = m_dataBuffer.at(8);
-                    quint32 crc
-                        = (crcA << 24) | (crcB << 16) | (crcC << 8) | (crcD & 0xff);
-
-                    if (crc32(buffer) == crc)
-                        emit frameReceived(buffer);
-                }
-            }
-
-            // Buffer does not contain CRC code
+            // Not enough data, check next time...
             else
-                emit frameReceived(buffer);
+            {
+                bytes = prevBytes;
+                break;
+            }
         }
+
+        // Check CRC-16
+        else if (cursor.startsWith("crc16:"))
+        {
+            // Enable the CRC flag
+            m_enableCrc = true;
+
+            // Check if we have enough data in the buffer
+            if (cursor.length() >= 8)
+            {
+                // Increment the number of bytes to remove from master buffer
+                bytes += 8;
+
+                // Get 16-bit checksum
+                quint8 a = cursor.at(6);
+                quint8 b = cursor.at(7);
+                quint16 crc = (a << 8) | (b & 0xff);
+
+                // Compare checksums
+                if (crc16(frame.data(), frame.length()) == crc)
+                    emit frameReceived(frame);
+            }
+
+            // Not enough data, check next time...
+            else
+            {
+                bytes = prevBytes;
+                break;
+            }
+        }
+
+        // Check CRC-32
+        else if (cursor.startsWith("crc32:"))
+        {
+            // Enable the CRC flag
+            m_enableCrc = true;
+
+            // Check if we have enough data in the buffer
+            if (cursor.length() >= 10)
+            {
+                // Increment the number of bytes to remove from master buffer
+                bytes += 10;
+
+                // Get 32-bit checksum
+                quint8 a = cursor.at(6);
+                quint8 b = cursor.at(7);
+                quint8 c = cursor.at(8);
+                quint8 d = cursor.at(9);
+                quint32 crc = (a << 24) | (b << 16) | (c << 8) | (d & 0xff);
+
+                // Compare checksums
+                if (crc32(frame.data(), frame.length()) == crc)
+                    emit frameReceived(frame);
+            }
+
+            // Not enough data, check next time...
+            else
+            {
+                bytes = prevBytes;
+                break;
+            }
+        }
+
+        // Buffer does not contain CRC code
+        else if (!m_enableCrc)
+            emit frameReceived(frame);
+
+        // Frame read successfully, save the number of bytes to chop.
+        // This is used to manage incomplete frames with checksums
+        prevBytes = bytes;
     }
 
-    // Clear temp. buffer (e.g. device sends a lot of invalid data)
-    if (m_dataBuffer.size() > maxBufferSize())
-        clearTempBuffer();
+    // Remove parsed data from master buffer
+    m_dataBuffer.remove(0, bytes);
 }
 
 /**

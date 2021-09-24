@@ -23,13 +23,14 @@
 #ifndef IO_CHECKSUM_H
 #define IO_CHECKSUM_H
 
-#include <QByteArray>
+#include <cstdint>
+#include <cstdlib>
 
 namespace IO
 {
-quint8 crc8(const QByteArray &data);
-quint16 crc16(const QByteArray &data);
-quint32 crc32(const QByteArray &data);
+uint8_t crc8(const char *data, const int length);
+uint16_t crc16(const char *data, const int length);
+uint32_t crc32(const char *data, const int length);
 }
 
 #endif

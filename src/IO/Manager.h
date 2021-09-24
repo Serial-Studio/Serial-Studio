@@ -146,6 +146,7 @@ private:
 
 private:
     QTimer m_watchdog;
+    bool m_enableCrc;
     bool m_writeEnabled;
     int m_maxBuzzerSize;
     QIODevice *m_device;
