@@ -71,7 +71,7 @@ Manager::Manager()
     , m_finishSequence("*/")
     , m_separatorSequence(",")
 {
-    // setWatchdogInterval(15);
+    setWatchdogInterval(10000);
     setMaxBufferSize(1024 * 1024);
 
     // Configure signals/slots
@@ -525,12 +525,9 @@ void Manager::readFrames()
         auto fIndex = cursor.indexOf(finish);
         auto frame = cursor.left(fIndex);
 
-        // Remove the data including the finish sequence from the master buffer
-        cursor = cursor.mid(fIndex + finish.length(), -1);
-        bytes += fIndex + finish.length();
-
         // Checksum verification & emit RX frame
-        auto result = integrityChecks(frame, cursor, &bytes);
+        int chop = 0;
+        auto result = integrityChecks(frame, cursor, &chop);
         if (result == ValidationStatus::FrameOk)
             emit frameReceived(frame);
 
@@ -540,6 +537,10 @@ void Manager::readFrames()
             bytes = prevBytes;
             break;
         }
+
+        // Remove the data including the finish sequence from the master buffer
+        cursor = cursor.mid(fIndex + chop, -1);
+        bytes += fIndex + chop;
 
         // Frame read successfully, save the number of bytes to chop.
         // This is used to manage frames with incomplete checksums
@@ -639,20 +640,27 @@ void Manager::setDevice(QIODevice *device)
 Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
                                                    const QByteArray &cursor, int *bytes)
 {
+    // Get finish sequence as byte array
+    auto finish = finishSequence().toUtf8();
+    auto crc8Header = finish + "crc8:";
+    auto crc16Header = finish + "crc16:";
+    auto crc32Header = finish + "crc32:";
+
     // Check CRC-8
-    if (cursor.startsWith("crc8:"))
+    if (cursor.contains(crc8Header))
     {
         // Enable the CRC flag
         m_enableCrc = true;
+        auto offset = cursor.indexOf(crc8Header) + crc8Header.length() - 1;
 
         // Check if we have enough data in the buffer
-        if (cursor.length() >= 6)
+        if (cursor.length() >= offset + 1)
         {
             // Increment the number of bytes to remove from master buffer
-            *bytes += 6;
+            *bytes += crc8Header.length() + 1;
 
             // Get 8-bit checksum
-            quint8 crc = cursor.at(5);
+            quint8 crc = cursor.at(offset + 1);
 
             // Compare checksums
             if (crc8(frame.data(), frame.length()) == crc)
@@ -663,20 +671,21 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
     }
 
     // Check CRC-16
-    else if (cursor.startsWith("crc16:"))
+    else if (cursor.contains(crc16Header))
     {
         // Enable the CRC flag
         m_enableCrc = true;
+        auto offset = cursor.indexOf(crc16Header) + crc16Header.length() - 1;
 
         // Check if we have enough data in the buffer
-        if (cursor.length() >= 8)
+        if (cursor.length() >= offset + 2)
         {
             // Increment the number of bytes to remove from master buffer
-            *bytes += 8;
+            *bytes += crc16Header.length() + 2;
 
             // Get 16-bit checksum
-            quint8 a = cursor.at(6);
-            quint8 b = cursor.at(7);
+            quint8 a = cursor.at(offset + 1);
+            quint8 b = cursor.at(offset + 2);
             quint16 crc = (a << 8) | (b & 0xff);
 
             // Compare checksums
@@ -688,22 +697,23 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
     }
 
     // Check CRC-32
-    else if (cursor.startsWith("crc32:"))
+    else if (cursor.contains(crc32Header))
     {
         // Enable the CRC flag
         m_enableCrc = true;
+        auto offset = cursor.indexOf(crc32Header) + crc32Header.length() - 1;
 
         // Check if we have enough data in the buffer
-        if (cursor.length() >= 10)
+        if (cursor.length() >= offset + 4)
         {
             // Increment the number of bytes to remove from master buffer
-            *bytes += 10;
+            *bytes += crc32Header.length() + 4;
 
             // Get 32-bit checksum
-            quint8 a = cursor.at(6);
-            quint8 b = cursor.at(7);
-            quint8 c = cursor.at(8);
-            quint8 d = cursor.at(9);
+            quint8 a = cursor.at(offset + 1);
+            quint8 b = cursor.at(offset + 2);
+            quint8 c = cursor.at(offset + 3);
+            quint8 d = cursor.at(offset + 4);
             quint32 crc = (a << 24) | (b << 16) | (c << 8) | (d & 0xff);
 
             // Compare checksums
@@ -716,7 +726,10 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
 
     // Buffer does not contain CRC code
     else if (!m_enableCrc)
+    {
+        *bytes += finish.length();
         return ValidationStatus::FrameOk;
+    }
 
     // Checksum data incomplete
     return ValidationStatus::ChecksumIncomplete;
