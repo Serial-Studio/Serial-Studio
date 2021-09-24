@@ -76,7 +76,7 @@ ModuleManager::ModuleManager()
 #elif defined(Q_OS_MAC)
     customFont.setPointSize(13);
 #else
-    customFont.setPointSize(12);
+    customFont.setPointSize(10);
 #endif
 
     // Use custom font globally
