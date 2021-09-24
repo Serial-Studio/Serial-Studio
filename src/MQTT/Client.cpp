@@ -483,7 +483,7 @@ void Client::onError(const QMQTT::ClientError error)
 }
 
 /**
- * Registers the given @a frameInfo structure to the JSON frames that shall be published
+ * Registers the given @a frame data to the list of frames that shall be published
  * to the MQTT broker/server
  */
 void Client::onFrameReceived(const QByteArray &frame)
