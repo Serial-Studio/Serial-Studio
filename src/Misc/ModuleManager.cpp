@@ -65,9 +65,17 @@
  */
 ModuleManager::ModuleManager()
 {
+    // Set application font
+    int id = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont roboto(family);
+    qApp->setFont(roboto);
+
+    // Show splash screen
     m_splash.setPixmap(QPixmap(":/images/splash.png"));
     m_splash.show();
 
+    // Stop modules when application is about to quit
     setSplashScreenMessage(tr("Initializing..."));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
 }
