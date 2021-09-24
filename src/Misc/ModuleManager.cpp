@@ -69,6 +69,9 @@ ModuleManager::ModuleManager()
     int id = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
     QFont roboto(family);
+#ifdef Q_OS_WIN
+    roboto.setPointSize(9);
+#endif
     qApp->setFont(roboto);
 
     // Show splash screen
