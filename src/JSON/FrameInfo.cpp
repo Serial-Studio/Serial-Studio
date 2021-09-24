@@ -23,15 +23,6 @@
 #include "FrameInfo.h"
 
 /**
- * Returns @c true if the given JFI @info structure has a non-empty JSON document and a
- * valid frame number.
- */
-bool JFI_Valid(const JFI_Object &info)
-{
-    return info.frameNumber >= 0 && !info.jsonDocument.isEmpty();
-}
-
-/**
  * Orders the given JFI @c list from least recent (first item) to most recent (last item)
  * using a simple Bubble-Sort algorithm.
  */

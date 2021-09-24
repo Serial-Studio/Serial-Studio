@@ -297,6 +297,5 @@ void Export::registerFrame(const JFI_Object &info)
         return;
 
     // Update JSON list
-    if (JFI_Valid(info))
-        m_jsonList.append(info);
+    m_jsonList.append(info);
 }
