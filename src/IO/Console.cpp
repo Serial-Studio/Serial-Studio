@@ -102,9 +102,6 @@ Console::Console()
     connect(te, SIGNAL(highFreqTimeout()), this, SLOT(displayData()));
     connect(dm, &Manager::dataSent, this, &Console::onDataSent);
     connect(dm, &Manager::dataReceived, this, &Console::onDataReceived);
-
-    // Log something to look like a pro
-    LOG_TRACE() << "Class initialized";
 }
 
 /**

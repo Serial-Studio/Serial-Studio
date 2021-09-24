@@ -24,6 +24,7 @@
 #define MODULE_MANAGER_H
 
 #include <QObject>
+#include <QSplashScreen>
 #include <QQmlApplicationEngine>
 
 class ModuleManager : public QObject
@@ -41,10 +42,15 @@ public:
 
     QQmlApplicationEngine *engine();
 
+public slots:
+    void hideSplashscreen();
+    void setSplashScreenMessage(const QString &message);
+
 private slots:
     void stopOperations();
 
 private:
+    QSplashScreen m_splash;
     QQmlApplicationEngine m_engine;
 };
 

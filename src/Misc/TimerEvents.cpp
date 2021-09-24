@@ -59,7 +59,6 @@ TimerEvents::TimerEvents()
     // Configure signals/slots
     connect(&m_timerLowFreq, &QTimer::timeout, this, &TimerEvents::lowFreqTimeout);
     connect(&m_timerHighFreq, &QTimer::timeout, this, &TimerEvents::highFreqTimeout);
-    LOG_TRACE() << "Class initialized";
 }
 
 /**
@@ -100,7 +99,7 @@ void TimerEvents::startTimers()
     m_timerLowFreq.start();
     m_timerHighFreq.start();
 
-    LOG_TRACE() << "Timers started";
+    LOG_INFO() << "Timers started";
 }
 
 /**

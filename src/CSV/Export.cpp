@@ -56,8 +56,6 @@ Export::Export()
     connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
     connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &Export::writeValues);
     connect(ge, &JSON::Generator::jsonChanged, this, &Export::registerFrame);
-
-    LOG_TRACE() << "Class initialized";
 }
 
 /**

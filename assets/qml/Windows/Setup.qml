@@ -126,7 +126,7 @@ Item {
             } RadioButton {
                 id: commAuto
                 checked: true
-                text: qsTr("Auto (JSON from serial device)")
+                text: qsTr("No parsing (device sends JSON data)")
                 onCheckedChanged: {
                     if (checked)
                         Cpp_JSON_Generator.setOperationMode(1)
@@ -136,7 +136,7 @@ Item {
             } RadioButton {
                 id: commManual
                 checked: false
-                text: qsTr("Manual (use JSON map file)")
+                text: qsTr("Parse via JSON project file")
                 onCheckedChanged: {
                     if (checked)
                         Cpp_JSON_Generator.setOperationMode(0)
@@ -154,8 +154,8 @@ Item {
                 enabled: commManual.checked
                 onClicked: Cpp_JSON_Generator.loadJsonMap()
                 Behavior on opacity {NumberAnimation{}}
-                text: (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change map file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
-                                                                   qsTr("Select map file") + "...")
+                text: (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change project file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
+                                                                   qsTr("Select project file") + "...")
             }
 
             //

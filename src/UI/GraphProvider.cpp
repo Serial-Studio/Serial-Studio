@@ -81,7 +81,6 @@ GraphProvider::GraphProvider()
             this, SLOT(csvPlayerFixes()));
 
     // clang-format on
-    LOG_TRACE() << "Class initialized";
 }
 
 /**

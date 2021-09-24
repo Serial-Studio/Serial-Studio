@@ -117,9 +117,10 @@ int main(int argc, char **argv)
         }
     }
 
-    // Create module manager & configure the logger
+    // Create module manager
     ModuleManager moduleManager;
     moduleManager.configureLogger();
+    moduleManager.configureUpdater();
 
     // Begin logging
     LOG_INFO() << QDateTime::currentDateTime();
@@ -134,9 +135,6 @@ int main(int argc, char **argv)
         LOG_FATAL() << "Critical QML error";
         return EXIT_FAILURE;
     }
-
-    // Configure the updater
-    moduleManager.configureUpdater();
 
     // Enter application event loop
     auto code = app.exec();

@@ -82,6 +82,8 @@ ApplicationWindow {
             windowMaximized = false
         }
 
+        // Hide splash screen
+        Cpp_ModuleManager.hideSplashscreen()
     }
 
     //

@@ -74,9 +74,6 @@ MacExtras::MacExtras()
     // Re-translate buttons when language is changed
     connect(Translator::getInstance(), SIGNAL(languageChanged()), this,
             SLOT(updateButtonText()));
-
-    // Logger
-    LOG_TRACE() << "Class initialized";
 #endif
 }
 

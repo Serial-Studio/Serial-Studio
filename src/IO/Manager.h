@@ -153,7 +153,7 @@ private:
     ~Manager();
 
     ValidationStatus integrityChecks(const QByteArray &frame,
-                                   const QByteArray &masterBuffer, int *bytesToChop);
+                                     const QByteArray &masterBuffer, int *bytesToChop);
 
 private:
     QTimer m_watchdog;

@@ -55,7 +55,6 @@ WidgetProvider::WidgetProvider()
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
     connect(jg, SIGNAL(jsonFileMapChanged()), this, SLOT(resetData()));
-    LOG_TRACE() << "Class initialized";
 }
 
 /**

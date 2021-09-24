@@ -38,8 +38,7 @@ static Translator *INSTANCE = nullptr;
 Translator::Translator()
 {
     m_language = systemLanguage();
-    LOG_TRACE() << "Class initialized";
-    LOG_TRACE() << "System language" << systemLanguage();
+    LOG_INFO() << "System language" << systemLanguage();
 }
 
 /**
@@ -215,5 +214,5 @@ void Translator::setLanguage(const QLocale &locale, const QString &language)
     qApp->installTranslator(&m_translator);
     emit languageChanged();
 
-    LOG_TRACE() << "Language set to" << language;
+    LOG_INFO() << "Language set to" << language;
 }

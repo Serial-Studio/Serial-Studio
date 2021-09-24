@@ -65,6 +65,10 @@
  */
 ModuleManager::ModuleManager()
 {
+    m_splash.setPixmap(QPixmap(":/images/splash.png"));
+    m_splash.show();
+
+    setSplashScreenMessage(tr("Initializing..."));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
 }
 
@@ -74,6 +78,8 @@ ModuleManager::ModuleManager()
  */
 void ModuleManager::configureLogger()
 {
+    setSplashScreenMessage(tr("Configuring logger..."));
+
     auto fileAppender = new FileAppender;
     auto consoleAppender = new ConsoleAppender;
     fileAppender->setFormat(LOG_FORMAT);
@@ -94,11 +100,13 @@ void ModuleManager::configureUpdater()
     if (!autoUpdaterEnabled())
         return;
 
-    LOG_TRACE() << "Configuring QSimpleUpdater...";
+    setSplashScreenMessage(tr("Configuring updater..."));
+
+    LOG_INFO() << "Configuring QSimpleUpdater...";
     QSimpleUpdater::getInstance()->setNotifyOnUpdate(APP_UPDATER_URL, true);
     QSimpleUpdater::getInstance()->setNotifyOnFinish(APP_UPDATER_URL, false);
     QSimpleUpdater::getInstance()->setMandatoryUpdate(APP_UPDATER_URL, false);
-    LOG_TRACE() << "QSimpleUpdater configuration finished!";
+    LOG_INFO() << "QSimpleUpdater configuration finished!";
 }
 
 /**
@@ -109,12 +117,12 @@ void ModuleManager::configureUpdater()
  */
 void ModuleManager::registerQmlTypes()
 {
-    LOG_TRACE() << "Registering QML types...";
+    LOG_INFO() << "Registering QML types...";
     qRegisterMetaType<JFI_Object>("JFI_Object");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
     qmlRegisterType<UI::QmlPlainTextEdit>("SerialStudio", 1, 0, "QmlPlainTextEdit");
-    LOG_TRACE() << "QML types registered!";
+    LOG_INFO() << "QML types registered!";
 }
 
 /**
@@ -141,6 +149,7 @@ void ModuleManager::initializeQmlInterface()
 {
     // Initialize modules
     LOG_INFO() << "Initializing C++ modules";
+    setSplashScreenMessage(tr("Initializing modules..."));
     auto translator = Misc::Translator::getInstance();
     auto csvExport = CSV::Export::getInstance();
     auto csvPlayer = CSV::Player::getInstance();
@@ -188,6 +197,7 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
     c->setContextProperty("Cpp_Misc_MacExtras", macExtras);
     c->setContextProperty("Cpp_Misc_TimerEvents", timerEvents);
+    c->setContextProperty("Cpp_ModuleManager", this);
 
     // Register app info with QML
     c->setContextProperty("Cpp_AppName", qApp->applicationName());
@@ -200,10 +210,12 @@ void ModuleManager::initializeQmlInterface()
     engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     // Start common event timers
+    setSplashScreenMessage(tr("Starting timers..."));
     timerEvents->startTimers();
 
     // Log QML engine status
     LOG_INFO() << "Finished loading QML interface";
+    setSplashScreenMessage(tr("Loading user interface..."));
 }
 
 /**
@@ -212,6 +224,28 @@ void ModuleManager::initializeQmlInterface()
 QQmlApplicationEngine *ModuleManager::engine()
 {
     return &m_engine;
+}
+
+/**
+ * Hides the splash screen widget
+ */
+void ModuleManager::hideSplashscreen()
+{
+    m_splash.hide();
+    m_splash.close();
+    qApp->processEvents();
+}
+
+/**
+ * Changes the text displayed on the splash screen
+ */
+void ModuleManager::setSplashScreenMessage(const QString &message)
+{
+    if (!message.isEmpty())
+    {
+        m_splash.showMessage(message, Qt::AlignBottom | Qt::AlignLeft, Qt::white);
+        qApp->processEvents();
+    }
 }
 
 /**

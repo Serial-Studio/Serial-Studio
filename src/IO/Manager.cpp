@@ -74,7 +74,6 @@ Manager::Manager()
 {
     // setWatchdogInterval(15);
     setMaxBufferSize(1024 * 1024);
-    LOG_TRACE() << "Class initialized";
 
     // Configure signals/slots
     auto serial = DataSources::Serial::getInstance();
@@ -418,7 +417,7 @@ void Manager::setDataSource(const DataSource source)
     emit dataSourceChanged();
 
     // Log changes
-    LOG_TRACE() << "Data source set to" << source;
+    LOG_INFO() << "Data source set to" << source;
 }
 
 /**
@@ -640,7 +639,7 @@ void Manager::setDevice(QIODevice *device)
     m_device = device;
     emit deviceChanged();
 
-    LOG_TRACE() << "Device pointer set to" << m_device;
+    LOG_INFO() << "Device pointer set to" << m_device;
 }
 
 /**
@@ -653,7 +652,7 @@ void Manager::setDevice(QIODevice *device)
  * @param bytes pointer to the number of bytes that we need to chop from the master buffer
  */
 Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
-                                                 const QByteArray &cursor, int *bytes)
+                                                   const QByteArray &cursor, int *bytes)
 {
     // Check CRC-8
     if (cursor.startsWith("crc8:"))
