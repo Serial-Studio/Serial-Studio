@@ -195,12 +195,10 @@ void Export::writeValues()
                 // Construct dataset title from group, dataset title & units
                 QString title;
                 if (datasetUnits.isEmpty())
-                    title = QString("(%1) %2").arg(groupTitle).arg(datasetTitle);
+                    title = QString("(%1) %2").arg(groupTitle, datasetTitle);
                 else
                     title = QString("(%1) %2 [%3]")
-                                .arg(groupTitle)
-                                .arg(datasetTitle)
-                                .arg(datasetUnits);
+                                .arg(groupTitle, datasetTitle, datasetUnits);
 
                 // Add dataset title & value to lists
                 titles.append(title);

@@ -113,7 +113,7 @@ bool Dataset::read(const QJsonObject &object)
         widget = widget.replace("\n", "");
         widget = widget.replace("\r", "");
 
-        if (!value.isEmpty())
+        if (!value.isEmpty() && !title.isEmpty())
         {
             m_graph = graph;
             m_title = title;
