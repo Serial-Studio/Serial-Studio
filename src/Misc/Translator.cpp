@@ -34,7 +34,7 @@ static Translator *INSTANCE = nullptr;
  */
 Translator::Translator()
 {
-    m_language = systemLanguage();
+    setLanguage(m_settings.value("language", systemLanguage()).toInt());
 }
 
 /**
@@ -192,6 +192,8 @@ void Translator::setLanguage(const int language)
     }
 
     m_language = language;
+    m_settings.setValue("language", m_language);
+
     setLanguage(locale, langName);
 }
 

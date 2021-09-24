@@ -94,11 +94,11 @@
     <name>Application</name>
     <message>
         <source>Check for updates automatically?</source>
-        <translation>自动检查更新？</translation>
+        <translation type="vanished">自动检查更新？</translation>
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
+        <translation type="vanished">%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
@@ -1381,7 +1381,7 @@
     </message>
     <message>
         <source>Show log file</source>
-        <translation>打开日志文件</translation>
+        <translation type="vanished">打开日志文件</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -1540,7 +1540,7 @@
     </message>
     <message>
         <source>Show log file</source>
-        <translation>打开日志文件</translation>
+        <translation type="vanished">打开日志文件</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -1579,6 +1579,40 @@
     <message>
         <source>Do you want to restart %1 now?</source>
         <translation>你现在想重新启动%1吗？</translation>
+    </message>
+</context>
+<context>
+    <name>Misc::Utilities</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation>自动检查更新？</translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation>%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleManager</name>
+    <message>
+        <source>Initializing...</source>
+        <translation>初始化...</translation>
+    </message>
+    <message>
+        <source>Configuring updater...</source>
+        <translation>配置更新器...</translation>
+    </message>
+    <message>
+        <source>Initializing modules...</source>
+        <translation>初始化模块...</translation>
+    </message>
+    <message>
+        <source>Starting timers...</source>
+        <translation>开始计时...</translation>
+    </message>
+    <message>
+        <source>Loading user interface...</source>
+        <translation>正在加载用户界面...</translation>
     </message>
 </context>
 <context>
@@ -1655,6 +1689,10 @@
     <message>
         <source>Flow Control</source>
         <translation>流控位</translation>
+    </message>
+    <message>
+        <source>Auto-reconnect</source>
+        <translation>自动重新连接</translation>
     </message>
 </context>
 <context>
@@ -1771,19 +1809,19 @@
     </message>
     <message>
         <source>Auto (JSON from serial device)</source>
-        <translation>自动（来自串行设备的JSON）</translation>
+        <translation type="vanished">自动（来自串行设备的JSON）</translation>
     </message>
     <message>
         <source>Manual (use JSON map file)</source>
-        <translation>手动（使用JSON映射文件）</translation>
+        <translation type="vanished">手动（使用JSON映射文件）</translation>
     </message>
     <message>
         <source>Change map file (%1)</source>
-        <translation>更改地图文件（%1）</translation>
+        <translation type="vanished">更改地图文件（%1）</translation>
     </message>
     <message>
         <source>Select map file</source>
-        <translation>选择地图文件</translation>
+        <translation type="vanished">选择地图文件</translation>
     </message>
     <message>
         <source>COM Port</source>
@@ -1872,6 +1910,22 @@
     <message>
         <source>Setup</source>
         <translation>体系</translation>
+    </message>
+    <message>
+        <source>No parsing (device sends JSON data)</source>
+        <translation>不进行解析（设备发送JSON数据）</translation>
+    </message>
+    <message>
+        <source>Parse via JSON project file</source>
+        <translation>通过JSON项目文件进行解析</translation>
+    </message>
+    <message>
+        <source>Change project file (%1)</source>
+        <translation>更改项目文件 (%1)</translation>
+    </message>
+    <message>
+        <source>Select project file</source>
+        <translation>选择项目文件</translation>
     </message>
 </context>
 <context>

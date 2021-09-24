@@ -321,9 +321,6 @@ void Serial::disconnectDevice()
     // Check if serial port pointer is valid
     if (port() != nullptr)
     {
-        // Get serial port name (used for warning messages)
-        auto name = portName();
-
         // Disconnect signals/slots
         port()->disconnect(this, SLOT(handleError(QSerialPort::SerialPortError)));
 
@@ -600,6 +597,19 @@ void Serial::refreshSerialDevices()
             }
         }
 
+        // Auto reconnect
+        if (Manager::getInstance()->dataSource() == Manager::DataSource::Serial)
+        {
+            if (autoReconnect() && m_lastSerialDeviceIndex > 0)
+            {
+                if (m_lastSerialDeviceIndex < portList().count())
+                {
+                    setPortIndex(m_lastSerialDeviceIndex);
+                    Manager::getInstance()->connectDevice();
+                }
+            }
+        }
+
         // Update UI
         emit availablePortsChanged();
     }
@@ -612,11 +622,7 @@ void Serial::refreshSerialDevices()
 void Serial::handleError(QSerialPort::SerialPortError error)
 {
     if (error != QSerialPort::NoError)
-    {
-        auto errorStr = port()->errorString();
         Manager::getInstance()->disconnectDevice();
-        Misc::Utilities::showMessageBox(tr("Serial port error"), errorStr);
-    }
 }
 
 /**

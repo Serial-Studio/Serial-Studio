@@ -33,8 +33,8 @@ ApplicationWindow {
     //
     // Window options
     //
-    minimumWidth: column.implicitWidth + 4 * app.spacing
-    minimumHeight: column.implicitHeight + 4 * app.spacing
+    minimumWidth: 910
+    minimumHeight: 720
     title: qsTr("JSON Editor - %1").arg(Cpp_JSON_Editor.jsonFileName)
 
     //

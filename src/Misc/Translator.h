@@ -67,6 +67,7 @@ public slots:
 
 private:
     int m_language;
+    QSettings m_settings;
     QTranslator m_translator;
 };
 }

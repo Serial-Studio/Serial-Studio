@@ -24,23 +24,8 @@ import QtQuick 2.12
 
 Item {
     id: qmlMain
-    readonly property string uiFont: uiFontLoader.name
-    readonly property string monoFont: monoFontLoader.name
-
-    FontLoader {
-        id: uiFontLoader
-        source: "qrc:/fonts/Roboto-Regular.ttf"
-    }
-
-    FontLoader {
-        id: uiFontLoaderBold
-        source: "qrc:/fonts/Roboto-Bold.ttf"
-    }
-
-    FontLoader {
-        id: monoFontLoader
-        source: "qrc:/fonts/RobotoMono-Regular.ttf"
-    }
+    readonly property string uiFont: "Roboto"
+    readonly property string monoFont: "Roboto Mono"
 
     Loader {
         asynchronous: true

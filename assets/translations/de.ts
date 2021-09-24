@@ -94,11 +94,11 @@
     <name>Application</name>
     <message>
         <source>Check for updates automatically?</source>
-        <translation>Automatish auf Updates prüfen?</translation>
+        <translation type="vanished">Automatish auf Updates prüfen?</translation>
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>Soll %1 Automatish auf Updates prüfen? Sie können jederzeit manuell über das Menü &quot;Hilfe&quot; nach Updates suchen</translation>
+        <translation type="vanished">Soll %1 Automatish auf Updates prüfen? Sie können jederzeit manuell über das Menü &quot;Hilfe&quot; nach Updates suchen</translation>
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
@@ -1349,7 +1349,7 @@
     </message>
     <message>
         <source>Show log file</source>
-        <translation>Logdatei anzeigen</translation>
+        <translation type="vanished">Logdatei anzeigen</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -1508,7 +1508,7 @@
     </message>
     <message>
         <source>Show log file</source>
-        <translation>Logdatei anzeigen</translation>
+        <translation type="vanished">Logdatei anzeigen</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -1547,6 +1547,40 @@
     <message>
         <source>Do you want to restart %1 now?</source>
         <translation>Möchten Sie %1 jetzt neu starten?</translation>
+    </message>
+</context>
+<context>
+    <name>Misc::Utilities</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation>Automatish auf Updates prüfen?</translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation>Soll %1 Automatish auf Updates prüfen? Sie können jederzeit manuell über das Menü &quot;Hilfe&quot; nach Updates suchen</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleManager</name>
+    <message>
+        <source>Initializing...</source>
+        <translation>Initialisierung...</translation>
+    </message>
+    <message>
+        <source>Configuring updater...</source>
+        <translation>Konfigurieren des Updaters...</translation>
+    </message>
+    <message>
+        <source>Initializing modules...</source>
+        <translation>Module initialisieren...</translation>
+    </message>
+    <message>
+        <source>Starting timers...</source>
+        <translation>Timer starten...</translation>
+    </message>
+    <message>
+        <source>Loading user interface...</source>
+        <translation>Benutzeroberfläche laden...</translation>
     </message>
 </context>
 <context>
@@ -1623,6 +1657,10 @@
     <message>
         <source>Flow Control</source>
         <translation>Fluss-Kontrolle</translation>
+    </message>
+    <message>
+        <source>Auto-reconnect</source>
+        <translation>Auto-Wiederverbindung</translation>
     </message>
 </context>
 <context>
@@ -1735,19 +1773,19 @@
     </message>
     <message>
         <source>Auto (JSON from serial device)</source>
-        <translation>Auto (JSON von Gerät)</translation>
+        <translation type="vanished">Auto (JSON von Gerät)</translation>
     </message>
     <message>
         <source>Manual (use JSON map file)</source>
-        <translation>Manuell (JSON Modelldatei)</translation>
+        <translation type="vanished">Manuell (JSON Modelldatei)</translation>
     </message>
     <message>
         <source>Change map file (%1)</source>
-        <translation>Modelldatei ändern (%1)</translation>
+        <translation type="vanished">Modelldatei ändern (%1)</translation>
     </message>
     <message>
         <source>Select map file</source>
-        <translation>Modelldatei auswählen</translation>
+        <translation type="vanished">Modelldatei auswählen</translation>
     </message>
     <message>
         <source>COM Port</source>
@@ -1836,6 +1874,22 @@
     <message>
         <source>Setup</source>
         <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <source>No parsing (device sends JSON data)</source>
+        <translation>Kein Parsing (Gerät sendet JSON-Daten)</translation>
+    </message>
+    <message>
+        <source>Parse via JSON project file</source>
+        <translation>Parsen über JSON-Projektdatei</translation>
+    </message>
+    <message>
+        <source>Change project file (%1)</source>
+        <translation>Projektdatei ändern (%1)</translation>
+    </message>
+    <message>
+        <source>Select project file</source>
+        <translation>Projektdatei auswählen</translation>
     </message>
 </context>
 <context>

@@ -82,11 +82,11 @@
     <name>Application</name>
     <message>
         <source>Check for updates automatically?</source>
-        <translation>Проверять обновления автоматически?</translation>
+        <translation type="vanished">Проверять обновления автоматически?</translation>
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>Должен ли %1 автоматически проверять наличие обновлений? Вы всегда можете проверить наличие обновлений вручную из меню &quot;Помощь&quot;</translation>
+        <translation type="vanished">Должен ли %1 автоматически проверять наличие обновлений? Вы всегда можете проверить наличие обновлений вручную из меню &quot;Помощь&quot;</translation>
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
@@ -222,7 +222,7 @@
     </message>
     <message>
         <source>CSV files</source>
-        <translation>Файлы CSV</translation>
+        <translation type="vanished">Файлы CSV</translation>
     </message>
 </context>
 <context>
@@ -260,27 +260,27 @@
     <name>DeviceManager</name>
     <message>
         <source>Communication Mode</source>
-        <translation>Режим связи</translation>
+        <translation type="vanished">Режим связи</translation>
     </message>
     <message>
         <source>COM Port</source>
-        <translation>COM-порт</translation>
+        <translation type="vanished">COM-порт</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>Скорость передачи данных</translation>
+        <translation type="vanished">Скорость передачи данных</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>Биты данных</translation>
+        <translation type="vanished">Биты данных</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>Стоп-биты</translation>
+        <translation type="vanished">Стоп-биты</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>Управление потоком</translation>
+        <translation type="vanished">Управление потоком</translation>
     </message>
 </context>
 <context>
@@ -445,7 +445,7 @@
     <name>Export</name>
     <message>
         <source>CSV File Error</source>
-        <translation>Ошибка файла CSV</translation>
+        <translation type="vanished">Ошибка файла CSV</translation>
     </message>
 </context>
 <context>
@@ -1199,7 +1199,7 @@
     </message>
     <message>
         <source>Show log file</source>
-        <translation>Показать файл журнала</translation>
+        <translation type="vanished">Показать файл журнала</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -1358,7 +1358,7 @@
     </message>
     <message>
         <source>Show log file</source>
-        <translation>Показать файл журнала</translation>
+        <translation type="vanished">Показать файл журнала</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -1397,6 +1397,40 @@
     <message>
         <source>Do you want to restart %1 now?</source>
         <translation>Хотите ли вы перезапустить %1 сейчас?</translation>
+    </message>
+</context>
+<context>
+    <name>Misc::Utilities</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation>Проверять обновления автоматически?</translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation>Должен ли %1 автоматически проверять наличие обновлений? Вы всегда можете проверить наличие обновлений вручную из меню &quot;Помощь&quot;</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleManager</name>
+    <message>
+        <source>Initializing...</source>
+        <translation>Инициализация...</translation>
+    </message>
+    <message>
+        <source>Configuring updater...</source>
+        <translation>Настройка программы обновления...</translation>
+    </message>
+    <message>
+        <source>Initializing modules...</source>
+        <translation>Инициализация модулей...</translation>
+    </message>
+    <message>
+        <source>Starting timers...</source>
+        <translation>Стартовые таймеры...</translation>
+    </message>
+    <message>
+        <source>Loading user interface...</source>
+        <translation>Загрузка пользовательского интерфейса...</translation>
     </message>
 </context>
 <context>
@@ -1462,16 +1496,20 @@
         <source>Flow Control</source>
         <translation>Управление потоком</translation>
     </message>
+    <message>
+        <source>Auto-reconnect</source>
+        <translation>Автоподключение</translation>
+    </message>
 </context>
 <context>
     <name>SerialManager</name>
     <message>
         <source>No Device</source>
-        <translation>Нет Устройство</translation>
+        <translation type="vanished">Нет Устройство</translation>
     </message>
     <message>
         <source>Select Port</source>
-        <translation>Выберите порт</translation>
+        <translation type="vanished">Выберите порт</translation>
     </message>
 </context>
 <context>
@@ -1517,39 +1555,39 @@
     </message>
     <message>
         <source>Auto (JSON from serial device)</source>
-        <translation>Авто (JSON с последовательного устройства)</translation>
+        <translation type="vanished">Авто (JSON с последовательного устройства)</translation>
     </message>
     <message>
         <source>Manual (use JSON map file)</source>
-        <translation>Вручную (использование файла карты JSON)</translation>
+        <translation type="vanished">Вручную (использование файла карты JSON)</translation>
     </message>
     <message>
         <source>Change map file (%1)</source>
-        <translation>Изменить файл карты (%1)</translation>
+        <translation type="vanished">Изменить файл карты (%1)</translation>
     </message>
     <message>
         <source>Select map file</source>
-        <translation>Выберите файл карты</translation>
+        <translation type="vanished">Выберите файл карты</translation>
     </message>
     <message>
         <source>COM Port</source>
-        <translation>COM-порт</translation>
+        <translation type="vanished">COM-порт</translation>
     </message>
     <message>
         <source>Baud Rate</source>
-        <translation>Скорость передачи данных</translation>
+        <translation type="vanished">Скорость передачи данных</translation>
     </message>
     <message>
         <source>Data Bits</source>
-        <translation>Биты данных</translation>
+        <translation type="vanished">Биты данных</translation>
     </message>
     <message>
         <source>Stop Bits</source>
-        <translation>Стоп-биты</translation>
+        <translation type="vanished">Стоп-биты</translation>
     </message>
     <message>
         <source>Flow Control</source>
-        <translation>Управление потоком</translation>
+        <translation type="vanished">Управление потоком</translation>
     </message>
     <message>
         <source>Create CSV file</source>
@@ -1574,6 +1612,22 @@
     <message>
         <source>Setup</source>
         <translation>Установка</translation>
+    </message>
+    <message>
+        <source>No parsing (device sends JSON data)</source>
+        <translation>Устройство отправляет данные в формате JSON</translation>
+    </message>
+    <message>
+        <source>Parse via JSON project file</source>
+        <translation>Используйте JSON файл проекта</translation>
+    </message>
+    <message>
+        <source>Change project file (%1)</source>
+        <translation>Изменить файл проекта (%1)</translation>
+    </message>
+    <message>
+        <source>Select project file</source>
+        <translation>Выберите файл проекта</translation>
     </message>
 </context>
 <context>

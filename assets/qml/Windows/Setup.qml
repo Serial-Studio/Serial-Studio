@@ -32,6 +32,7 @@ import "../SetupPanes" as SetupPanes
 
 Item {
     id: root
+    readonly property int maxItemWidth: column.width - 2 * spacing
 
     //
     // Save settings
@@ -53,6 +54,7 @@ Item {
         property alias dataBits: serial.dataBits
         property alias stopBits: serial.stopBits
         property alias flowControl: serial.flowControl
+        property alias autoReconnect: serial.autoReconnect
 
         //
         // Network settings
@@ -126,6 +128,7 @@ Item {
             } RadioButton {
                 id: commAuto
                 checked: true
+                Layout.maximumWidth: root.maxItemWidth
                 text: qsTr("No parsing (device sends JSON data)")
                 onCheckedChanged: {
                     if (checked)
@@ -136,6 +139,7 @@ Item {
             } RadioButton {
                 id: commManual
                 checked: false
+                Layout.maximumWidth: root.maxItemWidth
                 text: qsTr("Parse via JSON project file")
                 onCheckedChanged: {
                     if (checked)
@@ -152,6 +156,7 @@ Item {
                 Layout.fillWidth: true
                 opacity: enabled ? 1 : 0.5
                 enabled: commManual.checked
+                Layout.maximumWidth: root.maxItemWidth
                 onClicked: Cpp_JSON_Generator.loadJsonMap()
                 Behavior on opacity {NumberAnimation{}}
                 text: (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change project file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
@@ -176,6 +181,7 @@ Item {
                     text: qsTr("Create CSV file")
                     Layout.alignment: Qt.AlignVCenter
                     checked: Cpp_CSV_Export.exportEnabled
+                    Layout.maximumWidth: root.maxItemWidth
                     palette.highlight: Cpp_ThemeManager.csvHighlight
 
                     onCheckedChanged:  {
@@ -212,6 +218,7 @@ Item {
                 height: 24
                 id: tab
                 Layout.fillWidth: true
+                Layout.maximumWidth: root.maxItemWidth
                 onCurrentIndexChanged: {
                     if (currentIndex < 2 && currentIndex !== Cpp_IO_Manager.dataSource)
                         Cpp_IO_Manager.dataSource = currentIndex

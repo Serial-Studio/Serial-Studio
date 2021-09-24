@@ -57,27 +57,30 @@
 #include <QSimpleUpdater.h>
 
 /**
- * Connect SIGNALS/SLOTS to call singleton destructors before the application
+ * Configures the application font, creates a splash screen and configures
+ * application signals/slots to destroy singleton classes before the application
  * quits.
  */
 ModuleManager::ModuleManager()
 {
-    // Load application font
-    int id = QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont customFont(family);
+    // Init translator (so that splash screen displays text in user's language)
+    (void)Misc::Translator::getInstance();
 
-    // Set font size
+    // Load Roboto fonts from resources
+    QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/RobotoMono-Regular.ttf");
+
+    // Set Roboto as default app font
+    QFont font("Roboto");
 #if defined(Q_OS_WIN)
-    customFont.setPointSize(9);
+    font.setPointSize(9);
 #elif defined(Q_OS_MAC)
-    customFont.setPointSize(13);
+    font.setPointSize(13);
 #else
-    customFont.setPointSize(10);
+    font.setPointSize(10);
 #endif
-
-    // Use custom font globally
-    qApp->setFont(customFont);
+    qApp->setFont(font);
 
     // Show splash screen
     m_splash.setPixmap(QPixmap(":/images/splash.png"));

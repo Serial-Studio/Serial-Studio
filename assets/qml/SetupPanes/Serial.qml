@@ -37,6 +37,7 @@ Control {
     property alias parity: _parityCombo.currentIndex
     property alias flowControl: _flowCombo.currentIndex
     property alias stopBits: _stopBitsCombo.currentIndex
+    property alias autoReconnect: _autoreconnect.checked
 
     //
     // Update listbox models when translation is changed

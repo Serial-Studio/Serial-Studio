@@ -81,14 +81,6 @@
 <context>
     <name>Application</name>
     <message>
-        <source>Check for updates automatically?</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Drop JSON and CSV files here</source>
         <translation></translation>
     </message>
@@ -1198,10 +1190,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Show log file</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Report bug</source>
         <translation></translation>
     </message>
@@ -1357,10 +1345,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Show log file</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Report bug</source>
         <translation></translation>
     </message>
@@ -1396,6 +1380,40 @@
     </message>
     <message>
         <source>Do you want to restart %1 now?</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Misc::Utilities</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>ModuleManager</name>
+    <message>
+        <source>Initializing...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Configuring updater...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Initializing modules...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Starting timers...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Loading user interface...</source>
         <translation></translation>
     </message>
 </context>
@@ -1462,6 +1480,10 @@
         <source>Flow Control</source>
         <translation>Flow control</translation>
     </message>
+    <message>
+        <source>Auto-reconnect</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>SerialManager</name>
@@ -1516,22 +1538,6 @@
         <translation>Communication mode</translation>
     </message>
     <message>
-        <source>Auto (JSON from serial device)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Manual (use JSON map file)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Change map file (%1)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Select map file</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>COM Port</source>
         <translation type="vanished">COM port</translation>
     </message>
@@ -1573,6 +1579,22 @@
     </message>
     <message>
         <source>Setup</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>No parsing (device sends JSON data)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Parse via JSON project file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Change project file (%1)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Select project file</source>
         <translation></translation>
     </message>
 </context>

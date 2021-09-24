@@ -98,11 +98,11 @@
     <name>Application</name>
     <message>
         <source>Check for updates automatically?</source>
-        <translation>¿Buscar actualizaciones automaticamente?</translation>
+        <translation type="vanished">¿Buscar actualizaciones automaticamente?</translation>
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>¿Debería %1 buscar actualizaciones automáticamente? También puedes buscar actualizaciones manualmente desde el menu de &quot;Ayuda&quot;</translation>
+        <translation type="vanished">¿Debería %1 buscar actualizaciones automáticamente? También puedes buscar actualizaciones manualmente desde el menu de &quot;Ayuda&quot;</translation>
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
@@ -1416,7 +1416,7 @@
     </message>
     <message>
         <source>Show log file</source>
-        <translation>Mostar archivo de log</translation>
+        <translation type="vanished">Mostar archivo de log</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -1575,7 +1575,7 @@
     </message>
     <message>
         <source>Show log file</source>
-        <translation>Mostar archivo de log</translation>
+        <translation type="vanished">Mostar archivo de log</translation>
     </message>
     <message>
         <source>Report bug</source>
@@ -1614,6 +1614,40 @@
     <message>
         <source>Do you want to restart %1 now?</source>
         <translation>¿Quiere reiniciar %1 ahora?</translation>
+    </message>
+</context>
+<context>
+    <name>Misc::Utilities</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation>¿Buscar actualizaciones automaticamente?</translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation>¿Debería %1 buscar actualizaciones automáticamente? También puedes buscar actualizaciones manualmente desde el menu de &quot;Ayuda&quot;</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleManager</name>
+    <message>
+        <source>Initializing...</source>
+        <translation>Inicializando...</translation>
+    </message>
+    <message>
+        <source>Configuring updater...</source>
+        <translation>Configurando actualizador...</translation>
+    </message>
+    <message>
+        <source>Initializing modules...</source>
+        <translation>Inicializando módulos....</translation>
+    </message>
+    <message>
+        <source>Starting timers...</source>
+        <translation>Configurando temporizadores...</translation>
+    </message>
+    <message>
+        <source>Loading user interface...</source>
+        <translation>Cargando la interfaz de usuario...</translation>
     </message>
 </context>
 <context>
@@ -1694,6 +1728,10 @@
     <message>
         <source>Flow Control</source>
         <translation>Control de flujo</translation>
+    </message>
+    <message>
+        <source>Auto-reconnect</source>
+        <translation>Auto reconexión</translation>
     </message>
 </context>
 <context>
@@ -1854,19 +1892,19 @@
     </message>
     <message>
         <source>Auto (JSON from serial device)</source>
-        <translation>Automático (JSON desde puerto serial)</translation>
+        <translation type="vanished">Automático (JSON desde puerto serial)</translation>
     </message>
     <message>
         <source>Manual (use JSON map file)</source>
-        <translation>Manual (usar archivo de mapa JSON)</translation>
+        <translation type="vanished">Manual (usar archivo de mapa JSON)</translation>
     </message>
     <message>
         <source>Change map file (%1)</source>
-        <translation>Cambiar archivo (%1)</translation>
+        <translation type="vanished">Cambiar archivo (%1)</translation>
     </message>
     <message>
         <source>Select map file</source>
-        <translation>Seleccionar archivo de mapa</translation>
+        <translation type="vanished">Seleccionar archivo de mapa</translation>
     </message>
     <message>
         <source>COM Port</source>
@@ -1955,6 +1993,22 @@
     <message>
         <source>Setup</source>
         <translation>Configuración</translation>
+    </message>
+    <message>
+        <source>No parsing (device sends JSON data)</source>
+        <translation>El dispositivo envía los datos JSON</translation>
+    </message>
+    <message>
+        <source>Parse via JSON project file</source>
+        <translation>Utilizar archivo de proyecto JSON</translation>
+    </message>
+    <message>
+        <source>Change project file (%1)</source>
+        <translation>Cambiar el archivo del proyecto (%1)</translation>
+    </message>
+    <message>
+        <source>Select project file</source>
+        <translation>Seleccionar proyecto</translation>
     </message>
 </context>
 <context>

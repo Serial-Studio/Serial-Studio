@@ -89,8 +89,12 @@ Control {
             } ComboBox {
                 id: _langCombo
                 Layout.fillWidth: true
+                currentIndex: Cpp_Misc_Translator.language
                 model: Cpp_Misc_Translator.availableLanguages
-                onCurrentIndexChanged: Cpp_Misc_Translator.setLanguage(currentIndex)
+                onCurrentIndexChanged: {
+                    if (currentIndex !== Cpp_Misc_Translator.language)
+                        Cpp_Misc_Translator.setLanguage(currentIndex)
+                }
             }
 
             //
