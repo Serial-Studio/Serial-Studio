@@ -646,12 +646,11 @@ void Manager::setDevice(QIODevice *device)
 /**
  * Checks if the @c cursor has a checksum corresponding to the given @a frame.
  * If so, the function shall calculate the appropiate checksum to for the @a frame and
- * compare it with the sent checksum to ensure data integrity.
+ * compare it with the received checksum to verify the integrity of received data.
  *
  * @param frame data in which we shall perform integrity checks
  * @param cursor master buffer, should start with checksum type header
  * @param bytes pointer to the number of bytes that we need to chop from the master buffer
- * @return
  */
 Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
                                                  const QByteArray &cursor, int *bytes)
