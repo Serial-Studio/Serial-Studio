@@ -30,6 +30,7 @@ DEFINES += QTCSV_STATIC_LIB
 # Include *.pri files
 #-------------------------------------------------------------------------------
 
+include($$PWD/qwt/qwt.pri)
 include($$PWD/qtcsv/qtcsv.pri)
 include($$PWD/qmqtt/qmqtt.pri)
 include($$PWD/QSimpleUpdater/QSimpleUpdater.pri)

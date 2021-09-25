@@ -23,14 +23,11 @@
 #ifndef JSON_GENERATOR_H
 #define JSON_GENERATOR_H
 
-#include <QPair>
 #include <QFile>
-#include <QTimer>
 #include <QObject>
 #include <QJSValue>
 #include <QJSEngine>
 #include <QSettings>
-#include <QQmlEngine>
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QJsonObject>
