@@ -26,7 +26,6 @@
 #include <QApplication>
 #include <UI/Dashboard.h>
 
-using namespace UI;
 using namespace Widgets;
 
 /**
@@ -51,7 +50,7 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
             &WidgetLoader::updateWidgetSize);
 
     // Automatically update the widget's visibility
-    connect(Dashboard::getInstance(), &Dashboard::widgetVisibilityChanged, this,
+    connect(UI::Dashboard::getInstance(), &UI::Dashboard::widgetVisibilityChanged, this,
             &WidgetLoader::updateWidgetVisible);
 }
 
@@ -129,111 +128,38 @@ bool WidgetLoader::eventFilter(QObject *watched, QEvent *event)
     return QQuickPaintedItem::eventFilter(watched, event);
 }
 
+/**
+ * Returns the global index of the widget (index of the current widget in relation to all
+ * registered widgets).
+ */
 int WidgetLoader::widgetIndex() const
 {
     return m_index;
 }
 
+/**
+ * Returns the relative index of the widget (e.g. index of a bar widget in relation to the
+ * total number of bar widgets).
+ */
 int WidgetLoader::relativeIndex() const
 {
-    //
-    // Warning: relative widget index should be calculated using the same order as defined
-    // by the
-    //          UI::Dashboard::widgetTitles() function.
-    //
-
-    // Get pointer to dashboard module
-    auto dash = Dashboard::getInstance();
-
-    // Check if we should return group widget
-    int index = widgetIndex();
-    if (index < dash->groupCount())
-        return index;
-
-    // Check if we should return plot widget
-    index -= dash->groupCount();
-    if (index < dash->plotCount())
-        return index;
-
-    // Check if we should return bar widget
-    index -= dash->plotCount();
-    if (index < dash->barCount())
-        return index;
-
-    // Check if we should return gauge widget
-    index -= dash->barCount();
-    if (index < dash->gaugeCount())
-        return index;
-
-    // Check if we should return thermometer widget
-    index -= dash->gaugeCount();
-    if (index < dash->thermometerCount())
-        return index;
-
-    // Check if we should return compass widget
-    index -= dash->thermometerCount();
-    if (index < dash->compassCount())
-        return index;
-
-    // Check if we should return gyro widget
-    index -= dash->compassCount();
-    if (index < dash->gyroscopeCount())
-        return index;
-
-    // Check if we should return accelerometer widget
-    index -= dash->gyroscopeCount();
-    if (index < dash->accelerometerCount())
-        return index;
-
-    // Check if we should return map widget
-    index -= dash->accelerometerCount();
-    if (index < dash->mapCount())
-        return index;
-
-    // Return unknown widget
-    return -1;
+    return UI::Dashboard::getInstance()->relativeIndex(widgetIndex());
 }
 
+/**
+ * Returns @c true if the QML interface should display this widget.
+ */
 bool WidgetLoader::widgetVisible() const
 {
     return m_widgetVisible;
 }
 
+/**
+ * Returns the path of the SVG icon to use with this widget
+ */
 QString WidgetLoader::widgetIcon() const
 {
-    switch (widgetType())
-    {
-        case WidgetType::Group:
-            return "qrc:/icons/group.svg";
-            break;
-        case WidgetType::Plot:
-            return "qrc:/icons/plot.svg";
-            break;
-        case WidgetType::Bar:
-            return "qrc:/icons/bar.svg";
-            break;
-        case WidgetType::Gauge:
-            return "qrc:/icons/gauge.svg";
-            break;
-        case WidgetType::Thermometer:
-            return "qrc:/icons/thermometer.svg";
-            break;
-        case WidgetType::Compass:
-            return "qrc:/icons/compass.svg";
-            break;
-        case WidgetType::Gyroscope:
-            return "qrc:/icons/gyroscope.svg";
-            break;
-        case WidgetType::Accelerometer:
-            return "qrc:/icons/accelerometer.svg";
-            break;
-        case WidgetType::Map:
-            return "qrc:/icons/map.svg";
-            break;
-        default:
-            return "qrc:/icons/close.svg";
-            break;
-    }
+    return UI::Dashboard::getInstance()->widgetIcon(widgetIndex());
 }
 
 /**
@@ -244,68 +170,12 @@ QString WidgetLoader::widgetTitle() const
     return UI::Dashboard::getInstance()->widgetTitles().at(widgetIndex());
 }
 
-WidgetLoader::WidgetType WidgetLoader::widgetType() const
+/**
+ * Returns the type of the current widget (e.g. group, plot, bar, gauge, etc...)
+ */
+UI::Dashboard::WidgetType WidgetLoader::widgetType() const
 {
-    //
-    // Warning: relative widget index should be calculated using the same order as defined
-    // by the
-    //          UI::Dashboard::widgetTitles() function.
-    //
-
-    // Unitialized widget loader class
-    if (widgetIndex() < 0)
-        return WidgetType::Unknown;
-
-    // Get pointer to dashboard module
-    auto dash = UI::Dashboard::getInstance();
-
-    // Check if we should return group widget
-    int index = widgetIndex();
-    if (index < dash->groupCount())
-        return WidgetType::Group;
-
-    // Check if we should return plot widget
-    index -= dash->groupCount();
-    if (index < dash->plotCount())
-        return WidgetType::Plot;
-
-    // Check if we should return bar widget
-    index -= dash->plotCount();
-    if (index < dash->barCount())
-        return WidgetType::Bar;
-
-    // Check if we should return gauge widget
-    index -= dash->barCount();
-    if (index < dash->gaugeCount())
-        return WidgetType::Gauge;
-
-    // Check if we should return thermometer widget
-    index -= dash->gaugeCount();
-    if (index < dash->thermometerCount())
-        return WidgetType::Thermometer;
-
-    // Check if we should return compass widget
-    index -= dash->thermometerCount();
-    if (index < dash->compassCount())
-        return WidgetType::Compass;
-
-    // Check if we should return gyro widget
-    index -= dash->compassCount();
-    if (index < dash->gyroscopeCount())
-        return WidgetType::Gyroscope;
-
-    // Check if we should return accelerometer widget
-    index -= dash->gyroscopeCount();
-    if (index < dash->accelerometerCount())
-        return WidgetType::Accelerometer;
-
-    // Check if we should return map widget
-    index -= dash->accelerometerCount();
-    if (index < dash->mapCount())
-        return WidgetType::Map;
-
-    // Return unknown widget
-    return WidgetType::Unknown;
+    return UI::Dashboard::getInstance()->widgetType(widgetIndex());
 }
 
 /**
@@ -322,8 +192,7 @@ void WidgetLoader::displayWindow()
  */
 void WidgetLoader::setWidgetIndex(const int index)
 {
-    if (m_index != index && index < Dashboard::getInstance()->totalWidgetCount()
-        && index >= 0)
+    if (index < UI::Dashboard::getInstance()->totalWidgetCount() && index >= 0)
     {
         // Update widget index
         m_index = index;
@@ -338,31 +207,31 @@ void WidgetLoader::setWidgetIndex(const int index)
         // Construct new widget
         switch (widgetType())
         {
-            case WidgetType::Group:
+            case UI::Dashboard::WidgetType::Group:
                 m_widget = new QPushButton("Group");
                 break;
-            case WidgetType::Plot:
+            case UI::Dashboard::WidgetType::Plot:
                 m_widget = new QPushButton("Plot");
                 break;
-            case WidgetType::Bar:
+            case UI::Dashboard::WidgetType::Bar:
                 m_widget = new QPushButton("Bar");
                 break;
-            case WidgetType::Gauge:
+            case UI::Dashboard::WidgetType::Gauge:
                 m_widget = new QPushButton("Gauge");
                 break;
-            case WidgetType::Thermometer:
+            case UI::Dashboard::WidgetType::Thermometer:
                 m_widget = new QPushButton("Thermometer");
                 break;
-            case WidgetType::Compass:
+            case UI::Dashboard::WidgetType::Compass:
                 m_widget = new QPushButton("Compass");
                 break;
-            case WidgetType::Gyroscope:
+            case UI::Dashboard::WidgetType::Gyroscope:
                 m_widget = new QPushButton("Gyroscope");
                 break;
-            case WidgetType::Accelerometer:
+            case UI::Dashboard::WidgetType::Accelerometer:
                 m_widget = new QPushButton("Accelerometer");
                 break;
-            case WidgetType::Map:
+            case UI::Dashboard::WidgetType::Map:
                 m_widget = new QPushButton("Map");
                 break;
             default:
@@ -373,11 +242,9 @@ void WidgetLoader::setWidgetIndex(const int index)
         if (m_widget)
         {
             m_widget->installEventFilter(this);
+            emit widgetIndexChanged();
             updateWidgetVisible();
         }
-
-        // Update UI
-        emit widgetIndexChanged();
     }
 }
 
@@ -393,49 +260,18 @@ void WidgetLoader::updateWidgetSize()
     }
 }
 
+/**
+ * Updates the visibility status of the current widget (this function is called
+ * automatically by the UI::Dashboard class via signals/slots).
+ */
 void WidgetLoader::updateWidgetVisible()
 {
-    bool visible = false;
-    auto index = relativeIndex();
-    auto dash = Dashboard::getInstance();
-
-    switch (widgetType())
-    {
-        case WidgetType::Group:
-            visible = dash->groupVisible(index);
-            break;
-        case WidgetType::Plot:
-            visible = dash->plotVisible(index);
-            break;
-        case WidgetType::Bar:
-            visible = dash->barVisible(index);
-            break;
-        case WidgetType::Gauge:
-            visible = dash->gaugeVisible(index);
-            break;
-        case WidgetType::Thermometer:
-            visible = dash->thermometerVisible(index);
-            break;
-        case WidgetType::Compass:
-            visible = dash->compassVisible(index);
-            break;
-        case WidgetType::Gyroscope:
-            visible = dash->gyroscopeVisible(index);
-            break;
-        case WidgetType::Accelerometer:
-            visible = dash->accelerometerVisible(index);
-            break;
-        case WidgetType::Map:
-            visible = dash->mapVisible(index);
-            break;
-        default:
-            visible = false;
-            break;
-    }
+    bool visible = UI::Dashboard::getInstance()->widgetVisible(widgetIndex());
 
     if (widgetVisible() != visible)
     {
-        m_widgetVisible = visible;
+        m_widgetVisible = UI::Dashboard::getInstance()->widgetVisible(widgetIndex());
+        ;
         emit widgetVisibleChanged();
     }
 }

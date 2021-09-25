@@ -79,6 +79,21 @@ signals:
     void widgetVisibilityChanged();
 
 public:
+    enum class WidgetType
+    {
+        Group,
+        Plot,
+        Bar,
+        Gauge,
+        Thermometer,
+        Compass,
+        Gyroscope,
+        Accelerometer,
+        Map,
+        Unknown
+    };
+    Q_ENUM(WidgetType)
+
     static Dashboard *getInstance();
 
     QString title();
@@ -96,6 +111,22 @@ public:
     int thermometerCount();
     int accelerometerCount();
 
+    QStringList widgetTitles();
+    int relativeIndex(const int globalIndex);
+    bool widgetVisible(const int globalIndex);
+    QString widgetIcon(const int globalIndex);
+    WidgetType widgetType(const int globalIndex);
+
+    bool barVisible(const int index);
+    bool mapVisible(const int index);
+    bool plotVisible(const int index);
+    bool groupVisible(const int index);
+    bool gaugeVisible(const int index);
+    bool compassVisible(const int index);
+    bool gyroscopeVisible(const int index);
+    bool thermometerVisible(const int index);
+    bool accelerometerVisible(const int index);
+
     Q_INVOKABLE QStringList barTitles();
     Q_INVOKABLE QStringList mapTitles();
     Q_INVOKABLE QStringList plotTitles();
@@ -105,17 +136,6 @@ public:
     Q_INVOKABLE QStringList gyroscopeTitles();
     Q_INVOKABLE QStringList thermometerTitles();
     Q_INVOKABLE QStringList accelerometerTitles();
-    Q_INVOKABLE QStringList widgetTitles();
-
-    Q_INVOKABLE bool barVisible(const int index);
-    Q_INVOKABLE bool mapVisible(const int index);
-    Q_INVOKABLE bool plotVisible(const int index);
-    Q_INVOKABLE bool groupVisible(const int index);
-    Q_INVOKABLE bool gaugeVisible(const int index);
-    Q_INVOKABLE bool compassVisible(const int index);
-    Q_INVOKABLE bool gyroscopeVisible(const int index);
-    Q_INVOKABLE bool thermometerVisible(const int index);
-    Q_INVOKABLE bool accelerometerVisible(const int index);
 
     Q_INVOKABLE bool frameValid() const;
 

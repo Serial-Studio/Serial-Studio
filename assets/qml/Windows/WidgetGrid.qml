@@ -71,11 +71,11 @@ Widgets.Window {
             // Model + delegate
             model: Cpp_UI_Dashboard.totalWidgetCount
             delegate: Item {
+                id: cell
                 width: grid.cellWidth
                 height: grid.cellHeight
 
                 visible: opacity > 0
-                opacity: loader.widgetVisible ? 1 : 0
                 Behavior on opacity {NumberAnimation{}}
 
                 Widgets.Window {
@@ -97,6 +97,7 @@ Widgets.Window {
                         widgetIndex: index
                         anchors.fill: parent
                         anchors.margins: app.spacing
+                        onWidgetVisibleChanged: cell.opacity = widgetVisible ? 1 : 0
                     }
                 }
 

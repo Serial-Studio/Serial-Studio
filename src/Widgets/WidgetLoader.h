@@ -28,6 +28,8 @@
 #include <QPainter>
 #include <QQuickPaintedItem>
 
+#include <UI/Dashboard.h>
+
 namespace Widgets
 {
 class WidgetLoader : public QQuickPaintedItem
@@ -41,9 +43,6 @@ class WidgetLoader : public QQuickPaintedItem
                NOTIFY widgetIndexChanged)
     Q_PROPERTY(int relativeIndex
                READ relativeIndex
-               NOTIFY widgetIndexChanged)
-    Q_PROPERTY(WidgetType widgetType
-               READ widgetType
                NOTIFY widgetIndexChanged)
     Q_PROPERTY(QString widgetIcon
                READ widgetIcon
@@ -61,21 +60,6 @@ signals:
     void widgetVisibleChanged();
 
 public:
-    enum class WidgetType
-    {
-        Group,
-        Plot,
-        Bar,
-        Gauge,
-        Thermometer,
-        Compass,
-        Gyroscope,
-        Accelerometer,
-        Map,
-        Unknown
-    };
-    Q_ENUM(WidgetType)
-
     WidgetLoader(QQuickItem *parent = 0);
     ~WidgetLoader();
 
@@ -88,7 +72,7 @@ public:
     bool widgetVisible() const;
     QString widgetIcon() const;
     QString widgetTitle() const;
-    WidgetType widgetType() const;
+    UI::Dashboard::WidgetType widgetType() const;
 
 public slots:
     void displayWindow();

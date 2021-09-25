@@ -142,6 +142,298 @@ int Dashboard::accelerometerCount()
 }
 
 //--------------------------------------------------------------------------------------------------
+// Relative-to-global widget index utility functions
+//--------------------------------------------------------------------------------------------------
+
+QStringList Dashboard::widgetTitles()
+{
+    // Warning: maintain same order as the view option repeaters in ViewOptions.qml!
+
+    // clang-format off
+    return groupTitles() +
+            plotTitles() +
+            barTitles() +
+            gaugeTitles() +
+            thermometerTitles() +
+            compassTitles() +
+            gyroscopeTitles() +
+            accelerometerTitles() +
+            mapTitles();
+    // clang-format on
+}
+
+int Dashboard::relativeIndex(const int globalIndex)
+{
+    //
+    // Warning: relative widget index should be calculated using the same order as defined
+    // by the UI::Dashboard::widgetTitles() function.
+    //
+
+    // Check if we should return group widget
+    int index = globalIndex;
+    if (index < groupCount())
+        return index;
+
+    // Check if we should return plot widget
+    index -= groupCount();
+    if (index < plotCount())
+        return index;
+
+    // Check if we should return bar widget
+    index -= plotCount();
+    if (index < barCount())
+        return index;
+
+    // Check if we should return gauge widget
+    index -= barCount();
+    if (index < gaugeCount())
+        return index;
+
+    // Check if we should return thermometer widget
+    index -= gaugeCount();
+    if (index < thermometerCount())
+        return index;
+
+    // Check if we should return compass widget
+    index -= thermometerCount();
+    if (index < compassCount())
+        return index;
+
+    // Check if we should return gyro widget
+    index -= compassCount();
+    if (index < gyroscopeCount())
+        return index;
+
+    // Check if we should return accelerometer widget
+    index -= gyroscopeCount();
+    if (index < accelerometerCount())
+        return index;
+
+    // Check if we should return map widget
+    index -= accelerometerCount();
+    if (index < mapCount())
+        return index;
+
+    // Return unknown widget
+    return -1;
+}
+
+bool Dashboard::widgetVisible(const int globalIndex)
+{
+    bool visible = false;
+    auto index = relativeIndex(globalIndex);
+
+    switch (widgetType(globalIndex))
+    {
+        case WidgetType::Group:
+            visible = groupVisible(index);
+            break;
+        case WidgetType::Plot:
+            visible = plotVisible(index);
+            break;
+        case WidgetType::Bar:
+            visible = barVisible(index);
+            break;
+        case WidgetType::Gauge:
+            visible = gaugeVisible(index);
+            break;
+        case WidgetType::Thermometer:
+            visible = thermometerVisible(index);
+            break;
+        case WidgetType::Compass:
+            visible = compassVisible(index);
+            break;
+        case WidgetType::Gyroscope:
+            visible = gyroscopeVisible(index);
+            break;
+        case WidgetType::Accelerometer:
+            visible = accelerometerVisible(index);
+            break;
+        case WidgetType::Map:
+            visible = mapVisible(index);
+            break;
+        default:
+            visible = false;
+            break;
+    }
+
+    return visible;
+}
+
+QString Dashboard::widgetIcon(const int globalIndex)
+{
+    switch (widgetType(globalIndex))
+    {
+        case WidgetType::Group:
+            return "qrc:/icons/group.svg";
+            break;
+        case WidgetType::Plot:
+            return "qrc:/icons/plot.svg";
+            break;
+        case WidgetType::Bar:
+            return "qrc:/icons/bar.svg";
+            break;
+        case WidgetType::Gauge:
+            return "qrc:/icons/gauge.svg";
+            break;
+        case WidgetType::Thermometer:
+            return "qrc:/icons/thermometer.svg";
+            break;
+        case WidgetType::Compass:
+            return "qrc:/icons/compass.svg";
+            break;
+        case WidgetType::Gyroscope:
+            return "qrc:/icons/gyroscope.svg";
+            break;
+        case WidgetType::Accelerometer:
+            return "qrc:/icons/accelerometer.svg";
+            break;
+        case WidgetType::Map:
+            return "qrc:/icons/map.svg";
+            break;
+        default:
+            return "qrc:/icons/close.svg";
+            break;
+    }
+}
+
+Dashboard::WidgetType Dashboard::widgetType(const int globalIndex)
+{
+    //
+    // Warning: relative widget index should be calculated using the same order as defined
+    // by the UI::Dashboard::widgetTitles() function.
+    //
+
+    // Unitialized widget loader class
+    if (globalIndex < 0)
+        return WidgetType::Unknown;
+
+    // Check if we should return group widget
+    int index = globalIndex;
+    if (index < groupCount())
+        return WidgetType::Group;
+
+    // Check if we should return plot widget
+    index -= groupCount();
+    if (index < plotCount())
+        return WidgetType::Plot;
+
+    // Check if we should return bar widget
+    index -= plotCount();
+    if (index < barCount())
+        return WidgetType::Bar;
+
+    // Check if we should return gauge widget
+    index -= barCount();
+    if (index < gaugeCount())
+        return WidgetType::Gauge;
+
+    // Check if we should return thermometer widget
+    index -= gaugeCount();
+    if (index < thermometerCount())
+        return WidgetType::Thermometer;
+
+    // Check if we should return compass widget
+    index -= thermometerCount();
+    if (index < compassCount())
+        return WidgetType::Compass;
+
+    // Check if we should return gyro widget
+    index -= compassCount();
+    if (index < gyroscopeCount())
+        return WidgetType::Gyroscope;
+
+    // Check if we should return accelerometer widget
+    index -= gyroscopeCount();
+    if (index < accelerometerCount())
+        return WidgetType::Accelerometer;
+
+    // Check if we should return map widget
+    index -= accelerometerCount();
+    if (index < mapCount())
+        return WidgetType::Map;
+
+    // Return unknown widget
+    return WidgetType::Unknown;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Widget visibility access functions
+//--------------------------------------------------------------------------------------------------
+
+bool Dashboard::barVisible(const int index)
+{
+    if (index < m_barVisibility.count())
+        return m_barVisibility.at(index);
+
+    return false;
+}
+
+bool Dashboard::mapVisible(const int index)
+{
+    if (index < m_mapVisibility.count())
+        return m_mapVisibility.at(index);
+
+    return false;
+}
+
+bool Dashboard::plotVisible(const int index)
+{
+    if (index < m_plotVisibility.count())
+        return m_plotVisibility.at(index);
+
+    return false;
+}
+
+bool Dashboard::groupVisible(const int index)
+{
+    if (index < m_groupVisibility.count())
+        return m_groupVisibility.at(index);
+
+    return false;
+}
+
+bool Dashboard::gaugeVisible(const int index)
+{
+    if (index < m_gaugeVisibility.count())
+        return m_gaugeVisibility.at(index);
+
+    return false;
+}
+
+bool Dashboard::compassVisible(const int index)
+{
+    if (index < m_compassVisibility.count())
+        return m_compassVisibility.at(index);
+
+    return false;
+}
+
+bool Dashboard::gyroscopeVisible(const int index)
+{
+    if (index < m_gyroscopeVisibility.count())
+        return m_gyroscopeVisibility.at(index);
+
+    return false;
+}
+
+bool Dashboard::thermometerVisible(const int index)
+{
+    if (index < m_thermometerVisibility.count())
+        return m_thermometerVisibility.at(index);
+
+    return false;
+}
+
+bool Dashboard::accelerometerVisible(const int index)
+{
+    if (index < m_accelerometerVisibility.count())
+        return m_accelerometerVisibility.at(index);
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Widget title functions
 //--------------------------------------------------------------------------------------------------
 
@@ -224,99 +516,6 @@ QStringList Dashboard::accelerometerTitles()
         list.append(group->title());
 
     return list;
-}
-
-QStringList Dashboard::widgetTitles()
-{
-    // Warning: maintain same order as the view option repeaters in ViewOptions.qml!
-
-    // clang-format off
-    return groupTitles() +
-            plotTitles() +
-            barTitles() +
-            gaugeTitles() +
-            thermometerTitles() +
-            compassTitles() +
-            gyroscopeTitles() +
-            accelerometerTitles() +
-            mapTitles();
-    // clang-format on
-}
-
-//--------------------------------------------------------------------------------------------------
-// Widget visibility access functions
-//--------------------------------------------------------------------------------------------------
-
-bool Dashboard::barVisible(const int index)
-{
-    if (index < m_barVisibility.count())
-        return m_barVisibility.at(index);
-
-    return false;
-}
-
-bool Dashboard::mapVisible(const int index)
-{
-    if (index < m_mapVisibility.count())
-        return m_mapVisibility.at(index);
-
-    return false;
-}
-
-bool Dashboard::plotVisible(const int index)
-{
-    if (index < m_plotVisibility.count())
-        return m_plotVisibility.at(index);
-
-    return false;
-}
-
-bool Dashboard::groupVisible(const int index)
-{
-    if (index < m_groupVisibility.count())
-        return m_groupVisibility.at(index);
-
-    return false;
-}
-
-bool Dashboard::gaugeVisible(const int index)
-{
-    if (index < m_gaugeVisibility.count())
-        return m_gaugeVisibility.at(index);
-
-    return false;
-}
-
-bool Dashboard::compassVisible(const int index)
-{
-    if (index < m_compassVisibility.count())
-        return m_compassVisibility.at(index);
-
-    return false;
-}
-
-bool Dashboard::gyroscopeVisible(const int index)
-{
-    if (index < m_gyroscopeVisibility.count())
-        return m_gyroscopeVisibility.at(index);
-
-    return false;
-}
-
-bool Dashboard::thermometerVisible(const int index)
-{
-    if (index < m_thermometerVisibility.count())
-        return m_thermometerVisibility.at(index);
-
-    return false;
-}
-
-bool Dashboard::accelerometerVisible(const int index)
-{
-    if (index < m_accelerometerVisibility.count())
-        return m_accelerometerVisibility.at(index);
-
-    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
