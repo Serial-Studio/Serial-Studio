@@ -35,12 +35,12 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_index(-1)
     , m_widget(nullptr)
-    , m_widgetVisible(true)
+    , m_widgetVisible(false)
 {
     // Set item flags
     setFlag(ItemHasContents, true);
-    setFlag(ItemAcceptsInputMethod, true);
     setFlag(ItemIsFocusScope, true);
+    setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
 
     // Resize widget to fit QML item size
@@ -270,8 +270,7 @@ void WidgetLoader::updateWidgetVisible()
 
     if (widgetVisible() != visible)
     {
-        m_widgetVisible = UI::Dashboard::getInstance()->widgetVisible(widgetIndex());
-        ;
+        m_widgetVisible = visible;
         emit widgetVisibleChanged();
     }
 }

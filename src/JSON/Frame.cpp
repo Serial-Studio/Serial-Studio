@@ -67,13 +67,13 @@ QString Frame::title() const
  */
 int Frame::groupCount() const
 {
-    return groups().count();
+    return m_groups.count();
 }
 
 /**
  * Returns a vector of pointers to the @c Group objects associated to this frame.
  */
-QVector<Group *> Frame::groups() const
+QVector<Group *> &Frame::groups()
 {
     return m_groups;
 }

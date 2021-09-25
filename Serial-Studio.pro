@@ -29,8 +29,6 @@ MOC_DIR = moc
 RCC_DIR = qrc
 OBJECTS_DIR = obj
 
-CONFIG += c++11
-
 isEmpty(PREFIX) {
     PREFIX = /usr
 }
@@ -51,7 +49,6 @@ QT += sql
 QT += svg
 QT += core
 QT += quick
-QT += charts
 QT += widgets
 QT += serialport
 QT += printsupport
@@ -70,6 +67,20 @@ QT += quickcontrols2
     QMAKE_CXXFLAGS_RELEASE -= /O
     QMAKE_CXXFLAGS_RELEASE *= /O2
 }
+
+CONFIG += c++11
+CONFIG += silent
+CONFIG += strict_c++
+CONFIG -= depend_includepath
+
+sanitize {
+    CONFIG += sanitizer
+    CONFIG += sanitize_address
+    CONFIG *= sanitize_undefined
+}
+
+QMAKE_CXXFLAGS *= -fno-math-errno
+QMAKE_CXXFLAGS *= -funsafe-math-optimizations
 
 #-----------------------------------------------------------------------------------------
 # Libraries

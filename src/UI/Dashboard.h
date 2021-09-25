@@ -157,9 +157,16 @@ private slots:
 
 private:
     Dashboard();
+
     QVector<JSON::Dataset *> getPlotWidgets();
     QVector<JSON::Group *> getWidgetGroups(const QString &handle);
     QVector<JSON::Dataset *> getWidgetDatasets(const QString &handle);
+
+    QStringList getGroupTitles(QVector<JSON::Group *> &vector);
+    QStringList getDatasetTitles(QVector<JSON::Dataset *> &vector);
+
+    bool getVisibility(QVector<bool> &vector, const int index);
+    void setVisibility(QVector<bool> &vector, const int index, const bool visible);
 
 private:
     QVector<bool> m_barVisibility;

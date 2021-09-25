@@ -363,74 +363,47 @@ Dashboard::WidgetType Dashboard::widgetType(const int globalIndex)
 
 bool Dashboard::barVisible(const int index)
 {
-    if (index < m_barVisibility.count())
-        return m_barVisibility.at(index);
-
-    return false;
+    return getVisibility(m_barVisibility, index);
 }
 
 bool Dashboard::mapVisible(const int index)
 {
-    if (index < m_mapVisibility.count())
-        return m_mapVisibility.at(index);
-
-    return false;
+    return getVisibility(m_mapVisibility, index);
 }
 
 bool Dashboard::plotVisible(const int index)
 {
-    if (index < m_plotVisibility.count())
-        return m_plotVisibility.at(index);
-
-    return false;
+    return getVisibility(m_plotVisibility, index);
 }
 
 bool Dashboard::groupVisible(const int index)
 {
-    if (index < m_groupVisibility.count())
-        return m_groupVisibility.at(index);
-
-    return false;
+    return getVisibility(m_groupVisibility, index);
 }
 
 bool Dashboard::gaugeVisible(const int index)
 {
-    if (index < m_gaugeVisibility.count())
-        return m_gaugeVisibility.at(index);
-
-    return false;
+    return getVisibility(m_gaugeVisibility, index);
 }
 
 bool Dashboard::compassVisible(const int index)
 {
-    if (index < m_compassVisibility.count())
-        return m_compassVisibility.at(index);
-
-    return false;
+    return getVisibility(m_compassVisibility, index);
 }
 
 bool Dashboard::gyroscopeVisible(const int index)
 {
-    if (index < m_gyroscopeVisibility.count())
-        return m_gyroscopeVisibility.at(index);
-
-    return false;
+    return getVisibility(m_gyroscopeVisibility, index);
 }
 
 bool Dashboard::thermometerVisible(const int index)
 {
-    if (index < m_thermometerVisibility.count())
-        return m_thermometerVisibility.at(index);
-
-    return false;
+    return getVisibility(m_thermometerVisibility, index);
 }
 
 bool Dashboard::accelerometerVisible(const int index)
 {
-    if (index < m_accelerometerVisibility.count())
-        return m_accelerometerVisibility.at(index);
-
-    return false;
+    return getVisibility(m_accelerometerVisibility, index);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -439,83 +412,47 @@ bool Dashboard::accelerometerVisible(const int index)
 
 QStringList Dashboard::barTitles()
 {
-    QStringList list;
-    foreach (auto set, m_barWidgets)
-        list.append(set->title());
-
-    return list;
+    return getDatasetTitles(m_barWidgets);
 }
 
 QStringList Dashboard::mapTitles()
 {
-    QStringList list;
-    foreach (auto group, m_mapWidgets)
-        list.append(group->title());
-
-    return list;
+    return getGroupTitles(m_mapWidgets);
 }
 
 QStringList Dashboard::plotTitles()
 {
-    QStringList list;
-    foreach (auto set, m_plotWidgets)
-        list.append(set->title());
-
-    return list;
+    return getDatasetTitles(m_plotWidgets);
 }
 
 QStringList Dashboard::groupTitles()
 {
-    QStringList list;
-    foreach (auto group, m_latestFrame.groups())
-        list.append(group->title());
-
-    return list;
+    return getGroupTitles(m_latestFrame.groups());
 }
 
 QStringList Dashboard::gaugeTitles()
 {
-    QStringList list;
-    foreach (auto set, m_gaugeWidgets)
-        list.append(set->title());
-
-    return list;
+    return getDatasetTitles(m_gaugeWidgets);
 }
 
 QStringList Dashboard::compassTitles()
 {
-    QStringList list;
-    foreach (auto set, m_compassWidgets)
-        list.append(set->title());
-
-    return list;
+    return getDatasetTitles(m_compassWidgets);
 }
 
 QStringList Dashboard::gyroscopeTitles()
 {
-    QStringList list;
-    foreach (auto group, m_gyroscopeWidgets)
-        list.append(group->title());
-
-    return list;
+    return getGroupTitles(m_gyroscopeWidgets);
 }
 
 QStringList Dashboard::thermometerTitles()
 {
-    QStringList list;
-    foreach (auto set, m_thermometerWidgets)
-        list.append(set->title());
-
-    return list;
+    return getDatasetTitles(m_thermometerWidgets);
 }
 
 QStringList Dashboard::accelerometerTitles()
 {
-    QStringList list;
-    foreach (auto group, m_accelerometerWidgets)
-        list.append(group->title());
-
-    return list;
+    return getGroupTitles(m_accelerometerWidgets);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -524,83 +461,47 @@ QStringList Dashboard::accelerometerTitles()
 
 void Dashboard::setBarVisible(const int index, const bool visible)
 {
-    if (index < m_barVisibility.count())
-    {
-        m_barVisibility.replace(index, visible);
-        emit widgetVisibilityChanged();
-    }
+    setVisibility(m_barVisibility, index, visible);
 }
 
 void Dashboard::setMapVisible(const int index, const bool visible)
 {
-    if (index < m_mapVisibility.count())
-    {
-        m_mapVisibility.replace(index, visible);
-        emit widgetVisibilityChanged();
-    }
+    setVisibility(m_mapVisibility, index, visible);
 }
 
 void Dashboard::setPlotVisible(const int index, const bool visible)
 {
-    if (index < m_plotVisibility.count())
-    {
-        m_plotVisibility.replace(index, visible);
-        emit widgetVisibilityChanged();
-    }
+    setVisibility(m_plotVisibility, index, visible);
 }
 
 void Dashboard::setGroupVisible(const int index, const bool visible)
 {
-    if (index < m_groupVisibility.count())
-    {
-        m_groupVisibility.replace(index, visible);
-        emit widgetVisibilityChanged();
-    }
+    setVisibility(m_groupVisibility, index, visible);
 }
 
 void Dashboard::setGaugeVisible(const int index, const bool visible)
 {
-    if (index < m_gaugeVisibility.count())
-    {
-        m_gaugeVisibility.replace(index, visible);
-        emit widgetVisibilityChanged();
-    }
+    setVisibility(m_gaugeVisibility, index, visible);
 }
 
 void Dashboard::setCompassVisible(const int index, const bool visible)
 {
-    if (index < m_compassVisibility.count())
-    {
-        m_compassVisibility.replace(index, visible);
-        emit widgetVisibilityChanged();
-    }
+    setVisibility(m_compassVisibility, index, visible);
 }
 
 void Dashboard::setGyroscopeVisible(const int index, const bool visible)
 {
-    if (index < m_gyroscopeVisibility.count())
-    {
-        m_gyroscopeVisibility.replace(index, visible);
-        emit widgetVisibilityChanged();
-    }
+    setVisibility(m_gyroscopeVisibility, index, visible);
 }
 
 void Dashboard::setThermometerVisible(const int index, const bool visible)
 {
-    if (index < m_thermometerVisibility.count())
-    {
-        m_thermometerVisibility.replace(index, visible);
-        emit widgetVisibilityChanged();
-    }
+    setVisibility(m_thermometerVisibility, index, visible);
 }
 
 void Dashboard::setAccelerometerVisible(const int index, const bool visible)
 {
-    if (index < m_accelerometerVisibility.count())
-    {
-        m_accelerometerVisibility.replace(index, visible);
-        emit widgetVisibilityChanged();
-    }
+    setVisibility(m_accelerometerVisibility, index, visible);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -721,21 +622,21 @@ void Dashboard::updateData()
         int i;
         for (i = 0; i < barCount(); ++i)
             m_barVisibility.append(true);
-        for (i = 0; i < barCount(); ++i)
+        for (i = 0; i < mapCount(); ++i)
             m_mapVisibility.append(true);
-        for (i = 0; i < barCount(); ++i)
+        for (i = 0; i < plotCount(); ++i)
             m_plotVisibility.append(true);
-        for (i = 0; i < barCount(); ++i)
+        for (i = 0; i < gaugeCount(); ++i)
             m_gaugeVisibility.append(true);
-        for (i = 0; i < barCount(); ++i)
+        for (i = 0; i < groupCount(); ++i)
             m_groupVisibility.append(true);
-        for (i = 0; i < barCount(); ++i)
+        for (i = 0; i < compassCount(); ++i)
             m_compassVisibility.append(true);
-        for (i = 0; i < barCount(); ++i)
+        for (i = 0; i < gyroscopeCount(); ++i)
             m_gyroscopeVisibility.append(true);
-        for (i = 0; i < barCount(); ++i)
+        for (i = 0; i < thermometerCount(); ++i)
             m_thermometerVisibility.append(true);
-        for (i = 0; i < barCount(); ++i)
+        for (i = 0; i < accelerometerCount(); ++i)
             m_accelerometerVisibility.append(true);
 
         emit widgetCountChanged();
@@ -803,4 +704,39 @@ QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle)
     }
 
     return widgets;
+}
+
+QStringList Dashboard::getDatasetTitles(QVector<JSON::Dataset *> &vector)
+{
+    QStringList list;
+    foreach (auto set, vector)
+        list.append(set->title());
+
+    return list;
+}
+
+QStringList Dashboard::getGroupTitles(QVector<JSON::Group *> &vector)
+{
+    QStringList list;
+    foreach (auto group, vector)
+        list.append(group->title());
+
+    return list;
+}
+
+bool Dashboard::getVisibility(QVector<bool> &vector, const int index)
+{
+    if (index < vector.count())
+        return vector.at(index);
+
+    return false;
+}
+
+void Dashboard::setVisibility(QVector<bool> &vector, const int index, const bool visible)
+{
+    if (index < vector.count())
+    {
+        vector.replace(index, visible);
+        emit widgetVisibilityChanged();
+    }
 }

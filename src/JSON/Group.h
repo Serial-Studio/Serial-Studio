@@ -58,7 +58,7 @@ public:
     QString title() const;
     QString widget() const;
     int datasetCount() const;
-    QVector<Dataset *> datasets() const;
+    QVector<Dataset *> &datasets();
     bool read(const QJsonObject &object);
 
     Q_INVOKABLE Dataset *getDataset(const int index);

@@ -64,13 +64,13 @@ QString Group::widget() const
  */
 int Group::datasetCount() const
 {
-    return datasets().count();
+    return m_datasets.count();
 }
 
 /**
  * @return A list with all the dataset objects contained in this group
  */
-QVector<Dataset *> Group::datasets() const
+QVector<Dataset *> &Group::datasets()
 {
     return m_datasets;
 }

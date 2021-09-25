@@ -63,6 +63,7 @@ Widgets.Window {
             contentWidth: -1
             Layout.fillWidth: true
             Layout.fillHeight: true
+            ScrollBar.vertical: ScrollBar {}
 
             // Calculate cell size so that cells fill the grid space and heigth < width
             cellHeight: cellWidth * (2/3)
