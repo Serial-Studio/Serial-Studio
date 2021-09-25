@@ -38,27 +38,23 @@ MacExtras::MacExtras()
     updateButtonText();
 
     // Configure action icons
-    m_setupAction.setIcon(QIcon("://mac-icons/setup.png"));
-    m_consoleAction.setIcon(QIcon("://mac-icons/console.png"));
-    m_widgetsAction.setIcon(QIcon("://mac-icons/widgets.png"));
-    m_dashboardAction.setIcon(QIcon("://mac-icons/dashboard.png"));
+    m_setupAction.setIcon(QIcon("://touchbar/setup.png"));
+    m_consoleAction.setIcon(QIcon("://touchbar/console.png"));
+    m_dashboardAction.setIcon(QIcon("://touchbar/dashboard.png"));
 
     // Setup checkable items
     m_setupAction.setCheckable(true);
     m_consoleAction.setCheckable(true);
-    m_widgetsAction.setCheckable(true);
     m_dashboardAction.setCheckable(true);
 
     // Set initial button status(es)
     m_setupAction.setChecked(true);
     m_consoleAction.setChecked(true);
-    m_widgetsAction.setEnabled(false);
     m_dashboardAction.setEnabled(false);
 
     // Configure signals
     connect(&m_setupAction, SIGNAL(triggered()), this, SIGNAL(setupClicked()));
     connect(&m_consoleAction, SIGNAL(triggered()), this, SIGNAL(consoleClicked()));
-    connect(&m_widgetsAction, SIGNAL(triggered()), this, SIGNAL(widgetsClicked()));
     connect(&m_dashboardAction, SIGNAL(triggered()), this, SIGNAL(dashboardClicked()));
 
     // Create touchbar
@@ -66,7 +62,6 @@ MacExtras::MacExtras()
     bar->addAction(&m_setupAction);
     bar->addAction(&m_consoleAction);
     bar->addAction(&m_dashboardAction);
-    bar->addAction(&m_widgetsAction);
 
     // Re-translate buttons when language is changed
     connect(Translator::getInstance(), SIGNAL(languageChanged()), this,
@@ -92,16 +87,6 @@ void MacExtras::setConsoleChecked(const bool checked)
     m_consoleAction.setChecked(checked);
 }
 
-void MacExtras::setWidgetsChecked(const bool checked)
-{
-    m_widgetsAction.setChecked(checked);
-}
-
-void MacExtras::setWidgetsEnabled(const bool enabled)
-{
-    m_widgetsAction.setEnabled(enabled);
-}
-
 void MacExtras::setDashboardChecked(const bool checked)
 {
     m_dashboardAction.setChecked(checked);
@@ -116,6 +101,5 @@ void MacExtras::updateButtonText()
 {
     m_setupAction.setText(tr("Setup"));
     m_consoleAction.setText(tr("Console"));
-    m_widgetsAction.setText(tr("Widgets"));
     m_dashboardAction.setText(tr("Dashboard"));
 }

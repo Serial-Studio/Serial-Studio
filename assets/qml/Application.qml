@@ -88,12 +88,10 @@ ApplicationWindow {
     //
     // Application UI status variables (used for the menubar)
     //
-    property alias vt100emulation: terminal.vt100emulation
     readonly property bool setupVisible: setup.visible
-    readonly property bool dashboardVisible: data.visible
-    readonly property bool widgetsVisible: widgets.visible
+    property alias vt100emulation: terminal.vt100emulation
     readonly property bool consoleVisible: terminal.visible
-    readonly property bool widgetsAvailable: Cpp_UI_QmlDataProvider.widgetCount > 0
+    readonly property bool dashboardVisible: dashboard.visible
     readonly property bool dashboardAvailable: Cpp_UI_QmlDataProvider.groupCount > 0
 
     //
@@ -132,14 +130,7 @@ ApplicationWindow {
     // Display the dashboard
     //
     function showDashboard() {
-        toolbar.dataClicked()
-    }
-
-    //
-    // Display the widgets
-    //
-    function showWidgets() {
-        toolbar.widgetsClicked()
+        toolbar.dashboardClicked()
     }
 
     //
@@ -237,8 +228,7 @@ ApplicationWindow {
         csvPlayer.hide()
 
         // Hide everything except the terminal
-        data.opacity = 0
-        widgets.opacity = 0
+        dashboard.opacity = 0
         terminal.opacity = 1
 
         // Load welcome guide
@@ -331,13 +321,16 @@ ApplicationWindow {
         enabled: !app.firstValidFrame
 
         function onUpdated()  {
-            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) && Cpp_UI_QmlDataProvider.frameValid()) {
-                app.firstValidFrame = true
+            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) &&
+                    Cpp_UI_QmlDataProvider.frameValid()) {
                 setup.hide()
                 app.showDashboard()
-            } else {
-                toolbar.consoleClicked()
+                app.firstValidFrame = true
+            }
+
+            else {
                 setup.show()
+                app.showConsole()
                 app.firstValidFrame = false
             }
         }
@@ -377,6 +370,9 @@ ApplicationWindow {
         spacing: 0
         anchors.fill: parent
 
+        //
+        // Application toolbar
+        //
         Toolbar {
             z: 1
             id: toolbar
@@ -384,20 +380,16 @@ ApplicationWindow {
             Layout.minimumHeight: 48
             Layout.maximumHeight: 48
             setupChecked: app.setupVisible
-            dataChecked: app.dashboardVisible
-            widgetsChecked: app.widgetsVisible
             consoleChecked: app.consoleVisible
+            dashboardChecked: app.dashboardVisible
             onJsonEditorClicked: jsonEditor.show()
             onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
-            onDataClicked: {
+            onDashboardClicked: {
                 if (app.dashboardAvailable) {
-                    data.opacity     = 1
-                    terminal.opacity = 0
-                    widgets.opacity  = 0
-                    dataChecked      = true
-                    consoleChecked   = false
-                    widgetsChecked   = false
+                    consoleChecked = 0
+                    dashboardChecked = 1
+                    swipe.currentIndex = 1
                 }
 
                 else
@@ -405,98 +397,62 @@ ApplicationWindow {
             }
 
             onConsoleClicked: {
-                data.opacity     = 0
-                terminal.opacity = 1
-                widgets.opacity  = 0
-                consoleChecked   = true
-                dataChecked      = false
-                widgetsChecked   = false
-            }
-
-            onWidgetsClicked: {
-                if (app.widgetsAvailable) {
-                    data.opacity     = 0
-                    terminal.opacity = 0
-                    widgets.opacity  = 1
-                    dataChecked      = false
-                    widgetsChecked   = true
-                    consoleChecked   = false
-                }
-
-                else
-                    app.showConsole()
+                consoleChecked = 1
+                dashboardChecked = 0
+                swipe.currentIndex = 0
             }
         }
 
+        //
+        // Console, dashboard & setup panel
+        //
         RowLayout {
             spacing: 0
             clip: true
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            Item {
+            SwipeView {
+                id: swipe
+                interactive: false
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                Console {
-                    id: terminal
-                    anchors.fill: parent
+                onCurrentIndexChanged: {
+                    if (currentIndex == 0) {
+                        terminal.opacity = 1
+                        dashboard.opacity = 0
+                    }
 
-                    // Animate on show
-                    enabled: opacity > 0
-                    visible: opacity > 0
-                    Behavior on opacity {NumberAnimation{}}
-
-                    // Show translated welcome text on lang. change
-                    Connections {
-                        target: Cpp_Misc_Translator
-                        function onLanguageChanged() {
-                            terminal.showWelcomeGuide()
-                        }
+                    else {
+                        terminal.opacity = 0
+                        dashboard.opacity = 1
                     }
                 }
 
-                DataGrid {
-                    id: data
-                    anchors.fill: parent
-
-                    // Animate on show
-                    visible: opacity > 0
-                    Behavior on opacity {NumberAnimation{}}
-                }
-
-                Widgets {
-                    id: widgets
-                    anchors.fill: parent
-
-                    // Animate on show
+                Console {
+                    id: terminal
                     enabled: opacity > 0
                     visible: opacity > 0
-                    Behavior on opacity {NumberAnimation{}}
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+
+                Dashboard {
+                    id: dashboard
+                    enabled: opacity > 0
+                    visible: opacity > 0
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
             }
 
             Setup {
                 id: setup
-                property int displayedWidth: 340 + app.spacing * 1.5
-
-                function show() {
-                    opacity = 1
-                    displayedWidth = 340 + app.spacing * 1.5
-                }
-
-                function hide() {
-                    opacity = 0
-                    displayedWidth = 0
-                }
-
-                visible: opacity > 0
                 Layout.fillHeight: true
+                Layout.rightMargin: setupMargin
                 Layout.minimumWidth: displayedWidth
                 Layout.maximumWidth: displayedWidth
-
-                Behavior on opacity {NumberAnimation{}}
-                Behavior on displayedWidth {NumberAnimation{}}
             }
         }
     }
@@ -530,117 +486,10 @@ ApplicationWindow {
     }
 
     //
-    // Intuitive UI stuff for drag and drop
+    // JSON project drop area
     //
-    Rectangle {
-        id: dropRectangle
-
-        function hide() {
-            rectTimer.start()
-        }
-
-        opacity: 0
-        border.width: 1
-        color: palette.highlight
-        anchors.centerIn: parent
-        border.color: Cpp_ThemeManager.text
-        width: dropLayout.implicitWidth + 6 * app.spacing
-        height: dropLayout.implicitHeight + 6 * app.spacing
-
-
-        ColumnLayout {
-            id: dropLayout
-            spacing: app.spacing * 2
-            anchors.centerIn: parent
-
-            ToolButton {
-                flat: true
-                enabled: false
-                icon.width: 128
-                icon.height: 128
-                icon.color: Cpp_ThemeManager.text
-                Layout.alignment: Qt.AlignHCenter
-                icon.source: "qrc:/icons/drag-drop.svg"
-            }
-
-            Label {
-                font.bold: true
-                font.pixelSize: 24
-                color: Cpp_ThemeManager.text
-                Layout.alignment: Qt.AlignHCenter
-                text: qsTr("Drop JSON and CSV files here")
-            }
-        }
-
-        Timer {
-            id: rectTimer
-            interval: 200
-            onTriggered: dropRectangle.opacity = 0
-        }
-
-        Behavior on opacity {NumberAnimation{}}
-    }
-
-    //
-    // File drop area
-    //
-    DropArea {
-        id: dropArea
+    JSONDropArea {
         anchors.fill: parent
         enabled: terminal.visible
-
-        //
-        // Show rectangle and set color based on file extension on drag enter
-        //
-        onEntered: {
-            // Get file name & set color of rectangle accordingly
-            var path = drag.urls[0].toString()
-            if (path.endsWith(".json") || path.endsWith(".csv")) {
-                drag.accept(Qt.LinkAction)
-                dropRectangle.color = Qt.darker(palette.highlight, 1.4)
-            }
-
-            // Invalid file name, show red rectangle
-            else
-                dropRectangle.color = Cpp_ThemeManager.alternativeHighlight
-
-            // Show drag&drop rectangle
-            dropRectangle.opacity = 0.8
-        }
-
-        //
-        // Open *.json & *.csv files on drag drop
-        //
-        onDropped: {
-            // Hide rectangle
-            dropRectangle.hide()
-            
-            // Get dropped file URL and remove prefixed "file://"
-            var path = drop.urls[0].toString()
-            if (Qt.platform.os != "windows")
-                path = path.replace(/^(file:\/{2})/,"");
-            else
-                path = path.replace(/^(file:\/{3})/,"");
-
-            // Unescape html codes like '%23' for '#'
-            var cleanPath = decodeURIComponent(path);
-
-            // Process JSON files
-            if (cleanPath.endsWith(".json")) {
-                Cpp_JSON_Generator.setOperationMode(0)
-                Cpp_JSON_Generator.loadJsonMap(cleanPath)
-            }
-
-            // Process CSV files
-            else if (cleanPath.endsWith(".csv"))
-                Cpp_CSV_Player.openFile(cleanPath)
-        }
-
-        //
-        // Hide drag & drop rectangle on drag exit
-        //
-        onExited: {
-            dropRectangle.hide()
-        }
     }
 }

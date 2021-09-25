@@ -17,14 +17,14 @@
         <file>Windows/Acknowledgements.qml</file>
         <file>Windows/Console.qml</file>
         <file>Windows/CsvPlayer.qml</file>
-        <file>Windows/DataGrid.qml</file>
+        <file>Windows/Dashboard.qml</file>
         <file>Windows/Donate.qml</file>
         <file>Windows/Setup.qml</file>
         <file>Windows/Toolbar.qml</file>
-        <file>Windows/Widgets.qml</file>
         <file>JsonEditor/JsonDatasetDelegate.qml</file>
         <file>JsonEditor/JsonEditor.qml</file>
         <file>JsonEditor/JsonGroupDelegate.qml</file>
         <file>Widgets/Shadow.qml</file>
+        <file>JSONDropArea.qml</file>
     </qresource>
 </RCC>

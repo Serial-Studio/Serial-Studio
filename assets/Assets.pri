@@ -34,6 +34,6 @@ RESOURCES += \
     $$PWD/images/rcc_images.qrc \
     $$PWD/themes/rcc_themes.qrc \
     $$PWD/messages/rcc_messages.qrc \
-    $$PWD/mac-icons/rcc_mac-icons.qrc \
+    $$PWD/touchbar/rcc_touchbar.qrc \
     $$PWD/translations/rcc_translations.qrc
 

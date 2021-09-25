@@ -34,7 +34,6 @@ class MacExtras : public QObject
 
 signals:
     void setupClicked();
-    void widgetsClicked();
     void connectClicked();
     void consoleClicked();
     void dashboardClicked();
@@ -45,8 +44,6 @@ public:
 public slots:
     void setSetupChecked(const bool checked);
     void setConsoleChecked(const bool checked);
-    void setWidgetsChecked(const bool checked);
-    void setWidgetsEnabled(const bool enabled);
     void setDashboardChecked(const bool checked);
     void setDashboardEnabled(const bool enabled);
 
@@ -59,7 +56,6 @@ private:
 private:
     QAction m_setupAction;
     QAction m_consoleAction;
-    QAction m_widgetsAction;
     QAction m_dashboardAction;
 };
 }

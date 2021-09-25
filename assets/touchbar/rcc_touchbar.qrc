@@ -1,8 +1,7 @@
 <RCC>
-    <qresource prefix="/mac-icons">
+    <qresource prefix="/touchbar">
         <file>console.png</file>
         <file>dashboard.png</file>
         <file>setup.png</file>
-        <file>widgets.png</file>
     </qresource>
 </RCC>

@@ -28,4 +28,9 @@ import "../Widgets" as Widgets
 
 Item {
     id: root
+
+    //
+    // Animations
+    //
+    Behavior on opacity {NumberAnimation{}}
 }

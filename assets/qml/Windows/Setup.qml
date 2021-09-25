@@ -32,7 +32,36 @@ import "../SetupPanes" as SetupPanes
 
 Item {
     id: root
+
+    //
+    // Custom properties
+    //
+    property int setupMargin: 0
+    property int displayedWidth: 340 + app.spacing * 1.5
     readonly property int maxItemWidth: column.width - 2 * spacing
+
+    //
+    // Displays the setup panel
+    //
+    function show() {
+        opacity = 1
+        setupMargin = 0
+    }
+
+    //
+    // Hides the setup panel
+    //
+    function hide() {
+        opacity = 0
+        setupMargin = -1 * displayedWidth
+    }
+
+    //
+    // Animations
+    //
+    visible: opacity > 0
+    Behavior on opacity {NumberAnimation{}}
+    Behavior on setupMargin {NumberAnimation{}}
 
     //
     // Save settings

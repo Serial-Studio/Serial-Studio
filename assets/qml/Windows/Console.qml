@@ -38,6 +38,11 @@ Item {
     property alias vt100emulation: textEdit.vt100emulation
 
     //
+    // Animations
+    //
+    Behavior on opacity {NumberAnimation{}}
+
+    //
     // Function to send through serial port data
     //
     function sendData() {
@@ -73,6 +78,16 @@ Item {
     function showWelcomeGuide() {
         clearConsole()
         Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
+    }
+
+    //
+    // Re-load welcome text when the language is changed
+    //
+    Connections {
+        target: Cpp_Misc_Translator
+        function onLanguageChanged() {
+            root.showWelcomeGuide()
+        }
     }
 
     //

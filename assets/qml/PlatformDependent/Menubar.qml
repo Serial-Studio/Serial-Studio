@@ -189,19 +189,6 @@ MenuBar {
             }
         }
 
-        DecentMenuItem {
-            checkable: true
-            sequence: "ctrl+w"
-            text: qsTr("Widgets")
-            checked: app.widgetsVisible
-            enabled: app.widgetsAvailable
-            onTriggered: app.showWidgets()
-            onCheckedChanged: {
-                if (app.widgetsVisible !== checked)
-                    checked = app.widgetsVisible
-            }
-        }
-
         MenuSeparator {}
 
         DecentMenuItem {
@@ -217,7 +204,8 @@ MenuBar {
         DecentMenuItem {
             sequence: "alt+m"
             onTriggered: app.toggleMenubar()
-            text: root.visible ? qsTr("Hide menubar") : qsTr("Show menubar")
+            text: root.visible ? qsTr("Hide menubar") :
+                                 qsTr("Show menubar")
         }
 
         MenuSeparator {}
@@ -225,7 +213,8 @@ MenuBar {
         DecentMenuItem {
             sequence: StandardKey.FullScreen
             onTriggered: app.toggleFullscreen()
-            text: app.fullScreen ? qsTr("Exit full screen") : qsTr("Enter full screen")
+            text: app.fullScreen ? qsTr("Exit full screen") :
+                                   qsTr("Enter full screen")
         }
     }
 
@@ -286,26 +275,32 @@ MenuBar {
         Menu {
             title: qsTr("Line ending character")
 
-            Repeater {
-                model: Cpp_IO_Console.lineEndings()
-                delegate: DecentMenuItem {
-                    id: menuItem
-                    checkable: true
-                    text: Cpp_IO_Console.lineEndings()[index]
-                    checked: Cpp_IO_Console.lineEnding === index
-                    onTriggered: Cpp_IO_Console.lineEnding = index
-                    onCheckedChanged: timer.start()
+            DecentMenuItem {
+                checkable: true
+                text: Cpp_IO_Console.lineEndings()[0]
+                checked: Cpp_IO_Console.lineEnding === 0
+                onTriggered: Cpp_IO_Console.lineEnding = 0
+            }
 
-                    Timer {
-                        id: timer
-                        interval: 100
-                        onTriggered: {
-                            var shouldBeChecked = (Cpp_IO_Console.lineEnding === index)
-                            if (menuItem.checked !== shouldBeChecked)
-                                menuItem.checked = shouldBeChecked
-                        }
-                    }
-                }
+            DecentMenuItem {
+                checkable: true
+                text: Cpp_IO_Console.lineEndings()[1]
+                checked: Cpp_IO_Console.lineEnding == 1
+                onTriggered: Cpp_IO_Console.lineEnding = 1
+            }
+
+            DecentMenuItem {
+                checkable: true
+                text: Cpp_IO_Console.lineEndings()[2]
+                checked: Cpp_IO_Console.lineEnding == 2
+                onTriggered: Cpp_IO_Console.lineEnding = 2
+            }
+
+            DecentMenuItem {
+                checkable: true
+                text: Cpp_IO_Console.lineEndings()[3]
+                checked: Cpp_IO_Console.lineEnding == 3
+                onTriggered: Cpp_IO_Console.lineEnding = 3
             }
         }
     }

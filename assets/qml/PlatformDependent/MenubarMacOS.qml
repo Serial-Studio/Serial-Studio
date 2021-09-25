@@ -164,19 +164,6 @@ MenuBar {
             }
         }
 
-        MenuItem {
-            checkable: true
-            shortcut: "ctrl+w"
-            text: qsTr("Widgets")
-            checked: app.widgetsVisible
-            enabled: app.widgetsAvailable
-            onTriggered: app.showWidgets()
-            onCheckedChanged: {
-                if (app.widgetsVisible !== checked)
-                    checked = app.widgetsVisible
-            }
-        }
-
         MenuSeparator {}
 
         MenuItem {
@@ -192,7 +179,8 @@ MenuBar {
         DecentMenuItem {
             sequence: StandardKey.FullScreen
             onTriggered: app.toggleFullscreen()
-            text: app.fullScreen ? qsTr("Exit full screen") : qsTr("Enter full screen")
+            text: app.fullScreen ? qsTr("Exit full screen") :
+                                   qsTr("Enter full screen")
         }
     }
 

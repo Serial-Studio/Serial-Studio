@@ -37,19 +37,17 @@ Control {
     //
     // Custom signals
     //
-    signal dataClicked()
     signal setupClicked()
     signal consoleClicked()
-    signal widgetsClicked()
+    signal dashboardClicked()
     signal jsonEditorClicked()
 
     //
     // Aliases to button check status
     //
-    property alias dataChecked: dashboardBt.checked
     property alias setupChecked: setupBt.checked
     property alias consoleChecked: consoleBt.checked
-    property alias widgetsChecked: widgetsBt.checked
+    property alias dashboardChecked: dashboardBt.checked
 
     //
     // Connections with mac touchbar
@@ -65,11 +63,6 @@ Control {
         function onConsoleClicked() {
             consoleBt.clicked()
             Cpp_Misc_MacExtras.setConsoleChecked(consoleBt.checked)
-        }
-
-        function onWidgetsClicked() {
-            widgetsBt.clicked()
-            Cpp_Misc_MacExtras.setWidgetsChecked(widgetsBt.checked)
         }
 
         function onDashboardClicked() {
@@ -149,10 +142,10 @@ Control {
             icon.width: 24
             icon.height: 24
             Layout.fillHeight: true
+            enabled: dashboardBt.enabled
             onClicked: root.consoleClicked()
             icon.source: "qrc:/icons/code.svg"
             text: qsTr("Console") + _btSpacer
-            enabled: dashboardBt.enabled || widgetsBt.enabled
             icon.color: Cpp_ThemeManager.brightText
             palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
@@ -167,7 +160,7 @@ Control {
             icon.width: 24
             icon.height: 24
             Layout.fillHeight: true
-            onClicked: root.dataClicked()
+            onClicked: root.dashboardClicked()
             enabled: app.dashboardAvailable
             text: qsTr("Dashboard") + _btSpacer
             icon.source: "qrc:/icons/equalizer.svg"
@@ -177,28 +170,6 @@ Control {
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onCheckedChanged: Cpp_Misc_MacExtras.setDashboardChecked(checked)
             onEnabledChanged: Cpp_Misc_MacExtras.setDashboardEnabled(enabled)
-
-            opacity: enabled ? 1 : 0.5
-            Behavior on opacity {NumberAnimation{}}
-        }
-
-        Button {
-            id: widgetsBt
-
-            flat: true
-            icon.width: 24
-            icon.height: 24
-            Layout.fillHeight: true
-            enabled: app.widgetsAvailable
-            onClicked: root.widgetsClicked()
-            text: qsTr("Widgets") + _btSpacer
-            icon.source: "qrc:/icons/widget.svg"
-            icon.color: Cpp_ThemeManager.brightText
-            palette.buttonText: Cpp_ThemeManager.brightText
-            palette.button: Cpp_ThemeManager.toolbarGradient1
-            palette.window: Cpp_ThemeManager.toolbarGradient1
-            onCheckedChanged: Cpp_Misc_MacExtras.setWidgetsChecked(checked)
-            onEnabledChanged: Cpp_Misc_MacExtras.setWidgetsEnabled(enabled)
 
             opacity: enabled ? 1 : 0.5
             Behavior on opacity {NumberAnimation{}}
