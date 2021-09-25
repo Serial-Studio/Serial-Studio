@@ -39,6 +39,9 @@ class Dashboard : public QObject
     Q_PROPERTY(bool available
                READ available
                NOTIFY widgetCountChanged)
+    Q_PROPERTY(int totalWidgetCount
+               READ totalWidgetCount
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int mapCount
                READ mapCount
                NOTIFY widgetCountChanged)
@@ -81,6 +84,8 @@ public:
     QString title();
     bool available();
 
+    int totalWidgetCount();
+
     int mapCount();
     int barCount();
     int plotCount();
@@ -100,6 +105,7 @@ public:
     Q_INVOKABLE QStringList gyroscopeTitles();
     Q_INVOKABLE QStringList thermometerTitles();
     Q_INVOKABLE QStringList accelerometerTitles();
+    Q_INVOKABLE QStringList widgetTitles();
 
     Q_INVOKABLE bool barVisible(const int index);
     Q_INVOKABLE bool mapVisible(const int index);

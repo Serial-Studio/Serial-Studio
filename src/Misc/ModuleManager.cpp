@@ -50,15 +50,8 @@
 #include <Plugins/Bridge.h>
 #include <UI/Dashboard.h>
 
-#include <Widgets/Bar.h>
-#include <Widgets/Plot.h>
-#include <Widgets/Gauge.h>
-#include <Widgets/Compass.h>
 #include <Widgets/Terminal.h>
-#include <Widgets/DataGroup.h>
-#include <Widgets/Gyroscope.h>
-#include <Widgets/Thermometer.h>
-#include <Widgets/Accelerometer.h>
+#include <Widgets/WidgetLoader.h>
 
 #include <QSimpleUpdater.h>
 
@@ -126,6 +119,7 @@ void ModuleManager::registerQmlTypes()
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
     qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
+    qmlRegisterType<Widgets::WidgetLoader>("SerialStudio", 1, 0, "WidgetLoader");
 }
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,6 @@ Item {
     // Main layout
     //
     ColumnLayout {
-        x: 2 * app.spacing
         anchors.fill: parent
         spacing: app.spacing * 2
         anchors.margins: app.spacing * 1.5
@@ -75,6 +74,15 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
+
+                WidgetGrid {
+                    id: widgetGrid
+                    anchors.fill: parent
+                }
+
+                Widgets.Shadow {
+                    source: widgetGrid
+                }
             }
         }
 

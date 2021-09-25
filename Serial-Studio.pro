@@ -156,10 +156,12 @@ HEADERS += \
     src/Widgets/Gyroscope.h \
     src/Widgets/Plot.h \
     src/Widgets/Terminal.h \
-    src/Widgets/Thermometer.h
+    src/Widgets/Thermometer.h \
+    src/Widgets/WidgetLoader.h
 
 SOURCES += \
     src/UI/Dashboard.cpp \
+    src/Widgets/WidgetLoader.cpp \
     src/main.cpp \
     src/CSV/Export.cpp \
     src/CSV/Player.cpp \

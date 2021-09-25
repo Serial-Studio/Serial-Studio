@@ -28,5 +28,6 @@
         <file>JSONDropArea.qml</file>
         <file>Windows/ViewOptions.qml</file>
         <file>Windows/DashboardTitle.qml</file>
+        <file>Windows/WidgetGrid.qml</file>
     </qresource>
 </RCC>

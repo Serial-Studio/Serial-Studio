@@ -90,6 +90,12 @@ bool Dashboard::frameValid() const
 // Widget count functions
 //--------------------------------------------------------------------------------------------------
 
+int Dashboard::totalWidgetCount()
+{
+    return mapCount() + barCount() + plotCount() + gaugeCount() + groupCount()
+        + compassCount() + gyroscopeCount() + thermometerCount() + accelerometerCount();
+}
+
 int Dashboard::mapCount()
 {
     return m_mapWidgets.count();
@@ -220,6 +226,23 @@ QStringList Dashboard::accelerometerTitles()
     return list;
 }
 
+QStringList Dashboard::widgetTitles()
+{
+    // Warning: maintain same order as the view option repeaters in ViewOptions.qml!
+
+    // clang-format off
+    return groupTitles() +
+            plotTitles() +
+            barTitles() +
+            gaugeTitles() +
+            thermometerTitles() +
+            compassTitles() +
+            gyroscopeTitles() +
+            accelerometerTitles() +
+            mapTitles();
+    // clang-format on
+}
+
 //--------------------------------------------------------------------------------------------------
 // Widget visibility access functions
 //--------------------------------------------------------------------------------------------------
@@ -304,11 +327,8 @@ void Dashboard::setBarVisible(const int index, const bool visible)
 {
     if (index < m_barVisibility.count())
     {
-        if (barVisible(index) != visible)
-        {
-            m_barVisibility.replace(index, visible);
-            emit widgetVisibilityChanged();
-        }
+        m_barVisibility.replace(index, visible);
+        emit widgetVisibilityChanged();
     }
 }
 
@@ -316,11 +336,8 @@ void Dashboard::setMapVisible(const int index, const bool visible)
 {
     if (index < m_mapVisibility.count())
     {
-        if (mapVisible(index) != visible)
-        {
-            m_mapVisibility.replace(index, visible);
-            emit widgetVisibilityChanged();
-        }
+        m_mapVisibility.replace(index, visible);
+        emit widgetVisibilityChanged();
     }
 }
 
@@ -328,11 +345,8 @@ void Dashboard::setPlotVisible(const int index, const bool visible)
 {
     if (index < m_plotVisibility.count())
     {
-        if (plotVisible(index) != visible)
-        {
-            m_plotVisibility.replace(index, visible);
-            emit widgetVisibilityChanged();
-        }
+        m_plotVisibility.replace(index, visible);
+        emit widgetVisibilityChanged();
     }
 }
 
@@ -340,11 +354,8 @@ void Dashboard::setGroupVisible(const int index, const bool visible)
 {
     if (index < m_groupVisibility.count())
     {
-        if (groupVisible(index) != visible)
-        {
-            m_groupVisibility.replace(index, visible);
-            emit widgetVisibilityChanged();
-        }
+        m_groupVisibility.replace(index, visible);
+        emit widgetVisibilityChanged();
     }
 }
 
@@ -352,11 +363,8 @@ void Dashboard::setGaugeVisible(const int index, const bool visible)
 {
     if (index < m_gaugeVisibility.count())
     {
-        if (gaugeVisible(index) != visible)
-        {
-            m_gaugeVisibility.replace(index, visible);
-            emit widgetVisibilityChanged();
-        }
+        m_gaugeVisibility.replace(index, visible);
+        emit widgetVisibilityChanged();
     }
 }
 
@@ -364,11 +372,8 @@ void Dashboard::setCompassVisible(const int index, const bool visible)
 {
     if (index < m_compassVisibility.count())
     {
-        if (compassVisible(index) != visible)
-        {
-            m_compassVisibility.replace(index, visible);
-            emit widgetVisibilityChanged();
-        }
+        m_compassVisibility.replace(index, visible);
+        emit widgetVisibilityChanged();
     }
 }
 
@@ -376,11 +381,8 @@ void Dashboard::setGyroscopeVisible(const int index, const bool visible)
 {
     if (index < m_gyroscopeVisibility.count())
     {
-        if (gyroscopeVisible(index) != visible)
-        {
-            m_gyroscopeVisibility.replace(index, visible);
-            emit widgetVisibilityChanged();
-        }
+        m_gyroscopeVisibility.replace(index, visible);
+        emit widgetVisibilityChanged();
     }
 }
 
@@ -388,11 +390,8 @@ void Dashboard::setThermometerVisible(const int index, const bool visible)
 {
     if (index < m_thermometerVisibility.count())
     {
-        if (thermometerVisible(index) != visible)
-        {
-            m_thermometerVisibility.replace(index, visible);
-            emit widgetVisibilityChanged();
-        }
+        m_thermometerVisibility.replace(index, visible);
+        emit widgetVisibilityChanged();
     }
 }
 
@@ -400,11 +399,8 @@ void Dashboard::setAccelerometerVisible(const int index, const bool visible)
 {
     if (index < m_accelerometerVisibility.count())
     {
-        if (accelerometerVisible(index) != visible)
-        {
-            m_accelerometerVisibility.replace(index, visible);
-            emit widgetVisibilityChanged();
-        }
+        m_accelerometerVisibility.replace(index, visible);
+        emit widgetVisibilityChanged();
     }
 }
 

@@ -145,9 +145,9 @@ Page {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.maximumHeight: parent.height
                 Layout.minimumHeight: parent.height
+                icon.source: "qrc:/icons/widget.svg"
                 Layout.minimumWidth: root.headerHeight
                 Layout.maximumWidth: root.headerHeight
-                icon.source: "qrc:/icons/equalizer.svg"
                 icon.width: root.headerHeight * 24 / 32
                 icon.height: root.headerHeight * 24 / 32
             }
