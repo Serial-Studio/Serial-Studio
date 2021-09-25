@@ -48,7 +48,7 @@
 
 #include <MQTT/Client.h>
 #include <Plugins/Bridge.h>
-#include <UI/QmlDataProvider.h>
+#include <UI/Dashboard.h>
 
 #include <Widgets/Bar.h>
 #include <Widgets/Plot.h>
@@ -159,6 +159,7 @@ void ModuleManager::initializeQmlInterface()
     auto updater = QSimpleUpdater::getInstance();
     auto jsonEditor = JSON::Editor::getInstance();
     auto mqttClient = MQTT::Client::getInstance();
+    auto uiDashboard = UI::Dashboard::getInstance();
     auto jsonGenerator = JSON::Generator::getInstance();
     auto pluginsBridge = Plugins::Bridge::getInstance();
     auto miscUtilities = Misc::Utilities::getInstance();
@@ -168,7 +169,6 @@ void ModuleManager::initializeQmlInterface()
     auto miscTimerEvents = Misc::TimerEvents::getInstance();
     auto ioNetwork = IO::DataSources::Network::getInstance();
     auto miscThemeManager = Misc::ThemeManager::getInstance();
-    auto uiQmlDataProvider = UI::QmlDataProvider::getInstance();
 
     // Retranslate the QML interface automagically
     connect(miscTranslator, SIGNAL(languageChanged()), engine(), SLOT(retranslate()));
@@ -184,6 +184,7 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_IO_Network", ioNetwork);
     c->setContextProperty("Cpp_JSON_Editor", jsonEditor);
     c->setContextProperty("Cpp_MQTT_Client", mqttClient);
+    c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
     c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
     c->setContextProperty("Cpp_Misc_MacExtras", miscMacExtras);
@@ -192,7 +193,6 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
     c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
     c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
-    c->setContextProperty("Cpp_UI_QmlDataProvider", uiQmlDataProvider);
     c->setContextProperty("Cpp_ModuleManager", this);
 
     // Register app info with QML

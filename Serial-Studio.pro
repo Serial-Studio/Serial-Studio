@@ -147,7 +147,7 @@ HEADERS += \
     src/Misc/Translator.h \
     src/Misc/Utilities.h \
     src/Plugins/Bridge.h \
-    src/UI/QmlDataProvider.h \
+    src/UI/Dashboard.h \
     src/Widgets/Accelerometer.h \
     src/Widgets/Bar.h \
     src/Widgets/Compass.h \
@@ -159,6 +159,7 @@ HEADERS += \
     src/Widgets/Thermometer.h
 
 SOURCES += \
+    src/UI/Dashboard.cpp \
     src/main.cpp \
     src/CSV/Export.cpp \
     src/CSV/Player.cpp \
@@ -181,7 +182,6 @@ SOURCES += \
     src/Misc/Translator.cpp \
     src/Misc/Utilities.cpp \
     src/Plugins/Bridge.cpp \
-    src/UI/QmlDataProvider.cpp \
     src/Widgets/Accelerometer.cpp \
     src/Widgets/Bar.cpp \
     src/Widgets/Compass.cpp \

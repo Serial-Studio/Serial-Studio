@@ -175,8 +175,8 @@ Item {
             MenuItem {
                 enabled: visible
                 visible: app.menuBar != null
-                onTriggered: app.toggleMenubar()
                 height: visible ? implicitHeight : 0
+                onTriggered: app.menubarEnabled = !app.menubarEnabled
                 text: visible && app.menuBar.visible ? qsTr("Hide menubar") :
                                                        qsTr("Show menubar")
             }

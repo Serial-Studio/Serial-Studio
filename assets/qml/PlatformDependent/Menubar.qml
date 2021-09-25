@@ -181,7 +181,7 @@ MenuBar {
             sequence: "ctrl+d"
             text: qsTr("Dashboard")
             checked: app.dashboardVisible
-            enabled: app.dashboardAvailable
+            enabled: Cpp_UI_Dashboard.available
             onTriggered: app.showDashboard()
             onCheckedChanged: {
                 if (app.dashboardVisible !== checked)

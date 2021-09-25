@@ -92,7 +92,6 @@ ApplicationWindow {
     property alias vt100emulation: terminal.vt100emulation
     readonly property bool consoleVisible: terminal.visible
     readonly property bool dashboardVisible: dashboard.visible
-    readonly property bool dashboardAvailable: Cpp_UI_QmlDataProvider.groupCount > 0
 
     //
     // Menubar status
@@ -317,12 +316,12 @@ ApplicationWindow {
     // Hide console & device manager when we receive first valid frame
     //
     Connections {
-        target: Cpp_UI_QmlDataProvider
+        target: Cpp_UI_Dashboard
         enabled: !app.firstValidFrame
 
         function onUpdated()  {
             if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) &&
-                    Cpp_UI_QmlDataProvider.frameValid()) {
+                    Cpp_UI_Dashboard.frameValid()) {
                 setup.hide()
                 app.showDashboard()
                 app.firstValidFrame = true
@@ -340,10 +339,10 @@ ApplicationWindow {
     // Show console tab on serial disconnect
     //
     Connections {
-        target: Cpp_UI_QmlDataProvider
+        target: Cpp_UI_Dashboard
         function onDataReset() {
-            toolbar.consoleClicked()
             setup.show()
+            app.showConsole()
             app.firstValidFrame = false
         }
     }
@@ -386,7 +385,7 @@ ApplicationWindow {
             onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
             onDashboardClicked: {
-                if (app.dashboardAvailable) {
+                if (Cpp_UI_Dashboard.available) {
                     consoleChecked = 0
                     dashboardChecked = 1
                     swipe.currentIndex = 1

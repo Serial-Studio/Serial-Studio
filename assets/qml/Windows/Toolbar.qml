@@ -161,7 +161,7 @@ Control {
             icon.height: 24
             Layout.fillHeight: true
             onClicked: root.dashboardClicked()
-            enabled: app.dashboardAvailable
+            enabled: Cpp_UI_Dashboard.available
             text: qsTr("Dashboard") + _btSpacer
             icon.source: "qrc:/icons/equalizer.svg"
             icon.color: Cpp_ThemeManager.brightText

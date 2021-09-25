@@ -156,7 +156,7 @@ MenuBar {
             shortcut: "ctrl+d"
             text: qsTr("Dashboard")
             checked: app.dashboardVisible
-            enabled: app.dashboardAvailable
+            enabled: Cpp_UI_Dashboard.available
             onTriggered: app.showDashboard()
             onCheckedChanged: {
                 if (app.dashboardVisible !== checked)
@@ -179,8 +179,7 @@ MenuBar {
         DecentMenuItem {
             sequence: StandardKey.FullScreen
             onTriggered: app.toggleFullscreen()
-            text: app.fullScreen ? qsTr("Exit full screen") :
-                                   qsTr("Enter full screen")
+            text: app.fullScreen ? qsTr("Exit full screen") : qsTr("Enter full screen")
         }
     }
 
