@@ -163,7 +163,7 @@ Control {
             onClicked: root.dashboardClicked()
             enabled: Cpp_UI_Dashboard.available
             text: qsTr("Dashboard") + _btSpacer
-            icon.source: "qrc:/icons/equalizer.svg"
+            icon.source: "qrc:/icons/dashboard.svg"
             icon.color: Cpp_ThemeManager.brightText
             palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1

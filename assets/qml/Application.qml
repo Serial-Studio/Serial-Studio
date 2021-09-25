@@ -413,6 +413,7 @@ ApplicationWindow {
 
             SwipeView {
                 id: swipe
+                clip: true
                 interactive: false
                 Layout.fillWidth: true
                 Layout.fillHeight: true

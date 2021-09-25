@@ -175,8 +175,12 @@ void Bridge::acceptConnection()
     // Close connection if system is not enabled
     if (!enabled())
     {
-        socket->close();
-        socket->deleteLater();
+        if (socket)
+        {
+            socket->close();
+            socket->deleteLater();
+        }
+
         return;
     }
 

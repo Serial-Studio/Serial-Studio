@@ -22,7 +22,7 @@
 
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
-import QtQuick.Window 2.12 as QtWindow
+import QtQuick.Controls 2.12
 
 import "../Widgets" as Widgets
 
@@ -33,4 +33,57 @@ Item {
     // Animations
     //
     Behavior on opacity {NumberAnimation{}}
+
+    //
+    // Main layout
+    //
+    ColumnLayout {
+        x: 2 * app.spacing
+        anchors.fill: parent
+        spacing: app.spacing * 2
+        anchors.margins: app.spacing * 1.5
+
+        //
+        // Widget selector + widgets
+        //
+        RowLayout {
+            spacing: app.spacing
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            //
+            // View options window + shadow
+            //
+            Item {
+                Layout.fillHeight: true
+                Layout.minimumWidth: 240
+
+                ViewOptions {
+                    id: viewOptions
+                    anchors.fill: parent
+                }
+
+                Widgets.Shadow {
+                    source: viewOptions
+                }
+            }
+
+            //
+            // Widget grid
+            //
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.minimumWidth: 240
+            }
+        }
+
+        //
+        // Dashboard title window
+        //
+        DashboardTitle {
+            height: 32
+            Layout.fillWidth: true
+        }
+    }
 }

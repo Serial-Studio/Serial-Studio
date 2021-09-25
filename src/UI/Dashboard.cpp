@@ -35,6 +35,10 @@ using namespace UI;
  */
 static Dashboard *INSTANCE = nullptr;
 
+//--------------------------------------------------------------------------------------------------
+// Constructor/deconstructor & singleton
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Constructor of the class
  */
@@ -63,9 +67,10 @@ Dashboard *Dashboard::getInstance()
     return INSTANCE;
 }
 
-/**
- * @return The title of the current frame
- */
+//--------------------------------------------------------------------------------------------------
+// Misc member access functions
+//--------------------------------------------------------------------------------------------------
+
 QString Dashboard::title()
 {
     return m_latestFrame.title();
@@ -75,6 +80,15 @@ bool Dashboard::available()
 {
     return groupCount() > 0;
 }
+
+bool Dashboard::frameValid() const
+{
+    return m_latestFrame.isValid();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Widget count functions
+//--------------------------------------------------------------------------------------------------
 
 int Dashboard::mapCount()
 {
@@ -96,9 +110,6 @@ int Dashboard::gaugeCount()
     return m_gaugeWidgets.count();
 }
 
-/**
- * @return The number of groups contained in the current frame.
- */
 int Dashboard::groupCount()
 {
     return m_latestFrame.groupCount();
@@ -123,6 +134,10 @@ int Dashboard::accelerometerCount()
 {
     return m_accelerometerWidgets.count();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Widget title functions
+//--------------------------------------------------------------------------------------------------
 
 QStringList Dashboard::barTitles()
 {
@@ -205,6 +220,10 @@ QStringList Dashboard::accelerometerTitles()
     return list;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Widget visibility access functions
+//--------------------------------------------------------------------------------------------------
+
 bool Dashboard::barVisible(const int index)
 {
     if (index < m_barVisibility.count())
@@ -231,8 +250,8 @@ bool Dashboard::plotVisible(const int index)
 
 bool Dashboard::groupVisible(const int index)
 {
-    if (index < m_groupVisiblity.count())
-        return m_groupVisiblity.at(index);
+    if (index < m_groupVisibility.count())
+        return m_groupVisibility.at(index);
 
     return false;
 }
@@ -277,13 +296,9 @@ bool Dashboard::accelerometerVisible(const int index)
     return false;
 }
 
-/**
- * Returns @c true if the latest frame contains data
- */
-bool Dashboard::frameValid() const
-{
-    return m_latestFrame.isValid();
-}
+//--------------------------------------------------------------------------------------------------
+// Visibility-related slots
+//--------------------------------------------------------------------------------------------------
 
 void Dashboard::setBarVisible(const int index, const bool visible)
 {
@@ -323,11 +338,11 @@ void Dashboard::setPlotVisible(const int index, const bool visible)
 
 void Dashboard::setGroupVisible(const int index, const bool visible)
 {
-    if (index < m_groupVisiblity.count())
+    if (index < m_groupVisibility.count())
     {
         if (groupVisible(index) != visible)
         {
-            m_groupVisiblity.replace(index, visible);
+            m_groupVisibility.replace(index, visible);
             emit widgetVisibilityChanged();
         }
     }
@@ -393,6 +408,10 @@ void Dashboard::setAccelerometerVisible(const int index, const bool visible)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Frame data handling slots
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Removes all available data from the UI when the device is disconnected or the CSV
  * file is closed.
@@ -403,9 +422,33 @@ void Dashboard::resetData()
     m_latestJsonFrame = JFI_Empty();
     m_latestFrame.read(m_latestJsonFrame.jsonDocument.object());
 
+    // Clear widget data
+    m_barWidgets.clear();
+    m_mapWidgets.clear();
+    m_plotWidgets.clear();
+    m_gaugeWidgets.clear();
+    m_compassWidgets.clear();
+    m_gyroscopeWidgets.clear();
+    m_thermometerWidgets.clear();
+    m_accelerometerWidgets.clear();
+
+    // Clear widget visibility data
+    m_barVisibility.clear();
+    m_mapVisibility.clear();
+    m_plotVisibility.clear();
+    m_gaugeVisibility.clear();
+    m_groupVisibility.clear();
+    m_compassVisibility.clear();
+    m_gyroscopeVisibility.clear();
+    m_thermometerVisibility.clear();
+    m_accelerometerVisibility.clear();
+
     // Update UI
     emit updated();
     emit dataReset();
+    emit titleChanged();
+    emit widgetCountChanged();
+    emit widgetVisibilityChanged();
 }
 
 /**
@@ -413,8 +456,99 @@ void Dashboard::resetData()
  */
 void Dashboard::updateData()
 {
-    if (m_latestFrame.read(m_latestJsonFrame.jsonDocument.object()))
-        emit updated();
+    // Save widget count
+    int barC = barCount();
+    int mapC = mapCount();
+    int plotC = plotCount();
+    int groupC = groupCount();
+    int gaugeC = gaugeCount();
+    int compassC = compassCount();
+    int gyroscopeC = gyroscopeCount();
+    int thermometerC = thermometerCount();
+    int accelerometerC = accelerometerCount();
+
+    // Save previous title
+    auto pTitle = title();
+
+    // Clear widget data
+    m_barWidgets.clear();
+    m_mapWidgets.clear();
+    m_plotWidgets.clear();
+    m_gaugeWidgets.clear();
+    m_compassWidgets.clear();
+    m_gyroscopeWidgets.clear();
+    m_thermometerWidgets.clear();
+    m_accelerometerWidgets.clear();
+
+    // Check if frame is valid
+    if (!m_latestFrame.read(m_latestJsonFrame.jsonDocument.object()))
+        return;
+
+    // Update widget vectors
+    m_plotWidgets = getPlotWidgets();
+    m_mapWidgets = getWidgetGroups("map");
+    m_barWidgets = getWidgetDatasets("bar");
+    m_gaugeWidgets = getWidgetDatasets("gauge");
+    m_gyroscopeWidgets = getWidgetGroups("gyro");
+    m_compassWidgets = getWidgetDatasets("compass");
+    m_thermometerWidgets = getWidgetDatasets("thermometer");
+    m_accelerometerWidgets = getWidgetGroups("accelerometer");
+
+    // Check if we need to update title
+    if (pTitle != title())
+        emit titleChanged();
+
+    // Check if we need to regenerate widgets
+    bool regenerateWidgets = false;
+    regenerateWidgets |= (barC != barCount());
+    regenerateWidgets |= (mapC != mapCount());
+    regenerateWidgets |= (plotC != plotCount());
+    regenerateWidgets |= (gaugeC != gaugeCount());
+    regenerateWidgets |= (groupC != groupCount());
+    regenerateWidgets |= (compassC != compassCount());
+    regenerateWidgets |= (gyroscopeC != gyroscopeCount());
+    regenerateWidgets |= (thermometerC != thermometerCount());
+    regenerateWidgets |= (accelerometerC != accelerometerCount());
+
+    // Regenerate widget visiblity models
+    if (regenerateWidgets)
+    {
+        m_barVisibility.clear();
+        m_mapVisibility.clear();
+        m_plotVisibility.clear();
+        m_gaugeVisibility.clear();
+        m_groupVisibility.clear();
+        m_compassVisibility.clear();
+        m_gyroscopeVisibility.clear();
+        m_thermometerVisibility.clear();
+        m_accelerometerVisibility.clear();
+
+        int i;
+        for (i = 0; i < barCount(); ++i)
+            m_barVisibility.append(true);
+        for (i = 0; i < barCount(); ++i)
+            m_mapVisibility.append(true);
+        for (i = 0; i < barCount(); ++i)
+            m_plotVisibility.append(true);
+        for (i = 0; i < barCount(); ++i)
+            m_gaugeVisibility.append(true);
+        for (i = 0; i < barCount(); ++i)
+            m_groupVisibility.append(true);
+        for (i = 0; i < barCount(); ++i)
+            m_compassVisibility.append(true);
+        for (i = 0; i < barCount(); ++i)
+            m_gyroscopeVisibility.append(true);
+        for (i = 0; i < barCount(); ++i)
+            m_thermometerVisibility.append(true);
+        for (i = 0; i < barCount(); ++i)
+            m_accelerometerVisibility.append(true);
+
+        emit widgetCountChanged();
+        emit widgetVisibilityChanged();
+    }
+
+    // Update UI
+    emit updated();
 }
 
 /**
@@ -430,20 +564,48 @@ void Dashboard::selectLatestJSON(const JFI_Object &frameInfo)
         m_latestJsonFrame = frameInfo;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Widget discovery functions
+//--------------------------------------------------------------------------------------------------
+
 QVector<JSON::Dataset *> Dashboard::getPlotWidgets()
 {
     QVector<JSON::Dataset *> widgets;
+    foreach (auto group, m_latestFrame.groups())
+    {
+        foreach (auto dataset, group->datasets())
+        {
+            if (dataset->graph())
+                widgets.append(dataset);
+        }
+    }
+
     return widgets;
 }
 
-QVector<JSON::Group *> Dashboard::getWidgetGroup(const QString &handle)
+QVector<JSON::Group *> Dashboard::getWidgetGroups(const QString &handle)
 {
     QVector<JSON::Group *> widgets;
+    foreach (auto group, m_latestFrame.groups())
+    {
+        if (group->widget().toLower() == handle)
+            widgets.append(group);
+    }
+
     return widgets;
 }
 
 QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle)
 {
     QVector<JSON::Dataset *> widgets;
+    foreach (auto group, m_latestFrame.groups())
+    {
+        foreach (auto dataset, group->datasets())
+        {
+            if (dataset->widget() == handle)
+                widgets.append(dataset);
+        }
+    }
+
     return widgets;
 }

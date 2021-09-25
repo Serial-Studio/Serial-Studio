@@ -1,18 +1,20 @@
 <RCC>
     <qresource prefix="/icons">
         <file>ac-power.svg</file>
+        <file>accelerometer.svg</file>
         <file>add.svg</file>
         <file>apply.svg</file>
         <file>arrow-right.svg</file>
         <file>backspace.svg</file>
+        <file>bar.svg</file>
         <file>battery.svg</file>
         <file>bug.svg</file>
-        <file>chart.svg</file>
         <file>close.svg</file>
         <file>code.svg</file>
         <file>compass.svg</file>
         <file>connect.svg</file>
         <file>copy.svg</file>
+        <file>dashboard.svg</file>
         <file>dataset.svg</file>
         <file>delete-item.svg</file>
         <file>delete.svg</file>
@@ -22,32 +24,34 @@
         <file>down.svg</file>
         <file>drag-drop.svg</file>
         <file>end-sequence.svg</file>
-        <file>equalizer.svg</file>
         <file>error.svg</file>
         <file>ethernet.svg</file>
+        <file>expand.svg</file>
         <file>fullscreen-exit.svg</file>
         <file>fullscreen.svg</file>
         <file>gauge.svg</file>
+        <file>graphs.svg</file>
         <file>group.svg</file>
+        <file>gyro.svg</file>
         <file>help.svg</file>
         <file>info.svg</file>
         <file>json.svg</file>
         <file>link.svg</file>
         <file>location-off.svg</file>
         <file>location-on.svg</file>
+        <file>map.svg</file>
         <file>media-next.svg</file>
         <file>media-pause.svg</file>
         <file>media-play.svg</file>
         <file>media-prev.svg</file>
         <file>new.svg</file>
         <file>open.svg</file>
+        <file>plot.svg</file>
         <file>power.svg</file>
         <file>ram.svg</file>
-        <file>refresh.svg</file>
         <file>registration.svg</file>
         <file>right.svg</file>
         <file>save.svg</file>
-        <file>scatter-plot.svg</file>
         <file>schedule.svg</file>
         <file>scroll-bottom.svg</file>
         <file>scroll-down.svg</file>
@@ -58,14 +62,12 @@
         <file>separator.svg</file>
         <file>settings.svg</file>
         <file>start-sequence.svg</file>
-        <file>tab.svg</file>
-        <file>terminal.svg</file>
         <file>up.svg</file>
         <file>update.svg</file>
         <file>usb.svg</file>
         <file>visibility.svg</file>
         <file>warning.svg</file>
         <file>widget.svg</file>
-        <file>expand.svg</file>
+        <file>thermometer.svg</file>
     </qresource>
 </RCC>

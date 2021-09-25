@@ -26,5 +26,7 @@
         <file>JsonEditor/JsonGroupDelegate.qml</file>
         <file>Widgets/Shadow.qml</file>
         <file>JSONDropArea.qml</file>
+        <file>Windows/ViewOptions.qml</file>
+        <file>Windows/DashboardTitle.qml</file>
     </qresource>
 </RCC>

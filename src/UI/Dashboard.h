@@ -38,41 +38,41 @@ class Dashboard : public QObject
                NOTIFY titleChanged)
     Q_PROPERTY(bool available
                READ available
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int mapCount
                READ mapCount
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int barCount
                READ barCount
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int plotCount
                READ plotCount
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int groupCount
                READ groupCount
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int gaugeCount
                READ gaugeCount
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int compassCount
                READ compassCount
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int gyroscopeCount
                READ gyroscopeCount
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int thermometerCount
                READ thermometerCount
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int accelerometerCount
                READ accelerometerCount
-               NOTIFY dataCountChanged)
+               NOTIFY widgetCountChanged)
     // clang-format on
 
 signals:
     void updated();
     void dataReset();
     void titleChanged();
-    void dataCountChanged();
+    void widgetCountChanged();
     void widgetVisibilityChanged();
 
 public:
@@ -132,14 +132,14 @@ private slots:
 private:
     Dashboard();
     QVector<JSON::Dataset *> getPlotWidgets();
-    QVector<JSON::Group *> getWidgetGroup(const QString &handle);
+    QVector<JSON::Group *> getWidgetGroups(const QString &handle);
     QVector<JSON::Dataset *> getWidgetDatasets(const QString &handle);
 
 private:
     QVector<bool> m_barVisibility;
     QVector<bool> m_mapVisibility;
     QVector<bool> m_plotVisibility;
-    QVector<bool> m_groupVisiblity;
+    QVector<bool> m_groupVisibility;
     QVector<bool> m_gaugeVisibility;
     QVector<bool> m_compassVisibility;
     QVector<bool> m_gyroscopeVisibility;
