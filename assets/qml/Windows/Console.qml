@@ -23,7 +23,6 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.0
 
 import SerialStudio 1.0
 import Qt.labs.settings 1.0
@@ -179,7 +178,7 @@ Item {
             //
             // Console display
             //
-            QmlPlainTextEdit {
+            Terminal {
                 id: textEdit
                 focus: true
                 readOnly: true
@@ -191,15 +190,15 @@ Item {
                 Layout.fillHeight: true
                 maximumBlockCount: 12000
                 font.family: app.monoFont
+                autoscroll: Cpp_IO_Console.autoscroll
                 palette.text: Cpp_ThemeManager.consoleText
                 palette.base: Cpp_ThemeManager.consoleBase
                 palette.button: Cpp_ThemeManager.consoleButton
                 palette.window: Cpp_ThemeManager.consoleWindow
-                palette.highlight: Cpp_ThemeManager.consoleHighlight
-                palette.highlightedText: Cpp_ThemeManager.consoleHighlightedText
-                autoscroll: Cpp_IO_Console.autoscroll
                 wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                palette.highlight: Cpp_ThemeManager.consoleHighlight
                 placeholderText: qsTr("No data received so far") + "..."
+                palette.highlightedText: Cpp_ThemeManager.consoleHighlightedText
 
                 MouseArea {
                     id: mouseArea
@@ -234,9 +233,9 @@ Item {
                     height: 24
                     font: textEdit.font
                     Layout.fillWidth: true
+                    enabled: Cpp_IO_Manager.readWrite
                     palette.text: Cpp_ThemeManager.consoleText
                     palette.base: Cpp_ThemeManager.consoleBase
-                    enabled: Cpp_IO_Manager.readWrite
                     placeholderText: qsTr("Send data to device") + "..."
 
                     //
@@ -295,8 +294,8 @@ Item {
                     text: qsTr("Echo")
                     id: echoCheckbox
                     opacity: enabled ? 1 : 0.5
-                    enabled: Cpp_IO_Manager.readWrite
                     checked: Cpp_IO_Console.echo
+                    enabled: Cpp_IO_Manager.readWrite
                     onCheckedChanged: {
                         if (Cpp_IO_Console.echo != checked)
                             Cpp_IO_Console.echo = checked
@@ -386,13 +385,7 @@ Item {
     //
     // Window shadow
     //
-    DropShadow {
-        anchors.fill: window
-        horizontalOffset: 3
-        verticalOffset: 3
-        radius: 8.0
-        samples: 17
-        color: "#80000000"
+    Widgets.Shadow {
         source: window
     }
 }

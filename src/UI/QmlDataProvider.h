@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#ifndef UI_DATA_PROVIDER_H
-#define UI_DATA_PROVIDER_H
+#ifndef UI_QML_DATA_PROVIDER_H
+#define UI_QML_DATA_PROVIDER_H
 
 #include <QObject>
 #include <JSON/Frame.h>
@@ -29,7 +29,7 @@
 
 namespace UI
 {
-class DataProvider : public QObject
+class QmlDataProvider : public QObject
 {
     // clang-format off
     Q_OBJECT
@@ -46,7 +46,7 @@ signals:
     void dataReset();
 
 public:
-    static DataProvider *getInstance();
+    static QmlDataProvider *getInstance();
 
     QString title();
     int groupCount();
@@ -57,7 +57,7 @@ public:
     Q_INVOKABLE JSON::Group *getGroup(const int index);
 
 private:
-    DataProvider();
+    QmlDataProvider();
 
 private slots:
     void resetData();

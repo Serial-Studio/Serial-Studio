@@ -20,25 +20,25 @@
  * THE SOFTWARE.
  */
 
-#include "DataProvider.h"
-
 #include <IO/Manager.h>
 #include <IO/Console.h>
 #include <CSV/Player.h>
 #include <JSON/Generator.h>
 #include <Misc/TimerEvents.h>
 
+#include "QmlDataProvider.h"
+
 using namespace UI;
 
 /*
  * Only instance of the class
  */
-static DataProvider *INSTANCE = nullptr;
+static QmlDataProvider *INSTANCE = nullptr;
 
 /**
  * Constructor of the class
  */
-DataProvider::DataProvider()
+QmlDataProvider::QmlDataProvider()
     : m_latestJsonFrame(JFI_Empty())
 {
     auto cp = CSV::Player::getInstance();
@@ -49,16 +49,16 @@ DataProvider::DataProvider()
     connect(te, SIGNAL(highFreqTimeout()), this, SLOT(updateData()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
     connect(ge, SIGNAL(jsonFileMapChanged()), this, SLOT(resetData()));
-    connect(ge, &JSON::Generator::jsonChanged, this, &DataProvider::selectLatestJSON);
+    connect(ge, &JSON::Generator::jsonChanged, this, &QmlDataProvider::selectLatestJSON);
 }
 
 /**
  * Returns the only instance of the class
  */
-DataProvider *DataProvider::getInstance()
+QmlDataProvider *QmlDataProvider::getInstance()
 {
     if (!INSTANCE)
-        INSTANCE = new DataProvider();
+        INSTANCE = new QmlDataProvider();
 
     return INSTANCE;
 }
@@ -66,7 +66,7 @@ DataProvider *DataProvider::getInstance()
 /**
  * @return The title of the current frame
  */
-QString DataProvider::title()
+QString QmlDataProvider::title()
 {
     return m_latestFrame.title();
 }
@@ -74,7 +74,7 @@ QString DataProvider::title()
 /**
  * @return The number of groups contained in the current frame.
  */
-int DataProvider::groupCount()
+int QmlDataProvider::groupCount()
 {
     return m_latestFrame.groupCount();
 }
@@ -82,7 +82,7 @@ int DataProvider::groupCount()
 /**
  * Returns a pointer to the latest frame
  */
-JSON::Frame *DataProvider::latestFrame()
+JSON::Frame *QmlDataProvider::latestFrame()
 {
     return &m_latestFrame;
 }
@@ -90,7 +90,7 @@ JSON::Frame *DataProvider::latestFrame()
 /**
  * Returns @c true if the latest frame contains data
  */
-bool DataProvider::frameValid() const
+bool QmlDataProvider::frameValid() const
 {
     return m_latestFrame.isValid();
 }
@@ -98,7 +98,7 @@ bool DataProvider::frameValid() const
 /**
  * Returns a reference to the group object registered with the given @a index.
  */
-JSON::Group *DataProvider::getGroup(const int index)
+JSON::Group *QmlDataProvider::getGroup(const int index)
 {
     if (index < groupCount())
         return m_latestFrame.groups().at(index);
@@ -110,7 +110,7 @@ JSON::Group *DataProvider::getGroup(const int index)
  * Removes all available data from the UI when the device is disconnected or the CSV
  * file is closed.
  */
-void DataProvider::resetData()
+void QmlDataProvider::resetData()
 {
     // Make latest frame invalid
     m_latestJsonFrame = JFI_Empty();
@@ -124,7 +124,7 @@ void DataProvider::resetData()
 /**
  * Interprets the most recent JSON frame & signals the UI to regenerate itself.
  */
-void DataProvider::updateData()
+void QmlDataProvider::updateData()
 {
     if (m_latestFrame.read(m_latestJsonFrame.jsonDocument.object()))
         emit updated();
@@ -134,7 +134,7 @@ void DataProvider::updateData()
  * Ensures that only the most recent JSON document will be displayed on the user
  * interface.
  */
-void DataProvider::selectLatestJSON(const JFI_Object &frameInfo)
+void QmlDataProvider::selectLatestJSON(const JFI_Object &frameInfo)
 {
     auto frameCount = frameInfo.frameNumber;
     auto currFrameCount = m_latestJsonFrame.frameNumber;

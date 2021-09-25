@@ -19,13 +19,3 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Window 2.12 as QtWindow
-
-import "../Widgets" as Widgets
-
-Item {
-    id: root
-}

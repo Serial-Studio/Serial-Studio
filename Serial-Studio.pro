@@ -142,17 +142,24 @@ HEADERS += \
     src/MQTT/Client.h \
     src/Misc/MacExtras.h \
     src/Misc/ModuleManager.h \
-    src/Misc/TimerEvents.h \
     src/Misc/ThemeManager.h \
+    src/Misc/TimerEvents.h \
     src/Misc/Translator.h \
     src/Misc/Utilities.h \
     src/Plugins/Bridge.h \
-    src/UI/DataProvider.h \
-    src/UI/GraphProvider.h \
-    src/UI/QmlPlainTextEdit.h \
-    src/UI/WidgetProvider.h
+    src/UI/QmlDataProvider.h \
+    src/Widgets/Accelerometer.h \
+    src/Widgets/Bar.h \
+    src/Widgets/Compass.h \
+    src/Widgets/DataGroup.h \
+    src/Widgets/Gauge.h \
+    src/Widgets/Gyroscope.h \
+    src/Widgets/Plot.h \
+    src/Widgets/Terminal.h \
+    src/Widgets/Thermometer.h
 
 SOURCES += \
+    src/main.cpp \
     src/CSV/Export.cpp \
     src/CSV/Player.cpp \
     src/IO/Checksum.cpp \
@@ -169,16 +176,21 @@ SOURCES += \
     src/MQTT/Client.cpp \
     src/Misc/MacExtras.cpp \
     src/Misc/ModuleManager.cpp \
-    src/Misc/TimerEvents.cpp \
     src/Misc/ThemeManager.cpp \
+    src/Misc/TimerEvents.cpp \
     src/Misc/Translator.cpp \
     src/Misc/Utilities.cpp \
     src/Plugins/Bridge.cpp \
-    src/UI/DataProvider.cpp \
-    src/UI/GraphProvider.cpp \
-    src/UI/QmlPlainTextEdit.cpp \
-    src/UI/WidgetProvider.cpp \
-    src/main.cpp
+    src/UI/QmlDataProvider.cpp \
+    src/Widgets/Accelerometer.cpp \
+    src/Widgets/Bar.cpp \
+    src/Widgets/Compass.cpp \
+    src/Widgets/DataGroup.cpp \
+    src/Widgets/Gauge.cpp \
+    src/Widgets/Gyroscope.cpp \
+    src/Widgets/Plot.cpp \
+    src/Widgets/Terminal.cpp \
+    src/Widgets/Thermometer.cpp
 
 #-------------------------------------------------------------------------------
 # Deploy files

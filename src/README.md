@@ -37,8 +37,8 @@ Here is a breakdown of each subdirectory of the source code:
 - The [`Misc`](Misc) directory contains several utility classes, such as the global [`TimerEvents`](Misc/TimerEvents.h) class, which is used to update the UI elements at a given frequency.
 - [`MQTT`](MQTT) contains a singleton class that allows Serial Studio to act as an [MQTT](https://en.wikipedia.org/wiki/MQTT) client.
 - The [`Plugins`](Plugins) folder contains a simple [`TCP server`](Plugins/Bridge.h) that allows Serial Studio to interact with external applications/plugins.
-- Finally, the [`UI`](UI) folder contains the QML data providers, which provide QML-friendly functions so that the QML user interface can represent the lastest [`Frame`](JSON/Frame.h) object in the form of [`data-boxes`](UI/DataProvider.h), [`graphs`](UI/GraphProvider.h) & [`widgets`](UI/WidgetProvider.h). 
-	- The [`QmlPlainTextEdit`](UI/QmlPlainTextEdit.h) class implements a simple read-only text editor with [VT-100](https://en.wikipedia.org/wiki/VT100) emulation that can be used within QML.
+- The [`UI`](UI) folder contains the QML data provider, which provides QML-friendly functions so that the QML user interface can represent the lastest [`Frame`](JSON/Frame.h) object.
+- The [`Widgets`](Widgets) directory contains several `QWidget` based controls adapted to be used with a QML interface, most of the user interface elements that display data are implemented here.
 
 **What about the user interface?** 
 

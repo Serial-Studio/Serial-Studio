@@ -21,11 +21,13 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Window 2.12 as QtWindow
+import QtGraphicalEffects 1.0
 
-import "../Widgets" as Widgets
-
-Item {
-    id: root
+DropShadow {
+    radius: 8.0
+    samples: 17
+    verticalOffset: 3
+    color: "#80000000"
+    horizontalOffset: 0
+    anchors.fill: source
 }

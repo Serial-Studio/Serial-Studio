@@ -25,9 +25,9 @@
 #include <QApplication>
 #include <IO/Console.h>
 
-#include "QmlPlainTextEdit.h"
+#include "Terminal.h"
 
-using namespace UI;
+using namespace Widgets;
 
 //--------------------------------------------------------------------------------------------------
 // QML PlainTextEdit implementation
@@ -48,7 +48,7 @@ using namespace UI;
 /**
  * Constructor function
  */
-QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
+Terminal::Terminal(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_autoscroll(true)
     , m_emulateVt100(false)
@@ -78,14 +78,12 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
     m_color = qApp->palette().color(QPalette::Text);
 
     // Resize QPlainTextEdit to fit QML item
-    connect(this, &QQuickPaintedItem::widthChanged, this,
-            &QmlPlainTextEdit::updateWidgetSize);
-    connect(this, &QQuickPaintedItem::heightChanged, this,
-            &QmlPlainTextEdit::updateWidgetSize);
+    connect(this, &QQuickPaintedItem::widthChanged, this, &Terminal::updateWidgetSize);
+    connect(this, &QQuickPaintedItem::heightChanged, this, &Terminal::updateWidgetSize);
 
     // Connect console signals (doing this on QML uses about 50% of UI thread time)
     auto console = IO::Console::getInstance();
-    connect(console, &IO::Console::stringReceived, this, &QmlPlainTextEdit::insertText);
+    connect(console, &IO::Console::stringReceived, this, &Terminal::insertText);
 
     // React to widget events
     connect(textEdit(), SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));
@@ -94,7 +92,7 @@ QmlPlainTextEdit::QmlPlainTextEdit(QQuickItem *parent)
 /**
  * Destructor function
  */
-QmlPlainTextEdit::~QmlPlainTextEdit()
+Terminal::~Terminal()
 {
     m_textEdit->deleteLater();
 }
@@ -102,7 +100,7 @@ QmlPlainTextEdit::~QmlPlainTextEdit()
 /**
  * Handle application events manually
  */
-bool QmlPlainTextEdit::event(QEvent *event)
+bool Terminal::event(QEvent *event)
 {
     switch (event->type())
     {
@@ -131,7 +129,7 @@ bool QmlPlainTextEdit::event(QEvent *event)
 /**
  * Render the text edit on the given @a painter
  */
-void QmlPlainTextEdit::paint(QPainter *painter)
+void Terminal::paint(QPainter *painter)
 {
     if (m_textEdit && painter)
         textEdit()->render(painter);
@@ -140,7 +138,7 @@ void QmlPlainTextEdit::paint(QPainter *painter)
 /**
  * Custom event filter to manage redraw requests
  */
-bool QmlPlainTextEdit::eventFilter(QObject *watched, QEvent *event)
+bool Terminal::eventFilter(QObject *watched, QEvent *event)
 {
     Q_ASSERT(m_textEdit);
 
@@ -163,7 +161,7 @@ bool QmlPlainTextEdit::eventFilter(QObject *watched, QEvent *event)
 /**
  * Returns the font used by the QPlainTextEdit widget
  */
-QFont QmlPlainTextEdit::font() const
+QFont Terminal::font() const
 {
     return textEdit()->font();
 }
@@ -171,7 +169,7 @@ QFont QmlPlainTextEdit::font() const
 /**
  * Returns the text color used by the QPlainTextEdit widget
  */
-QColor QmlPlainTextEdit::color() const
+QColor Terminal::color() const
 {
     return m_color;
 }
@@ -179,7 +177,7 @@ QColor QmlPlainTextEdit::color() const
 /**
  * Returns the plain text of the QPlainTextEdit widget
  */
-QString QmlPlainTextEdit::text() const
+QString Terminal::text() const
 {
     return textEdit()->toPlainText();
 }
@@ -187,7 +185,7 @@ QString QmlPlainTextEdit::text() const
 /**
  * Returns @c true if the text document is empty
  */
-bool QmlPlainTextEdit::empty() const
+bool Terminal::empty() const
 {
     return textEdit()->document()->isEmpty();
 }
@@ -195,7 +193,7 @@ bool QmlPlainTextEdit::empty() const
 /**
  * Returns @c true if the widget is set to read-only
  */
-bool QmlPlainTextEdit::readOnly() const
+bool Terminal::readOnly() const
 {
     return textEdit()->isReadOnly();
 }
@@ -204,7 +202,7 @@ bool QmlPlainTextEdit::readOnly() const
  * Returns @c true if the widget shall scroll automatically to the bottom when new
  * text is appended to the widget.
  */
-bool QmlPlainTextEdit::autoscroll() const
+bool Terminal::autoscroll() const
 {
     return m_autoscroll;
 }
@@ -212,7 +210,7 @@ bool QmlPlainTextEdit::autoscroll() const
 /**
  * Returns the palette used by the QPlainTextEdit widget
  */
-QPalette QmlPlainTextEdit::palette() const
+QPalette Terminal::palette() const
 {
     return textEdit()->palette();
 }
@@ -221,7 +219,7 @@ QPalette QmlPlainTextEdit::palette() const
  * Returns the wrap mode of the QPlainTextEdit casted to an integer type (so that it
  * can be used from the QML interface).
  */
-int QmlPlainTextEdit::wordWrapMode() const
+int Terminal::wordWrapMode() const
 {
     return static_cast<int>(textEdit()->wordWrapMode());
 }
@@ -229,7 +227,7 @@ int QmlPlainTextEdit::wordWrapMode() const
 /**
  * Returns the width of the vertical scrollbar
  */
-int QmlPlainTextEdit::scrollbarWidth() const
+int Terminal::scrollbarWidth() const
 {
     return textEdit()->verticalScrollBar()->width();
 }
@@ -238,7 +236,7 @@ int QmlPlainTextEdit::scrollbarWidth() const
  * Returns @c true if the user is able to copy any text from the document. This value is
  * updated through the copyAvailable() signal sent by the QPlainTextEdit.
  */
-bool QmlPlainTextEdit::copyAvailable() const
+bool Terminal::copyAvailable() const
 {
     return m_copyAvailable;
 }
@@ -246,7 +244,7 @@ bool QmlPlainTextEdit::copyAvailable() const
 /**
  * Returns @c true if the QPlainTextEdit widget is enabled
  */
-bool QmlPlainTextEdit::widgetEnabled() const
+bool Terminal::widgetEnabled() const
 {
     return textEdit()->isEnabled();
 }
@@ -257,7 +255,7 @@ bool QmlPlainTextEdit::widgetEnabled() const
  * the end of the document. Otherwise, if set to false, the plain text edit scrolls the
  * smallest amount possible to ensure the cursor is visible.
  */
-bool QmlPlainTextEdit::centerOnScroll() const
+bool Terminal::centerOnScroll() const
 {
     return textEdit()->centerOnScroll();
 }
@@ -266,7 +264,7 @@ bool QmlPlainTextEdit::centerOnScroll() const
  * Returns true if the control shall parse basic VT-100 escape secuences. This can be
  * useful if you need to interface with a shell/CLI from Serial Studio.
  */
-bool QmlPlainTextEdit::vt100emulation() const
+bool Terminal::vt100emulation() const
 {
     return m_emulateVt100;
 }
@@ -276,7 +274,7 @@ bool QmlPlainTextEdit::vt100emulation() const
  * Users are only able to undo or redo actions if this property is true, and if there is
  * an action that can be undone (or redone).
  */
-bool QmlPlainTextEdit::undoRedoEnabled() const
+bool Terminal::undoRedoEnabled() const
 {
     return textEdit()->isUndoRedoEnabled();
 }
@@ -291,7 +289,7 @@ bool QmlPlainTextEdit::undoRedoEnabled() const
  * A negative or zero value specifies that the document may contain an unlimited amount
  * of blocks.
  */
-int QmlPlainTextEdit::maximumBlockCount() const
+int Terminal::maximumBlockCount() const
 {
     return textEdit()->maximumBlockCount();
 }
@@ -302,7 +300,7 @@ int QmlPlainTextEdit::maximumBlockCount() const
  * Setting this property makes the editor display a grayed-out placeholder text as long as
  * the document is empty.
  */
-QString QmlPlainTextEdit::placeholderText() const
+QString Terminal::placeholderText() const
 {
     return textEdit()->placeholderText();
 }
@@ -310,7 +308,7 @@ QString QmlPlainTextEdit::placeholderText() const
 /**
  * Returns the pointer to the text document
  */
-QTextDocument *QmlPlainTextEdit::document() const
+QTextDocument *Terminal::document() const
 {
     return textEdit()->document();
 }
@@ -318,7 +316,7 @@ QTextDocument *QmlPlainTextEdit::document() const
 /**
  * Returns the pointer to the text edit object
  */
-QPlainTextEdit *QmlPlainTextEdit::textEdit() const
+QPlainTextEdit *Terminal::textEdit() const
 {
     return m_textEdit;
 }
@@ -326,7 +324,7 @@ QPlainTextEdit *QmlPlainTextEdit::textEdit() const
 /**
  * Copies any selected text to the clipboard.
  */
-void QmlPlainTextEdit::copy()
+void Terminal::copy()
 {
     textEdit()->copy();
 }
@@ -334,7 +332,7 @@ void QmlPlainTextEdit::copy()
 /**
  * Deletes all the text in the text edit.
  */
-void QmlPlainTextEdit::clear()
+void Terminal::clear()
 {
     textEdit()->clear();
     updateScrollbarVisibility();
@@ -346,7 +344,7 @@ void QmlPlainTextEdit::clear()
 /**
  * Selects all the text of the text edit.
  */
-void QmlPlainTextEdit::selectAll()
+void Terminal::selectAll()
 {
     textEdit()->selectAll();
     update();
@@ -355,7 +353,7 @@ void QmlPlainTextEdit::selectAll()
 /**
  * Clears the text selection
  */
-void QmlPlainTextEdit::clearSelection()
+void Terminal::clearSelection()
 {
     auto cursor = QTextCursor(textEdit()->document());
     cursor.clearSelection();
@@ -370,7 +368,7 @@ void QmlPlainTextEdit::clearSelection()
  * In a read-only text edit the user can only navigate through the text and select text;
  * modifying the text is not possible.
  */
-void QmlPlainTextEdit::setReadOnly(const bool ro)
+void Terminal::setReadOnly(const bool ro)
 {
     textEdit()->setReadOnly(ro);
     update();
@@ -381,7 +379,7 @@ void QmlPlainTextEdit::setReadOnly(const bool ro)
 /**
  * Changes the font used to display the text of the text edit.
  */
-void QmlPlainTextEdit::setFont(const QFont &font)
+void Terminal::setFont(const QFont &font)
 {
     textEdit()->setFont(font);
     updateScrollbarVisibility();
@@ -396,7 +394,7 @@ void QmlPlainTextEdit::setFont(const QFont &font)
  * If @c autoscroll() is enabled, this function shall also update the scrollbar position
  * to scroll to the bottom of the text.
  */
-void QmlPlainTextEdit::append(const QString &text)
+void Terminal::append(const QString &text)
 {
     textEdit()->appendPlainText(text);
     updateScrollbarVisibility();
@@ -414,7 +412,7 @@ void QmlPlainTextEdit::append(const QString &text)
  * If @c autoscroll() is enabled, this function shall also update the scrollbar position
  * to scroll to the bottom of the text.
  */
-void QmlPlainTextEdit::setText(const QString &text)
+void Terminal::setText(const QString &text)
 {
     textEdit()->setPlainText(text);
     updateScrollbarVisibility();
@@ -429,7 +427,7 @@ void QmlPlainTextEdit::setText(const QString &text)
 /**
  * Changes the text color of the text editor.
  */
-void QmlPlainTextEdit::setColor(const QColor &color)
+void Terminal::setColor(const QColor &color)
 {
     m_color = color;
     auto qss = QString("QPlainTextEdit{color: %1;}").arg(color.name());
@@ -442,7 +440,7 @@ void QmlPlainTextEdit::setColor(const QColor &color)
 /**
  * Changes the width of the vertical scrollbar
  */
-void QmlPlainTextEdit::setScrollbarWidth(const int width)
+void Terminal::setScrollbarWidth(const int width)
 {
     auto bar = textEdit()->verticalScrollBar();
     bar->setFixedWidth(width);
@@ -454,7 +452,7 @@ void QmlPlainTextEdit::setScrollbarWidth(const int width)
 /**
  * Changes the @c QPalette of the text editor widget and its children.
  */
-void QmlPlainTextEdit::setPalette(const QPalette &palette)
+void Terminal::setPalette(const QPalette &palette)
 {
     textEdit()->setPalette(palette);
     update();
@@ -465,7 +463,7 @@ void QmlPlainTextEdit::setPalette(const QPalette &palette)
 /**
  * Enables or disables the text editor widget.
  */
-void QmlPlainTextEdit::setWidgetEnabled(const bool enabled)
+void Terminal::setWidgetEnabled(const bool enabled)
 {
     textEdit()->setEnabled(enabled);
     update();
@@ -478,7 +476,7 @@ void QmlPlainTextEdit::setWidgetEnabled(const bool enabled)
  * vertical scrollbar shall automatically scroll to the end of the document when the
  * text of the text editor is changed.
  */
-void QmlPlainTextEdit::setAutoscroll(const bool enabled)
+void Terminal::setAutoscroll(const bool enabled)
 {
     // Change internal variables
     m_autoscroll = enabled;
@@ -499,7 +497,7 @@ void QmlPlainTextEdit::setAutoscroll(const bool enabled)
 /**
  * Inserts the given @a text directly, no additional line breaks added.
  */
-void QmlPlainTextEdit::insertText(const QString &text)
+void Terminal::insertText(const QString &text)
 {
     addText(text, vt100emulation());
 }
@@ -509,7 +507,7 @@ void QmlPlainTextEdit::insertText(const QString &text)
  *
  * This property holds the mode QPlainTextEdit will use when wrapping text by words.
  */
-void QmlPlainTextEdit::setWordWrapMode(const int mode)
+void Terminal::setWordWrapMode(const int mode)
 {
     textEdit()->setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
     updateScrollbarVisibility();
@@ -524,7 +522,7 @@ void QmlPlainTextEdit::setWordWrapMode(const int mode)
  * the end of the document. Otherwise, if set to false, the plain text edit scrolls the
  * smallest amount possible to ensure the cursor is visible.
  */
-void QmlPlainTextEdit::setCenterOnScroll(const bool enabled)
+void Terminal::setCenterOnScroll(const bool enabled)
 {
     textEdit()->setCenterOnScroll(enabled);
     update();
@@ -537,7 +535,7 @@ void QmlPlainTextEdit::setCenterOnScroll(const bool enabled)
  * interfacing through network ports or interfacing with a MCU that implements some
  * kind of shell.
  */
-void QmlPlainTextEdit::setVt100Emulation(const bool enabled)
+void Terminal::setVt100Emulation(const bool enabled)
 {
     m_emulateVt100 = enabled;
     emit vt100EmulationChanged();
@@ -546,7 +544,7 @@ void QmlPlainTextEdit::setVt100Emulation(const bool enabled)
 /**
  * Enables/disables undo/redo history support.
  */
-void QmlPlainTextEdit::setUndoRedoEnabled(const bool enabled)
+void Terminal::setUndoRedoEnabled(const bool enabled)
 {
     textEdit()->setUndoRedoEnabled(enabled);
     update();
@@ -558,7 +556,7 @@ void QmlPlainTextEdit::setUndoRedoEnabled(const bool enabled)
  * Changes the placeholder text of the text editor. The placeholder text is only displayed
  * when the document is empty.
  */
-void QmlPlainTextEdit::setPlaceholderText(const QString &text)
+void Terminal::setPlaceholderText(const QString &text)
 {
     textEdit()->setPlaceholderText(text);
     update();
@@ -569,7 +567,7 @@ void QmlPlainTextEdit::setPlaceholderText(const QString &text)
 /**
  * Moves the position of the vertical scrollbar to the end of the document.
  */
-void QmlPlainTextEdit::scrollToBottom(const bool repaint)
+void Terminal::scrollToBottom(const bool repaint)
 {
     // Get scrollbar pointer, calculate line count & visible text lines
     auto *bar = textEdit()->verticalScrollBar();
@@ -603,7 +601,7 @@ void QmlPlainTextEdit::scrollToBottom(const bool repaint)
  * A negative or zero value specifies that the document may contain an unlimited amount of
  * blocks.
  */
-void QmlPlainTextEdit::setMaximumBlockCount(const int maxBlockCount)
+void Terminal::setMaximumBlockCount(const int maxBlockCount)
 {
     textEdit()->setMaximumBlockCount(maxBlockCount);
     update();
@@ -614,7 +612,7 @@ void QmlPlainTextEdit::setMaximumBlockCount(const int maxBlockCount)
 /**
  * Resizes the text editor widget to fit inside the QML item.
  */
-void QmlPlainTextEdit::updateWidgetSize()
+void Terminal::updateWidgetSize()
 {
     textEdit()->setFixedSize(width(), height());
     updateScrollbarVisibility();
@@ -624,7 +622,7 @@ void QmlPlainTextEdit::updateWidgetSize()
 /**
  * Hides or shows the scrollbar
  */
-void QmlPlainTextEdit::updateScrollbarVisibility()
+void Terminal::updateScrollbarVisibility()
 {
     // Get current line count & visible lines
     auto lineCount = textEdit()->document()->blockCount();
@@ -643,7 +641,7 @@ void QmlPlainTextEdit::updateScrollbarVisibility()
  * Updates the value of copy-available. This function is automatically called by the text
  * editor widget when the user makes any text selection/deselection.
  */
-void QmlPlainTextEdit::setCopyAvailable(const bool yes)
+void Terminal::setCopyAvailable(const bool yes)
 {
     m_copyAvailable = yes;
     emit copyAvailableChanged();
@@ -652,7 +650,7 @@ void QmlPlainTextEdit::setCopyAvailable(const bool yes)
 /**
  * Inserts the given @a text directly, no additional line breaks added.
  */
-void QmlPlainTextEdit::addText(const QString &text, const bool enableVt100)
+void Terminal::addText(const QString &text, const bool enableVt100)
 {
     // Get text to insert
     QString textToInsert = text;
@@ -680,7 +678,7 @@ void QmlPlainTextEdit::addText(const QString &text, const bool enableVt100)
  * Hack: call the appropiate protected mouse event handler function of the QPlainTextEdit
  *       item depending on event type
  */
-void QmlPlainTextEdit::processMouseEvents(QMouseEvent *event)
+void Terminal::processMouseEvents(QMouseEvent *event)
 {
     // Subclass QPlainTextEdit so that we can call protected functions
     class Hack : public QPlainTextEdit
@@ -716,7 +714,7 @@ void QmlPlainTextEdit::processMouseEvents(QMouseEvent *event)
 /**
  * Hack: call the protected wheel event handler function of the QPlainTextEdit item
  */
-void QmlPlainTextEdit::processWheelEvents(QWheelEvent *event)
+void Terminal::processWheelEvents(QWheelEvent *event)
 {
     // Subclass QPlainTextEdit so that we can call protected functions
     class Hack : public QPlainTextEdit
@@ -763,7 +761,7 @@ void QmlPlainTextEdit::processWheelEvents(QWheelEvent *event)
  * Processes the given @a data to remove the escape sequences from the text using code
  * from Qt Creator output terminal. Check the next code block for more info.
  */
-QString QmlPlainTextEdit::vt100Processing(const QString &data)
+QString Terminal::vt100Processing(const QString &data)
 {
     auto formattedText = m_escapeCodeHandler.parseText(FormattedText(data));
     const QString cleanLine = std::accumulate(

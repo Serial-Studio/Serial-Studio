@@ -20,14 +20,14 @@
  * THE SOFTWARE.
  */
 
-#ifndef UI_QML_PLAINTEXTEDIT_H
-#define UI_QML_PLAINTEXTEDIT_H
+#ifndef WIDGETS_TERMINAL_H
+#define WIDGETS_TERMINAL_H
 
 #include <QPainter>
 #include <QPlainTextEdit>
 #include <QQuickPaintedItem>
 
-namespace UI
+namespace Widgets
 {
 class FormattedText
 {
@@ -62,7 +62,7 @@ private:
     bool m_waitingForTerminator = false;
 };
 
-class QmlPlainTextEdit : public QQuickPaintedItem
+class Terminal : public QQuickPaintedItem
 {
     // clang-format off
     Q_OBJECT
@@ -149,8 +149,8 @@ signals:
     void maximumBlockCountChanged();
 
 public:
-    QmlPlainTextEdit(QQuickItem *parent = 0);
-    ~QmlPlainTextEdit();
+    Terminal(QQuickItem *parent = 0);
+    ~Terminal();
 
     virtual bool event(QEvent *event) override;
     virtual void paint(QPainter *painter) override;

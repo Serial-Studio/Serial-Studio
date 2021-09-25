@@ -37,7 +37,7 @@ ApplicationWindow {
     // Global properties
     //
     readonly property int spacing: 8
-    property bool firstValidPacket: false
+    property bool firstValidFrame: false
     readonly property string monoFont: qmlMain.monoFont
 
     //
@@ -93,8 +93,8 @@ ApplicationWindow {
     readonly property bool dashboardVisible: data.visible
     readonly property bool widgetsVisible: widgets.visible
     readonly property bool consoleVisible: terminal.visible
-    readonly property bool dashboardAvailable: Cpp_UI_Provider.groupCount > 0
-    readonly property bool widgetsAvailable: Cpp_UI_WidgetProvider.totalWidgetCount > 0
+    readonly property bool widgetsAvailable: Cpp_UI_QmlDataProvider.widgetCount > 0
+    readonly property bool dashboardAvailable: Cpp_UI_QmlDataProvider.groupCount > 0
 
     //
     // Menubar status
@@ -324,20 +324,21 @@ ApplicationWindow {
     }
 
     //
-    // Hide console & device manager when we receive first valid packet
+    // Hide console & device manager when we receive first valid frame
     //
     Connections {
-        target: Cpp_UI_Provider
-        enabled: !app.firstValidPacket
+        target: Cpp_UI_QmlDataProvider
+        enabled: !app.firstValidFrame
+
         function onUpdated()  {
-            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) && Cpp_UI_Provider.frameValid()) {
-                app.firstValidPacket = true
+            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) && Cpp_UI_QmlDataProvider.frameValid()) {
+                app.firstValidFrame = true
                 setup.hide()
                 app.showDashboard()
             } else {
                 toolbar.consoleClicked()
                 setup.show()
-                app.firstValidPacket = false
+                app.firstValidFrame = false
             }
         }
     }
@@ -346,11 +347,11 @@ ApplicationWindow {
     // Show console tab on serial disconnect
     //
     Connections {
-        target: Cpp_UI_Provider
+        target: Cpp_UI_QmlDataProvider
         function onDataReset() {
             toolbar.consoleClicked()
             setup.show()
-            app.firstValidPacket = false
+            app.firstValidFrame = false
         }
     }
 

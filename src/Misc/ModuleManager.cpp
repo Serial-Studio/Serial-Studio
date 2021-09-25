@@ -27,11 +27,6 @@
 #include <CSV/Export.h>
 #include <CSV/Player.h>
 
-#include <UI/DataProvider.h>
-#include <UI/GraphProvider.h>
-#include <UI/WidgetProvider.h>
-#include <UI/QmlPlainTextEdit.h>
-
 #include <JSON/Frame.h>
 #include <JSON/Group.h>
 #include <JSON/Editor.h>
@@ -53,6 +48,17 @@
 
 #include <MQTT/Client.h>
 #include <Plugins/Bridge.h>
+#include <UI/QmlDataProvider.h>
+
+#include <Widgets/Bar.h>
+#include <Widgets/Plot.h>
+#include <Widgets/Gauge.h>
+#include <Widgets/Compass.h>
+#include <Widgets/Terminal.h>
+#include <Widgets/DataGroup.h>
+#include <Widgets/Gyroscope.h>
+#include <Widgets/Thermometer.h>
+#include <Widgets/Accelerometer.h>
 
 #include <QSimpleUpdater.h>
 
@@ -119,7 +125,7 @@ void ModuleManager::registerQmlTypes()
     qRegisterMetaType<JFI_Object>("JFI_Object");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
-    qmlRegisterType<UI::QmlPlainTextEdit>("SerialStudio", 1, 0, "QmlPlainTextEdit");
+    qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
 }
 
 /**
@@ -146,51 +152,47 @@ void ModuleManager::initializeQmlInterface()
 {
     // Initialize modules
     setSplashScreenMessage(tr("Initializing modules..."));
-    auto translator = Misc::Translator::getInstance();
     auto csvExport = CSV::Export::getInstance();
     auto csvPlayer = CSV::Player::getInstance();
-    auto updater = QSimpleUpdater::getInstance();
-    auto uiDataProvider = UI::DataProvider::getInstance();
-    auto uiGraphProvider = UI::GraphProvider::getInstance();
-    auto uiWidgetProvider = UI::WidgetProvider::getInstance();
     auto ioManager = IO::Manager::getInstance();
     auto ioConsole = IO::Console::getInstance();
-    auto ioSerial = IO::DataSources::Serial::getInstance();
-    auto ioNetwork = IO::DataSources::Network::getInstance();
-    auto jsonGenerator = JSON::Generator::getInstance();
+    auto updater = QSimpleUpdater::getInstance();
     auto jsonEditor = JSON::Editor::getInstance();
-    auto utilities = Misc::Utilities::getInstance();
-    auto themeManager = Misc::ThemeManager::getInstance();
-    auto mqttPublisher = MQTT::Client::getInstance();
+    auto mqttClient = MQTT::Client::getInstance();
+    auto jsonGenerator = JSON::Generator::getInstance();
     auto pluginsBridge = Plugins::Bridge::getInstance();
-    auto macExtras = Misc::MacExtras::getInstance();
-    auto timerEvents = Misc::TimerEvents::getInstance();
+    auto miscUtilities = Misc::Utilities::getInstance();
+    auto miscMacExtras = Misc::MacExtras::getInstance();
+    auto miscTranslator = Misc::Translator::getInstance();
+    auto ioSerial = IO::DataSources::Serial::getInstance();
+    auto miscTimerEvents = Misc::TimerEvents::getInstance();
+    auto ioNetwork = IO::DataSources::Network::getInstance();
+    auto miscThemeManager = Misc::ThemeManager::getInstance();
+    auto uiQmlDataProvider = UI::QmlDataProvider::getInstance();
 
     // Retranslate the QML interface automagically
-    connect(translator, SIGNAL(languageChanged()), engine(), SLOT(retranslate()));
+    connect(miscTranslator, SIGNAL(languageChanged()), engine(), SLOT(retranslate()));
 
     // Register C++ modules with QML
     auto c = engine()->rootContext();
     c->setContextProperty("Cpp_Updater", updater);
-    c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
-    c->setContextProperty("Cpp_Misc_Translator", translator);
-    c->setContextProperty("Cpp_Misc_Utilities", utilities);
-    c->setContextProperty("Cpp_ThemeManager", themeManager);
+    c->setContextProperty("Cpp_IO_Serial", ioSerial);
     c->setContextProperty("Cpp_CSV_Export", csvExport);
     c->setContextProperty("Cpp_CSV_Player", csvPlayer);
-    c->setContextProperty("Cpp_UI_Provider", uiDataProvider);
-    c->setContextProperty("Cpp_UI_GraphProvider", uiGraphProvider);
-    c->setContextProperty("Cpp_UI_WidgetProvider", uiWidgetProvider);
     c->setContextProperty("Cpp_IO_Console", ioConsole);
     c->setContextProperty("Cpp_IO_Manager", ioManager);
-    c->setContextProperty("Cpp_IO_Serial", ioSerial);
     c->setContextProperty("Cpp_IO_Network", ioNetwork);
     c->setContextProperty("Cpp_JSON_Editor", jsonEditor);
+    c->setContextProperty("Cpp_MQTT_Client", mqttClient);
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
-    c->setContextProperty("Cpp_MQTT_Client", mqttPublisher);
     c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
-    c->setContextProperty("Cpp_Misc_MacExtras", macExtras);
-    c->setContextProperty("Cpp_Misc_TimerEvents", timerEvents);
+    c->setContextProperty("Cpp_Misc_MacExtras", miscMacExtras);
+    c->setContextProperty("Cpp_Misc_Utilities", miscUtilities);
+    c->setContextProperty("Cpp_ThemeManager", miscThemeManager);
+    c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
+    c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
+    c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
+    c->setContextProperty("Cpp_UI_QmlDataProvider", uiQmlDataProvider);
     c->setContextProperty("Cpp_ModuleManager", this);
 
     // Register app info with QML
@@ -205,7 +207,7 @@ void ModuleManager::initializeQmlInterface()
 
     // Start common event timers
     setSplashScreenMessage(tr("Starting timers..."));
-    timerEvents->startTimers();
+    miscTimerEvents->startTimers();
 
     // Log QML engine status
     setSplashScreenMessage(tr("Loading user interface..."));

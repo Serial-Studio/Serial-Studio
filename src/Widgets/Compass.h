@@ -20,12 +20,7 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Window 2.12 as QtWindow
+#ifndef WIDGETS_COMPASS_H
+#define WIDGETS_COMPASS_H
 
-import "../Widgets" as Widgets
-
-Item {
-    id: root
-}
+#endif

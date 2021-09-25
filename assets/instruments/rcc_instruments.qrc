@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/instruments">
-        <file>AttitudeDial.svg</file>
-        <file>AttitudePointer.svg</file>
-        <file>Compass.svg</file>
-        <file>CompassCase.svg</file>
-        <file>Crosshair.svg</file>
-    </qresource>
-</RCC>
