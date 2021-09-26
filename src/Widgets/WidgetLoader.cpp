@@ -64,6 +64,9 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     // Automatically update the widget's visibility
     connect(UI::Dashboard::getInstance(), &UI::Dashboard::widgetVisibilityChanged, this,
             &WidgetLoader::updateWidgetVisible);
+
+    // Enable/disable the window widget automatically
+    connect(&m_window, SIGNAL(visibleChanged()), this, SLOT(updateWidgetWindow()));
 }
 
 /**
@@ -225,6 +228,7 @@ void WidgetLoader::setWidgetIndex(const int index)
             case UI::Dashboard::WidgetType::Group:
                 m_widget = new DataGroup(relativeIndex());
                 m_window.setCentralWidget(new DataGroup(relativeIndex()));
+                m_window.centralWidget()->setEnabled(false);
                 break;
             case UI::Dashboard::WidgetType::Plot:
                 m_widget = new QPushButton("Plot");
@@ -277,6 +281,16 @@ void WidgetLoader::updateWidgetSize()
         m_widget->setFixedSize(width(), height());
         update();
     }
+}
+
+/**
+ * Enables/disables the widget updates of the external window when the window
+ * is shown or hidden.
+ */
+void WidgetLoader::updateWidgetWindow()
+{
+    if (m_window.centralWidget())
+        m_window.centralWidget()->setEnabled(m_window.isVisible());
 }
 
 /**

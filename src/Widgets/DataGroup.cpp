@@ -156,6 +156,10 @@ void DataGroup::createUserInterface()
 
 void DataGroup::updateUserInterface()
 {
+    // Widget not enabled, do nothing
+    if (!isEnabled())
+        return;
+
     // Get group pointer
     auto dash = UI::Dashboard::getInstance();
     auto group = dash->getGroup(m_groupIndex);

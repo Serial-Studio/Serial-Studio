@@ -33,6 +33,27 @@
 
 namespace Widgets
 {
+class WidgetWindow : public QMainWindow
+{
+    Q_OBJECT
+
+signals:
+    void visibleChanged();
+
+private:
+    void showEvent(QShowEvent *event)
+    {
+        event->accept();
+        emit visibleChanged();
+    }
+
+    void hideEvent(QHideEvent *event)
+    {
+        event->accept();
+        emit visibleChanged();
+    }
+};
+
 class WidgetLoader : public QQuickPaintedItem
 {
     // clang-format off
@@ -81,6 +102,7 @@ public slots:
 
 private slots:
     void updateWidgetSize();
+    void updateWidgetWindow();
     void updateWidgetVisible();
 
 protected:
@@ -90,7 +112,7 @@ protected:
 private:
     int m_index;
     QWidget *m_widget;
-    QMainWindow m_window;
+    WidgetWindow m_window;
     bool m_widgetVisible;
 };
 }
