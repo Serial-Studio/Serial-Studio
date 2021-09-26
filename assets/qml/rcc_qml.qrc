@@ -29,5 +29,6 @@
         <file>Windows/MainWindow.qml</file>
         <file>main.qml</file>
         <file>Windows/JsonEditor.qml</file>
+        <file>Dashboard/ViewOptionsDelegate.qml</file>
     </qresource>
 </RCC>

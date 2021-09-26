@@ -57,6 +57,9 @@ Widgets.Window {
             x: app.spacing
             width: parent.width - 10 - 2 * app.spacing
 
+            //
+            // Spacer
+            //
             Item {
                 height: app.spacing
             }
@@ -64,381 +67,100 @@ Widgets.Window {
             //
             // Groups
             //
-            RowLayout {
-                spacing: app.spacing
-                visible: Cpp_UI_Dashboard.groupCount > 0
-
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(18, 18)
-                    source: "qrc:/icons/group.svg"
-                    ColorOverlay {
-                        source: parent
-                        color: palette.text
-                        anchors.fill: parent
-                    }
-                } Label {
-                    font.bold: true
-                    text: qsTr("Data groups") + ":"
-                } Item {
-                    Layout.fillWidth: true
-                }
-            } Item {
-                height: app.spacing / 2
-            } Repeater {
-                model: Cpp_UI_Dashboard.groupCount
-                delegate: Switch {
-                    checked: true
-                    Layout.fillWidth: true
-                    text: Cpp_UI_Dashboard.groupTitles()[index]
-                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                    onCheckedChanged: Cpp_UI_Dashboard.setGroupVisible(index, checked)
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                height: app.spacing
+            ViewOptionsDelegate {
+                title: qsTr("Data groups")
+                icon: "qrc:/icons/group.svg"
+                count: Cpp_UI_Dashboard.groupCount
+                titles: Cpp_UI_Dashboard.groupTitles
+                onCheckedChanged: Cpp_UI_Dashboard.setGroupVisible(index, checked)
             }
 
             //
             // Plots
             //
-            RowLayout {
-                spacing: app.spacing
-                visible: Cpp_UI_Dashboard.plotCount > 0
-
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(18, 18)
-                    source: "qrc:/icons/plot.svg"
-                    ColorOverlay {
-                        source: parent
-                        color: palette.text
-                        anchors.fill: parent
-                    }
-                } Label {
-                    font.bold: true
-                    text: qsTr("Plots") + ":"
-                } Item {
-                    Layout.fillWidth: true
-                }
-            } Item {
-                height: app.spacing / 2
-            } Repeater {
-                model: Cpp_UI_Dashboard.plotCount
-                delegate: Switch {
-                    checked: true
-                    Layout.fillWidth: true
-                    text: Cpp_UI_Dashboard.plotTitles()[index]
-                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                    onCheckedChanged: Cpp_UI_Dashboard.setPlotVisible(index, checked)
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                height: app.spacing
+            ViewOptionsDelegate {
+                title: qsTr("Data plots")
+                icon: "qrc:/icons/plot.svg"
+                count: Cpp_UI_Dashboard.plotCount
+                titles: Cpp_UI_Dashboard.plotTitles
+                onCheckedChanged: Cpp_UI_Dashboard.setPlotVisible(index, checked)
             }
 
             //
             // Bars
             //
-            RowLayout {
-                spacing: app.spacing
-                visible: Cpp_UI_Dashboard.barCount > 0
-
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(18, 18)
-                    source: "qrc:/icons/bar.svg"
-                    ColorOverlay {
-                        source: parent
-                        color: palette.text
-                        anchors.fill: parent
-                    }
-                } Label {
-                    font.bold: true
-                    text: qsTr("Bars") + ":"
-                } Item {
-                    Layout.fillWidth: true
-                }
-            } Item {
-                height: app.spacing / 2
-            } Repeater {
-                model: Cpp_UI_Dashboard.barCount
-                delegate: Switch {
-                    checked: true
-                    Layout.fillWidth: true
-                    text: Cpp_UI_Dashboard.barTitles()[index]
-                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                    onCheckedChanged: Cpp_UI_Dashboard.setBarVisible(index, checked)
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                height: app.spacing
+            ViewOptionsDelegate {
+                title: qsTr("Bars")
+                icon: "qrc:/icons/bar.svg"
+                count: Cpp_UI_Dashboard.barCount
+                titles: Cpp_UI_Dashboard.barTitles
+                onCheckedChanged: Cpp_UI_Dashboard.setBarVisible(index, checked)
             }
 
             //
             // Gauges
             //
-            RowLayout {
-                spacing: app.spacing
-                visible: Cpp_UI_Dashboard.gaugeCount > 0
-
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(18, 18)
-                    source: "qrc:/icons/gauge.svg"
-                    ColorOverlay {
-                        source: parent
-                        color: palette.text
-                        anchors.fill: parent
-                    }
-                } Label {
-                    font.bold: true
-                    text: qsTr("Gauges") + ":"
-                } Item {
-                    Layout.fillWidth: true
-                }
-            } Item {
-                height: app.spacing / 2
-            } Repeater {
-                model: Cpp_UI_Dashboard.gaugeCount
-                delegate: Switch {
-                    checked: true
-                    Layout.fillWidth: true
-                    text: Cpp_UI_Dashboard.gaugeTitles()[index]
-                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                    onCheckedChanged: Cpp_UI_Dashboard.setGaugeVisible(index, checked)
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                height: app.spacing
+            ViewOptionsDelegate {
+                title: qsTr("Gauges")
+                icon: "qrc:/icons/gauge.svg"
+                count: Cpp_UI_Dashboard.gaugeCount
+                titles: Cpp_UI_Dashboard.gaugeTitles
+                onCheckedChanged: Cpp_UI_Dashboard.setGaugeVisible(index, checked)
             }
 
             //
             // Thermometers
             //
-            RowLayout {
-                spacing: app.spacing
-                visible: Cpp_UI_Dashboard.thermometerCount > 0
-
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(18, 18)
-                    source: "qrc:/icons/thermometer.svg"
-                    ColorOverlay {
-                        source: parent
-                        color: palette.text
-                        anchors.fill: parent
-                    }
-                } Label {
-                    font.bold: true
-                    text: qsTr("Thermometers") + ":"
-                } Item {
-                    Layout.fillWidth: true
-                }
-            } Item {
-                height: app.spacing / 2
-            } Repeater {
-                model: Cpp_UI_Dashboard.thermometerCount
-                delegate: Switch {
-                    checked: true
-                    Layout.fillWidth: true
-                    text: Cpp_UI_Dashboard.thermometerTitles()[index]
-                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                    onCheckedChanged: Cpp_UI_Dashboard.setThermometerVisible(index, checked)
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                height: app.spacing
+            ViewOptionsDelegate {
+                title: qsTr("Thermometers")
+                icon: "qrc:/icons/thermometer.svg"
+                count: Cpp_UI_Dashboard.thermometerCount
+                titles: Cpp_UI_Dashboard.thermometerTitles
+                onCheckedChanged: Cpp_UI_Dashboard.setThermometerVisible(index, checked)
             }
 
             //
             // Compasses
             //
-            RowLayout {
-                spacing: app.spacing
-                visible: Cpp_UI_Dashboard.compassCount > 0
-
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(18, 18)
-                    source: "qrc:/icons/compass.svg"
-                    ColorOverlay {
-                        source: parent
-                        color: palette.text
-                        anchors.fill: parent
-                    }
-                } Label {
-                    font.bold: true
-                    text: qsTr("Compasses") + ":"
-                } Item {
-                    Layout.fillWidth: true
-                }
-            } Item {
-                height: app.spacing / 2
-            } Repeater {
-                model: Cpp_UI_Dashboard.compassCount
-                delegate: Switch {
-                    checked: true
-                    Layout.fillWidth: true
-                    text: Cpp_UI_Dashboard.compassTitles()[index]
-                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                    onCheckedChanged: Cpp_UI_Dashboard.setCompassVisible(index, checked)
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                height: app.spacing
+            ViewOptionsDelegate {
+                title: qsTr("Compasses")
+                icon: "qrc:/icons/compass.svg"
+                count: Cpp_UI_Dashboard.compassCount
+                titles: Cpp_UI_Dashboard.compassTitles
+                onCheckedChanged: Cpp_UI_Dashboard.setCompassVisible(index, checked)
             }
 
             //
             // Gyroscopes
             //
-            RowLayout {
-                spacing: app.spacing
-                visible: Cpp_UI_Dashboard.gyroscopeCount > 0
-
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(18, 18)
-                    source: "qrc:/icons/gyro.svg"
-                    ColorOverlay {
-                        source: parent
-                        color: palette.text
-                        anchors.fill: parent
-                    }
-                } Label {
-                    font.bold: true
-                    text: qsTr("Gyroscopes") + ":"
-                } Item {
-                    Layout.fillWidth: true
-                }
-            } Item {
-                height: app.spacing / 2
-            } Repeater {
-                model: Cpp_UI_Dashboard.compassCount
-                delegate: Switch {
-                    checked: true
-                    Layout.fillWidth: true
-                    text: Cpp_UI_Dashboard.gyroscopeTitles()[index]
-                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                    onCheckedChanged: Cpp_UI_Dashboard.setGyroscopeVisible(index, checked)
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                height: app.spacing
+            ViewOptionsDelegate {
+                title: qsTr("Gyroscopes")
+                icon: "qrc:/icons/gyro.svg"
+                count: Cpp_UI_Dashboard.gyroscopeCount
+                titles: Cpp_UI_Dashboard.gyroscopeTitles
+                onCheckedChanged: Cpp_UI_Dashboard.setGyroscopeVisible(index, checked)
             }
 
             //
             // Accelerometers
             //
-            RowLayout {
-                spacing: app.spacing
-                visible: Cpp_UI_Dashboard.accelerometerCount > 0
-
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(18, 18)
-                    source: "qrc:/icons/accelerometer.svg"
-                    ColorOverlay {
-                        source: parent
-                        color: palette.text
-                        anchors.fill: parent
-                    }
-                } Label {
-                    font.bold: true
-                    text: qsTr("Accelerometers") + ":"
-                } Item {
-                    Layout.fillWidth: true
-                }
-            } Item {
-                height: app.spacing / 2
-            } Repeater {
-                model: Cpp_UI_Dashboard.accelerometerCount
-                delegate: Switch {
-                    checked: true
-                    Layout.fillWidth: true
-                    text: Cpp_UI_Dashboard.accelerometerTitles()[index]
-                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                    onCheckedChanged: Cpp_UI_Dashboard.setAccelerometerVisible(index, checked)
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                height: app.spacing
+            ViewOptionsDelegate {
+                title: qsTr("Accelerometers")
+                icon: "qrc:/icons/accelerometer.svg"
+                count: Cpp_UI_Dashboard.accelerometerCount
+                titles: Cpp_UI_Dashboard.accelerometerTitles
+                onCheckedChanged: Cpp_UI_Dashboard.setAccelerometerVisible(index, checked)
             }
 
             //
             // Maps
             //
-            RowLayout {
-                spacing: app.spacing
-                visible: Cpp_UI_Dashboard.mapCount > 0
-
-                Image {
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    sourceSize: Qt.size(18, 18)
-                    source: "qrc:/icons/map.svg"
-                    ColorOverlay {
-                        source: parent
-                        color: palette.text
-                        anchors.fill: parent
-                    }
-                } Label {
-                    font.bold: true
-                    text: qsTr("Maps") + ":"
-                } Item {
-                    Layout.fillWidth: true
-                }
-            } Item {
-                height: app.spacing / 2
-            } Repeater {
-                model: Cpp_UI_Dashboard.mapCount
-                delegate: Switch {
-                    checked: true
-                    Layout.fillWidth: true
-                    text: Cpp_UI_Dashboard.mapTitles()[index]
-                    palette.highlight: Cpp_ThemeManager.alternativeHighlight
-                    onCheckedChanged: Cpp_UI_Dashboard.setMapVisible(index, checked)
-                }
+            ViewOptionsDelegate {
+                title: qsTr("Maps")
+                icon: "qrc:/icons/map.svg"
+                count: Cpp_UI_Dashboard.mapCount
+                titles: Cpp_UI_Dashboard.mapTitles
+                onCheckedChanged: Cpp_UI_Dashboard.setMapVisible(index, checked)
             }
         }
     }

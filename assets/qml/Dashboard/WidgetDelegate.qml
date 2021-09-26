@@ -29,6 +29,7 @@ import "../Widgets" as Widgets
 
 Item {
     id: root
+    enabled: visible
     visible: loader.widgetVisible
 
     Widgets.Window {

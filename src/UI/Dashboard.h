@@ -69,6 +69,33 @@ class Dashboard : public QObject
     Q_PROPERTY(int accelerometerCount
                READ accelerometerCount
                NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList mapTitles
+               READ mapTitles
+               NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList barTitles
+               READ barTitles
+               NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList plotTitles
+               READ plotTitles
+               NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList groupTitles
+               READ groupTitles
+               NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList gaugeTitles
+               READ gaugeTitles
+               NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList compassTitles
+               READ compassTitles
+               NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList gyroscopeTitles
+               READ gyroscopeTitles
+               NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList thermometerTitles
+               READ thermometerTitles
+               NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList accelerometerTitles
+               READ accelerometerTitles
+               NOTIFY widgetCountChanged)
     // clang-format on
 
 signals:

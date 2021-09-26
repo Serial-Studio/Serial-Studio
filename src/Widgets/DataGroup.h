@@ -23,4 +23,6 @@
 #ifndef WIDGETS_DATAGROUP_H
 #define WIDGETS_DATAGROUP_H
 
+#include <QWidget>
+
 #endif

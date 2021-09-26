@@ -208,6 +208,7 @@ SOURCES += \
 DISTFILES += \
     assets/qml/Dashboard/DashboardTitle.qml \
     assets/qml/Dashboard/ViewOptions.qml \
+    assets/qml/Dashboard/ViewOptionsDelegate.qml \
     assets/qml/Dashboard/WidgetDelegate.qml \
     assets/qml/Dashboard/WidgetGrid.qml \
     assets/qml/Dashboard/WidgetModel.qml \

@@ -69,5 +69,7 @@
         <file>warning.svg</file>
         <file>widget.svg</file>
         <file>thermometer.svg</file>
+        <file>show-all.svg</file>
+        <file>hide-all.svg</file>
     </qresource>
 </RCC>
