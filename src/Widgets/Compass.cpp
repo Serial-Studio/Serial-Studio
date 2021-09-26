@@ -19,3 +19,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+#include "Compass.h"
+#include "UI/Dashboard.h"
+#include "Misc/ThemeManager.h"
+
+#include <QwtSimpleCompassRose>
+#include <QwtCompassWindArrow>
+
+using namespace Widgets;
+
+Compass::Compass(const int index)
+    : m_index(index)
+{
+    // Invalid index, abort
+    if (m_index < 0)
+        return;
+
+    // Configure compass
+    m_compass.setScale(0, 360);
+    m_compass.setNeedle(
+        new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::TriangleStyle));
+
+    // Add compass to layout
+    m_layout.addWidget(&m_compass);
+    m_layout.setContentsMargins(24, 24, 24, 24);
+    setLayout(&m_layout);
+
+    // Set stylesheet
+    auto theme = Misc::ThemeManager::getInstance();
+    auto qss
+        = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
+    setStyleSheet(qss);
+
+    // React to dashboard events
+    connect(UI::Dashboard::getInstance(), &UI::Dashboard::updated, this,
+            &Compass::update);
+}
+
+void Compass::update()
+{
+    auto dash = UI::Dashboard::getInstance();
+    auto data = dash->getCompass(m_index);
+
+    if (data)
+        m_compass.setValue(data->value().toDouble());
+}

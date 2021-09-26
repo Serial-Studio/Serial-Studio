@@ -33,6 +33,7 @@
 #include <QPushButton>
 #include <QApplication>
 #include <UI/Dashboard.h>
+#include <Misc/ThemeManager.h>
 
 using namespace Widgets;
 
@@ -54,6 +55,12 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     // Configure main window
     m_window.setMinimumWidth(640);
     m_window.setMinimumHeight(480);
+
+    // Configure window style sheet
+    auto theme = Misc::ThemeManager::getInstance();
+    auto qss
+        = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
+    m_window.setStyleSheet(qss);
 
     // Resize widget to fit QML item size
     connect(this, &QQuickPaintedItem::widthChanged, this,
@@ -222,13 +229,16 @@ void WidgetLoader::setWidgetIndex(const int index)
         if (m_window.centralWidget())
             delete m_window.centralWidget();
 
+        // Hide widget window
+        if (m_window.isVisible())
+            m_window.hide();
+
         // Construct new widget
         switch (widgetType())
         {
             case UI::Dashboard::WidgetType::Group:
                 m_widget = new DataGroup(relativeIndex());
                 m_window.setCentralWidget(new DataGroup(relativeIndex()));
-                m_window.centralWidget()->setEnabled(false);
                 break;
             case UI::Dashboard::WidgetType::Plot:
                 m_widget = new QPushButton("Plot");
@@ -243,7 +253,8 @@ void WidgetLoader::setWidgetIndex(const int index)
                 m_widget = new QPushButton("Thermometer");
                 break;
             case UI::Dashboard::WidgetType::Compass:
-                m_widget = new QPushButton("Compass");
+                m_widget = new Compass(relativeIndex());
+                m_window.setCentralWidget(new Compass(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gyroscope:
                 m_widget = new QPushButton("Gyroscope");
@@ -260,6 +271,8 @@ void WidgetLoader::setWidgetIndex(const int index)
 
         // Update window title
         m_window.setWindowTitle(widgetTitle());
+        if (m_window.centralWidget())
+            m_window.centralWidget()->setEnabled(false);
 
         // Allow widget to receive events from the QML interface
         if (m_widget)

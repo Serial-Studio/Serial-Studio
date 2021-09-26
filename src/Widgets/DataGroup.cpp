@@ -29,9 +29,9 @@
 using namespace Widgets;
 
 DataGroup::DataGroup(const int index)
-    : m_groupIndex(index)
+    : m_index(index)
 {
-    if (m_groupIndex >= 0)
+    if (m_index >= 0)
     {
         createUserInterface();
         connect(UI::Dashboard::getInstance(), &UI::Dashboard::updated, this,
@@ -59,17 +59,18 @@ void DataGroup::createUserInterface()
 {
     // Get group pointer
     auto dash = UI::Dashboard::getInstance();
-    auto group = dash->getGroup(m_groupIndex);
+    auto group = dash->getGroup(m_index);
     if (!group)
         return;
 
     // Get theme manager pointer and generate QSS code
+    // clang-format off
     auto theme = Misc::ThemeManager::getInstance();
     auto valueQSS = QString("color: %1;").arg(theme->datasetValue().name());
     auto titleQSS = QString("color: %1;").arg(theme->datasetTextPrimary().name());
     auto unitsQSS = QString("color: %1;").arg(theme->datasetTextSecondary().name());
-    auto windwQSS
-        = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
+    auto windwQSS = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
+    // clang-format on
 
     // Configure scroll area container
     m_dataContainer = new QWidget(this);
@@ -162,7 +163,7 @@ void DataGroup::updateUserInterface()
 
     // Get group pointer
     auto dash = UI::Dashboard::getInstance();
-    auto group = dash->getGroup(m_groupIndex);
+    auto group = dash->getGroup(m_index);
     if (!group)
         return;
 

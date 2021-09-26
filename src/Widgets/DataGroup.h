@@ -42,7 +42,7 @@ private slots:
     void updateUserInterface();
 
 private:
-    int m_groupIndex;
+    int m_index;
 
     QVector<QLabel *> m_icons;
     QVector<QLabel *> m_units;

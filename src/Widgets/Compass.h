@@ -23,4 +23,27 @@
 #ifndef WIDGETS_COMPASS_H
 #define WIDGETS_COMPASS_H
 
+#include <QWidget>
+#include <QwtCompass>
+#include <QVBoxLayout>
+
+namespace Widgets
+{
+class Compass : public QWidget
+{
+    Q_OBJECT
+
+public:
+    Compass(const int index = -1);
+
+private slots:
+    void update();
+
+private:
+    int m_index;
+    QwtCompass m_compass;
+    QVBoxLayout m_layout;
+};
+}
+
 #endif
