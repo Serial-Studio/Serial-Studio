@@ -46,8 +46,13 @@ Item {
         WidgetLoader {
             id: loader
             widgetIndex: index
-            anchors.fill: parent
-            anchors.margins: app.spacing
+            anchors {
+                fill: parent
+                leftMargin: window.borderWidth
+                rightMargin: window.borderWidth
+                bottomMargin: window.borderWidth
+            }
+
             onWidgetVisibleChanged: {
                 root.opacity = widgetVisible ? 1 : 0
             }
