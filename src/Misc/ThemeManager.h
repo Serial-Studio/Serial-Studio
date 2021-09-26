@@ -372,4 +372,20 @@ private:
 };
 }
 
+inline QString QSS(const QString &style, const QColor &color)
+{
+    return QString(style).arg(color.name());
+}
+
+inline QString QSS(const QString &style, const QColor &c1, const QColor &c2)
+{
+    return QString(style).arg(c1.name(), c2.name());
+}
+
+inline QString QSS(const QString &style, const QColor &c1, const QColor &c2,
+                   const QColor &c3)
+{
+    return QString(style).arg(c1.name(), c2.name(), c3.name());
+}
+
 #endif

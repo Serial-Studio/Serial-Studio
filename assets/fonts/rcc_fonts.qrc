@@ -3,5 +3,6 @@
         <file>Roboto-Bold.ttf</file>
         <file>Roboto-Regular.ttf</file>
         <file>RobotoMono-Regular.ttf</file>
+        <file>RobotoMono-Bold.ttf</file>
     </qresource>
 </RCC>

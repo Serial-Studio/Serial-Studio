@@ -24,7 +24,7 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-#include <QBitmap>
+#include <QResizeEvent>
 
 using namespace Widgets;
 
@@ -34,66 +34,30 @@ using namespace Widgets;
 DataGroup::DataGroup(const int index)
     : m_index(index)
 {
-    if (m_index >= 0)
-    {
-        // clang-format off
-        createUserInterface();
-        connect(UI::Dashboard::getInstance(),
-                &UI::Dashboard::updated,
-                this, &DataGroup::updateUserInterface);
-        // clang-format on
-    }
-}
-
-/**
- * Frees the memory allocated for each label that represents a dataset
- */
-DataGroup::~DataGroup()
-{
-    foreach (auto icon, m_icons)
-        delete icon;
-
-    foreach (auto title, m_titles)
-        delete title;
-
-    foreach (auto value, m_values)
-        delete value;
-
-    delete m_gridLayout;
-    delete m_scrollArea;
-    delete m_mainLayout;
-}
-
-/**
- * Creates a grid layout that contains the labels for each dataset.
- * The grid layout is then configured to be contained by a scroll area,
- * which is useful in the case that a group has a lot of elements inside it.
- */
-void DataGroup::createUserInterface()
-{
-    // Get group pointer
+    // Get pointers to serial studio modules
     auto dash = UI::Dashboard::getInstance();
+    auto theme = Misc::ThemeManager::getInstance();
+
+    // Invalid index, abort initialization
+    if (m_index < 0 || m_index >= dash->groupCount())
+        return;
+
+    // Get group pointer
     auto group = dash->getGroup(m_index);
     if (!group)
         return;
 
-    // Get theme manager pointer and generate QSS code
-    // clang-format off
-    auto theme = Misc::ThemeManager::getInstance();
-    auto valueQSS = QString("color: %1;").arg(theme->datasetValue().name());
-    auto titleQSS = QString("color: %1;").arg(theme->datasetTextPrimary().name());
-    auto unitsQSS = QString("color: %1;").arg(theme->datasetTextSecondary().name());
-    auto windwQSS = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
-    // clang-format on
+    // Generate widget stylesheets
+    auto font = dash->monoFont();
+    font.setBold(true);
+    auto valueQSS = QSS("color:%1", theme->datasetValue());
+    auto titleQSS = QSS("color:%1", theme->datasetTextPrimary());
+    auto unitsQSS = QSS("color:%1", theme->datasetTextSecondary());
+    auto iconsQSS = QSS("color:%1; font-weight:600;", theme->datasetTextSecondary());
+    auto windwQSS = QSS("background-color:%1", theme->datasetWindowBackground());
 
     // Configure scroll area container
     m_dataContainer = new QWidget(this);
-
-    // Create icon pixmap & set color
-    auto pixmap = QPixmap(":/icons/ethernet.svg");
-    auto mask = pixmap.createMaskFromColor(QColor("#000"), Qt::MaskOutColor);
-    pixmap.fill(theme->datasetTextSecondary());
-    pixmap.setMask(mask);
 
     // Configure grid layout
     m_gridLayout = new QGridLayout(m_dataContainer);
@@ -118,12 +82,13 @@ void DataGroup::createUserInterface()
         dicon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         // Set label styles
-        title->setStyleSheet(titleQSS);
-        value->setStyleSheet(valueQSS);
-        units->setStyleSheet(unitsQSS);
         title->setFont(dash->monoFont());
         value->setFont(dash->monoFont());
         units->setFont(dash->monoFont());
+        title->setStyleSheet(titleQSS);
+        value->setStyleSheet(valueQSS);
+        units->setStyleSheet(unitsQSS);
+        dicon->setStyleSheet(iconsQSS);
 
         // Configure elide modes
 
@@ -134,8 +99,8 @@ void DataGroup::createUserInterface()
         if (!set->units().isEmpty())
             units->setText(QString("[%1]").arg(set->units()));
 
-        // Set icon
-        dicon->setPixmap(pixmap);
+        // Set icon text
+        dicon->setText("⤑");
 
         // Add labels to grid layout
         m_gridLayout->addWidget(title, dataset, 0);
@@ -167,12 +132,34 @@ void DataGroup::createUserInterface()
 
     // Set background color
     m_dataContainer->setStyleSheet(windwQSS);
+
+    // React to dashboard events
+    connect(dash, SIGNAL(updated()), this, SLOT(update()));
 }
 
 /**
- * Updates the dataset labels corresponding to the group that this widget is visualizing.
+ * Frees the memory allocated for each label that represents a dataset
  */
-void DataGroup::updateUserInterface()
+DataGroup::~DataGroup()
+{
+    foreach (auto icon, m_icons)
+        delete icon;
+
+    foreach (auto title, m_titles)
+        delete title;
+
+    foreach (auto value, m_values)
+        delete value;
+
+    delete m_gridLayout;
+    delete m_scrollArea;
+    delete m_mainLayout;
+}
+
+/**
+ * Updates the widget's data
+ */
+void DataGroup::update()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
@@ -194,4 +181,26 @@ void DataGroup::updateUserInterface()
         if (!set->units().isEmpty())
             m_units.at(i)->setText(QString("[%1]").arg(set->units()));
     }
+}
+
+/**
+ * Changes the size of the labels when the widget is resized
+ */
+void DataGroup::resizeEvent(QResizeEvent *event)
+{
+    auto width = event->size().width();
+    QFont font = UI::Dashboard::getInstance()->monoFont();
+    QFont icon = font;
+    icon.setPixelSize(width / 16);
+    font.setPixelSize(width / 24);
+
+    for (int i = 0; i < m_titles.count(); ++i)
+    {
+        m_units.at(i)->setFont(font);
+        m_icons.at(i)->setFont(icon);
+        m_titles.at(i)->setFont(font);
+        m_values.at(i)->setFont(font);
+    }
+
+    event->accept();
 }

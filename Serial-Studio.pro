@@ -71,16 +71,6 @@ QT += quickcontrols2
 CONFIG += c++11
 CONFIG += silent
 CONFIG += strict_c++
-CONFIG -= depend_includepath
-
-sanitize {
-    CONFIG += sanitizer
-    CONFIG += sanitize_address
-    CONFIG *= sanitize_undefined
-}
-
-QMAKE_CXXFLAGS *= -fno-math-errno
-QMAKE_CXXFLAGS *= -funsafe-math-optimizations
 
 #-----------------------------------------------------------------------------------------
 # Libraries

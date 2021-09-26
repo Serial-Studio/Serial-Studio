@@ -33,13 +33,17 @@ namespace Widgets
 {
 class DataGroup : public QWidget
 {
+    Q_OBJECT
+
 public:
     DataGroup(const int index = -1);
     ~DataGroup();
 
 private slots:
-    void createUserInterface();
-    void updateUserInterface();
+    void update();
+
+private:
+    void resizeEvent(QResizeEvent *event);
 
 private:
     int m_index;

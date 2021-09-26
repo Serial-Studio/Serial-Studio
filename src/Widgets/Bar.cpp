@@ -24,44 +24,71 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
+#include <QResizeEvent>
+
 using namespace Widgets;
 
+/**
+ * Configures the bard widget style & the signals/slots with the dashboard module
+ */
 Bar::Bar(const int index)
     : m_index(index)
 {
-    if (m_index >= 0)
-    {
-        // Configure thermo & add it to layout
-        m_layout.addWidget(&m_thermo);
-        m_layout.setContentsMargins(24, 24, 24, 24);
-        setLayout(&m_layout);
+    // Get pointers to serial studio modules
+    auto dash = UI::Dashboard::getInstance();
+    auto theme = Misc::ThemeManager::getInstance();
 
-        // Get thermo color
-        QString color;
-        auto theme = Misc::ThemeManager::getInstance();
-        auto barcl = theme->barWidgetColors();
-        if (barcl.count() > m_index)
-            color = barcl.at(m_index);
-        else
-            color = barcl.at(barcl.count() % m_index);
+    // Invalid index, abort initialization
+    if (m_index < 0 || m_index >= dash->barCount())
+        return;
 
-        // Configure thermo style
-        m_thermo.setPipeWidth(64);
-        m_thermo.setFillBrush(QBrush(QColor(color)));
+    // Get thermo color
+    QString color;
+    auto barcl = theme->barWidgetColors();
+    if (barcl.count() > m_index)
+        color = barcl.at(m_index);
+    else
+        color = barcl.at(barcl.count() % m_index);
 
-        // Set window background
-        // clang-format off
-        auto qss = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
-        setStyleSheet(qss);
+    // Configure thermo style
+    m_thermo.setPipeWidth(64);
+    m_thermo.setFillBrush(QBrush(QColor(color)));
 
-        // React to dashboard events
-        connect(UI::Dashboard::getInstance(),
-                &UI::Dashboard::updated,
-                this, &Bar::update);
-        // clang-format on
-    }
+    // Configure label style
+    QFont font = dash->monoFont();
+    font.setPixelSize(24);
+    m_label.setFont(font);
+    m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    // Configure layout
+    m_layout.addWidget(&m_thermo);
+    m_layout.addWidget(&m_label);
+    m_layout.setSpacing(24);
+    m_layout.setStretch(0, 0);
+    m_layout.setStretch(1, 1);
+    m_layout.setContentsMargins(24, 24, 24, 24);
+    setLayout(&m_layout);
+
+    // Generate stylesheets
+    // clang-format off
+    auto labelQss = QSS("color:%1; border:1px solid %2;",
+                        theme->datasetValue(),
+                        theme->datasetWindowBorder());
+    auto windowQss = QSS("background-color:%1",
+                         theme->datasetWindowBackground());
+    // clang-format on
+
+    // Set stylesheets
+    setStyleSheet(windowQss);
+    m_label.setStyleSheet(labelQss);
+
+    // React to dashboard events
+    connect(dash, SIGNAL(updated()), this, SLOT(update()));
 }
 
+/**
+ * Updates the widget's data
+ */
 void Bar::update()
 {
     // Widget not enabled, do nothing
@@ -76,5 +103,19 @@ void Bar::update()
         m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
         m_thermo.setScale(dataset->min(), dataset->max());
         m_thermo.setValue(dataset->value().toDouble());
+        m_label.setText(QString("%1 %2").arg(dataset->value(), dataset->units()));
     }
+}
+
+/**
+ * Changes the size of the thermo and value label when the widget is resized
+ */
+void Bar::resizeEvent(QResizeEvent *event)
+{
+    auto width = event->size().width();
+    m_thermo.setPipeWidth(width / 4);
+    QFont font = m_label.font();
+    font.setPixelSize(width / 16);
+    m_label.setFont(font);
+    event->accept();
 }

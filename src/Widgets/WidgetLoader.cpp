@@ -280,6 +280,7 @@ void WidgetLoader::setWidgetIndex(const int index)
         // Allow widget to receive events from the QML interface
         if (m_widget)
         {
+            m_widget->setEnabled(true);
             m_widget->installEventFilter(this);
             emit widgetIndexChanged();
             updateWidgetVisible();
@@ -320,6 +321,13 @@ void WidgetLoader::updateWidgetVisible()
     if (widgetVisible() != visible)
     {
         m_widgetVisible = visible;
+
+        if (m_widget)
+            m_widget->setEnabled(visible);
+
+        if (m_window.centralWidget())
+            m_window.centralWidget()->setEnabled(visible);
+
         emit widgetVisibleChanged();
     }
 }

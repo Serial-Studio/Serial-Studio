@@ -35,21 +35,24 @@ using namespace Widgets;
 Compass::Compass(const int index)
     : m_index(index)
 {
-    // Invalid index, abort
-    if (m_index < 0)
-        return;
+    // Get pointers to serial studio modules
+    auto dash = UI::Dashboard::getInstance();
+    auto theme = Misc::ThemeManager::getInstance();
 
-    // clang-format off
+    // Invalid index, abort initialization
+    if (m_index < 0 || m_index >= dash->compassCount())
+        return;
 
     // Configure compass
     m_compass.setScale(0, 360);
     m_compass.setLineWidth(2);
+    m_compass.setFont(dash->monoFont());
     m_compass.setFrameShadow(QwtDial::Sunken);
-    m_compass.setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::TriangleStyle));
+    m_compass.setNeedle(
+        new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::TriangleStyle));
 
     // Set stylesheet
-    auto theme = Misc::ThemeManager::getInstance();
-    auto qss = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
+    auto qss = QSS("background-color:%1", theme->datasetWindowBackground());
     setStyleSheet(qss);
 
     // Add compass to layout
@@ -58,11 +61,7 @@ Compass::Compass(const int index)
     setLayout(&m_layout);
 
     // React to dashboard events
-    connect(UI::Dashboard::getInstance(),
-            &UI::Dashboard::updated,
-            this, &Compass::update);
-
-    // clang-format on
+    connect(dash, SIGNAL(updated()), this, SLOT(update()));
 }
 
 /**

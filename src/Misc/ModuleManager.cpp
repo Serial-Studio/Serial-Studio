@@ -68,6 +68,7 @@ ModuleManager::ModuleManager()
     // Load Roboto fonts from resources
     QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Roboto-Regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/RobotoMono-Bold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/RobotoMono-Regular.ttf");
 
     // Set Roboto as default app font

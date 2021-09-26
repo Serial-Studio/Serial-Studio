@@ -23,8 +23,9 @@
 #ifndef WIDGETS_BAR_H
 #define WIDGETS_BAR_H
 
+#include <QLabel>
 #include <QwtThermo>
-#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 namespace Widgets
 {
@@ -39,9 +40,13 @@ private slots:
     void update();
 
 private:
+    void resizeEvent(QResizeEvent *event);
+
+private:
     int m_index;
     QwtThermo m_thermo;
-    QVBoxLayout m_layout;
+    QLabel m_label;
+    QHBoxLayout m_layout;
 };
 }
 
