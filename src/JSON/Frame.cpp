@@ -73,7 +73,7 @@ int Frame::groupCount() const
 /**
  * Returns a vector of pointers to the @c Group objects associated to this frame.
  */
-QVector<Group *> &Frame::groups()
+QVector<Group *> Frame::groups() const
 {
     return m_groups;
 }

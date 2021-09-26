@@ -42,7 +42,7 @@ public:
     void clear();
     QString title() const;
     int groupCount() const;
-    QVector<Group *> &groups();
+    QVector<Group *> groups() const;
     bool read(const QJsonObject &object);
     Q_INVOKABLE Group *getGroup(const int index);
 

@@ -90,79 +90,57 @@ bool Dashboard::frameValid() const
 // Widget count functions
 //--------------------------------------------------------------------------------------------------
 
-int Dashboard::totalWidgetCount()
+int Dashboard::totalWidgetCount() const
 {
-    return mapCount() + barCount() + plotCount() + gaugeCount() + groupCount()
-        + compassCount() + gyroscopeCount() + thermometerCount() + accelerometerCount();
+    // clang-format off
+    const int count = mapCount() +
+                      barCount() +
+                      plotCount() +
+                      gaugeCount() +
+                      groupCount() +
+                      compassCount() +
+                      gyroscopeCount() +
+                      thermometerCount() +
+                      accelerometerCount();
+    // clang-format on
+
+    return count;
 }
 
-int Dashboard::mapCount()
-{
-    return m_mapWidgets.count();
-}
-
-int Dashboard::barCount()
-{
-    return m_barWidgets.count();
-}
-
-int Dashboard::plotCount()
-{
-    return m_plotWidgets.count();
-}
-
-int Dashboard::gaugeCount()
-{
-    return m_gaugeWidgets.count();
-}
-
-int Dashboard::groupCount()
-{
-    return m_latestFrame.groupCount();
-}
-
-int Dashboard::compassCount()
-{
-    return m_compassWidgets.count();
-}
-
-int Dashboard::gyroscopeCount()
-{
-    return m_gyroscopeWidgets.count();
-}
-
-int Dashboard::thermometerCount()
-{
-    return m_thermometerWidgets.count();
-}
-
-int Dashboard::accelerometerCount()
-{
-    return m_accelerometerWidgets.count();
-}
+// clang-format off
+int Dashboard::mapCount() const           { return m_mapWidgets.count();           }
+int Dashboard::barCount() const           { return m_barWidgets.count();           }
+int Dashboard::plotCount() const          { return m_plotWidgets.count();          }
+int Dashboard::gaugeCount() const         { return m_gaugeWidgets.count();         }
+int Dashboard::groupCount() const         { return m_latestFrame.groupCount();     }
+int Dashboard::compassCount() const       { return m_compassWidgets.count();       }
+int Dashboard::gyroscopeCount() const     { return m_gyroscopeWidgets.count();     }
+int Dashboard::thermometerCount() const   { return m_thermometerWidgets.count();   }
+int Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(); }
+// clang-format on
 
 //--------------------------------------------------------------------------------------------------
 // Relative-to-global widget index utility functions
 //--------------------------------------------------------------------------------------------------
 
-QStringList Dashboard::widgetTitles()
+QStringList Dashboard::widgetTitles() const
 {
     // Warning: maintain same order as the view option repeaters in ViewOptions.qml!
 
     // clang-format off
     return groupTitles() +
-            plotTitles() +
-            barTitles() +
-            gaugeTitles() +
-            thermometerTitles() +
-            compassTitles() +
-            gyroscopeTitles() +
-            accelerometerTitles() +
-            mapTitles();
+           plotTitles() +
+           barTitles() +
+           gaugeTitles() +
+           thermometerTitles() +
+           compassTitles() +
+           gyroscopeTitles() +
+           accelerometerTitles() +
+           mapTitles();
     // clang-format on
 }
 
-int Dashboard::relativeIndex(const int globalIndex)
+int Dashboard::relativeIndex(const int globalIndex) const
 {
     //
     // Warning: relative widget index should be calculated using the same order as defined
@@ -218,7 +196,7 @@ int Dashboard::relativeIndex(const int globalIndex)
     return -1;
 }
 
-bool Dashboard::widgetVisible(const int globalIndex)
+bool Dashboard::widgetVisible(const int globalIndex) const
 {
     bool visible = false;
     auto index = relativeIndex(globalIndex);
@@ -260,7 +238,7 @@ bool Dashboard::widgetVisible(const int globalIndex)
     return visible;
 }
 
-QString Dashboard::widgetIcon(const int globalIndex)
+QString Dashboard::widgetIcon(const int globalIndex) const
 {
     switch (widgetType(globalIndex))
     {
@@ -297,7 +275,7 @@ QString Dashboard::widgetIcon(const int globalIndex)
     }
 }
 
-Dashboard::WidgetType Dashboard::widgetType(const int globalIndex)
+Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
 {
     //
     // Warning: relative widget index should be calculated using the same order as defined
@@ -361,148 +339,49 @@ Dashboard::WidgetType Dashboard::widgetType(const int globalIndex)
 // Widget visibility access functions
 //--------------------------------------------------------------------------------------------------
 
-bool Dashboard::barVisible(const int index)
-{
-    return getVisibility(m_barVisibility, index);
-}
-
-bool Dashboard::mapVisible(const int index)
-{
-    return getVisibility(m_mapVisibility, index);
-}
-
-bool Dashboard::plotVisible(const int index)
-{
-    return getVisibility(m_plotVisibility, index);
-}
-
-bool Dashboard::groupVisible(const int index)
-{
-    return getVisibility(m_groupVisibility, index);
-}
-
-bool Dashboard::gaugeVisible(const int index)
-{
-    return getVisibility(m_gaugeVisibility, index);
-}
-
-bool Dashboard::compassVisible(const int index)
-{
-    return getVisibility(m_compassVisibility, index);
-}
-
-bool Dashboard::gyroscopeVisible(const int index)
-{
-    return getVisibility(m_gyroscopeVisibility, index);
-}
-
-bool Dashboard::thermometerVisible(const int index)
-{
-    return getVisibility(m_thermometerVisibility, index);
-}
-
-bool Dashboard::accelerometerVisible(const int index)
-{
-    return getVisibility(m_accelerometerVisibility, index);
-}
+// clang-format off
+bool Dashboard::barVisible(const int index) const           { return getVisibility(m_barVisibility, index);           }
+bool Dashboard::mapVisible(const int index) const           { return getVisibility(m_mapVisibility, index);           }
+bool Dashboard::plotVisible(const int index) const          { return getVisibility(m_plotVisibility, index);          }
+bool Dashboard::groupVisible(const int index) const         { return getVisibility(m_groupVisibility, index);         }
+bool Dashboard::gaugeVisible(const int index) const         { return getVisibility(m_gaugeVisibility, index);         }
+bool Dashboard::compassVisible(const int index) const       { return getVisibility(m_compassVisibility, index);       }
+bool Dashboard::gyroscopeVisible(const int index) const     { return getVisibility(m_gyroscopeVisibility, index);     }
+bool Dashboard::thermometerVisible(const int index) const   { return getVisibility(m_thermometerVisibility, index);   }
+bool Dashboard::accelerometerVisible(const int index) const { return getVisibility(m_accelerometerVisibility, index); }
+// clang-format on
 
 //--------------------------------------------------------------------------------------------------
 // Widget title functions
 //--------------------------------------------------------------------------------------------------
 
-QStringList Dashboard::barTitles()
-{
-    return getDatasetTitles(m_barWidgets);
-}
-
-QStringList Dashboard::mapTitles()
-{
-    return getGroupTitles(m_mapWidgets);
-}
-
-QStringList Dashboard::plotTitles()
-{
-    return getDatasetTitles(m_plotWidgets);
-}
-
-QStringList Dashboard::groupTitles()
-{
-    return getGroupTitles(m_latestFrame.groups());
-}
-
-QStringList Dashboard::gaugeTitles()
-{
-    return getDatasetTitles(m_gaugeWidgets);
-}
-
-QStringList Dashboard::compassTitles()
-{
-    return getDatasetTitles(m_compassWidgets);
-}
-
-QStringList Dashboard::gyroscopeTitles()
-{
-    return getGroupTitles(m_gyroscopeWidgets);
-}
-
-QStringList Dashboard::thermometerTitles()
-{
-    return getDatasetTitles(m_thermometerWidgets);
-}
-
-QStringList Dashboard::accelerometerTitles()
-{
-    return getGroupTitles(m_accelerometerWidgets);
-}
+// clang-format off
+QStringList Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
+QStringList Dashboard::mapTitles() const           { return groupTitles(m_mapWidgets);           }
+QStringList Dashboard::plotTitles() const          { return datasetTitles(m_plotWidgets);        }
+QStringList Dashboard::groupTitles() const         { return groupTitles(m_latestFrame.groups()); }
+QStringList Dashboard::gaugeTitles() const         { return datasetTitles(m_gaugeWidgets);       }
+QStringList Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
+QStringList Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
+QStringList Dashboard::thermometerTitles() const   { return datasetTitles(m_thermometerWidgets); }
+QStringList Dashboard::accelerometerTitles() const { return groupTitles(m_accelerometerWidgets); }
+// clang-format on
 
 //--------------------------------------------------------------------------------------------------
 // Visibility-related slots
 //--------------------------------------------------------------------------------------------------
 
-void Dashboard::setBarVisible(const int index, const bool visible)
-{
-    setVisibility(m_barVisibility, index, visible);
-}
-
-void Dashboard::setMapVisible(const int index, const bool visible)
-{
-    setVisibility(m_mapVisibility, index, visible);
-}
-
-void Dashboard::setPlotVisible(const int index, const bool visible)
-{
-    setVisibility(m_plotVisibility, index, visible);
-}
-
-void Dashboard::setGroupVisible(const int index, const bool visible)
-{
-    setVisibility(m_groupVisibility, index, visible);
-}
-
-void Dashboard::setGaugeVisible(const int index, const bool visible)
-{
-    setVisibility(m_gaugeVisibility, index, visible);
-}
-
-void Dashboard::setCompassVisible(const int index, const bool visible)
-{
-    setVisibility(m_compassVisibility, index, visible);
-}
-
-void Dashboard::setGyroscopeVisible(const int index, const bool visible)
-{
-    setVisibility(m_gyroscopeVisibility, index, visible);
-}
-
-void Dashboard::setThermometerVisible(const int index, const bool visible)
-{
-    setVisibility(m_thermometerVisibility, index, visible);
-}
-
-void Dashboard::setAccelerometerVisible(const int index, const bool visible)
-{
-    setVisibility(m_accelerometerVisibility, index, visible);
-}
+// clang-format off
+void Dashboard::setBarVisible(const int i, const bool v)           { setVisibility(m_barVisibility, i, v);           }
+void Dashboard::setMapVisible(const int i, const bool v)           { setVisibility(m_mapVisibility, i, v);           }
+void Dashboard::setPlotVisible(const int i, const bool v)          { setVisibility(m_plotVisibility, i, v);          }
+void Dashboard::setGroupVisible(const int i, const bool v)         { setVisibility(m_groupVisibility, i, v);         }
+void Dashboard::setGaugeVisible(const int i, const bool v)         { setVisibility(m_gaugeVisibility, i, v);         }
+void Dashboard::setCompassVisible(const int i, const bool v)       { setVisibility(m_compassVisibility, i, v);       }
+void Dashboard::setGyroscopeVisible(const int i, const bool v)     { setVisibility(m_gyroscopeVisibility, i, v);     }
+void Dashboard::setThermometerVisible(const int i, const bool v)   { setVisibility(m_thermometerVisibility, i, v);   }
+void Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisibility(m_accelerometerVisibility, i, v); }
+// clang-format on
 
 //--------------------------------------------------------------------------------------------------
 // Frame data handling slots
@@ -661,10 +540,10 @@ void Dashboard::selectLatestJSON(const JFI_Object &frameInfo)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Widget discovery functions
+// Widget utility functions
 //--------------------------------------------------------------------------------------------------
 
-QVector<JSON::Dataset *> Dashboard::getPlotWidgets()
+QVector<JSON::Dataset *> Dashboard::getPlotWidgets() const
 {
     QVector<JSON::Dataset *> widgets;
     foreach (auto group, m_latestFrame.groups())
@@ -679,7 +558,7 @@ QVector<JSON::Dataset *> Dashboard::getPlotWidgets()
     return widgets;
 }
 
-QVector<JSON::Group *> Dashboard::getWidgetGroups(const QString &handle)
+QVector<JSON::Group *> Dashboard::getWidgetGroups(const QString &handle) const
 {
     QVector<JSON::Group *> widgets;
     foreach (auto group, m_latestFrame.groups())
@@ -691,7 +570,7 @@ QVector<JSON::Group *> Dashboard::getWidgetGroups(const QString &handle)
     return widgets;
 }
 
-QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle)
+QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle) const
 {
     QVector<JSON::Dataset *> widgets;
     foreach (auto group, m_latestFrame.groups())
@@ -706,7 +585,7 @@ QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle)
     return widgets;
 }
 
-QStringList Dashboard::getDatasetTitles(QVector<JSON::Dataset *> &vector)
+QStringList Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) const
 {
     QStringList list;
     foreach (auto set, vector)
@@ -715,7 +594,7 @@ QStringList Dashboard::getDatasetTitles(QVector<JSON::Dataset *> &vector)
     return list;
 }
 
-QStringList Dashboard::getGroupTitles(QVector<JSON::Group *> &vector)
+QStringList Dashboard::groupTitles(const QVector<JSON::Group *> &vector) const
 {
     QStringList list;
     foreach (auto group, vector)
@@ -724,10 +603,10 @@ QStringList Dashboard::getGroupTitles(QVector<JSON::Group *> &vector)
     return list;
 }
 
-bool Dashboard::getVisibility(QVector<bool> &vector, const int index)
+bool Dashboard::getVisibility(const QVector<bool> &vector, const int index) const
 {
     if (index < vector.count())
-        return vector.at(index);
+        return vector[index];
 
     return false;
 }
@@ -736,7 +615,7 @@ void Dashboard::setVisibility(QVector<bool> &vector, const int index, const bool
 {
     if (index < vector.count())
     {
-        vector.replace(index, visible);
+        vector[index] = visible;
         emit widgetVisibilityChanged();
     }
 }

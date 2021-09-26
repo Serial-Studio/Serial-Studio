@@ -99,45 +99,43 @@ public:
     QString title();
     bool available();
 
-    int totalWidgetCount();
-
-    int mapCount();
-    int barCount();
-    int plotCount();
-    int groupCount();
-    int gaugeCount();
-    int compassCount();
-    int gyroscopeCount();
-    int thermometerCount();
-    int accelerometerCount();
-
-    QStringList widgetTitles();
-    int relativeIndex(const int globalIndex);
-    bool widgetVisible(const int globalIndex);
-    QString widgetIcon(const int globalIndex);
-    WidgetType widgetType(const int globalIndex);
-
-    bool barVisible(const int index);
-    bool mapVisible(const int index);
-    bool plotVisible(const int index);
-    bool groupVisible(const int index);
-    bool gaugeVisible(const int index);
-    bool compassVisible(const int index);
-    bool gyroscopeVisible(const int index);
-    bool thermometerVisible(const int index);
-    bool accelerometerVisible(const int index);
-
-    Q_INVOKABLE QStringList barTitles();
-    Q_INVOKABLE QStringList mapTitles();
-    Q_INVOKABLE QStringList plotTitles();
-    Q_INVOKABLE QStringList groupTitles();
-    Q_INVOKABLE QStringList gaugeTitles();
-    Q_INVOKABLE QStringList compassTitles();
-    Q_INVOKABLE QStringList gyroscopeTitles();
-    Q_INVOKABLE QStringList thermometerTitles();
-    Q_INVOKABLE QStringList accelerometerTitles();
+    int totalWidgetCount() const;
+    int mapCount() const;
+    int barCount() const;
+    int plotCount() const;
+    int groupCount() const;
+    int gaugeCount() const;
+    int compassCount() const;
+    int gyroscopeCount() const;
+    int thermometerCount() const;
+    int accelerometerCount() const;
 
     Q_INVOKABLE bool frameValid() const;
+    Q_INVOKABLE QStringList widgetTitles() const;
+    Q_INVOKABLE int relativeIndex(const int globalIndex) const;
+    Q_INVOKABLE bool widgetVisible(const int globalIndex) const;
+    Q_INVOKABLE QString widgetIcon(const int globalIndex) const;
+    Q_INVOKABLE WidgetType widgetType(const int globalIndex) const;
+
+    Q_INVOKABLE bool barVisible(const int index) const;
+    Q_INVOKABLE bool mapVisible(const int index) const;
+    Q_INVOKABLE bool plotVisible(const int index) const;
+    Q_INVOKABLE bool groupVisible(const int index) const;
+    Q_INVOKABLE bool gaugeVisible(const int index) const;
+    Q_INVOKABLE bool compassVisible(const int index) const;
+    Q_INVOKABLE bool gyroscopeVisible(const int index) const;
+    Q_INVOKABLE bool thermometerVisible(const int index) const;
+    Q_INVOKABLE bool accelerometerVisible(const int index) const;
+
+    Q_INVOKABLE QStringList barTitles() const;
+    Q_INVOKABLE QStringList mapTitles() const;
+    Q_INVOKABLE QStringList plotTitles() const;
+    Q_INVOKABLE QStringList groupTitles() const;
+    Q_INVOKABLE QStringList gaugeTitles() const;
+    Q_INVOKABLE QStringList compassTitles() const;
+    Q_INVOKABLE QStringList gyroscopeTitles() const;
+    Q_INVOKABLE QStringList thermometerTitles() const;
+    Q_INVOKABLE QStringList accelerometerTitles() const;
 
 public slots:
     void setBarVisible(const int index, const bool visible);
@@ -158,14 +156,14 @@ private slots:
 private:
     Dashboard();
 
-    QVector<JSON::Dataset *> getPlotWidgets();
-    QVector<JSON::Group *> getWidgetGroups(const QString &handle);
-    QVector<JSON::Dataset *> getWidgetDatasets(const QString &handle);
+    QVector<JSON::Dataset *> getPlotWidgets() const;
+    QVector<JSON::Group *> getWidgetGroups(const QString &handle) const;
+    QVector<JSON::Dataset *> getWidgetDatasets(const QString &handle) const;
 
-    QStringList getGroupTitles(QVector<JSON::Group *> &vector);
-    QStringList getDatasetTitles(QVector<JSON::Dataset *> &vector);
+    QStringList groupTitles(const QVector<JSON::Group *> &vector) const;
+    QStringList datasetTitles(const QVector<JSON::Dataset *> &vector) const;
 
-    bool getVisibility(QVector<bool> &vector, const int index);
+    bool getVisibility(const QVector<bool> &vector, const int index) const;
     void setVisibility(QVector<bool> &vector, const int index, const bool visible);
 
 private:
