@@ -29,11 +29,7 @@ import "../Widgets" as Widgets
 
 Item {
     id: root
-    visible: opacity > 0
-
-    Behavior on opacity {
-        NumberAnimation {}
-    }
+    visible: loader.widgetVisible
 
     Widgets.Window {
         id: window
@@ -51,10 +47,6 @@ Item {
                 leftMargin: window.borderWidth
                 rightMargin: window.borderWidth
                 bottomMargin: window.borderWidth
-            }
-
-            onWidgetVisibleChanged: {
-                root.opacity = widgetVisible ? 1 : 0
             }
         }
     }
