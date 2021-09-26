@@ -197,14 +197,13 @@ void ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_AppOrganizationDomain", qApp->organizationDomain());
 
     // Load main.qml
+    setSplashScreenMessage(tr("Loading user interface..."));
     engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
-    // Start common event timers
-    setSplashScreenMessage(tr("Starting timers..."));
-    miscTimerEvents->startTimers();
+    // Warning! Do not call setSplashScreenMessage() after loading QML user interface
 
-    // Log QML engine status
-    setSplashScreenMessage(tr("Loading user interface..."));
+    // Start common event timers
+    QTimer::singleShot(500, miscTimerEvents, SLOT(startTimers()));
 }
 
 /**

@@ -80,7 +80,7 @@ Widgets.Window {
                     }
                 } Label {
                     font.bold: true
-                    text: qsTr("Groups") + ":"
+                    text: qsTr("Data groups") + ":"
                 } Item {
                     Layout.fillWidth: true
                 }

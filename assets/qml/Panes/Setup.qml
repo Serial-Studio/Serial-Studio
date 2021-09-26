@@ -28,7 +28,7 @@ import QtGraphicalEffects 1.0
 import Qt.labs.settings 1.0
 
 import "../Widgets" as Widgets
-import "../SetupPanes" as SetupPanes
+import "SetupPanes" as SetupPanes
 
 Item {
     id: root

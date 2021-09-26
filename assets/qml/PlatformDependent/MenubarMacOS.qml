@@ -97,18 +97,18 @@ MenuBar {
         MenuItem {
             text: qsTr("Copy")
             shortcut: StandardKey.Copy
-            onTriggered: app.copyConsole()
+            onTriggered: mw.consoleCopy()
         }
 
         MenuItem {
             shortcut: StandardKey.SelectAll
             text: qsTr("Select all") + "..."
-            onTriggered: app.selectAllConsole()
+            onTriggered: mw.consoleSelectAll()
         }
 
         MenuItem {
             shortcut: StandardKey.Delete
-            onTriggered: app.clearConsole()
+            onTriggered: mw.consoleClear()
             text: qsTr("Clear console output")
         }
 
@@ -143,11 +143,11 @@ MenuBar {
             checkable: true
             shortcut: "ctrl+t"
             text: qsTr("Console")
-            checked: app.consoleVisible
-            onTriggered: app.showConsole()
+            checked: mw.consoleVisible
+            onTriggered: mw.showConsole()
             onCheckedChanged: {
-                if (app.consoleVisible !== checked)
-                    checked = app.consoleVisible
+                if (mw.consoleVisible !== checked)
+                    checked = mw.consoleVisible
             }
         }
 
@@ -155,12 +155,12 @@ MenuBar {
             checkable: true
             shortcut: "ctrl+d"
             text: qsTr("Dashboard")
-            checked: app.dashboardVisible
+            checked: mw.dashboardVisible
             enabled: Cpp_UI_Dashboard.available
-            onTriggered: app.showDashboard()
+            onTriggered: mw.showDashboard()
             onCheckedChanged: {
-                if (app.dashboardVisible !== checked)
-                    checked = app.dashboardVisible
+                if (mw.dashboardVisible !== checked)
+                    checked = mw.dashboardVisible
             }
         }
 
@@ -169,17 +169,17 @@ MenuBar {
         MenuItem {
             checkable: true
             shortcut: "ctrl+,"
-            checked: app.setupVisible
+            checked: mw.setupVisible
             text: qsTr("Show setup pane")
-            onTriggered: app.togglePreferences()
+            onTriggered: mw.showSetup()
         }
 
         MenuSeparator {}
 
         DecentMenuItem {
             sequence: StandardKey.FullScreen
-            onTriggered: app.toggleFullscreen()
-            text: app.fullScreen ? qsTr("Exit full screen") : qsTr("Enter full screen")
+            onTriggered: mw.toggleFullscreen()
+            text: mw.fullScreen ? qsTr("Exit full screen") : qsTr("Enter full screen")
         }
     }
 
@@ -205,9 +205,9 @@ MenuBar {
 
         MenuItem {
             checkable: true
-            checked: app.vt100emulation
+            checked: mw.vt100emulation
             text: qsTr("VT-100 emulation")
-            onTriggered: app.vt100emulation = checked
+            onTriggered: mw.vt100emulation = checked
         }
 
         MenuItem {
@@ -295,8 +295,8 @@ MenuBar {
             checkable: true
             visible: Cpp_UpdaterEnabled
             enabled: Cpp_UpdaterEnabled
-            checked: app.automaticUpdates
-            onTriggered: app.automaticUpdates = checked
+            checked: mw.automaticUpdates
+            onTriggered: mw.automaticUpdates = checked
             text: qsTr("Auto-updater")
         }
 

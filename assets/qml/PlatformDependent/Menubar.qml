@@ -25,7 +25,7 @@ import QtQuick.Controls 2.12
 
 MenuBar {
     id: root
-    visible: app.menubarEnabled
+    visible: mw.menubarEnabled
 
     //
     // Set background color + border
@@ -47,7 +47,7 @@ MenuBar {
     //
     // Set this component as the application's default menubar upon creation
     //
-    Component.onCompleted: app.menuBar = this
+    Component.onCompleted: mw.menuBar = this
 
     //
     // File menu
@@ -122,18 +122,18 @@ MenuBar {
         DecentMenuItem {
             text: qsTr("Copy")
             sequence: StandardKey.Copy
-            onTriggered: app.copyConsole()
+            onTriggered: mw.consoleCopy()
         }
 
         DecentMenuItem {
             sequence: StandardKey.SelectAll
             text: qsTr("Select all") + "..."
-            onTriggered: app.selectAllConsole()
+            onTriggered: mw.consoleSelectAll()
         }
 
         DecentMenuItem {
             sequence: StandardKey.Delete
-            onTriggered: app.clearConsole()
+            onTriggered: mw.consoleClear()
             text: qsTr("Clear console output")
         }
 
@@ -168,11 +168,11 @@ MenuBar {
             checkable: true
             sequence: "ctrl+t"
             text: qsTr("Console")
-            checked: app.consoleVisible
-            onTriggered: app.showConsole()
+            checked: mw.consoleVisible
+            onTriggered: mw.showConsole()
             onCheckedChanged: {
-                if (app.consoleVisible !== checked)
-                    checked = app.consoleVisible
+                if (mw.consoleVisible !== checked)
+                    checked = mw.consoleVisible
             }
         }
 
@@ -180,12 +180,12 @@ MenuBar {
             checkable: true
             sequence: "ctrl+d"
             text: qsTr("Dashboard")
-            checked: app.dashboardVisible
+            checked: mw.dashboardVisible
             enabled: Cpp_UI_Dashboard.available
-            onTriggered: app.showDashboard()
+            onTriggered: mw.showDashboard()
             onCheckedChanged: {
-                if (app.dashboardVisible !== checked)
-                    checked = app.dashboardVisible
+                if (mw.dashboardVisible !== checked)
+                    checked = mw.dashboardVisible
             }
         }
 
@@ -194,16 +194,16 @@ MenuBar {
         DecentMenuItem {
             checkable: true
             sequence: "ctrl+,"
-            checked: app.setupVisible
+            checked: mw.setupVisible
             text: qsTr("Show setup pane")
-            onTriggered: app.togglePreferences()
+            onTriggered: mw.showSetup()
         }
 
         MenuSeparator {}
 
         DecentMenuItem {
             sequence: "alt+m"
-            onTriggered: app.toggleMenubar()
+            onTriggered: mw.toggleMenubar()
             text: root.visible ? qsTr("Hide menubar") :
                                  qsTr("Show menubar")
         }
@@ -212,8 +212,8 @@ MenuBar {
 
         DecentMenuItem {
             sequence: StandardKey.FullScreen
-            onTriggered: app.toggleFullscreen()
-            text: app.fullScreen ? qsTr("Exit full screen") :
+            onTriggered: mw.toggleFullscreen()
+            text: mw.fullScreen ? qsTr("Exit full screen") :
                                    qsTr("Enter full screen")
         }
     }
@@ -240,9 +240,9 @@ MenuBar {
 
         DecentMenuItem {
             checkable: true
-            checked: app.vt100emulation
+            checked: mw.vt100emulation
             text: qsTr("VT-100 emulation")
-            onTriggered: app.vt100emulation = checked
+            onTriggered: mw.vt100emulation = checked
         }
 
         DecentMenuItem {
@@ -330,8 +330,8 @@ MenuBar {
             checkable: true
             visible: Cpp_UpdaterEnabled
             enabled: Cpp_UpdaterEnabled
-            checked: app.automaticUpdates
-            onTriggered: app.automaticUpdates = checked
+            checked: mw.automaticUpdates
+            onTriggered: mw.automaticUpdates = checked
             text: qsTr("Auto-updater")
         }
 

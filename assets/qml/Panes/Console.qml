@@ -53,7 +53,7 @@ Item {
     //
     // Clears console output
     //
-    function clearConsole() {
+    function clear() {
         Cpp_IO_Console.clear()
         textEdit.clear()
     }
@@ -76,7 +76,7 @@ Item {
     // Load welcome guide
     //
     function showWelcomeGuide() {
-        clearConsole()
+        clear()
         Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
     }
 
@@ -148,7 +148,7 @@ Item {
             MenuItem {
                 text: qsTr("Clear")
                 opacity: enabled ? 1 : 0.5
-                onTriggered: root.clearConsole()
+                onTriggered: root.clear()
                 enabled: Cpp_IO_Console.saveAvailable
             }
 
@@ -169,16 +169,16 @@ Item {
             }
 
             MenuSeparator {
-                visible: app.menuBar != null
+                visible: mw.menuBar != null
             }
 
             MenuItem {
                 enabled: visible
-                visible: app.menuBar != null
+                visible: mw.menuBar != null
                 height: visible ? implicitHeight : 0
-                onTriggered: app.menubarEnabled = !app.menubarEnabled
-                text: visible && app.menuBar.visible ? qsTr("Hide menubar") :
-                                                       qsTr("Show menubar")
+                onTriggered: mw.menubarEnabled = !mw.menubarEnabled
+                text: visible && mw.menuBar.visible ? qsTr("Hide menubar") :
+                                                      qsTr("Show menubar")
             }
         }
 
@@ -388,7 +388,7 @@ Item {
                     Layout.maximumWidth: 32
                     icon.color: palette.text
                     opacity: enabled ? 1 : 0.5
-                    onClicked: root.clearConsole()
+                    onClicked: root.clear()
                     icon.source: "qrc:/icons/delete.svg"
                     enabled: Cpp_IO_Console.saveAvailable
                     Behavior on opacity {NumberAnimation{}}

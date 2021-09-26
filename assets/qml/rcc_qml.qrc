@@ -1,33 +1,33 @@
 <RCC>
     <qresource prefix="/qml">
-        <file>Application.qml</file>
-        <file>main.qml</file>
+        <file>Dashboard/DashboardTitle.qml</file>
+        <file>Dashboard/WidgetModel.qml</file>
+        <file>Dashboard/ViewOptions.qml</file>
+        <file>Dashboard/WidgetDelegate.qml</file>
+        <file>Dashboard/WidgetGrid.qml</file>
+        <file>JsonEditor/JsonDatasetDelegate.qml</file>
+        <file>JsonEditor/JsonGroupDelegate.qml</file>
+        <file>Panes/SetupPanes/MQTT.qml</file>
+        <file>Panes/SetupPanes/Network.qml</file>
+        <file>Panes/SetupPanes/Serial.qml</file>
+        <file>Panes/SetupPanes/Settings.qml</file>
+        <file>Panes/Console.qml</file>
+        <file>Panes/Dashboard.qml</file>
+        <file>Panes/Setup.qml</file>
+        <file>Panes/Toolbar.qml</file>
         <file>PlatformDependent/DecentMenuItem.qml</file>
         <file>PlatformDependent/Menubar.qml</file>
         <file>PlatformDependent/MenubarMacOS.qml</file>
-        <file>SetupPanes/MQTT.qml</file>
-        <file>SetupPanes/Network.qml</file>
-        <file>SetupPanes/Serial.qml</file>
-        <file>SetupPanes/Settings.qml</file>
+        <file>Widgets/JSONDropArea.qml</file>
         <file>Widgets/LED.qml</file>
-        <file>Widgets/MapDelegate.qml</file>
-        <file>Widgets/SimpleDial.qml</file>
+        <file>Widgets/Shadow.qml</file>
         <file>Widgets/Window.qml</file>
         <file>Windows/About.qml</file>
         <file>Windows/Acknowledgements.qml</file>
-        <file>Windows/Console.qml</file>
         <file>Windows/CsvPlayer.qml</file>
-        <file>Windows/Dashboard.qml</file>
         <file>Windows/Donate.qml</file>
-        <file>Windows/Setup.qml</file>
-        <file>Windows/Toolbar.qml</file>
-        <file>JsonEditor/JsonDatasetDelegate.qml</file>
-        <file>JsonEditor/JsonEditor.qml</file>
-        <file>JsonEditor/JsonGroupDelegate.qml</file>
-        <file>Widgets/Shadow.qml</file>
-        <file>JSONDropArea.qml</file>
-        <file>Windows/ViewOptions.qml</file>
-        <file>Windows/DashboardTitle.qml</file>
-        <file>Windows/WidgetGrid.qml</file>
+        <file>Windows/MainWindow.qml</file>
+        <file>main.qml</file>
+        <file>Windows/JsonEditor.qml</file>
     </qresource>
 </RCC>

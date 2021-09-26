@@ -25,6 +25,7 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 import "../Widgets" as Widgets
+import "../Dashboard" as DashboardItems
 
 Item {
     id: root
@@ -57,7 +58,7 @@ Item {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
 
-                ViewOptions {
+                DashboardItems.ViewOptions {
                     id: viewOptions
                     anchors.fill: parent
                 }
@@ -75,7 +76,7 @@ Item {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
 
-                WidgetGrid {
+                DashboardItems.WidgetGrid {
                     id: widgetGrid
                     anchors.fill: parent
                 }
@@ -89,7 +90,7 @@ Item {
         //
         // Dashboard title window
         //
-        DashboardTitle {
+        DashboardItems.DashboardTitle {
             height: 32
             Layout.fillWidth: true
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,72 +21,40 @@
  */
 
 import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
-import "Windows" as Windows
+import SerialStudio 1.0
+import "../Widgets" as Widgets
 
 Item {
-    id: app
+    id: root
+    visible: opacity > 0
 
-    //
-    // Global propeties
-    //
-    readonly property int spacing: 8
-    readonly property string monoFont: "Roboto Mono"
-
-    //
-    // Check for updates (non-silent mode)
-    //
-    function checkForUpdates() {
-        Cpp_Updater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
-        Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+    Behavior on opacity {
+        NumberAnimation {}
     }
 
-    //
-    // Display about dialog
-    //
-    function showAbout() {
-        about.show()
+    Widgets.Window {
+        id: window
+        anchors.fill: parent
+        title: loader.widgetTitle
+        icon.source: loader.widgetIcon
+        onHeaderDoubleClicked: loader.displayWindow()
+        borderColor: Cpp_ThemeManager.datasetWindowBorder
+
+        WidgetLoader {
+            id: loader
+            widgetIndex: index
+            anchors.fill: parent
+            anchors.margins: app.spacing
+            onWidgetVisibleChanged: {
+                root.opacity = widgetVisible ? 1 : 0
+            }
+        }
     }
 
-    //
-    // Show donations dialog
-    //
-    function showDonationsDialog() {
-        donations.show()
-    }
-
-    //
-    // MainWindow
-    //
-    Windows.MainWindow {
-        id: mw
-    }
-
-    //
-    // About window
-    //
-    Windows.About {
-        id: about
-    }
-
-    //
-    // CSV player window
-    //
-    Windows.CsvPlayer {
-        id: csvPlayer
-    }
-
-    //
-    // JSON Editor dialog
-    //
-    Windows.JsonEditor {
-        id: jsonEditor
-    }
-
-    //
-    // Donations dialog
-    //
-    Windows.Donate {
-        id: donations
+    Widgets.Shadow {
+        source: window
     }
 }
