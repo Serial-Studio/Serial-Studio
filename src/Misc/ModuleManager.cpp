@@ -215,6 +215,14 @@ QQmlApplicationEngine *ModuleManager::engine()
 }
 
 /**
+ * Quits the application
+ */
+void ModuleManager::quit()
+{
+    qApp->quit();
+}
+
+/**
  * Hides the splash screen widget
  */
 void ModuleManager::hideSplashscreen()

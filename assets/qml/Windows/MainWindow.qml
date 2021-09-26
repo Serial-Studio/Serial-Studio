@@ -36,6 +36,11 @@ ApplicationWindow {
     id: root
 
     //
+    // Quit application on close
+    //
+    onClosing: Cpp_ModuleManager.quit()
+
+    //
     // Global properties
     //
     readonly property bool setupVisible: setup.visible

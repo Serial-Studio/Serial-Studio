@@ -22,6 +22,14 @@
 
 #include "WidgetLoader.h"
 
+#include "Bar.h"
+#include "Plot.h"
+#include "Gauge.h"
+#include "Compass.h"
+#include "DataGroup.h"
+#include "Gyroscope.h"
+#include "Thermometer.h"
+
 #include <QPushButton>
 #include <QApplication>
 #include <UI/Dashboard.h>
@@ -43,6 +51,10 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
 
+    // Configure main window
+    m_window.setMinimumWidth(640);
+    m_window.setMinimumHeight(480);
+
     // Resize widget to fit QML item size
     connect(this, &QQuickPaintedItem::widthChanged, this,
             &WidgetLoader::updateWidgetSize);
@@ -60,7 +72,7 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
 WidgetLoader::~WidgetLoader()
 {
     if (m_widget)
-        m_widget->deleteLater();
+        delete m_widget;
 }
 
 /**
@@ -183,8 +195,7 @@ UI::Dashboard::WidgetType WidgetLoader::widgetType() const
  */
 void WidgetLoader::displayWindow()
 {
-    if (m_widget)
-        m_widget->showNormal();
+    m_window.showNormal();
 }
 
 /**
@@ -200,15 +211,20 @@ void WidgetLoader::setWidgetIndex(const int index)
         // Delete previous widget
         if (m_widget)
         {
-            m_widget->deleteLater();
+            delete m_widget;
             m_widget = nullptr;
         }
+
+        // Delete central widget of window
+        if (m_window.centralWidget())
+            delete m_window.centralWidget();
 
         // Construct new widget
         switch (widgetType())
         {
             case UI::Dashboard::WidgetType::Group:
-                m_widget = new QPushButton("Group");
+                m_widget = new DataGroup(relativeIndex());
+                m_window.setCentralWidget(new DataGroup(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Plot:
                 m_widget = new QPushButton("Plot");
@@ -237,6 +253,9 @@ void WidgetLoader::setWidgetIndex(const int index)
             default:
                 break;
         }
+
+        // Update window title
+        m_window.setWindowTitle(widgetTitle());
 
         // Allow widget to receive events from the QML interface
         if (m_widget)

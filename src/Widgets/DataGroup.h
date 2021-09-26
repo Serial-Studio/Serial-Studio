@@ -23,6 +23,37 @@
 #ifndef WIDGETS_DATAGROUP_H
 #define WIDGETS_DATAGROUP_H
 
+#include <QLabel>
 #include <QWidget>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QScrollArea>
+
+namespace Widgets
+{
+class DataGroup : public QWidget
+{
+public:
+    DataGroup(const int index = -1);
+    ~DataGroup();
+
+private slots:
+    void createUserInterface();
+    void updateUserInterface();
+
+private:
+    int m_groupIndex;
+
+    QVector<QLabel *> m_icons;
+    QVector<QLabel *> m_units;
+    QVector<QLabel *> m_titles;
+    QVector<QLabel *> m_values;
+
+    QWidget *m_dataContainer;
+    QVBoxLayout *m_mainLayout;
+    QGridLayout *m_gridLayout;
+    QScrollArea *m_scrollArea;
+};
+}
 
 #endif

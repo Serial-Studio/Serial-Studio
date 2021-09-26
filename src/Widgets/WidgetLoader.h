@@ -26,6 +26,7 @@
 #include <QWidget>
 #include <QObject>
 #include <QPainter>
+#include <QMainWindow>
 #include <QQuickPaintedItem>
 
 #include <UI/Dashboard.h>
@@ -89,6 +90,7 @@ protected:
 private:
     int m_index;
     QWidget *m_widget;
+    QMainWindow m_window;
     bool m_widgetVisible;
 };
 }

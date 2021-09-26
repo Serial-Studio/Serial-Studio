@@ -40,6 +40,7 @@ public:
     QQmlApplicationEngine *engine();
 
 public slots:
+    void quit();
     void hideSplashscreen();
     void setSplashScreenMessage(const QString &message);
 

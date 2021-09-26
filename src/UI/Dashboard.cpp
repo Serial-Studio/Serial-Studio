@@ -68,6 +68,23 @@ Dashboard *Dashboard::getInstance()
 }
 
 //--------------------------------------------------------------------------------------------------
+// Group/Dataset access functions
+//--------------------------------------------------------------------------------------------------
+
+QFont Dashboard::monoFont() const
+{
+    return QFont("Roboto Mono");
+}
+
+JSON::Group *Dashboard::getGroup(const int index)
+{
+    if (index < m_latestFrame.groupCount())
+        return m_latestFrame.groups().at(index);
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Misc member access functions
 //--------------------------------------------------------------------------------------------------
 

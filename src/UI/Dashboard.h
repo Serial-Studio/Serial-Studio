@@ -23,6 +23,7 @@
 #ifndef UI_DASHBOARD_H
 #define UI_DASHBOARD_H
 
+#include <QFont>
 #include <QObject>
 #include <JSON/Frame.h>
 #include <JSON/FrameInfo.h>
@@ -122,6 +123,9 @@ public:
     Q_ENUM(WidgetType)
 
     static Dashboard *getInstance();
+
+    QFont monoFont() const;
+    JSON::Group *getGroup(const int index);
 
     QString title();
     bool available();
