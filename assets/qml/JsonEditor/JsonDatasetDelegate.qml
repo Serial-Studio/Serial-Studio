@@ -151,7 +151,6 @@ Widgets.Window {
             visible: widget.currentIndex == 1 || widget.currentIndex == 2
             onTextChanged: Cpp_JSON_Editor.setDatasetWidgetMin(group, dataset, text)
             validator: DoubleValidator {
-                bottom: 0
                 top: parseFloat(max.text)
             }
         }

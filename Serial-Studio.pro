@@ -72,6 +72,26 @@ CONFIG += c++11
 CONFIG += silent
 CONFIG += strict_c++
 
+sanitize {
+    CONFIG += sanitizer
+    CONFIG += sanitize_address
+    CONFIG *= sanitize_undefined
+}
+
+QMAKE_CXXFLAGS *= -fno-math-errno
+QMAKE_CXXFLAGS *= -funsafe-math-optimizations
+
+#-----------------------------------------------------------------------------------------
+# Serial Studio compile-time settings
+#-----------------------------------------------------------------------------------------
+
+#DEFINES += DISABLE_QSU     # If enabled, QSimpleUpdater shall not be used by the app.
+                            # This is the default behaviour for MinGW.
+
+DEFINES += LAZY_WIDGETS     # Compile-time option to reduce the CPU usage of the widgets.
+                            # If disabled, widgets shall update title, units, value, etc.
+                            # If enabled, widgets shall only update their value.
+
 #-----------------------------------------------------------------------------------------
 # Libraries
 #-----------------------------------------------------------------------------------------

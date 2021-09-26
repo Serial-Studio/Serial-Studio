@@ -165,6 +165,9 @@ void ModuleManager::initializeQmlInterface()
     auto ioNetwork = IO::DataSources::Network::getInstance();
     auto miscThemeManager = Misc::ThemeManager::getInstance();
 
+    // Start common event timers
+    miscTimerEvents->startTimers();
+
     // Retranslate the QML interface automagically
     connect(miscTranslator, SIGNAL(languageChanged()), engine(), SLOT(retranslate()));
 
@@ -202,9 +205,6 @@ void ModuleManager::initializeQmlInterface()
     engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     // Warning! Do not call setSplashScreenMessage() after loading QML user interface
-
-    // Start common event timers
-    QTimer::singleShot(500, miscTimerEvents, SLOT(startTimers()));
 }
 
 /**

@@ -56,13 +56,12 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     m_window.setMinimumWidth(640);
     m_window.setMinimumHeight(480);
 
-    // Configure window style sheet
-    // clang-format off
+    // Set window palette
+    QPalette windowPalette;
     auto theme = Misc::ThemeManager::getInstance();
-    auto qss = QString("background-color: %1;").arg(
-                theme->datasetWindowBackground().name());
-    m_window.setStyleSheet(qss);
-    // clang-format on
+    windowPalette.setColor(QPalette::Base, theme->datasetWindowBackground());
+    windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
+    m_window.setPalette(windowPalette);
 
     // Resize widget to fit QML item size
     connect(this, &QQuickPaintedItem::widthChanged, this,
@@ -367,6 +366,8 @@ void WidgetLoader::processMouseEvents(QMouseEvent *event)
         default:
             break;
     }
+
+    update();
 }
 
 /**
@@ -384,4 +385,5 @@ void WidgetLoader::processWheelEvents(QWheelEvent *event)
     };
 
     static_cast<Hack *>(m_widget)->wheelEvent(event);
+    update();
 }

@@ -48,13 +48,16 @@ DataGroup::DataGroup(const int index)
         return;
 
     // Generate widget stylesheets
-    auto font = dash->monoFont();
-    font.setBold(true);
     auto valueQSS = QSS("color:%1", theme->datasetValue());
     auto titleQSS = QSS("color:%1", theme->datasetTextPrimary());
     auto unitsQSS = QSS("color:%1", theme->datasetTextSecondary());
     auto iconsQSS = QSS("color:%1; font-weight:600;", theme->datasetTextSecondary());
-    auto windwQSS = QSS("background-color:%1", theme->datasetWindowBackground());
+
+    // Set window palette
+    QPalette windowPalette;
+    windowPalette.setColor(QPalette::Base, theme->datasetWindowBackground());
+    windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
+    setPalette(windowPalette);
 
     // Configure scroll area container
     m_dataContainer = new QWidget(this);
@@ -92,12 +95,16 @@ DataGroup::DataGroup(const int index)
 
         // Configure elide modes
 
-        // Set label data
+        // Lazy widgets, set label initial data
+#ifdef LAZY_WIDGETS
         auto set = group->getDataset(dataset);
-        title->setText(set->title());
-        value->setText(set->value());
-        if (!set->units().isEmpty())
-            units->setText(QString("[%1]").arg(set->units()));
+        if (set)
+        {
+            title->setText(set->title());
+            if (!set->units().isEmpty())
+                units->setText(QString("[%1]").arg(set->units()));
+        }
+#endif
 
         // Set icon text
         dicon->setText("⤑");
@@ -129,9 +136,6 @@ DataGroup::DataGroup(const int index)
     m_mainLayout->addWidget(m_scrollArea);
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(m_mainLayout);
-
-    // Set background color
-    m_dataContainer->setStyleSheet(windwQSS);
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(update()));
@@ -176,10 +180,15 @@ void DataGroup::update()
     for (int i = 0; i < group->datasetCount(); ++i)
     {
         set = group->getDataset(i);
-        m_titles.at(i)->setText(set->title());
-        m_values.at(i)->setText(set->value());
-        if (!set->units().isEmpty())
-            m_units.at(i)->setText(QString("[%1]").arg(set->units()));
+        if (set)
+        {
+#ifndef LAZY_WIDGETS
+            m_titles.at(i)->setText(set->title());
+            if (!set->units().isEmpty())
+                m_units.at(i)->setText(QString("[%1]").arg(set->units()));
+#endif
+            m_values.at(i)->setText(set->value());
+        }
     }
 }
 

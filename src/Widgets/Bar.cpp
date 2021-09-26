@@ -42,18 +42,6 @@ Bar::Bar(const int index)
     if (m_index < 0 || m_index >= dash->barCount())
         return;
 
-    // Get thermo color
-    QString color;
-    auto barcl = theme->barWidgetColors();
-    if (barcl.count() > m_index)
-        color = barcl.at(m_index);
-    else
-        color = barcl.at(barcl.count() % m_index);
-
-    // Configure thermo style
-    m_thermo.setPipeWidth(64);
-    m_thermo.setFillBrush(QBrush(QColor(color)));
-
     // Configure label style
     QFont font = dash->monoFont();
     font.setPixelSize(24);
@@ -69,18 +57,55 @@ Bar::Bar(const int index)
     m_layout.setContentsMargins(24, 24, 24, 24);
     setLayout(&m_layout);
 
-    // Generate stylesheets
+    // Set stylesheets
     // clang-format off
-    auto labelQss = QSS("color:%1; border:1px solid %2;",
-                        theme->datasetValue(),
-                        theme->datasetWindowBorder());
-    auto windowQss = QSS("background-color:%1",
-                         theme->datasetWindowBackground());
+    auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
+                        theme->widgetAlternativeBackground(),
+                        theme->widgetForegroundPrimary(),
+                        theme->widgetIndicator1());
+    m_label.setStyleSheet(valueQSS);
     // clang-format on
 
-    // Set stylesheets
-    setStyleSheet(windowQss);
-    m_label.setStyleSheet(labelQss);
+    // Set window palette
+    QPalette windowPalette;
+    windowPalette.setColor(QPalette::Base, theme->datasetWindowBackground());
+    windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
+    setPalette(windowPalette);
+
+    // Set thermo palette
+    QPalette thermoPalette;
+    thermoPalette.setColor(QPalette::Highlight, QColor("#f00"));
+    thermoPalette.setColor(QPalette::Text, theme->widgetIndicator1());
+    thermoPalette.setColor(QPalette::Dark, theme->widgetIndicator1());
+    thermoPalette.setColor(QPalette::Light, theme->widgetIndicator1());
+    thermoPalette.setColor(QPalette::ButtonText, theme->widgetIndicator1());
+    thermoPalette.setColor(QPalette::WindowText, theme->widgetIndicator1());
+    thermoPalette.setColor(QPalette::Base, theme->widgetAlternativeBackground());
+    m_thermo.setPalette(thermoPalette);
+
+    // Get thermo color
+    QString color;
+    auto barcl = theme->barWidgetColors();
+    if (barcl.count() > m_index)
+        color = barcl.at(m_index);
+    else
+        color = barcl.at(barcl.count() % m_index);
+
+    // Configure thermo style
+    m_thermo.setPipeWidth(64);
+    m_thermo.setBorderWidth(1);
+    m_thermo.setFillBrush(QBrush(QColor(color)));
+
+    // Lazy widgets, get initial properties from dataset
+#ifdef LAZY_WIDGETS
+    auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
+    if (dataset)
+    {
+        m_thermo.setAlarmLevel(dataset->alarm());
+        m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
+        m_thermo.setScale(dataset->min(), dataset->max());
+    }
+#endif
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(update()));
@@ -99,9 +124,11 @@ void Bar::update()
     auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
     if (dataset)
     {
+#ifndef LAZY_WIDGETS
         m_thermo.setAlarmLevel(dataset->alarm());
         m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
         m_thermo.setScale(dataset->min(), dataset->max());
+#endif
         m_thermo.setValue(dataset->value().toDouble());
         m_label.setText(QString("%1 %2").arg(dataset->value(), dataset->units()));
     }
@@ -117,5 +144,6 @@ void Bar::resizeEvent(QResizeEvent *event)
     QFont font = m_label.font();
     font.setPixelSize(width / 16);
     m_label.setFont(font);
+    m_label.setMaximumHeight(event->size().height() * 0.4);
     event->accept();
 }
