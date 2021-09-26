@@ -47,6 +47,30 @@ bool Dataset::graph() const
 }
 
 /**
+ * Returns the minimum value of the dataset
+ */
+double Dataset::min() const
+{
+    return m_min.toDouble();
+}
+
+/**
+ * Returns the maximum value of the dataset
+ */
+double Dataset::max() const
+{
+    return m_max.toDouble();
+}
+
+/**
+ * Returns the alarm level of the dataset
+ */
+double Dataset::alarm() const
+{
+    return m_alarm.toDouble();
+}
+
+/**
  * @return The title/description of this dataset
  */
 QString Dataset::title() const
@@ -103,22 +127,34 @@ bool Dataset::read(const QJsonObject &object)
         auto value = object.value("v").toVariant().toString();
         auto units = object.value("u").toVariant().toString();
         auto widget = object.value("w").toVariant().toString();
+        auto min = object.value("min").toVariant().toString();
+        auto max = object.value("max").toVariant().toString();
+        auto alarm = object.value("alarm").toVariant().toString();
 
+        min = min.replace("\n", "");
+        min = min.replace("\r", "");
+        max = max.replace("\n", "");
+        max = max.replace("\r", "");
         title = title.replace("\n", "");
         title = title.replace("\r", "");
         value = value.replace("\n", "");
         value = value.replace("\r", "");
         units = units.replace("\n", "");
         units = units.replace("\r", "");
+        alarm = alarm.replace("\n", "");
+        alarm = alarm.replace("\r", "");
         widget = widget.replace("\n", "");
         widget = widget.replace("\r", "");
 
         if (!value.isEmpty() && !title.isEmpty())
         {
+            m_min = min;
+            m_max = max;
             m_graph = graph;
             m_title = title;
             m_units = units;
             m_value = value;
+            m_alarm = alarm;
             m_widget = widget;
             m_jsonData = object;
 

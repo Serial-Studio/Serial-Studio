@@ -23,4 +23,16 @@
 #ifndef WIDGETS_GAUGE_H
 #define WIDGETS_GAUGE_H
 
+#include <QWidget>
+#include <QwtDial>
+#include <QwtDialNeedle>
+
+namespace Widgets
+{
+class Gauge : public QWidget
+{
+    Q_OBJECT
+};
+}
+
 #endif

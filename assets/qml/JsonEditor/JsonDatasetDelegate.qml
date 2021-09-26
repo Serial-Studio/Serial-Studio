@@ -175,6 +175,25 @@ Widgets.Window {
         }
 
         //
+        // Widget maximum value
+        //
+        Label {
+            text: qsTr("Alarm value:")
+            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+        } TextField {
+            id: alarm
+            Layout.fillWidth: true
+            text: Cpp_JSON_Editor.datasetWidgetAlarm(group, dataset)
+            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+            onTextChanged: Cpp_JSON_Editor.setDatasetWidgetAlarm(group, dataset, text)
+
+            validator: DoubleValidator {
+                top: parseFloat(max.text)
+                bottom: parseFloat(min.text)
+            }
+        }
+
+        //
         // Vertical spacer
         //
         Item {

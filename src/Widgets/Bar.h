@@ -23,4 +23,26 @@
 #ifndef WIDGETS_BAR_H
 #define WIDGETS_BAR_H
 
+#include <QwtThermo>
+#include <QVBoxLayout>
+
+namespace Widgets
+{
+class Bar : public QWidget
+{
+    Q_OBJECT
+
+public:
+    Bar(const int index = -1);
+
+private slots:
+    void update();
+
+private:
+    int m_index;
+    QwtThermo m_thermo;
+    QVBoxLayout m_layout;
+};
+}
+
 #endif

@@ -57,6 +57,9 @@ public:
     Dataset(QObject *parent = nullptr);
 
     bool graph() const;
+    double min() const;
+    double max() const;
+    double alarm() const;
     QString title() const;
     QString value() const;
     QString units() const;
@@ -77,6 +80,7 @@ private:
     int m_index;
     QString m_max;
     QString m_min;
+    QString m_alarm;
     friend class Editor;
 };
 }

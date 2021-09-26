@@ -29,6 +29,9 @@
 
 using namespace Widgets;
 
+/**
+ * Configures the compass widget style & the signals/slots with the dashboard module
+ */
 Compass::Compass(const int index)
     : m_index(index)
 {
@@ -36,32 +39,43 @@ Compass::Compass(const int index)
     if (m_index < 0)
         return;
 
+    // clang-format off
+
     // Configure compass
     m_compass.setScale(0, 360);
-    m_compass.setNeedle(
-        new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::TriangleStyle));
+    m_compass.setLineWidth(2);
+    m_compass.setFrameShadow(QwtDial::Sunken);
+    m_compass.setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::TriangleStyle));
+
+    // Set stylesheet
+    auto theme = Misc::ThemeManager::getInstance();
+    auto qss = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
+    setStyleSheet(qss);
 
     // Add compass to layout
     m_layout.addWidget(&m_compass);
     m_layout.setContentsMargins(24, 24, 24, 24);
     setLayout(&m_layout);
 
-    // Set stylesheet
-    auto theme = Misc::ThemeManager::getInstance();
-    auto qss
-        = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
-    setStyleSheet(qss);
-
     // React to dashboard events
-    connect(UI::Dashboard::getInstance(), &UI::Dashboard::updated, this,
-            &Compass::update);
+    connect(UI::Dashboard::getInstance(),
+            &UI::Dashboard::updated,
+            this, &Compass::update);
+
+    // clang-format on
 }
 
+/**
+ * Updates the widget's data
+ */
 void Compass::update()
 {
-    auto dash = UI::Dashboard::getInstance();
-    auto data = dash->getCompass(m_index);
+    // Widget not enabled, do nothing
+    if (!isEnabled())
+        return;
 
-    if (data)
-        m_compass.setValue(data->value().toDouble());
+    // Update compass heading
+    auto dataset = UI::Dashboard::getInstance()->getCompass(m_index);
+    if (dataset)
+        m_compass.setValue(dataset->value().toDouble());
 }

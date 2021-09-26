@@ -28,17 +28,26 @@
 
 using namespace Widgets;
 
+/**
+ * Generates the user interface elements & layout
+ */
 DataGroup::DataGroup(const int index)
     : m_index(index)
 {
     if (m_index >= 0)
     {
+        // clang-format off
         createUserInterface();
-        connect(UI::Dashboard::getInstance(), &UI::Dashboard::updated, this,
-                &DataGroup::updateUserInterface);
+        connect(UI::Dashboard::getInstance(),
+                &UI::Dashboard::updated,
+                this, &DataGroup::updateUserInterface);
+        // clang-format on
     }
 }
 
+/**
+ * Frees the memory allocated for each label that represents a dataset
+ */
 DataGroup::~DataGroup()
 {
     foreach (auto icon, m_icons)
@@ -55,6 +64,11 @@ DataGroup::~DataGroup()
     delete m_mainLayout;
 }
 
+/**
+ * Creates a grid layout that contains the labels for each dataset.
+ * The grid layout is then configured to be contained by a scroll area,
+ * which is useful in the case that a group has a lot of elements inside it.
+ */
 void DataGroup::createUserInterface()
 {
     // Get group pointer
@@ -155,6 +169,9 @@ void DataGroup::createUserInterface()
     m_dataContainer->setStyleSheet(windwQSS);
 }
 
+/**
+ * Updates the dataset labels corresponding to the group that this widget is visualizing.
+ */
 void DataGroup::updateUserInterface()
 {
     // Widget not enabled, do nothing

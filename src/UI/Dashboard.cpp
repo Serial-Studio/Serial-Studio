@@ -84,6 +84,14 @@ JSON::Group *Dashboard::getGroup(const int index)
     return nullptr;
 }
 
+JSON::Dataset *Dashboard::getBar(const int index)
+{
+    if (index < m_barWidgets.count())
+        return m_barWidgets.at(index);
+
+    return nullptr;
+}
+
 JSON::Dataset *Dashboard::getCompass(const int index)
 {
     if (index < m_compassWidgets.count())

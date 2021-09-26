@@ -311,6 +311,7 @@ bool Editor::saveJsonFile()
             dataset.insert("v", "%" + QString::number(datasetIndex(i, j)));
             dataset.insert("min", datasetWidgetMin(i, j).toDouble());
             dataset.insert("max", datasetWidgetMax(i, j).toDouble());
+            dataset.insert("alarm", datasetWidgetAlarm(i, j).toDouble());
 
             // Add dataset to array
             datasets.append(dataset);
@@ -548,6 +549,27 @@ QString Editor::datasetWidgetMax(const int group, const int dataset)
     return 0;
 }
 
+/**
+ * Returns the widget alarm value of the specified dataset.
+ * This option is used by the bar & gauge widgets.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+QString Editor::datasetWidgetAlarm(const int group, const int dataset)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+    {
+        if (set->m_alarm.isEmpty())
+            return set->m_max;
+        else
+            return set->m_alarm;
+    }
+
+    return 0;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Public slots
 //--------------------------------------------------------------------------------------------------
@@ -669,8 +691,10 @@ void Editor::openJsonFile(const QString &path)
             // Get max/min texts
             auto min = jsonDataset.value("min").toDouble();
             auto max = jsonDataset.value("max").toDouble();
+            auto alarm = jsonDataset.value("alarm").toDouble();
             setDatasetWidgetMin(group, dataset, QString::number(min));
             setDatasetWidgetMax(group, dataset, QString::number(max));
+            setDatasetWidgetAlarm(group, dataset, QString::number(alarm));
 
             // Calculate dataset index
             auto index = jsonDataset.value("v").toString();
@@ -1114,6 +1138,25 @@ void Editor::setDatasetWidgetData(const int group, const int dataset,
     if (set)
     {
         set->m_widget = widget;
+        emit datasetChanged(group, dataset);
+    }
+}
+
+/**
+ * Updates the @a alarm value used by the bar & gauge widgets for the given
+ * @a dataset. The value is specified in a @c QString to facilitate integration
+ * with the QML user interface.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+void Editor::setDatasetWidgetAlarm(const int group, const int dataset,
+                                   const QString &alarm)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+    {
+        set->m_alarm = alarm;
         emit datasetChanged(group, dataset);
     }
 }

@@ -144,7 +144,7 @@ Widgets.Window {
             columnSpacing: app.spacing
             Layout.fillHeight: repeater.model > 0
             columns: Math.floor(column.width / 320)
-            Layout.minimumHeight: (repeater.model / columns) * 300
+            Layout.minimumHeight: (repeater.model / columns) * 320
 
             Repeater {
                 id: repeater
@@ -154,7 +154,7 @@ Widgets.Window {
                     group: root.group
                     Layout.fillWidth: true
                     Layout.minimumWidth: 320
-                    Layout.minimumHeight: 300
+                    Layout.minimumHeight: 320
                     showGroupWidget: widget.currentIndex > 0
                 }
             }

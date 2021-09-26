@@ -5,6 +5,7 @@ import QtGraphicalEffects 1.0
 
 ColumnLayout {
     id: root
+    visible: count > 0
     spacing: app.spacing
 
     property int count: 0
@@ -72,6 +73,7 @@ ColumnLayout {
     }
 
     Item {
-        height: hideAll.checked ? 0 : app.spacing
+        height: app.spacing
+        visible: !hideAll.checked && count > 0
     }
 }

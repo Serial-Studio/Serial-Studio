@@ -57,10 +57,12 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     m_window.setMinimumHeight(480);
 
     // Configure window style sheet
+    // clang-format off
     auto theme = Misc::ThemeManager::getInstance();
-    auto qss
-        = QString("background-color: %1;").arg(theme->datasetWindowBackground().name());
+    auto qss = QString("background-color: %1;").arg(
+                theme->datasetWindowBackground().name());
     m_window.setStyleSheet(qss);
+    // clang-format on
 
     // Resize widget to fit QML item size
     connect(this, &QQuickPaintedItem::widthChanged, this,
@@ -244,7 +246,8 @@ void WidgetLoader::setWidgetIndex(const int index)
                 m_widget = new QPushButton("Plot");
                 break;
             case UI::Dashboard::WidgetType::Bar:
-                m_widget = new QPushButton("Bar");
+                m_widget = new Bar(relativeIndex());
+                m_window.setCentralWidget(new Bar(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gauge:
                 m_widget = new QPushButton("Gauge");

@@ -55,6 +55,7 @@ Widgets.Window {
         //
         ColumnLayout {
             x: app.spacing
+            spacing: app.spacing / 2
             width: parent.width - 10 - 2 * app.spacing
 
             //
