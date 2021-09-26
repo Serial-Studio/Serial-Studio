@@ -31,7 +31,7 @@
 using namespace UI;
 
 /*
- * Only instance of the class
+ * Pointer to the only instance of the class.
  */
 static Dashboard *INSTANCE = nullptr;
 
@@ -40,7 +40,7 @@ static Dashboard *INSTANCE = nullptr;
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Constructor of the class
+ * Constructor of the class.
  */
 Dashboard::Dashboard()
     : m_latestJsonFrame(JFI_Empty())
@@ -57,7 +57,7 @@ Dashboard::Dashboard()
 }
 
 /**
- * Returns the only instance of the class
+ * Returns a pointer to the only instance of the class.
  */
 Dashboard *Dashboard::getInstance()
 {
@@ -71,16 +71,26 @@ Dashboard *Dashboard::getInstance()
 // Misc member access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * Returns the title of the current JSON project/frame.
+ */
 QString Dashboard::title()
 {
     return m_latestFrame.title();
 }
 
+/**
+ * Returns @c true if there is any data available to generate the QML dashboard.
+ */
 bool Dashboard::available()
 {
-    return groupCount() > 0;
+    return totalWidgetCount() > 0;
 }
 
+/**
+ * Returns @c true if the current JSON frame is valid and ready-to-use by the QML
+ * interface.
+ */
 bool Dashboard::frameValid() const
 {
     return m_latestFrame.isValid();
@@ -90,6 +100,16 @@ bool Dashboard::frameValid() const
 // Widget count functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * Returns the total number of widgets that compose the current JSON frame.
+ * This function is used as a helper to the functions that use the global-index widget
+ * system.
+ *
+ * In the case of this function, we do not care about the order of the items that generate
+ * the summatory count of all widgets. But in the other global-index functions we need to
+ * be careful to sincronize the order of the widgets in order to allow the global-index
+ * system to work correctly.
+ */
 int Dashboard::totalWidgetCount() const
 {
     // clang-format off
@@ -123,6 +143,13 @@ int Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(
 // Relative-to-global widget index utility functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * Returns a @c QStringList with the titles of all the widgets that compose the current
+ * JSON frame.
+ *
+ * We need to be careful to sincronize the order of the widgets in order to allow
+ * the global-index system to work correctly.
+ */
 QStringList Dashboard::widgetTitles() const
 {
     // Warning: maintain same order as the view option repeaters in ViewOptions.qml!
@@ -140,6 +167,24 @@ QStringList Dashboard::widgetTitles() const
     // clang-format on
 }
 
+/**
+ * Returns the widget-specific index for the widget with the specified @a index.
+ *
+ * To simplify operations and user interface generation in QML, this class represents
+ * the widgets in two manners:
+ *
+ * - A global list of all widgets
+ * - A widget-specific list for each type of widget
+ *
+ * The global index allows us to use the @c WidgetLoader class to load any type of
+ * widget, which reduces the need of implementing QML-specific code for each widget
+ * that Serial Studio implements.
+ *
+ * The relative index is used by the visibility switches in the QML user interface.
+ *
+ * We need to be careful to sincronize the order of the widgets in order to allow
+ * the global-index system to work correctly.
+ */
 int Dashboard::relativeIndex(const int globalIndex) const
 {
     //
@@ -196,6 +241,23 @@ int Dashboard::relativeIndex(const int globalIndex) const
     return -1;
 }
 
+/**
+ * Returns @c true if the widget with the specifed @a globalIndex should be
+ * displayed in the QML user interface.
+ *
+ * To simplify operations and user interface generation in QML, this class represents
+ * the widgets in two manners:
+ *
+ * - A global list of all widgets
+ * - A widget-specific list for each type of widget
+ *
+ * The global index allows us to use the @c WidgetLoader class to load any type of
+ * widget, which reduces the need of implementing QML-specific code for each widget
+ * that Serial Studio implements.
+ *
+ * We need to be careful to sincronize the order of the widgets in order to allow
+ * the global-index system to work correctly.
+ */
 bool Dashboard::widgetVisible(const int globalIndex) const
 {
     bool visible = false;
@@ -238,6 +300,22 @@ bool Dashboard::widgetVisible(const int globalIndex) const
     return visible;
 }
 
+/**
+ * Returns the appropiate SVG-icon to load for the widget at the specified @a globalIndex.
+ *
+ * To simplify operations and user interface generation in QML, this class represents
+ * the widgets in two manners:
+ *
+ * - A global list of all widgets
+ * - A widget-specific list for each type of widget
+ *
+ * The global index allows us to use the @c WidgetLoader class to load any type of
+ * widget, which reduces the need of implementing QML-specific code for each widget
+ * that Serial Studio implements.
+ *
+ * We need to be careful to sincronize the order of the widgets in order to allow
+ * the global-index system to work correctly.
+ */
 QString Dashboard::widgetIcon(const int globalIndex) const
 {
     switch (widgetType(globalIndex))
@@ -275,6 +353,34 @@ QString Dashboard::widgetIcon(const int globalIndex) const
     }
 }
 
+/**
+ * Returns the type of widget that corresponds to the given @a globalIndex.
+ *
+ * Possible return values are:
+ * - @c WidgetType::Unknown
+ * - @c WidgetType::Group
+ * - @c WidgetType::Plot
+ * - @c WidgetType::Bar
+ * - @c WidgetType::Gauge
+ * - @c WidgetType::Thermometer
+ * - @c WidgetType::Compass
+ * - @c WidgetType::Gyroscope
+ * - @c WidgetType::Accelerometer
+ * - @c WidgetType::Map
+ *
+ * To simplify operations and user interface generation in QML, this class represents
+ * the widgets in two manners:
+ *
+ * - A global list of all widgets
+ * - A widget-specific list for each type of widget
+ *
+ * The global index allows us to use the @c WidgetLoader class to load any type of
+ * widget, which reduces the need of implementing QML-specific code for each widget
+ * that Serial Studio implements.
+ *
+ * We need to be careful to sincronize the order of the widgets in order to allow
+ * the global-index system to work correctly.
+ */
 Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
 {
     //
@@ -543,6 +649,9 @@ void Dashboard::selectLatestJSON(const JFI_Object &frameInfo)
 // Widget utility functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * Returns a vector with all the datasets that need to be plotted.
+ */
 QVector<JSON::Dataset *> Dashboard::getPlotWidgets() const
 {
     QVector<JSON::Dataset *> widgets;
@@ -558,6 +667,10 @@ QVector<JSON::Dataset *> Dashboard::getPlotWidgets() const
     return widgets;
 }
 
+/**
+ * Returns a vector with all the groups that implement the widget with the specied
+ * @a handle.
+ */
 QVector<JSON::Group *> Dashboard::getWidgetGroups(const QString &handle) const
 {
     QVector<JSON::Group *> widgets;
@@ -570,6 +683,10 @@ QVector<JSON::Group *> Dashboard::getWidgetGroups(const QString &handle) const
     return widgets;
 }
 
+/**
+ * Returns a vector with all the datasets that implement a widget with the specified
+ * @a handle.
+ */
 QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle) const
 {
     QVector<JSON::Dataset *> widgets;
@@ -585,6 +702,9 @@ QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle) con
     return widgets;
 }
 
+/**
+ * Returns the titles of the datasets contained in the specified @a vector.
+ */
 QStringList Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) const
 {
     QStringList list;
@@ -594,6 +714,9 @@ QStringList Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) con
     return list;
 }
 
+/**
+ * Returns the titles of the groups contained in the specified @a vector.
+ */
 QStringList Dashboard::groupTitles(const QVector<JSON::Group *> &vector) const
 {
     QStringList list;
@@ -603,6 +726,10 @@ QStringList Dashboard::groupTitles(const QVector<JSON::Group *> &vector) const
     return list;
 }
 
+/**
+ * Returns @c true if the widget at the specifed @a index of the @a vector should be
+ * displayed in the QML user interface.
+ */
 bool Dashboard::getVisibility(const QVector<bool> &vector, const int index) const
 {
     if (index < vector.count())
@@ -611,6 +738,11 @@ bool Dashboard::getVisibility(const QVector<bool> &vector, const int index) cons
     return false;
 }
 
+/**
+ * Changes the @a visible flag of the widget at the specified @a index of the given @a
+ * vector. Calling this function with @a visible set to @c false will hide the widget in
+ * the QML user interface.
+ */
 void Dashboard::setVisibility(QVector<bool> &vector, const int index, const bool visible)
 {
     if (index < vector.count())
