@@ -15,6 +15,14 @@ ColumnLayout {
 
     signal checkedChanged(var index, var checked)
 
+    Connections {
+        target: Cpp_UI_Dashboard
+
+        function onDataReset() {
+            hideAll.checked = false
+        }
+    }
+
     RowLayout {
         spacing: app.spacing
         visible: root.count > 0

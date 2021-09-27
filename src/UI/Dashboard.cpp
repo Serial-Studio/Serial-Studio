@@ -555,6 +555,7 @@ void Dashboard::resetData()
     m_gaugeWidgets.clear();
     m_compassWidgets.clear();
     m_gyroscopeWidgets.clear();
+    m_multiPlotWidgets.clear();
     m_thermometerWidgets.clear();
     m_accelerometerWidgets.clear();
 
@@ -566,6 +567,7 @@ void Dashboard::resetData()
     m_groupVisibility.clear();
     m_compassVisibility.clear();
     m_gyroscopeVisibility.clear();
+    m_multiPlotVisibility.clear();
     m_thermometerVisibility.clear();
     m_accelerometerVisibility.clear();
 
@@ -590,6 +592,7 @@ void Dashboard::updateData()
     int gaugeC = gaugeCount();
     int compassC = compassCount();
     int gyroscopeC = gyroscopeCount();
+    int multiPlotC = multiPlotCount();
     int thermometerC = thermometerCount();
     int accelerometerC = accelerometerCount();
 
@@ -603,6 +606,7 @@ void Dashboard::updateData()
     m_gaugeWidgets.clear();
     m_compassWidgets.clear();
     m_gyroscopeWidgets.clear();
+    m_multiPlotWidgets.clear();
     m_thermometerWidgets.clear();
     m_accelerometerWidgets.clear();
 
@@ -617,6 +621,7 @@ void Dashboard::updateData()
     m_gaugeWidgets = getWidgetDatasets("gauge");
     m_gyroscopeWidgets = getWidgetGroups("gyro");
     m_compassWidgets = getWidgetDatasets("compass");
+    m_multiPlotWidgets = getWidgetGroups("multiplot");
     m_thermometerWidgets = getWidgetDatasets("thermometer");
     m_accelerometerWidgets = getWidgetGroups("accelerometer");
 
@@ -633,6 +638,7 @@ void Dashboard::updateData()
     regenerateWidgets |= (groupC != groupCount());
     regenerateWidgets |= (compassC != compassCount());
     regenerateWidgets |= (gyroscopeC != gyroscopeCount());
+    regenerateWidgets |= (multiPlotC != multiPlotCount());
     regenerateWidgets |= (thermometerC != thermometerCount());
     regenerateWidgets |= (accelerometerC != accelerometerCount());
 
@@ -646,6 +652,7 @@ void Dashboard::updateData()
         m_groupVisibility.clear();
         m_compassVisibility.clear();
         m_gyroscopeVisibility.clear();
+        m_multiPlotVisibility.clear();
         m_thermometerVisibility.clear();
         m_accelerometerVisibility.clear();
 
@@ -664,6 +671,8 @@ void Dashboard::updateData()
             m_compassVisibility.append(true);
         for (i = 0; i < gyroscopeCount(); ++i)
             m_gyroscopeVisibility.append(true);
+        for (i = 0; i < multiPlotCount(); ++i)
+            m_multiPlotVisibility.append(true);
         for (i = 0; i < thermometerCount(); ++i)
             m_thermometerVisibility.append(true);
         for (i = 0; i < accelerometerCount(); ++i)
