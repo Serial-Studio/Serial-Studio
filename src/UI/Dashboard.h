@@ -64,6 +64,9 @@ class Dashboard : public QObject
     Q_PROPERTY(int gyroscopeCount
                READ gyroscopeCount
                NOTIFY widgetCountChanged)
+    Q_PROPERTY(int multiPlotCount
+               READ multiPlotCount
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int thermometerCount
                READ thermometerCount
                NOTIFY widgetCountChanged)
@@ -91,6 +94,9 @@ class Dashboard : public QObject
     Q_PROPERTY(QStringList gyroscopeTitles
                READ gyroscopeTitles
                NOTIFY widgetCountChanged)
+    Q_PROPERTY(QStringList multiPlotTitles
+               READ multiPlotTitles
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(QStringList thermometerTitles
                READ thermometerTitles
                NOTIFY widgetCountChanged)
@@ -110,6 +116,7 @@ public:
     enum class WidgetType
     {
         Group,
+        MultiPlot,
         Plot,
         Bar,
         Gauge,
@@ -132,6 +139,7 @@ public:
     JSON::Dataset *getGauge(const int index);
     JSON::Group *getGyroscope(const int index);
     JSON::Dataset *getCompass(const int index);
+    JSON::Group *getMultiplot(const int index);
     JSON::Group *getAccelerometer(const int index);
     JSON::Dataset *getThermometer(const int index);
 
@@ -146,6 +154,7 @@ public:
     int gaugeCount() const;
     int compassCount() const;
     int gyroscopeCount() const;
+    int multiPlotCount() const;
     int thermometerCount() const;
     int accelerometerCount() const;
 
@@ -163,6 +172,7 @@ public:
     Q_INVOKABLE bool gaugeVisible(const int index) const;
     Q_INVOKABLE bool compassVisible(const int index) const;
     Q_INVOKABLE bool gyroscopeVisible(const int index) const;
+    Q_INVOKABLE bool multiPlotVisible(const int index) const;
     Q_INVOKABLE bool thermometerVisible(const int index) const;
     Q_INVOKABLE bool accelerometerVisible(const int index) const;
 
@@ -173,6 +183,7 @@ public:
     Q_INVOKABLE QStringList gaugeTitles() const;
     Q_INVOKABLE QStringList compassTitles() const;
     Q_INVOKABLE QStringList gyroscopeTitles() const;
+    Q_INVOKABLE QStringList multiPlotTitles() const;
     Q_INVOKABLE QStringList thermometerTitles() const;
     Q_INVOKABLE QStringList accelerometerTitles() const;
 
@@ -184,6 +195,7 @@ public slots:
     void setGaugeVisible(const int index, const bool visible);
     void setCompassVisible(const int index, const bool visible);
     void setGyroscopeVisible(const int index, const bool visible);
+    void setMultiplotVisible(const int index, const bool visible);
     void setThermometerVisible(const int index, const bool visible);
     void setAccelerometerVisible(const int index, const bool visible);
 
@@ -217,6 +229,7 @@ private:
     QVector<bool> m_gaugeVisibility;
     QVector<bool> m_compassVisibility;
     QVector<bool> m_gyroscopeVisibility;
+    QVector<bool> m_multiPlotVisibility;
     QVector<bool> m_thermometerVisibility;
     QVector<bool> m_accelerometerVisibility;
 
@@ -227,6 +240,7 @@ private:
     QVector<JSON::Dataset *> m_thermometerWidgets;
 
     QVector<JSON::Group *> m_mapWidgets;
+    QVector<JSON::Group *> m_multiPlotWidgets;
     QVector<JSON::Group *> m_gyroscopeWidgets;
     QVector<JSON::Group *> m_accelerometerWidgets;
 

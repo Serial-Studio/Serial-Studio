@@ -77,6 +77,17 @@ Widgets.Window {
             }
 
             //
+            // Multiplots
+            //
+            ViewOptionsDelegate {
+                title: qsTr("Multiple data plots")
+                icon: "qrc:/icons/plot.svg"
+                count: Cpp_UI_Dashboard.multiPlotCount
+                titles: Cpp_UI_Dashboard.multiPlotCount
+                onCheckedChanged: Cpp_UI_Dashboard.setMultiplotVisible(index, checked)
+            }
+
+            //
             // Plots
             //
             ViewOptionsDelegate {

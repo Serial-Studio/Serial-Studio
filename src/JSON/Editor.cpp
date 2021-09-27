@@ -93,7 +93,7 @@ Editor *Editor::getInstance()
 QStringList Editor::availableGroupLevelWidgets()
 {
     return QStringList { tr("Dataset widgets"), tr("Accelerometer"), tr("Gyroscope"),
-                         tr("Map") };
+                         tr("Map"), tr("Multiple data plot") };
 }
 
 /**
@@ -326,7 +326,7 @@ bool Editor::saveJsonFile()
     json.insert("g", groups);
 
     // Write JSON data to file
-    file.write(QJsonDocument(json).toJson(QJsonDocument::Compact));
+    file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
     file.close();
 
     // Load JSON file to Serial Studio
@@ -414,6 +414,9 @@ int Editor::groupWidgetIndex(const int group)
 
         if (widget == "map")
             return 3;
+
+        if (widget == "multiplot")
+            return 4;
     }
 
     return 0;
@@ -823,16 +826,23 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
     if (grp)
     {
         // Warn user if group contains existing datasets
-        if (!(grp->m_datasets.isEmpty()))
+        if (!(grp->m_datasets.isEmpty()) && widgetId != 4)
         {
-            auto ret = Misc::Utilities::showMessageBox(
-                tr("Are you sure you want to change the group-level widget?"),
-                tr("Existing datasets for this group will be deleted"), APP_NAME,
-                QMessageBox::Yes | QMessageBox::No);
-            if (ret == QMessageBox::No)
-                return false;
+            if (widgetId == 0 && grp->widget() == "multiplot")
+                ;
+            // Do nothing
+
             else
-                grp->m_datasets.clear();
+            {
+                auto ret = Misc::Utilities::showMessageBox(
+                    tr("Are you sure you want to change the group-level widget?"),
+                    tr("Existing datasets for this group will be deleted"), APP_NAME,
+                    QMessageBox::Yes | QMessageBox::No);
+                if (ret == QMessageBox::No)
+                    return false;
+                else
+                    grp->m_datasets.clear();
+            }
         }
 
         // Accelerometer widget
@@ -936,6 +946,10 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
             grp->m_datasets.append(lat);
             grp->m_datasets.append(lon);
         }
+
+        // Multi plot widget
+        else if (widgetId == 4)
+            grp->m_widget = "multiplot";
 
         // Update UI
         emit groupChanged(group);

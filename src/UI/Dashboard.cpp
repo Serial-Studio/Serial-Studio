@@ -84,6 +84,7 @@ JSON::Dataset *Dashboard::getPlot(const int index)        { return getDatasetWid
 JSON::Dataset *Dashboard::getGauge(const int index)       { return getDatasetWidget(m_gaugeWidgets, index);       }
 JSON::Group *Dashboard::getGyroscope(const int index)     { return getGroupWidget(m_gyroscopeWidgets, index);     }
 JSON::Dataset *Dashboard::getCompass(const int index)     { return getDatasetWidget(m_compassWidgets, index);     }
+JSON::Group *Dashboard::getMultiplot(const int index) { return getGroupWidget(m_accelerometerWidgets, index); }
 JSON::Group *Dashboard::getAccelerometer(const int index) { return getGroupWidget(m_accelerometerWidgets, index); }
 JSON::Dataset *Dashboard::getThermometer(const int index) { return getDatasetWidget(m_thermometerWidgets, index); }
 // clang-format on
@@ -140,6 +141,7 @@ int Dashboard::totalWidgetCount() const
                       gaugeCount() +
                       groupCount() +
                       compassCount() +
+                      multiPlotCount() +
                       gyroscopeCount() +
                       thermometerCount() +
                       accelerometerCount();
@@ -156,6 +158,7 @@ int Dashboard::gaugeCount() const         { return m_gaugeWidgets.count();      
 int Dashboard::groupCount() const         { return m_latestFrame.groupCount();     }
 int Dashboard::compassCount() const       { return m_compassWidgets.count();       }
 int Dashboard::gyroscopeCount() const     { return m_gyroscopeWidgets.count();     }
+int Dashboard::multiPlotCount() const     { return m_gyroscopeWidgets.count();     }
 int Dashboard::thermometerCount() const   { return m_thermometerWidgets.count();   }
 int Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(); }
 // clang-format on
@@ -177,6 +180,7 @@ QStringList Dashboard::widgetTitles() const
 
     // clang-format off
     return groupTitles() +
+           multiPlotTitles() +
            plotTitles() +
            barTitles() +
            gaugeTitles() +
@@ -218,8 +222,13 @@ int Dashboard::relativeIndex(const int globalIndex) const
     if (index < groupCount())
         return index;
 
-    // Check if we should return plot widget
+    // Check if we should return multi-plot widget
     index -= groupCount();
+    if (index < multiPlotCount())
+        return index;
+
+    // Check if we should return plot widget
+    index -= multiPlotCount();
     if (index < plotCount())
         return index;
 
@@ -289,6 +298,9 @@ bool Dashboard::widgetVisible(const int globalIndex) const
         case WidgetType::Group:
             visible = groupVisible(index);
             break;
+        case WidgetType::MultiPlot:
+            visible = multiPlotVisible(index);
+            break;
         case WidgetType::Plot:
             visible = plotVisible(index);
             break;
@@ -344,6 +356,9 @@ QString Dashboard::widgetIcon(const int globalIndex) const
         case WidgetType::Group:
             return "qrc:/icons/group.svg";
             break;
+        case WidgetType::MultiPlot:
+            return "qrc:/icons/plot.svg";
+            break;
         case WidgetType::Plot:
             return "qrc:/icons/plot.svg";
             break;
@@ -380,6 +395,7 @@ QString Dashboard::widgetIcon(const int globalIndex) const
  * Possible return values are:
  * - @c WidgetType::Unknown
  * - @c WidgetType::Group
+ * - @c WidgetType::MultiPlot
  * - @c WidgetType::Plot
  * - @c WidgetType::Bar
  * - @c WidgetType::Gauge
@@ -418,8 +434,13 @@ Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
     if (index < groupCount())
         return WidgetType::Group;
 
-    // Check if we should return plot widget
+    // Check if we should return multi-plot widget
     index -= groupCount();
+    if (index < multiPlotCount())
+        return WidgetType::MultiPlot;
+
+    // Check if we should return plot widget
+    index -= multiPlotCount();
     if (index < plotCount())
         return WidgetType::Plot;
 
@@ -474,6 +495,7 @@ bool Dashboard::groupVisible(const int index) const         { return getVisibili
 bool Dashboard::gaugeVisible(const int index) const         { return getVisibility(m_gaugeVisibility, index);         }
 bool Dashboard::compassVisible(const int index) const       { return getVisibility(m_compassVisibility, index);       }
 bool Dashboard::gyroscopeVisible(const int index) const     { return getVisibility(m_gyroscopeVisibility, index);     }
+bool Dashboard::multiPlotVisible(const int index) const     { return getVisibility(m_multiPlotVisibility, index);     }
 bool Dashboard::thermometerVisible(const int index) const   { return getVisibility(m_thermometerVisibility, index);   }
 bool Dashboard::accelerometerVisible(const int index) const { return getVisibility(m_accelerometerVisibility, index); }
 // clang-format on
@@ -490,6 +512,7 @@ QStringList Dashboard::groupTitles() const         { return groupTitles(m_latest
 QStringList Dashboard::gaugeTitles() const         { return datasetTitles(m_gaugeWidgets);       }
 QStringList Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
 QStringList Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
+QStringList Dashboard::multiPlotTitles() const     { return groupTitles(m_multiPlotWidgets);     }
 QStringList Dashboard::thermometerTitles() const   { return datasetTitles(m_thermometerWidgets); }
 QStringList Dashboard::accelerometerTitles() const { return groupTitles(m_accelerometerWidgets); }
 // clang-format on
@@ -506,6 +529,7 @@ void Dashboard::setGroupVisible(const int i, const bool v)         { setVisibili
 void Dashboard::setGaugeVisible(const int i, const bool v)         { setVisibility(m_gaugeVisibility, i, v);         }
 void Dashboard::setCompassVisible(const int i, const bool v)       { setVisibility(m_compassVisibility, i, v);       }
 void Dashboard::setGyroscopeVisible(const int i, const bool v)     { setVisibility(m_gyroscopeVisibility, i, v);     }
+void Dashboard::setMultiplotVisible(const int i, const bool v)     { setVisibility(m_multiPlotVisibility, i, v);   }
 void Dashboard::setThermometerVisible(const int i, const bool v)   { setVisibility(m_thermometerVisibility, i, v);   }
 void Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisibility(m_accelerometerVisibility, i, v); }
 // clang-format on

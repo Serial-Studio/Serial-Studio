@@ -242,6 +242,9 @@ void WidgetLoader::setWidgetIndex(const int index)
                 m_widget = new DataGroup(relativeIndex());
                 m_window.setCentralWidget(new DataGroup(relativeIndex()));
                 break;
+            case UI::Dashboard::WidgetType::MultiPlot:
+                m_widget = new QPushButton("Multi-Plot");
+                break;
             case UI::Dashboard::WidgetType::Plot:
                 m_widget = new QPushButton("Plot");
                 break;

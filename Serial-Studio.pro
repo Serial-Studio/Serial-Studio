@@ -176,6 +176,7 @@ HEADERS += \
     src/Widgets/DataGroup.h \
     src/Widgets/Gauge.h \
     src/Widgets/Gyroscope.h \
+    src/Widgets/MultiPlot.h \
     src/Widgets/Plot.h \
     src/Widgets/Terminal.h \
     src/Widgets/Thermometer.h \
@@ -184,6 +185,7 @@ HEADERS += \
 SOURCES += \
     src/UI/Dashboard.cpp \
     src/Widgets/AnalogGauge.cpp \
+    src/Widgets/MultiPlot.cpp \
     src/Widgets/WidgetLoader.cpp \
     src/main.cpp \
     src/CSV/Export.cpp \
