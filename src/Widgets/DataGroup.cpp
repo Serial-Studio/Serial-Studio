@@ -43,14 +43,14 @@ DataGroup::DataGroup(const int index)
         return;
 
     // Get group pointer
-    auto group = dash->getGroup(m_index);
+    auto group = dash->getGroups(m_index);
     if (!group)
         return;
 
     // Generate widget stylesheets
-    auto valueQSS = QSS("color:%1", theme->datasetValue());
     auto titleQSS = QSS("color:%1", theme->datasetTextPrimary());
     auto unitsQSS = QSS("color:%1", theme->datasetTextSecondary());
+    auto valueQSS = QSS("color:%1", theme->widgetForegroundPrimary());
     auto iconsQSS = QSS("color:%1; font-weight:600;", theme->datasetTextSecondary());
 
     // Set window palette
@@ -61,6 +61,10 @@ DataGroup::DataGroup(const int index)
 
     // Configure scroll area container
     m_dataContainer = new QWidget(this);
+
+    // Make the value label larger
+    auto valueFont = dash->monoFont();
+    valueFont.setPixelSize(dash->monoFont().pixelSize() * 1.3);
 
     // Configure grid layout
     m_gridLayout = new QGridLayout(m_dataContainer);
@@ -84,9 +88,9 @@ DataGroup::DataGroup(const int index)
         title->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         dicon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
-        // Set label styles
+        // Set label styles & fonts
+        value->setFont(valueFont);
         title->setFont(dash->monoFont());
-        value->setFont(dash->monoFont());
         units->setFont(dash->monoFont());
         title->setStyleSheet(titleQSS);
         value->setStyleSheet(valueQSS);
@@ -161,7 +165,11 @@ DataGroup::~DataGroup()
 }
 
 /**
- * Updates the widget's data
+ * Checks if the widget is enabled, if so, the widget shall be updated
+ * to display the latest data frame.
+ *
+ * If the widget is disabled (e.g. the user hides it, or the external
+ * window is hidden), then the widget shall ignore the update request.
  */
 void DataGroup::update()
 {
@@ -171,7 +179,7 @@ void DataGroup::update()
 
     // Get group pointer
     auto dash = UI::Dashboard::getInstance();
-    auto group = dash->getGroup(m_index);
+    auto group = dash->getGroups(m_index);
     if (!group)
         return;
 
@@ -210,15 +218,17 @@ void DataGroup::resizeEvent(QResizeEvent *event)
     auto width = event->size().width();
     QFont font = UI::Dashboard::getInstance()->monoFont();
     QFont icon = font;
+    QFont valueFont = font;
     icon.setPixelSize(width / 16);
     font.setPixelSize(width / 24);
+    valueFont.setPixelSize(font.pixelSize() * 1.3);
 
     for (int i = 0; i < m_titles.count(); ++i)
     {
         m_units.at(i)->setFont(font);
         m_icons.at(i)->setFont(icon);
         m_titles.at(i)->setFont(font);
-        m_values.at(i)->setFont(font);
+        m_values.at(i)->setFont(valueFont);
     }
 
     event->accept();

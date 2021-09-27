@@ -23,6 +23,7 @@
 #ifndef WIDGETS_COMPASS_H
 #define WIDGETS_COMPASS_H
 
+#include <QLabel>
 #include <QWidget>
 #include <QwtCompass>
 #include <QVBoxLayout>
@@ -40,9 +41,13 @@ private slots:
     void update();
 
 private:
+    void resizeEvent(QResizeEvent *event);
+
+private:
     int m_index;
+    QLabel m_label;
     QwtCompass m_compass;
-    QVBoxLayout m_layout;
+    QHBoxLayout m_layout;
 };
 }
 

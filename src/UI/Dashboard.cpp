@@ -76,37 +76,17 @@ QFont Dashboard::monoFont() const
     return QFont("Roboto Mono");
 }
 
-JSON::Group *Dashboard::getGroup(const int index)
-{
-    if (index < m_latestFrame.groupCount())
-        return m_latestFrame.groups().at(index);
-
-    return nullptr;
-}
-
-JSON::Dataset *Dashboard::getBar(const int index)
-{
-    if (index < m_barWidgets.count())
-        return m_barWidgets.at(index);
-
-    return nullptr;
-}
-
-JSON::Dataset *Dashboard::getGauge(const int index)
-{
-    if (index < m_gaugeWidgets.count())
-        return m_gaugeWidgets.at(index);
-
-    return nullptr;
-}
-
-JSON::Dataset *Dashboard::getCompass(const int index)
-{
-    if (index < m_compassWidgets.count())
-        return m_compassWidgets.at(index);
-
-    return nullptr;
-}
+// clang-format off
+JSON::Group *Dashboard::getMap(const int index)           { return getGroupWidget(m_mapWidgets, index);           }
+JSON::Dataset *Dashboard::getBar(const int index)         { return getDatasetWidget(m_barWidgets, index);         }
+JSON::Group *Dashboard::getGroups(const int index)        { return getGroupWidget(m_latestFrame.groups(), index); }
+JSON::Dataset *Dashboard::getPlot(const int index)        { return getDatasetWidget(m_plotWidgets, index);        }
+JSON::Dataset *Dashboard::getGauge(const int index)       { return getDatasetWidget(m_gaugeWidgets, index);       }
+JSON::Group *Dashboard::getGyroscope(const int index)     { return getGroupWidget(m_gyroscopeWidgets, index);     }
+JSON::Dataset *Dashboard::getCompass(const int index)     { return getDatasetWidget(m_compassWidgets, index);     }
+JSON::Group *Dashboard::getAccelerometer(const int index) { return getGroupWidget(m_accelerometerWidgets, index); }
+JSON::Dataset *Dashboard::getThermometer(const int index) { return getDatasetWidget(m_thermometerWidgets, index); }
+// clang-format on
 
 //--------------------------------------------------------------------------------------------------
 // Misc member access functions
@@ -791,4 +771,30 @@ void Dashboard::setVisibility(QVector<bool> &vector, const int index, const bool
         vector[index] = visible;
         emit widgetVisibilityChanged();
     }
+}
+
+/**
+ * Returns a pointer to the group at the specified @a index of the given @a vector.
+ * If the @a index is invalid, then this function shall return a NULL pointer.
+ */
+JSON::Group *Dashboard::getGroupWidget(const QVector<JSON::Group *> vector,
+                                       const int index)
+{
+    if (index < vector.count())
+        return vector.at(index);
+
+    return nullptr;
+}
+
+/**
+ * Returns a pointer to the dataset at the specified @a index of the given @a vector.
+ * If the @a index is invalid, then this function shall return a NULL pointer.
+ */
+JSON::Dataset *Dashboard::getDatasetWidget(const QVector<JSON::Dataset *> vector,
+                                           const int index)
+{
+    if (index < vector.count())
+        return vector.at(index);
+
+    return nullptr;
 }

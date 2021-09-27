@@ -24,13 +24,14 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-#include <QwtSimpleCompassRose>
-#include <QwtCompassWindArrow>
+#include <QResizeEvent>
+#include <QwtCompassScaleDraw>
+#include <QwtCompassMagnetNeedle>
 
 using namespace Widgets;
 
 /**
- * Configures the compass widget style & the signals/slots with the dashboard module
+ * Constructor function, configures widget style & signal/slot connections.
  */
 Compass::Compass(const int index)
     : m_index(index)
@@ -43,13 +44,26 @@ Compass::Compass(const int index)
     if (m_index < 0 || m_index >= dash->compassCount())
         return;
 
-    // Configure compass
-    m_compass.setScale(0, 360);
-    m_compass.setLineWidth(2);
-    m_compass.setFont(dash->monoFont());
-    m_compass.setFrameShadow(QwtDial::Sunken);
-    m_compass.setNeedle(
-        new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::TriangleStyle));
+    // Set compass style
+    QwtCompassScaleDraw *scaleDraw = new QwtCompassScaleDraw();
+    scaleDraw->enableComponent(QwtAbstractScaleDraw::Ticks, true);
+    scaleDraw->enableComponent(QwtAbstractScaleDraw::Labels, true);
+    scaleDraw->enableComponent(QwtAbstractScaleDraw::Backbone, false);
+    scaleDraw->setTickLength(QwtScaleDiv::MinorTick, 1);
+    scaleDraw->setTickLength(QwtScaleDiv::MediumTick, 1);
+    scaleDraw->setTickLength(QwtScaleDiv::MajorTick, 3);
+
+    // Configure compass scale & needle
+    m_compass.setScaleDraw(scaleDraw);
+    m_compass.setScaleMaxMajor(36);
+    m_compass.setScaleMaxMinor(5);
+    m_compass.setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
+
+    // Set compass palette
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, theme->base());
+    palette.setColor(QPalette::Text, theme->widgetIndicator1());
+    m_compass.setPalette(palette);
 
     // Set window palette
     QPalette windowPalette;
@@ -57,17 +71,40 @@ Compass::Compass(const int index)
     windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
     setPalette(windowPalette);
 
-    // Add compass to layout
+    // Configure label style
+    QFont font = dash->monoFont();
+    font.setPixelSize(24);
+    m_label.setFont(font);
+    m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    // Configure layout
     m_layout.addWidget(&m_compass);
+    m_layout.addWidget(&m_label);
+    m_layout.setSpacing(24);
+    m_layout.setStretch(0, 0);
+    m_layout.setStretch(1, 1);
     m_layout.setContentsMargins(24, 24, 24, 24);
     setLayout(&m_layout);
+
+    // Set stylesheets
+    // clang-format off
+    auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
+                        theme->base(),
+                        theme->widgetForegroundPrimary(),
+                        theme->widgetIndicator1());
+    m_label.setStyleSheet(valueQSS);
+    // clang-format on
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(update()));
 }
 
 /**
- * Updates the widget's data
+ * Checks if the widget is enabled, if so, the widget shall be updated
+ * to display the latest data frame.
+ *
+ * If the widget is disabled (e.g. the user hides it, or the external
+ * window is hidden), then the widget shall ignore the update request.
  */
 void Compass::update()
 {
@@ -78,5 +115,32 @@ void Compass::update()
     // Update compass heading
     auto dataset = UI::Dashboard::getInstance()->getCompass(m_index);
     if (dataset)
-        m_compass.setValue(dataset->value().toDouble());
+    {
+        auto value = dataset->value().toDouble() * 12;
+        auto text = QString("%1°").arg(QString::number(value, 'f', 0));
+        m_compass.setValue(value);
+
+        if (text.length() == 2)
+            text.prepend("00");
+        else if (text.length() == 3)
+            text.prepend("0");
+
+        m_label.setText(text);
+    }
+}
+
+/**
+ * Changes the size of the labels when the widget is resized
+ */
+void Compass::resizeEvent(QResizeEvent *event)
+{
+    auto labelFont = UI::Dashboard::getInstance()->monoFont();
+    auto compassFont = UI::Dashboard::getInstance()->monoFont();
+    labelFont.setPixelSize(event->size().width() / 18);
+    compassFont.setPixelSize(event->size().width() / 24);
+    m_label.setFont(labelFont);
+    m_compass.setFont(compassFont);
+    m_label.setMaximumWidth(event->size().width() * 0.3);
+    m_label.setMaximumHeight(event->size().height() * 0.4);
+    event->accept();
 }

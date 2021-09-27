@@ -29,7 +29,7 @@
 using namespace Widgets;
 
 /**
- * Configures the bard widget style & the signals/slots with the dashboard module
+ * Constructor function, configures widget style & signal/slot connections.
  */
 Bar::Bar(const int index)
     : m_index(index)
@@ -60,7 +60,7 @@ Bar::Bar(const int index)
     // Set stylesheets
     // clang-format off
     auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
-                        theme->widgetAlternativeBackground(),
+                        theme->base(),
                         theme->widgetForegroundPrimary(),
                         theme->widgetIndicator1());
     m_label.setStyleSheet(valueQSS);
@@ -74,13 +74,13 @@ Bar::Bar(const int index)
 
     // Set thermo palette
     QPalette thermoPalette;
+    thermoPalette.setColor(QPalette::Base, theme->base());
     thermoPalette.setColor(QPalette::Highlight, QColor("#f00"));
     thermoPalette.setColor(QPalette::Text, theme->widgetIndicator1());
     thermoPalette.setColor(QPalette::Dark, theme->widgetIndicator1());
     thermoPalette.setColor(QPalette::Light, theme->widgetIndicator1());
     thermoPalette.setColor(QPalette::ButtonText, theme->widgetIndicator1());
     thermoPalette.setColor(QPalette::WindowText, theme->widgetIndicator1());
-    thermoPalette.setColor(QPalette::Base, theme->widgetAlternativeBackground());
     m_thermo.setPalette(thermoPalette);
 
     // Get thermo color
@@ -112,7 +112,11 @@ Bar::Bar(const int index)
 }
 
 /**
- * Updates the widget's data
+ * Checks if the widget is enabled, if so, the widget shall be updated
+ * to display the latest data frame.
+ *
+ * If the widget is disabled (e.g. the user hides it, or the external
+ * window is hidden), then the widget shall ignore the update request.
  */
 void Bar::update()
 {
@@ -137,7 +141,8 @@ void Bar::update()
 }
 
 /**
- * Changes the size of the thermo and value label when the widget is resized
+ * Resizes the thermo and the value display label to fit the size
+ * of the parent window.
  */
 void Bar::resizeEvent(QResizeEvent *event)
 {

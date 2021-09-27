@@ -170,6 +170,7 @@ HEADERS += \
     src/Plugins/Bridge.h \
     src/UI/Dashboard.h \
     src/Widgets/Accelerometer.h \
+    src/Widgets/AnalogGauge.h \
     src/Widgets/Bar.h \
     src/Widgets/Compass.h \
     src/Widgets/DataGroup.h \
@@ -182,6 +183,7 @@ HEADERS += \
 
 SOURCES += \
     src/UI/Dashboard.cpp \
+    src/Widgets/AnalogGauge.cpp \
     src/Widgets/WidgetLoader.cpp \
     src/main.cpp \
     src/CSV/Export.cpp \

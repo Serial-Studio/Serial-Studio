@@ -24,68 +24,13 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-#include <QPainter>
-#include <QApplication>
 #include <QResizeEvent>
-#include <QwtDialNeedle>
-#include <QwtRoundScaleDraw>
 
 using namespace Widgets;
 
-//--------------------------------------------------------------------------------------------------
-// Gauge/Speedometer implementation (based on Qwt examples)
-//--------------------------------------------------------------------------------------------------
-
-GaugeObject::GaugeObject(QWidget *parent)
-    : QwtDial(parent)
-{
-    // Disable controling the gauge with the mouse or keyboard
-    setReadOnly(true);
-
-    // Do not reset gauge if we reach maximum value
-    setWrapping(false);
-
-    // Set gauge origin & min/max angles
-    setOrigin(135);
-    setScaleArc(0, 270);
-}
-
-QString GaugeObject::label() const
-{
-    return m_label;
-}
-
-void GaugeObject::setLabel(const QString &label)
-{
-    m_label = label;
-    update();
-}
-
-void GaugeObject::drawScaleContents(QPainter *painter, const QPointF &center,
-                                    double radius) const
-{
-    // Get label font
-    auto labelFont = font();
-    labelFont.setPixelSize(1.4 * font().pixelSize());
-
-    // Create draw rectangle
-    QRectF rect(0.0, 0.0, 2.0 * radius, 2.0 * radius - labelFont.pixelSize() * 2);
-    rect.moveCenter(center);
-
-    // Set text alignment flags
-    const int flags = Qt::AlignBottom | Qt::AlignHCenter;
-
-    // Paint label
-    painter->setFont(labelFont);
-    painter->setPen(Misc::ThemeManager::getInstance()->widgetIndicator1());
-    painter->drawText(rect, flags,
-                      QString("%1 %2").arg(QString::number(value(), 'f', 2), m_label));
-}
-
-//--------------------------------------------------------------------------------------------------
-// Gauge widget implementation
-//--------------------------------------------------------------------------------------------------
-
+/**
+ * Constructor function, configures widget style & signal/slot connections.
+ */
 Gauge::Gauge(const int index)
     : m_index(index)
 {
@@ -123,6 +68,12 @@ Gauge::Gauge(const int index)
     }
 #endif
 
+    // Set gauge palette
+    QPalette gaugePalette;
+    gaugePalette.setColor(QPalette::WindowText, theme->base());
+    gaugePalette.setColor(QPalette::Text, theme->widgetIndicator1());
+    m_gauge.setPalette(gaugePalette);
+
     // Set window palette
     QPalette windowPalette;
     windowPalette.setColor(QPalette::Base, theme->datasetWindowBackground());
@@ -138,6 +89,13 @@ Gauge::Gauge(const int index)
     connect(dash, SIGNAL(updated()), this, SLOT(update()));
 }
 
+/**
+ * Checks if the widget is enabled, if so, the widget shall be updated
+ * to display the latest data frame.
+ *
+ * If the widget is disabled (e.g. the user hides it, or the external
+ * window is hidden), then the widget shall ignore the update request.
+ */
 void Gauge::update()
 {
     // Widget not enabled, do nothing
@@ -157,6 +115,9 @@ void Gauge::update()
     }
 }
 
+/**
+ * Changes the size of the labels when the widget is resized
+ */
 void Gauge::resizeEvent(QResizeEvent *event)
 {
     auto font = UI::Dashboard::getInstance()->monoFont();

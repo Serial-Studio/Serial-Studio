@@ -20,4 +20,29 @@
  * THE SOFTWARE.
  */
 
-#include "Gyroscope.h"
+#ifndef WIDGETS_ANALOG_GAUGE_H
+#define WIDGETS_ANALOG_GAUGE_H
+
+#include <QwtDial>
+#include <QwtDialNeedle>
+
+namespace Widgets
+{
+class AnalogGauge : public QwtDial
+{
+public:
+    AnalogGauge(QWidget *parent = nullptr);
+
+    QString label() const;
+    void setLabel(const QString &label);
+
+protected:
+    virtual void drawScaleContents(QPainter *painter, const QPointF &center,
+                                   double radius) const QWT_OVERRIDE;
+
+private:
+    QString m_label;
+};
+}
+
+#endif

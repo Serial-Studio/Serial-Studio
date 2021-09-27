@@ -125,10 +125,15 @@ public:
     static Dashboard *getInstance();
 
     QFont monoFont() const;
-    JSON::Group *getGroup(const int index);
+    JSON::Group *getMap(const int index);
     JSON::Dataset *getBar(const int index);
+    JSON::Group *getGroups(const int index);
+    JSON::Dataset *getPlot(const int index);
     JSON::Dataset *getGauge(const int index);
+    JSON::Group *getGyroscope(const int index);
     JSON::Dataset *getCompass(const int index);
+    JSON::Group *getAccelerometer(const int index);
+    JSON::Dataset *getThermometer(const int index);
 
     QString title();
     bool available();
@@ -199,6 +204,10 @@ private:
 
     bool getVisibility(const QVector<bool> &vector, const int index) const;
     void setVisibility(QVector<bool> &vector, const int index, const bool visible);
+
+    JSON::Group *getGroupWidget(const QVector<JSON::Group *> vector, const int index);
+    JSON::Dataset *getDatasetWidget(const QVector<JSON::Dataset *> vector,
+                                    const int index);
 
 private:
     QVector<bool> m_barVisibility;
