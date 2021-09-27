@@ -55,17 +55,14 @@ Gauge::Gauge(const int index)
     auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
                                           QColor(needleColor), knobColor);
     m_gauge.setNeedle(needle);
+    m_gauge.setLabelEnabled(false);
     m_gauge.setFont(dash->monoFont());
 
-    // Set gauge scale & label
+    // Set gauge scale
 #ifdef LAZY_WIDGETS
     auto dataset = dash->getGauge(m_index);
     if (dataset)
-    {
         m_gauge.setScale(dataset->min(), dataset->max());
-        if (!dataset->units().isEmpty())
-            m_gauge.setLabel(dataset->units());
-    }
 #endif
 
     // Set gauge palette
@@ -80,10 +77,29 @@ Gauge::Gauge(const int index)
     windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
     setPalette(windowPalette);
 
-    // Add gauge to layout
+    // Configure label style
+    QFont font = dash->monoFont();
+    font.setPixelSize(24);
+    m_label.setFont(font);
+    m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    // Configure layout
     m_layout.addWidget(&m_gauge);
-    m_layout.setContentsMargins(8, 8, 8, 8);
+    m_layout.addWidget(&m_label);
+    m_layout.setSpacing(24);
+    m_layout.setStretch(0, 0);
+    m_layout.setStretch(1, 1);
+    m_layout.setContentsMargins(24, 24, 24, 24);
     setLayout(&m_layout);
+
+    // Set stylesheets
+    // clang-format off
+    auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
+                        theme->base(),
+                        theme->widgetForegroundPrimary(),
+                        theme->widgetIndicator1());
+    m_label.setStyleSheet(valueQSS);
+    // clang-format on
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(update()));
@@ -108,10 +124,11 @@ void Gauge::update()
     {
 #ifndef LAZY_WIDGETS
         m_gauge.setScale(dataset->min(), dataset->max());
-        if (!dataset->units().isEmpty())
-            m_gauge.setLabel(dataset->units());
 #endif
+        auto value = dataset->value().toDouble();
         m_gauge.setValue(dataset->value().toDouble());
+        m_label.setText(
+            QString("%1 %2").arg(QString::number(value, 'f', 2), dataset->units()));
     }
 }
 
@@ -120,8 +137,14 @@ void Gauge::update()
  */
 void Gauge::resizeEvent(QResizeEvent *event)
 {
-    auto font = UI::Dashboard::getInstance()->monoFont();
-    font.setPixelSize(event->size().width() / 32);
-    m_gauge.setFont(font);
+    auto labelFont = UI::Dashboard::getInstance()->monoFont();
+    auto gaugeFont = UI::Dashboard::getInstance()->monoFont();
+    labelFont.setPixelSize(event->size().width() / 18);
+    gaugeFont.setPixelSize(event->size().width() / 24);
+    m_label.setFont(labelFont);
+    m_gauge.setFont(gaugeFont);
+    m_label.setMinimumWidth(event->size().width() * 0.4);
+    m_label.setMaximumWidth(event->size().width() * 0.4);
+    m_label.setMaximumHeight(event->size().height() * 0.4);
     event->accept();
 }

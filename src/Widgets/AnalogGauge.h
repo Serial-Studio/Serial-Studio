@@ -35,6 +35,7 @@ public:
 
     QString label() const;
     void setLabel(const QString &label);
+    void setLabelEnabled(const bool enabled);
 
 protected:
     virtual void drawScaleContents(QPainter *painter, const QPointF &center,
@@ -42,6 +43,7 @@ protected:
 
 private:
     QString m_label;
+    bool m_labelEnabled;
 };
 }
 

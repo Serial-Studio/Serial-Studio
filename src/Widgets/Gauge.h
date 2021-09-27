@@ -23,8 +23,9 @@
 #ifndef WIDGETS_GAUGE_H
 #define WIDGETS_GAUGE_H
 
+#include <QLabel>
 #include <QWidget>
-#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include "AnalogGauge.h"
 
@@ -40,13 +41,14 @@ public:
 private slots:
     void update();
 
-private:
+protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
     int m_index;
+    QLabel m_label;
     AnalogGauge m_gauge;
-    QVBoxLayout m_layout;
+    QHBoxLayout m_layout;
 };
 }
 

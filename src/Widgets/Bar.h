@@ -39,7 +39,7 @@ public:
 private slots:
     void update();
 
-private:
+protected:
     void resizeEvent(QResizeEvent *event);
 
 private:

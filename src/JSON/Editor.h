@@ -157,6 +157,8 @@ private:
     Editor();
     ~Editor();
 
+    int nextDatasetIndex();
+
 private:
     QString m_title;
     QString m_separator;

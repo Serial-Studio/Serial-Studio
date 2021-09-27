@@ -149,8 +149,10 @@ void Bar::resizeEvent(QResizeEvent *event)
     auto width = event->size().width();
     m_thermo.setPipeWidth(width / 4);
     QFont font = m_label.font();
-    font.setPixelSize(width / 16);
+    font.setPixelSize(width / 18);
     m_label.setFont(font);
+    m_label.setMinimumWidth(event->size().width() * 0.4);
+    m_label.setMaximumWidth(event->size().width() * 0.4);
     m_label.setMaximumHeight(event->size().height() * 0.4);
     event->accept();
 }

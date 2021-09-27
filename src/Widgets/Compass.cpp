@@ -140,7 +140,8 @@ void Compass::resizeEvent(QResizeEvent *event)
     compassFont.setPixelSize(event->size().width() / 24);
     m_label.setFont(labelFont);
     m_compass.setFont(compassFont);
-    m_label.setMaximumWidth(event->size().width() * 0.3);
+    m_label.setMinimumWidth(event->size().width() * 0.4);
+    m_label.setMaximumWidth(event->size().width() * 0.4);
     m_label.setMaximumHeight(event->size().height() * 0.4);
     event->accept();
 }

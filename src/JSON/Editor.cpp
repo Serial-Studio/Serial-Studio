@@ -840,11 +840,22 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
         {
             // Set widget title
             grp->m_widget = "accelerometer";
+            grp->m_title = tr("Accelerometer");
 
             // Create datasets
             auto x = new Dataset;
             auto y = new Dataset;
             auto z = new Dataset;
+
+            // Set dataset indexes
+            x->m_index = nextDatasetIndex();
+            y->m_index = nextDatasetIndex() + 1;
+            z->m_index = nextDatasetIndex() + 2;
+
+            // Set measurement units
+            x->m_units = "m/s²";
+            y->m_units = "m/s²";
+            z->m_units = "m/s²";
 
             // Set dataset properties
             x->m_widget = "x";
@@ -865,11 +876,22 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
         {
             // Set widget title
             grp->m_widget = "gyro";
+            grp->m_title = tr("Gyroscope");
 
             // Create datasets
             auto x = new Dataset;
             auto y = new Dataset;
             auto z = new Dataset;
+
+            // Set dataset indexes
+            x->m_index = nextDatasetIndex();
+            y->m_index = nextDatasetIndex() + 1;
+            z->m_index = nextDatasetIndex() + 2;
+
+            // Set measurement units
+            x->m_units = "°";
+            y->m_units = "°";
+            z->m_units = "°";
 
             // Set dataset properties
             x->m_widget = "x";
@@ -890,10 +912,19 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
         {
             // Set widget title
             grp->m_widget = "map";
+            grp->m_title = tr("GPS Map");
 
             // Create datasets
             auto lat = new Dataset;
             auto lon = new Dataset;
+
+            // Set dataset indexes
+            lat->m_index = nextDatasetIndex();
+            lon->m_index = nextDatasetIndex() + 1;
+
+            // Set measurement units
+            lat->m_units = "°";
+            lon->m_units = "°";
 
             // Set dataset properties
             lat->m_widget = "lat";
@@ -950,27 +981,9 @@ void Editor::addDataset(const int group)
     auto grp = getGroup(group);
     if (grp)
     {
-        // Calculate frame index for dataset
-        int maxIndex = 1;
-        for (int i = 0; i < groupCount(); ++i)
-        {
-            for (int j = 0; j < datasetCount(i); ++j)
-            {
-                auto dataset = getDataset(i, j);
-                if (dataset)
-                {
-                    if (dataset->m_index >= maxIndex)
-                        maxIndex = dataset->m_index + 1;
-                }
-            }
-        }
-
-        // Add dataset
         grp->m_datasets.append(new Dataset);
-        setDatasetIndex(group, grp->m_datasets.count() - 1, maxIndex);
+        setDatasetIndex(group, grp->m_datasets.count() - 1, nextDatasetIndex());
         setDatasetTitle(group, grp->m_datasets.count() - 1, tr("New dataset"));
-
-        // Update UI
         emit groupChanged(group);
     }
 }
@@ -1216,4 +1229,30 @@ void Editor::onDatasetChanged(const int group, const int dataset)
     (void)group;
     (void)dataset;
     setModified(true);
+}
+
+/**
+ * Gets the number of datasets registered in the projects and
+ * adds 1 to the result.
+ *
+ * This function is used when registering new datasets, so that
+ * the user does not need to manually specify dataset indexes.
+ */
+int Editor::nextDatasetIndex()
+{
+    int maxIndex = 1;
+    for (int i = 0; i < groupCount(); ++i)
+    {
+        for (int j = 0; j < datasetCount(i); ++j)
+        {
+            auto dataset = getDataset(i, j);
+            if (dataset)
+            {
+                if (dataset->m_index >= maxIndex)
+                    maxIndex = dataset->m_index + 1;
+            }
+        }
+    }
+
+    return maxIndex;
 }

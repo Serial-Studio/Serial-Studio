@@ -34,6 +34,8 @@ using namespace Widgets;
  */
 AnalogGauge::AnalogGauge(QWidget *parent)
     : QwtDial(parent)
+    , m_label("")
+    , m_labelEnabled(true)
 {
     // Disable controling the gauge with the mouse or keyboard
     setReadOnly(true);
@@ -64,17 +66,32 @@ void AnalogGauge::setLabel(const QString &label)
 }
 
 /**
+ * Enables or disables the label that displays the current
+ * value. For example, the normal gauge widget enables the
+ * label, while the accelerometer does not.
+ */
+void AnalogGauge::setLabelEnabled(const bool enabled)
+{
+    m_labelEnabled = enabled;
+    update();
+}
+
+/**
  * Re-draws the label that displays the current value & units.
  */
 void AnalogGauge::drawScaleContents(QPainter *painter, const QPointF &center,
                                     double radius) const
 {
+    // Label disabled, abort
+    if (!m_labelEnabled)
+        return;
+
     // Get label font
     auto labelFont = font();
-    labelFont.setPixelSize(1.4 * font().pixelSize());
+    labelFont.setPixelSize(1.2 * font().pixelSize());
 
     // Create draw rectangle
-    QRectF rect(0.0, 0.0, 2.0 * radius, 2.0 * radius - labelFont.pixelSize() * 2);
+    QRectF rect(0.0, 0.0, 2.0 * radius, 2.0 * radius - labelFont.pixelSize() * 6);
     rect.moveCenter(center);
 
     // Set text alignment flags

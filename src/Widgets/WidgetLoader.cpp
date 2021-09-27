@@ -29,6 +29,7 @@
 #include "DataGroup.h"
 #include "Gyroscope.h"
 #include "Thermometer.h"
+#include "Accelerometer.h"
 
 #include <QPushButton>
 #include <QApplication>
@@ -263,7 +264,8 @@ void WidgetLoader::setWidgetIndex(const int index)
                 m_widget = new QPushButton("Gyroscope");
                 break;
             case UI::Dashboard::WidgetType::Accelerometer:
-                m_widget = new QPushButton("Accelerometer");
+                m_widget = new Accelerometer(relativeIndex());
+                m_window.setCentralWidget(new Accelerometer(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Map:
                 m_widget = new QPushButton("Map");

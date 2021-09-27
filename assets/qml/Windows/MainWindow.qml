@@ -38,7 +38,10 @@ ApplicationWindow {
     //
     // Quit application on close
     //
-    onClosing: Cpp_ModuleManager.quit()
+    onClosing: {
+        if (Cpp_JSON_Editor.askSave())
+            Cpp_ModuleManager.quit()
+    }
 
     //
     // Global properties
