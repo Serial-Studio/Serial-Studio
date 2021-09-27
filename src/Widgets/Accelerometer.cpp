@@ -58,7 +58,6 @@ Accelerometer::Accelerometer(const int index)
     // Set gauge scale & display angles
     m_gauge.setScale(0, 12);
     m_gauge.setScaleArc(90, 360);
-    m_gauge.setLabelEnabled(false);
 
     // Set gauge palette
     QPalette gaugePalette;
@@ -79,12 +78,11 @@ Accelerometer::Accelerometer(const int index)
     m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     // Configure layout
+    m_layout.setSpacing(24);
     m_layout.addWidget(&m_gauge);
     m_layout.addWidget(&m_label);
-    m_layout.setSpacing(24);
-    m_layout.setStretch(0, 0);
-    m_layout.setStretch(1, 1);
     m_layout.setContentsMargins(24, 24, 24, 24);
+    m_layout.setAlignment(&m_gauge, Qt::AlignHCenter);
     setLayout(&m_layout);
 
     // Set stylesheets
@@ -142,14 +140,27 @@ void Accelerometer::update()
 
 void Accelerometer::resizeEvent(QResizeEvent *event)
 {
+    // Get width & height (exluding layout margins & spacing)
+    auto width = event->size().width() - 72;
+    auto height = event->size().height() - 72;
+
+    // Get fonts & calculate size
     auto labelFont = UI::Dashboard::getInstance()->monoFont();
     auto gaugeFont = UI::Dashboard::getInstance()->monoFont();
-    labelFont.setPixelSize(event->size().width() / 18);
-    gaugeFont.setPixelSize(event->size().width() / 24);
+    labelFont.setPixelSize(width / 18);
+    gaugeFont.setPixelSize(width / 24);
+
+    // Set fonts
     m_label.setFont(labelFont);
     m_gauge.setFont(gaugeFont);
-    m_label.setMinimumWidth(event->size().width() * 0.4);
-    m_label.setMaximumWidth(event->size().width() * 0.4);
-    m_label.setMaximumHeight(event->size().height() * 0.4);
+
+    // Set widget sizes
+    m_label.setMinimumWidth(width * 0.4);
+    m_label.setMaximumWidth(width * 0.4);
+    m_gauge.setMinimumWidth(width * 0.6);
+    m_gauge.setMaximumWidth(width * 0.6);
+    m_label.setMaximumHeight(height * 0.4);
+
+    // Accept event
     event->accept();
 }

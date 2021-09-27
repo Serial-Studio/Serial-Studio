@@ -34,8 +34,6 @@ using namespace Widgets;
  */
 AnalogGauge::AnalogGauge(QWidget *parent)
     : QwtDial(parent)
-    , m_label("")
-    , m_labelEnabled(true)
 {
     // Disable controling the gauge with the mouse or keyboard
     setReadOnly(true);
@@ -46,60 +44,4 @@ AnalogGauge::AnalogGauge(QWidget *parent)
     // Set gauge origin & min/max angles
     setOrigin(135);
     setScaleArc(0, 270);
-}
-
-/**
- * Returns the current value & units displayed by the gauge.
- */
-QString AnalogGauge::label() const
-{
-    return m_label;
-}
-
-/**
- * Changes the label text displayed under the gauge.
- */
-void AnalogGauge::setLabel(const QString &label)
-{
-    m_label = label;
-    update();
-}
-
-/**
- * Enables or disables the label that displays the current
- * value. For example, the normal gauge widget enables the
- * label, while the accelerometer does not.
- */
-void AnalogGauge::setLabelEnabled(const bool enabled)
-{
-    m_labelEnabled = enabled;
-    update();
-}
-
-/**
- * Re-draws the label that displays the current value & units.
- */
-void AnalogGauge::drawScaleContents(QPainter *painter, const QPointF &center,
-                                    double radius) const
-{
-    // Label disabled, abort
-    if (!m_labelEnabled)
-        return;
-
-    // Get label font
-    auto labelFont = font();
-    labelFont.setPixelSize(1.2 * font().pixelSize());
-
-    // Create draw rectangle
-    QRectF rect(0.0, 0.0, 2.0 * radius, 2.0 * radius - labelFont.pixelSize() * 6);
-    rect.moveCenter(center);
-
-    // Set text alignment flags
-    const int flags = Qt::AlignBottom | Qt::AlignHCenter;
-
-    // Paint label
-    painter->setFont(labelFont);
-    painter->setPen(Misc::ThemeManager::getInstance()->widgetForegroundPrimary());
-    painter->drawText(rect, flags,
-                      QString("%1 %2").arg(QString::number(value(), 'f', 2), m_label));
 }

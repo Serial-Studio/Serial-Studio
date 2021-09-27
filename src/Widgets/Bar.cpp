@@ -49,12 +49,11 @@ Bar::Bar(const int index)
     m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     // Configure layout
+    m_layout.setSpacing(24);
     m_layout.addWidget(&m_thermo);
     m_layout.addWidget(&m_label);
-    m_layout.setSpacing(24);
-    m_layout.setStretch(0, 0);
-    m_layout.setStretch(1, 1);
     m_layout.setContentsMargins(24, 24, 24, 24);
+    m_layout.setAlignment(&m_thermo, Qt::AlignHCenter);
     setLayout(&m_layout);
 
     // Set stylesheets
@@ -146,13 +145,25 @@ void Bar::update()
  */
 void Bar::resizeEvent(QResizeEvent *event)
 {
-    auto width = event->size().width();
-    m_thermo.setPipeWidth(width / 4);
-    QFont font = m_label.font();
-    font.setPixelSize(width / 18);
-    m_label.setFont(font);
-    m_label.setMinimumWidth(event->size().width() * 0.4);
-    m_label.setMaximumWidth(event->size().width() * 0.4);
-    m_label.setMaximumHeight(event->size().height() * 0.4);
+    // Get width & height (exluding layout margins & spacing)
+    auto width = event->size().width() - 72;
+    auto height = event->size().height() - 72;
+
+    // Get fonts & calculate size
+    auto labelFont = UI::Dashboard::getInstance()->monoFont();
+    auto thermoFont = UI::Dashboard::getInstance()->monoFont();
+    labelFont.setPixelSize(width / 18);
+
+    // Set fonts
+    m_label.setFont(labelFont);
+    m_thermo.setFont(thermoFont);
+
+    // Set widget sizes
+    m_thermo.setPipeWidth(width * 0.25);
+    m_label.setMinimumWidth(width * 0.4);
+    m_label.setMaximumWidth(width * 0.4);
+    m_label.setMaximumHeight(height * 0.4);
+
+    // Accept event
     event->accept();
 }

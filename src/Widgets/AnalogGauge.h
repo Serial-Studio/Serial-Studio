@@ -32,18 +32,6 @@ class AnalogGauge : public QwtDial
 {
 public:
     AnalogGauge(QWidget *parent = nullptr);
-
-    QString label() const;
-    void setLabel(const QString &label);
-    void setLabelEnabled(const bool enabled);
-
-protected:
-    virtual void drawScaleContents(QPainter *painter, const QPointF &center,
-                                   double radius) const QWT_OVERRIDE;
-
-private:
-    QString m_label;
-    bool m_labelEnabled;
 };
 }
 
