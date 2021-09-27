@@ -249,7 +249,8 @@ void WidgetLoader::setWidgetIndex(const int index)
                 m_window.setCentralWidget(new Bar(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gauge:
-                m_widget = new QPushButton("Gauge");
+                m_widget = new Gauge(relativeIndex());
+                m_window.setCentralWidget(new Gauge(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Thermometer:
                 m_widget = new QPushButton("Thermometer");

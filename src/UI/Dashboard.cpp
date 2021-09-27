@@ -92,6 +92,14 @@ JSON::Dataset *Dashboard::getBar(const int index)
     return nullptr;
 }
 
+JSON::Dataset *Dashboard::getGauge(const int index)
+{
+    if (index < m_gaugeWidgets.count())
+        return m_gaugeWidgets.at(index);
+
+    return nullptr;
+}
+
 JSON::Dataset *Dashboard::getCompass(const int index)
 {
     if (index < m_compassWidgets.count())

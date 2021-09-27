@@ -51,9 +51,11 @@ Compass::Compass(const int index)
     m_compass.setNeedle(
         new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::TriangleStyle));
 
-    // Set stylesheet
-    auto qss = QSS("background-color:%1", theme->datasetWindowBackground());
-    setStyleSheet(qss);
+    // Set window palette
+    QPalette windowPalette;
+    windowPalette.setColor(QPalette::Base, theme->datasetWindowBackground());
+    windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
+    setPalette(windowPalette);
 
     // Add compass to layout
     m_layout.addWidget(&m_compass);

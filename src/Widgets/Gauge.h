@@ -26,12 +26,40 @@
 #include <QWidget>
 #include <QwtDial>
 #include <QwtDialNeedle>
+#include <QVBoxLayout>
 
 namespace Widgets
 {
+class GaugeObject : public QwtDial
+{
+public:
+    GaugeObject(QWidget *parent = nullptr);
+
+    QString label() const;
+    void setLabel(const QString &label);
+
+protected:
+    virtual void drawScaleContents(QPainter *painter, const QPointF &center,
+                                   double radius) const QWT_OVERRIDE;
+
+private:
+    QString m_label;
+};
+
 class Gauge : public QWidget
 {
     Q_OBJECT
+
+public:
+    Gauge(const int index = -1);
+
+private slots:
+    void update();
+
+private:
+    int m_index;
+    GaugeObject m_gauge;
+    QVBoxLayout m_layout;
 };
 }
 

@@ -127,6 +127,7 @@ public:
     QFont monoFont() const;
     JSON::Group *getGroup(const int index);
     JSON::Dataset *getBar(const int index);
+    JSON::Dataset *getGauge(const int index);
     JSON::Dataset *getCompass(const int index);
 
     QString title();
