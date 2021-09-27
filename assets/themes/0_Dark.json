@@ -49,7 +49,7 @@
       "widgetIndicator2":"#d72d60",
       "widgetIndicator3":"#2d6073",
       "widgetAlternativeBackground":"#121218",
-      "widgetControlBackground":"#111111",
+      "widgetControlBackground":"#bebebe",
       "gyroSky":"#5c93c5",
       "gyroText":"#ffffff",
       "gyroGround":"#7d5233",
@@ -61,7 +61,7 @@
       "mapSkyHighAltitude":"#283e51",
       "connectButtonChecked":"#d72d60",
       "connectButtonUnchecked":"#2eed5c",
-      "barWidgetColors":[
+      "widgetColors":[
          "#f94144",
          "#f3722c",
          "#f8961e",

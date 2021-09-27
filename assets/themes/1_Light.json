@@ -61,7 +61,7 @@
       "mapSkyHighAltitude":"#283e51",
       "connectButtonChecked":"#fe696e",
       "connectButtonUnchecked":"#26cd40",
-      "barWidgetColors":[
+      "widgetColors":[
          "#f94144",
          "#f3722c",
          "#f8961e",

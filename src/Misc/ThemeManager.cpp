@@ -193,10 +193,10 @@ void ThemeManager::loadTheme(const int id)
     // clang-format on
 
     // Read bar widget colors
-    m_barWidgetColors.clear();
-    auto list = colors.value("barWidgetColors").toArray();
+    m_widgetColors.clear();
+    auto list = colors.value("widgetColors").toArray();
     for (int i = 0; i < list.count(); ++i)
-        m_barWidgetColors.append(list.at(i).toString());
+        m_widgetColors.append(list.at(i).toString());
 
     // Update application palette
     QPalette palette;
@@ -556,9 +556,9 @@ QColor ThemeManager::connectButtonUnchecked() const
     return m_connectButtonUnchecked;
 }
 
-QStringList ThemeManager::barWidgetColors() const
+QStringList ThemeManager::widgetColors() const
 {
-    return m_barWidgetColors;
+    return m_widgetColors;
 }
 
 QStringList ThemeManager::availableThemes() const

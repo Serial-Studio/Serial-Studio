@@ -85,11 +85,11 @@ Bar::Bar(const int index)
 
     // Get thermo color
     QString color;
-    auto barcl = theme->barWidgetColors();
-    if (barcl.count() > m_index)
-        color = barcl.at(m_index);
+    auto colors = theme->widgetColors();
+    if (colors.count() > m_index)
+        color = colors.at(m_index);
     else
-        color = barcl.at(barcl.count() % m_index);
+        color = colors.at(colors.count() % m_index);
 
     // Configure thermo style
     m_thermo.setPipeWidth(64);

@@ -25,6 +25,7 @@
 #include "Misc/ThemeManager.h"
 
 #include <QPainter>
+#include <QApplication>
 #include <QResizeEvent>
 #include <QwtDialNeedle>
 #include <QwtRoundScaleDraw>
@@ -76,7 +77,7 @@ void GaugeObject::drawScaleContents(QPainter *painter, const QPointF &center,
 
     // Paint label
     painter->setFont(labelFont);
-    painter->setPen(palette().color(QPalette::Highlight));
+    painter->setPen(Misc::ThemeManager::getInstance()->widgetIndicator1());
     painter->drawText(rect, flags,
                       QString("%1 %2").arg(QString::number(value(), 'f', 2), m_label));
 }
@@ -98,7 +99,7 @@ Gauge::Gauge(const int index)
 
     // Get needle & knob color
     QString needleColor;
-    auto colors = theme->barWidgetColors();
+    auto colors = theme->widgetColors();
     auto knobColor = theme->widgetControlBackground();
     if (colors.count() > m_index)
         needleColor = colors.at(m_index);

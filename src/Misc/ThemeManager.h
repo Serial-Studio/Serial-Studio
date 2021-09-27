@@ -213,8 +213,8 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor connectButtonUnchecked
                READ connectButtonUnchecked
                NOTIFY themeChanged)
-    Q_PROPERTY(QStringList barWidgetColors
-               READ barWidgetColors
+    Q_PROPERTY(QStringList widgetColors
+               READ widgetColors
                NOTIFY themeChanged)
     Q_PROPERTY(QStringList availableThemes
                READ availableThemes
@@ -290,7 +290,7 @@ public:
     QColor connectButtonChecked() const;
     QColor connectButtonUnchecked() const;
 
-    QStringList barWidgetColors() const;
+    QStringList widgetColors() const;
     QStringList availableThemes() const;
 
 public slots:
@@ -368,7 +368,7 @@ private:
     QColor m_mapSkyHighAltitude;
     QColor m_connectButtonChecked;
     QColor m_connectButtonUnchecked;
-    QStringList m_barWidgetColors;
+    QStringList m_widgetColors;
 };
 }
 
