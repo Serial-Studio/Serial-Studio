@@ -176,18 +176,28 @@ void DataGroup::update()
         return;
 
     // Update labels
-    JSON::Dataset *set;
+    JSON::Dataset *dataset;
     for (int i = 0; i < group->datasetCount(); ++i)
     {
-        set = group->getDataset(i);
-        if (set)
+        dataset = group->getDataset(i);
+        if (dataset)
         {
 #ifndef LAZY_WIDGETS
             m_titles.at(i)->setText(set->title());
             if (!set->units().isEmpty())
                 m_units.at(i)->setText(QString("[%1]").arg(set->units()));
 #endif
-            m_values.at(i)->setText(set->value());
+            // Get dataset value
+            auto value = dataset->value();
+
+            // Check if value is a number, if so make sure that
+            // we always show a fixed number of decimal places
+            QRegExp re("^[+-]?(\\d*\\.)?\\d+$");
+            if (re.exactMatch(value))
+                value = QString::number(value.toDouble(), 'f', 2);
+
+            // Update label
+            m_values.at(i)->setText(value);
         }
     }
 }

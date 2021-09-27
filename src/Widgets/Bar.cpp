@@ -129,8 +129,10 @@ void Bar::update()
         m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
         m_thermo.setScale(dataset->min(), dataset->max());
 #endif
-        m_thermo.setValue(dataset->value().toDouble());
-        m_label.setText(QString("%1 %2").arg(dataset->value(), dataset->units()));
+        auto value = dataset->value().toDouble();
+        m_thermo.setValue(value);
+        m_label.setText(
+            QString("%1 %2").arg(QString::number(value, 'f', 2), dataset->units()));
     }
 }
 

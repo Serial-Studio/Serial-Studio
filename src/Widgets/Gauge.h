@@ -57,6 +57,9 @@ private slots:
     void update();
 
 private:
+    void resizeEvent(QResizeEvent *event);
+
+private:
     int m_index;
     GaugeObject m_gauge;
     QVBoxLayout m_layout;

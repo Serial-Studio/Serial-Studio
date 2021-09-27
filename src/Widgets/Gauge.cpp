@@ -25,9 +25,9 @@
 #include "Misc/ThemeManager.h"
 
 #include <QPainter>
+#include <QResizeEvent>
 #include <QwtDialNeedle>
 #include <QwtRoundScaleDraw>
-#include <qwt_dial_needle.h>
 
 using namespace Widgets;
 
@@ -38,16 +38,15 @@ using namespace Widgets;
 GaugeObject::GaugeObject(QWidget *parent)
     : QwtDial(parent)
 {
+    // Disable controling the gauge with the mouse or keyboard
     setReadOnly(true);
+
+    // Do not reset gauge if we reach maximum value
     setWrapping(false);
 
     // Set gauge origin & min/max angles
     setOrigin(135);
     setScaleArc(0, 270);
-
-    QwtDialSimpleNeedle *needle = new QwtDialSimpleNeedle(
-        QwtDialSimpleNeedle::Arrow, true, Qt::red, QColor(Qt::gray).lighter(130));
-    setNeedle(needle);
 }
 
 QString GaugeObject::label() const
@@ -64,14 +63,22 @@ void GaugeObject::setLabel(const QString &label)
 void GaugeObject::drawScaleContents(QPainter *painter, const QPointF &center,
                                     double radius) const
 {
-    QRectF rect(0.0, 0.0, 2.0 * radius, 2.0 * radius - 10.0);
+    // Get label font
+    auto labelFont = font();
+    labelFont.setPixelSize(1.4 * font().pixelSize());
+
+    // Create draw rectangle
+    QRectF rect(0.0, 0.0, 2.0 * radius, 2.0 * radius - labelFont.pixelSize() * 2);
     rect.moveCenter(center);
 
-    const QColor color = palette().color(QPalette::Text);
-    painter->setPen(color);
-
+    // Set text alignment flags
     const int flags = Qt::AlignBottom | Qt::AlignHCenter;
-    painter->drawText(rect, flags, m_label);
+
+    // Paint label
+    painter->setFont(labelFont);
+    painter->setPen(palette().color(QPalette::Highlight));
+    painter->drawText(rect, flags,
+                      QString("%1 %2").arg(QString::number(value(), 'f', 2), m_label));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -89,10 +96,22 @@ Gauge::Gauge(const int index)
     if (m_index < 0 || m_index >= dash->gaugeCount())
         return;
 
-    // Configure gauge
+    // Get needle & knob color
+    QString needleColor;
+    auto colors = theme->barWidgetColors();
+    auto knobColor = theme->widgetControlBackground();
+    if (colors.count() > m_index)
+        needleColor = colors.at(m_index);
+    else
+        needleColor = colors.at(colors.count() % m_index);
+
+    // Configure gauge needle
+    auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
+                                          QColor(needleColor), knobColor);
+    m_gauge.setNeedle(needle);
     m_gauge.setFont(dash->monoFont());
 
-    // Set gauge scale (lazy widgets only)
+    // Set gauge scale & label
 #ifdef LAZY_WIDGETS
     auto dataset = dash->getGauge(m_index);
     if (dataset)
@@ -135,4 +154,12 @@ void Gauge::update()
 #endif
         m_gauge.setValue(dataset->value().toDouble());
     }
+}
+
+void Gauge::resizeEvent(QResizeEvent *event)
+{
+    auto font = UI::Dashboard::getInstance()->monoFont();
+    font.setPixelSize(event->size().width() / 32);
+    m_gauge.setFont(font);
+    event->accept();
 }
