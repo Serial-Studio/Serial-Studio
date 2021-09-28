@@ -55,7 +55,7 @@ BaseWidget::BaseWidget()
     // clang-format on
 }
 
-void BaseWidget::setLabel(const QString &label)
+void BaseWidget::setValue(const QString &label)
 {
     if (m_label.text() != label)
         m_label.setText(label);
@@ -83,7 +83,7 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
 {
     // Get width & height (exluding layout margins & spacing)
     auto width = event->size().width() - 72;
-    auto height = event->size().height() - 72;
+    auto height = event->size().height() - 48;
 
     // Get fonts & calculate size
     auto labelFont = UI::Dashboard::getInstance()->monoFont();

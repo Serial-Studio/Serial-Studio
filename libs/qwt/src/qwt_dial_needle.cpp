@@ -231,6 +231,7 @@ void QwtDialNeedle::draw( QPainter* painter,
 }
 
 //!  Draw the knob
+//!
 void QwtDialNeedle::drawKnob( QPainter* painter,
     double width, const QBrush& brush, bool sunken ) const
 {

@@ -39,7 +39,7 @@ signals:
 public:
     BaseWidget();
 
-    void setLabel(const QString &label);
+    void setValue(const QString &label);
     void setWidget(QWidget *widget, Qt::Alignment alignment = Qt::AlignHCenter,
                    bool autoresize = true);
 

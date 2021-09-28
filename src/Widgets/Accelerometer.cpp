@@ -107,6 +107,6 @@ void Accelerometer::update()
         const double G = qSqrt(qPow(x, 2) + qPow(y, 2) + qPow(z, 2));
 
         m_gauge.setValue(G);
-        setLabel(QString("%1 G").arg(QString::number(G, 'f', 2)));
+        setValue(QString("%1 G").arg(QString::number(G, 'f', 2)));
     }
 }

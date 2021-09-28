@@ -26,34 +26,14 @@
 #include <QWidget>
 #include <QObject>
 #include <QPainter>
-#include <QMainWindow>
 #include <QQuickPaintedItem>
 
 #include <UI/Dashboard.h>
 
+#include "Common/ExternalWindow.h"
+
 namespace Widgets
 {
-class WidgetWindow : public QMainWindow
-{
-    Q_OBJECT
-
-signals:
-    void visibleChanged();
-
-private:
-    void showEvent(QShowEvent *event)
-    {
-        event->accept();
-        emit visibleChanged();
-    }
-
-    void hideEvent(QHideEvent *event)
-    {
-        event->accept();
-        emit visibleChanged();
-    }
-};
-
 class WidgetLoader : public QQuickPaintedItem
 {
     // clang-format off
@@ -112,7 +92,7 @@ protected:
 private:
     int m_index;
     QWidget *m_widget;
-    WidgetWindow m_window;
+    ExternalWindow m_window;
     bool m_widgetVisible;
 };
 }

@@ -24,6 +24,8 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
+#include <QMouseEvent>
+#include <QWheelEvent>
 #include <QResizeEvent>
 #include <QRegularExpression>
 
@@ -234,4 +236,64 @@ void DataGroup::resizeEvent(QResizeEvent *event)
     }
 
     event->accept();
+}
+
+void DataGroup::wheelEvent(QWheelEvent *event)
+{
+    class Hack : public QScrollArea
+    {
+    public:
+        using QWidget::wheelEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_scrollArea);
+    hack->wheelEvent(event);
+}
+
+void DataGroup::mouseMoveEvent(QMouseEvent *event)
+{
+    class Hack : public QScrollArea
+    {
+    public:
+        using QWidget::mouseMoveEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_scrollArea);
+    hack->mouseMoveEvent(event);
+}
+
+void DataGroup::mousePressEvent(QMouseEvent *event)
+{
+    class Hack : public QScrollArea
+    {
+    public:
+        using QWidget::mousePressEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_scrollArea);
+    hack->mousePressEvent(event);
+}
+
+void DataGroup::mouseReleaseEvent(QMouseEvent *event)
+{
+    class Hack : public QScrollArea
+    {
+    public:
+        using QWidget::mouseReleaseEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_scrollArea);
+    hack->mouseReleaseEvent(event);
+}
+
+void DataGroup::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    class Hack : public QScrollArea
+    {
+    public:
+        using QWidget::mouseDoubleClickEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_scrollArea);
+    hack->mouseDoubleClickEvent(event);
 }

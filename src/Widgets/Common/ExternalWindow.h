@@ -19,3 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+#ifndef WIDGETS_COMMON_EXTERNAL_WINDOW_H
+#define WIDGETS_COMMON_EXTERNAL_WINDOW_H
+
+#include <QDialog>
+#include <QHBoxLayout>
+
+namespace Widgets
+{
+class ExternalWindow : public QDialog
+{
+    Q_OBJECT
+
+signals:
+    void visibleChanged();
+
+public:
+    ExternalWindow();
+
+    QWidget *widget();
+    void setWidget(QWidget *widget);
+
+protected:
+    void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
+
+private:
+    QWidget *m_widget;
+    QHBoxLayout m_layout;
+};
+}
+
+#endif

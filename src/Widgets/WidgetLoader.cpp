@@ -58,11 +58,11 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     m_window.setMinimumHeight(480);
 
     // Set window palette
-    QPalette windowPalette;
+    QPalette palette;
     auto theme = Misc::ThemeManager::getInstance();
-    windowPalette.setColor(QPalette::Base, theme->datasetWindowBackground());
-    windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
-    m_window.setPalette(windowPalette);
+    palette.setColor(QPalette::Base, theme->datasetWindowBackground());
+    palette.setColor(QPalette::Window, theme->datasetWindowBackground());
+    m_window.setPalette(palette);
 
     // Resize widget to fit QML item size
     connect(this, &QQuickPaintedItem::widthChanged, this,
@@ -228,8 +228,8 @@ void WidgetLoader::setWidgetIndex(const int index)
         }
 
         // Delete central widget of window
-        if (m_window.centralWidget())
-            delete m_window.centralWidget();
+        if (m_window.widget())
+            delete m_window.widget();
 
         // Hide widget window
         if (m_window.isVisible())
@@ -240,7 +240,7 @@ void WidgetLoader::setWidgetIndex(const int index)
         {
             case UI::Dashboard::WidgetType::Group:
                 m_widget = new DataGroup(relativeIndex());
-                m_window.setCentralWidget(new DataGroup(relativeIndex()));
+                m_window.setWidget(new DataGroup(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::MultiPlot:
                 m_widget = new QPushButton("Multi-Plot");
@@ -250,25 +250,25 @@ void WidgetLoader::setWidgetIndex(const int index)
                 break;
             case UI::Dashboard::WidgetType::Bar:
                 m_widget = new Bar(relativeIndex());
-                m_window.setCentralWidget(new Bar(relativeIndex()));
+                m_window.setWidget(new Bar(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gauge:
                 m_widget = new Gauge(relativeIndex());
-                m_window.setCentralWidget(new Gauge(relativeIndex()));
+                m_window.setWidget(new Gauge(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Thermometer:
                 m_widget = new QPushButton("Thermometer");
                 break;
             case UI::Dashboard::WidgetType::Compass:
                 m_widget = new Compass(relativeIndex());
-                m_window.setCentralWidget(new Compass(relativeIndex()));
+                m_window.setWidget(new Compass(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gyroscope:
                 m_widget = new QPushButton("Gyroscope");
                 break;
             case UI::Dashboard::WidgetType::Accelerometer:
                 m_widget = new Accelerometer(relativeIndex());
-                m_window.setCentralWidget(new Accelerometer(relativeIndex()));
+                m_window.setWidget(new Accelerometer(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Map:
                 m_widget = new QPushButton("Map");
@@ -279,8 +279,8 @@ void WidgetLoader::setWidgetIndex(const int index)
 
         // Update window title
         m_window.setWindowTitle(widgetTitle());
-        if (m_window.centralWidget())
-            m_window.centralWidget()->setEnabled(false);
+        if (m_window.widget())
+            m_window.widget()->setEnabled(false);
 
         // Allow widget to receive events from the QML interface
         if (m_widget)
@@ -311,8 +311,8 @@ void WidgetLoader::updateWidgetSize()
  */
 void WidgetLoader::updateWidgetWindow()
 {
-    if (m_window.centralWidget())
-        m_window.centralWidget()->setEnabled(m_window.isVisible());
+    if (m_window.widget())
+        m_window.widget()->setEnabled(m_window.isVisible());
 }
 
 /**
@@ -330,8 +330,8 @@ void WidgetLoader::updateWidgetVisible()
         if (m_widget)
             m_widget->setEnabled(visible);
 
-        if (m_window.centralWidget())
-            m_window.centralWidget()->setEnabled(visible);
+        if (m_window.widget())
+            m_window.widget()->setEnabled(visible);
 
         emit widgetVisibleChanged();
     }

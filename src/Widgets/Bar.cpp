@@ -109,7 +109,7 @@ void Bar::update()
 #endif
         auto value = dataset->value().toDouble();
         m_thermo.setValue(value);
-        setLabel(QString("%1 %2").arg(QString::number(value, 'f', 2), dataset->units()));
+        setValue(QString("%1 %2").arg(QString::number(value, 'f', 2), dataset->units()));
     }
 }
 

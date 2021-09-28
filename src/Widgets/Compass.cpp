@@ -98,6 +98,6 @@ void Compass::update()
         else if (text.length() == 3)
             text.prepend("0");
 
-        setLabel(text);
+        setValue(text);
     }
 }

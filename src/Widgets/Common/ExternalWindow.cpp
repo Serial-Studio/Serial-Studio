@@ -19,3 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+#include "ExternalWindow.h"
+
+#include <QShowEvent>
+#include <QHideEvent>
+
+using namespace Widgets;
+
+ExternalWindow::ExternalWindow()
+    : m_widget(nullptr)
+{
+    m_layout.setContentsMargins(24, 24, 24, 24);
+    setLayout(&m_layout);
+}
+
+QWidget *ExternalWindow::widget()
+{
+    return m_widget;
+}
+
+void ExternalWindow::setWidget(QWidget *widget)
+{
+    Q_ASSERT(widget);
+
+    if (m_widget)
+        m_layout.removeWidget(m_widget);
+
+    m_layout.addWidget(widget);
+}
+
+void ExternalWindow::showEvent(QShowEvent *event)
+{
+    event->accept();
+    emit visibleChanged();
+}
+
+void ExternalWindow::hideEvent(QHideEvent *event)
+{
+    event->accept();
+    emit visibleChanged();
+}
