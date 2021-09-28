@@ -38,7 +38,7 @@ ApplicationWindow {
     //
     // Quit application on close
     //
-    onClosing: {
+    onClosing: (close) => {
         close.accepted = Cpp_JSON_Editor.askSave()
         if (close.accepted)
             Cpp_ModuleManager.quit()
