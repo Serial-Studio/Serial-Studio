@@ -19,7 +19,6 @@
         <file>PlatformDependent/DecentMenuItem.qml</file>
         <file>PlatformDependent/Menubar.qml</file>
         <file>PlatformDependent/MenubarMacOS.qml</file>
-        <file>Widgets/Shadow/Shadow_Qt6.qml</file>
         <file>Widgets/Icon.qml</file>
         <file>Widgets/JSONDropArea.qml</file>
         <file>Widgets/LED.qml</file>
