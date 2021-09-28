@@ -54,7 +54,7 @@ jobs:
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
-        modules: qtcharts
+        version: 6.2.0
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     # Install additional dependencies, stolen from:
@@ -108,7 +108,7 @@ jobs:
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
-        modules: qtcharts
+        version: 6.2.0
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '🚧 Compile application'
@@ -159,7 +159,7 @@ jobs:
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
-        modules: qtcharts
+        version: 6.2.0
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '⚙️ Install NSIS'
