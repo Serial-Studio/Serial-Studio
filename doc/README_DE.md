@@ -1,5 +1,5 @@
 <a href="#">
-    <img width="192px" height="192px" src="doc/icon.svg" align="right" />
+    <img width="192px" height="192px" src="/doc/icon.svg" align="right" />
 </a>
 
 # Serial Studio
@@ -19,7 +19,7 @@ Darüber hinaus kann dieser Ansatz auf nahezu jede Art von Projekt ausgedehnt we
 
 **HINWEIS:** Informationen zum Kommunikationsprotokoll finden Sie im [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol).
 
-*Lesen Sie dies in anderen Sprachen:* [English](README.md) [简体中文](README_ZH.md) [Español](README_ES.md)
+*Lesen Sie dies in anderen Sprachen:* [English](../README.md) [简体中文](README_ZH.md) [Español](README_ES.md)
 
 ![Software usage](doc/app-usage.gif)
 

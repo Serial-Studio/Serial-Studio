@@ -22,7 +22,7 @@ Serial studio started out receiving data over a hardware serial port, but can no
 
 **NOTE:** Information regarding the communication protocol is provided in the [wiki](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol).
 
-*Read this in other languages*: [Español](README_ES.md) [简体中文](README_ZH.md) [Deutsch](README_DE.md)
+*Read this in other languages*: [Español](doc/README_ES.md) [简体中文](doc/README_ZH.md) [Deutsch](doc/README_DE.md)
 
 ![Software usage](doc/app-usage.gif)
 
@@ -53,11 +53,9 @@ This project is released under the MIT license, for more information, check the 
 
 ## Development
 
-#### Requirements
+### Requirements
 
-The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with Qt 5.15 or greater. You will also need to have the following Qt non-LGPL modules installed:
-
-- Qt Charts
+The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with Qt 5.15.2.
 
 On GNU/Linux systems, you will also need to install `libgl1-mesa-dev` in order to compile the application.
 
@@ -66,13 +64,28 @@ Full list of used Qt modules:
 - Qt SQL
 - Qt Quick
 - Qt Widgets
-- Qt Charts
 - Qt Serial Port
 - Qt Quick Controls
 - Qt Quick Controls 2
 - Qt Graphical Effects
 
-#### Cloning
+## Qt 6 support
+
+Serial Studio now compiles with Qt 6.2.0, however, the GitHub actions environment [does not have proper support for Qt 6](https://github.com/jurplel/install-qt-action/issues/95) yet.
+
+To compile with Qt 6, clone the Serial Studio repository and change the branch of the [`qtcsv`](https://github.com/iamantony/qtcsv) library.
+
+```bash
+git clone --recursive https://github.com/Serial-Studio/Serial-Studio
+cd libs/qtcsv
+git checkout master
+```
+
+Now, modify [`Shadows.qml`](assets/qml/Widgets/Shadow.qml) and proceed to compiling the application.
+
+Also, be sure to select the `qtserialport` module while installing Qt6 on your machine.
+
+### Cloning
 
 This repository makes use of [`git submodule`](https://git-scm.com/book/en/v2/Git-Tools-Submodules). In order to clone it, execute these commands on your Terminal:
 
@@ -85,7 +98,7 @@ Alternatively, just run:
 
 	git clone --recursive https://github.com/Serial-Studio/Serial-Studio
 
-#### Compiling the application
+### Compiling the application
 
 Once you have Qt installed, open *Serial-Studio.pro* in Qt Creator and click the "Run" button.
 
