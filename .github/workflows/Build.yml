@@ -48,7 +48,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: 6.2.0
-        modules: serialport
+        modules: qtserialport
         #cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     # Install additional dependencies, stolen from:
@@ -96,7 +96,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: 6.2.0
-        modules: serialport
+        modules: qtserialport
         #cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '🚧 Compile application'
@@ -141,7 +141,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: 6.2.0
-        modules: serialport
+        modules: qtserialport
         #cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '⚙️ Install NSIS'
