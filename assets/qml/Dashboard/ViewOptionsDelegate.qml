@@ -1,7 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.0
+
+import "../Widgets" as Widgets
 
 ColumnLayout {
     id: root
@@ -27,19 +28,12 @@ ColumnLayout {
         spacing: app.spacing
         visible: root.count > 0
 
-        Image {
+        Widgets.Icon {
+            width: 18
+            height: 18
             source: root.icon
-            width: sourceSize.width
-            height: sourceSize.height
-            sourceSize: Qt.size(18, 18)
             opacity: hideAll.checked ? 0.5 : 1
             Behavior on opacity {NumberAnimation{}}
-
-            ColorOverlay {
-                source: parent
-                color: palette.text
-                anchors.fill: parent
-            }
         }
 
         Label {

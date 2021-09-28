@@ -23,7 +23,6 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
 
@@ -73,7 +72,7 @@ Widgets.Window {
                 icon: "qrc:/icons/group.svg"
                 count: Cpp_UI_Dashboard.groupCount
                 titles: Cpp_UI_Dashboard.groupTitles
-                onCheckedChanged: Cpp_UI_Dashboard.setGroupVisible(index, checked)
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGroupVisible(index, checked)
             }
 
             //
@@ -84,7 +83,7 @@ Widgets.Window {
                 icon: "qrc:/icons/plot.svg"
                 count: Cpp_UI_Dashboard.multiPlotCount
                 titles: Cpp_UI_Dashboard.multiPlotCount
-                onCheckedChanged: Cpp_UI_Dashboard.setMultiplotVisible(index, checked)
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setMultiplotVisible(index, checked)
             }
 
             //
@@ -95,7 +94,7 @@ Widgets.Window {
                 icon: "qrc:/icons/plot.svg"
                 count: Cpp_UI_Dashboard.plotCount
                 titles: Cpp_UI_Dashboard.plotTitles
-                onCheckedChanged: Cpp_UI_Dashboard.setPlotVisible(index, checked)
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setPlotVisible(index, checked)
             }
 
             //
@@ -106,7 +105,7 @@ Widgets.Window {
                 icon: "qrc:/icons/bar.svg"
                 count: Cpp_UI_Dashboard.barCount
                 titles: Cpp_UI_Dashboard.barTitles
-                onCheckedChanged: Cpp_UI_Dashboard.setBarVisible(index, checked)
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setBarVisible(index, checked)
             }
 
             //
@@ -117,7 +116,7 @@ Widgets.Window {
                 icon: "qrc:/icons/gauge.svg"
                 count: Cpp_UI_Dashboard.gaugeCount
                 titles: Cpp_UI_Dashboard.gaugeTitles
-                onCheckedChanged: Cpp_UI_Dashboard.setGaugeVisible(index, checked)
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGaugeVisible(index, checked)
             }
 
             //
@@ -128,7 +127,7 @@ Widgets.Window {
                 icon: "qrc:/icons/thermometer.svg"
                 count: Cpp_UI_Dashboard.thermometerCount
                 titles: Cpp_UI_Dashboard.thermometerTitles
-                onCheckedChanged: Cpp_UI_Dashboard.setThermometerVisible(index, checked)
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setThermometerVisible(index, checked)
             }
 
             //
@@ -139,7 +138,7 @@ Widgets.Window {
                 icon: "qrc:/icons/compass.svg"
                 count: Cpp_UI_Dashboard.compassCount
                 titles: Cpp_UI_Dashboard.compassTitles
-                onCheckedChanged: Cpp_UI_Dashboard.setCompassVisible(index, checked)
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setCompassVisible(index, checked)
             }
 
             //
@@ -150,7 +149,7 @@ Widgets.Window {
                 icon: "qrc:/icons/gyro.svg"
                 count: Cpp_UI_Dashboard.gyroscopeCount
                 titles: Cpp_UI_Dashboard.gyroscopeTitles
-                onCheckedChanged: Cpp_UI_Dashboard.setGyroscopeVisible(index, checked)
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGyroscopeVisible(index, checked)
             }
 
             //
@@ -161,7 +160,7 @@ Widgets.Window {
                 icon: "qrc:/icons/accelerometer.svg"
                 count: Cpp_UI_Dashboard.accelerometerCount
                 titles: Cpp_UI_Dashboard.accelerometerTitles
-                onCheckedChanged: Cpp_UI_Dashboard.setAccelerometerVisible(index, checked)
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setAccelerometerVisible(index, checked)
             }
 
             //
@@ -172,7 +171,7 @@ Widgets.Window {
                 icon: "qrc:/icons/map.svg"
                 count: Cpp_UI_Dashboard.mapCount
                 titles: Cpp_UI_Dashboard.mapTitles
-                onCheckedChanged: Cpp_UI_Dashboard.setMapVisible(index, checked)
+                onCheckedChanged: (index, checked) =>  Cpp_UI_Dashboard.setMapVisible(index, checked)
             }
         }
     }

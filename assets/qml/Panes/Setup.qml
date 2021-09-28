@@ -23,7 +23,6 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.0
 
 import Qt.labs.settings 1.0
 
@@ -391,18 +390,12 @@ Item {
                         color: _rx.enabled ? palette.highlight : Cpp_ThemeManager.ledDisabled
                     }
 
-                    Image {
-                        width: sourceSize.width
-                        height: sourceSize.height
-                        sourceSize: Qt.size(32, 32)
+                    Widgets.Icon {
+                        width: 32
+                        height: 32
                         source: "qrc:/icons/ethernet.svg"
                         Layout.alignment: Qt.AlignVCenter
-
-                        ColorOverlay {
-                            source: parent
-                            anchors.fill: parent
-                            color: Cpp_ThemeManager.ledDisabled
-                        }
+                        color: Cpp_ThemeManager.ledDisabled
                     }
 
                     Label {

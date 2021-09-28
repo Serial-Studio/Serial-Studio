@@ -39,10 +39,11 @@ public:
     Gauge(const int index = -1);
 
 private slots:
-    void update();
+    void updateData();
 
 protected:
     void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     int m_index;

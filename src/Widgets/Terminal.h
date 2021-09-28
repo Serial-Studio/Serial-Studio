@@ -75,10 +75,6 @@ class Terminal : public QQuickPaintedItem
                READ text
                WRITE setText
                NOTIFY textChanged)
-    Q_PROPERTY(QColor color
-               READ color
-               WRITE setColor
-               NOTIFY colorChanged)
     Q_PROPERTY(bool autoscroll
                READ autoscroll
                WRITE setAutoscroll
@@ -134,7 +130,6 @@ class Terminal : public QQuickPaintedItem
 signals:
     void textChanged();
     void fontChanged();
-    void colorChanged();
     void paletteChanged();
     void readOnlyChanged();
     void autoscrollChanged();
@@ -157,7 +152,6 @@ public:
     virtual bool eventFilter(QObject *watched, QEvent *event) override;
 
     QFont font() const;
-    QColor color() const;
     QString text() const;
 
     bool empty() const;
@@ -186,7 +180,6 @@ public slots:
     void setFont(const QFont &font);
     void append(const QString &text);
     void setText(const QString &text);
-    void setColor(const QColor &color);
     void insertText(const QString &text);
     void setWordWrapMode(const int mode);
     void setAutoscroll(const bool enabled);
@@ -214,7 +207,6 @@ private:
     QString vt100Processing(const QString &data);
 
 private:
-    QColor m_color;
     bool m_autoscroll;
     bool m_emulateVt100;
     bool m_copyAvailable;

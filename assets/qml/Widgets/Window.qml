@@ -114,12 +114,13 @@ Page {
         }
 
         MouseArea {
+            z: 2
             id: headerMouseArea
             hoverEnabled: true
             anchors.fill: parent
             onDoubleClicked: root.headerDoubleClicked()
 
-            onClicked: {
+            onClicked: (mouse) => {
                 if (mouse.x >= headerBt.x && mouse.x <= headerBt.x + headerBt.width)
                     root.headerDoubleClicked()
             }
@@ -136,20 +137,17 @@ Page {
             spacing: 0
             anchors.fill: parent
 
-            ToolButton {
+            Icon {
                 id: _bt
-                z: 1
-                flat: true
-                enabled: false
-                icon.color: root.titleColor
+                color: root.titleColor
+                source: "qrc:/icons/widget.svg"
                 Layout.alignment: Qt.AlignVCenter
                 Layout.maximumHeight: parent.height
                 Layout.minimumHeight: parent.height
-                icon.source: "qrc:/icons/widget.svg"
                 Layout.minimumWidth: root.headerHeight
                 Layout.maximumWidth: root.headerHeight
-                icon.width: root.headerHeight * 24 / 32
-                icon.height: root.headerHeight * 24 / 32
+                icon.width: root.headerHeight * 20 / 32
+                icon.height: root.headerHeight * 20 / 32
             }
 
             Label {
@@ -162,21 +160,19 @@ Page {
                 horizontalAlignment: root.showIcon ? Label.AlignLeft : Label.AlignHCenter
             }
 
-            Button {
+            Icon {
                 id: headerBt
-                flat: true
                 opacity: 0
-                enabled: false
-                icon.color: root.titleColor
+                color: root.titleColor
                 Layout.alignment: Qt.AlignVCenter
                 Layout.maximumHeight: parent.height
                 Layout.minimumHeight: parent.height
                 icon.source: "qrc:/icons/expand.svg"
-                onClicked: root.headerDoubleClicked()
                 Layout.minimumWidth: root.headerHeight
                 Layout.maximumWidth: root.headerHeight
-                icon.width: root.headerHeight * 24 / 32
-                icon.height: root.headerHeight * 24 / 32
+                icon.width: root.headerHeight * 20 / 32
+                icon.height: root.headerHeight * 20 / 32
+
                 Behavior on opacity {NumberAnimation{}}
             }
 
@@ -192,8 +188,8 @@ Page {
                 Layout.minimumHeight: parent.height
                 Layout.minimumWidth: root.headerHeight
                 Layout.maximumWidth: root.headerHeight
-                icon.width: root.headerHeight * 24 / 32
-                icon.height: root.headerHeight * 24 / 32
+                icon.width: root.headerHeight * 20 / 32
+                icon.height: root.headerHeight * 20 / 32
                 background: Item {}
             }
         }

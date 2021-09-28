@@ -20,18 +20,32 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-//import QtGraphicalEffects 1.0
+import QtQuick 2.0
+import QtQuick.Controls 2.0
 
 Item {
-    property var source
-}
+    id: root
 
-/*DropShadow {
-    radius: 8.0
-    samples: 17
-    verticalOffset: 3
-    color: "#80000000"
-    horizontalOffset: 0
-    anchors.fill: source
-}*/
+    property string source: ""
+    property alias icon: button.icon
+    property color color: palette.brightText
+
+    width: 24
+    height: 24
+
+    ToolButton {
+        id: button
+        enabled: false
+        background: Item {}
+        icon.color: root.color
+        icon.width: root.width
+        icon.height: root.width
+        icon.source: root.source
+        anchors.centerIn: parent
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        propagateComposedEvents: true
+    }
+}

@@ -157,7 +157,7 @@ ApplicationWindow {
     title: Cpp_AppName
     width: minimumWidth
     height: minimumHeight
-    minimumHeight: Qt.platform.os == "osx" ? 720 : 740
+    minimumHeight: Qt.platform.os === "osx" ? 720 : 740
 
     //
     // Theme options
@@ -193,37 +193,41 @@ ApplicationWindow {
     //
     // Hacks to fix window maximized behavior
     //
-    onVisibilityChanged: {
-        if (visibility === Window.Maximized) {
-            if (!windowMaximized)
-                firstChange = false
+    Connections {
+        target: root
 
-            windowMaximized = true
-            fullScreen = false
-        }
+        function  onVisibilityChanged(visibility) {
+            if (visibility === Window.Maximized) {
+                if (!windowMaximized)
+                    firstChange = false
 
-        else if (visibility === Window.FullScreen) {
-            if (!fullScreen)
-                firstChange = false
-
-            windowMaximized = false
-            fullScreen = true
-        }
-
-        else if (visibility !== Window.Hidden) {
-            if (windowMaximized || fullScreen && firstChange) {
-                root.x = 100
-                root.y = 100
-                root.width = root.minimumWidth
-                root.height = root.minimumHeight
+                windowMaximized = true
+                fullScreen = false
             }
 
-            fullScreen = false
-            windowMaximized = false
-        }
+            else if (visibility === Window.FullScreen) {
+                if (!fullScreen)
+                    firstChange = false
 
-        // Hide splash screen
-        Cpp_ModuleManager.hideSplashscreen()
+                windowMaximized = false
+                fullScreen = true
+            }
+
+            else if (visibility !== Window.Hidden) {
+                if (windowMaximized || fullScreen && firstChange) {
+                    root.x = 100
+                    root.y = 100
+                    root.width = root.minimumWidth
+                    root.height = root.minimumHeight
+                }
+
+                fullScreen = false
+                windowMaximized = false
+            }
+
+            // Hide splash screen
+            Cpp_ModuleManager.hideSplashscreen()
+        }
     }
 
     //
@@ -397,6 +401,6 @@ ApplicationWindow {
     //
     JSONDropArea {
         anchors.fill: parent
-        enabled: terminal.visible
+        enabled: !Cpp_IO_Manager.connected
     }
 }

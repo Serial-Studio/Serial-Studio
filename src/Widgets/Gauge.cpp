@@ -24,6 +24,8 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
+#include <QMouseEvent>
+#include <QWheelEvent>
 #include <QResizeEvent>
 
 using namespace Widgets;
@@ -100,7 +102,7 @@ Gauge::Gauge(const int index)
     // clang-format on
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(update()));
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
 }
 
 /**
@@ -110,7 +112,7 @@ Gauge::Gauge(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Gauge::update()
+void Gauge::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
@@ -158,4 +160,10 @@ void Gauge::resizeEvent(QResizeEvent *event)
 
     // Accept event
     event->accept();
+}
+
+void Gauge::mousePressEvent(QMouseEvent *event)
+{
+    qDebug() << "Clicked";
+    event->ignore();
 }

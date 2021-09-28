@@ -202,9 +202,9 @@ void ThemeManager::loadTheme(const int id)
     QPalette palette;
     palette.setColor(QPalette::Base, base());
     palette.setColor(QPalette::Link, link());
+    palette.setColor(QPalette::Text, text());
     palette.setColor(QPalette::Button, button());
     palette.setColor(QPalette::Window, window());
-    palette.setColor(QPalette::Text, text());
     palette.setColor(QPalette::Midlight, midlight());
     palette.setColor(QPalette::Highlight, highlight());
     palette.setColor(QPalette::BrightText, brightText());
@@ -213,6 +213,9 @@ void ThemeManager::loadTheme(const int id)
     palette.setColor(QPalette::ToolTipBase, tooltipBase());
     palette.setColor(QPalette::ToolTipText, tooltipText());
     palette.setColor(QPalette::HighlightedText, highlightedText());
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    palette.setColor(QPalette::PlaceholderText, text().darker(150));
+#endif
     qApp->setPalette(palette);
 
     // Update user interface

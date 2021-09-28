@@ -23,7 +23,6 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.0
 
 import "../Widgets" as Widgets
 
@@ -56,18 +55,9 @@ Item {
                 verticalCenter: parent.verticalCenter
             }
 
-            Image {
-                width: sourceSize.width
-                height: sourceSize.height
-                sourceSize: Qt.size(24, 24)
-                source: "qrc:/icons/arrow-right.svg"
+            Widgets.Icon {
                 Layout.alignment: Qt.AlignVCenter
-
-                ColorOverlay {
-                    source: parent
-                    anchors.fill: parent
-                    color: palette.brightText
-                }
+                source: "qrc:/icons/arrow-right.svg"
             }
 
             Label {

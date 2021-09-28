@@ -25,6 +25,9 @@
 #include "Misc/ThemeManager.h"
 
 #include <QResizeEvent>
+#include <QRegularExpression>
+
+static QRegularExpression REGEXP("^[+-]?(\\d*\\.)?\\d+$");
 
 using namespace Widgets;
 
@@ -200,8 +203,7 @@ void DataGroup::update()
 
             // Check if value is a number, if so make sure that
             // we always show a fixed number of decimal places
-            QRegExp re("^[+-]?(\\d*\\.)?\\d+$");
-            if (re.exactMatch(value))
+            if (REGEXP.match(value).hasMatch())
                 value = QString::number(value.toDouble(), 'f', 2);
 
             // Update label

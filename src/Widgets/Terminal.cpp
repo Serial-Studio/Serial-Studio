@@ -24,6 +24,7 @@
 #include <QScrollBar>
 #include <QApplication>
 #include <IO/Console.h>
+#include <Misc/ThemeManager.h>
 
 #include "Terminal.h"
 
@@ -74,8 +75,16 @@ Terminal::Terminal(QQuickItem *parent)
     textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     textEdit()->setSizeAdjustPolicy(QPlainTextEdit::AdjustToContents);
 
-    // Get default text color
-    m_color = qApp->palette().color(QPalette::Text);
+    // Set widget palette
+    QPalette palette;
+    auto theme = Misc::ThemeManager::getInstance();
+    palette.setColor(QPalette::Text, theme->consoleText());
+    palette.setColor(QPalette::Base, theme->consoleBase());
+    palette.setColor(QPalette::Button, theme->consoleButton());
+    palette.setColor(QPalette::Window, theme->consoleWindow());
+    palette.setColor(QPalette::Highlight, theme->consoleHighlight());
+    palette.setColor(QPalette::HighlightedText, theme->consoleHighlightedText());
+    m_textEdit->setPalette(palette);
 
     // Resize QPlainTextEdit to fit QML item
     connect(this, &QQuickPaintedItem::widthChanged, this, &Terminal::updateWidgetSize);
@@ -164,14 +173,6 @@ bool Terminal::eventFilter(QObject *watched, QEvent *event)
 QFont Terminal::font() const
 {
     return textEdit()->font();
-}
-
-/**
- * Returns the text color used by the QPlainTextEdit widget
- */
-QColor Terminal::color() const
-{
-    return m_color;
 }
 
 /**
@@ -422,19 +423,6 @@ void Terminal::setText(const QString &text)
 
     update();
     emit textChanged();
-}
-
-/**
- * Changes the text color of the text editor.
- */
-void Terminal::setColor(const QColor &color)
-{
-    m_color = color;
-    auto qss = QString("QPlainTextEdit{color: %1;}").arg(color.name());
-    textEdit()->setStyleSheet(qss);
-    update();
-
-    emit colorChanged();
 }
 
 /**

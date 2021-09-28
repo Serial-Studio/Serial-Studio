@@ -206,14 +206,8 @@ Item {
                 maximumBlockCount: 12000
                 font.family: app.monoFont
                 autoscroll: Cpp_IO_Console.autoscroll
-                palette.text: Cpp_ThemeManager.consoleText
-                palette.base: Cpp_ThemeManager.consoleBase
-                palette.button: Cpp_ThemeManager.consoleButton
-                palette.window: Cpp_ThemeManager.consoleWindow
                 wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                palette.highlight: Cpp_ThemeManager.consoleHighlight
                 placeholderText: qsTr("No data received so far") + "..."
-                palette.highlightedText: Cpp_ThemeManager.consoleHighlightedText
 
                 MouseArea {
                     id: mouseArea
@@ -252,13 +246,14 @@ Item {
                     palette.text: Cpp_ThemeManager.consoleText
                     palette.base: Cpp_ThemeManager.consoleBase
                     placeholderText: qsTr("Send data to device") + "..."
+                    placeholderTextColor: Cpp_ThemeManager.consoleText.darker(1.5)
 
                     //
                     // Validate hex strings
                     //
-                    validator: RegExpValidator {
-                        regExp: hexCheckbox.checked ? /^(?:([a-f0-9]{2})\s*)+$/i : /[\s\S]*/
-                    }
+                    //validator: RegExpValidator {
+                    //    regExp: hexCheckbox.checked ? /^(?:([a-f0-9]{2})\s*)+$/i : /[\s\S]*/
+                    //}
 
                     //
                     // Send data on <enter>

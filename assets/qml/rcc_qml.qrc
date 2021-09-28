@@ -30,5 +30,6 @@
         <file>main.qml</file>
         <file>Windows/JsonEditor.qml</file>
         <file>Dashboard/ViewOptionsDelegate.qml</file>
+        <file>Widgets/Icon.qml</file>
     </qresource>
 </RCC>
