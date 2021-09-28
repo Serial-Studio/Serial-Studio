@@ -108,6 +108,7 @@ Control {
     //
     Widgets.Shadow {
         source: bg
+        anchors.fill: bg
     }
 
     //

@@ -246,14 +246,17 @@ Item {
                     palette.text: Cpp_ThemeManager.consoleText
                     palette.base: Cpp_ThemeManager.consoleBase
                     placeholderText: qsTr("Send data to device") + "..."
-                    placeholderTextColor: Cpp_ThemeManager.consoleText.darker(1.5)
+                    Component.onCompleted: {
+                        if (Cpp_Qt6)
+                            placeholderTextColor = Cpp_ThemeManager.consoleText.darker(1.5)
+                    }
 
                     //
                     // Validate hex strings
                     //
-                    //validator: RegExpValidator {
-                    //    regExp: hexCheckbox.checked ? /^(?:([a-f0-9]{2})\s*)+$/i : /[\s\S]*/
-                    //}
+                    validator: RegExpValidator {
+                        regExp: hexCheckbox.checked ? /^(?:([a-f0-9]{2})\s*)+$/i : /[\s\S]*/
+                    }
 
                     //
                     // Send data on <enter>
@@ -397,5 +400,6 @@ Item {
     //
     Widgets.Shadow {
         source: window
+        anchors.fill: window
     }
 }

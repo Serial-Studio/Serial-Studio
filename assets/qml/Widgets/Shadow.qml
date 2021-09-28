@@ -21,17 +21,23 @@
  */
 
 import QtQuick 2.12
-//import QtGraphicalEffects 1.0
+import QtGraphicalEffects 1.0
 
-Item {
-    property var source
-}
-
-/*DropShadow {
+DropShadow {
     radius: 8.0
     samples: 17
     verticalOffset: 3
     color: "#80000000"
     horizontalOffset: 0
-    anchors.fill: source
+}
+
+
+/* For Qt6
+import Qt5Compat.GraphicalEffects
+
+DropShadow {
+    radius: 8.0
+    verticalOffset: 3
+    color: "#80000000"
+    horizontalOffset: 0
 }*/

@@ -1,10 +1,11 @@
 <RCC>
     <qresource prefix="/qml">
         <file>Dashboard/DashboardTitle.qml</file>
-        <file>Dashboard/WidgetModel.qml</file>
         <file>Dashboard/ViewOptions.qml</file>
+        <file>Dashboard/ViewOptionsDelegate.qml</file>
         <file>Dashboard/WidgetDelegate.qml</file>
         <file>Dashboard/WidgetGrid.qml</file>
+        <file>Dashboard/WidgetModel.qml</file>
         <file>JsonEditor/JsonDatasetDelegate.qml</file>
         <file>JsonEditor/JsonGroupDelegate.qml</file>
         <file>Panes/SetupPanes/MQTT.qml</file>
@@ -18,6 +19,8 @@
         <file>PlatformDependent/DecentMenuItem.qml</file>
         <file>PlatformDependent/Menubar.qml</file>
         <file>PlatformDependent/MenubarMacOS.qml</file>
+        <file>Widgets/Shadow/Shadow_Qt6.qml</file>
+        <file>Widgets/Icon.qml</file>
         <file>Widgets/JSONDropArea.qml</file>
         <file>Widgets/LED.qml</file>
         <file>Widgets/Shadow.qml</file>
@@ -26,10 +29,8 @@
         <file>Windows/Acknowledgements.qml</file>
         <file>Windows/CsvPlayer.qml</file>
         <file>Windows/Donate.qml</file>
+        <file>Windows/JsonEditor.qml</file>
         <file>Windows/MainWindow.qml</file>
         <file>main.qml</file>
-        <file>Windows/JsonEditor.qml</file>
-        <file>Dashboard/ViewOptionsDelegate.qml</file>
-        <file>Widgets/Icon.qml</file>
     </qresource>
 </RCC>

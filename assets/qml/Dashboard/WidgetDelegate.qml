@@ -54,5 +54,6 @@ Item {
 
     Widgets.Shadow {
         source: window
+        anchors.fill: window
     }
 }

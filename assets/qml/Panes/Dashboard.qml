@@ -65,6 +65,7 @@ Item {
 
                 Widgets.Shadow {
                     source: viewOptions
+                    anchors.fill: viewOptions
                 }
             }
 
@@ -83,6 +84,7 @@ Item {
 
                 Widgets.Shadow {
                     source: widgetGrid
+                    anchors.fill: widgetGrid
                 }
             }
         }
