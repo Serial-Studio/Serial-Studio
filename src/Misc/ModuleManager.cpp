@@ -77,7 +77,7 @@ ModuleManager::ModuleManager()
     font.setPointSize(9);
 #elif defined(Q_OS_MAC)
     font.setPointSize(13);
-#else
+#elif defined(Q_OS_LINUX)
     font.setPointSize(10);
 #endif
     qApp->setFont(font);
