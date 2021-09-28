@@ -23,15 +23,12 @@
 #ifndef WIDGETS_GAUGE_H
 #define WIDGETS_GAUGE_H
 
-#include <QLabel>
-#include <QWidget>
-#include <QHBoxLayout>
-
-#include "AnalogGauge.h"
+#include "Common/BaseWidget.h"
+#include "Common/AnalogGauge.h"
 
 namespace Widgets
 {
-class Gauge : public QWidget
+class Gauge : public BaseWidget
 {
     Q_OBJECT
 
@@ -41,15 +38,9 @@ public:
 private slots:
     void updateData();
 
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-
 private:
     int m_index;
-    QLabel m_label;
     AnalogGauge m_gauge;
-    QHBoxLayout m_layout;
 };
 }
 

@@ -19,30 +19,3 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-#ifndef WIDGETS_BAR_H
-#define WIDGETS_BAR_H
-
-#include <QwtThermo>
-#include "Common/BaseWidget.h"
-
-namespace Widgets
-{
-class Bar : public BaseWidget
-{
-    Q_OBJECT
-
-public:
-    Bar(const int index = -1);
-
-private slots:
-    void update();
-    void onResized();
-
-private:
-    int m_index;
-    QwtThermo m_thermo;
-};
-}
-
-#endif

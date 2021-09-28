@@ -20,28 +20,38 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_BAR_H
-#define WIDGETS_BAR_H
+#ifndef WIDGETS_COMMON_BASE_H
+#define WIDGETS_COMMON_BASE_H
 
-#include <QwtThermo>
-#include "Common/BaseWidget.h"
+#include <QLabel>
+#include <QWidget>
+#include <QHBoxLayout>
 
 namespace Widgets
 {
-class Bar : public BaseWidget
+class BaseWidget : public QWidget
 {
     Q_OBJECT
 
-public:
-    Bar(const int index = -1);
+signals:
+    void resized();
 
-private slots:
-    void update();
-    void onResized();
+public:
+    BaseWidget();
+
+    void setLabel(const QString &label);
+    void setWidget(QWidget *widget, Qt::Alignment alignment = Qt::AlignHCenter,
+                   bool autoresize = true);
+
+protected:
+    void resizeEvent(QResizeEvent *event);
 
 private:
     int m_index;
-    QwtThermo m_thermo;
+    QLabel m_label;
+    QWidget *m_widget;
+    bool m_resizeWidget;
+    QHBoxLayout m_layout;
 };
 }
 

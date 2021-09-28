@@ -65,34 +65,8 @@ Compass::Compass(const int index)
     palette.setColor(QPalette::Text, theme->widgetIndicator1());
     m_compass.setPalette(palette);
 
-    // Set window palette
-    QPalette windowPalette;
-    windowPalette.setColor(QPalette::Base, theme->datasetWindowBackground());
-    windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
-    setPalette(windowPalette);
-
-    // Configure label style
-    QFont font = dash->monoFont();
-    font.setPixelSize(24);
-    m_label.setFont(font);
-    m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    // Configure layout
-    m_layout.setSpacing(24);
-    m_layout.addWidget(&m_compass);
-    m_layout.addWidget(&m_label);
-    m_layout.setContentsMargins(24, 24, 24, 24);
-    m_layout.setAlignment(&m_compass, Qt::AlignHCenter);
-    setLayout(&m_layout);
-
-    // Set stylesheets
-    // clang-format off
-    auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
-                        theme->base(),
-                        theme->widgetForegroundPrimary(),
-                        theme->widgetIndicator1());
-    m_label.setStyleSheet(valueQSS);
-    // clang-format on
+    // Set widget pointer
+    setWidget(&m_compass);
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(update()));
@@ -124,36 +98,6 @@ void Compass::update()
         else if (text.length() == 3)
             text.prepend("0");
 
-        m_label.setText(text);
+        setLabel(text);
     }
-}
-
-/**
- * Changes the size of the labels when the widget is resized
- */
-void Compass::resizeEvent(QResizeEvent *event)
-{
-    // Get width & height (exluding layout margins & spacing)
-    auto width = event->size().width() - 72;
-    auto height = event->size().height() - 72;
-
-    // Get fonts & calculate size
-    auto labelFont = UI::Dashboard::getInstance()->monoFont();
-    auto compassFont = UI::Dashboard::getInstance()->monoFont();
-    labelFont.setPixelSize(width / 18);
-    compassFont.setPixelSize(width / 24);
-
-    // Set fonts
-    m_label.setFont(labelFont);
-    m_compass.setFont(compassFont);
-
-    // Set widget sizes
-    m_label.setMinimumWidth(width * 0.4);
-    m_label.setMaximumWidth(width * 0.4);
-    m_label.setMaximumHeight(height * 0.4);
-    m_compass.setMinimumWidth(width * 0.6);
-    m_compass.setMaximumWidth(width * 0.6);
-
-    // Accept event
-    event->accept();
 }

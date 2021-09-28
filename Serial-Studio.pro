@@ -170,8 +170,10 @@ HEADERS += \
     src/Plugins/Bridge.h \
     src/UI/Dashboard.h \
     src/Widgets/Accelerometer.h \
-    src/Widgets/AnalogGauge.h \
     src/Widgets/Bar.h \
+    src/Widgets/Common/AnalogGauge.h \
+    src/Widgets/Common/BaseWidget.h \
+    src/Widgets/Common/ExternalWindow.h \
     src/Widgets/Compass.h \
     src/Widgets/DataGroup.h \
     src/Widgets/Gauge.h \
@@ -183,11 +185,6 @@ HEADERS += \
     src/Widgets/WidgetLoader.h
 
 SOURCES += \
-    src/UI/Dashboard.cpp \
-    src/Widgets/AnalogGauge.cpp \
-    src/Widgets/MultiPlot.cpp \
-    src/Widgets/WidgetLoader.cpp \
-    src/main.cpp \
     src/CSV/Export.cpp \
     src/CSV/Player.cpp \
     src/IO/Checksum.cpp \
@@ -209,15 +206,23 @@ SOURCES += \
     src/Misc/Translator.cpp \
     src/Misc/Utilities.cpp \
     src/Plugins/Bridge.cpp \
+    src/UI/Dashboard.cpp \
     src/Widgets/Accelerometer.cpp \
     src/Widgets/Bar.cpp \
+    src/Widgets/Common/AnalogGauge.cpp \
+    src/Widgets/Common/BaseWidget.cpp \
+    src/Widgets/Common/ExternalWindow.cpp \
     src/Widgets/Compass.cpp \
     src/Widgets/DataGroup.cpp \
     src/Widgets/Gauge.cpp \
     src/Widgets/Gyroscope.cpp \
+    src/Widgets/MultiPlot.cpp \
     src/Widgets/Plot.cpp \
     src/Widgets/Terminal.cpp \
-    src/Widgets/Thermometer.cpp
+    src/Widgets/Thermometer.cpp \
+    src/Widgets/WidgetLoader.cpp \
+    src/main.cpp
+
 
 DISTFILES += \
     assets/qml/Dashboard/DashboardTitle.qml \

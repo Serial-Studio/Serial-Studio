@@ -24,10 +24,6 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-#include <QMouseEvent>
-#include <QWheelEvent>
-#include <QResizeEvent>
-
 using namespace Widgets;
 
 /**
@@ -67,39 +63,13 @@ Gauge::Gauge(const int index)
 #endif
 
     // Set gauge palette
-    QPalette gaugePalette;
-    gaugePalette.setColor(QPalette::WindowText, theme->base());
-    gaugePalette.setColor(QPalette::Text, theme->widgetIndicator1());
-    m_gauge.setPalette(gaugePalette);
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, theme->base());
+    palette.setColor(QPalette::Text, theme->widgetIndicator1());
+    m_gauge.setPalette(palette);
 
-    // Set window palette
-    QPalette windowPalette;
-    windowPalette.setColor(QPalette::Base, theme->datasetWindowBackground());
-    windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
-    setPalette(windowPalette);
-
-    // Configure label style
-    QFont font = dash->monoFont();
-    font.setPixelSize(24);
-    m_label.setFont(font);
-    m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    // Configure layout
-    m_layout.setSpacing(24);
-    m_layout.addWidget(&m_gauge);
-    m_layout.addWidget(&m_label);
-    m_layout.setContentsMargins(24, 24, 24, 24);
-    m_layout.setAlignment(&m_gauge, Qt::AlignHCenter);
-    setLayout(&m_layout);
-
-    // Set stylesheets
-    // clang-format off
-    auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
-                        theme->base(),
-                        theme->widgetForegroundPrimary(),
-                        theme->widgetIndicator1());
-    m_label.setStyleSheet(valueQSS);
-    // clang-format on
+    // Set widget pointer
+    setWidget(&m_gauge);
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
@@ -127,43 +97,6 @@ void Gauge::updateData()
 #endif
         auto value = dataset->value().toDouble();
         m_gauge.setValue(dataset->value().toDouble());
-        m_label.setText(
-            QString("%1 %2").arg(QString::number(value, 'f', 2), dataset->units()));
+        setLabel(QString("%1 %2").arg(QString::number(value, 'f', 2), dataset->units()));
     }
-}
-
-/**
- * Changes the size of the labels when the widget is resized
- */
-void Gauge::resizeEvent(QResizeEvent *event)
-{
-    // Get width & height (exluding layout margins & spacing)
-    auto width = event->size().width() - 72;
-    auto height = event->size().height() - 72;
-
-    // Get fonts & calculate size
-    auto labelFont = UI::Dashboard::getInstance()->monoFont();
-    auto gaugeFont = UI::Dashboard::getInstance()->monoFont();
-    labelFont.setPixelSize(width / 18);
-    gaugeFont.setPixelSize(width / 24);
-
-    // Set fonts
-    m_label.setFont(labelFont);
-    m_gauge.setFont(gaugeFont);
-
-    // Set widget sizes
-    m_label.setMinimumWidth(width * 0.4);
-    m_label.setMaximumWidth(width * 0.4);
-    m_gauge.setMinimumWidth(width * 0.6);
-    m_gauge.setMaximumWidth(width * 0.6);
-    m_label.setMaximumHeight(height * 0.4);
-
-    // Accept event
-    event->accept();
-}
-
-void Gauge::mousePressEvent(QMouseEvent *event)
-{
-    qDebug() << "Clicked";
-    event->ignore();
 }

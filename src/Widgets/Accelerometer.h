@@ -23,15 +23,12 @@
 #ifndef WIDGETS_ACCELEROMETER_H
 #define WIDGETS_ACCELEROMETER_H
 
-#include <QLabel>
-#include <QWidget>
-#include <QHBoxLayout>
-
-#include "AnalogGauge.h"
+#include "Common/BaseWidget.h"
+#include "Common/AnalogGauge.h"
 
 namespace Widgets
 {
-class Accelerometer : public QWidget
+class Accelerometer : public BaseWidget
 {
     Q_OBJECT
 
@@ -41,14 +38,9 @@ public:
 private slots:
     void update();
 
-protected:
-    void resizeEvent(QResizeEvent *event);
-
 private:
     int m_index;
-    QLabel m_label;
     AnalogGauge m_gauge;
-    QHBoxLayout m_layout;
 };
 }
 

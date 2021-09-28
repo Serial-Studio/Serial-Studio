@@ -23,14 +23,13 @@
 #ifndef WIDGETS_COMPASS_H
 #define WIDGETS_COMPASS_H
 
-#include <QLabel>
-#include <QWidget>
 #include <QwtCompass>
-#include <QVBoxLayout>
+
+#include "Common/BaseWidget.h"
 
 namespace Widgets
 {
-class Compass : public QWidget
+class Compass : public BaseWidget
 {
     Q_OBJECT
 
@@ -40,14 +39,9 @@ public:
 private slots:
     void update();
 
-protected:
-    void resizeEvent(QResizeEvent *event);
-
 private:
     int m_index;
-    QLabel m_label;
     QwtCompass m_compass;
-    QHBoxLayout m_layout;
 };
 }
 
