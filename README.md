@@ -69,7 +69,7 @@ Full list of used Qt modules:
 - Qt Quick Controls 2
 - Qt Graphical Effects
 
-## Qt 6 support
+#### Qt 6 support
 
 Serial Studio now compiles with Qt 6.2.0, however, the GitHub actions environment [does not have proper support for Qt 6](https://github.com/jurplel/install-qt-action/issues/95) yet.
 
