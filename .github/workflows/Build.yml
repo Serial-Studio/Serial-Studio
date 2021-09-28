@@ -44,19 +44,12 @@ jobs:
       with:
         submodules: recursive
 
-    - name: '⚙️ Cache Qt'
-      id: cache-qt
-      uses: actions/cache@v1
-      with:
-        path: ../Qt
-        key: ${{runner.os}}-Qt6Cache
-
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
         version: 6.2.0
         modules: serialport
-        cached: ${{steps.cache-qt.outputs.cache-hit}}
+        #cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     # Install additional dependencies, stolen from:
     # https://github.com/mapeditor/tiled/blob/master/.github/workflows/packages.yml
@@ -99,19 +92,12 @@ jobs:
       with:
         submodules: recursive
 
-    - name: '⚙️ Cache Qt'
-      id: cache-qt
-      uses: actions/cache@v1
-      with:
-        path: ../Qt
-        key: ${{runner.os}}-Qt6Cache
-
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
         version: 6.2.0
         modules: serialport
-        cached: ${{steps.cache-qt.outputs.cache-hit}}
+        #cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '🚧 Compile application'
       run: |
@@ -151,19 +137,12 @@ jobs:
         arch: x64
         spectre: true
 
-    - name: '⚙️ Cache Qt'
-      id: cache-qt
-      uses: actions/cache@v1
-      with:
-        path: ../Qt
-        key: ${{runner.os}}-Qt6Cache
-
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
         version: 6.2.0
         modules: serialport
-        cached: ${{steps.cache-qt.outputs.cache-hit}}
+        #cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '⚙️ Install NSIS'
       run: |
