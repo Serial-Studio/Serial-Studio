@@ -30,7 +30,6 @@ using namespace Widgets;
 ExternalWindow::ExternalWindow()
     : m_widget(nullptr)
 {
-    m_layout.setContentsMargins(24, 24, 24, 24);
     setLayout(&m_layout);
 }
 

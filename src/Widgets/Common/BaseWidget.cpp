@@ -40,9 +40,6 @@ BaseWidget::BaseWidget()
     setPalette(palette);
 
     // Configure label style
-    QFont font = UI::Dashboard::getInstance()->monoFont();
-    font.setPixelSize(24);
-    m_label.setFont(font);
     m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     // Set stylesheets
@@ -57,8 +54,17 @@ BaseWidget::BaseWidget()
 
 void BaseWidget::setValue(const QString &label)
 {
-    if (m_label.text() != label)
+    // Change label text
+    if (m_label.text() != label) {
         m_label.setText(label);
+
+        // Resize label font (so it fits inside the box)
+        while (QFontMetrics(m_label.font()).horizontalAdvance(label) + 12 > m_label.width()) {
+            QFont font = m_label.font();
+            font.setPixelSize(font.pixelSize() - 1);
+            m_label.setFont(font);
+        }
+    }
 }
 
 void BaseWidget::setWidget(QWidget *widget, Qt::Alignment alignment, bool autoresize)
@@ -91,8 +97,15 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
     labelFont.setPixelSize(width / 18);
     gaugeFont.setPixelSize(width / 24);
 
-    // Set fonts
+    // Set label font (so it fits inside the box)
     m_label.setFont(labelFont);
+    while (QFontMetrics(m_label.font()).horizontalAdvance(m_label.text()) + 12 > m_label.width()) {
+        QFont font = m_label.font();
+        font.setPixelSize(font.pixelSize() - 1);
+        m_label.setFont(font);
+    }
+
+    // Set widget font
     if (m_widget)
         m_widget->setFont(gaugeFont);
 

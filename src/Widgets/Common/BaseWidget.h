@@ -52,6 +52,7 @@ private:
     QWidget *m_widget;
     bool m_resizeWidget;
     QHBoxLayout m_layout;
+    int m_labelTextWidth;
 };
 }
 
