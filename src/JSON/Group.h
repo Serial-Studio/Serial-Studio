@@ -61,7 +61,7 @@ public:
     QVector<Dataset *> &datasets();
     bool read(const QJsonObject &object);
 
-    Q_INVOKABLE Dataset *getDataset(const int index);
+    Q_INVOKABLE JSON::Dataset *getDataset(const int index);
 
 private:
     QString m_title;

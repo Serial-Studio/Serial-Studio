@@ -29,6 +29,40 @@
 
 namespace JSON
 {
+/**
+ * @brief The Dataset class
+ *
+ * The dataset class represents the properties and values of an
+ * individual data unit.
+ *
+ * For example, supose that you are reading the values of a temperature
+ * sensor. In this case, the dataset could have the following values:
+ *
+ * - Value: 21
+ * - Units: °C
+ * - Title: External temperature
+ * - Widget: "bar"
+ * - Graph: true
+ * - Max: 100
+ * - Min: -15
+ * - Alarm: 45
+ *
+ * Description for each field of the dataset class:
+ * - Value: represents the current sensor reading/value.
+ * - Units: represents the measurement units of the reading.
+ * - Title: description of the dataset.
+ * - Widget: widget that shall be used to represents the value,
+ *           for example, a level widget, a gauge, a compass, etc.
+ * - Graph: if set to true, Serial Studio shall plot the value in
+ *          realtime.
+ * - Max: maximum value of the dataset, used for gauges & bars.
+ * - Min: minimum value of the dataset, used for gauges & bars.
+ * - Alarm: if the value exceeds the alarm level, bar widgets
+ *          shall be rendered with a dark-red background.
+ *
+ * @note All of the dataset fields are optional, except the "value"
+ *       field and the "title" field.
+ */
 class Dataset : public QObject
 {
     // clang-format off

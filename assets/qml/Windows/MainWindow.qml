@@ -20,12 +20,11 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
-
-import Qt.labs.settings 1.0
+import QtQuick
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls
+import Qt.labs.settings
 
 import "../Panes"
 import "../Windows"
@@ -34,15 +33,6 @@ import "../JsonEditor"
 
 ApplicationWindow {
     id: root
-
-    //
-    // Quit application on close
-    //
-    onClosing: (close) => {
-        close.accepted = Cpp_JSON_Editor.askSave()
-        if (close.accepted)
-            Cpp_ModuleManager.quit()
-    }
 
     //
     // Global properties
@@ -174,16 +164,8 @@ ApplicationWindow {
     // Startup code
     //
     Component.onCompleted: {
-        // Hide everything except the terminal and the setup pane
-        dashboard.opacity = 0
-        terminal.opacity = 1
-        setup.show()
-
         // Load welcome guide
         terminal.showWelcomeGuide()
-
-        // Load JSON map file (if any)
-        Cpp_JSON_Generator.readSettings()
 
         // Display the window & check for updates in 500 ms (we do this so that
         // we wait for the window to read settings before showing it)
@@ -327,7 +309,7 @@ ApplicationWindow {
                 if (Cpp_UI_Dashboard.available) {
                     consoleChecked = 0
                     dashboardChecked = 1
-                    swipe.currentIndex = 1
+                    stack.push(dashboard)
                 }
 
                 else
@@ -337,7 +319,7 @@ ApplicationWindow {
             onConsoleClicked: {
                 consoleChecked = 1
                 dashboardChecked = 0
-                swipe.currentIndex = 0
+                stack.pop()
             }
         }
 
@@ -350,15 +332,15 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            SwipeView {
-                id: swipe
+            StackView {
+                id: stack
                 clip: true
-                interactive: false
+                initialItem: terminal
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                onCurrentIndexChanged: {
-                    if (currentIndex == 0) {
+                onCurrentItemChanged: {
+                    if (currentItem === terminal) {
                         terminal.opacity = 1
                         dashboard.opacity = 0
                     }
@@ -378,6 +360,7 @@ ApplicationWindow {
                 }
 
                 Dashboard {
+                    opacity: 0
                     id: dashboard
                     enabled: opacity > 0
                     visible: opacity > 0
@@ -388,6 +371,8 @@ ApplicationWindow {
 
             Setup {
                 id: setup
+                opacity: 1
+                setupMargin: 0
                 Layout.fillHeight: true
                 Layout.rightMargin: setupMargin
                 Layout.minimumWidth: displayedWidth

@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
 import "../Widgets" as Widgets
 
@@ -47,37 +47,63 @@ Widgets.Window {
     //
     // Put everything into a flickable to enable scrolling
     //
-    Flickable {
-        contentWidth: width
-        contentHeight: grid.height
+    Item {
+        clip: true
+        anchors.fill: parent
 
-        anchors {
-            fill: parent
-            margins: app.spacing * 2
-            rightMargin: app.spacing
-        }
+        Flickable {
+            contentWidth: width
+            contentHeight: grid.height
 
-        ScrollBar.vertical: ScrollBar {
-            id: scroll
-        }
-
-        Grid {
-            id: grid
-            width: parent.width
-            columns: root.columns
-            rowSpacing: app.spacing
-            columnSpacing: app.spacing
-            height: childrenRect.height
-
-            move: Transition {
-                NumberAnimation { properties: "x,y"; duration: 200; easing.type: Easing.OutSine }
+            anchors {
+                fill: parent
+                margins: app.spacing * 2
+                rightMargin: app.spacing
             }
 
-            WidgetModel {
-                id: model
-                cellWidth: root.cellWidth
-                cellHeight: root.cellHeight
-                model: Cpp_UI_Dashboard.totalWidgetCount
+            ScrollBar.vertical: ScrollBar {
+                id: scroll
+            }
+
+            Grid {
+                id: grid
+                width: parent.width
+                columns: root.columns
+                rowSpacing: app.spacing
+                columnSpacing: app.spacing
+                height: childrenRect.height
+
+                Timer {
+                    id: timer
+                    interval: 200
+                    onTriggered: transition.enabled = false
+                }
+
+                Connections {
+                    target: Cpp_UI_Dashboard
+                    function onWidgetVisibilityChanged() {
+                        transition.enabled = true
+                        timer.start()
+                    }
+                }
+
+                move: Transition {
+                    id: transition
+                    enabled: false
+
+                    NumberAnimation {
+                        duration: 200
+                        properties: "x,y"
+                        easing.type: Easing.OutSine
+                    }
+                }
+
+                WidgetModel {
+                    id: model
+                    cellWidth: root.cellWidth
+                    cellHeight: root.cellHeight
+                    model: Cpp_UI_Dashboard.totalWidgetCount
+                }
             }
         }
     }

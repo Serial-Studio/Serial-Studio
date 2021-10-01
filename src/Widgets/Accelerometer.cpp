@@ -29,6 +29,9 @@
 
 using namespace Widgets;
 
+/**
+ * Constructor function, configures widget style & signal/slot connections.
+ */
 Accelerometer::Accelerometer(const int index)
     : m_index(index)
 {
@@ -50,9 +53,8 @@ Accelerometer::Accelerometer(const int index)
         needleColor = colors.at(colors.count() % m_index);
 
     // Configure gauge needle
-    auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
-                                          QColor(needleColor), knobColor);
-    m_gauge.setNeedle(needle);
+    m_gauge.setNeedle(new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
+                                              QColor(needleColor), knobColor));
 
     // Set gauge scale & display angles
     m_gauge.setScale(0, 12);
@@ -71,6 +73,13 @@ Accelerometer::Accelerometer(const int index)
     connect(dash, SIGNAL(updated()), this, SLOT(update()));
 }
 
+/**
+ * Checks if the widget is enabled, if so, the widget shall be updated
+ * to display the latest data frame.
+ *
+ * If the widget is disabled (e.g. the user hides it, or the external
+ * window is hidden), then the widget shall ignore the update request.
+ */
 void Accelerometer::update()
 {
     // Widget not enabled, do nothing

@@ -125,7 +125,7 @@ bool Frame::read(const QJsonObject &object)
 /**
  * @return The group at the given @a index,vreturns @c Q_NULLPTR on invalid index
  */
-Group *Frame::getGroup(const int index)
+JSON::Group *Frame::getGroup(const int index)
 {
     if (index < groupCount() && index >= 0)
         return m_groups.at(index);

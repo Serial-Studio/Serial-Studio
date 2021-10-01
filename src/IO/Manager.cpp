@@ -394,20 +394,6 @@ void Manager::setWriteEnabled(const bool enabled)
 }
 
 /**
- * Changes the data source type. Check the @c dataSource() funciton for more information.
- */
-void Manager::setDataSource(const DataSource source)
-{
-    // Disconnect current device
-    if (connected())
-        disconnectDevice();
-
-    // Change data source
-    m_dataSource = source;
-    emit dataSourceChanged();
-}
-
-/**
  * Reads the given payload and emits it as if it were received from a device.
  * This function is for convenience to interact with other application modules & plugins.
  */
@@ -491,6 +477,20 @@ void Manager::setWatchdogInterval(const int interval)
     m_watchdog.setInterval(interval);
     m_watchdog.setTimerType(Qt::PreciseTimer);
     emit watchdogIntervalChanged();
+}
+
+/**
+ * Changes the data source type. Check the @c dataSource() funciton for more information.
+ */
+void Manager::setDataSource(const IO::Manager::DataSource source)
+{
+    // Disconnect current device
+    if (connected())
+        disconnectDevice();
+
+    // Change data source
+    m_dataSource = source;
+    emit dataSourceChanged();
 }
 
 /**

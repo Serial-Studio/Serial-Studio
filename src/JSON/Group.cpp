@@ -78,7 +78,7 @@ QVector<Dataset *> &Group::datasets()
 /**
  * @return The dataset at the given @a index,vreturns @c Q_NULLPTR on invalid index
  */
-Dataset *Group::getDataset(const int index)
+JSON::Dataset *Group::getDataset(const int index)
 {
     if (index < datasetCount() && index >= 0)
         return m_datasets.at(index);

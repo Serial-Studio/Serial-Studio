@@ -228,7 +228,8 @@ QQmlApplicationEngine *ModuleManager::engine()
  */
 void ModuleManager::quit()
 {
-    qApp->quit();
+    if (JSON::Editor::getInstance()->askSave())
+        qApp->quit();
 }
 
 /**

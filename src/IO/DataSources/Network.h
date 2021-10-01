@@ -34,6 +34,11 @@ namespace IO
 {
 namespace DataSources
 {
+/**
+ * @brief The Network class
+ *
+ * Serial Studio "driver" class to interact with UDP/TCP network ports.
+ */
 class Network : public QObject
 {
     // clang-format off

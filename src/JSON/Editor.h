@@ -31,6 +31,15 @@
 
 namespace JSON
 {
+/**
+ * @brief The Editor class
+ *
+ * The editor class allows the representation of a Serial Studio JSON
+ * project file in the graphical user interface.
+ *
+ * Additionaly, the class facilitates the modificiation of a project
+ * file or the creation of new JSON project files.
+ */
 class Editor : public QObject
 {
     // clang-format off
@@ -97,8 +106,8 @@ public:
     Q_INVOKABLE bool saveJsonFile();
     Q_INVOKABLE int datasetCount(const int group) const;
 
-    Q_INVOKABLE Group *getGroup(const int index);
-    Q_INVOKABLE Dataset *getDataset(const int group, const int index);
+    Q_INVOKABLE JSON::Group *getGroup(const int index);
+    Q_INVOKABLE JSON::Dataset *getDataset(const int group, const int index);
 
     Q_INVOKABLE QString groupTitle(const int group);
     Q_INVOKABLE QString groupWidget(const int group);

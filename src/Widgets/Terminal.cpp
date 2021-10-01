@@ -84,6 +84,9 @@ Terminal::Terminal(QQuickItem *parent)
     palette.setColor(QPalette::Window, theme->consoleWindow());
     palette.setColor(QPalette::Highlight, theme->consoleHighlight());
     palette.setColor(QPalette::HighlightedText, theme->consoleHighlightedText());
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    palette.setColor(QPalette::PlaceholderText, theme->consoleText().darker(150));
+#endif
     m_textEdit->setPalette(palette);
 
     // Resize QPlainTextEdit to fit QML item
@@ -445,7 +448,7 @@ void Terminal::setPalette(const QPalette &palette)
     textEdit()->setPalette(palette);
     update();
 
-    emit paletteChanged();
+    emit colorPaletteChanged();
 }
 
 /**

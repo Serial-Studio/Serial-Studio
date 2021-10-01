@@ -41,7 +41,7 @@
  */
 static void cliShowVersion()
 {
-    auto appver = QString("%1 version %2").arg(APP_NAME).arg(APP_VERSION);
+    auto appver = QString("%1 version %2").arg(APP_NAME, APP_VERSION);
     auto author = QString("Written by Alex Spataru <https://github.com/alex-spataru>");
 
     qDebug() << appver.toStdString().c_str();

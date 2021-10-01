@@ -28,6 +28,16 @@
 
 namespace IO
 {
+/**
+ * @brief The Console class
+ *
+ * The console class receives data from the @c IO::Manager class and
+ * processes it so that it can be easily appended to a text edit widget.
+ *
+ * The class also controls various UI-related factors, such as the display
+ * format of the data (e.g. ASCII or HEX), history of sent commands and
+ * exporting of the RX data.
+ */
 class Console : public QObject
 {
     // clang-format off
@@ -125,11 +135,11 @@ public slots:
     void send(const QString &data);
     void setEcho(const bool enabled);
     void print(const QString &fontFamily);
-    void setDataMode(const DataMode mode);
     void setAutoscroll(const bool enabled);
     void setShowTimestamp(const bool enabled);
-    void setLineEnding(const LineEnding mode);
-    void setDisplayMode(const DisplayMode mode);
+    void setDataMode(const IO::Console::DataMode mode);
+    void setLineEnding(const IO::Console::LineEnding mode);
+    void setDisplayMode(const IO::Console::DisplayMode mode);
     void append(const QString &str, const bool addTimestamp = false);
 
 private slots:

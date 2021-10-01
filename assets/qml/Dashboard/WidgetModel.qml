@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.10
-import QtQml.Models 2.3
+import QtQuick
+import QtQml.Models
 
 Repeater {
     id: root

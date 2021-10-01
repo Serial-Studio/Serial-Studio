@@ -349,7 +349,7 @@ int Editor::datasetCount(const int group) const
 /**
  * Returns a pointer to the group object positioned at the given @a index
  */
-Group *Editor::getGroup(const int index)
+JSON::Group *Editor::getGroup(const int index)
 {
     if (index < groupCount())
         return m_groups.at(index);
@@ -361,7 +361,7 @@ Group *Editor::getGroup(const int index)
  * Returns a pointer to the dataset object contained by the @a group at
  * the given @a index
  */
-Dataset *Editor::getDataset(const int group, const int index)
+JSON::Dataset *Editor::getDataset(const int group, const int index)
 {
     if (index < datasetCount(group))
         return getGroup(group)->m_datasets.at(index);

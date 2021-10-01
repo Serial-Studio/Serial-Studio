@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
 import "../Widgets" as Widgets
 
@@ -230,7 +230,6 @@ Control {
             icon.height: 24
             font.bold: true
             Layout.fillHeight: true
-            icon.color: palette.buttonText
 
             //
             // Connection-dependent
@@ -242,6 +241,8 @@ Control {
                                    "qrc:/icons/connect.svg"
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
+            icon.color: checked ? Cpp_ThemeManager.connectButtonChecked :
+                                  Cpp_ThemeManager.connectButtonUnchecked
             palette.buttonText: checked ? Cpp_ThemeManager.connectButtonChecked :
                                           Cpp_ThemeManager.connectButtonUnchecked
 

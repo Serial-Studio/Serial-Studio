@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-
+import QtQuick
 import "Windows" as Windows
 
 Item {

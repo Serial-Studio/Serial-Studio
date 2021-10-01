@@ -20,13 +20,14 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls
+import Qt.labs.settings
 
-import Qt.labs.settings 1.0
 import "../JsonEditor"
+import "../Widgets" as Widgets
 
 ApplicationWindow {
     id: root
@@ -249,6 +250,9 @@ ApplicationWindow {
                         height: group.height + app.spacing
                         width: parent.width - 2 * app.spacing
 
+                        //
+                        // Group window
+                        //
                         JsonGroupDelegate {
                             id: group
                             group: index
@@ -257,6 +261,15 @@ ApplicationWindow {
                                 right: parent.right
                                 bottom: parent.bottom
                             }
+                        }
+
+
+                        //
+                        // Window shadow
+                        //
+                        Widgets.Shadow {
+                            source: group
+                            anchors.fill: group
                         }
                     }
                 }

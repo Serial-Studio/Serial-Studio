@@ -29,6 +29,33 @@
 
 namespace IO
 {
+/**
+ * @brief The Manager class
+ *
+ * The I/O Manager class provides an abstraction layer between the physical
+ * device (e.g. a serial or network port) and the rest of the application.
+ *
+ * Additionaly, all frame parsing, checksum verification and data processing
+ * is done directly by this class. In this way, programmers can focus on
+ * implementing the code to read and write data to a device, while the manager
+ * class deals with the processing of the received data and generates frames.
+ *
+ * A "frame" is equivalent to a paquet of data. To identify frames, the manager
+ * class needs to know three things:
+ * - The start sequence or header of the frame
+ * - The end sequence or footer of the frame
+ * - The data separator sequence, which allows Serial Studio to differentiate
+ *   between a dataset value and another dataset value.
+ *
+ * Example of a frame:
+ *
+ *   $A,B,C,D,E,F,G;
+ *
+ * In this case, the start sequence of the frame is "$", while the end sequence
+ * is ";". The data separator sequence is ",". Knowing this, Serial Studio
+ * can process the frame and deduce that A,B,C,D,E,F and G are individual
+ * dataset values.
+ */
 class Manager : public QObject
 {
     // clang-format off
@@ -132,13 +159,13 @@ public slots:
     void toggleConnection();
     void disconnectDevice();
     void setWriteEnabled(const bool enabled);
-    void setDataSource(const DataSource source);
     void processPayload(const QByteArray &payload);
     void setMaxBufferSize(const int maxBufferSize);
     void setStartSequence(const QString &sequence);
     void setFinishSequence(const QString &sequence);
     void setSeparatorSequence(const QString &sequence);
     void setWatchdogInterval(const int interval = 15);
+    void setDataSource(const IO::Manager::DataSource source);
 
 private slots:
     void readFrames();

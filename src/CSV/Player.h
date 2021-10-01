@@ -33,6 +33,14 @@
 
 namespace CSV
 {
+/**
+ * @brief The Player class
+ *
+ * The CSV player class allows users to select a CSV file and "re-play" it
+ * with Serial Studio. To do this, the user must specify an appropiate JSON
+ * project file to generate the equivalent frames that where received when
+ * the CSV file was generated.
+ */
 class Player : public QObject
 {
     // clang-format off

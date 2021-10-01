@@ -90,13 +90,15 @@ void ThemeManager::setTheme(const int id)
     m_settings.setValue("themeId", m_themeId);
 
     // Ask user to quit application
-    auto resp
-        = Utilities::showMessageBox(tr("The theme change will take effect after restart"),
-                                    tr("Do you want to restart %1 now?").arg(APP_NAME),
-                                    APP_NAME, QMessageBox::Yes | QMessageBox::No);
+    // clang-format off
+    auto ans = Utilities::showMessageBox(
+                tr("The theme change will take effect after restart"),
+                tr("Do you want to restart %1 now?").arg(APP_NAME), APP_NAME,
+                QMessageBox::Yes | QMessageBox::No);
+    // clang-format on
 
     // Restart application
-    if (resp == QMessageBox::Yes)
+    if (ans == QMessageBox::Yes)
     {
         qApp->quit();
         QProcess::startDetached(qApp->arguments()[0], qApp->arguments());

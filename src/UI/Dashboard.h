@@ -163,7 +163,7 @@ public:
     Q_INVOKABLE int relativeIndex(const int globalIndex) const;
     Q_INVOKABLE bool widgetVisible(const int globalIndex) const;
     Q_INVOKABLE QString widgetIcon(const int globalIndex) const;
-    Q_INVOKABLE WidgetType widgetType(const int globalIndex) const;
+    Q_INVOKABLE UI::Dashboard::WidgetType widgetType(const int globalIndex) const;
 
     Q_INVOKABLE bool barVisible(const int index) const;
     Q_INVOKABLE bool mapVisible(const int index) const;

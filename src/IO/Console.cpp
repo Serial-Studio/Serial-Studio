@@ -425,15 +425,6 @@ void Console::print(const QString &fontFamily)
 }
 
 /**
- * Changes the data mode for user commands. See @c dataMode() for more information.
- */
-void Console::setDataMode(const DataMode mode)
-{
-    m_dataMode = mode;
-    emit dataModeChanged();
-}
-
-/**
  * Enables/disables displaying a timestamp of each received data block.
  */
 void Console::setShowTimestamp(const bool enabled)
@@ -458,10 +449,19 @@ void Console::setAutoscroll(const bool enabled)
 }
 
 /**
+ * Changes the data mode for user commands. See @c dataMode() for more information.
+ */
+void Console::setDataMode(const IO::Console::DataMode mode)
+{
+    m_dataMode = mode;
+    emit dataModeChanged();
+}
+
+/**
  * Changes line ending mode for sent user commands. See @c lineEnding() for more
  * information.
  */
-void Console::setLineEnding(const LineEnding mode)
+void Console::setLineEnding(const IO::Console::LineEnding mode)
 {
     m_lineEnding = mode;
     emit lineEndingChanged();
@@ -470,7 +470,7 @@ void Console::setLineEnding(const LineEnding mode)
 /**
  * Changes the display mode of the console. See @c displayMode() for more information.
  */
-void Console::setDisplayMode(const DisplayMode mode)
+void Console::setDisplayMode(const IO::Console::DisplayMode mode)
 {
     m_displayMode = mode;
     emit displayModeChanged();
@@ -504,7 +504,7 @@ void Console::append(const QString &string, const bool addTimestamp)
     processedString.reserve(data.length() + timestamp.length());
 
     // Create list with lines (keep separators)
-    QStringList tokens;
+    QVector<QString> tokens;
     QString currentToken;
     for (int i = 0; i < data.length(); ++i)
     {

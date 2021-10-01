@@ -106,7 +106,7 @@ class Terminal : public QQuickPaintedItem
     Q_PROPERTY(QPalette palette
                READ palette
                WRITE setPalette
-               NOTIFY paletteChanged)
+               NOTIFY colorPaletteChanged)
     Q_PROPERTY(int maximumBlockCount
                READ maximumBlockCount
                WRITE setMaximumBlockCount
@@ -130,9 +130,9 @@ class Terminal : public QQuickPaintedItem
 signals:
     void textChanged();
     void fontChanged();
-    void paletteChanged();
     void readOnlyChanged();
     void autoscrollChanged();
+    void colorPaletteChanged();
     void wordWrapModeChanged();
     void copyAvailableChanged();
     void widgetEnabledChanged();

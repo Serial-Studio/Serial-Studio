@@ -36,6 +36,11 @@ namespace IO
 {
 namespace DataSources
 {
+/**
+ * @brief The Network class
+ *
+ * Serial Studio "driver" class to interact with serial port devices.
+ */
 class Serial : public QObject
 {
     // clang-format off

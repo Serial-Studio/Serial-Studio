@@ -33,6 +33,26 @@
 
 namespace JSON
 {
+/**
+ * @brief The Frame class
+ *
+ * The frame class represents a complete frame, including the groups & datasets
+ * that compose it. This class allows Serial Studio to build the user interface
+ * dinamically from the received data.
+ *
+ * The process of building a frame and representing it in Serial Studio is:
+ * 1) Physical device sends data
+ * 2) I/O driver receives data
+ * 3) I/O manager processes the data and separates the frames
+ * 4) JSON generator creates a JSON file with the data contained in each frame.
+ * 5) UI dashboard class receives the JSON file.
+ * 6) TimerEvents class notifies the UI dashboard that the user interface should
+ *    be re-generated.
+ * 7) UI dashboard feeds JSON data to this class.
+ * 8) This class creates a model of the JSON data with the values of the latest
+ *    frame.
+ * 9) UI dashboard updates the widgets with the C++ model provided by this class.
+ */
 class Frame
 {
 public:
@@ -44,7 +64,7 @@ public:
     int groupCount() const;
     QVector<Group *> groups() const;
     bool read(const QJsonObject &object);
-    Q_INVOKABLE Group *getGroup(const int index);
+    Q_INVOKABLE JSON::Group *getGroup(const int index);
 
     inline bool isValid() const { return !title().isEmpty() && groupCount() > 0; }
 

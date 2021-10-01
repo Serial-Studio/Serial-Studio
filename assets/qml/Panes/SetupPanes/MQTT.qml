@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
 Control {
     id: root
@@ -46,12 +46,12 @@ Control {
         target: Cpp_MQTT_Client
         
         function onHostChanged() {
-            if (_host.text != "")
+            if (_host.text.length > 0)
                 _host.text = Cpp_MQTT_Client.host
         }
         
         function onPortChanged() {
-        	if (_port.text != "")
+            if (_port.text.length > 0)
         		_port.text = Cpp_MQTT_Client.port
         }
     }
@@ -116,10 +116,10 @@ Control {
                 placeholderText: Cpp_MQTT_Client.defaultHost
                 Component.onCompleted: text = Cpp_MQTT_Client.host
                 onTextChanged: {
-                    if (Cpp_MQTT_Client.host !== text && text != "")
+                    if (Cpp_MQTT_Client.host !== text && text.length > 0)
                         Cpp_MQTT_Client.host = text
 
-                    if (text == "")
+                    if (text.length === 0)
                         Cpp_MQTT_Client.host = Cpp_MQTT_Client.defaultHost
                 }
 
@@ -142,10 +142,10 @@ Control {
                 placeholderText: Cpp_MQTT_Client.defaultPort
                 Component.onCompleted: text = Cpp_MQTT_Client.port
                 onTextChanged: {
-                    if (Cpp_MQTT_Client.port !== text && text != "")
+                    if (Cpp_MQTT_Client.port !== text && text.length > 0)
                         Cpp_MQTT_Client.port = text
 
-                    if (text == "")
+                    if (text.length === 0)
                         Cpp_MQTT_Client.port = Cpp_MQTT_Client.defaultPort
                 }
 
@@ -268,13 +268,14 @@ Control {
             icon.height: 24
             font.bold: true
             Layout.fillWidth: true
-            icon.color: palette.buttonText
             checked: Cpp_MQTT_Client.isConnectedToHost
             onClicked: Cpp_MQTT_Client.toggleConnection()
             text: (checked ? qsTr("Disconnect") :
                              qsTr("Connect")) + "  "
             icon.source: checked ? "qrc:/icons/disconnect.svg" :
                                    "qrc:/icons/connect.svg"
+            icon.color: checked ? Cpp_ThemeManager.connectButtonChecked :
+                                  Cpp_ThemeManager.connectButtonUnchecked
             palette.buttonText: checked ? Cpp_ThemeManager.connectButtonChecked :
                                           Cpp_ThemeManager.connectButtonUnchecked
         }

@@ -50,6 +50,8 @@ Generator::Generator()
     connect(cp, SIGNAL(openChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(deviceChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(frameReceived(QByteArray)), this, SLOT(readData(QByteArray)));
+
+    readSettings();
 }
 
 /**
@@ -193,7 +195,7 @@ void Generator::loadJsonMap(const QString &path)
  * @c kAutomatic serial data contains the JSON data frame, good for simple
  *               applications or for prototyping.
  */
-void Generator::setOperationMode(const OperationMode mode)
+void Generator::setOperationMode(const JSON::Generator::OperationMode mode)
 {
     m_opMode = mode;
     emit operationModeChanged();

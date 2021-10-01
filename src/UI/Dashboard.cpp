@@ -418,7 +418,7 @@ QString Dashboard::widgetIcon(const int globalIndex) const
  * We need to be careful to sincronize the order of the widgets in order to allow
  * the global-index system to work correctly.
  */
-Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
+UI::Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
 {
     //
     // Warning: relative widget index should be calculated using the same order as defined

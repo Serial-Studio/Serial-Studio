@@ -38,6 +38,28 @@
 
 namespace JSON
 {
+/**
+ * @brief The Generator class
+ *
+ * The JSON generator class receives raw frame data from the I/O manager
+ * class and generates a JSON file that represents the project title,
+ * the groups that compose the project and the datasets that compose each
+ * group.
+ *
+ * As described in the documentation of the @c Frame class, the process
+ * of receiving data and generating the Serial Studio user interface is:
+ * 1) Physical device sends data
+ * 2) I/O driver receives data
+ * 3) I/O manager processes the data and separates the frames
+ * 4) JSON generator creates a JSON file with the data contained in each frame.
+ * 5) UI dashboard class receives the JSON file.
+ * 6) TimerEvents class notifies the UI dashboard that the user interface should
+ *    be re-generated.
+ * 7) UI dashboard feeds JSON data to a @c Frame object.
+ * 8) The @c Frame object creates a model of the JSON data with the values of
+ *    the latest received frame.
+ * 9) UI dashboard updates the widgets with the C++ model provided by this class.
+ */
 class Generator : public QObject
 {
     // clang-format off
@@ -65,7 +87,7 @@ public:
         kManual = 0x00,
         kAutomatic = 0x01,
     };
-    Q_ENUMS(OperationMode)
+    Q_ENUM(OperationMode)
 
 public:
     static Generator *getInstance();
@@ -78,7 +100,7 @@ public:
 public slots:
     void loadJsonMap();
     void loadJsonMap(const QString &path);
-    void setOperationMode(const OperationMode mode);
+    void setOperationMode(const JSON::Generator::OperationMode mode);
 
 private:
     Generator();

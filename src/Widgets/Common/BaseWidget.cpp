@@ -55,11 +55,14 @@ BaseWidget::BaseWidget()
 void BaseWidget::setValue(const QString &label)
 {
     // Change label text
-    if (m_label.text() != label) {
+    if (m_label.text() != label)
+    {
         m_label.setText(label);
 
         // Resize label font (so it fits inside the box)
-        while (QFontMetrics(m_label.font()).horizontalAdvance(label) + 12 > m_label.width()) {
+        while (QFontMetrics(m_label.font()).horizontalAdvance(label) + 12
+               > m_label.width())
+        {
             QFont font = m_label.font();
             font.setPixelSize(font.pixelSize() - 1);
             m_label.setFont(font);
@@ -99,7 +102,9 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
 
     // Set label font (so it fits inside the box)
     m_label.setFont(labelFont);
-    while (QFontMetrics(m_label.font()).horizontalAdvance(m_label.text()) + 12 > m_label.width()) {
+    while (QFontMetrics(m_label.font()).horizontalAdvance(m_label.text()) + 12
+           > m_label.width())
+    {
         QFont font = m_label.font();
         font.setPixelSize(font.pixelSize() - 1);
         m_label.setFont(font);

@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
 Control {
     id: root
@@ -42,12 +42,12 @@ Control {
     	target: Cpp_IO_Network
     	
     	function onHostChanged() {
-    		if (_address.text != "")
+            if (_address.text.length > 0)
     			_address.text = Cpp_IO_Network.host
     	}
     	
     	function onPortChanged() {
-    		if (_portText.text != "")
+            if (_portText.text.length > 0)
     			_portText.text = Cpp_IO_Network.port
     	}
     }
@@ -103,10 +103,10 @@ Control {
                 placeholderText: Cpp_IO_Network.defaultHost
                 Component.onCompleted: text = Cpp_IO_Network.host
                 onTextChanged: {
-                    if (Cpp_IO_Network.host !== text && text != "")
+                    if (Cpp_IO_Network.host !== text && text.length > 0)
                         Cpp_IO_Network.host = text
                         
-                    if (text == "")
+                    if (text.length === 0)
                     	Cpp_IO_Network.host = Cpp_IO_Network.defaultHost
                 }
 
@@ -129,10 +129,10 @@ Control {
                 placeholderText: Cpp_IO_Network.defaultPort
                 Component.onCompleted: text = Cpp_IO_Network.port
                 onTextChanged: {
-                    if (Cpp_IO_Network.port !== text && text != "")
+                    if (Cpp_IO_Network.port !== text && text.length > 0)
                         Cpp_IO_Network.port = text
                         
-                    if (text == "")
+                    if (text.length === 0)
                     	Cpp_IO_Network.port = Cpp_IO_Network.defaultPort
                 }
 

@@ -33,6 +33,17 @@
 
 namespace CSV
 {
+/**
+ * @brief The Export class
+ *
+ * The CSV export class receives data from the @c JSON::Generator class and
+ * exports the received frames into a CSV file selected by the user.
+ *
+ * CSV-data is generated periodically each time the @c Misc::TimerEvents
+ * low-frequency timer expires (e.g. every 1 second). The idea behind this
+ * is to allow exporting data, but avoid freezing the application when serial
+ * data is received continuously.
+ */
 class Export : public QObject
 {
     // clang-format off

@@ -20,24 +20,13 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtGraphicalEffects 1.0
-
-DropShadow {
-    radius: 8.0
-    samples: 17
-    verticalOffset: 3
-    color: "#80000000"
-    horizontalOffset: 0
-}
-
-
-/* For Qt6
+import QtQuick
 import Qt5Compat.GraphicalEffects
 
 DropShadow {
     radius: 8.0
     verticalOffset: 3
     color: "#80000000"
-    horizontalOffset: 0
-}*/
+    horizontalOffset: 3
+    transparentBorder: true
+}

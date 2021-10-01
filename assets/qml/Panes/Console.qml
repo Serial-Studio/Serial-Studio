@@ -20,12 +20,12 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import Qt.labs.settings
 
-import SerialStudio 1.0
-import Qt.labs.settings 1.0
+import SerialStudio
 
 import "../Widgets" as Widgets
 
@@ -254,9 +254,9 @@ Item {
                     //
                     // Validate hex strings
                     //
-                    validator: RegExpValidator {
-                        regExp: hexCheckbox.checked ? /^(?:([a-f0-9]{2})\s*)+$/i : /[\s\S]*/
-                    }
+                    //validator: RegExpValidator {
+                    //    regExp: hexCheckbox.checked ? /^(?:([a-f0-9]{2})\s*)+$/i : /[\s\S]*/
+                    //}
 
                     //
                     // Send data on <enter>
