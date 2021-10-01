@@ -55,35 +55,18 @@ This project is released under the MIT license, for more information, check the 
 
 ### Requirements
 
-The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with Qt 5.15.2.
+The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with Qt 6.2.0. You will need to install the `qtserialport` module while installing Qt.
 
 On GNU/Linux systems, you will also need to install `libgl1-mesa-dev` in order to compile the application.
 
 Full list of used Qt modules:
 
-- Qt SQL
+- Qt SVG
 - Qt Quick
 - Qt Widgets
 - Qt Serial Port
 - Qt Quick Controls
 - Qt Quick Controls 2
-- Qt Graphical Effects
-
-#### Qt 6 support
-
-Serial Studio now compiles with Qt 6.2.0, however, the GitHub actions environment [does not have proper support for Qt 6](https://github.com/jurplel/install-qt-action/issues/95) yet.
-
-To compile with Qt 6, clone the Serial Studio repository and change the branch of the [`qtcsv`](https://github.com/iamantony/qtcsv) library.
-
-```bash
-git clone --recursive https://github.com/Serial-Studio/Serial-Studio
-cd libs/qtcsv
-git checkout master
-```
-
-Now, modify [`Shadows.qml`](assets/qml/Widgets/Shadow.qml) and proceed to compiling the application.
-
-Also, be sure to select the `qtserialport` module while installing Qt6 on your machine.
 
 ### Cloning
 
