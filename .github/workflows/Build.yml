@@ -55,7 +55,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport, core5compat
+        modules: qtserialport, qtcore5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -112,13 +112,13 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        key: ${{runner.os}}-qt-${{env.QT_VERSION}}
+        key: ${{runner.os}}-qtcache-${{env.QT_VERSION}}
 
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qtcache-action@v2
+      uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport, core5compat
+        modules: qtserialport, qtcore5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -171,7 +171,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport, core5compat
+        modules: qtserialport, qtcore5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
