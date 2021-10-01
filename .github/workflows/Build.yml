@@ -36,7 +36,6 @@ jobs:
 
   # GNU/Linux build (we run on Ubuntu 16.04 to generate AppImage)
   build-linux:
-    if: ${{ false }}  # disable for now
     runs-on: ubuntu-18.04
     name: '🐧 Ubuntu 18.04'
     steps:
@@ -51,12 +50,14 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        key: ${{runner.os}}-QtCache-5.12.2
+        key: ${{runner.os}}-qt-${{env.QT_VERSION}}
 
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
+        modules: qtserialport
+        aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     # Install additional dependencies, stolen from:
@@ -105,7 +106,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        key: ${{runner.os}}-QtCache-${{env.QT_VERSION}}
+        key: ${{runner.os}}-qt-${{env.QT_VERSION}}
 
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
@@ -113,6 +114,7 @@ jobs:
         version: ${{env.QT_VERSION}}
         modules: qtserialport
         aqtversion: '==2.0.0'
+        cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '🚧 Compile application'
       run: |
@@ -137,7 +139,6 @@ jobs:
 
   # Windows build
   build-windows:
-    if: ${{ false }}  # disable for now
     runs-on: windows-latest
     name: '🧊 Windows'
     steps:
@@ -158,12 +159,14 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        key: ${{runner.os}}-QtCache-5.12.2
+        key: ${{runner.os}}-qt-${{env.QT_VERSION}}
 
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
+        modules: qtserialport
+        aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '⚙️ Install NSIS'
@@ -204,7 +207,6 @@ jobs:
 
   # Windows MSYS2 build
   msys2-makepkg:
-    if: ${{ false }}  # disable for now
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -256,7 +258,6 @@ jobs:
 
   # Test Windows MSYS2 packages
   msys2-test:
-    if: ${{ false }}  # disable for now
     needs: msys2-makepkg
     runs-on: windows-latest
     strategy:
