@@ -38,12 +38,14 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        key: ${{runner.os}}-QtCache
+        key: ${{runner.os}}-qt-6.2.0
 
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
-        modules: qtcharts
+        version: 6.2.0
+        modules: qtserialport
+        aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
         
     - name: '⚙️ Install dependencies'
