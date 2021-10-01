@@ -222,8 +222,8 @@ Item {
                             textEdit.forceActiveFocus()
                     }
 
-                    onClicked: {
-                        if (mouse.button == Qt.RightButton) {
+                    onClicked: (mouse) => {
+                        if (mouse.button === Qt.RightButton) {
                             contextMenu.popup()
                             mouse.accepted = true
                         }

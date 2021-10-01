@@ -91,14 +91,14 @@ MenuBar {
         MenuSeparator {}
 
         DecentMenuItem {
-            sequence: StandardKey.Print
+            sequence: "ctrl+p"
             text: qsTr("Print") + "..."
             enabled: Cpp_IO_Console.saveAvailable
             onTriggered: Cpp_IO_Console.print(app.monoFont)
         }
 
         DecentMenuItem {
-            sequence: StandardKey.Save
+            sequence: "ctrl+s"
             onClicked: Cpp_IO_Console.save()
             enabled: Cpp_IO_Console.saveAvailable
             text: qsTr("Export console output") + "..."
@@ -109,7 +109,7 @@ MenuBar {
         DecentMenuItem {
             text: qsTr("Quit")
             onTriggered: Qt.quit()
-            sequence: StandardKey.Quit
+            sequence: "ctrl+q"
         }
     }
 
@@ -121,18 +121,18 @@ MenuBar {
 
         DecentMenuItem {
             text: qsTr("Copy")
-            sequence: StandardKey.Copy
+            sequence: "ctrl+c"
             onTriggered: mw.consoleCopy()
         }
 
         DecentMenuItem {
-            sequence: StandardKey.SelectAll
+            sequence: "ctrl+a"
             text: qsTr("Select all") + "..."
             onTriggered: mw.consoleSelectAll()
         }
 
         DecentMenuItem {
-            sequence: StandardKey.Delete
+            sequence: "ctrl+d"
             onTriggered: mw.consoleClear()
             text: qsTr("Clear console output")
         }
@@ -211,7 +211,7 @@ MenuBar {
         MenuSeparator {}
 
         DecentMenuItem {
-            sequence: StandardKey.FullScreen
+            sequence: "f11"
             onTriggered: mw.toggleFullscreen()
             text: mw.fullScreen ? qsTr("Exit full screen") :
                                    qsTr("Enter full screen")
@@ -350,7 +350,7 @@ MenuBar {
         }
 
         DecentMenuItem {
-            sequence: StandardKey.HelpContents
+            sequence: "f1"
             text: qsTr("Documentation/wiki") + "..."
             onTriggered: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
         }

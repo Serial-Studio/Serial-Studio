@@ -42,7 +42,7 @@ MenuItem {
         opacity: root.enabled ? 1 : 0.5
 
         Item {
-            width: root.indicatorVisible ? root.indicator.width + 4 : 0
+            width: root.indicatorVisible ? 18 : 0
         }
 
         Label {
