@@ -119,19 +119,19 @@ macx* {
     CONFIG += sdk_no_version_check                       # Avoid warnings with Big Sur
 }
 
-target.path = $$PREFIX/bin
-
 linux:!android {
+    target.path = $$PREFIX/bin
     icon.path = $$PREFIX/share/pixmaps                   # icon instalation path
     desktop.path = $$PREFIX/share/applications           # *.desktop instalation path
     icon.files += deploy/linux/serial-studio.svg         # Add application icon
     desktop.files += deploy/linux/serial-studio.desktop  # Add *.desktop file
-    libc6-copyright.files += deploy/linux/copyright      # Libc6 file for linuxdeployqt
-    libc6-copyright.path = $$PREFIX/share/doc/libc6      # libc6 copyright path
-    INSTALLS += target desktop icon libc6-copyright      # make install targets
+    copyright.files += deploy/linux/copyright            # Libc6 file for linuxdeployqt
+    copyright.path = $$PREFIX/share/doc/libc6            # libc6 copyright path
+    INSTALLS += target copyright desktop icon            # make install targets
 }
 
 mingw {
+    target.path = $$PREFIX/bin
     license.path = $$PREFIX/share/licenses/$$TARGET      # Set license install path
     license.files += LICENSE.md                          # Add LICENSE.md file
     INSTALLS += target license                           # Install target+licence (MSYS2)
