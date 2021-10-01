@@ -26,6 +26,7 @@ env:
   QMAKE_PROJECT: "Serial-Studio.pro"
   QML_DIR_NIX: "assets/qml"
   QML_DIR_WIN: "assets\\qml"
+  PUBLISHER: "Alex Spataru"
   QT_VERSION: 6.2.0
 
 #--------------------------------------------------------------------------------
@@ -76,8 +77,8 @@ jobs:
 
     - name: '📦 Create CQtDeployer Installer'
       run: |
-          cqtdeployer -bin ${{env.UNIXNAME}} -icon deploy/linux/${{env.UNIXNAME}}.png -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo deploy/linux/${{env.UNIXNAME}}.png -name "${{env.APPLICATION}}" -deployVersion ${{env.VERSION}}
-          cqtdeployer -bin ${{env.UNIXNAME}} -icon deploy/linux/${{env.UNIXNAME}}.png -qmlDir "${{env.QML_DIR_NIX}}" deb -name "${{env.UNIXNAME}}" -deployVersion ${{env.VERSION}}
+          cqtdeployer -bin ${{env.UNIXNAME}} -icon deploy/linux/${{env.UNIXNAME}}.png -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo deploy/linux/${{env.UNIXNAME}}.png -name "${{env.APPLICATION}}" -deployVersion ${{env.VERSION}} -description "Multi-purpose serial data visualization software" -publisher "${{env.PUBLISHER}}"
+          cqtdeployer -bin ${{env.UNIXNAME}} -icon deploy/linux/${{env.UNIXNAME}}.png -qmlDir "${{env.QML_DIR_NIX}}" deb -name "${{env.UNIXNAME}}" -deployVersion ${{env.VERSION}} -description "Multi-purpose serial data visualization software" -publisher "${{env.PUBLISHER}}"
           cd DistributionKit
           mv "Installer${{env.APPLICATION}}.run" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
           mv "${{env.UNIXNAME}}.deb" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb"

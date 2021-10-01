@@ -21,7 +21,7 @@
  */
 
 import QtQuick
-/*import Qt5Compat.GraphicalEffects
+import Qt5Compat.GraphicalEffects
 
 DropShadow {
     radius: 8.0
@@ -29,8 +29,4 @@ DropShadow {
     color: "#80000000"
     horizontalOffset: 3
     transparentBorder: true
-}*/
-
-Item {
-    property var source
 }
