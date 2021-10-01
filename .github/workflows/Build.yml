@@ -63,24 +63,22 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev
+        
+    - name: '⚙️ Install CQtDeployer'
+      run: |
+        sudo snap install cqtdeployer
 
     - name: '🚧 Compile application'
       run: |
-          qmake ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+          qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
           make -j8
 
-    - name: '📦 Create AppImage'
+    - name: '📦 Create Installer'
       run: |
-        make INSTALL_ROOT=appdir install
+          cqtdeployer -bin serial-studio qif
+          ls
 
-        wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
-        chmod a+x linuxdeployqt
-        ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -unsupported-bundle-everything -extra-plugins=imageformats/libqsvg.so -qmldir="${{env.QML_DIR_NIX}}"
-
-        # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
-        mv *.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-
-    - name: '📤 Upload artifact: AppImage'
+    - name: '📤 Upload artifact: Installer'
       uses: actions/upload-artifact@v2
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
@@ -174,7 +172,7 @@ jobs:
 
     - name: '🚧 Compile application'
       run: |
-        qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
+        qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release
         nmake
 
     # Copy Qt DLLs, compiler runtime & application icon
