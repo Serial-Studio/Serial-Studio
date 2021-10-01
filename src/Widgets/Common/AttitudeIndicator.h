@@ -20,35 +20,38 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_GYROSCOPE_H
-#define WIDGETS_GYROSCOPE_H
+#ifndef WIDGETS_ATTITUDE_INDICATOR_H
+#define WIDGETS_ATTITUDE_INDICATOR_H
 
-#include <QTimer>
+#include <QwtDial>
+#include <QwtDialNeedle>
 
-#include "Common/BaseWidget.h"
-#include "Common/AttitudeIndicator.h"
+//
+// Based on https://github.com/opencor/qwt/blob/master/examples/dials/AttitudeIndicator.h
+//
 
 namespace Widgets
 {
-class Gyroscope : public BaseWidget
+class AttitudeIndicator : public QwtDial
 {
-    Q_OBJECT
-
 public:
-    Gyroscope(const int index = -1);
+    AttitudeIndicator(QWidget *parent = nullptr);
 
-private slots:
-    void updateData();
-    void updateLabel();
+    double angle() const;
+    double gradient() const;
+
+public slots:
+    void setAngle(const double &angle);
+    void setGradient(const double &gradient);
+
+protected:
+    void drawScale(QPainter *painter, const QPointF &center,
+                   double radius) const QWT_OVERRIDE;
+    void drawScaleContents(QPainter *painter, const QPointF &center,
+                           double radius) const QWT_OVERRIDE;
 
 private:
-    int m_index;
-    int m_displayNum;
-    QString m_yaw;
-    QString m_roll;
-    QString m_pitch;
-    QTimer m_timer;
-    AttitudeIndicator m_gauge;
+    double m_gradient;
 };
 }
 

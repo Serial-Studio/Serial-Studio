@@ -84,7 +84,7 @@ JSON::Dataset *Dashboard::getPlot(const int index)        { return getDatasetWid
 JSON::Dataset *Dashboard::getGauge(const int index)       { return getDatasetWidget(m_gaugeWidgets, index);       }
 JSON::Group *Dashboard::getGyroscope(const int index)     { return getGroupWidget(m_gyroscopeWidgets, index);     }
 JSON::Dataset *Dashboard::getCompass(const int index)     { return getDatasetWidget(m_compassWidgets, index);     }
-JSON::Group *Dashboard::getMultiplot(const int index) { return getGroupWidget(m_accelerometerWidgets, index); }
+JSON::Group *Dashboard::getMultiplot(const int index)     { return getGroupWidget(m_multiPlotWidgets, index);     }
 JSON::Group *Dashboard::getAccelerometer(const int index) { return getGroupWidget(m_accelerometerWidgets, index); }
 JSON::Dataset *Dashboard::getThermometer(const int index) { return getDatasetWidget(m_thermometerWidgets, index); }
 // clang-format on
@@ -158,7 +158,7 @@ int Dashboard::gaugeCount() const         { return m_gaugeWidgets.count();      
 int Dashboard::groupCount() const         { return m_latestFrame.groupCount();     }
 int Dashboard::compassCount() const       { return m_compassWidgets.count();       }
 int Dashboard::gyroscopeCount() const     { return m_gyroscopeWidgets.count();     }
-int Dashboard::multiPlotCount() const     { return m_gyroscopeWidgets.count();     }
+int Dashboard::multiPlotCount() const     { return m_multiPlotWidgets.count();     }
 int Dashboard::thermometerCount() const   { return m_thermometerWidgets.count();   }
 int Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(); }
 // clang-format on
@@ -375,7 +375,7 @@ QString Dashboard::widgetIcon(const int globalIndex) const
             return "qrc:/icons/compass.svg";
             break;
         case WidgetType::Gyroscope:
-            return "qrc:/icons/gyroscope.svg";
+            return "qrc:/icons/gyro.svg";
             break;
         case WidgetType::Accelerometer:
             return "qrc:/icons/accelerometer.svg";

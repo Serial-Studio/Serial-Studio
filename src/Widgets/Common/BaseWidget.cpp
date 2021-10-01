@@ -60,7 +60,7 @@ void BaseWidget::setValue(const QString &label)
         m_label.setText(label);
 
         // Resize label font (so it fits inside the box)
-        while (QFontMetrics(m_label.font()).horizontalAdvance(label) + 12
+        while (QFontMetrics(m_label.font()).horizontalAdvance(label) + 24
                > m_label.width())
         {
             QFont font = m_label.font();

@@ -21,3 +21,107 @@
  */
 
 #include "Gyroscope.h"
+#include "UI/Dashboard.h"
+#include "Misc/ThemeManager.h"
+
+#include <QResizeEvent>
+
+using namespace Widgets;
+
+/**
+ * Constructor function, configures widget style & signal/slot connections.
+ */
+Gyroscope::Gyroscope(const int index)
+    : m_index(index)
+    , m_displayNum(0)
+{
+    // Get pointers to Serial Studio modules
+    auto dash = UI::Dashboard::getInstance();
+    auto theme = Misc::ThemeManager::getInstance();
+
+    // Invalid index, abort initialization
+    if (m_index < 0 || m_index >= dash->gyroscopeCount())
+        return;
+
+    // Set gauge palette
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, theme->base());
+    palette.setColor(QPalette::Text, theme->widgetIndicator1());
+    m_gauge.setPalette(palette);
+
+    // Set widget pointer
+    setWidget(&m_gauge);
+
+    // Configure timer
+    m_timer.setInterval(500);
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateLabel()));
+    m_timer.start();
+
+    // React to dashboard events
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
+}
+
+/**
+ * Checks if the widget is enabled, if so, the widget shall be updated
+ * to display the latest data frame.
+ *
+ * If the widget is disabled (e.g. the user hides it, or the external
+ * window is hidden), then the widget shall ignore the update request.
+ */
+void Gyroscope::updateData()
+{
+    // Widget not enabled, do nothing
+    if (!isEnabled())
+        return;
+
+    // Update gyroscope values
+    auto gyro = UI::Dashboard::getInstance()->getGyroscope(m_index);
+    if (gyro)
+    {
+        if (gyro->datasetCount() != 3)
+            return;
+
+        double pitch = 0;
+        double roll = 0;
+        double yaw = 0;
+
+        JSON::Dataset *dataset;
+        for (int i = 0; i < 3; ++i)
+        {
+            dataset = gyro->getDataset(i);
+            if (dataset->widget() == "pitch")
+                pitch = dataset->value().toDouble();
+            if (dataset->widget() == "roll")
+                roll = dataset->value().toDouble();
+            if (dataset->widget() == "yaw")
+                yaw = dataset->value().toDouble();
+        }
+
+        m_pitch = QString::number(qAbs(pitch), 'f', 2);
+        m_roll = QString::number(qAbs(roll), 'f', 2);
+        m_yaw = QString::number(qAbs(yaw), 'f', 2);
+
+        m_gauge.setValue(pitch);
+        m_gauge.setGradient(roll / 360.0);
+    }
+}
+
+void Gyroscope::updateLabel()
+{
+    switch (m_displayNum)
+    {
+        case 0:
+            setValue(QString("%1° PITCH").arg(m_pitch));
+            break;
+        case 1:
+            setValue(QString("%1° ROLL").arg(m_roll));
+            break;
+        case 2:
+            setValue(QString("%1° YAW").arg(m_yaw));
+            break;
+    }
+
+    ++m_displayNum;
+    if (m_displayNum > 2)
+        m_displayNum = 0;
+}

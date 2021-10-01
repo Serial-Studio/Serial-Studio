@@ -191,7 +191,11 @@ QString WidgetLoader::widgetIcon() const
  */
 QString WidgetLoader::widgetTitle() const
 {
-    return UI::Dashboard::getInstance()->widgetTitles().at(widgetIndex());
+    auto titles = UI::Dashboard::getInstance()->widgetTitles();
+    if (widgetIndex() < titles.count())
+        return titles.at(widgetIndex());
+
+    return tr("Invalid");
 }
 
 /**
@@ -264,7 +268,8 @@ void WidgetLoader::setWidgetIndex(const int index)
                 m_window.setWidget(new Compass(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gyroscope:
-                m_widget = new QPushButton("Gyroscope");
+                m_widget = new Gyroscope(relativeIndex());
+                m_window.setWidget(new Gyroscope(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Accelerometer:
                 m_widget = new Accelerometer(relativeIndex());

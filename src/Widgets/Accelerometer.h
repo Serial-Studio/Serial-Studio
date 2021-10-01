@@ -36,7 +36,7 @@ public:
     Accelerometer(const int index = -1);
 
 private slots:
-    void update();
+    void updateData();
 
 private:
     int m_index;

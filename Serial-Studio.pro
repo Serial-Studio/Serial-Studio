@@ -123,7 +123,7 @@ linux:!android {
     target.path = $$PREFIX/bin
     icon.path = $$PREFIX/share/pixmaps                   # icon instalation path
     desktop.path = $$PREFIX/share/applications           # *.desktop instalation path
-    icon.files += deploy/linux/serial-studio.svg         # Add application icon
+    icon.files += deploy/linux/serial-studio.png         # Add application icon
     desktop.files += deploy/linux/serial-studio.desktop  # Add *.desktop file
     copyright.files += deploy/linux/copyright            # Libc6 file for linuxdeployqt
     copyright.path = $$PREFIX/share/doc/libc6            # libc6 copyright path
@@ -171,6 +171,7 @@ HEADERS += \
     src/Widgets/Accelerometer.h \
     src/Widgets/Bar.h \
     src/Widgets/Common/AnalogGauge.h \
+    src/Widgets/Common/AttitudeIndicator.h \
     src/Widgets/Common/BaseWidget.h \
     src/Widgets/Common/ExternalWindow.h \
     src/Widgets/Compass.h \
@@ -209,6 +210,7 @@ SOURCES += \
     src/Widgets/Accelerometer.cpp \
     src/Widgets/Bar.cpp \
     src/Widgets/Common/AnalogGauge.cpp \
+    src/Widgets/Common/AttitudeIndicator.cpp \
     src/Widgets/Common/BaseWidget.cpp \
     src/Widgets/Common/ExternalWindow.cpp \
     src/Widgets/Compass.cpp \

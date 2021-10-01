@@ -70,7 +70,7 @@ Accelerometer::Accelerometer(const int index)
     setWidget(&m_gauge);
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(update()));
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
 }
 
 /**
@@ -80,7 +80,7 @@ Accelerometer::Accelerometer(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Accelerometer::update()
+void Accelerometer::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())

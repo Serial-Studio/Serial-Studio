@@ -904,12 +904,12 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
             z->m_units = "°";
 
             // Set dataset properties
-            x->m_widget = "x";
-            y->m_widget = "y";
-            z->m_widget = "z";
-            x->m_title = tr("Gyro %1").arg("X");
-            y->m_title = tr("Gyro %1").arg("Y");
-            z->m_title = tr("Gyro %1").arg("Z");
+            x->m_widget = "roll";
+            y->m_widget = "pitch";
+            z->m_widget = "yaw";
+            x->m_title = tr("Gyro %1").arg("Roll");
+            y->m_title = tr("Gyro %1").arg("Pitch");
+            z->m_title = tr("Gyro %1").arg("Yaw");
 
             // Add datasets to group
             grp->m_datasets.append(x);

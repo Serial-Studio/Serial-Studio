@@ -88,7 +88,7 @@ void Gauge::updateData()
     if (!isEnabled())
         return;
 
-    // Update compass heading
+    // Update gauge value
     auto dataset = UI::Dashboard::getInstance()->getGauge(m_index);
     if (dataset)
     {
