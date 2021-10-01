@@ -77,7 +77,7 @@ jobs:
       run: |
           cqtdeployer -bin serial-studio -icon deploy/linux/serial-studio.svg -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo doc/artwork/icon.png
           cd DistributionKit
-          mv "*.run" "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
+          mv "Installerserial-studio.run" "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
 
     - name: '📤 Upload artifact: Installer'
       uses: actions/upload-artifact@v2
