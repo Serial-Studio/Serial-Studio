@@ -46,23 +46,13 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     , m_index(-1)
     , m_widget(nullptr)
     , m_widgetVisible(false)
+    , m_isExternalWindow(false)
 {
     // Set item flags
     setFlag(ItemHasContents, true);
     setFlag(ItemIsFocusScope, true);
     setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
-
-    // Configure main window
-    m_window.setMinimumWidth(640);
-    m_window.setMinimumHeight(480);
-
-    // Set window palette
-    QPalette palette;
-    auto theme = Misc::ThemeManager::getInstance();
-    palette.setColor(QPalette::Base, theme->datasetWindowBackground());
-    palette.setColor(QPalette::Window, theme->datasetWindowBackground());
-    m_window.setPalette(palette);
 
     // Resize widget to fit QML item size
     connect(this, &QQuickPaintedItem::widthChanged, this,
@@ -73,9 +63,6 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     // Automatically update the widget's visibility
     connect(UI::Dashboard::getInstance(), &UI::Dashboard::widgetVisibilityChanged, this,
             &WidgetLoader::updateWidgetVisible);
-
-    // Enable/disable the window widget automatically
-    connect(&m_window, SIGNAL(visibleChanged()), this, SLOT(updateWidgetWindow()));
 }
 
 /**
@@ -198,6 +185,11 @@ QString WidgetLoader::widgetTitle() const
     return tr("Invalid");
 }
 
+bool WidgetLoader::isExternalWindow() const
+{
+    return m_isExternalWindow;
+}
+
 /**
  * Returns the type of the current widget (e.g. group, plot, bar, gauge, etc...)
  */
@@ -206,12 +198,10 @@ UI::Dashboard::WidgetType WidgetLoader::widgetType() const
     return UI::Dashboard::getInstance()->widgetType(widgetIndex());
 }
 
-/**
- * Shows a window with the current widget
- */
-void WidgetLoader::displayWindow()
+void WidgetLoader::setVisible(const bool visible)
 {
-    m_window.showNormal();
+    if (m_widget)
+        m_widget->setEnabled(visible);
 }
 
 /**
@@ -231,20 +221,11 @@ void WidgetLoader::setWidgetIndex(const int index)
             m_widget = nullptr;
         }
 
-        // Delete central widget of window
-        if (m_window.widget())
-            delete m_window.widget();
-
-        // Hide widget window
-        if (m_window.isVisible())
-            m_window.hide();
-
         // Construct new widget
         switch (widgetType())
         {
             case UI::Dashboard::WidgetType::Group:
                 m_widget = new DataGroup(relativeIndex());
-                m_window.setWidget(new DataGroup(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::MultiPlot:
                 m_widget = new QPushButton("Multi-Plot");
@@ -254,26 +235,21 @@ void WidgetLoader::setWidgetIndex(const int index)
                 break;
             case UI::Dashboard::WidgetType::Bar:
                 m_widget = new Bar(relativeIndex());
-                m_window.setWidget(new Bar(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gauge:
                 m_widget = new Gauge(relativeIndex());
-                m_window.setWidget(new Gauge(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Thermometer:
                 m_widget = new QPushButton("Thermometer");
                 break;
             case UI::Dashboard::WidgetType::Compass:
                 m_widget = new Compass(relativeIndex());
-                m_window.setWidget(new Compass(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gyroscope:
                 m_widget = new Gyroscope(relativeIndex());
-                m_window.setWidget(new Gyroscope(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Accelerometer:
                 m_widget = new Accelerometer(relativeIndex());
-                m_window.setWidget(new Accelerometer(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Map:
                 m_widget = new QPushButton("Map");
@@ -281,11 +257,6 @@ void WidgetLoader::setWidgetIndex(const int index)
             default:
                 break;
         }
-
-        // Update window title
-        m_window.setWindowTitle(widgetTitle());
-        if (m_window.widget())
-            m_window.widget()->setEnabled(false);
 
         // Allow widget to receive events from the QML interface
         if (m_widget)
@@ -296,6 +267,12 @@ void WidgetLoader::setWidgetIndex(const int index)
             updateWidgetVisible();
         }
     }
+}
+
+void WidgetLoader::setIsExternalWindow(const bool isWindow)
+{
+    m_isExternalWindow = isWindow;
+    emit isExternalWindowChanged();
 }
 
 /**
@@ -311,16 +288,6 @@ void WidgetLoader::updateWidgetSize()
 }
 
 /**
- * Enables/disables the widget updates of the external window when the window
- * is shown or hidden.
- */
-void WidgetLoader::updateWidgetWindow()
-{
-    if (m_window.widget())
-        m_window.widget()->setEnabled(m_window.isVisible());
-}
-
-/**
  * Updates the visibility status of the current widget (this function is called
  * automatically by the UI::Dashboard class via signals/slots).
  */
@@ -328,15 +295,12 @@ void WidgetLoader::updateWidgetVisible()
 {
     bool visible = UI::Dashboard::getInstance()->widgetVisible(widgetIndex());
 
-    if (widgetVisible() != visible)
+    if (widgetVisible() != visible && !isExternalWindow())
     {
         m_widgetVisible = visible;
 
         if (m_widget)
             m_widget->setEnabled(visible);
-
-        if (m_window.widget())
-            m_window.widget()->setEnabled(visible);
 
         emit widgetVisibleChanged();
     }

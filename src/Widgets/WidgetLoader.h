@@ -30,8 +30,6 @@
 
 #include <UI/Dashboard.h>
 
-#include "Common/ExternalWindow.h"
-
 namespace Widgets
 {
 class WidgetLoader : public QQuickPaintedItem
@@ -55,11 +53,20 @@ class WidgetLoader : public QQuickPaintedItem
     Q_PROPERTY(bool widgetVisible
                READ widgetVisible
                NOTIFY widgetVisibleChanged)
+    Q_PROPERTY(bool isExternalWindow
+               READ isExternalWindow
+               WRITE setIsExternalWindow
+               NOTIFY isExternalWindowChanged)
+    Q_PROPERTY(bool widgetVisible
+               READ widgetVisible
+               WRITE setVisible
+               NOTIFY widgetVisibleChanged)
     // clang-format on
 
 signals:
     void widgetIndexChanged();
     void widgetVisibleChanged();
+    void isExternalWindowChanged();
 
 public:
     WidgetLoader(QQuickItem *parent = 0);
@@ -74,15 +81,16 @@ public:
     bool widgetVisible() const;
     QString widgetIcon() const;
     QString widgetTitle() const;
+    bool isExternalWindow() const;
     UI::Dashboard::WidgetType widgetType() const;
 
 public slots:
-    void displayWindow();
+    void setVisible(const bool visible);
     void setWidgetIndex(const int index);
+    void setIsExternalWindow(const bool isWindow);
 
 private slots:
     void updateWidgetSize();
-    void updateWidgetWindow();
     void updateWidgetVisible();
 
 protected:
@@ -92,8 +100,8 @@ protected:
 private:
     int m_index;
     QWidget *m_widget;
-    ExternalWindow m_window;
     bool m_widgetVisible;
+    bool m_isExternalWindow;
 };
 }
 

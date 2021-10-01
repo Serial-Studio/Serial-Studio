@@ -21,6 +21,7 @@
  */
 
 import QtQuick
+import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
@@ -37,7 +38,7 @@ Item {
         anchors.fill: parent
         title: loader.widgetTitle
         icon.source: loader.widgetIcon
-        onHeaderDoubleClicked: loader.displayWindow()
+        onHeaderDoubleClicked: externalWindow.visible = true
         borderColor: Cpp_ThemeManager.datasetWindowBorder
 
         WidgetLoader {
@@ -55,5 +56,23 @@ Item {
     Widgets.Shadow {
         source: window
         anchors.fill: window
+    }
+
+    Window {
+        id: externalWindow
+        minimumWidth: 640
+        minimumHeight: 480
+        title: externalLoader.widgetTitle
+        palette.base: Cpp_ThemeManager.datasetWindowBackground
+        palette.window: Cpp_ThemeManager.datasetWindowBackground
+        flags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
+
+        WidgetLoader {
+            id: externalLoader
+            widgetIndex: index
+            anchors.fill: parent
+            isExternalWindow: true
+            widgetVisible: externalWindow.visible
+        }
     }
 }

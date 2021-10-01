@@ -174,7 +174,6 @@ HEADERS += \
     src/Widgets/Common/AnalogGauge.h \
     src/Widgets/Common/AttitudeIndicator.h \
     src/Widgets/Common/BaseWidget.h \
-    src/Widgets/Common/ExternalWindow.h \
     src/Widgets/Compass.h \
     src/Widgets/DataGroup.h \
     src/Widgets/Gauge.h \
@@ -213,7 +212,6 @@ SOURCES += \
     src/Widgets/Common/AnalogGauge.cpp \
     src/Widgets/Common/AttitudeIndicator.cpp \
     src/Widgets/Common/BaseWidget.cpp \
-    src/Widgets/Common/ExternalWindow.cpp \
     src/Widgets/Compass.cpp \
     src/Widgets/DataGroup.cpp \
     src/Widgets/Gauge.cpp \
