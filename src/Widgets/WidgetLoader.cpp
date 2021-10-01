@@ -185,6 +185,13 @@ QString WidgetLoader::widgetTitle() const
     return tr("Invalid");
 }
 
+/**
+ * If set to @c true, then the widget visibility shall be controlled
+ * directly by the QML interface.
+ *
+ * If set to @c false, then the widget visbility shall be controlled
+ * by the UI::Dashboard class via the SIGNAL/SLOT system.
+ */
 bool WidgetLoader::isExternalWindow() const
 {
     return m_isExternalWindow;
@@ -198,6 +205,9 @@ UI::Dashboard::WidgetType WidgetLoader::widgetType() const
     return UI::Dashboard::getInstance()->widgetType(widgetIndex());
 }
 
+/**
+ * Changes the visibility & enabled status of the widget
+ */
 void WidgetLoader::setVisible(const bool visible)
 {
     if (m_widget)
@@ -269,6 +279,15 @@ void WidgetLoader::setWidgetIndex(const int index)
     }
 }
 
+/**
+ * Changes the widget visibility controller source.
+ *
+ * If set to @c true, then the widget visibility shall be controlled
+ * directly by the QML interface.
+ *
+ * If set to @c false, then the widget visbility shall be controlled
+ * by the UI::Dashboard class via the SIGNAL/SLOT system.
+ */
 void WidgetLoader::setIsExternalWindow(const bool isWindow)
 {
     m_isExternalWindow = isWindow;
