@@ -127,7 +127,7 @@ linux:!android {
     icon.files += deploy/linux/serial-studio.svg         # Add application icon
     desktop.files += deploy/linux/serial-studio.desktop  # Add *.desktop file
     libc6-copyright.files += deploy/linux/copyright      # Libc6 file for linuxdeployqt
-    libc6-copyright.path = $$PREFIX/usr/share/doc/libc6/ # libc6 copyright path
+    libc6-copyright.path = $$PREFIX/share/doc/libc6      # libc6 copyright path
     INSTALLS += target desktop icon libc6-copyright      # make install targets
 }
 
