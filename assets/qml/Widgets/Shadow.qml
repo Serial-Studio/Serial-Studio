@@ -29,4 +29,5 @@ DropShadow {
     color: "#80000000"
     horizontalOffset: 3
     transparentBorder: true
+    enabled: Qt.platform.os !== "windows"
 }

@@ -169,15 +169,15 @@ Item {
             }
 
             MenuSeparator {
-                visible: mw.menuBar != null
+                visible: mainWindow.menuBar != null
             }
 
             MenuItem {
                 enabled: visible
-                visible: mw.menuBar != null
+                visible: mainWindow.menuBar != null
                 height: visible ? implicitHeight : 0
-                onTriggered: mw.menubarEnabled = !mw.menubarEnabled
-                text: visible && mw.menuBar.visible ? qsTr("Hide menubar") :
+                onTriggered: mainWindow.menubarEnabled = !mainWindow.menubarEnabled
+                text: visible && mainWindow.menuBar.visible ? qsTr("Hide menubar") :
                                                       qsTr("Show menubar")
             }
         }

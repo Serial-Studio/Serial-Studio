@@ -33,6 +33,15 @@ Item {
     readonly property string monoFont: "Roboto Mono"
 
     //
+    // Access to dialogs & windows
+    //
+    property Windows.About about: null
+    property Windows.Donate donations: null
+    property Windows.CsvPlayer csvPlayer: null
+    property Windows.MainWindow mainWindow: null
+    property Windows.JsonEditor jsonEditor: null
+
+    //
     // Check for updates (non-silent mode)
     //
     function checkForUpdates() {
@@ -57,35 +66,50 @@ Item {
     //
     // MainWindow
     //
-    Windows.MainWindow {
-        id: mw
+    Loader {
+        asynchronous: true
+        sourceComponent: Windows.MainWindow {
+            Component.onCompleted: app.mainWindow = this
+        }
     }
 
     //
     // About window
     //
-    Windows.About {
-        id: about
+    Loader {
+        asynchronous: true
+        sourceComponent: Windows.About {
+            Component.onCompleted: app.about = this
+        }
     }
 
     //
     // CSV player window
     //
-    Windows.CsvPlayer {
-        id: csvPlayer
+    Loader {
+        asynchronous: true
+        sourceComponent: Windows.CsvPlayer {
+            Component.onCompleted: app.csvPlayer = this
+        }
     }
 
     //
     // JSON Editor dialog
     //
-    Windows.JsonEditor {
-        id: jsonEditor
+    Loader {
+        asynchronous: true
+        sourceComponent: Windows.JsonEditor {
+            Component.onCompleted: app.jsonEditor = this
+        }
     }
 
     //
     // Donations dialog
     //
-    Windows.Donate {
-        id: donations
+    Loader {
+        asynchronous: true
+        sourceComponent: Windows.Donate {
+            Component.onCompleted: app.donations = this
+        }
     }
 }

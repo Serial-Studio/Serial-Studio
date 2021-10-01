@@ -25,7 +25,7 @@ import QtQuick.Controls
 
 MenuBar {
     id: root
-    visible: mw.menubarEnabled
+    visible: app.mainWindow.menubarEnabled
 
     //
     // Set background color + border
@@ -47,7 +47,7 @@ MenuBar {
     //
     // Set this component as the application's default menubar upon creation
     //
-    Component.onCompleted: mw.menuBar = this
+    Component.onCompleted: app.mainWindow.menuBar = this
 
     //
     // File menu
@@ -122,18 +122,18 @@ MenuBar {
         DecentMenuItem {
             text: qsTr("Copy")
             sequence: "ctrl+c"
-            onTriggered: mw.consoleCopy()
+            onTriggered: app.mainWindow.consoleCopy()
         }
 
         DecentMenuItem {
             sequence: "ctrl+a"
             text: qsTr("Select all") + "..."
-            onTriggered: mw.consoleSelectAll()
+            onTriggered: app.mainWindow.consoleSelectAll()
         }
 
         DecentMenuItem {
             sequence: "ctrl+d"
-            onTriggered: mw.consoleClear()
+            onTriggered: app.mainWindow.consoleClear()
             text: qsTr("Clear console output")
         }
 
@@ -168,11 +168,11 @@ MenuBar {
             checkable: true
             sequence: "ctrl+t"
             text: qsTr("Console")
-            checked: mw.consoleVisible
-            onTriggered: mw.showConsole()
+            checked: app.mainWindow.consoleVisible
+            onTriggered: app.mainWindow.showConsole()
             onCheckedChanged: {
-                if (mw.consoleVisible !== checked)
-                    checked = mw.consoleVisible
+                if (app.mainWindow.consoleVisible !== checked)
+                    checked = app.mainWindow.consoleVisible
             }
         }
 
@@ -180,12 +180,12 @@ MenuBar {
             checkable: true
             sequence: "ctrl+d"
             text: qsTr("Dashboard")
-            checked: mw.dashboardVisible
+            checked: app.mainWindow.dashboardVisible
             enabled: Cpp_UI_Dashboard.available
-            onTriggered: mw.showDashboard()
+            onTriggered: app.mainWindow.showDashboard()
             onCheckedChanged: {
-                if (mw.dashboardVisible !== checked)
-                    checked = mw.dashboardVisible
+                if (app.mainWindow.dashboardVisible !== checked)
+                    checked = app.mainWindow.dashboardVisible
             }
         }
 
@@ -194,16 +194,16 @@ MenuBar {
         DecentMenuItem {
             checkable: true
             sequence: "ctrl+,"
-            checked: mw.setupVisible
+            checked: app.mainWindow.setupVisible
             text: qsTr("Show setup pane")
-            onTriggered: mw.showSetup()
+            onTriggered: app.mainWindow.showSetup()
         }
 
         MenuSeparator {}
 
         DecentMenuItem {
             sequence: "alt+m"
-            onTriggered: mw.toggleMenubar()
+            onTriggered: app.mainWindow.toggleMenubar()
             text: root.visible ? qsTr("Hide menubar") :
                                  qsTr("Show menubar")
         }
@@ -212,8 +212,8 @@ MenuBar {
 
         DecentMenuItem {
             sequence: "f11"
-            onTriggered: mw.toggleFullscreen()
-            text: mw.fullScreen ? qsTr("Exit full screen") :
+            onTriggered: app.mainWindow.toggleFullscreen()
+            text: app.mainWindow.fullScreen ? qsTr("Exit full screen") :
                                    qsTr("Enter full screen")
         }
     }
@@ -240,9 +240,9 @@ MenuBar {
 
         DecentMenuItem {
             checkable: true
-            checked: mw.vt100emulation
+            checked: app.mainWindow.vt100emulation
             text: qsTr("VT-100 emulation")
-            onTriggered: mw.vt100emulation = checked
+            onTriggered: app.mainWindow.vt100emulation = checked
         }
 
         DecentMenuItem {
@@ -330,8 +330,8 @@ MenuBar {
             checkable: true
             visible: Cpp_UpdaterEnabled
             enabled: Cpp_UpdaterEnabled
-            checked: mw.automaticUpdates
-            onTriggered: mw.automaticUpdates = checked
+            checked: app.mainWindow.automaticUpdates
+            onTriggered: app.mainWindow.automaticUpdates = checked
             text: qsTr("Auto-updater")
         }
 

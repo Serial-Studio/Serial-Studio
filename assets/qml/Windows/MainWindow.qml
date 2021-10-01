@@ -262,7 +262,16 @@ ApplicationWindow {
     }
 
     //
-    // Application menubar loader (we need to use a different version in macOS)
+    // Startup timer
+    //
+    Timer {
+        id: timer
+        interval: 500
+        onTriggered: root.showMainWindow()
+    }
+
+    //
+    // Menubar loader
     //
     Loader {
         asynchronous: false
@@ -272,15 +281,6 @@ ApplicationWindow {
 
             return "qrc:/qml/PlatformDependent/Menubar.qml"
         }
-    }
-
-    //
-    // Startup timer
-    //
-    Timer {
-        id: timer
-        interval: 500
-        onTriggered: root.showMainWindow()
     }
 
     //

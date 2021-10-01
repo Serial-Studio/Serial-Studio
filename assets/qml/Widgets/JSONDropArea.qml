@@ -28,7 +28,7 @@ DropArea {
     //
     // Show rectangle and set color based on file extension on drag enter
     //
-    onEntered: {
+    onEntered: (drag) => {
         // Get file name & set color of rectangle accordingly
         var path = drag.urls[0].toString()
         if (path.endsWith(".json") || path.endsWith(".csv")) {
