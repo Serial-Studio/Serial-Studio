@@ -116,7 +116,7 @@ jobs:
 
     - name: '🚧 Compile application'
       run: |
-           qmake ${{env.QMAKE_PROJECT}} CONFIG+=release
+           qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release
            make -j8
 
     - name: '📦 Package application (macdeployqt and zipfile)'
@@ -204,6 +204,7 @@ jobs:
 
   # Windows MSYS2 build
   msys2-makepkg:
+    if: ${{ false }}  # disable for now
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -255,6 +256,7 @@ jobs:
 
   # Test Windows MSYS2 packages
   msys2-test:
+    if: ${{ false }}  # disable for now
     needs: msys2-makepkg
     runs-on: windows-latest
     strategy:
