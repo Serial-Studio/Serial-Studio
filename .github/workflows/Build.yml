@@ -55,7 +55,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport, qt5compat
+        modules: qtserialport qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -118,7 +118,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport, qt5compat
+        modules: qtserialport qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -171,7 +171,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport, qt5compat
+        modules: qtserialport qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
