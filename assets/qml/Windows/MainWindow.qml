@@ -353,19 +353,19 @@ ApplicationWindow {
 
                 Console {
                     id: terminal
+                    anchors.margins: 0
+                    anchors.fill: parent
                     enabled: opacity > 0
                     visible: opacity > 0
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
                 }
 
                 Dashboard {
                     opacity: 0
                     id: dashboard
+                    anchors.margins: 0
+                    anchors.fill: parent
                     enabled: opacity > 0
                     visible: opacity > 0
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
                 }
             }
 
