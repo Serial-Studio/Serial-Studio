@@ -176,16 +176,16 @@ public:
     Q_INVOKABLE bool thermometerVisible(const int index) const;
     Q_INVOKABLE bool accelerometerVisible(const int index) const;
 
-    Q_INVOKABLE QStringList barTitles() const;
-    Q_INVOKABLE QStringList mapTitles() const;
-    Q_INVOKABLE QStringList plotTitles() const;
-    Q_INVOKABLE QStringList groupTitles() const;
-    Q_INVOKABLE QStringList gaugeTitles() const;
-    Q_INVOKABLE QStringList compassTitles() const;
-    Q_INVOKABLE QStringList gyroscopeTitles() const;
-    Q_INVOKABLE QStringList multiPlotTitles() const;
-    Q_INVOKABLE QStringList thermometerTitles() const;
-    Q_INVOKABLE QStringList accelerometerTitles() const;
+    QStringList barTitles() const;
+    QStringList mapTitles() const;
+    QStringList plotTitles() const;
+    QStringList groupTitles() const;
+    QStringList gaugeTitles() const;
+    QStringList compassTitles() const;
+    QStringList gyroscopeTitles() const;
+    QStringList multiPlotTitles() const;
+    QStringList thermometerTitles() const;
+    QStringList accelerometerTitles() const;
 
 public slots:
     void setBarVisible(const int index, const bool visible);

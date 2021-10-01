@@ -357,7 +357,7 @@ QString Dashboard::widgetIcon(const int globalIndex) const
             return "qrc:/icons/group.svg";
             break;
         case WidgetType::MultiPlot:
-            return "qrc:/icons/plot.svg";
+            return "qrc:/icons/multiplot.svg";
             break;
         case WidgetType::Plot:
             return "qrc:/icons/plot.svg";
@@ -508,7 +508,7 @@ bool Dashboard::accelerometerVisible(const int index) const { return getVisibili
 QStringList Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
 QStringList Dashboard::mapTitles() const           { return groupTitles(m_mapWidgets);           }
 QStringList Dashboard::plotTitles() const          { return datasetTitles(m_plotWidgets);        }
-QStringList Dashboard::groupTitles() const         { return groupTitles(m_groupWidgets);       }
+QStringList Dashboard::groupTitles() const         { return groupTitles(m_groupWidgets);         }
 QStringList Dashboard::gaugeTitles() const         { return datasetTitles(m_gaugeWidgets);       }
 QStringList Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
 QStringList Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
@@ -627,6 +627,14 @@ void Dashboard::updateData()
     m_multiPlotWidgets = getWidgetGroups("multiplot");
     m_thermometerWidgets = getWidgetDatasets("thermometer");
     m_accelerometerWidgets = getWidgetGroups("accelerometer");
+
+    // Add accelerometer widgets to multiplot
+    for (int i = 0; i < m_accelerometerWidgets.count(); ++i)
+        m_multiPlotWidgets.append(m_accelerometerWidgets.at(i));
+
+    // Add gyroscope widgets to multiplot
+    for (int i = 0; i < m_gyroscopeWidgets.count(); ++i)
+        m_multiPlotWidgets.append(m_gyroscopeWidgets.at(i));
 
     // Check if we need to update title
     if (pTitle != title())

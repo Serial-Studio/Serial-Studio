@@ -71,5 +71,6 @@
         <file>thermometer.svg</file>
         <file>show-all.svg</file>
         <file>hide-all.svg</file>
+        <file>multiplot.svg</file>
     </qresource>
 </RCC>

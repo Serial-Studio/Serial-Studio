@@ -68,7 +68,7 @@ Widgets.Window {
             // Groups
             //
             ViewOptionsDelegate {
-                title: qsTr("Data groups")
+                title: qsTr("Datasets")
                 icon: "qrc:/icons/group.svg"
                 count: Cpp_UI_Dashboard.groupCount
                 titles: Cpp_UI_Dashboard.groupTitles
@@ -80,9 +80,9 @@ Widgets.Window {
             //
             ViewOptionsDelegate {
                 title: qsTr("Multiple data plots")
-                icon: "qrc:/icons/plot.svg"
+                icon: "qrc:/icons/multiplot.svg"
                 count: Cpp_UI_Dashboard.multiPlotCount
-                titles: Cpp_UI_Dashboard.multiPlotCount
+                titles: Cpp_UI_Dashboard.multiPlotTitles
                 onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setMultiplotVisible(index, checked)
             }
 
