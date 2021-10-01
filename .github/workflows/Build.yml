@@ -75,7 +75,7 @@ jobs:
 
     - name: '📦 Create Installer'
       run: |
-          cqtdeployer -bin serial-studio -icon deploy/linux/serial-studio.svg -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo doc/artwork/icon.png
+          cqtdeployer -bin serial-studio -icon deploy/linux/serial-studio.svg -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo doc/artwork/icon-small.png
           cd DistributionKit
           mv "Installerserial-studio.run" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
 
@@ -88,7 +88,6 @@ jobs:
 
   # macOS build
   build-mac:
-    if: ${{ false }}
     runs-on: macos-latest
     name: '🍎 macOS'
     steps:
@@ -136,7 +135,6 @@ jobs:
 
   # Windows build
   build-windows:
-    if: ${{ false }}
     runs-on: windows-latest
     name: '🧊 Windows'
     steps:
@@ -205,7 +203,6 @@ jobs:
 
   # Windows MSYS2 build
   msys2-makepkg:
-    if: ${{ false }}
     runs-on: windows-latest
     strategy:
       fail-fast: false
