@@ -38,13 +38,13 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        key: ${{runner.os}}-qt-6.2.0
+        key: ${{runner.os}}-qtcache-6.2.0
 
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
         version: 6.2.0
-        modules: qtserialport
+        modules: qtserialport, qtcore5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
         
