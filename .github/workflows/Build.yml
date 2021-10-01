@@ -33,7 +33,6 @@ env:
 
 jobs:
   build-linux:
-    if: ${{ false }}  # disable until we find a fix for linuxdeployqt error
     runs-on: ubuntu-20.04
     name: '🐧 Ubuntu 20.04'
     steps:
@@ -76,7 +75,7 @@ jobs:
 
         wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
         chmod a+x linuxdeployqt
-        ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir="${{env.QML_DIR_NIX}} -unsupported-allow-new-glibc"
+        ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir="${{env.QML_DIR_NIX}} -unsupported-bundle-everything"
 
         # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
         mv *.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
