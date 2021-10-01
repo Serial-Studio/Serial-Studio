@@ -98,7 +98,7 @@ Window {
                 Layout.fillWidth: true
                 value: Cpp_CSV_Player.progress
                 onValueChanged: {
-                    if (value != Cpp_CSV_Player.progress)
+                    if (value !== Cpp_CSV_Player.progress)
                         Cpp_CSV_Player.setProgress(value)
                 }
             }

@@ -310,7 +310,7 @@ Item {
                     checked: Cpp_IO_Console.echo
                     enabled: Cpp_IO_Manager.readWrite
                     onCheckedChanged: {
-                        if (Cpp_IO_Console.echo != checked)
+                        if (Cpp_IO_Console.echo !== checked)
                             Cpp_IO_Console.echo = checked
                     }
                 }
@@ -328,7 +328,7 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     checked: Cpp_IO_Console.autoscroll
                     onCheckedChanged: {
-                        if (Cpp_IO_Console.autoscroll != checked)
+                        if (Cpp_IO_Console.autoscroll !== checked)
                             Cpp_IO_Console.autoscroll = checked
                     }
                 }
@@ -339,7 +339,7 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     checked: Cpp_IO_Console.showTimestamp
                     onCheckedChanged: {
-                        if (Cpp_IO_Console.showTimestamp != checked)
+                        if (Cpp_IO_Console.showTimestamp !== checked)
                             Cpp_IO_Console.showTimestamp = checked
                     }
                 }
@@ -354,7 +354,7 @@ Item {
                     model: Cpp_IO_Console.lineEndings()
                     currentIndex: Cpp_IO_Console.lineEnding
                     onCurrentIndexChanged: {
-                        if (currentIndex != Cpp_IO_Console.lineEnding)
+                        if (currentIndex !== Cpp_IO_Console.lineEnding)
                             Cpp_IO_Console.lineEnding = currentIndex
                     }
                 }
@@ -365,7 +365,7 @@ Item {
                     model: Cpp_IO_Console.displayModes()
                     currentIndex: Cpp_IO_Console.displayMode
                     onCurrentIndexChanged: {
-                        if (currentIndex != Cpp_IO_Console.displayMode)
+                        if (currentIndex !== Cpp_IO_Console.displayMode)
                             Cpp_IO_Console.displayMode = currentIndex
                     }
                 }

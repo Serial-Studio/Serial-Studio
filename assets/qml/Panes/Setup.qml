@@ -119,8 +119,8 @@ Item {
     Connections {
         target: Cpp_JSON_Generator
         function onOperationModeChanged() {
-            commAuto.checked = (Cpp_JSON_Generator.operationMode == 1)
-            commManual.checked = (Cpp_JSON_Generator.operationMode == 0)
+            commAuto.checked = (Cpp_JSON_Generator.operationMode === 1)
+            commManual.checked = (Cpp_JSON_Generator.operationMode === 0)
         }
     }
 

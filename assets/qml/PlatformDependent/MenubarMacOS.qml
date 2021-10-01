@@ -60,7 +60,7 @@ MenuBar {
             shortcut: "ctrl+o"
             text: qsTr("Replay CSV") + "..."
             onTriggered: Cpp_CSV_Player.openFile()
-            enabled: Cpp_JSON_Generator.operationMode == 0
+            enabled: Cpp_JSON_Generator.operationMode === 0
         }
 
         MenuSeparator {}
@@ -120,14 +120,14 @@ MenuBar {
             MenuItem {
                 checkable: true
                 text: qsTr("Device sends JSON")
-                checked: Cpp_JSON_Generator.operationMode == 1
+                checked: Cpp_JSON_Generator.operationMode === 1
                 onTriggered: Cpp_JSON_Generator.operationMode = checked ? 1 : 0
             }
 
             MenuItem {
                 checkable: true
                 text: qsTr("Load JSON from computer")
-                checked: Cpp_JSON_Generator.operationMode == 0
+                checked: Cpp_JSON_Generator.operationMode === 0
                 onTriggered: Cpp_JSON_Generator.operationMode = checked ? 0 : 1
             }
         }
@@ -225,14 +225,14 @@ MenuBar {
             MenuItem {
                 checkable: true
                 text: qsTr("Normal (plain text)")
-                checked: Cpp_IO_Console.displayMode == 0
+                checked: Cpp_IO_Console.displayMode === 0
                 onTriggered: Cpp_IO_Console.displayMode = checked ? 0 : 1
             }
 
             MenuItem {
                 checkable: true
                 text: qsTr("Binary (hexadecimal)")
-                checked: Cpp_IO_Console.displayMode == 1
+                checked: Cpp_IO_Console.displayMode === 1
                 onTriggered: Cpp_IO_Console.displayMode = checked ? 1 : 0
             }
         }
@@ -250,21 +250,21 @@ MenuBar {
             MenuItem {
                 checkable: true
                 text: Cpp_IO_Console.lineEndings()[1]
-                checked: Cpp_IO_Console.lineEnding == 1
+                checked: Cpp_IO_Console.lineEnding === 1
                 onTriggered: Cpp_IO_Console.lineEnding = 1
             }
 
             MenuItem {
                 checkable: true
                 text: Cpp_IO_Console.lineEndings()[2]
-                checked: Cpp_IO_Console.lineEnding == 2
+                checked: Cpp_IO_Console.lineEnding === 2
                 onTriggered: Cpp_IO_Console.lineEnding = 2
             }
 
             MenuItem {
                 checkable: true
                 text: Cpp_IO_Console.lineEndings()[3]
-                checked: Cpp_IO_Console.lineEnding == 3
+                checked: Cpp_IO_Console.lineEnding === 3
                 onTriggered: Cpp_IO_Console.lineEnding = 3
             }
         }
