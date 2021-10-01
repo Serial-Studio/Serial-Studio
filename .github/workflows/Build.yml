@@ -76,8 +76,8 @@ jobs:
     - name: '📦 Create Installer'
       run: |
           cqtdeployer -bin serial-studio -icon serial-studio deploy/linux/serial-studio.svg -qmldir="${{env.QML_DIR_NIX}}" qif -qifLogo doc/artwork/icon.png
-          ls
-          mv "LinuxInstaller.run" "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
+          cd DistributionKit
+          mv "*.run" "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
 
     - name: '📤 Upload artifact: Installer'
       uses: actions/upload-artifact@v2
