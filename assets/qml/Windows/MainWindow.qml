@@ -353,8 +353,8 @@ ApplicationWindow {
 
                 Console {
                     id: terminal
-                    anchors.margins: 0
-                    anchors.fill: parent
+                    width: parent.width
+                    height: parent.height
                     enabled: opacity > 0
                     visible: opacity > 0
                 }
@@ -362,8 +362,8 @@ ApplicationWindow {
                 Dashboard {
                     opacity: 0
                     id: dashboard
-                    anchors.margins: 0
-                    anchors.fill: parent
+                    width: parent.width
+                    height: parent.height
                     enabled: opacity > 0
                     visible: opacity > 0
                 }

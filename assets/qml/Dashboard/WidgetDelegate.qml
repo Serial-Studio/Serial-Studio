@@ -30,20 +30,21 @@ import "../Widgets" as Widgets
 
 Item {
     id: root
-    enabled: visible
-    visible: loader.widgetVisible
+
+    property int widgetIndex: -1
 
     Widgets.Window {
+        z: 1
         id: window
         anchors.fill: parent
         title: loader.widgetTitle
         icon.source: loader.widgetIcon
-        onHeaderDoubleClicked: externalWindow.visible = true
         borderColor: Cpp_ThemeManager.datasetWindowBorder
+        onHeaderDoubleClicked: externalWindow.visible = true
 
         WidgetLoader {
             id: loader
-            widgetIndex: index
+            widgetIndex: root.widgetIndex
             anchors {
                 fill: parent
                 leftMargin: window.borderWidth
@@ -54,6 +55,7 @@ Item {
     }
 
     Widgets.Shadow {
+        z: 0
         source: window
         anchors.fill: window
     }
@@ -69,9 +71,9 @@ Item {
 
         WidgetLoader {
             id: externalLoader
-            widgetIndex: index
             anchors.fill: parent
             isExternalWindow: true
+            widgetIndex: root.widgetIndex
             widgetVisible: externalWindow.visible
         }
     }

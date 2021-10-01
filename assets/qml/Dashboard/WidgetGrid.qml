@@ -42,7 +42,7 @@ Widgets.Window {
     readonly property int cellHeight: cellWidth * (2/3)
     readonly property int columns: Math.floor((grid.width - 2 * scroll.width) / cWidth)
     readonly property int cellWidth: cWidth + ((grid.width - 2 * scroll.width) - (cWidth) * columns) / columns
-    readonly property int cWidth: Math.min(Math.max(356, (grid.width - 2 * scroll.width) / Math.min(3, model.count)), 480)
+    readonly property int cWidth: Math.min(Math.max(356, (grid.width - 2 * scroll.width) / model.count), 480)
 
     //
     // Put everything into a flickable to enable scrolling

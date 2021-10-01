@@ -29,9 +29,26 @@ Repeater {
     property real cellWidth: 0
     property real cellHeight: 0
 
-    delegate: WidgetDelegate {
-        id: delegate
+    delegate: Loader {
+        id: loader
+        opacity: 0
+        asynchronous: true
         width: root.cellWidth
         height: root.cellHeight
+        Behavior on opacity {NumberAnimation{}}
+
+        sourceComponent: WidgetDelegate {
+            widgetIndex: index
+            anchors.fill: parent
+            Component.onCompleted: loader.opacity = 1
+        }
+
+        Connections {
+            target: Cpp_UI_Dashboard
+
+            function onWidgetVisibilityChanged() {
+                loader.visible = Cpp_UI_Dashboard.widgetVisible(index)
+            }
+        }
     }
 }
