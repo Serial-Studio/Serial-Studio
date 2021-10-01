@@ -22,6 +22,7 @@ env:
   VERSION: "1.0.24"
   EXECUTABLE: "SerialStudio"
   APPLICATION: "Serial Studio"
+  UNIXNAME: "serial-studio"
   QMAKE_PROJECT: "Serial-Studio.pro"
   QML_DIR_NIX: "assets/qml"
   QML_DIR_WIN: "assets\\qml"
@@ -75,11 +76,11 @@ jobs:
 
     - name: '📦 Create CQtDeployer Installer'
       run: |
-          cqtdeployer -bin serial-studio -icon deploy/linux/serial-studio.png -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo deploy/linux/serial-studio.png -name "${{env.APPLICATION}}" -deployVersion ${{env.VERSION}}
-          cqtdeployer -bin serial-studio -icon deploy/linux/serial-studio.png -qmlDir "${{env.QML_DIR_NIX}}" deb -name "serial-studio" -deployVersion ${{env.VERSION}}
+          cqtdeployer -bin ${{env.UNIXNAME}} -icon deploy/linux/${{env.UNIXNAME}}.png -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo deploy/linux/${{env.UNIXNAME}}.png -name "${{env.APPLICATION}}" -deployVersion ${{env.VERSION}}
+          cqtdeployer -bin ${{env.UNIXNAME}} -icon deploy/linux/${{env.UNIXNAME}}.png -qmlDir "${{env.QML_DIR_NIX}}" deb -name "${{env.UNIXNAME}}" -deployVersion ${{env.VERSION}}
           cd DistributionKit
-          mv "Installer${{env.EXECUTABLE}}.run" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
-          mv "Installer${{env.EXECUTABLE}}.deb" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb"
+          mv "Installer${{env.APPLICATION}}.run" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
+          mv "${{env.UNIXNAME}}.deb" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb"
 
     - name: '📤 Upload artifact: Installer'
       uses: actions/upload-artifact@v2
