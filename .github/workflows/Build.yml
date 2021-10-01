@@ -33,6 +33,7 @@ env:
 
 jobs:
   build-linux:
+    if: ${{ false }}  # disable until we find a fix for linuxdeployqt error
     runs-on: ubuntu-20.04
     name: '🐧 Ubuntu 20.04'
     steps:
