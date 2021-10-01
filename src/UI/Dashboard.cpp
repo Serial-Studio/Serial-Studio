@@ -79,8 +79,8 @@ QFont Dashboard::monoFont() const
 // clang-format off
 JSON::Group *Dashboard::getMap(const int index)           { return getGroupWidget(m_mapWidgets, index);           }
 JSON::Dataset *Dashboard::getBar(const int index)         { return getDatasetWidget(m_barWidgets, index);         }
-JSON::Group *Dashboard::getGroups(const int index)        { return getGroupWidget(m_latestFrame.groups(), index); }
 JSON::Dataset *Dashboard::getPlot(const int index)        { return getDatasetWidget(m_plotWidgets, index);        }
+JSON::Group *Dashboard::getGroups(const int index)        { return getGroupWidget(m_groupWidgets, index);       }
 JSON::Dataset *Dashboard::getGauge(const int index)       { return getDatasetWidget(m_gaugeWidgets, index);       }
 JSON::Group *Dashboard::getGyroscope(const int index)     { return getGroupWidget(m_gyroscopeWidgets, index);     }
 JSON::Dataset *Dashboard::getCompass(const int index)     { return getDatasetWidget(m_compassWidgets, index);     }
@@ -155,7 +155,7 @@ int Dashboard::mapCount() const           { return m_mapWidgets.count();        
 int Dashboard::barCount() const           { return m_barWidgets.count();           }
 int Dashboard::plotCount() const          { return m_plotWidgets.count();          }
 int Dashboard::gaugeCount() const         { return m_gaugeWidgets.count();         }
-int Dashboard::groupCount() const         { return m_latestFrame.groupCount();     }
+int Dashboard::groupCount() const         { return m_groupWidgets.count();       }
 int Dashboard::compassCount() const       { return m_compassWidgets.count();       }
 int Dashboard::gyroscopeCount() const     { return m_gyroscopeWidgets.count();     }
 int Dashboard::multiPlotCount() const     { return m_multiPlotWidgets.count();     }
@@ -508,7 +508,7 @@ bool Dashboard::accelerometerVisible(const int index) const { return getVisibili
 QStringList Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
 QStringList Dashboard::mapTitles() const           { return groupTitles(m_mapWidgets);           }
 QStringList Dashboard::plotTitles() const          { return datasetTitles(m_plotWidgets);        }
-QStringList Dashboard::groupTitles() const         { return groupTitles(m_latestFrame.groups()); }
+QStringList Dashboard::groupTitles() const         { return groupTitles(m_groupWidgets);       }
 QStringList Dashboard::gaugeTitles() const         { return datasetTitles(m_gaugeWidgets);       }
 QStringList Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
 QStringList Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
@@ -553,6 +553,7 @@ void Dashboard::resetData()
     m_mapWidgets.clear();
     m_plotWidgets.clear();
     m_gaugeWidgets.clear();
+    m_groupWidgets.clear();
     m_compassWidgets.clear();
     m_gyroscopeWidgets.clear();
     m_multiPlotWidgets.clear();
@@ -604,6 +605,7 @@ void Dashboard::updateData()
     m_mapWidgets.clear();
     m_plotWidgets.clear();
     m_gaugeWidgets.clear();
+    m_groupWidgets.clear();
     m_compassWidgets.clear();
     m_gyroscopeWidgets.clear();
     m_multiPlotWidgets.clear();
@@ -616,6 +618,7 @@ void Dashboard::updateData()
 
     // Update widget vectors
     m_plotWidgets = getPlotWidgets();
+    m_groupWidgets = getWidgetGroups("");
     m_mapWidgets = getWidgetGroups("map");
     m_barWidgets = getWidgetDatasets("bar");
     m_gaugeWidgets = getWidgetDatasets("gauge");

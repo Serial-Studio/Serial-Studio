@@ -89,7 +89,7 @@ void Compass::update()
     auto dataset = UI::Dashboard::getInstance()->getCompass(m_index);
     if (dataset)
     {
-        auto value = dataset->value().toDouble() * 12;
+        auto value = dataset->value().toDouble();
         auto text = QString("%1°").arg(QString::number(value, 'f', 0));
         m_compass.setValue(value);
 

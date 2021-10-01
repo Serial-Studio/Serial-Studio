@@ -240,6 +240,7 @@ private:
     QVector<JSON::Dataset *> m_thermometerWidgets;
 
     QVector<JSON::Group *> m_mapWidgets;
+    QVector<JSON::Group *> m_groupWidgets;
     QVector<JSON::Group *> m_multiPlotWidgets;
     QVector<JSON::Group *> m_gyroscopeWidgets;
     QVector<JSON::Group *> m_accelerometerWidgets;

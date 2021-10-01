@@ -50,9 +50,6 @@ class WidgetLoader : public QQuickPaintedItem
     Q_PROPERTY(QString widgetTitle
                READ widgetTitle
                NOTIFY widgetIndexChanged)
-    Q_PROPERTY(bool widgetVisible
-               READ widgetVisible
-               NOTIFY widgetVisibleChanged)
     Q_PROPERTY(bool isExternalWindow
                READ isExternalWindow
                WRITE setIsExternalWindow
