@@ -78,6 +78,9 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor highlightedTextAlternative
                READ highlightedTextAlternative
                NOTIFY themeChanged)
+    Q_PROPERTY(QColor placeholderText
+               READ placeholderText
+               NOTIFY themeChanged)
     Q_PROPERTY(QColor toolbarGradient1
                READ toolbarGradient1
                NOTIFY themeChanged)
@@ -101,6 +104,9 @@ class ThemeManager : public QObject
                NOTIFY themeChanged)
     Q_PROPERTY(QColor consoleHighlightedText
                READ consoleHighlightedText
+               NOTIFY themeChanged)
+    Q_PROPERTY(QColor consolePlaceholderText
+               READ consolePlaceholderText
                NOTIFY themeChanged)
     Q_PROPERTY(QColor windowBackground
                READ windowBackground
@@ -244,6 +250,7 @@ public:
     QColor tooltipBase() const;
     QColor highlightedText() const;
     QColor highlightedTextAlternative() const;
+    QColor placeholderText() const;
     QColor toolbarGradient1() const;
     QColor toolbarGradient2() const;
     QColor menubarGradient1() const;
@@ -256,6 +263,7 @@ public:
     QColor consoleWindow() const;
     QColor consoleHighlight() const;
     QColor consoleHighlightedText() const;
+    QColor consolePlaceholderText() const;
     QColor windowBackground() const;
     QColor windowGradient1() const;
     QColor windowGradient2() const;
@@ -323,6 +331,7 @@ private:
     QColor m_tooltipBase;
     QColor m_highlightedText;
     QColor m_highlightedTextAlternative;
+    QColor m_placeholderText;
     QColor m_toolbarGradient1;
     QColor m_toolbarGradient2;
     QColor m_menubarGradient1;
@@ -335,6 +344,7 @@ private:
     QColor m_consoleWindow;
     QColor m_consoleHighlight;
     QColor m_consoleHighlightedText;
+    QColor m_consolePlaceholderText;
     QColor m_windowBackground;
     QColor m_windowGradient1;
     QColor m_windowGradient2;

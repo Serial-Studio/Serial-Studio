@@ -248,7 +248,7 @@ Item {
                     placeholderText: qsTr("Send data to device") + "..."
                     Component.onCompleted: {
                         if (Cpp_Qt6)
-                            placeholderTextColor = Cpp_ThemeManager.consoleText.darker(1.5)
+                            placeholderTextColor = Cpp_ThemeManager.consolePlaceholderText
                     }
 
                     //

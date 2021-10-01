@@ -73,17 +73,25 @@ jobs:
           qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
           make -j8
 
-    - name: '📦 Create Installer'
+    - name: '📦 Create CQtDeployer Installer'
       run: |
           cqtdeployer -bin serial-studio -icon deploy/linux/serial-studio.png -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo deploy/linux/serial-studio.png -name "${{env.APPLICATION}}" -deployVersion ${{env.VERSION}}
+          cqtdeployer -bin serial-studio -icon deploy/linux/serial-studio.png -qmlDir "${{env.QML_DIR_NIX}}" deb -name "${{env.APPLICATION}}" -deployVersion ${{env.VERSION}}
           cd DistributionKit
           mv "InstallerSerial Studio.run" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
+          mv "InstallerSerial Studio.deb" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb"
 
     - name: '📤 Upload artifact: Installer'
       uses: actions/upload-artifact@v2
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run
+        
+    - name: '📤 Upload artifact: Debian package'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb
 
 
   # macOS build

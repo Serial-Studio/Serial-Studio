@@ -85,7 +85,7 @@ Terminal::Terminal(QQuickItem *parent)
     palette.setColor(QPalette::Highlight, theme->consoleHighlight());
     palette.setColor(QPalette::HighlightedText, theme->consoleHighlightedText());
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    palette.setColor(QPalette::PlaceholderText, theme->consoleText().darker(150));
+    palette.setColor(QPalette::PlaceholderText, theme->consolePlaceholderText());
 #endif
     m_textEdit->setPalette(palette);
 

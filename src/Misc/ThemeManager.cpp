@@ -147,6 +147,7 @@ void ThemeManager::loadTheme(const int id)
     m_tooltipBase = QColor(colors.value("tooltipBase").toString());
     m_highlightedText = QColor(colors.value("highlightedText").toString());
     m_highlightedTextAlternative = QColor(colors.value("highlightedTextAlternative").toString());
+    m_placeholderText = QColor(colors.value("placeholderText").toString());
     m_toolbarGradient1 = QColor(colors.value("toolbarGradient1").toString());
     m_toolbarGradient2 = QColor(colors.value("toolbarGradient2").toString());
     m_consoleText = QColor(colors.value("consoleText").toString());
@@ -155,6 +156,7 @@ void ThemeManager::loadTheme(const int id)
     m_consoleWindow = QColor(colors.value("consoleWindow").toString());
     m_consoleHighlight = QColor(colors.value("consoleHighlight").toString());
     m_consoleHighlightedText = QColor(colors.value("consoleHighlightedText").toString());
+    m_consolePlaceholderText = QColor(colors.value("consolePlaceholderText").toString());
     m_windowBackground = QColor(colors.value("windowBackground").toString());
     m_windowGradient1 = QColor(colors.value("windowGradient1").toString());
     m_windowGradient2 = QColor(colors.value("windowGradient2").toString());
@@ -216,7 +218,7 @@ void ThemeManager::loadTheme(const int id)
     palette.setColor(QPalette::ToolTipText, tooltipText());
     palette.setColor(QPalette::HighlightedText, highlightedText());
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    palette.setColor(QPalette::PlaceholderText, text().darker(150));
+    palette.setColor(QPalette::PlaceholderText, placeholderText());
 #endif
     qApp->setPalette(palette);
 
@@ -336,6 +338,11 @@ QColor ThemeManager::highlightedTextAlternative() const
     return m_highlightedTextAlternative;
 }
 
+QColor ThemeManager::placeholderText() const
+{
+    return m_placeholderText;
+}
+
 QColor ThemeManager::toolbarGradient1() const
 {
     return m_toolbarGradient1;
@@ -394,6 +401,11 @@ QColor ThemeManager::consoleHighlight() const
 QColor ThemeManager::consoleHighlightedText() const
 {
     return m_consoleHighlightedText;
+}
+
+QColor ThemeManager::consolePlaceholderText() const
+{
+    return m_consolePlaceholderText;
 }
 
 QColor ThemeManager::windowBackground() const

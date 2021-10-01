@@ -665,6 +665,9 @@ void Editor::openJsonFile(const QString &path)
     manager->setFinishSequence(frameEndSequence());
     manager->setStartSequence(frameStartSequence());
 
+    // Set JSON::Generator operation mode to manual
+    JSON::Generator::getInstance()->setOperationMode(JSON::Generator::kManual);
+
     // Read groups from JSON document
     auto groups = json.value("g").toArray();
     for (int group = 0; group < groups.count(); ++group)

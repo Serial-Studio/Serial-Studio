@@ -384,21 +384,21 @@ void Serial::setParity(const quint8 parityIndex)
     // Set parity based on current index
     switch (parityIndex)
     {
-        case 0:
-            m_parity = QSerialPort::NoParity;
-            break;
-        case 1:
-            m_parity = QSerialPort::EvenParity;
-            break;
-        case 2:
-            m_parity = QSerialPort::OddParity;
-            break;
-        case 3:
-            m_parity = QSerialPort::SpaceParity;
-            break;
-        case 4:
-            m_parity = QSerialPort::MarkParity;
-            break;
+    case 0:
+        m_parity = QSerialPort::NoParity;
+        break;
+    case 1:
+        m_parity = QSerialPort::EvenParity;
+        break;
+    case 2:
+        m_parity = QSerialPort::OddParity;
+        break;
+    case 3:
+        m_parity = QSerialPort::SpaceParity;
+        break;
+    case 4:
+        m_parity = QSerialPort::MarkParity;
+        break;
     }
 
     // Update serial port config.
@@ -420,8 +420,8 @@ void Serial::appendBaudRate(const QString &baudRate)
         writeSettings();
         emit baudRateListChanged();
         Misc::Utilities::showMessageBox(
-            tr("Baud rate registered successfully"),
-            tr("Rate \"%1\" has been added to baud rate list").arg(baudRate));
+                    tr("Baud rate registered successfully"),
+                    tr("Rate \"%1\" has been added to baud rate list").arg(baudRate));
     }
 }
 
@@ -442,18 +442,18 @@ void Serial::setDataBits(const quint8 dataBitsIndex)
     // Obtain data bits value from current index
     switch (dataBitsIndex)
     {
-        case 0:
-            m_dataBits = QSerialPort::Data5;
-            break;
-        case 1:
-            m_dataBits = QSerialPort::Data6;
-            break;
-        case 2:
-            m_dataBits = QSerialPort::Data7;
-            break;
-        case 3:
-            m_dataBits = QSerialPort::Data8;
-            break;
+    case 0:
+        m_dataBits = QSerialPort::Data5;
+        break;
+    case 1:
+        m_dataBits = QSerialPort::Data6;
+        break;
+    case 2:
+        m_dataBits = QSerialPort::Data7;
+        break;
+    case 3:
+        m_dataBits = QSerialPort::Data8;
+        break;
     }
 
     // Update serial port configuration
@@ -481,15 +481,15 @@ void Serial::setStopBits(const quint8 stopBitsIndex)
     // Obtain stop bits value from current index
     switch (stopBitsIndex)
     {
-        case 0:
-            m_stopBits = QSerialPort::OneStop;
-            break;
-        case 1:
-            m_stopBits = QSerialPort::OneAndHalfStop;
-            break;
-        case 2:
-            m_stopBits = QSerialPort::TwoStop;
-            break;
+    case 0:
+        m_stopBits = QSerialPort::OneStop;
+        break;
+    case 1:
+        m_stopBits = QSerialPort::OneAndHalfStop;
+        break;
+    case 2:
+        m_stopBits = QSerialPort::TwoStop;
+        break;
     }
 
     // Update serial port configuration
@@ -526,15 +526,15 @@ void Serial::setFlowControl(const quint8 flowControlIndex)
     // Obtain flow control value from current index
     switch (flowControlIndex)
     {
-        case 0:
-            m_flowControl = QSerialPort::NoFlowControl;
-            break;
-        case 1:
-            m_flowControl = QSerialPort::HardwareControl;
-            break;
-        case 2:
-            m_flowControl = QSerialPort::SoftwareControl;
-            break;
+    case 0:
+        m_flowControl = QSerialPort::NoFlowControl;
+        break;
+    case 1:
+        m_flowControl = QSerialPort::HardwareControl;
+        break;
+    case 2:
+        m_flowControl = QSerialPort::SoftwareControl;
+        break;
     }
 
     // Update serial port configuration
@@ -561,19 +561,7 @@ void Serial::refreshSerialDevices()
     foreach (QSerialPortInfo info, validPortList)
     {
         if (!info.isNull())
-        {
-            // Get port name & description
-            auto name = info.portName();
-            auto description = info.description();
-
-            // Show port description
-            if (!description.isEmpty())
-                ports.append(description);
-
-            // Show port name
-            else
-                ports.append(name);
-        }
+            ports.append(info.portName());
     }
 
     // Update list only if necessary
@@ -632,12 +620,12 @@ void Serial::readSettings()
 {
     // Register standard baud rates
     QStringList stdBaudRates
-        = { "300",   "1200",   "2400",   "4800",   "9600",   "19200",   "38400",  "57600",
-            "74880", "115200", "230400", "250000", "500000", "1000000", "2000000" };
+            = { "300",   "1200",   "2400",   "4800",   "9600",   "19200",   "38400",  "57600",
+                "74880", "115200", "230400", "250000", "500000", "1000000", "2000000" };
 
     // Get value from settings
     m_baudRateList = m_settings.value("IO_DataSource_Serial__BaudRates", stdBaudRates)
-                         .toStringList();
+            .toStringList();
 
     // Sort baud rate list
     for (auto i = 0; i < m_baudRateList.count() - 1; ++i)
