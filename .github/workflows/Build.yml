@@ -75,7 +75,7 @@ jobs:
 
     - name: '📦 Create Installer'
       run: |
-          cqtdeployer -bin serial-studio -icon deploy/linux/serial-studio.png -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo deploy/linux/serial-studio.png -name "${{env.APPLICATION}}" -deployVersion ${{env.VERSION}}
+          cqtdeployer -bin serial-studio -icon deploy/linux/serial-studio.png -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo deploy/linux/serial-studio.png -name "${{env.APPLICATION}}" -deployVersion ${{env.VERSION}} -enablePlugins printsupport
           cd DistributionKit
           mv "InstallerSerial Studio.run" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
 
