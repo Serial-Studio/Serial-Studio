@@ -112,6 +112,7 @@ jobs:
       with:
         version: ${{env.QT_VERSION}}
         modules: qtserialport
+        aqtversion: '==2.0.0'
 
     - name: '🚧 Compile application'
       run: |
