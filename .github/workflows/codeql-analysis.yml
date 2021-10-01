@@ -44,7 +44,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: 6.2.0
-        modules: qtserialport, qtcore5compat
+        modules: qtserialport, qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
         
