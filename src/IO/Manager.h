@@ -40,7 +40,7 @@ namespace IO
  * implementing the code to read and write data to a device, while the manager
  * class deals with the processing of the received data and generates frames.
  *
- * A "frame" is equivalent to a paquet of data. To identify frames, the manager
+ * A "frame" is equivalent to a packet of data. To identify frames, the manager
  * class needs to know three things:
  * - The start sequence or header of the frame
  * - The end sequence or footer of the frame
