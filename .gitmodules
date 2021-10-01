@@ -4,6 +4,3 @@
 [submodule "libs/qtcsv"]
 	path = libs/qtcsv
 	url = https://github.com/iamantony/qtcsv
-[submodule "libs/qmqtt"]
-	path = libs/qmqtt
-	url = https://github.com/emqx/qmqtt

@@ -78,9 +78,6 @@ sanitize {
     CONFIG *= sanitize_undefined
 }
 
-QMAKE_CXXFLAGS *= -fno-math-errno
-QMAKE_CXXFLAGS *= -funsafe-math-optimizations
-
 #-----------------------------------------------------------------------------------------
 # Serial Studio compile-time settings
 #-----------------------------------------------------------------------------------------

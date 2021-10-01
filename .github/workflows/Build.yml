@@ -25,6 +25,7 @@ env:
   QMAKE_PROJECT: "Serial-Studio.pro"
   QML_DIR_NIX: "assets/qml"
   QML_DIR_WIN: "assets\\qml"
+  QT_VERSION: 6.2.0
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -35,6 +36,7 @@ jobs:
 
   # GNU/Linux build (we run on Ubuntu 16.04 to generate AppImage)
   build-linux:
+    if: ${{ false }}  # disable for now
     runs-on: ubuntu-18.04
     name: '🐧 Ubuntu 18.04'
     steps:
@@ -54,6 +56,7 @@ jobs:
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
+        version: ${{env.QT_VERSION}}
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     # Install additional dependencies, stolen from:
@@ -107,6 +110,8 @@ jobs:
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
+        version: ${{env.QT_VERSION}}
+        modules: qtserialport
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '🚧 Compile application'
@@ -132,6 +137,7 @@ jobs:
 
   # Windows build
   build-windows:
+    if: ${{ false }}  # disable for now
     runs-on: windows-latest
     name: '🧊 Windows'
     steps:
@@ -157,6 +163,7 @@ jobs:
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
+        version: ${{env.QT_VERSION}}
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '⚙️ Install NSIS'
