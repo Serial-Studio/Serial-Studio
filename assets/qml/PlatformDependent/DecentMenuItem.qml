@@ -51,7 +51,7 @@ MenuItem {
             Layout.fillWidth: true
             elide: Label.ElideRight
             verticalAlignment: Qt.AlignVCenter
-            color: root.highlighted ? Cpp_ThemeManager.highlightedText : Cpp_ThemeManager.menubarText
+            color: root.highlighted ? Cpp_ThemeManager.highlightedText : palette.text
         }
 
         Item {
@@ -63,7 +63,7 @@ MenuItem {
             opacity: 0.8
             text: _shortcut.nativeText
             verticalAlignment: Qt.AlignVCenter
-            color: root.highlighted ? Cpp_ThemeManager.highlightedText : Cpp_ThemeManager.menubarText
+            color: root.highlighted ? Cpp_ThemeManager.highlightedText : palette.text
         }
     }
 }

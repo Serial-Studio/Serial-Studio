@@ -274,10 +274,6 @@ Control {
                              qsTr("Connect")) + "  "
             icon.source: checked ? "qrc:/icons/disconnect.svg" :
                                    "qrc:/icons/connect.svg"
-            icon.color: checked ? Cpp_ThemeManager.connectButtonChecked :
-                                  Cpp_ThemeManager.connectButtonUnchecked
-            palette.buttonText: checked ? Cpp_ThemeManager.connectButtonChecked :
-                                          Cpp_ThemeManager.connectButtonUnchecked
         }
 
         //

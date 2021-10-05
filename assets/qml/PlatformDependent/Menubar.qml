@@ -45,6 +45,14 @@ MenuBar {
     }
 
     //
+    // Palette
+    //
+    palette.text: Cpp_ThemeManager.menubarText
+    palette.base: Cpp_ThemeManager.menubarGradient2
+    palette.window: Cpp_ThemeManager.menubarGradient1
+    palette.highlightedText: Cpp_ThemeManager.highlightedText
+
+    //
     // File menu
     //
     Menu {

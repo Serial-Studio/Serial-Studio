@@ -76,15 +76,25 @@ Control {
     //
     Rectangle {
         id: bg
-        border.width: 1
-        border.color: Cpp_ThemeManager.toolbarGradient1
 
         Rectangle {
-            height: parent.border.width
-            visible: Qt.platform.os === "osx"
+            height: 1
+            color: Cpp_ThemeManager.toolbarGradient1
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+        }
+
+        Rectangle {
+            height: 1
+            visible: mainWindow.menuBar !== null
             color: Cpp_ThemeManager.toolbarGradient2
 
             anchors {
+                topMargin: -1
                 top: parent.top
                 left: parent.left
                 right: parent.right
