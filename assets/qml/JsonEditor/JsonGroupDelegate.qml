@@ -185,9 +185,12 @@ Widgets.Window {
             Layout.fillWidth: true
             text: qsTr("Add dataset")
             icon.source: "qrc:/icons/add.svg"
-            icon.color: Cpp_ThemeManager.text
-            visible: widget.currentIndex == 0
+            visible: widget.currentIndex === 0
+            icon.color: Cpp_ThemeManager.brightText
             onClicked: Cpp_JSON_Editor.addDataset(group)
+            palette.buttonText: Cpp_ThemeManager.brightText
+            palette.button: Cpp_ThemeManager.toolbarGradient1
+            palette.window: Cpp_ThemeManager.toolbarGradient1
         }
     }
 }
