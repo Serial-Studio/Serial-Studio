@@ -27,7 +27,6 @@
 #include <QString>
 #include <QSettings>
 #include <QByteArray>
-#include <QStringList>
 #include <QtSerialPort>
 #include <QTextCursor>
 #include <QQuickTextDocument>
@@ -76,22 +75,22 @@ class Serial : public QObject
                READ baudRate
                WRITE setBaudRate
                NOTIFY baudRateChanged)
-    Q_PROPERTY(QStringList portList
+    Q_PROPERTY(QVector<QString> portList
                READ portList
                NOTIFY availablePortsChanged)
-    Q_PROPERTY(QStringList parityList
+    Q_PROPERTY(QVector<QString> parityList
                READ parityList
                CONSTANT)
-    Q_PROPERTY(QStringList baudRateList
+    Q_PROPERTY(QVector<QString> baudRateList
                READ baudRateList
                NOTIFY baudRateListChanged)
-    Q_PROPERTY(QStringList dataBitsList
+    Q_PROPERTY(QVector<QString> dataBitsList
                READ dataBitsList
                CONSTANT)
-    Q_PROPERTY(QStringList stopBitsList
+    Q_PROPERTY(QVector<QString> stopBitsList
                READ stopBitsList
                CONSTANT)
-    Q_PROPERTY(QStringList flowControlList
+    Q_PROPERTY(QVector<QString> flowControlList
                READ flowControlList
                CONSTANT)
     // clang-format on
@@ -125,12 +124,12 @@ public:
     quint8 stopBitsIndex() const;
     quint8 flowControlIndex() const;
 
-    QStringList portList() const;
-    QStringList parityList() const;
-    QStringList baudRateList() const;
-    QStringList dataBitsList() const;
-    QStringList stopBitsList() const;
-    QStringList flowControlList() const;
+    QVector<QString> portList() const;
+    QVector<QString> parityList() const;
+    QVector<QString> baudRateList() const;
+    QVector<QString> dataBitsList() const;
+    QVector<QString> stopBitsList() const;
+    QVector<QString> flowControlList() const;
 
     qint32 baudRate() const;
     QSerialPort::Parity parity() const;
@@ -181,8 +180,8 @@ private:
     quint8 m_stopBitsIndex;
     quint8 m_flowControlIndex;
 
-    QStringList m_portList;
-    QStringList m_baudRateList;
+    QVector<QString> m_portList;
+    QVector<QString> m_baudRateList;
 };
 }
 }

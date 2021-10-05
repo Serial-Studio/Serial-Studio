@@ -24,7 +24,6 @@
 #define IO_CONSOLE_H
 
 #include <QObject>
-#include <QStringList>
 
 namespace IO
 {
@@ -122,9 +121,9 @@ public:
     DisplayMode displayMode() const;
     QString currentHistoryString() const;
 
-    Q_INVOKABLE QStringList dataModes() const;
-    Q_INVOKABLE QStringList lineEndings() const;
-    Q_INVOKABLE QStringList displayModes() const;
+    Q_INVOKABLE QVector<QString> dataModes() const;
+    Q_INVOKABLE QVector<QString> lineEndings() const;
+    Q_INVOKABLE QVector<QString> displayModes() const;
     Q_INVOKABLE QString formatUserHex(const QString &text);
 
 public slots:
@@ -167,8 +166,8 @@ private:
     bool m_showTimestamp;
     bool m_isStartingLine;
 
-    QStringList m_lines;
-    QStringList m_historyItems;
+    QVector<QString> m_lines;
+    QVector<QString> m_historyItems;
 
     QString m_textBuffer;
     QString m_printFont;

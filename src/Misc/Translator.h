@@ -41,7 +41,7 @@ class Translator : public QObject
                READ language
                WRITE setLanguage
                NOTIFY languageChanged)
-    Q_PROPERTY(QStringList availableLanguages
+    Q_PROPERTY(QVector<QString> availableLanguages
                READ availableLanguages
                CONSTANT)
     // clang-format on
@@ -57,7 +57,7 @@ public:
 
     int language() const;
     int systemLanguage() const;
-    QStringList availableLanguages() const;
+    QVector<QString> availableLanguages() const;
     Q_INVOKABLE QString welcomeConsoleText() const;
     Q_INVOKABLE QString acknowledgementsText() const;
 

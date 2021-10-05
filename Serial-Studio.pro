@@ -55,13 +55,24 @@ QT += core5compat
 QT += printsupport
 QT += quickcontrols2
 
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
+
 #-----------------------------------------------------------------------------------------
 # Compiler options
 #-----------------------------------------------------------------------------------------
 
 *g++*: {
-    QMAKE_CXXFLAGS_RELEASE -= -O
+    QMAKE_CXXFLAGS_RELEASE -= -O1
+    QMAKE_CXXFLAGS_RELEASE -= -O2
     QMAKE_CXXFLAGS_RELEASE *= -O3
+    QMAKE_CXXFLAGS_RELEASE *= -Ofast
+}
+
+*clang*: {
+    QMAKE_CXXFLAGS_RELEASE -= -O1
+    QMAKE_CXXFLAGS_RELEASE -= -O2
+    QMAKE_CXXFLAGS_RELEASE *= -O3
+    QMAKE_CXXFLAGS_RELEASE *= -Ofast
 }
 
 *msvc*: {
@@ -69,7 +80,7 @@ QT += quickcontrols2
     QMAKE_CXXFLAGS_RELEASE *= /O2
 }
 
-CONFIG += c++17
+CONFIG += c++11
 CONFIG += silent
 
 #-----------------------------------------------------------------------------------------

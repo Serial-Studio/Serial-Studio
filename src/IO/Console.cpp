@@ -203,9 +203,9 @@ QString Console::currentHistoryString() const
  * Returns a list with the available data (sending) modes. This list must be synchronized
  * with the order of the @c DataMode enums.
  */
-QStringList Console::dataModes() const
+QVector<QString> Console::dataModes() const
 {
-    QStringList list;
+    QVector<QString> list;
     list.append(tr("ASCII"));
     list.append(tr("HEX"));
     return list;
@@ -215,9 +215,9 @@ QStringList Console::dataModes() const
  * Returns a list with the available line endings options. This list must be synchronized
  * with the order of the @c LineEnding enums.
  */
-QStringList Console::lineEndings() const
+QVector<QString> Console::lineEndings() const
 {
-    QStringList list;
+    QVector<QString> list;
     list.append(tr("No line ending"));
     list.append(tr("New line"));
     list.append(tr("Carriage return"));
@@ -229,9 +229,9 @@ QStringList Console::lineEndings() const
  * Returns a list with the available console display modes. This list must be synchronized
  * with the order of the @c DisplayMode enums.
  */
-QStringList Console::displayModes() const
+QVector<QString> Console::displayModes() const
 {
-    QStringList list;
+    QVector<QString> list;
     list.append(tr("Plain text"));
     list.append(tr("Hexadecimal"));
     return list;
@@ -307,7 +307,7 @@ void Console::clear()
 }
 
 /**
- * Comamnds sent by the user are stored in a @c QStringList, in which the first items
+ * Comamnds sent by the user are stored in a @c QVector<QString>, in which the first items
  * are the oldest commands.
  *
  * The user can navigate the list using the up/down keys. This function allows the user
@@ -323,7 +323,7 @@ void Console::historyUp()
 }
 
 /**
- * Comamnds sent by the user are stored in a @c QStringList, in which the first items
+ * Comamnds sent by the user are stored in a @c QVector<QString>, in which the first items
  * are the oldest commands.
  *
  * The user can navigate the list using the up/down keys. This function allows the user

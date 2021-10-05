@@ -76,10 +76,10 @@ class Client : public QObject
     Q_PROPERTY(bool lookupActive
                READ lookupActive
                NOTIFY lookupActiveChanged)
-    Q_PROPERTY(QStringList mqttVersions
+    Q_PROPERTY(QVector<QString> mqttVersions
                READ mqttVersions
                CONSTANT)
-    Q_PROPERTY(QStringList clientModes
+    Q_PROPERTY(QVector<QString> clientModes
                READ clientModes
                CONSTANT)
     Q_PROPERTY(quint16 defaultPort
@@ -114,8 +114,8 @@ public:
     bool lookupActive() const;
     bool isSubscribed() const;
     bool isConnectedToHost() const;
-    QStringList clientModes() const;
-    QStringList mqttVersions() const;
+    QVector<QString> clientModes() const;
+    QVector<QString> mqttVersions() const;
 
     quint16 defaultPort() const { return 1883; }
     QString defaultHost() const { return "127.0.0.1"; }

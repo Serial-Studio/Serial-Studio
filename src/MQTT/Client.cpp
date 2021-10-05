@@ -180,17 +180,17 @@ bool Client::isConnectedToHost() const
 /**
  * Returns a list with the available client operation modes.
  */
-QStringList Client::clientModes() const
+QVector<QString> Client::clientModes() const
 {
-    return QStringList { tr("Publisher"), tr("Subscriber") };
+    return QVector<QString> { tr("Publisher"), tr("Subscriber") };
 }
 
 /**
  * Returns a list with the supported MQTT versions
  */
-QStringList Client::mqttVersions() const
+QVector<QString> Client::mqttVersions() const
 {
-    return QStringList { "MQTT 3.1.0", "MQTT 3.1.1" };
+    return QVector<QString> { "MQTT 3.1.0", "MQTT 3.1.1" };
 }
 
 /**

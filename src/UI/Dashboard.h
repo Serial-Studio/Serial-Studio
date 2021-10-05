@@ -73,34 +73,34 @@ class Dashboard : public QObject
     Q_PROPERTY(int accelerometerCount
                READ accelerometerCount
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList mapTitles
+    Q_PROPERTY(QVector<QString> mapTitles
                READ mapTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList barTitles
+    Q_PROPERTY(QVector<QString> barTitles
                READ barTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList plotTitles
+    Q_PROPERTY(QVector<QString> plotTitles
                READ plotTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList groupTitles
+    Q_PROPERTY(QVector<QString> groupTitles
                READ groupTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList gaugeTitles
+    Q_PROPERTY(QVector<QString> gaugeTitles
                READ gaugeTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList compassTitles
+    Q_PROPERTY(QVector<QString> compassTitles
                READ compassTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList gyroscopeTitles
+    Q_PROPERTY(QVector<QString> gyroscopeTitles
                READ gyroscopeTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList multiPlotTitles
+    Q_PROPERTY(QVector<QString> multiPlotTitles
                READ multiPlotTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList thermometerTitles
+    Q_PROPERTY(QVector<QString> thermometerTitles
                READ thermometerTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QStringList accelerometerTitles
+    Q_PROPERTY(QVector<QString> accelerometerTitles
                READ accelerometerTitles
                NOTIFY widgetCountChanged)
     // clang-format on
@@ -159,7 +159,7 @@ public:
     int accelerometerCount() const;
 
     Q_INVOKABLE bool frameValid() const;
-    Q_INVOKABLE QStringList widgetTitles() const;
+    Q_INVOKABLE QVector<QString> widgetTitles() const;
     Q_INVOKABLE int relativeIndex(const int globalIndex) const;
     Q_INVOKABLE bool widgetVisible(const int globalIndex) const;
     Q_INVOKABLE QString widgetIcon(const int globalIndex) const;
@@ -176,16 +176,16 @@ public:
     Q_INVOKABLE bool thermometerVisible(const int index) const;
     Q_INVOKABLE bool accelerometerVisible(const int index) const;
 
-    QStringList barTitles() const;
-    QStringList mapTitles() const;
-    QStringList plotTitles() const;
-    QStringList groupTitles() const;
-    QStringList gaugeTitles() const;
-    QStringList compassTitles() const;
-    QStringList gyroscopeTitles() const;
-    QStringList multiPlotTitles() const;
-    QStringList thermometerTitles() const;
-    QStringList accelerometerTitles() const;
+    QVector<QString> barTitles() const;
+    QVector<QString> mapTitles() const;
+    QVector<QString> plotTitles() const;
+    QVector<QString> groupTitles() const;
+    QVector<QString> gaugeTitles() const;
+    QVector<QString> compassTitles() const;
+    QVector<QString> gyroscopeTitles() const;
+    QVector<QString> multiPlotTitles() const;
+    QVector<QString> thermometerTitles() const;
+    QVector<QString> accelerometerTitles() const;
 
 public slots:
     void setBarVisible(const int index, const bool visible);
@@ -211,8 +211,8 @@ private:
     QVector<JSON::Group *> getWidgetGroups(const QString &handle) const;
     QVector<JSON::Dataset *> getWidgetDatasets(const QString &handle) const;
 
-    QStringList groupTitles(const QVector<JSON::Group *> &vector) const;
-    QStringList datasetTitles(const QVector<JSON::Dataset *> &vector) const;
+    QVector<QString> groupTitles(const QVector<JSON::Group *> &vector) const;
+    QVector<QString> datasetTitles(const QVector<JSON::Dataset *> &vector) const;
 
     bool getVisibility(const QVector<bool> &vector, const int index) const;
     void setVisibility(QVector<bool> &vector, const int index, const bool visible);

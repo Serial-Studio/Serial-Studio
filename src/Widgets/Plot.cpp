@@ -357,9 +357,11 @@ void Plot::replot()
     curveData->values().unlock();
 }
 
-void Plot::updateData() {
+void Plot::updateData()
+{
     auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
-    const QPointF s(static_cast<qreal>(m_elapsedTimer.elapsed()), dataset->value().toDouble());
+    const QPointF s(static_cast<qreal>(m_elapsedTimer.elapsed()),
+                    dataset->value().toDouble());
     SignalData::instance().append(s);
     updateCurve();
 }
@@ -370,8 +372,6 @@ void Plot::setIntervalLength(double interval)
     {
         m_interval.setMaxValue(m_interval.minValue() + interval);
         setAxisScale(QwtAxis::XBottom, m_interval.minValue(), m_interval.maxValue());
-
-        replot();
     }
 }
 
@@ -412,7 +412,7 @@ void Plot::updateCurve()
 void Plot::incrementInterval()
 {
     m_interval
-            = QwtInterval(m_interval.maxValue(), m_interval.maxValue() + m_interval.width());
+        = QwtInterval(m_interval.maxValue(), m_interval.maxValue() + m_interval.width());
 
     CurveData *curveData = static_cast<CurveData *>(m_curve->data());
     curveData->values().clearStaleValues(m_interval.minValue());

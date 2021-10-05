@@ -28,7 +28,6 @@
 #include <QFile>
 #include <QTimer>
 #include <QObject>
-#include <QStringList>
 #include <QJsonDocument>
 
 namespace CSV
@@ -104,7 +103,7 @@ private:
     QFile m_csvFile;
     QTimer m_frameTimer;
     QString m_timestamp;
-    QList<QStringList> m_csvData;
+    QVector<QVector<QString>> m_csvData;
     QMap<QString, QSet<QString>> m_model;
     QMap<QString, QMap<QString, int>> m_datasetIndexes;
 };

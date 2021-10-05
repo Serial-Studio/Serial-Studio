@@ -192,10 +192,10 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor connectButtonUnchecked
                READ connectButtonUnchecked
                NOTIFY themeChanged)
-    Q_PROPERTY(QStringList widgetColors
+    Q_PROPERTY(QVector<QString> widgetColors
                READ widgetColors
                NOTIFY themeChanged)
-    Q_PROPERTY(QStringList availableThemes
+    Q_PROPERTY(QVector<QString> availableThemes
                READ availableThemes
                NOTIFY availableThemesChanged)
     // clang-format on
@@ -262,8 +262,8 @@ public:
     QColor connectButtonChecked() const;
     QColor connectButtonUnchecked() const;
 
-    QStringList widgetColors() const;
-    QStringList availableThemes() const;
+    QVector<QString> widgetColors() const;
+    QVector<QString> availableThemes() const;
 
 public slots:
     void setTheme(const int id);
@@ -278,8 +278,8 @@ private:
 private:
     int m_themeId;
     QSettings m_settings;
-    QStringList m_availableThemes;
-    QStringList m_availableThemesPaths;
+    QVector<QString> m_availableThemes;
+    QVector<QString> m_availableThemesPaths;
 
     QColor m_base;
     QColor m_link;
@@ -333,7 +333,7 @@ private:
     QColor m_widgetControlBackground;
     QColor m_connectButtonChecked;
     QColor m_connectButtonUnchecked;
-    QStringList m_widgetColors;
+    QVector<QString> m_widgetColors;
 };
 }
 

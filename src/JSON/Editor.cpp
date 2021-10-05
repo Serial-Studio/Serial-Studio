@@ -90,19 +90,19 @@ Editor *Editor::getInstance()
  * interface to allow the user to build accelerometer, gyro & map widgets directly from
  * the UI.
  */
-QStringList Editor::availableGroupLevelWidgets()
+QVector<QString> Editor::availableGroupLevelWidgets()
 {
-    return QStringList { tr("Dataset widgets"), tr("Accelerometer"), tr("Gyroscope"),
-                         tr("Map"), tr("Multiple data plot") };
+    return QVector<QString> { tr("Dataset widgets"), tr("Accelerometer"), tr("Gyroscope"),
+                              tr("Map"), tr("Multiple data plot") };
 }
 
 /**
  * Returns a list with the available dataset-level widgets. This list is used by the user
  * interface to allow the user to build gauge, bar & compass widgets directly from the UI.
  */
-QStringList Editor::availableDatasetLevelWidgets()
+QVector<QString> Editor::availableDatasetLevelWidgets()
 {
-    return QStringList { tr("None"), tr("Gauge"), tr("Bar/level"), tr("Compass") };
+    return QVector<QString> { tr("None"), tr("Gauge"), tr("Bar/level"), tr("Compass") };
 }
 
 /**

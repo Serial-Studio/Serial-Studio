@@ -101,7 +101,7 @@ void ThemeManager::setTheme(const int id)
     if (ans == QMessageBox::Yes)
     {
         qApp->quit();
-        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+        QProcess::startDetached(qApp->arguments().at(0), qApp->arguments());
     }
 }
 
@@ -519,12 +519,12 @@ QColor ThemeManager::connectButtonUnchecked() const
     return m_connectButtonUnchecked;
 }
 
-QStringList ThemeManager::widgetColors() const
+QVector<QString> ThemeManager::widgetColors() const
 {
     return m_widgetColors;
 }
 
-QStringList ThemeManager::availableThemes() const
+QVector<QString> ThemeManager::availableThemes() const
 {
     return m_availableThemes;
 }

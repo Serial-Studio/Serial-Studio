@@ -59,7 +59,7 @@ class Network : public QObject
                READ socketTypeIndex
                WRITE setSocketTypeIndex
                NOTIFY socketTypeChanged)
-    Q_PROPERTY(QStringList socketTypes
+    Q_PROPERTY(QVector<QString> socketTypes
                READ socketTypes
                CONSTANT)
     Q_PROPERTY(QString defaultHost
@@ -87,7 +87,7 @@ public:
     bool lookupActive() const;
     int socketTypeIndex() const;
     bool configurationOk() const;
-    QStringList socketTypes() const;
+    QVector<QString> socketTypes() const;
     QAbstractSocket::SocketType socketType() const;
 
     static QString defaultHost() { return "127.0.0.1"; }

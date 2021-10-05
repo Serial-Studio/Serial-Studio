@@ -168,13 +168,13 @@ int Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns a @c QStringList with the titles of all the widgets that compose the current
- * JSON frame.
+ * Returns a @c list with the titles of all the widgets that compose the current JSON
+ * frame.
  *
  * We need to be careful to sincronize the order of the widgets in order to allow
  * the global-index system to work correctly.
  */
-QStringList Dashboard::widgetTitles() const
+QVector<QString> Dashboard::widgetTitles() const
 {
     // Warning: maintain same order as the view option repeaters in ViewOptions.qml!
 
@@ -505,16 +505,16 @@ bool Dashboard::accelerometerVisible(const int index) const { return getVisibili
 //--------------------------------------------------------------------------------------------------
 
 // clang-format off
-QStringList Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
-QStringList Dashboard::mapTitles() const           { return groupTitles(m_mapWidgets);           }
-QStringList Dashboard::plotTitles() const          { return datasetTitles(m_plotWidgets);        }
-QStringList Dashboard::groupTitles() const         { return groupTitles(m_groupWidgets);         }
-QStringList Dashboard::gaugeTitles() const         { return datasetTitles(m_gaugeWidgets);       }
-QStringList Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
-QStringList Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
-QStringList Dashboard::multiPlotTitles() const     { return groupTitles(m_multiPlotWidgets);     }
-QStringList Dashboard::thermometerTitles() const   { return datasetTitles(m_thermometerWidgets); }
-QStringList Dashboard::accelerometerTitles() const { return groupTitles(m_accelerometerWidgets); }
+QVector<QString> Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
+QVector<QString> Dashboard::mapTitles() const           { return groupTitles(m_mapWidgets);           }
+QVector<QString> Dashboard::plotTitles() const          { return datasetTitles(m_plotWidgets);        }
+QVector<QString> Dashboard::groupTitles() const         { return groupTitles(m_groupWidgets);         }
+QVector<QString> Dashboard::gaugeTitles() const         { return datasetTitles(m_gaugeWidgets);       }
+QVector<QString> Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
+QVector<QString> Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
+QVector<QString> Dashboard::multiPlotTitles() const     { return groupTitles(m_multiPlotWidgets);     }
+QVector<QString> Dashboard::thermometerTitles() const   { return datasetTitles(m_thermometerWidgets); }
+QVector<QString> Dashboard::accelerometerTitles() const { return groupTitles(m_accelerometerWidgets); }
 // clang-format on
 
 //--------------------------------------------------------------------------------------------------
@@ -770,9 +770,9 @@ QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle) con
 /**
  * Returns the titles of the datasets contained in the specified @a vector.
  */
-QStringList Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) const
+QVector<QString> Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) const
 {
-    QStringList list;
+    QVector<QString> list;
     foreach (auto set, vector)
         list.append(set->title());
 
@@ -782,9 +782,9 @@ QStringList Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) con
 /**
  * Returns the titles of the groups contained in the specified @a vector.
  */
-QStringList Dashboard::groupTitles(const QVector<JSON::Group *> &vector) const
+QVector<QString> Dashboard::groupTitles(const QVector<JSON::Group *> &vector) const
 {
-    QStringList list;
+    QVector<QString> list;
     foreach (auto group, vector)
         list.append(group->title());
 

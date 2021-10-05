@@ -127,7 +127,7 @@ quint8 Serial::portIndex() const
 
 /**
  * Returns the correspoding index of the parity configuration in relation
- * to the @c QStringList returned by the @c parityList() function.
+ * to the @c QVector<QString> returned by the @c parityList() function.
  */
 quint8 Serial::parityIndex() const
 {
@@ -136,7 +136,7 @@ quint8 Serial::parityIndex() const
 
 /**
  * Returns the correspoding index of the data bits configuration in relation
- * to the @c QStringList returned by the @c dataBitsList() function.
+ * to the @c QVector<QString> returned by the @c dataBitsList() function.
  */
 quint8 Serial::dataBitsIndex() const
 {
@@ -145,7 +145,7 @@ quint8 Serial::dataBitsIndex() const
 
 /**
  * Returns the correspoding index of the stop bits configuration in relation
- * to the @c QStringList returned by the @c stopBitsList() function.
+ * to the @c QVector<QString> returned by the @c stopBitsList() function.
  */
 quint8 Serial::stopBitsIndex() const
 {
@@ -154,7 +154,7 @@ quint8 Serial::stopBitsIndex() const
 
 /**
  * Returns the correspoding index of the flow control config. in relation
- * to the @c QStringList returned by the @c flowControlList() function.
+ * to the @c QVector<QString> returned by the @c flowControlList() function.
  */
 quint8 Serial::flowControlIndex() const
 {
@@ -169,7 +169,7 @@ quint8 Serial::flowControlIndex() const
  *       be "Select Serial Device". This is inteded to make the user interface
  *       a little more friendly.
  */
-QStringList Serial::portList() const
+QVector<QString> Serial::portList() const
 {
     return m_portList;
 }
@@ -178,9 +178,9 @@ QStringList Serial::portList() const
  * Returns a list with the available parity configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList Serial::parityList() const
+QVector<QString> Serial::parityList() const
 {
-    QStringList list;
+    QVector<QString> list;
     list.append(tr("None"));
     list.append(tr("Even"));
     list.append(tr("Odd"));
@@ -193,7 +193,7 @@ QStringList Serial::parityList() const
  * Returns a list with the available baud rate configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList Serial::baudRateList() const
+QVector<QString> Serial::baudRateList() const
 {
     return m_baudRateList;
 }
@@ -202,27 +202,27 @@ QStringList Serial::baudRateList() const
  * Returns a list with the available data bits configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList Serial::dataBitsList() const
+QVector<QString> Serial::dataBitsList() const
 {
-    return QStringList { "5", "6", "7", "8" };
+    return QVector<QString> { "5", "6", "7", "8" };
 }
 
 /**
  * Returns a list with the available stop bits configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList Serial::stopBitsList() const
+QVector<QString> Serial::stopBitsList() const
 {
-    return QStringList { "1", "1.5", "2" };
+    return QVector<QString> { "1", "1.5", "2" };
 }
 
 /**
  * Returns a list with the available flow control configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList Serial::flowControlList() const
+QVector<QString> Serial::flowControlList() const
 {
-    QStringList list;
+    QVector<QString> list;
     list.append(tr("None"));
     list.append("RTS/CTS");
     list.append("XON/XOFF");
@@ -546,14 +546,14 @@ void Serial::setFlowControl(const quint8 flowControlIndex)
 }
 
 /**
- * Scans for new serial ports available & generates a QStringList with current
+ * Scans for new serial ports available & generates a QVector<QString> with current
  * serial ports.
  */
 void Serial::refreshSerialDevices()
 {
     // Create device list, starting with dummy header
     // (for a more friendly UI when no devices are attached)
-    QStringList ports;
+    QVector<QString> ports;
     ports.append(tr("Select Port"));
 
     // Search for available ports and add them to the lsit
@@ -619,7 +619,7 @@ void Serial::handleError(QSerialPort::SerialPortError error)
 void Serial::readSettings()
 {
     // Register standard baud rates
-    QStringList stdBaudRates
+    QVector<QString> stdBaudRates
         = { "300",   "1200",   "2400",   "4800",   "9600",   "19200",   "38400",  "57600",
             "74880", "115200", "230400", "250000", "500000", "1000000", "2000000" };
 

@@ -151,7 +151,7 @@ public:
     QString separatorSequence() const;
     QString receivedDataLength() const;
 
-    Q_INVOKABLE QStringList dataSourcesList() const;
+    Q_INVOKABLE QVector<QString> dataSourcesList() const;
     Q_INVOKABLE qint64 writeData(const QByteArray &data);
 
 public slots:

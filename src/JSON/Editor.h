@@ -24,7 +24,6 @@
 #define JSON_EDITOR_H
 
 #include <QObject>
-#include <QStringList>
 
 #include "Group.h"
 #include "Dataset.h"
@@ -89,8 +88,8 @@ signals:
 public:
     static Editor *getInstance();
 
-    Q_INVOKABLE QStringList availableGroupLevelWidgets();
-    Q_INVOKABLE QStringList availableDatasetLevelWidgets();
+    Q_INVOKABLE QVector<QString> availableGroupLevelWidgets();
+    Q_INVOKABLE QVector<QString> availableDatasetLevelWidgets();
 
     QString title() const;
     QString separator() const;

@@ -117,9 +117,9 @@ bool Network::configurationOk() const
 /**
  * Returns a list with the available socket types
  */
-QStringList Network::socketTypes() const
+QVector<QString> Network::socketTypes() const
 {
-    return QStringList { "TCP", "UDP" };
+    return QVector<QString> { "TCP", "UDP" };
 }
 
 /**
