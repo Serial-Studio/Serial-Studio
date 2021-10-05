@@ -387,7 +387,7 @@ Item {
                         font.pixelSize: 18
                         font.family: app.monoFont
                         Layout.alignment: Qt.AlignVCenter
-                        color: _rx.enabled ? palette.highlight : Cpp_ThemeManager.ledDisabled
+                        color: _rx.enabled ? Cpp_ThemeManager.ledEnabled : Cpp_ThemeManager.ledDisabled
                     }
 
                     Widgets.Icon {
@@ -404,7 +404,7 @@ Item {
                         font.pixelSize: 18
                         font.family: app.monoFont
                         Layout.alignment: Qt.AlignVCenter
-                        color: _tx.enabled ? palette.highlight : Cpp_ThemeManager.ledDisabled
+                        color: _tx.enabled ? Cpp_ThemeManager.ledEnabled : Cpp_ThemeManager.ledDisabled
                     }
 
                     Widgets.LED {

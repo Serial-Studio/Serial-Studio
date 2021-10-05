@@ -75,7 +75,7 @@ RowLayout {
     Label {
         id: _label
         font.family: app.monoFont
-        color: palette.highlightedText
         Layout.alignment: Qt.AlignVCenter
+        color: root.enabled ? Cpp_ThemeManager.ledEnabled : Cpp_ThemeManager.ledDisabled
     }
 }
