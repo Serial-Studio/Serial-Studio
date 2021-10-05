@@ -354,7 +354,7 @@ ApplicationWindow {
             // Spacer
             //
             Item {
-                height: 2 * app.spacing
+                height: app.spacing
             }
 
             //
@@ -364,8 +364,6 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.minimumHeight: 320
-                Layout.topMargin: -app.spacing
-                Layout.bottomMargin: -app.spacing
                 Layout.leftMargin: -2 * app.spacing
                 Layout.rightMargin: -2 * app.spacing
 
@@ -444,7 +442,7 @@ ApplicationWindow {
             // Spacer
             //
             Item {
-                height: 2 * app.spacing
+                height: app.spacing
             }
         }
 
