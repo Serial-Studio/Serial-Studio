@@ -95,6 +95,9 @@ ApplicationWindow {
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
         palette.window: Cpp_ThemeManager.dialogBackground
+        background: Rectangle {
+            color: Cpp_ThemeManager.windowBackground
+        }
 
         //
         // Header (project properties)
