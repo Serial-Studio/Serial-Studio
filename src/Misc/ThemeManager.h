@@ -186,33 +186,6 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor widgetControlBackground
                READ widgetControlBackground
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor gyroSky
-               READ gyroSky
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor gyroText
-               READ gyroText
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor gyroGround
-               READ gyroGround
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor mapDotBackground
-               READ mapDotBackground
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor mapDotForeground
-               READ mapDotForeground
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor mapBorder
-               READ mapBorder
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor mapHorizon
-               READ mapHorizon
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor mapSkyLowAltitude
-               READ mapSkyLowAltitude
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor mapSkyHighAltitude
-               READ mapSkyHighAltitude
-               NOTIFY themeChanged)
     Q_PROPERTY(QColor connectButtonChecked
                READ connectButtonChecked
                NOTIFY themeChanged)
@@ -286,15 +259,6 @@ public:
     QColor widgetIndicator3() const;
     QColor widgetAlternativeBackground() const;
     QColor widgetControlBackground() const;
-    QColor gyroSky() const;
-    QColor gyroText() const;
-    QColor gyroGround() const;
-    QColor mapDotBackground() const;
-    QColor mapDotForeground() const;
-    QColor mapBorder() const;
-    QColor mapHorizon() const;
-    QColor mapSkyLowAltitude() const;
-    QColor mapSkyHighAltitude() const;
     QColor connectButtonChecked() const;
     QColor connectButtonUnchecked() const;
 
@@ -367,15 +331,6 @@ private:
     QColor m_widgetIndicator3;
     QColor m_widgetAlternativeBackground;
     QColor m_widgetControlBackground;
-    QColor m_gyroSky;
-    QColor m_gyroText;
-    QColor m_gyroGround;
-    QColor m_mapDotBackground;
-    QColor m_mapDotForeground;
-    QColor m_mapBorder;
-    QColor m_mapHorizon;
-    QColor m_mapSkyLowAltitude;
-    QColor m_mapSkyHighAltitude;
     QColor m_connectButtonChecked;
     QColor m_connectButtonUnchecked;
     QStringList m_widgetColors;

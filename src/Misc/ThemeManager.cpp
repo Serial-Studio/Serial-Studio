@@ -183,15 +183,6 @@ void ThemeManager::loadTheme(const int id)
     m_widgetIndicator3 = QColor(colors.value("widgetIndicator3").toString());
     m_widgetAlternativeBackground = QColor(colors.value("widgetAlternativeBackground").toString());
     m_widgetControlBackground = QColor(colors.value("widgetControlBackground").toString());
-    m_gyroSky = QColor(colors.value("gyroSky").toString());
-    m_gyroText = QColor(colors.value("gyroText").toString());
-    m_gyroGround = QColor(colors.value("gyroGround").toString());
-    m_mapDotBackground = QColor(colors.value("mapDotBackground").toString());
-    m_mapDotForeground = QColor(colors.value("mapDotForeground").toString());
-    m_mapBorder = QColor(colors.value("mapBorder").toString());
-    m_mapHorizon = QColor(colors.value("mapHorizon").toString());
-    m_mapSkyLowAltitude = QColor(colors.value("mapSkyLowAltitude").toString());
-    m_mapSkyHighAltitude = QColor(colors.value("mapSkyHighAltitude").toString());
     m_connectButtonChecked = QColor(colors.value("connectButtonChecked").toString());
     m_connectButtonUnchecked = QColor(colors.value("connectButtonUnchecked").toString());
     // clang-format on
@@ -516,51 +507,6 @@ QColor ThemeManager::widgetAlternativeBackground() const
 QColor ThemeManager::widgetControlBackground() const
 {
     return m_widgetControlBackground;
-}
-
-QColor ThemeManager::gyroSky() const
-{
-    return m_gyroSky;
-}
-
-QColor ThemeManager::gyroText() const
-{
-    return m_gyroText;
-}
-
-QColor ThemeManager::gyroGround() const
-{
-    return m_gyroGround;
-}
-
-QColor ThemeManager::mapDotBackground() const
-{
-    return m_mapDotBackground;
-}
-
-QColor ThemeManager::mapDotForeground() const
-{
-    return m_mapDotForeground;
-}
-
-QColor ThemeManager::mapBorder() const
-{
-    return m_mapBorder;
-}
-
-QColor ThemeManager::mapHorizon() const
-{
-    return m_mapHorizon;
-}
-
-QColor ThemeManager::mapSkyLowAltitude() const
-{
-    return m_mapSkyLowAltitude;
-}
-
-QColor ThemeManager::mapSkyHighAltitude() const
-{
-    return m_mapSkyHighAltitude;
 }
 
 QColor ThemeManager::connectButtonChecked() const
