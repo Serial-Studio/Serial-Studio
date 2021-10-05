@@ -241,7 +241,7 @@ void WidgetLoader::setWidgetIndex(const int index)
                 m_widget = new QPushButton("Multi-Plot");
                 break;
             case UI::Dashboard::WidgetType::Plot:
-                m_widget = new QPushButton("Plot");
+                m_widget = new Plot(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::Bar:
                 m_widget = new Bar(relativeIndex());

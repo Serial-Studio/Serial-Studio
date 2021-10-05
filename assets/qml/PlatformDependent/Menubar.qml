@@ -45,11 +45,6 @@ MenuBar {
     }
 
     //
-    // Set this component as the application's default menubar upon creation
-    //
-    Component.onCompleted: app.mainWindow.menuBar = this
-
-    //
     // File menu
     //
     Menu {

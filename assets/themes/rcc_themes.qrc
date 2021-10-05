@@ -2,5 +2,6 @@
     <qresource prefix="/themes">
         <file>1_Light.json</file>
         <file>0_Dark.json</file>
+        <file>2_Yaru.json</file>
     </qresource>
 </RCC>
