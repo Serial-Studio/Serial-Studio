@@ -34,7 +34,6 @@ Item {
     property int widgetIndex: -1
 
     Widgets.Window {
-        z: 1
         id: window
         anchors.fill: parent
         title: loader.widgetTitle
@@ -52,12 +51,6 @@ Item {
                 bottomMargin: window.borderWidth
             }
         }
-    }
-
-    Widgets.Shadow {
-        z: 0
-        source: window
-        anchors.fill: window
     }
 
     Window {

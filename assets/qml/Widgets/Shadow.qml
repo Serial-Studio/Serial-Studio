@@ -24,10 +24,10 @@ import QtQuick
 import Qt5Compat.GraphicalEffects
 
 DropShadow {
-    radius: 8.0
+    id: root
+    radius: 20
     verticalOffset: 3
     color: "#80000000"
     horizontalOffset: 3
     transparentBorder: true
-    enabled: Qt.platform.os !== "windows"
 }

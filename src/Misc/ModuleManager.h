@@ -41,11 +41,9 @@ public:
 
 public slots:
     void quit();
+    void stopOperations();
     void hideSplashscreen();
     void setSplashScreenMessage(const QString &message);
-
-private slots:
-    void stopOperations();
 
 private:
     QSplashScreen m_splash;

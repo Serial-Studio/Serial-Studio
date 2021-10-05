@@ -100,8 +100,13 @@ void ThemeManager::setTheme(const int id)
     // Restart application
     if (ans == QMessageBox::Yes)
     {
-        qApp->quit();
-        QProcess::startDetached(qApp->arguments().at(0), qApp->arguments());
+#ifdef Q_OS_MAC
+        auto bundle = qApp->applicationDirPath() + "/../../";
+        QProcess::startDetached("open", { "-n", "-a", bundle });
+#else
+        QProcess::startDetached(qApp->applicationFilePath());
+#endif
+        qApp->exit();
     }
 }
 

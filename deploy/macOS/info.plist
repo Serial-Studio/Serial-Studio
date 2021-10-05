@@ -27,6 +27,6 @@
 	<key>NSSupportsSuddenTermination</key>
 	<false/>
 	<key>NSRequiresAquaSystemAppearance</key>
-	<string>False</string>
+        <string>False</string>
 </dict>
 </plist>
