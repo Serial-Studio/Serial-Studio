@@ -69,15 +69,8 @@ QT += quickcontrols2
     QMAKE_CXXFLAGS_RELEASE *= /O2
 }
 
-CONFIG += c++11
+CONFIG += c++17
 CONFIG += silent
-CONFIG += strict_c++
-
-sanitize {
-    CONFIG += sanitizer
-    CONFIG += sanitize_address
-    CONFIG *= sanitize_undefined
-}
 
 #-----------------------------------------------------------------------------------------
 # Serial Studio compile-time settings

@@ -47,7 +47,7 @@ DropArea {
     //
     // Open *.json & *.csv files on drag drop
     //
-    onDropped: {
+    onDropped: (drop) => {
         // Hide rectangle
         dropRectangle.hide()
 
