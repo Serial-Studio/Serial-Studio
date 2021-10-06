@@ -85,7 +85,7 @@ Plot::Plot(const int index)
         color = colors.at(colors.count() % m_index);
 
     // Set curve color & plot style
-    m_curve.setPen(QColor(color), 1, Qt::SolidLine);
+    m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
     // Lazy widgets, get initial properties from dataset
 #ifdef LAZY_WIDGETS
@@ -97,6 +97,8 @@ Plot::Plot(const int index)
         auto max = dataset->max();
         if (max > min)
             m_plot.setAxisScale(m_plot.y(), min, max);
+        else
+            m_plot.setAxisAutoScale(m_plot.y(), true);
 
         // Set units
         if (!dataset->units().isEmpty())
@@ -125,6 +127,8 @@ void Plot::updateData()
         auto max = dataset->max();
         if (max > min)
             m_plot.setAxisScale(m_plot.y(), min, max);
+        else
+            m_plot.setAxisAutoScale(m_plot.y(), true);
 
         // Set units
         if (!dataset->units().isEmpty())
