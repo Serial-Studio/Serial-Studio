@@ -24,49 +24,32 @@
 #define WIDGETS_PLOT_H
 
 #include <QwtPlot>
-#include <QwtInterval>
-#include <QElapsedTimer>
-
-class QwtPlotCurve;
-class QwtPlotMarker;
-class QwtPlotDirectPainter;
+#include <QWidget>
+#include <QComboBox>
+#include <QVBoxLayout>
+#include <QwtPlotCurve>
 
 namespace Widgets
 {
-class Plot : public QwtPlot
+class Plot : public QWidget
 {
     Q_OBJECT
 
 public:
     Plot(const int index = -1);
-    ~Plot();
 
-    void start();
-    virtual void replot() QWT_OVERRIDE;
-    virtual bool eventFilter(QObject *, QEvent *) QWT_OVERRIDE;
-
-public slots:
+private slots:
     void updateData();
-    void setIntervalLength(const double interval);
-
-private:
-    void updateCurve();
-    void incrementInterval();
-
-protected:
-    virtual void showEvent(QShowEvent *event) QWT_OVERRIDE;
-    virtual void resizeEvent(QResizeEvent *event) QWT_OVERRIDE;
-    virtual void timerEvent(QTimerEvent *event) QWT_OVERRIDE;
 
 private:
     int m_index;
-    QwtPlotMarker *m_origin;
-    QwtPlotCurve *m_curve;
-    int m_paintedPoints;
-    QwtPlotDirectPainter *m_directPainter;
-    QwtInterval m_interval;
-    int m_timerId;
-    QElapsedTimer m_elapsedTimer;
+    int m_count;
+    QwtPlot m_plot;
+    QwtPlotCurve m_curve;
+    QVBoxLayout m_layout;
+    QComboBox m_plotTypes;
+    QVector<double> m_xData;
+    QVector<double> m_yData;
 };
 }
 

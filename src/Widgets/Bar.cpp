@@ -81,7 +81,7 @@ Bar::Bar(const int index)
     setWidget(&m_thermo, Qt::AlignHCenter, false);
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(update()));
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
     connect(this, SIGNAL(resized()), this, SLOT(onResized()));
 }
 
@@ -92,7 +92,7 @@ Bar::Bar(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Bar::update()
+void Bar::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())

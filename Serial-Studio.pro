@@ -185,7 +185,6 @@ HEADERS += \
     src/Widgets/MultiPlot.h \
     src/Widgets/Plot.h \
     src/Widgets/Terminal.h \
-    src/Widgets/Thermometer.h \
     src/Widgets/WidgetLoader.h
 
 SOURCES += \
@@ -223,7 +222,6 @@ SOURCES += \
     src/Widgets/MultiPlot.cpp \
     src/Widgets/Plot.cpp \
     src/Widgets/Terminal.cpp \
-    src/Widgets/Thermometer.cpp \
     src/Widgets/WidgetLoader.cpp \
     src/main.cpp
 

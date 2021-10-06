@@ -28,7 +28,6 @@
 #include "Compass.h"
 #include "DataGroup.h"
 #include "Gyroscope.h"
-#include "Thermometer.h"
 #include "Accelerometer.h"
 
 #include <QPushButton>
@@ -248,9 +247,6 @@ void WidgetLoader::setWidgetIndex(const int index)
                 break;
             case UI::Dashboard::WidgetType::Gauge:
                 m_widget = new Gauge(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::Thermometer:
-                m_widget = new QPushButton("Thermometer");
                 break;
             case UI::Dashboard::WidgetType::Compass:
                 m_widget = new Compass(relativeIndex());

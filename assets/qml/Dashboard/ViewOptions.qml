@@ -120,17 +120,6 @@ Widgets.Window {
             }
 
             //
-            // Thermometers
-            //
-            ViewOptionsDelegate {
-                title: qsTr("Thermometers")
-                icon: "qrc:/icons/thermometer.svg"
-                count: Cpp_UI_Dashboard.thermometerCount
-                titles: Cpp_UI_Dashboard.thermometerTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setThermometerVisible(index, checked)
-            }
-
-            //
             // Compasses
             //
             ViewOptionsDelegate {

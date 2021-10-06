@@ -36,7 +36,7 @@ public:
     Bar(const int index = -1);
 
 private slots:
-    void update();
+    void updateData();
     void onResized();
 
 private:

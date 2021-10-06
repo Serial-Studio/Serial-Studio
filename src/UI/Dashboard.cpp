@@ -86,7 +86,6 @@ JSON::Group *Dashboard::getGyroscope(const int index)     { return getGroupWidge
 JSON::Dataset *Dashboard::getCompass(const int index)     { return getDatasetWidget(m_compassWidgets, index);     }
 JSON::Group *Dashboard::getMultiplot(const int index)     { return getGroupWidget(m_multiPlotWidgets, index);     }
 JSON::Group *Dashboard::getAccelerometer(const int index) { return getGroupWidget(m_accelerometerWidgets, index); }
-JSON::Dataset *Dashboard::getThermometer(const int index) { return getDatasetWidget(m_thermometerWidgets, index); }
 // clang-format on
 
 //--------------------------------------------------------------------------------------------------
@@ -143,7 +142,6 @@ int Dashboard::totalWidgetCount() const
                       compassCount() +
                       multiPlotCount() +
                       gyroscopeCount() +
-                      thermometerCount() +
                       accelerometerCount();
     // clang-format on
 
@@ -159,7 +157,6 @@ int Dashboard::groupCount() const         { return m_groupWidgets.count();      
 int Dashboard::compassCount() const       { return m_compassWidgets.count();       }
 int Dashboard::gyroscopeCount() const     { return m_gyroscopeWidgets.count();     }
 int Dashboard::multiPlotCount() const     { return m_multiPlotWidgets.count();     }
-int Dashboard::thermometerCount() const   { return m_thermometerWidgets.count();   }
 int Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(); }
 // clang-format on
 
@@ -184,7 +181,6 @@ QVector<QString> Dashboard::widgetTitles() const
            plotTitles() +
            barTitles() +
            gaugeTitles() +
-           thermometerTitles() +
            compassTitles() +
            gyroscopeTitles() +
            accelerometerTitles() +
@@ -242,13 +238,8 @@ int Dashboard::relativeIndex(const int globalIndex) const
     if (index < gaugeCount())
         return index;
 
-    // Check if we should return thermometer widget
-    index -= gaugeCount();
-    if (index < thermometerCount())
-        return index;
-
     // Check if we should return compass widget
-    index -= thermometerCount();
+    index -= gaugeCount();
     if (index < compassCount())
         return index;
 
@@ -310,9 +301,6 @@ bool Dashboard::widgetVisible(const int globalIndex) const
         case WidgetType::Gauge:
             visible = gaugeVisible(index);
             break;
-        case WidgetType::Thermometer:
-            visible = thermometerVisible(index);
-            break;
         case WidgetType::Compass:
             visible = compassVisible(index);
             break;
@@ -368,9 +356,6 @@ QString Dashboard::widgetIcon(const int globalIndex) const
         case WidgetType::Gauge:
             return "qrc:/icons/gauge.svg";
             break;
-        case WidgetType::Thermometer:
-            return "qrc:/icons/thermometer.svg";
-            break;
         case WidgetType::Compass:
             return "qrc:/icons/compass.svg";
             break;
@@ -399,7 +384,6 @@ QString Dashboard::widgetIcon(const int globalIndex) const
  * - @c WidgetType::Plot
  * - @c WidgetType::Bar
  * - @c WidgetType::Gauge
- * - @c WidgetType::Thermometer
  * - @c WidgetType::Compass
  * - @c WidgetType::Gyroscope
  * - @c WidgetType::Accelerometer
@@ -454,13 +438,8 @@ UI::Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
     if (index < gaugeCount())
         return WidgetType::Gauge;
 
-    // Check if we should return thermometer widget
-    index -= gaugeCount();
-    if (index < thermometerCount())
-        return WidgetType::Thermometer;
-
     // Check if we should return compass widget
-    index -= thermometerCount();
+    index -= gaugeCount();
     if (index < compassCount())
         return WidgetType::Compass;
 
@@ -496,7 +475,6 @@ bool Dashboard::gaugeVisible(const int index) const         { return getVisibili
 bool Dashboard::compassVisible(const int index) const       { return getVisibility(m_compassVisibility, index);       }
 bool Dashboard::gyroscopeVisible(const int index) const     { return getVisibility(m_gyroscopeVisibility, index);     }
 bool Dashboard::multiPlotVisible(const int index) const     { return getVisibility(m_multiPlotVisibility, index);     }
-bool Dashboard::thermometerVisible(const int index) const   { return getVisibility(m_thermometerVisibility, index);   }
 bool Dashboard::accelerometerVisible(const int index) const { return getVisibility(m_accelerometerVisibility, index); }
 // clang-format on
 
@@ -513,7 +491,6 @@ QVector<QString> Dashboard::gaugeTitles() const         { return datasetTitles(m
 QVector<QString> Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
 QVector<QString> Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
 QVector<QString> Dashboard::multiPlotTitles() const     { return groupTitles(m_multiPlotWidgets);     }
-QVector<QString> Dashboard::thermometerTitles() const   { return datasetTitles(m_thermometerWidgets); }
 QVector<QString> Dashboard::accelerometerTitles() const { return groupTitles(m_accelerometerWidgets); }
 // clang-format on
 
@@ -529,8 +506,7 @@ void Dashboard::setGroupVisible(const int i, const bool v)         { setVisibili
 void Dashboard::setGaugeVisible(const int i, const bool v)         { setVisibility(m_gaugeVisibility, i, v);         }
 void Dashboard::setCompassVisible(const int i, const bool v)       { setVisibility(m_compassVisibility, i, v);       }
 void Dashboard::setGyroscopeVisible(const int i, const bool v)     { setVisibility(m_gyroscopeVisibility, i, v);     }
-void Dashboard::setMultiplotVisible(const int i, const bool v)     { setVisibility(m_multiPlotVisibility, i, v);   }
-void Dashboard::setThermometerVisible(const int i, const bool v)   { setVisibility(m_thermometerVisibility, i, v);   }
+void Dashboard::setMultiplotVisible(const int i, const bool v)     { setVisibility(m_multiPlotVisibility, i, v);     }
 void Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisibility(m_accelerometerVisibility, i, v); }
 // clang-format on
 
@@ -557,7 +533,6 @@ void Dashboard::resetData()
     m_compassWidgets.clear();
     m_gyroscopeWidgets.clear();
     m_multiPlotWidgets.clear();
-    m_thermometerWidgets.clear();
     m_accelerometerWidgets.clear();
 
     // Clear widget visibility data
@@ -569,7 +544,6 @@ void Dashboard::resetData()
     m_compassVisibility.clear();
     m_gyroscopeVisibility.clear();
     m_multiPlotVisibility.clear();
-    m_thermometerVisibility.clear();
     m_accelerometerVisibility.clear();
 
     // Update UI
@@ -594,7 +568,6 @@ void Dashboard::updateData()
     int compassC = compassCount();
     int gyroscopeC = gyroscopeCount();
     int multiPlotC = multiPlotCount();
-    int thermometerC = thermometerCount();
     int accelerometerC = accelerometerCount();
 
     // Save previous title
@@ -609,7 +582,6 @@ void Dashboard::updateData()
     m_compassWidgets.clear();
     m_gyroscopeWidgets.clear();
     m_multiPlotWidgets.clear();
-    m_thermometerWidgets.clear();
     m_accelerometerWidgets.clear();
 
     // Check if frame is valid
@@ -625,7 +597,6 @@ void Dashboard::updateData()
     m_gyroscopeWidgets = getWidgetGroups("gyro");
     m_compassWidgets = getWidgetDatasets("compass");
     m_multiPlotWidgets = getWidgetGroups("multiplot");
-    m_thermometerWidgets = getWidgetDatasets("thermometer");
     m_accelerometerWidgets = getWidgetGroups("accelerometer");
 
     // Add accelerometer widgets to multiplot
@@ -650,7 +621,6 @@ void Dashboard::updateData()
     regenerateWidgets |= (compassC != compassCount());
     regenerateWidgets |= (gyroscopeC != gyroscopeCount());
     regenerateWidgets |= (multiPlotC != multiPlotCount());
-    regenerateWidgets |= (thermometerC != thermometerCount());
     regenerateWidgets |= (accelerometerC != accelerometerCount());
 
     // Regenerate widget visiblity models
@@ -664,7 +634,6 @@ void Dashboard::updateData()
         m_compassVisibility.clear();
         m_gyroscopeVisibility.clear();
         m_multiPlotVisibility.clear();
-        m_thermometerVisibility.clear();
         m_accelerometerVisibility.clear();
 
         int i;
@@ -684,8 +653,6 @@ void Dashboard::updateData()
             m_gyroscopeVisibility.append(true);
         for (i = 0; i < multiPlotCount(); ++i)
             m_multiPlotVisibility.append(true);
-        for (i = 0; i < thermometerCount(); ++i)
-            m_thermometerVisibility.append(true);
         for (i = 0; i < accelerometerCount(); ++i)
             m_accelerometerVisibility.append(true);
 
