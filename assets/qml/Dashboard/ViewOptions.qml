@@ -37,7 +37,7 @@ Widgets.Window {
     title: qsTr("View")
     headerDoubleClickEnabled: false
     icon.source: "qrc:/icons/visibility.svg"
-    backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
+    backgroundColor: Cpp_ThemeManager.paneWindowBackground
 
     //
     // Maps the slider position to points

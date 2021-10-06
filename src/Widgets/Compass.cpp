@@ -62,7 +62,7 @@ Compass::Compass(const int index)
     // Set compass palette
     QPalette palette;
     palette.setColor(QPalette::WindowText, theme->base());
-    palette.setColor(QPalette::Text, theme->widgetIndicator1());
+    palette.setColor(QPalette::Text, theme->widgetIndicator());
     m_compass.setPalette(palette);
 
     // Set widget pointer

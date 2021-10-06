@@ -35,8 +35,8 @@ BaseWidget::BaseWidget()
     // Set window palette
     QPalette palette;
     auto theme = Misc::ThemeManager::getInstance();
-    palette.setColor(QPalette::Base, theme->datasetWindowBackground());
-    palette.setColor(QPalette::Window, theme->datasetWindowBackground());
+    palette.setColor(QPalette::Base, theme->widgetWindowBackground());
+    palette.setColor(QPalette::Window, theme->widgetWindowBackground());
     setPalette(palette);
 
     // Configure label style
@@ -47,7 +47,7 @@ BaseWidget::BaseWidget()
     auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
                         theme->base(),
                         theme->widgetForegroundPrimary(),
-                        theme->widgetIndicator1());
+                        theme->widgetIndicator());
     m_label.setStyleSheet(valueQSS);
     // clang-format on
 }

@@ -38,7 +38,7 @@ Item {
         anchors.fill: parent
         title: loader.widgetTitle
         icon.source: loader.widgetIcon
-        borderColor: Cpp_ThemeManager.datasetWindowBorder
+        borderColor: Cpp_ThemeManager.widgetWindowBorder
         onHeaderDoubleClicked: externalWindow.visible = true
 
         WidgetLoader {
@@ -58,8 +58,8 @@ Item {
         minimumWidth: 640
         minimumHeight: 480
         title: externalLoader.widgetTitle
-        palette.base: Cpp_ThemeManager.datasetWindowBackground
-        palette.window: Cpp_ThemeManager.datasetWindowBackground
+        palette.base: Cpp_ThemeManager.widgetWindowBackground
+        palette.window: Cpp_ThemeManager.widgetWindowBackground
         flags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
 
         WidgetLoader {

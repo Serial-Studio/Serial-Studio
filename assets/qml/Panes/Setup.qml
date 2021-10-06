@@ -136,7 +136,7 @@ Item {
         headerDoubleClickEnabled: false
         anchors.margins: app.spacing * 1.5
         icon.source: "qrc:/icons/settings.svg"
-        backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
+        backgroundColor: Cpp_ThemeManager.paneWindowBackground
 
         //
         // Control arrangement
@@ -210,7 +210,7 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     checked: Cpp_CSV_Export.exportEnabled
                     Layout.maximumWidth: root.maxItemWidth
-                    palette.highlight: Cpp_ThemeManager.csvHighlight
+                    palette.highlight: Cpp_ThemeManager.csvCheckbox
 
                     onCheckedChanged:  {
                         if (Cpp_CSV_Export.exportEnabled !== checked)

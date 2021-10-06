@@ -122,7 +122,7 @@ Item {
         headerDoubleClickEnabled: false
         icon.source: "qrc:/icons/code.svg"
         anchors.margins: app.spacing * 1.5
-        backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
+        backgroundColor: Cpp_ThemeManager.paneWindowBackground
 
         //
         // Right-click context menu

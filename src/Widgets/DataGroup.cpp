@@ -53,15 +53,15 @@ DataGroup::DataGroup(const int index)
         return;
 
     // Generate widget stylesheets
-    auto titleQSS = QSS("color:%1", theme->datasetTextPrimary());
-    auto unitsQSS = QSS("color:%1", theme->datasetTextSecondary());
+    auto titleQSS = QSS("color:%1", theme->widgetTextPrimary());
+    auto unitsQSS = QSS("color:%1", theme->widgetTextSecondary());
     auto valueQSS = QSS("color:%1", theme->widgetForegroundPrimary());
-    auto iconsQSS = QSS("color:%1; font-weight:600;", theme->datasetTextSecondary());
+    auto iconsQSS = QSS("color:%1; font-weight:600;", theme->widgetTextSecondary());
 
     // Set window palette
     QPalette windowPalette;
-    windowPalette.setColor(QPalette::Base, theme->datasetWindowBackground());
-    windowPalette.setColor(QPalette::Window, theme->datasetWindowBackground());
+    windowPalette.setColor(QPalette::Base, theme->widgetWindowBackground());
+    windowPalette.setColor(QPalette::Window, theme->widgetWindowBackground());
     setPalette(windowPalette);
 
     // Configure scroll area container

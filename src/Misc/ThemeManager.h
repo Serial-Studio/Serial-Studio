@@ -135,26 +135,20 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor setupPanelBackground
                READ setupPanelBackground
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor datasetValue
-               READ datasetValue
+    Q_PROPERTY(QColor widgetTextPrimary
+               READ widgetTextPrimary
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor graphDialBorder
-               READ graphDialBorder
+    Q_PROPERTY(QColor widgetTextSecondary
+               READ widgetTextSecondary
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor datasetTextPrimary
-               READ datasetTextPrimary
+    Q_PROPERTY(QColor widgetWindowBackground
+               READ widgetWindowBackground
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor datasetTextSecondary
-               READ datasetTextSecondary
+    Q_PROPERTY(QColor widgetWindowBorder
+               READ widgetWindowBorder
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor datasetWindowBackground
-               READ datasetWindowBackground
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor datasetWindowBorder
-               READ datasetWindowBorder
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor embeddedWindowBackground
-               READ embeddedWindowBackground
+    Q_PROPERTY(QColor paneWindowBackground
+               READ paneWindowBackground
                NOTIFY themeChanged)
     Q_PROPERTY(QColor ledEnabled
                READ ledEnabled
@@ -162,8 +156,8 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor ledDisabled
                READ ledDisabled
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor csvHighlight
-               READ csvHighlight
+    Q_PROPERTY(QColor csvCheckbox
+               READ csvCheckbox
                NOTIFY themeChanged)
     Q_PROPERTY(QColor widgetForegroundPrimary
                READ widgetForegroundPrimary
@@ -171,17 +165,8 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor widgetForegroundSecondary
                READ widgetForegroundSecondary
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor widgetIndicator1
-               READ widgetIndicator1
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor widgetIndicator2
-               READ widgetIndicator2
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor widgetIndicator3
-               READ widgetIndicator3
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor widgetAlternativeBackground
-               READ widgetAlternativeBackground
+    Q_PROPERTY(QColor widgetIndicator
+               READ widgetIndicator
                NOTIFY themeChanged)
     Q_PROPERTY(QColor widgetControlBackground
                READ widgetControlBackground
@@ -242,22 +227,17 @@ public:
     QColor windowGradient2() const;
     QColor alternativeHighlight() const;
     QColor setupPanelBackground() const;
-    QColor datasetValue() const;
-    QColor graphDialBorder() const;
-    QColor datasetTextPrimary() const;
-    QColor datasetTextSecondary() const;
-    QColor datasetWindowBackground() const;
-    QColor datasetWindowBorder() const;
-    QColor embeddedWindowBackground() const;
+    QColor widgetTextPrimary() const;
+    QColor widgetTextSecondary() const;
+    QColor widgetWindowBackground() const;
+    QColor widgetWindowBorder() const;
+    QColor paneWindowBackground() const;
     QColor ledEnabled() const;
     QColor ledDisabled() const;
-    QColor csvHighlight() const;
+    QColor csvCheckbox() const;
     QColor widgetForegroundPrimary() const;
     QColor widgetForegroundSecondary() const;
-    QColor widgetIndicator1() const;
-    QColor widgetIndicator2() const;
-    QColor widgetIndicator3() const;
-    QColor widgetAlternativeBackground() const;
+    QColor widgetIndicator() const;
     QColor widgetControlBackground() const;
     QColor connectButtonChecked() const;
     QColor connectButtonUnchecked() const;
@@ -314,22 +294,17 @@ private:
     QColor m_windowGradient2;
     QColor m_alternativeHighlight;
     QColor m_setupPanelBackground;
-    QColor m_datasetValue;
-    QColor m_graphDialBorder;
-    QColor m_datasetTextPrimary;
-    QColor m_datasetTextSecondary;
-    QColor m_datasetWindowBackground;
-    QColor m_datasetWindowBorder;
-    QColor m_embeddedWindowBackground;
+    QColor m_widgetTextPrimary;
+    QColor m_widgetTextSecondary;
+    QColor m_widgetWindowBackground;
+    QColor m_widgetWindowBorder;
+    QColor m_paneWindowBackground;
     QColor m_ledEnabled;
     QColor m_ledDisabled;
-    QColor m_csvHighlight;
+    QColor m_csvCheckbox;
     QColor m_widgetForegroundPrimary;
     QColor m_widgetForegroundSecondary;
-    QColor m_widgetIndicator1;
-    QColor m_widgetIndicator2;
-    QColor m_widgetIndicator3;
-    QColor m_widgetAlternativeBackground;
+    QColor m_widgetIndicator;
     QColor m_widgetControlBackground;
     QColor m_connectButtonChecked;
     QColor m_connectButtonUnchecked;

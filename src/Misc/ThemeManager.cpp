@@ -171,22 +171,17 @@ void ThemeManager::loadTheme(const int id)
     m_dialogBackground = QColor(colors.value("dialogBackground").toString());
     m_alternativeHighlight = QColor(colors.value("alternativeHighlight").toString());
     m_setupPanelBackground = QColor(colors.value("setupPanelBackground").toString());
-    m_datasetValue = QColor(colors.value("datasetValue").toString());
-    m_graphDialBorder = QColor(colors.value("graphDialBorder").toString());
-    m_datasetTextPrimary = QColor(colors.value("datasetTextPrimary").toString());
-    m_datasetTextSecondary = QColor(colors.value("datasetTextSecondary").toString());
-    m_datasetWindowBackground = QColor(colors.value("datasetWindowBackground").toString());
-    m_datasetWindowBorder = QColor(colors.value("datasetWindowBorder").toString());
-    m_embeddedWindowBackground = QColor(colors.value("embeddedWindowBackground").toString());
+    m_widgetTextPrimary = QColor(colors.value("widgetTextPrimary").toString());
+    m_widgetTextSecondary = QColor(colors.value("widgetTextSecondary").toString());
+    m_widgetWindowBackground = QColor(colors.value("widgetWindowBackground").toString());
+    m_widgetWindowBorder = QColor(colors.value("widgetWindowBorder").toString());
+    m_paneWindowBackground = QColor(colors.value("paneWindowBackground").toString());
     m_ledEnabled = QColor(colors.value("ledEnabled").toString());
     m_ledDisabled = QColor(colors.value("ledDisabled").toString());
-    m_csvHighlight = QColor(colors.value("csvHighlight").toString());
+    m_csvCheckbox = QColor(colors.value("csvCheckbox").toString());
     m_widgetForegroundPrimary = QColor(colors.value("widgetForegroundPrimary").toString());
     m_widgetForegroundSecondary = QColor(colors.value("widgetForegroundSecondary").toString());
-    m_widgetIndicator1 = QColor(colors.value("widgetIndicator1").toString());
-    m_widgetIndicator2 = QColor(colors.value("widgetIndicator2").toString());
-    m_widgetIndicator3 = QColor(colors.value("widgetIndicator3").toString());
-    m_widgetAlternativeBackground = QColor(colors.value("widgetAlternativeBackground").toString());
+    m_widgetIndicator = QColor(colors.value("widgetIndicator").toString());
     m_widgetControlBackground = QColor(colors.value("widgetControlBackground").toString());
     m_connectButtonChecked = QColor(colors.value("connectButtonChecked").toString());
     m_connectButtonUnchecked = QColor(colors.value("connectButtonUnchecked").toString());
@@ -429,39 +424,29 @@ QColor ThemeManager::setupPanelBackground() const
     return m_setupPanelBackground;
 }
 
-QColor ThemeManager::datasetValue() const
+QColor ThemeManager::widgetTextPrimary() const
 {
-    return m_datasetValue;
+    return m_widgetTextPrimary;
 }
 
-QColor ThemeManager::graphDialBorder() const
+QColor ThemeManager::widgetTextSecondary() const
 {
-    return m_graphDialBorder;
+    return m_widgetTextSecondary;
 }
 
-QColor ThemeManager::datasetTextPrimary() const
+QColor ThemeManager::widgetWindowBackground() const
 {
-    return m_datasetTextPrimary;
+    return m_widgetWindowBackground;
 }
 
-QColor ThemeManager::datasetTextSecondary() const
+QColor ThemeManager::widgetWindowBorder() const
 {
-    return m_datasetTextSecondary;
+    return m_widgetWindowBorder;
 }
 
-QColor ThemeManager::datasetWindowBackground() const
+QColor ThemeManager::paneWindowBackground() const
 {
-    return m_datasetWindowBackground;
-}
-
-QColor ThemeManager::datasetWindowBorder() const
-{
-    return m_datasetWindowBorder;
-}
-
-QColor ThemeManager::embeddedWindowBackground() const
-{
-    return m_embeddedWindowBackground;
+    return m_paneWindowBackground;
 }
 
 QColor ThemeManager::ledEnabled() const
@@ -474,9 +459,9 @@ QColor ThemeManager::ledDisabled() const
     return m_ledDisabled;
 }
 
-QColor ThemeManager::csvHighlight() const
+QColor ThemeManager::csvCheckbox() const
 {
-    return m_csvHighlight;
+    return m_csvCheckbox;
 }
 
 QColor ThemeManager::widgetForegroundPrimary() const
@@ -489,24 +474,9 @@ QColor ThemeManager::widgetForegroundSecondary() const
     return m_widgetForegroundSecondary;
 }
 
-QColor ThemeManager::widgetIndicator1() const
+QColor ThemeManager::widgetIndicator() const
 {
-    return m_widgetIndicator1;
-}
-
-QColor ThemeManager::widgetIndicator2() const
-{
-    return m_widgetIndicator2;
-}
-
-QColor ThemeManager::widgetIndicator3() const
-{
-    return m_widgetIndicator3;
-}
-
-QColor ThemeManager::widgetAlternativeBackground() const
-{
-    return m_widgetAlternativeBackground;
+    return m_widgetIndicator;
 }
 
 QColor ThemeManager::widgetControlBackground() const

@@ -36,7 +36,7 @@ Widgets.Window {
     Layout.minimumHeight: height
     headerDoubleClickEnabled: false
     icon.source: "qrc:/icons/group.svg"
-    backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
+    backgroundColor: Cpp_ThemeManager.paneWindowBackground
     height: column.implicitHeight + headerHeight + 4 * app.spacing
     title: qsTr("Group %1 - %2").arg(group + 1).arg(Cpp_JSON_Editor.groupTitle(group))
 

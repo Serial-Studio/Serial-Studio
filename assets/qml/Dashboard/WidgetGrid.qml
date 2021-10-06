@@ -36,7 +36,7 @@ Widgets.Window {
     title: qsTr("Data")
     headerDoubleClickEnabled: false
     icon.source: "qrc:/icons/dataset.svg"
-    backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
+    backgroundColor: Cpp_ThemeManager.paneWindowBackground
 
     // Hacks for calculating cell width
     readonly property int cellHeight: cellWidth * (2/3)

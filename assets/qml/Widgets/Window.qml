@@ -43,7 +43,7 @@ Page {
     property bool altButtonEnabled: false
     property alias altButtonIcon: altBt.icon
     property alias headerDoubleClickEnabled: headerMouseArea.enabled
-    property color backgroundColor: Cpp_ThemeManager.datasetWindowBackground
+    property color backgroundColor: Cpp_ThemeManager.widgetWindowBackground
     property color gradientColor1: root.gradient ? Cpp_ThemeManager.windowGradient1 :
                                                    root.borderColor
     property color gradientColor2: root.gradient ? Cpp_ThemeManager.windowGradient2 :

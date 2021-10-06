@@ -34,8 +34,8 @@ Widgets.Window {
     //
     headerDoubleClickEnabled: false
     icon.source: "qrc:/icons/dataset.svg"
-    borderColor: Cpp_ThemeManager.datasetWindowBorder
-    palette.window: Cpp_ThemeManager.datasetWindowBackground
+    borderColor: Cpp_ThemeManager.widgetWindowBorder
+    palette.window: Cpp_ThemeManager.widgetWindowBackground
     title: qsTr("Dataset %1 - %2").arg(dataset + 1).arg(Cpp_JSON_Editor.datasetTitle(group, dataset))
 
     //

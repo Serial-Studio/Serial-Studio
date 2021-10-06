@@ -43,18 +43,18 @@ MultiPlot::MultiPlot(const int index)
 
     // Set window palette
     QPalette palette;
-    palette.setColor(QPalette::Base, theme->datasetWindowBackground());
-    palette.setColor(QPalette::Window, theme->datasetWindowBackground());
+    palette.setColor(QPalette::Base, theme->widgetWindowBackground());
+    palette.setColor(QPalette::Window, theme->widgetWindowBackground());
     setPalette(palette);
 
     // Set plot palette
     palette.setColor(QPalette::Base, theme->base());
     palette.setColor(QPalette::Highlight, QColor("#f00"));
-    palette.setColor(QPalette::Text, theme->widgetIndicator1());
-    palette.setColor(QPalette::Dark, theme->widgetIndicator1());
-    palette.setColor(QPalette::Light, theme->widgetIndicator1());
-    palette.setColor(QPalette::ButtonText, theme->widgetIndicator1());
-    palette.setColor(QPalette::WindowText, theme->widgetIndicator1());
+    palette.setColor(QPalette::Text, theme->widgetIndicator());
+    palette.setColor(QPalette::Dark, theme->widgetIndicator());
+    palette.setColor(QPalette::Light, theme->widgetIndicator());
+    palette.setColor(QPalette::ButtonText, theme->widgetIndicator());
+    palette.setColor(QPalette::WindowText, theme->widgetIndicator());
     m_plot.setPalette(palette);
     m_plot.setCanvasBackground(theme->base());
     m_plot.setFrameStyle(QFrame::Plain);
@@ -112,7 +112,7 @@ MultiPlot::MultiPlot(const int index)
  *
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the new data shall be saved to the plot
- * vector, but the widget shall not be redrawn.
+ * vectors, but the widget shall not be redrawn.
  */
 void MultiPlot::updateData()
 {
