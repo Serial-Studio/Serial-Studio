@@ -21,14 +21,17 @@
  */
 
 #include "Plot.h"
+#include "CSV/Player.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
 using namespace Widgets;
 
+/**
+ * Constructor function, configures widget style & signal/slot connections.
+ */
 Plot::Plot(const int index)
     : m_index(index)
-    , m_count(0)
 {
     // Get pointers to serial studio modules
     auto dash = UI::Dashboard::getInstance();
@@ -69,7 +72,7 @@ Plot::Plot(const int index)
 
     // Get curve color
     QString color;
-    auto colors = theme->widgetColors();
+    QVector<QString> colors = theme->widgetColors();
     if (colors.count() > m_index)
         color = colors.at(m_index);
     else
@@ -80,7 +83,7 @@ Plot::Plot(const int index)
 
     // Lazy widgets, get initial properties from dataset
 #ifdef LAZY_WIDGETS
-    auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
+    auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
     if (dataset)
     {
         // Set max/min values
@@ -102,6 +105,14 @@ Plot::Plot(const int index)
     connect(dash, SIGNAL(pointsChanged()), this, SLOT(updateRange()));
 }
 
+/**
+ * Checks if the widget is enabled, if so, the widget shall be updated
+ * to display the latest data frame.
+ *
+ * If the widget is disabled (e.g. the user hides it, or the external
+ * window is hidden), then the new data shall be saved to the plot
+ * vector, but the widget shall not be redrawn.
+ */
 void Plot::updateData()
 {
     auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
@@ -115,7 +126,7 @@ void Plot::updateData()
         if (!isEnabled())
             return;
 
-        // Update plot properties
+            // Update plot properties
 #ifndef LAZY_WIDGETS
         // Set max/min values
         auto min = dataset->min();
@@ -136,6 +147,9 @@ void Plot::updateData()
     }
 }
 
+/**
+ * Updates the number of horizontal divisions of the plot
+ */
 void Plot::updateRange()
 {
     // Get pointer to dashboard manager

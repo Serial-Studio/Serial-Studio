@@ -23,4 +23,35 @@
 #ifndef WIDGETS_MULTIPLOT_H
 #define WIDGETS_MULTIPLOT_H
 
+#include <QwtPlot>
+#include <QWidget>
+#include <QwtLegend>
+#include <QComboBox>
+#include <QVBoxLayout>
+#include <QwtPlotCurve>
+
+namespace Widgets
+{
+class MultiPlot : public QWidget
+{
+    Q_OBJECT
+
+public:
+    MultiPlot(const int index = -1);
+
+private slots:
+    void updateData();
+    void updateRange();
+
+private:
+    int m_index;
+    QwtPlot m_plot;
+    QwtLegend m_legend;
+    QVBoxLayout m_layout;
+    QVector<double> m_xData;
+    QVector<QwtPlotCurve *> m_curves;
+    QVector<QVector<double>> m_yData;
+};
+}
+
 #endif

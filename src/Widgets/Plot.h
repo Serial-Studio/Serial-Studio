@@ -44,7 +44,6 @@ private slots:
 
 private:
     int m_index;
-    int m_count;
     QwtPlot m_plot;
     QwtPlotCurve m_curve;
     QVBoxLayout m_layout;
