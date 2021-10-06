@@ -104,14 +104,17 @@ Plot::Plot(const int index)
 
 void Plot::updateData()
 {
-    // Widget not enabled, do nothing
-    if (!isEnabled())
-        return;
-
-    // Update plot widget with new data
     auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
     if (dataset)
     {
+        // Add point to plot data
+        memmove(m_yData.data(), m_yData.data() + 1, m_yData.count() * sizeof(double));
+        m_yData[m_yData.count() - 1] = dataset->value().toDouble();
+
+        // Widget not enabled, do not redraw
+        if (!isEnabled())
+            return;
+
         // Update plot properties
 #ifndef LAZY_WIDGETS
         // Set max/min values
@@ -126,9 +129,8 @@ void Plot::updateData()
         if (!dataset->units().isEmpty())
             m_plot.setAxisTitle(m_plot.y(), dataset->units());
 #endif
-        // Add new input to the plot
-        memmove(m_yData.data(), m_yData.data() + 1, m_yData.count() * sizeof(double));
-        m_yData[m_yData.count() - 1] = dataset->value().toDouble();
+
+        // Plot new data
         m_curve.setSamples(m_xData, m_yData);
         m_plot.replot();
     }
