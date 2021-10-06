@@ -23,6 +23,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import Qt.labs.settings 1.0
 
 import "../Widgets" as Widgets
 
@@ -39,6 +40,40 @@ Widgets.Window {
     backgroundColor: Cpp_ThemeManager.embeddedWindowBackground
 
     //
+    // Maps the slider position to points
+    // https://stackoverflow.com/a/846249
+    //
+    function logslider(position) {
+        var minp = 0
+        var maxp = 100
+        var minv = Math.log(10)
+        var maxv = Math.log(10000)
+        var scale = (maxv - minv) / (maxp - minp);
+        return Math.exp(minv + scale * (position - minp)).toFixed(0);
+    }
+
+    //
+    // Maps the points value to the slider position
+    // https://stackoverflow.com/a/846249
+    //
+    function logposition(value) {
+        var minp = 0
+        var maxp = 100
+        var minv = Math.log(10)
+        var maxv = Math.log(10000)
+        var scale = (maxv - minv) / (maxp - minp)
+        var result = (Math.log(value) - minv) / scale + minp;
+        return result.toFixed(0)
+    }
+
+    //
+    // Settings
+    //
+    Settings {
+        property alias points: dial.value
+    }
+
+    //
     // Put all items inside a scrollview
     //
     ScrollView {
@@ -53,9 +88,61 @@ Widgets.Window {
         // Main layout
         //
         ColumnLayout {
+            id: layout
             x: app.spacing
             spacing: app.spacing / 2
             width: parent.width - 10 - 2 * app.spacing
+
+            //
+            // Spacer
+            //
+            Item {
+                height: app.spacing
+            }
+
+            //
+            // Horizontal range title
+            //
+            RowLayout {
+                spacing: app.spacing
+                Layout.fillWidth: true
+                visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+
+                Widgets.Icon {
+                    width: 18
+                    height: 18
+                    color: palette.text
+                    source: "qrc:/icons/points.svg"
+                }
+
+                Label {
+                    font.bold: true
+                    text: qsTr("Plot divisions (%1)").arg(logslider(dial.value))
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+            }
+
+            //
+            // Horizontal scale controls
+            //
+            Dial {
+                id: dial
+                to: 100
+                from: 10
+                value: logposition(100)
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+                visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+
+                onValueChanged: {
+                    var log = logslider(value)
+                    if (Cpp_UI_Dashboard.points !== log)
+                        Cpp_UI_Dashboard.points = log
+                }
+            }
 
             //
             // Spacer

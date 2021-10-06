@@ -40,6 +40,10 @@ class Dashboard : public QObject
     Q_PROPERTY(bool available
                READ available
                NOTIFY widgetCountChanged)
+    Q_PROPERTY(int points
+               READ points
+               WRITE setPoints
+               NOTIFY pointsChanged)
     Q_PROPERTY(int totalWidgetCount
                READ totalWidgetCount
                NOTIFY widgetCountChanged)
@@ -103,6 +107,7 @@ signals:
     void updated();
     void dataReset();
     void titleChanged();
+    void pointsChanged();
     void widgetCountChanged();
     void widgetVisibilityChanged();
 
@@ -137,6 +142,7 @@ public:
 
     QString title();
     bool available();
+    int points() const;
 
     int totalWidgetCount() const;
     int mapCount() const;
@@ -177,6 +183,7 @@ public:
     QVector<QString> accelerometerTitles() const;
 
 public slots:
+    void setPoints(const int points);
     void setBarVisible(const int index, const bool visible);
     void setMapVisible(const int index, const bool visible);
     void setPlotVisible(const int index, const bool visible);
@@ -210,6 +217,8 @@ private:
                                     const int index);
 
 private:
+    int m_points;
+
     QVector<bool> m_barVisibility;
     QVector<bool> m_mapVisibility;
     QVector<bool> m_plotVisibility;

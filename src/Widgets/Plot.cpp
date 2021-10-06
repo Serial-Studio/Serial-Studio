@@ -61,17 +61,8 @@ Plot::Plot(const int index)
     m_layout.setContentsMargins(24, 24, 24, 24);
     setLayout(&m_layout);
 
-    // Add 100 points to the plot
-    m_xData.reserve(100);
-    m_yData.reserve(100);
-    for (int i = 0; i < 100; ++i)
-    {
-        m_xData.append(i);
-        m_yData.append(0);
-    }
-
     // Create curve from data
-    m_curve.setSamples(m_xData, m_yData);
+    updateRange();
     m_curve.attach(&m_plot);
     m_plot.replot();
     m_plot.show();
@@ -108,6 +99,7 @@ Plot::Plot(const int index)
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
+    connect(dash, SIGNAL(pointsChanged()), this, SLOT(updateRange()));
 }
 
 void Plot::updateData()
@@ -140,4 +132,23 @@ void Plot::updateData()
         m_curve.setSamples(m_xData, m_yData);
         m_plot.replot();
     }
+}
+
+void Plot::updateRange() {
+    // Get pointer to dashboard manager
+    auto dash = UI::Dashboard::getInstance();
+
+    // Set number of points
+    m_xData.clear();
+    m_yData.clear();
+    m_xData.reserve(dash->points());
+    m_yData.reserve(dash->points());
+    for (int i = 0; i < dash->points(); ++i)
+    {
+        m_xData.append(i);
+        m_yData.append(0);
+    }
+
+    // Create curve from data
+    m_curve.setSamples(m_xData, m_yData);
 }

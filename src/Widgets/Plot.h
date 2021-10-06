@@ -40,6 +40,7 @@ public:
 
 private slots:
     void updateData();
+    void updateRange();
 
 private:
     int m_index;

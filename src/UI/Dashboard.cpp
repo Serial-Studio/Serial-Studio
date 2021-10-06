@@ -43,7 +43,8 @@ static Dashboard *INSTANCE = nullptr;
  * Constructor of the class.
  */
 Dashboard::Dashboard()
-    : m_latestJsonFrame(JFI_Empty())
+    : m_points(100),
+      m_latestJsonFrame(JFI_Empty())
 {
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
@@ -106,6 +107,13 @@ QString Dashboard::title()
 bool Dashboard::available()
 {
     return totalWidgetCount() > 0;
+}
+
+/**
+ * Returns the number of points displayed by the graphs
+ */
+int Dashboard::points() const {
+    return m_points;
 }
 
 /**
@@ -493,6 +501,17 @@ QVector<QString> Dashboard::gyroscopeTitles() const     { return groupTitles(m_g
 QVector<QString> Dashboard::multiPlotTitles() const     { return groupTitles(m_multiPlotWidgets);     }
 QVector<QString> Dashboard::accelerometerTitles() const { return groupTitles(m_accelerometerWidgets); }
 // clang-format on
+
+//--------------------------------------------------------------------------------------------------
+// Plot options
+//--------------------------------------------------------------------------------------------------
+
+void Dashboard::setPoints(const int points) {
+    if (m_points != points) {
+        m_points = points;
+        emit pointsChanged();
+    }
+}
 
 //--------------------------------------------------------------------------------------------------
 // Visibility-related slots
