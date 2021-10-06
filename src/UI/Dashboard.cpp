@@ -43,8 +43,8 @@ static Dashboard *INSTANCE = nullptr;
  * Constructor of the class.
  */
 Dashboard::Dashboard()
-    : m_points(100),
-      m_latestJsonFrame(JFI_Empty())
+    : m_points(100)
+    , m_latestJsonFrame(JFI_Empty())
 {
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
@@ -112,7 +112,8 @@ bool Dashboard::available()
 /**
  * Returns the number of points displayed by the graphs
  */
-int Dashboard::points() const {
+int Dashboard::points() const
+{
     return m_points;
 }
 
@@ -506,8 +507,10 @@ QVector<QString> Dashboard::accelerometerTitles() const { return groupTitles(m_a
 // Plot options
 //--------------------------------------------------------------------------------------------------
 
-void Dashboard::setPoints(const int points) {
-    if (m_points != points) {
+void Dashboard::setPoints(const int points)
+{
+    if (m_points != points)
+    {
         m_points = points;
         emit pointsChanged();
     }

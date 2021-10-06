@@ -134,7 +134,8 @@ void Plot::updateData()
     }
 }
 
-void Plot::updateRange() {
+void Plot::updateRange()
+{
     // Get pointer to dashboard manager
     auto dash = UI::Dashboard::getInstance();
 
