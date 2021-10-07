@@ -850,8 +850,7 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
         if (!(grp->m_datasets.isEmpty()) && widgetId != 4)
         {
             if (widgetId == 0 && grp->widget() == "multiplot")
-                ;
-            // Do nothing
+                grp->m_widget = "";
 
             else
             {

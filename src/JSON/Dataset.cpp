@@ -34,8 +34,9 @@ Dataset::Dataset(QObject *parent)
     , m_units("")
     , m_widget("")
     , m_index(0)
-    , m_max("100")
+    , m_max("0")
     , m_min("0")
+    , m_alarm("0")
 {
 }
 

@@ -73,5 +73,6 @@
         <file>hide-all.svg</file>
         <file>multiplot.svg</file>
         <file>points.svg</file>
+        <file>fft.svg</file>
     </qresource>
 </RCC>

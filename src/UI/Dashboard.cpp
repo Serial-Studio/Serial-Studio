@@ -80,8 +80,9 @@ QFont Dashboard::monoFont() const
 // clang-format off
 JSON::Group *Dashboard::getMap(const int index)           { return getGroupWidget(m_mapWidgets, index);           }
 JSON::Dataset *Dashboard::getBar(const int index)         { return getDatasetWidget(m_barWidgets, index);         }
+JSON::Dataset *Dashboard::getFFT(const int index)         { return getDatasetWidget(m_fftWidgets, index);         }
 JSON::Dataset *Dashboard::getPlot(const int index)        { return getDatasetWidget(m_plotWidgets, index);        }
-JSON::Group *Dashboard::getGroups(const int index)        { return getGroupWidget(m_groupWidgets, index);       }
+JSON::Group *Dashboard::getGroups(const int index)        { return getGroupWidget(m_groupWidgets, index);         }
 JSON::Dataset *Dashboard::getGauge(const int index)       { return getDatasetWidget(m_gaugeWidgets, index);       }
 JSON::Group *Dashboard::getGyroscope(const int index)     { return getGroupWidget(m_gyroscopeWidgets, index);     }
 JSON::Dataset *Dashboard::getCompass(const int index)     { return getDatasetWidget(m_compassWidgets, index);     }
@@ -145,6 +146,7 @@ int Dashboard::totalWidgetCount() const
     // clang-format off
     const int count = mapCount() +
                       barCount() +
+                      fftCount() +
                       plotCount() +
                       gaugeCount() +
                       groupCount() +
@@ -160,9 +162,10 @@ int Dashboard::totalWidgetCount() const
 // clang-format off
 int Dashboard::mapCount() const           { return m_mapWidgets.count();           }
 int Dashboard::barCount() const           { return m_barWidgets.count();           }
+int Dashboard::fftCount() const           { return m_fftWidgets.count();           }
 int Dashboard::plotCount() const          { return m_plotWidgets.count();          }
 int Dashboard::gaugeCount() const         { return m_gaugeWidgets.count();         }
-int Dashboard::groupCount() const         { return m_groupWidgets.count();       }
+int Dashboard::groupCount() const         { return m_groupWidgets.count();         }
 int Dashboard::compassCount() const       { return m_compassWidgets.count();       }
 int Dashboard::gyroscopeCount() const     { return m_gyroscopeWidgets.count();     }
 int Dashboard::multiPlotCount() const     { return m_multiPlotWidgets.count();     }
@@ -187,6 +190,7 @@ QVector<QString> Dashboard::widgetTitles() const
     // clang-format off
     return groupTitles() +
            multiPlotTitles() +
+           fftTitles() +
            plotTitles() +
            barTitles() +
            gaugeTitles() +
@@ -232,8 +236,13 @@ int Dashboard::relativeIndex(const int globalIndex) const
     if (index < multiPlotCount())
         return index;
 
-    // Check if we should return plot widget
+    // Check if we should return FFT widget
     index -= multiPlotCount();
+    if (index < fftCount())
+        return index;
+
+    // Check if we should return plot widget
+    index -= fftCount();
     if (index < plotCount())
         return index;
 
@@ -301,6 +310,9 @@ bool Dashboard::widgetVisible(const int globalIndex) const
         case WidgetType::MultiPlot:
             visible = multiPlotVisible(index);
             break;
+        case WidgetType::FFT:
+            visible = fftVisible(index);
+            break;
         case WidgetType::Plot:
             visible = plotVisible(index);
             break;
@@ -356,6 +368,9 @@ QString Dashboard::widgetIcon(const int globalIndex) const
         case WidgetType::MultiPlot:
             return "qrc:/icons/multiplot.svg";
             break;
+        case WidgetType::FFT:
+            return "qrc:/icons/fft.svg";
+            break;
         case WidgetType::Plot:
             return "qrc:/icons/plot.svg";
             break;
@@ -390,6 +405,7 @@ QString Dashboard::widgetIcon(const int globalIndex) const
  * - @c WidgetType::Unknown
  * - @c WidgetType::Group
  * - @c WidgetType::MultiPlot
+ * - @c WidgetType::FFT
  * - @c WidgetType::Plot
  * - @c WidgetType::Bar
  * - @c WidgetType::Gauge
@@ -432,8 +448,13 @@ UI::Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
     if (index < multiPlotCount())
         return WidgetType::MultiPlot;
 
-    // Check if we should return plot widget
+    // Check if we should return FFT widget
     index -= multiPlotCount();
+    if (index < fftCount())
+        return WidgetType::FFT;
+
+    // Check if we should return plot widget
+    index -= fftCount();
     if (index < plotCount())
         return WidgetType::Plot;
 
@@ -477,6 +498,7 @@ UI::Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
 
 // clang-format off
 bool Dashboard::barVisible(const int index) const           { return getVisibility(m_barVisibility, index);           }
+bool Dashboard::fftVisible(const int index) const           { return getVisibility(m_fftVisibility, index);           }
 bool Dashboard::mapVisible(const int index) const           { return getVisibility(m_mapVisibility, index);           }
 bool Dashboard::plotVisible(const int index) const          { return getVisibility(m_plotVisibility, index);          }
 bool Dashboard::groupVisible(const int index) const         { return getVisibility(m_groupVisibility, index);         }
@@ -492,10 +514,11 @@ bool Dashboard::accelerometerVisible(const int index) const { return getVisibili
 //--------------------------------------------------------------------------------------------------
 
 // clang-format off
-QVector<QString> Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
 QVector<QString> Dashboard::mapTitles() const           { return groupTitles(m_mapWidgets);           }
-QVector<QString> Dashboard::plotTitles() const          { return datasetTitles(m_plotWidgets);        }
 QVector<QString> Dashboard::groupTitles() const         { return groupTitles(m_groupWidgets);         }
+QVector<QString> Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
+QVector<QString> Dashboard::fftTitles() const           { return datasetTitles(m_fftWidgets);         }
+QVector<QString> Dashboard::plotTitles() const          { return datasetTitles(m_plotWidgets);        }
 QVector<QString> Dashboard::gaugeTitles() const         { return datasetTitles(m_gaugeWidgets);       }
 QVector<QString> Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
 QVector<QString> Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
@@ -522,6 +545,7 @@ void Dashboard::setPoints(const int points)
 
 // clang-format off
 void Dashboard::setBarVisible(const int i, const bool v)           { setVisibility(m_barVisibility, i, v);           }
+void Dashboard::setFFTVisible(const int i, const bool v)           { setVisibility(m_fftVisibility, i, v);           }
 void Dashboard::setMapVisible(const int i, const bool v)           { setVisibility(m_mapVisibility, i, v);           }
 void Dashboard::setPlotVisible(const int i, const bool v)          { setVisibility(m_plotVisibility, i, v);          }
 void Dashboard::setGroupVisible(const int i, const bool v)         { setVisibility(m_groupVisibility, i, v);         }
@@ -548,6 +572,7 @@ void Dashboard::resetData()
 
     // Clear widget data
     m_barWidgets.clear();
+    m_fftWidgets.clear();
     m_mapWidgets.clear();
     m_plotWidgets.clear();
     m_gaugeWidgets.clear();
@@ -559,6 +584,7 @@ void Dashboard::resetData()
 
     // Clear widget visibility data
     m_barVisibility.clear();
+    m_fftVisibility.clear();
     m_mapVisibility.clear();
     m_plotVisibility.clear();
     m_gaugeVisibility.clear();
@@ -583,6 +609,7 @@ void Dashboard::updateData()
 {
     // Save widget count
     int barC = barCount();
+    int fftC = fftCount();
     int mapC = mapCount();
     int plotC = plotCount();
     int groupC = groupCount();
@@ -597,6 +624,7 @@ void Dashboard::updateData()
 
     // Clear widget data
     m_barWidgets.clear();
+    m_fftWidgets.clear();
     m_mapWidgets.clear();
     m_plotWidgets.clear();
     m_gaugeWidgets.clear();
@@ -611,6 +639,7 @@ void Dashboard::updateData()
         return;
 
     // Update widget vectors
+    m_fftWidgets = getFFTWidgets();
     m_plotWidgets = getPlotWidgets();
     m_groupWidgets = getWidgetGroups("");
     m_mapWidgets = getWidgetGroups("map");
@@ -636,6 +665,7 @@ void Dashboard::updateData()
     // Check if we need to regenerate widgets
     bool regenerateWidgets = false;
     regenerateWidgets |= (barC != barCount());
+    regenerateWidgets |= (fftC != fftCount());
     regenerateWidgets |= (mapC != mapCount());
     regenerateWidgets |= (plotC != plotCount());
     regenerateWidgets |= (gaugeC != gaugeCount());
@@ -649,6 +679,7 @@ void Dashboard::updateData()
     if (regenerateWidgets)
     {
         m_barVisibility.clear();
+        m_fftVisibility.clear();
         m_mapVisibility.clear();
         m_plotVisibility.clear();
         m_gaugeVisibility.clear();
@@ -661,6 +692,8 @@ void Dashboard::updateData()
         int i;
         for (i = 0; i < barCount(); ++i)
             m_barVisibility.append(true);
+        for (i = 0; i < fftCount(); ++i)
+            m_fftVisibility.append(true);
         for (i = 0; i < mapCount(); ++i)
             m_mapVisibility.append(true);
         for (i = 0; i < plotCount(); ++i)
@@ -702,6 +735,24 @@ void Dashboard::selectLatestJSON(const JFI_Object &frameInfo)
 //--------------------------------------------------------------------------------------------------
 // Widget utility functions
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * Returns a vector with all the datasets that need to be shown in the FFT widgets.
+ */
+QVector<JSON::Dataset *> Dashboard::getFFTWidgets() const
+{
+    QVector<JSON::Dataset *> widgets;
+    foreach (auto group, m_latestFrame.groups())
+    {
+        foreach (auto dataset, group->datasets())
+        {
+            if (dataset->fft())
+                widgets.append(dataset);
+        }
+    }
+
+    return widgets;
+}
 
 /**
  * Returns a vector with all the datasets that need to be plotted.

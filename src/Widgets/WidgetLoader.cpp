@@ -240,6 +240,9 @@ void WidgetLoader::setWidgetIndex(const int index)
             case UI::Dashboard::WidgetType::MultiPlot:
                 m_widget = new MultiPlot(relativeIndex());
                 break;
+            case UI::Dashboard::WidgetType::FFT:
+                m_widget = new QPushButton("FFT");
+                break;
             case UI::Dashboard::WidgetType::Plot:
                 m_widget = new Plot(relativeIndex());
                 break;

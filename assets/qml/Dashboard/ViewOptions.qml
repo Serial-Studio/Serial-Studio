@@ -174,6 +174,17 @@ Widgets.Window {
             }
 
             //
+            // FFT
+            //
+            ViewOptionsDelegate {
+                title: qsTr("FFT plots")
+                icon: "qrc:/icons/fft.svg"
+                count: Cpp_UI_Dashboard.fftCount
+                titles: Cpp_UI_Dashboard.fftTitles
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setFFTVisible(index, checked)
+            }
+
+            //
             // Plots
             //
             ViewOptionsDelegate {

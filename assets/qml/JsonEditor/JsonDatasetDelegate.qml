@@ -154,12 +154,12 @@ Widgets.Window {
         //
         Label {
             text: qsTr("Min value:")
-            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+            visible: widget.currentIndex === 1 || widget.currentIndex === 2
         } TextField {
             id: min
             Layout.fillWidth: true
             text: Cpp_JSON_Editor.datasetWidgetMin(group, dataset)
-            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+            visible: widget.currentIndex === 1 || widget.currentIndex === 2
             onTextChanged: Cpp_JSON_Editor.setDatasetWidgetMin(group, dataset, text)
             validator: DoubleValidator {
                 top: parseFloat(max.text)
@@ -171,12 +171,12 @@ Widgets.Window {
         //
         Label {
             text: qsTr("Max value:")
-            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+            visible: widget.currentIndex === 1 || widget.currentIndex === 2
         } TextField {
             id: max
             Layout.fillWidth: true
             text: Cpp_JSON_Editor.datasetWidgetMax(group, dataset)
-            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+            visible: widget.currentIndex === 1 || widget.currentIndex === 2
             onTextChanged: Cpp_JSON_Editor.setDatasetWidgetMax(group, dataset, text)
 
             validator: DoubleValidator {
@@ -189,12 +189,12 @@ Widgets.Window {
         //
         Label {
             text: qsTr("Alarm value:")
-            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+            visible: widget.currentIndex === 1 || widget.currentIndex === 2
         } TextField {
             id: alarm
             Layout.fillWidth: true
             text: Cpp_JSON_Editor.datasetWidgetAlarm(group, dataset)
-            visible: widget.currentIndex == 1 || widget.currentIndex == 2
+            visible: widget.currentIndex === 1 || widget.currentIndex === 2
             onTextChanged: Cpp_JSON_Editor.setDatasetWidgetAlarm(group, dataset, text)
 
             validator: DoubleValidator {
