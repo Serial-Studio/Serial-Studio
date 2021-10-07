@@ -58,14 +58,14 @@ Item {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
 
-                DashboardItems.ViewOptions {
-                    id: viewOptions
-                    anchors.fill: parent
-                }
-
                 Widgets.Shadow {
                     source: viewOptions
                     anchors.fill: viewOptions
+                }
+
+                DashboardItems.ViewOptions {
+                    id: viewOptions
+                    anchors.fill: parent
                 }
             }
 
@@ -77,14 +77,14 @@ Item {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
 
-                DashboardItems.WidgetGrid {
-                    id: widgetGrid
-                    anchors.fill: parent
-                }
-
                 Widgets.Shadow {
                     source: widgetGrid
                     anchors.fill: widgetGrid
+                }
+
+                DashboardItems.WidgetGrid {
+                    id: widgetGrid
+                    anchors.fill: parent
                 }
             }
         }

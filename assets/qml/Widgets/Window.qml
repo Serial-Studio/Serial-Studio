@@ -69,7 +69,6 @@ Page {
     Layout.preferredWidth: enabled ? implicitWidth : 0
     Layout.preferredHeight: enabled ? implicitHeight : 0
 
-
     //
     // Background widget
     //

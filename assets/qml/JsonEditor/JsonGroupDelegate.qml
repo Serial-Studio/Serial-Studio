@@ -149,13 +149,23 @@ Widgets.Window {
             Repeater {
                 id: repeater
                 model: Cpp_JSON_Editor.datasetCount(group)
-                delegate: JsonDatasetDelegate {
-                    dataset: index
-                    group: root.group
+                delegate: Item {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 320
                     Layout.minimumHeight: 360
-                    showGroupWidget: widget.currentIndex > 0 && widget.currentIndex !== 4
+
+                    Widgets.Shadow {
+                        source: datasetDelegate
+                        anchors.fill: datasetDelegate
+                    }
+
+                    JsonDatasetDelegate {
+                        id: datasetDelegate
+                        dataset: index
+                        group: root.group
+                        anchors.fill: parent
+                        showGroupWidget: widget.currentIndex > 0 && widget.currentIndex !== 4
+                    }
                 }
             }
         }

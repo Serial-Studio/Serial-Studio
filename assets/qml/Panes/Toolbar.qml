@@ -72,6 +72,14 @@ Control {
     }
 
     //
+    // Toolbar shadow
+    //
+    Widgets.Shadow {
+        source: bg
+        anchors.fill: bg
+    }
+
+    //
     // Background gradient
     //
     Rectangle {
@@ -111,14 +119,6 @@ Control {
             leftMargin: -border.width * 10
             rightMargin: -border.width * 10
         }
-    }
-
-    //
-    // Toolbar shadow
-    //
-    Widgets.Shadow {
-        source: bg
-        anchors.fill: bg
     }
 
     //

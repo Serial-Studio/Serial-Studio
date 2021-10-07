@@ -100,6 +100,20 @@ ApplicationWindow {
         }
 
         //
+        // Shadows
+        //
+        Widgets.Shadow {
+            source: headerBg
+            horizontalOffset: 0
+            anchors.fill: headerBg
+        } Widgets.Shadow {
+            source: footerBg
+            verticalOffset: -3
+            horizontalOffset: 0
+            anchors.fill: footerBg
+        }
+
+        //
         // Header (project properties)
         //
         Rectangle {
@@ -384,6 +398,14 @@ ApplicationWindow {
                         width: parent.width - 4 * app.spacing
 
                         //
+                        // Window shadow
+                        //
+                        Widgets.Shadow {
+                            source: group
+                            anchors.fill: group
+                        }
+
+                        //
                         // Group window
                         //
                         JsonGroupDelegate {
@@ -394,15 +416,6 @@ ApplicationWindow {
                                 right: parent.right
                                 bottom: parent.bottom
                             }
-                        }
-
-
-                        //
-                        // Window shadow
-                        //
-                        Widgets.Shadow {
-                            source: group
-                            anchors.fill: group
                         }
                     }
                 }
@@ -442,20 +455,6 @@ ApplicationWindow {
             Item {
                 height: app.spacing
             }
-        }
-
-        //
-        // Shadows
-        //
-        Widgets.Shadow {
-            source: headerBg
-            horizontalOffset: 0
-            anchors.fill: headerBg
-        } Widgets.Shadow {
-            source: footerBg
-            verticalOffset: -3
-            horizontalOffset: 0
-            anchors.fill: footerBg
         }
     }
 }

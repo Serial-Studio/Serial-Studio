@@ -112,6 +112,15 @@ Item {
     }
 
     //
+    // Window shadow (must go before window declaration
+    // to avoid blurry artifacts & glitches).
+    //
+    Widgets.Shadow {
+        source: window
+        anchors.fill: window
+    }
+
+    //
     // Console window
     //
     Widgets.Window {
@@ -393,13 +402,5 @@ Item {
                 }
             }
         }
-    }
-
-    //
-    // Window shadow
-    //
-    Widgets.Shadow {
-        source: window
-        anchors.fill: window
     }
 }

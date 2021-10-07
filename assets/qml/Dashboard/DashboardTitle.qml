@@ -29,6 +29,18 @@ import "../Widgets" as Widgets
 Item {
     id: root
 
+    //
+    // Window shadow (must go before window declaration
+    // to avoid blurry artifacts & glitches).
+    //
+    Widgets.Shadow {
+        source: window
+        anchors.fill: window
+    }
+
+    //
+    // Window
+    //
     Rectangle {
         id: window
         radius: 5
@@ -81,10 +93,5 @@ Item {
                 verticalCenter: parent.verticalCenter
             }
         }
-    }
-
-    Widgets.Shadow {
-        source: window
-        anchors.fill: window
     }
 }
