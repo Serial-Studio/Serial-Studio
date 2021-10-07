@@ -64,6 +64,10 @@ MultiPlot::MultiPlot(const int index)
     m_layout.setContentsMargins(24, 24, 24, 24);
     setLayout(&m_layout);
 
+    // Fit data horizontally
+    m_plot.axisScaleEngine(QwtPlot::xBottom)
+        ->setAttribute(QwtScaleEngine::Floating, true);
+
     // Create curves from datasets
     auto group = dash->getMultiplot(m_index);
     QVector<QString> colors = theme->widgetColors();
@@ -130,16 +134,17 @@ void MultiPlot::updateData()
             continue;
 
         // Add point to plot data
-        memmove(m_yData[i].data(), m_yData[i].data() + 1,
-                m_yData[i].count() * sizeof(double));
-        m_yData[i][m_yData[i].count() - 1] = dataset->value().toDouble();
+        auto data = m_yData[i].data();
+        auto count = m_yData[i].count();
+        memmove(data, data + 1, count * sizeof(double));
+        m_yData[i][count - 1] = dataset->value().toDouble();
 
         // Widget not enabled, do not redraw
         if (!isEnabled())
             continue;
 
         // Plot new data
-        m_curves.at(i)->setSamples(m_xData, m_yData[i]);
+        m_curves.at(i)->setSamples(m_yData[i]);
     }
 
     // Plot widget again
@@ -156,13 +161,10 @@ void MultiPlot::updateRange()
     auto dash = UI::Dashboard::getInstance();
 
     // Set number of points
-    m_xData.clear();
     m_yData.clear();
-    m_xData.reserve(dash->points());
     auto group = UI::Dashboard::getInstance()->getMultiplot(m_index);
     for (int i = 0; i < dash->points(); ++i)
     {
-        m_xData.append(i);
         m_yData.append(QVector<double>());
         m_yData[i].reserve(dash->points());
         for (int j = 0; j < dash->points(); ++j)
@@ -172,5 +174,5 @@ void MultiPlot::updateRange()
     // Create curve from data
     for (int i = 0; i < group->datasetCount(); ++i)
         if (m_curves.count() > i)
-            m_curves.at(i)->setSamples(m_xData, m_yData[i]);
+            m_curves.at(i)->setSamples(*dash->xPlotValues(), m_yData[i]);
 }

@@ -44,7 +44,6 @@ static Dashboard *INSTANCE = nullptr;
  */
 Dashboard::Dashboard()
     : m_points(100)
-    , m_latestJsonFrame(JFI_Empty())
 {
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
@@ -54,7 +53,7 @@ Dashboard::Dashboard()
     connect(te, SIGNAL(highFreqTimeout()), this, SLOT(updateData()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
     connect(ge, SIGNAL(jsonFileMapChanged()), this, SLOT(resetData()));
-    connect(ge, &JSON::Generator::jsonChanged, this, &Dashboard::selectLatestJSON);
+    connect(ge, &JSON::Generator::jsonChanged, this, &Dashboard::processLatestJSON);
 }
 
 /**
@@ -145,15 +144,15 @@ int Dashboard::totalWidgetCount() const
 {
     // clang-format off
     const int count = mapCount() +
-                      barCount() +
-                      fftCount() +
-                      plotCount() +
-                      gaugeCount() +
-                      groupCount() +
-                      compassCount() +
-                      multiPlotCount() +
-                      gyroscopeCount() +
-                      accelerometerCount();
+            barCount() +
+            fftCount() +
+            plotCount() +
+            gaugeCount() +
+            groupCount() +
+            compassCount() +
+            multiPlotCount() +
+            gyroscopeCount() +
+            accelerometerCount();
     // clang-format on
 
     return count;
@@ -189,15 +188,15 @@ QVector<QString> Dashboard::widgetTitles() const
 
     // clang-format off
     return groupTitles() +
-           multiPlotTitles() +
-           fftTitles() +
-           plotTitles() +
-           barTitles() +
-           gaugeTitles() +
-           compassTitles() +
-           gyroscopeTitles() +
-           accelerometerTitles() +
-           mapTitles();
+            multiPlotTitles() +
+            fftTitles() +
+            plotTitles() +
+            barTitles() +
+            gaugeTitles() +
+            compassTitles() +
+            gyroscopeTitles() +
+            accelerometerTitles() +
+            mapTitles();
     // clang-format on
 }
 
@@ -534,7 +533,20 @@ void Dashboard::setPoints(const int points)
 {
     if (m_points != points)
     {
+        // Update number of points
         m_points = points;
+
+        // Clear values
+        m_fftPlotValues.clear();
+        m_linearPlotValues.clear();
+
+        // Regenerate x-axis values
+        m_xData.clear();
+        m_xData.reserve(points);
+        for (int i = 0; i < points; ++i)
+            m_xData.append(i);
+
+        // Update plots
         emit pointsChanged();
     }
 }
@@ -567,8 +579,12 @@ void Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisibili
 void Dashboard::resetData()
 {
     // Make latest frame invalid
-    m_latestJsonFrame = JFI_Empty();
-    m_latestFrame.read(m_latestJsonFrame.jsonDocument.object());
+    m_jsonList.clear();
+    m_latestFrame.read(QJsonObject {});
+
+    // Clear plot data
+    m_fftPlotValues.clear();
+    m_linearPlotValues.clear();
 
     // Clear widget data
     m_barWidgets.clear();
@@ -607,6 +623,18 @@ void Dashboard::resetData()
  */
 void Dashboard::updateData()
 {
+    // Sort JSON list
+    JFI_SortList(&m_jsonList);
+
+    // Check if we have anything to read
+    if (m_jsonList.isEmpty())
+        return;
+
+    // Try to read latest frame for widget updating
+    auto lastJson = m_jsonList.last();
+    if (!m_latestFrame.read(lastJson.jsonDocument.object()))
+        return;
+
     // Save widget count
     int barC = barCount();
     int fftC = fftCount();
@@ -634,9 +662,11 @@ void Dashboard::updateData()
     m_multiPlotWidgets.clear();
     m_accelerometerWidgets.clear();
 
-    // Check if frame is valid
-    if (!m_latestFrame.read(m_latestJsonFrame.jsonDocument.object()))
-        return;
+    // Regenerate plot data
+    updatePlots();
+
+    // Remove previous values from JSON list
+    m_jsonList.clear();
 
     // Update widget vectors
     m_fftWidgets = getFFTWidgets();
@@ -715,21 +745,75 @@ void Dashboard::updateData()
         emit widgetVisibilityChanged();
     }
 
-    // Update UI
+    // Update UI;
     emit updated();
 }
 
-/**
- * Ensures that only the most recent JSON document will be displayed on the user
- * interface.
- */
-void Dashboard::selectLatestJSON(const JFI_Object &frameInfo)
+void Dashboard::updatePlots()
 {
-    auto frameCount = frameInfo.frameNumber;
-    auto currFrameCount = m_latestJsonFrame.frameNumber;
+    // Initialize arrays that contain pointers to the
+    // datasets that need to be plotted.
+    QVector<JSON::Dataset *> fftDatasets;
+    QVector<JSON::Dataset *> linearDatasets;
 
-    if (currFrameCount < frameCount)
-        m_latestJsonFrame = frameInfo;
+    // Register all plot values for each frame
+    for (int f = 0; f < m_jsonList.count(); ++f)
+    {
+        // Clear dataset & latest values list
+        fftDatasets.clear();
+        linearDatasets.clear();
+
+        // Get frame, abort if frame is invalid
+        JSON::Frame frame;
+        if (!frame.read(m_jsonList.at(f).jsonDocument.object()))
+            continue;
+
+        // Create list with datasets that need to be graphed
+        for (int i = 0; i < frame.groupCount(); ++i)
+        {
+            auto group = frame.groups().at(i);
+            for (int j = 0; j < group->datasetCount(); ++j)
+            {
+                auto dataset = group->datasets().at(j);
+                if (dataset->fft())
+                    fftDatasets.append(dataset);
+                if (dataset->graph())
+                    linearDatasets.append(dataset);
+            }
+        }
+
+        // Check if we need to update dataset points
+        if (m_linearPlotValues.count() != linearDatasets.count())
+        {
+            m_linearPlotValues.clear();
+
+            for (int i = 0; i < linearDatasets.count(); ++i)
+            {
+                m_linearPlotValues.append(QVector<double>());
+                m_linearPlotValues.last().reserve(points());
+                for (int j = 0; j < points(); ++j)
+                    m_linearPlotValues[i].append(0);
+            }
+        }
+
+        // Append latest values to plot data
+        for (int i = 0; i < linearDatasets.count(); ++i)
+        {
+            auto data = m_linearPlotValues[i].data();
+            auto count = m_linearPlotValues[i].count();
+            memmove(data, data + 1, count * sizeof(double));
+            m_linearPlotValues[i][count - 1] = linearDatasets[i]->value().toDouble();
+        }
+    }
+}
+
+/**
+ * Registers the JSON frame to the list of JSON frame vectors, which is later used to
+ * update widgets & graphs
+ */
+void Dashboard::processLatestJSON(const JFI_Object &frameInfo)
+{
+    m_jsonList.append(frameInfo);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -28,6 +28,7 @@
 #include <QComboBox>
 #include <QVBoxLayout>
 #include <QwtPlotCurve>
+#include <QwtScaleEngine>
 
 namespace Widgets
 {
@@ -44,12 +45,12 @@ private slots:
 
 private:
     int m_index;
+    double m_min;
+    double m_max;
+    bool m_autoscale;
     QwtPlot m_plot;
     QwtPlotCurve m_curve;
     QVBoxLayout m_layout;
-    QComboBox m_plotTypes;
-    QVector<double> m_xData;
-    QVector<double> m_yData;
 };
 }
 

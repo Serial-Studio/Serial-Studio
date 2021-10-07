@@ -29,6 +29,7 @@
 #include <QComboBox>
 #include <QVBoxLayout>
 #include <QwtPlotCurve>
+#include <QwtScaleEngine>
 
 namespace Widgets
 {
@@ -48,7 +49,6 @@ private:
     QwtPlot m_plot;
     QwtLegend m_legend;
     QVBoxLayout m_layout;
-    QVector<double> m_xData;
     QVector<QwtPlotCurve *> m_curves;
     QVector<QVector<double>> m_yData;
 };

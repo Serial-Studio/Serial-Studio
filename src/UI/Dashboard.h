@@ -193,6 +193,10 @@ public:
     QVector<QString> multiPlotTitles() const;
     QVector<QString> accelerometerTitles() const;
 
+    QVector<double> *xPlotValues() { return &m_xData; }
+    QVector<QVector<double>> *fftPlotValues() { return &m_fftPlotValues; }
+    QVector<QVector<double>> *linearPlotValues() { return &m_linearPlotValues; }
+
 public slots:
     void setPoints(const int points);
     void setBarVisible(const int index, const bool visible);
@@ -209,7 +213,8 @@ public slots:
 private slots:
     void resetData();
     void updateData();
-    void selectLatestJSON(const JFI_Object &frameInfo);
+    void updatePlots();
+    void processLatestJSON(const JFI_Object &frameInfo);
 
 private:
     Dashboard();
@@ -231,6 +236,9 @@ private:
 
 private:
     int m_points;
+    QVector<double> m_xData;
+    QVector<QVector<double>> m_fftPlotValues;
+    QVector<QVector<double>> m_linearPlotValues;
 
     QVector<bool> m_barVisibility;
     QVector<bool> m_fftVisibility;
@@ -256,7 +264,7 @@ private:
     QVector<JSON::Group *> m_accelerometerWidgets;
 
     JSON::Frame m_latestFrame;
-    JFI_Object m_latestJsonFrame;
+    QVector<JFI_Object> m_jsonList;
 };
 }
 

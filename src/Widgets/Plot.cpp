@@ -32,6 +32,9 @@ using namespace Widgets;
  */
 Plot::Plot(const int index)
     : m_index(index)
+    , m_min(INT_MAX)
+    , m_max(INT_MIN)
+    , m_autoscale(true)
 {
     // Get pointers to serial studio modules
     auto dash = UI::Dashboard::getInstance();
@@ -64,6 +67,10 @@ Plot::Plot(const int index)
     m_layout.setContentsMargins(24, 24, 24, 24);
     setLayout(&m_layout);
 
+    // Fit data horizontally
+    m_plot.axisScaleEngine(QwtPlot::xBottom)
+        ->setAttribute(QwtScaleEngine::Floating, true);
+
     // Create curve from data
     updateRange();
     m_curve.attach(&m_plot);
@@ -81,24 +88,25 @@ Plot::Plot(const int index)
     // Set curve color & plot style
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
-    // Lazy widgets, get initial properties from dataset
-#ifdef LAZY_WIDGETS
+    // Get dataset units
     auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
     if (dataset)
     {
-        // Set max/min values
-        auto min = dataset->min();
+        // Update graph scale
         auto max = dataset->max();
+        auto min = dataset->min();
         if (max > min)
-            m_plot.setAxisScale(m_plot.y(), min, max);
-        else
-            m_plot.setAxisAutoScale(m_plot.y(), true);
+        {
+            m_max = max;
+            m_min = min;
+            m_autoscale = false;
+            m_plot.setAxisScale(m_plot.yLeft, m_min, m_max);
+        }
 
-        // Set units
+        // Set y-axis units
         if (!dataset->units().isEmpty())
             m_plot.setAxisTitle(m_plot.y(), dataset->units());
     }
-#endif
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
@@ -115,34 +123,74 @@ Plot::Plot(const int index)
  */
 void Plot::updateData()
 {
-    auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
-    if (dataset)
+    // Widget not enabled, do not redraw
+    if (!isEnabled())
+        return;
+
+    // Get new data
+    auto plotData = UI::Dashboard::getInstance()->linearPlotValues();
+    if (plotData->count() > m_index)
     {
-        // Add point to plot data
-        memmove(m_yData.data(), m_yData.data() + 1, m_yData.count() * sizeof(double));
-        m_yData[m_yData.count() - 1] = dataset->value().toDouble();
+        // Check if we need to update graph scale
+        if (m_autoscale)
+        {
+            bool changed = false;
+            for (int i = 0; i < plotData->at(m_index).count(); ++i)
+            {
+                auto v = plotData->at(m_index).at(i);
+                if (v > m_max)
+                {
+                    m_max = v + 1;
+                    changed = true;
+                }
 
-        // Widget not enabled, do not redraw
-        if (!isEnabled())
-            return;
+                if (v < m_min)
+                {
+                    m_min = v - 1;
+                    changed = true;
+                }
+            }
 
-            // Update plot properties
-#ifndef LAZY_WIDGETS
-        // Set max/min values
-        auto min = dataset->min();
-        auto max = dataset->max();
-        if (max > min)
-            m_plot.setAxisScale(m_plot.y(), min, max);
-        else
-            m_plot.setAxisAutoScale(m_plot.y(), true);
+            // Update graph scale
+            if (changed)
+            {
+                // Get central value
+                double medianValue = qMax<double>(1, (m_max + m_min)) / 2;
+                if (m_max == m_min)
+                    medianValue = m_max;
 
-        // Set units
-        if (!dataset->units().isEmpty())
-            m_plot.setAxisTitle(m_plot.y(), dataset->units());
-#endif
+                // Center graph verticaly
+                double mostDiff = qMax<double>(qAbs<double>(m_min), qAbs<double>(m_max));
+                double min
+                    = medianValue * (1 - 0.5) - qAbs<double>(medianValue - mostDiff);
+                double max
+                    = medianValue * (1 + 0.5) + qAbs<double>(medianValue - mostDiff);
+                if (m_min < 0)
+                    min = max * -1;
 
-        // Plot new data
-        m_curve.setSamples(m_xData, m_yData);
+                // Fix issues when min & max are equal
+                if (min == max)
+                {
+                    max = qAbs<double>(max);
+                    min = max * -1;
+                }
+
+                // Fix issues on min = max = (0,0)
+                if (min == 0 && max == 0)
+                {
+                    max = 1;
+                    min = -1;
+                }
+
+                // Update axis scale
+                m_max = max;
+                m_min = min;
+                m_plot.setAxisScale(m_plot.yLeft, m_min, m_max);
+            }
+        }
+
+        // Replot graph
+        m_curve.setSamples(plotData->at(m_index));
         m_plot.replot();
     }
 }
@@ -155,17 +203,13 @@ void Plot::updateRange()
     // Get pointer to dashboard manager
     auto dash = UI::Dashboard::getInstance();
 
-    // Set number of points
-    m_xData.clear();
-    m_yData.clear();
-    m_xData.reserve(dash->points());
-    m_yData.reserve(dash->points());
+    // Clear Y-axis data
+    QVector<double> tempYData;
+    tempYData.reserve(dash->points());
     for (int i = 0; i < dash->points(); ++i)
-    {
-        m_xData.append(i);
-        m_yData.append(0);
-    }
+        tempYData.append(0);
 
-    // Create curve from data
-    m_curve.setSamples(m_xData, m_yData);
+    // Redraw graph
+    m_curve.setSamples(*dash->xPlotValues(), tempYData);
+    m_plot.replot();
 }

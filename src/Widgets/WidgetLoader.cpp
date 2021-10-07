@@ -178,9 +178,12 @@ QString WidgetLoader::widgetIcon() const
  */
 QString WidgetLoader::widgetTitle() const
 {
-    auto titles = UI::Dashboard::getInstance()->widgetTitles();
-    if (widgetIndex() < titles.count())
-        return titles.at(widgetIndex());
+    if (widgetIndex() >= 0)
+    {
+        auto titles = UI::Dashboard::getInstance()->widgetTitles();
+        if (widgetIndex() < titles.count())
+            return titles.at(widgetIndex());
+    }
 
     return tr("Invalid");
 }
