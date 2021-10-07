@@ -90,6 +90,7 @@ class Dataset : public QObject
 public:
     Dataset(QObject *parent = nullptr);
 
+    bool fft() const;
     bool graph() const;
     double min() const;
     double max() const;
@@ -103,6 +104,7 @@ public:
     bool read(const QJsonObject &object);
 
 private:
+    bool m_fft;
     bool m_graph;
     QString m_title;
     QString m_value;

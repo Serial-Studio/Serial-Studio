@@ -109,11 +109,22 @@ Widgets.Window {
         // Dataset graph
         //
         Label {
-            text: qsTr("Generate graph:")
+            text: qsTr("Linear plot:")
         } Switch {
             Layout.leftMargin: -app.spacing
             checked: Cpp_JSON_Editor.datasetGraph(group, dataset)
             onCheckedChanged: Cpp_JSON_Editor.setDatasetGraph(group, dataset, checked)
+        }
+
+        //
+        // FFT plot
+        //
+        Label {
+            text: qsTr("FFT plot:")
+        } Switch {
+            Layout.leftMargin: -app.spacing
+            checked: Cpp_JSON_Editor.datasetFftPlot(group, dataset)
+            onCheckedChanged: Cpp_JSON_Editor.setDatasetFftPlot(group, dataset, checked)
         }
 
         //

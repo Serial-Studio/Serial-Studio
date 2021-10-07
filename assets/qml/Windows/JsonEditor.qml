@@ -412,14 +412,12 @@ ApplicationWindow {
                     anchors.centerIn: parent
                     visible: Cpp_JSON_Editor.groupCount === 0
 
-                    Button {
-                        flat: true
-                        enabled: false
-                        icon.width: 128
-                        icon.height: 128
+                    Widgets.Icon {
+                        width: 128
+                        height: 128
+                        color: Cpp_ThemeManager.text
                         Layout.alignment: Qt.AlignHCenter
-                        icon.color: Cpp_ThemeManager.text
-                        icon.source: "qrc:/icons/developer-board.svg"
+                        source: "qrc:/icons/developer-board.svg"
                     }
 
                     Label {

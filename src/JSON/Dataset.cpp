@@ -27,6 +27,7 @@ using namespace JSON;
 
 Dataset::Dataset(QObject *parent)
     : QObject(parent)
+    , m_fft(false)
     , m_graph(false)
     , m_title("")
     , m_value("")
@@ -36,6 +37,14 @@ Dataset::Dataset(QObject *parent)
     , m_max("100")
     , m_min("0")
 {
+}
+
+/**
+ * @return @c true if the UI should generate a FFT plot of this dataset
+ */
+bool Dataset::fft() const
+{
+    return m_fft;
 }
 
 /**
@@ -122,6 +131,7 @@ bool Dataset::read(const QJsonObject &object)
 
     if (!object.isEmpty())
     {
+        auto fft = object.value("fft").toVariant().toBool();
         auto graph = object.value("g").toVariant().toBool();
         auto title = object.value("t").toVariant().toString();
         auto value = object.value("v").toVariant().toString();
@@ -150,6 +160,7 @@ bool Dataset::read(const QJsonObject &object)
         {
             m_min = min;
             m_max = max;
+            m_fft = fft;
             m_graph = graph;
             m_title = title;
             m_units = units;

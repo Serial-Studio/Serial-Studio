@@ -308,6 +308,7 @@ bool Editor::saveJsonFile()
             dataset.insert("u", datasetUnits(i, j));
             dataset.insert("g", datasetGraph(i, j));
             dataset.insert("w", datasetWidget(i, j));
+            dataset.insert("fft", datasetFftPlot(i, j));
             dataset.insert("v", "%" + QString::number(datasetIndex(i, j)));
             dataset.insert("min", datasetWidgetMin(i, j).toDouble());
             dataset.insert("max", datasetWidgetMax(i, j).toDouble());
@@ -450,6 +451,22 @@ bool Editor::datasetGraph(const int group, const int dataset)
     auto set = getDataset(group, dataset);
     if (set)
         return set->m_graph;
+
+    return 0;
+}
+
+/**
+ * Returns @c true if Serial Studio should graph the data of the given
+ * @a dataset (which is contained by the specified @a group).
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+bool Editor::datasetFftPlot(const int group, const int dataset)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+        return set->m_fft;
 
     return 0;
 }
@@ -692,6 +709,7 @@ void Editor::openJsonFile(const QString &path)
             setDatasetGraph(group, dataset, jsonDataset.value("g").toBool());
             setDatasetTitle(group, dataset, jsonDataset.value("t").toString());
             setDatasetUnits(group, dataset, jsonDataset.value("u").toString());
+            setDatasetFftPlot(group, dataset, jsonDataset.value("fft").toBool());
             setDatasetWidgetData(group, dataset, jsonDataset.value("w").toString());
 
             // Get max/min texts
@@ -1091,6 +1109,23 @@ void Editor::setDatasetGraph(const int group, const int dataset, const bool gene
         emit datasetChanged(group, dataset);
     }
 }
+
+/**
+ * Updates the @a generateFft flag of the given @a dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+void Editor::setDatasetFftPlot(const int group, const int dataset, const bool generateFft)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+    {
+        set->m_fft = generateFft;
+        emit datasetChanged(group, dataset);
+    }
+}
+
 
 /**
  * Updates the @a widgetId of the given @a dataset. The widget ID is dependent on

@@ -154,7 +154,7 @@ Widgets.Window {
                     group: root.group
                     Layout.fillWidth: true
                     Layout.minimumWidth: 320
-                    Layout.minimumHeight: 320
+                    Layout.minimumHeight: 360
                     showGroupWidget: widget.currentIndex > 0 && widget.currentIndex !== 4
                 }
             }
