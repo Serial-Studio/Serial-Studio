@@ -68,8 +68,8 @@ Plot::Plot(const int index)
     setLayout(&m_layout);
 
     // Fit data horizontally
-    m_plot.axisScaleEngine(QwtPlot::xBottom)
-        ->setAttribute(QwtScaleEngine::Floating, true);
+    auto xAxisEngine = m_plot.axisScaleEngine(QwtPlot::xBottom);
+    xAxisEngine->setAttribute(QwtScaleEngine::Floating, true);
 
     // Create curve from data
     updateRange();
@@ -100,8 +100,15 @@ Plot::Plot(const int index)
             m_max = max;
             m_min = min;
             m_autoscale = false;
-            m_plot.setAxisScale(m_plot.yLeft, m_min, m_max);
+            m_plot.setAxisScale(QwtPlot::yLeft, m_min, m_max);
         }
+
+        // Enable logarithmic scale
+        // clang-format off
+        if (dataset->log())
+            m_plot.setAxisScaleEngine(QwtPlot::yLeft,
+                                      new QwtLogScaleEngine(10));
+        // clang-format on
 
         // Set y-axis units
         if (!dataset->units().isEmpty())

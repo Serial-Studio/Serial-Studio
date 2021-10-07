@@ -309,6 +309,7 @@ bool Editor::saveJsonFile()
             dataset.insert("g", datasetGraph(i, j));
             dataset.insert("w", datasetWidget(i, j));
             dataset.insert("fft", datasetFftPlot(i, j));
+            dataset.insert("log", datasetLogPlot(i, j));
             dataset.insert("v", "%" + QString::number(datasetIndex(i, j)));
             dataset.insert("min", datasetWidgetMin(i, j).toDouble());
             dataset.insert("max", datasetWidgetMax(i, j).toDouble());
@@ -467,6 +468,23 @@ bool Editor::datasetFftPlot(const int group, const int dataset)
     auto set = getDataset(group, dataset);
     if (set)
         return set->m_fft;
+
+    return 0;
+}
+
+/**
+ * Returns @c true if Serial Studio should graph the data of the given
+ * @a dataset (which is contained by the specified @a group) with a
+ * logarithmic scale.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+bool Editor::datasetLogPlot(const int group, const int dataset)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+        return set->m_log;
 
     return 0;
 }
@@ -710,6 +728,7 @@ void Editor::openJsonFile(const QString &path)
             setDatasetTitle(group, dataset, jsonDataset.value("t").toString());
             setDatasetUnits(group, dataset, jsonDataset.value("u").toString());
             setDatasetFftPlot(group, dataset, jsonDataset.value("fft").toBool());
+            setDatasetLogPlot(group, dataset, jsonDataset.value("log").toBool());
             setDatasetWidgetData(group, dataset, jsonDataset.value("w").toString());
 
             // Get max/min texts
@@ -1121,6 +1140,22 @@ void Editor::setDatasetFftPlot(const int group, const int dataset, const bool ge
     if (set)
     {
         set->m_fft = generateFft;
+        emit datasetChanged(group, dataset);
+    }
+}
+
+/**
+ * Updates the @a generateLog flag of the given @a dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+void Editor::setDatasetLogPlot(const int group, const int dataset, const bool generateLog)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+    {
+        set->m_log = generateLog;
         emit datasetChanged(group, dataset);
     }
 }

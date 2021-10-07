@@ -152,12 +152,7 @@ Widgets.Window {
                 delegate: Item {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 320
-                    Layout.minimumHeight: 360
-
-                    Widgets.Shadow {
-                        source: datasetDelegate
-                        anchors.fill: datasetDelegate
-                    }
+                    Layout.minimumHeight: 400
 
                     JsonDatasetDelegate {
                         id: datasetDelegate

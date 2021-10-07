@@ -97,18 +97,24 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
     // Get fonts & calculate size
     auto labelFont = UI::Dashboard::getInstance()->monoFont();
     auto gaugeFont = UI::Dashboard::getInstance()->monoFont();
-    labelFont.setPixelSize(width / 18);
-    gaugeFont.setPixelSize(width / 24);
+    labelFont.setPixelSize(qMax(8, width / 18));
+    gaugeFont.setPixelSize(qMax(8, width / 24));
 
     // Set label font (so it fits inside the box)
+    // clang-format off
     m_label.setFont(labelFont);
-    while (QFontMetrics(m_label.font()).horizontalAdvance(m_label.text()) + 12
-           > m_label.width())
+    while (QFontMetrics(m_label.font()).horizontalAdvance(m_label.text()) + 12 > m_label.width())
     {
         QFont font = m_label.font();
-        font.setPixelSize(font.pixelSize() - 1);
-        m_label.setFont(font);
+        if (font.pixelSize() > 2) {
+            font.setPixelSize(font.pixelSize() - 1);
+            m_label.setFont(font);
+        }
+
+        else
+            break;
     }
+    // clang-format on
 
     // Set widget font
     if (m_widget)

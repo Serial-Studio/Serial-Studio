@@ -29,6 +29,7 @@ Dataset::Dataset(QObject *parent)
     : QObject(parent)
     , m_fft(false)
     , m_graph(false)
+    , m_log(false)
     , m_title("")
     , m_value("")
     , m_units("")
@@ -46,6 +47,14 @@ Dataset::Dataset(QObject *parent)
 bool Dataset::fft() const
 {
     return m_fft;
+}
+
+/**
+ * @return @c true if the UI should generate a logarithmic plot of this dataset
+ */
+bool Dataset::log() const
+{
+    return m_log;
 }
 
 /**
@@ -133,6 +142,7 @@ bool Dataset::read(const QJsonObject &object)
     if (!object.isEmpty())
     {
         auto fft = object.value("fft").toVariant().toBool();
+        auto log = object.value("log").toVariant().toBool();
         auto graph = object.value("g").toVariant().toBool();
         auto title = object.value("t").toVariant().toString();
         auto value = object.value("v").toVariant().toString();
@@ -162,6 +172,7 @@ bool Dataset::read(const QJsonObject &object)
             m_min = min;
             m_max = max;
             m_fft = fft;
+            m_log = log;
             m_graph = graph;
             m_title = title;
             m_units = units;

@@ -33,11 +33,6 @@ Item {
 
     property int widgetIndex: -1
 
-    Widgets.Shadow {
-        source: window
-        anchors.fill: window
-    }
-
     Widgets.Window {
         id: window
         anchors.fill: parent

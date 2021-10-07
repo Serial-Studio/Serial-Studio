@@ -223,8 +223,8 @@ void DataGroup::resizeEvent(QResizeEvent *event)
     QFont font = UI::Dashboard::getInstance()->monoFont();
     QFont icon = font;
     QFont valueFont = font;
-    icon.setPixelSize(width / 16);
-    font.setPixelSize(width / 24);
+    icon.setPixelSize(qMax(8, width / 16));
+    font.setPixelSize(qMax(8, width / 24));
     valueFont.setPixelSize(font.pixelSize() * 1.3);
 
     for (int i = 0; i < m_titles.count(); ++i)
