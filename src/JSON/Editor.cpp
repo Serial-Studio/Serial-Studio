@@ -1126,7 +1126,6 @@ void Editor::setDatasetFftPlot(const int group, const int dataset, const bool ge
     }
 }
 
-
 /**
  * Updates the @a widgetId of the given @a dataset. The widget ID is dependent on
  * the order of the widgets returned by the @c availableDatasetLevelWidgets() function.
