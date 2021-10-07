@@ -630,11 +630,6 @@ void Dashboard::updateData()
     if (m_jsonList.isEmpty())
         return;
 
-    // Try to read latest frame for widget updating
-    auto lastJson = m_jsonList.last();
-    if (!m_latestFrame.read(lastJson.jsonDocument.object()))
-        return;
-
     // Save widget count
     int barC = barCount();
     int fftC = fftCount();
@@ -649,6 +644,11 @@ void Dashboard::updateData()
 
     // Save previous title
     auto pTitle = title();
+
+    // Try to read latest frame for widget updating
+    auto lastJson = m_jsonList.last();
+    if (!m_latestFrame.read(lastJson.jsonDocument.object()))
+        return;
 
     // Clear widget data
     m_barWidgets.clear();
