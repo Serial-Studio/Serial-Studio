@@ -134,6 +134,7 @@ void Plot::updateData()
         // Check if we need to update graph scale
         if (m_autoscale)
         {
+            // Scan new values to see if chart should be updated
             bool changed = false;
             for (int i = 0; i < plotData->at(m_index).count(); ++i)
             {
@@ -155,16 +156,14 @@ void Plot::updateData()
             if (changed)
             {
                 // Get central value
-                double medianValue = qMax<double>(1, (m_max + m_min)) / 2;
+                double median = qMax<double>(1, (m_max + m_min)) / 2;
                 if (m_max == m_min)
-                    medianValue = m_max;
+                    median = m_max;
 
                 // Center graph verticaly
                 double mostDiff = qMax<double>(qAbs<double>(m_min), qAbs<double>(m_max));
-                double min
-                    = medianValue * (1 - 0.5) - qAbs<double>(medianValue - mostDiff);
-                double max
-                    = medianValue * (1 + 0.5) + qAbs<double>(medianValue - mostDiff);
+                double min = median * (1 - 0.5) - qAbs<double>(median - mostDiff);
+                double max = median * (1 + 0.5) + qAbs<double>(median - mostDiff);
                 if (m_min < 0)
                     min = max * -1;
 
