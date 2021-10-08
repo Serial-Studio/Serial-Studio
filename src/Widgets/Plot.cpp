@@ -112,7 +112,7 @@ Plot::Plot(const int index)
 
         // Set y-axis units
         if (!dataset->units().isEmpty())
-            m_plot.setAxisTitle(m_plot.y(), dataset->units());
+            m_plot.setAxisTitle(QwtPlot::yLeft, dataset->units());
     }
 
     // React to dashboard events
