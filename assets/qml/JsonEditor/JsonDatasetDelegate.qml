@@ -115,12 +115,31 @@ Widgets.Window {
         // Dataset graph
         //
         Label {
-            text: qsTr("Linear plot:")
+            text: qsTr("Generate plot:")
         } Switch {
             id: linearPlot
             Layout.leftMargin: -app.spacing
             checked: Cpp_JSON_Editor.datasetGraph(group, dataset)
-            onCheckedChanged: Cpp_JSON_Editor.setDatasetGraph(group, dataset, checked)
+            onCheckedChanged: {
+                if (!checked)
+                    logPlot.checked = false
+
+                Cpp_JSON_Editor.setDatasetGraph(group, dataset, checked)
+            }
+        }
+
+        //
+        // Log plot
+        //
+        Label {
+            text: qsTr("Logarithmic plot:")
+            visible: linearPlot.checked
+        } CheckBox {
+            id: logPlot
+            visible: linearPlot.checked
+            Layout.leftMargin: -app.spacing
+            checked: Cpp_JSON_Editor.datasetLogPlot(group, dataset)
+            onCheckedChanged: Cpp_JSON_Editor.setDatasetLogPlot(group, dataset, checked)
         }
 
         //
@@ -132,23 +151,6 @@ Widgets.Window {
             Layout.leftMargin: -app.spacing
             checked: Cpp_JSON_Editor.datasetFftPlot(group, dataset)
             onCheckedChanged: Cpp_JSON_Editor.setDatasetFftPlot(group, dataset, checked)
-        }
-
-        //
-        // FFT plot
-        //
-        Label {
-            text: qsTr("Logarithmic plot:")
-        } Switch {
-            id: logPlot
-            Layout.leftMargin: -app.spacing
-            checked: Cpp_JSON_Editor.datasetLogPlot(group, dataset)
-            onCheckedChanged: {
-                if (checked)
-                    linearPlot.checked = true
-
-                Cpp_JSON_Editor.setDatasetLogPlot(group, dataset, checked)
-            }
         }
 
         //
