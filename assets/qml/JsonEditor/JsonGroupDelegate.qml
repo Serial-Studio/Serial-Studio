@@ -80,6 +80,58 @@ Widgets.Window {
         }
 
         //
+        // Notes rectangle
+        //
+        Rectangle {
+            id: notes
+            radius: 16
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.highlight
+            Layout.minimumHeight: 32 + 2 * app.spacing
+            visible: widget.currentIndex === 1 || widget.currentIndex === 2
+
+            RowLayout {
+                spacing: app.spacing
+                anchors.centerIn: parent
+                Layout.alignment: Qt.AlignHCenter
+                visible: widget.currentIndex === 1
+
+                Widgets.Icon {
+                    width: 32
+                    height: 32
+                    color: palette.highlightedText
+                    Layout.alignment: Qt.AlignHCenter
+                    source: "qrc:/icons/accelerometer.svg"
+                } Label {
+                    font.pixelSize: 18
+                    wrapMode: Label.WordWrap
+                    color: palette.highlightedText
+                    text: "<b>" + qsTr("Note:") + "</b> " + qsTr("The accelerometer widget expects values in m/s².")
+                }
+            }
+
+            RowLayout {
+                spacing: app.spacing
+                anchors.centerIn: parent
+                Layout.alignment: Qt.AlignHCenter
+                visible: widget.currentIndex === 2
+
+                Widgets.Icon {
+                    width: 32
+                    height: 32
+                    source: "qrc:/icons/gyro.svg"
+                    color: palette.highlightedText
+                    Layout.alignment: Qt.AlignHCenter
+                } Label {
+                    font.pixelSize: 18
+                    wrapMode: Label.WordWrap
+                    color: palette.highlightedText
+                    text: "<b>" + qsTr("Note:") + "</b> " + qsTr("The gyroscope widget expects values in degrees (0° to 360°).")
+                }
+            }
+        }
+
+        //
         // Group title
         //
         RowLayout {

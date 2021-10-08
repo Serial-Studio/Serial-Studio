@@ -237,5 +237,32 @@ Widgets.Window {
         } Item {
             Layout.fillHeight: true
         }
+
+        //
+        // Compass note label
+        //
+        Widgets.Icon {
+            width: 32
+            height: 32
+            color: palette.text
+            source: "qrc:/icons/compass.svg"
+            Layout.alignment: Qt.AlignHCenter
+            visible: widget.currentIndex === 3
+        } Label {
+            font.pixelSize: 16
+            Layout.fillWidth: true
+            wrapMode: Label.WordWrap
+            visible: widget.currentIndex === 3
+            text: "<b>" + qsTr("Note:") + "</b> " + qsTr("The compass widget expects values from 0° to 360°.")
+        }
+
+        //
+        // Vertical spacer
+        //
+        Item {
+            Layout.fillHeight: true
+        } Item {
+            Layout.fillHeight: true
+        }
     }
 }

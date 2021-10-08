@@ -1178,7 +1178,11 @@ void Editor::setDatasetWidget(const int group, const int dataset, const int widg
         else if (widgetId == 2)
             widget = "bar";
         else if (widgetId == 3)
+        {
             widget = "compass";
+            set->m_min = "0";
+            set->m_max = "360";
+        }
 
         set->m_widget = widget;
         emit datasetChanged(group, dataset);
