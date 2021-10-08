@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/themes">
         <file>2_MathWorks.json</file>
-        <file>1_Classic.json</file>
-        <file>0_Noir.json</file>
+        <file>0_Classic.json</file>
+        <file>1_Noir.json</file>
     </qresource>
 </RCC>
