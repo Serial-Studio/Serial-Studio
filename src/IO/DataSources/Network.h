@@ -71,12 +71,17 @@ class Network : public QObject
     Q_PROPERTY(bool lookupActive
                READ lookupActive
                NOTIFY lookupActiveChanged)
+    Q_PROPERTY(bool udpMulticast
+               READ udpMulticast
+               WRITE setUdpMulticast
+               NOTIFY udpMulticastChanged)
     // clang-format on
 
 signals:
     void hostChanged();
     void portChanged();
     void socketTypeChanged();
+    void udpMulticastChanged();
     void lookupActiveChanged();
 
 public:
@@ -84,6 +89,7 @@ public:
 
     QString host() const;
     quint16 port() const;
+    bool udpMulticast() const;
     bool lookupActive() const;
     int socketTypeIndex() const;
     bool configurationOk() const;
@@ -104,6 +110,7 @@ public slots:
     void setPort(const quint16 port);
     void setHost(const QString &host);
     void lookup(const QString &host);
+    void setUdpMulticast(const bool enabled);
     void setSocketTypeIndex(const int index);
     void setSocketType(const QAbstractSocket::SocketType type);
 
@@ -119,6 +126,7 @@ private:
     QString m_host;
     quint16 m_port;
     bool m_hostExists;
+    bool m_udpMulticast;
     bool m_lookupActive;
     QIODevice *m_device;
     QTcpSocket m_tcpSocket;

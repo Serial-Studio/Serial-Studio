@@ -32,10 +32,10 @@ static Network *INSTANCE = nullptr;
  * Constructor function
  */
 Network::Network()
+    : m_hostExists(false)
+    , m_udpMulticast(false)
+    , m_lookupActive(false)
 {
-    m_hostExists = false;
-    m_lookupActive = false;
-
     setHost("");
     setPort(defaultPort());
     setSocketType(QAbstractSocket::TcpSocket);
@@ -76,6 +76,15 @@ QString Network::host() const
 quint16 Network::port() const
 {
     return m_port;
+}
+
+/**
+ * Returns @c true if the UDP socket is managing a multicasted
+ * connection.
+ */
+bool Network::udpMulticast() const
+{
+    return m_udpMulticast;
 }
 
 /**
@@ -165,16 +174,26 @@ QIODevice *Network::openNetworkPort()
     else if (socketType() == QAbstractSocket::UdpSocket)
     {
         socket = &m_udpSocket;
-
         QHostAddress address(hostAddr);
-        if (address.protocol() == QAbstractSocket::IPv4Protocol)
-            m_udpSocket.bind(QHostAddress::AnyIPv4, portAddr, QUdpSocket::ShareAddress);
-        else if (address.protocol() == QAbstractSocket::IPv6Protocol)
-            m_udpSocket.bind(QHostAddress::AnyIPv6, portAddr, QUdpSocket::ShareAddress);
-        else
-            m_udpSocket.bind(QHostAddress::Any, portAddr, QUdpSocket::ShareAddress);
 
-        m_udpSocket.joinMulticastGroup(address);
+        // Bind the UDP socket to a multicast group
+        if (udpMulticast())
+        {
+            if (address.protocol() == QAbstractSocket::IPv4Protocol)
+                m_udpSocket.bind(QHostAddress::AnyIPv4, portAddr,
+                                 QUdpSocket::ShareAddress);
+            else if (address.protocol() == QAbstractSocket::IPv6Protocol)
+                m_udpSocket.bind(QHostAddress::AnyIPv6, portAddr,
+                                 QUdpSocket::ShareAddress);
+            else
+                m_udpSocket.bind(QHostAddress::Any, portAddr, QUdpSocket::ShareAddress);
+
+            m_udpSocket.joinMulticastGroup(address);
+        }
+
+        // Bind the UDP socket to an individual host
+        else
+            m_udpSocket.bind(address, portAddr, QUdpSocket::ShareAddress);
     }
 
     // Convert socket to IO device pointer
@@ -244,6 +263,15 @@ void Network::lookup(const QString &host)
     m_lookupActive = true;
     emit lookupActiveChanged();
     QHostInfo::lookupHost(host.simplified(), this, &Network::lookupFinished);
+}
+
+/**
+ * Enables/Disables multicast connections with the UDP socket.
+ */
+void Network::setUdpMulticast(const bool enabled)
+{
+    m_udpMulticast = enabled;
+    emit udpMulticastChanged();
 }
 
 /**

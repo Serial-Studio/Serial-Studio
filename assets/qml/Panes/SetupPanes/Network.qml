@@ -34,22 +34,23 @@ Control {
     property alias port: _portText.text
     property alias address: _address.text
     property alias socketType: _typeCombo.currentIndex
+    property alias udpMulticastEnabled: _udpMulticast.checked
     
     //
     // React to network manager events
     //
     Connections {
-    	target: Cpp_IO_Network
-    	
-    	function onHostChanged() {
+        target: Cpp_IO_Network
+
+        function onHostChanged() {
             if (_address.text.length > 0)
-    			_address.text = Cpp_IO_Network.host
-    	}
-    	
-    	function onPortChanged() {
+                _address.text = Cpp_IO_Network.host
+        }
+
+        function onPortChanged() {
             if (_portText.text.length > 0)
-    			_portText.text = Cpp_IO_Network.port
-    	}
+                _portText.text = Cpp_IO_Network.port
+        }
     }
 
     //
@@ -105,9 +106,9 @@ Control {
                 onTextChanged: {
                     if (Cpp_IO_Network.host !== text && text.length > 0)
                         Cpp_IO_Network.host = text
-                        
+
                     if (text.length === 0)
-                    	Cpp_IO_Network.host = Cpp_IO_Network.defaultHost
+                        Cpp_IO_Network.host = Cpp_IO_Network.defaultHost
                 }
 
                 opacity: enabled ? 1 : 0.5
@@ -131,9 +132,9 @@ Control {
                 onTextChanged: {
                     if (Cpp_IO_Network.port !== text && text.length > 0)
                         Cpp_IO_Network.port = text
-                        
+
                     if (text.length === 0)
-                    	Cpp_IO_Network.port = Cpp_IO_Network.defaultPort
+                        Cpp_IO_Network.port = Cpp_IO_Network.defaultPort
                 }
 
                 validator: IntValidator {
@@ -143,6 +144,28 @@ Control {
 
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Manager.connected
+                Behavior on opacity {NumberAnimation{}}
+            }
+
+            //
+            // UDP multicast checkbox
+            //
+            Label {
+                text: qsTr("Multicast") + ":"
+                opacity: _udpMulticast.enabled ? 1 : 0.5
+                Behavior on opacity {NumberAnimation{}}
+            } CheckBox {
+                id: _udpMulticast
+                opacity: enabled ? 1 : 0.5
+                Layout.alignment: Qt.AlignLeft
+                Layout.leftMargin: -app.spacing
+                checked: Cpp_IO_Network.udpMulticast
+                enabled: Cpp_IO_Network.socketTypeIndex === 1 && !Cpp_IO_Manager.connected
+                onCheckedChanged: {
+                    if (Cpp_IO_Network.udpMulticast !== checked)
+                        Cpp_IO_Network.udpMulticast = checked
+                }
+
                 Behavior on opacity {NumberAnimation{}}
             }
         }
