@@ -161,11 +161,20 @@ QIODevice *Network::openNetworkPort()
         m_tcpSocket.connectToHost(hostAddr, portAddr);
     }
 
-    // UDP connection, assign socket pointer & connect to host
+    // UDP connection, assign socket pointer & bind to host
     else if (socketType() == QAbstractSocket::UdpSocket)
     {
         socket = &m_udpSocket;
-        m_udpSocket.connectToHost(hostAddr, portAddr);
+
+        QHostAddress address(hostAddr);
+        if (address.protocol() == QAbstractSocket::IPv4Protocol)
+            m_udpSocket.bind(QHostAddress::AnyIPv4, portAddr, QUdpSocket::ShareAddress);
+        else if (address.protocol() == QAbstractSocket::IPv6Protocol)
+            m_udpSocket.bind(QHostAddress::AnyIPv6, portAddr, QUdpSocket::ShareAddress);
+        else
+            m_udpSocket.bind(QHostAddress::Any, portAddr, QUdpSocket::ShareAddress);
+
+        m_udpSocket.joinMulticastGroup(address);
     }
 
     // Convert socket to IO device pointer

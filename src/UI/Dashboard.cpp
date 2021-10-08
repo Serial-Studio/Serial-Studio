@@ -792,7 +792,8 @@ void Dashboard::updatePlots()
                 m_linearPlotValues.append(QVector<double>());
                 m_linearPlotValues.last().reserve(points());
                 for (int j = 0; j < points(); ++j)
-                    m_linearPlotValues[i].append(0.0001); // to avoid issues with log plots
+                    m_linearPlotValues[i].append(
+                        0.0001); // to avoid issues with log plots
             }
         }
 

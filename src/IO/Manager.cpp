@@ -28,6 +28,8 @@
 #include <IO/DataSources/Serial.h>
 #include <IO/DataSources/Network.h>
 
+#include <QNetworkDatagram>
+
 using namespace IO;
 
 /**
@@ -576,8 +578,33 @@ void Manager::onDataReceived()
     if (!device())
         disconnectDevice();
 
+    // Initialize byte array
+    QByteArray data;
+    bool udpConnection = false;
+
+    // Check if we need to use UDP socket functions
+    if (dataSource() == DataSource::Network)
+    {
+        auto network = DataSources::Network::getInstance();
+        if (network->socketType() == QAbstractSocket::UdpSocket)
+        {
+            udpConnection = true;
+            auto udpSocket = network->udpSocket();
+            while (udpSocket->hasPendingDatagrams())
+            {
+                QByteArray datagram;
+                datagram.resize(int(udpSocket->pendingDatagramSize()));
+                udpSocket->readDatagram(datagram.data(), datagram.size());
+                data.append(datagram);
+            }
+        }
+    }
+
+    // We are using the TCP socket or the serial port
+    if (!udpConnection)
+        data = device()->readAll();
+
     // Read data & append it to buffer
-    auto data = device()->readAll();
     auto bytes = data.length();
 
     // Feed watchdog (so that data is not cleared automatically)

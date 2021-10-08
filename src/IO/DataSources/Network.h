@@ -90,6 +90,8 @@ public:
     QVector<QString> socketTypes() const;
     QAbstractSocket::SocketType socketType() const;
 
+    QTcpSocket *tcpSocket() { return &m_tcpSocket; }
+    QUdpSocket *udpSocket() { return &m_udpSocket; }
     static QString defaultHost() { return "127.0.0.1"; }
     static quint16 defaultPort() { return 23; }
 
