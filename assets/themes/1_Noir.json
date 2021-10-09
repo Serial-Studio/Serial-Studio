@@ -50,16 +50,17 @@
       "widgetIndicator":"#444444",
       "widgetControlBackground":"#666666",
       "widgetColors":[
-         "#0172bd",
-         "#d9531a",
-         "#ecb120",
-         "#7d2f8e",
-         "#77ab30",
-         "#4dbeee",
-         "#a21330",
-         "#4d908e",
-         "#577590",
-         "#277da1"
+         "#1f76b4",
+         "#ff7f0f",
+         "#2aa02b",
+         "#d62628",
+         "#9467bd",
+         "#8c564c",
+         "#e377c1",
+         "#7f7f7f",
+         "#bcbd21",
+         "#19bdcf",
+         "#1955fe"
       ]
    }
 }

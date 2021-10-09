@@ -50,16 +50,16 @@
       "widgetForegroundSecondary":"#517497",
       "widgetIndicator":"#e6e0b2",
       "widgetColors":[
-         "#0172bd",
-         "#d9531a",
-         "#ecb120",
-         "#7d2f8e",
-         "#77ab30",
-         "#4dbeee",
-         "#a21330",
-         "#4d908e",
-         "#577590",
-         "#277da1"
+         "#fa8174",
+         "#bfbbd9",
+         "#80b1d2",
+         "#fdffb4",
+         "#fdb462",
+         "#8dd3c7",
+         "#b3dd69",
+         "#feed6f",
+         "#bc81bc",
+         "#cceac4"
       ]
    }
 }
