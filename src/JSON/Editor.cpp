@@ -314,6 +314,7 @@ bool Editor::saveJsonFile()
             dataset.insert("min", datasetWidgetMin(i, j).toDouble());
             dataset.insert("max", datasetWidgetMax(i, j).toDouble());
             dataset.insert("alarm", datasetWidgetAlarm(i, j).toDouble());
+            dataset.insert("fftSamples", datasetFFTSamples(i, j).toInt());
 
             // Add dataset to array
             datasets.append(dataset);
@@ -588,6 +589,21 @@ QString Editor::datasetWidgetMax(const int group, const int dataset)
 }
 
 /**
+ * Returns the maximum FFT frequency value of the specified dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+QString Editor::datasetFFTSamples(const int group, const int dataset)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+        return QString::number(set->m_fftSamples);
+
+    return 0;
+}
+
+/**
  * Returns the widget alarm value of the specified dataset.
  * This option is used by the bar & gauge widgets.
  *
@@ -730,6 +746,8 @@ void Editor::openJsonFile(const QString &path)
             setDatasetFftPlot(group, dataset, jsonDataset.value("fft").toBool());
             setDatasetLogPlot(group, dataset, jsonDataset.value("log").toBool());
             setDatasetWidgetData(group, dataset, jsonDataset.value("w").toString());
+            setDatasetFFTSamples(
+                group, dataset, QString::number(jsonDataset.value("fftSamples").toInt()));
 
             // Get max/min texts
             auto min = jsonDataset.value("min").toDouble();
@@ -1259,6 +1277,23 @@ void Editor::setDatasetWidgetAlarm(const int group, const int dataset,
     if (set)
     {
         set->m_alarm = alarm;
+        emit datasetChanged(group, dataset);
+    }
+}
+
+/**
+ * Updates the @a frequency value used for FFT plotting.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+void Editor::setDatasetFFTSamples(const int group, const int dataset,
+                                  const QString &frequency)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+    {
+        set->m_fftSamples = frequency.toInt();
         emit datasetChanged(group, dataset);
     }
 }

@@ -55,6 +55,7 @@ Widgets.Window {
     //
     // Convenience variables
     //
+    readonly property bool fftSamplesVisible: fftCheck.checked
     readonly property bool alarmVisible: widget.currentIndex === 2
     readonly property bool minMaxVisible: widget.currentIndex === 1 || widget.currentIndex === 2 || logPlot.checked || linearPlot.checked
 
@@ -148,6 +149,7 @@ Widgets.Window {
         Label {
             text: qsTr("FFT plot:")
         } Switch {
+            id: fftCheck
             Layout.leftMargin: -app.spacing
             checked: Cpp_JSON_Editor.datasetFftPlot(group, dataset)
             onCheckedChanged: Cpp_JSON_Editor.setDatasetFftPlot(group, dataset, checked)
@@ -173,6 +175,25 @@ Widgets.Window {
             Layout.fillWidth: true
             visible: showGroupWidget
             text: Cpp_JSON_Editor.datasetWidget(group, dataset)
+        }
+
+
+        //
+        // FFT max frequency
+        //
+        Label {
+            text: qsTr("FFT Samples:")
+            visible: root.fftSamplesVisible
+        } TextField {
+            id: fftSamples
+            Layout.fillWidth: true
+            visible: root.fftSamplesVisible
+            text: Cpp_JSON_Editor.datasetFFTSamples(group, dataset)
+            onTextChanged: Cpp_JSON_Editor.setDatasetFFTSamples(group, dataset, parseInt(text))
+            validator: IntValidator {
+                bottom: 128
+                top: 40 * 1000
+            }
         }
 
         //

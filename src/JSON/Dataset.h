@@ -100,6 +100,7 @@ public:
     QString value() const;
     QString units() const;
     QString widget() const;
+    int fftSamples() const;
     QJsonObject jsonData() const;
 
     bool read(const QJsonObject &object);
@@ -120,6 +121,7 @@ private:
     QString m_max;
     QString m_min;
     QString m_alarm;
+    int m_fftSamples;
     friend class Editor;
 };
 }

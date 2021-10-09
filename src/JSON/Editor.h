@@ -122,6 +122,7 @@ public:
     Q_INVOKABLE int datasetWidgetIndex(const int group, const int dataset);
     Q_INVOKABLE QString datasetWidgetMin(const int group, const int dataset);
     Q_INVOKABLE QString datasetWidgetMax(const int group, const int dataset);
+    Q_INVOKABLE QString datasetFFTSamples(const int group, const int dataset);
     Q_INVOKABLE QString datasetWidgetAlarm(const int group, const int dataset);
 
     Q_INVOKABLE bool setGroupWidget(const int group, const int widgetId);
@@ -156,6 +157,8 @@ public slots:
     void setDatasetWidgetMax(const int group, const int dataset, const QString &maximum);
     void setDatasetWidgetData(const int group, const int dataset, const QString &widget);
     void setDatasetWidgetAlarm(const int group, const int dataset, const QString &alarm);
+    void setDatasetFFTSamples(const int group, const int dataset,
+                              const QString &frequency);
 
 private slots:
     void setModified(const bool modified);

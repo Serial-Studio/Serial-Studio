@@ -39,12 +39,15 @@ class FFTPlot : public QWidget
 
 public:
     FFTPlot(const int index = -1);
+    ~FFTPlot();
 
 private slots:
     void updateData();
-    void updateRange();
 
 private:
+    float *m_fft;
+    float *m_samples;
+
     int m_size;
     int m_index;
     QwtPlot m_plot;

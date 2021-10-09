@@ -804,9 +804,9 @@ void Dashboard::updatePlots()
             for (int i = 0; i < fftDatasets.count(); ++i)
             {
                 m_fftPlotValues.append(QVector<double>());
-                m_fftPlotValues.last().reserve(points());
-                for (int j = 0; j < points(); ++j)
-                    m_fftPlotValues[i].append(0.0001);
+                m_fftPlotValues.last().reserve(fftDatasets[i]->fftSamples());
+                for (int j = 0; j < fftDatasets[i]->fftSamples(); ++j)
+                    m_fftPlotValues[i].append(0);
             }
         }
 

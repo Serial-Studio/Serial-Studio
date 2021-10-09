@@ -122,6 +122,14 @@ QString Dataset::widget() const
 }
 
 /**
+ * Returns the maximum freq. for the FFT transform
+ */
+int Dataset::fftSamples() const
+{
+    return qMax(1, m_fftSamples);
+}
+
+/**
  * Returns the JSON data that represents this widget
  */
 QJsonObject Dataset::jsonData() const
@@ -151,6 +159,7 @@ bool Dataset::read(const QJsonObject &object)
         auto min = object.value("min").toVariant().toString();
         auto max = object.value("max").toVariant().toString();
         auto alarm = object.value("alarm").toVariant().toString();
+        auto fftSamples = object.value("fftSamples").toVariant().toInt();
 
         min = min.replace("\n", "");
         min = min.replace("\r", "");
@@ -180,6 +189,7 @@ bool Dataset::read(const QJsonObject &object)
             m_alarm = alarm;
             m_widget = widget;
             m_jsonData = object;
+            m_fftSamples = fftSamples;
 
             return true;
         }

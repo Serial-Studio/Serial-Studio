@@ -37,6 +37,10 @@ FFTPlot::FFTPlot(const int index)
     auto dash = UI::Dashboard::getInstance();
     auto theme = Misc::ThemeManager::getInstance();
 
+    // Initialize pointers to NULL
+    m_fft = nullptr;
+    m_samples = nullptr;
+
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->fftCount())
         return;
@@ -69,7 +73,6 @@ FFTPlot::FFTPlot(const int index)
     xAxisEngine->setAttribute(QwtScaleEngine::Floating, true);
 
     // Create curve from data
-    updateRange();
     m_curve.attach(&m_plot);
     m_plot.replot();
     m_plot.show();
@@ -85,9 +88,56 @@ FFTPlot::FFTPlot(const int index)
     // Set curve color & plot style
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
+    // Set y-scale from -1 to 1
+    m_plot.setAxisScale(QwtPlot::yLeft, -1, 1);
+
+    // Get dataset max freq. & calculate fft size
+    auto dataset = UI::Dashboard::getInstance()->getFFT(m_index);
+    if (dataset)
+    {
+        // Calculate FFT size
+        int size = dataset->fftSamples();
+
+        // Ensure that FFT size is valid
+        while (m_transformer.setSize(size) == QFourierTransformer::InvalidSize)
+            --size;
+
+        // Set FFT size
+        m_size = size;
+
+        // Initialize samples & FFT arrays
+        m_fft = (float *)calloc(m_size, sizeof(float));
+        m_samples = (float *)calloc(m_size, sizeof(float));
+
+        // Clear Y-axis data
+        QVector<double> xData;
+        QVector<double> yData;
+        xData.reserve(m_size);
+        yData.reserve(m_size);
+        for (int i = 0; i < m_size; ++i)
+        {
+            yData.append(0);
+            xData.append(i);
+        }
+
+        // Set curve data & replot
+        m_curve.setSamples(xData, yData);
+        m_plot.replot();
+    }
+
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
-    connect(dash, SIGNAL(pointsChanged()), this, SLOT(updateRange()));
+}
+
+/**
+ * Destructor function
+ */
+FFTPlot::~FFTPlot()
+{
+    free(m_fft);
+    free(m_samples);
+    m_fft = nullptr;
+    m_samples = nullptr;
 }
 
 /**
@@ -100,50 +150,23 @@ FFTPlot::FFTPlot(const int index)
  */
 void FFTPlot::updateData()
 {
+    // Verify that FFT sample arrays are valid
+    if (!m_samples || !m_fft)
+        return;
+
+    // Replot
     auto plotData = UI::Dashboard::getInstance()->fftPlotValues();
     if (plotData->count() > m_index)
     {
-        // Get data
+        // Copy data to samples array
         auto data = plotData->at(m_index);
-
-        // Create float arrays
-        float fft[m_size];
-        float samples[m_size];
         for (int i = 0; i < m_size; ++i)
-            samples[i] = static_cast<float>(data[i]);
+            m_samples[i] = static_cast<float>(data[i]);
 
         // Execute FFT
-        m_transformer.forwardTransform(samples, fft);
-        m_curve.setSamples(fft, m_size);
+        m_transformer.forwardTransform(m_samples, m_fft);
+        m_transformer.rescale(m_fft);
+        m_curve.setSamples(m_fft, m_size);
         m_plot.replot();
     }
-}
-
-/**
- * Updates the number of horizontal divisions of the plot
- */
-void FFTPlot::updateRange()
-{
-    // Calculate FFT size
-    int size = UI::Dashboard::getInstance()->points();
-    while (m_transformer.setSize(size) == QFourierTransformer::InvalidSize)
-        --size;
-
-    // Set FFT size
-    m_size = size;
-
-    // Clear Y-axis data
-    QVector<double> xData;
-    QVector<double> yData;
-    xData.reserve(size);
-    yData.reserve(size);
-    for (int i = 0; i < size; ++i)
-    {
-        yData.append(0);
-        xData.append(i);
-    }
-
-    // Redraw graph
-    m_curve.setSamples(xData, yData);
-    m_plot.replot();
 }
