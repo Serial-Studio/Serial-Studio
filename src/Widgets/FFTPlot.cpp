@@ -88,9 +88,6 @@ FFTPlot::FFTPlot(const int index)
     // Set curve color & plot style
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
-    // Set y-scale from -1 to 1
-    m_plot.setAxisScale(QwtPlot::yLeft, -1, 1);
-
     // Get dataset max freq. & calculate fft size
     auto dataset = UI::Dashboard::getInstance()->getFFT(m_index);
     if (dataset)
@@ -119,6 +116,13 @@ FFTPlot::FFTPlot(const int index)
             yData.append(0);
             xData.append(i);
         }
+
+        // Set y-scale from -1 to 1
+        m_plot.setAxisScale(QwtPlot::yLeft, -1, 1);
+
+        // Set axis titles
+        m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
+        m_plot.setAxisTitle(QwtPlot::yLeft, tr("FFT of %1").arg(dataset->title()));
 
         // Set curve data & replot
         m_curve.setSamples(xData, yData);

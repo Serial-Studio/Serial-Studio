@@ -109,6 +109,10 @@ Plot::Plot(const int index)
             m_plot.setAxisScaleEngine(QwtPlot::yLeft,
                                       new QwtLogScaleEngine(10));
         // clang-format on
+
+        // Set axis titles
+        m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
+        m_plot.setAxisTitle(QwtPlot::yLeft, dataset->title());
     }
 
     // React to dashboard events

@@ -98,6 +98,8 @@ MultiPlot::MultiPlot(const int index)
 
     // Add plot legend to display curve names
     m_legend.setFrameStyle(QFrame::Plain);
+    m_plot.setAxisTitle(QwtPlot::yLeft, group->title());
+    m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
     m_plot.insertLegend(&m_legend, QwtPlot::BottomLegend);
 
     // Show plot
