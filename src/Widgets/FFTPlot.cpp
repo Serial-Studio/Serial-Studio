@@ -99,7 +99,7 @@ FFTPlot::FFTPlot(const int index)
         int size = dataset->fftSamples();
 
         // Ensure that FFT size is valid
-        while (m_transformer.setSize(size) == QFourierTransformer::InvalidSize)
+        while (m_transformer.setSize(size) != QFourierTransformer::FixedSize)
             --size;
 
         // Set FFT size

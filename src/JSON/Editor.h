@@ -157,8 +157,7 @@ public slots:
     void setDatasetWidgetMax(const int group, const int dataset, const QString &maximum);
     void setDatasetWidgetData(const int group, const int dataset, const QString &widget);
     void setDatasetWidgetAlarm(const int group, const int dataset, const QString &alarm);
-    void setDatasetFFTSamples(const int group, const int dataset,
-                              const QString &frequency);
+    void setDatasetFFTSamples(const int group, const int dataset, const QString &samples);
 
 private slots:
     void setModified(const bool modified);

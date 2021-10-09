@@ -598,7 +598,7 @@ QString Editor::datasetFFTSamples(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
     if (set)
-        return QString::number(set->m_fftSamples);
+        return QString::number(qMax(1, set->m_fftSamples));
 
     return 0;
 }
@@ -1282,18 +1282,22 @@ void Editor::setDatasetWidgetAlarm(const int group, const int dataset,
 }
 
 /**
- * Updates the @a frequency value used for FFT plotting.
+ * Updates the @a samples used for FFT plotting.
  *
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
 void Editor::setDatasetFFTSamples(const int group, const int dataset,
-                                  const QString &frequency)
+                                  const QString &samples)
 {
     auto set = getDataset(group, dataset);
     if (set)
     {
-        set->m_fftSamples = frequency.toInt();
+        auto sample = samples.toInt();
+        if (sample < 1)
+            sample = 1;
+
+        set->m_fftSamples = sample;
         emit datasetChanged(group, dataset);
     }
 }
