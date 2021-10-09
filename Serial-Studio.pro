@@ -51,6 +51,7 @@ QT += core
 QT += quick
 QT += widgets
 QT += serialport
+QT += positioning
 QT += core5compat
 QT += printsupport
 QT += quickcontrols2
@@ -125,7 +126,8 @@ macx* {
 }
 
 linux:!android {
-    target.path = $$PREFIX/bin
+    PKGCONFIG += libssl                                  # Add OpenSSL library
+    target.path = $$PREFIX/bin                           # Set binary installation path
     icon.path = $$PREFIX/share/pixmaps                   # icon instalation path
     desktop.path = $$PREFIX/share/applications           # *.desktop instalation path
     icon.files += deploy/linux/serial-studio.png         # Add application icon
@@ -180,8 +182,10 @@ HEADERS += \
     src/Widgets/Common/BaseWidget.h \
     src/Widgets/Compass.h \
     src/Widgets/DataGroup.h \
+    src/Widgets/FFTPlot.h \
     src/Widgets/Gauge.h \
     src/Widgets/Gyroscope.h \
+    src/Widgets/Map.h \
     src/Widgets/MultiPlot.h \
     src/Widgets/Plot.h \
     src/Widgets/Terminal.h \
@@ -217,8 +221,10 @@ SOURCES += \
     src/Widgets/Common/BaseWidget.cpp \
     src/Widgets/Compass.cpp \
     src/Widgets/DataGroup.cpp \
+    src/Widgets/FFTPlot.cpp \
     src/Widgets/Gauge.cpp \
     src/Widgets/Gyroscope.cpp \
+    src/Widgets/Map.cpp \
     src/Widgets/MultiPlot.cpp \
     src/Widgets/Plot.cpp \
     src/Widgets/Terminal.cpp \

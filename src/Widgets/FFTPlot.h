@@ -20,37 +20,37 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_PLOT_H
-#define WIDGETS_PLOT_H
+#ifndef WIDGETS_FFT_PLOT_H
+#define WIDGETS_FFT_PLOT_H
 
-#include <QwtPlot>
 #include <QWidget>
+#include <QwtPlot>
 #include <QVBoxLayout>
 #include <QwtPlotCurve>
 #include <QwtScaleEngine>
 
+#include "qfouriertransformer.h"
+
 namespace Widgets
 {
-class Plot : public QWidget
+class FFTPlot : public QWidget
 {
     Q_OBJECT
 
 public:
-    Plot(const int index = -1);
+    FFTPlot(const int index = -1);
 
 private slots:
     void updateData();
     void updateRange();
 
 private:
+    int m_size;
     int m_index;
-    double m_min;
-    double m_max;
-    bool m_autoscale;
-
     QwtPlot m_plot;
     QwtPlotCurve m_curve;
     QVBoxLayout m_layout;
+    QFourierTransformer m_transformer;
 };
 }
 

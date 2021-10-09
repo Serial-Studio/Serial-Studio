@@ -792,18 +792,40 @@ void Dashboard::updatePlots()
                 m_linearPlotValues.append(QVector<double>());
                 m_linearPlotValues.last().reserve(points());
                 for (int j = 0; j < points(); ++j)
-                    m_linearPlotValues[i].append(
-                        0.0001); // to avoid issues with log plots
+                    m_linearPlotValues[i].append(0.0001);
             }
         }
 
-        // Append latest values to plot data
+        // Check if we need to update FFT dataset points
+        if (m_fftPlotValues.count() != fftDatasets.count())
+        {
+            m_fftPlotValues.clear();
+
+            for (int i = 0; i < fftDatasets.count(); ++i)
+            {
+                m_fftPlotValues.append(QVector<double>());
+                m_fftPlotValues.last().reserve(points());
+                for (int j = 0; j < points(); ++j)
+                    m_fftPlotValues[i].append(0.0001);
+            }
+        }
+
+        // Append latest values to linear plot data
         for (int i = 0; i < linearDatasets.count(); ++i)
         {
             auto data = m_linearPlotValues[i].data();
             auto count = m_linearPlotValues[i].count();
             memmove(data, data + 1, count * sizeof(double));
             m_linearPlotValues[i][count - 1] = linearDatasets[i]->value().toDouble();
+        }
+
+        // Append latest values to FFT plot data
+        for (int i = 0; i < fftDatasets.count(); ++i)
+        {
+            auto data = m_fftPlotValues[i].data();
+            auto count = m_fftPlotValues[i].count();
+            memmove(data, data + 1, count * sizeof(double));
+            m_fftPlotValues[i][count - 1] = fftDatasets[i]->value().toDouble();
         }
     }
 }

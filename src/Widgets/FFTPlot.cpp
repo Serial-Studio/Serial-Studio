@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include "Plot.h"
-#include "CSV/Player.h"
+#include "FFTPlot.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
@@ -30,18 +29,16 @@ using namespace Widgets;
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Plot::Plot(const int index)
-    : m_index(index)
-    , m_min(INT_MAX)
-    , m_max(INT_MIN)
-    , m_autoscale(true)
+FFTPlot::FFTPlot(const int index)
+    : m_size(0)
+    , m_index(index)
 {
     // Get pointers to serial studio modules
     auto dash = UI::Dashboard::getInstance();
     auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->plotCount())
+    if (m_index < 0 || m_index >= dash->fftCount())
         return;
 
     // Set window palette
@@ -88,29 +85,6 @@ Plot::Plot(const int index)
     // Set curve color & plot style
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
-    // Get dataset units
-    auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
-    if (dataset)
-    {
-        // Update graph scale
-        auto max = dataset->max();
-        auto min = dataset->min();
-        if (max > min)
-        {
-            m_max = max;
-            m_min = min;
-            m_autoscale = false;
-            m_plot.setAxisScale(QwtPlot::yLeft, m_min, m_max);
-        }
-
-        // Enable logarithmic scale
-        // clang-format off
-        if (dataset->log())
-            m_plot.setAxisScaleEngine(QwtPlot::yLeft,
-                                      new QwtLogScaleEngine(10));
-        // clang-format on
-    }
-
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
     connect(dash, SIGNAL(pointsChanged()), this, SLOT(updateRange()));
@@ -124,75 +98,23 @@ Plot::Plot(const int index)
  * window is hidden), then the new data shall be saved to the plot
  * vector, but the widget shall not be redrawn.
  */
-void Plot::updateData()
+void FFTPlot::updateData()
 {
-    // Widget not enabled, do not redraw
-    if (!isEnabled())
-        return;
-
-    // Get new data
-    auto plotData = UI::Dashboard::getInstance()->linearPlotValues();
+    auto plotData = UI::Dashboard::getInstance()->fftPlotValues();
     if (plotData->count() > m_index)
     {
-        // Check if we need to update graph scale
-        if (m_autoscale)
-        {
-            // Scan new values to see if chart should be updated
-            bool changed = false;
-            for (int i = 0; i < plotData->at(m_index).count(); ++i)
-            {
-                auto v = plotData->at(m_index).at(i);
-                if (v > m_max)
-                {
-                    m_max = v + 1;
-                    changed = true;
-                }
+        // Get data
+        auto data = plotData->at(m_index);
 
-                if (v < m_min)
-                {
-                    m_min = v - 1;
-                    changed = true;
-                }
-            }
+        // Create float arrays
+        float fft[m_size];
+        float samples[m_size];
+        for (int i = 0; i < m_size; ++i)
+            samples[i] = static_cast<float>(data[i]);
 
-            // Update graph scale
-            if (changed)
-            {
-                // Get central value
-                double median = qMax<double>(1, (m_max + m_min)) / 2;
-                if (m_max == m_min)
-                    median = m_max;
-
-                // Center graph verticaly
-                double mostDiff = qMax<double>(qAbs<double>(m_min), qAbs<double>(m_max));
-                double min = median * (1 - 0.5) - qAbs<double>(median - mostDiff);
-                double max = median * (1 + 0.5) + qAbs<double>(median - mostDiff);
-                if (m_min < 0)
-                    min = max * -1;
-
-                // Fix issues when min & max are equal
-                if (min == max)
-                {
-                    max = qAbs<double>(max);
-                    min = max * -1;
-                }
-
-                // Fix issues on min = max = (0,0)
-                if (min == 0 && max == 0)
-                {
-                    max = 1;
-                    min = -1;
-                }
-
-                // Update axis scale
-                m_max = max;
-                m_min = min;
-                m_plot.setAxisScale(m_plot.yLeft, m_min, m_max);
-            }
-        }
-
-        // Replot graph
-        m_curve.setSamples(plotData->at(m_index));
+        // Execute FFT
+        m_transformer.forwardTransform(samples, fft);
+        m_curve.setSamples(fft, m_size);
         m_plot.replot();
     }
 }
@@ -200,18 +122,28 @@ void Plot::updateData()
 /**
  * Updates the number of horizontal divisions of the plot
  */
-void Plot::updateRange()
+void FFTPlot::updateRange()
 {
-    // Get pointer to dashboard manager
-    auto dash = UI::Dashboard::getInstance();
+    // Calculate FFT size
+    int size = UI::Dashboard::getInstance()->points();
+    while (m_transformer.setSize(size) == QFourierTransformer::InvalidSize)
+        --size;
+
+    // Set FFT size
+    m_size = size;
 
     // Clear Y-axis data
-    QVector<double> tempYData;
-    tempYData.reserve(dash->points());
-    for (int i = 0; i < dash->points(); ++i)
-        tempYData.append(0);
+    QVector<double> xData;
+    QVector<double> yData;
+    xData.reserve(size);
+    yData.reserve(size);
+    for (int i = 0; i < size; ++i)
+    {
+        yData.append(0);
+        xData.append(i);
+    }
 
     // Redraw graph
-    m_curve.setSamples(*dash->xPlotValues(), tempYData);
+    m_curve.setSamples(xData, yData);
     m_plot.replot();
 }

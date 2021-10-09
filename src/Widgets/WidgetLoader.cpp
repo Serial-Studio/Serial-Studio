@@ -26,6 +26,7 @@
 #include "Plot.h"
 #include "Gauge.h"
 #include "Compass.h"
+#include "FFTPlot.h"
 #include "DataGroup.h"
 #include "Gyroscope.h"
 #include "MultiPlot.h"
@@ -244,7 +245,7 @@ void WidgetLoader::setWidgetIndex(const int index)
                 m_widget = new MultiPlot(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::FFT:
-                m_widget = new QPushButton("FFT");
+                m_widget = new FFTPlot(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::Plot:
                 m_widget = new Plot(relativeIndex());
