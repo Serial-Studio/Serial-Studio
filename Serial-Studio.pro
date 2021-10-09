@@ -51,7 +51,6 @@ QT += core
 QT += quick
 QT += widgets
 QT += serialport
-QT += positioning
 QT += core5compat
 QT += printsupport
 QT += quickcontrols2
