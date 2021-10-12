@@ -28,12 +28,37 @@ TRANSLATIONS += \
     $$PWD/translations/ru.ts
 
 RESOURCES += \
-    $$PWD/qml/rcc_qml.qrc \
-    $$PWD/fonts/rcc_fonts.qrc \
-    $$PWD/icons/rcc_icons.qrc \
-    $$PWD/images/rcc_images.qrc \
-    $$PWD/themes/rcc_themes.qrc \
-    $$PWD/messages/rcc_messages.qrc \
-    $$PWD/touchbar/rcc_touchbar.qrc \
-    $$PWD/translations/rcc_translations.qrc
+    $$PWD/Resources.qrc
 
+DISTFILES += \
+    $$PWD/qml/Dashboard/DashboardTitle.qml \
+    $$PWD/qml/Dashboard/ViewOptions.qml \
+    $$PWD/qml/Dashboard/ViewOptionsDelegate.qml \
+    $$PWD/qml/Dashboard/WidgetDelegate.qml \
+    $$PWD/qml/Dashboard/WidgetGrid.qml \
+    $$PWD/qml/Dashboard/WidgetModel.qml \
+    $$PWD/qml/JsonEditor/JsonDatasetDelegate.qml \
+    $$PWD/qml/JsonEditor/JsonGroupDelegate.qml \
+    $$PWD/qml/Panes/Console.qml \
+    $$PWD/qml/Panes/Dashboard.qml \
+    $$PWD/qml/Panes/Setup.qml \
+    $$PWD/qml/Panes/SetupPanes/MQTT.qml \
+    $$PWD/qml/Panes/SetupPanes/Network.qml \
+    $$PWD/qml/Panes/SetupPanes/Serial.qml \
+    $$PWD/qml/Panes/SetupPanes/Settings.qml \
+    $$PWD/qml/Panes/Toolbar.qml \
+    $$PWD/qml/PlatformDependent/DecentMenuItem.qml \
+    $$PWD/qml/PlatformDependent/Menubar.qml \
+    $$PWD/qml/PlatformDependent/MenubarMacOS.qml \
+    $$PWD/qml/Widgets/Icon.qml \
+    $$PWD/qml/Widgets/JSONDropArea.qml \
+    $$PWD/qml/Widgets/LED.qml \
+    $$PWD/qml/Widgets/Shadow.qml \
+    $$PWD/qml/Widgets/Window.qml \
+    $$PWD/qml/Windows/About.qml \
+    $$PWD/qml/Windows/Acknowledgements.qml \
+    $$PWD/qml/Windows/CsvPlayer.qml \
+    $$PWD/qml/Windows/Donate.qml \
+    $$PWD/qml/Windows/JsonEditor.qml \
+    $$PWD/qml/Windows/MainWindow.qml \
+    $$PWD/qml/main.qml

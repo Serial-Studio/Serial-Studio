@@ -210,7 +210,7 @@ void Plot::updateRange()
     auto dash = UI::Dashboard::getInstance();
 
     // Clear Y-axis data
-    QVector<double> tempYData;
+    PlotData tempYData;
     tempYData.reserve(dash->points());
     for (int i = 0; i < dash->points(); ++i)
         tempYData.append(0);

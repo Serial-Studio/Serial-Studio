@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/touchbar">
-        <file>console.png</file>
-        <file>dashboard.png</file>
-        <file>setup.png</file>
-    </qresource>
-</RCC>

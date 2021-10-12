@@ -107,8 +107,8 @@ FFTPlot::FFTPlot(const int index)
         m_samples = (float *)calloc(m_size, sizeof(float));
 
         // Clear Y-axis data
-        QVector<double> xData;
-        QVector<double> yData;
+        PlotData xData;
+        PlotData yData;
         xData.reserve(m_size);
         yData.reserve(m_size);
         for (int i = 0; i < m_size; ++i)

@@ -28,6 +28,8 @@
 #include <JSON/Frame.h>
 #include <JSON/FrameInfo.h>
 
+#define PlotData QVector<double>
+
 namespace UI
 {
 class Dashboard : public QObject
@@ -193,9 +195,9 @@ public:
     QVector<QString> multiPlotTitles() const;
     QVector<QString> accelerometerTitles() const;
 
-    QVector<double> *xPlotValues() { return &m_xData; }
-    QVector<QVector<double>> *fftPlotValues() { return &m_fftPlotValues; }
-    QVector<QVector<double>> *linearPlotValues() { return &m_linearPlotValues; }
+    PlotData *xPlotValues() { return &m_xData; }
+    QVector<PlotData> *fftPlotValues() { return &m_fftPlotValues; }
+    QVector<PlotData> *linearPlotValues() { return &m_linearPlotValues; }
 
 public slots:
     void setPoints(const int points);
@@ -236,9 +238,10 @@ private:
 
 private:
     int m_points;
-    QVector<double> m_xData;
-    QVector<QVector<double>> m_fftPlotValues;
-    QVector<QVector<double>> m_linearPlotValues;
+    PlotData m_xData;
+    QVector<PlotData> m_fftPlotValues;
+    QVector<PlotData> m_linearPlotValues;
+    QVector<QVector<PlotData>> m_multiplotValues;
 
     QVector<bool> m_barVisibility;
     QVector<bool> m_fftVisibility;

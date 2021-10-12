@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/images">
-        <file>donate-qr.svg</file>
-        <file>icon.svg</file>
-        <file>splash.png</file>
-    </qresource>
-</RCC>

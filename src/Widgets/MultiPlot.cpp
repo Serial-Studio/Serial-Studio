@@ -167,7 +167,7 @@ void MultiPlot::updateRange()
     auto group = UI::Dashboard::getInstance()->getMultiplot(m_index);
     for (int i = 0; i < dash->points(); ++i)
     {
-        m_yData.append(QVector<double>());
+        m_yData.append(PlotData());
         m_yData[i].reserve(dash->points());
         for (int j = 0; j < dash->points(); ++j)
             m_yData[i].append(0);

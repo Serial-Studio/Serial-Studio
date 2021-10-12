@@ -789,7 +789,7 @@ void Dashboard::updatePlots()
 
             for (int i = 0; i < linearDatasets.count(); ++i)
             {
-                m_linearPlotValues.append(QVector<double>());
+                m_linearPlotValues.append(PlotData());
                 m_linearPlotValues.last().reserve(points());
                 for (int j = 0; j < points(); ++j)
                     m_linearPlotValues[i].append(0.0001);
@@ -803,7 +803,7 @@ void Dashboard::updatePlots()
 
             for (int i = 0; i < fftDatasets.count(); ++i)
             {
-                m_fftPlotValues.append(QVector<double>());
+                m_fftPlotValues.append(PlotData());
                 m_fftPlotValues.last().reserve(fftDatasets[i]->fftSamples());
                 for (int j = 0; j < fftDatasets[i]->fftSamples(); ++j)
                     m_fftPlotValues[i].append(0);

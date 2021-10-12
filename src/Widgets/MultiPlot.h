@@ -31,6 +31,8 @@
 #include <QwtPlotCurve>
 #include <QwtScaleEngine>
 
+#include "UI/Dashboard.h"
+
 namespace Widgets
 {
 class MultiPlot : public QWidget
@@ -50,7 +52,7 @@ private:
     QwtLegend m_legend;
     QVBoxLayout m_layout;
     QVector<QwtPlotCurve *> m_curves;
-    QVector<QVector<double>> m_yData;
+    QVector<PlotData> m_yData;
 };
 }
 
