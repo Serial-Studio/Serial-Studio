@@ -41,7 +41,7 @@ Widgets.Window {
     //
     // Delete dataset button
     //
-    altButtonEnabled: true
+    altButtonEnabled: !showGroupWidget
     altButtonIcon.source: "qrc:/icons/close.svg"
     onAltButtonClicked: Cpp_JSON_Editor.deleteDataset(group, dataset)
 
@@ -234,10 +234,10 @@ Widgets.Window {
         }
 
         //
-        // Widget maximum value
+        // Bar alarm level
         //
         Label {
-            text: qsTr("Alarm value:")
+            text: qsTr("Alarm level:")
             visible: root.alarmVisible
         } TextField {
             id: alarm
