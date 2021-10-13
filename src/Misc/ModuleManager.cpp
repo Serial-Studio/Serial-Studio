@@ -73,25 +73,26 @@ ModuleManager::ModuleManager()
     QFontDatabase::addApplicationFont(":/fonts/RobotoMono-Regular.ttf");
 
     // Set the UI rendering engine
-    switch (renderingEngine()) {
-    case 0:
-        QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-        break;
-    case 1:
-        QQuickWindow::setGraphicsApi(QSGRendererInterface::Vulkan);
-        break;
-    case 2:
-        QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
-        break;
-    case 3:
+    switch (renderingEngine())
+    {
+        case 0:
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+            break;
+        case 1:
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Vulkan);
+            break;
+        case 2:
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
+            break;
+        case 3:
 #if defined(Q_OS_WIN)
-        QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11);
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11);
 #elif defined(Q_OS_MAC)
-        QQuickWindow::setGraphicsApi(QSGRendererInterface::Metal);
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Metal);
 #endif
-        break;
-    default:
-        break;
+            break;
+        default:
+            break;
     }
 
     // Set Roboto as default app font
@@ -313,7 +314,8 @@ void ModuleManager::hideSplashscreen()
 void ModuleManager::setRenderingEngine(const int engine)
 {
     // Validate index
-    if (engine >= 0 && engine < renderingEngines().count()) {
+    if (engine >= 0 && engine < renderingEngines().count())
+    {
         // Save settings
         m_settings.setValue("renderingEngine", engine);
 
