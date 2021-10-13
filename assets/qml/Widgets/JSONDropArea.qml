@@ -53,7 +53,7 @@ DropArea {
 
         // Get dropped file URL and remove prefixed "file://"
         var path = drop.urls[0].toString()
-        if (Qt.platform.os !== "windows")
+        if (!Cpp_IsWin)
             path = path.replace(/^(file:\/{2})/,"");
         else
             path = path.replace(/^(file:\/{3})/,"");

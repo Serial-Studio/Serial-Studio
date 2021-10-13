@@ -23,6 +23,7 @@
 #include "WidgetLoader.h"
 
 #include "Bar.h"
+#include "Map.h"
 #include "Plot.h"
 #include "Gauge.h"
 #include "Compass.h"
@@ -32,7 +33,6 @@
 #include "MultiPlot.h"
 #include "Accelerometer.h"
 
-#include <QPushButton>
 #include <QApplication>
 #include <UI/Dashboard.h>
 #include <Misc/ThemeManager.h>
@@ -266,7 +266,7 @@ void WidgetLoader::setWidgetIndex(const int index)
                 m_widget = new Accelerometer(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::Map:
-                m_widget = new QPushButton("Map");
+                m_widget = new Map(relativeIndex());
                 break;
             default:
                 break;

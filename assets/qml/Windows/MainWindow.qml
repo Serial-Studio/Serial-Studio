@@ -148,7 +148,7 @@ ApplicationWindow {
     title: Cpp_AppName
     width: minimumWidth
     height: minimumHeight
-    minimumHeight: Qt.platform.os === "osx" ? 720 : 740
+    minimumHeight: Cpp_IsMac ? 720 : 740
 
     //
     // Theme options
@@ -275,13 +275,13 @@ ApplicationWindow {
     //
     Loader {
         asynchronous: false
-        active: Qt.platform.os !== "osx"
+        active: !Cpp_IsMac
         sourceComponent: PlatformDependent.Menubar {
             Component.onCompleted: root.menuBar = this
         }
     } Loader {
         asynchronous: false
-        active: Qt.platform.os === "osx"
+        active: Cpp_IsMac
         sourceComponent: PlatformDependent.MenubarMacOS {}
     }
 

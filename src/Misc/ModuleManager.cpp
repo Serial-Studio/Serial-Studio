@@ -165,6 +165,18 @@ void ModuleManager::initializeQmlInterface()
     auto ioNetwork = IO::DataSources::Network::getInstance();
     auto miscThemeManager = Misc::ThemeManager::getInstance();
 
+    // Operating system flags
+    bool isWin = false;
+    bool isMac = false;
+    bool isNix = false;
+#if defined(Q_OS_MAC)
+    isMac = true;
+#elif defined(Q_OS_WIN)
+    isWin = true;
+#else
+    isNix = true;
+#endif
+
     // Qt version QML flag
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     bool qt6 = false;
@@ -181,6 +193,9 @@ void ModuleManager::initializeQmlInterface()
     // Register C++ modules with QML
     auto c = engine()->rootContext();
     c->setContextProperty("Cpp_Qt6", qt6);
+    c->setContextProperty("Cpp_IsWin", isWin);
+    c->setContextProperty("Cpp_IsMac", isMac);
+    c->setContextProperty("Cpp_IsNix", isNix);
     c->setContextProperty("Cpp_Updater", updater);
     c->setContextProperty("Cpp_IO_Serial", ioSerial);
     c->setContextProperty("Cpp_CSV_Export", csvExport);

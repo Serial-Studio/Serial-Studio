@@ -452,9 +452,9 @@ bool Editor::datasetGraph(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
     if (set)
-        return set->m_graph;
+        return set->graph();
 
-    return 0;
+    return false;
 }
 
 /**
@@ -468,9 +468,9 @@ bool Editor::datasetFftPlot(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
     if (set)
-        return set->m_fft;
+        return set->fft();
 
-    return 0;
+    return false;
 }
 
 /**
@@ -485,9 +485,9 @@ bool Editor::datasetLogPlot(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
     if (set)
-        return set->m_log;
+        return set->log();
 
-    return 0;
+    return false;
 }
 
 /**
@@ -500,9 +500,9 @@ QString Editor::datasetTitle(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
     if (set)
-        return set->m_title;
+        return set->title();
 
-    return 0;
+    return "";
 }
 
 /**
@@ -515,9 +515,9 @@ QString Editor::datasetUnits(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
     if (set)
-        return set->m_units;
+        return set->units();
 
-    return 0;
+    return "";
 }
 
 /**
@@ -530,9 +530,9 @@ QString Editor::datasetWidget(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
     if (set)
-        return set->m_widget;
+        return set->widget();
 
-    return 0;
+    return "";
 }
 
 /**

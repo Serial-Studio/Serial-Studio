@@ -162,18 +162,20 @@ Widgets.Window {
             text: qsTr("Widget:")
         } ComboBox {
             id: widget
-            visible: !showGroupWidget
             Layout.fillWidth: true
+            visible: !showGroupWidget
+            enabled: !showGroupWidget
             model: Cpp_JSON_Editor.availableDatasetLevelWidgets()
             currentIndex: Cpp_JSON_Editor.datasetWidgetIndex(group, dataset)
             onCurrentIndexChanged: {
-                if (visible)
+                if (visible && currentIndex !== Cpp_JSON_Editor.datasetWidgetIndex(group, dataset))
                     Cpp_JSON_Editor.setDatasetWidget(group, dataset, currentIndex)
             }
         } TextField {
             readOnly: true
             Layout.fillWidth: true
             visible: showGroupWidget
+            enabled: showGroupWidget
             text: Cpp_JSON_Editor.datasetWidget(group, dataset)
         }
 

@@ -68,8 +68,23 @@ RequestExecutionLevel admin
 OutFile "${EXECNAME}-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-Windows.exe"
 
 Function .onInit
-        setShellVarContext all
-        !insertmacro VerifyUserIsAdmin
+  setShellVarContext all
+  !insertmacro VerifyUserIsAdmin
+
+  ReadRegStr $R0 HKLM \
+  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROGRAM_NAME}" \
+  "UninstallString"
+  StrCmp $R0 "" done
+
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+  "${APPNAME} is already installed. $\n$\nClick `OK` to remove the \
+  previous version or `Cancel` to cancel this upgrade." \
+  IDOK uninst
+  Abort
+
+uninst:
+  ClearErrors
+  Exec $INSTDIR\uninstall.exe
 FunctionEnd
 
 Section "${APPNAME} (required)" SecDummy
