@@ -117,7 +117,7 @@ Control {
             // Rendering engine
             //
             Label {
-                text: qsTr("Renderer") + ":"
+                text: qsTr("Rendering engine") + ":"
             } ComboBox {
                 Layout.fillWidth: true
                 model: Cpp_ModuleManager.renderingEngines()
