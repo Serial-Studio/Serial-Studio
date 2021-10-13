@@ -72,7 +72,7 @@ Function .onInit
   !insertmacro VerifyUserIsAdmin
 
   ReadRegStr $R0 HKLM \
-  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROGRAM_NAME}" \
+  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}" \
   "UninstallString"
   StrCmp $R0 "" done
 
