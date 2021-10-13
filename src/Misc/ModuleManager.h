@@ -24,6 +24,7 @@
 #define MODULE_MANAGER_H
 
 #include <QObject>
+#include <QSettings>
 #include <QSplashScreen>
 #include <QQmlApplicationEngine>
 
@@ -39,13 +40,18 @@ public:
     void initializeQmlInterface();
     QQmlApplicationEngine *engine();
 
+    Q_INVOKABLE int renderingEngine() const;
+    Q_INVOKABLE QVector<QString> renderingEngines() const;
+
 public slots:
     void quit();
     void stopOperations();
     void hideSplashscreen();
+    void setRenderingEngine(const int engine);
     void setSplashScreenMessage(const QString &message);
 
 private:
+    QSettings m_settings;
     QSplashScreen m_splash;
     QQmlApplicationEngine m_engine;
 };

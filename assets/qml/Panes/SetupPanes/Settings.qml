@@ -114,6 +114,21 @@ Control {
             }
 
             //
+            // Rendering engine
+            //
+            Label {
+                text: qsTr("Renderer") + ":"
+            } ComboBox {
+                Layout.fillWidth: true
+                model: Cpp_ModuleManager.renderingEngines()
+                currentIndex: Cpp_ModuleManager.renderingEngine()
+                onCurrentIndexChanged: {
+                    if (currentIndex !== Cpp_ModuleManager.renderingEngine())
+                        Cpp_ModuleManager.setRenderingEngine(currentIndex)
+                }
+            }
+
+            //
             // Start sequence
             //
             Label {
