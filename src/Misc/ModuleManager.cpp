@@ -79,12 +79,9 @@ ModuleManager::ModuleManager()
             QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
             break;
         case 1:
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Vulkan);
-            break;
-        case 2:
             QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
             break;
-        case 3:
+        case 2:
 #if defined(Q_OS_WIN)
             QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11);
 #elif defined(Q_OS_MAC)
@@ -277,7 +274,6 @@ QVector<QString> ModuleManager::renderingEngines() const
 {
     QVector<QString> list;
     list.append("OpenGL");
-    list.append("Vulkan");
     list.append("Software");
 #if defined(Q_OS_WIN)
     list.append("Direct3D");
