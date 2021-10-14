@@ -137,6 +137,23 @@ QString Player::timestamp() const
 }
 
 /**
+ * Returns the default path for CSV files
+ */
+QString Player::csvFilesPath() const
+{
+    // Get file name and path
+    QString path
+        = QString("%1/Documents/%2/CSV/").arg(QDir::homePath(), qApp->applicationName());
+
+    // Generate file path if required
+    QDir dir(path);
+    if (!dir.exists())
+        dir.mkpath(".");
+
+    return path;
+}
+
+/**
  * Enables CSV playback at 'live' speed (as it happened when CSV file was
  * saved to the computer).
  */
@@ -170,13 +187,20 @@ void Player::toggle()
  */
 void Player::openFile()
 {
+    // clang-format off
+
     // Get file name
     auto file = QFileDialog::getOpenFileName(
-        Q_NULLPTR, tr("Select CSV file"), QDir::homePath(), tr("CSV files") + " (*.csv)");
+                Q_NULLPTR,
+                tr("Select CSV file"),
+                csvFilesPath(),
+                tr("CSV files") + " (*.csv)");
 
     // Open CSV file
     if (!file.isEmpty())
         openFile(file);
+
+    // clang-format on
 }
 
 /**

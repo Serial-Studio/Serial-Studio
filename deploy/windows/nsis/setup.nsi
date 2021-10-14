@@ -85,6 +85,9 @@ Function .onInit
 uninst:
   ClearErrors
   Exec $INSTDIR\uninstall.exe
+
+done:
+  ; Nothing to do...
 FunctionEnd
 
 Section "${APPNAME} (required)" SecDummy

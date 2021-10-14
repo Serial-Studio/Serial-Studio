@@ -106,6 +106,23 @@ QVector<QString> Editor::availableDatasetLevelWidgets()
 }
 
 /**
+ * Returns the default path for saving JSON project files
+ */
+QString Editor::jsonProjectsPath() const
+{
+    // Get file name and path
+    QString path = QString("%1/Documents/%2/JSON Projects/")
+                       .arg(QDir::homePath(), qApp->applicationName());
+
+    // Generate file path if required
+    QDir dir(path);
+    if (!dir.exists())
+        dir.mkpath(".");
+
+    return path;
+}
+
+/**
  * Returns the title of the current project
  */
 QString Editor::title() const
@@ -267,7 +284,7 @@ bool Editor::saveJsonFile()
     if (jsonFilePath().isEmpty())
     {
         auto path = QFileDialog::getSaveFileName(nullptr, tr("Save JSON project"),
-                                                 QDir::homePath(), "*.json");
+                                                 jsonProjectsPath(), "*.json");
         if (path.isEmpty())
             return false;
 
@@ -660,7 +677,7 @@ void Editor::openJsonFile()
     // clang-format off
     auto path = QFileDialog::getOpenFileName(nullptr,
                                              tr("Select JSON file"),
-                                             QDir::homePath(),
+                                             jsonProjectsPath(),
                                              "*.json");
     // clang-format on
 

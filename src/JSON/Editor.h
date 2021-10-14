@@ -91,6 +91,8 @@ public:
     Q_INVOKABLE QVector<QString> availableGroupLevelWidgets();
     Q_INVOKABLE QVector<QString> availableDatasetLevelWidgets();
 
+    QString jsonProjectsPath() const;
+
     QString title() const;
     QString separator() const;
     QString frameEndSequence() const;

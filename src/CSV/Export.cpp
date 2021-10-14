@@ -223,7 +223,7 @@ void Export::writeValues()
             // Get file name and path
             QString format = dateTime.toString("yyyy/MMM/dd/");
             QString fileName = dateTime.toString("HH-mm-ss") + ".csv";
-            QString path = QString("%1/%2/%3/%4")
+            QString path = QString("%1/Documents/%2/CSV/%3/%4")
                                .arg(QDir::homePath(), qApp->applicationName(),
                                     projectTitle, format);
 

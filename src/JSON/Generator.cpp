@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "Editor.h"
 #include "Generator.h"
 
 #include <CSV/Player.h>
@@ -117,7 +118,7 @@ void Generator::loadJsonMap()
     // clang-format off
     auto file = QFileDialog::getOpenFileName(Q_NULLPTR,
                                              tr("Select JSON map file"),
-                                             QDir::homePath(),
+                                             Editor::getInstance()->jsonProjectsPath(),
                                              tr("JSON files") + " (*.json)");
     // clang-format on
 

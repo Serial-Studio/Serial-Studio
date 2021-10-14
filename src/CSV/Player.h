@@ -73,6 +73,7 @@ public:
     QString filename() const;
     int framePosition() const;
     QString timestamp() const;
+    QString csvFilesPath() const;
 
 private:
     Player();
