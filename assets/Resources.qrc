@@ -134,5 +134,9 @@
         <file>translations/ru.ts</file>
         <file>translations/zh.qm</file>
         <file>translations/zh.ts</file>
+        <file>qml/JsonEditor/Footer.qml</file>
+        <file>qml/JsonEditor/GroupEditor.qml</file>
+        <file>qml/JsonEditor/Header.qml</file>
+        <file>qml/JsonEditor/TreeView.qml</file>
     </qresource>
 </RCC>

@@ -37,8 +37,12 @@ DISTFILES += \
     $$PWD/qml/Dashboard/WidgetDelegate.qml \
     $$PWD/qml/Dashboard/WidgetGrid.qml \
     $$PWD/qml/Dashboard/WidgetModel.qml \
+    $$PWD/qml/JsonEditor/Footer.qml \
+    $$PWD/qml/JsonEditor/GroupEditor.qml \
+    $$PWD/qml/JsonEditor/Header.qml \
     $$PWD/qml/JsonEditor/JsonDatasetDelegate.qml \
     $$PWD/qml/JsonEditor/JsonGroupDelegate.qml \
+    $$PWD/qml/JsonEditor/TreeView.qml \
     $$PWD/qml/Panes/Console.qml \
     $$PWD/qml/Panes/Dashboard.qml \
     $$PWD/qml/Panes/Setup.qml \

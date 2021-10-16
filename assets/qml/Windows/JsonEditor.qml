@@ -69,23 +69,6 @@ ApplicationWindow {
     }
 
     //
-    // Connections with JSON editor model
-    //
-    Connections {
-        target: Cpp_JSON_Editor
-
-        function onGroupCountChanged() {
-            view.model = 0
-            view.model = Cpp_JSON_Editor.groupCount
-        }
-
-        function onGroupOrderChanged() {
-            view.model = 0
-            view.model = Cpp_JSON_Editor.groupCount
-        }
-    }
-
-    //
     // Use page item to set application palette
     //
     Page {
@@ -103,128 +86,21 @@ ApplicationWindow {
         // Shadows
         //
         Widgets.Shadow {
-            source: headerBg
+            source: header
             horizontalOffset: 0
-            anchors.fill: headerBg
+            anchors.fill: header
         } Widgets.Shadow {
-            source: footerBg
+            source: footer
             verticalOffset: -3
             horizontalOffset: 0
-            anchors.fill: footerBg
+            anchors.fill: footer
         }
 
         //
         // Header (project properties)
         //
-        Rectangle {
-            id: headerBg
-            border.width: 1
-            border.color: Cpp_ThemeManager.toolbarGradient1
-            height: header.implicitHeight + 4 * app.spacing
-
-            gradient: Gradient {
-                GradientStop { position: 0; color: Cpp_ThemeManager.toolbarGradient1 }
-                GradientStop { position: 1; color: Cpp_ThemeManager.toolbarGradient2 }
-            }
-
-            GridLayout {
-                id: header
-                columns: 2
-                rowSpacing: app.spacing
-                columnSpacing: app.spacing * 2
-
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    margins: app.spacing * 2
-                    verticalCenter: parent.verticalCenter
-                }
-
-                //
-                // Project title
-                //
-                RowLayout {
-                    spacing: app.spacing
-                    Layout.fillWidth: true
-
-                    Widgets.Icon {
-                        color: Cpp_ThemeManager.brightText
-                        source: "qrc:/icons/registration.svg"
-                    }
-
-                    TextField {
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: 320
-                        text: Cpp_JSON_Editor.title
-                        onTextChanged: Cpp_JSON_Editor.setTitle(text)
-                        placeholderText: qsTr("Project title (required)")
-                    }
-                }
-
-                //
-                // Separator character
-                //
-                RowLayout {
-                    spacing: app.spacing
-                    Layout.fillWidth: true
-
-                    Widgets.Icon {
-                        color: Cpp_ThemeManager.brightText
-                        source: "qrc:/icons/separator.svg"
-                    }
-
-                    TextField {
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: 420
-                        text: Cpp_JSON_Editor.separator
-                        onTextChanged: Cpp_JSON_Editor.setSeparator(text)
-                        placeholderText: qsTr("Data separator (default is ',')")
-                    }
-                }
-
-                //
-                // Start sequence
-                //
-                RowLayout {
-                    spacing: app.spacing
-                    Layout.fillWidth: true
-
-                    Widgets.Icon {
-                        color: Cpp_ThemeManager.brightText
-                        source: "qrc:/icons/start-sequence.svg"
-                    }
-
-                    TextField {
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: 256
-                        text: Cpp_JSON_Editor.frameStartSequence
-                        onTextChanged: Cpp_JSON_Editor.setFrameStartSequence(text)
-                        placeholderText: qsTr("Frame start sequence (default is '%1')").arg(Cpp_IO_Manager.startSequence)
-                    }
-                }
-
-                //
-                // End sequence
-                //
-                RowLayout {
-                    spacing: app.spacing
-                    Layout.fillWidth: true
-
-                    Widgets.Icon {
-                        color: Cpp_ThemeManager.brightText
-                        source: "qrc:/icons/end-sequence.svg"
-                    }
-
-                    TextField {
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: 256
-                        text: Cpp_JSON_Editor.frameEndSequence
-                        onTextChanged: Cpp_JSON_Editor.setFrameEndSequence(text)
-                        placeholderText: qsTr("Frame end sequence (default is '%1')").arg(Cpp_IO_Manager.finishSequence)
-                    }
-                }
-            }
-
+        Header {
+            id: header
             anchors {
                 margins: 0
                 top: parent.top
@@ -236,16 +112,10 @@ ApplicationWindow {
         //
         // Footer background
         //
-        Rectangle {
-            id: footerBg
-            border.width: 1
-            border.color: Cpp_ThemeManager.toolbarGradient1
-            height: footer.implicitHeight + 4 * app.spacing
-
-            gradient: Gradient {
-                GradientStop { position: 0; color: Cpp_ThemeManager.toolbarGradient1 }
-                GradientStop { position: 1; color: Cpp_ThemeManager.toolbarGradient2 }
-            }
+        Footer {
+            id: footer
+            onCloseWindow: root.close()
+            onScrollToBottom: groupEditor.scrollToBottom()
 
             anchors {
                 margins: 0
@@ -253,177 +123,70 @@ ApplicationWindow {
                 right: parent.right
                 bottom: parent.bottom
             }
-
-            //
-            // Dialog buttons
-            //
-            RowLayout {
-                id: footer
-                spacing: app.spacing
-
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    margins: app.spacing * 2
-                    verticalCenter: parent.verticalCenter
-                }
-
-                Button {
-                    icon.width: 24
-                    icon.height: 24
-                    onClicked: root.close()
-                    text: qsTr("Close") + _btSpacer
-                    icon.source: "qrc:/icons/close.svg"
-                    icon.color: Cpp_ThemeManager.brightText
-                    palette.buttonText: Cpp_ThemeManager.brightText
-                    palette.button: Cpp_ThemeManager.toolbarGradient1
-                    palette.window: Cpp_ThemeManager.toolbarGradient1
-                }
-
-                Item {
-                    Layout.fillWidth: true
-                }
-
-                Button {
-                    id: addGrp
-                    icon.width: 24
-                    icon.height: 24
-                    highlighted: true
-                    Layout.fillWidth: true
-                    text: qsTr("Add group")
-                    icon.source: "qrc:/icons/add.svg"
-                    icon.color: Cpp_ThemeManager.brightText
-                    palette.buttonText: Cpp_ThemeManager.brightText
-                    palette.button: Cpp_ThemeManager.toolbarGradient1
-                    palette.window: Cpp_ThemeManager.toolbarGradient1
-                    onClicked: {
-                        Cpp_JSON_Editor.addGroup()
-                        scroll.position = 1
-                    }
-                }
-
-                Item {
-                    Layout.fillWidth: true
-                }
-
-                Button {
-                    icon.width: 24
-                    icon.height: 24
-                    icon.source: "qrc:/icons/open.svg"
-                    icon.color: Cpp_ThemeManager.brightText
-                    onClicked: Cpp_JSON_Editor.openJsonFile()
-                    palette.buttonText: Cpp_ThemeManager.brightText
-                    palette.button: Cpp_ThemeManager.toolbarGradient1
-                    palette.window: Cpp_ThemeManager.toolbarGradient1
-                    text: qsTr("Open existing project...") + _btSpacer
-                }
-
-                Button {
-                    icon.width: 24
-                    icon.height: 24
-                    icon.source: "qrc:/icons/new.svg"
-                    icon.color: Cpp_ThemeManager.brightText
-                    onClicked: Cpp_JSON_Editor.newJsonFile()
-                    text: qsTr("Create new project") + _btSpacer
-                    palette.buttonText: Cpp_ThemeManager.brightText
-                    palette.button: Cpp_ThemeManager.toolbarGradient1
-                    palette.window: Cpp_ThemeManager.toolbarGradient1
-                }
-
-                Button {
-                    icon.width: 24
-                    icon.height: 24
-                    opacity: enabled ? 1: 0.5
-                    enabled: Cpp_JSON_Editor.modified
-                    icon.source: "qrc:/icons/apply.svg"
-                    icon.color: Cpp_ThemeManager.brightText
-                    palette.buttonText: Cpp_ThemeManager.brightText
-                    palette.button: Cpp_ThemeManager.toolbarGradient1
-                    palette.window: Cpp_ThemeManager.toolbarGradient1
-                    text: (Cpp_JSON_Editor.jsonFilePath.length > 0 ? qsTr("Apply") : qsTr("Save")) + _btSpacer
-
-                    onClicked: {
-                        if (Cpp_JSON_Editor.saveJsonFile())
-                            root.close()
-                    }
-
-                    Behavior on opacity {NumberAnimation{}}
-                }
-            }
         }
 
         //
         // Window controls
         //
-        ColumnLayout {
-            id: column
-            spacing: 0
+        RowLayout {
             clip: true
             anchors.fill: parent
-            anchors.margins: app.spacing * 2
-            anchors.topMargin: headerBg.height
-            anchors.bottomMargin: footerBg.height
+            spacing: app.spacing
+            anchors.topMargin: header.height
+            anchors.bottomMargin: footer.height
 
             //
-            // Spacer
+            // Horizontal spacer
             //
             Item {
-                height: app.spacing
+                Layout.fillHeight: true
+                Layout.minimumWidth: app.spacing
+                Layout.maximumWidth: app.spacing
             }
 
             //
-            // List view
+            // JSON structure tree
+            //
+            Item {
+                Layout.fillHeight: true
+                Layout.minimumWidth: 240
+                Layout.maximumWidth: 240
+                Layout.topMargin: app.spacing * 2
+                Layout.bottomMargin: app.spacing * 2
+                visible: Cpp_JSON_Editor.groupCount !== 0
+
+                Widgets.Shadow {
+                    source: jsonTree
+                    anchors.fill: jsonTree
+                }
+
+                TreeView {
+                    id: jsonTree
+                    anchors.fill: parent
+                }
+            }
+
+            //
+            // Group editor
+            //
+            GroupEditor {
+                id: groupEditor
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                visible: Cpp_JSON_Editor.groupCount !== 0
+            }
+
+            //
+            // Empty project text & icon
             //
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.minimumHeight: 320
-                Layout.leftMargin: -2 * app.spacing
-                Layout.rightMargin: -2 * app.spacing
-
-                ListView {
-                    id: view
-                    anchors.fill: parent
-                    model: Cpp_JSON_Editor.groupCount
-                    anchors.bottomMargin: app.spacing
-
-                    ScrollBar.vertical: ScrollBar {
-                        id: scroll
-                        policy: ScrollBar.AsNeeded
-                    }
-
-                    delegate: Item {
-                        x: (parent.width - width) / 2
-                        height: group.height + app.spacing
-                        width: parent.width - 4 * app.spacing
-
-                        //
-                        // Window shadow
-                        //
-                        Widgets.Shadow {
-                            source: group
-                            anchors.fill: group
-                        }
-
-                        //
-                        // Group window
-                        //
-                        JsonGroupDelegate {
-                            id: group
-                            group: index
-                            anchors {
-                                left: parent.left
-                                right: parent.right
-                                bottom: parent.bottom
-                            }
-                        }
-                    }
-                }
+                visible: Cpp_JSON_Editor.groupCount === 0
 
                 ColumnLayout {
                     spacing: app.spacing
                     anchors.centerIn: parent
-                    visible: Cpp_JSON_Editor.groupCount === 0
 
                     Widgets.Icon {
                         width: 128
@@ -444,16 +207,18 @@ ApplicationWindow {
                         opacity: 0.8
                         font.pixelSize: 18
                         Layout.alignment: Qt.AlignHCenter
-                        text: qsTr("Click on the \"%1\" button to begin").arg(addGrp.text)
+                        text: qsTr("Click on the \"Add group\" button to begin")
                     }
                 }
             }
 
             //
-            // Spacer
+            // Horizontal spacer
             //
             Item {
-                height: app.spacing
+                Layout.fillHeight: true
+                Layout.minimumWidth: app.spacing
+                Layout.maximumWidth: app.spacing
             }
         }
     }
