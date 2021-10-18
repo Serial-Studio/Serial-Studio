@@ -268,6 +268,7 @@ Control {
             icon.height: 24
             font.bold: true
             Layout.fillWidth: true
+            icon.color: palette.buttonText
             checked: Cpp_MQTT_Client.isConnectedToHost
             onClicked: Cpp_MQTT_Client.toggleConnection()
             text: (checked ? qsTr("Disconnect") :
