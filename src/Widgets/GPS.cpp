@@ -58,16 +58,19 @@ static const QString DD_TO_DMS(const qreal dd, const bool horizontal)
     // clang-format on
 
     // Add heading
-    if (horizontal) {
+    if (horizontal)
+    {
         if (deg < 0)
-            dms.append("W");
+            dms.append("W ");
         else
-            dms.append("E");
-    } else {
+            dms.append("E ");
+    }
+    else
+    {
         if (deg < 0)
-            dms.append("S");
+            dms.append("S ");
         else
-            dms.append("N");
+            dms.append("N ");
     }
 
     // Return constructed string
@@ -128,7 +131,7 @@ GPS::GPS(const int index)
         auto value = m_values.last();
 
         // Set label alignments
-        units->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        units->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         value->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         title->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         dicon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -312,7 +315,7 @@ void GPS::updateData()
         auto altLabel = m_values[2];
         lonLabel->setText(DD_TO_DMS(lon, true));
         latLabel->setText(DD_TO_DMS(lat, false));
-        altLabel->setText(QString::number(alt, 'f', 4));
+        altLabel->setText(QString::number(alt, 'f', 4) + " ");
 
         // Ensure that non-received data is displayed as "--.--"
         if (lat == -1)

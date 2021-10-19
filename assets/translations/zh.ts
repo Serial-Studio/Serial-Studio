@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh" sourcelanguage="en">
+<TS version="2.1" language="zh_CN" sourcelanguage="en_US">
 <context>
     <name>About</name>
     <message>
@@ -548,27 +548,27 @@
     <name>Footer</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished">关闭</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <source>Add group</source>
-        <translation type="unfinished">添加组别</translation>
+        <translation>添加组别</translation>
     </message>
     <message>
         <source>Open existing project...</source>
-        <translation type="unfinished">打开现有的项目...</translation>
+        <translation>打开现有的项目...</translation>
     </message>
     <message>
         <source>Create new project</source>
-        <translation type="unfinished">创建新项目</translation>
+        <translation>创建新项目</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished">申请</translation>
+        <translation>申请</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">拯救</translation>
+        <translation>拯救</translation>
     </message>
 </context>
 <context>
@@ -597,19 +597,19 @@
     <name>Header</name>
     <message>
         <source>Project title (required)</source>
-        <translation type="unfinished">项目名称（必填）</translation>
+        <translation>项目名称（必填）</translation>
     </message>
     <message>
         <source>Data separator (default is &apos;,&apos;)</source>
-        <translation type="unfinished">数据分隔符（默认为&apos;，&apos;）</translation>
+        <translation>数据分隔符（默认为&apos;，&apos;）</translation>
     </message>
     <message>
         <source>Frame start sequence (default is &apos;%1&apos;)</source>
-        <translation type="unfinished">帧开始顺序（默认为&apos;%1&apos;）</translation>
+        <translation>帧开始顺序（默认为&apos;%1&apos;）</translation>
     </message>
     <message>
         <source>Frame end sequence (default is &apos;%1&apos;)</source>
-        <translation type="unfinished">帧结束序列（默认为&apos;%1&apos;）</translation>
+        <translation>帧结束序列（默认为&apos;%1&apos;）</translation>
     </message>
 </context>
 <context>
@@ -872,15 +872,15 @@
     </message>
     <message>
         <source>GPS</source>
-        <translation type="unfinished"></translation>
+        <translation>全球定位系统</translation>
     </message>
     <message>
         <source>Multiple data plot</source>
-        <translation type="unfinished"></translation>
+        <translation>多个数据图表</translation>
     </message>
     <message>
         <source>Altitude</source>
-        <translation type="unfinished"></translation>
+        <translation>海拔</translation>
     </message>
 </context>
 <context>
@@ -926,7 +926,7 @@
     <name>JSONDropArea</name>
     <message>
         <source>Drop JSON and CSV files here</source>
-        <translation type="unfinished">拖放JSON和CSV文件</translation>
+        <translation>拖放JSON和CSV文件</translation>
     </message>
 </context>
 <context>
@@ -973,31 +973,31 @@
     </message>
     <message>
         <source>Generate plot:</source>
-        <translation type="unfinished"></translation>
+        <translation>生成图形：</translation>
     </message>
     <message>
         <source>Logarithmic plot:</source>
-        <translation type="unfinished"></translation>
+        <translation>对数图：</translation>
     </message>
     <message>
         <source>FFT plot:</source>
-        <translation type="unfinished"></translation>
+        <translation>FFT图：</translation>
     </message>
     <message>
         <source>FFT Samples:</source>
-        <translation type="unfinished"></translation>
+        <translation>FFT样本：</translation>
     </message>
     <message>
         <source>Alarm level:</source>
-        <translation type="unfinished"></translation>
+        <translation>报警水平：</translation>
     </message>
     <message>
         <source>Note:</source>
-        <translation type="unfinished"></translation>
+        <translation>注：</translation>
     </message>
     <message>
         <source>The compass widget expects values from 0° to 360°.</source>
-        <translation type="unfinished"></translation>
+        <translation>指南针小组件期望的数值为0°到360°。</translation>
     </message>
 </context>
 <context>
@@ -1056,7 +1056,7 @@
     </message>
     <message>
         <source>Click on the &quot;Add group&quot; button to begin</source>
-        <translation type="unfinished"></translation>
+        <translation>点击 &quot;添加组 &quot;按钮，开始</translation>
     </message>
 </context>
 <context>
@@ -1118,15 +1118,15 @@
     </message>
     <message>
         <source>Note:</source>
-        <translation type="unfinished"></translation>
+        <translation>注：</translation>
     </message>
     <message>
         <source>The accelerometer widget expects values in m/s².</source>
-        <translation type="unfinished"></translation>
+        <translation>加速器部件希望得到以m/s²为单位的值。</translation>
     </message>
     <message>
         <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
-        <translation type="unfinished"></translation>
+        <translation>陀螺仪小组件希望得到以度为单位的值（0°到360°）。</translation>
     </message>
 </context>
 <context>
@@ -1725,11 +1725,11 @@
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
-        <translation type="unfinished"></translation>
+        <translation>渲染引擎的改变将在重新启动后生效</translation>
     </message>
     <message>
         <source>Do you want to restart %1 now?</source>
-        <translation type="unfinished">你现在想重新启动%1吗？</translation>
+        <translation>你现在想重新启动%1吗？</translation>
     </message>
 </context>
 <context>
@@ -1760,7 +1760,7 @@
     </message>
     <message>
         <source>Multicast</source>
-        <translation type="unfinished"></translation>
+        <translation>组播</translation>
     </message>
 </context>
 <context>
@@ -1789,30 +1789,30 @@
     <name>QwtPlotRenderer</name>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>文件</translation>
     </message>
     <message>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation>图片</translation>
     </message>
     <message>
         <source>Export File Name</source>
-        <translation type="unfinished"></translation>
+        <translation>输出文件名</translation>
     </message>
 </context>
 <context>
     <name>QwtPolarRenderer</name>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>文件</translation>
     </message>
     <message>
         <source>Images</source>
-        <translation type="unfinished"></translation>
+        <translation>图片</translation>
     </message>
     <message>
         <source>Export File Name</source>
-        <translation type="unfinished"></translation>
+        <translation>输出文件名</translation>
     </message>
 </context>
 <context>
@@ -1953,7 +1953,7 @@
     </message>
     <message>
         <source>Rendering engine</source>
-        <translation type="unfinished"></translation>
+        <translation>渲染引擎</translation>
     </message>
 </context>
 <context>
@@ -2157,7 +2157,7 @@
     <name>TreeView</name>
     <message>
         <source>JSON Project Tree</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON项目树</translation>
     </message>
 </context>
 <context>
@@ -2187,58 +2187,58 @@
     <name>ViewOptions</name>
     <message>
         <source>View</source>
-        <translation type="unfinished">视图</translation>
+        <translation>视图</translation>
     </message>
     <message>
         <source>Plot divisions (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>图形划分 (%1)</translation>
     </message>
     <message>
         <source>Datasets</source>
-        <translation type="unfinished"></translation>
+        <translation>数据集</translation>
     </message>
     <message>
         <source>Multiple data plots</source>
-        <translation type="unfinished"></translation>
+        <translation>多种数据图表</translation>
     </message>
     <message>
         <source>FFT plots</source>
-        <translation type="unfinished"></translation>
+        <translation>FFT图</translation>
     </message>
     <message>
         <source>Data plots</source>
-        <translation type="unfinished"></translation>
+        <translation>数据图表</translation>
     </message>
     <message>
         <source>Bars</source>
-        <translation type="unfinished"></translation>
+        <translation>酒吧</translation>
     </message>
     <message>
         <source>Gauges</source>
-        <translation type="unfinished"></translation>
+        <translation>计量器</translation>
     </message>
     <message>
         <source>Compasses</source>
-        <translation type="unfinished"></translation>
+        <translation>指南针</translation>
     </message>
     <message>
         <source>Gyroscopes</source>
-        <translation type="unfinished"></translation>
+        <translation>陀螺仪</translation>
     </message>
     <message>
         <source>Accelerometers</source>
-        <translation type="unfinished"></translation>
+        <translation>加速器</translation>
     </message>
     <message>
         <source>GPS</source>
-        <translation type="unfinished"></translation>
+        <translation>全球定位系统</translation>
     </message>
 </context>
 <context>
     <name>WidgetGrid</name>
     <message>
         <source>Data</source>
-        <translation type="unfinished">数据</translation>
+        <translation>数据</translation>
     </message>
 </context>
 <context>
@@ -2256,59 +2256,59 @@
     <name>Widgets::FFTPlot</name>
     <message>
         <source>Samples</source>
-        <translation type="unfinished"></translation>
+        <translation>样品</translation>
     </message>
     <message>
         <source>FFT of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1的FFT</translation>
     </message>
 </context>
 <context>
     <name>Widgets::GPS</name>
     <message>
         <source>Latitude</source>
-        <translation type="unfinished">纬度</translation>
+        <translation>纬度</translation>
     </message>
     <message>
         <source>Longitude</source>
-        <translation type="unfinished">经度</translation>
+        <translation>经度</translation>
     </message>
     <message>
         <source>Altitude</source>
-        <translation type="unfinished"></translation>
+        <translation>海拔</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在加载...</translation>
     </message>
     <message>
         <source>Double-click to open map</source>
-        <translation type="unfinished"></translation>
+        <translation>双击以打开地图</translation>
     </message>
 </context>
 <context>
     <name>Widgets::MultiPlot</name>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">未知</translation>
+        <translation>未知</translation>
     </message>
     <message>
         <source>Samples</source>
-        <translation type="unfinished"></translation>
+        <translation>样品</translation>
     </message>
 </context>
 <context>
     <name>Widgets::Plot</name>
     <message>
         <source>Samples</source>
-        <translation type="unfinished"></translation>
+        <translation>样品</translation>
     </message>
 </context>
 <context>
     <name>Widgets::WidgetLoader</name>
     <message>
         <source>Invalid</source>
-        <translation type="unfinished">无效</translation>
+        <translation>无效</translation>
     </message>
 </context>
 <context>
