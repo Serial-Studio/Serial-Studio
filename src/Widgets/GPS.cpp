@@ -51,9 +51,10 @@ static const QString DD_TO_DMS(const qreal dd)
     // Calculate seconds
     auto sec = (val - min) * 60;
 
-    // clang-format-off
-    return QString("%1°%2'%3\"")
-        .arg(QString::number(deg), QString::number(min), QString::number(sec, 'f', 2));
+    // clang-format off
+    return QString("%1°%2'%3\"").arg(QString::number(deg),
+                                     QString::number(min),
+                                     QString::number(sec, 'f', 2));
     // clang-format on
 }
 
