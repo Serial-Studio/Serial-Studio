@@ -38,24 +38,40 @@ using namespace Widgets;
 /**
  * Converts the given latitude/longitude to degrees-minutes-seconds format
  */
-static const QString DD_TO_DMS(const qreal dd)
+static const QString DD_TO_DMS(const qreal dd, const bool horizontal)
 {
     // Calculate degrees
-    auto val = dd;
+    auto val = qAbs(dd);
     auto deg = static_cast<int>(val);
 
     // Calculate minutes
-    val = (qAbs(dd) - qAbs(deg)) * 60;
+    val = (val - deg) * 60;
     auto min = static_cast<int>(val);
 
     // Calculate seconds
     auto sec = (val - min) * 60;
 
     // clang-format off
-    return QString("%1°%2'%3\"").arg(QString::number(deg),
-                                     QString::number(min),
-                                     QString::number(sec, 'f', 2));
+    auto dms = QString("%1°%2'%3\"").arg(QString::number(deg),
+                                         QString::number(min),
+                                         QString::number(sec, 'f', 2));
     // clang-format on
+
+    // Add heading
+    if (horizontal) {
+        if (deg < 0)
+            dms.append("W");
+        else
+            dms.append("E");
+    } else {
+        if (deg < 0)
+            dms.append("S");
+        else
+            dms.append("N");
+    }
+
+    // Return constructed string
+    return dms;
 }
 
 /**
@@ -294,8 +310,8 @@ void GPS::updateData()
         auto latLabel = m_values[0];
         auto lonLabel = m_values[1];
         auto altLabel = m_values[2];
-        latLabel->setText(DD_TO_DMS(lat));
-        lonLabel->setText(DD_TO_DMS(lon));
+        lonLabel->setText(DD_TO_DMS(lon, true));
+        latLabel->setText(DD_TO_DMS(lat, false));
         altLabel->setText(QString::number(alt, 'f', 4));
 
         // Ensure that non-received data is displayed as "--.--"
