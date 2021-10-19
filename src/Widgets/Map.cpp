@@ -250,14 +250,31 @@ void Map::resizeEvent(QResizeEvent *event)
     event->accept();
 }
 
+void Map::mouseMoveEvent(QMouseEvent *event)
+{
+    event->accept();
+
+    auto theme = Misc::ThemeManager::getInstance();
+    auto qss = QSS("color:%1", theme->placeholderText());
+    m_mapLabel.setStyleSheet(qss);
+}
+
 void Map::mousePressEvent(QMouseEvent *event)
 {
     event->accept();
+
+    auto theme = Misc::ThemeManager::getInstance();
+    auto qss = QSS("color:%1", theme->widgetForegroundPrimary());
+    m_mapLabel.setStyleSheet(qss);
 }
 
 void Map::mouseReleaseEvent(QMouseEvent *event)
 {
     event->accept();
+
+    auto theme = Misc::ThemeManager::getInstance();
+    auto qss = QSS("color:%1", theme->placeholderText());
+    m_mapLabel.setStyleSheet(qss);
 }
 
 void Map::mouseDoubleClickEvent(QMouseEvent *event)
