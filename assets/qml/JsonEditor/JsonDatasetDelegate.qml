@@ -193,7 +193,7 @@ Widgets.Window {
             text: Cpp_JSON_Editor.datasetFFTSamples(group, dataset)
             onTextChanged: Cpp_JSON_Editor.setDatasetFFTSamples(group, dataset, parseInt(text))
             validator: IntValidator {
-                bottom: 128
+                bottom: 8
                 top: 40 * 1000
             }
         }

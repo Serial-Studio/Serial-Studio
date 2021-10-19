@@ -38,6 +38,7 @@ Dataset::Dataset(QObject *parent)
     , m_max("0")
     , m_min("0")
     , m_alarm("0")
+    , m_fftSamples(8)
 {
 }
 
