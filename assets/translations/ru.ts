@@ -48,23 +48,23 @@
     <name>AccelerometerDelegate</name>
     <message>
         <source>G Units</source>
-        <translation>G Units</translation>
+        <translation type="vanished">G Units</translation>
     </message>
     <message>
         <source>%1 G MAX</source>
-        <translation>%1 G MAX</translation>
+        <translation type="vanished">%1 G MAX</translation>
     </message>
     <message>
         <source>%1 G MIN</source>
-        <translation>%1 G MIN</translation>
+        <translation type="vanished">%1 G MIN</translation>
     </message>
     <message>
         <source>%1 G ACT</source>
-        <translation>%1 G ACT</translation>
+        <translation type="vanished">%1 G ACT</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation>Сбросить</translation>
+        <translation type="vanished">Сбросить</translation>
     </message>
 </context>
 <context>
@@ -90,7 +90,7 @@
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
-        <translation>Скиньте сюда файлы JSON и CSV</translation>
+        <translation type="vanished">Скиньте сюда файлы JSON и CSV</translation>
     </message>
 </context>
 <context>
@@ -229,31 +229,31 @@
     <name>DataGrid</name>
     <message>
         <source>View</source>
-        <translation>Просмотр</translation>
+        <translation type="vanished">Просмотр</translation>
     </message>
     <message>
         <source>Horizontal Range</source>
-        <translation>Горизонтальный диапазон</translation>
+        <translation type="vanished">Горизонтальный диапазон</translation>
     </message>
     <message>
         <source>Data Groups</source>
-        <translation>Группы данных</translation>
+        <translation type="vanished">Группы данных</translation>
     </message>
     <message>
         <source>Data Plots</source>
-        <translation>Графики данных</translation>
+        <translation type="vanished">Графики данных</translation>
     </message>
     <message>
         <source>Data</source>
-        <translation>Данные</translation>
+        <translation type="vanished">Данные</translation>
     </message>
     <message>
         <source>Points</source>
-        <translation>Точки</translation>
+        <translation type="vanished">Точки</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation>Масштаб</translation>
+        <translation type="vanished">Масштаб</translation>
     </message>
 </context>
 <context>
@@ -449,18 +449,64 @@
     </message>
 </context>
 <context>
+    <name>Footer</name>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished">Закрыть</translation>
+    </message>
+    <message>
+        <source>Add group</source>
+        <translation type="unfinished">Добавить группу</translation>
+    </message>
+    <message>
+        <source>Open existing project...</source>
+        <translation type="unfinished">Открыть существующий проект...</translation>
+    </message>
+    <message>
+        <source>Create new project</source>
+        <translation type="unfinished">Создать новый проект</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished">Применить</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Сохранить</translation>
+    </message>
+</context>
+<context>
     <name>GyroDelegate</name>
     <message>
         <source>%1° YAW</source>
-        <translation>%1° ЯВ</translation>
+        <translation type="vanished">%1° ЯВ</translation>
     </message>
     <message>
         <source>%1° ROLL</source>
-        <translation>%1° КРУГ</translation>
+        <translation type="vanished">%1° КРУГ</translation>
     </message>
     <message>
         <source>%1° PITCH</source>
-        <translation>%1° PITCH</translation>
+        <translation type="vanished">%1° PITCH</translation>
+    </message>
+</context>
+<context>
+    <name>Header</name>
+    <message>
+        <source>Project title (required)</source>
+        <translation type="unfinished">Название проекта (обязательно)</translation>
+    </message>
+    <message>
+        <source>Data separator (default is &apos;,&apos;)</source>
+        <translation type="unfinished">Разделитель данных (по умолчанию &apos;,&apos;)</translation>
+    </message>
+    <message>
+        <source>Frame start sequence (default is &apos;%1&apos;)</source>
+        <translation type="unfinished">Последовательность начала кадра (по умолчанию &apos;%1&apos;)</translation>
+    </message>
+    <message>
+        <source>Frame end sequence (default is &apos;%1&apos;)</source>
+        <translation type="unfinished">Последовательность окончания кадра (по умолчанию &apos;%1&apos;)</translation>
     </message>
 </context>
 <context>
@@ -557,7 +603,7 @@
     </message>
     <message>
         <source>Serial port error</source>
-        <translation>Ошибка последовательного порта</translation>
+        <translation type="vanished">Ошибка последовательного порта</translation>
     </message>
 </context>
 <context>
@@ -587,7 +633,7 @@
     </message>
     <message>
         <source>Map</source>
-        <translation>Карта</translation>
+        <translation type="vanished">Карта</translation>
     </message>
     <message>
         <source>None</source>
@@ -709,6 +755,18 @@
         <source>Are you sure you want to delete this dataset?</source>
         <translation>Вы уверены, что хотите удалить этот набор данных?</translation>
     </message>
+    <message>
+        <source>GPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiple data plot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Altitude</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>JSON::Generator</name>
@@ -731,6 +789,13 @@
     <message>
         <source>Please check file permissions &amp; location</source>
         <translation>Проверьте разрешения и расположение файла</translation>
+    </message>
+</context>
+<context>
+    <name>JSONDropArea</name>
+    <message>
+        <source>Drop JSON and CSV files here</source>
+        <translation type="unfinished">Скиньте сюда файлы JSON и CSV</translation>
     </message>
 </context>
 <context>
@@ -761,7 +826,7 @@
     </message>
     <message>
         <source>Generate graph:</source>
-        <translation>Генерировать график:</translation>
+        <translation type="vanished">Генерировать график:</translation>
     </message>
     <message>
         <source>Widget:</source>
@@ -775,6 +840,34 @@
         <source>Max value:</source>
         <translation>Максимальное значение:</translation>
     </message>
+    <message>
+        <source>Generate plot:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logarithmic plot:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFT plot:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFT Samples:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alarm level:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The compass widget expects values from 0° to 360°.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>JsonEditor</name>
@@ -784,19 +877,19 @@
     </message>
     <message>
         <source>Project title (required)</source>
-        <translation>Название проекта (обязательно)</translation>
+        <translation type="vanished">Название проекта (обязательно)</translation>
     </message>
     <message>
         <source>Data separator (default is &apos;,&apos;)</source>
-        <translation>Разделитель данных (по умолчанию &apos;,&apos;)</translation>
+        <translation type="vanished">Разделитель данных (по умолчанию &apos;,&apos;)</translation>
     </message>
     <message>
         <source>Frame start sequence (default is &apos;%1&apos;)</source>
-        <translation>Последовательность начала кадра (по умолчанию &apos;%1&apos;)</translation>
+        <translation type="vanished">Последовательность начала кадра (по умолчанию &apos;%1&apos;)</translation>
     </message>
     <message>
         <source>Frame end sequence (default is &apos;%1&apos;)</source>
-        <translation>Последовательность окончания кадра (по умолчанию &apos;%1&apos;)</translation>
+        <translation type="vanished">Последовательность окончания кадра (по умолчанию &apos;%1&apos;)</translation>
     </message>
     <message>
         <source>Start something awesome</source>
@@ -804,31 +897,35 @@
     </message>
     <message>
         <source>Click on the &quot;%1&quot; button to begin</source>
-        <translation>Нажмите на кнопку &quot;%1&quot;, чтобы начать работу</translation>
+        <translation type="vanished">Нажмите на кнопку &quot;%1&quot;, чтобы начать работу</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation type="vanished">Закрыть</translation>
     </message>
     <message>
         <source>Add group</source>
-        <translation>Добавить группу</translation>
+        <translation type="vanished">Добавить группу</translation>
     </message>
     <message>
         <source>Open existing project...</source>
-        <translation>Открыть существующий проект...</translation>
+        <translation type="vanished">Открыть существующий проект...</translation>
     </message>
     <message>
         <source>Create new project</source>
-        <translation>Создать новый проект</translation>
+        <translation type="vanished">Создать новый проект</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation>Применить</translation>
+        <translation type="vanished">Применить</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation type="vanished">Сохранить</translation>
+    </message>
+    <message>
+        <source>Click on the &quot;Add group&quot; button to begin</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -844,6 +941,18 @@
     <message>
         <source>Add dataset</source>
         <translation>Добавить набор данных</translation>
+    </message>
+    <message>
+        <source>Note:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The accelerometer widget expects values in m/s².</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1040,7 +1149,7 @@
     <name>MapDelegate</name>
     <message>
         <source>Center on coordinate</source>
-        <translation>Центр на координате</translation>
+        <translation type="vanished">Центр на координате</translation>
     </message>
 </context>
 <context>
@@ -1119,7 +1228,7 @@
     </message>
     <message>
         <source>Widgets</source>
-        <translation>Виджеты</translation>
+        <translation type="vanished">Виджеты</translation>
     </message>
     <message>
         <source>Show setup pane</source>
@@ -1286,7 +1395,7 @@
     </message>
     <message>
         <source>Widgets</source>
-        <translation>Виджеты</translation>
+        <translation type="vanished">Виджеты</translation>
     </message>
     <message>
         <source>Show setup pane</source>
@@ -1381,7 +1490,7 @@
     </message>
     <message>
         <source>Widgets</source>
-        <translation>Виджеты</translation>
+        <translation type="vanished">Виджеты</translation>
     </message>
     <message>
         <source>Dashboard</source>
@@ -1426,11 +1535,19 @@
     </message>
     <message>
         <source>Starting timers...</source>
-        <translation>Стартовые таймеры...</translation>
+        <translation type="vanished">Стартовые таймеры...</translation>
     </message>
     <message>
         <source>Loading user interface...</source>
         <translation>Загрузка пользовательского интерфейса...</translation>
+    </message>
+    <message>
+        <source>The rendering engine change will take effect after restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation type="unfinished">Хотите ли вы перезапустить %1 сейчас?</translation>
     </message>
 </context>
 <context>
@@ -1446,6 +1563,10 @@
     <message>
         <source>Host</source>
         <translation>Хост</translation>
+    </message>
+    <message>
+        <source>Multicast</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1468,6 +1589,36 @@
     <message>
         <source>Failed to load welcome text :(</source>
         <translation>Не удалось загрузить приветственный текст :(</translation>
+    </message>
+</context>
+<context>
+    <name>QwtPlotRenderer</name>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export File Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QwtPolarRenderer</name>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export File Name</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1545,6 +1696,10 @@
     <message>
         <source>UI refresh rate</source>
         <translation>Частота обновления</translation>
+    </message>
+    <message>
+        <source>Rendering engine</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1638,7 +1793,7 @@
     </message>
     <message>
         <source>Widgets</source>
-        <translation>Виджеты</translation>
+        <translation type="vanished">Виджеты</translation>
     </message>
     <message>
         <source>Dashboard</source>
@@ -1666,6 +1821,13 @@
     </message>
 </context>
 <context>
+    <name>TreeView</name>
+    <message>
+        <source>JSON Project Tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Updater</name>
     <message>
         <source>Would you like to download the update now?</source>
@@ -1689,14 +1851,131 @@
     </message>
 </context>
 <context>
+    <name>ViewOptions</name>
+    <message>
+        <source>View</source>
+        <translation type="unfinished">Просмотр</translation>
+    </message>
+    <message>
+        <source>Plot divisions (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Datasets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiple data plots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFT plots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data plots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gauges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compasses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gyroscopes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accelerometers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WidgetGrid</name>
+    <message>
+        <source>Data</source>
+        <translation type="unfinished">Данные</translation>
+    </message>
+</context>
+<context>
     <name>Widgets</name>
     <message>
         <source>View</source>
-        <translation>Просмотр</translation>
+        <translation type="vanished">Просмотр</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation>Виджеты</translation>
+        <translation type="vanished">Виджеты</translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::FFTPlot</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFT of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::GPS</name>
+    <message>
+        <source>Latitude</source>
+        <translation type="unfinished">Широта</translation>
+    </message>
+    <message>
+        <source>Longitude</source>
+        <translation type="unfinished">Долгота</translation>
+    </message>
+    <message>
+        <source>Altitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Double-click to open map</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::MultiPlot</name>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">Неизвестно</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::Plot</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::WidgetLoader</name>
+    <message>
+        <source>Invalid</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

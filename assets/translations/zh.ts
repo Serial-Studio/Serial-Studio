@@ -60,23 +60,23 @@
     <name>AccelerometerDelegate</name>
     <message>
         <source>G Units</source>
-        <translation>G 单位</translation>
+        <translation type="vanished">G 单位</translation>
     </message>
     <message>
         <source>%1 G MAX</source>
-        <translation>%1 G 最大</translation>
+        <translation type="vanished">%1 G 最大</translation>
     </message>
     <message>
         <source>%1 G MIN</source>
-        <translation>%1 G 最小</translation>
+        <translation type="vanished">%1 G 最小</translation>
     </message>
     <message>
         <source>%1 G ACT</source>
-        <translation>%1 G 实际</translation>
+        <translation type="vanished">%1 G 实际</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation>重置</translation>
+        <translation type="vanished">重置</translation>
     </message>
 </context>
 <context>
@@ -102,7 +102,7 @@
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
-        <translation>拖放JSON和CSV文件</translation>
+        <translation type="vanished">拖放JSON和CSV文件</translation>
     </message>
 </context>
 <context>
@@ -289,31 +289,31 @@
     <name>DataGrid</name>
     <message>
         <source>View</source>
-        <translation>视图</translation>
+        <translation type="vanished">视图</translation>
     </message>
     <message>
         <source>Horizontal Range</source>
-        <translation>水平范围</translation>
+        <translation type="vanished">水平范围</translation>
     </message>
     <message>
         <source>Data Groups</source>
-        <translation>资料组</translation>
+        <translation type="vanished">资料组</translation>
     </message>
     <message>
         <source>Data Plots</source>
-        <translation>数据图</translation>
+        <translation type="vanished">数据图</translation>
     </message>
     <message>
         <source>Data</source>
-        <translation>数据</translation>
+        <translation type="vanished">数据</translation>
     </message>
     <message>
         <source>Points</source>
-        <translation>点数</translation>
+        <translation type="vanished">点数</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation>乘数</translation>
+        <translation type="vanished">乘数</translation>
     </message>
 </context>
 <context>
@@ -545,6 +545,33 @@
     </message>
 </context>
 <context>
+    <name>Footer</name>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished">关闭</translation>
+    </message>
+    <message>
+        <source>Add group</source>
+        <translation type="unfinished">添加组别</translation>
+    </message>
+    <message>
+        <source>Open existing project...</source>
+        <translation type="unfinished">打开现有的项目...</translation>
+    </message>
+    <message>
+        <source>Create new project</source>
+        <translation type="unfinished">创建新项目</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished">申请</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">拯救</translation>
+    </message>
+</context>
+<context>
     <name>Group</name>
     <message>
         <source>Invalid</source>
@@ -555,15 +582,34 @@
     <name>GyroDelegate</name>
     <message>
         <source>%1° YAW</source>
-        <translation>%1°偏航角</translation>
+        <translation type="vanished">%1°偏航角</translation>
     </message>
     <message>
         <source>%1° ROLL</source>
-        <translation>%1°翻滚角</translation>
+        <translation type="vanished">%1°翻滚角</translation>
     </message>
     <message>
         <source>%1° PITCH</source>
-        <translation>%1°俯仰角</translation>
+        <translation type="vanished">%1°俯仰角</translation>
+    </message>
+</context>
+<context>
+    <name>Header</name>
+    <message>
+        <source>Project title (required)</source>
+        <translation type="unfinished">项目名称（必填）</translation>
+    </message>
+    <message>
+        <source>Data separator (default is &apos;,&apos;)</source>
+        <translation type="unfinished">数据分隔符（默认为&apos;，&apos;）</translation>
+    </message>
+    <message>
+        <source>Frame start sequence (default is &apos;%1&apos;)</source>
+        <translation type="unfinished">帧开始顺序（默认为&apos;%1&apos;）</translation>
+    </message>
+    <message>
+        <source>Frame end sequence (default is &apos;%1&apos;)</source>
+        <translation type="unfinished">帧结束序列（默认为&apos;%1&apos;）</translation>
     </message>
 </context>
 <context>
@@ -672,7 +718,7 @@
     </message>
     <message>
         <source>Serial port error</source>
-        <translation>串口错误</translation>
+        <translation type="vanished">串口错误</translation>
     </message>
 </context>
 <context>
@@ -702,7 +748,7 @@
     </message>
     <message>
         <source>Map</source>
-        <translation>地图</translation>
+        <translation type="vanished">地图</translation>
     </message>
     <message>
         <source>None</source>
@@ -824,6 +870,18 @@
         <source>Are you sure you want to delete this dataset?</source>
         <translation>你确定要删除这个数据集吗？</translation>
     </message>
+    <message>
+        <source>GPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiple data plot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Altitude</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>JSON::Generator</name>
@@ -865,6 +923,13 @@
     </message>
 </context>
 <context>
+    <name>JSONDropArea</name>
+    <message>
+        <source>Drop JSON and CSV files here</source>
+        <translation type="unfinished">拖放JSON和CSV文件</translation>
+    </message>
+</context>
+<context>
     <name>JsonDatasetDelegate</name>
     <message>
         <source>Dataset %1 - %2</source>
@@ -892,7 +957,7 @@
     </message>
     <message>
         <source>Generate graph:</source>
-        <translation>生成图形：</translation>
+        <translation type="vanished">生成图形：</translation>
     </message>
     <message>
         <source>Widget:</source>
@@ -906,6 +971,34 @@
         <source>Max value:</source>
         <translation>最大值：</translation>
     </message>
+    <message>
+        <source>Generate plot:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logarithmic plot:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFT plot:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFT Samples:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alarm level:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The compass widget expects values from 0° to 360°.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>JsonEditor</name>
@@ -915,19 +1008,19 @@
     </message>
     <message>
         <source>Project title (required)</source>
-        <translation>项目名称（必填）</translation>
+        <translation type="vanished">项目名称（必填）</translation>
     </message>
     <message>
         <source>Data separator (default is &apos;,&apos;)</source>
-        <translation>数据分隔符（默认为&apos;，&apos;）</translation>
+        <translation type="vanished">数据分隔符（默认为&apos;，&apos;）</translation>
     </message>
     <message>
         <source>Frame start sequence (default is &apos;%1&apos;)</source>
-        <translation>帧开始顺序（默认为&apos;%1&apos;）</translation>
+        <translation type="vanished">帧开始顺序（默认为&apos;%1&apos;）</translation>
     </message>
     <message>
         <source>Frame end sequence (default is &apos;%1&apos;)</source>
-        <translation>帧结束序列（默认为&apos;%1&apos;）</translation>
+        <translation type="vanished">帧结束序列（默认为&apos;%1&apos;）</translation>
     </message>
     <message>
         <source>Start something awesome</source>
@@ -935,31 +1028,35 @@
     </message>
     <message>
         <source>Click on the &quot;%1&quot; button to begin</source>
-        <translation>点击&quot;%1 &quot;按钮，开始</translation>
+        <translation type="vanished">点击&quot;%1 &quot;按钮，开始</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation type="vanished">关闭</translation>
     </message>
     <message>
         <source>Add group</source>
-        <translation>添加组别</translation>
+        <translation type="vanished">添加组别</translation>
     </message>
     <message>
         <source>Open existing project...</source>
-        <translation>打开现有的项目...</translation>
+        <translation type="vanished">打开现有的项目...</translation>
     </message>
     <message>
         <source>Create new project</source>
-        <translation>创建新项目</translation>
+        <translation type="vanished">创建新项目</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation>申请</translation>
+        <translation type="vanished">申请</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>拯救</translation>
+        <translation type="vanished">拯救</translation>
+    </message>
+    <message>
+        <source>Click on the &quot;Add group&quot; button to begin</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1018,6 +1115,18 @@
     <message>
         <source>Add dataset</source>
         <translation>添加数据集</translation>
+    </message>
+    <message>
+        <source>Note:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The accelerometer widget expects values in m/s².</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1222,7 +1331,7 @@
     <name>MapDelegate</name>
     <message>
         <source>Center on coordinate</source>
-        <translation>以坐标为中心</translation>
+        <translation type="vanished">以坐标为中心</translation>
     </message>
 </context>
 <context>
@@ -1301,7 +1410,7 @@
     </message>
     <message>
         <source>Widgets</source>
-        <translation>小部件</translation>
+        <translation type="vanished">小部件</translation>
     </message>
     <message>
         <source>Show setup pane</source>
@@ -1468,7 +1577,7 @@
     </message>
     <message>
         <source>Widgets</source>
-        <translation>小部件</translation>
+        <translation type="vanished">小部件</translation>
     </message>
     <message>
         <source>Show setup pane</source>
@@ -1563,7 +1672,7 @@
     </message>
     <message>
         <source>Widgets</source>
-        <translation>小部件</translation>
+        <translation type="vanished">小部件</translation>
     </message>
     <message>
         <source>Dashboard</source>
@@ -1608,11 +1717,19 @@
     </message>
     <message>
         <source>Starting timers...</source>
-        <translation>开始计时...</translation>
+        <translation type="vanished">开始计时...</translation>
     </message>
     <message>
         <source>Loading user interface...</source>
         <translation>正在加载用户界面...</translation>
+    </message>
+    <message>
+        <source>The rendering engine change will take effect after restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation type="unfinished">你现在想重新启动%1吗？</translation>
     </message>
 </context>
 <context>
@@ -1641,6 +1758,10 @@
         <source>Host</source>
         <translation>服务器</translation>
     </message>
+    <message>
+        <source>Multicast</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Plugins::Bridge</name>
@@ -1662,6 +1783,36 @@
     <message>
         <source>Failed to load welcome text :(</source>
         <translation>无法加载欢迎文本</translation>
+    </message>
+</context>
+<context>
+    <name>QwtPlotRenderer</name>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export File Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QwtPolarRenderer</name>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export File Name</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1799,6 +1950,10 @@
     <message>
         <source>UI refresh rate</source>
         <translation>UI刷新率</translation>
+    </message>
+    <message>
+        <source>Rendering engine</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1959,7 +2114,7 @@
     </message>
     <message>
         <source>Widgets</source>
-        <translation>小部件</translation>
+        <translation type="vanished">小部件</translation>
     </message>
     <message>
         <source>About</source>
@@ -1999,6 +2154,13 @@
     </message>
 </context>
 <context>
+    <name>TreeView</name>
+    <message>
+        <source>JSON Project Tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Updater</name>
     <message>
         <source>Would you like to download the update now?</source>
@@ -2022,14 +2184,131 @@
     </message>
 </context>
 <context>
+    <name>ViewOptions</name>
+    <message>
+        <source>View</source>
+        <translation type="unfinished">视图</translation>
+    </message>
+    <message>
+        <source>Plot divisions (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Datasets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiple data plots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFT plots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data plots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gauges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compasses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gyroscopes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Accelerometers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WidgetGrid</name>
+    <message>
+        <source>Data</source>
+        <translation type="unfinished">数据</translation>
+    </message>
+</context>
+<context>
     <name>Widgets</name>
     <message>
         <source>View</source>
-        <translation>视图</translation>
+        <translation type="vanished">视图</translation>
     </message>
     <message>
         <source>Widgets</source>
-        <translation>小部件</translation>
+        <translation type="vanished">小部件</translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::FFTPlot</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFT of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::GPS</name>
+    <message>
+        <source>Latitude</source>
+        <translation type="unfinished">纬度</translation>
+    </message>
+    <message>
+        <source>Longitude</source>
+        <translation type="unfinished">经度</translation>
+    </message>
+    <message>
+        <source>Altitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Double-click to open map</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::MultiPlot</name>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">未知</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::Plot</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::WidgetLoader</name>
+    <message>
+        <source>Invalid</source>
+        <translation type="unfinished">无效</translation>
     </message>
 </context>
 <context>

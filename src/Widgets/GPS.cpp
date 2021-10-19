@@ -36,6 +36,28 @@ using namespace Widgets;
 #define G_MAPS QStringLiteral("https://www.google.com/maps/search/?api=1&query=%1,%2")
 
 /**
+ * Converts the given latitude/longitude to degrees-minutes-seconds format
+ */
+static const QString DD_TO_DMS(const qreal dd)
+{
+    // Calculate degrees
+    auto val = dd;
+    auto deg = static_cast<int>(val);
+
+    // Calculate minutes
+    val = (qAbs(dd) - qAbs(deg)) * 60;
+    auto min = static_cast<int>(val);
+
+    // Calculate seconds
+    auto sec = (val - min) * 60;
+
+    // clang-format-off
+    return QString("%1°%2'%3\"")
+        .arg(QString::number(deg), QString::number(min), QString::number(sec, 'f', 2));
+    // clang-format on
+}
+
+/**
  * Generates the user interface elements & layout
  */
 GPS::GPS(const int index)
@@ -104,7 +126,7 @@ GPS::GPS(const int index)
 
         // Set icon & units text
         dicon->setText("⤑");
-        units->setText("[°]");
+        units->setText("[DMS]");
         value->setText("--.--");
 
         // Add labels to grid layout
@@ -271,8 +293,8 @@ void GPS::updateData()
         auto latLabel = m_values[0];
         auto lonLabel = m_values[1];
         auto altLabel = m_values[2];
-        latLabel->setText(QString::number(lat, 'f', 4));
-        lonLabel->setText(QString::number(lon, 'f', 4));
+        latLabel->setText(DD_TO_DMS(lat));
+        lonLabel->setText(DD_TO_DMS(lon));
         altLabel->setText(QString::number(alt, 'f', 4));
 
         // Ensure that non-received data is displayed as "--.--"
@@ -351,11 +373,9 @@ void GPS::resizeEvent(QResizeEvent *event)
     auto width = event->size().width();
     QFont font = UI::Dashboard::getInstance()->monoFont();
     QFont icon = font;
-    QFont valueFont = font;
     QFont labelFont = font;
     icon.setPixelSize(qMax(8, width / 16));
     font.setPixelSize(qMax(8, width / 24));
-    valueFont.setPixelSize(font.pixelSize() * 1.3);
     labelFont.setPixelSize(font.pixelSize() * 1.5);
     m_mapLabel.setFont(font);
     m_posLabel.setFont(labelFont);
@@ -365,7 +385,7 @@ void GPS::resizeEvent(QResizeEvent *event)
         m_icons.at(i)->setFont(icon);
         m_units.at(i)->setFont(font);
         m_titles.at(i)->setFont(font);
-        m_values.at(i)->setFont(valueFont);
+        m_values.at(i)->setFont(font);
     }
 
     event->accept();

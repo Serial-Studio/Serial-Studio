@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<TS version="2.1" language="de_DE" sourcelanguage="en_US">
 <context>
     <name>About</name>
     <message>
@@ -60,23 +60,11 @@
     <name>AccelerometerDelegate</name>
     <message>
         <source>G Units</source>
-        <translation>G Einheiten</translation>
-    </message>
-    <message>
-        <source>%1 G MAX</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>%1 G MIN</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>%1 G ACT</source>
-        <translation></translation>
+        <translation type="vanished">G Einheiten</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation>Zurücksetzen</translation>
+        <translation type="vanished">Zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -102,7 +90,7 @@
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
-        <translation>JSON und CSV Dateien hierher Ziehen</translation>
+        <translation type="vanished">JSON und CSV Dateien hierher Ziehen</translation>
     </message>
 </context>
 <context>
@@ -285,31 +273,31 @@
     <name>DataGrid</name>
     <message>
         <source>View</source>
-        <translation>Ansicht</translation>
+        <translation type="vanished">Ansicht</translation>
     </message>
     <message>
         <source>Horizontal Range</source>
-        <translation>Horizontaler Bereich</translation>
+        <translation type="vanished">Horizontaler Bereich</translation>
     </message>
     <message>
         <source>Data Groups</source>
-        <translation>Daten Gruppen</translation>
+        <translation type="vanished">Daten Gruppen</translation>
     </message>
     <message>
         <source>Data Plots</source>
-        <translation>Daten-Diagramme</translation>
+        <translation type="vanished">Daten-Diagramme</translation>
     </message>
     <message>
         <source>Data</source>
-        <translation>Daten</translation>
+        <translation type="vanished">Daten</translation>
     </message>
     <message>
         <source>Points</source>
-        <translation>Punkte</translation>
+        <translation type="vanished">Punkte</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation>Multiplikator</translation>
+        <translation type="vanished">Multiplikator</translation>
     </message>
 </context>
 <context>
@@ -517,6 +505,33 @@
     </message>
 </context>
 <context>
+    <name>Footer</name>
+    <message>
+        <source>Close</source>
+        <translation>Schließen</translation>
+    </message>
+    <message>
+        <source>Add group</source>
+        <translation>Gruppe hinzufügen</translation>
+    </message>
+    <message>
+        <source>Open existing project...</source>
+        <translation>Vorhandenes Projekt öffnen...</translation>
+    </message>
+    <message>
+        <source>Create new project</source>
+        <translation>Neues Projekt erstellen</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>Bewerbung</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Speichern</translation>
+    </message>
+</context>
+<context>
     <name>Group</name>
     <message>
         <source>Invalid</source>
@@ -527,15 +542,34 @@
     <name>GyroDelegate</name>
     <message>
         <source>%1° YAW</source>
-        <translation>%1 Gierachse</translation>
+        <translation type="vanished">%1 Gierachse</translation>
     </message>
     <message>
         <source>%1° ROLL</source>
-        <translation>%1 Rollachse</translation>
+        <translation type="vanished">%1 Rollachse</translation>
     </message>
     <message>
         <source>%1° PITCH</source>
-        <translation>%1° Neigachse</translation>
+        <translation type="vanished">%1° Neigachse</translation>
+    </message>
+</context>
+<context>
+    <name>Header</name>
+    <message>
+        <source>Project title (required)</source>
+        <translation>Projekttitel (erforderlich)</translation>
+    </message>
+    <message>
+        <source>Data separator (default is &apos;,&apos;)</source>
+        <translation>Datentrennzeichen (Standard ist &apos;,&apos;)</translation>
+    </message>
+    <message>
+        <source>Frame start sequence (default is &apos;%1&apos;)</source>
+        <translation>Startsequenz des Rahmens (Standard ist &apos;%1&apos;)</translation>
+    </message>
+    <message>
+        <source>Frame end sequence (default is &apos;%1&apos;)</source>
+        <translation>Rahmenendsequenz (Standard ist &apos;%1&apos;)</translation>
     </message>
 </context>
 <context>
@@ -644,7 +678,7 @@
     </message>
     <message>
         <source>Serial port error</source>
-        <translation>Fehler an der seriellen Schnittstelle</translation>
+        <translation type="vanished">Fehler an der seriellen Schnittstelle</translation>
     </message>
 </context>
 <context>
@@ -674,7 +708,7 @@
     </message>
     <message>
         <source>Map</source>
-        <translation>Karte</translation>
+        <translation type="vanished">Karte</translation>
     </message>
     <message>
         <source>None</source>
@@ -796,6 +830,18 @@
         <source>Are you sure you want to delete this dataset?</source>
         <translation>Sind Sie sicher, dass Sie diesen Datensatz löschen wollen?</translation>
     </message>
+    <message>
+        <source>GPS</source>
+        <translation>GPS</translation>
+    </message>
+    <message>
+        <source>Multiple data plot</source>
+        <translation>Mehrfache Datenplot</translation>
+    </message>
+    <message>
+        <source>Altitude</source>
+        <translation>Höhenlage</translation>
+    </message>
 </context>
 <context>
     <name>JSON::Generator</name>
@@ -837,6 +883,13 @@
     </message>
 </context>
 <context>
+    <name>JSONDropArea</name>
+    <message>
+        <source>Drop JSON and CSV files here</source>
+        <translation>JSON und CSV Dateien hierher Ziehen</translation>
+    </message>
+</context>
+<context>
     <name>JsonDatasetDelegate</name>
     <message>
         <source>Dataset %1 - %2</source>
@@ -864,7 +917,7 @@
     </message>
     <message>
         <source>Generate graph:</source>
-        <translation>Erzeugen Sie ein Diagramm:</translation>
+        <translation type="vanished">Erzeugen Sie ein Diagramm:</translation>
     </message>
     <message>
         <source>Widget:</source>
@@ -878,6 +931,34 @@
         <source>Max value:</source>
         <translation>Maximaler Wert:</translation>
     </message>
+    <message>
+        <source>Generate plot:</source>
+        <translation>Grafik generieren:</translation>
+    </message>
+    <message>
+        <source>Logarithmic plot:</source>
+        <translation>Logarithmische Grafik:</translation>
+    </message>
+    <message>
+        <source>FFT plot:</source>
+        <translation>FFT-Grafik:</translation>
+    </message>
+    <message>
+        <source>FFT Samples:</source>
+        <translation>FFT-Proben:</translation>
+    </message>
+    <message>
+        <source>Alarm level:</source>
+        <translation>Alarmstufe:</translation>
+    </message>
+    <message>
+        <source>Note:</source>
+        <translation>Anmerkung:</translation>
+    </message>
+    <message>
+        <source>The compass widget expects values from 0° to 360°.</source>
+        <translation>Das Kompass-Widget erwartet Werte von 0° bis 360°.</translation>
+    </message>
 </context>
 <context>
     <name>JsonEditor</name>
@@ -887,19 +968,19 @@
     </message>
     <message>
         <source>Project title (required)</source>
-        <translation>Projekttitel (erforderlich)</translation>
+        <translation type="vanished">Projekttitel (erforderlich)</translation>
     </message>
     <message>
         <source>Data separator (default is &apos;,&apos;)</source>
-        <translation>Datentrennzeichen (Standard ist &apos;,&apos;)</translation>
+        <translation type="vanished">Datentrennzeichen (Standard ist &apos;,&apos;)</translation>
     </message>
     <message>
         <source>Frame start sequence (default is &apos;%1&apos;)</source>
-        <translation>Startsequenz des Rahmens (Standard ist &apos;%1&apos;)</translation>
+        <translation type="vanished">Startsequenz des Rahmens (Standard ist &apos;%1&apos;)</translation>
     </message>
     <message>
         <source>Frame end sequence (default is &apos;%1&apos;)</source>
-        <translation>Rahmenendsequenz (Standard ist &apos;%1&apos;)</translation>
+        <translation type="vanished">Rahmenendsequenz (Standard ist &apos;%1&apos;)</translation>
     </message>
     <message>
         <source>Start something awesome</source>
@@ -907,31 +988,35 @@
     </message>
     <message>
         <source>Click on the &quot;%1&quot; button to begin</source>
-        <translation>Klicken Sie auf die Schaltfläche &quot;%1&quot;, um zu beginnen</translation>
+        <translation type="vanished">Klicken Sie auf die Schaltfläche &quot;%1&quot;, um zu beginnen</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Schließen</translation>
+        <translation type="vanished">Schließen</translation>
     </message>
     <message>
         <source>Add group</source>
-        <translation>Gruppe hinzufügen</translation>
+        <translation type="vanished">Gruppe hinzufügen</translation>
     </message>
     <message>
         <source>Open existing project...</source>
-        <translation>Vorhandenes Projekt öffnen...</translation>
+        <translation type="vanished">Vorhandenes Projekt öffnen...</translation>
     </message>
     <message>
         <source>Create new project</source>
-        <translation>Neues Projekt erstellen</translation>
+        <translation type="vanished">Neues Projekt erstellen</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation>Bewerbung</translation>
+        <translation type="vanished">Bewerbung</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Speichern</translation>
+        <translation type="vanished">Speichern</translation>
+    </message>
+    <message>
+        <source>Click on the &quot;Add group&quot; button to begin</source>
+        <translation>Klicken Sie auf die Schaltfläche &quot;Gruppe hinzufügen&quot;, um zu beginnen</translation>
     </message>
 </context>
 <context>
@@ -986,6 +1071,18 @@
     <message>
         <source>Add dataset</source>
         <translation>Datensatz hinzufügen</translation>
+    </message>
+    <message>
+        <source>Note:</source>
+        <translation>Anmerkung:</translation>
+    </message>
+    <message>
+        <source>The accelerometer widget expects values in m/s².</source>
+        <translation>Das Beschleunigungsmesser-Widget erwartet Werte in m/s².</translation>
+    </message>
+    <message>
+        <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
+        <translation>Das Gyroskop-Widget erwartet Werte in Grad (0° bis 360°).</translation>
     </message>
 </context>
 <context>
@@ -1190,7 +1287,7 @@
     <name>MapDelegate</name>
     <message>
         <source>Center on coordinate</source>
-        <translation>Koordinate zentrieren</translation>
+        <translation type="vanished">Koordinate zentrieren</translation>
     </message>
 </context>
 <context>
@@ -1266,10 +1363,6 @@
     <message>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
-    </message>
-    <message>
-        <source>Widgets</source>
-        <translation></translation>
     </message>
     <message>
         <source>Show setup pane</source>
@@ -1435,10 +1528,6 @@
         <translation>Dashboard</translation>
     </message>
     <message>
-        <source>Widgets</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Show setup pane</source>
         <translation>Setup-Bereich anzeigen</translation>
     </message>
@@ -1531,7 +1620,7 @@
     </message>
     <message>
         <source>Widgets</source>
-        <translation>Widgets</translation>
+        <translation type="vanished">Widgets</translation>
     </message>
     <message>
         <source>Dashboard</source>
@@ -1576,11 +1665,19 @@
     </message>
     <message>
         <source>Starting timers...</source>
-        <translation>Timer starten...</translation>
+        <translation type="vanished">Timer starten...</translation>
     </message>
     <message>
         <source>Loading user interface...</source>
         <translation>Benutzeroberfläche laden...</translation>
+    </message>
+    <message>
+        <source>The rendering engine change will take effect after restart</source>
+        <translation>Die Änderung der Rendering-Engine wird nach dem Neustart wirksam</translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation>Möchten Sie %1 jetzt neu starten?</translation>
     </message>
 </context>
 <context>
@@ -1609,6 +1706,10 @@
         <source>Host</source>
         <translation>Server</translation>
     </message>
+    <message>
+        <source>Multicast</source>
+        <translation>Multicast</translation>
+    </message>
 </context>
 <context>
     <name>Plugins::Bridge</name>
@@ -1630,6 +1731,36 @@
     <message>
         <source>Failed to load welcome text :(</source>
         <translation>Begrüßungstext konnte nicht geladen werden :(</translation>
+    </message>
+</context>
+<context>
+    <name>QwtPlotRenderer</name>
+    <message>
+        <source>Documents</source>
+        <translation>Dokumente</translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation>Bilder</translation>
+    </message>
+    <message>
+        <source>Export File Name</source>
+        <translation>Name der Exportdatei</translation>
+    </message>
+</context>
+<context>
+    <name>QwtPolarRenderer</name>
+    <message>
+        <source>Documents</source>
+        <translation>Dokumente</translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation>Bilder</translation>
+    </message>
+    <message>
+        <source>Export File Name</source>
+        <translation>Name der Exportdatei</translation>
     </message>
 </context>
 <context>
@@ -1763,6 +1894,10 @@
     <message>
         <source>UI refresh rate</source>
         <translation>UI-Aktualisierungsrate</translation>
+    </message>
+    <message>
+        <source>Rendering engine</source>
+        <translation>Rendering Motor</translation>
     </message>
 </context>
 <context>
@@ -1906,10 +2041,6 @@
         <translation>Konsole</translation>
     </message>
     <message>
-        <source>Widgets</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>About</source>
         <translation type="vanished">Über</translation>
     </message>
@@ -1939,6 +2070,13 @@
     </message>
 </context>
 <context>
+    <name>TreeView</name>
+    <message>
+        <source>JSON Project Tree</source>
+        <translation>JSON-Projektbaum</translation>
+    </message>
+</context>
+<context>
     <name>Updater</name>
     <message>
         <source>Would you like to download the update now?</source>
@@ -1962,14 +2100,131 @@
     </message>
 </context>
 <context>
-    <name>Widgets</name>
+    <name>ViewOptions</name>
     <message>
         <source>View</source>
         <translation>Ansicht</translation>
     </message>
     <message>
+        <source>Plot divisions (%1)</source>
+        <translation>Abteilungen (%1)</translation>
+    </message>
+    <message>
+        <source>Datasets</source>
+        <translation>Datensatz</translation>
+    </message>
+    <message>
+        <source>Multiple data plots</source>
+        <translation>Mehrfache Datenplots</translation>
+    </message>
+    <message>
+        <source>FFT plots</source>
+        <translation>FFT-Grafiken</translation>
+    </message>
+    <message>
+        <source>Data plots</source>
+        <translation>Daten-Grafiken</translation>
+    </message>
+    <message>
+        <source>Bars</source>
+        <translation>Barren</translation>
+    </message>
+    <message>
+        <source>Gauges</source>
+        <translation>Messgeräte</translation>
+    </message>
+    <message>
+        <source>Compasses</source>
+        <translation>Kompasse</translation>
+    </message>
+    <message>
+        <source>Gyroscopes</source>
+        <translation>Gyroskope</translation>
+    </message>
+    <message>
+        <source>Accelerometers</source>
+        <translation>Beschleunigungsmesser</translation>
+    </message>
+    <message>
+        <source>GPS</source>
+        <translation>GPS</translation>
+    </message>
+</context>
+<context>
+    <name>WidgetGrid</name>
+    <message>
+        <source>Data</source>
+        <translation>Daten</translation>
+    </message>
+</context>
+<context>
+    <name>Widgets</name>
+    <message>
+        <source>View</source>
+        <translation type="vanished">Ansicht</translation>
+    </message>
+    <message>
         <source>Widgets</source>
-        <translation>Widgets</translation>
+        <translation type="vanished">Widgets</translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::FFTPlot</name>
+    <message>
+        <source>Samples</source>
+        <translation>Proben</translation>
+    </message>
+    <message>
+        <source>FFT of %1</source>
+        <translation>FFT von %1</translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::GPS</name>
+    <message>
+        <source>Latitude</source>
+        <translation>Breitengrad</translation>
+    </message>
+    <message>
+        <source>Longitude</source>
+        <translation>Längengrad</translation>
+    </message>
+    <message>
+        <source>Altitude</source>
+        <translation>Höhenlage</translation>
+    </message>
+    <message>
+        <source>Loading...</source>
+        <translation>Laden...</translation>
+    </message>
+    <message>
+        <source>Double-click to open map</source>
+        <translation>Doppelklick zum Öffnen der Karte</translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::MultiPlot</name>
+    <message>
+        <source>Unknown</source>
+        <translation>Unbekannt</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation>Proben</translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::Plot</name>
+    <message>
+        <source>Samples</source>
+        <translation>Proben</translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::WidgetLoader</name>
+    <message>
+        <source>Invalid</source>
+        <translation>Ungültig</translation>
     </message>
 </context>
 <context>

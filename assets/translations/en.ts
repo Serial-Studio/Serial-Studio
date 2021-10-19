@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en" sourcelanguage="en">
+<TS version="2.1" language="en_US" sourcelanguage="en_US">
 <context>
     <name>About</name>
     <message>
@@ -45,29 +45,6 @@
     </message>
 </context>
 <context>
-    <name>AccelerometerDelegate</name>
-    <message>
-        <source>G Units</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>%1 G MAX</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>%1 G MIN</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>%1 G ACT</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>Acknowledgements</name>
     <message>
         <source>Acknowledgements</source>
@@ -75,13 +52,6 @@
     </message>
     <message>
         <source>Close</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>Application</name>
-    <message>
-        <source>Drop JSON and CSV files here</source>
         <translation></translation>
     </message>
 </context>
@@ -220,32 +190,16 @@
 <context>
     <name>DataGrid</name>
     <message>
-        <source>View</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Horizontal Range</source>
-        <translation>Horizontal range</translation>
+        <translation type="vanished">Horizontal range</translation>
     </message>
     <message>
         <source>Data Groups</source>
-        <translation>Data groups</translation>
+        <translation type="vanished">Data groups</translation>
     </message>
     <message>
         <source>Data Plots</source>
-        <translation>Data plots</translation>
-    </message>
-    <message>
-        <source>Data</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Points</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Scale</source>
-        <translation></translation>
+        <translation type="vanished">Data plots</translation>
     </message>
 </context>
 <context>
@@ -441,17 +395,48 @@
     </message>
 </context>
 <context>
-    <name>GyroDelegate</name>
+    <name>Footer</name>
     <message>
-        <source>%1° YAW</source>
+        <source>Close</source>
         <translation></translation>
     </message>
     <message>
-        <source>%1° ROLL</source>
+        <source>Add group</source>
         <translation></translation>
     </message>
     <message>
-        <source>%1° PITCH</source>
+        <source>Open existing project...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Create new project</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Header</name>
+    <message>
+        <source>Project title (required)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Data separator (default is &apos;,&apos;)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Frame start sequence (default is &apos;%1&apos;)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Frame end sequence (default is &apos;%1&apos;)</source>
         <translation></translation>
     </message>
 </context>
@@ -547,10 +532,6 @@
         <source>Select Port</source>
         <translation>Select port</translation>
     </message>
-    <message>
-        <source>Serial port error</source>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>IO::Manager</name>
@@ -575,10 +556,6 @@
     </message>
     <message>
         <source>Gyroscope</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Map</source>
         <translation></translation>
     </message>
     <message>
@@ -701,6 +678,18 @@
         <source>Are you sure you want to delete this dataset?</source>
         <translation></translation>
     </message>
+    <message>
+        <source>GPS</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Multiple data plot</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Altitude</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>JSON::Generator</name>
@@ -722,6 +711,13 @@
     </message>
     <message>
         <source>Please check file permissions &amp; location</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>JSONDropArea</name>
+    <message>
+        <source>Drop JSON and CSV files here</source>
         <translation></translation>
     </message>
 </context>
@@ -752,10 +748,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Generate graph:</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Widget:</source>
         <translation></translation>
     </message>
@@ -767,6 +759,34 @@
         <source>Max value:</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Generate plot:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Logarithmic plot:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>FFT plot:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>FFT Samples:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Alarm level:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Note:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>The compass widget expects values from 0° to 360°.</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>JsonEditor</name>
@@ -775,51 +795,11 @@
         <translation></translation>
     </message>
     <message>
-        <source>Project title (required)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Data separator (default is &apos;,&apos;)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Frame start sequence (default is &apos;%1&apos;)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Frame end sequence (default is &apos;%1&apos;)</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Start something awesome</source>
         <translation></translation>
     </message>
     <message>
-        <source>Click on the &quot;%1&quot; button to begin</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Add group</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Open existing project...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Create new project</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Apply</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Save</source>
+        <source>Click on the &quot;Add group&quot; button to begin</source>
         <translation></translation>
     </message>
 </context>
@@ -835,6 +815,18 @@
     </message>
     <message>
         <source>Add dataset</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Note:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>The accelerometer widget expects values in m/s².</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
         <translation></translation>
     </message>
 </context>
@@ -1029,13 +1021,6 @@
     </message>
 </context>
 <context>
-    <name>MapDelegate</name>
-    <message>
-        <source>Center on coordinate</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>Menubar</name>
     <message>
         <source>File</source>
@@ -1107,10 +1092,6 @@
     </message>
     <message>
         <source>Dashboard</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Widgets</source>
         <translation></translation>
     </message>
     <message>
@@ -1273,10 +1254,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Widgets</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Show setup pane</source>
         <translation></translation>
     </message>
@@ -1364,10 +1341,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Widgets</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Dashboard</source>
         <translation></translation>
     </message>
@@ -1409,11 +1382,15 @@
         <translation></translation>
     </message>
     <message>
-        <source>Starting timers...</source>
+        <source>Loading user interface...</source>
         <translation></translation>
     </message>
     <message>
-        <source>Loading user interface...</source>
+        <source>The rendering engine change will take effect after restart</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
         <translation></translation>
     </message>
 </context>
@@ -1429,6 +1406,10 @@
     </message>
     <message>
         <source>Host</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Multicast</source>
         <translation></translation>
     </message>
 </context>
@@ -1451,6 +1432,36 @@
     <name>QObject</name>
     <message>
         <source>Failed to load welcome text :(</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>QwtPlotRenderer</name>
+    <message>
+        <source>Documents</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Export File Name</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>QwtPolarRenderer</name>
+    <message>
+        <source>Documents</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Export File Name</source>
         <translation></translation>
     </message>
 </context>
@@ -1530,6 +1541,10 @@
         <source>UI refresh rate</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Rendering engine</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
@@ -1605,10 +1620,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Widgets</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Dashboard</source>
         <translation></translation>
     </message>
@@ -1630,6 +1641,13 @@
     </message>
     <message>
         <source>JSON Editor</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>TreeView</name>
+    <message>
+        <source>JSON Project Tree</source>
         <translation></translation>
     </message>
 </context>
@@ -1657,13 +1675,119 @@
     </message>
 </context>
 <context>
-    <name>Widgets</name>
+    <name>ViewOptions</name>
     <message>
         <source>View</source>
         <translation></translation>
     </message>
     <message>
-        <source>Widgets</source>
+        <source>Plot divisions (%1)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Datasets</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Multiple data plots</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>FFT plots</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Data plots</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Bars</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Gauges</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Compasses</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Gyroscopes</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Accelerometers</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>GPS</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>WidgetGrid</name>
+    <message>
+        <source>Data</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::FFTPlot</name>
+    <message>
+        <source>Samples</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>FFT of %1</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::GPS</name>
+    <message>
+        <source>Latitude</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Longitude</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Altitude</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Loading...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Double-click to open map</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::MultiPlot</name>
+    <message>
+        <source>Unknown</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::Plot</name>
+    <message>
+        <source>Samples</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Widgets::WidgetLoader</name>
+    <message>
+        <source>Invalid</source>
         <translation></translation>
     </message>
 </context>
