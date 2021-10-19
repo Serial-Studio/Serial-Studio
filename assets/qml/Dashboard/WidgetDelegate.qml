@@ -50,6 +50,13 @@ Item {
                 rightMargin: window.borderWidth
                 bottomMargin: window.borderWidth
             }
+
+            MouseArea {
+                hoverEnabled: true
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                onContainsMouseChanged: loader.processMouseHover(containsMouse)
+            }
         }
     }
 
@@ -68,6 +75,13 @@ Item {
             isExternalWindow: true
             widgetIndex: root.widgetIndex
             widgetVisible: externalWindow.visible
+        }
+
+        MouseArea {
+            hoverEnabled: true
+            anchors.fill: parent
+             acceptedButtons: Qt.NoButton
+            onContainsMouseChanged: externalLoader.processMouseHover(containsMouse)
         }
     }
 }

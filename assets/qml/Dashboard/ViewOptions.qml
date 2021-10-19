@@ -254,11 +254,11 @@ Widgets.Window {
             // Maps
             //
             ViewOptionsDelegate {
-                title: qsTr("Maps")
-                icon: "qrc:/icons/map.svg"
-                count: Cpp_UI_Dashboard.mapCount
-                titles: Cpp_UI_Dashboard.mapTitles
-                onCheckedChanged: (index, checked) =>  Cpp_UI_Dashboard.setMapVisible(index, checked)
+                title: qsTr("GPS")
+                icon: "qrc:/icons/gps.svg"
+                count: Cpp_UI_Dashboard.gpsCount
+                titles: Cpp_UI_Dashboard.gpsTitles
+                onCheckedChanged: (index, checked) =>  Cpp_UI_Dashboard.setGpsVisible(index, checked)
             }
         }
     }

@@ -23,7 +23,7 @@
 #include "WidgetLoader.h"
 
 #include "Bar.h"
-#include "Map.h"
+#include "GPS.h"
 #include "Plot.h"
 #include "Gauge.h"
 #include "Compass.h"
@@ -80,9 +80,11 @@ WidgetLoader::~WidgetLoader()
  */
 bool WidgetLoader::event(QEvent *event)
 {
+    // Check that widget exists
     if (!m_widget)
         return false;
 
+    // Process focus, wheel & mouse click/release events
     switch (event->type())
     {
         case QEvent::FocusIn:
@@ -104,6 +106,10 @@ bool WidgetLoader::event(QEvent *event)
             break;
     }
 
+    //
+    // Note: mouse enter/leave events must be processed directly with
+    //       the help of a QML MouseArea
+    //
     return QApplication::sendEvent(m_widget, event);
 }
 
@@ -265,8 +271,8 @@ void WidgetLoader::setWidgetIndex(const int index)
             case UI::Dashboard::WidgetType::Accelerometer:
                 m_widget = new Accelerometer(relativeIndex());
                 break;
-            case UI::Dashboard::WidgetType::Map:
-                m_widget = new Map(relativeIndex());
+            case UI::Dashboard::WidgetType::GPS:
+                m_widget = new GPS(relativeIndex());
                 break;
             default:
                 break;
@@ -299,6 +305,26 @@ void WidgetLoader::setIsExternalWindow(const bool isWindow)
 }
 
 /**
+ * This function must be called directly by a QML MouseArea item.
+ * Unfortunatelly, enter/leave events cannot be processed
+ * directly by the @c WidgetLoader::event(QEvent *event) function.
+ */
+void WidgetLoader::processMouseHover(const bool containsMouse)
+{
+    if (containsMouse)
+    {
+        QEnterEvent event(QPoint(0, 0), QPoint(0, 0), QPoint(0, 0));
+        processEnterEvent(&event);
+    }
+
+    else
+    {
+        QEvent event(QEvent::Leave);
+        processLeaveEvent(&event);
+    }
+}
+
+/**
  * Resizes the widget to fit inside the QML item.
  */
 void WidgetLoader::updateWidgetSize()
@@ -327,6 +353,44 @@ void WidgetLoader::updateWidgetVisible()
 
         emit widgetVisibleChanged();
     }
+}
+
+/**
+ * Lets the widget handle the mouse leave events
+ */
+void WidgetLoader::processLeaveEvent(QEvent *event)
+{
+    if (!m_widget)
+        return;
+
+    class Hack : public QWidget
+    {
+    public:
+        using QWidget::leaveEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_widget);
+    hack->leaveEvent(event);
+    update();
+}
+
+/**
+ * Lets the widget handle the mouse enter events
+ */
+void WidgetLoader::processEnterEvent(QEnterEvent *event)
+{
+    if (!m_widget)
+        return;
+
+    class Hack : public QWidget
+    {
+    public:
+        using QWidget::enterEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_widget);
+    hack->enterEvent(event);
+    update();
 }
 
 /**

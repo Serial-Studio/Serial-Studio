@@ -20,28 +20,36 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_MAP_H
-#define WIDGETS_MAP_H
+#ifndef WIDGETS_GPS_H
+#define WIDGETS_GPS_H
 
 #include <QLabel>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QElapsedTimer>
+#include <QNetworkAccessManager>
+
+class QNetworkReply;
 
 namespace Widgets
 {
-class Map : public QWidget
+class GPS : public QWidget
 {
     Q_OBJECT
 
 public:
-    Map(const int index = -1);
-    ~Map();
+    GPS(const int index = -1);
+    ~GPS();
 
 private slots:
     void openMap();
+    void queryCity();
     void updateData();
+    void processGeoResponse(QNetworkReply *reply);
 
 protected:
+    void leaveEvent(QEvent *event);
+    void enterEvent(QEnterEvent *event);
     void resizeEvent(QResizeEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -52,7 +60,9 @@ private:
     int m_index;
     qreal m_lat;
     qreal m_lon;
+    qreal m_alt;
     QLabel m_mapLabel;
+    QLabel m_posLabel;
     QVBoxLayout m_layout;
     QWidget *m_dataContainer;
     QGridLayout *m_gridLayout;
@@ -60,6 +70,9 @@ private:
     QVector<QLabel *> m_units;
     QVector<QLabel *> m_titles;
     QVector<QLabel *> m_values;
+
+    QElapsedTimer m_networkThrottle;
+    QNetworkAccessManager m_manager;
 };
 }
 

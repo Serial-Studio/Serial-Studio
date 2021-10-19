@@ -77,7 +77,7 @@ QFont Dashboard::monoFont() const
 }
 
 // clang-format off
-JSON::Group *Dashboard::getMap(const int index)           { return getGroupWidget(m_mapWidgets, index);           }
+JSON::Group *Dashboard::getGPS(const int index)           { return getGroupWidget(m_gpsWidgets, index);           }
 JSON::Dataset *Dashboard::getBar(const int index)         { return getDatasetWidget(m_barWidgets, index);         }
 JSON::Dataset *Dashboard::getFFT(const int index)         { return getDatasetWidget(m_fftWidgets, index);         }
 JSON::Dataset *Dashboard::getPlot(const int index)        { return getDatasetWidget(m_plotWidgets, index);        }
@@ -143,7 +143,7 @@ bool Dashboard::frameValid() const
 int Dashboard::totalWidgetCount() const
 {
     // clang-format off
-    const int count = mapCount() +
+    const int count = gpsCount() +
             barCount() +
             fftCount() +
             plotCount() +
@@ -159,7 +159,7 @@ int Dashboard::totalWidgetCount() const
 }
 
 // clang-format off
-int Dashboard::mapCount() const           { return m_mapWidgets.count();           }
+int Dashboard::gpsCount() const           { return m_gpsWidgets.count();           }
 int Dashboard::barCount() const           { return m_barWidgets.count();           }
 int Dashboard::fftCount() const           { return m_fftWidgets.count();           }
 int Dashboard::plotCount() const          { return m_plotWidgets.count();          }
@@ -196,7 +196,7 @@ QVector<QString> Dashboard::widgetTitles() const
             compassTitles() +
             gyroscopeTitles() +
             accelerometerTitles() +
-            mapTitles();
+            gpsTitles();
     // clang-format on
 }
 
@@ -272,7 +272,7 @@ int Dashboard::relativeIndex(const int globalIndex) const
 
     // Check if we should return map widget
     index -= accelerometerCount();
-    if (index < mapCount())
+    if (index < gpsCount())
         return index;
 
     // Return unknown widget
@@ -330,8 +330,8 @@ bool Dashboard::widgetVisible(const int globalIndex) const
         case WidgetType::Accelerometer:
             visible = accelerometerVisible(index);
             break;
-        case WidgetType::Map:
-            visible = mapVisible(index);
+        case WidgetType::GPS:
+            visible = gpsVisible(index);
             break;
         default:
             visible = false;
@@ -388,8 +388,8 @@ QString Dashboard::widgetIcon(const int globalIndex) const
         case WidgetType::Accelerometer:
             return "qrc:/icons/accelerometer.svg";
             break;
-        case WidgetType::Map:
-            return "qrc:/icons/map.svg";
+        case WidgetType::GPS:
+            return "qrc:/icons/gps.svg";
             break;
         default:
             return "qrc:/icons/close.svg";
@@ -484,8 +484,8 @@ UI::Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
 
     // Check if we should return map widget
     index -= accelerometerCount();
-    if (index < mapCount())
-        return WidgetType::Map;
+    if (index < gpsCount())
+        return WidgetType::GPS;
 
     // Return unknown widget
     return WidgetType::Unknown;
@@ -498,7 +498,7 @@ UI::Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
 // clang-format off
 bool Dashboard::barVisible(const int index) const           { return getVisibility(m_barVisibility, index);           }
 bool Dashboard::fftVisible(const int index) const           { return getVisibility(m_fftVisibility, index);           }
-bool Dashboard::mapVisible(const int index) const           { return getVisibility(m_mapVisibility, index);           }
+bool Dashboard::gpsVisible(const int index) const           { return getVisibility(m_gpsVisibility, index);           }
 bool Dashboard::plotVisible(const int index) const          { return getVisibility(m_plotVisibility, index);          }
 bool Dashboard::groupVisible(const int index) const         { return getVisibility(m_groupVisibility, index);         }
 bool Dashboard::gaugeVisible(const int index) const         { return getVisibility(m_gaugeVisibility, index);         }
@@ -513,7 +513,7 @@ bool Dashboard::accelerometerVisible(const int index) const { return getVisibili
 //--------------------------------------------------------------------------------------------------
 
 // clang-format off
-QVector<QString> Dashboard::mapTitles() const           { return groupTitles(m_mapWidgets);           }
+QVector<QString> Dashboard::gpsTitles() const           { return groupTitles(m_gpsWidgets);           }
 QVector<QString> Dashboard::groupTitles() const         { return groupTitles(m_groupWidgets);         }
 QVector<QString> Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
 QVector<QString> Dashboard::fftTitles() const           { return datasetTitles(m_fftWidgets);         }
@@ -558,7 +558,7 @@ void Dashboard::setPoints(const int points)
 // clang-format off
 void Dashboard::setBarVisible(const int i, const bool v)           { setVisibility(m_barVisibility, i, v);           }
 void Dashboard::setFFTVisible(const int i, const bool v)           { setVisibility(m_fftVisibility, i, v);           }
-void Dashboard::setMapVisible(const int i, const bool v)           { setVisibility(m_mapVisibility, i, v);           }
+void Dashboard::setGpsVisible(const int i, const bool v)           { setVisibility(m_gpsVisibility, i, v);           }
 void Dashboard::setPlotVisible(const int i, const bool v)          { setVisibility(m_plotVisibility, i, v);          }
 void Dashboard::setGroupVisible(const int i, const bool v)         { setVisibility(m_groupVisibility, i, v);         }
 void Dashboard::setGaugeVisible(const int i, const bool v)         { setVisibility(m_gaugeVisibility, i, v);         }
@@ -589,7 +589,7 @@ void Dashboard::resetData()
     // Clear widget data
     m_barWidgets.clear();
     m_fftWidgets.clear();
-    m_mapWidgets.clear();
+    m_gpsWidgets.clear();
     m_plotWidgets.clear();
     m_gaugeWidgets.clear();
     m_groupWidgets.clear();
@@ -601,7 +601,7 @@ void Dashboard::resetData()
     // Clear widget visibility data
     m_barVisibility.clear();
     m_fftVisibility.clear();
-    m_mapVisibility.clear();
+    m_gpsVisibility.clear();
     m_plotVisibility.clear();
     m_gaugeVisibility.clear();
     m_groupVisibility.clear();
@@ -633,7 +633,7 @@ void Dashboard::updateData()
     // Save widget count
     int barC = barCount();
     int fftC = fftCount();
-    int mapC = mapCount();
+    int mapC = gpsCount();
     int plotC = plotCount();
     int groupC = groupCount();
     int gaugeC = gaugeCount();
@@ -653,7 +653,7 @@ void Dashboard::updateData()
     // Clear widget data
     m_barWidgets.clear();
     m_fftWidgets.clear();
-    m_mapWidgets.clear();
+    m_gpsWidgets.clear();
     m_plotWidgets.clear();
     m_gaugeWidgets.clear();
     m_groupWidgets.clear();
@@ -672,7 +672,7 @@ void Dashboard::updateData()
     m_fftWidgets = getFFTWidgets();
     m_plotWidgets = getPlotWidgets();
     m_groupWidgets = getWidgetGroups("");
-    m_mapWidgets = getWidgetGroups("map");
+    m_gpsWidgets = getWidgetGroups("map");
     m_barWidgets = getWidgetDatasets("bar");
     m_gaugeWidgets = getWidgetDatasets("gauge");
     m_gyroscopeWidgets = getWidgetGroups("gyro");
@@ -696,7 +696,7 @@ void Dashboard::updateData()
     bool regenerateWidgets = false;
     regenerateWidgets |= (barC != barCount());
     regenerateWidgets |= (fftC != fftCount());
-    regenerateWidgets |= (mapC != mapCount());
+    regenerateWidgets |= (mapC != gpsCount());
     regenerateWidgets |= (plotC != plotCount());
     regenerateWidgets |= (gaugeC != gaugeCount());
     regenerateWidgets |= (groupC != groupCount());
@@ -710,7 +710,7 @@ void Dashboard::updateData()
     {
         m_barVisibility.clear();
         m_fftVisibility.clear();
-        m_mapVisibility.clear();
+        m_gpsVisibility.clear();
         m_plotVisibility.clear();
         m_gaugeVisibility.clear();
         m_groupVisibility.clear();
@@ -724,8 +724,8 @@ void Dashboard::updateData()
             m_barVisibility.append(true);
         for (i = 0; i < fftCount(); ++i)
             m_fftVisibility.append(true);
-        for (i = 0; i < mapCount(); ++i)
-            m_mapVisibility.append(true);
+        for (i = 0; i < gpsCount(); ++i)
+            m_gpsVisibility.append(true);
         for (i = 0; i < plotCount(); ++i)
             m_plotVisibility.append(true);
         for (i = 0; i < gaugeCount(); ++i)

@@ -182,9 +182,9 @@ HEADERS += \
     src/Widgets/Compass.h \
     src/Widgets/DataGroup.h \
     src/Widgets/FFTPlot.h \
+    src/Widgets/GPS.h \
     src/Widgets/Gauge.h \
     src/Widgets/Gyroscope.h \
-    src/Widgets/Map.h \
     src/Widgets/MultiPlot.h \
     src/Widgets/Plot.h \
     src/Widgets/Terminal.h \
@@ -221,9 +221,9 @@ SOURCES += \
     src/Widgets/Compass.cpp \
     src/Widgets/DataGroup.cpp \
     src/Widgets/FFTPlot.cpp \
+    src/Widgets/GPS.cpp \
     src/Widgets/Gauge.cpp \
     src/Widgets/Gyroscope.cpp \
-    src/Widgets/Map.cpp \
     src/Widgets/MultiPlot.cpp \
     src/Widgets/Plot.cpp \
     src/Widgets/Terminal.cpp \

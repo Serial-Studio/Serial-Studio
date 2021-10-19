@@ -93,7 +93,7 @@ Editor *Editor::getInstance()
 QVector<QString> Editor::availableGroupLevelWidgets()
 {
     return QVector<QString> { tr("Dataset widgets"), tr("Accelerometer"), tr("Gyroscope"),
-                              tr("Map"), tr("Multiple data plot") };
+                              tr("GPS"), tr("Multiple data plot") };
 }
 
 /**
@@ -996,29 +996,35 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
         {
             // Set widget title
             grp->m_widget = "map";
-            grp->m_title = tr("GPS Map");
+            grp->m_title = tr("GPS");
 
             // Create datasets
             auto lat = new Dataset;
             auto lon = new Dataset;
+            auto alt = new Dataset;
 
             // Set dataset indexes
             lat->m_index = nextDatasetIndex();
             lon->m_index = nextDatasetIndex() + 1;
+            alt->m_index = nextDatasetIndex() + 2;
 
             // Set measurement units
             lat->m_units = "°";
             lon->m_units = "°";
+            alt->m_units = "m";
 
             // Set dataset properties
             lat->m_widget = "lat";
             lon->m_widget = "lon";
+            alt->m_widget = "alt";
             lat->m_title = tr("Latitude");
             lon->m_title = tr("Longitude");
+            alt->m_title = tr("Altitude");
 
             // Add datasets to group
             grp->m_datasets.append(lat);
             grp->m_datasets.append(lon);
+            grp->m_datasets.append(alt);
         }
 
         // Multi plot widget
