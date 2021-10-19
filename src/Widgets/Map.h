@@ -23,6 +23,7 @@
 #ifndef WIDGETS_MAP_H
 #define WIDGETS_MAP_H
 
+#include <QLabel>
 #include <QWidget>
 #include <QVBoxLayout>
 
@@ -34,13 +35,30 @@ class Map : public QWidget
 
 public:
     Map(const int index = -1);
+    ~Map();
 
 private slots:
+    void openMap();
     void updateData();
+
+protected:
+    void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
     int m_index;
+    qreal m_lat;
+    qreal m_lon;
+    QLabel m_mapLabel;
     QVBoxLayout m_layout;
+    QWidget *m_dataContainer;
+    QGridLayout *m_gridLayout;
+    QVector<QLabel *> m_icons;
+    QVector<QLabel *> m_units;
+    QVector<QLabel *> m_titles;
+    QVector<QLabel *> m_values;
 };
 }
 

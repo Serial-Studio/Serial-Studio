@@ -40,7 +40,7 @@ public:
     ~DataGroup();
 
 private slots:
-    void update();
+    void updateData();
 
 protected:
     void resizeEvent(QResizeEvent *event);

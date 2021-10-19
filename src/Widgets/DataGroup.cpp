@@ -147,7 +147,7 @@ DataGroup::DataGroup(const int index)
     setLayout(m_mainLayout);
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(update()));
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
 }
 
 /**
@@ -164,6 +164,9 @@ DataGroup::~DataGroup()
     foreach (auto value, m_values)
         delete value;
 
+    foreach (auto units, m_units)
+        delete units;
+
     delete m_gridLayout;
     delete m_scrollArea;
     delete m_mainLayout;
@@ -176,7 +179,7 @@ DataGroup::~DataGroup()
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void DataGroup::update()
+void DataGroup::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
