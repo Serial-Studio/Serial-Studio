@@ -82,8 +82,9 @@ jobs:
     - name: '📦 Create AppImage'
       run: |
           export QML_SOURCES_PATHS=assets/qml
-          ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.EXECUTABLE}} -i deploy/linux/serial-studio.png -d deploy/linux/serial-studio.desktop --plugin qt --output appimage
-          mv ${{env.EXECUTABLE}}*.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir -e AppDir/usr/bin/serial-studio -i AppDir/usr/share/pixmaps/serial-studio.png -d AppDir/usr/share/desktop/serial-studio.desktop --plugin qt --output appimage
+          ls
+          mv serial-studio.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
           
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v2
