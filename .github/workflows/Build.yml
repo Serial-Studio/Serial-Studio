@@ -70,7 +70,6 @@ jobs:
       run: |
           qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
           make -j8
-          mkdir AppDir
 
     - name: '⚙️ Install linuxdeploy'
       run: |
@@ -81,10 +80,10 @@ jobs:
 
     - name: '📦 Create AppImage'
       run: |
-          export QML_SOURCES_PATHS=assets/qml
-          ./linuxdeploy-x86_64.AppImage --appdir AppDir -e serial-studio -i linux/deploy/serial-studio.png -d linux/deploy/serial-studio.desktop --plugin qt --output appimage
+          export QML_SOURCES_PATHS="${{env.QML_DIR_NIX}}"
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i linux/deploy/${{env.UNIXNAME}}.png -d linux/deploy/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
           ls
-          mv serial-studio.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+          mv ${{env.UNIXNAME}}.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
           
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v2
