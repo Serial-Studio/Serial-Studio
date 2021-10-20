@@ -110,7 +110,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
       with:
-        prerelease: true
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
         asset_name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
@@ -178,7 +177,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
       with:
-        prerelease: true
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
         asset_name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
@@ -268,12 +266,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
       with:
-        prerelease: true
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
         asset_name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
         asset_content_type: application/vnd.microsoft.portable-executable
-
 
   # Windows MSYS2 build
   msys2-makepkg:
