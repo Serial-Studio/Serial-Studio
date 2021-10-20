@@ -312,6 +312,8 @@ jobs:
       steps:
       - name: '📥 Download artifacts'
         uses: actions/download-artifact@v2
+      - name: '🗂 Inspect directory after downloading artifacts'
+        run: ls -alFR
       - name: '🚀 Create release and upload artifacts'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
