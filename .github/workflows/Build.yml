@@ -65,35 +65,31 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev
-        
-    - name: '⚙️ Install CQtDeployer'
-      run: |
-        sudo snap install cqtdeployer
 
     - name: '🚧 Compile application'
       run: |
           qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
           make -j8
+          mkdir AppDir
+          make install INSTALL_ROOT=AppDir
 
-    - name: '📦 Create CQtDeployer Installer'
+    - name: '⚙️ Install linuxdeploy'
       run: |
-          cqtdeployer -bin ${{env.UNIXNAME}} -icon deploy/linux/${{env.UNIXNAME}}.png -qmlDir "${{env.QML_DIR_NIX}}" qif -qifLogo deploy/linux/${{env.UNIXNAME}}.png -name "${{env.APPLICATION}}" -deployVersion ${{env.VERSION}} -description "Dashboard software for serial port devices" -publisher "${{env.PUBLISHER}}"
-          cqtdeployer -bin ${{env.UNIXNAME}} -icon deploy/linux/${{env.UNIXNAME}}.png -qmlDir "${{env.QML_DIR_NIX}}" deb -name "${{env.UNIXNAME}}" -deployVersion ${{env.VERSION}} -description "Dashboard software for serial port devices" -publisher "${{env.PUBLISHER}}"
-          cd DistributionKit
-          mv "Installer${{env.APPLICATION}}.run" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run"
-          mv "${{env.UNIXNAME}}.deb" "../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb"
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
 
-    - name: '📤 Upload artifact: Installer'
+    - name: '📦 Create AppImage'
+      run: |
+          export QML_SOURCES_PATHS=assets/qml
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.EXECUTABLE}} -i deploy/linux/serial-studio.png -d deploy/linux/serial-studio.desktop --plugin qt --output appimage
+          mv ${{env.EXECUTABLE}}*.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+          
+    - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v2
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.run
-        
-    - name: '📤 Upload artifact: Debian package'
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
 
 
   # macOS build
