@@ -27,6 +27,7 @@ env:
   QML_DIR_NIX: "assets/qml"
   QML_DIR_WIN: "assets\\qml"
   PUBLISHER: "Alex Spataru"
+  REPO_DIR: "/home/runner/work/Serial-Studio/Serial-Studio"
   QT_VERSION: 6.2.0
 
 #--------------------------------------------------------------------------------
@@ -80,7 +81,7 @@ jobs:
 
     - name: '📦 Create AppImage'
       run: |
-          export QML_SOURCES_PATHS="${{env.GITHUB_WORKSPACE}}/${{env.QML_DIR_NIX}}"
+          export QML_SOURCES_PATHS="${{env.REPO_DIR}}/${{env.QML_DIR_NIX}}"
           ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i linux/deploy/${{env.UNIXNAME}}.png -d linux/deploy/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
           ls
           mv ${{env.UNIXNAME}}.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
