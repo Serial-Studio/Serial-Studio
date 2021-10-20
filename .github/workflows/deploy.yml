@@ -85,7 +85,7 @@ jobs:
           export PATH=/home/runner/work/Serial-Studio/Qt/6.2.0/gcc_64/libexec:$PATH
           ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i deploy/linux/${{env.UNIXNAME}}.png -d deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
           ls
-          mv ${{env.UNIXNAME}}.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+          mv Serial_Studio-${{env.VERSION}}-x86_64.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
           
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v2
