@@ -80,7 +80,7 @@ jobs:
 
     - name: '📦 Create AppImage'
       run: |
-          export QML_SOURCES_PATHS="${{env.QML_DIR_NIX}}"
+          export QML_SOURCES_PATHS="${{GITHUB_WORKSPACE}}/${{env.QML_DIR_NIX}}"
           ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i linux/deploy/${{env.UNIXNAME}}.png -d linux/deploy/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
           ls
           mv ${{env.UNIXNAME}}.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
