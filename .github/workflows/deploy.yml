@@ -94,27 +94,6 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
 
-    - name: '📦 Create Release'
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        tag_name: 'continuous'
-        release_name: 'Serial Studio (continous build)'
-        draft: false
-        prerelease: true
-
-    - name: '📤 Upload Linux artifact'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-        asset_name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-        asset_content_type: application/x-executable
-
   # macOS build
   build-mac:
     runs-on: macos-latest
@@ -160,28 +139,6 @@ jobs:
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
-
-    - name: '📦 Create Release'
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        tag_name: 'continuous'
-        release_name: 'Serial Studio (continous build)'
-        draft: false
-        prerelease: true
-
-    - name: '📤 Upload macOS artifact'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
-        asset_name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
-        asset_content_type: application/zip
-
 
   # Windows build
   build-windows:
@@ -249,27 +206,6 @@ jobs:
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
         path: deploy/windows/nsis/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-
-    - name: '📦 Create Release'
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        tag_name: 'continuous'
-        release_name: 'Serial Studio (continous build)'
-        draft: false
-        prerelease: true
-
-    - name: '📤 Upload Windows artifact'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-        asset_name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-        asset_content_type: application/vnd.microsoft.portable-executable
 
   # Windows MSYS2 build
   msys2-makepkg:
@@ -364,3 +300,24 @@ jobs:
         cd tmp
         /usr/bin/tar xf ../*${{ matrix.arch }}*.zst
         tree ${{ matrix.msystem }}
+  
+  # Upload continuous build
+  upload:
+      name: '🗂 Create release and upload artifacts'
+      needs:
+        - build-linux
+        - build-mac
+        - build-windows
+      runs-on: ubuntu-latest
+      steps:
+      - name: '📥 Download artifacts'
+        uses: actions/download-artifact@v2
+      - name: '🚀 Create release and upload artifacts'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+            wget -q https://github.com/TheAssassin/pyuploadtool/releases/download/continuous/pyuploadtool-x86_64.AppImage
+            chmod +x pyuploadtool-x86_64.AppImage
+            ./pyuploadtool-x86_64.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+            ./pyuploadtool-x86_64.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+            ./pyuploadtool-x86_64.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
