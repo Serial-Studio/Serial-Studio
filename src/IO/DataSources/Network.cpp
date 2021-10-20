@@ -173,12 +173,10 @@ QIODevice *Network::openNetworkPort()
     // UDP connection, assign socket pointer & bind to host
     else if (socketType() == QAbstractSocket::UdpSocket)
     {
-        socket = &m_udpSocket;
-        QHostAddress address(hostAddr);
-
         // Bind the UDP socket to a multicast group
         if (udpMulticast())
         {
+            QHostAddress address(hostAddr);
             if (address.protocol() == QAbstractSocket::IPv4Protocol)
                 m_udpSocket.bind(QHostAddress::AnyIPv4, portAddr,
                                  QUdpSocket::ShareAddress);
@@ -193,7 +191,10 @@ QIODevice *Network::openNetworkPort()
 
         // Bind the UDP socket to an individual host
         else
-            m_udpSocket.bind(address, portAddr, QUdpSocket::ShareAddress);
+            m_udpSocket.connectToHost(hostAddr, portAddr);
+
+        // Update socket pointer
+        socket = &m_udpSocket;
     }
 
     // Convert socket to IO device pointer

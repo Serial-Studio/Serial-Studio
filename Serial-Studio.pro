@@ -239,4 +239,5 @@ OTHER_FILES += \
     deploy/macOS/* \
     deploy/windows/nsis/* \
     deploy/windows/resources/* \
-    .github/workflows/Build.yml
+    .github/workflows/*.yml \
+    updates.json

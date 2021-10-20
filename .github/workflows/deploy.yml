@@ -19,7 +19,7 @@ on:
 #--------------------------------------------------------------------------------
 
 env:
-  VERSION: "1.1.0"
+  VERSION: "1.1.1"
   EXECUTABLE: "SerialStudio"
   APPLICATION: "Serial Studio"
   UNIXNAME: "serial-studio"
@@ -94,6 +94,27 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
 
+    - name: '📦 Create Release'
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        tag_name: 'continuous'
+        release_name: 'Serial Studio (continous build)'
+        draft: false
+        prerelease: true
+
+    - name: '📤 Upload Linux artifact'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        prerelease: true
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+        asset_name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+        asset_content_type: application/x-executable
 
   # macOS build
   build-mac:
@@ -140,6 +161,28 @@ jobs:
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+
+    - name: '📦 Create Release'
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        tag_name: 'continuous'
+        release_name: 'Serial Studio (continous build)'
+        draft: false
+        prerelease: true
+
+    - name: '📤 Upload macOS artifact'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        prerelease: true
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+        asset_name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+        asset_content_type: application/zip
 
 
   # Windows build
@@ -208,6 +251,28 @@ jobs:
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
         path: deploy/windows/nsis/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+
+    - name: '📦 Create Release'
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        tag_name: 'continuous'
+        release_name: 'Serial Studio (continous build)'
+        draft: false
+        prerelease: true
+
+    - name: '📤 Upload Windows artifact'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        prerelease: true
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+        asset_name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+        asset_content_type: application/vnd.microsoft.portable-executable
 
 
   # Windows MSYS2 build
