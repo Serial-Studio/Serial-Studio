@@ -24,7 +24,7 @@ Serial studio started out receiving data over a hardware serial port, but can no
 
 *Read this in other languages*: [Español](doc/README_ES.md) [简体中文](doc/README_ZH.md) [Deutsch](doc/README_DE.md)
 
-![Software usage](doc/app-usage.gif)
+![Software usage](doc/mockup.png)
 
 ## Install
 

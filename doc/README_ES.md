@@ -4,11 +4,11 @@
 
 # Serial Studio
 
-[![Build Status](https://github.com/Serial-Studio/Serial-Studio/workflows/Build/badge.svg)](https://github.com/Serial-Studio/Serial-Studio/actions/)
+[![Build Status](https://github.com/Serial-Studio/Serial-Studio/workflows/Deploy/badge.svg)](https://github.com/Serial-Studio/Serial-Studio/actions/)
 [![CodeQL](https://github.com/Serial-Studio/Serial-Studio/workflows/CodeQL/badge.svg)](https://github.com/Serial-Studio/Serial-Studio/actions?query=workflow%3ACodeQL)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4b6f3ce14a684704980fea31d8c1632e)](https://www.codacy.com/gh/Serial-Studio/Serial-Studio/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Serial-Studio/Serial-Studio&amp;utm_campaign=Badge_Grade)
 [![Github All Releases](https://img.shields.io/github/downloads/Serial-Studio/Serial-Studio/total.svg)](https://github.com/Serial-Studio/Serial-Studio/releases/)
-[![GitHub Latest Release](https://img.shields.io/github/downloads/Serial-Studio/Serial-Studio/latest/total.svg)](https://github.com/Serial-Studio/Serial-Studio/releases/latest)
+[![Gitter](https://badges.gitter.im/Serial-Studio/community.svg)](https://gitter.im/Serial-Studio/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE)
 
@@ -22,7 +22,7 @@ Además, este enfoque se puede extender a casi cualquier tipo de proyecto que im
 
 *Lea esto en otros idiomas:* [English](../README.md) [简体中文](README_ZH.md) [Deutsch](README_DE.md)
 
-![Software usage](doc/app-usage.gif)
+![Software usage](doc/mockup.png)
 
 ## Instalación
 
