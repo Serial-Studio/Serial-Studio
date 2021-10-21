@@ -88,8 +88,8 @@ DataGroup::DataGroup(const int index)
         auto value = m_values.last();
 
         // Set label alignments
-        units->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        value->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        units->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        value->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         title->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         dicon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
@@ -212,7 +212,7 @@ void DataGroup::updateData()
                 value = QString::number(value.toDouble(), 'f', 2);
 
             // Update label
-            m_values.at(i)->setText(value);
+            m_values.at(i)->setText(value + " ");
         }
     }
 }
