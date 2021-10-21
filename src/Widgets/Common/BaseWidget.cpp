@@ -29,7 +29,8 @@
 using namespace Widgets;
 
 BaseWidget::BaseWidget()
-    : m_widget(nullptr)
+    : m_index(-1)
+    , m_widget(nullptr)
     , m_resizeWidget(true)
 {
     // Set window palette
