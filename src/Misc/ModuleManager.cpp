@@ -61,7 +61,7 @@
  * application signals/slots to destroy singleton classes before the application
  * quits.
  */
-ModuleManager::ModuleManager()
+Misc::ModuleManager::ModuleManager()
 {
     // Init translator (so that splash screen displays text in user's language)
     (void)Misc::Translator::getInstance();
@@ -121,7 +121,7 @@ ModuleManager::ModuleManager()
  * - Do not notify user when we finish checking for updates
  * - Do not close application if update is found
  */
-void ModuleManager::configureUpdater()
+void Misc::ModuleManager::configureUpdater()
 {
     if (!autoUpdaterEnabled())
         return;
@@ -138,7 +138,7 @@ void ModuleManager::configureUpdater()
  * - JSON Group object
  * - JSON Dataset object
  */
-void ModuleManager::registerQmlTypes()
+void Misc::ModuleManager::registerQmlTypes()
 {
     qRegisterMetaType<JFI_Object>("JFI_Object");
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
@@ -154,7 +154,7 @@ void ModuleManager::registerQmlTypes()
  * file. This option is provided for package managers, users are expected to update the
  * application using the same package manager they used for installing it.
  */
-bool ModuleManager::autoUpdaterEnabled()
+bool Misc::ModuleManager::autoUpdaterEnabled()
 {
 #ifdef DISABLE_QSU
     return false;
@@ -167,7 +167,7 @@ bool ModuleManager::autoUpdaterEnabled()
  * Initializes all the application modules, registers them with the QML engine and loads
  * the "main.qml" file as the root QML file.
  */
-void ModuleManager::initializeQmlInterface()
+void Misc::ModuleManager::initializeQmlInterface()
 {
     // Initialize modules
     setSplashScreenMessage(tr("Initializing modules..."));
@@ -257,7 +257,7 @@ void ModuleManager::initializeQmlInterface()
 /**
  * Returns a pointer to the QML application engine
  */
-QQmlApplicationEngine *ModuleManager::engine()
+QQmlApplicationEngine *Misc::ModuleManager::engine()
 {
     return &m_engine;
 }
@@ -265,7 +265,7 @@ QQmlApplicationEngine *ModuleManager::engine()
 /**
  * Returns the rendering engine ID to use for rendering the user interface
  */
-int ModuleManager::renderingEngine() const
+int Misc::ModuleManager::renderingEngine() const
 {
     return m_settings.value("renderingEngine", 0).toInt();
 }
@@ -273,7 +273,7 @@ int ModuleManager::renderingEngine() const
 /**
  * Returns a list with the available UI rendering engines
  */
-QVector<QString> ModuleManager::renderingEngines() const
+QVector<QString> Misc::ModuleManager::renderingEngines() const
 {
     QVector<QString> list;
     list.append("OpenGL");
@@ -291,7 +291,7 @@ QVector<QString> ModuleManager::renderingEngines() const
 /**
  * Quits the application
  */
-void ModuleManager::quit()
+void Misc::ModuleManager::quit()
 {
     if (JSON::Editor::getInstance()->askSave())
         qApp->quit();
@@ -300,7 +300,7 @@ void ModuleManager::quit()
 /**
  * Hides the splash screen widget
  */
-void ModuleManager::hideSplashscreen()
+void Misc::ModuleManager::hideSplashscreen()
 {
     m_splash.hide();
     m_splash.close();
@@ -311,7 +311,7 @@ void ModuleManager::hideSplashscreen()
  * Changes the rendering engine used by the Qt user interface & prompts the user
  * to restart the application.
  */
-void ModuleManager::setRenderingEngine(const int engine)
+void Misc::ModuleManager::setRenderingEngine(const int engine)
 {
     // Validate index
     if (engine >= 0 && engine < renderingEngines().count())
@@ -344,7 +344,7 @@ void ModuleManager::setRenderingEngine(const int engine)
 /**
  * Changes the text displayed on the splash screen
  */
-void ModuleManager::setSplashScreenMessage(const QString &message)
+void Misc::ModuleManager::setSplashScreenMessage(const QString &message)
 {
     if (!message.isEmpty())
     {
@@ -356,7 +356,7 @@ void ModuleManager::setSplashScreenMessage(const QString &message)
 /**
  * Calls the functions needed to safely quit the application
  */
-void ModuleManager::stopOperations()
+void Misc::ModuleManager::stopOperations()
 {
     Plugins::Server::getInstance()->removeConnection();
     CSV::Export::getInstance()->closeFile();

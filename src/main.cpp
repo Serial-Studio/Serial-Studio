@@ -119,7 +119,7 @@ int main(int argc, char **argv)
     }
 
     // Create module manager
-    ModuleManager moduleManager;
+    Misc::ModuleManager moduleManager;
     moduleManager.configureUpdater();
 
     // Initialize QML interface

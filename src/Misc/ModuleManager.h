@@ -28,6 +28,8 @@
 #include <QSplashScreen>
 #include <QQmlApplicationEngine>
 
+namespace Misc
+{
 /**
  * @brief The ModuleManager class
  *
@@ -64,5 +66,6 @@ private:
     QSplashScreen m_splash;
     QQmlApplicationEngine m_engine;
 };
+}
 
 #endif
