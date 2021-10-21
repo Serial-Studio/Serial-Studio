@@ -336,7 +336,6 @@ void Network::setSocketTypeIndex(const int index)
  *
  * @c QAbstractSocket::TcpSocket
  * @c QAbstractSocket::UdpSocket
- * @c QAbstractSocket::SctpSocket
  * @c QAbstractSocket::UnknownSocketType
  */
 void Network::setSocketType(const QAbstractSocket::SocketType type)
