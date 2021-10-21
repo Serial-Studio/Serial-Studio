@@ -301,8 +301,8 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
         }
 
         // Create json document
-        auto jsonDocument
-            = QJsonDocument::fromJson(QString::fromStdString(json).toUtf8(), &error);
+        auto jsonData = QString::fromStdString(json).toUtf8();
+        auto jsonDocument = QJsonDocument::fromJson(jsonData, &error);
 
         // Calculate dynamically generated values
         auto root = jsonDocument.object();
