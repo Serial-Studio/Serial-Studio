@@ -59,6 +59,7 @@ DISTFILES += \
     $$PWD/qml/Widgets/LED.qml \
     $$PWD/qml/Widgets/Shadow.qml \
     $$PWD/qml/Widgets/Window.qml \
+    $$PWD/qml/Widgets/Terminal.qml \
     $$PWD/qml/Windows/About.qml \
     $$PWD/qml/Windows/Acknowledgements.qml \
     $$PWD/qml/Windows/CsvPlayer.qml \

@@ -289,14 +289,20 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
             return;
 
         // Separate incoming data & add it to the JSON map
-        auto json = jsonMapData();
+        auto json = jsonMapData().toStdString();
         auto sepr = IO::Manager::getInstance()->separatorSequence();
         auto list = QString::fromUtf8(data).split(sepr);
-        for (int i = 0; i < list.size(); ++i)
-            json.replace(QString("%%1").arg(i + 1), list.at(i));
+        for (int i = 0; i < list.count(); ++i)
+        {
+            std::string id = "%" + std::to_string(i + 1);
+            size_t pos = json.find(id);
+            if (pos != std::string::npos && pos < json.length())
+                json.replace(pos, id.length(), list.at(i).toStdString());
+        }
 
         // Create json document
-        auto jsonDocument = QJsonDocument::fromJson(json.toUtf8(), &error);
+        auto jsonDocument
+            = QJsonDocument::fromJson(QString::fromStdString(json).toUtf8(), &error);
 
         // Calculate dynamically generated values
         auto root = jsonDocument.object();

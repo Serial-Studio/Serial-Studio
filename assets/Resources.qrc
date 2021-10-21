@@ -139,5 +139,6 @@
         <file>qml/JsonEditor/Header.qml</file>
         <file>qml/JsonEditor/TreeView.qml</file>
         <file>icons/gps.svg</file>
+        <file>qml/Widgets/Terminal.qml</file>
     </qresource>
 </RCC>
