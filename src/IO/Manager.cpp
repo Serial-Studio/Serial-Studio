@@ -79,8 +79,8 @@ Manager::Manager()
     // Configure signals/slots
     auto serial = DataSources::Serial::getInstance();
     auto netwrk = DataSources::Network::getInstance();
-    connect(netwrk, SIGNAL(hostChanged()), this, SIGNAL(configurationChanged()));
     connect(netwrk, SIGNAL(portChanged()), this, SIGNAL(configurationChanged()));
+    connect(netwrk, SIGNAL(addressChanged()), this, SIGNAL(configurationChanged()));
     connect(this, SIGNAL(dataSourceChanged()), this, SIGNAL(configurationChanged()));
     connect(serial, SIGNAL(portIndexChanged()), this, SIGNAL(configurationChanged()));
 }

@@ -87,9 +87,11 @@ Item {
         //
         // Network settings
         //
-        property alias port: network.port
         property alias address: network.address
+        property alias tcpPort: network.tcpPort
         property alias socketType: network.socketType
+        property alias udpLocalPort: network.udpLocalPort
+        property alias udpRemotePort: network.udpRemotePort
         property alias udpMulticastEnabled: network.udpMulticastEnabled
 
         //
@@ -300,10 +302,10 @@ Item {
                 Layout.minimumHeight: implicitHeight
                 Layout.maximumHeight: implicitHeight
                 Layout.preferredHeight: implicitHeight
-                onCurrentIndexChanged: getImplicitHeight()
-                Component.onCompleted: getImplicitHeight()
+                onCurrentIndexChanged: updateHeight()
+                Component.onCompleted: updateHeight()
 
-                function getImplicitHeight() {
+                function updateHeight() {
                     stack.implicitHeight = 0
 
                     switch (currentIndex) {
@@ -335,6 +337,14 @@ Item {
 
                 SetupPanes.Network {
                     id: network
+                    onUiChanged: timer.start()
+
+                    Timer {
+                        id: timer
+                        interval: 50
+                        onTriggered: stack.updateHeight()
+                    }
+
                     background: TextField {
                         enabled: false
                         palette.base: Cpp_ThemeManager.setupPanelBackground

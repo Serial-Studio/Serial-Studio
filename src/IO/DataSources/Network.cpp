@@ -36,8 +36,10 @@ Network::Network()
     , m_udpMulticast(false)
     , m_lookupActive(false)
 {
-    setHost("");
-    setPort(defaultPort());
+    setRemoteAddress("");
+    setTcpPort(defaultTcpPort());
+    setUdpLocalPort(defaultUdpLocalPort());
+    setUdpRemotePort(defaultUdpRemotePort());
     setSocketType(QAbstractSocket::TcpSocket);
     connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &Network::onErrorOccurred);
     connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &Network::onErrorOccurred);
@@ -65,17 +67,33 @@ Network *Network::getInstance()
 /**
  * Returns the host address
  */
-QString Network::host() const
+QString Network::remoteAddress() const
 {
-    return m_host;
+    return m_address;
 }
 
 /**
- * Returns the network port number
+ * Returns the TCP port number
  */
-quint16 Network::port() const
+quint16 Network::tcpPort() const
 {
-    return m_port;
+    return m_tcpPort;
+}
+
+/**
+ * Returns the UDP local port number
+ */
+quint16 Network::udpLocalPort() const
+{
+    return m_udpLocalPort;
+}
+
+/**
+ * Returns the UDP remote port number
+ */
+quint16 Network::udpRemotePort() const
+{
+    return m_udpRemotePort;
 }
 
 /**
@@ -120,7 +138,7 @@ int Network::socketTypeIndex() const
  */
 bool Network::configurationOk() const
 {
-    return port() > 0 && m_hostExists;
+    return tcpPort() > 0 && m_hostExists;
 }
 
 /**
@@ -156,18 +174,15 @@ QIODevice *Network::openNetworkPort()
     QAbstractSocket *socket = nullptr;
 
     // Get host & port
-    auto hostAddr = host();
-    auto portAddr = port();
+    auto hostAddr = remoteAddress();
     if (hostAddr.isEmpty())
-        hostAddr = defaultHost();
-    if (portAddr <= 0)
-        portAddr = defaultPort();
+        hostAddr = defaultAddress();
 
     // TCP connection, assign socket pointer & connect to host
     if (socketType() == QAbstractSocket::TcpSocket)
     {
         socket = &m_tcpSocket;
-        m_tcpSocket.connectToHost(hostAddr, portAddr);
+        m_tcpSocket.connectToHost(hostAddr, tcpPort());
     }
 
     // UDP connection, assign socket pointer & bind to host
@@ -178,20 +193,24 @@ QIODevice *Network::openNetworkPort()
         {
             QHostAddress address(hostAddr);
             if (address.protocol() == QAbstractSocket::IPv4Protocol)
-                m_udpSocket.bind(QHostAddress::AnyIPv4, portAddr,
+                m_udpSocket.bind(QHostAddress::AnyIPv4, udpRemotePort(),
                                  QUdpSocket::ShareAddress);
             else if (address.protocol() == QAbstractSocket::IPv6Protocol)
-                m_udpSocket.bind(QHostAddress::AnyIPv6, portAddr,
+                m_udpSocket.bind(QHostAddress::AnyIPv6, udpRemotePort(),
                                  QUdpSocket::ShareAddress);
             else
-                m_udpSocket.bind(QHostAddress::Any, portAddr, QUdpSocket::ShareAddress);
+                m_udpSocket.bind(QHostAddress::Any, udpRemotePort(),
+                                 QUdpSocket::ShareAddress);
 
             m_udpSocket.joinMulticastGroup(address);
         }
 
         // Bind the UDP socket to an individual host
         else
-            m_udpSocket.connectToHost(hostAddr, portAddr);
+        {
+            m_udpSocket.bind(QHostAddress::LocalHost, udpLocalPort());
+            m_udpSocket.connectToHost(hostAddr, udpRemotePort());
+        }
 
         // Update socket pointer
         socket = &m_udpSocket;
@@ -227,24 +246,42 @@ void Network::disconnectDevice()
 }
 
 /**
- * Sets the @c port number
+ * Changes the TCP socket's @c port number
  */
-void Network::setPort(const quint16 port)
+void Network::setTcpPort(const quint16 port)
 {
-    m_port = port;
+    m_tcpPort = port;
+    emit portChanged();
+}
+
+/**
+ * Changes the UDP socket's local @c port number
+ */
+void Network::setUdpLocalPort(const quint16 port)
+{
+    m_udpLocalPort = port;
+    emit portChanged();
+}
+
+/**
+ * Changes the UDP socket's remote @c port number
+ */
+void Network::setUdpRemotePort(const quint16 port)
+{
+    m_udpRemotePort = port;
     emit portChanged();
 }
 
 /**
  * Sets the IPv4 or IPv6 address specified by the input string representation
  */
-void Network::setHost(const QString &host)
+void Network::setRemoteAddress(const QString &address)
 {
     // Check if host name exists
-    if (QHostAddress(host).isNull())
+    if (QHostAddress(address).isNull())
     {
         m_hostExists = false;
-        lookup(host);
+        lookup(address);
     }
 
     // Host is an IP address, host should exist
@@ -252,8 +289,8 @@ void Network::setHost(const QString &host)
         m_hostExists = true;
 
     // Change host
-    m_host = host;
-    emit hostChanged();
+    m_address = address;
+    emit addressChanged();
 }
 
 /**
@@ -323,7 +360,7 @@ void Network::lookupFinished(const QHostInfo &info)
         if (addresses.count() >= 1)
         {
             m_hostExists = true;
-            emit hostChanged();
+            emit addressChanged();
             return;
         }
     }

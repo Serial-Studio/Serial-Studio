@@ -43,13 +43,21 @@ class Network : public QObject
 {
     // clang-format off
     Q_OBJECT
-    Q_PROPERTY(QString host
-               READ host
-               WRITE setHost
-               NOTIFY hostChanged)
-    Q_PROPERTY(quint16 port
-               READ port
-               WRITE setPort
+    Q_PROPERTY(QString remoteAddress
+               READ remoteAddress
+               WRITE setRemoteAddress
+               NOTIFY addressChanged)
+    Q_PROPERTY(quint16 tcpPort
+               READ tcpPort
+               WRITE setTcpPort
+               NOTIFY portChanged)
+    Q_PROPERTY(quint16 udpLocalPort
+               READ udpLocalPort
+               WRITE setUdpLocalPort
+               NOTIFY portChanged)
+    Q_PROPERTY(quint16 udpRemotePort
+               READ udpRemotePort
+               WRITE setUdpRemotePort
                NOTIFY portChanged)
     Q_PROPERTY(QAbstractSocket::SocketType socketType
                READ socketType
@@ -62,11 +70,17 @@ class Network : public QObject
     Q_PROPERTY(QVector<QString> socketTypes
                READ socketTypes
                CONSTANT)
-    Q_PROPERTY(QString defaultHost
-               READ defaultHost
+    Q_PROPERTY(QString defaultAddress
+               READ defaultAddress
                CONSTANT)
-    Q_PROPERTY(quint16 defaultPort
-               READ defaultPort
+    Q_PROPERTY(quint16 defaultTcpPort
+               READ defaultTcpPort
+               CONSTANT)
+    Q_PROPERTY(quint16 defaultUdpLocalPort
+               READ defaultUdpLocalPort
+               CONSTANT)
+    Q_PROPERTY(quint16 defaultUdpRemotePort
+               READ defaultUdpRemotePort
                CONSTANT)
     Q_PROPERTY(bool lookupActive
                READ lookupActive
@@ -78,8 +92,8 @@ class Network : public QObject
     // clang-format on
 
 signals:
-    void hostChanged();
     void portChanged();
+    void addressChanged();
     void socketTypeChanged();
     void udpMulticastChanged();
     void lookupActiveChanged();
@@ -87,8 +101,12 @@ signals:
 public:
     static Network *getInstance();
 
-    QString host() const;
-    quint16 port() const;
+    QString remoteAddress() const;
+
+    quint16 tcpPort() const;
+    quint16 udpLocalPort() const;
+    quint16 udpRemotePort() const;
+
     bool udpMulticast() const;
     bool lookupActive() const;
     int socketTypeIndex() const;
@@ -98,8 +116,11 @@ public:
 
     QTcpSocket *tcpSocket() { return &m_tcpSocket; }
     QUdpSocket *udpSocket() { return &m_udpSocket; }
-    static QString defaultHost() { return "127.0.0.1"; }
-    static quint16 defaultPort() { return 23; }
+
+    static QString defaultAddress() { return "127.0.0.1"; }
+    static quint16 defaultTcpPort() { return 23; }
+    static quint16 defaultUdpRemotePort() { return 53; }
+    static quint16 defaultUdpLocalPort() { return 8888; }
 
     QIODevice *openNetworkPort();
 
@@ -107,11 +128,13 @@ public slots:
     void setTcpSocket();
     void setUdpSocket();
     void disconnectDevice();
-    void setPort(const quint16 port);
-    void setHost(const QString &host);
     void lookup(const QString &host);
+    void setTcpPort(const quint16 port);
+    void setUdpLocalPort(const quint16 port);
     void setUdpMulticast(const bool enabled);
     void setSocketTypeIndex(const int index);
+    void setUdpRemotePort(const quint16 port);
+    void setRemoteAddress(const QString &address);
     void setSocketType(const QAbstractSocket::SocketType type);
 
 private slots:
@@ -123,15 +146,18 @@ private:
     ~Network();
 
 private:
-    QString m_host;
-    quint16 m_port;
+    QString m_address;
+    quint16 m_tcpPort;
     bool m_hostExists;
     bool m_udpMulticast;
     bool m_lookupActive;
     QIODevice *m_device;
+    quint16 m_udpLocalPort;
+    quint16 m_udpRemotePort;
+    QAbstractSocket::SocketType m_socketType;
+
     QTcpSocket m_tcpSocket;
     QUdpSocket m_udpSocket;
-    QAbstractSocket::SocketType m_socketType;
 };
 }
 }
