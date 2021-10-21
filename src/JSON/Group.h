@@ -33,6 +33,26 @@
 
 namespace JSON
 {
+/**
+ * @brief The Group class
+ *
+ * The group class represents a set of datasets that are related
+ * together (e.g. they correspond to the same category).
+ *
+ * Some special widgets, such as the accelerometer, the map or
+ * the gyroscope are generated using groups instead of datasets.
+ * For example, an accelerometer widget is constructed with a group
+ * with the following datasets:
+ *
+ * - X-axis readings
+ * - Y-axis readings
+ * - Z-axis readings
+ *
+ * A group contains the following properties:
+ * - Title
+ * - Widget
+ * - A vector of datasets
+ */
 class Group : public QObject
 {
     // clang-format off

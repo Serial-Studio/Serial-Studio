@@ -172,8 +172,9 @@ HEADERS += \
     src/Misc/TimerEvents.h \
     src/Misc/Translator.h \
     src/Misc/Utilities.h \
-    src/Plugins/Bridge.h \
+    src/Plugins/Server.h \
     src/UI/Dashboard.h \
+    src/UI/WidgetLoader.h \
     src/Widgets/Accelerometer.h \
     src/Widgets/Bar.h \
     src/Widgets/Common/AnalogGauge.h \
@@ -187,8 +188,7 @@ HEADERS += \
     src/Widgets/Gyroscope.h \
     src/Widgets/MultiPlot.h \
     src/Widgets/Plot.h \
-    src/Widgets/Terminal.h \
-    src/Widgets/WidgetLoader.h
+    src/Widgets/Terminal.h
 
 SOURCES += \
     src/CSV/Export.cpp \
@@ -211,8 +211,9 @@ SOURCES += \
     src/Misc/TimerEvents.cpp \
     src/Misc/Translator.cpp \
     src/Misc/Utilities.cpp \
-    src/Plugins/Bridge.cpp \
+    src/Plugins/Server.cpp \
     src/UI/Dashboard.cpp \
+    src/UI/WidgetLoader.cpp \
     src/Widgets/Accelerometer.cpp \
     src/Widgets/Bar.cpp \
     src/Widgets/Common/AnalogGauge.cpp \
@@ -227,7 +228,6 @@ SOURCES += \
     src/Widgets/MultiPlot.cpp \
     src/Widgets/Plot.cpp \
     src/Widgets/Terminal.cpp \
-    src/Widgets/WidgetLoader.cpp \
     src/main.cpp
 
 #-------------------------------------------------------------------------------

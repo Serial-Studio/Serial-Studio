@@ -32,6 +32,32 @@
 
 namespace UI
 {
+/**
+ * @brief The Dashboard class
+ *
+ * The @c Dashboard class receives data from the @c JSON::Generator class and builds the
+ * vector modules used by the QML user interface and the C++ widgets to display the
+ * current frame.
+ *
+ * This class is very large, but its really simple to understand. Most of the code here is
+ * repeated in order to support all the widgets implemented by Serial Studio.
+ *
+ * The important functions are:
+ *
+ * - @c Dashboard::updateData()
+ * - @c Dashboard::groupTitles()
+ * - @c Dashboard::datasetTitles()
+ * - @c Dashboard::getVisibility()
+ * - @c Dashboard::getVisibility()
+ * - @c Dashboard::getGroupWidget()
+ * - @c Dashboard::getWidgetGroups()
+ * - @c Dashboard::getDatasetWidget()
+ * - @c Dashboard::getWidgetDatasets()
+ * - @c Dashboard::processLatestJSON()
+ *
+ * The rest of the functions of this class rely on the procedures above in order to
+ * implement common functionality features for each widget type.
+ */
 class Dashboard : public QObject
 {
     // clang-format off

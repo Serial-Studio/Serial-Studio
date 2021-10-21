@@ -30,8 +30,35 @@
 
 #include <UI/Dashboard.h>
 
-namespace Widgets
+namespace UI
 {
+/**
+ * @brief The WidgetLoader class
+ *
+ * The @c WidgetLoader class acts as a man-in-the-middle between the QML user interface
+ * and the C++ widgets. C++ widgets are loaded and initialized by this class, and all the
+ * QML/Qt events are re-routed to the widgets using this class. Finally, the C++ widget
+ * is "painted" on the QML interface in realtime, effectively allowing us to use QWidget
+ * object directly in the QML user interface.
+ *
+ * By using this approach, the QML user interface only needs to know the total number of
+ * widgets and use the "global-index" approach to initialize every widget using a
+ * Repeater item.
+ *
+ * On the other hand, this class figures out which widget should be loaded and displayed
+ * in the user interface by knowing the "global-index" provider by the QML Repeater.
+ *
+ * See the following files for more information:
+ *      assets/qml/Dashboard/WidgetDelegate.qml
+ *      assets/qml/Dashboard/WidgetLoader.qml
+ *      assets/qml/Dashboard/WidgetGrid.qml
+ *
+ * Basic diagram explaining this approach:
+ *
+ *  ----------------        ---------------      ---------------       ----------------
+ * | UI::Dashboard | <-->  | QML Repeater | --> | WidgetLoader | <--> | Actual Widget |
+ * ----------------        ---------------      ---------------       ----------------
+ */
 class WidgetLoader : public QQuickPaintedItem
 {
     // clang-format off

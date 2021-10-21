@@ -31,6 +31,13 @@
 
 namespace Misc
 {
+/**
+ * @brief The Utilities class
+ *
+ * The @c Utilitities module provides commonly used functionality to the rest of the
+ * application. For example, showing a messagebox with a nice format or revealing files in
+ * the operating system's preffered file manager.
+ */
 class Utilities : public QObject
 {
     Q_OBJECT

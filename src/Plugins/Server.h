@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#ifndef PLUGINS_BRIDGE_H
-#define PLUGINS_BRIDGE_H
+#ifndef PLUGINS_SERVER_H
+#define PLUGINS_SERVER_H
 
 #include <QObject>
 #include <QTcpSocket>
@@ -33,11 +33,30 @@
 #include <JSON/Dataset.h>
 #include <JSON/FrameInfo.h>
 
+/**
+ * Default TCP port to use for incoming connections, I choose 7777 because 7 is one of
+ * my favourite numbers :)
+ */
 #define PLUGINS_TCP_PORT 7777
 
 namespace Plugins
 {
-class Bridge : public QObject
+/**
+ * @brief The Server class
+ *
+ * Implements a simple TCP server on port 7777, which allows Serial Studio to interact
+ * with other applications on the computer or in the LAN. "Plugins" receive incoming
+ * frames processed by Serial Studio, and can write data to the device by simply writting
+ * data on the TCP socket.
+ *
+ * An example of such application can be found at:
+ *  https://github.com/Kaan-Sat/CC2021-Control-Panel
+ *
+ * A benefit of implementing plugins in this manner is that you can write your Serial
+ * Studio companion application in any language and framework that you desire, you do not
+ * have to force yourself to use Qt or C/C++.
+ */
+class Server : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
@@ -46,7 +65,7 @@ signals:
     void enabledChanged();
 
 public:
-    static Bridge *getInstance();
+    static Server *getInstance();
     bool enabled() const;
 
 public slots:
@@ -62,8 +81,8 @@ private slots:
     void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
-    Bridge();
-    ~Bridge();
+    Server();
+    ~Server();
 
 private:
     bool m_enabled;

@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include "Bridge.h"
+#include "Server.h"
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -36,12 +36,12 @@ using namespace Plugins;
 /*
  * Singleton pointer
  */
-static Bridge *INSTANCE = nullptr;
+static Server *INSTANCE = nullptr;
 
 /**
  * Constructor function
  */
-Bridge::Bridge()
+Server::Server()
 {
     // Set internal variables
     m_enabled = false;
@@ -49,15 +49,15 @@ Bridge::Bridge()
     // Send processed data at 42 Hz
     auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
-    connect(ge, &JSON::Generator::jsonChanged, this, &Bridge::registerFrame);
-    connect(te, &Misc::TimerEvents::highFreqTimeout, this, &Bridge::sendProcessedData);
+    connect(ge, &JSON::Generator::jsonChanged, this, &Server::registerFrame);
+    connect(te, &Misc::TimerEvents::highFreqTimeout, this, &Server::sendProcessedData);
 
     // Send I/O "raw" data directly
     auto io = IO::Manager::getInstance();
-    connect(io, &IO::Manager::dataReceived, this, &Bridge::sendRawData);
+    connect(io, &IO::Manager::dataReceived, this, &Server::sendRawData);
 
     // Configure TCP server
-    connect(&m_server, &QTcpServer::newConnection, this, &Bridge::acceptConnection);
+    connect(&m_server, &QTcpServer::newConnection, this, &Server::acceptConnection);
     if (!m_server.listen(QHostAddress::Any, PLUGINS_TCP_PORT))
     {
         Misc::Utilities::showMessageBox(tr("Unable to start plugin TCP server"),
@@ -69,7 +69,7 @@ Bridge::Bridge()
 /**
  * Destructor function
  */
-Bridge::~Bridge()
+Server::~Server()
 {
     m_server.close();
 }
@@ -77,10 +77,10 @@ Bridge::~Bridge()
 /**
  * Returns a pointer to the only instance of the class
  */
-Bridge *Bridge::getInstance()
+Server *Server::getInstance()
 {
     if (!INSTANCE)
-        INSTANCE = new Bridge;
+        INSTANCE = new Server;
 
     return INSTANCE;
 }
@@ -88,7 +88,7 @@ Bridge *Bridge::getInstance()
 /**
  * Returns @c true if the plugin sub-system is enabled
  */
-bool Bridge::enabled() const
+bool Server::enabled() const
 {
     return m_enabled;
 }
@@ -96,7 +96,7 @@ bool Bridge::enabled() const
 /**
  * Disconnects the socket used for communicating with plugins.
  */
-void Bridge::removeConnection()
+void Server::removeConnection()
 {
     // Get caller socket
     auto socket = static_cast<QTcpSocket *>(QObject::sender());
@@ -121,7 +121,7 @@ void Bridge::removeConnection()
 /**
  * Enables/disables the plugin subsystem
  */
-void Bridge::setEnabled(const bool enabled)
+void Server::setEnabled(const bool enabled)
 {
     // Change value
     m_enabled = enabled;
@@ -148,7 +148,7 @@ void Bridge::setEnabled(const bool enabled)
 /**
  * Process incoming data and writes it directly to the connected I/O device
  */
-void Bridge::onDataReceived()
+void Server::onDataReceived()
 {
     // Get caller socket
     auto socket = static_cast<QTcpSocket *>(QObject::sender());
@@ -161,7 +161,7 @@ void Bridge::onDataReceived()
 /**
  * Configures incoming connection requests
  */
-void Bridge::acceptConnection()
+void Server::acceptConnection()
 {
     // Get & validate socket
     auto socket = m_server.nextPendingConnection();
@@ -185,9 +185,9 @@ void Bridge::acceptConnection()
     }
 
     // Connect socket signals/slots
-    connect(socket, &QTcpSocket::readyRead, this, &Bridge::onDataReceived);
-    connect(socket, &QTcpSocket::errorOccurred, this, &Bridge::onErrorOccurred);
-    connect(socket, &QTcpSocket::disconnected, this, &Bridge::removeConnection);
+    connect(socket, &QTcpSocket::readyRead, this, &Server::onDataReceived);
+    connect(socket, &QTcpSocket::errorOccurred, this, &Server::onErrorOccurred);
+    connect(socket, &QTcpSocket::disconnected, this, &Server::removeConnection);
 
     // Add socket to sockets list
     m_sockets.append(socket);
@@ -199,7 +199,7 @@ void Bridge::acceptConnection()
  * - RX timestamp
  * - Frame JSON data
  */
-void Bridge::sendProcessedData()
+void Server::sendProcessedData()
 {
     // Stop if system is not enabled
     if (!enabled())
@@ -253,7 +253,7 @@ void Bridge::sendProcessedData()
  * Encodes the given @a data in Base64 and sends it through the TCP socket connected
  * to the localhost.
  */
-void Bridge::sendRawData(const QByteArray &data)
+void Server::sendRawData(const QByteArray &data)
 {
     // Stop if system is not enabled
     if (!enabled())
@@ -286,7 +286,7 @@ void Bridge::sendRawData(const QByteArray &data)
  * Obtains the latest JSON dataframe & appends it to the JSON list, which is later read
  * and sent by the @c sendProcessedData() function.
  */
-void Bridge::registerFrame(const JFI_Object &frameInfo)
+void Server::registerFrame(const JFI_Object &frameInfo)
 {
     m_frames.append(frameInfo);
 }
@@ -295,7 +295,7 @@ void Bridge::registerFrame(const JFI_Object &frameInfo)
  * This function is called whenever a socket error occurs, it disconnects the socket
  * from the host and displays the error in a message box.
  */
-void Bridge::onErrorOccurred(const QAbstractSocket::SocketError socketError)
+void Server::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
     // Get caller socket
     auto socket = static_cast<QTcpSocket *>(QObject::sender());

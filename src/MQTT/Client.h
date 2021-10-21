@@ -32,12 +32,30 @@
 
 namespace MQTT
 {
+/**
+ * @brief The MQTTClientMode enum
+ *
+ * Specifies the operation modes of the MQTT client
+ */
 enum MQTTClientMode
 {
     ClientPublisher = 0,
     ClientSubscriber = 1
 };
 
+/**
+ * @brief The Client class
+ *
+ * Implements a simple MQTT client, which allows Serial Studio to upload received frames
+ * to a MQTT broker so that other devices and/or services can make use of that
+ * information. By acting as a MQTT subscriber, Serial Studio can display & process frames
+ * from a remote Serial Studio instance. As you might notice, this has a lot of
+ * interesting applications.
+ *
+ * For example, you can receive frames from a CanSat mission and display them allmost in
+ * real-time in another location, such as the "ground control" centre or by the media team
+ * which streams the GCS display on the internet as the mission is developing.
+ */
 class Client : public QObject
 {
     // clang-format off

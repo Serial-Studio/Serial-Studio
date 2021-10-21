@@ -28,6 +28,13 @@
 
 namespace Misc
 {
+/**
+ * @brief The MacExtras class
+ *
+ * The @c MacExtras class implements specialized functions that are used only in macOS
+ * targets. For the moment, this class implements the code necessary to interact with the
+ * touchbar display for some MacBook models.
+ */
 class MacExtras : public QObject
 {
     Q_OBJECT

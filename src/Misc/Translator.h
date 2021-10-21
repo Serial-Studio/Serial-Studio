@@ -33,6 +33,13 @@
 
 namespace Misc
 {
+/**
+ * @brief The Translator class
+ *
+ * The @c Translator module provides the user interface with a list of available
+ * translations, and loads the specified translation file during application startup or
+ * when the user changes the language of the application.
+ */
 class Translator : public QObject
 {
     // clang-format off

@@ -20,23 +20,25 @@
  * THE SOFTWARE.
  */
 
+#include "Dashboard.h"
 #include "WidgetLoader.h"
 
-#include "Bar.h"
-#include "GPS.h"
-#include "Plot.h"
-#include "Gauge.h"
-#include "Compass.h"
-#include "FFTPlot.h"
-#include "DataGroup.h"
-#include "Gyroscope.h"
-#include "MultiPlot.h"
-#include "Accelerometer.h"
-
 #include <QApplication>
-#include <UI/Dashboard.h>
+
+#include <Widgets/Bar.h>
+#include <Widgets/GPS.h>
+#include <Widgets/Plot.h>
+#include <Widgets/Gauge.h>
+#include <Widgets/Compass.h>
+#include <Widgets/FFTPlot.h>
+#include <Widgets/DataGroup.h>
+#include <Widgets/Gyroscope.h>
+#include <Widgets/MultiPlot.h>
+#include <Widgets/Accelerometer.h>
+
 #include <Misc/ThemeManager.h>
 
+using namespace UI;
 using namespace Widgets;
 
 /**
@@ -62,7 +64,7 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
             &WidgetLoader::updateWidgetSize);
 
     // Automatically update the widget's visibility
-    connect(UI::Dashboard::getInstance(), &UI::Dashboard::widgetVisibilityChanged, this,
+    connect(Dashboard::getInstance(), &Dashboard::widgetVisibilityChanged, this,
             &WidgetLoader::updateWidgetVisible);
 }
 

@@ -47,11 +47,11 @@
 #include <Misc/ModuleManager.h>
 
 #include <MQTT/Client.h>
-#include <Plugins/Bridge.h>
-#include <UI/Dashboard.h>
+#include <Plugins/Server.h>
 
+#include <UI/Dashboard.h>
+#include <UI/WidgetLoader.h>
 #include <Widgets/Terminal.h>
-#include <Widgets/WidgetLoader.h>
 
 #include <QQuickWindow>
 #include <QSimpleUpdater.h>
@@ -144,7 +144,7 @@ void ModuleManager::registerQmlTypes()
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
     qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
-    qmlRegisterType<Widgets::WidgetLoader>("SerialStudio", 1, 0, "WidgetLoader");
+    qmlRegisterType<UI::WidgetLoader>("SerialStudio", 1, 0, "WidgetLoader");
 }
 
 /**
@@ -180,7 +180,7 @@ void ModuleManager::initializeQmlInterface()
     auto mqttClient = MQTT::Client::getInstance();
     auto uiDashboard = UI::Dashboard::getInstance();
     auto jsonGenerator = JSON::Generator::getInstance();
-    auto pluginsBridge = Plugins::Bridge::getInstance();
+    auto pluginsBridge = Plugins::Server::getInstance();
     auto miscUtilities = Misc::Utilities::getInstance();
     auto miscMacExtras = Misc::MacExtras::getInstance();
     auto miscTranslator = Misc::Translator::getInstance();
@@ -358,7 +358,7 @@ void ModuleManager::setSplashScreenMessage(const QString &message)
  */
 void ModuleManager::stopOperations()
 {
-    Plugins::Bridge::getInstance()->removeConnection();
+    Plugins::Server::getInstance()->removeConnection();
     CSV::Export::getInstance()->closeFile();
     CSV::Player::getInstance()->closeFile();
     IO::Manager::getInstance()->disconnectDevice();

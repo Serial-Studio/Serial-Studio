@@ -29,6 +29,16 @@
 
 namespace Misc
 {
+/**
+ * @brief The ThemeManager class
+ *
+ * The @c ThemeManager class reads all the colors that are required to build a Serial
+ * Studio theme and makes them available to the rest of the application.
+ *
+ * Themes are stored as JSON files in the "assets/themes" folder. The class automatically
+ * builds a model with the available themes. The only requirement to create your own
+ * themes is to create a JSON theme file and add it to the application resources file.
+ */
 class ThemeManager : public QObject
 {
     // clang-format off

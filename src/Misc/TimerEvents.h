@@ -28,6 +28,17 @@
 
 namespace Misc
 {
+/**
+ * @brief The TimerEvents class
+ *
+ * The @c TimerEvents class implements periodic timers that are used to update
+ * the user interface elements at a specific frequency.
+ *
+ * It is necessary to use this class in order to avoid overloading the computer when
+ * incoming data is received at high frequencies. We do not want to re-generate the UI
+ * with every received frame, because that would probably freeze the GUI thread. Instead,
+ * we "register" all incoming frames and process these frames in regular intervals.
+ */
 class TimerEvents : public QObject
 {
     // clang-format off
