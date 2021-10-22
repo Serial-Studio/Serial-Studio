@@ -30,6 +30,7 @@ import SerialStudio as SerialStudio
 Item {
     id: root
     property bool isExternalWindow: false
+    property alias widgetEnabled: textEdit.widgetEnabled
     property alias vt100emulation: textEdit.vt100emulation
 
     //

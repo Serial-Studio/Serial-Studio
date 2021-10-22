@@ -259,7 +259,7 @@ bool Editor::saveJsonFile()
     }
 
     // Validate dataset indexes
-    QList<int> indexes;
+    QVector<int> indexes;
     for (int i = 0; i < groupCount(); ++i)
     {
         for (int j = 0; j < datasetCount(i); ++j)

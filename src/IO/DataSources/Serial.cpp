@@ -670,10 +670,10 @@ void Serial::writeSettings()
 /**
  * Returns a list with all the valid serial port objects
  */
-QList<QSerialPortInfo> Serial::validPorts() const
+QVector<QSerialPortInfo> Serial::validPorts() const
 {
     // Search for available ports and add them to the list
-    QList<QSerialPortInfo> ports;
+    QVector<QSerialPortInfo> ports;
     foreach (QSerialPortInfo info, QSerialPortInfo::availablePorts())
     {
         if (!info.isNull())

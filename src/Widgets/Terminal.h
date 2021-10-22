@@ -47,7 +47,7 @@ public:
 class AnsiEscapeCodeHandler
 {
 public:
-    QList<FormattedText> parseText(const FormattedText &input);
+    QVector<FormattedText> parseText(const FormattedText &input);
     void setTextEdit(QPlainTextEdit *widget);
     void endFormatScope();
 

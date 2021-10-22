@@ -46,7 +46,7 @@ Server::Server()
     // Set internal variables
     m_enabled = false;
 
-    // Send processed data at 42 Hz
+    // Send processed data at 1 Hz
     auto ge = JSON::Generator::getInstance();
     auto te = Misc::TimerEvents::getInstance();
     connect(ge, &JSON::Generator::jsonChanged, this, &Server::registerFrame);

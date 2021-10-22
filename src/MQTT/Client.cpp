@@ -53,7 +53,7 @@ Client::Client()
     // Send data periodically & reset statistics when disconnected/connected to a device
     auto io = IO::Manager::getInstance();
     auto te = Misc::TimerEvents::getInstance();
-    connect(te, &Misc::TimerEvents::highFreqTimeout, this, &Client::sendData);
+    connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &Client::sendData);
     connect(io, &IO::Manager::connectedChanged, this, &Client::resetStatistics);
     connect(io, &IO::Manager::frameReceived, this, &Client::onFrameReceived);
 

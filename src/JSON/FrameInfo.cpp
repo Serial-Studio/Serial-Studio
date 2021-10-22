@@ -26,7 +26,7 @@
  * Orders the given JFI @c list from least recent (first item) to most recent (last item)
  * using a simple Bubble-Sort algorithm.
  */
-void JFI_SortList(QList<JFI_Object> *list)
+void JFI_SortList(QVector<JFI_Object> *list)
 {
     Q_ASSERT(list);
     if (list->count() <= 1)

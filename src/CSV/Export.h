@@ -24,7 +24,6 @@
 #define CSV_EXPORT_H
 
 #include <QFile>
-#include <QList>
 #include <QObject>
 #include <QVariant>
 #include <QTextStream>
@@ -84,7 +83,7 @@ private:
     QFile m_csvFile;
     bool m_exportEnabled;
     QTextStream m_textStream;
-    QList<JFI_Object> m_jsonList;
+    QVector<JFI_Object> m_jsonList;
 };
 }
 

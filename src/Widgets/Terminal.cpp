@@ -490,7 +490,8 @@ void Terminal::setAutoscroll(const bool enabled)
  */
 void Terminal::insertText(const QString &text)
 {
-    addText(text, vt100emulation());
+    if (widgetEnabled())
+        addText(text, vt100emulation());
 }
 
 /**
@@ -790,7 +791,7 @@ static QColor ansiColor(uint code)
     return QColor(red, green, blue);
 }
 
-QList<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &input)
+QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &input)
 {
     enum AnsiEscapeCodes
     {
@@ -811,7 +812,7 @@ QList<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &input
     const QChar colorTerminator = 'm';
     const QChar eraseToEol = 'K';
 
-    QList<FormattedText> outputData;
+    QVector<FormattedText> outputData;
     QTextCharFormat charFormat = m_previousFormatClosed ? input.format : m_previousFormat;
     QString strippedText;
     if (m_pendingText.isEmpty())
@@ -922,7 +923,7 @@ QList<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &input
             if (upperCase.contains("2J"))
             {
                 textEdit->clear();
-                return QList<FormattedText>();
+                return QVector<FormattedText>();
             }
 
             // \e[K is not supported. Just strip it.

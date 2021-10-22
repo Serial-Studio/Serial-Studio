@@ -159,7 +159,7 @@ private slots:
 private:
     Serial();
     ~Serial();
-    QList<QSerialPortInfo> validPorts() const;
+    QVector<QSerialPortInfo> validPorts() const;
 
 private:
     QSerialPort *m_port;

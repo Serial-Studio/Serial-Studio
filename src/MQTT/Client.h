@@ -169,7 +169,7 @@ private:
     bool m_lookupActive;
     QMQTT::Client m_client;
     quint16 m_sentMessages;
-    QList<QByteArray> m_frames;
+    QVector<QByteArray> m_frames;
     MQTTClientMode m_clientMode;
 };
 }

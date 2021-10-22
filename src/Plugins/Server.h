@@ -87,8 +87,8 @@ private:
 private:
     bool m_enabled;
     QTcpServer m_server;
-    QList<JFI_Object> m_frames;
-    QList<QTcpSocket *> m_sockets;
+    QVector<JFI_Object> m_frames;
+    QVector<QTcpSocket *> m_sockets;
 };
 }
 

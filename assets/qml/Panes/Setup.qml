@@ -36,7 +36,7 @@ Item {
     // Custom properties
     //
     property int setupMargin: 0
-    property int displayedWidth: 340 + app.spacing * 1.5
+    property int displayedWidth: 380 + app.spacing * 1.5
     readonly property int maxItemWidth: column.width - 2 * spacing
 
     //

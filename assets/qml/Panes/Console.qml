@@ -101,6 +101,7 @@ Item {
 
         Widgets.Terminal {
             id: terminal
+            widgetEnabled: true
             anchors.fill: parent
         }
     }
@@ -127,6 +128,7 @@ Item {
         Widgets.Terminal {
             anchors.fill: parent
             isExternalWindow: true
+            widgetEnabled: externalWindow.visible
         }
     }
 }

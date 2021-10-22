@@ -186,7 +186,7 @@ private:
     bool m_modified;
     QString m_filePath;
 
-    QList<Group *> m_groups;
+    QVector<Group *> m_groups;
 };
 }
 
