@@ -67,7 +67,7 @@ LEDPanel::LEDPanel(const int index)
 
     // Configure grid layout
     m_gridLayout = new QGridLayout(m_dataContainer);
-    m_gridLayout->setSpacing(8);
+    m_gridLayout->setSpacing(16);
     for (int dataset = 0; dataset < group->datasetCount(); ++dataset)
     {
         // Create labels
@@ -85,7 +85,7 @@ LEDPanel::LEDPanel(const int index)
 
         // Set LED color & style
         led->setLook(KLed::Sunken);
-        led->setShape(KLed::Rectangular);
+        led->setShape(KLed::Circular);
         led->setColor(theme->ledEnabled());
 
         // Calculate column and row
