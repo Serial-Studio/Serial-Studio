@@ -91,6 +91,7 @@ public:
     Dataset(QObject *parent = nullptr);
 
     bool fft() const;
+    bool led() const;
     bool log() const;
     bool graph() const;
     double min() const;
@@ -107,8 +108,9 @@ public:
 
 private:
     bool m_fft;
-    bool m_graph;
+    bool m_led;
     bool m_log;
+    bool m_graph;
 
     QString m_title;
     QString m_value;

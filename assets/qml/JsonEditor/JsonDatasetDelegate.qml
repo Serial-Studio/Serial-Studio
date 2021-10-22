@@ -113,6 +113,18 @@ Widgets.Window {
         }
 
         //
+        // Dataset LED
+        //
+        Label {
+            text: qsTr("Display LED:")
+        } Switch {
+            id: led
+            Layout.leftMargin: -app.spacing
+            checked: Cpp_JSON_Editor.datasetLED(group, dataset)
+            onCheckedChanged: Cpp_JSON_Editor.setDatasetLED(group, dataset, checked)
+        }
+
+        //
         // Dataset graph
         //
         Label {

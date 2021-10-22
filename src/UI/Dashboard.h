@@ -78,6 +78,9 @@ class Dashboard : public QObject
     Q_PROPERTY(int gpsCount
                READ gpsCount
                NOTIFY widgetCountChanged)
+    Q_PROPERTY(int ledCount
+               READ ledCount
+               NOTIFY widgetCountChanged)
     Q_PROPERTY(int barCount
                READ barCount
                NOTIFY widgetCountChanged)
@@ -107,6 +110,9 @@ class Dashboard : public QObject
                NOTIFY widgetCountChanged)
     Q_PROPERTY(QVector<QString> gpsTitles
                READ gpsTitles
+               NOTIFY widgetCountChanged)
+    Q_PROPERTY(QVector<QString> ledTitles
+               READ ledTitles
                NOTIFY widgetCountChanged)
     Q_PROPERTY(QVector<QString> barTitles
                READ barTitles
@@ -158,6 +164,7 @@ public:
         Gyroscope,
         Accelerometer,
         GPS,
+        LED,
         Unknown
     };
     Q_ENUM(WidgetType)
@@ -165,6 +172,7 @@ public:
     static Dashboard *getInstance();
 
     QFont monoFont() const;
+    JSON::Group *getLED(const int index);
     JSON::Group *getGPS(const int index);
     JSON::Dataset *getFFT(const int index);
     JSON::Dataset *getBar(const int index);
@@ -182,6 +190,7 @@ public:
 
     int totalWidgetCount() const;
     int gpsCount() const;
+    int ledCount() const;
     int fftCount() const;
     int barCount() const;
     int plotCount() const;
@@ -202,6 +211,7 @@ public:
     Q_INVOKABLE bool barVisible(const int index) const;
     Q_INVOKABLE bool fftVisible(const int index) const;
     Q_INVOKABLE bool gpsVisible(const int index) const;
+    Q_INVOKABLE bool ledVisible(const int index) const;
     Q_INVOKABLE bool plotVisible(const int index) const;
     Q_INVOKABLE bool groupVisible(const int index) const;
     Q_INVOKABLE bool gaugeVisible(const int index) const;
@@ -213,6 +223,7 @@ public:
     QVector<QString> barTitles() const;
     QVector<QString> fftTitles() const;
     QVector<QString> gpsTitles() const;
+    QVector<QString> ledTitles() const;
     QVector<QString> plotTitles() const;
     QVector<QString> groupTitles() const;
     QVector<QString> gaugeTitles() const;
@@ -230,6 +241,7 @@ public slots:
     void setBarVisible(const int index, const bool visible);
     void setFFTVisible(const int index, const bool visible);
     void setGpsVisible(const int index, const bool visible);
+    void setLedVisible(const int index, const bool visible);
     void setPlotVisible(const int index, const bool visible);
     void setGroupVisible(const int index, const bool visible);
     void setGaugeVisible(const int index, const bool visible);
@@ -247,6 +259,7 @@ private slots:
 private:
     Dashboard();
 
+    QVector<JSON::Group *> getLEDWidgets() const;
     QVector<JSON::Dataset *> getFFTWidgets() const;
     QVector<JSON::Dataset *> getPlotWidgets() const;
     QVector<JSON::Group *> getWidgetGroups(const QString &handle) const;
@@ -272,6 +285,7 @@ private:
     QVector<bool> m_barVisibility;
     QVector<bool> m_fftVisibility;
     QVector<bool> m_gpsVisibility;
+    QVector<bool> m_ledVisibility;
     QVector<bool> m_plotVisibility;
     QVector<bool> m_groupVisibility;
     QVector<bool> m_gaugeVisibility;
@@ -286,6 +300,7 @@ private:
     QVector<JSON::Dataset *> m_gaugeWidgets;
     QVector<JSON::Dataset *> m_compassWidgets;
 
+    QVector<JSON::Group *> m_ledWidgets;
     QVector<JSON::Group *> m_gpsWidgets;
     QVector<JSON::Group *> m_groupWidgets;
     QVector<JSON::Group *> m_multiPlotWidgets;

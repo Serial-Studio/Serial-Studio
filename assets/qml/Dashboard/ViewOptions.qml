@@ -174,6 +174,17 @@ Widgets.Window {
             }
 
             //
+            // LEDs
+            //
+            ViewOptionsDelegate {
+                title: qsTr("LED Panels")
+                icon: "qrc:/icons/led.svg"
+                count: Cpp_UI_Dashboard.ledCount
+                titles: Cpp_UI_Dashboard.ledTitles
+                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setLedVisible(index, checked)
+            }
+
+            //
             // FFT
             //
             ViewOptionsDelegate {

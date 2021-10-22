@@ -204,7 +204,7 @@ Widgets.Window {
                 delegate: Item {
                     Layout.fillWidth: true
                     Layout.minimumWidth: 320
-                    Layout.minimumHeight: 400 + 2 * app.spacing
+                    Layout.minimumHeight: 420 + 2 * app.spacing
 
                     JsonDatasetDelegate {
                         id: datasetDelegate

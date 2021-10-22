@@ -140,5 +140,6 @@
         <file>qml/JsonEditor/TreeView.qml</file>
         <file>icons/gps.svg</file>
         <file>qml/Widgets/Terminal.qml</file>
+        <file>icons/led.svg</file>
     </qresource>
 </RCC>

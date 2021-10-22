@@ -31,6 +31,11 @@
 
 #include "Dataset.h"
 
+namespace UI
+{
+class Dashboard;
+}
+
 namespace JSON
 {
 /**
@@ -89,6 +94,7 @@ private:
     QVector<Dataset *> m_datasets;
 
     friend class Editor;
+    friend class UI::Dashboard;
 };
 }
 

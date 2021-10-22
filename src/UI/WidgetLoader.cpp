@@ -31,6 +31,7 @@
 #include <Widgets/Gauge.h>
 #include <Widgets/Compass.h>
 #include <Widgets/FFTPlot.h>
+#include <Widgets/LEDPanel.h>
 #include <Widgets/DataGroup.h>
 #include <Widgets/Gyroscope.h>
 #include <Widgets/MultiPlot.h>
@@ -275,6 +276,9 @@ void WidgetLoader::setWidgetIndex(const int index)
                 break;
             case UI::Dashboard::WidgetType::GPS:
                 m_widget = new GPS(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::LED:
+                m_widget = new LEDPanel(relativeIndex());
                 break;
             default:
                 break;

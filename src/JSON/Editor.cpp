@@ -324,6 +324,7 @@ bool Editor::saveJsonFile()
             dataset.insert("t", datasetTitle(i, j));
             dataset.insert("u", datasetUnits(i, j));
             dataset.insert("g", datasetGraph(i, j));
+            dataset.insert("led", datasetLED(i, j));
             dataset.insert("w", datasetWidget(i, j));
             dataset.insert("fft", datasetFftPlot(i, j));
             dataset.insert("log", datasetLogPlot(i, j));
@@ -456,6 +457,22 @@ int Editor::datasetIndex(const int group, const int dataset)
         return set->m_index;
 
     return 0;
+}
+
+/**
+ * Returns @c true if Serial Studio should generate a LED with the given
+ * @a dataset (which is contained by the specified @a group).
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+bool Editor::datasetLED(const int group, const int dataset)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+        return set->led();
+
+    return false;
 }
 
 /**
@@ -758,6 +775,7 @@ void Editor::openJsonFile(const QString &path)
             // Register dataset with C++ model
             addDataset(group);
             setDatasetGraph(group, dataset, jsonDataset.value("g").toBool());
+            setDatasetLED(group, dataset, jsonDataset.value("led").toBool());
             setDatasetTitle(group, dataset, jsonDataset.value("t").toString());
             setDatasetUnits(group, dataset, jsonDataset.value("u").toString());
             setDatasetFftPlot(group, dataset, jsonDataset.value("fft").toBool());
@@ -1149,6 +1167,22 @@ void Editor::setDatasetIndex(const int group, const int dataset, const int frame
     if (set)
     {
         set->m_index = frameIndex;
+        emit datasetChanged(group, dataset);
+    }
+}
+
+/**
+ * Updates the @a generateLED flag of the given @a dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+void Editor::setDatasetLED(const int group, const int dataset, const bool generateLED)
+{
+    auto set = getDataset(group, dataset);
+    if (set)
+    {
+        set->m_led = generateLED;
         emit datasetChanged(group, dataset);
     }
 }

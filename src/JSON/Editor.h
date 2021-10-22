@@ -115,6 +115,7 @@ public:
     Q_INVOKABLE int groupWidgetIndex(const int group);
 
     Q_INVOKABLE int datasetIndex(const int group, const int dataset);
+    Q_INVOKABLE bool datasetLED(const int group, const int dataset);
     Q_INVOKABLE bool datasetGraph(const int group, const int dataset);
     Q_INVOKABLE bool datasetFftPlot(const int group, const int dataset);
     Q_INVOKABLE bool datasetLogPlot(const int group, const int dataset);
@@ -151,6 +152,7 @@ public slots:
     void setDatasetTitle(const int group, const int dataset, const QString &title);
     void setDatasetUnits(const int group, const int dataset, const QString &units);
     void setDatasetIndex(const int group, const int dataset, const int frameIndex);
+    void setDatasetLED(const int group, const int dataset, const bool generateLED);
     void setDatasetGraph(const int group, const int dataset, const bool generateGraph);
     void setDatasetFftPlot(const int group, const int dataset, const bool generateFft);
     void setDatasetLogPlot(const int group, const int dataset, const bool generateLog);
