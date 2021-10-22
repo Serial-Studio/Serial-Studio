@@ -65,12 +65,6 @@ LEDPanel::LEDPanel(const int index)
     auto valueFont = dash->monoFont();
     valueFont.setPixelSize(dash->monoFont().pixelSize() * 1.3);
 
-    // Get LED color list
-    QString color;
-    auto colors = QStringList { "#ff3333", "#ff9933", "#ffff33", "#99ff33",
-                                "#33ff33", "#33ff99", "#33ffff", "#3399ff",
-                                "#3333ff", "#9933ff", "#ff33ff", "#ff3399" };
-
     // Configure grid layout
     m_gridLayout = new QGridLayout(m_dataContainer);
     m_gridLayout->setSpacing(8);
@@ -89,16 +83,10 @@ LEDPanel::LEDPanel(const int index)
         title->setFont(dash->monoFont());
         title->setText(group->getDataset(dataset)->title());
 
-        // Get LED color
-        if (colors.count() > dataset)
-            color = colors.at(dataset);
-        else
-            color = colors.at(colors.count() % dataset);
-
         // Set LED color & style
-        led->setLook(KLed::Flat);
+        led->setLook(KLed::Sunken);
         led->setShape(KLed::Rectangular);
-        led->setColor(QColor(color));
+        led->setColor(theme->ledEnabled());
 
         // Calculate column and row
         int column = 0;
@@ -114,8 +102,8 @@ LEDPanel::LEDPanel(const int index)
         // Add label and LED to grid layout
         m_gridLayout->addWidget(led, row, column);
         m_gridLayout->addWidget(title, row, column + 1);
+        m_gridLayout->setAlignment(led, Qt::AlignRight | Qt::AlignVCenter);
         m_gridLayout->setAlignment(title, Qt::AlignLeft | Qt::AlignVCenter);
-        m_gridLayout->setAlignment(led, Qt::AlignHCenter | Qt::AlignVCenter);
     }
 
     // Load layout into container widget
@@ -170,6 +158,7 @@ void LEDPanel::updateData()
 
     // Get group pointer
     auto dash = UI::Dashboard::getInstance();
+    auto theme = Misc::ThemeManager::getInstance();
     auto group = dash->getLED(m_index);
     if (!group)
         return;
