@@ -192,16 +192,16 @@ QVector<QString> Dashboard::widgetTitles() const
 
     // clang-format off
     return groupTitles() +
-           multiPlotTitles() +
-           ledTitles() +
-           fftTitles() +
-           plotTitles() +
-           barTitles() +
-           gaugeTitles() +
-           compassTitles() +
-           gyroscopeTitles() +
-           accelerometerTitles() +
-           gpsTitles();
+            multiPlotTitles() +
+            ledTitles() +
+            fftTitles() +
+            plotTitles() +
+            barTitles() +
+            gaugeTitles() +
+            compassTitles() +
+            gyroscopeTitles() +
+            accelerometerTitles() +
+            gpsTitles();
     // clang-format on
 }
 
@@ -313,42 +313,42 @@ bool Dashboard::widgetVisible(const int globalIndex) const
 
     switch (widgetType(globalIndex))
     {
-        case WidgetType::Group:
-            visible = groupVisible(index);
-            break;
-        case WidgetType::MultiPlot:
-            visible = multiPlotVisible(index);
-            break;
-        case WidgetType::FFT:
-            visible = fftVisible(index);
-            break;
-        case WidgetType::Plot:
-            visible = plotVisible(index);
-            break;
-        case WidgetType::Bar:
-            visible = barVisible(index);
-            break;
-        case WidgetType::Gauge:
-            visible = gaugeVisible(index);
-            break;
-        case WidgetType::Compass:
-            visible = compassVisible(index);
-            break;
-        case WidgetType::Gyroscope:
-            visible = gyroscopeVisible(index);
-            break;
-        case WidgetType::Accelerometer:
-            visible = accelerometerVisible(index);
-            break;
-        case WidgetType::GPS:
-            visible = gpsVisible(index);
-            break;
-        case WidgetType::LED:
-            visible = ledVisible(index);
-            break;
-        default:
-            visible = false;
-            break;
+    case WidgetType::Group:
+        visible = groupVisible(index);
+        break;
+    case WidgetType::MultiPlot:
+        visible = multiPlotVisible(index);
+        break;
+    case WidgetType::FFT:
+        visible = fftVisible(index);
+        break;
+    case WidgetType::Plot:
+        visible = plotVisible(index);
+        break;
+    case WidgetType::Bar:
+        visible = barVisible(index);
+        break;
+    case WidgetType::Gauge:
+        visible = gaugeVisible(index);
+        break;
+    case WidgetType::Compass:
+        visible = compassVisible(index);
+        break;
+    case WidgetType::Gyroscope:
+        visible = gyroscopeVisible(index);
+        break;
+    case WidgetType::Accelerometer:
+        visible = accelerometerVisible(index);
+        break;
+    case WidgetType::GPS:
+        visible = gpsVisible(index);
+        break;
+    case WidgetType::LED:
+        visible = ledVisible(index);
+        break;
+    default:
+        visible = false;
+        break;
     }
 
     return visible;
@@ -374,42 +374,42 @@ QString Dashboard::widgetIcon(const int globalIndex) const
 {
     switch (widgetType(globalIndex))
     {
-        case WidgetType::Group:
-            return "qrc:/icons/group.svg";
-            break;
-        case WidgetType::MultiPlot:
-            return "qrc:/icons/multiplot.svg";
-            break;
-        case WidgetType::FFT:
-            return "qrc:/icons/fft.svg";
-            break;
-        case WidgetType::Plot:
-            return "qrc:/icons/plot.svg";
-            break;
-        case WidgetType::Bar:
-            return "qrc:/icons/bar.svg";
-            break;
-        case WidgetType::Gauge:
-            return "qrc:/icons/gauge.svg";
-            break;
-        case WidgetType::Compass:
-            return "qrc:/icons/compass.svg";
-            break;
-        case WidgetType::Gyroscope:
-            return "qrc:/icons/gyro.svg";
-            break;
-        case WidgetType::Accelerometer:
-            return "qrc:/icons/accelerometer.svg";
-            break;
-        case WidgetType::GPS:
-            return "qrc:/icons/gps.svg";
-            break;
-        case WidgetType::LED:
-            return "qrc:/icons/led.svg";
-            break;
-        default:
-            return "qrc:/icons/close.svg";
-            break;
+    case WidgetType::Group:
+        return "qrc:/icons/group.svg";
+        break;
+    case WidgetType::MultiPlot:
+        return "qrc:/icons/multiplot.svg";
+        break;
+    case WidgetType::FFT:
+        return "qrc:/icons/fft.svg";
+        break;
+    case WidgetType::Plot:
+        return "qrc:/icons/plot.svg";
+        break;
+    case WidgetType::Bar:
+        return "qrc:/icons/bar.svg";
+        break;
+    case WidgetType::Gauge:
+        return "qrc:/icons/gauge.svg";
+        break;
+    case WidgetType::Compass:
+        return "qrc:/icons/compass.svg";
+        break;
+    case WidgetType::Gyroscope:
+        return "qrc:/icons/gyro.svg";
+        break;
+    case WidgetType::Accelerometer:
+        return "qrc:/icons/accelerometer.svg";
+        break;
+    case WidgetType::GPS:
+        return "qrc:/icons/gps.svg";
+        break;
+    case WidgetType::LED:
+        return "qrc:/icons/led.svg";
+        break;
+    default:
+        return "qrc:/icons/close.svg";
+        break;
     }
 }
 
@@ -895,12 +895,14 @@ QVector<JSON::Group *> Dashboard::getLEDWidgets() const
         }
     }
 
-    JSON::Group *group = new JSON::Group();
-    group->m_title = tr("Status Panel");
-    group->m_datasets = widgets;
-
     QVector<JSON::Group *> groups;
-    groups.append(group);
+    if (widgets.count() > 0) {
+        JSON::Group *group = new JSON::Group();
+        group->m_title = tr("Status Panel");
+        group->m_datasets = widgets;
+        groups.append(group);
+    }
+
     return groups;
 }
 
