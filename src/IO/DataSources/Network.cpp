@@ -188,29 +188,23 @@ QIODevice *Network::openNetworkPort()
     // UDP connection, assign socket pointer & bind to host
     else if (socketType() == QAbstractSocket::UdpSocket)
     {
-        // Bind the UDP socket to a multicast group
+        // Bind the UDP socket
+        // clang-format off
+        m_udpSocket.bind(udpLocalPort(),
+                         QAbstractSocket::ShareAddress |
+                         QAbstractSocket::ReuseAddressHint);
+        // clang-format on
+
+        // Join the multicast group (if required)
         if (udpMulticast())
         {
             QHostAddress address(hostAddr);
-            if (address.protocol() == QAbstractSocket::IPv4Protocol)
-                m_udpSocket.bind(QHostAddress::AnyIPv4, udpRemotePort(),
-                                 QUdpSocket::ShareAddress);
-            else if (address.protocol() == QAbstractSocket::IPv6Protocol)
-                m_udpSocket.bind(QHostAddress::AnyIPv6, udpRemotePort(),
-                                 QUdpSocket::ShareAddress);
-            else
-                m_udpSocket.bind(QHostAddress::Any, udpRemotePort(),
-                                 QUdpSocket::ShareAddress);
-
             m_udpSocket.joinMulticastGroup(address);
         }
 
-        // Bind the UDP socket to an individual host
-        else
-        {
-            m_udpSocket.bind(QHostAddress::LocalHost, udpLocalPort());
-            m_udpSocket.connectToHost(hostAddr, udpRemotePort());
-        }
+        // Set socket options
+        m_udpSocket.setSocketOption(QAbstractSocket::LowDelayOption, 1);
+        m_udpSocket.setSocketOption(QAbstractSocket::MulticastLoopbackOption, 0);
 
         // Update socket pointer
         socket = &m_udpSocket;
@@ -241,6 +235,8 @@ void Network::setUdpSocket()
  */
 void Network::disconnectDevice()
 {
+    m_tcpSocket.abort();
+    m_udpSocket.abort();
     m_tcpSocket.disconnectFromHost();
     m_udpSocket.disconnectFromHost();
 }

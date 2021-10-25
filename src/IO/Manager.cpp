@@ -288,8 +288,27 @@ qint64 Manager::writeData(const QByteArray &data)
 {
     if (connected())
     {
-        qint64 bytes = device()->write(data);
+        qint64 bytes = 0;
 
+        // Check if we need to use UDP socket functions
+        bool udpConnection = false;
+        if (dataSource() == DataSource::Network)
+        {
+            auto network = DataSources::Network::getInstance();
+            if (network->socketType() == QAbstractSocket::UdpSocket)
+            {
+                udpConnection = true;
+                bytes = network->udpSocket()->writeDatagram(
+                    data, QHostAddress(network->remoteAddress()),
+                    network->udpRemotePort());
+            }
+        }
+
+        // We are using a serial port or a TCP port
+        else if (!udpConnection)
+            bytes = device()->write(data);
+
+        // Show sent data in console
         if (bytes > 0)
         {
             auto writtenData = data;
@@ -299,6 +318,7 @@ qint64 Manager::writeData(const QByteArray &data)
             emit dataSent(writtenData);
         }
 
+        // Return number of bytes written
         return bytes;
     }
 
