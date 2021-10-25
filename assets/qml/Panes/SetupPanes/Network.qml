@@ -174,11 +174,11 @@ Control {
                 text: qsTr("Local port") + ":"
                 enabled: !Cpp_IO_Manager.connected
                 Behavior on opacity {NumberAnimation{}}
-                visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
+                visible: Cpp_IO_Network.socketTypeIndex === 1
             } TextField {
                 id: _udpLocalPort
                 Layout.fillWidth: true
-                placeholderText: Cpp_IO_Network.defaultUdpLocalPort
+                placeholderText: qsTr("Type 0 for automatic port")
                 Component.onCompleted: text = Cpp_IO_Network.udpLocalPort
                 onTextChanged: {
                     if (Cpp_IO_Network.udpLocalPort !== text && text.length > 0)
@@ -195,7 +195,7 @@ Control {
 
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Manager.connected
-                visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
+                visible: Cpp_IO_Network.socketTypeIndex === 1
 
                 Behavior on opacity {NumberAnimation{}}
             }
@@ -208,7 +208,7 @@ Control {
                 text: qsTr("Remote port") + ":"
                 enabled: !Cpp_IO_Manager.connected
                 Behavior on opacity {NumberAnimation{}}
-                visible: Cpp_IO_Network.socketTypeIndex === 1
+                visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
             } TextField {
                 id: _udpRemotePort
                 Layout.fillWidth: true
@@ -229,7 +229,7 @@ Control {
 
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Manager.connected
-                visible: Cpp_IO_Network.socketTypeIndex === 1
+                visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
 
                 Behavior on opacity {NumberAnimation{}}
             }

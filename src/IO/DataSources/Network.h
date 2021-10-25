@@ -119,8 +119,8 @@ public:
 
     static QString defaultAddress() { return "127.0.0.1"; }
     static quint16 defaultTcpPort() { return 23; }
+    static quint16 defaultUdpLocalPort() { return 0; }
     static quint16 defaultUdpRemotePort() { return 53; }
-    static quint16 defaultUdpLocalPort() { return 8888; }
 
     QIODevice *openNetworkPort();
 

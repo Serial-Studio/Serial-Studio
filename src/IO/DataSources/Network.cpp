@@ -202,10 +202,6 @@ QIODevice *Network::openNetworkPort()
             m_udpSocket.joinMulticastGroup(address);
         }
 
-        // Set socket options
-        m_udpSocket.setSocketOption(QAbstractSocket::LowDelayOption, 1);
-        m_udpSocket.setSocketOption(QAbstractSocket::MulticastLoopbackOption, 0);
-
         // Update socket pointer
         socket = &m_udpSocket;
     }
