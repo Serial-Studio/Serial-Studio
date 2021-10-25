@@ -122,7 +122,7 @@ Window {
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Website")
-                onClicked: Qt.openUrlExternally("https://www.alex-spataru.com/serial-studio")
+                onClicked: Qt.openUrlExternally("https://serial-studio.github.io/")
             }
 
             Button {
