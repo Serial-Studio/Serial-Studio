@@ -1,4 +1,4 @@
-# Sponsors
+# Sponsors
 
 A sincere thank you to all our sponsors and backers:
 
