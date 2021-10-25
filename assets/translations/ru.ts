@@ -163,51 +163,51 @@
     <name>Console</name>
     <message>
         <source>Send data to device</source>
-        <translation>Отправьте данные на устройство</translation>
+        <translation type="vanished">Отправьте данные на устройство</translation>
     </message>
     <message>
         <source>Echo</source>
-        <translation>Эхо</translation>
+        <translation type="vanished">Эхо</translation>
     </message>
     <message>
         <source>Autoscroll</source>
-        <translation>Автопрокрутка</translation>
+        <translation type="vanished">Автопрокрутка</translation>
     </message>
     <message>
         <source>Show timestamp</source>
-        <translation>Показать метку времени</translation>
+        <translation type="vanished">Показать метку времени</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Копировать</translation>
+        <translation type="vanished">Копировать</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Очистить</translation>
+        <translation type="vanished">Очистить</translation>
     </message>
     <message>
         <source>Save as</source>
-        <translation>Сохранить как</translation>
+        <translation type="vanished">Сохранить как</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation>Выбрать все</translation>
+        <translation type="vanished">Выбрать все</translation>
     </message>
     <message>
         <source>No data received so far</source>
-        <translation>Данные пока не получены</translation>
+        <translation type="vanished">Данные пока не получены</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation>Печать</translation>
+        <translation type="vanished">Печать</translation>
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation>Скрыть меню</translation>
+        <translation type="vanished">Скрыть меню</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation>Показать меню</translation>
+        <translation type="vanished">Показать меню</translation>
     </message>
     <message>
         <source>Console</source>
@@ -868,6 +868,10 @@
         <source>The compass widget expects values from 0° to 360°.</source>
         <translation>Виджет компаса принимает значения от 0° до 360°.</translation>
     </message>
+    <message>
+        <source>Display LED:</source>
+        <translation>Показать LED:</translation>
+    </message>
 </context>
 <context>
     <name>JsonEditor</name>
@@ -953,6 +957,19 @@
     <message>
         <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
         <translation>Виджет гироскопа принимает значения в градусах (от 0° до 360°).</translation>
+    </message>
+</context>
+<context>
+    <name>KLed</name>
+    <message>
+        <source>LED on</source>
+        <comment>Accessible name of a Led whose state is on</comment>
+        <translation>Светодиод включен</translation>
+    </message>
+    <message>
+        <source>LED off</source>
+        <comment>Accessible name of a Led whose state is off</comment>
+        <translation>Светодиод выключен</translation>
     </message>
 </context>
 <context>
@@ -1498,6 +1515,33 @@
     </message>
 </context>
 <context>
+    <name>Misc::ModuleManager</name>
+    <message>
+        <source>Initializing...</source>
+        <translation>Инициализация...</translation>
+    </message>
+    <message>
+        <source>Configuring updater...</source>
+        <translation>Настройка программы обновления...</translation>
+    </message>
+    <message>
+        <source>Initializing modules...</source>
+        <translation>Инициализация модулей...</translation>
+    </message>
+    <message>
+        <source>Loading user interface...</source>
+        <translation>Загрузка пользовательского интерфейса...</translation>
+    </message>
+    <message>
+        <source>The rendering engine change will take effect after restart</source>
+        <translation>Изменение механизма рендеринга вступит в силу после перезапуска</translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation>Хотите ли вы перезапустить %1 сейчас?</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ThemeManager</name>
     <message>
         <source>The theme change will take effect after restart</source>
@@ -1523,15 +1567,15 @@
     <name>ModuleManager</name>
     <message>
         <source>Initializing...</source>
-        <translation>Инициализация...</translation>
+        <translation type="vanished">Инициализация...</translation>
     </message>
     <message>
         <source>Configuring updater...</source>
-        <translation>Настройка программы обновления...</translation>
+        <translation type="vanished">Настройка программы обновления...</translation>
     </message>
     <message>
         <source>Initializing modules...</source>
-        <translation>Инициализация модулей...</translation>
+        <translation type="vanished">Инициализация модулей...</translation>
     </message>
     <message>
         <source>Starting timers...</source>
@@ -1539,15 +1583,15 @@
     </message>
     <message>
         <source>Loading user interface...</source>
-        <translation>Загрузка пользовательского интерфейса...</translation>
+        <translation type="vanished">Загрузка пользовательского интерфейса...</translation>
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
-        <translation>Изменение механизма рендеринга вступит в силу после перезапуска</translation>
+        <translation type="vanished">Изменение механизма рендеринга вступит в силу после перезапуска</translation>
     </message>
     <message>
         <source>Do you want to restart %1 now?</source>
-        <translation>Хотите ли вы перезапустить %1 сейчас?</translation>
+        <translation type="vanished">Хотите ли вы перезапустить %1 сейчас?</translation>
     </message>
 </context>
 <context>
@@ -1562,15 +1606,46 @@
     </message>
     <message>
         <source>Host</source>
-        <translation>Хост</translation>
+        <translation type="vanished">Хост</translation>
     </message>
     <message>
         <source>Multicast</source>
         <translation>Мультикаст</translation>
     </message>
+    <message>
+        <source>Remote address</source>
+        <translation>Удаленный адрес</translation>
+    </message>
+    <message>
+        <source>Local port</source>
+        <translation>Локальный порт</translation>
+    </message>
+    <message>
+        <source>Type 0 for automatic port</source>
+        <translation>Запишите 0 для автоматического номера порта</translation>
+    </message>
+    <message>
+        <source>Remote port</source>
+        <translation>Удаленный порт</translation>
+    </message>
 </context>
 <context>
     <name>Plugins::Bridge</name>
+    <message>
+        <source>Unable to start plugin TCP server</source>
+        <translation type="vanished">Невозможно запустить TCP-сервер плагина</translation>
+    </message>
+    <message>
+        <source>Plugin server</source>
+        <translation type="vanished">Сервер плагина</translation>
+    </message>
+    <message>
+        <source>Invalid pending connection</source>
+        <translation type="vanished">Недействительное ожидающее соединение</translation>
+    </message>
+</context>
+<context>
+    <name>Plugins::Server</name>
     <message>
         <source>Unable to start plugin TCP server</source>
         <translation>Невозможно запустить TCP-сервер плагина</translation>
@@ -1786,6 +1861,57 @@
     </message>
 </context>
 <context>
+    <name>Terminal</name>
+    <message>
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Выбрать все</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Очистить</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation>Печать</translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation>Сохранить как</translation>
+    </message>
+    <message>
+        <source>Hide menubar</source>
+        <translation>Скрыть меню</translation>
+    </message>
+    <message>
+        <source>Show menubar</source>
+        <translation>Показать меню</translation>
+    </message>
+    <message>
+        <source>No data received so far</source>
+        <translation>Данные пока не получены</translation>
+    </message>
+    <message>
+        <source>Send data to device</source>
+        <translation>Отправьте данные на устройство</translation>
+    </message>
+    <message>
+        <source>Echo</source>
+        <translation>Эхо</translation>
+    </message>
+    <message>
+        <source>Autoscroll</source>
+        <translation>Автопрокрутка</translation>
+    </message>
+    <message>
+        <source>Show timestamp</source>
+        <translation>Показать метку времени</translation>
+    </message>
+</context>
+<context>
     <name>Toolbar</name>
     <message>
         <source>Console</source>
@@ -1825,6 +1951,20 @@
     <message>
         <source>JSON Project Tree</source>
         <translation>JSON Дерево проекта</translation>
+    </message>
+</context>
+<context>
+    <name>UI::Dashboard</name>
+    <message>
+        <source>Status Panel</source>
+        <translation>Панель состояния</translation>
+    </message>
+</context>
+<context>
+    <name>UI::WidgetLoader</name>
+    <message>
+        <source>Invalid</source>
+        <translation>Неверный</translation>
     </message>
 </context>
 <context>
@@ -1899,6 +2039,10 @@
     <message>
         <source>GPS</source>
         <translation>GPS</translation>
+    </message>
+    <message>
+        <source>LED Panels</source>
+        <translation>LED-панели</translation>
     </message>
 </context>
 <context>
@@ -1975,7 +2119,7 @@
     <name>Widgets::WidgetLoader</name>
     <message>
         <source>Invalid</source>
-        <translation>Неверный</translation>
+        <translation type="vanished">Неверный</translation>
     </message>
 </context>
 </TS>

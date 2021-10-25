@@ -124,54 +124,6 @@
 <context>
     <name>Console</name>
     <message>
-        <source>Send data to device</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Echo</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Autoscroll</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Show timestamp</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Save as</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Select all</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>No data received so far</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hide menubar</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Show menubar</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Console</source>
         <translation></translation>
     </message>
@@ -787,6 +739,10 @@
         <source>The compass widget expects values from 0° to 360°.</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Display LED:</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>JsonEditor</name>
@@ -827,6 +783,19 @@
     </message>
     <message>
         <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>KLed</name>
+    <message>
+        <source>LED on</source>
+        <comment>Accessible name of a Led whose state is on</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>LED off</source>
+        <comment>Accessible name of a Led whose state is off</comment>
         <translation></translation>
     </message>
 </context>
@@ -1346,29 +1315,7 @@
     </message>
 </context>
 <context>
-    <name>Misc::ThemeManager</name>
-    <message>
-        <source>The theme change will take effect after restart</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Do you want to restart %1 now?</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>Misc::Utilities</name>
-    <message>
-        <source>Check for updates automatically?</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>ModuleManager</name>
+    <name>Misc::ModuleManager</name>
     <message>
         <source>Initializing...</source>
         <translation></translation>
@@ -1395,6 +1342,28 @@
     </message>
 </context>
 <context>
+    <name>Misc::ThemeManager</name>
+    <message>
+        <source>The theme change will take effect after restart</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Misc::Utilities</name>
+    <message>
+        <source>Check for updates automatically?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>Network</name>
     <message>
         <source>Socket type</source>
@@ -1405,16 +1374,28 @@
         <translation></translation>
     </message>
     <message>
-        <source>Host</source>
+        <source>Multicast</source>
         <translation></translation>
     </message>
     <message>
-        <source>Multicast</source>
+        <source>Remote address</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Local port</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Type 0 for automatic port</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Remote port</source>
         <translation></translation>
     </message>
 </context>
 <context>
-    <name>Plugins::Bridge</name>
+    <name>Plugins::Server</name>
     <message>
         <source>Unable to start plugin TCP server</source>
         <translation></translation>
@@ -1614,6 +1595,57 @@
     </message>
 </context>
 <context>
+    <name>Terminal</name>
+    <message>
+        <source>Copy</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Hide menubar</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Show menubar</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>No data received so far</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Send data to device</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Echo</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Autoscroll</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Show timestamp</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>Toolbar</name>
     <message>
         <source>Console</source>
@@ -1648,6 +1680,20 @@
     <name>TreeView</name>
     <message>
         <source>JSON Project Tree</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>UI::Dashboard</name>
+    <message>
+        <source>Status Panel</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>UI::WidgetLoader</name>
+    <message>
+        <source>Invalid</source>
         <translation></translation>
     </message>
 </context>
@@ -1724,6 +1770,10 @@
         <source>GPS</source>
         <translation></translation>
     </message>
+    <message>
+        <source>LED Panels</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>WidgetGrid</name>
@@ -1781,13 +1831,6 @@
     <name>Widgets::Plot</name>
     <message>
         <source>Samples</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>Widgets::WidgetLoader</name>
-    <message>
-        <source>Invalid</source>
         <translation></translation>
     </message>
 </context>

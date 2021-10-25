@@ -167,51 +167,51 @@
     </message>
     <message>
         <source>Send data to device</source>
-        <translation>Daten an das Gerät senden</translation>
+        <translation type="vanished">Daten an das Gerät senden</translation>
     </message>
     <message>
         <source>Echo</source>
-        <translation>Echo</translation>
+        <translation type="vanished">Echo</translation>
     </message>
     <message>
         <source>Autoscroll</source>
-        <translation>Auto Scroll</translation>
+        <translation type="vanished">Auto Scroll</translation>
     </message>
     <message>
         <source>Show timestamp</source>
-        <translation>Zeitstempel anzeigen</translation>
+        <translation type="vanished">Zeitstempel anzeigen</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Kopieren</translation>
+        <translation type="vanished">Kopieren</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Löschen</translation>
+        <translation type="vanished">Löschen</translation>
     </message>
     <message>
         <source>Save as</source>
-        <translation>Speichern als</translation>
+        <translation type="vanished">Speichern als</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation>Alles auswählen</translation>
+        <translation type="vanished">Alles auswählen</translation>
     </message>
     <message>
         <source>No data received so far</source>
-        <translation>Noch keine Daten verfügbar</translation>
+        <translation type="vanished">Noch keine Daten verfügbar</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation>Drucken</translation>
+        <translation type="vanished">Drucken</translation>
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation>Menüleiste ausblenden</translation>
+        <translation type="vanished">Menüleiste ausblenden</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation>Menüleiste anzeigen</translation>
+        <translation type="vanished">Menüleiste anzeigen</translation>
     </message>
     <message>
         <source>Console</source>
@@ -959,6 +959,10 @@
         <source>The compass widget expects values from 0° to 360°.</source>
         <translation>Das Kompass-Widget erwartet Werte von 0° bis 360°.</translation>
     </message>
+    <message>
+        <source>Display LED:</source>
+        <translation>LED anzeigen:</translation>
+    </message>
 </context>
 <context>
     <name>JsonEditor</name>
@@ -1083,6 +1087,19 @@
     <message>
         <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
         <translation>Das Gyroskop-Widget erwartet Werte in Grad (0° bis 360°).</translation>
+    </message>
+</context>
+<context>
+    <name>KLed</name>
+    <message>
+        <source>LED on</source>
+        <comment>Accessible name of a Led whose state is on</comment>
+        <translation>LED an</translation>
+    </message>
+    <message>
+        <source>LED off</source>
+        <comment>Accessible name of a Led whose state is off</comment>
+        <translation>LED aus</translation>
     </message>
 </context>
 <context>
@@ -1628,6 +1645,33 @@
     </message>
 </context>
 <context>
+    <name>Misc::ModuleManager</name>
+    <message>
+        <source>Initializing...</source>
+        <translation>Initialisierung...</translation>
+    </message>
+    <message>
+        <source>Configuring updater...</source>
+        <translation>Konfigurieren des Updaters...</translation>
+    </message>
+    <message>
+        <source>Initializing modules...</source>
+        <translation>Module initialisieren...</translation>
+    </message>
+    <message>
+        <source>Loading user interface...</source>
+        <translation>Benutzeroberfläche laden...</translation>
+    </message>
+    <message>
+        <source>The rendering engine change will take effect after restart</source>
+        <translation>Die Änderung der Rendering-Engine wird nach dem Neustart wirksam</translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation>Möchten Sie %1 jetzt neu starten?</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ThemeManager</name>
     <message>
         <source>The theme change will take effect after restart</source>
@@ -1653,15 +1697,15 @@
     <name>ModuleManager</name>
     <message>
         <source>Initializing...</source>
-        <translation>Initialisierung...</translation>
+        <translation type="vanished">Initialisierung...</translation>
     </message>
     <message>
         <source>Configuring updater...</source>
-        <translation>Konfigurieren des Updaters...</translation>
+        <translation type="vanished">Konfigurieren des Updaters...</translation>
     </message>
     <message>
         <source>Initializing modules...</source>
-        <translation>Module initialisieren...</translation>
+        <translation type="vanished">Module initialisieren...</translation>
     </message>
     <message>
         <source>Starting timers...</source>
@@ -1669,15 +1713,15 @@
     </message>
     <message>
         <source>Loading user interface...</source>
-        <translation>Benutzeroberfläche laden...</translation>
+        <translation type="vanished">Benutzeroberfläche laden...</translation>
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
-        <translation>Die Änderung der Rendering-Engine wird nach dem Neustart wirksam</translation>
+        <translation type="vanished">Die Änderung der Rendering-Engine wird nach dem Neustart wirksam</translation>
     </message>
     <message>
         <source>Do you want to restart %1 now?</source>
-        <translation>Möchten Sie %1 jetzt neu starten?</translation>
+        <translation type="vanished">Möchten Sie %1 jetzt neu starten?</translation>
     </message>
 </context>
 <context>
@@ -1704,15 +1748,46 @@
     </message>
     <message>
         <source>Host</source>
-        <translation>Server</translation>
+        <translation type="vanished">Server</translation>
     </message>
     <message>
         <source>Multicast</source>
         <translation>Multicast</translation>
     </message>
+    <message>
+        <source>Remote address</source>
+        <translation>Entfernte Adresse</translation>
+    </message>
+    <message>
+        <source>Local port</source>
+        <translation>Lokaler Port</translation>
+    </message>
+    <message>
+        <source>Type 0 for automatic port</source>
+        <translation>Geben Sie 0 ein, um den Port automatisch zuzuweisen</translation>
+    </message>
+    <message>
+        <source>Remote port</source>
+        <translation>Entfernter Port</translation>
+    </message>
 </context>
 <context>
     <name>Plugins::Bridge</name>
+    <message>
+        <source>Unable to start plugin TCP server</source>
+        <translation type="vanished">Plugin-TCP-Server kann nicht gestartet werden</translation>
+    </message>
+    <message>
+        <source>Plugin server</source>
+        <translation type="vanished">Plugin Server</translation>
+    </message>
+    <message>
+        <source>Invalid pending connection</source>
+        <translation type="vanished">Ungültige ausstehende Verbindung</translation>
+    </message>
+</context>
+<context>
+    <name>Plugins::Server</name>
     <message>
         <source>Unable to start plugin TCP server</source>
         <translation>Plugin-TCP-Server kann nicht gestartet werden</translation>
@@ -2035,6 +2110,57 @@
     </message>
 </context>
 <context>
+    <name>Terminal</name>
+    <message>
+        <source>Copy</source>
+        <translation>Kopieren</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Alles auswählen</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Löschen</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation>Drucken</translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation>Speichern als</translation>
+    </message>
+    <message>
+        <source>Hide menubar</source>
+        <translation>Menüleiste ausblenden</translation>
+    </message>
+    <message>
+        <source>Show menubar</source>
+        <translation>Menüleiste anzeigen</translation>
+    </message>
+    <message>
+        <source>No data received so far</source>
+        <translation>Noch keine Daten verfügbar</translation>
+    </message>
+    <message>
+        <source>Send data to device</source>
+        <translation>Daten an das Gerät senden</translation>
+    </message>
+    <message>
+        <source>Echo</source>
+        <translation>Echo</translation>
+    </message>
+    <message>
+        <source>Autoscroll</source>
+        <translation>Auto Scroll</translation>
+    </message>
+    <message>
+        <source>Show timestamp</source>
+        <translation>Zeitstempel anzeigen</translation>
+    </message>
+</context>
+<context>
     <name>Toolbar</name>
     <message>
         <source>Console</source>
@@ -2074,6 +2200,20 @@
     <message>
         <source>JSON Project Tree</source>
         <translation>JSON-Projektbaum</translation>
+    </message>
+</context>
+<context>
+    <name>UI::Dashboard</name>
+    <message>
+        <source>Status Panel</source>
+        <translation>Status-Panel</translation>
+    </message>
+</context>
+<context>
+    <name>UI::WidgetLoader</name>
+    <message>
+        <source>Invalid</source>
+        <translation>Ungültig</translation>
     </message>
 </context>
 <context>
@@ -2148,6 +2288,10 @@
     <message>
         <source>GPS</source>
         <translation>GPS</translation>
+    </message>
+    <message>
+        <source>LED Panels</source>
+        <translation>LED-Paneele</translation>
     </message>
 </context>
 <context>
@@ -2224,7 +2368,7 @@
     <name>Widgets::WidgetLoader</name>
     <message>
         <source>Invalid</source>
-        <translation>Ungültig</translation>
+        <translation type="vanished">Ungültig</translation>
     </message>
 </context>
 <context>

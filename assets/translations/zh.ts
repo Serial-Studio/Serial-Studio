@@ -179,51 +179,51 @@
     </message>
     <message>
         <source>Send data to device</source>
-        <translation>发送数据到设备</translation>
+        <translation type="vanished">发送数据到设备</translation>
     </message>
     <message>
         <source>Echo</source>
-        <translation>回声</translation>
+        <translation type="vanished">回声</translation>
     </message>
     <message>
         <source>Autoscroll</source>
-        <translation>自动滚屏</translation>
+        <translation type="vanished">自动滚屏</translation>
     </message>
     <message>
         <source>Show timestamp</source>
-        <translation>显示时间戳</translation>
+        <translation type="vanished">显示时间戳</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>复制</translation>
+        <translation type="vanished">复制</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>删除</translation>
+        <translation type="vanished">删除</translation>
     </message>
     <message>
         <source>Save as</source>
-        <translation>另存为</translation>
+        <translation type="vanished">另存为</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation>全选</translation>
+        <translation type="vanished">全选</translation>
     </message>
     <message>
         <source>No data received so far</source>
-        <translation>目前未收到任何数据</translation>
+        <translation type="vanished">目前未收到任何数据</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation>打印</translation>
+        <translation type="vanished">打印</translation>
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation>隐藏菜单栏</translation>
+        <translation type="vanished">隐藏菜单栏</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation>显示菜单栏</translation>
+        <translation type="vanished">显示菜单栏</translation>
     </message>
     <message>
         <source>Console</source>
@@ -999,6 +999,10 @@
         <source>The compass widget expects values from 0° to 360°.</source>
         <translation>指南针小组件期望的数值为0°到360°。</translation>
     </message>
+    <message>
+        <source>Display LED:</source>
+        <translation>显示LED：</translation>
+    </message>
 </context>
 <context>
     <name>JsonEditor</name>
@@ -1127,6 +1131,19 @@
     <message>
         <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
         <translation>陀螺仪小组件希望得到以度为单位的值（0°到360°）。</translation>
+    </message>
+</context>
+<context>
+    <name>KLed</name>
+    <message>
+        <source>LED on</source>
+        <comment>Accessible name of a Led whose state is on</comment>
+        <translation>LED灯亮起</translation>
+    </message>
+    <message>
+        <source>LED off</source>
+        <comment>Accessible name of a Led whose state is off</comment>
+        <translation>LED关闭</translation>
     </message>
 </context>
 <context>
@@ -1680,6 +1697,33 @@
     </message>
 </context>
 <context>
+    <name>Misc::ModuleManager</name>
+    <message>
+        <source>Initializing...</source>
+        <translation>初始化...</translation>
+    </message>
+    <message>
+        <source>Configuring updater...</source>
+        <translation>配置更新器...</translation>
+    </message>
+    <message>
+        <source>Initializing modules...</source>
+        <translation>初始化模块...</translation>
+    </message>
+    <message>
+        <source>Loading user interface...</source>
+        <translation>正在加载用户界面...</translation>
+    </message>
+    <message>
+        <source>The rendering engine change will take effect after restart</source>
+        <translation>渲染引擎的改变将在重新启动后生效</translation>
+    </message>
+    <message>
+        <source>Do you want to restart %1 now?</source>
+        <translation>你现在想重新启动%1吗？</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ThemeManager</name>
     <message>
         <source>The theme change will take effect after restart</source>
@@ -1705,15 +1749,15 @@
     <name>ModuleManager</name>
     <message>
         <source>Initializing...</source>
-        <translation>初始化...</translation>
+        <translation type="vanished">初始化...</translation>
     </message>
     <message>
         <source>Configuring updater...</source>
-        <translation>配置更新器...</translation>
+        <translation type="vanished">配置更新器...</translation>
     </message>
     <message>
         <source>Initializing modules...</source>
-        <translation>初始化模块...</translation>
+        <translation type="vanished">初始化模块...</translation>
     </message>
     <message>
         <source>Starting timers...</source>
@@ -1721,15 +1765,15 @@
     </message>
     <message>
         <source>Loading user interface...</source>
-        <translation>正在加载用户界面...</translation>
+        <translation type="vanished">正在加载用户界面...</translation>
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
-        <translation>渲染引擎的改变将在重新启动后生效</translation>
+        <translation type="vanished">渲染引擎的改变将在重新启动后生效</translation>
     </message>
     <message>
         <source>Do you want to restart %1 now?</source>
-        <translation>你现在想重新启动%1吗？</translation>
+        <translation type="vanished">你现在想重新启动%1吗？</translation>
     </message>
 </context>
 <context>
@@ -1756,15 +1800,46 @@
     </message>
     <message>
         <source>Host</source>
-        <translation>服务器</translation>
+        <translation type="vanished">服务器</translation>
     </message>
     <message>
         <source>Multicast</source>
         <translation>组播</translation>
     </message>
+    <message>
+        <source>Remote address</source>
+        <translation>远程地址</translation>
+    </message>
+    <message>
+        <source>Local port</source>
+        <translation>本地端口</translation>
+    </message>
+    <message>
+        <source>Type 0 for automatic port</source>
+        <translation>写0，用于自动分配端口</translation>
+    </message>
+    <message>
+        <source>Remote port</source>
+        <translation>远程端口</translation>
+    </message>
 </context>
 <context>
     <name>Plugins::Bridge</name>
+    <message>
+        <source>Unable to start plugin TCP server</source>
+        <translation type="vanished">无法启动插件TCP服务器</translation>
+    </message>
+    <message>
+        <source>Plugin server</source>
+        <translation type="vanished">插件服务器</translation>
+    </message>
+    <message>
+        <source>Invalid pending connection</source>
+        <translation type="vanished">无效的挂起连接</translation>
+    </message>
+</context>
+<context>
+    <name>Plugins::Server</name>
     <message>
         <source>Unable to start plugin TCP server</source>
         <translation>无法启动插件TCP服务器</translation>
@@ -2099,6 +2174,57 @@
     </message>
 </context>
 <context>
+    <name>Terminal</name>
+    <message>
+        <source>Copy</source>
+        <translation>复制</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>全选</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation>打印</translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation>另存为</translation>
+    </message>
+    <message>
+        <source>Hide menubar</source>
+        <translation>隐藏菜单栏</translation>
+    </message>
+    <message>
+        <source>Show menubar</source>
+        <translation>显示菜单栏</translation>
+    </message>
+    <message>
+        <source>No data received so far</source>
+        <translation>目前未收到任何数据</translation>
+    </message>
+    <message>
+        <source>Send data to device</source>
+        <translation>发送数据到设备</translation>
+    </message>
+    <message>
+        <source>Echo</source>
+        <translation>回声</translation>
+    </message>
+    <message>
+        <source>Autoscroll</source>
+        <translation>自动滚屏</translation>
+    </message>
+    <message>
+        <source>Show timestamp</source>
+        <translation>显示时间戳</translation>
+    </message>
+</context>
+<context>
     <name>Toolbar</name>
     <message>
         <source>Devices</source>
@@ -2158,6 +2284,20 @@
     <message>
         <source>JSON Project Tree</source>
         <translation>JSON项目树</translation>
+    </message>
+</context>
+<context>
+    <name>UI::Dashboard</name>
+    <message>
+        <source>Status Panel</source>
+        <translation>状态面板</translation>
+    </message>
+</context>
+<context>
+    <name>UI::WidgetLoader</name>
+    <message>
+        <source>Invalid</source>
+        <translation>无效</translation>
     </message>
 </context>
 <context>
@@ -2232,6 +2372,10 @@
     <message>
         <source>GPS</source>
         <translation>全球定位系统</translation>
+    </message>
+    <message>
+        <source>LED Panels</source>
+        <translation>LED面板</translation>
     </message>
 </context>
 <context>
@@ -2308,7 +2452,7 @@
     <name>Widgets::WidgetLoader</name>
     <message>
         <source>Invalid</source>
-        <translation>无效</translation>
+        <translation type="vanished">无效</translation>
     </message>
 </context>
 <context>
