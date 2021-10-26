@@ -22,7 +22,7 @@ Serial Studio是一个多平台，多用途的串行数据可视化的应用软�
 
 *其他语言请阅读*  :[English](../README.md)、 [Español](README_ES.md)、 [Deutsch](README_DE.md)
 
-![Software usage](doc/mockup.png)
+![Software usage](mockup.png)
 
 ## 编译说明
 

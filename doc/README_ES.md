@@ -22,7 +22,7 @@ Además, este enfoque se puede extender a casi cualquier tipo de proyecto que im
 
 *Lea esto en otros idiomas:* [English](../README.md) [简体中文](README_ZH.md) [Deutsch](README_DE.md)
 
-![Software usage](doc/mockup.png)
+![Software usage](mockup.png)
 
 ## Instalación
 

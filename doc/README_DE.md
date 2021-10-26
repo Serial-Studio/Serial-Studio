@@ -22,7 +22,7 @@ Darüber hinaus kann dieser Ansatz auf nahezu jede Art von Projekt ausgedehnt we
 
 *Lesen Sie dies in anderen Sprachen:* [English](../README.md) [简体中文](README_ZH.md) [Español](README_ES.md)
 
-![Software usage](doc/mockup.png)
+![Software usage](mockup.png)
 
 ## Bauanweisungen
 
