@@ -90,7 +90,7 @@ DataGroup::DataGroup(const int index)
         // Set label alignments
         units->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         value->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        title->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        title->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         dicon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         // Set label styles & fonts
@@ -143,7 +143,7 @@ DataGroup::DataGroup(const int index)
     // Configure main layout
     m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->addWidget(m_scrollArea);
-    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainLayout->setContentsMargins(12, 0, 0, 12);
     setLayout(m_mainLayout);
 
     // React to dashboard events

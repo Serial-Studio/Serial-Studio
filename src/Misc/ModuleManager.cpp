@@ -76,13 +76,13 @@ Misc::ModuleManager::ModuleManager()
     switch (renderingEngine())
     {
         case 0:
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
             break;
         case 1:
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenVG);
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
             break;
         case 2:
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenVG);
             break;
         case 3:
 #if defined(Q_OS_WIN)
@@ -106,10 +106,17 @@ Misc::ModuleManager::ModuleManager()
 #endif
     qApp->setFont(font);
 
+    // Get splash screen image
+    QPixmap pixmap(":/images/splash@1x.png");
+    auto dpr = qApp->devicePixelRatio();
+    if (dpr > 1)
+    {
+        pixmap.load(":/images/splash@2x.png");
+        pixmap.setDevicePixelRatio(dpr);
+    }
+
     // Show splash screen
-    QPixmap splash(":/images/splash.png");
-    splash.setDevicePixelRatio(qApp->devicePixelRatio());
-    m_splash.setPixmap(splash);
+    m_splash.setPixmap(pixmap);
     m_splash.show();
 
     // Stop modules when application is about to quit
@@ -278,9 +285,9 @@ int Misc::ModuleManager::renderingEngine() const
 QVector<QString> Misc::ModuleManager::renderingEngines() const
 {
     QVector<QString> list;
+    list.append("Software");
     list.append("OpenGL");
     list.append("OpenVG");
-    list.append("Software");
 #if defined(Q_OS_WIN)
     list.append("Direct3D");
 #elif defined(Q_OS_MAC)

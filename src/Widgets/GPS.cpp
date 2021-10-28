@@ -199,7 +199,7 @@ GPS::GPS(const int index)
     m_layout.setStretch(4, 1);
     m_layout.setAlignment(&m_posLabel, Qt::AlignHCenter | Qt::AlignVCenter);
     m_layout.setAlignment(&m_mapLabel, Qt::AlignHCenter | Qt::AlignVCenter);
-    m_layout.setContentsMargins(24, 24, 24, 24);
+    m_layout.setContentsMargins(12, 0, 0, 12);
     setLayout(&m_layout);
 
     // Invalidate network throttle timer
