@@ -25,6 +25,7 @@
 
 #include <QFile>
 #include <QObject>
+#include <QThread>
 #include <QJSValue>
 #include <QJSEngine>
 #include <QSettings>
@@ -38,6 +39,34 @@
 
 namespace JSON
 {
+/**
+ * Generates a JSON document by combining the JSON map file and the received
+ * data from the microcontroller device.
+ *
+ * This code is executed on another thread in order to avoid blocking the
+ * user interface.
+ */
+class JSONWorker : public QObject
+{
+    Q_OBJECT
+
+signals:
+    void finished();
+    void jsonReady(const JFI_Object &info);
+
+public:
+    JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time);
+
+public slots:
+    void process();
+
+private:
+    QDateTime m_time;
+    QByteArray m_data;
+    quint64 m_frame;
+    QJSEngine *m_engine;
+};
+
 /**
  * @brief The Generator class
  *
@@ -107,6 +136,7 @@ private:
 
 public slots:
     void readSettings();
+    void loadJFI(const JFI_Object &object);
     void writeSettings(const QString &path);
     void loadJSON(const QJsonDocument &json);
 
