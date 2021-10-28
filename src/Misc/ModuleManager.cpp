@@ -107,7 +107,9 @@ Misc::ModuleManager::ModuleManager()
     qApp->setFont(font);
 
     // Show splash screen
-    m_splash.setPixmap(QPixmap(":/images/splash.png"));
+    QPixmap splash(":/images/splash.png");
+    splash.setDevicePixelRatio(qApp->devicePixelRatio());
+    m_splash.setPixmap(splash);
     m_splash.show();
 
     // Stop modules when application is about to quit
