@@ -94,41 +94,15 @@ Item {
         gradient: true
         anchors.fill: parent
         title: qsTr("Console")
+        headerDoubleClickEnabled: false
         icon.source: "qrc:/icons/code.svg"
         anchors.margins: app.spacing * 1.5
-        onHeaderDoubleClicked: externalWindow.visible = true
         backgroundColor: Cpp_ThemeManager.paneWindowBackground
 
         Widgets.Terminal {
             id: terminal
             widgetEnabled: true
             anchors.fill: parent
-        }
-    }
-
-    //
-    // External console window
-    //
-    Window {
-        id: externalWindow
-        minimumWidth: 640
-        minimumHeight: 480
-        title: window.title
-        palette.text: Cpp_ThemeManager.text
-        palette.buttonText: Cpp_ThemeManager.text
-        palette.windowText: Cpp_ThemeManager.text
-        palette.window: Cpp_ThemeManager.paneWindowBackground
-        flags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
-
-        Rectangle {
-            anchors.fill: parent
-            color: Cpp_ThemeManager.paneWindowBackground
-        }
-
-        Widgets.Terminal {
-            anchors.fill: parent
-            isExternalWindow: true
-            widgetEnabled: externalWindow.visible
         }
     }
 }

@@ -144,7 +144,7 @@ ApplicationWindow {
     // operating systems because of the global menubar in macOS)
     //
     visible: false
-    minimumWidth: 1100
+    minimumWidth: 1250
     title: Cpp_AppName
     width: minimumWidth
     height: minimumHeight

@@ -246,12 +246,7 @@ Item {
                 opacity: enabled ? 1 : 0.5
                 enabled: Cpp_IO_Manager.readWrite
                 checked: Cpp_IO_Console.dataMode === 1
-                onCheckedChanged: {
-                    if (checked)
-                        Cpp_IO_Console.dataMode = 1
-                    else
-                        Cpp_IO_Console.dataMode = 0
-                }
+                onCheckedChanged: Cpp_IO_Console.dataMode = checked ? 1 : 0
             }
 
             CheckBox {

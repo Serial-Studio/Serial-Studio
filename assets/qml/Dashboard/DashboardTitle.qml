@@ -30,6 +30,11 @@ Item {
     id: root
 
     //
+    // Signals
+    //
+    property alias consoleChecked: consoleBt.checked
+
+    //
     // Window shadow (must go before window declaration
     // to avoid blurry artifacts & glitches).
     //
@@ -62,8 +67,11 @@ Item {
             spacing: app.spacing
 
             anchors {
+                margins: 0
                 left: parent.left
+                right: parent.right
                 leftMargin: app.spacing
+                rightMargin: app.spacing
                 verticalCenter: parent.verticalCenter
             }
 
@@ -78,19 +86,37 @@ Item {
                 color: palette.brightText
                 font.family: app.monoFont
                 text: Cpp_UI_Dashboard.title
+                Layout.alignment: Qt.AlignVCenter
             }
-        }
 
-        Label {
-            font.family: app.monoFont
-            color: palette.brightText
-            visible: !Cpp_CSV_Player.isOpen
-            text: Cpp_IO_Manager.receivedDataLength //*! Optimize this function
+            Item {
+                Layout.fillWidth: true
+            }
 
-            anchors {
-                right: parent.right
-                rightMargin: app.spacing
-                verticalCenter: parent.verticalCenter
+            Label {
+                font.family: app.monoFont
+                color: palette.brightText
+                visible: !Cpp_CSV_Player.isOpen
+                Layout.alignment: Qt.AlignVCenter
+                text: Cpp_IO_Manager.receivedDataLength //*! Optimize this function
+            }
+
+            Item {
+                width: app.spacing
+            }
+
+            Button {
+                flat: true
+                id: consoleBt
+                checkable: true
+                font.bold: true
+                text: qsTr("Console")
+                Layout.alignment: Qt.AlignVCenter
+                icon.source: "qrc:/icons/code.svg"
+                icon.color: Cpp_ThemeManager.brightText
+                palette.buttonText: Cpp_ThemeManager.brightText
+                palette.button: Cpp_ThemeManager.windowGradient1
+                palette.window: Cpp_ThemeManager.windowGradient1
             }
         }
     }

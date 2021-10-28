@@ -70,21 +70,65 @@ Item {
             }
 
             //
-            // Widget grid
+            // Widget grid + console
             //
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.minimumWidth: 240
+            ColumnLayout {
+                spacing: terminalView.enabled ? app.spacing : 0
 
-                Widgets.Shadow {
-                    source: widgetGrid
-                    anchors.fill: widgetGrid
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.minimumWidth: 240
+
+                    Widgets.Shadow {
+                        source: widgetGrid
+                        anchors.fill: widgetGrid
+                    }
+
+                    DashboardItems.WidgetGrid {
+                        id: widgetGrid
+                        anchors.fill: parent
+                    }
                 }
 
-                DashboardItems.WidgetGrid {
-                    id: widgetGrid
-                    anchors.fill: parent
+                Item {
+                    enabled: false
+                    id: terminalView
+                    Layout.fillWidth: true
+                    Layout.fillHeight: false
+                    Layout.maximumHeight: 280
+                    Layout.minimumHeight: 280
+                    opacity: enabled > 0 ? 1 : 0
+                    Layout.bottomMargin: enabled ? 0 : -Layout.minimumHeight
+
+                    Behavior on opacity { NumberAnimation{} }
+                    Behavior on Layout.bottomMargin { NumberAnimation{} }
+
+                    Widgets.Shadow {
+                        source: terminal
+                        anchors.fill: terminal
+                    }
+
+                    Widgets.Window {
+                        id: terminal
+                        gradient: true
+                        anchors.fill: parent
+                        title: qsTr("Console")
+                        altButtonEnabled: true
+                        headerDoubleClickEnabled: false
+                        icon.source: "qrc:/icons/code.svg"
+                        altButtonIcon.source: "qrc:/icons/scroll-down.svg"
+                        backgroundColor: Cpp_ThemeManager.paneWindowBackground
+                        onAltButtonClicked: {
+                            terminalView.enabled = false
+                            dbTitle.consoleChecked = false
+                        }
+
+                        Widgets.Terminal {
+                            anchors.fill: parent
+                            widgetEnabled: terminalView.enabled
+                        }
+                    }
                 }
             }
         }
@@ -93,8 +137,13 @@ Item {
         // Dashboard title window
         //
         DashboardItems.DashboardTitle {
+            id: dbTitle
             height: 32
             Layout.fillWidth: true
+            onConsoleCheckedChanged: {
+                if (terminalView.enabled != consoleChecked)
+                    terminalView.enabled = consoleChecked
+            }
         }
     }
 }
