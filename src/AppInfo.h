@@ -24,7 +24,7 @@
 #define APP_INFO_H
 
 // clang-format off
-#define APP_VERSION     "1.1.1"
+#define APP_VERSION     "1.1.2"
 #define APP_DEVELOPER   "Alex Spataru"
 #define APP_NAME        "Serial Studio"
 #define APP_ICON        ":/images/icon.svg"

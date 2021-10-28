@@ -74,6 +74,7 @@ ColumnLayout {
         ListView {
             id: view
             anchors.fill: parent
+            cacheBuffer: 2000 * 10
             model: Cpp_JSON_Editor.groupCount
             anchors.bottomMargin: app.spacing
 

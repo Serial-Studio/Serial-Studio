@@ -33,8 +33,8 @@ You can [download](https://github.com/Serial-Studio/Serial-Studio/releases/lates
 GNU/Linux users must enable the `executable` flag before attempting to run the application:
 
 ```bash
-chmod +x SerialStudio-1.1.0-Linux.AppImage
-./SerialStudio-1.1.0-Linux.AppImage
+chmod +x SerialStudio-1.1.1-Linux.AppImage
+./SerialStudio-1.1.1-Linux.AppImage
 ```
 
 You can also use the [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/) to integrate Serial Studio with your system.
