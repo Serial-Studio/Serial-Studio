@@ -650,12 +650,12 @@ void Dashboard::resetData()
  */
 void Dashboard::updateData()
 {
-    // Sort JSON list
-    JFI_SortList(&m_jsonList);
-
     // Check if we have anything to read
     if (m_jsonList.isEmpty())
         return;
+
+    // Sort JSON list
+    JFI_SortList(&m_jsonList);
 
     // Save widget count
     int barC = barCount();

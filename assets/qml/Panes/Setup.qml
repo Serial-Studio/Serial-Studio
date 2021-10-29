@@ -113,7 +113,6 @@ Item {
         property alias startSequence: settings.startSequence
         property alias tcpPlugins: settings.tcpPlugins
         property alias separatorSequence: settings.separatorSequence
-        property alias uiRefreshRate: settings.uiRefreshRate
     }
 
     //

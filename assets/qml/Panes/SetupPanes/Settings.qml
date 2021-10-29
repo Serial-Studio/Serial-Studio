@@ -36,33 +36,6 @@ Control {
     property alias startSequence: _startSequence.text
     property alias tcpPlugins: _tcpPlugins.checked
     property alias separatorSequence: _separatorSequence.text
-    property alias uiRefreshRate: _uiRefreshRate.value
-
-    //
-    // Maps the slider position to Hz
-    // https://stackoverflow.com/a/846249
-    //
-    function logslider(position) {
-        var minp = 0
-        var maxp = 100
-        var minv = Math.log(1)
-        var maxv = Math.log(1000)
-        var scale = (maxv - minv) / (maxp - minp);
-        return Math.exp(minv + scale * (position - minp));
-    }
-
-    //
-    // Maps the Hz value to the slider position
-    // https://stackoverflow.com/a/846249
-    //
-    function logposition(value) {
-        var minp = 0
-        var maxp = 100
-        var minv = Math.log(1)
-        var maxv = Math.log(1000)
-        var scale = (maxv - minv) / (maxp - minp)
-        return (Math.log(value) - minv) / scale + minp;
-    }
 
     //
     // Layout
@@ -173,30 +146,6 @@ Control {
                 onTextChanged: {
                     if (text !== Cpp_IO_Manager.separatorSequence)
                         Cpp_IO_Manager.separatorSequence = text
-                }
-            }
-
-            //
-            // UI refresh frequency
-            //
-            Label {
-                text: qsTr("UI refresh rate") + ": "
-            } RowLayout {
-                spacing: app.spacing
-                Slider {
-                    id: _uiRefreshRate
-                    from: 0
-                    to: 100
-                    Layout.fillWidth: true
-                    value: logposition(Cpp_Misc_TimerEvents.highFreqTimeoutHz)
-                    onValueChanged: {
-                        if (logslider(value) !== Cpp_Misc_TimerEvents.highFreqTimeoutHz)
-                            Cpp_Misc_TimerEvents.highFreqTimeoutHz = logslider(value)
-                    }
-                }
-
-                Label {
-                    text: Cpp_Misc_TimerEvents.highFreqTimeoutHz + " Hz"
                 }
             }
 

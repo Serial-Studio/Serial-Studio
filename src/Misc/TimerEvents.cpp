@@ -48,7 +48,7 @@ TimerEvents::TimerEvents()
 {
     // Configure timeout intevals
     m_timerLowFreq.setInterval(HZ_TO_MS(1));
-    m_timerHighFreq.setInterval(HZ_TO_MS(21));
+    m_timerHighFreq.setInterval(HZ_TO_MS(500));
 
     // Configure timer precision
     m_timerLowFreq.setTimerType(Qt::PreciseTimer);
