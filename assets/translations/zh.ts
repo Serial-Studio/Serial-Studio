@@ -2038,7 +2038,7 @@
     </message>
     <message>
         <source>UI refresh rate</source>
-        <translation>UI刷新率</translation>
+        <translation type="vanished">UI刷新率</translation>
     </message>
     <message>
         <source>Rendering engine</source>
@@ -2345,7 +2345,7 @@
     </message>
     <message>
         <source>Plot divisions (%1)</source>
-        <translation>图形划分 (%1)</translation>
+        <translation type="vanished">图形划分 (%1)</translation>
     </message>
     <message>
         <source>Datasets</source>
@@ -2390,6 +2390,18 @@
     <message>
         <source>LED Panels</source>
         <translation>LED面板</translation>
+    </message>
+    <message>
+        <source>View options</source>
+        <translation>可视化选项</translation>
+    </message>
+    <message>
+        <source>Points:</source>
+        <translation>点：</translation>
+    </message>
+    <message>
+        <source>Widgets:</source>
+        <translation>小工具：</translation>
     </message>
 </context>
 <context>

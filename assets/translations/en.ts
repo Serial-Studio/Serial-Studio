@@ -1533,10 +1533,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>UI refresh rate</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Rendering engine</source>
         <translation></translation>
     </message>
@@ -1741,10 +1737,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Plot divisions (%1)</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Datasets</source>
         <translation></translation>
     </message>
@@ -1786,6 +1778,18 @@
     </message>
     <message>
         <source>LED Panels</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>View options</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Points:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Widgets:</source>
         <translation></translation>
     </message>
 </context>

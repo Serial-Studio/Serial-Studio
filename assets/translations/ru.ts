@@ -1784,7 +1784,7 @@
     </message>
     <message>
         <source>UI refresh rate</source>
-        <translation>Частота обновления</translation>
+        <translation type="vanished">Частота обновления</translation>
     </message>
     <message>
         <source>Rendering engine</source>
@@ -2012,7 +2012,7 @@
     </message>
     <message>
         <source>Plot divisions (%1)</source>
-        <translation>Подразделения (%1)</translation>
+        <translation type="vanished">Подразделения (%1)</translation>
     </message>
     <message>
         <source>Datasets</source>
@@ -2057,6 +2057,18 @@
     <message>
         <source>LED Panels</source>
         <translation>LED-панели</translation>
+    </message>
+    <message>
+        <source>View options</source>
+        <translation>Опт визуализации</translation>
+    </message>
+    <message>
+        <source>Points:</source>
+        <translation>Баллы:</translation>
+    </message>
+    <message>
+        <source>Widgets:</source>
+        <translation>Виджеты:</translation>
     </message>
 </context>
 <context>

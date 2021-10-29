@@ -2106,7 +2106,7 @@
     </message>
     <message>
         <source>UI refresh rate</source>
-        <translation>Frec. de actualización</translation>
+        <translation type="vanished">Frec. de actualización</translation>
     </message>
     <message>
         <source>Rendering engine</source>
@@ -2425,7 +2425,7 @@
     </message>
     <message>
         <source>Plot divisions (%1)</source>
-        <translation>Divisiones de gráficos (%1)</translation>
+        <translation type="vanished">Divisiones de gráficos (%1)</translation>
     </message>
     <message>
         <source>Datasets</source>
@@ -2470,6 +2470,18 @@
     <message>
         <source>LED Panels</source>
         <translation>Panel de LEDs</translation>
+    </message>
+    <message>
+        <source>View options</source>
+        <translation>Opciones de visualización</translation>
+    </message>
+    <message>
+        <source>Points:</source>
+        <translation>Puntos:</translation>
+    </message>
+    <message>
+        <source>Widgets:</source>
+        <translation>Widgets:</translation>
     </message>
 </context>
 <context>
