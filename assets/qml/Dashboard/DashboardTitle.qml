@@ -23,6 +23,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import Qt.labs.settings 1.0
 
 import "../Widgets" as Widgets
 
@@ -30,9 +31,12 @@ Item {
     id: root
 
     //
-    // Signals
+    // Signals & settings for console button
     //
     property alias consoleChecked: consoleBt.checked
+    Settings {
+        property alias consoleVisible: root.consoleChecked
+    }
 
     //
     // Window shadow (must go before window declaration

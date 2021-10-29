@@ -290,6 +290,20 @@
     </message>
 </context>
 <context>
+    <name>Dashboard</name>
+    <message>
+        <source>Console</source>
+        <translation>Consola</translation>
+    </message>
+</context>
+<context>
+    <name>DashboardTitle</name>
+    <message>
+        <source>Console</source>
+        <translation>Consola</translation>
+    </message>
+</context>
+<context>
     <name>DataGrid</name>
     <message>
         <source>View</source>

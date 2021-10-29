@@ -126,7 +126,6 @@
         <file>qml/Windows/JsonEditor.qml</file>
         <file>qml/Windows/MainWindow.qml</file>
         <file>qml/main.qml</file>
-        <file>themes/4_Midnight.json</file>
         <file>themes/1_Classic.json</file>
         <file>themes/2_Noir.json</file>
         <file>themes/3_MathWorks.json</file>

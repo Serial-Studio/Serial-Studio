@@ -40,6 +40,11 @@ Widgets.Window {
     backgroundColor: Cpp_ThemeManager.paneWindowBackground
 
     //
+    // Signals
+    //
+    signal widgetSizeChanged(var maxSize)
+
+    //
     // Maps the slider position to points
     // https://stackoverflow.com/a/846249
     //
@@ -70,7 +75,8 @@ Widgets.Window {
     // Settings
     //
     Settings {
-        property alias points: dial.value
+        property alias points: plotPoints.value
+        property alias widgetSize: widgetSize.value
     }
 
     //
@@ -112,12 +118,12 @@ Widgets.Window {
                     width: 18
                     height: 18
                     color: palette.text
-                    source: "qrc:/icons/points.svg"
+                    source: "qrc:/icons/visibility.svg"
                 }
 
                 Label {
                     font.bold: true
-                    text: qsTr("Plot divisions (%1)").arg(logslider(dial.value))
+                    text: qsTr("View options")
                 }
 
                 Item {
@@ -126,21 +132,58 @@ Widgets.Window {
             }
 
             //
-            // Horizontal scale controls
+            // Spacer
             //
-            Dial {
-                id: dial
-                to: 100
-                from: 10
-                value: logposition(100)
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter
-                visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+            Item {
+                height: app.spacing
+            }
 
-                onValueChanged: {
-                    var log = logslider(value)
-                    if (Cpp_UI_Dashboard.points !== log)
-                        Cpp_UI_Dashboard.points = log
+            //
+            // Number of plot points slider
+            //
+            RowLayout {
+                spacing: app.spacing
+
+                Label {
+                    text: qsTr("Points:")
+                }
+
+                Slider {
+                    id: plotPoints
+                    from: 0
+                    to: 100
+                    Layout.fillWidth: true
+                    value: logposition(100)
+                    visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+                    onValueChanged: {
+                        var log = logslider(value)
+                        if (Cpp_UI_Dashboard.points !== log)
+                            Cpp_UI_Dashboard.points = log
+                    }
+                }
+
+                Label {
+                    text: logslider(plotPoints.value)
+                }
+            }
+
+            //
+            // Number of plot points slider
+            //
+            RowLayout {
+                spacing: app.spacing
+
+                Label {
+                    text: qsTr("Widgets:")
+                }
+
+                Slider {
+                    id: widgetSize
+                    to: 720
+                    from: 400
+                    value: 480
+                    Layout.fillWidth: true
+                    onValueChanged: widgetSizeChanged(value)
                 }
             }
 

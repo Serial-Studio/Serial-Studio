@@ -140,6 +140,20 @@
     </message>
 </context>
 <context>
+    <name>Dashboard</name>
+    <message>
+        <source>Console</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>DashboardTitle</name>
+    <message>
+        <source>Console</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>DataGrid</name>
     <message>
         <source>Horizontal Range</source>

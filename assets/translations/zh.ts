@@ -286,6 +286,20 @@
     </message>
 </context>
 <context>
+    <name>Dashboard</name>
+    <message>
+        <source>Console</source>
+        <translation>控制台</translation>
+    </message>
+</context>
+<context>
+    <name>DashboardTitle</name>
+    <message>
+        <source>Console</source>
+        <translation>控制台</translation>
+    </message>
+</context>
+<context>
     <name>DataGrid</name>
     <message>
         <source>View</source>

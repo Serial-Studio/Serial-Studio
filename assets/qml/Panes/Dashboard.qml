@@ -66,6 +66,7 @@ Item {
                 DashboardItems.ViewOptions {
                     id: viewOptions
                     anchors.fill: parent
+                    onWidgetSizeChanged: (maxSize) => widgetGrid.maxSize = maxSize
                 }
             }
 
