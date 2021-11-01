@@ -199,7 +199,7 @@ Widgets.Window {
                 spacing: app.spacing
 
                 Label {
-                    text: qsTr("Widgets:")
+                    text: qsTr("Widget size:")
                 }
 
                 Slider {
