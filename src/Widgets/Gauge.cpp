@@ -97,6 +97,8 @@ void Gauge::updateData()
 #endif
         auto value = dataset->value().toDouble();
         m_gauge.setValue(dataset->value().toDouble());
-        setValue(QString("%1 %2").arg(QString::number(value, 'f', 2), dataset->units()));
+        setValue(QString("%1 %2").arg(
+            QString::number(value, 'f', UI::Dashboard::getInstance()->precision()),
+            dataset->units()));
     }
 }

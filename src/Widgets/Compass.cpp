@@ -90,7 +90,8 @@ void Compass::update()
     if (dataset)
     {
         auto value = dataset->value().toDouble();
-        auto text = QString("%1°").arg(QString::number(value, 'f', 0));
+        auto text = QString("%1°").arg(
+            QString::number(value, 'f', UI::Dashboard::getInstance()->precision()));
         m_compass.setValue(value);
 
         if (text.length() == 2)

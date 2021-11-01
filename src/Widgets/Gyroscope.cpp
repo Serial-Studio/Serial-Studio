@@ -97,9 +97,12 @@ void Gyroscope::updateData()
                 yaw = dataset->value().toDouble();
         }
 
-        m_pitch = QString::number(qAbs(pitch), 'f', 2);
-        m_roll = QString::number(qAbs(roll), 'f', 2);
-        m_yaw = QString::number(qAbs(yaw), 'f', 2);
+        m_pitch = QString::number(qAbs(pitch), 'f',
+                                  UI::Dashboard::getInstance()->precision());
+        m_roll
+            = QString::number(qAbs(roll), 'f', UI::Dashboard::getInstance()->precision());
+        m_yaw
+            = QString::number(qAbs(yaw), 'f', UI::Dashboard::getInstance()->precision());
 
         m_gauge.setValue(pitch);
         m_gauge.setGradient(roll / 360.0);

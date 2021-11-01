@@ -72,6 +72,10 @@ class Dashboard : public QObject
                READ points
                WRITE setPoints
                NOTIFY pointsChanged)
+    Q_PROPERTY(int precision
+               READ precision
+               WRITE setPrecision
+               NOTIFY precisionChanged)
     Q_PROPERTY(int totalWidgetCount
                READ totalWidgetCount
                NOTIFY widgetCountChanged)
@@ -148,6 +152,7 @@ signals:
     void dataReset();
     void titleChanged();
     void pointsChanged();
+    void precisionChanged();
     void widgetCountChanged();
     void widgetVisibilityChanged();
 
@@ -187,6 +192,7 @@ public:
     QString title();
     bool available();
     int points() const;
+    int precision() const;
 
     int totalWidgetCount() const;
     int gpsCount() const;
@@ -238,6 +244,7 @@ public:
 
 public slots:
     void setPoints(const int points);
+    void setPrecision(const int precision);
     void setBarVisible(const int index, const bool visible);
     void setFFTVisible(const int index, const bool visible);
     void setGpsVisible(const int index, const bool visible);
@@ -277,6 +284,7 @@ private:
 
 private:
     int m_points;
+    int m_precision;
     PlotData m_xData;
     QVector<PlotData> m_fftPlotValues;
     QVector<PlotData> m_linearPlotValues;

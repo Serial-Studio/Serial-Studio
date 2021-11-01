@@ -209,7 +209,7 @@ void DataGroup::updateData()
             // Check if value is a number, if so make sure that
             // we always show a fixed number of decimal places
             if (REGEXP.match(value).hasMatch())
-                value = QString::number(value.toDouble(), 'f', 2);
+                value = QString::number(value.toDouble(), 'f', dash->precision());
 
             // Update label
             m_values.at(i)->setText(value + " ");

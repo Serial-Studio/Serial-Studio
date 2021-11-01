@@ -44,6 +44,7 @@ static Dashboard *INSTANCE = nullptr;
  */
 Dashboard::Dashboard()
     : m_points(100)
+    , m_precision(2)
 {
     auto cp = CSV::Player::getInstance();
     auto io = IO::Manager::getInstance();
@@ -116,6 +117,14 @@ bool Dashboard::available()
 int Dashboard::points() const
 {
     return m_points;
+}
+
+/**
+ * Returns the number of decimal digits displayed by the widgets
+ */
+int Dashboard::precision() const
+{
+    return m_precision;
 }
 
 /**
@@ -550,7 +559,7 @@ QVector<QString> Dashboard::accelerometerTitles() const { return groupTitles(m_a
 // clang-format on
 
 //--------------------------------------------------------------------------------------------------
-// Plot options
+// Plot & widget options
 //--------------------------------------------------------------------------------------------------
 
 void Dashboard::setPoints(const int points)
@@ -572,6 +581,15 @@ void Dashboard::setPoints(const int points)
 
         // Update plots
         emit pointsChanged();
+    }
+}
+
+void Dashboard::setPrecision(const int precision)
+{
+    if (m_precision != precision)
+    {
+        m_precision = precision;
+        emit precisionChanged();
     }
 }
 

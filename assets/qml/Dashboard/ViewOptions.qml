@@ -77,6 +77,7 @@ Widgets.Window {
     Settings {
         property alias points: plotPoints.value
         property alias widgetSize: widgetSize.value
+        property alias decimalPlaces: decimalPlaces.value
     }
 
     //
@@ -164,6 +165,30 @@ Widgets.Window {
 
                 Label {
                     text: logslider(plotPoints.value)
+                }
+            }
+
+            //
+            // Number of decimal places
+            //
+            RowLayout {
+                spacing: app.spacing
+
+                Label {
+                    text: qsTr("Decimal places:")
+                }
+
+                Slider {
+                    id: decimalPlaces
+                    to: 6
+                    from: 0
+                    value: 2
+                    Layout.fillWidth: true
+                    onValueChanged: Cpp_UI_Dashboard.precision = value
+                }
+
+                Label {
+                    text: Cpp_UI_Dashboard.precision
                 }
             }
 
