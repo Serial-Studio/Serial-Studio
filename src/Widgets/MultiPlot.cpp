@@ -32,6 +32,8 @@ using namespace Widgets;
  */
 MultiPlot::MultiPlot(const int index)
     : m_index(index)
+    , m_max(INT_MIN)
+    , m_min(INT_MAX)
 {
     // Get pointers to serial studio modules
     auto dash = UI::Dashboard::getInstance();
@@ -73,10 +75,27 @@ MultiPlot::MultiPlot(const int index)
     QVector<QString> colors = theme->widgetColors();
     for (int i = 0; i < group->datasetCount(); ++i)
     {
-        // Get title
+        // Get dataset title & min/max values
         QString title = tr("Unknown");
-        if (group->getDataset(i))
+        auto dataset = group->getDataset(i);
+        if (dataset)
+        {
+            // Update curve title
             title = group->getDataset(i)->title();
+
+            // Update graph scale
+            auto max = dataset->max();
+            auto min = dataset->min();
+            if (max > min)
+            {
+                if (m_max < max)
+                    m_max = max;
+                if (m_min > min)
+                    m_min = min;
+
+                m_plot.setAxisScale(QwtPlot::yLeft, m_min, m_max);
+            }
+        }
 
         // Create curve
         auto curve = new QwtPlotCurve(title);

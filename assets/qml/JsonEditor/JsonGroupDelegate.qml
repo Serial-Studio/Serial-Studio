@@ -211,6 +211,7 @@ Widgets.Window {
                         dataset: index
                         group: root.group
                         anchors.fill: parent
+                        multiplotGroup: widget.currentIndex === 4
                         showGroupWidget: widget.currentIndex > 0 && widget.currentIndex !== 4
                     }
                 }

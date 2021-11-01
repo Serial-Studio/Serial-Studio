@@ -50,6 +50,7 @@ Widgets.Window {
     //
     property int group
     property int dataset
+    property bool multiplotGroup
     property bool showGroupWidget
 
     //
@@ -57,7 +58,11 @@ Widgets.Window {
     //
     readonly property bool fftSamplesVisible: fftCheck.checked
     readonly property bool alarmVisible: widget.currentIndex === 2
-    readonly property bool minMaxVisible: widget.currentIndex === 1 || widget.currentIndex === 2 || logPlot.checked || linearPlot.checked
+    readonly property bool minMaxVisible: widget.currentIndex === 1 ||
+                                          widget.currentIndex === 2 ||
+                                          logPlot.checked ||
+                                          linearPlot.checked ||
+                                          root.multiplotGroup
 
     //
     // User interface

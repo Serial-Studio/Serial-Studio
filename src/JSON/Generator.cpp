@@ -324,10 +324,15 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
         auto list = QString::fromUtf8(data).split(sepr);
         for (int i = 0; i < list.count(); ++i)
         {
+            size_t start_pos = 0;
             std::string id = "%" + std::to_string(i + 1);
-            size_t pos = json.find(id);
-            if (pos != std::string::npos && pos < json.length())
-                json.replace(pos, id.length(), list.at(i).toStdString());
+            std::string value = list.at(i).toStdString();
+
+            while ((start_pos = json.find(id, start_pos)) != std::string::npos)
+            {
+                json.replace(start_pos, id.length(), value);
+                start_pos += value.length();
+            }
         }
 
         // Create json document
@@ -428,10 +433,15 @@ void JSONWorker::process()
         auto list = QString::fromUtf8(m_data).split(sepr);
         for (int i = 0; i < list.count(); ++i)
         {
+            size_t start_pos = 0;
             std::string id = "%" + std::to_string(i + 1);
-            size_t pos = json.find(id);
-            if (pos != std::string::npos && pos < json.length())
-                json.replace(pos, id.length(), list.at(i).toStdString());
+            std::string value = list.at(i).toStdString();
+
+            while ((start_pos = json.find(id, start_pos)) != std::string::npos)
+            {
+                json.replace(start_pos, id.length(), value);
+                start_pos += value.length();
+            }
         }
 
         // Create json document
