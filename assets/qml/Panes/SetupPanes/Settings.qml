@@ -32,10 +32,11 @@ Control {
     // Access to properties
     //
     property alias endSequence: _endSequence.text
+    property alias tcpPlugins: _tcpPlugins.checked
     property alias language: _langCombo.currentIndex
     property alias startSequence: _startSequence.text
-    property alias tcpPlugins: _tcpPlugins.checked
     property alias separatorSequence: _separatorSequence.text
+    property alias multithreadedFrameProcessing: _multithreadedFrameProcessing.checked
 
     //
     // Layout
@@ -146,6 +147,22 @@ Control {
                 onTextChanged: {
                     if (text !== Cpp_IO_Manager.separatorSequence)
                         Cpp_IO_Manager.separatorSequence = text
+                }
+            }
+
+            //
+            // Multi-threaded frame processing
+            //
+            Label {
+                text: qsTr("Multithreaded frame parsing") + ": "
+            } Switch {
+                id: _multithreadedFrameProcessing
+                Layout.leftMargin: -app.spacing
+                Layout.alignment: Qt.AlignLeft
+                checked: Cpp_JSON_Generator.processFramesInSeparateThread
+                onCheckedChanged: {
+                    if (checked != Cpp_JSON_Generator.processFramesInSeparateThread)
+                        Cpp_JSON_Generator.processFramesInSeparateThread = checked
                 }
             }
 

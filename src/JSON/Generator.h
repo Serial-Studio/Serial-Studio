@@ -103,12 +103,17 @@ class Generator : public QObject
                READ operationMode
                WRITE setOperationMode
                NOTIFY operationModeChanged)
+    Q_PROPERTY(bool processFramesInSeparateThread
+               READ processFramesInSeparateThread
+               WRITE setProcessFramesInSeparateThread
+               NOTIFY processFramesInSeparateThreadChanged)
     // clang-format on
 
 signals:
     void jsonFileMapChanged();
     void operationModeChanged();
     void jsonChanged(const JFI_Object &info);
+    void processFramesInSeparateThreadChanged();
 
 public:
     enum OperationMode
@@ -125,10 +130,12 @@ public:
     QString jsonMapFilename() const;
     QString jsonMapFilepath() const;
     OperationMode operationMode() const;
+    bool processFramesInSeparateThread() const;
 
 public slots:
     void loadJsonMap();
     void loadJsonMap(const QString &path);
+    void setProcessFramesInSeparateThread(const bool threaded);
     void setOperationMode(const JSON::Generator::OperationMode mode);
 
 private:
@@ -152,6 +159,7 @@ private:
     QSettings m_settings;
     QString m_jsonMapData;
     OperationMode m_opMode;
+    bool m_processInSeparateThread;
 };
 }
 

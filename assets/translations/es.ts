@@ -2112,6 +2112,14 @@
         <source>Rendering engine</source>
         <translation>Motor de renderizado</translation>
     </message>
+    <message>
+        <source>Threaded frame parsing</source>
+        <translation type="vanished">Análisis multihilo de tramas</translation>
+    </message>
+    <message>
+        <source>Multithreaded frame parsing</source>
+        <translation>Análisis multihilo de tramas</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>

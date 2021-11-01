@@ -1790,6 +1790,14 @@
         <source>Rendering engine</source>
         <translation>Механизм рендеринга</translation>
     </message>
+    <message>
+        <source>Threaded frame parsing</source>
+        <translation type="vanished">Многопоточный анализ кадров</translation>
+    </message>
+    <message>
+        <source>Multithreaded frame parsing</source>
+        <translation>Многопоточный анализ кадров</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>

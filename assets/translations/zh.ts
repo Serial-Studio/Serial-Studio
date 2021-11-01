@@ -2044,6 +2044,14 @@
         <source>Rendering engine</source>
         <translation>渲染引擎</translation>
     </message>
+    <message>
+        <source>Threaded frame parsing</source>
+        <translation type="vanished">多线程框架分析</translation>
+    </message>
+    <message>
+        <source>Multithreaded frame parsing</source>
+        <translation>多线程框架分析</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>

@@ -45,6 +45,7 @@ static Generator *INSTANCE = nullptr;
 Generator::Generator()
     : m_frameCount(0)
     , m_opMode(kAutomatic)
+    , m_processInSeparateThread(false)
 {
     auto io = IO::Manager::getInstance();
     auto cp = CSV::Player::getInstance();
@@ -108,6 +109,13 @@ QString Generator::jsonMapFilepath() const
 Generator::OperationMode Generator::operationMode() const
 {
     return m_opMode;
+}
+
+/**
+ * Returns @c true if JSON frames shall be generated in a separate thread
+ */
+bool Generator::processFramesInSeparateThread() const {
+    return m_processInSeparateThread;
 }
 
 /**
@@ -203,6 +211,14 @@ void Generator::setOperationMode(const JSON::Generator::OperationMode mode)
 }
 
 /**
+ * Enables or disables multi-threaded frame processing
+ */
+void Generator::setProcessFramesInSeparateThread(const bool threaded) {
+    m_processInSeparateThread = threaded;
+    emit processFramesInSeparateThreadChanged();
+}
+
+/**
  * Loads the last saved JSON map file (if any)
  */
 void Generator::readSettings()
@@ -285,15 +301,21 @@ void Generator::readData(const QByteArray &data)
     m_frameCount++;
 
     // Create new worker thread to read JSON data
-    QThread *thread = new QThread;
-    JSONWorker *worker = new JSONWorker(data, m_frameCount, QDateTime::currentDateTime());
-    worker->moveToThread(thread);
-    connect(thread, SIGNAL(started()), worker, SLOT(process()));
-    connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
-    connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
-    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-    connect(worker, &JSONWorker::jsonReady, this, &Generator::loadJFI);
-    thread->start();
+    if (processFramesInSeparateThread()) {
+        QThread *thread = new QThread;
+        JSONWorker *worker = new JSONWorker(data, m_frameCount, QDateTime::currentDateTime());
+        worker->moveToThread(thread);
+        connect(thread, SIGNAL(started()), worker, SLOT(process()));
+        connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
+        connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+        connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+        connect(worker, &JSONWorker::jsonReady, this, &Generator::loadJFI);
+        thread->start();
+    }
+
+    // Process frames in main thread
+    else
+        processFrame(data, m_frameCount, QDateTime::currentDateTime());
 }
 
 /**

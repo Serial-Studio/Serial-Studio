@@ -1988,6 +1988,14 @@
         <source>Rendering engine</source>
         <translation>Rendering Motor</translation>
     </message>
+    <message>
+        <source>Threaded frame parsing</source>
+        <translation type="vanished">Analyse von Multithreading-Rahmen</translation>
+    </message>
+    <message>
+        <source>Multithreaded frame parsing</source>
+        <translation>Analyse von Multithreading-Rahmen</translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>

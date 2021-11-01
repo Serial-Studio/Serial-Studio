@@ -1536,6 +1536,10 @@
         <source>Rendering engine</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Multithreaded frame parsing</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Setup</name>
