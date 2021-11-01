@@ -2473,7 +2473,7 @@
     </message>
     <message>
         <source>View options</source>
-        <translation>Opciones de visualización</translation>
+        <translation type="vanished">Opciones de visualización</translation>
     </message>
     <message>
         <source>Points:</source>
@@ -2481,7 +2481,19 @@
     </message>
     <message>
         <source>Widgets:</source>
-        <translation>Widgets:</translation>
+        <translation type="vanished">Widgets:</translation>
+    </message>
+    <message>
+        <source>Visualization options</source>
+        <translation>Opciones de visualización</translation>
+    </message>
+    <message>
+        <source>Decimal places:</source>
+        <translation>Lugares decimales:</translation>
+    </message>
+    <message>
+        <source>Widget size:</source>
+        <translation>Tamaño de widgets:</translation>
     </message>
 </context>
 <context>

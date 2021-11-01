@@ -1781,15 +1781,19 @@
         <translation></translation>
     </message>
     <message>
-        <source>View options</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Points:</source>
         <translation></translation>
     </message>
     <message>
-        <source>Widgets:</source>
+        <source>Visualization options</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Decimal places:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Widget size:</source>
         <translation></translation>
     </message>
 </context>

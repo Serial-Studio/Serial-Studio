@@ -2393,7 +2393,7 @@
     </message>
     <message>
         <source>View options</source>
-        <translation>可视化选项</translation>
+        <translation type="vanished">可视化选项</translation>
     </message>
     <message>
         <source>Points:</source>
@@ -2401,7 +2401,19 @@
     </message>
     <message>
         <source>Widgets:</source>
-        <translation>小工具：</translation>
+        <translation type="vanished">小工具：</translation>
+    </message>
+    <message>
+        <source>Visualization options</source>
+        <translation>可视化选项</translation>
+    </message>
+    <message>
+        <source>Decimal places:</source>
+        <translation>小数位：</translation>
+    </message>
+    <message>
+        <source>Widget size:</source>
+        <translation>小部件大小：</translation>
     </message>
 </context>
 <context>

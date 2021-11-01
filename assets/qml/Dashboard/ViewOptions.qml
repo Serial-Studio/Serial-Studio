@@ -108,7 +108,7 @@ Widgets.Window {
             }
 
             //
-            // Horizontal range title
+            // View options title
             //
             RowLayout {
                 spacing: app.spacing
@@ -124,7 +124,7 @@ Widgets.Window {
 
                 Label {
                     font.bold: true
-                    text: qsTr("View options")
+                    text: qsTr("Visualization options")
                 }
 
                 Item {
@@ -140,16 +140,19 @@ Widgets.Window {
             }
 
             //
-            // Number of plot points slider
+            // Visualization controls
             //
-            RowLayout {
-                spacing: app.spacing
+            GridLayout {
+                columns: 3
+                rowSpacing: app.spacing
+                columnSpacing: app.spacing
 
+                //
+                // Number of plot points slider
+                //
                 Label {
                     text: qsTr("Points:")
-                }
-
-                Slider {
+                } Slider {
                     id: plotPoints
                     from: 0
                     to: 100
@@ -161,55 +164,40 @@ Widgets.Window {
                         if (Cpp_UI_Dashboard.points !== log)
                             Cpp_UI_Dashboard.points = log
                     }
-                }
-
-                Label {
+                } Label {
                     text: logslider(plotPoints.value)
                 }
-            }
 
-            //
-            // Number of decimal places
-            //
-            RowLayout {
-                spacing: app.spacing
-
+                //
+                // Number of decimal places
+                //
                 Label {
                     text: qsTr("Decimal places:")
-                }
-
-                Slider {
+                } Slider {
                     id: decimalPlaces
                     to: 6
                     from: 0
                     value: 2
                     Layout.fillWidth: true
                     onValueChanged: Cpp_UI_Dashboard.precision = value
-                }
-
-                Label {
+                } Label {
                     text: Cpp_UI_Dashboard.precision
                 }
-            }
 
-            //
-            // Number of plot points slider
-            //
-            RowLayout {
-                spacing: app.spacing
 
+                //
+                // Number of plot points slider
+                //
                 Label {
                     text: qsTr("Widget size:")
-                }
-
-                Slider {
+                } Slider {
                     id: widgetSize
                     to: 720
                     from: 400
                     value: 480
                     Layout.fillWidth: true
                     onValueChanged: widgetSizeChanged(value)
-                }
+                } Item {}
             }
 
             //

@@ -56,7 +56,7 @@ Item {
             //
             Item {
                 Layout.fillHeight: true
-                Layout.minimumWidth: 240
+                Layout.minimumWidth: 280
 
                 Widgets.Shadow {
                     source: viewOptions

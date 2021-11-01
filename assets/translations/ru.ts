@@ -2060,7 +2060,7 @@
     </message>
     <message>
         <source>View options</source>
-        <translation>Опт визуализации</translation>
+        <translation type="vanished">Опт визуализации</translation>
     </message>
     <message>
         <source>Points:</source>
@@ -2068,7 +2068,19 @@
     </message>
     <message>
         <source>Widgets:</source>
-        <translation>Виджеты:</translation>
+        <translation type="vanished">Виджеты:</translation>
+    </message>
+    <message>
+        <source>Visualization options</source>
+        <translation>Варианты визуализации</translation>
+    </message>
+    <message>
+        <source>Decimal places:</source>
+        <translation>Десятичные разряды:</translation>
+    </message>
+    <message>
+        <source>Widget size:</source>
+        <translation>Размер виджетов:</translation>
     </message>
 </context>
 <context>
