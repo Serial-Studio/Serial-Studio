@@ -121,8 +121,11 @@ bool WidgetLoader::event(QEvent *event)
  */
 void WidgetLoader::paint(QPainter *painter)
 {
-    if (m_widget && painter)
-        m_widget->render(painter);
+    if (width() > 0 && height() > 0)
+    {
+        if (m_widget && painter)
+            m_widget->render(painter);
+    }
 }
 
 /**
