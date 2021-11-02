@@ -71,6 +71,7 @@ MultiPlot::MultiPlot(const int index)
         ->setAttribute(QwtScaleEngine::Floating, true);
 
     // Create curves from datasets
+    bool normalize = true;
     auto group = dash->getMultiplot(m_index);
     QVector<QString> colors = theme->widgetColors();
     for (int i = 0; i < group->datasetCount(); ++i)
@@ -80,21 +81,8 @@ MultiPlot::MultiPlot(const int index)
         auto dataset = group->getDataset(i);
         if (dataset)
         {
-            // Update curve title
             title = group->getDataset(i)->title();
-
-            // Update graph scale
-            auto max = dataset->max();
-            auto min = dataset->min();
-            if (max > min)
-            {
-                if (m_max < max)
-                    m_max = max;
-                if (m_min > min)
-                    m_min = min;
-
-                m_plot.setAxisScale(QwtPlot::yLeft, m_min, m_max);
-            }
+            normalize &= dataset->max() > dataset->min();
         }
 
         // Create curve
@@ -120,6 +108,10 @@ MultiPlot::MultiPlot(const int index)
     m_plot.setAxisTitle(QwtPlot::yLeft, group->title());
     m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
     m_plot.insertLegend(&m_legend, QwtPlot::BottomLegend);
+
+    // Normalize data curves
+    if (normalize)
+        m_plot.setAxisScale(QwtPlot::yLeft, 0, 1);
 
     // Show plot
     updateRange();
@@ -158,7 +150,19 @@ void MultiPlot::updateData()
         auto data = m_yData[i].data();
         auto count = m_yData[i].count();
         memmove(data, data + 1, count * sizeof(double));
-        m_yData[i][count - 1] = dataset->value().toDouble();
+
+        // Normalize dataset value
+        if (dataset->max() > dataset->min())
+        {
+            auto vmin = dataset->min();
+            auto vmax = dataset->max();
+            auto v = dataset->value().toDouble();
+            m_yData[i][count - 1] = (v - vmin) / (vmax - vmin);
+        }
+
+        // Plot dataset value directly
+        else
+            m_yData[i][count - 1] = dataset->value().toDouble();
 
         // Widget not enabled, do not redraw
         if (!isEnabled())

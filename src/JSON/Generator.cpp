@@ -114,7 +114,8 @@ Generator::OperationMode Generator::operationMode() const
 /**
  * Returns @c true if JSON frames shall be generated in a separate thread
  */
-bool Generator::processFramesInSeparateThread() const {
+bool Generator::processFramesInSeparateThread() const
+{
     return m_processInSeparateThread;
 }
 
@@ -213,7 +214,8 @@ void Generator::setOperationMode(const JSON::Generator::OperationMode mode)
 /**
  * Enables or disables multi-threaded frame processing
  */
-void Generator::setProcessFramesInSeparateThread(const bool threaded) {
+void Generator::setProcessFramesInSeparateThread(const bool threaded)
+{
     m_processInSeparateThread = threaded;
     emit processFramesInSeparateThreadChanged();
 }
@@ -301,9 +303,11 @@ void Generator::readData(const QByteArray &data)
     m_frameCount++;
 
     // Create new worker thread to read JSON data
-    if (processFramesInSeparateThread()) {
+    if (processFramesInSeparateThread())
+    {
         QThread *thread = new QThread;
-        JSONWorker *worker = new JSONWorker(data, m_frameCount, QDateTime::currentDateTime());
+        JSONWorker *worker
+            = new JSONWorker(data, m_frameCount, QDateTime::currentDateTime());
         worker->moveToThread(thread);
         connect(thread, SIGNAL(started()), worker, SLOT(process()));
         connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
