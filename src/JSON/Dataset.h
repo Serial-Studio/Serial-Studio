@@ -64,28 +64,6 @@ namespace JSON
  */
 class Dataset : public QObject
 {
-    // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(bool graph
-               READ graph
-               CONSTANT)
-    Q_PROPERTY(QString title
-               READ title
-               CONSTANT)
-    Q_PROPERTY(QString value
-               READ value
-               CONSTANT)
-    Q_PROPERTY(QString units
-               READ units
-               CONSTANT)
-    Q_PROPERTY(QString widget
-               READ widget
-               CONSTANT)
-    Q_PROPERTY(QJsonObject jsonData
-               READ jsonData
-               CONSTANT)
-    // clang-format on
-
 public:
     Dataset(QObject *parent = nullptr);
 

@@ -132,7 +132,3 @@ JSON::Group *Frame::getGroup(const int index)
 
     return Q_NULLPTR;
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Frame.cpp"
-#endif

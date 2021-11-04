@@ -130,7 +130,3 @@ bool Group::read(const QJsonObject &object)
 
     return false;
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Group.cpp"
-#endif
