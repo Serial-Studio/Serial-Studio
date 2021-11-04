@@ -258,7 +258,6 @@ jobs:
 
   # Test Windows MSYS2 packages
   msys2-test:
-    if: ${{ false }}
     needs: msys2-makepkg
     runs-on: windows-latest
     strategy:
