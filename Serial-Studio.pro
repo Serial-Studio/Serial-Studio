@@ -76,6 +76,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 }
 
 *msvc*: {
+    QMAKE_CXXFLAGS += -MP
     QMAKE_CXXFLAGS_RELEASE -= /O
     QMAKE_CXXFLAGS_RELEASE *= /O2
 }
@@ -149,6 +150,7 @@ mingw {
 #-----------------------------------------------------------------------------------------
 
 INCLUDEPATH += src
+PRECOMPILED_HEADER = src/PCH.h
 
 HEADERS += \
     src/AppInfo.h \
