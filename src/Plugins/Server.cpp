@@ -306,3 +306,7 @@ void Server::onErrorOccurred(const QAbstractSocket::SocketError socketError)
     else
         qDebug() << socketError;
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Server.cpp"
+#endif

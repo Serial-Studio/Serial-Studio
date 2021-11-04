@@ -120,3 +120,7 @@ void Utilities::revealFile(const QString &pathToReveal)
     QDesktopServices::openUrl(QUrl::fromLocalFile(pathToReveal));
 #endif
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Utilities.cpp"
+#endif

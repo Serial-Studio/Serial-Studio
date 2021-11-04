@@ -209,3 +209,7 @@ bool Dataset::read(const QJsonObject &object)
 
     return false;
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Dataset.cpp"
+#endif

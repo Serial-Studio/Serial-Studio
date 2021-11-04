@@ -128,3 +128,7 @@ void Gyroscope::updateLabel()
     if (m_displayNum > 2)
         m_displayNum = 0;
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Gyroscope.cpp"
+#endif

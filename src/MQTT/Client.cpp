@@ -526,3 +526,7 @@ void Client::onMessageReceived(const QMQTT::Message &message)
     // Let IO manager process incoming data
     IO::Manager::getInstance()->processPayload(mpayld);
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Client.cpp"
+#endif

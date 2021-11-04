@@ -29,6 +29,8 @@ MOC_DIR = moc
 RCC_DIR = qrc
 OBJECTS_DIR = obj
 
+DEFINES += SERIAL_STUDIO_MOC_INCLUDE=1
+
 isEmpty(PREFIX) {
     PREFIX = /usr
 }

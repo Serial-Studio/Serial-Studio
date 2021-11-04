@@ -431,3 +431,7 @@ void GPS::mouseDoubleClickEvent(QMouseEvent *event)
     openMap();
     event->accept();
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_GPS.cpp"
+#endif

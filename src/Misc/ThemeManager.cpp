@@ -503,3 +503,7 @@ QVector<QString> ThemeManager::availableThemes() const
 {
     return m_availableThemes;
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_ThemeManager.cpp"
+#endif

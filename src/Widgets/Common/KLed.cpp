@@ -272,3 +272,7 @@ void KLed::paintEvent(QPaintEvent *)
     painter.drawPixmap(1, 1, d->cachedPixmap[d->state]);
     painter.end();
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_KLed.cpp"
+#endif

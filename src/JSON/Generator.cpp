@@ -526,3 +526,7 @@ void JSONWorker::process()
     // Delete object in 500 ms
     QTimer::singleShot(500, this, SIGNAL(finished()));
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Generator.cpp"
+#endif

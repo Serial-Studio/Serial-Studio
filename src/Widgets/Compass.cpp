@@ -102,3 +102,7 @@ void Compass::update()
         setValue(text);
     }
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Compass.cpp"
+#endif

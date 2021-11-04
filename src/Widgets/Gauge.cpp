@@ -102,3 +102,7 @@ void Gauge::updateData()
             dataset->units()));
     }
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Gauge.cpp"
+#endif

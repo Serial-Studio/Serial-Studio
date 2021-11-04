@@ -139,3 +139,7 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
     // Emit resize signal
     emit resized();
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_BaseWidget.cpp"
+#endif

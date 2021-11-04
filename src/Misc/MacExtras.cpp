@@ -103,3 +103,7 @@ void MacExtras::updateButtonText()
     m_consoleAction.setText(tr("Console"));
     m_dashboardAction.setText(tr("Dashboard"));
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_MacExtras.cpp"
+#endif

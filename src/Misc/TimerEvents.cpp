@@ -113,3 +113,7 @@ void TimerEvents::setHighFreqTimeout(const int hz)
         emit highFreqTimeoutChanged();
     }
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_TimerEvents.cpp"
+#endif

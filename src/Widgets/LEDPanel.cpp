@@ -261,3 +261,7 @@ void LEDPanel::mouseDoubleClickEvent(QMouseEvent *event)
     auto hack = static_cast<Hack *>(m_scrollArea);
     hack->mouseDoubleClickEvent(event);
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_LEDPanel.cpp"
+#endif

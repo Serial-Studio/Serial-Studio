@@ -374,3 +374,7 @@ void Misc::ModuleManager::stopOperations()
     Misc::TimerEvents::getInstance()->stopTimers();
     MQTT::Client::getInstance()->disconnectFromHost();
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_ModuleManager.cpp"
+#endif

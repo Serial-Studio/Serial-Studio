@@ -458,3 +458,7 @@ void WidgetLoader::processWheelEvents(QWheelEvent *event)
     static_cast<Hack *>(m_widget)->wheelEvent(event);
     update();
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_WidgetLoader.cpp"
+#endif

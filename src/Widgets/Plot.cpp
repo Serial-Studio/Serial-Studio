@@ -219,3 +219,7 @@ void Plot::updateRange()
     m_curve.setSamples(*dash->xPlotValues(), tempYData);
     m_plot.replot();
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Plot.cpp"
+#endif

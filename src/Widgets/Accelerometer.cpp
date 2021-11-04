@@ -120,3 +120,7 @@ void Accelerometer::updateData()
             QString::number(G, 'f', UI::Dashboard::getInstance()->precision())));
     }
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Accelerometer.cpp"
+#endif

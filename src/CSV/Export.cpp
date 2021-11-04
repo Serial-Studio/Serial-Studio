@@ -297,3 +297,7 @@ void Export::registerFrame(const JFI_Object &info)
     // Update JSON list
     m_jsonList.append(info);
 }
+
+#if SERIAL_STUDIO_MOC_INCLUDE
+#    include "moc_Export.cpp"
+#endif
