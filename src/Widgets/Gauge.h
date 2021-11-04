@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_GAUGE_H
-#define WIDGETS_GAUGE_H
+#pragma once
 
 #include "Common/BaseWidget.h"
 #include "Common/AnalogGauge.h"
@@ -43,5 +42,3 @@ private:
     AnalogGauge m_gauge;
 };
 }
-
-#endif

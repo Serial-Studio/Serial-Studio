@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef MISC_THEME_MANAGER_H
-#define MISC_THEME_MANAGER_H
+#pragma once
 
 #include <QColor>
 #include <QObject>
@@ -337,5 +336,3 @@ inline QString QSS(const QString &style, const QColor &c1, const QColor &c2,
 {
     return QString(style).arg(c1.name(), c2.name(), c3.name());
 }
-
-#endif

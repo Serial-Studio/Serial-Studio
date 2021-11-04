@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_DATAGROUP_H
-#define WIDGETS_DATAGROUP_H
+#pragma once
 
 #include <QLabel>
 #include <QWidget>
@@ -64,5 +63,3 @@ private:
     QScrollArea *m_scrollArea;
 };
 }
-
-#endif

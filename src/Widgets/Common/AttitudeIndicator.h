@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_ATTITUDE_INDICATOR_H
-#define WIDGETS_ATTITUDE_INDICATOR_H
+#pragma once
 
 #include <QwtDial>
 #include <QwtDialNeedle>
@@ -54,5 +53,3 @@ private:
     double m_gradient;
 };
 }
-
-#endif

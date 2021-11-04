@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef UI_DASHBOARD_H
-#define UI_DASHBOARD_H
+#pragma once
 
 #include <QFont>
 #include <QObject>
@@ -319,5 +318,3 @@ private:
     QVector<JFI_Object> m_jsonList;
 };
 }
-
-#endif

@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_LOADER_H
-#define WIDGETS_LOADER_H
+#pragma once
 
 #include <QWidget>
 #include <QObject>
@@ -131,5 +130,3 @@ private:
     bool m_isExternalWindow;
 };
 }
-
-#endif

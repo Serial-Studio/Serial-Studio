@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef IO_DATA_SOURCES_SERIAL_H
-#define IO_DATA_SOURCES_SERIAL_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -185,5 +184,3 @@ private:
 };
 }
 }
-
-#endif

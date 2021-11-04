@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_MULTIPLOT_H
-#define WIDGETS_MULTIPLOT_H
+#pragma once
 
 #include <QwtPlot>
 #include <QWidget>
@@ -57,5 +56,3 @@ private:
     QVector<PlotData> m_yData;
 };
 }
-
-#endif

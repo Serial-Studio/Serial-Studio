@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef CSV_PLAYER_H
-#define CSV_PLAYER_H
+#pragma once
 
 #include <QMap>
 #include <QSet>
@@ -109,5 +108,3 @@ private:
     QMap<QString, QMap<QString, int>> m_datasetIndexes;
 };
 }
-
-#endif

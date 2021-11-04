@@ -5,8 +5,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KLED_H
-#define KLED_H
+#pragma once
 
 #include <QWidget>
 #include <memory>
@@ -254,5 +253,3 @@ private:
 private:
     std::unique_ptr<class KLedPrivate> const d;
 };
-
-#endif

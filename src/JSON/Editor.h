@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef JSON_EDITOR_H
-#define JSON_EDITOR_H
+#pragma once
 
 #include <QObject>
 
@@ -189,5 +188,3 @@ private:
     QVector<Group *> m_groups;
 };
 }
-
-#endif

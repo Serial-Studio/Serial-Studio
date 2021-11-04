@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef DATASET_H
-#define DATASET_H
+#pragma once
 
 #include <QObject>
 #include <QVariant>
@@ -127,5 +126,3 @@ private:
     friend class Editor;
 };
 }
-
-#endif

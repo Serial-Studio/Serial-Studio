@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef JSON_GROUP_H
-#define JSON_GROUP_H
+#pragma once
 
 #include <QVector>
 #include <QObject>
@@ -97,5 +96,3 @@ private:
     friend class UI::Dashboard;
 };
 }
-
-#endif

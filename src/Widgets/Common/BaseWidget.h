@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_COMMON_BASE_H
-#define WIDGETS_COMMON_BASE_H
+#pragma once
 
 #include <QLabel>
 #include <QWidget>
@@ -54,5 +53,3 @@ private:
     QHBoxLayout m_layout;
 };
 }
-
-#endif

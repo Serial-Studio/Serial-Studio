@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef JSON_FRAME_H
-#define JSON_FRAME_H
+#pragma once
 
 #include <QVector>
 #include <QObject>
@@ -73,4 +72,3 @@ private:
     QVector<Group *> m_groups;
 };
 }
-#endif

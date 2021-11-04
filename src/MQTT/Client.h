@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef MQTT_CLIENT_H
-#define MQTT_CLIENT_H
+#pragma once
 
 #include <QObject>
 #include <QHostInfo>
@@ -173,5 +172,3 @@ private:
     MQTTClientMode m_clientMode;
 };
 }
-
-#endif

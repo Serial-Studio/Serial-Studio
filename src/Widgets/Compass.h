@@ -20,11 +20,9 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_COMPASS_H
-#define WIDGETS_COMPASS_H
+#pragma once
 
 #include <QwtCompass>
-
 #include "Common/BaseWidget.h"
 
 namespace Widgets
@@ -44,5 +42,3 @@ private:
     QwtCompass m_compass;
 };
 }
-
-#endif

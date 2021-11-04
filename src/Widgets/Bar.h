@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_BAR_H
-#define WIDGETS_BAR_H
+#pragma once
 
 #include <QwtThermo>
 #include "Common/BaseWidget.h"
@@ -44,5 +43,3 @@ private:
     QwtThermo m_thermo;
 };
 }
-
-#endif

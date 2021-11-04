@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef IO_MANAGER_H
-#define IO_MANAGER_H
+#pragma once
 
 #include <QTimer>
 #include <QObject>
@@ -196,5 +195,3 @@ private:
     QString m_separatorSequence;
 };
 }
-
-#endif

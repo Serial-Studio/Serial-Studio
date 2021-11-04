@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_PLOT_H
-#define WIDGETS_PLOT_H
+#pragma once
 
 #include <QwtPlot>
 #include <QWidget>
@@ -53,5 +52,3 @@ private:
     QVBoxLayout m_layout;
 };
 }
-
-#endif

@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef PLUGINS_SERVER_H
-#define PLUGINS_SERVER_H
+#pragma once
 
 #include <QObject>
 #include <QTcpSocket>
@@ -91,5 +90,3 @@ private:
     QVector<QTcpSocket *> m_sockets;
 };
 }
-
-#endif

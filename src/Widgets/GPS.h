@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_GPS_H
-#define WIDGETS_GPS_H
+#pragma once
 
 #include <QLabel>
 #include <QWidget>
@@ -75,5 +74,3 @@ private:
     QNetworkAccessManager m_manager;
 };
 }
-
-#endif

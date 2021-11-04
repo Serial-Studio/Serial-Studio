@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_GYROSCOPE_H
-#define WIDGETS_GYROSCOPE_H
+#pragma once
 
 #include <QTimer>
 
@@ -51,5 +50,3 @@ private:
     AttitudeIndicator m_gauge;
 };
 }
-
-#endif

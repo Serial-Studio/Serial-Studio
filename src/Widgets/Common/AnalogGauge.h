@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_ANALOG_GAUGE_H
-#define WIDGETS_ANALOG_GAUGE_H
+#pragma once
 
 #include <QwtDial>
 #include <QwtDialNeedle>
@@ -34,5 +33,3 @@ public:
     AnalogGauge(QWidget *parent = nullptr);
 };
 }
-
-#endif

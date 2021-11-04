@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_FFT_PLOT_H
-#define WIDGETS_FFT_PLOT_H
+#pragma once
 
 #include <QWidget>
 #include <QwtPlot>
@@ -56,5 +55,3 @@ private:
     QFourierTransformer m_transformer;
 };
 }
-
-#endif

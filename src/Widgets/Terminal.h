@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIDGETS_TERMINAL_H
-#define WIDGETS_TERMINAL_H
+#pragma once
 
 #include <QPainter>
 #include <QPlainTextEdit>
@@ -214,5 +213,3 @@ private:
     AnsiEscapeCodeHandler m_escapeCodeHandler;
 };
 }
-
-#endif

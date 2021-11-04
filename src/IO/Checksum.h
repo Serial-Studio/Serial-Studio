@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef IO_CHECKSUM_H
-#define IO_CHECKSUM_H
+#pragma once
 
 #include <cstdint>
 #include <cstdlib>
@@ -32,5 +31,3 @@ uint8_t crc8(const char *data, const int length);
 uint16_t crc16(const char *data, const int length);
 uint32_t crc32(const char *data, const int length);
 }
-
-#endif

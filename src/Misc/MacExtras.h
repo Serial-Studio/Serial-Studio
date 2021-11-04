@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef MISC_MAC_EXTRAS_H
-#define MISC_MAC_EXTRAS_H
+#pragma once
 
 #include <QAction>
 #include <QObject>
@@ -66,5 +65,3 @@ private:
     QAction m_dashboardAction;
 };
 }
-
-#endif

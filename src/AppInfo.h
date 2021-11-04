@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef APP_INFO_H
-#define APP_INFO_H
+#pragma once
 
 // clang-format off
 #define APP_VERSION     "1.1.2"
@@ -31,5 +30,3 @@
 #define APP_SUPPORT_URL "https://github.com/serial-studio"
 #define APP_UPDATER_URL "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json"
 // clang-format on
-
-#endif

@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef JSON_GENERATOR_H
-#define JSON_GENERATOR_H
+#pragma once
 
 #include <QFile>
 #include <QObject>
@@ -162,5 +161,3 @@ private:
     bool m_processInSeparateThread;
 };
 }
-
-#endif

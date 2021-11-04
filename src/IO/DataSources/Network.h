@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef IO_DATA_SOURCES_NETWORK_H
-#define IO_DATA_SOURCES_NETWORK_H
+#pragma once
 
 #include <QHostInfo>
 #include <QTcpSocket>
@@ -161,5 +160,3 @@ private:
 };
 }
 }
-
-#endif

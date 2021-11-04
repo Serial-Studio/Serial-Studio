@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef MODULE_MANAGER_H
-#define MODULE_MANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QSettings>
@@ -67,5 +66,3 @@ private:
     QQmlApplicationEngine m_engine;
 };
 }
-
-#endif

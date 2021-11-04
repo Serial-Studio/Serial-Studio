@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef MISC_UTILITIES_H
-#define MISC_UTILITIES_H
+#pragma once
 
 #include <QObject>
 #include <QMessageBox>
@@ -57,5 +56,3 @@ public slots:
     static void revealFile(const QString& pathToReveal);
 };
 }
-
-#endif

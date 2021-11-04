@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#pragma once
 
 #include <QLocale>
 #include <QObject>
@@ -78,5 +77,3 @@ private:
     QTranslator m_translator;
 };
 }
-
-#endif

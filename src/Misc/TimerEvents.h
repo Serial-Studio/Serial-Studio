@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef MISC_TIMER_EVENTS_H
-#define MISC_TIMER_EVENTS_H
+#pragma once
 
 #include <QTimer>
 #include <QObject>
@@ -71,5 +70,3 @@ private:
     QTimer m_timerHighFreq;
 };
 }
-
-#endif

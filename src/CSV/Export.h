@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef CSV_EXPORT_H
-#define CSV_EXPORT_H
+#pragma once
 
 #include <QFile>
 #include <QObject>
@@ -86,5 +85,3 @@ private:
     QVector<JFI_Object> m_jsonList;
 };
 }
-
-#endif

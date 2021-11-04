@@ -20,9 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef IO_CONSOLE_H
-#define IO_CONSOLE_H
-
+#pragma once
 #include <QObject>
 
 namespace IO
@@ -174,5 +172,3 @@ private:
     QByteArray m_dataBuffer;
 };
 }
-
-#endif
