@@ -26,7 +26,8 @@
 
 #include <QResizeEvent>
 
-using namespace Widgets;
+namespace Widgets
+{
 
 /**
  * Constructor function, configures widget style & signal/slot connections.
@@ -127,6 +128,7 @@ void Gyroscope::updateLabel()
     ++m_displayNum;
     if (m_displayNum > 2)
         m_displayNum = 0;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

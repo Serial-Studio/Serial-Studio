@@ -33,18 +33,16 @@
 
 #include <AppInfo.h>
 
-using namespace Misc;
+namespace Misc
+{
+static Utilities *UTILITIES = nullptr;
 
-/**
- * Returns the onlt instance of the class, this is to be used by the QML interface
- */
-static Utilities *INSTANCE = nullptr;
 Utilities *Utilities::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Utilities;
+    if (!UTILITIES)
+        UTILITIES = new Utilities;
 
-    return INSTANCE;
+    return UTILITIES;
 }
 
 bool Utilities::askAutomaticUpdates()
@@ -119,6 +117,7 @@ void Utilities::revealFile(const QString &pathToReveal)
 #else
     QDesktopServices::openUrl(QUrl::fromLocalFile(pathToReveal));
 #endif
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

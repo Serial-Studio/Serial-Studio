@@ -23,7 +23,8 @@
 #include "Dataset.h"
 #include "Generator.h"
 
-using namespace JSON;
+namespace JSON
+{
 
 Dataset::Dataset(QObject *parent)
     : QObject(parent)
@@ -208,4 +209,5 @@ bool Dataset::read(const QJsonObject &object)
     }
 
     return false;
+}
 }

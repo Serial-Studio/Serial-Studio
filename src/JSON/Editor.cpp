@@ -32,8 +32,9 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-using namespace JSON;
-static Editor *INSTANCE = nullptr;
+namespace JSON
+{
+static Editor *EDITOR = nullptr;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
@@ -75,10 +76,10 @@ Editor::~Editor() { }
  */
 Editor *Editor::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Editor();
+    if (!EDITOR)
+        EDITOR = new Editor();
 
-    return INSTANCE;
+    return EDITOR;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1440,6 +1441,7 @@ int Editor::nextDatasetIndex()
     }
 
     return maxIndex;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

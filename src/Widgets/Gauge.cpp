@@ -24,7 +24,8 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-using namespace Widgets;
+namespace Widgets
+{
 
 /**
  * Constructor function, configures widget style & signal/slot connections.
@@ -101,6 +102,7 @@ void Gauge::updateData()
             QString::number(value, 'f', UI::Dashboard::getInstance()->precision()),
             dataset->units()));
     }
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

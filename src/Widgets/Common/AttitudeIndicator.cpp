@@ -29,8 +29,8 @@
 #include <QwtDialNeedle>
 #include <QwtRoundScaleDraw>
 
-using namespace Widgets;
-
+namespace Widgets
+{
 namespace
 {
 class Needle : public QwtDialNeedle
@@ -152,4 +152,5 @@ void AttitudeIndicator::drawScaleContents(QPainter *painter, const QPointF &cent
     painter->setBrush(skyColor);
     painter->drawChord(scaleInnerRect(), (dir - arc) * 16, 2 * arc * 16);
     painter->restore();
+}
 }

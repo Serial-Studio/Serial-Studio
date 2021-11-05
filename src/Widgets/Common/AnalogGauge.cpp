@@ -27,11 +27,8 @@
 #include "AnalogGauge.h"
 #include "Misc/ThemeManager.h"
 
-using namespace Widgets;
-
-/**
- * Configures the @c QwtDial so that it resembles a speedometer gauge.
- */
+namespace Widgets
+{
 AnalogGauge::AnalogGauge(QWidget *parent)
     : QwtDial(parent)
 {
@@ -44,4 +41,5 @@ AnalogGauge::AnalogGauge(QWidget *parent)
     // Set gauge origin & min/max angles
     setOrigin(135);
     setScaleArc(0, 270);
+}
 }

@@ -32,12 +32,9 @@
 #include <QFileDialog>
 #include <QRegularExpression>
 
-using namespace JSON;
-
-/*
- * Only instance of the class
- */
-static Generator *INSTANCE = nullptr;
+namespace JSON
+{
+static Generator *GENERATOR = nullptr;
 
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
@@ -61,10 +58,10 @@ Generator::Generator()
  */
 Generator *Generator::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Generator();
+    if (!GENERATOR)
+        GENERATOR = new Generator();
 
-    return INSTANCE;
+    return GENERATOR;
 }
 
 /**
@@ -525,6 +522,7 @@ void JSONWorker::process()
 
     // Delete object in 500 ms
     QTimer::singleShot(500, this, SIGNAL(finished()));
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

@@ -22,12 +22,9 @@
 
 #include "Translator.h"
 
-using namespace Misc;
-
-/**
- * Only instance of the class
- */
-static Translator *INSTANCE = nullptr;
+namespace Misc
+{
+static Translator *TRANSLATOR = nullptr;
 
 /**
  * Constructor function
@@ -42,10 +39,10 @@ Translator::Translator()
  */
 Translator *Translator::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Translator;
+    if (!TRANSLATOR)
+        TRANSLATOR = new Translator;
 
-    return INSTANCE;
+    return TRANSLATOR;
 }
 
 /**
@@ -213,6 +210,7 @@ void Translator::setLanguage(const QLocale &locale, const QString &language)
         qApp->installTranslator(&m_translator);
         emit languageChanged();
     }
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

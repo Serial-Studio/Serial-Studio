@@ -25,7 +25,8 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-using namespace Widgets;
+namespace Widgets
+{
 
 /**
  * Constructor function, configures widget style & signal/slot connections.
@@ -218,6 +219,7 @@ void Plot::updateRange()
     // Redraw graph
     m_curve.setSamples(*dash->xPlotValues(), tempYData);
     m_plot.replot();
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

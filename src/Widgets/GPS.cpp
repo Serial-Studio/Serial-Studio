@@ -30,7 +30,8 @@
 #include <QNetworkReply>
 #include <QDesktopServices>
 
-using namespace Widgets;
+namespace Widgets
+{
 
 #define APP_ID QStringLiteral("36496bad1955bf3365448965a42b9eac")
 #define G_MAPS QStringLiteral("https://www.google.com/maps/search/?api=1&query=%1,%2")
@@ -430,6 +431,7 @@ void GPS::mouseDoubleClickEvent(QMouseEvent *event)
 {
     openMap();
     event->accept();
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

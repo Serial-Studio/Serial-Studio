@@ -23,7 +23,8 @@
 #include "Group.h"
 #include "Dataset.h"
 
-using namespace JSON;
+namespace JSON
+{
 
 Group::Group(QObject *parent)
     : QObject(parent)
@@ -129,4 +130,5 @@ bool Group::read(const QJsonObject &object)
     }
 
     return false;
+}
 }

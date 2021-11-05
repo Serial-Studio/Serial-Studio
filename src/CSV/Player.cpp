@@ -37,16 +37,9 @@
 #include <Misc/Utilities.h>
 #include <JSON/Generator.h>
 
-using namespace CSV;
-
-//
-// Here be dragons...
-//
-
-/*
- * Only instance of the class
- */
-static Player *INSTANCE = nullptr;
+namespace CSV
+{
+static Player *PLAYER = nullptr;
 
 /**
  * Constructor function
@@ -64,10 +57,10 @@ Player::Player()
  */
 Player *Player::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Player;
+    if (!PLAYER)
+        PLAYER = new Player;
 
-    return INSTANCE;
+    return PLAYER;
 }
 
 /**
@@ -641,6 +634,7 @@ int Player::getDatasetIndex(const QString &groupKey, const QString &datasetKey)
     }
 
     return 0;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

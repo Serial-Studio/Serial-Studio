@@ -31,7 +31,8 @@
 
 static QRegularExpression REGEXP("^[+-]?(\\d*\\.)?\\d+$");
 
-using namespace Widgets;
+namespace Widgets
+{
 
 /**
  * Generates the user interface elements & layout
@@ -299,6 +300,7 @@ void DataGroup::mouseDoubleClickEvent(QMouseEvent *event)
 
     auto hack = static_cast<Hack *>(m_scrollArea);
     hack->mouseDoubleClickEvent(event);
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

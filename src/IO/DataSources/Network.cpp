@@ -25,8 +25,9 @@
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 
-using namespace IO::DataSources;
-static Network *INSTANCE = nullptr;
+namespace IO::DataSources
+{
+static Network *NETWORK = nullptr;
 
 /**
  * Constructor function
@@ -58,10 +59,10 @@ Network::~Network()
  */
 Network *Network::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Network;
+    if (!NETWORK)
+        NETWORK = new Network;
 
-    return INSTANCE;
+    return NETWORK;
 }
 
 /**
@@ -373,6 +374,7 @@ void Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 
     Manager::getInstance()->disconnectDevice();
     Misc::Utilities::showMessageBox(tr("Network socket error"), error);
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

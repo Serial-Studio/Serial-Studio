@@ -28,7 +28,8 @@
 #include <QwtCompassScaleDraw>
 #include <QwtCompassMagnetNeedle>
 
-using namespace Widgets;
+namespace Widgets
+{
 
 /**
  * Constructor function, configures widget style & signal/slot connections.
@@ -101,6 +102,7 @@ void Compass::update()
 
         setValue(text);
     }
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

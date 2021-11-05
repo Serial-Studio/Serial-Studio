@@ -24,12 +24,12 @@
 # Make options
 #-----------------------------------------------------------------------------------------
 
+DEFINES += SERIAL_STUDIO_MOC_INCLUDE=1
+
 UI_DIR = uic
 MOC_DIR = moc
 RCC_DIR = qrc
 OBJECTS_DIR = obj
-
-DEFINES += SERIAL_STUDIO_MOC_INCLUDE=1
 
 isEmpty(PREFIX) {
     PREFIX = /usr
@@ -236,7 +236,8 @@ SOURCES += \
     src/Widgets/MultiPlot.cpp \
     src/Widgets/Plot.cpp \
     src/Widgets/Terminal.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/SingleCompilationUnit.cpp
 
 #-------------------------------------------------------------------------------
 # Deploy files

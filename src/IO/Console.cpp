@@ -33,8 +33,9 @@
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 
-using namespace IO;
-static Console *INSTANCE = nullptr;
+namespace IO
+{
+static Console *CONSOLE = nullptr;
 
 /**
  * Generates a hexdump of the given data
@@ -107,10 +108,10 @@ Console::Console()
  */
 Console *Console::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Console;
+    if (!CONSOLE)
+        CONSOLE = new Console;
 
-    return INSTANCE;
+    return CONSOLE;
 }
 
 /**
@@ -665,6 +666,7 @@ QString Console::hexadecimalStr(const QByteArray &data)
 
     // Return string
     return str;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

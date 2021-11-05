@@ -39,9 +39,8 @@
 
 #include <Misc/ThemeManager.h>
 
-using namespace UI;
-using namespace Widgets;
-
+namespace UI
+{
 /**
  * Constructor function
  */
@@ -251,37 +250,37 @@ void WidgetLoader::setWidgetIndex(const int index)
         switch (widgetType())
         {
             case UI::Dashboard::WidgetType::Group:
-                m_widget = new DataGroup(relativeIndex());
+                m_widget = new Widgets::DataGroup(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::MultiPlot:
-                m_widget = new MultiPlot(relativeIndex());
+                m_widget = new Widgets::MultiPlot(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::FFT:
-                m_widget = new FFTPlot(relativeIndex());
+                m_widget = new Widgets::FFTPlot(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::Plot:
-                m_widget = new Plot(relativeIndex());
+                m_widget = new Widgets::Plot(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::Bar:
-                m_widget = new Bar(relativeIndex());
+                m_widget = new Widgets::Bar(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::Gauge:
-                m_widget = new Gauge(relativeIndex());
+                m_widget = new Widgets::Gauge(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::Compass:
-                m_widget = new Compass(relativeIndex());
+                m_widget = new Widgets::Compass(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::Gyroscope:
-                m_widget = new Gyroscope(relativeIndex());
+                m_widget = new Widgets::Gyroscope(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::Accelerometer:
-                m_widget = new Accelerometer(relativeIndex());
+                m_widget = new Widgets::Accelerometer(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::GPS:
-                m_widget = new GPS(relativeIndex());
+                m_widget = new Widgets::GPS(relativeIndex());
                 break;
             case UI::Dashboard::WidgetType::LED:
-                m_widget = new LEDPanel(relativeIndex());
+                m_widget = new Widgets::LEDPanel(relativeIndex());
                 break;
             default:
                 break;
@@ -457,6 +456,7 @@ void WidgetLoader::processWheelEvents(QWheelEvent *event)
 
     static_cast<Hack *>(m_widget)->wheelEvent(event);
     update();
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

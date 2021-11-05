@@ -26,8 +26,8 @@
 
 #include <QResizeEvent>
 
-using namespace Widgets;
-
+namespace Widgets
+{
 BaseWidget::BaseWidget()
     : m_index(-1)
     , m_widget(nullptr)
@@ -141,6 +141,7 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
 
     // Emit resize signal
     emit resized();
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

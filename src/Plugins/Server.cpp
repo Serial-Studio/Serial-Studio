@@ -31,12 +31,9 @@
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 
-using namespace Plugins;
-
-/*
- * Singleton pointer
- */
-static Server *INSTANCE = nullptr;
+namespace Plugins
+{
+static Server *SERVER = nullptr;
 
 /**
  * Constructor function
@@ -79,10 +76,10 @@ Server::~Server()
  */
 Server *Server::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Server;
+    if (!SERVER)
+        SERVER = new Server;
 
-    return INSTANCE;
+    return SERVER;
 }
 
 /**
@@ -305,6 +302,7 @@ void Server::onErrorOccurred(const QAbstractSocket::SocketError socketError)
         qDebug() << socket->errorString();
     else
         qDebug() << socketError;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

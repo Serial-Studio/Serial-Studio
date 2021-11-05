@@ -22,7 +22,8 @@
 
 #include "Frame.h"
 
-using namespace JSON;
+namespace JSON
+{
 
 /**
  * Constructor function
@@ -131,4 +132,5 @@ JSON::Group *Frame::getGroup(const int index)
         return m_groups.at(index);
 
     return Q_NULLPTR;
+}
 }

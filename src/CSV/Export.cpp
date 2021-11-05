@@ -37,9 +37,9 @@
 #include <QJsonDocument>
 #include <QDesktopServices>
 
-using namespace CSV;
-
-static Export *INSTANCE = nullptr;
+namespace CSV
+{
+static Export *EXPORT = nullptr;
 
 /**
  * Connect JSON Parser & Serial Manager signals to begin registering JSON
@@ -69,10 +69,10 @@ Export::~Export()
  */
 Export *Export::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Export;
+    if (!EXPORT)
+        EXPORT = new Export;
 
-    return INSTANCE;
+    return EXPORT;
 }
 
 /**
@@ -296,6 +296,7 @@ void Export::registerFrame(const JFI_Object &info)
 
     // Update JSON list
     m_jsonList.append(info);
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

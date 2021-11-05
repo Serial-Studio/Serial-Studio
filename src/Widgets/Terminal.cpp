@@ -28,7 +28,8 @@
 
 #include "Terminal.h"
 
-using namespace Widgets;
+namespace Widgets
+{
 
 //--------------------------------------------------------------------------------------------------
 // QML PlainTextEdit implementation
@@ -1096,6 +1097,7 @@ void AnsiEscapeCodeHandler::setFormatScope(const QTextCharFormat &charFormat)
 {
     m_previousFormat = charFormat;
     m_previousFormatClosed = false;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

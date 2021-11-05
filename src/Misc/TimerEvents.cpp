@@ -24,12 +24,13 @@
 
 #include <QtMath>
 
-using namespace Misc;
+namespace Misc
+{
 
-/**º
+/**
  * Pointer to the only instance of the class
  */
-static TimerEvents *INSTANCE = nullptr;
+static TimerEvents *TIMER_EVENTS = nullptr;
 
 /**
  * Converts the given @a hz to milliseconds
@@ -64,10 +65,10 @@ TimerEvents::TimerEvents()
  */
 TimerEvents *TimerEvents::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new TimerEvents;
+    if (!TIMER_EVENTS)
+        TIMER_EVENTS = new TimerEvents;
 
-    return INSTANCE;
+    return TIMER_EVENTS;
 }
 
 /**
@@ -112,6 +113,7 @@ void TimerEvents::setHighFreqTimeout(const int hz)
         m_timerHighFreq.setInterval(HZ_TO_MS(1));
         emit highFreqTimeoutChanged();
     }
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

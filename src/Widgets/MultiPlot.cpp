@@ -25,7 +25,8 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-using namespace Widgets;
+namespace Widgets
+{
 
 /**
  * Constructor function, configures widget style & signal/slot connections.
@@ -198,6 +199,7 @@ void MultiPlot::updateRange()
     for (int i = 0; i < group->datasetCount(); ++i)
         if (m_curves.count() > i)
             m_curves.at(i)->setSamples(*dash->xPlotValues(), m_yData[i]);
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

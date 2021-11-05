@@ -27,9 +27,9 @@
 #    include <kdmactouchbar.h>
 #endif
 
-using namespace Misc;
-
-MacExtras *INSTANCE = nullptr;
+namespace Misc
+{
+static MacExtras *MAC_EXTRAS = nullptr;
 
 MacExtras::MacExtras()
 {
@@ -71,10 +71,10 @@ MacExtras::MacExtras()
 
 MacExtras *MacExtras::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new MacExtras;
+    if (!MAC_EXTRAS)
+        MAC_EXTRAS = new MacExtras;
 
-    return INSTANCE;
+    return MAC_EXTRAS;
 }
 
 void MacExtras::setSetupChecked(const bool checked)
@@ -102,6 +102,7 @@ void MacExtras::updateButtonText()
     m_setupAction.setText(tr("Setup"));
     m_consoleAction.setText(tr("Console"));
     m_dashboardAction.setText(tr("Dashboard"));
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

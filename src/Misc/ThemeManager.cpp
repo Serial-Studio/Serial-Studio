@@ -33,12 +33,9 @@
 #include <QApplication>
 #include <QJsonDocument>
 
-using namespace Misc;
-
-/**
- * Pointer to the single instance of this class
- */
-static ThemeManager *INSTANCE = Q_NULLPTR;
+namespace Misc
+{
+static ThemeManager *THEME_MANAGER = Q_NULLPTR;
 
 /**
  * Constructor function, searches for available themes & loads
@@ -55,10 +52,10 @@ ThemeManager::ThemeManager()
  */
 ThemeManager *ThemeManager::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new ThemeManager;
+    if (!THEME_MANAGER)
+        THEME_MANAGER = new ThemeManager;
 
-    return INSTANCE;
+    return THEME_MANAGER;
 }
 
 /**
@@ -502,6 +499,7 @@ QVector<QString> ThemeManager::widgetColors() const
 QVector<QString> ThemeManager::availableThemes() const
 {
     return m_availableThemes;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

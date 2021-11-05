@@ -30,12 +30,9 @@
 
 #include <QNetworkDatagram>
 
-using namespace IO;
-
-/**
- * Pointer to the only instance of the class.
- */
-static Manager *INSTANCE = nullptr;
+namespace IO
+{
+static Manager *MANAGER = nullptr;
 
 /**
  * Adds support for C escape sequences to the given @a str.
@@ -95,10 +92,10 @@ Manager::~Manager() { }
  */
 Manager *Manager::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Manager;
+    if (!MANAGER)
+        MANAGER = new Manager;
 
-    return INSTANCE;
+    return MANAGER;
 }
 
 /**
@@ -786,6 +783,7 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
 
     // Checksum data incomplete
     return ValidationStatus::ChecksumIncomplete;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

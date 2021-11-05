@@ -26,12 +26,9 @@
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 
-using namespace MQTT;
-
-/**
- * The only instance of this class
- */
-static Client *INSTANCE = nullptr;
+namespace MQTT
+{
+static Client *CLIENT = nullptr;
 
 /**
  * Constructor function
@@ -75,10 +72,10 @@ Client::~Client()
  */
 Client *Client::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Client;
+    if (!CLIENT)
+        CLIENT = new Client;
 
-    return INSTANCE;
+    return CLIENT;
 }
 
 /**
@@ -525,6 +522,7 @@ void Client::onMessageReceived(const QMQTT::Message &message)
 
     // Let IO manager process incoming data
     IO::Manager::getInstance()->processPayload(mpayld);
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

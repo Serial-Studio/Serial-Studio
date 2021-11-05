@@ -28,12 +28,9 @@
 
 #include "Dashboard.h"
 
-using namespace UI;
-
-/*
- * Pointer to the only instance of the class.
- */
-static Dashboard *INSTANCE = nullptr;
+namespace UI
+{
+static Dashboard *DASHBOARD = nullptr;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
@@ -62,10 +59,10 @@ Dashboard::Dashboard()
  */
 Dashboard *Dashboard::getInstance()
 {
-    if (!INSTANCE)
-        INSTANCE = new Dashboard();
+    if (!DASHBOARD)
+        DASHBOARD = new Dashboard();
 
-    return INSTANCE;
+    return DASHBOARD;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1070,6 +1067,7 @@ JSON::Dataset *Dashboard::getDatasetWidget(const QVector<JSON::Dataset *> vector
         return vector.at(index);
 
     return nullptr;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

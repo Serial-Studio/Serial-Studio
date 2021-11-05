@@ -26,12 +26,9 @@
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 
-using namespace IO::DataSources;
-
-/**
- * Pointer to the only instance of the class.
- */
-static Serial *INSTANCE = nullptr;
+namespace IO::DataSources
+{
+static Serial *SERIAL = nullptr;
 
 /**
  * Constructor function
@@ -75,10 +72,10 @@ Serial::~Serial()
  */
 Serial *Serial::getInstance()
 {
-    if (INSTANCE == nullptr)
-        INSTANCE = new Serial;
+    if (SERIAL == nullptr)
+        SERIAL = new Serial;
 
-    return INSTANCE;
+    return SERIAL;
 }
 
 /**
@@ -691,6 +688,7 @@ QVector<QSerialPortInfo> Serial::validPorts() const
 
     // Return list
     return ports;
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

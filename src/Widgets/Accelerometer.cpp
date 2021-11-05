@@ -27,7 +27,8 @@
 #include <QtMath>
 #include <QResizeEvent>
 
-using namespace Widgets;
+namespace Widgets
+{
 
 /**
  * Constructor function, configures widget style & signal/slot connections.
@@ -119,6 +120,7 @@ void Accelerometer::updateData()
         setValue(QString("%1 G").arg(
             QString::number(G, 'f', UI::Dashboard::getInstance()->precision())));
     }
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

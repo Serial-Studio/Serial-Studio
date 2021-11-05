@@ -24,7 +24,8 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-using namespace Widgets;
+namespace Widgets
+{
 
 /**
  * Constructor function, configures widget style & signal/slot connections.
@@ -173,6 +174,7 @@ void FFTPlot::updateData()
         m_curve.setSamples(m_fft, m_size);
         m_plot.replot();
     }
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE

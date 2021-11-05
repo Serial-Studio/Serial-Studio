@@ -26,7 +26,8 @@
 
 #include <QResizeEvent>
 
-using namespace Widgets;
+namespace Widgets
+{
 
 /**
  * Constructor function, configures widget style & signal/slot connections.
@@ -121,6 +122,7 @@ void Bar::updateData()
 void Bar::onResized()
 {
     m_thermo.setPipeWidth(width() * 0.25);
+}
 }
 
 #if SERIAL_STUDIO_MOC_INCLUDE
