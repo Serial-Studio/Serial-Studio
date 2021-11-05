@@ -390,7 +390,7 @@ void QwtPlotMultiBarChart::drawSeries(QPainter* painter,
 
     painter->save();
 
-    for ( int i = from; i <= to; i++ )
+    for ( size_t i = from; i <= to; i++ )
     {
         drawSample( painter, xMap, yMap,
             canvasRect, interval, i, sample( i ) );
