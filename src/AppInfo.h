@@ -23,7 +23,7 @@
 #pragma once
 
 // clang-format off
-#define APP_VERSION     "1.1.2"
+#define APP_VERSION     "1.1.3"
 #define APP_DEVELOPER   "Alex Spataru"
 #define APP_NAME        "Serial Studio"
 #define APP_ICON        ":/images/icon.svg"
