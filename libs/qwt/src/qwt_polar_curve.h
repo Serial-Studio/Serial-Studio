@@ -89,7 +89,7 @@ class QWT_EXPORT QwtPolarCurve : public QwtPolarItem
     void setData( QwtSeriesData< QwtPointPolar >* data );
     const QwtSeriesData< QwtPointPolar >* data() const;
 
-    size_t dataSize() const;
+    int dataSize() const;
     QwtPointPolar sample( int i ) const;
 
     void setPen( const QPen& );

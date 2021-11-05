@@ -301,7 +301,7 @@ QwtPlotMultiBarChart::ChartStyle QwtPlotMultiBarChart::style() const
  */
 QRectF QwtPlotMultiBarChart::boundingRect() const
 {
-    const size_t numSamples = dataSize();
+    const int numSamples = dataSize();
 
     if ( numSamples == 0 )
         return QwtPlotSeriesItem::boundingRect();
@@ -331,7 +331,7 @@ QRectF QwtPlotMultiBarChart::boundingRect() const
 
         const QwtSeriesData< QwtSetSample >* series = data();
 
-        for ( size_t i = 0; i < numSamples; i++ )
+        for ( int i = 0; i < numSamples; i++ )
         {
             const QwtSetSample sample = series->sample( i );
             if ( i == 0 )
@@ -373,7 +373,7 @@ QRectF QwtPlotMultiBarChart::boundingRect() const
  */
 void QwtPlotMultiBarChart::drawSeries(QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, size_t from, size_t to ) const
+    const QRectF& canvasRect, int from, int to ) const
 {
     if ( to < 0 )
         to = dataSize() - 1;
@@ -390,7 +390,7 @@ void QwtPlotMultiBarChart::drawSeries(QPainter* painter,
 
     painter->save();
 
-    for ( size_t i = from; i <= to; i++ )
+    for ( int i = from; i <= to; i++ )
     {
         drawSample( painter, xMap, yMap,
             canvasRect, interval, i, sample( i ) );

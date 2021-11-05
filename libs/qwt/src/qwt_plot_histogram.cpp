@@ -333,7 +333,7 @@ void QwtPlotHistogram::setSamples(
  */
 void QwtPlotHistogram::drawSeries(QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, size_t from, size_t to ) const
+    const QRectF& canvasRect, int from, int to ) const
 {
     Q_UNUSED( canvasRect )
 

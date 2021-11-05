@@ -247,7 +247,7 @@ double QwtPlotAbstractBarChart::sampleWidth( const QwtScaleMap& map,
         case AutoAdjustSamples:
         default:
         {
-            const size_t numSamples = dataSize();
+            const int numSamples = dataSize();
 
             double w = 1.0;
             if ( numSamples > 1 )
@@ -312,7 +312,7 @@ void QwtPlotAbstractBarChart::getCanvasMarginHint( const QwtScaleMap& xMap,
         case ScaleSamplesToAxes:
         default:
         {
-            const size_t numSamples = dataSize();
+            const int numSamples = dataSize();
             if ( numSamples <= 0 )
                 break;
 

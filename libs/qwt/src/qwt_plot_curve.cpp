@@ -55,13 +55,13 @@ static void qwtUpdateLegendIconSize( QwtPlotCurve* curve )
     }
 }
 
-static int qwtVerifyRange( size_t size, size_t& i1, size_t& i2 )
+static int qwtVerifyRange( int size, int& i1, int& i2 )
 {
     if ( size < 1 )
         return 0;
 
-    i1 = qBound<size_t>( 0, i1, size - 1 );
-    i2 = qBound<size_t>( 0, i2, size - 1 );
+    i1 = qBound<int>( 0, i1, size - 1 );
+    i2 = qBound<int>( 0, i2, size - 1 );
 
     if ( i1 > i2 )
         qSwap( i1, i2 );
@@ -380,9 +380,9 @@ const QBrush& QwtPlotCurve::brush() const
  */
 void QwtPlotCurve::drawSeries( QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, size_t from, size_t to ) const
+    const QRectF& canvasRect, int from, int to ) const
 {
-    const size_t numSamples = dataSize();
+    const int numSamples = dataSize();
 
     if ( !painter || numSamples <= 0 )
         return;
@@ -1050,7 +1050,7 @@ double QwtPlotCurve::baseline() const
  */
 int QwtPlotCurve::closestPoint( const QPointF& pos, double* dist ) const
 {
-    const size_t numSamples = dataSize();
+    const int numSamples = dataSize();
 
     if ( plot() == NULL || numSamples <= 0 )
         return -1;
@@ -1063,7 +1063,7 @@ int QwtPlotCurve::closestPoint( const QPointF& pos, double* dist ) const
     int index = -1;
     double dmin = 1.0e10;
 
-    for ( uint i = 0; i < numSamples; i++ )
+    for ( int i = 0; i < numSamples; i++ )
     {
         const QPointF sample = series->sample( i );
 

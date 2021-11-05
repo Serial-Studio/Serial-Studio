@@ -50,7 +50,7 @@ class QWT_EXPORT QwtPlotSeriesItem : public QwtPlotItem,
      */
     virtual void drawSeries( QPainter* painter,
         const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, size_t from, size_t to ) const = 0;
+        const QRectF& canvasRect, int from, int to ) const = 0;
 
     virtual QRectF boundingRect() const QWT_OVERRIDE;
 

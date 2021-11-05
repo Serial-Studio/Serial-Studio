@@ -23,10 +23,10 @@ class QwtPointArrayData : public QwtPointSeriesData
 {
   public:
     QwtPointArrayData( const QVector< T >& x, const QVector< T >& y );
-    QwtPointArrayData( const T* x, const T* y, size_t size );
+    QwtPointArrayData( const T* x, const T* y, int size );
 
-    virtual size_t size() const QWT_OVERRIDE;
-    virtual QPointF sample( size_t index ) const QWT_OVERRIDE;
+    virtual int size() const QWT_OVERRIDE;
+    virtual QPointF sample( int index ) const QWT_OVERRIDE;
 
     const QVector< T >& xData() const;
     const QVector< T >& yData() const;
@@ -43,10 +43,10 @@ template< typename T >
 class QwtCPointerData : public QwtPointSeriesData
 {
   public:
-    QwtCPointerData( const T* x, const T* y, size_t size );
+    QwtCPointerData( const T* x, const T* y, int size );
 
-    virtual size_t size() const QWT_OVERRIDE;
-    virtual QPointF sample( size_t index ) const QWT_OVERRIDE;
+    virtual int size() const QWT_OVERRIDE;
+    virtual QPointF sample( int index ) const QWT_OVERRIDE;
 
     const T* xData() const;
     const T* yData() const;
@@ -54,7 +54,7 @@ class QwtCPointerData : public QwtPointSeriesData
   private:
     const T* m_x;
     const T* m_y;
-    size_t m_size;
+    int m_size;
 };
 
 /*!
@@ -68,10 +68,10 @@ class QwtValuePointData : public QwtPointSeriesData
 {
   public:
     QwtValuePointData( const QVector< T >& y );
-    QwtValuePointData( const T* y, size_t size );
+    QwtValuePointData( const T* y, int size );
 
-    virtual size_t size() const QWT_OVERRIDE;
-    virtual QPointF sample( size_t index ) const QWT_OVERRIDE;
+    virtual int size() const QWT_OVERRIDE;
+    virtual QPointF sample( int index ) const QWT_OVERRIDE;
 
     const QVector< T >& yData() const;
 
@@ -89,16 +89,16 @@ template< typename T >
 class QwtCPointerValueData : public QwtPointSeriesData
 {
   public:
-    QwtCPointerValueData( const T* y, size_t size );
+    QwtCPointerValueData( const T* y, int size );
 
-    virtual size_t size() const QWT_OVERRIDE;
-    virtual QPointF sample( size_t index ) const QWT_OVERRIDE;
+    virtual int size() const QWT_OVERRIDE;
+    virtual QPointF sample( int index ) const QWT_OVERRIDE;
 
     const T* yData() const;
 
   private:
     const T* m_y;
-    size_t m_size;
+    int m_size;
 };
 
 /*!
@@ -157,17 +157,17 @@ class QwtCPointerValueData : public QwtPointSeriesData
 class QWT_EXPORT QwtSyntheticPointData : public QwtPointSeriesData
 {
   public:
-    QwtSyntheticPointData( size_t size,
+    QwtSyntheticPointData( int size,
         const QwtInterval& = QwtInterval() );
 
-    void setSize( size_t size );
-    virtual size_t size() const QWT_OVERRIDE;
+    void setSize( int size );
+    virtual int size() const QWT_OVERRIDE;
 
     void setInterval( const QwtInterval& );
     QwtInterval interval() const;
 
     virtual QRectF boundingRect() const QWT_OVERRIDE;
-    virtual QPointF sample( size_t index ) const QWT_OVERRIDE;
+    virtual QPointF sample( int index ) const QWT_OVERRIDE;
 
     /*!
        Calculate a y value for a x value
@@ -182,7 +182,7 @@ class QWT_EXPORT QwtSyntheticPointData : public QwtPointSeriesData
     QRectF rectOfInterest() const;
 
   private:
-    size_t m_size;
+    int m_size;
     QwtInterval m_interval;
     QRectF m_rectOfInterest;
     QwtInterval m_intervalOfInterest;
@@ -213,7 +213,7 @@ QwtPointArrayData< T >::QwtPointArrayData(
    \sa QwtPlotCurve::setData(), QwtPlotCurve::setSamples()
  */
 template< typename T >
-QwtPointArrayData< T >::QwtPointArrayData( const T* x, const T* y, size_t size )
+QwtPointArrayData< T >::QwtPointArrayData( const T* x, const T* y, int size )
 {
     m_x.resize( size );
     std::memcpy( m_x.data(), x, size * sizeof( T ) );
@@ -224,7 +224,7 @@ QwtPointArrayData< T >::QwtPointArrayData( const T* x, const T* y, size_t size )
 
 //! \return Size of the data set
 template< typename T >
-size_t QwtPointArrayData< T >::size() const
+int QwtPointArrayData< T >::size() const
 {
     return qMin( m_x.size(), m_y.size() );
 }
@@ -236,7 +236,7 @@ size_t QwtPointArrayData< T >::size() const
    \return Sample at position i
  */
 template< typename T >
-QPointF QwtPointArrayData< T >::sample( size_t index ) const
+QPointF QwtPointArrayData< T >::sample( int index ) const
 {
     return QPointF( m_x[int( index )], m_y[int( index )] );
 }
@@ -276,7 +276,7 @@ QwtValuePointData< T >::QwtValuePointData( const QVector< T >& y )
    \sa QwtPlotCurve::setData(), QwtPlotCurve::setSamples()
  */
 template< typename T >
-QwtValuePointData< T >::QwtValuePointData( const T* y, size_t size )
+QwtValuePointData< T >::QwtValuePointData( const T* y, int size )
 {
     m_y.resize( size );
     std::memcpy( m_y.data(), y, size * sizeof( T ) );
@@ -284,7 +284,7 @@ QwtValuePointData< T >::QwtValuePointData( const T* y, size_t size )
 
 //! \return Size of the data set
 template< typename T >
-size_t QwtValuePointData< T >::size() const
+int QwtValuePointData< T >::size() const
 {
     return m_y.size();
 }
@@ -296,7 +296,7 @@ size_t QwtValuePointData< T >::size() const
    \return Sample at position i
  */
 template< typename T >
-QPointF QwtValuePointData< T >::sample( size_t index ) const
+QPointF QwtValuePointData< T >::sample( int index ) const
 {
     return QPointF( index, m_y[int( index )] );
 }
@@ -323,7 +323,7 @@ const QVector< T >& QwtValuePointData< T >::yData() const
  */
 
 template< typename T >
-QwtCPointerData< T >::QwtCPointerData( const T* x, const T* y, size_t size )
+QwtCPointerData< T >::QwtCPointerData( const T* x, const T* y, int size )
     : m_x( x )
     , m_y( y )
     , m_size( size )
@@ -332,7 +332,7 @@ QwtCPointerData< T >::QwtCPointerData( const T* x, const T* y, size_t size )
 
 //! \return Size of the data set
 template< typename T >
-size_t QwtCPointerData< T >::size() const
+int QwtCPointerData< T >::size() const
 {
     return m_size;
 }
@@ -344,7 +344,7 @@ size_t QwtCPointerData< T >::size() const
    \return Sample at position i
  */
 template< typename T >
-QPointF QwtCPointerData< T >::sample( size_t index ) const
+QPointF QwtCPointerData< T >::sample( int index ) const
 {
     return QPointF( m_x[int( index )], m_y[int( index )] );
 }
@@ -377,7 +377,7 @@ const T* QwtCPointerData< T >::yData() const
  */
 
 template< typename T >
-QwtCPointerValueData< T >::QwtCPointerValueData( const T* y, size_t size )
+QwtCPointerValueData< T >::QwtCPointerValueData( const T* y, int size )
     : m_y( y )
     , m_size( size )
 {
@@ -385,7 +385,7 @@ QwtCPointerValueData< T >::QwtCPointerValueData( const T* y, size_t size )
 
 //! \return Size of the data set
 template< typename T >
-size_t QwtCPointerValueData< T >::size() const
+int QwtCPointerValueData< T >::size() const
 {
     return m_size;
 }
@@ -397,7 +397,7 @@ size_t QwtCPointerValueData< T >::size() const
    \return Sample at position i
  */
 template< typename T >
-QPointF QwtCPointerValueData< T >::sample( size_t index ) const
+QPointF QwtCPointerValueData< T >::sample( int index ) const
 {
     return QPointF( index, m_y[ int( index ) ] );
 }

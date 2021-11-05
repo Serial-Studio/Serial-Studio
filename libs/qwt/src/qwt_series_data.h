@@ -58,14 +58,14 @@ class QwtSeriesData
 #ifndef QWT_PYTHON_WRAPPER
 
     //! \return Number of samples
-    virtual size_t size() const = 0;
+    virtual int size() const = 0;
 
     /*!
        Return a sample
        \param i Index
        \return Sample at position i
      */
-    virtual T sample( size_t i ) const = 0;
+    virtual T sample( int i ) const = 0;
 
     /*!
        Calculate the bounding rect of all samples
@@ -83,8 +83,8 @@ class QwtSeriesData
 
 #else
     // Needed for generating the python bindings, but not for using them !
-    virtual size_t size() const { return 0; }
-    virtual T sample( size_t i ) const { return T(); }
+    virtual int size() const { return 0; }
+    virtual T sample( int i ) const { return T(); }
     virtual QRectF boundingRect() const { return cachedBoundingRect; }
 #endif
 
@@ -154,7 +154,7 @@ class QwtArraySeriesData : public QwtSeriesData< T >
     const QVector< T > samples() const;
 
     //! \return Number of samples
-    virtual size_t size() const QWT_OVERRIDE;
+    virtual int size() const QWT_OVERRIDE;
 
     /*!
        \return Sample at a specific position
@@ -162,7 +162,7 @@ class QwtArraySeriesData : public QwtSeriesData< T >
        \param index Index
        \return Sample at position index
      */
-    virtual T sample( size_t index ) const QWT_OVERRIDE;
+    virtual T sample( int index ) const QWT_OVERRIDE;
 
   protected:
     //! Vector of samples
@@ -194,13 +194,13 @@ const QVector< T > QwtArraySeriesData< T >::samples() const
 }
 
 template< typename T >
-size_t QwtArraySeriesData< T >::size() const
+int QwtArraySeriesData< T >::size() const
 {
     return m_samples.size();
 }
 
 template< typename T >
-T QwtArraySeriesData< T >::sample( size_t i ) const
+T QwtArraySeriesData< T >::sample( int i ) const
 {
     return m_samples[ static_cast< int >( i ) ];
 }

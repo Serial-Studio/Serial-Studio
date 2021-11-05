@@ -386,7 +386,7 @@ QRectF QwtPlotTradingCurve::boundingRect() const
  */
 void QwtPlotTradingCurve::drawSeries(QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, size_t from, size_t to ) const
+    const QRectF& canvasRect, int from, int to ) const
 {
     if ( to < 0 )
         to = dataSize() - 1;

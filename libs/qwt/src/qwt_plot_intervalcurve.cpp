@@ -321,7 +321,7 @@ QRectF QwtPlotIntervalCurve::boundingRect() const
  */
 void QwtPlotIntervalCurve::drawSeries(QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, size_t from, size_t to ) const
+    const QRectF& canvasRect, int from, int to ) const
 {
     if ( to < 0 )
         to = dataSize() - 1;
@@ -376,11 +376,11 @@ void QwtPlotIntervalCurve::drawTube( QPainter* painter,
 
     painter->save();
 
-    const size_t size = to - from + 1;
+    const int size = to - from + 1;
     QPolygonF polygon( 2 * size );
     QPointF* points = polygon.data();
 
-    for ( uint i = 0; i < size; i++ )
+    for ( int i = 0; i < size; i++ )
     {
         QPointF& minValue = points[i];
         QPointF& maxValue = points[2 * size - 1 - i];

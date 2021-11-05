@@ -185,7 +185,7 @@ QwtPlotBarChart::LegendMode QwtPlotBarChart::legendMode() const
  */
 QRectF QwtPlotBarChart::boundingRect() const
 {
-    const size_t numSamples = dataSize();
+    const int numSamples = dataSize();
     if ( numSamples == 0 )
         return QwtPlotSeriesItem::boundingRect();
 
@@ -222,7 +222,7 @@ QRectF QwtPlotBarChart::boundingRect() const
  */
 void QwtPlotBarChart::drawSeries(QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, size_t from, size_t to ) const
+    const QRectF& canvasRect, int from, int to ) const
 {
     if ( to < 0 )
         to = dataSize() - 1;
@@ -239,7 +239,7 @@ void QwtPlotBarChart::drawSeries(QPainter* painter,
 
     painter->save();
 
-    for ( size_t i = from; i <= to; i++ )
+    for ( int i = from; i <= to; i++ )
     {
         drawSample( painter, xMap, yMap,
             canvasRect, interval, i, sample( i ) );
@@ -419,10 +419,10 @@ QList< QwtLegendData > QwtPlotBarChart::legendData() const
 
     if ( m_data->legendMode == LegendBarTitles )
     {
-        const size_t numSamples = dataSize();
+        const int numSamples = dataSize();
         list.reserve( numSamples );
 
-        for ( size_t i = 0; i < numSamples; i++ )
+        for ( int i = 0; i < numSamples; i++ )
         {
             QwtLegendData data;
 

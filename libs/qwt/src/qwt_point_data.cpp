@@ -18,7 +18,7 @@
    \sa setInterval(), setSize()
  */
 QwtSyntheticPointData::QwtSyntheticPointData(
-        size_t size, const QwtInterval& interval )
+        int size, const QwtInterval& interval )
     : m_size( size )
     , m_interval( interval )
 {
@@ -30,7 +30,7 @@ QwtSyntheticPointData::QwtSyntheticPointData(
    \param size Number of points
    \sa size(), setInterval()
  */
-void QwtSyntheticPointData::setSize( size_t size )
+void QwtSyntheticPointData::setSize( int size )
 {
     m_size = size;
 }
@@ -39,7 +39,7 @@ void QwtSyntheticPointData::setSize( size_t size )
    \return Number of points
    \sa setSize(), interval()
  */
-size_t QwtSyntheticPointData::size() const
+int QwtSyntheticPointData::size() const
 {
     return m_size;
 }
@@ -122,7 +122,7 @@ QRectF QwtSyntheticPointData::boundingRect() const
    \warning For invalid indices ( index < 0 || index >= size() )
             (0, 0) is returned.
  */
-QPointF QwtSyntheticPointData::sample( size_t index ) const
+QPointF QwtSyntheticPointData::sample( int index ) const
 {
     if ( index >= m_size )
         return QPointF( 0, 0 );

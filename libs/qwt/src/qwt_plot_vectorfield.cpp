@@ -53,7 +53,7 @@ static QwtInterval qwtMagnitudeRange(
     double min = s0.vx * s0.vx + s0.vy * s0.vy;
     double max = min;
 
-    for ( uint i = 1; i < series->size(); i++ )
+    for ( int i = 1; i < series->size(); i++ )
     {
         const QwtVectorFieldSample s = series->sample( i );
         const double l = s.vx * s.vx + s.vy * s.vy;
@@ -806,7 +806,7 @@ QwtGraphic QwtPlotVectorField::legendIcon(
  */
 void QwtPlotVectorField::drawSeries(QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, size_t from, size_t to ) const
+    const QRectF& canvasRect, int from, int to ) const
 {
     if ( !painter || dataSize() <= 0 )
         return;

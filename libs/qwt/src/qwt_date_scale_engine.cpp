@@ -112,9 +112,9 @@ static double qwtRoundedIntervalWidth(
 }
 
 static inline int qwtStepCount( int intervalSize, int maxSteps,
-    const int limits[], size_t numLimits )
+    const int limits[], int numLimits )
 {
-    for ( uint i = 0; i < numLimits; i++ )
+    for ( int i = 0; i < numLimits; i++ )
     {
         const int numSteps = intervalSize / limits[ i ];
 
@@ -160,11 +160,11 @@ static int qwtStepSize( int intervalSize, int maxSteps, uint base )
 }
 
 static int qwtDivideInterval( double intervalSize, int numSteps,
-    const int limits[], size_t numLimits )
+    const int limits[], int numLimits )
 {
     const int v = qwtCeil( intervalSize / double( numSteps ) );
 
-    for ( uint i = 0; i < numLimits - 1; i++ )
+    for ( int i = 0; i < numLimits - 1; i++ )
     {
         if ( v <= limits[i] )
             return limits[i];

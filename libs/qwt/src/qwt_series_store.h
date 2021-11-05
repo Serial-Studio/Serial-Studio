@@ -42,13 +42,13 @@ class QwtAbstractSeriesStore
     virtual QRectF dataRect() const = 0;
 
     //! \return Number of samples
-    virtual size_t dataSize() const = 0;
+    virtual int dataSize() const = 0;
 #else
     // Needed for generating the python bindings, but not for using them !
     virtual void dataChanged() {}
     virtual void setRectOfInterest( const QRectF& ) {}
     virtual QRectF dataRect() const { return QRectF( 0.0, 0.0, -1.0, -1.0 ); }
-    virtual size_t dataSize() const { return 0; }
+    virtual int dataSize() const { return 0; }
 #endif
 };
 
@@ -100,7 +100,7 @@ class QwtSeriesStore : public virtual QwtAbstractSeriesStore
        \return Number of samples of the series
        \sa setData(), QwtSeriesData<T>::size()
      */
-    virtual size_t dataSize() const QWT_OVERRIDE;
+    virtual int dataSize() const QWT_OVERRIDE;
 
     /*!
        \return Bounding rectangle of the series
@@ -172,7 +172,7 @@ void QwtSeriesStore< T >::setData( QwtSeriesData< T >* series )
 }
 
 template< typename T >
-size_t QwtSeriesStore< T >::dataSize() const
+int QwtSeriesStore< T >::dataSize() const
 {
     if ( m_series == NULL )
         return 0;

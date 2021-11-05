@@ -496,7 +496,7 @@ void QwtPolarCurve::drawSymbols( QPainter* painter, const QwtSymbol& symbol,
    \return Number of points
    \sa setData()
  */
-size_t QwtPolarCurve::dataSize() const
+int QwtPolarCurve::dataSize() const
 {
     return m_series->size();
 }
