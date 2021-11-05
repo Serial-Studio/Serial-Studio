@@ -16,10 +16,10 @@
 
 namespace
 {
-    class AxisData
+    class AxisData_polar_grid
     {
       public:
-        AxisData()
+        AxisData_polar_grid()
             : isVisible( true )
             , doAutoScale( true )
             , minValue( 0.0 )
@@ -33,7 +33,7 @@ namespace
         {
         }
 
-        ~AxisData()
+        ~AxisData_polar_grid()
         {
             delete scaleEngine;
         }
@@ -90,18 +90,18 @@ class QwtPlot::ScaleData
         m_axisData[XBottom].initWidget( QwtScaleDraw::BottomScale, "QwtPlotAxisXBottom", plot );
     }
 
-    inline AxisData& axisData( QwtAxisId axisId )
+    inline AxisData_polar_grid& axisData( QwtAxisId axisId )
     {
         return m_axisData[ axisId ];
     }
 
-    inline const AxisData& axisData( QwtAxisId axisId ) const
+    inline const AxisData_polar_grid& axisData( QwtAxisId axisId ) const
     {
         return m_axisData[ axisId ];
     }
 
   private:
-    AxisData m_axisData[ QwtAxis::AxisPositions ];
+    AxisData_polar_grid m_axisData[ QwtAxis::AxisPositions ];
 };
 
 void QwtPlot::initAxesData()
@@ -170,7 +170,7 @@ void QwtPlot::setAxisScaleEngine( QwtAxisId axisId, QwtScaleEngine* scaleEngine 
 {
     if ( isAxisValid( axisId ) && scaleEngine != NULL )
     {
-        AxisData& d = m_scaleData->axisData( axisId );
+        AxisData_polar_grid& d = m_scaleData->axisData( axisId );
 
         delete d.scaleEngine;
         d.scaleEngine = scaleEngine;
@@ -474,7 +474,7 @@ void QwtPlot::setAxisScale( QwtAxisId axisId, double min, double max, double ste
 {
     if ( isAxisValid( axisId ) )
     {
-        AxisData& d = m_scaleData->axisData( axisId );
+        AxisData_polar_grid& d = m_scaleData->axisData( axisId );
 
         d.doAutoScale = false;
         d.isValid = false;
@@ -503,7 +503,7 @@ void QwtPlot::setAxisScaleDiv( QwtAxisId axisId, const QwtScaleDiv& scaleDiv )
 {
     if ( isAxisValid( axisId ) )
     {
-        AxisData& d = m_scaleData->axisData( axisId );
+        AxisData_polar_grid& d = m_scaleData->axisData( axisId );
 
         d.doAutoScale = false;
         d.scaleDiv = scaleDiv;
@@ -581,7 +581,7 @@ void QwtPlot::setAxisMaxMinor( QwtAxisId axisId, int maxMinor )
     {
         maxMinor = qBound( 0, maxMinor, 100 );
 
-        AxisData& d = m_scaleData->axisData( axisId );
+        AxisData_polar_grid& d = m_scaleData->axisData( axisId );
         if ( maxMinor != d.maxMinor )
         {
             d.maxMinor = maxMinor;
@@ -605,7 +605,7 @@ void QwtPlot::setAxisMaxMajor( QwtAxisId axisId, int maxMajor )
     {
         maxMajor = qBound( 1, maxMajor, 10000 );
 
-        AxisData& d = m_scaleData->axisData( axisId );
+        AxisData_polar_grid& d = m_scaleData->axisData( axisId );
         if ( maxMajor != d.maxMajor )
         {
             d.maxMajor = maxMajor;
@@ -702,7 +702,7 @@ void QwtPlot::updateAxes()
         {
             const QwtAxisId axisId( axisPos );
 
-            AxisData& d = m_scaleData->axisData( axisId );
+            AxisData_polar_grid& d = m_scaleData->axisData( axisId );
 
             double minValue = d.minValue;
             double maxValue = d.maxValue;

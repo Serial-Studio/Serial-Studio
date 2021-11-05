@@ -23,7 +23,7 @@ static inline bool qwtInsidePole( const QwtScaleMap& map, double radius )
     return map.isInverting() ? ( radius > map.s1() ) : ( radius < map.s1() );
 }
 
-static int qwtVerifyRange( int size, int& i1, int& i2 )
+static int PolarCurve_qwtVerifyRange( int size, int& i1, int& i2 )
 {
     if ( size < 1 )
         return 0;
@@ -306,7 +306,7 @@ void QwtPolarCurve::draw( QPainter* painter,
     if ( to < 0 )
         to = dataSize() - 1;
 
-    if ( qwtVerifyRange( dataSize(), from, to ) > 0 )
+    if ( PolarCurve_qwtVerifyRange( dataSize(), from, to ) > 0 )
     {
         painter->save();
         painter->setPen( m_data->pen );
