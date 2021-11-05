@@ -120,7 +120,7 @@ bool Group::read(const QJsonObject &object)
                     if (dataset->read(object))
                         m_datasets.append(dataset);
                     else
-                        dataset->deleteLater();
+                        delete dataset;
                 }
             }
 

@@ -516,7 +516,7 @@ void JSONWorker::process()
         document = QJsonDocument(root);
 
         // Delete javacript engine
-        m_engine->deleteLater();
+        delete m_engine;
     }
 
     // No parse error, update UI & reset error counter

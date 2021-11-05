@@ -110,7 +110,7 @@ bool Frame::read(const QJsonObject &object)
             if (group->read(groups.at(i).toObject()))
                 m_groups.append(group);
             else
-                group->deleteLater();
+                delete group;
         }
 
         // Return status

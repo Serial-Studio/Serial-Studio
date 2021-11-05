@@ -62,6 +62,7 @@ class QWindowFunction
 
 	public:
 
+        virtual ~QWindowFunction() = default;
 		void apply(T *data, int size);
 		void create(int size);
 

@@ -106,7 +106,7 @@ Terminal::Terminal(QQuickItem *parent)
  */
 Terminal::~Terminal()
 {
-    m_textEdit->deleteLater();
+    delete m_textEdit;
 }
 
 /**
