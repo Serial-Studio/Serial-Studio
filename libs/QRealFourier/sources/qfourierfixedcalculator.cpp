@@ -51,6 +51,7 @@ QFourierFixedCalculator<T>::QFourierFixedCalculator()
 template <int T>
 void QFourierFixedCalculator<T>::setSize(int size)
 {
+    (void) size;
 }
 
 template <int T>

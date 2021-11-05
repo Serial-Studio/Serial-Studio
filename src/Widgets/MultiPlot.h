@@ -47,8 +47,6 @@ private slots:
 
 private:
     int m_index;
-    double m_max;
-    double m_min;
     QwtPlot m_plot;
     QwtLegend m_legend;
     QVBoxLayout m_layout;

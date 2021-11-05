@@ -33,6 +33,9 @@ BaseWidget::BaseWidget()
     , m_widget(nullptr)
     , m_resizeWidget(true)
 {
+    // Workaround for unused variables
+    (void)m_index;
+
     // Set window palette
     QPalette palette;
     auto theme = Misc::ThemeManager::getInstance();

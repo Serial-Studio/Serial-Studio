@@ -150,7 +150,6 @@ private:
     bool m_hostExists;
     bool m_udpMulticast;
     bool m_lookupActive;
-    QIODevice *m_device;
     quint16 m_udpLocalPort;
     quint16 m_udpRemotePort;
     QAbstractSocket::SocketType m_socketType;

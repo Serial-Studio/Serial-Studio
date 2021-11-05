@@ -158,7 +158,6 @@ void LEDPanel::updateData()
 
     // Get group pointer
     auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
     auto group = dash->getLED(m_index);
     if (!group)
         return;

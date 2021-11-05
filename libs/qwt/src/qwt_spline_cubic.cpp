@@ -966,8 +966,9 @@ class QwtSplineCubic::PrivateData
 QwtSplineCubic::QwtSplineCubic()
     : m_data( nullptr )
 {
-    // a natural spline
+    (void) m_data;
 
+    // a natural spline
     setBoundaryCondition( QwtSpline::AtBeginning, QwtSpline::Clamped2 );
     setBoundaryValue( QwtSpline::AtBeginning, 0.0 );
 

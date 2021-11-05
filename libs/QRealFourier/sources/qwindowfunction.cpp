@@ -122,6 +122,9 @@ QRectangularFunction
 template <typename T>
 T QRectangularFunction<T>::calculate(int currentSample, int totalSamples)
 {
+    (void) currentSample;
+    (void) totalSamples;
+
 	return 1.0;
 }
 

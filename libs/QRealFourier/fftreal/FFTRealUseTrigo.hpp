@@ -49,6 +49,7 @@ void	FFTRealUseTrigo <ALGO>::prepare (OscType &osc)
 template <>
 inline void	FFTRealUseTrigo <0>::prepare (OscType &osc)
 {
+    (void) osc;
 	// Nothing
 }
 
@@ -57,6 +58,9 @@ inline void	FFTRealUseTrigo <0>::prepare (OscType &osc)
 template <int ALGO>
 void	FFTRealUseTrigo <ALGO>::iterate (OscType &osc, DataType &c, DataType &s, const DataType cos_ptr [], long index_c, long index_s)
 {
+    (void) index_c;
+    (void) index_s;
+    (void) cos_ptr;
 	osc.step ();
 	c = osc.get_cos ();
 	s = osc.get_sin ();
@@ -65,6 +69,7 @@ void	FFTRealUseTrigo <ALGO>::iterate (OscType &osc, DataType &c, DataType &s, co
 template <>
 inline void	FFTRealUseTrigo <0>::iterate (OscType &osc, DataType &c, DataType &s, const DataType cos_ptr [], long index_c, long index_s)
 {
+    (void) osc;
 	c = cos_ptr [index_c];
 	s = cos_ptr [index_s];
 }

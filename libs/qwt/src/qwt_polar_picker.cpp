@@ -26,6 +26,7 @@ QwtPolarPicker::QwtPolarPicker( QwtPolarCanvas* canvas )
     : QwtPicker( canvas )
     , m_data( nullptr )
 {
+    (void) m_data;
 }
 
 /*!

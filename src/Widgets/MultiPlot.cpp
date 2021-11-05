@@ -32,8 +32,6 @@ using namespace Widgets;
  */
 MultiPlot::MultiPlot(const int index)
     : m_index(index)
-    , m_max(INT_MIN)
-    , m_min(INT_MAX)
 {
     // Get pointers to serial studio modules
     auto dash = UI::Dashboard::getInstance();
