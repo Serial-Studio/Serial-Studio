@@ -342,24 +342,14 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
             return;
 
         // Separate incoming data & add it to the JSON map
-        auto json = jsonMapData().toStdString();
+        auto json = jsonMapData();
         auto sepr = IO::Manager::getInstance()->separatorSequence();
         auto list = QString::fromUtf8(data).split(sepr);
         for (int i = 0; i < list.count(); ++i)
-        {
-            size_t start_pos = 0;
-            std::string id = "%" + std::to_string(i + 1);
-            std::string value = list.at(i).toStdString();
-
-            while ((start_pos = json.find(id, start_pos)) != std::string::npos)
-            {
-                json.replace(start_pos, id.length(), value);
-                start_pos += value.length();
-            }
-        }
+            json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
 
         // Create json document
-        auto jsonData = QString::fromStdString(json).toUtf8();
+        auto jsonData = json.toUtf8();
         auto jsonDocument = QJsonDocument::fromJson(jsonData, &error);
 
         // Calculate dynamically generated values
@@ -451,24 +441,14 @@ void JSONWorker::process()
         m_engine = new QJSEngine(this);
 
         // Separate incoming data & add it to the JSON map
-        auto json = generator->jsonMapData().toStdString();
+        auto json = generator->jsonMapData();
         auto sepr = IO::Manager::getInstance()->separatorSequence();
         auto list = QString::fromUtf8(m_data).split(sepr);
         for (int i = 0; i < list.count(); ++i)
-        {
-            size_t start_pos = 0;
-            std::string id = "%" + std::to_string(i + 1);
-            std::string value = list.at(i).toStdString();
-
-            while ((start_pos = json.find(id, start_pos)) != std::string::npos)
-            {
-                json.replace(start_pos, id.length(), value);
-                start_pos += value.length();
-            }
-        }
+            json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
 
         // Create json document
-        auto jsonData = QString::fromStdString(json).toUtf8();
+        auto jsonData = json.toUtf8();
         auto jsonDocument = QJsonDocument::fromJson(jsonData, &error);
 
         // Calculate dynamically generated values

@@ -97,9 +97,11 @@ CONFIG += silent
 #-----------------------------------------------------------------------------------------
 
 CONFIG(debug, debug|release) {
+    CONFIG -= ltcg
     DEFINES += UNITY_BUILD=0
 } else {
     DEFINES += UNITY_BUILD=1
+    SOURCES += src/SingleCompilationUnit.cpp
 }
 
 #-----------------------------------------------------------------------------------------
@@ -251,8 +253,7 @@ SOURCES += \
     src/Widgets/MultiPlot.cpp \
     src/Widgets/Plot.cpp \
     src/Widgets/Terminal.cpp \
-    src/main.cpp \
-    src/SingleCompilationUnit.cpp
+    src/main.cpp
 
 #-------------------------------------------------------------------------------
 # Deploy files
