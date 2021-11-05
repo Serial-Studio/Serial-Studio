@@ -41,7 +41,7 @@ TEMPLATE = app                                           # Project template
 TARGET = serial-studio                                   # Set default target name
 CONFIG += qtquickcompiler                                # Pre-compile QML interface
 CONFIG += ltcg                                           # Enable LTO (reduces code size)
-CONFIG += utf8_source                                    # Source code is encoding
+CONFIG += utf8_source                                    # Source code encoding
 
 QTPLUGIN += qsvg                                         # Fixes issues with windeployqt
 
