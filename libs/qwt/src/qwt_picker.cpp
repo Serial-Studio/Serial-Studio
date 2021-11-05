@@ -62,7 +62,7 @@ static inline QRegion qwtMaskRegion( const QLine& l, int penWidth )
     return region;
 }
 
-namespace
+namespace QwtPickerPrivate
 {
     class Rubberband QWT_FINAL : public QwtWidgetOverlay
     {
@@ -150,8 +150,8 @@ class QwtPicker::PrivateData
 
     bool mouseTracking; // used to save previous value
 
-    QPointer< Rubberband > rubberBandOverlay;
-    QPointer< Tracker > trackerOverlay;
+    QPointer< QwtPickerPrivate::Rubberband > rubberBandOverlay;
+    QPointer< QwtPickerPrivate::Tracker > trackerOverlay;
 
     bool openGL;
 };
@@ -1509,12 +1509,12 @@ void QwtPicker::updateDisplay()
         }
     }
 
-    QPointer< Rubberband >& rw = m_data->rubberBandOverlay;
+    QPointer< QwtPickerPrivate::Rubberband >& rw = m_data->rubberBandOverlay;
     if ( showRubberband )
     {
         if ( rw.isNull() )
         {
-            rw = new Rubberband( this, NULL ); // NULL -> no extra event filter
+            rw = new QwtPickerPrivate::Rubberband( this, NULL ); // NULL -> no extra event filter
             rw->setObjectName( "PickerRubberBand" );
             rw->setParent( w );
             rw->resize( w->size() );
@@ -1545,12 +1545,12 @@ void QwtPicker::updateDisplay()
         }
     }
 
-    QPointer< Tracker >& tw = m_data->trackerOverlay;
+    QPointer< QwtPickerPrivate::Tracker >& tw = m_data->trackerOverlay;
     if ( showTracker )
     {
         if ( tw.isNull() )
         {
-            tw = new Tracker( this, NULL ); // NULL -> no extra event filter
+            tw = new QwtPickerPrivate::Tracker( this, NULL ); // NULL -> no extra event filter
             tw->setObjectName( "PickerTracker" );
             tw->setParent( w );
             tw->resize( w->size() );

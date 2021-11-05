@@ -30,7 +30,7 @@ static inline double qwtDistance(
     return qSqrt( dx * dx + dy * dy );
 }
 
-namespace
+namespace QwtPolarPlotPrivate
 {
     class ScaleData
     {
@@ -72,7 +72,7 @@ class QwtPolarPlot::PrivateData
     QwtPointPolar zoomPos;
     double zoomFactor;
 
-    ScaleData scaleData[QwtPolar::ScaleCount];
+    QwtPolarPlotPrivate::ScaleData scaleData[QwtPolar::ScaleCount];
     QPointer< QwtTextLabel > titleLabel;
     QPointer< QwtPolarCanvas > canvas;
     QPointer< QwtAbstractLegend > legend;
@@ -370,7 +370,7 @@ void QwtPolarPlot::setAutoScale( int scaleId )
     if ( scaleId != QwtPolar::ScaleRadius )
         return;
 
-    ScaleData& scaleData = m_data->scaleData[scaleId];
+    QwtPolarPlotPrivate::ScaleData& scaleData = m_data->scaleData[scaleId];
     if ( !scaleData.doAutoScale )
     {
         scaleData.doAutoScale = true;
@@ -405,7 +405,7 @@ void QwtPolarPlot::setScaleMaxMinor( int scaleId, int maxMinor )
 
     maxMinor = qBound( 0, maxMinor, 100 );
 
-    ScaleData& scaleData = m_data->scaleData[scaleId];
+    QwtPolarPlotPrivate::ScaleData& scaleData = m_data->scaleData[scaleId];
 
     if ( maxMinor != scaleData.maxMinor )
     {
@@ -442,7 +442,7 @@ void QwtPolarPlot::setScaleMaxMajor( int scaleId, int maxMajor )
 
     maxMajor = qBound( 1, maxMajor, 10000 );
 
-    ScaleData& scaleData = m_data->scaleData[scaleId];
+    QwtPolarPlotPrivate::ScaleData& scaleData = m_data->scaleData[scaleId];
     if ( maxMajor != scaleData.maxMinor )
     {
         scaleData.maxMajor = maxMajor;
@@ -478,7 +478,7 @@ void QwtPolarPlot::setScaleEngine( int scaleId, QwtScaleEngine* scaleEngine )
     if ( scaleId < 0 || scaleId >= QwtPolar::ScaleCount )
         return;
 
-    ScaleData& scaleData = m_data->scaleData[scaleId];
+    QwtPolarPlotPrivate::ScaleData& scaleData = m_data->scaleData[scaleId];
     if ( scaleEngine == NULL || scaleEngine == scaleData.scaleEngine )
         return;
 
@@ -533,7 +533,7 @@ void QwtPolarPlot::setScale( int scaleId,
     if ( scaleId < 0 || scaleId >= QwtPolar::ScaleCount )
         return;
 
-    ScaleData& scaleData = m_data->scaleData[scaleId];
+    QwtPolarPlotPrivate::ScaleData& scaleData = m_data->scaleData[scaleId];
 
     scaleData.isValid = false;
 
@@ -556,7 +556,7 @@ void QwtPolarPlot::setScaleDiv( int scaleId, const QwtScaleDiv& scaleDiv )
     if ( scaleId < 0 || scaleId >= QwtPolar::ScaleCount )
         return;
 
-    ScaleData& scaleData = m_data->scaleData[scaleId];
+    QwtPolarPlotPrivate::ScaleData& scaleData = m_data->scaleData[scaleId];
 
     scaleData.scaleDiv = scaleDiv;
     scaleData.isValid = true;
@@ -809,7 +809,7 @@ void QwtPolarPlot::initPlot( const QwtText& title )
 
     for ( int scaleId = 0; scaleId < QwtPolar::ScaleCount; scaleId++ )
     {
-        ScaleData& scaleData = m_data->scaleData[scaleId];
+        QwtPolarPlotPrivate::ScaleData& scaleData = m_data->scaleData[scaleId];
 
         if ( scaleId == QwtPolar::Azimuth )
         {
@@ -1042,7 +1042,7 @@ void QwtPolarPlot::updateScale( int scaleId )
     if ( scaleId < 0 || scaleId >= QwtPolar::ScaleCount )
         return;
 
-    ScaleData& d = m_data->scaleData[scaleId];
+    QwtPolarPlotPrivate::ScaleData& d = m_data->scaleData[scaleId];
 
     double minValue = d.minValue;
     double maxValue = d.maxValue;

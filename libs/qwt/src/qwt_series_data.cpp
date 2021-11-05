@@ -90,7 +90,7 @@ QRectF qwtBoundingRectT( const QwtSeriesData< T >& series, int from, int to )
         from = 0;
 
     if ( to < 0 )
-        to = series.size() - 1;
+        to = static_cast<int>(series.size()) - 1;
 
     if ( to < from )
         return boundingRect;

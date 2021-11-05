@@ -19,7 +19,7 @@
 #include <qbrush.h>
 #include <qpainter.h>
 
-namespace
+namespace QwtPlotLegendItemPrivate
 {
     class LayoutItem QWT_FINAL : public QLayoutItem
     {
@@ -167,7 +167,7 @@ class QwtPlotLegendItem::PrivateData
     int canvasOffset[2];
     Qt::Alignment canvasAlignment;
 
-    QMap< const QwtPlotItem*, QList< LayoutItem* > > map;
+    QMap< const QwtPlotItem*, QList< QwtPlotLegendItemPrivate::LayoutItem* > > map;
     QwtDynGridLayout* layout;
 };
 
@@ -603,8 +603,8 @@ void QwtPlotLegendItem::draw( QPainter* painter,
 
     for ( int i = 0; i < m_data->layout->count(); i++ )
     {
-        const LayoutItem* layoutItem =
-            static_cast< LayoutItem* >( m_data->layout->itemAt( i ) );
+        const QwtPlotLegendItemPrivate::LayoutItem* layoutItem =
+            static_cast< QwtPlotLegendItemPrivate::LayoutItem* >( m_data->layout->itemAt( i ) );
 
         if ( m_data->backgroundMode == QwtPlotLegendItem::ItemBackground )
             drawBackground( painter, layoutItem->geometry() );
@@ -700,9 +700,9 @@ void QwtPlotLegendItem::updateLegend( const QwtPlotItem* plotItem,
     if ( plotItem == NULL )
         return;
 
-    QList< LayoutItem* > layoutItems;
+    QList< QwtPlotLegendItemPrivate::LayoutItem* > layoutItems;
 
-    QMap< const QwtPlotItem*, QList< LayoutItem* > >::const_iterator it =
+    QMap< const QwtPlotItem*, QList< QwtPlotLegendItemPrivate::LayoutItem* > >::const_iterator it =
         m_data->map.constFind( plotItem );
     if ( it != m_data->map.constEnd() )
         layoutItems = it.value();
@@ -729,8 +729,8 @@ void QwtPlotLegendItem::updateLegend( const QwtPlotItem* plotItem,
 
             for ( int i = 0; i < data.size(); i++ )
             {
-                LayoutItem* layoutItem =
-                    new LayoutItem( this, plotItem );
+                QwtPlotLegendItemPrivate::LayoutItem* layoutItem =
+                    new QwtPlotLegendItemPrivate::LayoutItem( this, plotItem );
                 m_data->layout->addItem( layoutItem );
                 layoutItems += layoutItem;
             }
@@ -895,9 +895,9 @@ QList< const QwtPlotItem* > QwtPlotLegendItem::plotItems() const
 QList< QRect > QwtPlotLegendItem::legendGeometries(
     const QwtPlotItem* plotItem ) const
 {
-    QList< LayoutItem* > layoutItems;
+    QList< QwtPlotLegendItemPrivate::LayoutItem* > layoutItems;
 
-    QMap< const QwtPlotItem*, QList< LayoutItem* > >::const_iterator it =
+    QMap< const QwtPlotItem*, QList< QwtPlotLegendItemPrivate::LayoutItem* > >::const_iterator it =
         m_data->map.constFind( plotItem );
     if ( it != m_data->map.constEnd() )
         layoutItems = it.value();

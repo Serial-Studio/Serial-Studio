@@ -47,7 +47,6 @@ static QString ADD_ESCAPE_SEQUENCES(const QString &str)
     auto escapedStr = str;
     escapedStr = escapedStr.replace("\\a", "\a");
     escapedStr = escapedStr.replace("\\b", "\b");
-    escapedStr = escapedStr.replace("\\e", "\e");
     escapedStr = escapedStr.replace("\\f", "\f");
     escapedStr = escapedStr.replace("\\n", "\n");
     escapedStr = escapedStr.replace("\\r", "\r");

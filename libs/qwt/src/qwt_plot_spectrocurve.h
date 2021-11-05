@@ -55,7 +55,7 @@ class QWT_EXPORT QwtPlotSpectroCurve
 
     virtual void drawSeries( QPainter*,
         const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, int from, int to ) const QWT_OVERRIDE;
+        const QRectF& canvasRect, size_t from, size_t to ) const QWT_OVERRIDE;
 
     void setPenWidth( double );
     double penWidth() const;

@@ -381,7 +381,7 @@ namespace
     }
 }
 
-namespace
+namespace QwtPlotLayoutPrivate
 {
     class LayoutEngine
     {
@@ -507,7 +507,7 @@ namespace
     };
 }
 
-QRectF LayoutEngine::layoutLegend( QwtPlotLayout::Options options,
+QRectF QwtPlotLayoutPrivate::LayoutEngine::layoutLegend( QwtPlotLayout::Options options,
     const LayoutData::LegendData& legendData,
     const QRectF& rect, const QSize& legendHint ) const
 {
@@ -567,7 +567,7 @@ QRectF LayoutEngine::layoutLegend( QwtPlotLayout::Options options,
     return legendRect;
 }
 
-QRectF LayoutEngine::alignLegend( const QSize& legendHint,
+QRectF QwtPlotLayoutPrivate::LayoutEngine::alignLegend( const QSize& legendHint,
     const QRectF& canvasRect, const QRectF& legendRect ) const
 {
     QRectF alignedRect = legendRect;
@@ -593,7 +593,7 @@ QRectF LayoutEngine::alignLegend( const QSize& legendHint,
     return alignedRect;
 }
 
-int LayoutEngine::heightForWidth(
+int QwtPlotLayoutPrivate::LayoutEngine::heightForWidth(
     LayoutData::Label labelType, const LayoutData& layoutData,
     QwtPlotLayout::Options options,
     double width, int axesWidth ) const
@@ -618,7 +618,7 @@ int LayoutEngine::heightForWidth(
     return d;
 }
 
-LayoutEngine::Dimensions LayoutEngine::layoutDimensions( QwtPlotLayout::Options options,
+QwtPlotLayoutPrivate::LayoutEngine::Dimensions QwtPlotLayoutPrivate::LayoutEngine::layoutDimensions( QwtPlotLayout::Options options,
     const LayoutData& layoutData, const QRectF& rect ) const
 {
     using namespace QwtAxis;
@@ -754,7 +754,7 @@ LayoutEngine::Dimensions LayoutEngine::layoutDimensions( QwtPlotLayout::Options 
     return dimensions;
 }
 
-void LayoutEngine::alignScales( QwtPlotLayout::Options options,
+void QwtPlotLayoutPrivate::LayoutEngine::alignScales( QwtPlotLayout::Options options,
     const LayoutData& layoutData, QRectF& canvasRect,
     QRectF scaleRect[QwtAxis::AxisPositions] ) const
 {
@@ -1026,7 +1026,7 @@ class QwtPlotLayout::PrivateData
     QRectF scaleRects[QwtAxis::AxisPositions];
     QRectF canvasRect;
 
-    LayoutEngine engine;
+    QwtPlotLayoutPrivate::LayoutEngine engine;
 };
 
 /*!
@@ -1068,7 +1068,7 @@ void QwtPlotLayout::setCanvasMargin( int margin, int axisPos )
     if ( margin < -1 )
         margin = -1;
 
-    LayoutEngine& engine = m_data->engine;
+    QwtPlotLayoutPrivate::LayoutEngine& engine = m_data->engine;
 
     if ( axisPos == -1 )
     {
@@ -1185,7 +1185,7 @@ void QwtPlotLayout::setLegendPosition( QwtPlot::LegendPosition pos, double ratio
     if ( ratio > 1.0 )
         ratio = 1.0;
 
-    LayoutEngine& engine = m_data->engine;
+    QwtPlotLayoutPrivate::LayoutEngine& engine = m_data->engine;
 
     switch ( pos )
     {
@@ -1458,7 +1458,7 @@ QSize QwtPlotLayout::minimumSizeHint( const QwtPlot* plot ) const
     const QwtAbstractLegend* legend = plot->legend();
     if ( legend && !legend->isEmpty() )
     {
-        const LayoutEngine& engine = m_data->engine;
+        const QwtPlotLayoutPrivate::LayoutEngine& engine = m_data->engine;
 
         if ( engine.legendPos() == QwtPlot::LeftLegend
             || engine.legendPos() == QwtPlot::RightLegend )
@@ -1583,7 +1583,7 @@ void QwtPlotLayout::activate( const QwtPlot* plot,
 
     using namespace QwtAxis;
 
-    const LayoutEngine::Dimensions dimensions =
+    const QwtPlotLayoutPrivate::LayoutEngine::Dimensions dimensions =
         m_data->engine.layoutDimensions( options, layoutData, rect );
 
     if ( dimensions.dimTitle > 0 )

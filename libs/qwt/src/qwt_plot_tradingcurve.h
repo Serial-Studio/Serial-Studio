@@ -135,7 +135,7 @@ class QWT_EXPORT QwtPlotTradingCurve
 
     virtual void drawSeries( QPainter*,
         const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, int from, int to ) const QWT_OVERRIDE;
+        const QRectF& canvasRect, size_t from, size_t to ) const QWT_OVERRIDE;
 
     virtual QRectF boundingRect() const QWT_OVERRIDE;
 

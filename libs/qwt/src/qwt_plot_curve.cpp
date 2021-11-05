@@ -55,13 +55,13 @@ static void qwtUpdateLegendIconSize( QwtPlotCurve* curve )
     }
 }
 
-static int qwtVerifyRange( int size, int& i1, int& i2 )
+static int qwtVerifyRange( size_t size, size_t& i1, size_t& i2 )
 {
     if ( size < 1 )
         return 0;
 
-    i1 = qBound( 0, i1, size - 1 );
-    i2 = qBound( 0, i2, size - 1 );
+    i1 = qBound<size_t>( 0, i1, size - 1 );
+    i2 = qBound<size_t>( 0, i2, size - 1 );
 
     if ( i1 > i2 )
         qSwap( i1, i2 );
@@ -380,7 +380,7 @@ const QBrush& QwtPlotCurve::brush() const
  */
 void QwtPlotCurve::drawSeries( QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, int from, int to ) const
+    const QRectF& canvasRect, size_t from, size_t to ) const
 {
     const size_t numSamples = dataSize();
 

@@ -804,9 +804,9 @@ QwtGraphic QwtPlotVectorField::legendIcon(
    \param to Index of the last sample to be painted. If to < 0 the
          series will be painted to its last sample.
  */
-void QwtPlotVectorField::drawSeries( QPainter* painter,
+void QwtPlotVectorField::drawSeries(QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, int from, int to ) const
+    const QRectF& canvasRect, size_t from, size_t to ) const
 {
     if ( !painter || dataSize() <= 0 )
         return;

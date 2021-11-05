@@ -20,7 +20,7 @@
 #include <qpainter.h>
 #include <qmargins.h>
 
-namespace
+namespace QwtLegendPrivate
 {
     class LegendMap
     {
@@ -135,7 +135,7 @@ class QwtLegend::PrivateData
     }
 
     QwtLegendData::Mode itemMode;
-    LegendMap itemMap;
+    QwtLegendPrivate::LegendMap itemMap;
 
     class LegendView;
     LegendView* view;

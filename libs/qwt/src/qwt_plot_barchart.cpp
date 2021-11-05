@@ -220,9 +220,9 @@ QRectF QwtPlotBarChart::boundingRect() const
 
    \sa drawSymbols()
  */
-void QwtPlotBarChart::drawSeries( QPainter* painter,
+void QwtPlotBarChart::drawSeries(QPainter* painter,
     const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, int from, int to ) const
+    const QRectF& canvasRect, size_t from, size_t to ) const
 {
     if ( to < 0 )
         to = dataSize() - 1;
@@ -239,7 +239,7 @@ void QwtPlotBarChart::drawSeries( QPainter* painter,
 
     painter->save();
 
-    for ( int i = from; i <= to; i++ )
+    for ( size_t i = from; i <= to; i++ )
     {
         drawSample( painter, xMap, yMap,
             canvasRect, interval, i, sample( i ) );
