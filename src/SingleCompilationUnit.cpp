@@ -492,7 +492,10 @@
 #include "moc_qmqtt_networkinterface.cpp"
 #include "moc_qmqtt_socketinterface.cpp"
 #include "moc_qmqtt_timerinterface.cpp"
+
+#ifdef Q_OS_MAC
 #include "moc_kdmactouchbar.cpp"
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // QtQuickCompiler code
