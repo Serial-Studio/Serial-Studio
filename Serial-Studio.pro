@@ -39,7 +39,6 @@ isEmpty(PREFIX) {
 
 TEMPLATE = app                                           # Project template
 TARGET = serial-studio                                   # Set default target name
-CONFIG += resources_big                                  # Avoid isses with large *.qrc
 CONFIG += qtquickcompiler                                # Pre-compile QML interface
 
 QTPLUGIN += qsvg                                         # Fixes issues with windeployqt
@@ -66,6 +65,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
     QMAKE_CXXFLAGS_RELEASE -= -O2
     QMAKE_CXXFLAGS_RELEASE *= -O3
     QMAKE_CXXFLAGS_RELEASE *= -Ofast
+    QMAKE_CXXFLAGS_RELEASE *= -flto
 }
 
 *clang*: {
@@ -73,12 +73,15 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
     QMAKE_CXXFLAGS_RELEASE -= -O2
     QMAKE_CXXFLAGS_RELEASE *= -O3
     QMAKE_CXXFLAGS_RELEASE *= -Ofast
+    QMAKE_CXXFLAGS_RELEASE *= -flto
 }
 
 *msvc*: {
     QMAKE_CXXFLAGS += -MP
     QMAKE_CXXFLAGS_RELEASE -= /O
     QMAKE_CXXFLAGS_RELEASE *= /O2
+    QMAKE_CXXFLAGS_RELEASE *= /GL
+    QMAKE_CXXFLAGS_RELEASE *= /LTCG
 
     INCLUDEPATH += $$OUT_PWD
     INCLUDEPATH += $$OUT_PWD/debug
