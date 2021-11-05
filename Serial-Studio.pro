@@ -160,7 +160,6 @@ mingw {
 #-----------------------------------------------------------------------------------------
 
 INCLUDEPATH += src
-PRECOMPILED_HEADER = src/PCH.h
 
 HEADERS += \
     src/AppInfo.h \

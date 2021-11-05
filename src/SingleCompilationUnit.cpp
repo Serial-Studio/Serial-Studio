@@ -486,6 +486,15 @@
 #include "moc_Utilities.cpp"
 
 //--------------------------------------------------------------------------------------------------
+// Meta object compiler code from third-party libraries
+//--------------------------------------------------------------------------------------------------
+
+#include "moc_qmqtt_networkinterface.cpp"
+#include "moc_qmqtt_socketinterface.cpp"
+#include "moc_qmqtt_timerinterface.cpp"
+#include "moc_kdmactouchbar.cpp"
+
+//--------------------------------------------------------------------------------------------------
 // QtQuickCompiler code
 //--------------------------------------------------------------------------------------------------
 
