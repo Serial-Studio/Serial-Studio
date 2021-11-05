@@ -212,7 +212,3 @@ void Translator::setLanguage(const QLocale &locale, const QString &language)
     }
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Translator.cpp"
-#endif

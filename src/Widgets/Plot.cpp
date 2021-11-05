@@ -221,7 +221,3 @@ void Plot::updateRange()
     m_plot.replot();
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Plot.cpp"
-#endif

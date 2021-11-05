@@ -690,7 +690,3 @@ QVector<QSerialPortInfo> Serial::validPorts() const
     return ports;
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Serial.cpp"
-#endif

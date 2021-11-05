@@ -104,7 +104,3 @@ void Compass::update()
     }
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Compass.cpp"
-#endif

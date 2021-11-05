@@ -104,7 +104,3 @@ void Gauge::updateData()
     }
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Gauge.cpp"
-#endif

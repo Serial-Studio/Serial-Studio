@@ -376,7 +376,3 @@ void Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
     Misc::Utilities::showMessageBox(tr("Network socket error"), error);
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Network.cpp"
-#endif

@@ -636,7 +636,3 @@ int Player::getDatasetIndex(const QString &groupKey, const QString &datasetKey)
     return 0;
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Player.cpp"
-#endif

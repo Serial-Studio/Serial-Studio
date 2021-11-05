@@ -785,7 +785,3 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
     return ValidationStatus::ChecksumIncomplete;
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Manager.cpp"
-#endif

@@ -1099,7 +1099,3 @@ void AnsiEscapeCodeHandler::setFormatScope(const QTextCharFormat &charFormat)
     m_previousFormatClosed = false;
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Terminal.cpp"
-#endif

@@ -302,7 +302,3 @@ void DataGroup::mouseDoubleClickEvent(QMouseEvent *event)
     hack->mouseDoubleClickEvent(event);
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_DataGroup.cpp"
-#endif

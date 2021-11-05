@@ -201,7 +201,3 @@ void MultiPlot::updateRange()
             m_curves.at(i)->setSamples(*dash->xPlotValues(), m_yData[i]);
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_MultiPlot.cpp"
-#endif

@@ -12,9 +12,11 @@
 // TODOs:
 //  - Change Qwt source code for inclusion in this file
 //  - Write a script that generates this file automagically
-//  - Only use this file for release builds (to avoid recompiling everything when running
-//    a debug build...)
 //
+
+#if UNITY_BUILD
+
+// clang-format off
 
 //--------------------------------------------------------------------------------------------------
 // Third-party library headers
@@ -321,3 +323,44 @@
 #include "Widgets/Plot.cpp"
 #include "Widgets/Terminal.cpp"
 #include "main.cpp"
+
+//--------------------------------------------------------------------------------------------------
+// Meta object compiler code
+//--------------------------------------------------------------------------------------------------
+
+#include "moc_Accelerometer.cpp"
+#include "moc_Bar.cpp"
+#include "moc_BaseWidget.cpp"
+#include "moc_Client.cpp"
+#include "moc_Compass.cpp"
+#include "moc_Console.cpp"
+#include "moc_Dashboard.cpp"
+#include "moc_DataGroup.cpp"
+#include "moc_Editor.cpp"
+#include "moc_Export.cpp"
+#include "moc_FFTPlot.cpp"
+#include "moc_Gauge.cpp"
+#include "moc_Generator.cpp"
+#include "moc_GPS.cpp"
+#include "moc_Gyroscope.cpp"
+#include "moc_KLed.cpp"
+#include "moc_LEDPanel.cpp"
+#include "moc_MacExtras.cpp"
+#include "moc_Manager.cpp"
+#include "moc_ModuleManager.cpp"
+#include "moc_MultiPlot.cpp"
+#include "moc_Network.cpp"
+#include "moc_Player.cpp"
+#include "moc_Plot.cpp"
+#include "moc_Serial.cpp"
+#include "moc_Server.cpp"
+#include "moc_Terminal.cpp"
+#include "moc_ThemeManager.cpp"
+#include "moc_TimerEvents.cpp"
+#include "moc_Translator.cpp"
+#include "moc_WidgetLoader.cpp"
+#include "moc_Utilities.cpp"
+
+// clang-format on
+
+#endif

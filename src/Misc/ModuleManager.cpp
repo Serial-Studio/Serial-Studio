@@ -372,9 +372,4 @@ void Misc::ModuleManager::stopOperations()
     CSV::Player::getInstance()->closeFile();
     IO::Manager::getInstance()->disconnectDevice();
     Misc::TimerEvents::getInstance()->stopTimers();
-    MQTT::Client::getInstance()->disconnectFromHost();
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_ModuleManager.cpp"
-#endif

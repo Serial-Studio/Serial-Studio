@@ -458,7 +458,3 @@ void WidgetLoader::processWheelEvents(QWheelEvent *event)
     update();
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_WidgetLoader.cpp"
-#endif

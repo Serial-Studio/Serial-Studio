@@ -1069,7 +1069,3 @@ JSON::Dataset *Dashboard::getDatasetWidget(const QVector<JSON::Dataset *> vector
     return nullptr;
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Dashboard.cpp"
-#endif

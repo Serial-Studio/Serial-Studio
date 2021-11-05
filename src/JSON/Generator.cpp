@@ -524,7 +524,3 @@ void JSONWorker::process()
     QTimer::singleShot(500, this, SIGNAL(finished()));
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Generator.cpp"
-#endif

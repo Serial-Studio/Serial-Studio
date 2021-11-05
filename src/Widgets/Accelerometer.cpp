@@ -122,7 +122,3 @@ void Accelerometer::updateData()
     }
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Accelerometer.cpp"
-#endif

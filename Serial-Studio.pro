@@ -24,8 +24,6 @@
 # Make options
 #-----------------------------------------------------------------------------------------
 
-DEFINES += SERIAL_STUDIO_MOC_INCLUDE=1
-
 UI_DIR = uic
 MOC_DIR = moc
 RCC_DIR = qrc
@@ -85,6 +83,16 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 CONFIG += c++11
 CONFIG += silent
+
+#-----------------------------------------------------------------------------------------
+# Enable/Disably unity build depending on build type
+#-----------------------------------------------------------------------------------------
+
+CONFIG(debug, debug|release) {
+    DEFINES += UNITY_BUILD=0
+} else {
+    DEFINES += UNITY_BUILD=1
+}
 
 #-----------------------------------------------------------------------------------------
 # Serial Studio compile-time settings

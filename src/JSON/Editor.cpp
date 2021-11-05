@@ -1443,7 +1443,3 @@ int Editor::nextDatasetIndex()
     return maxIndex;
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Editor.cpp"
-#endif

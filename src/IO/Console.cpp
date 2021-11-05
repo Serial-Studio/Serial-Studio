@@ -668,7 +668,3 @@ QString Console::hexadecimalStr(const QByteArray &data)
     return str;
 }
 }
-
-#if SERIAL_STUDIO_MOC_INCLUDE
-#    include "moc_Console.cpp"
-#endif
