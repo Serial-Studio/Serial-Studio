@@ -92,7 +92,7 @@ CONFIG += c++11
 CONFIG += silent
 
 #-----------------------------------------------------------------------------------------
-# Enable/Disably unity build depending on build type
+# Enable/Disable single unit build depending on build configuration
 #-----------------------------------------------------------------------------------------
 
 CONFIG(debug, debug|release) {
