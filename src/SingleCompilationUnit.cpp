@@ -1,10 +1,13 @@
 //
 // Well, this will be a PITA to maintain. But we can implement some interesting
-// optimizations by using this approach.
+// optimizations by using this approach, for example this build approach can lead to
+// faster code, because the compiler can do more aggressive optimizations on all the
+// program's code.
 //
 // See these articles for more information:
 //  https://en.wikipedia.org/wiki/Single_Compilation_Unit
 //  https://en.wikipedia.org/wiki/Unity_build
+//  https://mesonbuild.com/Unity-builds.html
 //
 // TODOs:
 //  - Change Qwt source code for inclusion in this file
