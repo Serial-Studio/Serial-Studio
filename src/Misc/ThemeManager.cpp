@@ -101,7 +101,7 @@ void ThemeManager::setTheme(const int id)
         auto bundle = qApp->applicationDirPath() + "/../../";
         QProcess::startDetached("open", { "-n", "-a", bundle });
 #else
-        QProcess::startDetached(qApp->applicationFilePath());
+        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 #endif
         qApp->exit();
     }

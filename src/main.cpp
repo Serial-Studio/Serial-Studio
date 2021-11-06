@@ -127,6 +127,11 @@ int main(int argc, char **argv)
     // Initialize QML interface
     moduleManager.registerQmlTypes();
     moduleManager.initializeQmlInterface();
+    if (moduleManager.engine()->rootObjects().isEmpty())
+    {
+        qCritical() << "Critical QML error";
+        return EXIT_FAILURE;
+    }
 
     // Enter application event loop
     return app.exec();

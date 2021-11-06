@@ -134,13 +134,6 @@ Misc::ModuleManager::ModuleManager()
         pixmap.setDevicePixelRatio(dpr);
     }
 
-    // Initilize QML window
-    m_window = new QQuickWidget(NULL);
-    m_window->setWindowFlag(Qt::FramelessWindowHint, true);
-    m_window->setAttribute(Qt::WA_PaintOnScreen, true);
-    m_window->setAttribute(Qt::WA_NoSystemBackground, true);
-    m_window->setAttribute(Qt::WA_TranslucentBackground, true);
-
     // Show splash screen
     m_splash.setPixmap(pixmap);
     m_splash.show();
@@ -154,9 +147,9 @@ Misc::ModuleManager::ModuleManager()
 /**
  * Returns a pointer to the QML application engine
  */
-QQmlEngine *Misc::ModuleManager::engine()
+QQmlApplicationEngine *Misc::ModuleManager::engine()
 {
-    return m_window->engine();
+    return &m_engine;
 }
 
 /**
@@ -293,8 +286,7 @@ void Misc::ModuleManager::initializeQmlInterface()
 
     // Load main.qml
     setSplashScreenMessage(tr("Loading user interface..."));
-    m_window->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-    m_window->showNormal();
+    engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     // Warning! Do not call setSplashScreenMessage() after loading QML user interface
 }
@@ -331,10 +323,7 @@ StringList Misc::ModuleManager::renderingEngines() const
 void Misc::ModuleManager::quit()
 {
     if (JSON::Editor::getInstance()->askSave())
-    {
-        m_window->deleteLater();
         qApp->quit();
-    }
 }
 
 /**
@@ -374,7 +363,7 @@ void Misc::ModuleManager::setRenderingEngine(const int engine)
             auto bundle = qApp->applicationDirPath() + "/../../";
             QProcess::startDetached("open", { "-n", "-a", bundle });
 #else
-            QProcess::startDetached(qApp->applicationFilePath());
+            QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 #endif
             qApp->exit();
         }

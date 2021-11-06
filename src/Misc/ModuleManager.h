@@ -24,8 +24,8 @@
 
 #include <QObject>
 #include <QSettings>
-#include <QQuickWidget>
 #include <QSplashScreen>
+#include <QQmlApplicationEngine>
 
 #include <DataTypes.h>
 
@@ -46,11 +46,11 @@ class ModuleManager : public QObject
 
 public:
     ModuleManager();
-    QQmlEngine *engine();
     void configureUpdater();
     void registerQmlTypes();
     bool autoUpdaterEnabled();
     void initializeQmlInterface();
+    QQmlApplicationEngine *engine();
 
     Q_INVOKABLE int renderingEngine() const;
     Q_INVOKABLE StringList renderingEngines() const;
@@ -64,7 +64,7 @@ public slots:
 
 private:
     QSettings m_settings;
-    QQuickWidget *m_window;
     QSplashScreen m_splash;
+    QQmlApplicationEngine m_engine;
 };
 }
