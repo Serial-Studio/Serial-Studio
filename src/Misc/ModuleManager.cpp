@@ -87,7 +87,7 @@ Misc::ModuleManager::ModuleManager()
             break;
         case 3:
 #    if defined(Q_OS_WIN)
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D12);
+            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Direct3D12);
 #    elif defined(Q_OS_MAC)
             QQuickWindow::setSceneGraphBackend(QSGRendererInterface::MetalRhi);
 #    endif
