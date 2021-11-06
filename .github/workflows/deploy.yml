@@ -86,6 +86,7 @@ jobs:
           chmod a+x linuxdeployqt
           ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir="${{env.QML_DIR_NIX}}"
           # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
+          ls
           mv *.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
           
     - name: '📤 Upload artifact: AppImage'
