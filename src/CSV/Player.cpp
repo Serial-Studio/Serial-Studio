@@ -285,7 +285,19 @@ void Player::openFile(const QString &filePath)
     if (m_csvFile.open(QIODevice::ReadOnly))
     {
         // Read CSV file into string matrix
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        auto csv = QtCSV::Reader::readToList(m_csvFile);
+        for (int i = 0; i < csv.count(); ++i)
+        {
+            QVector<QString> row;
+            for (int j = 0; j < csv.at(i).count(); ++j)
+                row.append(csv[i][j]);
+
+            m_csvData.append(row);
+        }
+#else
         m_csvData = QtCSV::Reader::readToList(m_csvFile);
+#endif
 
         // Validate CSV file (brutality works sometimes)
         bool valid = true;

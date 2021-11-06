@@ -160,8 +160,8 @@ void Export::writeValues()
         }
 
         // Get cell titles & values
-        QVector<QString> titles;
-        QVector<QString> values;
+        StringList titles;
+        StringList values;
         auto groups = json.value("g").toArray();
         for (int i = 0; i < groups.count(); ++i)
         {

@@ -80,7 +80,7 @@ FFTPlot::FFTPlot(const int index)
 
     // Get curve color
     QString color;
-    QVector<QString> colors = theme->widgetColors();
+    StringList colors = theme->widgetColors();
     if (colors.count() > m_index)
         color = colors.at(m_index);
     else

@@ -20,12 +20,14 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Window
-import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick 2.12
+import QtQuick.Window 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
-Window {
+import "../PlatformDependent" as PlatformDependent
+
+PlatformDependent.CustomWindow {
     id: root
 
     //
@@ -45,18 +47,50 @@ Window {
     maximumWidth: column.implicitWidth + 4 * app.spacing
     minimumHeight: column.implicitHeight + 4 * app.spacing
     maximumHeight: column.implicitHeight + 4 * app.spacing
-    flags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
+
+    //
+    // Titlebar options
+    //
+    minimizeEnabled: false
+    maximizeEnabled: false
+    fullscreenEnabled: false
+    titlebarBorderEnabled: false
+    titlebarText: Cpp_ThemeManager.text
+    titlebarColor: Cpp_ThemeManager.dialogBackground
+    backgroundColor: Cpp_ThemeManager.dialogBackground
 
     //
     // Use page item to set application palette
     //
     Page {
-        anchors.margins: 0
-        anchors.fill: parent
+        anchors {
+            margins: 0
+            fill: parent
+            topMargin: titlebar.height
+        }
+
         palette.text: Cpp_ThemeManager.text
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
         palette.window: Cpp_ThemeManager.dialogBackground
+        background: Rectangle {
+            color: "transparent"
+        }
+
+        //
+        // Window drag handler
+        //
+        Item {
+            anchors.fill: parent
+
+            DragHandler {
+                grabPermissions: TapHandler.CanTakeOverFromAnything
+                onActiveChanged: {
+                    if (active)
+                        root.startSystemMove()
+                }
+            }
+        }
 
         //
         // Window controls

@@ -373,7 +373,11 @@ void GPS::leaveEvent(QEvent *event)
 /**
  * Adds the link effect from the label when the mouse enters the widget
  */
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+void GPS::enterEvent(QEvent *event)
+#else
 void GPS::enterEvent(QEnterEvent *event)
+#endif
 {
     event->accept();
 

@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 import "../Widgets" as Widgets
 
 Rectangle {
@@ -77,7 +77,7 @@ Rectangle {
                 palette {
                     base: "#fff"
                     text: "#000"
-                    placeholderText: "#444"
+                    //placeholderText: "#444"
                 }
             }
         }
@@ -104,7 +104,7 @@ Rectangle {
                 palette {
                     base: "#fff"
                     text: "#000"
-                    placeholderText: "#444"
+                    //placeholderText: "#444"
                 }
             }
         }
@@ -131,7 +131,7 @@ Rectangle {
                 palette {
                     base: "#fff"
                     text: "#000"
-                    placeholderText: "#444"
+                    //placeholderText: "#444"
                 }
             }
         }
@@ -158,7 +158,7 @@ Rectangle {
                 palette {
                     base: "#fff"
                     text: "#000"
-                    placeholderText: "#444"
+                    //placeholderText: "#444"
                 }
             }
         }

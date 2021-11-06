@@ -24,10 +24,9 @@
 
 #include <QFont>
 #include <QObject>
+#include <DataTypes.h>
 #include <JSON/Frame.h>
 #include <JSON/FrameInfo.h>
-
-#define PlotData QVector<double>
 
 namespace UI
 {
@@ -111,37 +110,37 @@ class Dashboard : public QObject
     Q_PROPERTY(int accelerometerCount
                READ accelerometerCount
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> gpsTitles
+    Q_PROPERTY(StringList gpsTitles
                READ gpsTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> ledTitles
+    Q_PROPERTY(StringList ledTitles
                READ ledTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> barTitles
+    Q_PROPERTY(StringList barTitles
                READ barTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> fftTitles
+    Q_PROPERTY(StringList fftTitles
                READ fftTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> plotTitles
+    Q_PROPERTY(StringList plotTitles
                READ plotTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> groupTitles
+    Q_PROPERTY(StringList groupTitles
                READ groupTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> gaugeTitles
+    Q_PROPERTY(StringList gaugeTitles
                READ gaugeTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> compassTitles
+    Q_PROPERTY(StringList compassTitles
                READ compassTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> gyroscopeTitles
+    Q_PROPERTY(StringList gyroscopeTitles
                READ gyroscopeTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> multiPlotTitles
+    Q_PROPERTY(StringList multiPlotTitles
                READ multiPlotTitles
                NOTIFY widgetCountChanged)
-    Q_PROPERTY(QVector<QString> accelerometerTitles
+    Q_PROPERTY(StringList accelerometerTitles
                READ accelerometerTitles
                NOTIFY widgetCountChanged)
     // clang-format on
@@ -207,7 +206,7 @@ public:
     int accelerometerCount() const;
 
     Q_INVOKABLE bool frameValid() const;
-    Q_INVOKABLE QVector<QString> widgetTitles() const;
+    Q_INVOKABLE StringList widgetTitles() const;
     Q_INVOKABLE int relativeIndex(const int globalIndex) const;
     Q_INVOKABLE bool widgetVisible(const int globalIndex) const;
     Q_INVOKABLE QString widgetIcon(const int globalIndex) const;
@@ -225,17 +224,17 @@ public:
     Q_INVOKABLE bool multiPlotVisible(const int index) const;
     Q_INVOKABLE bool accelerometerVisible(const int index) const;
 
-    QVector<QString> barTitles() const;
-    QVector<QString> fftTitles() const;
-    QVector<QString> gpsTitles() const;
-    QVector<QString> ledTitles() const;
-    QVector<QString> plotTitles() const;
-    QVector<QString> groupTitles() const;
-    QVector<QString> gaugeTitles() const;
-    QVector<QString> compassTitles() const;
-    QVector<QString> gyroscopeTitles() const;
-    QVector<QString> multiPlotTitles() const;
-    QVector<QString> accelerometerTitles() const;
+    StringList barTitles() const;
+    StringList fftTitles() const;
+    StringList gpsTitles() const;
+    StringList ledTitles() const;
+    StringList plotTitles() const;
+    StringList groupTitles() const;
+    StringList gaugeTitles() const;
+    StringList compassTitles() const;
+    StringList gyroscopeTitles() const;
+    StringList multiPlotTitles() const;
+    StringList accelerometerTitles() const;
 
     PlotData *xPlotValues() { return &m_xData; }
     QVector<PlotData> *fftPlotValues() { return &m_fftPlotValues; }
@@ -271,8 +270,8 @@ private:
     QVector<JSON::Group *> getWidgetGroups(const QString &handle) const;
     QVector<JSON::Dataset *> getWidgetDatasets(const QString &handle) const;
 
-    QVector<QString> groupTitles(const QVector<JSON::Group *> &vector) const;
-    QVector<QString> datasetTitles(const QVector<JSON::Dataset *> &vector) const;
+    StringList groupTitles(const QVector<JSON::Group *> &vector) const;
+    StringList datasetTitles(const QVector<JSON::Dataset *> &vector) const;
 
     bool getVisibility(const QVector<bool> &vector, const int index) const;
     void setVisibility(QVector<bool> &vector, const int index, const bool visible);

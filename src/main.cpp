@@ -84,6 +84,8 @@ int main(int argc, char **argv)
     // Set application attributes
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#else
+    QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 #endif
 
     // Init. application
@@ -125,11 +127,6 @@ int main(int argc, char **argv)
     // Initialize QML interface
     moduleManager.registerQmlTypes();
     moduleManager.initializeQmlInterface();
-    if (moduleManager.engine()->rootObjects().isEmpty())
-    {
-        qCritical() << "Critical QML error";
-        return EXIT_FAILURE;
-    }
 
     // Enter application event loop
     return app.exec();

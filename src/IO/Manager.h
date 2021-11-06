@@ -25,6 +25,7 @@
 #include <QTimer>
 #include <QObject>
 #include <QIODevice>
+#include <DataTypes.h>
 
 namespace IO
 {
@@ -150,7 +151,7 @@ public:
     QString separatorSequence() const;
     QString receivedDataLength() const;
 
-    Q_INVOKABLE QVector<QString> dataSourcesList() const;
+    Q_INVOKABLE StringList dataSourcesList() const;
     Q_INVOKABLE qint64 writeData(const QByteArray &data);
 
 public slots:

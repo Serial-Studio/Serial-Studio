@@ -137,5 +137,18 @@
         <file>translations/es.qm</file>
         <file>translations/ru.qm</file>
         <file>translations/zh.qm</file>
+        <file>window-border/macOS/close-active.svg</file>
+        <file>window-border/macOS/close-hover.svg</file>
+        <file>window-border/macOS/close-normal.svg</file>
+        <file>window-border/macOS/maximize-active.svg</file>
+        <file>window-border/macOS/maximize-hover.svg</file>
+        <file>window-border/macOS/maximize-normal.svg</file>
+        <file>window-border/macOS/minimize-active.svg</file>
+        <file>window-border/macOS/minimize-hover.svg</file>
+        <file>window-border/macOS/minimize-normal.svg</file>
+        <file>qml/PlatformDependent/WindowBorder.qml</file>
+        <file>qml/PlatformDependent/WindowButton.qml</file>
+        <file>qml/PlatformDependent/CustomWindow.qml</file>
+        <file>icons/restore.svg</file>
     </qresource>
 </RCC>

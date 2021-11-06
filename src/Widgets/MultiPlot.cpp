@@ -72,7 +72,7 @@ MultiPlot::MultiPlot(const int index)
     // Create curves from datasets
     bool normalize = true;
     auto group = dash->getMultiplot(m_index);
-    QVector<QString> colors = theme->widgetColors();
+    StringList colors = theme->widgetColors();
     for (int i = 0; i < group->datasetCount(); ++i)
     {
         // Get dataset title & min/max values

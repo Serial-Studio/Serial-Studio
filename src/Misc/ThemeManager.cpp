@@ -491,12 +491,12 @@ QColor ThemeManager::connectButtonUnchecked() const
     return m_connectButtonUnchecked;
 }
 
-QVector<QString> ThemeManager::widgetColors() const
+StringList ThemeManager::widgetColors() const
 {
     return m_widgetColors;
 }
 
-QVector<QString> ThemeManager::availableThemes() const
+StringList ThemeManager::availableThemes() const
 {
     return m_availableThemes;
 }

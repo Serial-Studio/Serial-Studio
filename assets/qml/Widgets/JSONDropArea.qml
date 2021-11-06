@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
 DropArea {
     //
@@ -91,8 +91,8 @@ DropArea {
 
         opacity: 0
         border.width: 1
-        color: palette.highlight
         anchors.centerIn: parent
+        color: Cpp_ThemeManager.highlight
         border.color: Cpp_ThemeManager.text
         width: dropLayout.implicitWidth + 6 * app.spacing
         height: dropLayout.implicitHeight + 6 * app.spacing

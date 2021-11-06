@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <DataTypes.h>
+
 #include <QObject>
 #include <QString>
 #include <QSettings>
@@ -74,22 +76,22 @@ class Serial : public QObject
                READ baudRate
                WRITE setBaudRate
                NOTIFY baudRateChanged)
-    Q_PROPERTY(QVector<QString> portList
+    Q_PROPERTY(StringList portList
                READ portList
                NOTIFY availablePortsChanged)
-    Q_PROPERTY(QVector<QString> parityList
+    Q_PROPERTY(StringList parityList
                READ parityList
                CONSTANT)
-    Q_PROPERTY(QVector<QString> baudRateList
+    Q_PROPERTY(StringList baudRateList
                READ baudRateList
                NOTIFY baudRateListChanged)
-    Q_PROPERTY(QVector<QString> dataBitsList
+    Q_PROPERTY(StringList dataBitsList
                READ dataBitsList
                CONSTANT)
-    Q_PROPERTY(QVector<QString> stopBitsList
+    Q_PROPERTY(StringList stopBitsList
                READ stopBitsList
                CONSTANT)
-    Q_PROPERTY(QVector<QString> flowControlList
+    Q_PROPERTY(StringList flowControlList
                READ flowControlList
                CONSTANT)
     // clang-format on
@@ -123,12 +125,12 @@ public:
     quint8 stopBitsIndex() const;
     quint8 flowControlIndex() const;
 
-    QVector<QString> portList() const;
-    QVector<QString> parityList() const;
-    QVector<QString> baudRateList() const;
-    QVector<QString> dataBitsList() const;
-    QVector<QString> stopBitsList() const;
-    QVector<QString> flowControlList() const;
+    StringList portList() const;
+    StringList parityList() const;
+    StringList baudRateList() const;
+    StringList dataBitsList() const;
+    StringList stopBitsList() const;
+    StringList flowControlList() const;
 
     qint32 baudRate() const;
     QSerialPort::Parity parity() const;
@@ -179,8 +181,8 @@ private:
     quint8 m_stopBitsIndex;
     quint8 m_flowControlIndex;
 
-    QVector<QString> m_portList;
-    QVector<QString> m_baudRateList;
+    StringList m_portList;
+    StringList m_baudRateList;
 };
 }
 }

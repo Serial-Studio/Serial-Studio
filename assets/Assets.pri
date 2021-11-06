@@ -51,9 +51,12 @@ DISTFILES += \
     $$PWD/qml/Panes/SetupPanes/Serial.qml \
     $$PWD/qml/Panes/SetupPanes/Settings.qml \
     $$PWD/qml/Panes/Toolbar.qml \
+    $$PWD/qml/PlatformDependent/CustomWindow.qml \
     $$PWD/qml/PlatformDependent/DecentMenuItem.qml \
     $$PWD/qml/PlatformDependent/Menubar.qml \
     $$PWD/qml/PlatformDependent/MenubarMacOS.qml \
+    $$PWD/qml/PlatformDependent/WindowBorder.qml \
+    $$PWD/qml/PlatformDependent/WindowButton.qml \
     $$PWD/qml/Widgets/Icon.qml \
     $$PWD/qml/Widgets/JSONDropArea.qml \
     $$PWD/qml/Widgets/LED.qml \

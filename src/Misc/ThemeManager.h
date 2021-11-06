@@ -25,6 +25,7 @@
 #include <QColor>
 #include <QObject>
 #include <QSettings>
+#include <DataTypes.h>
 
 namespace Misc
 {
@@ -186,10 +187,10 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor connectButtonUnchecked
                READ connectButtonUnchecked
                NOTIFY themeChanged)
-    Q_PROPERTY(QVector<QString> widgetColors
+    Q_PROPERTY(StringList widgetColors
                READ widgetColors
                NOTIFY themeChanged)
-    Q_PROPERTY(QVector<QString> availableThemes
+    Q_PROPERTY(StringList availableThemes
                READ availableThemes
                NOTIFY availableThemesChanged)
     // clang-format on
@@ -251,8 +252,8 @@ public:
     QColor connectButtonChecked() const;
     QColor connectButtonUnchecked() const;
 
-    QVector<QString> widgetColors() const;
-    QVector<QString> availableThemes() const;
+    StringList widgetColors() const;
+    StringList availableThemes() const;
 
 public slots:
     void setTheme(const int id);
@@ -267,8 +268,8 @@ private:
 private:
     int m_themeId;
     QSettings m_settings;
-    QVector<QString> m_availableThemes;
-    QVector<QString> m_availableThemesPaths;
+    StringList m_availableThemes;
+    StringList m_availableThemesPaths;
 
     QColor m_base;
     QColor m_link;
@@ -317,7 +318,7 @@ private:
     QColor m_widgetControlBackground;
     QColor m_connectButtonChecked;
     QColor m_connectButtonUnchecked;
-    QVector<QString> m_widgetColors;
+    StringList m_widgetColors;
 };
 }
 

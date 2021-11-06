@@ -48,12 +48,17 @@ private slots:
 
 protected:
     void leaveEvent(QEvent *event);
-    void enterEvent(QEnterEvent *event);
     void resizeEvent(QResizeEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    void enterEvent(QEvent *event);
+#else
+    void enterEvent(QEnterEvent *event);
+#endif
 
 private:
     int m_index;

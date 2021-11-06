@@ -266,9 +266,9 @@ QString Manager::receivedDataLength() const
 /**
  * Returns a list with the possible data source options.
  */
-QVector<QString> Manager::dataSourcesList() const
+StringList Manager::dataSourcesList() const
 {
-    QVector<QString> list;
+    StringList list;
     list.append(tr("Serial port"));
     list.append(tr("Network port"));
     return list;

@@ -75,6 +75,24 @@ Misc::ModuleManager::ModuleManager()
     // Set the UI rendering engine
     switch (renderingEngine())
     {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        case 0:
+            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
+            break;
+        case 1:
+            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGL);
+            break;
+        case 2:
+            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenVG);
+            break;
+        case 3:
+#    if defined(Q_OS_WIN)
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D12);
+#    elif defined(Q_OS_MAC)
+            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::MetalRhi);
+#    endif
+            break;
+#else
         case 0:
             QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
             break;
@@ -85,12 +103,13 @@ Misc::ModuleManager::ModuleManager()
             QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenVG);
             break;
         case 3:
-#if defined(Q_OS_WIN)
+#    if defined(Q_OS_WIN)
             QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11);
-#elif defined(Q_OS_MAC)
+#    elif defined(Q_OS_MAC)
             QQuickWindow::setGraphicsApi(QSGRendererInterface::Metal);
-#endif
+#    endif
             break;
+#endif
         default:
             break;
     }
@@ -115,6 +134,13 @@ Misc::ModuleManager::ModuleManager()
         pixmap.setDevicePixelRatio(dpr);
     }
 
+    // Initilize QML window
+    m_window = new QQuickWidget(NULL);
+    m_window->setWindowFlag(Qt::FramelessWindowHint, true);
+    m_window->setAttribute(Qt::WA_PaintOnScreen, true);
+    m_window->setAttribute(Qt::WA_NoSystemBackground, true);
+    m_window->setAttribute(Qt::WA_TranslucentBackground, true);
+
     // Show splash screen
     m_splash.setPixmap(pixmap);
     m_splash.show();
@@ -122,6 +148,15 @@ Misc::ModuleManager::ModuleManager()
     // Stop modules when application is about to quit
     setSplashScreenMessage(tr("Initializing..."));
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
+    connect(engine(), SIGNAL(quit()), this, SLOT(quit()));
+}
+
+/**
+ * Returns a pointer to the QML application engine
+ */
+QQmlEngine *Misc::ModuleManager::engine()
+{
+    return m_window->engine();
 }
 
 /**
@@ -258,17 +293,10 @@ void Misc::ModuleManager::initializeQmlInterface()
 
     // Load main.qml
     setSplashScreenMessage(tr("Loading user interface..."));
-    engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    m_window->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    m_window->showNormal();
 
     // Warning! Do not call setSplashScreenMessage() after loading QML user interface
-}
-
-/**
- * Returns a pointer to the QML application engine
- */
-QQmlApplicationEngine *Misc::ModuleManager::engine()
-{
-    return &m_engine;
 }
 
 /**
@@ -276,15 +304,15 @@ QQmlApplicationEngine *Misc::ModuleManager::engine()
  */
 int Misc::ModuleManager::renderingEngine() const
 {
-    return m_settings.value("renderingEngine", 0).toInt();
+    return m_settings.value("renderingSystem", 1).toInt();
 }
 
 /**
  * Returns a list with the available UI rendering engines
  */
-QVector<QString> Misc::ModuleManager::renderingEngines() const
+StringList Misc::ModuleManager::renderingEngines() const
 {
-    QVector<QString> list;
+    StringList list;
     list.append("Software");
     list.append("OpenGL");
     list.append("OpenVG");
@@ -303,7 +331,10 @@ QVector<QString> Misc::ModuleManager::renderingEngines() const
 void Misc::ModuleManager::quit()
 {
     if (JSON::Editor::getInstance()->askSave())
+    {
+        m_window->deleteLater();
         qApp->quit();
+    }
 }
 
 /**
@@ -326,7 +357,7 @@ void Misc::ModuleManager::setRenderingEngine(const int engine)
     if (engine >= 0 && engine < renderingEngines().count())
     {
         // Save settings
-        m_settings.setValue("renderingEngine", engine);
+        m_settings.setValue("renderingSystem", engine);
 
         // Ask user to quit application
         // clang-format off

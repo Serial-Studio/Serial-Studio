@@ -936,7 +936,7 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
             }
             // get the number
             QString strNumber;
-            QVector<QString> numbers;
+            StringList numbers;
             while (!strippedText.isEmpty())
             {
                 if (strippedText.at(0).isDigit())

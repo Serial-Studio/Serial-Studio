@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 import "../Widgets" as Widgets
 
 Item {
@@ -96,7 +96,8 @@ Item {
         title: qsTr("Console")
         headerDoubleClickEnabled: false
         icon.source: "qrc:/icons/code.svg"
-        anchors.margins: app.spacing * 1.5
+        anchors.topMargin: app.spacing * 1.5
+        anchors.margins: (app.spacing * 1.5) - 5
         backgroundColor: Cpp_ThemeManager.paneWindowBackground
 
         Widgets.Terminal {

@@ -20,11 +20,11 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
-import Qt.labs.settings
+import Qt.labs.settings 1.0
 
 import "../Widgets" as Widgets
 import "SetupPanes" as SetupPanes
@@ -146,8 +146,9 @@ Item {
         anchors.fill: parent
         anchors.leftMargin: 0
         headerDoubleClickEnabled: false
-        anchors.margins: app.spacing * 1.5
+        anchors.topMargin: app.spacing * 1.5
         icon.source: "qrc:/icons/settings.svg"
+        anchors.margins: (app.spacing * 1.5) - 5
         backgroundColor: Cpp_ThemeManager.paneWindowBackground
 
         //

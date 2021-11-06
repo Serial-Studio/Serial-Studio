@@ -20,12 +20,13 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import Qt5Compat.GraphicalEffects
+import QtQuick 2.12
+import QtGraphicalEffects 1.0
 
 DropShadow {
     id: root
     radius: 20
+    samples: 42
     verticalOffset: 3
     color: "#80000000"
     horizontalOffset: 3

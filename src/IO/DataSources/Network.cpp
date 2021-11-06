@@ -25,7 +25,9 @@
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 
-namespace IO::DataSources
+namespace IO
+{
+namespace DataSources
 {
 static Network *NETWORK = nullptr;
 
@@ -145,9 +147,9 @@ bool Network::configurationOk() const
 /**
  * Returns a list with the available socket types
  */
-QVector<QString> Network::socketTypes() const
+StringList Network::socketTypes() const
 {
-    return QVector<QString> { "TCP", "UDP" };
+    return StringList { "TCP", "UDP" };
 }
 
 /**
@@ -374,5 +376,6 @@ void Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 
     Manager::getInstance()->disconnectDevice();
     Misc::Utilities::showMessageBox(tr("Network socket error"), error);
+}
 }
 }

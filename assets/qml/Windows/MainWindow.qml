@@ -20,11 +20,12 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Window
-import QtQuick.Layouts
-import QtQuick.Controls
-import Qt.labs.settings
+import QtQuick 2.12
+import QtQuick.Window 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
+
+import Qt.labs.settings 1.0
 
 import "../Panes"
 import "../Windows"
@@ -32,8 +33,9 @@ import "../Widgets"
 import "../JsonEditor"
 import "../PlatformDependent" as PlatformDependent
 
-ApplicationWindow {
+PlatformDependent.CustomWindow {
     id: root
+    onClosing: Qt.quit()
 
     //
     // Global properties
@@ -46,10 +48,7 @@ ApplicationWindow {
     // Custom properties
     //
     property int appLaunchCount: 0
-    property bool firstChange: true
-    property bool fullScreen: false
     property bool menubarEnabled: true
-    property bool windowMaximized: false
     property bool firstValidFrame: false
     property bool automaticUpdates: false
     property alias vt100emulation: terminal.vt100emulation
@@ -76,20 +75,15 @@ ApplicationWindow {
     }
 
     //
-    // Toggle fullscreen state
-    //
-    function toggleFullscreen() {
-        root.fullScreen = !root.fullScreen
-        if (root.fullScreen)
-            root.showFullScreen()
-        else
-            root.showNormal()
-    }
-
-    //
     // Displays the main window & checks for updates
     //
-    function showMainWindow() {
+    function showMainWindow() {        
+        // Reset window size for whatever reason
+        if (width <= 0 || height <= 0) {
+            width = minimumWidth
+            height = minimumHeight
+        }
+
         // Startup verifications to ensure that app is displayed inside the screen
         if (x < 0 || x >= Screen.desktopAvailableWidth)
             x = 100
@@ -116,8 +110,9 @@ ApplicationWindow {
         else
             root.showNormal()
 
-        // Increment app launch count
+        // Increment app launch count & hide splash screen
         ++appLaunchCount
+        Cpp_ModuleManager.hideSplashscreen()
 
         // Show donations dialog every 15 launches
         if (appLaunchCount % 15 == 0 && !donations.doNotShowAgain)
@@ -143,22 +138,13 @@ ApplicationWindow {
     // Window geometry (different minimum size for non-macOS
     // operating systems because of the global menubar in macOS)
     //
-    visible: false
+    visible: true
     minimumWidth: 1250
     title: Cpp_AppName
     width: minimumWidth
     height: minimumHeight
     minimumHeight: Cpp_IsMac ? 720 : 740
-
-    //
-    // Theme options
-    //
-    palette.text: Cpp_ThemeManager.text
-    palette.buttonText: Cpp_ThemeManager.text
-    palette.windowText: Cpp_ThemeManager.text
-    background: Rectangle {
-        color: Cpp_ThemeManager.windowBackground
-    }
+    backgroundColor: Cpp_ThemeManager.windowBackground
 
     //
     // Startup code
@@ -170,46 +156,6 @@ ApplicationWindow {
         // Display the window & check for updates in 500 ms (we do this so that
         // we wait for the window to read settings before showing it)
         timer.start()
-    }
-
-    //
-    // Hacks to fix window maximized behavior
-    //
-    Connections {
-        target: root
-
-        function  onVisibilityChanged(visibility) {
-            if (visibility === Window.Maximized) {
-                if (!windowMaximized)
-                    firstChange = false
-
-                windowMaximized = true
-                fullScreen = false
-            }
-
-            else if (visibility === Window.FullScreen) {
-                if (!fullScreen)
-                    firstChange = false
-
-                windowMaximized = false
-                fullScreen = true
-            }
-
-            else if (visibility !== Window.Hidden) {
-                if (windowMaximized || fullScreen && firstChange) {
-                    root.x = 100
-                    root.y = 100
-                    root.width = root.minimumWidth
-                    root.height = root.minimumHeight
-                }
-
-                fullScreen = false
-                windowMaximized = false
-            }
-
-            // Hide splash screen
-            Cpp_ModuleManager.hideSplashscreen()
-        }
     }
 
     //
@@ -250,14 +196,14 @@ ApplicationWindow {
     // Save window size & position
     //
     Settings {
-        property alias appX: root.x
-        property alias appY: root.y
-        property alias appW: root.width
-        property alias appH: root.height
+        property alias wx: root.x
+        property alias wy: root.y
+        property alias ww: root.width
+        property alias wh: root.height
+        property alias wf: root.fullScreen
+        property alias wm: root.windowMaximized
         property alias appStatus: root.appLaunchCount
-        property alias windowFullScreen: root.fullScreen
         property alias autoUpdater: root.automaticUpdates
-        property alias appMaximized: root.windowMaximized
         property alias menubarVisible: root.menubarEnabled
     }
 
@@ -271,15 +217,9 @@ ApplicationWindow {
     }
 
     //
-    // Menubar loader
+    // macOS menubar loader
     //
     Loader {
-        asynchronous: false
-        active: !Cpp_IsMac
-        sourceComponent: PlatformDependent.Menubar {
-            Component.onCompleted: root.menuBar = this
-        }
-    } Loader {
         asynchronous: false
         active: Cpp_IsMac
         sourceComponent: PlatformDependent.MenubarMacOS {}
@@ -288,97 +228,112 @@ ApplicationWindow {
     //
     // Main layout
     //
-    ColumnLayout {
-        spacing: 0
+    Page {
+        anchors.margins: 5
         anchors.fill: parent
+        anchors.topMargin: titlebar.height
+        palette.text: Cpp_ThemeManager.text
+        palette.buttonText: Cpp_ThemeManager.text
+        palette.windowText: Cpp_ThemeManager.text
 
-        //
-        // Application toolbar
-        //
-        Toolbar {
-            z: 1
-            id: toolbar
-            Layout.fillWidth: true
-            Layout.minimumHeight: 48
-            Layout.maximumHeight: 48
-            setupChecked: root.setupVisible
-            consoleChecked: root.consoleVisible
-            dashboardChecked: root.dashboardVisible
-            onJsonEditorClicked: jsonEditor.show()
-            onSetupClicked: setup.visible ? setup.hide() : setup.show()
-
-            onDashboardClicked: {
-                if (Cpp_UI_Dashboard.available) {
-                    consoleChecked = 0
-                    dashboardChecked = 1
-                    stack.push(dashboard)
-                }
-
-                else
-                    root.showConsole()
-            }
-
-            onConsoleClicked: {
-                consoleChecked = 1
-                dashboardChecked = 0
-                stack.pop()
-            }
+        background: Rectangle {
+            radius: root.radius
+            color: Cpp_ThemeManager.windowBackground
         }
 
-        //
-        // Console, dashboard & setup panel
-        //
-        RowLayout {
+        ColumnLayout {
             spacing: 0
-            clip: true
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            anchors.fill: parent
 
-            StackView {
-                id: stack
+            //
+            // Application toolbar
+            //
+            Toolbar {
+                z: 1
+                id: toolbar
+                window: root
+                Layout.fillWidth: true
+                Layout.minimumHeight: 48
+                Layout.maximumHeight: 48
+                setupChecked: root.setupVisible
+                consoleChecked: root.consoleVisible
+                dashboardChecked: root.dashboardVisible
+                onJsonEditorClicked: jsonEditor.show()
+                onSetupClicked: setup.visible ? setup.hide() : setup.show()
+
+                onDashboardClicked: {
+                    if (Cpp_UI_Dashboard.available) {
+                        consoleChecked = 0
+                        dashboardChecked = 1
+                        stack.push(dashboard)
+                    }
+
+                    else
+                        root.showConsole()
+                }
+
+                onConsoleClicked: {
+                    consoleChecked = 1
+                    dashboardChecked = 0
+                    stack.pop()
+                }
+            }
+
+            //
+            // Console, dashboard & setup panel
+            //
+            RowLayout {
+                spacing: 0
                 clip: true
-                initialItem: terminal
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                onCurrentItemChanged: {
-                    if (currentItem === terminal) {
-                        terminal.opacity = 1
-                        dashboard.opacity = 0
+                StackView {
+                    id: stack
+                    clip: true
+                    initialItem: terminal
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    onCurrentItemChanged: {
+                        if (currentItem === terminal) {
+                            terminal.opacity = 1
+                            dashboard.opacity = 0
+                        }
+
+                        else {
+                            terminal.opacity = 0
+                            dashboard.opacity = 1
+                        }
                     }
 
-                    else {
-                        terminal.opacity = 0
-                        dashboard.opacity = 1
+                    Console {
+                        id: terminal
+                        width: parent.width
+                        height: parent.height
+                        enabled: opacity > 0
+                        visible: opacity > 0
+                    }
+
+                    Dashboard {
+                        opacity: 0
+                        id: dashboard
+                        width: parent.width
+                        height: parent.height
+                        enabled: opacity > 0
+                        visible: opacity > 0
                     }
                 }
 
-                Console {
-                    id: terminal
-                    width: parent.width
-                    height: parent.height
-                    enabled: opacity > 0
-                    visible: opacity > 0
+                Setup {
+                    id: setup
+                    opacity: 1
+                    setupMargin: 0
+                    Layout.fillHeight: true
+                    Layout.rightMargin: setupMargin
+                    Layout.minimumWidth: displayedWidth
+                    Layout.maximumWidth: displayedWidth
                 }
-
-                Dashboard {
-                    opacity: 0
-                    id: dashboard
-                    width: parent.width
-                    height: parent.height
-                    enabled: opacity > 0
-                    visible: opacity > 0
-                }
-            }
-
-            Setup {
-                id: setup
-                opacity: 1
-                setupMargin: 0
-                Layout.fillHeight: true
-                Layout.rightMargin: setupMargin
-                Layout.minimumWidth: displayedWidth
-                Layout.maximumWidth: displayedWidth
             }
         }
     }

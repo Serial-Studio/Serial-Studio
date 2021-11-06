@@ -26,7 +26,7 @@ env:
   QML_DIR_WIN: "assets\\qml"
   PUBLISHER: "Alex Spataru"
   REPO_DIR: "/home/runner/work/Serial-Studio/Serial-Studio"
-  QT_VERSION: 6.2.0
+  QT_VERSION: 5.15.2
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -54,7 +54,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport qt5compat
+        #modules: qtserialport qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -114,7 +114,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport qt5compat
+        #modules: qtserialport qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -166,7 +166,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport qt5compat
+        #modules: qtserialport qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 

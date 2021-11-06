@@ -204,9 +204,9 @@ QString Console::currentHistoryString() const
  * Returns a list with the available data (sending) modes. This list must be synchronized
  * with the order of the @c DataMode enums.
  */
-QVector<QString> Console::dataModes() const
+StringList Console::dataModes() const
 {
-    QVector<QString> list;
+    StringList list;
     list.append(tr("ASCII"));
     list.append(tr("HEX"));
     return list;
@@ -216,9 +216,9 @@ QVector<QString> Console::dataModes() const
  * Returns a list with the available line endings options. This list must be synchronized
  * with the order of the @c LineEnding enums.
  */
-QVector<QString> Console::lineEndings() const
+StringList Console::lineEndings() const
 {
-    QVector<QString> list;
+    StringList list;
     list.append(tr("No line ending"));
     list.append(tr("New line"));
     list.append(tr("Carriage return"));
@@ -230,9 +230,9 @@ QVector<QString> Console::lineEndings() const
  * Returns a list with the available console display modes. This list must be synchronized
  * with the order of the @c DisplayMode enums.
  */
-QVector<QString> Console::displayModes() const
+StringList Console::displayModes() const
 {
-    QVector<QString> list;
+    StringList list;
     list.append(tr("Plain text"));
     list.append(tr("Hexadecimal"));
     return list;
@@ -308,7 +308,7 @@ void Console::clear()
 }
 
 /**
- * Comamnds sent by the user are stored in a @c QVector<QString>, in which the first items
+ * Comamnds sent by the user are stored in a @c StringList, in which the first items
  * are the oldest commands.
  *
  * The user can navigate the list using the up/down keys. This function allows the user
@@ -324,7 +324,7 @@ void Console::historyUp()
 }
 
 /**
- * Comamnds sent by the user are stored in a @c QVector<QString>, in which the first items
+ * Comamnds sent by the user are stored in a @c StringList, in which the first items
  * are the oldest commands.
  *
  * The user can navigate the list using the up/down keys. This function allows the user
@@ -505,7 +505,7 @@ void Console::append(const QString &string, const bool addTimestamp)
     processedString.reserve(data.length() + timestamp.length());
 
     // Create list with lines (keep separators)
-    QVector<QString> tokens;
+    StringList tokens;
     QString currentToken;
     for (int i = 0; i < data.length(); ++i)
     {

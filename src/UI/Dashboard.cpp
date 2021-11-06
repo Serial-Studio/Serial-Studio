@@ -192,7 +192,7 @@ int Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(
  * We need to be careful to sincronize the order of the widgets in order to allow
  * the global-index system to work correctly.
  */
-QVector<QString> Dashboard::widgetTitles() const
+StringList Dashboard::widgetTitles() const
 {
     // Warning: maintain same order as the view option repeaters in ViewOptions.qml!
 
@@ -542,17 +542,17 @@ bool Dashboard::accelerometerVisible(const int index) const { return getVisibili
 //--------------------------------------------------------------------------------------------------
 
 // clang-format off
-QVector<QString> Dashboard::gpsTitles() const           { return groupTitles(m_gpsWidgets);           }
-QVector<QString> Dashboard::ledTitles() const           { return groupTitles(m_ledWidgets);           }
-QVector<QString> Dashboard::groupTitles() const         { return groupTitles(m_groupWidgets);         }
-QVector<QString> Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
-QVector<QString> Dashboard::fftTitles() const           { return datasetTitles(m_fftWidgets);         }
-QVector<QString> Dashboard::plotTitles() const          { return datasetTitles(m_plotWidgets);        }
-QVector<QString> Dashboard::gaugeTitles() const         { return datasetTitles(m_gaugeWidgets);       }
-QVector<QString> Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
-QVector<QString> Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
-QVector<QString> Dashboard::multiPlotTitles() const     { return groupTitles(m_multiPlotWidgets);     }
-QVector<QString> Dashboard::accelerometerTitles() const { return groupTitles(m_accelerometerWidgets); }
+StringList Dashboard::gpsTitles() const           { return groupTitles(m_gpsWidgets);           }
+StringList Dashboard::ledTitles() const           { return groupTitles(m_ledWidgets);           }
+StringList Dashboard::groupTitles() const         { return groupTitles(m_groupWidgets);         }
+StringList Dashboard::barTitles() const           { return datasetTitles(m_barWidgets);         }
+StringList Dashboard::fftTitles() const           { return datasetTitles(m_fftWidgets);         }
+StringList Dashboard::plotTitles() const          { return datasetTitles(m_plotWidgets);        }
+StringList Dashboard::gaugeTitles() const         { return datasetTitles(m_gaugeWidgets);       }
+StringList Dashboard::compassTitles() const       { return datasetTitles(m_compassWidgets);     }
+StringList Dashboard::gyroscopeTitles() const     { return groupTitles(m_gyroscopeWidgets);     }
+StringList Dashboard::multiPlotTitles() const     { return groupTitles(m_multiPlotWidgets);     }
+StringList Dashboard::accelerometerTitles() const { return groupTitles(m_accelerometerWidgets); }
 // clang-format on
 
 //--------------------------------------------------------------------------------------------------
@@ -996,9 +996,9 @@ QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle) con
 /**
  * Returns the titles of the datasets contained in the specified @a vector.
  */
-QVector<QString> Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) const
+StringList Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) const
 {
-    QVector<QString> list;
+    StringList list;
     foreach (auto set, vector)
         list.append(set->title());
 
@@ -1008,9 +1008,9 @@ QVector<QString> Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector
 /**
  * Returns the titles of the groups contained in the specified @a vector.
  */
-QVector<QString> Dashboard::groupTitles(const QVector<JSON::Group *> &vector) const
+StringList Dashboard::groupTitles(const QVector<JSON::Group *> &vector) const
 {
-    QVector<QString> list;
+    StringList list;
     foreach (auto group, vector)
         list.append(group->title());
 

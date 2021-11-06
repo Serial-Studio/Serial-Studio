@@ -20,13 +20,13 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Window
-import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
-import SerialStudio
+import SerialStudio 1.0
 import "../Widgets" as Widgets
+import "../PlatformDependent" as PlatformDependent
 
 Item {
     id: root
@@ -60,28 +60,32 @@ Item {
         }
     }
 
-    Window {
+    PlatformDependent.CustomWindow {
         id: externalWindow
         minimumWidth: 640
         minimumHeight: 480
+        titlebarBorderEnabled: false
         title: externalLoader.widgetTitle
-        palette.base: Cpp_ThemeManager.widgetWindowBackground
-        palette.window: Cpp_ThemeManager.widgetWindowBackground
-        flags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
+        titlebarText: Cpp_ThemeManager.text
+        titlebarColor: Cpp_ThemeManager.widgetWindowBackground
+        backgroundColor: Cpp_ThemeManager.widgetWindowBackground
 
         WidgetLoader {
             id: externalLoader
             anchors.fill: parent
             isExternalWindow: true
+            anchors.margins: windowBorder
             widgetIndex: root.widgetIndex
+            anchors.topMargin: titlebar.height
             widgetVisible: externalWindow.visible
-        }
 
-        MouseArea {
-            hoverEnabled: true
-            anchors.fill: parent
-             acceptedButtons: Qt.NoButton
-            onContainsMouseChanged: externalLoader.processMouseHover(containsMouse)
+            MouseArea {
+                hoverEnabled: true
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                anchors.topMargin: titlebar.height
+                onContainsMouseChanged: externalLoader.processMouseHover(containsMouse)
+            }
         }
     }
 }

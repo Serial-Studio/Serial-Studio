@@ -28,6 +28,7 @@
 #include <QHostAddress>
 
 #include <qmqtt.h>
+#include <DataTypes.h>
 
 namespace MQTT
 {
@@ -93,10 +94,10 @@ class Client : public QObject
     Q_PROPERTY(bool lookupActive
                READ lookupActive
                NOTIFY lookupActiveChanged)
-    Q_PROPERTY(QVector<QString> mqttVersions
+    Q_PROPERTY(StringList mqttVersions
                READ mqttVersions
                CONSTANT)
-    Q_PROPERTY(QVector<QString> clientModes
+    Q_PROPERTY(StringList clientModes
                READ clientModes
                CONSTANT)
     Q_PROPERTY(quint16 defaultPort
@@ -131,8 +132,8 @@ public:
     bool lookupActive() const;
     bool isSubscribed() const;
     bool isConnectedToHost() const;
-    QVector<QString> clientModes() const;
-    QVector<QString> mqttVersions() const;
+    StringList clientModes() const;
+    StringList mqttVersions() const;
 
     quint16 defaultPort() const { return 1883; }
     QString defaultHost() const { return "127.0.0.1"; }

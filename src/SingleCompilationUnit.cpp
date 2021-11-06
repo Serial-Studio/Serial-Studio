@@ -209,6 +209,7 @@
 //--------------------------------------------------------------------------------------------------
 
 #include "AppInfo.h"
+#include "DataTypes.h"
 #include "CSV/Export.h"
 #include "CSV/Player.h"
 #include "IO/Checksum.h"
@@ -501,6 +502,7 @@
 // QtQuickCompiler code
 //--------------------------------------------------------------------------------------------------
 
+#if UNITY_BUILD_INCLUDE_QML
 #include "assets_qml_main_qml.cpp"
 #include "assets_qml_Windows_Acknowledgements_qml.cpp"
 #include "assets_qml_Windows_CsvPlayer_qml.cpp"
@@ -525,6 +527,9 @@
 #include "assets_qml_PlatformDependent_DecentMenuItem_qml.cpp"
 #include "assets_qml_PlatformDependent_Menubar_qml.cpp"
 #include "assets_qml_PlatformDependent_MenubarMacOS_qml.cpp"
+#include "assets_qml_PlatformDependent_WindowButton_qml.cpp"
+#include "assets_qml_PlatformDependent_WindowBorder_qml.cpp"
+#include "assets_qml_PlatformDependent_CustomWindow_qml.cpp"
 #include "assets_qml_JsonEditor_JsonGroupDelegate_qml.cpp"
 #include "assets_qml_JsonEditor_TreeView_qml.cpp"
 #include "assets_qml_JsonEditor_Header_qml.cpp"
@@ -538,6 +543,7 @@
 #include "assets_qml_Dashboard_ViewOptionsDelegate_qml.cpp"
 #include "assets_qml_Dashboard_WidgetModel_qml.cpp"
 #include "qmlcache_loader.cpp"
+#endif
 
 // clang-format on
 

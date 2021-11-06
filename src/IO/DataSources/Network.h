@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <DataTypes.h>
+
 #include <QHostInfo>
 #include <QTcpSocket>
 #include <QUdpSocket>
@@ -66,7 +68,7 @@ class Network : public QObject
                READ socketTypeIndex
                WRITE setSocketTypeIndex
                NOTIFY socketTypeChanged)
-    Q_PROPERTY(QVector<QString> socketTypes
+    Q_PROPERTY(StringList socketTypes
                READ socketTypes
                CONSTANT)
     Q_PROPERTY(QString defaultAddress
@@ -110,7 +112,7 @@ public:
     bool lookupActive() const;
     int socketTypeIndex() const;
     bool configurationOk() const;
-    QVector<QString> socketTypes() const;
+    StringList socketTypes() const;
     QAbstractSocket::SocketType socketType() const;
 
     QTcpSocket *tcpSocket() { return &m_tcpSocket; }

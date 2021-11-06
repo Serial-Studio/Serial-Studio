@@ -20,16 +20,18 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Window
-import QtQuick.Layouts
-import QtQuick.Controls
-import Qt.labs.settings
+import QtQuick 2.12
+import QtQuick.Window 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
+
+import Qt.labs.settings 1.0
 
 import "../JsonEditor"
 import "../Widgets" as Widgets
+import "../PlatformDependent" as PlatformDependent
 
-ApplicationWindow {
+PlatformDependent.CustomWindow {
     id: root
 
     //
@@ -37,6 +39,7 @@ ApplicationWindow {
     //
     minimumWidth: 910
     minimumHeight: 720
+    fullscreenEnabled: false
     title: qsTr("JSON Editor - %1").arg(Cpp_JSON_Editor.jsonFileName)
 
     //
@@ -72,13 +75,16 @@ ApplicationWindow {
     // Use page item to set application palette
     //
     Page {
-        anchors.margins: 0
         anchors.fill: parent
+        anchors.margins: root.radius
+        anchors.topMargin: titlebar.height
         palette.text: Cpp_ThemeManager.text
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
         palette.window: Cpp_ThemeManager.dialogBackground
+
         background: Rectangle {
+            radius: root.radius
             color: Cpp_ThemeManager.windowBackground
         }
 

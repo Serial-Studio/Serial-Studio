@@ -40,7 +40,6 @@ isEmpty(PREFIX) {
 TEMPLATE = app                                           # Project template
 TARGET = serial-studio                                   # Set default target name
 CONFIG += qtquickcompiler                                # Pre-compile QML interface
-CONFIG += ltcg                                           # Enable LTO (reduces code size)
 CONFIG += utf8_source                                    # Source code encoding
 
 QTPLUGIN += qsvg                                         # Fixes issues with windeployqt
@@ -52,9 +51,13 @@ QT += core
 QT += quick
 QT += widgets
 QT += serialport
-QT += core5compat
 QT += printsupport
+QT += quickwidgets
 QT += quickcontrols2
+
+equals(QT_MAJOR_VERSION, 6) {
+    QT += core5compat
+}
 
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
@@ -97,11 +100,14 @@ CONFIG += silent
 #-----------------------------------------------------------------------------------------
 
 CONFIG(debug, debug|release) {
-    CONFIG -= ltcg
-    DEFINES += UNITY_BUILD=0
+    CONFIG  -= ltcg                             # Disable linker optimization
+    DEFINES += UNITY_BUILD=0                    # Disable unity build
+    DEFINES += UNITY_BUILD_INCLUDE_QML=0        # Do not optimize QtQuick compiler cache
 } else {
-    DEFINES += UNITY_BUILD=1
-    SOURCES += src/SingleCompilationUnit.cpp
+    CONFIG  += ltcg                             # Enable linker optimization
+    DEFINES += UNITY_BUILD=1                    # Enable unity build
+    DEFINES += UNITY_BUILD_INCLUDE_QML=0        # Do not optimize QtQuick compiler cache
+    SOURCES += src/SingleCompilationUnit.cpp    # Include single compilation unit in code
 }
 
 #-----------------------------------------------------------------------------------------
@@ -175,6 +181,7 @@ HEADERS += \
     src/AppInfo.h \
     src/CSV/Export.h \
     src/CSV/Player.h \
+    src/DataTypes.h \
     src/IO/Checksum.h \
     src/IO/Console.h \
     src/IO/DataSources/Network.h \

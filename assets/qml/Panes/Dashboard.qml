@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
 import "../Widgets" as Widgets
 import "../Dashboard" as DashboardItems
@@ -41,7 +41,8 @@ Item {
     ColumnLayout {
         anchors.fill: parent
         spacing: app.spacing * 2
-        anchors.margins: app.spacing * 1.5
+        anchors.topMargin: app.spacing * 1.5
+        anchors.margins: (app.spacing * 1.5) - 5
 
         //
         // Widget selector + widgets

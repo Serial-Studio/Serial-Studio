@@ -20,15 +20,15 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Controls
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 Item {
     id: root
 
     property string source: ""
     property alias icon: button.icon
-    property color color: palette.brightText
+    property color color: Cpp_ThemeManager.brightText
 
     width: 24
     height: 24

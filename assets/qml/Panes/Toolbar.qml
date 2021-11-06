@@ -20,14 +20,20 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick 2.12
+import QtQuick.Window 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
 import "../Widgets" as Widgets
 
 Control {
     id: root
+
+    //
+    // Reference to parent window to be able to drag it with the toolbar
+    //
+    property Window window
 
     //
     // Dummy string to increase width of buttons
@@ -87,25 +93,12 @@ Control {
 
         Rectangle {
             height: 1
-            color: Cpp_ThemeManager.toolbarGradient1
+            color: Qt.darker(Cpp_ThemeManager.toolbarGradient1, 1.5)
 
             anchors {
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
-            }
-        }
-
-        Rectangle {
-            height: 1
-            visible: mainWindow.menuBar !== null
-            color: Cpp_ThemeManager.toolbarGradient2
-
-            anchors {
-                topMargin: -1
-                top: parent.top
-                left: parent.left
-                right: parent.right
             }
         }
 
@@ -118,6 +111,21 @@ Control {
             fill: parent
             leftMargin: -border.width * 10
             rightMargin: -border.width * 10
+        }
+    }
+
+    //
+    // Move window while dragging over the toolbar
+    //
+    Item {
+        anchors.fill: parent
+
+        DragHandler {
+            grabPermissions: TapHandler.CanTakeOverFromAnything
+            onActiveChanged: {
+                if (active)
+                    window.startSystemMove()
+            }
         }
     }
 

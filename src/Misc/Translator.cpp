@@ -144,9 +144,9 @@ QString Translator::acknowledgementsText() const
 /**
  * Returns a list with the available translation languages.
  */
-QVector<QString> Translator::availableLanguages() const
+StringList Translator::availableLanguages() const
 {
-    return QVector<QString> { "English", "Español", "简体中文", "Deutsch", "Русский" };
+    return StringList { "English", "Español", "简体中文", "Deutsch", "Русский" };
 }
 
 /**

@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include <DataTypes.h>
 
 #include "Group.h"
 #include "Dataset.h"
@@ -87,8 +88,8 @@ signals:
 public:
     static Editor *getInstance();
 
-    Q_INVOKABLE QVector<QString> availableGroupLevelWidgets();
-    Q_INVOKABLE QVector<QString> availableDatasetLevelWidgets();
+    Q_INVOKABLE StringList availableGroupLevelWidgets();
+    Q_INVOKABLE StringList availableDatasetLevelWidgets();
 
     QString jsonProjectsPath() const;
 
