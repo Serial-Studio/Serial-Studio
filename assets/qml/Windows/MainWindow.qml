@@ -283,14 +283,13 @@ PlatformDependent.CustomWindow {
             // Console, dashboard & setup panel
             //
             RowLayout {
+                z: 0
                 spacing: 0
-                clip: true
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
                 StackView {
                     id: stack
-                    clip: true
                     initialItem: terminal
                     Layout.fillWidth: true
                     Layout.fillHeight: true

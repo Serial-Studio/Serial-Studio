@@ -115,8 +115,8 @@ Rectangle {
     // macOS layout
     //
     Item {
-        visible: Cpp_IsMac
-        enabled: Cpp_IsMac
+        //visible: Cpp_IsMac
+        //enabled: Cpp_IsMac
         anchors.fill: parent
 
         RowLayout {
