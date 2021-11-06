@@ -36,8 +36,8 @@ env:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-20.04
-    name: '🐧 Ubuntu 20.04'
+    runs-on: ubuntu-18.04
+    name: '🐧 Ubuntu 18.04'
     steps:
 
     - name: '🧰 Checkout'
