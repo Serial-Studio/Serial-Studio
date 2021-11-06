@@ -27,6 +27,8 @@ env:
   PUBLISHER: "Alex Spataru"
   REPO_DIR: "/home/runner/work/Serial-Studio/Serial-Studio"
   QT_VERSION: 5.15.2
+  QMAKE: qmake
+  CORES: 12
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -67,8 +69,8 @@ jobs:
 
     - name: '🚧 Compile application'
       run: |
-          qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
-          make -j8
+          ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+          make -j${{env.CORES}}
 
     - name: '⚙️ Install linuxdeploy'
       run: |
@@ -120,8 +122,8 @@ jobs:
 
     - name: '🚧 Compile application'
       run: |
-           qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release
-           make -j8
+           ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+           make -j${{env.CORES}}
 
     - name: '📦 Package application (macdeployqt and zipfile)'
       run: |
@@ -178,7 +180,7 @@ jobs:
 
     - name: '🚧 Compile application'
       run: |
-        qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release
+        ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
         nmake
 
     # Copy Qt DLLs, compiler runtime & application icon
