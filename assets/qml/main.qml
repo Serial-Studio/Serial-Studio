@@ -40,6 +40,7 @@ Item {
     property Windows.CsvPlayer csvPlayer: null
     property Windows.MainWindow mainWindow: null
     property Windows.JsonEditor jsonEditor: null
+    property Windows.Acknowledgements acknowledgements: null
 
     //
     // Check for updates (non-silent mode)
@@ -47,20 +48,6 @@ Item {
     function checkForUpdates() {
         Cpp_Updater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
         Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
-    }
-
-    //
-    // Display about dialog
-    //
-    function showAbout() {
-        about.show()
-    }
-
-    //
-    // Show donations dialog
-    //
-    function showDonationsDialog() {
-        donations.show()
     }
 
     //
@@ -112,4 +99,15 @@ Item {
             Component.onCompleted: app.donations = this
         }
     }
+
+    //
+    // Acknowledgements dialog
+    //
+    Loader {
+        asynchronous: true
+        sourceComponent: Windows.Acknowledgements {
+            Component.onCompleted: app.acknowledgements = this
+        }
+    }
+
 }

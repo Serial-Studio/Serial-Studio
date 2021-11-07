@@ -32,9 +32,9 @@ namespace UI
 {
 static Dashboard *DASHBOARD = nullptr;
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 /**
  * Constructor of the class.
@@ -65,9 +65,9 @@ Dashboard *Dashboard::getInstance()
     return DASHBOARD;
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Group/Dataset access functions
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 QFont Dashboard::monoFont() const
 {
@@ -88,9 +88,9 @@ JSON::Group *Dashboard::getMultiplot(const int index)     { return getGroupWidge
 JSON::Group *Dashboard::getAccelerometer(const int index) { return getGroupWidget(m_accelerometerWidgets, index); }
 // clang-format on
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Misc member access functions
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 /**
  * Returns the title of the current JSON project/frame.
@@ -133,9 +133,9 @@ bool Dashboard::frameValid() const
     return m_latestFrame.isValid();
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Widget count functions
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 /**
  * Returns the total number of widgets that compose the current JSON frame.
@@ -181,9 +181,9 @@ int Dashboard::multiPlotCount() const     { return m_multiPlotWidgets.count();  
 int Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(); }
 // clang-format on
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Relative-to-global widget index utility functions
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 /**
  * Returns a @c list with the titles of all the widgets that compose the current JSON
@@ -519,9 +519,9 @@ UI::Dashboard::WidgetType Dashboard::widgetType(const int globalIndex) const
     return WidgetType::Unknown;
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Widget visibility access functions
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 // clang-format off
 bool Dashboard::barVisible(const int index) const           { return getVisibility(m_barVisibility, index);           }
@@ -537,9 +537,9 @@ bool Dashboard::multiPlotVisible(const int index) const     { return getVisibili
 bool Dashboard::accelerometerVisible(const int index) const { return getVisibility(m_accelerometerVisibility, index); }
 // clang-format on
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Widget title functions
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 // clang-format off
 StringList Dashboard::gpsTitles() const           { return groupTitles(m_gpsWidgets);           }
@@ -555,9 +555,9 @@ StringList Dashboard::multiPlotTitles() const     { return groupTitles(m_multiPl
 StringList Dashboard::accelerometerTitles() const { return groupTitles(m_accelerometerWidgets); }
 // clang-format on
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Plot & widget options
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 void Dashboard::setPoints(const int points)
 {
@@ -590,9 +590,9 @@ void Dashboard::setPrecision(const int precision)
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Visibility-related slots
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 // clang-format off
 void Dashboard::setBarVisible(const int i, const bool v)           { setVisibility(m_barVisibility, i, v);           }
@@ -608,9 +608,9 @@ void Dashboard::setMultiplotVisible(const int i, const bool v)     { setVisibili
 void Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisibility(m_accelerometerVisibility, i, v); }
 // clang-format on
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Frame data handling slots
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 /**
  * Removes all available data from the UI when the device is disconnected or the CSV
@@ -888,9 +888,9 @@ void Dashboard::processLatestJSON(const JFI_Object &frameInfo)
     m_jsonList.append(frameInfo);
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Widget utility functions
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 /**
  * Returns a group with all the datasets that need to be shown in the LED status panel.

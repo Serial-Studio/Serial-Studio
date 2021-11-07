@@ -45,8 +45,8 @@ PlatformDependent.CustomWindow {
     y: (Screen.desktopAvailableHeight - height) / 2
     minimumWidth: column.implicitWidth + 4 * app.spacing
     maximumWidth: column.implicitWidth + 4 * app.spacing
-    minimumHeight: column.implicitHeight + 4 * app.spacing
-    maximumHeight: column.implicitHeight + 4 * app.spacing
+    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height
+    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height
 
     //
     // Titlebar options
@@ -64,8 +64,8 @@ PlatformDependent.CustomWindow {
     //
     Page {
         anchors {
-            margins: 0
             fill: parent
+            margins: 0
             topMargin: titlebar.height
         }
 
@@ -162,7 +162,7 @@ PlatformDependent.CustomWindow {
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Make a donation")
-                onClicked: app.showDonationsDialog()
+                onClicked: donations.show()
             }
 
             Button {
@@ -192,17 +192,6 @@ PlatformDependent.CustomWindow {
                 onClicked: root.close()
                 text: qsTr("Close")
             }
-
-            Item {
-                height: app.spacing
-            }
         }
-    }
-
-    //
-    // Acknowledgements dialog
-    //
-    Acknowledgements {
-        id: acknowledgements
     }
 }

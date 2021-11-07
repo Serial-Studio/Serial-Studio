@@ -26,7 +26,7 @@ import QtQuick.Window 2.12
 Window {
     id: root
     color: "transparent"
-    flags: Qt.Window | Qt.FramelessWindowHint
+    flags: Qt.Window | Qt.CustomizeWindowHint
 
     //
     // Window radius control

@@ -277,7 +277,7 @@ MenuBar {
         title: qsTr("Help")
 
         MenuItem {
-            onTriggered: app.showAbout()
+            onTriggered: about.show()
             text: qsTr("About %1").arg(Cpp_AppName)
         }
 
