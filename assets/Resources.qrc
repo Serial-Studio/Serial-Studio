@@ -150,5 +150,12 @@
         <file>qml/PlatformDependent/WindowButton.qml</file>
         <file>qml/PlatformDependent/CustomWindow.qml</file>
         <file>icons/restore.svg</file>
+        <file>window-border/close.svg</file>
+        <file>window-border/maximize.svg</file>
+        <file>window-border/minimize.svg</file>
+        <file>window-border/unmaximize.svg</file>
+        <file>window-border/fullscreen.svg</file>
+        <file>window-border/restore.svg</file>
+        <file>qml/PlatformDependent/WindowButtonMacOS.qml</file>
     </qresource>
 </RCC>

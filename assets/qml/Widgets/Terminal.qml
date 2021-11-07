@@ -119,19 +119,6 @@ Item {
             onTriggered: Cpp_IO_Console.save()
             enabled: Cpp_IO_Console.saveAvailable
         }
-
-        MenuSeparator {
-            visible: mainWindow.menuBar !== null && !isExternalWindow
-        }
-
-        MenuItem {
-            enabled: visible
-            visible: mainWindow.menuBar !== null
-            height: visible ? implicitHeight : 0
-            onTriggered: mainWindow.menubarEnabled = !mainWindow.menubarEnabled
-            text: visible && mainWindow.menuBar.visible ? qsTr("Hide menubar") :
-                                                  qsTr("Show menubar")
-        }
     }
 
     //

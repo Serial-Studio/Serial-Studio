@@ -127,12 +127,6 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor windowGradient2
                READ windowGradient2
                NOTIFY themeChanged)
-    Q_PROPERTY(QColor menubarGradient1
-               READ menubarGradient1
-               NOTIFY themeChanged)
-    Q_PROPERTY(QColor menubarGradient2
-               READ menubarGradient2
-               NOTIFY themeChanged)
     Q_PROPERTY(QColor menubarText
                READ menubarText
                NOTIFY themeChanged)
@@ -221,8 +215,6 @@ public:
     QColor placeholderText() const;
     QColor toolbarGradient1() const;
     QColor toolbarGradient2() const;
-    QColor menubarGradient1() const;
-    QColor menubarGradient2() const;
     QColor menubarText() const;
     QColor dialogBackground() const;
     QColor consoleText() const;
@@ -288,8 +280,6 @@ private:
     QColor m_placeholderText;
     QColor m_toolbarGradient1;
     QColor m_toolbarGradient2;
-    QColor m_menubarGradient1;
-    QColor m_menubarGradient2;
     QColor m_menubarText;
     QColor m_dialogBackground;
     QColor m_consoleText;

@@ -162,7 +162,7 @@ PlatformDependent.CustomWindow {
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Make a donation")
-                onClicked: donations.show()
+                onClicked: app.donations.show()
             }
 
             Button {

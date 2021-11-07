@@ -48,7 +48,6 @@ PlatformDependent.CustomWindow {
     // Custom properties
     //
     property int appLaunchCount: 0
-    property bool menubarEnabled: true
     property bool firstValidFrame: false
     property bool automaticUpdates: false
     property alias vt100emulation: terminal.vt100emulation
@@ -68,16 +67,9 @@ PlatformDependent.CustomWindow {
     function consoleSelectAll() { terminal.selectAll() }
 
     //
-    // Hide/show menubar
-    //
-    function toggleMenubar() {
-        root.menubarEnabled = !root.menubarEnabled
-    }
-
-    //
     // Displays the main window & checks for updates
     //
-    function showMainWindow() {        
+    function showMainWindow() {
         // Reset window size for whatever reason
         if (width <= 0 || height <= 0) {
             width = minimumWidth
@@ -116,7 +108,7 @@ PlatformDependent.CustomWindow {
 
         // Show donations dialog every 15 launches
         if (appLaunchCount % 15 == 0 && !donations.doNotShowAgain)
-            donations.showAutomatically()
+            app.donations.showAutomatically()
 
         // Ask user if he/she wants to enable automatic updates
         if (appLaunchCount == 2 && Cpp_UpdaterEnabled) {
@@ -204,7 +196,6 @@ PlatformDependent.CustomWindow {
         property alias wm: root.windowMaximized
         property alias appStatus: root.appLaunchCount
         property alias autoUpdater: root.automaticUpdates
-        property alias menubarVisible: root.menubarEnabled
     }
 
     //
@@ -220,9 +211,36 @@ PlatformDependent.CustomWindow {
     // macOS menubar loader
     //
     Loader {
-        asynchronous: false
         active: Cpp_IsMac
+        asynchronous: false
         sourceComponent: PlatformDependent.MenubarMacOS {}
+    }
+
+    //
+    // Windows + Windows menubar loader
+    //
+    Item {
+        enabled: !Cpp_IsMac
+        visible: !Cpp_IsMac
+        height: titlebar.height
+
+        anchors {
+            top: root.top
+            left: root.left
+            right: root.right
+        }
+
+        PlatformDependent.Menubar {
+            id: menubar
+            opacity: 0.8
+            Behavior on opacity {NumberAnimation{}}
+            anchors {
+                left: parent.left
+                right: parent.right
+                leftMargin: 14 + 24
+                verticalCenter: parent.verticalCenter
+            }
+        }
     }
 
     //
@@ -258,7 +276,7 @@ PlatformDependent.CustomWindow {
                 setupChecked: root.setupVisible
                 consoleChecked: root.consoleVisible
                 dashboardChecked: root.dashboardVisible
-                onJsonEditorClicked: jsonEditor.show()
+                onJsonEditorClicked: app.jsonEditor.show()
                 onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
                 onDashboardClicked: {

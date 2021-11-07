@@ -25,31 +25,20 @@ import QtQuick.Controls 2.12
 
 MenuBar {
     id: root
-    visible: app.mainWindow.menubarEnabled
 
     //
-    // Set background color + border
+    // Set background color
     //
     background: Rectangle {
-        gradient: Gradient {
-            GradientStop {
-                position: 0
-                color: Cpp_ThemeManager.menubarGradient1
-            }
-
-            GradientStop {
-                position: 1
-                color: Cpp_ThemeManager.menubarGradient2
-            }
-        }
+        color: "transparent"
     }
 
     //
     // Palette
     //
     palette.text: Cpp_ThemeManager.menubarText
-    palette.base: Cpp_ThemeManager.menubarGradient2
-    palette.window: Cpp_ThemeManager.menubarGradient1
+    palette.base: Cpp_ThemeManager.toolbarGradient1
+    palette.window: Cpp_ThemeManager.toolbarGradient2
     palette.highlightedText: Cpp_ThemeManager.highlightedText
 
     //
@@ -205,19 +194,10 @@ MenuBar {
         MenuSeparator {}
 
         DecentMenuItem {
-            sequence: "alt+m"
-            onTriggered: app.mainWindow.toggleMenubar()
-            text: root.visible ? qsTr("Hide menubar") :
-                                 qsTr("Show menubar")
-        }
-
-        MenuSeparator {}
-
-        DecentMenuItem {
             sequence: "f11"
             onTriggered: app.mainWindow.toggleFullscreen()
             text: app.mainWindow.fullScreen ? qsTr("Exit full screen") :
-                                   qsTr("Enter full screen")
+                                              qsTr("Enter full screen")
         }
     }
 
@@ -315,7 +295,7 @@ MenuBar {
         title: qsTr("Help")
 
         DecentMenuItem {
-            onTriggered: app.showAbout()
+            onTriggered: app.about.show()
             text: qsTr("About %1").arg(Cpp_AppName)
         }
 

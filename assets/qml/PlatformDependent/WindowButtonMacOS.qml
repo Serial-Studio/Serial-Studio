@@ -21,31 +21,25 @@
  */
 
 import QtQuick 2.12
-import "../Widgets" as Widgets
 
-Widgets.Icon {
+Image {
     id: root
 
     signal clicked()
     property string name
-    property color textColor
-    property color highlightColor
+    property string variant: "normal"
 
-    width: 24
-    height: 24
-    color: root.textColor
-    source: "qrc:/window-border/" + name + ".svg"
-
-    Behavior on color {ColorAnimation{}}
-    Behavior on opacity {NumberAnimation{}}
+    width: sourceSize.width
+    height: sourceSize.height
+    sourceSize: Qt.size(20, 20)
+    source: ("qrc:/window-border/macOS/" + name + "-" + variant + ".svg")
 
     MouseArea {
         hoverEnabled: true
         anchors.fill: parent
         onReleased: root.clicked()
-        onContainsMouseChanged: {
-            parent.opacity = containsMouse ? 1 : 0.8
-            parent.color = containsMouse ? highlightColor : root.textColor
-        }
+        acceptedButtons: Qt.LeftButton
+        onContainsMouseChanged: root.variant = (containsMouse ? "hover" : "normal")
+        onContainsPressChanged: root.variant = (containsPress ? "active" : "normal")
     }
 }

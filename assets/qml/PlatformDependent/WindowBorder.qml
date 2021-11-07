@@ -66,7 +66,7 @@ Rectangle {
     //
     // Height calculation
     //
-    height: 32
+    height: !Cpp_IsMac ? 38 : 32
 
     //
     // Radius compensator rectangle
@@ -115,8 +115,8 @@ Rectangle {
     // macOS layout
     //
     Item {
-        //visible: Cpp_IsMac
-        //enabled: Cpp_IsMac
+        visible: Cpp_IsMac
+        enabled: Cpp_IsMac
         anchors.fill: parent
 
         RowLayout {
@@ -127,7 +127,7 @@ Rectangle {
                 width: 4
             }
 
-            WindowButton {
+            WindowButtonMacOS {
                 name: "close"
                 onClicked: window.close()
                 enabled: root.closeEnabled
@@ -135,7 +135,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignVCenter
             }
 
-            WindowButton {
+            WindowButtonMacOS {
                 name: "minimize"
                 onClicked: window.showMinimized()
                 Layout.alignment: Qt.AlignVCenter
@@ -143,7 +143,7 @@ Rectangle {
                 visible: root.minimizeEnabled && !root.fullScreen
             }
 
-            WindowButton {
+            WindowButtonMacOS {
                 name: "maximize"
                 onClicked: root.toggleMaximized()
                 Layout.alignment: Qt.AlignVCenter
@@ -155,33 +155,95 @@ Rectangle {
                 Layout.fillWidth: true
             }
 
-            Widgets.Icon {
+            WindowButton {
                 width: 18
                 height: 18
-                color: "#fff"
+                textColor: root.textColor
                 visible: root.fullscreenEnabled
                 enabled: root.fullscreenEnabled
                 Layout.alignment: Qt.AlignVCenter
-                source: root.fullScreen ? "qrc:/icons/restore.svg" : "qrc:/icons/expand.svg"
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: root.toggleFullscreen()
-                }
+                onClicked: root.toggleFullscreen()
+                highlightColor: Cpp_ThemeManager.highlight
+                name: root.fullScreen ? "restore" : "fullscreen"
             }
-
 
             Item {
                 width: 8
             }
         }
+    }
 
-        Label {
-            font.bold: true
-            font.pixelSize: 14
-            text: window.title
-            color: root.textColor
-            anchors.centerIn: parent
+    //
+    // Windows & Linux layout
+    //
+    Item {
+        visible: !Cpp_IsMac
+        enabled: !Cpp_IsMac
+        anchors.fill: parent
+
+        RowLayout {
+            spacing: 0
+            anchors.fill: parent
+
+            Item {
+                width: 8
+            }
+
+            WindowButton {
+                textColor: root.textColor
+                visible: root.fullscreenEnabled
+                enabled: root.fullscreenEnabled
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: root.toggleFullscreen()
+                highlightColor: Cpp_ThemeManager.highlight
+                name: root.fullScreen ? "restore" : "fullscreen"
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+
+            WindowButton {
+                name: "minimize"
+                textColor: root.textColor
+                onClicked: window.showMinimized()
+                Layout.alignment: Qt.AlignVCenter
+                highlightColor: Cpp_ThemeManager.highlight
+                enabled: root.minimizeEnabled && !root.fullScreen
+                visible: root.minimizeEnabled && !root.fullScreen
+            }
+
+            WindowButton {
+                textColor: root.textColor
+                onClicked: root.toggleMaximized()
+                Layout.alignment: Qt.AlignVCenter
+                highlightColor: Cpp_ThemeManager.highlight
+                enabled: root.maximizeEnabled && !root.fullScreen
+                visible: root.maximizeEnabled && !root.fullScreen
+                name: window.visibility === Window.Maximized ? "unmaximize" : "maximize"
+            }
+
+            WindowButton {
+                name: "close"
+                highlightColor: "#f00"
+                onClicked: window.close()
+                textColor: root.textColor
+                enabled: root.closeEnabled
+                visible: root.closeEnabled
+                Layout.alignment: Qt.AlignVCenter
+            }
+
+            Item {
+                width: 8
+            }
         }
+    }
+
+    Label {
+        font.bold: true
+        font.pixelSize: 14
+        text: window.title
+        color: root.textColor
+        anchors.centerIn: parent
     }
 }

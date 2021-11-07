@@ -26,7 +26,7 @@ import QtQuick.Window 2.12
 Window {
     id: root
     color: "transparent"
-    flags: Qt.Window | Qt.CustomizeWindowHint
+    flags: root.customFlags
 
     //
     // Window radius control
@@ -40,6 +40,7 @@ Window {
     property bool firstChange: true
     property bool windowMaximized: false
     property alias fullScreen: border.fullScreen
+    readonly property int customFlags: Qt.Window | Qt.CustomizeWindowHint
 
     //
     // Toggle fullscreen state
@@ -109,7 +110,7 @@ Window {
 
             root.windowMaximized = true
             root.fullScreen = false
-            root.flags = Qt.Window | Qt.FramelessWindowHint
+            root.flags = root.customFlags
         }
 
         else if (visibility === Window.FullScreen) {
@@ -130,7 +131,7 @@ Window {
 
             root.fullScreen = false
             root.windowMaximized = false
-            root.flags = Qt.Window | Qt.FramelessWindowHint
+            root.flags = root.customFlags
         }
     }
 
