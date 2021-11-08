@@ -220,8 +220,8 @@ void QwtWidgetOverlay::updateMask()
         // A fresh buffer from calloc() is usually faster
         // than reinitializing an existing one with
         // QImage::fill( 0 ) or memset()
-        size_t w = static_cast<uchar>(width());
-        size_t h = static_cast<uchar>(width());
+        size_t w = static_cast<size_t>(width());
+        size_t h = static_cast<size_t>(width());
         m_data->rgbaBuffer = ( uchar* )::calloc( w * h, 4 );
 
         QImage image( m_data->rgbaBuffer,
