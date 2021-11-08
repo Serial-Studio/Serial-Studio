@@ -287,6 +287,7 @@ void Misc::ModuleManager::initializeQmlInterface()
     // Load main.qml
     setSplashScreenMessage(tr("Loading user interface..."));
     engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    qApp->processEvents();
 
     // Warning! Do not call setSplashScreenMessage() after loading QML user interface
 }
@@ -358,15 +359,7 @@ void Misc::ModuleManager::setRenderingEngine(const int engine)
 
         // Restart application
         if (ans == QMessageBox::Yes)
-        {
-#ifdef Q_OS_MAC
-            auto bundle = qApp->applicationDirPath() + "/../../";
-            QProcess::startDetached("open", { "-n", "-a", bundle });
-#else
-            QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
-#endif
-            qApp->exit();
-        }
+            Misc::Utilities::rebootApplication();
     }
 }
 

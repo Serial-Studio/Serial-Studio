@@ -40,7 +40,8 @@ Window {
     property bool firstChange: true
     property bool windowMaximized: false
     property alias fullScreen: border.fullScreen
-    readonly property int customFlags: Qt.Window | Qt.CustomizeWindowHint
+    readonly property int customFlags: Qt.Dialog |
+                                       Qt.FramelessWindowHint
 
     //
     // Toggle fullscreen state
@@ -197,6 +198,18 @@ Window {
                 root.setGeometry(x, y, width, height)
             }
         }
+    }
+
+    //
+    // Background color implementation
+    //
+    Rectangle {
+        z: 100
+        border.width: 0
+        color: "transparent"
+        border.color: "#000"
+        radius: root.radius
+        anchors.fill: parent
     }
 
     //

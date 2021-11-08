@@ -44,6 +44,7 @@ class Utilities : public QObject
 public:
     // clang-format off
     static Utilities* getInstance();
+    static void rebootApplication();
     Q_INVOKABLE bool askAutomaticUpdates();
     static int showMessageBox(QString text,
                               QString informativeText,

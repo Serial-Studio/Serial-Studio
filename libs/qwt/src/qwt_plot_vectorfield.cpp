@@ -181,7 +181,9 @@ namespace
             m_x1 = m_x0 + m_numColumns * m_dx;
             m_y1 = m_y0 + m_numRows * m_dy;
 
-            m_entries = ( Entry* )::calloc( m_numRows * m_numColumns, sizeof( Entry ) );
+            size_t r = static_cast<size_t>(m_numRows);
+            size_t c = static_cast<size_t>(m_numColumns);
+            m_entries = ( Entry* )::calloc( r * c, sizeof( Entry ) );
             if ( m_entries == NULL )
             {
                 qWarning() << "QwtPlotVectorField: raster for filtering too fine - running out of memory";
