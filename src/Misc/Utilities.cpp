@@ -51,12 +51,12 @@ void Utilities::rebootApplication()
     qApp->exit();
     QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 #else
-#ifdef Q_OS_MAC
+#    ifdef Q_OS_MAC
     auto bundle = qApp->applicationDirPath() + "/../../";
     QProcess::startDetached("open", { "-n", "-a", bundle });
-#else
+#    else
     QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
-#endif
+#    endif
     qApp->exit();
 #endif
 }
@@ -67,7 +67,7 @@ bool Utilities::askAutomaticUpdates()
                                       tr("Should %1 automatically check for updates? "
                                          "You can always check for updates manually from "
                                          "the \"Help\" menu")
-                                      .arg(APP_NAME),
+                                          .arg(APP_NAME),
                                       APP_NAME, QMessageBox::Yes | QMessageBox::No);
     return result == QMessageBox::Yes;
 }
@@ -124,7 +124,7 @@ void Utilities::revealFile(const QString &pathToReveal)
     scriptArgs << QLatin1String("-e")
                << QString::fromLatin1(
                       "tell application \"Finder\" to reveal POSIX file \"%1\"")
-                  .arg(pathToReveal);
+                      .arg(pathToReveal);
     QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
     scriptArgs.clear();
     scriptArgs << QLatin1String("-e")
