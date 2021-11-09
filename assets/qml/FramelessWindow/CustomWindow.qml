@@ -115,12 +115,12 @@ Window {
     Rectangle {
         z: 1000
         opacity: 0.8
-        border.width: 1
+        border.width: 2
         radius: root.radius
         color: "transparent"
         anchors.fill: parent
-        anchors.margins: root.shadowMargin - 1
         border.color: root.borderColor
+        anchors.margins: root.shadowMargin - 1
     }
 
     //

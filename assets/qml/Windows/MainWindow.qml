@@ -227,9 +227,11 @@ FramelessWindow.CustomWindow {
         height: titlebar.height
 
         anchors {
-            top: root.top
-            left: root.left
-            right: root.right
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            margins: root.shadowMargin
+            rightMargin: root.shadowMargin + 128
         }
 
         PlatformDependent.Menubar {

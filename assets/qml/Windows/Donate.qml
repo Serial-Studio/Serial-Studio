@@ -120,6 +120,21 @@ FramelessWindow.CustomWindow {
         }
 
         //
+        // Window drag handler
+        //
+        Item {
+            anchors.fill: parent
+
+            DragHandler {
+                grabPermissions: TapHandler.CanTakeOverFromAnything
+                onActiveChanged: {
+                    if (active)
+                        root.startSystemMove()
+                }
+            }
+        }
+
+        //
         // Window controls
         //
         ColumnLayout {

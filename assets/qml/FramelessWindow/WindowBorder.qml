@@ -206,13 +206,15 @@ Rectangle {
                 width: 8
             }
 
-            WindowButton {
-                textColor: root.textColor
+            Image {
+                width: 24
+                height: 24
+                opacity: 0.9
                 visible: root.displayIcon
                 enabled: root.displayIcon
-                source: "qrc:/images/icon.svg"
+                sourceSize: Qt.size(24, 24)
                 Layout.alignment: Qt.AlignVCenter
-                highlightColor: Cpp_ThemeManager.highlight
+                source: "qrc:/images/icon-window.svg"
             }
 
             Item {

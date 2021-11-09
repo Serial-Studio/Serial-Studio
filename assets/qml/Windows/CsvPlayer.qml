@@ -59,6 +59,19 @@ FramelessWindow.CustomWindow {
     }
 
     //
+    // Automatically display the window when the CSV file is opened
+    //
+    Connections {
+        target: Cpp_CSV_Player
+        function onOpenChanged() {
+            if (Cpp_CSV_Player.isOpen)
+                root.visible = true
+            else
+                root.visible = false
+        }
+    }
+
+    //
     // Use page item to set application palette
     //
     Page {
@@ -89,15 +102,17 @@ FramelessWindow.CustomWindow {
         }
 
         //
-        // Automatically display the window when the CSV file is opened
+        // Window drag handler
         //
-        Connections {
-            target: Cpp_CSV_Player
-            function onOpenChanged() {
-                if (Cpp_CSV_Player.isOpen)
-                    root.visible = true
-                else
-                    root.visible = false
+        Item {
+            anchors.fill: parent
+
+            DragHandler {
+                grabPermissions: TapHandler.CanTakeOverFromAnything
+                onActiveChanged: {
+                    if (active)
+                        root.startSystemMove()
+                }
             }
         }
 
