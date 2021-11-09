@@ -50,8 +50,9 @@ Window {
     property bool windowMaximized: false
     property bool windowMinimized: false
     property alias fullScreen: border.fullScreen
-    readonly property int customFlags: Qt.FramelessWindowHint |
-                                       Qt.WindowMinMaxButtonsHint
+    readonly property int customFlags: Qt.CustomizeWindowHint |
+                                       Qt.FramelessWindowHint |
+                                       Qt.NoDropShadowWindowHint
 
     //
     // Toggle fullscreen state
@@ -91,9 +92,11 @@ Window {
     // Shadow implementation
     //
     RectangularGlow {
+        spread: 0.2
         anchors.fill: bg
-        glowRadius: root.margin
-        color: Qt.rgba(0,0,0,0.1)
+        color: Qt.rgba(0,0,0,0.5)
+        glowRadius: root.margin / 2
+        cornerRadius: bg.radius + glowRadius
     } Rectangle {
         id: bg
         color: "transparent"
