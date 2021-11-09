@@ -136,9 +136,9 @@ FramelessWindow.CustomWindow {
     title: Cpp_AppName
     width: minimumWidth
     height: minimumHeight
-    minimumWidth: 1250 + 2 * root.margin
+    minimumWidth: 1250 + 2 * root.shadowMargin
     backgroundColor: Cpp_ThemeManager.windowBackground
-    minimumHeight: 720 + 2 * root.margin + root.titlebar.height
+    minimumHeight: 720 + 2 * root.shadowMargin + root.titlebar.height
 
     //
     // Startup code
@@ -251,11 +251,11 @@ FramelessWindow.CustomWindow {
     Page {
         clip: true
         anchors.fill: parent
-        anchors.margins: root.margin
+        anchors.margins: root.shadowMargin
         palette.text: Cpp_ThemeManager.text
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
-        anchors.topMargin: titlebar.height + root.margin
+        anchors.topMargin: titlebar.height + root.shadowMargin
 
         background: Rectangle {
             radius: root.radius

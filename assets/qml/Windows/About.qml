@@ -43,10 +43,10 @@ FramelessWindow.CustomWindow {
     height: minimumHeight
     x: (Screen.desktopAvailableWidth - width) / 2
     y: (Screen.desktopAvailableHeight - height) / 2
-    minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.margin
-    maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.margin
-    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.margin
-    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.margin
+    minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+    maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
 
     //
     // Titlebar options
@@ -65,8 +65,8 @@ FramelessWindow.CustomWindow {
     Page {
         anchors {
             fill: parent
-            margins: root.margin
-            topMargin: titlebar.height + root.margin
+            margins: root.shadowMargin
+            topMargin: titlebar.height + root.shadowMargin
         }
 
         palette.text: Cpp_ThemeManager.text

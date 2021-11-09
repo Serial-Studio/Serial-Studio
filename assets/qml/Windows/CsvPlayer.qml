@@ -45,10 +45,10 @@ FramelessWindow.CustomWindow {
     y: (Screen.desktopAvailableHeight - height) / 2
     titlebarColor: Cpp_ThemeManager.dialogBackground
     backgroundColor: Cpp_ThemeManager.dialogBackground
-    minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.margin
-    maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.margin
-    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.margin
-    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.margin
+    minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+    maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
 
     //
     // Close CSV file when window is closed
@@ -64,8 +64,8 @@ FramelessWindow.CustomWindow {
     Page {
         anchors {
             fill: parent
-            margins: root.margin
-            topMargin: titlebar.height + root.margin
+            margins: root.shadowMargin
+            topMargin: titlebar.height + root.shadowMargin
         }
 
         palette.text: Cpp_ThemeManager.text

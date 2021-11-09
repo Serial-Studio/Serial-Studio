@@ -76,7 +76,7 @@ Item {
             isExternalWindow: true
             widgetIndex: root.widgetIndex
             widgetVisible: externalWindow.visible
-            anchors.margins: externalWindow.margin
+            anchors.margins: externalWindow.shadowMargin
             anchors.topMargin: externalWindow.titlebar.height
 
             MouseArea {

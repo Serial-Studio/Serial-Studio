@@ -78,11 +78,11 @@ FramelessWindow.CustomWindow {
     Page {
         clip: true
         anchors.fill: parent
-        anchors.margins: root.margin
+        anchors.margins: root.shadowMargin
         palette.text: Cpp_ThemeManager.text
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
-        anchors.topMargin: titlebar.height + root.margin
+        anchors.topMargin: titlebar.height + root.shadowMargin
         palette.window: Cpp_ThemeManager.dialogBackground
 
         background: Rectangle {

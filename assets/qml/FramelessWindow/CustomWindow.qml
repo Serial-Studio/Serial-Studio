@@ -40,7 +40,7 @@ Window {
     //
     // Window radius control
     //
-    readonly property int handleSize: radius + 5 + margin
+    readonly property int handleSize: radius + 5 + shadowMargin
     readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || fullScreen) ? 0 : 10
 
     //
@@ -71,9 +71,13 @@ Window {
     property alias titlebar: border
 
     //
+    // Size of the shadow object
+    //
+    property int shadowMargin: root.radius > 0 ? 20 : 0
+
+    //
     // Background color of the window & the titlebar
     //
-    property int margin: root.radius > 0 ? 10 : 0
     property color borderColor: Cpp_ThemeManager.highlight
     property color backgroundColor: Cpp_ThemeManager.window
     property color titlebarText: Cpp_ThemeManager.brightText
@@ -95,14 +99,14 @@ Window {
         spread: 0.2
         anchors.fill: bg
         color: Qt.rgba(0,0,0,0.5)
-        glowRadius: root.margin / 2
+        glowRadius: root.shadowMargin / 2
         cornerRadius: bg.radius + glowRadius
     } Rectangle {
         id: bg
         color: "transparent"
         radius: root.radius
         anchors.fill: parent
-        anchors.margins: root.margin
+        anchors.margins: root.shadowMargin
     }
 
     //
@@ -115,7 +119,7 @@ Window {
         radius: root.radius
         color: "transparent"
         anchors.fill: parent
-        anchors.margins: root.margin - 1
+        anchors.margins: root.shadowMargin - 1
         border.color: root.borderColor
     }
 
@@ -138,7 +142,7 @@ Window {
             top: parent.top
             left: parent.left
             right: parent.right
-            margins: root.margin
+            margins: root.shadowMargin
         }
     }
 
