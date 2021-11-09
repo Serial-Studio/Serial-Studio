@@ -40,8 +40,13 @@ FramelessWindow.CustomWindow {
     minimumWidth: 910
     minimumHeight: 720
     displayIcon: false
-    borderColor: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
     title: qsTr("JSON Editor - %1").arg(Cpp_JSON_Editor.jsonFileName)
+
+    //
+    // Customize window border
+    //
+    borderWidth: 1
+    borderColor: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
 
     //
     // Ensure that current JSON file is shown

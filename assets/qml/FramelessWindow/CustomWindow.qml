@@ -40,6 +40,7 @@ Window {
     //
     // Window radius control
     //
+    property int borderWidth: 2
     readonly property int handleSize: radius + 5 + shadowMargin
     readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || fullScreen) ? 0 : 10
 
@@ -114,12 +115,12 @@ Window {
     Rectangle {
         z: 1000
         opacity: 0.8
-        border.width: 2
         radius: root.radius
         color: "transparent"
         anchors.fill: parent
         border.color: root.borderColor
-        anchors.margins: root.shadowMargin - 1
+        border.width: root.borderWidth
+        anchors.margins: root.shadowMargin
     }
 
     //

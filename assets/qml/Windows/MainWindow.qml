@@ -36,7 +36,16 @@ import "../PlatformDependent" as PlatformDependent
 
 FramelessWindow.CustomWindow {
     id: root
+
+    //
+    // Quit application when this window is closed
+    //
     onClosed: Qt.quit()
+
+    //
+    // Customize window border
+    //
+    borderWidth: 1
     borderColor: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
 
     //
