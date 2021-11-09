@@ -156,6 +156,8 @@ Rectangle {
                 enabled: root.minimizeEnabled && !root.fullScreen
                 visible: root.minimizeEnabled && !root.fullScreen
                 onClicked: {
+                    // Workaround for QTBUG-64994
+                    window.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.WindowMinMaxButtonsHint
                     window.showMinimized()
                     root.minimized()
                 }
