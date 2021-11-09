@@ -171,6 +171,22 @@ Rectangle {
             Item {
                 Layout.fillWidth: true
             }
+
+            WindowButton {
+                width: 18
+                height: 18
+                textColor: root.textColor
+                visible: root.fullscreenEnabled
+                enabled: root.fullscreenEnabled
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: root.toggleFullscreen()
+                highlightColor: Cpp_ThemeManager.highlight
+                name: root.fullScreen ? "restore" : "fullscreen"
+            }
+
+            Item {
+                width: 8
+            }
         }
     }
 

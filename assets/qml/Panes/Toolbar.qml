@@ -227,7 +227,6 @@ Control {
             palette.buttonText: Cpp_ThemeManager.brightText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
-            
 
             onClicked: {
                 if (Cpp_CSV_Export.isOpen)
