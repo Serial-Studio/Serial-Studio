@@ -56,8 +56,7 @@ public:
     Q_INVOKABLE StringList renderingEngines() const;
 
 public slots:
-    void quit();
-    void stopOperations();
+    void onQuit();
     void hideSplashscreen();
     void setRenderingEngine(const int engine);
     void setSplashScreenMessage(const QString &message);

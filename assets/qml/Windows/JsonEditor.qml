@@ -29,9 +29,9 @@ import Qt.labs.settings 1.0
 
 import "../JsonEditor"
 import "../Widgets" as Widgets
-import "../PlatformDependent" as PlatformDependent
+import "../FramelessWindow" as FramelessWindow
 
-PlatformDependent.CustomWindow {
+FramelessWindow.CustomWindow {
     id: root
 
     //
@@ -39,7 +39,8 @@ PlatformDependent.CustomWindow {
     //
     minimumWidth: 910
     minimumHeight: 720
-    fullscreenEnabled: false
+    displayIcon: false
+    borderColor: Cpp_ThemeManager.toolbarGradient1
     title: qsTr("JSON Editor - %1").arg(Cpp_JSON_Editor.jsonFileName)
 
     //
@@ -53,7 +54,7 @@ PlatformDependent.CustomWindow {
     //
     // Ask user to save changes before closing the window
     //
-    onClosing: (close) => close.accepted = Cpp_JSON_Editor.askSave()
+    //onClosing: (close) => close.accepted = Cpp_JSON_Editor.askSave()
 
     //
     // Dummy string to increase width of buttons
@@ -75,12 +76,13 @@ PlatformDependent.CustomWindow {
     // Use page item to set application palette
     //
     Page {
+        clip: true
         anchors.fill: parent
-        anchors.margins: root.radius
-        anchors.topMargin: titlebar.height
+        anchors.margins: root.margin
         palette.text: Cpp_ThemeManager.text
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
+        anchors.topMargin: titlebar.height + root.margin
         palette.window: Cpp_ThemeManager.dialogBackground
 
         background: Rectangle {

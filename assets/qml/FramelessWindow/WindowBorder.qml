@@ -31,6 +31,14 @@ Rectangle {
     id: root
 
     //
+    // Custom signals
+    //
+    signal closed()
+    signal minimized()
+    signal maximized()
+    signal unmaximized()
+
+    //
     // Window controls
     //
     property Window window
@@ -38,18 +46,24 @@ Rectangle {
     property bool closeEnabled: true
     property bool minimizeEnabled: true
     property bool maximizeEnabled: true
-    property bool fullscreenEnabled: true
+    property bool displayIcon: true
     property bool titlebarBorderEnabled: true
     property color textColor: palette.text
+    readonly property bool showMacControls: Cpp_IsMac
 
     //
     // Toggle maximized
     //
     function toggleMaximized() {
-        if (window.visibility === Window.Maximized)
+        if (window.visibility === Window.Maximized) {
             window.showNormal()
-        else
+            root.unmaximized()
+        }
+
+        else {
             window.showMaximized()
+            root.maximized()
+        }
     }
 
     //
@@ -66,7 +80,7 @@ Rectangle {
     //
     // Height calculation
     //
-    height: !Cpp_IsMac ? 38 : 32
+    height: !showMacControls ? 38 : 32
 
     //
     // Radius compensator rectangle
@@ -112,12 +126,24 @@ Rectangle {
     }
 
     //
+    // Window maximize by double click
+    //
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton
+        onDoubleClicked: {
+            if (root.maximizeEnabled)
+                root.toggleMaximized()
+        }
+    }
+
+    //
     // macOS layout
     //
     Item {
-        visible: Cpp_IsMac
-        enabled: Cpp_IsMac
         anchors.fill: parent
+        visible: showMacControls
+        enabled: showMacControls
 
         RowLayout {
             spacing: 0
@@ -129,18 +155,25 @@ Rectangle {
 
             WindowButtonMacOS {
                 name: "close"
-                onClicked: window.close()
                 enabled: root.closeEnabled
                 visible: root.closeEnabled
                 Layout.alignment: Qt.AlignVCenter
+                onClicked: {
+                    window.close()
+                    root.closed()
+                }
+
             }
 
             WindowButtonMacOS {
                 name: "minimize"
-                onClicked: window.showMinimized()
                 Layout.alignment: Qt.AlignVCenter
                 enabled: root.minimizeEnabled && !root.fullScreen
                 visible: root.minimizeEnabled && !root.fullScreen
+                onClicked: {
+                    window.showMinimized()
+                    root.minimized()
+                }
             }
 
             WindowButtonMacOS {
@@ -154,22 +187,6 @@ Rectangle {
             Item {
                 Layout.fillWidth: true
             }
-
-            WindowButton {
-                width: 18
-                height: 18
-                textColor: root.textColor
-                visible: root.fullscreenEnabled
-                enabled: root.fullscreenEnabled
-                Layout.alignment: Qt.AlignVCenter
-                onClicked: root.toggleFullscreen()
-                highlightColor: Cpp_ThemeManager.highlight
-                name: root.fullScreen ? "restore" : "fullscreen"
-            }
-
-            Item {
-                width: 8
-            }
         }
     }
 
@@ -177,9 +194,9 @@ Rectangle {
     // Windows & Linux layout
     //
     Item {
-        visible: !Cpp_IsMac
-        enabled: !Cpp_IsMac
         anchors.fill: parent
+        visible: !showMacControls
+        enabled: !showMacControls
 
         RowLayout {
             spacing: 0
@@ -191,12 +208,11 @@ Rectangle {
 
             WindowButton {
                 textColor: root.textColor
-                visible: root.fullscreenEnabled
-                enabled: root.fullscreenEnabled
+                visible: root.displayIcon
+                enabled: root.displayIcon
+                source: "qrc:/images/icon.svg"
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: root.toggleFullscreen()
                 highlightColor: Cpp_ThemeManager.highlight
-                name: root.fullScreen ? "restore" : "fullscreen"
             }
 
             Item {
@@ -206,11 +222,14 @@ Rectangle {
             WindowButton {
                 name: "minimize"
                 textColor: root.textColor
-                onClicked: window.showMinimized()
                 Layout.alignment: Qt.AlignVCenter
                 highlightColor: Cpp_ThemeManager.highlight
                 enabled: root.minimizeEnabled && !root.fullScreen
                 visible: root.minimizeEnabled && !root.fullScreen
+                onClicked: {
+                    window.showMinimized()
+                    root.minimized()
+                }
             }
 
             WindowButton {
@@ -226,11 +245,15 @@ Rectangle {
             WindowButton {
                 name: "close"
                 highlightColor: "#f00"
-                onClicked: window.close()
                 textColor: root.textColor
                 enabled: root.closeEnabled
                 visible: root.closeEnabled
                 Layout.alignment: Qt.AlignVCenter
+                onClicked: {
+                    window.close()
+                    root.closed()
+                }
+
             }
 
             Item {

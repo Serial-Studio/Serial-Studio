@@ -60,6 +60,7 @@
         <file>icons/power.svg</file>
         <file>icons/ram.svg</file>
         <file>icons/registration.svg</file>
+        <file>icons/restore.svg</file>
         <file>icons/right.svg</file>
         <file>icons/save.svg</file>
         <file>icons/schedule.svg</file>
@@ -96,6 +97,11 @@
         <file>qml/Dashboard/WidgetDelegate.qml</file>
         <file>qml/Dashboard/WidgetGrid.qml</file>
         <file>qml/Dashboard/WidgetModel.qml</file>
+        <file>qml/FramelessWindow/CustomWindow.qml</file>
+        <file>qml/FramelessWindow/ResizeHandles.qml</file>
+        <file>qml/FramelessWindow/WindowBorder.qml</file>
+        <file>qml/FramelessWindow/WindowButton.qml</file>
+        <file>qml/FramelessWindow/WindowButtonMacOS.qml</file>
         <file>qml/JsonEditor/Footer.qml</file>
         <file>qml/JsonEditor/GroupEditor.qml</file>
         <file>qml/JsonEditor/Header.qml</file>
@@ -133,10 +139,15 @@
         <file>touchbar/dashboard.png</file>
         <file>touchbar/setup.png</file>
         <file>translations/de.qm</file>
+        <file>translations/de.ts</file>
         <file>translations/en.qm</file>
+        <file>translations/en.ts</file>
         <file>translations/es.qm</file>
+        <file>translations/es.ts</file>
         <file>translations/ru.qm</file>
+        <file>translations/ru.ts</file>
         <file>translations/zh.qm</file>
+        <file>translations/zh.ts</file>
         <file>window-border/macOS/close-active.svg</file>
         <file>window-border/macOS/close-hover.svg</file>
         <file>window-border/macOS/close-normal.svg</file>
@@ -146,16 +157,11 @@
         <file>window-border/macOS/minimize-active.svg</file>
         <file>window-border/macOS/minimize-hover.svg</file>
         <file>window-border/macOS/minimize-normal.svg</file>
-        <file>qml/PlatformDependent/WindowBorder.qml</file>
-        <file>qml/PlatformDependent/WindowButton.qml</file>
-        <file>qml/PlatformDependent/CustomWindow.qml</file>
-        <file>icons/restore.svg</file>
         <file>window-border/close.svg</file>
+        <file>window-border/fullscreen.svg</file>
         <file>window-border/maximize.svg</file>
         <file>window-border/minimize.svg</file>
-        <file>window-border/unmaximize.svg</file>
-        <file>window-border/fullscreen.svg</file>
         <file>window-border/restore.svg</file>
-        <file>qml/PlatformDependent/WindowButtonMacOS.qml</file>
+        <file>window-border/unmaximize.svg</file>
     </qresource>
 </RCC>

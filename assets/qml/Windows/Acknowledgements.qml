@@ -25,9 +25,9 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-import "../PlatformDependent" as PlatformDependent
+import "../FramelessWindow" as FramelessWindow
 
-PlatformDependent.CustomWindow {
+FramelessWindow.CustomWindow {
     id: root
 
     //
@@ -38,34 +38,46 @@ PlatformDependent.CustomWindow {
     height: minimumHeight
     minimizeEnabled: false
     maximizeEnabled: false
-    fullscreenEnabled: false
+    displayIcon: false
     titlebarBorderEnabled: false
     titlebarText: Cpp_ThemeManager.text
     x: (Screen.desktopAvailableWidth - width) / 2
     y: (Screen.desktopAvailableHeight - height) / 2
     titlebarColor: Cpp_ThemeManager.dialogBackground
     backgroundColor: Cpp_ThemeManager.dialogBackground
-    minimumWidth: column.implicitWidth + 4 * app.spacing
-    maximumWidth: column.implicitWidth + 4 * app.spacing
-    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height
-    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height
+    minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.margin
+    maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.margin
+    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.margin
+    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.margin
 
     //
     // Use page item to set application palette
     //
     Page {
+        anchors {
+            fill: parent
+            margins: root.margin
+            topMargin: titlebar.height + root.margin
+        }
+
         palette.text: Cpp_ThemeManager.text
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
         palette.window: Cpp_ThemeManager.dialogBackground
         background: Rectangle {
-            color: "transparent"
-        }
+            radius: root.radius
+            color: root.backgroundColor
 
-        anchors {
-            fill: parent
-            margins: 0
-            topMargin: titlebar.height
+            Rectangle {
+                height: root.radius
+                color: root.backgroundColor
+
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                }
+            }
         }
 
         //

@@ -41,7 +41,6 @@ Item {
     ColumnLayout {
         anchors.fill: parent
         spacing: app.spacing * 2
-        anchors.topMargin: app.spacing * 1.5
         anchors.margins: (app.spacing * 1.5) - 5
 
         //

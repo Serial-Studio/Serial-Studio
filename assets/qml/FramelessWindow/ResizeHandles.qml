@@ -23,117 +23,31 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 
-Window {
+Item {
     id: root
-    color: "transparent"
-    flags: root.customFlags
 
     //
-    // Window radius control
+    // Pointer to window to control
     //
-    readonly property int windowBorder: radius + 5
-    property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || fullScreen) ? 0 : 10
+    property Window window
+    property int handleSize
 
     //
-    // Visibility properties
+    // Disable handles if window size is fixed or window is maximized
     //
-    property bool firstChange: true
-    property bool windowMaximized: false
-    property alias fullScreen: border.fullScreen
-    readonly property int customFlags: Qt.Dialog |
-                                       Qt.FramelessWindowHint
+    enabled: ((window.minimumWidth !== window.maximumWidth) ||
+              (window.minimumHeight !== window.maximumHeight)) &&
+             (window.visibility !== Window.Maximized)
 
     //
-    // Toggle fullscreen state
+    // Global mouse area to fix cursor shape while resizing
     //
-    function toggleFullscreen() {
-        root.fullScreen = !root.fullScreen
-        if (root.fullScreen)
-            root.showFullScreen()
-        else
-            root.showNormal()
-    }
-
-    //
-    // Alias to the titlebar
-    //
-    property alias titlebar: border
-
-    //
-    // Background color of the window & the titlebar
-    //
-    property color backgroundColor: Cpp_ThemeManager.window
-    property color titlebarText: Cpp_ThemeManager.brightText
-    property color titlebarColor: Cpp_ThemeManager.toolbarGradient2
-
-    //
-    // Window controls
-    //
-    property alias closeEnabled: border.closeEnabled
-    property alias minimizeEnabled: border.minimizeEnabled
-    property alias maximizeEnabled: border.maximizeEnabled
-    property alias fullscreenEnabled: border.fullscreenEnabled
-    property alias titlebarBorderEnabled: border.titlebarBorderEnabled
-
-    //
-    // Background color implementation
-    //
-    Rectangle {
-        radius: root.radius
+    MouseArea {
+        z: 1000
+        id: globalMouseArea
         anchors.fill: parent
-        color: root.backgroundColor
-    }
-
-    //
-    // Titlebar control
-    //
-    WindowBorder {
-        id: border
-        window: root
-        radius: root.radius
-        color: root.titlebarColor
-        textColor: root.titlebarText
-
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-        }
-    }
-
-    //
-    // Maximize window fixes
-    //
-    onVisibilityChanged: {
-        if (visibility === Window.Maximized) {
-            if (!root.windowMaximized)
-                root.firstChange = false
-
-            root.windowMaximized = true
-            root.fullScreen = false
-            root.flags = root.customFlags
-        }
-
-        else if (visibility === Window.FullScreen) {
-            if (!root.fullScreen)
-                root.firstChange = false
-
-            root.windowMaximized = false
-            root.fullScreen = true
-        }
-
-        else if (visibility !== Window.Hidden) {
-            if (windowMaximized || fullScreen && firstChange) {
-                root.x = 100
-                root.y = 100
-                root.width = root.minimumWidth
-                root.height = root.minimumHeight
-            }
-
-            root.fullScreen = false
-            root.windowMaximized = false
-            root.flags = root.customFlags
-        }
+        acceptedButtons: Qt.NoButton
+        anchors.margins: root.handleSize
     }
 
     //
@@ -143,6 +57,9 @@ Window {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
 
+        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
+                                                                    Qt.ArrowCursor
+
         anchors {
             top: parent.top
             bottom: parent.bottom
@@ -151,7 +68,7 @@ Window {
         }
 
         hoverEnabled: true
-        width: windowBorder
+        width: handleSize
         cursorShape: Qt.SizeHorCursor
         onPressedChanged: dragging = pressed
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
@@ -159,7 +76,13 @@ Window {
         onMouseXChanged: {
             if (dragging) {
                 var dx = mouseX + lastMousePos.x
-                root.width += dx
+                var width = window.width + dx
+                if (width < window.minimumWidth)
+                    width = window.minimumWidth
+                else if (width > window.maximumWidth)
+                    width = window.maximumWidth
+
+                window.setGeometry(window.x, window.y, width, window.height)
             }
         }
     }
@@ -171,6 +94,9 @@ Window {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
 
+        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
+                                                                    Qt.ArrowCursor
+
         anchors {
             top: parent.top
             left: parent.left
@@ -179,7 +105,7 @@ Window {
         }
 
         hoverEnabled: true
-        width: windowBorder
+        width: handleSize
         cursorShape: Qt.SizeHorCursor
         onPressedChanged: dragging = pressed
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
@@ -187,29 +113,27 @@ Window {
         onMouseXChanged: {
             if (dragging) {
                 var dx = mouseX - lastMousePos.x
-                var y = root.y
-                var x = root.x + dx
-                var height = root.height
-                var width = root.width - dx
+                var y = window.y
+                var x = window.x + dx
+                var height = window.height
+                var width = window.width - dx
 
-                if (x > root.x)
-                    width = root.width - dx / 2
+                if (x > window.x) {
+                    width = window.width - dx / 2
+                    if (width < window.minimumWidth) {
+                        width = window.minimumWidth
+                        x = window.x
+                    }
 
-                root.setGeometry(x, y, width, height)
+                    else if (width > window.maximumWidth) {
+                        width = window.maximumWidth
+                        x = window.x
+                    }
+                }
+
+                window.setGeometry(x, y, width, height)
             }
         }
-    }
-
-    //
-    // Background color implementation
-    //
-    Rectangle {
-        z: 100
-        border.width: 0
-        color: "transparent"
-        border.color: "#000"
-        radius: root.radius
-        anchors.fill: parent
     }
 
     //
@@ -219,6 +143,9 @@ Window {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
 
+        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
+                                                                    Qt.ArrowCursor
+
         anchors {
             left: parent.left
             right: parent.right
@@ -226,14 +153,20 @@ Window {
         }
 
         hoverEnabled: true
-        height: windowBorder
+        height: handleSize
         cursorShape: Qt.SizeVerCursor
         onPressedChanged: dragging = pressed
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
         onMouseYChanged: {
             if (dragging) {
                 var dy = mouseY - lastMousePos.y
-                root.height += dy
+                var height = window.height + dy
+                if (height < minimumHeight)
+                    height = minimumHeight
+                else if (height > maximumHeight)
+                    height = maximumHeight
+
+                window.setGeometry(window.x, window.y, window.width, height)
             }
         }
     }
@@ -245,13 +178,27 @@ Window {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
 
+        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
+                                                                    Qt.ArrowCursor
+
         function updateWindowPosition() {
             if (dragging) {
                 var dy = mouseY - lastMousePos.y
                 var dx = mouseX + lastMousePos.x
+                var width = window.width + dx
+                var height = window.height + dy
 
-                root.width += dx
-                root.height += dy
+                if (width < window.minimumWidth)
+                    width = window.minimumWidth
+                else if (width > window.maximumWidth)
+                    width = window.maximumWidth
+
+                if (height < minimumHeight)
+                    height = minimumHeight
+                else if (height > maximumHeight)
+                    height = maximumHeight
+
+                window.setGeometry(window.x, window.y, width, height)
             }
         }
 
@@ -261,8 +208,8 @@ Window {
         }
 
         hoverEnabled: true
-        width: windowBorder
-        height: windowBorder
+        width: handleSize
+        height: handleSize
         cursorShape: Qt.SizeFDiagCursor
         onPressedChanged: dragging = pressed
         onMouseXChanged: updateWindowPosition()
@@ -276,20 +223,38 @@ Window {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
 
+        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
+                                                                    Qt.ArrowCursor
+
         function updateWindowPosition() {
             if (dragging) {
                 var dx = mouseX - lastMousePos.x
                 var dy = mouseY - lastMousePos.y
 
-                var y = root.y
-                var x = root.x + dx
-                var width = root.width - dx
-                var height = root.height + dy
+                var y = window.y
+                var x = window.x + dx
+                var width = window.width - dx
+                var height = window.height + dy
 
-                if (x > root.x)
-                    width = root.width - dx / 2
+                if (x > window.x)
+                    width = window.width - dx / 2
 
-                root.setGeometry(x, y, width, height)
+                if (width < window.minimumWidth) {
+                    width = window.minimumWidth
+                    x = window.x
+                }
+
+                else if (width > window.maximumWidth) {
+                    width = window.maximumWidth
+                    x = window.x
+                }
+
+                if (height < minimumHeight)
+                    height = minimumHeight
+                else if (height > maximumHeight)
+                    height = maximumHeight
+
+                window.setGeometry(x, y, width, height)
             }
         }
 
@@ -299,8 +264,8 @@ Window {
         }
 
         hoverEnabled: true
-        width: windowBorder
-        height: windowBorder
+        width: root.handleSize
+        height: root.handleSize
         cursorShape: Qt.SizeBDiagCursor
         onPressedChanged: dragging = pressed
         onMouseXChanged: updateWindowPosition()

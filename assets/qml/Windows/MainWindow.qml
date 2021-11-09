@@ -31,11 +31,13 @@ import "../Panes"
 import "../Windows"
 import "../Widgets"
 import "../JsonEditor"
+import "../FramelessWindow" as FramelessWindow
 import "../PlatformDependent" as PlatformDependent
 
-PlatformDependent.CustomWindow {
+FramelessWindow.CustomWindow {
     id: root
-    onClosing: Qt.quit()
+    onClosed: Qt.quit()
+    borderColor: Cpp_ThemeManager.toolbarGradient1
 
     //
     // Global properties
@@ -131,12 +133,12 @@ PlatformDependent.CustomWindow {
     // operating systems because of the global menubar in macOS)
     //
     visible: true
-    minimumWidth: 1250
     title: Cpp_AppName
     width: minimumWidth
     height: minimumHeight
-    minimumHeight: Cpp_IsMac ? 720 : 740
+    minimumWidth: 1250 + 2 * root.margin
     backgroundColor: Cpp_ThemeManager.windowBackground
+    minimumHeight: 720 + 2 * root.margin + root.titlebar.height
 
     //
     // Startup code
@@ -217,7 +219,7 @@ PlatformDependent.CustomWindow {
     }
 
     //
-    // Windows + Windows menubar loader
+    // Windows + Linux menubar loader
     //
     Item {
         enabled: !Cpp_IsMac
@@ -247,12 +249,13 @@ PlatformDependent.CustomWindow {
     // Main layout
     //
     Page {
-        anchors.margins: 5
+        clip: true
         anchors.fill: parent
-        anchors.topMargin: titlebar.height
+        anchors.margins: root.margin
         palette.text: Cpp_ThemeManager.text
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
+        anchors.topMargin: titlebar.height + root.margin
 
         background: Rectangle {
             radius: root.radius

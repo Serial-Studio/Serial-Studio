@@ -26,7 +26,7 @@ import QtQuick.Controls 2.12
 
 import SerialStudio 1.0
 import "../Widgets" as Widgets
-import "../PlatformDependent" as PlatformDependent
+import "../FramelessWindow" as FramelessWindow
 
 Item {
     id: root
@@ -60,7 +60,7 @@ Item {
         }
     }
 
-    PlatformDependent.CustomWindow {
+    FramelessWindow.CustomWindow {
         id: externalWindow
         minimumWidth: 640
         minimumHeight: 480
@@ -74,10 +74,10 @@ Item {
             id: externalLoader
             anchors.fill: parent
             isExternalWindow: true
-            anchors.margins: windowBorder
             widgetIndex: root.widgetIndex
-            anchors.topMargin: titlebar.height
             widgetVisible: externalWindow.visible
+            anchors.margins: externalWindow.margin
+            anchors.topMargin: externalWindow.titlebar.height
 
             MouseArea {
                 hoverEnabled: true

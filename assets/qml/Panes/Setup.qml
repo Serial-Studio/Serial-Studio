@@ -146,7 +146,6 @@ Item {
         anchors.fill: parent
         anchors.leftMargin: 0
         headerDoubleClickEnabled: false
-        anchors.topMargin: app.spacing * 1.5
         icon.source: "qrc:/icons/settings.svg"
         anchors.margins: (app.spacing * 1.5) - 5
         backgroundColor: Cpp_ThemeManager.paneWindowBackground

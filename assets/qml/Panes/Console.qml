@@ -96,7 +96,6 @@ Item {
         title: qsTr("Console")
         headerDoubleClickEnabled: false
         icon.source: "qrc:/icons/code.svg"
-        anchors.topMargin: app.spacing * 1.5
         anchors.margins: (app.spacing * 1.5) - 5
         backgroundColor: Cpp_ThemeManager.paneWindowBackground
 

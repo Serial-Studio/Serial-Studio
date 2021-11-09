@@ -27,6 +27,7 @@ import "../Widgets" as Widgets
 
 Rectangle {
     id: root
+    radius: jsonEditor.radius
     height: footer.implicitHeight + 4 * app.spacing
 
     //

@@ -51,6 +51,7 @@
 
 #include <UI/Dashboard.h>
 #include <UI/WidgetLoader.h>
+
 #include <Widgets/Terminal.h>
 
 #include <QQuickWindow>
@@ -140,8 +141,7 @@ Misc::ModuleManager::ModuleManager()
 
     // Stop modules when application is about to quit
     setSplashScreenMessage(tr("Initializing..."));
-    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(stopOperations()));
-    connect(engine(), SIGNAL(quit()), this, SLOT(quit()));
+    connect(engine(), SIGNAL(quit()), this, SLOT(onQuit()));
 }
 
 /**
@@ -319,15 +319,6 @@ StringList Misc::ModuleManager::renderingEngines() const
 }
 
 /**
- * Quits the application
- */
-void Misc::ModuleManager::quit()
-{
-    if (JSON::Editor::getInstance()->askSave())
-        qApp->quit();
-}
-
-/**
  * Hides the splash screen widget
  */
 void Misc::ModuleManager::hideSplashscreen()
@@ -378,7 +369,7 @@ void Misc::ModuleManager::setSplashScreenMessage(const QString &message)
 /**
  * Calls the functions needed to safely quit the application
  */
-void Misc::ModuleManager::stopOperations()
+void Misc::ModuleManager::onQuit()
 {
     Plugins::Server::getInstance()->removeConnection();
     CSV::Export::getInstance()->closeFile();

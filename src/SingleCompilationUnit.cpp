@@ -460,6 +460,7 @@
 #include "moc_Compass.cpp"
 #include "moc_Console.cpp"
 #include "moc_Dashboard.cpp"
+#include "moc_WidgetLoader.cpp"
 #include "moc_DataGroup.cpp"
 #include "moc_Editor.cpp"
 #include "moc_Export.cpp"
@@ -483,7 +484,6 @@
 #include "moc_ThemeManager.cpp"
 #include "moc_TimerEvents.cpp"
 #include "moc_Translator.cpp"
-#include "moc_WidgetLoader.cpp"
 #include "moc_Utilities.cpp"
 
 //----------------------------------------------------------------------------------------

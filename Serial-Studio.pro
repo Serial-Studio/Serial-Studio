@@ -273,6 +273,11 @@ DISTFILES += \
     assets/qml/Dashboard/WidgetDelegate.qml \
     assets/qml/Dashboard/WidgetGrid.qml \
     assets/qml/Dashboard/WidgetModel.qml \
+    assets/qml/FramelessWindow/CustomWindow.qml \
+    assets/qml/FramelessWindow/ResizeHandles.qml \
+    assets/qml/FramelessWindow/WindowBorder.qml \
+    assets/qml/FramelessWindow/WindowButton.qml \
+    assets/qml/FramelessWindow/WindowButtonMacOS.qml \
     assets/qml/JsonEditor/Footer.qml \
     assets/qml/JsonEditor/GroupEditor.qml \
     assets/qml/JsonEditor/Header.qml \
@@ -287,19 +292,15 @@ DISTFILES += \
     assets/qml/Panes/SetupPanes/Serial.qml \
     assets/qml/Panes/SetupPanes/Settings.qml \
     assets/qml/Panes/Toolbar.qml \
-    assets/qml/PlatformDependent/CustomWindow.qml \
     assets/qml/PlatformDependent/DecentMenuItem.qml \
     assets/qml/PlatformDependent/Menubar.qml \
     assets/qml/PlatformDependent/MenubarMacOS.qml \
-    assets/qml/PlatformDependent/WindowBorder.qml \
-    assets/qml/PlatformDependent/WindowButton.qml \
-    assets/qml/PlatformDependent/WindowButtonMacOS.qml \
     assets/qml/Widgets/Icon.qml \
     assets/qml/Widgets/JSONDropArea.qml \
     assets/qml/Widgets/LED.qml \
     assets/qml/Widgets/Shadow.qml \
-    assets/qml/Widgets/Window.qml \
     assets/qml/Widgets/Terminal.qml \
+    assets/qml/Widgets/Window.qml \
     assets/qml/Windows/About.qml \
     assets/qml/Windows/Acknowledgements.qml \
     assets/qml/Windows/CsvPlayer.qml \
@@ -308,9 +309,9 @@ DISTFILES += \
     assets/qml/Windows/MainWindow.qml \
     assets/qml/main.qml
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 # Deploy files
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 
 OTHER_FILES += \
     deploy/linux/* \
