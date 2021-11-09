@@ -47,6 +47,7 @@ Rectangle {
     property bool closeEnabled: true
     property bool minimizeEnabled: true
     property bool maximizeEnabled: true
+    property bool fullscreenEnabled: false
     property color textColor: palette.text
     readonly property bool showMacControls: Cpp_IsMac
 
