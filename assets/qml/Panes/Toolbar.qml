@@ -86,10 +86,23 @@ Control {
     }
 
     //
-    // Background gradient
+    // Background gradient + border
     //
     Rectangle {
         id: bg
+        anchors.fill: parent
+
+        gradient: Gradient {
+            GradientStop { position: 0; color: Cpp_ThemeManager.toolbarGradient1 }
+            GradientStop { position: 1; color: Cpp_ThemeManager.toolbarGradient2 }
+        }
+
+        Rectangle {
+            border.width: 1
+            anchors.fill: parent
+            color: "transparent"
+            border.color: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
+        }
 
         Rectangle {
             height: 1
@@ -100,17 +113,6 @@ Control {
                 right: parent.right
                 bottom: parent.bottom
             }
-        }
-
-        gradient: Gradient {
-            GradientStop { position: 0; color: Cpp_ThemeManager.toolbarGradient1 }
-            GradientStop { position: 1; color: Cpp_ThemeManager.toolbarGradient2 }
-        }
-
-        anchors {
-            fill: parent
-            leftMargin: -border.width * 10
-            rightMargin: -border.width * 10
         }
     }
 

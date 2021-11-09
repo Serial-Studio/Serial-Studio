@@ -33,13 +33,12 @@ FramelessWindow.CustomWindow {
     //
     // Window options
     //
-    title: qsTr("CSV Player")
+    displayIcon: false
     width: minimumWidth
     height: minimumHeight
     minimizeEnabled: false
     maximizeEnabled: false
-    displayIcon: false
-    titlebarBorderEnabled: false
+    title: qsTr("CSV Player")
     titlebarText: Cpp_ThemeManager.text
     x: (Screen.desktopAvailableWidth - width) / 2
     y: (Screen.desktopAvailableHeight - height) / 2

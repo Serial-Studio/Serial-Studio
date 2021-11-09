@@ -42,12 +42,11 @@ Rectangle {
     // Window controls
     //
     property Window window
+    property bool displayIcon: true
     property bool fullScreen: false
     property bool closeEnabled: true
     property bool minimizeEnabled: true
     property bool maximizeEnabled: true
-    property bool displayIcon: true
-    property bool titlebarBorderEnabled: true
     property color textColor: palette.text
     readonly property bool showMacControls: Cpp_IsMac
 
@@ -88,21 +87,6 @@ Rectangle {
     Rectangle {
         color: parent.color
         height: parent.radius
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-        }
-    }
-
-    //
-    // Bottom titlebar border
-    //
-    Rectangle {
-        height: 1
-        visible: root.titlebarBorderEnabled
-        color: Qt.darker(parent.color, 1.5)
-
         anchors {
             left: parent.left
             right: parent.right

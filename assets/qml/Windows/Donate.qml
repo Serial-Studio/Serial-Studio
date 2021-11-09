@@ -34,13 +34,12 @@ FramelessWindow.CustomWindow {
     //
     // Window options
     //
+    displayIcon: false
     title: qsTr("Donate")
     width: minimumWidth
     height: minimumHeight
     minimizeEnabled: false
     maximizeEnabled: false
-    displayIcon: false
-    titlebarBorderEnabled: false
     titlebarText: Cpp_ThemeManager.text
     x: (Screen.desktopAvailableWidth - width) / 2
     y: (Screen.desktopAvailableHeight - height) / 2

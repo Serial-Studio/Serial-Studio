@@ -64,20 +64,49 @@ Item {
         id: externalWindow
         minimumWidth: 640
         minimumHeight: 480
-        titlebarBorderEnabled: false
         title: externalLoader.widgetTitle
         titlebarText: Cpp_ThemeManager.text
         titlebarColor: Cpp_ThemeManager.widgetWindowBackground
         backgroundColor: Cpp_ThemeManager.widgetWindowBackground
 
-        WidgetLoader {
-            id: externalLoader
+        Rectangle {
+            clip: true
             anchors.fill: parent
-            isExternalWindow: true
-            widgetIndex: root.widgetIndex
-            widgetVisible: externalWindow.visible
+            radius: externalWindow.radius
             anchors.margins: externalWindow.shadowMargin
-            anchors.topMargin: externalWindow.titlebar.height
+            color: Cpp_ThemeManager.widgetWindowBackground
+            anchors.topMargin: externalWindow.titlebar.height + externalWindow.shadowMargin
+
+            Item {
+                anchors.fill: parent
+
+                DragHandler {
+                    grabPermissions: TapHandler.CanTakeOverFromAnything
+                    onActiveChanged: {
+                        if (active)
+                            externalWindow.startSystemMove()
+                    }
+                }
+            }
+
+            Rectangle {
+                height: externalWindow.radius
+                color: Cpp_ThemeManager.widgetWindowBackground
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                }
+            }
+
+            WidgetLoader {
+                id: externalLoader
+                anchors.fill: parent
+                isExternalWindow: true
+                widgetIndex: root.widgetIndex
+                widgetVisible: externalWindow.visible
+                anchors.margins: externalWindow.radius
+            }
 
             MouseArea {
                 hoverEnabled: true

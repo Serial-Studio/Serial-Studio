@@ -37,7 +37,7 @@ import "../PlatformDependent" as PlatformDependent
 FramelessWindow.CustomWindow {
     id: root
     onClosed: Qt.quit()
-    borderColor: Cpp_ThemeManager.toolbarGradient1
+    borderColor: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
 
     //
     // Global properties

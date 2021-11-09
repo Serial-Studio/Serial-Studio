@@ -32,11 +32,32 @@ Rectangle {
     //
     // Background & border
     //
-    border.width: 1
-    border.color: Cpp_ThemeManager.toolbarGradient1
-    gradient: Gradient {
-        GradientStop { position: 0; color: Cpp_ThemeManager.toolbarGradient1 }
-        GradientStop { position: 1; color: Cpp_ThemeManager.toolbarGradient2 }
+    Rectangle {
+        id: bg
+        anchors.fill: parent
+
+        gradient: Gradient {
+            GradientStop { position: 0; color: Cpp_ThemeManager.toolbarGradient1 }
+            GradientStop { position: 1; color: Cpp_ThemeManager.toolbarGradient2 }
+        }
+
+        Rectangle {
+            border.width: 1
+            anchors.fill: parent
+            color: "transparent"
+            border.color: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
+        }
+
+        Rectangle {
+            height: 1
+            color: Qt.darker(Cpp_ThemeManager.toolbarGradient1, 1.5)
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+        }
     }
 
     //

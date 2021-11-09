@@ -51,10 +51,9 @@ FramelessWindow.CustomWindow {
     //
     // Titlebar options
     //
+    displayIcon: false
     minimizeEnabled: false
     maximizeEnabled: false
-    displayIcon: false
-    titlebarBorderEnabled: false
     titlebarText: Cpp_ThemeManager.text
     titlebarColor: Cpp_ThemeManager.dialogBackground
     backgroundColor: Cpp_ThemeManager.dialogBackground

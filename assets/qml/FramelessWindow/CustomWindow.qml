@@ -90,7 +90,6 @@ Window {
     property alias closeEnabled: border.closeEnabled
     property alias minimizeEnabled: border.minimizeEnabled
     property alias maximizeEnabled: border.maximizeEnabled
-    property alias titlebarBorderEnabled: border.titlebarBorderEnabled
 
     //
     // Shadow implementation
