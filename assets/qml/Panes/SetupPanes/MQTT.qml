@@ -69,8 +69,8 @@ Control {
 
         GridLayout {
             columns: 2
+            rowSpacing: 0
             Layout.fillWidth: true
-            rowSpacing: app.spacing / 2
             columnSpacing: app.spacing
 
             //
@@ -114,9 +114,9 @@ Control {
             // Spacers
             //
             Item {
-                height: app.spacing / 2
+                height: app.spacing
             } Item {
-                height: app.spacing / 2
+                height: app.spacing
             }
 
             //
@@ -182,9 +182,9 @@ Control {
             // Spacers
             //
             Item {
-                height: app.spacing / 2
+                height: app.spacing
             } Item {
-                height: app.spacing / 2
+                height: app.spacing
             }
 
             //
@@ -253,9 +253,9 @@ Control {
             // Spacers
             //
             Item {
-                height: app.spacing / 2
+                height: app.spacing
             } Item {
-                height: app.spacing / 2
+                height: app.spacing
             }
 
             //
@@ -313,9 +313,9 @@ Control {
             // Spacers
             //
             Item {
-                height: app.spacing / 2
+                height: app.spacing
             } Item {
-                height: app.spacing / 2
+                height: app.spacing
             }
 
             //
@@ -356,7 +356,7 @@ Control {
             //
             RowLayout {
                 Layout.fillWidth: true
-                spacing: app.spacing / 2
+                spacing: app.spacing
 
                 TextField {
                     id: _password
