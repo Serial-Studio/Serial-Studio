@@ -450,15 +450,13 @@ FramelessWindow.CustomWindow {
                     icon.height: 24
                     font.bold: true
                     Layout.fillWidth: true
+                    icon.color: Cpp_ThemeManager.highlight
                     checked: Cpp_MQTT_Client.isConnectedToHost
                     onClicked: Cpp_MQTT_Client.toggleConnection()
+                    palette.buttonText: Cpp_ThemeManager.highlight
                     text: (checked ? qsTr("Disconnect") : qsTr("Connect")) + "  "
                     icon.source: checked ? "qrc:/icons/disconnect.svg" :
                                            "qrc:/icons/connect.svg"
-                    icon.color: checked ? Cpp_ThemeManager.connectButtonChecked :
-                                          Cpp_ThemeManager.connectButtonUnchecked
-                    palette.buttonText: checked ? Cpp_ThemeManager.connectButtonChecked :
-                                                  Cpp_ThemeManager.connectButtonUnchecked
                 }
 
                 Button {
