@@ -97,16 +97,13 @@ Item {
         //
         // MQTT settings
         //
-        property alias mqttQos: mqtt.qos
         property alias mqttHost: mqtt.host
         property alias mqttPort: mqtt.port
         property alias mqttUser: mqtt.user
         property alias mqttMode: mqtt.mode
         property alias mqttTopic: mqtt.topic
-        property alias mqttRetain: mqtt.retain
         property alias mqttVersion: mqtt.version
         property alias mqttPassword: mqtt.password
-        property alias mqttKeepAlive: mqtt.keepAlive
 
         //
         // App settings

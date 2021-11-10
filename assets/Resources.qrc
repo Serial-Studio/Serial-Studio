@@ -164,5 +164,6 @@
         <file>window-border/minimize.svg</file>
         <file>window-border/restore.svg</file>
         <file>window-border/unmaximize.svg</file>
+        <file>qml/Windows/MQTTConfiguration.qml</file>
     </qresource>
 </RCC>

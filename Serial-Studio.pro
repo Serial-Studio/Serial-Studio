@@ -306,6 +306,7 @@ DISTFILES += \
     assets/qml/Windows/CsvPlayer.qml \
     assets/qml/Windows/Donate.qml \
     assets/qml/Windows/JsonEditor.qml \
+    assets/qml/Windows/MQTTConfiguration.qml \
     assets/qml/Windows/MainWindow.qml \
     assets/qml/main.qml
 
