@@ -95,7 +95,6 @@ Window {
     //
     // Window controls
     //
-    property alias displayIcon: border.displayIcon
     property alias closeEnabled: border.closeEnabled
     property alias minimizeEnabled: border.minimizeEnabled
     property alias maximizeEnabled: border.maximizeEnabled
@@ -144,7 +143,7 @@ Window {
     //
     // Titlebar control
     //
-    WindowBorder {
+    Titlebar {
         id: border
         window: root
         radius: root.radius

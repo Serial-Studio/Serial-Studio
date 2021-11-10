@@ -33,7 +33,6 @@ FramelessWindow.CustomWindow {
     //
     // Window options
     //
-    displayIcon: false
     width: minimumWidth
     height: minimumHeight
     minimizeEnabled: false

@@ -34,7 +34,6 @@ FramelessWindow.CustomWindow {
     //
     // Window options
     //
-    displayIcon: false
     title: qsTr("Donate")
     width: minimumWidth
     height: minimumHeight

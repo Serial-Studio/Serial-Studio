@@ -275,7 +275,7 @@ DISTFILES += \
     assets/qml/Dashboard/WidgetModel.qml \
     assets/qml/FramelessWindow/CustomWindow.qml \
     assets/qml/FramelessWindow/ResizeHandles.qml \
-    assets/qml/FramelessWindow/WindowBorder.qml \
+    assets/qml/FramelessWindow/Titlebar.qml \
     assets/qml/FramelessWindow/WindowButton.qml \
     assets/qml/FramelessWindow/WindowButtonMacOS.qml \
     assets/qml/JsonEditor/Footer.qml \

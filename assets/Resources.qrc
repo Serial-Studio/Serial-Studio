@@ -100,7 +100,7 @@
         <file>qml/Dashboard/WidgetModel.qml</file>
         <file>qml/FramelessWindow/CustomWindow.qml</file>
         <file>qml/FramelessWindow/ResizeHandles.qml</file>
-        <file>qml/FramelessWindow/WindowBorder.qml</file>
+        <file>qml/FramelessWindow/Titlebar.qml</file>
         <file>qml/FramelessWindow/WindowButton.qml</file>
         <file>qml/FramelessWindow/WindowButtonMacOS.qml</file>
         <file>qml/JsonEditor/Footer.qml</file>

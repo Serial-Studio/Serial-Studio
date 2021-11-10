@@ -39,7 +39,6 @@ FramelessWindow.CustomWindow {
     //
     minimumWidth: 910
     minimumHeight: 720
-    displayIcon: false
     title: qsTr("JSON Editor - %1").arg(Cpp_JSON_Editor.jsonFileName)
 
     //

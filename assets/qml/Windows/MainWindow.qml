@@ -237,19 +237,22 @@ FramelessWindow.CustomWindow {
     }
 
     //
-    // Windows + Linux menubar loader
+    // Menubar, shown by default on Windows & Linux and when the app is fullscreen
     //
     RowLayout {
         spacing: app.spacing
         height: titlebar.height
+        opacity: enabled ? 1 : 0
         enabled: !root.showMacControls || isFullscreen
         visible: !root.showMacControls || isFullscreen
+
+        Behavior on opacity {NumberAnimation{}}
 
         anchors {
             top: parent.top
             left: parent.left
             right: parent.right
-            margins: root.shadowMargin
+            topMargin: root.shadowMargin + 1
             leftMargin: root.leftTitlebarMargin + root.shadowMargin
             rightMargin: root.rightTitlebarMargin + root.shadowMargin
         }
@@ -260,17 +263,7 @@ FramelessWindow.CustomWindow {
             Layout.alignment: Qt.AlignVCenter
         }
 
-        FramelessWindow.WindowButton {
-            width: 18
-            height: 18
-            textColor: root.titlebarText
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: root.toggleFullscreen()
-            highlightColor: Cpp_ThemeManager.highlight
-            name: root.isFullscreen ? "restore" : "fullscreen"
-            visible: root.fullscreenEnabled && !root.showMacControls
-            enabled: root.fullscreenEnabled && !root.showMacControls
-        }
+        // Leaving this layout for future usage...
 
         Item {
             Layout.fillWidth: true

@@ -42,7 +42,6 @@ Rectangle {
     // Window controls
     //
     property Window window
-    property bool displayIcon: true
     property bool closeEnabled: true
     property bool isFullscreen: false
     property bool minimizeEnabled: true
@@ -83,14 +82,14 @@ Rectangle {
         // Calculations for Windows/Linux layout
         else {
             // Default spacer
-            margin = 8
+            margin = 10
 
-            // Add space for window icon
-            if (displayIcon)
-                margin += 24
+            // Add space for fullscreen button
+            if (fullscreenEnabled)
+                margin += 18
 
             // Add extra spacer if icon is visible
-            if (margin > 8)
+            if (margin > 10)
                 margin += 8
         }
 
@@ -272,8 +271,8 @@ Rectangle {
             }
 
             WindowButton {
-                width: 18
-                height: 18
+                width: 16
+                height: 16
                 textColor: root.textColor
                 visible: root.fullscreenEnabled
                 enabled: root.fullscreenEnabled
@@ -284,7 +283,7 @@ Rectangle {
             }
 
             Item {
-                width: 8
+                width: 10
             }
         }
     }
@@ -302,18 +301,20 @@ Rectangle {
             anchors.fill: parent
 
             Item {
-                width: 8
+                width: 12
             }
 
-            Image {
-                width: 24
-                height: 24
-                opacity: 0.9
-                visible: root.displayIcon
-                enabled: root.displayIcon
-                sourceSize: Qt.size(24, 24)
+            WindowButton {
+                width: 16
+                height: 16
+                rotation: 90
+                textColor: root.textColor
+                visible: root.fullscreenEnabled
+                enabled: root.fullscreenEnabled
                 Layout.alignment: Qt.AlignVCenter
-                source: "qrc:/images/icon-window.svg"
+                onClicked: root.toggleFullscreen()
+                highlightColor: Cpp_ThemeManager.highlight
+                name: root.isFullscreen ? "restore" : "fullscreen"
             }
 
             Item {
