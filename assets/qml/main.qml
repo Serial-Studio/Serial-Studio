@@ -59,7 +59,7 @@ Item {
         asynchronous: true
         sourceComponent: Windows.MainWindow {
             Component.onCompleted: {
-                forceActiveFocus()
+                app.forceActiveFocus()
                 app.mainWindow = this
             }
         }

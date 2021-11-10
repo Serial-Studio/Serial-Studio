@@ -43,8 +43,8 @@ Rectangle {
     //
     property Window window
     property bool displayIcon: true
-    property bool fullScreen: false
     property bool closeEnabled: true
+    property bool isFullscreen: false
     property bool minimizeEnabled: true
     property bool maximizeEnabled: true
     property bool fullscreenEnabled: false
@@ -52,20 +52,97 @@ Rectangle {
     property bool showMacControls: Cpp_IsMac
 
     //
-    // Access to titlebar button widths (e.g. for implementing custom controls over the
-    // window titlebar, such as the main window menubar)
+    // Access to left titlebar button widths (e.g. for implementing custom controls over
+    // the window titlebar, such as the main window menubar)
     //
     readonly property real leftMargin: {
-        if (showMacControls)
-            return 4 + (3 * 20) + 4
+        var margin = 0
 
-        return 8 + 24 + 8
+        // Calculations for macOS layout
+        if (showMacControls) {
+            // Default spacer
+            margin = 4
+
+            // Add space for close button
+            if (closeEnabled)
+                margin += 20
+
+            // Add space for minimize button
+            if (minimizeEnabled && !root.isFullscreen)
+                margin += 20
+
+            // Add space for maximize button
+            if (maximizeEnabled && !root.isFullscreen)
+                margin += 20
+
+            // Add extra spacer if at least one button is visible
+            if (margin > 4)
+                margin += 4
+        }
+
+        // Calculations for Windows/Linux layout
+        else {
+            // Default spacer
+            margin = 8
+
+            // Add space for window icon
+            if (displayIcon)
+                margin += 24
+
+            // Add extra spacer if icon is visible
+            if (margin > 8)
+                margin += 8
+        }
+
+        // Return result
+        return margin
     }
-    readonly property real rightMargin: {
-        if (showMacControls)
-            return 18 + 8 + 4
 
-        return 8 + (3 * 24) + 8
+    //
+    // Access to right titlebar button widths (e.g. for implementing custom controls over
+    // the window titlebar, such as the main window menubar)
+    //
+    readonly property real rightMargin: {
+        var margin
+
+        // Calculations for macOS layout
+        if (showMacControls) {
+            // Add default spacer
+            margin = 4
+
+            // Add spacer for full-screen button
+            if (fullscreenEnabled)
+                margin += 18
+
+            // Add extra spacer if FS button is displayed
+            if (margin > 4)
+                margin += 4
+        }
+
+        // Calculations for Windows/Linux layout
+        else {
+            // Default spacer
+            margin = 8
+
+            // Add space for close button
+            if (closeEnabled)
+                margin += 24
+
+            // Add space for minimize button
+            if (minimizeEnabled && !root.isFullscreen)
+                margin += 24
+
+            // Add space for maximize button
+            if (maximizeEnabled && !root.isFullscreen)
+                margin += 24
+
+            // Add extra spacer if at least one button is visible
+            if (margin > 8)
+                margin += 8
+        }
+
+        // Return result
+        return margin
     }
 
     //
@@ -87,8 +164,8 @@ Rectangle {
     // Toggle fullscreen state
     //
     function toggleFullscreen() {
-        root.fullScreen = !root.fullScreen
-        if (window.fullScreen)
+        root.isFullscreen = !root.isFullscreen
+        if (root.isFullscreen)
             window.showFullScreen()
         else
             window.showNormal()
@@ -170,11 +247,13 @@ Rectangle {
             WindowButtonMacOS {
                 name: "minimize"
                 Layout.alignment: Qt.AlignVCenter
-                enabled: root.minimizeEnabled && !root.fullScreen
-                visible: root.minimizeEnabled && !root.fullScreen
+                enabled: root.minimizeEnabled && !root.isFullscreen
+                visible: root.minimizeEnabled && !root.isFullscreen
                 onClicked: {
                     // Workaround for QTBUG-64994
-                    window.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.WindowMinMaxButtonsHint
+                    if (Cpp_IsMac)
+                        window.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.WindowMinMaxButtonsHint
+
                     window.showMinimized()
                     root.minimized()
                 }
@@ -184,8 +263,8 @@ Rectangle {
                 name: "maximize"
                 onClicked: root.toggleMaximized()
                 Layout.alignment: Qt.AlignVCenter
-                enabled: root.maximizeEnabled && !root.fullScreen
-                visible: root.maximizeEnabled && !root.fullScreen
+                enabled: root.maximizeEnabled && !root.isFullscreen
+                visible: root.maximizeEnabled && !root.isFullscreen
             }
 
             Item {
@@ -201,7 +280,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: root.toggleFullscreen()
                 highlightColor: Cpp_ThemeManager.highlight
-                name: root.fullScreen ? "restore" : "fullscreen"
+                name: root.isFullscreen ? "restore" : "fullscreen"
             }
 
             Item {
@@ -246,9 +325,13 @@ Rectangle {
                 textColor: root.textColor
                 Layout.alignment: Qt.AlignVCenter
                 highlightColor: Cpp_ThemeManager.highlight
-                enabled: root.minimizeEnabled && !root.fullScreen
-                visible: root.minimizeEnabled && !root.fullScreen
+                enabled: root.minimizeEnabled && !root.isFullscreen
+                visible: root.minimizeEnabled && !root.isFullscreen
                 onClicked: {
+                    // Workaround for QTBUG-64994
+                    if (Cpp_IsMac)
+                        window.flags = Qt.Window | Qt.CustomizeWindowHint | Qt.WindowMinMaxButtonsHint
+
                     window.showMinimized()
                     root.minimized()
                 }
@@ -259,8 +342,8 @@ Rectangle {
                 onClicked: root.toggleMaximized()
                 Layout.alignment: Qt.AlignVCenter
                 highlightColor: Cpp_ThemeManager.highlight
-                enabled: root.maximizeEnabled && !root.fullScreen
-                visible: root.maximizeEnabled && !root.fullScreen
+                enabled: root.maximizeEnabled && !root.isFullscreen
+                visible: root.maximizeEnabled && !root.isFullscreen
                 name: window.visibility === Window.Maximized ? "unmaximize" : "maximize"
             }
 

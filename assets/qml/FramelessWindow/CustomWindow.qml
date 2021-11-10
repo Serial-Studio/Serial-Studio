@@ -42,16 +42,16 @@ Window {
     //
     property int borderWidth: 2
     readonly property int handleSize: radius > 0 ? radius + 5 + shadowMargin : 0
-    readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || fullScreen) ? 0 : 10
+    readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || isFullscreen) ? 0 : 10
 
     //
     // Visibility properties
     //
     property int extraFlags: 0
     property bool firstChange: true
-    property bool windowMaximized: false
-    property bool windowMinimized: false
-    property alias fullScreen: border.fullScreen
+    property bool isMaximized: false
+    property bool isMinimized: false
+    property alias isFullscreen: border.isFullscreen
     readonly property int customFlags: Qt.CustomizeWindowHint |
                                        Qt.FramelessWindowHint |
                                        Qt.NoDropShadowWindowHint
@@ -60,8 +60,8 @@ Window {
     // Toggle fullscreen state
     //
     function toggleFullscreen() {
-        root.fullScreen = !root.fullScreen
-        if (root.fullScreen)
+        root.isFullscreen = !root.isFullscreen
+        if (root.isFullscreen)
             root.showFullScreen()
         else
             root.showNormal()
@@ -177,39 +177,43 @@ Window {
 
         // Window has been just maximized, update internal variables
         if (visibility === Window.Maximized) {
-            if (!root.windowMaximized)
+            if (!root.isMaximized)
                 root.firstChange = false
 
-            root.fullScreen = false
-            root.windowMaximized = true
+            root.isMaximized = true
+            root.isFullscreen = false
         }
 
         // Window has been just minimized, update internal variables
         else if (visibility === Window.Minimized) {
-            root.fullScreen = false
-            root.windowMaximized = false
+            root.isFullscreen = false
+            root.isMaximized = false
         }
 
         // Window has been just switched to full-screen, update internal variables
         else if (visibility === Window.FullScreen) {
-            if (!root.fullScreen)
+            if (!root.isFullscreen)
                 root.firstChange = false
 
-            root.fullScreen = true
-            root.windowMaximized = false
+            root.isFullscreen = true
+            root.isMaximized = false
         }
 
         // Window was just restored to "normal" mode, recover previous geometry
         else if (visibility !== Window.Hidden) {
-            if (windowMaximized || fullScreen && firstChange) {
+            if (isMaximized || isFullscreen && firstChange) {
                 root.width = root.minimumWidth
                 root.height = root.minimumHeight
                 root.x = (Screen.desktopAvailableWidth - root.width) / 2
                 root.y = (Screen.desktopAvailableHeight - root.height) / 2
             }
 
-            root.fullScreen = false
-            root.windowMaximized = false
+            root.isMaximized = false
+            root.isFullscreen = false
+
+            // Force active focus
+            root.requestActivate()
+            root.requestUpdate()
         }
     }
 }

@@ -106,17 +106,25 @@ FramelessWindow.CustomWindow {
             height = Screen.desktopAvailableHeight - y
         }
 
-        // Show app window
-        if (root.fullScreen)
-            root.showFullScreen()
-        else if (root.windowMaximized)
-            root.showMaximized()
-        else
-            root.showNormal()
-
         // Increment app launch count & hide splash screen
         ++appLaunchCount
         Cpp_ModuleManager.hideSplashscreen()
+
+        // Show app window
+        if (root.isFullscreen)
+            root.showFullScreen()
+        else if (root.isMaximized)
+            root.showMaximized()
+        else {
+            opacity = 0
+            root.showMaximized()
+            root.showNormal()
+            opacity = 1
+        }
+
+        // Force active focus
+        root.requestActivate()
+        root.requestUpdate()
 
         // Show donations dialog every 15 launches
         if (appLaunchCount % 15 == 0 && !donations.doNotShowAgain)
@@ -204,8 +212,8 @@ FramelessWindow.CustomWindow {
         property alias wy: root.y
         property alias ww: root.width
         property alias wh: root.height
-        property alias wf: root.fullScreen
-        property alias wm: root.windowMaximized
+        property alias wm: root.isMaximized
+        property alias wf: root.isFullscreen
         property alias appStatus: root.appLaunchCount
         property alias autoUpdater: root.automaticUpdates
     }
@@ -234,8 +242,8 @@ FramelessWindow.CustomWindow {
     RowLayout {
         spacing: app.spacing
         height: titlebar.height
-        enabled: !root.showMacControls
-        visible: !root.showMacControls
+        enabled: !root.showMacControls || isFullscreen
+        visible: !root.showMacControls || isFullscreen
 
         anchors {
             top: parent.top
@@ -256,12 +264,12 @@ FramelessWindow.CustomWindow {
             width: 18
             height: 18
             textColor: root.titlebarText
-            visible: root.fullscreenEnabled
-            enabled: root.fullscreenEnabled
             Layout.alignment: Qt.AlignVCenter
             onClicked: root.toggleFullscreen()
             highlightColor: Cpp_ThemeManager.highlight
-            name: root.fullScreen ? "restore" : "fullscreen"
+            name: root.isFullscreen ? "restore" : "fullscreen"
+            visible: root.fullscreenEnabled && !root.showMacControls
+            enabled: root.fullscreenEnabled && !root.showMacControls
         }
 
         Item {
