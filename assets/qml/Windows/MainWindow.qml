@@ -252,9 +252,9 @@ FramelessWindow.CustomWindow {
             top: parent.top
             left: parent.left
             right: parent.right
-            topMargin: root.shadowMargin + 1
             leftMargin: root.leftTitlebarMargin + root.shadowMargin
             rightMargin: root.rightTitlebarMargin + root.shadowMargin
+            topMargin: root.shadowMargin + (!root.showMacControls ? 1 : 0)
         }
 
         PlatformDependent.Menubar {
