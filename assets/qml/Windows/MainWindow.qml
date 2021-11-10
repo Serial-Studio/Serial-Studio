@@ -231,29 +231,41 @@ FramelessWindow.CustomWindow {
     //
     // Windows + Linux menubar loader
     //
-    Item {
-        enabled: !Cpp_IsMac
-        visible: !Cpp_IsMac
+    RowLayout {
+        spacing: app.spacing
         height: titlebar.height
+        enabled: !root.showMacControls
+        visible: !root.showMacControls
 
         anchors {
             top: parent.top
             left: parent.left
             right: parent.right
             margins: root.shadowMargin
-            rightMargin: root.shadowMargin + 128
+            leftMargin: root.leftTitlebarMargin + root.shadowMargin
+            rightMargin: root.rightTitlebarMargin + root.shadowMargin
         }
 
         PlatformDependent.Menubar {
             id: menubar
             opacity: 0.8
-            Behavior on opacity {NumberAnimation{}}
-            anchors {
-                left: parent.left
-                right: parent.right
-                leftMargin: 14 + 24
-                verticalCenter: parent.verticalCenter
-            }
+            Layout.alignment: Qt.AlignVCenter
+        }
+
+        FramelessWindow.WindowButton {
+            width: 18
+            height: 18
+            textColor: root.titlebarText
+            visible: root.fullscreenEnabled
+            enabled: root.fullscreenEnabled
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: root.toggleFullscreen()
+            highlightColor: Cpp_ThemeManager.highlight
+            name: root.fullScreen ? "restore" : "fullscreen"
+        }
+
+        Item {
+            Layout.fillWidth: true
         }
     }
 

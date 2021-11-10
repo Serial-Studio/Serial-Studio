@@ -49,7 +49,24 @@ Rectangle {
     property bool maximizeEnabled: true
     property bool fullscreenEnabled: false
     property color textColor: palette.text
-    readonly property bool showMacControls: Cpp_IsMac
+    property bool showMacControls: Cpp_IsMac
+
+    //
+    // Access to titlebar button widths (e.g. for implementing custom controls over the
+    // window titlebar, such as the main window menubar)
+    //
+    readonly property real leftMargin: {
+        if (showMacControls)
+            return 4 + (3 * 20) + 4
+
+        return 8 + 24 + 8
+    }
+    readonly property real rightMargin: {
+        if (showMacControls)
+            return 18 + 8 + 4
+
+        return 8 + (3 * 24) + 8
+    }
 
     //
     // Toggle maximized

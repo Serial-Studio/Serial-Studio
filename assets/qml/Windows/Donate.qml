@@ -40,6 +40,7 @@ FramelessWindow.CustomWindow {
     height: minimumHeight
     minimizeEnabled: false
     maximizeEnabled: false
+    extraFlags: Qt.WindowStaysOnTopHint
     titlebarText: Cpp_ThemeManager.text
     x: (Screen.desktopAvailableWidth - width) / 2
     y: (Screen.desktopAvailableHeight - height) / 2

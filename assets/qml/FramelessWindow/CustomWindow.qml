@@ -27,7 +27,7 @@ import QtGraphicalEffects 1.0
 Window {
     id: root
     color: "transparent"
-    flags: root.customFlags
+    flags: root.customFlags | root.extraFlags
 
     //
     // Custom signals
@@ -41,12 +41,13 @@ Window {
     // Window radius control
     //
     property int borderWidth: 2
-    readonly property int handleSize: radius + 5 + shadowMargin
+    readonly property int handleSize: radius > 0 ? radius + 5 + shadowMargin : 0
     readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || fullScreen) ? 0 : 10
 
     //
     // Visibility properties
     //
+    property int extraFlags: 0
     property bool firstChange: true
     property bool windowMaximized: false
     property bool windowMinimized: false
@@ -75,6 +76,13 @@ Window {
     // Size of the shadow object
     //
     property int shadowMargin: root.radius > 0 ? 20 : 0
+
+    //
+    // Titlebar left/right margins for custom controls
+    //
+    property alias leftTitlebarMargin: border.leftMargin
+    property alias rightTitlebarMargin: border.rightMargin
+    property alias showMacControls: border.showMacControls
 
     //
     // Background color of the window & the titlebar
@@ -160,6 +168,14 @@ Window {
     // Maximize window fixes
     //
     onVisibilityChanged: {
+        // Hard-reset window flags on macOS to fix most glitches
+        if (Cpp_IsMac)
+            root.flags = Qt.Window
+
+        // Ensure that correct window flags are still used
+        root.flags = root.customFlags | root.extraFlags
+
+        // Window has been just maximized, update internal variables
         if (visibility === Window.Maximized) {
             if (!root.windowMaximized)
                 root.firstChange = false
@@ -168,11 +184,13 @@ Window {
             root.windowMaximized = true
         }
 
+        // Window has been just minimized, update internal variables
         else if (visibility === Window.Minimized) {
             root.fullScreen = false
             root.windowMaximized = false
         }
 
+        // Window has been just switched to full-screen, update internal variables
         else if (visibility === Window.FullScreen) {
             if (!root.fullScreen)
                 root.firstChange = false
@@ -181,6 +199,7 @@ Window {
             root.windowMaximized = false
         }
 
+        // Window was just restored to "normal" mode, recover previous geometry
         else if (visibility !== Window.Hidden) {
             if (windowMaximized || fullScreen && firstChange) {
                 root.width = root.minimumWidth
@@ -191,7 +210,6 @@ Window {
 
             root.fullScreen = false
             root.windowMaximized = false
-            root.flags = root.customFlags
         }
     }
 }

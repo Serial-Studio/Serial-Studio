@@ -39,6 +39,7 @@ FramelessWindow.CustomWindow {
     minimizeEnabled: false
     maximizeEnabled: false
     title: qsTr("Acknowledgements")
+    extraFlags: Qt.WindowStaysOnTopHint
     titlebarText: Cpp_ThemeManager.text
     x: (Screen.desktopAvailableWidth - width) / 2
     y: (Screen.desktopAvailableHeight - height) / 2

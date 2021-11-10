@@ -65,6 +65,7 @@ Item {
         minimumWidth: 640
         minimumHeight: 480
         title: externalLoader.widgetTitle
+        extraFlags: Qt.WindowStaysOnTopHint
         titlebarText: Cpp_ThemeManager.text
         titlebarColor: Cpp_ThemeManager.widgetWindowBackground
         backgroundColor: Cpp_ThemeManager.widgetWindowBackground
