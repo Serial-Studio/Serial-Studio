@@ -64,10 +64,22 @@ class Client : public QObject
                READ port
                WRITE setPort
                NOTIFY portChanged)
+    Q_PROPERTY(quint8 qos
+               READ qos
+               WRITE setQos
+               NOTIFY qosChanged)
     Q_PROPERTY(QString host
                READ host
                WRITE setHost
                NOTIFY hostChanged)
+    Q_PROPERTY(bool retain
+               READ retain
+               WRITE setRetain
+               NOTIFY retainChanged)
+    Q_PROPERTY(quint16 keepAlive
+               READ keepAlive
+               WRITE setKeepAlive
+               NOTIFY keepAliveChanged)
     Q_PROPERTY(QString topic
                READ topic
                WRITE setTopic
@@ -100,6 +112,9 @@ class Client : public QObject
     Q_PROPERTY(StringList clientModes
                READ clientModes
                CONSTANT)
+    Q_PROPERTY(StringList qosLevels
+               READ qosLevels
+               CONSTANT)
     Q_PROPERTY(quint16 defaultPort
                READ defaultPort
                CONSTANT)
@@ -109,11 +124,14 @@ class Client : public QObject
     // clang-format on
 
 signals:
+    void qosChanged();
     void portChanged();
     void hostChanged();
     void topicChanged();
+    void retainChanged();
     void usernameChanged();
     void passwordChanged();
+    void keepAliveChanged();
     void connectedChanged();
     void clientModeChanged();
     void mqttVersionChanged();
@@ -122,6 +140,8 @@ signals:
 public:
     static Client *getInstance();
 
+    quint8 qos() const;
+    bool retain() const;
     quint16 port() const;
     QString host() const;
     QString topic() const;
@@ -129,9 +149,12 @@ public:
     int mqttVersion() const;
     QString username() const;
     QString password() const;
+    quint16 keepAlive() const;
     bool lookupActive() const;
     bool isSubscribed() const;
     bool isConnectedToHost() const;
+
+    StringList qosLevels() const;
     StringList clientModes() const;
     StringList mqttVersions() const;
 
@@ -142,6 +165,8 @@ public slots:
     void connectToHost();
     void toggleConnection();
     void disconnectFromHost();
+    void setQos(const quint8 qos);
+    void setRetain(const bool retain);
     void lookup(const QString &host);
     void setPort(const quint16 port);
     void setHost(const QString &host);
@@ -149,6 +174,7 @@ public slots:
     void setTopic(const QString &topic);
     void setUsername(const QString &username);
     void setPassword(const QString &password);
+    void setKeepAlive(const quint16 keepAlive);
     void setMqttVersion(const int versionIndex);
 
 private:

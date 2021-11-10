@@ -79,6 +79,22 @@ Client *Client::getInstance()
 }
 
 /**
+ * Returns the quality-of-service option, available values:
+ * - 0: at most once
+ * - 1: at least once
+ * - 2: exactly once
+ */
+quint8 Client::qos() const
+{
+    return m_client.willQos();
+}
+
+bool Client::retain() const
+{
+    return m_client.willRetain();
+}
+
+/**
  * Returns the TCP port number used for the MQTT connection
  */
 quint16 Client::port() const
@@ -149,6 +165,14 @@ QString Client::host() const
 }
 
 /**
+ * Returns the keep-alive timeout interval used by the MQTT client.
+ */
+quint16 Client::keepAlive() const
+{
+    return m_client.keepAlive();
+}
+
+/**
  * Returns @c true if the MQTT module is currently performing a DNS lookup of the MQTT
  * broker/server domain.
  */
@@ -172,6 +196,20 @@ bool Client::isSubscribed() const
 bool Client::isConnectedToHost() const
 {
     return m_client.isConnectedToHost();
+}
+
+/**
+ * Returns a list with the available quality-of-service modes.
+ */
+StringList Client::qosLevels() const
+{
+    // clang-format off
+    return StringList {
+        tr("0: At most once"),
+        tr("1: At least once"),
+        tr("2: Exactly once")
+    };
+    // clang-format on
 }
 
 /**
@@ -216,6 +254,28 @@ void Client::toggleConnection()
 void Client::disconnectFromHost()
 {
     m_client.disconnectFromHost();
+}
+
+/**
+ * Changes the quality of service level of the MQTT client.
+ */
+void Client::setQos(const quint8 qos)
+{
+    if (qos >= 0 && qos <= 2)
+    {
+        m_client.setWillQos(qos);
+        emit qosChanged();
+    }
+}
+
+/**
+ * If set to @c true, the @c retain flag shall be appended to the MQTT message so that
+ * new clients connecting to the broker will immediately receive the last "good" message.
+ */
+void Client::setRetain(const bool retain)
+{
+    m_client.setWillRetain(retain);
+    emit retainChanged();
 }
 
 /**
@@ -282,6 +342,17 @@ void Client::setPassword(const QString &password)
 {
     m_client.setPassword(password.toUtf8());
     emit passwordChanged();
+}
+
+/**
+ * Sets the maximum time interval that is permitted to elapse between the point at which
+ * the Client finishes transmitting one Control Packet and the point it starts sending the
+ * next packet.
+ */
+void Client::setKeepAlive(const quint16 keepAlive)
+{
+    m_client.setKeepAlive(keepAlive);
+    emit keepAliveChanged();
 }
 
 /**

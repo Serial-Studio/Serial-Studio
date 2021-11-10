@@ -38,6 +38,9 @@ Control {
     property alias password: _password.text
     property alias version: _version.currentIndex
     property alias mode: _mode.currentIndex
+    property alias retain: _retain.checked
+    property alias qos: _qos.currentIndex
+    property alias keepAlive: _keepAlive.text
     
     //
     // React to events from MQTT module
@@ -52,7 +55,7 @@ Control {
         
         function onPortChanged() {
             if (_port.text.length > 0)
-        		_port.text = Cpp_MQTT_Client.port
+                _port.text = Cpp_MQTT_Client.port
         }
     }
 
@@ -67,15 +70,22 @@ Control {
         GridLayout {
             columns: 2
             Layout.fillWidth: true
-            rowSpacing: app.spacing
+            rowSpacing: app.spacing / 2
             columnSpacing: app.spacing
+
+            //
+            // Version & mode titles
+            //
+            Label {
+                text: qsTr("Version") + ":"
+            } Label {
+                text: qsTr("Mode") + ":"
+            }
 
             //
             // MQTT version
             //
-            Label {
-                text: qsTr("Version") + ":"
-            } ComboBox {
+            ComboBox {
                 id: _version
                 Layout.fillWidth: true
                 model: Cpp_MQTT_Client.mqttVersions
@@ -89,9 +99,7 @@ Control {
             //
             // Client mode version
             //
-            Label {
-                text: qsTr("Mode") + ":"
-            } ComboBox {
+            ComboBox {
                 id: _mode
                 Layout.fillWidth: true
                 model: Cpp_MQTT_Client.clientModes
@@ -103,14 +111,101 @@ Control {
             }
 
             //
-            // Host
+            // Spacers
+            //
+            Item {
+                height: app.spacing / 2
+            } Item {
+                height: app.spacing / 2
+            }
+
+            //
+            // QOS Level & Keep Alive
             //
             Label {
+                text: qsTr("QOS level") + ":"
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
+            } Label {
+                text: qsTr("Keep alive (s)") + ":"
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
+                Behavior on opacity {NumberAnimation{}}
+            }
+
+            //
+            // QOS
+            //
+            ComboBox {
+                id: _qos
+                Layout.fillWidth: true
+                model: Cpp_MQTT_Client.qosLevels
+                currentIndex: Cpp_MQTT_Client.qos
+                onCurrentIndexChanged: {
+                    if (Cpp_MQTT_Client.qos !== currentIndex)
+                        Cpp_MQTT_Client.qos = currentIndex
+                }
+
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
+                Behavior on opacity {NumberAnimation{}}
+            }
+
+            //
+            // Keep alive
+            //
+            TextField {
+                id: _keepAlive
+                Layout.fillWidth: true
+                placeholderText: Cpp_MQTT_Client.keepAlive
+                Component.onCompleted: text = Cpp_MQTT_Client.keepAlive
+                onTextChanged: {
+                    if (Cpp_MQTT_Client.keepAlive !== text && text.length > 0)
+                        Cpp_MQTT_Client.keepAlive = text
+
+                    if (text.length === 0)
+                        Cpp_MQTT_Client.keepAlive = 1
+                }
+
+                validator: IntValidator {
+                    bottom: 1
+                    top: 65535
+                }
+
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
+                Behavior on opacity {NumberAnimation{}}
+            }
+
+            //
+            // Spacers
+            //
+            Item {
+                height: app.spacing / 2
+            } Item {
+                height: app.spacing / 2
+            }
+
+            //
+            // Host & port titles
+            //
+            Label {
                 text: qsTr("Host") + ":"
-            } TextField {
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
+                Behavior on opacity {NumberAnimation{}}
+            } Label {
+                text: qsTr("Port") + ":"
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
+                Behavior on opacity {NumberAnimation{}}
+            }
+
+            //
+            // Host
+            //
+            TextField {
                 id: _host
                 Layout.fillWidth: true
                 placeholderText: Cpp_MQTT_Client.defaultHost
@@ -131,12 +226,7 @@ Control {
             //
             // Port
             //
-            Label {
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Client.isConnectedToHost
-                Behavior on opacity {NumberAnimation{}}
-                text: qsTr("Port") + ":"
-            } TextField {
+            TextField {
                 id: _port
                 Layout.fillWidth: true
                 placeholderText: Cpp_MQTT_Client.defaultPort
@@ -160,14 +250,33 @@ Control {
             }
 
             //
-            // Topic
+            // Spacers
+            //
+            Item {
+                height: app.spacing / 2
+            } Item {
+                height: app.spacing / 2
+            }
+
+            //
+            // Topic & retain labels
             //
             Label {
+                text: qsTr("Topic") + ":"
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
-                text: qsTr("Topic") + ":"
-            } TextField {
+            } Label {
+                text: qsTr("Retain") + ":"
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
+                Behavior on opacity {NumberAnimation{}}
+            }
+
+            //
+            // Topic
+            //
+            TextField {
                 id: _topic
                 Layout.fillWidth: true
                 text: Cpp_MQTT_Client.topic
@@ -183,14 +292,51 @@ Control {
             }
 
             //
-            // Username
+            // Retain checkbox
             //
-            Label {
+            CheckBox {
+                id: _retain
+                Layout.fillWidth: true
+                text: qsTr("Add retain flag")
+                Layout.leftMargin: -app.spacing
+                checked: Cpp_MQTT_Client.retain
+                onCheckedChanged: {
+                    if (Cpp_MQTT_Client.retain != checked)
+                        Cpp_MQTT_Client.retain = checked
+                }
+
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_MQTT_Client.isConnectedToHost
                 Behavior on opacity {NumberAnimation{}}
+            }
+
+            // Spacers
+            //
+            Item {
+                height: app.spacing / 2
+            } Item {
+                height: app.spacing / 2
+            }
+
+            //
+            // Username & password titles
+            //
+            Label {
                 text: qsTr("User") + ":"
-            } TextField {
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
+                Behavior on opacity {NumberAnimation{}}
+            } Label {
+                text: qsTr("Password") + ":"
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_MQTT_Client.isConnectedToHost
+                Behavior on opacity {NumberAnimation{}}
+            }
+
+            //
+            // Username
+            //
+            TextField {
                 id: _user
                 Layout.fillWidth: true
                 text: Cpp_MQTT_Client.username
@@ -208,12 +354,7 @@ Control {
             //
             // Password
             //
-            Label {
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_MQTT_Client.isConnectedToHost
-                Behavior on opacity {NumberAnimation{}}
-                text: qsTr("Password") + ":"
-            } RowLayout {
+            RowLayout {
                 Layout.fillWidth: true
                 spacing: app.spacing / 2
 
@@ -250,7 +391,7 @@ Control {
         //
         Item {
             Layout.fillHeight: true
-            Layout.minimumHeight: app.spacing
+            Layout.minimumHeight: app.spacing * 2
         }
 
         //

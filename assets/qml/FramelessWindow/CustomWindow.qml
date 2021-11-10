@@ -41,7 +41,7 @@ Window {
     // Window radius control
     //
     property int borderWidth: 2
-    readonly property int handleSize: radius > 0 ? radius + 5 + shadowMargin : 0
+    readonly property int handleSize: radius > 0 ? radius + 10 + shadowMargin : 0
     readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || isFullscreen) ? 0 : 10
 
     //

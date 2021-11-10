@@ -83,27 +83,27 @@ FramelessWindow.CustomWindow {
     //
     function showMainWindow() {
         // Reset window size for whatever reason
-        if (width <= 0 || height <= 0) {
-            width = minimumWidth
-            height = minimumHeight
+        if (root.width <= 0 || root.height <= 0) {
+            root.width = root.minimumWidth
+            root.height = root.minimumHeight
         }
 
         // Startup verifications to ensure that app is displayed inside the screen
-        if (x < 0 || x >= Screen.desktopAvailableWidth)
-            x = 100
-        if (y < 0 || y >= Screen.desktopAvailableHeight)
-            y = 100
+        if (root.x < 0 || root.x >= Screen.desktopAvailableWidth)
+            root.x = 100
+        if (root.y < 0 || root.y >= Screen.desktopAvailableHeight)
+            root.y = 100
 
         // Startup verifications to ensure that app fits in current screen
-        if (width > Screen.desktopAvailableWidth) {
-            x = 100
-            width = Screen.desktopAvailableWidth - x
+        if (root.width > Screen.desktopAvailableWidth) {
+            root.x = 100
+            root.width = Screen.desktopAvailableWidth - root.x
         }
 
         // Startup verifications to ensure that app fits in current screen
-        if (height > Screen.desktopAvailableHeight) {
-            y = 100
-            height = Screen.desktopAvailableHeight - y
+        if (root.height > Screen.desktopAvailableHeight) {
+            root.y = 100
+            root.height = Screen.desktopAvailableHeight - root.y
         }
 
         // Increment app launch count & hide splash screen
@@ -116,10 +116,16 @@ FramelessWindow.CustomWindow {
         else if (root.isMaximized)
             root.showMaximized()
         else {
-            opacity = 0
+            // Fix maximize not working on first try on macOS
+            root.opacity = 0
+            var x = root.x
+            var y = root.y
+            var w = root.width
+            var h = root.height
             root.showMaximized()
             root.showNormal()
-            opacity = 1
+            root.setGeometry(x, y, w,h)
+            root.opacity = 1
         }
 
         // Force active focus
@@ -127,11 +133,11 @@ FramelessWindow.CustomWindow {
         root.requestUpdate()
 
         // Show donations dialog every 15 launches
-        if (appLaunchCount % 15 == 0 && !donations.doNotShowAgain)
+        if (root.appLaunchCount % 15 == 0 && !donations.doNotShowAgain)
             app.donations.showAutomatically()
 
         // Ask user if he/she wants to enable automatic updates
-        if (appLaunchCount == 2 && Cpp_UpdaterEnabled) {
+        if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
             if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
                 root.automaticUpdates = true
                 Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
@@ -142,7 +148,7 @@ FramelessWindow.CustomWindow {
         }
 
         // Check for updates (if we are allowed)
-        if (automaticUpdates && Cpp_UpdaterEnabled)
+        if (root.automaticUpdates && Cpp_UpdaterEnabled)
             Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
     }
 
