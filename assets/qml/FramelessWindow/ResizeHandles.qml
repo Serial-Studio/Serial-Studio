@@ -44,21 +44,72 @@ Item {
     //
     MouseArea {
         z: 1000
-        id: globalMouseArea
+        hoverEnabled: true
         anchors.fill: parent
         acceptedButtons: Qt.NoButton
-        anchors.margins: root.handleSize
+        cursorShape: {
+            const p = Qt.point(mouseX, mouseY)
+            const b = handleSize / 2
+
+            if (p.x < b && p.y < b)
+                return Qt.SizeFDiagCursor
+
+            if (p.x >= width - b && p.y >= height - b)
+                return Qt.SizeFDiagCursor
+
+            if (p.x >= width - b && p.y < b)
+                return Qt.SizeBDiagCursor
+
+            if (p.x < b && p.y >= height - b)
+                return Qt.SizeBDiagCursor
+
+            if (p.x < b || p.x >= width - b)
+                return Qt.SizeHorCursor
+
+            if (p.y < b || p.y >= height - b)
+                return Qt.SizeVerCursor
+        }
     }
 
     //
-    // Right resize handle
+    // Handle for resizing the window
+    // Note: this does not work on macOS, see the following article for more information
+    //       https://www.qt.io/blog/custom-window-decorations
+    //
+    DragHandler {
+        id: resizeHandler
+        target: null
+        enabled: !Cpp_IsMac
+        grabPermissions: TapHandler.TakeOverForbidden
+        onActiveChanged: {
+            if (active) {
+                const p = resizeHandler.centroid.position
+                const b = root.handleSize
+                let e = 0;
+
+                if (p.x < b)
+                    e |= Qt.LeftEdge
+
+                if (p.x >= width - b)
+                    e |= Qt.RightEdge
+
+                if (p.y < b)
+                    e |= Qt.TopEdge
+
+                if (p.y >= height - b)
+                    e |= Qt.BottomEdge
+
+                window.startSystemResize(e)
+            }
+        }
+    }
+
+    //
+    // Right resize handle for macOS
     //
     MouseArea {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
-
-        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
-                                                                    Qt.ArrowCursor
 
         anchors {
             top: parent.top
@@ -67,9 +118,8 @@ Item {
             topMargin: titlebar.height
         }
 
-        hoverEnabled: true
         width: handleSize
-        cursorShape: Qt.SizeHorCursor
+        enabled: Cpp_IsMac
         onPressedChanged: dragging = pressed
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
 
@@ -94,9 +144,6 @@ Item {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
 
-        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
-                                                                    Qt.ArrowCursor
-
         anchors {
             top: parent.top
             left: parent.left
@@ -104,9 +151,8 @@ Item {
             topMargin: titlebar.height
         }
 
-        hoverEnabled: true
         width: handleSize
-        cursorShape: Qt.SizeHorCursor
+        enabled: Cpp_IsMac
         onPressedChanged: dragging = pressed
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
 
@@ -143,28 +189,24 @@ Item {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
 
-        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
-                                                                    Qt.ArrowCursor
-
         anchors {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
         }
 
-        hoverEnabled: true
         height: handleSize
-        cursorShape: Qt.SizeVerCursor
+        enabled: Cpp_IsMac
         onPressedChanged: dragging = pressed
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
         onMouseYChanged: {
             if (dragging) {
                 var dy = mouseY - lastMousePos.y
                 var height = window.height + dy
-                if (height < minimumHeight)
-                    height = minimumHeight
-                else if (height > maximumHeight)
-                    height = maximumHeight
+                if (height < window.minimumHeight)
+                    height = window.minimumHeight
+                else if (height > window.maximumHeight)
+                    height = window.maximumHeight
 
                 window.setGeometry(window.x, window.y, window.width, height)
             }
@@ -178,9 +220,6 @@ Item {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
 
-        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
-                                                                    Qt.ArrowCursor
-
         function updateWindowPosition() {
             if (dragging) {
                 var dy = mouseY - lastMousePos.y
@@ -193,10 +232,10 @@ Item {
                 else if (width > window.maximumWidth)
                     width = window.maximumWidth
 
-                if (height < minimumHeight)
-                    height = minimumHeight
-                else if (height > maximumHeight)
-                    height = maximumHeight
+                if (height < window.minimumHeight)
+                    height = window.minimumHeight
+                else if (height > window.maximumHeight)
+                    height = window.maximumHeight
 
                 window.setGeometry(window.x, window.y, width, height)
             }
@@ -207,10 +246,9 @@ Item {
             bottom: parent.bottom
         }
 
-        hoverEnabled: true
         width: handleSize
         height: handleSize
-        cursorShape: Qt.SizeFDiagCursor
+        enabled: Cpp_IsMac
         onPressedChanged: dragging = pressed
         onMouseXChanged: updateWindowPosition()
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
@@ -222,9 +260,6 @@ Item {
     MouseArea {
         property bool dragging: false
         property point lastMousePos: Qt.point(0, 0)
-
-        onDraggingChanged: globalMouseArea.cursorShape = dragging ? cursorShape :
-                                                                    Qt.ArrowCursor
 
         function updateWindowPosition() {
             if (dragging) {
@@ -263,10 +298,9 @@ Item {
             bottom: parent.bottom
         }
 
-        hoverEnabled: true
-        width: root.handleSize
-        height: root.handleSize
-        cursorShape: Qt.SizeBDiagCursor
+        width: handleSize
+        height: handleSize
+        enabled: Cpp_IsMac
         onPressedChanged: dragging = pressed
         onMouseXChanged: updateWindowPosition()
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
