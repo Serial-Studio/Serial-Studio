@@ -25,6 +25,8 @@ import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import Qt.labs.settings 1.0
+
 import "../FramelessWindow" as FramelessWindow
 
 FramelessWindow.CustomWindow {
@@ -57,6 +59,22 @@ FramelessWindow.CustomWindow {
     titlebarText: Cpp_ThemeManager.text
     titlebarColor: Cpp_ThemeManager.dialogBackground
     backgroundColor: Cpp_ThemeManager.dialogBackground
+
+    //
+    // Save settings
+    //
+    Settings {
+        property alias version: _version.currentIndex
+        property alias mode: _mode.currentIndex
+        property alias host: _host.text
+        property alias port: _port.text
+        property alias qos: _qos.currentIndex
+        property alias keepAlive: _keepAlive.text
+        property alias topic: _topic.text
+        property alias retain: _retain.checked
+        property alias user: _user.text
+        property alias password: _password.text
+    }
 
     //
     // Use page item to set application palette
@@ -453,7 +471,7 @@ FramelessWindow.CustomWindow {
                     icon.color: Cpp_ThemeManager.highlight
                     checked: Cpp_MQTT_Client.isConnectedToHost
                     onClicked: Cpp_MQTT_Client.toggleConnection()
-                    palette.buttonText: Cpp_ThemeManager.highlight
+                    palette.buttonText: Cpp_ThemeManager.ledEnabled
                     text: (checked ? qsTr("Disconnect") : qsTr("Connect")) + "  "
                     icon.source: checked ? "qrc:/icons/disconnect.svg" :
                                            "qrc:/icons/connect.svg"
