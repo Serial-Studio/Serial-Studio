@@ -116,22 +116,16 @@ FramelessWindow.CustomWindow {
         else if (root.isMaximized)
             root.showMaximized()
         else {
-            // Fix maximize not working on first try on macOS
-            if (Cpp_IsMac) {
-                root.opacity = 0
-                var x = root.x
-                var y = root.y
-                var w = root.width
-                var h = root.height
-                root.showMaximized()
-                root.showNormal()
-                root.setGeometry(x, y, w,h)
-                root.opacity = 1
-            }
-
-            // Normal display on other operating systems
-            else
-                root.showNormal()
+            // Fix maximize not working on first try on macOS & Windows
+            root.opacity = 0
+            var x = root.x
+            var y = root.y
+            var w = root.width
+            var h = root.height
+            root.showMaximized()
+            root.showNormal()
+            root.setGeometry(x, y, w,h)
+            root.opacity = 1
         }
 
         // Force active focus
