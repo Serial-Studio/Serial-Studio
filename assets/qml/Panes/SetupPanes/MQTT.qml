@@ -284,9 +284,9 @@ Control {
                 icon.height: 24
                 font.bold: true
                 Layout.fillWidth: true
-                icon.color: Cpp_ThemeManager.highlight
+                icon.color: Cpp_ThemeManager.mqttButton
                 checked: Cpp_MQTT_Client.isConnectedToHost
-                palette.buttonText: Cpp_ThemeManager.highlight
+                palette.buttonText: Cpp_ThemeManager.mqttButton
                 onClicked: Cpp_MQTT_Client.toggleConnection()
                 text: (checked ? qsTr("Disconnect") :
                                  qsTr("Connect to broker")) + "  "

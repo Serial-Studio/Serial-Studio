@@ -172,6 +172,7 @@ void ThemeManager::loadTheme(const int id)
     m_widgetControlBackground = QColor(colors.value("widgetControlBackground").toString());
     m_connectButtonChecked = QColor(colors.value("connectButtonChecked").toString());
     m_connectButtonUnchecked = QColor(colors.value("connectButtonUnchecked").toString());
+    m_mqttButton = QColor(colors.value("mqttButton").toString());
     // clang-format on
 
     // Read bar widget colors

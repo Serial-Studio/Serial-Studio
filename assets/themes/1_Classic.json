@@ -40,6 +40,7 @@
       "widgetControlBackground":"#bebebe",
       "connectButtonChecked":"#d72d60",
       "connectButtonUnchecked":"#2eed5c",
+      "mqttButton":"#2eed5c",
       "widgetTextPrimary":"#e6e0b2",
       "widgetTextSecondary":"#517497",
       "widgetWindowBackground":"#121920",
