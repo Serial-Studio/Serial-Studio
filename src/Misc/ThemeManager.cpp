@@ -472,6 +472,11 @@ QColor ThemeManager::connectButtonUnchecked() const
     return m_connectButtonUnchecked;
 }
 
+QColor ThemeManager::mqttButton() const
+{
+    return m_mqttButton;
+}
+
 StringList ThemeManager::widgetColors() const
 {
     return m_widgetColors;
