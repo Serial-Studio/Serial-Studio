@@ -96,14 +96,10 @@ CONFIG += c++11
 CONFIG += silent
 
 #-----------------------------------------------------------------------------------------
-# Enable/Disable single unit build depending on build configuration
+# Unity build
 #-----------------------------------------------------------------------------------------
 
-CONFIG(debug, debug|release) {
-    CONFIG  -= ltcg                             # Disable linker optimization
-    DEFINES += UNITY_BUILD=0                    # Disable unity build
-    DEFINES += UNITY_BUILD_INCLUDE_QML=0        # Do not optimize QtQuick compiler cache
-} else {
+CONFIG(unity_build) {
     CONFIG  += ltcg                             # Enable linker optimization
     DEFINES += UNITY_BUILD=1                    # Enable unity build
     DEFINES += UNITY_BUILD_INCLUDE_QML=0        # Do not optimize QtQuick compiler cache

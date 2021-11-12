@@ -116,6 +116,9 @@ class Client : public QObject
     Q_PROPERTY(StringList qosLevels
                READ qosLevels
                CONSTANT)
+    Q_PROPERTY(StringList sslProtocols
+               READ sslProtocols
+               CONSTANT)
     Q_PROPERTY(quint16 defaultPort
                READ defaultPort
                CONSTANT)
@@ -158,6 +161,7 @@ public:
     StringList qosLevels() const;
     StringList clientModes() const;
     StringList mqttVersions() const;
+    StringList sslProtocols() const;
 
     quint16 defaultPort() const { return 1883; }
     QString defaultHost() const { return "127.0.0.1"; }
@@ -198,5 +202,6 @@ private:
     quint16 m_sentMessages;
     QVector<QByteArray> m_frames;
     MQTTClientMode m_clientMode;
+    QSslConfiguration m_sslConfiguration;
 };
 }

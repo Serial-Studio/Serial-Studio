@@ -229,6 +229,22 @@ StringList Client::mqttVersions() const
 }
 
 /**
+ * Returns a list with the supported SSL/TLS protocols
+ */
+StringList Client::sslProtocols() const
+{
+    return StringList {
+        tr("System default"),
+        "TLS v1.0",
+        "TLS v1.1",
+        "TLS v1.2",
+        "DTLS v1.0",
+        "DTLS v1.2",
+        "DTLS v1.3"
+    };
+}
+
+/**
  * Tries to establish a TCP connection with the MQTT broker/server.
  */
 void Client::connectToHost()

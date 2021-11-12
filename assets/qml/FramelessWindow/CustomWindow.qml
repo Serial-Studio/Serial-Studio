@@ -51,7 +51,7 @@ Window {
     property bool firstChange: true
     property bool isMaximized: false
     property bool isMinimized: false
-    property alias isFullscreen: border.isFullscreen
+    property alias isFullscreen: _title.isFullscreen
     readonly property int customFlags: Qt.Window |
                                        Qt.CustomizeWindowHint |
                                        Qt.FramelessWindowHint |
@@ -73,7 +73,7 @@ Window {
     //
     // Alias to the titlebar
     //
-    property alias titlebar: border
+    property alias titlebar: _title
 
     //
     // Size of the shadow object
@@ -83,9 +83,9 @@ Window {
     //
     // Titlebar left/right margins for custom controls
     //
-    property alias leftTitlebarMargin: border.leftMargin
-    property alias rightTitlebarMargin: border.rightMargin
-    property alias showMacControls: border.showMacControls
+    property alias leftTitlebarMargin: _title.leftMargin
+    property alias rightTitlebarMargin: _title.rightMargin
+    property alias showMacControls: _title.showMacControls
 
     //
     // Background color of the window & the titlebar
@@ -98,10 +98,10 @@ Window {
     //
     // Window controls
     //
-    property alias closeEnabled: border.closeEnabled
-    property alias minimizeEnabled: border.minimizeEnabled
-    property alias maximizeEnabled: border.maximizeEnabled
-    property alias fullscreenEnabled: border.fullscreenEnabled
+    property alias closeEnabled: _title.closeEnabled
+    property alias minimizeEnabled: _title.minimizeEnabled
+    property alias maximizeEnabled: _title.maximizeEnabled
+    property alias fullscreenEnabled: _title.fullscreenEnabled
 
     //
     // Shadow implementation
@@ -147,7 +147,7 @@ Window {
     // Titlebar control
     //
     Titlebar {
-        id: border
+        id: _title
         window: root
         radius: root.radius
         color: root.titlebarColor

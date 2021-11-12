@@ -46,10 +46,10 @@ FramelessWindow.CustomWindow {
     extraFlags: Qt.WindowStaysOnTopHint
     x: (Screen.desktopAvailableWidth - width) / 2
     y: (Screen.desktopAvailableHeight - height) / 2
+    minimumHeight: 440 + titlebar.height + 2 * root.shadowMargin
+    maximumHeight: 440 + titlebar.height + 2 * root.shadowMargin
     minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
     maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
-    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
 
     //
     // Titlebar options
@@ -74,6 +74,9 @@ FramelessWindow.CustomWindow {
         property alias retain: _retain.checked
         property alias user: _user.text
         property alias password: _password.text
+        property alias ssl: _ssl.checked
+        property alias certificate: _certificateMode.currentIndex
+        property alias protocol: _protocols.currentIndex
     }
 
     //
@@ -374,6 +377,7 @@ FramelessWindow.CustomWindow {
                     Behavior on opacity {NumberAnimation{}}
                 }
 
+                //
                 // Spacers
                 //
                 Item {
@@ -472,7 +476,7 @@ FramelessWindow.CustomWindow {
                     visible: _ssl.checked
                     text: qsTr("Certificate:")
                     opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost && visible
+                    enabled: !Cpp_MQTT_Client.isConnectedToHosT
                     Behavior on opacity {NumberAnimation{}}
                 }
 
@@ -481,8 +485,8 @@ FramelessWindow.CustomWindow {
                 //
                 Switch {
                     id: _ssl
-                    Layout.leftMargin: -app.spacing
                     opacity: enabled ? 1 : 0.5
+                    Layout.leftMargin: -app.spacing
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
                     Behavior on opacity {NumberAnimation{}}
                 }
@@ -519,6 +523,47 @@ FramelessWindow.CustomWindow {
                         enabled: _certificateMode.currentIndex == 1
                         Behavior on opacity {NumberAnimation{}}
                     }
+                }
+
+                //
+                // Spacers
+                //
+                Item {
+                    height: app.spacing
+                    visible: _ssl.checked
+                } Item {
+                    height: app.spacing
+                    visible: _ssl.checked
+                }
+
+                //
+                // SSL/TLS protocol selection title
+                //
+                Item {
+                    visible: _ssl.checked
+                    Layout.fillWidth: true
+                } Label {
+                    visible: _ssl.checked
+                    text: qsTr("Protocol:")
+                    opacity: enabled ? 1 : 0.5
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+                    Behavior on opacity {NumberAnimation{}}
+                }
+
+                //
+                // SSL/TLS protocol selection
+                //
+                Item {
+                    visible: _ssl.checked
+                    Layout.fillWidth: true
+                } ComboBox {
+                    id: _protocols
+                    visible: _ssl.checked
+                    Layout.fillWidth: true
+                    opacity: enabled ? 1 : 0.5
+                    model: Cpp_MQTT_Client.sslProtocols
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+                    Behavior on opacity {NumberAnimation{}}
                 }
             }
 
