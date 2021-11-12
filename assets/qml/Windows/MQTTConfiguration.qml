@@ -46,10 +46,10 @@ FramelessWindow.CustomWindow {
     extraFlags: Qt.WindowStaysOnTopHint
     x: (Screen.desktopAvailableWidth - width) / 2
     y: (Screen.desktopAvailableHeight - height) / 2
-    minimumHeight: 440 + titlebar.height + 2 * root.shadowMargin
-    maximumHeight: 440 + titlebar.height + 2 * root.shadowMargin
     minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
     maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
 
     //
     // Titlebar options
@@ -469,14 +469,10 @@ FramelessWindow.CustomWindow {
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
                     Behavior on opacity {NumberAnimation{}}
-                } Item {
-                    visible: !(_ssl.checked)
-                    Layout.fillWidth: true
                 } Label {
-                    visible: _ssl.checked
                     text: qsTr("Certificate:")
                     opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHosT
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
                     Behavior on opacity {NumberAnimation{}}
                 }
 
@@ -496,8 +492,6 @@ FramelessWindow.CustomWindow {
                 //
                 RowLayout {
                     spacing: app.spacing
-                    enabled: _ssl.checked
-                    visible: _ssl.checked
                     Layout.fillWidth: true
 
                     ComboBox {
@@ -509,7 +503,7 @@ FramelessWindow.CustomWindow {
 
                         Layout.fillWidth: true
                         opacity: enabled ? 1 : 0.5
-                        enabled: !Cpp_MQTT_Client.isConnectedToHost
+                        enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
                         Behavior on opacity {NumberAnimation{}}
                     }
 
@@ -520,7 +514,7 @@ FramelessWindow.CustomWindow {
                         Layout.maximumWidth: height
                         Layout.alignment: Qt.AlignVCenter
                         icon.source: "qrc:/icons/open.svg"
-                        enabled: _certificateMode.currentIndex == 1
+                        enabled: _certificateMode.currentIndex == 1  && _ssl.checked
                         Behavior on opacity {NumberAnimation{}}
                     }
                 }
@@ -530,23 +524,19 @@ FramelessWindow.CustomWindow {
                 //
                 Item {
                     height: app.spacing
-                    visible: _ssl.checked
                 } Item {
                     height: app.spacing
-                    visible: _ssl.checked
                 }
 
                 //
                 // SSL/TLS protocol selection title
                 //
                 Item {
-                    visible: _ssl.checked
                     Layout.fillWidth: true
                 } Label {
-                    visible: _ssl.checked
                     text: qsTr("Protocol:")
                     opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
                     Behavior on opacity {NumberAnimation{}}
                 }
 
@@ -554,15 +544,13 @@ FramelessWindow.CustomWindow {
                 // SSL/TLS protocol selection
                 //
                 Item {
-                    visible: _ssl.checked
                     Layout.fillWidth: true
                 } ComboBox {
                     id: _protocols
-                    visible: _ssl.checked
                     Layout.fillWidth: true
                     opacity: enabled ? 1 : 0.5
                     model: Cpp_MQTT_Client.sslProtocols
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
                     Behavior on opacity {NumberAnimation{}}
                 }
             }
