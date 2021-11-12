@@ -165,6 +165,7 @@ FramelessWindow.CustomWindow {
                 ComboBox {
                     id: _mode
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 256
                     model: Cpp_MQTT_Client.clientModes
                     currentIndex: Cpp_MQTT_Client.clientMode
                     onCurrentIndexChanged: {
@@ -445,6 +446,78 @@ FramelessWindow.CustomWindow {
                         icon.source: "qrc:/icons/visibility.svg"
                         onCheckedChanged: _password.echoMode = (checked ? TextField.Normal :
                                                                           TextField.Password)
+                    }
+                }
+
+                // Spacers
+                //
+                Item {
+                    height: app.spacing
+                } Item {
+                    height: app.spacing
+                }
+
+                //
+                // SSL & certificate titles
+                //
+                Label {
+                    text: qsTr("Enable SSL/TLS:")
+                    opacity: enabled ? 1 : 0.5
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+                    Behavior on opacity {NumberAnimation{}}
+                } Item {
+                    visible: !(_ssl.checked)
+                    Layout.fillWidth: true
+                } Label {
+                    visible: _ssl.checked
+                    text: qsTr("Certificate:")
+                    opacity: enabled ? 1 : 0.5
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost && visible
+                    Behavior on opacity {NumberAnimation{}}
+                }
+
+                //
+                // SSL/TLS switch
+                //
+                Switch {
+                    id: _ssl
+                    Layout.leftMargin: -app.spacing
+                    opacity: enabled ? 1 : 0.5
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+                    Behavior on opacity {NumberAnimation{}}
+                }
+
+                //
+                // Certificate selection
+                //
+                RowLayout {
+                    spacing: app.spacing
+                    enabled: _ssl.checked
+                    visible: _ssl.checked
+                    Layout.fillWidth: true
+
+                    ComboBox {
+                        id: _certificateMode
+                        model: [
+                            qsTr("CA signed server"),
+                            qsTr("Self signed")
+                        ]
+
+                        Layout.fillWidth: true
+                        opacity: enabled ? 1 : 0.5
+                        enabled: !Cpp_MQTT_Client.isConnectedToHost
+                        Behavior on opacity {NumberAnimation{}}
+                    }
+
+                    Button {
+                        checkable: true
+                        icon.color: palette.text
+                        opacity: enabled ? 1 : 0.5
+                        Layout.maximumWidth: height
+                        Layout.alignment: Qt.AlignVCenter
+                        icon.source: "qrc:/icons/open.svg"
+                        enabled: _certificateMode.currentIndex == 1
+                        Behavior on opacity {NumberAnimation{}}
                     }
                 }
             }
