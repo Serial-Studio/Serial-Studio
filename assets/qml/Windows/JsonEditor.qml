@@ -50,10 +50,7 @@ FramelessWindow.CustomWindow {
     //
     // Ensure that current JSON file is shown
     //
-    onVisibleChanged: {
-        if (visible)
-            Cpp_JSON_Editor.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
-    }
+    Component.onCompleted: Cpp_JSON_Editor.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
 
     //
     // Ask user to save changes before closing the window

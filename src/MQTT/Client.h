@@ -26,6 +26,7 @@
 #include <QHostInfo>
 #include <QByteArray>
 #include <QHostAddress>
+#include <QSslConfiguration>
 
 #include <qmqtt.h>
 #include <DataTypes.h>
