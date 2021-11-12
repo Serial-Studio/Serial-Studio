@@ -468,7 +468,7 @@ FramelessWindow.CustomWindow {
                     icon.height: 24
                     font.bold: true
                     Layout.fillWidth: true
-                    icon.color: Cpp_ThemeManager.highlight
+                    icon.color: Cpp_ThemeManager.ledEnabled
                     checked: Cpp_MQTT_Client.isConnectedToHost
                     onClicked: Cpp_MQTT_Client.toggleConnection()
                     palette.buttonText: Cpp_ThemeManager.ledEnabled
