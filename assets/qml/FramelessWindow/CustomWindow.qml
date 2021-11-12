@@ -52,9 +52,12 @@ Window {
     property bool isMaximized: false
     property bool isMinimized: false
     property alias isFullscreen: border.isFullscreen
-    readonly property int customFlags: Qt.CustomizeWindowHint |
+    readonly property int customFlags: Qt.Window |
+                                       Qt.CustomizeWindowHint |
                                        Qt.FramelessWindowHint |
-                                       Qt.NoDropShadowWindowHint
+                                       Qt.WindowSystemMenuHint |
+                                       Qt.NoDropShadowWindowHint |
+                                       Qt.WindowMinMaxButtonsHint
 
     //
     // Toggle fullscreen state

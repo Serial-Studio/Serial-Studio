@@ -73,48 +73,6 @@ Misc::ModuleManager::ModuleManager()
     QFontDatabase::addApplicationFont(":/fonts/RobotoMono-Bold.ttf");
     QFontDatabase::addApplicationFont(":/fonts/RobotoMono-Regular.ttf");
 
-    // Set the UI rendering engine
-    switch (renderingEngine())
-    {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        case 0:
-            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
-            break;
-        case 1:
-            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGL);
-            break;
-        case 2:
-            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenVG);
-            break;
-        case 3:
-#    if defined(Q_OS_WIN)
-            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Direct3D12);
-#    elif defined(Q_OS_MAC)
-            QQuickWindow::setSceneGraphBackend(QSGRendererInterface::MetalRhi);
-#    endif
-            break;
-#else
-        case 0:
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
-            break;
-        case 1:
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-            break;
-        case 2:
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenVG);
-            break;
-        case 3:
-#    if defined(Q_OS_WIN)
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11);
-#    elif defined(Q_OS_MAC)
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Metal);
-#    endif
-            break;
-#endif
-        default:
-            break;
-    }
-
     // Set Roboto as default app font
     QFont font("Roboto");
 #if defined(Q_OS_WIN)
@@ -293,32 +251,6 @@ void Misc::ModuleManager::initializeQmlInterface()
 }
 
 /**
- * Returns the rendering engine ID to use for rendering the user interface
- */
-int Misc::ModuleManager::renderingEngine() const
-{
-    return m_settings.value("renderingSystem", 1).toInt();
-}
-
-/**
- * Returns a list with the available UI rendering engines
- */
-StringList Misc::ModuleManager::renderingEngines() const
-{
-    StringList list;
-    list.append("Software");
-    list.append("OpenGL");
-    list.append("OpenVG");
-#if defined(Q_OS_WIN)
-    list.append("Direct3D");
-#elif defined(Q_OS_MAC)
-    list.append("Metal");
-#endif
-
-    return list;
-}
-
-/**
  * Hides the splash screen widget
  */
 void Misc::ModuleManager::hideSplashscreen()
@@ -326,32 +258,6 @@ void Misc::ModuleManager::hideSplashscreen()
     m_splash.hide();
     m_splash.close();
     qApp->processEvents();
-}
-
-/**
- * Changes the rendering engine used by the Qt user interface & prompts the user
- * to restart the application.
- */
-void Misc::ModuleManager::setRenderingEngine(const int engine)
-{
-    // Validate index
-    if (engine >= 0 && engine < renderingEngines().count())
-    {
-        // Save settings
-        m_settings.setValue("renderingSystem", engine);
-
-        // Ask user to quit application
-        // clang-format off
-        auto ans = Misc::Utilities::showMessageBox(
-                    tr("The rendering engine change will take effect after restart"),
-                    tr("Do you want to restart %1 now?").arg(APP_NAME), APP_NAME,
-                    QMessageBox::Yes | QMessageBox::No);
-        // clang-format on
-
-        // Restart application
-        if (ans == QMessageBox::Yes)
-            Misc::Utilities::rebootApplication();
-    }
 }
 
 /**

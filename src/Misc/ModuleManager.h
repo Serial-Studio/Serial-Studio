@@ -23,7 +23,6 @@
 #pragma once
 
 #include <QObject>
-#include <QSettings>
 #include <QSplashScreen>
 #include <QQmlApplicationEngine>
 
@@ -52,17 +51,12 @@ public:
     void initializeQmlInterface();
     QQmlApplicationEngine *engine();
 
-    Q_INVOKABLE int renderingEngine() const;
-    Q_INVOKABLE StringList renderingEngines() const;
-
 public slots:
     void onQuit();
     void hideSplashscreen();
-    void setRenderingEngine(const int engine);
     void setSplashScreenMessage(const QString &message);
 
 private:
-    QSettings m_settings;
     QSplashScreen m_splash;
     QQmlApplicationEngine m_engine;
 };
