@@ -153,8 +153,7 @@ FramelessWindow.CustomWindow {
     }
 
     //
-    // Window geometry (different minimum size for non-macOS
-    // operating systems because of the global menubar in macOS)
+    // Window geometry
     //
     visible: false
     title: Cpp_AppName
