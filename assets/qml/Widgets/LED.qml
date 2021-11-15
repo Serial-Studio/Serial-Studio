@@ -62,8 +62,8 @@ RowLayout {
     //
     Rectangle {
         id: _dot
-        width: 18
-        height: 18
+        width: 14
+        height: 14
         radius: width / 2
         Layout.alignment: Qt.AlignVCenter
         color: root.enabled ? Cpp_ThemeManager.ledEnabled : Cpp_ThemeManager.ledDisabled

@@ -196,8 +196,8 @@ MenuBar {
         DecentMenuItem {
             sequence: "f11"
             onTriggered: app.mainWindow.toggleFullscreen()
-            text: app.mainWindow.fullScreen ? qsTr("Exit full screen") :
-                                              qsTr("Enter full screen")
+            text: app.mainWindow.isFullscreen ? qsTr("Exit full screen") :
+                                                qsTr("Enter full screen")
         }
     }
 

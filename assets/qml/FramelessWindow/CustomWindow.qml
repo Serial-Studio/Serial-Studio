@@ -51,6 +51,7 @@ Window {
     property bool firstChange: true
     property bool isMaximized: false
     property bool isMinimized: false
+    property alias showIcon: _title.showIcon
     property alias isFullscreen: _title.isFullscreen
     readonly property int customFlags: Qt.Window |
                                        Qt.CustomizeWindowHint |

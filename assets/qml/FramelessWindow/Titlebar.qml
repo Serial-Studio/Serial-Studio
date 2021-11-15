@@ -42,6 +42,7 @@ Rectangle {
     // Window controls
     //
     property Window window
+    property bool showIcon: false
     property bool closeEnabled: true
     property bool isFullscreen: false
     property bool minimizeEnabled: true
@@ -81,14 +82,11 @@ Rectangle {
 
         // Calculations for Windows/Linux layout
         else {
-            // Default spacer
             margin = 10
 
-            // Add space for fullscreen button
-            if (fullscreenEnabled)
-                margin += 18
+            if (root.showIcon)
+                margin += 24
 
-            // Add extra spacer if icon is visible
             if (margin > 10)
                 margin += 8
         }
@@ -305,16 +303,12 @@ Rectangle {
             }
 
             WindowButton {
-                width: 16
-                height: 16
-                rotation: 90
+                visible: root.showIcon
+                enabled: root.showIcon
                 textColor: root.textColor
-                visible: root.fullscreenEnabled
-                enabled: root.fullscreenEnabled
+                highlightColor: root.textColor
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: root.toggleFullscreen()
-                highlightColor: Cpp_ThemeManager.highlight
-                name: root.isFullscreen ? "restore" : "fullscreen"
+                source: "qrc:/images/icon-window.svg"
             }
 
             Item {
@@ -359,7 +353,6 @@ Rectangle {
                     window.close()
                     root.closed()
                 }
-
             }
 
             Item {

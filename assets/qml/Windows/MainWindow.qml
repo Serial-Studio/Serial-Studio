@@ -45,6 +45,7 @@ FramelessWindow.CustomWindow {
     //
     // Customize window border
     //
+    showIcon: true
     borderWidth: 1
     fullscreenEnabled: true
     borderColor: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
@@ -167,12 +168,8 @@ FramelessWindow.CustomWindow {
     // Startup code
     //
     Component.onCompleted: {
-        // Load welcome guide
         terminal.showWelcomeGuide()
-
-        // Display the window & check for updates in 500 ms (we do this so that
-        // we wait for the window to read settings before showing it)
-        timer.start()
+        root.showMainWindow()
     }
 
     //
@@ -224,15 +221,6 @@ FramelessWindow.CustomWindow {
     }
 
     //
-    // Startup timer
-    //
-    Timer {
-        id: timer
-        interval: 500
-        onTriggered: root.showMainWindow()
-    }
-
-    //
     // macOS menubar loader
     //
     Loader {
@@ -247,11 +235,6 @@ FramelessWindow.CustomWindow {
     RowLayout {
         spacing: app.spacing
         height: titlebar.height
-        opacity: enabled ? 1 : 0
-        enabled: !root.showMacControls || isFullscreen
-        visible: !root.showMacControls || isFullscreen
-
-        Behavior on opacity {NumberAnimation{}}
 
         anchors {
             top: parent.top
@@ -262,16 +245,97 @@ FramelessWindow.CustomWindow {
             topMargin: root.shadowMargin + (!root.showMacControls ? 1 : 0)
         }
 
+        //
+        // Menubar
+        //
         PlatformDependent.Menubar {
             id: menubar
-            opacity: 0.8
+            opacity: enabled ? 0.8 : 0
             Layout.alignment: Qt.AlignVCenter
+            enabled: !root.showMacControls || isFullscreen
+            visible: !root.showMacControls || isFullscreen
+
+            Behavior on opacity {NumberAnimation{}}
         }
 
-        // Leaving this layout for future usage...
-
+        //
+        // Spacer
+        //
         Item {
             Layout.fillWidth: true
+        }
+
+        //
+        // RX LED
+        //
+        LED {
+            id: _rx
+            enabled: false
+            Layout.alignment: Qt.AlignVCenter
+
+            Connections {
+                target: Cpp_IO_Manager
+                function onRx() {
+                    _rx.flash()
+                }
+            }
+        }
+
+        //
+        // RX label
+        //
+        Label {
+            text: "RX"
+            font.bold: true
+            font.family: app.monoFont
+            Layout.alignment: Qt.AlignVCenter
+            color: _rx.enabled ? Cpp_ThemeManager.ledEnabled : Cpp_ThemeManager.ledDisabled
+        }
+
+        //
+        // RX/TX middleman icon
+        //
+        Icon {
+            width: 24
+            height: 24
+            source: "qrc:/icons/ethernet.svg"
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.ledDisabled
+        }
+
+        //
+        // TX Label
+        //
+        Label {
+            text: "TX"
+            font.bold: true
+            font.family: app.monoFont
+            Layout.alignment: Qt.AlignVCenter
+            color: _tx.enabled ? Cpp_ThemeManager.ledEnabled : Cpp_ThemeManager.ledDisabled
+        }
+
+        //
+        // TX LED
+        //
+        LED {
+            id: _tx
+            enabled: false
+            layoutDirection: Qt.RightToLeft
+            Layout.alignment: Qt.AlignVCenter
+
+            Connections {
+                target: Cpp_IO_Manager
+                function onTx() {
+                    _tx.flash()
+                }
+            }
+        }
+
+        //
+        // Spacer
+        //
+        Item {
+            width: app.spacing
         }
     }
 

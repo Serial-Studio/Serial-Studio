@@ -369,82 +369,10 @@ Item {
             }
 
             //
-            // RX/TX LEDs
+            // Vertical spacer
             //
             Item {
-                Layout.fillWidth: true
                 Layout.fillHeight: true
-
-                RowLayout {
-                    spacing: app.spacing
-
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        verticalCenter: parent.verticalCenter
-                    }
-
-                    Item {
-                        Layout.fillWidth: true
-                    }
-
-                    Widgets.LED {
-                        id: _rx
-                        enabled: false
-                        Layout.alignment: Qt.AlignVCenter
-
-                        Connections {
-                            target: Cpp_IO_Manager
-                            function onRx() {
-                                _rx.flash()
-                            }
-                        }
-                    }
-
-                    Label {
-                        text: "RX"
-                        font.bold: true
-                        font.pixelSize: 18
-                        font.family: app.monoFont
-                        Layout.alignment: Qt.AlignVCenter
-                        color: _rx.enabled ? Cpp_ThemeManager.ledEnabled : Cpp_ThemeManager.ledDisabled
-                    }
-
-                    Widgets.Icon {
-                        width: 32
-                        height: 32
-                        source: "qrc:/icons/ethernet.svg"
-                        Layout.alignment: Qt.AlignVCenter
-                        color: Cpp_ThemeManager.ledDisabled
-                    }
-
-                    Label {
-                        text: "TX"
-                        font.bold: true
-                        font.pixelSize: 18
-                        font.family: app.monoFont
-                        Layout.alignment: Qt.AlignVCenter
-                        color: _tx.enabled ? Cpp_ThemeManager.ledEnabled : Cpp_ThemeManager.ledDisabled
-                    }
-
-                    Widgets.LED {
-                        id: _tx
-                        enabled: false
-                        layoutDirection: Qt.RightToLeft
-                        Layout.alignment: Qt.AlignVCenter
-
-                        Connections {
-                            target: Cpp_IO_Manager
-                            function onTx() {
-                                _tx.flash()
-                            }
-                        }
-                    }
-
-                    Item {
-                        Layout.fillWidth: true
-                    }
-                }
             }
         }
     }
