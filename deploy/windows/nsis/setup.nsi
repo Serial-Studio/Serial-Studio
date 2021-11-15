@@ -32,7 +32,7 @@ Unicode True
 !define DESCRIPTION                  "Dashboard software for serial port devices"
 !define VERSIONMAJOR                 1
 !define VERSIONMINOR                 1
-!define VERSIONBUILD                 2
+!define VERSIONBUILD                 3
 !define MUI_ABORTWARNING
 !define INSTALL_DIR                  "$PROGRAMFILES64\${APPNAME}"
 !define MUI_FINISHPAGE_RUN
@@ -76,16 +76,10 @@ Function .onInit
   "UninstallString"
   StrCmp $R0 "" done
 
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-  "${APPNAME} is already installed. $\n$\nClick `OK` to remove the \
-  previous version or `Cancel` to cancel this upgrade." \
-  IDOK uninst
-  Abort
-
-uninst:
-  ClearErrors
-  Exec $INSTDIR\uninstall.exe
-
+  ; Uninstall previous version (but save registry settings)
+  RMDir /r "$INSTDIR"
+  RMDir /r "$SMPROGRAMS\${APPNAME}.lnk"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}"
 done:
   ; Nothing to do...
 FunctionEnd
