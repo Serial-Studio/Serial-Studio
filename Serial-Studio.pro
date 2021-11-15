@@ -99,7 +99,6 @@ CONFIG += silent
 # Unity build
 #-----------------------------------------------------------------------------------------
 
-CONFIG += unity_build
 CONFIG(unity_build) {
     CONFIG  += ltcg                             # Enable linker optimization
     DEFINES += UNITY_BUILD=1                    # Enable unity build
