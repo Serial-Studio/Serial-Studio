@@ -133,7 +133,7 @@ FramelessWindow.CustomWindow {
         root.requestUpdate()
 
         // Show donations dialog every 15 launches
-        if (root.appLaunchCount % 15 == 0 && !donations.doNotShowAgain)
+        if (root.appLaunchCount % 15 == 0 && !app.donations.doNotShowAgain)
             app.donations.showAutomatically()
 
         // Ask user if he/she wants to enable automatic updates
