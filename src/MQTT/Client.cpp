@@ -131,6 +131,14 @@ int Client::mqttVersion() const
 }
 
 /**
+ * Returns @c true if SSL/TLS is enabled
+ */
+bool Client::sslEnabled() const
+{
+    return !(m_client.sslConfiguration().isNull());
+}
+
+/**
  * Returns the client mode, which can have the following values:
  * - Publisher
  * - Subscriber
@@ -337,6 +345,19 @@ void Client::setTopic(const QString &topic)
 {
     m_topic = topic;
     emit topicChanged();
+}
+
+/**
+ * Enables/disables SSL/TLS communications with the MQTT broker
+ */
+void Client::setSslEnabled(const bool enabled)
+{
+    if (enabled)
+        m_client.setSslConfiguration(m_sslConfiguration);
+    else
+        m_client.setSslConfiguration(QSslConfiguration());
+
+    emit sslEnabledChanged();
 }
 
 /**

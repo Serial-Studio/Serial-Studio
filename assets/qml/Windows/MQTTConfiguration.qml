@@ -116,7 +116,7 @@ FramelessWindow.CustomWindow {
             anchors.fill: parent
 
             DragHandler {
-                grabPermissions: TapHandler.CanTakeOverFromAnything
+                grabPermissions: TapHandler.TakeOverForbidden
                 onActiveChanged: {
                     if (active)
                         root.startSystemMove()
@@ -483,8 +483,13 @@ FramelessWindow.CustomWindow {
                     id: _ssl
                     opacity: enabled ? 1 : 0.5
                     Layout.leftMargin: -app.spacing
+                    checked: Cpp_MQTT_Client.sslEnabled
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
                     Behavior on opacity {NumberAnimation{}}
+                    onCheckedChanged: {
+                        if (Cpp_MQTT_Client.sslEnabled !== checked)
+                            Cpp_MQTT_Client.sslEnabled = checked
+                    }
                 }
 
                 //

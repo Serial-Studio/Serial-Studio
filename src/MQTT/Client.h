@@ -101,6 +101,10 @@ class Client : public QObject
                READ password
                WRITE setPassword
                NOTIFY passwordChanged)
+    Q_PROPERTY(bool sslEnabled
+               READ sslEnabled
+               WRITE setSslEnabled
+               NOTIFY sslEnabledChanged)
     Q_PROPERTY(bool isConnectedToHost
                READ isConnectedToHost
                NOTIFY connectedChanged)
@@ -138,6 +142,7 @@ signals:
     void keepAliveChanged();
     void connectedChanged();
     void clientModeChanged();
+    void sslEnabledChanged();
     void mqttVersionChanged();
     void lookupActiveChanged();
 
@@ -151,6 +156,7 @@ public:
     QString topic() const;
     int clientMode() const;
     int mqttVersion() const;
+    bool sslEnabled() const;
     QString username() const;
     QString password() const;
     quint16 keepAlive() const;
@@ -177,6 +183,7 @@ public slots:
     void setHost(const QString &host);
     void setClientMode(const int mode);
     void setTopic(const QString &topic);
+    void setSslEnabled(const bool enabled);
     void setUsername(const QString &username);
     void setPassword(const QString &password);
     void setKeepAlive(const quint16 keepAlive);
