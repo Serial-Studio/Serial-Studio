@@ -47,7 +47,6 @@ FramelessWindow.CustomWindow {
     //
     showIcon: true
     borderWidth: 1
-    fullscreenEnabled: true
     borderColor: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
 
     //
@@ -329,13 +328,6 @@ FramelessWindow.CustomWindow {
                     _tx.flash()
                 }
             }
-        }
-
-        //
-        // Spacer
-        //
-        Item {
-            width: app.spacing
         }
     }
 

@@ -102,7 +102,6 @@ Window {
     property alias closeEnabled: _title.closeEnabled
     property alias minimizeEnabled: _title.minimizeEnabled
     property alias maximizeEnabled: _title.maximizeEnabled
-    property alias fullscreenEnabled: _title.fullscreenEnabled
 
     //
     // Shadow implementation

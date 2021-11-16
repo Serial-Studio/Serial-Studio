@@ -47,7 +47,6 @@ Rectangle {
     property bool isFullscreen: false
     property bool minimizeEnabled: true
     property bool maximizeEnabled: true
-    property bool fullscreenEnabled: false
     property color textColor: palette.text
     property bool showMacControls: Cpp_IsMac
 
@@ -103,18 +102,8 @@ Rectangle {
         var margin
 
         // Calculations for macOS layout
-        if (showMacControls) {
-            // Add default spacer
-            margin = 4
-
-            // Add spacer for full-screen button
-            if (fullscreenEnabled)
-                margin += 18
-
-            // Add extra spacer if FS button is displayed
-            if (margin > 4)
-                margin += 4
-        }
+        if (showMacControls)
+            margin = 8
 
         // Calculations for Windows/Linux layout
         else {
@@ -266,22 +255,6 @@ Rectangle {
 
             Item {
                 Layout.fillWidth: true
-            }
-
-            WindowButton {
-                width: 16
-                height: 16
-                textColor: root.textColor
-                visible: root.fullscreenEnabled
-                enabled: root.fullscreenEnabled
-                Layout.alignment: Qt.AlignVCenter
-                onClicked: root.toggleFullscreen()
-                highlightColor: Cpp_ThemeManager.highlight
-                name: root.isFullscreen ? "restore" : "fullscreen"
-            }
-
-            Item {
-                width: 10
             }
         }
     }
