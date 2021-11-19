@@ -99,7 +99,7 @@ Item {
     // Donations dialog
     //
     Loader {
-        asynchronous: true
+        asynchronous: false
         sourceComponent: Windows.Donate {
             Component.onCompleted: app.donations = this
         }

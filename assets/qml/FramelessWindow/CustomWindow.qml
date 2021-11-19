@@ -104,6 +104,35 @@ Window {
     property alias maximizeEnabled: _title.maximizeEnabled
 
     //
+    // Ensure that window size & position is valid upon showing
+    //
+    Component.onCompleted: {
+        // Reset window size for whatever reason
+        if (root.width <= 0 || root.height <= 0) {
+            root.width = root.minimumWidth
+            root.height = root.minimumHeight
+        }
+
+        // Startup verifications to ensure that app is displayed inside the screen
+        if (root.x < 0 || root.x >= Screen.desktopAvailableWidth)
+            root.x = 100
+        if (root.y < 0 || root.y >= Screen.desktopAvailableHeight)
+            root.y = 100
+
+        // Startup verifications to ensure that app fits in current screen
+        if (root.width > Screen.desktopAvailableWidth) {
+            root.x = 100
+            root.width = Screen.desktopAvailableWidth - root.x
+        }
+
+        // Startup verifications to ensure that app fits in current screen
+        if (root.height > Screen.desktopAvailableHeight) {
+            root.y = 100
+            root.height = Screen.desktopAvailableHeight - root.y
+        }
+    }
+
+    //
     // Shadow implementation
     //
     RectangularGlow {
