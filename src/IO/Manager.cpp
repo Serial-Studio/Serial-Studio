@@ -275,8 +275,7 @@ StringList Manager::dataSourcesList() const
 }
 
 /**
- * Tries to write the given @a data to the current device. Upon data write, the class
- * emits the @a tx() signal for UI updating.
+ * Tries to write the given @a data to the current device.
  *
  * @returns the number of bytes written to the target device
  */
@@ -315,8 +314,6 @@ qint64 Manager::writeData(const QByteArray &data)
         {
             auto writtenData = data;
             writtenData.chop(data.length() - bytes);
-
-            emit tx();
             emit dataSent(writtenData);
         }
 
@@ -434,7 +431,6 @@ void Manager::processPayload(const QByteArray &payload)
             m_receivedBytes = 0;
 
         // Notify user interface & application modules
-        emit rx();
         emit dataReceived(payload);
         emit frameReceived(payload);
         emit receivedBytesChanged();
@@ -644,7 +640,6 @@ void Manager::onDataReceived()
     // Notify user interface
     emit receivedBytesChanged();
     emit dataReceived(data);
-    emit rx();
 }
 
 /**

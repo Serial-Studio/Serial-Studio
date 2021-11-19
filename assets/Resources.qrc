@@ -122,7 +122,6 @@
         <file>qml/PlatformDependent/MenubarMacOS.qml</file>
         <file>qml/Widgets/Icon.qml</file>
         <file>qml/Widgets/JSONDropArea.qml</file>
-        <file>qml/Widgets/LED.qml</file>
         <file>qml/Widgets/Shadow.qml</file>
         <file>qml/Widgets/Terminal.qml</file>
         <file>qml/Widgets/Window.qml</file>

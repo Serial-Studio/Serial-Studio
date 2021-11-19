@@ -97,8 +97,6 @@ class Manager : public QObject
     // clang-format on
 
 signals:
-    void tx();
-    void rx();
     void deviceChanged();
     void connectedChanged();
     void watchdogTriggered();

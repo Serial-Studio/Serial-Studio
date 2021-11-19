@@ -293,7 +293,6 @@ DISTFILES += \
     assets/qml/PlatformDependent/MenubarMacOS.qml \
     assets/qml/Widgets/Icon.qml \
     assets/qml/Widgets/JSONDropArea.qml \
-    assets/qml/Widgets/LED.qml \
     assets/qml/Widgets/Shadow.qml \
     assets/qml/Widgets/Terminal.qml \
     assets/qml/Widgets/Window.qml \
