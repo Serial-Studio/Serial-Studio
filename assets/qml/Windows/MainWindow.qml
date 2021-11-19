@@ -79,12 +79,25 @@ FramelessWindow.CustomWindow {
     function consoleSelectAll() { terminal.selectAll() }
 
     //
-    // Displays the main window & checks for updates
+    // Window geometry
     //
-    function showMainWindow() {
+    visible: false
+    title: Cpp_AppName
+    width: minimumWidth
+    height: minimumHeight
+    minimumWidth: 1250 + 2 * root.shadowMargin
+    backgroundColor: Cpp_ThemeManager.windowBackground
+    minimumHeight: 720 + 2 * root.shadowMargin + root.titlebar.height
+
+    //
+    // Startup code
+    //
+    Component.onCompleted: {
+        // Load welcome text
+        terminal.showWelcomeGuide()
+
         // Increment app launch count & hide splash screen
         ++appLaunchCount
-        Cpp_ModuleManager.hideSplashscreen()
 
         // Show app window
         if (root.isFullscreen)
@@ -129,25 +142,6 @@ FramelessWindow.CustomWindow {
     }
 
     //
-    // Window geometry
-    //
-    visible: false
-    title: Cpp_AppName
-    width: minimumWidth
-    height: minimumHeight
-    minimumWidth: 1250 + 2 * root.shadowMargin
-    backgroundColor: Cpp_ThemeManager.windowBackground
-    minimumHeight: 720 + 2 * root.shadowMargin + root.titlebar.height
-
-    //
-    // Startup code
-    //
-    Component.onCompleted: {
-        terminal.showWelcomeGuide()
-        root.showMainWindow()
-    }
-
-    //
     // Hide console & device manager when we receive first valid frame
     //
     Connections {
@@ -155,7 +149,8 @@ FramelessWindow.CustomWindow {
         enabled: !root.firstValidFrame
 
         function onUpdated()  {
-            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) && Cpp_UI_Dashboard.frameValid()) {
+            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) &&
+                    Cpp_UI_Dashboard.frameValid()) {
                 setup.hide()
                 root.showDashboard()
                 root.firstValidFrame = true
