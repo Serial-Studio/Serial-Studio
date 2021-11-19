@@ -123,6 +123,7 @@ FramelessWindow.CustomWindow {
         //
         Footer {
             id: footer
+            radius: root.radius
             onCloseWindow: root.close()
             onScrollToBottom: groupEditor.scrollToBottom()
 

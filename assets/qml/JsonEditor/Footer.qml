@@ -27,7 +27,7 @@ import "../Widgets" as Widgets
 
 Rectangle {
     id: root
-    radius: jsonEditor.radius
+    color: Cpp_ThemeManager.toolbarGradient2
     height: footer.implicitHeight + 4 * app.spacing
 
     //
@@ -37,13 +37,29 @@ Rectangle {
     signal scrollToBottom()
 
     //
-    // Background & border
+    // Radius compensator
     //
-    border.width: 1
-    border.color: Cpp_ThemeManager.toolbarGradient1
-    gradient: Gradient {
-        GradientStop { position: 0; color: Cpp_ThemeManager.toolbarGradient1 }
-        GradientStop { position: 1; color: Cpp_ThemeManager.toolbarGradient2 }
+    Rectangle {
+        color: root.color
+        height: root.radius
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+    }
+
+    //
+    // Top border
+    //
+    Rectangle {
+        height: 1
+        color: Cpp_ThemeManager.toolbarGradient1
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
     }
 
     //
