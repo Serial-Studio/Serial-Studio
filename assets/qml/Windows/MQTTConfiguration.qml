@@ -501,15 +501,15 @@ FramelessWindow.CustomWindow {
 
                     ComboBox {
                         id: _certificateMode
-                        model: [
-                            qsTr("CA signed server"),
-                            qsTr("Self signed")
-                        ]
-
                         Layout.fillWidth: true
                         opacity: enabled ? 1 : 0.5
+                        model: Cpp_MQTT_Client.certificateModes
                         enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
                         Behavior on opacity {NumberAnimation{}}
+                        onCurrentIndexChanged: {
+                            if (currentIndex !== Cpp_MQTT_Client.certificateMode)
+                                Cpp_MQTT_Client.certificateMode = currentIndex
+                        }
                     }
 
                     Button {
@@ -519,6 +519,7 @@ FramelessWindow.CustomWindow {
                         Layout.maximumWidth: height
                         Layout.alignment: Qt.AlignVCenter
                         icon.source: "qrc:/icons/open.svg"
+                        onClicked: Cpp_MQTT_Client.loadCaFile()
                         enabled: _certificateMode.currentIndex == 1  && _ssl.checked
                         Behavior on opacity {NumberAnimation{}}
                     }
@@ -557,6 +558,10 @@ FramelessWindow.CustomWindow {
                     model: Cpp_MQTT_Client.sslProtocols
                     enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
                     Behavior on opacity {NumberAnimation{}}
+                    onCurrentIndexChanged: {
+                        if (currentIndex !== Cpp_MQTT_Client.sslProtocol)
+                            Cpp_MQTT_Client.sslProtocol = currentIndex
+                    }
                 }
             }
 
