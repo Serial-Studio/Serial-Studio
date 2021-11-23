@@ -46,6 +46,9 @@ class ThemeManager : public QObject
     Q_PROPERTY(int themeId
                READ themeId
                NOTIFY themeChanged)
+    Q_PROPERTY(bool titlebarSeparator
+               READ titlebarSeparator
+               NOTIFY themeChanged)
     Q_PROPERTY(QColor base
                READ base
                NOTIFY themeChanged)
@@ -201,6 +204,7 @@ public:
 
     int themeId() const;
 
+    bool titlebarSeparator() const;
     QColor base() const;
     QColor link() const;
     QColor button() const;
@@ -264,6 +268,7 @@ private:
 private:
     int m_themeId;
     QSettings m_settings;
+    bool m_titlebarSeparator;
     StringList m_availableThemes;
     StringList m_availableThemesPaths;
 

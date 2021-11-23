@@ -1,6 +1,7 @@
 {
    "name":"Classic",
    "author":"Alex Spataru",
+   "titlebarSeparator":true,
    "colors":{
       "base":"#21373f",
       "link":"#409da0",

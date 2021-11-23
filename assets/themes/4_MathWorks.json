@@ -1,6 +1,7 @@
 {
    "name":"MathWorks",
    "author":"Alex Spataru",
+   "titlebarSeparator":true,
    "colors":{
       "base":"#fafafa",
       "link":"#105087",

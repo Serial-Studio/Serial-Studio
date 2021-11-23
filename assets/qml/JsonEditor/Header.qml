@@ -34,13 +34,14 @@ Rectangle {
     //
     Rectangle {
         id: bg
-        border.width: 1
         anchors.fill: parent
         color: Cpp_ThemeManager.toolbarGradient2
+        border.width: Cpp_ThemeManager.titlebarSeparator ? 1 : 0
         border.color: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
 
         Rectangle {
             height: 1
+            visible: Cpp_ThemeManager.titlebarSeparator
             color: Qt.darker(Cpp_ThemeManager.toolbarGradient1, 1.5)
 
             anchors {

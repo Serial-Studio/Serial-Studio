@@ -101,11 +101,13 @@ Control {
             border.width: 1
             anchors.fill: parent
             color: "transparent"
+            visible: Cpp_ThemeManager.titlebarSeparator
             border.color: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
         }
 
         Rectangle {
             height: 1
+            visible: Cpp_ThemeManager.titlebarSeparator
             color: Qt.darker(Cpp_ThemeManager.toolbarGradient1, 1.5)
 
             anchors {

@@ -133,8 +133,6 @@
         <file>qml/Windows/MainWindow.qml</file>
         <file>qml/main.qml</file>
         <file>themes/1_Classic.json</file>
-        <file>themes/2_Noir.json</file>
-        <file>themes/3_MathWorks.json</file>
         <file>touchbar/console.png</file>
         <file>touchbar/dashboard.png</file>
         <file>touchbar/setup.png</file>
@@ -164,5 +162,8 @@
         <file>window-border/restore.svg</file>
         <file>window-border/unmaximize.svg</file>
         <file>qml/Windows/MQTTConfiguration.qml</file>
+        <file>themes/2_NXG.json</file>
+        <file>themes/3_Noir.json</file>
+        <file>themes/4_MathWorks.json</file>
     </qresource>
 </RCC>

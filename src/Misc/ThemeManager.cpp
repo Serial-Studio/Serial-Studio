@@ -127,6 +127,7 @@ void ThemeManager::loadTheme(const int id)
 
     // Read colors from JSON file
     // clang-format off
+    m_titlebarSeparator = document.object().value("titlebarSeparator").toBool();
     m_base = QColor(colors.value("base").toString());
     m_link = QColor(colors.value("link").toString());
     m_button = QColor(colors.value("button").toString());
@@ -246,6 +247,11 @@ void ThemeManager::populateThemes()
 //----------------------------------------------------------------------------------------
 // Dumb access functions
 //----------------------------------------------------------------------------------------
+
+bool ThemeManager::titlebarSeparator() const
+{
+    return m_titlebarSeparator;
+}
 
 QColor ThemeManager::base() const
 {
