@@ -22,6 +22,7 @@
 
 #include "Group.h"
 #include "Dataset.h"
+#include "FrameInfo.h"
 
 namespace JSON
 {
@@ -97,14 +98,9 @@ bool Group::read(const QJsonObject &object)
 {
     if (!object.isEmpty())
     {
-        auto array = object.value("d").toArray();
-        auto title = object.value("t").toVariant().toString();
-        auto widget = object.value("w").toVariant().toString();
-
-        title = title.replace("\n", "");
-        title = title.replace("\r", "");
-        widget = widget.replace("\n", "");
-        widget = widget.replace("\r", "");
+        auto title = JFI_Value(object, "title", "t").toString();
+        auto array = JFI_Value(object, "datasets", "d").toArray();
+        auto widget = JFI_Value(object, "widget", "w").toString();
 
         if (!title.isEmpty() && !array.isEmpty())
         {

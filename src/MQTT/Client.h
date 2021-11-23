@@ -50,10 +50,10 @@ enum MQTTClientMode
  * Implements a simple MQTT client, which allows Serial Studio to upload received frames
  * to a MQTT broker so that other devices and/or services can make use of that
  * information. By acting as a MQTT subscriber, Serial Studio can display & process frames
- * from a remote Serial Studio instance. As you might notice, this has a lot of
- * interesting applications.
+ * from a remote Serial Studio instance that is setup as a MQTT publisher. As you might
+ * notice, this has a lot of interesting applications.
  *
- * For example, you can receive frames from a CanSat mission and display them allmost in
+ * For example, you can receive frames from a CanSat mission and display them almost in
  * real-time in another location, such as the "ground control" centre or by the media team
  * which streams the GCS display on the internet as the mission is developing.
  */

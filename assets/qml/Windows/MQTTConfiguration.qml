@@ -513,7 +513,6 @@ FramelessWindow.CustomWindow {
                     }
 
                     Button {
-                        checkable: true
                         icon.color: palette.text
                         opacity: enabled ? 1 : 0.5
                         Layout.maximumWidth: height

@@ -40,7 +40,7 @@ Item {
     //
     ColumnLayout {
         anchors.fill: parent
-        spacing: app.spacing * 2
+        spacing: app.spacing
         anchors.margins: (app.spacing * 1.5) - 5
 
         //

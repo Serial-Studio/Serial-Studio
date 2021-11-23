@@ -22,10 +22,10 @@
 
 #include "Dataset.h"
 #include "Generator.h"
+#include "FrameInfo.h"
 
 namespace JSON
 {
-
 Dataset::Dataset(QObject *parent)
     : QObject(parent)
     , m_fft(false)
@@ -156,37 +156,20 @@ QJsonObject Dataset::jsonData() const
  */
 bool Dataset::read(const QJsonObject &object)
 {
-    static QJSEngine JAVASCRIPT_ENGINE;
-
     if (!object.isEmpty())
     {
-        auto fft = object.value("fft").toVariant().toBool();
-        auto led = object.value("led").toVariant().toBool();
-        auto log = object.value("log").toVariant().toBool();
-        auto graph = object.value("g").toVariant().toBool();
-        auto title = object.value("t").toVariant().toString();
-        auto value = object.value("v").toVariant().toString();
-        auto units = object.value("u").toVariant().toString();
-        auto widget = object.value("w").toVariant().toString();
-        auto min = object.value("min").toVariant().toString();
-        auto max = object.value("max").toVariant().toString();
-        auto alarm = object.value("alarm").toVariant().toString();
-        auto fftSamples = object.value("fftSamples").toVariant().toInt();
-
-        min = min.replace("\n", "");
-        min = min.replace("\r", "");
-        max = max.replace("\n", "");
-        max = max.replace("\r", "");
-        title = title.replace("\n", "");
-        title = title.replace("\r", "");
-        value = value.replace("\n", "");
-        value = value.replace("\r", "");
-        units = units.replace("\n", "");
-        units = units.replace("\r", "");
-        alarm = alarm.replace("\n", "");
-        alarm = alarm.replace("\r", "");
-        widget = widget.replace("\n", "");
-        widget = widget.replace("\r", "");
+        auto fft = JFI_Value(object, "fft").toBool();
+        auto led = JFI_Value(object, "led").toBool();
+        auto log = JFI_Value(object, "log").toBool();
+        auto min = JFI_Value(object, "min").toString();
+        auto max = JFI_Value(object, "max").toString();
+        auto alarm = JFI_Value(object, "alarm").toString();
+        auto graph = JFI_Value(object, "graph", "g").toBool();
+        auto title = JFI_Value(object, "title", "t").toString();
+        auto value = JFI_Value(object, "value", "v").toString();
+        auto units = JFI_Value(object, "units", "u").toString();
+        auto widget = JFI_Value(object, "widget", "w").toString();
+        auto fftSamples = JFI_Value(object, "fftSamples").toInt();
 
         if (!value.isEmpty() && !title.isEmpty())
         {

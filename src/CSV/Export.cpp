@@ -25,6 +25,7 @@
 #include <AppInfo.h>
 #include <IO/Manager.h>
 #include <JSON/Generator.h>
+#include <JSON/FrameInfo.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 
@@ -150,7 +151,7 @@ void Export::writeValues()
         // Get project title & cell values
         auto dateTime = m_jsonList.first().rxDateTime;
         auto json = m_jsonList.first().jsonDocument.object();
-        auto projectTitle = json.value("t").toVariant().toString();
+        auto projectTitle = JFI_Value(json, "title", "t").toString();
 
         // Validate JSON & title
         if (json.isEmpty() || projectTitle.isEmpty())
@@ -162,35 +163,26 @@ void Export::writeValues()
         // Get cell titles & values
         StringList titles;
         StringList values;
-        auto groups = json.value("g").toArray();
+        auto groups = JFI_Value(json, "groups", "g").toArray();
         for (int i = 0; i < groups.count(); ++i)
         {
             // Get group & dataset array
             auto group = groups.at(i).toObject();
-            auto datasets = group.value("d").toArray();
+            auto datasets = JFI_Value(group, "datasets", "d").toArray();
             if (group.isEmpty() || datasets.isEmpty())
                 continue;
 
             // Get group title
-            auto groupTitle = group.value("t").toVariant().toString();
+            auto groupTitle = JFI_Value(group, "title", "t").toVariant().toString();
 
             // Get dataset titles & values
             for (int j = 0; j < datasets.count(); ++j)
             {
+                // Get dataset object & fields
                 auto dataset = datasets.at(j).toObject();
-                auto datasetTitle = dataset.value("t").toVariant().toString();
-                auto datasetUnits = dataset.value("u").toVariant().toString();
-                auto datasetValue = dataset.value("v").toVariant().toString();
-
-                datasetTitle = datasetTitle.replace("\n", "");
-                datasetUnits = datasetUnits.replace("\n", "");
-                datasetValue = datasetValue.replace("\n", "");
-                datasetTitle = datasetTitle.replace("\r", "");
-                datasetUnits = datasetUnits.replace("\r", "");
-                datasetValue = datasetValue.replace("\r", "");
-
-                if (datasetTitle.isEmpty())
-                    continue;
+                auto datasetTitle = JFI_Value(dataset, "title", "t").toString();
+                auto datasetUnits = JFI_Value(dataset, "units", "u").toString();
+                auto datasetValue = JFI_Value(dataset, "value", "v").toString();
 
                 // Construct dataset title from group, dataset title & units
                 QString title;

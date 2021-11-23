@@ -22,6 +22,7 @@
 
 #include "Editor.h"
 #include "Generator.h"
+#include "FrameInfo.h"
 
 #include <CSV/Player.h>
 #include <IO/Manager.h>
@@ -354,19 +355,19 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
 
         // Calculate dynamically generated values
         auto root = jsonDocument.object();
-        auto groups = root.value("g").toArray();
+        auto groups = JFI_Value(root, "groups", "g").toArray();
         for (int i = 0; i < groups.count(); ++i)
         {
             // Get group
             auto group = groups.at(i).toObject();
 
             // Evaluate each dataset of the current group
-            auto datasets = group.value("d").toArray();
+            auto datasets = JFI_Value(group, "datasets", "d").toArray();
             for (int j = 0; j < datasets.count(); ++j)
             {
                 // Get dataset object & value
                 auto dataset = datasets.at(j).toObject();
-                auto value = dataset.value("v").toString();
+                auto value = JFI_Value(root, "value", "v").toString();
 
                 // Evaluate code in dataset value (if any)
                 auto jsValue = m_engine.evaluate(value);
@@ -375,20 +376,23 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
                 if (!jsValue.isError())
                 {
                     dataset.remove("v");
-                    dataset.insert("v", jsValue.toString());
+                    dataset.remove("value");
+                    dataset.insert("value", jsValue.toString());
                     datasets.replace(j, dataset);
                 }
             }
 
             // Replace group datasets
             group.remove("d");
-            group.insert("d", datasets);
+            group.remove("datasets");
+            group.insert("datasets", datasets);
             groups.replace(i, group);
         }
 
         // Replace root document group objects
         root.remove("g");
-        root.insert("g", groups);
+        root.remove("groups");
+        root.insert("groups", groups);
 
         // Create JSON document
         document = QJsonDocument(root);
@@ -453,19 +457,19 @@ void JSONWorker::process()
 
         // Calculate dynamically generated values
         auto root = jsonDocument.object();
-        auto groups = root.value("g").toArray();
+        auto groups = JFI_Value(root, "groups", "g").toArray();
         for (int i = 0; i < groups.count(); ++i)
         {
             // Get group
             auto group = groups.at(i).toObject();
 
             // Evaluate each dataset of the current group
-            auto datasets = group.value("d").toArray();
+            auto datasets = JFI_Value(group, "datasets", "d").toArray();
             for (int j = 0; j < datasets.count(); ++j)
             {
                 // Get dataset object & value
                 auto dataset = datasets.at(j).toObject();
-                auto value = dataset.value("v").toString();
+                auto value = JFI_Value(root, "value", "v").toString();
 
                 // Evaluate code in dataset value (if any)
                 auto jsValue = m_engine->evaluate(value);
@@ -474,20 +478,23 @@ void JSONWorker::process()
                 if (!jsValue.isError())
                 {
                     dataset.remove("v");
-                    dataset.insert("v", jsValue.toString());
+                    dataset.remove("value");
+                    dataset.insert("value", jsValue.toString());
                     datasets.replace(j, dataset);
                 }
             }
 
             // Replace group datasets
             group.remove("d");
-            group.insert("d", datasets);
+            group.remove("datasets");
+            group.insert("datasets", datasets);
             groups.replace(i, group);
         }
 
         // Replace root document group objects
         root.remove("g");
-        root.insert("g", groups);
+        root.remove("groups");
+        root.insert("groups", groups);
 
         // Create JSON document
         document = QJsonDocument(root);

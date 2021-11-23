@@ -21,6 +21,7 @@
  */
 
 #include "Editor.h"
+#include "FrameInfo.h"
 #include "Generator.h"
 #include "IO/Manager.h"
 #include "Misc/Utilities.h"
@@ -302,10 +303,10 @@ bool Editor::saveJsonFile()
 
     // Create JSON document & add properties
     QJsonObject json;
-    json.insert("t", title());
-    json.insert("s", separator());
-    json.insert("fe", frameEndSequence());
-    json.insert("fs", frameStartSequence());
+    json.insert("title", title());
+    json.insert("separator", separator());
+    json.insert("frameEnd", frameEndSequence());
+    json.insert("frameStart", frameStartSequence());
 
     // Create group array
     QJsonArray groups;
@@ -313,8 +314,8 @@ bool Editor::saveJsonFile()
     {
         // Create group
         QJsonObject group;
-        group.insert("t", groupTitle(i));
-        group.insert("w", groupWidget(i));
+        group.insert("title", groupTitle(i));
+        group.insert("widget", groupWidget(i));
 
         // Create dataset array
         QJsonArray datasets;
@@ -322,30 +323,30 @@ bool Editor::saveJsonFile()
         {
             // Create dataset
             QJsonObject dataset;
-            dataset.insert("t", datasetTitle(i, j));
-            dataset.insert("u", datasetUnits(i, j));
-            dataset.insert("g", datasetGraph(i, j));
             dataset.insert("led", datasetLED(i, j));
-            dataset.insert("w", datasetWidget(i, j));
             dataset.insert("fft", datasetFftPlot(i, j));
             dataset.insert("log", datasetLogPlot(i, j));
-            dataset.insert("v", "%" + QString::number(datasetIndex(i, j)));
+            dataset.insert("title", datasetTitle(i, j));
+            dataset.insert("units", datasetUnits(i, j));
+            dataset.insert("graph", datasetGraph(i, j));
+            dataset.insert("widget", datasetWidget(i, j));
             dataset.insert("min", datasetWidgetMin(i, j).toDouble());
             dataset.insert("max", datasetWidgetMax(i, j).toDouble());
             dataset.insert("alarm", datasetWidgetAlarm(i, j).toDouble());
             dataset.insert("fftSamples", datasetFFTSamples(i, j).toInt());
+            dataset.insert("value", "%" + QString::number(datasetIndex(i, j)));
 
             // Add dataset to array
             datasets.append(dataset);
         }
 
         // Add datasets to group
-        group.insert("d", datasets);
+        group.insert("datasets", datasets);
         groups.append(group);
     }
 
     // Add groups array to JSON
-    json.insert("g", groups);
+    json.insert("groups", groups);
 
     // Write JSON data to file
     file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
@@ -740,10 +741,10 @@ void Editor::openJsonFile(const QString &path)
 
     // Read data from JSON document
     auto json = document.object();
-    setTitle(json.value("t").toString());
-    setSeparator(json.value("s").toString());
-    setFrameEndSequence(json.value("fe").toString());
-    setFrameStartSequence(json.value("fs").toString());
+    setTitle(JFI_Value(json, "title", "t").toString());
+    setSeparator(JFI_Value(json, "separator", "s").toString());
+    setFrameEndSequence(JFI_Value(json, "frameEnd", "fe").toString());
+    setFrameStartSequence(JFI_Value(json, "frameStart", "fs").toString());
 
     // Modify IO manager settings
     auto manager = IO::Manager::getInstance();
@@ -755,48 +756,47 @@ void Editor::openJsonFile(const QString &path)
     JSON::Generator::getInstance()->setOperationMode(JSON::Generator::kManual);
 
     // Read groups from JSON document
-    auto groups = json.value("g").toArray();
-    for (int group = 0; group < groups.count(); ++group)
+    auto groups = JFI_Value(json, "groups", "g").toArray();
+    for (int g = 0; g < groups.count(); ++g)
     {
         // Get JSON group data
-        auto jsonGroup = groups.at(group).toObject();
+        auto group = groups.at(g).toObject();
 
         // Register group with C++ model
         addGroup();
-        setGroupTitle(group, jsonGroup.value("t").toString());
-        setGroupWidgetData(group, jsonGroup.value("w").toString());
+        setGroupTitle(g, JFI_Value(group, "title", "t").toString());
+        setGroupWidgetData(g, JFI_Value(group, "widget", "w").toString());
 
         // Get JSON group datasets
-        auto jsonDatasets = jsonGroup.value("d").toArray();
-        for (int dataset = 0; dataset < jsonDatasets.count(); ++dataset)
+        auto datasets = JFI_Value(group, "datasets", "d").toArray();
+        for (int d = 0; d < datasets.count(); ++d)
         {
             // Get dataset JSON data
-            auto jsonDataset = jsonDatasets.at(dataset).toObject();
+            auto dataset = datasets.at(d).toObject();
 
             // Register dataset with C++ model
-            addDataset(group);
-            setDatasetGraph(group, dataset, jsonDataset.value("g").toBool());
-            setDatasetLED(group, dataset, jsonDataset.value("led").toBool());
-            setDatasetTitle(group, dataset, jsonDataset.value("t").toString());
-            setDatasetUnits(group, dataset, jsonDataset.value("u").toString());
-            setDatasetFftPlot(group, dataset, jsonDataset.value("fft").toBool());
-            setDatasetLogPlot(group, dataset, jsonDataset.value("log").toBool());
-            setDatasetWidgetData(group, dataset, jsonDataset.value("w").toString());
-            setDatasetFFTSamples(
-                group, dataset, QString::number(jsonDataset.value("fftSamples").toInt()));
+            addDataset(g);
+            setDatasetLED(g, d, JFI_Value(dataset, "led").toBool());
+            setDatasetFftPlot(g, d, JFI_Value(dataset, "fft").toBool());
+            setDatasetLogPlot(g, d, JFI_Value(dataset, "log").toBool());
+            setDatasetGraph(g, d, JFI_Value(dataset, "graph", "g").toBool());
+            setDatasetTitle(g, d, JFI_Value(dataset, "title", "t").toString());
+            setDatasetUnits(g, d, JFI_Value(dataset, "units", "u").toString());
+            setDatasetFFTSamples(g, d, JFI_Value(dataset, "fftSamples").toString());
+            setDatasetWidgetData(g, d, JFI_Value(dataset, "widget", "w").toString());
 
             // Get max/min texts
-            auto min = jsonDataset.value("min").toDouble();
-            auto max = jsonDataset.value("max").toDouble();
-            auto alarm = jsonDataset.value("alarm").toDouble();
-            setDatasetWidgetMin(group, dataset, QString::number(min));
-            setDatasetWidgetMax(group, dataset, QString::number(max));
-            setDatasetWidgetAlarm(group, dataset, QString::number(alarm));
+            auto min = JFI_Value(dataset, "min").toDouble();
+            auto max = JFI_Value(dataset, "max").toDouble();
+            auto alarm = JFI_Value(dataset, "alarm").toDouble();
+            setDatasetWidgetMin(g, d, QString::number(min));
+            setDatasetWidgetMax(g, d, QString::number(max));
+            setDatasetWidgetAlarm(g, d, QString::number(alarm));
 
             // Calculate dataset index
-            auto index = jsonDataset.value("v").toString();
+            auto index = JFI_Value(dataset, "value", "v").toString();
             index.replace("%", "");
-            setDatasetIndex(group, dataset, index.toInt());
+            setDatasetIndex(g, d, index.toInt());
         }
     }
 

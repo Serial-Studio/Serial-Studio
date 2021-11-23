@@ -36,6 +36,7 @@
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 #include <JSON/Generator.h>
+#include <JSON/FrameInfo.h>
 
 namespace CSV
 {
@@ -560,31 +561,35 @@ QJsonDocument Player::getJsonFrame(const int row)
 
     // Replace JSON title
     auto json = jsonTemplate.object();
-    json["t"] = tr("Replay of %1").arg(filename());
+    if (json.contains("t"))
+        json["t"] = tr("Replay of %1").arg(filename());
+    else
+        json["title"] = tr("Replay of %1").arg(filename());
 
     // Replace values in JSON  with values in row using the model.
     // This is very ugly code, somebody please fix it :(
-    auto groups = json.value("g").toArray();
+    auto groups = JFI_Value(json, "groups", "g").toArray();
     foreach (auto groupKey, m_model.keys())
     {
         for (int i = 0; i < groups.count(); ++i)
         {
             auto group = groups.at(i).toObject();
 
-            if (group.value("t") == groupKey)
+            if (JFI_Value(group, "title", "t") == groupKey)
             {
                 auto datasetKeys = m_model.value(groupKey);
-                auto datasets = group.value("d").toArray();
+                auto datasets = JFI_Value(group, "datasets", "d").toArray();
                 foreach (auto datasetKey, datasetKeys)
                 {
                     for (int j = 0; j < datasets.count(); ++j)
                     {
                         auto dataset = datasets.at(j).toObject();
-                        if (dataset.value("t") == datasetKey)
+                        if (JFI_Value(dataset, "title", "t") == datasetKey)
                         {
                             auto value = values.at(getDatasetIndex(groupKey, datasetKey));
                             dataset.remove("v");
-                            dataset.insert("v", value);
+                            dataset.remove("value");
+                            dataset.insert("value", value);
                         }
 
                         datasets.replace(j, dataset);
@@ -592,7 +597,8 @@ QJsonDocument Player::getJsonFrame(const int row)
                 }
 
                 group.remove("d");
-                group.insert("d", datasets);
+                group.remove("datasets");
+                group.insert("datasets", datasets);
             }
 
             groups.replace(i, group);
@@ -601,7 +607,8 @@ QJsonDocument Player::getJsonFrame(const int row)
 
     // Update groups from JSON
     json.remove("g");
-    json.insert("g", groups);
+    json.remove("groups");
+    json.insert("groups", groups);
 
     // Return new JSON document
     return QJsonDocument(json);

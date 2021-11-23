@@ -21,6 +21,7 @@
  */
 
 #include "Frame.h"
+#include "FrameInfo.h"
 
 namespace JSON
 {
@@ -91,12 +92,8 @@ bool Frame::read(const QJsonObject &object)
     clear();
 
     // Get title & groups array
-    auto title = object.value("t").toString();
-    auto groups = object.value("g").toArray();
-
-    // Remove line breaks from title
-    title = title.replace("\n", "");
-    title = title.replace("\r", "");
+    auto title = JFI_Value(object, "title", "t").toString();
+    auto groups = JFI_Value(object, "groups", "g").toArray();
 
     // We need to have a project title and at least one group
     if (!title.isEmpty() && !groups.isEmpty())
