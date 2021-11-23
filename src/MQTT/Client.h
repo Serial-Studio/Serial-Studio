@@ -224,6 +224,7 @@ private slots:
 
 private:
     QString m_topic;
+    bool m_sslEnabled;
     int m_sslProtocol;
     bool m_lookupActive;
     int m_certificateMode;

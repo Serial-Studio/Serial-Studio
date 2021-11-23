@@ -22,6 +22,9 @@
 
 #include "Client.h"
 
+#include <QFile>
+#include <QFileDialog>
+
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
@@ -123,15 +126,15 @@ int Client::mqttVersion() const
 {
     switch (m_client.version())
     {
-        case QMQTT::V3_1_0:
-            return 0;
-            break;
-        case QMQTT::V3_1_1:
-            return 1;
-            break;
-        default:
-            return -1;
-            break;
+    case QMQTT::V3_1_0:
+        return 0;
+        break;
+    case QMQTT::V3_1_1:
+        return 1;
+        break;
+    default:
+        return -1;
+        break;
     }
 }
 
@@ -140,7 +143,7 @@ int Client::mqttVersion() const
  */
 bool Client::sslEnabled() const
 {
-    return !(m_client.sslConfiguration().isNull());
+    return m_sslEnabled;
 }
 
 /**
@@ -251,8 +254,8 @@ StringList Client::mqttVersions() const
  */
 StringList Client::sslProtocols() const
 {
-    return StringList { tr("System default"), "TLS v1.0",  "TLS v1.1", "TLS v1.2",
-                        "DTLS v1.0",          "DTLS v1.2", "DTLS v1.3" };
+    return StringList { tr("System default"), "TLS v1.0",  "TLS v1.1", "TLS v1.2 (or later)",
+                "DTLS v1.0",          "DTLS v1.2", "DTLS v1.2 (or later)" };
 }
 
 /**
@@ -263,7 +266,22 @@ StringList Client::certificateModes() const
     return StringList { tr("CA server signed"), tr("Self signed") };
 }
 
-void Client::loadCaFile() { }
+/**
+ * Prompts the user to select a *.ca file and loads the certificate
+ * into the SSL configuration.
+ */
+void Client::loadCaFile() {
+    // Prompt user to select a CA file
+    auto path = QFileDialog::getOpenFileName(
+                Q_NULLPTR,
+                tr("Select CA file"),
+                QDir::homePath(),
+                "*.ca"
+                );
+
+    // Try to load the *.ca file
+    loadCaFile(path);
+}
 
 /**
  * Tries to establish a TCP connection with the MQTT broker/server.
@@ -360,15 +378,77 @@ void Client::setTopic(const QString &topic)
     emit topicChanged();
 }
 
-void Client::loadCaFile(const QString &path) { }
+/**
+ * Reads the CA file in the given @a path and loads it into the
+ * SSL configuration handler for the MQTT connection.
+ */
+void Client::loadCaFile(const QString &path) {
+    // Empty path, abort
+    if (path.isEmpty())
+        return;
 
-void Client::setSslProtocol(const int index) { }
+    // Try to read file contents
+    QByteArray data;
+    QFile file(path);
+    if (file.open(QFile::ReadOnly)) {
+        data = file.readAll();
+        file.close();
+    }
+
+    // Read error, alert user
+    else {
+        Misc::Utilities::showMessageBox(tr("Cannot open CA file!"),
+                                        file.errorString());
+        file.close();
+        return;
+    }
+
+    // Load certificate into SSL configuration
+    QList<QSslCertificate> list;
+    list.append(QSslCertificate(data));
+    m_sslConfiguration.setCaCertificates(list);
+}
+
+/**
+ * Changes the SSL protocol version to use for the MQTT connection.
+ */
+void Client::setSslProtocol(const int index) {
+    switch (index) {
+    case 0:
+        m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
+        break;
+    case 1:
+        m_sslConfiguration.setProtocol(QSsl::TlsV1_0);
+        break;
+    case 2:
+        m_sslConfiguration.setProtocol(QSsl::TlsV1_1);
+        break;
+    case 3:
+        m_sslConfiguration.setProtocol(QSsl::TlsV1_3OrLater);
+        break;
+    case 4:
+        m_sslConfiguration.setProtocol(QSsl::DtlsV1_0);
+        break;
+    case 5:
+        m_sslConfiguration.setProtocol(QSsl::DtlsV1_2);
+        break;
+    case 6:
+        m_sslConfiguration.setProtocol(QSsl::DtlsV1_2OrLater);
+        break;
+    default:
+        break;
+    }
+
+    emit sslProtocolChanged();
+}
 
 /**
  * Enables/disables SSL/TLS communications with the MQTT broker
  */
 void Client::setSslEnabled(const bool enabled)
 {
+    m_sslEnabled = enabled;
+
     if (enabled)
         m_client.setSslConfiguration(m_sslConfiguration);
     else
@@ -377,7 +457,18 @@ void Client::setSslEnabled(const bool enabled)
     emit sslEnabledChanged();
 }
 
-void Client::setCertificateMode(const int index) { }
+/**
+ * @brief Client::setCertificateMode
+ * @param index
+ */
+void Client::setCertificateMode(const int index)
+{
+    switch (index) {
+
+    }
+
+    emit certificateModeChanged();
+}
 
 /**
  * Changes the username used to connect to the MQTT broker/server
@@ -415,14 +506,14 @@ void Client::setMqttVersion(const int versionIndex)
 {
     switch (versionIndex)
     {
-        case 0:
-            m_client.setVersion(QMQTT::V3_1_0);
-            break;
-        case 1:
-            m_client.setVersion(QMQTT::V3_1_1);
-            break;
-        default:
-            break;
+    case 0:
+        m_client.setVersion(QMQTT::V3_1_0);
+        break;
+    case 1:
+        m_client.setVersion(QMQTT::V3_1_1);
+        break;
+    default:
+        break;
     }
 
     emit mqttVersionChanged();
@@ -504,99 +595,99 @@ void Client::onError(const QMQTT::ClientError error)
 
     switch (error)
     {
-        case QMQTT::UnknownError:
-            str = tr("Unknown error");
-            break;
-        case QMQTT::SocketConnectionRefusedError:
-            str = tr("Connection refused");
-            break;
-        case QMQTT::SocketRemoteHostClosedError:
-            str = tr("Remote host closed the connection");
-            break;
-        case QMQTT::SocketHostNotFoundError:
-            str = tr("Host not found");
-            break;
-        case QMQTT::SocketAccessError:
-            str = tr("Socket access error");
-            break;
-        case QMQTT::SocketResourceError:
-            str = tr("Socket resource error");
-            break;
-        case QMQTT::SocketTimeoutError:
-            str = tr("Socket timeout");
-            break;
-        case QMQTT::SocketDatagramTooLargeError:
-            str = tr("Socket datagram too large");
-            break;
-        case QMQTT::SocketNetworkError:
-            str = tr("Network error");
-            break;
-        case QMQTT::SocketAddressInUseError:
-            str = tr("Address in use");
-            break;
-        case QMQTT::SocketAddressNotAvailableError:
-            str = tr("Address not available");
-            break;
-        case QMQTT::SocketUnsupportedSocketOperationError:
-            str = tr("Unsupported socket operation");
-            break;
-        case QMQTT::SocketUnfinishedSocketOperationError:
-            str = tr("Unfinished socket operation");
-            break;
-        case QMQTT::SocketProxyAuthenticationRequiredError:
-            str = tr("Proxy authentication required");
-            break;
-        case QMQTT::SocketSslHandshakeFailedError:
-            str = tr("SSL handshake failed");
-            break;
-        case QMQTT::SocketProxyConnectionRefusedError:
-            str = tr("Proxy connection refused");
-            break;
-        case QMQTT::SocketProxyConnectionClosedError:
-            str = tr("Proxy connection closed");
-            break;
-        case QMQTT::SocketProxyConnectionTimeoutError:
-            str = tr("Proxy connection timeout");
-            break;
-        case QMQTT::SocketProxyNotFoundError:
-            str = tr("Proxy not found");
-            break;
-        case QMQTT::SocketProxyProtocolError:
-            str = tr("Proxy protocol error");
-            break;
-        case QMQTT::SocketOperationError:
-            str = tr("Operation error");
-            break;
-        case QMQTT::SocketSslInternalError:
-            str = tr("SSL internal error");
-            break;
-        case QMQTT::SocketSslInvalidUserDataError:
-            str = tr("Invalid SSL user data");
-            break;
-        case QMQTT::SocketTemporaryError:
-            str = tr("Socket temprary error");
-            break;
-        case QMQTT::MqttUnacceptableProtocolVersionError:
-            str = tr("Unacceptable MQTT protocol");
-            break;
-        case QMQTT::MqttIdentifierRejectedError:
-            str = tr("MQTT identifier rejected");
-            break;
-        case QMQTT::MqttServerUnavailableError:
-            str = tr("MQTT server unavailable");
-            break;
-        case QMQTT::MqttBadUserNameOrPasswordError:
-            str = tr("Bad MQTT username or password");
-            break;
-        case QMQTT::MqttNotAuthorizedError:
-            str = tr("MQTT authorization error");
-            break;
-        case QMQTT::MqttNoPingResponse:
-            str = tr("MQTT no ping response");
-            break;
-        default:
-            str = "";
-            break;
+    case QMQTT::UnknownError:
+        str = tr("Unknown error");
+        break;
+    case QMQTT::SocketConnectionRefusedError:
+        str = tr("Connection refused");
+        break;
+    case QMQTT::SocketRemoteHostClosedError:
+        str = tr("Remote host closed the connection");
+        break;
+    case QMQTT::SocketHostNotFoundError:
+        str = tr("Host not found");
+        break;
+    case QMQTT::SocketAccessError:
+        str = tr("Socket access error");
+        break;
+    case QMQTT::SocketResourceError:
+        str = tr("Socket resource error");
+        break;
+    case QMQTT::SocketTimeoutError:
+        str = tr("Socket timeout");
+        break;
+    case QMQTT::SocketDatagramTooLargeError:
+        str = tr("Socket datagram too large");
+        break;
+    case QMQTT::SocketNetworkError:
+        str = tr("Network error");
+        break;
+    case QMQTT::SocketAddressInUseError:
+        str = tr("Address in use");
+        break;
+    case QMQTT::SocketAddressNotAvailableError:
+        str = tr("Address not available");
+        break;
+    case QMQTT::SocketUnsupportedSocketOperationError:
+        str = tr("Unsupported socket operation");
+        break;
+    case QMQTT::SocketUnfinishedSocketOperationError:
+        str = tr("Unfinished socket operation");
+        break;
+    case QMQTT::SocketProxyAuthenticationRequiredError:
+        str = tr("Proxy authentication required");
+        break;
+    case QMQTT::SocketSslHandshakeFailedError:
+        str = tr("SSL handshake failed");
+        break;
+    case QMQTT::SocketProxyConnectionRefusedError:
+        str = tr("Proxy connection refused");
+        break;
+    case QMQTT::SocketProxyConnectionClosedError:
+        str = tr("Proxy connection closed");
+        break;
+    case QMQTT::SocketProxyConnectionTimeoutError:
+        str = tr("Proxy connection timeout");
+        break;
+    case QMQTT::SocketProxyNotFoundError:
+        str = tr("Proxy not found");
+        break;
+    case QMQTT::SocketProxyProtocolError:
+        str = tr("Proxy protocol error");
+        break;
+    case QMQTT::SocketOperationError:
+        str = tr("Operation error");
+        break;
+    case QMQTT::SocketSslInternalError:
+        str = tr("SSL internal error");
+        break;
+    case QMQTT::SocketSslInvalidUserDataError:
+        str = tr("Invalid SSL user data");
+        break;
+    case QMQTT::SocketTemporaryError:
+        str = tr("Socket temprary error");
+        break;
+    case QMQTT::MqttUnacceptableProtocolVersionError:
+        str = tr("Unacceptable MQTT protocol");
+        break;
+    case QMQTT::MqttIdentifierRejectedError:
+        str = tr("MQTT identifier rejected");
+        break;
+    case QMQTT::MqttServerUnavailableError:
+        str = tr("MQTT server unavailable");
+        break;
+    case QMQTT::MqttBadUserNameOrPasswordError:
+        str = tr("Bad MQTT username or password");
+        break;
+    case QMQTT::MqttNotAuthorizedError:
+        str = tr("MQTT authorization error");
+        break;
+    case QMQTT::MqttNoPingResponse:
+        str = tr("MQTT no ping response");
+        break;
+    default:
+        str = "";
+        break;
     }
 
     if (!str.isEmpty())
