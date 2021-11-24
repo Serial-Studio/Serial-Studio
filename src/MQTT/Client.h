@@ -109,10 +109,6 @@ class Client : public QObject
                READ sslProtocol
                WRITE setSslProtocol
                NOTIFY sslProtocolChanged)
-    Q_PROPERTY(int certificateMode
-               READ certificateMode
-               WRITE setCertificateMode
-               NOTIFY certificateModeChanged)
     Q_PROPERTY(bool isConnectedToHost
                READ isConnectedToHost
                NOTIFY connectedChanged)
@@ -130,9 +126,6 @@ class Client : public QObject
                CONSTANT)
     Q_PROPERTY(StringList sslProtocols
                READ sslProtocols
-               CONSTANT)
-    Q_PROPERTY(StringList certificateModes
-               READ certificateModes
                CONSTANT)
     Q_PROPERTY(quint16 defaultPort
                READ defaultPort
@@ -157,7 +150,6 @@ signals:
     void sslProtocolChanged();
     void mqttVersionChanged();
     void lookupActiveChanged();
-    void certificateModeChanged();
 
 public:
     static Client *getInstance();
@@ -176,14 +168,12 @@ public:
     quint16 keepAlive() const;
     bool lookupActive() const;
     bool isSubscribed() const;
-    int certificateMode() const;
     bool isConnectedToHost() const;
 
     StringList qosLevels() const;
     StringList clientModes() const;
     StringList mqttVersions() const;
     StringList sslProtocols() const;
-    StringList certificateModes() const;
 
     quint16 defaultPort() const { return 1883; }
     QString defaultHost() const { return "127.0.0.1"; }
@@ -203,7 +193,6 @@ public slots:
     void loadCaFile(const QString &path);
     void setSslProtocol(const int index);
     void setSslEnabled(const bool enabled);
-    void setCertificateMode(const int index);
     void setUsername(const QString &username);
     void setPassword(const QString &password);
     void setKeepAlive(const quint16 keepAlive);
@@ -227,7 +216,6 @@ private:
     bool m_sslEnabled;
     int m_sslProtocol;
     bool m_lookupActive;
-    int m_certificateMode;
     QMQTT::Client m_client;
     quint16 m_sentMessages;
     QVector<QByteArray> m_frames;

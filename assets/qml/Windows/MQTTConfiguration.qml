@@ -503,13 +503,12 @@ FramelessWindow.CustomWindow {
                         id: _certificateMode
                         Layout.fillWidth: true
                         opacity: enabled ? 1 : 0.5
-                        model: Cpp_MQTT_Client.certificateModes
-                        enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
                         Behavior on opacity {NumberAnimation{}}
-                        onCurrentIndexChanged: {
-                            if (currentIndex !== Cpp_MQTT_Client.certificateMode)
-                                Cpp_MQTT_Client.certificateMode = currentIndex
-                        }
+                        enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
+                        model: [
+                            tr("Use system database"),
+                            tr("Custom CA file")
+                        ]
                     }
 
                     Button {

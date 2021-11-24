@@ -206,11 +206,6 @@ bool Client::isSubscribed() const
     return isConnectedToHost() && !topic().isEmpty() && clientMode() == ClientSubscriber;
 }
 
-int Client::certificateMode() const
-{
-    return m_certificateMode;
-}
-
 /**
  * Returns @c true if the MQTT module is connected to a MQTT broker/server.
  */
@@ -260,22 +255,14 @@ StringList Client::sslProtocols() const
 }
 
 /**
- * Returns a list with the supported certificate modes
- */
-StringList Client::certificateModes() const
-{
-    return StringList { tr("CA server signed"), tr("Self signed") };
-}
-
-/**
  * Prompts the user to select a *.ca file and loads the certificate
  * into the SSL configuration.
  */
 void Client::loadCaFile()
 {
     // Prompt user to select a CA file
-    auto path = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Select CA file"),
-                                             QDir::homePath(), "*.ca");
+    auto path
+        = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Select CA file"), QDir::homePath());
 
     // Try to load the *.ca file
     loadCaFile(path);
@@ -404,9 +391,7 @@ void Client::loadCaFile(const QString &path)
     }
 
     // Load certificate into SSL configuration
-    QList<QSslCertificate> list;
-    list.append(QSslCertificate(data));
-    m_sslConfiguration.setCaCertificates(list);
+    m_sslConfiguration.setCaCertificates(QSslCertificate::fromData(data));
 }
 
 /**
@@ -457,19 +442,6 @@ void Client::setSslEnabled(const bool enabled)
         m_client.setSslConfiguration(QSslConfiguration());
 
     emit sslEnabledChanged();
-}
-
-/**
- * @brief Client::setCertificateMode
- * @param index
- */
-void Client::setCertificateMode(const int index)
-{
-    switch (index)
-    {
-    }
-
-    emit certificateModeChanged();
 }
 
 /**
