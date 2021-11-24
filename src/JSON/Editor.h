@@ -164,11 +164,10 @@ public slots:
     void setDatasetFFTSamples(const int group, const int dataset, const QString &samples);
 
 private slots:
-    void setModified(const bool modified);
-
     void onJsonLoaded();
     void onModelChanged();
     void onGroupChanged(const int group);
+    void setModified(const bool modified);
     void onDatasetChanged(const int group, const int dataset);
 
 private:

@@ -1367,11 +1367,8 @@ void Editor::setDatasetFFTSamples(const int group, const int dataset,
  */
 void Editor::setModified(const bool modified)
 {
-    if (m_modified != modified)
-    {
-        m_modified = modified;
-        emit modifiedChanged();
-    }
+    m_modified = modified;
+    emit modifiedChanged();
 }
 
 /**
