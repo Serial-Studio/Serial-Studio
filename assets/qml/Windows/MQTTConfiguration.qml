@@ -506,8 +506,8 @@ FramelessWindow.CustomWindow {
                         Behavior on opacity {NumberAnimation{}}
                         enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
                         model: [
-                            tr("Use system database"),
-                            tr("Custom CA file")
+                            qsTr("Use system database"),
+                            qsTr("Custom CA file")
                         ]
                     }
 
