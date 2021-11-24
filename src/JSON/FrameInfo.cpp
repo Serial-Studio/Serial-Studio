@@ -73,34 +73,34 @@ JFI_Object JFI_CreateNew(const quint64 n, const QDateTime &t, const QJsonDocumen
 }
 
 /**
- * Obtains the value of the first element that corresponds to given @a key
+ * Obtains the value of the  element that corresponds to given @a key
  */
-QJsonValue JFI_Value(const QJsonObject &object, const QString key)
+QJsonValue JFI_Value(const QJsonObject &obj, const QString &key)
 {
-    if (object.contains(key))
-        return object.value(key);
+    if (obj.contains(key))
+        return obj.value(key);
 
-    return QJsonValue();
+    return QJsonValue(QJsonValue::Null);
 }
 
 /**
  * Obtains the value of the first element that matches one of the given @a keys
  */
-QJsonValue JFI_Value(const QJsonObject &object, const StringList keys)
+QJsonValue JFI_Value(const QJsonObject &obj, const QStringList &keys)
 {
     foreach (auto key, keys)
     {
-        if (object.contains(key))
-            return object.value(key);
+        if (obj.contains(key))
+            return obj.value(key);
     }
 
-    return QJsonValue();
+    return QJsonValue(QJsonValue::Null);
 }
 
 /**
  * Obtains the value of the first element that corresponds to key @c a or key @c b
  */
-QJsonValue JFI_Value(const QJsonObject &object, const QString a, const QString b)
+QJsonValue JFI_Value(const QJsonObject &obj, const QString &a, const QString &b)
 {
-    return JFI_Value(object, StringList { a, b });
+    return JFI_Value(obj, StringList { a, b });
 }

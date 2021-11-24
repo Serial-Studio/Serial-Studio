@@ -81,13 +81,13 @@ Rectangle {
 
         // Calculations for Windows/Linux layout
         else {
-            margin = 10
+            margin = 8
 
             if (root.showIcon)
                 margin += 24
 
-            if (margin > 10)
-                margin += 8
+            if (margin > 8)
+                margin += 6
         }
 
         // Return result
@@ -272,7 +272,7 @@ Rectangle {
             anchors.fill: parent
 
             Item {
-                width: 12
+                width: 8
             }
 
             WindowButton {
