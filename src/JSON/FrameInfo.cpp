@@ -77,7 +77,10 @@ JFI_Object JFI_CreateNew(const quint64 n, const QDateTime &t, const QJsonDocumen
  */
 QJsonValue JFI_Value(const QJsonObject &object, const QString key)
 {
-    return JFI_Value(object, StringList { key });
+    if (object.contains(key))
+        return object.value(key);
+
+    return QJsonValue();
 }
 
 /**
@@ -85,11 +88,10 @@ QJsonValue JFI_Value(const QJsonObject &object, const QString key)
  */
 QJsonValue JFI_Value(const QJsonObject &object, const StringList keys)
 {
-    for (int i = 0; i < keys.count(); ++i)
+    foreach (auto key, keys)
     {
-        auto tag = keys.at(i);
-        if (object.contains(tag))
-            return object.value(tag);
+        if (object.contains(key))
+            return object.value(key);
     }
 
     return QJsonValue();
