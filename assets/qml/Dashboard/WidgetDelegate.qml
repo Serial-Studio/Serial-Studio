@@ -62,13 +62,14 @@ Item {
 
     FramelessWindow.CustomWindow {
         id: externalWindow
-        minimumWidth: 640
-        minimumHeight: 480
+        minimumWidth: 640 + shadowMargin
+        minimumHeight: 480 + shadowMargin
         title: externalLoader.widgetTitle
         extraFlags: Qt.WindowStaysOnTopHint
         titlebarText: Cpp_ThemeManager.text
         titlebarColor: Cpp_ThemeManager.widgetWindowBackground
         backgroundColor: Cpp_ThemeManager.widgetWindowBackground
+        borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
 
         Rectangle {
             clip: true
@@ -113,9 +114,15 @@ Item {
                 hoverEnabled: true
                 anchors.fill: parent
                 acceptedButtons: Qt.NoButton
-                anchors.topMargin: titlebar.height
+                anchors.topMargin: externalWindow.titlebar.height
                 onContainsMouseChanged: externalLoader.processMouseHover(containsMouse)
             }
+        }
+
+        FramelessWindow.ResizeHandles {
+            handleSize: 10
+            anchors.fill: parent
+            window: externalWindow
         }
     }
 }
