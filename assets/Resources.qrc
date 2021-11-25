@@ -165,5 +165,6 @@
         <file>themes/3_Flat.json</file>
         <file>themes/2_Noir.json</file>
         <file>themes/4_MathWorks.json</file>
+        <file>images/shadow.png</file>
     </qresource>
 </RCC>

@@ -92,7 +92,6 @@ ColumnLayout {
                 // Window shadow
                 //
                 Widgets.Shadow {
-                    source: group
                     anchors.fill: group
                 }
 

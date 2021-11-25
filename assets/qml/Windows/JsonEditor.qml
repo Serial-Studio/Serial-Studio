@@ -95,13 +95,8 @@ FramelessWindow.CustomWindow {
         // Shadows
         //
         Widgets.Shadow {
-            source: header
-            horizontalOffset: 0
             anchors.fill: header
         } Widgets.Shadow {
-            source: footer
-            verticalOffset: -3
-            horizontalOffset: 0
             anchors.fill: footer
         }
 
@@ -166,7 +161,6 @@ FramelessWindow.CustomWindow {
                 visible: Cpp_JSON_Editor.groupCount !== 0
 
                 Widgets.Shadow {
-                    source: jsonTree
                     anchors.fill: jsonTree
                 }
 

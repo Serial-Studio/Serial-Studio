@@ -59,7 +59,6 @@ Item {
                 Layout.minimumWidth: 280
 
                 Widgets.Shadow {
-                    source: viewOptions
                     anchors.fill: viewOptions
                 }
 
@@ -82,7 +81,6 @@ Item {
                     Layout.minimumWidth: 240
 
                     Widgets.Shadow {
-                        source: widgetGrid
                         anchors.fill: widgetGrid
                     }
 
@@ -106,7 +104,6 @@ Item {
                     Behavior on Layout.bottomMargin { NumberAnimation{} }
 
                     Widgets.Shadow {
-                        source: terminal
                         anchors.fill: terminal
                     }
 

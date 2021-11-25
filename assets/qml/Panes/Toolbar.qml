@@ -81,7 +81,6 @@ Control {
     // Toolbar shadow
     //
     Widgets.Shadow {
-        source: bg
         anchors.fill: bg
     }
 

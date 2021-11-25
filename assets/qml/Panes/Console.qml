@@ -82,7 +82,6 @@ Item {
     // to avoid blurry artifacts & glitches).
     //
     Widgets.Shadow {
-        source: window
         anchors.fill: window
     }
 

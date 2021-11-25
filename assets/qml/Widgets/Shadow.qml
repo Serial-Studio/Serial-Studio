@@ -21,14 +21,31 @@
  */
 
 import QtQuick 2.12
-import QtGraphicalEffects 1.0
 
-DropShadow {
+Item {
     id: root
-    radius: 20
-    samples: 42
-    verticalOffset: 3
-    color: "#80000000"
-    horizontalOffset: 3
-    transparentBorder: true
+    property real topMargin: -8
+    property real leftMargin: -8
+    property real rightMargin: -10
+    property real bottomMargin: -10
+
+    BorderImage {
+        opacity: 0.5
+        anchors.fill: parent
+        source: "qrc:/images/shadow.png"
+
+        anchors {
+            topMargin: root.topMargin
+            leftMargin: root.leftMargin
+            rightMargin: root.rightMargin
+            bottomMargin: root.bottomMargin
+        }
+
+        border {
+            left: 10
+            top: 10
+            right: 10
+            bottom: 10
+        }
+    }
 }

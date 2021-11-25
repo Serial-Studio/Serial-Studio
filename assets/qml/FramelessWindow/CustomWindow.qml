@@ -22,7 +22,8 @@
 
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtGraphicalEffects 1.0
+
+import "../Widgets" as Widgets
 
 Window {
     id: root
@@ -135,12 +136,14 @@ Window {
     //
     // Shadow implementation
     //
-    RectangularGlow {
-        spread: 0.2
+    Widgets.Shadow {
+        opacity: 0.2
         anchors.fill: bg
-        color: Qt.rgba(0,0,0,0.5)
-        glowRadius: root.shadowMargin / 2
-        cornerRadius: bg.radius + glowRadius
+        visible: root.shadowMargin > 0
+        topMargin: -1 * root.shadowMargin
+        leftMargin: -1 * root.shadowMargin
+        rightMargin: -1 * root.shadowMargin
+        bottomMargin: -1 * root.shadowMargin
     } Rectangle {
         id: bg
         color: "transparent"
