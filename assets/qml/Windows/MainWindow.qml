@@ -356,4 +356,13 @@ FramelessWindow.CustomWindow {
         anchors.fill: parent
         enabled: !Cpp_IO_Manager.connected
     }
+
+    //
+    // Resize handler
+    //
+    FramelessWindow.ResizeHandles {
+        window: root
+        anchors.fill: parent
+        handleSize: root.handleSize
+    }
 }

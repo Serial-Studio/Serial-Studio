@@ -98,6 +98,7 @@ FramelessWindow.CustomWindow {
             anchors.fill: header
         } Widgets.Shadow {
             anchors.fill: footer
+            anchors.bottomMargin: footer.height / 2
         }
 
         //
@@ -225,5 +226,14 @@ FramelessWindow.CustomWindow {
                 Layout.maximumWidth: app.spacing
             }
         }
+    }
+
+    //
+    // Resize handler
+    //
+    FramelessWindow.ResizeHandles {
+        window: root
+        anchors.fill: parent
+        handleSize: root.handleSize
     }
 }

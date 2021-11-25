@@ -183,15 +183,6 @@ Window {
         border.width: root.borderWidth
         anchors.margins: root.shadowMargin
     }
-    
-    //
-    // Resize handler
-    //
-    ResizeHandles {
-        window: root
-        anchors.fill: parent
-        handleSize: root.handleSize
-    }
 
     //
     // Titlebar control
