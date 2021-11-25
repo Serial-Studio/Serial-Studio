@@ -4,9 +4,6 @@
 [submodule "libs/qtcsv"]
 	path = libs/qtcsv
 	url = https://github.com/iamantony/qtcsv
-[submodule "libs/qmqtt"]
-	path = libs/qmqtt
-	url = https://github.com/alex-spataru/qmqtt
 [submodule "doc/doxygen/doxygen-awesome-css"]
 	path = doc/doxygen/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
