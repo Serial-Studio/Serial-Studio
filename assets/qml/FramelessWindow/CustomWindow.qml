@@ -208,6 +208,39 @@ Window {
     }
 
     //
+    // Handle for resizing the window
+    // Note: this does not work on macOS, see the following article for more information
+    //       https://www.qt.io/blog/custom-window-decorations
+    //
+    DragHandler {
+        id: resizeHandler
+        target: null
+        enabled: !Cpp_IsMac
+        grabPermissions: TapHandler.TakeOverForbidden
+        onActiveChanged: {
+            if (active) {
+                const p = resizeHandler.centroid.position
+                const b = root.handleSize
+                let e = 0;
+
+                if (p.x < b)
+                    e |= Qt.LeftEdge
+
+                if (p.x >= width - b)
+                    e |= Qt.RightEdge
+
+                if (p.y < b)
+                    e |= Qt.TopEdge
+
+                if (p.y >= height - b)
+                    e |= Qt.BottomEdge
+
+                window.startSystemResize(e)
+            }
+        }
+    }
+
+    //
     // Maximize window fixes
     //
     onVisibilityChanged: {

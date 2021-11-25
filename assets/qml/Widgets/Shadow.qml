@@ -31,8 +31,11 @@ Item {
 
     BorderImage {
         opacity: 0.5
+        smooth: true
         anchors.fill: parent
         source: "qrc:/images/shadow.png"
+        verticalTileMode: BorderImage.Round
+        horizontalTileMode: BorderImage.Round
 
         anchors {
             topMargin: root.topMargin
