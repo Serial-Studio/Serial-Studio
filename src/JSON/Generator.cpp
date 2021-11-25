@@ -367,7 +367,7 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
             {
                 // Get dataset object & value
                 auto dataset = datasets.at(j).toObject();
-                auto value = JFI_Value(root, "value", "v").toString();
+                auto value = JFI_Value(dataset, "value", "v").toString();
 
                 // Evaluate code in dataset value (if any)
                 auto jsValue = m_engine.evaluate(value);
@@ -469,7 +469,7 @@ void JSONWorker::process()
             {
                 // Get dataset object & value
                 auto dataset = datasets.at(j).toObject();
-                auto value = JFI_Value(root, "value", "v").toString();
+                auto value = JFI_Value(dataset, "value", "v").toString();
 
                 // Evaluate code in dataset value (if any)
                 auto jsValue = m_engine->evaluate(value);
