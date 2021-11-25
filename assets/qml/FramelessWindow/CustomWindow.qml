@@ -42,7 +42,7 @@ Window {
     // Window radius control
     //
     property int borderWidth: 2
-    readonly property int handleSize: radius > 0 ? radius + 10 + shadowMargin : 0
+    readonly property int handleSize: radius > 0 ? radius + 10 : 0
     readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || isFullscreen) ? 0 : 10
 
     //
@@ -54,12 +54,29 @@ Window {
     property bool isMinimized: false
     property alias showIcon: _title.showIcon
     property alias isFullscreen: _title.isFullscreen
-    readonly property int customFlags: Qt.Window |
-                                       Qt.CustomizeWindowHint |
-                                       Qt.FramelessWindowHint |
-                                       Qt.WindowSystemMenuHint |
-                                       Qt.NoDropShadowWindowHint |
-                                       Qt.WindowMinMaxButtonsHint
+    readonly property int customFlags: {
+        // Setup frameless window flags
+        var flags = Qt.Window |
+                    Qt.CustomizeWindowHint |
+                    Qt.FramelessWindowHint |
+                    Qt.WindowSystemMenuHint |
+                    Qt.WindowMinMaxButtonsHint
+
+        //
+        // The macOS window manager is able to generate shadows for Qt frameless
+        // windows. Other operating systems have varied mileage, so we draw the
+        // shadow ourselves to avoid ugly surprises.
+        //
+        // Also, disabling the custom shadow on macOS is a good idea so that users can
+        // move the window freely over all the desktop without being blocked by the
+        // menubar or dock due to the custom shadow border.
+        //
+        if (!Cpp_IsMac)
+            flags |= Qt.NoDropShadowWindowHint
+
+        // Return "calculated" window flags
+        return flags
+    }
 
     //
     // Toggle fullscreen state
@@ -80,7 +97,7 @@ Window {
     //
     // Size of the shadow object
     //
-    property int shadowMargin: root.radius > 0 ? 20 : 0
+    property int shadowMargin: Cpp_IsMac ? 0 : (root.radius > 0 ? 20 : 0)
 
     //
     // Titlebar left/right margins for custom controls
@@ -134,7 +151,8 @@ Window {
     }
 
     //
-    // Shadow implementation
+    // Custom shadow implementation for non-macOS systems. The shadow shall be disabled
+    // when the window is maximized.
     //
     Widgets.Shadow {
         opacity: 0.2
