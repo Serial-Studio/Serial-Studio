@@ -279,7 +279,6 @@ Rectangle {
                 visible: root.showIcon
                 enabled: root.showIcon
                 textColor: root.textColor
-                highlightColor: root.textColor
                 Layout.alignment: Qt.AlignVCenter
                 source: "qrc:/images/icon-window.svg"
             }
@@ -292,7 +291,6 @@ Rectangle {
                 name: "minimize"
                 textColor: root.textColor
                 Layout.alignment: Qt.AlignVCenter
-                highlightColor: Cpp_ThemeManager.highlight
                 enabled: root.minimizeEnabled && !root.isFullscreen
                 visible: root.minimizeEnabled && !root.isFullscreen
                 onClicked: {
@@ -309,7 +307,6 @@ Rectangle {
                 textColor: root.textColor
                 onClicked: root.toggleMaximized()
                 Layout.alignment: Qt.AlignVCenter
-                highlightColor: Cpp_ThemeManager.highlight
                 enabled: root.maximizeEnabled && !root.isFullscreen
                 visible: root.maximizeEnabled && !root.isFullscreen
                 name: window.visibility === Window.Maximized ? "unmaximize" : "maximize"
@@ -317,7 +314,6 @@ Rectangle {
 
             WindowButton {
                 name: "close"
-                highlightColor: "#f00"
                 textColor: root.textColor
                 enabled: root.closeEnabled
                 visible: root.closeEnabled
