@@ -28,8 +28,13 @@ Item {
     property real leftMargin: -8
     property real rightMargin: -10
     property real bottomMargin: -10
+    property alias border: borderImage.border
+    property alias source: borderImage.source
+    property alias shadowOpacity: borderImage.opacity
 
     BorderImage {
+        id: borderImage
+
         opacity: 0.5
         smooth: true
         anchors.fill: parent

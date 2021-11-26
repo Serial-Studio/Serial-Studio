@@ -155,13 +155,18 @@ Window {
     // when the window is maximized.
     //
     Widgets.Shadow {
-        opacity: 0.2
+        border.top: 50
+        border.left: 50
+        border.right: 50
+        border.bottom: 50
         anchors.fill: bg
+        shadowOpacity: 1.0
         visible: root.shadowMargin > 0
         topMargin: -1 * root.shadowMargin
         leftMargin: -1 * root.shadowMargin
         rightMargin: -1 * root.shadowMargin
         bottomMargin: -1 * root.shadowMargin
+        source: "qrc:/images/window-shadow.png"
     } Rectangle {
         id: bg
         color: "transparent"

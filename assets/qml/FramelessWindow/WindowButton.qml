@@ -29,23 +29,14 @@ Widgets.Icon {
     signal clicked()
     property string name
     property color textColor
-    property color highlightColor
 
     width: 24
     height: 24
     color: root.textColor
     source: "qrc:/window-border/" + name + ".svg"
 
-    Behavior on color {ColorAnimation{}}
-    Behavior on opacity {NumberAnimation{}}
-
     MouseArea {
-        hoverEnabled: true
         anchors.fill: parent
         onReleased: root.clicked()
-        onContainsMouseChanged: {
-            parent.opacity = containsMouse ? 1 : 0.8
-            parent.color = containsMouse ? highlightColor : root.textColor
-        }
     }
 }
