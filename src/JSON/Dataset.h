@@ -97,9 +97,9 @@ private:
 
     // Editor-related variables
     int m_index;
-    QString m_max;
-    QString m_min;
-    QString m_alarm;
+    double m_max;
+    double m_min;
+    double m_alarm;
     int m_fftSamples;
     friend class Editor;
 };

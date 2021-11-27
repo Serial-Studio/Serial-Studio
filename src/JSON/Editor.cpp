@@ -330,9 +330,9 @@ bool Editor::saveJsonFile()
             dataset.insert("units", datasetUnits(i, j));
             dataset.insert("graph", datasetGraph(i, j));
             dataset.insert("widget", datasetWidget(i, j));
-            dataset.insert("min", datasetWidgetMin(i, j));
-            dataset.insert("max", datasetWidgetMax(i, j));
-            dataset.insert("alarm", datasetWidgetAlarm(i, j));
+            dataset.insert("min", datasetWidgetMin(i, j).toDouble());
+            dataset.insert("max", datasetWidgetMax(i, j).toDouble());
+            dataset.insert("alarm", datasetWidgetAlarm(i, j).toDouble());
             dataset.insert("fftSamples", datasetFFTSamples(i, j).toInt());
             dataset.insert("value", "%" + QString::number(datasetIndex(i, j)));
 
@@ -603,7 +603,7 @@ QString Editor::datasetWidgetMin(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
     if (set)
-        return set->m_min;
+        return QString::number(set->m_min);
 
     return "0";
 }
@@ -619,7 +619,7 @@ QString Editor::datasetWidgetMax(const int group, const int dataset)
 {
     auto set = getDataset(group, dataset);
     if (set)
-        return set->m_max;
+        return QString::number(set->m_max);
 
     return "0";
 }
@@ -651,10 +651,10 @@ QString Editor::datasetWidgetAlarm(const int group, const int dataset)
     auto set = getDataset(group, dataset);
     if (set)
     {
-        if (set->m_alarm.isEmpty())
-            return set->m_max;
+        if (set->m_alarm <= set->min())
+            return QString::number(set->m_max);
         else
-            return set->m_alarm;
+            return QString::number(set->m_alarm);
     }
 
     return "0";
@@ -1256,8 +1256,8 @@ void Editor::setDatasetWidget(const int group, const int dataset, const int widg
         else if (widgetId == 3)
         {
             widget = "compass";
-            set->m_min = "0";
-            set->m_max = "360";
+            set->m_min = 0;
+            set->m_max = 360;
         }
 
         set->m_widget = widget;
@@ -1279,7 +1279,7 @@ void Editor::setDatasetWidgetMin(const int group, const int dataset,
     auto set = getDataset(group, dataset);
     if (set)
     {
-        set->m_min = minimum;
+        set->m_min = minimum.toDouble();
         emit datasetChanged(group, dataset);
     }
 }
@@ -1298,7 +1298,7 @@ void Editor::setDatasetWidgetMax(const int group, const int dataset,
     auto set = getDataset(group, dataset);
     if (set)
     {
-        set->m_max = maximum;
+        set->m_max = maximum.toDouble();
         emit datasetChanged(group, dataset);
     }
 }
@@ -1334,7 +1334,7 @@ void Editor::setDatasetWidgetAlarm(const int group, const int dataset,
     auto set = getDataset(group, dataset);
     if (set)
     {
-        set->m_alarm = alarm;
+        set->m_alarm = alarm.toDouble();
         emit datasetChanged(group, dataset);
     }
 }

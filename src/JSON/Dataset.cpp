@@ -37,9 +37,9 @@ Dataset::Dataset(QObject *parent)
     , m_units("")
     , m_widget("")
     , m_index(0)
-    , m_max("0")
-    , m_min("0")
-    , m_alarm("0")
+    , m_max(0)
+    , m_min(0)
+    , m_alarm(0)
     , m_fftSamples(1024)
 {
 }
@@ -81,7 +81,7 @@ bool Dataset::graph() const
  */
 double Dataset::min() const
 {
-    return m_min.toDouble();
+    return m_min;
 }
 
 /**
@@ -89,7 +89,7 @@ double Dataset::min() const
  */
 double Dataset::max() const
 {
-    return m_max.toDouble();
+    return m_max;
 }
 
 /**
@@ -97,7 +97,7 @@ double Dataset::max() const
  */
 double Dataset::alarm() const
 {
-    return m_alarm.toDouble();
+    return m_alarm;
 }
 
 /**
@@ -161,9 +161,9 @@ bool Dataset::read(const QJsonObject &object)
         auto fft = JFI_Value(object, "fft").toBool();
         auto led = JFI_Value(object, "led").toBool();
         auto log = JFI_Value(object, "log").toBool();
-        auto min = JFI_Value(object, "min").toString();
-        auto max = JFI_Value(object, "max").toString();
-        auto alarm = JFI_Value(object, "alarm").toString();
+        auto min = JFI_Value(object, "min").toDouble();
+        auto max = JFI_Value(object, "max").toDouble();
+        auto alarm = JFI_Value(object, "alarm").toDouble();
         auto graph = JFI_Value(object, "graph", "g").toBool();
         auto title = JFI_Value(object, "title", "t").toString();
         auto value = JFI_Value(object, "value", "v").toString();
