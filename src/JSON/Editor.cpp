@@ -330,9 +330,9 @@ bool Editor::saveJsonFile()
             dataset.insert("units", datasetUnits(i, j));
             dataset.insert("graph", datasetGraph(i, j));
             dataset.insert("widget", datasetWidget(i, j));
-            dataset.insert("min", datasetWidgetMin(i, j).toDouble());
-            dataset.insert("max", datasetWidgetMax(i, j).toDouble());
-            dataset.insert("alarm", datasetWidgetAlarm(i, j).toDouble());
+            dataset.insert("min", datasetWidgetMin(i, j));
+            dataset.insert("max", datasetWidgetMax(i, j));
+            dataset.insert("alarm", datasetWidgetAlarm(i, j));
             dataset.insert("fftSamples", datasetFFTSamples(i, j).toInt());
             dataset.insert("value", "%" + QString::number(datasetIndex(i, j)));
 
@@ -605,7 +605,7 @@ QString Editor::datasetWidgetMin(const int group, const int dataset)
     if (set)
         return set->m_min;
 
-    return 0;
+    return "0";
 }
 
 /**
@@ -621,7 +621,7 @@ QString Editor::datasetWidgetMax(const int group, const int dataset)
     if (set)
         return set->m_max;
 
-    return 0;
+    return "0";
 }
 
 /**
@@ -636,7 +636,7 @@ QString Editor::datasetFFTSamples(const int group, const int dataset)
     if (set)
         return QString::number(qMax(1, set->m_fftSamples));
 
-    return 0;
+    return "0";
 }
 
 /**
@@ -657,7 +657,7 @@ QString Editor::datasetWidgetAlarm(const int group, const int dataset)
             return set->m_alarm;
     }
 
-    return 0;
+    return "0";
 }
 
 //----------------------------------------------------------------------------------------
