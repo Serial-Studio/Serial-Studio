@@ -29,6 +29,7 @@ Widgets.Icon {
     signal clicked()
     property string name
     property color textColor
+    property color pressedColor: Cpp_ThemeManager.highlight
 
     width: 24
     height: 24
@@ -37,6 +38,9 @@ Widgets.Icon {
 
     MouseArea {
         anchors.fill: parent
-        onReleased: root.clicked()
+        preventStealing: true
+        onClicked: root.clicked()
+        acceptedButtons: Qt.LeftButton
+        onPressedChanged: root.color = pressed ? root.pressedColor : root.textColor
     }
 }

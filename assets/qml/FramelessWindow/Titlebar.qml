@@ -314,6 +314,7 @@ Rectangle {
 
             WindowButton {
                 name: "close"
+                pressedColor: "#f00"
                 textColor: root.textColor
                 enabled: root.closeEnabled
                 visible: root.closeEnabled
