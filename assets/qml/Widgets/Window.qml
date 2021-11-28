@@ -58,7 +58,6 @@ Page {
     //
     // Animations
     //
-    Behavior on opacity {NumberAnimation{}}
     Behavior on Layout.preferredWidth {NumberAnimation{}}
     Behavior on Layout.preferredHeight {NumberAnimation{}}
 
@@ -115,20 +114,12 @@ Page {
         MouseArea {
             z: 2
             id: headerMouseArea
-            hoverEnabled: true
             anchors.fill: parent
             onDoubleClicked: root.headerDoubleClicked()
 
             onClicked: (mouse) => {
                 if (mouse.x >= headerBt.x && mouse.x <= headerBt.x + headerBt.width)
                     root.headerDoubleClicked()
-            }
-
-            onContainsMouseChanged: {
-                if (containsMouse)
-                    headerBt.opacity = 1
-                else
-                    headerBt.opacity = 0
             }
         }
 
@@ -161,7 +152,6 @@ Page {
 
             Icon {
                 id: headerBt
-                opacity: 0
                 color: root.titleColor
                 Layout.alignment: Qt.AlignVCenter
                 Layout.maximumHeight: parent.height
@@ -169,10 +159,9 @@ Page {
                 icon.source: "qrc:/icons/expand.svg"
                 Layout.minimumWidth: root.headerHeight
                 Layout.maximumWidth: root.headerHeight
+                visible: root.headerDoubleClickEnabled
                 icon.width: root.headerHeight * 20 / 32
                 icon.height: root.headerHeight * 20 / 32
-
-                Behavior on opacity {NumberAnimation{}}
             }
 
             Button {

@@ -190,15 +190,13 @@ FramelessWindow.CustomWindow {
                 // QOS Level & Keep Alive
                 //
                 Label {
+                    opacity: enabled ? 1 : 0.5
                     text: qsTr("QOS level") + ":"
-                    opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 } Label {
-                    text: qsTr("Keep alive (s)") + ":"
                     opacity: enabled ? 1 : 0.5
+                    text: qsTr("Keep alive (s)") + ":"
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -207,16 +205,15 @@ FramelessWindow.CustomWindow {
                 ComboBox {
                     id: _qos
                     Layout.fillWidth: true
+                    opacity: enabled ? 1 : 0.5
                     model: Cpp_MQTT_Client.qosLevels
                     currentIndex: Cpp_MQTT_Client.qos
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+
                     onCurrentIndexChanged: {
                         if (Cpp_MQTT_Client.qos !== currentIndex)
                             Cpp_MQTT_Client.qos = currentIndex
                     }
-
-                    opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -225,8 +222,11 @@ FramelessWindow.CustomWindow {
                 TextField {
                     id: _keepAlive
                     Layout.fillWidth: true
+                    opacity: enabled ? 1 : 0.5
                     placeholderText: Cpp_MQTT_Client.keepAlive
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
                     Component.onCompleted: text = Cpp_MQTT_Client.keepAlive
+
                     onTextChanged: {
                         if (Cpp_MQTT_Client.keepAlive !== text && text.length > 0)
                             Cpp_MQTT_Client.keepAlive = text
@@ -239,10 +239,6 @@ FramelessWindow.CustomWindow {
                         bottom: 1
                         top: 65535
                     }
-
-                    opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -261,12 +257,10 @@ FramelessWindow.CustomWindow {
                     text: qsTr("Host") + ":"
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 } Label {
                     text: qsTr("Port") + ":"
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -275,8 +269,11 @@ FramelessWindow.CustomWindow {
                 TextField {
                     id: _host
                     Layout.fillWidth: true
+                    opacity: enabled ? 1 : 0.5
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
                     placeholderText: Cpp_MQTT_Client.defaultHost
                     Component.onCompleted: text = Cpp_MQTT_Client.host
+
                     onTextChanged: {
                         if (Cpp_MQTT_Client.host !== text && text.length > 0)
                             Cpp_MQTT_Client.host = text
@@ -284,10 +281,6 @@ FramelessWindow.CustomWindow {
                         if (text.length === 0)
                             Cpp_MQTT_Client.host = Cpp_MQTT_Client.defaultHost
                     }
-
-                    opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -296,8 +289,11 @@ FramelessWindow.CustomWindow {
                 TextField {
                     id: _port
                     Layout.fillWidth: true
+                    opacity: enabled ? 1 : 0.5
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
                     placeholderText: Cpp_MQTT_Client.defaultPort
                     Component.onCompleted: text = Cpp_MQTT_Client.port
+
                     onTextChanged: {
                         if (Cpp_MQTT_Client.port !== text && text.length > 0)
                             Cpp_MQTT_Client.port = text
@@ -310,10 +306,6 @@ FramelessWindow.CustomWindow {
                         bottom: 0
                         top: 65535
                     }
-
-                    opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -332,12 +324,10 @@ FramelessWindow.CustomWindow {
                     text: qsTr("Topic") + ":"
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 } Label {
                     text: qsTr("Retain") + ":"
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -346,16 +336,15 @@ FramelessWindow.CustomWindow {
                 TextField {
                     id: _topic
                     Layout.fillWidth: true
+                    opacity: enabled ? 1 : 0.5
                     text: Cpp_MQTT_Client.topic
                     placeholderText: qsTr("MQTT topic")
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+
                     onTextChanged: {
                         if (Cpp_MQTT_Client.topic !== text)
                             Cpp_MQTT_Client.topic = text
                     }
-
-                    opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -364,17 +353,16 @@ FramelessWindow.CustomWindow {
                 CheckBox {
                     id: _retain
                     Layout.fillWidth: true
+                    opacity: enabled ? 1 : 0.5
                     text: qsTr("Add retain flag")
                     Layout.leftMargin: -app.spacing
                     checked: Cpp_MQTT_Client.retain
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+
                     onCheckedChanged: {
                         if (Cpp_MQTT_Client.retain != checked)
                             Cpp_MQTT_Client.retain = checked
                     }
-
-                    opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -393,12 +381,10 @@ FramelessWindow.CustomWindow {
                     text: qsTr("User") + ":"
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 } Label {
                     text: qsTr("Password") + ":"
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -407,16 +393,15 @@ FramelessWindow.CustomWindow {
                 TextField {
                     id: _user
                     Layout.fillWidth: true
+                    opacity: enabled ? 1 : 0.5
                     text: Cpp_MQTT_Client.username
                     placeholderText: qsTr("MQTT username")
+                    enabled: !Cpp_MQTT_Client.isConnectedToHost
+
                     onTextChanged: {
                         if (Cpp_MQTT_Client.username !== text)
                             Cpp_MQTT_Client.username = text
                     }
-
-                    opacity: enabled ? 1 : 0.5
-                    enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -429,17 +414,16 @@ FramelessWindow.CustomWindow {
                     TextField {
                         id: _password
                         Layout.fillWidth: true
+                        opacity: enabled ? 1 : 0.5
                         echoMode: TextField.Password
                         text: Cpp_MQTT_Client.password
                         placeholderText: qsTr("MQTT password")
+                        enabled: !Cpp_MQTT_Client.isConnectedToHost
+
                         onTextChanged: {
                             if (Cpp_MQTT_Client.password !== text)
                                 Cpp_MQTT_Client.password = text
                         }
-
-                        opacity: enabled ? 1 : 0.5
-                        enabled: !Cpp_MQTT_Client.isConnectedToHost
-                        Behavior on opacity {NumberAnimation{}}
                     }
 
                     Button {
@@ -468,12 +452,10 @@ FramelessWindow.CustomWindow {
                     text: qsTr("Enable SSL/TLS:")
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
                 } Label {
                     text: qsTr("Certificate:")
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -485,7 +467,7 @@ FramelessWindow.CustomWindow {
                     Layout.leftMargin: -app.spacing
                     checked: Cpp_MQTT_Client.sslEnabled
                     enabled: !Cpp_MQTT_Client.isConnectedToHost
-                    Behavior on opacity {NumberAnimation{}}
+
                     onCheckedChanged: {
                         if (Cpp_MQTT_Client.sslEnabled !== checked)
                             Cpp_MQTT_Client.sslEnabled = checked
@@ -503,7 +485,6 @@ FramelessWindow.CustomWindow {
                         id: _certificateMode
                         Layout.fillWidth: true
                         opacity: enabled ? 1 : 0.5
-                        Behavior on opacity {NumberAnimation{}}
                         enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
                         model: [
                             qsTr("Use system database"),
@@ -519,7 +500,6 @@ FramelessWindow.CustomWindow {
                         icon.source: "qrc:/icons/open.svg"
                         onClicked: Cpp_MQTT_Client.loadCaFile()
                         enabled: _certificateMode.currentIndex == 1  && _ssl.checked
-                        Behavior on opacity {NumberAnimation{}}
                     }
                 }
 
@@ -541,7 +521,6 @@ FramelessWindow.CustomWindow {
                     text: qsTr("Protocol:")
                     opacity: enabled ? 1 : 0.5
                     enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 //
@@ -555,7 +534,7 @@ FramelessWindow.CustomWindow {
                     opacity: enabled ? 1 : 0.5
                     model: Cpp_MQTT_Client.sslProtocols
                     enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
-                    Behavior on opacity {NumberAnimation{}}
+
                     onCurrentIndexChanged: {
                         if (currentIndex !== Cpp_MQTT_Client.sslProtocol)
                             Cpp_MQTT_Client.sslProtocol = currentIndex

@@ -150,16 +150,11 @@ Item {
 
             MouseArea {
                 id: mouseArea
-                hoverEnabled: true
                 anchors.fill: parent
                 cursorShape: Qt.IBeamCursor
                 propagateComposedEvents: true
                 acceptedButtons: Qt.RightButton
                 anchors.rightMargin: textEdit.scrollbarWidth
-                onContainsMouseChanged: {
-                    if (mouseArea.containsMouse)
-                        textEdit.forceActiveFocus()
-                }
 
                 onClicked: (mouse) => {
                     if (mouse.button === Qt.RightButton) {
@@ -312,7 +307,6 @@ Item {
                 onClicked: Cpp_IO_Console.save()
                 icon.source: "qrc:/icons/save.svg"
                 enabled: Cpp_IO_Console.saveAvailable
-                Behavior on opacity {NumberAnimation{}}
             }
 
             Button {
@@ -323,7 +317,6 @@ Item {
                 onClicked: root.clear()
                 icon.source: "qrc:/icons/delete.svg"
                 enabled: Cpp_IO_Console.saveAvailable
-                Behavior on opacity {NumberAnimation{}}
             }
         }
     }

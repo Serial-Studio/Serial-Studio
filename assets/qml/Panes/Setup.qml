@@ -43,7 +43,6 @@ Item {
     // Displays the setup panel
     //
     function show() {
-        opacity = 1
         setupMargin = 0
     }
 
@@ -51,15 +50,13 @@ Item {
     // Hides the setup panel
     //
     function hide() {
-        opacity = 0
         setupMargin = -1 * displayedWidth
     }
 
     //
     // Animations
     //
-    visible: opacity > 0
-    Behavior on opacity {NumberAnimation{}}
+    visible: setupMargin > -1 * displayedWidth
     Behavior on setupMargin {NumberAnimation{}}
 
     //
@@ -197,7 +194,6 @@ Item {
                 enabled: commManual.checked
                 Layout.maximumWidth: root.maxItemWidth
                 onClicked: Cpp_JSON_Generator.loadJsonMap()
-                Behavior on opacity {NumberAnimation{}}
                 text: (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change project file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
                                                                    qsTr("Select project file") + "...")
             }

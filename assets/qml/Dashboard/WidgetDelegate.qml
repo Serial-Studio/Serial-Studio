@@ -38,6 +38,7 @@ Item {
         anchors.fill: parent
         title: loader.widgetTitle
         icon.source: loader.widgetIcon
+        headerDoubleClickEnabled: true
         borderColor: Cpp_ThemeManager.widgetWindowBorder
         onHeaderDoubleClicked: externalWindow.visible = true
 

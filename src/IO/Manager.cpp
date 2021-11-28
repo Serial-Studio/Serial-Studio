@@ -232,38 +232,6 @@ QString Manager::separatorSequence() const
 }
 
 /**
- * Returns the size of the data received (and successfully read) from the device in the
- * format of a string.
- */
-QString Manager::receivedDataLength() const
-{
-    QString value;
-    QString units;
-
-    if (m_receivedBytes < 1024)
-    {
-        value = QString::number(m_receivedBytes);
-        units = "bytes";
-    }
-
-    else if (m_receivedBytes >= 1024 && m_receivedBytes < 1024 * 1024)
-    {
-        double kb = static_cast<double>(m_receivedBytes) / 1024.0;
-        value = QString::number(kb, 'f', 2);
-        units = "KB";
-    }
-
-    else
-    {
-        double mb = static_cast<double>(m_receivedBytes) / (1024 * 1024.0);
-        value = QString::number(mb, 'f', 2);
-        units = "MB";
-    }
-
-    return QString("%1 %2").arg(value, units);
-}
-
-/**
  * Returns a list with the possible data source options.
  */
 StringList Manager::dataSourcesList() const

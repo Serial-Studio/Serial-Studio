@@ -31,11 +31,6 @@ Item {
     id: root
 
     //
-    // Animations
-    //
-    Behavior on opacity {NumberAnimation{}}
-
-    //
     // Main layout
     //
     ColumnLayout {
@@ -97,10 +92,9 @@ Item {
                     Layout.fillHeight: false
                     Layout.maximumHeight: 280
                     Layout.minimumHeight: 280
-                    opacity: enabled > 0 ? 1 : 0
+                    visible: Layout.bottomMargin > -Layout.minimumHeight
                     Layout.bottomMargin: enabled ? 0 : -Layout.minimumHeight
 
-                    Behavior on opacity { NumberAnimation{} }
                     Behavior on Layout.bottomMargin { NumberAnimation{} }
 
                     Widgets.Shadow {

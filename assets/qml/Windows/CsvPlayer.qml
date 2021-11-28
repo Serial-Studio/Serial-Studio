@@ -145,8 +145,6 @@ FramelessWindow.CustomWindow {
                     onClicked: Cpp_CSV_Player.previousFrame()
                     icon.source: "qrc:/icons/media-prev.svg"
                     enabled: Cpp_CSV_Player.progress > 0 && !Cpp_CSV_Player.isPlaying
-
-                    Behavior on opacity {NumberAnimation{}}
                 }
 
                 Button {
@@ -166,8 +164,6 @@ FramelessWindow.CustomWindow {
                     onClicked: Cpp_CSV_Player.nextFrame()
                     icon.source: "qrc:/icons/media-next.svg"
                     enabled: Cpp_CSV_Player.progress < 1 && !Cpp_CSV_Player.isPlaying
-
-                    Behavior on opacity {NumberAnimation{}}
                 }
             }
         }

@@ -97,18 +97,6 @@ Item {
                 Layout.fillWidth: true
             }
 
-            Label {
-                font.family: app.monoFont
-                color: palette.brightText
-                visible: !Cpp_CSV_Player.isOpen
-                Layout.alignment: Qt.AlignVCenter
-                text: Cpp_IO_Manager.receivedDataLength //*! Optimize this function
-            }
-
-            Item {
-                width: app.spacing
-            }
-
             Button {
                 flat: true
                 id: consoleBt

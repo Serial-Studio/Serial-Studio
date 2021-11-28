@@ -85,13 +85,14 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
                 text: qsTr("Socket type") + ":"
+                enabled: !Cpp_IO_Manager.connected
             } ComboBox {
                 id: _typeCombo
                 Layout.fillWidth: true
+                opacity: enabled ? 1 : 0.5
                 model: Cpp_IO_Network.socketTypes
+                enabled: !Cpp_IO_Manager.connected
                 currentIndex: Cpp_IO_Network.socketTypeIndex
                 onCurrentIndexChanged: {
                     if (currentIndex !== Cpp_IO_Network.socketTypeIndex)
@@ -99,10 +100,6 @@ Control {
 
                     root.uiChanged()
                 }
-
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
             }
 
             //
@@ -111,11 +108,12 @@ Control {
             Label {
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
                 text: qsTr("Remote address") + ":"
             } TextField {
                 id: _address
                 Layout.fillWidth: true
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_IO_Manager.connected
                 placeholderText: Cpp_IO_Network.defaultAddress
                 Component.onCompleted: text = Cpp_IO_Network.remoteAddress
                 onTextChanged: {
@@ -125,20 +123,15 @@ Control {
                     if (text.length === 0)
                         Cpp_IO_Network.remoteAddress = Cpp_IO_Network.defaultAddress
                 }
-
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
             }
 
             //
             // TCP port
             //
             Label {
-                opacity: enabled ? 1 : 0.5
                 text: qsTr("Port") + ":"
+                opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
                 visible: Cpp_IO_Network.socketTypeIndex === 0
             } TextField {
                 id: _tcpPort
@@ -158,11 +151,8 @@ Control {
                     top: 65535
                 }
 
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
-                visible: Cpp_IO_Network.socketTypeIndex === 0
 
-                Behavior on opacity {NumberAnimation{}}
+                visible: Cpp_IO_Network.socketTypeIndex === 0
             }
 
 
@@ -173,7 +163,6 @@ Control {
                 opacity: enabled ? 1 : 0.5
                 text: qsTr("Local port") + ":"
                 enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
                 visible: Cpp_IO_Network.socketTypeIndex === 1
             } TextField {
                 id: _udpLocalPort
@@ -196,8 +185,6 @@ Control {
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Manager.connected
                 visible: Cpp_IO_Network.socketTypeIndex === 1
-
-                Behavior on opacity {NumberAnimation{}}
             }
 
             //
@@ -207,13 +194,16 @@ Control {
                 opacity: enabled ? 1 : 0.5
                 text: qsTr("Remote port") + ":"
                 enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
                 visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
             } TextField {
                 id: _udpRemotePort
                 Layout.fillWidth: true
+                opacity: enabled ? 1 : 0.5
+                enabled: !Cpp_IO_Manager.connected
                 placeholderText: Cpp_IO_Network.defaultUdpRemotePort
                 Component.onCompleted: text = Cpp_IO_Network.udpRemotePort
+                visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
+
                 onTextChanged: {
                     if (Cpp_IO_Network.udpRemotePort !== text && text.length > 0)
                         Cpp_IO_Network.udpRemotePort = text
@@ -226,12 +216,6 @@ Control {
                     bottom: 0
                     top: 65535
                 }
-
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
-                visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
-
-                Behavior on opacity {NumberAnimation{}}
             }
 
             //
@@ -240,7 +224,6 @@ Control {
             Label {
                 text: qsTr("Multicast") + ":"
                 opacity: _udpMulticast.enabled ? 1 : 0.5
-                Behavior on opacity {NumberAnimation{}}
                 visible: Cpp_IO_Network.socketTypeIndex === 1
             } CheckBox {
                 id: _udpMulticast
@@ -257,8 +240,6 @@ Control {
 
                     root.uiChanged()
                 }
-
-                Behavior on opacity {NumberAnimation{}}
             }
         }
 

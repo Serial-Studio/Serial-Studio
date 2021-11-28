@@ -154,8 +154,6 @@ Rectangle {
                 if (Cpp_JSON_Editor.saveJsonFile())
                     root.closeWindow()
             }
-
-            Behavior on opacity {NumberAnimation{}}
         }
     }
 }

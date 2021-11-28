@@ -35,7 +35,6 @@ Repeater {
         asynchronous: true
         width: root.cellWidth
         height: root.cellHeight
-        Behavior on opacity {NumberAnimation{}}
 
         sourceComponent: WidgetDelegate {
             widgetIndex: index

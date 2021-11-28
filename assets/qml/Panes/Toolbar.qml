@@ -182,6 +182,7 @@ Control {
             icon.width: 24
             icon.height: 24
             Layout.fillHeight: true
+            opacity: enabled ? 1 : 0.5
             onClicked: root.dashboardClicked()
             enabled: Cpp_UI_Dashboard.available
             text: qsTr("Dashboard") + _btSpacer
@@ -192,9 +193,6 @@ Control {
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onCheckedChanged: Cpp_Misc_MacExtras.setDashboardChecked(checked)
             onEnabledChanged: Cpp_Misc_MacExtras.setDashboardEnabled(enabled)
-
-            opacity: enabled ? 1 : 0.5
-            Behavior on opacity {NumberAnimation{}}
         }
 
         Item {
@@ -235,8 +233,6 @@ Control {
                 else
                     Cpp_CSV_Player.openFile()
             }
-
-            Behavior on opacity {NumberAnimation{}}
         }
 
         Button {
@@ -270,7 +266,6 @@ Control {
             // Only enable button if it can be clicked
             //
             opacity: enabled ? 1 : 0.5
-            Behavior on opacity {NumberAnimation{}}
             enabled: Cpp_IO_Manager.configurationOk
 
             //

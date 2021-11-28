@@ -170,8 +170,6 @@ Widgets.Window {
                 icon.source: "qrc:/icons/up.svg"
                 icon.color: Cpp_ThemeManager.text
                 onClicked: Cpp_JSON_Editor.moveGroupUp(group)
-
-                Behavior on opacity {NumberAnimation{}}
             }
 
             RoundButton {
@@ -182,8 +180,6 @@ Widgets.Window {
                 icon.source: "qrc:/icons/down.svg"
                 enabled: group < Cpp_JSON_Editor.groupCount - 1
                 onClicked: Cpp_JSON_Editor.moveGroupDown(group)
-
-                Behavior on opacity {NumberAnimation{}}
             }
         }
 

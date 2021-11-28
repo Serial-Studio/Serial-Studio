@@ -34,14 +34,12 @@ ColumnLayout {
             source: root.icon
             color: palette.text
             opacity: hideAll.checked ? 0.5 : 1
-            Behavior on opacity {NumberAnimation{}}
         }
 
         Label {
             font.bold: true
             text: root.title
             opacity: hideAll.checked ? 0.5 : 1
-            Behavior on opacity {NumberAnimation{}}
         }
 
         Item {

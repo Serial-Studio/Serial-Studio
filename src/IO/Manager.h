@@ -76,9 +76,6 @@ class Manager : public QObject
                READ dataSource
                WRITE setDataSource
                NOTIFY dataSourceChanged)
-    Q_PROPERTY(QString receivedDataLength
-               READ receivedDataLength
-               NOTIFY receivedBytesChanged)
     Q_PROPERTY(QString startSequence
                READ startSequence
                WRITE setStartSequence
@@ -147,7 +144,6 @@ public:
     QString startSequence() const;
     QString finishSequence() const;
     QString separatorSequence() const;
-    QString receivedDataLength() const;
 
     Q_INVOKABLE StringList dataSourcesList() const;
     Q_INVOKABLE qint64 writeData(const QByteArray &data);

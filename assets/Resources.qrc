@@ -132,7 +132,6 @@
         <file>qml/Windows/JsonEditor.qml</file>
         <file>qml/Windows/MainWindow.qml</file>
         <file>qml/main.qml</file>
-        <file>themes/1_Classic.json</file>
         <file>touchbar/console.png</file>
         <file>touchbar/dashboard.png</file>
         <file>touchbar/setup.png</file>
@@ -162,10 +161,12 @@
         <file>window-border/restore.svg</file>
         <file>window-border/unmaximize.svg</file>
         <file>qml/Windows/MQTTConfiguration.qml</file>
-        <file>themes/3_Flat.json</file>
-        <file>themes/2_Noir.json</file>
-        <file>themes/4_MathWorks.json</file>
         <file>images/shadow.png</file>
         <file>images/window-shadow.png</file>
+        <file>themes/1_FlatDark.json</file>
+        <file>themes/2_FlatLight.json</file>
+        <file>themes/3_Classic.json</file>
+        <file>themes/4_Noir.json</file>
+        <file>themes/5_MathWorks.json</file>
     </qresource>
 </RCC>

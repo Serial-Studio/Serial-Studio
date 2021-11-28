@@ -220,12 +220,10 @@ FramelessWindow.CustomWindow {
         //
         PlatformDependent.Menubar {
             id: menubar
-            opacity: enabled ? 0.8 : 0
+            opacity: 0.8
             Layout.alignment: Qt.AlignVCenter
             enabled: !root.showMacControls || isFullscreen
             visible: !root.showMacControls || isFullscreen
-
-            Behavior on opacity {NumberAnimation{}}
         }
 
         //
@@ -277,7 +275,8 @@ FramelessWindow.CustomWindow {
                     if (Cpp_UI_Dashboard.available) {
                         consoleChecked = 0
                         dashboardChecked = 1
-                        stack.push(dashboard)
+                        if (stack.currentItem != dashboard)
+                            stack.push(dashboard)
                     }
 
                     else
@@ -302,44 +301,29 @@ FramelessWindow.CustomWindow {
 
                 StackView {
                     id: stack
+                    clip: true
                     initialItem: terminal
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    data: [
+                        Console {
+                            id: terminal
+                            visible: false
+                            width: parent.width
+                            height: parent.height
+                        },
 
-                    onCurrentItemChanged: {
-                        if (currentItem === terminal) {
-                            terminal.opacity = 1
-                            dashboard.opacity = 0
+                        Dashboard {
+                            id: dashboard
+                            visible: false
+                            width: parent.width
+                            height: parent.height
                         }
-
-                        else {
-                            terminal.opacity = 0
-                            dashboard.opacity = 1
-                        }
-                    }
-
-                    Console {
-                        id: terminal
-                        width: parent.width
-                        height: parent.height
-                        enabled: opacity > 0
-                        visible: opacity > 0
-                    }
-
-                    Dashboard {
-                        opacity: 0
-                        id: dashboard
-                        width: parent.width
-                        height: parent.height
-                        enabled: opacity > 0
-                        visible: opacity > 0
-                    }
+                    ]
                 }
 
                 Setup {
                     id: setup
-                    opacity: 1
-                    setupMargin: 0
                     Layout.fillHeight: true
                     Layout.rightMargin: setupMargin
                     Layout.minimumWidth: displayedWidth

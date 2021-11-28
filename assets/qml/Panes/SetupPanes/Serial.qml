@@ -78,22 +78,19 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
                 text: qsTr("COM Port") + ":"
+                enabled: !Cpp_IO_Manager.connected
             } ComboBox {
                 id: _portCombo
                 Layout.fillWidth: true
+                opacity: enabled ? 1 : 0.5
                 model: Cpp_IO_Serial.portList
+                enabled: !Cpp_IO_Manager.connected
                 currentIndex: Cpp_IO_Serial.portIndex
                 onCurrentIndexChanged: {
                     if (currentIndex !== Cpp_IO_Serial.portIndex)
                         Cpp_IO_Serial.portIndex = currentIndex
                 }
-
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
-                Behavior on opacity {NumberAnimation{}}
             }
 
             //
@@ -101,7 +98,6 @@ Control {
             //
             Label {
                 opacity: enabled ? 1 : 0.5
-                Behavior on opacity {NumberAnimation{}}
                 text: qsTr("Baud Rate") + ":"
             } ComboBox {
                 id: _baudCombo

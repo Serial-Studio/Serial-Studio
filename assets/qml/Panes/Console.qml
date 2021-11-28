@@ -34,11 +34,6 @@ Item {
     property alias vt100emulation: terminal.vt100emulation
 
     //
-    // Animations
-    //
-    Behavior on opacity {NumberAnimation{}}
-
-    //
     // Utility functions between terminal widget & main window
     //
     function sendData() {
