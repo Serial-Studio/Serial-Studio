@@ -38,12 +38,12 @@ Item {
     //
     // Access to dialogs & windows
     //
-    property Windows.About about: null
-    property Windows.Donate donations: null
-    property Windows.CsvPlayer csvPlayer: null
+    property Windows.About aboutDialog: null
+    property Windows.Donate donateDialog: null
     property Windows.MainWindow mainWindow: null
-    property Windows.JsonEditor jsonEditor: null
-    property Windows.Acknowledgements acknowledgements: null
+    property Windows.CsvPlayer csvPlayerDialog: null
+    property Windows.JsonEditor jsonEditorWindow: null
+    property Windows.Acknowledgements acknowledgementsDialog: null
 
     //
     // Check for updates (non-silent mode)
@@ -73,7 +73,7 @@ Item {
     Loader {
         asynchronous: true
         sourceComponent: Windows.About {
-            Component.onCompleted: app.about = this
+            Component.onCompleted: app.aboutDialog = this
         }
     }
 
@@ -83,7 +83,7 @@ Item {
     Loader {
         asynchronous: true
         sourceComponent: Windows.CsvPlayer {
-            Component.onCompleted: app.csvPlayer = this
+            Component.onCompleted: app.csvPlayerDialog = this
         }
     }
 
@@ -93,7 +93,7 @@ Item {
     Loader {
         asynchronous: true
         sourceComponent: Windows.JsonEditor {
-            Component.onCompleted: app.jsonEditor = this
+            Component.onCompleted: app.jsonEditorWindow = this
         }
     }
 
@@ -103,7 +103,7 @@ Item {
     Loader {
         asynchronous: false
         sourceComponent: Windows.Donate {
-            Component.onCompleted: app.donations = this
+            Component.onCompleted: app.donateDialog = this
         }
     }
 
@@ -113,7 +113,7 @@ Item {
     Loader {
         asynchronous: true
         sourceComponent: Windows.Acknowledgements {
-            Component.onCompleted: app.acknowledgements = this
+            Component.onCompleted: app.acknowledgementsDialog = this
         }
     }
 }

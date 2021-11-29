@@ -29,23 +29,9 @@ Repeater {
     property real cellWidth: 0
     property real cellHeight: 0
 
-    delegate: Loader {
-        id: loader
-        asynchronous: true
+    delegate: WidgetDelegate {
+        widgetIndex: index
         width: root.cellWidth
         height: root.cellHeight
-
-        sourceComponent: WidgetDelegate {
-            widgetIndex: index
-            anchors.fill: parent
-        }
-
-        Connections {
-            target: Cpp_UI_Dashboard
-
-            function onWidgetVisibilityChanged() {
-                loader.visible = Cpp_UI_Dashboard.widgetVisible(index)
-            }
-        }
     }
 }

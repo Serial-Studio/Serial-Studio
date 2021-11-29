@@ -173,7 +173,7 @@ FramelessWindow.CustomWindow {
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Make a donation")
-                onClicked: app.donations.show()
+                onClicked: app.donateDialog.show()
             }
 
             Button {
@@ -191,7 +191,7 @@ FramelessWindow.CustomWindow {
             Button {
                 Layout.fillWidth: true
                 text: qsTr("Acknowledgements")
-                onClicked: acknowledgements.show()
+                onClicked: acknowledgementsDialog.show()
             }
 
             Item {

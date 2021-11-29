@@ -122,8 +122,8 @@ FramelessWindow.CustomWindow {
         root.requestUpdate()
 
         // Show donations dialog every 15 launches
-        if (root.appLaunchCount % 15 == 0 && !app.donations.doNotShowAgain)
-            app.donations.showAutomatically()
+        if (root.appLaunchCount % 15 == 0 && !app.donateDialog.doNotShowAgain)
+            app.donateDialog.showAutomatically()
 
         // Ask user if he/she wants to enable automatic updates
         if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
@@ -269,7 +269,7 @@ FramelessWindow.CustomWindow {
                 setupChecked: root.setupVisible
                 consoleChecked: root.consoleVisible
                 dashboardChecked: root.dashboardVisible
-                onJsonEditorClicked: app.jsonEditor.show()
+                onJsonEditorClicked: app.jsonEditorWindow.show()
                 onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
                 onDashboardClicked: {
