@@ -99,7 +99,7 @@ Misc::ModuleManager::ModuleManager()
 
     // Select rendering engine
 #ifdef Q_OS_WIN
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Direct3D12);
+    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
 #else
     QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGL);
 #endif
