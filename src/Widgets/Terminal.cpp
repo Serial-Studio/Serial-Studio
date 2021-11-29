@@ -144,7 +144,7 @@ bool Terminal::event(QEvent *event)
  */
 void Terminal::paint(QPainter *painter)
 {
-    if (m_textEdit && painter)
+    if (m_textEdit && painter && isVisible())
         textEdit()->render(painter);
 }
 

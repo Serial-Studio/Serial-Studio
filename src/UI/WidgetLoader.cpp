@@ -105,23 +105,23 @@ bool WidgetLoader::event(QEvent *event)
     // Process focus, wheel & mouse click/release events
     switch (event->type())
     {
-        case QEvent::FocusIn:
-            forceActiveFocus();
-            return QQuickPaintedItem::event(event);
-            break;
-        case QEvent::Wheel:
-            processWheelEvents(static_cast<QWheelEvent *>(event));
-            return true;
-            break;
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseButtonDblClick:
-        case QEvent::MouseMove:
-            processMouseEvents(static_cast<QMouseEvent *>(event));
-            return true;
-            break;
-        default:
-            break;
+    case QEvent::FocusIn:
+        forceActiveFocus();
+        return QQuickPaintedItem::event(event);
+        break;
+    case QEvent::Wheel:
+        processWheelEvents(static_cast<QWheelEvent *>(event));
+        return true;
+        break;
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease:
+    case QEvent::MouseButtonDblClick:
+    case QEvent::MouseMove:
+        processMouseEvents(static_cast<QMouseEvent *>(event));
+        return true;
+        break;
+    default:
+        break;
     }
 
     //
@@ -136,11 +136,8 @@ bool WidgetLoader::event(QEvent *event)
  */
 void WidgetLoader::paint(QPainter *painter)
 {
-    if (width() > 0 && height() > 0)
-    {
-        if (m_widget && painter)
-            m_widget->render(painter);
-    }
+    if (m_widget && painter && isVisible())
+        m_widget->render(painter);
 }
 
 /**
@@ -155,12 +152,12 @@ bool WidgetLoader::eventFilter(QObject *watched, QEvent *event)
     {
         switch (event->type())
         {
-            case QEvent::Paint:
-            case QEvent::UpdateRequest:
-                update();
-                break;
-            default:
-                break;
+        case QEvent::Paint:
+        case QEvent::UpdateRequest:
+            update();
+            break;
+        default:
+            break;
         }
     }
 
@@ -262,52 +259,52 @@ void WidgetLoader::setWidgetIndex(const int index)
         // Construct new widget
         switch (widgetType())
         {
-            case UI::Dashboard::WidgetType::Group:
-                m_widget = new Widgets::DataGroup(relativeIndex());
-                m_window.setCentralWidget(new Widgets::DataGroup(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::MultiPlot:
-                m_widget = new Widgets::MultiPlot(relativeIndex());
-                m_window.setCentralWidget(new Widgets::MultiPlot(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::FFT:
-                m_widget = new Widgets::FFTPlot(relativeIndex());
-                m_window.setCentralWidget(new Widgets::FFTPlot(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::Plot:
-                m_widget = new Widgets::Plot(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Plot(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::Bar:
-                m_widget = new Widgets::Bar(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Bar(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::Gauge:
-                m_widget = new Widgets::Gauge(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Gauge(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::Compass:
-                m_widget = new Widgets::Compass(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Compass(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::Gyroscope:
-                m_widget = new Widgets::Gyroscope(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Gyroscope(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::Accelerometer:
-                m_widget = new Widgets::Accelerometer(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Accelerometer(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::GPS:
-                m_widget = new Widgets::GPS(relativeIndex());
-                m_window.setCentralWidget(new Widgets::GPS(relativeIndex()));
-                break;
-            case UI::Dashboard::WidgetType::LED:
-                m_widget = new Widgets::LEDPanel(relativeIndex());
-                m_window.setCentralWidget(new Widgets::LEDPanel(relativeIndex()));
-                break;
-            default:
-                break;
+        case UI::Dashboard::WidgetType::Group:
+            m_widget = new Widgets::DataGroup(relativeIndex());
+            m_window.setCentralWidget(new Widgets::DataGroup(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::MultiPlot:
+            m_widget = new Widgets::MultiPlot(relativeIndex());
+            m_window.setCentralWidget(new Widgets::MultiPlot(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::FFT:
+            m_widget = new Widgets::FFTPlot(relativeIndex());
+            m_window.setCentralWidget(new Widgets::FFTPlot(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::Plot:
+            m_widget = new Widgets::Plot(relativeIndex());
+            m_window.setCentralWidget(new Widgets::Plot(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::Bar:
+            m_widget = new Widgets::Bar(relativeIndex());
+            m_window.setCentralWidget(new Widgets::Bar(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::Gauge:
+            m_widget = new Widgets::Gauge(relativeIndex());
+            m_window.setCentralWidget(new Widgets::Gauge(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::Compass:
+            m_widget = new Widgets::Compass(relativeIndex());
+            m_window.setCentralWidget(new Widgets::Compass(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::Gyroscope:
+            m_widget = new Widgets::Gyroscope(relativeIndex());
+            m_window.setCentralWidget(new Widgets::Gyroscope(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::Accelerometer:
+            m_widget = new Widgets::Accelerometer(relativeIndex());
+            m_window.setCentralWidget(new Widgets::Accelerometer(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::GPS:
+            m_widget = new Widgets::GPS(relativeIndex());
+            m_window.setCentralWidget(new Widgets::GPS(relativeIndex()));
+            break;
+        case UI::Dashboard::WidgetType::LED:
+            m_widget = new Widgets::LEDPanel(relativeIndex());
+            m_window.setCentralWidget(new Widgets::LEDPanel(relativeIndex()));
+            break;
+        default:
+            break;
         }
 
         // Configure external window
@@ -426,20 +423,20 @@ void WidgetLoader::processMouseEvents(QMouseEvent *event)
     auto hack = static_cast<Hack *>(m_widget);
     switch (event->type())
     {
-        case QEvent::MouseButtonPress:
-            hack->mousePressEvent(event);
-            break;
-        case QEvent::MouseMove:
-            hack->mouseMoveEvent(event);
-            break;
-        case QEvent::MouseButtonRelease:
-            hack->mouseReleaseEvent(event);
-            break;
-        case QEvent::MouseButtonDblClick:
-            hack->mouseDoubleClickEvent(event);
-            break;
-        default:
-            break;
+    case QEvent::MouseButtonPress:
+        hack->mousePressEvent(event);
+        break;
+    case QEvent::MouseMove:
+        hack->mouseMoveEvent(event);
+        break;
+    case QEvent::MouseButtonRelease:
+        hack->mouseReleaseEvent(event);
+        break;
+    case QEvent::MouseButtonDblClick:
+        hack->mouseDoubleClickEvent(event);
+        break;
+    default:
+        break;
     }
 
     update();
