@@ -25,34 +25,12 @@
 #include <QWidget>
 #include <QObject>
 #include <QPainter>
-#include <QMainWindow>
 #include <QQuickPaintedItem>
 
 #include <UI/Dashboard.h>
 
 namespace UI
 {
-class WidgetWindow : public QMainWindow
-{
-    Q_OBJECT
-
-signals:
-    void visibleChanged();
-
-private:
-    void showEvent(QShowEvent *event)
-    {
-        event->accept();
-        emit visibleChanged();
-    }
-
-    void hideEvent(QHideEvent *event)
-    {
-        event->accept();
-        emit visibleChanged();
-    }
-};
-
 /**
  * @brief The WidgetLoader class
  *
@@ -98,6 +76,10 @@ class WidgetLoader : public QQuickPaintedItem
     Q_PROPERTY(QString widgetTitle
                READ widgetTitle
                NOTIFY widgetIndexChanged)
+    Q_PROPERTY(bool isExternalWindow
+               READ isExternalWindow
+               WRITE setIsExternalWindow
+               NOTIFY isExternalWindowChanged)
     Q_PROPERTY(bool widgetVisible
                READ widgetVisible
                WRITE setVisible
@@ -107,6 +89,7 @@ class WidgetLoader : public QQuickPaintedItem
 signals:
     void widgetIndexChanged();
     void widgetVisibleChanged();
+    void isExternalWindowChanged();
 
 public:
     WidgetLoader(QQuickItem *parent = 0);
@@ -121,17 +104,18 @@ public:
     bool widgetVisible() const;
     QString widgetIcon() const;
     QString widgetTitle() const;
+    bool isExternalWindow() const;
     UI::Dashboard::WidgetType widgetType() const;
 
 public slots:
-    void showExternalWindow();
     void setVisible(const bool visible);
     void setWidgetIndex(const int index);
+    void setIsExternalWindow(const bool isWindow);
+    void processMouseHover(const bool containsMouse);
 
 private slots:
     void updateWidgetSize();
     void updateWidgetVisible();
-    void updateExternalWindow();
 
 protected:
     void processLeaveEvent(QEvent *event);
@@ -143,6 +127,6 @@ private:
     int m_index;
     QWidget *m_widget;
     bool m_widgetVisible;
-    WidgetWindow m_window;
+    bool m_isExternalWindow;
 };
 }

@@ -49,6 +49,7 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     , m_index(-1)
     , m_widget(nullptr)
     , m_widgetVisible(false)
+    , m_isExternalWindow(false)
 {
     // Set item flags
     setFlag(ItemHasContents, true);
@@ -62,20 +63,6 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
     connect(this, &QQuickPaintedItem::heightChanged, this,
             &WidgetLoader::updateWidgetSize);
 
-    // Configure external window
-    m_window.setMinimumWidth(640);
-    m_window.setMinimumHeight(480);
-
-    // Set window palette
-    QPalette palette;
-    auto theme = Misc::ThemeManager::getInstance();
-    palette.setColor(QPalette::Base, theme->widgetWindowBackground());
-    palette.setColor(QPalette::Window, theme->widgetWindowBackground());
-    m_window.setPalette(palette);
-
-    // Enable/disable the external window widget automatically
-    connect(&m_window, SIGNAL(visibleChanged()), this, SLOT(updateExternalWindow()));
-
     // Automatically update the widget's visibility
     connect(Dashboard::getInstance(), &Dashboard::widgetVisibilityChanged, this,
             &WidgetLoader::updateWidgetVisible);
@@ -88,9 +75,6 @@ WidgetLoader::~WidgetLoader()
 {
     if (m_widget)
         delete m_widget;
-
-    if (m_window.centralWidget())
-        delete m_window.centralWidget();
 }
 
 /**
@@ -105,23 +89,23 @@ bool WidgetLoader::event(QEvent *event)
     // Process focus, wheel & mouse click/release events
     switch (event->type())
     {
-    case QEvent::FocusIn:
-        forceActiveFocus();
-        return QQuickPaintedItem::event(event);
-        break;
-    case QEvent::Wheel:
-        processWheelEvents(static_cast<QWheelEvent *>(event));
-        return true;
-        break;
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-    case QEvent::MouseMove:
-        processMouseEvents(static_cast<QMouseEvent *>(event));
-        return true;
-        break;
-    default:
-        break;
+        case QEvent::FocusIn:
+            forceActiveFocus();
+            return QQuickPaintedItem::event(event);
+            break;
+        case QEvent::Wheel:
+            processWheelEvents(static_cast<QWheelEvent *>(event));
+            return true;
+            break;
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonDblClick:
+        case QEvent::MouseMove:
+            processMouseEvents(static_cast<QMouseEvent *>(event));
+            return true;
+            break;
+        default:
+            break;
     }
 
     //
@@ -152,12 +136,12 @@ bool WidgetLoader::eventFilter(QObject *watched, QEvent *event)
     {
         switch (event->type())
         {
-        case QEvent::Paint:
-        case QEvent::UpdateRequest:
-            update();
-            break;
-        default:
-            break;
+            case QEvent::Paint:
+            case QEvent::UpdateRequest:
+                update();
+                break;
+            default:
+                break;
         }
     }
 
@@ -214,20 +198,23 @@ QString WidgetLoader::widgetTitle() const
 }
 
 /**
+ * If set to @c true, then the widget visibility shall be controlled
+ * directly by the QML interface.
+ *
+ * If set to @c false, then the widget visbility shall be controlled
+ * by the UI::Dashboard class via the SIGNAL/SLOT system.
+ */
+bool WidgetLoader::isExternalWindow() const
+{
+    return m_isExternalWindow;
+}
+
+/**
  * Returns the type of the current widget (e.g. group, plot, bar, gauge, etc...)
  */
 UI::Dashboard::WidgetType WidgetLoader::widgetType() const
 {
     return UI::Dashboard::getInstance()->widgetType(widgetIndex());
-}
-
-/**
- * Displays the external window
- */
-void WidgetLoader::showExternalWindow()
-{
-    if (m_window.centralWidget())
-        m_window.showNormal();
 }
 
 /**
@@ -259,68 +246,86 @@ void WidgetLoader::setWidgetIndex(const int index)
         // Construct new widget
         switch (widgetType())
         {
-        case UI::Dashboard::WidgetType::Group:
-            m_widget = new Widgets::DataGroup(relativeIndex());
-            m_window.setCentralWidget(new Widgets::DataGroup(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::MultiPlot:
-            m_widget = new Widgets::MultiPlot(relativeIndex());
-            m_window.setCentralWidget(new Widgets::MultiPlot(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::FFT:
-            m_widget = new Widgets::FFTPlot(relativeIndex());
-            m_window.setCentralWidget(new Widgets::FFTPlot(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::Plot:
-            m_widget = new Widgets::Plot(relativeIndex());
-            m_window.setCentralWidget(new Widgets::Plot(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::Bar:
-            m_widget = new Widgets::Bar(relativeIndex());
-            m_window.setCentralWidget(new Widgets::Bar(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::Gauge:
-            m_widget = new Widgets::Gauge(relativeIndex());
-            m_window.setCentralWidget(new Widgets::Gauge(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::Compass:
-            m_widget = new Widgets::Compass(relativeIndex());
-            m_window.setCentralWidget(new Widgets::Compass(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::Gyroscope:
-            m_widget = new Widgets::Gyroscope(relativeIndex());
-            m_window.setCentralWidget(new Widgets::Gyroscope(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::Accelerometer:
-            m_widget = new Widgets::Accelerometer(relativeIndex());
-            m_window.setCentralWidget(new Widgets::Accelerometer(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::GPS:
-            m_widget = new Widgets::GPS(relativeIndex());
-            m_window.setCentralWidget(new Widgets::GPS(relativeIndex()));
-            break;
-        case UI::Dashboard::WidgetType::LED:
-            m_widget = new Widgets::LEDPanel(relativeIndex());
-            m_window.setCentralWidget(new Widgets::LEDPanel(relativeIndex()));
-            break;
-        default:
-            break;
-        }
-
-        // Configure external window
-        if (m_window.centralWidget())
-        {
-            m_window.setWindowTitle(widgetTitle());
-            m_window.centralWidget()->setEnabled(false);
+            case UI::Dashboard::WidgetType::Group:
+                m_widget = new Widgets::DataGroup(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::MultiPlot:
+                m_widget = new Widgets::MultiPlot(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::FFT:
+                m_widget = new Widgets::FFTPlot(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::Plot:
+                m_widget = new Widgets::Plot(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::Bar:
+                m_widget = new Widgets::Bar(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::Gauge:
+                m_widget = new Widgets::Gauge(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::Compass:
+                m_widget = new Widgets::Compass(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::Gyroscope:
+                m_widget = new Widgets::Gyroscope(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::Accelerometer:
+                m_widget = new Widgets::Accelerometer(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::GPS:
+                m_widget = new Widgets::GPS(relativeIndex());
+                break;
+            case UI::Dashboard::WidgetType::LED:
+                m_widget = new Widgets::LEDPanel(relativeIndex());
+                break;
+            default:
+                break;
         }
 
         // Allow widget to receive events from the QML interface
         if (m_widget)
         {
+            m_widget->setEnabled(true);
             m_widget->installEventFilter(this);
-            QTimer::singleShot(100, this, SLOT(updateWidgetVisible()));
             emit widgetIndexChanged();
+            updateWidgetVisible();
         }
+    }
+}
+
+/**
+ * Changes the widget visibility controller source.
+ *
+ * If set to @c true, then the widget visibility shall be controlled
+ * directly by the QML interface.
+ *
+ * If set to @c false, then the widget visbility shall be controlled
+ * by the UI::Dashboard class via the SIGNAL/SLOT system.
+ */
+void WidgetLoader::setIsExternalWindow(const bool isWindow)
+{
+    m_isExternalWindow = isWindow;
+    emit isExternalWindowChanged();
+}
+
+/**
+ * This function must be called directly by a QML MouseArea item.
+ * Unfortunatelly, enter/leave events cannot be processed
+ * directly by the @c WidgetLoader::event(QEvent *event) function.
+ */
+void WidgetLoader::processMouseHover(const bool containsMouse)
+{
+    if (containsMouse)
+    {
+        QEnterEvent event(QPoint(0, 0), QPoint(0, 0), QPoint(0, 0));
+        processEnterEvent(&event);
+    }
+
+    else
+    {
+        QEvent event(QEvent::Leave);
+        processLeaveEvent(&event);
     }
 }
 
@@ -344,7 +349,7 @@ void WidgetLoader::updateWidgetVisible()
 {
     bool visible = UI::Dashboard::getInstance()->widgetVisible(widgetIndex());
 
-    if (widgetVisible() != visible)
+    if (widgetVisible() != visible && !isExternalWindow())
     {
         m_widgetVisible = visible;
 
@@ -353,16 +358,6 @@ void WidgetLoader::updateWidgetVisible()
 
         emit widgetVisibleChanged();
     }
-}
-
-/**
- * Enables/disables the widget updates of the external window when the window
- * is shown or hidden.
- */
-void WidgetLoader::updateExternalWindow()
-{
-    if (m_window.centralWidget())
-        m_window.centralWidget()->setEnabled(m_window.isVisible());
 }
 
 /**
@@ -423,20 +418,20 @@ void WidgetLoader::processMouseEvents(QMouseEvent *event)
     auto hack = static_cast<Hack *>(m_widget);
     switch (event->type())
     {
-    case QEvent::MouseButtonPress:
-        hack->mousePressEvent(event);
-        break;
-    case QEvent::MouseMove:
-        hack->mouseMoveEvent(event);
-        break;
-    case QEvent::MouseButtonRelease:
-        hack->mouseReleaseEvent(event);
-        break;
-    case QEvent::MouseButtonDblClick:
-        hack->mouseDoubleClickEvent(event);
-        break;
-    default:
-        break;
+        case QEvent::MouseButtonPress:
+            hack->mousePressEvent(event);
+            break;
+        case QEvent::MouseMove:
+            hack->mouseMoveEvent(event);
+            break;
+        case QEvent::MouseButtonRelease:
+            hack->mouseReleaseEvent(event);
+            break;
+        case QEvent::MouseButtonDblClick:
+            hack->mouseDoubleClickEvent(event);
+            break;
+        default:
+            break;
     }
 
     update();

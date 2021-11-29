@@ -21,47 +21,105 @@
  */
 
 import QtQuick 2.12
-import SerialStudio 1.0
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
+import SerialStudio 1.0
 import "../Widgets" as Widgets
+import "../FramelessWindow" as FramelessWindow
 
 Item {
     id: root
-    visible: false
 
     property int widgetIndex: -1
+    property FramelessWindow.CustomWindow externalWindow: null
 
-    Connections {
-        target: Cpp_UI_Dashboard
+    Widgets.Window {
+        id: window
+        anchors.fill: parent
+        title: loader.widgetTitle
+        icon.source: loader.widgetIcon
+        headerDoubleClickEnabled: true
+        borderColor: Cpp_ThemeManager.widgetWindowBorder
+        onHeaderDoubleClicked: {
+            if (root.externalWindow !== null)
+                root.externalWindow.showNormal()
+            else
+                externalWindowLoader.active = true
+        }
 
-        function onWidgetVisibilityChanged() {
-            if (loader.status == Loader.Ready)
-                root.visible = Cpp_UI_Dashboard.widgetVisible(root.widgetIndex)
+        WidgetLoader {
+            id: loader
+            widgetIndex: root.widgetIndex
+            anchors {
+                fill: parent
+                leftMargin: window.borderWidth
+                rightMargin: window.borderWidth
+                bottomMargin: window.borderWidth
+            }
         }
     }
 
     Loader {
-        id: loader
-        anchors.fill: parent
-        onLoaded: root.visible = Cpp_UI_Dashboard.widgetVisible(root.widgetIndex)
+        id: externalWindowLoader
 
-        sourceComponent: Widgets.Window {
-            id: window
-            title: widget.widgetTitle
-            icon.source: widget.widgetIcon
-            headerDoubleClickEnabled: true
-            borderColor: Cpp_ThemeManager.widgetWindowBorder
-            onHeaderDoubleClicked: widget.showExternalWindow()
+        active: false
+        asynchronous: true
 
-            WidgetLoader {
-                id: widget
-                widgetIndex: root.widgetIndex
-                anchors {
-                    fill: parent
-                    leftMargin: window.borderWidth
-                    rightMargin: window.borderWidth
-                    bottomMargin: window.borderWidth
+        sourceComponent: FramelessWindow.CustomWindow {
+            id: _window
+            minimumWidth: 640 + shadowMargin
+            minimumHeight: 480 + shadowMargin
+            title: externalLoader.widgetTitle
+            extraFlags: Qt.WindowStaysOnTopHint
+            titlebarText: Cpp_ThemeManager.text
+            titlebarColor: Cpp_ThemeManager.widgetWindowBackground
+            backgroundColor: Cpp_ThemeManager.widgetWindowBackground
+            borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
+
+            Timer {
+                id: timer
+                interval: 200
+                onTriggered: _window.showNormal()
+            }
+
+            Component.onCompleted: {
+                root.externalWindow = this
+                timer.start()
+            }
+
+            Rectangle {
+                clip: true
+                anchors.fill: parent
+                radius: _window.radius
+                anchors.margins: _window.shadowMargin
+                color: Cpp_ThemeManager.widgetWindowBackground
+                anchors.topMargin: _window.titlebar.height + _window.shadowMargin
+
+                Rectangle {
+                    height: _window.radius
+                    color: Cpp_ThemeManager.widgetWindowBackground
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        right: parent.right
+                    }
                 }
+
+                WidgetLoader {
+                    id: externalLoader
+                    anchors.fill: parent
+                    isExternalWindow: true
+                    widgetIndex: root.widgetIndex
+                    widgetVisible: _window.visible
+                    anchors.margins: _window.radius
+                }
+            }
+
+            FramelessWindow.ResizeHandles {
+                window: _window
+                anchors.fill: parent
+                handleSize: _window.handleSize
             }
         }
     }
