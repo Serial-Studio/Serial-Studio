@@ -145,6 +145,7 @@ Item {
             maximumBlockCount: 12000
             font.family: app.monoFont
             autoscroll: Cpp_IO_Console.autoscroll
+            renderTarget: PaintedItem.FramebufferObject
             wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
             placeholderText: qsTr("No data received so far") + "..."
 

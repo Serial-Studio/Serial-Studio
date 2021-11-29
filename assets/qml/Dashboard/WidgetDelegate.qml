@@ -51,6 +51,7 @@ Item {
         WidgetLoader {
             id: loader
             widgetIndex: root.widgetIndex
+            renderTarget: PaintedItem.FramebufferObject
             anchors {
                 fill: parent
                 leftMargin: window.borderWidth
@@ -113,6 +114,7 @@ Item {
                     widgetIndex: root.widgetIndex
                     widgetVisible: _window.visible
                     anchors.margins: _window.radius
+                    renderTarget: PaintedItem.FramebufferObject
                 }
             }
 

@@ -57,10 +57,12 @@ Terminal::Terminal(QQuickItem *parent)
     , m_copyAvailable(false)
     , m_textEdit(new QPlainTextEdit)
 {
-    // Set item flags
-    setFlag(ItemHasContents, true);
-    setFlag(ItemAcceptsInputMethod, true);
-    setFlag(ItemIsFocusScope, true);
+    // Set render flags
+    setAntialiasing(true);
+    setOpaquePainting(true);
+    setAcceptHoverEvents(true);
+    setRenderTarget(FramebufferObject);
+    setPerformanceHints(FastFBOResizing);
     setAcceptedMouseButtons(Qt::AllButtons);
     m_escapeCodeHandler.setTextEdit(textEdit());
 
@@ -100,6 +102,9 @@ Terminal::Terminal(QQuickItem *parent)
 
     // React to widget events
     connect(textEdit(), SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));
+
+    // Draw widget
+    QTimer::singleShot(0, this, SLOT(update()));
 }
 
 /**
