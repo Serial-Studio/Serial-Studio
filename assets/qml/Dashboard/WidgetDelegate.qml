@@ -64,25 +64,29 @@ Item {
         id: externalWindowLoader
 
         active: false
-        enabled: active
         asynchronous: true
 
         sourceComponent: FramelessWindow.CustomWindow {
             id: _window
-
-            Component.onCompleted: {
-                root.externalWindow = this
-                root.externalWindow.showNormal()
-            }
-
             minimumWidth: 640 + shadowMargin
             minimumHeight: 480 + shadowMargin
             title: externalLoader.widgetTitle
             extraFlags: Qt.WindowStaysOnTopHint
-            titlebarText: Cpp_ThemeManager.text
+            titlebarText: Cpp_ThemeManager.text  
             titlebarColor: Cpp_ThemeManager.widgetWindowBackground
             backgroundColor: Cpp_ThemeManager.widgetWindowBackground
             borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
+
+            Timer {
+                id: timer
+                interval: 200
+                onTriggered: _window.showNormal()
+            }
+
+            Component.onCompleted: {
+                root.externalWindow = this
+                timer.start()
+            }
 
             Rectangle {
                 clip: true

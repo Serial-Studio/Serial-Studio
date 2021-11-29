@@ -65,55 +65,12 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 # Compiler options
 #-----------------------------------------------------------------------------------------
 
-*g++*: {
-    QMAKE_CXXFLAGS_RELEASE -= -O1
-    QMAKE_CXXFLAGS_RELEASE -= -O2
-    QMAKE_CXXFLAGS_RELEASE *= -O3
-    QMAKE_CXXFLAGS_RELEASE *= -Ofast
-    QMAKE_CXXFLAGS_RELEASE *= -flto
-}
-
-*clang*: {
-    QMAKE_CXXFLAGS_RELEASE -= -O1
-    QMAKE_CXXFLAGS_RELEASE -= -O2
-    QMAKE_CXXFLAGS_RELEASE *= -O3
-    QMAKE_CXXFLAGS_RELEASE *= -Ofast
-    QMAKE_CXXFLAGS_RELEASE *= -flto
-}
-
 *msvc*: {
     QMAKE_CXXFLAGS *= -MP
-    QMAKE_CXXFLAGS_RELEASE -= /O
-    QMAKE_CXXFLAGS_RELEASE *= /O2
-    QMAKE_CXXFLAGS_RELEASE *= /GL
-
-    INCLUDEPATH += $$OUT_PWD
-    INCLUDEPATH += $$OUT_PWD/debug
-    INCLUDEPATH += $$OUT_PWD/release
 }
 
 CONFIG += c++11
 CONFIG += silent
-
-#-----------------------------------------------------------------------------------------
-# Unity build
-#-----------------------------------------------------------------------------------------
-
-#CONFIG += unity_build                          # Uncomment for final releases, the unity
-                                                # build reduces compile time by mashing
-                                                # together all the C++ files in a single
-                                                # file. This approach also allows the
-                                                # compiler to perform more optimizations,
-                                                # resulting in a smaller & faster binary.
-                                                #
-                                                # Unity build is automatically enabled
-                                                # for GitHub CI jobs.
-CONFIG(unity_build) {
-    CONFIG  += ltcg                             # Enable linker optimization
-    DEFINES += UNITY_BUILD=1                    # Enable unity build
-    DEFINES += UNITY_BUILD_INCLUDE_QML=0        # Do not optimize QtQuick compiler cache
-    SOURCES += src/SingleCompilationUnit.cpp    # Include single compilation unit in code
-}
 
 #-----------------------------------------------------------------------------------------
 # Serial Studio compile-time settings
