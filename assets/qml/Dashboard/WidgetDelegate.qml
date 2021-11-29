@@ -32,6 +32,7 @@ Item {
     id: root
 
     property int widgetIndex: -1
+    property FramelessWindow.CustomWindow externalWindow: null
 
     Widgets.Window {
         id: window
@@ -40,7 +41,12 @@ Item {
         icon.source: loader.widgetIcon
         headerDoubleClickEnabled: true
         borderColor: Cpp_ThemeManager.widgetWindowBorder
-        onHeaderDoubleClicked: externalWindow.visible = true
+        onHeaderDoubleClicked: {
+            if (root.externalWindow !== null)
+                root.externalWindow.showNormal()
+
+            externalWindowLoader.enabled = true
+        }
 
         WidgetLoader {
             id: loader
@@ -51,79 +57,70 @@ Item {
                 rightMargin: window.borderWidth
                 bottomMargin: window.borderWidth
             }
-
-            MouseArea {
-                hoverEnabled: true
-                anchors.fill: parent
-                acceptedButtons: Qt.NoButton
-                onContainsMouseChanged: loader.processMouseHover(containsMouse)
-            }
         }
     }
 
-    FramelessWindow.CustomWindow {
-        id: externalWindow
-        minimumWidth: 640 + shadowMargin
-        minimumHeight: 480 + shadowMargin
-        title: externalLoader.widgetTitle
-        extraFlags: Qt.WindowStaysOnTopHint
-        titlebarText: Cpp_ThemeManager.text
-        titlebarColor: Cpp_ThemeManager.widgetWindowBackground
-        backgroundColor: Cpp_ThemeManager.widgetWindowBackground
-        borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
+    Loader {
+        id: externalWindowLoader
+        enabled: false
+        asynchronous: true
+        sourceComponent: FramelessWindow.CustomWindow {
+            Component.onCompleted: root.externalWindow = this
 
-        Rectangle {
-            clip: true
-            anchors.fill: parent
-            radius: externalWindow.radius
-            anchors.margins: externalWindow.shadowMargin
-            color: Cpp_ThemeManager.widgetWindowBackground
-            anchors.topMargin: externalWindow.titlebar.height + externalWindow.shadowMargin
-
-            Item {
-                anchors.fill: parent
-
-                DragHandler {
-                    grabPermissions: TapHandler.CanTakeOverFromAnything
-                    onActiveChanged: {
-                        if (active)
-                            externalWindow.startSystemMove()
-                    }
-                }
-            }
+            minimumWidth: 640 + shadowMargin
+            minimumHeight: 480 + shadowMargin
+            title: externalLoader.widgetTitle
+            extraFlags: Qt.WindowStaysOnTopHint
+            titlebarText: Cpp_ThemeManager.text
+            titlebarColor: Cpp_ThemeManager.widgetWindowBackground
+            backgroundColor: Cpp_ThemeManager.widgetWindowBackground
+            borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
 
             Rectangle {
-                height: externalWindow.radius
+                clip: true
+                anchors.fill: parent
+                radius: externalWindow.radius
+                anchors.margins: externalWindow.shadowMargin
                 color: Cpp_ThemeManager.widgetWindowBackground
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
+                anchors.topMargin: externalWindow.titlebar.height + externalWindow.shadowMargin
+
+                Item {
+                    anchors.fill: parent
+
+                    DragHandler {
+                        grabPermissions: TapHandler.CanTakeOverFromAnything
+                        onActiveChanged: {
+                            if (active)
+                                externalWindow.startSystemMove()
+                        }
+                    }
+                }
+
+                Rectangle {
+                    height: externalWindow.radius
+                    color: Cpp_ThemeManager.widgetWindowBackground
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        right: parent.right
+                    }
+                }
+
+                WidgetLoader {
+                    id: externalLoader
+                    anchors.fill: parent
+                    isExternalWindow: true
+                    widgetIndex: root.widgetIndex
+                    widgetVisible: externalWindow.visible
+                    anchors.margins: externalWindow.radius
                 }
             }
 
-            WidgetLoader {
-                id: externalLoader
+            FramelessWindow.ResizeHandles {
+                handleSize: 10
                 anchors.fill: parent
-                isExternalWindow: true
-                widgetIndex: root.widgetIndex
-                widgetVisible: externalWindow.visible
-                anchors.margins: externalWindow.radius
+                window: externalWindow
             }
-
-            MouseArea {
-                hoverEnabled: true
-                anchors.fill: parent
-                acceptedButtons: Qt.NoButton
-                anchors.topMargin: externalWindow.titlebar.height
-                onContainsMouseChanged: externalLoader.processMouseHover(containsMouse)
-            }
-        }
-
-        FramelessWindow.ResizeHandles {
-            handleSize: 10
-            anchors.fill: parent
-            window: externalWindow
         }
     }
 }

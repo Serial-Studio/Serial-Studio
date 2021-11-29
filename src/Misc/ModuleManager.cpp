@@ -84,9 +84,6 @@ Misc::ModuleManager::ModuleManager()
 #endif
     qApp->setFont(font);
 
-    // Force software rendering to avoid ugly bugs
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::GraphicsApi::Software);
-
     // Get splash screen image
     QPixmap pixmap(":/images/splash@1x.png");
     auto dpr = qApp->devicePixelRatio();
