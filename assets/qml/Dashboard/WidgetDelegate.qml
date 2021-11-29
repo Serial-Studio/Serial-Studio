@@ -68,7 +68,7 @@ Item {
         asynchronous: true
 
         sourceComponent: FramelessWindow.CustomWindow {
-            id: external
+            id: _window
 
             Component.onCompleted: {
                 root.externalWindow = this
@@ -87,13 +87,13 @@ Item {
             Rectangle {
                 clip: true
                 anchors.fill: parent
-                radius: external.radius
-                anchors.margins: external.shadowMargin
+                radius: _window.radius
+                anchors.margins: _window.shadowMargin
                 color: Cpp_ThemeManager.widgetWindowBackground
-                anchors.topMargin: external.titlebar.height + external.shadowMargin
+                anchors.topMargin: _window.titlebar.height + _window.shadowMargin
 
                 Rectangle {
-                    height: external.radius
+                    height: _window.radius
                     color: Cpp_ThemeManager.widgetWindowBackground
                     anchors {
                         top: parent.top
@@ -107,15 +107,15 @@ Item {
                     anchors.fill: parent
                     isExternalWindow: true
                     widgetIndex: root.widgetIndex
-                    widgetVisible: external.visible
-                    anchors.margins: external.radius
+                    widgetVisible: _window.visible
+                    anchors.margins: _window.radius
                 }
             }
 
             FramelessWindow.ResizeHandles {
+                window: _window
                 anchors.fill: parent
-                window: external
-                handleSize: external.handleSize
+                handleSize: _window.handleSize
             }
         }
     }

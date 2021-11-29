@@ -21,11 +21,11 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Window 2.12
+import QtQuick.Window 2.12 as QtWindow
 
 import "../Widgets" as Widgets
 
-Window {
+QtWindow.Window {
     id: root
     color: "transparent"
     flags: root.customFlags | root.extraFlags
@@ -43,7 +43,7 @@ Window {
     //
     property int borderWidth: 2
     readonly property int handleSize: radius > 0 ? radius + shadowMargin + 10 : 0
-    readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || isFullscreen) ? 0 : 10
+    readonly property int radius: ((root.visibility === QtWindow.Window.Maximized && maximizeEnabled) || isFullscreen) ? 0 : 10
 
     //
     // Visibility properties
@@ -132,21 +132,21 @@ Window {
         }
 
         // Startup verifications to ensure that app is displayed inside the screen
-        if (root.x < 0 || root.x >= Screen.desktopAvailableWidth)
+        if (root.x < 0 || root.x >= QtWindow.Screen.desktopAvailableWidth)
             root.x = 100
-        if (root.y < 0 || root.y >= Screen.desktopAvailableHeight)
+        if (root.y < 0 || root.y >= QtWindow.Screen.desktopAvailableHeight)
             root.y = 100
 
         // Startup verifications to ensure that app fits in current screen
-        if (root.width > Screen.desktopAvailableWidth) {
+        if (root.width > QtWindow.Screen.desktopAvailableWidth) {
             root.x = 100
-            root.width = Screen.desktopAvailableWidth - root.x
+            root.width = QtWindow.Screen.desktopAvailableWidth - root.x
         }
 
         // Startup verifications to ensure that app fits in current screen
-        if (root.height > Screen.desktopAvailableHeight) {
+        if (root.height > QtWindow.Screen.desktopAvailableHeight) {
             root.y = 100
-            root.height = Screen.desktopAvailableHeight - root.y
+            root.height = QtWindow.Screen.desktopAvailableHeight - root.y
         }
     }
 
@@ -290,7 +290,7 @@ Window {
         root.flags = root.customFlags | root.extraFlags
 
         // Window has been just maximized, update internal variables
-        if (visibility === Window.Maximized) {
+        if (visibility === QtWindow.Window.Maximized) {
             if (!root.isMaximized)
                 root.firstChange = false
 
@@ -299,13 +299,13 @@ Window {
         }
 
         // Window has been just minimized, update internal variables
-        else if (visibility === Window.Minimized) {
+        else if (visibility === QtWindow.Window.Minimized) {
             root.isFullscreen = false
             root.isMaximized = false
         }
 
         // Window has been just switched to full-screen, update internal variables
-        else if (visibility === Window.FullScreen) {
+        else if (visibility === QtWindow.Window.FullScreen) {
             if (!root.isFullscreen)
                 root.firstChange = false
 
@@ -314,12 +314,12 @@ Window {
         }
 
         // Window was just restored to "normal" mode, recover previous geometry
-        else if (visibility !== Window.Hidden) {
+        else if (visibility !== QtWindow.Window.Hidden) {
             if (isMaximized || isFullscreen && firstChange) {
                 root.width = root.minimumWidth
                 root.height = root.minimumHeight
-                root.x = (Screen.desktopAvailableWidth - root.width) / 2
-                root.y = (Screen.desktopAvailableHeight - root.height) / 2
+                root.x = (QtWindow.Screen.desktopAvailableWidth - root.width) / 2
+                root.y = (QtWindow.Screen.desktopAvailableHeight - root.height) / 2
             }
 
             root.isMaximized = false
