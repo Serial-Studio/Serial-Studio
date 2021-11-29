@@ -36,11 +36,14 @@ Widgets.Icon {
     color: root.textColor
     source: "qrc:/window-border/" + name + ".svg"
 
+    Behavior on color { ColorAnimation{} }
+
     MouseArea {
+        hoverEnabled: true
         anchors.fill: parent
         preventStealing: true
         onClicked: root.clicked()
         acceptedButtons: Qt.LeftButton
-        onPressedChanged: root.color = pressed ? root.pressedColor : root.textColor
+        onContainsMouseChanged: root.color = containsMouse ? root.pressedColor : root.textColor
     }
 }

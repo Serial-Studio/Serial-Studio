@@ -62,9 +62,12 @@ Item {
 
     Loader {
         id: externalWindowLoader
+
         enabled: false
         asynchronous: true
+
         sourceComponent: FramelessWindow.CustomWindow {
+            id: dynamicWindow
             Component.onCompleted: root.externalWindow = this
 
             minimumWidth: 640 + shadowMargin
@@ -117,9 +120,9 @@ Item {
             }
 
             FramelessWindow.ResizeHandles {
-                handleSize: 10
                 anchors.fill: parent
-                window: externalWindow
+                window: dynamicWindow
+                handleSize: dynamicWindow.handleSize
             }
         }
     }

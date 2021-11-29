@@ -42,7 +42,7 @@ Window {
     // Window radius control
     //
     property int borderWidth: 2
-    readonly property int handleSize: radius > 0 ? radius + 10 : 0
+    readonly property int handleSize: radius > 0 ? radius + shadowMargin + 5 : 0
     readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || isFullscreen) ? 0 : 10
 
     //
@@ -179,37 +179,14 @@ Window {
     // Window border
     //
     Rectangle {
-        z: 1000
         opacity: 0.8
+        z: titlebar.z + 1
         radius: root.radius
         color: "transparent"
         anchors.fill: parent
         border.color: root.borderColor
         border.width: root.borderWidth
         anchors.margins: root.shadowMargin
-    }
-
-    //
-    // Titlebar control
-    //
-    Titlebar {
-        id: _title
-        window: root
-        radius: root.radius
-        color: root.titlebarColor
-        textColor: root.titlebarText
-
-        onClosed: root.closed()
-        onMinimized: root.minimized()
-        onMaximized: root.maximized()
-        onUnmaximized: root.unmaximized()
-
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-            margins: root.shadowMargin
-        }
     }
 
     //
@@ -240,8 +217,64 @@ Window {
                 if (p.y >= height - b)
                     e |= Qt.BottomEdge
 
-                window.startSystemResize(e)
+                root.startSystemResize(e)
             }
+        }
+    }
+
+    //
+    // Global mouse area to set cursor shape while resizing
+    //
+    MouseArea {
+        z: titlebar.z - 1
+        hoverEnabled: true
+        anchors.fill: parent
+        acceptedButtons: Qt.NoButton
+        cursorShape: {
+            const p = Qt.point(mouseX, mouseY)
+            const b = handleSize / 2
+
+            if (p.x < b && p.y < b)
+                return Qt.SizeFDiagCursor
+
+            if (p.x >= width - b && p.y >= height - b)
+                return Qt.SizeFDiagCursor
+
+            if (p.x >= width - b && p.y < b)
+                return Qt.SizeBDiagCursor
+
+            if (p.x < b && p.y >= height - b)
+                return Qt.SizeBDiagCursor
+
+            if (p.x < b || p.x >= width - b)
+                return Qt.SizeHorCursor
+
+            if (p.y < b || p.y >= height - b)
+                return Qt.SizeVerCursor
+        }
+    }
+
+    //
+    // Titlebar control
+    //
+    Titlebar {
+        z: 2000
+        id: _title
+        window: root
+        radius: root.radius
+        color: root.titlebarColor
+        textColor: root.titlebarText
+
+        onClosed: root.closed()
+        onMinimized: root.minimized()
+        onMaximized: root.maximized()
+        onUnmaximized: root.unmaximized()
+
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            margins: root.shadowMargin
         }
     }
 

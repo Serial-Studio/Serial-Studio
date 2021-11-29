@@ -203,6 +203,7 @@ FramelessWindow.CustomWindow {
     // Menubar, shown by default on Windows & Linux and when the app is fullscreen
     //
     RowLayout {
+        z: titlebar.z + 1
         spacing: app.spacing
         height: titlebar.height
 

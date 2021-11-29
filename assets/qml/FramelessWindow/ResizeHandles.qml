@@ -40,38 +40,6 @@ Item {
              (window.visibility !== Window.Maximized)
 
     //
-    // Global mouse area to fix cursor shape while resizing
-    //
-    MouseArea {
-        z: 1000
-        hoverEnabled: true
-        anchors.fill: parent
-        acceptedButtons: Qt.NoButton
-        cursorShape: {
-            const p = Qt.point(mouseX, mouseY)
-            const b = handleSize / 2
-
-            if (p.x < b && p.y < b)
-                return Qt.SizeFDiagCursor
-
-            if (p.x >= width - b && p.y >= height - b)
-                return Qt.SizeFDiagCursor
-
-            if (p.x >= width - b && p.y < b)
-                return Qt.SizeBDiagCursor
-
-            if (p.x < b && p.y >= height - b)
-                return Qt.SizeBDiagCursor
-
-            if (p.x < b || p.x >= width - b)
-                return Qt.SizeHorCursor
-
-            if (p.y < b || p.y >= height - b)
-                return Qt.SizeVerCursor
-        }
-    }
-
-    //
     // Right resize handle for macOS
     //
     MouseArea {
