@@ -42,7 +42,7 @@ Window {
     // Window radius control
     //
     property int borderWidth: 2
-    readonly property int handleSize: radius > 0 ? radius + shadowMargin + 5 : 0
+    readonly property int handleSize: radius > 0 ? radius + shadowMargin + 10 : 0
     readonly property int radius: ((root.visibility === Window.Maximized && maximizeEnabled) || isFullscreen) ? 0 : 10
 
     //
@@ -232,7 +232,7 @@ Window {
         acceptedButtons: Qt.NoButton
         cursorShape: {
             const p = Qt.point(mouseX, mouseY)
-            const b = handleSize / 2
+            const b = root.handleSize / 2
 
             if (p.x < b && p.y < b)
                 return Qt.SizeFDiagCursor

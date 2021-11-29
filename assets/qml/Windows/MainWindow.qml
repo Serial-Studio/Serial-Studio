@@ -260,9 +260,9 @@ FramelessWindow.CustomWindow {
             // Application toolbar
             //
             Toolbar {
-                z: 1
                 id: toolbar
                 window: root
+                z: titlebar.z
                 Layout.fillWidth: true
                 Layout.minimumHeight: 48
                 Layout.maximumHeight: 48
@@ -295,7 +295,6 @@ FramelessWindow.CustomWindow {
             // Console, dashboard & setup panel
             //
             RowLayout {
-                z: 0
                 spacing: 0
                 Layout.fillWidth: true
                 Layout.fillHeight: true

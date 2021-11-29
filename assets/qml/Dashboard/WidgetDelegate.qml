@@ -44,8 +44,8 @@ Item {
         onHeaderDoubleClicked: {
             if (root.externalWindow !== null)
                 root.externalWindow.showNormal()
-
-            externalWindowLoader.enabled = true
+            else
+                externalWindowLoader.active = true
         }
 
         WidgetLoader {
@@ -63,12 +63,17 @@ Item {
     Loader {
         id: externalWindowLoader
 
-        enabled: false
+        active: false
+        enabled: active
         asynchronous: true
 
         sourceComponent: FramelessWindow.CustomWindow {
-            id: dynamicWindow
-            Component.onCompleted: root.externalWindow = this
+            id: external
+
+            Component.onCompleted: {
+                root.externalWindow = this
+                root.externalWindow.showNormal()
+            }
 
             minimumWidth: 640 + shadowMargin
             minimumHeight: 480 + shadowMargin
@@ -82,25 +87,13 @@ Item {
             Rectangle {
                 clip: true
                 anchors.fill: parent
-                radius: externalWindow.radius
-                anchors.margins: externalWindow.shadowMargin
+                radius: external.radius
+                anchors.margins: external.shadowMargin
                 color: Cpp_ThemeManager.widgetWindowBackground
-                anchors.topMargin: externalWindow.titlebar.height + externalWindow.shadowMargin
-
-                Item {
-                    anchors.fill: parent
-
-                    DragHandler {
-                        grabPermissions: TapHandler.CanTakeOverFromAnything
-                        onActiveChanged: {
-                            if (active)
-                                externalWindow.startSystemMove()
-                        }
-                    }
-                }
+                anchors.topMargin: external.titlebar.height + external.shadowMargin
 
                 Rectangle {
-                    height: externalWindow.radius
+                    height: external.radius
                     color: Cpp_ThemeManager.widgetWindowBackground
                     anchors {
                         top: parent.top
@@ -114,15 +107,15 @@ Item {
                     anchors.fill: parent
                     isExternalWindow: true
                     widgetIndex: root.widgetIndex
-                    widgetVisible: externalWindow.visible
-                    anchors.margins: externalWindow.radius
+                    widgetVisible: external.visible
+                    anchors.margins: external.radius
                 }
             }
 
             FramelessWindow.ResizeHandles {
                 anchors.fill: parent
-                window: dynamicWindow
-                handleSize: dynamicWindow.handleSize
+                window: external
+                handleSize: external.handleSize
             }
         }
     }

@@ -31,7 +31,6 @@ Repeater {
 
     delegate: Loader {
         id: loader
-        opacity: 0
         asynchronous: true
         width: root.cellWidth
         height: root.cellHeight
@@ -39,7 +38,6 @@ Repeater {
         sourceComponent: WidgetDelegate {
             widgetIndex: index
             anchors.fill: parent
-            Component.onCompleted: loader.opacity = 1
         }
 
         Connections {
