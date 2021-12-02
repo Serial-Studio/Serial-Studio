@@ -97,13 +97,6 @@ Misc::ModuleManager::ModuleManager()
     m_splash.setPixmap(pixmap);
     m_splash.show();
 
-    // Select rendering engine
-#ifdef Q_OS_WIN
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
-#else
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGL);
-#endif
-
     // Stop modules when application is about to quit
     setSplashScreenMessage(tr("Initializing..."));
     connect(engine(), SIGNAL(quit()), this, SLOT(onQuit()));

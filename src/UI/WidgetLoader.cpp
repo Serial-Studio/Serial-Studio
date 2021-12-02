@@ -314,26 +314,6 @@ void WidgetLoader::setIsExternalWindow(const bool isWindow)
 }
 
 /**
- * This function must be called directly by a QML MouseArea item.
- * Unfortunatelly, enter/leave events cannot be processed
- * directly by the @c WidgetLoader::event(QEvent *event) function.
- */
-void WidgetLoader::processMouseHover(const bool containsMouse)
-{
-    if (containsMouse)
-    {
-        QEnterEvent event(QPoint(0, 0), QPoint(0, 0), QPoint(0, 0));
-        processEnterEvent(&event);
-    }
-
-    else
-    {
-        QEvent event(QEvent::Leave);
-        processLeaveEvent(&event);
-    }
-}
-
-/**
  * Resizes the widget to fit inside the QML item.
  */
 void WidgetLoader::updateWidgetSize()
@@ -362,44 +342,6 @@ void WidgetLoader::updateWidgetVisible()
 
         emit widgetVisibleChanged();
     }
-}
-
-/**
- * Lets the widget handle the mouse leave events
- */
-void WidgetLoader::processLeaveEvent(QEvent *event)
-{
-    if (!m_widget)
-        return;
-
-    class Hack : public QWidget
-    {
-    public:
-        using QWidget::leaveEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_widget);
-    hack->leaveEvent(event);
-    update();
-}
-
-/**
- * Lets the widget handle the mouse enter events
- */
-void WidgetLoader::processEnterEvent(QEnterEvent *event)
-{
-    if (!m_widget)
-        return;
-
-    class Hack : public QWidget
-    {
-    public:
-        using QWidget::enterEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_widget);
-    hack->enterEvent(event);
-    update();
 }
 
 /**

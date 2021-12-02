@@ -111,15 +111,12 @@ public slots:
     void setVisible(const bool visible);
     void setWidgetIndex(const int index);
     void setIsExternalWindow(const bool isWindow);
-    void processMouseHover(const bool containsMouse);
 
 private slots:
     void updateWidgetSize();
     void updateWidgetVisible();
 
 protected:
-    void processLeaveEvent(QEvent *event);
-    void processEnterEvent(QEnterEvent *event);
     void processMouseEvents(QMouseEvent *event);
     void processWheelEvents(QWheelEvent *event);
 
