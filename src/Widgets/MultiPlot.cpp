@@ -146,9 +146,8 @@ void MultiPlot::updateData()
             continue;
 
         // Add point to plot data
-        auto data = m_yData[i].data();
         auto count = m_yData[i].count();
-        memmove(data, data + 1, count * sizeof(double));
+        memmove(m_yData[i].data(), m_yData[i].data() + 1, count * sizeof(double));
 
         // Normalize dataset value
         if (dataset->max() > dataset->min())

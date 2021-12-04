@@ -20,47 +20,59 @@
  * THE SOFTWARE.
  */
 
-#pragma once
+#include <QTimer>
+#include <QResizeEvent>
 
-#include <QWidget>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QScrollArea>
-
-#include "Common/ElidedLabel.h"
+#include "ElidedLabel.h"
 
 namespace Widgets
 {
-class DataGroup : public QWidget
+ElidedLabel::ElidedLabel(QWidget *parent, Qt::WindowFlags flags)
+    : QLabel(parent, flags)
+    , m_eliding(false)
+    , m_originalText("")
+    , m_elideMode(Qt::ElideNone)
 {
-    Q_OBJECT
+}
 
-public:
-    DataGroup(const int index = -1);
-    ~DataGroup();
+ElidedLabel::ElidedLabel(const QString &text, QWidget *parent, Qt::WindowFlags flags)
+    : QLabel(text, parent, flags)
+    , m_eliding(false)
+    , m_originalText("")
+    , m_elideMode(Qt::ElideNone)
+{
+    setText(text);
+}
 
-private slots:
-    void updateData();
+void ElidedLabel::setType(const Qt::TextElideMode type)
+{
+    m_elideMode = type;
+    elide();
+}
 
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void wheelEvent(QWheelEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
+void ElidedLabel::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
+    QTimer::singleShot(50, this, SLOT(elide()));
+}
 
-private:
-    int m_index;
+void ElidedLabel::setText(const QString &text)
+{
+    m_originalText = text;
+    QLabel::setText(text);
+    elide();
+}
 
-    QVector<QLabel *> m_icons;
-    QVector<QLabel *> m_units;
-    QVector<ElidedLabel *> m_titles;
-    QVector<ElidedLabel *> m_values;
+void ElidedLabel::elide()
+{
+    if (m_eliding == false)
+    {
+        m_eliding = true;
 
-    QWidget *m_dataContainer;
-    QVBoxLayout *m_mainLayout;
-    QGridLayout *m_gridLayout;
-    QScrollArea *m_scrollArea;
-};
+        QFontMetrics metrics(font());
+        QLabel::setText(metrics.elidedText(m_originalText, m_elideMode, width()));
+
+        m_eliding = false;
+    }
+}
 }

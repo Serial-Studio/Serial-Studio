@@ -967,7 +967,7 @@ QVector<JSON::Group *> Dashboard::getWidgetGroups(const QString &handle) const
     QVector<JSON::Group *> widgets;
     foreach (auto group, m_latestFrame.groups())
     {
-        if (group->widget().toLower() == handle)
+        if (group->widget() == handle)
             widgets.append(group);
     }
 

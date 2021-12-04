@@ -25,8 +25,6 @@
 #include <QFile>
 #include <QObject>
 #include <QThread>
-#include <QJSValue>
-#include <QJSEngine>
 #include <QSettings>
 #include <QJsonArray>
 #include <QJsonValue>
@@ -63,7 +61,6 @@ private:
     QDateTime m_time;
     QByteArray m_data;
     quint64 m_frame;
-    QJSEngine *m_engine;
 };
 
 /**
@@ -153,7 +150,6 @@ private slots:
 
 private:
     QFile m_jsonMap;
-    QJSEngine m_engine;
     quint64 m_frameCount;
     QSettings m_settings;
     QString m_jsonMapData;

@@ -118,21 +118,6 @@ Control {
     }
 
     //
-    // Move window while dragging over the toolbar
-    //
-    Item {
-        anchors.fill: parent
-
-        DragHandler {
-            grabPermissions: TapHandler.CanTakeOverFromAnything
-            onActiveChanged: {
-                if (active)
-                    window.startSystemMove()
-            }
-        }
-    }
-
-    //
     // Toolbar icons
     //
     RowLayout {

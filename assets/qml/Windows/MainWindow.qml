@@ -69,7 +69,17 @@ FramelessWindow.CustomWindow {
     //
     function showSetup()     { toolbar.setupClicked()     }
     function showConsole()   { toolbar.consoleClicked()   }
-    function showDashboard() { toolbar.dashboardClicked() }
+    function showDashboard() { dbTimer.start() }
+
+    //
+    // Wait a little before showing the dashboard to avoid UI glitches and/or overloading
+    // the rendering engine
+    //
+    Timer {
+        id: dbTimer
+        interval: 500
+        onTriggered: toolbar.dashboardClicked()
+    }
 
     //
     // Console-related functions

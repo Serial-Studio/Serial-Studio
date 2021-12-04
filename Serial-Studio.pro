@@ -171,6 +171,7 @@ HEADERS += \
     src/Widgets/Common/AnalogGauge.h \
     src/Widgets/Common/AttitudeIndicator.h \
     src/Widgets/Common/BaseWidget.h \
+    src/Widgets/Common/ElidedLabel.h \
     src/Widgets/Common/KLed.h \
     src/Widgets/Compass.h \
     src/Widgets/DataGroup.h \
@@ -212,6 +213,7 @@ SOURCES += \
     src/Widgets/Common/AnalogGauge.cpp \
     src/Widgets/Common/AttitudeIndicator.cpp \
     src/Widgets/Common/BaseWidget.cpp \
+    src/Widgets/Common/ElidedLabel.cpp \
     src/Widgets/Common/KLed.cpp \
     src/Widgets/Compass.cpp \
     src/Widgets/DataGroup.cpp \

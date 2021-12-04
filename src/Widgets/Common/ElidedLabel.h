@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,36 +20,33 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+#pragma once
 
-import SerialStudio 1.0
-import "../Widgets" as Widgets
+#include <QLabel>
 
-Item {
-    id: root
+namespace Widgets
+{
+class ElidedLabel : public QLabel
+{
+    Q_OBJECT
 
-    property int widgetIndex: -1
+public:
+    explicit ElidedLabel(QWidget *parent = Q_NULLPTR,
+                         Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit ElidedLabel(const QString &text, QWidget *parent = Q_NULLPTR,
+                         Qt::WindowFlags flags = Qt::WindowFlags());
+    void setType(const Qt::TextElideMode type);
 
-    Widgets.Window {
-        id: window
-        anchors.fill: parent
-        title: loader.widgetTitle
-        icon.source: loader.widgetIcon
-        headerDoubleClickEnabled: true
-        borderColor: Cpp_ThemeManager.widgetWindowBorder
-        onHeaderDoubleClicked: loader.showExternalWindow()
+public slots:
+    void setText(const QString &text);
+    void elide();
 
-        WidgetLoader {
-            id: loader
-            widgetIndex: root.widgetIndex
-            anchors {
-                fill: parent
-                leftMargin: window.borderWidth
-                rightMargin: window.borderWidth
-                bottomMargin: window.borderWidth
-            }
-        }
-    }
+protected:
+    void resizeEvent(QResizeEvent *event);
+
+private:
+    bool m_eliding;
+    QString m_originalText;
+    Qt::TextElideMode m_elideMode;
+};
 }

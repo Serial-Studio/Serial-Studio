@@ -79,14 +79,18 @@ DataGroup::DataGroup(const int index)
         // Create labels
         m_units.append(new QLabel(m_dataContainer));
         m_icons.append(new QLabel(m_dataContainer));
-        m_titles.append(new QLabel(m_dataContainer));
-        m_values.append(new QLabel(m_dataContainer));
+        m_titles.append(new ElidedLabel(m_dataContainer));
+        m_values.append(new ElidedLabel(m_dataContainer));
 
         // Get pointers to labels
         auto dicon = m_icons.last();
         auto units = m_units.last();
         auto title = m_titles.last();
         auto value = m_values.last();
+
+        // Set elide modes for title & value fields
+        title->setType(Qt::ElideRight);
+        value->setType(Qt::ElideRight);
 
         // Set label alignments
         units->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);

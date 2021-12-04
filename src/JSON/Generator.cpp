@@ -365,21 +365,12 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
             auto datasets = JFI_Value(group, "datasets", "d").toArray();
             for (int j = 0; j < datasets.count(); ++j)
             {
-                // Get dataset object & value
                 auto dataset = datasets.at(j).toObject();
                 auto value = JFI_Value(dataset, "value", "v").toString();
-
-                // Evaluate code in dataset value (if any)
-                auto jsValue = m_engine.evaluate(value);
-
-                // Code execution correct, replace value in JSON
-                if (!jsValue.isError())
-                {
-                    dataset.remove("v");
-                    dataset.remove("value");
-                    dataset.insert("value", jsValue.toString());
-                    datasets.replace(j, dataset);
-                }
+                dataset.remove("v");
+                dataset.remove("value");
+                dataset.insert("value", value);
+                datasets.replace(j, dataset);
             }
 
             // Replace group datasets
@@ -415,7 +406,6 @@ JSONWorker::JSONWorker(const QByteArray &data, const quint64 frame, const QDateT
     : m_time(time)
     , m_data(data)
     , m_frame(frame)
-    , m_engine(nullptr)
 {
 }
 
@@ -441,9 +431,6 @@ void JSONWorker::process()
         if (generator->jsonMapData().isEmpty())
             return;
 
-        // Initialize javscript engine
-        m_engine = new QJSEngine(this);
-
         // Separate incoming data & add it to the JSON map
         auto json = generator->jsonMapData();
         auto sepr = IO::Manager::getInstance()->separatorSequence();
@@ -467,21 +454,12 @@ void JSONWorker::process()
             auto datasets = JFI_Value(group, "datasets", "d").toArray();
             for (int j = 0; j < datasets.count(); ++j)
             {
-                // Get dataset object & value
                 auto dataset = datasets.at(j).toObject();
                 auto value = JFI_Value(dataset, "value", "v").toString();
-
-                // Evaluate code in dataset value (if any)
-                auto jsValue = m_engine->evaluate(value);
-
-                // Code execution correct, replace value in JSON
-                if (!jsValue.isError())
-                {
-                    dataset.remove("v");
-                    dataset.remove("value");
-                    dataset.insert("value", jsValue.toString());
-                    datasets.replace(j, dataset);
-                }
+                dataset.remove("v");
+                dataset.remove("value");
+                dataset.insert("value", value);
+                datasets.replace(j, dataset);
             }
 
             // Replace group datasets
@@ -498,9 +476,6 @@ void JSONWorker::process()
 
         // Create JSON document
         document = QJsonDocument(root);
-
-        // Delete javacript engine
-        delete m_engine;
     }
 
     // No parse error, update UI & reset error counter

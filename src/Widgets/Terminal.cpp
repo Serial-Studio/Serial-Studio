@@ -60,7 +60,6 @@ Terminal::Terminal(QQuickItem *parent)
     // Set render flags
     setAntialiasing(true);
     setOpaquePainting(true);
-    setAcceptHoverEvents(true);
     setRenderTarget(FramebufferObject);
     setPerformanceHints(FastFBOResizing);
     setAcceptedMouseButtons(Qt::AllButtons);
