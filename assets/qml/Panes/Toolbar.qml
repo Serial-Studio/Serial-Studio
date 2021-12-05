@@ -180,8 +180,20 @@ Control {
             onEnabledChanged: Cpp_Misc_MacExtras.setDashboardEnabled(enabled)
         }
 
+        //
+        // Window drag handler
+        //
         Item {
+            height: parent.height
             Layout.fillWidth: true
+
+            DragHandler {
+                grabPermissions: TapHandler.CanTakeOverFromAnything
+                onActiveChanged: {
+                    if (active)
+                        window.startSystemMove()
+                }
+            }
         }
 
         Button {
