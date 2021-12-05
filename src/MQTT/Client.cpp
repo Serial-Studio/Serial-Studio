@@ -791,9 +791,9 @@ void Client::regenerateClient()
         password = QString::fromUtf8(m_client->password());
 
         disconnect(m_client, &QMQTT::Client::error, nullptr, 0);
-        disconnect(m_client, &QMQTT::Client::sslErrors, nullptr, 0);
         disconnect(m_client, &QMQTT::Client::received, nullptr, 0);
         disconnect(m_client, &QMQTT::Client::connected, nullptr, 0);
+        disconnect(m_client, &QMQTT::Client::sslErrors, nullptr, 0);
         disconnect(m_client, &QMQTT::Client::disconnected, nullptr, 0);
 
         m_client->disconnectFromHost();
