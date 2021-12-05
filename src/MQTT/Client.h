@@ -209,15 +209,19 @@ private slots:
     void lookupFinished(const QHostInfo &info);
     void onError(const QMQTT::ClientError error);
     void onFrameReceived(const QByteArray &frame);
+    void onSslErrors(const QList<QSslError> &errors);
     void onMessageReceived(const QMQTT::Message &message);
+
+private:
+    void regenerateClient();
 
 private:
     QString m_topic;
     bool m_sslEnabled;
     int m_sslProtocol;
     bool m_lookupActive;
-    QMQTT::Client m_client;
     quint16 m_sentMessages;
+    QMQTT::Client *m_client;
     QVector<QByteArray> m_frames;
     MQTTClientMode m_clientMode;
     QSslConfiguration m_sslConfiguration;

@@ -40,15 +40,11 @@ Client::Client()
     : m_topic("")
     , m_lookupActive(false)
     , m_sentMessages(0)
+    , m_client(nullptr)
     , m_clientMode(MQTTClientMode::ClientPublisher)
 {
-    // MQTT signals/slots
-    connect(&m_client, &QMQTT::Client::error, this, &Client::onError);
-    connect(&m_client, &QMQTT::Client::received, this, &Client::onMessageReceived);
-    connect(&m_client, &QMQTT::Client::connected, this, &Client::connectedChanged);
-    connect(&m_client, &QMQTT::Client::disconnected, this, &Client::connectedChanged);
-    connect(&m_client, &QMQTT::Client::connected, this, &Client::onConnectedChanged);
-    connect(&m_client, &QMQTT::Client::disconnected, this, &Client::onConnectedChanged);
+    // Configure new client
+    regenerateClient();
 
     // Send data periodically & reset statistics when disconnected/connected to a device
     auto io = IO::Manager::getInstance();
@@ -56,10 +52,6 @@ Client::Client()
     connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &Client::sendData);
     connect(io, &IO::Manager::connectedChanged, this, &Client::resetStatistics);
     connect(io, &IO::Manager::frameReceived, this, &Client::onFrameReceived);
-
-    // Set default port/host
-    setPort(defaultPort());
-    setHost(defaultHost());
 }
 
 /**
@@ -68,6 +60,7 @@ Client::Client()
 Client::~Client()
 {
     disconnectFromHost();
+    delete m_client;
 }
 
 /**
@@ -89,12 +82,17 @@ Client *Client::getInstance()
  */
 quint8 Client::qos() const
 {
-    return m_client.willQos();
+    Q_ASSERT(m_client);
+    return m_client->willQos();
 }
 
+/**
+ * Returns @c true if the retain flag is enabled
+ */
 bool Client::retain() const
 {
-    return m_client.willRetain();
+    Q_ASSERT(m_client);
+    return m_client->willRetain();
 }
 
 /**
@@ -102,7 +100,8 @@ bool Client::retain() const
  */
 quint16 Client::port() const
 {
-    return m_client.port();
+    Q_ASSERT(m_client);
+    return m_client->port();
 }
 
 /**
@@ -113,6 +112,9 @@ QString Client::topic() const
     return m_topic;
 }
 
+/**
+ * Returns the selected SSL/TLS protocol index
+ */
 int Client::sslProtocol() const
 {
     return m_sslProtocol;
@@ -124,7 +126,9 @@ int Client::sslProtocol() const
  */
 int Client::mqttVersion() const
 {
-    switch (m_client.version())
+    Q_ASSERT(m_client);
+
+    switch (m_client->version())
     {
         case QMQTT::V3_1_0:
             return 0;
@@ -161,7 +165,8 @@ int Client::clientMode() const
  */
 QString Client::username() const
 {
-    return m_client.username();
+    Q_ASSERT(m_client);
+    return m_client->username();
 }
 
 /**
@@ -169,7 +174,8 @@ QString Client::username() const
  */
 QString Client::password() const
 {
-    return QString::fromUtf8(m_client.password());
+    Q_ASSERT(m_client);
+    return QString::fromUtf8(m_client->password());
 }
 
 /**
@@ -177,7 +183,8 @@ QString Client::password() const
  */
 QString Client::host() const
 {
-    return m_client.hostName();
+    Q_ASSERT(m_client);
+    return m_client->hostName();
 }
 
 /**
@@ -185,7 +192,8 @@ QString Client::host() const
  */
 quint16 Client::keepAlive() const
 {
-    return m_client.keepAlive();
+    Q_ASSERT(m_client);
+    return m_client->keepAlive();
 }
 
 /**
@@ -211,7 +219,8 @@ bool Client::isSubscribed() const
  */
 bool Client::isConnectedToHost() const
 {
-    return m_client.isConnectedToHost();
+    Q_ASSERT(m_client);
+    return m_client->isConnectedToHost();
 }
 
 /**
@@ -249,9 +258,10 @@ StringList Client::mqttVersions() const
  */
 StringList Client::sslProtocols() const
 {
-    return StringList { tr("System default"),  "TLS v1.0",  "TLS v1.1",
-                        "TLS v1.2 (or later)", "DTLS v1.0", "DTLS v1.2",
-                        "DTLS v1.2 (or later)" };
+    return StringList {
+        tr("System default"),  "TLS v1.0",  "TLS v1.1",  "TLS v1.2",
+        "TLS v1.3 (or later)", "DTLS v1.0", "DTLS v1.2", "DTLS v1.2 (or later)"
+    };
 }
 
 /**
@@ -273,7 +283,8 @@ void Client::loadCaFile()
  */
 void Client::connectToHost()
 {
-    m_client.connectToHost();
+    Q_ASSERT(m_client);
+    m_client->connectToHost();
 }
 
 /**
@@ -293,7 +304,8 @@ void Client::toggleConnection()
  */
 void Client::disconnectFromHost()
 {
-    m_client.disconnectFromHost();
+    Q_ASSERT(m_client);
+    m_client->disconnectFromHost();
 }
 
 /**
@@ -301,7 +313,8 @@ void Client::disconnectFromHost()
  */
 void Client::setQos(const quint8 qos)
 {
-    m_client.setWillQos(qos);
+    Q_ASSERT(m_client);
+    m_client->setWillQos(qos);
     emit qosChanged();
 }
 
@@ -311,7 +324,8 @@ void Client::setQos(const quint8 qos)
  */
 void Client::setRetain(const bool retain)
 {
-    m_client.setWillRetain(retain);
+    Q_ASSERT(m_client);
+    m_client->setWillRetain(retain);
     emit retainChanged();
 }
 
@@ -330,7 +344,8 @@ void Client::lookup(const QString &host)
  */
 void Client::setPort(const quint16 port)
 {
-    m_client.setPort(port);
+    Q_ASSERT(m_client);
+    m_client->setPort(port);
     emit portChanged();
 }
 
@@ -339,7 +354,8 @@ void Client::setPort(const quint16 port)
  */
 void Client::setHost(const QString &host)
 {
-    m_client.setHostName(host);
+    Q_ASSERT(m_client);
+    m_client->setHostName(host);
     emit hostChanged();
 }
 
@@ -392,6 +408,7 @@ void Client::loadCaFile(const QString &path)
 
     // Load certificate into SSL configuration
     m_sslConfiguration.setCaCertificates(QSslCertificate::fromData(data));
+    regenerateClient();
 }
 
 /**
@@ -411,21 +428,25 @@ void Client::setSslProtocol(const int index)
             m_sslConfiguration.setProtocol(QSsl::TlsV1_1);
             break;
         case 3:
-            m_sslConfiguration.setProtocol(QSsl::TlsV1_3OrLater);
+            m_sslConfiguration.setProtocol(QSsl::TlsV1_2);
             break;
         case 4:
-            m_sslConfiguration.setProtocol(QSsl::DtlsV1_0);
+            m_sslConfiguration.setProtocol(QSsl::TlsV1_3OrLater);
             break;
         case 5:
-            m_sslConfiguration.setProtocol(QSsl::DtlsV1_2);
+            m_sslConfiguration.setProtocol(QSsl::DtlsV1_0);
             break;
         case 6:
+            m_sslConfiguration.setProtocol(QSsl::DtlsV1_2);
+            break;
+        case 7:
             m_sslConfiguration.setProtocol(QSsl::DtlsV1_2OrLater);
             break;
         default:
             break;
     }
 
+    regenerateClient();
     emit sslProtocolChanged();
 }
 
@@ -435,12 +456,7 @@ void Client::setSslProtocol(const int index)
 void Client::setSslEnabled(const bool enabled)
 {
     m_sslEnabled = enabled;
-
-    if (enabled)
-        m_client.setSslConfiguration(m_sslConfiguration);
-    else
-        m_client.setSslConfiguration(QSslConfiguration());
-
+    regenerateClient();
     emit sslEnabledChanged();
 }
 
@@ -449,7 +465,8 @@ void Client::setSslEnabled(const bool enabled)
  */
 void Client::setUsername(const QString &username)
 {
-    m_client.setUsername(username);
+    Q_ASSERT(m_client);
+    m_client->setUsername(username);
     emit usernameChanged();
 }
 
@@ -458,7 +475,8 @@ void Client::setUsername(const QString &username)
  */
 void Client::setPassword(const QString &password)
 {
-    m_client.setPassword(password.toUtf8());
+    Q_ASSERT(m_client);
+    m_client->setPassword(password.toUtf8());
     emit passwordChanged();
 }
 
@@ -469,7 +487,8 @@ void Client::setPassword(const QString &password)
  */
 void Client::setKeepAlive(const quint16 keepAlive)
 {
-    m_client.setKeepAlive(keepAlive);
+    Q_ASSERT(m_client);
+    m_client->setKeepAlive(keepAlive);
     emit keepAliveChanged();
 }
 
@@ -478,13 +497,15 @@ void Client::setKeepAlive(const quint16 keepAlive)
  */
 void Client::setMqttVersion(const int versionIndex)
 {
+    Q_ASSERT(m_client);
+
     switch (versionIndex)
     {
         case 0:
-            m_client.setVersion(QMQTT::V3_1_0);
+            m_client->setVersion(QMQTT::V3_1_0);
             break;
         case 1:
-            m_client.setVersion(QMQTT::V3_1_1);
+            m_client->setVersion(QMQTT::V3_1_1);
             break;
         default:
             break;
@@ -498,6 +519,8 @@ void Client::setMqttVersion(const int versionIndex)
  */
 void Client::sendData()
 {
+    Q_ASSERT(m_client);
+
     // Create data byte array
     QByteArray data;
     for (int i = 0; i < m_frames.count(); ++i)
@@ -510,7 +533,7 @@ void Client::sendData()
     if (!data.isEmpty())
     {
         QMQTT::Message message(m_sentMessages, topic(), data);
-        m_client.publish(message);
+        m_client->publish(message);
         ++m_sentMessages;
     }
 
@@ -532,10 +555,12 @@ void Client::resetStatistics()
  */
 void Client::onConnectedChanged()
 {
+    Q_ASSERT(m_client);
+
     if (isConnectedToHost())
-        m_client.subscribe(topic());
+        m_client->subscribe(topic());
     else
-        m_client.unsubscribe(topic());
+        m_client->unsubscribe(topic());
 }
 
 /**
@@ -688,6 +713,30 @@ void Client::onFrameReceived(const QByteArray &frame)
 }
 
 /**
+ * Displays the SSL errors that occur and allows the user to decide if he/she wants to
+ * ignore those errors.
+ */
+void Client::onSslErrors(const QList<QSslError> &errors)
+{
+    Q_ASSERT(m_client);
+
+    foreach (auto error, errors)
+    {
+        auto ret = Misc::Utilities::showMessageBox(
+            tr("MQTT client SSL/TLS error, ignore?"), error.errorString(),
+            qApp->applicationName(), QMessageBox::Ignore | QMessageBox::Abort);
+
+        if (ret == QMessageBox::Abort)
+        {
+            disconnectFromHost();
+            abort();
+        }
+    }
+
+    m_client->ignoreSslErrors();
+}
+
+/**
  * Reads the given MQTT @a message and instructs the @c IO::Manager module to process
  * received data directly.
  */
@@ -711,5 +760,71 @@ void Client::onMessageReceived(const QMQTT::Message &message)
 
     // Let IO manager process incoming data
     IO::Manager::getInstance()->processPayload(mpayld);
+}
+
+/**
+ * Creates a new MQTT client instance, this approach is required in order to allow
+ * the MQTT module to support both non-encrypted and TLS connections.
+ */
+void Client::regenerateClient()
+{
+    // Init. default MQTT configuration
+    quint8 qos = 0;
+    QString user = "";
+    bool retain = false;
+    QString password = "";
+    quint16 keepAlive = 60;
+    quint16 port = defaultPort();
+    QString host = defaultHost();
+    QMQTT::MQTTVersion version = QMQTT::V3_1_1;
+
+    // There is an existing client, copy its configuration and delete it from memory
+    if (m_client)
+    {
+        port = m_client->port();
+        qos = m_client->willQos();
+        user = m_client->username();
+        version = m_client->version();
+        retain = m_client->willRetain();
+        keepAlive = m_client->keepAlive();
+        host = m_client->host().toString();
+        password = QString::fromUtf8(m_client->password());
+
+        disconnect(m_client, &QMQTT::Client::error, nullptr, 0);
+        disconnect(m_client, &QMQTT::Client::sslErrors, nullptr, 0);
+        disconnect(m_client, &QMQTT::Client::received, nullptr, 0);
+        disconnect(m_client, &QMQTT::Client::connected, nullptr, 0);
+        disconnect(m_client, &QMQTT::Client::disconnected, nullptr, 0);
+
+        m_client->disconnectFromHost();
+        delete m_client;
+    }
+
+    // Configure MQTT client depending on SSL/TLS configuration
+    if (sslEnabled())
+        m_client = new QMQTT::Client(host, port, m_sslConfiguration);
+    else
+        m_client = new QMQTT::Client(QHostAddress(host), port);
+
+    // Set client ID
+    m_client->setClientId(qApp->applicationName());
+
+    // Set MQTT client options
+    m_client->setWillQos(qos);
+    m_client->setUsername(user);
+    m_client->setVersion(version);
+    m_client->setWillRetain(retain);
+    m_client->setWillRetain(retain);
+    m_client->setKeepAlive(keepAlive);
+    m_client->setPassword(password.toUtf8());
+
+    // Connect signals/slots
+    connect(m_client, &QMQTT::Client::error, this, &Client::onError);
+    connect(m_client, &QMQTT::Client::sslErrors, this, &Client::onSslErrors);
+    connect(m_client, &QMQTT::Client::received, this, &Client::onMessageReceived);
+    connect(m_client, &QMQTT::Client::connected, this, &Client::connectedChanged);
+    connect(m_client, &QMQTT::Client::connected, this, &Client::onConnectedChanged);
+    connect(m_client, &QMQTT::Client::disconnected, this, &Client::connectedChanged);
+    connect(m_client, &QMQTT::Client::disconnected, this, &Client::onConnectedChanged);
 }
 }
