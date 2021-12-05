@@ -8,9 +8,9 @@
          "mandatory":false
       },
       "osx":{
-         "open-url":"",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v1.1.2",
          "latest-version":"1.1.2",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v1.1.2/SerialStudio-1.1.2-macOS.zip",
+         "download-url:"",
          "changelog":"",
          "mandatory":false
       },
