@@ -40,7 +40,7 @@
 
 namespace CSV
 {
-static Player *PLAYER = nullptr;
+static Player *PLAYER = Q_NULLPTR;
 
 /**
  * Constructor function

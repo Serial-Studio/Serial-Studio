@@ -29,7 +29,7 @@
 
 namespace Misc
 {
-static MacExtras *MAC_EXTRAS = nullptr;
+static MacExtras *MAC_EXTRAS = Q_NULLPTR;
 
 MacExtras::MacExtras()
 {
@@ -58,7 +58,7 @@ MacExtras::MacExtras()
     connect(&m_dashboardAction, SIGNAL(triggered()), this, SIGNAL(dashboardClicked()));
 
     // Create touchbar
-    KDMacTouchBar *bar = new KDMacTouchBar((QWidget *)nullptr);
+    KDMacTouchBar *bar = new KDMacTouchBar((QWidget *)Q_NULLPTR);
     bar->addAction(&m_setupAction);
     bar->addAction(&m_consoleAction);
     bar->addAction(&m_dashboardAction);

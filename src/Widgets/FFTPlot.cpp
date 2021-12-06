@@ -39,8 +39,8 @@ FFTPlot::FFTPlot(const int index)
     auto theme = Misc::ThemeManager::getInstance();
 
     // Initialize pointers to NULL
-    m_fft = nullptr;
-    m_samples = nullptr;
+    m_fft = Q_NULLPTR;
+    m_samples = Q_NULLPTR;
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->fftCount())
@@ -141,8 +141,8 @@ FFTPlot::~FFTPlot()
 {
     free(m_fft);
     free(m_samples);
-    m_fft = nullptr;
-    m_samples = nullptr;
+    m_fft = Q_NULLPTR;
+    m_samples = Q_NULLPTR;
 }
 
 /**

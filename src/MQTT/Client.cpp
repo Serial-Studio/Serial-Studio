@@ -31,7 +31,7 @@
 
 namespace MQTT
 {
-static Client *CLIENT = nullptr;
+static Client *CLIENT = Q_NULLPTR;
 
 /**
  * Constructor function
@@ -40,7 +40,7 @@ Client::Client()
     : m_topic("")
     , m_lookupActive(false)
     , m_sentMessages(0)
-    , m_client(nullptr)
+    , m_client(Q_NULLPTR)
     , m_clientMode(MQTTClientMode::ClientPublisher)
 {
     // Configure new client
@@ -790,11 +790,11 @@ void Client::regenerateClient()
         host = m_client->host().toString();
         password = QString::fromUtf8(m_client->password());
 
-        disconnect(m_client, &QMQTT::Client::error, nullptr, 0);
-        disconnect(m_client, &QMQTT::Client::received, nullptr, 0);
-        disconnect(m_client, &QMQTT::Client::connected, nullptr, 0);
-        disconnect(m_client, &QMQTT::Client::sslErrors, nullptr, 0);
-        disconnect(m_client, &QMQTT::Client::disconnected, nullptr, 0);
+        disconnect(m_client, &QMQTT::Client::error, Q_NULLPTR, 0);
+        disconnect(m_client, &QMQTT::Client::received, Q_NULLPTR, 0);
+        disconnect(m_client, &QMQTT::Client::connected, Q_NULLPTR, 0);
+        disconnect(m_client, &QMQTT::Client::sslErrors, Q_NULLPTR, 0);
+        disconnect(m_client, &QMQTT::Client::disconnected, Q_NULLPTR, 0);
 
         m_client->disconnectFromHost();
         delete m_client;

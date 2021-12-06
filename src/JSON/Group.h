@@ -60,7 +60,7 @@ namespace JSON
 class Group : public QObject
 {
 public:
-    Group(QObject *parent = nullptr);
+    Group(QObject *parent = Q_NULLPTR);
     ~Group();
 
     QString title() const;

@@ -29,7 +29,7 @@ namespace IO
 {
 namespace DataSources
 {
-static Network *NETWORK = nullptr;
+static Network *NETWORK = Q_NULLPTR;
 
 /**
  * Constructor function
@@ -174,7 +174,7 @@ QIODevice *Network::openNetworkPort()
     disconnectDevice();
 
     // Init socket pointer
-    QAbstractSocket *socket = nullptr;
+    QAbstractSocket *socket = Q_NULLPTR;
 
     // Get host & port
     auto hostAddr = remoteAddress();

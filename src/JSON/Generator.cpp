@@ -35,7 +35,7 @@
 
 namespace JSON
 {
-static Generator *GENERATOR = nullptr;
+static Generator *GENERATOR = Q_NULLPTR;
 
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS

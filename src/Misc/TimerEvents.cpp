@@ -30,7 +30,7 @@ namespace Misc
 /**
  * Pointer to the only instance of the class
  */
-static TimerEvents *TIMER_EVENTS = nullptr;
+static TimerEvents *TIMER_EVENTS = Q_NULLPTR;
 
 /**
  * Converts the given @a hz to milliseconds

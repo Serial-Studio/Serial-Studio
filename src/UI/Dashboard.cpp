@@ -30,7 +30,7 @@
 
 namespace UI
 {
-static Dashboard *DASHBOARD = nullptr;
+static Dashboard *DASHBOARD = Q_NULLPTR;
 
 //----------------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
@@ -1053,7 +1053,7 @@ JSON::Group *Dashboard::getGroupWidget(const QVector<JSON::Group *> vector,
     if (index < vector.count())
         return vector.at(index);
 
-    return nullptr;
+    return Q_NULLPTR;
 }
 
 /**
@@ -1066,6 +1066,6 @@ JSON::Dataset *Dashboard::getDatasetWidget(const QVector<JSON::Dataset *> vector
     if (index < vector.count())
         return vector.at(index);
 
-    return nullptr;
+    return Q_NULLPTR;
 }
 }

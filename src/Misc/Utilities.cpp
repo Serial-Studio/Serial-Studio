@@ -35,7 +35,7 @@
 
 namespace Misc
 {
-static Utilities *UTILITIES = nullptr;
+static Utilities *UTILITIES = Q_NULLPTR;
 
 Utilities *Utilities::getInstance()
 {

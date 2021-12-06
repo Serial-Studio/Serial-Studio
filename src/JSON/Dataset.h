@@ -65,7 +65,7 @@ namespace JSON
 class Dataset : public QObject
 {
 public:
-    Dataset(QObject *parent = nullptr);
+    Dataset(QObject *parent = Q_NULLPTR);
 
     bool fft() const;
     bool led() const;

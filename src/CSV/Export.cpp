@@ -40,7 +40,7 @@
 
 namespace CSV
 {
-static Export *EXPORT = nullptr;
+static Export *EXPORT = Q_NULLPTR;
 
 /**
  * Connect JSON Parser & Serial Manager signals to begin registering JSON

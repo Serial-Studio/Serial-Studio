@@ -34,7 +34,7 @@ namespace Widgets
 class AttitudeIndicator : public QwtDial
 {
 public:
-    AttitudeIndicator(QWidget *parent = nullptr);
+    AttitudeIndicator(QWidget *parent = Q_NULLPTR);
 
     double angle() const;
     double gradient() const;

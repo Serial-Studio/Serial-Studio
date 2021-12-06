@@ -30,7 +30,7 @@ namespace Widgets
 {
 BaseWidget::BaseWidget()
     : m_index(-1)
-    , m_widget(nullptr)
+    , m_widget(Q_NULLPTR)
     , m_resizeWidget(true)
 {
     // Workaround for unused variables
@@ -76,9 +76,9 @@ void BaseWidget::setValue(const QString &label)
 
 void BaseWidget::setWidget(QWidget *widget, Qt::Alignment alignment, bool autoresize)
 {
-    Q_ASSERT(widget != nullptr);
+    Q_ASSERT(widget != Q_NULLPTR);
 
-    if (m_widget == nullptr)
+    if (m_widget == Q_NULLPTR)
     {
         m_widget = widget;
         m_resizeWidget = autoresize;

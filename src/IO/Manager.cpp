@@ -32,7 +32,7 @@
 
 namespace IO
 {
-static Manager *MANAGER = nullptr;
+static Manager *MANAGER = Q_NULLPTR;
 
 /**
  * Adds support for C escape sequences to the given @a str.
@@ -62,7 +62,7 @@ Manager::Manager()
     : m_enableCrc(false)
     , m_writeEnabled(true)
     , m_maxBufferSize(1024 * 1024)
-    , m_device(nullptr)
+    , m_device(Q_NULLPTR)
     , m_dataSource(DataSource::Serial)
     , m_receivedBytes(0)
     , m_startSequence("/*")
@@ -130,7 +130,7 @@ bool Manager::connected()
  */
 bool Manager::deviceAvailable()
 {
-    return device() != nullptr;
+    return device() != Q_NULLPTR;
 }
 
 /**
@@ -184,7 +184,7 @@ int Manager::maxBufferSize() const
 /**
  * Returns a pointer to the currently selected device.
  *
- * @warning you need to check this pointer before using it, it can have a @c nullptr
+ * @warning you need to check this pointer before using it, it can have a @c Q_NULLPTR
  *          value during normal operations.
  */
 QIODevice *Manager::device()
@@ -359,7 +359,7 @@ void Manager::disconnectDevice()
             DataSources::Network::getInstance()->disconnectDevice();
 
         // Update device pointer
-        m_device = nullptr;
+        m_device = Q_NULLPTR;
         m_receivedBytes = 0;
         m_dataBuffer.clear();
         m_dataBuffer.reserve(maxBufferSize());

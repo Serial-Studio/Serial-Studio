@@ -94,7 +94,7 @@ private slots:
 private:
     bool validateRow(const int row);
     QJsonDocument getJsonFrame(const int row);
-    QString getCellValue(int row, int column, bool *error = nullptr);
+    QString getCellValue(int row, int column, bool *error = Q_NULLPTR);
     int getDatasetIndex(const QString &groupKey, const QString &datasetKey);
 
 private:

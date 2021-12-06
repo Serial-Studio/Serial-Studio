@@ -24,7 +24,7 @@
 
 namespace Misc
 {
-static Translator *TRANSLATOR = nullptr;
+static Translator *TRANSLATOR = Q_NULLPTR;
 
 /**
  * Constructor function

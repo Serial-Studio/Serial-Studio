@@ -35,7 +35,7 @@
 
 namespace JSON
 {
-static Editor *EDITOR = nullptr;
+static Editor *EDITOR = Q_NULLPTR;
 
 //----------------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
@@ -285,7 +285,7 @@ bool Editor::saveJsonFile()
     // Get file save path
     if (jsonFilePath().isEmpty())
     {
-        auto path = QFileDialog::getSaveFileName(nullptr, tr("Save JSON project"),
+        auto path = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save JSON project"),
                                                  jsonProjectsPath(), "*.json");
         if (path.isEmpty())
             return false;
@@ -377,7 +377,7 @@ JSON::Group *Editor::getGroup(const int index)
     if (index < groupCount())
         return m_groups.at(index);
 
-    return nullptr;
+    return Q_NULLPTR;
 }
 
 /**
@@ -389,7 +389,7 @@ JSON::Dataset *Editor::getDataset(const int group, const int index)
     if (index < datasetCount(group))
         return getGroup(group)->m_datasets.at(index);
 
-    return nullptr;
+    return Q_NULLPTR;
 }
 
 /**
@@ -694,7 +694,7 @@ void Editor::newJsonFile()
 void Editor::openJsonFile()
 {
     // clang-format off
-    auto path = QFileDialog::getOpenFileName(nullptr,
+    auto path = QFileDialog::getOpenFileName(Q_NULLPTR,
                                              tr("Select JSON file"),
                                              jsonProjectsPath(),
                                              "*.json");

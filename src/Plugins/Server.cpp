@@ -33,7 +33,7 @@
 
 namespace Plugins
 {
-static Server *SERVER = nullptr;
+static Server *SERVER = Q_NULLPTR;
 
 /**
  * Constructor function

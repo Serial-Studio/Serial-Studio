@@ -30,6 +30,6 @@ namespace Widgets
 class AnalogGauge : public QwtDial
 {
 public:
-    AnalogGauge(QWidget *parent = nullptr);
+    AnalogGauge(QWidget *parent = Q_NULLPTR);
 };
 }

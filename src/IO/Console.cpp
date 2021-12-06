@@ -35,7 +35,7 @@
 
 namespace IO
 {
-static Console *CONSOLE = nullptr;
+static Console *CONSOLE = Q_NULLPTR;
 
 /**
  * Generates a hexdump of the given data
@@ -603,7 +603,7 @@ QByteArray Console::hexToBytes(const QString &data)
     {
         auto chr1 = withoutSpaces.at(i);
         auto chr2 = withoutSpaces.at(i + 1);
-        auto byte = QString("%1%2").arg(chr1, chr2).toInt(nullptr, 16);
+        auto byte = QString("%1%2").arg(chr1, chr2).toInt(Q_NULLPTR, 16);
         array.append(byte);
     }
 

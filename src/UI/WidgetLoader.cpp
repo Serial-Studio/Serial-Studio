@@ -47,7 +47,7 @@ namespace UI
 WidgetLoader::WidgetLoader(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_index(-1)
-    , m_widget(nullptr)
+    , m_widget(Q_NULLPTR)
     , m_widgetVisible(false)
 {
     // Set render flags
@@ -245,7 +245,7 @@ void WidgetLoader::setWidgetIndex(const int index)
         if (m_widget)
         {
             delete m_widget;
-            m_widget = nullptr;
+            m_widget = Q_NULLPTR;
         }
 
         // Construct new widget

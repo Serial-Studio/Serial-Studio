@@ -30,13 +30,13 @@ namespace IO
 {
 namespace DataSources
 {
-static Serial *SERIAL = nullptr;
+static Serial *SERIAL = Q_NULLPTR;
 
 /**
  * Constructor function
  */
 Serial::Serial()
-    : m_port(nullptr)
+    : m_port(Q_NULLPTR)
     , m_autoReconnect(false)
     , m_lastSerialDeviceIndex(0)
     , m_portIndex(0)
@@ -74,7 +74,7 @@ Serial::~Serial()
  */
 Serial *Serial::getInstance()
 {
-    if (SERIAL == nullptr)
+    if (SERIAL == Q_NULLPTR)
         SERIAL = new Serial;
 
     return SERIAL;
@@ -318,7 +318,7 @@ QSerialPort *Serial::openSerialPort()
 void Serial::disconnectDevice()
 {
     // Check if serial port pointer is valid
-    if (port() != nullptr)
+    if (port() != Q_NULLPTR)
     {
         // Disconnect signals/slots
         port()->disconnect(this, SLOT(handleError(QSerialPort::SerialPortError)));
@@ -329,7 +329,7 @@ void Serial::disconnectDevice()
     }
 
     // Reset pointer
-    m_port = nullptr;
+    m_port = Q_NULLPTR;
     emit portChanged();
     emit availablePortsChanged();
 }
