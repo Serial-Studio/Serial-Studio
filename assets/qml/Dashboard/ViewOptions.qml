@@ -152,6 +152,7 @@ Widgets.Window {
                 //
                 Label {
                     text: qsTr("Points:")
+                    visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
                 } Slider {
                     id: plotPoints
                     from: 0
@@ -166,6 +167,7 @@ Widgets.Window {
                     }
                 } Label {
                     text: logslider(plotPoints.value)
+                    visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
                 }
 
                 //

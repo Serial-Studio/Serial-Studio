@@ -52,11 +52,19 @@ static const QString DD_TO_DMS(const qreal dd, const bool horizontal)
     // Calculate seconds
     auto sec = (val - min) * 60;
 
-    // clang-format off
-    auto dms = QString("%1°%2'%3\"").arg(QString::number(deg),
-                                         QString::number(min),
-                                         QString::number(sec, 'f', 2));
-    // clang-format on
+    // Construct strings
+    auto degStr = QString::number(deg);
+    if (deg < 10)
+        degStr.prepend("0");
+    auto minStr = QString::number(min);
+    if (min < 10)
+        minStr.prepend("0");
+    auto secStr = QString::number(sec, 'f', 2);
+    if (sec < 10)
+        secStr.prepend("0");
+
+    // Construct DMS string
+    auto dms = QString("%1°%2'%3\"").arg(degStr, minStr, secStr);
 
     // Add heading
     if (horizontal)
@@ -316,7 +324,7 @@ void GPS::updateData()
         auto altLabel = m_values[2];
         lonLabel->setText(DD_TO_DMS(lon, true));
         latLabel->setText(DD_TO_DMS(lat, false));
-        altLabel->setText(QString::number(alt, 'f', 4) + " ");
+        altLabel->setText(QString::number(alt, 'f', dash->precision()) + " ");
 
         // Ensure that non-received data is displayed as "--.--"
         if (lat == -1)
@@ -351,7 +359,13 @@ void GPS::processGeoResponse(QNetworkReply *reply)
         QJsonObject object = document.object();
         auto name = object.value("name").toString();
         auto country = object.value("sys").toObject().value("country").toString();
-        m_posLabel.setText(name + ", " + country);
+
+        if (!name.isEmpty() && !country.isEmpty())
+            m_posLabel.setText(name + ", " + country);
+        else if (!country.isEmpty())
+            m_posLabel.setText(country);
+        else
+            m_posLabel.setText("");
     }
 
     // Delete the reply object
