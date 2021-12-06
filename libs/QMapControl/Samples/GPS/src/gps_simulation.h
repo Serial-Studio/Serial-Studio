@@ -22,7 +22,7 @@ public slots:
     void tick();
 
 private:
-    QTimer* timer;
+    QTimer *timer;
     float mLat;
     float mLong;
 };

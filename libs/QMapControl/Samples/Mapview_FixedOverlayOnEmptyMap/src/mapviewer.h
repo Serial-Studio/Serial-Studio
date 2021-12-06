@@ -14,17 +14,17 @@ public:
     ~Mapviewer();
 
 private:
-    MapControl* mc;
-    MapAdapter* mapadapter;
-    Layer* mainlayer;
+    MapControl *mc;
+    MapAdapter *mapadapter;
+    Layer *mainlayer;
 
     void addZoomButtons();
 
 public slots:
-    void coordinateClicked(const QMouseEvent* evnt, const QPointF coordinate);
+    void coordinateClicked(const QMouseEvent *evnt, const QPointF coordinate);
 
 protected:
-    virtual void resizeEvent ( QResizeEvent * event );
+    virtual void resizeEvent(QResizeEvent *event);
 };
 
 #endif

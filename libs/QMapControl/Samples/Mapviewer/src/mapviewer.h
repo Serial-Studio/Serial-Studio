@@ -16,14 +16,14 @@ public:
     ~Mapviewer();
 
 private:
-    MapControl* mc;
-    MapAdapter* mapadapter;
-    Layer* mainlayer;
+    MapControl *mc;
+    MapAdapter *mapadapter;
+    Layer *mainlayer;
 
     void addZoomButtons();
 
 protected:
-    virtual void resizeEvent ( QResizeEvent * event );
+    virtual void resizeEvent(QResizeEvent *event);
 };
 
 #endif

@@ -52,6 +52,26 @@ License along with this library; if not, write to the
 Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
 Boston, MA  02110-1301, USA.
 
+## QMapControl
+
+Copyright (C) 2007 - 2008 Kai Winter
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with QMapControl. If not, see <http://www.gnu.org/licenses/>.
+
+Contact e-mail: kaiwinter@gmx.de
+Program URL   : http://qmapcontrol.sourceforge.net/
+
 ## qtcsv
 
 Copyright © 2015 Antony Cherepanov (antony.cherepanov@gmail.com)
@@ -623,8 +643,8 @@ THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE PUBLIC LICE
 “Contribution” means:
 * **a)** in the case of the initial Contributor, the initial code and documentation distributed under this Agreement, and
 * **b)** in the case of each subsequent Contributor:
-        * **i)** changes to the Program, and
-        * **ii)** additions to the Program;
+       **i)** changes to the Program, and
+       **ii)** additions to the Program;
 where such changes and/or additions to the Program originate from and are distributed by that particular Contributor. A Contribution 'originates' from a Contributor if it was added to the Program by such Contributor itself or anyone acting on such Contributor's behalf. Contributions do not include additions to the Program which: **(i)** are separate modules of software distributed in conjunction with the Program under their own license agreement, and **(ii)** are not derivative works of the Program.
 
 “Contributor” means any person or entity that distributes the Program.
@@ -650,10 +670,10 @@ where such changes and/or additions to the Program originate from and are distri
 A Contributor may choose to distribute the Program in object code form under its own license agreement, provided that:
 * **a)** it complies with the terms and conditions of this Agreement; and
 * **b)** its license agreement:
-        * **i)** effectively disclaims on behalf of all Contributors all warranties and conditions, express and implied, including warranties or conditions of title and non-infringement, and implied warranties or conditions of merchantability and fitness for a particular purpose;
-        * **ii)** effectively excludes on behalf of all Contributors all liability for damages, including direct, indirect, special, incidental and consequential damages, such as lost profits;
-        * **iii)** states that any provisions which differ from this Agreement are offered by that Contributor alone and not by any other party; and
-        * **iv)** states that source code for the Program is available from such Contributor, and informs licensees how to obtain it in a reasonable manner on or through a medium customarily used for software exchange.
+       **i)** effectively disclaims on behalf of all Contributors all warranties and conditions, express and implied, including warranties or conditions of title and non-infringement, and implied warranties or conditions of merchantability and fitness for a particular purpose;
+       **ii)** effectively excludes on behalf of all Contributors all liability for damages, including direct, indirect, special, incidental and consequential damages, such as lost profits;
+       **iii)** states that any provisions which differ from this Agreement are offered by that Contributor alone and not by any other party; and
+       **iv)** states that source code for the Program is available from such Contributor, and informs licensees how to obtain it in a reasonable manner on or through a medium customarily used for software exchange.
 
 When the Program is made available in source code form:
 * **a)** it must be made available under this Agreement; and

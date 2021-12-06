@@ -14,99 +14,99 @@
 class QLabel;
 
 using namespace qmapcontrol;
-class Citymap: public QMainWindow
+class Citymap : public QMainWindow
 {
-        Q_OBJECT
-        public:
-                Citymap(QWidget* parent = 0);
+    Q_OBJECT
+public:
+    Citymap(QWidget *parent = 0);
 
-                ~Citymap();
+    ~Citymap();
 
-        private:
-                MapControl* mc;
-                MapAdapter* mapadapter;
+private:
+    MapControl *mc;
+    MapAdapter *mapadapter;
 
-                QPixmap* notepixmap;
+    QPixmap *notepixmap;
 
-                Layer* sights;
-                Layer* museum;
-                Layer* pubs;
-                Layer* notes;
+    Layer *sights;
+    Layer *museum;
+    Layer *pubs;
+    Layer *notes;
 
-                void addZoomButtons();
+    void addZoomButtons();
 
-                void createTours();
-                void createActions();
-                void createMenus();
+    void createTours();
+    void createActions();
+    void createMenus();
 
-                QMenu* layerMenu;
-                QMenu* tourMenu;
-                QMenu* toolsMenu;
-                QMenu* mapMenu;
-                QMenu* zoomMenu;
+    QMenu *layerMenu;
+    QMenu *tourMenu;
+    QMenu *toolsMenu;
+    QMenu *mapMenu;
+    QMenu *zoomMenu;
 
-                QAction* toggleSights;
-                QAction* togglePub;
-                QAction* toggleMuseum;
+    QAction *toggleSights;
+    QAction *togglePub;
+    QAction *toggleMuseum;
 
-                QAction* togglePubTour;
-                QAction* toggleMuseumTour;
-                QAction* toggleSightTour;
+    QAction *togglePubTour;
+    QAction *toggleMuseumTour;
+    QAction *toggleSightTour;
 
-                QAction* addNoteAction;
-                QAction* toolsDistance;
-                QAction* toolsLocalDiskCache;
+    QAction *addNoteAction;
+    QAction *toolsDistance;
+    QAction *toolsLocalDiskCache;
 
-                QAction* osmAction;
-                QAction* googleActionMap;
-                QAction* googleActionSatellite;
-                QAction* googleActionTerrain;
-                QAction* googleActionHybrid;
+    QAction *osmAction;
+    QAction *googleActionMap;
+    QAction *googleActionSatellite;
+    QAction *googleActionTerrain;
+    QAction *googleActionHybrid;
 
-                QList<QAction*> zoomActions;
+    QList<QAction *> zoomActions;
 
-                QStatusBar* statusBar;
+    QStatusBar *statusBar;
 
-                bool ignoreClicks;
-                bool addingNote;
+    bool ignoreClicks;
+    bool addingNote;
 
-                void addSights();
-                void addPubs();
-                void addMuseums();
+    void addSights();
+    void addPubs();
+    void addMuseums();
 
-                QPointF coord1;
-                QPointF coord2;
+    QPointF coord1;
+    QPointF coord2;
 
-                Layer* l;
+    Layer *l;
 
-                LineString* pub_tour;
-                LineString* museum_tour;
-                LineString* sights_tour;
+    LineString *pub_tour;
+    LineString *museum_tour;
+    LineString *sights_tour;
 
-                QTextEdit* notetextedit;
-                Point* notepoint;
-                int noteID;
-                int currentnoteID;
-                QHash<int, QString> notestext;
-                QLabel* loadingProgress;
-                QTimer* loadingProgressTimer;
+    QTextEdit *notetextedit;
+    Point *notepoint;
+    int noteID;
+    int currentnoteID;
+    QHash<int, QString> notestext;
+    QLabel *loadingProgress;
+    QTimer *loadingProgressTimer;
 
-        public slots:
-                void hideNote(const QMouseEvent* evnt, const QPointF coordinate);
-                void geometryClicked(Geometry* geometry, QPoint point);
-                void geometryClickEventKneipe(Geometry* geometry, QPoint point);
-                void addNote();
-                void writeNote(const QMouseEvent*, const QPointF);
-                void calcDistance();
-                void calcDistanceClick(const QMouseEvent*, const QPointF);
-                void mapControlZoomChanged(const QPointF &coordinate, int zoom ) const;
+public slots:
+    void hideNote(const QMouseEvent *evnt, const QPointF coordinate);
+    void geometryClicked(Geometry *geometry, QPoint point);
+    void geometryClickEventKneipe(Geometry *geometry, QPoint point);
+    void addNote();
+    void writeNote(const QMouseEvent *, const QPointF);
+    void calcDistance();
+    void calcDistanceClick(const QMouseEvent *, const QPointF);
+    void mapControlZoomChanged(const QPointF &coordinate, int zoom) const;
 
-                void mapproviderSelected(QAction*);
-                void mapZoomSelected(QAction*);
-                void editNote(Geometry* geom, QPoint point);
-                void resizeEvent(QResizeEvent *qEvent);
-                void updateProgress();
-                void cacheTiles(bool qEnabled);
+    void mapproviderSelected(QAction *);
+    void mapZoomSelected(QAction *);
+    void editNote(Geometry *geom, QPoint point);
+    void resizeEvent(QResizeEvent *qEvent);
+    void updateProgress();
+    void cacheTiles(bool qEnabled);
 };
 
 #endif
