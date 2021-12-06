@@ -137,7 +137,7 @@ QString Player::csvFilesPath() const
 {
     // Get file name and path
     QString path
-        = QString("%1/Documents/%2/CSV/").arg(QDir::homePath(), qApp->applicationName());
+            = QString("%1/Documents/%2/CSV/").arg(QDir::homePath(), qApp->applicationName());
 
     // Generate file path if required
     QDir dir(path);
@@ -253,9 +253,9 @@ void Player::openFile(const QString &filePath)
     if (opMode != JSON::Generator::kManual || !jsonOpen)
     {
         Misc::Utilities::showMessageBox(
-            tr("Invalid configuration for CSV player"),
-            tr("You need to select a JSON map file in order to use "
-               "this feature"));
+                    tr("Invalid configuration for CSV player"),
+                    tr("You need to select a JSON map file in order to use "
+                       "this feature"));
         return;
     }
 
@@ -271,10 +271,10 @@ void Player::openFile(const QString &filePath)
     if (sm->connected())
     {
         auto response = Misc::Utilities::showMessageBox(
-            tr("Serial port open, do you want to continue?"),
-            tr("In order to use this feature, its necessary "
-               "to disconnect from the serial port"),
-            qAppName(), QMessageBox::No | QMessageBox::Yes);
+                    tr("Serial port open, do you want to continue?"),
+                    tr("In order to use this feature, its necessary "
+                       "to disconnect from the serial port"),
+                    qAppName(), QMessageBox::No | QMessageBox::Yes);
         if (response == QMessageBox::Yes)
             sm->disconnectDevice();
         else
@@ -326,9 +326,9 @@ void Player::openFile(const QString &filePath)
         else
         {
             Misc::Utilities::showMessageBox(
-                tr("There is an error with the data in the CSV file"),
-                tr("Please verify that the CSV file was created with Serial "
-                   "Studio"));
+                        tr("There is an error with the data in the CSV file"),
+                        tr("Please verify that the CSV file was created with Serial "
+                           "Studio"));
         }
     }
 
@@ -586,10 +586,13 @@ QJsonDocument Player::getJsonFrame(const int row)
                         auto dataset = datasets.at(j).toObject();
                         if (JFI_Value(dataset, "title", "t") == datasetKey)
                         {
-                            auto value = values.at(getDatasetIndex(groupKey, datasetKey));
-                            dataset.remove("v");
-                            dataset.remove("value");
-                            dataset.insert("value", value);
+                            auto index = getDatasetIndex(groupKey, datasetKey);
+                            if (values.count() > index) {
+                                auto value = values.at(index);
+                                dataset.remove("v");
+                                dataset.remove("value");
+                                dataset.insert("value", value);
+                            }
                         }
 
                         datasets.replace(j, dataset);
