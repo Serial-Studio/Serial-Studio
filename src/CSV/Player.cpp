@@ -384,7 +384,7 @@ void Player::updateData()
         return;
 
     // Update timestamp string
-    bool error;
+    bool error = true;
     auto timestamp = getCellValue(framePosition() + 1, 0, error);
     if (!error)
     {
@@ -405,7 +405,7 @@ void Player::updateData()
         // Get first frame
         if (framePosition() < frameCount())
         {
-            bool error = false;
+            bool error = true;
             auto currTime = getCellValue(framePosition() + 1, 0, error);
             auto nextTime = getCellValue(framePosition() + 2, 0, error);
 
@@ -489,8 +489,8 @@ QJsonDocument Player::getJsonFrame(const int row)
         {
             // Construct group string
             QString group;
-            auto title = titles.at(i);
-            auto glist = title.split(")");
+            const auto title = titles.at(i);
+            const auto glist = title.split(")");
             for (int j = 0; j < glist.count() - 1; ++j)
                 group.append(glist.at(j));
 
@@ -589,7 +589,7 @@ QJsonDocument Player::getJsonFrame(const int row)
                             auto index = getDatasetIndex(groupKey, datasetKey);
                             if (values.count() > index)
                             {
-                                auto value = values.at(index);
+                                const auto value = values.at(index);
                                 dataset.remove("v");
                                 dataset.remove("value");
                                 dataset.insert("value", value);
