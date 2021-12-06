@@ -53,7 +53,7 @@ public:
 
     //! returns a QPixmap of the asked image
     /*!
-     * If this component doesn´t have the image a network query gets started to load it.
+     * If this component doesnï¿½t have the image a network query gets started to load it.
      * @param host the host of the image
      * @param path the path to the image
      * @return the pixmap of the asked image
@@ -84,10 +84,10 @@ public:
     /*!
      * This method sets the proxy for HTTP connections.
      * This is not provided by the current Qtopia version!
-     * @param host the proxy´s hostname or ip
-     * @param port the proxy´s port
-     * @param username the proxy´s username
-     * @param password the proxy´s password
+     * @param host the proxyï¿½s hostname or ip
+     * @param port the proxyï¿½s port
+     * @param username the proxyï¿½s username
+     * @param password the proxyï¿½s password
      */
     void setProxy(QString host, int port, const QString username = QString(),
                   const QString password = QString());
@@ -123,3 +123,4 @@ signals:
 };
 }
 #endif
+
