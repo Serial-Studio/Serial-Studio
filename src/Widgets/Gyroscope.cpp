@@ -37,8 +37,8 @@ Gyroscope::Gyroscope(const int index)
     , m_displayNum(0)
 {
     // Get pointers to Serial Studio modules
-    auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->gyroscopeCount())
@@ -76,7 +76,7 @@ void Gyroscope::updateData()
         return;
 
     // Update gyroscope values
-    auto gyro = UI::Dashboard::getInstance()->getGyroscope(m_index);
+    const auto gyro = UI::Dashboard::getInstance()->getGyroscope(m_index);
     if (gyro)
     {
         if (gyro->datasetCount() != 3)

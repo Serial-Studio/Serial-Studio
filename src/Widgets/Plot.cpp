@@ -38,8 +38,8 @@ Plot::Plot(const int index)
     , m_autoscale(true)
 {
     // Get pointers to serial studio modules
-    auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->plotCount())
@@ -94,8 +94,8 @@ Plot::Plot(const int index)
     if (dataset)
     {
         // Update graph scale
-        auto max = dataset->max();
-        auto min = dataset->min();
+        const auto max = dataset->max();
+        const auto min = dataset->min();
         if (max > min)
         {
             m_max = max;
@@ -136,7 +136,7 @@ void Plot::updateData()
         return;
 
     // Get new data
-    auto plotData = UI::Dashboard::getInstance()->linearPlotValues();
+    const auto plotData = UI::Dashboard::getInstance()->linearPlotValues();
     if (plotData->count() > m_index)
     {
         // Check if we need to update graph scale
@@ -146,7 +146,7 @@ void Plot::updateData()
             bool changed = false;
             for (int i = 0; i < plotData->at(m_index).count(); ++i)
             {
-                auto v = plotData->at(m_index).at(i);
+                const auto v = plotData->at(m_index).at(i);
                 if (v > m_max)
                 {
                     m_max = v + 1;
@@ -208,7 +208,7 @@ void Plot::updateData()
 void Plot::updateRange()
 {
     // Get pointer to dashboard manager
-    auto dash = UI::Dashboard::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
 
     // Clear Y-axis data
     PlotData tempYData;

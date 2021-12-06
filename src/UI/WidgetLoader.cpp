@@ -63,7 +63,7 @@ WidgetLoader::WidgetLoader(QQuickItem *parent)
 
     // Set window palette
     QPalette palette;
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
     palette.setColor(QPalette::Base, theme->widgetWindowBackground());
     palette.setColor(QPalette::Window, theme->widgetWindowBackground());
     m_window.setPalette(palette);

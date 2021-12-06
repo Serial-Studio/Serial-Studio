@@ -38,7 +38,7 @@ BaseWidget::BaseWidget()
 
     // Set window palette
     QPalette palette;
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
     palette.setColor(QPalette::Base, theme->widgetWindowBackground());
     palette.setColor(QPalette::Window, theme->widgetWindowBackground());
     setPalette(palette);
@@ -48,7 +48,7 @@ BaseWidget::BaseWidget()
 
     // Set stylesheets
     // clang-format off
-    auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
+    const auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
                         theme->base(),
                         theme->widgetForegroundPrimary(),
                         theme->widgetIndicator());

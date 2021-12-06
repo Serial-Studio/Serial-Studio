@@ -45,8 +45,8 @@ Generator::Generator()
     , m_opMode(kAutomatic)
     , m_processInSeparateThread(false)
 {
-    auto io = IO::Manager::getInstance();
-    auto cp = CSV::Player::getInstance();
+    const auto io = IO::Manager::getInstance();
+    const auto cp = CSV::Player::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(deviceChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(frameReceived(QByteArray)), this, SLOT(readData(QByteArray)));

@@ -53,7 +53,7 @@ Serial::Serial()
     setFlowControl(flowControlList().indexOf(tr("None")));
 
     // Build serial devices list
-    auto te = Misc::TimerEvents::getInstance();
+    const auto te = Misc::TimerEvents::getInstance();
     connect(te, SIGNAL(lowFreqTimeout()), this, SLOT(refreshSerialDevices()));
 }
 

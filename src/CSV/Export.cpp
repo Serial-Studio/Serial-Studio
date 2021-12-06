@@ -49,9 +49,9 @@ static Export *EXPORT = Q_NULLPTR;
 Export::Export()
     : m_exportEnabled(true)
 {
-    auto io = IO::Manager::getInstance();
-    auto ge = JSON::Generator::getInstance();
-    auto te = Misc::TimerEvents::getInstance();
+    const auto io = IO::Manager::getInstance();
+    const auto ge = JSON::Generator::getInstance();
+    const auto te = Misc::TimerEvents::getInstance();
     connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
     connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &Export::writeValues);
     connect(ge, &JSON::Generator::jsonChanged, this, &Export::registerFrame);
@@ -148,6 +148,10 @@ void Export::writeValues()
     // Export JSON frames
     for (int k = 0; k < m_jsonList.count(); ++k)
     {
+        // k is unused, since we are removing each JSON structure
+        // as we are exporting the file
+        (void)k;
+
         // Get project title & cell values
         auto dateTime = m_jsonList.first().rxDateTime;
         auto json = m_jsonList.first().jsonDocument.object();
@@ -213,11 +217,11 @@ void Export::writeValues()
         if (!isOpen() && exportEnabled())
         {
             // Get file name and path
-            QString format = dateTime.toString("yyyy/MMM/dd/");
-            QString fileName = dateTime.toString("HH-mm-ss") + ".csv";
-            QString path = QString("%1/Documents/%2/CSV/%3/%4")
-                               .arg(QDir::homePath(), qApp->applicationName(),
-                                    projectTitle, format);
+            const QString format = dateTime.toString("yyyy/MMM/dd/");
+            const QString fileName = dateTime.toString("HH-mm-ss") + ".csv";
+            const QString path = QString("%1/Documents/%2/CSV/%3/%4")
+                                     .arg(QDir::homePath(), qApp->applicationName(),
+                                          projectTitle, format);
 
             // Generate file path if required
             QDir dir(path);

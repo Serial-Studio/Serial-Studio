@@ -38,20 +38,20 @@ LEDPanel::LEDPanel(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->ledCount())
         return;
 
     // Get group pointer
-    auto group = dash->getLED(m_index);
+    const auto group = dash->getLED(m_index);
     if (!group)
         return;
 
     // Generate widget stylesheets
-    auto titleQSS = QSS("color:%1", theme->widgetTextPrimary());
+    const auto titleQSS = QSS("color:%1", theme->widgetTextPrimary());
 
     // Set window palette
     QPalette windowPalette;
@@ -158,8 +158,8 @@ void LEDPanel::updateData()
         return;
 
     // Get group pointer
-    auto dash = UI::Dashboard::getInstance();
-    auto group = dash->getLED(m_index);
+    const auto dash = UI::Dashboard::getInstance();
+    const auto group = dash->getLED(m_index);
     if (!group)
         return;
 
@@ -174,7 +174,7 @@ void LEDPanel::updateData()
             m_titles.at(i)->setText(set->title());
 #endif
             // Get dataset value (we compare with 0.1 for low voltages)
-            auto value = dataset->value().toDouble();
+            const auto value = dataset->value().toDouble();
             if (qAbs(value) < 0.10)
                 m_leds.at(i)->off();
             else
@@ -188,10 +188,10 @@ void LEDPanel::updateData()
  */
 void LEDPanel::resizeEvent(QResizeEvent *event)
 {
-    auto width = event->size().width();
+    const auto width = event->size().width();
     QFont font = UI::Dashboard::getInstance()->monoFont();
     font.setPixelSize(qMax(8, width / 24));
-    auto fHeight = QFontMetrics(font).height() * 1.5;
+    const auto fHeight = QFontMetrics(font).height() * 1.5;
 
     for (int i = 0; i < m_titles.count(); ++i)
     {

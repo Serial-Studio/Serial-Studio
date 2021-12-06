@@ -36,8 +36,8 @@ Bar::Bar(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->barCount())
@@ -56,7 +56,7 @@ Bar::Bar(const int index)
 
     // Get thermo color
     QString color;
-    auto colors = theme->widgetColors();
+    const auto colors = theme->widgetColors();
     if (colors.count() > m_index)
         color = colors.at(m_index);
     else
@@ -69,7 +69,7 @@ Bar::Bar(const int index)
 
     // Lazy widgets, get initial properties from dataset
 #ifdef LAZY_WIDGETS
-    auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
+    const auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
     if (dataset)
     {
         m_thermo.setAlarmLevel(dataset->alarm());
@@ -100,7 +100,7 @@ void Bar::updateData()
         return;
 
     // Update bar level
-    auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
+    const auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
     if (dataset)
     {
 #ifndef LAZY_WIDGETS

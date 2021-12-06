@@ -39,8 +39,8 @@ GPS::GPS(const int index)
     , m_alt(0)
 {
     // Get pointers to serial studio modules
-    auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->gpsCount())
@@ -124,8 +124,8 @@ void GPS::updateData()
         return;
 
     // Get group pointer
-    auto dash = UI::Dashboard::getInstance();
-    auto group = dash->getGPS(m_index);
+    const auto dash = UI::Dashboard::getInstance();
+    const auto group = dash->getGPS(m_index);
     if (!group)
         return;
 
@@ -166,8 +166,8 @@ void GPS::updateData()
  */
 void GPS::resizeEvent(QResizeEvent *event)
 {
-    auto width = event->size().width();
-    auto height = event->size().height();
+    const auto width = event->size().width();
+    const auto height = event->size().height();
     m_mapControl.resize(QSize(width - 25, height - 33 - m_titleWidget.height()));
     event->accept();
 }

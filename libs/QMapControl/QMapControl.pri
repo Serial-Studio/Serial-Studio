@@ -5,6 +5,7 @@ QT += widgets
 VERSION = 0.9.7.9
 
 INCLUDEPATH += $$PWD/src
+DEFINES += QMAPCONTROL_PROJECT_INCLUDE_SRC
 
 HEADERS += $$PWD/src/curve.h \
            $$PWD/src/geometry.h \

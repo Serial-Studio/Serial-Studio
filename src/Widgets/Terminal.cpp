@@ -70,7 +70,7 @@ Terminal::Terminal(QQuickItem *parent)
     textEdit()->installEventFilter(this);
 
     // Set the QML item's implicit size
-    auto hint = textEdit()->sizeHint();
+    const auto hint = textEdit()->sizeHint();
     setImplicitSize(hint.width(), hint.height());
 
     // Setup default options
@@ -79,7 +79,7 @@ Terminal::Terminal(QQuickItem *parent)
 
     // Set widget palette
     QPalette palette;
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
     palette.setColor(QPalette::Text, theme->consoleText());
     palette.setColor(QPalette::Base, theme->consoleBase());
     palette.setColor(QPalette::Button, theme->consoleButton());
@@ -96,7 +96,7 @@ Terminal::Terminal(QQuickItem *parent)
     connect(this, &QQuickPaintedItem::heightChanged, this, &Terminal::updateWidgetSize);
 
     // Connect console signals (doing this on QML uses about 50% of UI thread time)
-    auto console = IO::Console::getInstance();
+    const auto console = IO::Console::getInstance();
     connect(console, &IO::Console::stringReceived, this, &Terminal::insertText);
 
     // React to widget events
@@ -731,8 +731,8 @@ void Terminal::processWheelEvents(QWheelEvent *event)
         // Disable autoscroll if we are scrolling upwards
         if (autoscroll())
         {
-            auto delta = event->angleDelta();
-            auto deltaY = delta.y();
+            const auto delta = event->angleDelta();
+            const auto deltaY = delta.y();
 
             if (deltaY > 0)
             {
@@ -744,7 +744,7 @@ void Terminal::processWheelEvents(QWheelEvent *event)
         // Enable autoscroll if scrolling to bottom
         else
         {
-            auto bar = textEdit()->verticalScrollBar();
+            const auto bar = textEdit()->verticalScrollBar();
             if (bar->value() >= bar->maximum())
             {
                 setAutoscroll(true);

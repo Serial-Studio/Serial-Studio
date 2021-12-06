@@ -66,7 +66,7 @@ Editor::Editor()
     connect(this, &Editor::frameStartSequenceChanged, this, &Editor::onModelChanged);
 
     // Load current JSON map file into C++ model
-    auto generator = Generator::getInstance();
+    const auto generator = Generator::getInstance();
     connect(generator, &Generator::jsonFileMapChanged, this, &Editor::onJsonLoaded);
 }
 

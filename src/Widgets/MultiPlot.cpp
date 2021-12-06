@@ -35,8 +35,8 @@ MultiPlot::MultiPlot(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->multiPlotCount())
@@ -71,7 +71,7 @@ MultiPlot::MultiPlot(const int index)
 
     // Create curves from datasets
     bool normalize = true;
-    auto group = dash->getMultiplot(m_index);
+    const auto group = dash->getMultiplot(m_index);
     StringList colors = theme->widgetColors();
     for (int i = 0; i < group->datasetCount(); ++i)
     {
@@ -133,7 +133,7 @@ MultiPlot::MultiPlot(const int index)
 void MultiPlot::updateData()
 {
     // Get group
-    auto group = UI::Dashboard::getInstance()->getMultiplot(m_index);
+    const auto group = UI::Dashboard::getInstance()->getMultiplot(m_index);
     if (!group)
         return;
 
@@ -141,20 +141,20 @@ void MultiPlot::updateData()
     for (int i = 0; i < group->datasetCount(); ++i)
     {
         // Get dataset
-        auto dataset = group->getDataset(i);
+        const auto dataset = group->getDataset(i);
         if (!dataset)
             continue;
 
         // Add point to plot data
-        auto count = m_yData[i].count();
+        const auto count = m_yData[i].count();
         memmove(m_yData[i].data(), m_yData[i].data() + 1, count * sizeof(double));
 
         // Normalize dataset value
         if (dataset->max() > dataset->min())
         {
-            auto vmin = dataset->min();
-            auto vmax = dataset->max();
-            auto v = dataset->value().toDouble();
+            const auto vmin = dataset->min();
+            const auto vmax = dataset->max();
+            const auto v = dataset->value().toDouble();
             m_yData[i][count - 1] = (v - vmin) / (vmax - vmin);
         }
 
@@ -181,11 +181,11 @@ void MultiPlot::updateData()
 void MultiPlot::updateRange()
 {
     // Get pointer to dashboard manager
-    auto dash = UI::Dashboard::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
 
     // Set number of points
     m_yData.clear();
-    auto group = UI::Dashboard::getInstance()->getMultiplot(m_index);
+    const auto group = UI::Dashboard::getInstance()->getMultiplot(m_index);
     for (int i = 0; i < dash->points(); ++i)
     {
         m_yData.append(PlotData());

@@ -73,8 +73,8 @@ Manager::Manager()
     setMaxBufferSize(1024 * 1024);
 
     // Configure signals/slots
-    auto serial = DataSources::Serial::getInstance();
-    auto netwrk = DataSources::Network::getInstance();
+    const auto serial = DataSources::Serial::getInstance();
+    const auto netwrk = DataSources::Network::getInstance();
     connect(netwrk, SIGNAL(portChanged()), this, SIGNAL(configurationChanged()));
     connect(netwrk, SIGNAL(addressChanged()), this, SIGNAL(configurationChanged()));
     connect(this, SIGNAL(dataSourceChanged()), this, SIGNAL(configurationChanged()));

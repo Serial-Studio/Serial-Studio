@@ -44,13 +44,13 @@ Server::Server()
     m_enabled = false;
 
     // Send processed data at 1 Hz
-    auto ge = JSON::Generator::getInstance();
-    auto te = Misc::TimerEvents::getInstance();
+    const auto ge = JSON::Generator::getInstance();
+    const auto te = Misc::TimerEvents::getInstance();
     connect(ge, &JSON::Generator::jsonChanged, this, &Server::registerFrame);
     connect(te, &Misc::TimerEvents::highFreqTimeout, this, &Server::sendProcessedData);
 
     // Send I/O "raw" data directly
-    auto io = IO::Manager::getInstance();
+    const auto io = IO::Manager::getInstance();
     connect(io, &IO::Manager::dataReceived, this, &Server::sendRawData);
 
     // Configure TCP server

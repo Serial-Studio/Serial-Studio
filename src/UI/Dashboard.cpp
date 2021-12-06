@@ -43,10 +43,10 @@ Dashboard::Dashboard()
     : m_points(100)
     , m_precision(2)
 {
-    auto cp = CSV::Player::getInstance();
-    auto io = IO::Manager::getInstance();
-    auto ge = JSON::Generator::getInstance();
-    auto te = Misc::TimerEvents::getInstance();
+    const auto cp = CSV::Player::getInstance();
+    const auto io = IO::Manager::getInstance();
+    const auto ge = JSON::Generator::getInstance();
+    const auto te = Misc::TimerEvents::getInstance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
     connect(te, SIGNAL(highFreqTimeout()), this, SLOT(updateData()));
     connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));

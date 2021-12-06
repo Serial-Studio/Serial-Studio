@@ -38,8 +38,8 @@ Compass::Compass(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->compassCount())
@@ -87,7 +87,7 @@ void Compass::update()
         return;
 
     // Update compass heading
-    auto dataset = UI::Dashboard::getInstance()->getCompass(m_index);
+    const auto dataset = UI::Dashboard::getInstance()->getCompass(m_index);
     if (dataset)
     {
         auto value = dataset->value().toDouble();

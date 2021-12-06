@@ -34,8 +34,8 @@ Gauge::Gauge(const int index)
     : m_index(index)
 {
     // Get pointers to Serial Studio modules
-    auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->gaugeCount())
@@ -43,8 +43,8 @@ Gauge::Gauge(const int index)
 
     // Get needle & knob color
     QString needleColor;
-    auto colors = theme->widgetColors();
-    auto knobColor = theme->widgetControlBackground();
+    const auto colors = theme->widgetColors();
+    const auto knobColor = theme->widgetControlBackground();
     if (colors.count() > m_index)
         needleColor = colors.at(m_index);
     else
@@ -90,7 +90,7 @@ void Gauge::updateData()
         return;
 
     // Update gauge value
-    auto dataset = UI::Dashboard::getInstance()->getGauge(m_index);
+    const auto dataset = UI::Dashboard::getInstance()->getGauge(m_index);
     if (dataset)
     {
 #ifndef LAZY_WIDGETS

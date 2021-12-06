@@ -47,8 +47,8 @@ Client::Client()
     regenerateClient();
 
     // Send data periodically & reset statistics when disconnected/connected to a device
-    auto io = IO::Manager::getInstance();
-    auto te = Misc::TimerEvents::getInstance();
+    const auto io = IO::Manager::getInstance();
+    const auto te = Misc::TimerEvents::getInstance();
     connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &Client::sendData);
     connect(io, &IO::Manager::frameReceived, this, &Client::onFrameReceived);
     connect(io, &IO::Manager::connectedChanged, this, &Client::resetStatistics);

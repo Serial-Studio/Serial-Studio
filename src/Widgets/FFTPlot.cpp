@@ -35,8 +35,8 @@ FFTPlot::FFTPlot(const int index)
     , m_index(index)
 {
     // Get pointers to serial studio modules
-    auto dash = UI::Dashboard::getInstance();
-    auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = UI::Dashboard::getInstance();
+    const auto theme = Misc::ThemeManager::getInstance();
 
     // Initialize pointers to NULL
     m_fft = Q_NULLPTR;
@@ -80,7 +80,7 @@ FFTPlot::FFTPlot(const int index)
 
     // Get curve color
     QString color;
-    StringList colors = theme->widgetColors();
+    const StringList colors = theme->widgetColors();
     if (colors.count() > m_index)
         color = colors.at(m_index);
     else
@@ -90,7 +90,7 @@ FFTPlot::FFTPlot(const int index)
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
     // Get dataset max freq. & calculate fft size
-    auto dataset = UI::Dashboard::getInstance()->getFFT(m_index);
+    const auto dataset = UI::Dashboard::getInstance()->getFFT(m_index);
     if (dataset)
     {
         // Calculate FFT size
@@ -160,7 +160,7 @@ void FFTPlot::updateData()
         return;
 
     // Replot
-    auto plotData = UI::Dashboard::getInstance()->fftPlotValues();
+    const auto plotData = UI::Dashboard::getInstance()->fftPlotValues();
     if (plotData->count() > m_index)
     {
         // Copy data to samples array
