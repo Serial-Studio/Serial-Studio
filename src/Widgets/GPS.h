@@ -22,11 +22,12 @@
 
 #pragma once
 
-#include <QLabel>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QElapsedTimer>
 #include <QNetworkAccessManager>
+
+#include "Common/ElidedLabel.h"
 
 class QNetworkReply;
 
@@ -66,8 +67,8 @@ private:
     qreal m_lon;
     qreal m_alt;
     QLabel m_mapLabel;
-    QLabel m_posLabel;
     QVBoxLayout m_layout;
+    ElidedLabel m_posLabel;
     QWidget *m_dataContainer;
     QGridLayout *m_gridLayout;
     QVector<QLabel *> m_icons;

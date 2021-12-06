@@ -188,8 +188,10 @@ GPS::GPS(const int index)
     m_dataContainer->setLayout(m_gridLayout);
 
     // Configure position label
+    m_posLabel.setType(Qt::ElideRight);
     m_posLabel.setStyleSheet(titleQSS);
     m_posLabel.setText(tr("Loading..."));
+    m_posLabel.setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
 
     // Configure map labeL
     m_mapLabel.setStyleSheet(labelQSS);
@@ -203,7 +205,7 @@ GPS::GPS(const int index)
     m_layout.addWidget(new QWidget(this));
     m_layout.setStretch(0, 0);
     m_layout.setStretch(1, 1);
-    m_layout.setStretch(2, 0);
+    m_layout.setStretch(2, 1);
     m_layout.setStretch(3, 0);
     m_layout.setStretch(4, 1);
     m_layout.setAlignment(&m_posLabel, Qt::AlignHCenter | Qt::AlignVCenter);
