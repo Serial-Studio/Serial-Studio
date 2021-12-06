@@ -1216,6 +1216,14 @@
     </message>
     <message>
         <source>Connect</source>
+        <translation type="vanished">连接</translation>
+    </message>
+    <message>
+        <source>Advanced setup</source>
+        <translation>高级设置</translation>
+    </message>
+    <message>
+        <source>Connect to broker</source>
         <translation>连接</translation>
     </message>
 </context>
@@ -1357,6 +1365,133 @@
         <source>MQTT client error</source>
         <translation>MQTT客户端错误</translation>
     </message>
+    <message>
+        <source>0: At most once</source>
+        <translation>0: 最多一次</translation>
+    </message>
+    <message>
+        <source>1: At least once</source>
+        <translation>1: 至少一次</translation>
+    </message>
+    <message>
+        <source>2: Exactly once</source>
+        <translation>2：正好一次</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>系统默认</translation>
+    </message>
+    <message>
+        <source>Select CA file</source>
+        <translation>选择CA文件</translation>
+    </message>
+    <message>
+        <source>Cannot open CA file!</source>
+        <translation>无法打开CA文件!</translation>
+    </message>
+    <message>
+        <source>MQTT client SSL/TLS error, ignore?</source>
+        <translation>MQTT客户端SSL/TLS错误，忽略？</translation>
+    </message>
+</context>
+<context>
+    <name>MQTTConfiguration</name>
+    <message>
+        <source>MQTT Configuration</source>
+        <translation>MQTT配置</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>版本</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>模式</translation>
+    </message>
+    <message>
+        <source>QOS level</source>
+        <translation>QOS水平</translation>
+    </message>
+    <message>
+        <source>Keep alive (s)</source>
+        <translation>保持活力的超时（s）</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>服务器</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>端口</translation>
+    </message>
+    <message>
+        <source>Topic</source>
+        <translation>话题</translation>
+    </message>
+    <message>
+        <source>Retain</source>
+        <translation>保留</translation>
+    </message>
+    <message>
+        <source>MQTT topic</source>
+        <translation>MQTT主题</translation>
+    </message>
+    <message>
+        <source>Add retain flag</source>
+        <translation>添加保留标志</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>用户</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>密码</translation>
+    </message>
+    <message>
+        <source>MQTT username</source>
+        <translation>MQTT用户名</translation>
+    </message>
+    <message>
+        <source>MQTT password</source>
+        <translation>MQTT密码</translation>
+    </message>
+    <message>
+        <source>Enable SSL/TLS:</source>
+        <translation>启用SSL/TLS：</translation>
+    </message>
+    <message>
+        <source>Certificate:</source>
+        <translation>证明书：</translation>
+    </message>
+    <message>
+        <source>Use system database</source>
+        <translation>使用系统数据库</translation>
+    </message>
+    <message>
+        <source>Custom CA file</source>
+        <translation>选择自定义CA文件</translation>
+    </message>
+    <message>
+        <source>Protocol:</source>
+        <translation>议定书：</translation>
+    </message>
+    <message>
+        <source>CA file:</source>
+        <translation>CA文件：</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation>断开</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>连接</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>申请</translation>
+    </message>
 </context>
 <context>
     <name>MapDelegate</name>
@@ -1449,11 +1584,11 @@
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation>隐藏菜单栏</translation>
+        <translation type="vanished">隐藏菜单栏</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation>显示菜单栏</translation>
+        <translation type="vanished">显示菜单栏</translation>
     </message>
     <message>
         <source>Exit full screen</source>
@@ -1730,11 +1865,11 @@
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
-        <translation>渲染引擎的改变将在重新启动后生效</translation>
+        <translation type="vanished">渲染引擎的改变将在重新启动后生效</translation>
     </message>
     <message>
         <source>Do you want to restart %1 now?</source>
-        <translation>你现在想重新启动%1吗？</translation>
+        <translation type="vanished">你现在想重新启动%1吗？</translation>
     </message>
 </context>
 <context>
@@ -2042,7 +2177,7 @@
     </message>
     <message>
         <source>Rendering engine</source>
-        <translation>渲染引擎</translation>
+        <translation type="vanished">渲染引擎</translation>
     </message>
     <message>
         <source>Threaded frame parsing</source>
@@ -2219,11 +2354,11 @@
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation>隐藏菜单栏</translation>
+        <translation type="vanished">隐藏菜单栏</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation>显示菜单栏</translation>
+        <translation type="vanished">显示菜单栏</translation>
     </message>
     <message>
         <source>No data received so far</source>
@@ -2457,23 +2592,23 @@
     <name>Widgets::GPS</name>
     <message>
         <source>Latitude</source>
-        <translation>纬度</translation>
+        <translation type="vanished">纬度</translation>
     </message>
     <message>
         <source>Longitude</source>
-        <translation>经度</translation>
+        <translation type="vanished">经度</translation>
     </message>
     <message>
         <source>Altitude</source>
-        <translation>海拔</translation>
+        <translation type="vanished">海拔</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation>正在加载...</translation>
+        <translation type="vanished">正在加载...</translation>
     </message>
     <message>
         <source>Double-click to open map</source>
-        <translation>双击以打开地图</translation>
+        <translation type="vanished">双击以打开地图</translation>
     </message>
 </context>
 <context>

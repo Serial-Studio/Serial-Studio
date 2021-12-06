@@ -77,6 +77,7 @@ FramelessWindow.CustomWindow {
         property alias ssl: _ssl.checked
         property alias certificate: _certificateMode.currentIndex
         property alias protocol: _protocols.currentIndex
+        property alias caFilePath: _caFile.text
     }
 
     //
@@ -490,6 +491,11 @@ FramelessWindow.CustomWindow {
                             qsTr("Use system database"),
                             qsTr("Custom CA file")
                         ]
+
+                        onCurrentIndexChanged: {
+                            if (currentIndex == 0)
+                                Cpp_MQTT_Client.loadCaFile("")
+                        }
                     }
 
                     Button {
@@ -546,7 +552,40 @@ FramelessWindow.CustomWindow {
             // Spacer
             //
             Item {
+                height: app.spacing
+                visible: Cpp_MQTT_Client.caFilePath.length > 0
+            }
+
+            //
+            // CA file display
+            //
+            RowLayout {
+                spacing: app.spacing
+                Layout.fillWidth: true
+                visible: Cpp_MQTT_Client.caFilePath.length > 0
+
+                Label {
+                    font.bold: true
+                    text: qsTr("CA file:")
+                    Layout.alignment: Qt.AlignVCenter
+                }
+
+                Label {
+                    id: _caFile
+                    text: Cpp_MQTT_Client.caFilePath
+                    onTextChanged: {
+                        if (text !== Cpp_MQTT_Client.caFilePath)
+                            Cpp_MQTT_Client.loadCaFile(text)
+                    }
+                }
+            }
+
+            //
+            // Spacer
+            //
+            Item {
                 height: app.spacing * 2
+                visible: Cpp_MQTT_Client.caFilePath.length <= 0
             }
 
             //

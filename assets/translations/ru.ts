@@ -1034,6 +1034,14 @@
     </message>
     <message>
         <source>Connect</source>
+        <translation type="vanished">Подключиться</translation>
+    </message>
+    <message>
+        <source>Advanced setup</source>
+        <translation>Настройка</translation>
+    </message>
+    <message>
+        <source>Connect to broker</source>
         <translation>Подключиться</translation>
     </message>
 </context>
@@ -1175,6 +1183,133 @@
         <source>MQTT client error</source>
         <translation>Ошибка клиента MQTT</translation>
     </message>
+    <message>
+        <source>0: At most once</source>
+        <translation>0: Не более одного раза</translation>
+    </message>
+    <message>
+        <source>1: At least once</source>
+        <translation>1: Хотя бы раз</translation>
+    </message>
+    <message>
+        <source>2: Exactly once</source>
+        <translation>2: Ровно раз</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>Система по умолчанию</translation>
+    </message>
+    <message>
+        <source>Select CA file</source>
+        <translation>Выберите файл CA</translation>
+    </message>
+    <message>
+        <source>Cannot open CA file!</source>
+        <translation>Невозможно открыть файл CA!</translation>
+    </message>
+    <message>
+        <source>MQTT client SSL/TLS error, ignore?</source>
+        <translation>Ошибка SSL/TLS клиента MQTT, игнорировать?</translation>
+    </message>
+</context>
+<context>
+    <name>MQTTConfiguration</name>
+    <message>
+        <source>MQTT Configuration</source>
+        <translation>Конфигурация MQTT</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Версия</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Режим</translation>
+    </message>
+    <message>
+        <source>QOS level</source>
+        <translation>Уровень QOS</translation>
+    </message>
+    <message>
+        <source>Keep alive (s)</source>
+        <translation>Время жизни (сек)</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>Хост</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <source>Topic</source>
+        <translation>Тема</translation>
+    </message>
+    <message>
+        <source>Retain</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <source>MQTT topic</source>
+        <translation>Тема MQTT</translation>
+    </message>
+    <message>
+        <source>Add retain flag</source>
+        <translation>Добавить флаг удержания</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Пользователь</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Пароль</translation>
+    </message>
+    <message>
+        <source>MQTT username</source>
+        <translation>Имя пользователя MQTT</translation>
+    </message>
+    <message>
+        <source>MQTT password</source>
+        <translation>Пароль MQTT</translation>
+    </message>
+    <message>
+        <source>Enable SSL/TLS:</source>
+        <translation>Включить SSL/TLS:</translation>
+    </message>
+    <message>
+        <source>Certificate:</source>
+        <translation>Сертификат:</translation>
+    </message>
+    <message>
+        <source>Use system database</source>
+        <translation>Системная база данных</translation>
+    </message>
+    <message>
+        <source>Custom CA file</source>
+        <translation>Выберите файл CA</translation>
+    </message>
+    <message>
+        <source>Protocol:</source>
+        <translation>Протокол:</translation>
+    </message>
+    <message>
+        <source>CA file:</source>
+        <translation>Файл CA:</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation>Отключить</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>Подключиться</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>Применить</translation>
+    </message>
 </context>
 <context>
     <name>MapDelegate</name>
@@ -1267,11 +1402,11 @@
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation>Скрыть меню</translation>
+        <translation type="vanished">Скрыть меню</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation>Показать меню</translation>
+        <translation type="vanished">Показать меню</translation>
     </message>
     <message>
         <source>Exit full screen</source>
@@ -1548,11 +1683,11 @@
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
-        <translation>Изменение механизма рендеринга вступит в силу после перезапуска</translation>
+        <translation type="vanished">Изменение механизма рендеринга вступит в силу после перезапуска</translation>
     </message>
     <message>
         <source>Do you want to restart %1 now?</source>
-        <translation>Хотите ли вы перезапустить %1 сейчас?</translation>
+        <translation type="vanished">Хотите ли вы перезапустить %1 сейчас?</translation>
     </message>
 </context>
 <context>
@@ -1788,7 +1923,7 @@
     </message>
     <message>
         <source>Rendering engine</source>
-        <translation>Механизм рендеринга</translation>
+        <translation type="vanished">Механизм рендеринга</translation>
     </message>
     <message>
         <source>Threaded frame parsing</source>
@@ -1906,11 +2041,11 @@
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation>Скрыть меню</translation>
+        <translation type="vanished">Скрыть меню</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation>Показать меню</translation>
+        <translation type="vanished">Показать меню</translation>
     </message>
     <message>
         <source>No data received so far</source>
@@ -2124,23 +2259,23 @@
     <name>Widgets::GPS</name>
     <message>
         <source>Latitude</source>
-        <translation>Широта</translation>
+        <translation type="vanished">Широта</translation>
     </message>
     <message>
         <source>Longitude</source>
-        <translation>Долгота</translation>
+        <translation type="vanished">Долгота</translation>
     </message>
     <message>
         <source>Altitude</source>
-        <translation>Высота</translation>
+        <translation type="vanished">Высота</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation>Загрузка...</translation>
+        <translation type="vanished">Загрузка...</translation>
     </message>
     <message>
         <source>Double-click to open map</source>
-        <translation>Дважды щелкните, чтобы открыть карту</translation>
+        <translation type="vanished">Дважды щелкните, чтобы открыть карту</translation>
     </message>
 </context>
 <context>

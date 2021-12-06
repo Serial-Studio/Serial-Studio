@@ -1236,7 +1236,15 @@
     </message>
     <message>
         <source>Connect</source>
-        <translation>Conectar</translation>
+        <translation type="vanished">Conectar</translation>
+    </message>
+    <message>
+        <source>Advanced setup</source>
+        <translation>Configuración avanzada</translation>
+    </message>
+    <message>
+        <source>Connect to broker</source>
+        <translation>Conectarse al broker</translation>
     </message>
 </context>
 <context>
@@ -1377,6 +1385,133 @@
         <source>MQTT client error</source>
         <translation>Error del cliente MQTT</translation>
     </message>
+    <message>
+        <source>0: At most once</source>
+        <translation>0: a lo mucho una vez</translation>
+    </message>
+    <message>
+        <source>1: At least once</source>
+        <translation>0: al menos una vez</translation>
+    </message>
+    <message>
+        <source>2: Exactly once</source>
+        <translation>0: exactamente una vez</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>Predeterminado del sistema</translation>
+    </message>
+    <message>
+        <source>Select CA file</source>
+        <translation>Seleccionar archivo CA</translation>
+    </message>
+    <message>
+        <source>Cannot open CA file!</source>
+        <translation>¡Error al abrir el archivo CA!</translation>
+    </message>
+    <message>
+        <source>MQTT client SSL/TLS error, ignore?</source>
+        <translation>Error SSL/TLS del cliente MQTT, ¿ignorar?</translation>
+    </message>
+</context>
+<context>
+    <name>MQTTConfiguration</name>
+    <message>
+        <source>MQTT Configuration</source>
+        <translation>Configuración del cliente MQTT</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Versión</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Operación</translation>
+    </message>
+    <message>
+        <source>QOS level</source>
+        <translation>Nivel QOS</translation>
+    </message>
+    <message>
+        <source>Keep alive (s)</source>
+        <translation>Tiempo de permanencia (s)</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation>Servidor</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Puerto</translation>
+    </message>
+    <message>
+        <source>Topic</source>
+        <translation>Tema</translation>
+    </message>
+    <message>
+        <source>Retain</source>
+        <translation>Retención</translation>
+    </message>
+    <message>
+        <source>MQTT topic</source>
+        <translation>Tema MQTT</translation>
+    </message>
+    <message>
+        <source>Add retain flag</source>
+        <translation>Agregar bandera de retención</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Usuario</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Contraseña</translation>
+    </message>
+    <message>
+        <source>MQTT username</source>
+        <translation>Usuario MQTT</translation>
+    </message>
+    <message>
+        <source>MQTT password</source>
+        <translation>Contraseña de MQTT</translation>
+    </message>
+    <message>
+        <source>Enable SSL/TLS:</source>
+        <translation>Habilidar SSL/TLS:</translation>
+    </message>
+    <message>
+        <source>Certificate:</source>
+        <translation>Certificado:</translation>
+    </message>
+    <message>
+        <source>Use system database</source>
+        <translation>Usar base de datos del sistema</translation>
+    </message>
+    <message>
+        <source>Custom CA file</source>
+        <translation>Usar archivo CA</translation>
+    </message>
+    <message>
+        <source>Protocol:</source>
+        <translation>Protocolo:</translation>
+    </message>
+    <message>
+        <source>CA file:</source>
+        <translation>Archivo CA:</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation>Desconectar</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>Conectar</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>Aplicar</translation>
+    </message>
 </context>
 <context>
     <name>MapDelegate</name>
@@ -1469,11 +1604,11 @@
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation>Ocular la barra de menú</translation>
+        <translation type="vanished">Ocular la barra de menú</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation>Mostrar la barra de menú</translation>
+        <translation type="vanished">Mostrar la barra de menú</translation>
     </message>
     <message>
         <source>Exit full screen</source>
@@ -1750,11 +1885,11 @@
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
-        <translation>El cambio de motor de renderización tendrá efecto después de reiniciar</translation>
+        <translation type="vanished">El cambio de motor de renderización tendrá efecto después de reiniciar</translation>
     </message>
     <message>
         <source>Do you want to restart %1 now?</source>
-        <translation>¿Quiere reiniciar %1 ahora?</translation>
+        <translation type="vanished">¿Quiere reiniciar %1 ahora?</translation>
     </message>
 </context>
 <context>
@@ -2110,7 +2245,7 @@
     </message>
     <message>
         <source>Rendering engine</source>
-        <translation>Motor de renderizado</translation>
+        <translation type="vanished">Motor de renderizado</translation>
     </message>
     <message>
         <source>Threaded frame parsing</source>
@@ -2287,11 +2422,11 @@
     </message>
     <message>
         <source>Hide menubar</source>
-        <translation>Ocular la barra de menú</translation>
+        <translation type="vanished">Ocular la barra de menú</translation>
     </message>
     <message>
         <source>Show menubar</source>
-        <translation>Mostrar la barra de menú</translation>
+        <translation type="vanished">Mostrar la barra de menú</translation>
     </message>
     <message>
         <source>No data received so far</source>
@@ -2537,23 +2672,23 @@
     <name>Widgets::GPS</name>
     <message>
         <source>Latitude</source>
-        <translation>Latitud</translation>
+        <translation type="vanished">Latitud</translation>
     </message>
     <message>
         <source>Longitude</source>
-        <translation>Longitud</translation>
+        <translation type="vanished">Longitud</translation>
     </message>
     <message>
         <source>Altitude</source>
-        <translation>Altitud</translation>
+        <translation type="vanished">Altitud</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation>Cargando...</translation>
+        <translation type="vanished">Cargando...</translation>
     </message>
     <message>
         <source>Double-click to open map</source>
-        <translation>Doble clic para mostrar mapa</translation>
+        <translation type="vanished">Doble clic para mostrar mapa</translation>
     </message>
 </context>
 <context>

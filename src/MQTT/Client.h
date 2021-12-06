@@ -133,6 +133,9 @@ class Client : public QObject
     Q_PROPERTY(QString defaultHost
                READ defaultHost
                CONSTANT)
+    Q_PROPERTY(QString caFilePath
+               READ caFilePath
+               NOTIFY caFilePathChanged)
     // clang-format on
 
 signals:
@@ -145,6 +148,7 @@ signals:
     void passwordChanged();
     void keepAliveChanged();
     void connectedChanged();
+    void caFilePathChanged();
     void clientModeChanged();
     void sslEnabledChanged();
     void sslProtocolChanged();
@@ -175,6 +179,7 @@ public:
     StringList mqttVersions() const;
     StringList sslProtocols() const;
 
+    QString caFilePath() const;
     quint16 defaultPort() const { return 1883; }
     QString defaultHost() const { return "127.0.0.1"; }
 
@@ -220,6 +225,7 @@ private:
     bool m_sslEnabled;
     int m_sslProtocol;
     bool m_lookupActive;
+    QString m_caFilePath;
     quint16 m_sentMessages;
     QMQTT::Client *m_client;
     QVector<QByteArray> m_frames;

@@ -860,7 +860,11 @@
         <translation></translation>
     </message>
     <message>
-        <source>Connect</source>
+        <source>Advanced setup</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Connect to broker</source>
         <translation></translation>
     </message>
 </context>
@@ -1002,6 +1006,133 @@
         <source>MQTT client error</source>
         <translation></translation>
     </message>
+    <message>
+        <source>0: At most once</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>1: At least once</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>2: Exactly once</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Select CA file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Cannot open CA file!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT client SSL/TLS error, ignore?</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>MQTTConfiguration</name>
+    <message>
+        <source>MQTT Configuration</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>QOS level</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keep alive (s)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Topic</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Retain</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT topic</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Add retain flag</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT username</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MQTT password</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Enable SSL/TLS:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Certificate:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Use system database</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Custom CA file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Protocol:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>CA file:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Menubar</name>
@@ -1079,14 +1210,6 @@
     </message>
     <message>
         <source>Show setup pane</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hide menubar</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Show menubar</source>
         <translation></translation>
     </message>
     <message>
@@ -1346,14 +1469,6 @@
         <source>Loading user interface...</source>
         <translation></translation>
     </message>
-    <message>
-        <source>The rendering engine change will take effect after restart</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Do you want to restart %1 now?</source>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>Misc::ThemeManager</name>
@@ -1533,10 +1648,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Rendering engine</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Multithreaded frame parsing</source>
         <translation></translation>
     </message>
@@ -1628,14 +1739,6 @@
     </message>
     <message>
         <source>Save as</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hide menubar</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Show menubar</source>
         <translation></translation>
     </message>
     <message>
@@ -1816,29 +1919,6 @@
     </message>
     <message>
         <source>FFT of %1</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>Widgets::GPS</name>
-    <message>
-        <source>Latitude</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Longitude</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Altitude</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Loading...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Double-click to open map</source>
         <translation></translation>
     </message>
 </context>

@@ -265,6 +265,14 @@ StringList Client::sslProtocols() const
 }
 
 /**
+ * Returns the path of the currently loaded *.ca file
+ */
+QString Client::caFilePath() const
+{
+    return m_caFilePath;
+}
+
+/**
  * Prompts the user to select a *.ca file and loads the certificate
  * into the SSL configuration.
  */
@@ -385,6 +393,10 @@ void Client::setTopic(const QString &topic)
  */
 void Client::loadCaFile(const QString &path)
 {
+    // Save *.ca file path
+    m_caFilePath = path;
+    emit caFilePathChanged();
+
     // Empty path, abort
     if (path.isEmpty())
         return;
