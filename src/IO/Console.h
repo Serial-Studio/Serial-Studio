@@ -136,9 +136,9 @@ public slots:
     void print(const QString &fontFamily);
     void setAutoscroll(const bool enabled);
     void setShowTimestamp(const bool enabled);
-    void setDataMode(const IO::Console::DataMode mode);
-    void setLineEnding(const IO::Console::LineEnding mode);
-    void setDisplayMode(const IO::Console::DisplayMode mode);
+    void setDataMode(const IO::Console::DataMode &mode);
+    void setLineEnding(const IO::Console::LineEnding &mode);
+    void setDisplayMode(const IO::Console::DisplayMode &mode);
     void append(const QString &str, const bool addTimestamp = false);
 
 private slots:

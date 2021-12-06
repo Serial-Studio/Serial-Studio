@@ -200,10 +200,7 @@ QIODevice *Network::openNetworkPort()
 
         // Join the multicast group (if required)
         if (udpMulticast())
-        {
-            QHostAddress address(hostAddr);
-            m_udpSocket.joinMulticastGroup(address);
-        }
+            m_udpSocket.joinMulticastGroup(QHostAddress(m_address));
 
         // Update socket pointer
         socket = &m_udpSocket;

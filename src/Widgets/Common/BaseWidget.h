@@ -39,8 +39,8 @@ public:
     BaseWidget();
 
     void setValue(const QString &label);
-    void setWidget(QWidget *widget, Qt::Alignment alignment = Qt::AlignHCenter,
-                   bool autoresize = true);
+    void setWidget(QWidget *widget, const Qt::Alignment &alignment = Qt::AlignHCenter,
+                   const bool autoresize = true);
 
 protected:
     void resizeEvent(QResizeEvent *event);

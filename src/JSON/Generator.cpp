@@ -203,7 +203,7 @@ void Generator::loadJsonMap(const QString &path)
  * @c kAutomatic serial data contains the JSON data frame, good for simple
  *               applications or for prototyping.
  */
-void Generator::setOperationMode(const JSON::Generator::OperationMode mode)
+void Generator::setOperationMode(const JSON::Generator::OperationMode &mode)
 {
     m_opMode = mode;
     emit operationModeChanged();
@@ -350,8 +350,8 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
             json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
 
         // Create json document
-        auto jsonData = json.toUtf8();
-        auto jsonDocument = QJsonDocument::fromJson(jsonData, &error);
+        const auto jsonData = json.toUtf8();
+        const auto jsonDocument = QJsonDocument::fromJson(jsonData, &error);
 
         // Calculate dynamically generated values
         auto root = jsonDocument.object();
@@ -402,7 +402,8 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
  * Constructor function, stores received frame data & the date/time that the frame data
  * was received.
  */
-JSONWorker::JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time)
+JSONWorker::JSONWorker(const QByteArray &data, const quint64 frame,
+                       const QDateTime &time)
     : m_time(time)
     , m_data(data)
     , m_frame(frame)
@@ -433,14 +434,14 @@ void JSONWorker::process()
 
         // Separate incoming data & add it to the JSON map
         auto json = generator->jsonMapData();
-        auto sepr = IO::Manager::getInstance()->separatorSequence();
-        auto list = QString::fromUtf8(m_data).split(sepr);
+        const auto sepr = IO::Manager::getInstance()->separatorSequence();
+        const auto list = QString::fromUtf8(m_data).split(sepr);
         for (int i = 0; i < list.count(); ++i)
             json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
 
         // Create json document
-        auto jsonData = json.toUtf8();
-        auto jsonDocument = QJsonDocument::fromJson(jsonData, &error);
+        const auto jsonData = json.toUtf8();
+        const auto jsonDocument = QJsonDocument::fromJson(jsonData, &error);
 
         // Calculate dynamically generated values
         auto root = jsonDocument.object();

@@ -132,7 +132,7 @@ public slots:
     void loadJsonMap();
     void loadJsonMap(const QString &path);
     void setProcessFramesInSeparateThread(const bool threaded);
-    void setOperationMode(const JSON::Generator::OperationMode mode);
+    void setOperationMode(const JSON::Generator::OperationMode &mode);
 
 private:
     Generator();
@@ -146,7 +146,8 @@ public slots:
 private slots:
     void reset();
     void readData(const QByteArray &data);
-    void processFrame(const QByteArray &data, const quint64 frame, const QDateTime &time);
+    void processFrame(const QByteArray &data, const quint64 frame,
+                      const QDateTime &time);
 
 private:
     QFile m_jsonMap;

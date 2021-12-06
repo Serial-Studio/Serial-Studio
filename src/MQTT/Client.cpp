@@ -327,17 +327,6 @@ void Client::setQos(const quint8 qos)
 }
 
 /**
- * If set to @c true, the @c retain flag shall be appended to the MQTT message so that
- * new clients connecting to the broker will immediately receive the last "good" message.
- */
-void Client::setRetain(const bool retain)
-{
-    Q_ASSERT(m_client);
-    m_client->setWillRetain(retain);
-    emit retainChanged();
-}
-
-/**
  * Performs a DNS lookup for the given @a host name
  */
 void Client::lookup(const QString &host)
@@ -365,6 +354,17 @@ void Client::setHost(const QString &host)
     Q_ASSERT(m_client);
     m_client->setHostName(host);
     emit hostChanged();
+}
+
+/**
+ * If set to @c true, the @c retain flag shall be appended to the MQTT message so that
+ * new clients connecting to the broker will immediately receive the last "good" message.
+ */
+void Client::setRetain(const bool retain)
+{
+    Q_ASSERT(m_client);
+    m_client->setWillRetain(retain);
+    emit retainChanged();
 }
 
 /**

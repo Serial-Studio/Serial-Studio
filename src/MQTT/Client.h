@@ -189,10 +189,10 @@ public slots:
     void toggleConnection();
     void disconnectFromHost();
     void setQos(const quint8 qos);
-    void setRetain(const bool retain);
     void lookup(const QString &host);
     void setPort(const quint16 port);
     void setHost(const QString &host);
+    void setRetain(const bool retain);
     void setClientMode(const int mode);
     void setTopic(const QString &topic);
     void loadCaFile(const QString &path);

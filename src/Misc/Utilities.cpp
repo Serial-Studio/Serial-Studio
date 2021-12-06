@@ -75,8 +75,9 @@ bool Utilities::askAutomaticUpdates()
 /**
  * Shows a macOS-like message box with the given properties
  */
-int Utilities::showMessageBox(QString text, QString informativeText, QString windowTitle,
-                              QMessageBox::StandardButtons bt)
+int Utilities::showMessageBox(const QString &text, const QString &informativeText,
+                              const QString &windowTitle,
+                              const QMessageBox::StandardButtons &bt)
 {
     // Get app icon
     auto icon = QPixmap(APP_ICON).scaled(64, 64, Qt::IgnoreAspectRatio,

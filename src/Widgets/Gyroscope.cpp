@@ -76,7 +76,8 @@ void Gyroscope::updateData()
         return;
 
     // Update gyroscope values
-    const auto gyro = UI::Dashboard::getInstance()->getGyroscope(m_index);
+    const auto dash = UI::Dashboard::getInstance();
+    const auto gyro = dash->getGyroscope(m_index);
     if (gyro)
     {
         if (gyro->datasetCount() != 3)
@@ -98,12 +99,9 @@ void Gyroscope::updateData()
                 yaw = dataset->value().toDouble();
         }
 
-        m_pitch = QString::number(qAbs(pitch), 'f',
-                                  UI::Dashboard::getInstance()->precision());
-        m_roll
-            = QString::number(qAbs(roll), 'f', UI::Dashboard::getInstance()->precision());
-        m_yaw
-            = QString::number(qAbs(yaw), 'f', UI::Dashboard::getInstance()->precision());
+        m_yaw = QString::number(qAbs(yaw), 'f', dash->precision());
+        m_roll = QString::number(qAbs(roll), 'f', dash->precision());
+        m_pitch = QString::number(qAbs(pitch), 'f', dash->precision());
 
         m_gauge.setValue(pitch);
         m_gauge.setGradient(roll / 360.0);

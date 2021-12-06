@@ -267,7 +267,7 @@ void Player::openFile(const QString &filePath)
     closeFile();
 
     // Device is connected, warn user & disconnect
-    auto sm = IO::Manager::getInstance();
+    const auto sm = IO::Manager::getInstance();
     if (sm->connected())
     {
         auto response = Misc::Utilities::showMessageBox(
@@ -345,7 +345,7 @@ void Player::openFile(const QString &filePath)
  * Reads a specific row from the @a progress range (which can have a value
  * ranging from 0.0 to 1.0).
  */
-void Player::setProgress(const qreal progress)
+void Player::setProgress(const qreal &progress)
 {
     // Ensure that progress value is between 0 and 1
     auto validProgress = progress;
@@ -385,7 +385,7 @@ void Player::updateData()
 
     // Update timestamp string
     bool error;
-    auto timestamp = getCellValue(framePosition() + 1, 0, &error);
+    auto timestamp = getCellValue(framePosition() + 1, 0, error);
     if (!error)
     {
         m_timestamp = timestamp;
@@ -406,16 +406,16 @@ void Player::updateData()
         if (framePosition() < frameCount())
         {
             bool error = false;
-            auto currTime = getCellValue(framePosition() + 1, 0, &error);
-            auto nextTime = getCellValue(framePosition() + 2, 0, &error);
+            auto currTime = getCellValue(framePosition() + 1, 0, error);
+            auto nextTime = getCellValue(framePosition() + 2, 0, error);
 
             // No error, calculate difference & schedule update
             if (!error)
             {
-                auto format = "yyyy/MM/dd/ HH:mm:ss::zzz"; // Same as in Export.cpp
-                auto currDateTime = QDateTime::fromString(currTime, format);
-                auto nextDateTime = QDateTime::fromString(nextTime, format);
-                auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
+                const auto format = "yyyy/MM/dd/ HH:mm:ss::zzz"; // Same as in Export.cpp
+                const auto currDateTime = QDateTime::fromString(currTime, format);
+                const auto nextDateTime = QDateTime::fromString(nextTime, format);
+                const auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
                 QTimer::singleShot(msecsToNextF, Qt::PreciseTimer, this,
                                    SLOT(nextFrame()));
             }
@@ -557,7 +557,7 @@ QJsonDocument Player::getJsonFrame(const int row)
     // Read CSV row & JSON template from JSON parser
     const auto values = m_csvData.at(row);
     const auto mapData = JSON::Generator::getInstance()->jsonMapData();
-    QJsonDocument jsonTemplate = QJsonDocument::fromJson(mapData.toUtf8());
+    const QJsonDocument jsonTemplate = QJsonDocument::fromJson(mapData.toUtf8());
 
     // Replace JSON title
     auto json = jsonTemplate.object();
@@ -623,23 +623,19 @@ QJsonDocument Player::getJsonFrame(const int row)
  * error occurs or the cell does not exist, the value of @a error shall be set
  * to @c true.
  */
-QString Player::getCellValue(int row, int column, bool *error)
+QString Player::getCellValue(const int row, const int column, bool &error)
 {
     if (m_csvData.count() > row)
     {
         auto list = m_csvData.at(row);
         if (list.count() > column)
         {
-            if (error)
-                *error = false;
-
+            error = false;
             return list.at(column);
         }
     }
 
-    if (error)
-        *error = true;
-
+    error = true;
     return "";
 }
 

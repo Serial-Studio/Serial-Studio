@@ -30,6 +30,7 @@
 
 namespace UI
 {
+
 static Dashboard *DASHBOARD = Q_NULLPTR;
 
 //----------------------------------------------------------------------------------------
@@ -1034,7 +1035,8 @@ bool Dashboard::getVisibility(const QVector<bool> &vector, const int index) cons
  * vector. Calling this function with @a visible set to @c false will hide the widget in
  * the QML user interface.
  */
-void Dashboard::setVisibility(QVector<bool> &vector, const int index, const bool visible)
+void Dashboard::setVisibility(QVector<bool> &vector, const int index,
+                              const bool visible)
 {
     if (index < vector.count())
     {
@@ -1047,7 +1049,7 @@ void Dashboard::setVisibility(QVector<bool> &vector, const int index, const bool
  * Returns a pointer to the group at the specified @a index of the given @a vector.
  * If the @a index is invalid, then this function shall return a NULL pointer.
  */
-JSON::Group *Dashboard::getGroupWidget(const QVector<JSON::Group *> vector,
+JSON::Group *Dashboard::getGroupWidget(const QVector<JSON::Group *> &vector,
                                        const int index)
 {
     if (index < vector.count())
@@ -1060,7 +1062,7 @@ JSON::Group *Dashboard::getGroupWidget(const QVector<JSON::Group *> vector,
  * Returns a pointer to the dataset at the specified @a index of the given @a vector.
  * If the @a index is invalid, then this function shall return a NULL pointer.
  */
-JSON::Dataset *Dashboard::getDatasetWidget(const QVector<JSON::Dataset *> vector,
+JSON::Dataset *Dashboard::getDatasetWidget(const QVector<JSON::Dataset *> &vector,
                                            const int index)
 {
     if (index < vector.count())

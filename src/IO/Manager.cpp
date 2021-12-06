@@ -470,7 +470,7 @@ void Manager::setWatchdogInterval(const int interval)
 /**
  * Changes the data source type. Check the @c dataSource() funciton for more information.
  */
-void Manager::setDataSource(const IO::Manager::DataSource source)
+void Manager::setDataSource(const IO::Manager::DataSource &source)
 {
     // Disconnect current device
     if (connected())
@@ -500,8 +500,8 @@ void Manager::readFrames()
     auto bytes = 0;
     auto prevBytes = 0;
     auto cursor = m_dataBuffer;
-    auto start = startSequence().toUtf8();
-    auto finish = finishSequence().toUtf8();
+    const auto start = startSequence().toUtf8();
+    const auto finish = finishSequence().toUtf8();
     while (cursor.contains(start) && cursor.contains(finish))
     {
         // Remove the part of the buffer prior to, and including, the start sequence.
@@ -515,7 +515,7 @@ void Manager::readFrames()
 
         // Checksum verification & emit RX frame
         int chop = 0;
-        auto result = integrityChecks(frame, cursor, &chop);
+        const auto result = integrityChecks(frame, cursor, &chop);
         if (result == ValidationStatus::FrameOk)
             emit frameReceived(frame);
 
@@ -575,7 +575,7 @@ void Manager::onDataReceived()
         if (network->socketType() == QAbstractSocket::UdpSocket)
         {
             udpConnection = true;
-            auto udpSocket = network->udpSocket();
+            const auto udpSocket = network->udpSocket();
             while (udpSocket->hasPendingDatagrams())
             {
                 QByteArray datagram;
@@ -653,17 +653,17 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
                                                    const QByteArray &cursor, int *bytes)
 {
     // Get finish sequence as byte array
-    auto finish = finishSequence().toUtf8();
-    auto crc8Header = finish + "crc8:";
-    auto crc16Header = finish + "crc16:";
-    auto crc32Header = finish + "crc32:";
+    const auto finish = finishSequence().toUtf8();
+    const auto crc8Header = finish + "crc8:";
+    const auto crc16Header = finish + "crc16:";
+    const auto crc32Header = finish + "crc32:";
 
     // Check CRC-8
     if (cursor.contains(crc8Header))
     {
         // Enable the CRC flag
         m_enableCrc = true;
-        auto offset = cursor.indexOf(crc8Header) + crc8Header.length() - 1;
+        const auto offset = cursor.indexOf(crc8Header) + crc8Header.length() - 1;
 
         // Check if we have enough data in the buffer
         if (cursor.length() >= offset + 1)
@@ -672,7 +672,7 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
             *bytes += crc8Header.length() + 1;
 
             // Get 8-bit checksum
-            quint8 crc = cursor.at(offset + 1);
+            const quint8 crc = cursor.at(offset + 1);
 
             // Compare checksums
             if (crc8(frame.data(), frame.length()) == crc)
@@ -687,7 +687,7 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
     {
         // Enable the CRC flag
         m_enableCrc = true;
-        auto offset = cursor.indexOf(crc16Header) + crc16Header.length() - 1;
+        const auto offset = cursor.indexOf(crc16Header) + crc16Header.length() - 1;
 
         // Check if we have enough data in the buffer
         if (cursor.length() >= offset + 2)
@@ -696,9 +696,9 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
             *bytes += crc16Header.length() + 2;
 
             // Get 16-bit checksum
-            quint8 a = cursor.at(offset + 1);
-            quint8 b = cursor.at(offset + 2);
-            quint16 crc = (a << 8) | (b & 0xff);
+            const quint8 a = cursor.at(offset + 1);
+            const quint8 b = cursor.at(offset + 2);
+            const quint16 crc = (a << 8) | (b & 0xff);
 
             // Compare checksums
             if (crc16(frame.data(), frame.length()) == crc)
@@ -713,7 +713,7 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
     {
         // Enable the CRC flag
         m_enableCrc = true;
-        auto offset = cursor.indexOf(crc32Header) + crc32Header.length() - 1;
+        const auto offset = cursor.indexOf(crc32Header) + crc32Header.length() - 1;
 
         // Check if we have enough data in the buffer
         if (cursor.length() >= offset + 4)
@@ -722,11 +722,11 @@ Manager::ValidationStatus Manager::integrityChecks(const QByteArray &frame,
             *bytes += crc32Header.length() + 4;
 
             // Get 32-bit checksum
-            quint8 a = cursor.at(offset + 1);
-            quint8 b = cursor.at(offset + 2);
-            quint8 c = cursor.at(offset + 3);
-            quint8 d = cursor.at(offset + 4);
-            quint32 crc = (a << 24) | (b << 16) | (c << 8) | (d & 0xff);
+            const quint8 a = cursor.at(offset + 1);
+            const quint8 b = cursor.at(offset + 2);
+            const quint8 c = cursor.at(offset + 3);
+            const quint8 d = cursor.at(offset + 4);
+            const quint32 crc = (a << 24) | (b << 16) | (c << 8) | (d & 0xff);
 
             // Compare checksums
             if (crc32(frame.data(), frame.length()) == crc)

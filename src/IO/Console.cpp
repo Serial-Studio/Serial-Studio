@@ -40,7 +40,7 @@ static Console *CONSOLE = Q_NULLPTR;
 /**
  * Generates a hexdump of the given data
  */
-static QString HexDump(const char *data, size_t size)
+static QString HexDump(const char *data, const size_t size)
 {
     char str[4096] = "";
     char ascii[17];
@@ -452,7 +452,7 @@ void Console::setAutoscroll(const bool enabled)
 /**
  * Changes the data mode for user commands. See @c dataMode() for more information.
  */
-void Console::setDataMode(const IO::Console::DataMode mode)
+void Console::setDataMode(const IO::Console::DataMode &mode)
 {
     m_dataMode = mode;
     emit dataModeChanged();
@@ -462,7 +462,7 @@ void Console::setDataMode(const IO::Console::DataMode mode)
  * Changes line ending mode for sent user commands. See @c lineEnding() for more
  * information.
  */
-void Console::setLineEnding(const IO::Console::LineEnding mode)
+void Console::setLineEnding(const IO::Console::LineEnding &mode)
 {
     m_lineEnding = mode;
     emit lineEndingChanged();
@@ -471,7 +471,7 @@ void Console::setLineEnding(const IO::Console::LineEnding mode)
 /**
  * Changes the display mode of the console. See @c displayMode() for more information.
  */
-void Console::setDisplayMode(const IO::Console::DisplayMode mode)
+void Console::setDisplayMode(const IO::Console::DisplayMode &mode)
 {
     m_displayMode = mode;
     emit displayModeChanged();
@@ -530,7 +530,7 @@ void Console::append(const QString &string, const bool addTimestamp)
         if (m_isStartingLine)
             processedString.append(timestamp);
 
-        auto token = tokens.first();
+        const auto token = tokens.first();
         processedString.append(token);
         m_isStartingLine = (token == "\n");
         tokens.removeFirst();
@@ -601,9 +601,9 @@ QByteArray Console::hexToBytes(const QString &data)
     QByteArray array;
     for (int i = 0; i < withoutSpaces.length(); i += 2)
     {
-        auto chr1 = withoutSpaces.at(i);
-        auto chr2 = withoutSpaces.at(i + 1);
-        auto byte = QString("%1%2").arg(chr1, chr2).toInt(Q_NULLPTR, 16);
+        const auto chr1 = withoutSpaces.at(i);
+        const auto chr2 = withoutSpaces.at(i + 1);
+        const auto byte = QString("%1%2").arg(chr1, chr2).toInt(Q_NULLPTR, 16);
         array.append(byte);
     }
 

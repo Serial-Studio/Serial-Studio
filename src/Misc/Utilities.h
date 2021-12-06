@@ -46,10 +46,10 @@ public:
     static Utilities* getInstance();
     static void rebootApplication();
     Q_INVOKABLE bool askAutomaticUpdates();
-    static int showMessageBox(QString text,
-                              QString informativeText,
-                              QString windowTitle = APP_NAME,
-                              QMessageBox::StandardButtons bt = QMessageBox::Ok);
+    static int showMessageBox(const QString &text, 
+                              const QString &informativeText = "",
+                              const QString &windowTitle = "",
+                              const QMessageBox::StandardButtons &bt = QMessageBox::Ok);
     //clang-format on
 
 public slots:

@@ -90,7 +90,7 @@ Plot::Plot(const int index)
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
     // Get dataset units
-    auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
+    const auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
     if (dataset)
     {
         // Update graph scale

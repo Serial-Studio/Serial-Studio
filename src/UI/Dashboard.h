@@ -276,8 +276,8 @@ private:
     bool getVisibility(const QVector<bool> &vector, const int index) const;
     void setVisibility(QVector<bool> &vector, const int index, const bool visible);
 
-    JSON::Group *getGroupWidget(const QVector<JSON::Group *> vector, const int index);
-    JSON::Dataset *getDatasetWidget(const QVector<JSON::Dataset *> vector,
+    JSON::Group *getGroupWidget(const QVector<JSON::Group *> &vector, const int index);
+    JSON::Dataset *getDatasetWidget(const QVector<JSON::Dataset *> &vector,
                                     const int index);
 
 private:

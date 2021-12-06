@@ -107,26 +107,25 @@ public:
     Q_INVOKABLE bool saveJsonFile();
     Q_INVOKABLE int datasetCount(const int group) const;
 
-    Q_INVOKABLE JSON::Group *getGroup(const int index);
-    Q_INVOKABLE JSON::Dataset *getDataset(const int group, const int index);
+    Q_INVOKABLE JSON::Group *getGroup(const int index) const;
+    Q_INVOKABLE JSON::Dataset *getDataset(const int group, const int index) const;
 
-    Q_INVOKABLE QString groupTitle(const int group);
-    Q_INVOKABLE QString groupWidget(const int group);
-    Q_INVOKABLE int groupWidgetIndex(const int group);
-
-    Q_INVOKABLE int datasetIndex(const int group, const int dataset);
-    Q_INVOKABLE bool datasetLED(const int group, const int dataset);
-    Q_INVOKABLE bool datasetGraph(const int group, const int dataset);
-    Q_INVOKABLE bool datasetFftPlot(const int group, const int dataset);
-    Q_INVOKABLE bool datasetLogPlot(const int group, const int dataset);
-    Q_INVOKABLE QString datasetTitle(const int group, const int dataset);
-    Q_INVOKABLE QString datasetUnits(const int group, const int dataset);
-    Q_INVOKABLE QString datasetWidget(const int group, const int dataset);
-    Q_INVOKABLE int datasetWidgetIndex(const int group, const int dataset);
-    Q_INVOKABLE QString datasetWidgetMin(const int group, const int dataset);
-    Q_INVOKABLE QString datasetWidgetMax(const int group, const int dataset);
-    Q_INVOKABLE QString datasetFFTSamples(const int group, const int dataset);
-    Q_INVOKABLE QString datasetWidgetAlarm(const int group, const int dataset);
+    Q_INVOKABLE QString groupTitle(const int group) const;
+    Q_INVOKABLE QString groupWidget(const int group) const;
+    Q_INVOKABLE int groupWidgetIndex(const int group) const;
+    Q_INVOKABLE int datasetIndex(const int group, const int dataset) const;
+    Q_INVOKABLE bool datasetLED(const int group, const int dataset) const;
+    Q_INVOKABLE bool datasetGraph(const int group, const int dataset) const;
+    Q_INVOKABLE bool datasetFftPlot(const int group, const int dataset) const;
+    Q_INVOKABLE bool datasetLogPlot(const int group, const int dataset) const;
+    Q_INVOKABLE QString datasetTitle(const int group, const int dataset) const;
+    Q_INVOKABLE QString datasetUnits(const int group, const int dataset) const;
+    Q_INVOKABLE QString datasetWidget(const int group, const int dataset) const;
+    Q_INVOKABLE int datasetWidgetIndex(const int group, const int dataset) const;
+    Q_INVOKABLE QString datasetWidgetMin(const int group, const int dataset) const;
+    Q_INVOKABLE QString datasetWidgetMax(const int group, const int dataset) const;
+    Q_INVOKABLE QString datasetFFTSamples(const int group, const int dataset) const;
+    Q_INVOKABLE QString datasetWidgetAlarm(const int group, const int dataset) const;
 
     Q_INVOKABLE bool setGroupWidget(const int group, const int widgetId);
 
@@ -149,6 +148,7 @@ public slots:
 
     void addDataset(const int group);
     void deleteDataset(const int group, const int dataset);
+    void setDatasetWidget(const int group, const int dataset, const int widgetId);
     void setDatasetTitle(const int group, const int dataset, const QString &title);
     void setDatasetUnits(const int group, const int dataset, const QString &units);
     void setDatasetIndex(const int group, const int dataset, const int frameIndex);
@@ -156,12 +156,16 @@ public slots:
     void setDatasetGraph(const int group, const int dataset, const bool generateGraph);
     void setDatasetFftPlot(const int group, const int dataset, const bool generateFft);
     void setDatasetLogPlot(const int group, const int dataset, const bool generateLog);
-    void setDatasetWidget(const int group, const int dataset, const int widgetId);
-    void setDatasetWidgetMin(const int group, const int dataset, const QString &minimum);
-    void setDatasetWidgetMax(const int group, const int dataset, const QString &maximum);
-    void setDatasetWidgetData(const int group, const int dataset, const QString &widget);
-    void setDatasetWidgetAlarm(const int group, const int dataset, const QString &alarm);
-    void setDatasetFFTSamples(const int group, const int dataset, const QString &samples);
+    void setDatasetWidgetMin(const int group, const int dataset,
+                             const QString &minimum);
+    void setDatasetWidgetMax(const int group, const int dataset,
+                             const QString &maximum);
+    void setDatasetWidgetData(const int group, const int dataset,
+                              const QString &widget);
+    void setDatasetWidgetAlarm(const int group, const int dataset,
+                               const QString &alarm);
+    void setDatasetFFTSamples(const int group, const int dataset,
+                              const QString &samples);
 
 private slots:
     void onJsonLoaded();

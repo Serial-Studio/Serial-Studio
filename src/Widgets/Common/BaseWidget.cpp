@@ -74,7 +74,8 @@ void BaseWidget::setValue(const QString &label)
     }
 }
 
-void BaseWidget::setWidget(QWidget *widget, Qt::Alignment alignment, bool autoresize)
+void BaseWidget::setWidget(QWidget *widget, const Qt::Alignment &alignment,
+                           const bool autoresize)
 {
     Q_ASSERT(widget != Q_NULLPTR);
 

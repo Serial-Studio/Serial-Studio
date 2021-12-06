@@ -116,7 +116,7 @@ void ThemeManager::loadTheme(const int id)
         return;
 
     // Read theme data into JSON
-    auto document = QJsonDocument::fromJson(file.readAll());
+    const auto document = QJsonDocument::fromJson(file.readAll());
     if (document.isEmpty())
         return;
 
@@ -227,11 +227,11 @@ void ThemeManager::populateThemes()
         QFile file(QString(":/themes/%1").arg(themeList.at(i)));
         if (file.open(QFile::ReadOnly))
         {
-            auto data = file.readAll();
+            const auto data = file.readAll();
             file.close();
 
-            auto document = QJsonDocument::fromJson(data);
-            auto name = document.object().value("name").toString();
+            const auto document = QJsonDocument::fromJson(data);
+            const auto name = document.object().value("name").toString();
             if (!name.isEmpty())
             {
                 m_availableThemes.append(name);

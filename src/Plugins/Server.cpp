@@ -228,8 +228,8 @@ void Server::sendProcessedData()
         // Construct QByteArray with data
         QJsonObject object;
         object.insert("frames", array);
-        QJsonDocument document(object);
-        auto json = document.toJson(QJsonDocument::Compact) + "\n";
+        const QJsonDocument document(object);
+        const auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
         // Send data to each plugin
         foreach (auto socket, m_sockets)

@@ -159,7 +159,7 @@ public slots:
     void setFinishSequence(const QString &sequence);
     void setSeparatorSequence(const QString &sequence);
     void setWatchdogInterval(const int interval = 15);
-    void setDataSource(const IO::Manager::DataSource source);
+    void setDataSource(const IO::Manager::DataSource &source);
 
 private slots:
     void readFrames();

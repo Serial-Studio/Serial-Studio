@@ -86,7 +86,7 @@ public slots:
     void nextFrame();
     void previousFrame();
     void openFile(const QString &filePath);
-    void setProgress(const qreal progress);
+    void setProgress(const qreal &progress);
 
 private slots:
     void updateData();
@@ -94,7 +94,7 @@ private slots:
 private:
     bool validateRow(const int row);
     QJsonDocument getJsonFrame(const int row);
-    QString getCellValue(int row, int column, bool *error = Q_NULLPTR);
+    QString getCellValue(const int row, const int column, bool &error);
     int getDatasetIndex(const QString &groupKey, const QString &datasetKey);
 
 private:

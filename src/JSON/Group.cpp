@@ -98,9 +98,9 @@ bool Group::read(const QJsonObject &object)
 {
     if (!object.isEmpty())
     {
-        auto title = JFI_Value(object, "title", "t").toString();
-        auto array = JFI_Value(object, "datasets", "d").toArray();
-        auto widget = JFI_Value(object, "widget", "w").toString();
+        const auto title = JFI_Value(object, "title", "t").toString();
+        const auto array = JFI_Value(object, "datasets", "d").toArray();
+        const auto widget = JFI_Value(object, "widget", "w").toString();
 
         if (!title.isEmpty() && !array.isEmpty())
         {
@@ -110,7 +110,7 @@ bool Group::read(const QJsonObject &object)
 
             for (auto i = 0; i < array.count(); ++i)
             {
-                auto object = array.at(i).toObject();
+                const auto object = array.at(i).toObject();
                 if (!object.isEmpty())
                 {
                     Dataset *dataset = new Dataset(this);

@@ -271,7 +271,7 @@ bool Editor::saveJsonFile()
 
             else
             {
-                auto ret = Misc::Utilities::showMessageBox(
+                const auto ret = Misc::Utilities::showMessageBox(
                     tr("Warning - Group %1, Dataset %2").arg(i + 1).arg(j + 1),
                     tr("Dataset contains duplicate frame index position! Continue?"),
                     APP_NAME, QMessageBox::Yes | QMessageBox::No);
@@ -285,8 +285,8 @@ bool Editor::saveJsonFile()
     // Get file save path
     if (jsonFilePath().isEmpty())
     {
-        auto path = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save JSON project"),
-                                                 jsonProjectsPath(), "*.json");
+        const auto path = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save JSON project"),
+                                                       jsonProjectsPath(), "*.json");
         if (path.isEmpty())
             return false;
 
@@ -372,7 +372,7 @@ int Editor::datasetCount(const int group) const
 /**
  * Returns a pointer to the group object positioned at the given @a index
  */
-JSON::Group *Editor::getGroup(const int index)
+JSON::Group *Editor::getGroup(const int index) const
 {
     if (index < groupCount())
         return m_groups.at(index);
@@ -384,7 +384,7 @@ JSON::Group *Editor::getGroup(const int index)
  * Returns a pointer to the dataset object contained by the @a group at
  * the given @a index
  */
-JSON::Dataset *Editor::getDataset(const int group, const int index)
+JSON::Dataset *Editor::getDataset(const int group, const int index) const
 {
     if (index < datasetCount(group))
         return getGroup(group)->m_datasets.at(index);
@@ -395,9 +395,9 @@ JSON::Dataset *Editor::getDataset(const int group, const int index)
 /**
  * Returns the title of the given @a group.
  */
-QString Editor::groupTitle(const int group)
+QString Editor::groupTitle(const int group) const
 {
-    auto grp = getGroup(group);
+    const auto grp = getGroup(group);
     if (grp)
         return grp->m_title;
 
@@ -407,9 +407,9 @@ QString Editor::groupTitle(const int group)
 /**
  * Returns the widget of the given @a group.
  */
-QString Editor::groupWidget(const int group)
+QString Editor::groupWidget(const int group) const
 {
-    auto grp = getGroup(group);
+    const auto grp = getGroup(group);
     if (grp)
         return grp->m_widget;
 
@@ -422,12 +422,12 @@ QString Editor::groupWidget(const int group)
  * and the order of the widgets returned by the @c availableGroupLevelWidgets()
  * function.
  */
-int Editor::groupWidgetIndex(const int group)
+int Editor::groupWidgetIndex(const int group) const
 {
-    auto grp = getGroup(group);
+    const auto grp = getGroup(group);
     if (grp)
     {
-        auto widget = grp->m_widget;
+        const auto widget = grp->m_widget;
 
         if (widget == "accelerometer")
             return 1;
@@ -452,9 +452,9 @@ int Editor::groupWidgetIndex(const int group)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-int Editor::datasetIndex(const int group, const int dataset)
+int Editor::datasetIndex(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return set->m_index;
 
@@ -468,9 +468,9 @@ int Editor::datasetIndex(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-bool Editor::datasetLED(const int group, const int dataset)
+bool Editor::datasetLED(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return set->led();
 
@@ -484,9 +484,9 @@ bool Editor::datasetLED(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-bool Editor::datasetGraph(const int group, const int dataset)
+bool Editor::datasetGraph(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return set->graph();
 
@@ -500,9 +500,9 @@ bool Editor::datasetGraph(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-bool Editor::datasetFftPlot(const int group, const int dataset)
+bool Editor::datasetFftPlot(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return set->fft();
 
@@ -517,9 +517,9 @@ bool Editor::datasetFftPlot(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-bool Editor::datasetLogPlot(const int group, const int dataset)
+bool Editor::datasetLogPlot(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return set->log();
 
@@ -532,9 +532,9 @@ bool Editor::datasetLogPlot(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Editor::datasetTitle(const int group, const int dataset)
+QString Editor::datasetTitle(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return set->title();
 
@@ -547,9 +547,9 @@ QString Editor::datasetTitle(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Editor::datasetUnits(const int group, const int dataset)
+QString Editor::datasetUnits(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return set->units();
 
@@ -562,9 +562,9 @@ QString Editor::datasetUnits(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Editor::datasetWidget(const int group, const int dataset)
+QString Editor::datasetWidget(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return set->widget();
 
@@ -579,9 +579,9 @@ QString Editor::datasetWidget(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-int Editor::datasetWidgetIndex(const int group, const int dataset)
+int Editor::datasetWidgetIndex(const int group, const int dataset) const
 {
-    auto widget = datasetWidget(group, dataset);
+    const auto widget = datasetWidget(group, dataset);
     if (widget == "gauge")
         return 1;
     if (widget == "bar")
@@ -599,9 +599,9 @@ int Editor::datasetWidgetIndex(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Editor::datasetWidgetMin(const int group, const int dataset)
+QString Editor::datasetWidgetMin(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return QString::number(set->m_min);
 
@@ -615,9 +615,9 @@ QString Editor::datasetWidgetMin(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Editor::datasetWidgetMax(const int group, const int dataset)
+QString Editor::datasetWidgetMax(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return QString::number(set->m_max);
 
@@ -630,9 +630,9 @@ QString Editor::datasetWidgetMax(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Editor::datasetFFTSamples(const int group, const int dataset)
+QString Editor::datasetFFTSamples(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
         return QString::number(qMax(1, set->m_fftSamples));
 
@@ -646,9 +646,9 @@ QString Editor::datasetFFTSamples(const int group, const int dataset)
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Editor::datasetWidgetAlarm(const int group, const int dataset)
+QString Editor::datasetWidgetAlarm(const int group, const int dataset) const
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
     {
         if (set->m_alarm <= set->min())
@@ -728,7 +728,7 @@ void Editor::openJsonFile(const QString &path)
         return;
 
     // Let the generator use the given JSON file
-    auto generator = Generator::getInstance();
+    const auto generator = Generator::getInstance();
     if (generator->jsonMapFilepath() != path)
         generator->loadJsonMap(path);
 
@@ -747,7 +747,7 @@ void Editor::openJsonFile(const QString &path)
     setFrameStartSequence(JFI_Value(json, "frameStart", "fs").toString());
 
     // Modify IO manager settings
-    auto manager = IO::Manager::getInstance();
+    const auto manager = IO::Manager::getInstance();
     manager->setSeparatorSequence(separator());
     manager->setFinishSequence(frameEndSequence());
     manager->setStartSequence(frameStartSequence());
@@ -760,7 +760,7 @@ void Editor::openJsonFile(const QString &path)
     for (int g = 0; g < groups.count(); ++g)
     {
         // Get JSON group data
-        auto group = groups.at(g).toObject();
+        const auto group = groups.at(g).toObject();
 
         // Register group with C++ model
         addGroup();
@@ -870,7 +870,7 @@ void Editor::addGroup()
  */
 void Editor::deleteGroup(const int group)
 {
-    auto grp = getGroup(group);
+    const auto grp = getGroup(group);
     if (grp)
     {
         auto ret = Misc::Utilities::showMessageBox(
@@ -1109,7 +1109,7 @@ void Editor::addDataset(const int group)
  */
 void Editor::deleteDataset(const int group, const int dataset)
 {
-    auto set = getDataset(group, dataset);
+    const auto set = getDataset(group, dataset);
     if (set)
     {
         auto ret = Misc::Utilities::showMessageBox(
@@ -1194,7 +1194,8 @@ void Editor::setDatasetLED(const int group, const int dataset, const bool genera
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-void Editor::setDatasetGraph(const int group, const int dataset, const bool generateGraph)
+void Editor::setDatasetGraph(const int group, const int dataset,
+                             const bool generateGraph)
 {
     auto set = getDataset(group, dataset);
     if (set)
@@ -1210,7 +1211,8 @@ void Editor::setDatasetGraph(const int group, const int dataset, const bool gene
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-void Editor::setDatasetFftPlot(const int group, const int dataset, const bool generateFft)
+void Editor::setDatasetFftPlot(const int group, const int dataset,
+                               const bool generateFft)
 {
     auto set = getDataset(group, dataset);
     if (set)
@@ -1226,7 +1228,8 @@ void Editor::setDatasetFftPlot(const int group, const int dataset, const bool ge
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-void Editor::setDatasetLogPlot(const int group, const int dataset, const bool generateLog)
+void Editor::setDatasetLogPlot(const int group, const int dataset,
+                               const bool generateLog)
 {
     auto set = getDataset(group, dataset);
     if (set)
@@ -1428,7 +1431,7 @@ int Editor::nextDatasetIndex()
     {
         for (int j = 0; j < datasetCount(i); ++j)
         {
-            auto dataset = getDataset(i, j);
+            const auto dataset = getDataset(i, j);
             if (dataset)
             {
                 if (dataset->m_index >= maxIndex)
