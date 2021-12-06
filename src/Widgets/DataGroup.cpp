@@ -191,8 +191,8 @@ void DataGroup::updateData()
         return;
 
     // Get group pointer
-    auto dash = UI::Dashboard::getInstance();
-    auto group = dash->getGroups(m_index);
+    const auto dash = UI::Dashboard::getInstance();
+    const auto group = dash->getGroups(m_index);
     if (!group)
         return;
 

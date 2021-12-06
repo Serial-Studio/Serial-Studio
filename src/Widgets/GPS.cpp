@@ -135,7 +135,7 @@ void GPS::updateData()
     qreal alt = -1;
     for (int i = 0; i < group->datasetCount(); ++i)
     {
-        auto dataset = group->getDataset(i);
+        const auto dataset = group->getDataset(i);
         if (dataset)
         {
             if (dataset->widget() == "lat")
@@ -151,9 +151,9 @@ void GPS::updateData()
     m_mapControl.setView(QPointF(lon, lat));
 
     // Update map title
-    auto latstr = QString::number(lat, 'f', dash->precision());
-    auto lonstr = QString::number(lon, 'f', dash->precision());
-    auto altstr = QString::number(alt, 'f', dash->precision());
+    const auto latstr = QString::number(lat, 'f', dash->precision());
+    const auto lonstr = QString::number(lon, 'f', dash->precision());
+    const auto altstr = QString::number(alt, 'f', dash->precision());
 
     // clang-format off
     m_label->setText(QString("<u>POS:</u><i> %1,%2</i>&nbsp;<u>ALT:</u><i> %3 m</i>")

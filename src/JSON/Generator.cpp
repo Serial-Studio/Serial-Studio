@@ -236,9 +236,9 @@ void Generator::readSettings()
  */
 void Generator::loadJFI(const JFI_Object &info)
 {
-    bool csvOpen = CSV::Player::getInstance()->isOpen();
-    bool devOpen = IO::Manager::getInstance()->connected();
-    bool mqttSub = MQTT::Client::getInstance()->isSubscribed();
+    const bool csvOpen = CSV::Player::getInstance()->isOpen();
+    const bool devOpen = IO::Manager::getInstance()->connected();
+    const bool mqttSub = MQTT::Client::getInstance()->isSubscribed();
 
     if (csvOpen || devOpen || mqttSub)
         emit jsonChanged(info);
@@ -420,7 +420,7 @@ void JSONWorker::process()
     QJsonDocument document;
 
     // Serial device sends JSON (auto mode)
-    auto generator = Generator::getInstance();
+    const auto generator = Generator::getInstance();
     if (generator->operationMode() == Generator::kAutomatic)
         document = QJsonDocument::fromJson(m_data, &error);
 

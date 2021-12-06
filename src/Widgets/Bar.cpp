@@ -108,7 +108,7 @@ void Bar::updateData()
         m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
         m_thermo.setScale(dataset->min(), dataset->max());
 #endif
-        auto value = dataset->value().toDouble();
+        const auto value = dataset->value().toDouble();
         m_thermo.setValue(value);
         setValue(QString("%1 %2").arg(
             QString::number(value, 'f', UI::Dashboard::getInstance()->precision()),

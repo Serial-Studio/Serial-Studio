@@ -77,7 +77,7 @@ MultiPlot::MultiPlot(const int index)
     {
         // Get dataset title & min/max values
         QString title = tr("Unknown");
-        auto dataset = group->getDataset(i);
+        const auto dataset = group->getDataset(i);
         if (dataset)
         {
             title = group->getDataset(i)->title();

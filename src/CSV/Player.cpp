@@ -555,8 +555,8 @@ QJsonDocument Player::getJsonFrame(const int row)
         return QJsonDocument();
 
     // Read CSV row & JSON template from JSON parser
-    auto values = m_csvData.at(row);
-    auto mapData = JSON::Generator::getInstance()->jsonMapData();
+    const auto values = m_csvData.at(row);
+    const auto mapData = JSON::Generator::getInstance()->jsonMapData();
     QJsonDocument jsonTemplate = QJsonDocument::fromJson(mapData.toUtf8());
 
     // Replace JSON title
@@ -577,7 +577,7 @@ QJsonDocument Player::getJsonFrame(const int row)
 
             if (JFI_Value(group, "title", "t") == groupKey)
             {
-                auto datasetKeys = m_model.value(groupKey);
+                const auto datasetKeys = m_model.value(groupKey);
                 auto datasets = JFI_Value(group, "datasets", "d").toArray();
                 foreach (auto datasetKey, datasetKeys)
                 {

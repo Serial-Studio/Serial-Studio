@@ -166,23 +166,23 @@ void Misc::ModuleManager::initializeQmlInterface()
 {
     // Initialize modules
     setSplashScreenMessage(tr("Initializing modules..."));
-    auto csvExport = CSV::Export::getInstance();
-    auto csvPlayer = CSV::Player::getInstance();
-    auto ioManager = IO::Manager::getInstance();
-    auto ioConsole = IO::Console::getInstance();
-    auto updater = QSimpleUpdater::getInstance();
-    auto jsonEditor = JSON::Editor::getInstance();
-    auto mqttClient = MQTT::Client::getInstance();
-    auto uiDashboard = UI::Dashboard::getInstance();
-    auto jsonGenerator = JSON::Generator::getInstance();
-    auto pluginsBridge = Plugins::Server::getInstance();
-    auto miscUtilities = Misc::Utilities::getInstance();
-    auto miscMacExtras = Misc::MacExtras::getInstance();
-    auto miscTranslator = Misc::Translator::getInstance();
-    auto ioSerial = IO::DataSources::Serial::getInstance();
-    auto miscTimerEvents = Misc::TimerEvents::getInstance();
-    auto ioNetwork = IO::DataSources::Network::getInstance();
-    auto miscThemeManager = Misc::ThemeManager::getInstance();
+    const auto csvExport = CSV::Export::getInstance();
+    const auto csvPlayer = CSV::Player::getInstance();
+    const auto ioManager = IO::Manager::getInstance();
+    const auto ioConsole = IO::Console::getInstance();
+    const auto updater = QSimpleUpdater::getInstance();
+    const auto jsonEditor = JSON::Editor::getInstance();
+    const auto mqttClient = MQTT::Client::getInstance();
+    const auto uiDashboard = UI::Dashboard::getInstance();
+    const auto jsonGenerator = JSON::Generator::getInstance();
+    const auto pluginsBridge = Plugins::Server::getInstance();
+    const auto miscUtilities = Misc::Utilities::getInstance();
+    const auto miscMacExtras = Misc::MacExtras::getInstance();
+    const auto miscTranslator = Misc::Translator::getInstance();
+    const auto ioSerial = IO::DataSources::Serial::getInstance();
+    const auto miscTimerEvents = Misc::TimerEvents::getInstance();
+    const auto ioNetwork = IO::DataSources::Network::getInstance();
+    const auto miscThemeManager = Misc::ThemeManager::getInstance();
 
     // Operating system flags
     bool isWin = false;
@@ -198,9 +198,9 @@ void Misc::ModuleManager::initializeQmlInterface()
 
     // Qt version QML flag
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    bool qt6 = false;
+    const bool qt6 = false;
 #else
-    bool qt6 = true;
+    const bool qt6 = true;
 #endif
 
     // Start common event timers

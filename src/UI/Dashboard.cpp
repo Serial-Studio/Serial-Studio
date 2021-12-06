@@ -673,20 +673,20 @@ void Dashboard::updateData()
     JFI_SortList(&m_jsonList);
 
     // Save widget count
-    int barC = barCount();
-    int fftC = fftCount();
-    int mapC = gpsCount();
-    int ledC = ledCount();
-    int plotC = plotCount();
-    int groupC = groupCount();
-    int gaugeC = gaugeCount();
-    int compassC = compassCount();
-    int gyroscopeC = gyroscopeCount();
-    int multiPlotC = multiPlotCount();
-    int accelerometerC = accelerometerCount();
+    const int barC = barCount();
+    const int fftC = fftCount();
+    const int mapC = gpsCount();
+    const int ledC = ledCount();
+    const int plotC = plotCount();
+    const int groupC = groupCount();
+    const int gaugeC = gaugeCount();
+    const int compassC = compassCount();
+    const int gyroscopeC = gyroscopeCount();
+    const int multiPlotC = multiPlotCount();
+    const int accelerometerC = accelerometerCount();
 
     // Save previous title
-    auto pTitle = title();
+    const auto pTitle = title();
 
     // Try to read latest frame for widget updating
     auto lastJson = m_jsonList.last();
@@ -820,7 +820,7 @@ void Dashboard::updatePlots()
         // Create list with datasets that need to be graphed
         for (int i = 0; i < frame.groupCount(); ++i)
         {
-            auto group = frame.groups().at(i);
+            const auto group = frame.groups().at(i);
             for (int j = 0; j < group->datasetCount(); ++j)
             {
                 auto dataset = group->datasets().at(j);
