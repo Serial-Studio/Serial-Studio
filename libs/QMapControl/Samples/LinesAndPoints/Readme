@@ -1,0 +1,16 @@
+/*!
+ * \example linesandpoints.cpp
+ * This application demonstrates how to use Geometry objects and how to add them to a layer.
+ * 
+ * Here are used three different point types:
+ *  - One which displays a image
+ *  - One which draws a plain circle
+ *  - One which uses a QPen to draw a circle
+ *  - One which has no markers
+ * Then these Points were added to a LineString
+ * 
+ * Also there is a keylistener.
+ * 
+ * You can find this example here: MapAPI/Samples/LinesAndPoints
+ * \image html sample_linesandpoints.png "screenshot"
+ */

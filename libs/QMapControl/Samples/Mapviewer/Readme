@@ -1,0 +1,9 @@
+/*!
+ * \example mapviewer.cpp
+ * This application is just a simple map viewer. A Mapadapter is created (OpenStreetmaps) 
+ * and added to a layer. The layer is given to the MapControl.
+ * Two Buttons are available to adjust the zoom level.
+ * 
+ * You can find this example here: MapAPI/Samples/Mapviewer
+ * \image html sample_mapviewer.png "screenshot"
+ */

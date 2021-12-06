@@ -1,0 +1,5 @@
+This demo appclication shows more features of the QMapControl. It shows images, which changes its size when changing the zoomlevel. You can display/hide layers and choose different map providers. Also it demonstrates more possibilities for user interaction:
+ 
+- notes can be added to any coordinate (a QTextEdit is used for editing the note)
+- the user can measure distances between two points
+

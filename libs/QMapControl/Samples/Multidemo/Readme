@@ -1,0 +1,15 @@
+/*!
+ * \example multidemo.cpp
+ * This is a bit complexer application, which lets you play around.
+ * There are the following buttons configured:
+ *  - Add Point: adds a Point to the coordinate you click (this point will be clickable)
+ *  - Drag Rect: lets to drag a rectangular into which will be zoomed in
+ *  - Move To Click: moves the view middle to the clicked coordinate
+ *  - GPS: starts a "pseudo" GPS receiver which emits new positions, these are connected to the ImagePoint
+ *  - Follow Geom: Follows the ImagePoint, when it moves because of new GPS positions
+ * 
+ * A overview map lefts you see where you are. You can even click on it to change your position.
+ * 
+ * You can find this example here: MapAPI/Samples/Multimap
+ * \image html sample_multidemo.png "screenshot"
+ */

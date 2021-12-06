@@ -1,0 +1,12 @@
+/*!
+ * \example gps.cpp
+ * This sample application uses GPS data from the gllin service, which you have to start manually before using this application.
+ * The file /tmp/nmeaNP is read in for the posiitons.
+ * 
+ * The application receives positions from the GPS_Neo class and writes it into a label.
+ * You can toggle a button to set the view to the received coordinate.
+ * 
+ * You can find this example here: MapAPI/Samples/GPS
+ * \image html sample_gps.png "screenshot"
+ * @see http://3rdparty.downloads.openmoko.org
+ */
