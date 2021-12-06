@@ -22,12 +22,13 @@
 
 #pragma once
 
+#include <QLabel>
 #include <QWidget>
+#include <QPushButton>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QElapsedTimer>
-#include <QNetworkAccessManager>
 
-#include "Common/ElidedLabel.h"
+#include <mapcontrol.h>
 
 class QNetworkReply;
 
@@ -42,41 +43,24 @@ public:
     ~GPS();
 
 private slots:
-    void openMap();
-    void queryCity();
     void updateData();
-    void processGeoResponse(QNetworkReply *reply);
 
 protected:
-    void leaveEvent(QEvent *event);
     void resizeEvent(QResizeEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    void enterEvent(QEvent *event);
-#else
-    void enterEvent(QEnterEvent *event);
-#endif
 
 private:
     int m_index;
     qreal m_lat;
     qreal m_lon;
     qreal m_alt;
-    QLabel m_mapLabel;
+    QLabel *m_label;
     QVBoxLayout m_layout;
-    ElidedLabel m_posLabel;
-    QWidget *m_dataContainer;
-    QGridLayout *m_gridLayout;
-    QVector<QLabel *> m_icons;
-    QVector<QLabel *> m_units;
-    QVector<QLabel *> m_titles;
-    QVector<QLabel *> m_values;
-
-    QElapsedTimer m_networkThrottle;
-    QNetworkAccessManager m_manager;
+    QPushButton *m_zoomIn;
+    QPushButton *m_zoomOut;
+    QWidget m_titleWidget;
+    QHBoxLayout m_titleLayout;
+    qmapcontrol::MapControl m_mapControl;
 };
 }

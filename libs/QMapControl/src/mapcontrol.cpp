@@ -259,10 +259,14 @@ namespace qmapcontrol
 
         if (crosshairsVisible)
         {
-            dbPainter.drawLine(screen_middle.x(), screen_middle.y()-10,
-                             screen_middle.x(), screen_middle.y()+10); // |
-            dbPainter.drawLine(screen_middle.x()-10, screen_middle.y(),
-                             screen_middle.x()+10, screen_middle.y()); // -
+            auto oldPen = dbPainter.pen();
+            dbPainter.setPen(QPen(QBrush(QColor(255, 0, 0)), 1));
+            dbPainter.drawLine(screen_middle.x(), screen_middle.y()-15,
+                             screen_middle.x(), screen_middle.y()+15); // |
+            dbPainter.drawLine(screen_middle.x()-15, screen_middle.y(),
+                             screen_middle.x()+15, screen_middle.y()); // -
+            dbPainter.drawEllipse(screen_middle.x() - 10, screen_middle.y() - 10, 20, 20);
+            dbPainter.setPen(oldPen);
         }
 
         dbPainter.drawRect(0,0, size.width(), size.height());
