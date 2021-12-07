@@ -28,7 +28,7 @@ Darüber hinaus kann dieser Ansatz auf nahezu jede Art von Projekt ausgedehnt we
 
 #### Bedarf
 
-Die einzige Voraussetzung zum Kompilieren der Anwendung ist, dass [Qt](http://www.qt.io/download-open-source/) auf Ihrem System installiert ist. Die Desktop-Anwendung wird mit **Qt 5.15** oder höher kompiliert.
+Die einzige Voraussetzung zum Kompilieren der Anwendung ist, dass [Qt](http://www.qt.io/download-open-source/) auf Ihrem System installiert ist. Die Desktop-Anwendung wird mit **Qt 5.15** kompiliert.
 
 Auf GNU / Linux-Systemen müssen Sie außerdem `libgl1-mesa-dev` installieren, um die Anwendung zu kompilieren.
 
