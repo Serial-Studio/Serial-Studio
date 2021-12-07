@@ -156,16 +156,11 @@ public slots:
     void setDatasetGraph(const int group, const int dataset, const bool generateGraph);
     void setDatasetFftPlot(const int group, const int dataset, const bool generateFft);
     void setDatasetLogPlot(const int group, const int dataset, const bool generateLog);
-    void setDatasetWidgetMin(const int group, const int dataset,
-                             const QString &minimum);
-    void setDatasetWidgetMax(const int group, const int dataset,
-                             const QString &maximum);
-    void setDatasetWidgetData(const int group, const int dataset,
-                              const QString &widget);
-    void setDatasetWidgetAlarm(const int group, const int dataset,
-                               const QString &alarm);
-    void setDatasetFFTSamples(const int group, const int dataset,
-                              const QString &samples);
+    void setDatasetWidgetMin(const int group, const int dataset, const QString &minimum);
+    void setDatasetWidgetMax(const int group, const int dataset, const QString &maximum);
+    void setDatasetWidgetData(const int group, const int dataset, const QString &widget);
+    void setDatasetWidgetAlarm(const int group, const int dataset, const QString &alarm);
+    void setDatasetFFTSamples(const int group, const int dataset, const QString &samples);
 
 private slots:
     void onJsonLoaded();

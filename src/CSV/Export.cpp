@@ -24,18 +24,14 @@
 
 #include <AppInfo.h>
 #include <IO/Manager.h>
-#include <JSON/Generator.h>
-#include <JSON/FrameInfo.h>
+#include <UI/Dashboard.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 
 #include <QDir>
 #include <QUrl>
-#include <QProcess>
 #include <QFileInfo>
-#include <QMessageBox>
 #include <QApplication>
-#include <QJsonDocument>
 #include <QDesktopServices>
 
 namespace CSV
@@ -50,11 +46,10 @@ Export::Export()
     : m_exportEnabled(true)
 {
     const auto io = IO::Manager::getInstance();
-    const auto ge = JSON::Generator::getInstance();
     const auto te = Misc::TimerEvents::getInstance();
     connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
+    connect(io, &IO::Manager::frameReceived, this, &Export::registerFrame);
     connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &Export::writeValues);
-    connect(ge, &JSON::Generator::jsonChanged, this, &Export::registerFrame);
 }
 
 /**
@@ -114,7 +109,7 @@ void Export::setExportEnabled(const bool enabled)
 
     if (!exportEnabled() && isOpen())
     {
-        m_jsonList.clear();
+        m_frames.clear();
         closeFile();
     }
 }
@@ -126,7 +121,7 @@ void Export::closeFile()
 {
     if (isOpen())
     {
-        while (m_jsonList.count())
+        while (m_frames.count())
             writeValues();
 
         m_csvFile.close();
@@ -142,155 +137,118 @@ void Export::closeFile()
  */
 void Export::writeValues()
 {
-    // Sort JSON frames so that they are ordered from least-recent to most-recent
-    JFI_SortList(&m_jsonList);
+    // Get separator sequence
+    const auto sep = IO::Manager::getInstance()->separatorSequence();
 
-    // Export JSON frames
-    for (int k = 0; k < m_jsonList.count(); ++k)
+    // Write each frame
+    for (int i = 0; i < m_frames.count(); ++i)
     {
-        // k is unused, since we are removing each JSON structure
-        // as we are exporting the file
-        (void)k;
-
-        // Get project title & cell values
-        auto dateTime = m_jsonList.first().rxDateTime;
-        auto json = m_jsonList.first().jsonDocument.object();
-        auto projectTitle = JFI_Value(json, "title", "t").toString();
-
-        // Validate JSON & title
-        if (json.isEmpty() || projectTitle.isEmpty())
-        {
-            m_jsonList.removeFirst();
-            break;
-        }
-
-        // Get cell titles & values
-        StringList titles;
-        StringList values;
-        auto groups = JFI_Value(json, "groups", "g").toArray();
-        for (int i = 0; i < groups.count(); ++i)
-        {
-            // Get group & dataset array
-            auto group = groups.at(i).toObject();
-            auto datasets = JFI_Value(group, "datasets", "d").toArray();
-            if (group.isEmpty() || datasets.isEmpty())
-                continue;
-
-            // Get group title
-            auto groupTitle = JFI_Value(group, "title", "t").toVariant().toString();
-
-            // Get dataset titles & values
-            for (int j = 0; j < datasets.count(); ++j)
-            {
-                // Get dataset object & fields
-                auto dataset = datasets.at(j).toObject();
-                auto datasetTitle = JFI_Value(dataset, "title", "t").toString();
-                auto datasetUnits = JFI_Value(dataset, "units", "u").toString();
-                auto datasetValue = JFI_Value(dataset, "value", "v").toString();
-
-                // Construct dataset title from group, dataset title & units
-                QString title;
-                if (datasetUnits.isEmpty())
-                    title = QString("(%1) %2").arg(groupTitle, datasetTitle);
-                else
-                    title = QString("(%1) %2 [%3]")
-                                .arg(groupTitle, datasetTitle, datasetUnits);
-
-                // Add dataset title & value to lists
-                titles.append(title);
-                values.append(datasetValue);
-            }
-        }
-
-        // Abort if cell titles are empty
-        if (titles.isEmpty())
-        {
-            m_jsonList.removeFirst();
-            break;
-        }
-
-        // Prepend current time
-        titles.prepend("RX Date/Time");
-        values.prepend(dateTime.toString("yyyy/MM/dd/ HH:mm:ss::zzz"));
+        auto frame = m_frames.at(i);
+        auto fields = QString::fromUtf8(frame.data).split(sep);
 
         // File not open, create it & add cell titles
         if (!isOpen() && exportEnabled())
+            createCsvFile(frame);
+
+        // Write RX date/time
+        m_textStream << frame.rxDateTime.toString("yyyy/MM/dd/ HH:mm:ss::zzz") << ",";
+
+        // Write frame data
+        for (int j = 0; j < fields.count(); ++j)
         {
-            // Get file name and path
-            const QString format = dateTime.toString("yyyy/MMM/dd/");
-            const QString fileName = dateTime.toString("HH-mm-ss") + ".csv";
-            const QString path = QString("%1/Documents/%2/CSV/%3/%4")
-                                     .arg(QDir::homePath(), qApp->applicationName(),
-                                          projectTitle, format);
-
-            // Generate file path if required
-            QDir dir(path);
-            if (!dir.exists())
-                dir.mkpath(".");
-
-            // Open file
-            m_csvFile.setFileName(dir.filePath(fileName));
-            if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                QMessageBox::critical(Q_NULLPTR, tr("CSV File Error"),
-                                      tr("Cannot open CSV file for writing!"),
-                                      QMessageBox::Ok);
-                closeFile();
-                return;
-            }
-
-            // Add cell titles & force UTF-8 codec
-            m_textStream.setDevice(&m_csvFile);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            m_textStream.setCodec("UTF-8");
-#else
-            m_textStream.setEncoding(QStringConverter::Utf8);
-#endif
-            m_textStream.setGenerateByteOrderMark(true);
-            for (int i = 0; i < titles.count(); ++i)
-            {
-                m_textStream << titles.at(i).toUtf8();
-                if (i < titles.count() - 1)
-                    m_textStream << ",";
-                else
-                    m_textStream << "\n";
-            }
-
-            // Update UI
-            emit openChanged();
-        }
-
-        // Write cell values
-        for (int i = 0; i < values.count(); ++i)
-        {
-            m_textStream << values.at(i).toUtf8();
-            if (i < values.count() - 1)
+            m_textStream << fields.at(j);
+            if (j < fields.count() - 1)
                 m_textStream << ",";
             else
                 m_textStream << "\n";
         }
-
-        // Remove JSON from list
-        m_jsonList.removeFirst();
     }
+
+    // Clear frames
+    m_frames.clear();
 }
 
 /**
- * Obtains the latest JSON dataframe & appends it to the JSON list, which is later read,
- * sorted and written to the CSV file by the @c writeValues() function.
+ * Creates a new CSV file corresponding to the current project title & field count
  */
-void Export::registerFrame(const JFI_Object &info)
+void Export::createCsvFile(const RawFrame &frame)
+{
+    // Get project title
+    const auto projectTitle = UI::Dashboard::getInstance()->title();
+
+    // Get file name
+    const QString fileName = frame.rxDateTime.toString("HH-mm-ss") + ".csv";
+
+    // Get path
+    // clang-format off
+    const QString format = frame.rxDateTime.toString("yyyy/MMM/dd/");
+    const QString path = QString("%1/Documents/%2/CSV/%3/%4").arg(QDir::homePath(),
+                                                                  qApp->applicationName(),
+                                                                  projectTitle, format);
+    // clang-format on
+
+    // Generate file path if required
+    QDir dir(path);
+    if (!dir.exists())
+        dir.mkpath(".");
+
+    // Open file
+    m_csvFile.setFileName(dir.filePath(fileName));
+    if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        Misc::Utilities::showMessageBox(tr("CSV File Error"),
+                                        tr("Cannot open CSV file for writing!"));
+        closeFile();
+        return;
+    }
+
+    // Add cell titles & force UTF-8 codec
+    m_textStream.setDevice(&m_csvFile);
+    m_textStream.setGenerateByteOrderMark(true);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    m_textStream.setCodec("UTF-8");
+#else
+    m_textStream.setEncoding(QStringConverter::Utf8);
+#endif
+
+    // Get number of fields
+    const auto sep = IO::Manager::getInstance()->separatorSequence();
+    const auto fields = QString::fromUtf8(frame.data).split(sep);
+
+    // Add table titles
+    m_textStream << "RX Date/Time,";
+    for (int j = 0; j < fields.count(); ++j)
+    {
+        m_textStream << "Field " << j + 1;
+
+        if (j < fields.count() - 1)
+            m_textStream << ",";
+        else
+            m_textStream << "\n";
+    }
+
+    // Update UI
+    emit openChanged();
+}
+
+/**
+ * Appends the latest data from the device to the output buffer
+ */
+void Export::registerFrame(const QByteArray &data)
 {
     // Ignore if device is not connected (we don't want to generate a CSV file when we
     // are reading another CSV file don't we?)
     if (!IO::Manager::getInstance()->connected())
         return;
 
-    // Ignore is CSV export is disabled
+    // Ignore if CSV export is disabled
     if (!exportEnabled())
         return;
 
-    // Update JSON list
-    m_jsonList.append(info);
+    // Register raw frame to list
+    RawFrame frame;
+    frame.data = data;
+    frame.rxDateTime = QDateTime::currentDateTime();
+    m_frames.append(frame);
 }
 }

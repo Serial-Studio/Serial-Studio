@@ -1035,8 +1035,7 @@ bool Dashboard::getVisibility(const QVector<bool> &vector, const int index) cons
  * vector. Calling this function with @a visible set to @c false will hide the widget in
  * the QML user interface.
  */
-void Dashboard::setVisibility(QVector<bool> &vector, const int index,
-                              const bool visible)
+void Dashboard::setVisibility(QVector<bool> &vector, const int index, const bool visible)
 {
     if (index < vector.count())
     {

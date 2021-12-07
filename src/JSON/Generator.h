@@ -146,8 +146,7 @@ public slots:
 private slots:
     void reset();
     void readData(const QByteArray &data);
-    void processFrame(const QByteArray &data, const quint64 frame,
-                      const QDateTime &time);
+    void processFrame(const QByteArray &data, const quint64 frame, const QDateTime &time);
 
 private:
     QFile m_jsonMap;

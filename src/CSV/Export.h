@@ -27,14 +27,13 @@
 #include <QVariant>
 #include <QTextStream>
 #include <QJsonObject>
-#include <JSON/FrameInfo.h>
 
 namespace CSV
 {
 /**
  * @brief The Export class
  *
- * The CSV export class receives data from the @c JSON::Generator class and
+ * The CSV export class receives data from the @c IO::Manager class and
  * exports the received frames into a CSV file selected by the user.
  *
  * CSV-data is generated periodically each time the @c Misc::TimerEvents
@@ -42,6 +41,12 @@ namespace CSV
  * is to allow exporting data, but avoid freezing the application when serial
  * data is received continuously.
  */
+typedef struct
+{
+    QByteArray data;
+    QDateTime rxDateTime;
+} RawFrame;
+
 class Export : public QObject
 {
     // clang-format off
@@ -76,12 +81,13 @@ public slots:
 
 private slots:
     void writeValues();
-    void registerFrame(const JFI_Object &info);
+    void createCsvFile(const RawFrame &frame);
+    void registerFrame(const QByteArray &data);
 
 private:
     QFile m_csvFile;
     bool m_exportEnabled;
     QTextStream m_textStream;
-    QVector<JFI_Object> m_jsonList;
+    QVector<RawFrame> m_frames;
 };
 }

@@ -22,12 +22,10 @@
 
 #pragma once
 
-#include <QMap>
-#include <QSet>
 #include <QFile>
 #include <QTimer>
 #include <QObject>
-#include <QJsonDocument>
+#include <QVector>
 
 namespace CSV
 {
@@ -35,9 +33,7 @@ namespace CSV
  * @brief The Player class
  *
  * The CSV player class allows users to select a CSV file and "re-play" it
- * with Serial Studio. To do this, the user must specify an appropiate JSON
- * project file to generate the equivalent frames that where received when
- * the CSV file was generated.
+ * with Serial Studio.
  */
 class Player : public QObject
 {
@@ -93,9 +89,8 @@ private slots:
 
 private:
     bool validateRow(const int row);
-    QJsonDocument getJsonFrame(const int row);
+    QByteArray getFrame(const int row);
     QString getCellValue(const int row, const int column, bool &error);
-    int getDatasetIndex(const QString &groupKey, const QString &datasetKey);
 
 private:
     int m_framePos;
@@ -104,7 +99,5 @@ private:
     QTimer m_frameTimer;
     QString m_timestamp;
     QVector<QVector<QString>> m_csvData;
-    QMap<QString, QSet<QString>> m_model;
-    QMap<QString, QMap<QString, int>> m_datasetIndexes;
 };
 }

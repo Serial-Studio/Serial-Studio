@@ -29,14 +29,8 @@
 #include <qtcsv/stringdata.h>
 #include <qtcsv/reader.h>
 
-#include <QJsonValue>
-#include <QJsonArray>
-#include <QJsonObject>
-
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
-#include <JSON/Generator.h>
-#include <JSON/FrameInfo.h>
 
 namespace CSV
 {
@@ -136,8 +130,10 @@ QString Player::timestamp() const
 QString Player::csvFilesPath() const
 {
     // Get file name and path
-    QString path
-        = QString("%1/Documents/%2/CSV/").arg(QDir::homePath(), qApp->applicationName());
+    // clang-format off
+    QString path = QString("%1/Documents/%2/CSV/").arg(QDir::homePath(),
+                                                       qApp->applicationName());
+    // clang-format on
 
     // Generate file path if required
     QDir dir(path);
@@ -204,11 +200,9 @@ void Player::openFile()
 void Player::closeFile()
 {
     m_framePos = 0;
-    m_model.clear();
     m_csvFile.close();
     m_csvData.clear();
     m_playing = false;
-    m_datasetIndexes.clear();
     m_timestamp = "--.--";
 
     emit openChanged();
@@ -247,18 +241,6 @@ void Player::previousFrame()
  */
 void Player::openFile(const QString &filePath)
 {
-    // Check that manual JSON mode is activaded
-    const auto opMode = JSON::Generator::getInstance()->operationMode();
-    const auto jsonOpen = !JSON::Generator::getInstance()->jsonMapData().isEmpty();
-    if (opMode != JSON::Generator::kManual || !jsonOpen)
-    {
-        Misc::Utilities::showMessageBox(
-            tr("Invalid configuration for CSV player"),
-            tr("You need to select a JSON map file in order to use "
-               "this feature"));
-        return;
-    }
-
     // File name empty, abort
     if (filePath.isEmpty())
         return;
@@ -392,11 +374,8 @@ void Player::updateData()
         emit timestampChanged();
     }
 
-    // Construct JSON from CSV & instruct the parser to use this document as
-    // input source for the QML bridge
-    auto json = getJsonFrame(framePosition() + 1);
-    if (!json.isEmpty())
-        JSON::Generator::getInstance()->loadJSON(json);
+    // Construct frame from CSV and send it to the IO manager
+    IO::Manager::getInstance()->processPayload(getFrame(framePosition() + 1));
 
     // If the user wants to 'play' the CSV, get time difference between this
     // frame and the next frame & schedule an automated update
@@ -416,8 +395,13 @@ void Player::updateData()
                 const auto currDateTime = QDateTime::fromString(currTime, format);
                 const auto nextDateTime = QDateTime::fromString(nextTime, format);
                 const auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
-                QTimer::singleShot(msecsToNextF, Qt::PreciseTimer, this,
+
+                // clang-format off
+                QTimer::singleShot(msecsToNextF,
+                                   Qt::PreciseTimer,
+                                   this,
                                    SLOT(nextFrame()));
+                // clang-format on
             }
 
             // Error - pause playback
@@ -473,149 +457,29 @@ bool Player::validateRow(const int position)
 }
 
 /**
- * Generates a JSON data frame by combining the values of the current CSV
- * row & the structure of the JSON map file loaded in the @c JsonParser class.
- *
- * The details of how this is done are a bit fuzzy, and the methods used here
- * are pretty ugly & unorthodox, but they work. Brutality works.
+ * Generates a frame from the data at the given @a row. The first item of each row is
+ * ignored because it contains the RX date/time, which is used to regulate the interval
+ * at which the frames are parsed.
  */
-QJsonDocument Player::getJsonFrame(const int row)
+QByteArray Player::getFrame(const int row)
 {
-    // Create the group/dataset model only one time
-    if (m_model.isEmpty())
+    QByteArray frame;
+    const auto sep = IO::Manager::getInstance()->separatorSequence();
+
+    if (m_csvData.count() > row)
     {
-        auto titles = m_csvData.at(0);
-        for (int i = 1; i < titles.count(); ++i)
+        auto list = m_csvData.at(row);
+        for (int i = 1; i < list.count(); ++i)
         {
-            // Construct group string
-            QString group;
-            const auto title = titles.at(i);
-            const auto glist = title.split(")");
-            for (int j = 0; j < glist.count() - 1; ++j)
-                group.append(glist.at(j));
-
-            // Remove the '(' from group name
-            if (!group.isEmpty())
-                group.remove(0, 1);
-
-            // Get dataset name & remove units
-            QString dataset = glist.last();
-            if (dataset.endsWith("]"))
-            {
-                while (!dataset.endsWith("["))
-                    dataset.chop(1);
-            }
-
-            // Remove extra spaces from dataset
-            while (dataset.startsWith(" "))
-                dataset.remove(0, 1);
-            while (dataset.endsWith(" ") || dataset.endsWith("["))
-                dataset.chop(1);
-
-            // Register group with dataset map
-            if (!m_model.contains(group))
-            {
-                QSet<QString> set;
-                set.insert(dataset);
-                m_model.insert(group, set);
-            }
-
-            // Update existing group/dataset model
-            else if (!m_model.value(group).contains(dataset))
-            {
-                auto set = m_model.value(group);
-                if (!set.contains(dataset))
-                    set.insert(dataset);
-
-                m_model.remove(group);
-                m_model.insert(group, set);
-            }
-
-            // Register dataset index with group key
-            if (!m_datasetIndexes.contains(group))
-            {
-                QMap<QString, int> map;
-                map.insert(dataset, i);
-                m_datasetIndexes.insert(group, map);
-            }
-
-            // Register dataset index with existing group key
+            frame.append(list.at(i).toUtf8());
+            if (i < list.count() - 1)
+                frame.append(sep.toUtf8());
             else
-            {
-                auto map = m_datasetIndexes.value(group);
-                map.insert(dataset, i);
-                m_datasetIndexes.remove(group);
-                m_datasetIndexes.insert(group, map);
-            }
+                frame.append('\n');
         }
     }
 
-    // Check that row is valid
-    if (m_csvData.count() <= row)
-        return QJsonDocument();
-
-    // Read CSV row & JSON template from JSON parser
-    const auto values = m_csvData.at(row);
-    const auto mapData = JSON::Generator::getInstance()->jsonMapData();
-    const QJsonDocument jsonTemplate = QJsonDocument::fromJson(mapData.toUtf8());
-
-    // Replace JSON title
-    auto json = jsonTemplate.object();
-    if (json.contains("t"))
-        json["t"] = tr("Replay of %1").arg(filename());
-    else
-        json["title"] = tr("Replay of %1").arg(filename());
-
-    // Replace values in JSON  with values in row using the model.
-    // This is very ugly code, somebody please fix it :(
-    auto groups = JFI_Value(json, "groups", "g").toArray();
-    foreach (auto groupKey, m_model.keys())
-    {
-        for (int i = 0; i < groups.count(); ++i)
-        {
-            auto group = groups.at(i).toObject();
-
-            if (JFI_Value(group, "title", "t") == groupKey)
-            {
-                const auto datasetKeys = m_model.value(groupKey);
-                auto datasets = JFI_Value(group, "datasets", "d").toArray();
-                foreach (auto datasetKey, datasetKeys)
-                {
-                    for (int j = 0; j < datasets.count(); ++j)
-                    {
-                        auto dataset = datasets.at(j).toObject();
-                        if (JFI_Value(dataset, "title", "t") == datasetKey)
-                        {
-                            auto index = getDatasetIndex(groupKey, datasetKey);
-                            if (values.count() > index)
-                            {
-                                const auto value = values.at(index);
-                                dataset.remove("v");
-                                dataset.remove("value");
-                                dataset.insert("value", value);
-                            }
-                        }
-
-                        datasets.replace(j, dataset);
-                    }
-                }
-
-                group.remove("d");
-                group.remove("datasets");
-                group.insert("datasets", datasets);
-            }
-
-            groups.replace(i, group);
-        }
-    }
-
-    // Update groups from JSON
-    json.remove("g");
-    json.remove("groups");
-    json.insert("groups", groups);
-
-    // Return new JSON document
-    return QJsonDocument(json);
+    return frame;
 }
 
 /**
@@ -637,21 +501,5 @@ QString Player::getCellValue(const int row, const int column, bool &error)
 
     error = true;
     return "";
-}
-
-/**
- * Returns the column/index for the dataset key that belongs to the given
- * group key.
- */
-int Player::getDatasetIndex(const QString &groupKey, const QString &datasetKey)
-{
-    if (m_datasetIndexes.contains(groupKey))
-    {
-        auto map = m_datasetIndexes.value(groupKey);
-        if (map.contains(datasetKey))
-            return map.value(datasetKey);
-    }
-
-    return 0;
 }
 }

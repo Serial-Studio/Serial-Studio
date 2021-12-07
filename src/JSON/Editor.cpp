@@ -1194,8 +1194,7 @@ void Editor::setDatasetLED(const int group, const int dataset, const bool genera
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-void Editor::setDatasetGraph(const int group, const int dataset,
-                             const bool generateGraph)
+void Editor::setDatasetGraph(const int group, const int dataset, const bool generateGraph)
 {
     auto set = getDataset(group, dataset);
     if (set)
@@ -1211,8 +1210,7 @@ void Editor::setDatasetGraph(const int group, const int dataset,
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-void Editor::setDatasetFftPlot(const int group, const int dataset,
-                               const bool generateFft)
+void Editor::setDatasetFftPlot(const int group, const int dataset, const bool generateFft)
 {
     auto set = getDataset(group, dataset);
     if (set)
@@ -1228,8 +1226,7 @@ void Editor::setDatasetFftPlot(const int group, const int dataset,
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-void Editor::setDatasetLogPlot(const int group, const int dataset,
-                               const bool generateLog)
+void Editor::setDatasetLogPlot(const int group, const int dataset, const bool generateLog)
 {
     auto set = getDataset(group, dataset);
     if (set)

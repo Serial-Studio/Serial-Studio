@@ -289,10 +289,6 @@ void Generator::reset()
  */
 void Generator::readData(const QByteArray &data)
 {
-    // CSV-replay active, abort
-    if (CSV::Player::getInstance()->isOpen())
-        return;
-
     // Data empty, abort
     if (data.isEmpty())
         return;
@@ -402,8 +398,7 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
  * Constructor function, stores received frame data & the date/time that the frame data
  * was received.
  */
-JSONWorker::JSONWorker(const QByteArray &data, const quint64 frame,
-                       const QDateTime &time)
+JSONWorker::JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time)
     : m_time(time)
     , m_data(data)
     , m_frame(frame)
