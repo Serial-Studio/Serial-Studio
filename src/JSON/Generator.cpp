@@ -299,10 +299,14 @@ void Generator::readData(const QByteArray &data)
     // Create new worker thread to read JSON data
     if (processFramesInSeparateThread())
     {
+        // clang-format off
         QThread *thread = new QThread;
-        JSONWorker *worker
-            = new JSONWorker(data, m_frameCount, QDateTime::currentDateTime());
+        JSONWorker *worker = new JSONWorker(data,
+                                            m_frameCount,
+                                            QDateTime::currentDateTime());
         worker->moveToThread(thread);
+        // clang-format on
+
         connect(thread, SIGNAL(started()), worker, SLOT(process()));
         connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
         connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
