@@ -47,7 +47,8 @@ Server::Server()
     const auto ge = JSON::Generator::getInstance();
     const auto te = Misc::TimerEvents::getInstance();
     connect(ge, &JSON::Generator::jsonChanged, this, &Server::registerFrame);
-    connect(te, &Misc::TimerEvents::highFreqTimeout, this, &Server::sendProcessedData);
+    connect(te, &Misc::TimerEvents::highFreqTimeout, this, &Server::sendProcessedData,
+            Qt::QueuedConnection);
 
     // Send I/O "raw" data directly
     const auto io = IO::Manager::getInstance();

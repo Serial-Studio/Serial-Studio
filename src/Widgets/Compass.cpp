@@ -70,7 +70,7 @@ Compass::Compass(const int index)
     setWidget(&m_compass);
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(update()));
+    connect(dash, SIGNAL(updated()), this, SLOT(update()), Qt::QueuedConnection);
 }
 
 /**

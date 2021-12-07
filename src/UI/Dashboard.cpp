@@ -48,10 +48,13 @@ Dashboard::Dashboard()
     const auto io = IO::Manager::getInstance();
     const auto ge = JSON::Generator::getInstance();
     const auto te = Misc::TimerEvents::getInstance();
-    connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()));
-    connect(te, SIGNAL(highFreqTimeout()), this, SLOT(updateData()));
-    connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()));
-    connect(ge, SIGNAL(jsonFileMapChanged()), this, SLOT(resetData()));
+    connect(cp, SIGNAL(openChanged()), this, SLOT(resetData()), Qt::QueuedConnection);
+    connect(te, SIGNAL(highFreqTimeout()), this, SLOT(updateData()),
+            Qt::QueuedConnection);
+    connect(io, SIGNAL(connectedChanged()), this, SLOT(resetData()),
+            Qt::QueuedConnection);
+    connect(ge, SIGNAL(jsonFileMapChanged()), this, SLOT(resetData()),
+            Qt::QueuedConnection);
     connect(ge, &JSON::Generator::jsonChanged, this, &Dashboard::processLatestJSON);
 }
 

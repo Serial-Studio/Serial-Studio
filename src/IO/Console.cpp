@@ -98,9 +98,10 @@ Console::Console()
     // Read received data automatically
     const auto dm = Manager::getInstance();
     const auto te = Misc::TimerEvents::getInstance();
-    connect(te, SIGNAL(highFreqTimeout()), this, SLOT(displayData()));
     connect(dm, &Manager::dataSent, this, &Console::onDataSent);
     connect(dm, &Manager::dataReceived, this, &Console::onDataReceived);
+    connect(te, SIGNAL(highFreqTimeout()), this, SLOT(displayData()),
+            Qt::QueuedConnection);
 }
 
 /**

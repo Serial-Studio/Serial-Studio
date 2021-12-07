@@ -102,7 +102,7 @@ GPS::GPS(const int index)
     setLayout(&m_layout);
 
     // React to Qt signals
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
 }
 
 /**

@@ -71,7 +71,7 @@ Accelerometer::Accelerometer(const int index)
     setWidget(&m_gauge);
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
 }
 
 /**

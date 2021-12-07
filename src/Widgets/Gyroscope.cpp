@@ -59,7 +59,7 @@ Gyroscope::Gyroscope(const int index)
     m_timer.start();
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
 }
 
 /**

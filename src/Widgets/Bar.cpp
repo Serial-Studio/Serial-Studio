@@ -82,8 +82,8 @@ Bar::Bar(const int index)
     setWidget(&m_thermo, Qt::AlignHCenter, false);
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
-    connect(this, SIGNAL(resized()), this, SLOT(onResized()));
+    connect(this, SIGNAL(resized()), this, SLOT(onResized()), Qt::QueuedConnection);
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
 }
 
 /**

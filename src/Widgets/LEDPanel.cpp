@@ -125,7 +125,7 @@ LEDPanel::LEDPanel(const int index)
     setLayout(m_mainLayout);
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()));
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
 }
 
 /**
