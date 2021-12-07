@@ -354,6 +354,7 @@ void MapControl::mouseMoveEvent(QMouseEvent *evnt)
 
 void MapControl::wheelEvent(QWheelEvent *evnt)
 {
+    (void) evnt;
     /*if(mouse_wheel_events && evnt->angleDelta() )
     {
         if(evnt->delta() > 0)
