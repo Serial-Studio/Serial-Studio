@@ -47,35 +47,28 @@ namespace UI
 WidgetLoader::WidgetLoader(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_index(-1)
-    , m_widget(Q_NULLPTR)
+    , m_widget(nullptr)
     , m_widgetVisible(false)
+    , m_isExternalWindow(false)
 {
     // Set render flags
     setAntialiasing(true);
     setOpaquePainting(true);
-    setImplicitSize(100, 100);
+    setRenderTarget(FramebufferObject);
     setPerformanceHints(FastFBOResizing);
     setAcceptedMouseButtons(Qt::AllButtons);
 
-    // Configure external window
-    m_window.setMinimumWidth(640);
-    m_window.setMinimumHeight(480);
-
-    // Set window palette
-    QPalette palette;
-    const auto theme = Misc::ThemeManager::getInstance();
-    palette.setColor(QPalette::Base, theme->widgetWindowBackground());
-    palette.setColor(QPalette::Window, theme->widgetWindowBackground());
-    m_window.setPalette(palette);
+    // Set item flags
+    setFlag(ItemHasContents, true);
+    setFlag(ItemIsFocusScope, true);
+    setFlag(ItemAcceptsInputMethod, true);
+    setAcceptedMouseButtons(Qt::AllButtons);
 
     // Resize widget to fit QML item size
     connect(this, &QQuickPaintedItem::widthChanged, this,
             &WidgetLoader::updateWidgetSize);
     connect(this, &QQuickPaintedItem::heightChanged, this,
             &WidgetLoader::updateWidgetSize);
-
-    // Enable/disable the external window widget automatically
-    connect(&m_window, SIGNAL(visibleChanged()), this, SLOT(updateExternalWindow()));
 
     // Automatically update the widget's visibility
     connect(Dashboard::getInstance(), &Dashboard::widgetVisibilityChanged, this,
@@ -96,9 +89,11 @@ WidgetLoader::~WidgetLoader()
  */
 bool WidgetLoader::event(QEvent *event)
 {
+    // Check that widget exists
     if (!m_widget)
         return false;
 
+    // Process focus, wheel & mouse click/release events
     switch (event->type())
     {
         case QEvent::FocusIn:
@@ -120,6 +115,10 @@ bool WidgetLoader::event(QEvent *event)
             break;
     }
 
+    //
+    // Note: mouse enter/leave events must be processed directly with
+    //       the help of a QML MouseArea
+    //
     return QApplication::sendEvent(m_widget, event);
 }
 
@@ -206,20 +205,23 @@ QString WidgetLoader::widgetTitle() const
 }
 
 /**
+ * If set to @c true, then the widget visibility shall be controlled
+ * directly by the QML interface.
+ *
+ * If set to @c false, then the widget visbility shall be controlled
+ * by the UI::Dashboard class via the SIGNAL/SLOT system.
+ */
+bool WidgetLoader::isExternalWindow() const
+{
+    return m_isExternalWindow;
+}
+
+/**
  * Returns the type of the current widget (e.g. group, plot, bar, gauge, etc...)
  */
 UI::Dashboard::WidgetType WidgetLoader::widgetType() const
 {
     return UI::Dashboard::getInstance()->widgetType(widgetIndex());
-}
-
-/**
- * Displays the external window
- */
-void WidgetLoader::showExternalWindow()
-{
-    if (m_window.centralWidget())
-        m_window.showNormal();
 }
 
 /**
@@ -245,7 +247,7 @@ void WidgetLoader::setWidgetIndex(const int index)
         if (m_widget)
         {
             delete m_widget;
-            m_widget = Q_NULLPTR;
+            m_widget = nullptr;
         }
 
         // Construct new widget
@@ -253,66 +255,84 @@ void WidgetLoader::setWidgetIndex(const int index)
         {
             case UI::Dashboard::WidgetType::Group:
                 m_widget = new Widgets::DataGroup(relativeIndex());
-                m_window.setCentralWidget(new Widgets::DataGroup(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::MultiPlot:
                 m_widget = new Widgets::MultiPlot(relativeIndex());
-                m_window.setCentralWidget(new Widgets::MultiPlot(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::FFT:
                 m_widget = new Widgets::FFTPlot(relativeIndex());
-                m_window.setCentralWidget(new Widgets::FFTPlot(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Plot:
                 m_widget = new Widgets::Plot(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Plot(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Bar:
                 m_widget = new Widgets::Bar(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Bar(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gauge:
                 m_widget = new Widgets::Gauge(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Gauge(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Compass:
                 m_widget = new Widgets::Compass(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Compass(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Gyroscope:
                 m_widget = new Widgets::Gyroscope(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Gyroscope(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::Accelerometer:
                 m_widget = new Widgets::Accelerometer(relativeIndex());
-                m_window.setCentralWidget(new Widgets::Accelerometer(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::GPS:
                 m_widget = new Widgets::GPS(relativeIndex());
-                m_window.setCentralWidget(new Widgets::GPS(relativeIndex()));
                 break;
             case UI::Dashboard::WidgetType::LED:
                 m_widget = new Widgets::LEDPanel(relativeIndex());
-                m_window.setCentralWidget(new Widgets::LEDPanel(relativeIndex()));
                 break;
             default:
                 break;
         }
 
-        // Configure external window
-        if (m_window.centralWidget())
-        {
-            m_window.setWindowTitle(widgetTitle());
-            m_window.centralWidget()->setEnabled(false);
-        }
-
         // Allow widget to receive events from the QML interface
         if (m_widget)
         {
+            m_widget->setEnabled(true);
             m_widget->installEventFilter(this);
-            QTimer::singleShot(100, this, SLOT(updateWidgetVisible()));
             emit widgetIndexChanged();
+            updateWidgetVisible();
         }
+    }
+}
+
+/**
+ * Changes the widget visibility controller source.
+ *
+ * If set to @c true, then the widget visibility shall be controlled
+ * directly by the QML interface.
+ *
+ * If set to @c false, then the widget visbility shall be controlled
+ * by the UI::Dashboard class via the SIGNAL/SLOT system.
+ */
+void WidgetLoader::setIsExternalWindow(const bool isWindow)
+{
+    m_isExternalWindow = isWindow;
+    emit isExternalWindowChanged();
+}
+
+/**
+ * This function must be called directly by a QML MouseArea item.
+ * Unfortunatelly, enter/leave events cannot be processed
+ * directly by the @c WidgetLoader::event(QEvent *event) function.
+ */
+void WidgetLoader::processMouseHover(const bool containsMouse)
+{
+    if (containsMouse)
+    {
+        QEnterEvent event(QPoint(0, 0), QPoint(0, 0), QPoint(0, 0));
+        processEnterEvent(&event);
+    }
+
+    else
+    {
+        QEvent event(QEvent::Leave);
+        processLeaveEvent(&event);
     }
 }
 
@@ -336,7 +356,7 @@ void WidgetLoader::updateWidgetVisible()
 {
     bool visible = UI::Dashboard::getInstance()->widgetVisible(widgetIndex());
 
-    if (widgetVisible() != visible)
+    if (widgetVisible() != visible && !isExternalWindow())
     {
         m_widgetVisible = visible;
 
@@ -348,13 +368,41 @@ void WidgetLoader::updateWidgetVisible()
 }
 
 /**
- * Enables/disables the widget updates of the external window when the window
- * is shown or hidden.
+ * Lets the widget handle the mouse leave events
  */
-void WidgetLoader::updateExternalWindow()
+void WidgetLoader::processLeaveEvent(QEvent *event)
 {
-    if (m_window.centralWidget())
-        m_window.centralWidget()->setEnabled(m_window.isVisible());
+    if (!m_widget)
+        return;
+
+    class Hack : public QWidget
+    {
+    public:
+        using QWidget::leaveEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_widget);
+    hack->leaveEvent(event);
+    update();
+}
+
+/**
+ * Lets the widget handle the mouse enter events
+ */
+void WidgetLoader::processEnterEvent(QEnterEvent *event)
+{
+    if (!m_widget)
+        return;
+
+    class Hack : public QWidget
+    {
+    public:
+        using QWidget::enterEvent;
+    };
+
+    auto hack = static_cast<Hack *>(m_widget);
+    hack->enterEvent(event);
+    update();
 }
 
 /**

@@ -89,11 +89,12 @@ int main(int argc, char **argv)
 #endif
 
     //
-    // Force non-threaded rendering to avoid crashes in Windows & Linux.
+    // Force non-threaded rendering to avoid ugly crashes.
     //
-    // We need to do this because the only way to get QWidgets-based
-    // items to render on the QML interface is through the QQuickPaintedItem
-    // class, which can cause some conflicts between the GUI and render threads.
+    // We need to do this because the only way to get QWidgets-based items to render on
+    // the QML interface is through the QQuickPaintedItem class, which can cause conflicts
+    // between the GUI and render threads when the rendered items need to work with
+    // signals/slots.
     //
     QApplication::setAttribute(Qt::AA_UseOpenGLES);
 

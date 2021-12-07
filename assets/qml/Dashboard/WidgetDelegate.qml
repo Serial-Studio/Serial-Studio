@@ -26,11 +26,13 @@ import QtQuick.Controls 2.12
 
 import SerialStudio 1.0
 import "../Widgets" as Widgets
+import "../FramelessWindow" as FramelessWindow
 
 Item {
     id: root
 
     property int widgetIndex: -1
+    property FramelessWindow.CustomWindow externalWindow: null
 
     Widgets.Window {
         id: window
@@ -39,7 +41,12 @@ Item {
         icon.source: loader.widgetIcon
         headerDoubleClickEnabled: true
         borderColor: Cpp_ThemeManager.widgetWindowBorder
-        onHeaderDoubleClicked: loader.showExternalWindow()
+        onHeaderDoubleClicked: {
+            if (root.externalWindow !== null)
+                root.externalWindow.showNormal()
+            else
+                externalWindowLoader.active = true
+        }
 
         WidgetLoader {
             id: loader
@@ -49,6 +56,70 @@ Item {
                 leftMargin: window.borderWidth
                 rightMargin: window.borderWidth
                 bottomMargin: window.borderWidth
+            }
+        }
+    }
+
+    Loader {
+        id: externalWindowLoader
+
+        active: false
+        asynchronous: true
+
+        sourceComponent: FramelessWindow.CustomWindow {
+            id: _window
+            minimumWidth: 640 + shadowMargin
+            minimumHeight: 480 + shadowMargin
+            title: externalLoader.widgetTitle
+            extraFlags: Qt.WindowStaysOnTopHint
+            titlebarText: Cpp_ThemeManager.text
+            titlebarColor: Cpp_ThemeManager.widgetWindowBackground
+            backgroundColor: Cpp_ThemeManager.widgetWindowBackground
+            borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
+
+            Timer {
+                id: timer
+                interval: 200
+                onTriggered: _window.showNormal()
+            }
+
+            Component.onCompleted: {
+                root.externalWindow = this
+                timer.start()
+            }
+
+            Rectangle {
+                clip: true
+                anchors.fill: parent
+                radius: _window.radius
+                anchors.margins: _window.shadowMargin
+                color: Cpp_ThemeManager.widgetWindowBackground
+                anchors.topMargin: _window.titlebar.height + _window.shadowMargin
+
+                Rectangle {
+                    height: _window.radius
+                    color: Cpp_ThemeManager.widgetWindowBackground
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        right: parent.right
+                    }
+                }
+
+                WidgetLoader {
+                    id: externalLoader
+                    anchors.fill: parent
+                    isExternalWindow: true
+                    widgetIndex: root.widgetIndex
+                    widgetVisible: _window.visible
+                    anchors.margins: _window.radius
+                }
+            }
+
+            FramelessWindow.ResizeHandles {
+                window: _window
+                anchors.fill: parent
+                handleSize: _window.handleSize
             }
         }
     }

@@ -65,6 +65,12 @@ Terminal::Terminal(QQuickItem *parent)
     setAcceptedMouseButtons(Qt::AllButtons);
     m_escapeCodeHandler.setTextEdit(textEdit());
 
+    // Set item flags
+    setFlag(ItemHasContents, true);
+    setFlag(ItemIsFocusScope, true);
+    setFlag(ItemAcceptsInputMethod, true);
+    setAcceptedMouseButtons(Qt::AllButtons);
+
     // Configure text edit widget
     setScrollbarWidth(14);
     textEdit()->installEventFilter(this);
