@@ -118,9 +118,14 @@ MultiPlot::MultiPlot(const int index)
     m_plot.show();
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
-    connect(dash, SIGNAL(pointsChanged()), this, SLOT(updateRange()),
+    // clang-format off
+    connect(dash, SIGNAL(updated()),
+            this, SLOT(updateData()),
             Qt::QueuedConnection);
+    connect(dash, SIGNAL(pointsChanged()),
+            this, SLOT(updateRange()),
+            Qt::QueuedConnection);
+    // clang-format on
 }
 
 /**
