@@ -88,6 +88,11 @@ int main(int argc, char **argv)
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 #endif
 
+    // Force non-threaded rendering on Windows & Linux (macOS disables this by default)
+#if !defined(Q_OS_MAC)
+    QApplication::setAttribute(Qt::AA_UseOpenGLES);
+#endif
+
     // Init. application
     QApplication app(argc, argv);
     app.setApplicationName(APP_NAME);
