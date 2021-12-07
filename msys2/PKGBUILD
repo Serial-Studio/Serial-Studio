@@ -7,7 +7,7 @@ pkgdesc="Serial Studio: Multi-purpose serial data visualization & processing pro
 arch=('any')
 url="https://github.com/Serial-Studio/Serial-Studio"
 license=('MIT')
-depends=("${MINGW_PACKAGE_PREFIX}-qt6")
+depends=("${MINGW_PACKAGE_PREFIX}-qt5")
 makedepends=(
   "${MINGW_PACKAGE_PREFIX}-gcc"
   "${MINGW_PACKAGE_PREFIX}-cmake"
