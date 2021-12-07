@@ -52,22 +52,20 @@ Este proyecto se publica bajo la licencia MIT, para obtener más información, c
 
 #### Requisitos
 
-El único requisito para compilar la aplicación es tener [Qt](http://www.qt.io/download-open-source/) instalado en su sistema. La aplicación se compilará con Qt 5.15 o superior. También necesitará tener instalados los siguientes módulos de Qt:
-
-- Qt Charts
+El único requisito para compilar la aplicación es tener [Qt](http://www.qt.io/download-open-source/) instalado en su sistema. La aplicación se compilará con **Qt 5.15**.
 
 En sistemas GNU/Linux, también necesitará instalar `libgl1-mesa-dev` para compilar la aplicación.
 
 Lista completa de módulos Qt usados:
 
-- Qt SQL
+- Qt SVG
 - Qt Quick
 - Qt Widgets
-- Qt Charts
+- Qt Networking
 - Qt Serial Port
-- Qt Quick Controls
+- Qt Print Support
+- Qt Quick Widgets
 - Qt Quick Controls 2
-- Qt Graphical Effects
 
 #### Clonado
 
