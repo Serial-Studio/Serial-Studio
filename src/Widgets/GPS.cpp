@@ -172,27 +172,30 @@ void GPS::resizeEvent(QResizeEvent *event)
     event->accept();
 }
 
+/**
+ * Manually calls the zoom in / zoom out button clicks when the user presses on the widget
+ */
 void GPS::mousePressEvent(QMouseEvent *event)
 {
-    class Hack : public QWidget
+    // Get x and y coordinates relative to title widget
+    auto x = event->x() - m_titleWidget.x();
+    auto y = event->y() - m_titleWidget.y();
+
+    // Press zoom in button
+    if (x >= m_zoomIn->x() && x <= m_zoomIn->x() + m_zoomIn->width())
     {
-    public:
-        using QWidget::mousePressEvent;
-    };
+        if (y >= m_zoomIn->y() && y <= m_zoomIn->y() + m_zoomIn->height())
+            m_zoomIn->clicked();
+    }
 
-    auto hack = static_cast<Hack *>(&m_titleWidget);
-    hack->mousePressEvent(event);
-}
-
-void GPS::mouseReleaseEvent(QMouseEvent *event)
-{
-    class Hack : public QWidget
+    // Press zoom out button
+    else if (x >= m_zoomOut->x() && x <= m_zoomOut->x() + m_zoomOut->width())
     {
-    public:
-        using QWidget::mouseReleaseEvent;
-    };
+        if (y >= m_zoomOut->y() && y <= m_zoomOut->y() + m_zoomOut->height())
+            m_zoomOut->clicked();
+    }
 
-    auto hack = static_cast<Hack *>(&m_titleWidget);
-    hack->mouseReleaseEvent(event);
+    // Accept event
+    event->accept();
 }
 }

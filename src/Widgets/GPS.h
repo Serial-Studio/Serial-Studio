@@ -48,7 +48,6 @@ private slots:
 protected:
     void resizeEvent(QResizeEvent *event);
     void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     int m_index;
