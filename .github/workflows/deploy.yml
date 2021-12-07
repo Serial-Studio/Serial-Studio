@@ -205,7 +205,7 @@ jobs:
 
   # Windows MSYS2 build
   msys2-makepkg:
-    if: ${{false}}
+    #if: ${{false}}
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -257,7 +257,7 @@ jobs:
 
   # Test Windows MSYS2 packages
   msys2-test:
-    if: ${{false}}
+    #if: ${{false}}
     needs: msys2-makepkg
     runs-on: windows-latest
     strategy:
