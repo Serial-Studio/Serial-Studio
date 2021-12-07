@@ -88,10 +88,14 @@ int main(int argc, char **argv)
     QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 #endif
 
-    // Force non-threaded rendering on Windows & Linux (macOS disables this by default)
-#if !defined(Q_OS_MAC)
+    //
+    // Force non-threaded rendering to avoid crashes in Windows & Linux.
+    //
+    // We need to do this because the only way to get QWidgets-based
+    // items to render on the QML interface is through the QQuickPaintedItem
+    // class, which can cause some conflicts between the GUI and render threads.
+    //
     QApplication::setAttribute(Qt::AA_UseOpenGLES);
-#endif
 
     // Init. application
     QApplication app(argc, argv);
