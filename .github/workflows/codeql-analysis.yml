@@ -54,7 +54,7 @@ jobs:
         
     - name: '🚧 Compile application'
       run: |
-          qmake ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+          qmake ${{env.QMAKE_PROJECT}} CONFIG+=release CONFIG+=unity_build PREFIX=/usr
           make -j16
 
     - name: '💭 Perform CodeQL Analysis'

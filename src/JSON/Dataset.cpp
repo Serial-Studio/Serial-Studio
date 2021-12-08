@@ -44,6 +44,8 @@ Dataset::Dataset(QObject *parent)
 {
 }
 
+Dataset::~Dataset() { }
+
 /**
  * @return @c true if the UI should generate a FFT plot of this dataset
  */

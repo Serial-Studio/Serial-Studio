@@ -51,9 +51,6 @@ protected:
 
 private:
     int m_index;
-    qreal m_lat;
-    qreal m_lon;
-    qreal m_alt;
     QLabel *m_label;
     QVBoxLayout m_layout;
     QPushButton *m_zoomIn;

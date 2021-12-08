@@ -69,7 +69,7 @@ jobs:
 
     - name: '🚧 Compile application'
       run: |
-          ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+          ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release CONFIG+=unity_build PREFIX=/usr
           make -j${{env.CORES}}
 
     - name: '⚙️ Install linuxdeployqt'
@@ -118,7 +118,7 @@ jobs:
 
     - name: '🚧 Compile application'
       run: |
-           ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+           ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release CONFIG+=unity_build PREFIX=/usr
            make -j${{env.CORES}}
 
     - name: '📦 Package application (macdeployqt and zipfile)'
@@ -176,7 +176,7 @@ jobs:
 
     - name: '🚧 Compile application'
       run: |
-        ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+        ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release CONFIG+=unity_build PREFIX=/usr
         nmake
 
     # Copy Qt DLLs, compiler runtime & application icon

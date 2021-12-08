@@ -39,9 +39,7 @@ Group::Group(QObject *parent)
  */
 Group::~Group()
 {
-    for (int i = 0; i < datasetCount(); ++i)
-        m_datasets.at(i)->deleteLater();
-
+    qDeleteAll(m_datasets);
     m_datasets.clear();
 }
 

@@ -20,6 +20,8 @@
  * THE SOFTWARE.
  */
 
+#include <QtAlgorithms>
+
 #include <IO/Manager.h>
 #include <IO/Console.h>
 #include <CSV/Player.h>
@@ -584,10 +586,9 @@ void Dashboard::setPoints(const int points)
         m_linearPlotValues.clear();
 
         // Regenerate x-axis values
-        m_xData.clear();
-        m_xData.reserve(points);
+        m_xData.resize(points);
         for (int i = 0; i < points; ++i)
-            m_xData.append(i);
+            m_xData[i] = i;
 
         // Update plots
         emit pointsChanged();
@@ -688,7 +689,7 @@ void Dashboard::updateData()
     // Save widget count
     const int barC = barCount();
     const int fftC = fftCount();
-    const int mapC = gpsCount();
+    const int gpsC = gpsCount();
     const int ledC = ledCount();
     const int plotC = plotCount();
     const int groupC = groupCount();
@@ -705,19 +706,6 @@ void Dashboard::updateData()
     auto lastJson = m_jsonList.last();
     if (!m_latestFrame.read(lastJson.jsonDocument.object()))
         return;
-
-    // Clear widget data
-    m_barWidgets.clear();
-    m_fftWidgets.clear();
-    m_gpsWidgets.clear();
-    m_ledWidgets.clear();
-    m_plotWidgets.clear();
-    m_gaugeWidgets.clear();
-    m_groupWidgets.clear();
-    m_compassWidgets.clear();
-    m_gyroscopeWidgets.clear();
-    m_multiPlotWidgets.clear();
-    m_accelerometerWidgets.clear();
 
     // Regenerate plot data
     updatePlots();
@@ -754,7 +742,7 @@ void Dashboard::updateData()
     bool regenerateWidgets = false;
     regenerateWidgets |= (barC != barCount());
     regenerateWidgets |= (fftC != fftCount());
-    regenerateWidgets |= (mapC != gpsCount());
+    regenerateWidgets |= (gpsC != gpsCount());
     regenerateWidgets |= (ledC != ledCount());
     regenerateWidgets |= (plotC != plotCount());
     regenerateWidgets |= (gaugeC != gaugeCount());
@@ -767,41 +755,28 @@ void Dashboard::updateData()
     // Regenerate widget visiblity models
     if (regenerateWidgets)
     {
-        m_barVisibility.clear();
-        m_fftVisibility.clear();
-        m_gpsVisibility.clear();
-        m_ledVisibility.clear();
-        m_plotVisibility.clear();
-        m_gaugeVisibility.clear();
-        m_groupVisibility.clear();
-        m_compassVisibility.clear();
-        m_gyroscopeVisibility.clear();
-        m_multiPlotVisibility.clear();
-        m_accelerometerVisibility.clear();
-
-        int i;
-        for (i = 0; i < barCount(); ++i)
-            m_barVisibility.append(true);
-        for (i = 0; i < fftCount(); ++i)
-            m_fftVisibility.append(true);
-        for (i = 0; i < gpsCount(); ++i)
-            m_gpsVisibility.append(true);
-        for (i = 0; i < ledCount(); ++i)
-            m_ledVisibility.append(true);
-        for (i = 0; i < plotCount(); ++i)
-            m_plotVisibility.append(true);
-        for (i = 0; i < gaugeCount(); ++i)
-            m_gaugeVisibility.append(true);
-        for (i = 0; i < groupCount(); ++i)
-            m_groupVisibility.append(true);
-        for (i = 0; i < compassCount(); ++i)
-            m_compassVisibility.append(true);
-        for (i = 0; i < gyroscopeCount(); ++i)
-            m_gyroscopeVisibility.append(true);
-        for (i = 0; i < multiPlotCount(); ++i)
-            m_multiPlotVisibility.append(true);
-        for (i = 0; i < accelerometerCount(); ++i)
-            m_accelerometerVisibility.append(true);
+        m_barVisibility.resize(barCount());
+        m_fftVisibility.resize(fftCount());
+        m_gpsVisibility.resize(gpsCount());
+        m_ledVisibility.resize(ledCount());
+        m_plotVisibility.resize(plotCount());
+        m_gaugeVisibility.resize(gaugeCount());
+        m_groupVisibility.resize(groupCount());
+        m_compassVisibility.resize(compassCount());
+        m_gyroscopeVisibility.resize(gyroscopeCount());
+        m_multiPlotVisibility.resize(multiPlotCount());
+        m_accelerometerVisibility.resize(accelerometerCount());
+        std::fill(m_barVisibility.begin(), m_barVisibility.end(), 1);
+        std::fill(m_fftVisibility.begin(), m_fftVisibility.end(), 1);
+        std::fill(m_gpsVisibility.begin(), m_gpsVisibility.end(), 1);
+        std::fill(m_ledVisibility.begin(), m_ledVisibility.end(), 1);
+        std::fill(m_plotVisibility.begin(), m_plotVisibility.end(), 1);
+        std::fill(m_gaugeVisibility.begin(), m_gaugeVisibility.end(), 1);
+        std::fill(m_groupVisibility.begin(), m_groupVisibility.end(), 1);
+        std::fill(m_compassVisibility.begin(), m_compassVisibility.end(), 1);
+        std::fill(m_gyroscopeVisibility.begin(), m_gyroscopeVisibility.end(), 1);
+        std::fill(m_multiPlotVisibility.begin(), m_multiPlotVisibility.end(), 1);
+        std::fill(m_accelerometerVisibility.begin(), m_accelerometerVisibility.end(), 1);
 
         emit widgetCountChanged();
         emit widgetVisibilityChanged();
@@ -852,9 +827,13 @@ void Dashboard::updatePlots()
             for (int i = 0; i < linearDatasets.count(); ++i)
             {
                 m_linearPlotValues.append(PlotData());
-                m_linearPlotValues.last().reserve(points());
-                for (int j = 0; j < points(); ++j)
-                    m_linearPlotValues[i].append(0.0001);
+                m_linearPlotValues.last().resize(points());
+
+                // clang-format off
+                std::fill(m_linearPlotValues.last().begin(),
+                          m_linearPlotValues.last().end(),
+                          0.0001);
+                // clang-format on
             }
         }
 
@@ -866,9 +845,13 @@ void Dashboard::updatePlots()
             for (int i = 0; i < fftDatasets.count(); ++i)
             {
                 m_fftPlotValues.append(PlotData());
-                m_fftPlotValues.last().reserve(fftDatasets[i]->fftSamples());
-                for (int j = 0; j < fftDatasets[i]->fftSamples(); ++j)
-                    m_fftPlotValues[i].append(0);
+                m_fftPlotValues.last().resize(fftDatasets[i]->fftSamples());
+
+                // clang-format off
+                std::fill(m_fftPlotValues.last().begin(),
+                          m_fftPlotValues.last().end(),
+                          0);
+                // clang-format on
             }
         }
 

@@ -66,6 +66,7 @@ class Dataset : public QObject
 {
 public:
     Dataset(QObject *parent = Q_NULLPTR);
+    ~Dataset();
 
     bool fft() const;
     bool led() const;

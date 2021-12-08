@@ -29,8 +29,9 @@ namespace JSON
 /**
  * Constructor function
  */
-Frame::Frame()
-    : m_title("")
+Frame::Frame(QObject *parent)
+    : QObject(parent)
+    , m_title("")
 {
 }
 
@@ -49,10 +50,8 @@ Frame::~Frame()
  */
 void Frame::clear()
 {
-    for (int i = 0; i < groupCount(); ++i)
-        m_groups.at(i)->deleteLater();
-
     m_title = "";
+    qDeleteAll(m_groups);
     m_groups.clear();
 }
 
@@ -104,7 +103,7 @@ bool Frame::read(const QJsonObject &object)
         // Generate groups & datasets from data frame
         for (auto i = 0; i < groups.count(); ++i)
         {
-            Group *group = new Group;
+            Group *group = new Group(this);
             if (group->read(groups.at(i).toObject()))
                 m_groups.append(group);
             else

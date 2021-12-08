@@ -52,10 +52,10 @@ namespace JSON
  *    frame.
  * 9) UI dashboard updates the widgets with the C++ model provided by this class.
  */
-class Frame
+class Frame : public QObject
 {
 public:
-    Frame();
+    Frame(QObject *parent = nullptr);
     ~Frame();
 
     void clear();

@@ -34,9 +34,6 @@ namespace Widgets
  */
 GPS::GPS(const int index)
     : m_index(index)
-    , m_lat(0)
-    , m_lon(0)
-    , m_alt(0)
 {
     // Get pointers to serial studio modules
     const auto dash = UI::Dashboard::getInstance();
