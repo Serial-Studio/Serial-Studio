@@ -99,15 +99,10 @@ CONFIG += silent
 # Unity build
 #-----------------------------------------------------------------------------------------
 
-#CONFIG += unity_build                          # Uncomment for final releases, the unity
-                                                # build reduces compile time by mashing
-                                                # together all the C++ files in a single
-                                                # file. This approach also allows the
-                                                # compiler to perform more optimizations,
-                                                # resulting in a smaller & faster binary.
-                                                #
-                                                # Unity build is automatically enabled
-                                                # for GitHub CI jobs.
+CONFIG(release, debug|release) {
+    CONFIG += unity_build
+}
+
 CONFIG(unity_build) {
     CONFIG  += ltcg                             # Enable linker optimization
     DEFINES += UNITY_BUILD=1                    # Enable unity build
