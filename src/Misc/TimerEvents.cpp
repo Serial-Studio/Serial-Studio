@@ -101,13 +101,13 @@ void TimerEvents::setHighFreqTimeout(const int hz)
     if (hz > 0)
     {
         m_timerHighFreq.setInterval(HZ_TO_MS(hz));
-        emit highFreqTimeoutChanged();
+        Q_EMIT highFreqTimeoutChanged();
     }
 
     else
     {
         m_timerHighFreq.setInterval(HZ_TO_MS(1));
-        emit highFreqTimeoutChanged();
+        Q_EMIT highFreqTimeoutChanged();
     }
 }
 }

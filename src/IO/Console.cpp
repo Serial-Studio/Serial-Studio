@@ -305,7 +305,7 @@ void Console::clear()
     m_isStartingLine = true;
     m_dataBuffer.reserve(1200 * 1000);
 
-    emit dataReceived();
+    Q_EMIT dataReceived();
 }
 
 /**
@@ -320,7 +320,7 @@ void Console::historyUp()
     if (m_historyItem > 0)
     {
         --m_historyItem;
-        emit historyItemChanged();
+        Q_EMIT historyItemChanged();
     }
 }
 
@@ -336,7 +336,7 @@ void Console::historyDown()
     if (m_historyItem < m_historyItems.count() - 1)
     {
         ++m_historyItem;
-        emit historyItemChanged();
+        Q_EMIT historyItemChanged();
     }
 }
 
@@ -391,7 +391,7 @@ void Console::send(const QString &data)
 void Console::setEcho(const bool enabled)
 {
     m_echo = enabled;
-    emit echoChanged();
+    Q_EMIT echoChanged();
 }
 
 /**
@@ -434,7 +434,7 @@ void Console::setShowTimestamp(const bool enabled)
     if (showTimestamp() != enabled)
     {
         m_showTimestamp = enabled;
-        emit showTimestampChanged();
+        Q_EMIT showTimestampChanged();
     }
 }
 
@@ -446,7 +446,7 @@ void Console::setAutoscroll(const bool enabled)
     if (autoscroll() != enabled)
     {
         m_autoscroll = enabled;
-        emit autoscrollChanged();
+        Q_EMIT autoscrollChanged();
     }
 }
 
@@ -456,7 +456,7 @@ void Console::setAutoscroll(const bool enabled)
 void Console::setDataMode(const IO::Console::DataMode &mode)
 {
     m_dataMode = mode;
-    emit dataModeChanged();
+    Q_EMIT dataModeChanged();
 }
 
 /**
@@ -466,7 +466,7 @@ void Console::setDataMode(const IO::Console::DataMode &mode)
 void Console::setLineEnding(const IO::Console::LineEnding &mode)
 {
     m_lineEnding = mode;
-    emit lineEndingChanged();
+    Q_EMIT lineEndingChanged();
 }
 
 /**
@@ -475,7 +475,7 @@ void Console::setLineEnding(const IO::Console::LineEnding &mode)
 void Console::setDisplayMode(const IO::Console::DisplayMode &mode)
 {
     m_displayMode = mode;
-    emit displayModeChanged();
+    Q_EMIT displayModeChanged();
 }
 
 /**
@@ -541,8 +541,8 @@ void Console::append(const QString &string, const bool addTimestamp)
     m_textBuffer.append(processedString);
 
     // Update UI
-    emit dataReceived();
-    emit stringReceived(processedString);
+    Q_EMIT dataReceived();
+    Q_EMIT stringReceived(processedString);
 }
 
 /**
@@ -588,7 +588,7 @@ void Console::addToHistory(const QString &command)
     // Register command
     m_historyItems.append(command);
     m_historyItem = m_historyItems.count();
-    emit historyItemChanged();
+    Q_EMIT historyItemChanged();
 }
 
 /**

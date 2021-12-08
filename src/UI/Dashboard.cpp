@@ -591,7 +591,7 @@ void Dashboard::setPoints(const int points)
             m_xData[i] = i;
 
         // Update plots
-        emit pointsChanged();
+        Q_EMIT pointsChanged();
     }
 }
 
@@ -600,7 +600,7 @@ void Dashboard::setPrecision(const int precision)
     if (m_precision != precision)
     {
         m_precision = precision;
-        emit precisionChanged();
+        Q_EMIT precisionChanged();
     }
 }
 
@@ -667,11 +667,11 @@ void Dashboard::resetData()
     m_accelerometerVisibility.clear();
 
     // Update UI
-    emit updated();
-    emit dataReset();
-    emit titleChanged();
-    emit widgetCountChanged();
-    emit widgetVisibilityChanged();
+    Q_EMIT updated();
+    Q_EMIT dataReset();
+    Q_EMIT titleChanged();
+    Q_EMIT widgetCountChanged();
+    Q_EMIT widgetVisibilityChanged();
 }
 
 /**
@@ -736,7 +736,7 @@ void Dashboard::updateData()
 
     // Check if we need to update title
     if (pTitle != title())
-        emit titleChanged();
+        Q_EMIT titleChanged();
 
     // Check if we need to regenerate widgets
     bool regenerateWidgets = false;
@@ -778,12 +778,12 @@ void Dashboard::updateData()
         std::fill(m_multiPlotVisibility.begin(), m_multiPlotVisibility.end(), 1);
         std::fill(m_accelerometerVisibility.begin(), m_accelerometerVisibility.end(), 1);
 
-        emit widgetCountChanged();
-        emit widgetVisibilityChanged();
+        Q_EMIT widgetCountChanged();
+        Q_EMIT widgetVisibilityChanged();
     }
 
     // Update UI;
-    emit updated();
+    Q_EMIT updated();
 }
 
 void Dashboard::updatePlots()
@@ -1035,7 +1035,7 @@ void Dashboard::setVisibility(QVector<bool> &vector, const int index, const bool
     if (index < vector.count())
     {
         vector[index] = visible;
-        emit widgetVisibilityChanged();
+        Q_EMIT widgetVisibilityChanged();
     }
 }
 

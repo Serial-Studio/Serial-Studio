@@ -353,7 +353,7 @@ void Terminal::clear()
     updateScrollbarVisibility();
     update();
 
-    emit textChanged();
+    Q_EMIT textChanged();
 }
 
 /**
@@ -388,7 +388,7 @@ void Terminal::setReadOnly(const bool ro)
     textEdit()->setReadOnly(ro);
     update();
 
-    emit readOnlyChanged();
+    Q_EMIT readOnlyChanged();
 }
 
 /**
@@ -400,7 +400,7 @@ void Terminal::setFont(const QFont &font)
     updateScrollbarVisibility();
     update();
 
-    emit fontChanged();
+    Q_EMIT fontChanged();
 }
 
 /**
@@ -418,7 +418,7 @@ void Terminal::append(const QString &text)
         scrollToBottom();
 
     update();
-    emit textChanged();
+    Q_EMIT textChanged();
 }
 
 /**
@@ -436,7 +436,7 @@ void Terminal::setText(const QString &text)
         scrollToBottom();
 
     update();
-    emit textChanged();
+    Q_EMIT textChanged();
 }
 
 /**
@@ -448,7 +448,7 @@ void Terminal::setScrollbarWidth(const int width)
     bar->setFixedWidth(width);
     update();
 
-    emit scrollbarWidthChanged();
+    Q_EMIT scrollbarWidthChanged();
 }
 
 /**
@@ -459,7 +459,7 @@ void Terminal::setPalette(const QPalette &palette)
     textEdit()->setPalette(palette);
     update();
 
-    emit colorPaletteChanged();
+    Q_EMIT colorPaletteChanged();
 }
 
 /**
@@ -470,7 +470,7 @@ void Terminal::setWidgetEnabled(const bool enabled)
     textEdit()->setEnabled(enabled);
     update();
 
-    emit widgetEnabledChanged();
+    Q_EMIT widgetEnabledChanged();
 }
 
 /**
@@ -493,7 +493,7 @@ void Terminal::setAutoscroll(const bool enabled)
 
     // Update UI
     update();
-    emit autoscrollChanged();
+    Q_EMIT autoscrollChanged();
 }
 
 /**
@@ -516,7 +516,7 @@ void Terminal::setWordWrapMode(const int mode)
     updateScrollbarVisibility();
     update();
 
-    emit wordWrapModeChanged();
+    Q_EMIT wordWrapModeChanged();
 }
 
 /**
@@ -530,7 +530,7 @@ void Terminal::setCenterOnScroll(const bool enabled)
     textEdit()->setCenterOnScroll(enabled);
     update();
 
-    emit centerOnScrollChanged();
+    Q_EMIT centerOnScrollChanged();
 }
 
 /**
@@ -541,7 +541,7 @@ void Terminal::setCenterOnScroll(const bool enabled)
 void Terminal::setVt100Emulation(const bool enabled)
 {
     m_emulateVt100 = enabled;
-    emit vt100EmulationChanged();
+    Q_EMIT vt100EmulationChanged();
 }
 
 /**
@@ -552,7 +552,7 @@ void Terminal::setUndoRedoEnabled(const bool enabled)
     textEdit()->setUndoRedoEnabled(enabled);
     update();
 
-    emit undoRedoEnabledChanged();
+    Q_EMIT undoRedoEnabledChanged();
 }
 
 /**
@@ -564,7 +564,7 @@ void Terminal::setPlaceholderText(const QString &text)
     textEdit()->setPlaceholderText(text);
     update();
 
-    emit placeholderTextChanged();
+    Q_EMIT placeholderTextChanged();
 }
 
 /**
@@ -609,7 +609,7 @@ void Terminal::setMaximumBlockCount(const int maxBlockCount)
     textEdit()->setMaximumBlockCount(maxBlockCount);
     update();
 
-    emit maximumBlockCountChanged();
+    Q_EMIT maximumBlockCountChanged();
 }
 
 /**
@@ -647,7 +647,7 @@ void Terminal::updateScrollbarVisibility()
 void Terminal::setCopyAvailable(const bool yes)
 {
     m_copyAvailable = yes;
-    emit copyAvailableChanged();
+    Q_EMIT copyAvailableChanged();
 }
 
 /**
@@ -674,7 +674,7 @@ void Terminal::addText(const QString &text, const bool enableVt100)
 
     // Redraw the control
     update();
-    emit textChanged();
+    Q_EMIT textChanged();
 }
 
 /**

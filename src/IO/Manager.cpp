@@ -282,7 +282,7 @@ qint64 Manager::writeData(const QByteArray &data)
         {
             auto writtenData = data;
             writtenData.chop(data.length() - bytes);
-            emit dataSent(writtenData);
+            Q_EMIT dataSent(writtenData);
         }
 
         // Return number of bytes written
@@ -338,7 +338,7 @@ void Manager::connectDevice()
             disconnectDevice();
 
         // Update UI
-        emit connectedChanged();
+        Q_EMIT connectedChanged();
     }
 }
 
@@ -365,8 +365,8 @@ void Manager::disconnectDevice()
         m_dataBuffer.reserve(maxBufferSize());
 
         // Update UI
-        emit deviceChanged();
-        emit connectedChanged();
+        Q_EMIT deviceChanged();
+        Q_EMIT connectedChanged();
     }
 
     // Disable CRC checking
@@ -379,7 +379,7 @@ void Manager::disconnectDevice()
 void Manager::setWriteEnabled(const bool enabled)
 {
     m_writeEnabled = enabled;
-    emit writeEnabledChanged();
+    Q_EMIT writeEnabledChanged();
 }
 
 /**
@@ -399,9 +399,9 @@ void Manager::processPayload(const QByteArray &payload)
             m_receivedBytes = 0;
 
         // Notify user interface & application modules
-        emit dataReceived(payload);
-        emit frameReceived(payload);
-        emit receivedBytesChanged();
+        Q_EMIT dataReceived(payload);
+        Q_EMIT frameReceived(payload);
+        Q_EMIT receivedBytesChanged();
     }
 }
 
@@ -412,7 +412,7 @@ void Manager::processPayload(const QByteArray &payload)
 void Manager::setMaxBufferSize(const int maxBufferSize)
 {
     m_maxBufferSize = maxBufferSize;
-    emit maxBufferSizeChanged();
+    Q_EMIT maxBufferSizeChanged();
 
     m_dataBuffer.reserve(maxBufferSize);
 }
@@ -427,7 +427,7 @@ void Manager::setStartSequence(const QString &sequence)
     if (m_startSequence.isEmpty())
         m_startSequence = "/*";
 
-    emit startSequenceChanged();
+    Q_EMIT startSequenceChanged();
 }
 
 /**
@@ -440,7 +440,7 @@ void Manager::setFinishSequence(const QString &sequence)
     if (m_finishSequence.isEmpty())
         m_finishSequence = "*/";
 
-    emit finishSequenceChanged();
+    Q_EMIT finishSequenceChanged();
 }
 
 /**
@@ -453,7 +453,7 @@ void Manager::setSeparatorSequence(const QString &sequence)
     if (m_separatorSequence.isEmpty())
         m_separatorSequence = ",";
 
-    emit separatorSequenceChanged();
+    Q_EMIT separatorSequenceChanged();
 }
 
 /**
@@ -464,7 +464,7 @@ void Manager::setWatchdogInterval(const int interval)
 {
     m_watchdog.setInterval(interval);
     m_watchdog.setTimerType(Qt::PreciseTimer);
-    emit watchdogIntervalChanged();
+    Q_EMIT watchdogIntervalChanged();
 }
 
 /**
@@ -478,7 +478,7 @@ void Manager::setDataSource(const IO::Manager::DataSource &source)
 
     // Change data source
     m_dataSource = source;
-    emit dataSourceChanged();
+    Q_EMIT dataSourceChanged();
 }
 
 /**
@@ -513,11 +513,11 @@ void Manager::readFrames()
         auto fIndex = cursor.indexOf(finish);
         auto frame = cursor.left(fIndex);
 
-        // Checksum verification & emit RX frame
+        // Checksum verification & Q_EMIT RX frame
         int chop = 0;
         const auto result = integrityChecks(frame, cursor, &chop);
         if (result == ValidationStatus::FrameOk)
-            emit frameReceived(frame);
+            Q_EMIT frameReceived(frame);
 
         // Checksum data incomplete, try next time...
         else if (result == ValidationStatus::ChecksumIncomplete)
@@ -606,8 +606,8 @@ void Manager::onDataReceived()
         m_receivedBytes = 0;
 
     // Notify user interface
-    emit receivedBytesChanged();
-    emit dataReceived(data);
+    Q_EMIT receivedBytesChanged();
+    Q_EMIT dataReceived(data);
 }
 
 /**
@@ -637,7 +637,7 @@ void Manager::setDevice(QIODevice *device)
 {
     disconnectDevice();
     m_device = device;
-    emit deviceChanged();
+    Q_EMIT deviceChanged();
 }
 
 /**

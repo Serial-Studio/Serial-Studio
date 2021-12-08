@@ -295,7 +295,7 @@ void WidgetLoader::setWidgetIndex(const int index)
         {
             m_widget->setEnabled(true);
             m_widget->installEventFilter(this);
-            emit widgetIndexChanged();
+            Q_EMIT widgetIndexChanged();
             updateWidgetVisible();
         }
     }
@@ -313,7 +313,7 @@ void WidgetLoader::setWidgetIndex(const int index)
 void WidgetLoader::setIsExternalWindow(const bool isWindow)
 {
     m_isExternalWindow = isWindow;
-    emit isExternalWindowChanged();
+    Q_EMIT isExternalWindowChanged();
 }
 
 /**
@@ -363,7 +363,7 @@ void WidgetLoader::updateWidgetVisible()
         if (m_widget)
             m_widget->setEnabled(visible);
 
-        emit widgetVisibleChanged();
+        Q_EMIT widgetVisibleChanged();
     }
 }
 

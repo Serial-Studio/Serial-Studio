@@ -323,7 +323,7 @@ void Client::setQos(const quint8 qos)
 {
     Q_ASSERT(m_client);
     m_client->setWillQos(qos);
-    emit qosChanged();
+    Q_EMIT qosChanged();
 }
 
 /**
@@ -332,7 +332,7 @@ void Client::setQos(const quint8 qos)
 void Client::lookup(const QString &host)
 {
     m_lookupActive = true;
-    emit lookupActiveChanged();
+    Q_EMIT lookupActiveChanged();
     QHostInfo::lookupHost(host.simplified(), this, &Client::lookupFinished);
 }
 
@@ -343,7 +343,7 @@ void Client::setPort(const quint16 port)
 {
     Q_ASSERT(m_client);
     m_client->setPort(port);
-    emit portChanged();
+    Q_EMIT portChanged();
 }
 
 /**
@@ -353,7 +353,7 @@ void Client::setHost(const QString &host)
 {
     Q_ASSERT(m_client);
     m_client->setHostName(host);
-    emit hostChanged();
+    Q_EMIT hostChanged();
 }
 
 /**
@@ -364,7 +364,7 @@ void Client::setRetain(const bool retain)
 {
     Q_ASSERT(m_client);
     m_client->setWillRetain(retain);
-    emit retainChanged();
+    Q_EMIT retainChanged();
 }
 
 /**
@@ -375,7 +375,7 @@ void Client::setRetain(const bool retain)
 void Client::setClientMode(const int mode)
 {
     m_clientMode = static_cast<MQTTClientMode>(mode);
-    emit clientModeChanged();
+    Q_EMIT clientModeChanged();
 }
 
 /**
@@ -384,7 +384,7 @@ void Client::setClientMode(const int mode)
 void Client::setTopic(const QString &topic)
 {
     m_topic = topic;
-    emit topicChanged();
+    Q_EMIT topicChanged();
 }
 
 /**
@@ -395,7 +395,7 @@ void Client::loadCaFile(const QString &path)
 {
     // Save *.ca file path
     m_caFilePath = path;
-    emit caFilePathChanged();
+    Q_EMIT caFilePathChanged();
 
     // Empty path, abort
     if (path.isEmpty())
@@ -459,7 +459,7 @@ void Client::setSslProtocol(const int index)
     }
 
     regenerateClient();
-    emit sslProtocolChanged();
+    Q_EMIT sslProtocolChanged();
 }
 
 /**
@@ -469,7 +469,7 @@ void Client::setSslEnabled(const bool enabled)
 {
     m_sslEnabled = enabled;
     regenerateClient();
-    emit sslEnabledChanged();
+    Q_EMIT sslEnabledChanged();
 }
 
 /**
@@ -479,7 +479,7 @@ void Client::setUsername(const QString &username)
 {
     Q_ASSERT(m_client);
     m_client->setUsername(username);
-    emit usernameChanged();
+    Q_EMIT usernameChanged();
 }
 
 /**
@@ -489,7 +489,7 @@ void Client::setPassword(const QString &password)
 {
     Q_ASSERT(m_client);
     m_client->setPassword(password.toUtf8());
-    emit passwordChanged();
+    Q_EMIT passwordChanged();
 }
 
 /**
@@ -501,7 +501,7 @@ void Client::setKeepAlive(const quint16 keepAlive)
 {
     Q_ASSERT(m_client);
     m_client->setKeepAlive(keepAlive);
-    emit keepAliveChanged();
+    Q_EMIT keepAliveChanged();
 }
 
 /**
@@ -523,7 +523,7 @@ void Client::setMqttVersion(const int versionIndex)
             break;
     }
 
-    emit mqttVersionChanged();
+    Q_EMIT mqttVersionChanged();
 }
 
 /**
@@ -582,7 +582,7 @@ void Client::onConnectedChanged()
 void Client::lookupFinished(const QHostInfo &info)
 {
     m_lookupActive = false;
-    emit lookupActiveChanged();
+    Q_EMIT lookupActiveChanged();
 
     if (info.error() == QHostInfo::NoError)
     {

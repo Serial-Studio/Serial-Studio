@@ -150,7 +150,7 @@ QString Player::csvFilesPath() const
 void Player::play()
 {
     m_playing = true;
-    emit playerStateChanged();
+    Q_EMIT playerStateChanged();
 }
 
 /**
@@ -160,7 +160,7 @@ void Player::play()
 void Player::pause()
 {
     m_playing = false;
-    emit playerStateChanged();
+    Q_EMIT playerStateChanged();
 }
 
 /**
@@ -169,7 +169,7 @@ void Player::pause()
 void Player::toggle()
 {
     m_playing = !m_playing;
-    emit playerStateChanged();
+    Q_EMIT playerStateChanged();
 }
 
 /**
@@ -205,9 +205,9 @@ void Player::closeFile()
     m_playing = false;
     m_timestamp = "--.--";
 
-    emit openChanged();
-    emit timestampChanged();
-    emit playerStateChanged();
+    Q_EMIT openChanged();
+    Q_EMIT timestampChanged();
+    Q_EMIT playerStateChanged();
 }
 
 /**
@@ -294,9 +294,9 @@ void Player::openFile(const QString &filePath)
         // Read first row & update UI
         if (valid)
         {
-            // Read first data & emit UI signals
+            // Read first data & Q_EMIT UI signals
             updateData();
-            emit openChanged();
+            Q_EMIT openChanged();
 
             // Play next frame (to force UI to generate groups, graphs & widgets)
             // Note: nextFrame() MUST BE CALLED AFTER emiting the openChanged() signal in
@@ -371,7 +371,7 @@ void Player::updateData()
     if (!error)
     {
         m_timestamp = timestamp;
-        emit timestampChanged();
+        Q_EMIT timestampChanged();
     }
 
     // Construct frame from CSV and send it to the IO manager

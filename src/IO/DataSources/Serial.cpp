@@ -287,7 +287,7 @@ QSerialPort *Serial::openSerialPort()
         disconnectDevice();
         m_portIndex = portId + 1;
         m_lastSerialDeviceIndex = m_portIndex;
-        emit portIndexChanged();
+        Q_EMIT portIndexChanged();
 
         // Create new serial port handler
         m_port = new QSerialPort(ports.at(portId));
@@ -330,8 +330,8 @@ void Serial::disconnectDevice()
 
     // Reset pointer
     m_port = Q_NULLPTR;
-    emit portChanged();
-    emit availablePortsChanged();
+    Q_EMIT portChanged();
+    Q_EMIT availablePortsChanged();
 }
 
 /**
@@ -350,7 +350,7 @@ void Serial::setBaudRate(const qint32 rate)
         port()->setBaudRate(baudRate());
 
     // Update user interface
-    emit baudRateChanged();
+    Q_EMIT baudRateChanged();
 }
 
 /**
@@ -365,7 +365,7 @@ void Serial::setPortIndex(const quint8 portIndex)
     else
         m_portIndex = 0;
 
-    emit portIndexChanged();
+    Q_EMIT portIndexChanged();
 }
 
 /**
@@ -405,7 +405,7 @@ void Serial::setParity(const quint8 parityIndex)
         port()->setParity(parity());
 
     // Notify user interface
-    emit parityChanged();
+    Q_EMIT parityChanged();
 }
 
 /**
@@ -417,7 +417,7 @@ void Serial::appendBaudRate(const QString &baudRate)
     {
         m_baudRateList.append(baudRate);
         writeSettings();
-        emit baudRateListChanged();
+        Q_EMIT baudRateListChanged();
         Misc::Utilities::showMessageBox(
             tr("Baud rate registered successfully"),
             tr("Rate \"%1\" has been added to baud rate list").arg(baudRate));
@@ -460,7 +460,7 @@ void Serial::setDataBits(const quint8 dataBitsIndex)
         port()->setDataBits(dataBits());
 
     // Update user interface
-    emit dataBitsChanged();
+    Q_EMIT dataBitsChanged();
 }
 
 /**
@@ -496,7 +496,7 @@ void Serial::setStopBits(const quint8 stopBitsIndex)
         port()->setStopBits(stopBits());
 
     // Update user interface
-    emit stopBitsChanged();
+    Q_EMIT stopBitsChanged();
 }
 
 /**
@@ -505,7 +505,7 @@ void Serial::setStopBits(const quint8 stopBitsIndex)
 void Serial::setAutoReconnect(const bool autoreconnect)
 {
     m_autoReconnect = autoreconnect;
-    emit autoReconnectChanged();
+    Q_EMIT autoReconnectChanged();
 }
 
 /**
@@ -541,7 +541,7 @@ void Serial::setFlowControl(const quint8 flowControlIndex)
         port()->setFlowControl(flowControl());
 
     // Update user interface
-    emit flowControlChanged();
+    Q_EMIT flowControlChanged();
 }
 
 /**
@@ -598,7 +598,7 @@ void Serial::refreshSerialDevices()
         }
 
         // Update UI
-        emit availablePortsChanged();
+        Q_EMIT availablePortsChanged();
     }
 }
 
@@ -645,7 +645,7 @@ void Serial::readSettings()
     }
 
     // Notify UI
-    emit baudRateListChanged();
+    Q_EMIT baudRateListChanged();
 }
 
 /**
@@ -663,7 +663,7 @@ void Serial::writeSettings()
             if (a > b)
             {
                 m_baudRateList.swapItemsAt(j, j + 1);
-                emit baudRateListChanged();
+                Q_EMIT baudRateListChanged();
             }
         }
     }

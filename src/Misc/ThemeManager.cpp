@@ -204,7 +204,7 @@ void ThemeManager::loadTheme(const int id)
 
     // Update user interface
     m_themeId = id;
-    emit themeChanged();
+    Q_EMIT themeChanged();
 }
 
 /**
@@ -241,7 +241,7 @@ void ThemeManager::populateThemes()
     }
 
     // Update UI
-    emit availableThemesChanged();
+    Q_EMIT availableThemesChanged();
 }
 
 //----------------------------------------------------------------------------------------

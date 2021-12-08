@@ -680,10 +680,10 @@ void Editor::newJsonFile()
 
     // Update file path
     m_filePath = "";
-    emit jsonFileChanged();
+    Q_EMIT jsonFileChanged();
 
     // Update UI
-    emit groupCountChanged();
+    Q_EMIT groupCountChanged();
     setModified(false);
 }
 
@@ -737,7 +737,7 @@ void Editor::openJsonFile(const QString &path)
 
     // Update current JSON document
     m_filePath = path;
-    emit jsonFileChanged();
+    Q_EMIT jsonFileChanged();
 
     // Read data from JSON document
     auto json = document.object();
@@ -801,7 +801,7 @@ void Editor::openJsonFile(const QString &path)
     }
 
     // Update UI
-    emit groupCountChanged();
+    Q_EMIT groupCountChanged();
     setModified(false);
 }
 
@@ -813,7 +813,7 @@ void Editor::setTitle(const QString &title)
     if (title != m_title)
     {
         m_title = title;
-        emit titleChanged();
+        Q_EMIT titleChanged();
     }
 }
 
@@ -825,7 +825,7 @@ void Editor::setSeparator(const QString &separator)
     if (separator != m_separator)
     {
         m_separator = separator;
-        emit separatorChanged();
+        Q_EMIT separatorChanged();
     }
 }
 
@@ -837,7 +837,7 @@ void Editor::setFrameEndSequence(const QString &sequence)
     if (sequence != m_frameEndSequence)
     {
         m_frameEndSequence = sequence;
-        emit frameEndSequenceChanged();
+        Q_EMIT frameEndSequenceChanged();
     }
 }
 
@@ -849,7 +849,7 @@ void Editor::setFrameStartSequence(const QString &sequence)
     if (sequence != m_frameStartSequence)
     {
         m_frameStartSequence = sequence;
-        emit frameStartSequenceChanged();
+        Q_EMIT frameStartSequenceChanged();
     }
 }
 
@@ -861,7 +861,7 @@ void Editor::addGroup()
     m_groups.append(new Group);
     setGroupTitle(m_groups.count() - 1, tr("New Group"));
 
-    emit groupCountChanged();
+    Q_EMIT groupCountChanged();
 }
 
 /**
@@ -880,7 +880,7 @@ void Editor::deleteGroup(const int group)
         if (ret == QMessageBox::Yes)
         {
             m_groups.removeAt(group);
-            emit groupCountChanged();
+            Q_EMIT groupCountChanged();
         }
     }
 }
@@ -893,7 +893,7 @@ void Editor::moveGroupUp(const int group)
     if (group > 0)
     {
         m_groups.move(group, group - 1);
-        emit groupOrderChanged();
+        Q_EMIT groupOrderChanged();
     }
 }
 
@@ -905,7 +905,7 @@ void Editor::moveGroupDown(const int group)
     if (group < groupCount() - 1)
     {
         m_groups.move(group, group + 1);
-        emit groupOrderChanged();
+        Q_EMIT groupOrderChanged();
     }
 }
 
@@ -1051,7 +1051,7 @@ bool Editor::setGroupWidget(const int group, const int widgetId)
             grp->m_widget = "multiplot";
 
         // Update UI
-        emit groupChanged(group);
+        Q_EMIT groupChanged(group);
         return true;
     }
 
@@ -1067,7 +1067,7 @@ void Editor::setGroupTitle(const int group, const QString &title)
     if (grp)
     {
         grp->m_title = title;
-        emit groupChanged(group);
+        Q_EMIT groupChanged(group);
     }
 }
 
@@ -1080,7 +1080,7 @@ void Editor::setGroupWidgetData(const int group, const QString &widget)
     if (grp)
     {
         grp->m_widget = widget;
-        emit groupChanged(group);
+        Q_EMIT groupChanged(group);
     }
 }
 
@@ -1097,7 +1097,7 @@ void Editor::addDataset(const int group)
         grp->m_datasets.append(new Dataset);
         setDatasetIndex(group, grp->m_datasets.count() - 1, nextDatasetIndex());
         setDatasetTitle(group, grp->m_datasets.count() - 1, tr("New dataset"));
-        emit groupChanged(group);
+        Q_EMIT groupChanged(group);
     }
 }
 
@@ -1119,7 +1119,7 @@ void Editor::deleteDataset(const int group, const int dataset)
         if (ret == QMessageBox::Yes)
         {
             getGroup(group)->m_datasets.removeAt(dataset);
-            emit groupChanged(group);
+            Q_EMIT groupChanged(group);
         }
     }
 }
@@ -1136,7 +1136,7 @@ void Editor::setDatasetTitle(const int group, const int dataset, const QString &
     if (set)
     {
         set->m_title = title;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1152,7 +1152,7 @@ void Editor::setDatasetUnits(const int group, const int dataset, const QString &
     if (set)
     {
         set->m_units = units;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1168,7 +1168,7 @@ void Editor::setDatasetIndex(const int group, const int dataset, const int frame
     if (set)
     {
         set->m_index = frameIndex;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1184,7 +1184,7 @@ void Editor::setDatasetLED(const int group, const int dataset, const bool genera
     if (set)
     {
         set->m_led = generateLED;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1200,7 +1200,7 @@ void Editor::setDatasetGraph(const int group, const int dataset, const bool gene
     if (set)
     {
         set->m_graph = generateGraph;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1216,7 +1216,7 @@ void Editor::setDatasetFftPlot(const int group, const int dataset, const bool ge
     if (set)
     {
         set->m_fft = generateFft;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1232,7 +1232,7 @@ void Editor::setDatasetLogPlot(const int group, const int dataset, const bool ge
     if (set)
     {
         set->m_log = generateLog;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1261,7 +1261,7 @@ void Editor::setDatasetWidget(const int group, const int dataset, const int widg
         }
 
         set->m_widget = widget;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1280,7 +1280,7 @@ void Editor::setDatasetWidgetMin(const int group, const int dataset,
     if (set)
     {
         set->m_min = minimum.toDouble();
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1299,7 +1299,7 @@ void Editor::setDatasetWidgetMax(const int group, const int dataset,
     if (set)
     {
         set->m_max = maximum.toDouble();
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1316,7 +1316,7 @@ void Editor::setDatasetWidgetData(const int group, const int dataset,
     if (set)
     {
         set->m_widget = widget;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1335,7 +1335,7 @@ void Editor::setDatasetWidgetAlarm(const int group, const int dataset,
     if (set)
     {
         set->m_alarm = alarm.toDouble();
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1356,7 +1356,7 @@ void Editor::setDatasetFFTSamples(const int group, const int dataset,
             sample = 1;
 
         set->m_fftSamples = sample;
-        emit datasetChanged(group, dataset);
+        Q_EMIT datasetChanged(group, dataset);
     }
 }
 
@@ -1368,7 +1368,7 @@ void Editor::setDatasetFFTSamples(const int group, const int dataset,
 void Editor::setModified(const bool modified)
 {
     m_modified = modified;
-    emit modifiedChanged();
+    Q_EMIT modifiedChanged();
 }
 
 /**

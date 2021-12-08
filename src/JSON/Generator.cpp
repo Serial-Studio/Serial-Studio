@@ -147,7 +147,7 @@ void Generator::loadJsonMap(const QString &path)
     {
         m_jsonMap.close();
         m_jsonMapData = "";
-        emit jsonFileMapChanged();
+        Q_EMIT jsonFileMapChanged();
     }
 
     // Try to open the file (read only mode)
@@ -187,7 +187,7 @@ void Generator::loadJsonMap(const QString &path)
     }
 
     // Update UI
-    emit jsonFileMapChanged();
+    Q_EMIT jsonFileMapChanged();
 }
 
 /**
@@ -206,7 +206,7 @@ void Generator::loadJsonMap(const QString &path)
 void Generator::setOperationMode(const JSON::Generator::OperationMode &mode)
 {
     m_opMode = mode;
-    emit operationModeChanged();
+    Q_EMIT operationModeChanged();
 }
 
 /**
@@ -215,7 +215,7 @@ void Generator::setOperationMode(const JSON::Generator::OperationMode &mode)
 void Generator::setProcessFramesInSeparateThread(const bool threaded)
 {
     m_processInSeparateThread = threaded;
-    emit processFramesInSeparateThreadChanged();
+    Q_EMIT processFramesInSeparateThreadChanged();
 }
 
 /**
@@ -241,7 +241,7 @@ void Generator::loadJFI(const JFI_Object &info)
     const bool mqttSub = MQTT::Client::getInstance()->isSubscribed();
 
     if (csvOpen || devOpen || mqttSub)
-        emit jsonChanged(info);
+        Q_EMIT jsonChanged(info);
 
     else
         reset();
@@ -271,7 +271,7 @@ void Generator::loadJSON(const QJsonDocument &json)
 void Generator::reset()
 {
     m_frameCount = 0;
-    emit jsonChanged(JFI_Empty());
+    Q_EMIT jsonChanged(JFI_Empty());
 }
 
 /**
@@ -391,7 +391,7 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
 
     // No parse error, update UI & reset error counter
     if (error.error == QJsonParseError::NoError)
-        emit jsonChanged(JFI_CreateNew(frame, time, document));
+        Q_EMIT jsonChanged(JFI_CreateNew(frame, time, document));
 }
 
 //----------------------------------------------------------------------------------------
@@ -480,7 +480,7 @@ void JSONWorker::process()
 
     // No parse error, update UI & reset error counter
     if (error.error == QJsonParseError::NoError)
-        emit jsonReady(JFI_CreateNew(m_frame, m_time, document));
+        Q_EMIT jsonReady(JFI_CreateNew(m_frame, m_time, document));
 
     // Delete object in 500 ms
     QTimer::singleShot(500, this, SIGNAL(finished()));

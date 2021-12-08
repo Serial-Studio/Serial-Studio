@@ -105,7 +105,7 @@ void Export::openCurrentCsv()
 void Export::setExportEnabled(const bool enabled)
 {
     m_exportEnabled = enabled;
-    emit enabledChanged();
+    Q_EMIT enabledChanged();
 
     if (!exportEnabled() && isOpen())
     {
@@ -127,7 +127,7 @@ void Export::closeFile()
         m_csvFile.close();
         m_textStream.setDevice(Q_NULLPTR);
 
-        emit openChanged();
+        Q_EMIT openChanged();
     }
 }
 
@@ -228,7 +228,7 @@ void Export::createCsvFile(const RawFrame &frame)
     }
 
     // Update UI
-    emit openChanged();
+    Q_EMIT openChanged();
 }
 
 /**

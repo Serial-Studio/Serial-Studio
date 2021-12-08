@@ -99,7 +99,7 @@ CONFIG += silent
 # Unity build
 #-----------------------------------------------------------------------------------------
 
-CONFIG += unity_build                           # Uncomment for final releases, the unity
+#CONFIG += unity_build                          # Uncomment for final releases, the unity
                                                 # build reduces compile time by mashing
                                                 # together all the C++ files in a single
                                                 # file. This approach also allows the

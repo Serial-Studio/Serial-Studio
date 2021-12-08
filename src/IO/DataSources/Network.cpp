@@ -243,7 +243,7 @@ void Network::disconnectDevice()
 void Network::setTcpPort(const quint16 port)
 {
     m_tcpPort = port;
-    emit portChanged();
+    Q_EMIT portChanged();
 }
 
 /**
@@ -252,7 +252,7 @@ void Network::setTcpPort(const quint16 port)
 void Network::setUdpLocalPort(const quint16 port)
 {
     m_udpLocalPort = port;
-    emit portChanged();
+    Q_EMIT portChanged();
 }
 
 /**
@@ -261,7 +261,7 @@ void Network::setUdpLocalPort(const quint16 port)
 void Network::setUdpRemotePort(const quint16 port)
 {
     m_udpRemotePort = port;
-    emit portChanged();
+    Q_EMIT portChanged();
 }
 
 /**
@@ -282,7 +282,7 @@ void Network::setRemoteAddress(const QString &address)
 
     // Change host
     m_address = address;
-    emit addressChanged();
+    Q_EMIT addressChanged();
 }
 
 /**
@@ -291,7 +291,7 @@ void Network::setRemoteAddress(const QString &address)
 void Network::lookup(const QString &host)
 {
     m_lookupActive = true;
-    emit lookupActiveChanged();
+    Q_EMIT lookupActiveChanged();
     QHostInfo::lookupHost(host.simplified(), this, &Network::lookupFinished);
 }
 
@@ -301,7 +301,7 @@ void Network::lookup(const QString &host)
 void Network::setUdpMulticast(const bool enabled)
 {
     m_udpMulticast = enabled;
-    emit udpMulticastChanged();
+    Q_EMIT udpMulticastChanged();
 }
 
 /**
@@ -333,7 +333,7 @@ void Network::setSocketTypeIndex(const int index)
 void Network::setSocketType(const QAbstractSocket::SocketType type)
 {
     m_socketType = type;
-    emit socketTypeChanged();
+    Q_EMIT socketTypeChanged();
 }
 
 /**
@@ -343,7 +343,7 @@ void Network::setSocketType(const QAbstractSocket::SocketType type)
 void Network::lookupFinished(const QHostInfo &info)
 {
     m_lookupActive = false;
-    emit lookupActiveChanged();
+    Q_EMIT lookupActiveChanged();
 
     if (info.error() == QHostInfo::NoError)
     {
@@ -351,7 +351,7 @@ void Network::lookupFinished(const QHostInfo &info)
         if (addresses.count() >= 1)
         {
             m_hostExists = true;
-            emit addressChanged();
+            Q_EMIT addressChanged();
             return;
         }
     }

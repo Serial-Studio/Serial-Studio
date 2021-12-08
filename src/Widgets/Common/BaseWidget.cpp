@@ -141,6 +141,6 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
     event->accept();
 
     // Emit resize signal
-    emit resized();
+    Q_EMIT resized();
 }
 }

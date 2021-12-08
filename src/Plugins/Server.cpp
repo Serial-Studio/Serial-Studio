@@ -123,7 +123,7 @@ void Server::setEnabled(const bool enabled)
 {
     // Change value
     m_enabled = enabled;
-    emit enabledChanged();
+    Q_EMIT enabledChanged();
 
     // If not enabled, remove all connections
     if (!enabled)

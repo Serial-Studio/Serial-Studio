@@ -208,7 +208,7 @@ void Translator::setLanguage(const QLocale &locale, const QString &language)
     if (m_translator.load(locale, ":/translations/" + language + ".qm"))
     {
         qApp->installTranslator(&m_translator);
-        emit languageChanged();
+        Q_EMIT languageChanged();
     }
 }
 }
