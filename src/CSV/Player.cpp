@@ -269,10 +269,11 @@ void Player::openFile(const QString &filePath)
     {
         // Read CSV file into string matrix
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        QVector<QString> row;
         auto csv = QtCSV::Reader::readToList(m_csvFile);
         for (int i = 0; i < csv.count(); ++i)
         {
-            QVector<QString> row;
+            row.clear();
             for (int j = 0; j < csv.at(i).count(); ++j)
                 row.append(csv[i][j]);
 

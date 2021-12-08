@@ -88,7 +88,7 @@ QJsonValue JFI_Value(const QJsonObject &obj, const QString &key)
  */
 QJsonValue JFI_Value(const QJsonObject &obj, const QStringList &keys)
 {
-    foreach (auto key, keys)
+    Q_FOREACH (auto key, keys)
     {
         if (obj.contains(key))
             return obj.value(key);

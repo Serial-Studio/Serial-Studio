@@ -206,8 +206,8 @@ QIODevice *Network::openNetworkPort()
         socket = &m_udpSocket;
     }
 
-    // Convert socket to IO device pointer
-    return static_cast<QIODevice *>(socket);
+    // Return pointer
+    return socket;
 }
 
 /**

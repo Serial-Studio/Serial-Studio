@@ -73,6 +73,10 @@ DataGroup::DataGroup(const int index)
     valueFont.setPixelSize(dash->monoFont().pixelSize() * 1.3);
 
     // Configure grid layout
+    m_units.reserve(group->datasetCount());
+    m_icons.reserve(group->datasetCount());
+    m_titles.reserve(group->datasetCount());
+    m_values.reserve(group->datasetCount());
     m_gridLayout = new QGridLayout(m_dataContainer);
     for (int dataset = 0; dataset < group->datasetCount(); ++dataset)
     {
@@ -160,16 +164,16 @@ DataGroup::DataGroup(const int index)
  */
 DataGroup::~DataGroup()
 {
-    foreach (auto icon, m_icons)
+    Q_FOREACH (auto icon, m_icons)
         delete icon;
 
-    foreach (auto title, m_titles)
+    Q_FOREACH (auto title, m_titles)
         delete title;
 
-    foreach (auto value, m_values)
+    Q_FOREACH (auto value, m_values)
         delete value;
 
-    foreach (auto units, m_units)
+    Q_FOREACH (auto units, m_units)
         delete units;
 
     delete m_gridLayout;

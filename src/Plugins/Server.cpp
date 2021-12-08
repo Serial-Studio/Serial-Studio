@@ -233,7 +233,7 @@ void Server::sendProcessedData()
         const auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
         // Send data to each plugin
-        foreach (auto socket, m_sockets)
+        Q_FOREACH (auto socket, m_sockets)
         {
             if (!socket)
                 continue;
@@ -270,7 +270,7 @@ void Server::sendRawData(const QByteArray &data)
     auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
     // Send data to each plugin
-    foreach (auto socket, m_sockets)
+    Q_FOREACH (auto socket, m_sockets)
     {
         if (!socket)
             continue;

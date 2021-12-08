@@ -121,7 +121,7 @@ void Export::closeFile()
 {
     if (isOpen())
     {
-        while (m_frames.count())
+        while (m_frames.isEmpty())
             writeValues();
 
         m_csvFile.close();
@@ -171,7 +171,7 @@ void Export::writeValues()
 /**
  * Creates a new CSV file corresponding to the current project title & field count
  */
-void Export::createCsvFile(const RawFrame &frame)
+void Export::createCsvFile(const CSV::RawFrame &frame)
 {
     // Get project title
     const auto projectTitle = UI::Dashboard::getInstance()->title();

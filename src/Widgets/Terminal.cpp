@@ -910,7 +910,7 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
                 }
                 break;
             }
-            m_pendingText += strippedText.mid(0, escape.length());
+            m_pendingText += strippedText.midRef(0, escape.length());
             strippedText.remove(0, escape.length());
 
             // Get stripped text in uppercase
@@ -961,7 +961,7 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
                         break;
                     strNumber.clear();
                 }
-                m_pendingText += strippedText.mid(0, 1);
+                m_pendingText += strippedText.midRef(0, 1);
                 strippedText.remove(0, 1);
             }
             if (strippedText.isEmpty())

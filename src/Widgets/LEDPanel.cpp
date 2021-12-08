@@ -67,6 +67,8 @@ LEDPanel::LEDPanel(const int index)
     valueFont.setPixelSize(dash->monoFont().pixelSize() * 1.3);
 
     // Configure grid layout
+    m_leds.reserve(group->datasetCount());
+    m_titles.reserve(group->datasetCount());
     m_gridLayout = new QGridLayout(m_dataContainer);
     m_gridLayout->setSpacing(16);
     for (int dataset = 0; dataset < group->datasetCount(); ++dataset)
@@ -133,10 +135,10 @@ LEDPanel::LEDPanel(const int index)
  */
 LEDPanel::~LEDPanel()
 {
-    foreach (auto led, m_leds)
+    Q_FOREACH (auto led, m_leds)
         delete led;
 
-    foreach (auto title, m_titles)
+    Q_FOREACH (auto title, m_titles)
         delete title;
 
     delete m_gridLayout;

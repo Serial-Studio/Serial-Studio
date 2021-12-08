@@ -557,7 +557,7 @@ void Serial::refreshSerialDevices()
 
     // Search for available ports and add them to the lsit
     auto validPortList = validPorts();
-    foreach (QSerialPortInfo info, validPortList)
+    Q_FOREACH (QSerialPortInfo info, validPortList)
     {
         if (!info.isNull())
             ports.append(info.portName());
@@ -671,7 +671,7 @@ void Serial::writeSettings()
     // Convert QVector to QStringList
     QStringList list;
     for (int i = 0; i < baudRateList().count(); ++i)
-        list.append(baudRateList()[i]);
+        list.append(baudRateList().at(i));
 
     // Save list to memory
     m_settings.setValue("IO_DataSource_Serial__BaudRates", list);
@@ -684,7 +684,7 @@ QVector<QSerialPortInfo> Serial::validPorts() const
 {
     // Search for available ports and add them to the list
     QVector<QSerialPortInfo> ports;
-    foreach (QSerialPortInfo info, QSerialPortInfo::availablePorts())
+    Q_FOREACH (QSerialPortInfo info, QSerialPortInfo::availablePorts())
     {
         if (!info.isNull())
         {

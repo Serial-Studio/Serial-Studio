@@ -732,7 +732,7 @@ void Client::onSslErrors(const QList<QSslError> &errors)
 {
     Q_ASSERT(m_client);
 
-    foreach (auto error, errors)
+    Q_FOREACH (auto error, errors)
     {
         auto ret = Misc::Utilities::showMessageBox(
             tr("MQTT client SSL/TLS error, ignore?"), error.errorString(),

@@ -49,7 +49,7 @@ void Utilities::rebootApplication()
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qApp->exit();
-    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    QProcess::startDetached(qApp->arguments().first(), qApp->arguments());
 #else
 #    ifdef Q_OS_MAC
     auto bundle = qApp->applicationDirPath() + "/../../";

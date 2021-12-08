@@ -703,8 +703,7 @@ void Dashboard::updateData()
     const auto pTitle = title();
 
     // Try to read latest frame for widget updating
-    auto lastJson = m_jsonList.last();
-    if (!m_latestFrame.read(lastJson.jsonDocument.object()))
+    if (!m_latestFrame.read(m_jsonList.last().jsonDocument.object()))
         return;
 
     // Regenerate plot data
@@ -897,9 +896,9 @@ void Dashboard::processLatestJSON(const JFI_Object &frameInfo)
 QVector<JSON::Group *> Dashboard::getLEDWidgets() const
 {
     QVector<JSON::Dataset *> widgets;
-    foreach (auto group, m_latestFrame.groups())
+    Q_FOREACH (auto group, m_latestFrame.groups())
     {
-        foreach (auto dataset, group->datasets())
+        Q_FOREACH (auto dataset, group->datasets())
         {
             if (dataset->led())
                 widgets.append(dataset);
@@ -924,9 +923,9 @@ QVector<JSON::Group *> Dashboard::getLEDWidgets() const
 QVector<JSON::Dataset *> Dashboard::getFFTWidgets() const
 {
     QVector<JSON::Dataset *> widgets;
-    foreach (auto group, m_latestFrame.groups())
+    Q_FOREACH (auto group, m_latestFrame.groups())
     {
-        foreach (auto dataset, group->datasets())
+        Q_FOREACH (auto dataset, group->datasets())
         {
             if (dataset->fft())
                 widgets.append(dataset);
@@ -942,9 +941,9 @@ QVector<JSON::Dataset *> Dashboard::getFFTWidgets() const
 QVector<JSON::Dataset *> Dashboard::getPlotWidgets() const
 {
     QVector<JSON::Dataset *> widgets;
-    foreach (auto group, m_latestFrame.groups())
+    Q_FOREACH (auto group, m_latestFrame.groups())
     {
-        foreach (auto dataset, group->datasets())
+        Q_FOREACH (auto dataset, group->datasets())
         {
             if (dataset->graph())
                 widgets.append(dataset);
@@ -961,7 +960,7 @@ QVector<JSON::Dataset *> Dashboard::getPlotWidgets() const
 QVector<JSON::Group *> Dashboard::getWidgetGroups(const QString &handle) const
 {
     QVector<JSON::Group *> widgets;
-    foreach (auto group, m_latestFrame.groups())
+    Q_FOREACH (auto group, m_latestFrame.groups())
     {
         if (group->widget() == handle)
             widgets.append(group);
@@ -977,9 +976,9 @@ QVector<JSON::Group *> Dashboard::getWidgetGroups(const QString &handle) const
 QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle) const
 {
     QVector<JSON::Dataset *> widgets;
-    foreach (auto group, m_latestFrame.groups())
+    Q_FOREACH (auto group, m_latestFrame.groups())
     {
-        foreach (auto dataset, group->datasets())
+        Q_FOREACH (auto dataset, group->datasets())
         {
             if (dataset->widget() == handle)
                 widgets.append(dataset);
@@ -995,7 +994,7 @@ QVector<JSON::Dataset *> Dashboard::getWidgetDatasets(const QString &handle) con
 StringList Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) const
 {
     StringList list;
-    foreach (auto set, vector)
+    Q_FOREACH (auto set, vector)
         list.append(set->title());
 
     return list;
@@ -1007,7 +1006,7 @@ StringList Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) cons
 StringList Dashboard::groupTitles(const QVector<JSON::Group *> &vector) const
 {
     StringList list;
-    foreach (auto group, vector)
+    Q_FOREACH (auto group, vector)
         list.append(group->title());
 
     return list;

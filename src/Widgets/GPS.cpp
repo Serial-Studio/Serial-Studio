@@ -182,14 +182,14 @@ void GPS::mousePressEvent(QMouseEvent *event)
     if (x >= m_zoomIn->x() && x <= m_zoomIn->x() + m_zoomIn->width())
     {
         if (y >= m_zoomIn->y() && y <= m_zoomIn->y() + m_zoomIn->height())
-            m_zoomIn->clicked();
+            Q_EMIT m_zoomIn->clicked();
     }
 
     // Press zoom out button
     else if (x >= m_zoomOut->x() && x <= m_zoomOut->x() + m_zoomOut->width())
     {
         if (y >= m_zoomOut->y() && y <= m_zoomOut->y() + m_zoomOut->height())
-            m_zoomOut->clicked();
+            Q_EMIT m_zoomOut->clicked();
     }
 
     // Accept event

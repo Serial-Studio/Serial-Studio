@@ -73,6 +73,7 @@ MultiPlot::MultiPlot(const int index)
     bool normalize = true;
     const auto group = dash->getMultiplot(m_index);
     StringList colors = theme->widgetColors();
+    m_curves.reserve(group->datasetCount());
     for (int i = 0; i < group->datasetCount(); ++i)
     {
         // Get dataset title & min/max values

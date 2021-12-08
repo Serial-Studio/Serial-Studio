@@ -81,8 +81,8 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void writeValues();
-    void createCsvFile(const RawFrame &frame);
     void registerFrame(const QByteArray &data);
+    void createCsvFile(const CSV::RawFrame &frame);
 
 private:
     QFile m_csvFile;
