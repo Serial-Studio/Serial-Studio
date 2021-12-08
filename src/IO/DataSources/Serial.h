@@ -96,7 +96,7 @@ class Serial : public QObject
                CONSTANT)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void portChanged();
     void parityChanged();
     void baudRateChanged();
@@ -140,7 +140,7 @@ public:
 
     QSerialPort *openSerialPort();
 
-public slots:
+public Q_SLOTS:
     void disconnectDevice();
     void setBaudRate(const qint32 rate);
     void setParity(const quint8 parityIndex);
@@ -151,7 +151,7 @@ public slots:
     void setAutoReconnect(const bool autoreconnect);
     void setFlowControl(const quint8 flowControlIndex);
 
-private slots:
+private Q_SLOTS:
     void readSettings();
     void writeSettings();
     void refreshSerialDevices();

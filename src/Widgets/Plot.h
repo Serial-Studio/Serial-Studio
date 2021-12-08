@@ -37,7 +37,7 @@ class Plot : public QWidget
 public:
     Plot(const int index = -1);
 
-private slots:
+private Q_SLOTS:
     void updateData();
     void updateRange();
 

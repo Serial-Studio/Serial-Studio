@@ -42,7 +42,7 @@ public:
     GPS(const int index = -1);
     ~GPS();
 
-private slots:
+private Q_SLOTS:
     void updateData();
 
 protected:

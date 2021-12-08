@@ -34,7 +34,7 @@ class Compass : public BaseWidget
 public:
     Compass(const int index = -1);
 
-private slots:
+private Q_SLOTS:
     void update();
 
 private:

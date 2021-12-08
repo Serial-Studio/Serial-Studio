@@ -86,7 +86,7 @@ class WidgetLoader : public QQuickPaintedItem
                NOTIFY widgetVisibleChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void widgetIndexChanged();
     void widgetVisibleChanged();
     void isExternalWindowChanged();
@@ -107,13 +107,13 @@ public:
     bool isExternalWindow() const;
     UI::Dashboard::WidgetType widgetType() const;
 
-public slots:
+public Q_SLOTS:
     void setVisible(const bool visible);
     void setWidgetIndex(const int index);
     void setIsExternalWindow(const bool isWindow);
     void processMouseHover(const bool containsMouse);
 
-private slots:
+private Q_SLOTS:
     void updateWidgetSize();
     void updateWidgetVisible();
 

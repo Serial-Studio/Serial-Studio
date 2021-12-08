@@ -73,7 +73,7 @@ class Editor : public QObject
                NOTIFY jsonFileChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void titleChanged();
     void jsonFileChanged();
     void modifiedChanged();
@@ -129,7 +129,7 @@ public:
 
     Q_INVOKABLE bool setGroupWidget(const int group, const int widgetId);
 
-public slots:
+public Q_SLOTS:
     void newJsonFile();
     void openJsonFile();
     void openJsonFile(const QString &path);
@@ -162,7 +162,7 @@ public slots:
     void setDatasetWidgetAlarm(const int group, const int dataset, const QString &alarm);
     void setDatasetFFTSamples(const int group, const int dataset, const QString &samples);
 
-private slots:
+private Q_SLOTS:
     void onJsonLoaded();
     void onModelChanged();
     void onGroupChanged(const int group);

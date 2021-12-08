@@ -39,7 +39,7 @@ public:
     DataGroup(const int index = -1);
     ~DataGroup();
 
-private slots:
+private Q_SLOTS:
     void updateData();
 
 protected:

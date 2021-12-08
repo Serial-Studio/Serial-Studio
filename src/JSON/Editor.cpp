@@ -782,16 +782,17 @@ void Editor::openJsonFile(const QString &path)
             setDatasetGraph(g, d, JFI_Value(dataset, "graph", "g").toBool());
             setDatasetTitle(g, d, JFI_Value(dataset, "title", "t").toString());
             setDatasetUnits(g, d, JFI_Value(dataset, "units", "u").toString());
-            setDatasetFFTSamples(g, d, JFI_Value(dataset, "fftSamples").toString());
             setDatasetWidgetData(g, d, JFI_Value(dataset, "widget", "w").toString());
 
             // Get max/min texts
             auto min = JFI_Value(dataset, "min").toDouble();
             auto max = JFI_Value(dataset, "max").toDouble();
             auto alarm = JFI_Value(dataset, "alarm").toDouble();
+            auto fftSamples = JFI_Value(dataset, "fftSamples").toInt();
             setDatasetWidgetMin(g, d, QString::number(min));
             setDatasetWidgetMax(g, d, QString::number(max));
             setDatasetWidgetAlarm(g, d, QString::number(alarm));
+            setDatasetFFTSamples(g, d, QString::number(fftSamples));
 
             // Calculate dataset index
             auto index = JFI_Value(dataset, "value", "v").toString();

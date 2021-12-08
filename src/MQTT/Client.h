@@ -138,7 +138,7 @@ class Client : public QObject
                NOTIFY caFilePathChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void qosChanged();
     void portChanged();
     void hostChanged();
@@ -183,7 +183,7 @@ public:
     quint16 defaultPort() const { return 1883; }
     QString defaultHost() const { return "127.0.0.1"; }
 
-public slots:
+public Q_SLOTS:
     void loadCaFile();
     void connectToHost();
     void toggleConnection();
@@ -207,7 +207,7 @@ private:
     Client();
     ~Client();
 
-private slots:
+private Q_SLOTS:
     void sendData();
     void resetStatistics();
     void onConnectedChanged();

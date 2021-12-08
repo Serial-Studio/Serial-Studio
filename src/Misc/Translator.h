@@ -53,7 +53,7 @@ class Translator : public QObject
                CONSTANT)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void languageChanged();
 
 private:
@@ -68,7 +68,7 @@ public:
     Q_INVOKABLE QString welcomeConsoleText() const;
     Q_INVOKABLE QString acknowledgementsText() const;
 
-public slots:
+public Q_SLOTS:
     void setLanguage(const int language);
     void setLanguage(const QLocale &locale, const QString &language);
 

@@ -195,7 +195,7 @@ class ThemeManager : public QObject
                NOTIFY availableThemesChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void themeChanged();
     void availableThemesChanged();
 
@@ -255,10 +255,10 @@ public:
     StringList widgetColors() const;
     StringList availableThemes() const;
 
-public slots:
+public Q_SLOTS:
     void setTheme(const int id);
 
-private slots:
+private Q_SLOTS:
     void populateThemes();
     void loadTheme(const int id);
 

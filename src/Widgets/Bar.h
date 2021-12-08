@@ -34,7 +34,7 @@ class Bar : public BaseWidget
 public:
     Bar(const int index = -1);
 
-private slots:
+private Q_SLOTS:
     void updateData();
     void onResized();
 

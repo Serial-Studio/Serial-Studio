@@ -40,7 +40,7 @@ public:
     LEDPanel(const int index = -1);
     ~LEDPanel();
 
-private slots:
+private Q_SLOTS:
     void updateData();
 
 protected:

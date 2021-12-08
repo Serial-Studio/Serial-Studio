@@ -53,7 +53,7 @@ class Player : public QObject
                NOTIFY timestampChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void openChanged();
     void timestampChanged();
     void playerStateChanged();
@@ -73,7 +73,7 @@ public:
 private:
     Player();
 
-public slots:
+public Q_SLOTS:
     void play();
     void pause();
     void toggle();
@@ -84,7 +84,7 @@ public slots:
     void openFile(const QString &filePath);
     void setProgress(const qreal &progress);
 
-private slots:
+private Q_SLOTS:
     void updateData();
 
 private:

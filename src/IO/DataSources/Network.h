@@ -92,7 +92,7 @@ class Network : public QObject
                NOTIFY udpMulticastChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void portChanged();
     void addressChanged();
     void socketTypeChanged();
@@ -125,7 +125,7 @@ public:
 
     QIODevice *openNetworkPort();
 
-public slots:
+public Q_SLOTS:
     void setTcpSocket();
     void setUdpSocket();
     void disconnectDevice();
@@ -138,7 +138,7 @@ public slots:
     void setRemoteAddress(const QString &address);
     void setSocketType(const QAbstractSocket::SocketType type);
 
-private slots:
+private Q_SLOTS:
     void lookupFinished(const QHostInfo &info);
     void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 

@@ -40,7 +40,7 @@ public:
     FFTPlot(const int index = -1);
     ~FFTPlot();
 
-private slots:
+private Q_SLOTS:
     void updateData();
 
 private:

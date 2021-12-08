@@ -93,7 +93,7 @@ class Manager : public QObject
                NOTIFY configurationChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void deviceChanged();
     void connectedChanged();
     void watchdogTriggered();
@@ -148,7 +148,7 @@ public:
     Q_INVOKABLE StringList dataSourcesList() const;
     Q_INVOKABLE qint64 writeData(const QByteArray &data);
 
-public slots:
+public Q_SLOTS:
     void connectDevice();
     void toggleConnection();
     void disconnectDevice();
@@ -161,7 +161,7 @@ public slots:
     void setWatchdogInterval(const int interval = 15);
     void setDataSource(const IO::Manager::DataSource &source);
 
-private slots:
+private Q_SLOTS:
     void readFrames();
     void feedWatchdog();
     void onDataReceived();

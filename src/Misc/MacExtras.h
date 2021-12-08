@@ -38,7 +38,7 @@ class MacExtras : public QObject
 {
     Q_OBJECT
 
-signals:
+Q_SIGNALS:
     void setupClicked();
     void connectClicked();
     void consoleClicked();
@@ -47,13 +47,13 @@ signals:
 public:
     static MacExtras *getInstance();
 
-public slots:
+public Q_SLOTS:
     void setSetupChecked(const bool checked);
     void setConsoleChecked(const bool checked);
     void setDashboardChecked(const bool checked);
     void setDashboardEnabled(const bool enabled);
 
-private slots:
+private Q_SLOTS:
     void updateButtonText();
 
 private:

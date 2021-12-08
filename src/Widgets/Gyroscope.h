@@ -36,7 +36,7 @@ class Gyroscope : public BaseWidget
 public:
     Gyroscope(const int index = -1);
 
-private slots:
+private Q_SLOTS:
     void updateData();
     void updateLabel();
 

@@ -60,7 +60,7 @@ class Export : public QObject
                NOTIFY enabledChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void openChanged();
     void enabledChanged();
 
@@ -74,12 +74,12 @@ private:
     Export();
     ~Export();
 
-public slots:
+public Q_SLOTS:
     void closeFile();
     void openCurrentCsv();
     void setExportEnabled(const bool enabled);
 
-private slots:
+private Q_SLOTS:
     void writeValues();
     void createCsvFile(const RawFrame &frame);
     void registerFrame(const QByteArray &data);

@@ -48,7 +48,7 @@ class TimerEvents : public QObject
                NOTIFY highFreqTimeoutChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void lowFreqTimeout();
     void highFreqTimeout();
     void highFreqTimeoutChanged();
@@ -57,7 +57,7 @@ public:
     static TimerEvents *getInstance();
     int highFreqTimeoutHz() const;
 
-public slots:
+public Q_SLOTS:
     void stopTimers();
     void startTimers();
     void setHighFreqTimeout(const int hz);

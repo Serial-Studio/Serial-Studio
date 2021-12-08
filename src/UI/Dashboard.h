@@ -145,7 +145,7 @@ class Dashboard : public QObject
                NOTIFY widgetCountChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void updated();
     void dataReset();
     void titleChanged();
@@ -240,7 +240,7 @@ public:
     QVector<PlotData> *fftPlotValues() { return &m_fftPlotValues; }
     QVector<PlotData> *linearPlotValues() { return &m_linearPlotValues; }
 
-public slots:
+public Q_SLOTS:
     void setPoints(const int points);
     void setPrecision(const int precision);
     void setBarVisible(const int index, const bool visible);
@@ -255,7 +255,7 @@ public slots:
     void setMultiplotVisible(const int index, const bool visible);
     void setAccelerometerVisible(const int index, const bool visible);
 
-private slots:
+private Q_SLOTS:
     void resetData();
     void updateData();
     void updatePlots();

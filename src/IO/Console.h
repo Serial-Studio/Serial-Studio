@@ -73,7 +73,7 @@ class Console : public QObject
                NOTIFY historyItemChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void echoChanged();
     void dataReceived();
     void dataModeChanged();
@@ -126,7 +126,7 @@ public:
     Q_INVOKABLE StringList displayModes() const;
     Q_INVOKABLE QString formatUserHex(const QString &text);
 
-public slots:
+public Q_SLOTS:
     void save();
     void clear();
     void historyUp();
@@ -141,7 +141,7 @@ public slots:
     void setDisplayMode(const IO::Console::DisplayMode &mode);
     void append(const QString &str, const bool addTimestamp = false);
 
-private slots:
+private Q_SLOTS:
     void displayData();
     void onDataSent(const QByteArray &data);
     void addToHistory(const QString &command);

@@ -41,7 +41,7 @@ class MultiPlot : public QWidget
 public:
     MultiPlot(const int index = -1);
 
-private slots:
+private Q_SLOTS:
     void updateData();
     void updateRange();
 

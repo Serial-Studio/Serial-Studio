@@ -126,7 +126,7 @@ class Terminal : public QQuickPaintedItem
                NOTIFY vt100EmulationChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void textChanged();
     void fontChanged();
     void readOnlyChanged();
@@ -170,7 +170,7 @@ public:
     QTextDocument *document() const;
     QPlainTextEdit *textEdit() const;
 
-public slots:
+public Q_SLOTS:
     void copy();
     void clear();
     void selectAll();
@@ -192,7 +192,7 @@ public slots:
     void scrollToBottom(const bool repaint = false);
     void setMaximumBlockCount(const int maxBlockCount);
 
-private slots:
+private Q_SLOTS:
     void updateWidgetSize();
     void updateScrollbarVisibility();
     void setCopyAvailable(const bool yes);

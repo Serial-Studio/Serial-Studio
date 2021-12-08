@@ -60,18 +60,18 @@ class Server : public QObject
     Q_OBJECT
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
 
-signals:
+Q_SIGNALS:
     void enabledChanged();
 
 public:
     static Server *getInstance();
     bool enabled() const;
 
-public slots:
+public Q_SLOTS:
     void removeConnection();
     void setEnabled(const bool enabled);
 
-private slots:
+private Q_SLOTS:
     void onDataReceived();
     void acceptConnection();
     void sendProcessedData();

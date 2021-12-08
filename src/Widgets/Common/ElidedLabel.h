@@ -37,7 +37,7 @@ public:
                          Qt::WindowFlags flags = Qt::WindowFlags());
     void setType(const Qt::TextElideMode type);
 
-public slots:
+public Q_SLOTS:
     void setText(const QString &text);
     void elide();
 

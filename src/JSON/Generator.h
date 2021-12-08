@@ -47,14 +47,14 @@ class JSONWorker : public QObject
 {
     Q_OBJECT
 
-signals:
+Q_SIGNALS:
     void finished();
     void jsonReady(const JFI_Object &info);
 
 public:
     JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time);
 
-public slots:
+public Q_SLOTS:
     void process();
 
 private:
@@ -105,7 +105,7 @@ class Generator : public QObject
                NOTIFY processFramesInSeparateThreadChanged)
     // clang-format on
 
-signals:
+Q_SIGNALS:
     void jsonFileMapChanged();
     void operationModeChanged();
     void jsonChanged(const JFI_Object &info);
@@ -128,7 +128,7 @@ public:
     OperationMode operationMode() const;
     bool processFramesInSeparateThread() const;
 
-public slots:
+public Q_SLOTS:
     void loadJsonMap();
     void loadJsonMap(const QString &path);
     void setProcessFramesInSeparateThread(const bool threaded);
@@ -137,13 +137,13 @@ public slots:
 private:
     Generator();
 
-public slots:
+public Q_SLOTS:
     void readSettings();
     void loadJFI(const JFI_Object &object);
     void writeSettings(const QString &path);
     void loadJSON(const QJsonDocument &json);
 
-private slots:
+private Q_SLOTS:
     void reset();
     void readData(const QByteArray &data);
     void processFrame(const QByteArray &data, const quint64 frame, const QDateTime &time);

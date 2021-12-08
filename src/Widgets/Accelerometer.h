@@ -34,7 +34,7 @@ class Accelerometer : public BaseWidget
 public:
     Accelerometer(const int index = -1);
 
-private slots:
+private Q_SLOTS:
     void updateData();
 
 private:

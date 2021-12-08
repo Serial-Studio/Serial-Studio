@@ -39,7 +39,7 @@ public:
     double angle() const;
     double gradient() const;
 
-public slots:
+public Q_SLOTS:
     void setAngle(const double &angle);
     void setGradient(const double &gradient);
 

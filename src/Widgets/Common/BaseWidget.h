@@ -32,7 +32,7 @@ class BaseWidget : public QWidget
 {
     Q_OBJECT
 
-signals:
+Q_SIGNALS:
     void resized();
 
 public:
