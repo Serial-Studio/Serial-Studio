@@ -81,7 +81,9 @@ jobs:
 
     - name: '📦 Create AppImage'
       run: |
+          which ${{env.QMAKE}
           export QML_SOURCES_PATHS="${{env.QML_DIR_NIX}}"
+          export QMAKE=${{env.QMAKE}
           export PATH=/home/runner/work/Serial-Studio/Qt/${{env.QT_VERSION}}/gcc_64/libexec:$PATH
           ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i deploy/linux/${{env.UNIXNAME}}.png -d deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
           rm linuxdeploy-x86_64.AppImage
