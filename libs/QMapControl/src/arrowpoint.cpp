@@ -64,7 +64,7 @@ void ArrowPoint::drawArrow()
     QPainter painter(&mypixmap);
     //#if !defined Q_WS_MAEMO_5  //FIXME Maemo has a bug - it will antialias our point out
     //of existence
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::Qt4CompatiblePainting);
+    painter.setRenderHints(QPainter::Antialiasing);
     //#endif
 
     if (mypen)

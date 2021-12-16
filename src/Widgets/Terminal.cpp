@@ -127,23 +127,23 @@ bool Terminal::event(QEvent *event)
 {
     switch (event->type())
     {
-        case QEvent::FocusIn:
-            forceActiveFocus();
-            return QQuickPaintedItem::event(event);
-            break;
-        case QEvent::Wheel:
-            processWheelEvents(static_cast<QWheelEvent *>(event));
-            return true;
-            break;
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseButtonDblClick:
-        case QEvent::MouseMove:
-            processMouseEvents(static_cast<QMouseEvent *>(event));
-            return true;
-            break;
-        default:
-            break;
+    case QEvent::FocusIn:
+        forceActiveFocus();
+        return QQuickPaintedItem::event(event);
+        break;
+    case QEvent::Wheel:
+        processWheelEvents(static_cast<QWheelEvent *>(event));
+        return true;
+        break;
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease:
+    case QEvent::MouseButtonDblClick:
+    case QEvent::MouseMove:
+        processMouseEvents(static_cast<QMouseEvent *>(event));
+        return true;
+        break;
+    default:
+        break;
     }
 
     return QApplication::sendEvent(textEdit(), event);
@@ -169,12 +169,12 @@ bool Terminal::eventFilter(QObject *watched, QEvent *event)
     {
         switch (event->type())
         {
-            case QEvent::Paint:
-            case QEvent::UpdateRequest:
-                update();
-                break;
-            default:
-                break;
+        case QEvent::Paint:
+        case QEvent::UpdateRequest:
+            update();
+            break;
+        default:
+            break;
         }
     }
 
@@ -697,20 +697,20 @@ void Terminal::processMouseEvents(QMouseEvent *event)
     auto hack = static_cast<Hack *>(textEdit());
     switch (event->type())
     {
-        case QEvent::MouseButtonPress:
-            hack->mousePressEvent(event);
-            break;
-        case QEvent::MouseMove:
-            hack->mouseMoveEvent(event);
-            break;
-        case QEvent::MouseButtonRelease:
-            hack->mouseReleaseEvent(event);
-            break;
-        case QEvent::MouseButtonDblClick:
-            hack->mouseDoubleClickEvent(event);
-            break;
-        default:
-            break;
+    case QEvent::MouseButtonPress:
+        hack->mousePressEvent(event);
+        break;
+    case QEvent::MouseMove:
+        hack->mouseMoveEvent(event);
+        break;
+    case QEvent::MouseButtonRelease:
+        hack->mouseReleaseEvent(event);
+        break;
+    case QEvent::MouseButtonDblClick:
+        hack->mouseDoubleClickEvent(event);
+        break;
+    default:
+        break;
     }
 }
 
@@ -768,10 +768,10 @@ QString Terminal::vt100Processing(const QString &data)
 {
     auto formattedText = m_escapeCodeHandler.parseText(FormattedText(data));
     const QString cleanLine = std::accumulate(
-        formattedText.begin(), formattedText.end(), QString(),
-        [](const FormattedText &t1, const FormattedText &t2) -> QString {
-            return t1.text + t2.text;
-        });
+                formattedText.begin(), formattedText.end(), QString(),
+                [](const FormattedText &t1, const FormattedText &t2) -> QString {
+        return t1.text + t2.text;
+    });
     m_escapeCodeHandler.endFormatScope();
 
     return cleanLine;
@@ -785,12 +785,12 @@ QString Terminal::vt100Processing(const QString &data)
 #define QTC_ASSERT(cond, action)                                                         \
     if (Q_LIKELY(cond)) { }                                                              \
     else                                                                                 \
-    {                                                                                    \
-        action;                                                                          \
-    }                                                                                    \
+{                                                                                    \
+    action;                                                                          \
+}                                                                                    \
     do                                                                                   \
-    {                                                                                    \
-    } while (0)
+{                                                                                    \
+} while (0)
 
 static QColor ansiColor(uint code)
 {
@@ -885,32 +885,38 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
             {
                 switch (strippedText.at(1).toLatin1())
                 {
-                    case '\\': // Unexpected terminator sequence.
-                        Q_FALLTHROUGH();
-                    case 'N':
-                    case 'O': // Ignore unsupported single-character sequences.
-                        strippedText.remove(0, 2);
-                        break;
-                    case ']':
-                        m_alternateTerminator = QChar(7);
-                        Q_FALLTHROUGH();
-                    case 'P':
-                    case 'X':
-                    case '^':
-                    case '_':
-                        strippedText.remove(0, 2);
-                        m_waitingForTerminator = true;
-                        break;
-                    default:
-                        // not a control sequence
-                        m_pendingText.clear();
-                        outputData << FormattedText(strippedText.left(1), charFormat);
-                        strippedText.remove(0, 1);
-                        continue;
+                case '\\': // Unexpected terminator sequence.
+                    Q_FALLTHROUGH();
+                case 'N':
+                case 'O': // Ignore unsupported single-character sequences.
+                    strippedText.remove(0, 2);
+                    break;
+                case ']':
+                    m_alternateTerminator = QChar(7);
+                    Q_FALLTHROUGH();
+                case 'P':
+                case 'X':
+                case '^':
+                case '_':
+                    strippedText.remove(0, 2);
+                    m_waitingForTerminator = true;
+                    break;
+                default:
+                    // not a control sequence
+                    m_pendingText.clear();
+                    outputData << FormattedText(strippedText.left(1), charFormat);
+                    strippedText.remove(0, 1);
+                    continue;
                 }
                 break;
             }
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             m_pendingText += strippedText.midRef(0, escape.length());
+#else
+            m_pendingText += QStringView{strippedText}.mid(0, escape.length()).toString();
+#endif
+
             strippedText.remove(0, escape.length());
 
             // Get stripped text in uppercase
@@ -961,7 +967,11 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
                         break;
                     strNumber.clear();
                 }
-                m_pendingText += strippedText.midRef(0, 1);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            m_pendingText += strippedText.midRef(0, 1);
+#else
+            m_pendingText += QStringView{strippedText}.mid(0, 1).toString();
+#endif
                 strippedText.remove(0, 1);
             }
             if (strippedText.isEmpty())
@@ -1002,89 +1012,89 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
                 {
                     switch (code)
                     {
-                        case ResetFormat:
-                            charFormat = input.format;
-                            endFormatScope();
+                    case ResetFormat:
+                        charFormat = input.format;
+                        endFormatScope();
+                        break;
+                    case BoldText:
+                        charFormat.setFontWeight(QFont::Bold);
+                        setFormatScope(charFormat);
+                        break;
+                    case DefaultTextColor:
+                        charFormat.setForeground(input.format.foreground());
+                        setFormatScope(charFormat);
+                        break;
+                    case DefaultBackgroundColor:
+                        charFormat.setBackground(input.format.background());
+                        setFormatScope(charFormat);
+                        break;
+                    case RgbTextColor:
+                    case RgbBackgroundColor:
+                        // See http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+                        if (++i >= numbers.size())
                             break;
-                        case BoldText:
-                            charFormat.setFontWeight(QFont::Bold);
-                            setFormatScope(charFormat);
-                            break;
-                        case DefaultTextColor:
-                            charFormat.setForeground(input.format.foreground());
-                            setFormatScope(charFormat);
-                            break;
-                        case DefaultBackgroundColor:
-                            charFormat.setBackground(input.format.background());
-                            setFormatScope(charFormat);
-                            break;
-                        case RgbTextColor:
-                        case RgbBackgroundColor:
-                            // See http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
-                            if (++i >= numbers.size())
-                                break;
-                            switch (numbers.at(i).toInt())
+                        switch (numbers.at(i).toInt())
+                        {
+                        case 2:
+                            // RGB set with format: 38;2;<r>;<g>;<b>
+                            if ((i + 3) < numbers.size())
                             {
-                                case 2:
-                                    // RGB set with format: 38;2;<r>;<g>;<b>
-                                    if ((i + 3) < numbers.size())
-                                    {
-                                        (code == RgbTextColor)
-                                            ? charFormat.setForeground(
-                                                QColor(numbers.at(i + 1).toInt(),
-                                                       numbers.at(i + 2).toInt(),
-                                                       numbers.at(i + 3).toInt()))
-                                            : charFormat.setBackground(
-                                                QColor(numbers.at(i + 1).toInt(),
-                                                       numbers.at(i + 2).toInt(),
-                                                       numbers.at(i + 3).toInt()));
-                                        setFormatScope(charFormat);
-                                    }
-                                    i += 3;
-                                    break;
-                                case 5:
-                                    // 256 color mode with format: 38;5;<i>
-                                    uint index = numbers.at(i + 1).toUInt();
-
-                                    QColor color;
-                                    if (index < 8)
-                                    {
-                                        // The first 8 colors are standard low-intensity
-                                        // ANSI colors.
-                                        color = ansiColor(index);
-                                    }
-                                    else if (index < 16)
-                                    {
-                                        // The next 8 colors are standard high-intensity
-                                        // ANSI colors.
-                                        color = ansiColor(index - 8).lighter(150);
-                                    }
-                                    else if (index < 232)
-                                    {
-                                        // The next 216 colors are a 6x6x6 RGB cube.
-                                        uint o = index - 16;
-                                        color = QColor((o / 36) * 51, ((o / 6) % 6) * 51,
-                                                       (o % 6) * 51);
-                                    }
-                                    else
-                                    {
-                                        // The last 24 colors are a greyscale gradient.
-                                        int grey = int((index - 232) * 11);
-                                        color = QColor(grey, grey, grey);
-                                    }
-
-                                    if (code == RgbTextColor)
-                                        charFormat.setForeground(color);
-                                    else
-                                        charFormat.setBackground(color);
-
-                                    setFormatScope(charFormat);
-                                    ++i;
-                                    break;
+                                (code == RgbTextColor)
+                                        ? charFormat.setForeground(
+                                              QColor(numbers.at(i + 1).toInt(),
+                                                     numbers.at(i + 2).toInt(),
+                                                     numbers.at(i + 3).toInt()))
+                                        : charFormat.setBackground(
+                                              QColor(numbers.at(i + 1).toInt(),
+                                                     numbers.at(i + 2).toInt(),
+                                                     numbers.at(i + 3).toInt()));
+                                setFormatScope(charFormat);
                             }
+                            i += 3;
                             break;
-                        default:
+                        case 5:
+                            // 256 color mode with format: 38;5;<i>
+                            uint index = numbers.at(i + 1).toUInt();
+
+                            QColor color;
+                            if (index < 8)
+                            {
+                                // The first 8 colors are standard low-intensity
+                                // ANSI colors.
+                                color = ansiColor(index);
+                            }
+                            else if (index < 16)
+                            {
+                                // The next 8 colors are standard high-intensity
+                                // ANSI colors.
+                                color = ansiColor(index - 8).lighter(150);
+                            }
+                            else if (index < 232)
+                            {
+                                // The next 216 colors are a 6x6x6 RGB cube.
+                                uint o = index - 16;
+                                color = QColor((o / 36) * 51, ((o / 6) % 6) * 51,
+                                               (o % 6) * 51);
+                            }
+                            else
+                            {
+                                // The last 24 colors are a greyscale gradient.
+                                int grey = int((index - 232) * 11);
+                                color = QColor(grey, grey, grey);
+                            }
+
+                            if (code == RgbTextColor)
+                                charFormat.setForeground(color);
+                            else
+                                charFormat.setBackground(color);
+
+                            setFormatScope(charFormat);
+                            ++i;
                             break;
+                        }
+                        break;
+                    default:
+                        break;
                     }
                 }
             }

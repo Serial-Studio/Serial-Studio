@@ -31,6 +31,10 @@
 
 #include <QMutexLocker>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegExp>
+#endif
+
 namespace qmapcontrol
 {
 MapNetwork::MapNetwork(ImageManager *parent)

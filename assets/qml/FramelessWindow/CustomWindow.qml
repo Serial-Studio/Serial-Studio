@@ -281,7 +281,7 @@ QtWindow.Window {
     //
     // Maximize window fixes
     //
-    onVisibilityChanged: {
+    onVisibilityChanged: (visibility) => {
         // Hard-reset window flags on macOS to fix most glitches
         if (Cpp_IsMac)
             root.flags = Qt.Window
