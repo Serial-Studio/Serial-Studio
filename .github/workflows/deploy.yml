@@ -82,7 +82,7 @@ jobs:
     - name: '📦 Create AppImage'
       run: |
           export QML_SOURCES_PATHS="${{env.QML_DIR_NIX}}"
-          export PATH=/home/runner/work/Serial-Studio/Qt/6.2.0/gcc_64/libexec:$PATH
+          export PATH=/home/runner/work/Serial-Studio/Qt/${{env.QT_VERSION}}/gcc_64/libexec:$PATH
           ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i deploy/linux/${{env.UNIXNAME}}.png -d deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
           rm linuxdeploy-x86_64.AppImage
           rm linuxdeploy-plugin-qt-x86_64.AppImage
@@ -209,7 +209,7 @@ jobs:
 
   # Windows MSYS2 build
   msys2-makepkg:
-    #if: ${{false}}
+    if: ${{false}}
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -261,7 +261,7 @@ jobs:
 
   # Test Windows MSYS2 packages
   msys2-test:
-    #if: ${{false}}
+    if: ${{false}}
     needs: msys2-makepkg
     runs-on: windows-latest
     strategy:
