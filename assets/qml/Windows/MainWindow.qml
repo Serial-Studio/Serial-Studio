@@ -229,12 +229,14 @@ FramelessWindow.CustomWindow {
         //
         // Menubar
         //
-        PlatformDependent.Menubar {
-            id: menubar
+        Loader {
             opacity: 0.8
+            asynchronous: false
             Layout.alignment: Qt.AlignVCenter
-            enabled: !root.showMacControls || isFullscreen
-            visible: !root.showMacControls || isFullscreen
+            sourceComponent: PlatformDependent.Menubar {
+                enabled: !root.showMacControls || isFullscreen
+                visible: !root.showMacControls || isFullscreen
+            }
         }
 
         //
