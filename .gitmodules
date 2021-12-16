@@ -7,3 +7,6 @@
 [submodule "doc/doxygen/doxygen-awesome-css"]
 	path = doc/doxygen/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
+[submodule "libs/qmqtt"]
+	path = libs/qmqtt
+	url = https://github.com/alex-spataru/qmqtt
