@@ -95,9 +95,9 @@ FramelessWindow.CustomWindow {
     title: Cpp_AppName
     width: minimumWidth
     height: minimumHeight
-    minimumWidth: 1250 + 2 * root.shadowMargin
+    minimumWidth: 1050 + 2 * root.shadowMargin
     backgroundColor: Cpp_ThemeManager.windowBackground
-    minimumHeight: 720 + 2 * root.shadowMargin + root.titlebar.height
+    minimumHeight: 620 + 2 * root.shadowMargin + root.titlebar.height
 
     //
     // Startup code

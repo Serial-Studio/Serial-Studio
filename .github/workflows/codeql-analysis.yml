@@ -38,13 +38,14 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        key: ${{runner.os}}-qtcachedir-5.15.2
+        key: ${{runner.os}}-qtcachedir-6.2.2
 
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
-        version: 5.15.2
+        version: 6.2.2
         aqtversion: '==2.0.0'
+        modules: qtserialport qt5compat
         cached: ${{steps.cache-qt.outputs.cache-hit}}
         
     - name: '⚙️ Install dependencies'
