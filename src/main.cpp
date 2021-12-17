@@ -84,8 +84,6 @@ int main(int argc, char **argv)
     // Set application attributes
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#else
-    QApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 #endif
 
     //
