@@ -209,7 +209,7 @@ private:
     bool m_autoscroll;
     bool m_emulateVt100;
     bool m_copyAvailable;
-    QPlainTextEdit *m_textEdit;
+    QPointer<QPlainTextEdit> m_textEdit;
     AnsiEscapeCodeHandler m_escapeCodeHandler;
 };
 }

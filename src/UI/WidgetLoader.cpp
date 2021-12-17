@@ -47,7 +47,6 @@ namespace UI
 WidgetLoader::WidgetLoader(QQuickItem *parent)
     : QQuickPaintedItem(parent)
     , m_index(-1)
-    , m_widget(nullptr)
     , m_widgetVisible(false)
     , m_isExternalWindow(false)
 {
@@ -225,6 +224,14 @@ UI::Dashboard::WidgetType WidgetLoader::widgetType() const
 }
 
 /**
+ * Returns a pointer to the current widget
+ */
+QWidget* WidgetLoader::widget() const
+{
+    return m_widget;
+}
+
+/**
  * Changes the visibility & enabled status of the widget
  */
 void WidgetLoader::setVisible(const bool visible)
@@ -381,7 +388,7 @@ void WidgetLoader::processLeaveEvent(QEvent *event)
         using QWidget::leaveEvent;
     };
 
-    auto hack = static_cast<Hack *>(m_widget);
+    auto hack = static_cast<Hack *>(widget());
     hack->leaveEvent(event);
     update();
 }
@@ -400,7 +407,7 @@ void WidgetLoader::processEnterEvent(QEnterEvent *event)
         using QWidget::enterEvent;
     };
 
-    auto hack = static_cast<Hack *>(m_widget);
+    auto hack = static_cast<Hack *>(widget());
     hack->enterEvent(event);
     update();
 }
@@ -422,7 +429,7 @@ void WidgetLoader::processMouseEvents(QMouseEvent *event)
         using QWidget::mouseReleaseEvent;
     };
 
-    auto hack = static_cast<Hack *>(m_widget);
+    auto hack = static_cast<Hack *>(widget());
     switch (event->type())
     {
         case QEvent::MouseButtonPress:
@@ -458,7 +465,7 @@ void WidgetLoader::processWheelEvents(QWheelEvent *event)
         using QWidget::wheelEvent;
     };
 
-    static_cast<Hack *>(m_widget)->wheelEvent(event);
+    static_cast<Hack *>(widget())->wheelEvent(event);
     update();
 }
 }

@@ -107,6 +107,8 @@ public:
     bool isExternalWindow() const;
     UI::Dashboard::WidgetType widgetType() const;
 
+    QWidget *widget() const;
+
 public Q_SLOTS:
     void setVisible(const bool visible);
     void setWidgetIndex(const int index);
@@ -125,8 +127,8 @@ protected:
 
 private:
     int m_index;
-    QWidget *m_widget;
     bool m_widgetVisible;
     bool m_isExternalWindow;
+    QPointer<QWidget> m_widget;
 };
 }
