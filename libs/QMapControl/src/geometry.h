@@ -134,7 +134,7 @@ protected:
     void setParentGeometry(Geometry *geom);
 
 signals:
-    void updateRequest(Geometry *geom);
+    void updateRequest(qmapcontrol::Geometry *geom);
     void updateRequest(QRectF rect);
     //! This signal is emitted when a Geometry is clicked
     /*!
@@ -143,13 +143,13 @@ signals:
      * @param  geometry The clicked Geometry
      * @param  point -unused-
      */
-    void geometryClicked(Geometry *geometry, QPoint point);
+    void geometryClicked(qmapcontrol::Geometry *geometry, QPoint point);
 
     //! A Geometry emits this signal, when its position gets changed
     /*!
      * @param geom the Geometry
      */
-    void positionChanged(Geometry *geom);
+    void positionChanged(qmapcontrol::Geometry *geom);
 
 public slots:
     //! if visible is true, the layer is made visible

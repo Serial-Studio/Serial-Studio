@@ -50,7 +50,7 @@ MultiPlot::MultiPlot(const int index)
 
     // Set plot palette
     palette.setColor(QPalette::Base, theme->base());
-    palette.setColor(QPalette::Highlight, QColor("#f00"));
+    palette.setColor(QPalette::Highlight, QColor(255, 0, 0));
     palette.setColor(QPalette::Text, theme->widgetIndicator());
     palette.setColor(QPalette::Dark, theme->widgetIndicator());
     palette.setColor(QPalette::Light, theme->widgetIndicator());

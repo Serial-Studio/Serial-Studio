@@ -380,7 +380,7 @@ signals:
      * @param geometry The clicked Geometry object
      * @param coord_px  The coordinate in pixel coordinates
      */
-    void geometryClicked(Geometry *geometry, QPoint coord_px);
+    void geometryClicked(qmapcontrol::Geometry *geometry, QPoint coord_px);
 
     //! This signal is emitted, after the view have changed
     /*!
@@ -438,7 +438,7 @@ public slots:
 private slots:
     void tick();
     void loadingFinished();
-    void positionChanged(Geometry *geom);
+    void positionChanged(qmapcontrol::Geometry *geom);
 };
 }
 #endif

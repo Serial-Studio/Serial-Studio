@@ -29,8 +29,6 @@
 #include <QResizeEvent>
 #include <QRegularExpression>
 
-static QRegularExpression REGEXP("^[+-]?(\\d*\\.)?\\d+$");
-
 namespace Widgets
 {
 
@@ -200,6 +198,9 @@ void DataGroup::updateData()
     if (!group)
         return;
 
+    // Regular expresion handler
+    const QRegularExpression regex("^[+-]?(\\d*\\.)?\\d+$");
+
     // Update labels
     JSON::Dataset *dataset;
     for (int i = 0; i < group->datasetCount(); ++i)
@@ -217,7 +218,7 @@ void DataGroup::updateData()
 
             // Check if value is a number, if so make sure that
             // we always show a fixed number of decimal places
-            if (REGEXP.match(value).hasMatch())
+            if (regex.match(value).hasMatch())
                 value = QString::number(value.toDouble(), 'f', dash->precision());
 
             // Update label

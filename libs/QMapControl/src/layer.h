@@ -212,7 +212,7 @@ signals:
      * @param  geometry The clicked Geometry
      * @param  point The coordinate (in widget coordinates) of the click
      */
-    void geometryClicked(Geometry *geometry, QPoint point);
+    void geometryClicked(qmapcontrol::Geometry *geometry, QPoint point);
 
     void updateRequest(QRectF rect);
     void updateRequest();
