@@ -121,7 +121,7 @@ void Export::closeFile()
 {
     if (isOpen())
     {
-        while (m_frames.isEmpty())
+        while (!m_frames.isEmpty())
             writeValues();
 
         m_csvFile.close();
