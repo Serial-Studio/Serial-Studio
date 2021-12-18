@@ -51,7 +51,7 @@ Este proyecto se publica bajo la licencia MIT, para obtener más información, c
 
 #### Requisitos
 
-El único requisito para compilar la aplicación es tener [Qt](http://www.qt.io/download-open-source/) instalado en su sistema. La aplicación se compilará con **Qt 6.2.2**.
+El único requisito para compilar la aplicación es tener [Qt](http://www.qt.io/download-open-source/) instalado en su sistema. La aplicación se compilará con **Qt 5.15**.
 
 En sistemas GNU/Linux, también necesitará instalar `libgl1-mesa-dev` para compilar la aplicación.
 
@@ -65,7 +65,6 @@ Lista completa de módulos Qt usados:
 - Qt Print Support
 - Qt Quick Widgets
 - Qt Quick Controls 2
-- Qt5 Compatibility Module
 
 #### Clonado
 

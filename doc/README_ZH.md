@@ -27,7 +27,7 @@ Serial Studio是一个多平台，多用途的串行数据可视化的应用软�
 
 #### 要求
 
-编译本项目的唯一要求是在你的电脑系统中安装 QT ， 本项目编译支持 **Qt 6.2.2***。
+编译本项目的唯一要求是在你的电脑系统中安装 QT ， 本项目编译支持 **Qt 5.15***。
 
 在GNU/Linux系统上，还需要安装`libgl1-mesa-dev`才能编译应用程序。
 
@@ -41,7 +41,6 @@ Serial Studio是一个多平台，多用途的串行数据可视化的应用软�
 - Qt Print Support
 - Qt Quick Widgets
 - Qt Quick Controls 2
-- Qt5 Compatibility Module
 
 #### 克隆
 

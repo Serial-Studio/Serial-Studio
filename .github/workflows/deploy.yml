@@ -17,7 +17,7 @@ on:
 #--------------------------------------------------------------------------------
 
 env:
-  VERSION: "1.1.5"
+  VERSION: "1.1.4"
   EXECUTABLE: "SerialStudio"
   APPLICATION: "Serial Studio"
   UNIXNAME: "serial-studio"
@@ -25,10 +25,9 @@ env:
   QML_DIR_NIX: "assets/qml"
   QML_DIR_WIN: "assets\\qml"
   PUBLISHER: "Alex Spataru"
-  QT_MODULES: qtserialport qt5compat
   REPO_DIR: "/home/runner/work/Serial-Studio/Serial-Studio"
-  QT_VERSION: 6.2.2
-  QMAKE: qmake6
+  QT_VERSION: 5.15.2
+  QMAKE: qmake
   CORES: 12
 
 #--------------------------------------------------------------------------------
@@ -37,8 +36,8 @@ env:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-20.04
-    name: '🐧 Ubuntu 20.04'
+    runs-on: ubuntu-18.04
+    name: '🐧 Ubuntu 18.04'
     steps:
 
     - name: '🧰 Checkout'
@@ -57,7 +56,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: ${{env.QT_MODULES}}
+        #modules: qtserialport qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -70,25 +69,20 @@ jobs:
 
     - name: '🚧 Compile application'
       run: |
-        ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
-        make -j${{env.CORES}}
+          ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+          make -j${{env.CORES}}
 
-    - name: '⚙️ Install linuxdeploy'
+    - name: '⚙️ Install linuxdeployqt'
       run: |
-        wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-        wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-        chmod +x linuxdeploy-x86_64.AppImage
-        chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+          wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
+          chmod a+x linuxdeployqt
 
     - name: '📦 Create AppImage'
       run: |
-        export QML_SOURCES_PATHS="${{env.QML_DIR_NIX}}"
-        export QMAKE=${{env.REPO_DIR}}/../Qt/${{env.QT_VERSION}}/gcc_64/bin/qmake6
-        export PATH=${{env.REPO_DIR}}/../Qt/${{env.QT_VERSION}}/gcc_64/libexec:$PATH
-        ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i deploy/linux/${{env.UNIXNAME}}.png -d deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
-        rm linuxdeploy-x86_64.AppImage
-        rm linuxdeploy-plugin-qt-x86_64.AppImage
-        mv *.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+          make INSTALL_ROOT=appdir install
+          ./linuxdeployqt appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -extra-plugins=imageformats/libqsvg.so -qmldir="${{env.QML_DIR_NIX}}"
+          # Rename AppImage to match "%AppName%-%Version%-Linux.AppImage" format
+          mv Serial_Studio-${{env.VERSION}}-x86_64.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
           
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v2
@@ -118,14 +112,14 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: ${{env.QT_MODULES}}
+        #modules: qtserialport qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '🚧 Compile application'
       run: |
-        ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
-        make -j${{env.CORES}}
+           ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+           make -j${{env.CORES}}
 
     - name: '📦 Package application (macdeployqt and zipfile)'
       run: |
@@ -170,7 +164,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: ${{env.QT_MODULES}}
+        #modules: qtserialport qt5compat
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 

@@ -11,7 +11,7 @@ on:
 jobs:
   analyze:
     name: '💭 Analyze'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
     permissions:
       actions: read
       contents: read
@@ -38,14 +38,13 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        key: ${{runner.os}}-qtcachedir-6.2.2
+        key: ${{runner.os}}-qtcachedir-5.15.2
 
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
-        version: 6.2.2
+        version: 5.15.2
         aqtversion: '==2.0.0'
-        modules: qtserialport qt5compat
         cached: ${{steps.cache-qt.outputs.cache-hit}}
         
     - name: '⚙️ Install dependencies'
@@ -55,7 +54,7 @@ jobs:
         
     - name: '🚧 Compile application'
       run: |
-          qmake6 ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+          qmake ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
           make -j16
 
     - name: '💭 Perform CodeQL Analysis'

@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-import QtQuick
-import Qt.labs.platform
+import QtQuick 2.12
+import Qt.labs.platform 1.0
 
 MenuBar {
     //
