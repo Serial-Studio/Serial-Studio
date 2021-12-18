@@ -86,16 +86,6 @@ int main(int argc, char **argv)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    //
-    // Force non-threaded rendering to avoid ugly crashes.
-    //
-    // We need to do this because the only way to get QWidgets-based items to render on
-    // the QML interface is through the QQuickPaintedItem class, which can cause conflicts
-    // between the GUI and render threads when the rendered items need to work with
-    // signals/slots.
-    //
-    QApplication::setAttribute(Qt::AA_UseOpenGLES);
-
     // Init. application
     QApplication app(argc, argv);
     app.setApplicationName(APP_NAME);

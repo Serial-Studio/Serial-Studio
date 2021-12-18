@@ -91,6 +91,8 @@ void BaseWidget::setWidget(QWidget *widget, const Qt::Alignment &alignment,
         m_layout.setContentsMargins(24, 24, 24, 24);
         setLayout(&m_layout);
     }
+
+    Q_EMIT updated();
 }
 
 void BaseWidget::resizeEvent(QResizeEvent *event)
@@ -139,8 +141,6 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
 
     // Accept event
     event->accept();
-
-    // Emit resize signal
     Q_EMIT resized();
 }
 }

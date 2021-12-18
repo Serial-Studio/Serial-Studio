@@ -22,19 +22,33 @@
 
 #pragma once
 
-#include <QWidget>
-#include <QObject>
-#include <QPainter>
-#include <QQuickPaintedItem>
-
 #include <UI/Dashboard.h>
+#include <UI/DeclarativeWidget.h>
+
+namespace Widgets
+{
+/**
+ * @brief The DashboardWidgetBase class
+ *
+ * A simple QWidget with an additional @c update() signal, which is used by the
+ * @c UI::DashboardWidget to know when it should trigger a re-paint request to the scene
+ * render thread.
+ */
+class DashboardWidgetBase : public QWidget
+{
+    Q_OBJECT
+
+Q_SIGNALS:
+    void updated();
+};
+}
 
 namespace UI
 {
 /**
- * @brief The WidgetLoader class
+ * @brief The DashboardWidget class
  *
- * The @c WidgetLoader class acts as a man-in-the-middle between the QML user interface
+ * The @c DashboardWidget class acts as a man-in-the-middle between the QML UI
  * and the C++ widgets. C++ widgets are loaded and initialized by this class, and all the
  * QML/Qt events are re-routed to the widgets using this class. Finally, the C++ widget
  * is "painted" on the QML interface in realtime, effectively allowing us to use QWidget
@@ -51,14 +65,8 @@ namespace UI
  *      assets/qml/Dashboard/WidgetDelegate.qml
  *      assets/qml/Dashboard/WidgetLoader.qml
  *      assets/qml/Dashboard/WidgetGrid.qml
- *
- * Basic diagram explaining this approach:
- *
- *  ----------------        ---------------      ---------------       ----------------
- * | UI::Dashboard | <-->  | QML Repeater | --> | WidgetLoader | <--> | Actual Widget |
- * ----------------        ---------------      ---------------       ----------------
  */
-class WidgetLoader : public QQuickPaintedItem
+class DashboardWidget : public DeclarativeWidget
 {
     // clang-format off
     Q_OBJECT
@@ -92,12 +100,8 @@ Q_SIGNALS:
     void isExternalWindowChanged();
 
 public:
-    WidgetLoader(QQuickItem *parent = 0);
-    ~WidgetLoader();
-
-    virtual bool event(QEvent *event) override;
-    virtual void paint(QPainter *painter) override;
-    virtual bool eventFilter(QObject *watched, QEvent *event) override;
+    DashboardWidget(QQuickItem *parent = 0);
+    ~DashboardWidget();
 
     int widgetIndex() const;
     int relativeIndex() const;
@@ -107,28 +111,18 @@ public:
     bool isExternalWindow() const;
     UI::Dashboard::WidgetType widgetType() const;
 
-    QWidget *widget() const;
-
 public Q_SLOTS:
     void setVisible(const bool visible);
     void setWidgetIndex(const int index);
     void setIsExternalWindow(const bool isWindow);
-    void processMouseHover(const bool containsMouse);
 
 private Q_SLOTS:
-    void updateWidgetSize();
     void updateWidgetVisible();
-
-protected:
-    void processLeaveEvent(QEvent *event);
-    void processEnterEvent(QEnterEvent *event);
-    void processMouseEvents(QMouseEvent *event);
-    void processWheelEvents(QWheelEvent *event);
 
 private:
     int m_index;
     bool m_widgetVisible;
     bool m_isExternalWindow;
-    QPointer<QWidget> m_widget;
+    QPointer<Widgets::DashboardWidgetBase> m_dbWidget;
 };
 }

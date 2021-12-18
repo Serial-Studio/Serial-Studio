@@ -84,7 +84,7 @@ GPS::GPS(const int index)
     m_mapControl.setFrameShadow(QFrame::Plain);
     m_mapControl.setFrameShape(QFrame::NoFrame);
     m_mapControl.setMouseMode(qmapcontrol::MapControl::None);
-    m_mapControl.resize(QSize(width() - 25, height() - 33 - m_titleWidget.height()));
+    m_mapControl.resize(QSize(width() - 26, height() - 34 - m_titleWidget.height()));
     qmapcontrol::TileMapAdapter *mapadapter = new qmapcontrol::OSMMapAdapter();
     qmapcontrol::Layer *l = new qmapcontrol::Layer("Custom Layer", mapadapter,
                                                    qmapcontrol::Layer::MapLayer);
@@ -156,6 +156,9 @@ void GPS::updateData()
     m_label->setText(QString("<u>POS:</u><i> %1,%2</i>&nbsp;<u>ALT:</u><i> %3 m</i>")
                      .arg(latstr, lonstr, altstr));
     // clang-format on
+
+    // Repaint widget
+    Q_EMIT updated();
 }
 
 /**
@@ -165,7 +168,7 @@ void GPS::resizeEvent(QResizeEvent *event)
 {
     const auto width = event->size().width();
     const auto height = event->size().height();
-    m_mapControl.resize(QSize(width - 25, height - 33 - m_titleWidget.height()));
+    m_mapControl.resize(QSize(width - 26, height - 34 - m_titleWidget.height()));
     event->accept();
 }
 

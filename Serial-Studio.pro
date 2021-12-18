@@ -41,18 +41,15 @@ TEMPLATE = app                                           # Project template
 TARGET = serial-studio                                   # Set default target name
 CONFIG += qtquickcompiler                                # Pre-compile QML interface
 CONFIG += utf8_source                                    # Source code encoding
-
 QTPLUGIN += qsvg                                         # Fixes issues with windeployqt
 
 QT += xml
-QT += sql
 QT += svg
 QT += core
 QT += quick
 QT += widgets
 QT += serialport
 QT += printsupport
-QT += quickwidgets
 QT += quickcontrols2
 
 equals(QT_MAJOR_VERSION, 6) {
@@ -65,49 +62,48 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 # Compiler options
 #-----------------------------------------------------------------------------------------
 
+CONFIG += c++11
+CONFIG += silent
+
 *g++*: {
     QMAKE_CXXFLAGS_RELEASE -= -O1
     QMAKE_CXXFLAGS_RELEASE -= -O2
     QMAKE_CXXFLAGS_RELEASE *= -O3
-    QMAKE_CXXFLAGS_RELEASE *= -Ofast
-    QMAKE_CXXFLAGS_RELEASE *= -flto
 }
 
 *clang*: {
     QMAKE_CXXFLAGS_RELEASE -= -O1
     QMAKE_CXXFLAGS_RELEASE -= -O2
     QMAKE_CXXFLAGS_RELEASE *= -O3
-    QMAKE_CXXFLAGS_RELEASE *= -Ofast
-    QMAKE_CXXFLAGS_RELEASE *= -flto
 }
 
 *msvc*: {
     QMAKE_CXXFLAGS *= -MP
     QMAKE_CXXFLAGS_RELEASE -= /O
     QMAKE_CXXFLAGS_RELEASE *= /O2
-    QMAKE_CXXFLAGS_RELEASE *= /GL
 
     INCLUDEPATH += $$OUT_PWD
     INCLUDEPATH += $$OUT_PWD/debug
     INCLUDEPATH += $$OUT_PWD/release
 }
 
-CONFIG += c++11
-CONFIG += silent
-
-#-----------------------------------------------------------------------------------------
-# Unity build
-#-----------------------------------------------------------------------------------------
 
 CONFIG(release, debug|release) {
-    CONFIG += unity_build
-}
+    CONFIG += ltcg
 
-CONFIG(unity_build) {
-    CONFIG  += ltcg                             # Enable linker optimization
-    DEFINES += UNITY_BUILD=1                    # Enable unity build
-    DEFINES += UNITY_BUILD_INCLUDE_QML=0        # Do not optimize QtQuick compiler cache
-    SOURCES += src/SingleCompilationUnit.cpp    # Include single compilation unit in code
+    *g++*: {
+        QMAKE_CXXFLAGS_RELEASE *= -Ofast
+        QMAKE_CXXFLAGS_RELEASE *= -flto
+    }
+
+    *clang*: {
+        QMAKE_CXXFLAGS_RELEASE *= -Ofast
+        QMAKE_CXXFLAGS_RELEASE *= -flto
+    }
+
+    *msvc*: {
+        QMAKE_CXXFLAGS_RELEASE *= /GL
+    }
 }
 
 #-----------------------------------------------------------------------------------------
@@ -116,10 +112,6 @@ CONFIG(unity_build) {
 
 #DEFINES += DISABLE_QSU     # If enabled, QSimpleUpdater shall not be used by the app.
                             # This is the default behaviour for MinGW.
-
-DEFINES += LAZY_WIDGETS     # Compile-time option to reduce the CPU usage of the widgets.
-                            # If disabled, widgets shall update title, units, value, etc.
-                            # If enabled, widgets shall only update their value.
 
 #-----------------------------------------------------------------------------------------
 # Libraries
@@ -202,24 +194,25 @@ HEADERS += \
     src/Misc/Utilities.h \
     src/Plugins/Server.h \
     src/UI/Dashboard.h \
-    src/UI/WidgetLoader.h \
-    src/Widgets/Accelerometer.h \
-    src/Widgets/Bar.h \
-    src/Widgets/Common/AnalogGauge.h \
-    src/Widgets/Common/AttitudeIndicator.h \
-    src/Widgets/Common/BaseWidget.h \
-    src/Widgets/Common/ElidedLabel.h \
-    src/Widgets/Common/KLed.h \
-    src/Widgets/Compass.h \
-    src/Widgets/DataGroup.h \
-    src/Widgets/FFTPlot.h \
-    src/Widgets/GPS.h \
-    src/Widgets/Gauge.h \
-    src/Widgets/Gyroscope.h \
-    src/Widgets/LEDPanel.h \
-    src/Widgets/MultiPlot.h \
-    src/Widgets/Plot.h \
-    src/Widgets/Terminal.h
+    src/UI/DashboardWidget.h \
+    src/UI/DeclarativeWidget.h \
+    src/UI/Widgets/Terminal.h \
+    src/UI/Widgets/Accelerometer.h \
+    src/UI/Widgets/Bar.h \
+    src/UI/Widgets/Common/AnalogGauge.h \
+    src/UI/Widgets/Common/AttitudeIndicator.h \
+    src/UI/Widgets/Common/BaseWidget.h \
+    src/UI/Widgets/Common/ElidedLabel.h \
+    src/UI/Widgets/Common/KLed.h \
+    src/UI/Widgets/Compass.h \
+    src/UI/Widgets/DataGroup.h \
+    src/UI/Widgets/FFTPlot.h \
+    src/UI/Widgets/GPS.h \
+    src/UI/Widgets/Gauge.h \
+    src/UI/Widgets/Gyroscope.h \
+    src/UI/Widgets/LEDPanel.h \
+    src/UI/Widgets/MultiPlot.h \
+    src/UI/Widgets/Plot.h
 
 SOURCES += \
     src/CSV/Export.cpp \
@@ -244,24 +237,25 @@ SOURCES += \
     src/Misc/Utilities.cpp \
     src/Plugins/Server.cpp \
     src/UI/Dashboard.cpp \
-    src/UI/WidgetLoader.cpp \
-    src/Widgets/Accelerometer.cpp \
-    src/Widgets/Bar.cpp \
-    src/Widgets/Common/AnalogGauge.cpp \
-    src/Widgets/Common/AttitudeIndicator.cpp \
-    src/Widgets/Common/BaseWidget.cpp \
-    src/Widgets/Common/ElidedLabel.cpp \
-    src/Widgets/Common/KLed.cpp \
-    src/Widgets/Compass.cpp \
-    src/Widgets/DataGroup.cpp \
-    src/Widgets/FFTPlot.cpp \
-    src/Widgets/GPS.cpp \
-    src/Widgets/Gauge.cpp \
-    src/Widgets/Gyroscope.cpp \
-    src/Widgets/LEDPanel.cpp \
-    src/Widgets/MultiPlot.cpp \
-    src/Widgets/Plot.cpp \
-    src/Widgets/Terminal.cpp \
+    src/UI/DashboardWidget.cpp \
+    src/UI/DeclarativeWidget.cpp \
+    src/UI/Widgets/Terminal.cpp \
+    src/UI/Widgets/Accelerometer.cpp \
+    src/UI/Widgets/Bar.cpp \
+    src/UI/Widgets/Common/AnalogGauge.cpp \
+    src/UI/Widgets/Common/AttitudeIndicator.cpp \
+    src/UI/Widgets/Common/BaseWidget.cpp \
+    src/UI/Widgets/Common/ElidedLabel.cpp \
+    src/UI/Widgets/Common/KLed.cpp \
+    src/UI/Widgets/Compass.cpp \
+    src/UI/Widgets/DataGroup.cpp \
+    src/UI/Widgets/FFTPlot.cpp \
+    src/UI/Widgets/GPS.cpp \
+    src/UI/Widgets/Gauge.cpp \
+    src/UI/Widgets/Gyroscope.cpp \
+    src/UI/Widgets/LEDPanel.cpp \
+    src/UI/Widgets/MultiPlot.cpp \
+    src/UI/Widgets/Plot.cpp \
     src/main.cpp
 
 #-----------------------------------------------------------------------------------------

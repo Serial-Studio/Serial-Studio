@@ -22,7 +22,6 @@
 
 #include <QtMath>
 #include <QScrollBar>
-#include <QApplication>
 #include <IO/Console.h>
 #include <Misc/ThemeManager.h>
 
@@ -35,53 +34,22 @@ namespace Widgets
 // QML PlainTextEdit implementation
 //----------------------------------------------------------------------------------------
 
-/*
- * NOTE: most of the Doxygen documentation comments where heavily based from the following
- *       URL https://doc.qt.io/qt-5/qplaintextedit.html. In some cases the comments are a
- *       simple copy-paste job. I am lazy and the Qt documentation is very good IMO.
- *
- *       This class works by initializing a QPlainTextEdit widget, rendering it into the
- *       the painter of a QML item and handling keyboard/mouse events.
- *
- *       The rest of the functions are just a wrapper around the functions of the
- *       QPlainTextEdit widget for increased QML-friendliness.
- */
-
 /**
  * Constructor function
  */
 Terminal::Terminal(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+    : UI::DeclarativeWidget(parent)
     , m_autoscroll(true)
     , m_emulateVt100(false)
     , m_copyAvailable(false)
-    , m_textEdit(new QPlainTextEdit)
 {
-    // Set render flags
-    setAntialiasing(true);
-    setOpaquePainting(true);
-    setRenderTarget(FramebufferObject);
-    setPerformanceHints(FastFBOResizing);
-    setAcceptedMouseButtons(Qt::AllButtons);
-    m_escapeCodeHandler.setTextEdit(textEdit());
-
-    // Set item flags
-    setFlag(ItemHasContents, true);
-    setFlag(ItemIsFocusScope, true);
-    setFlag(ItemAcceptsInputMethod, true);
-    setAcceptedMouseButtons(Qt::AllButtons);
-
-    // Configure text edit widget
-    setScrollbarWidth(14);
-    textEdit()->installEventFilter(this);
-
-    // Set the QML item's implicit size
-    const auto hint = textEdit()->sizeHint();
-    setImplicitSize(hint.width(), hint.height());
+    // Set widget
+    setWidget(&m_textEdit);
 
     // Setup default options
-    textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    textEdit()->setSizeAdjustPolicy(QPlainTextEdit::AdjustToContents);
+    setScrollbarWidth(14);
+    m_textEdit.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_textEdit.setSizeAdjustPolicy(QPlainTextEdit::AdjustToContents);
 
     // Set widget palette
     QPalette palette;
@@ -95,90 +63,14 @@ Terminal::Terminal(QQuickItem *parent)
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     palette.setColor(QPalette::PlaceholderText, theme->consolePlaceholderText());
 #endif
-    m_textEdit->setPalette(palette);
-
-    // Resize QPlainTextEdit to fit QML item
-    connect(this, &QQuickPaintedItem::widthChanged, this, &Terminal::updateWidgetSize);
-    connect(this, &QQuickPaintedItem::heightChanged, this, &Terminal::updateWidgetSize);
+    m_textEdit.setPalette(palette);
 
     // Connect console signals (doing this on QML uses about 50% of UI thread time)
     const auto console = IO::Console::getInstance();
     connect(console, &IO::Console::stringReceived, this, &Terminal::insertText);
 
     // React to widget events
-    connect(textEdit(), SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));
-
-    // Draw widget
-    QTimer::singleShot(0, this, SLOT(update()));
-}
-
-/**
- * Destructor function
- */
-Terminal::~Terminal()
-{
-    delete m_textEdit;
-}
-
-/**
- * Handle application events manually
- */
-bool Terminal::event(QEvent *event)
-{
-    switch (event->type())
-    {
-    case QEvent::FocusIn:
-        forceActiveFocus();
-        return QQuickPaintedItem::event(event);
-        break;
-    case QEvent::Wheel:
-        processWheelEvents(static_cast<QWheelEvent *>(event));
-        return true;
-        break;
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-    case QEvent::MouseMove:
-        processMouseEvents(static_cast<QMouseEvent *>(event));
-        return true;
-        break;
-    default:
-        break;
-    }
-
-    return QApplication::sendEvent(textEdit(), event);
-}
-
-/**
- * Render the text edit on the given @a painter
- */
-void Terminal::paint(QPainter *painter)
-{
-    if (m_textEdit && painter)
-        textEdit()->render(painter);
-}
-
-/**
- * Custom event filter to manage redraw requests
- */
-bool Terminal::eventFilter(QObject *watched, QEvent *event)
-{
-    Q_ASSERT(m_textEdit);
-
-    if (watched == textEdit())
-    {
-        switch (event->type())
-        {
-        case QEvent::Paint:
-        case QEvent::UpdateRequest:
-            update();
-            break;
-        default:
-            break;
-        }
-    }
-
-    return QQuickPaintedItem::eventFilter(watched, event);
+    connect(&m_textEdit, SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));
 }
 
 /**
@@ -186,7 +78,7 @@ bool Terminal::eventFilter(QObject *watched, QEvent *event)
  */
 QFont Terminal::font() const
 {
-    return textEdit()->font();
+    return m_textEdit.font();
 }
 
 /**
@@ -194,7 +86,7 @@ QFont Terminal::font() const
  */
 QString Terminal::text() const
 {
-    return textEdit()->toPlainText();
+    return m_textEdit.toPlainText();
 }
 
 /**
@@ -202,7 +94,7 @@ QString Terminal::text() const
  */
 bool Terminal::empty() const
 {
-    return textEdit()->document()->isEmpty();
+    return m_textEdit.document()->isEmpty();
 }
 
 /**
@@ -210,7 +102,7 @@ bool Terminal::empty() const
  */
 bool Terminal::readOnly() const
 {
-    return textEdit()->isReadOnly();
+    return m_textEdit.isReadOnly();
 }
 
 /**
@@ -227,7 +119,7 @@ bool Terminal::autoscroll() const
  */
 QPalette Terminal::palette() const
 {
-    return textEdit()->palette();
+    return m_textEdit.palette();
 }
 
 /**
@@ -236,7 +128,7 @@ QPalette Terminal::palette() const
  */
 int Terminal::wordWrapMode() const
 {
-    return static_cast<int>(textEdit()->wordWrapMode());
+    return static_cast<int>(m_textEdit.wordWrapMode());
 }
 
 /**
@@ -244,7 +136,7 @@ int Terminal::wordWrapMode() const
  */
 int Terminal::scrollbarWidth() const
 {
-    return textEdit()->verticalScrollBar()->width();
+    return m_textEdit.verticalScrollBar()->width();
 }
 
 /**
@@ -261,7 +153,7 @@ bool Terminal::copyAvailable() const
  */
 bool Terminal::widgetEnabled() const
 {
-    return textEdit()->isEnabled();
+    return m_textEdit.isEnabled();
 }
 
 /**
@@ -272,7 +164,7 @@ bool Terminal::widgetEnabled() const
  */
 bool Terminal::centerOnScroll() const
 {
-    return textEdit()->centerOnScroll();
+    return m_textEdit.centerOnScroll();
 }
 
 /**
@@ -291,7 +183,7 @@ bool Terminal::vt100emulation() const
  */
 bool Terminal::undoRedoEnabled() const
 {
-    return textEdit()->isUndoRedoEnabled();
+    return m_textEdit.isUndoRedoEnabled();
 }
 
 /**
@@ -306,7 +198,7 @@ bool Terminal::undoRedoEnabled() const
  */
 int Terminal::maximumBlockCount() const
 {
-    return textEdit()->maximumBlockCount();
+    return m_textEdit.maximumBlockCount();
 }
 
 /**
@@ -317,7 +209,7 @@ int Terminal::maximumBlockCount() const
  */
 QString Terminal::placeholderText() const
 {
-    return textEdit()->placeholderText();
+    return m_textEdit.placeholderText();
 }
 
 /**
@@ -325,15 +217,7 @@ QString Terminal::placeholderText() const
  */
 QTextDocument *Terminal::document() const
 {
-    return textEdit()->document();
-}
-
-/**
- * Returns the pointer to the text edit object
- */
-QPlainTextEdit *Terminal::textEdit() const
-{
-    return m_textEdit;
+    return m_textEdit.document();
 }
 
 /**
@@ -341,7 +225,7 @@ QPlainTextEdit *Terminal::textEdit() const
  */
 void Terminal::copy()
 {
-    textEdit()->copy();
+    m_textEdit.copy();
 }
 
 /**
@@ -349,7 +233,7 @@ void Terminal::copy()
  */
 void Terminal::clear()
 {
-    textEdit()->clear();
+    m_textEdit.clear();
     updateScrollbarVisibility();
     update();
 
@@ -361,7 +245,7 @@ void Terminal::clear()
  */
 void Terminal::selectAll()
 {
-    textEdit()->selectAll();
+    m_textEdit.selectAll();
     update();
 }
 
@@ -370,9 +254,9 @@ void Terminal::selectAll()
  */
 void Terminal::clearSelection()
 {
-    auto cursor = QTextCursor(textEdit()->document());
+    auto cursor = QTextCursor(m_textEdit.document());
     cursor.clearSelection();
-    textEdit()->setTextCursor(cursor);
+    m_textEdit.setTextCursor(cursor);
     updateScrollbarVisibility();
     update();
 }
@@ -385,7 +269,7 @@ void Terminal::clearSelection()
  */
 void Terminal::setReadOnly(const bool ro)
 {
-    textEdit()->setReadOnly(ro);
+    m_textEdit.setReadOnly(ro);
     update();
 
     Q_EMIT readOnlyChanged();
@@ -396,7 +280,7 @@ void Terminal::setReadOnly(const bool ro)
  */
 void Terminal::setFont(const QFont &font)
 {
-    textEdit()->setFont(font);
+    m_textEdit.setFont(font);
     updateScrollbarVisibility();
     update();
 
@@ -411,7 +295,7 @@ void Terminal::setFont(const QFont &font)
  */
 void Terminal::append(const QString &text)
 {
-    textEdit()->appendPlainText(text);
+    m_textEdit.appendPlainText(text);
     updateScrollbarVisibility();
 
     if (autoscroll())
@@ -429,7 +313,7 @@ void Terminal::append(const QString &text)
  */
 void Terminal::setText(const QString &text)
 {
-    textEdit()->setPlainText(text);
+    m_textEdit.setPlainText(text);
     updateScrollbarVisibility();
 
     if (autoscroll())
@@ -444,7 +328,7 @@ void Terminal::setText(const QString &text)
  */
 void Terminal::setScrollbarWidth(const int width)
 {
-    auto bar = textEdit()->verticalScrollBar();
+    auto bar = m_textEdit.verticalScrollBar();
     bar->setFixedWidth(width);
     update();
 
@@ -456,7 +340,7 @@ void Terminal::setScrollbarWidth(const int width)
  */
 void Terminal::setPalette(const QPalette &palette)
 {
-    textEdit()->setPalette(palette);
+    m_textEdit.setPalette(palette);
     update();
 
     Q_EMIT colorPaletteChanged();
@@ -467,7 +351,7 @@ void Terminal::setPalette(const QPalette &palette)
  */
 void Terminal::setWidgetEnabled(const bool enabled)
 {
-    textEdit()->setEnabled(enabled);
+    m_textEdit.setEnabled(enabled);
     update();
 
     Q_EMIT widgetEnabledChanged();
@@ -512,7 +396,7 @@ void Terminal::insertText(const QString &text)
  */
 void Terminal::setWordWrapMode(const int mode)
 {
-    textEdit()->setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
+    m_textEdit.setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
     updateScrollbarVisibility();
     update();
 
@@ -527,7 +411,7 @@ void Terminal::setWordWrapMode(const int mode)
  */
 void Terminal::setCenterOnScroll(const bool enabled)
 {
-    textEdit()->setCenterOnScroll(enabled);
+    m_textEdit.setCenterOnScroll(enabled);
     update();
 
     Q_EMIT centerOnScrollChanged();
@@ -549,7 +433,7 @@ void Terminal::setVt100Emulation(const bool enabled)
  */
 void Terminal::setUndoRedoEnabled(const bool enabled)
 {
-    textEdit()->setUndoRedoEnabled(enabled);
+    m_textEdit.setUndoRedoEnabled(enabled);
     update();
 
     Q_EMIT undoRedoEnabledChanged();
@@ -561,7 +445,7 @@ void Terminal::setUndoRedoEnabled(const bool enabled)
  */
 void Terminal::setPlaceholderText(const QString &text)
 {
-    textEdit()->setPlaceholderText(text);
+    m_textEdit.setPlaceholderText(text);
     update();
 
     Q_EMIT placeholderTextChanged();
@@ -573,9 +457,9 @@ void Terminal::setPlaceholderText(const QString &text)
 void Terminal::scrollToBottom(const bool repaint)
 {
     // Get scrollbar pointer, calculate line count & visible text lines
-    auto *bar = textEdit()->verticalScrollBar();
-    auto lineCount = textEdit()->document()->blockCount();
-    auto visibleLines = qRound(height() / textEdit()->fontMetrics().height());
+    auto *bar = m_textEdit.verticalScrollBar();
+    auto lineCount = m_textEdit.document()->blockCount();
+    auto visibleLines = qRound(height() / m_textEdit.fontMetrics().height());
 
     // Abort operation if control is not visible
     if (visibleLines <= 0)
@@ -606,20 +490,10 @@ void Terminal::scrollToBottom(const bool repaint)
  */
 void Terminal::setMaximumBlockCount(const int maxBlockCount)
 {
-    textEdit()->setMaximumBlockCount(maxBlockCount);
+    m_textEdit.setMaximumBlockCount(maxBlockCount);
     update();
 
     Q_EMIT maximumBlockCountChanged();
-}
-
-/**
- * Resizes the text editor widget to fit inside the QML item.
- */
-void Terminal::updateWidgetSize()
-{
-    textEdit()->setFixedSize(width(), height());
-    updateScrollbarVisibility();
-    update();
 }
 
 /**
@@ -628,16 +502,16 @@ void Terminal::updateWidgetSize()
 void Terminal::updateScrollbarVisibility()
 {
     // Get current line count & visible lines
-    auto lineCount = textEdit()->document()->blockCount();
-    auto visibleLines = qCeil(height() / textEdit()->fontMetrics().height());
+    auto lineCount = m_textEdit.document()->blockCount();
+    auto visibleLines = qCeil(height() / m_textEdit.fontMetrics().height());
 
     // Autoscroll enabled or text content is less than widget height
     if (autoscroll() || visibleLines >= lineCount)
-        textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        m_textEdit.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Show the scrollbar if the text content is greater than the widget height
     else
-        textEdit()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        m_textEdit.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
 /**
@@ -661,7 +535,7 @@ void Terminal::addText(const QString &text, const bool enableVt100)
         textToInsert = vt100Processing(text);
 
     // Add text at the end of the text document
-    QTextCursor cursor(textEdit()->document());
+    QTextCursor cursor(m_textEdit.document());
     cursor.beginEditBlock();
     cursor.movePosition(QTextCursor::End);
     cursor.insertText(textToInsert);
@@ -678,89 +552,6 @@ void Terminal::addText(const QString &text, const bool enableVt100)
 }
 
 /**
- * Hack: call the appropiate protected mouse event handler function of the QPlainTextEdit
- *       item depending on event type
- */
-void Terminal::processMouseEvents(QMouseEvent *event)
-{
-    // Subclass QPlainTextEdit so that we can call protected functions
-    class Hack : public QPlainTextEdit
-    {
-    public:
-        using QPlainTextEdit::mouseDoubleClickEvent;
-        using QPlainTextEdit::mouseMoveEvent;
-        using QPlainTextEdit::mousePressEvent;
-        using QPlainTextEdit::mouseReleaseEvent;
-    };
-
-    // Call appropiate function
-    auto hack = static_cast<Hack *>(textEdit());
-    switch (event->type())
-    {
-    case QEvent::MouseButtonPress:
-        hack->mousePressEvent(event);
-        break;
-    case QEvent::MouseMove:
-        hack->mouseMoveEvent(event);
-        break;
-    case QEvent::MouseButtonRelease:
-        hack->mouseReleaseEvent(event);
-        break;
-    case QEvent::MouseButtonDblClick:
-        hack->mouseDoubleClickEvent(event);
-        break;
-    default:
-        break;
-    }
-}
-
-/**
- * Hack: call the protected wheel event handler function of the QPlainTextEdit item
- */
-void Terminal::processWheelEvents(QWheelEvent *event)
-{
-    // Subclass QPlainTextEdit so that we can call protected functions
-    class Hack : public QPlainTextEdit
-    {
-    public:
-        using QPlainTextEdit::wheelEvent;
-    };
-
-    // Call wheel event function only if linecount is larget than text height
-    auto lineCount = textEdit()->document()->blockCount();
-    auto visibleLines = qCeil(height() / textEdit()->fontMetrics().height());
-    if (lineCount > visibleLines)
-    {
-        // Call event
-        static_cast<Hack *>(textEdit())->wheelEvent(event);
-
-        // Disable autoscroll if we are scrolling upwards
-        if (autoscroll())
-        {
-            const auto delta = event->angleDelta();
-            const auto deltaY = delta.y();
-
-            if (deltaY > 0)
-            {
-                setAutoscroll(false);
-                update();
-            }
-        }
-
-        // Enable autoscroll if scrolling to bottom
-        else
-        {
-            const auto bar = textEdit()->verticalScrollBar();
-            if (bar->value() >= bar->maximum())
-            {
-                setAutoscroll(true);
-                update();
-            }
-        }
-    }
-}
-
-/**
  * Processes the given @a data to remove the escape sequences from the text using code
  * from Qt Creator output terminal. Check the next code block for more info.
  */
@@ -768,10 +559,10 @@ QString Terminal::vt100Processing(const QString &data)
 {
     auto formattedText = m_escapeCodeHandler.parseText(FormattedText(data));
     const QString cleanLine = std::accumulate(
-                formattedText.begin(), formattedText.end(), QString(),
-                [](const FormattedText &t1, const FormattedText &t2) -> QString {
-        return t1.text + t2.text;
-    });
+        formattedText.begin(), formattedText.end(), QString(),
+        [](const FormattedText &t1, const FormattedText &t2) -> QString {
+            return t1.text + t2.text;
+        });
     m_escapeCodeHandler.endFormatScope();
 
     return cleanLine;
@@ -785,12 +576,12 @@ QString Terminal::vt100Processing(const QString &data)
 #define QTC_ASSERT(cond, action)                                                         \
     if (Q_LIKELY(cond)) { }                                                              \
     else                                                                                 \
-{                                                                                    \
-    action;                                                                          \
-}                                                                                    \
+    {                                                                                    \
+        action;                                                                          \
+    }                                                                                    \
     do                                                                                   \
-{                                                                                    \
-} while (0)
+    {                                                                                    \
+    } while (0)
 
 static QColor ansiColor(uint code)
 {
@@ -885,28 +676,28 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
             {
                 switch (strippedText.at(1).toLatin1())
                 {
-                case '\\': // Unexpected terminator sequence.
-                    Q_FALLTHROUGH();
-                case 'N':
-                case 'O': // Ignore unsupported single-character sequences.
-                    strippedText.remove(0, 2);
-                    break;
-                case ']':
-                    m_alternateTerminator = QChar(7);
-                    Q_FALLTHROUGH();
-                case 'P':
-                case 'X':
-                case '^':
-                case '_':
-                    strippedText.remove(0, 2);
-                    m_waitingForTerminator = true;
-                    break;
-                default:
-                    // not a control sequence
-                    m_pendingText.clear();
-                    outputData << FormattedText(strippedText.left(1), charFormat);
-                    strippedText.remove(0, 1);
-                    continue;
+                    case '\\': // Unexpected terminator sequence.
+                        Q_FALLTHROUGH();
+                    case 'N':
+                    case 'O': // Ignore unsupported single-character sequences.
+                        strippedText.remove(0, 2);
+                        break;
+                    case ']':
+                        m_alternateTerminator = QChar(7);
+                        Q_FALLTHROUGH();
+                    case 'P':
+                    case 'X':
+                    case '^':
+                    case '_':
+                        strippedText.remove(0, 2);
+                        m_waitingForTerminator = true;
+                        break;
+                    default:
+                        // not a control sequence
+                        m_pendingText.clear();
+                        outputData << FormattedText(strippedText.left(1), charFormat);
+                        strippedText.remove(0, 1);
+                        continue;
                 }
                 break;
             }
@@ -914,7 +705,8 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             m_pendingText += strippedText.midRef(0, escape.length());
 #else
-            m_pendingText += QStringView{strippedText}.mid(0, escape.length()).toString();
+            m_pendingText
+                += QStringView { strippedText }.mid(0, escape.length()).toString();
 #endif
 
             strippedText.remove(0, escape.length());
@@ -968,9 +760,9 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
                     strNumber.clear();
                 }
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            m_pendingText += strippedText.midRef(0, 1);
+                m_pendingText += strippedText.midRef(0, 1);
 #else
-            m_pendingText += QStringView{strippedText}.mid(0, 1).toString();
+                m_pendingText += QStringView { strippedText }.mid(0, 1).toString();
 #endif
                 strippedText.remove(0, 1);
             }
@@ -1012,89 +804,89 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
                 {
                     switch (code)
                     {
-                    case ResetFormat:
-                        charFormat = input.format;
-                        endFormatScope();
-                        break;
-                    case BoldText:
-                        charFormat.setFontWeight(QFont::Bold);
-                        setFormatScope(charFormat);
-                        break;
-                    case DefaultTextColor:
-                        charFormat.setForeground(input.format.foreground());
-                        setFormatScope(charFormat);
-                        break;
-                    case DefaultBackgroundColor:
-                        charFormat.setBackground(input.format.background());
-                        setFormatScope(charFormat);
-                        break;
-                    case RgbTextColor:
-                    case RgbBackgroundColor:
-                        // See http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
-                        if (++i >= numbers.size())
+                        case ResetFormat:
+                            charFormat = input.format;
+                            endFormatScope();
                             break;
-                        switch (numbers.at(i).toInt())
-                        {
-                        case 2:
-                            // RGB set with format: 38;2;<r>;<g>;<b>
-                            if ((i + 3) < numbers.size())
-                            {
-                                (code == RgbTextColor)
-                                        ? charFormat.setForeground(
-                                              QColor(numbers.at(i + 1).toInt(),
-                                                     numbers.at(i + 2).toInt(),
-                                                     numbers.at(i + 3).toInt()))
-                                        : charFormat.setBackground(
-                                              QColor(numbers.at(i + 1).toInt(),
-                                                     numbers.at(i + 2).toInt(),
-                                                     numbers.at(i + 3).toInt()));
-                                setFormatScope(charFormat);
-                            }
-                            i += 3;
-                            break;
-                        case 5:
-                            // 256 color mode with format: 38;5;<i>
-                            uint index = numbers.at(i + 1).toUInt();
-
-                            QColor color;
-                            if (index < 8)
-                            {
-                                // The first 8 colors are standard low-intensity
-                                // ANSI colors.
-                                color = ansiColor(index);
-                            }
-                            else if (index < 16)
-                            {
-                                // The next 8 colors are standard high-intensity
-                                // ANSI colors.
-                                color = ansiColor(index - 8).lighter(150);
-                            }
-                            else if (index < 232)
-                            {
-                                // The next 216 colors are a 6x6x6 RGB cube.
-                                uint o = index - 16;
-                                color = QColor((o / 36) * 51, ((o / 6) % 6) * 51,
-                                               (o % 6) * 51);
-                            }
-                            else
-                            {
-                                // The last 24 colors are a greyscale gradient.
-                                int grey = int((index - 232) * 11);
-                                color = QColor(grey, grey, grey);
-                            }
-
-                            if (code == RgbTextColor)
-                                charFormat.setForeground(color);
-                            else
-                                charFormat.setBackground(color);
-
+                        case BoldText:
+                            charFormat.setFontWeight(QFont::Bold);
                             setFormatScope(charFormat);
-                            ++i;
                             break;
-                        }
-                        break;
-                    default:
-                        break;
+                        case DefaultTextColor:
+                            charFormat.setForeground(input.format.foreground());
+                            setFormatScope(charFormat);
+                            break;
+                        case DefaultBackgroundColor:
+                            charFormat.setBackground(input.format.background());
+                            setFormatScope(charFormat);
+                            break;
+                        case RgbTextColor:
+                        case RgbBackgroundColor:
+                            // See http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+                            if (++i >= numbers.size())
+                                break;
+                            switch (numbers.at(i).toInt())
+                            {
+                                case 2:
+                                    // RGB set with format: 38;2;<r>;<g>;<b>
+                                    if ((i + 3) < numbers.size())
+                                    {
+                                        (code == RgbTextColor)
+                                            ? charFormat.setForeground(
+                                                QColor(numbers.at(i + 1).toInt(),
+                                                       numbers.at(i + 2).toInt(),
+                                                       numbers.at(i + 3).toInt()))
+                                            : charFormat.setBackground(
+                                                QColor(numbers.at(i + 1).toInt(),
+                                                       numbers.at(i + 2).toInt(),
+                                                       numbers.at(i + 3).toInt()));
+                                        setFormatScope(charFormat);
+                                    }
+                                    i += 3;
+                                    break;
+                                case 5:
+                                    // 256 color mode with format: 38;5;<i>
+                                    uint index = numbers.at(i + 1).toUInt();
+
+                                    QColor color;
+                                    if (index < 8)
+                                    {
+                                        // The first 8 colors are standard low-intensity
+                                        // ANSI colors.
+                                        color = ansiColor(index);
+                                    }
+                                    else if (index < 16)
+                                    {
+                                        // The next 8 colors are standard high-intensity
+                                        // ANSI colors.
+                                        color = ansiColor(index - 8).lighter(150);
+                                    }
+                                    else if (index < 232)
+                                    {
+                                        // The next 216 colors are a 6x6x6 RGB cube.
+                                        uint o = index - 16;
+                                        color = QColor((o / 36) * 51, ((o / 6) % 6) * 51,
+                                                       (o % 6) * 51);
+                                    }
+                                    else
+                                    {
+                                        // The last 24 colors are a greyscale gradient.
+                                        int grey = int((index - 232) * 11);
+                                        color = QColor(grey, grey, grey);
+                                    }
+
+                                    if (code == RgbTextColor)
+                                        charFormat.setForeground(color);
+                                    else
+                                        charFormat.setBackground(color);
+
+                                    setFormatScope(charFormat);
+                                    ++i;
+                                    break;
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
             }

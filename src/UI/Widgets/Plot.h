@@ -22,36 +22,34 @@
 
 #pragma once
 
-#include <QWidget>
 #include <QwtPlot>
+#include <QWidget>
 #include <QVBoxLayout>
 #include <QwtPlotCurve>
 #include <QwtScaleEngine>
-
-#include "qfouriertransformer.h"
+#include <UI/DashboardWidget.h>
 
 namespace Widgets
 {
-class FFTPlot : public QWidget
+class Plot : public DashboardWidgetBase
 {
     Q_OBJECT
 
 public:
-    FFTPlot(const int index = -1);
-    ~FFTPlot();
+    Plot(const int index = -1);
 
 private Q_SLOTS:
     void updateData();
+    void updateRange();
 
 private:
-    float *m_fft;
-    float *m_samples;
-
-    int m_size;
     int m_index;
+    double m_min;
+    double m_max;
+    bool m_autoscale;
+
     QwtPlot m_plot;
     QwtPlotCurve m_curve;
     QVBoxLayout m_layout;
-    QFourierTransformer m_transformer;
 };
 }

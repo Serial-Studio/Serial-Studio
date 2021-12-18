@@ -22,41 +22,37 @@
 
 #pragma once
 
-#include <QLabel>
 #include <QWidget>
-#include <QPushButton>
-#include <QHBoxLayout>
+#include <QwtPlot>
 #include <QVBoxLayout>
+#include <QwtPlotCurve>
+#include <QwtScaleEngine>
+#include <UI/DashboardWidget.h>
 
-#include <mapcontrol.h>
-
-class QNetworkReply;
+#include "qfouriertransformer.h"
 
 namespace Widgets
 {
-class GPS : public QWidget
+class FFTPlot : public DashboardWidgetBase
 {
     Q_OBJECT
 
 public:
-    GPS(const int index = -1);
-    ~GPS();
+    FFTPlot(const int index = -1);
+    ~FFTPlot();
 
 private Q_SLOTS:
     void updateData();
 
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-
 private:
+    float *m_fft;
+    float *m_samples;
+
+    int m_size;
     int m_index;
-    QLabel *m_label;
+    QwtPlot m_plot;
+    QwtPlotCurve m_curve;
     QVBoxLayout m_layout;
-    QPushButton *m_zoomIn;
-    QPushButton *m_zoomOut;
-    QWidget m_titleWidget;
-    QHBoxLayout m_titleLayout;
-    qmapcontrol::MapControl m_mapControl;
+    QFourierTransformer m_transformer;
 };
 }

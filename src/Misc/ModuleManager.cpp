@@ -50,9 +50,8 @@
 #include <Plugins/Server.h>
 
 #include <UI/Dashboard.h>
-#include <UI/WidgetLoader.h>
-
-#include <Widgets/Terminal.h>
+#include <UI/DashboardWidget.h>
+#include <UI/Widgets/Terminal.h>
 
 #include <QQuickWindow>
 #include <QSimpleUpdater.h>
@@ -139,7 +138,7 @@ void Misc::ModuleManager::registerQmlTypes()
     qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
     qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
     qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
-    qmlRegisterType<UI::WidgetLoader>("SerialStudio", 1, 0, "WidgetLoader");
+    qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
 }
 
 /**

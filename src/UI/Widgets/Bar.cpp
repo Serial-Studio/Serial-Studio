@@ -20,13 +20,11 @@
  * THE SOFTWARE.
  */
 
-#include "Compass.h"
+#include "Bar.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
 #include <QResizeEvent>
-#include <QwtCompassScaleDraw>
-#include <QwtCompassMagnetNeedle>
 
 namespace Widgets
 {
@@ -34,7 +32,7 @@ namespace Widgets
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Compass::Compass(const int index)
+Bar::Bar(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
@@ -42,35 +40,48 @@ Compass::Compass(const int index)
     const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->compassCount())
+    if (m_index < 0 || m_index >= dash->barCount())
         return;
 
-    // Set compass style
-    QwtCompassScaleDraw *scaleDraw = new QwtCompassScaleDraw();
-    scaleDraw->enableComponent(QwtAbstractScaleDraw::Ticks, true);
-    scaleDraw->enableComponent(QwtAbstractScaleDraw::Labels, true);
-    scaleDraw->enableComponent(QwtAbstractScaleDraw::Backbone, false);
-    scaleDraw->setTickLength(QwtScaleDiv::MinorTick, 1);
-    scaleDraw->setTickLength(QwtScaleDiv::MediumTick, 1);
-    scaleDraw->setTickLength(QwtScaleDiv::MajorTick, 3);
-
-    // Configure compass scale & needle
-    m_compass.setScaleDraw(scaleDraw);
-    m_compass.setScaleMaxMajor(36);
-    m_compass.setScaleMaxMinor(5);
-    m_compass.setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
-
-    // Set compass palette
+    // Set thermo palette
     QPalette palette;
-    palette.setColor(QPalette::WindowText, theme->base());
+    palette.setColor(QPalette::Base, theme->base());
+    palette.setColor(QPalette::Highlight, QColor(255, 0, 0));
     palette.setColor(QPalette::Text, theme->widgetIndicator());
-    m_compass.setPalette(palette);
+    palette.setColor(QPalette::Dark, theme->widgetIndicator());
+    palette.setColor(QPalette::Light, theme->widgetIndicator());
+    palette.setColor(QPalette::ButtonText, theme->widgetIndicator());
+    palette.setColor(QPalette::WindowText, theme->widgetIndicator());
+    m_thermo.setPalette(palette);
 
-    // Set widget pointer
-    setWidget(&m_compass);
+    // Get thermo color
+    QString color;
+    const auto colors = theme->widgetColors();
+    if (colors.count() > m_index)
+        color = colors.at(m_index);
+    else
+        color = colors.at(colors.count() % m_index);
+
+    // Configure thermo style
+    m_thermo.setPipeWidth(64);
+    m_thermo.setBorderWidth(1);
+    m_thermo.setFillBrush(QBrush(QColor(color)));
+
+    // Get initial properties from dataset
+    const auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
+    if (dataset)
+    {
+        m_thermo.setAlarmLevel(dataset->alarm());
+        m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
+        m_thermo.setScale(dataset->min(), dataset->max());
+    }
+
+    // Set widget pointer & disable auto resize
+    setWidget(&m_thermo, Qt::AlignHCenter, false);
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(update()), Qt::QueuedConnection);
+    connect(this, SIGNAL(resized()), this, SLOT(onResized()), Qt::QueuedConnection);
+    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
 }
 
 /**
@@ -80,27 +91,32 @@ Compass::Compass(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Compass::update()
+void Bar::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
-    // Update compass heading
-    const auto dataset = UI::Dashboard::getInstance()->getCompass(m_index);
+    // Update bar level
+    const auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
     if (dataset)
     {
-        auto value = dataset->value().toDouble();
-        auto text = QString("%1°").arg(
-            QString::number(value, 'f', UI::Dashboard::getInstance()->precision()));
-        m_compass.setValue(value);
+        const auto value = dataset->value().toDouble();
+        m_thermo.setValue(value);
+        setValue(QString("%1 %2").arg(
+            QString::number(value, 'f', UI::Dashboard::getInstance()->precision()),
+            dataset->units()));
 
-        if (text.length() == 2)
-            text.prepend("00");
-        else if (text.length() == 3)
-            text.prepend("0");
-
-        setValue(text);
+        // Repaint widget
+        Q_EMIT updated();
     }
+}
+
+/**
+ * Resizes the thermo to fit the size of the parent window.
+ */
+void Bar::onResized()
+{
+    m_thermo.setPipeWidth(width() * 0.25);
 }
 }

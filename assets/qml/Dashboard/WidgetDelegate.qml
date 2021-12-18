@@ -38,8 +38,8 @@ Item {
     Widgets.Window {
         id: window
         anchors.fill: parent
-        title: loader.widgetTitle
-        icon.source: loader.widgetIcon
+        title: widget.widgetTitle
+        icon.source: widget.widgetIcon
         headerDoubleClickEnabled: true
         borderColor: Cpp_ThemeManager.widgetWindowBorder
         onHeaderDoubleClicked: {
@@ -49,8 +49,8 @@ Item {
                 externalWindowLoader.active = true
         }
 
-        WidgetLoader {
-            id: loader
+        DashboardWidget {
+            id: widget
             widgetIndex: root.widgetIndex
             anchors {
                 fill: parent
@@ -71,7 +71,7 @@ Item {
             id: _window
             minimumWidth: 640 + shadowMargin
             minimumHeight: 480 + shadowMargin
-            title: externalLoader.widgetTitle
+            title: externalWidget.widgetTitle
             extraFlags: Qt.WindowStaysOnTopHint
             titlebarText: Cpp_ThemeManager.text
             titlebarColor: Cpp_ThemeManager.widgetWindowBackground
@@ -107,8 +107,8 @@ Item {
                     }
                 }
 
-                WidgetLoader {
-                    id: externalLoader
+                DashboardWidget {
+                    id: externalWidget
                     anchors.fill: parent
                     isExternalWindow: true
                     widgetIndex: root.widgetIndex

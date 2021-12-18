@@ -20,9 +20,12 @@
  * THE SOFTWARE.
  */
 
-#include "Gauge.h"
 #include "UI/Dashboard.h"
+#include "Accelerometer.h"
 #include "Misc/ThemeManager.h"
+
+#include <QtMath>
+#include <QResizeEvent>
 
 namespace Widgets
 {
@@ -30,7 +33,7 @@ namespace Widgets
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Gauge::Gauge(const int index)
+Accelerometer::Accelerometer(const int index)
     : m_index(index)
 {
     // Get pointers to Serial Studio modules
@@ -38,7 +41,7 @@ Gauge::Gauge(const int index)
     const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->gaugeCount())
+    if (m_index < 0 || m_index >= dash->accelerometerCount())
         return;
 
     // Get needle & knob color
@@ -51,17 +54,12 @@ Gauge::Gauge(const int index)
         needleColor = colors.at(colors.count() % m_index);
 
     // Configure gauge needle
-    auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
-                                          QColor(needleColor), knobColor);
-    m_gauge.setNeedle(needle);
-    m_gauge.setFont(dash->monoFont());
+    m_gauge.setNeedle(new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
+                                              QColor(needleColor), knobColor));
 
-    // Set gauge scale
-#ifdef LAZY_WIDGETS
-    auto dataset = dash->getGauge(m_index);
-    if (dataset)
-        m_gauge.setScale(dataset->min(), dataset->max());
-#endif
+    // Set gauge scale & display angles
+    m_gauge.setScale(0, 12);
+    m_gauge.setScaleArc(90, 360);
 
     // Set gauge palette
     QPalette palette;
@@ -83,24 +81,47 @@ Gauge::Gauge(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Gauge::updateData()
+void Accelerometer::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
-    // Update gauge value
-    const auto dataset = UI::Dashboard::getInstance()->getGauge(m_index);
-    if (dataset)
+    // Update accelerometer values
+    const auto accelerometer = UI::Dashboard::getInstance()->getAccelerometer(m_index);
+    if (accelerometer)
     {
-#ifndef LAZY_WIDGETS
-        m_gauge.setScale(dataset->min(), dataset->max());
-#endif
-        const auto value = dataset->value().toDouble();
-        m_gauge.setValue(dataset->value().toDouble());
-        setValue(QString("%1 %2").arg(
-            QString::number(value, 'f', UI::Dashboard::getInstance()->precision()),
-            dataset->units()));
+        if (accelerometer->datasetCount() != 3)
+            return;
+
+        double x = 0;
+        double y = 0;
+        double z = 0;
+
+        JSON::Dataset *dataset;
+        for (int i = 0; i < 3; ++i)
+        {
+            dataset = accelerometer->getDataset(i);
+            if (dataset->widget() == "x")
+                x = dataset->value().toDouble();
+            if (dataset->widget() == "y")
+                y = dataset->value().toDouble();
+            if (dataset->widget() == "z")
+                z = dataset->value().toDouble();
+        }
+
+        x /= 9.18;
+        y /= 9.18;
+        z /= 9.18;
+
+        const double G = qSqrt(qPow(x, 2) + qPow(y, 2) + qPow(z, 2));
+
+        m_gauge.setValue(G);
+        setValue(QString("%1 G").arg(
+            QString::number(G, 'f', UI::Dashboard::getInstance()->precision())));
+
+        // Repaint widget
+        Q_EMIT updated();
     }
 }
 }

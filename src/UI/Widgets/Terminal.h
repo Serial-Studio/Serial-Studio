@@ -22,9 +22,8 @@
 
 #pragma once
 
-#include <QPainter>
 #include <QPlainTextEdit>
-#include <QQuickPaintedItem>
+#include <UI/DeclarativeWidget.h>
 
 namespace Widgets
 {
@@ -61,7 +60,7 @@ private:
     bool m_waitingForTerminator = false;
 };
 
-class Terminal : public QQuickPaintedItem
+class Terminal : public UI::DeclarativeWidget
 {
     // clang-format off
     Q_OBJECT
@@ -144,11 +143,6 @@ Q_SIGNALS:
 
 public:
     Terminal(QQuickItem *parent = 0);
-    ~Terminal();
-
-    virtual bool event(QEvent *event) override;
-    virtual void paint(QPainter *painter) override;
-    virtual bool eventFilter(QObject *watched, QEvent *event) override;
 
     QFont font() const;
     QString text() const;
@@ -166,9 +160,7 @@ public:
     bool undoRedoEnabled() const;
     int maximumBlockCount() const;
     QString placeholderText() const;
-
     QTextDocument *document() const;
-    QPlainTextEdit *textEdit() const;
 
 public Q_SLOTS:
     void copy();
@@ -193,14 +185,9 @@ public Q_SLOTS:
     void setMaximumBlockCount(const int maxBlockCount);
 
 private Q_SLOTS:
-    void updateWidgetSize();
     void updateScrollbarVisibility();
     void setCopyAvailable(const bool yes);
     void addText(const QString &text, const bool enableVt100);
-
-protected:
-    void processMouseEvents(QMouseEvent *event);
-    void processWheelEvents(QWheelEvent *event);
 
 private:
     QString vt100Processing(const QString &data);
@@ -209,7 +196,7 @@ private:
     bool m_autoscroll;
     bool m_emulateVt100;
     bool m_copyAvailable;
-    QPointer<QPlainTextEdit> m_textEdit;
+    QPlainTextEdit m_textEdit;
     AnsiEscapeCodeHandler m_escapeCodeHandler;
 };
 }

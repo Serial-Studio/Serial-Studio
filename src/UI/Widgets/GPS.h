@@ -22,35 +22,41 @@
 
 #pragma once
 
-#include <QwtPlot>
-#include <QWidget>
-#include <QwtLegend>
-#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QwtPlotCurve>
-#include <QwtScaleEngine>
 
-#include "UI/Dashboard.h"
+#include <mapcontrol.h>
+#include <UI/DashboardWidget.h>
+
+class QNetworkReply;
 
 namespace Widgets
 {
-class MultiPlot : public QWidget
+class GPS : public DashboardWidgetBase
 {
     Q_OBJECT
 
 public:
-    MultiPlot(const int index = -1);
+    GPS(const int index = -1);
+    ~GPS();
 
 private Q_SLOTS:
     void updateData();
-    void updateRange();
+
+protected:
+    void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     int m_index;
-    QwtPlot m_plot;
-    QwtLegend m_legend;
+    QLabel *m_label;
     QVBoxLayout m_layout;
-    QVector<QwtPlotCurve *> m_curves;
-    QVector<PlotData> m_yData;
+    QPushButton *m_zoomIn;
+    QPushButton *m_zoomOut;
+    QWidget m_titleWidget;
+    QHBoxLayout m_titleLayout;
+    qmapcontrol::MapControl m_mapControl;
 };
 }

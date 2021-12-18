@@ -179,7 +179,10 @@ void MultiPlot::updateData()
 
     // Plot widget again
     if (isEnabled())
+    {
         m_plot.replot();
+        Q_EMIT updated();
+    }
 }
 
 /**
@@ -205,5 +208,8 @@ void MultiPlot::updateRange()
     for (int i = 0; i < group->datasetCount(); ++i)
         if (m_curves.count() > i)
             m_curves.at(i)->setSamples(*dash->xPlotValues(), m_yData[i]);
+
+    // Repaint widget
+    Q_EMIT updated();
 }
 }

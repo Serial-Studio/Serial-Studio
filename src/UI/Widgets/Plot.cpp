@@ -205,6 +205,9 @@ void Plot::updateData()
         // Replot graph
         m_curve.setSamples(plotData->at(m_index));
         m_plot.replot();
+
+        // Repaint widget
+        Q_EMIT updated();
     }
 }
 
@@ -225,5 +228,8 @@ void Plot::updateRange()
     // Redraw graph
     m_curve.setSamples(*dash->xPlotValues(), tempYData);
     m_plot.replot();
+
+    // Repaint widget
+    Q_EMIT updated();
 }
 }

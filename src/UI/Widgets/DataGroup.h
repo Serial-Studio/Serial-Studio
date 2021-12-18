@@ -22,33 +22,45 @@
 
 #pragma once
 
-#include <QwtPlot>
-#include <QWidget>
+#include <QGridLayout>
 #include <QVBoxLayout>
-#include <QwtPlotCurve>
-#include <QwtScaleEngine>
+#include <QScrollArea>
+#include <UI/DashboardWidget.h>
+
+#include "Common/ElidedLabel.h"
 
 namespace Widgets
 {
-class Plot : public QWidget
+class DataGroup : public DashboardWidgetBase
 {
     Q_OBJECT
 
 public:
-    Plot(const int index = -1);
+    DataGroup(const int index = -1);
+    ~DataGroup();
 
 private Q_SLOTS:
     void updateData();
-    void updateRange();
+
+protected:
+    void resizeEvent(QResizeEvent *event);
+    void wheelEvent(QWheelEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
     int m_index;
-    double m_min;
-    double m_max;
-    bool m_autoscale;
 
-    QwtPlot m_plot;
-    QwtPlotCurve m_curve;
-    QVBoxLayout m_layout;
+    QVector<QLabel *> m_icons;
+    QVector<QLabel *> m_units;
+    QVector<ElidedLabel *> m_titles;
+    QVector<ElidedLabel *> m_values;
+
+    QWidget *m_dataContainer;
+    QVBoxLayout *m_mainLayout;
+    QGridLayout *m_gridLayout;
+    QScrollArea *m_scrollArea;
 };
 }

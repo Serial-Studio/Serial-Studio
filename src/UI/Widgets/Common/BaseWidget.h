@@ -26,9 +26,11 @@
 #include <QWidget>
 #include <QHBoxLayout>
 
+#include <UI/DashboardWidget.h>
+
 namespace Widgets
 {
-class BaseWidget : public QWidget
+class BaseWidget : public DashboardWidgetBase
 {
     Q_OBJECT
 

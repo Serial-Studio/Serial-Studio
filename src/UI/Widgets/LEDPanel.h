@@ -23,16 +23,17 @@
 #pragma once
 
 #include <QLabel>
-#include <QWidget>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QScrollArea>
+
+#include <UI/DashboardWidget.h>
 
 #include "Common/KLed.h"
 
 namespace Widgets
 {
-class LEDPanel : public QWidget
+class LEDPanel : public DashboardWidgetBase
 {
     Q_OBJECT
 
@@ -45,11 +46,6 @@ private Q_SLOTS:
 
 protected:
     void resizeEvent(QResizeEvent *event);
-    void wheelEvent(QWheelEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
     int m_index;

@@ -22,45 +22,35 @@
 
 #pragma once
 
-#include <QWidget>
-#include <QGridLayout>
+#include <QwtPlot>
+#include <QwtLegend>
+#include <QComboBox>
 #include <QVBoxLayout>
-#include <QScrollArea>
+#include <QwtPlotCurve>
+#include <QwtScaleEngine>
 
-#include "Common/ElidedLabel.h"
+#include <UI/Dashboard.h>
+#include <UI/DashboardWidget.h>
 
 namespace Widgets
 {
-class DataGroup : public QWidget
+class MultiPlot : public DashboardWidgetBase
 {
     Q_OBJECT
 
 public:
-    DataGroup(const int index = -1);
-    ~DataGroup();
+    MultiPlot(const int index = -1);
 
 private Q_SLOTS:
     void updateData();
-
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void wheelEvent(QWheelEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
+    void updateRange();
 
 private:
     int m_index;
-
-    QVector<QLabel *> m_icons;
-    QVector<QLabel *> m_units;
-    QVector<ElidedLabel *> m_titles;
-    QVector<ElidedLabel *> m_values;
-
-    QWidget *m_dataContainer;
-    QVBoxLayout *m_mainLayout;
-    QGridLayout *m_gridLayout;
-    QScrollArea *m_scrollArea;
+    QwtPlot m_plot;
+    QwtLegend m_legend;
+    QVBoxLayout m_layout;
+    QVector<QwtPlotCurve *> m_curves;
+    QVector<PlotData> m_yData;
 };
 }

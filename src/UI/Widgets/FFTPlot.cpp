@@ -173,6 +173,9 @@ void FFTPlot::updateData()
         m_transformer.rescale(m_fft);
         m_curve.setSamples(m_fft, m_size);
         m_plot.replot();
+
+        // Repaint widget
+        Q_EMIT updated();
     }
 }
 }

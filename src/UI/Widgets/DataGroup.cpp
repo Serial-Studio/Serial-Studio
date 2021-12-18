@@ -24,13 +24,22 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-#include <QMouseEvent>
-#include <QWheelEvent>
 #include <QResizeEvent>
 #include <QRegularExpression>
 
 namespace Widgets
 {
+#define EXEC_EVENT(pointer, function, event)                                             \
+    if (pointer)                                                                         \
+    {                                                                                    \
+        class PwnedWidget : public QScrollArea                                           \
+        {                                                                                \
+        public:                                                                          \
+            using QScrollArea::function;                                                 \
+        };                                                                               \
+        static_cast<PwnedWidget *>(pointer)->function(event);                            \
+        Q_EMIT updated();                                                                \
+    }
 
 /**
  * Generates the user interface elements & layout
@@ -109,10 +118,7 @@ DataGroup::DataGroup(const int index)
         units->setStyleSheet(unitsQSS);
         dicon->setStyleSheet(iconsQSS);
 
-        // Configure elide modes
-
-        // Lazy widgets, set label initial data
-#ifdef LAZY_WIDGETS
+        // Set label initial data
         auto set = group->getDataset(dataset);
         if (set)
         {
@@ -120,7 +126,6 @@ DataGroup::DataGroup(const int index)
             if (!set->units().isEmpty())
                 units->setText(QString("[%1]").arg(set->units()));
         }
-#endif
 
         // Set icon text
         dicon->setText("⤑");
@@ -150,7 +155,7 @@ DataGroup::DataGroup(const int index)
     // Configure main layout
     m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->addWidget(m_scrollArea);
-    m_mainLayout->setContentsMargins(12, 0, 0, 12);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(m_mainLayout);
 
     // React to dashboard events
@@ -208,11 +213,6 @@ void DataGroup::updateData()
         dataset = group->getDataset(i);
         if (dataset)
         {
-#ifndef LAZY_WIDGETS
-            m_titles.at(i)->setText(set->title());
-            if (!set->units().isEmpty())
-                m_units.at(i)->setText(QString("[%1]").arg(set->units()));
-#endif
             // Get dataset value
             auto value = dataset->value();
 
@@ -225,6 +225,9 @@ void DataGroup::updateData()
             m_values.at(i)->setText(value + " ");
         }
     }
+
+    // Repaint widget
+    Q_EMIT updated();
 }
 
 /**
@@ -253,61 +256,26 @@ void DataGroup::resizeEvent(QResizeEvent *event)
 
 void DataGroup::wheelEvent(QWheelEvent *event)
 {
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::wheelEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->wheelEvent(event);
+    EXEC_EVENT(m_scrollArea, wheelEvent, event);
 }
 
 void DataGroup::mouseMoveEvent(QMouseEvent *event)
 {
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::mouseMoveEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->mouseMoveEvent(event);
+    EXEC_EVENT(m_scrollArea, mouseMoveEvent, event);
 }
 
 void DataGroup::mousePressEvent(QMouseEvent *event)
 {
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::mousePressEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->mousePressEvent(event);
+    EXEC_EVENT(m_scrollArea, mousePressEvent, event);
 }
 
 void DataGroup::mouseReleaseEvent(QMouseEvent *event)
 {
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::mouseReleaseEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->mouseReleaseEvent(event);
+    EXEC_EVENT(m_scrollArea, mouseReleaseEvent, event);
 }
 
 void DataGroup::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::mouseDoubleClickEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->mouseDoubleClickEvent(event);
+    EXEC_EVENT(m_scrollArea, mouseDoubleClickEvent, event);
 }
 }

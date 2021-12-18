@@ -20,11 +20,9 @@
  * THE SOFTWARE.
  */
 
-#include "Gyroscope.h"
+#include "Gauge.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
-
-#include <QResizeEvent>
 
 namespace Widgets
 {
@@ -32,17 +30,36 @@ namespace Widgets
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Gyroscope::Gyroscope(const int index)
+Gauge::Gauge(const int index)
     : m_index(index)
-    , m_displayNum(0)
 {
     // Get pointers to Serial Studio modules
     const auto dash = UI::Dashboard::getInstance();
     const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->gyroscopeCount())
+    if (m_index < 0 || m_index >= dash->gaugeCount())
         return;
+
+    // Get needle & knob color
+    QString needleColor;
+    const auto colors = theme->widgetColors();
+    const auto knobColor = theme->widgetControlBackground();
+    if (colors.count() > m_index)
+        needleColor = colors.at(m_index);
+    else
+        needleColor = colors.at(colors.count() % m_index);
+
+    // Configure gauge needle
+    auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
+                                          QColor(needleColor), knobColor);
+    m_gauge.setNeedle(needle);
+    m_gauge.setFont(dash->monoFont());
+
+    // Set gauge scale
+    auto dataset = dash->getGauge(m_index);
+    if (dataset)
+        m_gauge.setScale(dataset->min(), dataset->max());
 
     // Set gauge palette
     QPalette palette;
@@ -52,11 +69,6 @@ Gyroscope::Gyroscope(const int index)
 
     // Set widget pointer
     setWidget(&m_gauge);
-
-    // Configure timer
-    m_timer.setInterval(500);
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateLabel()));
-    m_timer.start();
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
@@ -69,62 +81,23 @@ Gyroscope::Gyroscope(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Gyroscope::updateData()
+void Gauge::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
-    // Update gyroscope values
-    const auto dash = UI::Dashboard::getInstance();
-    const auto gyro = dash->getGyroscope(m_index);
-    if (gyro)
+    // Update gauge value
+    const auto dataset = UI::Dashboard::getInstance()->getGauge(m_index);
+    if (dataset)
     {
-        if (gyro->datasetCount() != 3)
-            return;
+        const auto value = dataset->value().toDouble();
+        m_gauge.setValue(dataset->value().toDouble());
+        setValue(QString("%1 %2").arg(
+            QString::number(value, 'f', UI::Dashboard::getInstance()->precision()),
+            dataset->units()));
 
-        double pitch = 0;
-        double roll = 0;
-        double yaw = 0;
-
-        JSON::Dataset *dataset;
-        for (int i = 0; i < 3; ++i)
-        {
-            dataset = gyro->getDataset(i);
-            if (dataset->widget() == "pitch")
-                pitch = dataset->value().toDouble();
-            if (dataset->widget() == "roll")
-                roll = dataset->value().toDouble();
-            if (dataset->widget() == "yaw")
-                yaw = dataset->value().toDouble();
-        }
-
-        m_yaw = QString::number(qAbs(yaw), 'f', dash->precision());
-        m_roll = QString::number(qAbs(roll), 'f', dash->precision());
-        m_pitch = QString::number(qAbs(pitch), 'f', dash->precision());
-
-        m_gauge.setValue(pitch);
-        m_gauge.setGradient(roll / 360.0);
+        Q_EMIT updated();
     }
-}
-
-void Gyroscope::updateLabel()
-{
-    switch (m_displayNum)
-    {
-        case 0:
-            setValue(QString("%1° PITCH").arg(m_pitch));
-            break;
-        case 1:
-            setValue(QString("%1° ROLL").arg(m_roll));
-            break;
-        case 2:
-            setValue(QString("%1° YAW").arg(m_yaw));
-            break;
-    }
-
-    ++m_displayNum;
-    if (m_displayNum > 2)
-        m_displayNum = 0;
 }
 }

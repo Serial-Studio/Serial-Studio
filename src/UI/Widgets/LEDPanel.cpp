@@ -24,8 +24,6 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-#include <QMouseEvent>
-#include <QWheelEvent>
 #include <QResizeEvent>
 
 namespace Widgets
@@ -172,15 +170,15 @@ void LEDPanel::updateData()
         dataset = group->getDataset(i);
         if (dataset)
         {
-#ifndef LAZY_WIDGETS
-            m_titles.at(i)->setText(set->title());
-#endif
             // Get dataset value (we compare with 0.1 for low voltages)
             const auto value = dataset->value().toDouble();
             if (qAbs(value) < 0.10)
                 m_leds.at(i)->off();
             else
                 m_leds.at(i)->on();
+
+            // Repaint widget
+            Q_EMIT updated();
         }
     }
 }
@@ -202,65 +200,5 @@ void LEDPanel::resizeEvent(QResizeEvent *event)
     }
 
     event->accept();
-}
-
-void LEDPanel::wheelEvent(QWheelEvent *event)
-{
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::wheelEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->wheelEvent(event);
-}
-
-void LEDPanel::mouseMoveEvent(QMouseEvent *event)
-{
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::mouseMoveEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->mouseMoveEvent(event);
-}
-
-void LEDPanel::mousePressEvent(QMouseEvent *event)
-{
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::mousePressEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->mousePressEvent(event);
-}
-
-void LEDPanel::mouseReleaseEvent(QMouseEvent *event)
-{
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::mouseReleaseEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->mouseReleaseEvent(event);
-}
-
-void LEDPanel::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    class Hack : public QScrollArea
-    {
-    public:
-        using QWidget::mouseDoubleClickEvent;
-    };
-
-    auto hack = static_cast<Hack *>(m_scrollArea);
-    hack->mouseDoubleClickEvent(event);
 }
 }

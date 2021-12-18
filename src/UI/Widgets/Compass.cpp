@@ -20,12 +20,13 @@
  * THE SOFTWARE.
  */
 
+#include "Compass.h"
 #include "UI/Dashboard.h"
-#include "Accelerometer.h"
 #include "Misc/ThemeManager.h"
 
-#include <QtMath>
 #include <QResizeEvent>
+#include <QwtCompassScaleDraw>
+#include <QwtCompassMagnetNeedle>
 
 namespace Widgets
 {
@@ -33,45 +34,43 @@ namespace Widgets
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Accelerometer::Accelerometer(const int index)
+Compass::Compass(const int index)
     : m_index(index)
 {
-    // Get pointers to Serial Studio modules
+    // Get pointers to serial studio modules
     const auto dash = UI::Dashboard::getInstance();
     const auto theme = Misc::ThemeManager::getInstance();
 
     // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->accelerometerCount())
+    if (m_index < 0 || m_index >= dash->compassCount())
         return;
 
-    // Get needle & knob color
-    QString needleColor;
-    const auto colors = theme->widgetColors();
-    const auto knobColor = theme->widgetControlBackground();
-    if (colors.count() > m_index)
-        needleColor = colors.at(m_index);
-    else
-        needleColor = colors.at(colors.count() % m_index);
+    // Set compass style
+    QwtCompassScaleDraw *scaleDraw = new QwtCompassScaleDraw();
+    scaleDraw->enableComponent(QwtAbstractScaleDraw::Ticks, true);
+    scaleDraw->enableComponent(QwtAbstractScaleDraw::Labels, true);
+    scaleDraw->enableComponent(QwtAbstractScaleDraw::Backbone, false);
+    scaleDraw->setTickLength(QwtScaleDiv::MinorTick, 1);
+    scaleDraw->setTickLength(QwtScaleDiv::MediumTick, 1);
+    scaleDraw->setTickLength(QwtScaleDiv::MajorTick, 3);
 
-    // Configure gauge needle
-    m_gauge.setNeedle(new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
-                                              QColor(needleColor), knobColor));
+    // Configure compass scale & needle
+    m_compass.setScaleDraw(scaleDraw);
+    m_compass.setScaleMaxMajor(36);
+    m_compass.setScaleMaxMinor(5);
+    m_compass.setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
 
-    // Set gauge scale & display angles
-    m_gauge.setScale(0, 12);
-    m_gauge.setScaleArc(90, 360);
-
-    // Set gauge palette
+    // Set compass palette
     QPalette palette;
     palette.setColor(QPalette::WindowText, theme->base());
     palette.setColor(QPalette::Text, theme->widgetIndicator());
-    m_gauge.setPalette(palette);
+    m_compass.setPalette(palette);
 
     // Set widget pointer
-    setWidget(&m_gauge);
+    setWidget(&m_compass);
 
     // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
+    connect(dash, SIGNAL(updated()), this, SLOT(update()), Qt::QueuedConnection);
 }
 
 /**
@@ -81,44 +80,30 @@ Accelerometer::Accelerometer(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Accelerometer::updateData()
+void Compass::update()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
-    // Update accelerometer values
-    const auto accelerometer = UI::Dashboard::getInstance()->getAccelerometer(m_index);
-    if (accelerometer)
+    // Update compass heading
+    const auto dataset = UI::Dashboard::getInstance()->getCompass(m_index);
+    if (dataset)
     {
-        if (accelerometer->datasetCount() != 3)
-            return;
+        auto value = dataset->value().toDouble();
+        auto text = QString("%1°").arg(
+            QString::number(value, 'f', UI::Dashboard::getInstance()->precision()));
+        m_compass.setValue(value);
 
-        double x = 0;
-        double y = 0;
-        double z = 0;
+        if (text.length() == 2)
+            text.prepend("00");
+        else if (text.length() == 3)
+            text.prepend("0");
 
-        JSON::Dataset *dataset;
-        for (int i = 0; i < 3; ++i)
-        {
-            dataset = accelerometer->getDataset(i);
-            if (dataset->widget() == "x")
-                x = dataset->value().toDouble();
-            if (dataset->widget() == "y")
-                y = dataset->value().toDouble();
-            if (dataset->widget() == "z")
-                z = dataset->value().toDouble();
-        }
+        setValue(text);
 
-        x /= 9.18;
-        y /= 9.18;
-        z /= 9.18;
-
-        const double G = qSqrt(qPow(x, 2) + qPow(y, 2) + qPow(z, 2));
-
-        m_gauge.setValue(G);
-        setValue(QString("%1 G").arg(
-            QString::number(G, 'f', UI::Dashboard::getInstance()->precision())));
+        // Repaint widget
+        Q_EMIT updated();
     }
 }
 }
