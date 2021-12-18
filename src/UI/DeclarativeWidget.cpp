@@ -39,11 +39,13 @@ namespace UI
 DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
+    setMipmap(true);
     setAntialiasing(true);
     setOpaquePainting(true);
     setAcceptTouchEvents(true);
     setFlag(ItemHasContents, true);
     setFlag(ItemIsFocusScope, true);
+    setFillColor(QColor(255, 0, 255));
     setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
 

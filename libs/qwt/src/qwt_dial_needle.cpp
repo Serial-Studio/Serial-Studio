@@ -244,7 +244,9 @@ void QwtDialNeedle::drawKnob( QPainter* painter,
         qSwap( c1, c2 );
 
     QRectF rect( 0.0, 0.0, width, width );
-    rect.moveCenter( painter->combinedTransform().map( QPointF() ) );
+    qreal hc = painter->window().width() / 2.0;
+    qreal vc = painter->window().height() / 2.0;
+    rect.moveCenter( QPointF( hc, vc) );
 
     QLinearGradient gradient( rect.topLeft(), rect.bottomRight() );
     gradient.setColorAt( 0.0, c1 );
