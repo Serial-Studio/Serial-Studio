@@ -88,7 +88,8 @@ GPS::GPS(const int index)
 
     // Load google maps adapter
     auto *mapadapter = new qmapcontrol::GoogleMapAdapter();
-    auto *l = new qmapcontrol::Layer("Custom Layer", mapadapter, qmapcontrol::Layer::MapLayer);
+    auto *l = new qmapcontrol::Layer("Custom Layer", mapadapter,
+                                     qmapcontrol::Layer::MapLayer);
     m_mapControl.addLayer(l);
     m_mapControl.setZoom(14);
 
