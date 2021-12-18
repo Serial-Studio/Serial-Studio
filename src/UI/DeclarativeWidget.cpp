@@ -25,6 +25,10 @@
 
 namespace UI
 {
+/**
+ * Creates a subclass of @c QWidget that allows us to call the given protected/private
+ * @a function and pass the given @a event as a parameter to the @a function.
+ */
 #define EXEC_EVENT(pointer, function, event)                                             \
     if (!pointer.isNull())                                                               \
     {                                                                                    \
