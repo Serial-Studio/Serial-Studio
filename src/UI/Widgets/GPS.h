@@ -40,7 +40,6 @@ class GPS : public DashboardWidgetBase
 
 public:
     GPS(const int index = -1);
-    ~GPS();
 
 private Q_SLOTS:
     void updateData();

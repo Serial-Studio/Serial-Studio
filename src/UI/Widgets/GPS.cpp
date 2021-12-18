@@ -25,7 +25,7 @@
 #include "Misc/ThemeManager.h"
 #include "Misc/ModuleManager.h"
 
-#include <osmmapadapter.h>
+#include <googlemapadapter.h>
 
 namespace Widgets
 {
@@ -84,10 +84,11 @@ GPS::GPS(const int index)
     m_mapControl.setFrameShadow(QFrame::Plain);
     m_mapControl.setFrameShape(QFrame::NoFrame);
     m_mapControl.setMouseMode(qmapcontrol::MapControl::None);
-    m_mapControl.resize(QSize(width() - 26, height() - 34 - m_titleWidget.height()));
-    qmapcontrol::TileMapAdapter *mapadapter = new qmapcontrol::OSMMapAdapter();
-    qmapcontrol::Layer *l = new qmapcontrol::Layer("Custom Layer", mapadapter,
-                                                   qmapcontrol::Layer::MapLayer);
+    m_mapControl.resize(QSize(width() - 28, height() - 36 - m_titleWidget.height()));
+
+    // Load google maps adapter
+    auto *mapadapter = new qmapcontrol::GoogleMapAdapter();
+    auto *l = new qmapcontrol::Layer("Custom Layer", mapadapter, qmapcontrol::Layer::MapLayer);
     m_mapControl.addLayer(l);
     m_mapControl.setZoom(14);
 
@@ -101,11 +102,6 @@ GPS::GPS(const int index)
     // React to Qt signals
     connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
 }
-
-/**
- * Frees the memory allocated for each label that represents a dataset
- */
-GPS::~GPS() { }
 
 /**
  * Checks if the widget is enabled, if so, the widget shall be updated
@@ -168,7 +164,7 @@ void GPS::resizeEvent(QResizeEvent *event)
 {
     const auto width = event->size().width();
     const auto height = event->size().height();
-    m_mapControl.resize(QSize(width - 26, height - 34 - m_titleWidget.height()));
+    m_mapControl.resize(QSize(width - 28, height - 26 - m_titleWidget.height()));
     event->accept();
 }
 

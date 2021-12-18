@@ -52,7 +52,7 @@ public:
     /*!
      * This construct a Google Adapter
      */
-    GoogleMapAdapter(googleLayerType qLayerType = roadmap);
+    GoogleMapAdapter(googleLayerType qLayerType = satellite);
     virtual ~GoogleMapAdapter();
 
 private:

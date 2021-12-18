@@ -92,7 +92,6 @@ Section "${APPNAME} (required)" SecDummy
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
   IntFmt $0 "0x%08X" $0
 
-  DeleteRegKey HKCU "Software\${COMPANYNAME}\${APPNAME}"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${COMPANYNAME} ${APPNAME}"
 
   WriteUninstaller "$INSTDIR\uninstall.exe"

@@ -21,6 +21,7 @@
  */
 
 #include "DeclarativeWidget.h"
+#include <Misc/ThemeManager.h>
 
 namespace UI
 {
@@ -36,6 +37,10 @@ namespace UI
         update();                                                                        \
     }
 
+/**
+ * Configures item flags, sets fill color and connects signals/slots to automatically
+ * resize the contained widget to the QML item's size.
+ */
 DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
@@ -45,9 +50,9 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
     setAcceptTouchEvents(true);
     setFlag(ItemHasContents, true);
     setFlag(ItemIsFocusScope, true);
-    setFillColor(QColor(255, 0, 255));
     setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
+    setFillColor(Misc::ThemeManager::getInstance()->base());
 
     // clang-format off
     connect(this, &QQuickPaintedItem::widthChanged,
@@ -58,11 +63,19 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
     // clang-format on
 }
 
+/**
+ * Returns a pointer to the contained widget
+ */
 QWidget *DeclarativeWidget::widget()
 {
     return m_widget;
 }
 
+/**
+ * Grabs an image/pixmap of the contained widget. The pixmap is later
+ * used to render the widget in the QML interface without causing signal/slot
+ * interferences with the scenegraph render thread.
+ */
 void DeclarativeWidget::update(const QRect &rect)
 {
     if (widget())
@@ -72,82 +85,131 @@ void DeclarativeWidget::update(const QRect &rect)
     }
 }
 
+/**
+ * Displays the pixmap generated in the @c update() function in the QML
+ * interface through the given @a painter pointer.
+ */
 void DeclarativeWidget::paint(QPainter *painter)
 {
     if (painter)
         painter->drawPixmap(0, 0, m_pixmap);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::keyPressEvent(QKeyEvent *event)
 {
     EXEC_EVENT(m_widget, keyPressEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::keyReleaseEvent(QKeyEvent *event)
 {
     EXEC_EVENT(m_widget, keyReleaseEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::inputMethodEvent(QInputMethodEvent *event)
 {
     EXEC_EVENT(m_widget, inputMethodEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::focusInEvent(QFocusEvent *event)
 {
     EXEC_EVENT(m_widget, focusInEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::focusOutEvent(QFocusEvent *event)
 {
     EXEC_EVENT(m_widget, focusOutEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::mousePressEvent(QMouseEvent *event)
 {
     EXEC_EVENT(m_widget, mousePressEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::mouseMoveEvent(QMouseEvent *event)
 {
     EXEC_EVENT(m_widget, mouseMoveEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     EXEC_EVENT(m_widget, mouseReleaseEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     EXEC_EVENT(m_widget, mouseDoubleClickEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::wheelEvent(QWheelEvent *event)
 {
     EXEC_EVENT(m_widget, wheelEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     EXEC_EVENT(m_widget, dragEnterEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::dragMoveEvent(QDragMoveEvent *event)
 {
     EXEC_EVENT(m_widget, dragMoveEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::dragLeaveEvent(QDragLeaveEvent *event)
 {
     EXEC_EVENT(m_widget, dragLeaveEvent, event);
 }
 
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
 void DeclarativeWidget::dropEvent(QDropEvent *event)
 {
     EXEC_EVENT(m_widget, dropEvent, event);
 }
 
+/**
+ * Resizes the widget to fit inside the QML painted item.
+ */
 void DeclarativeWidget::resizeWidget()
 {
     if (widget())
@@ -160,6 +222,9 @@ void DeclarativeWidget::resizeWidget()
     }
 }
 
+/**
+ * Changes the @param widget to be rendered in the QML interface.
+ */
 void DeclarativeWidget::setWidget(QWidget *widget)
 {
     if (widget)
