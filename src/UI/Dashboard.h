@@ -264,7 +264,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void resetData();
-    void updateData();
     void updatePlots();
     void processLatestJSON(const JFI_Object &frameInfo);
 
@@ -319,6 +318,5 @@ private:
     QVector<JSON::Group *> m_accelerometerWidgets;
 
     JSON::Frame m_latestFrame;
-    QVector<JFI_Object> m_jsonList;
 };
 }

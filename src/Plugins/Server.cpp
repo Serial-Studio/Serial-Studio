@@ -42,9 +42,8 @@ Plugins::Server::Server()
     // Send processed data at 1 Hz
     connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged,
             this, &Plugins::Server::registerFrame);
-    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::highFreqTimeout,
-            this, &Plugins::Server::sendProcessedData,
-            Qt::QueuedConnection);
+    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::lowFreqTimeout,
+            this, &Plugins::Server::sendProcessedData);
 
     // Send I/O "raw" data directly
     connect(&IO::Manager::instance(), &IO::Manager::dataReceived,

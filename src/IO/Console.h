@@ -149,7 +149,6 @@ public Q_SLOTS:
     void append(const QString &str, const bool addTimestamp = false);
 
 private Q_SLOTS:
-    void displayData();
     void onDataSent(const QByteArray &data);
     void addToHistory(const QString &command);
     void onDataReceived(const QByteArray &data);
@@ -175,8 +174,7 @@ private:
     StringList m_lines;
     StringList m_historyItems;
 
-    QString m_textBuffer;
     QString m_printFont;
-    QByteArray m_dataBuffer;
+    QString m_textBuffer;
 };
 }

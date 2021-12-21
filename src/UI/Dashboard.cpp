@@ -41,26 +41,15 @@ UI::Dashboard::Dashboard()
     : m_points(100)
     , m_precision(2)
 {
-    const auto cp = &CSV::Player::instance();
-    const auto io = &IO::Manager::instance();
-    const auto ge = &JSON::Generator::instance();
-    const auto te = &Misc::TimerEvents::instance();
-
     // clang-format off
-    connect(cp, SIGNAL(openChanged()),
-            this, SLOT(resetData()),
-            Qt::QueuedConnection);
-    connect(te, SIGNAL(highFreqTimeout()),
-            this, SLOT(updateData()),
-            Qt::QueuedConnection);
-    connect(io, SIGNAL(connectedChanged()),
-            this, SLOT(resetData()),
-            Qt::QueuedConnection);
-    connect(ge, SIGNAL(jsonFileMapChanged()),
-            this, SLOT(resetData()),
-            Qt::QueuedConnection);
-    connect(ge, &JSON::Generator::jsonChanged,
+    connect(&CSV::Player::instance(), &CSV::Player::openChanged,
+            this, &UI::Dashboard::resetData);
+    connect(&IO::Manager::instance(), &IO::Manager::connectedChanged,
+            this, &UI::Dashboard::resetData);
+    connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged,
             this, &UI::Dashboard::processLatestJSON);
+    connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
+            this, &UI::Dashboard::resetData);
     // clang-format on
 }
 
@@ -626,7 +615,6 @@ void UI::Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisi
 void UI::Dashboard::resetData()
 {
     // Make latest frame invalid
-    m_jsonList.clear();
     m_latestFrame.read(QJsonObject {});
 
     // Clear plot data
@@ -668,17 +656,89 @@ void UI::Dashboard::resetData()
 }
 
 /**
- * Interprets the most recent JSON frame & signals the UI to regenerate itself.
+ * Regenerates the data displayed on the dashboard plots
  */
-void UI::Dashboard::updateData()
+void UI::Dashboard::updatePlots()
 {
-    // Check if we have anything to read
-    if (m_jsonList.isEmpty())
-        return;
+    // Initialize arrays that contain pointers to the
+    // datasets that need to be plotted.
+    QVector<JSON::Dataset *> fftDatasets;
+    QVector<JSON::Dataset *> linearDatasets;
 
-    // Sort JSON list
-    JFI_SortList(&m_jsonList);
+    // Create list with datasets that need to be graphed
+    for (int i = 0; i < m_latestFrame.groupCount(); ++i)
+    {
+        const auto group = m_latestFrame.groups().at(i);
+        for (int j = 0; j < group->datasetCount(); ++j)
+        {
+            auto dataset = group->datasets().at(j);
+            if (dataset->fft())
+                fftDatasets.append(dataset);
+            if (dataset->graph())
+                linearDatasets.append(dataset);
+        }
+    }
 
+    // Check if we need to update dataset points
+    if (m_linearPlotValues.count() != linearDatasets.count())
+    {
+        m_linearPlotValues.clear();
+
+        for (int i = 0; i < linearDatasets.count(); ++i)
+        {
+            m_linearPlotValues.append(PlotData());
+            m_linearPlotValues.last().resize(points());
+
+            // clang-format off
+            std::fill(m_linearPlotValues.last().begin(),
+                      m_linearPlotValues.last().end(),
+                      0.0001);
+            // clang-format on
+        }
+    }
+
+    // Check if we need to update FFT dataset points
+    if (m_fftPlotValues.count() != fftDatasets.count())
+    {
+        m_fftPlotValues.clear();
+
+        for (int i = 0; i < fftDatasets.count(); ++i)
+        {
+            m_fftPlotValues.append(PlotData());
+            m_fftPlotValues.last().resize(fftDatasets[i]->fftSamples());
+
+            // clang-format off
+            std::fill(m_fftPlotValues.last().begin(),
+                      m_fftPlotValues.last().end(),
+                      0);
+            // clang-format on
+        }
+    }
+
+    // Append latest values to linear plot data
+    for (int i = 0; i < linearDatasets.count(); ++i)
+    {
+        auto data = m_linearPlotValues[i].data();
+        auto count = m_linearPlotValues[i].count();
+        memmove(data, data + 1, count * sizeof(double));
+        m_linearPlotValues[i][count - 1] = linearDatasets[i]->value().toDouble();
+    }
+
+    // Append latest values to FFT plot data
+    for (int i = 0; i < fftDatasets.count(); ++i)
+    {
+        auto data = m_fftPlotValues[i].data();
+        auto count = m_fftPlotValues[i].count();
+        memmove(data, data + 1, count * sizeof(double));
+        m_fftPlotValues[i][count - 1] = fftDatasets[i]->value().toDouble();
+    }
+}
+
+/**
+ * Regenerates the data displayed on the dashboard widgets
+ */
+void UI::Dashboard::processLatestJSON(const JFI_Object &frameInfo)
+{
     // Save widget count
     const int barC = barCount();
     const int fftC = fftCount();
@@ -696,14 +756,11 @@ void UI::Dashboard::updateData()
     const auto pTitle = title();
 
     // Try to read latest frame for widget updating
-    if (!m_latestFrame.read(m_jsonList.last().jsonDocument.object()))
+    if (!m_latestFrame.read(frameInfo.jsonDocument.object()))
         return;
 
     // Regenerate plot data
     updatePlots();
-
-    // Remove previous values from JSON list
-    m_jsonList.clear();
 
     // Update widget vectors
     m_fftWidgets = getFFTWidgets();
@@ -776,104 +833,6 @@ void UI::Dashboard::updateData()
 
     // Update UI;
     Q_EMIT updated();
-}
-
-void UI::Dashboard::updatePlots()
-{
-    // Initialize arrays that contain pointers to the
-    // datasets that need to be plotted.
-    QVector<JSON::Dataset *> fftDatasets;
-    QVector<JSON::Dataset *> linearDatasets;
-
-    // Register all plot values for each frame
-    for (int f = 0; f < m_jsonList.count(); ++f)
-    {
-        // Clear dataset & latest values list
-        fftDatasets.clear();
-        linearDatasets.clear();
-
-        // Get frame, abort if frame is invalid
-        JSON::Frame frame;
-        if (!frame.read(m_jsonList.at(f).jsonDocument.object()))
-            continue;
-
-        // Create list with datasets that need to be graphed
-        for (int i = 0; i < frame.groupCount(); ++i)
-        {
-            const auto group = frame.groups().at(i);
-            for (int j = 0; j < group->datasetCount(); ++j)
-            {
-                auto dataset = group->datasets().at(j);
-                if (dataset->fft())
-                    fftDatasets.append(dataset);
-                if (dataset->graph())
-                    linearDatasets.append(dataset);
-            }
-        }
-
-        // Check if we need to update dataset points
-        if (m_linearPlotValues.count() != linearDatasets.count())
-        {
-            m_linearPlotValues.clear();
-
-            for (int i = 0; i < linearDatasets.count(); ++i)
-            {
-                m_linearPlotValues.append(PlotData());
-                m_linearPlotValues.last().resize(points());
-
-                // clang-format off
-                std::fill(m_linearPlotValues.last().begin(),
-                          m_linearPlotValues.last().end(),
-                          0.0001);
-                // clang-format on
-            }
-        }
-
-        // Check if we need to update FFT dataset points
-        if (m_fftPlotValues.count() != fftDatasets.count())
-        {
-            m_fftPlotValues.clear();
-
-            for (int i = 0; i < fftDatasets.count(); ++i)
-            {
-                m_fftPlotValues.append(PlotData());
-                m_fftPlotValues.last().resize(fftDatasets[i]->fftSamples());
-
-                // clang-format off
-                std::fill(m_fftPlotValues.last().begin(),
-                          m_fftPlotValues.last().end(),
-                          0);
-                // clang-format on
-            }
-        }
-
-        // Append latest values to linear plot data
-        for (int i = 0; i < linearDatasets.count(); ++i)
-        {
-            auto data = m_linearPlotValues[i].data();
-            auto count = m_linearPlotValues[i].count();
-            memmove(data, data + 1, count * sizeof(double));
-            m_linearPlotValues[i][count - 1] = linearDatasets[i]->value().toDouble();
-        }
-
-        // Append latest values to FFT plot data
-        for (int i = 0; i < fftDatasets.count(); ++i)
-        {
-            auto data = m_fftPlotValues[i].data();
-            auto count = m_fftPlotValues[i].count();
-            memmove(data, data + 1, count * sizeof(double));
-            m_fftPlotValues[i][count - 1] = fftDatasets[i]->value().toDouble();
-        }
-    }
-}
-
-/**
- * Registers the JSON frame to the list of JSON frame vectors, which is later used to
- * update widgets & graphs
- */
-void UI::Dashboard::processLatestJSON(const JFI_Object &frameInfo)
-{
-    m_jsonList.append(frameInfo);
 }
 
 //----------------------------------------------------------------------------------------

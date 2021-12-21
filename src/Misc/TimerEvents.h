@@ -42,16 +42,10 @@ class TimerEvents : public QObject
 {
     // clang-format off
     Q_OBJECT
-    Q_PROPERTY(int highFreqTimeoutHz
-               READ highFreqTimeoutHz
-               WRITE setHighFreqTimeout
-               NOTIFY highFreqTimeoutChanged)
     // clang-format on
 
 Q_SIGNALS:
     void lowFreqTimeout();
-    void highFreqTimeout();
-    void highFreqTimeoutChanged();
 
 private:
     explicit TimerEvents();
@@ -62,15 +56,12 @@ private:
 
 public:
     static TimerEvents &instance();
-    int highFreqTimeoutHz() const;
 
 public Q_SLOTS:
     void stopTimers();
     void startTimers();
-    void setHighFreqTimeout(const int hz);
 
 private:
     QTimer m_timerLowFreq;
-    QTimer m_timerHighFreq;
 };
 }

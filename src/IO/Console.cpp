@@ -93,11 +93,8 @@ IO::Console::Console()
 
     // Read received data automatically
     const auto dm = &Manager::instance();
-    const auto te = &Misc::TimerEvents::instance();
     connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent);
     connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived);
-    connect(te, SIGNAL(highFreqTimeout()), this, SLOT(displayData()),
-            Qt::QueuedConnection);
 }
 
 /**
@@ -294,11 +291,8 @@ void IO::Console::save()
  */
 void IO::Console::clear()
 {
-    m_dataBuffer.clear();
     m_textBuffer.clear();
     m_isStartingLine = true;
-    m_dataBuffer.reserve(1200 * 1000);
-
     Q_EMIT dataReceived();
 }
 
@@ -544,17 +538,6 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
  * done by the @c dataToString() function, which displays incoming data either in UTF-8
  * or in hexadecimal mode.
  */
-void IO::Console::displayData()
-{
-    append(dataToString(m_dataBuffer), showTimestamp());
-    m_dataBuffer.clear();
-}
-
-/**
- * Displays the given @a data in the console. @c QByteArray to ~@c QString conversion is
- * done by the @c dataToString() function, which displays incoming data either in UTF-8
- * or in hexadecimal mode.
- */
 void IO::Console::onDataSent(const QByteArray &data)
 {
     if (echo())
@@ -562,12 +545,11 @@ void IO::Console::onDataSent(const QByteArray &data)
 }
 
 /**
- * Adds the given @a data to the incoming data buffer, which is read later by the UI
- * refresh functions (displayData())
+ * Displays the given @a data in the console
  */
 void IO::Console::onDataReceived(const QByteArray &data)
 {
-    m_dataBuffer.append(data);
+    append(dataToString(data), showTimestamp());
 }
 
 /**

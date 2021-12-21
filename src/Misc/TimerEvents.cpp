@@ -22,31 +22,13 @@
 
 #include "TimerEvents.h"
 
-#include <QtMath>
-
-/**
- * Converts the given @a hz to milliseconds
- */
-static int HZ_TO_MS(const int hz)
-{
-    const double rHz = hz;
-    const double uHz = 1000;
-    return qRound(uHz / rHz);
-}
-
 /**
  * Constructor function
  */
 Misc::TimerEvents::TimerEvents()
 {
-    // Configure timeout intevals
-    m_timerLowFreq.setInterval(HZ_TO_MS(1));
-    m_timerHighFreq.setInterval(HZ_TO_MS(20));
-
-    // Configure signals/slots
+    m_timerLowFreq.setInterval(1000);
     connect(&m_timerLowFreq, &QTimer::timeout, this, &Misc::TimerEvents::lowFreqTimeout);
-    connect(&m_timerHighFreq, &QTimer::timeout, this,
-            &Misc::TimerEvents::highFreqTimeout);
 }
 
 /**
@@ -59,20 +41,11 @@ Misc::TimerEvents &Misc::TimerEvents::instance()
 }
 
 /**
- * Returns the target UI refresh frequency
- */
-int Misc::TimerEvents::highFreqTimeoutHz() const
-{
-    return HZ_TO_MS(m_timerHighFreq.interval());
-}
-
-/**
  * Stops all the timers of this module
  */
 void Misc::TimerEvents::stopTimers()
 {
     m_timerLowFreq.stop();
-    m_timerHighFreq.stop();
 }
 
 /**
@@ -81,23 +54,4 @@ void Misc::TimerEvents::stopTimers()
 void Misc::TimerEvents::startTimers()
 {
     m_timerLowFreq.start();
-    m_timerHighFreq.start();
-}
-
-/**
- * Updates the target UI refresh frequency
- */
-void Misc::TimerEvents::setHighFreqTimeout(const int hz)
-{
-    if (hz > 0)
-    {
-        m_timerHighFreq.setInterval(HZ_TO_MS(hz));
-        Q_EMIT highFreqTimeoutChanged();
-    }
-
-    else
-    {
-        m_timerHighFreq.setInterval(HZ_TO_MS(1));
-        Q_EMIT highFreqTimeoutChanged();
-    }
 }
