@@ -36,27 +36,25 @@
 #include <UI/Widgets/MultiPlot.h>
 #include <UI/Widgets/Accelerometer.h>
 
-namespace UI
-{
 /**
  * Constructor function
  */
-DashboardWidget::DashboardWidget(QQuickItem *parent)
+UI::DashboardWidget::DashboardWidget(QQuickItem *parent)
     : DeclarativeWidget(parent)
     , m_index(-1)
     , m_widgetVisible(false)
     , m_isExternalWindow(false)
 {
     // clang-format off
-    connect(&Dashboard::instance(), &Dashboard::widgetVisibilityChanged,
-            this, &DashboardWidget::updateWidgetVisible);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetVisibilityChanged,
+            this, &UI::DashboardWidget::updateWidgetVisible);
     // clang-format on
 }
 
 /**
  * Delete widget on class destruction
  */
-DashboardWidget::~DashboardWidget()
+UI::DashboardWidget::~DashboardWidget()
 {
     if (m_dbWidget)
         delete m_dbWidget;
@@ -66,7 +64,7 @@ DashboardWidget::~DashboardWidget()
  * Returns the global index of the widget (index of the current widget in relation to all
  * registered widgets).
  */
-int DashboardWidget::widgetIndex() const
+int UI::DashboardWidget::widgetIndex() const
 {
     return m_index;
 }
@@ -75,7 +73,7 @@ int DashboardWidget::widgetIndex() const
  * Returns the relative index of the widget (e.g. index of a bar widget in relation to the
  * total number of bar widgets).
  */
-int DashboardWidget::relativeIndex() const
+int UI::DashboardWidget::relativeIndex() const
 {
     return UI::Dashboard::instance().relativeIndex(widgetIndex());
 }
@@ -83,7 +81,7 @@ int DashboardWidget::relativeIndex() const
 /**
  * Returns @c true if the QML interface should display this widget.
  */
-bool DashboardWidget::widgetVisible() const
+bool UI::DashboardWidget::widgetVisible() const
 {
     return m_widgetVisible;
 }
@@ -91,7 +89,7 @@ bool DashboardWidget::widgetVisible() const
 /**
  * Returns the path of the SVG icon to use with this widget
  */
-QString DashboardWidget::widgetIcon() const
+QString UI::DashboardWidget::widgetIcon() const
 {
     return UI::Dashboard::instance().widgetIcon(widgetIndex());
 }
@@ -99,7 +97,7 @@ QString DashboardWidget::widgetIcon() const
 /**
  * Returns the appropiate window title for the given widget
  */
-QString DashboardWidget::widgetTitle() const
+QString UI::DashboardWidget::widgetTitle() const
 {
     if (widgetIndex() >= 0)
     {
@@ -118,7 +116,7 @@ QString DashboardWidget::widgetTitle() const
  * If set to @c false, then the widget visbility shall be controlled
  * by the UI::Dashboard class via the SIGNAL/SLOT system.
  */
-bool DashboardWidget::isExternalWindow() const
+bool UI::DashboardWidget::isExternalWindow() const
 {
     return m_isExternalWindow;
 }
@@ -126,7 +124,7 @@ bool DashboardWidget::isExternalWindow() const
 /**
  * Returns the type of the current widget (e.g. group, plot, bar, gauge, etc...)
  */
-UI::Dashboard::WidgetType DashboardWidget::widgetType() const
+UI::Dashboard::WidgetType UI::DashboardWidget::widgetType() const
 {
     return UI::Dashboard::instance().widgetType(widgetIndex());
 }
@@ -134,7 +132,7 @@ UI::Dashboard::WidgetType DashboardWidget::widgetType() const
 /**
  * Changes the visibility & enabled status of the widget
  */
-void DashboardWidget::setVisible(const bool visible)
+void UI::DashboardWidget::setVisible(const bool visible)
 {
     if (m_dbWidget)
     {
@@ -146,7 +144,7 @@ void DashboardWidget::setVisible(const bool visible)
 /**
  * Selects & configures the appropiate widget for the given @a index
  */
-void DashboardWidget::setWidgetIndex(const int index)
+void UI::DashboardWidget::setWidgetIndex(const int index)
 {
     if (index < UI::Dashboard::instance().totalWidgetCount() && index >= 0)
     {
@@ -219,7 +217,7 @@ void DashboardWidget::setWidgetIndex(const int index)
  * If set to @c false, then the widget visbility shall be controlled
  * by the UI::Dashboard class via the SIGNAL/SLOT system.
  */
-void DashboardWidget::setIsExternalWindow(const bool isWindow)
+void UI::DashboardWidget::setIsExternalWindow(const bool isWindow)
 {
     m_isExternalWindow = isWindow;
     Q_EMIT isExternalWindowChanged();
@@ -229,7 +227,7 @@ void DashboardWidget::setIsExternalWindow(const bool isWindow)
  * Updates the visibility status of the current widget (this function is called
  * automatically by the UI::Dashboard class via signals/slots).
  */
-void DashboardWidget::updateWidgetVisible()
+void UI::DashboardWidget::updateWidgetVisible()
 {
     bool visible = UI::Dashboard::instance().widgetVisible(widgetIndex());
 
@@ -245,5 +243,4 @@ void DashboardWidget::updateWidgetVisible()
 
         Q_EMIT widgetVisibleChanged();
     }
-}
 }
