@@ -36,7 +36,7 @@
             using QScrollArea::function;                                                 \
         };                                                                               \
         static_cast<PwnedWidget *>(pointer)->function(event);                            \
-        requestUpdate();                                                                 \
+        requestRepaint();                                                                \
     }
 
 /**
