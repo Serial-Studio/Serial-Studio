@@ -35,6 +35,7 @@ Control {
     property alias tcpPlugins: _tcpPlugins.checked
     property alias language: _langCombo.currentIndex
     property alias startSequence: _startSequence.text
+    property alias windowShadows: _windowShadows.checked
     property alias separatorSequence: _separatorSequence.text
     property alias multithreadedFrameProcessing: _multithreadedFrameProcessing.checked
 
@@ -164,6 +165,24 @@ Control {
                 onCheckedChanged: {
                     if (checked != Cpp_JSON_Generator.processFramesInSeparateThread)
                         Cpp_JSON_Generator.processFramesInSeparateThread = checked
+                }
+            }
+
+            //
+            // Window shadows
+            //
+            Label {
+                visible: !Cpp_IsMac
+                text: qsTr("Window shadows") + ": "
+            } Switch {
+                id: _windowShadows
+                visible: !Cpp_IsMac
+                Layout.leftMargin: -app.spacing
+                Layout.alignment: Qt.AlignLeft
+                checked: Cpp_ThemeManager.shadowsEnabled
+                onCheckedChanged: {
+                    if (checked != Cpp_ThemeManager.shadowsEnabled)
+                        Cpp_ThemeManager.shadowsEnabled = checked
                 }
             }
         }

@@ -193,10 +193,15 @@ class ThemeManager : public QObject
     Q_PROPERTY(StringList availableThemes
                READ availableThemes
                NOTIFY availableThemesChanged)
+    Q_PROPERTY(bool shadowsEnabled
+               READ shadowsEnabled
+               WRITE setshadowsEnabled
+               NOTIFY shadowsEnabledChanged)
     // clang-format on
 
 Q_SIGNALS:
     void themeChanged();
+    void shadowsEnabledChanged();
     void availableThemesChanged();
 
 private:
@@ -210,6 +215,7 @@ public:
     static ThemeManager &instance();
 
     int themeId() const;
+    bool shadowsEnabled() const;
 
     bool titlebarSeparator() const;
     QColor base() const;
@@ -264,6 +270,7 @@ public:
 
 public Q_SLOTS:
     void setTheme(const int id);
+    void setShadowsEnabled(const bool enabled);
 
 private Q_SLOTS:
     void populateThemes();
@@ -271,6 +278,8 @@ private Q_SLOTS:
 
 private:
     int m_themeId;
+    bool m_enableShadows;
+
     QSettings m_settings;
     bool m_titlebarSeparator;
     StringList m_availableThemes;

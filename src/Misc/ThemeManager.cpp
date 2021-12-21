@@ -41,6 +41,7 @@ Misc::ThemeManager::ThemeManager()
 {
     populateThemes();
     loadTheme(m_settings.value("themeId", 0).toInt());
+    setShadowsEnabled(m_settings.value("shadowsEnabled", true).toBool());
 }
 
 /**
@@ -58,6 +59,16 @@ Misc::ThemeManager &Misc::ThemeManager::instance()
 int Misc::ThemeManager::themeId() const
 {
     return m_themeId;
+}
+
+/**
+ * Returns @c true if the application should draw window shadows. This feature makes the
+ * frameless windows look good - except if the DE does not support composting (e.g. CDE
+ * or Haiku OS).
+ */
+bool Misc::ThemeManager::shadowsEnabled() const
+{
+    return m_enableShadows;
 }
 
 /**
@@ -91,6 +102,13 @@ void Misc::ThemeManager::setTheme(const int id)
     // Restart application
     if (ans == QMessageBox::Yes)
         Utilities::rebootApplication();
+}
+
+void Misc::ThemeManager::setShadowsEnabled(const bool enabled)
+{
+    m_enableShadows = enabled;
+    m_settings.setValue("shadowsEnabled", enabled);
+    Q_EMIT shadowsEnabledChanged();
 }
 
 /**

@@ -97,7 +97,8 @@ QtWindow.Window {
     //
     // Size of the shadow object
     //
-    property int shadowMargin: Cpp_IsMac ? 0 : (root.radius > 0 ? 20 : 0)
+    property int shadowMargin: (Cpp_IsMac | !Cpp_ThemeManager.shadowsEnabled) ?
+                                   0 : (root.radius > 0 ? 20 : 0)
 
     //
     // Titlebar left/right margins for custom controls
