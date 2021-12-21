@@ -24,19 +24,16 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-namespace Widgets
-{
-
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-FFTPlot::FFTPlot(const int index)
+Widgets::FFTPlot::FFTPlot(const int index)
     : m_size(0)
     , m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Initialize pointers to NULL
     m_fft = Q_NULLPTR;
@@ -90,7 +87,7 @@ FFTPlot::FFTPlot(const int index)
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
     // Get dataset max freq. & calculate fft size
-    const auto dataset = UI::Dashboard::getInstance()->getFFT(m_index);
+    const auto dataset = UI::Dashboard::instance().getFFT(m_index);
     if (dataset)
     {
         // Calculate FFT size
@@ -137,7 +134,7 @@ FFTPlot::FFTPlot(const int index)
 /**
  * Destructor function
  */
-FFTPlot::~FFTPlot()
+Widgets::FFTPlot::~FFTPlot()
 {
     free(m_fft);
     free(m_samples);
@@ -153,14 +150,14 @@ FFTPlot::~FFTPlot()
  * window is hidden), then the new data shall be saved to the plot
  * vector, but the widget shall not be redrawn.
  */
-void FFTPlot::updateData()
+void Widgets::FFTPlot::updateData()
 {
     // Verify that FFT sample arrays are valid
     if (!m_samples || !m_fft)
         return;
 
     // Replot
-    const auto plotData = UI::Dashboard::getInstance()->fftPlotValues();
+    const auto plotData = UI::Dashboard::instance().fftPlotValues();
     if (plotData->count() > m_index)
     {
         // Copy data to samples array
@@ -177,5 +174,4 @@ void FFTPlot::updateData()
         // Repaint widget
         Q_EMIT updated();
     }
-}
 }

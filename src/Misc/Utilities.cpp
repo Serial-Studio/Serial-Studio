@@ -33,19 +33,13 @@
 
 #include <AppInfo.h>
 
-namespace Misc
+Misc::Utilities &Misc::Utilities::instance()
 {
-static Utilities *UTILITIES = Q_NULLPTR;
-
-Utilities *Utilities::getInstance()
-{
-    if (!UTILITIES)
-        UTILITIES = new Utilities;
-
-    return UTILITIES;
+    static auto singleton = new Utilities();
+    return *singleton;
 }
 
-void Utilities::rebootApplication()
+void Misc::Utilities::rebootApplication()
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qApp->exit();
@@ -61,7 +55,7 @@ void Utilities::rebootApplication()
 #endif
 }
 
-bool Utilities::askAutomaticUpdates()
+bool Misc::Utilities::askAutomaticUpdates()
 {
     const int result = showMessageBox(tr("Check for updates automatically?"),
                                       tr("Should %1 automatically check for updates? "
@@ -75,9 +69,9 @@ bool Utilities::askAutomaticUpdates()
 /**
  * Shows a macOS-like message box with the given properties
  */
-int Utilities::showMessageBox(const QString &text, const QString &informativeText,
-                              const QString &windowTitle,
-                              const QMessageBox::StandardButtons &bt)
+int Misc::Utilities::showMessageBox(const QString &text, const QString &informativeText,
+                                    const QString &windowTitle,
+                                    const QMessageBox::StandardButtons &bt)
 {
     // Get app icon
     auto icon = QPixmap(APP_ICON).scaled(64, 64, Qt::IgnoreAspectRatio,
@@ -98,7 +92,7 @@ int Utilities::showMessageBox(const QString &text, const QString &informativeTex
 /**
  * Displays the about Qt dialog
  */
-void Utilities::aboutQt()
+void Misc::Utilities::aboutQt()
 {
     qApp->aboutQt();
 }
@@ -111,7 +105,7 @@ void Utilities::aboutQt()
  * Hacking details:
  * http://stackoverflow.com/questions/3490336/how-to-reveal-in-finder-or-show-in-explorer-with-qt
  */
-void Utilities::revealFile(const QString &pathToReveal)
+void Misc::Utilities::revealFile(const QString &pathToReveal)
 {
 #if defined(Q_OS_WIN)
     QStringList param;
@@ -134,5 +128,4 @@ void Utilities::revealFile(const QString &pathToReveal)
 #else
     QDesktopServices::openUrl(QUrl::fromLocalFile(pathToReveal));
 #endif
-}
 }

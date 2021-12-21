@@ -24,20 +24,10 @@
 #include "Dataset.h"
 #include "FrameInfo.h"
 
-namespace JSON
-{
-
-Group::Group(QObject *parent)
-    : QObject(parent)
-    , m_title("")
-    , m_widget("")
-{
-}
-
 /**
  * Destructor function
  */
-Group::~Group()
+JSON::Group::~Group()
 {
     qDeleteAll(m_datasets);
     m_datasets.clear();
@@ -46,7 +36,7 @@ Group::~Group()
 /**
  * @return The title/description of this group
  */
-QString Group::title() const
+QString JSON::Group::title() const
 {
     return m_title;
 }
@@ -54,7 +44,7 @@ QString Group::title() const
 /**
  * @return The widget type of this group (if any)
  */
-QString Group::widget() const
+QString JSON::Group::widget() const
 {
     return m_widget;
 }
@@ -62,7 +52,7 @@ QString Group::widget() const
 /**
  * @return The number of datasets inside this group
  */
-int Group::datasetCount() const
+int JSON::Group::datasetCount() const
 {
     return m_datasets.count();
 }
@@ -70,7 +60,7 @@ int Group::datasetCount() const
 /**
  * @return A list with all the dataset objects contained in this group
  */
-QVector<Dataset *> &Group::datasets()
+QVector<JSON::Dataset *> &JSON::Group::datasets()
 {
     return m_datasets;
 }
@@ -78,7 +68,7 @@ QVector<Dataset *> &Group::datasets()
 /**
  * @return The dataset at the given @a index,vreturns @c Q_NULLPTR on invalid index
  */
-JSON::Dataset *Group::getDataset(const int index)
+JSON::Dataset *JSON::Group::getDataset(const int index)
 {
     if (index < datasetCount() && index >= 0)
         return m_datasets.at(index);
@@ -92,7 +82,7 @@ JSON::Dataset *Group::getDataset(const int index)
  *
  * @return @c true on success, @c false on failure
  */
-bool Group::read(const QJsonObject &object)
+bool JSON::Group::read(const QJsonObject &object)
 {
     if (!object.isEmpty())
     {
@@ -111,7 +101,7 @@ bool Group::read(const QJsonObject &object)
                 const auto object = array.at(i).toObject();
                 if (!object.isEmpty())
                 {
-                    Dataset *dataset = new Dataset(this);
+                    Dataset *dataset = new Dataset();
                     if (dataset->read(object))
                         m_datasets.append(dataset);
                     else
@@ -124,5 +114,4 @@ bool Group::read(const QJsonObject &object)
     }
 
     return false;
-}
 }

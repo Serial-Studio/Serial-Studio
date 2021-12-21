@@ -27,8 +27,6 @@
 #include <QResizeEvent>
 #include <QRegularExpression>
 
-namespace Widgets
-{
 #define EXEC_EVENT(pointer, function, event)                                             \
     if (pointer)                                                                         \
     {                                                                                    \
@@ -44,12 +42,12 @@ namespace Widgets
 /**
  * Generates the user interface elements & layout
  */
-DataGroup::DataGroup(const int index)
+Widgets::DataGroup::DataGroup(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->groupCount())
@@ -165,7 +163,7 @@ DataGroup::DataGroup(const int index)
 /**
  * Frees the memory allocated for each label that represents a dataset
  */
-DataGroup::~DataGroup()
+Widgets::DataGroup::~DataGroup()
 {
     Q_FOREACH (auto icon, m_icons)
         delete icon;
@@ -191,14 +189,14 @@ DataGroup::~DataGroup()
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void DataGroup::updateData()
+void Widgets::DataGroup::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
     // Get group pointer
-    const auto dash = UI::Dashboard::getInstance();
+    const auto dash = &UI::Dashboard::instance();
     const auto group = dash->getGroups(m_index);
     if (!group)
         return;
@@ -233,10 +231,10 @@ void DataGroup::updateData()
 /**
  * Changes the size of the labels when the widget is resized
  */
-void DataGroup::resizeEvent(QResizeEvent *event)
+void Widgets::DataGroup::resizeEvent(QResizeEvent *event)
 {
     auto width = event->size().width();
-    QFont font = UI::Dashboard::getInstance()->monoFont();
+    QFont font = UI::Dashboard::instance().monoFont();
     QFont icon = font;
     QFont valueFont = font;
     icon.setPixelSize(qMax(8, width / 16));
@@ -254,28 +252,27 @@ void DataGroup::resizeEvent(QResizeEvent *event)
     event->accept();
 }
 
-void DataGroup::wheelEvent(QWheelEvent *event)
+void Widgets::DataGroup::wheelEvent(QWheelEvent *event)
 {
     EXEC_EVENT(m_scrollArea, wheelEvent, event);
 }
 
-void DataGroup::mouseMoveEvent(QMouseEvent *event)
+void Widgets::DataGroup::mouseMoveEvent(QMouseEvent *event)
 {
     EXEC_EVENT(m_scrollArea, mouseMoveEvent, event);
 }
 
-void DataGroup::mousePressEvent(QMouseEvent *event)
+void Widgets::DataGroup::mousePressEvent(QMouseEvent *event)
 {
     EXEC_EVENT(m_scrollArea, mousePressEvent, event);
 }
 
-void DataGroup::mouseReleaseEvent(QMouseEvent *event)
+void Widgets::DataGroup::mouseReleaseEvent(QMouseEvent *event)
 {
     EXEC_EVENT(m_scrollArea, mouseReleaseEvent, event);
 }
 
-void DataGroup::mouseDoubleClickEvent(QMouseEvent *event)
+void Widgets::DataGroup::mouseDoubleClickEvent(QMouseEvent *event)
 {
     EXEC_EVENT(m_scrollArea, mouseDoubleClickEvent, event);
-}
 }

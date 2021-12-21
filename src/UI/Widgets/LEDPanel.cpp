@@ -26,18 +26,15 @@
 
 #include <QResizeEvent>
 
-namespace Widgets
-{
-
 /**
  * Generates the user interface elements & layout
  */
-LEDPanel::LEDPanel(const int index)
+Widgets::LEDPanel::LEDPanel(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->ledCount())
@@ -131,7 +128,7 @@ LEDPanel::LEDPanel(const int index)
 /**
  * Frees the memory allocated for each label and LED that represents a dataset
  */
-LEDPanel::~LEDPanel()
+Widgets::LEDPanel::~LEDPanel()
 {
     Q_FOREACH (auto led, m_leds)
         delete led;
@@ -151,14 +148,14 @@ LEDPanel::~LEDPanel()
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void LEDPanel::updateData()
+void Widgets::LEDPanel::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
     // Get group pointer
-    const auto dash = UI::Dashboard::getInstance();
+    const auto dash = &UI::Dashboard::instance();
     const auto group = dash->getLED(m_index);
     if (!group)
         return;
@@ -186,10 +183,10 @@ void LEDPanel::updateData()
 /**
  * Changes the size of the labels when the widget is resized
  */
-void LEDPanel::resizeEvent(QResizeEvent *event)
+void Widgets::LEDPanel::resizeEvent(QResizeEvent *event)
 {
     const auto width = event->size().width();
-    QFont font = UI::Dashboard::getInstance()->monoFont();
+    QFont font = UI::Dashboard::instance().monoFont();
     font.setPixelSize(qMax(8, width / 24));
     const auto fHeight = QFontMetrics(font).height() * 1.5;
 
@@ -200,5 +197,4 @@ void LEDPanel::resizeEvent(QResizeEvent *event)
     }
 
     event->accept();
-}
 }

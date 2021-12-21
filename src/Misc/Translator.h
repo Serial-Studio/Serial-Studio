@@ -57,10 +57,14 @@ Q_SIGNALS:
     void languageChanged();
 
 private:
-    Translator();
+    explicit Translator();
+    Translator(Translator &&) = delete;
+    Translator(const Translator &) = delete;
+    Translator &operator=(Translator &&) = delete;
+    Translator &operator=(const Translator &) = delete;
 
 public:
-    static Translator *getInstance();
+    static Translator &instance();
 
     int language() const;
     int systemLanguage() const;

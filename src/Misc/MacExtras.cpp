@@ -27,11 +27,7 @@
 #    include <kdmactouchbar.h>
 #endif
 
-namespace Misc
-{
-static MacExtras *MAC_EXTRAS = Q_NULLPTR;
-
-MacExtras::MacExtras()
+Misc::MacExtras::MacExtras()
 {
 #ifdef Q_OS_MAC
     // Configure action strings
@@ -64,43 +60,40 @@ MacExtras::MacExtras()
     bar->addAction(&m_dashboardAction);
 
     // Re-translate buttons when language is changed
-    connect(Translator::getInstance(), SIGNAL(languageChanged()), this,
+    connect(&Translator::instance(), SIGNAL(languageChanged()), this,
             SLOT(updateButtonText()));
 #endif
 }
 
-MacExtras *MacExtras::getInstance()
+Misc::MacExtras &Misc::MacExtras::instance()
 {
-    if (!MAC_EXTRAS)
-        MAC_EXTRAS = new MacExtras;
-
-    return MAC_EXTRAS;
+    static auto singleton = new MacExtras();
+    return *singleton;
 }
 
-void MacExtras::setSetupChecked(const bool checked)
+void Misc::MacExtras::setSetupChecked(const bool checked)
 {
     m_setupAction.setChecked(checked);
 }
 
-void MacExtras::setConsoleChecked(const bool checked)
+void Misc::MacExtras::setConsoleChecked(const bool checked)
 {
     m_consoleAction.setChecked(checked);
 }
 
-void MacExtras::setDashboardChecked(const bool checked)
+void Misc::MacExtras::setDashboardChecked(const bool checked)
 {
     m_dashboardAction.setChecked(checked);
 }
 
-void MacExtras::setDashboardEnabled(const bool enabled)
+void Misc::MacExtras::setDashboardEnabled(const bool enabled)
 {
     m_dashboardAction.setEnabled(enabled);
 }
 
-void MacExtras::updateButtonText()
+void Misc::MacExtras::updateButtonText()
 {
     m_setupAction.setText(tr("Setup"));
     m_consoleAction.setText(tr("Console"));
     m_dashboardAction.setText(tr("Dashboard"));
-}
 }

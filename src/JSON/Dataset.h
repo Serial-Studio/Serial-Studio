@@ -62,11 +62,10 @@ namespace JSON
  * @note All of the dataset fields are optional, except the "value"
  *       field and the "title" field.
  */
-class Dataset : public QObject
+class Dataset
 {
 public:
-    Dataset(QObject *parent = Q_NULLPTR);
-    ~Dataset();
+    Dataset();
 
     bool fft() const;
     bool led() const;

@@ -32,14 +32,10 @@
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 
-namespace CSV
-{
-static Player *PLAYER = Q_NULLPTR;
-
 /**
  * Constructor function
  */
-Player::Player()
+CSV::Player::Player()
     : m_framePos(0)
     , m_playing(false)
     , m_timestamp("")
@@ -50,18 +46,16 @@ Player::Player()
 /**
  * Returns the only instance of the class
  */
-Player *Player::getInstance()
+CSV::Player &CSV::Player::instance()
 {
-    if (!PLAYER)
-        PLAYER = new Player;
-
-    return PLAYER;
+    static auto singleton = new Player();
+    return *singleton;
 }
 
 /**
  * Returns @c true if an CSV file is open for reading
  */
-bool Player::isOpen() const
+bool CSV::Player::isOpen() const
 {
     return m_csvFile.isOpen();
 }
@@ -69,7 +63,7 @@ bool Player::isOpen() const
 /**
  * Returns the CSV playback progress in a range from 0.0 to 1.0
  */
-qreal Player::progress() const
+qreal CSV::Player::progress() const
 {
     return ((qreal)framePosition()) / frameCount();
 }
@@ -78,7 +72,7 @@ qreal Player::progress() const
  * Returns @c true if the user is currently re-playing the CSV file at real-time
  * speed.
  */
-bool Player::isPlaying() const
+bool CSV::Player::isPlaying() const
 {
     return m_playing;
 }
@@ -86,7 +80,7 @@ bool Player::isPlaying() const
 /**
  * Returns the short filename of the current CSV file
  */
-QString Player::filename() const
+QString CSV::Player::filename() const
 {
     if (isOpen())
     {
@@ -102,7 +96,7 @@ QString Player::filename() const
  * by getting the number of rows of the CSV and substracting 1 (because the
  * title cells do not count as a valid frame).
  */
-int Player::frameCount() const
+int CSV::Player::frameCount() const
 {
     return m_csvData.count() - 1;
 }
@@ -111,7 +105,7 @@ int Player::frameCount() const
  * Returns the current row that we are using to create the JSON data that is
  * feed to the JsonParser class.
  */
-int Player::framePosition() const
+int CSV::Player::framePosition() const
 {
     return m_framePos;
 }
@@ -119,7 +113,7 @@ int Player::framePosition() const
 /**
  * Returns the timestamp of the current data frame / row.
  */
-QString Player::timestamp() const
+QString CSV::Player::timestamp() const
 {
     return m_timestamp;
 }
@@ -127,7 +121,7 @@ QString Player::timestamp() const
 /**
  * Returns the default path for CSV files
  */
-QString Player::csvFilesPath() const
+QString CSV::Player::csvFilesPath() const
 {
     // Get file name and path
     // clang-format off
@@ -147,7 +141,7 @@ QString Player::csvFilesPath() const
  * Enables CSV playback at 'live' speed (as it happened when CSV file was
  * saved to the computer).
  */
-void Player::play()
+void CSV::Player::play()
 {
     m_playing = true;
     Q_EMIT playerStateChanged();
@@ -157,7 +151,7 @@ void Player::play()
  * Pauses the CSV playback so that the user can see WTF happened at
  * certain point of the mission.
  */
-void Player::pause()
+void CSV::Player::pause()
 {
     m_playing = false;
     Q_EMIT playerStateChanged();
@@ -166,7 +160,7 @@ void Player::pause()
 /**
  * Toggles play/pause state
  */
-void Player::toggle()
+void CSV::Player::toggle()
 {
     m_playing = !m_playing;
     Q_EMIT playerStateChanged();
@@ -175,7 +169,7 @@ void Player::toggle()
 /**
  * Lets the user select a CSV file
  */
-void Player::openFile()
+void CSV::Player::openFile()
 {
     // clang-format off
 
@@ -197,7 +191,7 @@ void Player::openFile()
  * Closes the file & cleans up internal variables. This helps us to reduice
  * memory usage & prepare the module to load another CSV file.
  */
-void Player::closeFile()
+void CSV::Player::closeFile()
 {
     m_framePos = 0;
     m_csvFile.close();
@@ -213,7 +207,7 @@ void Player::closeFile()
 /**
  * Reads & processes the next CSV row (until we get to the last row)
  */
-void Player::nextFrame()
+void CSV::Player::nextFrame()
 {
     if (framePosition() < frameCount())
     {
@@ -225,7 +219,7 @@ void Player::nextFrame()
 /**
  * Reads & processes the previous CSV row (until we get to the first row)
  */
-void Player::previousFrame()
+void CSV::Player::previousFrame()
 {
     if (framePosition() > 0)
     {
@@ -239,7 +233,7 @@ void Player::previousFrame()
  * row. If one of the data rows does not correspond to the title row, the CSV
  * is considered to be invalid.
  */
-void Player::openFile(const QString &filePath)
+void CSV::Player::openFile(const QString &filePath)
 {
     // File name empty, abort
     if (filePath.isEmpty())
@@ -249,8 +243,7 @@ void Player::openFile(const QString &filePath)
     closeFile();
 
     // Device is connected, warn user & disconnect
-    const auto sm = IO::Manager::getInstance();
-    if (sm->connected())
+    if (IO::Manager::instance().connected())
     {
         auto response = Misc::Utilities::showMessageBox(
             tr("Serial port open, do you want to continue?"),
@@ -258,7 +251,7 @@ void Player::openFile(const QString &filePath)
                "to disconnect from the serial port"),
             qAppName(), QMessageBox::No | QMessageBox::Yes);
         if (response == QMessageBox::Yes)
-            sm->disconnectDevice();
+            IO::Manager::instance().disconnectDevice();
         else
             return;
     }
@@ -328,7 +321,7 @@ void Player::openFile(const QString &filePath)
  * Reads a specific row from the @a progress range (which can have a value
  * ranging from 0.0 to 1.0).
  */
-void Player::setProgress(const qreal &progress)
+void CSV::Player::setProgress(const qreal &progress)
 {
     // Ensure that progress value is between 0 and 1
     auto validProgress = progress;
@@ -360,7 +353,7 @@ void Player::setProgress(const qreal &progress)
  * milliseconds between the current row and the next row & schedules a re-call
  * of this function using a timer.
  */
-void Player::updateData()
+void CSV::Player::updateData()
 {
     // File not open, abort
     if (!isOpen())
@@ -376,7 +369,7 @@ void Player::updateData()
     }
 
     // Construct frame from CSV and send it to the IO manager
-    IO::Manager::getInstance()->processPayload(getFrame(framePosition() + 1));
+    IO::Manager::instance().processPayload(getFrame(framePosition() + 1));
 
     // If the user wants to 'play' the CSV, get time difference between this
     // frame and the next frame & schedule an automated update
@@ -425,7 +418,7 @@ void Player::updateData()
  * validation by checking that the timestamp cell has the correct title as the
  * one used in the @c Export class.
  */
-bool Player::validateRow(const int position)
+bool CSV::Player::validateRow(const int position)
 {
     // Ensure that position is valid
     if (m_csvData.count() <= position)
@@ -462,10 +455,10 @@ bool Player::validateRow(const int position)
  * ignored because it contains the RX date/time, which is used to regulate the interval
  * at which the frames are parsed.
  */
-QByteArray Player::getFrame(const int row)
+QByteArray CSV::Player::getFrame(const int row)
 {
     QByteArray frame;
-    const auto sep = IO::Manager::getInstance()->separatorSequence();
+    const auto sep = IO::Manager::instance().separatorSequence();
 
     if (m_csvData.count() > row)
     {
@@ -488,7 +481,7 @@ QByteArray Player::getFrame(const int row)
  * error occurs or the cell does not exist, the value of @a error shall be set
  * to @c true.
  */
-QString Player::getCellValue(const int row, const int column, bool &error)
+QString CSV::Player::getCellValue(const int row, const int column, bool &error)
 {
     if (m_csvData.count() > row)
     {
@@ -502,5 +495,4 @@ QString Player::getCellValue(const int row, const int column, bool &error)
 
     error = true;
     return "";
-}
 }

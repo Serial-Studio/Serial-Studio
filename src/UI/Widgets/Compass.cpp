@@ -28,18 +28,15 @@
 #include <QwtCompassScaleDraw>
 #include <QwtCompassMagnetNeedle>
 
-namespace Widgets
-{
-
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Compass::Compass(const int index)
+Widgets::Compass::Compass(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->compassCount())
@@ -80,19 +77,19 @@ Compass::Compass(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Compass::update()
+void Widgets::Compass::update()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
     // Update compass heading
-    const auto dataset = UI::Dashboard::getInstance()->getCompass(m_index);
+    const auto dataset = UI::Dashboard::instance().getCompass(m_index);
     if (dataset)
     {
         auto value = dataset->value().toDouble();
         auto text = QString("%1°").arg(
-            QString::number(value, 'f', UI::Dashboard::getInstance()->precision()));
+            QString::number(value, 'f', UI::Dashboard::instance().precision()));
         m_compass.setValue(value);
 
         if (text.length() == 2)
@@ -105,5 +102,4 @@ void Compass::update()
         // Repaint widget
         Q_EMIT updated();
     }
-}
 }

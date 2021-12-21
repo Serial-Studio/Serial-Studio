@@ -85,8 +85,15 @@ Q_SIGNALS:
     void groupChanged(const int group);
     void datasetChanged(const int group, const int dataset);
 
+private:
+    explicit Editor();
+    Editor(Editor &&) = delete;
+    Editor(const Editor &) = delete;
+    Editor &operator=(Editor &&) = delete;
+    Editor &operator=(const Editor &) = delete;
+
 public:
-    static Editor *getInstance();
+    static Editor &instance();
 
     Q_INVOKABLE StringList availableGroupLevelWidgets();
     Q_INVOKABLE StringList availableDatasetLevelWidgets();
@@ -170,9 +177,6 @@ private Q_SLOTS:
     void onDatasetChanged(const int group, const int dataset);
 
 private:
-    Editor();
-    ~Editor();
-
     int nextDatasetIndex();
 
 private:

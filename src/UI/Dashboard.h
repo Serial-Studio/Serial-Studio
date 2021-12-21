@@ -154,6 +154,13 @@ Q_SIGNALS:
     void widgetCountChanged();
     void widgetVisibilityChanged();
 
+private:
+    explicit Dashboard();
+    Dashboard(Dashboard &&) = delete;
+    Dashboard(const Dashboard &) = delete;
+    Dashboard &operator=(Dashboard &&) = delete;
+    Dashboard &operator=(const Dashboard &) = delete;
+
 public:
     enum class WidgetType
     {
@@ -172,7 +179,7 @@ public:
     };
     Q_ENUM(WidgetType)
 
-    static Dashboard *getInstance();
+    static Dashboard &instance();
 
     QFont monoFont() const;
     JSON::Group *getLED(const int index);
@@ -262,8 +269,6 @@ private Q_SLOTS:
     void processLatestJSON(const JFI_Object &frameInfo);
 
 private:
-    Dashboard();
-
     QVector<JSON::Group *> getLEDWidgets() const;
     QVector<JSON::Dataset *> getFFTWidgets() const;
     QVector<JSON::Dataset *> getPlotWidgets() const;

@@ -63,8 +63,17 @@ class Server : public QObject
 Q_SIGNALS:
     void enabledChanged();
 
+private:
+    explicit Server();
+    Server(Server &&) = delete;
+    Server(const Server &) = delete;
+    Server &operator=(Server &&) = delete;
+    Server &operator=(const Server &) = delete;
+
+    ~Server();
+
 public:
-    static Server *getInstance();
+    static Server &instance();
     bool enabled() const;
 
 public Q_SLOTS:
@@ -78,10 +87,6 @@ private Q_SLOTS:
     void sendRawData(const QByteArray &data);
     void registerFrame(const JFI_Object &frameInfo);
     void onErrorOccurred(const QAbstractSocket::SocketError socketError);
-
-private:
-    Server();
-    ~Server();
 
 private:
     bool m_enabled;

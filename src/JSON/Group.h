@@ -57,10 +57,9 @@ namespace JSON
  * - Widget
  * - A vector of datasets
  */
-class Group : public QObject
+class Group
 {
 public:
-    Group(QObject *parent = Q_NULLPTR);
     ~Group();
 
     QString title() const;

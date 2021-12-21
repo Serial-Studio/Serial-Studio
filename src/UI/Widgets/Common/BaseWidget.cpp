@@ -38,7 +38,7 @@ BaseWidget::BaseWidget()
 
     // Set window palette
     QPalette palette;
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto theme = &Misc::ThemeManager::instance();
     palette.setColor(QPalette::Base, theme->widgetWindowBackground());
     palette.setColor(QPalette::Window, theme->widgetWindowBackground());
     setPalette(palette);
@@ -102,8 +102,8 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
     auto height = event->size().height() - 48;
 
     // Get fonts & calculate size
-    auto labelFont = UI::Dashboard::getInstance()->monoFont();
-    auto gaugeFont = UI::Dashboard::getInstance()->monoFont();
+    auto labelFont = UI::Dashboard::instance().monoFont();
+    auto gaugeFont = UI::Dashboard::instance().monoFont();
     labelFont.setPixelSize(qMax(8, width / 18));
     gaugeFont.setPixelSize(qMax(8, width / 24));
 

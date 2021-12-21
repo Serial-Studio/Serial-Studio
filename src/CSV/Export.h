@@ -64,15 +64,20 @@ Q_SIGNALS:
     void openChanged();
     void enabledChanged();
 
+private:
+    explicit Export();
+    Export(Export &&) = delete;
+    Export(const Export &) = delete;
+    Export &operator=(Export &&) = delete;
+    Export &operator=(const Export &) = delete;
+
+    ~Export();
+
 public:
-    static Export *getInstance();
+    static Export &instance();
 
     bool isOpen() const;
     bool exportEnabled() const;
-
-private:
-    Export();
-    ~Export();
 
 public Q_SLOTS:
     void closeFile();

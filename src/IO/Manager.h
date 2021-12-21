@@ -111,6 +111,13 @@ Q_SIGNALS:
     void dataReceived(const QByteArray &data);
     void frameReceived(const QByteArray &frame);
 
+private:
+    explicit Manager();
+    Manager(Manager &&) = delete;
+    Manager(const Manager &) = delete;
+    Manager &operator=(Manager &&) = delete;
+    Manager &operator=(const Manager &) = delete;
+
 public:
     enum class DataSource
     {
@@ -127,7 +134,7 @@ public:
     };
     Q_ENUM(ValidationStatus)
 
-    static Manager *getInstance();
+    static Manager &instance();
 
     bool readOnly();
     bool readWrite();
@@ -170,9 +177,6 @@ private Q_SLOTS:
     void setDevice(QIODevice *device);
 
 private:
-    Manager();
-    ~Manager();
-
     ValidationStatus integrityChecks(const QByteArray &frame,
                                      const QByteArray &masterBuffer, int *bytesToChop);
 

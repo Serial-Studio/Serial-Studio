@@ -110,8 +110,17 @@ Q_SIGNALS:
     void availablePortsChanged();
     void connectionError(const QString &name);
 
+private:
+    explicit Serial();
+    Serial(Serial &&) = delete;
+    Serial(const Serial &) = delete;
+    Serial &operator=(Serial &&) = delete;
+    Serial &operator=(const Serial &) = delete;
+
+    ~Serial();
+
 public:
-    static Serial *getInstance();
+    static Serial &instance();
 
     QString portName() const;
     QSerialPort *port() const;
@@ -158,8 +167,6 @@ private Q_SLOTS:
     void handleError(QSerialPort::SerialPortError error);
 
 private:
-    Serial();
-    ~Serial();
     QVector<QSerialPortInfo> validPorts() const;
 
 private:

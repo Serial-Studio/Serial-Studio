@@ -58,8 +58,15 @@ Q_SIGNALS:
     void timestampChanged();
     void playerStateChanged();
 
+private:
+    explicit Player();
+    Player(Player &&) = delete;
+    Player(const Player &) = delete;
+    Player &operator=(Player &&) = delete;
+    Player &operator=(const Player &) = delete;
+
 public:
-    static Player *getInstance();
+    static Player &instance();
 
     bool isOpen() const;
     qreal progress() const;
@@ -69,9 +76,6 @@ public:
     int framePosition() const;
     QString timestamp() const;
     QString csvFilesPath() const;
-
-private:
-    Player();
 
 public Q_SLOTS:
     void play();

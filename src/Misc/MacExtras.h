@@ -44,8 +44,15 @@ Q_SIGNALS:
     void consoleClicked();
     void dashboardClicked();
 
+private:
+    explicit MacExtras();
+    MacExtras(MacExtras &&) = delete;
+    MacExtras(const MacExtras &) = delete;
+    MacExtras &operator=(MacExtras &&) = delete;
+    MacExtras &operator=(const MacExtras &) = delete;
+
 public:
-    static MacExtras *getInstance();
+    static MacExtras &instance();
 
 public Q_SLOTS:
     void setSetupChecked(const bool checked);
@@ -55,9 +62,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void updateButtonText();
-
-private:
-    MacExtras();
 
 private:
     QAction m_setupAction;

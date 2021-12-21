@@ -33,20 +33,16 @@
 #include <QFileDialog>
 #include <QRegularExpression>
 
-namespace JSON
-{
-static Generator *GENERATOR = Q_NULLPTR;
-
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
-Generator::Generator()
+JSON::Generator::Generator()
     : m_frameCount(0)
     , m_opMode(kAutomatic)
     , m_processInSeparateThread(false)
 {
-    const auto io = IO::Manager::getInstance();
-    const auto cp = CSV::Player::getInstance();
+    const auto io = &IO::Manager::instance();
+    const auto cp = &CSV::Player::instance();
     connect(cp, SIGNAL(openChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(deviceChanged()), this, SLOT(reset()));
     connect(io, SIGNAL(frameReceived(QByteArray)), this, SLOT(readData(QByteArray)));
@@ -57,18 +53,16 @@ Generator::Generator()
 /**
  * Returns the only instance of the class
  */
-Generator *Generator::getInstance()
+JSON::Generator &JSON::Generator::instance()
 {
-    if (!GENERATOR)
-        GENERATOR = new Generator();
-
-    return GENERATOR;
+    static auto singleton = new Generator();
+    return *singleton;
 }
 
 /**
  * Returns the JSON map data from the loaded file as a string
  */
-QString Generator::jsonMapData() const
+QString JSON::Generator::jsonMapData() const
 {
     return m_jsonMapData;
 }
@@ -76,7 +70,7 @@ QString Generator::jsonMapData() const
 /**
  * Returns the file name (e.g. "JsonMap.json") of the loaded JSON map file
  */
-QString Generator::jsonMapFilename() const
+QString JSON::Generator::jsonMapFilename() const
 {
     if (m_jsonMap.isOpen())
     {
@@ -90,7 +84,7 @@ QString Generator::jsonMapFilename() const
 /**
  * Returns the file path of the loaded JSON map file
  */
-QString Generator::jsonMapFilepath() const
+QString JSON::Generator::jsonMapFilepath() const
 {
     if (m_jsonMap.isOpen())
     {
@@ -104,7 +98,7 @@ QString Generator::jsonMapFilepath() const
 /**
  * Returns the operation mode
  */
-Generator::OperationMode Generator::operationMode() const
+JSON::Generator::OperationMode JSON::Generator::operationMode() const
 {
     return m_opMode;
 }
@@ -112,7 +106,7 @@ Generator::OperationMode Generator::operationMode() const
 /**
  * Returns @c true if JSON frames shall be generated in a separate thread
  */
-bool Generator::processFramesInSeparateThread() const
+bool JSON::Generator::processFramesInSeparateThread() const
 {
     return m_processInSeparateThread;
 }
@@ -120,12 +114,12 @@ bool Generator::processFramesInSeparateThread() const
 /**
  * Creates a file dialog & lets the user select the JSON file map
  */
-void Generator::loadJsonMap()
+void JSON::Generator::loadJsonMap()
 {
     // clang-format off
     auto file = QFileDialog::getOpenFileName(Q_NULLPTR,
                                              tr("Select JSON map file"),
-                                             Editor::getInstance()->jsonProjectsPath(),
+                                             Editor::instance().jsonProjectsPath(),
                                              tr("JSON files") + " (*.json)");
     // clang-format on
 
@@ -136,7 +130,7 @@ void Generator::loadJsonMap()
 /**
  * Opens, validates & loads into memory the JSON file in the given @a path.
  */
-void Generator::loadJsonMap(const QString &path)
+void JSON::Generator::loadJsonMap(const QString &path)
 {
     // Validate path
     if (path.isEmpty())
@@ -203,7 +197,7 @@ void Generator::loadJsonMap(const QString &path)
  * @c kAutomatic serial data contains the JSON data frame, good for simple
  *               applications or for prototyping.
  */
-void Generator::setOperationMode(const JSON::Generator::OperationMode &mode)
+void JSON::Generator::setOperationMode(const JSON::Generator::OperationMode &mode)
 {
     m_opMode = mode;
     Q_EMIT operationModeChanged();
@@ -212,7 +206,7 @@ void Generator::setOperationMode(const JSON::Generator::OperationMode &mode)
 /**
  * Enables or disables multi-threaded frame processing
  */
-void Generator::setProcessFramesInSeparateThread(const bool threaded)
+void JSON::Generator::setProcessFramesInSeparateThread(const bool threaded)
 {
     m_processInSeparateThread = threaded;
     Q_EMIT processFramesInSeparateThreadChanged();
@@ -221,7 +215,7 @@ void Generator::setProcessFramesInSeparateThread(const bool threaded)
 /**
  * Loads the last saved JSON map file (if any)
  */
-void Generator::readSettings()
+void JSON::Generator::readSettings()
 {
     auto path = m_settings.value("json_map_location", "").toString();
     if (!path.isEmpty())
@@ -234,11 +228,11 @@ void Generator::readSettings()
  *
  * Read the "FrameInfo.h" file for more information.
  */
-void Generator::loadJFI(const JFI_Object &info)
+void JSON::Generator::loadJFI(const JFI_Object &info)
 {
-    const bool csvOpen = CSV::Player::getInstance()->isOpen();
-    const bool devOpen = IO::Manager::getInstance()->connected();
-    const bool mqttSub = MQTT::Client::getInstance()->isSubscribed();
+    const bool csvOpen = CSV::Player::instance().isOpen();
+    const bool devOpen = IO::Manager::instance().connected();
+    const bool mqttSub = MQTT::Client::instance().isSubscribed();
 
     if (csvOpen || devOpen || mqttSub)
         Q_EMIT jsonChanged(info);
@@ -250,7 +244,7 @@ void Generator::loadJFI(const JFI_Object &info)
 /**
  * Saves the location of the last valid JSON map file that was opened (if any)
  */
-void Generator::writeSettings(const QString &path)
+void JSON::Generator::writeSettings(const QString &path)
 {
     m_settings.setValue("json_map_location", path);
 }
@@ -258,7 +252,7 @@ void Generator::writeSettings(const QString &path)
 /**
  * Create a new JFI event with the given @a JSON document and increment the frame count
  */
-void Generator::loadJSON(const QJsonDocument &json)
+void JSON::Generator::loadJSON(const QJsonDocument &json)
 {
     m_frameCount++;
     auto jfi = JFI_CreateNew(m_frameCount, QDateTime::currentDateTime(), json);
@@ -268,7 +262,7 @@ void Generator::loadJSON(const QJsonDocument &json)
 /**
  * Resets all the statistics related to the current device and the JSON map file
  */
-void Generator::reset()
+void JSON::Generator::reset()
 {
     m_frameCount = 0;
     Q_EMIT jsonChanged(JFI_Empty());
@@ -287,7 +281,7 @@ void Generator::reset()
  * If JSON parsing is successfull, then the class shall notify the rest of the
  * application in order to process packet data.
  */
-void Generator::readData(const QByteArray &data)
+void JSON::Generator::readData(const QByteArray &data)
 {
     // Data empty, abort
     if (data.isEmpty())
@@ -301,7 +295,7 @@ void Generator::readData(const QByteArray &data)
     {
         // clang-format off
         QThread *thread = new QThread;
-        JSONWorker *worker = new JSONWorker(data,
+        Worker *worker = new Worker(data,
                                             m_frameCount,
                                             QDateTime::currentDateTime());
         worker->moveToThread(thread);
@@ -311,7 +305,7 @@ void Generator::readData(const QByteArray &data)
         connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
         connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
         connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-        connect(worker, &JSONWorker::jsonReady, this, &Generator::loadJFI);
+        connect(worker, &JSON::Worker::jsonReady, this, &JSON::Generator::loadJFI);
         thread->start();
     }
 
@@ -324,15 +318,15 @@ void Generator::readData(const QByteArray &data)
  * Reads the frame & inserts its values on the JSON map, and/or extracts the JSON frame
  * directly from the serial data.
  */
-void Generator::processFrame(const QByteArray &data, const quint64 frame,
-                             const QDateTime &time)
+void JSON::Generator::processFrame(const QByteArray &data, const quint64 frame,
+                                   const QDateTime &time)
 {
     // Init variables
     QJsonParseError error;
     QJsonDocument document;
 
     // Serial device sends JSON (auto mode)
-    if (operationMode() == Generator::kAutomatic)
+    if (operationMode() == JSON::Generator::kAutomatic)
         document = QJsonDocument::fromJson(data, &error);
 
     // We need to use a map file, check if its loaded & replace values into map
@@ -344,7 +338,7 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
 
         // Separate incoming data & add it to the JSON map
         auto json = jsonMapData();
-        auto sepr = IO::Manager::getInstance()->separatorSequence();
+        auto sepr = IO::Manager::instance().separatorSequence();
         auto list = QString::fromUtf8(data).split(sepr);
         for (int i = 0; i < list.count(); ++i)
             json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
@@ -402,7 +396,7 @@ void Generator::processFrame(const QByteArray &data, const quint64 frame,
  * Constructor function, stores received frame data & the date/time that the frame data
  * was received.
  */
-JSONWorker::JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time)
+JSON::Worker::Worker(const QByteArray &data, const quint64 frame, const QDateTime &time)
     : m_time(time)
     , m_data(data)
     , m_frame(frame)
@@ -413,27 +407,26 @@ JSONWorker::JSONWorker(const QByteArray &data, const quint64 frame, const QDateT
  * Reads the frame & inserts its values on the JSON map, and/or extracts the JSON frame
  * directly from the serial data.
  */
-void JSONWorker::process()
+void JSON::Worker::process()
 {
     // Init variables
     QJsonParseError error;
     QJsonDocument document;
 
     // Serial device sends JSON (auto mode)
-    const auto generator = Generator::getInstance();
-    if (generator->operationMode() == Generator::kAutomatic)
+    if (Generator::instance().operationMode() == Generator::kAutomatic)
         document = QJsonDocument::fromJson(m_data, &error);
 
     // We need to use a map file, check if its loaded & replace values into map
     else
     {
         // Empty JSON map data
-        if (generator->jsonMapData().isEmpty())
+        if (Generator::instance().jsonMapData().isEmpty())
             return;
 
         // Separate incoming data & add it to the JSON map
-        auto json = generator->jsonMapData();
-        const auto sepr = IO::Manager::getInstance()->separatorSequence();
+        auto json = Generator::instance().jsonMapData();
+        const auto sepr = IO::Manager::instance().separatorSequence();
         const auto list = QString::fromUtf8(m_data).split(sepr);
         for (int i = 0; i < list.count(); ++i)
             json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
@@ -484,5 +477,4 @@ void JSONWorker::process()
 
     // Delete object in 500 ms
     QTimer::singleShot(500, this, SIGNAL(finished()));
-}
 }

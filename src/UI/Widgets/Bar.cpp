@@ -26,18 +26,15 @@
 
 #include <QResizeEvent>
 
-namespace Widgets
-{
-
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Bar::Bar(const int index)
+Widgets::Bar::Bar(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->barCount())
@@ -68,7 +65,7 @@ Bar::Bar(const int index)
     m_thermo.setFillBrush(QBrush(QColor(color)));
 
     // Get initial properties from dataset
-    const auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
+    const auto dataset = UI::Dashboard::instance().getBar(m_index);
     if (dataset)
     {
         m_thermo.setAlarmLevel(dataset->alarm());
@@ -91,20 +88,20 @@ Bar::Bar(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Bar::updateData()
+void Widgets::Bar::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
     // Update bar level
-    const auto dataset = UI::Dashboard::getInstance()->getBar(m_index);
+    const auto dataset = UI::Dashboard::instance().getBar(m_index);
     if (dataset)
     {
         const auto value = dataset->value().toDouble();
         m_thermo.setValue(value);
         setValue(QString("%1 %2").arg(
-            QString::number(value, 'f', UI::Dashboard::getInstance()->precision()),
+            QString::number(value, 'f', UI::Dashboard::instance().precision()),
             dataset->units()));
 
         // Repaint widget
@@ -115,8 +112,7 @@ void Bar::updateData()
 /**
  * Resizes the thermo to fit the size of the parent window.
  */
-void Bar::onResized()
+void Widgets::Bar::onResized()
 {
     m_thermo.setPipeWidth(width() * 0.25);
-}
 }

@@ -24,14 +24,6 @@
 
 #include <QtMath>
 
-namespace Misc
-{
-
-/**
- * Pointer to the only instance of the class
- */
-static TimerEvents *TIMER_EVENTS = Q_NULLPTR;
-
 /**
  * Converts the given @a hz to milliseconds
  */
@@ -45,32 +37,31 @@ static int HZ_TO_MS(const int hz)
 /**
  * Constructor function
  */
-TimerEvents::TimerEvents()
+Misc::TimerEvents::TimerEvents()
 {
     // Configure timeout intevals
     m_timerLowFreq.setInterval(HZ_TO_MS(1));
     m_timerHighFreq.setInterval(HZ_TO_MS(20));
 
     // Configure signals/slots
-    connect(&m_timerLowFreq, &QTimer::timeout, this, &TimerEvents::lowFreqTimeout);
-    connect(&m_timerHighFreq, &QTimer::timeout, this, &TimerEvents::highFreqTimeout);
+    connect(&m_timerLowFreq, &QTimer::timeout, this, &Misc::TimerEvents::lowFreqTimeout);
+    connect(&m_timerHighFreq, &QTimer::timeout, this,
+            &Misc::TimerEvents::highFreqTimeout);
 }
 
 /**
  * Returns a pointer to the only instance of the class
  */
-TimerEvents *TimerEvents::getInstance()
+Misc::TimerEvents &Misc::TimerEvents::instance()
 {
-    if (!TIMER_EVENTS)
-        TIMER_EVENTS = new TimerEvents;
-
-    return TIMER_EVENTS;
+    static auto singleton = new TimerEvents();
+    return *singleton;
 }
 
 /**
  * Returns the target UI refresh frequency
  */
-int TimerEvents::highFreqTimeoutHz() const
+int Misc::TimerEvents::highFreqTimeoutHz() const
 {
     return HZ_TO_MS(m_timerHighFreq.interval());
 }
@@ -78,7 +69,7 @@ int TimerEvents::highFreqTimeoutHz() const
 /**
  * Stops all the timers of this module
  */
-void TimerEvents::stopTimers()
+void Misc::TimerEvents::stopTimers()
 {
     m_timerLowFreq.stop();
     m_timerHighFreq.stop();
@@ -87,7 +78,7 @@ void TimerEvents::stopTimers()
 /**
  * Starts all the timer of the module
  */
-void TimerEvents::startTimers()
+void Misc::TimerEvents::startTimers()
 {
     m_timerLowFreq.start();
     m_timerHighFreq.start();
@@ -96,7 +87,7 @@ void TimerEvents::startTimers()
 /**
  * Updates the target UI refresh frequency
  */
-void TimerEvents::setHighFreqTimeout(const int hz)
+void Misc::TimerEvents::setHighFreqTimeout(const int hz)
 {
     if (hz > 0)
     {
@@ -109,5 +100,4 @@ void TimerEvents::setHighFreqTimeout(const int hz)
         m_timerHighFreq.setInterval(HZ_TO_MS(1));
         Q_EMIT highFreqTimeoutChanged();
     }
-}
 }

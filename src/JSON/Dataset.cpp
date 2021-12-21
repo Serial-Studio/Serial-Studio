@@ -24,11 +24,8 @@
 #include "Generator.h"
 #include "FrameInfo.h"
 
-namespace JSON
-{
-Dataset::Dataset(QObject *parent)
-    : QObject(parent)
-    , m_fft(false)
+JSON::Dataset::Dataset()
+    : m_fft(false)
     , m_led(false)
     , m_log(false)
     , m_graph(false)
@@ -44,12 +41,10 @@ Dataset::Dataset(QObject *parent)
 {
 }
 
-Dataset::~Dataset() { }
-
 /**
  * @return @c true if the UI should generate a FFT plot of this dataset
  */
-bool Dataset::fft() const
+bool JSON::Dataset::fft() const
 {
     return m_fft;
 }
@@ -57,7 +52,7 @@ bool Dataset::fft() const
 /**
  * @return @c true if the UI should generate a LED of this dataset
  */
-bool Dataset::led() const
+bool JSON::Dataset::led() const
 {
     return m_led;
 }
@@ -65,7 +60,7 @@ bool Dataset::led() const
 /**
  * @return @c true if the UI should generate a logarithmic plot of this dataset
  */
-bool Dataset::log() const
+bool JSON::Dataset::log() const
 {
     return m_log;
 }
@@ -73,7 +68,7 @@ bool Dataset::log() const
 /**
  * @return @c true if the UI should graph this dataset
  */
-bool Dataset::graph() const
+bool JSON::Dataset::graph() const
 {
     return m_graph;
 }
@@ -81,7 +76,7 @@ bool Dataset::graph() const
 /**
  * Returns the minimum value of the dataset
  */
-double Dataset::min() const
+double JSON::Dataset::min() const
 {
     return m_min;
 }
@@ -89,7 +84,7 @@ double Dataset::min() const
 /**
  * Returns the maximum value of the dataset
  */
-double Dataset::max() const
+double JSON::Dataset::max() const
 {
     return m_max;
 }
@@ -97,7 +92,7 @@ double Dataset::max() const
 /**
  * Returns the alarm level of the dataset
  */
-double Dataset::alarm() const
+double JSON::Dataset::alarm() const
 {
     return m_alarm;
 }
@@ -105,7 +100,7 @@ double Dataset::alarm() const
 /**
  * @return The title/description of this dataset
  */
-QString Dataset::title() const
+QString JSON::Dataset::title() const
 {
     return m_title;
 }
@@ -113,7 +108,7 @@ QString Dataset::title() const
 /**
  * @return The value/reading of this dataset
  */
-QString Dataset::value() const
+QString JSON::Dataset::value() const
 {
     return m_value;
 }
@@ -121,7 +116,7 @@ QString Dataset::value() const
 /**
  * @return The units of this dataset
  */
-QString Dataset::units() const
+QString JSON::Dataset::units() const
 {
     return m_units;
 }
@@ -129,7 +124,7 @@ QString Dataset::units() const
 /**
  * @return The widget value of this dataset
  */
-QString Dataset::widget() const
+QString JSON::Dataset::widget() const
 {
     return m_widget;
 }
@@ -137,7 +132,7 @@ QString Dataset::widget() const
 /**
  * Returns the maximum freq. for the FFT transform
  */
-int Dataset::fftSamples() const
+int JSON::Dataset::fftSamples() const
 {
     return qMax(1, m_fftSamples);
 }
@@ -145,7 +140,7 @@ int Dataset::fftSamples() const
 /**
  * Returns the JSON data that represents this widget
  */
-QJsonObject Dataset::jsonData() const
+QJsonObject JSON::Dataset::jsonData() const
 {
     return m_jsonData;
 }
@@ -156,7 +151,7 @@ QJsonObject Dataset::jsonData() const
  *
  * @return @c true on read success, @c false on failure
  */
-bool Dataset::read(const QJsonObject &object)
+bool JSON::Dataset::read(const QJsonObject &object)
 {
     if (!object.isEmpty())
     {
@@ -194,5 +189,4 @@ bool Dataset::read(const QJsonObject &object)
     }
 
     return false;
-}
 }

@@ -27,9 +27,6 @@
 
 #include "Terminal.h"
 
-namespace Widgets
-{
-
 //----------------------------------------------------------------------------------------
 // QML PlainTextEdit implementation
 //----------------------------------------------------------------------------------------
@@ -37,7 +34,7 @@ namespace Widgets
 /**
  * Constructor function
  */
-Terminal::Terminal(QQuickItem *parent)
+Widgets::Terminal::Terminal(QQuickItem *parent)
     : UI::DeclarativeWidget(parent)
     , m_autoscroll(true)
     , m_emulateVt100(false)
@@ -53,7 +50,7 @@ Terminal::Terminal(QQuickItem *parent)
 
     // Set widget palette
     QPalette palette;
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto theme = &Misc::ThemeManager::instance();
     palette.setColor(QPalette::Text, theme->consoleText());
     palette.setColor(QPalette::Base, theme->consoleBase());
     palette.setColor(QPalette::Button, theme->consoleButton());
@@ -66,8 +63,8 @@ Terminal::Terminal(QQuickItem *parent)
     m_textEdit.setPalette(palette);
 
     // Connect console signals (doing this on QML uses about 50% of UI thread time)
-    const auto console = IO::Console::getInstance();
-    connect(console, &IO::Console::stringReceived, this, &Terminal::insertText);
+    const auto console = &IO::Console::instance();
+    connect(console, &IO::Console::stringReceived, this, &Widgets::Terminal::insertText);
 
     // React to widget events
     connect(&m_textEdit, SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));
@@ -76,7 +73,7 @@ Terminal::Terminal(QQuickItem *parent)
 /**
  * Returns the font used by the QPlainTextEdit widget
  */
-QFont Terminal::font() const
+QFont Widgets::Terminal::font() const
 {
     return m_textEdit.font();
 }
@@ -84,7 +81,7 @@ QFont Terminal::font() const
 /**
  * Returns the plain text of the QPlainTextEdit widget
  */
-QString Terminal::text() const
+QString Widgets::Terminal::text() const
 {
     return m_textEdit.toPlainText();
 }
@@ -92,7 +89,7 @@ QString Terminal::text() const
 /**
  * Returns @c true if the text document is empty
  */
-bool Terminal::empty() const
+bool Widgets::Terminal::empty() const
 {
     return m_textEdit.document()->isEmpty();
 }
@@ -100,7 +97,7 @@ bool Terminal::empty() const
 /**
  * Returns @c true if the widget is set to read-only
  */
-bool Terminal::readOnly() const
+bool Widgets::Terminal::readOnly() const
 {
     return m_textEdit.isReadOnly();
 }
@@ -109,7 +106,7 @@ bool Terminal::readOnly() const
  * Returns @c true if the widget shall scroll automatically to the bottom when new
  * text is appended to the widget.
  */
-bool Terminal::autoscroll() const
+bool Widgets::Terminal::autoscroll() const
 {
     return m_autoscroll;
 }
@@ -117,7 +114,7 @@ bool Terminal::autoscroll() const
 /**
  * Returns the palette used by the QPlainTextEdit widget
  */
-QPalette Terminal::palette() const
+QPalette Widgets::Terminal::palette() const
 {
     return m_textEdit.palette();
 }
@@ -126,7 +123,7 @@ QPalette Terminal::palette() const
  * Returns the wrap mode of the QPlainTextEdit casted to an integer type (so that it
  * can be used from the QML interface).
  */
-int Terminal::wordWrapMode() const
+int Widgets::Terminal::wordWrapMode() const
 {
     return static_cast<int>(m_textEdit.wordWrapMode());
 }
@@ -134,7 +131,7 @@ int Terminal::wordWrapMode() const
 /**
  * Returns the width of the vertical scrollbar
  */
-int Terminal::scrollbarWidth() const
+int Widgets::Terminal::scrollbarWidth() const
 {
     return m_textEdit.verticalScrollBar()->width();
 }
@@ -143,7 +140,7 @@ int Terminal::scrollbarWidth() const
  * Returns @c true if the user is able to copy any text from the document. This value is
  * updated through the copyAvailable() signal sent by the QPlainTextEdit.
  */
-bool Terminal::copyAvailable() const
+bool Widgets::Terminal::copyAvailable() const
 {
     return m_copyAvailable;
 }
@@ -151,7 +148,7 @@ bool Terminal::copyAvailable() const
 /**
  * Returns @c true if the QPlainTextEdit widget is enabled
  */
-bool Terminal::widgetEnabled() const
+bool Widgets::Terminal::widgetEnabled() const
 {
     return m_textEdit.isEnabled();
 }
@@ -162,7 +159,7 @@ bool Terminal::widgetEnabled() const
  * the end of the document. Otherwise, if set to false, the plain text edit scrolls the
  * smallest amount possible to ensure the cursor is visible.
  */
-bool Terminal::centerOnScroll() const
+bool Widgets::Terminal::centerOnScroll() const
 {
     return m_textEdit.centerOnScroll();
 }
@@ -171,7 +168,7 @@ bool Terminal::centerOnScroll() const
  * Returns true if the control shall parse basic VT-100 escape secuences. This can be
  * useful if you need to interface with a shell/CLI from Serial Studio.
  */
-bool Terminal::vt100emulation() const
+bool Widgets::Terminal::vt100emulation() const
 {
     return m_emulateVt100;
 }
@@ -181,7 +178,7 @@ bool Terminal::vt100emulation() const
  * Users are only able to undo or redo actions if this property is true, and if there is
  * an action that can be undone (or redone).
  */
-bool Terminal::undoRedoEnabled() const
+bool Widgets::Terminal::undoRedoEnabled() const
 {
     return m_textEdit.isUndoRedoEnabled();
 }
@@ -196,7 +193,7 @@ bool Terminal::undoRedoEnabled() const
  * A negative or zero value specifies that the document may contain an unlimited amount
  * of blocks.
  */
-int Terminal::maximumBlockCount() const
+int Widgets::Terminal::maximumBlockCount() const
 {
     return m_textEdit.maximumBlockCount();
 }
@@ -207,7 +204,7 @@ int Terminal::maximumBlockCount() const
  * Setting this property makes the editor display a grayed-out placeholder text as long as
  * the document is empty.
  */
-QString Terminal::placeholderText() const
+QString Widgets::Terminal::placeholderText() const
 {
     return m_textEdit.placeholderText();
 }
@@ -215,7 +212,7 @@ QString Terminal::placeholderText() const
 /**
  * Returns the pointer to the text document
  */
-QTextDocument *Terminal::document() const
+QTextDocument *Widgets::Terminal::document() const
 {
     return m_textEdit.document();
 }
@@ -223,7 +220,7 @@ QTextDocument *Terminal::document() const
 /**
  * Copies any selected text to the clipboard.
  */
-void Terminal::copy()
+void Widgets::Terminal::copy()
 {
     m_textEdit.copy();
 }
@@ -231,7 +228,7 @@ void Terminal::copy()
 /**
  * Deletes all the text in the text edit.
  */
-void Terminal::clear()
+void Widgets::Terminal::clear()
 {
     m_textEdit.clear();
     updateScrollbarVisibility();
@@ -243,7 +240,7 @@ void Terminal::clear()
 /**
  * Selects all the text of the text edit.
  */
-void Terminal::selectAll()
+void Widgets::Terminal::selectAll()
 {
     m_textEdit.selectAll();
     update();
@@ -252,7 +249,7 @@ void Terminal::selectAll()
 /**
  * Clears the text selection
  */
-void Terminal::clearSelection()
+void Widgets::Terminal::clearSelection()
 {
     auto cursor = QTextCursor(m_textEdit.document());
     cursor.clearSelection();
@@ -267,7 +264,7 @@ void Terminal::clearSelection()
  * In a read-only text edit the user can only navigate through the text and select text;
  * modifying the text is not possible.
  */
-void Terminal::setReadOnly(const bool ro)
+void Widgets::Terminal::setReadOnly(const bool ro)
 {
     m_textEdit.setReadOnly(ro);
     update();
@@ -278,7 +275,7 @@ void Terminal::setReadOnly(const bool ro)
 /**
  * Changes the font used to display the text of the text edit.
  */
-void Terminal::setFont(const QFont &font)
+void Widgets::Terminal::setFont(const QFont &font)
 {
     m_textEdit.setFont(font);
     updateScrollbarVisibility();
@@ -293,7 +290,7 @@ void Terminal::setFont(const QFont &font)
  * If @c autoscroll() is enabled, this function shall also update the scrollbar position
  * to scroll to the bottom of the text.
  */
-void Terminal::append(const QString &text)
+void Widgets::Terminal::append(const QString &text)
 {
     m_textEdit.appendPlainText(text);
     updateScrollbarVisibility();
@@ -311,7 +308,7 @@ void Terminal::append(const QString &text)
  * If @c autoscroll() is enabled, this function shall also update the scrollbar position
  * to scroll to the bottom of the text.
  */
-void Terminal::setText(const QString &text)
+void Widgets::Terminal::setText(const QString &text)
 {
     m_textEdit.setPlainText(text);
     updateScrollbarVisibility();
@@ -326,7 +323,7 @@ void Terminal::setText(const QString &text)
 /**
  * Changes the width of the vertical scrollbar
  */
-void Terminal::setScrollbarWidth(const int width)
+void Widgets::Terminal::setScrollbarWidth(const int width)
 {
     auto bar = m_textEdit.verticalScrollBar();
     bar->setFixedWidth(width);
@@ -338,7 +335,7 @@ void Terminal::setScrollbarWidth(const int width)
 /**
  * Changes the @c QPalette of the text editor widget and its children.
  */
-void Terminal::setPalette(const QPalette &palette)
+void Widgets::Terminal::setPalette(const QPalette &palette)
 {
     m_textEdit.setPalette(palette);
     update();
@@ -349,7 +346,7 @@ void Terminal::setPalette(const QPalette &palette)
 /**
  * Enables or disables the text editor widget.
  */
-void Terminal::setWidgetEnabled(const bool enabled)
+void Widgets::Terminal::setWidgetEnabled(const bool enabled)
 {
     m_textEdit.setEnabled(enabled);
     update();
@@ -362,7 +359,7 @@ void Terminal::setWidgetEnabled(const bool enabled)
  * vertical scrollbar shall automatically scroll to the end of the document when the
  * text of the text editor is changed.
  */
-void Terminal::setAutoscroll(const bool enabled)
+void Widgets::Terminal::setAutoscroll(const bool enabled)
 {
     // Change internal variables
     m_autoscroll = enabled;
@@ -373,7 +370,7 @@ void Terminal::setAutoscroll(const bool enabled)
         scrollToBottom(true);
 
     // Update console configuration
-    IO::Console::getInstance()->setAutoscroll(enabled);
+    IO::Console::instance().setAutoscroll(enabled);
 
     // Update UI
     update();
@@ -383,7 +380,7 @@ void Terminal::setAutoscroll(const bool enabled)
 /**
  * Inserts the given @a text directly, no additional line breaks added.
  */
-void Terminal::insertText(const QString &text)
+void Widgets::Terminal::insertText(const QString &text)
 {
     if (widgetEnabled())
         addText(text, vt100emulation());
@@ -394,7 +391,7 @@ void Terminal::insertText(const QString &text)
  *
  * This property holds the mode QPlainTextEdit will use when wrapping text by words.
  */
-void Terminal::setWordWrapMode(const int mode)
+void Widgets::Terminal::setWordWrapMode(const int mode)
 {
     m_textEdit.setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
     updateScrollbarVisibility();
@@ -409,7 +406,7 @@ void Terminal::setWordWrapMode(const int mode)
  * the end of the document. Otherwise, if set to false, the plain text edit scrolls the
  * smallest amount possible to ensure the cursor is visible.
  */
-void Terminal::setCenterOnScroll(const bool enabled)
+void Widgets::Terminal::setCenterOnScroll(const bool enabled)
 {
     m_textEdit.setCenterOnScroll(enabled);
     update();
@@ -422,7 +419,7 @@ void Terminal::setCenterOnScroll(const bool enabled)
  * interfacing through network ports or interfacing with a MCU that implements some
  * kind of shell.
  */
-void Terminal::setVt100Emulation(const bool enabled)
+void Widgets::Terminal::setVt100Emulation(const bool enabled)
 {
     m_emulateVt100 = enabled;
     Q_EMIT vt100EmulationChanged();
@@ -431,7 +428,7 @@ void Terminal::setVt100Emulation(const bool enabled)
 /**
  * Enables/disables undo/redo history support.
  */
-void Terminal::setUndoRedoEnabled(const bool enabled)
+void Widgets::Terminal::setUndoRedoEnabled(const bool enabled)
 {
     m_textEdit.setUndoRedoEnabled(enabled);
     update();
@@ -443,7 +440,7 @@ void Terminal::setUndoRedoEnabled(const bool enabled)
  * Changes the placeholder text of the text editor. The placeholder text is only displayed
  * when the document is empty.
  */
-void Terminal::setPlaceholderText(const QString &text)
+void Widgets::Terminal::setPlaceholderText(const QString &text)
 {
     m_textEdit.setPlaceholderText(text);
     update();
@@ -454,7 +451,7 @@ void Terminal::setPlaceholderText(const QString &text)
 /**
  * Moves the position of the vertical scrollbar to the end of the document.
  */
-void Terminal::scrollToBottom(const bool repaint)
+void Widgets::Terminal::scrollToBottom(const bool repaint)
 {
     // Get scrollbar pointer, calculate line count & visible text lines
     auto *bar = m_textEdit.verticalScrollBar();
@@ -488,7 +485,7 @@ void Terminal::scrollToBottom(const bool repaint)
  * A negative or zero value specifies that the document may contain an unlimited amount of
  * blocks.
  */
-void Terminal::setMaximumBlockCount(const int maxBlockCount)
+void Widgets::Terminal::setMaximumBlockCount(const int maxBlockCount)
 {
     m_textEdit.setMaximumBlockCount(maxBlockCount);
     update();
@@ -499,7 +496,7 @@ void Terminal::setMaximumBlockCount(const int maxBlockCount)
 /**
  * Hides or shows the scrollbar
  */
-void Terminal::updateScrollbarVisibility()
+void Widgets::Terminal::updateScrollbarVisibility()
 {
     // Get current line count & visible lines
     auto lineCount = m_textEdit.document()->blockCount();
@@ -518,7 +515,7 @@ void Terminal::updateScrollbarVisibility()
  * Updates the value of copy-available. This function is automatically called by the text
  * editor widget when the user makes any text selection/deselection.
  */
-void Terminal::setCopyAvailable(const bool yes)
+void Widgets::Terminal::setCopyAvailable(const bool yes)
 {
     m_copyAvailable = yes;
     Q_EMIT copyAvailableChanged();
@@ -527,7 +524,7 @@ void Terminal::setCopyAvailable(const bool yes)
 /**
  * Inserts the given @a text directly, no additional line breaks added.
  */
-void Terminal::addText(const QString &text, const bool enableVt100)
+void Widgets::Terminal::addText(const QString &text, const bool enableVt100)
 {
     // Get text to insert
     QString textToInsert = text;
@@ -555,7 +552,7 @@ void Terminal::addText(const QString &text, const bool enableVt100)
  * Processes the given @a data to remove the escape sequences from the text using code
  * from Qt Creator output terminal. Check the next code block for more info.
  */
-QString Terminal::vt100Processing(const QString &data)
+QString Widgets::Terminal::vt100Processing(const QString &data)
 {
     auto formattedText = m_escapeCodeHandler.parseText(FormattedText(data));
     const QString cleanLine = std::accumulate(
@@ -593,7 +590,8 @@ static QColor ansiColor(uint code)
     return QColor(red, green, blue);
 }
 
-QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &input)
+QVector<Widgets::FormattedText>
+Widgets::AnsiEscapeCodeHandler::parseText(const FormattedText &input)
 {
     enum AnsiEscapeCodes
     {
@@ -895,19 +893,18 @@ QVector<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &inp
     return outputData;
 }
 
-void AnsiEscapeCodeHandler::setTextEdit(QPlainTextEdit *widget)
+void Widgets::AnsiEscapeCodeHandler::setTextEdit(QPlainTextEdit *widget)
 {
     textEdit = widget;
 }
 
-void AnsiEscapeCodeHandler::endFormatScope()
+void Widgets::AnsiEscapeCodeHandler::endFormatScope()
 {
     m_previousFormatClosed = true;
 }
 
-void AnsiEscapeCodeHandler::setFormatScope(const QTextCharFormat &charFormat)
+void Widgets::AnsiEscapeCodeHandler::setFormatScope(const QTextCharFormat &charFormat)
 {
     m_previousFormat = charFormat;
     m_previousFormatClosed = false;
-}
 }

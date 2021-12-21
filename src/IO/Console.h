@@ -85,6 +85,13 @@ Q_SIGNALS:
     void showTimestampChanged();
     void stringReceived(const QString &text);
 
+private:
+    explicit Console();
+    Console(Console &&) = delete;
+    Console(const Console &) = delete;
+    Console &operator=(Console &&) = delete;
+    Console &operator=(const Console &) = delete;
+
 public:
     enum class DisplayMode
     {
@@ -109,7 +116,7 @@ public:
     };
     Q_ENUM(LineEnding)
 
-    static Console *getInstance();
+    static Console &instance();
 
     bool echo() const;
     bool autoscroll() const;
@@ -148,7 +155,6 @@ private Q_SLOTS:
     void onDataReceived(const QByteArray &data);
 
 private:
-    Console();
     QByteArray hexToBytes(const QString &data);
     QString dataToString(const QByteArray &data);
     QString plainTextStr(const QByteArray &data);

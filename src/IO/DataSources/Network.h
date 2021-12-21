@@ -99,8 +99,17 @@ Q_SIGNALS:
     void udpMulticastChanged();
     void lookupActiveChanged();
 
+private:
+    explicit Network();
+    Network(Network &&) = delete;
+    Network(const Network &) = delete;
+    Network &operator=(Network &&) = delete;
+    Network &operator=(const Network &) = delete;
+
+    ~Network();
+
 public:
-    static Network *getInstance();
+    static Network &instance();
 
     QString remoteAddress() const;
 
@@ -141,10 +150,6 @@ public Q_SLOTS:
 private Q_SLOTS:
     void lookupFinished(const QHostInfo &info);
     void onErrorOccurred(const QAbstractSocket::SocketError socketError);
-
-private:
-    Network();
-    ~Network();
 
 private:
     QString m_address;

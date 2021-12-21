@@ -43,7 +43,7 @@ namespace JSON
  * This code is executed on another thread in order to avoid blocking the
  * user interface.
  */
-class JSONWorker : public QObject
+class Worker : public QObject
 {
     Q_OBJECT
 
@@ -52,7 +52,7 @@ Q_SIGNALS:
     void jsonReady(const JFI_Object &info);
 
 public:
-    JSONWorker(const QByteArray &data, const quint64 frame, const QDateTime &time);
+    Worker(const QByteArray &data, const quint64 frame, const QDateTime &time);
 
 public Q_SLOTS:
     void process();
@@ -111,6 +111,13 @@ Q_SIGNALS:
     void jsonChanged(const JFI_Object &info);
     void processFramesInSeparateThreadChanged();
 
+private:
+    explicit Generator();
+    Generator(Generator &&) = delete;
+    Generator(const Generator &) = delete;
+    Generator &operator=(Generator &&) = delete;
+    Generator &operator=(const Generator &) = delete;
+
 public:
     enum OperationMode
     {
@@ -119,8 +126,7 @@ public:
     };
     Q_ENUM(OperationMode)
 
-public:
-    static Generator *getInstance();
+    static Generator &instance();
 
     QString jsonMapData() const;
     QString jsonMapFilename() const;
@@ -133,9 +139,6 @@ public Q_SLOTS:
     void loadJsonMap(const QString &path);
     void setProcessFramesInSeparateThread(const bool threaded);
     void setOperationMode(const JSON::Generator::OperationMode &mode);
-
-private:
-    Generator();
 
 public Q_SLOTS:
     void readSettings();

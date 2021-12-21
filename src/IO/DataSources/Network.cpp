@@ -25,16 +25,10 @@
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 
-namespace IO
-{
-namespace DataSources
-{
-static Network *NETWORK = Q_NULLPTR;
-
 /**
  * Constructor function
  */
-Network::Network()
+IO::DataSources::Network::Network()
     : m_hostExists(false)
     , m_udpMulticast(false)
     , m_lookupActive(false)
@@ -44,14 +38,16 @@ Network::Network()
     setUdpLocalPort(defaultUdpLocalPort());
     setUdpRemotePort(defaultUdpRemotePort());
     setSocketType(QAbstractSocket::TcpSocket);
-    connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &Network::onErrorOccurred);
-    connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &Network::onErrorOccurred);
+    connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this,
+            &IO::DataSources::Network::onErrorOccurred);
+    connect(&m_udpSocket, &QUdpSocket::errorOccurred, this,
+            &IO::DataSources::Network::onErrorOccurred);
 }
 
 /**
  * Destructor function
  */
-Network::~Network()
+IO::DataSources::Network::~Network()
 {
     disconnectDevice();
 }
@@ -59,18 +55,16 @@ Network::~Network()
 /**
  * Returns the only instance of this class
  */
-Network *Network::getInstance()
+IO::DataSources::Network &IO::DataSources::Network::instance()
 {
-    if (!NETWORK)
-        NETWORK = new Network;
-
-    return NETWORK;
+    static auto singleton = new Network();
+    return *singleton;
 }
 
 /**
  * Returns the host address
  */
-QString Network::remoteAddress() const
+QString IO::DataSources::Network::remoteAddress() const
 {
     return m_address;
 }
@@ -78,7 +72,7 @@ QString Network::remoteAddress() const
 /**
  * Returns the TCP port number
  */
-quint16 Network::tcpPort() const
+quint16 IO::DataSources::Network::tcpPort() const
 {
     return m_tcpPort;
 }
@@ -86,7 +80,7 @@ quint16 Network::tcpPort() const
 /**
  * Returns the UDP local port number
  */
-quint16 Network::udpLocalPort() const
+quint16 IO::DataSources::Network::udpLocalPort() const
 {
     return m_udpLocalPort;
 }
@@ -94,7 +88,7 @@ quint16 Network::udpLocalPort() const
 /**
  * Returns the UDP remote port number
  */
-quint16 Network::udpRemotePort() const
+quint16 IO::DataSources::Network::udpRemotePort() const
 {
     return m_udpRemotePort;
 }
@@ -103,7 +97,7 @@ quint16 Network::udpRemotePort() const
  * Returns @c true if the UDP socket is managing a multicasted
  * connection.
  */
-bool Network::udpMulticast() const
+bool IO::DataSources::Network::udpMulticast() const
 {
     return m_udpMulticast;
 }
@@ -111,7 +105,7 @@ bool Network::udpMulticast() const
 /**
  * Returns @c true if we are currently performing a DNS lookup
  */
-bool Network::lookupActive() const
+bool IO::DataSources::Network::lookupActive() const
 {
     return m_lookupActive;
 }
@@ -120,7 +114,7 @@ bool Network::lookupActive() const
  * Returns the current socket type as an index of the list returned by the @c socketType
  * function.
  */
-int Network::socketTypeIndex() const
+int IO::DataSources::Network::socketTypeIndex() const
 {
     switch (socketType())
     {
@@ -139,7 +133,7 @@ int Network::socketTypeIndex() const
 /**
  * Returns @c true if the port is greater than 0 and the host address is valid.
  */
-bool Network::configurationOk() const
+bool IO::DataSources::Network::configurationOk() const
 {
     return tcpPort() > 0 && m_hostExists;
 }
@@ -147,7 +141,7 @@ bool Network::configurationOk() const
 /**
  * Returns a list with the available socket types
  */
-StringList Network::socketTypes() const
+StringList IO::DataSources::Network::socketTypes() const
 {
     return StringList { "TCP", "UDP" };
 }
@@ -160,7 +154,7 @@ StringList Network::socketTypes() const
  * @c QAbstractSocket::SctpSocket
  * @c QAbstractSocket::UnknownSocketType
  */
-QAbstractSocket::SocketType Network::socketType() const
+QAbstractSocket::SocketType IO::DataSources::Network::socketType() const
 {
     return m_socketType;
 }
@@ -168,7 +162,7 @@ QAbstractSocket::SocketType Network::socketType() const
 /**
  * Attempts to make a connection to the given host, port and TCP/UDP socket type.
  */
-QIODevice *Network::openNetworkPort()
+QIODevice *IO::DataSources::Network::openNetworkPort()
 {
     // Disconnect all sockets
     disconnectDevice();
@@ -213,7 +207,7 @@ QIODevice *Network::openNetworkPort()
 /**
  * Instructs the module to communicate via a TCP socket.
  */
-void Network::setTcpSocket()
+void IO::DataSources::Network::setTcpSocket()
 {
     setSocketType(QAbstractSocket::TcpSocket);
 }
@@ -221,7 +215,7 @@ void Network::setTcpSocket()
 /**
  * Instructs the module to communicate via an UDP socket.
  */
-void Network::setUdpSocket()
+void IO::DataSources::Network::setUdpSocket()
 {
     setSocketType(QAbstractSocket::UdpSocket);
 }
@@ -229,7 +223,7 @@ void Network::setUdpSocket()
 /**
  * Disconnects the TCP/UDP sockets from the host
  */
-void Network::disconnectDevice()
+void IO::DataSources::Network::disconnectDevice()
 {
     m_tcpSocket.abort();
     m_udpSocket.abort();
@@ -240,7 +234,7 @@ void Network::disconnectDevice()
 /**
  * Changes the TCP socket's @c port number
  */
-void Network::setTcpPort(const quint16 port)
+void IO::DataSources::Network::setTcpPort(const quint16 port)
 {
     m_tcpPort = port;
     Q_EMIT portChanged();
@@ -249,7 +243,7 @@ void Network::setTcpPort(const quint16 port)
 /**
  * Changes the UDP socket's local @c port number
  */
-void Network::setUdpLocalPort(const quint16 port)
+void IO::DataSources::Network::setUdpLocalPort(const quint16 port)
 {
     m_udpLocalPort = port;
     Q_EMIT portChanged();
@@ -258,7 +252,7 @@ void Network::setUdpLocalPort(const quint16 port)
 /**
  * Changes the UDP socket's remote @c port number
  */
-void Network::setUdpRemotePort(const quint16 port)
+void IO::DataSources::Network::setUdpRemotePort(const quint16 port)
 {
     m_udpRemotePort = port;
     Q_EMIT portChanged();
@@ -267,7 +261,7 @@ void Network::setUdpRemotePort(const quint16 port)
 /**
  * Sets the IPv4 or IPv6 address specified by the input string representation
  */
-void Network::setRemoteAddress(const QString &address)
+void IO::DataSources::Network::setRemoteAddress(const QString &address)
 {
     // Check if host name exists
     if (QHostAddress(address).isNull())
@@ -288,17 +282,18 @@ void Network::setRemoteAddress(const QString &address)
 /**
  * Performs a DNS lookup for the given @a host name
  */
-void Network::lookup(const QString &host)
+void IO::DataSources::Network::lookup(const QString &host)
 {
     m_lookupActive = true;
     Q_EMIT lookupActiveChanged();
-    QHostInfo::lookupHost(host.simplified(), this, &Network::lookupFinished);
+    QHostInfo::lookupHost(host.simplified(), this,
+                          &IO::DataSources::Network::lookupFinished);
 }
 
 /**
  * Enables/Disables multicast connections with the UDP socket.
  */
-void Network::setUdpMulticast(const bool enabled)
+void IO::DataSources::Network::setUdpMulticast(const bool enabled)
 {
     m_udpMulticast = enabled;
     Q_EMIT udpMulticastChanged();
@@ -308,7 +303,7 @@ void Network::setUdpMulticast(const bool enabled)
  * Changes the current socket type given an index of the list returned by the
  * @c socketType() function.
  */
-void Network::setSocketTypeIndex(const int index)
+void IO::DataSources::Network::setSocketTypeIndex(const int index)
 {
     switch (index)
     {
@@ -330,7 +325,7 @@ void Network::setSocketTypeIndex(const int index)
  * @c QAbstractSocket::UdpSocket
  * @c QAbstractSocket::UnknownSocketType
  */
-void Network::setSocketType(const QAbstractSocket::SocketType type)
+void IO::DataSources::Network::setSocketType(const QAbstractSocket::SocketType type)
 {
     m_socketType = type;
     Q_EMIT socketTypeChanged();
@@ -340,7 +335,7 @@ void Network::setSocketType(const QAbstractSocket::SocketType type)
  * Sets the host IP address when the lookup finishes.
  * If the lookup fails, the error code/string shall be shown to the user in a messagebox.
  */
-void Network::lookupFinished(const QHostInfo &info)
+void IO::DataSources::Network::lookupFinished(const QHostInfo &info)
 {
     m_lookupActive = false;
     Q_EMIT lookupActiveChanged();
@@ -361,7 +356,8 @@ void Network::lookupFinished(const QHostInfo &info)
  * This function is called whenever a socket error occurs, it disconnects the socket
  * from the host and displays the error in a message box.
  */
-void Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
+void IO::DataSources::Network::onErrorOccurred(
+    const QAbstractSocket::SocketError socketError)
 {
     QString error;
     if (socketType() == QAbstractSocket::TcpSocket)
@@ -371,8 +367,6 @@ void Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
     else
         error = QString::number(socketError);
 
-    Manager::getInstance()->disconnectDevice();
+    Manager::instance().disconnectDevice();
     Misc::Utilities::showMessageBox(tr("Network socket error"), error);
-}
-}
 }

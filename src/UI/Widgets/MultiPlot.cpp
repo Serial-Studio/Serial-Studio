@@ -25,18 +25,15 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-namespace Widgets
-{
-
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-MultiPlot::MultiPlot(const int index)
+Widgets::MultiPlot::MultiPlot(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->multiPlotCount())
@@ -137,10 +134,10 @@ MultiPlot::MultiPlot(const int index)
  * window is hidden), then the new data shall be saved to the plot
  * vectors, but the widget shall not be redrawn.
  */
-void MultiPlot::updateData()
+void Widgets::MultiPlot::updateData()
 {
     // Get group
-    const auto group = UI::Dashboard::getInstance()->getMultiplot(m_index);
+    const auto group = UI::Dashboard::instance().getMultiplot(m_index);
     if (!group)
         return;
 
@@ -188,14 +185,14 @@ void MultiPlot::updateData()
 /**
  * Updates the number of horizontal divisions of the plot
  */
-void MultiPlot::updateRange()
+void Widgets::MultiPlot::updateRange()
 {
     // Get pointer to dashboard manager
-    const auto dash = UI::Dashboard::getInstance();
+    const auto dash = &UI::Dashboard::instance();
 
     // Set number of points
     m_yData.clear();
-    const auto group = UI::Dashboard::getInstance()->getMultiplot(m_index);
+    const auto group = UI::Dashboard::instance().getMultiplot(m_index);
     for (int i = 0; i < dash->points(); ++i)
     {
         m_yData.append(PlotData());
@@ -211,5 +208,4 @@ void MultiPlot::updateRange()
 
     // Repaint widget
     Q_EMIT updated();
-}
 }

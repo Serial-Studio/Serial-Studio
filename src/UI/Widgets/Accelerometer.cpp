@@ -27,18 +27,15 @@
 #include <QtMath>
 #include <QResizeEvent>
 
-namespace Widgets
-{
-
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Accelerometer::Accelerometer(const int index)
+Widgets::Accelerometer::Accelerometer(const int index)
     : m_index(index)
 {
     // Get pointers to Serial Studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->accelerometerCount())
@@ -81,14 +78,14 @@ Accelerometer::Accelerometer(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Accelerometer::updateData()
+void Widgets::Accelerometer::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
     // Update accelerometer values
-    const auto accelerometer = UI::Dashboard::getInstance()->getAccelerometer(m_index);
+    const auto accelerometer = UI::Dashboard::instance().getAccelerometer(m_index);
     if (accelerometer)
     {
         if (accelerometer->datasetCount() != 3)
@@ -118,10 +115,9 @@ void Accelerometer::updateData()
 
         m_gauge.setValue(G);
         setValue(QString("%1 G").arg(
-            QString::number(G, 'f', UI::Dashboard::getInstance()->precision())));
+            QString::number(G, 'f', UI::Dashboard::instance().precision())));
 
         // Repaint widget
         Q_EMIT updated();
     }
-}
 }

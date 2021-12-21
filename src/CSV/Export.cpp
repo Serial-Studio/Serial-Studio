@@ -34,19 +34,15 @@
 #include <QApplication>
 #include <QDesktopServices>
 
-namespace CSV
-{
-static Export *EXPORT = Q_NULLPTR;
-
 /**
  * Connect JSON Parser & Serial Manager signals to begin registering JSON
  * dataframes into JSON list.
  */
-Export::Export()
+CSV::Export::Export()
     : m_exportEnabled(true)
 {
-    const auto io = IO::Manager::getInstance();
-    const auto te = Misc::TimerEvents::getInstance();
+    const auto io = &IO::Manager::instance();
+    const auto te = &Misc::TimerEvents::instance();
     connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
     connect(io, &IO::Manager::frameReceived, this, &Export::registerFrame);
     connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &Export::writeValues);
@@ -55,7 +51,7 @@ Export::Export()
 /**
  * Close file & finnish write-operations before destroying the class
  */
-Export::~Export()
+CSV::Export::~Export()
 {
     closeFile();
 }
@@ -63,18 +59,16 @@ Export::~Export()
 /**
  * Returns a pointer to the only instance of this class
  */
-Export *Export::getInstance()
+CSV::Export &CSV::Export::instance()
 {
-    if (!EXPORT)
-        EXPORT = new Export;
-
-    return EXPORT;
+    static auto singleton = new Export();
+    return *singleton;
 }
 
 /**
  * Returns @c true if the CSV output file is open
  */
-bool Export::isOpen() const
+bool CSV::Export::isOpen() const
 {
     return m_csvFile.isOpen();
 }
@@ -82,7 +76,7 @@ bool Export::isOpen() const
 /**
  * Returns @c true if CSV export is enabled
  */
-bool Export::exportEnabled() const
+bool CSV::Export::exportEnabled() const
 {
     return m_exportEnabled;
 }
@@ -90,7 +84,7 @@ bool Export::exportEnabled() const
 /**
  * Open the current CSV file in the Explorer/Finder window
  */
-void Export::openCurrentCsv()
+void CSV::Export::openCurrentCsv()
 {
     if (isOpen())
         Misc::Utilities::revealFile(m_csvFile.fileName());
@@ -102,7 +96,7 @@ void Export::openCurrentCsv()
 /**
  * Enables or disables data export
  */
-void Export::setExportEnabled(const bool enabled)
+void CSV::Export::setExportEnabled(const bool enabled)
 {
     m_exportEnabled = enabled;
     Q_EMIT enabledChanged();
@@ -117,7 +111,7 @@ void Export::setExportEnabled(const bool enabled)
 /**
  * Write all remaining JSON frames & close the CSV file
  */
-void Export::closeFile()
+void CSV::Export::closeFile()
 {
     if (isOpen())
     {
@@ -135,10 +129,10 @@ void Export::closeFile()
  * Creates a CSV file based on the JSON frames contained in the JSON list.
  * @note This function is called periodically every 1 second.
  */
-void Export::writeValues()
+void CSV::Export::writeValues()
 {
     // Get separator sequence
-    const auto sep = IO::Manager::getInstance()->separatorSequence();
+    const auto sep = IO::Manager::instance().separatorSequence();
 
     // Write each frame
     for (int i = 0; i < m_frames.count(); ++i)
@@ -171,10 +165,10 @@ void Export::writeValues()
 /**
  * Creates a new CSV file corresponding to the current project title & field count
  */
-void Export::createCsvFile(const CSV::RawFrame &frame)
+void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
 {
     // Get project title
-    const auto projectTitle = UI::Dashboard::getInstance()->title();
+    const auto projectTitle = UI::Dashboard::instance().title();
 
     // Get file name
     const QString fileName = frame.rxDateTime.toString("HH-mm-ss") + ".csv";
@@ -212,7 +206,7 @@ void Export::createCsvFile(const CSV::RawFrame &frame)
 #endif
 
     // Get number of fields
-    const auto sep = IO::Manager::getInstance()->separatorSequence();
+    const auto sep = IO::Manager::instance().separatorSequence();
     const auto fields = QString::fromUtf8(frame.data).split(sep);
 
     // Add table titles
@@ -234,11 +228,11 @@ void Export::createCsvFile(const CSV::RawFrame &frame)
 /**
  * Appends the latest data from the device to the output buffer
  */
-void Export::registerFrame(const QByteArray &data)
+void CSV::Export::registerFrame(const QByteArray &data)
 {
     // Ignore if device is not connected (we don't want to generate a CSV file when we
     // are reading another CSV file don't we?)
-    if (!IO::Manager::getInstance()->connected())
+    if (!IO::Manager::instance().connected())
         return;
 
     // Ignore if CSV export is disabled
@@ -250,5 +244,4 @@ void Export::registerFrame(const QByteArray &data)
     frame.data = data;
     frame.rxDateTime = QDateTime::currentDateTime();
     m_frames.append(frame);
-}
 }

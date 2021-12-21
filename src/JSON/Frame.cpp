@@ -23,32 +23,21 @@
 #include "Frame.h"
 #include "FrameInfo.h"
 
-namespace JSON
-{
-
-/**
- * Constructor function
- */
-Frame::Frame(QObject *parent)
-    : QObject(parent)
-    , m_title("")
-{
-}
-
 /**
  * Destructor function, free memory used by the @c Group objects before destroying an
  * instance of this class.
  */
-Frame::~Frame()
+JSON::Frame::~Frame()
 {
-    clear();
+    qDeleteAll(m_groups);
+    m_groups.clear();
 }
 
 /**
  * Resets the frame title and frees the memory used by the @c Group objects associated
  * to the instance of the @c Frame object.
  */
-void Frame::clear()
+void JSON::Frame::clear()
 {
     m_title = "";
     qDeleteAll(m_groups);
@@ -58,7 +47,7 @@ void Frame::clear()
 /**
  * Returns the title of the frame.
  */
-QString Frame::title() const
+QString JSON::Frame::title() const
 {
     return m_title;
 }
@@ -66,7 +55,7 @@ QString Frame::title() const
 /**
  * Returns the number of groups contained in the frame.
  */
-int Frame::groupCount() const
+int JSON::Frame::groupCount() const
 {
     return m_groups.count();
 }
@@ -74,7 +63,7 @@ int Frame::groupCount() const
 /**
  * Returns a vector of pointers to the @c Group objects associated to this frame.
  */
-QVector<Group *> Frame::groups() const
+QVector<JSON::Group *> JSON::Frame::groups() const
 {
     return m_groups;
 }
@@ -85,7 +74,7 @@ QVector<Group *> Frame::groups() const
  *
  * @return @c true on success, @c false on failure
  */
-bool Frame::read(const QJsonObject &object)
+bool JSON::Frame::read(const QJsonObject &object)
 {
     // Rest frame data
     clear();
@@ -103,7 +92,7 @@ bool Frame::read(const QJsonObject &object)
         // Generate groups & datasets from data frame
         for (auto i = 0; i < groups.count(); ++i)
         {
-            Group *group = new Group(this);
+            Group *group = new Group();
             if (group->read(groups.at(i).toObject()))
                 m_groups.append(group);
             else
@@ -122,11 +111,10 @@ bool Frame::read(const QJsonObject &object)
 /**
  * @return The group at the given @a index,vreturns @c Q_NULLPTR on invalid index
  */
-JSON::Group *Frame::getGroup(const int index)
+JSON::Group *JSON::Frame::getGroup(const int index)
 {
     if (index < groupCount() && index >= 0)
         return m_groups.at(index);
 
     return Q_NULLPTR;
-}
 }

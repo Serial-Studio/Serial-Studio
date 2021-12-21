@@ -26,19 +26,16 @@
 
 #include <QResizeEvent>
 
-namespace Widgets
-{
-
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Gyroscope::Gyroscope(const int index)
+Widgets::Gyroscope::Gyroscope(const int index)
     : m_index(index)
     , m_displayNum(0)
 {
     // Get pointers to Serial Studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->gyroscopeCount())
@@ -69,14 +66,14 @@ Gyroscope::Gyroscope(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Gyroscope::updateData()
+void Widgets::Gyroscope::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
     // Update gyroscope values
-    const auto dash = UI::Dashboard::getInstance();
+    const auto dash = &UI::Dashboard::instance();
     const auto gyro = dash->getGyroscope(m_index);
     if (gyro)
     {
@@ -110,7 +107,7 @@ void Gyroscope::updateData()
     }
 }
 
-void Gyroscope::updateLabel()
+void Widgets::Gyroscope::updateLabel()
 {
     switch (m_displayNum)
     {
@@ -128,5 +125,4 @@ void Gyroscope::updateLabel()
     ++m_displayNum;
     if (m_displayNum > 2)
         m_displayNum = 0;
-}
 }

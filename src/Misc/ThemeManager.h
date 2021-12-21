@@ -199,8 +199,15 @@ Q_SIGNALS:
     void themeChanged();
     void availableThemesChanged();
 
+private:
+    explicit ThemeManager();
+    ThemeManager(ThemeManager &&) = delete;
+    ThemeManager(const ThemeManager &) = delete;
+    ThemeManager &operator=(ThemeManager &&) = delete;
+    ThemeManager &operator=(const ThemeManager &) = delete;
+
 public:
-    static ThemeManager *getInstance();
+    static ThemeManager &instance();
 
     int themeId() const;
 
@@ -261,9 +268,6 @@ public Q_SLOTS:
 private Q_SLOTS:
     void populateThemes();
     void loadTheme(const int id);
-
-private:
-    ThemeManager();
 
 private:
     int m_themeId;

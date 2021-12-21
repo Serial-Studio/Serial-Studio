@@ -25,21 +25,18 @@
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 
-namespace Widgets
-{
-
 /**
  * Constructor function, configures widget style & signal/slot connections.
  */
-Plot::Plot(const int index)
+Widgets::Plot::Plot(const int index)
     : m_index(index)
     , m_min(INT_MAX)
     , m_max(INT_MIN)
     , m_autoscale(true)
 {
     // Get pointers to serial studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->plotCount())
@@ -90,7 +87,7 @@ Plot::Plot(const int index)
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
     // Get dataset units
-    const auto dataset = UI::Dashboard::getInstance()->getPlot(m_index);
+    const auto dataset = UI::Dashboard::instance().getPlot(m_index);
     if (dataset)
     {
         // Update graph scale
@@ -135,14 +132,14 @@ Plot::Plot(const int index)
  * window is hidden), then the new data shall be saved to the plot
  * vector, but the widget shall not be redrawn.
  */
-void Plot::updateData()
+void Widgets::Plot::updateData()
 {
     // Widget not enabled, do not redraw
     if (!isEnabled())
         return;
 
     // Get new data
-    const auto plotData = UI::Dashboard::getInstance()->linearPlotValues();
+    const auto plotData = UI::Dashboard::instance().linearPlotValues();
     if (plotData->count() > m_index)
     {
         // Check if we need to update graph scale
@@ -214,10 +211,10 @@ void Plot::updateData()
 /**
  * Updates the number of horizontal divisions of the plot
  */
-void Plot::updateRange()
+void Widgets::Plot::updateRange()
 {
     // Get pointer to dashboard manager
-    const auto dash = UI::Dashboard::getInstance();
+    const auto dash = &UI::Dashboard::instance();
 
     // Clear Y-axis data
     PlotData tempYData;
@@ -231,5 +228,4 @@ void Plot::updateRange()
 
     // Repaint widget
     Q_EMIT updated();
-}
 }

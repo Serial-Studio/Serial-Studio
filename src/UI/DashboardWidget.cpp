@@ -48,7 +48,7 @@ DashboardWidget::DashboardWidget(QQuickItem *parent)
     , m_isExternalWindow(false)
 {
     // clang-format off
-    connect(Dashboard::getInstance(), &Dashboard::widgetVisibilityChanged,
+    connect(&Dashboard::instance(), &Dashboard::widgetVisibilityChanged,
             this, &DashboardWidget::updateWidgetVisible);
     // clang-format on
 }
@@ -77,7 +77,7 @@ int DashboardWidget::widgetIndex() const
  */
 int DashboardWidget::relativeIndex() const
 {
-    return UI::Dashboard::getInstance()->relativeIndex(widgetIndex());
+    return UI::Dashboard::instance().relativeIndex(widgetIndex());
 }
 
 /**
@@ -93,7 +93,7 @@ bool DashboardWidget::widgetVisible() const
  */
 QString DashboardWidget::widgetIcon() const
 {
-    return UI::Dashboard::getInstance()->widgetIcon(widgetIndex());
+    return UI::Dashboard::instance().widgetIcon(widgetIndex());
 }
 
 /**
@@ -103,7 +103,7 @@ QString DashboardWidget::widgetTitle() const
 {
     if (widgetIndex() >= 0)
     {
-        auto titles = UI::Dashboard::getInstance()->widgetTitles();
+        auto titles = UI::Dashboard::instance().widgetTitles();
         if (widgetIndex() < titles.count())
             return titles.at(widgetIndex());
     }
@@ -128,7 +128,7 @@ bool DashboardWidget::isExternalWindow() const
  */
 UI::Dashboard::WidgetType DashboardWidget::widgetType() const
 {
-    return UI::Dashboard::getInstance()->widgetType(widgetIndex());
+    return UI::Dashboard::instance().widgetType(widgetIndex());
 }
 
 /**
@@ -148,7 +148,7 @@ void DashboardWidget::setVisible(const bool visible)
  */
 void DashboardWidget::setWidgetIndex(const int index)
 {
-    if (index < UI::Dashboard::getInstance()->totalWidgetCount() && index >= 0)
+    if (index < UI::Dashboard::instance().totalWidgetCount() && index >= 0)
     {
         // Update widget index
         m_index = index;
@@ -231,7 +231,7 @@ void DashboardWidget::setIsExternalWindow(const bool isWindow)
  */
 void DashboardWidget::updateWidgetVisible()
 {
-    bool visible = UI::Dashboard::getInstance()->widgetVisible(widgetIndex());
+    bool visible = UI::Dashboard::instance().widgetVisible(widgetIndex());
 
     if (widgetVisible() != visible && !isExternalWindow())
     {

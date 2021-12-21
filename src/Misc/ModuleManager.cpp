@@ -64,7 +64,7 @@
 Misc::ModuleManager::ModuleManager()
 {
     // Init translator (so that splash screen displays text in user's language)
-    (void)Misc::Translator::getInstance();
+    (void)Misc::Translator::instance();
 
     // Load Roboto fonts from resources
     QFontDatabase::addApplicationFont(":/fonts/Roboto-Bold.ttf");
@@ -135,8 +135,6 @@ void Misc::ModuleManager::configureUpdater()
 void Misc::ModuleManager::registerQmlTypes()
 {
     qRegisterMetaType<JFI_Object>("JFI_Object");
-    qmlRegisterType<JSON::Group>("SerialStudio", 1, 0, "Group");
-    qmlRegisterType<JSON::Dataset>("SerialStudio", 1, 0, "Dataset");
     qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
     qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
 }
@@ -165,23 +163,25 @@ void Misc::ModuleManager::initializeQmlInterface()
 {
     // Initialize modules
     setSplashScreenMessage(tr("Initializing modules..."));
-    const auto csvExport = CSV::Export::getInstance();
-    const auto csvPlayer = CSV::Player::getInstance();
-    const auto ioManager = IO::Manager::getInstance();
-    const auto ioConsole = IO::Console::getInstance();
+    const auto csvExport = &CSV::Export::instance();
+    const auto csvPlayer = &CSV::Player::instance();
+    const auto ioManager = &IO::Manager::instance();
+    const auto ioConsole = &IO::Console::instance();
+    const auto jsonEditor = &JSON::Editor::instance();
+    const auto mqttClient = &MQTT::Client::instance();
+    const auto uiDashboard = &UI::Dashboard::instance();
+    const auto jsonGenerator = &JSON::Generator::instance();
+    const auto pluginsBridge = &Plugins::Server::instance();
+    const auto miscUtilities = &Misc::Utilities::instance();
+    const auto miscMacExtras = &Misc::MacExtras::instance();
+    const auto miscTranslator = &Misc::Translator::instance();
+    const auto ioSerial = &IO::DataSources::Serial::instance();
+    const auto miscTimerEvents = &Misc::TimerEvents::instance();
+    const auto ioNetwork = &IO::DataSources::Network::instance();
+    const auto miscThemeManager = &Misc::ThemeManager::instance();
+
+    // Initialize third-party modules
     const auto updater = QSimpleUpdater::getInstance();
-    const auto jsonEditor = JSON::Editor::getInstance();
-    const auto mqttClient = MQTT::Client::getInstance();
-    const auto uiDashboard = UI::Dashboard::getInstance();
-    const auto jsonGenerator = JSON::Generator::getInstance();
-    const auto pluginsBridge = Plugins::Server::getInstance();
-    const auto miscUtilities = Misc::Utilities::getInstance();
-    const auto miscMacExtras = Misc::MacExtras::getInstance();
-    const auto miscTranslator = Misc::Translator::getInstance();
-    const auto ioSerial = IO::DataSources::Serial::getInstance();
-    const auto miscTimerEvents = Misc::TimerEvents::getInstance();
-    const auto ioNetwork = IO::DataSources::Network::getInstance();
-    const auto miscThemeManager = Misc::ThemeManager::getInstance();
 
     // Operating system flags
     bool isWin = false;
@@ -276,9 +276,9 @@ void Misc::ModuleManager::setSplashScreenMessage(const QString &message)
  */
 void Misc::ModuleManager::onQuit()
 {
-    Plugins::Server::getInstance()->removeConnection();
-    CSV::Export::getInstance()->closeFile();
-    CSV::Player::getInstance()->closeFile();
-    IO::Manager::getInstance()->disconnectDevice();
-    Misc::TimerEvents::getInstance()->stopTimers();
+    CSV::Export::instance().closeFile();
+    CSV::Player::instance().closeFile();
+    IO::Manager::instance().disconnectDevice();
+    Misc::TimerEvents::instance().stopTimers();
+    Plugins::Server::instance().removeConnection();
 }

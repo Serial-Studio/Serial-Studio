@@ -27,17 +27,15 @@
 
 #include <googlemapadapter.h>
 
-namespace Widgets
-{
 /**
  * Generates the user interface elements & layout
  */
-GPS::GPS(const int index)
+Widgets::GPS::GPS(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = UI::Dashboard::getInstance();
-    const auto theme = Misc::ThemeManager::getInstance();
+    const auto dash = &UI::Dashboard::instance();
+    const auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->gpsCount())
@@ -111,14 +109,14 @@ GPS::GPS(const int index)
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void GPS::updateData()
+void Widgets::GPS::updateData()
 {
     // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
     // Get group pointer
-    const auto dash = UI::Dashboard::getInstance();
+    const auto dash = &UI::Dashboard::instance();
     const auto group = dash->getGPS(m_index);
     if (!group)
         return;
@@ -161,7 +159,7 @@ void GPS::updateData()
 /**
  * Changes the size of the map when the widget is resized
  */
-void GPS::resizeEvent(QResizeEvent *event)
+void Widgets::GPS::resizeEvent(QResizeEvent *event)
 {
     const auto width = event->size().width();
     const auto height = event->size().height();
@@ -172,7 +170,7 @@ void GPS::resizeEvent(QResizeEvent *event)
 /**
  * Manually calls the zoom in / zoom out button clicks when the user presses on the widget
  */
-void GPS::mousePressEvent(QMouseEvent *event)
+void Widgets::GPS::mousePressEvent(QMouseEvent *event)
 {
     // Get x and y coordinates relative to title widget
     auto x = event->x() - m_titleWidget.x();
@@ -194,5 +192,4 @@ void GPS::mousePressEvent(QMouseEvent *event)
 
     // Accept event
     event->accept();
-}
 }

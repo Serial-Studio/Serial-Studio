@@ -56,7 +56,7 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
     setFlag(ItemIsFocusScope, true);
     setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
-    setFillColor(Misc::ThemeManager::getInstance()->base());
+    setFillColor(Misc::ThemeManager::instance().base());
 
     // clang-format off
     connect(this, &QQuickPaintedItem::widthChanged,

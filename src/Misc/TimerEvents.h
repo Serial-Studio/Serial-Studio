@@ -53,17 +53,21 @@ Q_SIGNALS:
     void highFreqTimeout();
     void highFreqTimeoutChanged();
 
+private:
+    explicit TimerEvents();
+    TimerEvents(TimerEvents &&) = delete;
+    TimerEvents(const TimerEvents &) = delete;
+    TimerEvents &operator=(TimerEvents &&) = delete;
+    TimerEvents &operator=(const TimerEvents &) = delete;
+
 public:
-    static TimerEvents *getInstance();
+    static TimerEvents &instance();
     int highFreqTimeoutHz() const;
 
 public Q_SLOTS:
     void stopTimers();
     void startTimers();
     void setHighFreqTimeout(const int hz);
-
-private:
-    TimerEvents();
 
 private:
     QTimer m_timerLowFreq;
