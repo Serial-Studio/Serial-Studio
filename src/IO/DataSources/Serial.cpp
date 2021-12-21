@@ -68,8 +68,8 @@ IO::DataSources::Serial::~Serial()
  */
 IO::DataSources::Serial &IO::DataSources::Serial::instance()
 {
-    static auto singleton = new Serial();
-    return *singleton;
+    static Serial singleton;
+    return singleton;
 }
 
 /**

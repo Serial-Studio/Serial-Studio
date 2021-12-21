@@ -77,8 +77,8 @@ Plugins::Server::~Server()
  */
 Plugins::Server &Plugins::Server::instance()
 {
-    static auto singleton = new Server();
-    return *singleton;
+    static Server singleton;
+    return singleton;
 }
 
 /**

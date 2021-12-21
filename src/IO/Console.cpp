@@ -102,8 +102,8 @@ IO::Console::Console()
  */
 IO::Console &IO::Console::instance()
 {
-    static auto singleton = new Console();
-    return *singleton;
+    static Console singleton;
+    return singleton;
 }
 
 /**

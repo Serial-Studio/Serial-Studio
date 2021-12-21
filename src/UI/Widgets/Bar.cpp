@@ -105,7 +105,7 @@ void Widgets::Bar::updateData()
             dataset->units()));
 
         // Repaint widget
-        Q_EMIT updated();
+        QTimer::singleShot(20, this, SIGNAL(updated()));
     }
 }
 

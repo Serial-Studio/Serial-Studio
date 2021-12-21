@@ -61,8 +61,8 @@ CSV::Export::~Export()
  */
 CSV::Export &CSV::Export::instance()
 {
-    static auto singleton = new Export();
-    return *singleton;
+    static Export singleton;
+    return singleton;
 }
 
 /**

@@ -225,7 +225,7 @@ void Widgets::DataGroup::updateData()
     }
 
     // Repaint widget
-    Q_EMIT updated();
+    QTimer::singleShot(20, this, SIGNAL(updated()));
 }
 
 /**

@@ -83,8 +83,8 @@ JSON::Editor::Editor()
  */
 JSON::Editor &JSON::Editor::instance()
 {
-    static auto singleton = new Editor();
-    return *singleton;
+    static Editor singleton;
+    return singleton;
 }
 
 //----------------------------------------------------------------------------------------

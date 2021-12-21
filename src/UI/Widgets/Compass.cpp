@@ -100,6 +100,6 @@ void Widgets::Compass::update()
         setValue(text);
 
         // Repaint widget
-        Q_EMIT updated();
+        QTimer::singleShot(20, this, SIGNAL(updated()));
     }
 }

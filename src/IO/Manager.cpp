@@ -82,8 +82,8 @@ IO::Manager::Manager()
  */
 IO::Manager &IO::Manager::instance()
 {
-    static auto singleton = new Manager();
-    return *singleton;
+    static Manager singleton;
+    return singleton;
 }
 
 /**

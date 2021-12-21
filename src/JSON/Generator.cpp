@@ -55,8 +55,8 @@ JSON::Generator::Generator()
  */
 JSON::Generator &JSON::Generator::instance()
 {
-    static auto singleton = new Generator();
-    return *singleton;
+    static Generator singleton;
+    return singleton;
 }
 
 /**

@@ -35,8 +35,8 @@ Misc::Translator::Translator()
  */
 Misc::Translator &Misc::Translator::instance()
 {
-    static auto singleton = new Translator();
-    return *singleton;
+    static Translator singleton;
+    return singleton;
 }
 
 /**

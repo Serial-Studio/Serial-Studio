@@ -57,8 +57,8 @@ IO::DataSources::Network::~Network()
  */
 IO::DataSources::Network &IO::DataSources::Network::instance()
 {
-    static auto singleton = new Network();
-    return *singleton;
+    static Network singleton;
+    return singleton;
 }
 
 /**

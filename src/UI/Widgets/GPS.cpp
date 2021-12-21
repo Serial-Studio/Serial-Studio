@@ -153,7 +153,7 @@ void Widgets::GPS::updateData()
     // clang-format on
 
     // Repaint widget
-    Q_EMIT updated();
+    QTimer::singleShot(20, this, SIGNAL(updated()));
 }
 
 /**

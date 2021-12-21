@@ -36,8 +36,8 @@ Misc::TimerEvents::TimerEvents()
  */
 Misc::TimerEvents &Misc::TimerEvents::instance()
 {
-    static auto singleton = new TimerEvents();
-    return *singleton;
+    static TimerEvents singleton;
+    return singleton;
 }
 
 /**

@@ -178,7 +178,7 @@ void Widgets::MultiPlot::updateData()
     if (isEnabled())
     {
         m_plot.replot();
-        Q_EMIT updated();
+        QTimer::singleShot(20, this, SIGNAL(updated()));
     }
 }
 

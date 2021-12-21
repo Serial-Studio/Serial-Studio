@@ -35,8 +35,8 @@
 
 Misc::Utilities &Misc::Utilities::instance()
 {
-    static auto singleton = new Utilities();
-    return *singleton;
+    static Utilities singleton;
+    return singleton;
 }
 
 void Misc::Utilities::rebootApplication()

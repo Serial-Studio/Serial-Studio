@@ -103,7 +103,7 @@ void Widgets::Gyroscope::updateData()
         m_gauge.setValue(pitch);
         m_gauge.setGradient(roll / 360.0);
 
-        Q_EMIT updated();
+        QTimer::singleShot(20, this, SIGNAL(updated()));
     }
 }
 

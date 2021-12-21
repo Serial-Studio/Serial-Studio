@@ -58,8 +58,8 @@ UI::Dashboard::Dashboard()
  */
 UI::Dashboard &UI::Dashboard::instance()
 {
-    static auto singleton = new Dashboard();
-    return *singleton;
+    static Dashboard singleton;
+    return singleton;
 }
 
 //----------------------------------------------------------------------------------------

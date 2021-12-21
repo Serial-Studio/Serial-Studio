@@ -48,8 +48,8 @@ Misc::ThemeManager::ThemeManager()
  */
 Misc::ThemeManager &Misc::ThemeManager::instance()
 {
-    static auto singleton = new ThemeManager();
-    return *singleton;
+    static ThemeManager singleton;
+    return singleton;
 }
 
 /**

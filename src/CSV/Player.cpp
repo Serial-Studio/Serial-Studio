@@ -48,8 +48,8 @@ CSV::Player::Player()
  */
 CSV::Player &CSV::Player::instance()
 {
-    static auto singleton = new Player();
-    return *singleton;
+    static Player singleton;
+    return singleton;
 }
 
 /**

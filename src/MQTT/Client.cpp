@@ -64,8 +64,8 @@ MQTT::Client::~Client()
  */
 MQTT::Client &MQTT::Client::instance()
 {
-    static auto singleton = new Client();
-    return *singleton;
+    static Client singleton;
+    return singleton;
 }
 
 /**

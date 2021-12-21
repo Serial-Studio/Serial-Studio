@@ -67,8 +67,8 @@ Misc::MacExtras::MacExtras()
 
 Misc::MacExtras &Misc::MacExtras::instance()
 {
-    static auto singleton = new MacExtras();
-    return *singleton;
+    static MacExtras singleton;
+    return singleton;
 }
 
 void Misc::MacExtras::setSetupChecked(const bool checked)
