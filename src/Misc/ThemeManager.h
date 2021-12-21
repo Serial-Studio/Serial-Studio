@@ -195,7 +195,7 @@ class ThemeManager : public QObject
                NOTIFY availableThemesChanged)
     Q_PROPERTY(bool shadowsEnabled
                READ shadowsEnabled
-               WRITE setshadowsEnabled
+               WRITE setShadowsEnabled
                NOTIFY shadowsEnabledChanged)
     // clang-format on
 
