@@ -94,6 +94,6 @@ void Widgets::Gauge::updateData()
             QString::number(value, 'f', UI::Dashboard::instance().precision()),
             dataset->units()));
 
-        QTimer::singleShot(20, this, SIGNAL(updated()));
+        requestUpdate();
     }
 }

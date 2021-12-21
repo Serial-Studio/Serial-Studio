@@ -178,7 +178,7 @@ void Widgets::MultiPlot::updateData()
     if (isEnabled())
     {
         m_plot.replot();
-        QTimer::singleShot(20, this, SIGNAL(updated()));
+        requestUpdate();
     }
 }
 
@@ -207,5 +207,5 @@ void Widgets::MultiPlot::updateRange()
             m_curves.at(i)->setSamples(*dash->xPlotValues(), m_yData[i]);
 
     // Repaint widget
-    Q_EMIT updated();
+    requestUpdate();
 }

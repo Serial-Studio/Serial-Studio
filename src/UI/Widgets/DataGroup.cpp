@@ -36,7 +36,7 @@
             using QScrollArea::function;                                                 \
         };                                                                               \
         static_cast<PwnedWidget *>(pointer)->function(event);                            \
-        Q_EMIT updated();                                                                \
+        requestUpdate();                                                                 \
     }
 
 /**
@@ -225,7 +225,7 @@ void Widgets::DataGroup::updateData()
     }
 
     // Repaint widget
-    QTimer::singleShot(20, this, SIGNAL(updated()));
+    requestUpdate();
 }
 
 /**

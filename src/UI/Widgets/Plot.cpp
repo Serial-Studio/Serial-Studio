@@ -204,7 +204,7 @@ void Widgets::Plot::updateData()
         m_plot.replot();
 
         // Repaint widget
-        Q_EMIT updated();
+        requestUpdate();
     }
 }
 
@@ -227,5 +227,5 @@ void Widgets::Plot::updateRange()
     m_plot.replot();
 
     // Repaint widget
-    Q_EMIT updated();
+    requestUpdate();
 }

@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <QTimer>
 #include <QPlainTextEdit>
 #include <UI/DeclarativeWidget.h>
 
@@ -185,17 +186,22 @@ public Q_SLOTS:
     void setMaximumBlockCount(const int maxBlockCount);
 
 private Q_SLOTS:
+    void repaint();
     void updateScrollbarVisibility();
     void setCopyAvailable(const bool yes);
     void addText(const QString &text, const bool enableVt100);
 
 private:
+    void requestRepaint();
     QString vt100Processing(const QString &data);
 
 private:
     bool m_autoscroll;
     bool m_emulateVt100;
     bool m_copyAvailable;
+    bool m_paintRequested;
+
+    QTimer m_timer;
     QPlainTextEdit m_textEdit;
     AnsiEscapeCodeHandler m_escapeCodeHandler;
 };

@@ -33,6 +33,10 @@ namespace Widgets
  * A simple QWidget with an additional @c update() signal, which is used by the
  * @c UI::DashboardWidget to know when it should trigger a re-paint request to the scene
  * render thread.
+ *
+ * The widget also contains a @c requestUpdate() function, which is called by the widgets
+ * that inherit this class when they finish updating the displayed data. This function
+ * is used to schedule a re-paint at a controlled frequency, which is limited at 20 Hz.
  */
 class DashboardWidgetBase : public QWidget
 {
@@ -40,6 +44,31 @@ class DashboardWidgetBase : public QWidget
 
 Q_SIGNALS:
     void updated();
+
+public:
+    DashboardWidgetBase()
+    {
+        // clang-format off
+        connect(&m_timer, &QTimer::timeout,
+                this, &Widgets::DashboardWidgetBase::updateWidget);
+        m_timer.start(50);
+        // clang-format on
+    }
+
+    void updateWidget()
+    {
+        if (m_updateRequested)
+        {
+            m_updateRequested = false;
+            Q_EMIT updated();
+        }
+    }
+
+    void requestUpdate() { m_updateRequested = true; }
+
+private:
+    QTimer m_timer;
+    bool m_updateRequested;
 };
 }
 

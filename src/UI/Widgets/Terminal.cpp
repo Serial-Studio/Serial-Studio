@@ -39,6 +39,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
     , m_autoscroll(true)
     , m_emulateVt100(false)
     , m_copyAvailable(false)
+    , m_paintRequested(false)
 {
     // Set widget
     setWidget(&m_textEdit);
@@ -62,9 +63,15 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
 #endif
     m_textEdit.setPalette(palette);
 
-    // Connect console signals (doing this on QML uses about 50% of UI thread time)
-    const auto console = &IO::Console::instance();
-    connect(console, &IO::Console::stringReceived, this, &Widgets::Terminal::insertText);
+    // Connect console signals
+    // clang-format off
+    connect(&IO::Console::instance(), &IO::Console::stringReceived,
+            this, &Widgets::Terminal::insertText);
+    // clang-format on
+
+    // Configure re-paint timer at 10 Hz
+    connect(&m_timer, &QTimer::timeout, this, &Widgets::Terminal::repaint);
+    m_timer.start(100);
 
     // React to widget events
     connect(&m_textEdit, SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));
@@ -232,7 +239,7 @@ void Widgets::Terminal::clear()
 {
     m_textEdit.clear();
     updateScrollbarVisibility();
-    update();
+    requestRepaint();
 
     Q_EMIT textChanged();
 }
@@ -243,7 +250,7 @@ void Widgets::Terminal::clear()
 void Widgets::Terminal::selectAll()
 {
     m_textEdit.selectAll();
-    update();
+    requestRepaint();
 }
 
 /**
@@ -255,7 +262,7 @@ void Widgets::Terminal::clearSelection()
     cursor.clearSelection();
     m_textEdit.setTextCursor(cursor);
     updateScrollbarVisibility();
-    update();
+    requestRepaint();
 }
 
 /**
@@ -267,7 +274,7 @@ void Widgets::Terminal::clearSelection()
 void Widgets::Terminal::setReadOnly(const bool ro)
 {
     m_textEdit.setReadOnly(ro);
-    update();
+    requestRepaint();
 
     Q_EMIT readOnlyChanged();
 }
@@ -279,7 +286,7 @@ void Widgets::Terminal::setFont(const QFont &font)
 {
     m_textEdit.setFont(font);
     updateScrollbarVisibility();
-    update();
+    requestRepaint();
 
     Q_EMIT fontChanged();
 }
@@ -298,7 +305,7 @@ void Widgets::Terminal::append(const QString &text)
     if (autoscroll())
         scrollToBottom();
 
-    update();
+    requestRepaint();
     Q_EMIT textChanged();
 }
 
@@ -316,7 +323,7 @@ void Widgets::Terminal::setText(const QString &text)
     if (autoscroll())
         scrollToBottom();
 
-    update();
+    requestRepaint();
     Q_EMIT textChanged();
 }
 
@@ -327,7 +334,7 @@ void Widgets::Terminal::setScrollbarWidth(const int width)
 {
     auto bar = m_textEdit.verticalScrollBar();
     bar->setFixedWidth(width);
-    update();
+    requestRepaint();
 
     Q_EMIT scrollbarWidthChanged();
 }
@@ -338,7 +345,7 @@ void Widgets::Terminal::setScrollbarWidth(const int width)
 void Widgets::Terminal::setPalette(const QPalette &palette)
 {
     m_textEdit.setPalette(palette);
-    update();
+    requestRepaint();
 
     Q_EMIT colorPaletteChanged();
 }
@@ -349,7 +356,7 @@ void Widgets::Terminal::setPalette(const QPalette &palette)
 void Widgets::Terminal::setWidgetEnabled(const bool enabled)
 {
     m_textEdit.setEnabled(enabled);
-    update();
+    requestRepaint();
 
     Q_EMIT widgetEnabledChanged();
 }
@@ -373,7 +380,7 @@ void Widgets::Terminal::setAutoscroll(const bool enabled)
     IO::Console::instance().setAutoscroll(enabled);
 
     // Update UI
-    update();
+    requestRepaint();
     Q_EMIT autoscrollChanged();
 }
 
@@ -395,7 +402,7 @@ void Widgets::Terminal::setWordWrapMode(const int mode)
 {
     m_textEdit.setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
     updateScrollbarVisibility();
-    update();
+    requestRepaint();
 
     Q_EMIT wordWrapModeChanged();
 }
@@ -409,7 +416,7 @@ void Widgets::Terminal::setWordWrapMode(const int mode)
 void Widgets::Terminal::setCenterOnScroll(const bool enabled)
 {
     m_textEdit.setCenterOnScroll(enabled);
-    update();
+    requestRepaint();
 
     Q_EMIT centerOnScrollChanged();
 }
@@ -431,7 +438,7 @@ void Widgets::Terminal::setVt100Emulation(const bool enabled)
 void Widgets::Terminal::setUndoRedoEnabled(const bool enabled)
 {
     m_textEdit.setUndoRedoEnabled(enabled);
-    update();
+    requestRepaint();
 
     Q_EMIT undoRedoEnabledChanged();
 }
@@ -443,7 +450,7 @@ void Widgets::Terminal::setUndoRedoEnabled(const bool enabled)
 void Widgets::Terminal::setPlaceholderText(const QString &text)
 {
     m_textEdit.setPlaceholderText(text);
-    update();
+    requestRepaint();
 
     Q_EMIT placeholderTextChanged();
 }
@@ -474,7 +481,7 @@ void Widgets::Terminal::scrollToBottom(const bool repaint)
 
     // Trigger UI repaint
     if (repaint)
-        update();
+        requestRepaint();
 }
 
 /**
@@ -488,9 +495,24 @@ void Widgets::Terminal::scrollToBottom(const bool repaint)
 void Widgets::Terminal::setMaximumBlockCount(const int maxBlockCount)
 {
     m_textEdit.setMaximumBlockCount(maxBlockCount);
-    update();
+    requestRepaint();
 
     Q_EMIT maximumBlockCountChanged();
+}
+
+/**
+ * Redraws the widget. This function is called by a timer to reduce the number of paint
+ * requests (and thus avoid considerable slow-downs).
+ */
+void Widgets::Terminal::repaint()
+{
+    if (m_paintRequested)
+    {
+        m_paintRequested = false;
+
+        update();
+        Q_EMIT textChanged();
+    }
 }
 
 /**
@@ -543,9 +565,17 @@ void Widgets::Terminal::addText(const QString &text, const bool enableVt100)
     if (autoscroll())
         scrollToBottom();
 
-    // Redraw the control
-    update();
-    Q_EMIT textChanged();
+    // Repaint the widget
+    requestRepaint();
+}
+
+/**
+ * Enables the re-paint flag, which is later used by the @c repaint() function to know
+ * if the widget shall be repainted.
+ */
+void Widgets::Terminal::requestRepaint()
+{
+    m_paintRequested = true;
 }
 
 /**
