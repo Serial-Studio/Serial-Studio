@@ -105,7 +105,7 @@ void Widgets::Bar::updateData()
             dataset->units()));
 
         // Repaint widget
-        requestUpdate();
+        requestRepaint();
     }
 }
 

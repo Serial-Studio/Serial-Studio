@@ -36,10 +36,11 @@
  */
 Widgets::Terminal::Terminal(QQuickItem *parent)
     : UI::DeclarativeWidget(parent)
+    , m_repaint(false)
     , m_autoscroll(true)
+    , m_textChanged(false)
     , m_emulateVt100(false)
     , m_copyAvailable(false)
-    , m_paintRequested(false)
 {
     // Set widget
     setWidget(&m_textEdit);
@@ -239,9 +240,7 @@ void Widgets::Terminal::clear()
 {
     m_textEdit.clear();
     updateScrollbarVisibility();
-    requestRepaint();
-
-    Q_EMIT textChanged();
+    requestRepaint(true);
 }
 
 /**
@@ -305,8 +304,7 @@ void Widgets::Terminal::append(const QString &text)
     if (autoscroll())
         scrollToBottom();
 
-    requestRepaint();
-    Q_EMIT textChanged();
+    requestRepaint(true);
 }
 
 /**
@@ -323,8 +321,7 @@ void Widgets::Terminal::setText(const QString &text)
     if (autoscroll())
         scrollToBottom();
 
-    requestRepaint();
-    Q_EMIT textChanged();
+    requestRepaint(true);
 }
 
 /**
@@ -506,12 +503,13 @@ void Widgets::Terminal::setMaximumBlockCount(const int maxBlockCount)
  */
 void Widgets::Terminal::repaint()
 {
-    if (m_paintRequested)
+    if (m_repaint)
     {
-        m_paintRequested = false;
-
+        m_repaint = false;
         update();
-        Q_EMIT textChanged();
+
+        if (m_textChanged)
+            Q_EMIT textChanged();
     }
 }
 
@@ -566,16 +564,17 @@ void Widgets::Terminal::addText(const QString &text, const bool enableVt100)
         scrollToBottom();
 
     // Repaint the widget
-    requestRepaint();
+    requestRepaint(true);
 }
 
 /**
  * Enables the re-paint flag, which is later used by the @c repaint() function to know
  * if the widget shall be repainted.
  */
-void Widgets::Terminal::requestRepaint()
+void Widgets::Terminal::requestRepaint(const bool textChanged)
 {
-    m_paintRequested = true;
+    m_repaint = true;
+    m_textChanged = textChanged;
 }
 
 /**

@@ -100,6 +100,6 @@ void Widgets::Compass::update()
         setValue(text);
 
         // Repaint widget
-        requestUpdate();
+        requestRepaint();
     }
 }

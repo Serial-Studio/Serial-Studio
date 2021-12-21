@@ -103,7 +103,7 @@ void Widgets::Gyroscope::updateData()
         m_gauge.setValue(pitch);
         m_gauge.setGradient(roll / 360.0);
 
-        requestUpdate();
+        requestRepaint();
     }
 }
 

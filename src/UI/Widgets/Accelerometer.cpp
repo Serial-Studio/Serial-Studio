@@ -118,6 +118,6 @@ void Widgets::Accelerometer::updateData()
             QString::number(G, 'f', UI::Dashboard::instance().precision())));
 
         // Repaint widget
-        requestUpdate();
+        requestRepaint();
     }
 }

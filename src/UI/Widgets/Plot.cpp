@@ -204,7 +204,7 @@ void Widgets::Plot::updateData()
         m_plot.replot();
 
         // Repaint widget
-        requestUpdate();
+        requestRepaint();
     }
 }
 
@@ -227,5 +227,5 @@ void Widgets::Plot::updateRange()
     m_plot.replot();
 
     // Repaint widget
-    requestUpdate();
+    requestRepaint();
 }

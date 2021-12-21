@@ -92,7 +92,7 @@ void BaseWidget::setWidget(QWidget *widget, const Qt::Alignment &alignment,
         setLayout(&m_layout);
     }
 
-    requestUpdate();
+    requestRepaint();
 }
 
 void BaseWidget::resizeEvent(QResizeEvent *event)

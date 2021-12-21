@@ -50,25 +50,25 @@ public:
     {
         // clang-format off
         connect(&m_timer, &QTimer::timeout,
-                this, &Widgets::DashboardWidgetBase::updateWidget);
+                this, &Widgets::DashboardWidgetBase::repaint);
         m_timer.start(50);
         // clang-format on
     }
 
-    void updateWidget()
+    void repaint()
     {
-        if (m_updateRequested)
+        if (m_repaint)
         {
-            m_updateRequested = false;
+            m_repaint = false;
             Q_EMIT updated();
         }
     }
 
-    void requestUpdate() { m_updateRequested = true; }
+    void requestRepaint() { m_repaint = true; }
 
 private:
     QTimer m_timer;
-    bool m_updateRequested;
+    bool m_repaint;
 };
 }
 

@@ -175,7 +175,7 @@ void Widgets::LEDPanel::updateData()
                 m_leds.at(i)->on();
 
             // Repaint widget
-            requestUpdate();
+            requestRepaint();
         }
     }
 }

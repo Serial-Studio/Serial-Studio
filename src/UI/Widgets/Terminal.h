@@ -192,14 +192,15 @@ private Q_SLOTS:
     void addText(const QString &text, const bool enableVt100);
 
 private:
-    void requestRepaint();
     QString vt100Processing(const QString &data);
+    void requestRepaint(const bool textChanged = false);
 
 private:
+    bool m_repaint;
     bool m_autoscroll;
+    bool m_textChanged;
     bool m_emulateVt100;
     bool m_copyAvailable;
-    bool m_paintRequested;
 
     QTimer m_timer;
     QPlainTextEdit m_textEdit;

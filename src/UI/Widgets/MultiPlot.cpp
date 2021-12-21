@@ -178,7 +178,7 @@ void Widgets::MultiPlot::updateData()
     if (isEnabled())
     {
         m_plot.replot();
-        requestUpdate();
+        requestRepaint();
     }
 }
 
@@ -207,5 +207,5 @@ void Widgets::MultiPlot::updateRange()
             m_curves.at(i)->setSamples(*dash->xPlotValues(), m_yData[i]);
 
     // Repaint widget
-    requestUpdate();
+    requestRepaint();
 }

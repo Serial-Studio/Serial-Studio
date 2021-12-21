@@ -172,6 +172,6 @@ void Widgets::FFTPlot::updateData()
         m_plot.replot();
 
         // Repaint widget
-        requestUpdate();
+        requestRepaint();
     }
 }

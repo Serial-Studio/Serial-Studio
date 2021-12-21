@@ -225,7 +225,7 @@ void Widgets::DataGroup::updateData()
     }
 
     // Repaint widget
-    requestUpdate();
+    requestRepaint();
 }
 
 /**
