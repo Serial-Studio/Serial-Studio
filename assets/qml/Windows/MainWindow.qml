@@ -97,7 +97,7 @@ FramelessWindow.CustomWindow {
     height: minimumHeight
     minimumWidth: 1050 + 2 * root.shadowMargin
     backgroundColor: Cpp_ThemeManager.windowBackground
-    minimumHeight: 620 + 2 * root.shadowMargin + root.titlebar.height
+    minimumHeight: 650 + 2 * root.shadowMargin + root.titlebar.height
 
     //
     // Startup code
@@ -215,7 +215,7 @@ FramelessWindow.CustomWindow {
     RowLayout {
         z: titlebar.z + 1
         spacing: app.spacing
-        height: titlebar.height
+        height: Cpp_IsMac ? titlebar.height : 38
 
         anchors {
             top: parent.top

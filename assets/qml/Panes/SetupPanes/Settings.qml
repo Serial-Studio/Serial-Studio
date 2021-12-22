@@ -172,17 +172,15 @@ Control {
             // Window shadows
             //
             Label {
-                visible: !Cpp_IsMac
-                text: qsTr("Window shadows") + ": "
+                text: qsTr("Custom window decorations") + ": "
             } Switch {
                 id: _windowShadows
-                visible: !Cpp_IsMac
                 Layout.leftMargin: -app.spacing
                 Layout.alignment: Qt.AlignLeft
-                checked: Cpp_ThemeManager.shadowsEnabled
+                checked: Cpp_ThemeManager.customWindowDecorations
                 onCheckedChanged: {
-                    if (checked != Cpp_ThemeManager.shadowsEnabled)
-                        Cpp_ThemeManager.shadowsEnabled = checked
+                    if (checked != Cpp_ThemeManager.customWindowDecorations)
+                        Cpp_ThemeManager.customWindowDecorations = checked
                 }
             }
         }

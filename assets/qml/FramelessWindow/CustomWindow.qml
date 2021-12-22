@@ -28,7 +28,7 @@ import "../Widgets" as Widgets
 QtWindow.Window {
     id: root
     color: "transparent"
-    flags: root.customFlags | root.extraFlags
+    flags: (Cpp_ThemeManager.customWindowDecorations ? root.customFlags : Qt.Window) | root.extraFlags
 
     //
     // Custom signals
@@ -39,11 +39,27 @@ QtWindow.Window {
     signal unmaximized()
 
     //
+    // Connections with the theme manager for enabling/disabling frameless window
+    //
+    Connections {
+        target: Cpp_ThemeManager
+
+        function onCustomWindowDecorationsChanged() {
+            if (Cpp_ThemeManager.customWindowDecorations)
+                root.flags = root.customFlags | root.extraFlags
+            else
+                root.flags = Qt.Window | root.extraFlags
+        }
+    }
+
+    //
     // Window radius control
     //
-    property int borderWidth: 2
+    property int borderWidth: Cpp_ThemeManager.customWindowDecorations ? 2 : 0
     readonly property int handleSize: radius > 0 ? radius + shadowMargin + 10 : 0
-    readonly property int radius: ((root.visibility === QtWindow.Window.Maximized && maximizeEnabled) || isFullscreen) ? 0 : 10
+    readonly property int radius: Cpp_ThemeManager.customWindowDecorations ?
+                                      (((root.visibility === QtWindow.Window.Maximized &&
+                                        maximizeEnabled) || isFullscreen) ? 0 : 10) : 0
 
     //
     // Visibility properties
@@ -97,7 +113,7 @@ QtWindow.Window {
     //
     // Size of the shadow object
     //
-    property int shadowMargin: (Cpp_IsMac | !Cpp_ThemeManager.shadowsEnabled) ?
+    property int shadowMargin: (Cpp_IsMac | !Cpp_ThemeManager.customWindowDecorations) ?
                                    0 : (root.radius > 0 ? 20 : 0)
 
     //
@@ -198,7 +214,7 @@ QtWindow.Window {
     DragHandler {
         id: resizeHandler
         target: null
-        enabled: !Cpp_IsMac
+        enabled: !Cpp_IsMac && Cpp_ThemeManager.customWindowDecorations
         grabPermissions: TapHandler.TakeOverForbidden
         onActiveChanged: {
             if (active) {
@@ -231,6 +247,7 @@ QtWindow.Window {
         hoverEnabled: true
         anchors.fill: parent
         acceptedButtons: Qt.NoButton
+        enabled: Cpp_ThemeManager.customWindowDecorations
         cursorShape: {
             const p = Qt.point(mouseX, mouseY)
             const b = root.handleSize / 2
@@ -283,12 +300,19 @@ QtWindow.Window {
     // Maximize window fixes
     //
     onVisibilityChanged: (visibility) => {
-        // Hard-reset window flags on macOS to fix most glitches
-        if (Cpp_IsMac)
-            root.flags = Qt.Window
-
         // Ensure that correct window flags are still used
-        root.flags = root.customFlags | root.extraFlags
+        if (Cpp_ThemeManager.customWindowDecorations) {
+            // Hard-reset window flags on macOS to fix most glitches
+            if (Cpp_IsMac)
+                root.flags = Qt.Window
+
+            // Apply custom flags
+            root.flags = root.customFlags | root.extraFlags
+        }
+
+        // Apply basic flags
+        else
+            root.flags = Qt.Window | root.extraFlags
 
         // Window has been just maximized, update internal variables
         if (visibility === QtWindow.Window.Maximized) {

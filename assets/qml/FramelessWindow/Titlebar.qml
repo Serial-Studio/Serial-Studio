@@ -160,7 +160,7 @@ Rectangle {
     //
     // Height calculation
     //
-    height: !showMacControls ? 38 : 32
+    height: Cpp_ThemeManager.customWindowDecorations ? (!showMacControls ? 38 : 32) : 0
 
     //
     // Radius compensator rectangle
@@ -180,6 +180,7 @@ Rectangle {
     //
     Item {
         anchors.fill: parent
+        enabled: Cpp_ThemeManager.customWindowDecorations
 
         DragHandler {
             grabPermissions: TapHandler.CanTakeOverFromAnything
@@ -196,6 +197,7 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
+        enabled: Cpp_ThemeManager.customWindowDecorations
         onDoubleClicked: {
             if (root.maximizeEnabled)
                 root.toggleMaximized()
@@ -207,8 +209,8 @@ Rectangle {
     //
     Item {
         anchors.fill: parent
-        visible: showMacControls
-        enabled: showMacControls
+        visible: showMacControls && Cpp_ThemeManager.customWindowDecorations
+        enabled: showMacControls && Cpp_ThemeManager.customWindowDecorations
 
         RowLayout {
             spacing: 0
@@ -264,8 +266,8 @@ Rectangle {
     //
     Item {
         anchors.fill: parent
-        visible: !showMacControls
-        enabled: !showMacControls
+        visible: !showMacControls && Cpp_ThemeManager.customWindowDecorations
+        enabled: !showMacControls && Cpp_ThemeManager.customWindowDecorations
 
         RowLayout {
             spacing: 0
@@ -337,5 +339,6 @@ Rectangle {
         text: window.title
         color: root.textColor
         anchors.centerIn: parent
+        visible: Cpp_ThemeManager.customWindowDecorations
     }
 }

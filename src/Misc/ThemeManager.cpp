@@ -41,7 +41,7 @@ Misc::ThemeManager::ThemeManager()
 {
     populateThemes();
     loadTheme(m_settings.value("themeId", 0).toInt());
-    setShadowsEnabled(m_settings.value("shadowsEnabled", true).toBool());
+    setCustomWindowDecorations(m_settings.value("customWindows", true).toBool());
 }
 
 /**
@@ -62,13 +62,13 @@ int Misc::ThemeManager::themeId() const
 }
 
 /**
- * Returns @c true if the application should draw window shadows. This feature makes the
- * frameless windows look good - except if the DE does not support composting (e.g. CDE
- * or Haiku OS).
+ * Returns @c true if the application should draw the window decorations & controls by
+ * itself. This feature makes it look cooler, but it can lead to some trouble on
+ * not-so-common desktop environments, such as CDE.
  */
-bool Misc::ThemeManager::shadowsEnabled() const
+bool Misc::ThemeManager::customWindowDecorations() const
 {
-    return m_enableShadows;
+    return m_customWindowDecorations;
 }
 
 /**
@@ -104,11 +104,15 @@ void Misc::ThemeManager::setTheme(const int id)
         Utilities::rebootApplication();
 }
 
-void Misc::ThemeManager::setShadowsEnabled(const bool enabled)
+/**
+ * Enables/disables the custom window feature. See the @c customWindowDecorations()
+ * function for more information.
+ */
+void Misc::ThemeManager::setCustomWindowDecorations(const bool enabled)
 {
-    m_enableShadows = enabled;
-    m_settings.setValue("shadowsEnabled", enabled);
-    Q_EMIT shadowsEnabledChanged();
+    m_customWindowDecorations = enabled;
+    m_settings.setValue("customWindows", enabled);
+    Q_EMIT customWindowDecorationsChanged();
 }
 
 /**
