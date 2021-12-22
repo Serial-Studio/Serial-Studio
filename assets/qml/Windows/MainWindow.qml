@@ -210,12 +210,24 @@ FramelessWindow.CustomWindow {
     }
 
     //
+    // Rectangle for the menubar (only used if custom window flags are disabled)
+    //
+    Rectangle {
+        color: root.titlebarColor
+        anchors.fill: menubarLayout
+        visible: !Cpp_ThemeManager.customWindowDecorations
+    }
+
+    //
     // Menubar, shown by default on Windows & Linux and when the app is fullscreen
     //
     RowLayout {
+        id: menubarLayout
         z: titlebar.z + 1
         spacing: app.spacing
-        height: Cpp_IsMac ? titlebar.height : 38
+        height: !showMenubar ? titlebar.height : 38
+
+        readonly property bool showMenubar: !root.showMacControls || isFullscreen
 
         anchors {
             top: parent.top
@@ -257,7 +269,7 @@ FramelessWindow.CustomWindow {
         palette.text: Cpp_ThemeManager.text
         palette.buttonText: Cpp_ThemeManager.text
         palette.windowText: Cpp_ThemeManager.text
-        anchors.topMargin: titlebar.height + root.shadowMargin
+        anchors.topMargin: menubarLayout.height + root.shadowMargin
 
         background: Rectangle {
             radius: root.radius

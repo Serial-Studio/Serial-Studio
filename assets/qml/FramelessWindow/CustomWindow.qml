@@ -119,8 +119,8 @@ QtWindow.Window {
     //
     // Titlebar left/right margins for custom controls
     //
-    property alias leftTitlebarMargin: _title.leftMargin
-    property alias rightTitlebarMargin: _title.rightMargin
+    readonly property real leftTitlebarMargin: Cpp_ThemeManager.customWindowDecorations ? _title.leftMargin : 0
+    readonly property real rightTitlebarMargin: Cpp_ThemeManager.customWindowDecorations ? _title.rightMargin : 0
     property alias showMacControls: _title.showMacControls
 
     //
