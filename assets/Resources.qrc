@@ -82,10 +82,12 @@
         <file>icons/warning.svg</file>
         <file>icons/widget.svg</file>
         <file>images/donate-qr.svg</file>
-        <file>images/icon.svg</file>
         <file>images/icon-window.svg</file>
+        <file>images/icon.svg</file>
+        <file>images/shadow.png</file>
         <file>images/splash@1x.png</file>
         <file>images/splash@2x.png</file>
+        <file>images/window-shadow.png</file>
         <file>messages/Acknowledgements.txt</file>
         <file>messages/Welcome_DE.txt</file>
         <file>messages/Welcome_EN.txt</file>
@@ -131,7 +133,14 @@
         <file>qml/Windows/Donate.qml</file>
         <file>qml/Windows/JsonEditor.qml</file>
         <file>qml/Windows/MainWindow.qml</file>
+        <file>qml/Windows/MQTTConfiguration.qml</file>
         <file>qml/main.qml</file>
+        <file>themes/1_FlatDark.json</file>
+        <file>themes/2_FlatLight.json</file>
+        <file>themes/3_Mainframe.json</file>
+        <file>themes/4_Classic.json</file>
+        <file>themes/5_Noir.json</file>
+        <file>themes/6_MathWorks.json</file>
         <file>touchbar/console.png</file>
         <file>touchbar/dashboard.png</file>
         <file>touchbar/setup.png</file>
@@ -160,13 +169,5 @@
         <file>window-border/minimize.svg</file>
         <file>window-border/restore.svg</file>
         <file>window-border/unmaximize.svg</file>
-        <file>qml/Windows/MQTTConfiguration.qml</file>
-        <file>images/shadow.png</file>
-        <file>images/window-shadow.png</file>
-        <file>themes/1_FlatDark.json</file>
-        <file>themes/2_FlatLight.json</file>
-        <file>themes/3_Classic.json</file>
-        <file>themes/4_Noir.json</file>
-        <file>themes/5_MathWorks.json</file>
     </qresource>
 </RCC>

@@ -42,8 +42,9 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
     , m_emulateVt100(false)
     , m_copyAvailable(false)
 {
-    // Set widget
+    // Set widget & configure VT-100 emulator
     setWidget(&m_textEdit);
+    m_escapeCodeHandler.setTextEdit(&m_textEdit);
 
     // Setup default options
     setScrollbarWidth(14);
