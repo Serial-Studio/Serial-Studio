@@ -49,6 +49,10 @@ QtWindow.Window {
                 root.flags = root.customFlags | root.extraFlags
             else
                 root.flags = Qt.Window | root.extraFlags
+
+            var prevVisible = root.visible
+            root.visible = false
+            root.visible = prevVisible
         }
     }
 

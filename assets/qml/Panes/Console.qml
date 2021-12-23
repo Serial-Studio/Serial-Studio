@@ -66,14 +66,6 @@ Item {
     }
 
     //
-    // Remove selection
-    //
-    Shortcut {
-        sequence: "escape"
-        onActivated: textEdit.clearSelection()
-    }
-
-    //
     // Window shadow (must go before window declaration
     // to avoid blurry artifacts & glitches).
     //

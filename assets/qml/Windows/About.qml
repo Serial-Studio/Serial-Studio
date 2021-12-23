@@ -41,11 +41,11 @@ FramelessWindow.CustomWindow {
     title: qsTr("About")
     width: minimumWidth
     height: minimumHeight
-    extraFlags: Qt.WindowStaysOnTopHint
     x: (Screen.desktopAvailableWidth - width) / 2
     y: (Screen.desktopAvailableHeight - height) / 2
     minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
     maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+    extraFlags: Qt.WindowStaysOnTopHint | Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
     minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
     maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
 

@@ -72,11 +72,11 @@ Item {
             minimumWidth: 640 + shadowMargin
             minimumHeight: 480 + shadowMargin
             title: externalWidget.widgetTitle
-            extraFlags: Qt.WindowStaysOnTopHint
             titlebarText: Cpp_ThemeManager.text
             titlebarColor: Cpp_ThemeManager.widgetWindowBackground
             backgroundColor: Cpp_ThemeManager.widgetWindowBackground
             borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
+            extraFlags: Qt.WindowStaysOnTopHint | Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
 
             Timer {
                 id: timer

@@ -1,5 +1,5 @@
 {
-   "name":"Mainframe",
+   "name":"Midnight",
    "author":"Alex Spataru",
    "titlebarSeparator":false,
    "colors":{
@@ -41,26 +41,24 @@
       "connectButtonChecked":"#fc5142",
       "connectButtonUnchecked":"#2eed5c",
       "mqttButton":"#eda870",
-      "widgetTextPrimary":"#24476a",
-      "widgetTextSecondary":"#666666",
+      "widgetTextPrimary":"#f1bd92",
+      "widgetTextSecondary":"#517497",
       "widgetWindowBackground":"#484f62",
       "widgetWindowBorder":"#b7878d",
-      "widgetForegroundPrimary":"#f94144",
-      "widgetForegroundSecondary":"#666666",
-      "widgetIndicator":"#444444",
-      "widgetControlBackground":"#666666",
+      "widgetForegroundPrimary":"#f1bd92",
+      "widgetForegroundSecondary":"#517497",
+      "widgetIndicator":"#ffffff",
       "widgetColors":[
-         "#1f76b4",
-         "#ff7f0f",
-         "#2aa02b",
-         "#d62628",
-         "#9467bd",
-         "#8c564c",
-         "#e377c1",
-         "#7f7f7f",
-         "#bcbd21",
-         "#19bdcf",
-         "#1955fe"
+         "#fa8174",
+         "#bfbbd9",
+         "#80b1d2",
+         "#fdffb4",
+         "#fdb462",
+         "#8dd3c7",
+         "#b3dd69",
+         "#feed6f",
+         "#bc81bc",
+         "#cceac4"
       ]
    }
 }
