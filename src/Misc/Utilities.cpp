@@ -97,7 +97,7 @@ int Misc::Utilities::showMessageBox(const QString &text, const QString &informat
 
     // Add button translations
     if (bt & QMessageBox::Ok)
-        box.button(QMessageBox::Ok)->setText(tr("Ol"));
+        box.button(QMessageBox::Ok)->setText(tr("Ok"));
     if (bt & QMessageBox::Save)
         box.button(QMessageBox::Save)->setText(tr("Save"));
     if (bt & QMessageBox::SaveAll)
