@@ -29,16 +29,23 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QApplication>
+#include <QAbstractButton>
 #include <QDesktopServices>
 
 #include <AppInfo.h>
 
+/**
+ * Returns a pointer to the only instance of the class
+ */
 Misc::Utilities &Misc::Utilities::instance()
 {
     static Utilities singleton;
     return singleton;
 }
 
+/**
+ * Restarts the application - with macOS specific code to make it work
+ */
 void Misc::Utilities::rebootApplication()
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -55,6 +62,9 @@ void Misc::Utilities::rebootApplication()
 #endif
 }
 
+/**
+ * Asks the user if he/she wants the application to check for updates automatically
+ */
 bool Misc::Utilities::askAutomaticUpdates()
 {
     const int result = showMessageBox(tr("Check for updates automatically?"),
@@ -84,6 +94,44 @@ int Misc::Utilities::showMessageBox(const QString &text, const QString &informat
     box.setWindowTitle(windowTitle);
     box.setText("<h3>" + text + "</h3>");
     box.setInformativeText(informativeText);
+
+    // Add button translations
+    if (bt & QMessageBox::Ok)
+        box.button(QMessageBox::Ok)->setText(tr("Ol"));
+    if (bt & QMessageBox::Save)
+        box.button(QMessageBox::Save)->setText(tr("Save"));
+    if (bt & QMessageBox::SaveAll)
+        box.button(QMessageBox::SaveAll)->setText(tr("Save all"));
+    if (bt & QMessageBox::Open)
+        box.button(QMessageBox::Open)->setText(tr("Open"));
+    if (bt & QMessageBox::Yes)
+        box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    if (bt & QMessageBox::YesToAll)
+        box.button(QMessageBox::YesToAll)->setText(tr("Yes to all"));
+    if (bt & QMessageBox::No)
+        box.button(QMessageBox::No)->setText(tr("No"));
+    if (bt & QMessageBox::NoToAll)
+        box.button(QMessageBox::NoToAll)->setText(tr("No to all"));
+    if (bt & QMessageBox::Abort)
+        box.button(QMessageBox::Abort)->setText(tr("Abort"));
+    if (bt & QMessageBox::Retry)
+        box.button(QMessageBox::Retry)->setText(tr("Retry"));
+    if (bt & QMessageBox::Ignore)
+        box.button(QMessageBox::Ignore)->setText(tr("Ignore"));
+    if (bt & QMessageBox::Close)
+        box.button(QMessageBox::Close)->setText(tr("Close"));
+    if (bt & QMessageBox::Cancel)
+        box.button(QMessageBox::Cancel)->setText(tr("Cancel"));
+    if (bt & QMessageBox::Discard)
+        box.button(QMessageBox::Discard)->setText(tr("Discard"));
+    if (bt & QMessageBox::Help)
+        box.button(QMessageBox::Help)->setText(tr("Help"));
+    if (bt & QMessageBox::Apply)
+        box.button(QMessageBox::Apply)->setText(tr("Apply"));
+    if (bt & QMessageBox::Reset)
+        box.button(QMessageBox::Reset)->setText(tr("Reset"));
+    if (bt & QMessageBox::RestoreDefaults)
+        box.button(QMessageBox::RestoreDefaults)->setText(tr("Restore defaults"));
 
     // Show message box & return user decision to caller
     return box.exec();
