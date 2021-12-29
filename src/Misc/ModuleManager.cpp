@@ -88,9 +88,13 @@ Misc::ModuleManager::ModuleManager()
     if (qApp->devicePixelRatio() >= 2)
         pixmap.load(":/images/splash@2x.png");
 
+        // Disable splash screen shadow on macOS
+#ifdef Q_OS_MAC
+    m_splash.setWindowFlags(Qt::SplashScreen | Qt::NoDropShadowWindowHint);
+#endif
+
     // Show splash screen
     m_splash.setPixmap(pixmap);
-    m_splash.setWindowFlags(Qt::SplashScreen | Qt::NoDropShadowWindowHint);
     m_splash.show();
 
     // Stop modules when application is about to quit
