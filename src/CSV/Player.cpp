@@ -496,3 +496,7 @@ QString CSV::Player::getCellValue(const int row, const int column, bool &error)
     error = true;
     return "";
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Player.cpp"
+#endif

@@ -25,9 +25,7 @@
 
 #include "ElidedLabel.h"
 
-namespace Widgets
-{
-ElidedLabel::ElidedLabel(QWidget *parent, Qt::WindowFlags flags)
+Widgets::ElidedLabel::ElidedLabel(QWidget *parent, Qt::WindowFlags flags)
     : QLabel(parent, flags)
     , m_eliding(false)
     , m_originalText("")
@@ -35,7 +33,8 @@ ElidedLabel::ElidedLabel(QWidget *parent, Qt::WindowFlags flags)
 {
 }
 
-ElidedLabel::ElidedLabel(const QString &text, QWidget *parent, Qt::WindowFlags flags)
+Widgets::ElidedLabel::ElidedLabel(const QString &text, QWidget *parent,
+                                  Qt::WindowFlags flags)
     : QLabel(text, parent, flags)
     , m_eliding(false)
     , m_originalText("")
@@ -44,26 +43,26 @@ ElidedLabel::ElidedLabel(const QString &text, QWidget *parent, Qt::WindowFlags f
     setText(text);
 }
 
-void ElidedLabel::setType(const Qt::TextElideMode type)
+void Widgets::ElidedLabel::setType(const Qt::TextElideMode type)
 {
     m_elideMode = type;
     elide();
 }
 
-void ElidedLabel::resizeEvent(QResizeEvent *event)
+void Widgets::ElidedLabel::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     QTimer::singleShot(50, this, SLOT(elide()));
 }
 
-void ElidedLabel::setText(const QString &text)
+void Widgets::ElidedLabel::setText(const QString &text)
 {
     m_originalText = text;
     QLabel::setText(text);
     elide();
 }
 
-void ElidedLabel::elide()
+void Widgets::ElidedLabel::elide()
 {
     if (m_eliding == false)
     {
@@ -75,4 +74,7 @@ void ElidedLabel::elide()
         m_eliding = false;
     }
 }
-}
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_ElidedLabel.cpp"
+#endif

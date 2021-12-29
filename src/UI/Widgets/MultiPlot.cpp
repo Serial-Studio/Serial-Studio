@@ -209,3 +209,7 @@ void Widgets::MultiPlot::updateRange()
     // Repaint widget
     requestRepaint();
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_MultiPlot.cpp"
+#endif

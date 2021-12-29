@@ -116,3 +116,7 @@ void Widgets::Bar::onResized()
 {
     m_thermo.setPipeWidth(width() * 0.25);
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Bar.cpp"
+#endif

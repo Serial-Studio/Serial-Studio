@@ -302,3 +302,7 @@ void Plugins::Server::onErrorOccurred(const QAbstractSocket::SocketError socketE
     else
         qDebug() << socketError;
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Server.cpp"
+#endif

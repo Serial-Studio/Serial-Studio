@@ -126,3 +126,7 @@ void Widgets::Gyroscope::updateLabel()
     if (m_displayNum > 2)
         m_displayNum = 0;
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Gyroscope.cpp"
+#endif

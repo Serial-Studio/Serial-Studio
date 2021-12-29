@@ -1450,3 +1450,7 @@ int JSON::Editor::nextDatasetIndex()
 
     return maxIndex;
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Editor.cpp"
+#endif

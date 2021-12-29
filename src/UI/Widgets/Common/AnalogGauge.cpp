@@ -27,9 +27,7 @@
 #include "AnalogGauge.h"
 #include "Misc/ThemeManager.h"
 
-namespace Widgets
-{
-AnalogGauge::AnalogGauge(QWidget *parent)
+Widgets::AnalogGauge::AnalogGauge(QWidget *parent)
     : QwtDial(parent)
 {
     // Disable controling the gauge with the mouse or keyboard
@@ -41,5 +39,4 @@ AnalogGauge::AnalogGauge(QWidget *parent)
     // Set gauge origin & min/max angles
     setOrigin(135);
     setScaleArc(0, 270);
-}
 }

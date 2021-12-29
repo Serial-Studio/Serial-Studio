@@ -694,3 +694,7 @@ QVector<QSerialPortInfo> IO::DataSources::Serial::validPorts() const
     // Return list
     return ports;
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Serial.cpp"
+#endif

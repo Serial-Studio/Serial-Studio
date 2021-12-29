@@ -370,3 +370,7 @@ void IO::DataSources::Network::onErrorOccurred(
     Manager::instance().disconnectDevice();
     Misc::Utilities::showMessageBox(tr("Network socket error"), error);
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Network.cpp"
+#endif

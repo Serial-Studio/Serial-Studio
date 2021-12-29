@@ -734,3 +734,7 @@ IO::Manager::ValidationStatus IO::Manager::integrityChecks(const QByteArray &fra
     // Checksum data incomplete
     return ValidationStatus::ChecksumIncomplete;
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Manager.cpp"
+#endif

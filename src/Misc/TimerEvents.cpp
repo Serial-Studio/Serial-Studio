@@ -55,3 +55,7 @@ void Misc::TimerEvents::startTimers()
 {
     m_timerLowFreq.start();
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_TimerEvents.cpp"
+#endif

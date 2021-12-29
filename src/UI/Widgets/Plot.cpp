@@ -229,3 +229,7 @@ void Widgets::Plot::updateRange()
     // Repaint widget
     requestRepaint();
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Plot.cpp"
+#endif

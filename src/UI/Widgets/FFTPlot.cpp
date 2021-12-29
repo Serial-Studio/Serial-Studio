@@ -175,3 +175,7 @@ void Widgets::FFTPlot::updateData()
         requestRepaint();
     }
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_FFTPlot.cpp"
+#endif

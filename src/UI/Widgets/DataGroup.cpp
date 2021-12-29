@@ -276,3 +276,7 @@ void Widgets::DataGroup::mouseDoubleClickEvent(QMouseEvent *event)
 {
     EXEC_EVENT(m_scrollArea, mouseDoubleClickEvent, event);
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_DataGroup.cpp"
+#endif

@@ -245,3 +245,7 @@ void CSV::Export::registerFrame(const QByteArray &data)
     frame.rxDateTime = QDateTime::currentDateTime();
     m_frames.append(frame);
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Export.cpp"
+#endif

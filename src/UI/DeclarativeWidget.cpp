@@ -238,3 +238,7 @@ void UI::DeclarativeWidget::setWidget(QWidget *widget)
         Q_EMIT widgetChanged();
     }
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_DeclarativeWidget.cpp"
+#endif

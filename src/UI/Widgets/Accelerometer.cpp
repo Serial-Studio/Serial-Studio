@@ -121,3 +121,7 @@ void Widgets::Accelerometer::updateData()
         requestRepaint();
     }
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Accelerometer.cpp"
+#endif

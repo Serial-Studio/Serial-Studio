@@ -842,3 +842,7 @@ void MQTT::Client::regenerateClient()
             this, &MQTT::Client::onConnectedChanged);
     // clang-format on
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Client.cpp"
+#endif

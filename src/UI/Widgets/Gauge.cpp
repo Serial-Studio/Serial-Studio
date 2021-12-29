@@ -97,3 +97,7 @@ void Widgets::Gauge::updateData()
         requestRepaint();
     }
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Gauge.cpp"
+#endif

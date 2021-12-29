@@ -103,3 +103,7 @@ void Widgets::Compass::update()
         requestRepaint();
     }
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Compass.cpp"
+#endif

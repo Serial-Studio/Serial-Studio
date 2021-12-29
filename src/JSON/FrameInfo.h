@@ -39,7 +39,6 @@ typedef struct
 } JFI_Object;
 Q_DECLARE_METATYPE(JFI_Object)
 
-extern void JFI_SortList(QVector<JFI_Object> *list);
 extern JFI_Object JFI_Empty(const quint64 n = 0);
 extern JFI_Object JFI_CreateNew(const quint64 n, const QDateTime &t,
                                 const QJsonDocument &d);

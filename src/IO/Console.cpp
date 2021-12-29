@@ -644,3 +644,7 @@ QString IO::Console::hexadecimalStr(const QByteArray &data)
     // Return string
     return str;
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Console.cpp"
+#endif

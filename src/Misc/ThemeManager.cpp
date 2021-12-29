@@ -508,3 +508,7 @@ StringList Misc::ThemeManager::availableThemes() const
 {
     return m_availableThemes;
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_ThemeManager.cpp"
+#endif

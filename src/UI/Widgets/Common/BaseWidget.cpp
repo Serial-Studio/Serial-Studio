@@ -26,9 +26,7 @@
 
 #include <QResizeEvent>
 
-namespace Widgets
-{
-BaseWidget::BaseWidget()
+Widgets::BaseWidget::BaseWidget()
     : m_index(-1)
     , m_widget(Q_NULLPTR)
     , m_resizeWidget(true)
@@ -56,7 +54,7 @@ BaseWidget::BaseWidget()
     // clang-format on
 }
 
-void BaseWidget::setValue(const QString &label)
+void Widgets::BaseWidget::setValue(const QString &label)
 {
     // Change label text
     if (m_label.text() != label)
@@ -74,8 +72,8 @@ void BaseWidget::setValue(const QString &label)
     }
 }
 
-void BaseWidget::setWidget(QWidget *widget, const Qt::Alignment &alignment,
-                           const bool autoresize)
+void Widgets::BaseWidget::setWidget(QWidget *widget, const Qt::Alignment &alignment,
+                                    const bool autoresize)
 {
     Q_ASSERT(widget != Q_NULLPTR);
 
@@ -95,7 +93,7 @@ void BaseWidget::setWidget(QWidget *widget, const Qt::Alignment &alignment,
     requestRepaint();
 }
 
-void BaseWidget::resizeEvent(QResizeEvent *event)
+void Widgets::BaseWidget::resizeEvent(QResizeEvent *event)
 {
     // Get width & height (exluding layout margins & spacing)
     auto width = event->size().width() - 72;
@@ -143,4 +141,7 @@ void BaseWidget::resizeEvent(QResizeEvent *event)
     event->accept();
     Q_EMIT resized();
 }
-}
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_BaseWidget.cpp"
+#endif

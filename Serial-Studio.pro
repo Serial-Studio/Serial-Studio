@@ -65,50 +65,22 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 CONFIG += c++11
 CONFIG += silent
 
-*g++*: {
-    QMAKE_CXXFLAGS_RELEASE -= -O1
-    QMAKE_CXXFLAGS_RELEASE -= -O2
-    QMAKE_CXXFLAGS_RELEASE *= -O3
-}
-
-*clang*: {
-    QMAKE_CXXFLAGS_RELEASE -= -O1
-    QMAKE_CXXFLAGS_RELEASE -= -O2
-    QMAKE_CXXFLAGS_RELEASE *= -O3
-}
-
 *msvc*: {
     QMAKE_CXXFLAGS *= -MP
-    QMAKE_CXXFLAGS_RELEASE -= /O
-    QMAKE_CXXFLAGS_RELEASE *= /O2
-
     INCLUDEPATH += $$OUT_PWD
     INCLUDEPATH += $$OUT_PWD/debug
     INCLUDEPATH += $$OUT_PWD/release
 }
 
-
 CONFIG(release, debug|release) {
     CONFIG += ltcg
-
-    *g++*: {
-        QMAKE_CXXFLAGS_RELEASE *= -Ofast
-        QMAKE_CXXFLAGS_RELEASE *= -flto
-    }
-
-    *clang*: {
-        QMAKE_CXXFLAGS_RELEASE *= -Ofast
-        QMAKE_CXXFLAGS_RELEASE *= -flto
-    }
-
-    *msvc*: {
-        QMAKE_CXXFLAGS_RELEASE *= /GL
-    }
 }
 
 #-----------------------------------------------------------------------------------------
 # Serial Studio compile-time settings
 #-----------------------------------------------------------------------------------------
+
+DEFINES += SERIAL_STUDIO_INCLUDE_MOC
 
 #DEFINES += DISABLE_QSU     # If enabled, QSimpleUpdater shall not be used by the app.
                             # This is the default behaviour for MinGW.

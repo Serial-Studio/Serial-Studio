@@ -198,3 +198,7 @@ void Widgets::LEDPanel::resizeEvent(QResizeEvent *event)
 
     event->accept();
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_LEDPanel.cpp"
+#endif

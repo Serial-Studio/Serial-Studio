@@ -90,7 +90,7 @@ Misc::ModuleManager::ModuleManager()
     else
         pixmap.load(":/images/splash@1x.png");
 
-    // Disable splash screen shadow on macOS
+        // Disable splash screen shadow on macOS
 #ifdef Q_OS_MAC
     m_splash.setWindowFlags(Qt::SplashScreen | Qt::NoDropShadowWindowHint);
 #endif
@@ -267,3 +267,7 @@ void Misc::ModuleManager::onQuit()
     Misc::TimerEvents::instance().stopTimers();
     Plugins::Server::instance().removeConnection();
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_ModuleManager.cpp"
+#endif

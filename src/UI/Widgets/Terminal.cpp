@@ -938,3 +938,7 @@ void Widgets::AnsiEscapeCodeHandler::setFormatScope(const QTextCharFormat &charF
     m_previousFormat = charFormat;
     m_previousFormatClosed = false;
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_Terminal.cpp"
+#endif

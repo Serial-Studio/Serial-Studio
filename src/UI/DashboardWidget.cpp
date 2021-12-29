@@ -244,3 +244,7 @@ void UI::DashboardWidget::updateWidgetVisible()
         Q_EMIT widgetVisibleChanged();
     }
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_DashboardWidget.cpp"
+#endif

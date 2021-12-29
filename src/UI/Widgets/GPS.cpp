@@ -193,3 +193,7 @@ void Widgets::GPS::mousePressEvent(QMouseEvent *event)
     // Accept event
     event->accept();
 }
+
+#ifdef SERIAL_STUDIO_INCLUDE_MOC
+#    include "moc_GPS.cpp"
+#endif
