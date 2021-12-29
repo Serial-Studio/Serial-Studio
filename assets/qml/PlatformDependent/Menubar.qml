@@ -114,18 +114,18 @@ MenuBar {
         DecentMenuItem {
             text: qsTr("Copy")
             sequence: "ctrl+c"
-            onTriggered: app.mainWindow.consoleCopy()
+            onTriggered: mainWindow.consoleCopy()
         }
 
         DecentMenuItem {
             sequence: "ctrl+a"
             text: qsTr("Select all") + "..."
-            onTriggered: app.mainWindow.consoleSelectAll()
+            onTriggered: mainWindow.consoleSelectAll()
         }
 
         DecentMenuItem {
             sequence: "ctrl+d"
-            onTriggered: app.mainWindow.consoleClear()
+            onTriggered: mainWindow.consoleClear()
             text: qsTr("Clear console output")
         }
 
@@ -160,11 +160,11 @@ MenuBar {
             checkable: true
             sequence: "ctrl+t"
             text: qsTr("Console")
-            checked: app.mainWindow.consoleVisible
-            onTriggered: app.mainWindow.showConsole()
+            checked: mainWindow.consoleVisible
+            onTriggered: mainWindow.showConsole()
             onCheckedChanged: {
-                if (app.mainWindow.consoleVisible !== checked)
-                    checked = app.mainWindow.consoleVisible
+                if (mainWindow.consoleVisible !== checked)
+                    checked = mainWindow.consoleVisible
             }
         }
 
@@ -172,12 +172,12 @@ MenuBar {
             checkable: true
             sequence: "ctrl+d"
             text: qsTr("Dashboard")
-            checked: app.mainWindow.dashboardVisible
+            checked: mainWindow.dashboardVisible
             enabled: Cpp_UI_Dashboard.available
-            onTriggered: app.mainWindow.showDashboard()
+            onTriggered: mainWindow.showDashboard()
             onCheckedChanged: {
-                if (app.mainWindow.dashboardVisible !== checked)
-                    checked = app.mainWindow.dashboardVisible
+                if (mainWindow.dashboardVisible !== checked)
+                    checked = mainWindow.dashboardVisible
             }
         }
 
@@ -186,17 +186,17 @@ MenuBar {
         DecentMenuItem {
             checkable: true
             sequence: "ctrl+,"
-            checked: app.mainWindow.setupVisible
+            checked: mainWindow.setupVisible
             text: qsTr("Show setup pane")
-            onTriggered: app.mainWindow.showSetup()
+            onTriggered: mainWindow.showSetup()
         }
 
         MenuSeparator {}
 
         DecentMenuItem {
             sequence: "f11"
-            onTriggered: app.mainWindow.toggleFullscreen()
-            text: app.mainWindow.isFullscreen ? qsTr("Exit full screen") :
+            onTriggered: mainWindow.toggleFullscreen()
+            text: mainWindow.isFullscreen ? qsTr("Exit full screen") :
                                                 qsTr("Enter full screen")
         }
     }
@@ -223,9 +223,9 @@ MenuBar {
 
         DecentMenuItem {
             checkable: true
-            checked: app.mainWindow.vt100emulation
+            checked: mainWindow.vt100emulation
             text: qsTr("VT-100 emulation")
-            onTriggered: app.mainWindow.vt100emulation = checked
+            onTriggered: mainWindow.vt100emulation = checked
         }
 
         DecentMenuItem {
@@ -313,8 +313,8 @@ MenuBar {
             checkable: true
             visible: Cpp_UpdaterEnabled
             enabled: Cpp_UpdaterEnabled
-            checked: app.mainWindow.automaticUpdates
-            onTriggered: app.mainWindow.automaticUpdates = checked
+            checked: mainWindow.automaticUpdates
+            onTriggered: mainWindow.automaticUpdates = checked
             text: qsTr("Auto-updater")
         }
 

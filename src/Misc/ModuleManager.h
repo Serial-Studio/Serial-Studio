@@ -54,7 +54,6 @@ public:
 public Q_SLOTS:
     void onQuit();
     void hideSplashscreen();
-    void setSplashScreenMessage(const QString &message);
 
 private:
     QSplashScreen m_splash;

@@ -85,19 +85,15 @@ Misc::ModuleManager::ModuleManager()
 
     // Get splash screen image
     QPixmap pixmap(":/images/splash@1x.png");
-    auto dpr = qApp->devicePixelRatio();
-    if (dpr > 1)
-    {
+    if (qApp->devicePixelRatio() >= 2)
         pixmap.load(":/images/splash@2x.png");
-        pixmap.setDevicePixelRatio(dpr);
-    }
 
     // Show splash screen
     m_splash.setPixmap(pixmap);
+    m_splash.setWindowFlags(Qt::SplashScreen | Qt::NoDropShadowWindowHint);
     m_splash.show();
 
     // Stop modules when application is about to quit
-    setSplashScreenMessage(tr("Initializing..."));
     connect(engine(), SIGNAL(quit()), this, SLOT(onQuit()));
 }
 
@@ -120,7 +116,6 @@ void Misc::ModuleManager::configureUpdater()
     if (!autoUpdaterEnabled())
         return;
 
-    setSplashScreenMessage(tr("Configuring updater..."));
     QSimpleUpdater::getInstance()->setNotifyOnUpdate(APP_UPDATER_URL, true);
     QSimpleUpdater::getInstance()->setNotifyOnFinish(APP_UPDATER_URL, false);
     QSimpleUpdater::getInstance()->setMandatoryUpdate(APP_UPDATER_URL, false);
@@ -162,7 +157,6 @@ bool Misc::ModuleManager::autoUpdaterEnabled()
 void Misc::ModuleManager::initializeQmlInterface()
 {
     // Initialize modules
-    setSplashScreenMessage(tr("Initializing modules..."));
     const auto csvExport = &CSV::Export::instance();
     const auto csvPlayer = &CSV::Player::instance();
     const auto ioManager = &IO::Manager::instance();
@@ -242,11 +236,8 @@ void Misc::ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_AppOrganizationDomain", qApp->organizationDomain());
 
     // Load main.qml
-    setSplashScreenMessage(tr("Loading user interface..."));
     engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     qApp->processEvents();
-
-    // Warning! Do not call setSplashScreenMessage() after loading QML user interface
 }
 
 /**
@@ -257,18 +248,6 @@ void Misc::ModuleManager::hideSplashscreen()
     m_splash.hide();
     m_splash.close();
     qApp->processEvents();
-}
-
-/**
- * Changes the text displayed on the splash screen
- */
-void Misc::ModuleManager::setSplashScreenMessage(const QString &message)
-{
-    if (!message.isEmpty())
-    {
-        m_splash.showMessage(message, Qt::AlignBottom | Qt::AlignLeft, Qt::white);
-        qApp->processEvents();
-    }
 }
 
 /**
