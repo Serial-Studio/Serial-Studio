@@ -84,11 +84,13 @@ Misc::ModuleManager::ModuleManager()
     qApp->setFont(font);
 
     // Get splash screen image
-    QPixmap pixmap(":/images/splash@1x.png");
+    QPixmap pixmap;
     if (qApp->devicePixelRatio() >= 2)
         pixmap.load(":/images/splash@2x.png");
+    else
+        pixmap.load(":/images/splash@1x.png");
 
-        // Disable splash screen shadow on macOS
+    // Disable splash screen shadow on macOS
 #ifdef Q_OS_MAC
     m_splash.setWindowFlags(Qt::SplashScreen | Qt::NoDropShadowWindowHint);
 #endif
