@@ -674,6 +674,7 @@ QString JSON::Editor::datasetWidgetAlarm(const int group, const int dataset) con
 void JSON::Editor::newJsonFile()
 {
     // Clear groups list
+    qDeleteAll(m_groups);
     m_groups.clear();
 
     // Reset project properties
@@ -936,8 +937,10 @@ bool JSON::Editor::setGroupWidget(const int group, const int widgetId)
                     QMessageBox::Yes | QMessageBox::No);
                 if (ret == QMessageBox::No)
                     return false;
-                else
+                else {
+                    qDeleteAll(grp->m_datasets);
                     grp->m_datasets.clear();
+                }
             }
         }
 

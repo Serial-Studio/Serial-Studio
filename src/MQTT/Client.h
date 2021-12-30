@@ -232,9 +232,9 @@ private:
     bool m_lookupActive;
     QString m_caFilePath;
     quint16 m_sentMessages;
-    QMQTT::Client *m_client;
-    QVector<QByteArray> m_frames;
     MQTTClientMode m_clientMode;
+    QVector<QByteArray> m_frames;
+    QPointer<QMQTT::Client> m_client;
     QSslConfiguration m_sslConfiguration;
 };
 }

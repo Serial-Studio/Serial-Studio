@@ -137,11 +137,10 @@
         <file>qml/main.qml</file>
         <file>themes/1_FlatDark.json</file>
         <file>themes/2_FlatLight.json</file>
-        <file>themes/3_Ivrea.json</file>
-        <file>themes/4_Midnight.json</file>
-        <file>themes/5_Classic.json</file>
-        <file>themes/6_Noir.json</file>
-        <file>themes/7_MathWorks.json</file>
+        <file>themes/3_Midnight.json</file>
+        <file>themes/4_Classic.json</file>
+        <file>themes/5_Noir.json</file>
+        <file>themes/6_MathWorks.json</file>
         <file>touchbar/console.png</file>
         <file>touchbar/dashboard.png</file>
         <file>touchbar/setup.png</file>

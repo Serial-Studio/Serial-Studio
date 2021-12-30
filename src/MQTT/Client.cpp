@@ -36,8 +36,8 @@ MQTT::Client::Client()
     : m_topic("")
     , m_lookupActive(false)
     , m_sentMessages(0)
-    , m_client(Q_NULLPTR)
     , m_clientMode(MQTTClientMode::ClientPublisher)
+    , m_client(Q_NULLPTR)
 {
     // Configure new client
     regenerateClient();
@@ -55,7 +55,6 @@ MQTT::Client::Client()
  */
 MQTT::Client::~Client()
 {
-    disconnectFromHost();
     delete m_client;
 }
 
@@ -225,8 +224,8 @@ StringList MQTT::Client::qosLevels() const
     // clang-format off
     return StringList {
         tr("0: At most once"),
-                tr("1: At least once"),
-                tr("2: Exactly once")
+        tr("1: At least once"),
+        tr("2: Exactly once")
     };
     // clang-format on
 }
