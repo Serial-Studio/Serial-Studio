@@ -937,7 +937,8 @@ bool JSON::Editor::setGroupWidget(const int group, const int widgetId)
                     QMessageBox::Yes | QMessageBox::No);
                 if (ret == QMessageBox::No)
                     return false;
-                else {
+                else
+                {
                     qDeleteAll(grp->m_datasets);
                     grp->m_datasets.clear();
                 }
