@@ -116,9 +116,9 @@ FramelessWindow.CustomWindow {
                 Layout.fillWidth: true
 
                 Image {
-                    width: 96
-                    height: 96
-                    source: "qrc:/images/icon.svg"
+                    width: 128
+                    height: 128
+                    source: "qrc:/images/icon.png"
                     Layout.alignment: Qt.AlignVCenter
                     sourceSize: Qt.size(width, height)
                 }
@@ -145,7 +145,7 @@ FramelessWindow.CustomWindow {
             Label {
                 opacity: 0.8
                 Layout.fillWidth: true
-                Layout.maximumWidth: 288
+                Layout.maximumWidth: 320
                 wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                 text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(Cpp_AppOrganization)
             }
@@ -154,7 +154,7 @@ FramelessWindow.CustomWindow {
                 opacity: 0.8
                 font.pixelSize: 12
                 Layout.fillWidth: true
-                Layout.maximumWidth: 288
+                Layout.maximumWidth: 320
                 wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                 color: Cpp_ThemeManager.highlightedTextAlternative
                 text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.")

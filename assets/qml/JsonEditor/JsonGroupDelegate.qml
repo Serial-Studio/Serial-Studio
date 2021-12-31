@@ -223,9 +223,9 @@ Widgets.Window {
             Layout.fillWidth: true
             text: qsTr("Add dataset")
             icon.source: "qrc:/icons/add.svg"
-            icon.color: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
             onClicked: Cpp_JSON_Editor.addDataset(group)
-            palette.buttonText: Cpp_ThemeManager.brightText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             visible: widget.currentIndex === 0 || widget.currentIndex === 4

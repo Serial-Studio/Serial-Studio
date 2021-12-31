@@ -77,7 +77,7 @@ Rectangle {
             Layout.fillWidth: true
 
             Widgets.Icon {
-                color: Cpp_ThemeManager.brightText
+                color: Cpp_ThemeManager.menubarText
                 source: "qrc:/icons/registration.svg"
             }
 
@@ -104,7 +104,7 @@ Rectangle {
             Layout.fillWidth: true
 
             Widgets.Icon {
-                color: Cpp_ThemeManager.brightText
+                color: Cpp_ThemeManager.menubarText
                 source: "qrc:/icons/separator.svg"
             }
 
@@ -131,7 +131,7 @@ Rectangle {
             Layout.fillWidth: true
 
             Widgets.Icon {
-                color: Cpp_ThemeManager.brightText
+                color: Cpp_ThemeManager.menubarText
                 source: "qrc:/icons/start-sequence.svg"
             }
 
@@ -158,7 +158,7 @@ Rectangle {
             Layout.fillWidth: true
 
             Widgets.Icon {
-                color: Cpp_ThemeManager.brightText
+                color: Cpp_ThemeManager.menubarText
                 source: "qrc:/icons/end-sequence.svg"
             }
 

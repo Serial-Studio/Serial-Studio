@@ -82,8 +82,11 @@
         <file>icons/warning.svg</file>
         <file>icons/widget.svg</file>
         <file>images/donate-qr.svg</file>
+        <file>images/icon-small@1x.png</file>
+        <file>images/icon-small@2x.png</file>
         <file>images/icon-window.svg</file>
-        <file>images/icon.svg</file>
+        <file>images/icon@1x.png</file>
+        <file>images/icon@2x.png</file>
         <file>images/shadow.png</file>
         <file>images/splash@1x.png</file>
         <file>images/splash@2x.png</file>
@@ -135,25 +138,20 @@
         <file>qml/Windows/MainWindow.qml</file>
         <file>qml/Windows/MQTTConfiguration.qml</file>
         <file>qml/main.qml</file>
-        <file>themes/1_FlatDark.json</file>
-        <file>themes/2_FlatLight.json</file>
-        <file>themes/3_Midnight.json</file>
-        <file>themes/4_Classic.json</file>
+        <file>themes/1_Flat.json</file>
+        <file>themes/2_Dark.json</file>
+        <file>themes/4_Midnight.json</file>
+        <file>themes/3_Classic.json</file>
         <file>themes/5_Noir.json</file>
-        <file>themes/6_MathWorks.json</file>
+        <file>themes/6_Mathworks.json</file>
         <file>touchbar/console.png</file>
         <file>touchbar/dashboard.png</file>
         <file>touchbar/setup.png</file>
         <file>translations/de.qm</file>
-        <file>translations/de.ts</file>
         <file>translations/en.qm</file>
-        <file>translations/en.ts</file>
         <file>translations/es.qm</file>
-        <file>translations/es.ts</file>
         <file>translations/ru.qm</file>
-        <file>translations/ru.ts</file>
         <file>translations/zh.qm</file>
-        <file>translations/zh.ts</file>
         <file>window-border/macOS/close-active.svg</file>
         <file>window-border/macOS/close-hover.svg</file>
         <file>window-border/macOS/close-normal.svg</file>

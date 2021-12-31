@@ -76,6 +76,15 @@ Page {
         color: root.backgroundColor
         border.width: root.borderWidth
         border.color: root.gradientColor1
+
+        Rectangle {
+            border.width: 1
+            color: "transparent"
+            anchors.fill: parent
+            border.color: "#a7a7a7"
+            anchors.topMargin: header.height
+            anchors.margins: root.borderWidth
+        }
     }
 
     //

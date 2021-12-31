@@ -132,7 +132,7 @@ QtWindow.Window {
     //
     property color borderColor: Cpp_ThemeManager.highlight
     property color backgroundColor: Cpp_ThemeManager.window
-    property color titlebarText: Cpp_ThemeManager.brightText
+    property color titlebarText: Cpp_ThemeManager.menubarText
     property color titlebarColor: Cpp_ThemeManager.toolbarGradient2
 
     //

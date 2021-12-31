@@ -105,8 +105,8 @@ Item {
                 text: qsTr("Console")
                 Layout.alignment: Qt.AlignVCenter
                 icon.source: "qrc:/icons/code.svg"
-                icon.color: Cpp_ThemeManager.brightText
-                palette.buttonText: Cpp_ThemeManager.brightText
+                icon.color: Cpp_ThemeManager.menubarText
+                palette.buttonText: Cpp_ThemeManager.menubarText
                 palette.button: Cpp_ThemeManager.windowGradient1
                 palette.window: Cpp_ThemeManager.windowGradient1
             }

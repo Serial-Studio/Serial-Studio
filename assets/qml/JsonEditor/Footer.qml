@@ -83,8 +83,8 @@ Rectangle {
             onClicked: root.closeWindow()
             text: qsTr("Close") + _btSpacer
             icon.source: "qrc:/icons/close.svg"
-            icon.color: Cpp_ThemeManager.brightText
-            palette.buttonText: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
         }
@@ -101,8 +101,8 @@ Rectangle {
             Layout.fillWidth: true
             text: qsTr("Add group")
             icon.source: "qrc:/icons/add.svg"
-            icon.color: Cpp_ThemeManager.brightText
-            palette.buttonText: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onClicked: {
@@ -119,9 +119,9 @@ Rectangle {
             icon.width: 24
             icon.height: 24
             icon.source: "qrc:/icons/open.svg"
-            icon.color: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
             onClicked: Cpp_JSON_Editor.openJsonFile()
-            palette.buttonText: Cpp_ThemeManager.brightText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             text: qsTr("Open existing project...") + _btSpacer
@@ -131,10 +131,10 @@ Rectangle {
             icon.width: 24
             icon.height: 24
             icon.source: "qrc:/icons/new.svg"
-            icon.color: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
             onClicked: Cpp_JSON_Editor.newJsonFile()
             text: qsTr("Create new project") + _btSpacer
-            palette.buttonText: Cpp_ThemeManager.brightText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
         }
@@ -145,8 +145,8 @@ Rectangle {
             opacity: enabled ? 1: 0.5
             enabled: Cpp_JSON_Editor.modified
             icon.source: "qrc:/icons/apply.svg"
-            icon.color: Cpp_ThemeManager.brightText
-            palette.buttonText: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             text: (Cpp_JSON_Editor.jsonFilePath.length > 0 ? qsTr("Apply") : qsTr("Save")) + _btSpacer

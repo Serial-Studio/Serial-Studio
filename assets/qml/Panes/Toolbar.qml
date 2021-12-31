@@ -135,8 +135,8 @@ Control {
             onClicked: root.setupClicked()
             text: qsTr("Setup") + _btSpacer
             icon.source: "qrc:/icons/settings.svg"
-            icon.color: Cpp_ThemeManager.brightText
-            palette.buttonText: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onCheckedChanged: Cpp_Misc_MacExtras.setSetupChecked(checked)
@@ -153,8 +153,8 @@ Control {
             onClicked: root.consoleClicked()
             icon.source: "qrc:/icons/code.svg"
             text: qsTr("Console") + _btSpacer
-            icon.color: Cpp_ThemeManager.brightText
-            palette.buttonText: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onCheckedChanged: Cpp_Misc_MacExtras.setConsoleChecked(checked)
@@ -172,8 +172,8 @@ Control {
             enabled: Cpp_UI_Dashboard.available
             text: qsTr("Dashboard") + _btSpacer
             icon.source: "qrc:/icons/dashboard.svg"
-            icon.color: Cpp_ThemeManager.brightText
-            palette.buttonText: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onCheckedChanged: Cpp_Misc_MacExtras.setDashboardChecked(checked)
@@ -204,8 +204,8 @@ Control {
             icon.source: "qrc:/icons/json.svg"
             onClicked: root.jsonEditorClicked()
             text: qsTr("JSON Editor") + _btSpacer
-            icon.color: Cpp_ThemeManager.brightText
-            palette.buttonText: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
         }
@@ -219,8 +219,8 @@ Control {
             enabled: !Cpp_CSV_Player.isOpen
             icon.source: "qrc:/icons/open.svg"
             text: qsTr("Open CSV") + _btSpacer
-            icon.color: Cpp_ThemeManager.brightText
-            palette.buttonText: Cpp_ThemeManager.brightText
+            icon.color: Cpp_ThemeManager.menubarText
+            palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
 

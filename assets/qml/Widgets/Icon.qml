@@ -28,7 +28,7 @@ Item {
 
     property string source: ""
     property alias icon: button.icon
-    property color color: Cpp_ThemeManager.brightText
+    property color color: Cpp_ThemeManager.menubarText
 
     width: 24
     height: 24

@@ -84,8 +84,11 @@ int Misc::Utilities::showMessageBox(const QString &text, const QString &informat
                                     const QMessageBox::StandardButtons &bt)
 {
     // Get app icon
-    auto icon = QPixmap(APP_ICON).scaled(64, 64, Qt::IgnoreAspectRatio,
-                                         Qt::SmoothTransformation);
+    QPixmap icon;
+    if (qApp->devicePixelRatio() >= 2)
+        icon.load(":/images/icon-small@2x.png");
+    else
+        icon.load(":/images/icon-small@1x.png");
 
     // Create message box & set options
     QMessageBox box;
