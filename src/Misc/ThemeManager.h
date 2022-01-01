@@ -48,148 +48,151 @@ class ThemeManager : public QObject
                NOTIFY themeChanged)
     Q_PROPERTY(bool titlebarSeparator
                READ titlebarSeparator
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor base
                READ base
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor link
                READ link
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor button
                READ button
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor window
                READ window
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor text
                READ text
-               NOTIFY themeChanged)
+               CONSTANT)
+    Q_PROPERTY(QColor border
+               READ border
+               CONSTANT)
     Q_PROPERTY(QColor midlight
                READ midlight
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor highlight
                READ highlight
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor brightText
                READ brightText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor buttonText
                READ buttonText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor windowText
                READ windowText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor tooltipText
                READ tooltipText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor tooltipBase
                READ tooltipBase
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor highlightedText
                READ highlightedText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor highlightedTextAlternative
                READ highlightedTextAlternative
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor placeholderText
                READ placeholderText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor toolbarGradient1
                READ toolbarGradient1
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor toolbarGradient2
                READ toolbarGradient2
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor consoleText
                READ consoleText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor consoleBase
                READ consoleBase
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor consoleButton
                READ consoleButton
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor consoleWindow
                READ consoleWindow
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor consoleHighlight
                READ consoleHighlight
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor consoleHighlightedText
                READ consoleHighlightedText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor consolePlaceholderText
                READ consolePlaceholderText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor windowBackground
                READ windowBackground
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor windowGradient1
                READ windowGradient1
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor windowGradient2
                READ windowGradient2
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor menubarText
                READ menubarText
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor dialogBackground
                READ dialogBackground
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor alternativeHighlight
                READ alternativeHighlight
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor setupPanelBackground
                READ setupPanelBackground
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor widgetTextPrimary
                READ widgetTextPrimary
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor widgetTextSecondary
                READ widgetTextSecondary
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor widgetWindowBackground
                READ widgetWindowBackground
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor widgetWindowBorder
                READ widgetWindowBorder
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor paneWindowBackground
                READ paneWindowBackground
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor ledEnabled
                READ ledEnabled
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor ledDisabled
                READ ledDisabled
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor csvCheckbox
                READ csvCheckbox
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor widgetForegroundPrimary
                READ widgetForegroundPrimary
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor widgetForegroundSecondary
                READ widgetForegroundSecondary
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor widgetIndicator
                READ widgetIndicator
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor widgetControlBackground
                READ widgetControlBackground
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor connectButtonChecked
                READ connectButtonChecked
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor connectButtonUnchecked
                READ connectButtonUnchecked
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(QColor mqttButton
                READ mqttButton
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(StringList widgetColors
                READ widgetColors
-               NOTIFY themeChanged)
+               CONSTANT)
     Q_PROPERTY(StringList availableThemes
                READ availableThemes
                NOTIFY availableThemesChanged)
@@ -201,8 +204,8 @@ class ThemeManager : public QObject
 
 Q_SIGNALS:
     void themeChanged();
-    void customWindowDecorationsChanged();
     void availableThemesChanged();
+    void customWindowDecorationsChanged();
 
 private:
     explicit ThemeManager();
@@ -223,6 +226,7 @@ public:
     QColor button() const;
     QColor window() const;
     QColor text() const;
+    QColor border() const;
     QColor midlight() const;
     QColor highlight() const;
     QColor brightText() const;
@@ -290,6 +294,7 @@ private:
     QColor m_button;
     QColor m_window;
     QColor m_text;
+    QColor m_border;
     QColor m_midlight;
     QColor m_highlight;
     QColor m_brightText;

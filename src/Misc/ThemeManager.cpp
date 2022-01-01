@@ -149,6 +149,7 @@ void Misc::ThemeManager::loadTheme(const int id)
     m_button = QColor(colors.value("button").toString());
     m_window = QColor(colors.value("window").toString());
     m_text = QColor(colors.value("text").toString());
+    m_border = QColor(colors.value("border").toString());
     m_midlight = QColor(colors.value("midlight").toString());
     m_highlight = QColor(colors.value("highlight").toString());
     m_brightText = QColor(colors.value("brightText").toString());
@@ -292,6 +293,11 @@ QColor Misc::ThemeManager::window() const
 QColor Misc::ThemeManager::text() const
 {
     return m_text;
+}
+
+QColor Misc::ThemeManager::border() const
+{
+    return m_border;
 }
 
 QColor Misc::ThemeManager::midlight() const

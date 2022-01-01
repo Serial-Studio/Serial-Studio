@@ -8,6 +8,7 @@
       "button":"#fafafa",
       "window":"#fafafa",
       "text":"#000000",
+      "border":"#b3b3b3",
       "midlight":"#2c2c2c",
       "highlight":"#1e7cf3",
       "brightText":"#ffffff",

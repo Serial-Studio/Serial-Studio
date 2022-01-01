@@ -90,8 +90,8 @@ Misc::ModuleManager::ModuleManager()
     else
         pixmap.load(":/images/splash@1x.png");
 
-        // Disable splash screen shadow on macOS
 #ifdef Q_OS_MAC
+    // Disable splash screen shadow on macOS
     m_splash.setWindowFlags(Qt::SplashScreen | Qt::NoDropShadowWindowHint);
 #endif
 

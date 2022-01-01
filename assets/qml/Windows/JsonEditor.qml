@@ -153,22 +153,14 @@ FramelessWindow.CustomWindow {
             //
             // JSON structure tree
             //
-            Item {
+            TreeView {
+                id: jsonTree
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
                 Layout.maximumWidth: 240
                 Layout.topMargin: app.spacing * 2
                 Layout.bottomMargin: app.spacing * 2
                 visible: Cpp_JSON_Editor.groupCount !== 0
-
-                Widgets.Shadow {
-                    anchors.fill: jsonTree
-                }
-
-                TreeView {
-                    id: jsonTree
-                    anchors.fill: parent
-                }
             }
 
             //

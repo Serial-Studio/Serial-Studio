@@ -88,16 +88,6 @@ ColumnLayout {
                 height: group.height + app.spacing
                 width: parent.width - 4 * app.spacing
 
-                //
-                // Window shadow
-                //
-                Widgets.Shadow {
-                    anchors.fill: group
-                }
-
-                //
-                // Group window
-                //
                 JsonGroupDelegate {
                     id: group
                     group: index

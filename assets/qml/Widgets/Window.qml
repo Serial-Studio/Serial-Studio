@@ -81,9 +81,9 @@ Page {
             border.width: 1
             color: "transparent"
             anchors.fill: parent
-            border.color: "#a7a7a7"
             anchors.topMargin: header.height
             anchors.margins: root.borderWidth
+            border.color: Cpp_ThemeManager.border
         }
     }
 

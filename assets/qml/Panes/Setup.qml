@@ -125,18 +125,9 @@ Item {
     }
 
     //
-    // Window shadow (must go before window declaration
-    // to avoid blurry artifacts & glitches).
-    //
-    Widgets.Shadow {
-        anchors.fill: window
-    }
-
-    //
     // Window
     //
     Widgets.Window {
-        id: window
         gradient: true
         title: qsTr("Setup")
         anchors.fill: parent

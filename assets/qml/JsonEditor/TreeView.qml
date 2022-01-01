@@ -130,10 +130,16 @@ Widgets.Window {
                     }
 
                     Label {
+                        id: label
                         Layout.fillWidth: true
                         elide: Label.ElideRight
                         Layout.alignment: Qt.AlignVCenter
                         text: Cpp_JSON_Editor.datasetTitle(groupDelegate.groupId, index)
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                        }
                     }
 
                     Label {
