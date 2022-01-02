@@ -78,8 +78,8 @@ bool JSON::Frame::read(const QJsonObject &object)
     clear();
 
     // Get title & groups array
-    const auto title = JFI_Value(object, "title", "t").toString();
-    const auto groups = JFI_Value(object, "groups", "g").toArray();
+    const auto title = object.value("title").toString();
+    const auto groups = object.value("groups").toArray();
 
     // We need to have a project title and at least one group
     if (!title.isEmpty() && !groups.isEmpty())

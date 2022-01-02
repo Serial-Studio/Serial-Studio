@@ -42,7 +42,3 @@ Q_DECLARE_METATYPE(JFI_Object)
 extern JFI_Object JFI_Empty(const quint64 n = 0);
 extern JFI_Object JFI_CreateNew(const quint64 n, const QDateTime &t,
                                 const QJsonDocument &d);
-
-extern QJsonValue JFI_Value(const QJsonObject &obj, const QString &key);
-extern QJsonValue JFI_Value(const QJsonObject &obj, const StringList &keys);
-extern QJsonValue JFI_Value(const QJsonObject &obj, const QString &a, const QString &b);

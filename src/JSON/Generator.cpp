@@ -277,40 +277,8 @@ void JSON::Generator::processFrame(const QByteArray &data, const quint64 frame,
         for (int i = 0; i < list.count(); ++i)
             json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
 
-        // Calculate dynamically generated values
-        auto root = QJsonDocument::fromJson(json.toUtf8(), &m_error).object();
-        auto groups = JFI_Value(root, "groups", "g").toArray();
-        for (int i = 0; i < groups.count(); ++i)
-        {
-            // Get group
-            auto group = groups.at(i).toObject();
-
-            // Evaluate each dataset of the current group
-            auto datasets = JFI_Value(group, "datasets", "d").toArray();
-            for (int j = 0; j < datasets.count(); ++j)
-            {
-                auto dataset = datasets.at(j).toObject();
-                auto value = JFI_Value(dataset, "value", "v").toString();
-                dataset.remove("v");
-                dataset.remove("value");
-                dataset.insert("value", value);
-                datasets.replace(j, dataset);
-            }
-
-            // Replace group datasets
-            group.remove("d");
-            group.remove("datasets");
-            group.insert("datasets", datasets);
-            groups.replace(i, group);
-        }
-
-        // Replace root document group objects
-        root.remove("g");
-        root.remove("groups");
-        root.insert("groups", groups);
-
         // Create JSON document
-        m_jfi.jsonDocument = QJsonDocument(root);
+        m_jfi.jsonDocument = QJsonDocument::fromJson(json.toUtf8(), &m_error);
 
         // Clear strings
         json.clear();

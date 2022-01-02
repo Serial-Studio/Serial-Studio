@@ -155,18 +155,18 @@ bool JSON::Dataset::read(const QJsonObject &object)
 {
     if (!object.isEmpty())
     {
-        const auto fft = JFI_Value(object, "fft").toBool();
-        const auto led = JFI_Value(object, "led").toBool();
-        const auto log = JFI_Value(object, "log").toBool();
-        const auto min = JFI_Value(object, "min").toDouble();
-        const auto max = JFI_Value(object, "max").toDouble();
-        const auto alarm = JFI_Value(object, "alarm").toDouble();
-        const auto graph = JFI_Value(object, "graph", "g").toBool();
-        const auto title = JFI_Value(object, "title", "t").toString();
-        const auto value = JFI_Value(object, "value", "v").toString();
-        const auto units = JFI_Value(object, "units", "u").toString();
-        const auto widget = JFI_Value(object, "widget", "w").toString();
-        const auto fftSamples = JFI_Value(object, "fftSamples").toInt();
+        const auto fft = object.value("fft").toBool();
+        const auto led = object.value("led").toBool();
+        const auto log = object.value("log").toBool();
+        const auto min = object.value("min").toDouble();
+        const auto max = object.value("max").toDouble();
+        const auto alarm = object.value("alarm").toDouble();
+        const auto graph = object.value("graph").toBool();
+        const auto title = object.value("title").toString();
+        const auto value = object.value("value").toString();
+        const auto units = object.value("units").toString();
+        const auto widget = object.value("widget").toString();
+        const auto fftSamples = object.value("fftSamples").toInt();
 
         if (!value.isEmpty() && !title.isEmpty())
         {

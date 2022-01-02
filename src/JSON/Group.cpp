@@ -82,9 +82,9 @@ bool JSON::Group::read(const QJsonObject &object)
 {
     if (!object.isEmpty())
     {
-        const auto title = JFI_Value(object, "title", "t").toString();
-        const auto array = JFI_Value(object, "datasets", "d").toArray();
-        const auto widget = JFI_Value(object, "widget", "w").toString();
+        const auto title = object.value("title").toString();
+        const auto array = object.value("datasets").toArray();
+        const auto widget = object.value("widget").toString();
 
         if (!title.isEmpty() && !array.isEmpty())
         {
