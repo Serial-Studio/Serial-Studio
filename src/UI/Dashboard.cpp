@@ -662,8 +662,8 @@ void UI::Dashboard::updatePlots()
 {
     // Initialize arrays that contain pointers to the
     // datasets that need to be plotted.
-    QVector<JSON::Dataset *> fftDatasets;
-    QVector<JSON::Dataset *> linearDatasets;
+    QVector<JSON::Dataset> fftDatasets;
+    QVector<JSON::Dataset> linearDatasets;
 
     // Create list with datasets that need to be graphed
     for (int i = 0; i < m_latestFrame.groupCount(); ++i)
@@ -673,9 +673,9 @@ void UI::Dashboard::updatePlots()
         {
             auto dataset = group.getDataset(j);
             if (dataset.fft())
-                fftDatasets.append(&dataset);
+                fftDatasets.append(dataset);
             if (dataset.graph())
-                linearDatasets.append(&dataset);
+                linearDatasets.append(dataset);
         }
     }
 
@@ -705,7 +705,7 @@ void UI::Dashboard::updatePlots()
         for (int i = 0; i < fftDatasets.count(); ++i)
         {
             m_fftPlotValues.append(PlotData());
-            m_fftPlotValues.last().resize(fftDatasets[i]->fftSamples());
+            m_fftPlotValues.last().resize(fftDatasets[i].fftSamples());
 
             // clang-format off
             std::fill(m_fftPlotValues.last().begin(),
@@ -721,7 +721,7 @@ void UI::Dashboard::updatePlots()
         auto data = m_linearPlotValues[i].data();
         auto count = m_linearPlotValues[i].count();
         memmove(data, data + 1, count * sizeof(double));
-        m_linearPlotValues[i][count - 1] = linearDatasets[i]->value().toDouble();
+        m_linearPlotValues[i][count - 1] = linearDatasets[i].value().toDouble();
     }
 
     // Append latest values to FFT plot data
@@ -730,7 +730,7 @@ void UI::Dashboard::updatePlots()
         auto data = m_fftPlotValues[i].data();
         auto count = m_fftPlotValues[i].count();
         memmove(data, data + 1, count * sizeof(double));
-        m_fftPlotValues[i][count - 1] = fftDatasets[i]->value().toDouble();
+        m_fftPlotValues[i][count - 1] = fftDatasets[i].value().toDouble();
     }
 }
 
@@ -970,10 +970,7 @@ StringList UI::Dashboard::groupTitles(const QVector<JSON::Group> &vector) const
  */
 bool UI::Dashboard::getVisibility(const QVector<bool> &vector, const int index) const
 {
-    if (index < vector.count())
-        return vector[index];
-
-    return false;
+    return vector[index];
 }
 
 /**
@@ -984,11 +981,8 @@ bool UI::Dashboard::getVisibility(const QVector<bool> &vector, const int index) 
 void UI::Dashboard::setVisibility(QVector<bool> &vector, const int index,
                                   const bool visible)
 {
-    if (index < vector.count())
-    {
-        vector[index] = visible;
-        Q_EMIT widgetVisibilityChanged();
-    }
+    vector[index] = visible;
+    Q_EMIT widgetVisibilityChanged();
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC
