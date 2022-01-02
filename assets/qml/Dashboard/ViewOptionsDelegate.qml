@@ -1,6 +1,6 @@
-import QtQuick 2.10
-import QtQuick.Layouts 1.10
-import QtQuick.Controls 2.10
+import QtQuick 2.5
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.5
 
 import "../Widgets" as Widgets
 

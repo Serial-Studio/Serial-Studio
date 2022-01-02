@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.10
-import QtQuick.Window 2.10 as QtWindow
+import QtQuick 2.5
+import QtQuick.Window 2.2 as QtWindow
 
 import "../Widgets" as Widgets
 

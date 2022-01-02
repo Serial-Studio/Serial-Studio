@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.10
+import QtQuick 2.5
 
 Image {
     id: root
@@ -39,7 +39,7 @@ Image {
         anchors.fill: parent
         onReleased: root.clicked()
         acceptedButtons: Qt.LeftButton
+        onPressedChanged: root.variant = (pressed ? "active" : "normal")
         onContainsMouseChanged: root.variant = (containsMouse ? "hover" : "normal")
-        onContainsPressChanged: root.variant = (containsPress ? "active" : "normal")
     }
 }

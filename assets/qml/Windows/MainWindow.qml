@@ -20,10 +20,10 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.10
-import QtQuick.Window 2.10
-import QtQuick.Layouts 1.10
-import QtQuick.Controls 2.10
+import QtQuick 2.5
+import QtQuick.Window 2.5
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.5
 
 import Qt.labs.settings 1.0
 
@@ -156,9 +156,11 @@ FramelessWindow.CustomWindow {
     //
     Connections {
         target: Cpp_UI_Dashboard
-        enabled: !root.firstValidFrame
 
         function onUpdated()  {
+            if (!root.firstValidFrame)
+                return
+
             if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) &&
                     Cpp_UI_Dashboard.frameValid()) {
                 setup.hide()

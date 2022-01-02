@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.10
-import QtQuick.Window 2.10
+import QtQuick 2.5
+import QtQuick.Window 2.5
 
 Item {
     id: root
