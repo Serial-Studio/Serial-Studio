@@ -25,9 +25,9 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QScrollArea>
-#include <UI/DashboardWidget.h>
 
-#include "Common/ElidedLabel.h"
+#include <UI/DashboardWidget.h>
+#include <UI/Widgets/Common/ElidedLabel.h>
 
 namespace Widgets
 {

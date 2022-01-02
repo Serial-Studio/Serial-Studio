@@ -27,9 +27,9 @@
 #include <QVBoxLayout>
 #include <QwtPlotCurve>
 #include <QwtScaleEngine>
-#include <UI/DashboardWidget.h>
 
-#include "qfouriertransformer.h"
+#include <UI/DashboardWidget.h>
+#include <qfouriertransformer.h>
 
 namespace Widgets
 {

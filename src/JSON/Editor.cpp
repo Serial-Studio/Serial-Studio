@@ -20,18 +20,18 @@
  * THE SOFTWARE.
  */
 
-#include "Editor.h"
-#include "FrameInfo.h"
-#include "Generator.h"
-#include "IO/Manager.h"
-#include "Misc/Utilities.h"
-
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonArray>
 #include <QFileDialog>
 #include <QJsonObject>
 #include <QJsonDocument>
+
+#include <AppInfo.h>
+#include <IO/Manager.h>
+#include <JSON/Editor.h>
+#include <JSON/Generator.h>
+#include <Misc/Utilities.h>
 
 //----------------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton

@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-#include "Gauge.h"
-#include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
+#include <UI/Dashboard.h>
+#include <UI/Widgets/Gauge.h>
+#include <Misc/ThemeManager.h>
 
 /**
  * Constructor function, configures widget style & signal/slot connections.

@@ -20,9 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include "Console.h"
-#include "Manager.h"
-
 #include <QFile>
 #include <QPrinter>
 #include <QDateTime>
@@ -30,6 +27,8 @@
 #include <QPrintDialog>
 #include <QTextDocument>
 
+#include <IO/Manager.h>
+#include <IO/Console.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 

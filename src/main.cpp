@@ -22,15 +22,14 @@
 
 #include <QtQml>
 #include <QSysInfo>
+#include <QQuickStyle>
 #include <QApplication>
+#include <QStyleFactory>
 
 #include <AppInfo.h>
 #include <JSON/Frame.h>
 #include <Misc/Utilities.h>
 #include <Misc/ModuleManager.h>
-
-#include <QQuickStyle>
-#include <QStyleFactory>
 
 #ifdef Q_OS_WIN
 #    include <windows.h>

@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#include "MacExtras.h"
-#include "Translator.h"
+#include <Misc/MacExtras.h>
+#include <Misc/Translator.h>
 
 #ifdef Q_OS_MAC
 #    include <kdmactouchbar.h>

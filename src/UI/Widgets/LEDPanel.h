@@ -28,8 +28,7 @@
 #include <QScrollArea>
 
 #include <UI/DashboardWidget.h>
-
-#include "Common/KLed.h"
+#include <UI/Widgets/Common/KLed.h>
 
 namespace Widgets
 {

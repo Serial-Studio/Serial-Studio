@@ -20,12 +20,11 @@
  * THE SOFTWARE.
  */
 
-#include "Client.h"
-
 #include <QFile>
 #include <QFileDialog>
 
 #include <IO/Manager.h>
+#include <MQTT/Client.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 

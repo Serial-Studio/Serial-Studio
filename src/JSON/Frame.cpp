@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include "Frame.h"
-#include "FrameInfo.h"
+#include <JSON/Frame.h>
 
 /**
  * Destructor function, free memory used by the @c Group objects before destroying an

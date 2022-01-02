@@ -20,8 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include "Server.h"
-
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -29,6 +27,7 @@
 #include <IO/Manager.h>
 #include <JSON/Generator.h>
 #include <Misc/Utilities.h>
+#include <Plugins/Server.h>
 #include <Misc/TimerEvents.h>
 
 /**
@@ -215,9 +214,7 @@ void Plugins::Server::sendProcessedData()
     {
         QJsonObject object;
         auto frame = m_frames.at(i);
-        object.insert("id", QString::number(frame.frameNumber));
-        object.insert("timestamp", frame.rxDateTime.toString());
-        object.insert("data", frame.jsonDocument.object());
+        object.insert("data", frame);
         array.append(object);
     }
 
@@ -282,9 +279,9 @@ void Plugins::Server::sendRawData(const QByteArray &data)
  * Obtains the latest JSON dataframe & appends it to the JSON list, which is later read
  * and sent by the @c sendProcessedData() function.
  */
-void Plugins::Server::registerFrame(const JFI_Object &frameInfo)
+void Plugins::Server::registerFrame(const QJsonObject &json)
 {
-    m_frames.append(frameInfo);
+    m_frames.append(json);
 }
 
 /**

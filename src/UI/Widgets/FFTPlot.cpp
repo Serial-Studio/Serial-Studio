@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-#include "FFTPlot.h"
-#include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
+#include <UI/Dashboard.h>
+#include <Misc/ThemeManager.h>
+#include <UI/Widgets/FFTPlot.h>
 
 /**
  * Constructor function, configures widget style & signal/slot connections.

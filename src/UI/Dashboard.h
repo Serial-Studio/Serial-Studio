@@ -26,7 +26,6 @@
 #include <QObject>
 #include <DataTypes.h>
 #include <JSON/Frame.h>
-#include <JSON/FrameInfo.h>
 
 namespace UI
 {
@@ -265,7 +264,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void resetData();
     void updatePlots();
-    void processLatestJSON(const JFI_Object &frameInfo);
+    void processLatestJSON(const QJsonObject &json);
 
 private:
     QVector<JSON::Group> getLEDWidgets() const;

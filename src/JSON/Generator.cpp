@@ -20,25 +20,23 @@
  * THE SOFTWARE.
  */
 
-#include "Editor.h"
-#include "Generator.h"
-#include "FrameInfo.h"
+#include <QFileInfo>
+#include <QFileDialog>
+#include <QRegularExpression>
+
+#include <JSON/Editor.h>
+#include <JSON/Generator.h>
 
 #include <CSV/Player.h>
 #include <IO/Manager.h>
 #include <MQTT/Client.h>
 #include <Misc/Utilities.h>
 
-#include <QFileInfo>
-#include <QFileDialog>
-#include <QRegularExpression>
-
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
 JSON::Generator::Generator()
-    : m_frameCount(0)
-    , m_opMode(kAutomatic)
+    : m_opMode(kAutomatic)
 {
     // clang-format off
     connect(&CSV::Player::instance(), &CSV::Player::openChanged,
@@ -220,8 +218,8 @@ void JSON::Generator::writeSettings(const QString &path)
  */
 void JSON::Generator::reset()
 {
-    m_frameCount = 0;
-    Q_EMIT jsonChanged(JFI_Empty());
+    m_json = QJsonObject();
+    Q_EMIT jsonChanged(m_json);
 }
 
 /**
@@ -243,25 +241,9 @@ void JSON::Generator::readData(const QByteArray &data)
     if (data.isEmpty())
         return;
 
-    // Increment received frames and process frame
-    m_frameCount++;
-    processFrame(data, m_frameCount, QDateTime::currentDateTime());
-}
-
-/**
- * Reads the frame & inserts its values on the JSON map, and/or extracts the JSON frame
- * directly from the serial data.
- */
-void JSON::Generator::processFrame(const QByteArray &data, const quint64 frame,
-                                   const QDateTime &time)
-{
-    //
-    // TODO: Re-write this function because it leaks memory
-    //
-
     // Serial device sends JSON (auto mode)
     if (operationMode() == JSON::Generator::kAutomatic)
-        m_jfi.jsonDocument = QJsonDocument::fromJson(data, &m_error);
+        m_json = QJsonDocument::fromJson(data, &m_error).object();
 
     // We need to use a map file, check if its loaded & replace values into map
     else
@@ -278,7 +260,7 @@ void JSON::Generator::processFrame(const QByteArray &data, const quint64 frame,
             json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
 
         // Create JSON document
-        m_jfi.jsonDocument = QJsonDocument::fromJson(json.toUtf8(), &m_error);
+        m_json = QJsonDocument::fromJson(json.toUtf8(), &m_error).object();
 
         // Clear strings
         json.clear();
@@ -286,11 +268,7 @@ void JSON::Generator::processFrame(const QByteArray &data, const quint64 frame,
 
     // No parse error, update UI & reset error counter
     if (m_error.error == QJsonParseError::NoError)
-    {
-        m_jfi.rxDateTime = time;
-        m_jfi.frameNumber = frame;
-        Q_EMIT jsonChanged(m_jfi);
-    }
+        Q_EMIT jsonChanged(m_json);
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

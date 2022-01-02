@@ -6,12 +6,11 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "KLed.h"
-
 #include <QImage>
-#include <QPainter>
 #include <QStyle>
+#include <QPainter>
 #include <QStyleOption>
+#include <UI/Widgets/Common/KLed.h>
 
 class KLedPrivate
 {

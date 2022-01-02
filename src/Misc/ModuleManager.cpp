@@ -20,8 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include "ModuleManager.h"
-
 #include <AppInfo.h>
 
 #include <CSV/Export.h>
@@ -32,7 +30,6 @@
 #include <JSON/Editor.h>
 #include <JSON/Dataset.h>
 #include <JSON/Generator.h>
-#include <JSON/FrameInfo.h>
 
 #include <IO/Manager.h>
 #include <IO/Console.h>
@@ -135,7 +132,6 @@ void Misc::ModuleManager::configureUpdater()
  */
 void Misc::ModuleManager::registerQmlTypes()
 {
-    qRegisterMetaType<JFI_Object>("JFI_Object");
     qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
     qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
 }

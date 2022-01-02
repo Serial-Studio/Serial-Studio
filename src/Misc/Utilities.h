@@ -26,8 +26,6 @@
 #include <QMessageBox>
 #include <QApplication>
 
-#include "AppInfo.h"
-
 namespace Misc
 {
 /**

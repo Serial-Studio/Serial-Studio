@@ -22,11 +22,11 @@
 
 #include <QtMath>
 #include <QScrollBar>
+
 #include <IO/Console.h>
 #include <Misc/TimerEvents.h>
 #include <Misc/ThemeManager.h>
-
-#include "Terminal.h"
+#include <UI/Widgets/Terminal.h>
 
 //----------------------------------------------------------------------------------------
 // QML PlainTextEdit implementation

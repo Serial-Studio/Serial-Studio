@@ -22,13 +22,7 @@
 
 #pragma once
 
-#include <QVector>
-#include <QObject>
-#include <QVariant>
-#include <QJsonArray>
-#include <QJsonObject>
-
-#include "Dataset.h"
+#include <JSON/Dataset.h>
 
 namespace UI
 {

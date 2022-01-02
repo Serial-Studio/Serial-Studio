@@ -20,11 +20,11 @@
  * THE SOFTWARE.
  */
 
-#include "LEDPanel.h"
-#include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
-
 #include <QResizeEvent>
+
+#include <UI/Dashboard.h>
+#include <Misc/ThemeManager.h>
+#include <UI/Widgets/LEDPanel.h>
 
 /**
  * Generates the user interface elements & layout

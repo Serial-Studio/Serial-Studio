@@ -20,9 +20,8 @@
  * THE SOFTWARE.
  */
 
-#include "Dataset.h"
-#include "Generator.h"
-#include "FrameInfo.h"
+#include <JSON/Dataset.h>
+#include <JSON/Generator.h>
 
 JSON::Dataset::Dataset()
     : m_fft(false)

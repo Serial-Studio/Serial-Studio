@@ -20,14 +20,14 @@
  * THE SOFTWARE.
  */
 
-#include "AttitudeIndicator.h"
-
 #include <QtMath>
 #include <QPainter>
 #include <QPainterPath>
 #include <QwtPointPolar>
 #include <QwtDialNeedle>
 #include <QwtRoundScaleDraw>
+
+#include <UI/Widgets/Common/AttitudeIndicator.h>
 
 namespace Widgets
 {

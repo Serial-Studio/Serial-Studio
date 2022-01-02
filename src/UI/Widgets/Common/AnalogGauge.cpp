@@ -24,8 +24,8 @@
 #include <QwtDialNeedle>
 #include <QwtRoundScaleDraw>
 
-#include "AnalogGauge.h"
-#include "Misc/ThemeManager.h"
+#include <Misc/ThemeManager.h>
+#include <UI/Widgets/Common/AnalogGauge.h>
 
 Widgets::AnalogGauge::AnalogGauge(QWidget *parent)
     : QwtDial(parent)

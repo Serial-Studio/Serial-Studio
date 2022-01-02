@@ -27,8 +27,7 @@
 #include <QVariant>
 #include <QJsonArray>
 #include <QJsonObject>
-
-#include "Group.h"
+#include <JSON/Group.h>
 
 namespace JSON
 {

@@ -21,13 +21,12 @@
  * THE SOFTWARE.
  */
 
-#include "Manager.h"
-#include "Checksum.h"
-
-#include <MQTT/Client.h>
+#include <IO/Manager.h>
+#include <IO/Checksum.h>
 #include <IO/DataSources/Serial.h>
 #include <IO/DataSources/Network.h>
 
+#include <MQTT/Client.h>
 #include <QNetworkDatagram>
 
 /**

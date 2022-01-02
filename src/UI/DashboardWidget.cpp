@@ -20,9 +20,8 @@
  * THE SOFTWARE.
  */
 
-#include "DashboardWidget.h"
-
 #include <Misc/ThemeManager.h>
+#include <UI/DashboardWidget.h>
 
 #include <UI/Widgets/Bar.h>
 #include <UI/Widgets/GPS.h>

@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "Common/BaseWidget.h"
-#include "Common/AttitudeIndicator.h"
+#include <UI/Widgets/Common/BaseWidget.h>
+#include <UI/Widgets/Common/AttitudeIndicator.h>
 
 namespace Widgets
 {

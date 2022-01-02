@@ -20,11 +20,10 @@
  * THE SOFTWARE.
  */
 
-#include "Serial.h"
-
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
+#include <IO/DataSources/Serial.h>
 
 /**
  * Constructor function

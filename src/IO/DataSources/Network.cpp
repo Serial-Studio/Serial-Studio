@@ -20,10 +20,9 @@
  * THE SOFTWARE.
  */
 
-#include "Network.h"
-
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
+#include <IO/DataSources/Network.h>
 
 /**
  * Constructor function

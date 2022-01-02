@@ -23,7 +23,7 @@
 #pragma once
 
 #include <QwtThermo>
-#include "Common/BaseWidget.h"
+#include <UI/Widgets/Common/BaseWidget.h>
 
 namespace Widgets
 {

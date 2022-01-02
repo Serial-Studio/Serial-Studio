@@ -24,9 +24,8 @@
 
 #include <QObject>
 #include <DataTypes.h>
-
-#include "Group.h"
-#include "Dataset.h"
+#include <JSON/Group.h>
+#include <JSON/Dataset.h>
 
 namespace JSON
 {

@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include "Checksum.h"
+#include <IO/Checksum.h>
 
 uint8_t IO::crc8(const char *data, const int length)
 {

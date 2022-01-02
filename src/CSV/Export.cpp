@@ -20,19 +20,18 @@
  * THE SOFTWARE.
  */
 
-#include "Export.h"
-
-#include <AppInfo.h>
-#include <IO/Manager.h>
-#include <UI/Dashboard.h>
-#include <Misc/Utilities.h>
-#include <Misc/TimerEvents.h>
-
 #include <QDir>
 #include <QUrl>
 #include <QFileInfo>
 #include <QApplication>
 #include <QDesktopServices>
+
+#include <AppInfo.h>
+#include <IO/Manager.h>
+#include <CSV/Export.h>
+#include <UI/Dashboard.h>
+#include <Misc/Utilities.h>
+#include <Misc/TimerEvents.h>
 
 /**
  * Connect JSON Parser & Serial Manager signals to begin registering JSON

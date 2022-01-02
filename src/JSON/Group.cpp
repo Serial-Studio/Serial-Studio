@@ -20,9 +20,8 @@
  * THE SOFTWARE.
  */
 
-#include "Group.h"
-#include "Dataset.h"
-#include "FrameInfo.h"
+#include <QJsonArray>
+#include <JSON/Group.h>
 
 /**
  * Destructor function

@@ -30,7 +30,6 @@
 
 #include <JSON/Frame.h>
 #include <JSON/Dataset.h>
-#include <JSON/FrameInfo.h>
 
 /**
  * Default TCP port to use for incoming connections, I choose 7777 because 7 is one of
@@ -85,13 +84,13 @@ private Q_SLOTS:
     void acceptConnection();
     void sendProcessedData();
     void sendRawData(const QByteArray &data);
-    void registerFrame(const JFI_Object &frameInfo);
+    void registerFrame(const QJsonObject &json);
     void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
     bool m_enabled;
     QTcpServer m_server;
-    QVector<JFI_Object> m_frames;
+    QVector<QJsonObject> m_frames;
     QVector<QTcpSocket *> m_sockets;
 };
 }

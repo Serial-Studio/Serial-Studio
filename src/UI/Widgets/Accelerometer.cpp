@@ -20,12 +20,12 @@
  * THE SOFTWARE.
  */
 
-#include "UI/Dashboard.h"
-#include "Accelerometer.h"
-#include "Misc/ThemeManager.h"
-
 #include <QtMath>
 #include <QResizeEvent>
+
+#include <UI/Dashboard.h>
+#include <Misc/ThemeManager.h>
+#include <UI/Widgets/Accelerometer.h>
 
 /**
  * Constructor function, configures widget style & signal/slot connections.

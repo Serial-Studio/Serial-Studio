@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include "Translator.h"
+#include <Misc/Translator.h>
 
 /**
  * Constructor function

@@ -20,11 +20,11 @@
  * THE SOFTWARE.
  */
 
-#include "BaseWidget.h"
-#include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
-
 #include <QResizeEvent>
+
+#include <UI/Dashboard.h>
+#include <Misc/ThemeManager.h>
+#include <UI/Widgets/Common/BaseWidget.h>
 
 Widgets::BaseWidget::BaseWidget()
     : m_index(-1)

@@ -20,12 +20,11 @@
  * THE SOFTWARE.
  */
 
-#include "GPS.h"
-#include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
-#include "Misc/ModuleManager.h"
-
 #include <googlemapadapter.h>
+
+#include <UI/Dashboard.h>
+#include <UI/Widgets/GPS.h>
+#include <Misc/ThemeManager.h>
 
 /**
  * Generates the user interface elements & layout

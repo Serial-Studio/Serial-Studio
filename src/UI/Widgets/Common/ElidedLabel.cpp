@@ -22,8 +22,7 @@
 
 #include <QTimer>
 #include <QResizeEvent>
-
-#include "ElidedLabel.h"
+#include <UI/Widgets/Common/ElidedLabel.h>
 
 Widgets::ElidedLabel::ElidedLabel(QWidget *parent, Qt::WindowFlags flags)
     : QLabel(parent, flags)

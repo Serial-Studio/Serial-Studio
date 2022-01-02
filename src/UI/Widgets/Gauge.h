@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "Common/BaseWidget.h"
-#include "Common/AnalogGauge.h"
+#include <UI/Widgets/Common/BaseWidget.h>
+#include <UI/Widgets/Common/AnalogGauge.h>
 
 namespace Widgets
 {

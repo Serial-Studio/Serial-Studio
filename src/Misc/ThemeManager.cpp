@@ -20,10 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include "AppInfo.h"
-#include "Utilities.h"
-#include "ThemeManager.h"
-
 #include <QDir>
 #include <QFile>
 #include <QPalette>
@@ -32,6 +28,10 @@
 #include <QJsonObject>
 #include <QApplication>
 #include <QJsonDocument>
+
+#include <AppInfo.h>
+#include <Misc/Utilities.h>
+#include <Misc/ThemeManager.h>
 
 /**
  * Constructor function, searches for available themes & loads

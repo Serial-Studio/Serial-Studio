@@ -20,8 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include "Utilities.h"
-
 #include <QDir>
 #include <QUrl>
 #include <QPalette>
@@ -33,6 +31,7 @@
 #include <QDesktopServices>
 
 #include <AppInfo.h>
+#include <Misc/Utilities.h>
 
 /**
  * Returns a pointer to the only instance of the class

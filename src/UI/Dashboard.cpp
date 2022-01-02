@@ -20,15 +20,12 @@
  * THE SOFTWARE.
  */
 
-#include <QtAlgorithms>
-
 #include <IO/Manager.h>
 #include <IO/Console.h>
 #include <CSV/Player.h>
+#include <UI/Dashboard.h>
 #include <JSON/Generator.h>
 #include <Misc/TimerEvents.h>
-
-#include "Dashboard.h"
 
 //----------------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
@@ -737,7 +734,7 @@ void UI::Dashboard::updatePlots()
 /**
  * Regenerates the data displayed on the dashboard widgets
  */
-void UI::Dashboard::processLatestJSON(const JFI_Object &frameInfo)
+void UI::Dashboard::processLatestJSON(const QJsonObject &json)
 {
     // Save widget count
     const int barC = barCount();
@@ -756,7 +753,7 @@ void UI::Dashboard::processLatestJSON(const JFI_Object &frameInfo)
     auto pTitle = title();
 
     // Try to read latest frame for widget updating
-    if (!m_latestFrame.read(frameInfo.jsonDocument.object()))
+    if (!m_latestFrame.read(json))
         return;
 
     // Regenerate plot data

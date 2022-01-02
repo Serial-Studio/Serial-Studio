@@ -30,8 +30,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include "Frame.h"
-#include "FrameInfo.h"
+#include <JSON/Frame.h>
 
 namespace JSON
 {
@@ -76,7 +75,7 @@ class Generator : public QObject
 Q_SIGNALS:
     void jsonFileMapChanged();
     void operationModeChanged();
-    void jsonChanged(const JFI_Object &info);
+    void jsonChanged(const QJsonObject &json);
 
 private:
     explicit Generator();
@@ -112,12 +111,10 @@ public Q_SLOTS:
 private Q_SLOTS:
     void reset();
     void readData(const QByteArray &data);
-    void processFrame(const QByteArray &data, const quint64 frame, const QDateTime &time);
 
 private:
     QFile m_jsonMap;
-    JFI_Object m_jfi;
-    quint64 m_frameCount;
+    QJsonObject m_json;
     QSettings m_settings;
     QString m_jsonMapData;
     OperationMode m_opMode;

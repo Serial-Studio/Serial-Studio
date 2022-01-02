@@ -174,7 +174,6 @@ HEADERS += \
     src/JSON/Dataset.h \
     src/JSON/Editor.h \
     src/JSON/Frame.h \
-    src/JSON/FrameInfo.h \
     src/JSON/Generator.h \
     src/JSON/Group.h \
     src/MQTT/Client.h \
@@ -217,7 +216,6 @@ SOURCES += \
     src/JSON/Dataset.cpp \
     src/JSON/Editor.cpp \
     src/JSON/Frame.cpp \
-    src/JSON/FrameInfo.cpp \
     src/JSON/Generator.cpp \
     src/JSON/Group.cpp \
     src/MQTT/Client.cpp \
