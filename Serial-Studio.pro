@@ -64,36 +64,11 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 CONFIG += c++11
 CONFIG += silent
-
-*g++*: {
-    QMAKE_CXXFLAGS_RELEASE -= -O1
-    QMAKE_CXXFLAGS_RELEASE -= -O2
-    QMAKE_CXXFLAGS_RELEASE *= -O3
-    QMAKE_CXXFLAGS_RELEASE *= -Ofast
-    QMAKE_CXXFLAGS_RELEASE *= -flto
-}
-
-*clang*: {
-    QMAKE_CXXFLAGS_RELEASE -= -O1
-    QMAKE_CXXFLAGS_RELEASE -= -O2
-    QMAKE_CXXFLAGS_RELEASE *= -O3
-    QMAKE_CXXFLAGS_RELEASE *= -Ofast
-    QMAKE_CXXFLAGS_RELEASE *= -flto
-}
+CONFIG += sanitizer
+CONFIG += sanitize_address
 
 *msvc*: {
     QMAKE_CXXFLAGS *= -MP
-    QMAKE_CXXFLAGS_RELEASE -= /O
-    QMAKE_CXXFLAGS_RELEASE *= /O2
-    QMAKE_CXXFLAGS_RELEASE *= /GL
-
-    INCLUDEPATH += $$OUT_PWD
-    INCLUDEPATH += $$OUT_PWD/debug
-    INCLUDEPATH += $$OUT_PWD/release
-}
-
-CONFIG(release, debug|release) {
-    CONFIG += ltcg
 }
 
 #-----------------------------------------------------------------------------------------
