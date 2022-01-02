@@ -92,6 +92,11 @@ Misc::ModuleManager::ModuleManager()
     m_splash.setWindowFlags(Qt::SplashScreen | Qt::NoDropShadowWindowHint);
 #endif
 
+    // Enable software rendering
+#ifdef SERIAL_STUDIO_SOFTWARE_RENDERING
+    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
+#endif
+
     // Show splash screen
     m_splash.setPixmap(pixmap);
     m_splash.show();
