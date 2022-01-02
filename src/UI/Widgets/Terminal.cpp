@@ -54,7 +54,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
 
     // Set widget palette
     QPalette palette;
-    const auto theme = &Misc::ThemeManager::instance();
+    auto theme = &Misc::ThemeManager::instance();
     palette.setColor(QPalette::Text, theme->consoleText());
     palette.setColor(QPalette::Base, theme->consoleBase());
     palette.setColor(QPalette::Button, theme->consoleButton());

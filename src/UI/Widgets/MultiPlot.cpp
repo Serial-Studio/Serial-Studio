@@ -32,8 +32,8 @@ Widgets::MultiPlot::MultiPlot(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = &UI::Dashboard::instance();
-    const auto theme = &Misc::ThemeManager::instance();
+    auto dash = &UI::Dashboard::instance();
+    auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->multiPlotCount())
@@ -134,7 +134,7 @@ Widgets::MultiPlot::MultiPlot(const int index)
 void Widgets::MultiPlot::updateData()
 {
     // Invalid index, abort update
-    const auto dash = &UI::Dashboard::instance();
+    auto dash = &UI::Dashboard::instance();
     if (m_index < 0 || m_index >= dash->multiPlotCount())
         return;
 
@@ -148,15 +148,15 @@ void Widgets::MultiPlot::updateData()
         auto dataset = group.getDataset(i);
 
         // Add point to plot data
-        const auto count = m_yData[i].count();
+        auto count = m_yData[i].count();
         memmove(m_yData[i].data(), m_yData[i].data() + 1, count * sizeof(double));
 
         // Normalize dataset value
         if (dataset.max() > dataset.min())
         {
-            const auto vmin = dataset.min();
-            const auto vmax = dataset.max();
-            const auto v = dataset.value().toDouble();
+            auto vmin = dataset.min();
+            auto vmax = dataset.max();
+            auto v = dataset.value().toDouble();
             m_yData[i][count - 1] = (v - vmin) / (vmax - vmin);
         }
 
@@ -186,7 +186,7 @@ void Widgets::MultiPlot::updateData()
 void Widgets::MultiPlot::updateRange()
 {
     // Invalid index, abort update
-    const auto dash = &UI::Dashboard::instance();
+    auto dash = &UI::Dashboard::instance();
     if (m_index < 0 || m_index >= dash->multiPlotCount())
         return;
 

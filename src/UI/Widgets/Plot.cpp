@@ -35,8 +35,8 @@ Widgets::Plot::Plot(const int index)
     , m_autoscale(true)
 {
     // Get pointers to serial studio modules
-    const auto dash = &UI::Dashboard::instance();
-    const auto theme = &Misc::ThemeManager::instance();
+    auto dash = &UI::Dashboard::instance();
+    auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->plotCount())
@@ -88,8 +88,8 @@ Widgets::Plot::Plot(const int index)
 
     // Update graph scale
     auto dataset = UI::Dashboard::instance().getPlot(m_index);
-    const auto max = dataset.max();
-    const auto min = dataset.min();
+    auto max = dataset.max();
+    auto min = dataset.min();
     if (max > min)
     {
         m_max = max;
@@ -145,7 +145,7 @@ void Widgets::Plot::updateData()
             bool changed = false;
             for (int i = 0; i < plotData.at(m_index).count(); ++i)
             {
-                const auto v = plotData.at(m_index).at(i);
+                auto v = plotData.at(m_index).at(i);
                 if (v > m_max)
                 {
                     m_max = v + 1;
@@ -210,7 +210,7 @@ void Widgets::Plot::updateData()
 void Widgets::Plot::updateRange()
 {
     // Get pointer to dashboard manager
-    const auto dash = &UI::Dashboard::instance();
+    auto dash = &UI::Dashboard::instance();
 
     // Clear Y-axis data
     PlotData tempYData;

@@ -32,8 +32,8 @@ Widgets::FFTPlot::FFTPlot(const int index)
     , m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = &UI::Dashboard::instance();
-    const auto theme = &Misc::ThemeManager::instance();
+    auto dash = &UI::Dashboard::instance();
+    auto theme = &Misc::ThemeManager::instance();
 
     // Initialize pointers to NULL
     m_fft = Q_NULLPTR;

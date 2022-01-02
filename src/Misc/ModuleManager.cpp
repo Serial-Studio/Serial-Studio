@@ -163,25 +163,25 @@ bool Misc::ModuleManager::autoUpdaterEnabled()
 void Misc::ModuleManager::initializeQmlInterface()
 {
     // Initialize modules
-    const auto csvExport = &CSV::Export::instance();
-    const auto csvPlayer = &CSV::Player::instance();
-    const auto ioManager = &IO::Manager::instance();
-    const auto ioConsole = &IO::Console::instance();
-    const auto jsonEditor = &JSON::Editor::instance();
-    const auto mqttClient = &MQTT::Client::instance();
-    const auto uiDashboard = &UI::Dashboard::instance();
-    const auto jsonGenerator = &JSON::Generator::instance();
-    const auto pluginsBridge = &Plugins::Server::instance();
-    const auto miscUtilities = &Misc::Utilities::instance();
-    const auto miscMacExtras = &Misc::MacExtras::instance();
-    const auto miscTranslator = &Misc::Translator::instance();
-    const auto ioSerial = &IO::DataSources::Serial::instance();
-    const auto miscTimerEvents = &Misc::TimerEvents::instance();
-    const auto ioNetwork = &IO::DataSources::Network::instance();
-    const auto miscThemeManager = &Misc::ThemeManager::instance();
+    auto csvExport = &CSV::Export::instance();
+    auto csvPlayer = &CSV::Player::instance();
+    auto ioManager = &IO::Manager::instance();
+    auto ioConsole = &IO::Console::instance();
+    auto jsonEditor = &JSON::Editor::instance();
+    auto mqttClient = &MQTT::Client::instance();
+    auto uiDashboard = &UI::Dashboard::instance();
+    auto jsonGenerator = &JSON::Generator::instance();
+    auto pluginsBridge = &Plugins::Server::instance();
+    auto miscUtilities = &Misc::Utilities::instance();
+    auto miscMacExtras = &Misc::MacExtras::instance();
+    auto miscTranslator = &Misc::Translator::instance();
+    auto ioSerial = &IO::DataSources::Serial::instance();
+    auto miscTimerEvents = &Misc::TimerEvents::instance();
+    auto ioNetwork = &IO::DataSources::Network::instance();
+    auto miscThemeManager = &Misc::ThemeManager::instance();
 
     // Initialize third-party modules
-    const auto updater = QSimpleUpdater::getInstance();
+    auto updater = QSimpleUpdater::getInstance();
 
     // Operating system flags
     bool isWin = false;

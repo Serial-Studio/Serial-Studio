@@ -82,9 +82,9 @@ bool JSON::Group::read(const QJsonObject &object)
 {
     if (!object.isEmpty())
     {
-        const auto title = object.value("title").toString();
-        const auto array = object.value("datasets").toArray();
-        const auto widget = object.value("widget").toString();
+        auto title = object.value("title").toString();
+        auto array = object.value("datasets").toArray();
+        auto widget = object.value("widget").toString();
 
         if (!title.isEmpty() && !array.isEmpty())
         {
@@ -94,7 +94,7 @@ bool JSON::Group::read(const QJsonObject &object)
 
             for (auto i = 0; i < array.count(); ++i)
             {
-                const auto object = array.at(i).toObject();
+                auto object = array.at(i).toObject();
                 if (!object.isEmpty())
                 {
                     Dataset dataset;

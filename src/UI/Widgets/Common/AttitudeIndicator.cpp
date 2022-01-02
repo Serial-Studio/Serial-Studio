@@ -105,7 +105,7 @@ void AttitudeIndicator::setAngle(const double &angle)
 
 void AttitudeIndicator::setGradient(const double &gradient)
 {
-    const auto grad = qMin(1.0, qMax(gradient, -1.0));
+    auto grad = qMin(1.0, qMax(gradient, -1.0));
 
     if (m_gradient != grad)
     {

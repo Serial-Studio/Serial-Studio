@@ -46,8 +46,8 @@ Widgets::DataGroup::DataGroup(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = &UI::Dashboard::instance();
-    const auto theme = &Misc::ThemeManager::instance();
+    auto dash = &UI::Dashboard::instance();
+    auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->groupCount())
@@ -57,10 +57,10 @@ Widgets::DataGroup::DataGroup(const int index)
     auto group = dash->getGroups(m_index);
 
     // Generate widget stylesheets
-    const auto titleQSS = QSS("color:%1", theme->widgetTextPrimary());
-    const auto unitsQSS = QSS("color:%1", theme->widgetTextSecondary());
-    const auto valueQSS = QSS("color:%1", theme->widgetForegroundPrimary());
-    const auto iconsQSS = QSS("color:%1; font-weight:600;", theme->widgetTextSecondary());
+    auto titleQSS = QSS("color:%1", theme->widgetTextPrimary());
+    auto unitsQSS = QSS("color:%1", theme->widgetTextSecondary());
+    auto valueQSS = QSS("color:%1", theme->widgetForegroundPrimary());
+    auto iconsQSS = QSS("color:%1; font-weight:600;", theme->widgetTextSecondary());
 
     // Set window palette
     QPalette windowPalette;
@@ -191,7 +191,7 @@ void Widgets::DataGroup::updateData()
         return;
 
     // Invalid index, abort update
-    const auto dash = &UI::Dashboard::instance();
+    auto dash = &UI::Dashboard::instance();
     if (m_index < 0 || m_index >= dash->groupCount())
         return;
 

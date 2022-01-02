@@ -385,10 +385,10 @@ void CSV::Player::updateData()
             // No error, calculate difference & schedule update
             if (!error)
             {
-                const auto format = "yyyy/MM/dd/ HH:mm:ss::zzz"; // Same as in Export.cpp
-                const auto currDateTime = QDateTime::fromString(currTime, format);
-                const auto nextDateTime = QDateTime::fromString(nextTime, format);
-                const auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
+                auto format = "yyyy/MM/dd/ HH:mm:ss::zzz"; // Same as in Export.cpp
+                auto currDateTime = QDateTime::fromString(currTime, format);
+                auto nextDateTime = QDateTime::fromString(nextTime, format);
+                auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
 
                 // clang-format off
                 QTimer::singleShot(msecsToNextF,
@@ -425,8 +425,8 @@ bool CSV::Player::validateRow(const int position)
         return false;
 
     // Get titles & value list
-    const auto titles = m_csvData.at(0);
-    const auto list = m_csvData.at(position);
+    auto titles = m_csvData.at(0);
+    auto list = m_csvData.at(position);
 
     // Check that row value count is the same
     if (titles.count() != list.count())
@@ -438,7 +438,7 @@ bool CSV::Player::validateRow(const int position)
 
     // Check that this CSV is valid by checking the time title, this value must
     // be the same one that is used in Export.cpp
-    const auto rxTitle = "RX Date/Time";
+    auto rxTitle = "RX Date/Time";
     if (titles.first() != rxTitle)
     {
         qWarning() << "Invalid CSV file (title format does not match)";
@@ -458,7 +458,7 @@ bool CSV::Player::validateRow(const int position)
 QByteArray CSV::Player::getFrame(const int row)
 {
     QByteArray frame;
-    const auto sep = IO::Manager::instance().separatorSequence();
+    auto sep = IO::Manager::instance().separatorSequence();
 
     if (m_csvData.count() > row)
     {

@@ -34,8 +34,8 @@ Widgets::GPS::GPS(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = &UI::Dashboard::instance();
-    const auto theme = &Misc::ThemeManager::instance();
+    auto dash = &UI::Dashboard::instance();
+    auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->gpsCount())
@@ -116,7 +116,7 @@ void Widgets::GPS::updateData()
         return;
 
     // Invalid index, abort update
-    const auto dash = &UI::Dashboard::instance();
+    auto dash = &UI::Dashboard::instance();
     if (m_index < 0 || m_index >= dash->gpsCount())
         return;
 
@@ -142,9 +142,9 @@ void Widgets::GPS::updateData()
     m_mapControl.setView(QPointF(lon, lat));
 
     // Update map title
-    const auto latstr = QString::number(lat, 'f', dash->precision());
-    const auto lonstr = QString::number(lon, 'f', dash->precision());
-    const auto altstr = QString::number(alt, 'f', dash->precision());
+    auto latstr = QString::number(lat, 'f', dash->precision());
+    auto lonstr = QString::number(lon, 'f', dash->precision());
+    auto altstr = QString::number(alt, 'f', dash->precision());
 
     // clang-format off
     m_label->setText(QString("<u>POS:</u><i> %1,%2</i>&nbsp;<u>ALT:</u><i> %3 m</i>")
@@ -160,8 +160,8 @@ void Widgets::GPS::updateData()
  */
 void Widgets::GPS::resizeEvent(QResizeEvent *event)
 {
-    const auto width = event->size().width();
-    const auto height = event->size().height();
+    auto width = event->size().width();
+    auto height = event->size().height();
     m_mapControl.resize(QSize(width - 28, height - 26 - m_titleWidget.height()));
     event->accept();
 }

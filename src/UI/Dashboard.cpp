@@ -668,7 +668,7 @@ void UI::Dashboard::updatePlots()
     // Create list with datasets that need to be graphed
     for (int i = 0; i < m_latestFrame.groupCount(); ++i)
     {
-        const auto group = m_latestFrame.groups().at(i);
+        auto group = m_latestFrame.groups().at(i);
         for (int j = 0; j < group.datasetCount(); ++j)
         {
             auto dataset = group.getDataset(j);
@@ -753,7 +753,7 @@ void UI::Dashboard::processLatestJSON(const JFI_Object &frameInfo)
     const int accelerometerC = accelerometerCount();
 
     // Save previous title
-    const auto pTitle = title();
+    auto pTitle = title();
 
     // Try to read latest frame for widget updating
     if (!m_latestFrame.read(frameInfo.jsonDocument.object()))

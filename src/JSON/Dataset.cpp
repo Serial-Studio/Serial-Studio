@@ -155,18 +155,18 @@ bool JSON::Dataset::read(const QJsonObject &object)
 {
     if (!object.isEmpty())
     {
-        const auto fft = object.value("fft").toBool();
-        const auto led = object.value("led").toBool();
-        const auto log = object.value("log").toBool();
-        const auto min = object.value("min").toDouble();
-        const auto max = object.value("max").toDouble();
-        const auto alarm = object.value("alarm").toDouble();
-        const auto graph = object.value("graph").toBool();
-        const auto title = object.value("title").toString();
-        const auto value = object.value("value").toString();
-        const auto units = object.value("units").toString();
-        const auto widget = object.value("widget").toString();
-        const auto fftSamples = object.value("fftSamples").toInt();
+        auto fft = object.value("fft").toBool();
+        auto led = object.value("led").toBool();
+        auto log = object.value("log").toBool();
+        auto min = object.value("min").toDouble();
+        auto max = object.value("max").toDouble();
+        auto alarm = object.value("alarm").toDouble();
+        auto graph = object.value("graph").toBool();
+        auto title = object.value("title").toString();
+        auto value = object.value("value").toString();
+        auto units = object.value("units").toString();
+        auto widget = object.value("widget").toString();
+        auto fftSamples = object.value("fftSamples").toInt();
 
         if (!value.isEmpty() && !title.isEmpty())
         {

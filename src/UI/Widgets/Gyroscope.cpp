@@ -35,8 +35,8 @@ Widgets::Gyroscope::Gyroscope(const int index)
     , m_displayNum(0)
 {
     // Get pointers to Serial Studio modules
-    const auto dash = &UI::Dashboard::instance();
-    const auto theme = &Misc::ThemeManager::instance();
+    auto dash = &UI::Dashboard::instance();
+    auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->gyroscopeCount())
@@ -74,7 +74,7 @@ void Widgets::Gyroscope::updateData()
         return;
 
     // Invalid index, abort update
-    const auto dash = &UI::Dashboard::instance();
+    auto dash = &UI::Dashboard::instance();
     if (m_index < 0 || m_index >= dash->gyroscopeCount())
         return;
 

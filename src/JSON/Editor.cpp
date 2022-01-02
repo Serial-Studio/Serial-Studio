@@ -275,7 +275,7 @@ bool JSON::Editor::saveJsonFile()
 
             else
             {
-                const auto ret = Misc::Utilities::showMessageBox(
+                auto ret = Misc::Utilities::showMessageBox(
                     tr("Warning - Group %1, Dataset %2").arg(i + 1).arg(j + 1),
                     tr("Dataset contains duplicate frame index position! Continue?"),
                     APP_NAME, QMessageBox::Yes | QMessageBox::No);
@@ -289,8 +289,8 @@ bool JSON::Editor::saveJsonFile()
     // Get file save path
     if (jsonFilePath().isEmpty())
     {
-        const auto path = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save JSON project"),
-                                                       jsonProjectsPath(), "*.json");
+        auto path = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save JSON project"),
+                                                 jsonProjectsPath(), "*.json");
         if (path.isEmpty())
             return false;
 
@@ -694,7 +694,7 @@ void JSON::Editor::openJsonFile(const QString &path)
     for (int g = 0; g < groups.count(); ++g)
     {
         // Get JSON group data
-        const auto group = groups.at(g).toObject();
+        auto group = groups.at(g).toObject();
 
         // Register group with C++ model
         addGroup();

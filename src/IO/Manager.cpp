@@ -68,8 +68,8 @@ IO::Manager::Manager()
     setMaxBufferSize(1024 * 1024);
 
     // Configure signals/slots
-    const auto serial = &DataSources::Serial::instance();
-    const auto netwrk = &DataSources::Network::instance();
+    auto serial = &DataSources::Serial::instance();
+    auto netwrk = &DataSources::Network::instance();
     connect(netwrk, SIGNAL(portChanged()), this, SIGNAL(configurationChanged()));
     connect(netwrk, SIGNAL(addressChanged()), this, SIGNAL(configurationChanged()));
     connect(this, SIGNAL(dataSourceChanged()), this, SIGNAL(configurationChanged()));
@@ -220,7 +220,7 @@ qint64 IO::Manager::writeData(const QByteArray &data)
         if (dataSource() == DataSource::Network)
         {
             // Write to UDP socket
-            const auto network = &DataSources::Network::instance();
+            auto network = &DataSources::Network::instance();
             if (network->socketType() == QAbstractSocket::UdpSocket)
             {
                 bytes = network->udpSocket()->writeDatagram(
@@ -448,8 +448,8 @@ void IO::Manager::readFrames()
     auto bytes = 0;
     auto prevBytes = 0;
     auto cursor = m_dataBuffer;
-    const auto start = startSequence().toUtf8();
-    const auto finish = finishSequence().toUtf8();
+    auto start = startSequence().toUtf8();
+    auto finish = finishSequence().toUtf8();
     while (cursor.contains(start) && cursor.contains(finish))
     {
         // Remove the part of the buffer prior to, and including, the start sequence.
@@ -463,7 +463,7 @@ void IO::Manager::readFrames()
 
         // Checksum verification & Q_EMIT RX frame
         int chop = 0;
-        const auto result = integrityChecks(frame, cursor, &chop);
+        auto result = integrityChecks(frame, cursor, &chop);
         if (result == ValidationStatus::FrameOk)
             Q_EMIT frameReceived(frame);
 
@@ -512,7 +512,7 @@ void IO::Manager::onDataReceived()
         if (DataSources::Network::instance().socketType() == QAbstractSocket::UdpSocket)
         {
             udpConnection = true;
-            const auto udpSocket = DataSources::Network::instance().udpSocket();
+            auto udpSocket = DataSources::Network::instance().udpSocket();
             while (udpSocket->hasPendingDatagrams())
             {
                 QByteArray datagram;
@@ -579,17 +579,17 @@ IO::Manager::ValidationStatus IO::Manager::integrityChecks(const QByteArray &fra
                                                            int *bytes)
 {
     // Get finish sequence as byte array
-    const auto finish = finishSequence().toUtf8();
-    const auto crc8Header = finish + "crc8:";
-    const auto crc16Header = finish + "crc16:";
-    const auto crc32Header = finish + "crc32:";
+    auto finish = finishSequence().toUtf8();
+    auto crc8Header = finish + "crc8:";
+    auto crc16Header = finish + "crc16:";
+    auto crc32Header = finish + "crc32:";
 
     // Check CRC-8
     if (cursor.contains(crc8Header))
     {
         // Enable the CRC flag
         m_enableCrc = true;
-        const auto offset = cursor.indexOf(crc8Header) + crc8Header.length() - 1;
+        auto offset = cursor.indexOf(crc8Header) + crc8Header.length() - 1;
 
         // Check if we have enough data in the buffer
         if (cursor.length() >= offset + 1)
@@ -613,7 +613,7 @@ IO::Manager::ValidationStatus IO::Manager::integrityChecks(const QByteArray &fra
     {
         // Enable the CRC flag
         m_enableCrc = true;
-        const auto offset = cursor.indexOf(crc16Header) + crc16Header.length() - 1;
+        auto offset = cursor.indexOf(crc16Header) + crc16Header.length() - 1;
 
         // Check if we have enough data in the buffer
         if (cursor.length() >= offset + 2)
@@ -639,7 +639,7 @@ IO::Manager::ValidationStatus IO::Manager::integrityChecks(const QByteArray &fra
     {
         // Enable the CRC flag
         m_enableCrc = true;
-        const auto offset = cursor.indexOf(crc32Header) + crc32Header.length() - 1;
+        auto offset = cursor.indexOf(crc32Header) + crc32Header.length() - 1;
 
         // Check if we have enough data in the buffer
         if (cursor.length() >= offset + 4)

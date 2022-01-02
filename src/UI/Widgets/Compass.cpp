@@ -35,8 +35,8 @@ Widgets::Compass::Compass(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = &UI::Dashboard::instance();
-    const auto theme = &Misc::ThemeManager::instance();
+    auto dash = &UI::Dashboard::instance();
+    auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->compassCount())
@@ -84,7 +84,7 @@ void Widgets::Compass::update()
         return;
 
     // Invalid index, abort update
-    const auto dash = &UI::Dashboard::instance();
+    auto dash = &UI::Dashboard::instance();
     if (m_index < 0 || m_index >= dash->compassCount())
         return;
 

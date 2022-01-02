@@ -41,8 +41,8 @@
 CSV::Export::Export()
     : m_exportEnabled(true)
 {
-    const auto io = &IO::Manager::instance();
-    const auto te = &Misc::TimerEvents::instance();
+    auto io = &IO::Manager::instance();
+    auto te = &Misc::TimerEvents::instance();
     connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
     connect(io, &IO::Manager::frameReceived, this, &Export::registerFrame);
     connect(te, &Misc::TimerEvents::timeout1Hz, this, &Export::writeValues);
@@ -132,7 +132,7 @@ void CSV::Export::closeFile()
 void CSV::Export::writeValues()
 {
     // Get separator sequence
-    const auto sep = IO::Manager::instance().separatorSequence();
+    auto sep = IO::Manager::instance().separatorSequence();
 
     // Write each frame
     for (int i = 0; i < m_frames.count(); ++i)
@@ -168,7 +168,7 @@ void CSV::Export::writeValues()
 void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
 {
     // Get project title
-    const auto projectTitle = UI::Dashboard::instance().title();
+    auto projectTitle = UI::Dashboard::instance().title();
 
     // Get file name
     const QString fileName = frame.rxDateTime.toString("HH-mm-ss") + ".csv";
@@ -206,8 +206,8 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
 #endif
 
     // Get number of fields
-    const auto sep = IO::Manager::instance().separatorSequence();
-    const auto fields = QString::fromUtf8(frame.data).split(sep);
+    auto sep = IO::Manager::instance().separatorSequence();
+    auto fields = QString::fromUtf8(frame.data).split(sep);
 
     // Add table titles
     m_textStream << "RX Date/Time,";

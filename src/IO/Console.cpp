@@ -92,7 +92,7 @@ IO::Console::Console()
     clear();
 
     // Read received data automatically
-    const auto dm = &Manager::instance();
+    auto dm = &Manager::instance();
     connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent);
     connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived);
 }
@@ -520,7 +520,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
         if (m_isStartingLine)
             processedString.append(timestamp);
 
-        const auto token = tokens.first();
+        auto token = tokens.first();
         processedString.append(token);
         m_isStartingLine = (token == "\n");
         tokens.removeFirst();
@@ -579,9 +579,9 @@ QByteArray IO::Console::hexToBytes(const QString &data)
     QByteArray array;
     for (int i = 0; i < withoutSpaces.length(); i += 2)
     {
-        const auto chr1 = withoutSpaces.at(i);
-        const auto chr2 = withoutSpaces.at(i + 1);
-        const auto byte = QString("%1%2").arg(chr1, chr2).toInt(Q_NULLPTR, 16);
+        auto chr1 = withoutSpaces.at(i);
+        auto chr2 = withoutSpaces.at(i + 1);
+        auto byte = QString("%1%2").arg(chr1, chr2).toInt(Q_NULLPTR, 16);
         array.append(byte);
     }
 

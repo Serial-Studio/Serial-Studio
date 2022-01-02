@@ -34,8 +34,8 @@ Widgets::Accelerometer::Accelerometer(const int index)
     : m_index(index)
 {
     // Get pointers to Serial Studio modules
-    const auto dash = &UI::Dashboard::instance();
-    const auto theme = &Misc::ThemeManager::instance();
+    auto dash = &UI::Dashboard::instance();
+    auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->accelerometerCount())
@@ -43,8 +43,8 @@ Widgets::Accelerometer::Accelerometer(const int index)
 
     // Get needle & knob color
     QString needleColor;
-    const auto colors = theme->widgetColors();
-    const auto knobColor = theme->widgetControlBackground();
+    auto colors = theme->widgetColors();
+    auto knobColor = theme->widgetControlBackground();
     if (colors.count() > m_index)
         needleColor = colors.at(m_index);
     else
@@ -85,7 +85,7 @@ void Widgets::Accelerometer::updateData()
         return;
 
     // Invalid index, abort update
-    const auto dash = &UI::Dashboard::instance();
+    auto dash = &UI::Dashboard::instance();
     if (m_index < 0 || m_index >= dash->accelerometerCount())
         return;
 

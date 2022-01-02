@@ -33,8 +33,8 @@ Widgets::Bar::Bar(const int index)
     : m_index(index)
 {
     // Get pointers to serial studio modules
-    const auto dash = &UI::Dashboard::instance();
-    const auto theme = &Misc::ThemeManager::instance();
+    auto dash = &UI::Dashboard::instance();
+    auto theme = &Misc::ThemeManager::instance();
 
     // Invalid index, abort initialization
     if (m_index < 0 || m_index >= dash->barCount())
@@ -53,7 +53,7 @@ Widgets::Bar::Bar(const int index)
 
     // Get thermo color
     QString color;
-    const auto colors = theme->widgetColors();
+    auto colors = theme->widgetColors();
     if (colors.count() > m_index)
         color = colors.at(m_index);
     else
@@ -92,13 +92,13 @@ void Widgets::Bar::updateData()
         return;
 
     // Invalid index, abort update
-    const auto dash = &UI::Dashboard::instance();
+    auto dash = &UI::Dashboard::instance();
     if (m_index < 0 || m_index >= dash->barCount())
         return;
 
     // Update bar level
     auto dataset = dash->getBar(m_index);
-    const auto value = dataset.value().toDouble();
+    auto value = dataset.value().toDouble();
     m_thermo.setValue(value);
     setValue(QString("%1 %2").arg(
         QString::number(value, 'f', UI::Dashboard::instance().precision()),

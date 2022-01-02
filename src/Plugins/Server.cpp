@@ -228,7 +228,7 @@ void Plugins::Server::sendProcessedData()
         QJsonObject object;
         object.insert("frames", array);
         const QJsonDocument document(object);
-        const auto json = document.toJson(QJsonDocument::Compact) + "\n";
+        auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
         // Send data to each plugin
         Q_FOREACH (auto socket, m_sockets)
