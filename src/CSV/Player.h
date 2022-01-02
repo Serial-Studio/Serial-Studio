@@ -23,7 +23,6 @@
 #pragma once
 
 #include <QFile>
-#include <QTimer>
 #include <QObject>
 #include <QVector>
 
@@ -100,7 +99,6 @@ private:
     int m_framePos;
     bool m_playing;
     QFile m_csvFile;
-    QTimer m_frameTimer;
     QString m_timestamp;
     QVector<QVector<QString>> m_csvData;
 };

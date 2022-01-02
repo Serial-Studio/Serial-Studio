@@ -20,16 +20,8 @@
  * THE SOFTWARE.
  */
 
+#include <QTimerEvent>
 #include "TimerEvents.h"
-
-/**
- * Constructor function
- */
-Misc::TimerEvents::TimerEvents()
-{
-    m_timerLowFreq.setInterval(1000);
-    connect(&m_timerLowFreq, &QTimer::timeout, this, &Misc::TimerEvents::lowFreqTimeout);
-}
 
 /**
  * Returns a pointer to the only instance of the class
@@ -45,7 +37,24 @@ Misc::TimerEvents &Misc::TimerEvents::instance()
  */
 void Misc::TimerEvents::stopTimers()
 {
-    m_timerLowFreq.stop();
+    m_timer1Hz.stop();
+    m_timer10Hz.stop();
+    m_timer20Hz.stop();
+}
+
+/**
+ * Emits the @c timeout signal when the basic timer expires
+ */
+void Misc::TimerEvents::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == m_timer1Hz.timerId())
+        Q_EMIT timeout1Hz();
+
+    else if (event->timerId() == m_timer10Hz.timerId())
+        Q_EMIT timeout10Hz();
+
+    else if (event->timerId() == m_timer20Hz.timerId())
+        Q_EMIT timeout20Hz();
 }
 
 /**
@@ -53,7 +62,9 @@ void Misc::TimerEvents::stopTimers()
  */
 void Misc::TimerEvents::startTimers()
 {
-    m_timerLowFreq.start();
+    m_timer20Hz.start(50, this);
+    m_timer10Hz.start(100, this);
+    m_timer1Hz.start(1000, this);
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

@@ -46,9 +46,11 @@ IO::DataSources::Serial::Serial()
     setParity(parityList().indexOf(tr("None")));
     setFlowControl(flowControlList().indexOf(tr("None")));
 
-    // Build serial devices list
-    const auto te = &Misc::TimerEvents::instance();
-    connect(te, SIGNAL(lowFreqTimeout()), this, SLOT(refreshSerialDevices()));
+    // Build serial devices list and refresh it every second
+    // clang-format off
+    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
+            this, &IO::DataSources::Serial::refreshSerialDevices);
+    // clang-format on
 }
 
 /**

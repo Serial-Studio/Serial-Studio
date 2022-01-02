@@ -22,8 +22,6 @@
 
 #pragma once
 
-#include <QTimer>
-
 #include "Common/BaseWidget.h"
 #include "Common/AttitudeIndicator.h"
 
@@ -46,7 +44,6 @@ private:
     QString m_yaw;
     QString m_roll;
     QString m_pitch;
-    QTimer m_timer;
     AttitudeIndicator m_gauge;
 };
 }

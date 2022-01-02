@@ -23,6 +23,7 @@
 #include <QtMath>
 #include <QScrollBar>
 #include <IO/Console.h>
+#include <Misc/TimerEvents.h>
 #include <Misc/ThemeManager.h>
 
 #include "Terminal.h"
@@ -72,8 +73,10 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
     // clang-format on
 
     // Configure re-paint timer at 10 Hz
-    connect(&m_timer, &QTimer::timeout, this, &Widgets::Terminal::repaint);
-    m_timer.start(100);
+    // clang-format off
+    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout10Hz,
+            this, &Widgets::Terminal::repaint);
+    // clang-format on
 
     // React to widget events
     connect(&m_textEdit, SIGNAL(copyAvailable(bool)), this, SLOT(setCopyAvailable(bool)));

@@ -235,47 +235,15 @@ SOURCES += \
 #-----------------------------------------------------------------------------------------
 
 DISTFILES += \
-    assets/qml/Dashboard/DashboardTitle.qml \
-    assets/qml/Dashboard/ViewOptions.qml \
-    assets/qml/Dashboard/ViewOptionsDelegate.qml \
-    assets/qml/Dashboard/WidgetDelegate.qml \
-    assets/qml/Dashboard/WidgetGrid.qml \
-    assets/qml/Dashboard/WidgetModel.qml \
-    assets/qml/FramelessWindow/CustomWindow.qml \
-    assets/qml/FramelessWindow/ResizeHandles.qml \
-    assets/qml/FramelessWindow/Titlebar.qml \
-    assets/qml/FramelessWindow/WindowButton.qml \
-    assets/qml/FramelessWindow/WindowButtonMacOS.qml \
-    assets/qml/JsonEditor/Footer.qml \
-    assets/qml/JsonEditor/GroupEditor.qml \
-    assets/qml/JsonEditor/Header.qml \
-    assets/qml/JsonEditor/JsonDatasetDelegate.qml \
-    assets/qml/JsonEditor/JsonGroupDelegate.qml \
-    assets/qml/JsonEditor/TreeView.qml \
-    assets/qml/Panes/Console.qml \
-    assets/qml/Panes/Dashboard.qml \
-    assets/qml/Panes/Setup.qml \
-    assets/qml/Panes/SetupPanes/MQTT.qml \
-    assets/qml/Panes/SetupPanes/Network.qml \
-    assets/qml/Panes/SetupPanes/Serial.qml \
-    assets/qml/Panes/SetupPanes/Settings.qml \
-    assets/qml/Panes/Toolbar.qml \
-    assets/qml/PlatformDependent/DecentMenuItem.qml \
-    assets/qml/PlatformDependent/Menubar.qml \
-    assets/qml/PlatformDependent/MenubarMacOS.qml \
-    assets/qml/Widgets/Icon.qml \
-    assets/qml/Widgets/JSONDropArea.qml \
-    assets/qml/Widgets/Shadow.qml \
-    assets/qml/Widgets/Terminal.qml \
-    assets/qml/Widgets/Window.qml \
-    assets/qml/Windows/About.qml \
-    assets/qml/Windows/Acknowledgements.qml \
-    assets/qml/Windows/CsvPlayer.qml \
-    assets/qml/Windows/Donate.qml \
-    assets/qml/Windows/JsonEditor.qml \
-    assets/qml/Windows/MQTTConfiguration.qml \
-    assets/qml/Windows/MainWindow.qml \
-    assets/qml/main.qml
+    assets/qml/*.qml \
+    assets/qml/Panes/*.qml \
+    assets/qml/Widgets/*.qml \
+    assets/qml/Windows/*.qml \
+    assets/qml/Dashboard/*.qml \
+    assets/qml/JsonEditor/*.qml \
+    assets/qml/FramelessWindow/*.qml \
+    assets/qml/Panes/SetupPanes/*.qml \
+    assets/qml/PlatformDependent/*.qml
 
 #-----------------------------------------------------------------------------------------
 # Deploy files

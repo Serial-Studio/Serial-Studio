@@ -23,6 +23,7 @@
 #pragma once
 
 #include <UI/Dashboard.h>
+#include <Misc/TimerEvents.h>
 #include <UI/DeclarativeWidget.h>
 
 namespace Widgets
@@ -49,9 +50,8 @@ public:
     DashboardWidgetBase()
     {
         // clang-format off
-        connect(&m_timer, &QTimer::timeout,
+        connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz,
                 this, &Widgets::DashboardWidgetBase::repaint);
-        m_timer.start(50);
         // clang-format on
     }
 
@@ -67,7 +67,6 @@ public:
     void requestRepaint() { m_repaint = true; }
 
 private:
-    QTimer m_timer;
     bool m_repaint;
 };
 }

@@ -23,6 +23,7 @@
 #include "Gyroscope.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
+#include "Misc/TimerEvents.h"
 
 #include <QResizeEvent>
 
@@ -50,10 +51,11 @@ Widgets::Gyroscope::Gyroscope(const int index)
     // Set widget pointer
     setWidget(&m_gauge);
 
-    // Configure timer
-    m_timer.setInterval(500);
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateLabel()));
-    m_timer.start();
+    // Show different values each second
+    // clang-format off
+    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
+            this, &Widgets::Gyroscope::updateLabel);
+    // clang-format on
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);

@@ -475,8 +475,8 @@ void JSON::Worker::process()
     if (error.error == QJsonParseError::NoError)
         Q_EMIT jsonReady(JFI_CreateNew(m_frame, m_time, document));
 
-    // Delete object in 500 ms
-    QTimer::singleShot(500, this, SIGNAL(finished()));
+    // Delete object
+    Q_EMIT finished();
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

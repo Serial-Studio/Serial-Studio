@@ -140,6 +140,23 @@ Control {
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onCheckedChanged: Cpp_Misc_MacExtras.setSetupChecked(checked)
+
+            background: Rectangle {
+                radius: 3
+                border.width: 1
+                color: "transparent"
+                border.color: "#040600"
+                opacity: parent.checked ? 0.2 : 0.0
+
+                Rectangle {
+                    border.width: 1
+                    color: "#626262"
+                    anchors.fill: parent
+                    border.color: "#c2c2c2"
+                    radius: parent.radius - 1
+                    anchors.margins: parent.border.width
+                }
+            }
         }
 
         Button {
@@ -158,6 +175,23 @@ Control {
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onCheckedChanged: Cpp_Misc_MacExtras.setConsoleChecked(checked)
+
+            background: Rectangle {
+                radius: 3
+                border.width: 1
+                color: "transparent"
+                border.color: "#040600"
+                opacity: parent.checked ? 0.2 : 0.0
+
+                Rectangle {
+                    border.width: 1
+                    color: "#626262"
+                    anchors.fill: parent
+                    border.color: "#c2c2c2"
+                    radius: parent.radius - 1
+                    anchors.margins: parent.border.width
+                }
+            }
         }
 
         Button {
@@ -178,6 +212,23 @@ Control {
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onCheckedChanged: Cpp_Misc_MacExtras.setDashboardChecked(checked)
             onEnabledChanged: Cpp_Misc_MacExtras.setDashboardEnabled(enabled)
+
+            background: Rectangle {
+                radius: 3
+                border.width: 1
+                color: "transparent"
+                border.color: "#040600"
+                opacity: parent.checked ? 0.2 : 0.0
+
+                Rectangle {
+                    border.width: 1
+                    color: "#626262"
+                    anchors.fill: parent
+                    border.color: "#c2c2c2"
+                    radius: parent.radius - 1
+                    anchors.margins: parent.border.width
+                }
+            }
         }
 
         //
@@ -208,6 +259,8 @@ Control {
             palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
+
+            background: Item {}
         }
 
         Button {
@@ -230,6 +283,8 @@ Control {
                 else
                     Cpp_CSV_Player.openFile()
             }
+
+            background: Item{}
         }
 
         Button {
@@ -269,6 +324,26 @@ Control {
             // Connect/disconnect device when button is clicked
             //
             onClicked: Cpp_IO_Manager.toggleConnection()
+
+            //
+            // Custom button background
+            //
+            background: Rectangle {
+                radius: 3
+                border.width: 1
+                color: "transparent"
+                border.color: "#040600"
+                opacity: parent.checked ? 0.2 : 0.0
+
+                Rectangle {
+                    border.width: 1
+                    color: "#626262"
+                    anchors.fill: parent
+                    border.color: "#c2c2c2"
+                    radius: parent.radius - 1
+                    anchors.margins: parent.border.width
+                }
+            }
         }
     }
 }

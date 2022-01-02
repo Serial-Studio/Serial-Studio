@@ -45,7 +45,7 @@ MQTT::Client::Client()
     // Send data periodically & reset statistics when disconnected/connected to a device
     const auto io = &IO::Manager::instance();
     const auto te = &Misc::TimerEvents::instance();
-    connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &MQTT::Client::sendData);
+    connect(te, &Misc::TimerEvents::timeout1Hz, this, &MQTT::Client::sendData);
     connect(io, &IO::Manager::frameReceived, this, &MQTT::Client::onFrameReceived);
     connect(io, &IO::Manager::connectedChanged, this, &MQTT::Client::resetStatistics);
 }

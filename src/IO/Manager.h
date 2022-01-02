@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <QTimer>
 #include <QObject>
 #include <QIODevice>
 #include <DataTypes.h>
@@ -96,7 +95,6 @@ class Manager : public QObject
 Q_SIGNALS:
     void deviceChanged();
     void connectedChanged();
-    void watchdogTriggered();
     void dataSourceChanged();
     void writeEnabledChanged();
     void configurationChanged();
@@ -104,7 +102,6 @@ Q_SIGNALS:
     void maxBufferSizeChanged();
     void startSequenceChanged();
     void finishSequenceChanged();
-    void watchdogIntervalChanged();
     void separatorSequenceChanged();
     void frameValidationRegexChanged();
     void dataSent(const QByteArray &data);
@@ -143,7 +140,6 @@ public:
     bool configurationOk() const;
 
     int maxBufferSize() const;
-    int watchdogInterval() const;
 
     QIODevice *device();
     DataSource dataSource() const;
@@ -165,15 +161,12 @@ public Q_SLOTS:
     void setStartSequence(const QString &sequence);
     void setFinishSequence(const QString &sequence);
     void setSeparatorSequence(const QString &sequence);
-    void setWatchdogInterval(const int interval = 15);
     void setDataSource(const IO::Manager::DataSource &source);
 
 private Q_SLOTS:
     void readFrames();
-    void feedWatchdog();
     void onDataReceived();
     void clearTempBuffer();
-    void onWatchdogTriggered();
     void setDevice(QIODevice *device);
 
 private:
@@ -181,7 +174,6 @@ private:
                                      const QByteArray &masterBuffer, int *bytesToChop);
 
 private:
-    QTimer m_watchdog;
     bool m_enableCrc;
     bool m_writeEnabled;
     int m_maxBufferSize;

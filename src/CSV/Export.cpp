@@ -45,7 +45,7 @@ CSV::Export::Export()
     const auto te = &Misc::TimerEvents::instance();
     connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
     connect(io, &IO::Manager::frameReceived, this, &Export::registerFrame);
-    connect(te, &Misc::TimerEvents::lowFreqTimeout, this, &Export::writeValues);
+    connect(te, &Misc::TimerEvents::timeout1Hz, this, &Export::writeValues);
 }
 
 /**

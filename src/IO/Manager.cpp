@@ -65,7 +65,6 @@ IO::Manager::Manager()
     , m_finishSequence("*/")
     , m_separatorSequence(",")
 {
-    setWatchdogInterval(10000);
     setMaxBufferSize(1024 * 1024);
 
     // Configure signals/slots
@@ -133,31 +132,6 @@ bool IO::Manager::configurationOk() const
         return DataSources::Network::instance().configurationOk();
 
     return false;
-}
-
-/**
- * Returns the interval of the watchdog in milliseconds. The watchdog is used to clear
- * the data buffer if no data has been received in more than x milliseconds (default
- * 15 ms, tested on a 300 baud rate MCU).
- *
- * This is useful for: a) Dealing when a device suddenly is disconnected
- *                     b) Removing extra data between received frames
- *
- * Example:
- *
- *      RRRRRRRRR  watchdog clears buf.  RRRRRRRRR  watchdog clear buf.   RRRRRRRR
- *     [--------] . - . - . - . - . - . [--------] . - . - . - . - . - . [--------]
- *      Frame A   Interval of > 15 ms    Frame B   Interval of > 15 ms    Frame C
- *
- *  Note: in the representation above "R" means that the watchdog is reset, thus, the
- *        data buffer is not cleared until we wait for another frame or communications
- *        are interrupted.
- *
- * TODO: let the JSON project file define the watchdog timeout time.
- */
-int IO::Manager::watchdogInterval() const
-{
-    return m_watchdog.interval();
 }
 
 /**
@@ -378,9 +352,6 @@ void IO::Manager::processPayload(const QByteArray &payload)
 {
     if (!payload.isEmpty())
     {
-        // Reset watchdog
-        feedWatchdog();
-
         // Update received bytes indicator
         m_receivedBytes += payload.size();
         if (m_receivedBytes >= UINT64_MAX)
@@ -442,17 +413,6 @@ void IO::Manager::setSeparatorSequence(const QString &sequence)
         m_separatorSequence = ",";
 
     Q_EMIT separatorSequenceChanged();
-}
-
-/**
- * Changes the expiration interval of the watchdog timer. Check the @c watchdogInterval()
- * function for more information.
- */
-void IO::Manager::setWatchdogInterval(const int interval)
-{
-    m_watchdog.setInterval(interval);
-    m_watchdog.setTimerType(Qt::PreciseTimer);
-    Q_EMIT watchdogIntervalChanged();
 }
 
 /**
@@ -532,16 +492,6 @@ void IO::Manager::readFrames()
 }
 
 /**
- * Resets the watchdog timer before it expires. Check the @c watchdogInterval() function
- * for more information.
- */
-void IO::Manager::feedWatchdog()
-{
-    m_watchdog.stop();
-    m_watchdog.start();
-}
-
-/**
  * Reads incoming data from the serial device, updates the serial console object,
  * registers incoming data to temporary buffer & extracts valid data frames from the
  * buffer using the @c readFrame() function.
@@ -580,9 +530,6 @@ void IO::Manager::onDataReceived()
     // Read data & append it to buffer
     auto bytes = data.length();
 
-    // Feed watchdog (so that data is not cleared automatically)
-    feedWatchdog();
-
     // Obtain frames from data buffer
     m_dataBuffer.append(data);
     readFrames();
@@ -605,15 +552,6 @@ void IO::Manager::onDataReceived()
 void IO::Manager::clearTempBuffer()
 {
     m_dataBuffer.clear();
-}
-
-/**
- * Called when the watchdog timer expires. For the moment, this function only clears the
- * temporary data buffer.
- */
-void IO::Manager::onWatchdogTriggered()
-{
-    clearTempBuffer();
 }
 
 /**

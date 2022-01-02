@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <QTimer>
 #include <QPlainTextEdit>
 #include <UI/DeclarativeWidget.h>
 
@@ -202,7 +201,6 @@ private:
     bool m_emulateVt100;
     bool m_copyAvailable;
 
-    QTimer m_timer;
     QPlainTextEdit m_textEdit;
     AnsiEscapeCodeHandler m_escapeCodeHandler;
 };

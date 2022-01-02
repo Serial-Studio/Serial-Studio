@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include <QTimer>
 #include <QObject>
+#include <QBasicTimer>
 
 namespace Misc
 {
@@ -32,11 +32,6 @@ namespace Misc
  *
  * The @c TimerEvents class implements periodic timers that are used to update
  * the user interface elements at a specific frequency.
- *
- * It is necessary to use this class in order to avoid overloading the computer when
- * incoming data is received at high frequencies. We do not want to re-generate the UI
- * with every received frame, because that would probably freeze the GUI thread. Instead,
- * we "register" all incoming frames and process these frames in regular intervals.
  */
 class TimerEvents : public QObject
 {
@@ -45,10 +40,12 @@ class TimerEvents : public QObject
     // clang-format on
 
 Q_SIGNALS:
-    void lowFreqTimeout();
+    void timeout1Hz();
+    void timeout10Hz();
+    void timeout20Hz();
 
 private:
-    explicit TimerEvents();
+    TimerEvents() {};
     TimerEvents(TimerEvents &&) = delete;
     TimerEvents(const TimerEvents &) = delete;
     TimerEvents &operator=(TimerEvents &&) = delete;
@@ -57,11 +54,16 @@ private:
 public:
     static TimerEvents &instance();
 
+protected:
+    void timerEvent(QTimerEvent *event) override;
+
 public Q_SLOTS:
     void stopTimers();
     void startTimers();
 
 private:
-    QTimer m_timerLowFreq;
+    QBasicTimer m_timer1Hz;
+    QBasicTimer m_timer10Hz;
+    QBasicTimer m_timer20Hz;
 };
 }

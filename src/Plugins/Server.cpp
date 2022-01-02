@@ -42,7 +42,7 @@ Plugins::Server::Server()
     // Send processed data at 1 Hz
     connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged,
             this, &Plugins::Server::registerFrame);
-    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::lowFreqTimeout,
+    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
             this, &Plugins::Server::sendProcessedData);
 
     // Send I/O "raw" data directly
