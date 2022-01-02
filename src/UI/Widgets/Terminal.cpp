@@ -604,7 +604,9 @@ QString Widgets::Terminal::vt100Processing(const QString &data)
 //---------------------------------------------------------º-----------------------------------------
 
 #define QTC_ASSERT(cond, action)                                                         \
-    if (Q_LIKELY(cond)) { }                                                              \
+    if (Q_LIKELY(cond))                                                                  \
+    {                                                                                    \
+    }                                                                                    \
     else                                                                                 \
     {                                                                                    \
         action;                                                                          \
@@ -864,13 +866,13 @@ Widgets::AnsiEscapeCodeHandler::parseText(const FormattedText &input)
                                     {
                                         (code == RgbTextColor)
                                             ? charFormat.setForeground(
-                                                QColor(numbers.at(i + 1).toInt(),
-                                                       numbers.at(i + 2).toInt(),
-                                                       numbers.at(i + 3).toInt()))
+                                                  QColor(numbers.at(i + 1).toInt(),
+                                                         numbers.at(i + 2).toInt(),
+                                                         numbers.at(i + 3).toInt()))
                                             : charFormat.setBackground(
-                                                QColor(numbers.at(i + 1).toInt(),
-                                                       numbers.at(i + 2).toInt(),
-                                                       numbers.at(i + 3).toInt()));
+                                                  QColor(numbers.at(i + 1).toInt(),
+                                                         numbers.at(i + 2).toInt(),
+                                                         numbers.at(i + 3).toInt()));
                                         setFormatScope(charFormat);
                                     }
                                     i += 3;

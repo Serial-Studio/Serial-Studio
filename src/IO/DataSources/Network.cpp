@@ -37,7 +37,7 @@ IO::DataSources::Network::Network()
     setUdpLocalPort(defaultUdpLocalPort());
     setUdpRemotePort(defaultUdpRemotePort());
     setSocketType(QAbstractSocket::TcpSocket);
-    
+
     // clang-format off
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
     connect(&m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), 

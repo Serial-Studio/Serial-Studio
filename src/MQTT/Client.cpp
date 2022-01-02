@@ -251,9 +251,7 @@ StringList MQTT::Client::mqttVersions() const
 StringList MQTT::Client::sslProtocols() const
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-    return StringList {
-        tr("System default"),  "TLS v1.0",  "TLS v1.1",  "TLS v1.2"
-    };
+    return StringList { tr("System default"), "TLS v1.0", "TLS v1.1", "TLS v1.2" };
 #else
     return StringList {
         tr("System default"),  "TLS v1.0",  "TLS v1.1",  "TLS v1.2",
