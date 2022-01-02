@@ -41,7 +41,12 @@ Misc::ThemeManager::ThemeManager()
 {
     populateThemes();
     loadTheme(m_settings.value("themeId", 0).toInt());
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+    setCustomWindowDecorations(m_settings.value("customWindows", false).toBool());
+#else
     setCustomWindowDecorations(m_settings.value("customWindows", true).toBool());
+#endif
 }
 
 /**
