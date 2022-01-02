@@ -37,7 +37,6 @@ Control {
     property alias startSequence: _startSequence.text
     property alias windowShadows: _windowShadows.checked
     property alias separatorSequence: _separatorSequence.text
-    property alias multithreadedFrameProcessing: _multithreadedFrameProcessing.checked
 
     //
     // Layout
@@ -149,22 +148,6 @@ Control {
                 onCheckedChanged: {
                     if (checked !== Cpp_Plugins_Bridge.enabled)
                         Cpp_Plugins_Bridge.enabled = checked
-                }
-            }
-
-            //
-            // Multi-threaded frame processing
-            //
-            Label {
-                text: qsTr("Multithreaded frame parsing") + ": "
-            } Switch {
-                id: _multithreadedFrameProcessing
-                Layout.leftMargin: -app.spacing
-                Layout.alignment: Qt.AlignLeft
-                checked: Cpp_JSON_Generator.processFramesInSeparateThread
-                onCheckedChanged: {
-                    if (checked != Cpp_JSON_Generator.processFramesInSeparateThread)
-                        Cpp_JSON_Generator.processFramesInSeparateThread = checked
                 }
             }
 

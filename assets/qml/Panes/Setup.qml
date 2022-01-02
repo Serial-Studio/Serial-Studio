@@ -110,7 +110,6 @@ Item {
         property alias endSequence: settings.endSequence
         property alias startSequence: settings.startSequence
         property alias separatorSequence: settings.separatorSequence
-        property alias multithreadedFrameProcessing: settings.multithreadedFrameProcessing
     }
 
     //

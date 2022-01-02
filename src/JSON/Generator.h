@@ -24,7 +24,6 @@
 
 #include <QFile>
 #include <QObject>
-#include <QThread>
 #include <QSettings>
 #include <QJsonArray>
 #include <QJsonValue>
@@ -36,33 +35,6 @@
 
 namespace JSON
 {
-/**
- * Generates a JSON document by combining the JSON map file and the received
- * data from the microcontroller device.
- *
- * This code is executed on another thread in order to avoid blocking the
- * user interface.
- */
-class Worker : public QObject
-{
-    Q_OBJECT
-
-Q_SIGNALS:
-    void finished();
-    void jsonReady(const JFI_Object &info);
-
-public:
-    Worker(const QByteArray &data, const quint64 frame, const QDateTime &time);
-
-public Q_SLOTS:
-    void process();
-
-private:
-    QDateTime m_time;
-    QByteArray m_data;
-    quint64 m_frame;
-};
-
 /**
  * @brief The Generator class
  *
@@ -99,17 +71,12 @@ class Generator : public QObject
                READ operationMode
                WRITE setOperationMode
                NOTIFY operationModeChanged)
-    Q_PROPERTY(bool processFramesInSeparateThread
-               READ processFramesInSeparateThread
-               WRITE setProcessFramesInSeparateThread
-               NOTIFY processFramesInSeparateThreadChanged)
     // clang-format on
 
 Q_SIGNALS:
     void jsonFileMapChanged();
     void operationModeChanged();
     void jsonChanged(const JFI_Object &info);
-    void processFramesInSeparateThreadChanged();
 
 private:
     explicit Generator();
@@ -132,19 +99,15 @@ public:
     QString jsonMapFilename() const;
     QString jsonMapFilepath() const;
     OperationMode operationMode() const;
-    bool processFramesInSeparateThread() const;
 
 public Q_SLOTS:
     void loadJsonMap();
     void loadJsonMap(const QString &path);
-    void setProcessFramesInSeparateThread(const bool threaded);
     void setOperationMode(const JSON::Generator::OperationMode &mode);
 
 public Q_SLOTS:
     void readSettings();
-    void loadJFI(const JFI_Object &object);
     void writeSettings(const QString &path);
-    void loadJSON(const QJsonDocument &json);
 
 private Q_SLOTS:
     void reset();
@@ -159,6 +122,5 @@ private:
     QString m_jsonMapData;
     OperationMode m_opMode;
     QJsonParseError m_error;
-    bool m_processInSeparateThread;
 };
 }
