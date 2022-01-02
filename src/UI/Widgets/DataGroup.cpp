@@ -53,10 +53,8 @@ Widgets::DataGroup::DataGroup(const int index)
     if (m_index < 0 || m_index >= dash->groupCount())
         return;
 
-    // Get group pointer
-    const auto group = dash->getGroups(m_index);
-    if (!group)
-        return;
+    // Get group reference
+    auto group = dash->getGroups(m_index);
 
     // Generate widget stylesheets
     const auto titleQSS = QSS("color:%1", theme->widgetTextPrimary());
@@ -78,12 +76,12 @@ Widgets::DataGroup::DataGroup(const int index)
     valueFont.setPixelSize(dash->monoFont().pixelSize() * 1.3);
 
     // Configure grid layout
-    m_units.reserve(group->datasetCount());
-    m_icons.reserve(group->datasetCount());
-    m_titles.reserve(group->datasetCount());
-    m_values.reserve(group->datasetCount());
+    m_units.reserve(group.datasetCount());
+    m_icons.reserve(group.datasetCount());
+    m_titles.reserve(group.datasetCount());
+    m_values.reserve(group.datasetCount());
     m_gridLayout = new QGridLayout(m_dataContainer);
-    for (int dataset = 0; dataset < group->datasetCount(); ++dataset)
+    for (int dataset = 0; dataset < group.datasetCount(); ++dataset)
     {
         // Create labels
         m_units.append(new QLabel(m_dataContainer));
@@ -117,13 +115,10 @@ Widgets::DataGroup::DataGroup(const int index)
         dicon->setStyleSheet(iconsQSS);
 
         // Set label initial data
-        auto set = group->getDataset(dataset);
-        if (set)
-        {
-            title->setText(set->title());
-            if (!set->units().isEmpty())
-                units->setText(QString("[%1]").arg(set->units()));
-        }
+        auto set = group.getDataset(dataset);
+        title->setText(set.title());
+        if (!set.units().isEmpty())
+            units->setText(QString("[%1]").arg(set.units()));
 
         // Set icon text
         dicon->setText("⤑");
@@ -196,32 +191,25 @@ void Widgets::DataGroup::updateData()
         return;
 
     // Get group pointer
-    const auto dash = &UI::Dashboard::instance();
-    const auto group = dash->getGroups(m_index);
-    if (!group)
-        return;
+    auto dash = &UI::Dashboard::instance();
+    auto group = dash->getGroups(m_index);
 
     // Regular expresion handler
     const QRegularExpression regex("^[+-]?(\\d*\\.)?\\d+$");
 
     // Update labels
-    JSON::Dataset *dataset;
-    for (int i = 0; i < group->datasetCount(); ++i)
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
-        dataset = group->getDataset(i);
-        if (dataset)
-        {
-            // Get dataset value
-            auto value = dataset->value();
+        // Get dataset value
+        auto value = group.getDataset(i).value();
 
-            // Check if value is a number, if so make sure that
-            // we always show a fixed number of decimal places
-            if (regex.match(value).hasMatch())
-                value = QString::number(value.toDouble(), 'f', dash->precision());
+        // Check if value is a number, if so make sure that
+        // we always show a fixed number of decimal places
+        if (regex.match(value).hasMatch())
+            value = QString::number(value.toDouble(), 'f', dash->precision());
 
-            // Update label
-            m_values.at(i)->setText(value + " ");
-        }
+        // Update label
+        m_values.at(i)->setText(value + " ");
     }
 
     // Repaint widget

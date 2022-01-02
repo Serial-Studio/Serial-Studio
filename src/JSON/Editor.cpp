@@ -367,33 +367,24 @@ bool JSON::Editor::saveJsonFile()
  */
 int JSON::Editor::datasetCount(const int group) const
 {
-    if (group < groupCount())
-        return m_groups.at(group)->m_datasets.count();
-
-    return 0;
+    return getGroup(group).m_datasets.count();
 }
 
 /**
  * Returns a pointer to the group object positioned at the given @a index
  */
-JSON::Group *JSON::Editor::getGroup(const int index) const
+const JSON::Group &JSON::Editor::getGroup(const int index) const
 {
-    if (index < groupCount())
-        return m_groups.at(index);
-
-    return Q_NULLPTR;
+    return m_groups.at(index);
 }
 
 /**
  * Returns a pointer to the dataset object contained by the @a group at
  * the given @a index
  */
-JSON::Dataset *JSON::Editor::getDataset(const int group, const int index) const
+const JSON::Dataset &JSON::Editor::getDataset(const int group, const int index) const
 {
-    if (index < datasetCount(group))
-        return getGroup(group)->m_datasets.at(index);
-
-    return Q_NULLPTR;
+    return getGroup(group).getDataset(index);
 }
 
 /**
@@ -401,11 +392,7 @@ JSON::Dataset *JSON::Editor::getDataset(const int group, const int index) const
  */
 QString JSON::Editor::groupTitle(const int group) const
 {
-    const auto grp = getGroup(group);
-    if (grp)
-        return grp->m_title;
-
-    return "";
+    return getGroup(group).title();
 }
 
 /**
@@ -413,11 +400,7 @@ QString JSON::Editor::groupTitle(const int group) const
  */
 QString JSON::Editor::groupWidget(const int group) const
 {
-    const auto grp = getGroup(group);
-    if (grp)
-        return grp->m_widget;
-
-    return "";
+    return getGroup(group).widget();
 }
 
 /**
@@ -428,23 +411,19 @@ QString JSON::Editor::groupWidget(const int group) const
  */
 int JSON::Editor::groupWidgetIndex(const int group) const
 {
-    const auto grp = getGroup(group);
-    if (grp)
-    {
-        const auto widget = grp->m_widget;
+    auto widget = groupWidget(group);
 
-        if (widget == "accelerometer")
-            return 1;
+    if (widget == "accelerometer")
+        return 1;
 
-        if (widget == "gyro")
-            return 2;
+    if (widget == "gyro")
+        return 2;
 
-        if (widget == "map")
-            return 3;
+    if (widget == "map")
+        return 3;
 
-        if (widget == "multiplot")
-            return 4;
-    }
+    if (widget == "multiplot")
+        return 4;
 
     return 0;
 }
@@ -458,11 +437,7 @@ int JSON::Editor::groupWidgetIndex(const int group) const
  */
 int JSON::Editor::datasetIndex(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return set->m_index;
-
-    return 0;
+    return getDataset(group, dataset).m_index;
 }
 
 /**
@@ -474,11 +449,7 @@ int JSON::Editor::datasetIndex(const int group, const int dataset) const
  */
 bool JSON::Editor::datasetLED(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return set->led();
-
-    return false;
+    return getDataset(group, dataset).led();
 }
 
 /**
@@ -490,11 +461,7 @@ bool JSON::Editor::datasetLED(const int group, const int dataset) const
  */
 bool JSON::Editor::datasetGraph(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return set->graph();
-
-    return false;
+    return getDataset(group, dataset).graph();
 }
 
 /**
@@ -506,11 +473,7 @@ bool JSON::Editor::datasetGraph(const int group, const int dataset) const
  */
 bool JSON::Editor::datasetFftPlot(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return set->fft();
-
-    return false;
+    return getDataset(group, dataset).fft();
 }
 
 /**
@@ -523,11 +486,7 @@ bool JSON::Editor::datasetFftPlot(const int group, const int dataset) const
  */
 bool JSON::Editor::datasetLogPlot(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return set->log();
-
-    return false;
+    return getDataset(group, dataset).log();
 }
 
 /**
@@ -538,11 +497,7 @@ bool JSON::Editor::datasetLogPlot(const int group, const int dataset) const
  */
 QString JSON::Editor::datasetTitle(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return set->title();
-
-    return "";
+    return getDataset(group, dataset).title();
 }
 
 /**
@@ -553,11 +508,7 @@ QString JSON::Editor::datasetTitle(const int group, const int dataset) const
  */
 QString JSON::Editor::datasetUnits(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return set->units();
-
-    return "";
+    return getDataset(group, dataset).units();
 }
 
 /**
@@ -568,11 +519,7 @@ QString JSON::Editor::datasetUnits(const int group, const int dataset) const
  */
 QString JSON::Editor::datasetWidget(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return set->widget();
-
-    return "";
+    return getDataset(group, dataset).widget();
 }
 
 /**
@@ -585,7 +532,8 @@ QString JSON::Editor::datasetWidget(const int group, const int dataset) const
  */
 int JSON::Editor::datasetWidgetIndex(const int group, const int dataset) const
 {
-    const auto widget = datasetWidget(group, dataset);
+    auto widget = datasetWidget(group, dataset);
+
     if (widget == "gauge")
         return 1;
     if (widget == "bar")
@@ -605,11 +553,7 @@ int JSON::Editor::datasetWidgetIndex(const int group, const int dataset) const
  */
 QString JSON::Editor::datasetWidgetMin(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return QString::number(set->m_min);
-
-    return "0";
+    return QString::number(getDataset(group, dataset).min());
 }
 
 /**
@@ -621,11 +565,7 @@ QString JSON::Editor::datasetWidgetMin(const int group, const int dataset) const
  */
 QString JSON::Editor::datasetWidgetMax(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return QString::number(set->m_max);
-
-    return "0";
+    return QString::number(getDataset(group, dataset).max());
 }
 
 /**
@@ -636,11 +576,7 @@ QString JSON::Editor::datasetWidgetMax(const int group, const int dataset) const
  */
 QString JSON::Editor::datasetFFTSamples(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-        return QString::number(qMax(1, set->m_fftSamples));
-
-    return "0";
+    return QString::number(getDataset(group, dataset).fftSamples());
 }
 
 /**
@@ -652,16 +588,12 @@ QString JSON::Editor::datasetFFTSamples(const int group, const int dataset) cons
  */
 QString JSON::Editor::datasetWidgetAlarm(const int group, const int dataset) const
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
-    {
-        if (set->m_alarm <= set->min())
-            return QString::number(set->m_max);
-        else
-            return QString::number(set->m_alarm);
-    }
+    auto set = getDataset(group, dataset);
 
-    return "0";
+    if (set.alarm() <= set.min())
+        return QString::number(set.max());
+
+    return QString::number(set.alarm());
 }
 
 //----------------------------------------------------------------------------------------
@@ -674,7 +606,6 @@ QString JSON::Editor::datasetWidgetAlarm(const int group, const int dataset) con
 void JSON::Editor::newJsonFile()
 {
     // Clear groups list
-    qDeleteAll(m_groups);
     m_groups.clear();
 
     // Reset project properties
@@ -862,7 +793,7 @@ void JSON::Editor::setFrameStartSequence(const QString &sequence)
  */
 void JSON::Editor::addGroup()
 {
-    m_groups.append(new Group);
+    m_groups.append(Group());
     setGroupTitle(m_groups.count() - 1, tr("New Group"));
 
     Q_EMIT groupCountChanged();
@@ -874,18 +805,15 @@ void JSON::Editor::addGroup()
  */
 void JSON::Editor::deleteGroup(const int group)
 {
-    const auto grp = getGroup(group);
-    if (grp)
+    auto ret = Misc::Utilities::showMessageBox(
+        tr("Delete group \"%1\"").arg(groupTitle(group)),
+        tr("Are you sure you want to delete this group?"), APP_NAME,
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (ret == QMessageBox::Yes)
     {
-        auto ret = Misc::Utilities::showMessageBox(
-            tr("Delete group \"%1\"").arg(grp->title()),
-            tr("Are you sure you want to delete this group?"), APP_NAME,
-            QMessageBox::Yes | QMessageBox::No);
-        if (ret == QMessageBox::Yes)
-        {
-            m_groups.removeAt(group);
-            Q_EMIT groupCountChanged();
-        }
+        m_groups.removeAt(group);
+        Q_EMIT groupCountChanged();
     }
 }
 
@@ -921,148 +849,138 @@ void JSON::Editor::moveGroupDown(const int group)
 bool JSON::Editor::setGroupWidget(const int group, const int widgetId)
 {
     auto grp = getGroup(group);
-    if (grp)
+
+    // Warn user if group contains existing datasets
+    if (!(grp.m_datasets.isEmpty()) && widgetId != 4)
     {
-        // Warn user if group contains existing datasets
-        if (!(grp->m_datasets.isEmpty()) && widgetId != 4)
-        {
-            if (widgetId == 0 && grp->widget() == "multiplot")
-                grp->m_widget = "";
+        if (widgetId == 0 && grp.widget() == "multiplot")
+            grp.m_widget = "";
 
+        else
+        {
+            auto ret = Misc::Utilities::showMessageBox(
+                tr("Are you sure you want to change the group-level widget?"),
+                tr("Existing datasets for this group will be deleted"), APP_NAME,
+                QMessageBox::Yes | QMessageBox::No);
+            if (ret == QMessageBox::No)
+                return false;
             else
-            {
-                auto ret = Misc::Utilities::showMessageBox(
-                    tr("Are you sure you want to change the group-level widget?"),
-                    tr("Existing datasets for this group will be deleted"), APP_NAME,
-                    QMessageBox::Yes | QMessageBox::No);
-                if (ret == QMessageBox::No)
-                    return false;
-                else
-                {
-                    qDeleteAll(grp->m_datasets);
-                    grp->m_datasets.clear();
-                }
-            }
+                grp.m_datasets.clear();
         }
-
-        // Accelerometer widget
-        if (widgetId == 1)
-        {
-            // Set widget title
-            grp->m_widget = "accelerometer";
-            grp->m_title = tr("Accelerometer");
-
-            // Create datasets
-            auto x = new Dataset;
-            auto y = new Dataset;
-            auto z = new Dataset;
-
-            // Set dataset indexes
-            x->m_index = nextDatasetIndex();
-            y->m_index = nextDatasetIndex() + 1;
-            z->m_index = nextDatasetIndex() + 2;
-
-            // Set measurement units
-            x->m_units = "m/s²";
-            y->m_units = "m/s²";
-            z->m_units = "m/s²";
-
-            // Set dataset properties
-            x->m_widget = "x";
-            y->m_widget = "y";
-            z->m_widget = "z";
-            x->m_title = tr("Accelerometer %1").arg("X");
-            y->m_title = tr("Accelerometer %1").arg("Y");
-            z->m_title = tr("Accelerometer %1").arg("Z");
-
-            // Add datasets to group
-            grp->m_datasets.append(x);
-            grp->m_datasets.append(y);
-            grp->m_datasets.append(z);
-        }
-
-        // Gyroscope widget
-        else if (widgetId == 2)
-        {
-            // Set widget title
-            grp->m_widget = "gyro";
-            grp->m_title = tr("Gyroscope");
-
-            // Create datasets
-            auto x = new Dataset;
-            auto y = new Dataset;
-            auto z = new Dataset;
-
-            // Set dataset indexes
-            x->m_index = nextDatasetIndex();
-            y->m_index = nextDatasetIndex() + 1;
-            z->m_index = nextDatasetIndex() + 2;
-
-            // Set measurement units
-            x->m_units = "°";
-            y->m_units = "°";
-            z->m_units = "°";
-
-            // Set dataset properties
-            x->m_widget = "roll";
-            y->m_widget = "pitch";
-            z->m_widget = "yaw";
-            x->m_title = tr("Gyro %1").arg("Roll");
-            y->m_title = tr("Gyro %1").arg("Pitch");
-            z->m_title = tr("Gyro %1").arg("Yaw");
-
-            // Add datasets to group
-            grp->m_datasets.append(x);
-            grp->m_datasets.append(y);
-            grp->m_datasets.append(z);
-        }
-
-        // Map widget
-        else if (widgetId == 3)
-        {
-            // Set widget title
-            grp->m_widget = "map";
-            grp->m_title = tr("GPS");
-
-            // Create datasets
-            auto lat = new Dataset;
-            auto lon = new Dataset;
-            auto alt = new Dataset;
-
-            // Set dataset indexes
-            lat->m_index = nextDatasetIndex();
-            lon->m_index = nextDatasetIndex() + 1;
-            alt->m_index = nextDatasetIndex() + 2;
-
-            // Set measurement units
-            lat->m_units = "°";
-            lon->m_units = "°";
-            alt->m_units = "m";
-
-            // Set dataset properties
-            lat->m_widget = "lat";
-            lon->m_widget = "lon";
-            alt->m_widget = "alt";
-            lat->m_title = tr("Latitude");
-            lon->m_title = tr("Longitude");
-            alt->m_title = tr("Altitude");
-
-            // Add datasets to group
-            grp->m_datasets.append(lat);
-            grp->m_datasets.append(lon);
-            grp->m_datasets.append(alt);
-        }
-
-        // Multi plot widget
-        else if (widgetId == 4)
-            grp->m_widget = "multiplot";
-
-        // Update UI
-        Q_EMIT groupChanged(group);
-        return true;
     }
 
-    return false;
+    // Accelerometer widget
+    if (widgetId == 1)
+    {
+        // Set widget title
+        grp.m_widget = "accelerometer";
+        grp.m_title = tr("Accelerometer");
+
+        // Create datasets
+        Dataset x, y, z;
+
+        // Set dataset indexes
+        x.m_index = nextDatasetIndex();
+        y.m_index = nextDatasetIndex() + 1;
+        z.m_index = nextDatasetIndex() + 2;
+
+        // Set measurement units
+        x.m_units = "m/s²";
+        y.m_units = "m/s²";
+        z.m_units = "m/s²";
+
+        // Set dataset properties
+        x.m_widget = "x";
+        y.m_widget = "y";
+        z.m_widget = "z";
+        x.m_title = tr("Accelerometer %1").arg("X");
+        y.m_title = tr("Accelerometer %1").arg("Y");
+        z.m_title = tr("Accelerometer %1").arg("Z");
+
+        // Add datasets to group
+        grp.m_datasets.append(x);
+        grp.m_datasets.append(y);
+        grp.m_datasets.append(z);
+    }
+
+    // Gyroscope widget
+    else if (widgetId == 2)
+    {
+        // Set widget title
+        grp.m_widget = "gyro";
+        grp.m_title = tr("Gyroscope");
+
+        // Create datasets
+        Dataset x, y, z;
+
+        // Set dataset indexes
+        x.m_index = nextDatasetIndex();
+        y.m_index = nextDatasetIndex() + 1;
+        z.m_index = nextDatasetIndex() + 2;
+
+        // Set measurement units
+        x.m_units = "°";
+        y.m_units = "°";
+        z.m_units = "°";
+
+        // Set dataset properties
+        x.m_widget = "roll";
+        y.m_widget = "pitch";
+        z.m_widget = "yaw";
+        x.m_title = tr("Gyro %1").arg("Roll");
+        y.m_title = tr("Gyro %1").arg("Pitch");
+        z.m_title = tr("Gyro %1").arg("Yaw");
+
+        // Add datasets to group
+        grp.m_datasets.append(x);
+        grp.m_datasets.append(y);
+        grp.m_datasets.append(z);
+    }
+
+    // Map widget
+    else if (widgetId == 3)
+    {
+        // Set widget title
+        grp.m_widget = "map";
+        grp.m_title = tr("GPS");
+
+        // Create datasets
+        Dataset lat, lon, alt;
+
+        // Set dataset indexes
+        lat.m_index = nextDatasetIndex();
+        lon.m_index = nextDatasetIndex() + 1;
+        alt.m_index = nextDatasetIndex() + 2;
+
+        // Set measurement units
+        lat.m_units = "°";
+        lon.m_units = "°";
+        alt.m_units = "m";
+
+        // Set dataset properties
+        lat.m_widget = "lat";
+        lon.m_widget = "lon";
+        alt.m_widget = "alt";
+        lat.m_title = tr("Latitude");
+        lon.m_title = tr("Longitude");
+        alt.m_title = tr("Altitude");
+
+        // Add datasets to group
+        grp.m_datasets.append(lat);
+        grp.m_datasets.append(lon);
+        grp.m_datasets.append(alt);
+    }
+
+    // Multi plot widget
+    else if (widgetId == 4)
+        grp.m_widget = "multiplot";
+
+    // Replace previous group with new group
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT groupChanged(group);
+    return true;
 }
 
 /**
@@ -1070,12 +988,15 @@ bool JSON::Editor::setGroupWidget(const int group, const int widgetId)
  */
 void JSON::Editor::setGroupTitle(const int group, const QString &title)
 {
+    // Get group
     auto grp = getGroup(group);
-    if (grp)
-    {
-        grp->m_title = title;
-        Q_EMIT groupChanged(group);
-    }
+
+    // Change group values & update groups vector
+    grp.m_title = title;
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT groupChanged(group);
 }
 
 /**
@@ -1083,12 +1004,15 @@ void JSON::Editor::setGroupTitle(const int group, const QString &title)
  */
 void JSON::Editor::setGroupWidgetData(const int group, const QString &widget)
 {
+    // Get group
     auto grp = getGroup(group);
-    if (grp)
-    {
-        grp->m_widget = widget;
-        Q_EMIT groupChanged(group);
-    }
+
+    // Change group values & update groups vector
+    grp.m_widget = widget;
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT groupChanged(group);
 }
 
 /**
@@ -1098,14 +1022,19 @@ void JSON::Editor::setGroupWidgetData(const int group, const QString &widget)
  */
 void JSON::Editor::addDataset(const int group)
 {
+    // Get group
     auto grp = getGroup(group);
-    if (grp)
-    {
-        grp->m_datasets.append(new Dataset);
-        setDatasetIndex(group, grp->m_datasets.count() - 1, nextDatasetIndex());
-        setDatasetTitle(group, grp->m_datasets.count() - 1, tr("New dataset"));
-        Q_EMIT groupChanged(group);
-    }
+
+    // Change group values & update groups vector
+    grp.m_datasets.append(Dataset());
+    m_groups.replace(group, grp);
+
+    // Set dataset title & index
+    setDatasetIndex(group, grp.m_datasets.count() - 1, nextDatasetIndex());
+    setDatasetTitle(group, grp.m_datasets.count() - 1, tr("New dataset"));
+
+    // Update UI
+    Q_EMIT groupChanged(group);
 }
 
 /**
@@ -1116,18 +1045,17 @@ void JSON::Editor::addDataset(const int group)
  */
 void JSON::Editor::deleteDataset(const int group, const int dataset)
 {
-    const auto set = getDataset(group, dataset);
-    if (set)
+    auto ret = Misc::Utilities::showMessageBox(
+        tr("Delete dataset \"%1\"").arg(getDataset(group, dataset).title()),
+        tr("Are you sure you want to delete this dataset?"), APP_NAME,
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (ret == QMessageBox::Yes)
     {
-        auto ret = Misc::Utilities::showMessageBox(
-            tr("Delete dataset \"%1\"").arg(set->title()),
-            tr("Are you sure you want to delete this dataset?"), APP_NAME,
-            QMessageBox::Yes | QMessageBox::No);
-        if (ret == QMessageBox::Yes)
-        {
-            getGroup(group)->m_datasets.removeAt(dataset);
-            Q_EMIT groupChanged(group);
-        }
+        auto grp = getGroup(group);
+        grp.m_datasets.removeAt(dataset);
+        m_groups.replace(group, grp);
+        Q_EMIT groupChanged(group);
     }
 }
 
@@ -1140,12 +1068,17 @@ void JSON::Editor::deleteDataset(const int group, const int dataset)
 void JSON::Editor::setDatasetTitle(const int group, const int dataset,
                                    const QString &title)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_title = title;
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_title = title;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1157,12 +1090,17 @@ void JSON::Editor::setDatasetTitle(const int group, const int dataset,
 void JSON::Editor::setDatasetUnits(const int group, const int dataset,
                                    const QString &units)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_units = units;
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_units = units;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1174,12 +1112,17 @@ void JSON::Editor::setDatasetUnits(const int group, const int dataset,
 void JSON::Editor::setDatasetIndex(const int group, const int dataset,
                                    const int frameIndex)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_index = frameIndex;
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_index = frameIndex;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1191,12 +1134,17 @@ void JSON::Editor::setDatasetIndex(const int group, const int dataset,
 void JSON::Editor::setDatasetLED(const int group, const int dataset,
                                  const bool generateLED)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_led = generateLED;
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_led = generateLED;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1208,12 +1156,17 @@ void JSON::Editor::setDatasetLED(const int group, const int dataset,
 void JSON::Editor::setDatasetGraph(const int group, const int dataset,
                                    const bool generateGraph)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_graph = generateGraph;
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_graph = generateGraph;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1225,12 +1178,17 @@ void JSON::Editor::setDatasetGraph(const int group, const int dataset,
 void JSON::Editor::setDatasetFftPlot(const int group, const int dataset,
                                      const bool generateFft)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_fft = generateFft;
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_fft = generateFft;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1242,12 +1200,17 @@ void JSON::Editor::setDatasetFftPlot(const int group, const int dataset,
 void JSON::Editor::setDatasetLogPlot(const int group, const int dataset,
                                      const bool generateLog)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_log = generateLog;
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_log = generateLog;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1260,24 +1223,30 @@ void JSON::Editor::setDatasetLogPlot(const int group, const int dataset,
 void JSON::Editor::setDatasetWidget(const int group, const int dataset,
                                     const int widgetId)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        QString widget;
-        if (widgetId == 1)
-            widget = "gauge";
-        else if (widgetId == 2)
-            widget = "bar";
-        else if (widgetId == 3)
-        {
-            widget = "compass";
-            set->m_min = 0;
-            set->m_max = 360;
-        }
 
-        set->m_widget = widget;
-        Q_EMIT datasetChanged(group, dataset);
+    // Get widget string
+    QString widget;
+    if (widgetId == 1)
+        widget = "gauge";
+    else if (widgetId == 2)
+        widget = "bar";
+    else if (widgetId == 3)
+    {
+        widget = "compass";
+        set.m_min = 0;
+        set.m_max = 360;
     }
+
+    // Update dataset & group
+    set.m_widget = widget;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1291,12 +1260,17 @@ void JSON::Editor::setDatasetWidget(const int group, const int dataset,
 void JSON::Editor::setDatasetWidgetMin(const int group, const int dataset,
                                        const QString &minimum)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_min = minimum.toDouble();
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_min = minimum.toDouble();
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1310,12 +1284,17 @@ void JSON::Editor::setDatasetWidgetMin(const int group, const int dataset,
 void JSON::Editor::setDatasetWidgetMax(const int group, const int dataset,
                                        const QString &maximum)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_max = maximum.toDouble();
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_max = maximum.toDouble();
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1327,12 +1306,17 @@ void JSON::Editor::setDatasetWidgetMax(const int group, const int dataset,
 void JSON::Editor::setDatasetWidgetData(const int group, const int dataset,
                                         const QString &widget)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_widget = widget;
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_widget = widget;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1346,12 +1330,17 @@ void JSON::Editor::setDatasetWidgetData(const int group, const int dataset,
 void JSON::Editor::setDatasetWidgetAlarm(const int group, const int dataset,
                                          const QString &alarm)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        set->m_alarm = alarm.toDouble();
-        Q_EMIT datasetChanged(group, dataset);
-    }
+
+    // Update dataset & group
+    set.m_alarm = alarm.toDouble();
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1363,16 +1352,22 @@ void JSON::Editor::setDatasetWidgetAlarm(const int group, const int dataset,
 void JSON::Editor::setDatasetFFTSamples(const int group, const int dataset,
                                         const QString &samples)
 {
+    // Get dataset & group
+    auto grp = getGroup(group);
     auto set = getDataset(group, dataset);
-    if (set)
-    {
-        auto sample = samples.toInt();
-        if (sample < 1)
-            sample = 1;
 
-        set->m_fftSamples = sample;
-        Q_EMIT datasetChanged(group, dataset);
-    }
+    // Validate FFT samples
+    auto sample = samples.toInt();
+    if (sample < 128)
+        sample = 128;
+
+    // Update dataset & group
+    set.m_fftSamples = sample;
+    grp.m_datasets.replace(dataset, set);
+    m_groups.replace(group, grp);
+
+    // Update UI
+    Q_EMIT datasetChanged(group, dataset);
 }
 
 /**
@@ -1443,12 +1438,9 @@ int JSON::Editor::nextDatasetIndex()
     {
         for (int j = 0; j < datasetCount(i); ++j)
         {
-            const auto dataset = getDataset(i, j);
-            if (dataset)
-            {
-                if (dataset->m_index >= maxIndex)
-                    maxIndex = dataset->m_index + 1;
-            }
+            auto dataset = getDataset(i, j);
+            if (dataset.m_index >= maxIndex)
+                maxIndex = dataset.m_index + 1;
         }
     }
 

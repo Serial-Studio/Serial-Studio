@@ -115,28 +115,23 @@ void Widgets::GPS::updateData()
     if (!isEnabled())
         return;
 
-    // Get group pointer
+    // Get group reference
     const auto dash = &UI::Dashboard::instance();
-    const auto group = dash->getGPS(m_index);
-    if (!group)
-        return;
+    auto group = dash->getGPS(m_index);
 
     // Get latitiude/longitude from datasets
     qreal lat = -1;
     qreal lon = -1;
     qreal alt = -1;
-    for (int i = 0; i < group->datasetCount(); ++i)
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
-        const auto dataset = group->getDataset(i);
-        if (dataset)
-        {
-            if (dataset->widget() == "lat")
-                lat = dataset->value().toDouble();
-            else if (dataset->widget() == "lon")
-                lon = dataset->value().toDouble();
-            else if (dataset->widget() == "alt")
-                alt = dataset->value().toDouble();
-        }
+        auto dataset = group.getDataset(i);
+        if (dataset.widget() == "lat")
+            lat = dataset.value().toDouble();
+        else if (dataset.widget() == "lon")
+            lon = dataset.value().toDouble();
+        else if (dataset.widget() == "alt")
+            alt = dataset.value().toDouble();
     }
 
     // Update map position

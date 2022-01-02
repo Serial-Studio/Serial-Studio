@@ -80,46 +80,39 @@ Widgets::Accelerometer::Accelerometer(const int index)
  */
 void Widgets::Accelerometer::updateData()
 {
-    // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
-    // Update accelerometer values
-    const auto accelerometer = UI::Dashboard::instance().getAccelerometer(m_index);
-    if (accelerometer)
+    auto accelerometer = UI::Dashboard::instance().getAccelerometer(m_index);
+    if (accelerometer.datasetCount() != 3)
+        return;
+
+    double x = 0;
+    double y = 0;
+    double z = 0;
+
+    for (int i = 0; i < 3; ++i)
     {
-        if (accelerometer->datasetCount() != 3)
-            return;
-
-        double x = 0;
-        double y = 0;
-        double z = 0;
-
-        JSON::Dataset *dataset;
-        for (int i = 0; i < 3; ++i)
-        {
-            dataset = accelerometer->getDataset(i);
-            if (dataset->widget() == "x")
-                x = dataset->value().toDouble();
-            if (dataset->widget() == "y")
-                y = dataset->value().toDouble();
-            if (dataset->widget() == "z")
-                z = dataset->value().toDouble();
-        }
-
-        x /= 9.18;
-        y /= 9.18;
-        z /= 9.18;
-
-        const double G = qSqrt(qPow(x, 2) + qPow(y, 2) + qPow(z, 2));
-
-        m_gauge.setValue(G);
-        setValue(QString("%1 G").arg(
-            QString::number(G, 'f', UI::Dashboard::instance().precision())));
-
-        // Repaint widget
-        requestRepaint();
+        auto dataset = accelerometer.getDataset(i);
+        if (dataset.widget() == "x")
+            x = dataset.value().toDouble();
+        if (dataset.widget() == "y")
+            y = dataset.value().toDouble();
+        if (dataset.widget() == "z")
+            z = dataset.value().toDouble();
     }
+
+    x /= 9.18;
+    y /= 9.18;
+    z /= 9.18;
+
+    const double G = qSqrt(qPow(x, 2) + qPow(y, 2) + qPow(z, 2));
+
+    m_gauge.setValue(G);
+    setValue(QString("%1 G").arg(
+        QString::number(G, 'f', UI::Dashboard::instance().precision())));
+
+    requestRepaint();
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

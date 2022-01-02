@@ -55,8 +55,7 @@ Widgets::Gauge::Gauge(const int index)
 
     // Set gauge scale
     auto dataset = dash->getGauge(m_index);
-    if (dataset)
-        m_gauge.setScale(dataset->min(), dataset->max());
+    m_gauge.setScale(dataset.min(), dataset.max());
 
     // Set gauge palette
     QPalette palette;
@@ -85,17 +84,12 @@ void Widgets::Gauge::updateData()
         return;
 
     // Update gauge value
-    const auto dataset = UI::Dashboard::instance().getGauge(m_index);
-    if (dataset)
-    {
-        const auto value = dataset->value().toDouble();
-        m_gauge.setValue(dataset->value().toDouble());
-        setValue(QString("%1 %2").arg(
-            QString::number(value, 'f', UI::Dashboard::instance().precision()),
-            dataset->units()));
-
-        requestRepaint();
-    }
+    auto dataset = UI::Dashboard::instance().getGauge(m_index);
+    m_gauge.setValue(dataset.value().toDouble());
+    setValue(QString("%1 %2").arg(QString::number(dataset.value().toDouble(), 'f',
+                                                  UI::Dashboard::instance().precision()),
+                                  dataset.units()));
+    requestRepaint();
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

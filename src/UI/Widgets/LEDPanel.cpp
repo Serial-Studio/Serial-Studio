@@ -40,10 +40,8 @@ Widgets::LEDPanel::LEDPanel(const int index)
     if (m_index < 0 || m_index >= dash->ledCount())
         return;
 
-    // Get group pointer
-    const auto group = dash->getLED(m_index);
-    if (!group)
-        return;
+    // Get group reference
+    auto group = dash->getLED(m_index);
 
     // Generate widget stylesheets
     const auto titleQSS = QSS("color:%1", theme->widgetTextPrimary());
@@ -62,11 +60,11 @@ Widgets::LEDPanel::LEDPanel(const int index)
     valueFont.setPixelSize(dash->monoFont().pixelSize() * 1.3);
 
     // Configure grid layout
-    m_leds.reserve(group->datasetCount());
-    m_titles.reserve(group->datasetCount());
+    m_leds.reserve(group.datasetCount());
+    m_titles.reserve(group.datasetCount());
     m_gridLayout = new QGridLayout(m_dataContainer);
     m_gridLayout->setSpacing(16);
-    for (int dataset = 0; dataset < group->datasetCount(); ++dataset)
+    for (int dataset = 0; dataset < group.datasetCount(); ++dataset)
     {
         // Create labels
         m_leds.append(new KLed(m_dataContainer));
@@ -79,7 +77,7 @@ Widgets::LEDPanel::LEDPanel(const int index)
         // Set label styles & fonts
         title->setStyleSheet(titleQSS);
         title->setFont(dash->monoFont());
-        title->setText(group->getDataset(dataset)->title());
+        title->setText(group.getDataset(dataset).title());
 
         // Set LED color & style
         led->setLook(KLed::Sunken);
@@ -156,28 +154,21 @@ void Widgets::LEDPanel::updateData()
 
     // Get group pointer
     const auto dash = &UI::Dashboard::instance();
-    const auto group = dash->getLED(m_index);
-    if (!group)
-        return;
+    auto group = dash->getLED(m_index);
 
     // Update labels
-    JSON::Dataset *dataset;
-    for (int i = 0; i < group->datasetCount(); ++i)
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
-        dataset = group->getDataset(i);
-        if (dataset)
-        {
-            // Get dataset value (we compare with 0.1 for low voltages)
-            const auto value = dataset->value().toDouble();
-            if (qAbs(value) < 0.10)
-                m_leds.at(i)->off();
-            else
-                m_leds.at(i)->on();
-
-            // Repaint widget
-            requestRepaint();
-        }
+        // Get dataset value (we compare with 0.1 for low voltages)
+        const auto value = group.getDataset(i).value().toDouble();
+        if (qAbs(value) < 0.10)
+            m_leds.at(i)->off();
+        else
+            m_leds.at(i)->on();
     }
+
+    // Repaint widget
+    requestRepaint();
 }
 
 /**

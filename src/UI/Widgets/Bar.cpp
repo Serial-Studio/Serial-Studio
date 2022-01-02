@@ -65,13 +65,10 @@ Widgets::Bar::Bar(const int index)
     m_thermo.setFillBrush(QBrush(QColor(color)));
 
     // Get initial properties from dataset
-    const auto dataset = UI::Dashboard::instance().getBar(m_index);
-    if (dataset)
-    {
-        m_thermo.setAlarmLevel(dataset->alarm());
-        m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
-        m_thermo.setScale(dataset->min(), dataset->max());
-    }
+    auto dataset = UI::Dashboard::instance().getBar(m_index);
+    m_thermo.setAlarmLevel(dataset.alarm());
+    m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
+    m_thermo.setScale(dataset.min(), dataset.max());
 
     // Set widget pointer & disable auto resize
     setWidget(&m_thermo, Qt::AlignHCenter, false);
@@ -95,18 +92,15 @@ void Widgets::Bar::updateData()
         return;
 
     // Update bar level
-    const auto dataset = UI::Dashboard::instance().getBar(m_index);
-    if (dataset)
-    {
-        const auto value = dataset->value().toDouble();
-        m_thermo.setValue(value);
-        setValue(QString("%1 %2").arg(
-            QString::number(value, 'f', UI::Dashboard::instance().precision()),
-            dataset->units()));
+    auto dataset = UI::Dashboard::instance().getBar(m_index);
+    const auto value = dataset.value().toDouble();
+    m_thermo.setValue(value);
+    setValue(QString("%1 %2").arg(
+        QString::number(value, 'f', UI::Dashboard::instance().precision()),
+        dataset.units()));
 
-        // Repaint widget
-        requestRepaint();
-    }
+    // Repaint widget
+    requestRepaint();
 }
 
 /**

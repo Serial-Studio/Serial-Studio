@@ -70,43 +70,37 @@ Widgets::Gyroscope::Gyroscope(const int index)
  */
 void Widgets::Gyroscope::updateData()
 {
-    // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
-    // Update gyroscope values
     const auto dash = &UI::Dashboard::instance();
-    const auto gyro = dash->getGyroscope(m_index);
-    if (gyro)
+    auto gyro = dash->getGyroscope(m_index);
+    if (gyro.datasetCount() != 3)
+        return;
+
+    double pitch = 0;
+    double roll = 0;
+    double yaw = 0;
+
+    for (int i = 0; i < 3; ++i)
     {
-        if (gyro->datasetCount() != 3)
-            return;
-
-        double pitch = 0;
-        double roll = 0;
-        double yaw = 0;
-
-        JSON::Dataset *dataset;
-        for (int i = 0; i < 3; ++i)
-        {
-            dataset = gyro->getDataset(i);
-            if (dataset->widget() == "pitch")
-                pitch = dataset->value().toDouble();
-            if (dataset->widget() == "roll")
-                roll = dataset->value().toDouble();
-            if (dataset->widget() == "yaw")
-                yaw = dataset->value().toDouble();
-        }
-
-        m_yaw = QString::number(qAbs(yaw), 'f', dash->precision());
-        m_roll = QString::number(qAbs(roll), 'f', dash->precision());
-        m_pitch = QString::number(qAbs(pitch), 'f', dash->precision());
-
-        m_gauge.setValue(pitch);
-        m_gauge.setGradient(roll / 360.0);
-
-        requestRepaint();
+        auto dataset = gyro.getDataset(i);
+        if (dataset.widget() == "pitch")
+            pitch = dataset.value().toDouble();
+        if (dataset.widget() == "roll")
+            roll = dataset.value().toDouble();
+        if (dataset.widget() == "yaw")
+            yaw = dataset.value().toDouble();
     }
+
+    m_yaw = QString::number(qAbs(yaw), 'f', dash->precision());
+    m_roll = QString::number(qAbs(roll), 'f', dash->precision());
+    m_pitch = QString::number(qAbs(pitch), 'f', dash->precision());
+
+    m_gauge.setValue(pitch);
+    m_gauge.setGradient(roll / 360.0);
+
+    requestRepaint();
 }
 
 void Widgets::Gyroscope::updateLabel()

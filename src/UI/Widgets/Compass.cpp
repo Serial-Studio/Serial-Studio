@@ -79,29 +79,23 @@ Widgets::Compass::Compass(const int index)
  */
 void Widgets::Compass::update()
 {
-    // Widget not enabled, do nothing
     if (!isEnabled())
         return;
 
-    // Update compass heading
-    const auto dataset = UI::Dashboard::instance().getCompass(m_index);
-    if (dataset)
-    {
-        auto value = dataset->value().toDouble();
-        auto text = QString("%1°").arg(
-            QString::number(value, 'f', UI::Dashboard::instance().precision()));
-        m_compass.setValue(value);
+    auto dataset = UI::Dashboard::instance().getCompass(m_index);
+    auto value = dataset.value().toDouble();
+    auto text = QString("%1°").arg(
+        QString::number(value, 'f', UI::Dashboard::instance().precision()));
 
-        if (text.length() == 2)
-            text.prepend("00");
-        else if (text.length() == 3)
-            text.prepend("0");
+    if (text.length() == 2)
+        text.prepend("00");
+    else if (text.length() == 3)
+        text.prepend("0");
 
-        setValue(text);
+    setValue(text);
+    m_compass.setValue(value);
 
-        // Repaint widget
-        requestRepaint();
-    }
+    requestRepaint();
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

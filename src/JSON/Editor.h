@@ -114,8 +114,8 @@ public:
     Q_INVOKABLE bool saveJsonFile();
     Q_INVOKABLE int datasetCount(const int group) const;
 
-    Q_INVOKABLE JSON::Group *getGroup(const int index) const;
-    Q_INVOKABLE JSON::Dataset *getDataset(const int group, const int index) const;
+    Q_INVOKABLE const Group &getGroup(const int index) const;
+    Q_INVOKABLE const JSON::Dataset &getDataset(const int group, const int index) const;
 
     Q_INVOKABLE QString groupTitle(const int group) const;
     Q_INVOKABLE QString groupWidget(const int group) const;
@@ -188,6 +188,6 @@ private:
     bool m_modified;
     QString m_filePath;
 
-    QVector<Group *> m_groups;
+    QVector<Group> m_groups;
 };
 }

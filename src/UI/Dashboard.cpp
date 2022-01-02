@@ -72,17 +72,17 @@ QFont UI::Dashboard::monoFont() const
 }
 
 // clang-format off
-JSON::Group *UI::Dashboard::getLED(const int index)           { return getGroupWidget(m_ledWidgets, index);           }
-JSON::Group *UI::Dashboard::getGPS(const int index)           { return getGroupWidget(m_gpsWidgets, index);           }
-JSON::Dataset *UI::Dashboard::getBar(const int index)         { return getDatasetWidget(m_barWidgets, index);         }
-JSON::Dataset *UI::Dashboard::getFFT(const int index)         { return getDatasetWidget(m_fftWidgets, index);         }
-JSON::Dataset *UI::Dashboard::getPlot(const int index)        { return getDatasetWidget(m_plotWidgets, index);        }
-JSON::Group *UI::Dashboard::getGroups(const int index)        { return getGroupWidget(m_groupWidgets, index);         }
-JSON::Dataset *UI::Dashboard::getGauge(const int index)       { return getDatasetWidget(m_gaugeWidgets, index);       }
-JSON::Group *UI::Dashboard::getGyroscope(const int index)     { return getGroupWidget(m_gyroscopeWidgets, index);     }
-JSON::Dataset *UI::Dashboard::getCompass(const int index)     { return getDatasetWidget(m_compassWidgets, index);     }
-JSON::Group *UI::Dashboard::getMultiplot(const int index)     { return getGroupWidget(m_multiPlotWidgets, index);     }
-JSON::Group *UI::Dashboard::getAccelerometer(const int index) { return getGroupWidget(m_accelerometerWidgets, index); }
+const JSON::Group &UI::Dashboard::getLED(const int index)           { return m_ledWidgets.at(index);           }
+const JSON::Group &UI::Dashboard::getGPS(const int index)           { return m_gpsWidgets.at(index);           }
+const JSON::Dataset &UI::Dashboard::getBar(const int index)         { return m_barWidgets.at(index);           }
+const JSON::Dataset &UI::Dashboard::getFFT(const int index)         { return m_fftWidgets.at(index);           }
+const JSON::Dataset &UI::Dashboard::getPlot(const int index)        { return m_plotWidgets.at(index);          }
+const JSON::Group &UI::Dashboard::getGroups(const int index)        { return m_groupWidgets.at(index);         }
+const JSON::Dataset &UI::Dashboard::getGauge(const int index)       { return m_gaugeWidgets.at(index);         }
+const JSON::Group &UI::Dashboard::getGyroscope(const int index)     { return m_gyroscopeWidgets.at(index);     }
+const JSON::Dataset &UI::Dashboard::getCompass(const int index)     { return m_compassWidgets.at(index);       }
+const JSON::Group &UI::Dashboard::getMultiplot(const int index)     { return m_multiPlotWidgets.at(index);     }
+const JSON::Group &UI::Dashboard::getAccelerometer(const int index) { return m_accelerometerWidgets.at(index); }
 // clang-format on
 
 //----------------------------------------------------------------------------------------
@@ -669,13 +669,13 @@ void UI::Dashboard::updatePlots()
     for (int i = 0; i < m_latestFrame.groupCount(); ++i)
     {
         const auto group = m_latestFrame.groups().at(i);
-        for (int j = 0; j < group->datasetCount(); ++j)
+        for (int j = 0; j < group.datasetCount(); ++j)
         {
-            auto dataset = group->datasets().at(j);
-            if (dataset->fft())
-                fftDatasets.append(dataset);
-            if (dataset->graph())
-                linearDatasets.append(dataset);
+            auto dataset = group.getDataset(j);
+            if (dataset.fft())
+                fftDatasets.append(&dataset);
+            if (dataset.graph())
+                linearDatasets.append(&dataset);
         }
     }
 
@@ -845,24 +845,24 @@ void UI::Dashboard::processLatestJSON(const JFI_Object &frameInfo)
  * @note We return a vector with a single group item because we want to display a title on
  * the window without breaking the current software architecture.
  */
-QVector<JSON::Group *> UI::Dashboard::getLEDWidgets() const
+QVector<JSON::Group> UI::Dashboard::getLEDWidgets() const
 {
-    QVector<JSON::Dataset *> widgets;
+    QVector<JSON::Dataset> widgets;
     Q_FOREACH (auto group, m_latestFrame.groups())
     {
-        Q_FOREACH (auto dataset, group->datasets())
+        Q_FOREACH (auto dataset, group.datasets())
         {
-            if (dataset->led())
+            if (dataset.led())
                 widgets.append(dataset);
         }
     }
 
-    QVector<JSON::Group *> groups;
+    QVector<JSON::Group> groups;
     if (widgets.count() > 0)
     {
-        JSON::Group *group = new JSON::Group();
-        group->m_title = tr("Status Panel");
-        group->m_datasets = widgets;
+        JSON::Group group;
+        group.m_title = tr("Status Panel");
+        group.m_datasets = widgets;
         groups.append(group);
     }
 
@@ -872,14 +872,14 @@ QVector<JSON::Group *> UI::Dashboard::getLEDWidgets() const
 /**
  * Returns a vector with all the datasets that need to be shown in the FFT widgets.
  */
-QVector<JSON::Dataset *> UI::Dashboard::getFFTWidgets() const
+QVector<JSON::Dataset> UI::Dashboard::getFFTWidgets() const
 {
-    QVector<JSON::Dataset *> widgets;
+    QVector<JSON::Dataset> widgets;
     Q_FOREACH (auto group, m_latestFrame.groups())
     {
-        Q_FOREACH (auto dataset, group->datasets())
+        Q_FOREACH (auto dataset, group.datasets())
         {
-            if (dataset->fft())
+            if (dataset.fft())
                 widgets.append(dataset);
         }
     }
@@ -890,14 +890,14 @@ QVector<JSON::Dataset *> UI::Dashboard::getFFTWidgets() const
 /**
  * Returns a vector with all the datasets that need to be plotted.
  */
-QVector<JSON::Dataset *> UI::Dashboard::getPlotWidgets() const
+QVector<JSON::Dataset> UI::Dashboard::getPlotWidgets() const
 {
-    QVector<JSON::Dataset *> widgets;
+    QVector<JSON::Dataset> widgets;
     Q_FOREACH (auto group, m_latestFrame.groups())
     {
-        Q_FOREACH (auto dataset, group->datasets())
+        Q_FOREACH (auto dataset, group.datasets())
         {
-            if (dataset->graph())
+            if (dataset.graph())
                 widgets.append(dataset);
         }
     }
@@ -909,12 +909,12 @@ QVector<JSON::Dataset *> UI::Dashboard::getPlotWidgets() const
  * Returns a vector with all the groups that implement the widget with the specied
  * @a handle.
  */
-QVector<JSON::Group *> UI::Dashboard::getWidgetGroups(const QString &handle) const
+QVector<JSON::Group> UI::Dashboard::getWidgetGroups(const QString &handle) const
 {
-    QVector<JSON::Group *> widgets;
+    QVector<JSON::Group> widgets;
     Q_FOREACH (auto group, m_latestFrame.groups())
     {
-        if (group->widget() == handle)
+        if (group.widget() == handle)
             widgets.append(group);
     }
 
@@ -925,14 +925,14 @@ QVector<JSON::Group *> UI::Dashboard::getWidgetGroups(const QString &handle) con
  * Returns a vector with all the datasets that implement a widget with the specified
  * @a handle.
  */
-QVector<JSON::Dataset *> UI::Dashboard::getWidgetDatasets(const QString &handle) const
+QVector<JSON::Dataset> UI::Dashboard::getWidgetDatasets(const QString &handle) const
 {
-    QVector<JSON::Dataset *> widgets;
+    QVector<JSON::Dataset> widgets;
     Q_FOREACH (auto group, m_latestFrame.groups())
     {
-        Q_FOREACH (auto dataset, group->datasets())
+        Q_FOREACH (auto dataset, group.datasets())
         {
-            if (dataset->widget() == handle)
+            if (dataset.widget() == handle)
                 widgets.append(dataset);
         }
     }
@@ -943,11 +943,11 @@ QVector<JSON::Dataset *> UI::Dashboard::getWidgetDatasets(const QString &handle)
 /**
  * Returns the titles of the datasets contained in the specified @a vector.
  */
-StringList UI::Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) const
+StringList UI::Dashboard::datasetTitles(const QVector<JSON::Dataset> &vector) const
 {
     StringList list;
     Q_FOREACH (auto set, vector)
-        list.append(set->title());
+        list.append(set.title());
 
     return list;
 }
@@ -955,11 +955,11 @@ StringList UI::Dashboard::datasetTitles(const QVector<JSON::Dataset *> &vector) 
 /**
  * Returns the titles of the groups contained in the specified @a vector.
  */
-StringList UI::Dashboard::groupTitles(const QVector<JSON::Group *> &vector) const
+StringList UI::Dashboard::groupTitles(const QVector<JSON::Group> &vector) const
 {
     StringList list;
     Q_FOREACH (auto group, vector)
-        list.append(group->title());
+        list.append(group.title());
 
     return list;
 }
@@ -989,32 +989,6 @@ void UI::Dashboard::setVisibility(QVector<bool> &vector, const int index,
         vector[index] = visible;
         Q_EMIT widgetVisibilityChanged();
     }
-}
-
-/**
- * Returns a pointer to the group at the specified @a index of the given @a vector.
- * If the @a index is invalid, then this function shall return a NULL pointer.
- */
-JSON::Group *UI::Dashboard::getGroupWidget(const QVector<JSON::Group *> &vector,
-                                           const int index)
-{
-    if (index < vector.count())
-        return vector.at(index);
-
-    return Q_NULLPTR;
-}
-
-/**
- * Returns a pointer to the dataset at the specified @a index of the given @a vector.
- * If the @a index is invalid, then this function shall return a NULL pointer.
- */
-JSON::Dataset *UI::Dashboard::getDatasetWidget(const QVector<JSON::Dataset *> &vector,
-                                               const int index)
-{
-    if (index < vector.count())
-        return vector.at(index);
-
-    return Q_NULLPTR;
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

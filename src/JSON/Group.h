@@ -65,15 +65,15 @@ public:
     QString title() const;
     QString widget() const;
     int datasetCount() const;
-    QVector<Dataset *> &datasets();
+    QVector<Dataset> &datasets();
     bool read(const QJsonObject &object);
 
-    Q_INVOKABLE JSON::Dataset *getDataset(const int index);
+    Q_INVOKABLE const JSON::Dataset &getDataset(const int index) const;
 
 private:
     QString m_title;
     QString m_widget;
-    QVector<Dataset *> m_datasets;
+    QVector<Dataset> m_datasets;
 
     friend class Editor;
     friend class UI::Dashboard;

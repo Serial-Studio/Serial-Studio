@@ -87,45 +87,41 @@ Widgets::FFTPlot::FFTPlot(const int index)
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
     // Get dataset max freq. & calculate fft size
-    const auto dataset = UI::Dashboard::instance().getFFT(m_index);
-    if (dataset)
+    auto dataset = UI::Dashboard::instance().getFFT(m_index);
+    int size = qMax(8, dataset.fftSamples());
+
+    // Ensure that FFT size is valid
+    while (m_transformer.setSize(size) != QFourierTransformer::FixedSize)
+        --size;
+
+    // Set FFT size
+    m_size = size;
+
+    // Initialize samples & FFT arrays
+    m_fft = (float *)calloc(m_size, sizeof(float));
+    m_samples = (float *)calloc(m_size, sizeof(float));
+
+    // Clear Y-axis data
+    PlotData xData;
+    PlotData yData;
+    xData.reserve(m_size);
+    yData.reserve(m_size);
+    for (int i = 0; i < m_size; ++i)
     {
-        // Calculate FFT size
-        int size = qMax(8, dataset->fftSamples());
-
-        // Ensure that FFT size is valid
-        while (m_transformer.setSize(size) != QFourierTransformer::FixedSize)
-            --size;
-
-        // Set FFT size
-        m_size = size;
-
-        // Initialize samples & FFT arrays
-        m_fft = (float *)calloc(m_size, sizeof(float));
-        m_samples = (float *)calloc(m_size, sizeof(float));
-
-        // Clear Y-axis data
-        PlotData xData;
-        PlotData yData;
-        xData.reserve(m_size);
-        yData.reserve(m_size);
-        for (int i = 0; i < m_size; ++i)
-        {
-            yData.append(0);
-            xData.append(i);
-        }
-
-        // Set y-scale from -1 to 1
-        m_plot.setAxisScale(QwtPlot::yLeft, -1, 1);
-
-        // Set axis titles
-        m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
-        m_plot.setAxisTitle(QwtPlot::yLeft, tr("FFT of %1").arg(dataset->title()));
-
-        // Set curve data & replot
-        m_curve.setSamples(xData, yData);
-        m_plot.replot();
+        yData.append(0);
+        xData.append(i);
     }
+
+    // Set y-scale from -1 to 1
+    m_plot.setAxisScale(QwtPlot::yLeft, -1, 1);
+
+    // Set axis titles
+    m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
+    m_plot.setAxisTitle(QwtPlot::yLeft, tr("FFT of %1").arg(dataset.title()));
+
+    // Set curve data & replot
+    m_curve.setSamples(xData, yData);
+    m_plot.replot();
 
     // React to dashboard events
     connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
@@ -157,11 +153,11 @@ void Widgets::FFTPlot::updateData()
         return;
 
     // Replot
-    const auto plotData = UI::Dashboard::instance().fftPlotValues();
-    if (plotData->count() > m_index)
+    auto plotData = UI::Dashboard::instance().fftPlotValues();
+    if (plotData.count() > m_index)
     {
         // Copy data to samples array
-        auto data = plotData->at(m_index);
+        auto data = plotData.at(m_index);
         for (int i = 0; i < m_size; ++i)
             m_samples[i] = static_cast<float>(data[i]);
 

@@ -86,32 +86,28 @@ Widgets::Plot::Plot(const int index)
     // Set curve color & plot style
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
-    // Get dataset units
-    const auto dataset = UI::Dashboard::instance().getPlot(m_index);
-    if (dataset)
+    // Update graph scale
+    auto dataset = UI::Dashboard::instance().getPlot(m_index);
+    const auto max = dataset.max();
+    const auto min = dataset.min();
+    if (max > min)
     {
-        // Update graph scale
-        const auto max = dataset->max();
-        const auto min = dataset->min();
-        if (max > min)
-        {
-            m_max = max;
-            m_min = min;
-            m_autoscale = false;
-            m_plot.setAxisScale(QwtPlot::yLeft, m_min, m_max);
-        }
-
-        // Enable logarithmic scale
-        // clang-format off
-        if (dataset->log())
-            m_plot.setAxisScaleEngine(QwtPlot::yLeft,
-                                      new QwtLogScaleEngine(10));
-        // clang-format on
-
-        // Set axis titles
-        m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
-        m_plot.setAxisTitle(QwtPlot::yLeft, dataset->title());
+        m_max = max;
+        m_min = min;
+        m_autoscale = false;
+        m_plot.setAxisScale(QwtPlot::yLeft, m_min, m_max);
     }
+
+    // Enable logarithmic scale
+    // clang-format off
+    if (dataset.log())
+        m_plot.setAxisScaleEngine(QwtPlot::yLeft,
+                                  new QwtLogScaleEngine(10));
+    // clang-format on
+
+    // Set axis titles
+    m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
+    m_plot.setAxisTitle(QwtPlot::yLeft, dataset.title());
 
     // React to dashboard events
     // clang-format off
@@ -139,17 +135,17 @@ void Widgets::Plot::updateData()
         return;
 
     // Get new data
-    const auto plotData = UI::Dashboard::instance().linearPlotValues();
-    if (plotData->count() > m_index)
+    auto plotData = UI::Dashboard::instance().linearPlotValues();
+    if (plotData.count() > m_index)
     {
         // Check if we need to update graph scale
         if (m_autoscale)
         {
             // Scan new values to see if chart should be updated
             bool changed = false;
-            for (int i = 0; i < plotData->at(m_index).count(); ++i)
+            for (int i = 0; i < plotData.at(m_index).count(); ++i)
             {
-                const auto v = plotData->at(m_index).at(i);
+                const auto v = plotData.at(m_index).at(i);
                 if (v > m_max)
                 {
                     m_max = v + 1;
@@ -200,7 +196,7 @@ void Widgets::Plot::updateData()
         }
 
         // Replot graph
-        m_curve.setSamples(plotData->at(m_index));
+        m_curve.setSamples(plotData.at(m_index));
         m_plot.replot();
 
         // Repaint widget
@@ -223,7 +219,7 @@ void Widgets::Plot::updateRange()
         tempYData.append(0);
 
     // Redraw graph
-    m_curve.setSamples(*dash->xPlotValues(), tempYData);
+    m_curve.setSamples(dash->xPlotValues(), tempYData);
     m_plot.replot();
 
     // Repaint widget

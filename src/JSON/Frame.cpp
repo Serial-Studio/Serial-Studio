@@ -29,7 +29,6 @@
  */
 JSON::Frame::~Frame()
 {
-    qDeleteAll(m_groups);
     m_groups.clear();
 }
 
@@ -40,7 +39,6 @@ JSON::Frame::~Frame()
 void JSON::Frame::clear()
 {
     m_title = "";
-    qDeleteAll(m_groups);
     m_groups.clear();
 }
 
@@ -63,7 +61,7 @@ int JSON::Frame::groupCount() const
 /**
  * Returns a vector of pointers to the @c Group objects associated to this frame.
  */
-QVector<JSON::Group *> JSON::Frame::groups() const
+QVector<JSON::Group> JSON::Frame::groups() const
 {
     return m_groups;
 }
@@ -92,11 +90,9 @@ bool JSON::Frame::read(const QJsonObject &object)
         // Generate groups & datasets from data frame
         for (auto i = 0; i < groups.count(); ++i)
         {
-            Group *group = new Group();
-            if (group->read(groups.at(i).toObject()))
+            Group group;
+            if (group.read(groups.at(i).toObject()))
                 m_groups.append(group);
-            else
-                delete group;
         }
 
         // Return status
@@ -109,12 +105,9 @@ bool JSON::Frame::read(const QJsonObject &object)
 }
 
 /**
- * @return The group at the given @a index,vreturns @c Q_NULLPTR on invalid index
+ * @return The group at the given @a index
  */
-JSON::Group *JSON::Frame::getGroup(const int index)
+const JSON::Group &JSON::Frame::getGroup(const int index) const
 {
-    if (index < groupCount() && index >= 0)
-        return m_groups.at(index);
-
-    return Q_NULLPTR;
+    return m_groups.at(index);
 }

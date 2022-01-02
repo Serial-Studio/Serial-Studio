@@ -60,14 +60,14 @@ public:
     void clear();
     QString title() const;
     int groupCount() const;
-    QVector<Group *> groups() const;
+    QVector<Group> groups() const;
     bool read(const QJsonObject &object);
-    Q_INVOKABLE JSON::Group *getGroup(const int index);
+    Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
 
     inline bool isValid() const { return !title().isEmpty() && groupCount() > 0; }
 
 private:
     QString m_title;
-    QVector<Group *> m_groups;
+    QVector<Group> m_groups;
 };
 }

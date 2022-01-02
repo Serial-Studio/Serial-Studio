@@ -29,7 +29,6 @@
  */
 JSON::Group::~Group()
 {
-    qDeleteAll(m_datasets);
     m_datasets.clear();
 }
 
@@ -60,7 +59,7 @@ int JSON::Group::datasetCount() const
 /**
  * @return A list with all the dataset objects contained in this group
  */
-QVector<JSON::Dataset *> &JSON::Group::datasets()
+QVector<JSON::Dataset> &JSON::Group::datasets()
 {
     return m_datasets;
 }
@@ -68,12 +67,9 @@ QVector<JSON::Dataset *> &JSON::Group::datasets()
 /**
  * @return The dataset at the given @a index,vreturns @c Q_NULLPTR on invalid index
  */
-JSON::Dataset *JSON::Group::getDataset(const int index)
+const JSON::Dataset &JSON::Group::getDataset(const int index) const
 {
-    if (index < datasetCount() && index >= 0)
-        return m_datasets.at(index);
-
-    return Q_NULLPTR;
+    return m_datasets.at(index);
 }
 
 /**
@@ -101,11 +97,9 @@ bool JSON::Group::read(const QJsonObject &object)
                 const auto object = array.at(i).toObject();
                 if (!object.isEmpty())
                 {
-                    Dataset *dataset = new Dataset();
-                    if (dataset->read(object))
+                    Dataset dataset;
+                    if (dataset.read(object))
                         m_datasets.append(dataset);
-                    else
-                        delete dataset;
                 }
             }
 

@@ -68,19 +68,16 @@ Widgets::MultiPlot::MultiPlot(const int index)
 
     // Create curves from datasets
     bool normalize = true;
-    const auto group = dash->getMultiplot(m_index);
+    auto group = dash->getMultiplot(m_index);
     StringList colors = theme->widgetColors();
-    m_curves.reserve(group->datasetCount());
-    for (int i = 0; i < group->datasetCount(); ++i)
+    m_curves.reserve(group.datasetCount());
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
         // Get dataset title & min/max values
         QString title = tr("Unknown");
-        const auto dataset = group->getDataset(i);
-        if (dataset)
-        {
-            title = group->getDataset(i)->title();
-            normalize &= dataset->max() > dataset->min();
-        }
+        auto dataset = group.getDataset(i);
+        title = dataset.title();
+        normalize &= dataset.max() > dataset.min();
 
         // Create curve
         auto curve = new QwtPlotCurve(title);
@@ -102,7 +99,7 @@ Widgets::MultiPlot::MultiPlot(const int index)
 
     // Add plot legend to display curve names
     m_legend.setFrameStyle(QFrame::Plain);
-    m_plot.setAxisTitle(QwtPlot::yLeft, group->title());
+    m_plot.setAxisTitle(QwtPlot::yLeft, group.title());
     m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
     m_plot.insertLegend(&m_legend, QwtPlot::BottomLegend);
 
@@ -137,34 +134,30 @@ Widgets::MultiPlot::MultiPlot(const int index)
 void Widgets::MultiPlot::updateData()
 {
     // Get group
-    const auto group = UI::Dashboard::instance().getMultiplot(m_index);
-    if (!group)
-        return;
+    auto group = UI::Dashboard::instance().getMultiplot(m_index);
 
     // Plot each dataset
-    for (int i = 0; i < group->datasetCount(); ++i)
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
         // Get dataset
-        const auto dataset = group->getDataset(i);
-        if (!dataset)
-            continue;
+        auto dataset = group.getDataset(i);
 
         // Add point to plot data
         const auto count = m_yData[i].count();
         memmove(m_yData[i].data(), m_yData[i].data() + 1, count * sizeof(double));
 
         // Normalize dataset value
-        if (dataset->max() > dataset->min())
+        if (dataset.max() > dataset.min())
         {
-            const auto vmin = dataset->min();
-            const auto vmax = dataset->max();
-            const auto v = dataset->value().toDouble();
+            const auto vmin = dataset.min();
+            const auto vmax = dataset.max();
+            const auto v = dataset.value().toDouble();
             m_yData[i][count - 1] = (v - vmin) / (vmax - vmin);
         }
 
         // Plot dataset value directly
         else
-            m_yData[i][count - 1] = dataset->value().toDouble();
+            m_yData[i][count - 1] = dataset.value().toDouble();
 
         // Widget not enabled, do not redraw
         if (!isEnabled())
@@ -192,7 +185,7 @@ void Widgets::MultiPlot::updateRange()
 
     // Set number of points
     m_yData.clear();
-    const auto group = UI::Dashboard::instance().getMultiplot(m_index);
+    auto group = UI::Dashboard::instance().getMultiplot(m_index);
     for (int i = 0; i < dash->points(); ++i)
     {
         m_yData.append(PlotData());
@@ -202,9 +195,9 @@ void Widgets::MultiPlot::updateRange()
     }
 
     // Create curve from data
-    for (int i = 0; i < group->datasetCount(); ++i)
+    for (int i = 0; i < group.datasetCount(); ++i)
         if (m_curves.count() > i)
-            m_curves.at(i)->setSamples(*dash->xPlotValues(), m_yData[i]);
+            m_curves.at(i)->setSamples(dash->xPlotValues(), m_yData[i]);
 
     // Repaint widget
     requestRepaint();
