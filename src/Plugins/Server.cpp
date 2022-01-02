@@ -186,7 +186,7 @@ void Plugins::Server::acceptConnection()
     // React to socket errors
     // clang-format off
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), 
+    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
             this,     SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
 #else
     connect(socket, &QTcpSocket::errorOccurred,
@@ -291,7 +291,8 @@ void Plugins::Server::sendRawData(const QByteArray &data)
  */
 void Plugins::Server::registerFrame(const QJsonObject &json)
 {
-    m_frames.append(json);
+    if (enabled())
+        m_frames.append(json);
 }
 
 /**

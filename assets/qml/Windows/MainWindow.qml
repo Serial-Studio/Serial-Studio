@@ -158,11 +158,10 @@ FramelessWindow.CustomWindow {
         target: Cpp_UI_Dashboard
 
         function onUpdated()  {
-            if (!root.firstValidFrame)
+            if (root.firstValidFrame)
                 return
 
-            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) &&
-                    Cpp_UI_Dashboard.frameValid()) {
+            if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) && Cpp_UI_Dashboard.frameValid()) {
                 setup.hide()
                 root.showDashboard()
                 root.firstValidFrame = true

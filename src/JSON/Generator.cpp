@@ -261,9 +261,6 @@ void JSON::Generator::readData(const QByteArray &data)
 
         // Create JSON document
         m_json = QJsonDocument::fromJson(json.toUtf8(), &m_error).object();
-
-        // Clear strings
-        json.clear();
     }
 
     // No parse error, update UI & reset error counter
