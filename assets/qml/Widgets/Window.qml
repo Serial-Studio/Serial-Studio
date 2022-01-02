@@ -126,7 +126,7 @@ Page {
             anchors.fill: parent
             onDoubleClicked: root.headerDoubleClicked()
 
-            onClicked: (mouse) => {
+            onClicked: {
                 if (mouse.x >= headerBt.x && mouse.x <= headerBt.x + headerBt.width)
                     root.headerDoubleClicked()
             }

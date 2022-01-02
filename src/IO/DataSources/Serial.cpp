@@ -626,6 +626,7 @@ void IO::DataSources::Serial::readSettings()
         m_baudRateList.append(list.at(i));
 
     // Sort baud rate list
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
     for (auto i = 0; i < m_baudRateList.count() - 1; ++i)
     {
         for (auto j = 0; j < m_baudRateList.count() - i - 1; ++j)
@@ -636,6 +637,7 @@ void IO::DataSources::Serial::readSettings()
                 m_baudRateList.swapItemsAt(j, j + 1);
         }
     }
+#endif
 
     // Notify UI
     Q_EMIT baudRateListChanged();
@@ -647,6 +649,7 @@ void IO::DataSources::Serial::readSettings()
 void IO::DataSources::Serial::writeSettings()
 {
     // Sort baud rate list
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
     for (auto i = 0; i < m_baudRateList.count() - 1; ++i)
     {
         for (auto j = 0; j < m_baudRateList.count() - i - 1; ++j)
@@ -660,6 +663,7 @@ void IO::DataSources::Serial::writeSettings()
             }
         }
     }
+#endif
 
     // Convert QVector to QStringList
     QStringList list;

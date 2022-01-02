@@ -181,8 +181,18 @@ void Plugins::Server::acceptConnection()
 
     // Connect socket signals/slots
     connect(socket, &QTcpSocket::readyRead, this, &Plugins::Server::onDataReceived);
-    connect(socket, &QTcpSocket::errorOccurred, this, &Plugins::Server::onErrorOccurred);
     connect(socket, &QTcpSocket::disconnected, this, &Plugins::Server::removeConnection);
+    
+    // React to socket errors
+    // clang-format off
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), 
+            this,     SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
+#else
+    connect(socket, &QTcpSocket::errorOccurred,
+            this, &Plugins::Server::onErrorOccurred);
+#endif
+    // clang-format on
 
     // Add socket to sockets list
     m_sockets.append(socket);

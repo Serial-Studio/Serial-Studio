@@ -250,10 +250,16 @@ StringList MQTT::Client::mqttVersions() const
  */
 StringList MQTT::Client::sslProtocols() const
 {
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+    return StringList {
+        tr("System default"),  "TLS v1.0",  "TLS v1.1",  "TLS v1.2"
+    };
+#else
     return StringList {
         tr("System default"),  "TLS v1.0",  "TLS v1.1",  "TLS v1.2",
         "TLS v1.3 (or later)", "DTLS v1.0", "DTLS v1.2", "DTLS v1.2 (or later)"
     };
+#endif
 }
 
 /**
@@ -271,8 +277,11 @@ QString MQTT::Client::caFilePath() const
 void MQTT::Client::loadCaFile()
 {
     // Prompt user to select a CA file
-    auto path
-        = QFileDialog::getOpenFileName(Q_NULLPTR, tr("Select CA file"), QDir::homePath());
+    // clang-format off
+    auto path = QFileDialog::getOpenFileName(Q_NULLPTR, 
+                                             tr("Select CA file"), 
+                                             QDir::homePath());
+    // clang-format on
 
     // Try to load the *.ca file
     loadCaFile(path);
@@ -420,6 +429,25 @@ void MQTT::Client::loadCaFile(const QString &path)
  */
 void MQTT::Client::setSslProtocol(const int index)
 {
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+    switch (index)
+    {
+        case 0:
+            m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
+            break;
+        case 1:
+            m_sslConfiguration.setProtocol(QSsl::TlsV1_0);
+            break;
+        case 2:
+            m_sslConfiguration.setProtocol(QSsl::TlsV1_1);
+            break;
+        case 3:
+            m_sslConfiguration.setProtocol(QSsl::TlsV1_2);
+            break;
+        default:
+            break;
+    }
+#else
     switch (index)
     {
         case 0:
@@ -449,6 +477,7 @@ void MQTT::Client::setSslProtocol(const int index)
         default:
             break;
     }
+#endif
 
     regenerateClient();
     Q_EMIT sslProtocolChanged();

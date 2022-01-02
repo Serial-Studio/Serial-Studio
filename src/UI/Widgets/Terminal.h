@@ -64,7 +64,6 @@ class Terminal : public UI::DeclarativeWidget
 {
     // clang-format off
     Q_OBJECT
-    QML_ELEMENT
     Q_PROPERTY(QFont font
                READ font
                WRITE setFont

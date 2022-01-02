@@ -217,7 +217,7 @@ Widgets.Window {
                 icon: "qrc:/icons/group.svg"
                 count: Cpp_UI_Dashboard.groupCount
                 titles: Cpp_UI_Dashboard.groupTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGroupVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setGroupVisible(index, checked)
             }
 
             //
@@ -228,7 +228,7 @@ Widgets.Window {
                 icon: "qrc:/icons/multiplot.svg"
                 count: Cpp_UI_Dashboard.multiPlotCount
                 titles: Cpp_UI_Dashboard.multiPlotTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setMultiplotVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setMultiplotVisible(index, checked)
             }
 
             //
@@ -239,7 +239,7 @@ Widgets.Window {
                 icon: "qrc:/icons/led.svg"
                 count: Cpp_UI_Dashboard.ledCount
                 titles: Cpp_UI_Dashboard.ledTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setLedVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setLedVisible(index, checked)
             }
 
             //
@@ -250,7 +250,7 @@ Widgets.Window {
                 icon: "qrc:/icons/fft.svg"
                 count: Cpp_UI_Dashboard.fftCount
                 titles: Cpp_UI_Dashboard.fftTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setFFTVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setFFTVisible(index, checked)
             }
 
             //
@@ -261,7 +261,7 @@ Widgets.Window {
                 icon: "qrc:/icons/plot.svg"
                 count: Cpp_UI_Dashboard.plotCount
                 titles: Cpp_UI_Dashboard.plotTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setPlotVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setPlotVisible(index, checked)
             }
 
             //
@@ -272,7 +272,7 @@ Widgets.Window {
                 icon: "qrc:/icons/bar.svg"
                 count: Cpp_UI_Dashboard.barCount
                 titles: Cpp_UI_Dashboard.barTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setBarVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setBarVisible(index, checked)
             }
 
             //
@@ -283,7 +283,7 @@ Widgets.Window {
                 icon: "qrc:/icons/gauge.svg"
                 count: Cpp_UI_Dashboard.gaugeCount
                 titles: Cpp_UI_Dashboard.gaugeTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGaugeVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setGaugeVisible(index, checked)
             }
 
             //
@@ -294,7 +294,7 @@ Widgets.Window {
                 icon: "qrc:/icons/compass.svg"
                 count: Cpp_UI_Dashboard.compassCount
                 titles: Cpp_UI_Dashboard.compassTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setCompassVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setCompassVisible(index, checked)
             }
 
             //
@@ -305,7 +305,7 @@ Widgets.Window {
                 icon: "qrc:/icons/gyro.svg"
                 count: Cpp_UI_Dashboard.gyroscopeCount
                 titles: Cpp_UI_Dashboard.gyroscopeTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGyroscopeVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setGyroscopeVisible(index, checked)
             }
 
             //
@@ -316,7 +316,7 @@ Widgets.Window {
                 icon: "qrc:/icons/accelerometer.svg"
                 count: Cpp_UI_Dashboard.accelerometerCount
                 titles: Cpp_UI_Dashboard.accelerometerTitles
-                onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setAccelerometerVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setAccelerometerVisible(index, checked)
             }
 
             //
@@ -327,7 +327,7 @@ Widgets.Window {
                 icon: "qrc:/icons/gps.svg"
                 count: Cpp_UI_Dashboard.gpsCount
                 titles: Cpp_UI_Dashboard.gpsTitles
-                onCheckedChanged: (index, checked) =>  Cpp_UI_Dashboard.setGpsVisible(index, checked)
+                onCheckedChanged: Cpp_UI_Dashboard.setGpsVisible(index, checked)
             }
         }
     }

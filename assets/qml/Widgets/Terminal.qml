@@ -157,7 +157,7 @@ Item {
                 acceptedButtons: Qt.RightButton
                 anchors.rightMargin: textEdit.scrollbarWidth
 
-                onClicked: (mouse) => {
+                onClicked: {
                     if (mouse.button === Qt.RightButton) {
                         contextMenu.popup()
                         mouse.accepted = true

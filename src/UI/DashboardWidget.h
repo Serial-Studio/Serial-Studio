@@ -98,7 +98,6 @@ class DashboardWidget : public DeclarativeWidget
 {
     // clang-format off
     Q_OBJECT
-    QML_ELEMENT
     Q_PROPERTY(int widgetIndex
                READ widgetIndex
                WRITE setWidgetIndex

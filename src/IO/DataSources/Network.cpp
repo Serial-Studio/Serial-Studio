@@ -37,10 +37,20 @@ IO::DataSources::Network::Network()
     setUdpLocalPort(defaultUdpLocalPort());
     setUdpRemotePort(defaultUdpRemotePort());
     setSocketType(QAbstractSocket::TcpSocket);
-    connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this,
-            &IO::DataSources::Network::onErrorOccurred);
-    connect(&m_udpSocket, &QUdpSocket::errorOccurred, this,
-            &IO::DataSources::Network::onErrorOccurred);
+    
+    // clang-format off
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+    connect(&m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), 
+            this,           SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
+    connect(&m_udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), 
+            this,           SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
+#else
+    connect(&m_tcpSocket, &QTcpSocket::errorOccurred,
+            this, &IO::DataSources::Network::onErrorOccurred);
+    connect(&m_udpSocket, &QUdpSocket::errorOccurred,
+            this, &IO::DataSources::Network::onErrorOccurred);
+#endif
+    // clang-format on
 }
 
 /**
