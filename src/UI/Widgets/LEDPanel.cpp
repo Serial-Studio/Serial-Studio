@@ -152,8 +152,12 @@ void Widgets::LEDPanel::updateData()
     if (!isEnabled())
         return;
 
-    // Get group pointer
+    // Invalid index, abort update
     const auto dash = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dash->ledCount())
+        return;
+
+    // Get group pointer
     auto group = dash->getLED(m_index);
 
     // Update labels

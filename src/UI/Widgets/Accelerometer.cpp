@@ -80,17 +80,26 @@ Widgets::Accelerometer::Accelerometer(const int index)
  */
 void Widgets::Accelerometer::updateData()
 {
+    // Widget disabled
     if (!isEnabled())
         return;
 
-    auto accelerometer = UI::Dashboard::instance().getAccelerometer(m_index);
+    // Invalid index, abort update
+    const auto dash = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dash->accelerometerCount())
+        return;
+
+    // Get accelerometer group & validate it
+    auto accelerometer = dash->getAccelerometer(m_index);
     if (accelerometer.datasetCount() != 3)
         return;
 
+    // Initialize x, y, z
     double x = 0;
     double y = 0;
     double z = 0;
 
+    // Extract x, y, z from accelerometer group
     for (int i = 0; i < 3; ++i)
     {
         auto dataset = accelerometer.getDataset(i);
@@ -102,16 +111,20 @@ void Widgets::Accelerometer::updateData()
             z = dataset.value().toDouble();
     }
 
+    // Divide accelerations by gravitational constant
     x /= 9.18;
     y /= 9.18;
     z /= 9.18;
 
+    // Normalize acceleration vector
     const double G = qSqrt(qPow(x, 2) + qPow(y, 2) + qPow(z, 2));
 
+    // Update gauge
     m_gauge.setValue(G);
     setValue(QString("%1 G").arg(
         QString::number(G, 'f', UI::Dashboard::instance().precision())));
 
+    // Repaint the widget
     requestRepaint();
 }
 

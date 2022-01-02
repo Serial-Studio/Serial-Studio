@@ -91,8 +91,13 @@ void Widgets::Bar::updateData()
     if (!isEnabled())
         return;
 
+    // Invalid index, abort update
+    const auto dash = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dash->barCount())
+        return;
+
     // Update bar level
-    auto dataset = UI::Dashboard::instance().getBar(m_index);
+    auto dataset = dash->getBar(m_index);
     const auto value = dataset.value().toDouble();
     m_thermo.setValue(value);
     setValue(QString("%1 %2").arg(

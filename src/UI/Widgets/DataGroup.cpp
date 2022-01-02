@@ -190,8 +190,12 @@ void Widgets::DataGroup::updateData()
     if (!isEnabled())
         return;
 
-    // Get group pointer
-    auto dash = &UI::Dashboard::instance();
+    // Invalid index, abort update
+    const auto dash = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dash->groupCount())
+        return;
+
+    // Get group reference
     auto group = dash->getGroups(m_index);
 
     // Regular expresion handler

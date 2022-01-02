@@ -73,33 +73,43 @@ void Widgets::Gyroscope::updateData()
     if (!isEnabled())
         return;
 
+    // Invalid index, abort update
     const auto dash = &UI::Dashboard::instance();
-    auto gyro = dash->getGyroscope(m_index);
-    if (gyro.datasetCount() != 3)
+    if (m_index < 0 || m_index >= dash->gyroscopeCount())
         return;
 
-    double pitch = 0;
-    double roll = 0;
-    double yaw = 0;
+    // Get group reference & validate dataset count
+    auto group = dash->getGyroscope(m_index);
+    if (group.datasetCount() != 3)
+        return;
 
+    // Initialize values for pitch, roll & yaw
+    double p = 0;
+    double r = 0;
+    double y = 0;
+
+    // Extract pitch, roll & yaw from group datasets
     for (int i = 0; i < 3; ++i)
     {
-        auto dataset = gyro.getDataset(i);
+        auto dataset = group.getDataset(i);
         if (dataset.widget() == "pitch")
-            pitch = dataset.value().toDouble();
+            p = dataset.value().toDouble();
         if (dataset.widget() == "roll")
-            roll = dataset.value().toDouble();
+            r = dataset.value().toDouble();
         if (dataset.widget() == "yaw")
-            yaw = dataset.value().toDouble();
+            y = dataset.value().toDouble();
     }
 
-    m_yaw = QString::number(qAbs(yaw), 'f', dash->precision());
-    m_roll = QString::number(qAbs(roll), 'f', dash->precision());
-    m_pitch = QString::number(qAbs(pitch), 'f', dash->precision());
+    // Construct strings from pitch, roll & yaw
+    m_yaw = QString::number(qAbs(y), 'f', dash->precision());
+    m_roll = QString::number(qAbs(r), 'f', dash->precision());
+    m_pitch = QString::number(qAbs(p), 'f', dash->precision());
 
-    m_gauge.setValue(pitch);
-    m_gauge.setGradient(roll / 360.0);
+    // Update gauge
+    m_gauge.setValue(p);
+    m_gauge.setGradient(r / 360.0);
 
+    // Repaint the widget
     requestRepaint();
 }
 

@@ -133,8 +133,13 @@ Widgets::MultiPlot::MultiPlot(const int index)
  */
 void Widgets::MultiPlot::updateData()
 {
+    // Invalid index, abort update
+    const auto dash = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dash->multiPlotCount())
+        return;
+
     // Get group
-    auto group = UI::Dashboard::instance().getMultiplot(m_index);
+    auto group = dash->getMultiplot(m_index);
 
     // Plot each dataset
     for (int i = 0; i < group.datasetCount(); ++i)
@@ -180,8 +185,10 @@ void Widgets::MultiPlot::updateData()
  */
 void Widgets::MultiPlot::updateRange()
 {
-    // Get pointer to dashboard manager
+    // Invalid index, abort update
     const auto dash = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dash->multiPlotCount())
+        return;
 
     // Set number of points
     m_yData.clear();

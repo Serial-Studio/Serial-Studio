@@ -83,12 +83,19 @@ void Widgets::Gauge::updateData()
     if (!isEnabled())
         return;
 
+    // Invalid index, abort update
+    const auto dash = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dash->gaugeCount())
+        return;
+
     // Update gauge value
-    auto dataset = UI::Dashboard::instance().getGauge(m_index);
+    auto dataset = dash->getGauge(m_index);
     m_gauge.setValue(dataset.value().toDouble());
-    setValue(QString("%1 %2").arg(QString::number(dataset.value().toDouble(), 'f',
-                                                  UI::Dashboard::instance().precision()),
-                                  dataset.units()));
+    setValue(QString("%1 %2").arg(
+        QString::number(dataset.value().toDouble(), 'f', dash->precision()),
+        dataset.units()));
+
+    // Repaint widget
     requestRepaint();
 }
 

@@ -115,8 +115,12 @@ void Widgets::GPS::updateData()
     if (!isEnabled())
         return;
 
-    // Get group reference
+    // Invalid index, abort update
     const auto dash = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dash->gpsCount())
+        return;
+
+    // Get group reference
     auto group = dash->getGPS(m_index);
 
     // Get latitiude/longitude from datasets

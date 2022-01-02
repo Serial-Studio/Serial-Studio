@@ -79,22 +79,32 @@ Widgets::Compass::Compass(const int index)
  */
 void Widgets::Compass::update()
 {
+    // Widget disabled
     if (!isEnabled())
         return;
 
-    auto dataset = UI::Dashboard::instance().getCompass(m_index);
+    // Invalid index, abort update
+    const auto dash = &UI::Dashboard::instance();
+    if (m_index < 0 || m_index >= dash->compassCount())
+        return;
+
+    // Get dataset value & set text format
+    auto dataset = dash->getCompass(m_index);
     auto value = dataset.value().toDouble();
     auto text = QString("%1°").arg(
         QString::number(value, 'f', UI::Dashboard::instance().precision()));
 
+    // Ensure that angle always has 3 characters
     if (text.length() == 2)
         text.prepend("00");
     else if (text.length() == 3)
         text.prepend("0");
 
+    // Update gauge
     setValue(text);
     m_compass.setValue(value);
 
+    // Repaint the widget
     requestRepaint();
 }
 
