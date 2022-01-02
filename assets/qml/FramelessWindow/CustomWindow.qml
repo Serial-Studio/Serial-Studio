@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Window 2.12 as QtWindow
+import QtQuick 2.10
+import QtQuick.Window 2.10 as QtWindow
 
 import "../Widgets" as Widgets
 
@@ -63,7 +63,7 @@ QtWindow.Window {
     readonly property int handleSize: radius > 0 ? radius + shadowMargin + 10 : 0
     readonly property int radius: Cpp_ThemeManager.customWindowDecorations ?
                                       (((root.visibility === QtWindow.Window.Maximized &&
-                                        maximizeEnabled) || isFullscreen) ? 0 : 10) : 0
+                                         maximizeEnabled) || isFullscreen) ? 0 : 10) : 0
 
     //
     // Visibility properties
@@ -77,10 +77,10 @@ QtWindow.Window {
     readonly property int customFlags: {
         // Setup frameless window flags
         var flags = Qt.Window |
-                    Qt.CustomizeWindowHint |
-                    Qt.FramelessWindowHint |
-                    Qt.WindowSystemMenuHint |
-                    Qt.WindowMinMaxButtonsHint
+                Qt.CustomizeWindowHint |
+                Qt.FramelessWindowHint |
+                Qt.WindowSystemMenuHint |
+                Qt.WindowMinMaxButtonsHint
 
         //
         // The macOS window manager is able to generate shadows for Qt frameless
@@ -208,39 +208,6 @@ QtWindow.Window {
         border.color: root.borderColor
         border.width: root.borderWidth
         anchors.margins: root.shadowMargin
-    }
-
-    //
-    // Handle for resizing the window
-    // Note: this does not work on macOS, see the following article for more information
-    //       https://www.qt.io/blog/custom-window-decorations
-    //
-    DragHandler {
-        id: resizeHandler
-        target: null
-        enabled: !Cpp_IsMac && Cpp_ThemeManager.customWindowDecorations
-        grabPermissions: TapHandler.TakeOverForbidden
-        onActiveChanged: {
-            if (active) {
-                const p = resizeHandler.centroid.position
-                const b = root.handleSize
-                let e = 0;
-
-                if (p.x < b)
-                    e |= Qt.LeftEdge
-
-                if (p.x >= width - b)
-                    e |= Qt.RightEdge
-
-                if (p.y < b)
-                    e |= Qt.TopEdge
-
-                if (p.y >= height - b)
-                    e |= Qt.BottomEdge
-
-                root.startSystemResize(e)
-            }
-        }
     }
 
     //

@@ -20,10 +20,10 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick 2.10
+import QtQuick.Window 2.10
+import QtQuick.Layouts 1.10
+import QtQuick.Controls 2.10
 
 import "../FramelessWindow" as FramelessWindow
 
@@ -94,10 +94,10 @@ FramelessWindow.CustomWindow {
         Item {
             anchors.fill: parent
 
-            DragHandler {
-                grabPermissions: TapHandler.CanTakeOverFromAnything
-                onActiveChanged: {
-                    if (active)
+            MouseArea {
+                anchors.fill: parent
+                onPressedChanged: {
+                    if (pressed)
                         root.startSystemMove()
                 }
             }

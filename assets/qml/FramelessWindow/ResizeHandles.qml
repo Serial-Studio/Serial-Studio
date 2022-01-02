@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Window 2.12
+import QtQuick 2.10
+import QtQuick.Window 2.10
 
 Item {
     id: root
@@ -40,7 +40,7 @@ Item {
              (window.visibility !== Window.Maximized)
 
     //
-    // Right resize handle for macOS
+    // Right resize handle
     //
     MouseArea {
         property bool dragging: false
@@ -54,7 +54,6 @@ Item {
         }
 
         width: handleSize
-        enabled: Cpp_IsMac
         onPressedChanged: dragging = pressed
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
 
@@ -87,7 +86,6 @@ Item {
         }
 
         width: handleSize
-        enabled: Cpp_IsMac
         onPressedChanged: dragging = pressed
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
 
@@ -131,7 +129,6 @@ Item {
         }
 
         height: handleSize
-        enabled: Cpp_IsMac
         onPressedChanged: dragging = pressed
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)
         onMouseYChanged: {
@@ -235,7 +232,6 @@ Item {
 
         width: handleSize
         height: handleSize
-        enabled: Cpp_IsMac
         onPressedChanged: dragging = pressed
         onMouseXChanged: updateWindowPosition()
         onPressed: lastMousePos = Qt.point(mouseX, mouseY)

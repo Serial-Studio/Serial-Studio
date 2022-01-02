@@ -20,12 +20,12 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick 2.10
+import QtQuick.Window 2.10
+import QtQuick.Layouts 1.10
+import QtQuick.Controls 2.10
 
-import Qt.labs.settings 1.1
+import Qt.labs.settings 1.0
 
 import "../Panes"
 import "../Windows"

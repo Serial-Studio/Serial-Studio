@@ -20,10 +20,10 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick 2.10
+import QtQuick.Window 2.10
+import QtQuick.Layouts 1.10
+import QtQuick.Controls 2.10
 
 import "../Widgets" as Widgets
 
@@ -238,10 +238,10 @@ Control {
             height: parent.height
             Layout.fillWidth: true
 
-            DragHandler {
-                grabPermissions: TapHandler.CanTakeOverFromAnything
-                onActiveChanged: {
-                    if (active)
+            MouseArea {
+                anchors.fill: parent
+                onPressedChanged: {
+                    if (pressed)
                         window.startSystemMove()
                 }
             }

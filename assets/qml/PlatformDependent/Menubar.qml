@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.10
+import QtQuick.Controls 2.10
 
 MenuBar {
     id: root
@@ -197,7 +197,7 @@ MenuBar {
             sequence: "f11"
             onTriggered: mainWindow.toggleFullscreen()
             text: mainWindow.isFullscreen ? qsTr("Exit full screen") :
-                                                qsTr("Enter full screen")
+                                            qsTr("Enter full screen")
         }
     }
 

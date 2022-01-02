@@ -20,10 +20,10 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.10
+import QtQuick.Window 2.10
+import QtQuick.Layouts 1.10
+import QtQuick.Controls 2.10
 
 import "../Widgets" as Widgets
 
@@ -176,31 +176,25 @@ Rectangle {
     }
 
     //
-    // Window drag handler
+    // Window drag handler & maximize by double click
     //
     Item {
         anchors.fill: parent
         enabled: Cpp_ThemeManager.customWindowDecorations
 
-        DragHandler {
-            grabPermissions: TapHandler.CanTakeOverFromAnything
-            onActiveChanged: {
-                if (active)
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton
+
+            onDoubleClicked: {
+                if (root.maximizeEnabled)
+                    root.toggleMaximized()
+            }
+
+            onPressedChanged: {
+                if (pressed)
                     window.startSystemMove()
             }
-        }
-    }
-
-    //
-    // Window maximize by double click
-    //
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton
-        enabled: Cpp_ThemeManager.customWindowDecorations
-        onDoubleClicked: {
-            if (root.maximizeEnabled)
-                root.toggleMaximized()
         }
     }
 

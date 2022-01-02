@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.12
+import QtQuick 2.10
 
 Image {
     id: root
