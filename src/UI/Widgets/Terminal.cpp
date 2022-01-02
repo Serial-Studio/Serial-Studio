@@ -66,14 +66,10 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
 #endif
     m_textEdit.setPalette(palette);
 
-    // Connect console signals
+    // Connect signals/slots
     // clang-format off
     connect(&IO::Console::instance(), &IO::Console::stringReceived,
             this, &Widgets::Terminal::insertText);
-    // clang-format on
-
-    // Configure re-paint timer at 10 Hz
-    // clang-format off
     connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout10Hz,
             this, &Widgets::Terminal::repaint);
     // clang-format on
@@ -554,6 +550,10 @@ void Widgets::Terminal::addText(const QString &text, const bool enableVt100)
     QString textToInsert = text;
     if (enableVt100)
         textToInsert = vt100Processing(text);
+
+    // Clear terminal scrollback after 10000 lines
+    if (m_textEdit.blockCount() >= 10000)
+        m_textEdit.clear();
 
     // Add text at the end of the text document
     QTextCursor cursor(m_textEdit.document());

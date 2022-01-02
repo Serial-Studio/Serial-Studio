@@ -153,10 +153,12 @@ private Q_SLOTS:
 
 private:
     QFile m_jsonMap;
+    JFI_Object m_jfi;
     quint64 m_frameCount;
     QSettings m_settings;
     QString m_jsonMapData;
     OperationMode m_opMode;
+    QJsonParseError m_error;
     bool m_processInSeparateThread;
 };
 }

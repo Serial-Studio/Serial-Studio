@@ -321,13 +321,9 @@ void JSON::Generator::readData(const QByteArray &data)
 void JSON::Generator::processFrame(const QByteArray &data, const quint64 frame,
                                    const QDateTime &time)
 {
-    // Init variables
-    QJsonParseError error;
-    QJsonDocument document;
-
     // Serial device sends JSON (auto mode)
     if (operationMode() == JSON::Generator::kAutomatic)
-        document = QJsonDocument::fromJson(data, &error);
+        m_jfi.jsonDocument = QJsonDocument::fromJson(data, &m_error);
 
     // We need to use a map file, check if its loaded & replace values into map
     else
@@ -343,12 +339,8 @@ void JSON::Generator::processFrame(const QByteArray &data, const quint64 frame,
         for (int i = 0; i < list.count(); ++i)
             json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
 
-        // Create json document
-        const auto jsonData = json.toUtf8();
-        const auto jsonDocument = QJsonDocument::fromJson(jsonData, &error);
-
         // Calculate dynamically generated values
-        auto root = jsonDocument.object();
+        auto root = QJsonDocument::fromJson(json.toUtf8(), &m_error).object();
         auto groups = JFI_Value(root, "groups", "g").toArray();
         for (int i = 0; i < groups.count(); ++i)
         {
@@ -380,12 +372,19 @@ void JSON::Generator::processFrame(const QByteArray &data, const quint64 frame,
         root.insert("groups", groups);
 
         // Create JSON document
-        document = QJsonDocument(root);
+        m_jfi.jsonDocument = QJsonDocument(root);
+
+        // Clear strings
+        json.clear();
     }
 
     // No parse error, update UI & reset error counter
-    if (error.error == QJsonParseError::NoError)
-        Q_EMIT jsonChanged(JFI_CreateNew(frame, time, document));
+    if (m_error.error == QJsonParseError::NoError)
+    {
+        m_jfi.rxDateTime = time;
+        m_jfi.frameNumber = frame;
+        Q_EMIT jsonChanged(m_jfi);
+    }
 }
 
 //----------------------------------------------------------------------------------------

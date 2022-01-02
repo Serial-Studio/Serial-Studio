@@ -292,6 +292,7 @@ void IO::Console::save()
 void IO::Console::clear()
 {
     m_textBuffer.clear();
+    m_textBuffer.reserve(10 * 1000);
     m_isStartingLine = true;
     Q_EMIT dataReceived();
 }
