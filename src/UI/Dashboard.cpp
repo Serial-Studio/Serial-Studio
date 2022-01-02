@@ -72,17 +72,17 @@ QFont UI::Dashboard::monoFont() const
 }
 
 // clang-format off
-const JSON::Group &UI::Dashboard::getLED(const int index)           { return m_ledWidgets.at(index);           }
-const JSON::Group &UI::Dashboard::getGPS(const int index)           { return m_gpsWidgets.at(index);           }
-const JSON::Dataset &UI::Dashboard::getBar(const int index)         { return m_barWidgets.at(index);           }
-const JSON::Dataset &UI::Dashboard::getFFT(const int index)         { return m_fftWidgets.at(index);           }
-const JSON::Dataset &UI::Dashboard::getPlot(const int index)        { return m_plotWidgets.at(index);          }
-const JSON::Group &UI::Dashboard::getGroups(const int index)        { return m_groupWidgets.at(index);         }
-const JSON::Dataset &UI::Dashboard::getGauge(const int index)       { return m_gaugeWidgets.at(index);         }
-const JSON::Group &UI::Dashboard::getGyroscope(const int index)     { return m_gyroscopeWidgets.at(index);     }
-const JSON::Dataset &UI::Dashboard::getCompass(const int index)     { return m_compassWidgets.at(index);       }
-const JSON::Group &UI::Dashboard::getMultiplot(const int index)     { return m_multiPlotWidgets.at(index);     }
-const JSON::Group &UI::Dashboard::getAccelerometer(const int index) { return m_accelerometerWidgets.at(index); }
+const JSON::Group &UI::Dashboard::getLED(const int index) const           { return m_ledWidgets.at(index);           }
+const JSON::Group &UI::Dashboard::getGPS(const int index) const           { return m_gpsWidgets.at(index);           }
+const JSON::Dataset &UI::Dashboard::getBar(const int index) const         { return m_barWidgets.at(index);           }
+const JSON::Dataset &UI::Dashboard::getFFT(const int index) const         { return m_fftWidgets.at(index);           }
+const JSON::Dataset &UI::Dashboard::getPlot(const int index) const        { return m_plotWidgets.at(index);          }
+const JSON::Group &UI::Dashboard::getGroups(const int index) const        { return m_groupWidgets.at(index);         }
+const JSON::Dataset &UI::Dashboard::getGauge(const int index) const       { return m_gaugeWidgets.at(index);         }
+const JSON::Group &UI::Dashboard::getGyroscope(const int index) const     { return m_gyroscopeWidgets.at(index);     }
+const JSON::Dataset &UI::Dashboard::getCompass(const int index) const     { return m_compassWidgets.at(index);       }
+const JSON::Group &UI::Dashboard::getMultiplot(const int index) const     { return m_multiPlotWidgets.at(index);     }
+const JSON::Group &UI::Dashboard::getAccelerometer(const int index) const { return m_accelerometerWidgets.at(index); }
 // clang-format on
 
 //----------------------------------------------------------------------------------------

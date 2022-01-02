@@ -182,17 +182,17 @@ public:
     static Dashboard &instance();
 
     QFont monoFont() const;
-    const JSON::Group &getLED(const int index);
-    const JSON::Group &getGPS(const int index);
-    const JSON::Dataset &getFFT(const int index);
-    const JSON::Dataset &getBar(const int index);
-    const JSON::Group &getGroups(const int index);
-    const JSON::Dataset &getPlot(const int index);
-    const JSON::Dataset &getGauge(const int index);
-    const JSON::Group &getGyroscope(const int index);
-    const JSON::Dataset &getCompass(const int index);
-    const JSON::Group &getMultiplot(const int index);
-    const JSON::Group &getAccelerometer(const int index);
+    const JSON::Group &getLED(const int index) const;
+    const JSON::Group &getGPS(const int index) const;
+    const JSON::Dataset &getFFT(const int index) const;
+    const JSON::Dataset &getBar(const int index) const;
+    const JSON::Group &getGroups(const int index) const;
+    const JSON::Dataset &getPlot(const int index) const;
+    const JSON::Dataset &getGauge(const int index) const;
+    const JSON::Group &getGyroscope(const int index) const;
+    const JSON::Dataset &getCompass(const int index) const;
+    const JSON::Group &getMultiplot(const int index) const;
+    const JSON::Group &getAccelerometer(const int index) const;
 
     QString title();
     bool available();
