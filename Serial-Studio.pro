@@ -73,20 +73,8 @@ CONFIG(debug, debug|release) {
 CONFIG(release, debug|release) {
     CONFIG += unity_build
 
-    *g++*: {
-        QMAKE_CXXFLAGS_RELEASE -= -O2
-        QMAKE_CXXFLAGS_RELEASE *= -Ofast
-    }
-
-    *clang*: {
-        QMAKE_CXXFLAGS_RELEASE -= -O2
-        QMAKE_CXXFLAGS_RELEASE *= -Ofast
-    }
-
     *msvc*: {
         QMAKE_CXXFLAGS *= -MP
-        QMAKE_CXXFLAGS_RELEASE *= /O2
-
         INCLUDEPATH += $$OUT_PWD
         INCLUDEPATH += $$OUT_PWD/debug
         INCLUDEPATH += $$OUT_PWD/release
