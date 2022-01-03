@@ -27,7 +27,7 @@
 #include <Misc/ThemeManager.h>
 #include <UI/Widgets/DataGroup.h>
 
-#define EXEC_EVENT(pointer, function, event)                                             \
+#define DG_EXEC_EVENT(pointer, function, event)                                          \
     if (pointer)                                                                         \
     {                                                                                    \
         class PwnedWidget : public QScrollArea                                           \
@@ -246,27 +246,27 @@ void Widgets::DataGroup::resizeEvent(QResizeEvent *event)
 
 void Widgets::DataGroup::wheelEvent(QWheelEvent *event)
 {
-    EXEC_EVENT(m_scrollArea, wheelEvent, event);
+    DG_EXEC_EVENT(m_scrollArea, wheelEvent, event);
 }
 
 void Widgets::DataGroup::mouseMoveEvent(QMouseEvent *event)
 {
-    EXEC_EVENT(m_scrollArea, mouseMoveEvent, event);
+    DG_EXEC_EVENT(m_scrollArea, mouseMoveEvent, event);
 }
 
 void Widgets::DataGroup::mousePressEvent(QMouseEvent *event)
 {
-    EXEC_EVENT(m_scrollArea, mousePressEvent, event);
+    DG_EXEC_EVENT(m_scrollArea, mousePressEvent, event);
 }
 
 void Widgets::DataGroup::mouseReleaseEvent(QMouseEvent *event)
 {
-    EXEC_EVENT(m_scrollArea, mouseReleaseEvent, event);
+    DG_EXEC_EVENT(m_scrollArea, mouseReleaseEvent, event);
 }
 
 void Widgets::DataGroup::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    EXEC_EVENT(m_scrollArea, mouseDoubleClickEvent, event);
+    DG_EXEC_EVENT(m_scrollArea, mouseDoubleClickEvent, event);
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

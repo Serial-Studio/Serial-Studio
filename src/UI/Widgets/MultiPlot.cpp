@@ -148,8 +148,9 @@ void Widgets::MultiPlot::updateData()
         auto dataset = group.getDataset(i);
 
         // Add point to plot data
+        auto data = m_yData[i].data();
         auto count = m_yData[i].count();
-        memmove(m_yData[i].data(), m_yData[i].data() + 1, count * sizeof(double));
+        memmove(data, data + 1, count * sizeof(double));
 
         // Normalize dataset value
         if (dataset.max() > dataset.min())
@@ -193,12 +194,11 @@ void Widgets::MultiPlot::updateRange()
     // Set number of points
     m_yData.clear();
     auto group = UI::Dashboard::instance().getMultiplot(m_index);
-    for (int i = 0; i < dash->points(); ++i)
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
         m_yData.append(PlotData());
-        m_yData[i].reserve(dash->points());
-        for (int j = 0; j < dash->points(); ++j)
-            m_yData[i].append(0);
+        m_yData.last().resize(dash->points());
+        std::fill(m_yData.last().begin(), m_yData.last().end(), 0.0001);
     }
 
     // Create curve from data

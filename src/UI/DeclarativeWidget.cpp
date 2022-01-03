@@ -27,7 +27,7 @@
  * Creates a subclass of @c QWidget that allows us to call the given protected/private
  * @a function and pass the given @a event as a parameter to the @a function.
  */
-#define EXEC_EVENT(pointer, function, event)                                             \
+#define DW_EXEC_EVENT(pointer, function, event)                                          \
     if (!pointer.isNull())                                                               \
     {                                                                                    \
         class PwnedWidget : public QWidget                                               \
@@ -102,7 +102,7 @@ void UI::DeclarativeWidget::paint(QPainter *painter)
  */
 void UI::DeclarativeWidget::keyPressEvent(QKeyEvent *event)
 {
-    EXEC_EVENT(m_widget, keyPressEvent, event);
+    DW_EXEC_EVENT(m_widget, keyPressEvent, event);
 }
 
 /**
@@ -110,7 +110,7 @@ void UI::DeclarativeWidget::keyPressEvent(QKeyEvent *event)
  */
 void UI::DeclarativeWidget::keyReleaseEvent(QKeyEvent *event)
 {
-    EXEC_EVENT(m_widget, keyReleaseEvent, event);
+    DW_EXEC_EVENT(m_widget, keyReleaseEvent, event);
 }
 
 /**
@@ -118,7 +118,7 @@ void UI::DeclarativeWidget::keyReleaseEvent(QKeyEvent *event)
  */
 void UI::DeclarativeWidget::inputMethodEvent(QInputMethodEvent *event)
 {
-    EXEC_EVENT(m_widget, inputMethodEvent, event);
+    DW_EXEC_EVENT(m_widget, inputMethodEvent, event);
 }
 
 /**
@@ -126,7 +126,7 @@ void UI::DeclarativeWidget::inputMethodEvent(QInputMethodEvent *event)
  */
 void UI::DeclarativeWidget::focusInEvent(QFocusEvent *event)
 {
-    EXEC_EVENT(m_widget, focusInEvent, event);
+    DW_EXEC_EVENT(m_widget, focusInEvent, event);
 }
 
 /**
@@ -134,7 +134,7 @@ void UI::DeclarativeWidget::focusInEvent(QFocusEvent *event)
  */
 void UI::DeclarativeWidget::focusOutEvent(QFocusEvent *event)
 {
-    EXEC_EVENT(m_widget, focusOutEvent, event);
+    DW_EXEC_EVENT(m_widget, focusOutEvent, event);
 }
 
 /**
@@ -142,7 +142,7 @@ void UI::DeclarativeWidget::focusOutEvent(QFocusEvent *event)
  */
 void UI::DeclarativeWidget::mousePressEvent(QMouseEvent *event)
 {
-    EXEC_EVENT(m_widget, mousePressEvent, event);
+    DW_EXEC_EVENT(m_widget, mousePressEvent, event);
 }
 
 /**
@@ -150,7 +150,7 @@ void UI::DeclarativeWidget::mousePressEvent(QMouseEvent *event)
  */
 void UI::DeclarativeWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    EXEC_EVENT(m_widget, mouseMoveEvent, event);
+    DW_EXEC_EVENT(m_widget, mouseMoveEvent, event);
 }
 
 /**
@@ -158,7 +158,7 @@ void UI::DeclarativeWidget::mouseMoveEvent(QMouseEvent *event)
  */
 void UI::DeclarativeWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    EXEC_EVENT(m_widget, mouseReleaseEvent, event);
+    DW_EXEC_EVENT(m_widget, mouseReleaseEvent, event);
 }
 
 /**
@@ -166,7 +166,7 @@ void UI::DeclarativeWidget::mouseReleaseEvent(QMouseEvent *event)
  */
 void UI::DeclarativeWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    EXEC_EVENT(m_widget, mouseDoubleClickEvent, event);
+    DW_EXEC_EVENT(m_widget, mouseDoubleClickEvent, event);
 }
 
 /**
@@ -174,7 +174,7 @@ void UI::DeclarativeWidget::mouseDoubleClickEvent(QMouseEvent *event)
  */
 void UI::DeclarativeWidget::wheelEvent(QWheelEvent *event)
 {
-    EXEC_EVENT(m_widget, wheelEvent, event);
+    DW_EXEC_EVENT(m_widget, wheelEvent, event);
 }
 
 /**
@@ -182,7 +182,7 @@ void UI::DeclarativeWidget::wheelEvent(QWheelEvent *event)
  */
 void UI::DeclarativeWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    EXEC_EVENT(m_widget, dragEnterEvent, event);
+    DW_EXEC_EVENT(m_widget, dragEnterEvent, event);
 }
 
 /**
@@ -190,7 +190,7 @@ void UI::DeclarativeWidget::dragEnterEvent(QDragEnterEvent *event)
  */
 void UI::DeclarativeWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    EXEC_EVENT(m_widget, dragMoveEvent, event);
+    DW_EXEC_EVENT(m_widget, dragMoveEvent, event);
 }
 
 /**
@@ -198,7 +198,7 @@ void UI::DeclarativeWidget::dragMoveEvent(QDragMoveEvent *event)
  */
 void UI::DeclarativeWidget::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    EXEC_EVENT(m_widget, dragLeaveEvent, event);
+    DW_EXEC_EVENT(m_widget, dragLeaveEvent, event);
 }
 
 /**
@@ -206,7 +206,7 @@ void UI::DeclarativeWidget::dragLeaveEvent(QDragLeaveEvent *event)
  */
 void UI::DeclarativeWidget::dropEvent(QDropEvent *event)
 {
-    EXEC_EVENT(m_widget, dropEvent, event);
+    DW_EXEC_EVENT(m_widget, dropEvent, event);
 }
 
 /**

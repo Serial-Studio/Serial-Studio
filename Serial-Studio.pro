@@ -70,8 +70,33 @@ CONFIG(debug, debug|release) {
     CONFIG += sanitize_address
 }
 
-*msvc*: {
-    QMAKE_CXXFLAGS *= -MP
+CONFIG(release, debug|release) {
+    CONFIG += unity_build
+
+    *g++*: {
+        QMAKE_CXXFLAGS_RELEASE -= -O2
+        QMAKE_CXXFLAGS_RELEASE *= -Ofast
+    }
+
+    *clang*: {
+        QMAKE_CXXFLAGS_RELEASE -= -O2
+        QMAKE_CXXFLAGS_RELEASE *= -Ofast
+    }
+
+    *msvc*: {
+        QMAKE_CXXFLAGS *= -MP
+        QMAKE_CXXFLAGS_RELEASE *= /O2
+
+        INCLUDEPATH += $$OUT_PWD
+        INCLUDEPATH += $$OUT_PWD/debug
+        INCLUDEPATH += $$OUT_PWD/release
+    }
+}
+
+CONFIG(unity_build) {
+    CONFIG  += ltcg                             # Enable linker optimization
+    DEFINES += UNITY_BUILD=1                    # Enable unity build
+    SOURCES += src/SingleCompilationUnit.cpp    # Include single compilation unit in code
 }
 
 #-----------------------------------------------------------------------------------------
