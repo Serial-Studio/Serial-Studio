@@ -138,6 +138,9 @@ void Plugins::Server::setEnabled(const bool enabled)
 
         m_sockets.clear();
     }
+
+    // Clear frames array to avoid memory leaks
+    m_frames.clear();
 }
 
 /**
