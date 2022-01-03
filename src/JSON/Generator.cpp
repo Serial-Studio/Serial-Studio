@@ -151,11 +151,11 @@ void JSON::Generator::loadJsonMap(const QString &path)
             Misc::Utilities::showMessageBox(tr("JSON parse error"), error.errorString());
         }
 
-        // JSON contains no errors, load data & save settings
+        // JSON contains no errors, load compacted JSON document & save settings
         else
         {
             writeSettings(path);
-            m_jsonMapData = QString::fromUtf8(data);
+            m_jsonMapData = QString::fromUtf8(document.toJson(QJsonDocument::Compact));
         }
 
         // Get rid of warnings
