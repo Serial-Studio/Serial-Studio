@@ -60,7 +60,7 @@ int JSON::Frame::groupCount() const
 /**
  * Returns a vector of pointers to the @c Group objects associated to this frame.
  */
-QVector<JSON::Group> JSON::Frame::groups() const
+QVector<JSON::Group> &JSON::Frame::groups()
 {
     return m_groups;
 }

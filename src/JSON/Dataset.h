@@ -70,6 +70,7 @@ public:
     bool fft() const;
     bool led() const;
     bool log() const;
+    int index() const;
     bool graph() const;
     double min() const;
     double max() const;

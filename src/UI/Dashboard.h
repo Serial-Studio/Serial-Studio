@@ -212,7 +212,7 @@ public:
     int accelerometerCount() const;
 
     Q_INVOKABLE bool frameValid() const;
-    Q_INVOKABLE StringList widgetTitles() const;
+    Q_INVOKABLE StringList widgetTitles();
     Q_INVOKABLE int relativeIndex(const int globalIndex) const;
     Q_INVOKABLE bool widgetVisible(const int globalIndex) const;
     Q_INVOKABLE QString widgetIcon(const int globalIndex) const;
@@ -230,19 +230,20 @@ public:
     Q_INVOKABLE bool multiPlotVisible(const int index) const;
     Q_INVOKABLE bool accelerometerVisible(const int index) const;
 
-    StringList barTitles() const;
-    StringList fftTitles() const;
-    StringList gpsTitles() const;
-    StringList ledTitles() const;
-    StringList plotTitles() const;
-    StringList groupTitles() const;
-    StringList gaugeTitles() const;
-    StringList compassTitles() const;
-    StringList gyroscopeTitles() const;
-    StringList multiPlotTitles() const;
-    StringList accelerometerTitles() const;
+    StringList barTitles();
+    StringList fftTitles();
+    StringList gpsTitles();
+    StringList ledTitles();
+    StringList plotTitles();
+    StringList groupTitles();
+    StringList gaugeTitles();
+    StringList compassTitles();
+    StringList gyroscopeTitles();
+    StringList multiPlotTitles();
+    StringList accelerometerTitles();
 
     const PlotData &xPlotValues() { return m_xData; }
+    const JSON::Frame &currentFrame() { return m_currentFrame; }
     const QVector<PlotData> &fftPlotValues() { return m_fftPlotValues; }
     const QVector<PlotData> &linearPlotValues() { return m_linearPlotValues; }
 
@@ -267,14 +268,14 @@ private Q_SLOTS:
     void processLatestJSON(const QJsonObject &json);
 
 private:
-    QVector<JSON::Group> getLEDWidgets() const;
-    QVector<JSON::Dataset> getFFTWidgets() const;
-    QVector<JSON::Dataset> getPlotWidgets() const;
-    QVector<JSON::Group> getWidgetGroups(const QString &handle) const;
-    QVector<JSON::Dataset> getWidgetDatasets(const QString &handle) const;
+    QVector<JSON::Group> getLEDWidgets();
+    QVector<JSON::Dataset> getFFTWidgets();
+    QVector<JSON::Dataset> getPlotWidgets();
+    QVector<JSON::Group> getWidgetGroups(const QString &handle);
+    QVector<JSON::Dataset> getWidgetDatasets(const QString &handle);
 
-    StringList groupTitles(const QVector<JSON::Group> &vector) const;
-    StringList datasetTitles(const QVector<JSON::Dataset> &vector) const;
+    StringList groupTitles(const QVector<JSON::Group> &vector);
+    StringList datasetTitles(const QVector<JSON::Dataset> &vector);
 
     bool getVisibility(const QVector<bool> &vector, const int index) const;
     void setVisibility(QVector<bool> &vector, const int index, const bool visible);
@@ -312,6 +313,6 @@ private:
     QVector<JSON::Group> m_gyroscopeWidgets;
     QVector<JSON::Group> m_accelerometerWidgets;
 
-    JSON::Frame m_latestFrame;
+    JSON::Frame m_currentFrame;
 };
 }

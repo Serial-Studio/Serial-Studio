@@ -144,6 +144,10 @@ void Widgets::MultiPlot::updateData()
     // Plot each dataset
     for (int i = 0; i < group.datasetCount(); ++i)
     {
+        // Check vector size
+        if (m_yData.count() < i)
+            break;
+
         // Get dataset
         auto dataset = group.getDataset(i);
 

@@ -29,6 +29,7 @@
 #include <AppInfo.h>
 #include <IO/Manager.h>
 #include <CSV/Export.h>
+#include <JSON/Editor.h>
 #include <UI/Dashboard.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
@@ -38,7 +39,8 @@
  * dataframes into JSON list.
  */
 CSV::Export::Export()
-    : m_exportEnabled(true)
+    : m_fieldCount(0)
+    , m_exportEnabled(true)
 {
     auto io = &IO::Manager::instance();
     auto te = &Misc::TimerEvents::instance();
@@ -117,6 +119,7 @@ void CSV::Export::closeFile()
         while (!m_frames.isEmpty())
             writeValues();
 
+        m_fieldCount = 0;
         m_csvFile.close();
         m_textStream.setDevice(Q_NULLPTR);
 
@@ -134,7 +137,7 @@ void CSV::Export::writeValues()
     auto sep = IO::Manager::instance().separatorSequence();
 
     // Write each frame
-    for (int i = 0; i < m_frames.count(); ++i)
+    for (auto i = 0; i < m_frames.count(); ++i)
     {
         auto frame = m_frames.at(i);
         auto fields = QString::fromUtf8(frame.data).split(sep);
@@ -147,13 +150,23 @@ void CSV::Export::writeValues()
         m_textStream << frame.rxDateTime.toString("yyyy/MM/dd/ HH:mm:ss::zzz") << ",";
 
         // Write frame data
-        for (int j = 0; j < fields.count(); ++j)
+        for (auto j = 0; j < fields.count(); ++j)
         {
             m_textStream << fields.at(j);
             if (j < fields.count() - 1)
                 m_textStream << ",";
+
             else
+            {
+                auto d = m_fieldCount - fields.count();
+                if (d > 0)
+                {
+                    for (auto k = 0; k < d - 1; ++k)
+                        m_textStream << ",";
+                }
+
                 m_textStream << "\n";
+            }
         }
     }
 
@@ -165,8 +178,7 @@ void CSV::Export::writeValues()
  * Creates a new CSV file corresponding to the current project title & field count
  */
 void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
-{
-    // Get project title
+{ // Get project title
     auto projectTitle = UI::Dashboard::instance().title();
 
     // Get file name
@@ -204,17 +216,26 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
     m_textStream.setEncoding(QStringConverter::Utf8);
 #endif
 
-    // Get number of fields
-    auto sep = IO::Manager::instance().separatorSequence();
-    auto fields = QString::fromUtf8(frame.data).split(sep);
+    // Get number of fields by counting datasets with non-duplicated indexes
+    QVector<int> fields;
+    for (int i = 0; i < JSON::Editor::instance().groupCount(); ++i)
+    {
+        for (int j = 0; j < JSON::Editor::instance().datasetCount(i); ++j)
+        {
+            auto dataset = JSON::Editor::instance().getDataset(i, j);
+            if (!fields.contains(dataset.index()))
+                fields.append(dataset.index());
+        }
+    }
 
     // Add table titles
+    m_fieldCount = fields.count();
     m_textStream << "RX Date/Time,";
-    for (int j = 0; j < fields.count(); ++j)
+    for (auto i = 0; i < m_fieldCount; ++i)
     {
-        m_textStream << "Field " << j + 1;
+        m_textStream << "Field " << i + 1;
 
-        if (j < fields.count() - 1)
+        if (i < m_fieldCount - 1)
             m_textStream << ",";
         else
             m_textStream << "\n";
@@ -232,6 +253,10 @@ void CSV::Export::registerFrame(const QByteArray &data)
     // Ignore if device is not connected (we don't want to generate a CSV file when we
     // are reading another CSV file don't we?)
     if (!IO::Manager::instance().connected())
+        return;
+
+    // Ignore if current dashboard frame hasn't been loaded yet
+    if (!UI::Dashboard::instance().currentFrame().isValid())
         return;
 
     // Ignore if CSV export is disabled

@@ -65,6 +65,14 @@ bool JSON::Dataset::log() const
 }
 
 /**
+ * @return the field index represented by the current dataset
+ */
+int JSON::Dataset::index() const
+{
+    return m_index;
+}
+
+/**
  * @return @c true if the UI should graph this dataset
  */
 bool JSON::Dataset::graph() const
@@ -154,37 +162,24 @@ bool JSON::Dataset::read(const QJsonObject &object)
 {
     if (!object.isEmpty())
     {
-        auto fft = object.value("fft").toBool();
-        auto led = object.value("led").toBool();
-        auto log = object.value("log").toBool();
-        auto min = object.value("min").toDouble();
-        auto max = object.value("max").toDouble();
-        auto alarm = object.value("alarm").toDouble();
-        auto graph = object.value("graph").toBool();
-        auto title = object.value("title").toString();
-        auto value = object.value("value").toString();
-        auto units = object.value("units").toString();
-        auto widget = object.value("widget").toString();
-        auto fftSamples = object.value("fftSamples").toInt();
+        m_fft = object.value("fft").toBool();
+        m_led = object.value("led").toBool();
+        m_log = object.value("log").toBool();
+        m_min = object.value("min").toDouble();
+        m_max = object.value("max").toDouble();
+        m_index = object.value("index").toInt();
+        m_alarm = object.value("alarm").toDouble();
+        m_graph = object.value("graph").toBool();
+        m_title = object.value("title").toString();
+        m_value = object.value("value").toString();
+        m_units = object.value("units").toString();
+        m_widget = object.value("widget").toString();
+        m_fftSamples = object.value("fftSamples").toInt();
 
-        if (!value.isEmpty() && !title.isEmpty())
-        {
-            m_min = min;
-            m_max = max;
-            m_fft = fft;
-            m_led = led;
-            m_log = log;
-            m_graph = graph;
-            m_title = title;
-            m_units = units;
-            m_value = value;
-            m_alarm = alarm;
-            m_widget = widget;
-            m_jsonData = object;
-            m_fftSamples = fftSamples;
+        if (m_value.isEmpty())
+            m_value = "--.--";
 
-            return true;
-        }
+        return true;
     }
 
     return false;

@@ -213,7 +213,8 @@ void Widgets::DataGroup::updateData()
             value = QString::number(value.toDouble(), 'f', dash->precision());
 
         // Update label
-        m_values.at(i)->setText(value + " ");
+        if (m_values.count() > i)
+            m_values.at(i)->setText(value + " ");
     }
 
     // Repaint widget

@@ -163,6 +163,10 @@ void Widgets::LEDPanel::updateData()
     // Update labels
     for (int i = 0; i < group.datasetCount(); ++i)
     {
+        // Check vector size
+        if (m_leds.count() < i)
+            break;
+
         // Get dataset value (we compare with 0.1 for low voltages)
         auto value = group.getDataset(i).value().toDouble();
         if (qAbs(value) < 0.10)

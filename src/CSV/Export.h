@@ -93,6 +93,7 @@ private Q_SLOTS:
 
 private:
     QFile m_csvFile;
+    int m_fieldCount;
     bool m_exportEnabled;
     QTextStream m_textStream;
     QVector<RawFrame> m_frames;

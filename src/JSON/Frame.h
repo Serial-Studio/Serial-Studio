@@ -59,7 +59,7 @@ public:
     void clear();
     QString title() const;
     int groupCount() const;
-    QVector<Group> groups() const;
+    QVector<Group> &groups();
     bool read(const QJsonObject &object);
     Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
 
