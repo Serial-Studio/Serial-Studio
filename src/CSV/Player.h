@@ -91,7 +91,6 @@ private Q_SLOTS:
     void updateData();
 
 private:
-    bool validateRow(const int row);
     QByteArray getFrame(const int row);
     QString getCellValue(const int row, const int column, bool &error);
 

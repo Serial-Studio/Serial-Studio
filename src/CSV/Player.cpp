@@ -275,36 +275,14 @@ void CSV::Player::openFile(const QString &filePath)
         m_csvData = QtCSV::Reader::readToList(m_csvFile);
 #endif
 
-        // Validate CSV file (brutality works sometimes)
-        bool valid = true;
-        for (int i = 1; i < frameCount(); ++i)
-        {
-            valid &= validateRow(i);
-            if (!valid)
-                break;
-        }
+        // Read first data & Q_EMIT UI signals
+        updateData();
+        Q_EMIT openChanged();
 
-        // Read first row & update UI
-        if (valid)
-        {
-            // Read first data & Q_EMIT UI signals
-            updateData();
-            Q_EMIT openChanged();
-
-            // Play next frame (to force UI to generate groups, graphs & widgets)
-            // Note: nextFrame() MUST BE CALLED AFTER emiting the openChanged() signal in
-            //       order for this monstrosity to work
-            nextFrame();
-        }
-
-        // Show error to the user
-        else
-        {
-            Misc::Utilities::showMessageBox(
-                tr("There is an error with the data in the CSV file"),
-                tr("Please verify that the CSV file was created with Serial "
-                   "Studio"));
-        }
+        // Play next frame (to force UI to generate groups, graphs & widgets)
+        // Note: nextFrame() MUST BE CALLED AFTER emiting the openChanged() signal in
+        //       order for this monstrosity to work
+        nextFrame();
     }
 
     // Open error
@@ -409,44 +387,6 @@ void CSV::Player::updateData()
         else
             pause();
     }
-}
-
-/**
- * Checks that the row at the given @a position has the same number of elements
- * as the title row (the first row of the CSV file). Also, we do another
- * validation by checking that the timestamp cell has the correct title as the
- * one used in the @c Export class.
- */
-bool CSV::Player::validateRow(const int position)
-{
-    // Ensure that position is valid
-    if (m_csvData.count() <= position)
-        return false;
-
-    // Get titles & value list
-    auto titles = m_csvData.at(0);
-    auto list = m_csvData.at(position);
-
-    // Check that row value count is the same
-    if (titles.count() != list.count())
-    {
-        qWarning() << "Mismatched CSV data on frame" << framePosition();
-        closeFile();
-        return false;
-    }
-
-    // Check that this CSV is valid by checking the time title, this value must
-    // be the same one that is used in Export.cpp
-    auto rxTitle = "RX Date/Time";
-    if (titles.first() != rxTitle)
-    {
-        qWarning() << "Invalid CSV file (title format does not match)";
-        closeFile();
-        return false;
-    }
-
-    // Valid row
-    return true;
 }
 
 /**
