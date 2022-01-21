@@ -218,13 +218,17 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
 
     // Get number of fields by counting datasets with non-duplicated indexes
     QVector<int> fields;
+    QVector<QString> titles;
     for (int i = 0; i < JSON::Editor::instance().groupCount(); ++i)
     {
         for (int j = 0; j < JSON::Editor::instance().datasetCount(i); ++j)
         {
             auto dataset = JSON::Editor::instance().getDataset(i, j);
             if (!fields.contains(dataset.index()))
+            {
                 fields.append(dataset.index());
+                titles.append(dataset.title());
+            }
         }
     }
 
@@ -233,7 +237,7 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
     m_textStream << "RX Date/Time,";
     for (auto i = 0; i < m_fieldCount; ++i)
     {
-        m_textStream << "Field " << i + 1;
+        m_textStream << titles.at(i) << "(field " << i + 1 << ")";
 
         if (i < m_fieldCount - 1)
             m_textStream << ",";
