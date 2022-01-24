@@ -24,6 +24,8 @@
 
 #include <QFile>
 #include <QObject>
+#include <QJSValue>
+#include <QJSEngine>
 #include <QSettings>
 #include <QJsonArray>
 #include <QJsonValue>
@@ -115,9 +117,11 @@ private Q_SLOTS:
 private:
     QFile m_jsonMap;
     QJsonObject m_json;
+    QJSEngine m_jsEngine;
     QSettings m_settings;
     QString m_jsonMapData;
     OperationMode m_opMode;
     QJsonParseError m_error;
+    QStringList m_latestValidValues;
 };
 }

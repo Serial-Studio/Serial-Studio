@@ -219,6 +219,8 @@ void JSON::Generator::writeSettings(const QString &path)
 void JSON::Generator::reset()
 {
     m_json = QJsonObject();
+    m_latestValidValues.clear();
+
     Q_EMIT jsonChanged(m_json);
 }
 
@@ -257,15 +259,106 @@ void JSON::Generator::readData(const QByteArray &data)
         auto sepr = IO::Manager::instance().separatorSequence();
         auto list = QString::fromUtf8(data).split(sepr);
         for (int i = 0; i < list.count(); ++i)
-            json.replace(QString("\"%%1\"").arg(i + 1), "\"" + list.at(i) + "\"");
+            json.replace(QString("%%1").arg(i + 1), list.at(i));
+
+        // Update latest JSON values list
+        if (list.count() > m_latestValidValues.count())
+        {
+            m_latestValidValues.clear();
+            for (int i = 0; i < list.count(); ++i)
+                m_latestValidValues.append("");
+        }
 
         // Create JSON document
         m_json = QJsonDocument::fromJson(json.toUtf8(), &m_error).object();
     }
 
-    // No parse error, update UI & reset error counter
+    // No parse error, evaluate any JS code
     if (m_error.error == QJsonParseError::NoError)
+    {
+        // Initialize dataset counter
+        int datasetIndex = -1;
+
+        // Evaluate JavaScript code
+        bool evaluated = false;
+        auto groups = m_json.value("groups").toArray();
+        for (int i = 0; i < groups.count(); ++i)
+        {
+            // Get group & list of datasets
+            auto group = groups.at(i).toObject();
+            auto datasets = group.value("datasets").toArray();
+
+            // Evaluate value for each dataset
+            for (int j = 0; j < datasets.count(); ++j)
+            {
+                // Increment dataset index
+                ++datasetIndex;
+
+                // Get dataset & value string
+                auto dataset = datasets.at(j).toObject();
+                auto value = dataset.value("value").toString();
+
+                //
+                // Update latest valid values array (or replace currently
+                // invalid value with the last known valid value)
+                //
+                if (datasetIndex < m_latestValidValues.count())
+                {
+                    // Register latest value to list of valid values
+                    if (!value.isEmpty() && !value.contains("%"))
+                        m_latestValidValues.replace(datasetIndex, value);
+
+                    // Invalid value, get the last known valid value
+                    else
+                    {
+                        evaluated = true;
+                        value = m_latestValidValues.at(datasetIndex);
+
+                        dataset.remove("value");
+                        dataset.insert("value", value);
+                    }
+                }
+
+                // Evaluate JS expresion (if any)
+                auto evaluatedValue = m_jsEngine.evaluate(value);
+
+                // Successful JS evaluation, insert evaluated value
+                if (evaluatedValue.errorType() == QJSValue::NoError)
+                {
+                    evaluated = true;
+                    dataset.remove("value");
+                    dataset.insert("value", evaluatedValue.toString());
+                    datasets.removeAt(j);
+                    datasets.insert(j, dataset);
+                }
+            }
+
+            // Replace evaluated datasets in group
+            if (evaluated)
+            {
+                //
+                // Reset eval. flag so that we only replace JSON data
+                // when required.
+                //
+                evaluated = false;
+
+                // Update datasets in group
+                group.remove("datasets");
+                group.insert("datasets", datasets);
+
+                // Update group in groups array
+                groups.removeAt(i);
+                groups.insert(i, group);
+
+                // Update groups array in JSON frame
+                m_json.remove("groups");
+                m_json.insert("groups", groups);
+            }
+        }
+
+        // Update UI
         Q_EMIT jsonChanged(m_json);
+    }
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC
