@@ -514,10 +514,18 @@ void IO::Manager::onDataReceived()
             auto udpSocket = DataSources::Network::instance().udpSocket();
             while (udpSocket->hasPendingDatagrams())
             {
+                // Read datagram data
                 QByteArray datagram;
                 datagram.resize(int(udpSocket->pendingDatagramSize()));
                 udpSocket->readDatagram(datagram.data(), datagram.size());
-                data.append(datagram);
+
+                // Add datagram to data buffer
+                if (!DataSources::Network::instance().udpIgnoreFrameSequences())
+                    data.append(datagram);
+
+                // Ingore start/end sequences & process frame directly
+                else
+                    processPayload(datagram);
             }
         }
     }

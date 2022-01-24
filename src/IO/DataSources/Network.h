@@ -90,6 +90,10 @@ class Network : public QObject
                READ udpMulticast
                WRITE setUdpMulticast
                NOTIFY udpMulticastChanged)
+    Q_PROPERTY(bool udpIgnoreFrameSequences
+               READ udpIgnoreFrameSequences
+               WRITE setUdpIgnoreFrameSequences
+               NOTIFY udpIgnoreFrameSequencesChanged)
     // clang-format on
 
 Q_SIGNALS:
@@ -98,6 +102,7 @@ Q_SIGNALS:
     void socketTypeChanged();
     void udpMulticastChanged();
     void lookupActiveChanged();
+    void udpIgnoreFrameSequencesChanged();
 
 private:
     explicit Network();
@@ -122,6 +127,7 @@ public:
     int socketTypeIndex() const;
     bool configurationOk() const;
     StringList socketTypes() const;
+    bool udpIgnoreFrameSequences() const;
     QAbstractSocket::SocketType socketType() const;
 
     QTcpSocket *tcpSocket() { return &m_tcpSocket; }
@@ -145,6 +151,7 @@ public Q_SLOTS:
     void setSocketTypeIndex(const int index);
     void setUdpRemotePort(const quint16 port);
     void setRemoteAddress(const QString &address);
+    void setUdpIgnoreFrameSequences(const bool ignore);
     void setSocketType(const QAbstractSocket::SocketType type);
 
 private Q_SLOTS:
@@ -159,6 +166,7 @@ private:
     bool m_lookupActive;
     quint16 m_udpLocalPort;
     quint16 m_udpRemotePort;
+    bool m_udpIgnoreFrameSequences;
     QAbstractSocket::SocketType m_socketType;
 
     QTcpSocket m_tcpSocket;

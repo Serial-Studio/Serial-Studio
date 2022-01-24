@@ -31,6 +31,7 @@ IO::DataSources::Network::Network()
     : m_hostExists(false)
     , m_udpMulticast(false)
     , m_lookupActive(false)
+    , m_udpIgnoreFrameSequences(false)
 {
     setRemoteAddress("");
     setTcpPort(defaultTcpPort());
@@ -153,6 +154,15 @@ bool IO::DataSources::Network::configurationOk() const
 StringList IO::DataSources::Network::socketTypes() const
 {
     return StringList { "TCP", "UDP" };
+}
+
+/**
+ * Returns @c true if the @c IO::Manager should not check for start/end
+ * frame sequences when an UDP datagram is received.
+ */
+bool IO::DataSources::Network::udpIgnoreFrameSequences() const
+{
+    return m_udpIgnoreFrameSequences;
 }
 
 /**
@@ -286,6 +296,19 @@ void IO::DataSources::Network::setRemoteAddress(const QString &address)
     // Change host
     m_address = address;
     Q_EMIT addressChanged();
+}
+
+/**
+ * If @a ignore is set to @c true, then the @c IO::Manager should not check
+ * for start/end frame sequences when an UDP datagram is received.
+ *
+ * Otherwise, the @c IO::Manager shall check for start/end sequences to identify
+ * incoming frames.
+ */
+void IO::DataSources::Network::setUdpIgnoreFrameSequences(const bool ignore)
+{
+    m_udpIgnoreFrameSequences = ignore;
+    Q_EMIT udpIgnoreFrameSequencesChanged();
 }
 
 /**

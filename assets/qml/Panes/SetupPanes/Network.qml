@@ -37,6 +37,7 @@ Control {
     property alias udpRemotePort: _udpRemotePort.text
     property alias socketType: _typeCombo.currentIndex
     property alias udpMulticastEnabled: _udpMulticast.checked
+    property alias udpProcessDatagramsDirectly: _udpProcessDatagrams.checked
 
     //
     // Signals
@@ -237,6 +238,30 @@ Control {
                 onCheckedChanged: {
                     if (Cpp_IO_Network.udpMulticast !== checked)
                         Cpp_IO_Network.udpMulticast = checked
+
+                    root.uiChanged()
+                }
+            }
+
+            //
+            // UDP multicast checkbox
+            //
+            Label {
+                text: qsTr("Each datagram is a frame") + ":"
+                opacity: _udpProcessDatagrams.enabled ? 1 : 0.5
+                visible: Cpp_IO_Network.socketTypeIndex === 1
+            } CheckBox {
+                id: _udpProcessDatagrams
+                opacity: enabled ? 1 : 0.5
+                Layout.alignment: Qt.AlignLeft
+                Layout.leftMargin: -app.spacing
+                checked: Cpp_IO_Network.udpIgnoreFrameSequences
+                visible: Cpp_IO_Network.socketTypeIndex === 1
+                enabled: Cpp_IO_Network.socketTypeIndex === 1 && !Cpp_IO_Manager.connected
+
+                onCheckedChanged: {
+                    if (Cpp_IO_Network.udpIgnoreFrameSequences !== checked)
+                        Cpp_IO_Network.udpIgnoreFrameSequences = checked
 
                     root.uiChanged()
                 }

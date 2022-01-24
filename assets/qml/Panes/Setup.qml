@@ -90,6 +90,7 @@ Item {
         property alias udpLocalPort: network.udpLocalPort
         property alias udpRemotePort: network.udpRemotePort
         property alias udpMulticastEnabled: network.udpMulticastEnabled
+        property alias udpProcessDatagramsDirectly: network.udpProcessDatagramsDirectly
 
         //
         // MQTT settings
