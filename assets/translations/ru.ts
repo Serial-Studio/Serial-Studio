@@ -124,11 +124,11 @@
     </message>
     <message>
         <source>Invalid configuration for CSV player</source>
-        <translation>Неверная конфигурация для CSV-плеера</translation>
+        <translation type="vanished">Неверная конфигурация для CSV-плеера</translation>
     </message>
     <message>
         <source>You need to select a JSON map file in order to use this feature</source>
-        <translation>Вам необходимо выбрать файл карты JSON, чтобы использовать эту функцию</translation>
+        <translation type="vanished">Вам необходимо выбрать файл карты JSON, чтобы использовать эту функцию</translation>
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
@@ -140,11 +140,11 @@
     </message>
     <message>
         <source>There is an error with the data in the CSV file</source>
-        <translation>Возникла ошибка с данными в CSV-файле</translation>
+        <translation type="vanished">Возникла ошибка с данными в CSV-файле</translation>
     </message>
     <message>
         <source>Please verify that the CSV file was created with Serial Studio</source>
-        <translation>Убедитесь, что CSV-файл был создан с помощью Serial Studio</translation>
+        <translation type="vanished">Убедитесь, что CSV-файл был создан с помощью Serial Studio</translation>
     </message>
     <message>
         <source>Cannot read CSV file</source>
@@ -156,7 +156,7 @@
     </message>
     <message>
         <source>Replay of %1</source>
-        <translation>Воспроизведение %1</translation>
+        <translation type="vanished">Воспроизведение %1</translation>
     </message>
 </context>
 <context>
@@ -1667,19 +1667,19 @@
     <name>Misc::ModuleManager</name>
     <message>
         <source>Initializing...</source>
-        <translation>Инициализация...</translation>
+        <translation type="vanished">Инициализация...</translation>
     </message>
     <message>
         <source>Configuring updater...</source>
-        <translation>Настройка программы обновления...</translation>
+        <translation type="vanished">Настройка программы обновления...</translation>
     </message>
     <message>
         <source>Initializing modules...</source>
-        <translation>Инициализация модулей...</translation>
+        <translation type="vanished">Инициализация модулей...</translation>
     </message>
     <message>
         <source>Loading user interface...</source>
-        <translation>Загрузка пользовательского интерфейса...</translation>
+        <translation type="vanished">Загрузка пользовательского интерфейса...</translation>
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
@@ -1710,6 +1710,78 @@
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
         <translation>Должен ли %1 автоматически проверять наличие обновлений? Вы всегда можете проверить наличие обновлений вручную из меню &quot;Помощь&quot;</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Сохранить</translation>
+    </message>
+    <message>
+        <source>Save all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished">Открыть</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes to all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No to all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished">Закрыть</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Справка</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished">Применить</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished">Сбросить</translation>
+    </message>
+    <message>
+        <source>Restore defaults</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1776,6 +1848,10 @@
     <message>
         <source>Remote port</source>
         <translation>Удаленный порт</translation>
+    </message>
+    <message>
+        <source>Ignore data delimiters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1931,7 +2007,11 @@
     </message>
     <message>
         <source>Multithreaded frame parsing</source>
-        <translation>Многопоточный анализ кадров</translation>
+        <translation type="vanished">Многопоточный анализ кадров</translation>
+    </message>
+    <message>
+        <source>Custom window decorations</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2118,10 +2198,17 @@
     </message>
 </context>
 <context>
+    <name>UI::DashboardWidget</name>
+    <message>
+        <source>Invalid</source>
+        <translation type="unfinished">Неверный</translation>
+    </message>
+</context>
+<context>
     <name>UI::WidgetLoader</name>
     <message>
         <source>Invalid</source>
-        <translation>Неверный</translation>
+        <translation type="vanished">Неверный</translation>
     </message>
 </context>
 <context>

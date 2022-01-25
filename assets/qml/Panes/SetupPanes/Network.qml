@@ -247,7 +247,7 @@ Control {
             // UDP multicast checkbox
             //
             Label {
-                text: qsTr("Each datagram is a frame") + ":"
+                text: qsTr("Ignore data delimiters") + ":"
                 opacity: _udpProcessDatagrams.enabled ? 1 : 0.5
                 visible: Cpp_IO_Network.socketTypeIndex === 1
             } CheckBox {

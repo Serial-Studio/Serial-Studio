@@ -85,14 +85,6 @@
         <translation>CSV files</translation>
     </message>
     <message>
-        <source>Invalid configuration for CSV player</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>You need to select a JSON map file in order to use this feature</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Serial port open, do you want to continue?</source>
         <translation></translation>
     </message>
@@ -101,23 +93,11 @@
         <translation></translation>
     </message>
     <message>
-        <source>There is an error with the data in the CSV file</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Please verify that the CSV file was created with Serial Studio</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Cannot read CSV file</source>
         <translation></translation>
     </message>
     <message>
         <source>Please check file permissions &amp; location</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Replay of %1</source>
         <translation></translation>
     </message>
 </context>
@@ -1452,25 +1432,6 @@
     </message>
 </context>
 <context>
-    <name>Misc::ModuleManager</name>
-    <message>
-        <source>Initializing...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Configuring updater...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Initializing modules...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Loading user interface...</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>Misc::ThemeManager</name>
     <message>
         <source>The theme change will take effect after restart</source>
@@ -1489,6 +1450,78 @@
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Save all</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Yes to all</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>No to all</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ignore</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Discard</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Restore defaults</source>
         <translation></translation>
     </message>
 </context>
@@ -1520,6 +1553,10 @@
     </message>
     <message>
         <source>Remote port</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ignore data delimiters</source>
         <translation></translation>
     </message>
 </context>
@@ -1648,7 +1685,7 @@
         <translation></translation>
     </message>
     <message>
-        <source>Multithreaded frame parsing</source>
+        <source>Custom window decorations</source>
         <translation></translation>
     </message>
 </context>
@@ -1808,7 +1845,7 @@
     </message>
 </context>
 <context>
-    <name>UI::WidgetLoader</name>
+    <name>UI::DashboardWidget</name>
     <message>
         <source>Invalid</source>
         <translation></translation>

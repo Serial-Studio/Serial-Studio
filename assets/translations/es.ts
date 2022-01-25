@@ -140,11 +140,11 @@
     </message>
     <message>
         <source>Invalid configuration for CSV player</source>
-        <translation>Configuración inválida para el reproductor CSV</translation>
+        <translation type="vanished">Configuración inválida para el reproductor CSV</translation>
     </message>
     <message>
         <source>You need to select a JSON map file in order to use this feature</source>
-        <translation>Debe seleccionar un archivo de mapa JSON para utilizar esta función</translation>
+        <translation type="vanished">Debe seleccionar un archivo de mapa JSON para utilizar esta función</translation>
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
@@ -156,11 +156,11 @@
     </message>
     <message>
         <source>There is an error with the data in the CSV file</source>
-        <translation>Hay un error con los datos en el archivo CSV</translation>
+        <translation type="vanished">Hay un error con los datos en el archivo CSV</translation>
     </message>
     <message>
         <source>Please verify that the CSV file was created with Serial Studio</source>
-        <translation>Verifique que el archivo CSV haya sido creado con Serial Studio</translation>
+        <translation type="vanished">Verifique que el archivo CSV haya sido creado con Serial Studio</translation>
     </message>
     <message>
         <source>Cannot read CSV file</source>
@@ -172,7 +172,7 @@
     </message>
     <message>
         <source>Replay of %1</source>
-        <translation>Reproducción de %1</translation>
+        <translation type="vanished">Reproducción de %1</translation>
     </message>
 </context>
 <context>
@@ -1869,19 +1869,19 @@
     <name>Misc::ModuleManager</name>
     <message>
         <source>Initializing...</source>
-        <translation>Inicializando...</translation>
+        <translation type="vanished">Inicializando...</translation>
     </message>
     <message>
         <source>Configuring updater...</source>
-        <translation>Configurando actualizador...</translation>
+        <translation type="vanished">Configurando actualizador...</translation>
     </message>
     <message>
         <source>Initializing modules...</source>
-        <translation>Inicializando módulos....</translation>
+        <translation type="vanished">Inicializando módulos....</translation>
     </message>
     <message>
         <source>Loading user interface...</source>
-        <translation>Cargando la interfaz de usuario...</translation>
+        <translation type="vanished">Cargando la interfaz de usuario...</translation>
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
@@ -1912,6 +1912,78 @@
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
         <translation>¿Debería %1 buscar actualizaciones automáticamente? También puedes buscar actualizaciones manualmente desde el menu de &quot;Ayuda&quot;</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation>Ok</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Guardar</translation>
+    </message>
+    <message>
+        <source>Save all</source>
+        <translation>Guardar todo</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Abrir</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation>Si</translation>
+    </message>
+    <message>
+        <source>Yes to all</source>
+        <translation>Si a todo</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation>No</translation>
+    </message>
+    <message>
+        <source>No to all</source>
+        <translation>No a todo</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation>Abortar</translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation>Intentar de nuevo</translation>
+    </message>
+    <message>
+        <source>Ignore</source>
+        <translation>Ignorar</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Cerrar</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>Discard</source>
+        <translation>Descartar</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>Ayuda</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>Aplicar</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation>Restaurar</translation>
+    </message>
+    <message>
+        <source>Restore defaults</source>
+        <translation>Restaurar prederminados</translation>
     </message>
 </context>
 <context>
@@ -1990,6 +2062,14 @@
     <message>
         <source>Remote port</source>
         <translation>Puerto remoto</translation>
+    </message>
+    <message>
+        <source>Each datagram is a frame</source>
+        <translation type="vanished">Ignorar delimitadores de datos</translation>
+    </message>
+    <message>
+        <source>Ignore data delimiters</source>
+        <translation>Ignorar delimitadores de datos</translation>
     </message>
 </context>
 <context>
@@ -2253,7 +2333,11 @@
     </message>
     <message>
         <source>Multithreaded frame parsing</source>
-        <translation>Análisis multihilo de tramas</translation>
+        <translation type="vanished">Análisis multihilo de tramas</translation>
+    </message>
+    <message>
+        <source>Custom window decorations</source>
+        <translation>Decorador de ventanas</translation>
     </message>
 </context>
 <context>
@@ -2531,10 +2615,17 @@
     </message>
 </context>
 <context>
-    <name>UI::WidgetLoader</name>
+    <name>UI::DashboardWidget</name>
     <message>
         <source>Invalid</source>
         <translation>Inválido</translation>
+    </message>
+</context>
+<context>
+    <name>UI::WidgetLoader</name>
+    <message>
+        <source>Invalid</source>
+        <translation type="vanished">Inválido</translation>
     </message>
 </context>
 <context>

@@ -136,11 +136,11 @@
     </message>
     <message>
         <source>Invalid configuration for CSV player</source>
-        <translation>CSV播放器的配置无效</translation>
+        <translation type="vanished">CSV播放器的配置无效</translation>
     </message>
     <message>
         <source>You need to select a JSON map file in order to use this feature</source>
-        <translation>您需要选择一个JSON映射文件才能使用此功能</translation>
+        <translation type="vanished">您需要选择一个JSON映射文件才能使用此功能</translation>
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
@@ -152,11 +152,11 @@
     </message>
     <message>
         <source>There is an error with the data in the CSV file</source>
-        <translation>CSV文件中的数据有误</translation>
+        <translation type="vanished">CSV文件中的数据有误</translation>
     </message>
     <message>
         <source>Please verify that the CSV file was created with Serial Studio</source>
-        <translation>请确认CSV文件是使用Serial Studio创建的</translation>
+        <translation type="vanished">请确认CSV文件是使用Serial Studio创建的</translation>
     </message>
     <message>
         <source>Cannot read CSV file</source>
@@ -168,7 +168,7 @@
     </message>
     <message>
         <source>Replay of %1</source>
-        <translation>重播%1</translation>
+        <translation type="vanished">重播%1</translation>
     </message>
 </context>
 <context>
@@ -1849,19 +1849,19 @@
     <name>Misc::ModuleManager</name>
     <message>
         <source>Initializing...</source>
-        <translation>初始化...</translation>
+        <translation type="vanished">初始化...</translation>
     </message>
     <message>
         <source>Configuring updater...</source>
-        <translation>配置更新器...</translation>
+        <translation type="vanished">配置更新器...</translation>
     </message>
     <message>
         <source>Initializing modules...</source>
-        <translation>初始化模块...</translation>
+        <translation type="vanished">初始化模块...</translation>
     </message>
     <message>
         <source>Loading user interface...</source>
-        <translation>正在加载用户界面...</translation>
+        <translation type="vanished">正在加载用户界面...</translation>
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
@@ -1892,6 +1892,78 @@
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
         <translation>%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">拯救</translation>
+    </message>
+    <message>
+        <source>Save all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished">打开</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes to all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No to all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished">关闭</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">帮助</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished">申请</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished">重置</translation>
+    </message>
+    <message>
+        <source>Restore defaults</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1970,6 +2042,10 @@
     <message>
         <source>Remote port</source>
         <translation>远程端口</translation>
+    </message>
+    <message>
+        <source>Ignore data delimiters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2185,7 +2261,11 @@
     </message>
     <message>
         <source>Multithreaded frame parsing</source>
-        <translation>多线程框架分析</translation>
+        <translation type="vanished">多线程框架分析</translation>
+    </message>
+    <message>
+        <source>Custom window decorations</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2451,10 +2531,17 @@
     </message>
 </context>
 <context>
+    <name>UI::DashboardWidget</name>
+    <message>
+        <source>Invalid</source>
+        <translation type="unfinished">无效</translation>
+    </message>
+</context>
+<context>
     <name>UI::WidgetLoader</name>
     <message>
         <source>Invalid</source>
-        <translation>无效</translation>
+        <translation type="vanished">无效</translation>
     </message>
 </context>
 <context>

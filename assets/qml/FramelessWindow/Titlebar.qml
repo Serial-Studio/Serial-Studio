@@ -275,6 +275,7 @@ Rectangle {
                 visible: root.showIcon
                 enabled: root.showIcon
                 textColor: root.textColor
+                pressedColor: root.textColor
                 Layout.alignment: Qt.AlignVCenter
                 source: "qrc:/images/icon-window.svg"
             }

@@ -124,11 +124,11 @@
     </message>
     <message>
         <source>Invalid configuration for CSV player</source>
-        <translation>Konfiguration des CSV players ist ungültig</translation>
+        <translation type="vanished">Konfiguration des CSV players ist ungültig</translation>
     </message>
     <message>
         <source>You need to select a JSON map file in order to use this feature</source>
-        <translation>Sie müssen eine JSON-Modelldatei auswählen, um diese Funktion nutzen zu können</translation>
+        <translation type="vanished">Sie müssen eine JSON-Modelldatei auswählen, um diese Funktion nutzen zu können</translation>
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
@@ -140,11 +140,11 @@
     </message>
     <message>
         <source>There is an error with the data in the CSV file</source>
-        <translation>Es liegt ein Fehler in der CSV Datei vor</translation>
+        <translation type="vanished">Es liegt ein Fehler in der CSV Datei vor</translation>
     </message>
     <message>
         <source>Please verify that the CSV file was created with Serial Studio</source>
-        <translation>Überprüfen Sie ob die CSV mit Serial Studio erstellt ist</translation>
+        <translation type="vanished">Überprüfen Sie ob die CSV mit Serial Studio erstellt ist</translation>
     </message>
     <message>
         <source>Cannot read CSV file</source>
@@ -156,7 +156,7 @@
     </message>
     <message>
         <source>Replay of %1</source>
-        <translation>Wiederholen von %1</translation>
+        <translation type="vanished">Wiederholen von %1</translation>
     </message>
 </context>
 <context>
@@ -1797,19 +1797,19 @@
     <name>Misc::ModuleManager</name>
     <message>
         <source>Initializing...</source>
-        <translation>Initialisierung...</translation>
+        <translation type="vanished">Initialisierung...</translation>
     </message>
     <message>
         <source>Configuring updater...</source>
-        <translation>Konfigurieren des Updaters...</translation>
+        <translation type="vanished">Konfigurieren des Updaters...</translation>
     </message>
     <message>
         <source>Initializing modules...</source>
-        <translation>Module initialisieren...</translation>
+        <translation type="vanished">Module initialisieren...</translation>
     </message>
     <message>
         <source>Loading user interface...</source>
-        <translation>Benutzeroberfläche laden...</translation>
+        <translation type="vanished">Benutzeroberfläche laden...</translation>
     </message>
     <message>
         <source>The rendering engine change will take effect after restart</source>
@@ -1840,6 +1840,78 @@
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
         <translation>Soll %1 Automatish auf Updates prüfen? Sie können jederzeit manuell über das Menü &quot;Hilfe&quot; nach Updates suchen</translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Speichern</translation>
+    </message>
+    <message>
+        <source>Save all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished">Öffnen</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes to all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No to all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished">Schließen</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">Hilfe</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished">Bewerbung</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished">Zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Restore defaults</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1918,6 +1990,10 @@
     <message>
         <source>Remote port</source>
         <translation>Entfernter Port</translation>
+    </message>
+    <message>
+        <source>Ignore data delimiters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2129,7 +2205,11 @@
     </message>
     <message>
         <source>Multithreaded frame parsing</source>
-        <translation>Analyse von Multithreading-Rahmen</translation>
+        <translation type="vanished">Analyse von Multithreading-Rahmen</translation>
+    </message>
+    <message>
+        <source>Custom window decorations</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2367,10 +2447,17 @@
     </message>
 </context>
 <context>
+    <name>UI::DashboardWidget</name>
+    <message>
+        <source>Invalid</source>
+        <translation type="unfinished">Ungültig</translation>
+    </message>
+</context>
+<context>
     <name>UI::WidgetLoader</name>
     <message>
         <source>Invalid</source>
-        <translation>Ungültig</translation>
+        <translation type="vanished">Ungültig</translation>
     </message>
 </context>
 <context>
