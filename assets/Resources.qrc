@@ -138,8 +138,8 @@
         <file>qml/Windows/MainWindow.qml</file>
         <file>qml/Windows/MQTTConfiguration.qml</file>
         <file>qml/main.qml</file>
-        <file>themes/2_Flat.json</file>
-        <file>themes/1_Dark.json</file>
+        <file>themes/1_Flat.json</file>
+        <file>themes/2_Dark.json</file>
         <file>themes/4_Midnight.json</file>
         <file>themes/3_Classic.json</file>
         <file>themes/5_Noir.json</file>
