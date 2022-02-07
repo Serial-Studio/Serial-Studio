@@ -1713,75 +1713,75 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ок</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Сохранить</translation>
+        <translation>Сохранить</translation>
     </message>
     <message>
         <source>Save all</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить все</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished">Открыть</translation>
+        <translation>Открыть</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Да</translation>
     </message>
     <message>
         <source>Yes to all</source>
-        <translation type="unfinished"></translation>
+        <translation>Да всем</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <source>No to all</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет всем</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Прервать</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Повторная попытка</translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Игнорировать</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Закрыть</translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Отбросить</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">Справка</translation>
+        <translation>Справка</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished">Применить</translation>
+        <translation>Применить</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">Сбросить</translation>
+        <translation>Сбросить</translation>
     </message>
     <message>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстановление по умолчанию</translation>
     </message>
 </context>
 <context>
@@ -1851,7 +1851,7 @@
     </message>
     <message>
         <source>Ignore data delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Игнорировать разделители</translation>
     </message>
 </context>
 <context>
@@ -2011,7 +2011,7 @@
     </message>
     <message>
         <source>Custom window decorations</source>
-        <translation type="unfinished"></translation>
+        <translation>Украшения для окон</translation>
     </message>
 </context>
 <context>
@@ -2201,7 +2201,7 @@
     <name>UI::DashboardWidget</name>
     <message>
         <source>Invalid</source>
-        <translation type="unfinished">Неверный</translation>
+        <translation>Неверный</translation>
     </message>
 </context>
 <context>

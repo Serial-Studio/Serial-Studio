@@ -1895,75 +1895,75 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>好的</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">拯救</translation>
+        <translation>拯救</translation>
     </message>
     <message>
         <source>Save all</source>
-        <translation type="unfinished"></translation>
+        <translation>保存所有</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished">打开</translation>
+        <translation>打开</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>是</translation>
     </message>
     <message>
         <source>Yes to all</source>
-        <translation type="unfinished"></translation>
+        <translation>是的，对所有</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>没有</translation>
     </message>
     <message>
         <source>No to all</source>
-        <translation type="unfinished"></translation>
+        <translation>拒绝所有</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>中止</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>重试</translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>忽略不计</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">关闭</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>弃置</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">帮助</translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished">申请</translation>
+        <translation>申请</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">重置</translation>
+        <translation>重置</translation>
     </message>
     <message>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>恢复默认值</translation>
     </message>
 </context>
 <context>
@@ -2045,7 +2045,7 @@
     </message>
     <message>
         <source>Ignore data delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>忽略数据定界符</translation>
     </message>
 </context>
 <context>
@@ -2265,7 +2265,7 @@
     </message>
     <message>
         <source>Custom window decorations</source>
-        <translation type="unfinished"></translation>
+        <translation>定制窗口装饰</translation>
     </message>
 </context>
 <context>
@@ -2534,7 +2534,7 @@
     <name>UI::DashboardWidget</name>
     <message>
         <source>Invalid</source>
-        <translation type="unfinished">无效</translation>
+        <translation>无效</translation>
     </message>
 </context>
 <context>

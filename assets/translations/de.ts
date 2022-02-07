@@ -1843,75 +1843,75 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <source>Save all</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle speichern</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished">Öffnen</translation>
+        <translation>Öffnen</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <source>Yes to all</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja zu allen</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
     <message>
         <source>No to all</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein zu alle</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholung</translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorieren</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Ablegen</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished">Hilfe</translation>
+        <translation>Hilfe</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished">Bewerbung</translation>
+        <translation>Bewerbung</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">Zurücksetzen</translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardwerte wiederherstellen</translation>
     </message>
 </context>
 <context>
@@ -1993,7 +1993,7 @@
     </message>
     <message>
         <source>Ignore data delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Datenbegrenzer ignorieren</translation>
     </message>
 </context>
 <context>
@@ -2209,7 +2209,7 @@
     </message>
     <message>
         <source>Custom window decorations</source>
-        <translation type="unfinished"></translation>
+        <translation>Fensterdekorationen</translation>
     </message>
 </context>
 <context>
@@ -2450,7 +2450,7 @@
     <name>UI::DashboardWidget</name>
     <message>
         <source>Invalid</source>
-        <translation type="unfinished">Ungültig</translation>
+        <translation>Ungültig</translation>
     </message>
 </context>
 <context>
