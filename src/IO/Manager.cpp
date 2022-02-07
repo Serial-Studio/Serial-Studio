@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2022 Alex Spataru <https://github.com/alex-spataru>
  * Copyright (c) 2021 JP Norair <https://github.com/jpnorair>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
