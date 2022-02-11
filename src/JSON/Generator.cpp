@@ -255,11 +255,16 @@ void JSON::Generator::readData(const QByteArray &data)
             return;
 
         // Separate incoming data & add it to the JSON map
-        auto json = jsonMapData();
+        auto json = jsonMapData().toStdString();
         auto sepr = IO::Manager::instance().separatorSequence();
         auto list = QString::fromUtf8(data).split(sepr);
         for (int i = 0; i < list.count(); ++i)
-            json.replace(QString("%%1").arg(i + 1), list.at(i));
+        {
+            std::string id = "%" + std::to_string(i + 1);
+            size_t pos = json.find(id);
+            if (pos != std::string::npos && pos < json.length())
+                json.replace(pos, id.length(), list.at(i).toStdString());
+        }
 
         // Update latest JSON values list
         if (list.count() > m_latestValidValues.count())
@@ -270,7 +275,8 @@ void JSON::Generator::readData(const QByteArray &data)
         }
 
         // Create JSON document
-        m_json = QJsonDocument::fromJson(json.toUtf8(), &m_error).object();
+        auto jsonData = QString::fromStdString(json).toUtf8();
+        m_json = QJsonDocument::fromJson(jsonData, &m_error).object();
     }
 
     // No parse error, evaluate any JS code
