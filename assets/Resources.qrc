@@ -59,6 +59,7 @@
         <file>icons/points.svg</file>
         <file>icons/power.svg</file>
         <file>icons/ram.svg</file>
+        <file>icons/refresh.svg</file>
         <file>icons/registration.svg</file>
         <file>icons/restore.svg</file>
         <file>icons/right.svg</file>
@@ -114,6 +115,7 @@
         <file>qml/JsonEditor/JsonDatasetDelegate.qml</file>
         <file>qml/JsonEditor/JsonGroupDelegate.qml</file>
         <file>qml/JsonEditor/TreeView.qml</file>
+        <file>qml/Panes/SetupPanes/Bluetooth.qml</file>
         <file>qml/Panes/SetupPanes/MQTT.qml</file>
         <file>qml/Panes/SetupPanes/Network.qml</file>
         <file>qml/Panes/SetupPanes/Serial.qml</file>
@@ -140,18 +142,23 @@
         <file>qml/main.qml</file>
         <file>themes/1_Flat.json</file>
         <file>themes/2_Dark.json</file>
-        <file>themes/4_Midnight.json</file>
         <file>themes/3_Classic.json</file>
+        <file>themes/4_Midnight.json</file>
         <file>themes/5_Noir.json</file>
         <file>themes/6_Mathworks.json</file>
         <file>touchbar/console.png</file>
         <file>touchbar/dashboard.png</file>
         <file>touchbar/setup.png</file>
         <file>translations/de.qm</file>
+        <file>translations/de.ts</file>
         <file>translations/en.qm</file>
+        <file>translations/en.ts</file>
         <file>translations/es.qm</file>
+        <file>translations/es.ts</file>
         <file>translations/ru.qm</file>
+        <file>translations/ru.ts</file>
         <file>translations/zh.qm</file>
+        <file>translations/zh.ts</file>
         <file>window-border/macOS/close-active.svg</file>
         <file>window-border/macOS/close-hover.svg</file>
         <file>window-border/macOS/close-normal.svg</file>

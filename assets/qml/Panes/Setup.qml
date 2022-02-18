@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -246,7 +246,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.maximumWidth: root.maxItemWidth
                 onCurrentIndexChanged: {
-                    if (currentIndex < 2 && currentIndex !== Cpp_IO_Manager.dataSource)
+                    if (currentIndex < 3 && currentIndex !== Cpp_IO_Manager.dataSource)
                         Cpp_IO_Manager.dataSource = currentIndex
                 }
 
@@ -258,6 +258,12 @@ Item {
 
                 TabButton {
                     text: qsTr("Network")
+                    height: tab.height + 3
+                    width: implicitWidth + 2 * app.spacing
+                }
+
+                TabButton {
+                    text: qsTr("Bluetooth")
                     height: tab.height + 3
                     width: implicitWidth + 2 * app.spacing
                 }
@@ -302,9 +308,12 @@ Item {
                         stack.implicitHeight = network.implicitHeight
                         break
                     case 2:
-                        stack.implicitHeight = mqtt.implicitHeight
+                        stack.implicitHeight = bluetooth.implicitHeight
                         break
                     case 3:
+                        stack.implicitHeight = mqtt.implicitHeight
+                        break
+                    case 4:
                         stack.implicitHeight = settings.implicitHeight
                         break
                     default:
@@ -323,10 +332,26 @@ Item {
 
                 SetupPanes.Network {
                     id: network
-                    onUiChanged: timer.start()
+                    onUiChanged: networkTimer.start()
 
                     Timer {
-                        id: timer
+                        id: networkTimer
+                        interval: 50
+                        onTriggered: stack.updateHeight()
+                    }
+
+                    background: TextField {
+                        enabled: false
+                        palette.base: Cpp_ThemeManager.setupPanelBackground
+                    }
+                }
+
+                SetupPanes.Bluetooth {
+                    id: bluetooth
+                    onUiChanged: bluetoothTimer.start()
+
+                    Timer {
+                        id: bluetoothTimer
                         interval: 50
                         onTriggered: stack.updateHeight()
                     }

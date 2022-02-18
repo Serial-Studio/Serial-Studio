@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2020-2022 Alex Spataru <https://github.com/alex-spataru>
+# Copyright (c) 2020-2021 Alex Spataru <https://github.com/alex-spataru>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +48,7 @@ QT += svg
 QT += core
 QT += quick
 QT += widgets
+QT += bluetooth
 QT += serialport
 QT += printsupport
 QT += quickcontrols2
@@ -159,6 +160,7 @@ HEADERS += \
     src/DataTypes.h \
     src/IO/Checksum.h \
     src/IO/Console.h \
+    src/IO/DataSources/Bluetooth.h \
     src/IO/DataSources/Network.h \
     src/IO/DataSources/Serial.h \
     src/IO/Manager.h \
@@ -201,6 +203,7 @@ SOURCES += \
     src/CSV/Player.cpp \
     src/IO/Checksum.cpp \
     src/IO/Console.cpp \
+    src/IO/DataSources/Bluetooth.cpp \
     src/IO/DataSources/Network.cpp \
     src/IO/DataSources/Serial.cpp \
     src/IO/Manager.cpp \

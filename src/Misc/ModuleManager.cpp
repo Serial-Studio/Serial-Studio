@@ -35,6 +35,7 @@
 #include <IO/Console.h>
 #include <IO/DataSources/Serial.h>
 #include <IO/DataSources/Network.h>
+#include <IO/DataSources/Bluetooth.h>
 
 #include <Misc/MacExtras.h>
 #include <Misc/Utilities.h>
@@ -180,6 +181,7 @@ void Misc::ModuleManager::initializeQmlInterface()
     auto miscTimerEvents = &Misc::TimerEvents::instance();
     auto ioNetwork = &IO::DataSources::Network::instance();
     auto miscThemeManager = &Misc::ThemeManager::instance();
+    auto ioBluetooth = &IO::DataSources::Bluetooth::instance();
 
     // Initialize third-party modules
     auto updater = QSimpleUpdater::getInstance();
@@ -225,6 +227,7 @@ void Misc::ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_JSON_Editor", jsonEditor);
     c->setContextProperty("Cpp_MQTT_Client", mqttClient);
     c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
+    c->setContextProperty("Cpp_IO_Bluetooth", ioBluetooth);
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
     c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
     c->setContextProperty("Cpp_Misc_MacExtras", miscMacExtras);
