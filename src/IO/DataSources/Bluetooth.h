@@ -99,8 +99,9 @@ private:
     QString m_rssi;
     bool m_supported;
     int m_currentDevice;
-    QStringList m_devices;
+    QStringList m_names;
     QStringList m_services;
+    QList<QBluetoothDeviceInfo> m_devices;
     QBluetoothDeviceDiscoveryAgent m_discovery;
 };
 }

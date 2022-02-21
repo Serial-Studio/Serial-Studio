@@ -80,7 +80,7 @@ int IO::DataSources::Bluetooth::currentDevice() const
  */
 QStringList IO::DataSources::Bluetooth::devices() const
 {
-    return m_devices;
+    return m_names;
 }
 
 /**
@@ -99,6 +99,7 @@ QStringList IO::DataSources::Bluetooth::services() const
 void IO::DataSources::Bluetooth::beginScanning()
 {
     // Reset device & service lists
+    m_names.clear();
     m_devices.clear();
     m_services.clear();
 
@@ -107,7 +108,7 @@ void IO::DataSources::Bluetooth::beginScanning()
     m_supported = false;
     m_currentDevice = -1;
     m_services.append(tr("N/A"));
-    m_devices.append(tr("Searching..."));
+    m_names.append(tr("Searching..."));
 
     // Update UI
     Q_EMIT rssiChanged();
@@ -135,13 +136,14 @@ void IO::DataSources::Bluetooth::setCurrentDevice(const int index)
     if (m_currentDevice >= 0)
     {
         // Get device info object
-        auto device = m_discovery.discoveredDevices().at(m_currentDevice);
+        auto device = m_devices.at(m_currentDevice);
 
         // Update device information
-        m_services.append("No services found");
-        m_rssi = QString::number(device.rssi()) + " dB";
-        m_supported = device.coreConfigurations()
-            & QBluetoothDeviceInfo::LowEnergyCoreConfiguration;
+        // clang-format off
+        m_services.append(tr("No services found"));
+        m_rssi = QString::number(device.rssi()) + " dBm";
+        m_supported = device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration;
+        // clang-format on
     }
 
     // Not a valid device, reset data
@@ -174,21 +176,34 @@ void IO::DataSources::Bluetooth::setCurrentDevice(const int index)
 void IO::DataSources::Bluetooth::refreshDevices()
 {
     // Clear devices
+    m_names.clear();
     m_devices.clear();
     m_services.clear();
-    m_devices.append(tr("Select device"));
+    m_names.append(tr("Select device"));
 
     // Add all discovered devices to list
     for (int i = 0; i < m_discovery.discoveredDevices().count(); ++i)
     {
-        auto name = m_discovery.discoveredDevices().at(i).name();
-        m_devices.append(name);
+        auto device = m_discovery.discoveredDevices().at(i);
+        if (device.isValid())
+        {
+            auto name = device.name();
+            auto addr = device.address();
+            auto uuid = device.deviceUuid();
+
+            if (!name.isEmpty())
+                m_names.append(name);
+            else if (!addr.isNull())
+                m_names.append(addr.toString());
+            else
+                m_names.append(uuid.toString());
+
+            m_devices.append(device);
+        }
     }
 
     // Update UI
-    Q_EMIT rssiChanged();
-    Q_EMIT devicesChanged();
-    Q_EMIT servicesChanged();
+    setCurrentDevice(currentDevice() + 1);
 }
 
 /**
