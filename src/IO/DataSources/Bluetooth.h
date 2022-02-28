@@ -58,11 +58,15 @@ class Bluetooth : public QObject
     Q_PROPERTY(bool supported
                READ supported
                NOTIFY supportedChanged)
+    Q_PROPERTY(bool isScanning
+               READ isScanning
+               NOTIFY scanningChanged)
     // clang-format on
 
 Q_SIGNALS:
     void rssiChanged();
     void devicesChanged();
+    void scanningChanged();
     void servicesChanged();
     void supportedChanged();
     void currentDeviceChanged();
@@ -81,6 +85,7 @@ public:
 
     QString rssi() const;
     bool supported() const;
+    bool isScanning() const;
     int currentDevice() const;
     QStringList devices() const;
     QStringList services() const;
@@ -94,6 +99,7 @@ private Q_SLOTS:
     void deviceDiscovered(const QBluetoothDeviceInfo &info);
     void deviceUpdated(const QBluetoothDeviceInfo &info,
                        QBluetoothDeviceInfo::Fields updatedFields);
+    void onErrorOcurred(QBluetoothDeviceDiscoveryAgent::Error error);
 
 private:
     QString m_rssi;

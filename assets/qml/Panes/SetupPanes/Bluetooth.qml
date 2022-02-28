@@ -80,6 +80,7 @@ Control {
                 opacity: enabled ? 1 : 0.5
                 icon.color: Cpp_ThemeManager.text
                 icon.source: "qrc:/icons/refresh.svg"
+                enabled: !Cpp_IO_Bluetooth.isScanning
                 onClicked: Cpp_IO_Bluetooth.beginScanning()
             }
         }
@@ -114,6 +115,7 @@ Control {
         //
         RowLayout {
             spacing: app.spacing
+            visible: _deviceCombo.currentIndex >= 1
 
             Label {
                 id: rssiLabel
@@ -160,6 +162,30 @@ Control {
                 wrapMode: Label.WordWrap
                 text: "<b>" + qsTr("Note:") + "</b> " + qsTr("This is not a BLE device, I/O operations " +
                                                              "are not yet supported for classic Bluetooth devices.")
+            }
+        }
+
+        //
+        // Not at BLE device warning
+        //
+        RowLayout {
+            spacing: app.spacing
+            visible: opacity > 0
+            opacity: Cpp_IO_Bluetooth.isScanning ? 1 : 0
+
+            Behavior on opacity {NumberAnimation{}}
+
+            BusyIndicator {
+                width: 16
+                height: 16
+                Layout.minimumWidth: 16
+                Layout.minimumHeight: 16
+                running: Cpp_IO_Bluetooth.isScanning
+            }
+
+            Label {
+                Layout.fillWidth: true
+                text: qsTr("Scanning....")
             }
         }
 

@@ -32,6 +32,12 @@ IO::DataSources::Bluetooth::Bluetooth()
             &IO::DataSources::Bluetooth::deviceUpdated);
     connect(&m_discovery, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this,
             &IO::DataSources::Bluetooth::deviceDiscovered);
+    connect(&m_discovery, &QBluetoothDeviceDiscoveryAgent::canceled, this,
+            &IO::DataSources::Bluetooth::scanningChanged);
+    connect(&m_discovery, &QBluetoothDeviceDiscoveryAgent::finished, this,
+            &IO::DataSources::Bluetooth::scanningChanged);
+    connect(&m_discovery, SIGNAL(error(QBluetoothDeviceDiscoveryAgent::Error)), this,
+            SLOT(onErrorOcurred(QBluetoothDeviceDiscoveryAgent::Error)));
 
     // Start the device discovery process
     QTimer::singleShot(1000, this, &IO::DataSources::Bluetooth::beginScanning);
@@ -65,6 +71,15 @@ QString IO::DataSources::Bluetooth::rssi() const
 bool IO::DataSources::Bluetooth::supported() const
 {
     return m_supported;
+}
+
+/**
+ * Returns @c true if the bluetooth discovery service is searching
+ * for devices
+ */
+bool IO::DataSources::Bluetooth::isScanning() const
+{
+    return m_discovery.isActive();
 }
 
 /**
@@ -113,6 +128,7 @@ void IO::DataSources::Bluetooth::beginScanning()
     // Update UI
     Q_EMIT rssiChanged();
     Q_EMIT devicesChanged();
+    Q_EMIT scanningChanged();
     Q_EMIT servicesChanged();
     Q_EMIT supportedChanged();
     Q_EMIT currentDeviceChanged();
@@ -224,6 +240,15 @@ void IO::DataSources::Bluetooth::deviceUpdated(const QBluetoothDeviceInfo &info,
     (void)info;
     (void)updatedFields;
     refreshDevices();
+}
+
+/**
+ * Prints the device discovery error that have occurred
+ */
+void IO::DataSources::Bluetooth::onErrorOcurred(
+    QBluetoothDeviceDiscoveryAgent::Error error)
+{
+    qDebug() << error << m_discovery.errorString();
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC
