@@ -176,8 +176,6 @@ Control {
             Behavior on opacity {NumberAnimation{}}
 
             BusyIndicator {
-                width: 16
-                height: 16
                 Layout.minimumWidth: 16
                 Layout.minimumHeight: 16
                 running: Cpp_IO_Bluetooth.isScanning
