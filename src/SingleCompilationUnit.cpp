@@ -241,6 +241,7 @@
 #include "CSV/Player.h"
 #include "IO/Checksum.h"
 #include "IO/Console.h"
+#include "IO/HAL_Driver.h"
 #include "IO/Drivers/Serial.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
@@ -537,6 +538,8 @@
 #ifdef Q_OS_MAC
 #include "moc_kdmactouchbar.cpp"
 #endif
+
+#include "moc_HAL_Driver.cpp"
 
 // clang-format on
 
