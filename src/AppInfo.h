@@ -23,7 +23,7 @@
 #pragma once
 
 // clang-format off
-#define APP_VERSION     "1.1.7"
+#define APP_VERSION     "1.2.0"
 #define APP_DEVELOPER   "Alex Spataru"
 #define APP_NAME        "Serial Studio"
 #define APP_SUPPORT_URL "https://github.com/serial-studio"

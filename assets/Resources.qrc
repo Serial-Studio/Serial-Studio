@@ -115,10 +115,11 @@
         <file>qml/JsonEditor/JsonDatasetDelegate.qml</file>
         <file>qml/JsonEditor/JsonGroupDelegate.qml</file>
         <file>qml/JsonEditor/TreeView.qml</file>
-        <file>qml/Panes/SetupPanes/Bluetooth.qml</file>
+        <file>qml/Panes/SetupPanes/Devices/BluetoothLE.qml</file>
+        <file>qml/Panes/SetupPanes/Devices/Network.qml</file>
+        <file>qml/Panes/SetupPanes/Devices/Serial.qml</file>
+        <file>qml/Panes/SetupPanes/Hardware.qml</file>
         <file>qml/Panes/SetupPanes/MQTT.qml</file>
-        <file>qml/Panes/SetupPanes/Network.qml</file>
-        <file>qml/Panes/SetupPanes/Serial.qml</file>
         <file>qml/Panes/SetupPanes/Settings.qml</file>
         <file>qml/Panes/Console.qml</file>
         <file>qml/Panes/Dashboard.qml</file>

@@ -87,6 +87,7 @@ Control {
                 model: Cpp_IO_Serial.portList
                 enabled: !Cpp_IO_Manager.connected
                 currentIndex: Cpp_IO_Serial.portIndex
+                palette.base: Cpp_ThemeManager.setupPanelBackground
                 onCurrentIndexChanged: {
                     if (currentIndex !== Cpp_IO_Serial.portIndex)
                         Cpp_IO_Serial.portIndex = currentIndex
@@ -105,6 +106,7 @@ Control {
                 currentIndex: 4
                 Layout.fillWidth: true
                 model: Cpp_IO_Serial.baudRateList
+                palette.base: Cpp_ThemeManager.setupPanelBackground
 
                 validator: IntValidator {
                     bottom: 1
@@ -131,6 +133,7 @@ Control {
                 Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: -app.spacing
                 checked: Cpp_IO_Serial.autoReconnect
+                palette.base: Cpp_ThemeManager.setupPanelBackground
                 onCheckedChanged: {
                     if (Cpp_IO_Serial.autoReconnect !== checked)
                         Cpp_IO_Serial.autoReconnect = checked
@@ -158,6 +161,7 @@ Control {
                 Layout.fillWidth: true
                 model: Cpp_IO_Serial.dataBitsList
                 currentIndex: Cpp_IO_Serial.dataBitsIndex
+                palette.base: Cpp_ThemeManager.setupPanelBackground
                 onCurrentIndexChanged: {
                     if (Cpp_IO_Serial.dataBitsIndex !== currentIndex)
                         Cpp_IO_Serial.dataBitsIndex = currentIndex
@@ -174,6 +178,7 @@ Control {
                 Layout.fillWidth: true
                 model: Cpp_IO_Serial.parityList
                 currentIndex: Cpp_IO_Serial.parityIndex
+                palette.base: Cpp_ThemeManager.setupPanelBackground
                 onCurrentIndexChanged: {
                     if (Cpp_IO_Serial.parityIndex !== currentIndex)
                         Cpp_IO_Serial.parityIndex = currentIndex
@@ -190,6 +195,7 @@ Control {
                 Layout.fillWidth: true
                 model: Cpp_IO_Serial.stopBitsList
                 currentIndex: Cpp_IO_Serial.stopBitsIndex
+                palette.base: Cpp_ThemeManager.setupPanelBackground
                 onCurrentIndexChanged: {
                     if (Cpp_IO_Serial.stopBitsIndex !== currentIndex)
                         Cpp_IO_Serial.stopBitsIndex = currentIndex
@@ -206,6 +212,7 @@ Control {
                 Layout.fillWidth: true
                 model: Cpp_IO_Serial.flowControlList
                 currentIndex: Cpp_IO_Serial.flowControlIndex
+                palette.base: Cpp_ThemeManager.setupPanelBackground
                 onCurrentIndexChanged: {
                     if (Cpp_IO_Serial.flowControlIndex !== currentIndex)
                         Cpp_IO_Serial.flowControlIndex = currentIndex

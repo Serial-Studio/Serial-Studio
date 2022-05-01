@@ -33,9 +33,9 @@
 
 #include <IO/Manager.h>
 #include <IO/Console.h>
-#include <IO/DataSources/Serial.h>
-#include <IO/DataSources/Network.h>
-#include <IO/DataSources/Bluetooth.h>
+#include <IO/Drivers/Serial.h>
+#include <IO/Drivers/Network.h>
+#include <IO/Drivers/BluetoothLE.h>
 
 #include <Misc/MacExtras.h>
 #include <Misc/Utilities.h>
@@ -177,11 +177,11 @@ void Misc::ModuleManager::initializeQmlInterface()
     auto miscUtilities = &Misc::Utilities::instance();
     auto miscMacExtras = &Misc::MacExtras::instance();
     auto miscTranslator = &Misc::Translator::instance();
-    auto ioSerial = &IO::DataSources::Serial::instance();
+    auto ioSerial = &IO::Drivers::Serial::instance();
     auto miscTimerEvents = &Misc::TimerEvents::instance();
-    auto ioNetwork = &IO::DataSources::Network::instance();
+    auto ioNetwork = &IO::Drivers::Network::instance();
     auto miscThemeManager = &Misc::ThemeManager::instance();
-    auto ioBluetooth = &IO::DataSources::Bluetooth::instance();
+    auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
 
     // Initialize third-party modules
     auto updater = QSimpleUpdater::getInstance();
@@ -227,11 +227,11 @@ void Misc::ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_JSON_Editor", jsonEditor);
     c->setContextProperty("Cpp_MQTT_Client", mqttClient);
     c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
-    c->setContextProperty("Cpp_IO_Bluetooth", ioBluetooth);
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
     c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
     c->setContextProperty("Cpp_Misc_MacExtras", miscMacExtras);
     c->setContextProperty("Cpp_Misc_Utilities", miscUtilities);
+    c->setContextProperty("Cpp_IO_Bluetooth_LE", ioBluetoothLE);
     c->setContextProperty("Cpp_ThemeManager", miscThemeManager);
     c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
     c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
@@ -267,7 +267,7 @@ void Misc::ModuleManager::onQuit()
 {
     CSV::Export::instance().closeFile();
     CSV::Player::instance().closeFile();
-    IO::Manager::instance().disconnectDevice();
+    IO::Manager::instance().disconnectDriver();
     Misc::TimerEvents::instance().stopTimers();
     Plugins::Server::instance().removeConnection();
 }

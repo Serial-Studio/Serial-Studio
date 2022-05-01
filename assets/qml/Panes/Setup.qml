@@ -72,27 +72,6 @@ Item {
         property alias csvExport: csvLogging.checked
 
         //
-        // Serial settings
-        //
-        property alias parity: serial.parity
-        property alias baudRate: serial.baudRate
-        property alias dataBits: serial.dataBits
-        property alias stopBits: serial.stopBits
-        property alias flowControl: serial.flowControl
-        property alias autoReconnect: serial.autoReconnect
-
-        //
-        // Network settings
-        //
-        property alias address: network.address
-        property alias tcpPort: network.tcpPort
-        property alias socketType: network.socketType
-        property alias udpLocalPort: network.udpLocalPort
-        property alias udpRemotePort: network.udpRemotePort
-        property alias udpMulticastEnabled: network.udpMulticastEnabled
-        property alias udpProcessDatagramsDirectly: network.udpProcessDatagramsDirectly
-
-        //
         // MQTT settings
         //
         property alias mqttHost: mqtt.host
@@ -245,25 +224,9 @@ Item {
                 id: tab
                 Layout.fillWidth: true
                 Layout.maximumWidth: root.maxItemWidth
-                onCurrentIndexChanged: {
-                    if (currentIndex < 3 && currentIndex !== Cpp_IO_Manager.dataSource)
-                        Cpp_IO_Manager.dataSource = currentIndex
-                }
 
                 TabButton {
-                    text: qsTr("Serial")
-                    height: tab.height + 3
-                    width: implicitWidth + 2 * app.spacing
-                }
-
-                TabButton {
-                    text: qsTr("Network")
-                    height: tab.height + 3
-                    width: implicitWidth + 2 * app.spacing
-                }
-
-                TabButton {
-                    text: qsTr("Bluetooth")
+                    text: qsTr("Device")
                     height: tab.height + 3
                     width: implicitWidth + 2 * app.spacing
                 }
@@ -302,18 +265,12 @@ Item {
 
                     switch (currentIndex) {
                     case 0:
-                        stack.implicitHeight = serial.implicitHeight
+                        stack.implicitHeight = hardware.implicitHeight
                         break
                     case 1:
-                        stack.implicitHeight = network.implicitHeight
-                        break
-                    case 2:
-                        stack.implicitHeight = bluetooth.implicitHeight
-                        break
-                    case 3:
                         stack.implicitHeight = mqtt.implicitHeight
                         break
-                    case 4:
+                    case 2:
                         stack.implicitHeight = settings.implicitHeight
                         break
                     default:
@@ -322,39 +279,9 @@ Item {
                     }
                 }
 
-                SetupPanes.Serial {
-                    id: serial
-                    background: TextField {
-                        enabled: false
-                        palette.base: Cpp_ThemeManager.setupPanelBackground
-                    }
-                }
-
-                SetupPanes.Network {
-                    id: network
-                    onUiChanged: networkTimer.start()
-
-                    Timer {
-                        id: networkTimer
-                        interval: 50
-                        onTriggered: stack.updateHeight()
-                    }
-
-                    background: TextField {
-                        enabled: false
-                        palette.base: Cpp_ThemeManager.setupPanelBackground
-                    }
-                }
-
-                SetupPanes.Bluetooth {
-                    id: bluetooth
-                    onUiChanged: bluetoothTimer.start()
-
-                    Timer {
-                        id: bluetoothTimer
-                        interval: 50
-                        onTriggered: stack.updateHeight()
-                    }
+                SetupPanes.Hardware {
+                    id: hardware
+                    onUiChanged: stack.updateHeight()
 
                     background: TextField {
                         enabled: false

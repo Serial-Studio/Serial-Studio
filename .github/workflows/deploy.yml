@@ -17,7 +17,7 @@ on:
 #--------------------------------------------------------------------------------
 
 env:
-  VERSION: "1.1.7"
+  VERSION: "1.2.0"
   EXECUTABLE: "SerialStudio"
   APPLICATION: "Serial Studio"
   UNIXNAME: "serial-studio"
@@ -35,6 +35,9 @@ env:
 #--------------------------------------------------------------------------------
 
 jobs:
+  #
+  # GNU/Linux build
+  #
   build-linux:
     runs-on: ubuntu-18.04
     name: '🐧 Ubuntu 18.04'
@@ -60,8 +63,6 @@ jobs:
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
-    # Install additional dependencies, stolen from:
-    # https://github.com/mapeditor/tiled/blob/master/.github/workflows/packages.yml
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
@@ -90,7 +91,9 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
 
+  #
   # macOS build
+  #
   build-mac:
     runs-on: macos-latest
     name: '🍎 macOS'
@@ -125,9 +128,6 @@ jobs:
       run: |
         macdeployqt ${{env.EXECUTABLE}}.app -qmldir="${{env.QML_DIR_NIX}}"
         mv "${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
-
-        # ZIP application "%AppName%-%Version%-macOS.zip"
-        # We use ditto instead of zip to use the same commands as Finder
         ditto -c -k --sequesterRsrc --keepParent "${{env.APPLICATION}}.app" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
 
     - name: '📤 Upload artifact: ZIP'
@@ -136,7 +136,9 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
 
+  #
   # Windows build
+  #
   build-windows:
     runs-on: windows-latest
     name: '🧊 Windows'
@@ -168,18 +170,11 @@ jobs:
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
-    - name: '⚙️ Install NSIS'
-      run: |
-        Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-        scoop bucket add extras
-        scoop install nsis
-
     - name: '🚧 Compile application'
       run: |
         ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
         nmake
 
-    # Copy Qt DLLs, compiler runtime & application icon
     - name: '📦 Package application (windeployqt)'
       run: |
         mkdir bin
@@ -189,12 +184,18 @@ jobs:
         move bin "${{env.APPLICATION}}"
         xcopy deploy\windows\resources\icon.ico "${{env.APPLICATION}}"
         xcopy deploy\windows\openssl\*.dll "${{env.APPLICATION}}\bin"
+        move "${{env.APPLICATION}}" deploy\windows\nsis\
 
     - name: '📦 Make NSIS installer'
+      uses: joncloud/makensis-action@v3.6
+      with:
+        script-file: deploy/windows/nsis/setup.nsi
+
+    - name: '📦 Rename installer'
       run: |
-        move "${{env.APPLICATION}}" deploy\windows\nsis\
-        cd deploy\windows\nsis
-        makensis /X"SetCompressor /FINAL lzma" setup.nsi
+        dir
+        cd deploy/windows/nsis/
+        dir
         ren *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
 
     - name: '📤 Upload artifact: NSIS installer'
@@ -203,7 +204,9 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
         path: deploy/windows/nsis/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
 
+  #
   # Windows MSYS2 build
+  #
   msys2-makepkg:
     if: ${{false}}
     runs-on: windows-latest
@@ -298,7 +301,9 @@ jobs:
         /usr/bin/tar xf ../*${{ matrix.arch }}*.zst
         tree ${{ matrix.msystem }}
   
+  #
   # Upload continuous build
+  #
   upload:
       name: '🗂 Create release and upload artifacts'
       needs:

@@ -160,9 +160,10 @@ HEADERS += \
     src/DataTypes.h \
     src/IO/Checksum.h \
     src/IO/Console.h \
-    src/IO/DataSources/Bluetooth.h \
-    src/IO/DataSources/Network.h \
-    src/IO/DataSources/Serial.h \
+    src/IO/Drivers/BluetoothLE.h \
+    src/IO/Drivers/Network.h \
+    src/IO/Drivers/Serial.h \
+    src/IO/HAL_Driver.h \
     src/IO/Manager.h \
     src/JSON/Dataset.h \
     src/JSON/Editor.h \
@@ -203,9 +204,9 @@ SOURCES += \
     src/CSV/Player.cpp \
     src/IO/Checksum.cpp \
     src/IO/Console.cpp \
-    src/IO/DataSources/Bluetooth.cpp \
-    src/IO/DataSources/Network.cpp \
-    src/IO/DataSources/Serial.cpp \
+    src/IO/Drivers/BluetoothLE.cpp \
+    src/IO/Drivers/Network.cpp \
+    src/IO/Drivers/Serial.cpp \
     src/IO/Manager.cpp \
     src/JSON/Dataset.cpp \
     src/JSON/Editor.cpp \
@@ -255,7 +256,8 @@ DISTFILES += \
     assets/qml/JsonEditor/*.qml \
     assets/qml/FramelessWindow/*.qml \
     assets/qml/Panes/SetupPanes/*.qml \
-    assets/qml/PlatformDependent/*.qml
+    assets/qml/PlatformDependent/*.qml \
+    assets/qml/Panes/SetupPanes/Devices/*.qml \
 
 #-----------------------------------------------------------------------------------------
 # Deploy files

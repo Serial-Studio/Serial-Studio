@@ -23,8 +23,8 @@
 #pragma once
 
 #include <QObject>
-#include <QIODevice>
 #include <DataTypes.h>
+#include <IO/HAL_Driver.h>
 
 namespace IO
 {
@@ -70,11 +70,11 @@ class Manager : public QObject
                NOTIFY connectedChanged)
     Q_PROPERTY(bool deviceAvailable
                READ deviceAvailable
-               NOTIFY deviceChanged)
-    Q_PROPERTY(IO::Manager::DataSource dataSource
-               READ dataSource
-               WRITE setDataSource
-               NOTIFY dataSourceChanged)
+               NOTIFY driverChanged)
+    Q_PROPERTY(IO::Manager::SelectedDriver selectedDriver
+               READ selectedDriver
+               WRITE setSelectedDriver
+               NOTIFY selectedDriverChanged)
     Q_PROPERTY(QString startSequence
                READ startSequence
                WRITE setStartSequence
@@ -93,15 +93,15 @@ class Manager : public QObject
     // clang-format on
 
 Q_SIGNALS:
-    void deviceChanged();
+    void driverChanged();
     void connectedChanged();
-    void dataSourceChanged();
     void writeEnabledChanged();
     void configurationChanged();
     void receivedBytesChanged();
     void maxBufferSizeChanged();
     void startSequenceChanged();
     void finishSequenceChanged();
+    void selectedDriverChanged();
     void separatorSequenceChanged();
     void frameValidationRegexChanged();
     void dataSent(const QByteArray &data);
@@ -116,12 +116,13 @@ private:
     Manager &operator=(const Manager &) = delete;
 
 public:
-    enum class DataSource
+    enum class SelectedDriver
     {
         Serial,
-        Network
+        Network,
+        BluetoothLE
     };
-    Q_ENUM(DataSource)
+    Q_ENUM(SelectedDriver)
 
     enum class ValidationStatus
     {
@@ -137,37 +138,37 @@ public:
     bool readWrite();
     bool connected();
     bool deviceAvailable();
-    bool configurationOk() const;
+    bool configurationOk();
 
     int maxBufferSize() const;
 
-    QIODevice *device();
-    DataSource dataSource() const;
+    HAL_Driver *driver();
+    SelectedDriver selectedDriver() const;
 
     QString startSequence() const;
     QString finishSequence() const;
     QString separatorSequence() const;
 
-    Q_INVOKABLE StringList dataSourcesList() const;
+    Q_INVOKABLE StringList availableDrivers() const;
     Q_INVOKABLE qint64 writeData(const QByteArray &data);
 
 public Q_SLOTS:
     void connectDevice();
     void toggleConnection();
-    void disconnectDevice();
+    void disconnectDriver();
     void setWriteEnabled(const bool enabled);
     void processPayload(const QByteArray &payload);
     void setMaxBufferSize(const int maxBufferSize);
     void setStartSequence(const QString &sequence);
     void setFinishSequence(const QString &sequence);
     void setSeparatorSequence(const QString &sequence);
-    void setDataSource(const IO::Manager::DataSource &source);
+    void setSelectedDriver(const IO::Manager::SelectedDriver &driver);
 
 private Q_SLOTS:
     void readFrames();
-    void onDataReceived();
     void clearTempBuffer();
-    void setDevice(QIODevice *device);
+    void setDriver(HAL_Driver *driver);
+    void onDataReceived(const QByteArray &data);
 
 private:
     ValidationStatus integrityChecks(const QByteArray &frame,
@@ -177,12 +178,12 @@ private:
     bool m_enableCrc;
     bool m_writeEnabled;
     int m_maxBufferSize;
-    QIODevice *m_device;
-    DataSource m_dataSource;
+    HAL_Driver *m_driver;
     QByteArray m_dataBuffer;
     quint64 m_receivedBytes;
     QString m_startSequence;
     QString m_finishSequence;
     QString m_separatorSequence;
+    SelectedDriver m_selectedDriver;
 };
 }

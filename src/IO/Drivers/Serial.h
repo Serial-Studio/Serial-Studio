@@ -23,6 +23,7 @@
 #pragma once
 
 #include <DataTypes.h>
+#include <IO/HAL_Driver.h>
 
 #include <QObject>
 #include <QString>
@@ -34,14 +35,13 @@
 
 namespace IO
 {
-namespace DataSources
+namespace Drivers
 {
 /**
- * @brief The Network class
- *
- * Serial Studio "driver" class to interact with serial port devices.
+ * @brief The Serial class
+ * Serial Studio driver class to interact with serial port devices.
  */
-class Serial : public QObject
+class Serial : public HAL_Driver
 {
     // clang-format off
     Q_OBJECT
@@ -122,10 +122,20 @@ private:
 public:
     static Serial &instance();
 
+    //
+    // HAL functions
+    //
+    void close() override;
+    bool isOpen() const override;
+    bool isReadable() const override;
+    bool isWritable() const override;
+    bool configurationOk() const override;
+    quint64 write(const QByteArray &data) override;
+    bool open(const QIODevice::OpenMode mode) override;
+
     QString portName() const;
     QSerialPort *port() const;
     bool autoReconnect() const;
-    bool configurationOk() const;
 
     quint8 portIndex() const;
     quint8 parityIndex() const;
@@ -147,8 +157,6 @@ public:
     QSerialPort::StopBits stopBits() const;
     QSerialPort::FlowControl flowControl() const;
 
-    QSerialPort *openSerialPort();
-
 public Q_SLOTS:
     void disconnectDevice();
     void setBaudRate(const qint32 rate);
@@ -161,6 +169,7 @@ public Q_SLOTS:
     void setFlowControl(const quint8 flowControlIndex);
 
 private Q_SLOTS:
+    void onReadyRead();
     void readSettings();
     void writeSettings();
     void refreshSerialDevices();

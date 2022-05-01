@@ -23,11 +23,11 @@
 
 #include <IO/Manager.h>
 #include <IO/Checksum.h>
-#include <IO/DataSources/Serial.h>
-#include <IO/DataSources/Network.h>
+#include <IO/Drivers/Serial.h>
+#include <IO/Drivers/Network.h>
+#include <IO/Drivers/BluetoothLE.h>
 
 #include <MQTT/Client.h>
-#include <QNetworkDatagram>
 
 /**
  * Adds support for C escape sequences to the given @a str.
@@ -57,22 +57,15 @@ IO::Manager::Manager()
     : m_enableCrc(false)
     , m_writeEnabled(true)
     , m_maxBufferSize(1024 * 1024)
-    , m_device(Q_NULLPTR)
-    , m_dataSource(DataSource::Serial)
+    , m_driver(Q_NULLPTR)
     , m_receivedBytes(0)
     , m_startSequence("/*")
     , m_finishSequence("*/")
     , m_separatorSequence(",")
 {
     setMaxBufferSize(1024 * 1024);
-
-    // Configure signals/slots
-    auto serial = &DataSources::Serial::instance();
-    auto netwrk = &DataSources::Network::instance();
-    connect(netwrk, SIGNAL(portChanged()), this, SIGNAL(configurationChanged()));
-    connect(netwrk, SIGNAL(addressChanged()), this, SIGNAL(configurationChanged()));
-    connect(this, SIGNAL(dataSourceChanged()), this, SIGNAL(configurationChanged()));
-    connect(serial, SIGNAL(portIndexChanged()), this, SIGNAL(configurationChanged()));
+    setSelectedDriver(SelectedDriver::Serial);
+    connect(this, SIGNAL(selectedDriverChanged()), this, SIGNAL(configurationChanged()));
 }
 
 /**
@@ -106,8 +99,8 @@ bool IO::Manager::readWrite()
  */
 bool IO::Manager::connected()
 {
-    if (device())
-        return device()->isOpen();
+    if (driver())
+        return driver()->isOpen();
 
     return MQTT::Client::instance().isSubscribed();
 }
@@ -117,18 +110,16 @@ bool IO::Manager::connected()
  */
 bool IO::Manager::deviceAvailable()
 {
-    return device() != Q_NULLPTR;
+    return driver() != Q_NULLPTR;
 }
 
 /**
  * Returns @c true if we are able to connect to a device/port with the current config.
  */
-bool IO::Manager::configurationOk() const
+bool IO::Manager::configurationOk()
 {
-    if (dataSource() == DataSource::Serial)
-        return DataSources::Serial::instance().configurationOk();
-    else if (dataSource() == DataSource::Network)
-        return DataSources::Network::instance().configurationOk();
+    if (driver())
+        return driver()->configurationOk();
 
     return false;
 }
@@ -144,14 +135,14 @@ int IO::Manager::maxBufferSize() const
 }
 
 /**
- * Returns a pointer to the currently selected device.
+ * Returns a pointer to the currently selected driver.
  *
  * @warning you need to check this pointer before using it, it can have a @c Q_NULLPTR
  *          value during normal operations.
  */
-QIODevice *IO::Manager::device()
+IO::HAL_Driver *IO::Manager::driver()
 {
-    return m_device;
+    return m_driver;
 }
 
 /**
@@ -159,9 +150,9 @@ QIODevice *IO::Manager::device()
  * - @c DataSource::Serial  use a serial port as a data source
  * - @c DataSource::Network use a network port as a data source
  */
-IO::Manager::DataSource IO::Manager::dataSource() const
+IO::Manager::SelectedDriver IO::Manager::selectedDriver() const
 {
-    return m_dataSource;
+    return m_selectedDriver;
 }
 
 /**
@@ -196,11 +187,12 @@ QString IO::Manager::separatorSequence() const
 /**
  * Returns a list with the possible data source options.
  */
-StringList IO::Manager::dataSourcesList() const
+StringList IO::Manager::availableDrivers() const
 {
     StringList list;
     list.append(tr("Serial port"));
     list.append(tr("Network port"));
+    list.append(tr("Bluetooth LE device"));
     return list;
 }
 
@@ -213,30 +205,8 @@ qint64 IO::Manager::writeData(const QByteArray &data)
 {
     if (connected())
     {
-        qint64 bytes = 0;
-
-        // Check which data source to use to write data
-        if (dataSource() == DataSource::Network)
-        {
-            // Write to UDP socket
-            auto network = &DataSources::Network::instance();
-            if (network->socketType() == QAbstractSocket::UdpSocket)
-            {
-                bytes = network->udpSocket()->writeDatagram(
-                    data, QHostAddress(network->remoteAddress()),
-                    network->udpRemotePort());
-            }
-
-            // Write to TCP socket
-            else
-            {
-                bytes = network->tcpSocket()->write(data);
-            }
-        }
-
-        // Write to serial device
-        else
-            bytes = device()->write(data);
+        // Write data to device
+        auto bytes = driver()->write(data);
 
         // Show sent data in console
         if (bytes > 0)
@@ -260,7 +230,7 @@ qint64 IO::Manager::writeData(const QByteArray &data)
 void IO::Manager::toggleConnection()
 {
     if (connected())
-        disconnectDevice();
+        disconnectDriver();
     else
         connectDevice();
 }
@@ -271,16 +241,8 @@ void IO::Manager::toggleConnection()
  */
 void IO::Manager::connectDevice()
 {
-    // Disconnect previous device (if any)
-    disconnectDevice();
-
-    // Try to open a serial port connection
-    if (dataSource() == DataSource::Serial)
-        setDevice(DataSources::Serial::instance().openSerialPort());
-
-    // Try to open a network connection
-    else if (dataSource() == DataSource::Network)
-        setDevice(DataSources::Network::instance().openNetworkPort());
+    // Reset driver
+    setSelectedDriver(selectedDriver());
 
     // Configure current device
     if (deviceAvailable())
@@ -291,12 +253,13 @@ void IO::Manager::connectDevice()
             mode = QIODevice::ReadWrite;
 
         // Open device
-        if (device()->open(mode))
-            connect(device(), &QIODevice::readyRead, this, &IO::Manager::onDataReceived);
+        if (driver()->open(mode))
+            connect(driver(), &IO::HAL_Driver::dataReceived, this,
+                    &IO::Manager::onDataReceived);
 
         // Error opening the device
         else
-            disconnectDevice();
+            disconnectDriver();
 
         // Update UI
         Q_EMIT connectedChanged();
@@ -306,27 +269,27 @@ void IO::Manager::connectDevice()
 /**
  * Disconnects from the current device and clears temp. data
  */
-void IO::Manager::disconnectDevice()
+void IO::Manager::disconnectDriver()
 {
     if (deviceAvailable())
     {
         // Disconnect device signals/slots
-        device()->disconnect(this, SLOT(onDataReceived()));
+        disconnect(driver(), &IO::HAL_Driver::dataReceived, this,
+                   &IO::Manager::onDataReceived);
+        disconnect(driver(), &IO::HAL_Driver::configurationChanged, this,
+                   &IO::Manager::configurationChanged);
 
-        // Call-appropiate interface functions
-        if (dataSource() == DataSource::Serial)
-            DataSources::Serial::instance().disconnectDevice();
-        else if (dataSource() == DataSource::Network)
-            DataSources::Network::instance().disconnectDevice();
+        // Close driver device
+        driver()->close();
 
         // Update device pointer
-        m_device = Q_NULLPTR;
+        m_driver = Q_NULLPTR;
         m_receivedBytes = 0;
         m_dataBuffer.clear();
         m_dataBuffer.reserve(maxBufferSize());
 
         // Update UI
-        Q_EMIT deviceChanged();
+        Q_EMIT driverChanged();
         Q_EMIT connectedChanged();
     }
 
@@ -417,15 +380,35 @@ void IO::Manager::setSeparatorSequence(const QString &sequence)
 /**
  * Changes the data source type. Check the @c dataSource() funciton for more information.
  */
-void IO::Manager::setDataSource(const IO::Manager::DataSource &source)
+void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
 {
-    // Disconnect current device
-    if (connected())
-        disconnectDevice();
+    // Disconnect current driver
+    disconnectDriver();
 
     // Change data source
-    m_dataSource = source;
-    Q_EMIT dataSourceChanged();
+    m_selectedDriver = driver;
+
+    // Disconnect previous device (if any)
+    disconnectDriver();
+
+    // Try to open a serial port connection
+    if (selectedDriver() == SelectedDriver::Serial)
+        setDriver(&(Drivers::Serial::instance()));
+
+    // Try to open a network connection
+    else if (selectedDriver() == SelectedDriver::Network)
+        setDriver(&(Drivers::Network::instance()));
+
+    // Try to open a BLE connection
+    else if (selectedDriver() == SelectedDriver::BluetoothLE)
+        setDriver(&(Drivers::BluetoothLE::instance()));
+
+    // Invalid driver
+    else
+        setDriver(Q_NULLPTR);
+
+    // Update UI
+    Q_EMIT selectedDriverChanged();
 }
 
 /**
@@ -491,48 +474,41 @@ void IO::Manager::readFrames()
 }
 
 /**
- * Reads incoming data from the serial device, updates the serial console object,
- * registers incoming data to temporary buffer & extracts valid data frames from the
- * buffer using the @c readFrame() function.
+ * Deletes the contents of the temporary buffer. This function is called automatically by
+ * the class when the temporary buffer size exceeds the limit imposed by the
+ * @c maxBufferSize() function.
  */
-void IO::Manager::onDataReceived()
+void IO::Manager::clearTempBuffer()
+{
+    m_dataBuffer.clear();
+}
+
+/**
+ * Changes the target device pointer. Deletion should be handled by the interface
+ * implementation, not by this class.
+ */
+void IO::Manager::setDriver(HAL_Driver *driver)
+{
+    if (driver)
+        connect(driver, &IO::HAL_Driver::configurationChanged, this,
+                &IO::Manager::configurationChanged);
+
+    m_driver = driver;
+
+    Q_EMIT driverChanged();
+    Q_EMIT configurationChanged();
+}
+
+/**
+ * Reads incoming data from the I/O device, updates the console object, registers incoming
+ * data to temporary buffer & extracts valid data frames from the buffer using the @c
+ * readFrame() function.
+ */
+void IO::Manager::onDataReceived(const QByteArray &data)
 {
     // Verify that device is still valid
-    if (!device())
-        disconnectDevice();
-
-    // Initialize byte array
-    QByteArray data;
-    bool udpConnection = false;
-
-    // Check if we need to use UDP socket functions
-    if (dataSource() == DataSource::Network)
-    {
-        if (DataSources::Network::instance().socketType() == QAbstractSocket::UdpSocket)
-        {
-            udpConnection = true;
-            auto udpSocket = DataSources::Network::instance().udpSocket();
-            while (udpSocket->hasPendingDatagrams())
-            {
-                // Read datagram data
-                QByteArray datagram;
-                datagram.resize(int(udpSocket->pendingDatagramSize()));
-                udpSocket->readDatagram(datagram.data(), datagram.size());
-
-                // Add datagram to data buffer
-                if (!DataSources::Network::instance().udpIgnoreFrameSequences())
-                    data.append(datagram);
-
-                // Ingore start/end sequences & process frame directly
-                else
-                    processPayload(datagram);
-            }
-        }
-    }
-
-    // We are using the TCP socket or the serial port
-    if (!udpConnection)
-        data = device()->readAll();
+    if (!driver())
+        disconnectDriver();
 
     // Read data & append it to buffer
     auto bytes = data.length();
@@ -549,27 +525,6 @@ void IO::Manager::onDataReceived()
     // Notify user interface
     Q_EMIT receivedBytesChanged();
     Q_EMIT dataReceived(data);
-}
-
-/**
- * Deletes the contents of the temporary buffer. This function is called automatically by
- * the class when the temporary buffer size exceeds the limit imposed by the
- * @c maxBufferSize() function.
- */
-void IO::Manager::clearTempBuffer()
-{
-    m_dataBuffer.clear();
-}
-
-/**
- * Changes the target device pointer. Deletion should be handled by the interface
- * implementation, not by this class.
- */
-void IO::Manager::setDevice(QIODevice *device)
-{
-    disconnectDevice();
-    m_device = device;
-    Q_EMIT deviceChanged();
 }
 
 /**

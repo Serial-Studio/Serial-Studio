@@ -41,7 +41,7 @@ JSON::Generator::Generator()
     // clang-format off
     connect(&CSV::Player::instance(), &CSV::Player::openChanged,
             this, &JSON::Generator::reset);
-    connect(&IO::Manager::instance(), &IO::Manager::deviceChanged,
+    connect(&IO::Manager::instance(), &IO::Manager::driverChanged,
             this, &JSON::Generator::reset);
     connect(&IO::Manager::instance(), &IO::Manager::frameReceived,
             this, &JSON::Generator::readData);

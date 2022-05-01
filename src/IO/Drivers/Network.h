@@ -23,6 +23,7 @@
 #pragma once
 
 #include <DataTypes.h>
+#include <IO/HAL_Driver.h>
 
 #include <QHostInfo>
 #include <QTcpSocket>
@@ -33,14 +34,14 @@
 
 namespace IO
 {
-namespace DataSources
+namespace Drivers
 {
 /**
  * @brief The Network class
  *
  * Serial Studio "driver" class to interact with UDP/TCP network ports.
  */
-class Network : public QObject
+class Network : public HAL_Driver
 {
     // clang-format off
     Q_OBJECT
@@ -111,10 +112,19 @@ private:
     Network &operator=(Network &&) = delete;
     Network &operator=(const Network &) = delete;
 
-    ~Network();
-
 public:
     static Network &instance();
+
+    //
+    // HAL functions
+    //
+    void close() override;
+    bool isOpen() const override;
+    bool isReadable() const override;
+    bool isWritable() const override;
+    bool configurationOk() const override;
+    quint64 write(const QByteArray &data) override;
+    bool open(const QIODevice::OpenMode mode) override;
 
     QString remoteAddress() const;
 
@@ -125,7 +135,6 @@ public:
     bool udpMulticast() const;
     bool lookupActive() const;
     int socketTypeIndex() const;
-    bool configurationOk() const;
     StringList socketTypes() const;
     bool udpIgnoreFrameSequences() const;
     QAbstractSocket::SocketType socketType() const;
@@ -138,12 +147,9 @@ public:
     static quint16 defaultUdpLocalPort() { return 0; }
     static quint16 defaultUdpRemotePort() { return 53; }
 
-    QIODevice *openNetworkPort();
-
 public Q_SLOTS:
     void setTcpSocket();
     void setUdpSocket();
-    void disconnectDevice();
     void lookup(const QString &host);
     void setTcpPort(const quint16 port);
     void setUdpLocalPort(const quint16 port);
@@ -155,6 +161,7 @@ public Q_SLOTS:
     void setSocketType(const QAbstractSocket::SocketType type);
 
 private Q_SLOTS:
+    void onReadyRead();
     void lookupFinished(const QHostInfo &info);
     void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
