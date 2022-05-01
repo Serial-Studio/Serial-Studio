@@ -55,13 +55,12 @@
 #include <QSimpleUpdater.h>
 
 /**
- * Configures the application font, creates a splash screen and configures
- * application signals/slots to destroy singleton classes before the application
- * quits.
+ * Configures the application font and configures application signals/slots to destroy
+ * singleton classes before the application quits.
  */
 Misc::ModuleManager::ModuleManager()
 {
-    // Init translator (so that splash screen displays text in user's language)
+    // Init translator
     (void)Misc::Translator::instance();
 
     // Load Roboto fonts from resources
@@ -81,26 +80,10 @@ Misc::ModuleManager::ModuleManager()
 #endif
     qApp->setFont(font);
 
-    // Get splash screen image
-    QPixmap pixmap;
-    if (qApp->devicePixelRatio() >= 2)
-        pixmap.load(":/images/splash@2x.png");
-    else
-        pixmap.load(":/images/splash@1x.png");
-
-#ifdef Q_OS_MAC
-    // Disable splash screen shadow on macOS
-    m_splash.setWindowFlags(Qt::SplashScreen | Qt::NoDropShadowWindowHint);
-#endif
-
     // Enable software rendering
 #ifdef SERIAL_STUDIO_SOFTWARE_RENDERING
     QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
 #endif
-
-    // Show splash screen
-    m_splash.setPixmap(pixmap);
-    m_splash.show();
 
     // Stop modules when application is about to quit
     connect(engine(), SIGNAL(quit()), this, SLOT(onQuit()));
@@ -247,17 +230,6 @@ void Misc::ModuleManager::initializeQmlInterface()
 
     // Load main.qml
     engine()->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-    qApp->processEvents();
-}
-
-/**
- * Hides the splash screen widget
- */
-void Misc::ModuleManager::hideSplashscreen()
-{
-    m_splash.hide();
-    m_splash.close();
-    qApp->processEvents();
 }
 
 /**

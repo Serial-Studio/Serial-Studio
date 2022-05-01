@@ -23,7 +23,6 @@
 #pragma once
 
 #include <QObject>
-#include <QSplashScreen>
 #include <QQmlApplicationEngine>
 
 #include <DataTypes.h>
@@ -35,9 +34,6 @@ namespace Misc
  *
  * The @c ModuleManager class is in charge of initializing all the C++ modules that are
  * part of Serial Studio in the correct order.
- *
- * Also, the class configures the QML rendering engine during application startup and
- * displays a splash screen to entretain the user while the user interface is loaded.
  */
 class ModuleManager : public QObject
 {
@@ -53,10 +49,8 @@ public:
 
 public Q_SLOTS:
     void onQuit();
-    void hideSplashscreen();
 
 private:
-    QSplashScreen m_splash;
     QQmlApplicationEngine m_engine;
 };
 }

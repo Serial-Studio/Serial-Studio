@@ -60,7 +60,6 @@ Item {
         asynchronous: true
         sourceComponent: Windows.MainWindow {
             Component.onCompleted: {
-                Cpp_ModuleManager.hideSplashscreen()
                 app.forceActiveFocus()
                 app.mainWindow = this
             }

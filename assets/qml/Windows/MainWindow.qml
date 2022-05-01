@@ -106,7 +106,7 @@ FramelessWindow.CustomWindow {
         // Load welcome text
         terminal.showWelcomeGuide()
 
-        // Increment app launch count & hide splash screen
+        // Increment app launch count
         ++appLaunchCount
 
         // Show app window
