@@ -63,9 +63,17 @@ IO::Manager::Manager()
     , m_finishSequence("*/")
     , m_separatorSequence(",")
 {
+    // Set initial settings
     setMaxBufferSize(1024 * 1024);
     setSelectedDriver(SelectedDriver::Serial);
-    connect(this, SIGNAL(selectedDriverChanged()), this, SIGNAL(configurationChanged()));
+
+    // clang-format off
+
+    // Update connect button status when device type is changed
+    connect(this, &IO::Manager::selectedDriverChanged,
+            this, &IO::Manager::configurationChanged);
+
+    // clang-format on
 }
 
 /**

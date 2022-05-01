@@ -38,6 +38,7 @@ IO::Drivers::Network::Network()
     , m_lookupActive(false)
     , m_udpIgnoreFrameSequences(false)
 {
+    // Set initial configuration
     setRemoteAddress("");
     setTcpPort(defaultTcpPort());
     setUdpLocalPort(defaultUdpLocalPort());
@@ -45,12 +46,16 @@ IO::Drivers::Network::Network()
     setSocketType(QAbstractSocket::TcpSocket);
 
     // clang-format off
+
+    // Update connect button status when the configuration is changed
     connect(this, &IO::Drivers::Network::addressChanged,
             this, &IO::Drivers::Network::configurationChanged);
     connect(this, &IO::Drivers::Network::socketTypeChanged,
             this, &IO::Drivers::Network::configurationChanged);
     connect(this, &IO::Drivers::Network::portChanged,
             this, &IO::Drivers::Network::configurationChanged);
+
+    // Report socket errors
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
     connect(&m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
             this,           SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
@@ -62,6 +67,7 @@ IO::Drivers::Network::Network()
     connect(&m_udpSocket, &QUdpSocket::errorOccurred,
             this, &IO::Drivers::Network::onErrorOccurred);
 #endif
+
     // clang-format on
 }
 

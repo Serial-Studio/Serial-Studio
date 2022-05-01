@@ -50,12 +50,16 @@ IO::Drivers::Serial::Serial()
     setParity(parityList().indexOf(tr("None")));
     setFlowControl(flowControlList().indexOf(tr("None")));
 
-    // Build serial devices list and refresh it every second
     // clang-format off
+
+    // Build serial devices list and refresh it every second
     connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
             this, &IO::Drivers::Serial::refreshSerialDevices);
+
+    // Update connect button status when user selects a serial device
     connect(this, &IO::Drivers::Serial::portIndexChanged,
             this, &IO::Drivers::Serial::configurationChanged);
+
     // clang-format on
 }
 

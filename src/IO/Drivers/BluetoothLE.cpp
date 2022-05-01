@@ -43,15 +43,22 @@ IO::Drivers::BluetoothLE::BluetoothLE()
     , m_controller(Q_NULLPTR)
 {
     // clang-format off
+
+    // Update connect button status when a BLE device is selected by the user
     connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged,
             this, &IO::Drivers::BluetoothLE::configurationChanged);
+
+    // Register discovered devices
     connect(&m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
             this, &IO::Drivers::BluetoothLE::onDeviceDiscovered);
+
+    // Report BLE discovery errors
     connect(&m_discoveryAgent,
             static_cast<void (QBluetoothDeviceDiscoveryAgent::*)(
                 QBluetoothDeviceDiscoveryAgent::Error)>(
                 &QBluetoothDeviceDiscoveryAgent::error),
             this, &IO::Drivers::BluetoothLE::onDiscoveryError);
+
     // clang-format on
 }
 
