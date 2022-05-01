@@ -27,6 +27,7 @@
 #include <QLowEnergyController>
 #include <QBluetoothDeviceDiscoveryAgent>
 
+#include <DataTypes.h>
 #include <IO/HAL_Driver.h>
 
 namespace IO
@@ -44,9 +45,12 @@ class BluetoothLE : public HAL_Driver
     Q_PROPERTY(int deviceCount
                READ deviceCount
                NOTIFY devicesChanged)
-    Q_PROPERTY(QStringList deviceNames
+    Q_PROPERTY(StringList deviceNames
                READ deviceNames
                NOTIFY devicesChanged)
+    Q_PROPERTY(StringList serviceNames
+               READ serviceNames
+               NOTIFY servicesChanged)
     Q_PROPERTY(int deviceIndex
                READ deviceIndex
                WRITE selectDevice
@@ -54,14 +58,17 @@ class BluetoothLE : public HAL_Driver
     Q_PROPERTY(bool deviceConnected
                READ deviceConnected
                NOTIFY deviceConnectedChanged)
+    Q_PROPERTY(bool operatingSystemSupported
+               READ operatingSystemSupported
+               CONSTANT)
     // clang-format on
 
 Q_SIGNALS:
     void devicesChanged();
+    void servicesChanged();
     void deviceIndexChanged();
     void deviceConnectedChanged();
     void error(const QString &message);
-    void dataReceived(const QByteArray &data);
 
 private:
     explicit BluetoothLE();
@@ -87,16 +94,18 @@ public:
     int deviceCount() const;
     int deviceIndex() const;
     bool deviceConnected() const;
-    QStringList deviceNames() const;
+    StringList deviceNames() const;
+    StringList serviceNames() const;
+    bool operatingSystemSupported() const;
 
 public Q_SLOTS:
     void startDiscovery();
     void selectDevice(const int index);
+    void selectService(const int index);
 
 private Q_SLOTS:
     void configureCharacteristics();
     void onServiceDiscoveryFinished();
-    void onServiceDiscovered(const QBluetoothUuid &gatt);
     void onDeviceDiscovered(const QBluetoothDeviceInfo &device);
     void onServiceError(QLowEnergyService::ServiceError serviceError);
     void onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error error);
@@ -107,12 +116,12 @@ private Q_SLOTS:
 private:
     int m_deviceIndex;
     bool m_deviceConnected;
-    bool m_uartServiceDiscovered;
 
     QLowEnergyService *m_service;
     QLowEnergyController *m_controller;
 
-    QStringList m_deviceNames;
+    StringList m_deviceNames;
+    StringList m_serviceNames;
     QList<QBluetoothDeviceInfo> m_devices;
     QBluetoothDeviceDiscoveryAgent m_discoveryAgent;
 };

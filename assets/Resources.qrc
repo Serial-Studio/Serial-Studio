@@ -173,5 +173,6 @@
         <file>window-border/minimize.svg</file>
         <file>window-border/restore.svg</file>
         <file>window-border/unmaximize.svg</file>
+        <file>icons/heart-broken.svg</file>
     </qresource>
 </RCC>

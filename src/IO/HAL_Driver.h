@@ -55,4 +55,3 @@ public:
     virtual bool open(const QIODevice::OpenMode mode) = 0;
 };
 }
-

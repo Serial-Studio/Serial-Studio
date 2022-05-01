@@ -59,7 +59,7 @@ Control {
             spacing: app.spacing
             visible: opacity > 0
             onVisibleChanged: root.uiChanged()
-            opacity: Cpp_IO_Bluetooth_LE.deviceCount > 0 ? 1 : 0
+            opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount > 0 ? 1 : 0
 
             Behavior on opacity {NumberAnimation{}}
 
@@ -105,7 +105,7 @@ Control {
             spacing: app.spacing
             visible: opacity > 0
             onVisibleChanged: root.uiChanged()
-            opacity: Cpp_IO_Bluetooth_LE.deviceConnected ? 1 : 0
+            opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceConnected ? 1 : 0
 
             Label {
                 id: servLabel
@@ -132,7 +132,7 @@ Control {
             spacing: app.spacing
             visible: opacity > 0
             onVisibleChanged: root.uiChanged()
-            opacity: Cpp_IO_Bluetooth_LE.deviceCount < 1 ? 1 : 0
+            opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount < 1 ? 1 : 0
 
             Behavior on opacity {NumberAnimation{}}
 
@@ -147,6 +147,37 @@ Control {
                 Layout.fillWidth: true
                 text: qsTr("Scanning....")
                 Layout.alignment: Qt.AlignVCenter
+            }
+        }
+
+        //
+        // OS not supported indicator
+        //
+        RowLayout {
+            spacing: app.spacing
+            visible: opacity > 0
+            onVisibleChanged: root.uiChanged()
+            opacity: !Cpp_IO_Bluetooth_LE.operatingSystemSupported
+
+            Behavior on opacity {NumberAnimation{}}
+
+            ToolButton {
+                flat: true
+                enabled: false
+                icon.width: 32
+                icon.height: 32
+                Layout.alignment: Qt.AlignVCenter
+                icon.source: "qrc:/icons/heart-broken.svg"
+                icon.color: Cpp_ThemeManager.connectButtonChecked
+            }
+
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Label.WordWrap
+                Layout.alignment: Qt.AlignVCenter
+                text: qsTr("Sorry, this version of %1 is not supported yet. " +
+                           "We'll update Serial Studio to work with this operating " +
+                           "system as soon as Qt officially supports it.").arg(Cpp_OSName);
             }
         }
 

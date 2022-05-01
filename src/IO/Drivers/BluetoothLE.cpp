@@ -20,25 +20,19 @@
  * THE SOFTWARE.
  */
 
+#include <QOperatingSystemVersion>
 #include <IO/Drivers/BluetoothLE.h>
-
-/**
- * @brief UUID del servicio de UART provisto por el transmisor BLE
- */
-const QBluetoothUuid UART_SERVICE(QString("{6e400001-b5a3-f393-e0a9-e50e24dcca9e}"));
 
 //----------------------------------------------------------------------------------------
 // Constructor & singleton access functions
 //----------------------------------------------------------------------------------------
 
 /**
- * Constructor de la clase, configura los conectores de señales/slots entre el modulo de
- * busqueda de dispositivos y la clase
+ * Constructor function, configures the signals/slots of the BLE module
  */
 IO::Drivers::BluetoothLE::BluetoothLE()
     : m_deviceIndex(-1)
     , m_deviceConnected(false)
-    , m_uartServiceDiscovered(false)
     , m_service(Q_NULLPTR)
     , m_controller(Q_NULLPTR)
 {
@@ -47,6 +41,10 @@ IO::Drivers::BluetoothLE::BluetoothLE()
     // Update connect button status when a BLE device is selected by the user
     connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged,
             this, &IO::Drivers::BluetoothLE::configurationChanged);
+
+    // Operating system not supported, abort initialization process
+    if (!operatingSystemSupported())
+        return;
 
     // Register discovered devices
     connect(&m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
@@ -83,7 +81,7 @@ void IO::Drivers::BluetoothLE::close()
 
 bool IO::Drivers::BluetoothLE::isOpen() const
 {
-    return false;
+    return deviceConnected();
 }
 
 bool IO::Drivers::BluetoothLE::isReadable() const
@@ -98,21 +96,34 @@ bool IO::Drivers::BluetoothLE::isWritable() const
 
 bool IO::Drivers::BluetoothLE::configurationOk() const
 {
-    return deviceIndex() >= 0;
+    return operatingSystemSupported() && deviceIndex() >= 0;
 }
 
 quint64 IO::Drivers::BluetoothLE::write(const QByteArray &data)
 {
+    // TODO
+    (void)data;
     return -1;
 }
 
 bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
 {
+    // I/O mode not used
+    (void)mode;
+
+    // Operating system not supported, abort process
+    if (!operatingSystemSupported())
+        return false;
+
     // Validar el indice del dispositivo
     if (m_deviceIndex < 0 || m_deviceIndex >= m_devices.count())
         return false;
 
-    // Eliminar servicio anterior
+    // Clear services list
+    m_serviceNames.clear();
+    Q_EMIT servicesChanged();
+
+    // Delete previous service
     if (m_service)
     {
         disconnect(m_service);
@@ -120,7 +131,7 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
         m_service = Q_NULLPTR;
     }
 
-    // Eliminar controlador anterior
+    // Delete previous controller
     if (m_controller)
     {
         disconnect(m_controller);
@@ -128,24 +139,22 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
         m_controller = Q_NULLPTR;
     }
 
-    // Inicializar un controlador BLE para el dispositivo seleccionado
+    // Initialize a BLE controller for the current deveice
     auto device = m_devices.at(m_deviceIndex);
     m_controller = QLowEnergyController::createCentral(device, this);
 
-    // Configurar señales/slots del controlador BLE
-    connect(m_controller, &QLowEnergyController::serviceDiscovered, this,
-            &IO::Drivers::BluetoothLE::onServiceDiscovered);
+    // Configure controller signals/slots
     connect(m_controller, &QLowEnergyController::discoveryFinished, this,
             &IO::Drivers::BluetoothLE::onServiceDiscoveryFinished);
 
-    // Reaccionar al evento de conexión con el dispositivo BLE
+    // React to connection event with BLE device
     connect(m_controller, &QLowEnergyController::connected, this, [this]() {
         m_deviceConnected = true;
         m_controller->discoverServices();
         Q_EMIT deviceConnectedChanged();
     });
 
-    // Reaccionar al evento de desconexión del dispositivo BLE
+    // React to disconnection event with BLE device
     connect(m_controller, &QLowEnergyController::disconnected, this, [this]() {
         if (m_service)
         {
@@ -164,10 +173,10 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
         m_deviceConnected = false;
 
         Q_EMIT deviceConnectedChanged();
-        Q_EMIT error(tr("El dispositivo BLE ha sido desconectado"));
+        Q_EMIT error(tr("The BLE device has been disconnected"));
     });
 
-    // Emparejarse con el dispositivo BLE
+    // Pair with the BLE device
     m_controller->connectToDevice();
     return true;
 }
@@ -177,7 +186,7 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
 //----------------------------------------------------------------------------------------
 
 /**
- * @return El número de dispositivos BLE encontrados.
+ * @return The total number of discovered devices.
  */
 int IO::Drivers::BluetoothLE::deviceCount() const
 {
@@ -185,7 +194,7 @@ int IO::Drivers::BluetoothLE::deviceCount() const
 }
 
 /**
- * @return El índice del dispositivo BLE seleccionado por el usuario.
+ * @return The index of the BLE device selected by the user.
  */
 int IO::Drivers::BluetoothLE::deviceIndex() const
 {
@@ -193,7 +202,7 @@ int IO::Drivers::BluetoothLE::deviceIndex() const
 }
 
 /**
- * @return @c true si la aplicación esta conectada a un dispositivo BLE.
+ * @return @c true if the module is currently connected to a BLE device.
  */
 bool IO::Drivers::BluetoothLE::deviceConnected() const
 {
@@ -201,7 +210,7 @@ bool IO::Drivers::BluetoothLE::deviceConnected() const
 }
 
 /**
- * @return Una lista con los dispositivos BLE encontrados.
+ * @return A list with the discovered BLE devices.
  */
 QStringList IO::Drivers::BluetoothLE::deviceNames() const
 {
@@ -212,94 +221,122 @@ QStringList IO::Drivers::BluetoothLE::deviceNames() const
 }
 
 /**
- * Comienza el proceso de busqueda de dispositivos BLE.
+ * @return A list with the discovered BLE services for the current device.
+ */
+QStringList IO::Drivers::BluetoothLE::serviceNames() const
+{
+    QStringList list;
+    list.append(tr("Select service"));
+    list.append(m_serviceNames);
+    return list;
+}
+
+/**
+ * Returns @c false on macOS Monterey, for more info, please check this link:
+ * https://forum.qt.io/topic/132285/mac-os-sdk12-not-working-with-qt-bluetooth
+ */
+bool IO::Drivers::BluetoothLE::operatingSystemSupported() const
+{
+#if defined(Q_OS_MAC)
+    if (QOperatingSystemVersion::current() > QOperatingSystemVersion::MacOSBigSur)
+        return false;
+#endif
+
+    return true;
+}
+
+/**
+ * Starts the BLE device discovery process.
  */
 void IO::Drivers::BluetoothLE::startDiscovery()
 {
-    // Un dispositivo BLE esta conectado, cancelar proceso de escaneo
+    // Operating system not supported, abort process
+    if (!operatingSystemSupported())
+        return;
+
+    // A BLE device is already connected, cancel discovery process
     if (deviceConnected())
         return;
 
-    // Restaurar la clase y sus miembros al estado incial
+    // Restore initial conditions
     m_devices.clear();
     m_deviceIndex = -1;
     m_deviceNames.clear();
-    m_uartServiceDiscovered = false;
+    m_serviceNames.clear();
 
-    // Eliminar servicios anteriores
+    // Delete previous service
     if (m_service)
     {
         disconnect(m_service);
-        delete m_service;
+        m_service->deleteLater();
+        m_service = Q_NULLPTR;
     }
 
-    // Eliminar controladores anteriores
+    // Delete previous BLE controller
     if (m_controller)
     {
         disconnect(m_controller);
-        delete m_controller;
+        m_controller->deleteLater();
+        m_controller = Q_NULLPTR;
     }
 
-    // Notificar cambios
+    // Update UI
     Q_EMIT devicesChanged();
+    Q_EMIT servicesChanged();
     Q_EMIT deviceIndexChanged();
 
-    // Comenzar el proceso de escaneo
+    // Start device discovery process
     m_discoveryAgent.start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
 }
 
 /**
- * Cambia el índice del dispositivo seleccionado por el usuario.
+ * Changes the index of the device selected by the user.
  *
- * @note Esta función compensa el elemento de "Seleccionar dispositivo" agregado
- *       a la lista de dispositivos en @c deviceNames() para que el índice
- *       corresponda a los elementos de @c m_devices.
+ * @note This function compensates for the added "Select device" element to the list of
+ *       devices in @c deviceNames() so that the index corresponds to the elements of
+ *       @c m_deviceNames.
  */
 void IO::Drivers::BluetoothLE::selectDevice(const int index)
 {
+    // Operating system not supported, abort process
+    if (!operatingSystemSupported())
+        return;
+
+    // Close current device
     close();
+
+    // Set new device index
     m_deviceIndex = index - 1;
     Q_EMIT deviceIndexChanged();
 }
 
 /**
- * Establece las opciones de interacción entre cada característica del dispositivo BLE y
- * la aplicación.
+ * Changes the index of the service selected by the user.
+ *
+ * @note This function compensates for the added "Select service" element to the list of
+ *       devices in @c serviceNames() so that the index corresponds to the elements of
+ *       @c m_serviceNames.
  */
-void IO::Drivers::BluetoothLE::configureCharacteristics()
+void IO::Drivers::BluetoothLE::selectService(const int index)
 {
-    // Validar servicio BLE
-    if (!m_service)
+    // Operating system not supported, abort process
+    if (!operatingSystemSupported())
         return;
 
-    // Probar todas las características del dispositivo
-    foreach (QLowEnergyCharacteristic c, m_service->characteristics())
-    {
-        // Validar que la característica sea valida
-        if (!c.isValid())
-            continue;
-
-        // Establecer propiedades de la conexión cliente/descriptor
-        auto descriptor = c.descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
-        if (descriptor.isValid())
-            m_service->writeDescriptor(descriptor, QByteArray::fromHex("0100"));
-    }
-}
-
-/**
- * Configura las conexiónes de señal/slot para poder leer los datos transmitidos mediante
- * el servicio de UART.
- */
-void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
-{
-    // Eliminar servicio anterior
+    // Delete previous service
     if (m_service)
-        delete m_service;
-
-    // Intentar hacer uso del servicio de UART del dispostivo BLE
-    if (m_uartServiceDiscovered)
     {
-        m_service = m_controller->createServiceObject(UART_SERVICE, this);
+        disconnect(m_service);
+        m_service->deleteLater();
+        m_service = Q_NULLPTR;
+    }
+
+    // Ensure that index is valid
+    if (index >= 1 && index < m_serviceNames.count())
+    {
+        // Generate service handler & connect signals/slots
+        auto serviceUuid = m_controller->services().at(index - 1);
+        m_service = m_controller->createServiceObject(serviceUuid, this);
         if (m_service)
         {
             // clang-format off
@@ -320,38 +357,68 @@ void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
             else
                 configureCharacteristics();
         }
+
+        // Service handler error
+        if (!m_service)
+            Q_EMIT error(tr("Error while configuring BLE service"));
     }
-
-    // Error al registrar el servicio
-    if (!m_service)
-        Q_EMIT error(tr("El dispositivo no cuenta con un servicio de UART"));
 }
 
 /**
- * Activa la bandera que indica que el dispositivo BLE suporta el servicio de UART.
- * Esto se realiza al comparar el UUID del servicio encontrado y el UUID que corresponde
- * al servicio de UART.
+ * Sets the interaction options between each characteristic of the BLE device and the BLE
+ * module.
  */
-void IO::Drivers::BluetoothLE::onServiceDiscovered(const QBluetoothUuid &uuid)
+void IO::Drivers::BluetoothLE::configureCharacteristics()
 {
-    // Activar bandera de servicio encontrado si el GATT corresponde al servicio de UART
-    if (uuid == UART_SERVICE)
-        m_uartServiceDiscovered = true;
+    // Validate service pointer
+    if (!m_service)
+        return;
+
+    // Test & validate all service characteristics
+    foreach (QLowEnergyCharacteristic c, m_service->characteristics())
+    {
+        // Validate characteristic
+        if (!c.isValid())
+            continue;
+
+        // Set client/descriptor connection properties
+        auto descriptor = c.descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+        if (descriptor.isValid())
+            m_service->writeDescriptor(descriptor, QByteArray::fromHex("0100"));
+    }
 }
 
 /**
- * Registra el dispositivo (@c device) encontrado en la lista de dispositivos BLE.
+ * Generates a list with the UUIDs of the services available for the current BLE device.
+ */
+void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
+{
+    // Validate BLE controller
+    if (!m_controller)
+        return;
+
+    // Generate services list
+    m_serviceNames.clear();
+    for (auto i = 0; i < m_controller->services().count(); ++i)
+        m_serviceNames.append(m_controller->services().at(i).toString());
+
+    // Update UI
+    Q_EMIT servicesChanged();
+}
+
+/**
+ * Registers the device (@c device) found in the list of BLE devices.
  */
 void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo &device)
 {
-    // Solo registrar dispositivos BLE
+    // Only register BLE devices
     if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
     {
-        // Validar nombre del dispositivo (no queremos mostrar dispositivos ocultos...)
+        // Validate device name (we don't want to show hidden devices...)
         if (!device.isValid() || device.name().isEmpty())
             return;
 
-        // Agregar el dispositivo a la lista de dispositivos encontrados
+        // Add the device to the list of found devices
         if (!m_devices.contains(device))
         {
             m_devices.append(device);
@@ -363,7 +430,7 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo &de
 }
 
 /**
- * Imprime cualquier error que ocurra con el servicio de UART.
+ * Print any errors that may occur with the BLE service.
  */
 void IO::Drivers::BluetoothLE::onServiceError(
     QLowEnergyService::ServiceError serviceError)
@@ -372,27 +439,26 @@ void IO::Drivers::BluetoothLE::onServiceError(
 }
 
 /**
- * Notifica al usuario de cualquier error detectado en el adaptador Bluetooth de la
- * computadora/tablet/telefono.
+ * Notifies the user of any errors detected in the Bluetooth adapter of the computer.
  */
 void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error e)
 {
     switch (e)
     {
         case QBluetoothDeviceDiscoveryAgent::PoweredOffError:
-            Q_EMIT error(tr("El adaptador Bluetooth esta apagado!"));
+            Q_EMIT error(tr("Bluetooth adapter is off!"));
             break;
         case QBluetoothDeviceDiscoveryAgent::InvalidBluetoothAdapterError:
-            Q_EMIT error(tr("Adaptador de Bluetooth inválido!"));
+            Q_EMIT error(tr("Invalid Bluetooth adapter!"));
             break;
         case QBluetoothDeviceDiscoveryAgent::UnsupportedPlatformError:
-            Q_EMIT error(tr("Este sistema operativo no está soportado!"));
+            Q_EMIT error(tr("Unsuported platform or operating system"));
             break;
         case QBluetoothDeviceDiscoveryAgent::UnsupportedDiscoveryMethod:
-            Q_EMIT error(tr("Modo de escaneo no soportado!"));
+            Q_EMIT error(tr("Unsupported discovery method"));
             break;
         case QBluetoothDeviceDiscoveryAgent::InputOutputError:
-            Q_EMIT error(tr("Error general de I/O"));
+            Q_EMIT error(tr("General I/O error"));
             break;
         default:
             break;
@@ -400,8 +466,8 @@ void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::
 }
 
 /**
- * Configura las características de los servicios encontrados en el dispositivo BLE
- * emparejado con la aplicación.
+ * Configurs the characteristics of the services found on the BLE device paired with the
+ * app.
  */
 void IO::Drivers::BluetoothLE::onServiceStateChanged(
     QLowEnergyService::ServiceState serviceState)
@@ -411,7 +477,7 @@ void IO::Drivers::BluetoothLE::onServiceStateChanged(
 }
 
 /**
- * Lee los datos transmitidos (o característica RX) del servicio UART.
+ * Reads the transmitted data from the BLE service.
  */
 void IO::Drivers::BluetoothLE::onCharacteristicChanged(
     const QLowEnergyCharacteristic &info, const QByteArray &value)

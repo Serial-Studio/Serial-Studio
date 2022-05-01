@@ -89,7 +89,7 @@ Control {
             clip: true
             Layout.fillWidth: true
             Layout.fillHeight: true
-            onCurrentIndexChanged: root.uiChanged()
+            onCurrentIndexChanged: timer.start()
             currentIndex: Cpp_IO_Manager.selectedDriver
 
             Devices.Serial {
@@ -114,6 +114,16 @@ Control {
                     enabled: false
                 }
             }
+        }
+
+        //
+        // Timer to regenerate UI size constraints when the device driver
+        // selection is modified.
+        //
+        Timer {
+            id: timer
+            interval: 50
+            onTriggered: root.uiChanged()
         }
     }
 }

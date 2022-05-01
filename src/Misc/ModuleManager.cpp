@@ -173,12 +173,19 @@ void Misc::ModuleManager::initializeQmlInterface()
     bool isWin = false;
     bool isMac = false;
     bool isNix = false;
+    QString osName = tr("Unknown OS");
 #if defined(Q_OS_MAC)
     isMac = true;
+    osName = "macOS";
 #elif defined(Q_OS_WIN)
     isWin = true;
+    osName = "Windows";
+#elif defined(Q_OS_LINUX)
+    isNix = true;
+    osName = "GNU/Linux";
 #else
     isNix = true;
+    osName = "UNIX";
 #endif
 
     // Qt version QML flag
@@ -200,6 +207,7 @@ void Misc::ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_IsWin", isWin);
     c->setContextProperty("Cpp_IsMac", isMac);
     c->setContextProperty("Cpp_IsNix", isNix);
+    c->setContextProperty("Cpp_OSName", osName);
     c->setContextProperty("Cpp_Updater", updater);
     c->setContextProperty("Cpp_IO_Serial", ioSerial);
     c->setContextProperty("Cpp_CSV_Export", csvExport);
