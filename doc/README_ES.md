@@ -88,6 +88,12 @@ Alternativamente, también puede utilizar los siguientes comandos:
 	qmake
 	make -j4
 	
+### Arquitectura de software
+
+Este es un diagrama simplificado que explica cómo los diferentes módulos de Serial Studio interactúan entre sí. Puede encontrar la documentación DOXYGEN (estable) más reciente haciendo clic [aquí](https://serial-studio.github.io/hackers/).
+
+![Architecture](architecture/architecture.svg)
+	
 ## Donaciones
 
 Si encuentras Serial Studio útil para tus proyectos, considera [darme una propina a través de PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE). O, si prefieres invitarme un trago, simplemente [envíame un DM](https://instagram.com/aspatru) cuando visites [Querétaro, México](https://en.wikipedia.org/wiki/Querétaro), donde vivo. Espero conocerte!
