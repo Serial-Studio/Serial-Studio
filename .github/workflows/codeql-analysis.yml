@@ -8,10 +8,17 @@ on:
   schedule:
     - cron: '15 15 * * 0'
 
+env:
+  VERSION: "1.2.0"
+  QMAKE_PROJECT: "Serial-Studio.pro"
+  QT_VERSION: 6.3.0
+  QMAKE: qmake6
+  CORES: 16
+
 jobs:
   analyze:
-    name: '💭 Analyze'
-    runs-on: ubuntu-18.04
+    name: '💭 Analyze (Ubuntu 20.04)'
+    runs-on: ubuntu-20.04
     permissions:
       actions: read
       contents: read
@@ -27,35 +34,31 @@ jobs:
       uses: actions/checkout@v2
       with:
         submodules: recursive
-        
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
 
     - name: '⚙️ Cache Qt'
       id: cache-qt
       uses: actions/cache@v1
       with:
         path: ../Qt
-        key: ${{runner.os}}-qtcachedir-5.15.2
+        key: ${{runner.os}}-qtcachedir-${{env.QT_VERSION}}
 
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
-        version: 5.15.2
+        version: ${{env.QT_VERSION}}
+        modules: qtserialport qt5compat qtconnectivity
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
-        
+
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
         sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev
-        
+
     - name: '🚧 Compile application'
       run: |
-          qmake ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
-          make -j16
+          ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+          make -j${{env.CORES}}
 
     - name: '💭 Perform CodeQL Analysis'
       uses: github/codeql-action/analyze@v1

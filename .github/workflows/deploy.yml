@@ -25,10 +25,10 @@ env:
   QML_DIR_NIX: "assets/qml"
   QML_DIR_WIN: "assets\\qml"
   PUBLISHER: "Alex Spataru"
-  REPO_DIR: "/home/runner/work/Serial-Studio/Serial-Studio"
+  REPO_DIR: "/home/runner/work/Serial-Studio"
   QT_VERSION: 6.3.0
   QMAKE: qmake6
-  CORES: 12
+  CORES: 16
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
