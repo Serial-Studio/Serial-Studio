@@ -63,6 +63,12 @@ Alternativ können Sie auch die folgenden Befehle verwenden:
 
 	qmake
 	make -j4
+	
+### Softwarearchitektur
+
+Unten sehen Sie ein vereinfachtes Diagramm, das erklärt, wie die verschiedenen Module von Serial Studio miteinander interagieren. Sie finden die DOXYGEN-Dokumentation, indem Sie [hier](https://serial-studio.github.io/hackers/) klicken.
+
+![Architektur](architecture/architecture.png)
 
 ## Lizenz
 
