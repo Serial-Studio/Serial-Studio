@@ -39,8 +39,8 @@ jobs:
   # GNU/Linux build
   #
   build-linux:
-    runs-on: ubuntu-18.04
-    name: '🐧 Ubuntu 18.04'
+    runs-on: ubuntu-20.04
+    name: '🐧 Ubuntu 20.04'
     steps:
 
     - name: '🧰 Checkout'
@@ -98,8 +98,8 @@ jobs:
   # macOS build
   #
   build-mac:
-    runs-on: macos-latest
-    name: '🍎 macOS'
+    runs-on: macos-12
+    name: '🍎 macOS Monterey'
     steps:
 
     - name: '🧰 Checkout'
@@ -143,8 +143,8 @@ jobs:
   # Windows build
   #
   build-windows:
-    runs-on: windows-latest
-    name: '🧊 Windows'
+    runs-on: windows-2022
+    name: '🧊 Windows Server 2022'
     steps:
 
     - name: '🧰 Checkout'
