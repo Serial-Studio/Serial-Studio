@@ -94,7 +94,7 @@ Alternatively, you can also use the following commands:
 
 This a simplified diagram of how the different modules of Serial Studio interact with each other. You can find the latest (stable) DOXYGEN documentation by clicking [here](https://serial-studio.github.io/hackers/).
 
-![Architecture](doc/architecture/architecture.svg)
+![Architecture](doc/architecture/architecture.png)
 	
 ## Tipping
 
