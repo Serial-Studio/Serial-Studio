@@ -90,9 +90,9 @@ Alternativamente, también puede utilizar los siguientes comandos:
 	
 ### Arquitectura de software
 
-Este es un diagrama simplificado que explica cómo los diferentes módulos de Serial Studio interactúan entre sí. Puede encontrar la documentación DOXYGEN (estable) más reciente haciendo clic [aquí](https://serial-studio.github.io/hackers/).
+A continuación se muestra un diagrama simplificado que explica cómo los diferentes módulos de Serial Studio interactúan entre sí. Puedes encontrar la documentación DOXYGEN haciendo clic [aquí](https://serial-studio.github.io/hackers/).
 
-![Architecture](architecture/architecture.svg)
+![Architecture](architecture/architecture.png)
 	
 ## Donaciones
 
