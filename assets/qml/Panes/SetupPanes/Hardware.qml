@@ -31,9 +31,6 @@ import "../../Windows" as Windows
 
 Control {
     id: root
-    implicitHeight: layout.implicitHeight + app.spacing * 2
-
-    signal uiChanged()
 
     //
     // Save setti
@@ -89,11 +86,12 @@ Control {
             clip: true
             Layout.fillWidth: true
             Layout.fillHeight: true
-            onCurrentIndexChanged: timer.start()
             currentIndex: Cpp_IO_Manager.selectedDriver
 
             Devices.Serial {
                 id: serial
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 background: TextField {
                     enabled: false
                 }
@@ -101,7 +99,8 @@ Control {
 
             Devices.Network {
                 id: network
-                onUiChanged: root.uiChanged()
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 background: TextField {
                     enabled: false
                 }
@@ -109,21 +108,12 @@ Control {
 
             Devices.BluetoothLE {
                 id: bluetoothLE
-                onUiChanged: root.uiChanged()
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 background: TextField {
                     enabled: false
                 }
             }
-        }
-
-        //
-        // Timer to regenerate UI size constraints when the device driver
-        // selection is modified.
-        //
-        Timer {
-            id: timer
-            interval: 50
-            onTriggered: root.uiChanged()
         }
     }
 }

@@ -26,12 +26,6 @@ import QtQuick.Controls 2.3
 
 Control {
     id: root
-    implicitHeight: layout.implicitHeight + app.spacing * 2
-
-    //
-    // Signals
-    //
-    signal uiChanged()
 
     //
     // Start BLE scanning 2 seconds after the control is created
@@ -58,7 +52,6 @@ Control {
         RowLayout {
             spacing: app.spacing
             visible: opacity > 0
-            onVisibleChanged: root.uiChanged()
             opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount > 0 ? 1 : 0
 
             Behavior on opacity {NumberAnimation{}}
@@ -81,8 +74,6 @@ Control {
                 onCurrentIndexChanged: {
                     if (currentIndex !== Cpp_IO_Bluetooth_LE.currentDevice)
                         Cpp_IO_Bluetooth_LE.selectDevice(currentIndex)
-
-                    root.uiChanged()
                 }
             }
 
@@ -104,7 +95,6 @@ Control {
         RowLayout {
             spacing: app.spacing
             visible: opacity > 0
-            onVisibleChanged: root.uiChanged()
             opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceConnected ? 1 : 0
 
             Label {
@@ -120,8 +110,9 @@ Control {
                 Layout.fillWidth: true
                 opacity: enabled ? 1 : 0.5
                 enabled: !Cpp_IO_Manager.connected
-                model: Cpp_IO_Bluetooth_LE.services
+                model: Cpp_IO_Bluetooth_LE.serviceNames
                 palette.base: Cpp_ThemeManager.setupPanelBackground
+                onCurrentIndexChanged: Cpp_IO_Bluetooth_LE.selectService(currentIndex)
             }
         }
 
@@ -131,7 +122,6 @@ Control {
         RowLayout {
             spacing: app.spacing
             visible: opacity > 0
-            onVisibleChanged: root.uiChanged()
             opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount < 1 ? 1 : 0
 
             Behavior on opacity {NumberAnimation{}}
@@ -156,7 +146,6 @@ Control {
         RowLayout {
             spacing: app.spacing
             visible: opacity > 0
-            onVisibleChanged: root.uiChanged()
             opacity: !Cpp_IO_Bluetooth_LE.operatingSystemSupported
 
             Behavior on opacity {NumberAnimation{}}

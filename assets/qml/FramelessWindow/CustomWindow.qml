@@ -270,7 +270,7 @@ QtWindow.Window {
     //
     // Maximize window fixes
     //
-    onVisibilityChanged: {
+    onVisibilityChanged: (visibility) => {
         // Ensure that correct window flags are still used
         if (Cpp_ThemeManager.customWindowDecorations) {
             // Hard-reset window flags on macOS to fix most glitches

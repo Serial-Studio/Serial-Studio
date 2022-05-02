@@ -26,7 +26,6 @@ import QtQuick.Controls 2.3
 
 Control {
     id: root
-    implicitHeight: layout.implicitHeight + app.spacing * 2
 
     //
     // Access to properties

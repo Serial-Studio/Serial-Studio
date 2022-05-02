@@ -251,38 +251,14 @@ Item {
                 id: stack
                 clip: true
                 Layout.fillWidth: true
-                Layout.fillHeight: false
+                Layout.fillHeight: true
                 currentIndex: tab.currentIndex
                 Layout.topMargin: -parent.spacing - 1
-                Layout.minimumHeight: implicitHeight
-                Layout.maximumHeight: implicitHeight
-                Layout.preferredHeight: implicitHeight
-                onCurrentIndexChanged: updateHeight()
-                Component.onCompleted: updateHeight()
-
-                function updateHeight() {
-                    stack.implicitHeight = 0
-
-                    switch (currentIndex) {
-                    case 0:
-                        stack.implicitHeight = hardware.implicitHeight
-                        break
-                    case 1:
-                        stack.implicitHeight = mqtt.implicitHeight
-                        break
-                    case 2:
-                        stack.implicitHeight = settings.implicitHeight
-                        break
-                    default:
-                        stack.implicitHeight = 0
-                        break
-                    }
-                }
 
                 SetupPanes.Hardware {
                     id: hardware
-                    onUiChanged: stack.updateHeight()
-
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     background: TextField {
                         enabled: false
                         palette.base: Cpp_ThemeManager.setupPanelBackground
@@ -291,6 +267,8 @@ Item {
 
                 SetupPanes.MQTT {
                     id: mqtt
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     background: TextField {
                         enabled: false
                         palette.base: Cpp_ThemeManager.setupPanelBackground
@@ -299,18 +277,13 @@ Item {
 
                 SetupPanes.Settings {
                     id: settings
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                     background: TextField {
                         enabled: false
                         palette.base: Cpp_ThemeManager.setupPanelBackground
                     }
                 }
-            }
-
-            //
-            // Vertical spacer
-            //
-            Item {
-                Layout.fillHeight: true
             }
         }
     }

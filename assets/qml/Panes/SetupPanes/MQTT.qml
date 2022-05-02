@@ -28,7 +28,6 @@ import "../../Windows" as Windows
 
 Control {
     id: root
-    implicitHeight: layout.implicitHeight + app.spacing * 2
 
     //
     // Aliases

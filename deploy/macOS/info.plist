@@ -19,7 +19,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-        <string>1.2.0</string>
+	<string>1.2.0</string>
 	<key>LSHasLocalizedDisplayName</key>
 	<true/>
 	<key>NSPrincipalClass</key>
@@ -27,6 +27,8 @@
 	<key>NSSupportsSuddenTermination</key>
 	<false/>
 	<key>NSRequiresAquaSystemAppearance</key>
-        <string>False</string>
+	<string>False</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+        <string>Serial Studio uses Bluetooth LE to find, connect and transfer data between different devices</string>
 </dict>
 </plist>

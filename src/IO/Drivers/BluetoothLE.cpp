@@ -51,11 +51,16 @@ IO::Drivers::BluetoothLE::BluetoothLE()
             this, &IO::Drivers::BluetoothLE::onDeviceDiscovered);
 
     // Report BLE discovery errors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(&m_discoveryAgent,
             static_cast<void (QBluetoothDeviceDiscoveryAgent::*)(
                 QBluetoothDeviceDiscoveryAgent::Error)>(
                 &QBluetoothDeviceDiscoveryAgent::error),
             this, &IO::Drivers::BluetoothLE::onDiscoveryError);
+#else
+    connect(&m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
+            this, &IO::Drivers::BluetoothLE::onDiscoveryError);
+#endif
 
     // clang-format on
 }
@@ -237,9 +242,11 @@ QStringList IO::Drivers::BluetoothLE::serviceNames() const
  */
 bool IO::Drivers::BluetoothLE::operatingSystemSupported() const
 {
-#if defined(Q_OS_MAC)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#    if defined(Q_OS_MAC)
     if (QOperatingSystemVersion::current() > QOperatingSystemVersion::MacOSBigSur)
         return false;
+#    endif
 #endif
 
     return true;
@@ -346,13 +353,9 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
                     &IO::Drivers::BluetoothLE::onCharacteristicChanged);
             connect(m_service, &QLowEnergyService::stateChanged, this,
                     &IO::Drivers::BluetoothLE::onServiceStateChanged);
-            connect(m_service,
-                    static_cast<void (QLowEnergyService::*)
-                    (QLowEnergyService::ServiceError)>(&QLowEnergyService::error),
-                    this, &IO::Drivers::BluetoothLE::onServiceError);
             // clang-format on
 
-            if (m_service->state() == QLowEnergyService::DiscoveryRequired)
+            if (m_service->state() == QLowEnergyService::RemoteService)
                 m_service->discoverDetails();
             else
                 configureCharacteristics();
@@ -382,7 +385,8 @@ void IO::Drivers::BluetoothLE::configureCharacteristics()
             continue;
 
         // Set client/descriptor connection properties
-        auto descriptor = c.descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+        auto descriptor = c.descriptor(
+            QBluetoothUuid::DescriptorType::ClientCharacteristicConfiguration);
         if (descriptor.isValid())
             m_service->writeDescriptor(descriptor, QByteArray::fromHex("0100"));
     }
@@ -419,7 +423,7 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo &de
             return;
 
         // Add the device to the list of found devices
-        if (!m_devices.contains(device))
+        if (!m_devices.contains(device) && !m_deviceNames.contains(device.name()))
         {
             m_devices.append(device);
             m_deviceNames.append(device.name());
@@ -427,15 +431,6 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo &de
             Q_EMIT devicesChanged();
         }
     }
-}
-
-/**
- * Print any errors that may occur with the BLE service.
- */
-void IO::Drivers::BluetoothLE::onServiceError(
-    QLowEnergyService::ServiceError serviceError)
-{
-    qDebug() << __func__ << "ERROR" << serviceError;
 }
 
 /**
@@ -472,7 +467,7 @@ void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::
 void IO::Drivers::BluetoothLE::onServiceStateChanged(
     QLowEnergyService::ServiceState serviceState)
 {
-    if (serviceState == QLowEnergyService::ServiceDiscovered)
+    if (serviceState == QLowEnergyService::RemoteService)
         configureCharacteristics();
 }
 

@@ -107,7 +107,6 @@ private Q_SLOTS:
     void configureCharacteristics();
     void onServiceDiscoveryFinished();
     void onDeviceDiscovered(const QBluetoothDeviceInfo &device);
-    void onServiceError(QLowEnergyService::ServiceError serviceError);
     void onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error error);
     void onServiceStateChanged(QLowEnergyService::ServiceState serviceState);
     void onCharacteristicChanged(const QLowEnergyCharacteristic &info,

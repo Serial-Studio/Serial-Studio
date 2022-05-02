@@ -52,7 +52,7 @@ Item {
             DashboardItems.ViewOptions {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 280
-                onWidgetSizeChanged: widgetGrid.maxSize = maxSize
+                onWidgetSizeChanged:(maxSize) => widgetGrid.maxSize = maxSize
             }
 
             //

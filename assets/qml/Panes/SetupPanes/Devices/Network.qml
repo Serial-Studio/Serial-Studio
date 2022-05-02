@@ -26,7 +26,6 @@ import QtQuick.Controls 2.3
 
 Control {
     id: root
-    implicitHeight: layout.implicitHeight + app.spacing * 2
 
     //
     // Access to properties
@@ -38,11 +37,6 @@ Control {
     property alias socketType: _typeCombo.currentIndex
     property alias udpMulticastEnabled: _udpMulticast.checked
     property alias udpProcessDatagramsDirectly: _udpProcessDatagrams.checked
-
-    //
-    // Signals
-    //
-    signal uiChanged()
     
     //
     // React to network manager events
@@ -99,8 +93,6 @@ Control {
                 onCurrentIndexChanged: {
                     if (currentIndex !== Cpp_IO_Network.socketTypeIndex)
                         Cpp_IO_Network.socketTypeIndex = currentIndex
-
-                    root.uiChanged()
                 }
             }
 
@@ -246,8 +238,6 @@ Control {
                 onCheckedChanged: {
                     if (Cpp_IO_Network.udpMulticast !== checked)
                         Cpp_IO_Network.udpMulticast = checked
-
-                    root.uiChanged()
                 }
             }
 
@@ -271,8 +261,6 @@ Control {
                 onCheckedChanged: {
                     if (Cpp_IO_Network.udpIgnoreFrameSequences !== checked)
                         Cpp_IO_Network.udpIgnoreFrameSequences = checked
-
-                    root.uiChanged()
                 }
             }
         }
