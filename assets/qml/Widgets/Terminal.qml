@@ -20,12 +20,12 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
-import Qt.labs.settings 1.0
-import SerialStudio 1.0 as SerialStudio
+import Qt.labs.settings
+import SerialStudio as SerialStudio
 
 Item {
     id: root

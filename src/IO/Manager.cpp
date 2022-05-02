@@ -262,8 +262,10 @@ void IO::Manager::connectDevice()
 
         // Open device
         if (driver()->open(mode))
+        {
             connect(driver(), &IO::HAL_Driver::dataReceived, this,
                     &IO::Manager::onDataReceived);
+        }
 
         // Error opening the device
         else

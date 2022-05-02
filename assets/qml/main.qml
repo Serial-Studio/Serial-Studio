@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.3
-import QtQuick.Window 2.3
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
 
 import "Windows" as Windows
 

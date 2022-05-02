@@ -20,12 +20,12 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.3
-import QtQuick.Window 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls
+import Qt.labs.settings
 
-import Qt.labs.settings 1.0
 import "../FramelessWindow" as FramelessWindow
 
 FramelessWindow.CustomWindow {

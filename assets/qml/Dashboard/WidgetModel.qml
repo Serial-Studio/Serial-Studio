@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.3
+import QtQuick
 
 Repeater {
     id: root

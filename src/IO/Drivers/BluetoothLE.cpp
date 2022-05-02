@@ -21,6 +21,8 @@
  */
 
 #include <QOperatingSystemVersion>
+
+#include <IO/Manager.h>
 #include <IO/Drivers/BluetoothLE.h>
 
 //----------------------------------------------------------------------------------------
@@ -41,6 +43,8 @@ IO::Drivers::BluetoothLE::BluetoothLE()
     // Update connect button status when a BLE device is selected by the user
     connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged,
             this, &IO::Drivers::BluetoothLE::configurationChanged);
+    connect(this, &IO::Drivers::BluetoothLE::deviceConnectedChanged,
+            &IO::Manager::instance(), &IO::Manager::connectedChanged);
 
     // Operating system not supported, abort initialization process
     if (!operatingSystemSupported())
@@ -80,13 +84,35 @@ IO::Drivers::BluetoothLE &IO::Drivers::BluetoothLE::instance()
 
 void IO::Drivers::BluetoothLE::close()
 {
+    // Clear services list & reset flags
+    m_serviceNames.clear();
+    m_deviceConnected = false;
+
+    // Delete previous service
+    if (m_service)
+    {
+        disconnect(m_service);
+        m_service->deleteLater();
+        m_service = Q_NULLPTR;
+    }
+
+    // Delete previous controller
     if (m_controller)
+    {
+        disconnect(m_controller);
         m_controller->disconnectFromDevice();
+        m_controller->deleteLater();
+        m_controller = Q_NULLPTR;
+    }
+
+    // Update UI
+    Q_EMIT servicesChanged();
+    Q_EMIT deviceConnectedChanged();
 }
 
 bool IO::Drivers::BluetoothLE::isOpen() const
 {
-    return deviceConnected();
+    return m_deviceConnected;
 }
 
 bool IO::Drivers::BluetoothLE::isReadable() const
@@ -124,25 +150,8 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
     if (m_deviceIndex < 0 || m_deviceIndex >= m_devices.count())
         return false;
 
-    // Clear services list
-    m_serviceNames.clear();
-    Q_EMIT servicesChanged();
-
-    // Delete previous service
-    if (m_service)
-    {
-        disconnect(m_service);
-        m_service->deleteLater();
-        m_service = Q_NULLPTR;
-    }
-
-    // Delete previous controller
-    if (m_controller)
-    {
-        disconnect(m_controller);
-        m_controller->deleteLater();
-        m_controller = Q_NULLPTR;
-    }
+    // Close previous device
+    close();
 
     // Initialize a BLE controller for the current deveice
     auto device = m_devices.at(m_deviceIndex);
@@ -207,14 +216,6 @@ int IO::Drivers::BluetoothLE::deviceIndex() const
 }
 
 /**
- * @return @c true if the module is currently connected to a BLE device.
- */
-bool IO::Drivers::BluetoothLE::deviceConnected() const
-{
-    return m_deviceConnected;
-}
-
-/**
  * @return A list with the discovered BLE devices.
  */
 QStringList IO::Drivers::BluetoothLE::deviceNames() const
@@ -261,35 +262,16 @@ void IO::Drivers::BluetoothLE::startDiscovery()
     if (!operatingSystemSupported())
         return;
 
-    // A BLE device is already connected, cancel discovery process
-    if (deviceConnected())
-        return;
-
     // Restore initial conditions
     m_devices.clear();
     m_deviceIndex = -1;
     m_deviceNames.clear();
-    m_serviceNames.clear();
 
-    // Delete previous service
-    if (m_service)
-    {
-        disconnect(m_service);
-        m_service->deleteLater();
-        m_service = Q_NULLPTR;
-    }
-
-    // Delete previous BLE controller
-    if (m_controller)
-    {
-        disconnect(m_controller);
-        m_controller->deleteLater();
-        m_controller = Q_NULLPTR;
-    }
+    // Close previous device
+    close();
 
     // Update UI
     Q_EMIT devicesChanged();
-    Q_EMIT servicesChanged();
     Q_EMIT deviceIndexChanged();
 
     // Start device discovery process

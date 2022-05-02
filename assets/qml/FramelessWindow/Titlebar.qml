@@ -20,10 +20,10 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.3
-import QtQuick.Window 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls
 
 import "../Widgets" as Widgets
 
@@ -48,7 +48,7 @@ Rectangle {
     property bool minimizeEnabled: true
     property bool maximizeEnabled: true
     property color textColor: palette.text
-    property bool showMacControls: Cpp_IsMac
+    property bool showMacControls: false
 
     //
     // Access to left titlebar button widths (e.g. for implementing custom controls over

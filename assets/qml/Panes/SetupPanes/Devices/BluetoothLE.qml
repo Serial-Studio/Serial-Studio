@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
 Control {
     id: root
@@ -82,7 +82,9 @@ Control {
                 height: 24
                 icon.width: 16
                 icon.height: 16
+                opacity: enabled ? 1 : 0.5
                 icon.color: Cpp_ThemeManager.text
+                enabled: !Cpp_IO_Manager.connected
                 icon.source: "qrc:/icons/refresh.svg"
                 onClicked: Cpp_IO_Bluetooth_LE.startDiscovery()
                 palette.base: Cpp_ThemeManager.setupPanelBackground
@@ -95,21 +97,17 @@ Control {
         RowLayout {
             spacing: app.spacing
             visible: opacity > 0
-            opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceConnected ? 1 : 0
+            opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && serviceNames.count > 1 ? 1 : 0
 
             Label {
                 id: servLabel
-                opacity: enabled ? 1 : 0.5
                 text: qsTr("Service") + ":"
-                enabled: !Cpp_IO_Manager.connected
                 Layout.minimumWidth: Math.max(devLabel.implicitWidth, servLabel.implicitWidth)
             }
 
             ComboBox {
-                id: _service
+                id: serviceNames
                 Layout.fillWidth: true
-                opacity: enabled ? 1 : 0.5
-                enabled: !Cpp_IO_Manager.connected
                 model: Cpp_IO_Bluetooth_LE.serviceNames
                 palette.base: Cpp_ThemeManager.setupPanelBackground
                 onCurrentIndexChanged: Cpp_IO_Bluetooth_LE.selectService(currentIndex)

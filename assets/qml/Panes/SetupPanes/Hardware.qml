@@ -20,11 +20,11 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
-import Qt.labs.settings 1.0 as QtSettings
+import Qt.labs.settings as QtSettings
 
 import "Devices" as Devices
 import "../../Windows" as Windows

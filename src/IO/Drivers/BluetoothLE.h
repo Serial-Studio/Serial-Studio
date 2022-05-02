@@ -55,8 +55,8 @@ class BluetoothLE : public HAL_Driver
                READ deviceIndex
                WRITE selectDevice
                NOTIFY devicesChanged)
-    Q_PROPERTY(bool deviceConnected
-               READ deviceConnected
+    Q_PROPERTY(bool isOpen
+               READ isOpen
                NOTIFY deviceConnectedChanged)
     Q_PROPERTY(bool operatingSystemSupported
                READ operatingSystemSupported
@@ -93,7 +93,6 @@ public:
 
     int deviceCount() const;
     int deviceIndex() const;
-    bool deviceConnected() const;
     StringList deviceNames() const;
     StringList serviceNames() const;
     bool operatingSystemSupported() const;

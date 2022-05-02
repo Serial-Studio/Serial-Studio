@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-import QtQuick 2.3
+import QtQuick
 import "../Widgets" as Widgets
 
 Widgets.Icon {
