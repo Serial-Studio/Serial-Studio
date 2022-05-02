@@ -63,6 +63,12 @@ Serial Studio是一个多平台，多用途的串行数据可视化的应用软�
 
 	qmake
 	make -j4
+	
+## 软件架构
+
+下面是一个简化图，解释了不同的 Serial Studio 模块如何相互交互。 您可以通过单击 [此处](https://serial-studio.github.io/hackers/) 找到 DOXYGEN 文档。
+
+![架构](architecture/architecture.png)
 
 ## Licence
 
