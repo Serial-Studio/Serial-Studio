@@ -92,7 +92,7 @@ Alternatively, you can also use the following commands:
 	
 ### Software architecture
 
-This a simplified diagram of how the different modules of Serial Studio interact with each other. You can find the latest (stable) DOXYGEN documentation by clicking [here](https://serial-studio.github.io/hackers/).
+This is a simplified diagram that explains how the different Serial Studio modules interact with each other. You can find the DOXYGEN documentation by clicking [here](https://serial-studio.github.io/hackers/).
 
 ![Architecture](doc/architecture/architecture.png)
 	
