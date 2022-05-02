@@ -35,6 +35,11 @@ jobs:
       with:
         submodules: recursive
 
+    - name: '⚙️ Initialize CodeQL'
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+
     - name: '⚙️ Cache Qt'
       id: cache-qt
       uses: actions/cache@v1
