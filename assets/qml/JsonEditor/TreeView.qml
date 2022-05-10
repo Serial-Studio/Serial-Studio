@@ -73,13 +73,9 @@ Widgets.Window {
             id: groupDelegate
             readonly property var groupId: index
 
+            width: view.width
             spacing: app.spacing
             height: Cpp_JSON_Editor.datasetCount(groupDelegate.groupId) * 24 + 24
-
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
 
             RowLayout {
                 spacing: app.spacing

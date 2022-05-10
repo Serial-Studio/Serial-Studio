@@ -54,7 +54,7 @@ FramelessWindow.CustomWindow {
     //
     // Ask user to save changes before closing the window
     //
-    onClosing: close.accepted = Cpp_JSON_Editor.askSave()
+    onClosing: (close) => close.accepted = Cpp_JSON_Editor.askSave()
 
     //
     // Dummy string to increase width of buttons

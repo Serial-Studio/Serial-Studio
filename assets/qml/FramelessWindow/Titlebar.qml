@@ -48,7 +48,7 @@ Rectangle {
     property bool minimizeEnabled: true
     property bool maximizeEnabled: true
     property color textColor: palette.text
-    property bool showMacControls: false
+    property bool showMacControls: Cpp_IsMac
 
     //
     // Access to left titlebar button widths (e.g. for implementing custom controls over

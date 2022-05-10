@@ -84,17 +84,20 @@ ColumnLayout {
             }
 
             delegate: Item {
+                id: container
                 x: (parent.width - width) / 2
-                height: group.height + app.spacing
                 width: parent.width - 4 * app.spacing
 
-                JsonGroupDelegate {
-                    id: group
-                    group: index
+                Loader {
                     anchors {
                         left: parent.left
                         right: parent.right
                         bottom: parent.bottom
+                    }
+
+                    sourceComponent: JsonGroupDelegate {
+                        group: index
+                        onHeightChanged: container.height = height + app.spacing
                     }
                 }
             }

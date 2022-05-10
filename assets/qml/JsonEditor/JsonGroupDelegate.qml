@@ -202,13 +202,14 @@ Widgets.Window {
                     Layout.minimumWidth: 320
                     Layout.minimumHeight: 420 + 2 * app.spacing
 
-                    JsonDatasetDelegate {
-                        id: datasetDelegate
-                        dataset: index
-                        group: root.group
+                    Loader {
                         anchors.fill: parent
-                        multiplotGroup: widget.currentIndex === 4
-                        showGroupWidget: widget.currentIndex > 0 && widget.currentIndex !== 4
+                        sourceComponent: JsonDatasetDelegate {
+                            dataset: index
+                            group: root.group
+                            multiplotGroup: widget.currentIndex === 4
+                            showGroupWidget: widget.currentIndex > 0 && widget.currentIndex !== 4
+                        }
                     }
                 }
             }
