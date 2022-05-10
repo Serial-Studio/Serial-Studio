@@ -34,7 +34,8 @@
 #include <Misc/Utilities.h>
 
 //
-// For invalid group returns
+// For invalid group returns, avoids crashes while creating a new project & the UI
+// is in the process of being updated
 //
 static JSON::Group EMPTY_GROUP;
 

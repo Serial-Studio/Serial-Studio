@@ -42,10 +42,11 @@ Page {
     //
     property int group
     readonly property int minSize: 320
+    readonly property int maxSize: 380
     readonly property int cellHeight: 420
     readonly property int columns: Math.floor((grid.width - 2 * scroll.width) / cWidth)
-    readonly property int cWidth: Math.max(minSize, (grid.width - 2 * scroll.width) / grid.model)
     readonly property int cellWidth: cWidth + ((grid.width - 2 * scroll.width) - (cWidth) * columns) / columns
+    readonly property int cWidth: Math.min(maxSize, Math.max(minSize, (grid.width - 2 * scroll.width) / grid.model))
 
     //
     // Connections with JSON editor
@@ -217,6 +218,39 @@ Page {
             TextField {
                 enabled: false
                 anchors.fill: parent
+            }
+
+            //
+            // Empty group text & icon
+            //
+            ColumnLayout {
+                spacing: app.spacing
+                anchors.centerIn: parent
+                visible: grid.model === 0
+
+                Widgets.Icon {
+                    width: 128
+                    height: 128
+                    color: Cpp_ThemeManager.text
+                    source: "qrc:/icons/group.svg"
+                    Layout.alignment: Qt.AlignHCenter
+                }
+
+                Label {
+                    font.bold: true
+                    font.pixelSize: 24
+                    text: qsTr("Empty group")
+                    Layout.alignment: Qt.AlignHCenter
+                }
+
+                Label {
+                    opacity: 0.8
+                    font.pixelSize: 18
+                    Layout.alignment: Qt.AlignHCenter
+                    wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                    Layout.maximumWidth: grid.width - 8 * app.spacing
+                    text: qsTr("Set group title and click on the \"Add dataset\" button to begin")
+                }
             }
 
             //

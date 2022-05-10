@@ -77,7 +77,7 @@ ColumnLayout {
             id: tabRepeater
             delegate: TabButton {
                 height: 24
-                text: qsTr("Group %1 - %2").arg(index + 1).arg(Cpp_JSON_Editor.groupTitle(index))
+                text: qsTr("Group %1").arg(index + 1) + " <i>" + (Cpp_JSON_Editor.groupTitle(index)) + "</i>"
             }
         }
     }
