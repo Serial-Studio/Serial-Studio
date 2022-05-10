@@ -51,6 +51,11 @@ Widgets.Window {
     // Custom properties
     //
     property int group
+    readonly property int minSize: 320
+    readonly property int cellHeight: 420
+    readonly property int columns: Math.floor((grid.width - 2 * scroll.width) / cWidth)
+    readonly property int cWidth: Math.max(minSize, (grid.width - 2 * scroll.width) / grid.model)
+    readonly property int cellWidth: cWidth + ((grid.width - 2 * scroll.width) - (cWidth) * columns) / columns
 
     //
     // Connections with JSON editor
@@ -60,8 +65,10 @@ Widgets.Window {
 
         function onGroupChanged(id) {
             if (id === group) {
-                repeater.model = 0
-                repeater.model = Cpp_JSON_Editor.datasetCount(group)
+                grid.model = 0
+                grid.cacheBuffer = 0
+                grid.model = Cpp_JSON_Editor.datasetCount(group)
+                grid.cacheBuffer = 2000 * Cpp_JSON_Editor.datasetCount(group)
             }
         }
     }
@@ -186,24 +193,33 @@ Widgets.Window {
         //
         // Datasets
         //
-        GridLayout {
+        Item {
             Layout.fillWidth: true
-            rowSpacing: app.spacing
-            columnSpacing: app.spacing
-            Layout.fillHeight: repeater.model > 0
-            columns: Math.floor(column.width / 320)
-            Layout.minimumHeight: (repeater.model / columns) * 320
+            Layout.minimumHeight: root.cellHeight + 8 * app.spacing
+            Layout.fillHeight: grid.model > 0
 
-            Repeater {
-                id: repeater
+            GridView {
+                id: grid
+                clip: true
+                anchors.fill: parent
+                cellWidth: root.cellWidth
+                cellHeight: root.cellHeight
                 model: Cpp_JSON_Editor.datasetCount(group)
+
+                ScrollBar.vertical: ScrollBar {
+                    id: scroll
+                    policy: ScrollBar.AsNeeded
+                }
+
                 delegate: Item {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: 320
-                    Layout.minimumHeight: 420 + 2 * app.spacing
+                    width: grid.cellWidth
+                    height: grid.cellHeight
 
                     Loader {
+                        id: loader
                         anchors.fill: parent
+                        anchors.margins: app.spacing
+
                         sourceComponent: JsonDatasetDelegate {
                             dataset: index
                             group: root.group

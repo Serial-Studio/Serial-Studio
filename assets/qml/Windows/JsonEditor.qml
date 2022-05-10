@@ -152,7 +152,7 @@ FramelessWindow.CustomWindow {
             //
             // JSON structure tree
             //
-            TreeView {
+            /*TreeView {
                 id: jsonTree
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
@@ -160,7 +160,7 @@ FramelessWindow.CustomWindow {
                 Layout.topMargin: app.spacing * 2
                 Layout.bottomMargin: app.spacing * 2
                 visible: Cpp_JSON_Editor.groupCount !== 0
-            }
+            }*/
 
             //
             // Group editor

@@ -38,12 +38,16 @@ ColumnLayout {
 
         function onGroupCountChanged() {
             view.model = 0
+            view.cacheBuffer = 0
             view.model = Cpp_JSON_Editor.groupCount
+            view.cacheBuffer = 2000 * Cpp_JSON_Editor.groupCount
         }
 
         function onGroupOrderChanged() {
             view.model = 0
+            view.cacheBuffer = 0
             view.model = Cpp_JSON_Editor.groupCount
+            view.cacheBuffer = 2000 * Cpp_JSON_Editor.groupCount
         }
     }
 
@@ -74,8 +78,6 @@ ColumnLayout {
         ListView {
             id: view
             anchors.fill: parent
-            cacheBuffer: 2000 * 10
-            model: Cpp_JSON_Editor.groupCount
             anchors.bottomMargin: app.spacing
 
             ScrollBar.vertical: ScrollBar {
