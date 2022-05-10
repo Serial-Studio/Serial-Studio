@@ -33,6 +33,11 @@
 #include <JSON/Generator.h>
 #include <Misc/Utilities.h>
 
+//
+// For invalid group returns
+//
+static JSON::Group EMPTY_GROUP;
+
 //----------------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
 //----------------------------------------------------------------------------------------
@@ -375,7 +380,10 @@ int JSON::Editor::datasetCount(const int group) const
  */
 const JSON::Group &JSON::Editor::getGroup(const int index) const
 {
-    return m_groups.at(index);
+    if (m_groups.count() > index)
+        return m_groups.at(index);
+
+    return EMPTY_GROUP;
 }
 
 /**

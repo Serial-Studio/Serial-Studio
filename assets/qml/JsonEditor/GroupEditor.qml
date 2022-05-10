@@ -37,25 +37,25 @@ ColumnLayout {
         target: Cpp_JSON_Editor
 
         function onGroupCountChanged() {
-            view.model = 0
-            view.cacheBuffer = 0
-            view.model = Cpp_JSON_Editor.groupCount
-            view.cacheBuffer = 2000 * Cpp_JSON_Editor.groupCount
+            tabRepeater.model = 0
+            stackRepeater.model = 0
+            tabRepeater.model = Cpp_JSON_Editor.groupCount
+            stackRepeater.model = Cpp_JSON_Editor.groupCount
         }
 
         function onGroupOrderChanged() {
-            view.model = 0
-            view.cacheBuffer = 0
-            view.model = Cpp_JSON_Editor.groupCount
-            view.cacheBuffer = 2000 * Cpp_JSON_Editor.groupCount
+            tabRepeater.model = 0
+            stackRepeater.model = 0
+            tabRepeater.model = Cpp_JSON_Editor.groupCount
+            stackRepeater.model = Cpp_JSON_Editor.groupCount
         }
     }
 
     //
     // Function to scroll to the last group
     //
-    function scrollToBottom() {
-        scroll.position = 1
+    function selectLastGroup() {
+        tabBar.currentIndex = tabBar.count - 1
     }
 
     //
@@ -66,41 +66,42 @@ ColumnLayout {
     }
 
     //
-    // List view
+    // Tab widget
     //
-    Item {
+    TabBar {
+        id: tabBar
+        Layout.fillWidth: true
+        visible: tabRepeater.model > 0
+
+        Repeater {
+            id: tabRepeater
+            delegate: TabButton {
+                height: 24
+                text: qsTr("Group %1 - %2").arg(index + 1).arg(Cpp_JSON_Editor.groupTitle(index))
+            }
+        }
+    }
+
+    //
+    // StackView
+    //
+    StackLayout {
+        id: swipe
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.minimumHeight: 320
-        Layout.leftMargin: -2 * app.spacing
-        Layout.rightMargin: -2 * app.spacing
+        currentIndex: tabBar.currentIndex
+        Layout.topMargin: -parent.spacing - 1
 
-        ListView {
-            id: view
-            anchors.fill: parent
-            anchors.bottomMargin: app.spacing
+        Repeater {
+            id: stackRepeater
 
-            ScrollBar.vertical: ScrollBar {
-                id: scroll
-                policy: ScrollBar.AsNeeded
-            }
+            delegate: Loader {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                active: swipe.currentIndex == index
 
-            delegate: Item {
-                id: container
-                x: (parent.width - width) / 2
-                width: parent.width - 4 * app.spacing
-
-                Loader {
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        bottom: parent.bottom
-                    }
-
-                    sourceComponent: JsonGroupDelegate {
-                        group: index
-                        onHeightChanged: container.height = height + app.spacing
-                    }
+                sourceComponent: JsonGroupDelegate {
+                    group: index
                 }
             }
         }

@@ -45,23 +45,17 @@ Widgets.Window {
 
         function onGroupCountChanged() {
             view.model = 0
-            view.cacheBuffer = 0
             view.model = Cpp_JSON_Editor.groupCount
-            view.cacheBuffer = 2000 * Cpp_JSON_Editor.groupCount
         }
 
         function onGroupOrderChanged() {
             view.model = 0
-            view.cacheBuffer = 0
             view.model = Cpp_JSON_Editor.groupCount
-            view.cacheBuffer = 2000 * Cpp_JSON_Editor.groupCount
         }
 
         function onDatasetChanged() {
             view.model = 0
-            view.cacheBuffer = 0
             view.model = Cpp_JSON_Editor.groupCount
-            view.cacheBuffer = 2000 * Cpp_JSON_Editor.groupCount
         }
     }
 
@@ -76,7 +70,7 @@ Widgets.Window {
         model: Cpp_JSON_Editor.groupCount
 
         delegate: Loader {
-            width: view.width
+            width: view.width - app.spacing * 2
             height: Cpp_JSON_Editor.datasetCount(index) * 24 + 24
 
             sourceComponent: ColumnLayout {

@@ -26,26 +26,16 @@ import QtQuick.Controls
 
 import "../Widgets" as Widgets
 
-Widgets.Window {
+Page {
     id: root
 
     //
-    // Window properties
+    // Page background
     //
-    gradient: true
-    Layout.minimumHeight: height
-    headerDoubleClickEnabled: false
-    icon.source: "qrc:/icons/group.svg"
-    backgroundColor: Cpp_ThemeManager.paneWindowBackground
-    height: column.implicitHeight + headerHeight + 4 * app.spacing
-    title: qsTr("Group %1 - %2").arg(group + 1).arg(Cpp_JSON_Editor.groupTitle(group))
-
-    //
-    // Delete group button
-    //
-    altButtonEnabled: true
-    altButtonIcon.source: "qrc:/icons/delete-item.svg"
-    onAltButtonClicked: Cpp_JSON_Editor.deleteGroup(group)
+    background: TextField {
+        enabled: false
+        palette.base: Cpp_ThemeManager.setupPanelBackground
+    }
 
     //
     // Custom properties
@@ -66,9 +56,8 @@ Widgets.Window {
         function onGroupChanged(id) {
             if (id === group) {
                 grid.model = 0
-                grid.cacheBuffer = 0
                 grid.model = Cpp_JSON_Editor.datasetCount(group)
-                grid.cacheBuffer = 2000 * Cpp_JSON_Editor.datasetCount(group)
+                grid.positionViewAtIndex(grid.count - 1, GridView.Beginning)
             }
         }
     }
@@ -79,12 +68,8 @@ Widgets.Window {
     ColumnLayout {
         id: column
         spacing: app.spacing
-        anchors {
-            left: parent.left
-            right: parent.right
-            margins: 2 * app.spacing
-            verticalCenter: parent.verticalCenter
-        }
+        anchors.fill: parent
+        anchors.margins: app.spacing
 
         //
         // Notes rectangle
@@ -145,19 +130,36 @@ Widgets.Window {
             spacing: app.spacing
             Layout.fillWidth: true
 
+            Label {
+                text: qsTr("Title") + ":"
+                Layout.alignment: Qt.AlignVCenter
+            }
+
             TextField {
-                Layout.fillWidth: true
+                Layout.minimumWidth: 320
                 placeholderText: qsTr("Title")
+                Layout.alignment: Qt.AlignVCenter
                 text: Cpp_JSON_Editor.groupTitle(group)
+
                 onTextChanged: {
                     Cpp_JSON_Editor.setGroupTitle(group, text)
                     root.title = qsTr("Group %1 - %2").arg(group + 1).arg(Cpp_JSON_Editor.groupTitle(group))
                 }
             }
 
+            Item {
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: qsTr("Group widget") + ":"
+                Layout.alignment: Qt.AlignVCenter
+            }
+
             ComboBox {
                 id: widget
                 Layout.minimumWidth: 180
+                Layout.alignment: Qt.AlignVCenter
                 model: Cpp_JSON_Editor.availableGroupLevelWidgets()
                 currentIndex: Cpp_JSON_Editor.groupWidgetIndex(group)
                 onCurrentIndexChanged: {
@@ -175,6 +177,7 @@ Widgets.Window {
                 enabled: group > 0
                 opacity: enabled ? 1 : 0.5
                 icon.source: "qrc:/icons/up.svg"
+                Layout.alignment: Qt.AlignVCenter
                 icon.color: Cpp_ThemeManager.text
                 onClicked: Cpp_JSON_Editor.moveGroupUp(group)
             }
@@ -183,10 +186,20 @@ Widgets.Window {
                 icon.width: 18
                 icon.height: 18
                 opacity: enabled ? 1 : 0.5
+                Layout.alignment: Qt.AlignVCenter
                 icon.color: Cpp_ThemeManager.text
                 icon.source: "qrc:/icons/down.svg"
                 enabled: group < Cpp_JSON_Editor.groupCount - 1
                 onClicked: Cpp_JSON_Editor.moveGroupDown(group)
+            }
+
+            RoundButton {
+                icon.width: 18
+                icon.height: 18
+                Layout.alignment: Qt.AlignVCenter
+                icon.color: Cpp_ThemeManager.text
+                icon.source: "qrc:/icons/delete-item.svg"
+                onClicked: Cpp_JSON_Editor.deleteGroup(group)
             }
         }
 
@@ -194,13 +207,25 @@ Widgets.Window {
         // Datasets
         //
         Item {
+            clip: true
             Layout.fillWidth: true
-            Layout.minimumHeight: root.cellHeight + 8 * app.spacing
-            Layout.fillHeight: grid.model > 0
+            Layout.fillHeight: true
 
+            //
+            // Background
+            //
+            TextField {
+                enabled: false
+                anchors.fill: parent
+            }
+
+            //
+            // Grid
+            //
             GridView {
                 id: grid
                 clip: true
+                anchors.margins: 1
                 anchors.fill: parent
                 cellWidth: root.cellWidth
                 cellHeight: root.cellHeight
@@ -241,11 +266,14 @@ Widgets.Window {
             text: qsTr("Add dataset")
             icon.source: "qrc:/icons/add.svg"
             icon.color: Cpp_ThemeManager.menubarText
-            onClicked: Cpp_JSON_Editor.addDataset(group)
             palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             visible: widget.currentIndex === 0 || widget.currentIndex === 4
+            onClicked: {
+                Cpp_JSON_Editor.addDataset(group)
+                grid.positionViewAtIndex(grid.count - 1, GridView.Beginning)
+            }
         }
     }
 }
