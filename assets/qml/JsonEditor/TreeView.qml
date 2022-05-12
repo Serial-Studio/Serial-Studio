@@ -69,77 +69,34 @@ Widgets.Window {
         anchors.margins: app.spacing
         model: Cpp_JSON_Editor.groupCount
 
-        delegate: ColumnLayout {
-            id: groupDelegate
-            readonly property var groupId: index
+        delegate: Loader {
+            width: view.width - app.spacing * 2
+            height: Cpp_JSON_Editor.datasetCount(index) * 24 + 24
 
-            spacing: app.spacing
-            height: Cpp_JSON_Editor.datasetCount(groupDelegate.groupId) * 24 + 24
-
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-
-            RowLayout {
+            sourceComponent: ColumnLayout {
+                id: groupDelegate
                 spacing: app.spacing
-                Layout.fillWidth: true
 
-                Widgets.Icon {
-                    width: 18
-                    height: 18
-                    color: Cpp_ThemeManager.text
-                    source: "qrc:/icons/group.svg"
-                    Layout.alignment: Qt.AlignVCenter
-                }
+                readonly property var groupId: index
 
-                Label {
-                    font.bold: true
-                    Layout.fillWidth: true
-                    elide: Label.ElideRight
-                    Layout.alignment: Qt.AlignVCenter
-                    text: Cpp_JSON_Editor.groupTitle(groupDelegate.groupId)
-                }
-
-                Label {
-                    opacity: 0.5
-                    visible: text !== "[]"
-                    font.family: app.monoFont
-                    Layout.alignment: Qt.AlignVCenter
-                    text: "[" + Cpp_JSON_Editor.groupWidget(groupDelegate.groupId) + "]"
-                }
-            }
-
-            Repeater {
-                model: Cpp_JSON_Editor.datasetCount(groupDelegate.groupId)
-
-                delegate: RowLayout {
+                RowLayout {
                     spacing: app.spacing
                     Layout.fillWidth: true
-
-                    Item {
-                        width: 2 * app.spacing
-                    }
 
                     Widgets.Icon {
                         width: 18
                         height: 18
                         color: Cpp_ThemeManager.text
-                        source: "qrc:/icons/dataset.svg"
+                        source: "qrc:/icons/group.svg"
                         Layout.alignment: Qt.AlignVCenter
                     }
 
                     Label {
-                        id: label
+                        font.bold: true
                         Layout.fillWidth: true
                         elide: Label.ElideRight
                         Layout.alignment: Qt.AlignVCenter
-                        text: Cpp_JSON_Editor.datasetTitle(groupDelegate.groupId, index)
-
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                        }
+                        text: Cpp_JSON_Editor.groupTitle(groupDelegate.groupId)
                     }
 
                     Label {
@@ -147,7 +104,51 @@ Widgets.Window {
                         visible: text !== "[]"
                         font.family: app.monoFont
                         Layout.alignment: Qt.AlignVCenter
-                        text: "[" + Cpp_JSON_Editor.datasetWidget(groupDelegate.groupId, index) + "]"
+                        text: "[" + Cpp_JSON_Editor.groupWidget(groupDelegate.groupId) + "]"
+                    }
+                }
+
+                Repeater {
+                    model: Cpp_JSON_Editor.datasetCount(groupDelegate.groupId)
+
+                    delegate: Loader {
+                        Layout.fillWidth: true
+                        sourceComponent: RowLayout {
+                            spacing: app.spacing
+
+                            Item {
+                                width: 2 * app.spacing
+                            }
+
+                            Widgets.Icon {
+                                width: 18
+                                height: 18
+                                color: Cpp_ThemeManager.text
+                                source: "qrc:/icons/dataset.svg"
+                                Layout.alignment: Qt.AlignVCenter
+                            }
+
+                            Label {
+                                id: label
+                                Layout.fillWidth: true
+                                elide: Label.ElideRight
+                                Layout.alignment: Qt.AlignVCenter
+                                text: Cpp_JSON_Editor.datasetTitle(groupDelegate.groupId, index)
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                }
+                            }
+
+                            Label {
+                                opacity: 0.5
+                                visible: text !== "[]"
+                                font.family: app.monoFont
+                                Layout.alignment: Qt.AlignVCenter
+                                text: "[" + Cpp_JSON_Editor.datasetWidget(groupDelegate.groupId, index) + "]"
+                            }
+                        }
                     }
                 }
             }

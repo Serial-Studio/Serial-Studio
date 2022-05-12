@@ -148,6 +148,7 @@ Page {
                 text: root.title
                 Layout.fillWidth: true
                 color: root.titleColor
+                elide: Label.ElideRight
                 Layout.alignment: Qt.AlignVCenter
                 font.pixelSize: root.headerHeight * 14 / 32
                 horizontalAlignment: root.showIcon ? Label.AlignLeft : Label.AlignHCenter

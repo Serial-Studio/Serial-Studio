@@ -54,7 +54,7 @@ FramelessWindow.CustomWindow {
     //
     // Ask user to save changes before closing the window
     //
-    onClosing: close.accepted = Cpp_JSON_Editor.askSave()
+    onClosing: (close) => close.accepted = Cpp_JSON_Editor.askSave()
 
     //
     // Dummy string to increase width of buttons
@@ -120,7 +120,7 @@ FramelessWindow.CustomWindow {
             id: footer
             radius: root.radius
             onCloseWindow: root.close()
-            onScrollToBottom: groupEditor.scrollToBottom()
+            onScrollToBottom: groupEditor.selectLastGroup()
 
             anchors {
                 margins: 0
@@ -152,7 +152,7 @@ FramelessWindow.CustomWindow {
             //
             // JSON structure tree
             //
-            TreeView {
+            /*TreeView {
                 id: jsonTree
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
@@ -160,7 +160,7 @@ FramelessWindow.CustomWindow {
                 Layout.topMargin: app.spacing * 2
                 Layout.bottomMargin: app.spacing * 2
                 visible: Cpp_JSON_Editor.groupCount !== 0
-            }
+            }*/
 
             //
             // Group editor

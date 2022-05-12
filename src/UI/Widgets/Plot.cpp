@@ -81,7 +81,13 @@ Widgets::Plot::Plot(const int index)
     if (colors.count() > m_index)
         color = colors.at(m_index);
     else
-        color = colors.at(colors.count() % m_index);
+    {
+        auto index = colors.count() % m_index;
+        if (index >= colors.count())
+            index = colors.count() - 1;
+
+        color = colors.at(index);
+    }
 
     // Set curve color & plot style
     m_curve.setPen(QColor(color), 2, Qt::SolidLine);

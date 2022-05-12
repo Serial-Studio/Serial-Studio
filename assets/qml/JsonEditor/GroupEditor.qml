@@ -37,21 +37,25 @@ ColumnLayout {
         target: Cpp_JSON_Editor
 
         function onGroupCountChanged() {
-            view.model = 0
-            view.model = Cpp_JSON_Editor.groupCount
+            tabRepeater.model = 0
+            stackRepeater.model = 0
+            tabRepeater.model = Cpp_JSON_Editor.groupCount
+            stackRepeater.model = Cpp_JSON_Editor.groupCount
         }
 
         function onGroupOrderChanged() {
-            view.model = 0
-            view.model = Cpp_JSON_Editor.groupCount
+            tabRepeater.model = 0
+            stackRepeater.model = 0
+            tabRepeater.model = Cpp_JSON_Editor.groupCount
+            stackRepeater.model = Cpp_JSON_Editor.groupCount
         }
     }
 
     //
     // Function to scroll to the last group
     //
-    function scrollToBottom() {
-        scroll.position = 1
+    function selectLastGroup() {
+        tabBar.currentIndex = tabBar.count - 1
     }
 
     //
@@ -62,40 +66,42 @@ ColumnLayout {
     }
 
     //
-    // List view
+    // Tab widget
     //
-    Item {
+    TabBar {
+        id: tabBar
+        Layout.fillWidth: true
+        visible: tabRepeater.model > 0
+
+        Repeater {
+            id: tabRepeater
+            delegate: TabButton {
+                height: 24
+                text: qsTr("Group %1").arg(index + 1) + " <i>" + (Cpp_JSON_Editor.groupTitle(index)) + "</i>"
+            }
+        }
+    }
+
+    //
+    // StackView
+    //
+    StackLayout {
+        id: swipe
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.minimumHeight: 320
-        Layout.leftMargin: -2 * app.spacing
-        Layout.rightMargin: -2 * app.spacing
+        currentIndex: tabBar.currentIndex
+        Layout.topMargin: -parent.spacing - 1
 
-        ListView {
-            id: view
-            anchors.fill: parent
-            cacheBuffer: 2000 * 10
-            model: Cpp_JSON_Editor.groupCount
-            anchors.bottomMargin: app.spacing
+        Repeater {
+            id: stackRepeater
 
-            ScrollBar.vertical: ScrollBar {
-                id: scroll
-                policy: ScrollBar.AsNeeded
-            }
+            delegate: Loader {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                active: swipe.currentIndex == index
 
-            delegate: Item {
-                x: (parent.width - width) / 2
-                height: group.height + app.spacing
-                width: parent.width - 4 * app.spacing
-
-                JsonGroupDelegate {
-                    id: group
+                sourceComponent: JsonGroupDelegate {
                     group: index
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        bottom: parent.bottom
-                    }
                 }
             }
         }

@@ -23,6 +23,8 @@
 #include <QJsonArray>
 #include <JSON/Group.h>
 
+static JSON::Dataset EMPTY_DATASET;
+
 /**
  * Destructor function
  */
@@ -68,7 +70,10 @@ QVector<JSON::Dataset> &JSON::Group::datasets()
  */
 const JSON::Dataset &JSON::Group::getDataset(const int index) const
 {
-    return m_datasets.at(index);
+    if (m_datasets.count() > index)
+        return m_datasets.at(index);
+
+    return EMPTY_DATASET;
 }
 
 /**
