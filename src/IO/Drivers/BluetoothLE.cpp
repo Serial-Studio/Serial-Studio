@@ -443,8 +443,7 @@ void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::
 }
 
 /**
- * Configurs the characteristics of the services found on the BLE device paired with the
- * app.
+ * Configures the characteristics of the services found on the paired BLE device.
  */
 void IO::Drivers::BluetoothLE::onServiceStateChanged(
     QLowEnergyService::ServiceState serviceState)

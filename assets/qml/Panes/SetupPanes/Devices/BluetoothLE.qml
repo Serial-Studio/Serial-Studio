@@ -54,8 +54,6 @@ Control {
             visible: opacity > 0
             opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount > 0 ? 1 : 0
 
-            Behavior on opacity {NumberAnimation{}}
-
             Label {
                 id: devLabel
                 opacity: enabled ? 1 : 0.5
@@ -122,8 +120,6 @@ Control {
             visible: opacity > 0
             opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount < 1 ? 1 : 0
 
-            Behavior on opacity {NumberAnimation{}}
-
             BusyIndicator {
                 running: parent.visible
                 Layout.minimumWidth: 16
@@ -145,8 +141,6 @@ Control {
             spacing: app.spacing
             visible: opacity > 0
             opacity: !Cpp_IO_Bluetooth_LE.operatingSystemSupported
-
-            Behavior on opacity {NumberAnimation{}}
 
             ToolButton {
                 flat: true

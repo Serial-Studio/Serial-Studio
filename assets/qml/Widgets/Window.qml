@@ -56,12 +56,6 @@ Page {
     signal headerDoubleClicked()
 
     //
-    // Animations
-    //
-    Behavior on Layout.preferredWidth {NumberAnimation{}}
-    Behavior on Layout.preferredHeight {NumberAnimation{}}
-
-    //
     // Layout properties
     //
     visible: opacity > 0
