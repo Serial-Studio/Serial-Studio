@@ -195,6 +195,10 @@ jobs:
       uses: joncloud/makensis-action@v3.6
       with:
         script-file: deploy/windows/nsis/setup.nsi
+        
+    - name: '📦 Check NSIS version & hash'
+      run: |
+        makensis /HDRINFO
 
     - name: '📦 Rename installer'
       run: |
