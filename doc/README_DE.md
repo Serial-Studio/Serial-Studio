@@ -16,7 +16,7 @@ Serial Studio ist ein plattformübergreifendes Programm zur Visualisierung serie
 
 Die Notwendigkeit für dieses Projekt entstand während der Entwicklung der Bodenstationssoftware für mehrere CanSat-basierte Wettbewerbe, an denen ich teilnehme. Es ist einfach nicht nachhaltig, für jeden Wettbewerb und jedes Projekt unterschiedliche GSS-Programme zu entwickeln und zu pflegen. Die intelligente Lösung besteht darin, eine gemeinsame Ground Station-Software zu haben und jedem CanSat zu ermöglichen, zu definieren, wie die Daten dem Endbenutzer mithilfe eines erweiterbaren Kommunikationsprotokolls präsentiert werden.
 
-Darüber hinaus kann dieser Ansatz auf nahezu jede Art von Projekt ausgedehnt werden, bei dem Daten erfasst und gemessen werden. Wenn Sie ausführlicher erklären möchten, warum dieses Projekt existiert und worum es geht, lesen Sie [diesen Blog-Beitrag](https://www.alex-spataru.com/blog/introducing-serial-studio).
+Darüber hinaus kann dieser Ansatz auf nahezu jede Art von Projekt ausgedehnt werden, bei dem Daten erfasst und gemessen werden.
 
 **HINWEIS:** Informationen zum Kommunikationsprotokoll finden Sie im [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol).
 
