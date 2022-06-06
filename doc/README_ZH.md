@@ -16,7 +16,7 @@ Serial Studio是一个多平台，多用途的串行数据可视化的应用软�
 
 在我参加过的一些基于CanSat比赛的地面工作站的软件开发过程中，对这个项目的需求有所增加。为每个竞赛和项目开发和维护不同的GSS软件是不可持续的。正确的解决方案是拥有一个通用的地面工作站软件，并让每个CanSat定义如何使用可扩展的通信协议并将数据呈现给最终用户。
 
-此外，本项目使用的方法可以扩展到涉及某种数据采集和测量的几乎任何类型的项目中。如果您想更深入地了解本项目为何存在以及其全部内容，请查看[此博客文章](https://www.alex-spataru.com/blog/introducing-serial-studio)。
+此外，本项目使用的方法可以扩展到涉及某种数据采集和测量的几乎任何类型的项目中。
 
 **注意:**有关通信协议的说明在[Wiki中](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol)提供。
 
