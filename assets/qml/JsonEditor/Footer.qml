@@ -111,6 +111,19 @@ Rectangle {
             }
         }
 
+        Button {
+            icon.width: 24
+            icon.height: 24
+            Layout.fillWidth: true
+            icon.source: "qrc:/icons/code.svg"
+            text: qsTr("Edit frame parsing code")
+            icon.color: Cpp_ThemeManager.menubarText
+            onClicked: Cpp_JSON_CodeEditor.displayWindow()
+            palette.buttonText: Cpp_ThemeManager.menubarText
+            palette.button: Cpp_ThemeManager.toolbarGradient1
+            palette.window: Cpp_ThemeManager.toolbarGradient1
+        }
+
         Item {
             Layout.fillWidth: true
         }

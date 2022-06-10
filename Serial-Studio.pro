@@ -165,6 +165,7 @@ HEADERS += \
     src/IO/Drivers/Serial.h \
     src/IO/HAL_Driver.h \
     src/IO/Manager.h \
+    src/JSON/CodeEditor.h \
     src/JSON/Dataset.h \
     src/JSON/Editor.h \
     src/JSON/Frame.h \
@@ -208,6 +209,7 @@ SOURCES += \
     src/IO/Drivers/Network.cpp \
     src/IO/Drivers/Serial.cpp \
     src/IO/Manager.cpp \
+    src/JSON/CodeEditor.cpp \
     src/JSON/Dataset.cpp \
     src/JSON/Editor.cpp \
     src/JSON/Frame.cpp \

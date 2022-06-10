@@ -30,6 +30,7 @@
 #include <JSON/Editor.h>
 #include <JSON/Dataset.h>
 #include <JSON/Generator.h>
+#include <JSON/CodeEditor.h>
 
 #include <IO/Manager.h>
 #include <IO/Console.h>
@@ -155,14 +156,15 @@ void Misc::ModuleManager::initializeQmlInterface()
     auto jsonEditor = &JSON::Editor::instance();
     auto mqttClient = &MQTT::Client::instance();
     auto uiDashboard = &UI::Dashboard::instance();
+    auto ioSerial = &IO::Drivers::Serial::instance();
     auto jsonGenerator = &JSON::Generator::instance();
     auto pluginsBridge = &Plugins::Server::instance();
     auto miscUtilities = &Misc::Utilities::instance();
     auto miscMacExtras = &Misc::MacExtras::instance();
-    auto miscTranslator = &Misc::Translator::instance();
-    auto ioSerial = &IO::Drivers::Serial::instance();
-    auto miscTimerEvents = &Misc::TimerEvents::instance();
     auto ioNetwork = &IO::Drivers::Network::instance();
+    auto miscTranslator = &Misc::Translator::instance();
+    auto jsonCodeEditor = &JSON::CodeEditor::instance();
+    auto miscTimerEvents = &Misc::TimerEvents::instance();
     auto miscThemeManager = &Misc::ThemeManager::instance();
     auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
 
@@ -225,6 +227,7 @@ void Misc::ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_IO_Bluetooth_LE", ioBluetoothLE);
     c->setContextProperty("Cpp_ThemeManager", miscThemeManager);
     c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
+    c->setContextProperty("Cpp_JSON_CodeEditor", jsonCodeEditor);
     c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
     c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
     c->setContextProperty("Cpp_ModuleManager", this);

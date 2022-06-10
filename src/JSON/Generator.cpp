@@ -26,6 +26,7 @@
 
 #include <JSON/Editor.h>
 #include <JSON/Generator.h>
+#include <JSON/CodeEditor.h>
 
 #include <CSV/Player.h>
 #include <IO/Manager.h>
@@ -154,7 +155,19 @@ void JSON::Generator::loadJsonMap(const QString &path)
         // JSON contains no errors, load compacted JSON document & save settings
         else
         {
+            // Save settings
             writeSettings(path);
+
+            // Construct frame parsing code
+            m_frameParserCode = document.object().value("frameParser").toString();
+            if (m_frameParserCode.isEmpty())
+                m_frameParserCode = JSON::CodeEditor::instance().defaultCode();
+
+            // Hacks to be able to evaluate the frame parser function
+            m_frameParserCode = "(" + m_frameParserCode + ")";
+
+            // Load compacted JSON document
+            document.object().remove("frameParser");
             m_jsonMapData = QString::fromUtf8(document.toJson(QJsonDocument::Compact));
         }
 
@@ -254,23 +267,34 @@ void JSON::Generator::readData(const QByteArray &data)
         if (jsonMapData().isEmpty())
             return;
 
+        // Construct JS parser arguments
+        QJSValueList args;
+        args << QString::fromUtf8(data) << IO::Manager::instance().separatorSequence();
+
+        // Evaluate frame parsing code (which returns a list with all the values)
+        auto fun = m_jsEngine.evaluate(m_frameParserCode);
+        auto out = fun.call(args).toVariant().toList();
+
+        // Convert JS parser output to QStringList
+        QVector<QString> fields;
+        for (auto i = 0; i < out.count(); ++i)
+            fields.append(out.at(i).toString());
+
         // Separate incoming data & add it to the JSON map
         auto json = jsonMapData().toStdString();
-        auto sepr = IO::Manager::instance().separatorSequence();
-        auto list = QString::fromUtf8(data).split(sepr);
-        for (int i = 0; i < list.count(); ++i)
+        for (int i = 0; i < fields.count(); ++i)
         {
             std::string id = "%" + std::to_string(i + 1);
             size_t pos = json.find(id);
             if (pos != std::string::npos && pos < json.length())
-                json.replace(pos, id.length(), list.at(i).toStdString());
+                json.replace(pos, id.length(), fields.at(i).toStdString());
         }
 
         // Update latest JSON values list
-        if (list.count() > m_latestValidValues.count())
+        if (fields.count() > m_latestValidValues.count())
         {
             m_latestValidValues.clear();
-            for (int i = 0; i < list.count(); ++i)
+            for (int i = 0; i < fields.count(); ++i)
                 m_latestValidValues.append("");
         }
 

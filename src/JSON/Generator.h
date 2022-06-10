@@ -90,7 +90,7 @@ public:
     enum OperationMode
     {
         kManual = 0x00,
-        kAutomatic = 0x01,
+        kAutomatic = 0x01
     };
     Q_ENUM(OperationMode)
 
@@ -122,6 +122,7 @@ private:
     QString m_jsonMapData;
     OperationMode m_opMode;
     QJsonParseError m_error;
+    QString m_frameParserCode;
     QStringList m_latestValidValues;
 };
 }
