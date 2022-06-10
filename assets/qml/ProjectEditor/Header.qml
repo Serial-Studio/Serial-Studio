@@ -86,8 +86,8 @@ Rectangle {
                 Layout.minimumWidth: 320
                 Layout.maximumHeight: 24
                 Layout.minimumHeight: 24
-                text: Cpp_JSON_Editor.title
-                onTextChanged: Cpp_JSON_Editor.setTitle(text)
+                text: Cpp_Project_Model.title
+                onTextChanged: Cpp_Project_Model.setTitle(text)
                 placeholderText: qsTr("Project title (required)")
 
                 palette {
@@ -115,8 +115,8 @@ Rectangle {
                 Layout.minimumWidth: 420
                 Layout.maximumHeight: 24
                 Layout.minimumHeight: 24
-                text: Cpp_JSON_Editor.separator
-                onTextChanged: Cpp_JSON_Editor.setSeparator(text)
+                text: Cpp_Project_Model.separator
+                onTextChanged: Cpp_Project_Model.setSeparator(text)
                 placeholderText: qsTr("Data separator (default is ',')")
 
                 palette {
@@ -144,9 +144,9 @@ Rectangle {
                 Layout.minimumWidth: 256
                 Layout.maximumHeight: 24
                 Layout.minimumHeight: 24
-                text: Cpp_JSON_Editor.frameStartSequence
-                onTextChanged: Cpp_JSON_Editor.setFrameStartSequence(text)
-                placeholderText: qsTr("Frame start sequence (default is '%1')").arg(Cpp_IO_Manager.startSequence)
+                text: Cpp_Project_Model.frameStartSequence
+                onTextChanged: Cpp_Project_Model.setFrameStartSequence(text)
+                placeholderText: qsTr("Frame start sequence (default is '/*')")
 
                 palette {
                     base: "#fff"
@@ -173,9 +173,9 @@ Rectangle {
                 Layout.minimumWidth: 256
                 Layout.maximumHeight: 24
                 Layout.minimumHeight: 24
-                text: Cpp_JSON_Editor.frameEndSequence
-                onTextChanged: Cpp_JSON_Editor.setFrameEndSequence(text)
-                placeholderText: qsTr("Frame end sequence (default is '%1')").arg(Cpp_IO_Manager.finishSequence)
+                text: Cpp_Project_Model.frameEndSequence
+                onTextChanged: Cpp_Project_Model.setFrameEndSequence(text)
+                placeholderText: qsTr("Frame end sequence (default is '*/')")
 
                 palette {
                     base: "#fff"

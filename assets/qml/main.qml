@@ -42,7 +42,7 @@ Item {
     property Windows.Donate donateDialog: null
     property Windows.MainWindow mainWindow: null
     property Windows.CsvPlayer csvPlayerDialog: null
-    property Windows.JsonEditor jsonEditorWindow: null
+    property Windows.ProjectEditor projectEditorWindow: null
     property Windows.Acknowledgements acknowledgementsDialog: null
 
     //
@@ -87,12 +87,12 @@ Item {
     }
 
     //
-    // JSON Editor dialog
+    // Project editor dialog
     //
     Loader {
         asynchronous: true
-        sourceComponent: Windows.JsonEditor {
-            Component.onCompleted: app.jsonEditorWindow = this
+        sourceComponent: Windows.ProjectEditor {
+            Component.onCompleted: app.projectEditorWindow = this
         }
     }
 

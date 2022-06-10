@@ -26,6 +26,11 @@
 #include <QVariant>
 #include <QJsonObject>
 
+namespace Project
+{
+class Model;
+}
+
 namespace JSON
 {
 /**
@@ -102,6 +107,7 @@ private:
     double m_min;
     double m_alarm;
     int m_fftSamples;
-    friend class Editor;
+
+    friend class Project::Model;
 };
 }

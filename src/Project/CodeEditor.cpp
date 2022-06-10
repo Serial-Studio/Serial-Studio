@@ -40,7 +40,7 @@ static const QString DEFAULT_CODE
       "    return frame.split(separator);\n"
       "}";
 
-JSON::CodeEditor::CodeEditor()
+Project::CodeEditor::CodeEditor()
 {
     setWindowTitle(tr("Frame parser code"));
     m_textEdit.setPlainText(DEFAULT_CODE);
@@ -53,20 +53,20 @@ JSON::CodeEditor::CodeEditor()
     setMinimumSize(QSize(640, 480));
 }
 
-JSON::CodeEditor::~CodeEditor() { }
+Project::CodeEditor::~CodeEditor() { }
 
-JSON::CodeEditor &JSON::CodeEditor::instance()
+Project::CodeEditor &Project::CodeEditor::instance()
 {
     static CodeEditor instance;
     return instance;
 }
 
-QString JSON::CodeEditor::defaultCode() const
+QString Project::CodeEditor::defaultCode() const
 {
     return DEFAULT_CODE;
 }
 
-void JSON::CodeEditor::displayWindow()
+void Project::CodeEditor::displayWindow()
 {
     showNormal();
 }

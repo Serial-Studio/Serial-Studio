@@ -107,12 +107,12 @@
         <file>qml/FramelessWindow/Titlebar.qml</file>
         <file>qml/FramelessWindow/WindowButton.qml</file>
         <file>qml/FramelessWindow/WindowButtonMacOS.qml</file>
-        <file>qml/JsonEditor/Footer.qml</file>
-        <file>qml/JsonEditor/GroupEditor.qml</file>
-        <file>qml/JsonEditor/Header.qml</file>
-        <file>qml/JsonEditor/JsonDatasetDelegate.qml</file>
-        <file>qml/JsonEditor/JsonGroupDelegate.qml</file>
-        <file>qml/JsonEditor/TreeView.qml</file>
+        <file>qml/ProjectEditor/Footer.qml</file>
+        <file>qml/ProjectEditor/GroupEditor.qml</file>
+        <file>qml/ProjectEditor/Header.qml</file>
+        <file>qml/ProjectEditor/JsonDatasetDelegate.qml</file>
+        <file>qml/ProjectEditor/JsonGroupDelegate.qml</file>
+        <file>qml/ProjectEditor/TreeView.qml</file>
         <file>qml/Panes/SetupPanes/Devices/BluetoothLE.qml</file>
         <file>qml/Panes/SetupPanes/Devices/Network.qml</file>
         <file>qml/Panes/SetupPanes/Devices/Serial.qml</file>
@@ -135,7 +135,7 @@
         <file>qml/Windows/Acknowledgements.qml</file>
         <file>qml/Windows/CsvPlayer.qml</file>
         <file>qml/Windows/Donate.qml</file>
-        <file>qml/Windows/JsonEditor.qml</file>
+        <file>qml/Windows/ProjectEditor.qml</file>
         <file>qml/Windows/MainWindow.qml</file>
         <file>qml/Windows/MQTTConfiguration.qml</file>
         <file>qml/main.qml</file>

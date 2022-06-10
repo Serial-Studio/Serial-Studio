@@ -20,13 +20,14 @@
  * THE SOFTWARE.
  */
 
+#include "Generator.h"
+
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QRegularExpression>
 
-#include <JSON/Editor.h>
-#include <JSON/Generator.h>
-#include <JSON/CodeEditor.h>
+#include <Project/Model.h>
+#include <Project/CodeEditor.h>
 
 #include <CSV/Player.h>
 #include <IO/Manager.h>
@@ -112,7 +113,7 @@ void JSON::Generator::loadJsonMap()
     // clang-format off
     auto file = QFileDialog::getOpenFileName(Q_NULLPTR,
                                              tr("Select JSON map file"),
-                                             Editor::instance().jsonProjectsPath(),
+                                             Project::Model::instance().jsonProjectsPath(),
                                              tr("JSON files") + " (*.json)");
     // clang-format on
 
@@ -161,7 +162,7 @@ void JSON::Generator::loadJsonMap(const QString &path)
             // Construct frame parsing code
             m_frameParserCode = document.object().value("frameParser").toString();
             if (m_frameParserCode.isEmpty())
-                m_frameParserCode = JSON::CodeEditor::instance().defaultCode();
+                m_frameParserCode = Project::CodeEditor::instance().defaultCode();
 
             // Hacks to be able to evaluate the frame parser function
             m_frameParserCode = "(" + m_frameParserCode + ")";

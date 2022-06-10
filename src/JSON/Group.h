@@ -30,6 +30,11 @@ namespace UI
 class Dashboard;
 }
 
+namespace Project
+{
+class Model;
+}
+
 namespace JSON
 {
 /**
@@ -60,7 +65,7 @@ public:
     QString title() const;
     QString widget() const;
     int datasetCount() const;
-    QVector<Dataset> &datasets();
+    QVector<JSON::Dataset> &datasets();
     bool read(const QJsonObject &object);
 
     Q_INVOKABLE const JSON::Dataset &getDataset(const int index) const;
@@ -68,9 +73,9 @@ public:
 private:
     QString m_title;
     QString m_widget;
-    QVector<Dataset> m_datasets;
+    QVector<JSON::Dataset> m_datasets;
 
-    friend class Editor;
     friend class UI::Dashboard;
+    friend class Project::Model;
 };
 }

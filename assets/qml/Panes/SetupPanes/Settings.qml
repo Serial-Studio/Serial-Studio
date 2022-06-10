@@ -30,12 +30,9 @@ Control {
     //
     // Access to properties
     //
-    property alias endSequence: _endSequence.text
     property alias tcpPlugins: _tcpPlugins.checked
     property alias language: _langCombo.currentIndex
-    property alias startSequence: _startSequence.text
     property alias windowShadows: _windowShadows.checked
-    property alias separatorSequence: _separatorSequence.text
 
     //
     // Layout
@@ -83,54 +80,6 @@ Control {
                 onCurrentIndexChanged: {
                     if (currentIndex !== Cpp_ThemeManager.themeId)
                         Cpp_ThemeManager.setTheme(currentIndex)
-                }
-            }
-
-            //
-            // Start sequence
-            //
-            Label {
-                text: qsTr("Start sequence") + ": "
-            } TextField {
-                id: _startSequence
-                Layout.fillWidth: true
-                placeholderText: "/*"
-                text: "/*"
-                onTextChanged: {
-                    if (text !== Cpp_IO_Manager.startSequence)
-                        Cpp_IO_Manager.startSequence = text
-                }
-            }
-
-            //
-            // End sequence
-            //
-            Label {
-                text: qsTr("End sequence") + ": "
-            } TextField {
-                id: _endSequence
-                Layout.fillWidth: true
-                placeholderText: "*/"
-                text: "*/"
-                onTextChanged: {
-                    if (text !== Cpp_IO_Manager.finishSequence)
-                        Cpp_IO_Manager.finishSequence = text
-                }
-            }
-
-            //
-            // End sequence
-            //
-            Label {
-                text: qsTr("Data separator") + ": "
-            } TextField {
-                id: _separatorSequence
-                Layout.fillWidth: true
-                placeholderText: ","
-                text: ","
-                onTextChanged: {
-                    if (text !== Cpp_IO_Manager.separatorSequence)
-                        Cpp_IO_Manager.separatorSequence = text
                 }
             }
 

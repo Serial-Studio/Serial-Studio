@@ -34,20 +34,20 @@ ColumnLayout {
     // Connections with JSON editor model
     //
     Connections {
-        target: Cpp_JSON_Editor
+        target: Cpp_Project_Model
 
         function onGroupCountChanged() {
             tabRepeater.model = 0
             stackRepeater.model = 0
-            tabRepeater.model = Cpp_JSON_Editor.groupCount
-            stackRepeater.model = Cpp_JSON_Editor.groupCount
+            tabRepeater.model = Cpp_Project_Model.groupCount
+            stackRepeater.model = Cpp_Project_Model.groupCount
         }
 
         function onGroupOrderChanged() {
             tabRepeater.model = 0
             stackRepeater.model = 0
-            tabRepeater.model = Cpp_JSON_Editor.groupCount
-            stackRepeater.model = Cpp_JSON_Editor.groupCount
+            tabRepeater.model = Cpp_Project_Model.groupCount
+            stackRepeater.model = Cpp_Project_Model.groupCount
         }
     }
 
@@ -77,7 +77,7 @@ ColumnLayout {
             id: tabRepeater
             delegate: TabButton {
                 height: 24
-                text: qsTr("Group %1").arg(index + 1) + " <i>" + (Cpp_JSON_Editor.groupTitle(index)) + "</i>"
+                text: qsTr("Group %1").arg(index + 1) + " <i>" + (Cpp_Project_Model.groupTitle(index)) + "</i>"
             }
         }
     }

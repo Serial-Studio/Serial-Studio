@@ -29,7 +29,7 @@ import Qt.labs.settings
 import "../Panes"
 import "../Windows"
 import "../Widgets"
-import "../JsonEditor"
+import "../ProjectEditor"
 import "../FramelessWindow" as FramelessWindow
 import "../PlatformDependent" as PlatformDependent
 
@@ -293,7 +293,7 @@ FramelessWindow.CustomWindow {
                 setupChecked: root.setupVisible
                 consoleChecked: root.consoleVisible
                 dashboardChecked: root.dashboardVisible
-                onJsonEditorClicked: app.jsonEditorWindow.show()
+                onProjectEditorClicked: app.projectEditorWindow.show()
                 onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
                 onDashboardClicked: {

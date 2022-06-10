@@ -85,7 +85,7 @@ CONFIG(release, debug|release) {
 CONFIG(unity_build) {
     CONFIG  += ltcg                             # Enable linker optimization
     DEFINES += UNITY_BUILD=1                    # Enable unity build
-    SOURCES += src/SingleCompilationUnit.cpp    # Include single compilation unit in code
+    SOURCES +=    # src/SingleCompilationUnit.cpp # Include single compilation unit in code
 }
 
 #-----------------------------------------------------------------------------------------
@@ -165,9 +165,7 @@ HEADERS += \
     src/IO/Drivers/Serial.h \
     src/IO/HAL_Driver.h \
     src/IO/Manager.h \
-    src/JSON/CodeEditor.h \
     src/JSON/Dataset.h \
-    src/JSON/Editor.h \
     src/JSON/Frame.h \
     src/JSON/Generator.h \
     src/JSON/Group.h \
@@ -179,10 +177,11 @@ HEADERS += \
     src/Misc/Translator.h \
     src/Misc/Utilities.h \
     src/Plugins/Server.h \
+    src/Project/CodeEditor.h \
+    src/Project/Model.h \
     src/UI/Dashboard.h \
     src/UI/DashboardWidget.h \
     src/UI/DeclarativeWidget.h \
-    src/UI/Widgets/Terminal.h \
     src/UI/Widgets/Accelerometer.h \
     src/UI/Widgets/Bar.h \
     src/UI/Widgets/Common/AnalogGauge.h \
@@ -198,7 +197,8 @@ HEADERS += \
     src/UI/Widgets/Gyroscope.h \
     src/UI/Widgets/LEDPanel.h \
     src/UI/Widgets/MultiPlot.h \
-    src/UI/Widgets/Plot.h
+    src/UI/Widgets/Plot.h \
+    src/UI/Widgets/Terminal.h
 
 SOURCES += \
     src/CSV/Export.cpp \
@@ -209,9 +209,7 @@ SOURCES += \
     src/IO/Drivers/Network.cpp \
     src/IO/Drivers/Serial.cpp \
     src/IO/Manager.cpp \
-    src/JSON/CodeEditor.cpp \
     src/JSON/Dataset.cpp \
-    src/JSON/Editor.cpp \
     src/JSON/Frame.cpp \
     src/JSON/Generator.cpp \
     src/JSON/Group.cpp \
@@ -223,10 +221,11 @@ SOURCES += \
     src/Misc/Translator.cpp \
     src/Misc/Utilities.cpp \
     src/Plugins/Server.cpp \
+    src/Project/CodeEditor.cpp \
+    src/Project/Model.cpp \
     src/UI/Dashboard.cpp \
     src/UI/DashboardWidget.cpp \
     src/UI/DeclarativeWidget.cpp \
-    src/UI/Widgets/Terminal.cpp \
     src/UI/Widgets/Accelerometer.cpp \
     src/UI/Widgets/Bar.cpp \
     src/UI/Widgets/Common/AnalogGauge.cpp \
@@ -243,6 +242,7 @@ SOURCES += \
     src/UI/Widgets/LEDPanel.cpp \
     src/UI/Widgets/MultiPlot.cpp \
     src/UI/Widgets/Plot.cpp \
+    src/UI/Widgets/Terminal.cpp \
     src/main.cpp
 
 #-----------------------------------------------------------------------------------------
@@ -255,7 +255,7 @@ DISTFILES += \
     assets/qml/Widgets/*.qml \
     assets/qml/Windows/*.qml \
     assets/qml/Dashboard/*.qml \
-    assets/qml/JsonEditor/*.qml \
+    assets/qml/ProjectEditor/*.qml \
     assets/qml/FramelessWindow/*.qml \
     assets/qml/Panes/SetupPanes/*.qml \
     assets/qml/PlatformDependent/*.qml \

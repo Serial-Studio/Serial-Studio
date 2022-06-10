@@ -1019,7 +1019,7 @@
     </message>
 </context>
 <context>
-    <name>JsonEditor</name>
+    <name>ProjectEditor</name>
     <message>
         <source>JSON Editor - %1</source>
         <translation>JSON编辑器 - %1</translation>

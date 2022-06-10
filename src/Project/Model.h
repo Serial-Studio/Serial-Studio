@@ -27,18 +27,18 @@
 #include <JSON/Group.h>
 #include <JSON/Dataset.h>
 
-namespace JSON
+namespace Project
 {
 /**
- * @brief The Editor class
+ * @brief The Model class
  *
- * The editor class allows the representation of a Serial Studio JSON
+ * The model class allows the representation of a Serial Studio JSON
  * project file in the graphical user interface.
  *
  * Additionaly, the class facilitates the modificiation of a project
  * file or the creation of new JSON project files.
  */
-class Editor : public QObject
+class Model : public QObject
 {
     // clang-format off
     Q_OBJECT
@@ -85,14 +85,14 @@ Q_SIGNALS:
     void datasetChanged(const int group, const int dataset);
 
 private:
-    explicit Editor();
-    Editor(Editor &&) = delete;
-    Editor(const Editor &) = delete;
-    Editor &operator=(Editor &&) = delete;
-    Editor &operator=(const Editor &) = delete;
+    explicit Model();
+    Model(Model &&) = delete;
+    Model(const Model &) = delete;
+    Model &operator=(Model &&) = delete;
+    Model &operator=(const Model &) = delete;
 
 public:
-    static Editor &instance();
+    static Model &instance();
 
     Q_INVOKABLE StringList availableGroupLevelWidgets();
     Q_INVOKABLE StringList availableDatasetLevelWidgets();
@@ -113,7 +113,7 @@ public:
     Q_INVOKABLE bool saveJsonFile();
     Q_INVOKABLE int datasetCount(const int group) const;
 
-    Q_INVOKABLE const Group &getGroup(const int index) const;
+    Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
     Q_INVOKABLE const JSON::Dataset &getDataset(const int group, const int index) const;
 
     Q_INVOKABLE QString groupTitle(const int group) const;
@@ -187,6 +187,6 @@ private:
     bool m_modified;
     QString m_filePath;
 
-    QVector<Group> m_groups;
+    QVector<JSON::Group> m_groups;
 };
 }

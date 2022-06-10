@@ -29,7 +29,7 @@
 #include <QPushButton>
 #include <QPlainTextEdit>
 
-namespace JSON
+namespace Project
 {
 class CodeEditor : public QDialog
 {

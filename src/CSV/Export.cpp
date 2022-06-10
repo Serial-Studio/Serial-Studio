@@ -20,6 +20,8 @@
  * THE SOFTWARE.
  */
 
+#include "Export.h"
+
 #include <QDir>
 #include <QUrl>
 #include <QFileInfo>
@@ -28,9 +30,8 @@
 
 #include <AppInfo.h>
 #include <IO/Manager.h>
-#include <CSV/Export.h>
-#include <JSON/Editor.h>
 #include <UI/Dashboard.h>
+#include <Project/Model.h>
 #include <Misc/Utilities.h>
 #include <Misc/TimerEvents.h>
 
@@ -219,11 +220,11 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
     // Get number of fields by counting datasets with non-duplicated indexes
     QVector<int> fields;
     QVector<QString> titles;
-    for (int i = 0; i < JSON::Editor::instance().groupCount(); ++i)
+    for (int i = 0; i < Project::Model::instance().groupCount(); ++i)
     {
-        for (int j = 0; j < JSON::Editor::instance().datasetCount(i); ++j)
+        for (int j = 0; j < Project::Model::instance().datasetCount(i); ++j)
         {
-            auto dataset = JSON::Editor::instance().getDataset(i, j);
+            auto dataset = Project::Model::instance().getDataset(i, j);
             if (!fields.contains(dataset.index()))
             {
                 fields.append(dataset.index());

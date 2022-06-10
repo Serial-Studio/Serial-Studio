@@ -26,7 +26,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import Qt.labs.settings
 
-import "../JsonEditor"
+import "../ProjectEditor"
 import "../Widgets" as Widgets
 import "../FramelessWindow" as FramelessWindow
 
@@ -38,7 +38,7 @@ FramelessWindow.CustomWindow {
     //
     minimumWidth: 910
     minimumHeight: 720
-    title: qsTr("JSON Editor - %1").arg(Cpp_JSON_Editor.jsonFileName)
+    title: qsTr("Project Editor - %1").arg(Cpp_Project_Model.jsonFileName)
 
     //
     // Customize window border
@@ -49,12 +49,12 @@ FramelessWindow.CustomWindow {
     //
     // Ensure that current JSON file is shown
     //
-    Component.onCompleted: Cpp_JSON_Editor.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
+    Component.onCompleted: Cpp_Project_Model.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
 
     //
     // Ask user to save changes before closing the window
     //
-    onClosing: (close) => close.accepted = Cpp_JSON_Editor.askSave()
+    onClosing: (close) => close.accepted = Cpp_Project_Model.askSave()
 
     //
     // Dummy string to increase width of buttons
@@ -65,7 +65,7 @@ FramelessWindow.CustomWindow {
     // Save window size
     //
     Settings {
-        category: "JSONEditor"
+        category: "ProjectEditor"
         property alias windowX: root.x
         property alias windowY: root.y
         property alias windowWidth: root.width
@@ -159,7 +159,7 @@ FramelessWindow.CustomWindow {
                 Layout.maximumWidth: 240
                 Layout.topMargin: app.spacing * 2
                 Layout.bottomMargin: app.spacing * 2
-                visible: Cpp_JSON_Editor.groupCount !== 0
+                visible: Cpp_Project_Model.groupCount !== 0
             }*/
 
             //
@@ -169,7 +169,7 @@ FramelessWindow.CustomWindow {
                 id: groupEditor
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                visible: Cpp_JSON_Editor.groupCount !== 0
+                visible: Cpp_Project_Model.groupCount !== 0
             }
 
             //
@@ -178,7 +178,7 @@ FramelessWindow.CustomWindow {
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                visible: Cpp_JSON_Editor.groupCount === 0
+                visible: Cpp_Project_Model.groupCount === 0
 
                 ColumnLayout {
                     spacing: app.spacing

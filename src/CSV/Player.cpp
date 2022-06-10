@@ -20,6 +20,8 @@
  * THE SOFTWARE.
  */
 
+#include "Player.h"
+
 #include <QtMath>
 #include <QFileDialog>
 #include <QApplication>
@@ -27,7 +29,6 @@
 #include <qtcsv/stringdata.h>
 #include <qtcsv/reader.h>
 
-#include <CSV/Player.h>
 #include <IO/Manager.h>
 #include <Misc/Utilities.h>
 

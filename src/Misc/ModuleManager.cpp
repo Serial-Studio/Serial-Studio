@@ -27,10 +27,11 @@
 
 #include <JSON/Frame.h>
 #include <JSON/Group.h>
-#include <JSON/Editor.h>
 #include <JSON/Dataset.h>
 #include <JSON/Generator.h>
-#include <JSON/CodeEditor.h>
+
+#include <Project/Model.h>
+#include <Project/CodeEditor.h>
 
 #include <IO/Manager.h>
 #include <IO/Console.h>
@@ -153,9 +154,9 @@ void Misc::ModuleManager::initializeQmlInterface()
     auto csvPlayer = &CSV::Player::instance();
     auto ioManager = &IO::Manager::instance();
     auto ioConsole = &IO::Console::instance();
-    auto jsonEditor = &JSON::Editor::instance();
     auto mqttClient = &MQTT::Client::instance();
     auto uiDashboard = &UI::Dashboard::instance();
+    auto projectModel = &Project::Model::instance();
     auto ioSerial = &IO::Drivers::Serial::instance();
     auto jsonGenerator = &JSON::Generator::instance();
     auto pluginsBridge = &Plugins::Server::instance();
@@ -163,9 +164,9 @@ void Misc::ModuleManager::initializeQmlInterface()
     auto miscMacExtras = &Misc::MacExtras::instance();
     auto ioNetwork = &IO::Drivers::Network::instance();
     auto miscTranslator = &Misc::Translator::instance();
-    auto jsonCodeEditor = &JSON::CodeEditor::instance();
     auto miscTimerEvents = &Misc::TimerEvents::instance();
     auto miscThemeManager = &Misc::ThemeManager::instance();
+    auto projectCodeEditor = &Project::CodeEditor::instance();
     auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
 
     // Initialize third-party modules
@@ -217,9 +218,9 @@ void Misc::ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_IO_Console", ioConsole);
     c->setContextProperty("Cpp_IO_Manager", ioManager);
     c->setContextProperty("Cpp_IO_Network", ioNetwork);
-    c->setContextProperty("Cpp_JSON_Editor", jsonEditor);
     c->setContextProperty("Cpp_MQTT_Client", mqttClient);
     c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
+    c->setContextProperty("Cpp_Project_Model", projectModel);
     c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
     c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
     c->setContextProperty("Cpp_Misc_MacExtras", miscMacExtras);
@@ -227,8 +228,8 @@ void Misc::ModuleManager::initializeQmlInterface()
     c->setContextProperty("Cpp_IO_Bluetooth_LE", ioBluetoothLE);
     c->setContextProperty("Cpp_ThemeManager", miscThemeManager);
     c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
-    c->setContextProperty("Cpp_JSON_CodeEditor", jsonCodeEditor);
     c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
+    c->setContextProperty("Cpp_Project_CodeEditor", projectCodeEditor);
     c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
     c->setContextProperty("Cpp_ModuleManager", this);
 

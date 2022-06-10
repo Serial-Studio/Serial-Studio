@@ -86,9 +86,7 @@ Item {
         //
         property alias language: settings.language
         property alias tcpPlugins: settings.tcpPlugins
-        property alias endSequence: settings.endSequence
-        property alias startSequence: settings.startSequence
-        property alias separatorSequence: settings.separatorSequence
+        property alias windowShadows: settings.windowShadows
     }
 
     //

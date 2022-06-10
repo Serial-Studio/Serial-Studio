@@ -41,21 +41,21 @@ Widgets.Window {
     // Connections with JSON editor model
     //
     Connections {
-        target: Cpp_JSON_Editor
+        target: Cpp_Project_Model
 
         function onGroupCountChanged() {
             view.model = 0
-            view.model = Cpp_JSON_Editor.groupCount
+            view.model = Cpp_Project_Model.groupCount
         }
 
         function onGroupOrderChanged() {
             view.model = 0
-            view.model = Cpp_JSON_Editor.groupCount
+            view.model = Cpp_Project_Model.groupCount
         }
 
         function onDatasetChanged() {
             view.model = 0
-            view.model = Cpp_JSON_Editor.groupCount
+            view.model = Cpp_Project_Model.groupCount
         }
     }
 
@@ -67,11 +67,11 @@ Widgets.Window {
         anchors.fill: parent
         spacing: app.spacing * 2
         anchors.margins: app.spacing
-        model: Cpp_JSON_Editor.groupCount
+        model: Cpp_Project_Model.groupCount
 
         delegate: Loader {
             width: view.width - app.spacing * 2
-            height: Cpp_JSON_Editor.datasetCount(index) * 24 + 24
+            height: Cpp_Project_Model.datasetCount(index) * 24 + 24
 
             sourceComponent: ColumnLayout {
                 id: groupDelegate
@@ -96,7 +96,7 @@ Widgets.Window {
                         Layout.fillWidth: true
                         elide: Label.ElideRight
                         Layout.alignment: Qt.AlignVCenter
-                        text: Cpp_JSON_Editor.groupTitle(groupDelegate.groupId)
+                        text: Cpp_Project_Model.groupTitle(groupDelegate.groupId)
                     }
 
                     Label {
@@ -104,12 +104,12 @@ Widgets.Window {
                         visible: text !== "[]"
                         font.family: app.monoFont
                         Layout.alignment: Qt.AlignVCenter
-                        text: "[" + Cpp_JSON_Editor.groupWidget(groupDelegate.groupId) + "]"
+                        text: "[" + Cpp_Project_Model.groupWidget(groupDelegate.groupId) + "]"
                     }
                 }
 
                 Repeater {
-                    model: Cpp_JSON_Editor.datasetCount(groupDelegate.groupId)
+                    model: Cpp_Project_Model.datasetCount(groupDelegate.groupId)
 
                     delegate: Loader {
                         Layout.fillWidth: true
@@ -133,7 +133,7 @@ Widgets.Window {
                                 Layout.fillWidth: true
                                 elide: Label.ElideRight
                                 Layout.alignment: Qt.AlignVCenter
-                                text: Cpp_JSON_Editor.datasetTitle(groupDelegate.groupId, index)
+                                text: Cpp_Project_Model.datasetTitle(groupDelegate.groupId, index)
 
                                 MouseArea {
                                     anchors.fill: parent
@@ -146,7 +146,7 @@ Widgets.Window {
                                 visible: text !== "[]"
                                 font.family: app.monoFont
                                 Layout.alignment: Qt.AlignVCenter
-                                text: "[" + Cpp_JSON_Editor.datasetWidget(groupDelegate.groupId, index) + "]"
+                                text: "[" + Cpp_Project_Model.datasetWidget(groupDelegate.groupId, index) + "]"
                             }
                         }
                     }

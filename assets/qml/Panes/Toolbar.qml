@@ -46,7 +46,7 @@ Control {
     signal setupClicked()
     signal consoleClicked()
     signal dashboardClicked()
-    signal jsonEditorClicked()
+    signal projectEditorClicked()
 
     //
     // Aliases to button check status
@@ -253,8 +253,8 @@ Control {
             icon.height: 24
             Layout.fillHeight: true
             icon.source: "qrc:/icons/json.svg"
-            onClicked: root.jsonEditorClicked()
-            text: qsTr("JSON Editor") + _btSpacer
+            onClicked: root.projectEditorClicked()
+            text: qsTr("Project Editor") + _btSpacer
             icon.color: Cpp_ThemeManager.menubarText
             palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1

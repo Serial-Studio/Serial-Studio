@@ -52,12 +52,12 @@ Page {
     // Connections with JSON editor
     //
     Connections {
-        target: Cpp_JSON_Editor
+        target: Cpp_Project_Model
 
         function onGroupChanged(id) {
             if (id === group) {
                 grid.model = 0
-                grid.model = Cpp_JSON_Editor.datasetCount(group)
+                grid.model = Cpp_Project_Model.datasetCount(group)
                 grid.positionViewAtIndex(grid.count - 1, GridView.Beginning)
             }
         }
@@ -140,11 +140,11 @@ Page {
                 Layout.minimumWidth: 320
                 placeholderText: qsTr("Title")
                 Layout.alignment: Qt.AlignVCenter
-                text: Cpp_JSON_Editor.groupTitle(group)
+                text: Cpp_Project_Model.groupTitle(group)
 
                 onTextChanged: {
-                    Cpp_JSON_Editor.setGroupTitle(group, text)
-                    root.title = qsTr("Group %1 - %2").arg(group + 1).arg(Cpp_JSON_Editor.groupTitle(group))
+                    Cpp_Project_Model.setGroupTitle(group, text)
+                    root.title = qsTr("Group %1 - %2").arg(group + 1).arg(Cpp_Project_Model.groupTitle(group))
                 }
             }
 
@@ -161,12 +161,12 @@ Page {
                 id: widget
                 Layout.minimumWidth: 180
                 Layout.alignment: Qt.AlignVCenter
-                model: Cpp_JSON_Editor.availableGroupLevelWidgets()
-                currentIndex: Cpp_JSON_Editor.groupWidgetIndex(group)
+                model: Cpp_Project_Model.availableGroupLevelWidgets()
+                currentIndex: Cpp_Project_Model.groupWidgetIndex(group)
                 onCurrentIndexChanged: {
-                    var prevIndex = Cpp_JSON_Editor.groupWidgetIndex(group)
+                    var prevIndex = Cpp_Project_Model.groupWidgetIndex(group)
                     if (currentIndex !== prevIndex) {
-                        if (!Cpp_JSON_Editor.setGroupWidget(group, currentIndex))
+                        if (!Cpp_Project_Model.setGroupWidget(group, currentIndex))
                             currentIndex = prevIndex
                     }
                 }
@@ -180,7 +180,7 @@ Page {
                 icon.source: "qrc:/icons/up.svg"
                 Layout.alignment: Qt.AlignVCenter
                 icon.color: Cpp_ThemeManager.text
-                onClicked: Cpp_JSON_Editor.moveGroupUp(group)
+                onClicked: Cpp_Project_Model.moveGroupUp(group)
             }
 
             RoundButton {
@@ -190,8 +190,8 @@ Page {
                 Layout.alignment: Qt.AlignVCenter
                 icon.color: Cpp_ThemeManager.text
                 icon.source: "qrc:/icons/down.svg"
-                enabled: group < Cpp_JSON_Editor.groupCount - 1
-                onClicked: Cpp_JSON_Editor.moveGroupDown(group)
+                enabled: group < Cpp_Project_Model.groupCount - 1
+                onClicked: Cpp_Project_Model.moveGroupDown(group)
             }
 
             RoundButton {
@@ -200,7 +200,7 @@ Page {
                 Layout.alignment: Qt.AlignVCenter
                 icon.color: Cpp_ThemeManager.text
                 icon.source: "qrc:/icons/delete-item.svg"
-                onClicked: Cpp_JSON_Editor.deleteGroup(group)
+                onClicked: Cpp_Project_Model.deleteGroup(group)
             }
         }
 
@@ -263,7 +263,7 @@ Page {
                 anchors.fill: parent
                 cellWidth: root.cellWidth
                 cellHeight: root.cellHeight
-                model: Cpp_JSON_Editor.datasetCount(group)
+                model: Cpp_Project_Model.datasetCount(group)
 
                 ScrollBar.vertical: ScrollBar {
                     id: scroll
@@ -305,7 +305,7 @@ Page {
             palette.window: Cpp_ThemeManager.toolbarGradient1
             visible: widget.currentIndex === 0 || widget.currentIndex === 4
             onClicked: {
-                Cpp_JSON_Editor.addDataset(group)
+                Cpp_Project_Model.addDataset(group)
                 grid.positionViewAtIndex(grid.count - 1, GridView.Beginning)
             }
         }

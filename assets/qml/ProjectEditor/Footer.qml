@@ -106,7 +106,7 @@ Rectangle {
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
             onClicked: {
-                Cpp_JSON_Editor.addGroup()
+                Cpp_Project_Model.addGroup()
                 root.scrollToBottom()
             }
         }
@@ -116,9 +116,9 @@ Rectangle {
             icon.height: 24
             Layout.fillWidth: true
             icon.source: "qrc:/icons/code.svg"
-            text: qsTr("Edit frame parsing code")
+            text: qsTr("Customize frame parser")
             icon.color: Cpp_ThemeManager.menubarText
-            onClicked: Cpp_JSON_CodeEditor.displayWindow()
+            onClicked: Cpp_Project_CodeEditor.displayWindow()
             palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
@@ -133,7 +133,7 @@ Rectangle {
             icon.height: 24
             icon.source: "qrc:/icons/open.svg"
             icon.color: Cpp_ThemeManager.menubarText
-            onClicked: Cpp_JSON_Editor.openJsonFile()
+            onClicked: Cpp_Project_Model.openJsonFile()
             palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
@@ -145,7 +145,7 @@ Rectangle {
             icon.height: 24
             icon.source: "qrc:/icons/new.svg"
             icon.color: Cpp_ThemeManager.menubarText
-            onClicked: Cpp_JSON_Editor.newJsonFile()
+            onClicked: Cpp_Project_Model.newJsonFile()
             text: qsTr("Create new project") + _btSpacer
             palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
@@ -156,16 +156,16 @@ Rectangle {
             icon.width: 24
             icon.height: 24
             opacity: enabled ? 1: 0.5
-            enabled: Cpp_JSON_Editor.modified
+            enabled: Cpp_Project_Model.modified
             icon.source: "qrc:/icons/apply.svg"
             icon.color: Cpp_ThemeManager.menubarText
             palette.buttonText: Cpp_ThemeManager.menubarText
             palette.button: Cpp_ThemeManager.toolbarGradient1
             palette.window: Cpp_ThemeManager.toolbarGradient1
-            text: (Cpp_JSON_Editor.jsonFilePath.length > 0 ? qsTr("Apply") : qsTr("Save")) + _btSpacer
+            text: (Cpp_Project_Model.jsonFilePath.length > 0 ? qsTr("Apply") : qsTr("Save")) + _btSpacer
 
             onClicked: {
-                if (Cpp_JSON_Editor.saveJsonFile())
+                if (Cpp_Project_Model.saveJsonFile())
                     root.closeWindow()
             }
         }
