@@ -28,24 +28,6 @@
 #include <Misc/Utilities.h>
 #include <Misc/ThemeManager.h>
 
-static const QString DEFAULT_CODE
-    = "/* \n"
-      " * Frame parsing function, you can modify this to suit your\n"
-      " * needs. By customizing this code, you can use a single JSON\n"
-      " * project file to process different kinds of frames that are\n"
-      " * sent by the microcontroller or device that is connected to\n"
-      " * Serial Studio.\n"
-      " *\n"
-      " * @note only data that is *inside* the data delimiters will\n"
-      " *       be processed by this function!\n"
-      " *\n"
-      " * @param frame string with the latest received frame.\n"
-      " * @param separator data sepatator sequence set by the JSON project.\n"
-      " */\n"
-      "function parse(frame, separator) {\n"
-      "    return frame.split(separator);\n"
-      "}";
-
 Project::CodeEditor::CodeEditor()
 {
     // Setup syntax highlighter
@@ -94,7 +76,7 @@ Project::CodeEditor::CodeEditor()
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     palette.setColor(QPalette::PlaceholderText, theme->consolePlaceholderText());
 #endif
-    m_textEdit.setPalette(palette);
+    setPalette(palette);
 
     // Setup layout
     auto layout = new QVBoxLayout(this);
@@ -121,7 +103,15 @@ Project::CodeEditor &Project::CodeEditor::instance()
 
 QString Project::CodeEditor::defaultCode() const
 {
-    return DEFAULT_CODE;
+    QString code;
+    QFile file(":/scripts/frame-parser.js");
+    if (file.open(QFile::ReadOnly))
+    {
+        code = QString::fromUtf8(file.readAll());
+        file.close();
+    }
+
+    return code;
 }
 
 void Project::CodeEditor::displayWindow()
@@ -143,7 +133,7 @@ void Project::CodeEditor::onNewClicked()
     }
 
     // Load default template
-    m_textEdit.setPlainText(DEFAULT_CODE);
+    m_textEdit.setPlainText(defaultCode());
     save(true);
 }
 

@@ -179,5 +179,6 @@
         <file>window-border/restore.svg</file>
         <file>window-border/unmaximize.svg</file>
         <file>icons/paste.svg</file>
+        <file>scripts/frame-parser.js</file>
     </qresource>
 </RCC>
