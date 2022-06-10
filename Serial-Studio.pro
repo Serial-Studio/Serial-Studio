@@ -72,20 +72,13 @@ CONFIG(debug, debug|release) {
 }
 
 CONFIG(release, debug|release) {
-    CONFIG += unity_build
-
+    CONFIG += ltcg
     *msvc*: {
         QMAKE_CXXFLAGS *= -MP
         INCLUDEPATH += $$OUT_PWD
         INCLUDEPATH += $$OUT_PWD/debug
         INCLUDEPATH += $$OUT_PWD/release
     }
-}
-
-CONFIG(unity_build) {
-    CONFIG  += ltcg                             # Enable linker optimization
-    DEFINES += UNITY_BUILD=1                    # Enable unity build
-    SOURCES +=    # src/SingleCompilationUnit.cpp # Include single compilation unit in code
 }
 
 #-----------------------------------------------------------------------------------------
