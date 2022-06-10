@@ -24,10 +24,13 @@
 
 #include <QObject>
 #include <QDialog>
+#include <QToolBar>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QPlainTextEdit>
+
+#include <QSourceHighlite/qsourcehighliter.h>
 
 namespace Project
 {
@@ -50,7 +53,20 @@ public:
 public Q_SLOTS:
     void displayWindow();
 
+private Q_SLOTS:
+    void onNewClicked();
+    void onOpenClicked();
+    void onSaveClicked();
+    void onHelpClicked();
+
 private:
+    bool checkModified();
+    bool save(const bool silent = false);
+    void closeEvent(QCloseEvent *event) override;
+
+private:
+    QToolBar m_toolbar;
     QPlainTextEdit m_textEdit;
+    QSourceHighlite::QSourceHighliter *m_highlighter;
 };
 }

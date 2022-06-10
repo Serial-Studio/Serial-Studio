@@ -18,6 +18,7 @@
         <file>icons/compass.svg</file>
         <file>icons/connect.svg</file>
         <file>icons/copy.svg</file>
+        <file>icons/cut.svg</file>
         <file>icons/dashboard.svg</file>
         <file>icons/dataset.svg</file>
         <file>icons/delete-item.svg</file>
@@ -39,6 +40,7 @@
         <file>icons/graphs.svg</file>
         <file>icons/group.svg</file>
         <file>icons/gyro.svg</file>
+        <file>icons/heart-broken.svg</file>
         <file>icons/help.svg</file>
         <file>icons/hide-all.svg</file>
         <file>icons/info.svg</file>
@@ -59,6 +61,7 @@
         <file>icons/points.svg</file>
         <file>icons/power.svg</file>
         <file>icons/ram.svg</file>
+        <file>icons/redo.svg</file>
         <file>icons/refresh.svg</file>
         <file>icons/registration.svg</file>
         <file>icons/restore.svg</file>
@@ -75,7 +78,9 @@
         <file>icons/settings.svg</file>
         <file>icons/show-all.svg</file>
         <file>icons/start-sequence.svg</file>
+        <file>icons/template.svg</file>
         <file>icons/thermometer.svg</file>
+        <file>icons/undo.svg</file>
         <file>icons/up.svg</file>
         <file>icons/update.svg</file>
         <file>icons/usb.svg</file>
@@ -107,12 +112,6 @@
         <file>qml/FramelessWindow/Titlebar.qml</file>
         <file>qml/FramelessWindow/WindowButton.qml</file>
         <file>qml/FramelessWindow/WindowButtonMacOS.qml</file>
-        <file>qml/ProjectEditor/Footer.qml</file>
-        <file>qml/ProjectEditor/GroupEditor.qml</file>
-        <file>qml/ProjectEditor/Header.qml</file>
-        <file>qml/ProjectEditor/JsonDatasetDelegate.qml</file>
-        <file>qml/ProjectEditor/JsonGroupDelegate.qml</file>
-        <file>qml/ProjectEditor/TreeView.qml</file>
         <file>qml/Panes/SetupPanes/Devices/BluetoothLE.qml</file>
         <file>qml/Panes/SetupPanes/Devices/Network.qml</file>
         <file>qml/Panes/SetupPanes/Devices/Serial.qml</file>
@@ -126,6 +125,12 @@
         <file>qml/PlatformDependent/DecentMenuItem.qml</file>
         <file>qml/PlatformDependent/Menubar.qml</file>
         <file>qml/PlatformDependent/MenubarMacOS.qml</file>
+        <file>qml/ProjectEditor/Footer.qml</file>
+        <file>qml/ProjectEditor/GroupEditor.qml</file>
+        <file>qml/ProjectEditor/Header.qml</file>
+        <file>qml/ProjectEditor/JsonDatasetDelegate.qml</file>
+        <file>qml/ProjectEditor/JsonGroupDelegate.qml</file>
+        <file>qml/ProjectEditor/TreeView.qml</file>
         <file>qml/Widgets/Icon.qml</file>
         <file>qml/Widgets/JSONDropArea.qml</file>
         <file>qml/Widgets/Shadow.qml</file>
@@ -135,9 +140,9 @@
         <file>qml/Windows/Acknowledgements.qml</file>
         <file>qml/Windows/CsvPlayer.qml</file>
         <file>qml/Windows/Donate.qml</file>
-        <file>qml/Windows/ProjectEditor.qml</file>
         <file>qml/Windows/MainWindow.qml</file>
         <file>qml/Windows/MQTTConfiguration.qml</file>
+        <file>qml/Windows/ProjectEditor.qml</file>
         <file>qml/main.qml</file>
         <file>themes/1_Flat.json</file>
         <file>themes/2_Dark.json</file>
@@ -173,6 +178,6 @@
         <file>window-border/minimize.svg</file>
         <file>window-border/restore.svg</file>
         <file>window-border/unmaximize.svg</file>
-        <file>icons/heart-broken.svg</file>
+        <file>icons/paste.svg</file>
     </qresource>
 </RCC>

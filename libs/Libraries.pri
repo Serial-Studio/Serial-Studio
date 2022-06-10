@@ -48,6 +48,7 @@ include($$PWD/qmqtt/qmqtt.pri)
 include($$PWD/QMapControl/QMapControl.pri)
 include($$PWD/QRealFourier/QRealFourier.pri)
 include($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
+include($$PWD/QSourceHighlite/QSourceHighlite.pri)
 
 macx* {
     DEFINES += KDMACTOUCHBAR_BUILD_KDMACTOUCHBAR_SRC
