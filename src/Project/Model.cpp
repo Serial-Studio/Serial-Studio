@@ -21,6 +21,7 @@
  */
 
 #include "Model.h"
+#include "CodeEditor.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -53,6 +54,7 @@ static JSON::Group EMPTY_GROUP;
 Project::Model::Model()
     : m_title("")
     , m_separator("")
+    , m_frameParserCode("")
     , m_frameEndSequence("")
     , m_frameStartSequence("")
     , m_modified(false)
@@ -72,6 +74,8 @@ Project::Model::Model()
     connect(this, &Project::Model::groupCountChanged,
             this, &Project::Model::onModelChanged);
     connect(this, &Project::Model::groupOrderChanged,
+            this, &Project::Model::onModelChanged);
+    connect(this, &Project::Model::frameParserCodeChanged,
             this, &Project::Model::onModelChanged);
     connect(this, &Project::Model::frameEndSequenceChanged,
             this, &Project::Model::onModelChanged);
@@ -317,6 +321,7 @@ bool Project::Model::saveJsonFile()
     json.insert("title", title());
     json.insert("separator", separator());
     json.insert("frameEnd", frameEndSequence());
+    json.insert("frameParser", frameParserCode());
     json.insert("frameStart", frameStartSequence());
 
     // Create group array
@@ -395,6 +400,14 @@ const JSON::Group &Project::Model::getGroup(const int index) const
 const JSON::Dataset &Project::Model::getDataset(const int group, const int index) const
 {
     return getGroup(group).getDataset(index);
+}
+
+/**
+ * Returns the JavaScript code used to parse incoming frames
+ */
+QString Project::Model::frameParserCode() const
+{
+    return m_frameParserCode;
 }
 
 /**
@@ -621,6 +634,7 @@ void Project::Model::newJsonFile()
     // Reset project properties
     setTitle("");
     setSeparator("");
+    setFrameParserCode("");
     setFrameEndSequence("");
     setFrameStartSequence("");
 
@@ -689,6 +703,7 @@ void Project::Model::openJsonFile(const QString &path)
     setTitle(json.value("title").toString());
     setSeparator(json.value("separator").toString());
     setFrameEndSequence(json.value("frameEnd").toString());
+    setFrameParserCode(json.value("frameParser").toString());
     setFrameStartSequence(json.value("frameStart").toString());
 
     // Modify IO manager settings
@@ -746,8 +761,8 @@ void Project::Model::openJsonFile(const QString &path)
     }
 
     // Update UI
-    Q_EMIT groupCountChanged();
     setModified(false);
+    Q_EMIT groupCountChanged();
 }
 
 /**
@@ -771,6 +786,25 @@ void Project::Model::setSeparator(const QString &separator)
     {
         m_separator = separator;
         Q_EMIT separatorChanged();
+    }
+}
+
+/**
+ * Updates the JavaScript code used to parse incoming frames
+ */
+void Project::Model::setFrameParserCode(const QString &code)
+{
+    if (code != m_frameParserCode)
+    {
+        // Update internal model
+        m_frameParserCode = code;
+
+        // Load default code if required
+        if (m_frameParserCode.isEmpty())
+            m_frameParserCode = CodeEditor::instance().defaultCode();
+
+        // Update UI
+        Q_EMIT frameParserCodeChanged();
     }
 }
 

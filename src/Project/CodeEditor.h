@@ -64,6 +64,10 @@ private:
     bool save(const bool silent = false);
     void closeEvent(QCloseEvent *event) override;
 
+private slots:
+    void readCode();
+    void writeChanges();
+
 private:
     QToolBar m_toolbar;
     QPlainTextEdit m_textEdit;

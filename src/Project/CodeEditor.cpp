@@ -21,6 +21,7 @@
  */
 
 #include "CodeEditor.h"
+#include "Model.h"
 
 #include <QFile>
 #include <QJSEngine>
@@ -91,6 +92,10 @@ Project::CodeEditor::CodeEditor()
     // Setup window
     setMinimumSize(QSize(640, 480));
     setWindowTitle(tr("Customize frame parser"));
+
+    // Load code from JSON model automatically
+    connect(&Project::Model::instance(), &Model::frameParserCodeChanged, this,
+            &Project::CodeEditor::readCode);
 }
 
 Project::CodeEditor::~CodeEditor() { }
@@ -231,6 +236,9 @@ bool Project::CodeEditor::save(const bool silent)
     // Update text edit
     m_textEdit.document()->setModified(false);
 
+    // Save code inside JSON project
+    QTimer::singleShot(500, this, SLOT(writeChanges()));
+
     // Show save messagebox
     if (!silent)
         Misc::Utilities::showMessageBox(tr("Frame parser code updated successfully!"),
@@ -269,4 +277,15 @@ void Project::CodeEditor::closeEvent(QCloseEvent *event)
 
     // User saved changes (with no errors) or discarded the changes
     event->accept();
+}
+
+void Project::CodeEditor::readCode()
+{
+    m_textEdit.setPlainText(Model::instance().frameParserCode());
+    m_textEdit.document()->setModified(false);
+}
+
+void Project::CodeEditor::writeChanges()
+{
+    Model::instance().setFrameParserCode(m_textEdit.toPlainText());
 }

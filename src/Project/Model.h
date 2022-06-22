@@ -79,6 +79,7 @@ Q_SIGNALS:
     void separatorChanged();
     void groupCountChanged();
     void groupOrderChanged();
+    void frameParserCodeChanged();
     void frameEndSequenceChanged();
     void frameStartSequenceChanged();
     void groupChanged(const int group);
@@ -116,6 +117,7 @@ public:
     Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
     Q_INVOKABLE const JSON::Dataset &getDataset(const int group, const int index) const;
 
+    Q_INVOKABLE QString frameParserCode() const;
     Q_INVOKABLE QString groupTitle(const int group) const;
     Q_INVOKABLE QString groupWidget(const int group) const;
     Q_INVOKABLE int groupWidgetIndex(const int group) const;
@@ -142,6 +144,7 @@ public Q_SLOTS:
 
     void setTitle(const QString &title);
     void setSeparator(const QString &separator);
+    void setFrameParserCode(const QString &code);
     void setFrameEndSequence(const QString &sequence);
     void setFrameStartSequence(const QString &sequence);
 
@@ -181,6 +184,7 @@ private:
 private:
     QString m_title;
     QString m_separator;
+    QString m_frameParserCode;
     QString m_frameEndSequence;
     QString m_frameStartSequence;
 

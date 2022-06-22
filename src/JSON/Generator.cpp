@@ -167,6 +167,9 @@ void JSON::Generator::loadJsonMap(const QString &path)
             // Hacks to be able to evaluate the frame parser function
             m_frameParserCode = "(" + m_frameParserCode + ")";
 
+            // Generate JS function handler
+            m_frameParserFunction = m_jsEngine.evaluate(m_frameParserCode);
+
             // Load compacted JSON document
             document.object().remove("frameParser");
             m_jsonMapData = QString::fromUtf8(document.toJson(QJsonDocument::Compact));
@@ -273,8 +276,7 @@ void JSON::Generator::readData(const QByteArray &data)
         args << QString::fromUtf8(data) << IO::Manager::instance().separatorSequence();
 
         // Evaluate frame parsing code (which returns a list with all the values)
-        auto fun = m_jsEngine.evaluate(m_frameParserCode);
-        auto out = fun.call(args).toVariant().toList();
+        auto out = m_frameParserFunction.call(args).toVariant().toList();
 
         // Convert JS parser output to QStringList
         QVector<QString> fields;

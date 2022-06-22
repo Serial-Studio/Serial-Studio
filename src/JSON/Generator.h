@@ -123,6 +123,7 @@ private:
     OperationMode m_opMode;
     QJsonParseError m_error;
     QString m_frameParserCode;
+    QJSValue m_frameParserFunction;
     QStringList m_latestValidValues;
 };
 }
