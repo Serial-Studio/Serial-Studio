@@ -21,6 +21,8 @@
  */
 
 #include <googlemapadapter.h>
+#include <osmmapadapter.h>
+#include <openaerialmapadapter.h>
 
 #include <UI/Dashboard.h>
 #include <UI/Widgets/GPS.h>
@@ -83,8 +85,8 @@ Widgets::GPS::GPS(const int index)
     m_mapControl.setMouseMode(qmapcontrol::MapControl::None);
     m_mapControl.resize(QSize(width() - 28, height() - 36 - m_titleWidget.height()));
 
-    // Load google maps adapter
-    auto *mapadapter = new qmapcontrol::GoogleMapAdapter();
+    // Load OSM map adapter
+    auto *mapadapter = new qmapcontrol::OSMMapAdapter();
     auto *l = new qmapcontrol::Layer("Custom Layer", mapadapter,
                                      qmapcontrol::Layer::MapLayer);
     m_mapControl.addLayer(l);
