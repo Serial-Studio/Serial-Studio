@@ -850,7 +850,10 @@ QVector<JSON::Group> UI::Dashboard::getLEDWidgets()
         Q_FOREACH (auto dataset, group.datasets())
         {
             if (dataset.led())
+            {
+                dataset.setTitle(dataset.title() + " (" + group.title() + ")");
                 widgets.append(dataset);
+            }
         }
     }
 
@@ -877,7 +880,10 @@ QVector<JSON::Dataset> UI::Dashboard::getFFTWidgets()
         Q_FOREACH (auto dataset, group.datasets())
         {
             if (dataset.fft())
+            {
+                dataset.setTitle(dataset.title() + " (" + group.title() + ")");
                 widgets.append(dataset);
+            }
         }
     }
 
@@ -895,7 +901,10 @@ QVector<JSON::Dataset> UI::Dashboard::getPlotWidgets()
         Q_FOREACH (auto dataset, group.datasets())
         {
             if (dataset.graph())
+            {
+                dataset.setTitle(dataset.title() + " (" + group.title() + ")");
                 widgets.append(dataset);
+            }
         }
     }
 
@@ -930,7 +939,10 @@ QVector<JSON::Dataset> UI::Dashboard::getWidgetDatasets(const QString &handle)
         Q_FOREACH (auto dataset, group.datasets())
         {
             if (dataset.widget() == handle)
+            {
+                dataset.setTitle(dataset.title() + " (" + group.title() + ")");
                 widgets.append(dataset);
+            }
         }
     }
 

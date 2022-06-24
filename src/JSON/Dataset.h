@@ -89,6 +89,8 @@ public:
 
     bool read(const QJsonObject &object);
 
+    void setTitle(const QString &title) { m_title = title; }
+
 private:
     bool m_fft;
     bool m_led;
