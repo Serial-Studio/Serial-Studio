@@ -119,6 +119,24 @@ QString Project::CodeEditor::defaultCode() const
     return code;
 }
 
+QStringList Project::CodeEditor::parse(const QString &frame, const QString &separator)
+{
+    // Construct function arguments
+    QJSValueList args;
+    args << frame << separator;
+
+    // Evaluate frame parsing function
+    auto out = m_parseFunction.call(args).toVariant().toList();
+
+    // Convert output to QStringList
+    QStringList list;
+    for (auto i = 0; i < out.count(); ++i)
+        list.append(out.at(i).toString());
+
+    // Return fields list
+    return list;
+}
+
 void Project::CodeEditor::displayWindow()
 {
     showNormal();
@@ -182,11 +200,45 @@ void Project::CodeEditor::onHelpClicked() { }
 
 bool Project::CodeEditor::save(const bool silent)
 {
-    // Validate code
-    QJSEngine engine;
+    // Update text edit
+    if (loadScript(m_textEdit.toPlainText()))
+    {
+        m_textEdit.document()->setModified(false);
+
+        // Save code inside JSON project
+        QTimer::singleShot(500, this, SLOT(writeChanges()));
+
+        // Show save messagebox
+        if (!silent)
+            Misc::Utilities::showMessageBox(
+                tr("Frame parser code updated successfully!"),
+                tr("No errors have been detected in the code."));
+
+        // Everything good
+        return true;
+    }
+
+    // Something did not work quite right
+    return false;
+}
+
+bool Project::CodeEditor::loadScript(const QString &script)
+{
+    // Check if there are no general JS errors
     QStringList errors;
+    m_engine.evaluate(script, "", 1, &errors);
+
+    // Check if parse() function exists
+    auto fun = m_engine.globalObject().property("parse");
+    if (fun.isNull() || !fun.isCallable())
+    {
+        Misc::Utilities::showMessageBox(tr("Frame parser error!"),
+                                        tr("No parse() function has been declared!"));
+        return false;
+    }
+
+    // Try to run parse() function
     QJSValueList args = { "", "," };
-    auto fun = engine.evaluate("(" + m_textEdit.toPlainText() + ")", "", 1, &errors);
     auto ret = fun.call(args);
 
     // Error on engine evaluation
@@ -233,18 +285,8 @@ bool Project::CodeEditor::save(const bool silent)
         return false;
     }
 
-    // Update text edit
-    m_textEdit.document()->setModified(false);
-
-    // Save code inside JSON project
-    QTimer::singleShot(500, this, SLOT(writeChanges()));
-
-    // Show save messagebox
-    if (!silent)
-        Misc::Utilities::showMessageBox(tr("Frame parser code updated successfully!"),
-                                        tr("No errors have been detected in the code."));
-
-    // Everything good
+    // We have reached this point without any errors, set function caller
+    m_parseFunction = fun;
     return true;
 }
 
@@ -283,6 +325,7 @@ void Project::CodeEditor::readCode()
 {
     m_textEdit.setPlainText(Model::instance().frameParserCode());
     m_textEdit.document()->setModified(false);
+    loadScript(m_textEdit.toPlainText());
 }
 
 void Project::CodeEditor::writeChanges()

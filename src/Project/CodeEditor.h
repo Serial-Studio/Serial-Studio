@@ -30,6 +30,9 @@
 #include <QPushButton>
 #include <QPlainTextEdit>
 
+#include <QJSValue>
+#include <QJSEngine>
+
 #include <QSourceHighlite/qsourcehighliter.h>
 
 namespace Project
@@ -49,6 +52,7 @@ private:
 public:
     static CodeEditor &instance();
     QString defaultCode() const;
+    QStringList parse(const QString &frame, const QString &separator);
 
 public Q_SLOTS:
     void displayWindow();
@@ -62,6 +66,7 @@ private Q_SLOTS:
 private:
     bool checkModified();
     bool save(const bool silent = false);
+    bool loadScript(const QString &script);
     void closeEvent(QCloseEvent *event) override;
 
 private slots:
@@ -69,7 +74,9 @@ private slots:
     void writeChanges();
 
 private:
+    QJSEngine m_engine;
     QToolBar m_toolbar;
+    QJSValue m_parseFunction;
     QPlainTextEdit m_textEdit;
     QSourceHighlite::QSourceHighliter *m_highlighter;
 };

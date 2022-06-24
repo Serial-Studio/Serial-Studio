@@ -159,17 +159,6 @@ void JSON::Generator::loadJsonMap(const QString &path)
             // Save settings
             writeSettings(path);
 
-            // Construct frame parsing code
-            m_frameParserCode = document.object().value("frameParser").toString();
-            if (m_frameParserCode.isEmpty())
-                m_frameParserCode = Project::CodeEditor::instance().defaultCode();
-
-            // Hacks to be able to evaluate the frame parser function
-            m_frameParserCode = "(" + m_frameParserCode + ")";
-
-            // Generate JS function handler
-            m_frameParserFunction = m_jsEngine.evaluate(m_frameParserCode);
-
             // Load compacted JSON document
             document.object().remove("frameParser");
             m_jsonMapData = QString::fromUtf8(document.toJson(QJsonDocument::Compact));
@@ -271,17 +260,9 @@ void JSON::Generator::readData(const QByteArray &data)
         if (jsonMapData().isEmpty())
             return;
 
-        // Construct JS parser arguments
-        QJSValueList args;
-        args << QString::fromUtf8(data) << IO::Manager::instance().separatorSequence();
-
-        // Evaluate frame parsing code (which returns a list with all the values)
-        auto out = m_frameParserFunction.call(args).toVariant().toList();
-
-        // Convert JS parser output to QStringList
-        QVector<QString> fields;
-        for (auto i = 0; i < out.count(); ++i)
-            fields.append(out.at(i).toString());
+        // Get fields from frame parser function
+        auto fields = Project::CodeEditor::instance().parse(
+            QString::fromUtf8(data), IO::Manager::instance().separatorSequence());
 
         // Separate incoming data & add it to the JSON map
         auto json = jsonMapData().toStdString();
@@ -350,19 +331,6 @@ void JSON::Generator::readData(const QByteArray &data)
                         dataset.remove("value");
                         dataset.insert("value", value);
                     }
-                }
-
-                // Evaluate JS expresion (if any)
-                auto evaluatedValue = m_jsEngine.evaluate(value);
-
-                // Successful JS evaluation, insert evaluated value
-                if (evaluatedValue.errorType() == QJSValue::NoError)
-                {
-                    evaluated = true;
-                    dataset.remove("value");
-                    dataset.insert("value", evaluatedValue.toString());
-                    datasets.removeAt(j);
-                    datasets.insert(j, dataset);
                 }
             }
 
