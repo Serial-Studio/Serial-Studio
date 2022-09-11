@@ -191,6 +191,13 @@ jobs:
         xcopy deploy\windows\openssl\*.dll "${{env.APPLICATION}}\bin"
         move "${{env.APPLICATION}}" deploy\windows\nsis\
 
+    - name: '📦 Portable application'
+      run: |
+        mkdir "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows"
+        xcopy "deploy\windows\nsis\${{env.APPLICATION}}\icon.ico" "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows"
+        xcopy "deploy\windows\nsis\${{env.APPLICATION}}\bin" "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows" /E
+        Compress-Archive -Path "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows" -DestinationPath "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip"
+
     - name: '📦 Make NSIS installer'
       uses: joncloud/makensis-action@v3.6
       with:
@@ -212,6 +219,12 @@ jobs:
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
         path: deploy/windows/nsis/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+
+    - name: '📤 Upload artifact: Portable application'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip
 
   #
   # Windows MSYS2 build
@@ -334,3 +347,4 @@ jobs:
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip
