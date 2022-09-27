@@ -98,11 +98,11 @@
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation type="vanished">%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
+        <translation type="vanished">%1是否自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
     </message>
     <message>
         <source>Drop JSON and CSV files here</source>
-        <translation type="vanished">拖放JSON和CSV文件</translation>
+        <translation type="vanished">在此处拖放JSON和CSV文件</translation>
     </message>
 </context>
 <context>
@@ -132,7 +132,7 @@
     </message>
     <message>
         <source>CSV files</source>
-        <translation>CSV档案</translation>
+        <translation>CSV文件</translation>
     </message>
     <message>
         <source>Invalid configuration for CSV player</source>
@@ -250,7 +250,7 @@
     </message>
     <message>
         <source>CSV files (*.csv)</source>
-        <translation type="vanished">CSV档案 (*.csv)</translation>
+        <translation type="vanished">CSV文件 (*.csv)</translation>
     </message>
     <message>
         <source>Serial port open, do you want to continue?</source>
@@ -282,7 +282,7 @@
     </message>
     <message>
         <source>CSV files</source>
-        <translation type="vanished">CSV档案</translation>
+        <translation type="vanished">CSV文件</translation>
     </message>
 </context>
 <context>
@@ -311,7 +311,7 @@
     </message>
     <message>
         <source>Data Groups</source>
-        <translation type="vanished">资料组</translation>
+        <translation type="vanished">数据组别</translation>
     </message>
     <message>
         <source>Data Plots</source>
@@ -327,14 +327,14 @@
     </message>
     <message>
         <source>Scale</source>
-        <translation type="vanished">乘数</translation>
+        <translation type="vanished">缩放倍数</translation>
     </message>
 </context>
 <context>
     <name>DeviceManager</name>
     <message>
         <source>Communication Mode</source>
-        <translation type="vanished">通讯方式</translation>
+        <translation type="vanished">通信模式</translation>
     </message>
     <message>
         <source>Auto (JSON from serial device)</source>
@@ -409,7 +409,7 @@
     </message>
     <message>
         <source>Don&apos;t annoy me again!</source>
-        <translation>别再烦我了!</translation>
+        <translation>不再提醒!</translation>
     </message>
 </context>
 <context>
@@ -578,11 +578,11 @@
     </message>
     <message>
         <source>Apply</source>
-        <translation>申请</translation>
+        <translation>应用</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>拯救</translation>
+        <translation>保存</translation>
     </message>
 </context>
 <context>
@@ -642,7 +642,7 @@
     </message>
     <message>
         <source>New line</source>
-        <translation>新队</translation>
+        <translation>换行</translation>
     </message>
     <message>
         <source>Carriage return</source>
@@ -650,7 +650,7 @@
     </message>
     <message>
         <source>NL + CR</source>
-        <translation>新行和回车</translation>
+        <translation>换行和回车</translation>
     </message>
     <message>
         <source>Plain text</source>
@@ -666,7 +666,7 @@
     </message>
     <message>
         <source>Text files</source>
-        <translation>文字档</translation>
+        <translation>文本文件</translation>
     </message>
     <message>
         <source>File save error</source>
@@ -750,11 +750,11 @@
     <name>JSON::Editor</name>
     <message>
         <source>Dataset widgets</source>
-        <translation>数据集小工具</translation>
+        <translation>数据项小部件</translation>
     </message>
     <message>
         <source>Accelerometer</source>
-        <translation>加速器</translation>
+        <translation>加速度计</translation>
     </message>
     <message>
         <source>Gyroscope</source>
@@ -774,7 +774,7 @@
     </message>
     <message>
         <source>Bar/level</source>
-        <translation>酒吧/楼层</translation>
+        <translation>柱形图/级别</translation>
     </message>
     <message>
         <source>Compass</source>
@@ -810,19 +810,19 @@
     </message>
     <message>
         <source>Project error - Group %1, Dataset %2</source>
-        <translation>项目错误 - 组%1，数据集%2</translation>
+        <translation>项目错误 - 组%1，数据项%2</translation>
     </message>
     <message>
         <source>Dataset title cannot be empty!</source>
-        <translation>数据集的标题不能是空的!</translation>
+        <translation>数据项的标题不能是空的!</translation>
     </message>
     <message>
         <source>Warning - Group %1, Dataset %2</source>
-        <translation>警告 - 组 %1, 数据集 %2</translation>
+        <translation>警告 - 组 %1, 数据项 %2</translation>
     </message>
     <message>
         <source>Dataset contains duplicate frame index position! Continue?</source>
-        <translation>数据集包含重复的帧索引位置! 继续吗？</translation>
+        <translation>数据项包含重复的位置序号! 继续吗？</translation>
     </message>
     <message>
         <source>Save JSON project</source>
@@ -838,7 +838,7 @@
     </message>
     <message>
         <source>New Group</source>
-        <translation>新集团</translation>
+        <translation>新组别</translation>
     </message>
     <message>
         <source>Delete group &quot;%1&quot;</source>
@@ -854,11 +854,11 @@
     </message>
     <message>
         <source>Existing datasets for this group will be deleted</source>
-        <translation>该组的现有数据集将被删除</translation>
+        <translation>该组的现有数据项将被删除</translation>
     </message>
     <message>
         <source>Accelerometer %1</source>
-        <translation>加速器%1</translation>
+        <translation>加速度计%1</translation>
     </message>
     <message>
         <source>Gyro %1</source>
@@ -874,15 +874,15 @@
     </message>
     <message>
         <source>New dataset</source>
-        <translation>新的数据集</translation>
+        <translation>创建数据项</translation>
     </message>
     <message>
         <source>Delete dataset &quot;%1&quot;</source>
-        <translation>删除数据集&quot;%1&quot;</translation>
+        <translation>删除数据项&quot;%1&quot;</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this dataset?</source>
-        <translation>你确定要删除这个数据集吗？</translation>
+        <translation>你确定要删除这个数据项吗？</translation>
     </message>
     <message>
         <source>GPS</source>
@@ -947,7 +947,7 @@
     <name>JsonDatasetDelegate</name>
     <message>
         <source>Dataset %1 - %2</source>
-        <translation>数据集 %1 - %2</translation>
+        <translation>数据项 %1 - %2</translation>
     </message>
     <message>
         <source>Title:</source>
@@ -967,7 +967,7 @@
     </message>
     <message>
         <source>Frame index:</source>
-        <translation>框架指数：</translation>
+        <translation>部件序号：</translation>
     </message>
     <message>
         <source>Generate graph:</source>
@@ -999,7 +999,7 @@
     </message>
     <message>
         <source>FFT Samples:</source>
-        <translation>FFT样本：</translation>
+        <translation>FFT采样点数：</translation>
     </message>
     <message>
         <source>Alarm level:</source>
@@ -1066,11 +1066,11 @@
     </message>
     <message>
         <source>Apply</source>
-        <translation type="vanished">申请</translation>
+        <translation type="vanished">应用</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="vanished">拯救</translation>
+        <translation type="vanished">保存</translation>
     </message>
     <message>
         <source>Click on the &quot;Add group&quot; button to begin</source>
@@ -1132,7 +1132,7 @@
     </message>
     <message>
         <source>Add dataset</source>
-        <translation>添加数据集</translation>
+        <translation>添加数据项</translation>
     </message>
     <message>
         <source>Note:</source>
@@ -1140,7 +1140,7 @@
     </message>
     <message>
         <source>The accelerometer widget expects values in m/s².</source>
-        <translation>加速器部件希望得到以m/s²为单位的值。</translation>
+        <translation>加速度计部件希望得到以m/s²为单位的值。</translation>
     </message>
     <message>
         <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
@@ -1180,7 +1180,7 @@
     </message>
     <message>
         <source>Topic</source>
-        <translation>话题</translation>
+        <translation>主题</translation>
     </message>
     <message>
         <source>MQTT topic</source>
@@ -1231,7 +1231,7 @@
     <name>MQTT::Client</name>
     <message>
         <source>Publisher</source>
-        <translation>著作人</translation>
+        <translation>发布者</translation>
     </message>
     <message>
         <source>Subscriber</source>
@@ -1259,15 +1259,15 @@
     </message>
     <message>
         <source>Socket access error</source>
-        <translation>插座访问错误</translation>
+        <translation>套接字访问错误</translation>
     </message>
     <message>
         <source>Socket resource error</source>
-        <translation>插座资源错误</translation>
+        <translation>套接字资源错误</translation>
     </message>
     <message>
         <source>Socket timeout</source>
-        <translation>插座超时</translation>
+        <translation>套接字超时</translation>
     </message>
     <message>
         <source>Socket datagram too large</source>
@@ -1279,11 +1279,11 @@
     </message>
     <message>
         <source>Address in use</source>
-        <translation>使用中的地址</translation>
+        <translation>地址已被使用</translation>
     </message>
     <message>
         <source>Address not available</source>
-        <translation>地址不详</translation>
+        <translation>找不到地址</translation>
     </message>
     <message>
         <source>Unsupported socket operation</source>
@@ -1291,7 +1291,7 @@
     </message>
     <message>
         <source>Unfinished socket operation</source>
-        <translation>未完成的插座操作</translation>
+        <translation>未完成的套接字操作</translation>
     </message>
     <message>
         <source>Proxy authentication required</source>
@@ -1315,7 +1315,7 @@
     </message>
     <message>
         <source>Proxy not found</source>
-        <translation>未找到代理机构</translation>
+        <translation>未找到代理</translation>
     </message>
     <message>
         <source>Proxy protocol error</source>
@@ -1335,7 +1335,7 @@
     </message>
     <message>
         <source>Socket temprary error</source>
-        <translation>插座临时错误</translation>
+        <translation>套接字临时错误</translation>
     </message>
     <message>
         <source>Unacceptable MQTT protocol</source>
@@ -1355,7 +1355,7 @@
     </message>
     <message>
         <source>MQTT authorization error</source>
-        <translation>MQTT授权错误</translation>
+        <translation>MQTT鉴权错误</translation>
     </message>
     <message>
         <source>MQTT no ping response</source>
@@ -1414,7 +1414,7 @@
     </message>
     <message>
         <source>Keep alive (s)</source>
-        <translation>保持活力的超时（s）</translation>
+        <translation>keep-alive超时（s）</translation>
     </message>
     <message>
         <source>Host</source>
@@ -1426,7 +1426,7 @@
     </message>
     <message>
         <source>Topic</source>
-        <translation>话题</translation>
+        <translation>主题</translation>
     </message>
     <message>
         <source>Retain</source>
@@ -1462,7 +1462,7 @@
     </message>
     <message>
         <source>Certificate:</source>
-        <translation>证明书：</translation>
+        <translation>证书：</translation>
     </message>
     <message>
         <source>Use system database</source>
@@ -1474,7 +1474,7 @@
     </message>
     <message>
         <source>Protocol:</source>
-        <translation>议定书：</translation>
+        <translation>协议：</translation>
     </message>
     <message>
         <source>CA file:</source>
@@ -1490,7 +1490,7 @@
     </message>
     <message>
         <source>Apply</source>
-        <translation>申请</translation>
+        <translation>应用</translation>
     </message>
 </context>
 <context>
@@ -1532,7 +1532,7 @@
     </message>
     <message>
         <source>Quit</source>
-        <translation>辞职</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <source>Edit</source>
@@ -1699,7 +1699,7 @@
     </message>
     <message>
         <source>Quit</source>
-        <translation>辞职</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <source>Edit</source>
@@ -1830,7 +1830,7 @@
     <name>Misc::MacExtras</name>
     <message>
         <source>Setup</source>
-        <translation>体系</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <source>Console</source>
@@ -1899,7 +1899,7 @@
     </message>
     <message>
         <source>Save</source>
-        <translation>拯救</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <source>Save all</source>
@@ -1915,7 +1915,7 @@
     </message>
     <message>
         <source>Yes to all</source>
-        <translation>是的，对所有</translation>
+        <translation>全部选是</translation>
     </message>
     <message>
         <source>No</source>
@@ -1923,7 +1923,7 @@
     </message>
     <message>
         <source>No to all</source>
-        <translation>拒绝所有</translation>
+        <translation>全部选否</translation>
     </message>
     <message>
         <source>Abort</source>
@@ -1935,7 +1935,7 @@
     </message>
     <message>
         <source>Ignore</source>
-        <translation>忽略不计</translation>
+        <translation>忽略</translation>
     </message>
     <message>
         <source>Close</source>
@@ -1947,7 +1947,7 @@
     </message>
     <message>
         <source>Discard</source>
-        <translation>弃置</translation>
+        <translation>丢弃</translation>
     </message>
     <message>
         <source>Help</source>
@@ -1955,7 +1955,7 @@
     </message>
     <message>
         <source>Apply</source>
-        <translation>申请</translation>
+        <translation>应用</translation>
     </message>
     <message>
         <source>Reset</source>
@@ -2001,7 +2001,7 @@
     <name>Network</name>
     <message>
         <source>Socket type</source>
-        <translation>插座类型</translation>
+        <translation>套接字类型</translation>
     </message>
     <message>
         <source>IP Address</source>
@@ -2089,7 +2089,7 @@
     <name>QwtPlotRenderer</name>
     <message>
         <source>Documents</source>
-        <translation>文件</translation>
+        <translation>文档</translation>
     </message>
     <message>
         <source>Images</source>
@@ -2104,7 +2104,7 @@
     <name>QwtPolarRenderer</name>
     <message>
         <source>Documents</source>
-        <translation>文件</translation>
+        <translation>文档</translation>
     </message>
     <message>
         <source>Images</source>
@@ -2245,7 +2245,7 @@
     </message>
     <message>
         <source>Data separator</source>
-        <translation>数据分离器</translation>
+        <translation>数据分隔符</translation>
     </message>
     <message>
         <source>UI refresh rate</source>
@@ -2272,7 +2272,7 @@
     <name>Setup</name>
     <message>
         <source>Communication Mode</source>
-        <translation>通讯方式</translation>
+        <translation>通信模式</translation>
     </message>
     <message>
         <source>Auto (JSON from serial device)</source>
@@ -2336,7 +2336,7 @@
     </message>
     <message>
         <source>Custom baud rate</source>
-        <translation type="vanished">另一个波特率</translation>
+        <translation type="vanished">自定义波特率</translation>
     </message>
     <message>
         <source>CSV Export</source>
@@ -2352,11 +2352,11 @@
     </message>
     <message>
         <source>Start sequence</source>
-        <translation type="vanished">启动顺序</translation>
+        <translation type="vanished">启动序列</translation>
     </message>
     <message>
         <source>End sequence</source>
-        <translation type="vanished">完成顺序</translation>
+        <translation type="vanished">结束序列</translation>
     </message>
     <message>
         <source>Serial</source>
@@ -2376,7 +2376,7 @@
     </message>
     <message>
         <source>Setup</source>
-        <translation>体系</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <source>No parsing (device sends JSON data)</source>
@@ -2501,7 +2501,7 @@
     </message>
     <message>
         <source>Setup</source>
-        <translation>体系</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <source>Disconnect</source>
@@ -2579,7 +2579,7 @@
     </message>
     <message>
         <source>Datasets</source>
-        <translation>数据集</translation>
+        <translation>数据项</translation>
     </message>
     <message>
         <source>Multiple data plots</source>
@@ -2595,11 +2595,11 @@
     </message>
     <message>
         <source>Bars</source>
-        <translation>酒吧</translation>
+        <translation>柱形图</translation>
     </message>
     <message>
         <source>Gauges</source>
-        <translation>计量器</translation>
+        <translation>角度计</translation>
     </message>
     <message>
         <source>Compasses</source>
@@ -2611,7 +2611,7 @@
     </message>
     <message>
         <source>Accelerometers</source>
-        <translation>加速器</translation>
+        <translation>加速度计</translation>
     </message>
     <message>
         <source>GPS</source>
@@ -2627,7 +2627,7 @@
     </message>
     <message>
         <source>Points:</source>
-        <translation>点：</translation>
+        <translation>点数：</translation>
     </message>
     <message>
         <source>Widgets:</source>
@@ -2643,7 +2643,7 @@
     </message>
     <message>
         <source>Widget size:</source>
-        <translation>小部件大小：</translation>
+        <translation>部件大小：</translation>
     </message>
 </context>
 <context>
@@ -2668,7 +2668,7 @@
     <name>Widgets::FFTPlot</name>
     <message>
         <source>Samples</source>
-        <translation>样品</translation>
+        <translation>采样点</translation>
     </message>
     <message>
         <source>FFT of %1</source>
@@ -2706,14 +2706,14 @@
     </message>
     <message>
         <source>Samples</source>
-        <translation>样品</translation>
+        <translation>采样点</translation>
     </message>
 </context>
 <context>
     <name>Widgets::Plot</name>
     <message>
         <source>Samples</source>
-        <translation>样品</translation>
+        <translation>采样点</translation>
     </message>
 </context>
 <context>
