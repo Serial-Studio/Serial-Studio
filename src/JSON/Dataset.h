@@ -88,7 +88,6 @@ public:
     QJsonObject jsonData() const;
 
     bool read(const QJsonObject &object);
-
     void setTitle(const QString &title) { m_title = title; }
 
 private:

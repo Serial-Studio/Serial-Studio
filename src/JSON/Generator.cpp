@@ -64,9 +64,9 @@ JSON::Generator &JSON::Generator::instance()
 /**
  * Returns the JSON map data from the loaded file as a string
  */
-QString JSON::Generator::jsonMapData() const
+QJsonObject &JSON::Generator::json()
 {
-    return m_jsonMapData;
+    return m_json;
 }
 
 /**
@@ -134,7 +134,7 @@ void JSON::Generator::loadJsonMap(const QString &path)
     if (m_jsonMap.isOpen())
     {
         m_jsonMap.close();
-        m_jsonMapData = "";
+        m_json = QJsonObject();
         Q_EMIT jsonFileMapChanged();
     }
 
@@ -161,7 +161,7 @@ void JSON::Generator::loadJsonMap(const QString &path)
 
             // Load compacted JSON document
             document.object().remove("frameParser");
-            m_jsonMapData = QString::fromUtf8(document.toJson(QJsonDocument::Compact));
+            m_json = document.object();
         }
 
         // Get rid of warnings
@@ -171,7 +171,6 @@ void JSON::Generator::loadJsonMap(const QString &path)
     // Open error
     else
     {
-        m_jsonMapData = "";
         writeSettings("");
         Misc::Utilities::showMessageBox(tr("Cannot read JSON file"),
                                         tr("Please check file permissions & location"));
@@ -249,117 +248,66 @@ void JSON::Generator::readData(const QByteArray &data)
     if (data.isEmpty())
         return;
 
-    // Serial device sends JSON (auto mode)
-    if (operationMode() == JSON::Generator::kAutomatic)
-        m_json = QJsonDocument::fromJson(data, &m_error).object();
+    // Initialize status handler
+    bool ok = false;
 
-    // We need to use a map file, check if its loaded & replace values into map
+    // Serial device sends JSON (auto mode)
+    QJsonObject jsonData;
+    if (operationMode() == JSON::Generator::kAutomatic)
+    {
+        jsonData = QJsonDocument::fromJson(data).object();
+        ok = !jsonData.isEmpty();
+    }
+
+    // Data is separated and parsed by Serial Studio (manual mode)
     else
     {
-        // Empty JSON map data
-        if (jsonMapData().isEmpty())
-            return;
+        // Copy JSON map
+        jsonData = m_json;
 
         // Get fields from frame parser function
         auto fields = Project::CodeEditor::instance().parse(
             QString::fromUtf8(data), IO::Manager::instance().separatorSequence());
 
-        // Separate incoming data & add it to the JSON map
-        auto json = jsonMapData().toStdString();
-        for (int i = 0; i < fields.count(); ++i)
-        {
-            std::string id = "%" + std::to_string(i + 1);
-            size_t pos = json.find(id);
-            if (pos != std::string::npos && pos < json.length())
-                json.replace(pos, id.length(), fields.at(i).toStdString());
-        }
-
-        // Update latest JSON values list
-        if (fields.count() > m_latestValidValues.count())
-        {
-            m_latestValidValues.clear();
-            for (int i = 0; i < fields.count(); ++i)
-                m_latestValidValues.append("");
-        }
-
-        // Create JSON document
-        auto jsonData = QString::fromStdString(json).toUtf8();
-        m_json = QJsonDocument::fromJson(jsonData, &m_error).object();
-    }
-
-    // No parse error, evaluate any JS code
-    if (m_error.error == QJsonParseError::NoError)
-    {
-        // Initialize dataset counter
-        int datasetIndex = -1;
-
-        // Evaluate JavaScript code
-        bool evaluated = false;
-        auto groups = m_json.value("groups").toArray();
+        // Replace data in JSON map
+        auto groups = jsonData.value("groups").toArray();
         for (int i = 0; i < groups.count(); ++i)
         {
             // Get group & list of datasets
             auto group = groups.at(i).toObject();
             auto datasets = group.value("datasets").toArray();
 
-            // Evaluate value for each dataset
+            // Evaluate each dataset
             for (int j = 0; j < datasets.count(); ++j)
             {
-                // Increment dataset index
-                ++datasetIndex;
-
-                // Get dataset & value string
                 auto dataset = datasets.at(j).toObject();
-                auto value = dataset.value("value").toString();
+                auto index = dataset.value("index").toInt();
 
-                //
-                // Update latest valid values array (or replace currently
-                // invalid value with the last known valid value)
-                //
-                if (datasetIndex < m_latestValidValues.count())
+                if (index <= fields.count())
                 {
-                    // Register latest value to list of valid values
-                    if (!value.isEmpty() && !value.contains("%"))
-                        m_latestValidValues.replace(datasetIndex, value);
-
-                    // Invalid value, get the last known valid value
-                    else
-                    {
-                        evaluated = true;
-                        value = m_latestValidValues.at(datasetIndex);
-
-                        dataset.remove("value");
-                        dataset.insert("value", value);
-                    }
+                    ok = true;
+                    dataset.remove("value");
+                    dataset.insert("value", QJsonValue(fields.at(index - 1)));
                 }
             }
 
-            // Replace evaluated datasets in group
-            if (evaluated)
-            {
-                //
-                // Reset eval. flag so that we only replace JSON data
-                // when required.
-                //
-                evaluated = false;
+            // Update datasets in group
+            group.remove("datasets");
+            group.insert("datasets", datasets);
 
-                // Update datasets in group
-                group.remove("datasets");
-                group.insert("datasets", datasets);
+            // Update group in groups array
+            groups.removeAt(i);
+            groups.insert(i, group);
 
-                // Update group in groups array
-                groups.removeAt(i);
-                groups.insert(i, group);
-
-                // Update groups array in JSON frame
-                m_json.remove("groups");
-                m_json.insert("groups", groups);
-            }
+            // Update groups array in JSON frame
+            jsonData.remove("groups");
+            jsonData.insert("groups", groups);
         }
-
-        // Update UI
-        Q_EMIT jsonChanged(m_json);
     }
+
+    // Update UI
+    if (ok)
+        Q_EMIT jsonChanged(jsonData);
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

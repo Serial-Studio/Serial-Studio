@@ -94,7 +94,7 @@ public:
 
     static Generator &instance();
 
-    QString jsonMapData() const;
+    QJsonObject &json();
     QString jsonMapFilename() const;
     QString jsonMapFilepath() const;
     OperationMode operationMode() const;
@@ -116,7 +116,6 @@ private:
     QFile m_jsonMap;
     QJsonObject m_json;
     QSettings m_settings;
-    QString m_jsonMapData;
     OperationMode m_opMode;
     QJsonParseError m_error;
     QStringList m_latestValidValues;

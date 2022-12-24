@@ -350,7 +350,8 @@ bool Project::Model::saveJsonFile()
             dataset.insert("max", datasetWidgetMax(i, j).toDouble());
             dataset.insert("alarm", datasetWidgetAlarm(i, j).toDouble());
             dataset.insert("fftSamples", datasetFFTSamples(i, j).toInt());
-            dataset.insert("value", "%" + QString::number(datasetIndex(i, j)));
+            dataset.insert("index", datasetIndex(i, j));
+            dataset.insert("value", "");
 
             // Add dataset to array
             datasets.append(dataset);
@@ -746,23 +747,23 @@ void Project::Model::openJsonFile(const QString &path)
             // Get max/min texts
             auto min = dataset.value("min").toDouble();
             auto max = dataset.value("max").toDouble();
+            auto index = dataset.value("index").toInt();
             auto alarm = dataset.value("alarm").toDouble();
             auto fftSamples = dataset.value("fftSamples").toInt();
+            setDatasetIndex(g, d, index);
             setDatasetWidgetMin(g, d, QString::number(min));
             setDatasetWidgetMax(g, d, QString::number(max));
             setDatasetWidgetAlarm(g, d, QString::number(alarm));
+            ;
             setDatasetFFTSamples(g, d, QString::number(fftSamples));
-
-            // Calculate dataset index
-            auto index = dataset.value("value").toString();
-            index.replace("%", "");
-            setDatasetIndex(g, d, index.toInt());
         }
     }
 
     // Update UI
-    setModified(false);
     Q_EMIT groupCountChanged();
+
+    // Reset modified flag
+    setModified(false);
 }
 
 /**
@@ -1117,12 +1118,15 @@ void Project::Model::setDatasetTitle(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_title = title;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_title != title)
+    {
+        set.m_title = title;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1139,12 +1143,15 @@ void Project::Model::setDatasetUnits(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_units = units;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_units != units)
+    {
+        set.m_units = units;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1161,12 +1168,15 @@ void Project::Model::setDatasetIndex(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_index = frameIndex;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_index != frameIndex)
+    {
+        set.m_index = frameIndex;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1183,12 +1193,15 @@ void Project::Model::setDatasetLED(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_led = generateLED;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_led != generateLED)
+    {
+        set.m_led = generateLED;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1205,12 +1218,15 @@ void Project::Model::setDatasetGraph(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_graph = generateGraph;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_graph != generateGraph)
+    {
+        set.m_graph = generateGraph;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1227,12 +1243,15 @@ void Project::Model::setDatasetFftPlot(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_fft = generateFft;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_fft != generateFft)
+    {
+        set.m_fft = generateFft;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1249,12 +1268,15 @@ void Project::Model::setDatasetLogPlot(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_log = generateLog;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_log != generateLog)
+    {
+        set.m_log = generateLog;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1285,12 +1307,15 @@ void Project::Model::setDatasetWidget(const int group, const int dataset,
     }
 
     // Update dataset & group
-    set.m_widget = widget;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_widget != widget)
+    {
+        set.m_widget = widget;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1309,12 +1334,15 @@ void Project::Model::setDatasetWidgetMin(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_min = minimum.toDouble();
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_min != minimum.toDouble())
+    {
+        set.m_min = minimum.toDouble();
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1333,12 +1361,15 @@ void Project::Model::setDatasetWidgetMax(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_max = maximum.toDouble();
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_max != maximum.toDouble())
+    {
+        set.m_max = maximum.toDouble();
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1355,12 +1386,15 @@ void Project::Model::setDatasetWidgetData(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_widget = widget;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_widget != widget)
+    {
+        set.m_widget = widget;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1379,12 +1413,15 @@ void Project::Model::setDatasetWidgetAlarm(const int group, const int dataset,
     auto set = getDataset(group, dataset);
 
     // Update dataset & group
-    set.m_alarm = alarm.toDouble();
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_alarm != alarm.toDouble())
+    {
+        set.m_alarm = alarm.toDouble();
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1406,12 +1443,15 @@ void Project::Model::setDatasetFFTSamples(const int group, const int dataset,
         sample = 128;
 
     // Update dataset & group
-    set.m_fftSamples = sample;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
+    if (set.m_fftSamples != sample)
+    {
+        set.m_fftSamples = sample;
+        grp.m_datasets.replace(dataset, set);
+        m_groups.replace(group, grp);
 
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
+        // Update UI
+        Q_EMIT datasetChanged(group, dataset);
+    }
 }
 
 /**
@@ -1421,6 +1461,8 @@ void Project::Model::setDatasetFFTSamples(const int group, const int dataset,
  */
 void Project::Model::setModified(const bool modified)
 {
+    qDebug() << sender() << modified << Q_FUNC_INFO;
+
     m_modified = modified;
     Q_EMIT modifiedChanged();
 }
@@ -1441,6 +1483,8 @@ void Project::Model::onJsonLoaded()
  */
 void Project::Model::onModelChanged()
 {
+    qDebug() << sender() << Q_FUNC_INFO;
+
     setModified(true);
 }
 
@@ -1450,6 +1494,8 @@ void Project::Model::onModelChanged()
  */
 void Project::Model::onGroupChanged(const int group)
 {
+    qDebug() << sender() << Q_FUNC_INFO;
+
     (void)group;
     setModified(true);
 }
@@ -1463,6 +1509,8 @@ void Project::Model::onGroupChanged(const int group)
  */
 void Project::Model::onDatasetChanged(const int group, const int dataset)
 {
+    qDebug() << sender() << Q_FUNC_INFO;
+
     (void)group;
     (void)dataset;
     setModified(true);

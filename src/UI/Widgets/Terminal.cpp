@@ -604,7 +604,9 @@ QString Widgets::Terminal::vt100Processing(const QString &data)
 //---------------------------------------------------------º-----------------------------------------
 
 #define QTC_ASSERT(cond, action)                                                         \
-    if (Q_LIKELY(cond)) { }                                                              \
+    if (Q_LIKELY(cond))                                                                  \
+    {                                                                                    \
+    }                                                                                    \
     else                                                                                 \
     {                                                                                    \
         action;                                                                          \
