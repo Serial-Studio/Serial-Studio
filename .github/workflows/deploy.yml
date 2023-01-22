@@ -27,6 +27,7 @@ env:
   PUBLISHER: "Alex Spataru"
   REPO_DIR: "/home/runner/work/Serial-Studio"
   QT_VERSION: 6.4.2
+  QT_MODULES: qtserialport qtconnectivity qt5compat
   QMAKE: qmake6
   CORES: 16
 
@@ -59,7 +60,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport qt5compat qtconnectivity
+        modules: ${{env.QT_MODULES}}
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -89,7 +90,7 @@ jobs:
         rm linuxdeploy-x86_64.AppImage
         rm linuxdeploy-plugin-qt-x86_64.AppImage
         mv *.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-          
+
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v2
       with:
@@ -120,7 +121,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport qt5compat qtconnectivity
+        modules: ${{env.QT_MODULES}}
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -171,7 +172,7 @@ jobs:
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport qt5compat qtconnectivity
+        modules: ${{env.QT_MODULES}}
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
@@ -202,7 +203,7 @@ jobs:
       uses: joncloud/makensis-action@v3.6
       with:
         script-file: deploy/windows/nsis/setup.nsi
-        
+
     - name: '📦 Check NSIS version & hash'
       run: |
         makensis /HDRINFO
@@ -322,7 +323,7 @@ jobs:
         cd tmp
         /usr/bin/tar xf ../*${{ matrix.arch }}*.zst
         tree ${{ matrix.msystem }}
-  
+
   #
   # Upload continuous build
   #
