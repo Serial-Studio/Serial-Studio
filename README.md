@@ -51,7 +51,7 @@ This project is released under the MIT license, for more information, check the 
 
 ### Requirements
 
-The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with **Qt 6.4.2**.
+The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with **Qt 6.3.2**.
 
 On GNU/Linux systems, you will also need to install `libgl1-mesa-dev` in order to compile the application.
 
