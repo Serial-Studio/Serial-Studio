@@ -12,7 +12,7 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE)
 
-Serial Studio is a simple, multi-platform, and multi-purpose serial data visualization program that allows embedded developers to visualize, analyze, and represent data generated from their projects and devices. It does not require the need to write project-specific visualization software.
+Serial Studio is a simple, multi-platform, and multi-purpose data visualization program that allows embedded developers to visualize, analyze, and represent data generated from their projects and devices. It does not require the need to write project-specific visualization software.
 
 Over my many CanSat-based competitions, I found myself writing and maintaing several Ground Station Softwares for each program. However, I decided that it would be easier and more sustainable to define one flexible Ground Station Software that let developers define how each CanSat presents data using an extensible communication protocol for easy data visualization. Developers can also use Serial Studio for almost any data acquisition and visualization project outside of CanSat, now supporting data retrieval from a hardware serial ports, software serial ports, MQTT, and network sockets (TCP/UDP).
 
@@ -51,7 +51,7 @@ This project is released under the MIT license, for more information, check the 
 
 ### Requirements
 
-The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with **Qt 5.15**.
+The only requirement to compile the application is to have [Qt](http://www.qt.io/download-open-source/) installed in your system. The desktop application will compile with **Qt 6.4.2**.
 
 On GNU/Linux systems, you will also need to install `libgl1-mesa-dev` in order to compile the application.
 
