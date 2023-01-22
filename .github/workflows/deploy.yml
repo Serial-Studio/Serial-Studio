@@ -26,7 +26,7 @@ env:
   QML_DIR_WIN: "assets\\qml"
   PUBLISHER: "Alex Spataru"
   REPO_DIR: "/home/runner/work/Serial-Studio"
-  QT_VERSION: 6.3.0
+  QT_VERSION: 6.4.2
   QMAKE: qmake6
   CORES: 16
 
