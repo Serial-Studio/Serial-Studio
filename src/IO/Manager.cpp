@@ -453,26 +453,34 @@ void IO::Manager::readFrames()
         auto fIndex = cursor.indexOf(finish);
         auto frame = cursor.left(fIndex);
 
-        // Checksum verification & Q_EMIT RX frame
-        int chop = 0;
-        auto result = integrityChecks(frame, cursor, &chop);
-        if (result == ValidationStatus::FrameOk)
-            Q_EMIT frameReceived(frame);
-
-        // Checksum data incomplete, try next time...
-        else if (result == ValidationStatus::ChecksumIncomplete)
+        // Parse frame
+        if (!frame.isEmpty())
         {
-            bytes = prevBytes;
-            break;
+            // Checksum verification & Q_EMIT RX frame
+            int chop = 0;
+            auto result = integrityChecks(frame, cursor, &chop);
+            if (result == ValidationStatus::FrameOk)
+                Q_EMIT frameReceived(frame);
+
+            // Checksum data incomplete, try next time...
+            else if (result == ValidationStatus::ChecksumIncomplete)
+            {
+                bytes = prevBytes;
+                break;
+            }
+
+            // Remove the data including the finish sequence from the master buffer
+            cursor = cursor.mid(fIndex + chop, -1);
+            bytes += fIndex + chop;
+
+            // Frame read successfully, save the number of bytes to chop.
+            // This is used to manage frames with incomplete checksums
+            prevBytes = bytes;
         }
 
-        // Remove the data including the finish sequence from the master buffer
-        cursor = cursor.mid(fIndex + chop, -1);
-        bytes += fIndex + chop;
-
-        // Frame read successfully, save the number of bytes to chop.
-        // This is used to manage frames with incomplete checksums
-        prevBytes = bytes;
+        // Frame empty, wait for more data...
+        else
+            bytes = prevBytes;
     }
 
     // Remove parsed data from master buffer

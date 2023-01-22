@@ -321,7 +321,7 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
     }
 
     // Ensure that index is valid
-    if (index >= 1 && index < m_serviceNames.count())
+    if (index >= 1 && index <= m_serviceNames.count())
     {
         // Generate service handler & connect signals/slots
         auto serviceUuid = m_controller->services().at(index - 1);
@@ -335,6 +335,8 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
                     &IO::Drivers::BluetoothLE::onCharacteristicChanged);
             connect(m_service, &QLowEnergyService::stateChanged, this,
                     &IO::Drivers::BluetoothLE::onServiceStateChanged);
+            connect(m_service, &QLowEnergyService::errorOccurred, this,
+                    &IO::Drivers::BluetoothLE::onServiceError);
             // clang-format on
 
             if (m_service->state() == QLowEnergyService::RemoteService)
@@ -367,8 +369,7 @@ void IO::Drivers::BluetoothLE::configureCharacteristics()
             continue;
 
         // Set client/descriptor connection properties
-        auto descriptor = c.descriptor(
-            QBluetoothUuid::DescriptorType::ClientCharacteristicConfiguration);
+        auto descriptor = c.clientCharacteristicConfiguration();
         if (descriptor.isValid())
             m_service->writeDescriptor(descriptor, QByteArray::fromHex("0100"));
     }
@@ -416,6 +417,35 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo &de
 }
 
 /**
+ * Notifies any service error that occurs
+ */
+void IO::Drivers::BluetoothLE::onServiceError(
+    QLowEnergyService::ServiceError serviceError)
+{
+    switch (serviceError)
+    {
+        case QLowEnergyService::OperationError:
+            Q_EMIT error(tr("Operation error"));
+            break;
+        case QLowEnergyService::CharacteristicWriteError:
+            Q_EMIT error(tr("Characteristic write error"));
+            break;
+        case QLowEnergyService::DescriptorWriteError:
+            Q_EMIT error(tr("Descriptor write error"));
+            break;
+        case QLowEnergyService::UnknownError:
+            Q_EMIT error(tr("Unknown error"));
+            break;
+        case QLowEnergyService::CharacteristicReadError:
+            Q_EMIT error(tr("Characteristic read error"));
+            break;
+        case QLowEnergyService::DescriptorReadError:
+            Q_EMIT error(tr("Descriptor read error"));
+            break;
+    }
+}
+
+/**
  * Notifies the user of any errors detected in the Bluetooth adapter of the computer.
  */
 void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error e)
@@ -448,7 +478,7 @@ void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::
 void IO::Drivers::BluetoothLE::onServiceStateChanged(
     QLowEnergyService::ServiceState serviceState)
 {
-    if (serviceState == QLowEnergyService::RemoteService)
+    if (serviceState == QLowEnergyService::ServiceDiscovered)
         configureCharacteristics();
 }
 
@@ -459,9 +489,7 @@ void IO::Drivers::BluetoothLE::onCharacteristicChanged(
     const QLowEnergyCharacteristic &info, const QByteArray &value)
 {
     (void)info;
-
-    if (!value.isEmpty())
-        Q_EMIT dataReceived(value);
+    Q_EMIT dataReceived(value);
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC

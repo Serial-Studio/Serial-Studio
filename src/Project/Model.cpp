@@ -1461,8 +1461,6 @@ void Project::Model::setDatasetFFTSamples(const int group, const int dataset,
  */
 void Project::Model::setModified(const bool modified)
 {
-    qDebug() << sender() << modified << Q_FUNC_INFO;
-
     m_modified = modified;
     Q_EMIT modifiedChanged();
 }
@@ -1483,8 +1481,6 @@ void Project::Model::onJsonLoaded()
  */
 void Project::Model::onModelChanged()
 {
-    qDebug() << sender() << Q_FUNC_INFO;
-
     setModified(true);
 }
 
@@ -1494,8 +1490,6 @@ void Project::Model::onModelChanged()
  */
 void Project::Model::onGroupChanged(const int group)
 {
-    qDebug() << sender() << Q_FUNC_INFO;
-
     (void)group;
     setModified(true);
 }
@@ -1509,8 +1503,6 @@ void Project::Model::onGroupChanged(const int group)
  */
 void Project::Model::onDatasetChanged(const int group, const int dataset)
 {
-    qDebug() << sender() << Q_FUNC_INFO;
-
     (void)group;
     (void)dataset;
     setModified(true);

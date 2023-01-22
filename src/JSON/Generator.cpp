@@ -41,10 +41,6 @@ JSON::Generator::Generator()
     : m_opMode(kAutomatic)
 {
     // clang-format off
-    connect(&CSV::Player::instance(), &CSV::Player::openChanged,
-            this, &JSON::Generator::reset);
-    connect(&IO::Manager::instance(), &IO::Manager::driverChanged,
-            this, &JSON::Generator::reset);
     connect(&IO::Manager::instance(), &IO::Manager::frameReceived,
             this, &JSON::Generator::readData);
     // clang-format on
@@ -219,17 +215,6 @@ void JSON::Generator::writeSettings(const QString &path)
 }
 
 /**
- * Resets all the statistics related to the current device and the JSON map file
- */
-void JSON::Generator::reset()
-{
-    m_json = QJsonObject();
-    m_latestValidValues.clear();
-
-    Q_EMIT jsonChanged(m_json);
-}
-
-/**
  * Tries to parse the given data as a JSON document according to the selected
  * operation mode.
  *
@@ -248,16 +233,10 @@ void JSON::Generator::readData(const QByteArray &data)
     if (data.isEmpty())
         return;
 
-    // Initialize status handler
-    bool ok = false;
-
     // Serial device sends JSON (auto mode)
     QJsonObject jsonData;
     if (operationMode() == JSON::Generator::kAutomatic)
-    {
         jsonData = QJsonDocument::fromJson(data).object();
-        ok = !jsonData.isEmpty();
-    }
 
     // Data is separated and parsed by Serial Studio (manual mode)
     else
@@ -285,9 +264,10 @@ void JSON::Generator::readData(const QByteArray &data)
 
                 if (index <= fields.count())
                 {
-                    ok = true;
                     dataset.remove("value");
                     dataset.insert("value", QJsonValue(fields.at(index - 1)));
+                    datasets.removeAt(j);
+                    datasets.insert(j, dataset);
                 }
             }
 
@@ -306,7 +286,7 @@ void JSON::Generator::readData(const QByteArray &data)
     }
 
     // Update UI
-    if (ok)
+    if (!jsonData.isEmpty())
         Q_EMIT jsonChanged(jsonData);
 }
 

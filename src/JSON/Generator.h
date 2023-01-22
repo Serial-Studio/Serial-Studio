@@ -109,7 +109,6 @@ public Q_SLOTS:
     void writeSettings(const QString &path);
 
 private Q_SLOTS:
-    void reset();
     void readData(const QByteArray &data);
 
 private:
@@ -118,6 +117,5 @@ private:
     QSettings m_settings;
     OperationMode m_opMode;
     QJsonParseError m_error;
-    QStringList m_latestValidValues;
 };
 }
