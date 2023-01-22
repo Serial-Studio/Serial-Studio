@@ -14,7 +14,7 @@
 
 Serial Studio is a simple, multi-platform, and multi-purpose data visualization program that allows embedded developers to visualize, analyze, and represent data generated from their projects and devices. It does not require the need to write project-specific visualization software.
 
-Over my many CanSat-based competitions, I found myself writing and maintaing several Ground Station Softwares for each program. However, I decided that it would be easier and more sustainable to define one flexible Ground Station Software that let developers define how each CanSat presents data using an extensible communication protocol for easy data visualization. Developers can also use Serial Studio for almost any data acquisition and visualization project outside of CanSat, now supporting data retrieval from a hardware serial ports, software serial ports, MQTT, and network sockets (TCP/UDP).
+Over my many CanSat-based competitions, I found myself writing and maintaing several Ground Station Softwares for each program. However, I decided that it would be easier and more sustainable to define one flexible Ground Station Software that let developers define how each CanSat presents data using an extensible communication protocol for easy data visualization. Developers can also use Serial Studio for almost any data acquisition and visualization project outside of CanSat, now supporting data retrieval from a hardware serial ports, software serial ports, MQTT, Bluetooth Low Energy (BLE) and network sockets (TCP/UDP).
 
 *Read this in other languages*: [Español](doc/README_ES.md) [简体中文](doc/README_ZH.md) [Deutsch](doc/README_DE.md)
 
