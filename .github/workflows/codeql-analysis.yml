@@ -9,7 +9,7 @@ on:
     - cron: '15 15 * * 0'
 
 env:
-  VERSION: "1.2.0"
+  VERSION: "2.0.0"
   QMAKE_PROJECT: "Serial-Studio.pro"
   QT_VERSION: 6.3.0
   QMAKE: qmake6

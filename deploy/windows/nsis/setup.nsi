@@ -29,9 +29,9 @@ Unicode True
 !define APPNAME                      "Serial Studio"
 !define EXECNAME                     "SerialStudio"
 !define COMPANYNAME                  "Alex Spataru"
-!define DESCRIPTION                  "Dashboard software for serial port devices"
-!define VERSIONMAJOR                 1
-!define VERSIONMINOR                 2
+!define DESCRIPTION                  "Multi-purpose data visualization & processing program"
+!define VERSIONMAJOR                 2
+!define VERSIONMINOR                 0
 !define VERSIONBUILD                 0
 !define MUI_ABORTWARNING
 !define INSTALL_DIR                  "$PROGRAMFILES64\${APPNAME}"

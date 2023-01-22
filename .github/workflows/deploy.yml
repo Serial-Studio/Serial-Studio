@@ -17,7 +17,7 @@ on:
 #--------------------------------------------------------------------------------
 
 env:
-  VERSION: "1.2.0"
+  VERSION: "2.0.0"
   EXECUTABLE: "SerialStudio"
   APPLICATION: "Serial Studio"
   UNIXNAME: "serial-studio"
@@ -189,7 +189,6 @@ jobs:
         mkdir "${{env.APPLICATION}}"
         move bin "${{env.APPLICATION}}"
         xcopy deploy\windows\resources\icon.ico "${{env.APPLICATION}}"
-        xcopy deploy\windows\openssl\*.dll "${{env.APPLICATION}}\bin"
         move "${{env.APPLICATION}}" deploy\windows\nsis\
 
     - name: '📦 Portable application'

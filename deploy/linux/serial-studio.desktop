@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Serial Studio
-Comment=Multi-purpose serial data visualization & processing program
+Comment=Multi-purpose data visualization & processing program
 Exec=serial-studio
 Terminal=false
 Type=Application
@@ -8,5 +8,5 @@ StartupNotify=true
 Categories=Electronics;Engineering;Science;
 Icon=serial-studio
 X-AppImage-Name=Serial Studio
-X-AppImage-Version=1.2.0
+X-AppImage-Version=2.0.0
 X-AppImage-Arch=x86_64

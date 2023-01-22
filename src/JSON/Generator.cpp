@@ -262,7 +262,7 @@ void JSON::Generator::readData(const QByteArray &data)
                 auto dataset = datasets.at(j).toObject();
                 auto index = dataset.value("index").toInt();
 
-                if (index <= fields.count())
+                if (index <= fields.count() && index >= 1)
                 {
                     dataset.remove("value");
                     dataset.insert("value", QJsonValue(fields.at(index - 1)));

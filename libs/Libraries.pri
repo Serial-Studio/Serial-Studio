@@ -45,6 +45,7 @@ INCLUDEPATH += $$PWD
 include($$PWD/qwt/qwt.pri)
 include($$PWD/qtcsv/qtcsv.pri)
 include($$PWD/qmqtt/qmqtt.pri)
+include($$PWD/OpenSSL/OpenSSL.pri)
 include($$PWD/QMapControl/QMapControl.pri)
 include($$PWD/QRealFourier/QRealFourier.pri)
 include($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
