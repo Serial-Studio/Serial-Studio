@@ -27,7 +27,7 @@ env:
   PUBLISHER: "Alex Spataru"
   REPO_DIR: "/home/runner/work/Serial-Studio"
   QT_VERSION: 6.5.0
-  QT_MODULES: qtserialport qtconnectivity
+  QT_MODULES: qtserialport qtconnectivity qt5compat
   QMAKE: qmake6
   CORES: 16
 
