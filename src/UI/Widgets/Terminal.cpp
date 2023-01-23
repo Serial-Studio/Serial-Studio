@@ -598,10 +598,10 @@ QString Widgets::Terminal::vt100Processing(const QString &data)
     return cleanLine;
 }
 
-//----------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // VT-100 / ANSI terminal hacks
 // https://code.qt.io/cgit/qt-creator/qt-creator.git/tree/src/libs/utils/ansiescapecodehandler.cpp
-//---------------------------------------------------------º-----------------------------------------
+//---------------------------------------------------------º----------------------------------------
 
 #define QTC_ASSERT(cond, action)                                                         \
     if (Q_LIKELY(cond))                                                                  \

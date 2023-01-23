@@ -53,10 +53,6 @@ QT += serialport
 QT += printsupport
 QT += quickcontrols2
 
-equals(QT_MAJOR_VERSION, 6) {
-    QT += core5compat
-}
-
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 #-----------------------------------------------------------------------------------------
