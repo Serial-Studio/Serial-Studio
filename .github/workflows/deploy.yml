@@ -67,7 +67,7 @@ jobs:
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
-        sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev libxcb-image0-dev libxcb-util0-dev xcb-util-cursor
+        sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev libxcb-image0-dev libxcb-util0-dev libxcb-cursor-dev
 
     - name: '🚧 Compile application'
       run: |
