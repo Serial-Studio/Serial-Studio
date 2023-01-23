@@ -23,8 +23,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-
-import Qt.labs.settings as QtSettings
+import QtCore as QtCore
 
 import "Devices" as Devices
 import "../../Windows" as Windows
@@ -33,9 +32,9 @@ Control {
     id: root
 
     //
-    // Save setti
+    // Save settings
     //
-    QtSettings.Settings {
+    QtCore.Settings {
         property alias driver: _driverCombo.currentIndex
         property alias parity: serial.parity
         property alias baudRate: serial.baudRate
@@ -65,7 +64,7 @@ Control {
             Layout.fillWidth: true
 
             Label {
-                text: qsTr("Device type") + ":"
+                text: qsTr("Data source") + ":"
                 Layout.alignment: Qt.AlignVCenter
             }
 

@@ -20,11 +20,11 @@
  * THE SOFTWARE.
  */
 
+import QtCore
 import QtQuick
 import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
-import Qt.labs.settings
 
 import "../FramelessWindow" as FramelessWindow
 
@@ -160,36 +160,45 @@ FramelessWindow.CustomWindow {
                 }
 
                 ColumnLayout {
-                    spacing: 0
+                    spacing: app.spacing * 2
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
+                    Item {
+                        Layout.fillHeight: true
+                    }
+
                     Label {
                         id: title
+                        font.bold: true
+                        font.pixelSize: 16
                         Layout.fillWidth: true
-                        text: "<h3>" + qsTr("Support the development of %1!").arg(Cpp_AppName) + "</h3>"
+                        Layout.minimumHeight: font.pixelSize
+                        text: qsTr("Support the development of %1!").arg(Cpp_AppName)
                     }
 
                     Label {
                         Layout.fillWidth: true
+                        Layout.minimumHeight: font.pixelSize * 3
                         Layout.maximumWidth: title.implicitWidth
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                         text: qsTr("Serial Studio is free & open-source software supported by volunteers. " +
                                    "Consider donating to support development efforts :)")
                     }
 
-                    Item {
-                        height: app.spacing * 2
-                    }
-
                     Label {
                         opacity: 0.8
                         font.pixelSize: 12
                         Layout.fillWidth: true
+                        Layout.minimumHeight: font.pixelSize * 2
                         Layout.maximumWidth: title.implicitWidth
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                         color: Cpp_ThemeManager.highlightedTextAlternative
                         text: qsTr("You can also support this project by sharing it, reporting bugs and proposing new features!")
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
                     }
                 }
             }

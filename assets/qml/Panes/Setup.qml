@@ -20,10 +20,10 @@
  * THE SOFTWARE.
  */
 
+import QtCore
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import Qt.labs.settings
 
 import "../Widgets" as Widgets
 import "SetupPanes" as SetupPanes
