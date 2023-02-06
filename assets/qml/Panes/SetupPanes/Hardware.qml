@@ -23,7 +23,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtCore as QtCore
+import Qt.labs.settings as QtSettings
 
 import "Devices" as Devices
 import "../../Windows" as Windows
@@ -34,7 +34,7 @@ Control {
     //
     // Save settings
     //
-    QtCore.Settings {
+    QtSettings.Settings {
         property alias driver: _driverCombo.currentIndex
         property alias parity: serial.parity
         property alias baudRate: serial.baudRate
