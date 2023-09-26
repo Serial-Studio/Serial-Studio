@@ -100,7 +100,7 @@ Control {
             }
 
             //
-            // Window shadows
+            // Custom window decorations
             //
             Label {
                 text: qsTr("Custom window decorations") + ": "
@@ -112,6 +112,22 @@ Control {
                 onCheckedChanged: {
                     if (checked != Cpp_ThemeManager.customWindowDecorations)
                         Cpp_ThemeManager.customWindowDecorations = checked
+                }
+            }
+
+            //
+            // Software rendering
+            //
+            Label {
+                text: qsTr("Software rendering") + ": "
+            } Switch {
+                id: _softwareRendering
+                Layout.leftMargin: -app.spacing
+                Layout.alignment: Qt.AlignLeft
+                checked: Cpp_ModuleManager.softwareRendering
+                onCheckedChanged: {
+                    if (checked !== Cpp_ModuleManager.softwareRendering)
+                        Cpp_ModuleManager.setSoftwareRenderingEnabled(checked)
                 }
             }
         }

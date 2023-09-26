@@ -83,9 +83,8 @@ Misc::ModuleManager::ModuleManager()
     qApp->setFont(font);
 
     // Enable software rendering
-#ifdef SERIAL_STUDIO_SOFTWARE_RENDERING
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
-#endif
+    if (softwareRendering())
+        QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
 
     // Stop modules when application is about to quit
     connect(engine(), SIGNAL(quit()), this, SLOT(onQuit()));
@@ -125,6 +124,17 @@ void Misc::ModuleManager::registerQmlTypes()
 {
     qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
     qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
+}
+
+/**
+ * Returns @c true if software rendering is enabled.
+ * By default, software rendering is enabled so that Serial Studio
+ * works with most computers and virtual machines.
+ */
+bool Misc::ModuleManager::softwareRendering()
+{
+    QSettings settings(APP_DEVELOPER, APP_NAME);
+    return settings.value("SoftwareRendering", true).toBool();
 }
 
 /**
@@ -254,6 +264,29 @@ void Misc::ModuleManager::onQuit()
     IO::Manager::instance().disconnectDriver();
     Misc::TimerEvents::instance().stopTimers();
     Plugins::Server::instance().removeConnection();
+}
+
+/**
+ * Enables or disables software rendering, which might be useful when
+ * dealing with virtual machine environments.
+ */
+void Misc::ModuleManager::setSoftwareRenderingEnabled(const bool enabled)
+{
+    // Change settings
+    QSettings settings(APP_DEVELOPER, APP_NAME);
+    settings.setValue("SoftwareRendering", enabled);
+
+    // Ask user to quit application
+    // clang-format off
+    auto ans = Utilities::showMessageBox(
+        tr("The change will take effect after restart"),
+        tr("Do you want to restart %1 now?").arg(APP_NAME), APP_NAME,
+        QMessageBox::Yes | QMessageBox::No);
+    // clang-format on
+
+    // Restart application
+    if (ans == QMessageBox::Yes)
+        Utilities::rebootApplication();
 }
 
 #ifdef SERIAL_STUDIO_INCLUDE_MOC
