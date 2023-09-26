@@ -79,11 +79,22 @@ FramelessWindow.CustomWindow {
         clip: true
         anchors.fill: parent
         anchors.margins: root.shadowMargin
-        palette.text: Cpp_ThemeManager.text
-        palette.buttonText: Cpp_ThemeManager.text
-        palette.windowText: Cpp_ThemeManager.text
         anchors.topMargin: titlebar.height + root.shadowMargin
-        palette.window: Cpp_ThemeManager.dialogBackground
+
+        palette.alternateBase: Cpp_ThemeManager.base
+        palette.base: Cpp_ThemeManager.base
+        palette.brightText: Cpp_ThemeManager.brightText
+        palette.button: Cpp_ThemeManager.button
+        palette.buttonText: Cpp_ThemeManager.buttonText
+        palette.highlight: Cpp_ThemeManager.highlight
+        palette.highlightedText: Cpp_ThemeManager.highlightedText
+        palette.link: Cpp_ThemeManager.link
+        palette.placeholderText: Cpp_ThemeManager.placeholderText
+        palette.text: Cpp_ThemeManager.text
+        palette.toolTipBase: Cpp_ThemeManager.tooltipBase
+        palette.toolTipText: Cpp_ThemeManager.tooltipText
+        palette.window: Cpp_ThemeManager.window
+        palette.windowText: Cpp_ThemeManager.windowText
 
         background: Rectangle {
             radius: root.radius
