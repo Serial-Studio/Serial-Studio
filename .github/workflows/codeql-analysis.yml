@@ -11,9 +11,10 @@ on:
 env:
   VERSION: "2.0.0"
   QMAKE_PROJECT: "Serial-Studio.pro"
-  QT_VERSION: 6.3.0
+  QT_VERSION: 6.5.3
   QMAKE: qmake6
   CORES: 16
+  QT_MODULES: qtserialport qtconnectivity qt5compat
 
 jobs:
   analyze:
@@ -40,25 +41,18 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
-    - name: '⚙️ Cache Qt'
-      id: cache-qt
-      uses: actions/cache@v1
-      with:
-        path: ../Qt
-        key: ${{runner.os}}-qtcachedir-${{env.QT_VERSION}}
-
     - name: '⚙️ Install Qt'
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{env.QT_VERSION}}
-        modules: qtserialport qt5compat qtconnectivity
+        modules: ${{env.QT_MODULES}}
         aqtversion: '==2.0.0'
         cached: ${{steps.cache-qt.outputs.cache-hit}}
 
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
-        sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev
+        sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev libxcb-image0-dev libxcb-util0-dev libxcb-cursor-dev
 
     - name: '🚧 Compile application'
       run: |
