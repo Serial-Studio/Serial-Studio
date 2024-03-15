@@ -1,8 +1,8 @@
+# Serial Studio
+
 <a href="#">
     <img width="192px" height="192px" src="doc/icon.svg" align="right" />
 </a>
-
-# Serial Studio
 
 [![Github commits](https://img.shields.io/github/last-commit/Serial-Studio/Serial-Studio)](https://github.com/Serial-Studio/Serial-Studio/commits/master)
 [![GitHub contributors](https://img.shields.io/github/contributors/Serial-Studio/Serial-Studio)](https://github.com/Serial-Studio/Serial-Studio/graphs/contributors)
