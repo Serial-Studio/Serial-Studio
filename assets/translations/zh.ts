@@ -389,7 +389,7 @@
     </message>
     <message>
         <source>Later</source>
-        <translation>后来</translation>
+        <translation>稍后再说</translation>
     </message>
     <message>
         <source>Close</source>
@@ -397,7 +397,7 @@
     </message>
     <message>
         <source>Support the development of %1!</source>
-        <translation>支持发展%1!</translation>
+        <translation>支持开发者%1!</translation>
     </message>
     <message>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating to support development efforts :)</source>
@@ -1011,7 +1011,7 @@
     </message>
     <message>
         <source>The compass widget expects values from 0° to 360°.</source>
-        <translation>指南针小组件期望的数值为0°到360°。</translation>
+        <translation>指南针组件输入的数值需为0°到360°。</translation>
     </message>
     <message>
         <source>Display LED:</source>
@@ -1140,11 +1140,11 @@
     </message>
     <message>
         <source>The accelerometer widget expects values in m/s².</source>
-        <translation>加速度计部件希望得到以m/s²为单位的值。</translation>
+        <translation>加速度计部件需得到以m/s²为单位的值。</translation>
     </message>
     <message>
         <source>The gyroscope widget expects values in degrees (0° to 360°).</source>
-        <translation>陀螺仪小组件希望得到以度为单位的值（0°到360°）。</translation>
+        <translation>陀螺仪组件输入的数值需为0°到360°(以度为单位)。</translation>
     </message>
 </context>
 <context>
@@ -2731,7 +2731,7 @@
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
-        <translation type="vanished">%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
+        <translation type="vanished">%1是否应该自动检查更新？ 您随时可以从“关于”对话框中手动检查更新</translation>
     </message>
     <message>
         <source>Drop *.json and *.csv files here</source>
@@ -2743,7 +2743,7 @@
     </message>
     <message>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation type="vanished">%1是否应该自动检查更新？ 您始终可以从“关于”对话框中手动检查更新</translation>
+        <translation type="vanished">%1是否应该自动检查更新？ 您随时可以从“关于”对话框中手动检查更新</translation>
     </message>
 </context>
 </TS>
