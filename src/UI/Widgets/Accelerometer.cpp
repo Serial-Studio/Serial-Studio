@@ -112,9 +112,9 @@ void Widgets::Accelerometer::updateData()
     }
 
     // Divide accelerations by gravitational constant
-    x /= 9.18;
-    y /= 9.18;
-    z /= 9.18;
+    x /= 9.81;
+    y /= 9.81;
+    z /= 9.81;
 
     // Normalize acceleration vector
     const double G = qSqrt(qPow(x, 2) + qPow(y, 2) + qPow(z, 2));
