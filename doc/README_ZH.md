@@ -18,7 +18,7 @@ Serial Studio是一个多平台，多用途的串行数据可视化的应用软�
 
 此外，本项目使用的方法可以扩展到涉及某种数据采集和测量的几乎任何类型的项目中。
 
-**注意:**有关通信协议的说明在[Wiki中](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol)提供。
+**注意:** 有关通信协议的说明在[Wiki中](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol)提供。
 
 *其他语言请阅读*  :[English](../README.md)、 [Español](README_ES.md)、 [Deutsch](README_DE.md)
 
