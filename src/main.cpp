@@ -85,6 +85,10 @@ int main(int argc, char **argv)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
+    // Avoid 200% scaling on 150% scaling...
+    auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
+    QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
+
     // Init. application
     QApplication app(argc, argv);
     app.setApplicationName(APP_NAME);
