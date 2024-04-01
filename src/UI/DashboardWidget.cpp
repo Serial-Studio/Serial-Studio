@@ -41,6 +41,7 @@
 UI::DashboardWidget::DashboardWidget(QQuickItem *parent)
     : DeclarativeWidget(parent)
     , m_index(-1)
+    , m_isGpsMap(false)
     , m_widgetVisible(false)
     , m_isExternalWindow(false)
 {
@@ -56,7 +57,7 @@ UI::DashboardWidget::DashboardWidget(QQuickItem *parent)
 UI::DashboardWidget::~DashboardWidget()
 {
     if (m_dbWidget)
-        delete m_dbWidget;
+        m_dbWidget->deleteLater();
 }
 
 /**
@@ -129,6 +130,67 @@ UI::Dashboard::WidgetType UI::DashboardWidget::widgetType() const
 }
 
 /**
+ * Hack: rendering a map is currently very hard on QtWidgets, so we
+ * must use the QtLocation API (QML only) to display the map. Prevously, we
+ * used QMapControl to render the satellite map, however, QMapControl does
+ * not support the current mapping APIs and the project seems to have been
+ * abandoned :(
+ *
+ * The quick and dirty solution is to break the nice abstraction that this
+ * class provided and feed the GPS data from C++ to QML through this class.
+ *
+ * On the QML side, a QML Loader will be activated if (and only if) the
+ * isGpsMap() function returns true, in turn, the QML loader will display
+ * the GPS/Map widget and feed it the GPS data. Not nice, not cool, not
+ * very efficient, but it is a fast solution for a problem that I don't
+ * have too much time to fix (if I could pay my rent by writting FOSS,
+ * believe me I would).
+ *
+ * Please ping me or make a PR if you find a better solution, or have
+ * some free time to cleanup this fix.
+ */
+bool UI::DashboardWidget::isGpsMap() const
+{
+    return m_isGpsMap;
+}
+
+/**
+ * Returns the current GPS altitude indicated by the GPS "parser" widget,
+ * this function only returns an useful value if @c isGpsMap() is @c true.
+ */
+qreal UI::DashboardWidget::gpsAltitude() const
+{
+    if (isGpsMap() && m_dbWidget)
+        return static_cast<Widgets::GPS*>(m_dbWidget)->altitude();
+
+    return 0;
+}
+
+/**
+ * Returns the current GPS altitude indicated by the GPS "parser" widget,
+ * this function only returns an useful value if @c isGpsMap() is @c true.
+ */
+qreal UI::DashboardWidget::gpsLatitude() const
+{
+    if (isGpsMap() && m_dbWidget)
+        return static_cast<Widgets::GPS*>(m_dbWidget)->latitude();
+
+    return 0;
+}
+
+/**
+ * Returns the current GPS altitude indicated by the GPS "parser" widget,
+ * this function only returns an useful value if @c isGpsMap() is @c true.
+ */
+qreal UI::DashboardWidget::gpsLongitude() const
+{
+    if (isGpsMap() && m_dbWidget)
+        return static_cast<Widgets::GPS*>(m_dbWidget)->longitude();
+
+    return 0;
+}
+
+/**
  * Changes the visibility & enabled status of the widget
  */
 void UI::DashboardWidget::setVisible(const bool visible)
@@ -152,46 +214,53 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
 
         // Delete previous widget
         if (m_dbWidget)
-            delete m_dbWidget;
+        {
+            m_dbWidget->deleteLater();
+            m_dbWidget = nullptr;
+        }
+
+        // Initialize the GPS indicator flag to false by default
+        m_isGpsMap = false;
 
         // Construct new widget
         switch (widgetType())
         {
-            case UI::Dashboard::WidgetType::Group:
-                m_dbWidget = new Widgets::DataGroup(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::MultiPlot:
-                m_dbWidget = new Widgets::MultiPlot(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::FFT:
-                m_dbWidget = new Widgets::FFTPlot(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::Plot:
-                m_dbWidget = new Widgets::Plot(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::Bar:
-                m_dbWidget = new Widgets::Bar(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::Gauge:
-                m_dbWidget = new Widgets::Gauge(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::Compass:
-                m_dbWidget = new Widgets::Compass(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::Gyroscope:
-                m_dbWidget = new Widgets::Gyroscope(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::Accelerometer:
-                m_dbWidget = new Widgets::Accelerometer(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::GPS:
-                m_dbWidget = new Widgets::GPS(relativeIndex());
-                break;
-            case UI::Dashboard::WidgetType::LED:
-                m_dbWidget = new Widgets::LEDPanel(relativeIndex());
-                break;
-            default:
-                break;
+        case UI::Dashboard::WidgetType::Group:
+            m_dbWidget = new Widgets::DataGroup(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::MultiPlot:
+            m_dbWidget = new Widgets::MultiPlot(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::FFT:
+            m_dbWidget = new Widgets::FFTPlot(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::Plot:
+            m_dbWidget = new Widgets::Plot(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::Bar:
+            m_dbWidget = new Widgets::Bar(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::Gauge:
+            m_dbWidget = new Widgets::Gauge(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::Compass:
+            m_dbWidget = new Widgets::Compass(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::Gyroscope:
+            m_dbWidget = new Widgets::Gyroscope(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::Accelerometer:
+            m_dbWidget = new Widgets::Accelerometer(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::GPS:
+            m_isGpsMap = true;
+            m_dbWidget = new Widgets::GPS(relativeIndex());
+            break;
+        case UI::Dashboard::WidgetType::LED:
+            m_dbWidget = new Widgets::LEDPanel(relativeIndex());
+            break;
+        default:
+            break;
         }
 
         // Configure widget
@@ -199,8 +268,13 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
         {
             setWidget(m_dbWidget);
             updateWidgetVisible();
-            connect(m_dbWidget, &Widgets::DashboardWidgetBase::updated,
-                    [=]() { update(); });
+            connect(m_dbWidget, &Widgets::DashboardWidgetBase::updated, this,
+                    [=]() {
+                        if (!isGpsMap())
+                            update();
+                        else
+                            Q_EMIT gpsDataChanged();
+                    });
 
             Q_EMIT widgetIndexChanged();
         }

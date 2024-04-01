@@ -119,9 +119,22 @@ class DashboardWidget : public DeclarativeWidget
                READ widgetVisible
                WRITE setVisible
                NOTIFY widgetVisibleChanged)
+    Q_PROPERTY(bool isGpsMap
+               READ isGpsMap
+               NOTIFY widgetIndexChanged)
+    Q_PROPERTY(qreal gpsAltitude
+               READ gpsAltitude
+               NOTIFY gpsDataChanged)
+    Q_PROPERTY(qreal gpsLatitude
+               READ gpsLatitude
+               NOTIFY gpsDataChanged)
+    Q_PROPERTY(qreal gpsLongitude
+               READ gpsLongitude
+               NOTIFY gpsDataChanged)
     // clang-format on
 
 Q_SIGNALS:
+    void gpsDataChanged();
     void widgetIndexChanged();
     void widgetVisibleChanged();
     void isExternalWindowChanged();
@@ -138,6 +151,11 @@ public:
     bool isExternalWindow() const;
     UI::Dashboard::WidgetType widgetType() const;
 
+    bool isGpsMap() const;
+    qreal gpsAltitude() const;
+    qreal gpsLatitude() const;
+    qreal gpsLongitude() const;
+
 public Q_SLOTS:
     void setVisible(const bool visible);
     void setWidgetIndex(const int index);
@@ -148,8 +166,9 @@ private Q_SLOTS:
 
 private:
     int m_index;
+    bool m_isGpsMap;
     bool m_widgetVisible;
     bool m_isExternalWindow;
-    QPointer<Widgets::DashboardWidgetBase> m_dbWidget;
+    Widgets::DashboardWidgetBase* m_dbWidget;
 };
 }

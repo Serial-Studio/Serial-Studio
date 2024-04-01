@@ -26,8 +26,8 @@ env:
   QML_DIR_WIN: "assets\\qml"
   PUBLISHER: "Alex Spataru"
   REPO_DIR: "/home/runner/work/Serial-Studio"
-  QT_VERSION: 6.5.3
-  QT_MODULES: qtserialport qtconnectivity qt5compat
+  QT_VERSION: 6.6.2
+  QT_MODULES: qtserialport qtconnectivity qt5compat qtpositioning qtlocation
   QMAKE: qmake6
   CORES: 16
 
@@ -45,24 +45,17 @@ jobs:
     steps:
 
     - name: '🧰 Checkout'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
-    - name: '⚙️ Cache Qt'
-      id: cache-qt
-      uses: actions/cache@v1
-      with:
-        path: ../Qt
-        key: ${{runner.os}}-qtcachedir-${{env.QT_VERSION}}
-
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: ${{env.QT_VERSION}}
         modules: ${{env.QT_MODULES}}
-        aqtversion: '==2.0.0'
-        cached: ${{steps.cache-qt.outputs.cache-hit}}
+        cache: true
+        install-deps: 'true'
 
     - name: '⚙️ Install dependencies'
       run: |
@@ -101,29 +94,22 @@ jobs:
   # macOS build
   #
   build-mac:
-    runs-on: macos-12
-    name: '🍎 macOS Monterey'
+    runs-on: macos-latest
+    name: '🍎 macOS'
     steps:
 
     - name: '🧰 Checkout'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
-    - name: '⚙️ Cache Qt'
-      id: cache-qt
-      uses: actions/cache@v1
-      with:
-        path: ../Qt
-        key: ${{runner.os}}-qtcachedir-${{env.QT_VERSION}}
-
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: ${{env.QT_VERSION}}
         modules: ${{env.QT_MODULES}}
-        aqtversion: '==2.0.0'
-        cached: ${{steps.cache-qt.outputs.cache-hit}}
+        cache: true
+        install-deps: 'true'
 
     - name: '🚧 Compile application'
       run: |
@@ -146,12 +132,12 @@ jobs:
   # Windows build
   #
   build-windows:
-    runs-on: windows-2022
-    name: '🧊 Windows Server 2022'
+    runs-on: windows-latest
+    name: '🧊 Windows'
     steps:
 
     - name: '🧰 Checkout'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
@@ -161,20 +147,13 @@ jobs:
         arch: x64
         spectre: true
 
-    - name: '⚙️ Cache Qt'
-      id: cache-qt
-      uses: actions/cache@v1
-      with:
-        path: ../Qt
-        key: ${{runner.os}}-qtcachedir-${{env.QT_VERSION}}
-
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: ${{env.QT_VERSION}}
         modules: ${{env.QT_MODULES}}
-        aqtversion: '==2.0.0'
-        cached: ${{steps.cache-qt.outputs.cache-hit}}
+        cache: true
+        install-deps: 'true'
 
     - name: '🚧 Compile application'
       run: |

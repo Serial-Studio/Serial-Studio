@@ -22,15 +22,7 @@
 
 #pragma once
 
-#include <QLabel>
-#include <QPushButton>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-
-#include <mapcontrol.h>
 #include <UI/DashboardWidget.h>
-
-class QNetworkReply;
 
 namespace Widgets
 {
@@ -41,21 +33,17 @@ class GPS : public DashboardWidgetBase
 public:
     GPS(const int index = -1);
 
+    qreal altitude() const;
+    qreal latitude() const;
+    qreal longitude() const;
+
 private Q_SLOTS:
     void updateData();
 
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-
 private:
     int m_index;
-    QLabel *m_label;
-    QVBoxLayout m_layout;
-    QPushButton *m_zoomIn;
-    QPushButton *m_zoomOut;
-    QWidget m_titleWidget;
-    QHBoxLayout m_titleLayout;
-    qmapcontrol::MapControl m_mapControl;
+    qreal m_altitude;
+    qreal m_latitude;
+    qreal m_longitude;
 };
 }

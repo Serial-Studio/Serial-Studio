@@ -23,7 +23,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import Qt.labs.settings as QtSettings
+import QtCore as QtSettings
 
 import "Devices" as Devices
 import "../../Windows" as Windows

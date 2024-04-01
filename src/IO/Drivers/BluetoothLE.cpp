@@ -442,6 +442,8 @@ void IO::Drivers::BluetoothLE::onServiceError(
         case QLowEnergyService::DescriptorReadError:
             Q_EMIT error(tr("Descriptor read error"));
             break;
+        default:
+            break;
     }
 }
 
@@ -478,7 +480,7 @@ void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::
 void IO::Drivers::BluetoothLE::onServiceStateChanged(
     QLowEnergyService::ServiceState serviceState)
 {
-    if (serviceState == QLowEnergyService::ServiceDiscovered)
+    if (serviceState == QLowEnergyService::RemoteServiceDiscovered)
         configureCharacteristics();
 }
 

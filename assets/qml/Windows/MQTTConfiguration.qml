@@ -20,11 +20,11 @@
  * THE SOFTWARE.
  */
 
+import QtCore
 import QtQuick
 import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
-import Qt.labs.settings
 
 import "../FramelessWindow" as FramelessWindow
 

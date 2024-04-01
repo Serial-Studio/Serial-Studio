@@ -48,9 +48,12 @@ QT += svg
 QT += core
 QT += quick
 QT += widgets
+QT += location
 QT += bluetooth
 QT += serialport
+QT += positioning
 QT += printsupport
+
 QT += quickcontrols2
 
 equals(QT_MAJOR_VERSION, 6) {

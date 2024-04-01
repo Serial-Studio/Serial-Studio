@@ -55,7 +55,6 @@ public Q_SLOTS:
     void setSoftwareRenderingEnabled(const bool enabled);
 
 private:
-    bool m_softwareRendering;
     QQmlApplicationEngine m_engine;
 };
 }

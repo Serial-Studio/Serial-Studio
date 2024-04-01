@@ -58,6 +58,21 @@ Item {
                 rightMargin: window.borderWidth
                 bottomMargin: window.borderWidth
             }
+
+            //
+            // Hack: render a GPS map using QML code instead of QtWidgets
+            //
+            Loader {
+                anchors.fill: parent
+                asynchronous: true
+                active: widget.isGpsMap
+                visible: widget.isGpsMap && status == Loader.Ready
+                sourceComponent: Widgets.GpsMap {
+                    altitude: widget.gpsAltitude
+                    latitude: widget.gpsLatitude
+                    longitude: widget.gpsLongitude
+                }
+            }
         }
     }
 
@@ -114,6 +129,18 @@ Item {
                     widgetIndex: root.widgetIndex
                     widgetVisible: _window.visible
                     anchors.margins: _window.radius
+
+                    Loader {
+                        anchors.fill: parent
+                        asynchronous: true
+                        active: externalWidget.isGpsMap
+                        visible: externalWidget.isGpsMap && status == Loader.Ready
+                        sourceComponent: Widgets.GpsMap {
+                            altitude: externalWidget.gpsAltitude
+                            latitude: externalWidget.gpsLatitude
+                            longitude: externalWidget.gpsLongitude
+                        }
+                    }
                 }
             }
 

@@ -180,5 +180,6 @@
         <file>window-border/unmaximize.svg</file>
         <file>icons/paste.svg</file>
         <file>scripts/frame-parser.js</file>
+        <file>qml/Widgets/GpsMap.qml</file>
     </qresource>
 </RCC>
