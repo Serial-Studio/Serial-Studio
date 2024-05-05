@@ -97,7 +97,6 @@ jobs:
   # macOS build (ARM64)
   #
   build-mac-arm:
-    if: false
     runs-on: macos-latest
     name: '🍎 macOS (ARM64)'
     steps:
@@ -171,6 +170,7 @@ jobs:
   # macOS build (Intel)
   #
   build-mac-intel:
+    if: false
     runs-on: macos-14-large
     name: '🍎 macOS (Intel)'
     steps:
@@ -423,7 +423,7 @@ jobs:
       needs:
         - build-linux
         - build-mac-arm
-        - build-mac-intel
+        #- build-mac-intel
         - build-windows
       runs-on: ubuntu-latest
       steps:
@@ -441,6 +441,6 @@ jobs:
             chmod +x pyuploadtool-x86_64.AppImage
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Arm64.dmg
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
+            #./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip
