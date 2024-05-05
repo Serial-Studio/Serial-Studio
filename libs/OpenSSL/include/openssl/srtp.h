@@ -19,7 +19,7 @@
 
 #include <openssl/macros.h>
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define HEADER_D1_SRTP_H
+#  define HEADER_D1_SRTP_H
 #endif
 
 #include <openssl/ssl.h>

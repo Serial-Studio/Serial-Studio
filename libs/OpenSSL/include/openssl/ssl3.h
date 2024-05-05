@@ -14,7 +14,7 @@
 
 #include <openssl/macros.h>
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define HEADER_SSL3_H
+#  define HEADER_SSL3_H
 #endif
 
 #include <openssl/comp.h>
@@ -149,12 +149,12 @@ extern "C" {
  * allocated region to its front, but makes data payload aligned, which
  * improves performance:-)
  */
-#    define SSL3_ALIGN_PAYLOAD 8
+#  define SSL3_ALIGN_PAYLOAD 8
 #else
-#    if (SSL3_ALIGN_PAYLOAD & (SSL3_ALIGN_PAYLOAD - 1)) != 0
-#        error "insane SSL3_ALIGN_PAYLOAD"
-#        undef SSL3_ALIGN_PAYLOAD
-#    endif
+#  if (SSL3_ALIGN_PAYLOAD & (SSL3_ALIGN_PAYLOAD - 1)) != 0
+#    error "insane SSL3_ALIGN_PAYLOAD"
+#    undef SSL3_ALIGN_PAYLOAD
+#  endif
 #endif
 
 /*
@@ -191,21 +191,23 @@ extern "C" {
  * send overhead is smaller.
  */
 
-#define SSL3_RT_SEND_MAX_ENCRYPTED_OVERHEAD (SSL_RT_MAX_CIPHER_BLOCK_SIZE + SSL3_RT_MAX_MD_SIZE)
+#define SSL3_RT_SEND_MAX_ENCRYPTED_OVERHEAD                                    \
+  (SSL_RT_MAX_CIPHER_BLOCK_SIZE + SSL3_RT_MAX_MD_SIZE)
 
 /* If compression isn't used don't include the compression overhead */
 
 #ifdef OPENSSL_NO_COMP
-#    define SSL3_RT_MAX_COMPRESSED_LENGTH SSL3_RT_MAX_PLAIN_LENGTH
+#  define SSL3_RT_MAX_COMPRESSED_LENGTH SSL3_RT_MAX_PLAIN_LENGTH
 #else
-#    define SSL3_RT_MAX_COMPRESSED_LENGTH                                                          \
-        (SSL3_RT_MAX_PLAIN_LENGTH + SSL3_RT_MAX_COMPRESSED_OVERHEAD)
+#  define SSL3_RT_MAX_COMPRESSED_LENGTH                                        \
+    (SSL3_RT_MAX_PLAIN_LENGTH + SSL3_RT_MAX_COMPRESSED_OVERHEAD)
 #endif
-#define SSL3_RT_MAX_ENCRYPTED_LENGTH                                                               \
-    (SSL3_RT_MAX_ENCRYPTED_OVERHEAD + SSL3_RT_MAX_COMPRESSED_LENGTH)
-#define SSL3_RT_MAX_TLS13_ENCRYPTED_LENGTH                                                         \
-    (SSL3_RT_MAX_PLAIN_LENGTH + SSL3_RT_MAX_TLS13_ENCRYPTED_OVERHEAD)
-#define SSL3_RT_MAX_PACKET_SIZE (SSL3_RT_MAX_ENCRYPTED_LENGTH + SSL3_RT_HEADER_LENGTH)
+#define SSL3_RT_MAX_ENCRYPTED_LENGTH                                           \
+  (SSL3_RT_MAX_ENCRYPTED_OVERHEAD + SSL3_RT_MAX_COMPRESSED_LENGTH)
+#define SSL3_RT_MAX_TLS13_ENCRYPTED_LENGTH                                     \
+  (SSL3_RT_MAX_PLAIN_LENGTH + SSL3_RT_MAX_TLS13_ENCRYPTED_OVERHEAD)
+#define SSL3_RT_MAX_PACKET_SIZE                                                \
+  (SSL3_RT_MAX_ENCRYPTED_LENGTH + SSL3_RT_HEADER_LENGTH)
 
 #define SSL3_MD_CLIENT_FINISHED_CONST "\x43\x4C\x4E\x54"
 #define SSL3_MD_SERVER_FINISHED_CONST "\x53\x52\x56\x52"
@@ -241,10 +243,10 @@ extern "C" {
 #define SSL3_AL_FATAL 2
 
 #define SSL3_AD_CLOSE_NOTIFY 0
-#define SSL3_AD_UNEXPECTED_MESSAGE 10 /* fatal */
-#define SSL3_AD_BAD_RECORD_MAC 20 /* fatal */
+#define SSL3_AD_UNEXPECTED_MESSAGE 10    /* fatal */
+#define SSL3_AD_BAD_RECORD_MAC 20        /* fatal */
 #define SSL3_AD_DECOMPRESSION_FAILURE 30 /* fatal */
-#define SSL3_AD_HANDSHAKE_FAILURE 40 /* fatal */
+#define SSL3_AD_HANDSHAKE_FAILURE 40     /* fatal */
 #define SSL3_AD_NO_CERTIFICATE 41
 #define SSL3_AD_BAD_CERTIFICATE 42
 #define SSL3_AD_UNSUPPORTED_CERTIFICATE 43
@@ -270,9 +272,9 @@ extern "C" {
 #define SSL3_CT_NUMBER 12
 
 #if defined(TLS_CT_NUMBER)
-#    if TLS_CT_NUMBER != SSL3_CT_NUMBER
-#        error "SSL/TLS CT_NUMBER values do not match"
-#    endif
+#  if TLS_CT_NUMBER != SSL3_CT_NUMBER
+#    error "SSL/TLS CT_NUMBER values do not match"
+#  endif
 #endif
 
 /* No longer used as of OpenSSL 1.1.1 */
@@ -316,7 +318,7 @@ extern "C" {
 #define SSL3_MT_KEY_UPDATE 24
 #define SSL3_MT_COMPRESSED_CERTIFICATE 25
 #ifndef OPENSSL_NO_NEXTPROTONEG
-#    define SSL3_MT_NEXT_PROTO 67
+#  define SSL3_MT_NEXT_PROTO 67
 #endif
 #define SSL3_MT_MESSAGE_HASH 254
 #define DTLS1_MT_HELLO_VERIFY_REQUEST 3

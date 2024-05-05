@@ -17,8 +17,8 @@
    \brief Constructor
    \param title Title
  */
-QwtPlotSvgItem::QwtPlotSvgItem( const QString& title )
-    : QwtPlotGraphicItem( QwtText( title ) )
+QwtPlotSvgItem::QwtPlotSvgItem(const QString &title)
+  : QwtPlotGraphicItem(QwtText(title))
 {
 }
 
@@ -26,15 +26,13 @@ QwtPlotSvgItem::QwtPlotSvgItem( const QString& title )
    \brief Constructor
    \param title Title
  */
-QwtPlotSvgItem::QwtPlotSvgItem( const QwtText& title )
-    : QwtPlotGraphicItem( title )
+QwtPlotSvgItem::QwtPlotSvgItem(const QwtText &title)
+  : QwtPlotGraphicItem(title)
 {
 }
 
 //! Destructor
-QwtPlotSvgItem::~QwtPlotSvgItem()
-{
-}
+QwtPlotSvgItem::~QwtPlotSvgItem() {}
 
 /*!
    Load a SVG file
@@ -44,23 +42,22 @@ QwtPlotSvgItem::~QwtPlotSvgItem()
 
    \return true, if the SVG file could be loaded
  */
-bool QwtPlotSvgItem::loadFile( const QRectF& rect,
-    const QString& fileName )
+bool QwtPlotSvgItem::loadFile(const QRectF &rect, const QString &fileName)
 {
-    QwtGraphic graphic;
+  QwtGraphic graphic;
 
-    QSvgRenderer renderer;
+  QSvgRenderer renderer;
 
-    const bool ok = renderer.load( fileName );
-    if ( ok )
-    {
-        QPainter p( &graphic );
-        renderer.render( &p );
-    }
+  const bool ok = renderer.load(fileName);
+  if (ok)
+  {
+    QPainter p(&graphic);
+    renderer.render(&p);
+  }
 
-    setGraphic( rect, graphic );
+  setGraphic(rect, graphic);
 
-    return ok;
+  return ok;
 }
 
 /*!
@@ -71,21 +68,20 @@ bool QwtPlotSvgItem::loadFile( const QRectF& rect,
 
    \return true, if the SVG data could be loaded
  */
-bool QwtPlotSvgItem::loadData( const QRectF& rect,
-    const QByteArray& data )
+bool QwtPlotSvgItem::loadData(const QRectF &rect, const QByteArray &data)
 {
-    QwtGraphic graphic;
+  QwtGraphic graphic;
 
-    QSvgRenderer renderer;
+  QSvgRenderer renderer;
 
-    const bool ok = renderer.load( data );
-    if ( ok )
-    {
-        QPainter p( &graphic );
-        renderer.render( &p );
-    }
+  const bool ok = renderer.load(data);
+  if (ok)
+  {
+    QPainter p(&graphic);
+    renderer.render(&p);
+  }
 
-    setGraphic( rect, graphic );
+  setGraphic(rect, graphic);
 
-    return ok;
+  return ok;
 }

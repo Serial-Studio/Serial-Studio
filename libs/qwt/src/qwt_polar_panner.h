@@ -29,23 +29,23 @@ class QwtPolarCanvas;
  */
 class QWT_EXPORT QwtPolarPanner : public QwtPanner
 {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    explicit QwtPolarPanner( QwtPolarCanvas* );
-    virtual ~QwtPolarPanner();
+public:
+  explicit QwtPolarPanner(QwtPolarCanvas *);
+  virtual ~QwtPolarPanner();
 
-    QwtPolarPlot* plot();
-    const QwtPolarPlot* plot() const;
+  QwtPolarPlot *plot();
+  const QwtPolarPlot *plot() const;
 
-    QwtPolarCanvas* canvas();
-    const QwtPolarCanvas* canvas() const;
+  QwtPolarCanvas *canvas();
+  const QwtPolarCanvas *canvas() const;
 
-  public Q_SLOTS:
-    virtual void movePlot( int dx, int dy );
+public Q_SLOTS:
+  virtual void movePlot(int dx, int dy);
 
-  protected:
-    virtual void widgetMousePressEvent( QMouseEvent* ) QWT_OVERRIDE;
+protected:
+  virtual void widgetMousePressEvent(QMouseEvent *) QWT_OVERRIDE;
 };
 
 #endif

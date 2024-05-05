@@ -31,9 +31,9 @@ void ChaCha20_ctr32(unsigned char *out, const unsigned char *inp, size_t len,
  * as trivial as collecting bytes into 32-bit elements, it's reckoned
  * that below macro is sufficient.
  */
-#define CHACHA_U8TOU32(p)                                                                          \
-    (((unsigned int)(p)[0]) | ((unsigned int)(p)[1] << 8) | ((unsigned int)(p)[2] << 16)           \
-     | ((unsigned int)(p)[3] << 24))
+#define CHACHA_U8TOU32(p)                                                      \
+  (((unsigned int)(p)[0]) | ((unsigned int)(p)[1] << 8)                        \
+   | ((unsigned int)(p)[2] << 16) | ((unsigned int)(p)[3] << 24))
 
 #define CHACHA_KEY_SIZE 32
 #define CHACHA_CTR_SIZE 16

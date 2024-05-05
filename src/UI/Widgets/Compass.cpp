@@ -32,42 +32,43 @@
  * Constructor function, configures widget style & signal/slot connections.
  */
 Widgets::Compass::Compass(const int index)
-    : m_index(index)
+  : m_index(index)
 {
-    // Get pointers to serial studio modules
-    auto dash = &UI::Dashboard::instance();
-    auto theme = &Misc::ThemeManager::instance();
+  // Get pointers to serial studio modules
+  auto dash = &UI::Dashboard::instance();
+  auto theme = &Misc::ThemeManager::instance();
 
-    // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->compassCount())
-        return;
+  // Invalid index, abort initialization
+  if (m_index < 0 || m_index >= dash->compassCount())
+    return;
 
-    // Set compass style
-    QwtCompassScaleDraw *scaleDraw = new QwtCompassScaleDraw();
-    scaleDraw->enableComponent(QwtAbstractScaleDraw::Ticks, true);
-    scaleDraw->enableComponent(QwtAbstractScaleDraw::Labels, true);
-    scaleDraw->enableComponent(QwtAbstractScaleDraw::Backbone, false);
-    scaleDraw->setTickLength(QwtScaleDiv::MinorTick, 1);
-    scaleDraw->setTickLength(QwtScaleDiv::MediumTick, 1);
-    scaleDraw->setTickLength(QwtScaleDiv::MajorTick, 3);
+  // Set compass style
+  QwtCompassScaleDraw *scaleDraw = new QwtCompassScaleDraw();
+  scaleDraw->enableComponent(QwtAbstractScaleDraw::Ticks, true);
+  scaleDraw->enableComponent(QwtAbstractScaleDraw::Labels, true);
+  scaleDraw->enableComponent(QwtAbstractScaleDraw::Backbone, false);
+  scaleDraw->setTickLength(QwtScaleDiv::MinorTick, 1);
+  scaleDraw->setTickLength(QwtScaleDiv::MediumTick, 1);
+  scaleDraw->setTickLength(QwtScaleDiv::MajorTick, 3);
 
-    // Configure compass scale & needle
-    m_compass.setScaleDraw(scaleDraw);
-    m_compass.setScaleMaxMajor(36);
-    m_compass.setScaleMaxMinor(5);
-    m_compass.setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
+  // Configure compass scale & needle
+  m_compass.setScaleDraw(scaleDraw);
+  m_compass.setScaleMaxMajor(36);
+  m_compass.setScaleMaxMinor(5);
+  m_compass.setNeedle(
+      new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
 
-    // Set compass palette
-    QPalette palette;
-    palette.setColor(QPalette::WindowText, theme->base());
-    palette.setColor(QPalette::Text, theme->widgetIndicator());
-    m_compass.setPalette(palette);
+  // Set compass palette
+  QPalette palette;
+  palette.setColor(QPalette::WindowText, theme->base());
+  palette.setColor(QPalette::Text, theme->widgetIndicator());
+  m_compass.setPalette(palette);
 
-    // Set widget pointer
-    setWidget(&m_compass);
+  // Set widget pointer
+  setWidget(&m_compass);
 
-    // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(update()), Qt::QueuedConnection);
+  // React to dashboard events
+  connect(dash, SIGNAL(updated()), this, SLOT(update()), Qt::QueuedConnection);
 }
 
 /**
@@ -79,35 +80,31 @@ Widgets::Compass::Compass(const int index)
  */
 void Widgets::Compass::update()
 {
-    // Widget disabled
-    if (!isEnabled())
-        return;
+  // Widget disabled
+  if (!isEnabled())
+    return;
 
-    // Invalid index, abort update
-    auto dash = &UI::Dashboard::instance();
-    if (m_index < 0 || m_index >= dash->compassCount())
-        return;
+  // Invalid index, abort update
+  auto dash = &UI::Dashboard::instance();
+  if (m_index < 0 || m_index >= dash->compassCount())
+    return;
 
-    // Get dataset value & set text format
-    auto dataset = dash->getCompass(m_index);
-    auto value = dataset.value().toDouble();
-    auto text = QString("%1°").arg(
-        QString::number(value, 'f', UI::Dashboard::instance().precision()));
+  // Get dataset value & set text format
+  auto dataset = dash->getCompass(m_index);
+  auto value = dataset.value().toDouble();
+  auto text = QString("%1°").arg(
+      QString::number(value, 'f', UI::Dashboard::instance().precision()));
 
-    // Ensure that angle always has 3 characters
-    if (text.length() == 2)
-        text.prepend("00");
-    else if (text.length() == 3)
-        text.prepend("0");
+  // Ensure that angle always has 3 characters
+  if (text.length() == 2)
+    text.prepend("00");
+  else if (text.length() == 3)
+    text.prepend("0");
 
-    // Update gauge
-    setValue(text);
-    m_compass.setValue(value);
+  // Update gauge
+  setValue(text);
+  m_compass.setValue(value);
 
-    // Repaint the widget
-    requestRepaint();
+  // Repaint the widget
+  requestRepaint();
 }
-
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_Compass.cpp"
-#endif

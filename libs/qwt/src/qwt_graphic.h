@@ -66,139 +66,137 @@ class QImage;
       what is needed for rendering the outline with an unscaled pen.
 
     Because the offset for drawing the outline depends on the shape
-    of the painter path ( the peak of a triangle is different than the flat side )
-    scaling with a fixed aspect ratio always needs to be calculated from the
+    of the painter path ( the peak of a triangle is different than the flat side
+   ) scaling with a fixed aspect ratio always needs to be calculated from the
     control point rectangle.
 
     \sa QwtPainterCommand
  */
 class QWT_EXPORT QwtGraphic : public QwtNullPaintDevice
 {
-  public:
+public:
+  /*!
+      Hint how to render a graphic
+      \sa setRenderHint(), testRenderHint()
+   */
+  enum RenderHint
+  {
     /*!
-        Hint how to render a graphic
-        \sa setRenderHint(), testRenderHint()
+       When rendering a QwtGraphic a specific scaling between
+       the controlPointRect() and the coordinates of the target rectangle
+       is set up internally in render().
+
+       When RenderPensUnscaled is set this specific scaling is applied
+       for the control points only, but not for the pens.
+       All other painter transformations ( set up by application code )
+       are supposed to work like usual.
+
+       \sa render();
      */
-    enum RenderHint
-    {
-        /*!
-           When rendering a QwtGraphic a specific scaling between
-           the controlPointRect() and the coordinates of the target rectangle
-           is set up internally in render().
+    RenderPensUnscaled = 0x1
+  };
 
-           When RenderPensUnscaled is set this specific scaling is applied
-           for the control points only, but not for the pens.
-           All other painter transformations ( set up by application code )
-           are supposed to work like usual.
+  Q_DECLARE_FLAGS(RenderHints, RenderHint)
 
-           \sa render();
-         */
-        RenderPensUnscaled = 0x1
-    };
+  /*!
+     Indicator if the graphic contains a specific type of painter command
+     \sa CommandTypes, commandTypes();
+   */
+  enum CommandType
+  {
+    //! The graphic contains scalable vector data
+    VectorData = 1 << 0,
 
-    Q_DECLARE_FLAGS( RenderHints, RenderHint )
+    //! The graphic contains raster data ( QPixmap or QImage )
+    RasterData = 1 << 1,
 
-    /*!
-       Indicator if the graphic contains a specific type of painter command
-       \sa CommandTypes, commandTypes();
-     */
-    enum CommandType
-    {
-        //! The graphic contains scalable vector data
-        VectorData     = 1 << 0,
+    //! The graphic contains transformations beyond simple translations
+    Transformation = 1 << 2
+  };
 
-        //! The graphic contains raster data ( QPixmap or QImage )
-        RasterData     = 1 << 1,
+  Q_DECLARE_FLAGS(CommandTypes, CommandType)
 
-        //! The graphic contains transformations beyond simple translations
-        Transformation = 1 << 2
-    };
+  QwtGraphic();
+  QwtGraphic(const QwtGraphic &);
 
-    Q_DECLARE_FLAGS( CommandTypes, CommandType )
+  virtual ~QwtGraphic();
 
-    QwtGraphic();
-    QwtGraphic( const QwtGraphic& );
+  QwtGraphic &operator=(const QwtGraphic &);
 
-    virtual ~QwtGraphic();
+  void reset();
 
-    QwtGraphic& operator=( const QwtGraphic& );
+  bool isNull() const;
+  bool isEmpty() const;
 
-    void reset();
+  CommandTypes commandTypes() const;
 
-    bool isNull() const;
-    bool isEmpty() const;
+  void render(QPainter *) const;
 
-    CommandTypes commandTypes() const;
+  void render(QPainter *, const QSizeF &,
+              Qt::AspectRatioMode = Qt::IgnoreAspectRatio) const;
 
-    void render( QPainter* ) const;
+  void render(QPainter *, const QPointF &,
+              Qt::Alignment = Qt::AlignTop | Qt::AlignLeft) const;
 
-    void render( QPainter*, const QSizeF&,
-        Qt::AspectRatioMode = Qt::IgnoreAspectRatio ) const;
+  void render(QPainter *, const QRectF &,
+              Qt::AspectRatioMode = Qt::IgnoreAspectRatio) const;
 
-    void render( QPainter*, const QPointF&,
-        Qt::Alignment = Qt::AlignTop | Qt::AlignLeft ) const;
+  QPixmap toPixmap(qreal devicePixelRatio = 0.0) const;
 
-    void render( QPainter*, const QRectF&,
-        Qt::AspectRatioMode = Qt::IgnoreAspectRatio ) const;
+  QPixmap toPixmap(const QSize &, Qt::AspectRatioMode = Qt::IgnoreAspectRatio,
+                   qreal devicePixelRatio = 0.0) const;
 
-    QPixmap toPixmap( qreal devicePixelRatio = 0.0 ) const;
+  QImage toImage(qreal devicePixelRatio = 0.0) const;
 
-    QPixmap toPixmap( const QSize&,
-        Qt::AspectRatioMode = Qt::IgnoreAspectRatio,
-        qreal devicePixelRatio = 0.0 ) const;
+  QImage toImage(const QSize &, Qt::AspectRatioMode = Qt::IgnoreAspectRatio,
+                 qreal devicePixelRatio = 0.0) const;
 
-    QImage toImage( qreal devicePixelRatio = 0.0 ) const;
+  QRectF scaledBoundingRect(qreal sx, qreal sy) const;
 
-    QImage toImage( const QSize&,
-        Qt::AspectRatioMode = Qt::IgnoreAspectRatio,
-        qreal devicePixelRatio = 0.0 ) const;
+  QRectF boundingRect() const;
+  QRectF controlPointRect() const;
 
-    QRectF scaledBoundingRect( qreal sx, qreal sy ) const;
+  const QVector<QwtPainterCommand> &commands() const;
+  void setCommands(const QVector<QwtPainterCommand> &);
 
-    QRectF boundingRect() const;
-    QRectF controlPointRect() const;
+  void setDefaultSize(const QSizeF &);
+  QSizeF defaultSize() const;
 
-    const QVector< QwtPainterCommand >& commands() const;
-    void setCommands( const QVector< QwtPainterCommand >& );
+  qreal heightForWidth(qreal width) const;
+  qreal widthForHeight(qreal height) const;
 
-    void setDefaultSize( const QSizeF& );
-    QSizeF defaultSize() const;
+  void setRenderHint(RenderHint, bool on = true);
+  bool testRenderHint(RenderHint) const;
 
-    qreal heightForWidth( qreal width ) const;
-    qreal widthForHeight( qreal height ) const;
+  RenderHints renderHints() const;
 
-    void setRenderHint( RenderHint, bool on = true );
-    bool testRenderHint( RenderHint ) const;
+protected:
+  virtual QSize sizeMetrics() const QWT_OVERRIDE;
 
-    RenderHints renderHints() const;
+  virtual void drawPath(const QPainterPath &) QWT_OVERRIDE;
 
-  protected:
-    virtual QSize sizeMetrics() const QWT_OVERRIDE;
+  virtual void drawPixmap(const QRectF &, const QPixmap &,
+                          const QRectF &) QWT_OVERRIDE;
 
-    virtual void drawPath( const QPainterPath& ) QWT_OVERRIDE;
+  virtual void drawImage(const QRectF &, const QImage &, const QRectF &,
+                         Qt::ImageConversionFlags) QWT_OVERRIDE;
 
-    virtual void drawPixmap( const QRectF&,
-        const QPixmap&, const QRectF& ) QWT_OVERRIDE;
+  virtual void updateState(const QPaintEngineState &) QWT_OVERRIDE;
 
-    virtual void drawImage( const QRectF&, const QImage&,
-        const QRectF&, Qt::ImageConversionFlags ) QWT_OVERRIDE;
+private:
+  void renderGraphic(QPainter *, QTransform *) const;
 
-    virtual void updateState( const QPaintEngineState& ) QWT_OVERRIDE;
+  void updateBoundingRect(const QRectF &);
+  void updateControlPointRect(const QRectF &);
 
-  private:
-    void renderGraphic( QPainter*, QTransform* ) const;
+  class PathInfo;
 
-    void updateBoundingRect( const QRectF& );
-    void updateControlPointRect( const QRectF& );
-
-    class PathInfo;
-
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtGraphic::RenderHints )
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtGraphic::CommandTypes )
-Q_DECLARE_METATYPE( QwtGraphic )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtGraphic::RenderHints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtGraphic::CommandTypes)
+Q_DECLARE_METATYPE(QwtGraphic)
 
 #endif

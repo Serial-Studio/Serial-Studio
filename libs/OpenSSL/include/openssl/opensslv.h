@@ -64,8 +64,9 @@ extern "C" {
  */
 
 /* For checking general API compatibility when preprocessing */
-#define OPENSSL_VERSION_PREREQ(maj, min)                                                           \
-    ((OPENSSL_VERSION_MAJOR << 16) + OPENSSL_VERSION_MINOR >= ((maj) << 16) + (min))
+#define OPENSSL_VERSION_PREREQ(maj, min)                                       \
+  ((OPENSSL_VERSION_MAJOR << 16) + OPENSSL_VERSION_MINOR                       \
+   >= ((maj) << 16) + (min))
 
 /*
  * Macros to get the version in easily digested string form, both the short
@@ -92,13 +93,13 @@ extern "C" {
 
 /* Synthesize OPENSSL_VERSION_NUMBER with the layout 0xMNN00PPSL */
 #ifdef OPENSSL_VERSION_PRE_RELEASE
-#    define _OPENSSL_VERSION_PRE_RELEASE 0x0L
+#  define _OPENSSL_VERSION_PRE_RELEASE 0x0L
 #else
-#    define _OPENSSL_VERSION_PRE_RELEASE 0xfL
+#  define _OPENSSL_VERSION_PRE_RELEASE 0xfL
 #endif
-#define OPENSSL_VERSION_NUMBER                                                                     \
-    ((OPENSSL_VERSION_MAJOR << 28) | (OPENSSL_VERSION_MINOR << 20) | (OPENSSL_VERSION_PATCH << 4)  \
-     | _OPENSSL_VERSION_PRE_RELEASE)
+#define OPENSSL_VERSION_NUMBER                                                 \
+  ((OPENSSL_VERSION_MAJOR << 28) | (OPENSSL_VERSION_MINOR << 20)               \
+   | (OPENSSL_VERSION_PATCH << 4) | _OPENSSL_VERSION_PRE_RELEASE)
 
 #ifdef __cplusplus
 }
@@ -106,7 +107,7 @@ extern "C" {
 
 #include <openssl/macros.h>
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define HEADER_OPENSSLV_H
+#  define HEADER_OPENSSLV_H
 #endif
 
 #endif /* OPENSSL_OPENSSLV_H */

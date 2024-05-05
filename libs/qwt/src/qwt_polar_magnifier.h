@@ -29,31 +29,31 @@ class QwtPolarCanvas;
 
 class QWT_EXPORT QwtPolarMagnifier : public QwtMagnifier
 {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    explicit QwtPolarMagnifier( QwtPolarCanvas* );
-    virtual ~QwtPolarMagnifier();
+public:
+  explicit QwtPolarMagnifier(QwtPolarCanvas *);
+  virtual ~QwtPolarMagnifier();
 
-    void setUnzoomKey( int key, int modifiers );
-    void getUnzoomKey( int& key, int& modifiers ) const;
+  void setUnzoomKey(int key, int modifiers);
+  void getUnzoomKey(int &key, int &modifiers) const;
 
-    QwtPolarPlot* plot();
-    const QwtPolarPlot* plot() const;
+  QwtPolarPlot *plot();
+  const QwtPolarPlot *plot() const;
 
-    QwtPolarCanvas* canvas();
-    const QwtPolarCanvas* canvas() const;
+  QwtPolarCanvas *canvas();
+  const QwtPolarCanvas *canvas() const;
 
-  public Q_SLOTS:
-    virtual void rescale( double factor ) QWT_OVERRIDE;
-    void unzoom();
+public Q_SLOTS:
+  virtual void rescale(double factor) QWT_OVERRIDE;
+  void unzoom();
 
-  protected:
-    virtual void widgetKeyPressEvent( QKeyEvent* ) QWT_OVERRIDE;
+protected:
+  virtual void widgetKeyPressEvent(QKeyEvent *) QWT_OVERRIDE;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

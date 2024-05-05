@@ -45,22 +45,19 @@ qrealfourier@gmail.com
 #include "FFTRealFixLen.h"
 #include "qfouriercalculator.h"
 
-template <int T>
+template<int T>
 class QFourierFixedCalculator : public QFourierCalculator
 {
 
-	public:
-		
-		QFourierFixedCalculator();
-		void setSize(int size);
-		void forward();
-		void inverse();
-		void rescale();
+public:
+  QFourierFixedCalculator();
+  void setSize(int size);
+  void forward();
+  void inverse();
+  void rescale();
 
-	protected:
-
-		ffft::FFTRealFixLen<T> mFourierTransform;
-
+protected:
+  ffft::FFTRealFixLen<T> mFourierTransform;
 };
 
 #endif

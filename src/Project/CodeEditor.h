@@ -39,45 +39,45 @@ namespace Project
 {
 class CodeEditor : public QDialog
 {
-    Q_OBJECT
+  Q_OBJECT
 
 private:
-    explicit CodeEditor();
-    ~CodeEditor();
-    CodeEditor(CodeEditor &&) = delete;
-    CodeEditor(const CodeEditor &) = delete;
-    CodeEditor &operator=(CodeEditor &&) = delete;
-    CodeEditor &operator=(const CodeEditor &) = delete;
+  explicit CodeEditor();
+  ~CodeEditor();
+  CodeEditor(CodeEditor &&) = delete;
+  CodeEditor(const CodeEditor &) = delete;
+  CodeEditor &operator=(CodeEditor &&) = delete;
+  CodeEditor &operator=(const CodeEditor &) = delete;
 
 public:
-    static CodeEditor &instance();
-    QString defaultCode() const;
-    QStringList parse(const QString &frame, const QString &separator);
+  static CodeEditor &instance();
+  QString defaultCode() const;
+  QStringList parse(const QString &frame, const QString &separator);
 
 public Q_SLOTS:
-    void displayWindow();
+  void displayWindow();
 
 private Q_SLOTS:
-    void onNewClicked();
-    void onOpenClicked();
-    void onSaveClicked();
-    void onHelpClicked();
+  void onNewClicked();
+  void onOpenClicked();
+  void onSaveClicked();
+  void onHelpClicked();
 
 private:
-    bool checkModified();
-    bool save(const bool silent = false);
-    bool loadScript(const QString &script);
-    void closeEvent(QCloseEvent *event) override;
+  bool checkModified();
+  bool save(const bool silent = false);
+  bool loadScript(const QString &script);
+  void closeEvent(QCloseEvent *event) override;
 
 private slots:
-    void readCode();
-    void writeChanges();
+  void readCode();
+  void writeChanges();
 
 private:
-    QJSEngine m_engine;
-    QToolBar m_toolbar;
-    QJSValue m_parseFunction;
-    QPlainTextEdit m_textEdit;
-    QSourceHighlite::QSourceHighliter *m_highlighter;
+  QJSEngine m_engine;
+  QToolBar m_toolbar;
+  QJSValue m_parseFunction;
+  QPlainTextEdit m_textEdit;
+  QSourceHighlite::QSourceHighliter *m_highlighter;
 };
-}
+} // namespace Project

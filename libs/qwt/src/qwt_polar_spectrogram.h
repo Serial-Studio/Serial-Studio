@@ -27,65 +27,64 @@ class QwtColorMap;
  */
 class QWT_EXPORT QwtPolarSpectrogram : public QwtPolarItem
 {
-  public:
+public:
+  /*!
+      Attributes to modify the drawing algorithm.
+      The default setting disables ApproximatedAtan
+
+      \sa setPaintAttribute(), testPaintAttribute()
+   */
+  enum PaintAttribute
+  {
     /*!
-        Attributes to modify the drawing algorithm.
-        The default setting disables ApproximatedAtan
-
-        \sa setPaintAttribute(), testPaintAttribute()
+       Use qwtFastAtan2 instead of atan2 for translating
+       widget into polar coordinates.
      */
-    enum PaintAttribute
-    {
-        /*!
-           Use qwtFastAtan2 instead of atan2 for translating
-           widget into polar coordinates.
-         */
 
-        ApproximatedAtan = 0x01
-    };
+    ApproximatedAtan = 0x01
+  };
 
-    Q_DECLARE_FLAGS( PaintAttributes, PaintAttribute )
+  Q_DECLARE_FLAGS(PaintAttributes, PaintAttribute)
 
-    explicit QwtPolarSpectrogram();
-    virtual ~QwtPolarSpectrogram();
+  explicit QwtPolarSpectrogram();
+  virtual ~QwtPolarSpectrogram();
 
-    void setData( QwtRasterData* data );
-    const QwtRasterData* data() const;
+  void setData(QwtRasterData *data);
+  const QwtRasterData *data() const;
 
-    void setColorMap( QwtColorMap* );
-    const QwtColorMap* colorMap() const;
+  void setColorMap(QwtColorMap *);
+  const QwtColorMap *colorMap() const;
 
-    void setPaintAttribute( PaintAttribute, bool on = true );
-    bool testPaintAttribute( PaintAttribute ) const;
+  void setPaintAttribute(PaintAttribute, bool on = true);
+  bool testPaintAttribute(PaintAttribute) const;
 
-    virtual int rtti() const QWT_OVERRIDE;
+  virtual int rtti() const QWT_OVERRIDE;
 
-    virtual void draw( QPainter* painter,
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, double radius,
-        const QRectF& canvasRect ) const QWT_OVERRIDE;
+  virtual void draw(QPainter *painter, const QwtScaleMap &azimuthMap,
+                    const QwtScaleMap &radialMap, const QPointF &pole,
+                    double radius, const QRectF &canvasRect) const QWT_OVERRIDE;
 
-    virtual QwtInterval boundingInterval( int scaleId ) const QWT_OVERRIDE;
+  virtual QwtInterval boundingInterval(int scaleId) const QWT_OVERRIDE;
 
-  protected:
-    virtual QImage renderImage(
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, const QRect& rect ) const;
+protected:
+  virtual QImage renderImage(const QwtScaleMap &azimuthMap,
+                             const QwtScaleMap &radialMap, const QPointF &pole,
+                             const QRect &rect) const;
 
-    virtual void renderTile(
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, const QPoint& imagePos,
-        const QRect& tile, QImage* image ) const;
+  virtual void renderTile(const QwtScaleMap &azimuthMap,
+                          const QwtScaleMap &radialMap, const QPointF &pole,
+                          const QPoint &imagePos, const QRect &tile,
+                          QImage *image) const;
 
-  private:
-    class TileInfo;
-    void renderTileInfo( const QwtScaleMap&, const QwtScaleMap&,
-        const QPointF& pole, TileInfo* ) const;
+private:
+  class TileInfo;
+  void renderTileInfo(const QwtScaleMap &, const QwtScaleMap &,
+                      const QPointF &pole, TileInfo *) const;
 
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPolarSpectrogram::PaintAttributes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPolarSpectrogram::PaintAttributes)
 
 #endif

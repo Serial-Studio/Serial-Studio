@@ -39,20 +39,21 @@ typedef struct stream_frame_st STREAM_FRAME;
 
 typedef struct sframe_list_st
 {
-    OSSL_QRX *qrx;
-    STREAM_FRAME *head, *tail;
-    /* Is the tail frame final. */
-    unsigned int fin;
-    /* Number of stream frames in the list. */
-    size_t num_frames;
-    /* Offset of data not yet dropped */
-    uint64_t offset;
+  OSSL_QRX *qrx;
+  STREAM_FRAME *head, *tail;
+  /* Is the tail frame final. */
+  unsigned int fin;
+  /* Number of stream frames in the list. */
+  size_t num_frames;
+  /* Offset of data not yet dropped */
+  uint64_t offset;
 } SFRAME_LIST;
 
 void ossl_sframe_list_init(SFRAME_LIST *fl, OSSL_QRX *qrx);
 void ossl_sframe_list_destroy(SFRAME_LIST *fl);
-int ossl_sframe_list_insert(SFRAME_LIST *fl, UINT_RANGE *range, OSSL_QRX_PKT_WRAP *pkt,
-                            const unsigned char *data, int fin);
+int ossl_sframe_list_insert(SFRAME_LIST *fl, UINT_RANGE *range,
+                            OSSL_QRX_PKT_WRAP *pkt, const unsigned char *data,
+                            int fin);
 int ossl_sframe_list_peek(const SFRAME_LIST *fl, void **iter, UINT_RANGE *range,
                           const unsigned char **data, int *fin);
 int ossl_sframe_list_drop_frames(SFRAME_LIST *fl, uint64_t limit);

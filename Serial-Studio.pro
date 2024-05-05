@@ -20,9 +20,9 @@
 # THE SOFTWARE.
 #
 
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Make options
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 UI_DIR = uic
 MOC_DIR = moc
@@ -33,15 +33,15 @@ isEmpty(PREFIX) {
     PREFIX = /usr
 }
 
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Qt configuration
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
-TEMPLATE = app                                           # Project template
-TARGET = serial-studio                                   # Set default target name
-CONFIG += qtquickcompiler                                # Pre-compile QML interface
-CONFIG += utf8_source                                    # Source code encoding
-QTPLUGIN += qsvg                                         # Fixes issues with windeployqt
+TEMPLATE = app
+TARGET = serial-studio
+CONFIG += qtquickcompiler
+CONFIG += utf8_source
+QTPLUGIN += qsvg
 
 QT += xml
 QT += svg
@@ -56,15 +56,9 @@ QT += printsupport
 
 QT += quickcontrols2
 
-equals(QT_MAJOR_VERSION, 6) {
-    QT += core5compat
-}
-
-DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
-
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Compiler options
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 CONFIG += c++11
 CONFIG += silent
@@ -79,68 +73,64 @@ CONFIG(release, debug|release) {
     }
 }
 
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Serial Studio compile-time settings
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
-DEFINES += SERIAL_STUDIO_INCLUDE_MOC
+#DEFINES += DISABLE_QS # If enabled, QSimpleUpdater shall not be used by the app
+                       # This is the default behaviour for MinGW.
 
-#DEFINES += DISABLE_QSU     # If enabled, QSimpleUpdater shall not be used by the app.
-                            # This is the default behaviour for MinGW.
-
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Libraries
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 include(libs/Libraries.pri)
 
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Assets
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 include(assets/Assets.pri)
 
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Deploy options
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 win32* {
-    TARGET = SerialStudio                                # Change target name
-    RC_FILE = deploy/windows/resources/info.rc           # Set applicaiton icon
-    OTHER_FILES += deploy/windows/nsis/setup.nsi         # Setup script
+    TARGET = SerialStudio
+    RC_FILE = deploy/windows/resources/info.rc
+    OTHER_FILES += deploy/windows/nsis/setup.nsi
 }
 
 macx* {
-    TARGET = SerialStudio                                # Change target name
-    ICON = deploy/macOS/icon.icns                        # icon file
-    RC_FILE = deploy/macOS/icon.icns                     # icon file
-    QMAKE_INFO_PLIST = deploy/macOS/info.plist           # Add info.plist file
-    CONFIG += sdk_no_version_check                       # Avoid warnings with Big Sur
+    TARGET = SerialStudio
+    ICON = deploy/macOS/icon.icns
+    RC_FILE = deploy/macOS/icon.icns
+    QMAKE_INFO_PLIST = deploy/macOS/info.plist
+    CONFIG += sdk_no_version_check
 }
 
 linux:!android {
-    PKGCONFIG += libssl                                  # Add OpenSSL library
-    target.path = $$PREFIX/bin                           # Set binary installation path
-    icon.path = $$PREFIX/share/pixmaps                   # icon instalation path
-    desktop.path = $$PREFIX/share/applications           # *.desktop instalation path
-    icon.files += deploy/linux/serial-studio.png         # Add application icon
-    desktop.files += deploy/linux/serial-studio.desktop  # Add *.desktop file
-    copyright.files += deploy/linux/copyright            # Libc6 file for linuxdeployqt
-    copyright.path = $$PREFIX/share/doc/libc6            # libc6 copyright path
-    INSTALLS += target copyright desktop icon            # make install targets
+    PKGCONFIG += libssl
+    target.path = $$PREFIX/bin
+    icon.path = $$PREFIX/share/pixmaps
+    desktop.path = $$PREFIX/share/applications
+    icon.files += deploy/linux/serial-studio.png
+    desktop.files += deploy/linux/serial-studio.desktop
+    INSTALLS += target copyright desktop icon
 }
 
 mingw {
     target.path = $$PREFIX/bin
-    license.path = $$PREFIX/share/licenses/$$TARGET      # Set license install path
-    license.files += LICENSE.md                          # Add LICENSE.md file
-    INSTALLS += target license                           # Install target+licence (MSYS2)
-    DEFINES += DISABLE_QSU                               # Disable QSimpleUpdater (MSYS2)
+    license.path = $$PREFIX/share/licenses/$$TARGET
+    license.files += LICENSE.md
+    INSTALLS += target license
+    DEFINES += DISABLE_QSU
 }
 
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Import source code
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 INCLUDEPATH += src
 
@@ -161,7 +151,6 @@ HEADERS += \
     src/JSON/Generator.h \
     src/JSON/Group.h \
     src/MQTT/Client.h \
-    src/Misc/MacExtras.h \
     src/Misc/ModuleManager.h \
     src/Misc/ThemeManager.h \
     src/Misc/TimerEvents.h \
@@ -205,7 +194,6 @@ SOURCES += \
     src/JSON/Generator.cpp \
     src/JSON/Group.cpp \
     src/MQTT/Client.cpp \
-    src/Misc/MacExtras.cpp \
     src/Misc/ModuleManager.cpp \
     src/Misc/ThemeManager.cpp \
     src/Misc/TimerEvents.cpp \
@@ -236,9 +224,9 @@ SOURCES += \
     src/UI/Widgets/Terminal.cpp \
     src/main.cpp
 
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Import QML source code
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 DISTFILES += \
     assets/qml/*.qml \
@@ -252,9 +240,9 @@ DISTFILES += \
     assets/qml/PlatformDependent/*.qml \
     assets/qml/Panes/SetupPanes/Devices/*.qml \
 
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Deploy files
-#-----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 OTHER_FILES += \
     deploy/linux/* \

@@ -25,120 +25,120 @@ class QRectF;
  */
 class QWT_EXPORT QwtColumnRect
 {
-  public:
-    //! Direction of the column
-    enum Direction
-    {
-        //! From left to right
-        LeftToRight,
+public:
+  //! Direction of the column
+  enum Direction
+  {
+    //! From left to right
+    LeftToRight,
 
-        //! From right to left
-        RightToLeft,
+    //! From right to left
+    RightToLeft,
 
-        //! From bottom to top
-        BottomToTop,
+    //! From bottom to top
+    BottomToTop,
 
-        //! From top to bottom
-        TopToBottom
-    };
+    //! From top to bottom
+    TopToBottom
+  };
 
-    //! Build an rectangle with invalid intervals directed BottomToTop.
-    QwtColumnRect()
-        : direction( BottomToTop )
-    {
-    }
+  //! Build an rectangle with invalid intervals directed BottomToTop.
+  QwtColumnRect()
+    : direction(BottomToTop)
+  {
+  }
 
-    //! \return A normalized QRect built from the intervals
-    QRectF toRect() const;
+  //! \return A normalized QRect built from the intervals
+  QRectF toRect() const;
 
-    //! \return Orientation
-    Qt::Orientation orientation() const
-    {
-        if ( direction == LeftToRight || direction == RightToLeft )
-            return Qt::Horizontal;
+  //! \return Orientation
+  Qt::Orientation orientation() const
+  {
+    if (direction == LeftToRight || direction == RightToLeft)
+      return Qt::Horizontal;
 
-        return Qt::Vertical;
-    }
+    return Qt::Vertical;
+  }
 
-    //! Interval for the horizontal coordinates
-    QwtInterval hInterval;
+  //! Interval for the horizontal coordinates
+  QwtInterval hInterval;
 
-    //! Interval for the vertical coordinates
-    QwtInterval vInterval;
+  //! Interval for the vertical coordinates
+  QwtInterval vInterval;
 
-    //! Direction
-    Direction direction;
+  //! Direction
+  Direction direction;
 };
 
 //! A drawing primitive for columns
 class QWT_EXPORT QwtColumnSymbol
 {
-  public:
-    /*!
-       Style
-       \sa setStyle(), style()
-     */
-    enum Style
-    {
-        //! No Style, the symbol draws nothing
-        NoStyle = -1,
-
-        /*!
-           The column is painted with a frame depending on the frameStyle()
-           and lineWidth() using the palette().
-         */
-        Box,
-
-        /*!
-           Styles >= QwtColumnSymbol::UserStyle are reserved for derived
-           classes of QwtColumnSymbol that overload draw() with
-           additional application specific symbol types.
-         */
-        UserStyle = 1000
-    };
+public:
+  /*!
+     Style
+     \sa setStyle(), style()
+   */
+  enum Style
+  {
+    //! No Style, the symbol draws nothing
+    NoStyle = -1,
 
     /*!
-       Frame Style used in Box style().
-       \sa Style, setFrameStyle(), frameStyle(), setStyle(), setPalette()
+       The column is painted with a frame depending on the frameStyle()
+       and lineWidth() using the palette().
      */
-    enum FrameStyle
-    {
-        //! No frame
-        NoFrame,
+    Box,
 
-        //! A plain frame style
-        Plain,
+    /*!
+       Styles >= QwtColumnSymbol::UserStyle are reserved for derived
+       classes of QwtColumnSymbol that overload draw() with
+       additional application specific symbol types.
+     */
+    UserStyle = 1000
+  };
 
-        //! A raised frame style
-        Raised
-    };
+  /*!
+     Frame Style used in Box style().
+     \sa Style, setFrameStyle(), frameStyle(), setStyle(), setPalette()
+   */
+  enum FrameStyle
+  {
+    //! No frame
+    NoFrame,
 
-  public:
-    explicit QwtColumnSymbol( Style = NoStyle );
-    virtual ~QwtColumnSymbol();
+    //! A plain frame style
+    Plain,
 
-    void setFrameStyle( FrameStyle );
-    FrameStyle frameStyle() const;
+    //! A raised frame style
+    Raised
+  };
 
-    void setLineWidth( int width );
-    int lineWidth() const;
+public:
+  explicit QwtColumnSymbol(Style = NoStyle);
+  virtual ~QwtColumnSymbol();
 
-    void setPalette( const QPalette& );
-    const QPalette& palette() const;
+  void setFrameStyle(FrameStyle);
+  FrameStyle frameStyle() const;
 
-    void setStyle( Style );
-    Style style() const;
+  void setLineWidth(int width);
+  int lineWidth() const;
 
-    virtual void draw( QPainter*, const QwtColumnRect& ) const;
+  void setPalette(const QPalette &);
+  const QPalette &palette() const;
 
-  protected:
-    void drawBox( QPainter*, const QwtColumnRect& ) const;
+  void setStyle(Style);
+  Style style() const;
 
-  private:
-    Q_DISABLE_COPY(QwtColumnSymbol)
+  virtual void draw(QPainter *, const QwtColumnRect &) const;
 
-    class PrivateData;
-    PrivateData* m_data;
+protected:
+  void drawBox(QPainter *, const QwtColumnRect &) const;
+
+private:
+  Q_DISABLE_COPY(QwtColumnSymbol)
+
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

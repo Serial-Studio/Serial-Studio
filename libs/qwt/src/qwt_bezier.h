@@ -28,25 +28,26 @@ class QPolygonF;
  */
 class QWT_EXPORT QwtBezier
 {
-  public:
-    QwtBezier( double tolerance = 0.5 );
-    ~QwtBezier();
+public:
+  QwtBezier(double tolerance = 0.5);
+  ~QwtBezier();
 
-    void setTolerance( double tolerance );
-    double tolerance() const;
+  void setTolerance(double tolerance);
+  double tolerance() const;
 
-    QPolygonF toPolygon( const QPointF& p1, const QPointF& cp1,
-        const QPointF& cp2, const QPointF& p2 ) const;
+  QPolygonF toPolygon(const QPointF &p1, const QPointF &cp1, const QPointF &cp2,
+                      const QPointF &p2) const;
 
-    void appendToPolygon( const QPointF& p1, const QPointF& cp1,
-        const QPointF& cp2, const QPointF& p2, QPolygonF& polygon ) const;
+  void appendToPolygon(const QPointF &p1, const QPointF &cp1,
+                       const QPointF &cp2, const QPointF &p2,
+                       QPolygonF &polygon) const;
 
-    static QPointF pointAt( const QPointF& p1, const QPointF& cp1,
-        const QPointF& cp2, const QPointF& p2, double t );
+  static QPointF pointAt(const QPointF &p1, const QPointF &cp1,
+                         const QPointF &cp2, const QPointF &p2, double t);
 
-  private:
-    double m_tolerance;
-    double m_flatness;
+private:
+  double m_tolerance;
+  double m_flatness;
 };
 
 /*!
@@ -55,7 +56,7 @@ class QWT_EXPORT QwtBezier
  */
 inline double QwtBezier::tolerance() const
 {
-    return m_tolerance;
+  return m_tolerance;
 }
 
 #endif

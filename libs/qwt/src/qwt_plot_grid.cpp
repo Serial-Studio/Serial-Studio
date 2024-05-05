@@ -16,54 +16,54 @@
 #include <qpainter.h>
 #include <qpen.h>
 
-static inline bool qwtFuzzyGreaterOrEqual( double d1, double d2 )
+static inline bool qwtFuzzyGreaterOrEqual(double d1, double d2)
 {
-    return ( d1 >= d2 ) || qFuzzyCompare( d1, d2 );
+  return (d1 >= d2) || qFuzzyCompare(d1, d2);
 }
 
 class QwtPlotGrid::PrivateData
 {
-  public:
-    PrivateData()
-        : xEnabled( true )
-        , yEnabled( true )
-        , xMinEnabled( false )
-        , yMinEnabled( false )
-    {
-    }
+public:
+  PrivateData()
+    : xEnabled(true)
+    , yEnabled(true)
+    , xMinEnabled(false)
+    , yMinEnabled(false)
+  {
+  }
 
-    bool xEnabled;
-    bool yEnabled;
-    bool xMinEnabled;
-    bool yMinEnabled;
+  bool xEnabled;
+  bool yEnabled;
+  bool xMinEnabled;
+  bool yMinEnabled;
 
-    QwtScaleDiv xScaleDiv;
-    QwtScaleDiv yScaleDiv;
+  QwtScaleDiv xScaleDiv;
+  QwtScaleDiv yScaleDiv;
 
-    QPen majorPen;
-    QPen minorPen;
+  QPen majorPen;
+  QPen minorPen;
 };
 
 //! Enables major grid, disables minor grid
 QwtPlotGrid::QwtPlotGrid()
-    : QwtPlotItem( QwtText( "Grid" ) )
+  : QwtPlotItem(QwtText("Grid"))
 {
-    m_data = new PrivateData;
+  m_data = new PrivateData;
 
-    setItemInterest( QwtPlotItem::ScaleInterest, true );
-    setZ( 10.0 );
+  setItemInterest(QwtPlotItem::ScaleInterest, true);
+  setZ(10.0);
 }
 
 //! Destructor
 QwtPlotGrid::~QwtPlotGrid()
 {
-    delete m_data;
+  delete m_data;
 }
 
 //! \return QwtPlotItem::Rtti_PlotGrid
 int QwtPlotGrid::rtti() const
 {
-    return QwtPlotItem::Rtti_PlotGrid;
+  return QwtPlotItem::Rtti_PlotGrid;
 }
 
 /*!
@@ -73,15 +73,15 @@ int QwtPlotGrid::rtti() const
    \sa Minor grid lines can be enabled or disabled with
       enableXMin()
  */
-void QwtPlotGrid::enableX( bool on )
+void QwtPlotGrid::enableX(bool on)
 {
-    if ( m_data->xEnabled != on )
-    {
-        m_data->xEnabled = on;
+  if (m_data->xEnabled != on)
+  {
+    m_data->xEnabled = on;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -89,15 +89,15 @@ void QwtPlotGrid::enableX( bool on )
    \param on Enable (true) or disable
    \sa Minor grid lines can be enabled or disabled with enableYMin()
  */
-void QwtPlotGrid::enableY( bool on )
+void QwtPlotGrid::enableY(bool on)
 {
-    if ( m_data->yEnabled != on )
-    {
-        m_data->yEnabled = on;
+  if (m_data->yEnabled != on)
+  {
+    m_data->yEnabled = on;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -105,15 +105,15 @@ void QwtPlotGrid::enableY( bool on )
    \param on Enable (true) or disable
    \sa enableX()
  */
-void QwtPlotGrid::enableXMin( bool on )
+void QwtPlotGrid::enableXMin(bool on)
 {
-    if ( m_data->xMinEnabled != on )
-    {
-        m_data->xMinEnabled = on;
+  if (m_data->xMinEnabled != on)
+  {
+    m_data->xMinEnabled = on;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -121,15 +121,15 @@ void QwtPlotGrid::enableXMin( bool on )
    \param on Enable (true) or disable
    \sa enableY()
  */
-void QwtPlotGrid::enableYMin( bool on )
+void QwtPlotGrid::enableYMin(bool on)
 {
-    if ( m_data->yMinEnabled != on )
-    {
-        m_data->yMinEnabled = on;
+  if (m_data->yMinEnabled != on)
+  {
+    m_data->yMinEnabled = on;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -137,13 +137,13 @@ void QwtPlotGrid::enableYMin( bool on )
 
    \param scaleDiv Scale division
  */
-void QwtPlotGrid::setXDiv( const QwtScaleDiv& scaleDiv )
+void QwtPlotGrid::setXDiv(const QwtScaleDiv &scaleDiv)
 {
-    if ( m_data->xScaleDiv != scaleDiv )
-    {
-        m_data->xScaleDiv = scaleDiv;
-        itemChanged();
-    }
+  if (m_data->xScaleDiv != scaleDiv)
+  {
+    m_data->xScaleDiv = scaleDiv;
+    itemChanged();
+  }
 }
 
 /*!
@@ -151,13 +151,13 @@ void QwtPlotGrid::setXDiv( const QwtScaleDiv& scaleDiv )
 
    \param scaleDiv Scale division
  */
-void QwtPlotGrid::setYDiv( const QwtScaleDiv& scaleDiv )
+void QwtPlotGrid::setYDiv(const QwtScaleDiv &scaleDiv)
 {
-    if ( m_data->yScaleDiv != scaleDiv )
-    {
-        m_data->yScaleDiv = scaleDiv;
-        itemChanged();
-    }
+  if (m_data->yScaleDiv != scaleDiv)
+  {
+    m_data->yScaleDiv = scaleDiv;
+    itemChanged();
+  }
 }
 
 /*!
@@ -173,9 +173,9 @@ void QwtPlotGrid::setYDiv( const QwtScaleDiv& scaleDiv )
 
    \sa pen(), brush()
  */
-void QwtPlotGrid::setPen( const QColor& color, qreal width, Qt::PenStyle style )
+void QwtPlotGrid::setPen(const QColor &color, qreal width, Qt::PenStyle style)
 {
-    setPen( QPen( color, width, style ) );
+  setPen(QPen(color, width, style));
 }
 
 /*!
@@ -184,16 +184,16 @@ void QwtPlotGrid::setPen( const QColor& color, qreal width, Qt::PenStyle style )
    \param pen Pen
    \sa setMajorPen(), setMinorPen()
  */
-void QwtPlotGrid::setPen( const QPen& pen )
+void QwtPlotGrid::setPen(const QPen &pen)
 {
-    if ( m_data->majorPen != pen || m_data->minorPen != pen )
-    {
-        m_data->majorPen = pen;
-        m_data->minorPen = pen;
+  if (m_data->majorPen != pen || m_data->minorPen != pen)
+  {
+    m_data->majorPen = pen;
+    m_data->minorPen = pen;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -209,9 +209,10 @@ void QwtPlotGrid::setPen( const QPen& pen )
 
    \sa pen(), brush()
  */
-void QwtPlotGrid::setMajorPen( const QColor& color, qreal width, Qt::PenStyle style )
+void QwtPlotGrid::setMajorPen(const QColor &color, qreal width,
+                              Qt::PenStyle style)
 {
-    setMajorPen( QPen( color, width, style ) );
+  setMajorPen(QPen(color, width, style));
 }
 
 /*!
@@ -220,15 +221,15 @@ void QwtPlotGrid::setMajorPen( const QColor& color, qreal width, Qt::PenStyle st
    \param pen Pen
    \sa majorPen(), setMinorPen(), setPen()
  */
-void QwtPlotGrid::setMajorPen( const QPen& pen )
+void QwtPlotGrid::setMajorPen(const QPen &pen)
 {
-    if ( m_data->majorPen != pen )
-    {
-        m_data->majorPen = pen;
+  if (m_data->majorPen != pen)
+  {
+    m_data->majorPen = pen;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -244,9 +245,10 @@ void QwtPlotGrid::setMajorPen( const QPen& pen )
 
    \sa pen(), brush()
  */
-void QwtPlotGrid::setMinorPen( const QColor& color, qreal width, Qt::PenStyle style )
+void QwtPlotGrid::setMinorPen(const QColor &color, qreal width,
+                              Qt::PenStyle style)
 {
-    setMinorPen( QPen( color, width, style ) );
+  setMinorPen(QPen(color, width, style));
 }
 
 /*!
@@ -255,15 +257,15 @@ void QwtPlotGrid::setMinorPen( const QColor& color, qreal width, Qt::PenStyle st
    \param pen Pen
    \sa minorPen(), setMajorPen(), setPen()
  */
-void QwtPlotGrid::setMinorPen( const QPen& pen )
+void QwtPlotGrid::setMinorPen(const QPen &pen)
 {
-    if ( m_data->minorPen != pen )
-    {
-        m_data->minorPen = pen;
+  if (m_data->minorPen != pen)
+  {
+    m_data->minorPen = pen;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -279,103 +281,103 @@ void QwtPlotGrid::setMinorPen( const QPen& pen )
    \param yMap Y axis
    \param canvasRect Contents rectangle of the plot canvas
  */
-void QwtPlotGrid::draw( QPainter* painter,
-    const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect ) const
+void QwtPlotGrid::draw(QPainter *painter, const QwtScaleMap &xMap,
+                       const QwtScaleMap &yMap, const QRectF &canvasRect) const
 {
-    //  draw minor grid lines
-    QPen minorPen = m_data->minorPen;
-    minorPen.setCapStyle( Qt::FlatCap );
+  //  draw minor grid lines
+  QPen minorPen = m_data->minorPen;
+  minorPen.setCapStyle(Qt::FlatCap);
 
-    painter->setPen( minorPen );
+  painter->setPen(minorPen);
 
-    if ( m_data->xEnabled && m_data->xMinEnabled )
-    {
-        drawLines( painter, canvasRect, Qt::Vertical, xMap,
-            m_data->xScaleDiv.ticks( QwtScaleDiv::MinorTick ) );
-        drawLines( painter, canvasRect, Qt::Vertical, xMap,
-            m_data->xScaleDiv.ticks( QwtScaleDiv::MediumTick ) );
-    }
+  if (m_data->xEnabled && m_data->xMinEnabled)
+  {
+    drawLines(painter, canvasRect, Qt::Vertical, xMap,
+              m_data->xScaleDiv.ticks(QwtScaleDiv::MinorTick));
+    drawLines(painter, canvasRect, Qt::Vertical, xMap,
+              m_data->xScaleDiv.ticks(QwtScaleDiv::MediumTick));
+  }
 
-    if ( m_data->yEnabled && m_data->yMinEnabled )
-    {
-        drawLines( painter, canvasRect, Qt::Horizontal, yMap,
-            m_data->yScaleDiv.ticks( QwtScaleDiv::MinorTick ) );
-        drawLines( painter, canvasRect, Qt::Horizontal, yMap,
-            m_data->yScaleDiv.ticks( QwtScaleDiv::MediumTick ) );
-    }
+  if (m_data->yEnabled && m_data->yMinEnabled)
+  {
+    drawLines(painter, canvasRect, Qt::Horizontal, yMap,
+              m_data->yScaleDiv.ticks(QwtScaleDiv::MinorTick));
+    drawLines(painter, canvasRect, Qt::Horizontal, yMap,
+              m_data->yScaleDiv.ticks(QwtScaleDiv::MediumTick));
+  }
 
-    //  draw major grid lines
-    QPen majorPen = m_data->majorPen;
-    majorPen.setCapStyle( Qt::FlatCap );
+  //  draw major grid lines
+  QPen majorPen = m_data->majorPen;
+  majorPen.setCapStyle(Qt::FlatCap);
 
-    painter->setPen( majorPen );
+  painter->setPen(majorPen);
 
-    if ( m_data->xEnabled )
-    {
-        drawLines( painter, canvasRect, Qt::Vertical, xMap,
-            m_data->xScaleDiv.ticks( QwtScaleDiv::MajorTick ) );
-    }
+  if (m_data->xEnabled)
+  {
+    drawLines(painter, canvasRect, Qt::Vertical, xMap,
+              m_data->xScaleDiv.ticks(QwtScaleDiv::MajorTick));
+  }
 
-    if ( m_data->yEnabled )
-    {
-        drawLines( painter, canvasRect, Qt::Horizontal, yMap,
-            m_data->yScaleDiv.ticks( QwtScaleDiv::MajorTick ) );
-    }
+  if (m_data->yEnabled)
+  {
+    drawLines(painter, canvasRect, Qt::Horizontal, yMap,
+              m_data->yScaleDiv.ticks(QwtScaleDiv::MajorTick));
+  }
 }
 
-void QwtPlotGrid::drawLines( QPainter* painter, const QRectF& canvasRect,
-    Qt::Orientation orientation, const QwtScaleMap& scaleMap,
-    const QList< double >& values ) const
+void QwtPlotGrid::drawLines(QPainter *painter, const QRectF &canvasRect,
+                            Qt::Orientation orientation,
+                            const QwtScaleMap &scaleMap,
+                            const QList<double> &values) const
 {
-    const double x1 = canvasRect.left();
-    const double x2 = canvasRect.right() - 1.0;
-    const double y1 = canvasRect.top();
-    const double y2 = canvasRect.bottom() - 1.0;
+  const double x1 = canvasRect.left();
+  const double x2 = canvasRect.right() - 1.0;
+  const double y1 = canvasRect.top();
+  const double y2 = canvasRect.bottom() - 1.0;
 
-    const bool doAlign = QwtPainter::roundingAlignment( painter );
+  const bool doAlign = QwtPainter::roundingAlignment(painter);
 
-    for ( int i = 0; i < values.count(); i++ )
+  for (int i = 0; i < values.count(); i++)
+  {
+    double value = scaleMap.transform(values[i]);
+    if (doAlign)
+      value = qRound(value);
+
+    if (orientation == Qt::Horizontal)
     {
-        double value = scaleMap.transform( values[i] );
-        if ( doAlign )
-            value = qRound( value );
-
-        if ( orientation == Qt::Horizontal )
-        {
-            if ( qwtFuzzyGreaterOrEqual( value, y1 ) &&
-                qwtFuzzyGreaterOrEqual( y2, value ) )
-            {
-                QwtPainter::drawLine( painter, x1, value, x2, value );
-            }
-        }
-        else
-        {
-            if ( qwtFuzzyGreaterOrEqual( value, x1 ) &&
-                qwtFuzzyGreaterOrEqual( x2, value ) )
-            {
-                QwtPainter::drawLine( painter, value, y1, value, y2 );
-            }
-        }
+      if (qwtFuzzyGreaterOrEqual(value, y1)
+          && qwtFuzzyGreaterOrEqual(y2, value))
+      {
+        QwtPainter::drawLine(painter, x1, value, x2, value);
+      }
     }
+    else
+    {
+      if (qwtFuzzyGreaterOrEqual(value, x1)
+          && qwtFuzzyGreaterOrEqual(x2, value))
+      {
+        QwtPainter::drawLine(painter, value, y1, value, y2);
+      }
+    }
+  }
 }
 
 /*!
    \return the pen for the major grid lines
    \sa setMajorPen(), setMinorPen(), setPen()
  */
-const QPen& QwtPlotGrid::majorPen() const
+const QPen &QwtPlotGrid::majorPen() const
 {
-    return m_data->majorPen;
+  return m_data->majorPen;
 }
 
 /*!
    \return the pen for the minor grid lines
    \sa setMinorPen(), setMajorPen(), setPen()
  */
-const QPen& QwtPlotGrid::minorPen() const
+const QPen &QwtPlotGrid::minorPen() const
 {
-    return m_data->minorPen;
+  return m_data->minorPen;
 }
 
 /*!
@@ -384,7 +386,7 @@ const QPen& QwtPlotGrid::minorPen() const
  */
 bool QwtPlotGrid::xEnabled() const
 {
-    return m_data->xEnabled;
+  return m_data->xEnabled;
 }
 
 /*!
@@ -393,7 +395,7 @@ bool QwtPlotGrid::xEnabled() const
  */
 bool QwtPlotGrid::xMinEnabled() const
 {
-    return m_data->xMinEnabled;
+  return m_data->xMinEnabled;
 }
 
 /*!
@@ -402,7 +404,7 @@ bool QwtPlotGrid::xMinEnabled() const
  */
 bool QwtPlotGrid::yEnabled() const
 {
-    return m_data->yEnabled;
+  return m_data->yEnabled;
 }
 
 /*!
@@ -411,20 +413,19 @@ bool QwtPlotGrid::yEnabled() const
  */
 bool QwtPlotGrid::yMinEnabled() const
 {
-    return m_data->yMinEnabled;
+  return m_data->yMinEnabled;
 }
 
-
 /*! \return the scale division of the x axis */
-const QwtScaleDiv& QwtPlotGrid::xScaleDiv() const
+const QwtScaleDiv &QwtPlotGrid::xScaleDiv() const
 {
-    return m_data->xScaleDiv;
+  return m_data->xScaleDiv;
 }
 
 /*! \return the scale division of the y axis */
-const QwtScaleDiv& QwtPlotGrid::yScaleDiv() const
+const QwtScaleDiv &QwtPlotGrid::yScaleDiv() const
 {
-    return m_data->yScaleDiv;
+  return m_data->yScaleDiv;
 }
 
 /*!
@@ -435,9 +436,9 @@ const QwtScaleDiv& QwtPlotGrid::yScaleDiv() const
 
    \sa QwtPlot::updateAxes()
  */
-void QwtPlotGrid::updateScaleDiv( const QwtScaleDiv& xScaleDiv,
-    const QwtScaleDiv& yScaleDiv )
+void QwtPlotGrid::updateScaleDiv(const QwtScaleDiv &xScaleDiv,
+                                 const QwtScaleDiv &yScaleDiv)
 {
-    setXDiv( xScaleDiv );
-    setYDiv( yScaleDiv );
+  setXDiv(xScaleDiv);
+  setYDiv(yScaleDiv);
 }

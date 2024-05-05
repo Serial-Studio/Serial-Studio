@@ -13,20 +13,20 @@
 
 typedef enum
 {
-    SURROGATE_MIN = 0xd800UL,
-    SURROGATE_MAX = 0xdfffUL,
-    UNICODE_MAX = 0x10ffffUL,
-    UNICODE_LIMIT
+  SURROGATE_MIN = 0xd800UL,
+  SURROGATE_MAX = 0xdfffUL,
+  UNICODE_MAX = 0x10ffffUL,
+  UNICODE_LIMIT
 } UNICODE_CONSTANTS;
 
 static ossl_unused ossl_inline int is_unicode_surrogate(unsigned long value)
 {
-    return value >= SURROGATE_MIN && value <= SURROGATE_MAX;
+  return value >= SURROGATE_MIN && value <= SURROGATE_MAX;
 }
 
 static ossl_unused ossl_inline int is_unicode_valid(unsigned long value)
 {
-    return value <= UNICODE_MAX && !is_unicode_surrogate(value);
+  return value <= UNICODE_MAX && !is_unicode_surrogate(value);
 }
 
 #endif

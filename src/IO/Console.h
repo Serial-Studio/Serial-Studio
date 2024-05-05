@@ -39,7 +39,7 @@ namespace IO
  */
 class Console : public QObject
 {
-    // clang-format off
+  // clang-format off
     Q_OBJECT
     Q_PROPERTY(bool echo
                READ echo
@@ -71,110 +71,110 @@ class Console : public QObject
     Q_PROPERTY(QString currentHistoryString
                READ currentHistoryString
                NOTIFY historyItemChanged)
-    // clang-format on
+  // clang-format on
 
 Q_SIGNALS:
-    void echoChanged();
-    void dataReceived();
-    void dataModeChanged();
-    void autoscrollChanged();
-    void lineEndingChanged();
-    void displayModeChanged();
-    void historyItemChanged();
-    void textDocumentChanged();
-    void showTimestampChanged();
-    void stringReceived(const QString &text);
+  void echoChanged();
+  void dataReceived();
+  void dataModeChanged();
+  void autoscrollChanged();
+  void lineEndingChanged();
+  void displayModeChanged();
+  void historyItemChanged();
+  void textDocumentChanged();
+  void showTimestampChanged();
+  void stringReceived(const QString &text);
 
 private:
-    explicit Console();
-    Console(Console &&) = delete;
-    Console(const Console &) = delete;
-    Console &operator=(Console &&) = delete;
-    Console &operator=(const Console &) = delete;
+  explicit Console();
+  Console(Console &&) = delete;
+  Console(const Console &) = delete;
+  Console &operator=(Console &&) = delete;
+  Console &operator=(const Console &) = delete;
 
 public:
-    enum class DisplayMode
-    {
-        DisplayPlainText,
-        DisplayHexadecimal
-    };
-    Q_ENUM(DisplayMode)
+  enum class DisplayMode
+  {
+    DisplayPlainText,
+    DisplayHexadecimal
+  };
+  Q_ENUM(DisplayMode)
 
-    enum class DataMode
-    {
-        DataUTF8,
-        DataHexadecimal
-    };
-    Q_ENUM(DataMode)
+  enum class DataMode
+  {
+    DataUTF8,
+    DataHexadecimal
+  };
+  Q_ENUM(DataMode)
 
-    enum class LineEnding
-    {
-        NoLineEnding,
-        NewLine,
-        CarriageReturn,
-        BothNewLineAndCarriageReturn
-    };
-    Q_ENUM(LineEnding)
+  enum class LineEnding
+  {
+    NoLineEnding,
+    NewLine,
+    CarriageReturn,
+    BothNewLineAndCarriageReturn
+  };
+  Q_ENUM(LineEnding)
 
-    static Console &instance();
+  static Console &instance();
 
-    bool echo() const;
-    bool autoscroll() const;
-    bool saveAvailable() const;
-    bool showTimestamp() const;
+  bool echo() const;
+  bool autoscroll() const;
+  bool saveAvailable() const;
+  bool showTimestamp() const;
 
-    DataMode dataMode() const;
-    LineEnding lineEnding() const;
-    DisplayMode displayMode() const;
-    QString currentHistoryString() const;
+  DataMode dataMode() const;
+  LineEnding lineEnding() const;
+  DisplayMode displayMode() const;
+  QString currentHistoryString() const;
 
-    Q_INVOKABLE StringList dataModes() const;
-    Q_INVOKABLE StringList lineEndings() const;
-    Q_INVOKABLE StringList displayModes() const;
-    Q_INVOKABLE QString formatUserHex(const QString &text);
+  Q_INVOKABLE StringList dataModes() const;
+  Q_INVOKABLE StringList lineEndings() const;
+  Q_INVOKABLE StringList displayModes() const;
+  Q_INVOKABLE QString formatUserHex(const QString &text);
 
 public Q_SLOTS:
-    void save();
-    void clear();
-    void historyUp();
-    void historyDown();
-    void send(const QString &data);
-    void setEcho(const bool enabled);
-    void print(const QString &fontFamily);
-    void setAutoscroll(const bool enabled);
-    void setShowTimestamp(const bool enabled);
-    void setDataMode(const IO::Console::DataMode &mode);
-    void setLineEnding(const IO::Console::LineEnding &mode);
-    void setDisplayMode(const IO::Console::DisplayMode &mode);
-    void append(const QString &str, const bool addTimestamp = false);
+  void save();
+  void clear();
+  void historyUp();
+  void historyDown();
+  void send(const QString &data);
+  void setEcho(const bool enabled);
+  void print(const QString &fontFamily);
+  void setAutoscroll(const bool enabled);
+  void setShowTimestamp(const bool enabled);
+  void setDataMode(const IO::Console::DataMode &mode);
+  void setLineEnding(const IO::Console::LineEnding &mode);
+  void setDisplayMode(const IO::Console::DisplayMode &mode);
+  void append(const QString &str, const bool addTimestamp = false);
 
 private Q_SLOTS:
-    void onDataSent(const QByteArray &data);
-    void addToHistory(const QString &command);
-    void onDataReceived(const QByteArray &data);
+  void onDataSent(const QByteArray &data);
+  void addToHistory(const QString &command);
+  void onDataReceived(const QByteArray &data);
 
 private:
-    QByteArray hexToBytes(const QString &data);
-    QString dataToString(const QByteArray &data);
-    QString plainTextStr(const QByteArray &data);
-    QString hexadecimalStr(const QByteArray &data);
+  QByteArray hexToBytes(const QString &data);
+  QString dataToString(const QByteArray &data);
+  QString plainTextStr(const QByteArray &data);
+  QString hexadecimalStr(const QByteArray &data);
 
 private:
-    DataMode m_dataMode;
-    LineEnding m_lineEnding;
-    DisplayMode m_displayMode;
+  DataMode m_dataMode;
+  LineEnding m_lineEnding;
+  DisplayMode m_displayMode;
 
-    int m_historyItem;
+  int m_historyItem;
 
-    bool m_echo;
-    bool m_autoscroll;
-    bool m_showTimestamp;
-    bool m_isStartingLine;
+  bool m_echo;
+  bool m_autoscroll;
+  bool m_showTimestamp;
+  bool m_isStartingLine;
 
-    StringList m_lines;
-    StringList m_historyItems;
+  StringList m_lines;
+  StringList m_historyItems;
 
-    QString m_printFont;
-    QString m_textBuffer;
+  QString m_printFont;
+  QString m_textBuffer;
 };
-}
+} // namespace IO

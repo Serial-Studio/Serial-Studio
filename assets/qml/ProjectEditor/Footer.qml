@@ -27,147 +27,147 @@ import QtQuick.Controls
 import "../Widgets" as Widgets
 
 Rectangle {
-    id: root
-    color: Cpp_ThemeManager.toolbarGradient2
-    height: footer.implicitHeight + 4 * app.spacing
+  id: root
+  color: Cpp_ThemeManager.toolbarGradient2
+  height: footer.implicitHeight + 4 * app.spacing
 
-    //
-    // Signals
-    //
-    signal closeWindow()
-    signal scrollToBottom()
+  //
+  // Signals
+  //
+  signal closeWindow()
+  signal scrollToBottom()
 
-    //
-    // Radius compensator
-    //
-    Rectangle {
-        color: root.color
-        height: root.radius
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-        }
+  //
+  // Radius compensator
+  //
+  Rectangle {
+    color: root.color
+    height: root.radius
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+  }
+
+  //
+  // Top border
+  //
+  Rectangle {
+    height: 1
+    color: Cpp_ThemeManager.toolbarGradient1
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
+    }
+  }
+
+  //
+  // Dialog buttons
+  //
+  RowLayout {
+    id: footer
+    spacing: app.spacing
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      margins: app.spacing * 2
+      verticalCenter: parent.verticalCenter
     }
 
-    //
-    // Top border
-    //
-    Rectangle {
-        height: 1
-        color: Cpp_ThemeManager.toolbarGradient1
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-        }
+    Button {
+      icon.width: 24
+      icon.height: 24
+      onClicked: root.closeWindow()
+      text: qsTr("Close") + _btSpacer
+      icon.source: "qrc:/icons/close.svg"
+      icon.color: Cpp_ThemeManager.menubarText
+      palette.buttonText: Cpp_ThemeManager.menubarText
+      palette.button: Cpp_ThemeManager.toolbarGradient1
+      palette.window: Cpp_ThemeManager.toolbarGradient1
     }
 
-    //
-    // Dialog buttons
-    //
-    RowLayout {
-        id: footer
-        spacing: app.spacing
-
-        anchors {
-            left: parent.left
-            right: parent.right
-            margins: app.spacing * 2
-            verticalCenter: parent.verticalCenter
-        }
-
-        Button {
-            icon.width: 24
-            icon.height: 24
-            onClicked: root.closeWindow()
-            text: qsTr("Close") + _btSpacer
-            icon.source: "qrc:/icons/close.svg"
-            icon.color: Cpp_ThemeManager.menubarText
-            palette.buttonText: Cpp_ThemeManager.menubarText
-            palette.button: Cpp_ThemeManager.toolbarGradient1
-            palette.window: Cpp_ThemeManager.toolbarGradient1
-        }
-
-        Item {
-            Layout.fillWidth: true
-        }
-
-        Button {
-            id: addGrp
-            icon.width: 24
-            icon.height: 24
-            highlighted: true
-            Layout.fillWidth: true
-            text: qsTr("Add group")
-            icon.source: "qrc:/icons/add.svg"
-            icon.color: Cpp_ThemeManager.menubarText
-            palette.buttonText: Cpp_ThemeManager.menubarText
-            palette.button: Cpp_ThemeManager.toolbarGradient1
-            palette.window: Cpp_ThemeManager.toolbarGradient1
-            onClicked: {
-                Cpp_Project_Model.addGroup()
-                root.scrollToBottom()
-            }
-        }
-
-        Button {
-            icon.width: 24
-            icon.height: 24
-            Layout.fillWidth: true
-            icon.source: "qrc:/icons/code.svg"
-            text: qsTr("Customize frame parser")
-            icon.color: Cpp_ThemeManager.menubarText
-            onClicked: Cpp_Project_CodeEditor.displayWindow()
-            palette.buttonText: Cpp_ThemeManager.menubarText
-            palette.button: Cpp_ThemeManager.toolbarGradient1
-            palette.window: Cpp_ThemeManager.toolbarGradient1
-        }
-
-        Item {
-            Layout.fillWidth: true
-        }
-
-        Button {
-            icon.width: 24
-            icon.height: 24
-            icon.source: "qrc:/icons/open.svg"
-            icon.color: Cpp_ThemeManager.menubarText
-            onClicked: Cpp_Project_Model.openJsonFile()
-            palette.buttonText: Cpp_ThemeManager.menubarText
-            palette.button: Cpp_ThemeManager.toolbarGradient1
-            palette.window: Cpp_ThemeManager.toolbarGradient1
-            text: qsTr("Open existing project...") + _btSpacer
-        }
-
-        Button {
-            icon.width: 24
-            icon.height: 24
-            icon.source: "qrc:/icons/new.svg"
-            icon.color: Cpp_ThemeManager.menubarText
-            onClicked: Cpp_Project_Model.newJsonFile()
-            text: qsTr("Create new project") + _btSpacer
-            palette.buttonText: Cpp_ThemeManager.menubarText
-            palette.button: Cpp_ThemeManager.toolbarGradient1
-            palette.window: Cpp_ThemeManager.toolbarGradient1
-        }
-
-        Button {
-            icon.width: 24
-            icon.height: 24
-            opacity: enabled ? 1: 0.5
-            enabled: Cpp_Project_Model.modified
-            icon.source: "qrc:/icons/apply.svg"
-            icon.color: Cpp_ThemeManager.menubarText
-            palette.buttonText: Cpp_ThemeManager.menubarText
-            palette.button: Cpp_ThemeManager.toolbarGradient1
-            palette.window: Cpp_ThemeManager.toolbarGradient1
-            text: (Cpp_Project_Model.jsonFilePath.length > 0 ? qsTr("Apply") : qsTr("Save")) + _btSpacer
-
-            onClicked: {
-                if (Cpp_Project_Model.saveJsonFile())
-                    root.closeWindow()
-            }
-        }
+    Item {
+      Layout.fillWidth: true
     }
+
+    Button {
+      id: addGrp
+      icon.width: 24
+      icon.height: 24
+      highlighted: true
+      Layout.fillWidth: true
+      text: qsTr("Add group")
+      icon.source: "qrc:/icons/add.svg"
+      icon.color: Cpp_ThemeManager.menubarText
+      palette.buttonText: Cpp_ThemeManager.menubarText
+      palette.button: Cpp_ThemeManager.toolbarGradient1
+      palette.window: Cpp_ThemeManager.toolbarGradient1
+      onClicked: {
+        Cpp_Project_Model.addGroup()
+        root.scrollToBottom()
+      }
+    }
+
+    Button {
+      icon.width: 24
+      icon.height: 24
+      Layout.fillWidth: true
+      icon.source: "qrc:/icons/code.svg"
+      text: qsTr("Customize frame parser")
+      icon.color: Cpp_ThemeManager.menubarText
+      onClicked: Cpp_Project_CodeEditor.displayWindow()
+      palette.buttonText: Cpp_ThemeManager.menubarText
+      palette.button: Cpp_ThemeManager.toolbarGradient1
+      palette.window: Cpp_ThemeManager.toolbarGradient1
+    }
+
+    Item {
+      Layout.fillWidth: true
+    }
+
+    Button {
+      icon.width: 24
+      icon.height: 24
+      icon.source: "qrc:/icons/open.svg"
+      icon.color: Cpp_ThemeManager.menubarText
+      onClicked: Cpp_Project_Model.openJsonFile()
+      palette.buttonText: Cpp_ThemeManager.menubarText
+      palette.button: Cpp_ThemeManager.toolbarGradient1
+      palette.window: Cpp_ThemeManager.toolbarGradient1
+      text: qsTr("Open existing project...") + _btSpacer
+    }
+
+    Button {
+      icon.width: 24
+      icon.height: 24
+      icon.source: "qrc:/icons/new.svg"
+      icon.color: Cpp_ThemeManager.menubarText
+      onClicked: Cpp_Project_Model.newJsonFile()
+      text: qsTr("Create new project") + _btSpacer
+      palette.buttonText: Cpp_ThemeManager.menubarText
+      palette.button: Cpp_ThemeManager.toolbarGradient1
+      palette.window: Cpp_ThemeManager.toolbarGradient1
+    }
+
+    Button {
+      icon.width: 24
+      icon.height: 24
+      opacity: enabled ? 1: 0.5
+      enabled: Cpp_Project_Model.modified
+      icon.source: "qrc:/icons/apply.svg"
+      icon.color: Cpp_ThemeManager.menubarText
+      palette.buttonText: Cpp_ThemeManager.menubarText
+      palette.button: Cpp_ThemeManager.toolbarGradient1
+      palette.window: Cpp_ThemeManager.toolbarGradient1
+      text: (Cpp_Project_Model.jsonFilePath.length > 0 ? qsTr("Apply") : qsTr("Save")) + _btSpacer
+
+      onClicked: {
+        if (Cpp_Project_Model.saveJsonFile())
+          root.closeWindow()
+      }
+    }
+  }
 }

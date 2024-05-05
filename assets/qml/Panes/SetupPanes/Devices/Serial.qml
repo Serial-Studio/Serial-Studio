@@ -25,207 +25,207 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 Control {
-    id: root
+  id: root
+
+  //
+  // Access to properties
+  //
+  property alias port: _portCombo.currentIndex
+  property alias baudRate: _baudCombo.currentIndex
+  property alias dataBits: _dataCombo.currentIndex
+  property alias parity: _parityCombo.currentIndex
+  property alias flowControl: _flowCombo.currentIndex
+  property alias stopBits: _stopBitsCombo.currentIndex
+  property alias autoReconnect: _autoreconnect.checked
+
+  //
+  // Update listbox models when translation is changed
+  //
+  Connections {
+    target: Cpp_Misc_Translator
+    function onLanguageChanged() {
+      var oldParityIndex = _parityCombo.currentIndex
+      var oldFlowControlIndex = _flowCombo.currentIndex
+
+      _parityCombo.model = Cpp_IO_Serial.parityList
+      _flowCombo.model = Cpp_IO_Serial.flowControlList
+
+      _parityCombo.currentIndex = oldParityIndex
+      _flowCombo.currentIndex = oldFlowControlIndex
+    }
+  }
+
+  //
+  // Control layout
+  //
+  ColumnLayout {
+    anchors.fill: parent
+    anchors.margins: app.spacing
 
     //
-    // Access to properties
+    // Controls
     //
-    property alias port: _portCombo.currentIndex
-    property alias baudRate: _baudCombo.currentIndex
-    property alias dataBits: _dataCombo.currentIndex
-    property alias parity: _parityCombo.currentIndex
-    property alias flowControl: _flowCombo.currentIndex
-    property alias stopBits: _stopBitsCombo.currentIndex
-    property alias autoReconnect: _autoreconnect.checked
+    GridLayout {
+      id: layout
+      columns: 2
+      Layout.fillWidth: true
+      rowSpacing: app.spacing
+      columnSpacing: app.spacing
 
-    //
-    // Update listbox models when translation is changed
-    //
-    Connections {
-        target: Cpp_Misc_Translator
-        function onLanguageChanged() {
-            var oldParityIndex = _parityCombo.currentIndex
-            var oldFlowControlIndex = _flowCombo.currentIndex
-
-            _parityCombo.model = Cpp_IO_Serial.parityList
-            _flowCombo.model = Cpp_IO_Serial.flowControlList
-
-            _parityCombo.currentIndex = oldParityIndex
-            _flowCombo.currentIndex = oldFlowControlIndex
+      //
+      // COM port selector
+      //
+      Label {
+        opacity: enabled ? 1 : 0.5
+        text: qsTr("COM Port") + ":"
+        enabled: !Cpp_IO_Manager.connected
+      } ComboBox {
+        id: _portCombo
+        Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
+        model: Cpp_IO_Serial.portList
+        enabled: !Cpp_IO_Manager.connected
+        currentIndex: Cpp_IO_Serial.portIndex
+        palette.base: Cpp_ThemeManager.setupPanelBackground
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_IO_Serial.portIndex)
+            Cpp_IO_Serial.portIndex = currentIndex
         }
+      }
+
+      //
+      // Baud rate selector
+      //
+      Label {
+        opacity: enabled ? 1 : 0.5
+        text: qsTr("Baud Rate") + ":"
+      } ComboBox {
+        id: _baudCombo
+        editable: true
+        currentIndex: 4
+        Layout.fillWidth: true
+        model: Cpp_IO_Serial.baudRateList
+        palette.base: Cpp_ThemeManager.setupPanelBackground
+
+        validator: IntValidator {
+          bottom: 1
+        }
+
+        onAccepted: {
+          if (find(editText) === -1)
+            Cpp_IO_Serial.appendBaudRate(editText)
+        }
+
+        onCurrentTextChanged: {
+          var value = currentText
+          Cpp_IO_Serial.baudRate = value
+        }
+      }
+
+      //
+      // Auto-reconnect
+      //
+      Label {
+        text: qsTr("Auto-reconnect") + ":"
+      } CheckBox {
+        id: _autoreconnect
+        Layout.alignment: Qt.AlignLeft
+        Layout.leftMargin: -app.spacing
+        checked: Cpp_IO_Serial.autoReconnect
+        palette.base: Cpp_ThemeManager.setupPanelBackground
+        onCheckedChanged: {
+          if (Cpp_IO_Serial.autoReconnect !== checked)
+            Cpp_IO_Serial.autoReconnect = checked
+        }
+      }
+
+      //
+      // Spacer
+      //
+      Item {
+        Layout.minimumHeight: app.spacing / 2
+        Layout.maximumHeight: app.spacing / 2
+      } Item {
+        Layout.minimumHeight: app.spacing / 2
+        Layout.maximumHeight: app.spacing / 2
+      }
+
+      //
+      // Data bits selector
+      //
+      Label {
+        text: qsTr("Data Bits") + ":"
+      } ComboBox {
+        id: _dataCombo
+        Layout.fillWidth: true
+        model: Cpp_IO_Serial.dataBitsList
+        currentIndex: Cpp_IO_Serial.dataBitsIndex
+        palette.base: Cpp_ThemeManager.setupPanelBackground
+        onCurrentIndexChanged: {
+          if (Cpp_IO_Serial.dataBitsIndex !== currentIndex)
+            Cpp_IO_Serial.dataBitsIndex = currentIndex
+        }
+      }
+
+      //
+      // Parity selector
+      //
+      Label {
+        text: qsTr("Parity") + ":"
+      } ComboBox {
+        id: _parityCombo
+        Layout.fillWidth: true
+        model: Cpp_IO_Serial.parityList
+        currentIndex: Cpp_IO_Serial.parityIndex
+        palette.base: Cpp_ThemeManager.setupPanelBackground
+        onCurrentIndexChanged: {
+          if (Cpp_IO_Serial.parityIndex !== currentIndex)
+            Cpp_IO_Serial.parityIndex = currentIndex
+        }
+      }
+
+      //
+      // Stop bits selector
+      //
+      Label {
+        text: qsTr("Stop Bits") + ":"
+      } ComboBox {
+        id: _stopBitsCombo
+        Layout.fillWidth: true
+        model: Cpp_IO_Serial.stopBitsList
+        currentIndex: Cpp_IO_Serial.stopBitsIndex
+        palette.base: Cpp_ThemeManager.setupPanelBackground
+        onCurrentIndexChanged: {
+          if (Cpp_IO_Serial.stopBitsIndex !== currentIndex)
+            Cpp_IO_Serial.stopBitsIndex = currentIndex
+        }
+      }
+
+      //
+      // Flow control selector
+      //
+      Label {
+        text: qsTr("Flow Control") + ":"
+      } ComboBox {
+        id: _flowCombo
+        Layout.fillWidth: true
+        model: Cpp_IO_Serial.flowControlList
+        currentIndex: Cpp_IO_Serial.flowControlIndex
+        palette.base: Cpp_ThemeManager.setupPanelBackground
+        onCurrentIndexChanged: {
+          if (Cpp_IO_Serial.flowControlIndex !== currentIndex)
+            Cpp_IO_Serial.flowControlIndex = currentIndex
+        }
+      }
     }
 
     //
-    // Control layout
+    // Vertical spacer
     //
-    ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: app.spacing
-
-        //
-        // Controls
-        //
-        GridLayout {
-            id: layout
-            columns: 2
-            Layout.fillWidth: true
-            rowSpacing: app.spacing
-            columnSpacing: app.spacing
-
-            //
-            // COM port selector
-            //
-            Label {
-                opacity: enabled ? 1 : 0.5
-                text: qsTr("COM Port") + ":"
-                enabled: !Cpp_IO_Manager.connected
-            } ComboBox {
-                id: _portCombo
-                Layout.fillWidth: true
-                opacity: enabled ? 1 : 0.5
-                model: Cpp_IO_Serial.portList
-                enabled: !Cpp_IO_Manager.connected
-                currentIndex: Cpp_IO_Serial.portIndex
-                palette.base: Cpp_ThemeManager.setupPanelBackground
-                onCurrentIndexChanged: {
-                    if (currentIndex !== Cpp_IO_Serial.portIndex)
-                        Cpp_IO_Serial.portIndex = currentIndex
-                }
-            }
-
-            //
-            // Baud rate selector
-            //
-            Label {
-                opacity: enabled ? 1 : 0.5
-                text: qsTr("Baud Rate") + ":"
-            } ComboBox {
-                id: _baudCombo
-                editable: true
-                currentIndex: 4
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.baudRateList
-                palette.base: Cpp_ThemeManager.setupPanelBackground
-
-                validator: IntValidator {
-                    bottom: 1
-                }
-
-                onAccepted: {
-                    if (find(editText) === -1)
-                        Cpp_IO_Serial.appendBaudRate(editText)
-                }
-
-                onCurrentTextChanged: {
-                    var value = currentText
-                    Cpp_IO_Serial.baudRate = value
-                }
-            }
-
-            //
-            // Auto-reconnect
-            //
-            Label {
-                text: qsTr("Auto-reconnect") + ":"
-            } CheckBox {
-                id: _autoreconnect
-                Layout.alignment: Qt.AlignLeft
-                Layout.leftMargin: -app.spacing
-                checked: Cpp_IO_Serial.autoReconnect
-                palette.base: Cpp_ThemeManager.setupPanelBackground
-                onCheckedChanged: {
-                    if (Cpp_IO_Serial.autoReconnect !== checked)
-                        Cpp_IO_Serial.autoReconnect = checked
-                }
-            }
-
-            //
-            // Spacer
-            //
-            Item {
-                Layout.minimumHeight: app.spacing / 2
-                Layout.maximumHeight: app.spacing / 2
-            } Item {
-                Layout.minimumHeight: app.spacing / 2
-                Layout.maximumHeight: app.spacing / 2
-            }
-
-            //
-            // Data bits selector
-            //
-            Label {
-                text: qsTr("Data Bits") + ":"
-            } ComboBox {
-                id: _dataCombo
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.dataBitsList
-                currentIndex: Cpp_IO_Serial.dataBitsIndex
-                palette.base: Cpp_ThemeManager.setupPanelBackground
-                onCurrentIndexChanged: {
-                    if (Cpp_IO_Serial.dataBitsIndex !== currentIndex)
-                        Cpp_IO_Serial.dataBitsIndex = currentIndex
-                }
-            }
-
-            //
-            // Parity selector
-            //
-            Label {
-                text: qsTr("Parity") + ":"
-            } ComboBox {
-                id: _parityCombo
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.parityList
-                currentIndex: Cpp_IO_Serial.parityIndex
-                palette.base: Cpp_ThemeManager.setupPanelBackground
-                onCurrentIndexChanged: {
-                    if (Cpp_IO_Serial.parityIndex !== currentIndex)
-                        Cpp_IO_Serial.parityIndex = currentIndex
-                }
-            }
-
-            //
-            // Stop bits selector
-            //
-            Label {
-                text: qsTr("Stop Bits") + ":"
-            } ComboBox {
-                id: _stopBitsCombo
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.stopBitsList
-                currentIndex: Cpp_IO_Serial.stopBitsIndex
-                palette.base: Cpp_ThemeManager.setupPanelBackground
-                onCurrentIndexChanged: {
-                    if (Cpp_IO_Serial.stopBitsIndex !== currentIndex)
-                        Cpp_IO_Serial.stopBitsIndex = currentIndex
-                }
-            }
-
-            //
-            // Flow control selector
-            //
-            Label {
-                text: qsTr("Flow Control") + ":"
-            } ComboBox {
-                id: _flowCombo
-                Layout.fillWidth: true
-                model: Cpp_IO_Serial.flowControlList
-                currentIndex: Cpp_IO_Serial.flowControlIndex
-                palette.base: Cpp_ThemeManager.setupPanelBackground
-                onCurrentIndexChanged: {
-                    if (Cpp_IO_Serial.flowControlIndex !== currentIndex)
-                        Cpp_IO_Serial.flowControlIndex = currentIndex
-                }
-            }
-        }
-
-        //
-        // Vertical spacer
-        //
-        Item {
-            Layout.fillHeight: true
-        }
+    Item {
+      Layout.fillHeight: true
     }
+  }
 }
 
 

@@ -49,14 +49,3 @@ include($$PWD/OpenSSL/OpenSSL.pri)
 include($$PWD/QRealFourier/QRealFourier.pri)
 include($$PWD/QSimpleUpdater/QSimpleUpdater.pri)
 include($$PWD/QSourceHighlite/QSourceHighlite.pri)
-
-macx* {
-    DEFINES += KDMACTOUCHBAR_BUILD_KDMACTOUCHBAR_SRC
-    LIBS += -framework Cocoa
-    INCLUDEPATH += $$PWD/KDMacTouchBar/src
-    SOURCES += \
-        $$PWD/KDMacTouchBar/src/kdmactouchbar.mm
-    HEADERS += \
-        $$PWD/KDMacTouchBar/src/kdmactouchbar.h \
-        $$PWD/KDMacTouchBar/src/kdmactouchbar_global.h
-}

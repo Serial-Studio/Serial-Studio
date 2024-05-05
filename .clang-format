@@ -1,39 +1,24 @@
-# Copyright (C) 2016 Olivier Goffart <ogoffart@woboq.com>
-#
-# You may use this file under the terms of the 3-clause BSD license.
-# See the file LICENSE from this package for details.
+BasedOnStyle:                       LLVM
+Standard:                           Cpp11
+CommentPragmas:                     "^!|^:"
+PointerBindsToType:                 false
+SpaceAfterTemplateKeyword:          false
+BreakBeforeBinaryOperators:         All
+BreakBeforeBraces:                  Custom
+BreakBeforeTernaryOperators:        true
+BreakConstructorInitializers:       BeforeComma
+ConstructorInitializerIndentWidth:  2
+NamespaceIndentation:               None
+AlignAfterOpenBracket:              true
+AlwaysBreakTemplateDeclarations:    true
+AllowShortFunctionsOnASingleLine:   Inline
+SortIncludes:                       false
+IndentCaseLabels:                   true
+IndentPPDirectives:                 AfterHash
+AccessModifierOffset:               -2
+IndentWidth:                        2
+ColumnLimit:                        80
 
-# This is the clang-format configuration style to be used by Qt,
-# based on the rules from https://wiki.qt.io/Qt_Coding_Style and
-# https://wiki.qt.io/Coding_Conventions
-
----
-# Webkit style was loosely based on the Qt style
-BasedOnStyle: WebKit
-
-Standard: Cpp11
-
-# Leave the line breaks up to the user.
-# Note that this may be changed at some point in the future.
-ColumnLimit: 0
-# How much weight do extra characters after the line length limit have.
-# PenaltyExcessCharacter: 4
-
-# Disable reflow of qdoc comments: indentation rules are different.
-# Translation comments are also excluded.
-CommentPragmas: "^!|^:"
-
-# We want a space between the type and the star for pointer types.
-PointerBindsToType: false
-
-# We use template< without space.
-SpaceAfterTemplateKeyword: false
-
-# We want to break before the operators, but not before a '='.
-BreakBeforeBinaryOperators: All
-
-# Braces are usually attached, but not after functions or class declarations.
-BreakBeforeBraces: Custom
 BraceWrapping:
     AfterClass: true
     AfterControlStatement: true
@@ -47,48 +32,7 @@ BraceWrapping:
     BeforeElse: true
     IndentBraces: false
 
-BreakBeforeTernaryOperators: true
-
-BreakConstructorInitializers: BeforeComma
-
-# Indent initializers by 3 spaces
-ConstructorInitializerIndentWidth: 4
-
-# No indentation for namespaces.
-NamespaceIndentation: None
-
-# Horizontally align arguments after an open bracket.
-# The coding style does not specify the following, but this is what gives
-# results closest to the existing code.
-AlignAfterOpenBracket: true
-AlwaysBreakTemplateDeclarations: true
-
-# Ideally we should also allow less short function in a single line, but
-# clang-format does not handle that.
-AllowShortFunctionsOnASingleLine: Inline
-
-# The coding style specifies some include order categories, but also tells to
-# separate categories with an empty line. It does not specify the order within
-# the categories. Since the SortInclude feature of clang-format does not
-# re-order includes separated by empty lines, the feature is not used.
-SortIncludes: false
-
-# macros for which the opening brace stays attached.
 ForEachMacros:   [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMARK, QBENCHMARK_ONCE ]
-
-IndentCaseLabels: true
-
-IndentPPDirectives: AfterHash
-
-AlignAfterOpenBracket: Align
-
-AccessModifierOffset: -4
-
-IndentWidth: 4
-
 #StatementMacros ['Q_OBJECT', 'Q_UNUSED']
-
-ColumnLimit: 90
-
 
 

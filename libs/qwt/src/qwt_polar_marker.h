@@ -35,34 +35,33 @@ class QwtSymbol;
  */
 class QWT_EXPORT QwtPolarMarker : public QwtPolarItem
 {
-  public:
-    explicit QwtPolarMarker();
-    virtual ~QwtPolarMarker();
+public:
+  explicit QwtPolarMarker();
+  virtual ~QwtPolarMarker();
 
-    virtual int rtti() const QWT_OVERRIDE;
+  virtual int rtti() const QWT_OVERRIDE;
 
-    void setPosition( const QwtPointPolar& );
-    QwtPointPolar position() const;
+  void setPosition(const QwtPointPolar &);
+  QwtPointPolar position() const;
 
-    void setSymbol( const QwtSymbol* s );
-    const QwtSymbol* symbol() const;
+  void setSymbol(const QwtSymbol *s);
+  const QwtSymbol *symbol() const;
 
-    void setLabel( const QwtText& );
-    QwtText label() const;
+  void setLabel(const QwtText &);
+  QwtText label() const;
 
-    void setLabelAlignment( Qt::Alignment );
-    Qt::Alignment labelAlignment() const;
+  void setLabelAlignment(Qt::Alignment);
+  Qt::Alignment labelAlignment() const;
 
-    virtual void draw( QPainter* painter,
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, double radius,
-        const QRectF& canvasRect ) const QWT_OVERRIDE;
+  virtual void draw(QPainter *painter, const QwtScaleMap &azimuthMap,
+                    const QwtScaleMap &radialMap, const QPointF &pole,
+                    double radius, const QRectF &canvasRect) const QWT_OVERRIDE;
 
-    virtual QwtInterval boundingInterval( int scaleId ) const QWT_OVERRIDE;
+  virtual QwtInterval boundingInterval(int scaleId) const QWT_OVERRIDE;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

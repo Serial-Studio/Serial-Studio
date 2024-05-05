@@ -26,86 +26,85 @@
 
 class QWT_EXPORT QwtPlotLayout
 {
-  public:
+public:
+  /*!
+     Options to configure the plot layout engine
+     \sa activate(), QwtPlotRenderer
+   */
+  enum Option
+  {
+    //! Unused
+    AlignScales = 0x01,
+
     /*!
-       Options to configure the plot layout engine
-       \sa activate(), QwtPlotRenderer
+       Ignore the dimension of the scrollbars. There are no
+       scrollbars, when the plot is not rendered to widgets.
      */
-    enum Option
-    {
-        //! Unused
-        AlignScales = 0x01,
+    IgnoreScrollbars = 0x02,
 
-        /*!
-           Ignore the dimension of the scrollbars. There are no
-           scrollbars, when the plot is not rendered to widgets.
-         */
-        IgnoreScrollbars = 0x02,
+    //! Ignore all frames.
+    IgnoreFrames = 0x04,
 
-        //! Ignore all frames.
-        IgnoreFrames = 0x04,
+    //! Ignore the legend.
+    IgnoreLegend = 0x08,
 
-        //! Ignore the legend.
-        IgnoreLegend = 0x08,
+    //! Ignore the title.
+    IgnoreTitle = 0x10,
 
-        //! Ignore the title.
-        IgnoreTitle = 0x10,
+    //! Ignore the footer.
+    IgnoreFooter = 0x20
+  };
 
-        //! Ignore the footer.
-        IgnoreFooter = 0x20
-    };
+  Q_DECLARE_FLAGS(Options, Option)
 
-    Q_DECLARE_FLAGS( Options, Option )
+  explicit QwtPlotLayout();
+  virtual ~QwtPlotLayout();
 
-    explicit QwtPlotLayout();
-    virtual ~QwtPlotLayout();
+  void setCanvasMargin(int margin, int axis = -1);
+  int canvasMargin(int axisId) const;
 
-    void setCanvasMargin( int margin, int axis = -1 );
-    int canvasMargin( int axisId ) const;
+  void setAlignCanvasToScales(bool);
 
-    void setAlignCanvasToScales( bool );
+  void setAlignCanvasToScale(int axisId, bool);
+  bool alignCanvasToScale(int axisId) const;
 
-    void setAlignCanvasToScale( int axisId, bool );
-    bool alignCanvasToScale( int axisId ) const;
+  void setSpacing(int);
+  int spacing() const;
 
-    void setSpacing( int );
-    int spacing() const;
+  void setLegendPosition(QwtPlot::LegendPosition pos, double ratio);
+  void setLegendPosition(QwtPlot::LegendPosition pos);
+  QwtPlot::LegendPosition legendPosition() const;
 
-    void setLegendPosition( QwtPlot::LegendPosition pos, double ratio );
-    void setLegendPosition( QwtPlot::LegendPosition pos );
-    QwtPlot::LegendPosition legendPosition() const;
+  void setLegendRatio(double ratio);
+  double legendRatio() const;
 
-    void setLegendRatio( double ratio );
-    double legendRatio() const;
+  virtual QSize minimumSizeHint(const QwtPlot *) const;
 
-    virtual QSize minimumSizeHint( const QwtPlot* ) const;
+  virtual void activate(const QwtPlot *, const QRectF &plotRect,
+                        Options options = Options());
 
-    virtual void activate( const QwtPlot*,
-        const QRectF& plotRect, Options options = Options() );
+  virtual void invalidate();
 
-    virtual void invalidate();
+  QRectF titleRect() const;
+  QRectF footerRect() const;
+  QRectF legendRect() const;
+  QRectF scaleRect(QwtAxisId) const;
+  QRectF canvasRect() const;
 
-    QRectF titleRect() const;
-    QRectF footerRect() const;
-    QRectF legendRect() const;
-    QRectF scaleRect( QwtAxisId ) const;
-    QRectF canvasRect() const;
+protected:
+  void setTitleRect(const QRectF &);
+  void setFooterRect(const QRectF &);
+  void setLegendRect(const QRectF &);
+  void setScaleRect(QwtAxisId, const QRectF &);
+  void setCanvasRect(const QRectF &);
 
-  protected:
+private:
+  Q_DISABLE_COPY(QwtPlotLayout)
 
-    void setTitleRect( const QRectF& );
-    void setFooterRect( const QRectF& );
-    void setLegendRect( const QRectF& );
-    void setScaleRect( QwtAxisId, const QRectF& );
-    void setCanvasRect( const QRectF& );
-
-  private:
-    Q_DISABLE_COPY(QwtPlotLayout)
-
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPlotLayout::Options )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPlotLayout::Options)
 
 #endif

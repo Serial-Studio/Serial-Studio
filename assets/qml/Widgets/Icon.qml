@@ -24,28 +24,28 @@ import QtQuick
 import QtQuick.Controls
 
 Item {
-    id: root
+  id: root
 
-    property string source: ""
-    property alias icon: button.icon
-    property color color: Cpp_ThemeManager.menubarText
+  property string source: ""
+  property alias icon: button.icon
+  property color color: Cpp_ThemeManager.menubarText
 
-    width: 24
-    height: 24
+  width: 24
+  height: 24
 
-    ToolButton {
-        id: button
-        enabled: false
-        background: Item {}
-        icon.color: root.color
-        icon.width: root.width
-        icon.height: root.width
-        icon.source: root.source
-        anchors.centerIn: parent
-    }
+  ToolButton {
+    id: button
+    enabled: false
+    background: Item {}
+    icon.color: root.color
+    icon.width: root.width
+    icon.height: root.width
+    icon.source: root.source
+    anchors.centerIn: parent
+  }
 
-    MouseArea {
-        anchors.fill: parent
-        propagateComposedEvents: true
-    }
+  MouseArea {
+    anchors.fill: parent
+    propagateComposedEvents: true
+  }
 }

@@ -13,7 +13,7 @@
 
 #include <openssl/macros.h>
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define HEADER_DTLS1_H
+#  define HEADER_DTLS1_H
 #endif
 
 #include <openssl/prov_ssl.h>
@@ -26,8 +26,8 @@ extern "C" {
 
 /* DTLS*_VERSION constants are defined in prov_ssl.h */
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define DTLS_MIN_VERSION DTLS1_VERSION
-#    define DTLS_MAX_VERSION DTLS1_2_VERSION
+#  define DTLS_MIN_VERSION DTLS1_VERSION
+#  define DTLS_MAX_VERSION DTLS1_2_VERSION
 #endif
 #define DTLS1_VERSION_MAJOR 0xFE
 

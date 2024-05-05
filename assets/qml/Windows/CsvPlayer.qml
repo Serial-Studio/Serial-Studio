@@ -28,155 +28,155 @@ import QtQuick.Controls
 import "../FramelessWindow" as FramelessWindow
 
 FramelessWindow.CustomWindow {
-    id: root
+  id: root
 
-    //
-    // Window options
-    //
-    width: minimumWidth
-    height: minimumHeight
-    minimizeEnabled: false
-    maximizeEnabled: false
-    title: qsTr("CSV Player")
-    titlebarText: Cpp_ThemeManager.text
-    x: (Screen.desktopAvailableWidth - width) / 2
-    y: (Screen.desktopAvailableHeight - height) / 2
-    titlebarColor: Cpp_ThemeManager.dialogBackground
-    backgroundColor: Cpp_ThemeManager.dialogBackground
-    minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-    maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-    extraFlags: Qt.WindowStaysOnTopHint | Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
-    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
-    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+  //
+  // Window options
+  //
+  width: minimumWidth
+  height: minimumHeight
+  minimizeEnabled: false
+  maximizeEnabled: false
+  title: qsTr("CSV Player")
+  titlebarText: Cpp_ThemeManager.text
+  x: (Screen.desktopAvailableWidth - width) / 2
+  y: (Screen.desktopAvailableHeight - height) / 2
+  titlebarColor: Cpp_ThemeManager.dialogBackground
+  backgroundColor: Cpp_ThemeManager.dialogBackground
+  minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+  maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+  extraFlags: Qt.WindowStaysOnTopHint | Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
+  minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+  maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
 
-    //
-    // Close CSV file when window is closed
-    //
-    onVisibleChanged: {
-        if (!visible && Cpp_CSV_Player.isOpen)
-            Cpp_CSV_Player.closeFile()
+  //
+  // Close CSV file when window is closed
+  //
+  onVisibleChanged: {
+    if (!visible && Cpp_CSV_Player.isOpen)
+      Cpp_CSV_Player.closeFile()
+  }
+
+  //
+  // Automatically display the window when the CSV file is opened
+  //
+  Connections {
+    target: Cpp_CSV_Player
+    function onOpenChanged() {
+      if (Cpp_CSV_Player.isOpen)
+        root.visible = true
+      else
+        root.visible = false
+    }
+  }
+
+  //
+  // Use page item to set application palette
+  //
+  Page {
+    anchors {
+      fill: parent
+      margins: root.shadowMargin
+      topMargin: titlebar.height + root.shadowMargin
     }
 
-    //
-    // Automatically display the window when the CSV file is opened
-    //
-    Connections {
-        target: Cpp_CSV_Player
-        function onOpenChanged() {
-            if (Cpp_CSV_Player.isOpen)
-                root.visible = true
-            else
-                root.visible = false
-        }
-    }
+    palette.alternateBase: Cpp_ThemeManager.base
+    palette.base: Cpp_ThemeManager.base
+    palette.brightText: Cpp_ThemeManager.brightText
+    palette.button: Cpp_ThemeManager.button
+    palette.buttonText: Cpp_ThemeManager.buttonText
+    palette.highlight: Cpp_ThemeManager.highlight
+    palette.highlightedText: Cpp_ThemeManager.highlightedText
+    palette.link: Cpp_ThemeManager.link
+    palette.placeholderText: Cpp_ThemeManager.placeholderText
+    palette.text: Cpp_ThemeManager.text
+    palette.toolTipBase: Cpp_ThemeManager.tooltipBase
+    palette.toolTipText: Cpp_ThemeManager.tooltipText
+    palette.window: Cpp_ThemeManager.window
+    palette.windowText: Cpp_ThemeManager.windowText
 
-    //
-    // Use page item to set application palette
-    //
-    Page {
+    background: Rectangle {
+      radius: root.radius
+      color: root.backgroundColor
+
+      Rectangle {
+        height: root.radius
+        color: root.backgroundColor
+
         anchors {
-            fill: parent
-            margins: root.shadowMargin
-            topMargin: titlebar.height + root.shadowMargin
+          top: parent.top
+          left: parent.left
+          right: parent.right
         }
-
-        palette.alternateBase: Cpp_ThemeManager.base
-        palette.base: Cpp_ThemeManager.base
-        palette.brightText: Cpp_ThemeManager.brightText
-        palette.button: Cpp_ThemeManager.button
-        palette.buttonText: Cpp_ThemeManager.buttonText
-        palette.highlight: Cpp_ThemeManager.highlight
-        palette.highlightedText: Cpp_ThemeManager.highlightedText
-        palette.link: Cpp_ThemeManager.link
-        palette.placeholderText: Cpp_ThemeManager.placeholderText
-        palette.text: Cpp_ThemeManager.text
-        palette.toolTipBase: Cpp_ThemeManager.tooltipBase
-        palette.toolTipText: Cpp_ThemeManager.tooltipText
-        palette.window: Cpp_ThemeManager.window
-        palette.windowText: Cpp_ThemeManager.windowText
-
-        background: Rectangle {
-            radius: root.radius
-            color: root.backgroundColor
-
-            Rectangle {
-                height: root.radius
-                color: root.backgroundColor
-
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
-                }
-            }
-        }
-
-        //
-        // Window controls
-        //
-        ColumnLayout {
-            id: column
-            anchors.centerIn: parent
-            spacing: app.spacing * 2
-
-            //
-            // Timestamp display
-            //
-            Label {
-                font.family: app.monoFont
-                text: Cpp_CSV_Player.timestamp
-                Layout.alignment: Qt.AlignLeft
-            }
-
-            //
-            // Progress display
-            //
-            Slider {
-                Layout.fillWidth: true
-                value: Cpp_CSV_Player.progress
-                onValueChanged: {
-                    if (value !== Cpp_CSV_Player.progress)
-                        Cpp_CSV_Player.setProgress(value)
-                }
-            }
-
-            //
-            // Play/pause buttons
-            //
-            RowLayout {
-                spacing: app.spacing
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.alignment: Qt.AlignHCenter
-
-                Button {
-                    opacity: enabled ? 1 : 0.5
-                    icon.color: Cpp_ThemeManager.text
-                    Layout.alignment: Qt.AlignVCenter
-                    onClicked: Cpp_CSV_Player.previousFrame()
-                    icon.source: "qrc:/icons/media-prev.svg"
-                    enabled: Cpp_CSV_Player.progress > 0 && !Cpp_CSV_Player.isPlaying
-                }
-
-                Button {
-                    icon.width: 32
-                    icon.height: 32
-                    icon.color: Cpp_ThemeManager.text
-                    onClicked: Cpp_CSV_Player.toggle()
-                    Layout.alignment: Qt.AlignVCenter
-                    icon.source: Cpp_CSV_Player.isPlaying ? "qrc:/icons/media-pause.svg" :
-                                                            "qrc:/icons/media-play.svg"
-                }
-
-                Button {
-                    opacity: enabled ? 1 : 0.5
-                    icon.color: Cpp_ThemeManager.text
-                    Layout.alignment: Qt.AlignVCenter
-                    onClicked: Cpp_CSV_Player.nextFrame()
-                    icon.source: "qrc:/icons/media-next.svg"
-                    enabled: Cpp_CSV_Player.progress < 1 && !Cpp_CSV_Player.isPlaying
-                }
-            }
-        }
+      }
     }
+
+    //
+    // Window controls
+    //
+    ColumnLayout {
+      id: column
+      anchors.centerIn: parent
+      spacing: app.spacing * 2
+
+      //
+      // Timestamp display
+      //
+      Label {
+        font.family: app.monoFont
+        text: Cpp_CSV_Player.timestamp
+        Layout.alignment: Qt.AlignLeft
+      }
+
+      //
+      // Progress display
+      //
+      Slider {
+        Layout.fillWidth: true
+        value: Cpp_CSV_Player.progress
+        onValueChanged: {
+          if (value !== Cpp_CSV_Player.progress)
+            Cpp_CSV_Player.setProgress(value)
+        }
+      }
+
+      //
+      // Play/pause buttons
+      //
+      RowLayout {
+        spacing: app.spacing
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.alignment: Qt.AlignHCenter
+
+        Button {
+          opacity: enabled ? 1 : 0.5
+          icon.color: Cpp_ThemeManager.text
+          Layout.alignment: Qt.AlignVCenter
+          onClicked: Cpp_CSV_Player.previousFrame()
+          icon.source: "qrc:/icons/media-prev.svg"
+          enabled: Cpp_CSV_Player.progress > 0 && !Cpp_CSV_Player.isPlaying
+        }
+
+        Button {
+          icon.width: 32
+          icon.height: 32
+          icon.color: Cpp_ThemeManager.text
+          onClicked: Cpp_CSV_Player.toggle()
+          Layout.alignment: Qt.AlignVCenter
+          icon.source: Cpp_CSV_Player.isPlaying ? "qrc:/icons/media-pause.svg" :
+                                                  "qrc:/icons/media-play.svg"
+        }
+
+        Button {
+          opacity: enabled ? 1 : 0.5
+          icon.color: Cpp_ThemeManager.text
+          Layout.alignment: Qt.AlignVCenter
+          onClicked: Cpp_CSV_Player.nextFrame()
+          icon.source: "qrc:/icons/media-next.svg"
+          enabled: Cpp_CSV_Player.progress < 1 && !Cpp_CSV_Player.isPlaying
+        }
+      }
+    }
+  }
 }

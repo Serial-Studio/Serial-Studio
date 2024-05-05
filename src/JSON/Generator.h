@@ -54,11 +54,12 @@ namespace JSON
  * 7) UI dashboard feeds JSON data to a @c Frame object.
  * 8) The @c Frame object creates a model of the JSON data with the values of
  *    the latest received frame.
- * 9) UI dashboard updates the widgets with the C++ model provided by this class.
+ * 9) UI dashboard updates the widgets with the C++ model provided by this
+ * class.
  */
 class Generator : public QObject
 {
-    // clang-format off
+  // clang-format off
     Q_OBJECT
     Q_PROPERTY(QString jsonMapFilename
                READ jsonMapFilename
@@ -70,52 +71,52 @@ class Generator : public QObject
                READ operationMode
                WRITE setOperationMode
                NOTIFY operationModeChanged)
-    // clang-format on
+  // clang-format on
 
 Q_SIGNALS:
-    void jsonFileMapChanged();
-    void operationModeChanged();
-    void jsonChanged(const QJsonObject &json);
+  void jsonFileMapChanged();
+  void operationModeChanged();
+  void jsonChanged(const QJsonObject &json);
 
 private:
-    explicit Generator();
-    Generator(Generator &&) = delete;
-    Generator(const Generator &) = delete;
-    Generator &operator=(Generator &&) = delete;
-    Generator &operator=(const Generator &) = delete;
+  explicit Generator();
+  Generator(Generator &&) = delete;
+  Generator(const Generator &) = delete;
+  Generator &operator=(Generator &&) = delete;
+  Generator &operator=(const Generator &) = delete;
 
 public:
-    enum OperationMode
-    {
-        kManual = 0x00,
-        kAutomatic = 0x01
-    };
-    Q_ENUM(OperationMode)
+  enum OperationMode
+  {
+    kManual = 0x00,
+    kAutomatic = 0x01
+  };
+  Q_ENUM(OperationMode)
 
-    static Generator &instance();
+  static Generator &instance();
 
-    QJsonObject &json();
-    QString jsonMapFilename() const;
-    QString jsonMapFilepath() const;
-    OperationMode operationMode() const;
-
-public Q_SLOTS:
-    void loadJsonMap();
-    void loadJsonMap(const QString &path);
-    void setOperationMode(const JSON::Generator::OperationMode &mode);
+  QJsonObject &json();
+  QString jsonMapFilename() const;
+  QString jsonMapFilepath() const;
+  OperationMode operationMode() const;
 
 public Q_SLOTS:
-    void readSettings();
-    void writeSettings(const QString &path);
+  void loadJsonMap();
+  void loadJsonMap(const QString &path);
+  void setOperationMode(const JSON::Generator::OperationMode &mode);
+
+public Q_SLOTS:
+  void readSettings();
+  void writeSettings(const QString &path);
 
 private Q_SLOTS:
-    void readData(const QByteArray &data);
+  void readData(const QByteArray &data);
 
 private:
-    QFile m_jsonMap;
-    QJsonObject m_json;
-    QSettings m_settings;
-    OperationMode m_opMode;
-    QJsonParseError m_error;
+  QFile m_jsonMap;
+  QJsonObject m_json;
+  QSettings m_settings;
+  OperationMode m_opMode;
+  QJsonParseError m_error;
 };
-}
+} // namespace JSON

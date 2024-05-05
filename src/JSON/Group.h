@@ -60,22 +60,22 @@ namespace JSON
 class Group
 {
 public:
-    ~Group();
+  ~Group();
 
-    QString title() const;
-    QString widget() const;
-    int datasetCount() const;
-    QVector<JSON::Dataset> &datasets();
-    bool read(const QJsonObject &object);
+  QString title() const;
+  QString widget() const;
+  int datasetCount() const;
+  QVector<JSON::Dataset> &datasets();
+  bool read(const QJsonObject &object);
 
-    Q_INVOKABLE const JSON::Dataset &getDataset(const int index) const;
+  Q_INVOKABLE const JSON::Dataset &getDataset(const int index) const;
 
 private:
-    QString m_title;
-    QString m_widget;
-    QVector<JSON::Dataset> m_datasets;
+  QString m_title;
+  QString m_widget;
+  QVector<JSON::Dataset> m_datasets;
 
-    friend class UI::Dashboard;
-    friend class Project::Model;
+  friend class UI::Dashboard;
+  friend class Project::Model;
 };
-}
+} // namespace JSON

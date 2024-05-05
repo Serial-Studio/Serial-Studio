@@ -32,44 +32,45 @@ namespace Widgets
  * @brief The DashboardWidgetBase class
  *
  * A simple QWidget with an additional @c update() signal, which is used by the
- * @c UI::DashboardWidget to know when it should trigger a re-paint request to the scene
- * render thread.
+ * @c UI::DashboardWidget to know when it should trigger a re-paint request to
+ * the scene render thread.
  *
- * The widget also contains a @c requestUpdate() function, which is called by the widgets
- * that inherit this class when they finish updating the displayed data. This function
- * is used to schedule a re-paint at a controlled frequency, which is limited at 20 Hz.
+ * The widget also contains a @c requestUpdate() function, which is called by
+ * the widgets that inherit this class when they finish updating the displayed
+ * data. This function is used to schedule a re-paint at a controlled frequency,
+ * which is limited at 20 Hz.
  */
 class DashboardWidgetBase : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 Q_SIGNALS:
-    void updated();
+  void updated();
 
 public:
-    DashboardWidgetBase()
-    {
-        // clang-format off
+  DashboardWidgetBase()
+  {
+    // clang-format off
         connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz,
                 this, &Widgets::DashboardWidgetBase::repaint);
-        // clang-format on
-    }
+    // clang-format on
+  }
 
-    void repaint()
+  void repaint()
+  {
+    if (m_repaint)
     {
-        if (m_repaint)
-        {
-            m_repaint = false;
-            Q_EMIT updated();
-        }
+      m_repaint = false;
+      Q_EMIT updated();
     }
+  }
 
-    void requestRepaint() { m_repaint = true; }
+  void requestRepaint() { m_repaint = true; }
 
 private:
-    bool m_repaint;
+  bool m_repaint;
 };
-}
+} // namespace Widgets
 
 namespace UI
 {
@@ -77,17 +78,19 @@ namespace UI
  * @brief The DashboardWidget class
  *
  * The @c DashboardWidget class acts as a man-in-the-middle between the QML UI
- * and the C++ widgets. C++ widgets are loaded and initialized by this class, and all the
- * QML/Qt events are re-routed to the widgets using this class. Finally, the C++ widget
- * is "painted" on the QML interface in realtime, effectively allowing us to use QWidget
- * object directly in the QML user interface.
+ * and the C++ widgets. C++ widgets are loaded and initialized by this class,
+ * and all the QML/Qt events are re-routed to the widgets using this class.
+ * Finally, the C++ widget is "painted" on the QML interface in realtime,
+ * effectively allowing us to use QWidget object directly in the QML user
+ * interface.
  *
- * By using this approach, the QML user interface only needs to know the total number of
- * widgets and use the "global-index" approach to initialize every widget using a
- * Repeater item.
+ * By using this approach, the QML user interface only needs to know the total
+ * number of widgets and use the "global-index" approach to initialize every
+ * widget using a Repeater item.
  *
- * On the other hand, this class figures out which widget should be loaded and displayed
- * in the user interface by knowing the "global-index" provider by the QML Repeater.
+ * On the other hand, this class figures out which widget should be loaded and
+ * displayed in the user interface by knowing the "global-index" provider by the
+ * QML Repeater.
  *
  * See the following files for more information:
  *      assets/qml/Dashboard/WidgetDelegate.qml
@@ -96,7 +99,7 @@ namespace UI
  */
 class DashboardWidget : public DeclarativeWidget
 {
-    // clang-format off
+  // clang-format off
     Q_OBJECT
     Q_PROPERTY(int widgetIndex
                READ widgetIndex
@@ -131,44 +134,44 @@ class DashboardWidget : public DeclarativeWidget
     Q_PROPERTY(qreal gpsLongitude
                READ gpsLongitude
                NOTIFY gpsDataChanged)
-    // clang-format on
+  // clang-format on
 
 Q_SIGNALS:
-    void gpsDataChanged();
-    void widgetIndexChanged();
-    void widgetVisibleChanged();
-    void isExternalWindowChanged();
+  void gpsDataChanged();
+  void widgetIndexChanged();
+  void widgetVisibleChanged();
+  void isExternalWindowChanged();
 
 public:
-    DashboardWidget(QQuickItem *parent = 0);
-    ~DashboardWidget();
+  DashboardWidget(QQuickItem *parent = 0);
+  ~DashboardWidget();
 
-    int widgetIndex() const;
-    int relativeIndex() const;
-    bool widgetVisible() const;
-    QString widgetIcon() const;
-    QString widgetTitle() const;
-    bool isExternalWindow() const;
-    UI::Dashboard::WidgetType widgetType() const;
+  int widgetIndex() const;
+  int relativeIndex() const;
+  bool widgetVisible() const;
+  QString widgetIcon() const;
+  QString widgetTitle() const;
+  bool isExternalWindow() const;
+  UI::Dashboard::WidgetType widgetType() const;
 
-    bool isGpsMap() const;
-    qreal gpsAltitude() const;
-    qreal gpsLatitude() const;
-    qreal gpsLongitude() const;
+  bool isGpsMap() const;
+  qreal gpsAltitude() const;
+  qreal gpsLatitude() const;
+  qreal gpsLongitude() const;
 
 public Q_SLOTS:
-    void setVisible(const bool visible);
-    void setWidgetIndex(const int index);
-    void setIsExternalWindow(const bool isWindow);
+  void setVisible(const bool visible);
+  void setWidgetIndex(const int index);
+  void setIsExternalWindow(const bool isWindow);
 
 private Q_SLOTS:
-    void updateWidgetVisible();
+  void updateWidgetVisible();
 
 private:
-    int m_index;
-    bool m_isGpsMap;
-    bool m_widgetVisible;
-    bool m_isExternalWindow;
-    Widgets::DashboardWidgetBase* m_dbWidget;
+  int m_index;
+  bool m_isGpsMap;
+  bool m_widgetVisible;
+  bool m_isExternalWindow;
+  Widgets::DashboardWidgetBase *m_dbWidget;
 };
-}
+} // namespace UI

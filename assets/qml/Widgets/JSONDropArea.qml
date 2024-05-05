@@ -25,110 +25,110 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 DropArea {
-    //
-    // Show rectangle and set color based on file extension on drag enter
-    //
-    onEntered: {
-        // Get file name & set color of rectangle accordingly
-        if (drag.urls.length > 0) {
-            var path = drag.urls[0].toString()
-            if (path.endsWith(".json") || path.endsWith(".csv")) {
-                drag.accept(Qt.LinkAction)
-                dropRectangle.color = Qt.darker(palette.highlight, 1.4)
-            }
+  //
+  // Show rectangle and set color based on file extension on drag enter
+  //
+  onEntered: {
+    // Get file name & set color of rectangle accordingly
+    if (drag.urls.length > 0) {
+      var path = drag.urls[0].toString()
+      if (path.endsWith(".json") || path.endsWith(".csv")) {
+        drag.accept(Qt.LinkAction)
+        dropRectangle.color = Qt.darker(palette.highlight, 1.4)
+      }
 
-            // Invalid file name, show red rectangle
-            else
-                dropRectangle.color = Cpp_ThemeManager.alternativeHighlight
+      // Invalid file name, show red rectangle
+      else
+        dropRectangle.color = Cpp_ThemeManager.alternativeHighlight
 
-            // Show drag&drop rectangle
-            dropRectangle.opacity = 0.8
-        }
+      // Show drag&drop rectangle
+      dropRectangle.opacity = 0.8
+    }
+  }
+
+  //
+  // Open *.json & *.csv files on drag drop
+  //
+  onDropped: {
+    // Hide rectangle
+    dropRectangle.hide()
+
+    // Get dropped file URL and remove prefixed "file://"
+    var path = drop.urls[0].toString()
+    if (!Cpp_IsWin)
+      path = path.replace(/^(file:\/{2})/,"");
+    else
+      path = path.replace(/^(file:\/{3})/,"");
+
+    // Unescape html codes like '%23' for '#'
+    var cleanPath = decodeURIComponent(path);
+
+    // Process JSON files
+    if (cleanPath.endsWith(".json")) {
+      Cpp_JSON_Generator.setOperationMode(0)
+      Cpp_JSON_Generator.loadJsonMap(cleanPath)
     }
 
-    //
-    // Open *.json & *.csv files on drag drop
-    //
-    onDropped: {
-        // Hide rectangle
-        dropRectangle.hide()
+    // Process CSV files
+    else if (cleanPath.endsWith(".csv"))
+      Cpp_CSV_Player.openFile(cleanPath)
+  }
 
-        // Get dropped file URL and remove prefixed "file://"
-        var path = drop.urls[0].toString()
-        if (!Cpp_IsWin)
-            path = path.replace(/^(file:\/{2})/,"");
-        else
-            path = path.replace(/^(file:\/{3})/,"");
+  //
+  // Hide drag & drop rectangle on drag exit
+  //
+  onExited: {
+    dropRectangle.hide()
+  }
 
-        // Unescape html codes like '%23' for '#'
-        var cleanPath = decodeURIComponent(path);
+  //
+  // Drop rectangle + icon + text
+  //
+  Rectangle {
+    id: dropRectangle
 
-        // Process JSON files
-        if (cleanPath.endsWith(".json")) {
-            Cpp_JSON_Generator.setOperationMode(0)
-            Cpp_JSON_Generator.loadJsonMap(cleanPath)
-        }
-
-        // Process CSV files
-        else if (cleanPath.endsWith(".csv"))
-            Cpp_CSV_Player.openFile(cleanPath)
+    function hide() {
+      rectTimer.start()
     }
 
-    //
-    // Hide drag & drop rectangle on drag exit
-    //
-    onExited: {
-        dropRectangle.hide()
+    opacity: 0
+    border.width: 1
+    anchors.centerIn: parent
+    color: Cpp_ThemeManager.highlight
+    border.color: Cpp_ThemeManager.text
+    width: dropLayout.implicitWidth + 6 * app.spacing
+    height: dropLayout.implicitHeight + 6 * app.spacing
+
+    ColumnLayout {
+      id: dropLayout
+      spacing: app.spacing * 2
+      anchors.centerIn: parent
+
+      ToolButton {
+        flat: true
+        enabled: false
+        icon.width: 128
+        icon.height: 128
+        Layout.alignment: Qt.AlignHCenter
+        icon.source: "qrc:/icons/drag-drop.svg"
+        icon.color: Cpp_ThemeManager.highlightedText
+      }
+
+      Label {
+        font.bold: true
+        font.pixelSize: 24
+        Layout.alignment: Qt.AlignHCenter
+        color: Cpp_ThemeManager.highlightedText
+        text: qsTr("Drop JSON and CSV files here")
+      }
     }
 
-    //
-    // Drop rectangle + icon + text
-    //
-    Rectangle {
-        id: dropRectangle
-
-        function hide() {
-            rectTimer.start()
-        }
-
-        opacity: 0
-        border.width: 1
-        anchors.centerIn: parent
-        color: Cpp_ThemeManager.highlight
-        border.color: Cpp_ThemeManager.text
-        width: dropLayout.implicitWidth + 6 * app.spacing
-        height: dropLayout.implicitHeight + 6 * app.spacing
-
-        ColumnLayout {
-            id: dropLayout
-            spacing: app.spacing * 2
-            anchors.centerIn: parent
-
-            ToolButton {
-                flat: true
-                enabled: false
-                icon.width: 128
-                icon.height: 128
-                Layout.alignment: Qt.AlignHCenter
-                icon.source: "qrc:/icons/drag-drop.svg"
-                icon.color: Cpp_ThemeManager.highlightedText
-            }
-
-            Label {
-                font.bold: true
-                font.pixelSize: 24
-                Layout.alignment: Qt.AlignHCenter
-                color: Cpp_ThemeManager.highlightedText
-                text: qsTr("Drop JSON and CSV files here")
-            }
-        }
-
-        Timer {
-            id: rectTimer
-            interval: 200
-            onTriggered: dropRectangle.opacity = 0
-        }
-
-        Behavior on opacity {NumberAnimation{}}
+    Timer {
+      id: rectTimer
+      interval: 200
+      onTriggered: dropRectangle.opacity = 0
     }
+
+    Behavior on opacity {NumberAnimation{}}
+  }
 }

@@ -30,4 +30,4 @@ namespace IO
 uint8_t crc8(const char *data, const int length);
 uint16_t crc16(const char *data, const int length);
 uint32_t crc32(const char *data, const int length);
-}
+} // namespace IO

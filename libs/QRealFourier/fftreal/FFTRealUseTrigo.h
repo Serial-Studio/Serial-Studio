@@ -13,87 +13,60 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 *Tab=3***********************************************************************/
 
+#if !defined(ffft_FFTRealUseTrigo_HEADER_INCLUDED)
+#  define ffft_FFTRealUseTrigo_HEADER_INCLUDED
 
-
-#if ! defined (ffft_FFTRealUseTrigo_HEADER_INCLUDED)
-#define	ffft_FFTRealUseTrigo_HEADER_INCLUDED
-
-#if defined (_MSC_VER)
-	#pragma once
-	#pragma warning (4 : 4250) // "Inherits via dominance."
-#endif
-
-
+#  if defined(_MSC_VER)
+#    pragma once
+#    pragma warning(4 : 4250) // "Inherits via dominance."
+#  endif
 
 /*\\\ INCLUDE FILES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 
-#include	"def.h"
-#include	"FFTRealFixLenParam.h"
-#include	"OscSinCos.h"
-
-
+#  include "def.h"
+#  include "FFTRealFixLenParam.h"
+#  include "OscSinCos.h"
 
 namespace ffft
 {
 
-
-
-template <int ALGO>
+template<int ALGO>
 class FFTRealUseTrigo
 {
 
-/*\\\ PUBLIC \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+  /*\\\ PUBLIC \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 
 public:
+  typedef FFTRealFixLenParam::DataType DataType;
+  typedef OscSinCos<DataType> OscType;
 
-   typedef	FFTRealFixLenParam::DataType	DataType;
-	typedef	OscSinCos <DataType>	OscType;
+  ffft_FORCEINLINE static void prepare(OscType &osc);
+  ffft_FORCEINLINE static void iterate(OscType &osc, DataType &c, DataType &s,
+                                       const DataType cos_ptr[], long index_c,
+                                       long index_s);
 
-	ffft_FORCEINLINE static void
-						prepare (OscType &osc);
-	ffft_FORCEINLINE	static void
-						iterate (OscType &osc, DataType &c, DataType &s, const DataType cos_ptr [], long index_c, long index_s);
-
-
-
-/*\\\ PROTECTED \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+  /*\\\ PROTECTED \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 
 protected:
-
-
-
-/*\\\ PRIVATE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+  /*\\\ PRIVATE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 
 private:
-
-
-
-/*\\\ FORBIDDEN MEMBER FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+  /*\\\ FORBIDDEN MEMBER FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
 
 private:
+  FFTRealUseTrigo();
+  ~FFTRealUseTrigo();
+  FFTRealUseTrigo(const FFTRealUseTrigo &other);
+  FFTRealUseTrigo &operator=(const FFTRealUseTrigo &other);
+  bool operator==(const FFTRealUseTrigo &other);
+  bool operator!=(const FFTRealUseTrigo &other);
 
-						FFTRealUseTrigo ();
-						~FFTRealUseTrigo ();
-						FFTRealUseTrigo (const FFTRealUseTrigo &other);
-	FFTRealUseTrigo &
-						operator = (const FFTRealUseTrigo &other);
-	bool				operator == (const FFTRealUseTrigo &other);
-	bool				operator != (const FFTRealUseTrigo &other);
+}; // class FFTRealUseTrigo
 
-};	// class FFTRealUseTrigo
+} // namespace ffft
 
+#  include "FFTRealUseTrigo.hpp"
 
-
-}	// namespace ffft
-
-
-
-#include	"FFTRealUseTrigo.hpp"
-
-
-
-#endif	// ffft_FFTRealUseTrigo_HEADER_INCLUDED
-
-
+#endif // ffft_FFTRealUseTrigo_HEADER_INCLUDED
 
 /*\\\ EOF \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/

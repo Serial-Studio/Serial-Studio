@@ -33,34 +33,34 @@ namespace Widgets
 {
 class DataGroup : public DashboardWidgetBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    DataGroup(const int index = -1);
-    ~DataGroup();
+  DataGroup(const int index = -1);
+  ~DataGroup();
 
 private Q_SLOTS:
-    void updateData();
+  void updateData();
 
 protected:
-    void resizeEvent(QResizeEvent *event);
-    void wheelEvent(QWheelEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
+  void resizeEvent(QResizeEvent *event);
+  void wheelEvent(QWheelEvent *event);
+  void mouseMoveEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
-    int m_index;
+  int m_index;
 
-    QVector<QLabel *> m_icons;
-    QVector<QLabel *> m_units;
-    QVector<ElidedLabel *> m_titles;
-    QVector<ElidedLabel *> m_values;
+  QVector<QLabel *> m_icons;
+  QVector<QLabel *> m_units;
+  QVector<ElidedLabel *> m_titles;
+  QVector<ElidedLabel *> m_values;
 
-    QWidget *m_dataContainer;
-    QVBoxLayout *m_mainLayout;
-    QGridLayout *m_gridLayout;
-    QScrollArea *m_scrollArea;
+  QWidget *m_dataContainer;
+  QVBoxLayout *m_mainLayout;
+  QGridLayout *m_gridLayout;
+  QScrollArea *m_scrollArea;
 };
-}
+} // namespace Widgets

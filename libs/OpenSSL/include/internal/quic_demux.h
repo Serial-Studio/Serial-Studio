@@ -88,54 +88,56 @@ typedef struct quic_urxe_st QUIC_URXE;
 
 struct quic_urxe_st
 {
-    OSSL_LIST_MEMBER(urxe, QUIC_URXE);
+  OSSL_LIST_MEMBER(urxe, QUIC_URXE);
 
-    /*
-     * The URXE data starts after this structure so we don't need a pointer.
-     * data_len stores the current length (i.e., the length of the received
-     * datagram) and alloc_len stores the allocation length. The URXE will be
-     * reallocated if we need a larger allocation than is available, though this
-     * should not be common as we will have a good idea of worst-case MTUs up
-     * front.
-     */
-    size_t data_len, alloc_len;
+  /*
+   * The URXE data starts after this structure so we don't need a pointer.
+   * data_len stores the current length (i.e., the length of the received
+   * datagram) and alloc_len stores the allocation length. The URXE will be
+   * reallocated if we need a larger allocation than is available, though this
+   * should not be common as we will have a good idea of worst-case MTUs up
+   * front.
+   */
+  size_t data_len, alloc_len;
 
-    /*
-     * Bitfields per packet. processed indicates the packet has been processed
-     * and must not be processed again, hpr_removed indicates header protection
-     * has already been removed. Used by QRX only; not used by the demuxer.
-     */
-    uint64_t processed, hpr_removed;
+  /*
+   * Bitfields per packet. processed indicates the packet has been processed
+   * and must not be processed again, hpr_removed indicates header protection
+   * has already been removed. Used by QRX only; not used by the demuxer.
+   */
+  uint64_t processed, hpr_removed;
 
-    /*
-     * Address of peer we received the datagram from, and the local interface
-     * address we received it on. If local address support is not enabled, local
-     * is zeroed.
-     */
-    BIO_ADDR peer, local;
+  /*
+   * Address of peer we received the datagram from, and the local interface
+   * address we received it on. If local address support is not enabled, local
+   * is zeroed.
+   */
+  BIO_ADDR peer, local;
 
-    /*
-     * Time at which datagram was received (or ossl_time_zero()) if a now
-     * function was not provided).
-     */
-    OSSL_TIME time;
+  /*
+   * Time at which datagram was received (or ossl_time_zero()) if a now
+   * function was not provided).
+   */
+  OSSL_TIME time;
 
-    /*
-     * Used by the QRX to mark whether a datagram has been deferred. Used by the
-     * QRX only; not used by the demuxer.
-     */
-    char deferred;
+  /*
+   * Used by the QRX to mark whether a datagram has been deferred. Used by the
+   * QRX only; not used by the demuxer.
+   */
+  char deferred;
 };
 
 /* Accessors for URXE buffer. */
-static ossl_unused ossl_inline unsigned char *ossl_quic_urxe_data(const QUIC_URXE *e)
+static ossl_unused ossl_inline unsigned char *
+ossl_quic_urxe_data(const QUIC_URXE *e)
 {
-    return (unsigned char *)&e[1];
+  return (unsigned char *)&e[1];
 }
 
-static ossl_unused ossl_inline unsigned char *ossl_quic_urxe_data_end(const QUIC_URXE *e)
+static ossl_unused ossl_inline unsigned char *
+ossl_quic_urxe_data_end(const QUIC_URXE *e)
 {
-    return ossl_quic_urxe_data(e) + e->data_len;
+  return ossl_quic_urxe_data(e) + e->data_len;
 }
 
 /* List structure tracking a queue of URXEs. */
@@ -160,8 +162,9 @@ typedef struct quic_demux_st QUIC_DEMUX;
  * to mutate this buffer; once the demuxer calls this callback, it will never
  * read the buffer again.
  *
- * The callee must arrange for ossl_quic_demux_release_urxe to be called on the URXE
- * at some point in the future (this need not be before the callback returns).
+ * The callee must arrange for ossl_quic_demux_release_urxe to be called on the
+ * URXE at some point in the future (this need not be before the callback
+ * returns).
  *
  * At the time the callback is made, the URXE will not be in any queue,
  * therefore the callee can use the prev and next fields as it wishes.
@@ -181,8 +184,8 @@ typedef void(ossl_quic_demux_cb_fn)(QUIC_URXE *e, void *arg);
  * NULL, ossl_time_zero() is used as the datagram reception time.
  */
 QUIC_DEMUX *ossl_quic_demux_new(BIO *net_bio, size_t short_conn_id_len,
-                                size_t default_urxe_alloc_len, OSSL_TIME (*now)(void *arg),
-                                void *now_arg);
+                                size_t default_urxe_alloc_len,
+                                OSSL_TIME (*now)(void *arg), void *now_arg);
 
 /*
  * Destroy a demuxer. All URXEs must have been released back to the demuxer
@@ -193,8 +196,9 @@ void ossl_quic_demux_free(QUIC_DEMUX *demux);
 /*
  * Register a datagram handler callback for a connection ID.
  *
- * ossl_quic_demux_pump will call the specified function if it receives a datagram
- * the first packet of which has the specified destination connection ID.
+ * ossl_quic_demux_pump will call the specified function if it receives a
+ * datagram the first packet of which has the specified destination connection
+ * ID.
  *
  * It is assumed all packets in a datagram have the same destination connection
  * ID (as QUIC mandates this), but it is the user's responsibility to check for
@@ -220,14 +224,16 @@ int ossl_quic_demux_register(QUIC_DEMUX *demux, const QUIC_CONN_ID *dst_conn_id,
  *
  * Returns 1 on success or 0 on failure.
  */
-int ossl_quic_demux_unregister(QUIC_DEMUX *demux, const QUIC_CONN_ID *dst_conn_id);
+int ossl_quic_demux_unregister(QUIC_DEMUX *demux,
+                               const QUIC_CONN_ID *dst_conn_id);
 
 /*
  * Unregisters any datagram handler callback from all connection IDs it is used
  * for. cb and cb_arg must both match the values passed to
  * ossl_quic_demux_register.
  */
-void ossl_quic_demux_unregister_by_cb(QUIC_DEMUX *demux, ossl_quic_demux_cb_fn *cb, void *cb_arg);
+void ossl_quic_demux_unregister_by_cb(QUIC_DEMUX *demux,
+                                      ossl_quic_demux_cb_fn *cb, void *cb_arg);
 
 /*
  * Releases a URXE back to the demuxer. No reference must be made to the URXE or
@@ -253,7 +259,8 @@ int ossl_quic_demux_pump(QUIC_DEMUX *demux);
  *
  * Returns 1 on success or 0 on failure.
  */
-int ossl_quic_demux_inject(QUIC_DEMUX *demux, const unsigned char *buf, size_t buf_len,
-                           const BIO_ADDR *peer, const BIO_ADDR *local);
+int ossl_quic_demux_inject(QUIC_DEMUX *demux, const unsigned char *buf,
+                           size_t buf_len, const BIO_ADDR *peer,
+                           const BIO_ADDR *local);
 
 #endif

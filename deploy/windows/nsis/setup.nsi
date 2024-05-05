@@ -31,7 +31,7 @@ Unicode True
 !define COMPANYNAME                  "Alex Spataru"
 !define DESCRIPTION                  "Multi-purpose data visualization & processing program"
 !define VERSIONMAJOR                 2
-!define VERSIONMINOR                 0
+!define VERSIONMINOR                 1
 !define VERSIONBUILD                 0
 !define MUI_ABORTWARNING
 !define INSTALL_DIR                  "$PROGRAMFILES64\${APPNAME}"

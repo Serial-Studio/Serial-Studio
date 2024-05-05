@@ -57,6 +57,7 @@
         <file>icons/multiplot.svg</file>
         <file>icons/new.svg</file>
         <file>icons/open.svg</file>
+        <file>icons/paste.svg</file>
         <file>icons/plot.svg</file>
         <file>icons/points.svg</file>
         <file>icons/power.svg</file>
@@ -131,6 +132,7 @@
         <file>qml/ProjectEditor/JsonDatasetDelegate.qml</file>
         <file>qml/ProjectEditor/JsonGroupDelegate.qml</file>
         <file>qml/ProjectEditor/TreeView.qml</file>
+        <file>qml/Widgets/GpsMap.qml</file>
         <file>qml/Widgets/Icon.qml</file>
         <file>qml/Widgets/JSONDropArea.qml</file>
         <file>qml/Widgets/Shadow.qml</file>
@@ -144,15 +146,13 @@
         <file>qml/Windows/MQTTConfiguration.qml</file>
         <file>qml/Windows/ProjectEditor.qml</file>
         <file>qml/main.qml</file>
+        <file>scripts/frame-parser.js</file>
         <file>themes/1_Flat.json</file>
         <file>themes/2_Dark.json</file>
         <file>themes/3_Classic.json</file>
         <file>themes/4_Midnight.json</file>
         <file>themes/5_Noir.json</file>
         <file>themes/6_Mathworks.json</file>
-        <file>touchbar/console.png</file>
-        <file>touchbar/dashboard.png</file>
-        <file>touchbar/setup.png</file>
         <file>translations/de.qm</file>
         <file>translations/de.ts</file>
         <file>translations/en.qm</file>
@@ -178,8 +178,5 @@
         <file>window-border/minimize.svg</file>
         <file>window-border/restore.svg</file>
         <file>window-border/unmaximize.svg</file>
-        <file>icons/paste.svg</file>
-        <file>scripts/frame-parser.js</file>
-        <file>qml/Widgets/GpsMap.qml</file>
     </qresource>
 </RCC>

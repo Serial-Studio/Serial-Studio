@@ -1,7 +1,7 @@
 /***********************************************************************
 
 qfouriervariablecalculator.h - Header file for
-							   QFourierVariableCalculator
+                                                           QFourierVariableCalculator
 
 Class for calculating FFts of a variable size.
 
@@ -48,19 +48,16 @@ qrealfourier@gmail.com
 class QFourierVariableCalculator : public QFourierCalculator
 {
 
-	public:
+public:
+  QFourierVariableCalculator();
+  ~QFourierVariableCalculator();
+  void setSize(int size);
+  void forward();
+  void inverse();
+  void rescale();
 
-		QFourierVariableCalculator();
-		~QFourierVariableCalculator();
-		void setSize(int size);
-		void forward();
-		void inverse();
-		void rescale();
-
-	protected:
-
-		ffft::FFTReal<float> *mFourierTransform;
-
+protected:
+  ffft::FFTReal<float> *mFourierTransform;
 };
 
 #endif

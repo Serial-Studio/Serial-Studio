@@ -28,22 +28,22 @@ namespace Widgets
 {
 class GPS : public DashboardWidgetBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    GPS(const int index = -1);
+  GPS(const int index = -1);
 
-    qreal altitude() const;
-    qreal latitude() const;
-    qreal longitude() const;
+  qreal altitude() const;
+  qreal latitude() const;
+  qreal longitude() const;
 
 private Q_SLOTS:
-    void updateData();
+  void updateData();
 
 private:
-    int m_index;
-    qreal m_altitude;
-    qreal m_latitude;
-    qreal m_longitude;
+  int m_index;
+  qreal m_altitude;
+  qreal m_latitude;
+  qreal m_longitude;
 };
-}
+} // namespace Widgets

@@ -30,40 +30,38 @@
 
 class QWT_EXPORT QwtRoundScaleDraw : public QwtAbstractScaleDraw
 {
-  public:
-    QwtRoundScaleDraw();
-    virtual ~QwtRoundScaleDraw();
+public:
+  QwtRoundScaleDraw();
+  virtual ~QwtRoundScaleDraw();
 
-    void setRadius( double radius );
-    double radius() const;
+  void setRadius(double radius);
+  double radius() const;
 
-    void moveCenter( double x, double y );
-    void moveCenter( const QPointF& );
-    QPointF center() const;
+  void moveCenter(double x, double y);
+  void moveCenter(const QPointF &);
+  QPointF center() const;
 
-    void setAngleRange( double angle1, double angle2 );
+  void setAngleRange(double angle1, double angle2);
 
-    virtual double extent( const QFont& ) const QWT_OVERRIDE;
+  virtual double extent(const QFont &) const QWT_OVERRIDE;
 
-  protected:
-    virtual void drawTick( QPainter*,
-        double value, double len ) const QWT_OVERRIDE;
+protected:
+  virtual void drawTick(QPainter *, double value,
+                        double len) const QWT_OVERRIDE;
 
-    virtual void drawBackbone(
-        QPainter* ) const QWT_OVERRIDE;
+  virtual void drawBackbone(QPainter *) const QWT_OVERRIDE;
 
-    virtual void drawLabel(
-        QPainter*, double value ) const QWT_OVERRIDE;
+  virtual void drawLabel(QPainter *, double value) const QWT_OVERRIDE;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 //! Move the center of the scale draw, leaving the radius unchanged
-inline void QwtRoundScaleDraw::moveCenter( double x, double y )
+inline void QwtRoundScaleDraw::moveCenter(double x, double y)
 {
-    moveCenter( QPointF( x, y ) );
+  moveCenter(QPointF(x, y));
 }
 
 #endif

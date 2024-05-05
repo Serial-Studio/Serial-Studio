@@ -1,7 +1,7 @@
 /***********************************************************************
 
 qfouriervariablecalculator.cpp - Source file for
-								 QFourierVariableCalculator
+                                                                 QFourierVariableCalculator
 
 Class for calculating FFts of a variable size.
 
@@ -42,44 +42,44 @@ qrealfourier@gmail.com
 #include "qfouriervariablecalculator.h"
 
 QFourierVariableCalculator::QFourierVariableCalculator()
-	: QFourierCalculator()
+  : QFourierCalculator()
 {
-	mFourierTransform = 0;
+  mFourierTransform = 0;
 }
 
 QFourierVariableCalculator::~QFourierVariableCalculator()
 {
-	if(mFourierTransform != 0)
-	{
-		delete mFourierTransform;
-	}
+  if (mFourierTransform != 0)
+  {
+    delete mFourierTransform;
+  }
 }
 
 void QFourierVariableCalculator::setSize(int size)
 {
-	QFourierCalculator::setSize(size);
-	if(mFourierTransform == 0)
-	{
-		mFourierTransform = new ffft::FFTReal<float>(mSize);
-	}
-	else if(mFourierTransform->get_length() != mSize)
-	{
-		delete mFourierTransform;
-		mFourierTransform = new ffft::FFTReal<float>(mSize);
-	}
+  QFourierCalculator::setSize(size);
+  if (mFourierTransform == 0)
+  {
+    mFourierTransform = new ffft::FFTReal<float>(mSize);
+  }
+  else if (mFourierTransform->get_length() != mSize)
+  {
+    delete mFourierTransform;
+    mFourierTransform = new ffft::FFTReal<float>(mSize);
+  }
 }
 
 void QFourierVariableCalculator::forward()
 {
-	mFourierTransform->do_fft(mOutput, mInput);
+  mFourierTransform->do_fft(mOutput, mInput);
 }
 
 void QFourierVariableCalculator::inverse()
 {
-	mFourierTransform->do_ifft(mInput, mOutput);
+  mFourierTransform->do_ifft(mInput, mOutput);
 }
 
 void QFourierVariableCalculator::rescale()
 {
-	mFourierTransform->rescale(mInput);
+  mFourierTransform->rescale(mInput);
 }

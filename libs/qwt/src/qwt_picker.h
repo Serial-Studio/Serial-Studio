@@ -102,237 +102,235 @@ class QPolygon;
 
 class QWT_EXPORT QwtPicker : public QObject, public QwtEventPattern
 {
-    Q_OBJECT
+  Q_OBJECT
 
-    Q_ENUMS( RubberBand DisplayMode ResizeMode )
+  Q_ENUMS(RubberBand DisplayMode ResizeMode)
 
-    Q_PROPERTY( bool isEnabled READ isEnabled WRITE setEnabled )
-    Q_PROPERTY( ResizeMode resizeMode READ resizeMode WRITE setResizeMode )
+  Q_PROPERTY(bool isEnabled READ isEnabled WRITE setEnabled)
+  Q_PROPERTY(ResizeMode resizeMode READ resizeMode WRITE setResizeMode)
 
-    Q_PROPERTY( DisplayMode trackerMode READ trackerMode WRITE setTrackerMode )
-    Q_PROPERTY( QPen trackerPen READ trackerPen WRITE setTrackerPen )
-    Q_PROPERTY( QFont trackerFont READ trackerFont WRITE setTrackerFont )
+  Q_PROPERTY(DisplayMode trackerMode READ trackerMode WRITE setTrackerMode)
+  Q_PROPERTY(QPen trackerPen READ trackerPen WRITE setTrackerPen)
+  Q_PROPERTY(QFont trackerFont READ trackerFont WRITE setTrackerFont)
 
-    Q_PROPERTY( RubberBand rubberBand READ rubberBand WRITE setRubberBand )
-    Q_PROPERTY( QPen rubberBandPen READ rubberBandPen WRITE setRubberBandPen )
+  Q_PROPERTY(RubberBand rubberBand READ rubberBand WRITE setRubberBand)
+  Q_PROPERTY(QPen rubberBandPen READ rubberBandPen WRITE setRubberBandPen)
 
-  public:
-    /*!
-       Rubber band style
+public:
+  /*!
+     Rubber band style
 
-       The default value is QwtPicker::NoRubberBand.
-       \sa setRubberBand(), rubberBand()
-     */
+     The default value is QwtPicker::NoRubberBand.
+     \sa setRubberBand(), rubberBand()
+   */
 
-    enum RubberBand
-    {
-        //! No rubberband.
-        NoRubberBand = 0,
+  enum RubberBand
+  {
+    //! No rubberband.
+    NoRubberBand = 0,
 
-        //! A horizontal line ( only for QwtPickerMachine::PointSelection )
-        HLineRubberBand,
+    //! A horizontal line ( only for QwtPickerMachine::PointSelection )
+    HLineRubberBand,
 
-        //! A vertical line ( only for QwtPickerMachine::PointSelection )
-        VLineRubberBand,
+    //! A vertical line ( only for QwtPickerMachine::PointSelection )
+    VLineRubberBand,
 
-        //! A crosshair ( only for QwtPickerMachine::PointSelection )
-        CrossRubberBand,
+    //! A crosshair ( only for QwtPickerMachine::PointSelection )
+    CrossRubberBand,
 
-        //! A rectangle ( only for QwtPickerMachine::RectSelection )
-        RectRubberBand,
+    //! A rectangle ( only for QwtPickerMachine::RectSelection )
+    RectRubberBand,
 
-        //! An ellipse ( only for QwtPickerMachine::RectSelection )
-        EllipseRubberBand,
+    //! An ellipse ( only for QwtPickerMachine::RectSelection )
+    EllipseRubberBand,
 
-        //! A polygon ( only for QwtPickerMachine::PolygonSelection )
-        PolygonRubberBand,
-
-        /*!
-           Values >= UserRubberBand can be used to define additional
-           rubber bands.
-         */
-        UserRubberBand = 100
-    };
+    //! A polygon ( only for QwtPickerMachine::PolygonSelection )
+    PolygonRubberBand,
 
     /*!
-       \brief Display mode
-       \sa setTrackerMode(), trackerMode(), isActive()
+       Values >= UserRubberBand can be used to define additional
+       rubber bands.
      */
-    enum DisplayMode
-    {
-        //! Display never
-        AlwaysOff,
+    UserRubberBand = 100
+  };
 
-        //! Display always
-        AlwaysOn,
+  /*!
+     \brief Display mode
+     \sa setTrackerMode(), trackerMode(), isActive()
+   */
+  enum DisplayMode
+  {
+    //! Display never
+    AlwaysOff,
 
-        //! Display only when the selection is active
-        ActiveOnly
-    };
+    //! Display always
+    AlwaysOn,
 
-    /*!
-       Controls what to do with the selected points of an active
-         selection when the observed widget is resized.
+    //! Display only when the selection is active
+    ActiveOnly
+  };
 
-       The default value is QwtPicker::Stretch.
-       \sa setResizeMode()
-     */
+  /*!
+     Controls what to do with the selected points of an active
+       selection when the observed widget is resized.
 
-    enum ResizeMode
-    {
-        //! All points are scaled according to the new size,
-        Stretch,
+     The default value is QwtPicker::Stretch.
+     \sa setResizeMode()
+   */
 
-        //! All points remain unchanged.
-        KeepSize
-    };
+  enum ResizeMode
+  {
+    //! All points are scaled according to the new size,
+    Stretch,
 
-    explicit QwtPicker( QWidget* parent );
-    explicit QwtPicker( RubberBand rubberBand,
-        DisplayMode trackerMode, QWidget* );
+    //! All points remain unchanged.
+    KeepSize
+  };
 
-    virtual ~QwtPicker();
+  explicit QwtPicker(QWidget *parent);
+  explicit QwtPicker(RubberBand rubberBand, DisplayMode trackerMode, QWidget *);
 
-    void setStateMachine( QwtPickerMachine* );
-    const QwtPickerMachine* stateMachine() const;
-    QwtPickerMachine* stateMachine();
+  virtual ~QwtPicker();
 
-    void setRubberBand( RubberBand );
-    RubberBand rubberBand() const;
+  void setStateMachine(QwtPickerMachine *);
+  const QwtPickerMachine *stateMachine() const;
+  QwtPickerMachine *stateMachine();
 
-    void setTrackerMode( DisplayMode );
-    DisplayMode trackerMode() const;
+  void setRubberBand(RubberBand);
+  RubberBand rubberBand() const;
 
-    void setResizeMode( ResizeMode );
-    ResizeMode resizeMode() const;
+  void setTrackerMode(DisplayMode);
+  DisplayMode trackerMode() const;
 
-    void setRubberBandPen( const QPen& );
-    QPen rubberBandPen() const;
+  void setResizeMode(ResizeMode);
+  ResizeMode resizeMode() const;
 
-    void setTrackerPen( const QPen& );
-    QPen trackerPen() const;
+  void setRubberBandPen(const QPen &);
+  QPen rubberBandPen() const;
 
-    void setTrackerFont( const QFont& );
-    QFont trackerFont() const;
+  void setTrackerPen(const QPen &);
+  QPen trackerPen() const;
 
-    bool isEnabled() const;
-    bool isActive() const;
+  void setTrackerFont(const QFont &);
+  QFont trackerFont() const;
 
-    virtual bool eventFilter( QObject*, QEvent* ) QWT_OVERRIDE;
+  bool isEnabled() const;
+  bool isActive() const;
 
-    QWidget* parentWidget();
-    const QWidget* parentWidget() const;
+  virtual bool eventFilter(QObject *, QEvent *) QWT_OVERRIDE;
 
-    virtual QPainterPath pickArea() const;
+  QWidget *parentWidget();
+  const QWidget *parentWidget() const;
 
-    virtual void drawRubberBand( QPainter* ) const;
-    virtual void drawTracker( QPainter* ) const;
+  virtual QPainterPath pickArea() const;
 
-    virtual QRegion trackerMask() const;
-    virtual QRegion rubberBandMask() const;
+  virtual void drawRubberBand(QPainter *) const;
+  virtual void drawTracker(QPainter *) const;
 
-    virtual QwtText trackerText( const QPoint& pos ) const;
-    QPoint trackerPosition() const;
-    virtual QRect trackerRect( const QFont& ) const;
+  virtual QRegion trackerMask() const;
+  virtual QRegion rubberBandMask() const;
 
-    QPolygon selection() const;
+  virtual QwtText trackerText(const QPoint &pos) const;
+  QPoint trackerPosition() const;
+  virtual QRect trackerRect(const QFont &) const;
 
-  public Q_SLOTS:
-    void setEnabled( bool );
+  QPolygon selection() const;
 
-  Q_SIGNALS:
-    /*!
-       A signal indicating, when the picker has been activated.
-       Together with setEnabled() it can be used to implement
-       selections with more than one picker.
+public Q_SLOTS:
+  void setEnabled(bool);
 
-       \param on True, when the picker has been activated
-     */
-    void activated( bool on );
+Q_SIGNALS:
+  /*!
+     A signal indicating, when the picker has been activated.
+     Together with setEnabled() it can be used to implement
+     selections with more than one picker.
 
-    /*!
-       A signal emitting the selected points,
-       at the end of a selection.
+     \param on True, when the picker has been activated
+   */
+  void activated(bool on);
 
-       \param polygon Selected points
-     */
-    void selected( const QPolygon& polygon );
+  /*!
+     A signal emitting the selected points,
+     at the end of a selection.
 
-    /*!
-       A signal emitted when a point has been appended to the selection
+     \param polygon Selected points
+   */
+  void selected(const QPolygon &polygon);
 
-       \param pos Position of the appended point.
-       \sa append(). moved()
-     */
-    void appended( const QPoint& pos );
+  /*!
+     A signal emitted when a point has been appended to the selection
 
-    /*!
-       A signal emitted whenever the last appended point of the
-       selection has been moved.
+     \param pos Position of the appended point.
+     \sa append(). moved()
+   */
+  void appended(const QPoint &pos);
 
-       \param pos Position of the moved last point of the selection.
-       \sa move(), appended()
-     */
-    void moved( const QPoint& pos );
+  /*!
+     A signal emitted whenever the last appended point of the
+     selection has been moved.
 
-    /*!
-       A signal emitted whenever the last appended point of the
-       selection has been removed.
+     \param pos Position of the moved last point of the selection.
+     \sa move(), appended()
+   */
+  void moved(const QPoint &pos);
 
-       \param pos Position of the point, that has been removed
-       \sa remove(), appended()
-     */
-    void removed( const QPoint& pos );
-    /*!
-       A signal emitted when the active selection has been changed.
-       This might happen when the observed widget is resized.
+  /*!
+     A signal emitted whenever the last appended point of the
+     selection has been removed.
 
-       \param selection Changed selection
-       \sa stretchSelection()
-     */
-    void changed( const QPolygon& selection );
+     \param pos Position of the point, that has been removed
+     \sa remove(), appended()
+   */
+  void removed(const QPoint &pos);
+  /*!
+     A signal emitted when the active selection has been changed.
+     This might happen when the observed widget is resized.
 
-  protected:
-    virtual QPolygon adjustedPoints( const QPolygon& ) const;
+     \param selection Changed selection
+     \sa stretchSelection()
+   */
+  void changed(const QPolygon &selection);
 
-    virtual void transition( const QEvent* );
+protected:
+  virtual QPolygon adjustedPoints(const QPolygon &) const;
 
-    virtual void begin();
-    virtual void append( const QPoint& );
-    virtual void move( const QPoint& );
-    virtual void remove();
-    virtual bool end( bool ok = true );
+  virtual void transition(const QEvent *);
 
-    virtual bool accept( QPolygon& ) const;
-    virtual void reset();
+  virtual void begin();
+  virtual void append(const QPoint &);
+  virtual void move(const QPoint &);
+  virtual void remove();
+  virtual bool end(bool ok = true);
 
-    virtual void widgetMousePressEvent( QMouseEvent* );
-    virtual void widgetMouseReleaseEvent( QMouseEvent* );
-    virtual void widgetMouseDoubleClickEvent( QMouseEvent* );
-    virtual void widgetMouseMoveEvent( QMouseEvent* );
-    virtual void widgetWheelEvent( QWheelEvent* );
-    virtual void widgetKeyPressEvent( QKeyEvent* );
-    virtual void widgetKeyReleaseEvent( QKeyEvent* );
-    virtual void widgetEnterEvent( QEvent* );
-    virtual void widgetLeaveEvent( QEvent* );
+  virtual bool accept(QPolygon &) const;
+  virtual void reset();
 
-    virtual void stretchSelection(
-        const QSize& oldSize, const QSize& newSize );
+  virtual void widgetMousePressEvent(QMouseEvent *);
+  virtual void widgetMouseReleaseEvent(QMouseEvent *);
+  virtual void widgetMouseDoubleClickEvent(QMouseEvent *);
+  virtual void widgetMouseMoveEvent(QMouseEvent *);
+  virtual void widgetWheelEvent(QWheelEvent *);
+  virtual void widgetKeyPressEvent(QKeyEvent *);
+  virtual void widgetKeyReleaseEvent(QKeyEvent *);
+  virtual void widgetEnterEvent(QEvent *);
+  virtual void widgetLeaveEvent(QEvent *);
 
-    virtual void updateDisplay();
+  virtual void stretchSelection(const QSize &oldSize, const QSize &newSize);
 
-    const QwtWidgetOverlay* rubberBandOverlay() const;
-    const QwtWidgetOverlay* trackerOverlay() const;
+  virtual void updateDisplay();
 
-    const QPolygon& pickedPoints() const;
+  const QwtWidgetOverlay *rubberBandOverlay() const;
+  const QwtWidgetOverlay *trackerOverlay() const;
 
-  private:
-    void init( QWidget*, RubberBand rubberBand, DisplayMode trackerMode );
+  const QPolygon &pickedPoints() const;
 
-    void setMouseTracking( bool );
+private:
+  void init(QWidget *, RubberBand rubberBand, DisplayMode trackerMode);
 
-    class PrivateData;
-    PrivateData* m_data;
+  void setMouseTracking(bool);
+
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

@@ -46,30 +46,29 @@ class QwtText;
 
 class QWT_EXPORT QwtPlotTextLabel : public QwtPlotItem
 {
-  public:
-    QwtPlotTextLabel();
-    virtual ~QwtPlotTextLabel();
+public:
+  QwtPlotTextLabel();
+  virtual ~QwtPlotTextLabel();
 
-    virtual int rtti() const QWT_OVERRIDE;
+  virtual int rtti() const QWT_OVERRIDE;
 
-    void setText( const QwtText& );
-    QwtText text() const;
+  void setText(const QwtText &);
+  QwtText text() const;
 
-    void setMargin( int margin );
-    int margin() const;
+  void setMargin(int margin);
+  int margin() const;
 
-    virtual QRectF textRect( const QRectF&, const QSizeF& ) const;
+  virtual QRectF textRect(const QRectF &, const QSizeF &) const;
 
-  protected:
-    virtual void draw( QPainter*,
-        const QwtScaleMap&, const QwtScaleMap&,
-        const QRectF&) const QWT_OVERRIDE;
+protected:
+  virtual void draw(QPainter *, const QwtScaleMap &, const QwtScaleMap &,
+                    const QRectF &) const QWT_OVERRIDE;
 
-    void invalidateCache();
+  void invalidateCache();
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

@@ -24,19 +24,19 @@
 #include <JSON/Generator.h>
 
 JSON::Dataset::Dataset()
-    : m_fft(false)
-    , m_led(false)
-    , m_log(false)
-    , m_graph(false)
-    , m_title("")
-    , m_value("")
-    , m_units("")
-    , m_widget("")
-    , m_index(0)
-    , m_max(0)
-    , m_min(0)
-    , m_alarm(0)
-    , m_fftSamples(1024)
+  : m_fft(false)
+  , m_led(false)
+  , m_log(false)
+  , m_graph(false)
+  , m_title("")
+  , m_value("")
+  , m_units("")
+  , m_widget("")
+  , m_index(0)
+  , m_max(0)
+  , m_min(0)
+  , m_alarm(0)
+  , m_fftSamples(1024)
 {
 }
 
@@ -45,7 +45,7 @@ JSON::Dataset::Dataset()
  */
 bool JSON::Dataset::fft() const
 {
-    return m_fft;
+  return m_fft;
 }
 
 /**
@@ -53,7 +53,7 @@ bool JSON::Dataset::fft() const
  */
 bool JSON::Dataset::led() const
 {
-    return m_led;
+  return m_led;
 }
 
 /**
@@ -61,7 +61,7 @@ bool JSON::Dataset::led() const
  */
 bool JSON::Dataset::log() const
 {
-    return m_log;
+  return m_log;
 }
 
 /**
@@ -69,7 +69,7 @@ bool JSON::Dataset::log() const
  */
 int JSON::Dataset::index() const
 {
-    return m_index;
+  return m_index;
 }
 
 /**
@@ -77,7 +77,7 @@ int JSON::Dataset::index() const
  */
 bool JSON::Dataset::graph() const
 {
-    return m_graph;
+  return m_graph;
 }
 
 /**
@@ -85,7 +85,7 @@ bool JSON::Dataset::graph() const
  */
 double JSON::Dataset::min() const
 {
-    return m_min;
+  return m_min;
 }
 
 /**
@@ -93,7 +93,7 @@ double JSON::Dataset::min() const
  */
 double JSON::Dataset::max() const
 {
-    return m_max;
+  return m_max;
 }
 
 /**
@@ -101,7 +101,7 @@ double JSON::Dataset::max() const
  */
 double JSON::Dataset::alarm() const
 {
-    return m_alarm;
+  return m_alarm;
 }
 
 /**
@@ -109,7 +109,7 @@ double JSON::Dataset::alarm() const
  */
 QString JSON::Dataset::title() const
 {
-    return m_title;
+  return m_title;
 }
 
 /**
@@ -117,7 +117,7 @@ QString JSON::Dataset::title() const
  */
 QString JSON::Dataset::value() const
 {
-    return m_value;
+  return m_value;
 }
 
 /**
@@ -125,7 +125,7 @@ QString JSON::Dataset::value() const
  */
 QString JSON::Dataset::units() const
 {
-    return m_units;
+  return m_units;
 }
 
 /**
@@ -133,7 +133,7 @@ QString JSON::Dataset::units() const
  */
 QString JSON::Dataset::widget() const
 {
-    return m_widget;
+  return m_widget;
 }
 
 /**
@@ -141,7 +141,7 @@ QString JSON::Dataset::widget() const
  */
 int JSON::Dataset::fftSamples() const
 {
-    return qMax(1, m_fftSamples);
+  return qMax(1, m_fftSamples);
 }
 
 /**
@@ -149,38 +149,38 @@ int JSON::Dataset::fftSamples() const
  */
 QJsonObject JSON::Dataset::jsonData() const
 {
-    return m_jsonData;
+  return m_jsonData;
 }
 
 /**
- * Reads dataset information from the given @a object and evaluates any JS code in the
- * "value" field of the dataset.
+ * Reads dataset information from the given @a object and evaluates any JS code
+ * in the "value" field of the dataset.
  *
  * @return @c true on read success, @c false on failure
  */
 bool JSON::Dataset::read(const QJsonObject &object)
 {
-    if (!object.isEmpty())
-    {
-        m_fft = object.value("fft").toBool();
-        m_led = object.value("led").toBool();
-        m_log = object.value("log").toBool();
-        m_min = object.value("min").toDouble();
-        m_max = object.value("max").toDouble();
-        m_index = object.value("index").toInt();
-        m_alarm = object.value("alarm").toDouble();
-        m_graph = object.value("graph").toBool();
-        m_title = object.value("title").toString();
-        m_value = object.value("value").toString();
-        m_units = object.value("units").toString();
-        m_widget = object.value("widget").toString();
-        m_fftSamples = object.value("fftSamples").toInt();
+  if (!object.isEmpty())
+  {
+    m_fft = object.value("fft").toBool();
+    m_led = object.value("led").toBool();
+    m_log = object.value("log").toBool();
+    m_min = object.value("min").toDouble();
+    m_max = object.value("max").toDouble();
+    m_index = object.value("index").toInt();
+    m_alarm = object.value("alarm").toDouble();
+    m_graph = object.value("graph").toBool();
+    m_title = object.value("title").toString();
+    m_value = object.value("value").toString();
+    m_units = object.value("units").toString();
+    m_widget = object.value("widget").toString();
+    m_fftSamples = object.value("fftSamples").toInt();
 
-        if (m_value.isEmpty())
-            m_value = "--.--";
+    if (m_value.isEmpty())
+      m_value = "--.--";
 
-        return true;
-    }
+    return true;
+  }
 
-    return false;
+  return false;
 }

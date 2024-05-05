@@ -15,9 +15,9 @@
 
 class QwtPlotGraphicItem::PrivateData
 {
-  public:
-    QRectF boundingRect;
-    QwtGraphic graphic;
+public:
+  QRectF boundingRect;
+  QwtGraphic graphic;
 };
 
 /*!
@@ -29,10 +29,10 @@ class QwtPlotGraphicItem::PrivateData
 
    \param title Title
  */
-QwtPlotGraphicItem::QwtPlotGraphicItem( const QString& title )
-    : QwtPlotItem( QwtText( title ) )
+QwtPlotGraphicItem::QwtPlotGraphicItem(const QString &title)
+  : QwtPlotItem(QwtText(title))
 {
-    init();
+  init();
 }
 
 /*!
@@ -44,33 +44,33 @@ QwtPlotGraphicItem::QwtPlotGraphicItem( const QString& title )
 
    \param title Title
  */
-QwtPlotGraphicItem::QwtPlotGraphicItem( const QwtText& title )
-    : QwtPlotItem( title )
+QwtPlotGraphicItem::QwtPlotGraphicItem(const QwtText &title)
+  : QwtPlotItem(title)
 {
-    init();
+  init();
 }
 
 //! Destructor
 QwtPlotGraphicItem::~QwtPlotGraphicItem()
 {
-    delete m_data;
+  delete m_data;
 }
 
 void QwtPlotGraphicItem::init()
 {
-    m_data = new PrivateData();
-    m_data->boundingRect = QwtPlotItem::boundingRect();
+  m_data = new PrivateData();
+  m_data->boundingRect = QwtPlotItem::boundingRect();
 
-    setItemAttribute( QwtPlotItem::AutoScale, true );
-    setItemAttribute( QwtPlotItem::Legend, false );
+  setItemAttribute(QwtPlotItem::AutoScale, true);
+  setItemAttribute(QwtPlotItem::Legend, false);
 
-    setZ( 8.0 );
+  setZ(8.0);
 }
 
 //! \return QwtPlotItem::Rtti_PlotGraphic
 int QwtPlotGraphicItem::rtti() const
 {
-    return QwtPlotItem::Rtti_PlotGraphic;
+  return QwtPlotItem::Rtti_PlotGraphic;
 }
 
 /*!
@@ -79,14 +79,14 @@ int QwtPlotGraphicItem::rtti() const
    \param rect Rectangle in plot coordinates
    \param graphic Recorded sequence of painter commands
  */
-void QwtPlotGraphicItem::setGraphic(
-    const QRectF& rect, const QwtGraphic& graphic )
+void QwtPlotGraphicItem::setGraphic(const QRectF &rect,
+                                    const QwtGraphic &graphic)
 {
-    m_data->boundingRect = rect;
-    m_data->graphic = graphic;
+  m_data->boundingRect = rect;
+  m_data->graphic = graphic;
 
-    legendChanged();
-    itemChanged();
+  legendChanged();
+  itemChanged();
 }
 
 /*!
@@ -95,13 +95,13 @@ void QwtPlotGraphicItem::setGraphic(
  */
 QwtGraphic QwtPlotGraphicItem::graphic() const
 {
-    return m_data->graphic;
+  return m_data->graphic;
 }
 
 //! Bounding rectangle of the item
 QRectF QwtPlotGraphicItem::boundingRect() const
 {
-    return m_data->boundingRect;
+  return m_data->boundingRect;
 }
 
 /*!
@@ -112,25 +112,25 @@ QRectF QwtPlotGraphicItem::boundingRect() const
    \param yMap Y-Scale Map
    \param canvasRect Contents rect of the plot canvas
  */
-void QwtPlotGraphicItem::draw( QPainter* painter,
-    const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect ) const
+void QwtPlotGraphicItem::draw(QPainter *painter, const QwtScaleMap &xMap,
+                              const QwtScaleMap &yMap,
+                              const QRectF &canvasRect) const
 {
-    if ( m_data->graphic.isEmpty() )
-        return;
+  if (m_data->graphic.isEmpty())
+    return;
 
-    QRectF r = QwtScaleMap::transform( xMap, yMap, boundingRect() );
+  QRectF r = QwtScaleMap::transform(xMap, yMap, boundingRect());
 
-    if ( !r.intersects( canvasRect ) )
-        return;
+  if (!r.intersects(canvasRect))
+    return;
 
-    if ( QwtPainter::roundingAlignment( painter ) )
-    {
-        r.setLeft ( qRound( r.left() ) );
-        r.setRight ( qRound( r.right() ) );
-        r.setTop ( qRound( r.top() ) );
-        r.setBottom ( qRound( r.bottom() ) );
-    }
+  if (QwtPainter::roundingAlignment(painter))
+  {
+    r.setLeft(qRound(r.left()));
+    r.setRight(qRound(r.right()));
+    r.setTop(qRound(r.top()));
+    r.setBottom(qRound(r.bottom()));
+  }
 
-    m_data->graphic.render( painter, r );
+  m_data->graphic.render(painter, r);
 }

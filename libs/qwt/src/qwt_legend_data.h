@@ -35,54 +35,54 @@ class QwtGraphic;
  */
 class QWT_EXPORT QwtLegendData
 {
-  public:
-    //! Mode defining how a legend entry interacts
-    enum Mode
-    {
-        //! The legend item is not interactive, like a label
-        ReadOnly,
+public:
+  //! Mode defining how a legend entry interacts
+  enum Mode
+  {
+    //! The legend item is not interactive, like a label
+    ReadOnly,
 
-        //! The legend item is clickable, like a push button
-        Clickable,
+    //! The legend item is clickable, like a push button
+    Clickable,
 
-        //! The legend item is checkable, like a checkable button
-        Checkable
-    };
+    //! The legend item is checkable, like a checkable button
+    Checkable
+  };
 
-    //! Identifier how to interpret a QVariant
-    enum Role
-    {
-        // The value is a Mode
-        ModeRole,
+  //! Identifier how to interpret a QVariant
+  enum Role
+  {
+    // The value is a Mode
+    ModeRole,
 
-        // The value is a title
-        TitleRole,
+    // The value is a title
+    TitleRole,
 
-        // The value is an icon
-        IconRole,
+    // The value is an icon
+    IconRole,
 
-        // Values < UserRole are reserved for internal use
-        UserRole  = 32
-    };
+    // Values < UserRole are reserved for internal use
+    UserRole = 32
+  };
 
-    QwtLegendData();
-    ~QwtLegendData();
+  QwtLegendData();
+  ~QwtLegendData();
 
-    void setValues( const QMap< int, QVariant >& );
-    const QMap< int, QVariant >& values() const;
+  void setValues(const QMap<int, QVariant> &);
+  const QMap<int, QVariant> &values() const;
 
-    void setValue( int role, const QVariant& );
-    QVariant value( int role ) const;
+  void setValue(int role, const QVariant &);
+  QVariant value(int role) const;
 
-    bool hasRole( int role ) const;
-    bool isValid() const;
+  bool hasRole(int role) const;
+  bool isValid() const;
 
-    QwtGraphic icon() const;
-    QwtText title() const;
-    Mode mode() const;
+  QwtGraphic icon() const;
+  QwtText title() const;
+  Mode mode() const;
 
-  private:
-    QMap< int, QVariant > m_map;
+private:
+  QMap<int, QVariant> m_map;
 };
 
 #endif

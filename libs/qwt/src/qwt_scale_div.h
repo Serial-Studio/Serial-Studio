@@ -32,76 +32,76 @@ class QwtInterval;
 
 class QWT_EXPORT QwtScaleDiv
 {
-  public:
-    //! Scale tick types
-    enum TickType
-    {
-        //! No ticks
-        NoTick = -1,
+public:
+  //! Scale tick types
+  enum TickType
+  {
+    //! No ticks
+    NoTick = -1,
 
-        //! Minor ticks
-        MinorTick,
+    //! Minor ticks
+    MinorTick,
 
-        //! Medium ticks
-        MediumTick,
+    //! Medium ticks
+    MediumTick,
 
-        //! Major ticks
-        MajorTick,
+    //! Major ticks
+    MajorTick,
 
-        //! Number of valid tick types
-        NTickTypes
-    };
+    //! Number of valid tick types
+    NTickTypes
+  };
 
-    explicit QwtScaleDiv( double lowerBound = 0.0,
-        double upperBound = 0.0 );
+  explicit QwtScaleDiv(double lowerBound = 0.0, double upperBound = 0.0);
 
-    explicit QwtScaleDiv( const QwtInterval&, QList< double >[NTickTypes] );
+  explicit QwtScaleDiv(const QwtInterval &, QList<double>[NTickTypes]);
 
-    explicit QwtScaleDiv( double lowerBound, double upperBound,
-        QList< double >[NTickTypes] );
+  explicit QwtScaleDiv(double lowerBound, double upperBound,
+                       QList<double>[NTickTypes]);
 
-    explicit QwtScaleDiv( double lowerBound, double upperBound,
-        const QList< double >& minorTicks, const QList< double >& mediumTicks,
-        const QList< double >& majorTicks );
+  explicit QwtScaleDiv(double lowerBound, double upperBound,
+                       const QList<double> &minorTicks,
+                       const QList<double> &mediumTicks,
+                       const QList<double> &majorTicks);
 
-    bool operator==( const QwtScaleDiv& ) const;
-    bool operator!=( const QwtScaleDiv& ) const;
+  bool operator==(const QwtScaleDiv &) const;
+  bool operator!=(const QwtScaleDiv &) const;
 
-    void setInterval( double lowerBound, double upperBound );
-    void setInterval( const QwtInterval& );
-    QwtInterval interval() const;
+  void setInterval(double lowerBound, double upperBound);
+  void setInterval(const QwtInterval &);
+  QwtInterval interval() const;
 
-    void setLowerBound( double );
-    double lowerBound() const;
+  void setLowerBound(double);
+  double lowerBound() const;
 
-    void setUpperBound( double );
-    double upperBound() const;
+  void setUpperBound(double);
+  double upperBound() const;
 
-    double range() const;
+  double range() const;
 
-    bool contains( double value ) const;
+  bool contains(double value) const;
 
-    void setTicks( int tickType, const QList< double >& );
-    QList< double > ticks( int tickType ) const;
+  void setTicks(int tickType, const QList<double> &);
+  QList<double> ticks(int tickType) const;
 
-    bool isEmpty() const;
-    bool isIncreasing() const;
+  bool isEmpty() const;
+  bool isIncreasing() const;
 
-    void invert();
-    QwtScaleDiv inverted() const;
+  void invert();
+  QwtScaleDiv inverted() const;
 
-    QwtScaleDiv bounded( double lowerBound, double upperBound ) const;
+  QwtScaleDiv bounded(double lowerBound, double upperBound) const;
 
-  private:
-    double m_lowerBound;
-    double m_upperBound;
-    QList< double > m_ticks[NTickTypes];
+private:
+  double m_lowerBound;
+  double m_upperBound;
+  QList<double> m_ticks[NTickTypes];
 };
 
-Q_DECLARE_TYPEINFO( QwtScaleDiv, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO(QwtScaleDiv, Q_MOVABLE_TYPE);
 
 #ifndef QT_NO_DEBUG_STREAM
-QWT_EXPORT QDebug operator<<( QDebug, const QwtScaleDiv& );
+QWT_EXPORT QDebug operator<<(QDebug, const QwtScaleDiv &);
 #endif
 
 #endif

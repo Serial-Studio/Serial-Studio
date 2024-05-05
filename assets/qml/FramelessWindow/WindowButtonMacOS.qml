@@ -23,23 +23,23 @@
 import QtQuick
 
 Image {
-    id: root
+  id: root
 
-    signal clicked()
-    property string name
-    property string variant: "normal"
+  signal clicked()
+  property string name
+  property string variant: "normal"
 
-    width: sourceSize.width
-    height: sourceSize.height
-    sourceSize: Qt.size(20, 20)
-    source: ("qrc:/window-border/macOS/" + name + "-" + variant + ".svg")
+  width: sourceSize.width
+  height: sourceSize.height
+  sourceSize: Qt.size(20, 20)
+  source: ("qrc:/window-border/macOS/" + name + "-" + variant + ".svg")
 
-    MouseArea {
-        hoverEnabled: true
-        anchors.fill: parent
-        onReleased: root.clicked()
-        acceptedButtons: Qt.LeftButton
-        onPressedChanged: root.variant = (pressed ? "active" : "normal")
-        onContainsMouseChanged: root.variant = (containsMouse ? "hover" : "normal")
-    }
+  MouseArea {
+    hoverEnabled: true
+    anchors.fill: parent
+    onReleased: root.clicked()
+    acceptedButtons: Qt.LeftButton
+    onPressedChanged: root.variant = (pressed ? "active" : "normal")
+    onContainsMouseChanged: root.variant = (containsMouse ? "hover" : "normal")
+  }
 }

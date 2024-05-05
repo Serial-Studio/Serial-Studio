@@ -36,21 +36,21 @@ namespace Widgets
 {
 class MultiPlot : public DashboardWidgetBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    MultiPlot(const int index = -1);
+  MultiPlot(const int index = -1);
 
 private Q_SLOTS:
-    void updateData();
-    void updateRange();
+  void updateData();
+  void updateRange();
 
 private:
-    int m_index;
-    QwtPlot m_plot;
-    QwtLegend m_legend;
-    QVBoxLayout m_layout;
-    QVector<QwtPlotCurve *> m_curves;
-    QVector<PlotData> m_yData;
+  int m_index;
+  QwtPlot m_plot;
+  QwtLegend m_legend;
+  QVBoxLayout m_layout;
+  QVector<QwtPlotCurve *> m_curves;
+  QVector<PlotData> m_yData;
 };
-}
+} // namespace Widgets

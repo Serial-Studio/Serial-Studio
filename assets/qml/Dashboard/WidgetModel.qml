@@ -23,27 +23,27 @@
 import QtQuick
 
 Repeater {
-    id: root
+  id: root
 
-    property real cellWidth: 0
-    property real cellHeight: 0
+  property real cellWidth: 0
+  property real cellHeight: 0
 
-    delegate: Loader {
-        id: loader
-        asynchronous: true
-        width: root.cellWidth
-        height: root.cellHeight
+  delegate: Loader {
+    id: loader
+    asynchronous: true
+    width: root.cellWidth
+    height: root.cellHeight
 
-        sourceComponent: WidgetDelegate {
-            widgetIndex: index
-        }
-
-        Connections {
-            target: Cpp_UI_Dashboard
-
-            function onWidgetVisibilityChanged() {
-                loader.visible = Cpp_UI_Dashboard.widgetVisible(index)
-            }
-        }
+    sourceComponent: WidgetDelegate {
+      widgetIndex: index
     }
+
+    Connections {
+      target: Cpp_UI_Dashboard
+
+      function onWidgetVisibilityChanged() {
+        loader.visible = Cpp_UI_Dashboard.widgetVisible(index)
+      }
+    }
+  }
 }

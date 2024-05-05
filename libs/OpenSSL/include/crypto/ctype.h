@@ -53,8 +53,8 @@
 int ossl_toascii(int c);
 int ossl_fromascii(int c);
 #else
-#    define ossl_toascii(c) (c)
-#    define ossl_fromascii(c) (c)
+#  define ossl_toascii(c) (c)
+#  define ossl_fromascii(c) (c)
 #endif
 int ossl_ctype_check(int c, unsigned int mask);
 
@@ -70,9 +70,9 @@ int ossl_ascii_isdigit(int c);
 #define ossl_isalnum(c) (ossl_ctype_check((c), CTYPE_MASK_alnum))
 #define ossl_isalpha(c) (ossl_ctype_check((c), CTYPE_MASK_alpha))
 #ifdef CHARSET_EBCDIC
-#    define ossl_isascii(c) (ossl_ctype_check((c), CTYPE_MASK_ascii))
+#  define ossl_isascii(c) (ossl_ctype_check((c), CTYPE_MASK_ascii))
 #else
-#    define ossl_isascii(c) (((c) & ~127) == 0)
+#  define ossl_isascii(c) (((c) & ~127) == 0)
 #endif
 #define ossl_isblank(c) (ossl_ctype_check((c), CTYPE_MASK_blank))
 #define ossl_iscntrl(c) (ossl_ctype_check((c), CTYPE_MASK_cntrl))

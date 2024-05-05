@@ -27,10 +27,10 @@
 #include <QVector>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#    include <QStringList>
-#    define StringList QStringList
+#  include <QStringList>
+#  define StringList QStringList
 #else
-#    define StringList QVector<QString>
+#  define StringList QVector<QString>
 #endif
 
 #define PlotData QVector<double>

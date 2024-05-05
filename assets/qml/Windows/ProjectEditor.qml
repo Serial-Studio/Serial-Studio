@@ -31,139 +31,139 @@ import "../Widgets" as Widgets
 import "../FramelessWindow" as FramelessWindow
 
 FramelessWindow.CustomWindow {
-    id: root
+  id: root
 
-    //
-    // Window options
-    //
-    minimumWidth: 910
-    minimumHeight: 720
-    title: qsTr("Project Editor - %1").arg(Cpp_Project_Model.jsonFileName)
+  //
+  // Window options
+  //
+  minimumWidth: 910
+  minimumHeight: 720
+  title: qsTr("Project Editor - %1").arg(Cpp_Project_Model.jsonFileName)
 
-    //
-    // Customize window border
-    //
-    borderWidth: 1
-    borderColor: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
+  //
+  // Customize window border
+  //
+  borderWidth: 1
+  borderColor: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
 
-    //
-    // Ensure that current JSON file is shown
-    //
-    Component.onCompleted: Cpp_Project_Model.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
+  //
+  // Ensure that current JSON file is shown
+  //
+  Component.onCompleted: Cpp_Project_Model.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
 
-    //
-    // Ask user to save changes before closing the window
-    //
-    onClosing: (close) => close.accepted = Cpp_Project_Model.askSave()
+  //
+  // Ask user to save changes before closing the window
+  //
+  onClosing: (close) => close.accepted = Cpp_Project_Model.askSave()
 
-    //
-    // Dummy string to increase width of buttons
-    //
-    readonly property string _btSpacer: "  "
+  //
+  // Dummy string to increase width of buttons
+  //
+  readonly property string _btSpacer: "  "
 
-    //
-    // Save window size
-    //
-    Settings {
-        category: "ProjectEditor"
-        property alias windowX: root.x
-        property alias windowY: root.y
-        property alias windowWidth: root.width
-        property alias windowHeight: root.height
+  //
+  // Save window size
+  //
+  Settings {
+    category: "ProjectEditor"
+    property alias windowX: root.x
+    property alias windowY: root.y
+    property alias windowWidth: root.width
+    property alias windowHeight: root.height
+  }
+
+  //
+  // Use page item to set application palette
+  //
+  Page {
+    clip: true
+    anchors.fill: parent
+    anchors.margins: root.shadowMargin
+    anchors.topMargin: titlebar.height + root.shadowMargin
+
+    palette.alternateBase: Cpp_ThemeManager.base
+    palette.base: Cpp_ThemeManager.base
+    palette.brightText: Cpp_ThemeManager.brightText
+    palette.button: Cpp_ThemeManager.button
+    palette.buttonText: Cpp_ThemeManager.buttonText
+    palette.highlight: Cpp_ThemeManager.highlight
+    palette.highlightedText: Cpp_ThemeManager.highlightedText
+    palette.link: Cpp_ThemeManager.link
+    palette.placeholderText: Cpp_ThemeManager.placeholderText
+    palette.text: Cpp_ThemeManager.text
+    palette.toolTipBase: Cpp_ThemeManager.tooltipBase
+    palette.toolTipText: Cpp_ThemeManager.tooltipText
+    palette.window: Cpp_ThemeManager.window
+    palette.windowText: Cpp_ThemeManager.windowText
+
+    background: Rectangle {
+      radius: root.radius
+      color: Cpp_ThemeManager.windowBackground
     }
 
     //
-    // Use page item to set application palette
+    // Shadows
     //
-    Page {
-        clip: true
-        anchors.fill: parent
-        anchors.margins: root.shadowMargin
-        anchors.topMargin: titlebar.height + root.shadowMargin
+    Widgets.Shadow {
+      anchors.fill: header
+    } Widgets.Shadow {
+      anchors.fill: footer
+      anchors.bottomMargin: footer.height / 2
+    }
 
-        palette.alternateBase: Cpp_ThemeManager.base
-        palette.base: Cpp_ThemeManager.base
-        palette.brightText: Cpp_ThemeManager.brightText
-        palette.button: Cpp_ThemeManager.button
-        palette.buttonText: Cpp_ThemeManager.buttonText
-        palette.highlight: Cpp_ThemeManager.highlight
-        palette.highlightedText: Cpp_ThemeManager.highlightedText
-        palette.link: Cpp_ThemeManager.link
-        palette.placeholderText: Cpp_ThemeManager.placeholderText
-        palette.text: Cpp_ThemeManager.text
-        palette.toolTipBase: Cpp_ThemeManager.tooltipBase
-        palette.toolTipText: Cpp_ThemeManager.tooltipText
-        palette.window: Cpp_ThemeManager.window
-        palette.windowText: Cpp_ThemeManager.windowText
+    //
+    // Header (project properties)
+    //
+    Header {
+      id: header
+      anchors {
+        margins: 0
+        top: parent.top
+        left: parent.left
+        right: parent.right
+      }
+    }
 
-        background: Rectangle {
-            radius: root.radius
-            color: Cpp_ThemeManager.windowBackground
-        }
+    //
+    // Footer background
+    //
+    Footer {
+      id: footer
+      radius: root.radius
+      onCloseWindow: root.close()
+      onScrollToBottom: groupEditor.selectLastGroup()
 
-        //
-        // Shadows
-        //
-        Widgets.Shadow {
-            anchors.fill: header
-        } Widgets.Shadow {
-            anchors.fill: footer
-            anchors.bottomMargin: footer.height / 2
-        }
+      anchors {
+        margins: 0
+        left: parent.left
+        right: parent.right
+        bottom: parent.bottom
+      }
+    }
 
-        //
-        // Header (project properties)
-        //
-        Header {
-            id: header
-            anchors {
-                margins: 0
-                top: parent.top
-                left: parent.left
-                right: parent.right
-            }
-        }
+    //
+    // Window controls
+    //
+    RowLayout {
+      clip: true
+      anchors.fill: parent
+      spacing: app.spacing
+      anchors.topMargin: header.height
+      anchors.bottomMargin: footer.height
 
-        //
-        // Footer background
-        //
-        Footer {
-            id: footer
-            radius: root.radius
-            onCloseWindow: root.close()
-            onScrollToBottom: groupEditor.selectLastGroup()
+      //
+      // Horizontal spacer
+      //
+      Item {
+        Layout.fillHeight: true
+        Layout.minimumWidth: app.spacing
+        Layout.maximumWidth: app.spacing
+      }
 
-            anchors {
-                margins: 0
-                left: parent.left
-                right: parent.right
-                bottom: parent.bottom
-            }
-        }
-
-        //
-        // Window controls
-        //
-        RowLayout {
-            clip: true
-            anchors.fill: parent
-            spacing: app.spacing
-            anchors.topMargin: header.height
-            anchors.bottomMargin: footer.height
-
-            //
-            // Horizontal spacer
-            //
-            Item {
-                Layout.fillHeight: true
-                Layout.minimumWidth: app.spacing
-                Layout.maximumWidth: app.spacing
-            }
-
-            //
-            // JSON structure tree
-            //
-            /*TreeView {
+      //
+      // JSON structure tree
+      //
+      /*TreeView {
                 id: jsonTree
                 Layout.fillHeight: true
                 Layout.minimumWidth: 240
@@ -173,69 +173,69 @@ FramelessWindow.CustomWindow {
                 visible: Cpp_Project_Model.groupCount !== 0
             }*/
 
-            //
-            // Group editor
-            //
-            GroupEditor {
-                id: groupEditor
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                visible: Cpp_Project_Model.groupCount !== 0
-            }
+      //
+      // Group editor
+      //
+      GroupEditor {
+        id: groupEditor
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        visible: Cpp_Project_Model.groupCount !== 0
+      }
 
-            //
-            // Empty project text & icon
-            //
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                visible: Cpp_Project_Model.groupCount === 0
+      //
+      // Empty project text & icon
+      //
+      Item {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        visible: Cpp_Project_Model.groupCount === 0
 
-                ColumnLayout {
-                    spacing: app.spacing
-                    anchors.centerIn: parent
+        ColumnLayout {
+          spacing: app.spacing
+          anchors.centerIn: parent
 
-                    Widgets.Icon {
-                        width: 128
-                        height: 128
-                        color: Cpp_ThemeManager.text
-                        Layout.alignment: Qt.AlignHCenter
-                        source: "qrc:/icons/developer-board.svg"
-                    }
+          Widgets.Icon {
+            width: 128
+            height: 128
+            color: Cpp_ThemeManager.text
+            Layout.alignment: Qt.AlignHCenter
+            source: "qrc:/icons/developer-board.svg"
+          }
 
-                    Label {
-                        font.bold: true
-                        font.pixelSize: 24
-                        Layout.alignment: Qt.AlignHCenter
-                        text: qsTr("Start something awesome")
-                    }
+          Label {
+            font.bold: true
+            font.pixelSize: 24
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTr("Start something awesome")
+          }
 
-                    Label {
-                        opacity: 0.8
-                        font.pixelSize: 18
-                        Layout.alignment: Qt.AlignHCenter
-                        text: qsTr("Click on the \"Add group\" button to begin")
-                    }
-                }
-            }
-
-            //
-            // Horizontal spacer
-            //
-            Item {
-                Layout.fillHeight: true
-                Layout.minimumWidth: app.spacing
-                Layout.maximumWidth: app.spacing
-            }
+          Label {
+            opacity: 0.8
+            font.pixelSize: 18
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTr("Click on the \"Add group\" button to begin")
+          }
         }
-    }
+      }
 
-    //
-    // Resize handler
-    //
-    FramelessWindow.ResizeHandles {
-        window: root
-        anchors.fill: parent
-        handleSize: root.handleSize
+      //
+      // Horizontal spacer
+      //
+      Item {
+        Layout.fillHeight: true
+        Layout.minimumWidth: app.spacing
+        Layout.maximumWidth: app.spacing
+      }
     }
+  }
+
+  //
+  // Resize handler
+  //
+  FramelessWindow.ResizeHandles {
+    window: root
+    anchors.fill: parent
+    handleSize: root.handleSize
+  }
 }

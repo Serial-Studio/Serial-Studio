@@ -24,26 +24,26 @@ typedef struct ossl_qrx_st OSSL_QRX;
 
 typedef struct ossl_qrx_args_st
 {
-    OSSL_LIB_CTX *libctx;
-    const char *propq;
+  OSSL_LIB_CTX *libctx;
+  const char *propq;
 
-    /* Demux to receive datagrams from. */
-    QUIC_DEMUX *demux;
+  /* Demux to receive datagrams from. */
+  QUIC_DEMUX *demux;
 
-    /* Length of connection IDs used in short-header packets in bytes. */
-    size_t short_conn_id_len;
+  /* Length of connection IDs used in short-header packets in bytes. */
+  size_t short_conn_id_len;
 
-    /*
-     * Maximum number of deferred datagrams buffered at any one time.
-     * Suggested value: 32.
-     */
-    size_t max_deferred;
+  /*
+   * Maximum number of deferred datagrams buffered at any one time.
+   * Suggested value: 32.
+   */
+  size_t max_deferred;
 
-    /* Initial reference PN used for RX. */
-    QUIC_PN init_largest_pn[QUIC_PN_SPACE_NUM];
+  /* Initial reference PN used for RX. */
+  QUIC_PN init_largest_pn[QUIC_PN_SPACE_NUM];
 
-    /* Initial key phase. For debugging use only; always 0 in real use. */
-    unsigned char init_key_phase_bit;
+  /* Initial key phase. For debugging use only; always 0 in real use. */
+  unsigned char init_key_phase_bit;
 } OSSL_QRX_ARGS;
 
 /* Instantiates a new QRX. */
@@ -172,7 +172,8 @@ int ossl_qrx_remove_dst_conn_id(OSSL_QRX *qrx, const QUIC_CONN_ID *dst_conn_id);
  *
  * Returns 1 on success or 0 on failure.
  */
-int ossl_qrx_provide_secret(OSSL_QRX *qrx, uint32_t enc_level, uint32_t suite_id, EVP_MD *md,
+int ossl_qrx_provide_secret(OSSL_QRX *qrx, uint32_t enc_level,
+                            uint32_t suite_id, EVP_MD *md,
                             const unsigned char *secret, size_t secret_len);
 
 /*
@@ -193,45 +194,45 @@ int ossl_qrx_discard_enc_level(OSSL_QRX *qrx, uint32_t enc_level);
 /* Information about a received packet. */
 typedef struct ossl_qrx_pkt_st
 {
-    /* Opaque handle to be passed to ossl_qrx_release_pkt. */
-    void *handle;
+  /* Opaque handle to be passed to ossl_qrx_release_pkt. */
+  void *handle;
 
-    /*
-     * Points to a logical representation of the decoded QUIC packet header. The
-     * data and len fields point to the decrypted QUIC payload (i.e., to a
-     * sequence of zero or more (potentially malformed) frames to be decoded).
-     */
-    QUIC_PKT_HDR *hdr;
+  /*
+   * Points to a logical representation of the decoded QUIC packet header. The
+   * data and len fields point to the decrypted QUIC payload (i.e., to a
+   * sequence of zero or more (potentially malformed) frames to be decoded).
+   */
+  QUIC_PKT_HDR *hdr;
 
-    /*
-     * Address the packet was received from. If this is not available for this
-     * packet, this field is NULL (but this can only occur for manually injected
-     * packets).
-     */
-    const BIO_ADDR *peer;
+  /*
+   * Address the packet was received from. If this is not available for this
+   * packet, this field is NULL (but this can only occur for manually injected
+   * packets).
+   */
+  const BIO_ADDR *peer;
 
-    /*
-     * Local address the packet was sent to. If this is not available for this
-     * packet, this field is NULL.
-     */
-    const BIO_ADDR *local;
+  /*
+   * Local address the packet was sent to. If this is not available for this
+   * packet, this field is NULL.
+   */
+  const BIO_ADDR *local;
 
-    /*
-     * This is the length of the datagram which contained this packet. Note that
-     * the datagram may have contained other packets than this. The intended use
-     * for this is so that the user can enforce minimum datagram sizes (e.g. for
-     * datagrams containing INITIAL packets), as required by RFC 9000.
-     */
-    size_t datagram_len;
+  /*
+   * This is the length of the datagram which contained this packet. Note that
+   * the datagram may have contained other packets than this. The intended use
+   * for this is so that the user can enforce minimum datagram sizes (e.g. for
+   * datagrams containing INITIAL packets), as required by RFC 9000.
+   */
+  size_t datagram_len;
 
-    /* The PN which was decoded for the packet, if the packet has a PN field. */
-    QUIC_PN pn;
+  /* The PN which was decoded for the packet, if the packet has a PN field. */
+  QUIC_PN pn;
 
-    /*
-     * Time the packet was received, or ossl_time_zero() if the demuxer is not
-     * using a now() function.
-     */
-    OSSL_TIME time;
+  /*
+   * Time the packet was received, or ossl_time_zero() if the demuxer is not
+   * using a now() function.
+   */
+  OSSL_TIME time;
 } OSSL_QRX_PKT;
 
 /*
@@ -302,7 +303,9 @@ uint64_t ossl_qrx_get_bytes_received(OSSL_QRX *qrx, int clear);
  */
 typedef int(ossl_qrx_early_validation_cb)(QUIC_PN pn, int pn_space, void *arg);
 
-int ossl_qrx_set_early_validation_cb(OSSL_QRX *qrx, ossl_qrx_early_validation_cb *cb, void *cb_arg);
+int ossl_qrx_set_early_validation_cb(OSSL_QRX *qrx,
+                                     ossl_qrx_early_validation_cb *cb,
+                                     void *cb_arg);
 
 /*
  * Key Update (RX)
@@ -467,7 +470,8 @@ uint64_t ossl_qrx_get_key_epoch(OSSL_QRX *qrx);
  */
 typedef void(ossl_qrx_key_update_cb)(void *arg);
 
-int ossl_qrx_set_key_update_cb(OSSL_QRX *qrx, ossl_qrx_key_update_cb *cb, void *cb_arg);
+int ossl_qrx_set_key_update_cb(OSSL_QRX *qrx, ossl_qrx_key_update_cb *cb,
+                               void *cb_arg);
 
 /*
  * Relates to the 1-RTT encryption level. The caller should call this after the

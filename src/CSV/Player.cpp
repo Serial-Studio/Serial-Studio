@@ -36,11 +36,11 @@
  * Constructor function
  */
 CSV::Player::Player()
-    : m_framePos(0)
-    , m_playing(false)
-    , m_timestamp("")
+  : m_framePos(0)
+  , m_playing(false)
+  , m_timestamp("")
 {
-    connect(this, SIGNAL(playerStateChanged()), this, SLOT(updateData()));
+  connect(this, SIGNAL(playerStateChanged()), this, SLOT(updateData()));
 }
 
 /**
@@ -48,8 +48,8 @@ CSV::Player::Player()
  */
 CSV::Player &CSV::Player::instance()
 {
-    static Player singleton;
-    return singleton;
+  static Player singleton;
+  return singleton;
 }
 
 /**
@@ -57,7 +57,7 @@ CSV::Player &CSV::Player::instance()
  */
 bool CSV::Player::isOpen() const
 {
-    return m_csvFile.isOpen();
+  return m_csvFile.isOpen();
 }
 
 /**
@@ -65,7 +65,7 @@ bool CSV::Player::isOpen() const
  */
 qreal CSV::Player::progress() const
 {
-    return ((qreal)framePosition()) / frameCount();
+  return ((qreal)framePosition()) / frameCount();
 }
 
 /**
@@ -74,7 +74,7 @@ qreal CSV::Player::progress() const
  */
 bool CSV::Player::isPlaying() const
 {
-    return m_playing;
+  return m_playing;
 }
 
 /**
@@ -82,13 +82,13 @@ bool CSV::Player::isPlaying() const
  */
 QString CSV::Player::filename() const
 {
-    if (isOpen())
-    {
-        auto fileInfo = QFileInfo(m_csvFile.fileName());
-        return fileInfo.fileName();
-    }
+  if (isOpen())
+  {
+    auto fileInfo = QFileInfo(m_csvFile.fileName());
+    return fileInfo.fileName();
+  }
 
-    return "";
+  return "";
 }
 
 /**
@@ -98,7 +98,7 @@ QString CSV::Player::filename() const
  */
 int CSV::Player::frameCount() const
 {
-    return m_csvData.count() - 1;
+  return m_csvData.count() - 1;
 }
 
 /**
@@ -107,7 +107,7 @@ int CSV::Player::frameCount() const
  */
 int CSV::Player::framePosition() const
 {
-    return m_framePos;
+  return m_framePos;
 }
 
 /**
@@ -115,7 +115,7 @@ int CSV::Player::framePosition() const
  */
 QString CSV::Player::timestamp() const
 {
-    return m_timestamp;
+  return m_timestamp;
 }
 
 /**
@@ -123,18 +123,16 @@ QString CSV::Player::timestamp() const
  */
 QString CSV::Player::csvFilesPath() const
 {
-    // Get file name and path
-    // clang-format off
-    QString path = QString("%1/Documents/%2/CSV/").arg(QDir::homePath(),
-                                                       qApp->applicationName());
-    // clang-format on
+  // Get file name and path
+  const auto path = QString("%1/Documents/%2/CSV/")
+                        .arg(QDir::homePath(), qApp->applicationName());
 
-    // Generate file path if required
-    QDir dir(path);
-    if (!dir.exists())
-        dir.mkpath(".");
+  // Generate file path if required
+  QDir dir(path);
+  if (!dir.exists())
+    dir.mkpath(".");
 
-    return path;
+  return path;
 }
 
 /**
@@ -143,8 +141,8 @@ QString CSV::Player::csvFilesPath() const
  */
 void CSV::Player::play()
 {
-    m_playing = true;
-    Q_EMIT playerStateChanged();
+  m_playing = true;
+  Q_EMIT playerStateChanged();
 }
 
 /**
@@ -153,8 +151,8 @@ void CSV::Player::play()
  */
 void CSV::Player::pause()
 {
-    m_playing = false;
-    Q_EMIT playerStateChanged();
+  m_playing = false;
+  Q_EMIT playerStateChanged();
 }
 
 /**
@@ -162,8 +160,8 @@ void CSV::Player::pause()
  */
 void CSV::Player::toggle()
 {
-    m_playing = !m_playing;
-    Q_EMIT playerStateChanged();
+  m_playing = !m_playing;
+  Q_EMIT playerStateChanged();
 }
 
 /**
@@ -171,7 +169,7 @@ void CSV::Player::toggle()
  */
 void CSV::Player::openFile()
 {
-    // clang-format off
+  // clang-format off
 
     // Get file name
     auto file = QFileDialog::getOpenFileName(
@@ -184,7 +182,7 @@ void CSV::Player::openFile()
     if (!file.isEmpty())
         openFile(file);
 
-    // clang-format on
+  // clang-format on
 }
 
 /**
@@ -193,15 +191,15 @@ void CSV::Player::openFile()
  */
 void CSV::Player::closeFile()
 {
-    m_framePos = 0;
-    m_csvFile.close();
-    m_csvData.clear();
-    m_playing = false;
-    m_timestamp = "--.--";
+  m_framePos = 0;
+  m_csvFile.close();
+  m_csvData.clear();
+  m_playing = false;
+  m_timestamp = "--.--";
 
-    Q_EMIT openChanged();
-    Q_EMIT timestampChanged();
-    Q_EMIT playerStateChanged();
+  Q_EMIT openChanged();
+  Q_EMIT timestampChanged();
+  Q_EMIT playerStateChanged();
 }
 
 /**
@@ -209,11 +207,11 @@ void CSV::Player::closeFile()
  */
 void CSV::Player::nextFrame()
 {
-    if (framePosition() < frameCount())
-    {
-        ++m_framePos;
-        updateData();
-    }
+  if (framePosition() < frameCount())
+  {
+    ++m_framePos;
+    updateData();
+  }
 }
 
 /**
@@ -221,11 +219,11 @@ void CSV::Player::nextFrame()
  */
 void CSV::Player::previousFrame()
 {
-    if (framePosition() > 0)
-    {
-        --m_framePos;
-        updateData();
-    }
+  if (framePosition() > 0)
+  {
+    --m_framePos;
+    updateData();
+  }
 }
 
 /**
@@ -235,64 +233,66 @@ void CSV::Player::previousFrame()
  */
 void CSV::Player::openFile(const QString &filePath)
 {
-    // File name empty, abort
-    if (filePath.isEmpty())
-        return;
+  // File name empty, abort
+  if (filePath.isEmpty())
+    return;
 
-    // Close previous file
-    closeFile();
+  // Close previous file
+  closeFile();
 
-    // Device is connected, warn user & disconnect
-    if (IO::Manager::instance().connected())
-    {
-        auto response = Misc::Utilities::showMessageBox(
-            tr("Serial port open, do you want to continue?"),
-            tr("In order to use this feature, its necessary "
-               "to disconnect from the serial port"),
-            qAppName(), QMessageBox::No | QMessageBox::Yes);
-        if (response == QMessageBox::Yes)
-            IO::Manager::instance().disconnectDriver();
-        else
-            return;
-    }
+  // Device is connected, warn user & disconnect
+  if (IO::Manager::instance().connected())
+  {
+    auto response = Misc::Utilities::showMessageBox(
+        tr("Serial port open, do you want to continue?"),
+        tr("In order to use this feature, its necessary "
+           "to disconnect from the serial port"),
+        qAppName(), QMessageBox::No | QMessageBox::Yes);
+    if (response == QMessageBox::Yes)
+      IO::Manager::instance().disconnectDriver();
+    else
+      return;
+  }
 
-    // Try to open the current file
-    m_csvFile.setFileName(filePath);
-    if (m_csvFile.open(QIODevice::ReadOnly))
-    {
-        // Read CSV file into string matrix
+  // Try to open the current file
+  m_csvFile.setFileName(filePath);
+  if (m_csvFile.open(QIODevice::ReadOnly))
+  {
+    // Read CSV file into string matrix
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        QVector<QString> row;
-        auto csv = QtCSV::Reader::readToList(m_csvFile);
-        for (int i = 0; i < csv.count(); ++i)
-        {
-            row.clear();
-            for (int j = 0; j < csv.at(i).count(); ++j)
-                row.append(csv[i][j]);
+    QVector<QString> row;
+    auto csv = QtCSV::Reader::readToList(m_csvFile);
+    for (int i = 0; i < csv.count(); ++i)
+    {
+      row.clear();
+      for (int j = 0; j < csv.at(i).count(); ++j)
+        row.append(csv[i][j]);
 
-            m_csvData.append(row);
-        }
+      m_csvData.append(row);
+    }
 #else
-        m_csvData = QtCSV::Reader::readToList(m_csvFile);
+    m_csvData = QtCSV::Reader::readToList(m_csvFile);
 #endif
 
-        // Read first data & Q_EMIT UI signals
-        updateData();
-        Q_EMIT openChanged();
+    // Read first data & Q_EMIT UI signals
+    updateData();
+    Q_EMIT openChanged();
 
-        // Play next frame (to force UI to generate groups, graphs & widgets)
-        // Note: nextFrame() MUST BE CALLED AFTER emiting the openChanged() signal in
-        //       order for this monstrosity to work
-        nextFrame();
-    }
+    // Play next frame (to force UI to generate groups, graphs & widgets)
+    // Note: nextFrame() MUST BE CALLED AFTER emiting the openChanged() signal
+    // in
+    //       order for this monstrosity to work
+    nextFrame();
+  }
 
-    // Open error
-    else
-    {
-        Misc::Utilities::showMessageBox(tr("Cannot read CSV file"),
-                                        tr("Please check file permissions & location"));
-        closeFile();
-    }
+  // Open error
+  else
+  {
+    Misc::Utilities::showMessageBox(
+        tr("Cannot read CSV file"),
+        tr("Please check file permissions & location"));
+    closeFile();
+  }
 }
 
 /**
@@ -301,26 +301,26 @@ void CSV::Player::openFile(const QString &filePath)
  */
 void CSV::Player::setProgress(const qreal &progress)
 {
-    // Ensure that progress value is between 0 and 1
-    auto validProgress = progress;
-    if (validProgress > 1)
-        validProgress = 1;
-    else if (validProgress < 0)
-        validProgress = 0;
+  // Ensure that progress value is between 0 and 1
+  auto validProgress = progress;
+  if (validProgress > 1)
+    validProgress = 1;
+  else if (validProgress < 0)
+    validProgress = 0;
 
-    // Pause player to avoid messing the scheduled timer (if playing)
-    if (isPlaying())
-        pause();
+  // Pause player to avoid messing the scheduled timer (if playing)
+  if (isPlaying())
+    pause();
 
-    // Calculate frame position & update data
-    m_framePos = qCeil(frameCount() * validProgress);
-    if (validProgress == 0)
-        m_framePos = 0;
-    else if (validProgress == 1)
-        m_framePos = frameCount();
+  // Calculate frame position & update data
+  m_framePos = qCeil(frameCount() * validProgress);
+  if (validProgress == 0)
+    m_framePos = 0;
+  else if (validProgress == 1)
+    m_framePos = frameCount();
 
-    // Update CSV values
-    updateData();
+  // Update CSV values
+  updateData();
 }
 
 /**
@@ -333,87 +333,87 @@ void CSV::Player::setProgress(const qreal &progress)
  */
 void CSV::Player::updateData()
 {
-    // File not open, abort
-    if (!isOpen())
-        return;
+  // File not open, abort
+  if (!isOpen())
+    return;
 
-    // Update timestamp string
-    bool error = true;
-    auto timestamp = getCellValue(framePosition() + 1, 0, error);
-    if (!error)
+  // Update timestamp string
+  bool error = true;
+  auto timestamp = getCellValue(framePosition() + 1, 0, error);
+  if (!error)
+  {
+    m_timestamp = timestamp;
+    Q_EMIT timestampChanged();
+  }
+
+  // Construct frame from CSV and send it to the IO manager
+  IO::Manager::instance().processPayload(getFrame(framePosition() + 1));
+
+  // If the user wants to 'play' the CSV, get time difference between this
+  // frame and the next frame & schedule an automated update
+  if (isPlaying())
+  {
+    // Get first frame
+    if (framePosition() < frameCount())
     {
-        m_timestamp = timestamp;
-        Q_EMIT timestampChanged();
-    }
+      bool error = true;
+      auto currTime = getCellValue(framePosition() + 1, 0, error);
+      auto nextTime = getCellValue(framePosition() + 2, 0, error);
 
-    // Construct frame from CSV and send it to the IO manager
-    IO::Manager::instance().processPayload(getFrame(framePosition() + 1));
+      // No error, calculate difference & schedule update
+      if (!error)
+      {
+        auto format = "yyyy/MM/dd/ HH:mm:ss::zzz"; // Same as in Export.cpp
+        auto currDateTime = QDateTime::fromString(currTime, format);
+        auto nextDateTime = QDateTime::fromString(nextTime, format);
+        auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
 
-    // If the user wants to 'play' the CSV, get time difference between this
-    // frame and the next frame & schedule an automated update
-    if (isPlaying())
-    {
-        // Get first frame
-        if (framePosition() < frameCount())
-        {
-            bool error = true;
-            auto currTime = getCellValue(framePosition() + 1, 0, error);
-            auto nextTime = getCellValue(framePosition() + 2, 0, error);
-
-            // No error, calculate difference & schedule update
-            if (!error)
-            {
-                auto format = "yyyy/MM/dd/ HH:mm:ss::zzz"; // Same as in Export.cpp
-                auto currDateTime = QDateTime::fromString(currTime, format);
-                auto nextDateTime = QDateTime::fromString(nextTime, format);
-                auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
-
-                // clang-format off
+        // clang-format off
                 QTimer::singleShot(msecsToNextF,
                                    Qt::PreciseTimer,
                                    this,
                                    SLOT(nextFrame()));
-                // clang-format on
-            }
+        // clang-format on
+      }
 
-            // Error - pause playback
-            else
-            {
-                pause();
-                qWarning() << "Error getting timestamp difference";
-            }
-        }
-
-        // Pause at end of CSV
-        else
-            pause();
+      // Error - pause playback
+      else
+      {
+        pause();
+        qWarning() << "Error getting timestamp difference";
+      }
     }
+
+    // Pause at end of CSV
+    else
+      pause();
+  }
 }
 
 /**
- * Generates a frame from the data at the given @a row. The first item of each row is
- * ignored because it contains the RX date/time, which is used to regulate the interval
- * at which the frames are parsed.
+ * Generates a frame from the data at the given @a row. The first item of each
+ * row is ignored because it contains the RX date/time, which is used to
+ * regulate the interval at which the frames are parsed.
  */
 QByteArray CSV::Player::getFrame(const int row)
 {
-    QByteArray frame;
-    auto sep = IO::Manager::instance().separatorSequence();
+  QByteArray frame;
+  auto sep = IO::Manager::instance().separatorSequence();
 
-    if (m_csvData.count() > row)
+  if (m_csvData.count() > row)
+  {
+    auto list = m_csvData.at(row);
+    for (int i = 1; i < list.count(); ++i)
     {
-        auto list = m_csvData.at(row);
-        for (int i = 1; i < list.count(); ++i)
-        {
-            frame.append(list.at(i).toUtf8());
-            if (i < list.count() - 1)
-                frame.append(sep.toUtf8());
-            else
-                frame.append('\n');
-        }
+      frame.append(list.at(i).toUtf8());
+      if (i < list.count() - 1)
+        frame.append(sep.toUtf8());
+      else
+        frame.append('\n');
     }
+  }
 
-    return frame;
+  return frame;
 }
 
 /**
@@ -423,20 +423,16 @@ QByteArray CSV::Player::getFrame(const int row)
  */
 QString CSV::Player::getCellValue(const int row, const int column, bool &error)
 {
-    if (m_csvData.count() > row)
+  if (m_csvData.count() > row)
+  {
+    auto list = m_csvData.at(row);
+    if (list.count() > column)
     {
-        auto list = m_csvData.at(row);
-        if (list.count() > column)
-        {
-            error = false;
-            return list.at(column);
-        }
+      error = false;
+      return list.at(column);
     }
+  }
 
-    error = true;
-    return "";
+  error = true;
+  return "";
 }
-
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_Player.cpp"
-#endif

@@ -17,46 +17,49 @@
  */
 namespace QwtAxis
 {
-    //! \brief Axis position
-    enum Position
-    {
-        //! Y axis left of the canvas
-        YLeft,
+//! \brief Axis position
+enum Position
+{
+  //! Y axis left of the canvas
+  YLeft,
 
-        //! Y axis right of the canvas
-        YRight,
+  //! Y axis right of the canvas
+  YRight,
 
-        //! X axis below the canvas
-        XBottom,
+  //! X axis below the canvas
+  XBottom,
 
-        //! X axis above the canvas
-        XTop
-    };
+  //! X axis above the canvas
+  XTop
+};
 
-    //! \brief Number of axis positions
-    enum { AxisPositions = XTop + 1 };
+//! \brief Number of axis positions
+enum
+{
+  AxisPositions = XTop + 1
+};
 
-    bool isValid( int axisPos );
-    bool isYAxis( int axisPos );
-    bool isXAxis( int axisPos );
-}
+bool isValid(int axisPos);
+bool isYAxis(int axisPos);
+bool isXAxis(int axisPos);
+} // namespace QwtAxis
 
 //! \return true, when axisPos is in the valid range [ YLeft, XTop ]
-inline bool QwtAxis::isValid( int axisPos )
+inline bool QwtAxis::isValid(int axisPos)
 {
-    return ( axisPos >= 0 && axisPos < AxisPositions );
+  return (axisPos >= 0 && axisPos < AxisPositions);
 }
 
 //! \return true, when axisPos is XBottom or XTop
-inline bool QwtAxis::isXAxis( int axisPos )
+inline bool QwtAxis::isXAxis(int axisPos)
 {
-    return ( axisPos == XBottom ) || ( axisPos == XTop );
+  return (axisPos == XBottom) || (axisPos == XTop);
 }
 
 //! \return true, when axisPos is YLeft or YRight
-inline bool QwtAxis::isYAxis( int axisPos )
+inline bool QwtAxis::isYAxis(int axisPos)
 {
-    return ( axisPos == YLeft ) || ( axisPos == YRight );
+  return (axisPos == YLeft) || (axisPos == YRight);
 }
 
 #endif

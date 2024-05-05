@@ -41,35 +41,38 @@ qrealfourier@gmail.com
 
 #include "qfourierfixedcalculator.h"
 
-template <int T>
+template<int T>
 QFourierFixedCalculator<T>::QFourierFixedCalculator()
-	: QFourierCalculator()
+  : QFourierCalculator()
 {
-	setSize(mFourierTransform.get_length());
+  setSize(mFourierTransform.get_length());
 }
 
-template <int T>
+template<int T>
 void QFourierFixedCalculator<T>::setSize(int size)
 {
-    (void) size;
+  (void)size;
 }
 
-template <int T>
+template<int T>
 void QFourierFixedCalculator<T>::forward()
 {
-	QFourierFixedCalculator<T>::mFourierTransform.do_fft(QFourierCalculator::mOutput, QFourierCalculator::mInput);
+  QFourierFixedCalculator<T>::mFourierTransform.do_fft(
+      QFourierCalculator::mOutput, QFourierCalculator::mInput);
 }
 
-template <int T>
+template<int T>
 void QFourierFixedCalculator<T>::inverse()
 {
-	QFourierFixedCalculator<T>::mFourierTransform.do_ifft(QFourierCalculator::mInput, QFourierCalculator::mOutput);
+  QFourierFixedCalculator<T>::mFourierTransform.do_ifft(
+      QFourierCalculator::mInput, QFourierCalculator::mOutput);
 }
 
-template <int T>
+template<int T>
 void QFourierFixedCalculator<T>::rescale()
 {
-	QFourierFixedCalculator<T>::mFourierTransform.rescale(QFourierCalculator::mInput);
+  QFourierFixedCalculator<T>::mFourierTransform.rescale(
+      QFourierCalculator::mInput);
 }
 
 template class QFourierFixedCalculator<3>;

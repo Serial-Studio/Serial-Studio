@@ -45,13 +45,13 @@ namespace CSV
  */
 typedef struct
 {
-    QByteArray data;
-    QDateTime rxDateTime;
+  QByteArray data;
+  QDateTime rxDateTime;
 } RawFrame;
 
 class Export : public QObject
 {
-    // clang-format off
+  // clang-format off
     Q_OBJECT
     Q_PROPERTY(bool isOpen
                READ isOpen
@@ -60,42 +60,42 @@ class Export : public QObject
                READ exportEnabled
                WRITE setExportEnabled
                NOTIFY enabledChanged)
-    // clang-format on
+  // clang-format on
 
 Q_SIGNALS:
-    void openChanged();
-    void enabledChanged();
+  void openChanged();
+  void enabledChanged();
 
 private:
-    explicit Export();
-    Export(Export &&) = delete;
-    Export(const Export &) = delete;
-    Export &operator=(Export &&) = delete;
-    Export &operator=(const Export &) = delete;
+  explicit Export();
+  Export(Export &&) = delete;
+  Export(const Export &) = delete;
+  Export &operator=(Export &&) = delete;
+  Export &operator=(const Export &) = delete;
 
-    ~Export();
+  ~Export();
 
 public:
-    static Export &instance();
+  static Export &instance();
 
-    bool isOpen() const;
-    bool exportEnabled() const;
+  bool isOpen() const;
+  bool exportEnabled() const;
 
 public Q_SLOTS:
-    void closeFile();
-    void openCurrentCsv();
-    void setExportEnabled(const bool enabled);
+  void closeFile();
+  void openCurrentCsv();
+  void setExportEnabled(const bool enabled);
 
 private Q_SLOTS:
-    void writeValues();
-    void registerFrame(const QByteArray &data);
-    void createCsvFile(const CSV::RawFrame &frame);
+  void writeValues();
+  void registerFrame(const QByteArray &data);
+  void createCsvFile(const CSV::RawFrame &frame);
 
 private:
-    QFile m_csvFile;
-    int m_fieldCount;
-    bool m_exportEnabled;
-    QTextStream m_textStream;
-    QVector<RawFrame> m_frames;
+  QFile m_csvFile;
+  int m_fieldCount;
+  bool m_exportEnabled;
+  QTextStream m_textStream;
+  QVector<RawFrame> m_frames;
 };
-}
+} // namespace CSV

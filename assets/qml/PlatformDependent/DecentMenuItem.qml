@@ -25,45 +25,45 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 MenuItem {
-    id: root
+  id: root
 
-    property alias sequence: _shortcut.sequence
-    property bool indicatorVisible: root.icon.source.length > 0 || root.checkable
+  property alias sequence: _shortcut.sequence
+  property bool indicatorVisible: root.icon.source.length > 0 || root.checkable
 
-    Shortcut {
-        id: _shortcut
-        enabled: root.enabled
-        onActivated: root.triggered()
+  Shortcut {
+    id: _shortcut
+    enabled: root.enabled
+    onActivated: root.triggered()
+  }
+
+  contentItem: RowLayout {
+    spacing: 0
+    width: root.width
+    opacity: root.enabled ? 1 : 0.5
+
+    Item {
+      width: root.indicatorVisible ? 18 : 0
     }
 
-    contentItem: RowLayout {
-        spacing: 0
-        width: root.width
-        opacity: root.enabled ? 1 : 0.5
-
-        Item {
-            width: root.indicatorVisible ? 18 : 0
-        }
-
-        Label {
-            id: _titleLabel
-            text: root.text
-            Layout.fillWidth: true
-            elide: Label.ElideRight
-            verticalAlignment: Qt.AlignVCenter
-            color: root.highlighted ? Cpp_ThemeManager.highlightedText : palette.text
-        }
-
-        Item {
-            Layout.fillWidth: true
-        }
-
-        Label {
-            id: _shortcutLabel
-            opacity: 0.8
-            text: _shortcut.nativeText
-            verticalAlignment: Qt.AlignVCenter
-            color: root.highlighted ? Cpp_ThemeManager.highlightedText : palette.text
-        }
+    Label {
+      id: _titleLabel
+      text: root.text
+      Layout.fillWidth: true
+      elide: Label.ElideRight
+      verticalAlignment: Qt.AlignVCenter
+      color: root.highlighted ? Cpp_ThemeManager.highlightedText : palette.text
     }
+
+    Item {
+      Layout.fillWidth: true
+    }
+
+    Label {
+      id: _shortcutLabel
+      opacity: 0.8
+      text: _shortcut.nativeText
+      verticalAlignment: Qt.AlignVCenter
+      color: root.highlighted ? Cpp_ThemeManager.highlightedText : palette.text
+    }
+  }
 }

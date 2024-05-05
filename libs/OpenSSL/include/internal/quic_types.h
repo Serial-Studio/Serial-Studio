@@ -27,21 +27,22 @@
 #define QUIC_PN_SPACE_APP 2
 #define QUIC_PN_SPACE_NUM 3
 
-static ossl_unused ossl_inline uint32_t ossl_quic_enc_level_to_pn_space(uint32_t enc_level)
+static ossl_unused ossl_inline uint32_t
+ossl_quic_enc_level_to_pn_space(uint32_t enc_level)
 {
-    switch (enc_level)
-    {
-        case QUIC_ENC_LEVEL_INITIAL:
-            return QUIC_PN_SPACE_INITIAL;
-        case QUIC_ENC_LEVEL_HANDSHAKE:
-            return QUIC_PN_SPACE_HANDSHAKE;
-        case QUIC_ENC_LEVEL_0RTT:
-        case QUIC_ENC_LEVEL_1RTT:
-            return QUIC_PN_SPACE_APP;
-        default:
-            assert(0);
-            return QUIC_PN_SPACE_APP;
-    }
+  switch (enc_level)
+  {
+    case QUIC_ENC_LEVEL_INITIAL:
+      return QUIC_PN_SPACE_INITIAL;
+    case QUIC_ENC_LEVEL_HANDSHAKE:
+      return QUIC_PN_SPACE_HANDSHAKE;
+    case QUIC_ENC_LEVEL_0RTT:
+    case QUIC_ENC_LEVEL_1RTT:
+      return QUIC_PN_SPACE_APP;
+    default:
+      assert(0);
+      return QUIC_PN_SPACE_APP;
+  }
 }
 
 /* QUIC packet number spaces. */
@@ -56,12 +57,12 @@ typedef uint64_t QUIC_PN;
 
 static ossl_unused ossl_inline QUIC_PN ossl_quic_pn_max(QUIC_PN a, QUIC_PN b)
 {
-    return a > b ? a : b;
+  return a > b ? a : b;
 }
 
 static ossl_unused ossl_inline QUIC_PN ossl_quic_pn_min(QUIC_PN a, QUIC_PN b)
 {
-    return a < b ? a : b;
+  return a < b ? a : b;
 }
 
 /* QUIC connection ID representation. */
@@ -69,15 +70,15 @@ static ossl_unused ossl_inline QUIC_PN ossl_quic_pn_min(QUIC_PN a, QUIC_PN b)
 
 typedef struct quic_conn_id_st
 {
-    unsigned char id_len, id[QUIC_MAX_CONN_ID_LEN];
+  unsigned char id_len, id[QUIC_MAX_CONN_ID_LEN];
 } QUIC_CONN_ID;
 
 static ossl_unused ossl_inline int ossl_quic_conn_id_eq(const QUIC_CONN_ID *a,
                                                         const QUIC_CONN_ID *b)
 {
-    if (a->id_len != b->id_len || a->id_len > QUIC_MAX_CONN_ID_LEN)
-        return 0;
-    return memcmp(a->id, b->id, a->id_len) == 0;
+  if (a->id_len != b->id_len || a->id_len > QUIC_MAX_CONN_ID_LEN)
+    return 0;
+  return memcmp(a->id, b->id, a->id_len) == 0;
 }
 
 #define QUIC_MIN_INITIAL_DGRAM_LEN 1200

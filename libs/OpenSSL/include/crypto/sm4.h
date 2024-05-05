@@ -16,7 +16,7 @@
 #include <openssl/e_os2.h>
 
 #ifdef OPENSSL_NO_SM4
-#    error SM4 is disabled.
+#  error SM4 is disabled.
 #endif
 
 #define SM4_ENCRYPT 1
@@ -27,7 +27,7 @@
 
 typedef struct SM4_KEY_st
 {
-    uint32_t rk[SM4_KEY_SCHEDULE];
+  uint32_t rk[SM4_KEY_SCHEDULE];
 } SM4_KEY;
 
 int ossl_sm4_set_key(const uint8_t *key, SM4_KEY *ks);

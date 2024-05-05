@@ -30,52 +30,54 @@
  * Constructor function, configures widget style & signal/slot connections.
  */
 Widgets::Bar::Bar(const int index)
-    : m_index(index)
+  : m_index(index)
 {
-    // Get pointers to serial studio modules
-    auto dash = &UI::Dashboard::instance();
-    auto theme = &Misc::ThemeManager::instance();
+  // Get pointers to serial studio modules
+  auto dash = &UI::Dashboard::instance();
+  auto theme = &Misc::ThemeManager::instance();
 
-    // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->barCount())
-        return;
+  // Invalid index, abort initialization
+  if (m_index < 0 || m_index >= dash->barCount())
+    return;
 
-    // Set thermo palette
-    QPalette palette;
-    palette.setColor(QPalette::Base, theme->base());
-    palette.setColor(QPalette::Highlight, QColor(255, 0, 0));
-    palette.setColor(QPalette::Text, theme->widgetIndicator());
-    palette.setColor(QPalette::Dark, theme->widgetIndicator());
-    palette.setColor(QPalette::Light, theme->widgetIndicator());
-    palette.setColor(QPalette::ButtonText, theme->widgetIndicator());
-    palette.setColor(QPalette::WindowText, theme->widgetIndicator());
-    m_thermo.setPalette(palette);
+  // Set thermo palette
+  QPalette palette;
+  palette.setColor(QPalette::Base, theme->base());
+  palette.setColor(QPalette::Highlight, QColor(255, 0, 0));
+  palette.setColor(QPalette::Text, theme->widgetIndicator());
+  palette.setColor(QPalette::Dark, theme->widgetIndicator());
+  palette.setColor(QPalette::Light, theme->widgetIndicator());
+  palette.setColor(QPalette::ButtonText, theme->widgetIndicator());
+  palette.setColor(QPalette::WindowText, theme->widgetIndicator());
+  m_thermo.setPalette(palette);
 
-    // Get thermo color
-    QString color;
-    auto colors = theme->widgetColors();
-    if (colors.count() > m_index)
-        color = colors.at(m_index);
-    else
-        color = colors.at(colors.count() % m_index);
+  // Get thermo color
+  QString color;
+  auto colors = theme->widgetColors();
+  if (colors.count() > m_index)
+    color = colors.at(m_index);
+  else
+    color = colors.at(colors.count() % m_index);
 
-    // Configure thermo style
-    m_thermo.setPipeWidth(64);
-    m_thermo.setBorderWidth(1);
-    m_thermo.setFillBrush(QBrush(QColor(color)));
+  // Configure thermo style
+  m_thermo.setPipeWidth(64);
+  m_thermo.setBorderWidth(1);
+  m_thermo.setFillBrush(QBrush(QColor(color)));
 
-    // Get initial properties from dataset
-    auto dataset = UI::Dashboard::instance().getBar(m_index);
-    m_thermo.setAlarmLevel(dataset.alarm());
-    m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
-    m_thermo.setScale(dataset.min(), dataset.max());
+  // Get initial properties from dataset
+  auto dataset = UI::Dashboard::instance().getBar(m_index);
+  m_thermo.setAlarmLevel(dataset.alarm());
+  m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
+  m_thermo.setScale(dataset.min(), dataset.max());
 
-    // Set widget pointer & disable auto resize
-    setWidget(&m_thermo, Qt::AlignHCenter, false);
+  // Set widget pointer & disable auto resize
+  setWidget(&m_thermo, Qt::AlignHCenter, false);
 
-    // React to dashboard events
-    connect(this, SIGNAL(resized()), this, SLOT(onResized()), Qt::QueuedConnection);
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
+  // React to dashboard events
+  connect(this, SIGNAL(resized()), this, SLOT(onResized()),
+          Qt::QueuedConnection);
+  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
+          Qt::QueuedConnection);
 }
 
 /**
@@ -87,25 +89,25 @@ Widgets::Bar::Bar(const int index)
  */
 void Widgets::Bar::updateData()
 {
-    // Widget not enabled, do nothing
-    if (!isEnabled())
-        return;
+  // Widget not enabled, do nothing
+  if (!isEnabled())
+    return;
 
-    // Invalid index, abort update
-    auto dash = &UI::Dashboard::instance();
-    if (m_index < 0 || m_index >= dash->barCount())
-        return;
+  // Invalid index, abort update
+  auto dash = &UI::Dashboard::instance();
+  if (m_index < 0 || m_index >= dash->barCount())
+    return;
 
-    // Update bar level
-    auto dataset = dash->getBar(m_index);
-    auto value = dataset.value().toDouble();
-    m_thermo.setValue(value);
-    setValue(QString("%1 %2").arg(
-        QString::number(value, 'f', UI::Dashboard::instance().precision()),
-        dataset.units()));
+  // Update bar level
+  auto dataset = dash->getBar(m_index);
+  auto value = dataset.value().toDouble();
+  m_thermo.setValue(value);
+  setValue(QString("%1 %2").arg(
+      QString::number(value, 'f', UI::Dashboard::instance().precision()),
+      dataset.units()));
 
-    // Repaint widget
-    requestRepaint();
+  // Repaint widget
+  requestRepaint();
 }
 
 /**
@@ -113,9 +115,5 @@ void Widgets::Bar::updateData()
  */
 void Widgets::Bar::onResized()
 {
-    m_thermo.setPipeWidth(width() * 0.25);
+  m_thermo.setPipeWidth(width() * 0.25);
 }
-
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_Bar.cpp"
-#endif

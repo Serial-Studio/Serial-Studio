@@ -16,21 +16,23 @@
 #include <internal/cryptlib.h>
 #include "crypto/context.h"
 
-void *ossl_crypto_thread_start(OSSL_LIB_CTX *ctx, CRYPTO_THREAD_ROUTINE start, void *data);
+void *ossl_crypto_thread_start(OSSL_LIB_CTX *ctx, CRYPTO_THREAD_ROUTINE start,
+                               void *data);
 int ossl_crypto_thread_join(void *task, CRYPTO_THREAD_RETVAL *retval);
 int ossl_crypto_thread_clean(void *vhandle);
 uint64_t ossl_get_avail_threads(OSSL_LIB_CTX *ctx);
 
 #if defined(OPENSSL_THREADS)
 
-#    define OSSL_LIB_CTX_GET_THREADS(CTX) ossl_lib_ctx_get_data(CTX, OSSL_LIB_CTX_THREAD_INDEX);
+#  define OSSL_LIB_CTX_GET_THREADS(CTX)                                        \
+    ossl_lib_ctx_get_data(CTX, OSSL_LIB_CTX_THREAD_INDEX);
 
 typedef struct openssl_threads_st
 {
-    uint64_t max_threads;
-    uint64_t active_threads;
-    CRYPTO_MUTEX *lock;
-    CRYPTO_CONDVAR *cond_finished;
+  uint64_t max_threads;
+  uint64_t active_threads;
+  CRYPTO_MUTEX *lock;
+  CRYPTO_CONDVAR *cond_finished;
 } OSSL_LIB_CTX_THREADS;
 
 #endif /* defined(OPENSSL_THREADS) */

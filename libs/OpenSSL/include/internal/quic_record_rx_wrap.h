@@ -31,10 +31,10 @@
 
 typedef struct ossl_qrx_pkt_wrap_st
 {
-    void *handle; /* This is a copy of |pkt->handle| */
-    OSSL_QRX_PKT *pkt;
-    CRYPTO_REF_COUNT references;
-    CRYPTO_RWLOCK *lock; /* For reference counting without atomic */
+  void *handle; /* This is a copy of |pkt->handle| */
+  OSSL_QRX_PKT *pkt;
+  CRYPTO_REF_COUNT references;
+  CRYPTO_RWLOCK *lock; /* For reference counting without atomic */
 } OSSL_QRX_PKT_WRAP;
 
 OSSL_QRX_PKT_WRAP *ossl_qrx_pkt_wrap_new(OSSL_QRX_PKT *pkt);

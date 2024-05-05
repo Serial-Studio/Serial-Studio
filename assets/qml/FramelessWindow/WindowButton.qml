@@ -24,26 +24,26 @@ import QtQuick
 import "../Widgets" as Widgets
 
 Widgets.Icon {
-    id: root
+  id: root
 
-    signal clicked()
-    property string name
-    property color textColor
-    property color pressedColor: Cpp_ThemeManager.highlight
+  signal clicked()
+  property string name
+  property color textColor
+  property color pressedColor: Cpp_ThemeManager.highlight
 
-    width: 24
-    height: 24
-    color: root.textColor
-    source: "qrc:/window-border/" + name + ".svg"
+  width: 24
+  height: 24
+  color: root.textColor
+  source: "qrc:/window-border/" + name + ".svg"
 
-    Behavior on color { ColorAnimation{} }
+  Behavior on color { ColorAnimation{} }
 
-    MouseArea {
-        hoverEnabled: true
-        anchors.fill: parent
-        preventStealing: true
-        onClicked: root.clicked()
-        acceptedButtons: Qt.LeftButton
-        onContainsMouseChanged: root.color = containsMouse ? root.pressedColor : root.textColor
-    }
+  MouseArea {
+    hoverEnabled: true
+    anchors.fill: parent
+    preventStealing: true
+    onClicked: root.clicked()
+    acceptedButtons: Qt.LeftButton
+    onContainsMouseChanged: root.color = containsMouse ? root.pressedColor : root.textColor
+  }
 }

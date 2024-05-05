@@ -13,48 +13,34 @@ http://sam.zoy.org/wtfpl/COPYING for more details.
 
 *Tab=3***********************************************************************/
 
+#if !defined(ffft_def_HEADER_INCLUDED)
+#  define ffft_def_HEADER_INCLUDED
 
-
-#if ! defined (ffft_def_HEADER_INCLUDED)
-#define	ffft_def_HEADER_INCLUDED
-
-#if defined (_MSC_VER)
-	#pragma once
-	#pragma warning (4 : 4250) // "Inherits via dominance."
-#endif
-
-
+#  if defined(_MSC_VER)
+#    pragma once
+#    pragma warning(4 : 4250) // "Inherits via dominance."
+#  endif
 
 /*\\\ INCLUDE FILES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
-
-
 
 namespace ffft
 {
 
+const double PI = 3.1415926535897932384626433832795;
+const double SQRT2 = 1.41421356237309514547462185873883;
 
+#  if defined(_MSC_VER)
 
-const double	PI		= 3.1415926535897932384626433832795;
-const double	SQRT2	= 1.41421356237309514547462185873883;
+#    define ffft_FORCEINLINE __forceinline
 
-#if defined (_MSC_VER)
+#  else
 
-	#define	ffft_FORCEINLINE	__forceinline
+#    define ffft_FORCEINLINE inline
 
-#else
+#  endif
 
-	#define	ffft_FORCEINLINE	inline
+} // namespace ffft
 
-#endif
-
-
-
-}	// namespace ffft
-
-
-
-#endif	// ffft_def_HEADER_INCLUDED
-
-
+#endif // ffft_def_HEADER_INCLUDED
 
 /*\\\ EOF \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/

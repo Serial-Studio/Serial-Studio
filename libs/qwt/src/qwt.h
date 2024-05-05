@@ -21,6 +21,6 @@ namespace Qwt
 {
 }
 
-QWT_EXPORT QSize qwtExpandedToGlobalStrut( const QSize& );
+QWT_EXPORT QSize qwtExpandedToGlobalStrut(const QSize &);
 
 #endif

@@ -27,92 +27,92 @@ import QtQuick.Controls
 import "Windows" as Windows
 
 Item {
-    id: app
+  id: app
 
-    //
-    // Global propeties
-    //
-    readonly property int spacing: 8
-    readonly property string monoFont: "Roboto Mono"
+  //
+  // Global propeties
+  //
+  readonly property int spacing: 8
+  readonly property string monoFont: "Roboto Mono"
 
-    //
-    // Access to dialogs & windows
-    //
-    property Windows.About aboutDialog: null
-    property Windows.Donate donateDialog: null
-    property Windows.MainWindow mainWindow: null
-    property Windows.CsvPlayer csvPlayerDialog: null
-    property Windows.ProjectEditor projectEditorWindow: null
-    property Windows.Acknowledgements acknowledgementsDialog: null
+  //
+  // Access to dialogs & windows
+  //
+  property Window aboutDialog: null
+  property Window donateDialog: null
+  property Window mainWindow: null
+  property Window csvPlayerDialog: null
+  property Window projectEditorWindow: null
+  property Window acknowledgementsDialog: null
 
-    //
-    // Check for updates (non-silent mode)
-    //
-    function checkForUpdates() {
-        Cpp_Updater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
-        Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+  //
+  // Check for updates (non-silent mode)
+  //
+  function checkForUpdates() {
+    Cpp_Updater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
+    Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+  }
+
+  //
+  // MainWindow
+  //
+  Loader {
+    asynchronous: true
+    sourceComponent: Windows.MainWindow {
+      Component.onCompleted: {
+        app.forceActiveFocus()
+        app.mainWindow = this
+      }
     }
+  }
 
-    //
-    // MainWindow
-    //
-    Loader {
-        asynchronous: true
-        sourceComponent: Windows.MainWindow {
-            Component.onCompleted: {
-                app.forceActiveFocus()
-                app.mainWindow = this
-            }
-        }
+  //
+  // About window
+  //
+  Loader {
+    asynchronous: true
+    sourceComponent: Windows.About {
+      Component.onCompleted: app.aboutDialog = this
     }
+  }
 
-    //
-    // About window
-    //
-    Loader {
-        asynchronous: true
-        sourceComponent: Windows.About {
-            Component.onCompleted: app.aboutDialog = this
-        }
+  //
+  // CSV player window
+  //
+  Loader {
+    asynchronous: true
+    sourceComponent: Windows.CsvPlayer {
+      Component.onCompleted: app.csvPlayerDialog = this
     }
+  }
 
-    //
-    // CSV player window
-    //
-    Loader {
-        asynchronous: true
-        sourceComponent: Windows.CsvPlayer {
-            Component.onCompleted: app.csvPlayerDialog = this
-        }
+  //
+  // Project editor dialog
+  //
+  Loader {
+    asynchronous: true
+    sourceComponent: Windows.ProjectEditor {
+      Component.onCompleted: app.projectEditorWindow = this
     }
+  }
 
-    //
-    // Project editor dialog
-    //
-    Loader {
-        asynchronous: true
-        sourceComponent: Windows.ProjectEditor {
-            Component.onCompleted: app.projectEditorWindow = this
-        }
+  //
+  // Donations dialog
+  //
+  Loader {
+    asynchronous: false
+    sourceComponent: Windows.Donate {
+      Component.onCompleted: app.donateDialog = this
     }
+  }
 
-    //
-    // Donations dialog
-    //
-    Loader {
-        asynchronous: false
-        sourceComponent: Windows.Donate {
-            Component.onCompleted: app.donateDialog = this
-        }
+  //
+  // Acknowledgements dialog
+  //
+  Loader {
+    asynchronous: true
+    sourceComponent: Windows.Acknowledgements {
+      Component.onCompleted: app.acknowledgementsDialog = this
     }
-
-    //
-    // Acknowledgements dialog
-    //
-    Loader {
-        asynchronous: true
-        sourceComponent: Windows.Acknowledgements {
-            Component.onCompleted: app.acknowledgementsDialog = this
-        }
-    }
+  }
 }

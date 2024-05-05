@@ -38,49 +38,50 @@ class QwtPlot;
         geometries.
 
    \note Another way for getting hardware accelerated graphics is using
-        an OpenGL offscreen buffer ( QwtPlotCanvas::OpenGLBuffer ) with QwtPlotCanvas.
-        Performance is worse, than rendering straight to a QGLWidget, but is usually
-        better integrated into a desktop application.
+        an OpenGL offscreen buffer ( QwtPlotCanvas::OpenGLBuffer ) with
+   QwtPlotCanvas. Performance is worse, than rendering straight to a QGLWidget,
+   but is usually better integrated into a desktop application.
  */
-class QWT_EXPORT QwtPlotGLCanvas : public QGLWidget, public QwtPlotAbstractGLCanvas
+class QWT_EXPORT QwtPlotGLCanvas : public QGLWidget,
+                                   public QwtPlotAbstractGLCanvas
 {
-    Q_OBJECT
+  Q_OBJECT
 
-    Q_PROPERTY( QFrame::Shadow frameShadow READ frameShadow WRITE setFrameShadow )
-    Q_PROPERTY( QFrame::Shape frameShape READ frameShape WRITE setFrameShape )
-    Q_PROPERTY( int lineWidth READ lineWidth WRITE setLineWidth )
-    Q_PROPERTY( int midLineWidth READ midLineWidth WRITE setMidLineWidth )
-    Q_PROPERTY( int frameWidth READ frameWidth )
-    Q_PROPERTY( QRect frameRect READ frameRect DESIGNABLE false )
+  Q_PROPERTY(QFrame::Shadow frameShadow READ frameShadow WRITE setFrameShadow)
+  Q_PROPERTY(QFrame::Shape frameShape READ frameShape WRITE setFrameShape)
+  Q_PROPERTY(int lineWidth READ lineWidth WRITE setLineWidth)
+  Q_PROPERTY(int midLineWidth READ midLineWidth WRITE setMidLineWidth)
+  Q_PROPERTY(int frameWidth READ frameWidth)
+  Q_PROPERTY(QRect frameRect READ frameRect DESIGNABLE false)
 
-    Q_PROPERTY( double borderRadius READ borderRadius WRITE setBorderRadius )
+  Q_PROPERTY(double borderRadius READ borderRadius WRITE setBorderRadius)
 
-  public:
-    explicit QwtPlotGLCanvas( QwtPlot* = NULL );
-    explicit QwtPlotGLCanvas( const QGLFormat&, QwtPlot* = NULL );
-    virtual ~QwtPlotGLCanvas();
+public:
+  explicit QwtPlotGLCanvas(QwtPlot * = NULL);
+  explicit QwtPlotGLCanvas(const QGLFormat &, QwtPlot * = NULL);
+  virtual ~QwtPlotGLCanvas();
 
-    Q_INVOKABLE virtual void invalidateBackingStore() QWT_OVERRIDE;
-    Q_INVOKABLE QPainterPath borderPath( const QRect& ) const;
+  Q_INVOKABLE virtual void invalidateBackingStore() QWT_OVERRIDE;
+  Q_INVOKABLE QPainterPath borderPath(const QRect &) const;
 
-    virtual bool event( QEvent* ) QWT_OVERRIDE;
+  virtual bool event(QEvent *) QWT_OVERRIDE;
 
-  public Q_SLOTS:
-    void replot();
+public Q_SLOTS:
+  void replot();
 
-  protected:
-    virtual void paintEvent( QPaintEvent* ) QWT_OVERRIDE;
+protected:
+  virtual void paintEvent(QPaintEvent *) QWT_OVERRIDE;
 
-    virtual void initializeGL() QWT_OVERRIDE;
-    virtual void paintGL() QWT_OVERRIDE;
-    virtual void resizeGL( int width, int height ) QWT_OVERRIDE;
+  virtual void initializeGL() QWT_OVERRIDE;
+  virtual void paintGL() QWT_OVERRIDE;
+  virtual void resizeGL(int width, int height) QWT_OVERRIDE;
 
-  private:
-    void init();
-    virtual void clearBackingStore() QWT_OVERRIDE;
+private:
+  void init();
+  virtual void clearBackingStore() QWT_OVERRIDE;
 
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

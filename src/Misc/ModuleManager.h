@@ -32,29 +32,26 @@ namespace Misc
 /**
  * @brief The ModuleManager class
  *
- * The @c ModuleManager class is in charge of initializing all the C++ modules that are
- * part of Serial Studio in the correct order.
+ * The @c ModuleManager class is in charge of initializing all the C++ modules
+ * that are part of Serial Studio in the correct order.
  */
 class ModuleManager : public QObject
 {
-    Q_OBJECT
-    Q_PROPERTY(bool softwareRendering READ softwareRendering CONSTANT)
-    Q_PROPERTY(bool autoUpdaterEnabled READ autoUpdaterEnabled CONSTANT)
+  Q_OBJECT
+  Q_PROPERTY(bool autoUpdaterEnabled READ autoUpdaterEnabled CONSTANT)
 
 public:
-    ModuleManager();
-    void configureUpdater();
-    void registerQmlTypes();
-    bool softwareRendering();
-    bool autoUpdaterEnabled();
-    void initializeQmlInterface();
-    QQmlApplicationEngine *engine();
+  ModuleManager();
+  void configureUpdater();
+  void registerQmlTypes();
+  bool autoUpdaterEnabled();
+  void initializeQmlInterface();
+  QQmlApplicationEngine *engine();
 
 public Q_SLOTS:
-    void onQuit();
-    void setSoftwareRenderingEnabled(const bool enabled);
+  void onQuit();
 
 private:
-    QQmlApplicationEngine m_engine;
+  QQmlApplicationEngine m_engine;
 };
-}
+} // namespace Misc

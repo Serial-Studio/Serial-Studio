@@ -71,35 +71,44 @@ int bn_set_words(BIGNUM *a, const BN_ULONG *words, int num_words);
  * is constant-time by itself. They all have pre-conditions, consult source
  * code...
  */
-int bn_mul_mont_fixed_top(BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_MONT_CTX *mont,
-                          BN_CTX *ctx);
-int bn_to_mont_fixed_top(BIGNUM *r, const BIGNUM *a, BN_MONT_CTX *mont, BN_CTX *ctx);
-int bn_from_mont_fixed_top(BIGNUM *r, const BIGNUM *a, BN_MONT_CTX *mont, BN_CTX *ctx);
-int bn_mod_add_fixed_top(BIGNUM *r, const BIGNUM *a, const BIGNUM *b, const BIGNUM *m);
-int bn_mod_sub_fixed_top(BIGNUM *r, const BIGNUM *a, const BIGNUM *b, const BIGNUM *m);
+int bn_mul_mont_fixed_top(BIGNUM *r, const BIGNUM *a, const BIGNUM *b,
+                          BN_MONT_CTX *mont, BN_CTX *ctx);
+int bn_to_mont_fixed_top(BIGNUM *r, const BIGNUM *a, BN_MONT_CTX *mont,
+                         BN_CTX *ctx);
+int bn_from_mont_fixed_top(BIGNUM *r, const BIGNUM *a, BN_MONT_CTX *mont,
+                           BN_CTX *ctx);
+int bn_mod_add_fixed_top(BIGNUM *r, const BIGNUM *a, const BIGNUM *b,
+                         const BIGNUM *m);
+int bn_mod_sub_fixed_top(BIGNUM *r, const BIGNUM *a, const BIGNUM *b,
+                         const BIGNUM *m);
 int bn_mul_fixed_top(BIGNUM *r, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx);
 int bn_sqr_fixed_top(BIGNUM *r, const BIGNUM *a, BN_CTX *ctx);
 int bn_lshift_fixed_top(BIGNUM *r, const BIGNUM *a, int n);
 int bn_rshift_fixed_top(BIGNUM *r, const BIGNUM *a, int n);
-int bn_div_fixed_top(BIGNUM *dv, BIGNUM *rem, const BIGNUM *m, const BIGNUM *d, BN_CTX *ctx);
+int bn_div_fixed_top(BIGNUM *dv, BIGNUM *rem, const BIGNUM *m, const BIGNUM *d,
+                     BN_CTX *ctx);
 
 #define BN_PRIMETEST_COMPOSITE 0
 #define BN_PRIMETEST_COMPOSITE_WITH_FACTOR 1
 #define BN_PRIMETEST_COMPOSITE_NOT_POWER_OF_PRIME 2
 #define BN_PRIMETEST_PROBABLY_PRIME 3
 
-int ossl_bn_miller_rabin_is_prime(const BIGNUM *w, int iterations, BN_CTX *ctx, BN_GENCB *cb,
-                                  int enhanced, int *status);
-int ossl_bn_check_generated_prime(const BIGNUM *w, int checks, BN_CTX *ctx, BN_GENCB *cb);
+int ossl_bn_miller_rabin_is_prime(const BIGNUM *w, int iterations, BN_CTX *ctx,
+                                  BN_GENCB *cb, int enhanced, int *status);
+int ossl_bn_check_generated_prime(const BIGNUM *w, int checks, BN_CTX *ctx,
+                                  BN_GENCB *cb);
 
 const BIGNUM *ossl_bn_get0_small_factors(void);
 
-int ossl_bn_rsa_fips186_4_gen_prob_primes(BIGNUM *p, BIGNUM *Xpout, BIGNUM *p1, BIGNUM *p2,
-                                          const BIGNUM *Xp, const BIGNUM *Xp1, const BIGNUM *Xp2,
-                                          int nlen, const BIGNUM *e, BN_CTX *ctx, BN_GENCB *cb);
+int ossl_bn_rsa_fips186_4_gen_prob_primes(BIGNUM *p, BIGNUM *Xpout, BIGNUM *p1,
+                                          BIGNUM *p2, const BIGNUM *Xp,
+                                          const BIGNUM *Xp1, const BIGNUM *Xp2,
+                                          int nlen, const BIGNUM *e,
+                                          BN_CTX *ctx, BN_GENCB *cb);
 
-int ossl_bn_rsa_fips186_4_derive_prime(BIGNUM *Y, BIGNUM *X, const BIGNUM *Xin, const BIGNUM *r1,
-                                       const BIGNUM *r2, int nlen, const BIGNUM *e, BN_CTX *ctx,
+int ossl_bn_rsa_fips186_4_derive_prime(BIGNUM *Y, BIGNUM *X, const BIGNUM *Xin,
+                                       const BIGNUM *r1, const BIGNUM *r2,
+                                       int nlen, const BIGNUM *e, BN_CTX *ctx,
                                        BN_GENCB *cb);
 
 OSSL_LIB_CTX *ossl_bn_get_libctx(BN_CTX *ctx);

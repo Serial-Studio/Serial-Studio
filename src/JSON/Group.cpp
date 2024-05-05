@@ -30,7 +30,7 @@ static JSON::Dataset EMPTY_DATASET;
  */
 JSON::Group::~Group()
 {
-    m_datasets.clear();
+  m_datasets.clear();
 }
 
 /**
@@ -38,7 +38,7 @@ JSON::Group::~Group()
  */
 QString JSON::Group::title() const
 {
-    return m_title;
+  return m_title;
 }
 
 /**
@@ -46,7 +46,7 @@ QString JSON::Group::title() const
  */
 QString JSON::Group::widget() const
 {
-    return m_widget;
+  return m_widget;
 }
 
 /**
@@ -54,7 +54,7 @@ QString JSON::Group::widget() const
  */
 int JSON::Group::datasetCount() const
 {
-    return m_datasets.count();
+  return m_datasets.count();
 }
 
 /**
@@ -62,18 +62,19 @@ int JSON::Group::datasetCount() const
  */
 QVector<JSON::Dataset> &JSON::Group::datasets()
 {
-    return m_datasets;
+  return m_datasets;
 }
 
 /**
- * @return The dataset at the given @a index,vreturns @c Q_NULLPTR on invalid index
+ * @return The dataset at the given @a index,vreturns @c Q_NULLPTR on invalid
+ * index
  */
 const JSON::Dataset &JSON::Group::getDataset(const int index) const
 {
-    if (m_datasets.count() > index)
-        return m_datasets.at(index);
+  if (m_datasets.count() > index)
+    return m_datasets.at(index);
 
-    return EMPTY_DATASET;
+  return EMPTY_DATASET;
 }
 
 /**
@@ -84,32 +85,32 @@ const JSON::Dataset &JSON::Group::getDataset(const int index) const
  */
 bool JSON::Group::read(const QJsonObject &object)
 {
-    if (!object.isEmpty())
+  if (!object.isEmpty())
+  {
+    auto title = object.value("title").toString();
+    auto array = object.value("datasets").toArray();
+    auto widget = object.value("widget").toString();
+
+    if (!title.isEmpty() && !array.isEmpty())
     {
-        auto title = object.value("title").toString();
-        auto array = object.value("datasets").toArray();
-        auto widget = object.value("widget").toString();
+      m_title = title;
+      m_widget = widget;
+      m_datasets.clear();
 
-        if (!title.isEmpty() && !array.isEmpty())
+      for (auto i = 0; i < array.count(); ++i)
+      {
+        auto object = array.at(i).toObject();
+        if (!object.isEmpty())
         {
-            m_title = title;
-            m_widget = widget;
-            m_datasets.clear();
-
-            for (auto i = 0; i < array.count(); ++i)
-            {
-                auto object = array.at(i).toObject();
-                if (!object.isEmpty())
-                {
-                    Dataset dataset;
-                    if (dataset.read(object))
-                        m_datasets.append(dataset);
-                }
-            }
-
-            return datasetCount() > 0;
+          Dataset dataset;
+          if (dataset.read(object))
+            m_datasets.append(dataset);
         }
-    }
+      }
 
-    return false;
+      return datasetCount() > 0;
+    }
+  }
+
+  return false;
 }

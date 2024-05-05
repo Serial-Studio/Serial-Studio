@@ -1,6 +1,6 @@
-#--------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Workflow configuration
-#--------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 name: Deploy
 on:
@@ -12,9 +12,9 @@ on:
     paths-ignore:     # File-patterns to ignore
     - '**.md'         # Ignore changes to *.md files
 
-#--------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Define application name & version
-#--------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 env:
   VERSION: "2.0.0"
@@ -26,14 +26,14 @@ env:
   QML_DIR_WIN: "assets\\qml"
   PUBLISHER: "Alex Spataru"
   REPO_DIR: "/home/runner/work/Serial-Studio"
-  QT_VERSION: 6.6.2
-  QT_MODULES: qtserialport qtconnectivity qt5compat qtpositioning qtlocation
+  QT_VERSION: 6.7.0
+  QT_MODULES: qtserialport qtconnectivity qtpositioning qtlocation
   QMAKE: qmake6
   CORES: 16
 
-#--------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
-#--------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 jobs:
   #
@@ -60,12 +60,15 @@ jobs:
     - name: '⚙️ Install dependencies'
       run: |
         sudo apt-get update
-        sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev libxcb-image0-dev libxcb-util0-dev libxcb-cursor-dev
+        sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 \
+                             libxcb-image0 libxcb-keysyms1 libxcb-render-util0 \
+                             libxcb-xinerama0 libzstd-dev libxcb-image0-dev \
+                             libxcb-util0-dev libxcb-cursor-dev
 
     - name: '🚧 Compile application'
       run: |
-          ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
-          make -j${{env.CORES}}
+        ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+        make -j${{env.CORES}}
 
     - name: '⚙️ Install linuxdeploy'
       run: |
@@ -109,24 +112,58 @@ jobs:
         version: ${{env.QT_VERSION}}
         modules: ${{env.QT_MODULES}}
         cache: true
+        arch: clang_64
         install-deps: 'true'
+
+    - name: '⚙️ Install Node'
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
 
     - name: '🚧 Compile application'
       run: |
-           ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
-           make -j${{env.CORES}}
+        ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release
+        make -j${{env.CORES}}
 
-    - name: '📦 Package application (macdeployqt and zipfile)'
+    - name: '📦 Package application'
       run: |
         macdeployqt ${{env.EXECUTABLE}}.app -qmldir="${{env.QML_DIR_NIX}}"
         mv "${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
-        ditto -c -k --sequesterRsrc --keepParent "${{env.APPLICATION}}.app" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
 
-    - name: '📤 Upload artifact: ZIP'
-      uses: actions/upload-artifact@v2
+    - name: '🪪 Import Code Signing Certificate'
+      uses: apple-actions/import-codesign-certs@v2
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+        p12-file-base64: ${{secrets.CERTIFICATES_P12}}
+        p12-password: ${{secrets.CERTIFICATES_P12_PASSWORD}}
+
+    - name: '✍🏻 Sign Application'
+      run: codesign --force --deep --options runtime --sign "${{secrets.DEVELOPER_ID}}" "${{env.APPLICATION}}.app"
+
+    - name: '💽 Create nice DMG'
+      run: |
+        npm install --global create-dmg
+        rm LICENSE.md
+        create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg"
+
+    - name: '📋 Notarize'
+      uses: alex-spataru/xcode-notarize@v2
+      with:
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
+        appstore-connect-teamid: ${{secrets.NOTARIZATION_TEAMID}}
+        appstore-connect-password: ${{secrets.NOTARIZATION_PASSWORD}}
+
+    - name: '📌 Staple'
+      uses: BoundfoxStudios/action-xcode-staple@v1
+      with:
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+
+    - name: '📤 Upload artifact: DMG'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
 
   #
   # Windows build
@@ -259,7 +296,9 @@ jobs:
         name: msys2-pkgs
         path: msys2/*.zst
 
+  #
   # Test Windows MSYS2 packages
+  #
   msys2-test:
     if: ${{false}}
     needs: msys2-makepkg
@@ -324,6 +363,6 @@ jobs:
             wget -q https://github.com/TheAssassin/pyuploadtool/releases/download/continuous/pyuploadtool-x86_64.AppImage
             chmod +x pyuploadtool-x86_64.AppImage
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.zip
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip

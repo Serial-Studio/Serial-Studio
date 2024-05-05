@@ -11,38 +11,37 @@
 
 #if QT_VERSION >= 0x050200
 
-static QwtPoint3D qwtPointToPoint3D( const QPointF& point )
+static QwtPoint3D qwtPointToPoint3D(const QPointF &point)
 {
-    return QwtPoint3D( point );
+  return QwtPoint3D(point);
 }
 
 #endif
 
 namespace
 {
-    static const struct RegisterQwtPoint3D
-    {
-        inline RegisterQwtPoint3D()
-        {
-            qRegisterMetaType< QwtPoint3D >();
+static const struct RegisterQwtPoint3D
+{
+  inline RegisterQwtPoint3D()
+  {
+    qRegisterMetaType<QwtPoint3D>();
 
 #if QT_VERSION >= 0x050200
-            QMetaType::registerConverter< QPointF, QwtPoint3D >( qwtPointToPoint3D );
+    QMetaType::registerConverter<QPointF, QwtPoint3D>(qwtPointToPoint3D);
 #endif
-        }
-    } qwtRegisterQwtPoint3D;
-}
+  }
+} qwtRegisterQwtPoint3D;
+} // namespace
 
 #ifndef QT_NO_DEBUG_STREAM
 
-#include <qdebug.h>
+#  include <qdebug.h>
 
-QDebug operator<<( QDebug debug, const QwtPoint3D& point )
+QDebug operator<<(QDebug debug, const QwtPoint3D &point)
 {
-    debug.nospace() << "QwtPoint3D(" << point.x()
-                    << "," << point.y() << "," << point.z() << ")";
-    return debug.space();
+  debug.nospace() << "QwtPoint3D(" << point.x() << "," << point.y() << ","
+                  << point.z() << ")";
+  return debug.space();
 }
 
 #endif
-

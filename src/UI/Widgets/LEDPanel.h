@@ -34,27 +34,27 @@ namespace Widgets
 {
 class LEDPanel : public DashboardWidgetBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    LEDPanel(const int index = -1);
-    ~LEDPanel();
+  LEDPanel(const int index = -1);
+  ~LEDPanel();
 
 private Q_SLOTS:
-    void updateData();
+  void updateData();
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+  void resizeEvent(QResizeEvent *event);
 
 private:
-    int m_index;
+  int m_index;
 
-    QVector<KLed *> m_leds;
-    QVector<QLabel *> m_titles;
+  QVector<KLed *> m_leds;
+  QVector<QLabel *> m_titles;
 
-    QWidget *m_dataContainer;
-    QVBoxLayout *m_mainLayout;
-    QGridLayout *m_gridLayout;
-    QScrollArea *m_scrollArea;
+  QWidget *m_dataContainer;
+  QVBoxLayout *m_mainLayout;
+  QGridLayout *m_gridLayout;
+  QScrollArea *m_scrollArea;
 };
-}
+} // namespace Widgets

@@ -27,90 +27,90 @@ import QtQuick.Controls
 import "../Widgets" as Widgets
 
 ColumnLayout {
-    id: root
-    spacing: 0
+  id: root
+  spacing: 0
 
-    //
-    // Connections with JSON editor model
-    //
-    Connections {
-        target: Cpp_Project_Model
+  //
+  // Connections with JSON editor model
+  //
+  Connections {
+    target: Cpp_Project_Model
 
-        function onGroupCountChanged() {
-            tabRepeater.model = 0
-            stackRepeater.model = 0
-            tabRepeater.model = Cpp_Project_Model.groupCount
-            stackRepeater.model = Cpp_Project_Model.groupCount
-        }
-
-        function onGroupOrderChanged() {
-            tabRepeater.model = 0
-            stackRepeater.model = 0
-            tabRepeater.model = Cpp_Project_Model.groupCount
-            stackRepeater.model = Cpp_Project_Model.groupCount
-        }
+    function onGroupCountChanged() {
+      tabRepeater.model = 0
+      stackRepeater.model = 0
+      tabRepeater.model = Cpp_Project_Model.groupCount
+      stackRepeater.model = Cpp_Project_Model.groupCount
     }
 
-    //
-    // Function to scroll to the last group
-    //
-    function selectLastGroup() {
-        tabBar.currentIndex = tabBar.count - 1
+    function onGroupOrderChanged() {
+      tabRepeater.model = 0
+      stackRepeater.model = 0
+      tabRepeater.model = Cpp_Project_Model.groupCount
+      stackRepeater.model = Cpp_Project_Model.groupCount
     }
+  }
 
-    //
-    // Spacer
-    //
-    Item {
-        height: app.spacing
+  //
+  // Function to scroll to the last group
+  //
+  function selectLastGroup() {
+    tabBar.currentIndex = tabBar.count - 1
+  }
+
+  //
+  // Spacer
+  //
+  Item {
+    height: app.spacing
+  }
+
+  //
+  // Tab widget
+  //
+  TabBar {
+    id: tabBar
+    Layout.fillWidth: true
+    visible: tabRepeater.model > 0
+
+    Repeater {
+      id: tabRepeater
+      delegate: TabButton {
+        height: 24
+        text: qsTr("Group %1").arg(index + 1) + " <i>" + (Cpp_Project_Model.groupTitle(index)) + "</i>"
+      }
     }
+  }
 
-    //
-    // Tab widget
-    //
-    TabBar {
-        id: tabBar
-        Layout.fillWidth: true
-        visible: tabRepeater.model > 0
+  //
+  // StackView
+  //
+  StackLayout {
+    id: swipe
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    currentIndex: tabBar.currentIndex
+    Layout.topMargin: -parent.spacing - 1
 
-        Repeater {
-            id: tabRepeater
-            delegate: TabButton {
-                height: 24
-                text: qsTr("Group %1").arg(index + 1) + " <i>" + (Cpp_Project_Model.groupTitle(index)) + "</i>"
-            }
-        }
-    }
+    Repeater {
+      id: stackRepeater
 
-    //
-    // StackView
-    //
-    StackLayout {
-        id: swipe
+      delegate: Loader {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        currentIndex: tabBar.currentIndex
-        Layout.topMargin: -parent.spacing - 1
+        active: swipe.currentIndex == index
 
-        Repeater {
-            id: stackRepeater
-
-            delegate: Loader {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                active: swipe.currentIndex == index
-
-                sourceComponent: JsonGroupDelegate {
-                    group: index
-                }
-            }
+        sourceComponent: JsonGroupDelegate {
+          group: index
         }
+      }
     }
+  }
 
-    //
-    // Spacer
-    //
-    Item {
-        height: app.spacing
-    }
+  //
+  // Spacer
+  //
+  Item {
+    height: app.spacing
+  }
 }

@@ -12,52 +12,52 @@
 
 class QwtPlotDict::PrivateData
 {
+public:
+  class ItemList : public QList<QwtPlotItem *>
+  {
   public:
-
-    class ItemList : public QList< QwtPlotItem* >
+    void insertItem(QwtPlotItem *item)
     {
-      public:
-        void insertItem( QwtPlotItem* item )
-        {
-            if ( item == NULL )
-                return;
+      if (item == NULL)
+        return;
 
-            QList< QwtPlotItem* >::iterator it =
-                std::upper_bound( begin(), end(), item, LessZThan() );
-            insert( it, item );
+      QList<QwtPlotItem *>::iterator it
+          = std::upper_bound(begin(), end(), item, LessZThan());
+      insert(it, item);
+    }
+
+    void removeItem(QwtPlotItem *item)
+    {
+      if (item == NULL)
+        return;
+
+      QList<QwtPlotItem *>::iterator it
+          = std::lower_bound(begin(), end(), item, LessZThan());
+
+      for (; it != end(); ++it)
+      {
+        if (item == *it)
+        {
+          erase(it);
+          break;
         }
+      }
+    }
 
-        void removeItem( QwtPlotItem* item )
-        {
-            if ( item == NULL )
-                return;
-
-            QList< QwtPlotItem* >::iterator it =
-                std::lower_bound( begin(), end(), item, LessZThan() );
-
-            for ( ; it != end(); ++it )
-            {
-                if ( item == *it )
-                {
-                    erase( it );
-                    break;
-                }
-            }
-        }
-      private:
-        class LessZThan
-        {
-          public:
-            inline bool operator()( const QwtPlotItem* item1,
-                const QwtPlotItem* item2 ) const
-            {
-                return item1->z() < item2->z();
-            }
-        };
+  private:
+    class LessZThan
+    {
+    public:
+      inline bool operator()(const QwtPlotItem *item1,
+                             const QwtPlotItem *item2) const
+      {
+        return item1->z() < item2->z();
+      }
     };
+  };
 
-    ItemList itemList;
-    bool autoDelete;
+  ItemList itemList;
+  bool autoDelete;
 };
 
 /*!
@@ -68,8 +68,8 @@ class QwtPlotDict::PrivateData
  */
 QwtPlotDict::QwtPlotDict()
 {
-    m_data = new QwtPlotDict::PrivateData;
-    m_data->autoDelete = true;
+  m_data = new QwtPlotDict::PrivateData;
+  m_data->autoDelete = true;
 }
 
 /*!
@@ -80,8 +80,8 @@ QwtPlotDict::QwtPlotDict()
  */
 QwtPlotDict::~QwtPlotDict()
 {
-    detachItems( QwtPlotItem::Rtti_PlotItem, m_data->autoDelete );
-    delete m_data;
+  detachItems(QwtPlotItem::Rtti_PlotItem, m_data->autoDelete);
+  delete m_data;
 }
 
 /*!
@@ -92,9 +92,9 @@ QwtPlotDict::~QwtPlotDict()
 
    \sa autoDelete(), insertItem()
  */
-void QwtPlotDict::setAutoDelete( bool autoDelete )
+void QwtPlotDict::setAutoDelete(bool autoDelete)
 {
-    m_data->autoDelete = autoDelete;
+  m_data->autoDelete = autoDelete;
 }
 
 /*!
@@ -103,7 +103,7 @@ void QwtPlotDict::setAutoDelete( bool autoDelete )
  */
 bool QwtPlotDict::autoDelete() const
 {
-    return m_data->autoDelete;
+  return m_data->autoDelete;
 }
 
 /*!
@@ -112,9 +112,9 @@ bool QwtPlotDict::autoDelete() const
    \param item PlotItem
    \sa removeItem()
  */
-void QwtPlotDict::insertItem( QwtPlotItem* item )
+void QwtPlotDict::insertItem(QwtPlotItem *item)
 {
-    m_data->itemList.insertItem( item );
+  m_data->itemList.insertItem(item);
 }
 
 /*!
@@ -123,9 +123,9 @@ void QwtPlotDict::insertItem( QwtPlotItem* item )
    \param item PlotItem
    \sa insertItem()
  */
-void QwtPlotDict::removeItem( QwtPlotItem* item )
+void QwtPlotDict::removeItem(QwtPlotItem *item)
 {
-    m_data->itemList.removeItem( item );
+  m_data->itemList.removeItem(item);
 }
 
 /*!
@@ -135,23 +135,23 @@ void QwtPlotDict::removeItem( QwtPlotItem* item )
                otherwise only those items of the type rtti.
    \param autoDelete If true, delete all detached items
  */
-void QwtPlotDict::detachItems( int rtti, bool autoDelete )
+void QwtPlotDict::detachItems(int rtti, bool autoDelete)
 {
-    PrivateData::ItemList list = m_data->itemList;
-    QwtPlotItemIterator it = list.constBegin();
-    while ( it != list.constEnd() )
+  PrivateData::ItemList list = m_data->itemList;
+  QwtPlotItemIterator it = list.constBegin();
+  while (it != list.constEnd())
+  {
+    QwtPlotItem *item = *it;
+
+    ++it; // increment before removing item from the list
+
+    if (rtti == QwtPlotItem::Rtti_PlotItem || item->rtti() == rtti)
     {
-        QwtPlotItem* item = *it;
-
-        ++it; // increment before removing item from the list
-
-        if ( rtti == QwtPlotItem::Rtti_PlotItem || item->rtti() == rtti )
-        {
-            item->attach( NULL );
-            if ( autoDelete )
-                delete item;
-        }
+      item->attach(NULL);
+      if (autoDelete)
+        delete item;
     }
+  }
 }
 
 /*!
@@ -163,9 +163,9 @@ void QwtPlotDict::detachItems( int rtti, bool autoDelete )
 
    \return List of all attached plot items.
  */
-const QwtPlotItemList& QwtPlotDict::itemList() const
+const QwtPlotItemList &QwtPlotDict::itemList() const
 {
-    return m_data->itemList;
+  return m_data->itemList;
 }
 
 /*!
@@ -173,20 +173,20 @@ const QwtPlotItemList& QwtPlotDict::itemList() const
    \param rtti See QwtPlotItem::RttiValues
    \sa QwtPlotItem::rtti()
  */
-QwtPlotItemList QwtPlotDict::itemList( int rtti ) const
+QwtPlotItemList QwtPlotDict::itemList(int rtti) const
 {
-    if ( rtti == QwtPlotItem::Rtti_PlotItem )
-        return m_data->itemList;
+  if (rtti == QwtPlotItem::Rtti_PlotItem)
+    return m_data->itemList;
 
-    QwtPlotItemList items;
+  QwtPlotItemList items;
 
-    PrivateData::ItemList list = m_data->itemList;
-    for ( QwtPlotItemIterator it = list.constBegin(); it != list.constEnd(); ++it )
-    {
-        QwtPlotItem* item = *it;
-        if ( item->rtti() == rtti )
-            items += item;
-    }
+  PrivateData::ItemList list = m_data->itemList;
+  for (QwtPlotItemIterator it = list.constBegin(); it != list.constEnd(); ++it)
+  {
+    QwtPlotItem *item = *it;
+    if (item->rtti() == rtti)
+      items += item;
+  }
 
-    return items;
+  return items;
 }

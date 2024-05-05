@@ -21,87 +21,86 @@
 
 class QWT_EXPORT QwtInterval
 {
-  public:
-    /*!
-       Flag indicating if a border is included or excluded
-       \sa setBorderFlags(), borderFlags()
-     */
-    enum BorderFlag
-    {
-        //! Min/Max values are inside the interval
-        IncludeBorders = 0x00,
+public:
+  /*!
+     Flag indicating if a border is included or excluded
+     \sa setBorderFlags(), borderFlags()
+   */
+  enum BorderFlag
+  {
+    //! Min/Max values are inside the interval
+    IncludeBorders = 0x00,
 
-        //! Min value is not included in the interval
-        ExcludeMinimum = 0x01,
+    //! Min value is not included in the interval
+    ExcludeMinimum = 0x01,
 
-        //! Max value is not included in the interval
-        ExcludeMaximum = 0x02,
+    //! Max value is not included in the interval
+    ExcludeMaximum = 0x02,
 
-        //! Min/Max values are not included in the interval
-        ExcludeBorders = ExcludeMinimum | ExcludeMaximum
-    };
+    //! Min/Max values are not included in the interval
+    ExcludeBorders = ExcludeMinimum | ExcludeMaximum
+  };
 
-    //! Border flags
-    Q_DECLARE_FLAGS( BorderFlags, BorderFlag )
+  //! Border flags
+  Q_DECLARE_FLAGS(BorderFlags, BorderFlag)
 
-    QwtInterval();
-    QwtInterval( double minValue, double maxValue,
-        BorderFlags = IncludeBorders );
+  QwtInterval();
+  QwtInterval(double minValue, double maxValue, BorderFlags = IncludeBorders);
 
-    void setInterval( double minValue, double maxValue,
-        BorderFlags = IncludeBorders );
+  void setInterval(double minValue, double maxValue,
+                   BorderFlags = IncludeBorders);
 
-    QwtInterval normalized() const;
-    QwtInterval inverted() const;
-    QwtInterval limited( double lowerBound, double upperBound ) const;
+  QwtInterval normalized() const;
+  QwtInterval inverted() const;
+  QwtInterval limited(double lowerBound, double upperBound) const;
 
-    bool operator==( const QwtInterval& ) const;
-    bool operator!=( const QwtInterval& ) const;
+  bool operator==(const QwtInterval &) const;
+  bool operator!=(const QwtInterval &) const;
 
-    void setBorderFlags( BorderFlags );
-    BorderFlags borderFlags() const;
+  void setBorderFlags(BorderFlags);
+  BorderFlags borderFlags() const;
 
-    double minValue() const;
-    double maxValue() const;
+  double minValue() const;
+  double maxValue() const;
 
-    double width() const;
-    long double widthL() const;
+  double width() const;
+  long double widthL() const;
 
-    void setMinValue( double );
-    void setMaxValue( double );
+  void setMinValue(double);
+  void setMaxValue(double);
 
-    bool contains( double value ) const;
-    bool contains( const QwtInterval& ) const;
+  bool contains(double value) const;
+  bool contains(const QwtInterval &) const;
 
-    bool intersects( const QwtInterval& ) const;
-    QwtInterval intersect( const QwtInterval& ) const;
-    QwtInterval unite( const QwtInterval& ) const;
+  bool intersects(const QwtInterval &) const;
+  QwtInterval intersect(const QwtInterval &) const;
+  QwtInterval unite(const QwtInterval &) const;
 
-    QwtInterval operator|( const QwtInterval& ) const;
-    QwtInterval operator&( const QwtInterval& ) const;
+  QwtInterval operator|(const QwtInterval &) const;
+  QwtInterval operator&(const QwtInterval &) const;
 
-    QwtInterval& operator|=( const QwtInterval& );
-    QwtInterval& operator&=( const QwtInterval& );
+  QwtInterval &operator|=(const QwtInterval &);
+  QwtInterval &operator&=(const QwtInterval &);
 
-    QwtInterval extend( double value ) const;
-    QwtInterval operator|( double ) const;
-    QwtInterval& operator|=( double );
+  QwtInterval extend(double value) const;
+  QwtInterval operator|(double) const;
+  QwtInterval &operator|=(double);
 
-    bool isValid() const;
-    bool isNull() const;
-    void invalidate();
+  bool isValid() const;
+  bool isNull() const;
+  void invalidate();
 
-    QwtInterval symmetrize( double value ) const;
+  QwtInterval symmetrize(double value) const;
 
-  private:
-    double m_minValue;
-    double m_maxValue;
-    BorderFlags m_borderFlags;
+private:
+  double m_minValue;
+  double m_maxValue;
+  BorderFlags m_borderFlags;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtInterval::BorderFlags )
-Q_DECLARE_METATYPE( QwtInterval )
-Q_DECLARE_TYPEINFO( QwtInterval, Q_MOVABLE_TYPE );
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtInterval::BorderFlags)
+Q_DECLARE_METATYPE(QwtInterval)
+Q_DECLARE_TYPEINFO(QwtInterval, Q_MOVABLE_TYPE);
 
 /*!
    \brief Default Constructor
@@ -110,9 +109,9 @@ Q_DECLARE_TYPEINFO( QwtInterval, Q_MOVABLE_TYPE );
    \sa setInterval(), isValid()
  */
 inline QwtInterval::QwtInterval()
-    : m_minValue( 0.0 )
-    , m_maxValue( -1.0 )
-    , m_borderFlags( IncludeBorders )
+  : m_minValue(0.0)
+  , m_maxValue(-1.0)
+  , m_borderFlags(IncludeBorders)
 {
 }
 
@@ -125,11 +124,11 @@ inline QwtInterval::QwtInterval()
    \param maxValue Maximum value
    \param borderFlags Include/Exclude borders
  */
-inline QwtInterval::QwtInterval(
-        double minValue, double maxValue, BorderFlags borderFlags )
-    : m_minValue( minValue )
-    , m_maxValue( maxValue )
-    , m_borderFlags( borderFlags )
+inline QwtInterval::QwtInterval(double minValue, double maxValue,
+                                BorderFlags borderFlags)
+  : m_minValue(minValue)
+  , m_maxValue(maxValue)
+  , m_borderFlags(borderFlags)
 {
 }
 
@@ -140,12 +139,12 @@ inline QwtInterval::QwtInterval(
    \param maxValue Maximum value
    \param borderFlags Include/Exclude borders
  */
-inline void QwtInterval::setInterval(
-    double minValue, double maxValue, BorderFlags borderFlags )
+inline void QwtInterval::setInterval(double minValue, double maxValue,
+                                     BorderFlags borderFlags)
 {
-    m_minValue = minValue;
-    m_maxValue = maxValue;
-    m_borderFlags = borderFlags;
+  m_minValue = minValue;
+  m_maxValue = maxValue;
+  m_borderFlags = borderFlags;
 }
 
 /*!
@@ -154,9 +153,9 @@ inline void QwtInterval::setInterval(
    \param borderFlags Or'd BorderMode flags
    \sa borderFlags()
  */
-inline void QwtInterval::setBorderFlags( BorderFlags borderFlags )
+inline void QwtInterval::setBorderFlags(BorderFlags borderFlags)
 {
-    m_borderFlags = borderFlags;
+  m_borderFlags = borderFlags;
 }
 
 /*!
@@ -165,7 +164,7 @@ inline void QwtInterval::setBorderFlags( BorderFlags borderFlags )
  */
 inline QwtInterval::BorderFlags QwtInterval::borderFlags() const
 {
-    return m_borderFlags;
+  return m_borderFlags;
 }
 
 /*!
@@ -173,9 +172,9 @@ inline QwtInterval::BorderFlags QwtInterval::borderFlags() const
 
    \param minValue Minimum value
  */
-inline void QwtInterval::setMinValue( double minValue )
+inline void QwtInterval::setMinValue(double minValue)
 {
-    m_minValue = minValue;
+  m_minValue = minValue;
 }
 
 /*!
@@ -183,21 +182,21 @@ inline void QwtInterval::setMinValue( double minValue )
 
    \param maxValue Maximum value
  */
-inline void QwtInterval::setMaxValue( double maxValue )
+inline void QwtInterval::setMaxValue(double maxValue)
 {
-    m_maxValue = maxValue;
+  m_maxValue = maxValue;
 }
 
 //! \return Lower limit of the interval
 inline double QwtInterval::minValue() const
 {
-    return m_minValue;
+  return m_minValue;
 }
 
 //! \return Upper limit of the interval
 inline double QwtInterval::maxValue() const
 {
-    return m_maxValue;
+  return m_maxValue;
 }
 
 /*!
@@ -209,10 +208,10 @@ inline double QwtInterval::maxValue() const
  */
 inline bool QwtInterval::isValid() const
 {
-    if ( ( m_borderFlags & ExcludeBorders ) == 0 )
-        return m_minValue <= m_maxValue;
-    else
-        return m_minValue < m_maxValue;
+  if ((m_borderFlags & ExcludeBorders) == 0)
+    return m_minValue <= m_maxValue;
+  else
+    return m_minValue < m_maxValue;
 }
 
 /*!
@@ -226,7 +225,7 @@ inline bool QwtInterval::isValid() const
  */
 inline double QwtInterval::width() const
 {
-    return isValid() ? ( m_maxValue - m_minValue ) : 0.0;
+  return isValid() ? (m_maxValue - m_minValue) : 0.0;
 }
 
 /*!
@@ -240,11 +239,11 @@ inline double QwtInterval::width() const
  */
 inline long double QwtInterval::widthL() const
 {
-    if ( !isValid() )
-        return 0.0;
+  if (!isValid())
+    return 0.0;
 
-    return static_cast< long double >( m_maxValue )
-           - static_cast< long double >( m_minValue );
+  return static_cast<long double>(m_maxValue)
+         - static_cast<long double>(m_minValue);
 }
 
 /*!
@@ -255,10 +254,9 @@ inline long double QwtInterval::widthL() const
 
    \sa intersect()
  */
-inline QwtInterval QwtInterval::operator&(
-    const QwtInterval& other ) const
+inline QwtInterval QwtInterval::operator&(const QwtInterval &other) const
 {
-    return intersect( other );
+  return intersect(other);
 }
 
 /*!
@@ -269,10 +267,9 @@ inline QwtInterval QwtInterval::operator&(
 
    \sa unite()
  */
-inline QwtInterval QwtInterval::operator|(
-    const QwtInterval& other ) const
+inline QwtInterval QwtInterval::operator|(const QwtInterval &other) const
 {
-    return unite( other );
+  return unite(other);
 }
 
 /*!
@@ -281,11 +278,10 @@ inline QwtInterval QwtInterval::operator|(
    \param other Interval to compare with
    \return True, when this and other are equal
  */
-inline bool QwtInterval::operator==( const QwtInterval& other ) const
+inline bool QwtInterval::operator==(const QwtInterval &other) const
 {
-    return ( m_minValue == other.m_minValue ) &&
-           ( m_maxValue == other.m_maxValue ) &&
-           ( m_borderFlags == other.m_borderFlags );
+  return (m_minValue == other.m_minValue) && (m_maxValue == other.m_maxValue)
+         && (m_borderFlags == other.m_borderFlags);
 }
 /*!
    \brief Compare two intervals
@@ -293,9 +289,9 @@ inline bool QwtInterval::operator==( const QwtInterval& other ) const
    \param other Interval to compare with
    \return True, when this and other are not equal
  */
-inline bool QwtInterval::operator!=( const QwtInterval& other ) const
+inline bool QwtInterval::operator!=(const QwtInterval &other) const
 {
-    return ( !( *this == other ) );
+  return (!(*this == other));
 }
 
 /*!
@@ -305,15 +301,15 @@ inline bool QwtInterval::operator!=( const QwtInterval& other ) const
    \return Extended interval
    \sa extend()
  */
-inline QwtInterval QwtInterval::operator|( double value ) const
+inline QwtInterval QwtInterval::operator|(double value) const
 {
-    return extend( value );
+  return extend(value);
 }
 
 //! \return true, if isValid() && (minValue() >= maxValue())
 inline bool QwtInterval::isNull() const
 {
-    return isValid() && m_minValue >= m_maxValue;
+  return isValid() && m_minValue >= m_maxValue;
 }
 
 /*!
@@ -324,12 +320,12 @@ inline bool QwtInterval::isNull() const
  */
 inline void QwtInterval::invalidate()
 {
-    m_minValue = 0.0;
-    m_maxValue = -1.0;
+  m_minValue = 0.0;
+  m_maxValue = -1.0;
 }
 
 #ifndef QT_NO_DEBUG_STREAM
-QWT_EXPORT QDebug operator<<( QDebug, const QwtInterval& );
+QWT_EXPORT QDebug operator<<(QDebug, const QwtInterval &);
 #endif
 
 #endif

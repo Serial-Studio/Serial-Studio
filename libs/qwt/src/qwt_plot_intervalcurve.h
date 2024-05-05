@@ -14,7 +14,8 @@
 #include "qwt_plot_seriesitem.h"
 
 class QwtIntervalSymbol;
-template< typename T > class QwtSeriesData;
+template<typename T>
+class QwtSeriesData;
 
 /*!
    \brief QwtPlotIntervalCurve represents a series of samples, where each value
@@ -24,112 +25,108 @@ template< typename T > class QwtSeriesData;
    that is displayed for each interval. QwtPlotIntervalCurve might be used
    to display error bars or the area between 2 curves.
  */
-class QWT_EXPORT QwtPlotIntervalCurve
-    : public QwtPlotSeriesItem
-    , public QwtSeriesStore< QwtIntervalSample >
+class QWT_EXPORT QwtPlotIntervalCurve : public QwtPlotSeriesItem,
+                                        public QwtSeriesStore<QwtIntervalSample>
 {
-  public:
+public:
+  /*!
+      \brief Curve styles.
+      The default setting is QwtPlotIntervalCurve::Tube.
+
+      \sa setStyle(), style()
+   */
+  enum CurveStyle
+  {
     /*!
-        \brief Curve styles.
-        The default setting is QwtPlotIntervalCurve::Tube.
-
-        \sa setStyle(), style()
+       Don't draw a curve. Note: This doesn't affect the symbols.
      */
-    enum CurveStyle
-    {
-        /*!
-           Don't draw a curve. Note: This doesn't affect the symbols.
-         */
-        NoCurve,
-
-        /*!
-           Build 2 curves from the upper and lower limits of the intervals
-           and draw them with the pen(). The area between the curves is
-           filled with the brush().
-         */
-        Tube,
-
-        /*!
-           Styles >= QwtPlotIntervalCurve::UserCurve are reserved for derived
-           classes that overload drawSeries() with
-           additional application specific curve types.
-         */
-        UserCurve = 100
-    };
+    NoCurve,
 
     /*!
-        Attributes to modify the drawing algorithm.
-        \sa setPaintAttribute(), testPaintAttribute()
+       Build 2 curves from the upper and lower limits of the intervals
+       and draw them with the pen(). The area between the curves is
+       filled with the brush().
      */
-    enum PaintAttribute
-    {
-        /*!
-           Clip polygons before painting them. In situations, where points
-           are far outside the visible area (f.e when zooming deep) this
-           might be a substantial improvement for the painting performance.
-         */
-        ClipPolygons = 0x01,
+    Tube,
 
-        //! Check if a symbol is on the plot canvas before painting it.
-        ClipSymbol   = 0x02
-    };
+    /*!
+       Styles >= QwtPlotIntervalCurve::UserCurve are reserved for derived
+       classes that overload drawSeries() with
+       additional application specific curve types.
+     */
+    UserCurve = 100
+  };
 
-    Q_DECLARE_FLAGS( PaintAttributes, PaintAttribute )
+  /*!
+      Attributes to modify the drawing algorithm.
+      \sa setPaintAttribute(), testPaintAttribute()
+   */
+  enum PaintAttribute
+  {
+    /*!
+       Clip polygons before painting them. In situations, where points
+       are far outside the visible area (f.e when zooming deep) this
+       might be a substantial improvement for the painting performance.
+     */
+    ClipPolygons = 0x01,
 
-    explicit QwtPlotIntervalCurve( const QString& title = QString() );
-    explicit QwtPlotIntervalCurve( const QwtText& title );
+    //! Check if a symbol is on the plot canvas before painting it.
+    ClipSymbol = 0x02
+  };
 
-    virtual ~QwtPlotIntervalCurve();
+  Q_DECLARE_FLAGS(PaintAttributes, PaintAttribute)
 
-    virtual int rtti() const QWT_OVERRIDE;
+  explicit QwtPlotIntervalCurve(const QString &title = QString());
+  explicit QwtPlotIntervalCurve(const QwtText &title);
 
-    void setPaintAttribute( PaintAttribute, bool on = true );
-    bool testPaintAttribute( PaintAttribute ) const;
+  virtual ~QwtPlotIntervalCurve();
 
-    void setSamples( const QVector< QwtIntervalSample >& );
-    void setSamples( QwtSeriesData< QwtIntervalSample >* );
+  virtual int rtti() const QWT_OVERRIDE;
 
-    void setPen( const QColor&,
-        qreal width = 0.0, Qt::PenStyle = Qt::SolidLine );
+  void setPaintAttribute(PaintAttribute, bool on = true);
+  bool testPaintAttribute(PaintAttribute) const;
 
-    void setPen( const QPen& );
-    const QPen& pen() const;
+  void setSamples(const QVector<QwtIntervalSample> &);
+  void setSamples(QwtSeriesData<QwtIntervalSample> *);
 
-    void setBrush( const QBrush& );
-    const QBrush& brush() const;
+  void setPen(const QColor &, qreal width = 0.0, Qt::PenStyle = Qt::SolidLine);
 
-    void setStyle( CurveStyle style );
-    CurveStyle style() const;
+  void setPen(const QPen &);
+  const QPen &pen() const;
 
-    void setSymbol( const QwtIntervalSymbol* );
-    const QwtIntervalSymbol* symbol() const;
+  void setBrush(const QBrush &);
+  const QBrush &brush() const;
 
-    virtual void drawSeries( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, int from, int to ) const QWT_OVERRIDE;
+  void setStyle(CurveStyle style);
+  CurveStyle style() const;
 
-    virtual QRectF boundingRect() const QWT_OVERRIDE;
+  void setSymbol(const QwtIntervalSymbol *);
+  const QwtIntervalSymbol *symbol() const;
 
-    virtual QwtGraphic legendIcon(
-        int index, const QSizeF& ) const QWT_OVERRIDE;
+  virtual void drawSeries(QPainter *, const QwtScaleMap &xMap,
+                          const QwtScaleMap &yMap, const QRectF &canvasRect,
+                          int from, int to) const QWT_OVERRIDE;
 
-  protected:
+  virtual QRectF boundingRect() const QWT_OVERRIDE;
 
-    void init();
+  virtual QwtGraphic legendIcon(int index, const QSizeF &) const QWT_OVERRIDE;
 
-    virtual void drawTube( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, int from, int to ) const;
+protected:
+  void init();
 
-    virtual void drawSymbols( QPainter*, const QwtIntervalSymbol&,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, int from, int to ) const;
+  virtual void drawTube(QPainter *, const QwtScaleMap &xMap,
+                        const QwtScaleMap &yMap, const QRectF &canvasRect,
+                        int from, int to) const;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+  virtual void drawSymbols(QPainter *, const QwtIntervalSymbol &,
+                           const QwtScaleMap &xMap, const QwtScaleMap &yMap,
+                           const QRectF &canvasRect, int from, int to) const;
+
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPlotIntervalCurve::PaintAttributes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPlotIntervalCurve::PaintAttributes)
 
 #endif

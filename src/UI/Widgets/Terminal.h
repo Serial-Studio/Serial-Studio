@@ -30,39 +30,40 @@ namespace Widgets
 class FormattedText
 {
 public:
-    FormattedText() = default;
-    FormattedText(const FormattedText &other) = default;
-    FormattedText(const QString &txt, const QTextCharFormat &fmt = QTextCharFormat())
-        : text(txt)
-        , format(fmt)
-    {
-    }
+  FormattedText() = default;
+  FormattedText(const FormattedText &other) = default;
+  FormattedText(const QString &txt,
+                const QTextCharFormat &fmt = QTextCharFormat())
+    : text(txt)
+    , format(fmt)
+  {
+  }
 
-    QString text;
-    QTextCharFormat format;
+  QString text;
+  QTextCharFormat format;
 };
 
 class AnsiEscapeCodeHandler
 {
 public:
-    QVector<FormattedText> parseText(const FormattedText &input);
-    void setTextEdit(QPlainTextEdit *widget);
-    void endFormatScope();
+  QVector<FormattedText> parseText(const FormattedText &input);
+  void setTextEdit(QPlainTextEdit *widget);
+  void endFormatScope();
 
 private:
-    void setFormatScope(const QTextCharFormat &charFormat);
+  void setFormatScope(const QTextCharFormat &charFormat);
 
-    QString m_pendingText;
-    QPlainTextEdit *textEdit;
-    QString m_alternateTerminator;
-    QTextCharFormat m_previousFormat;
-    bool m_previousFormatClosed = true;
-    bool m_waitingForTerminator = false;
+  QString m_pendingText;
+  QPlainTextEdit *textEdit;
+  QString m_alternateTerminator;
+  QTextCharFormat m_previousFormat;
+  bool m_previousFormatClosed = true;
+  bool m_waitingForTerminator = false;
 };
 
 class Terminal : public UI::DeclarativeWidget
 {
-    // clang-format off
+  // clang-format off
     Q_OBJECT
     Q_PROPERTY(QFont font
                READ font
@@ -122,85 +123,85 @@ class Terminal : public UI::DeclarativeWidget
                READ vt100emulation
                WRITE setVt100Emulation
                NOTIFY vt100EmulationChanged)
-    // clang-format on
+  // clang-format on
 
 Q_SIGNALS:
-    void textChanged();
-    void fontChanged();
-    void readOnlyChanged();
-    void autoscrollChanged();
-    void colorPaletteChanged();
-    void wordWrapModeChanged();
-    void copyAvailableChanged();
-    void widgetEnabledChanged();
-    void scrollbarWidthChanged();
-    void centerOnScrollChanged();
-    void vt100EmulationChanged();
-    void placeholderTextChanged();
-    void undoRedoEnabledChanged();
-    void maximumBlockCountChanged();
+  void textChanged();
+  void fontChanged();
+  void readOnlyChanged();
+  void autoscrollChanged();
+  void colorPaletteChanged();
+  void wordWrapModeChanged();
+  void copyAvailableChanged();
+  void widgetEnabledChanged();
+  void scrollbarWidthChanged();
+  void centerOnScrollChanged();
+  void vt100EmulationChanged();
+  void placeholderTextChanged();
+  void undoRedoEnabledChanged();
+  void maximumBlockCountChanged();
 
 public:
-    Terminal(QQuickItem *parent = 0);
+  Terminal(QQuickItem *parent = 0);
 
-    QFont font() const;
-    QString text() const;
+  QFont font() const;
+  QString text() const;
 
-    bool empty() const;
-    bool readOnly() const;
-    bool autoscroll() const;
-    QPalette palette() const;
-    int wordWrapMode() const;
-    int scrollbarWidth() const;
-    bool copyAvailable() const;
-    bool widgetEnabled() const;
-    bool centerOnScroll() const;
-    bool vt100emulation() const;
-    bool undoRedoEnabled() const;
-    int maximumBlockCount() const;
-    QString placeholderText() const;
-    QTextDocument *document() const;
+  bool empty() const;
+  bool readOnly() const;
+  bool autoscroll() const;
+  QPalette palette() const;
+  int wordWrapMode() const;
+  int scrollbarWidth() const;
+  bool copyAvailable() const;
+  bool widgetEnabled() const;
+  bool centerOnScroll() const;
+  bool vt100emulation() const;
+  bool undoRedoEnabled() const;
+  int maximumBlockCount() const;
+  QString placeholderText() const;
+  QTextDocument *document() const;
 
 public Q_SLOTS:
-    void copy();
-    void clear();
-    void selectAll();
-    void clearSelection();
-    void setReadOnly(const bool ro);
-    void setFont(const QFont &font);
-    void append(const QString &text);
-    void setText(const QString &text);
-    void insertText(const QString &text);
-    void setWordWrapMode(const int mode);
-    void setAutoscroll(const bool enabled);
-    void setScrollbarWidth(const int width);
-    void setPalette(const QPalette &palette);
-    void setWidgetEnabled(const bool enabled);
-    void setCenterOnScroll(const bool enabled);
-    void setVt100Emulation(const bool enabled);
-    void setUndoRedoEnabled(const bool enabled);
-    void setPlaceholderText(const QString &text);
-    void scrollToBottom(const bool repaint = false);
-    void setMaximumBlockCount(const int maxBlockCount);
+  void copy();
+  void clear();
+  void selectAll();
+  void clearSelection();
+  void setReadOnly(const bool ro);
+  void setFont(const QFont &font);
+  void append(const QString &text);
+  void setText(const QString &text);
+  void insertText(const QString &text);
+  void setWordWrapMode(const int mode);
+  void setAutoscroll(const bool enabled);
+  void setScrollbarWidth(const int width);
+  void setPalette(const QPalette &palette);
+  void setWidgetEnabled(const bool enabled);
+  void setCenterOnScroll(const bool enabled);
+  void setVt100Emulation(const bool enabled);
+  void setUndoRedoEnabled(const bool enabled);
+  void setPlaceholderText(const QString &text);
+  void scrollToBottom(const bool repaint = false);
+  void setMaximumBlockCount(const int maxBlockCount);
 
 private Q_SLOTS:
-    void repaint();
-    void updateScrollbarVisibility();
-    void setCopyAvailable(const bool yes);
-    void addText(const QString &text, const bool enableVt100);
+  void repaint();
+  void updateScrollbarVisibility();
+  void setCopyAvailable(const bool yes);
+  void addText(const QString &text, const bool enableVt100);
 
 private:
-    QString vt100Processing(const QString &data);
-    void requestRepaint(const bool textChanged = false);
+  QString vt100Processing(const QString &data);
+  void requestRepaint(const bool textChanged = false);
 
 private:
-    bool m_repaint;
-    bool m_autoscroll;
-    bool m_textChanged;
-    bool m_emulateVt100;
-    bool m_copyAvailable;
+  bool m_repaint;
+  bool m_autoscroll;
+  bool m_textChanged;
+  bool m_emulateVt100;
+  bool m_copyAvailable;
 
-    QPlainTextEdit m_textEdit;
-    AnsiEscapeCodeHandler m_escapeCodeHandler;
+  QPlainTextEdit m_textEdit;
+  AnsiEscapeCodeHandler m_escapeCodeHandler;
 };
-}
+} // namespace Widgets

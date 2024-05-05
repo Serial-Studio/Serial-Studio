@@ -26,32 +26,33 @@ class QPainterPath;
     the head size and width of the arrow. It is _always_ called before
     paint().
 
-    A new arrow implementation can be set with QwtPlotVectorField::setArrowSymbol(), whereby
-    ownership is transferred to the plot field.
+    A new arrow implementation can be set with
+   QwtPlotVectorField::setArrowSymbol(), whereby ownership is transferred to the
+   plot field.
  */
 class QWT_EXPORT QwtVectorFieldSymbol
 {
-  public:
-    QwtVectorFieldSymbol();
-    virtual ~QwtVectorFieldSymbol();
+public:
+  QwtVectorFieldSymbol();
+  virtual ~QwtVectorFieldSymbol();
 
-    /*!
-        Set the length of the symbol/arrow
-        \sa length()
-     */
-    virtual void setLength( qreal length ) = 0;
+  /*!
+      Set the length of the symbol/arrow
+      \sa length()
+   */
+  virtual void setLength(qreal length) = 0;
 
-    /*!
-        \return length of the symbol/arrow
-        \sa setLength()
-     */
-    virtual qreal length() const = 0;
+  /*!
+      \return length of the symbol/arrow
+      \sa setLength()
+   */
+  virtual qreal length() const = 0;
 
-    //! Draw the symbol/arrow
-    virtual void paint( QPainter* ) const = 0;
+  //! Draw the symbol/arrow
+  virtual void paint(QPainter *) const = 0;
 
-  private:
-    Q_DISABLE_COPY(QwtVectorFieldSymbol)
+private:
+  Q_DISABLE_COPY(QwtVectorFieldSymbol)
 };
 
 /*!
@@ -60,38 +61,38 @@ class QWT_EXPORT QwtVectorFieldSymbol
  */
 class QWT_EXPORT QwtVectorFieldArrow : public QwtVectorFieldSymbol
 {
-  public:
-    QwtVectorFieldArrow( qreal headWidth = 6.0, qreal tailWidth = 1.0 );
-    virtual ~QwtVectorFieldArrow() QWT_OVERRIDE;
+public:
+  QwtVectorFieldArrow(qreal headWidth = 6.0, qreal tailWidth = 1.0);
+  virtual ~QwtVectorFieldArrow() QWT_OVERRIDE;
 
-    virtual void setLength( qreal length ) QWT_OVERRIDE;
-    virtual qreal length() const QWT_OVERRIDE;
+  virtual void setLength(qreal length) QWT_OVERRIDE;
+  virtual qreal length() const QWT_OVERRIDE;
 
-    virtual void paint( QPainter* ) const QWT_OVERRIDE;
+  virtual void paint(QPainter *) const QWT_OVERRIDE;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 /*!
-    Arrow implementation that only used lines, with optionally a filled arrow or only
-    lines.
+    Arrow implementation that only used lines, with optionally a filled arrow or
+   only lines.
  */
 class QWT_EXPORT QwtVectorFieldThinArrow : public QwtVectorFieldSymbol
 {
-  public:
-    QwtVectorFieldThinArrow( qreal headWidth = 6.0 );
-    virtual ~QwtVectorFieldThinArrow() QWT_OVERRIDE;
+public:
+  QwtVectorFieldThinArrow(qreal headWidth = 6.0);
+  virtual ~QwtVectorFieldThinArrow() QWT_OVERRIDE;
 
-    virtual void setLength( qreal length ) QWT_OVERRIDE;
-    virtual qreal length() const QWT_OVERRIDE;
+  virtual void setLength(qreal length) QWT_OVERRIDE;
+  virtual qreal length() const QWT_OVERRIDE;
 
-    virtual void paint( QPainter* ) const QWT_OVERRIDE;
+  virtual void paint(QPainter *) const QWT_OVERRIDE;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

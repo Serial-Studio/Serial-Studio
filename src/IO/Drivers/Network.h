@@ -43,7 +43,7 @@ namespace Drivers
  */
 class Network : public HAL_Driver
 {
-    // clang-format off
+  // clang-format off
     Q_OBJECT
     Q_PROPERTY(QString remoteAddress
                READ remoteAddress
@@ -95,89 +95,89 @@ class Network : public HAL_Driver
                READ udpIgnoreFrameSequences
                WRITE setUdpIgnoreFrameSequences
                NOTIFY udpIgnoreFrameSequencesChanged)
-    // clang-format on
+  // clang-format on
 
 Q_SIGNALS:
-    void portChanged();
-    void addressChanged();
-    void socketTypeChanged();
-    void udpMulticastChanged();
-    void lookupActiveChanged();
-    void udpIgnoreFrameSequencesChanged();
+  void portChanged();
+  void addressChanged();
+  void socketTypeChanged();
+  void udpMulticastChanged();
+  void lookupActiveChanged();
+  void udpIgnoreFrameSequencesChanged();
 
 private:
-    explicit Network();
-    Network(Network &&) = delete;
-    Network(const Network &) = delete;
-    Network &operator=(Network &&) = delete;
-    Network &operator=(const Network &) = delete;
+  explicit Network();
+  Network(Network &&) = delete;
+  Network(const Network &) = delete;
+  Network &operator=(Network &&) = delete;
+  Network &operator=(const Network &) = delete;
 
 public:
-    static Network &instance();
+  static Network &instance();
 
-    //
-    // HAL functions
-    //
-    void close() override;
-    bool isOpen() const override;
-    bool isReadable() const override;
-    bool isWritable() const override;
-    bool configurationOk() const override;
-    quint64 write(const QByteArray &data) override;
-    bool open(const QIODevice::OpenMode mode) override;
+  //
+  // HAL functions
+  //
+  void close() override;
+  bool isOpen() const override;
+  bool isReadable() const override;
+  bool isWritable() const override;
+  bool configurationOk() const override;
+  quint64 write(const QByteArray &data) override;
+  bool open(const QIODevice::OpenMode mode) override;
 
-    QString remoteAddress() const;
+  QString remoteAddress() const;
 
-    quint16 tcpPort() const;
-    quint16 udpLocalPort() const;
-    quint16 udpRemotePort() const;
+  quint16 tcpPort() const;
+  quint16 udpLocalPort() const;
+  quint16 udpRemotePort() const;
 
-    bool udpMulticast() const;
-    bool lookupActive() const;
-    int socketTypeIndex() const;
-    StringList socketTypes() const;
-    bool udpIgnoreFrameSequences() const;
-    QAbstractSocket::SocketType socketType() const;
+  bool udpMulticast() const;
+  bool lookupActive() const;
+  int socketTypeIndex() const;
+  StringList socketTypes() const;
+  bool udpIgnoreFrameSequences() const;
+  QAbstractSocket::SocketType socketType() const;
 
-    QTcpSocket *tcpSocket() { return &m_tcpSocket; }
-    QUdpSocket *udpSocket() { return &m_udpSocket; }
+  QTcpSocket *tcpSocket() { return &m_tcpSocket; }
+  QUdpSocket *udpSocket() { return &m_udpSocket; }
 
-    static QString defaultAddress() { return "127.0.0.1"; }
-    static quint16 defaultTcpPort() { return 23; }
-    static quint16 defaultUdpLocalPort() { return 0; }
-    static quint16 defaultUdpRemotePort() { return 53; }
+  static QString defaultAddress() { return "127.0.0.1"; }
+  static quint16 defaultTcpPort() { return 23; }
+  static quint16 defaultUdpLocalPort() { return 0; }
+  static quint16 defaultUdpRemotePort() { return 53; }
 
 public Q_SLOTS:
-    void setTcpSocket();
-    void setUdpSocket();
-    void lookup(const QString &host);
-    void setTcpPort(const quint16 port);
-    void setUdpLocalPort(const quint16 port);
-    void setUdpMulticast(const bool enabled);
-    void setSocketTypeIndex(const int index);
-    void setUdpRemotePort(const quint16 port);
-    void setRemoteAddress(const QString &address);
-    void setUdpIgnoreFrameSequences(const bool ignore);
-    void setSocketType(const QAbstractSocket::SocketType type);
+  void setTcpSocket();
+  void setUdpSocket();
+  void lookup(const QString &host);
+  void setTcpPort(const quint16 port);
+  void setUdpLocalPort(const quint16 port);
+  void setUdpMulticast(const bool enabled);
+  void setSocketTypeIndex(const int index);
+  void setUdpRemotePort(const quint16 port);
+  void setRemoteAddress(const QString &address);
+  void setUdpIgnoreFrameSequences(const bool ignore);
+  void setSocketType(const QAbstractSocket::SocketType type);
 
 private Q_SLOTS:
-    void onReadyRead();
-    void lookupFinished(const QHostInfo &info);
-    void onErrorOccurred(const QAbstractSocket::SocketError socketError);
+  void onReadyRead();
+  void lookupFinished(const QHostInfo &info);
+  void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
-    QString m_address;
-    quint16 m_tcpPort;
-    bool m_hostExists;
-    bool m_udpMulticast;
-    bool m_lookupActive;
-    quint16 m_udpLocalPort;
-    quint16 m_udpRemotePort;
-    bool m_udpIgnoreFrameSequences;
-    QAbstractSocket::SocketType m_socketType;
+  QString m_address;
+  quint16 m_tcpPort;
+  bool m_hostExists;
+  bool m_udpMulticast;
+  bool m_lookupActive;
+  quint16 m_udpLocalPort;
+  quint16 m_udpRemotePort;
+  bool m_udpIgnoreFrameSequences;
+  QAbstractSocket::SocketType m_socketType;
 
-    QTcpSocket m_tcpSocket;
-    QUdpSocket m_udpSocket;
+  QTcpSocket m_tcpSocket;
+  QUdpSocket m_udpSocket;
 };
-}
-}
+} // namespace Drivers
+} // namespace IO

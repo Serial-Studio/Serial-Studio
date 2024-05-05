@@ -1,8 +1,8 @@
 /***********************************************************************
 
 qwindowfunction.cpp - Source file for QWindowFunction,
-					QWindowFunctionManager, QRectangularFunction,
-					QHammingFunction, QHannFunction
+                                        QWindowFunctionManager,
+QRectangularFunction, QHammingFunction, QHannFunction
 
 Template classes necessary for applying a window function to a discrete
 set of samples.
@@ -47,33 +47,33 @@ qrealfourier@gmail.com
 QWindowFunction
 ***********************************************************************/
 
-template <typename T>
+template<typename T>
 void QWindowFunction<T>::apply(T *data, int size)
 {
-	for(int i = 0; i < size; ++i)
-	{
-		data[i] *= mWindow[i];
-	}
+  for (int i = 0; i < size; ++i)
+  {
+    data[i] *= mWindow[i];
+  }
 }
 
-template <typename T>
+template<typename T>
 void QWindowFunction<T>::create(int size)
 {
-	if(size != mWindow.size())
-	{
-		mWindow.clear();
-		mWindow.resize(size);
-		fillWindow(size);
-	}
+  if (size != mWindow.size())
+  {
+    mWindow.clear();
+    mWindow.resize(size);
+    fillWindow(size);
+  }
 }
 
-template <typename T>
+template<typename T>
 void QWindowFunction<T>::fillWindow(int size)
 {
-	for(int i = 0; i < size; ++i)
-	{
-		mWindow[i] = calculate(i, size);
-	}
+  for (int i = 0; i < size; ++i)
+  {
+    mWindow[i] = calculate(i, size);
+  }
 }
 
 template class QWindowFunction<short>;
@@ -86,27 +86,28 @@ template class QWindowFunction<double>;
 QWindowFunctionManager
 ***********************************************************************/
 
-template <typename T>
-QWindowFunction<T>* QWindowFunctionManager<T>::createFunction(QString functionName)
+template<typename T>
+QWindowFunction<T> *
+QWindowFunctionManager<T>::createFunction(QString functionName)
 {
-	functionName = functionName.trimmed().toLower().replace("function", "");
-	if(functionName == "hamming")
-	{
-		return new QHammingFunction<T>;
-	}
-	else if(functionName == "hann")
-	{
-		return new QHannFunction<T>;
-	}
-	return NULL;
+  functionName = functionName.trimmed().toLower().replace("function", "");
+  if (functionName == "hamming")
+  {
+    return new QHammingFunction<T>;
+  }
+  else if (functionName == "hann")
+  {
+    return new QHannFunction<T>;
+  }
+  return NULL;
 }
 
-template <typename T>
+template<typename T>
 QStringList QWindowFunctionManager<T>::functions()
 {
-	QStringList result;
-	result << "Rectangular" << "Hamming" << "Hann";
-	return result;
+  QStringList result;
+  result << "Rectangular" << "Hamming" << "Hann";
+  return result;
 }
 
 template class QWindowFunctionManager<short>;
@@ -119,13 +120,13 @@ template class QWindowFunctionManager<double>;
 QRectangularFunction
 ***********************************************************************/
 
-template <typename T>
+template<typename T>
 T QRectangularFunction<T>::calculate(int currentSample, int totalSamples)
 {
-    (void) currentSample;
-    (void) totalSamples;
+  (void)currentSample;
+  (void)totalSamples;
 
-	return 1.0;
+  return 1.0;
 }
 
 template class QRectangularFunction<short>;
@@ -138,10 +139,10 @@ template class QRectangularFunction<double>;
 QHammingFunction
 ***********************************************************************/
 
-template <typename T>
+template<typename T>
 T QHammingFunction<T>::calculate(int currentSample, int totalSamples)
 {
-	return 0.54 + (0.46 * qCos((2 * M_PI * currentSample) / (totalSamples - 1)));
+  return 0.54 + (0.46 * qCos((2 * M_PI * currentSample) / (totalSamples - 1)));
 }
 
 template class QHammingFunction<short>;
@@ -154,10 +155,10 @@ template class QHammingFunction<double>;
 QHannFunction
 ***********************************************************************/
 
-template <typename T>
+template<typename T>
 T QHannFunction<T>::calculate(int currentSample, int totalSamples)
 {
-	return 0.5 * (1 - qCos((2 * M_PI * currentSample) / (totalSamples - 1)));
+  return 0.5 * (1 - qCos((2 * M_PI * currentSample) / (totalSamples - 1)));
 }
 
 template class QHannFunction<short>;

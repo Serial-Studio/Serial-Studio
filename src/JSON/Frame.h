@@ -49,24 +49,25 @@ namespace JSON
  * 7) UI dashboard feeds JSON data to this class.
  * 8) This class creates a model of the JSON data with the values of the latest
  *    frame.
- * 9) UI dashboard updates the widgets with the C++ model provided by this class.
+ * 9) UI dashboard updates the widgets with the C++ model provided by this
+ * class.
  */
 class Frame
 {
 public:
-    ~Frame();
+  ~Frame();
 
-    void clear();
-    QString title() const;
-    int groupCount() const;
-    QVector<Group> &groups();
-    bool read(const QJsonObject &object);
-    Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
+  void clear();
+  QString title() const;
+  int groupCount() const;
+  QVector<Group> &groups();
+  bool read(const QJsonObject &object);
+  Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
 
-    inline bool isValid() const { return !title().isEmpty() && groupCount() > 0; }
+  inline bool isValid() const { return !title().isEmpty() && groupCount() > 0; }
 
 private:
-    QString m_title;
-    QVector<Group> m_groups;
+  QString m_title;
+  QVector<Group> m_groups;
 };
-}
+} // namespace JSON

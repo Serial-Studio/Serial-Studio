@@ -28,94 +28,94 @@ import "../Widgets" as Widgets
 import "../Dashboard" as DashboardItems
 
 Item {
-    id: root
+  id: root
+
+  //
+  // Main layout
+  //
+  ColumnLayout {
+    anchors.fill: parent
+    spacing: app.spacing
+    anchors.margins: (app.spacing * 1.5) - 5
 
     //
-    // Main layout
+    // Widget selector + widgets
     //
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: app.spacing
-        anchors.margins: (app.spacing * 1.5) - 5
+    RowLayout {
+      spacing: app.spacing
+      Layout.fillWidth: true
+      Layout.fillHeight: true
 
-        //
-        // Widget selector + widgets
-        //
-        RowLayout {
-            spacing: app.spacing
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+      //
+      // View options window
+      //
+      DashboardItems.ViewOptions {
+        Layout.fillHeight: true
+        Layout.minimumWidth: 280
+        onWidgetSizeChanged:(maxSize) => widgetGrid.maxSize = maxSize
+      }
 
-            //
-            // View options window
-            //
-            DashboardItems.ViewOptions {
-                Layout.fillHeight: true
-                Layout.minimumWidth: 280
-                onWidgetSizeChanged:(maxSize) => widgetGrid.maxSize = maxSize
-            }
+      //
+      // Widget grid + console
+      //
+      ColumnLayout {
+        spacing: terminalView.enabled ? app.spacing : 0
 
-            //
-            // Widget grid + console
-            //
-            ColumnLayout {
-                spacing: terminalView.enabled ? app.spacing : 0
-
-                DashboardItems.WidgetGrid {
-                    id: widgetGrid
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.minimumWidth: 240
-                }
-
-
-                Item {
-                    enabled: false
-                    id: terminalView
-                    Layout.fillWidth: true
-                    Layout.fillHeight: false
-                    Layout.maximumHeight: 280
-                    Layout.minimumHeight: 280
-                    visible: Layout.bottomMargin > -Layout.minimumHeight
-                    Layout.bottomMargin: enabled ? 0 : -Layout.minimumHeight
-
-                    Behavior on Layout.bottomMargin { NumberAnimation{} }
-
-                    Widgets.Window {
-                        id: terminal
-                        gradient: true
-                        anchors.fill: parent
-                        title: qsTr("Console")
-                        altButtonEnabled: true
-                        headerDoubleClickEnabled: false
-                        icon.source: "qrc:/icons/code.svg"
-                        altButtonIcon.source: "qrc:/icons/scroll-down.svg"
-                        backgroundColor: Cpp_ThemeManager.paneWindowBackground
-                        onAltButtonClicked: {
-                            terminalView.enabled = false
-                            dbTitle.consoleChecked = false
-                        }
-
-                        Widgets.Terminal {
-                            anchors.fill: parent
-                            widgetEnabled: terminalView.enabled
-                        }
-                    }
-                }
-            }
+        DashboardItems.WidgetGrid {
+          id: widgetGrid
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          Layout.minimumWidth: 240
         }
 
-        //
-        // Dashboard title window
-        //
-        DashboardItems.DashboardTitle {
-            id: dbTitle
-            height: 32
-            Layout.fillWidth: true
-            onConsoleCheckedChanged: {
-                if (terminalView.enabled != consoleChecked)
-                    terminalView.enabled = consoleChecked
+
+        Item {
+          enabled: false
+          id: terminalView
+          Layout.fillWidth: true
+          Layout.fillHeight: false
+          Layout.maximumHeight: 280
+          Layout.minimumHeight: 280
+          visible: Layout.bottomMargin > -Layout.minimumHeight
+          Layout.bottomMargin: enabled ? 0 : -Layout.minimumHeight
+
+          Behavior on Layout.bottomMargin { NumberAnimation{} }
+
+          Widgets.Window {
+            id: terminal
+            gradient: true
+            anchors.fill: parent
+            title: qsTr("Console")
+            altButtonEnabled: true
+            headerDoubleClickEnabled: false
+            icon.source: "qrc:/icons/code.svg"
+            altButtonIcon.source: "qrc:/icons/scroll-down.svg"
+            backgroundColor: Cpp_ThemeManager.paneWindowBackground
+            onAltButtonClicked: {
+              terminalView.enabled = false
+              dbTitle.consoleChecked = false
             }
+
+            Widgets.Terminal {
+              anchors.fill: parent
+              widgetEnabled: terminalView.enabled
+            }
+          }
         }
+      }
     }
+
+    //
+    // Dashboard title window
+    //
+    DashboardItems.DashboardTitle {
+      id: dbTitle
+      height: 32
+      Layout.fillWidth: true
+      onConsoleCheckedChanged: {
+        if (terminalView.enabled != consoleChecked)
+          terminalView.enabled = consoleChecked
+      }
+    }
+  }
 }

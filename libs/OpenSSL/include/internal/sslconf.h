@@ -15,6 +15,7 @@ typedef struct ssl_conf_cmd_st SSL_CONF_CMD;
 
 const SSL_CONF_CMD *conf_ssl_get(size_t idx, const char **name, size_t *cnt);
 int conf_ssl_name_find(const char *name, size_t *idx);
-void conf_ssl_get_cmd(const SSL_CONF_CMD *cmd, size_t idx, char **cmdstr, char **arg);
+void conf_ssl_get_cmd(const SSL_CONF_CMD *cmd, size_t idx, char **cmdstr,
+                      char **arg);
 
 #endif

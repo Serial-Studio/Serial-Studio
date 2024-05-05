@@ -36,116 +36,115 @@ class QwtInterval;
 
 class QWT_EXPORT QwtPlotRasterItem : public QwtPlotItem
 {
-  public:
+public:
+  /*!
+     \brief Cache policy
+     The default policy is NoCache
+   */
+  enum CachePolicy
+  {
     /*!
-       \brief Cache policy
-       The default policy is NoCache
+       renderImage() is called each time the item has to be repainted
      */
-    enum CachePolicy
-    {
-        /*!
-           renderImage() is called each time the item has to be repainted
-         */
-        NoCache,
-
-        /*!
-           renderImage() is called, whenever the image cache is not valid,
-           or the scales, or the size of the canvas has changed.
-
-           This type of cache is useful for improving the performance
-           of hide/show operations or manipulations of the alpha value.
-           All other situations are handled by the canvas backing store.
-         */
-        PaintCache
-    };
+    NoCache,
 
     /*!
-        Attributes to modify the drawing algorithm.
-        \sa setPaintAttribute(), testPaintAttribute()
+       renderImage() is called, whenever the image cache is not valid,
+       or the scales, or the size of the canvas has changed.
+
+       This type of cache is useful for improving the performance
+       of hide/show operations or manipulations of the alpha value.
+       All other situations are handled by the canvas backing store.
      */
-    enum PaintAttribute
-    {
-        /*!
-           When the image is rendered according to the data pixels
-           ( QwtRasterData::pixelHint() ) it can be expanded to paint
-           device resolution before it is passed to QPainter.
-           The expansion algorithm rounds the pixel borders in the same
-           way as the axis ticks, what is usually better than the
-           scaling algorithm implemented in Qt.
-           Disabling this flag might make sense, to reduce the size of a
-           document/file. If this is possible for a document format
-           depends on the implementation of the specific QPaintEngine.
-         */
+    PaintCache
+  };
 
-        PaintInDeviceResolution = 1
-    };
-
-    Q_DECLARE_FLAGS( PaintAttributes, PaintAttribute )
-
-    explicit QwtPlotRasterItem( const QString& title = QString() );
-    explicit QwtPlotRasterItem( const QwtText& title );
-    virtual ~QwtPlotRasterItem();
-
-    void setPaintAttribute( PaintAttribute, bool on = true );
-    bool testPaintAttribute( PaintAttribute ) const;
-
-    void setAlpha( int alpha );
-    int alpha() const;
-
-    void setCachePolicy( CachePolicy );
-    CachePolicy cachePolicy() const;
-
-    void invalidateCache();
-
-    virtual void draw( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect ) const QWT_OVERRIDE;
-
-    virtual QRectF pixelHint( const QRectF& ) const;
-
-    virtual QwtInterval interval(Qt::Axis) const;
-    virtual QRectF boundingRect() const QWT_OVERRIDE;
-
-  protected:
+  /*!
+      Attributes to modify the drawing algorithm.
+      \sa setPaintAttribute(), testPaintAttribute()
+   */
+  enum PaintAttribute
+  {
     /*!
-       \brief Render an image
-
-       An implementation of render() might iterate over all
-       pixels of imageRect. Each pixel has to be translated into
-       the corresponding position in scale coordinates using the maps.
-       This position can be used to look up a value in a implementation
-       specific way and to map it into a color.
-
-       \param xMap X-Scale Map
-       \param yMap Y-Scale Map
-       \param area Requested area for the image in scale coordinates
-       \param imageSize Requested size of the image
-
-       \return Rendered image
+       When the image is rendered according to the data pixels
+       ( QwtRasterData::pixelHint() ) it can be expanded to paint
+       device resolution before it is passed to QPainter.
+       The expansion algorithm rounds the pixel borders in the same
+       way as the axis ticks, what is usually better than the
+       scaling algorithm implemented in Qt.
+       Disabling this flag might make sense, to reduce the size of a
+       document/file. If this is possible for a document format
+       depends on the implementation of the specific QPaintEngine.
      */
-    virtual QImage renderImage( const QwtScaleMap& xMap,
-        const QwtScaleMap& yMap, const QRectF& area,
-        const QSize& imageSize ) const = 0;
 
-    virtual QwtScaleMap imageMap( Qt::Orientation,
-        const QwtScaleMap& map, const QRectF& area,
-        const QSize& imageSize, double pixelSize) const;
+    PaintInDeviceResolution = 1
+  };
 
-  private:
-    explicit QwtPlotRasterItem( const QwtPlotRasterItem& );
-    QwtPlotRasterItem& operator=( const QwtPlotRasterItem& );
+  Q_DECLARE_FLAGS(PaintAttributes, PaintAttribute)
 
-    void init();
+  explicit QwtPlotRasterItem(const QString &title = QString());
+  explicit QwtPlotRasterItem(const QwtText &title);
+  virtual ~QwtPlotRasterItem();
 
-    QImage compose( const QwtScaleMap&, const QwtScaleMap&,
-        const QRectF& imageArea, const QRectF& paintRect,
-        const QSize& imageSize, bool doCache) const;
+  void setPaintAttribute(PaintAttribute, bool on = true);
+  bool testPaintAttribute(PaintAttribute) const;
 
+  void setAlpha(int alpha);
+  int alpha() const;
 
-    class PrivateData;
-    PrivateData* m_data;
+  void setCachePolicy(CachePolicy);
+  CachePolicy cachePolicy() const;
+
+  void invalidateCache();
+
+  virtual void draw(QPainter *, const QwtScaleMap &xMap,
+                    const QwtScaleMap &yMap,
+                    const QRectF &canvasRect) const QWT_OVERRIDE;
+
+  virtual QRectF pixelHint(const QRectF &) const;
+
+  virtual QwtInterval interval(Qt::Axis) const;
+  virtual QRectF boundingRect() const QWT_OVERRIDE;
+
+protected:
+  /*!
+     \brief Render an image
+
+     An implementation of render() might iterate over all
+     pixels of imageRect. Each pixel has to be translated into
+     the corresponding position in scale coordinates using the maps.
+     This position can be used to look up a value in a implementation
+     specific way and to map it into a color.
+
+     \param xMap X-Scale Map
+     \param yMap Y-Scale Map
+     \param area Requested area for the image in scale coordinates
+     \param imageSize Requested size of the image
+
+     \return Rendered image
+   */
+  virtual QImage renderImage(const QwtScaleMap &xMap, const QwtScaleMap &yMap,
+                             const QRectF &area, const QSize &imageSize) const
+      = 0;
+
+  virtual QwtScaleMap imageMap(Qt::Orientation, const QwtScaleMap &map,
+                               const QRectF &area, const QSize &imageSize,
+                               double pixelSize) const;
+
+private:
+  explicit QwtPlotRasterItem(const QwtPlotRasterItem &);
+  QwtPlotRasterItem &operator=(const QwtPlotRasterItem &);
+
+  void init();
+
+  QImage compose(const QwtScaleMap &, const QwtScaleMap &,
+                 const QRectF &imageArea, const QRectF &paintRect,
+                 const QSize &imageSize, bool doCache) const;
+
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPlotRasterItem::PaintAttributes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPlotRasterItem::PaintAttributes)
 
 #endif

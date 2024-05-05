@@ -24,50 +24,51 @@
 
 uint8_t IO::crc8(const char *data, const int length)
 {
-    uint8_t crc = 0xff;
-    for (int i = 0; i < length; i++)
+  uint8_t crc = 0xff;
+  for (int i = 0; i < length; i++)
+  {
+    crc ^= data[i];
+    for (int j = 0; j < 8; j++)
     {
-        crc ^= data[i];
-        for (int j = 0; j < 8; j++)
-        {
-            if ((crc & 0x80) != 0)
-                crc = (uint8_t)((crc << 1) ^ 0x31);
-            else
-                crc <<= 1;
-        }
+      if ((crc & 0x80) != 0)
+        crc = (uint8_t)((crc << 1) ^ 0x31);
+      else
+        crc <<= 1;
     }
+  }
 
-    return crc;
+  return crc;
 }
 
 uint16_t IO::crc16(const char *data, const int length)
 {
-    uint8_t x;
-    uint16_t crc = 0xFFFF;
+  uint8_t x;
+  uint16_t crc = 0xFFFF;
 
-    for (int i = 0; i < length; ++i)
-    {
-        x = crc >> 8 ^ data[i];
-        x ^= x >> 4;
-        crc = (crc << 8) ^ ((uint16_t)(x << 12)) ^ ((uint16_t)(x << 5)) ^ ((uint16_t)x);
-    }
+  for (int i = 0; i < length; ++i)
+  {
+    x = crc >> 8 ^ data[i];
+    x ^= x >> 4;
+    crc = (crc << 8) ^ ((uint16_t)(x << 12)) ^ ((uint16_t)(x << 5))
+          ^ ((uint16_t)x);
+  }
 
-    return crc;
+  return crc;
 }
 
 uint32_t IO::crc32(const char *data, const int length)
 {
-    uint32_t mask;
-    uint32_t crc = 0xFFFFFFFF;
-    for (int i = 0; i < length; ++i)
+  uint32_t mask;
+  uint32_t crc = 0xFFFFFFFF;
+  for (int i = 0; i < length; ++i)
+  {
+    crc = crc ^ data[i];
+    for (int j = 8; j >= 0; j--)
     {
-        crc = crc ^ data[i];
-        for (int j = 8; j >= 0; j--)
-        {
-            mask = -(crc & 1);
-            crc = (crc >> 1) ^ (0xEDB88320 & mask);
-        }
+      mask = -(crc & 1);
+      crc = (crc >> 1) ^ (0xEDB88320 & mask);
     }
+  }
 
-    return ~crc;
+  return ~crc;
 }

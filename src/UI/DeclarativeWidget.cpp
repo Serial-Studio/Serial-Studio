@@ -24,45 +24,46 @@
 #include <UI/DeclarativeWidget.h>
 
 /**
- * Creates a subclass of @c QWidget that allows us to call the given protected/private
+ * Creates a subclass of @c QWidget that allows us to call the given
+ * protected/private
  * @a function and pass the given @a event as a parameter to the @a function.
  */
-#define DW_EXEC_EVENT(pointer, function, event)                                          \
-    if (!pointer.isNull())                                                               \
-    {                                                                                    \
-        class PwnedWidget : public QWidget                                               \
-        {                                                                                \
-        public:                                                                          \
-            using QWidget::function;                                                     \
-        };                                                                               \
-        static_cast<PwnedWidget *>(pointer.data())->function(event);                     \
-        update();                                                                        \
-    }
+#define DW_EXEC_EVENT(pointer, function, event)                                \
+  if (!pointer.isNull())                                                       \
+  {                                                                            \
+    class PwnedWidget : public QWidget                                         \
+    {                                                                          \
+    public:                                                                    \
+      using QWidget::function;                                                 \
+    };                                                                         \
+    static_cast<PwnedWidget *>(pointer.data())->function(event);               \
+    update();                                                                  \
+  }
 
 /**
- * Configures item flags, sets fill color and connects signals/slots to automatically
- * resize the contained widget to the QML item's size.
+ * Configures item flags, sets fill color and connects signals/slots to
+ * automatically resize the contained widget to the QML item's size.
  */
 UI::DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+  : QQuickPaintedItem(parent)
 {
-    setMipmap(true);
-    setAntialiasing(true);
-    setOpaquePainting(true);
-    setAcceptTouchEvents(true);
-    setFlag(ItemHasContents, true);
-    setFlag(ItemIsFocusScope, true);
-    setFlag(ItemAcceptsInputMethod, true);
-    setAcceptedMouseButtons(Qt::AllButtons);
-    setFillColor(Misc::ThemeManager::instance().base());
+  setMipmap(true);
+  setAntialiasing(true);
+  setOpaquePainting(true);
+  setAcceptTouchEvents(true);
+  setFlag(ItemHasContents, true);
+  setFlag(ItemIsFocusScope, true);
+  setFlag(ItemAcceptsInputMethod, true);
+  setAcceptedMouseButtons(Qt::AllButtons);
+  setFillColor(Misc::ThemeManager::instance().base());
 
-    // clang-format off
+  // clang-format off
     connect(this, &QQuickPaintedItem::widthChanged,
             this, &UI::DeclarativeWidget::resizeWidget);
     connect(this, &QQuickPaintedItem::heightChanged,
             this, &UI::DeclarativeWidget::resizeWidget);
     connect(this, &UI::DeclarativeWidget::widgetChanged, [=](){update();});
-    // clang-format on
+  // clang-format on
 }
 
 /**
@@ -70,7 +71,7 @@ UI::DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
  */
 QWidget *UI::DeclarativeWidget::widget()
 {
-    return m_widget;
+  return m_widget;
 }
 
 /**
@@ -80,11 +81,11 @@ QWidget *UI::DeclarativeWidget::widget()
  */
 void UI::DeclarativeWidget::update(const QRect &rect)
 {
-    if (widget())
-    {
-        m_pixmap = m_widget->grab();
-        QQuickPaintedItem::update(rect);
-    }
+  if (widget())
+  {
+    m_pixmap = m_widget->grab();
+    QQuickPaintedItem::update(rect);
+  }
 }
 
 /**
@@ -93,8 +94,8 @@ void UI::DeclarativeWidget::update(const QRect &rect)
  */
 void UI::DeclarativeWidget::paint(QPainter *painter)
 {
-    if (painter)
-        painter->drawPixmap(0, 0, m_pixmap);
+  if (painter)
+    painter->drawPixmap(0, 0, m_pixmap);
 }
 
 /**
@@ -102,7 +103,7 @@ void UI::DeclarativeWidget::paint(QPainter *painter)
  */
 void UI::DeclarativeWidget::keyPressEvent(QKeyEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, keyPressEvent, event);
+  DW_EXEC_EVENT(m_widget, keyPressEvent, event);
 }
 
 /**
@@ -110,7 +111,7 @@ void UI::DeclarativeWidget::keyPressEvent(QKeyEvent *event)
  */
 void UI::DeclarativeWidget::keyReleaseEvent(QKeyEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, keyReleaseEvent, event);
+  DW_EXEC_EVENT(m_widget, keyReleaseEvent, event);
 }
 
 /**
@@ -118,7 +119,7 @@ void UI::DeclarativeWidget::keyReleaseEvent(QKeyEvent *event)
  */
 void UI::DeclarativeWidget::inputMethodEvent(QInputMethodEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, inputMethodEvent, event);
+  DW_EXEC_EVENT(m_widget, inputMethodEvent, event);
 }
 
 /**
@@ -126,7 +127,7 @@ void UI::DeclarativeWidget::inputMethodEvent(QInputMethodEvent *event)
  */
 void UI::DeclarativeWidget::focusInEvent(QFocusEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, focusInEvent, event);
+  DW_EXEC_EVENT(m_widget, focusInEvent, event);
 }
 
 /**
@@ -134,7 +135,7 @@ void UI::DeclarativeWidget::focusInEvent(QFocusEvent *event)
  */
 void UI::DeclarativeWidget::focusOutEvent(QFocusEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, focusOutEvent, event);
+  DW_EXEC_EVENT(m_widget, focusOutEvent, event);
 }
 
 /**
@@ -142,7 +143,7 @@ void UI::DeclarativeWidget::focusOutEvent(QFocusEvent *event)
  */
 void UI::DeclarativeWidget::mousePressEvent(QMouseEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, mousePressEvent, event);
+  DW_EXEC_EVENT(m_widget, mousePressEvent, event);
 }
 
 /**
@@ -150,7 +151,7 @@ void UI::DeclarativeWidget::mousePressEvent(QMouseEvent *event)
  */
 void UI::DeclarativeWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, mouseMoveEvent, event);
+  DW_EXEC_EVENT(m_widget, mouseMoveEvent, event);
 }
 
 /**
@@ -158,7 +159,7 @@ void UI::DeclarativeWidget::mouseMoveEvent(QMouseEvent *event)
  */
 void UI::DeclarativeWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, mouseReleaseEvent, event);
+  DW_EXEC_EVENT(m_widget, mouseReleaseEvent, event);
 }
 
 /**
@@ -166,7 +167,7 @@ void UI::DeclarativeWidget::mouseReleaseEvent(QMouseEvent *event)
  */
 void UI::DeclarativeWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, mouseDoubleClickEvent, event);
+  DW_EXEC_EVENT(m_widget, mouseDoubleClickEvent, event);
 }
 
 /**
@@ -174,7 +175,7 @@ void UI::DeclarativeWidget::mouseDoubleClickEvent(QMouseEvent *event)
  */
 void UI::DeclarativeWidget::wheelEvent(QWheelEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, wheelEvent, event);
+  DW_EXEC_EVENT(m_widget, wheelEvent, event);
 }
 
 /**
@@ -182,7 +183,7 @@ void UI::DeclarativeWidget::wheelEvent(QWheelEvent *event)
  */
 void UI::DeclarativeWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, dragEnterEvent, event);
+  DW_EXEC_EVENT(m_widget, dragEnterEvent, event);
 }
 
 /**
@@ -190,7 +191,7 @@ void UI::DeclarativeWidget::dragEnterEvent(QDragEnterEvent *event)
  */
 void UI::DeclarativeWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, dragMoveEvent, event);
+  DW_EXEC_EVENT(m_widget, dragMoveEvent, event);
 }
 
 /**
@@ -198,7 +199,7 @@ void UI::DeclarativeWidget::dragMoveEvent(QDragMoveEvent *event)
  */
 void UI::DeclarativeWidget::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, dragLeaveEvent, event);
+  DW_EXEC_EVENT(m_widget, dragLeaveEvent, event);
 }
 
 /**
@@ -206,7 +207,7 @@ void UI::DeclarativeWidget::dragLeaveEvent(QDragLeaveEvent *event)
  */
 void UI::DeclarativeWidget::dropEvent(QDropEvent *event)
 {
-    DW_EXEC_EVENT(m_widget, dropEvent, event);
+  DW_EXEC_EVENT(m_widget, dropEvent, event);
 }
 
 /**
@@ -214,14 +215,14 @@ void UI::DeclarativeWidget::dropEvent(QDropEvent *event)
  */
 void UI::DeclarativeWidget::resizeWidget()
 {
-    if (widget())
+  if (widget())
+  {
+    if (width() > 0 && height() > 0)
     {
-        if (width() > 0 && height() > 0)
-        {
-            widget()->setFixedSize(width(), height());
-            update();
-        }
+      widget()->setFixedSize(width(), height());
+      update();
     }
+  }
 }
 
 /**
@@ -229,16 +230,12 @@ void UI::DeclarativeWidget::resizeWidget()
  */
 void UI::DeclarativeWidget::setWidget(QWidget *widget)
 {
-    if (widget)
-    {
-        if (m_widget)
-            delete m_widget;
+  if (widget)
+  {
+    if (m_widget)
+      delete m_widget;
 
-        m_widget = widget;
-        Q_EMIT widgetChanged();
-    }
+    m_widget = widget;
+    Q_EMIT widgetChanged();
+  }
 }
-
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_DeclarativeWidget.cpp"
-#endif

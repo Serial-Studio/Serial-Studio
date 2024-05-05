@@ -28,101 +28,101 @@ import QtQuick.Controls
 import "../FramelessWindow" as FramelessWindow
 
 FramelessWindow.CustomWindow {
-    id: root
+  id: root
 
-    //
-    // Window options
-    //
-    width: minimumWidth
-    height: minimumHeight
-    minimizeEnabled: false
-    maximizeEnabled: false
-    title: qsTr("Acknowledgements")
-    titlebarText: Cpp_ThemeManager.text
-    x: (Screen.desktopAvailableWidth - width) / 2
-    y: (Screen.desktopAvailableHeight - height) / 2
-    titlebarColor: Cpp_ThemeManager.dialogBackground
-    backgroundColor: Cpp_ThemeManager.dialogBackground
-    extraFlags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
-    minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-    maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
-    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+  //
+  // Window options
+  //
+  width: minimumWidth
+  height: minimumHeight
+  minimizeEnabled: false
+  maximizeEnabled: false
+  title: qsTr("Acknowledgements")
+  titlebarText: Cpp_ThemeManager.text
+  x: (Screen.desktopAvailableWidth - width) / 2
+  y: (Screen.desktopAvailableHeight - height) / 2
+  titlebarColor: Cpp_ThemeManager.dialogBackground
+  backgroundColor: Cpp_ThemeManager.dialogBackground
+  extraFlags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
+  minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+  maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+  minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+  maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
 
-    //
-    // Use page item to set application palette
-    //
-    Page {
-        anchors {
-            fill: parent
-            margins: root.shadowMargin
-            topMargin: titlebar.height + root.shadowMargin
-        }
-
-        palette.alternateBase: Cpp_ThemeManager.base
-        palette.base: Cpp_ThemeManager.base
-        palette.brightText: Cpp_ThemeManager.brightText
-        palette.button: Cpp_ThemeManager.button
-        palette.buttonText: Cpp_ThemeManager.buttonText
-        palette.highlight: Cpp_ThemeManager.highlight
-        palette.highlightedText: Cpp_ThemeManager.highlightedText
-        palette.link: Cpp_ThemeManager.link
-        palette.placeholderText: Cpp_ThemeManager.placeholderText
-        palette.text: Cpp_ThemeManager.text
-        palette.toolTipBase: Cpp_ThemeManager.tooltipBase
-        palette.toolTipText: Cpp_ThemeManager.tooltipText
-        palette.window: Cpp_ThemeManager.window
-        palette.windowText: Cpp_ThemeManager.windowText
-
-        background: Rectangle {
-            radius: root.radius
-            color: root.backgroundColor
-
-            Rectangle {
-                height: root.radius
-                color: root.backgroundColor
-
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
-                }
-            }
-        }
-
-        //
-        // Window controls
-        //
-        ColumnLayout {
-            id: column
-            spacing: app.spacing
-            anchors.centerIn: parent
-
-            ScrollView {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.minimumWidth: 640
-                Layout.maximumWidth: 640
-                Layout.minimumHeight: 480
-                Layout.maximumHeight: 480
-
-                TextArea {
-                    readOnly: true
-                    textFormat: TextArea.MarkdownText
-                    wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
-                    text: Cpp_Misc_Translator.acknowledgementsText()
-
-                    background: TextField {
-                        enabled: false
-                    }
-                }
-            }
-
-            Button {
-                text: qsTr("Close")
-                onClicked: root.close()
-                Layout.alignment: Qt.AlignRight
-            }
-        }
+  //
+  // Use page item to set application palette
+  //
+  Page {
+    anchors {
+      fill: parent
+      margins: root.shadowMargin
+      topMargin: titlebar.height + root.shadowMargin
     }
+
+    palette.alternateBase: Cpp_ThemeManager.base
+    palette.base: Cpp_ThemeManager.base
+    palette.brightText: Cpp_ThemeManager.brightText
+    palette.button: Cpp_ThemeManager.button
+    palette.buttonText: Cpp_ThemeManager.buttonText
+    palette.highlight: Cpp_ThemeManager.highlight
+    palette.highlightedText: Cpp_ThemeManager.highlightedText
+    palette.link: Cpp_ThemeManager.link
+    palette.placeholderText: Cpp_ThemeManager.placeholderText
+    palette.text: Cpp_ThemeManager.text
+    palette.toolTipBase: Cpp_ThemeManager.tooltipBase
+    palette.toolTipText: Cpp_ThemeManager.tooltipText
+    palette.window: Cpp_ThemeManager.window
+    palette.windowText: Cpp_ThemeManager.windowText
+
+    background: Rectangle {
+      radius: root.radius
+      color: root.backgroundColor
+
+      Rectangle {
+        height: root.radius
+        color: root.backgroundColor
+
+        anchors {
+          top: parent.top
+          left: parent.left
+          right: parent.right
+        }
+      }
+    }
+
+    //
+    // Window controls
+    //
+    ColumnLayout {
+      id: column
+      spacing: app.spacing
+      anchors.centerIn: parent
+
+      ScrollView {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.minimumWidth: 640
+        Layout.maximumWidth: 640
+        Layout.minimumHeight: 480
+        Layout.maximumHeight: 480
+
+        TextArea {
+          readOnly: true
+          textFormat: TextArea.MarkdownText
+          wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
+          text: Cpp_Misc_Translator.acknowledgementsText()
+
+          background: TextField {
+            enabled: false
+          }
+        }
+      }
+
+      Button {
+        text: qsTr("Close")
+        onClicked: root.close()
+        Layout.alignment: Qt.AlignRight
+      }
+    }
+  }
 }

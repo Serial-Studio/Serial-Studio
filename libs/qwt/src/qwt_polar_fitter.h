@@ -23,19 +23,19 @@
  */
 class QWT_EXPORT QwtPolarFitter : public QwtCurveFitter
 {
-  public:
-    QwtPolarFitter( int stepCount = 5 );
-    virtual ~QwtPolarFitter();
+public:
+  QwtPolarFitter(int stepCount = 5);
+  virtual ~QwtPolarFitter();
 
-    void setStepCount( int size );
-    int stepCount() const;
+  void setStepCount(int size);
+  int stepCount() const;
 
-    virtual QPolygonF fitCurve( const QPolygonF& ) const QWT_OVERRIDE;
-    virtual QPainterPath fitCurvePath( const QPolygonF& ) const QWT_OVERRIDE;
+  virtual QPolygonF fitCurve(const QPolygonF &) const QWT_OVERRIDE;
+  virtual QPainterPath fitCurvePath(const QPolygonF &) const QWT_OVERRIDE;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

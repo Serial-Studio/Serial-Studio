@@ -31,34 +31,35 @@
  * Constructor function, configures widget style & signal/slot connections.
  */
 Widgets::Gyroscope::Gyroscope(const int index)
-    : m_index(index)
-    , m_displayNum(0)
+  : m_index(index)
+  , m_displayNum(0)
 {
-    // Get pointers to Serial Studio modules
-    auto dash = &UI::Dashboard::instance();
-    auto theme = &Misc::ThemeManager::instance();
+  // Get pointers to Serial Studio modules
+  auto dash = &UI::Dashboard::instance();
+  auto theme = &Misc::ThemeManager::instance();
 
-    // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->gyroscopeCount())
-        return;
+  // Invalid index, abort initialization
+  if (m_index < 0 || m_index >= dash->gyroscopeCount())
+    return;
 
-    // Set gauge palette
-    QPalette palette;
-    palette.setColor(QPalette::WindowText, theme->base());
-    palette.setColor(QPalette::Text, theme->widgetIndicator());
-    m_gauge.setPalette(palette);
+  // Set gauge palette
+  QPalette palette;
+  palette.setColor(QPalette::WindowText, theme->base());
+  palette.setColor(QPalette::Text, theme->widgetIndicator());
+  m_gauge.setPalette(palette);
 
-    // Set widget pointer
-    setWidget(&m_gauge);
+  // Set widget pointer
+  setWidget(&m_gauge);
 
-    // Show different values each second
-    // clang-format off
+  // Show different values each second
+  // clang-format off
     connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
             this, &Widgets::Gyroscope::updateLabel);
-    // clang-format on
+  // clang-format on
 
-    // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
+  // React to dashboard events
+  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
+          Qt::QueuedConnection);
 }
 
 /**
@@ -70,69 +71,65 @@ Widgets::Gyroscope::Gyroscope(const int index)
  */
 void Widgets::Gyroscope::updateData()
 {
-    if (!isEnabled())
-        return;
+  if (!isEnabled())
+    return;
 
-    // Invalid index, abort update
-    auto dash = &UI::Dashboard::instance();
-    if (m_index < 0 || m_index >= dash->gyroscopeCount())
-        return;
+  // Invalid index, abort update
+  auto dash = &UI::Dashboard::instance();
+  if (m_index < 0 || m_index >= dash->gyroscopeCount())
+    return;
 
-    // Get group reference & validate dataset count
-    auto group = dash->getGyroscope(m_index);
-    if (group.datasetCount() != 3)
-        return;
+  // Get group reference & validate dataset count
+  auto group = dash->getGyroscope(m_index);
+  if (group.datasetCount() != 3)
+    return;
 
-    // Initialize values for pitch, roll & yaw
-    double p = 0;
-    double r = 0;
-    double y = 0;
+  // Initialize values for pitch, roll & yaw
+  double p = 0;
+  double r = 0;
+  double y = 0;
 
-    // Extract pitch, roll & yaw from group datasets
-    for (int i = 0; i < 3; ++i)
-    {
-        auto dataset = group.getDataset(i);
-        if (dataset.widget() == "pitch")
-            p = dataset.value().toDouble();
-        if (dataset.widget() == "roll")
-            r = dataset.value().toDouble();
-        if (dataset.widget() == "yaw")
-            y = dataset.value().toDouble();
-    }
+  // Extract pitch, roll & yaw from group datasets
+  for (int i = 0; i < 3; ++i)
+  {
+    auto dataset = group.getDataset(i);
+    if (dataset.widget() == "pitch")
+      p = dataset.value().toDouble();
+    if (dataset.widget() == "roll")
+      r = dataset.value().toDouble();
+    if (dataset.widget() == "yaw")
+      y = dataset.value().toDouble();
+  }
 
-    // Construct strings from pitch, roll & yaw
-    m_yaw = QString::number(qAbs(y), 'f', dash->precision());
-    m_roll = QString::number(qAbs(r), 'f', dash->precision());
-    m_pitch = QString::number(qAbs(p), 'f', dash->precision());
+  // Construct strings from pitch, roll & yaw
+  m_yaw = QString::number(qAbs(y), 'f', dash->precision());
+  m_roll = QString::number(qAbs(r), 'f', dash->precision());
+  m_pitch = QString::number(qAbs(p), 'f', dash->precision());
 
-    // Update gauge
-    m_gauge.setValue(p);
-    m_gauge.setGradient(r / 360.0);
+  // Update gauge
+  m_gauge.setValue(p);
+  m_gauge.setGradient(r / 360.0);
 
-    // Repaint the widget
-    requestRepaint();
+  // Repaint the widget
+  requestRepaint();
 }
 
 void Widgets::Gyroscope::updateLabel()
 {
-    switch (m_displayNum)
-    {
-        case 0:
-            setValue(QString("%1° PITCH").arg(m_pitch));
-            break;
-        case 1:
-            setValue(QString("%1° ROLL").arg(m_roll));
-            break;
-        case 2:
-            setValue(QString("%1° YAW").arg(m_yaw));
-            break;
-    }
+  switch (m_displayNum)
+  {
+    case 0:
+      setValue(QString("%1° PITCH").arg(m_pitch));
+      break;
+    case 1:
+      setValue(QString("%1° ROLL").arg(m_roll));
+      break;
+    case 2:
+      setValue(QString("%1° YAW").arg(m_yaw));
+      break;
+  }
 
-    ++m_displayNum;
-    if (m_displayNum > 2)
-        m_displayNum = 0;
+  ++m_displayNum;
+  if (m_displayNum > 2)
+    m_displayNum = 0;
 }
-
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_Gyroscope.cpp"
-#endif

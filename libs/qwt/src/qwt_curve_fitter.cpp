@@ -13,18 +13,16 @@
    Constructor
    \param mode Preferred fitting mode
  */
-QwtCurveFitter::QwtCurveFitter( Mode mode )
-    : m_mode( mode )
+QwtCurveFitter::QwtCurveFitter(Mode mode)
+  : m_mode(mode)
 {
 }
 
 //! Destructor
-QwtCurveFitter::~QwtCurveFitter()
-{
-}
+QwtCurveFitter::~QwtCurveFitter() {}
 
 //! \return Preferred fitting mode
 QwtCurveFitter::Mode QwtCurveFitter::mode() const
 {
-    return m_mode;
+  return m_mode;
 }

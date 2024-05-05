@@ -32,8 +32,8 @@
 #include <JSON/Dataset.h>
 
 /**
- * Default TCP port to use for incoming connections, I choose 7777 because 7 is one of
- * my favourite numbers :)
+ * Default TCP port to use for incoming connections, I choose 7777 because 7 is
+ * one of my favourite numbers :)
  */
 #define PLUGINS_TCP_PORT 7777
 
@@ -42,55 +42,55 @@ namespace Plugins
 /**
  * @brief The Server class
  *
- * Implements a simple TCP server on port 7777, which allows Serial Studio to interact
- * with other applications on the computer or in the LAN. "Plugins" receive incoming
- * frames processed by Serial Studio, and can write data to the device by simply writting
- * data on the TCP socket.
+ * Implements a simple TCP server on port 7777, which allows Serial Studio to
+ * interact with other applications on the computer or in the LAN. "Plugins"
+ * receive incoming frames processed by Serial Studio, and can write data to the
+ * device by simply writting data on the TCP socket.
  *
  * An example of such application can be found at:
  *  https://github.com/Kaan-Sat/CC2021-Control-Panel
  *
- * A benefit of implementing plugins in this manner is that you can write your Serial
- * Studio companion application in any language and framework that you desire, you do not
- * have to force yourself to use Qt or C/C++.
+ * A benefit of implementing plugins in this manner is that you can write your
+ * Serial Studio companion application in any language and framework that you
+ * desire, you do not have to force yourself to use Qt or C/C++.
  */
 class Server : public QObject
 {
-    Q_OBJECT
-    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+  Q_OBJECT
+  Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
 
 Q_SIGNALS:
-    void enabledChanged();
+  void enabledChanged();
 
 private:
-    explicit Server();
-    Server(Server &&) = delete;
-    Server(const Server &) = delete;
-    Server &operator=(Server &&) = delete;
-    Server &operator=(const Server &) = delete;
+  explicit Server();
+  Server(Server &&) = delete;
+  Server(const Server &) = delete;
+  Server &operator=(Server &&) = delete;
+  Server &operator=(const Server &) = delete;
 
-    ~Server();
+  ~Server();
 
 public:
-    static Server &instance();
-    bool enabled() const;
+  static Server &instance();
+  bool enabled() const;
 
 public Q_SLOTS:
-    void removeConnection();
-    void setEnabled(const bool enabled);
+  void removeConnection();
+  void setEnabled(const bool enabled);
 
 private Q_SLOTS:
-    void onDataReceived();
-    void acceptConnection();
-    void sendProcessedData();
-    void sendRawData(const QByteArray &data);
-    void registerFrame(const QJsonObject &json);
-    void onErrorOccurred(const QAbstractSocket::SocketError socketError);
+  void onDataReceived();
+  void acceptConnection();
+  void sendProcessedData();
+  void sendRawData(const QByteArray &data);
+  void registerFrame(const QJsonObject &json);
+  void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
-    bool m_enabled;
-    QTcpServer m_server;
-    QVector<QJsonObject> m_frames;
-    QVector<QTcpSocket *> m_sockets;
+  bool m_enabled;
+  QTcpServer m_server;
+  QVector<QJsonObject> m_frames;
+  QVector<QTcpSocket *> m_sockets;
 };
-}
+} // namespace Plugins

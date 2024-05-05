@@ -43,27 +43,25 @@ qrealfourier@gmail.com
 
 QFourierCalculator::QFourierCalculator()
 {
-	mInput = 0;
-	mOutput = 0;
-	mSize = 0;
+  mInput = 0;
+  mOutput = 0;
+  mSize = 0;
 }
 
-QFourierCalculator::~QFourierCalculator()
-{
-}
+QFourierCalculator::~QFourierCalculator() {}
 
 void QFourierCalculator::setData(float input[], float output[])
 {
-	mInput = input;
-	mOutput = output;
+  mInput = input;
+  mOutput = output;
 }
 
 void QFourierCalculator::setSize(int size)
 {
-	mSize = size;
+  mSize = size;
 }
 
 int QFourierCalculator::size()
 {
-	return mSize;
+  return mSize;
 }

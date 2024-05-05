@@ -23,22 +23,22 @@
 #include <JSON/Frame.h>
 
 /**
- * Destructor function, free memory used by the @c Group objects before destroying an
- * instance of this class.
+ * Destructor function, free memory used by the @c Group objects before
+ * destroying an instance of this class.
  */
 JSON::Frame::~Frame()
 {
-    m_groups.clear();
+  m_groups.clear();
 }
 
 /**
- * Resets the frame title and frees the memory used by the @c Group objects associated
- * to the instance of the @c Frame object.
+ * Resets the frame title and frees the memory used by the @c Group objects
+ * associated to the instance of the @c Frame object.
  */
 void JSON::Frame::clear()
 {
-    m_title = "";
-    m_groups.clear();
+  m_title = "";
+  m_groups.clear();
 }
 
 /**
@@ -46,7 +46,7 @@ void JSON::Frame::clear()
  */
 QString JSON::Frame::title() const
 {
-    return m_title;
+  return m_title;
 }
 
 /**
@@ -54,53 +54,54 @@ QString JSON::Frame::title() const
  */
 int JSON::Frame::groupCount() const
 {
-    return m_groups.count();
+  return m_groups.count();
 }
 
 /**
- * Returns a vector of pointers to the @c Group objects associated to this frame.
+ * Returns a vector of pointers to the @c Group objects associated to this
+ * frame.
  */
 QVector<JSON::Group> &JSON::Frame::groups()
 {
-    return m_groups;
+  return m_groups;
 }
 
 /**
- * Reads the frame information and all its asociated groups (and datatsets) from the given
- * JSON @c object.
+ * Reads the frame information and all its asociated groups (and datatsets) from
+ * the given JSON @c object.
  *
  * @return @c true on success, @c false on failure
  */
 bool JSON::Frame::read(const QJsonObject &object)
 {
-    // Rest frame data
-    clear();
+  // Rest frame data
+  clear();
 
-    // Get title & groups array
-    auto title = object.value("title").toString();
-    auto groups = object.value("groups").toArray();
+  // Get title & groups array
+  auto title = object.value("title").toString();
+  auto groups = object.value("groups").toArray();
 
-    // We need to have a project title and at least one group
-    if (!title.isEmpty() && !groups.isEmpty())
+  // We need to have a project title and at least one group
+  if (!title.isEmpty() && !groups.isEmpty())
+  {
+    // Update title
+    m_title = title;
+
+    // Generate groups & datasets from data frame
+    for (auto i = 0; i < groups.count(); ++i)
     {
-        // Update title
-        m_title = title;
-
-        // Generate groups & datasets from data frame
-        for (auto i = 0; i < groups.count(); ++i)
-        {
-            Group group;
-            if (group.read(groups.at(i).toObject()))
-                m_groups.append(group);
-        }
-
-        // Return status
-        return groupCount() > 0;
+      Group group;
+      if (group.read(groups.at(i).toObject()))
+        m_groups.append(group);
     }
 
-    // Error
-    clear();
-    return false;
+    // Return status
+    return groupCount() > 0;
+  }
+
+  // Error
+  clear();
+  return false;
 }
 
 /**
@@ -108,5 +109,5 @@ bool JSON::Frame::read(const QJsonObject &object)
  */
 const JSON::Group &JSON::Frame::getGroup(const int index) const
 {
-    return m_groups.at(index);
+  return m_groups.at(index);
 }

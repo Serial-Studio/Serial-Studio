@@ -28,28 +28,28 @@
 
 class QWT_EXPORT QwtPlotGraphicItem : public QwtPlotItem
 {
-  public:
-    explicit QwtPlotGraphicItem( const QString& title = QString() );
-    explicit QwtPlotGraphicItem( const QwtText& title );
+public:
+  explicit QwtPlotGraphicItem(const QString &title = QString());
+  explicit QwtPlotGraphicItem(const QwtText &title);
 
-    virtual ~QwtPlotGraphicItem();
+  virtual ~QwtPlotGraphicItem();
 
-    void setGraphic( const QRectF& rect, const QwtGraphic& );
-    QwtGraphic graphic() const;
+  void setGraphic(const QRectF &rect, const QwtGraphic &);
+  QwtGraphic graphic() const;
 
-    virtual QRectF boundingRect() const QWT_OVERRIDE;
+  virtual QRectF boundingRect() const QWT_OVERRIDE;
 
-    virtual void draw( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect ) const QWT_OVERRIDE;
+  virtual void draw(QPainter *, const QwtScaleMap &xMap,
+                    const QwtScaleMap &yMap,
+                    const QRectF &canvasRect) const QWT_OVERRIDE;
 
-    virtual int rtti() const QWT_OVERRIDE;
+  virtual int rtti() const QWT_OVERRIDE;
 
-  private:
-    void init();
+private:
+  void init();
 
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

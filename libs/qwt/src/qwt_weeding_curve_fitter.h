@@ -23,9 +23,9 @@
 
    The runtime of the algorithm increases non linear ( worst case O( n*n ) )
    and might be very slow for huge polygons. To avoid performance issues
-   it might be useful to split the polygon ( setChunkSize() ) and to run the algorithm
-   for these smaller parts. The disadvantage of having no interpolation
-   at the borders is for most use cases irrelevant.
+   it might be useful to split the polygon ( setChunkSize() ) and to run the
+   algorithm for these smaller parts. The disadvantage of having no
+   interpolation at the borders is for most use cases irrelevant.
 
    The smoothed curve consists of a subset of the points that defined the
    original curve.
@@ -37,26 +37,26 @@
  */
 class QWT_EXPORT QwtWeedingCurveFitter : public QwtCurveFitter
 {
-  public:
-    explicit QwtWeedingCurveFitter( double tolerance = 1.0 );
-    virtual ~QwtWeedingCurveFitter();
+public:
+  explicit QwtWeedingCurveFitter(double tolerance = 1.0);
+  virtual ~QwtWeedingCurveFitter();
 
-    void setTolerance( double );
-    double tolerance() const;
+  void setTolerance(double);
+  double tolerance() const;
 
-    void setChunkSize( uint );
-    uint chunkSize() const;
+  void setChunkSize(uint);
+  uint chunkSize() const;
 
-    virtual QPolygonF fitCurve( const QPolygonF& ) const QWT_OVERRIDE;
-    virtual QPainterPath fitCurvePath( const QPolygonF& ) const QWT_OVERRIDE;
+  virtual QPolygonF fitCurve(const QPolygonF &) const QWT_OVERRIDE;
+  virtual QPainterPath fitCurvePath(const QPolygonF &) const QWT_OVERRIDE;
 
-  private:
-    virtual QPolygonF simplify( const QPolygonF& ) const;
+private:
+  virtual QPolygonF simplify(const QPolygonF &) const;
 
-    class Line;
+  class Line;
 
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

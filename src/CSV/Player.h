@@ -36,69 +36,69 @@ namespace CSV
  */
 class Player : public QObject
 {
-    // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(bool isOpen
-               READ isOpen
-               NOTIFY openChanged)
-    Q_PROPERTY(qreal progress
-               READ progress
-               NOTIFY timestampChanged)
-    Q_PROPERTY(bool isPlaying
-               READ isPlaying
-               NOTIFY playerStateChanged)
-    Q_PROPERTY(QString timestamp
-               READ timestamp
-               NOTIFY timestampChanged)
-    // clang-format on
+  // clang-format off
+  Q_OBJECT
+  Q_PROPERTY(bool isOpen
+             READ isOpen
+             NOTIFY openChanged)
+  Q_PROPERTY(qreal progress
+             READ progress
+             NOTIFY timestampChanged)
+  Q_PROPERTY(bool isPlaying
+             READ isPlaying
+             NOTIFY playerStateChanged)
+  Q_PROPERTY(QString timestamp
+             READ timestamp
+             NOTIFY timestampChanged)
+  // clang-format on
 
 Q_SIGNALS:
-    void openChanged();
-    void timestampChanged();
-    void playerStateChanged();
+  void openChanged();
+  void timestampChanged();
+  void playerStateChanged();
 
 private:
-    explicit Player();
-    Player(Player &&) = delete;
-    Player(const Player &) = delete;
-    Player &operator=(Player &&) = delete;
-    Player &operator=(const Player &) = delete;
+  explicit Player();
+  Player(Player &&) = delete;
+  Player(const Player &) = delete;
+  Player &operator=(Player &&) = delete;
+  Player &operator=(const Player &) = delete;
 
 public:
-    static Player &instance();
+  static Player &instance();
 
-    bool isOpen() const;
-    qreal progress() const;
-    bool isPlaying() const;
-    int frameCount() const;
-    QString filename() const;
-    int framePosition() const;
-    QString timestamp() const;
-    QString csvFilesPath() const;
+  bool isOpen() const;
+  qreal progress() const;
+  bool isPlaying() const;
+  int frameCount() const;
+  QString filename() const;
+  int framePosition() const;
+  QString timestamp() const;
+  QString csvFilesPath() const;
 
 public Q_SLOTS:
-    void play();
-    void pause();
-    void toggle();
-    void openFile();
-    void closeFile();
-    void nextFrame();
-    void previousFrame();
-    void openFile(const QString &filePath);
-    void setProgress(const qreal &progress);
+  void play();
+  void pause();
+  void toggle();
+  void openFile();
+  void closeFile();
+  void nextFrame();
+  void previousFrame();
+  void openFile(const QString &filePath);
+  void setProgress(const qreal &progress);
 
 private Q_SLOTS:
-    void updateData();
+  void updateData();
 
 private:
-    QByteArray getFrame(const int row);
-    QString getCellValue(const int row, const int column, bool &error);
+  QByteArray getFrame(const int row);
+  QString getCellValue(const int row, const int column, bool &error);
 
 private:
-    int m_framePos;
-    bool m_playing;
-    QFile m_csvFile;
-    QString m_timestamp;
-    QVector<QVector<QString>> m_csvData;
+  int m_framePos;
+  bool m_playing;
+  QFile m_csvFile;
+  QString m_timestamp;
+  QVector<QVector<QString>> m_csvData;
 };
-}
+} // namespace CSV

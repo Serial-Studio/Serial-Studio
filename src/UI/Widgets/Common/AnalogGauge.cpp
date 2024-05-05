@@ -28,15 +28,15 @@
 #include <UI/Widgets/Common/AnalogGauge.h>
 
 Widgets::AnalogGauge::AnalogGauge(QWidget *parent)
-    : QwtDial(parent)
+  : QwtDial(parent)
 {
-    // Disable controling the gauge with the mouse or keyboard
-    setReadOnly(true);
+  // Disable controling the gauge with the mouse or keyboard
+  setReadOnly(true);
 
-    // Do not reset gauge if we reach maximum value
-    setWrapping(false);
+  // Do not reset gauge if we reach maximum value
+  setWrapping(false);
 
-    // Set gauge origin & min/max angles
-    setOrigin(135);
-    setScaleArc(0, 270);
+  // Set gauge origin & min/max angles
+  setOrigin(135);
+  setScaleArc(0, 270);
 }

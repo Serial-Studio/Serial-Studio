@@ -15,27 +15,27 @@
 
 class QwtPolarItem::PrivateData
 {
-  public:
-    PrivateData()
-        : plot( NULL )
-        , isVisible( true )
-        , renderThreadCount( 1 )
-        , z( 0.0 )
-        , legendIconSize( 8, 8 )
-    {
-    }
+public:
+  PrivateData()
+    : plot(NULL)
+    , isVisible(true)
+    , renderThreadCount(1)
+    , z(0.0)
+    , legendIconSize(8, 8)
+  {
+  }
 
-    mutable QwtPolarPlot* plot;
+  mutable QwtPolarPlot *plot;
 
-    bool isVisible;
-    QwtPolarItem::ItemAttributes attributes;
-    QwtPolarItem::RenderHints renderHints;
-    uint renderThreadCount;
+  bool isVisible;
+  QwtPolarItem::ItemAttributes attributes;
+  QwtPolarItem::RenderHints renderHints;
+  uint renderThreadCount;
 
-    double z;
+  double z;
 
-    QwtText title;
-    QSize legendIconSize;
+  QwtText title;
+  QSize legendIconSize;
 };
 
 /*!
@@ -45,17 +45,17 @@ class QwtPolarItem::PrivateData
 
    \sa setTitle()
  */
-QwtPolarItem::QwtPolarItem( const QwtText& title )
+QwtPolarItem::QwtPolarItem(const QwtText &title)
 {
-    m_data = new PrivateData;
-    m_data->title = title;
+  m_data = new PrivateData;
+  m_data->title = title;
 }
 
 //! Destroy the QwtPolarItem
 QwtPolarItem::~QwtPolarItem()
 {
-    attach( NULL );
-    delete m_data;
+  attach(NULL);
+  delete m_data;
 }
 
 /*!
@@ -71,18 +71,18 @@ QwtPolarItem::~QwtPolarItem()
 
    \sa QwtPolarItem::detach()
  */
-void QwtPolarItem::attach( QwtPolarPlot* plot )
+void QwtPolarItem::attach(QwtPolarPlot *plot)
 {
-    if ( plot == m_data->plot )
-        return;
+  if (plot == m_data->plot)
+    return;
 
-    if ( m_data->plot )
-        m_data->plot->attachItem( this, false );
+  if (m_data->plot)
+    m_data->plot->attachItem(this, false);
 
-    m_data->plot = plot;
+  m_data->plot = plot;
 
-    if ( m_data->plot )
-        m_data->plot->attachItem( this, true );
+  if (m_data->plot)
+    m_data->plot->attachItem(this, true);
 }
 
 /*!
@@ -94,7 +94,7 @@ void QwtPolarItem::attach( QwtPolarPlot* plot )
  */
 void QwtPolarItem::detach()
 {
-    attach( NULL );
+  attach(NULL);
 }
 
 /*!
@@ -111,13 +111,13 @@ void QwtPolarItem::detach()
  */
 int QwtPolarItem::rtti() const
 {
-    return Rtti_PolarItem;
+  return Rtti_PolarItem;
 }
 
 //! \return Attached plot
-QwtPolarPlot* QwtPolarItem::plot() const
+QwtPolarPlot *QwtPolarItem::plot() const
 {
-    return m_data->plot;
+  return m_data->plot;
 }
 
 /*!
@@ -128,7 +128,7 @@ QwtPolarPlot* QwtPolarItem::plot() const
  */
 double QwtPolarItem::z() const
 {
-    return m_data->z;
+  return m_data->z;
 }
 
 /*!
@@ -139,20 +139,20 @@ double QwtPolarItem::z() const
    \param z Z-value
    \sa z(), QwtPolarItemDict::itemList()
  */
-void QwtPolarItem::setZ( double z )
+void QwtPolarItem::setZ(double z)
 {
-    if ( m_data->z != z )
-    {
-        if ( m_data->plot )
-            m_data->plot->attachItem( this, false );
+  if (m_data->z != z)
+  {
+    if (m_data->plot)
+      m_data->plot->attachItem(this, false);
 
-        m_data->z = z;
+    m_data->z = z;
 
-        if ( m_data->plot )
-            m_data->plot->attachItem( this, true );
+    if (m_data->plot)
+      m_data->plot->attachItem(this, true);
 
-        itemChanged();
-    }
+    itemChanged();
+  }
 }
 
 /*!
@@ -161,9 +161,9 @@ void QwtPolarItem::setZ( double z )
    \param title Title
    \sa title()
  */
-void QwtPolarItem::setTitle( const QString& title )
+void QwtPolarItem::setTitle(const QString &title)
 {
-    setTitle( QwtText( title ) );
+  setTitle(QwtText(title));
 }
 
 /*!
@@ -172,22 +172,22 @@ void QwtPolarItem::setTitle( const QString& title )
    \param title Title
    \sa title()
  */
-void QwtPolarItem::setTitle( const QwtText& title )
+void QwtPolarItem::setTitle(const QwtText &title)
 {
-    if ( m_data->title != title )
-    {
-        m_data->title = title;
-        itemChanged();
-    }
+  if (m_data->title != title)
+  {
+    m_data->title = title;
+    itemChanged();
+  }
 }
 
 /*!
    \return Title of the item
    \sa setTitle()
  */
-const QwtText& QwtPolarItem::title() const
+const QwtText &QwtPolarItem::title() const
 {
-    return m_data->title;
+  return m_data->title;
 }
 
 /*!
@@ -198,17 +198,17 @@ const QwtText& QwtPolarItem::title() const
 
    \sa testItemAttribute(), ItemAttribute
  */
-void QwtPolarItem::setItemAttribute( ItemAttribute attribute, bool on )
+void QwtPolarItem::setItemAttribute(ItemAttribute attribute, bool on)
 {
-    if ( bool( m_data->attributes & attribute ) != on )
-    {
-        if ( on )
-            m_data->attributes |= attribute;
-        else
-            m_data->attributes &= ~attribute;
+  if (bool(m_data->attributes & attribute) != on)
+  {
+    if (on)
+      m_data->attributes |= attribute;
+    else
+      m_data->attributes &= ~attribute;
 
-        itemChanged();
-    }
+    itemChanged();
+  }
 }
 
 /*!
@@ -218,9 +218,9 @@ void QwtPolarItem::setItemAttribute( ItemAttribute attribute, bool on )
    \return true/false
    \sa setItemAttribute(), ItemAttribute
  */
-bool QwtPolarItem::testItemAttribute( ItemAttribute attribute ) const
+bool QwtPolarItem::testItemAttribute(ItemAttribute attribute) const
 {
-    return m_data->attributes & attribute;
+  return m_data->attributes & attribute;
 }
 
 /*!
@@ -231,17 +231,17 @@ bool QwtPolarItem::testItemAttribute( ItemAttribute attribute ) const
 
    \sa testRenderHint(), RenderHint
  */
-void QwtPolarItem::setRenderHint( RenderHint hint, bool on )
+void QwtPolarItem::setRenderHint(RenderHint hint, bool on)
 {
-    if ( ( ( m_data->renderHints & hint ) != 0 ) != on )
-    {
-        if ( on )
-            m_data->renderHints |= hint;
-        else
-            m_data->renderHints &= ~hint;
+  if (((m_data->renderHints & hint) != 0) != on)
+  {
+    if (on)
+      m_data->renderHints |= hint;
+    else
+      m_data->renderHints &= ~hint;
 
-        itemChanged();
-    }
+    itemChanged();
+  }
 }
 
 /*!
@@ -251,9 +251,9 @@ void QwtPolarItem::setRenderHint( RenderHint hint, bool on )
    \return true/false
    \sa setRenderHint(), RenderHint
  */
-bool QwtPolarItem::testRenderHint( RenderHint hint ) const
+bool QwtPolarItem::testRenderHint(RenderHint hint) const
 {
-    return ( m_data->renderHints & hint );
+  return (m_data->renderHints & hint);
 }
 
 /*!
@@ -269,9 +269,9 @@ bool QwtPolarItem::testRenderHint( RenderHint hint ) const
 
    The default thread count is 1 ( = no additional threads )
  */
-void QwtPolarItem::setRenderThreadCount( uint numThreads )
+void QwtPolarItem::setRenderThreadCount(uint numThreads)
 {
-    m_data->renderThreadCount = numThreads;
+  m_data->renderThreadCount = numThreads;
 }
 
 /*!
@@ -281,7 +281,7 @@ void QwtPolarItem::setRenderThreadCount( uint numThreads )
  */
 uint QwtPolarItem::renderThreadCount() const
 {
-    return m_data->renderThreadCount;
+  return m_data->renderThreadCount;
 }
 
 /*!
@@ -292,13 +292,13 @@ uint QwtPolarItem::renderThreadCount() const
    \param size Size
    \sa legendIconSize(), legendIcon()
  */
-void QwtPolarItem::setLegendIconSize( const QSize& size )
+void QwtPolarItem::setLegendIconSize(const QSize &size)
 {
-    if ( m_data->legendIconSize != size )
-    {
-        m_data->legendIconSize = size;
-        legendChanged();
-    }
+  if (m_data->legendIconSize != size)
+  {
+    m_data->legendIconSize = size;
+    legendChanged();
+  }
 }
 
 /*!
@@ -307,19 +307,19 @@ void QwtPolarItem::setLegendIconSize( const QSize& size )
  */
 QSize QwtPolarItem::legendIconSize() const
 {
-    return m_data->legendIconSize;
+  return m_data->legendIconSize;
 }
 
 //! Show the item
 void QwtPolarItem::show()
 {
-    setVisible( true );
+  setVisible(true);
 }
 
 //! Hide the item
 void QwtPolarItem::hide()
 {
-    setVisible( false );
+  setVisible(false);
 }
 
 /*!
@@ -328,13 +328,13 @@ void QwtPolarItem::hide()
     \param on Show if true, otherwise hide
     \sa isVisible(), show(), hide()
  */
-void QwtPolarItem::setVisible( bool on )
+void QwtPolarItem::setVisible(bool on)
 {
-    if ( on != m_data->isVisible )
-    {
-        m_data->isVisible = on;
-        itemChanged();
-    }
+  if (on != m_data->isVisible)
+  {
+    m_data->isVisible = on;
+    itemChanged();
+  }
 }
 
 /*!
@@ -343,7 +343,7 @@ void QwtPolarItem::setVisible( bool on )
  */
 bool QwtPolarItem::isVisible() const
 {
-    return m_data->isVisible;
+  return m_data->isVisible;
 }
 
 /*!
@@ -354,8 +354,8 @@ bool QwtPolarItem::isVisible() const
  */
 void QwtPolarItem::itemChanged()
 {
-    if ( m_data->plot )
-        m_data->plot->autoRefresh();
+  if (m_data->plot)
+    m_data->plot->autoRefresh();
 }
 
 /*!
@@ -364,8 +364,8 @@ void QwtPolarItem::itemChanged()
  */
 void QwtPolarItem::legendChanged()
 {
-    if ( testItemAttribute( QwtPolarItem::Legend ) && m_data->plot )
-        m_data->plot->updateLegend( this );
+  if (testItemAttribute(QwtPolarItem::Legend) && m_data->plot)
+    m_data->plot->updateLegend(this);
 }
 
 /*!
@@ -378,11 +378,11 @@ void QwtPolarItem::legendChanged()
    \param scaleId Scale id ( QwtPolar::Scale )
    \return Bounding interval of the plot item for a specific scale
  */
-QwtInterval QwtPolarItem::boundingInterval( int scaleId ) const
+QwtInterval QwtPolarItem::boundingInterval(int scaleId) const
 {
-    Q_UNUSED( scaleId );
+  Q_UNUSED(scaleId);
 
-    return QwtInterval(); // invalid
+  return QwtInterval(); // invalid
 }
 
 /*!
@@ -400,12 +400,13 @@ QwtInterval QwtPolarItem::boundingInterval( int scaleId ) const
 
    \sa QwtPolarPlot::updateAxes()
  */
-void QwtPolarItem::updateScaleDiv( const QwtScaleDiv& azimuthScaleDiv,
-    const QwtScaleDiv& radialScaleDiv, const QwtInterval& interval )
+void QwtPolarItem::updateScaleDiv(const QwtScaleDiv &azimuthScaleDiv,
+                                  const QwtScaleDiv &radialScaleDiv,
+                                  const QwtInterval &interval)
 {
-    Q_UNUSED( azimuthScaleDiv );
-    Q_UNUSED( radialScaleDiv );
-    Q_UNUSED( interval );
+  Q_UNUSED(azimuthScaleDiv);
+  Q_UNUSED(radialScaleDiv);
+  Q_UNUSED(interval);
 }
 
 /*!
@@ -425,27 +426,25 @@ void QwtPolarItem::updateScaleDiv( const QwtScaleDiv& azimuthScaleDiv,
 
    \sa title(), legendIcon(), QwtLegend
  */
-QList< QwtLegendData > QwtPolarItem::legendData() const
+QList<QwtLegendData> QwtPolarItem::legendData() const
 {
-    QwtLegendData data;
+  QwtLegendData data;
 
-    QwtText label = title();
-    label.setRenderFlags( label.renderFlags() & Qt::AlignLeft );
+  QwtText label = title();
+  label.setRenderFlags(label.renderFlags() & Qt::AlignLeft);
 
-    data.setValue( QwtLegendData::TitleRole,
-        QVariant::fromValue( label ) );
+  data.setValue(QwtLegendData::TitleRole, QVariant::fromValue(label));
 
-    const QwtGraphic graphic = legendIcon( 0, legendIconSize() );
-    if ( !graphic.isNull() )
-    {
-        data.setValue( QwtLegendData::IconRole,
-            QVariant::fromValue( graphic ) );
-    }
+  const QwtGraphic graphic = legendIcon(0, legendIconSize());
+  if (!graphic.isNull())
+  {
+    data.setValue(QwtLegendData::IconRole, QVariant::fromValue(graphic));
+  }
 
-    QList< QwtLegendData > list;
-    list += data;
+  QList<QwtLegendData> list;
+  list += data;
 
-    return list;
+  return list;
 }
 
 /*!
@@ -459,13 +458,12 @@ QList< QwtLegendData > QwtPolarItem::legendData() const
 
    \sa setLegendIconSize(), legendData()
  */
-QwtGraphic QwtPolarItem::legendIcon(
-    int index, const QSizeF& size ) const
+QwtGraphic QwtPolarItem::legendIcon(int index, const QSizeF &size) const
 {
-    Q_UNUSED( index )
-    Q_UNUSED( size )
+  Q_UNUSED(index)
+  Q_UNUSED(size)
 
-    return QwtGraphic();
+  return QwtGraphic();
 }
 
 /*!
@@ -477,5 +475,5 @@ QwtGraphic QwtPolarItem::legendIcon(
  */
 int QwtPolarItem::marginHint() const
 {
-    return 0;
+  return 0;
 }

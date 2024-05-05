@@ -23,15 +23,15 @@
 
 class QWT_EXPORT QwtSystemClock
 {
-  public:
-    bool isNull() const;
+public:
+  bool isNull() const;
 
-    void start();
-    double restart();
-    double elapsed() const;
+  void start();
+  double restart();
+  double elapsed() const;
 
-  private:
-    QElapsedTimer m_timer;
+private:
+  QElapsedTimer m_timer;
 };
 
 #endif

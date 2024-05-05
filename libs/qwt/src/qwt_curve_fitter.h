@@ -20,65 +20,65 @@ class QPolygonF;
  */
 class QWT_EXPORT QwtCurveFitter
 {
-  public:
+public:
+  /*!
+     \brief Preferred mode of the fitting algorithm
+
+     Even if a QPainterPath can always be created from a QPolygonF
+     the overhead of the conversion can be avoided by indicating
+     the preference of the implementation to the application
+     code.
+   */
+  enum Mode
+  {
     /*!
-       \brief Preferred mode of the fitting algorithm
+       The fitting algorithm creates a polygon - the implementation
+       of fitCurvePath() simply wraps the polygon into a path.
 
-       Even if a QPainterPath can always be created from a QPolygonF
-       the overhead of the conversion can be avoided by indicating
-       the preference of the implementation to the application
-       code.
+       \sa QwtWeedingCurveFitter
      */
-    enum Mode
-    {
-        /*!
-           The fitting algorithm creates a polygon - the implementation
-           of fitCurvePath() simply wraps the polygon into a path.
-
-           \sa QwtWeedingCurveFitter
-         */
-        Polygon,
-
-        /*!
-           The fitting algorithm creates a painter path - the implementation
-           of fitCurve() extracts a polygon from the path.
-
-           \sa QwtSplineCurveFitter
-         */
-        Path
-    };
-
-    virtual ~QwtCurveFitter();
-
-    Mode mode() const;
+    Polygon,
 
     /*!
-        Find a curve which has the best fit to a series of data points
+       The fitting algorithm creates a painter path - the implementation
+       of fitCurve() extracts a polygon from the path.
 
-        \param polygon Series of data points
-        \return Curve points
-
-        \sa fitCurvePath()
+       \sa QwtSplineCurveFitter
      */
-    virtual QPolygonF fitCurve( const QPolygonF& polygon ) const = 0;
+    Path
+  };
 
-    /*!
-        Find a curve path which has the best fit to a series of data points
+  virtual ~QwtCurveFitter();
 
-        \param polygon Series of data points
-        \return Curve path
+  Mode mode() const;
 
-        \sa fitCurve()
-     */
-    virtual QPainterPath fitCurvePath( const QPolygonF& polygon ) const = 0;
+  /*!
+      Find a curve which has the best fit to a series of data points
 
-  protected:
-    explicit QwtCurveFitter( Mode mode );
+      \param polygon Series of data points
+      \return Curve points
 
-  private:
-    Q_DISABLE_COPY(QwtCurveFitter)
+      \sa fitCurvePath()
+   */
+  virtual QPolygonF fitCurve(const QPolygonF &polygon) const = 0;
 
-    const Mode m_mode;
+  /*!
+      Find a curve path which has the best fit to a series of data points
+
+      \param polygon Series of data points
+      \return Curve path
+
+      \sa fitCurve()
+   */
+  virtual QPainterPath fitCurvePath(const QPolygonF &polygon) const = 0;
+
+protected:
+  explicit QwtCurveFitter(Mode mode);
+
+private:
+  Q_DISABLE_COPY(QwtCurveFitter)
+
+  const Mode m_mode;
 };
 
 #endif

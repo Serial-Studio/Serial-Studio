@@ -27,27 +27,29 @@ typedef int(sha3_final_fn)(unsigned char *md, void *vctx);
 
 typedef struct prov_sha3_meth_st
 {
-    sha3_absorb_fn *absorb;
-    sha3_final_fn *final;
+  sha3_absorb_fn *absorb;
+  sha3_final_fn *final;
 } PROV_SHA3_METHOD;
 
 struct keccak_st
 {
-    uint64_t A[5][5];
-    size_t block_size; /* cached ctx->digest->block_size */
-    size_t md_size; /* output length, variable in XOF */
-    size_t bufsz; /* used bytes in below buffer */
-    unsigned char buf[KECCAK1600_WIDTH / 8 - 32];
-    unsigned char pad;
-    PROV_SHA3_METHOD meth;
+  uint64_t A[5][5];
+  size_t block_size; /* cached ctx->digest->block_size */
+  size_t md_size;    /* output length, variable in XOF */
+  size_t bufsz;      /* used bytes in below buffer */
+  unsigned char buf[KECCAK1600_WIDTH / 8 - 32];
+  unsigned char pad;
+  PROV_SHA3_METHOD meth;
 };
 
 void ossl_sha3_reset(KECCAK1600_CTX *ctx);
 int ossl_sha3_init(KECCAK1600_CTX *ctx, unsigned char pad, size_t bitlen);
-int ossl_keccak_kmac_init(KECCAK1600_CTX *ctx, unsigned char pad, size_t bitlen);
+int ossl_keccak_kmac_init(KECCAK1600_CTX *ctx, unsigned char pad,
+                          size_t bitlen);
 int ossl_sha3_update(KECCAK1600_CTX *ctx, const void *_inp, size_t len);
 int ossl_sha3_final(unsigned char *md, KECCAK1600_CTX *ctx);
 
-size_t SHA3_absorb(uint64_t A[5][5], const unsigned char *inp, size_t len, size_t r);
+size_t SHA3_absorb(uint64_t A[5][5], const unsigned char *inp, size_t len,
+                   size_t r);
 
 #endif /* OSSL_INTERNAL_SHA3_H */

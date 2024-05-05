@@ -25,131 +25,115 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 Control {
-    id: root
+  id: root
+
+  //
+  // Access to properties
+  //
+  property alias tcpPlugins: _tcpPlugins.checked
+  property alias language: _langCombo.currentIndex
+  property alias windowShadows: _windowShadows.checked
+
+  //
+  // Layout
+  //
+  ColumnLayout {
+    id: layout
+    anchors.fill: parent
+    anchors.margins: app.spacing
 
     //
-    // Access to properties
+    // Controls
     //
-    property alias tcpPlugins: _tcpPlugins.checked
-    property alias language: _langCombo.currentIndex
-    property alias windowShadows: _windowShadows.checked
+    GridLayout {
+      columns: 2
+      Layout.fillWidth: true
+      rowSpacing: app.spacing
+      columnSpacing: app.spacing
 
-    //
-    // Layout
-    //
-    ColumnLayout {
-        id: layout
-        anchors.fill: parent
-        anchors.margins: app.spacing
-
-        //
-        // Controls
-        //
-        GridLayout {
-            columns: 2
-            Layout.fillWidth: true
-            rowSpacing: app.spacing
-            columnSpacing: app.spacing
-
-            //
-            // Language selector
-            //
-            Label {
-                text: qsTr("Language") + ":"
-            } ComboBox {
-                id: _langCombo
-                Layout.fillWidth: true
-                currentIndex: Cpp_Misc_Translator.language
-                model: Cpp_Misc_Translator.availableLanguages
-                onCurrentIndexChanged: {
-                    if (currentIndex !== Cpp_Misc_Translator.language)
-                        Cpp_Misc_Translator.setLanguage(currentIndex)
-                }
-            }
-
-            //
-            // Theme selector
-            //
-            Label {
-                text: qsTr("Theme") + ":"
-            } ComboBox {
-                id: _themeCombo
-                Layout.fillWidth: true
-                model: Cpp_ThemeManager.availableThemes
-                currentIndex: Cpp_ThemeManager.themeId
-                onCurrentIndexChanged: {
-                    if (currentIndex !== Cpp_ThemeManager.themeId)
-                        Cpp_ThemeManager.setTheme(currentIndex)
-                }
-            }
-
-            //
-            // Plugins enabled
-            //
-            Label {
-                text: qsTr("Plugin system") + ": "
-            } Switch {
-                id: _tcpPlugins
-                Layout.leftMargin: -app.spacing
-                Layout.alignment: Qt.AlignLeft
-                checked: Cpp_Plugins_Bridge.enabled
-                onCheckedChanged: {
-                    if (checked !== Cpp_Plugins_Bridge.enabled)
-                        Cpp_Plugins_Bridge.enabled = checked
-                }
-            }
-
-            //
-            // Custom window decorations
-            //
-            Label {
-                text: qsTr("Custom window decorations") + ": "
-            } Switch {
-                id: _windowShadows
-                Layout.leftMargin: -app.spacing
-                Layout.alignment: Qt.AlignLeft
-                checked: Cpp_ThemeManager.customWindowDecorations
-                onCheckedChanged: {
-                    if (checked != Cpp_ThemeManager.customWindowDecorations)
-                        Cpp_ThemeManager.customWindowDecorations = checked
-                }
-            }
-
-            //
-            // Software rendering
-            //
-            Label {
-                text: qsTr("Software rendering") + ": "
-            } Switch {
-                id: _softwareRendering
-                Layout.leftMargin: -app.spacing
-                Layout.alignment: Qt.AlignLeft
-                checked: Cpp_ModuleManager.softwareRendering
-                onCheckedChanged: {
-                    if (checked !== Cpp_ModuleManager.softwareRendering)
-                        Cpp_ModuleManager.setSoftwareRenderingEnabled(checked)
-                }
-            }
+      //
+      // Language selector
+      //
+      Label {
+        text: qsTr("Language") + ":"
+      } ComboBox {
+        id: _langCombo
+        Layout.fillWidth: true
+        currentIndex: Cpp_Misc_Translator.language
+        model: Cpp_Misc_Translator.availableLanguages
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_Misc_Translator.language)
+            Cpp_Misc_Translator.setLanguage(currentIndex)
         }
+      }
 
-        //
-        // Plugins label
-        //
-        Label {
-            opacity: 0.8
-            font.pixelSize: 12
-            Layout.fillWidth: true
-            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            color: Cpp_ThemeManager.highlightedTextAlternative
-            text: qsTr("Applications/plugins can interact with %1 by " +
-                       "establishing a TCP connection on port 7777.").arg(Cpp_AppName)
+      //
+      // Theme selector
+      //
+      Label {
+        text: qsTr("Theme") + ":"
+      } ComboBox {
+        id: _themeCombo
+        Layout.fillWidth: true
+        model: Cpp_ThemeManager.availableThemes
+        currentIndex: Cpp_ThemeManager.themeId
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_ThemeManager.themeId)
+            Cpp_ThemeManager.setTheme(currentIndex)
         }
+      }
 
-        //
-        // Vertical spacer
-        //
-        Item {
-            Layout.fillHeight: true
+      //
+      // Plugins enabled
+      //
+      Label {
+        text: qsTr("Plugin system") + ": "
+      } Switch {
+        id: _tcpPlugins
+        Layout.leftMargin: -app.spacing
+        Layout.alignment: Qt.AlignLeft
+        checked: Cpp_Plugins_Bridge.enabled
+        onCheckedChanged: {
+          if (checked !== Cpp_Plugins_Bridge.enabled)
+            Cpp_Plugins_Bridge.enabled = checked
         }
+      }
+
+      //
+      // Custom window decorations
+      //
+      Label {
+        text: qsTr("Custom window decorations") + ": "
+      } Switch {
+        id: _windowShadows
+        Layout.leftMargin: -app.spacing
+        Layout.alignment: Qt.AlignLeft
+        checked: Cpp_ThemeManager.customWindowDecorations
+        onCheckedChanged: {
+          if (checked != Cpp_ThemeManager.customWindowDecorations)
+            Cpp_ThemeManager.customWindowDecorations = checked
+        }
+      }
     }
+
+    //
+    // Plugins label
+    //
+    Label {
+      opacity: 0.8
+      font.pixelSize: 12
+      Layout.fillWidth: true
+      wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+      color: Cpp_ThemeManager.highlightedTextAlternative
+      text: qsTr("Applications/plugins can interact with %1 by " +
+                 "establishing a TCP connection on port 7777.").arg(Cpp_AppName)
+    }
+
+    //
+    // Vertical spacer
+    //
+    Item {
+      Layout.fillHeight: true
+    }
+  }
 }

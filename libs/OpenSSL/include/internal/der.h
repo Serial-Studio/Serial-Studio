@@ -73,14 +73,16 @@
 /* This can be used for all items that don't have a context */
 #define DER_NO_CONTEXT -1
 
-int ossl_DER_w_precompiled(WPACKET *pkt, int tag, const unsigned char *precompiled,
+int ossl_DER_w_precompiled(WPACKET *pkt, int tag,
+                           const unsigned char *precompiled,
                            size_t precompiled_n);
 
 int ossl_DER_w_boolean(WPACKET *pkt, int tag, int b);
 int ossl_DER_w_uint32(WPACKET *pkt, int tag, uint32_t v);
 int ossl_DER_w_bn(WPACKET *pkt, int tag, const BIGNUM *v);
 int ossl_DER_w_null(WPACKET *pkt, int tag);
-int ossl_DER_w_octet_string(WPACKET *pkt, int tag, const unsigned char *data, size_t data_n);
+int ossl_DER_w_octet_string(WPACKET *pkt, int tag, const unsigned char *data,
+                            size_t data_n);
 int ossl_DER_w_octet_string_uint32(WPACKET *pkt, int tag, uint32_t value);
 
 /*

@@ -12,10 +12,10 @@
 #pragma once
 
 #ifdef OPENSSL_USE_APPLINK
-#    define BIO_FLAGS_UPLINK_INTERNAL 0x8000
-#    include "ms/uplink.h"
+#  define BIO_FLAGS_UPLINK_INTERNAL 0x8000
+#  include "ms/uplink.h"
 #else
-#    define BIO_FLAGS_UPLINK_INTERNAL 0
+#  define BIO_FLAGS_UPLINK_INTERNAL 0
 #endif
 
 #include "internal/common.h"
@@ -34,8 +34,9 @@ typedef struct mem_st MEM;
 DEFINE_LHASH_OF_EX(MEM);
 
 void OPENSSL_cpuid_setup(void);
-#if defined(__i386) || defined(__i386__) || defined(_M_IX86) || defined(__x86_64)                  \
-    || defined(__x86_64__) || defined(_M_AMD64) || defined(_M_X64)
+#if defined(__i386) || defined(__i386__) || defined(_M_IX86)                   \
+    || defined(__x86_64) || defined(__x86_64__) || defined(_M_AMD64)           \
+    || defined(_M_X64)
 extern unsigned int OPENSSL_ia32cap_P[];
 #endif
 void OPENSSL_showfatal(const char *fmta, ...);
@@ -66,12 +67,12 @@ size_t OPENSSL_instrument_bus2(unsigned int *, size_t, size_t);
  */
 struct ex_callback_st
 {
-    long argl; /* Arbitrary long */
-    void *argp; /* Arbitrary void * */
-    int priority; /* Priority ordering for freeing */
-    CRYPTO_EX_new *new_func;
-    CRYPTO_EX_free *free_func;
-    CRYPTO_EX_dup *dup_func;
+  long argl;    /* Arbitrary long */
+  void *argp;   /* Arbitrary void * */
+  int priority; /* Priority ordering for freeing */
+  CRYPTO_EX_new *new_func;
+  CRYPTO_EX_free *free_func;
+  CRYPTO_EX_dup *dup_func;
 };
 
 /*
@@ -80,13 +81,13 @@ struct ex_callback_st
  */
 typedef struct ex_callbacks_st
 {
-    STACK_OF(EX_CALLBACK) * meth;
+  STACK_OF(EX_CALLBACK) * meth;
 } EX_CALLBACKS;
 
 typedef struct ossl_ex_data_global_st
 {
-    CRYPTO_RWLOCK *ex_data_lock;
-    EX_CALLBACKS ex_data[CRYPTO_EX_INDEX__COUNT];
+  CRYPTO_RWLOCK *ex_data_lock;
+  EX_CALLBACKS ex_data[CRYPTO_EX_INDEX__COUNT];
 } OSSL_EX_DATA_GLOBAL;
 
 /* OSSL_LIB_CTX */
@@ -105,7 +106,7 @@ typedef struct ossl_ex_data_global_st
 #define OSSL_LIB_CTX_DRBG_NONCE_INDEX 6
 #define OSSL_LIB_CTX_RAND_CRNGT_INDEX 7
 #ifdef FIPS_MODULE
-#    define OSSL_LIB_CTX_THREAD_EVENT_HANDLER_INDEX 8
+#  define OSSL_LIB_CTX_THREAD_EVENT_HANDLER_INDEX 8
 #endif
 #define OSSL_LIB_CTX_FIPS_PROV_INDEX 9
 #define OSSL_LIB_CTX_ENCODER_STORE_INDEX 10
@@ -133,9 +134,12 @@ OSSL_EX_DATA_GLOBAL *ossl_lib_ctx_get_ex_data_global(OSSL_LIB_CTX *ctx);
 const char *ossl_lib_ctx_get_descriptor(OSSL_LIB_CTX *libctx);
 
 OSSL_LIB_CTX *ossl_crypto_ex_data_get_ossl_lib_ctx(const CRYPTO_EX_DATA *ad);
-int ossl_crypto_new_ex_data_ex(OSSL_LIB_CTX *ctx, int class_index, void *obj, CRYPTO_EX_DATA *ad);
-int ossl_crypto_get_ex_new_index_ex(OSSL_LIB_CTX *ctx, int class_index, long argl, void *argp,
-                                    CRYPTO_EX_new *new_func, CRYPTO_EX_dup *dup_func,
+int ossl_crypto_new_ex_data_ex(OSSL_LIB_CTX *ctx, int class_index, void *obj,
+                               CRYPTO_EX_DATA *ad);
+int ossl_crypto_get_ex_new_index_ex(OSSL_LIB_CTX *ctx, int class_index,
+                                    long argl, void *argp,
+                                    CRYPTO_EX_new *new_func,
+                                    CRYPTO_EX_dup *dup_func,
                                     CRYPTO_EX_free *free_func, int priority);
 int ossl_crypto_free_ex_index_ex(OSSL_LIB_CTX *ctx, int class_index, int idx);
 
@@ -148,10 +152,11 @@ int ossl_crypto_free_ex_index_ex(OSSL_LIB_CTX *ctx, int class_index, int idx);
 const void *ossl_bsearch(const void *key, const void *base, int num, int size,
                          int (*cmp)(const void *, const void *), int flags);
 
-char *ossl_sk_ASN1_UTF8STRING2text(STACK_OF(ASN1_UTF8STRING) * text, const char *sep,
-                                   size_t max_len);
+char *ossl_sk_ASN1_UTF8STRING2text(STACK_OF(ASN1_UTF8STRING) * text,
+                                   const char *sep, size_t max_len);
 char *ossl_ipaddr_to_asc(unsigned char *p, int len);
 
 char *ossl_buf2hexstr_sep(const unsigned char *buf, long buflen, char sep);
-unsigned char *ossl_hexstr2buf_sep(const char *str, long *buflen, const char sep);
+unsigned char *ossl_hexstr2buf_sep(const char *str, long *buflen,
+                                   const char sep);
 #endif

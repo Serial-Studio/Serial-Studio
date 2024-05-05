@@ -21,149 +21,148 @@ class QBrush;
 /*!
     \brief A plot item, that represents a vector field
 
-    A vector field is a representation of a points with a given magnitude and direction
-    as arrows. While the direction affects the direction of the arrow, the magnitude
-    might be represented as a color or by the length of the arrow.
+    A vector field is a representation of a points with a given magnitude and
+   direction as arrows. While the direction affects the direction of the arrow,
+   the magnitude might be represented as a color or by the length of the arrow.
 
     \sa QwtVectorFieldSymbol, QwtVectorFieldSample
  */
 class QWT_EXPORT QwtPlotVectorField
-    : public QwtPlotSeriesItem
-    , public QwtSeriesStore< QwtVectorFieldSample >
+  : public QwtPlotSeriesItem,
+    public QwtSeriesStore<QwtVectorFieldSample>
 {
-  public:
-    /*!
-        Depending on the origin the indicator symbol ( usually an arrow )
-        will be to the position of the corresponding sample.
+public:
+  /*!
+      Depending on the origin the indicator symbol ( usually an arrow )
+      will be to the position of the corresponding sample.
+   */
+  enum IndicatorOrigin
+  {
+    //! symbol points to the sample position
+    OriginHead,
+
+    //! The arrow starts at the sample position
+    OriginTail,
+
+    //! The arrow is centered at the sample position
+    OriginCenter
+  };
+
+  /*!
+      Attributes to modify the rendering
+      \sa setPaintAttribute(), testPaintAttribute()
+   */
+  enum PaintAttribute
+  {
+    /*
+        FilterVectors calculates an average sample from all samples
+        that lie in the same cell of a grid that is determined by
+        setting the rasterSize().
+
+        \sa setRasterSize()
      */
-    enum IndicatorOrigin
-    {
-        //! symbol points to the sample position
-        OriginHead,
+    FilterVectors = 0x01
+  };
 
-        //! The arrow starts at the sample position
-        OriginTail,
+  Q_DECLARE_FLAGS(PaintAttributes, PaintAttribute)
 
-        //! The arrow is centered at the sample position
-        OriginCenter
-    };
+  /*!
+      Depending on the MagnitudeMode the magnitude component will have
+      an impact on the attributes of the symbol/arrow.
+
+      \sa setMagnitudeMode()
+   */
+  enum MagnitudeMode
+  {
+    /*!
+       The magnitude will be mapped to a color using a color map
+       \sa magnitudeRange(), colorMap()
+     */
+    MagnitudeAsColor = 0x01,
 
     /*!
-        Attributes to modify the rendering
-        \sa setPaintAttribute(), testPaintAttribute()
+       The magnitude will have an impact on the length of the arrow/symbol
+       \sa arrowLength(), magnitudeScaleFactor()
      */
-    enum PaintAttribute
-    {
-        /*
-            FilterVectors calculates an average sample from all samples
-            that lie in the same cell of a grid that is determined by
-            setting the rasterSize().
+    MagnitudeAsLength = 0x02
+  };
 
-            \sa setRasterSize()
-         */
-        FilterVectors        = 0x01
-    };
+  Q_DECLARE_FLAGS(MagnitudeModes, MagnitudeMode)
 
-    Q_DECLARE_FLAGS( PaintAttributes, PaintAttribute )
+  explicit QwtPlotVectorField(const QString &title = QString());
+  explicit QwtPlotVectorField(const QwtText &title);
 
-    /*!
-        Depending on the MagnitudeMode the magnitude component will have
-        an impact on the attributes of the symbol/arrow.
+  virtual ~QwtPlotVectorField();
 
-        \sa setMagnitudeMode()
-     */
-    enum MagnitudeMode
-    {
-        /*!
-           The magnitude will be mapped to a color using a color map
-           \sa magnitudeRange(), colorMap()
-         */
-        MagnitudeAsColor = 0x01,
+  void setPaintAttribute(PaintAttribute, bool on = true);
+  bool testPaintAttribute(PaintAttribute) const;
 
-        /*!
-           The magnitude will have an impact on the length of the arrow/symbol
-           \sa arrowLength(), magnitudeScaleFactor()
-         */
-        MagnitudeAsLength = 0x02
-    };
+  void setMagnitudeMode(MagnitudeMode, bool on = true);
+  bool testMagnitudeMode(MagnitudeMode) const;
 
-    Q_DECLARE_FLAGS( MagnitudeModes, MagnitudeMode )
+  void setSymbol(QwtVectorFieldSymbol *);
+  const QwtVectorFieldSymbol *symbol() const;
 
-    explicit QwtPlotVectorField( const QString& title = QString() );
-    explicit QwtPlotVectorField( const QwtText& title );
+  void setPen(const QPen &);
+  QPen pen() const;
 
-    virtual ~QwtPlotVectorField();
+  void setBrush(const QBrush &);
+  QBrush brush() const;
 
-    void setPaintAttribute( PaintAttribute, bool on = true );
-    bool testPaintAttribute( PaintAttribute ) const;
+  void setRasterSize(const QSizeF &);
+  QSizeF rasterSize() const;
 
-    void setMagnitudeMode( MagnitudeMode, bool on = true );
-    bool testMagnitudeMode( MagnitudeMode ) const;
+  void setIndicatorOrigin(IndicatorOrigin);
+  IndicatorOrigin indicatorOrigin() const;
 
-    void setSymbol( QwtVectorFieldSymbol* );
-    const QwtVectorFieldSymbol* symbol() const;
+  void setSamples(const QVector<QwtVectorFieldSample> &);
+  void setSamples(QwtVectorFieldData *);
 
-    void setPen( const QPen& );
-    QPen pen() const;
+  void setColorMap(QwtColorMap *);
+  const QwtColorMap *colorMap() const;
 
-    void setBrush( const QBrush& );
-    QBrush brush() const;
+  void setMagnitudeRange(const QwtInterval &);
+  QwtInterval magnitudeRange() const;
 
-    void setRasterSize( const QSizeF& );
-    QSizeF rasterSize() const;
+  void setMinArrowLength(double);
+  double minArrowLength() const;
 
-    void setIndicatorOrigin( IndicatorOrigin );
-    IndicatorOrigin indicatorOrigin() const;
+  void setMaxArrowLength(double);
+  double maxArrowLength() const;
 
-    void setSamples( const QVector< QwtVectorFieldSample >& );
-    void setSamples( QwtVectorFieldData* );
+  virtual double arrowLength(double magnitude) const;
 
-    void setColorMap( QwtColorMap* );
-    const QwtColorMap* colorMap() const;
+  virtual QRectF boundingRect() const QWT_OVERRIDE;
 
-    void setMagnitudeRange( const QwtInterval& );
-    QwtInterval magnitudeRange() const;
+  virtual void drawSeries(QPainter *, const QwtScaleMap &xMap,
+                          const QwtScaleMap &yMap, const QRectF &canvasRect,
+                          int from, int to) const QWT_OVERRIDE;
 
-    void setMinArrowLength( double );
-    double minArrowLength() const;
+  virtual int rtti() const QWT_OVERRIDE;
 
-    void setMaxArrowLength( double );
-    double maxArrowLength() const;
+  virtual QwtGraphic legendIcon(int index, const QSizeF &) const QWT_OVERRIDE;
 
-    virtual double arrowLength( double magnitude ) const;
+  void setMagnitudeScaleFactor(double factor);
+  double magnitudeScaleFactor() const;
 
-    virtual QRectF boundingRect() const QWT_OVERRIDE;
+protected:
+  virtual void drawSymbols(QPainter *, const QwtScaleMap &xMap,
+                           const QwtScaleMap &yMap, const QRectF &canvasRect,
+                           int from, int to) const;
 
-    virtual void drawSeries( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, int from, int to ) const QWT_OVERRIDE;
+  virtual void drawSymbol(QPainter *, double x, double y, double vx,
+                          double vy) const;
 
-    virtual int rtti() const QWT_OVERRIDE;
+  virtual void dataChanged() QWT_OVERRIDE;
 
-    virtual QwtGraphic legendIcon(
-        int index, const QSizeF& ) const QWT_OVERRIDE;
+private:
+  void init();
 
-    void setMagnitudeScaleFactor( double factor );
-    double magnitudeScaleFactor() const;
-
-  protected:
-    virtual void drawSymbols( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, int from, int to ) const;
-
-    virtual void drawSymbol( QPainter*,
-        double x, double y, double vx, double vy ) const;
-
-    virtual void dataChanged() QWT_OVERRIDE;
-
-  private:
-    void init();
-
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPlotVectorField::PaintAttributes )
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPlotVectorField::MagnitudeModes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPlotVectorField::PaintAttributes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPlotVectorField::MagnitudeModes)
 
 #endif

@@ -26,7 +26,8 @@
 #include <QwtDialNeedle>
 
 //
-// Based on https://github.com/opencor/qwt/blob/master/examples/dials/AttitudeIndicator.h
+// Based on
+// https://github.com/opencor/qwt/blob/master/examples/dials/AttitudeIndicator.h
 //
 
 namespace Widgets
@@ -34,22 +35,22 @@ namespace Widgets
 class AttitudeIndicator : public QwtDial
 {
 public:
-    AttitudeIndicator(QWidget *parent = Q_NULLPTR);
+  AttitudeIndicator(QWidget *parent = Q_NULLPTR);
 
-    double angle() const;
-    double gradient() const;
+  double angle() const;
+  double gradient() const;
 
 public Q_SLOTS:
-    void setAngle(const double &angle);
-    void setGradient(const double &gradient);
+  void setAngle(const double &angle);
+  void setGradient(const double &gradient);
 
 protected:
-    void drawScale(QPainter *painter, const QPointF &center,
-                   double radius) const QWT_OVERRIDE;
-    void drawScaleContents(QPainter *painter, const QPointF &center,
-                           double radius) const QWT_OVERRIDE;
+  void drawScale(QPainter *painter, const QPointF &center,
+                 double radius) const QWT_OVERRIDE;
+  void drawScaleContents(QPainter *painter, const QPointF &center,
+                         double radius) const QWT_OVERRIDE;
 
 private:
-    double m_gradient;
+  double m_gradient;
 };
-}
+} // namespace Widgets

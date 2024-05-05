@@ -22,47 +22,48 @@ class QwtScaleDiv;
    \brief Base class for plot items representing a series of samples
  */
 class QWT_EXPORT QwtPlotSeriesItem : public QwtPlotItem,
-    public virtual QwtAbstractSeriesStore
+                                     public virtual QwtAbstractSeriesStore
 {
-  public:
-    explicit QwtPlotSeriesItem( const QString& title = QString() );
-    explicit QwtPlotSeriesItem( const QwtText& title );
+public:
+  explicit QwtPlotSeriesItem(const QString &title = QString());
+  explicit QwtPlotSeriesItem(const QwtText &title);
 
-    virtual ~QwtPlotSeriesItem();
+  virtual ~QwtPlotSeriesItem();
 
-    void setOrientation( Qt::Orientation );
-    Qt::Orientation orientation() const;
+  void setOrientation(Qt::Orientation);
+  Qt::Orientation orientation() const;
 
-    virtual void draw( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect ) const QWT_OVERRIDE;
+  virtual void draw(QPainter *, const QwtScaleMap &xMap,
+                    const QwtScaleMap &yMap,
+                    const QRectF &canvasRect) const QWT_OVERRIDE;
 
-    /*!
-       Draw a subset of the samples
+  /*!
+     Draw a subset of the samples
 
-       \param painter Painter
-       \param xMap Maps x-values into pixel coordinates.
-       \param yMap Maps y-values into pixel coordinates.
-       \param canvasRect Contents rectangle of the canvas
-       \param from Index of the first point to be painted
-       \param to Index of the last point to be painted. If to < 0 the
-             curve will be painted to its last point.
-     */
-    virtual void drawSeries( QPainter* painter,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, int from, int to ) const = 0;
+     \param painter Painter
+     \param xMap Maps x-values into pixel coordinates.
+     \param yMap Maps y-values into pixel coordinates.
+     \param canvasRect Contents rectangle of the canvas
+     \param from Index of the first point to be painted
+     \param to Index of the last point to be painted. If to < 0 the
+           curve will be painted to its last point.
+   */
+  virtual void drawSeries(QPainter *painter, const QwtScaleMap &xMap,
+                          const QwtScaleMap &yMap, const QRectF &canvasRect,
+                          int from, int to) const
+      = 0;
 
-    virtual QRectF boundingRect() const QWT_OVERRIDE;
+  virtual QRectF boundingRect() const QWT_OVERRIDE;
 
-    virtual void updateScaleDiv(
-        const QwtScaleDiv&, const QwtScaleDiv& ) QWT_OVERRIDE;
+  virtual void updateScaleDiv(const QwtScaleDiv &,
+                              const QwtScaleDiv &) QWT_OVERRIDE;
 
-  protected:
-    virtual void dataChanged() QWT_OVERRIDE;
+protected:
+  virtual void dataChanged() QWT_OVERRIDE;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

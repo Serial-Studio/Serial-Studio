@@ -3,7 +3,7 @@
 qcomplexnumber.h - Header file for QComplexNumber
 
 Template class for handling complex numbers with a real and imaginary
-part. 
+part.
 
 ************************************************************************
 
@@ -42,36 +42,33 @@ qrealfourier@gmail.com
 #ifndef QCOMPLEXNUMBER_H
 #define QCOMPLEXNUMBER_H
 
-template <typename T>
+template<typename T>
 class QComplexNumber
 {
 
-	public:
+public:
+  QComplexNumber();
+  QComplexNumber(T real, T imaginary);
 
-		QComplexNumber();
-		QComplexNumber(T real, T imaginary);
+  void setReal(T real);
+  void setImaginary(T imaginary);
+  void set(T real, T imaginary);
+  void set(QComplexNumber complex);
 
-		void setReal(T real);
-		void setImaginary(T imaginary);
-		void set(T real, T imaginary);
-		void set(QComplexNumber complex);
+  T real();
+  T imaginary();
 
-		T real();
-		T imaginary();
+  QComplexNumber<T> &operator+=(const QComplexNumber<T> &number);
+  QComplexNumber<T> &operator-=(const QComplexNumber<T> &number);
+  QComplexNumber<T> &operator/=(const QComplexNumber<T> &number);
+  QComplexNumber<T> &operator*=(const QComplexNumber<T> &number);
 
-		QComplexNumber<T>& operator+=(const QComplexNumber<T> &number);
-		QComplexNumber<T>& operator-=(const QComplexNumber<T> &number);
-		QComplexNumber<T>& operator/=(const QComplexNumber<T> &number);
-		QComplexNumber<T>& operator*=(const QComplexNumber<T> &number);
+  QComplexNumber<T> &operator/=(const T &value);
+  QComplexNumber<T> &operator*=(const T &value);
 
-		QComplexNumber<T>& operator/=(const T &value);
-		QComplexNumber<T>& operator*=(const T &value);
-
-	private:
-
-		T mReal;
-		T mImaginary;
-
+private:
+  T mReal;
+  T mImaginary;
 };
 
 typedef QComplexNumber<float> QComplexFloat;

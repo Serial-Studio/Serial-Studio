@@ -23,14 +23,14 @@ typedef struct ossl_qtx_st OSSL_QTX;
 
 typedef struct ossl_qtx_args_st
 {
-    OSSL_LIB_CTX *libctx;
-    const char *propq;
+  OSSL_LIB_CTX *libctx;
+  const char *propq;
 
-    /* BIO to transmit to. */
-    BIO *bio;
+  /* BIO to transmit to. */
+  BIO *bio;
 
-    /* Maximum datagram payload length (MDPL) for TX purposes. */
-    size_t mdpl;
+  /* Maximum datagram payload length (MDPL) for TX purposes. */
+  size_t mdpl;
 } OSSL_QTX_ARGS;
 
 /* Instantiates a new QTX. */
@@ -75,7 +75,8 @@ void ossl_qtx_free(OSSL_QTX *qtx);
  *
  * Returns 1 on success or 0 on failure.
  */
-int ossl_qtx_provide_secret(OSSL_QTX *qtx, uint32_t enc_level, uint32_t suite_id, EVP_MD *md,
+int ossl_qtx_provide_secret(OSSL_QTX *qtx, uint32_t enc_level,
+                            uint32_t suite_id, EVP_MD *md,
                             const unsigned char *secret, size_t secret_len);
 
 /*
@@ -97,7 +98,8 @@ int ossl_qtx_is_enc_level_provisioned(OSSL_QTX *qtx, uint32_t enc_level);
  * small. The result is written to *plaintext_len.
  */
 int ossl_qtx_calculate_plaintext_payload_len(OSSL_QTX *qtx, uint32_t enc_level,
-                                             size_t ciphertext_len, size_t *plaintext_len);
+                                             size_t ciphertext_len,
+                                             size_t *plaintext_len);
 
 uint32_t ossl_qrl_get_suite_cipher_tag_len(uint32_t suite_id);
 
@@ -107,39 +109,39 @@ uint32_t ossl_qrl_get_suite_cipher_tag_len(uint32_t suite_id);
  */
 typedef struct ossl_qtx_iovec_st
 {
-    const unsigned char *buf;
-    size_t buf_len;
+  const unsigned char *buf;
+  size_t buf_len;
 } OSSL_QTX_IOVEC;
 
 typedef struct ossl_qtx_pkt_st
 {
-    /* Logical packet header to be serialized. */
-    QUIC_PKT_HDR *hdr;
+  /* Logical packet header to be serialized. */
+  QUIC_PKT_HDR *hdr;
 
-    /*
-     * iovecs expressing the logical packet payload buffer. Zero-length entries
-     * are permitted.
-     */
-    const OSSL_QTX_IOVEC *iovec;
-    size_t num_iovec;
+  /*
+   * iovecs expressing the logical packet payload buffer. Zero-length entries
+   * are permitted.
+   */
+  const OSSL_QTX_IOVEC *iovec;
+  size_t num_iovec;
 
-    /* Destination address. Will be passed through to the BIO if non-NULL. */
-    const BIO_ADDR *peer;
+  /* Destination address. Will be passed through to the BIO if non-NULL. */
+  const BIO_ADDR *peer;
 
-    /*
-     * Local address (optional). Specify as non-NULL only if TX BIO
-     * has local address support enabled.
-     */
-    const BIO_ADDR *local;
+  /*
+   * Local address (optional). Specify as non-NULL only if TX BIO
+   * has local address support enabled.
+   */
+  const BIO_ADDR *local;
 
-    /*
-     * Logical PN. Used for encryption. This will automatically be encoded to
-     * hdr->pn, which need not be initialized.
-     */
-    QUIC_PN pn;
+  /*
+   * Logical PN. Used for encryption. This will automatically be encoded to
+   * hdr->pn, which need not be initialized.
+   */
+  QUIC_PN pn;
 
-    /* Packet flags. Zero or more OSSL_QTX_PKT_FLAG_* values. */
-    uint32_t flags;
+  /* Packet flags. Zero or more OSSL_QTX_PKT_FLAG_* values. */
+  uint32_t flags;
 } OSSL_QTX_PKT;
 
 /*

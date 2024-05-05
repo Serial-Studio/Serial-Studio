@@ -30,69 +30,69 @@ typedef struct quic_stream_list_node_st QUIC_STREAM_LIST_NODE;
 
 struct quic_stream_list_node_st
 {
-    QUIC_STREAM_LIST_NODE *prev, *next;
+  QUIC_STREAM_LIST_NODE *prev, *next;
 };
 
 struct quic_stream_st
 {
-    QUIC_STREAM_LIST_NODE active_node; /* for use by QUIC_STREAM_MAP */
+  QUIC_STREAM_LIST_NODE active_node; /* for use by QUIC_STREAM_MAP */
 
-    /* Temporary link used by TXP. */
-    QUIC_STREAM *txp_next;
+  /* Temporary link used by TXP. */
+  QUIC_STREAM *txp_next;
 
-    /*
-     * QUIC Stream ID. Do not assume that this encodes a type as this is a
-     * version-specific property and may change between QUIC versions; instead,
-     * use the type field.
-     */
-    uint64_t id;
+  /*
+   * QUIC Stream ID. Do not assume that this encodes a type as this is a
+   * version-specific property and may change between QUIC versions; instead,
+   * use the type field.
+   */
+  uint64_t id;
 
-    /*
-     * Application Error Code (AEC) used for STOP_SENDING frame.
-     * This is only valid if stop_sending is 1.
-     */
-    uint64_t stop_sending_aec;
+  /*
+   * Application Error Code (AEC) used for STOP_SENDING frame.
+   * This is only valid if stop_sending is 1.
+   */
+  uint64_t stop_sending_aec;
 
-    /*
-     * Application Error Code (AEC) used for RESET_STREAM frame.
-     * This is only valid if reset_stream is 1.
-     */
-    uint64_t reset_stream_aec;
+  /*
+   * Application Error Code (AEC) used for RESET_STREAM frame.
+   * This is only valid if reset_stream is 1.
+   */
+  uint64_t reset_stream_aec;
 
-    /* Temporary value used by TXP. */
-    uint64_t txp_txfc_new_credit_consumed;
+  /* Temporary value used by TXP. */
+  uint64_t txp_txfc_new_credit_consumed;
 
-    QUIC_SSTREAM *sstream; /* NULL if RX-only */
-    void *rstream; /* NULL if TX only (placeholder) */
-    QUIC_TXFC txfc; /* NULL if RX-only */
-    QUIC_RXFC rxfc; /* NULL if TX-only */
-    unsigned int type : 8; /* QUIC_STREAM_INITIATOR_*, QUIC_STREAM_DIR_* */
-    unsigned int active : 1;
+  QUIC_SSTREAM *sstream; /* NULL if RX-only */
+  void *rstream;         /* NULL if TX only (placeholder) */
+  QUIC_TXFC txfc;        /* NULL if RX-only */
+  QUIC_RXFC rxfc;        /* NULL if TX-only */
+  unsigned int type : 8; /* QUIC_STREAM_INITIATOR_*, QUIC_STREAM_DIR_* */
+  unsigned int active : 1;
 
-    /*
-     * Has STOP_SENDING been requested? Note that this is not the same as
-     * want_stop_sending below, as a STOP_SENDING frame may already have been
-     * sent and fully acknowledged.
-     */
-    unsigned int stop_sending : 1;
+  /*
+   * Has STOP_SENDING been requested? Note that this is not the same as
+   * want_stop_sending below, as a STOP_SENDING frame may already have been
+   * sent and fully acknowledged.
+   */
+  unsigned int stop_sending : 1;
 
-    /*
-     * Has RESET_STREAM been requested? Works identically to STOP_SENDING for
-     * transmission purposes.
-     */
-    unsigned int reset_stream : 1;
+  /*
+   * Has RESET_STREAM been requested? Works identically to STOP_SENDING for
+   * transmission purposes.
+   */
+  unsigned int reset_stream : 1;
 
-    /* Temporary flags used by TXP. */
-    unsigned int txp_sent_fc : 1;
-    unsigned int txp_sent_stop_sending : 1;
-    unsigned int txp_sent_reset_stream : 1;
-    unsigned int txp_drained : 1;
-    unsigned int txp_blocked : 1;
+  /* Temporary flags used by TXP. */
+  unsigned int txp_sent_fc : 1;
+  unsigned int txp_sent_stop_sending : 1;
+  unsigned int txp_sent_reset_stream : 1;
+  unsigned int txp_drained : 1;
+  unsigned int txp_blocked : 1;
 
-    /* Frame regeneration flags. */
-    unsigned int want_max_stream_data : 1; /* used for regen only */
-    unsigned int want_stop_sending : 1; /* used for gen or regen */
-    unsigned int want_reset_stream : 1; /* used for gen or regen */
+  /* Frame regeneration flags. */
+  unsigned int want_max_stream_data : 1; /* used for regen only */
+  unsigned int want_stop_sending : 1;    /* used for gen or regen */
+  unsigned int want_reset_stream : 1;    /* used for gen or regen */
 };
 
 /*
@@ -120,10 +120,10 @@ int ossl_quic_stream_reset(QUIC_STREAM *s, uint64_t aec);
  */
 typedef struct quic_stream_map_st
 {
-    LHASH_OF(QUIC_STREAM) * map;
-    QUIC_STREAM_LIST_NODE active_list;
-    size_t rr_stepping, rr_counter;
-    QUIC_STREAM *rr_cur;
+  LHASH_OF(QUIC_STREAM) * map;
+  QUIC_STREAM_LIST_NODE active_list;
+  size_t rr_stepping, rr_counter;
+  QUIC_STREAM *rr_cur;
 } QUIC_STREAM_MAP;
 
 int ossl_quic_stream_map_init(QUIC_STREAM_MAP *qsm);
@@ -151,7 +151,8 @@ void ossl_quic_stream_map_cleanup(QUIC_STREAM_MAP *qsm);
  * stream_id must be a valid value. Returns NULL if a stream already exists
  * with the given ID.
  */
-QUIC_STREAM *ossl_quic_stream_map_alloc(QUIC_STREAM_MAP *qsm, uint64_t stream_id, int type);
+QUIC_STREAM *ossl_quic_stream_map_alloc(QUIC_STREAM_MAP *qsm,
+                                        uint64_t stream_id, int type);
 
 /*
  * Releases a stream object. Note that this must only be done once the teardown
@@ -164,13 +165,15 @@ void ossl_quic_stream_map_release(QUIC_STREAM_MAP *qsm, QUIC_STREAM *stream);
  * argument which is passed through.
  */
 void ossl_quic_stream_map_visit(QUIC_STREAM_MAP *qsm,
-                                void (*visit_cb)(QUIC_STREAM *stream, void *arg),
+                                void (*visit_cb)(QUIC_STREAM *stream,
+                                                 void *arg),
                                 void *visit_cb_arg);
 
 /*
  * Retrieves a stream by stream ID. Returns NULL if it does not exist.
  */
-QUIC_STREAM *ossl_quic_stream_map_get_by_id(QUIC_STREAM_MAP *qsm, uint64_t stream_id);
+QUIC_STREAM *ossl_quic_stream_map_get_by_id(QUIC_STREAM_MAP *qsm,
+                                            uint64_t stream_id);
 
 /*
  * Marks the given stream as active or inactive based on its state. Idempotent.
@@ -189,7 +192,8 @@ void ossl_quic_stream_map_update_state(QUIC_STREAM_MAP *qsm, QUIC_STREAM *s);
  * Sets the RR stepping value, n. The RR rotation will be advanced every n
  * packets. The default value is 1.
  */
-void ossl_quic_stream_map_set_rr_stepping(QUIC_STREAM_MAP *qsm, size_t stepping);
+void ossl_quic_stream_map_set_rr_stepping(QUIC_STREAM_MAP *qsm,
+                                          size_t stepping);
 
 /*
  * QUIC Stream Iterator
@@ -211,8 +215,8 @@ void ossl_quic_stream_map_set_rr_stepping(QUIC_STREAM_MAP *qsm, size_t stepping)
  */
 typedef struct quic_stream_iter_st
 {
-    QUIC_STREAM_MAP *qsm;
-    QUIC_STREAM *first_stream, *stream;
+  QUIC_STREAM_MAP *qsm;
+  QUIC_STREAM *first_stream, *stream;
 } QUIC_STREAM_ITER;
 
 /*
@@ -220,7 +224,8 @@ typedef struct quic_stream_iter_st
  * advance_rr is 1). After calling this, it->stream will be the first stream in
  * the iteration sequence, or NULL if there are no active streams.
  */
-void ossl_quic_stream_iter_init(QUIC_STREAM_ITER *it, QUIC_STREAM_MAP *qsm, int advance_rr);
+void ossl_quic_stream_iter_init(QUIC_STREAM_ITER *it, QUIC_STREAM_MAP *qsm,
+                                int advance_rr);
 
 /*
  * Advances to next stream in iteration sequence. You do not need to call this

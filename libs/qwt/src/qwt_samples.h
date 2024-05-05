@@ -19,19 +19,19 @@
 //! \brief A sample of the types (x1-x2, y) or (x, y1-y2)
 class QWT_EXPORT QwtIntervalSample
 {
-  public:
-    QwtIntervalSample();
-    QwtIntervalSample( double, const QwtInterval& );
-    QwtIntervalSample( double value, double min, double max );
+public:
+  QwtIntervalSample();
+  QwtIntervalSample(double, const QwtInterval &);
+  QwtIntervalSample(double value, double min, double max);
 
-    bool operator==( const QwtIntervalSample& ) const;
-    bool operator!=( const QwtIntervalSample& ) const;
+  bool operator==(const QwtIntervalSample &) const;
+  bool operator!=(const QwtIntervalSample &) const;
 
-    //! Value
-    double value;
+  //! Value
+  double value;
 
-    //! Interval
-    QwtInterval interval;
+  //! Interval
+  QwtInterval interval;
 };
 
 /*!
@@ -39,53 +39,53 @@ class QWT_EXPORT QwtIntervalSample
    The value is set to 0.0, the interval is invalid
  */
 inline QwtIntervalSample::QwtIntervalSample()
-    : value( 0.0 )
+  : value(0.0)
 {
 }
 
 //! Constructor
-inline QwtIntervalSample::QwtIntervalSample( double v, const QwtInterval& intv )
-    : value( v )
-    , interval( intv )
+inline QwtIntervalSample::QwtIntervalSample(double v, const QwtInterval &intv)
+  : value(v)
+  , interval(intv)
 {
 }
 
 //! Constructor
-inline QwtIntervalSample::QwtIntervalSample( double v, double min, double max )
-    : value( v )
-    , interval( min, max )
+inline QwtIntervalSample::QwtIntervalSample(double v, double min, double max)
+  : value(v)
+  , interval(min, max)
 {
 }
 
 //! Compare operator
-inline bool QwtIntervalSample::operator==( const QwtIntervalSample& other ) const
+inline bool QwtIntervalSample::operator==(const QwtIntervalSample &other) const
 {
-    return value == other.value && interval == other.interval;
+  return value == other.value && interval == other.interval;
 }
 
 //! Compare operator
-inline bool QwtIntervalSample::operator!=( const QwtIntervalSample& other ) const
+inline bool QwtIntervalSample::operator!=(const QwtIntervalSample &other) const
 {
-    return !( *this == other );
+  return !(*this == other);
 }
 
 //! \brief A sample of the types (x1...xn, y) or (x, y1..yn)
 class QWT_EXPORT QwtSetSample
 {
-  public:
-    QwtSetSample();
-    explicit QwtSetSample( double, const QVector< double >& = QVector< double >( ) );
+public:
+  QwtSetSample();
+  explicit QwtSetSample(double, const QVector<double> & = QVector<double>());
 
-    bool operator==( const QwtSetSample& other ) const;
-    bool operator!=( const QwtSetSample& other ) const;
+  bool operator==(const QwtSetSample &other) const;
+  bool operator!=(const QwtSetSample &other) const;
 
-    double added() const;
+  double added() const;
 
-    //! value
-    double value;
+  //! value
+  double value;
 
-    //! Vector of values associated to value
-    QVector< double > set;
+  //! Vector of values associated to value
+  QVector<double> set;
 };
 
 /*!
@@ -93,7 +93,7 @@ class QWT_EXPORT QwtSetSample
    The value is set to 0.0
  */
 inline QwtSetSample::QwtSetSample()
-    : value( 0.0 )
+  : value(0.0)
 {
 }
 
@@ -103,32 +103,32 @@ inline QwtSetSample::QwtSetSample()
    \param v Value
    \param s Set of values
  */
-inline QwtSetSample::QwtSetSample( double v, const QVector< double >& s )
-    : value( v )
-    , set( s )
+inline QwtSetSample::QwtSetSample(double v, const QVector<double> &s)
+  : value(v)
+  , set(s)
 {
 }
 
 //! Compare operator
-inline bool QwtSetSample::operator==( const QwtSetSample& other ) const
+inline bool QwtSetSample::operator==(const QwtSetSample &other) const
 {
-    return value == other.value && set == other.set;
+  return value == other.value && set == other.set;
 }
 
 //! Compare operator
-inline bool QwtSetSample::operator!=( const QwtSetSample& other ) const
+inline bool QwtSetSample::operator!=(const QwtSetSample &other) const
 {
-    return !( *this == other );
+  return !(*this == other);
 }
 
 //! \return All values of the set added
 inline double QwtSetSample::added() const
 {
-    double y = 0.0;
-    for ( int i = 0; i < set.size(); i++ )
-        y += set[i];
+  double y = 0.0;
+  for (int i = 0; i < set.size(); i++)
+    y += set[i];
 
-    return y;
+  return y;
 }
 
 /*!
@@ -142,32 +142,31 @@ inline double QwtSetSample::added() const
  */
 class QWT_EXPORT QwtOHLCSample
 {
-  public:
-    QwtOHLCSample( double time = 0.0,
-        double open = 0.0, double high = 0.0,
-        double low = 0.0, double close = 0.0 );
+public:
+  QwtOHLCSample(double time = 0.0, double open = 0.0, double high = 0.0,
+                double low = 0.0, double close = 0.0);
 
-    QwtInterval boundingInterval() const;
+  QwtInterval boundingInterval() const;
 
-    bool isValid() const;
+  bool isValid() const;
 
-    /*!
-       Time of the sample, usually a number representing
-       a specific interval - like a day.
-     */
-    double time;
+  /*!
+     Time of the sample, usually a number representing
+     a specific interval - like a day.
+   */
+  double time;
 
-    //! Opening price
-    double open;
+  //! Opening price
+  double open;
 
-    //! Highest price
-    double high;
+  //! Highest price
+  double high;
 
-    //! Lowest price
-    double low;
+  //! Lowest price
+  double low;
 
-    //! Closing price
-    double close;
+  //! Closing price
+  double close;
 };
 
 /*!
@@ -179,13 +178,13 @@ class QWT_EXPORT QwtOHLCSample
    \param l Low value
    \param c Close value
  */
-inline QwtOHLCSample::QwtOHLCSample(
-        double t, double o, double h, double l, double c )
-    : time( t )
-    , open( o )
-    , high( h )
-    , low( l )
-    , close( c )
+inline QwtOHLCSample::QwtOHLCSample(double t, double o, double h, double l,
+                                    double c)
+  : time(t)
+  , open(o)
+  , high(h)
+  , low(l)
+  , close(c)
 {
 }
 
@@ -202,11 +201,8 @@ inline QwtOHLCSample::QwtOHLCSample(
  */
 inline bool QwtOHLCSample::isValid() const
 {
-    return ( low <= high )
-           && ( open >= low )
-           && ( open <= high )
-           && ( close >= low )
-           && ( close <= high );
+  return (low <= high) && (open >= low) && (open <= high) && (close >= low)
+         && (close <= high);
 }
 
 /*!
@@ -219,17 +215,17 @@ inline bool QwtOHLCSample::isValid() const
  */
 inline QwtInterval QwtOHLCSample::boundingInterval() const
 {
-    double minY = open;
-    minY = qMin( minY, high );
-    minY = qMin( minY, low );
-    minY = qMin( minY, close );
+  double minY = open;
+  minY = qMin(minY, high);
+  minY = qMin(minY, low);
+  minY = qMin(minY, close);
 
-    double maxY = open;
-    maxY = qMax( maxY, high );
-    maxY = qMax( maxY, low );
-    maxY = qMax( maxY, close );
+  double maxY = open;
+  maxY = qMax(maxY, high);
+  maxY = qMax(maxY, low);
+  maxY = qMax(maxY, close);
 
-    return QwtInterval( minY, maxY );
+  return QwtInterval(minY, maxY);
 }
 
 /*!
@@ -242,28 +238,27 @@ inline QwtInterval QwtOHLCSample::boundingInterval() const
  */
 class QWT_EXPORT QwtVectorFieldSample
 {
-  public:
-    QwtVectorFieldSample( double x = 0.0, double y = 0.0,
-        double vx = 0.0, double vy = 0.0 );
+public:
+  QwtVectorFieldSample(double x = 0.0, double y = 0.0, double vx = 0.0,
+                       double vy = 0.0);
 
-    QwtVectorFieldSample( const QPointF& pos,
-        double vx = 0.0, double vy = 0.0 );
+  QwtVectorFieldSample(const QPointF &pos, double vx = 0.0, double vy = 0.0);
 
-    QPointF pos() const;
+  QPointF pos() const;
 
-    bool isNull() const;
+  bool isNull() const;
 
-    //! x coordinate of the position
-    double x;
+  //! x coordinate of the position
+  double x;
 
-    //! y coordinate of the position
-    double y;
+  //! y coordinate of the position
+  double y;
 
-    //! x coordinate of the vector
-    double vx;
+  //! x coordinate of the vector
+  double vx;
 
-    //! y coordinate of the vector
-    double vy;
+  //! y coordinate of the vector
+  double vy;
 };
 
 /*!
@@ -274,12 +269,13 @@ class QWT_EXPORT QwtVectorFieldSample
    \param vectorX x coordinate of the vector
    \param vectorY y coordinate of the vector
  */
-inline QwtVectorFieldSample::QwtVectorFieldSample(
-        double posX, double posY, double vectorX, double vectorY )
-    : x( posX )
-    , y( posY )
-    , vx( vectorX )
-    , vy( vectorY )
+inline QwtVectorFieldSample::QwtVectorFieldSample(double posX, double posY,
+                                                  double vectorX,
+                                                  double vectorY)
+  : x(posX)
+  , y(posY)
+  , vx(vectorX)
+  , vy(vectorY)
 {
 }
 
@@ -290,25 +286,26 @@ inline QwtVectorFieldSample::QwtVectorFieldSample(
    \param vectorX x coordinate of the vector
    \param vectorY y coordinate of the vector
  */
-inline QwtVectorFieldSample::QwtVectorFieldSample(
-        const QPointF& pos, double vectorX, double vectorY )
-    : x( pos.x() )
-    , y( pos.y() )
-    , vx( vectorX )
-    , vy( vectorY )
+inline QwtVectorFieldSample::QwtVectorFieldSample(const QPointF &pos,
+                                                  double vectorX,
+                                                  double vectorY)
+  : x(pos.x())
+  , y(pos.y())
+  , vx(vectorX)
+  , vy(vectorY)
 {
 }
 
 //! \return x/y coordinates as QPointF
 inline QPointF QwtVectorFieldSample::pos() const
 {
-    return QPointF( x, y );
+  return QPointF(x, y);
 }
 
 //! \return true, if vx and vy are 0
 inline bool QwtVectorFieldSample::isNull() const
 {
-    return ( vx == 0.0 ) && ( vy == 0.0 );
+  return (vx == 0.0) && (vy == 0.0);
 }
 
 #endif

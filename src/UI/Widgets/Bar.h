@@ -29,17 +29,17 @@ namespace Widgets
 {
 class Bar : public BaseWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    Bar(const int index = -1);
+  Bar(const int index = -1);
 
 private Q_SLOTS:
-    void updateData();
-    void onResized();
+  void updateData();
+  void onResized();
 
 private:
-    int m_index;
-    QwtThermo m_thermo;
+  int m_index;
+  QwtThermo m_thermo;
 };
-}
+} // namespace Widgets

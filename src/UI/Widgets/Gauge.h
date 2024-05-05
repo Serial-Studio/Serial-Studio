@@ -29,16 +29,16 @@ namespace Widgets
 {
 class Gauge : public BaseWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    Gauge(const int index = -1);
+  Gauge(const int index = -1);
 
 private Q_SLOTS:
-    void updateData();
+  void updateData();
 
 private:
-    int m_index;
-    AnalogGauge m_gauge;
+  int m_index;
+  AnalogGauge m_gauge;
 };
-}
+} // namespace Widgets

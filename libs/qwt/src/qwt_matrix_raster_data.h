@@ -14,7 +14,8 @@
 #include "qwt_raster_data.h"
 
 #if QT_VERSION < 0x060000
-template< typename T > class QVector;
+template<typename T>
+class QVector;
 #endif
 
 /*!
@@ -27,58 +28,58 @@ template< typename T > class QVector;
  */
 class QWT_EXPORT QwtMatrixRasterData : public QwtRasterData
 {
-  public:
+public:
+  /*!
+     \brief Resampling algorithm
+     The default setting is NearestNeighbour;
+   */
+  enum ResampleMode
+  {
     /*!
-       \brief Resampling algorithm
-       The default setting is NearestNeighbour;
+       Return the value from the matrix, that is nearest to the
+       the requested position.
      */
-    enum ResampleMode
-    {
-        /*!
-           Return the value from the matrix, that is nearest to the
-           the requested position.
-         */
-        NearestNeighbour,
+    NearestNeighbour,
 
-        /*!
-           Interpolate the value from the distances and values of the
-           4 surrounding values in the matrix,
-         */
-        BilinearInterpolation,
+    /*!
+       Interpolate the value from the distances and values of the
+       4 surrounding values in the matrix,
+     */
+    BilinearInterpolation,
 
-        /*!
-           Interpolate the value from the 16 surrounding values in the
-           matrix using hermite bicubic interpolation
-         */
-        BicubicInterpolation
-    };
+    /*!
+       Interpolate the value from the 16 surrounding values in the
+       matrix using hermite bicubic interpolation
+     */
+    BicubicInterpolation
+  };
 
-    QwtMatrixRasterData();
-    virtual ~QwtMatrixRasterData();
+  QwtMatrixRasterData();
+  virtual ~QwtMatrixRasterData();
 
-    void setResampleMode(ResampleMode mode);
-    ResampleMode resampleMode() const;
+  void setResampleMode(ResampleMode mode);
+  ResampleMode resampleMode() const;
 
-    void setInterval( Qt::Axis, const QwtInterval& );
-    virtual QwtInterval interval( Qt::Axis axis) const QWT_OVERRIDE QWT_FINAL;
+  void setInterval(Qt::Axis, const QwtInterval &);
+  virtual QwtInterval interval(Qt::Axis axis) const QWT_OVERRIDE QWT_FINAL;
 
-    void setValueMatrix( const QVector< double >& values, int numColumns );
-    const QVector< double > valueMatrix() const;
+  void setValueMatrix(const QVector<double> &values, int numColumns);
+  const QVector<double> valueMatrix() const;
 
-    void setValue( int row, int col, double value );
+  void setValue(int row, int col, double value);
 
-    int numColumns() const;
-    int numRows() const;
+  int numColumns() const;
+  int numRows() const;
 
-    virtual QRectF pixelHint( const QRectF& ) const QWT_OVERRIDE;
+  virtual QRectF pixelHint(const QRectF &) const QWT_OVERRIDE;
 
-    virtual double value( double x, double y ) const QWT_OVERRIDE;
+  virtual double value(double x, double y) const QWT_OVERRIDE;
 
-  private:
-    void update();
+private:
+  void update();
 
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

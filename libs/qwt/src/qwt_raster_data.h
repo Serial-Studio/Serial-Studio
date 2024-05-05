@@ -17,8 +17,10 @@ class QwtInterval;
 class QPolygonF;
 class QRectF;
 class QSize;
-template< typename T > class QList;
-template< class Key, class T > class QMap;
+template<typename T>
+class QList;
+template<class Key, class T>
+class QMap;
 
 /*!
    \brief QwtRasterData defines an interface to any type of raster data.
@@ -41,89 +43,89 @@ template< class Key, class T > class QMap;
  */
 class QWT_EXPORT QwtRasterData
 {
-  public:
-    //! Contour lines
-    typedef QMap< double, QPolygonF > ContourLines;
+public:
+  //! Contour lines
+  typedef QMap<double, QPolygonF> ContourLines;
 
+  /*!
+     \brief Raster data attributes
+
+     Additional information that is used to improve processing
+     of the data.
+   */
+  enum Attribute
+  {
     /*!
-       \brief Raster data attributes
+       The bounding rectangle of the data is spanned by
+       the interval(Qt::XAxis) and interval(Qt::YAxis).
 
-       Additional information that is used to improve processing
-       of the data.
+       WithoutGaps indicates, that the data has no gaps
+       ( unknown values ) in this area and the result of
+       value() does not need to be checked for NaN values.
+
+       Enabling this flag will have an positive effect on
+       the performance of rendering a QwtPlotSpectrogram.
+
+       The default setting is false.
+
+       \note NaN values indicate an undefined value
      */
-    enum Attribute
-    {
-        /*!
-           The bounding rectangle of the data is spanned by
-           the interval(Qt::XAxis) and interval(Qt::YAxis).
+    WithoutGaps = 0x01
+  };
 
-           WithoutGaps indicates, that the data has no gaps
-           ( unknown values ) in this area and the result of
-           value() does not need to be checked for NaN values.
+  Q_DECLARE_FLAGS(Attributes, Attribute)
 
-           Enabling this flag will have an positive effect on
-           the performance of rendering a QwtPlotSpectrogram.
+  //! Flags to modify the contour algorithm
+  enum ConrecFlag
+  {
+    //! Ignore all vertices on the same level
+    IgnoreAllVerticesOnLevel = 0x01,
 
-           The default setting is false.
+    //! Ignore all values, that are out of range
+    IgnoreOutOfRange = 0x02
+  };
 
-           \note NaN values indicate an undefined value
-         */
-        WithoutGaps = 0x01
-    };
+  Q_DECLARE_FLAGS(ConrecFlags, ConrecFlag)
 
-    Q_DECLARE_FLAGS( Attributes, Attribute )
+  QwtRasterData();
+  virtual ~QwtRasterData();
 
-    //! Flags to modify the contour algorithm
-    enum ConrecFlag
-    {
-        //! Ignore all vertices on the same level
-        IgnoreAllVerticesOnLevel = 0x01,
+  void setAttribute(Attribute, bool on = true);
+  bool testAttribute(Attribute) const;
 
-        //! Ignore all values, that are out of range
-        IgnoreOutOfRange = 0x02
-    };
+  /*!
+     \return Bounding interval for an axis
+     \sa setInterval
+   */
+  virtual QwtInterval interval(Qt::Axis) const = 0;
 
-    Q_DECLARE_FLAGS( ConrecFlags, ConrecFlag )
+  virtual QRectF pixelHint(const QRectF &) const;
 
-    QwtRasterData();
-    virtual ~QwtRasterData();
+  virtual void initRaster(const QRectF &, const QSize &raster);
+  virtual void discardRaster();
 
-    void setAttribute( Attribute, bool on = true );
-    bool testAttribute( Attribute ) const;
+  /*!
+     \return the value at a raster position
+     \param x X value in plot coordinates
+     \param y Y value in plot coordinates
+   */
+  virtual double value(double x, double y) const = 0;
 
-    /*!
-       \return Bounding interval for an axis
-       \sa setInterval
-     */
-    virtual QwtInterval interval( Qt::Axis ) const = 0;
+  virtual ContourLines contourLines(const QRectF &rect, const QSize &raster,
+                                    const QList<double> &levels,
+                                    ConrecFlags) const;
 
-    virtual QRectF pixelHint( const QRectF& ) const;
+  class Contour3DPoint;
+  class ContourPlane;
 
-    virtual void initRaster( const QRectF&, const QSize& raster );
-    virtual void discardRaster();
+private:
+  Q_DISABLE_COPY(QwtRasterData)
 
-    /*!
-       \return the value at a raster position
-       \param x X value in plot coordinates
-       \param y Y value in plot coordinates
-     */
-    virtual double value( double x, double y ) const = 0;
-
-    virtual ContourLines contourLines( const QRectF& rect,
-        const QSize& raster, const QList< double >& levels,
-        ConrecFlags ) const;
-
-    class Contour3DPoint;
-    class ContourPlane;
-
-  private:
-    Q_DISABLE_COPY(QwtRasterData)
-
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtRasterData::ConrecFlags )
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtRasterData::Attributes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtRasterData::ConrecFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtRasterData::Attributes)
 
 #endif

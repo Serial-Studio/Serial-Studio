@@ -28,69 +28,69 @@ import QtQuick.Controls
 import "../Widgets" as Widgets
 
 Rectangle {
-    id: root
-    radius: 5
+  id: root
+  radius: 5
 
-    property alias consoleChecked: consoleBt.checked
+  property alias consoleChecked: consoleBt.checked
 
-    Settings {
-        property alias consoleVisible: root.consoleChecked
+  Settings {
+    property alias consoleVisible: root.consoleChecked
+  }
+
+  gradient: Gradient {
+    GradientStop {
+      position: 0
+      color: Cpp_ThemeManager.windowGradient1
     }
 
-    gradient: Gradient {
-        GradientStop {
-            position: 0
-            color: Cpp_ThemeManager.windowGradient1
-        }
+    GradientStop {
+      position: 1
+      color: Cpp_ThemeManager.windowGradient2
+    }
+  }
 
-        GradientStop {
-            position: 1
-            color: Cpp_ThemeManager.windowGradient2
-        }
+  RowLayout {
+    spacing: app.spacing
+
+    anchors {
+      margins: 0
+      left: parent.left
+      right: parent.right
+      leftMargin: app.spacing
+      rightMargin: app.spacing
+      verticalCenter: parent.verticalCenter
     }
 
-    RowLayout {
-        spacing: app.spacing
-
-        anchors {
-            margins: 0
-            left: parent.left
-            right: parent.right
-            leftMargin: app.spacing
-            rightMargin: app.spacing
-            verticalCenter: parent.verticalCenter
-        }
-
-        Widgets.Icon {
-            Layout.alignment: Qt.AlignVCenter
-            source: "qrc:/icons/arrow-right.svg"
-        }
-
-        Label {
-            font.bold: true
-            font.pixelSize: 16
-            color: palette.brightText
-            font.family: app.monoFont
-            text: Cpp_UI_Dashboard.title
-            Layout.alignment: Qt.AlignVCenter
-        }
-
-        Item {
-            Layout.fillWidth: true
-        }
-
-        Button {
-            flat: true
-            id: consoleBt
-            checkable: true
-            font.bold: true
-            text: qsTr("Console")
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/icons/code.svg"
-            icon.color: Cpp_ThemeManager.menubarText
-            palette.buttonText: Cpp_ThemeManager.menubarText
-            palette.button: Cpp_ThemeManager.windowGradient1
-            palette.window: Cpp_ThemeManager.windowGradient1
-        }
+    Widgets.Icon {
+      Layout.alignment: Qt.AlignVCenter
+      source: "qrc:/icons/arrow-right.svg"
     }
+
+    Label {
+      font.bold: true
+      font.pixelSize: 16
+      color: palette.brightText
+      font.family: app.monoFont
+      text: Cpp_UI_Dashboard.title
+      Layout.alignment: Qt.AlignVCenter
+    }
+
+    Item {
+      Layout.fillWidth: true
+    }
+
+    Button {
+      flat: true
+      id: consoleBt
+      checkable: true
+      font.bold: true
+      text: qsTr("Console")
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/icons/code.svg"
+      icon.color: Cpp_ThemeManager.menubarText
+      palette.buttonText: Cpp_ThemeManager.menubarText
+      palette.button: Cpp_ThemeManager.windowGradient1
+      palette.window: Cpp_ThemeManager.windowGradient1
+    }
+  }
 }

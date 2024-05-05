@@ -29,16 +29,16 @@ namespace Widgets
 {
 class Accelerometer : public BaseWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    Accelerometer(const int index = -1);
+  Accelerometer(const int index = -1);
 
 private Q_SLOTS:
-    void updateData();
+  void updateData();
 
 private:
-    int m_index;
-    AnalogGauge m_gauge;
+  int m_index;
+  AnalogGauge m_gauge;
 };
-}
+} // namespace Widgets

@@ -16,93 +16,90 @@
 #include <qstyle.h>
 #include <qstyleoption.h>
 #ifdef Q_WS_X11
-#include <qx11info_x11.h>
+#  include <qx11info_x11.h>
 #endif
 
-static inline void PolarCanvas_qwtDrawStyledBackground(
-    QWidget* widget, QPainter* painter )
+static inline void PolarCanvas_qwtDrawStyledBackground(QWidget *widget,
+                                                       QPainter *painter)
 {
-    QStyleOption opt;
-    opt.initFrom( widget );
-    widget->style()->drawPrimitive( QStyle::PE_Widget, &opt, painter, widget );
+  QStyleOption opt;
+  opt.initFrom(widget);
+  widget->style()->drawPrimitive(QStyle::PE_Widget, &opt, painter, widget);
 }
 
-static QWidget* PolarCanvas_qwtBackgroundWidget( QWidget* w )
+static QWidget *PolarCanvas_qwtBackgroundWidget(QWidget *w)
 {
-    if ( w->parentWidget() == NULL )
-        return w;
+  if (w->parentWidget() == NULL)
+    return w;
 
-    if ( w->autoFillBackground() )
-    {
-        const QBrush brush = w->palette().brush( w->backgroundRole() );
-        if ( brush.color().alpha() > 0 )
-            return w;
-    }
+  if (w->autoFillBackground())
+  {
+    const QBrush brush = w->palette().brush(w->backgroundRole());
+    if (brush.color().alpha() > 0)
+      return w;
+  }
 
-    if ( w->testAttribute( Qt::WA_StyledBackground ) )
-    {
-        QImage image( 1, 1, QImage::Format_ARGB32 );
-        image.fill( Qt::transparent );
+  if (w->testAttribute(Qt::WA_StyledBackground))
+  {
+    QImage image(1, 1, QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
 
-        QPainter painter( &image );
-        painter.translate( -w->rect().center() );
-        PolarCanvas_qwtDrawStyledBackground( w, &painter );
-        painter.end();
+    QPainter painter(&image);
+    painter.translate(-w->rect().center());
+    PolarCanvas_qwtDrawStyledBackground(w, &painter);
+    painter.end();
 
-        if ( qAlpha( image.pixel( 0, 0 ) ) != 0 )
-            return w;
-    }
+    if (qAlpha(image.pixel(0, 0)) != 0)
+      return w;
+  }
 
-    return PolarCanvas_qwtBackgroundWidget( w->parentWidget() );
+  return PolarCanvas_qwtBackgroundWidget(w->parentWidget());
 }
 
 class QwtPolarCanvas::PrivateData
 {
-  public:
-    PrivateData()
-        : backingStore( NULL )
-    {
-    }
+public:
+  PrivateData()
+    : backingStore(NULL)
+  {
+  }
 
-    ~PrivateData()
-    {
-        delete backingStore;
-    }
+  ~PrivateData() { delete backingStore; }
 
-    QwtPolarCanvas::PaintAttributes paintAttributes;
-    QPixmap* backingStore;
+  QwtPolarCanvas::PaintAttributes paintAttributes;
+  QPixmap *backingStore;
 };
 
 //! Constructor
-QwtPolarCanvas::QwtPolarCanvas( QwtPolarPlot* plot )
-    : QFrame( plot )
+QwtPolarCanvas::QwtPolarCanvas(QwtPolarPlot *plot)
+  : QFrame(plot)
 {
-    m_data = new PrivateData;
+  m_data = new PrivateData;
 
 #ifndef QT_NO_CURSOR
-    setCursor( Qt::CrossCursor );
+  setCursor(Qt::CrossCursor);
 #endif
-    setFocusPolicy( Qt::WheelFocus );
+  setFocusPolicy(Qt::WheelFocus);
 
-    setPaintAttribute( BackingStore, true );
+  setPaintAttribute(BackingStore, true);
 }
 
 //! Destructor
 QwtPolarCanvas::~QwtPolarCanvas()
 {
-    delete m_data;
+  delete m_data;
 }
 
 //! \return Parent plot widget
-QwtPolarPlot* QwtPolarCanvas::plot()
+QwtPolarPlot *QwtPolarCanvas::plot()
 {
-    return qobject_cast< QwtPolarPlot* >( parent() );
+  return qobject_cast<QwtPolarPlot *>(parent());
 }
 
 //! \return Parent plot widget
-const QwtPolarPlot* QwtPolarCanvas::plot() const
+const QwtPolarPlot *QwtPolarCanvas::plot() const
 {
-    return qobject_cast< QwtPolarPlot* >( parent() );
+  return qobject_cast<QwtPolarPlot *>(parent());
 }
 
 /*!
@@ -115,43 +112,42 @@ const QwtPolarPlot* QwtPolarCanvas::plot() const
 
    \sa testPaintAttribute(), paintCache()
  */
-void QwtPolarCanvas::setPaintAttribute( PaintAttribute attribute, bool on )
+void QwtPolarCanvas::setPaintAttribute(PaintAttribute attribute, bool on)
 {
-    if ( bool( m_data->paintAttributes & attribute ) == on )
-        return;
+  if (bool(m_data->paintAttributes & attribute) == on)
+    return;
 
-    if ( on )
-        m_data->paintAttributes |= attribute;
-    else
-        m_data->paintAttributes &= ~attribute;
+  if (on)
+    m_data->paintAttributes |= attribute;
+  else
+    m_data->paintAttributes &= ~attribute;
 
-    switch( attribute )
-    {
-        case BackingStore:
+  switch (attribute)
+  {
+    case BackingStore: {
+      if (on)
+      {
+        if (m_data->backingStore == NULL)
+          m_data->backingStore = new QPixmap();
+
+        if (isVisible())
         {
-            if ( on )
-            {
-                if ( m_data->backingStore == NULL )
-                    m_data->backingStore = new QPixmap();
-
-                if ( isVisible() )
-                {
-                    const QRect cr = contentsRect();
+          const QRect cr = contentsRect();
 #if QT_VERSION >= 0x050000
-                    *m_data->backingStore = grab( cr );
+          *m_data->backingStore = grab(cr);
 #else
-                    *m_data->backingStore = QPixmap::grabWidget( this, cr );
+          *m_data->backingStore = QPixmap::grabWidget(this, cr);
 #endif
-                }
-            }
-            else
-            {
-                delete m_data->backingStore;
-                m_data->backingStore = NULL;
-            }
-            break;
         }
+      }
+      else
+      {
+        delete m_data->backingStore;
+        m_data->backingStore = NULL;
+      }
+      break;
     }
+  }
 }
 
 /*!
@@ -161,99 +157,98 @@ void QwtPolarCanvas::setPaintAttribute( PaintAttribute attribute, bool on )
    \return true if the attribute is enabled
    \sa setPaintAttribute()
  */
-bool QwtPolarCanvas::testPaintAttribute( PaintAttribute attribute ) const
+bool QwtPolarCanvas::testPaintAttribute(PaintAttribute attribute) const
 {
-    return ( m_data->paintAttributes & attribute ) != 0;
+  return (m_data->paintAttributes & attribute) != 0;
 }
 
 //! \return Backing store, might be null
-const QPixmap* QwtPolarCanvas::backingStore() const
+const QPixmap *QwtPolarCanvas::backingStore() const
 {
-    return m_data->backingStore;
+  return m_data->backingStore;
 }
 
 //! Invalidate the internal backing store
 void QwtPolarCanvas::invalidateBackingStore()
 {
-    if ( m_data->backingStore )
-        *m_data->backingStore = QPixmap();
+  if (m_data->backingStore)
+    *m_data->backingStore = QPixmap();
 }
 
 /*!
    Paint event
    \param event Paint event
  */
-void QwtPolarCanvas::paintEvent( QPaintEvent* event )
+void QwtPolarCanvas::paintEvent(QPaintEvent *event)
 {
-    QPainter painter( this );
-    painter.setClipRegion( event->region() );
+  QPainter painter(this);
+  painter.setClipRegion(event->region());
 
-    if ( ( m_data->paintAttributes & BackingStore )
-        && m_data->backingStore != NULL )
+  if ((m_data->paintAttributes & BackingStore) && m_data->backingStore != NULL)
+  {
+    QPixmap &bs = *m_data->backingStore;
+    if (bs.size() != size())
     {
-        QPixmap& bs = *m_data->backingStore;
-        if ( bs.size() != size() )
-        {
-            bs = QPixmap( size() );
+      bs = QPixmap(size());
 #ifdef Q_WS_X11
-            if ( bs.x11Info().screen() != x11Info().screen() )
-                bs.x11SetScreen( x11Info().screen() );
+      if (bs.x11Info().screen() != x11Info().screen())
+        bs.x11SetScreen(x11Info().screen());
 #endif
 
-            QPainter p;
+      QPainter p;
 
-            if ( testAttribute( Qt::WA_StyledBackground ) )
-            {
-                p.begin( &bs );
-                PolarCanvas_qwtDrawStyledBackground( this, &p );
-            }
-            else
-            {
-                if ( autoFillBackground() )
-                {
-                    p.begin( &bs );
-                    p.fillRect( rect(), palette().brush( backgroundRole() ) );
-                }
-                else
-                {
-                    QWidget* bgWidget = PolarCanvas_qwtBackgroundWidget( plot() );
-
-                    QwtPainter::fillPixmap( bgWidget, bs,
-                        mapTo( bgWidget, rect().topLeft() ) );
-
-                    p.begin( &bs );
-                }
-            }
-
-            plot()->drawCanvas( &p, contentsRect() );
-
-            if ( frameWidth() > 0 )
-                drawFrame( &p );
+      if (testAttribute(Qt::WA_StyledBackground))
+      {
+        p.begin(&bs);
+        PolarCanvas_qwtDrawStyledBackground(this, &p);
+      }
+      else
+      {
+        if (autoFillBackground())
+        {
+          p.begin(&bs);
+          p.fillRect(rect(), palette().brush(backgroundRole()));
         }
+        else
+        {
+          QWidget *bgWidget = PolarCanvas_qwtBackgroundWidget(plot());
 
-        painter.drawPixmap( 0, 0, *m_data->backingStore );
+          QwtPainter::fillPixmap(bgWidget, bs,
+                                 mapTo(bgWidget, rect().topLeft()));
+
+          p.begin(&bs);
+        }
+      }
+
+      plot()->drawCanvas(&p, contentsRect());
+
+      if (frameWidth() > 0)
+        drawFrame(&p);
     }
-    else
-    {
-        PolarCanvas_qwtDrawStyledBackground( this, &painter );
 
-        plot()->drawCanvas( &painter, contentsRect() );
+    painter.drawPixmap(0, 0, *m_data->backingStore);
+  }
+  else
+  {
+    PolarCanvas_qwtDrawStyledBackground(this, &painter);
 
-        if ( frameWidth() > 0 )
-            drawFrame( &painter );
-    }
+    plot()->drawCanvas(&painter, contentsRect());
+
+    if (frameWidth() > 0)
+      drawFrame(&painter);
+  }
 }
 
 /*!
    Resize event
    \param event Resize event
  */
-void QwtPolarCanvas::resizeEvent( QResizeEvent* event )
+void QwtPolarCanvas::resizeEvent(QResizeEvent *event)
 {
-    QFrame::resizeEvent( event );
+  QFrame::resizeEvent(event);
 
-    for ( int scaleId = 0; scaleId < QwtPolar::ScaleCount; scaleId++ )
-        plot()->updateScale( scaleId );
+  for (int scaleId = 0; scaleId < QwtPolar::ScaleCount; scaleId++)
+    plot()->updateScale(scaleId);
 }
 
 /*!
@@ -264,40 +259,40 @@ void QwtPolarCanvas::resizeEvent( QResizeEvent* event )
 
     \sa transform()
  */
-QwtPointPolar QwtPolarCanvas::invTransform( const QPoint& pos ) const
+QwtPointPolar QwtPolarCanvas::invTransform(const QPoint &pos) const
 {
-    const QwtPolarPlot* pl = plot();
+  const QwtPolarPlot *pl = plot();
 
-    const QwtScaleMap azimuthMap = pl->scaleMap( QwtPolar::Azimuth );
-    const QwtScaleMap radialMap = pl->scaleMap( QwtPolar::Radius );
+  const QwtScaleMap azimuthMap = pl->scaleMap(QwtPolar::Azimuth);
+  const QwtScaleMap radialMap = pl->scaleMap(QwtPolar::Radius);
 
-    const QPointF center = pl->plotRect().center();
+  const QPointF center = pl->plotRect().center();
 
-    double dx = pos.x() - center.x();
-    double dy = -( pos.y() - center.y() );
+  double dx = pos.x() - center.x();
+  double dy = -(pos.y() - center.y());
 
-    const QwtPointPolar polarPos = QwtPointPolar( QPoint( dx, dy ) ).normalized();
+  const QwtPointPolar polarPos = QwtPointPolar(QPoint(dx, dy)).normalized();
 
-    double azimuth = azimuthMap.invTransform( polarPos.azimuth() );
+  double azimuth = azimuthMap.invTransform(polarPos.azimuth());
 
-    // normalize the azimuth
-    double min = azimuthMap.s1();
-    double max = azimuthMap.s2();
-    if ( max < min )
-        qSwap( min, max );
+  // normalize the azimuth
+  double min = azimuthMap.s1();
+  double max = azimuthMap.s2();
+  if (max < min)
+    qSwap(min, max);
 
-    if ( azimuth < min )
-    {
-        azimuth += max - min;
-    }
-    else if ( azimuth > max )
-    {
-        azimuth -= max - min;
-    }
+  if (azimuth < min)
+  {
+    azimuth += max - min;
+  }
+  else if (azimuth > max)
+  {
+    azimuth -= max - min;
+  }
 
-    const double radius = radialMap.invTransform( polarPos.radius() );
+  const double radius = radialMap.invTransform(polarPos.radius());
 
-    return QwtPointPolar( azimuth, radius );
+  return QwtPointPolar(azimuth, radius);
 }
 
 /*!
@@ -307,22 +302,21 @@ QwtPointPolar QwtPolarCanvas::invTransform( const QPoint& pos ) const
     \return Point in widget coordinates
     \sa transform()
  */
-QPoint QwtPolarCanvas::transform( const QwtPointPolar& polarPos ) const
+QPoint QwtPolarCanvas::transform(const QwtPointPolar &polarPos) const
 {
-    const QwtPolarPlot* pl = plot();
+  const QwtPolarPlot *pl = plot();
 
-    const QwtScaleMap azimuthMap = pl->scaleMap( QwtPolar::Azimuth );
-    const QwtScaleMap radialMap = pl->scaleMap( QwtPolar::Radius );
+  const QwtScaleMap azimuthMap = pl->scaleMap(QwtPolar::Azimuth);
+  const QwtScaleMap radialMap = pl->scaleMap(QwtPolar::Radius);
 
-    const double radius = radialMap.transform( polarPos.radius() );
-    const double azimuth = azimuthMap.transform( polarPos.azimuth() );
+  const double radius = radialMap.transform(polarPos.radius());
+  const double azimuth = azimuthMap.transform(polarPos.azimuth());
 
-    const QPointF pos = qwtPolar2Pos(
-        pl->plotRect().center(), radius, azimuth );
+  const QPointF pos = qwtPolar2Pos(pl->plotRect().center(), radius, azimuth);
 
-    return pos.toPoint();
+  return pos.toPoint();
 }
 
 #if QWT_MOC_INCLUDE
-#include "moc_qwt_polar_canvas.cpp"
+#  include "moc_qwt_polar_canvas.cpp"
 #endif

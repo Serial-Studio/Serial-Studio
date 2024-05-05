@@ -27,61 +27,61 @@ import QtQuick.Controls
 import "../Widgets" as Widgets
 
 Item {
-    id: root
+  id: root
 
-    //
-    // Custom properties
-    //
-    property alias vt100emulation: terminal.vt100emulation
+  //
+  // Custom properties
+  //
+  property alias vt100emulation: terminal.vt100emulation
 
-    //
-    // Utility functions between terminal widget & main window
-    //
-    function sendData() {
-        terminal.sendData()
-    } function clear() {
-        terminal.clear()
-    } function copy() {
-        terminal.copy()
-    } function selectAll() {
-        terminal.selectAll()
+  //
+  // Utility functions between terminal widget & main window
+  //
+  function sendData() {
+    terminal.sendData()
+  } function clear() {
+    terminal.clear()
+  } function copy() {
+    terminal.copy()
+  } function selectAll() {
+    terminal.selectAll()
+  }
+
+  //
+  // Load welcome guide
+  //
+  function showWelcomeGuide() {
+    clear()
+    Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
+  }
+
+  //
+  // Re-load welcome text when the language is changed
+  //
+  Connections {
+    target: Cpp_Misc_Translator
+    function onLanguageChanged() {
+      root.showWelcomeGuide()
     }
+  }
 
-    //
-    // Load welcome guide
-    //
-    function showWelcomeGuide() {
-        clear()
-        Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
+  //
+  // Console window
+  //
+  Widgets.Window {
+    id: window
+    gradient: true
+    anchors.fill: parent
+    title: qsTr("Console")
+    headerDoubleClickEnabled: false
+    icon.source: "qrc:/icons/code.svg"
+    anchors.margins: (app.spacing * 1.5) - 5
+    backgroundColor: Cpp_ThemeManager.paneWindowBackground
+
+    Widgets.Terminal {
+      id: terminal
+      widgetEnabled: true
+      anchors.fill: parent
     }
-
-    //
-    // Re-load welcome text when the language is changed
-    //
-    Connections {
-        target: Cpp_Misc_Translator
-        function onLanguageChanged() {
-            root.showWelcomeGuide()
-        }
-    }
-
-    //
-    // Console window
-    //
-    Widgets.Window {
-        id: window
-        gradient: true
-        anchors.fill: parent
-        title: qsTr("Console")
-        headerDoubleClickEnabled: false
-        icon.source: "qrc:/icons/code.svg"
-        anchors.margins: (app.spacing * 1.5) - 5
-        backgroundColor: Cpp_ThemeManager.paneWindowBackground
-
-        Widgets.Terminal {
-            id: terminal
-            widgetEnabled: true
-            anchors.fill: parent
-        }
-    }
+  }
 }

@@ -22,14 +22,15 @@
  */
 class QWT_EXPORT QwtSplinePleasing : public QwtSplineG1
 {
-  public:
-    QwtSplinePleasing();
-    virtual ~QwtSplinePleasing();
+public:
+  QwtSplinePleasing();
+  virtual ~QwtSplinePleasing();
 
-    virtual uint locality() const QWT_OVERRIDE;
+  virtual uint locality() const QWT_OVERRIDE;
 
-    virtual QPainterPath painterPath( const QPolygonF& ) const QWT_OVERRIDE;
-    virtual QVector< QLineF > bezierControlLines( const QPolygonF& ) const QWT_OVERRIDE;
+  virtual QPainterPath painterPath(const QPolygonF &) const QWT_OVERRIDE;
+  virtual QVector<QLineF>
+  bezierControlLines(const QPolygonF &) const QWT_OVERRIDE;
 };
 
 #endif

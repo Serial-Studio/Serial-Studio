@@ -27,36 +27,36 @@
  */
 class QWT_EXPORT QwtSamplingThread : public QThread
 {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    virtual ~QwtSamplingThread();
+public:
+  virtual ~QwtSamplingThread();
 
-    double interval() const;
-    double elapsed() const;
+  double interval() const;
+  double elapsed() const;
 
-  public Q_SLOTS:
-    void setInterval( double interval );
-    void stop();
+public Q_SLOTS:
+  void setInterval(double interval);
+  void stop();
 
-  protected:
-    explicit QwtSamplingThread( QObject* parent = NULL );
+protected:
+  explicit QwtSamplingThread(QObject *parent = NULL);
 
-    virtual void run() QWT_OVERRIDE;
+  virtual void run() QWT_OVERRIDE;
 
-    /*!
-       Collect a sample
+  /*!
+     Collect a sample
 
-       \param elapsed Time since the thread was started in seconds
-       \note Due to a bug in previous version elapsed was passed as
-             seconds instead of miliseconds. To avoid breaking existing
-             code we stay with seconds for now.
-     */
-    virtual void sample( double elapsed ) = 0;
+     \param elapsed Time since the thread was started in seconds
+     \note Due to a bug in previous version elapsed was passed as
+           seconds instead of miliseconds. To avoid breaking existing
+           code we stay with seconds for now.
+   */
+  virtual void sample(double elapsed) = 0;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

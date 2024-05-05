@@ -20,8 +20,8 @@
 
 struct ESS_issuer_serial
 {
-    STACK_OF(GENERAL_NAME) * issuer;
-    ASN1_INTEGER *serial;
+  STACK_OF(GENERAL_NAME) * issuer;
+  ASN1_INTEGER *serial;
 };
 
 /*-
@@ -33,8 +33,8 @@ struct ESS_issuer_serial
 
 struct ESS_cert_id
 {
-    ASN1_OCTET_STRING *hash; /* Always SHA-1 digest. */
-    ESS_ISSUER_SERIAL *issuer_serial;
+  ASN1_OCTET_STRING *hash; /* Always SHA-1 digest. */
+  ESS_ISSUER_SERIAL *issuer_serial;
 };
 
 /*-
@@ -46,8 +46,8 @@ struct ESS_cert_id
 
 struct ESS_signing_cert
 {
-    STACK_OF(ESS_CERT_ID) * cert_ids;
-    STACK_OF(POLICYINFO) * policy_info;
+  STACK_OF(ESS_CERT_ID) * cert_ids;
+  STACK_OF(POLICYINFO) * policy_info;
 };
 
 /*-
@@ -60,9 +60,9 @@ struct ESS_signing_cert
 
 struct ESS_cert_id_v2_st
 {
-    X509_ALGOR *hash_alg; /* Default: SHA-256 */
-    ASN1_OCTET_STRING *hash;
-    ESS_ISSUER_SERIAL *issuer_serial;
+  X509_ALGOR *hash_alg; /* Default: SHA-256 */
+  ASN1_OCTET_STRING *hash;
+  ESS_ISSUER_SERIAL *issuer_serial;
 };
 
 /*-
@@ -74,8 +74,8 @@ struct ESS_cert_id_v2_st
 
 struct ESS_signing_cert_v2_st
 {
-    STACK_OF(ESS_CERT_ID_V2) * cert_ids;
-    STACK_OF(POLICYINFO) * policy_info;
+  STACK_OF(ESS_CERT_ID_V2) * cert_ids;
+  STACK_OF(POLICYINFO) * policy_info;
 };
 
 #endif /* OSSL_CRYPTO_ESS_H */

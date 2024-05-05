@@ -18,268 +18,250 @@
 #include <qpaintengine.h>
 #include <qmath.h>
 
-static inline double qwtEffectivePenWidth( const QwtAbstractScaleDraw* scaleDraw )
+static inline double qwtEffectivePenWidth(const QwtAbstractScaleDraw *scaleDraw)
 {
-    return qwtMaxF( scaleDraw->penWidthF(), 1.0 );
+  return qwtMaxF(scaleDraw->penWidthF(), 1.0);
 }
 
 namespace QwtScaleRendererReal
 {
-    inline qreal penWidth( const QPainter* painter, const QwtScaleDraw* scaleDraw )
-    {
-        qreal width = scaleDraw->penWidthF();
+inline qreal penWidth(const QPainter *painter, const QwtScaleDraw *scaleDraw)
+{
+  qreal width = scaleDraw->penWidthF();
 #if 1
-        if ( width <= 0.0 )
-            width = 1.0;
+  if (width <= 0.0)
+    width = 1.0;
 #endif
 
-        if ( painter->pen().isCosmetic() )
-        {
-            const QTransform& transform = painter->transform();
+  if (painter->pen().isCosmetic())
+  {
+    const QTransform &transform = painter->transform();
 
-            switch ( scaleDraw->alignment() )
-            {
-                case QwtScaleDraw::LeftScale:
-                case QwtScaleDraw::RightScale:
-                {
-                    width /= transform.m11();
-                    break;
-                }
-                case QwtScaleDraw::TopScale:
-                case QwtScaleDraw::BottomScale:
-                {
-                    width /= transform.m22();
-                    break;
-                }
-            }
-        }
-
-        return width;
-    }
-
-    inline void drawBackbone( QPainter* painter, const QwtScaleDraw* scaleDraw )
+    switch (scaleDraw->alignment())
     {
-        const qreal pw2 = 0.5 * penWidth( painter, scaleDraw );
-
-        const QPointF pos = scaleDraw->pos();
-        const qreal length = scaleDraw->length();
-
-        switch ( scaleDraw->alignment() )
-        {
-            case QwtScaleDraw::LeftScale:
-            {
-                const qreal x = pos.x() + 1.0 - pw2;
-                QwtPainter::drawLine( painter, x, pos.y(), x, pos.y() + length );
-
-                break;
-            }
-            case QwtScaleDraw::RightScale:
-            {
-                const qreal x = pos.x() - 1.0 + pw2;
-                QwtPainter::drawLine( painter, x, pos.y(), x, pos.y() + length );
-
-                break;
-            }
-            case QwtScaleDraw::TopScale:
-            {
-                const qreal y = pos.y() + 1.0 - pw2;
-                QwtPainter::drawLine( painter, pos.x(), y, pos.x() + length, y );
-
-                break;
-            }
-            case QwtScaleDraw::BottomScale:
-            {
-                const qreal y = pos.y() - 1.0 + pw2;
-                QwtPainter::drawLine( painter, pos.x(), y, pos.x() + length, y );
-
-                break;
-            }
-        }
+      case QwtScaleDraw::LeftScale:
+      case QwtScaleDraw::RightScale: {
+        width /= transform.m11();
+        break;
+      }
+      case QwtScaleDraw::TopScale:
+      case QwtScaleDraw::BottomScale: {
+        width /= transform.m22();
+        break;
+      }
     }
+  }
 
-    inline void drawTick( QPainter* painter,
-        const QwtScaleDraw* scaleDraw, qreal tickPos, qreal tickLength )
-    {
-        const QPointF pos = scaleDraw->pos();
-
-        qreal pw = 0.0;
-
-        if ( scaleDraw->hasComponent( QwtScaleDraw::Backbone ) )
-            pw = penWidth( painter, scaleDraw );
-
-        const qreal length = tickLength + pw;
-
-        /*
-            Those correction offsets have been found by try and error.
-            They need to be understood and replaced by a calculation,
-            that makes sense. TODO ...
-         */
-        const qreal off1 = 1.0;
-        const qreal off2 = ( scaleDraw->penWidthF() <= 0.0 ) ? 0.5 : 0.0;
-
-        switch ( scaleDraw->alignment() )
-        {
-            case QwtScaleDraw::LeftScale:
-            {
-                const qreal x = pos.x() + off1 - off2;
-                QwtPainter::drawLine( painter, x, tickPos, x - length, tickPos );
-
-                break;
-            }
-            case QwtScaleDraw::RightScale:
-            {
-                const qreal x = pos.x() - off1 + off2;
-                QwtPainter::drawLine( painter, x, tickPos, x + length, tickPos );
-                break;
-            }
-            case QwtScaleDraw::TopScale:
-            {
-                const qreal y = pos.y() + off1 - 2 * off2;
-                QwtPainter::drawLine( painter, tickPos, y, tickPos, y - length );
-
-                break;
-            }
-            case QwtScaleDraw::BottomScale:
-            {
-                const qreal y = pos.y() - off1 + off2;
-                QwtPainter::drawLine( painter, tickPos, y, tickPos, y + length );
-
-                break;
-            }
-        }
-    }
+  return width;
 }
+
+inline void drawBackbone(QPainter *painter, const QwtScaleDraw *scaleDraw)
+{
+  const qreal pw2 = 0.5 * penWidth(painter, scaleDraw);
+
+  const QPointF pos = scaleDraw->pos();
+  const qreal length = scaleDraw->length();
+
+  switch (scaleDraw->alignment())
+  {
+    case QwtScaleDraw::LeftScale: {
+      const qreal x = pos.x() + 1.0 - pw2;
+      QwtPainter::drawLine(painter, x, pos.y(), x, pos.y() + length);
+
+      break;
+    }
+    case QwtScaleDraw::RightScale: {
+      const qreal x = pos.x() - 1.0 + pw2;
+      QwtPainter::drawLine(painter, x, pos.y(), x, pos.y() + length);
+
+      break;
+    }
+    case QwtScaleDraw::TopScale: {
+      const qreal y = pos.y() + 1.0 - pw2;
+      QwtPainter::drawLine(painter, pos.x(), y, pos.x() + length, y);
+
+      break;
+    }
+    case QwtScaleDraw::BottomScale: {
+      const qreal y = pos.y() - 1.0 + pw2;
+      QwtPainter::drawLine(painter, pos.x(), y, pos.x() + length, y);
+
+      break;
+    }
+  }
+}
+
+inline void drawTick(QPainter *painter, const QwtScaleDraw *scaleDraw,
+                     qreal tickPos, qreal tickLength)
+{
+  const QPointF pos = scaleDraw->pos();
+
+  qreal pw = 0.0;
+
+  if (scaleDraw->hasComponent(QwtScaleDraw::Backbone))
+    pw = penWidth(painter, scaleDraw);
+
+  const qreal length = tickLength + pw;
+
+  /*
+      Those correction offsets have been found by try and error.
+      They need to be understood and replaced by a calculation,
+      that makes sense. TODO ...
+   */
+  const qreal off1 = 1.0;
+  const qreal off2 = (scaleDraw->penWidthF() <= 0.0) ? 0.5 : 0.0;
+
+  switch (scaleDraw->alignment())
+  {
+    case QwtScaleDraw::LeftScale: {
+      const qreal x = pos.x() + off1 - off2;
+      QwtPainter::drawLine(painter, x, tickPos, x - length, tickPos);
+
+      break;
+    }
+    case QwtScaleDraw::RightScale: {
+      const qreal x = pos.x() - off1 + off2;
+      QwtPainter::drawLine(painter, x, tickPos, x + length, tickPos);
+      break;
+    }
+    case QwtScaleDraw::TopScale: {
+      const qreal y = pos.y() + off1 - 2 * off2;
+      QwtPainter::drawLine(painter, tickPos, y, tickPos, y - length);
+
+      break;
+    }
+    case QwtScaleDraw::BottomScale: {
+      const qreal y = pos.y() - off1 + off2;
+      QwtPainter::drawLine(painter, tickPos, y, tickPos, y + length);
+
+      break;
+    }
+  }
+}
+} // namespace QwtScaleRendererReal
 
 namespace QwtScaleRendererInt
 {
-    inline void drawBackbone( QPainter* painter, const QwtScaleDraw* scaleDraw )
-    {
-        const int pw = qMax( qRound( scaleDraw->penWidthF() ), 1 );
+inline void drawBackbone(QPainter *painter, const QwtScaleDraw *scaleDraw)
+{
+  const int pw = qMax(qRound(scaleDraw->penWidthF()), 1);
 
-        const qreal length = scaleDraw->length();
-        const QPointF pos = scaleDraw->pos();
+  const qreal length = scaleDraw->length();
+  const QPointF pos = scaleDraw->pos();
 
-        switch ( scaleDraw->alignment() )
-        {
-            case QwtScaleDraw::LeftScale:
-            {
-                const qreal x = qRound( pos.x() - ( pw - 1 ) / 2 );
-                QwtPainter::drawLine( painter, x, pos.y(), x, pos.y() + length );
+  switch (scaleDraw->alignment())
+  {
+    case QwtScaleDraw::LeftScale: {
+      const qreal x = qRound(pos.x() - (pw - 1) / 2);
+      QwtPainter::drawLine(painter, x, pos.y(), x, pos.y() + length);
 
-                break;
-            }
-            case QwtScaleDraw::RightScale:
-            {
-                const qreal x = qRound( pos.x() + pw / 2 );
-                QwtPainter::drawLine( painter, x, pos.y(), x, pos.y() + length );
-
-                break;
-            }
-            case QwtScaleDraw::TopScale:
-            {
-                const qreal y = qRound( pos.y() - ( pw - 1 ) / 2 );
-                QwtPainter::drawLine( painter, pos.x(), y, pos.x() + length, y );
-
-                break;
-            }
-            case QwtScaleDraw::BottomScale:
-            {
-                const qreal y = qRound( pos.y() + pw / 2 );
-                QwtPainter::drawLine( painter, pos.x(), y, pos.x() + length, y );
-
-                break;
-            }
-        }
+      break;
     }
+    case QwtScaleDraw::RightScale: {
+      const qreal x = qRound(pos.x() + pw / 2);
+      QwtPainter::drawLine(painter, x, pos.y(), x, pos.y() + length);
 
-    inline void drawTick( QPainter* painter,
-        const QwtScaleDraw* scaleDraw, qreal tickPos, qreal tickLength )
-    {
-        const QPointF pos = scaleDraw->pos();
-        tickPos = qRound( tickPos );
-
-        int pw = 0;
-        if ( scaleDraw->hasComponent( QwtScaleDraw::Backbone ) )
-            pw = qMax( qRound( scaleDraw->penWidthF() ), 1 );
-
-        int len = qMax( qRound( tickLength ), 1 );
-
-        // the width of ticks at the borders might extent the backbone
-        len += pw;
-
-        if ( painter->pen().capStyle() == Qt::FlatCap )
-            len++; // the end point is not rendered
-
-        qreal off = 0.0;
-
-        if ( painter->paintEngine()->type() == QPaintEngine::X11 )
-        {
-            if ( pw == 1 )
-            {
-                // In opposite to raster, X11 paints the end point
-                off = 1.0;
-            }
-        }
-
-        switch ( scaleDraw->alignment() )
-        {
-            case QwtScaleDraw::LeftScale:
-            {
-                const qreal x1 = qRound( pos.x() ) + 1;
-                const qreal x2 = x1 - len + 1;
-
-                QwtPainter::drawLine( painter, x2, tickPos, x1 - off, tickPos );
-
-                break;
-            }
-            case QwtScaleDraw::RightScale:
-            {
-                const qreal x1 = qRound( pos.x() );
-                const qreal x2 = x1 + len - 1;
-
-                QwtPainter::drawLine( painter, x1, tickPos, x2 - off, tickPos );
-
-                break;
-            }
-            case QwtScaleDraw::BottomScale:
-            {
-                const qreal y1 = qRound( pos.y() );
-                const qreal y2 = y1 + len - 1;
-
-                QwtPainter::drawLine( painter, tickPos, y1, tickPos, y2 - off );
-
-                break;
-            }
-            case QwtScaleDraw::TopScale:
-            {
-                const qreal y1 = qRound( pos.y() );
-                const qreal y2 = y1 - len + 1;
-
-                QwtPainter::drawLine( painter, tickPos, y2 + 1, tickPos, y1 + 1 - off );
-
-                break;
-            }
-        }
+      break;
     }
+    case QwtScaleDraw::TopScale: {
+      const qreal y = qRound(pos.y() - (pw - 1) / 2);
+      QwtPainter::drawLine(painter, pos.x(), y, pos.x() + length, y);
+
+      break;
+    }
+    case QwtScaleDraw::BottomScale: {
+      const qreal y = qRound(pos.y() + pw / 2);
+      QwtPainter::drawLine(painter, pos.x(), y, pos.x() + length, y);
+
+      break;
+    }
+  }
 }
+
+inline void drawTick(QPainter *painter, const QwtScaleDraw *scaleDraw,
+                     qreal tickPos, qreal tickLength)
+{
+  const QPointF pos = scaleDraw->pos();
+  tickPos = qRound(tickPos);
+
+  int pw = 0;
+  if (scaleDraw->hasComponent(QwtScaleDraw::Backbone))
+    pw = qMax(qRound(scaleDraw->penWidthF()), 1);
+
+  int len = qMax(qRound(tickLength), 1);
+
+  // the width of ticks at the borders might extent the backbone
+  len += pw;
+
+  if (painter->pen().capStyle() == Qt::FlatCap)
+    len++; // the end point is not rendered
+
+  qreal off = 0.0;
+
+  if (painter->paintEngine()->type() == QPaintEngine::X11)
+  {
+    if (pw == 1)
+    {
+      // In opposite to raster, X11 paints the end point
+      off = 1.0;
+    }
+  }
+
+  switch (scaleDraw->alignment())
+  {
+    case QwtScaleDraw::LeftScale: {
+      const qreal x1 = qRound(pos.x()) + 1;
+      const qreal x2 = x1 - len + 1;
+
+      QwtPainter::drawLine(painter, x2, tickPos, x1 - off, tickPos);
+
+      break;
+    }
+    case QwtScaleDraw::RightScale: {
+      const qreal x1 = qRound(pos.x());
+      const qreal x2 = x1 + len - 1;
+
+      QwtPainter::drawLine(painter, x1, tickPos, x2 - off, tickPos);
+
+      break;
+    }
+    case QwtScaleDraw::BottomScale: {
+      const qreal y1 = qRound(pos.y());
+      const qreal y2 = y1 + len - 1;
+
+      QwtPainter::drawLine(painter, tickPos, y1, tickPos, y2 - off);
+
+      break;
+    }
+    case QwtScaleDraw::TopScale: {
+      const qreal y1 = qRound(pos.y());
+      const qreal y2 = y1 - len + 1;
+
+      QwtPainter::drawLine(painter, tickPos, y2 + 1, tickPos, y1 + 1 - off);
+
+      break;
+    }
+  }
+}
+} // namespace QwtScaleRendererInt
 
 class QwtScaleDraw::PrivateData
 {
-  public:
-    PrivateData()
-        : len( 0 )
-        , alignment( QwtScaleDraw::BottomScale )
-        , labelRotation( 0.0 )
-    {
-    }
+public:
+  PrivateData()
+    : len(0)
+    , alignment(QwtScaleDraw::BottomScale)
+    , labelRotation(0.0)
+  {
+  }
 
-    QPointF pos;
-    double len;
+  QPointF pos;
+  double len;
 
-    Alignment alignment;
+  Alignment alignment;
 
-    Qt::Alignment labelAlignment;
-    double labelRotation;
+  Qt::Alignment labelAlignment;
+  double labelRotation;
 };
 
 /*!
@@ -291,14 +273,14 @@ class QwtScaleDraw::PrivateData
  */
 QwtScaleDraw::QwtScaleDraw()
 {
-    m_data = new QwtScaleDraw::PrivateData;
-    setLength( 100 );
+  m_data = new QwtScaleDraw::PrivateData;
+  setLength(100);
 }
 
 //! Destructor
 QwtScaleDraw::~QwtScaleDraw()
 {
-    delete m_data;
+  delete m_data;
 }
 
 /*!
@@ -308,7 +290,7 @@ QwtScaleDraw::~QwtScaleDraw()
  */
 QwtScaleDraw::Alignment QwtScaleDraw::alignment() const
 {
-    return m_data->alignment;
+  return m_data->alignment;
 }
 
 /*!
@@ -319,9 +301,9 @@ QwtScaleDraw::Alignment QwtScaleDraw::alignment() const
    The default alignment is QwtScaleDraw::BottomScale
    \sa alignment()
  */
-void QwtScaleDraw::setAlignment( Alignment align )
+void QwtScaleDraw::setAlignment(Alignment align)
 {
-    m_data->alignment = align;
+  m_data->alignment = align;
 }
 
 /*!
@@ -336,16 +318,16 @@ void QwtScaleDraw::setAlignment( Alignment align )
  */
 Qt::Orientation QwtScaleDraw::orientation() const
 {
-    switch ( m_data->alignment )
-    {
-        case TopScale:
-        case BottomScale:
-            return Qt::Horizontal;
-        case LeftScale:
-        case RightScale:
-        default:
-            return Qt::Vertical;
-    }
+  switch (m_data->alignment)
+  {
+    case TopScale:
+    case BottomScale:
+      return Qt::Horizontal;
+    case LeftScale:
+    case RightScale:
+    default:
+      return Qt::Vertical;
+  }
 }
 
 /*!
@@ -358,69 +340,69 @@ Qt::Orientation QwtScaleDraw::orientation() const
    \param start Start border distance
    \param end End border distance
  */
-void QwtScaleDraw::getBorderDistHint(
-    const QFont& font, int& start, int& end ) const
+void QwtScaleDraw::getBorderDistHint(const QFont &font, int &start,
+                                     int &end) const
 {
-    start = 0;
-    end = 1.0;
+  start = 0;
+  end = 1.0;
 
-    if ( !hasComponent( QwtAbstractScaleDraw::Labels ) )
-        return;
+  if (!hasComponent(QwtAbstractScaleDraw::Labels))
+    return;
 
-    const QList< double >& ticks = scaleDiv().ticks( QwtScaleDiv::MajorTick );
-    if ( ticks.count() == 0 )
-        return;
+  const QList<double> &ticks = scaleDiv().ticks(QwtScaleDiv::MajorTick);
+  if (ticks.count() == 0)
+    return;
 
-    // Find the ticks, that are mapped to the borders.
-    // minTick is the tick, that is mapped to the top/left-most position
-    // in widget coordinates.
+  // Find the ticks, that are mapped to the borders.
+  // minTick is the tick, that is mapped to the top/left-most position
+  // in widget coordinates.
 
-    double minTick = ticks[0];
-    double minPos = scaleMap().transform( minTick );
-    double maxTick = minTick;
-    double maxPos = minPos;
+  double minTick = ticks[0];
+  double minPos = scaleMap().transform(minTick);
+  double maxTick = minTick;
+  double maxPos = minPos;
 
-    for ( int i = 1; i < ticks.count(); i++ )
+  for (int i = 1; i < ticks.count(); i++)
+  {
+    const double tickPos = scaleMap().transform(ticks[i]);
+    if (tickPos < minPos)
     {
-        const double tickPos = scaleMap().transform( ticks[i] );
-        if ( tickPos < minPos )
-        {
-            minTick = ticks[i];
-            minPos = tickPos;
-        }
-        if ( tickPos > scaleMap().transform( maxTick ) )
-        {
-            maxTick = ticks[i];
-            maxPos = tickPos;
-        }
+      minTick = ticks[i];
+      minPos = tickPos;
     }
-
-    double e = 0.0;
-    double s = 0.0;
-    if ( orientation() == Qt::Vertical )
+    if (tickPos > scaleMap().transform(maxTick))
     {
-        s = -labelRect( font, minTick ).top();
-        s -= qAbs( minPos - qRound( scaleMap().p2() ) );
-
-        e = labelRect( font, maxTick ).bottom();
-        e -= qAbs( maxPos - scaleMap().p1() );
+      maxTick = ticks[i];
+      maxPos = tickPos;
     }
-    else
-    {
-        s = -labelRect( font, minTick ).left();
-        s -= qAbs( minPos - scaleMap().p1() );
+  }
 
-        e = labelRect( font, maxTick ).right();
-        e -= qAbs( maxPos - scaleMap().p2() );
-    }
+  double e = 0.0;
+  double s = 0.0;
+  if (orientation() == Qt::Vertical)
+  {
+    s = -labelRect(font, minTick).top();
+    s -= qAbs(minPos - qRound(scaleMap().p2()));
 
-    if ( s < 0.0 )
-        s = 0.0;
-    if ( e < 0.0 )
-        e = 0.0;
+    e = labelRect(font, maxTick).bottom();
+    e -= qAbs(maxPos - scaleMap().p1());
+  }
+  else
+  {
+    s = -labelRect(font, minTick).left();
+    s -= qAbs(minPos - scaleMap().p1());
 
-    start = qwtCeil( s );
-    end = qwtCeil( e );
+    e = labelRect(font, maxTick).right();
+    e -= qAbs(maxPos - scaleMap().p2());
+  }
+
+  if (s < 0.0)
+    s = 0.0;
+  if (e < 0.0)
+    e = 0.0;
+
+  start = qwtCeil(s);
+  end = qwtCeil(e);
 }
 
 /*!
@@ -433,78 +415,77 @@ void QwtScaleDraw::getBorderDistHint(
    \sa getBorderDistHint()
  */
 
-int QwtScaleDraw::minLabelDist( const QFont& font ) const
+int QwtScaleDraw::minLabelDist(const QFont &font) const
 {
-    if ( !hasComponent( QwtAbstractScaleDraw::Labels ) )
-        return 0;
+  if (!hasComponent(QwtAbstractScaleDraw::Labels))
+    return 0;
 
-    const QList< double >& ticks = scaleDiv().ticks( QwtScaleDiv::MajorTick );
-    if ( ticks.isEmpty() )
-        return 0;
+  const QList<double> &ticks = scaleDiv().ticks(QwtScaleDiv::MajorTick);
+  if (ticks.isEmpty())
+    return 0;
 
-    const QFontMetrics fm( font );
+  const QFontMetrics fm(font);
 
-    const bool vertical = ( orientation() == Qt::Vertical );
+  const bool vertical = (orientation() == Qt::Vertical);
 
-    QRectF bRect1;
-    QRectF bRect2 = labelRect( font, ticks[0] );
-    if ( vertical )
+  QRectF bRect1;
+  QRectF bRect2 = labelRect(font, ticks[0]);
+  if (vertical)
+  {
+    bRect2.setRect(-bRect2.bottom(), 0.0, bRect2.height(), bRect2.width());
+  }
+
+  double maxDist = 0.0;
+
+  for (int i = 1; i < ticks.count(); i++)
+  {
+    bRect1 = bRect2;
+    bRect2 = labelRect(font, ticks[i]);
+    if (vertical)
     {
-        bRect2.setRect( -bRect2.bottom(), 0.0, bRect2.height(), bRect2.width() );
+      bRect2.setRect(-bRect2.bottom(), 0.0, bRect2.height(), bRect2.width());
     }
 
-    double maxDist = 0.0;
+    double dist = fm.leading(); // space between the labels
+    if (bRect1.right() > 0)
+      dist += bRect1.right();
+    if (bRect2.left() < 0)
+      dist += -bRect2.left();
 
-    for ( int i = 1; i < ticks.count(); i++ )
-    {
-        bRect1 = bRect2;
-        bRect2 = labelRect( font, ticks[i] );
-        if ( vertical )
-        {
-            bRect2.setRect( -bRect2.bottom(), 0.0,
-                bRect2.height(), bRect2.width() );
-        }
+    if (dist > maxDist)
+      maxDist = dist;
+  }
 
-        double dist = fm.leading(); // space between the labels
-        if ( bRect1.right() > 0 )
-            dist += bRect1.right();
-        if ( bRect2.left() < 0 )
-            dist += -bRect2.left();
+  double angle = qwtRadians(labelRotation());
+  if (vertical)
+    angle += M_PI / 2;
 
-        if ( dist > maxDist )
-            maxDist = dist;
-    }
+  const double sinA = qFastSin(angle); // qreal -> double
+  if (qFuzzyCompare(sinA + 1.0, 1.0))
+    return qCeil(maxDist);
 
-    double angle = qwtRadians( labelRotation() );
-    if ( vertical )
-        angle += M_PI / 2;
+  const int fmHeight = fm.ascent() - 2;
 
-    const double sinA = qFastSin( angle ); // qreal -> double
-    if ( qFuzzyCompare( sinA + 1.0, 1.0 ) )
-        return qCeil( maxDist );
+  // The distance we need until there is
+  // the height of the label font. This height is needed
+  // for the neighbored label.
 
-    const int fmHeight = fm.ascent() - 2;
+  double labelDist = fmHeight / qFastSin(angle) * qFastCos(angle);
+  if (labelDist < 0)
+    labelDist = -labelDist;
 
-    // The distance we need until there is
-    // the height of the label font. This height is needed
-    // for the neighbored label.
+  // For text orientations close to the scale orientation
 
-    double labelDist = fmHeight / qFastSin( angle ) * qFastCos( angle );
-    if ( labelDist < 0 )
-        labelDist = -labelDist;
+  if (labelDist > maxDist)
+    labelDist = maxDist;
 
-    // For text orientations close to the scale orientation
+  // For text orientations close to the opposite of the
+  // scale orientation
 
-    if ( labelDist > maxDist )
-        labelDist = maxDist;
+  if (labelDist < fmHeight)
+    labelDist = fmHeight;
 
-    // For text orientations close to the opposite of the
-    // scale orientation
-
-    if ( labelDist < fmHeight )
-        labelDist = fmHeight;
-
-    return qCeil( labelDist );
+  return qCeil(labelDist);
 }
 
 /*!
@@ -520,33 +501,33 @@ int QwtScaleDraw::minLabelDist( const QFont& font ) const
 
    \sa minLength()
  */
-double QwtScaleDraw::extent( const QFont& font ) const
+double QwtScaleDraw::extent(const QFont &font) const
 {
-    double d = 0;
+  double d = 0;
 
-    if ( hasComponent( QwtAbstractScaleDraw::Labels ) )
-    {
-        if ( orientation() == Qt::Vertical )
-            d = maxLabelWidth( font );
-        else
-            d = maxLabelHeight( font );
+  if (hasComponent(QwtAbstractScaleDraw::Labels))
+  {
+    if (orientation() == Qt::Vertical)
+      d = maxLabelWidth(font);
+    else
+      d = maxLabelHeight(font);
 
-        if ( d > 0 )
-            d += spacing();
-    }
+    if (d > 0)
+      d += spacing();
+  }
 
-    if ( hasComponent( QwtAbstractScaleDraw::Ticks ) )
-    {
-        d += maxTickLength();
-    }
+  if (hasComponent(QwtAbstractScaleDraw::Ticks))
+  {
+    d += maxTickLength();
+  }
 
-    if ( hasComponent( QwtAbstractScaleDraw::Backbone ) )
-    {
-        d += qwtEffectivePenWidth( this );
-    }
+  if (hasComponent(QwtAbstractScaleDraw::Backbone))
+  {
+    d += qwtEffectivePenWidth(this);
+  }
 
-    d = qwtMaxF( d, minimumExtent() );
-    return d;
+  d = qwtMaxF(d, minimumExtent());
+  return d;
 }
 
 /*!
@@ -557,31 +538,29 @@ double QwtScaleDraw::extent( const QFont& font ) const
 
    \sa extent()
  */
-int QwtScaleDraw::minLength( const QFont& font ) const
+int QwtScaleDraw::minLength(const QFont &font) const
 {
-    int startDist, endDist;
-    getBorderDistHint( font, startDist, endDist );
+  int startDist, endDist;
+  getBorderDistHint(font, startDist, endDist);
 
-    const QwtScaleDiv& sd = scaleDiv();
+  const QwtScaleDiv &sd = scaleDiv();
 
-    const uint minorCount =
-        sd.ticks( QwtScaleDiv::MinorTick ).count() +
-        sd.ticks( QwtScaleDiv::MediumTick ).count();
-    const uint majorCount =
-        sd.ticks( QwtScaleDiv::MajorTick ).count();
+  const uint minorCount = sd.ticks(QwtScaleDiv::MinorTick).count()
+                          + sd.ticks(QwtScaleDiv::MediumTick).count();
+  const uint majorCount = sd.ticks(QwtScaleDiv::MajorTick).count();
 
-    int lengthForLabels = 0;
-    if ( hasComponent( QwtAbstractScaleDraw::Labels ) )
-        lengthForLabels = minLabelDist( font ) * majorCount;
+  int lengthForLabels = 0;
+  if (hasComponent(QwtAbstractScaleDraw::Labels))
+    lengthForLabels = minLabelDist(font) * majorCount;
 
-    int lengthForTicks = 0;
-    if ( hasComponent( QwtAbstractScaleDraw::Ticks ) )
-    {
-        const double pw = qwtEffectivePenWidth( this );
-        lengthForTicks = qCeil( ( majorCount + minorCount ) * ( pw + 1.0 ) );
-    }
+  int lengthForTicks = 0;
+  if (hasComponent(QwtAbstractScaleDraw::Ticks))
+  {
+    const double pw = qwtEffectivePenWidth(this);
+    lengthForTicks = qCeil((majorCount + minorCount) * (pw + 1.0));
+  }
 
-    return startDist + endDist + qMax( lengthForLabels, lengthForTicks );
+  return startDist + endDist + qMax(lengthForLabels, lengthForTicks);
 }
 
 /*!
@@ -593,48 +572,44 @@ int QwtScaleDraw::minLength( const QFont& font ) const
    \param value Value
    \return Position, where to paint a label
  */
-QPointF QwtScaleDraw::labelPosition( double value ) const
+QPointF QwtScaleDraw::labelPosition(double value) const
 {
-    const double tval = scaleMap().transform( value );
-    double dist = spacing();
-    if ( hasComponent( QwtAbstractScaleDraw::Backbone ) )
-        dist += qwtEffectivePenWidth( this );
+  const double tval = scaleMap().transform(value);
+  double dist = spacing();
+  if (hasComponent(QwtAbstractScaleDraw::Backbone))
+    dist += qwtEffectivePenWidth(this);
 
-    if ( hasComponent( QwtAbstractScaleDraw::Ticks ) )
-        dist += tickLength( QwtScaleDiv::MajorTick );
+  if (hasComponent(QwtAbstractScaleDraw::Ticks))
+    dist += tickLength(QwtScaleDiv::MajorTick);
 
-    double px = 0;
-    double py = 0;
+  double px = 0;
+  double py = 0;
 
-    switch ( alignment() )
-    {
-        case RightScale:
-        {
-            px = m_data->pos.x() + dist;
-            py = tval;
-            break;
-        }
-        case LeftScale:
-        {
-            px = m_data->pos.x() - dist;
-            py = tval;
-            break;
-        }
-        case BottomScale:
-        {
-            px = tval;
-            py = m_data->pos.y() + dist;
-            break;
-        }
-        case TopScale:
-        {
-            px = tval;
-            py = m_data->pos.y() - dist;
-            break;
-        }
+  switch (alignment())
+  {
+    case RightScale: {
+      px = m_data->pos.x() + dist;
+      py = tval;
+      break;
     }
+    case LeftScale: {
+      px = m_data->pos.x() - dist;
+      py = tval;
+      break;
+    }
+    case BottomScale: {
+      px = tval;
+      py = m_data->pos.y() + dist;
+      break;
+    }
+    case TopScale: {
+      px = tval;
+      py = m_data->pos.y() - dist;
+      break;
+    }
+  }
 
-    return QPointF( px, py );
+  return QPointF(px, py);
 }
 
 /*!
@@ -646,17 +621,17 @@ QPointF QwtScaleDraw::labelPosition( double value ) const
 
    \sa drawBackbone(), drawLabel()
  */
-void QwtScaleDraw::drawTick( QPainter* painter, double value, double len ) const
+void QwtScaleDraw::drawTick(QPainter *painter, double value, double len) const
 {
-    if ( len <= 0 )
-        return;
+  if (len <= 0)
+    return;
 
-    const double tval = scaleMap().transform( value );
+  const double tval = scaleMap().transform(value);
 
-    if ( QwtPainter::roundingAlignment( painter ) )
-        QwtScaleRendererInt::drawTick( painter, this, tval, len );
-    else
-        QwtScaleRendererReal::drawTick( painter, this, tval, len );
+  if (QwtPainter::roundingAlignment(painter))
+    QwtScaleRendererInt::drawTick(painter, this, tval, len);
+  else
+    QwtScaleRendererReal::drawTick(painter, this, tval, len);
 }
 
 /*!
@@ -665,12 +640,12 @@ void QwtScaleDraw::drawTick( QPainter* painter, double value, double len ) const
 
    \sa drawTick(), drawLabel()
  */
-void QwtScaleDraw::drawBackbone( QPainter* painter ) const
+void QwtScaleDraw::drawBackbone(QPainter *painter) const
 {
-    if ( QwtPainter::roundingAlignment( painter ) )
-        QwtScaleRendererInt::drawBackbone( painter, this );
-    else
-        QwtScaleRendererReal::drawBackbone( painter, this );
+  if (QwtPainter::roundingAlignment(painter))
+    QwtScaleRendererInt::drawBackbone(painter, this);
+  else
+    QwtScaleRendererReal::drawBackbone(painter, this);
 }
 
 /*!
@@ -704,10 +679,10 @@ void QwtScaleDraw::drawBackbone( QPainter* painter ) const
 
    \sa pos(), setLength()
  */
-void QwtScaleDraw::move( const QPointF& pos )
+void QwtScaleDraw::move(const QPointF &pos)
 {
-    m_data->pos = pos;
-    updateMap();
+  m_data->pos = pos;
+  updateMap();
 }
 
 /*!
@@ -716,7 +691,7 @@ void QwtScaleDraw::move( const QPointF& pos )
  */
 QPointF QwtScaleDraw::pos() const
 {
-    return m_data->pos;
+  return m_data->pos;
 }
 
 /*!
@@ -729,7 +704,7 @@ QPointF QwtScaleDraw::pos() const
 
    \sa move(), minLabelDist()
  */
-void QwtScaleDraw::setLength( double length )
+void QwtScaleDraw::setLength(double length)
 {
 #if 0
     if ( length >= 0 && length < 10 )
@@ -739,11 +714,11 @@ void QwtScaleDraw::setLength( double length )
     if ( length < 0 && length > -10 )
         length = -10;
 #else
-    length = qwtMaxF( length, 10.0 );
+  length = qwtMaxF(length, 10.0);
 #endif
 
-    m_data->len = length;
-    updateMap();
+  m_data->len = length;
+  updateMap();
 }
 
 /*!
@@ -752,7 +727,7 @@ void QwtScaleDraw::setLength( double length )
  */
 double QwtScaleDraw::length() const
 {
-    return m_data->len;
+  return m_data->len;
 }
 
 /*!
@@ -763,24 +738,24 @@ double QwtScaleDraw::length() const
 
    \sa drawTick(), drawBackbone(), boundingLabelRect()
  */
-void QwtScaleDraw::drawLabel( QPainter* painter, double value ) const
+void QwtScaleDraw::drawLabel(QPainter *painter, double value) const
 {
-    QwtText lbl = tickLabel( painter->font(), value );
-    if ( lbl.isEmpty() )
-        return;
+  QwtText lbl = tickLabel(painter->font(), value);
+  if (lbl.isEmpty())
+    return;
 
-    QPointF pos = labelPosition( value );
+  QPointF pos = labelPosition(value);
 
-    QSizeF labelSize = lbl.textSize( painter->font() );
+  QSizeF labelSize = lbl.textSize(painter->font());
 
-    const QTransform transform = labelTransformation( pos, labelSize );
+  const QTransform transform = labelTransformation(pos, labelSize);
 
-    painter->save();
-    painter->setWorldTransform( transform, true );
+  painter->save();
+  painter->setWorldTransform(transform, true);
 
-    lbl.draw ( painter, QRect( QPoint( 0, 0 ), labelSize.toSize() ) );
+  lbl.draw(painter, QRect(QPoint(0, 0), labelSize.toSize()));
 
-    painter->restore();
+  painter->restore();
 }
 
 /*!
@@ -795,17 +770,17 @@ void QwtScaleDraw::drawLabel( QPainter* painter, double value ) const
    \return Bounding rectangle
    \sa labelRect()
  */
-QRect QwtScaleDraw::boundingLabelRect( const QFont& font, double value ) const
+QRect QwtScaleDraw::boundingLabelRect(const QFont &font, double value) const
 {
-    QwtText lbl = tickLabel( font, value );
-    if ( lbl.isEmpty() )
-        return QRect();
+  QwtText lbl = tickLabel(font, value);
+  if (lbl.isEmpty())
+    return QRect();
 
-    const QPointF pos = labelPosition( value );
-    QSizeF labelSize = lbl.textSize( font );
+  const QPointF pos = labelPosition(value);
+  QSizeF labelSize = lbl.textSize(font);
 
-    const QTransform transform = labelTransformation( pos, labelSize );
-    return transform.mapRect( QRect( QPoint( 0, 0 ), labelSize.toSize() ) );
+  const QTransform transform = labelTransformation(pos, labelSize);
+  return transform.mapRect(QRect(QPoint(0, 0), labelSize.toSize()));
 }
 
 /*!
@@ -818,64 +793,60 @@ QRect QwtScaleDraw::boundingLabelRect( const QFont& font, double value ) const
    \return Transformation matrix
    \sa setLabelAlignment(), setLabelRotation()
  */
-QTransform QwtScaleDraw::labelTransformation(
-    const QPointF& pos, const QSizeF& size ) const
+QTransform QwtScaleDraw::labelTransformation(const QPointF &pos,
+                                             const QSizeF &size) const
 {
-    QTransform transform;
-    transform.translate( pos.x(), pos.y() );
-    transform.rotate( labelRotation() );
+  QTransform transform;
+  transform.translate(pos.x(), pos.y());
+  transform.rotate(labelRotation());
 
-    int flags = labelAlignment();
-    if ( flags == 0 )
+  int flags = labelAlignment();
+  if (flags == 0)
+  {
+    switch (alignment())
     {
-        switch ( alignment() )
-        {
-            case RightScale:
-            {
-                if ( flags == 0 )
-                    flags = Qt::AlignRight | Qt::AlignVCenter;
-                break;
-            }
-            case LeftScale:
-            {
-                if ( flags == 0 )
-                    flags = Qt::AlignLeft | Qt::AlignVCenter;
-                break;
-            }
-            case BottomScale:
-            {
-                if ( flags == 0 )
-                    flags = Qt::AlignHCenter | Qt::AlignBottom;
-                break;
-            }
-            case TopScale:
-            {
-                if ( flags == 0 )
-                    flags = Qt::AlignHCenter | Qt::AlignTop;
-                break;
-            }
-        }
+      case RightScale: {
+        if (flags == 0)
+          flags = Qt::AlignRight | Qt::AlignVCenter;
+        break;
+      }
+      case LeftScale: {
+        if (flags == 0)
+          flags = Qt::AlignLeft | Qt::AlignVCenter;
+        break;
+      }
+      case BottomScale: {
+        if (flags == 0)
+          flags = Qt::AlignHCenter | Qt::AlignBottom;
+        break;
+      }
+      case TopScale: {
+        if (flags == 0)
+          flags = Qt::AlignHCenter | Qt::AlignTop;
+        break;
+      }
     }
+  }
 
-    double x, y;
+  double x, y;
 
-    if ( flags & Qt::AlignLeft )
-        x = -size.width();
-    else if ( flags & Qt::AlignRight )
-        x = 0.0;
-    else // Qt::AlignHCenter
-        x = -( 0.5 * size.width() );
+  if (flags & Qt::AlignLeft)
+    x = -size.width();
+  else if (flags & Qt::AlignRight)
+    x = 0.0;
+  else // Qt::AlignHCenter
+    x = -(0.5 * size.width());
 
-    if ( flags & Qt::AlignTop )
-        y = -size.height();
-    else if ( flags & Qt::AlignBottom )
-        y = 0;
-    else // Qt::AlignVCenter
-        y = -( 0.5 * size.height() );
+  if (flags & Qt::AlignTop)
+    y = -size.height();
+  else if (flags & Qt::AlignBottom)
+    y = 0;
+  else // Qt::AlignVCenter
+    y = -(0.5 * size.height());
 
-    transform.translate( x, y );
+  transform.translate(x, y);
 
-    return transform;
+  return transform;
 }
 
 /*!
@@ -888,21 +859,21 @@ QTransform QwtScaleDraw::labelTransformation(
 
    \return Bounding rectangle that is needed to draw a label
  */
-QRectF QwtScaleDraw::labelRect( const QFont& font, double value ) const
+QRectF QwtScaleDraw::labelRect(const QFont &font, double value) const
 {
-    QwtText lbl = tickLabel( font, value );
-    if ( lbl.isEmpty() )
-        return QRectF( 0.0, 0.0, 0.0, 0.0 );
+  QwtText lbl = tickLabel(font, value);
+  if (lbl.isEmpty())
+    return QRectF(0.0, 0.0, 0.0, 0.0);
 
-    const QPointF pos = labelPosition( value );
+  const QPointF pos = labelPosition(value);
 
-    const QSizeF labelSize = lbl.textSize( font );
-    const QTransform transform = labelTransformation( pos, labelSize );
+  const QSizeF labelSize = lbl.textSize(font);
+  const QTransform transform = labelTransformation(pos, labelSize);
 
-    QRectF br = transform.mapRect( QRectF( QPointF( 0, 0 ), labelSize ) );
-    br.translate( -pos.x(), -pos.y() );
+  QRectF br = transform.mapRect(QRectF(QPointF(0, 0), labelSize));
+  br.translate(-pos.x(), -pos.y());
 
-    return br;
+  return br;
 }
 
 /*!
@@ -913,9 +884,9 @@ QRectF QwtScaleDraw::labelRect( const QFont& font, double value ) const
 
    \return Size that is needed to draw a label
  */
-QSizeF QwtScaleDraw::labelSize( const QFont& font, double value ) const
+QSizeF QwtScaleDraw::labelSize(const QFont &font, double value) const
 {
-    return labelRect( font, value ).size();
+  return labelRect(font, value).size();
 }
 
 /*!
@@ -931,9 +902,9 @@ QSizeF QwtScaleDraw::labelSize( const QFont& font, double value ) const
    \sa setLabelAlignment(), labelRotation(), labelAlignment().
 
  */
-void QwtScaleDraw::setLabelRotation( double rotation )
+void QwtScaleDraw::setLabelRotation(double rotation)
 {
-    m_data->labelRotation = rotation;
+  m_data->labelRotation = rotation;
 }
 
 /*!
@@ -942,7 +913,7 @@ void QwtScaleDraw::setLabelRotation( double rotation )
  */
 double QwtScaleDraw::labelRotation() const
 {
-    return m_data->labelRotation;
+  return m_data->labelRotation;
 }
 
 /*!
@@ -970,9 +941,9 @@ double QwtScaleDraw::labelRotation() const
            ( QwtText::flags() ) returned from QwtAbstractScaleDraw::label().
  */
 
-void QwtScaleDraw::setLabelAlignment( Qt::Alignment alignment )
+void QwtScaleDraw::setLabelAlignment(Qt::Alignment alignment)
 {
-    m_data->labelAlignment = alignment;
+  m_data->labelAlignment = alignment;
 }
 
 /*!
@@ -981,63 +952,63 @@ void QwtScaleDraw::setLabelAlignment( Qt::Alignment alignment )
  */
 Qt::Alignment QwtScaleDraw::labelAlignment() const
 {
-    return m_data->labelAlignment;
+  return m_data->labelAlignment;
 }
 
 /*!
    \param font Font
    \return the maximum width of a label
  */
-int QwtScaleDraw::maxLabelWidth( const QFont& font ) const
+int QwtScaleDraw::maxLabelWidth(const QFont &font) const
 {
-    double maxWidth = 0.0;
+  double maxWidth = 0.0;
 
-    const QList< double >& ticks = scaleDiv().ticks( QwtScaleDiv::MajorTick );
-    for ( int i = 0; i < ticks.count(); i++ )
+  const QList<double> &ticks = scaleDiv().ticks(QwtScaleDiv::MajorTick);
+  for (int i = 0; i < ticks.count(); i++)
+  {
+    const double v = ticks[i];
+    if (scaleDiv().contains(v))
     {
-        const double v = ticks[i];
-        if ( scaleDiv().contains( v ) )
-        {
-            const double w = labelSize( font, ticks[i] ).width();
-            if ( w > maxWidth )
-                maxWidth = w;
-        }
+      const double w = labelSize(font, ticks[i]).width();
+      if (w > maxWidth)
+        maxWidth = w;
     }
+  }
 
-    return qCeil( maxWidth );
+  return qCeil(maxWidth);
 }
 
 /*!
    \param font Font
    \return the maximum height of a label
  */
-int QwtScaleDraw::maxLabelHeight( const QFont& font ) const
+int QwtScaleDraw::maxLabelHeight(const QFont &font) const
 {
-    double maxHeight = 0.0;
+  double maxHeight = 0.0;
 
-    const QList< double >& ticks = scaleDiv().ticks( QwtScaleDiv::MajorTick );
-    for ( int i = 0; i < ticks.count(); i++ )
+  const QList<double> &ticks = scaleDiv().ticks(QwtScaleDiv::MajorTick);
+  for (int i = 0; i < ticks.count(); i++)
+  {
+    const double v = ticks[i];
+    if (scaleDiv().contains(v))
     {
-        const double v = ticks[i];
-        if ( scaleDiv().contains( v ) )
-        {
-            const double h = labelSize( font, ticks[i] ).height();
-            if ( h > maxHeight )
-                maxHeight = h;
-        }
+      const double h = labelSize(font, ticks[i]).height();
+      if (h > maxHeight)
+        maxHeight = h;
     }
+  }
 
-    return qCeil( maxHeight );
+  return qCeil(maxHeight);
 }
 
 void QwtScaleDraw::updateMap()
 {
-    const QPointF pos = m_data->pos;
-    double len = m_data->len;
+  const QPointF pos = m_data->pos;
+  double len = m_data->len;
 
-    QwtScaleMap& sm = scaleMap();
-    if ( orientation() == Qt::Vertical )
-        sm.setPaintInterval( pos.y() + len, pos.y() );
-    else
-        sm.setPaintInterval( pos.x(), pos.x() + len );
+  QwtScaleMap &sm = scaleMap();
+  if (orientation() == Qt::Vertical)
+    sm.setPaintInterval(pos.y() + len, pos.y());
+  else
+    sm.setPaintInterval(pos.x(), pos.x() + len);
 }

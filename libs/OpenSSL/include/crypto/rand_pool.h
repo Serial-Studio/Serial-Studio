@@ -19,9 +19,9 @@
  *
  * The max_len value for the buffer provided to the rand_drbg_get_entropy()
  * callback is currently 2^31 bytes (2 gigabytes), if a derivation function
- * is used. Since this is much too large to be allocated, the ossl_rand_pool_new()
- * function chooses more modest values as default pool length, bounded
- * by RAND_POOL_MIN_LENGTH and RAND_POOL_MAX_LENGTH
+ * is used. Since this is much too large to be allocated, the
+ * ossl_rand_pool_new() function chooses more modest values as default pool
+ * length, bounded by RAND_POOL_MIN_LENGTH and RAND_POOL_MAX_LENGTH
  *
  * The choice of the RAND_POOL_FACTOR is large enough such that the
  * RAND_POOL can store a random input which has a lousy entropy rate of
@@ -69,21 +69,23 @@
  */
 typedef struct rand_pool_st
 {
-    unsigned char *buffer; /* points to the beginning of the random pool */
-    size_t len; /* current number of random bytes contained in the pool */
+  unsigned char *buffer; /* points to the beginning of the random pool */
+  size_t len; /* current number of random bytes contained in the pool */
 
-    int attached; /* true pool was attached to existing buffer */
-    int secure; /* 1: allocated on the secure heap, 0: otherwise */
+  int attached; /* true pool was attached to existing buffer */
+  int secure;   /* 1: allocated on the secure heap, 0: otherwise */
 
-    size_t min_len; /* minimum number of random bytes requested */
-    size_t max_len; /* maximum number of random bytes (allocated buffer size) */
-    size_t alloc_len; /* current number of bytes allocated */
-    size_t entropy; /* current entropy count in bits */
-    size_t entropy_requested; /* requested entropy count in bits */
+  size_t min_len;   /* minimum number of random bytes requested */
+  size_t max_len;   /* maximum number of random bytes (allocated buffer size) */
+  size_t alloc_len; /* current number of bytes allocated */
+  size_t entropy;   /* current entropy count in bits */
+  size_t entropy_requested; /* requested entropy count in bits */
 } RAND_POOL;
 
-RAND_POOL *ossl_rand_pool_new(int entropy_requested, int secure, size_t min_len, size_t max_len);
-RAND_POOL *ossl_rand_pool_attach(const unsigned char *buffer, size_t len, size_t entropy);
+RAND_POOL *ossl_rand_pool_new(int entropy_requested, int secure, size_t min_len,
+                              size_t max_len);
+RAND_POOL *ossl_rand_pool_attach(const unsigned char *buffer, size_t len,
+                                 size_t entropy);
 void ossl_rand_pool_free(RAND_POOL *pool);
 
 const unsigned char *ossl_rand_pool_buffer(RAND_POOL *pool);
@@ -96,10 +98,12 @@ size_t ossl_rand_pool_length(RAND_POOL *pool);
 size_t ossl_rand_pool_entropy_available(RAND_POOL *pool);
 size_t ossl_rand_pool_entropy_needed(RAND_POOL *pool);
 /* |entropy_factor| expresses how many bits of data contain 1 bit of entropy */
-size_t ossl_rand_pool_bytes_needed(RAND_POOL *pool, unsigned int entropy_factor);
+size_t ossl_rand_pool_bytes_needed(RAND_POOL *pool,
+                                   unsigned int entropy_factor);
 size_t ossl_rand_pool_bytes_remaining(RAND_POOL *pool);
 
-int ossl_rand_pool_add(RAND_POOL *pool, const unsigned char *buffer, size_t len, size_t entropy);
+int ossl_rand_pool_add(RAND_POOL *pool, const unsigned char *buffer, size_t len,
+                       size_t entropy);
 unsigned char *ossl_rand_pool_add_begin(RAND_POOL *pool, size_t len);
 int ossl_rand_pool_add_end(RAND_POOL *pool, size_t len, size_t entropy);
 

@@ -50,169 +50,167 @@ class QwtTextEngine;
 
 class QWT_EXPORT QwtText
 {
-  public:
+public:
+  /*!
+     \brief Text format
+
+     The text format defines the QwtTextEngine, that is used to render
+     the text.
+
+     \sa QwtTextEngine, setTextEngine()
+   */
+
+  enum TextFormat
+  {
+    /*!
+       The text format is determined using QwtTextEngine::mightRender() for
+       all available text engines in increasing order > PlainText.
+       If none of the text engines can render the text is rendered
+       like QwtText::PlainText.
+     */
+    AutoText = 0,
+
+    //! Draw the text as it is, using a QwtPlainTextEngine.
+    PlainText,
+
+    //! Use the Scribe framework (Qt Rich Text) to render the text.
+    RichText,
 
     /*!
-       \brief Text format
+       Use a MathML (http://en.wikipedia.org/wiki/MathML) render engine
+       to display the text. In earlier versions of Qwt such an engine
+       was included - since Qwt 6.2 it can be found here:
+       https://github.com/uwerat/qwt-mml-dev
 
-       The text format defines the QwtTextEngine, that is used to render
-       the text.
+       To enable MathML support the following code needs to be added to the
+       application:
 
-       \sa QwtTextEngine, setTextEngine()
+       \code
+        QwtText::setTextEngine( QwtText::MathMLText, new QwtMathMLTextEngine()
+       ); \endcode
      */
-
-    enum TextFormat
-    {
-        /*!
-           The text format is determined using QwtTextEngine::mightRender() for
-           all available text engines in increasing order > PlainText.
-           If none of the text engines can render the text is rendered
-           like QwtText::PlainText.
-         */
-        AutoText = 0,
-
-        //! Draw the text as it is, using a QwtPlainTextEngine.
-        PlainText,
-
-        //! Use the Scribe framework (Qt Rich Text) to render the text.
-        RichText,
-
-        /*!
-           Use a MathML (http://en.wikipedia.org/wiki/MathML) render engine
-           to display the text. In earlier versions of Qwt such an engine
-           was included - since Qwt 6.2 it can be found here:
-           https://github.com/uwerat/qwt-mml-dev
-
-           To enable MathML support the following code needs to be added to the
-           application:
-
-           \code
-            QwtText::setTextEngine( QwtText::MathMLText, new QwtMathMLTextEngine() );
-           \endcode
-         */
-        MathMLText,
-
-        /*!
-           Use a TeX (http://en.wikipedia.org/wiki/TeX) render engine
-           to display the text ( not implemented yet ).
-         */
-        TeXText,
-
-        /*!
-           The number of text formats can be extended using setTextEngine.
-           Formats >= QwtText::OtherFormat are not used by Qwt.
-         */
-        OtherFormat = 100
-    };
+    MathMLText,
 
     /*!
-       \brief Paint Attributes
-
-       Font and color and background are optional attributes of a QwtText.
-       The paint attributes hold the information, if they are set.
+       Use a TeX (http://en.wikipedia.org/wiki/TeX) render engine
+       to display the text ( not implemented yet ).
      */
-    enum PaintAttribute
-    {
-        //! The text has an individual font.
-        PaintUsingTextFont = 0x01,
-
-        //! The text has an individual color.
-        PaintUsingTextColor = 0x02,
-
-        //! The text has an individual background.
-        PaintBackground = 0x04
-    };
-
-    Q_DECLARE_FLAGS( PaintAttributes, PaintAttribute )
+    TeXText,
 
     /*!
-       \brief Layout Attributes
-       The layout attributes affects some aspects of the layout of the text.
+       The number of text formats can be extended using setTextEngine.
+       Formats >= QwtText::OtherFormat are not used by Qwt.
      */
-    enum LayoutAttribute
-    {
-        /*!
-           Layout the text without its margins. This mode is useful if a
-           text needs to be aligned accurately, like the tick labels of a scale.
-           If QwtTextEngine::textMargins is not implemented for the format
-           of the text, MinimumLayout has no effect.
-         */
-        MinimumLayout = 0x01
-    };
+    OtherFormat = 100
+  };
 
-    Q_DECLARE_FLAGS( LayoutAttributes, LayoutAttribute )
+  /*!
+     \brief Paint Attributes
 
-    QwtText();
-    QwtText( const QString&, TextFormat textFormat = AutoText );
-    QwtText( const QwtText& );
+     Font and color and background are optional attributes of a QwtText.
+     The paint attributes hold the information, if they are set.
+   */
+  enum PaintAttribute
+  {
+    //! The text has an individual font.
+    PaintUsingTextFont = 0x01,
 
-    ~QwtText();
+    //! The text has an individual color.
+    PaintUsingTextColor = 0x02,
 
-    QwtText& operator=( const QwtText& );
+    //! The text has an individual background.
+    PaintBackground = 0x04
+  };
 
-    bool operator==( const QwtText& ) const;
-    bool operator!=( const QwtText& ) const;
+  Q_DECLARE_FLAGS(PaintAttributes, PaintAttribute)
 
-    void setText( const QString&,
-        QwtText::TextFormat textFormat = AutoText );
-    QString text() const;
+  /*!
+     \brief Layout Attributes
+     The layout attributes affects some aspects of the layout of the text.
+   */
+  enum LayoutAttribute
+  {
+    /*!
+       Layout the text without its margins. This mode is useful if a
+       text needs to be aligned accurately, like the tick labels of a scale.
+       If QwtTextEngine::textMargins is not implemented for the format
+       of the text, MinimumLayout has no effect.
+     */
+    MinimumLayout = 0x01
+  };
 
-    bool isNull() const;
-    bool isEmpty() const;
+  Q_DECLARE_FLAGS(LayoutAttributes, LayoutAttribute)
 
-    void setFont( const QFont& );
-    QFont font() const;
+  QwtText();
+  QwtText(const QString &, TextFormat textFormat = AutoText);
+  QwtText(const QwtText &);
 
-    QFont usedFont( const QFont& ) const;
+  ~QwtText();
 
-    void setRenderFlags( int );
-    int renderFlags() const;
+  QwtText &operator=(const QwtText &);
 
-    void setColor( const QColor& );
-    QColor color() const;
+  bool operator==(const QwtText &) const;
+  bool operator!=(const QwtText &) const;
 
-    QColor usedColor( const QColor& ) const;
+  void setText(const QString &, QwtText::TextFormat textFormat = AutoText);
+  QString text() const;
 
-    void setBorderRadius( double );
-    double borderRadius() const;
+  bool isNull() const;
+  bool isEmpty() const;
 
-    void setBorderPen( const QPen& );
-    QPen borderPen() const;
+  void setFont(const QFont &);
+  QFont font() const;
 
-    void setBackgroundBrush( const QBrush& );
-    QBrush backgroundBrush() const;
+  QFont usedFont(const QFont &) const;
 
-    void setPaintAttribute( PaintAttribute, bool on = true );
-    bool testPaintAttribute( PaintAttribute ) const;
+  void setRenderFlags(int);
+  int renderFlags() const;
 
-    void setLayoutAttribute( LayoutAttribute, bool on = true );
-    bool testLayoutAttribute( LayoutAttribute ) const;
+  void setColor(const QColor &);
+  QColor color() const;
 
-    double heightForWidth( double width ) const;
-    double heightForWidth( double width, const QFont& ) const;
+  QColor usedColor(const QColor &) const;
 
-    QSizeF textSize() const;
-    QSizeF textSize( const QFont& ) const;
+  void setBorderRadius(double);
+  double borderRadius() const;
 
-    void draw( QPainter* painter, const QRectF& rect ) const;
+  void setBorderPen(const QPen &);
+  QPen borderPen() const;
 
-    static const QwtTextEngine* textEngine(
-        const QString& text, QwtText::TextFormat = AutoText );
+  void setBackgroundBrush(const QBrush &);
+  QBrush backgroundBrush() const;
 
-    static const QwtTextEngine* textEngine( QwtText::TextFormat );
-    static void setTextEngine( QwtText::TextFormat, QwtTextEngine* );
+  void setPaintAttribute(PaintAttribute, bool on = true);
+  bool testPaintAttribute(PaintAttribute) const;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+  void setLayoutAttribute(LayoutAttribute, bool on = true);
+  bool testLayoutAttribute(LayoutAttribute) const;
 
-    class LayoutCache;
-    LayoutCache* m_layoutCache;
+  double heightForWidth(double width) const;
+  double heightForWidth(double width, const QFont &) const;
+
+  QSizeF textSize() const;
+  QSizeF textSize(const QFont &) const;
+
+  void draw(QPainter *painter, const QRectF &rect) const;
+
+  static const QwtTextEngine *textEngine(const QString &text,
+                                         QwtText::TextFormat = AutoText);
+
+  static const QwtTextEngine *textEngine(QwtText::TextFormat);
+  static void setTextEngine(QwtText::TextFormat, QwtTextEngine *);
+
+private:
+  class PrivateData;
+  PrivateData *m_data;
+
+  class LayoutCache;
+  LayoutCache *m_layoutCache;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtText::PaintAttributes )
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtText::LayoutAttributes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtText::PaintAttributes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtText::LayoutAttributes)
 
-Q_DECLARE_METATYPE( QwtText )
+Q_DECLARE_METATYPE(QwtText)
 
 #endif

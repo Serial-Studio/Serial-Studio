@@ -23,61 +23,63 @@
  */
 class QWT_EXPORT QwtSplineLocal : public QwtSplineC1
 {
-  public:
+public:
+  /*!
+      \brief Spline interpolation type
+
+      All type of spline interpolations are lightweight algorithms
+      calculating the slopes at a point by looking 1 or 2 points back
+      and ahead.
+   */
+  enum Type
+  {
     /*!
-        \brief Spline interpolation type
+       A cardinal spline
 
-        All type of spline interpolations are lightweight algorithms
-        calculating the slopes at a point by looking 1 or 2 points back
-        and ahead.
+       The cardinal spline interpolation is a very cheap calculation with
+       a locality of 1.
      */
-    enum Type
-    {
-        /*!
-           A cardinal spline
+    Cardinal,
 
-           The cardinal spline interpolation is a very cheap calculation with
-           a locality of 1.
-         */
-        Cardinal,
+    /*!
+       Parabolic blending is a cheap calculation with a locality of 1. Sometimes
+       it is also called Cubic Bessel interpolation.
+     */
+    ParabolicBlending,
 
-        /*!
-           Parabolic blending is a cheap calculation with a locality of 1. Sometimes
-           it is also called Cubic Bessel interpolation.
-         */
-        ParabolicBlending,
+    /*!
+       The algorithm of H.Akima is a calculation with a locality of 2.
+     */
+    Akima,
 
-        /*!
-           The algorithm of H.Akima is a calculation with a locality of 2.
-         */
-        Akima,
+    /*!
+       Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) is an algorithm
+       that is popular because of being offered by MATLAB.
 
-        /*!
-           Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) is an algorithm
-           that is popular because of being offered by MATLAB.
+       It preserves the shape of the data and respects monotonicity. It has a
+       locality of 1.
+     */
+    PChip
+  };
 
-           It preserves the shape of the data and respects monotonicity. It has a
-           locality of 1.
-         */
-        PChip
-    };
+  QwtSplineLocal(Type type);
+  virtual ~QwtSplineLocal();
 
-    QwtSplineLocal( Type type );
-    virtual ~QwtSplineLocal();
+  Type type() const;
 
-    Type type() const;
+  virtual uint locality() const QWT_OVERRIDE;
 
-    virtual uint locality() const QWT_OVERRIDE;
+  virtual QPainterPath painterPath(const QPolygonF &) const QWT_OVERRIDE;
+  virtual QVector<QLineF>
+  bezierControlLines(const QPolygonF &) const QWT_OVERRIDE;
 
-    virtual QPainterPath painterPath( const QPolygonF& ) const QWT_OVERRIDE;
-    virtual QVector< QLineF > bezierControlLines( const QPolygonF& ) const QWT_OVERRIDE;
+  // calculating the parametric equations
+  virtual QVector<QwtSplinePolynomial>
+  polynomials(const QPolygonF &) const QWT_OVERRIDE;
+  virtual QVector<double> slopes(const QPolygonF &) const QWT_OVERRIDE;
 
-    // calculating the parametric equations
-    virtual QVector< QwtSplinePolynomial > polynomials( const QPolygonF& ) const QWT_OVERRIDE;
-    virtual QVector< double > slopes( const QPolygonF& ) const QWT_OVERRIDE;
-
-  private:
-    const Type m_type;
+private:
+  const Type m_type;
 };
 
 #endif

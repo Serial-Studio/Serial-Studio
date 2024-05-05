@@ -20,7 +20,6 @@
  * THE SOFTWARE.
  */
 
-
 #include <UI/Dashboard.h>
 #include <UI/Widgets/GPS.h>
 #include <Misc/ThemeManager.h>
@@ -29,27 +28,28 @@
  * Generates the user interface elements & layout
  */
 Widgets::GPS::GPS(const int index)
-    : m_index(index)
-    , m_altitude(0)
-    , m_latitude(0)
-    , m_longitude(0)
+  : m_index(index)
+  , m_altitude(0)
+  , m_latitude(0)
+  , m_longitude(0)
 {
-    // Get pointers to serial studio modules
-    auto dash = &UI::Dashboard::instance();
-    auto theme = &Misc::ThemeManager::instance();
+  // Get pointers to serial studio modules
+  auto dash = &UI::Dashboard::instance();
+  auto theme = &Misc::ThemeManager::instance();
 
-    // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->gpsCount())
-        return;
+  // Invalid index, abort initialization
+  if (m_index < 0 || m_index >= dash->gpsCount())
+    return;
 
-    // Set window palette
-    QPalette windowPalette;
-    windowPalette.setColor(QPalette::Base, theme->widgetWindowBackground());
-    windowPalette.setColor(QPalette::Window, theme->widgetWindowBackground());
-    setPalette(windowPalette);
+  // Set window palette
+  QPalette windowPalette;
+  windowPalette.setColor(QPalette::Base, theme->widgetWindowBackground());
+  windowPalette.setColor(QPalette::Window, theme->widgetWindowBackground());
+  setPalette(windowPalette);
 
-    // React to Qt signals
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
+  // React to Qt signals
+  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
+          Qt::QueuedConnection);
 }
 
 /**
@@ -57,7 +57,7 @@ Widgets::GPS::GPS(const int index)
  */
 qreal Widgets::GPS::altitude() const
 {
-    return m_altitude;
+  return m_altitude;
 }
 
 /**
@@ -65,7 +65,7 @@ qreal Widgets::GPS::altitude() const
  */
 qreal Widgets::GPS::latitude() const
 {
-    return m_latitude;
+  return m_latitude;
 }
 
 /**
@@ -73,7 +73,7 @@ qreal Widgets::GPS::latitude() const
  */
 qreal Widgets::GPS::longitude() const
 {
-    return m_longitude;
+  return m_longitude;
 }
 
 /**
@@ -85,37 +85,32 @@ qreal Widgets::GPS::longitude() const
  */
 void Widgets::GPS::updateData()
 {
-    // Widget not enabled, do nothing
-    if (!isEnabled())
-        return;
+  // Widget not enabled, do nothing
+  if (!isEnabled())
+    return;
 
-    // Invalid index, abort update
-    auto dash = &UI::Dashboard::instance();
-    if (m_index < 0 || m_index >= dash->gpsCount())
-        return;
+  // Invalid index, abort update
+  auto dash = &UI::Dashboard::instance();
+  if (m_index < 0 || m_index >= dash->gpsCount())
+    return;
 
-    // Get group reference
-    auto group = dash->getGPS(m_index);
+  // Get group reference
+  auto group = dash->getGPS(m_index);
 
-    // Get latitiude/longitude from datasets
-    m_altitude = 0,
-    m_latitude = 0;
-    m_longitude = 0;
-    for (int i = 0; i < group.datasetCount(); ++i)
-    {
-        auto dataset = group.getDataset(i);
-        if (dataset.widget() == "lat")
-            m_latitude = dataset.value().toDouble();
-        else if (dataset.widget() == "lon")
-            m_longitude = dataset.value().toDouble();
-        else if (dataset.widget() == "alt")
-            m_altitude = dataset.value().toDouble();
-    }
+  // Get latitiude/longitude from datasets
+  m_altitude = 0, m_latitude = 0;
+  m_longitude = 0;
+  for (int i = 0; i < group.datasetCount(); ++i)
+  {
+    auto dataset = group.getDataset(i);
+    if (dataset.widget() == "lat")
+      m_latitude = dataset.value().toDouble();
+    else if (dataset.widget() == "lon")
+      m_longitude = dataset.value().toDouble();
+    else if (dataset.widget() == "alt")
+      m_altitude = dataset.value().toDouble();
+  }
 
-    // Update the QML user interface with the new data
-    Q_EMIT updated();
+  // Update the QML user interface with the new data
+  Q_EMIT updated();
 }
-
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_GPS.cpp"
-#endif

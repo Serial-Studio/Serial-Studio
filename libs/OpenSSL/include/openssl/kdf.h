@@ -13,7 +13,7 @@
 
 #include <openssl/macros.h>
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define HEADER_KDF_H
+#  define HEADER_KDF_H
 #endif
 
 #include <stdarg.h>
@@ -27,7 +27,8 @@ extern "C" {
 
 int EVP_KDF_up_ref(EVP_KDF *kdf);
 void EVP_KDF_free(EVP_KDF *kdf);
-EVP_KDF *EVP_KDF_fetch(OSSL_LIB_CTX *libctx, const char *algorithm, const char *properties);
+EVP_KDF *EVP_KDF_fetch(OSSL_LIB_CTX *libctx, const char *algorithm,
+                       const char *properties);
 
 EVP_KDF_CTX *EVP_KDF_CTX_new(EVP_KDF *kdf);
 void EVP_KDF_CTX_free(EVP_KDF_CTX *ctx);
@@ -40,7 +41,8 @@ const EVP_KDF *EVP_KDF_CTX_kdf(EVP_KDF_CTX *ctx);
 
 void EVP_KDF_CTX_reset(EVP_KDF_CTX *ctx);
 size_t EVP_KDF_CTX_get_kdf_size(EVP_KDF_CTX *ctx);
-int EVP_KDF_derive(EVP_KDF_CTX *ctx, unsigned char *key, size_t keylen, const OSSL_PARAM params[]);
+int EVP_KDF_derive(EVP_KDF_CTX *ctx, unsigned char *key, size_t keylen,
+                   const OSSL_PARAM params[]);
 int EVP_KDF_get_params(EVP_KDF *kdf, OSSL_PARAM params[]);
 int EVP_KDF_CTX_get_params(EVP_KDF_CTX *ctx, OSSL_PARAM params[]);
 int EVP_KDF_CTX_set_params(EVP_KDF_CTX *ctx, const OSSL_PARAM params[]);
@@ -50,8 +52,10 @@ const OSSL_PARAM *EVP_KDF_settable_ctx_params(const EVP_KDF *kdf);
 const OSSL_PARAM *EVP_KDF_CTX_gettable_params(EVP_KDF_CTX *ctx);
 const OSSL_PARAM *EVP_KDF_CTX_settable_params(EVP_KDF_CTX *ctx);
 
-void EVP_KDF_do_all_provided(OSSL_LIB_CTX *libctx, void (*fn)(EVP_KDF *kdf, void *arg), void *arg);
-int EVP_KDF_names_do_all(const EVP_KDF *kdf, void (*fn)(const char *name, void *data), void *data);
+void EVP_KDF_do_all_provided(OSSL_LIB_CTX *libctx,
+                             void (*fn)(EVP_KDF *kdf, void *arg), void *arg);
+int EVP_KDF_names_do_all(const EVP_KDF *kdf,
+                         void (*fn)(const char *name, void *data), void *data);
 
 #define EVP_KDF_HKDF_MODE_EXTRACT_AND_EXPAND 0
 #define EVP_KDF_HKDF_MODE_EXTRACT_ONLY 1
@@ -81,30 +85,38 @@ int EVP_KDF_names_do_all(const EVP_KDF *kdf, void (*fn)(const char *name, void *
 #define EVP_PKEY_CTRL_SCRYPT_P (EVP_PKEY_ALG_CTRL + 12)
 #define EVP_PKEY_CTRL_SCRYPT_MAXMEM_BYTES (EVP_PKEY_ALG_CTRL + 13)
 
-#define EVP_PKEY_HKDEF_MODE_EXTRACT_AND_EXPAND EVP_KDF_HKDF_MODE_EXTRACT_AND_EXPAND
+#define EVP_PKEY_HKDEF_MODE_EXTRACT_AND_EXPAND                                 \
+  EVP_KDF_HKDF_MODE_EXTRACT_AND_EXPAND
 #define EVP_PKEY_HKDEF_MODE_EXTRACT_ONLY EVP_KDF_HKDF_MODE_EXTRACT_ONLY
 #define EVP_PKEY_HKDEF_MODE_EXPAND_ONLY EVP_KDF_HKDF_MODE_EXPAND_ONLY
 
 int EVP_PKEY_CTX_set_tls1_prf_md(EVP_PKEY_CTX *ctx, const EVP_MD *md);
 
-int EVP_PKEY_CTX_set1_tls1_prf_secret(EVP_PKEY_CTX *pctx, const unsigned char *sec, int seclen);
+int EVP_PKEY_CTX_set1_tls1_prf_secret(EVP_PKEY_CTX *pctx,
+                                      const unsigned char *sec, int seclen);
 
-int EVP_PKEY_CTX_add1_tls1_prf_seed(EVP_PKEY_CTX *pctx, const unsigned char *seed, int seedlen);
+int EVP_PKEY_CTX_add1_tls1_prf_seed(EVP_PKEY_CTX *pctx,
+                                    const unsigned char *seed, int seedlen);
 
 int EVP_PKEY_CTX_set_hkdf_md(EVP_PKEY_CTX *ctx, const EVP_MD *md);
 
-int EVP_PKEY_CTX_set1_hkdf_salt(EVP_PKEY_CTX *ctx, const unsigned char *salt, int saltlen);
+int EVP_PKEY_CTX_set1_hkdf_salt(EVP_PKEY_CTX *ctx, const unsigned char *salt,
+                                int saltlen);
 
-int EVP_PKEY_CTX_set1_hkdf_key(EVP_PKEY_CTX *ctx, const unsigned char *key, int keylen);
+int EVP_PKEY_CTX_set1_hkdf_key(EVP_PKEY_CTX *ctx, const unsigned char *key,
+                               int keylen);
 
-int EVP_PKEY_CTX_add1_hkdf_info(EVP_PKEY_CTX *ctx, const unsigned char *info, int infolen);
+int EVP_PKEY_CTX_add1_hkdf_info(EVP_PKEY_CTX *ctx, const unsigned char *info,
+                                int infolen);
 
 int EVP_PKEY_CTX_set_hkdf_mode(EVP_PKEY_CTX *ctx, int mode);
 #define EVP_PKEY_CTX_hkdf_mode EVP_PKEY_CTX_set_hkdf_mode
 
-int EVP_PKEY_CTX_set1_pbe_pass(EVP_PKEY_CTX *ctx, const char *pass, int passlen);
+int EVP_PKEY_CTX_set1_pbe_pass(EVP_PKEY_CTX *ctx, const char *pass,
+                               int passlen);
 
-int EVP_PKEY_CTX_set1_scrypt_salt(EVP_PKEY_CTX *ctx, const unsigned char *salt, int saltlen);
+int EVP_PKEY_CTX_set1_scrypt_salt(EVP_PKEY_CTX *ctx, const unsigned char *salt,
+                                  int saltlen);
 
 int EVP_PKEY_CTX_set_scrypt_N(EVP_PKEY_CTX *ctx, uint64_t n);
 
@@ -112,7 +124,8 @@ int EVP_PKEY_CTX_set_scrypt_r(EVP_PKEY_CTX *ctx, uint64_t r);
 
 int EVP_PKEY_CTX_set_scrypt_p(EVP_PKEY_CTX *ctx, uint64_t p);
 
-int EVP_PKEY_CTX_set_scrypt_maxmem_bytes(EVP_PKEY_CTX *ctx, uint64_t maxmem_bytes);
+int EVP_PKEY_CTX_set_scrypt_maxmem_bytes(EVP_PKEY_CTX *ctx,
+                                         uint64_t maxmem_bytes);
 
 #ifdef __cplusplus
 }

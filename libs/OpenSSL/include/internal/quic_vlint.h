@@ -36,19 +36,19 @@
  */
 static ossl_unused ossl_inline size_t ossl_quic_vlint_encode_len(uint64_t v)
 {
-    if (v < OSSL_QUIC_VLINT_2B_MIN)
-        return 1;
+  if (v < OSSL_QUIC_VLINT_2B_MIN)
+    return 1;
 
-    if (v < OSSL_QUIC_VLINT_4B_MIN)
-        return 2;
+  if (v < OSSL_QUIC_VLINT_4B_MIN)
+    return 2;
 
-    if (v < OSSL_QUIC_VLINT_8B_MIN)
-        return 4;
+  if (v < OSSL_QUIC_VLINT_8B_MIN)
+    return 4;
 
-    if (v <= OSSL_QUIC_VLINT_MAX)
-        return 8;
+  if (v <= OSSL_QUIC_VLINT_MAX)
+    return 8;
 
-    return 0;
+  return 0;
 }
 
 /*
@@ -92,19 +92,20 @@ void ossl_quic_vlint_encode_n(unsigned char *buf, uint64_t v, int n);
  * the number of bytes comprising the encoded integer, including the first
  * byte.
  */
-static ossl_unused ossl_inline size_t ossl_quic_vlint_decode_len(uint8_t first_byte)
+static ossl_unused ossl_inline size_t
+ossl_quic_vlint_decode_len(uint8_t first_byte)
 {
-    return 1U << ((first_byte & 0xC0) >> 6);
+  return 1U << ((first_byte & 0xC0) >> 6);
 }
 
 /*
  * Given a buffer containing an encoded QUIC variable-length integer, returns
  * the decoded value. The buffer must be of at least
- * ossl_quic_vlint_decode_len(buf[0]) bytes in size, and the caller is responsible
- * for checking this.
+ * ossl_quic_vlint_decode_len(buf[0]) bytes in size, and the caller is
+ * responsible for checking this.
  *
- * Precondition: buf is at least ossl_quic_vlint_decode_len(buf[0]) bytes in size
- *   (unchecked)
+ * Precondition: buf is at least ossl_quic_vlint_decode_len(buf[0]) bytes in
+ * size (unchecked)
  */
 uint64_t ossl_quic_vlint_decode_unchecked(const unsigned char *buf);
 
@@ -118,6 +119,7 @@ uint64_t ossl_quic_vlint_decode_unchecked(const unsigned char *buf);
  * Precondition: buf is at least buf_len bytes in size
  * Precondition: v (unchecked)
  */
-int ossl_quic_vlint_decode(const unsigned char *buf, size_t buf_len, uint64_t *v);
+int ossl_quic_vlint_decode(const unsigned char *buf, size_t buf_len,
+                           uint64_t *v);
 
 #endif

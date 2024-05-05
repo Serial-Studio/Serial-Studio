@@ -35,35 +35,33 @@ namespace Misc
  */
 class TimerEvents : public QObject
 {
-    // clang-format off
-    Q_OBJECT
-    // clang-format on
+  Q_OBJECT
 
 Q_SIGNALS:
-    void timeout1Hz();
-    void timeout10Hz();
-    void timeout20Hz();
+  void timeout1Hz();
+  void timeout10Hz();
+  void timeout20Hz();
 
 private:
-    TimerEvents() {};
-    TimerEvents(TimerEvents &&) = delete;
-    TimerEvents(const TimerEvents &) = delete;
-    TimerEvents &operator=(TimerEvents &&) = delete;
-    TimerEvents &operator=(const TimerEvents &) = delete;
+  TimerEvents(){};
+  TimerEvents(TimerEvents &&) = delete;
+  TimerEvents(const TimerEvents &) = delete;
+  TimerEvents &operator=(TimerEvents &&) = delete;
+  TimerEvents &operator=(const TimerEvents &) = delete;
 
 public:
-    static TimerEvents &instance();
+  static TimerEvents &instance();
 
 protected:
-    void timerEvent(QTimerEvent *event) override;
+  void timerEvent(QTimerEvent *event) override;
 
 public Q_SLOTS:
-    void stopTimers();
-    void startTimers();
+  void stopTimers();
+  void startTimers();
 
 private:
-    QBasicTimer m_timer1Hz;
-    QBasicTimer m_timer10Hz;
-    QBasicTimer m_timer20Hz;
+  QBasicTimer m_timer1Hz;
+  QBasicTimer m_timer10Hz;
+  QBasicTimer m_timer20Hz;
 };
-}
+} // namespace Misc

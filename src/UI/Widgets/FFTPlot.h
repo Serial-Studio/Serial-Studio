@@ -35,24 +35,24 @@ namespace Widgets
 {
 class FFTPlot : public DashboardWidgetBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    FFTPlot(const int index = -1);
-    ~FFTPlot();
+  FFTPlot(const int index = -1);
+  ~FFTPlot();
 
 private Q_SLOTS:
-    void updateData();
+  void updateData();
 
 private:
-    float *m_fft;
-    float *m_samples;
+  float *m_fft;
+  float *m_samples;
 
-    int m_size;
-    int m_index;
-    QwtPlot m_plot;
-    QwtPlotCurve m_curve;
-    QVBoxLayout m_layout;
-    QFourierTransformer m_transformer;
+  int m_size;
+  int m_index;
+  QwtPlot m_plot;
+  QwtPlotCurve m_curve;
+  QVBoxLayout m_layout;
+  QFourierTransformer m_transformer;
 };
-}
+} // namespace Widgets

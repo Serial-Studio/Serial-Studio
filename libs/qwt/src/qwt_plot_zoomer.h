@@ -14,7 +14,8 @@
 #include "qwt_plot_picker.h"
 
 class QSizeF;
-template< typename T > class QStack;
+template<typename T>
+class QStack;
 
 /*!
    \brief QwtPlotZoomer provides stacked zooming for a plot widget
@@ -61,10 +62,10 @@ template< typename T > class QStack;
 
    \code
    zoomer = new QwtPlotZoomer( plot );
-   zoomer->setKeyPattern( QwtEventPattern::KeyRedo, Qt::Key_I, Qt::ShiftModifier );
-   zoomer->setKeyPattern( QwtEventPattern::KeyUndo, Qt::Key_O, Qt::ShiftModifier );
-   zoomer->setKeyPattern( QwtEventPattern::KeyHome, Qt::Key_Home );
-   \endcode
+   zoomer->setKeyPattern( QwtEventPattern::KeyRedo, Qt::Key_I, Qt::ShiftModifier
+   ); zoomer->setKeyPattern( QwtEventPattern::KeyUndo, Qt::Key_O,
+   Qt::ShiftModifier ); zoomer->setKeyPattern( QwtEventPattern::KeyHome,
+   Qt::Key_Home ); \endcode
 
    QwtPlotZoomer is tailored for plots with one x and y axis, but it is
    allowed to attach a second QwtPlotZoomer ( without rubber band and tracker )
@@ -78,65 +79,64 @@ template< typename T > class QStack;
 
 class QWT_EXPORT QwtPlotZoomer : public QwtPlotPicker
 {
-    Q_OBJECT
-  public:
-    explicit QwtPlotZoomer( QWidget*, bool doReplot = true );
-    explicit QwtPlotZoomer( QwtAxisId xAxis, QwtAxisId yAxis,
-        QWidget*, bool doReplot = true );
+  Q_OBJECT
+public:
+  explicit QwtPlotZoomer(QWidget *, bool doReplot = true);
+  explicit QwtPlotZoomer(QwtAxisId xAxis, QwtAxisId yAxis, QWidget *,
+                         bool doReplot = true);
 
-    virtual ~QwtPlotZoomer();
+  virtual ~QwtPlotZoomer();
 
-    virtual void setZoomBase( bool doReplot = true );
-    virtual void setZoomBase( const QRectF& );
+  virtual void setZoomBase(bool doReplot = true);
+  virtual void setZoomBase(const QRectF &);
 
-    QRectF zoomBase() const;
-    QRectF zoomRect() const;
+  QRectF zoomBase() const;
+  QRectF zoomRect() const;
 
-    virtual void setAxes( QwtAxisId xAxis, QwtAxisId yAxis ) QWT_OVERRIDE;
+  virtual void setAxes(QwtAxisId xAxis, QwtAxisId yAxis) QWT_OVERRIDE;
 
-    void setMaxStackDepth( int );
-    int maxStackDepth() const;
+  void setMaxStackDepth(int);
+  int maxStackDepth() const;
 
-    const QStack< QRectF >& zoomStack() const;
-    void setZoomStack( const QStack< QRectF >&,
-        int zoomRectIndex = -1 );
+  const QStack<QRectF> &zoomStack() const;
+  void setZoomStack(const QStack<QRectF> &, int zoomRectIndex = -1);
 
-    uint zoomRectIndex() const;
+  uint zoomRectIndex() const;
 
-  public Q_SLOTS:
-    void moveBy( double dx, double dy );
-    virtual void moveTo( const QPointF& );
+public Q_SLOTS:
+  void moveBy(double dx, double dy);
+  virtual void moveTo(const QPointF &);
 
-    virtual void zoom( const QRectF& );
-    virtual void zoom( int offset );
+  virtual void zoom(const QRectF &);
+  virtual void zoom(int offset);
 
-  Q_SIGNALS:
-    /*!
-       A signal emitting the zoomRect(), when the plot has been
-       zoomed in or out.
+Q_SIGNALS:
+  /*!
+     A signal emitting the zoomRect(), when the plot has been
+     zoomed in or out.
 
-       \param rect Current zoom rectangle.
-     */
+     \param rect Current zoom rectangle.
+   */
 
-    void zoomed( const QRectF& rect );
+  void zoomed(const QRectF &rect);
 
-  protected:
-    virtual void rescale();
+protected:
+  virtual void rescale();
 
-    virtual QSizeF minZoomSize() const;
+  virtual QSizeF minZoomSize() const;
 
-    virtual void widgetMouseReleaseEvent( QMouseEvent* ) QWT_OVERRIDE;
-    virtual void widgetKeyPressEvent( QKeyEvent* ) QWT_OVERRIDE;
+  virtual void widgetMouseReleaseEvent(QMouseEvent *) QWT_OVERRIDE;
+  virtual void widgetKeyPressEvent(QKeyEvent *) QWT_OVERRIDE;
 
-    virtual void begin() QWT_OVERRIDE;
-    virtual bool end( bool ok = true ) QWT_OVERRIDE;
-    virtual bool accept( QPolygon& ) const QWT_OVERRIDE;
+  virtual void begin() QWT_OVERRIDE;
+  virtual bool end(bool ok = true) QWT_OVERRIDE;
+  virtual bool accept(QPolygon &) const QWT_OVERRIDE;
 
-  private:
-    void init( bool doReplot );
+private:
+  void init(bool doReplot);
 
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

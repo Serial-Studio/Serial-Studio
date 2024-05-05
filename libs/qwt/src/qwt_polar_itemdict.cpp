@@ -10,56 +10,56 @@
 
 class QwtPolarItemDict::PrivateData
 {
+public:
+  class ItemList : public QList<QwtPolarItem *>
+  {
   public:
-    class ItemList : public QList< QwtPolarItem* >
+    void insertItem(QwtPolarItem *item)
     {
-      public:
-        void insertItem( QwtPolarItem* item )
+      if (item == NULL)
+        return;
+
+      // Unfortunately there is no inSort operation
+      // for lists in Qt4. The implementation below
+      // is slow, but there shouldn't be many plot items.
+
+      QList<QwtPolarItem *>::Iterator it;
+      for (it = begin(); it != end(); ++it)
+      {
+        if (*it == item)
+          return;
+
+        if ((*it)->z() > item->z())
         {
-            if ( item == NULL )
-                return;
-
-            // Unfortunately there is no inSort operation
-            // for lists in Qt4. The implementation below
-            // is slow, but there shouldn't be many plot items.
-
-            QList< QwtPolarItem* >::Iterator it;
-            for ( it = begin(); it != end(); ++it )
-            {
-                if ( *it == item )
-                    return;
-
-                if ( ( *it )->z() > item->z() )
-                {
-                    insert( it, item );
-                    return;
-                }
-            }
-            append( item );
+          insert(it, item);
+          return;
         }
+      }
+      append(item);
+    }
 
-        void removeItem( QwtPolarItem* item )
+    void removeItem(QwtPolarItem *item)
+    {
+      if (item == NULL)
+        return;
+
+      int i = 0;
+
+      QList<QwtPolarItem *>::Iterator it;
+      for (it = begin(); it != end(); ++it)
+      {
+        if (item == *it)
         {
-            if ( item == NULL )
-                return;
-
-            int i = 0;
-
-            QList< QwtPolarItem* >::Iterator it;
-            for ( it = begin(); it != end(); ++it )
-            {
-                if ( item == *it )
-                {
-                    removeAt( i );
-                    return;
-                }
-                i++;
-            }
+          removeAt(i);
+          return;
         }
-    };
+        i++;
+      }
+    }
+  };
 
-    ItemList itemList;
-    bool autoDelete;
+  ItemList itemList;
+  bool autoDelete;
 };
 
 /*!
@@ -70,8 +70,8 @@ class QwtPolarItemDict::PrivateData
  */
 QwtPolarItemDict::QwtPolarItemDict()
 {
-    m_data = new QwtPolarItemDict::PrivateData;
-    m_data->autoDelete = true;
+  m_data = new QwtPolarItemDict::PrivateData;
+  m_data->autoDelete = true;
 }
 
 /*!
@@ -82,8 +82,8 @@ QwtPolarItemDict::QwtPolarItemDict()
  */
 QwtPolarItemDict::~QwtPolarItemDict()
 {
-    detachItems( QwtPolarItem::Rtti_PolarItem, m_data->autoDelete );
-    delete m_data;
+  detachItems(QwtPolarItem::Rtti_PolarItem, m_data->autoDelete);
+  delete m_data;
 }
 
 /*!
@@ -94,9 +94,9 @@ QwtPolarItemDict::~QwtPolarItemDict()
 
    \sa autoDelete, attachItem
  */
-void QwtPolarItemDict::setAutoDelete( bool autoDelete )
+void QwtPolarItemDict::setAutoDelete(bool autoDelete)
 {
-    m_data->autoDelete = autoDelete;
+  m_data->autoDelete = autoDelete;
 }
 
 /*!
@@ -105,7 +105,7 @@ void QwtPolarItemDict::setAutoDelete( bool autoDelete )
  */
 bool QwtPolarItemDict::autoDelete() const
 {
-    return m_data->autoDelete;
+  return m_data->autoDelete;
 }
 
 /*!
@@ -114,9 +114,9 @@ bool QwtPolarItemDict::autoDelete() const
    \param item PlotItem
    \sa removeItem()
  */
-void QwtPolarItemDict::insertItem( QwtPolarItem* item )
+void QwtPolarItemDict::insertItem(QwtPolarItem *item)
 {
-    m_data->itemList.insertItem( item );
+  m_data->itemList.insertItem(item);
 }
 
 /*!
@@ -125,9 +125,9 @@ void QwtPolarItemDict::insertItem( QwtPolarItem* item )
    \param item PlotItem
    \sa insertItem()
  */
-void QwtPolarItemDict::removeItem( QwtPolarItem* item )
+void QwtPolarItemDict::removeItem(QwtPolarItem *item)
 {
-    m_data->itemList.removeItem( item );
+  m_data->itemList.removeItem(item);
 }
 
 /*!
@@ -137,23 +137,23 @@ void QwtPolarItemDict::removeItem( QwtPolarItem* item )
                otherwise only those items of the type rtti.
    \param autoDelete If true, delete all detached items
  */
-void QwtPolarItemDict::detachItems( int rtti, bool autoDelete )
+void QwtPolarItemDict::detachItems(int rtti, bool autoDelete)
 {
-    PrivateData::ItemList list = m_data->itemList;
-    QwtPolarItemIterator it = list.constBegin();
-    while ( it != list.constEnd() )
+  PrivateData::ItemList list = m_data->itemList;
+  QwtPolarItemIterator it = list.constBegin();
+  while (it != list.constEnd())
+  {
+    QwtPolarItem *item = *it;
+
+    ++it; // increment before removing item from the list
+
+    if (rtti == QwtPolarItem::Rtti_PolarItem || item->rtti() == rtti)
     {
-        QwtPolarItem* item = *it;
-
-        ++it; // increment before removing item from the list
-
-        if ( rtti == QwtPolarItem::Rtti_PolarItem || item->rtti() == rtti )
-        {
-            item->attach( NULL );
-            if ( autoDelete )
-                delete item;
-        }
+      item->attach(NULL);
+      if (autoDelete)
+        delete item;
     }
+  }
 }
 
 /*!
@@ -165,7 +165,7 @@ void QwtPolarItemDict::detachItems( int rtti, bool autoDelete )
         Instead you can place pointers to objects to be
         removed in a removal list, and traverse that list later.
  */
-const QwtPolarItemList& QwtPolarItemDict::itemList() const
+const QwtPolarItemList &QwtPolarItemDict::itemList() const
 {
-    return m_data->itemList;
+  return m_data->itemList;
 }

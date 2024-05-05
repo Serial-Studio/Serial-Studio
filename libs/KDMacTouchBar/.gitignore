@@ -1,7 +1,0 @@
-Makefile
-*.moc
-*.o
-lib
-.qmake.cache
-.qmake.stash
-.DS_Store

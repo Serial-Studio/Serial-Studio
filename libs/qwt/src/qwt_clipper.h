@@ -20,7 +20,8 @@ class QPolygon;
 class QPolygonF;
 
 #if QT_VERSION < 0x060000
-template< typename T > class QVector;
+template<typename T>
+class QVector;
 #endif
 
 /*!
@@ -29,26 +30,26 @@ template< typename T > class QVector;
 
 namespace QwtClipper
 {
-    QWT_EXPORT void clipPolygon( const QRect&,
-        QPolygon&, bool closePolygon = false );
+QWT_EXPORT void clipPolygon(const QRect &, QPolygon &,
+                            bool closePolygon = false);
 
-    QWT_EXPORT void clipPolygon( const QRectF&,
-        QPolygon&, bool closePolygon = false );
+QWT_EXPORT void clipPolygon(const QRectF &, QPolygon &,
+                            bool closePolygon = false);
 
-    QWT_EXPORT void clipPolygonF( const QRectF&,
-        QPolygonF&, bool closePolygon = false );
+QWT_EXPORT void clipPolygonF(const QRectF &, QPolygonF &,
+                             bool closePolygon = false);
 
-    QWT_EXPORT QPolygon clippedPolygon( const QRect&,
-        const QPolygon&, bool closePolygon = false );
+QWT_EXPORT QPolygon clippedPolygon(const QRect &, const QPolygon &,
+                                   bool closePolygon = false);
 
-    QWT_EXPORT QPolygon clippedPolygon( const QRectF&,
-        const QPolygon&, bool closePolygon = false );
+QWT_EXPORT QPolygon clippedPolygon(const QRectF &, const QPolygon &,
+                                   bool closePolygon = false);
 
-    QWT_EXPORT QPolygonF clippedPolygonF( const QRectF&,
-        const QPolygonF&, bool closePolygon = false );
+QWT_EXPORT QPolygonF clippedPolygonF(const QRectF &, const QPolygonF &,
+                                     bool closePolygon = false);
 
-    QWT_EXPORT QVector< QwtInterval > clipCircle(
-        const QRectF&, const QPointF&, double radius );
-};
+QWT_EXPORT QVector<QwtInterval> clipCircle(const QRectF &, const QPointF &,
+                                           double radius);
+}; // namespace QwtClipper
 
 #endif

@@ -16,85 +16,86 @@
 
 #include <qpainter.h>
 
-static inline bool qwtIsSampleInside( const QwtOHLCSample& sample,
-    double tMin, double tMax, double vMin, double vMax )
+static inline bool qwtIsSampleInside(const QwtOHLCSample &sample, double tMin,
+                                     double tMax, double vMin, double vMax)
 {
-    const double t = sample.time;
-    const QwtInterval interval = sample.boundingInterval();
+  const double t = sample.time;
+  const QwtInterval interval = sample.boundingInterval();
 
-    const bool isOffScreen = ( t < tMin ) || ( t > tMax )
-        || ( interval.maxValue() < vMin ) || ( interval.minValue() > vMax );
+  const bool isOffScreen = (t < tMin) || (t > tMax)
+                           || (interval.maxValue() < vMin)
+                           || (interval.minValue() > vMax);
 
-    return !isOffScreen;
+  return !isOffScreen;
 }
 
 class QwtPlotTradingCurve::PrivateData
 {
-  public:
-    PrivateData()
-        : symbolStyle( QwtPlotTradingCurve::CandleStick )
-        , symbolExtent( 0.6 )
-        , minSymbolWidth( 2.0 )
-        , maxSymbolWidth( -1.0 )
-        , paintAttributes( QwtPlotTradingCurve::ClipSymbols )
-    {
-        symbolBrush[0] = QBrush( Qt::white );
-        symbolBrush[1] = QBrush( Qt::black );
-    }
+public:
+  PrivateData()
+    : symbolStyle(QwtPlotTradingCurve::CandleStick)
+    , symbolExtent(0.6)
+    , minSymbolWidth(2.0)
+    , maxSymbolWidth(-1.0)
+    , paintAttributes(QwtPlotTradingCurve::ClipSymbols)
+  {
+    symbolBrush[0] = QBrush(Qt::white);
+    symbolBrush[1] = QBrush(Qt::black);
+  }
 
-    QwtPlotTradingCurve::SymbolStyle symbolStyle;
-    double symbolExtent;
-    double minSymbolWidth;
-    double maxSymbolWidth;
+  QwtPlotTradingCurve::SymbolStyle symbolStyle;
+  double symbolExtent;
+  double minSymbolWidth;
+  double maxSymbolWidth;
 
-    QPen symbolPen;
-    QBrush symbolBrush[2]; // Increasing/Decreasing
+  QPen symbolPen;
+  QBrush symbolBrush[2]; // Increasing/Decreasing
 
-    QwtPlotTradingCurve::PaintAttributes paintAttributes;
+  QwtPlotTradingCurve::PaintAttributes paintAttributes;
 };
 
 /*!
    Constructor
    \param title Title of the curve
  */
-QwtPlotTradingCurve::QwtPlotTradingCurve( const QwtText& title )
-    : QwtPlotSeriesItem( title )
+QwtPlotTradingCurve::QwtPlotTradingCurve(const QwtText &title)
+  : QwtPlotSeriesItem(title)
 {
-    init();
+  init();
 }
 
 /*!
    Constructor
    \param title Title of the curve
  */
-QwtPlotTradingCurve::QwtPlotTradingCurve( const QString& title )
-    : QwtPlotSeriesItem( QwtText( title ) )
+QwtPlotTradingCurve::QwtPlotTradingCurve(const QString &title)
+  : QwtPlotSeriesItem(QwtText(title))
 {
-    init();
+  init();
 }
 
 //! Destructor
 QwtPlotTradingCurve::~QwtPlotTradingCurve()
 {
-    delete m_data;
+  delete m_data;
 }
 
 //! Initialize internal members
 void QwtPlotTradingCurve::init()
 {
-    setItemAttribute( QwtPlotItem::Legend, true );
-    setItemAttribute( QwtPlotItem::AutoScale, true );
+  setItemAttribute(QwtPlotItem::Legend, true);
+  setItemAttribute(QwtPlotItem::AutoScale, true);
 
-    m_data = new PrivateData;
-    setData( new QwtTradingChartData() );
+  m_data = new PrivateData;
+  setData(new QwtTradingChartData());
 
-    setZ( 19.0 );
+  setZ(19.0);
 }
 
 //! \return QwtPlotItem::Rtti_PlotTradingCurve
 int QwtPlotTradingCurve::rtti() const
 {
-    return QwtPlotTradingCurve::Rtti_PlotTradingCurve;
+  return QwtPlotTradingCurve::Rtti_PlotTradingCurve;
 }
 
 /*!
@@ -104,23 +105,21 @@ int QwtPlotTradingCurve::rtti() const
    \param on On/Off
    \sa testPaintAttribute()
  */
-void QwtPlotTradingCurve::setPaintAttribute(
-    PaintAttribute attribute, bool on )
+void QwtPlotTradingCurve::setPaintAttribute(PaintAttribute attribute, bool on)
 {
-    if ( on )
-        m_data->paintAttributes |= attribute;
-    else
-        m_data->paintAttributes &= ~attribute;
+  if (on)
+    m_data->paintAttributes |= attribute;
+  else
+    m_data->paintAttributes &= ~attribute;
 }
 
 /*!
     \return True, when attribute is enabled
     \sa PaintAttribute, setPaintAttribute()
  */
-bool QwtPlotTradingCurve::testPaintAttribute(
-    PaintAttribute attribute ) const
+bool QwtPlotTradingCurve::testPaintAttribute(PaintAttribute attribute) const
 {
-    return ( m_data->paintAttributes & attribute );
+  return (m_data->paintAttributes & attribute);
 }
 
 /*!
@@ -129,10 +128,9 @@ bool QwtPlotTradingCurve::testPaintAttribute(
 
    \sa QwtPlotSeriesItem::setData()
  */
-void QwtPlotTradingCurve::setSamples(
-    const QVector< QwtOHLCSample >& samples )
+void QwtPlotTradingCurve::setSamples(const QVector<QwtOHLCSample> &samples)
 {
-    setData( new QwtTradingChartData( samples ) );
+  setData(new QwtTradingChartData(samples));
 }
 
 /*!
@@ -145,10 +143,9 @@ void QwtPlotTradingCurve::setSamples(
    \warning The item takes ownership of the data object, deleting
            it when its not used anymore.
  */
-void QwtPlotTradingCurve::setSamples(
-    QwtSeriesData< QwtOHLCSample >* data )
+void QwtPlotTradingCurve::setSamples(QwtSeriesData<QwtOHLCSample> *data)
 {
-    setData( data );
+  setData(data);
 }
 
 /*!
@@ -159,15 +156,15 @@ void QwtPlotTradingCurve::setSamples(
    \sa symbolStyle(), setSymbolExtent(),
       setSymbolPen(), setSymbolBrush()
  */
-void QwtPlotTradingCurve::setSymbolStyle( SymbolStyle style )
+void QwtPlotTradingCurve::setSymbolStyle(SymbolStyle style)
 {
-    if ( style != m_data->symbolStyle )
-    {
-        m_data->symbolStyle = style;
+  if (style != m_data->symbolStyle)
+  {
+    m_data->symbolStyle = style;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -176,7 +173,7 @@ void QwtPlotTradingCurve::setSymbolStyle( SymbolStyle style )
  */
 QwtPlotTradingCurve::SymbolStyle QwtPlotTradingCurve::symbolStyle() const
 {
-    return m_data->symbolStyle;
+  return m_data->symbolStyle;
 }
 
 /*!
@@ -192,10 +189,10 @@ QwtPlotTradingCurve::SymbolStyle QwtPlotTradingCurve::symbolStyle() const
 
    \sa pen(), brush()
  */
-void QwtPlotTradingCurve::setSymbolPen(
-    const QColor& color, qreal width, Qt::PenStyle style )
+void QwtPlotTradingCurve::setSymbolPen(const QColor &color, qreal width,
+                                       Qt::PenStyle style)
 {
-    setSymbolPen( QPen( color, width, style ) );
+  setSymbolPen(QPen(color, width, style));
 }
 
 /*!
@@ -206,15 +203,15 @@ void QwtPlotTradingCurve::setSymbolPen(
 
    \sa symbolPen(), setSymbolBrush()
  */
-void QwtPlotTradingCurve::setSymbolPen( const QPen& pen )
+void QwtPlotTradingCurve::setSymbolPen(const QPen &pen)
 {
-    if ( pen != m_data->symbolPen )
-    {
-        m_data->symbolPen = pen;
+  if (pen != m_data->symbolPen)
+  {
+    m_data->symbolPen = pen;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -223,7 +220,7 @@ void QwtPlotTradingCurve::setSymbolPen( const QPen& pen )
  */
 QPen QwtPlotTradingCurve::symbolPen() const
 {
-    return m_data->symbolPen;
+  return m_data->symbolPen;
 }
 
 /*!
@@ -235,21 +232,21 @@ QPen QwtPlotTradingCurve::symbolPen() const
 
    \sa symbolBrush(), setSymbolPen()
  */
-void QwtPlotTradingCurve::setSymbolBrush(
-    Direction direction, const QBrush& brush )
+void QwtPlotTradingCurve::setSymbolBrush(Direction direction,
+                                         const QBrush &brush)
 {
-    // silencing -Wtautological-constant-out-of-range-compare
-    const int index = static_cast< int >( direction );
-    if ( index < 0 || index >= 2 )
-        return;
+  // silencing -Wtautological-constant-out-of-range-compare
+  const int index = static_cast<int>(direction);
+  if (index < 0 || index >= 2)
+    return;
 
-    if ( brush != m_data->symbolBrush[ index ] )
-    {
-        m_data->symbolBrush[ index ] = brush;
+  if (brush != m_data->symbolBrush[index])
+  {
+    m_data->symbolBrush[index] = brush;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -259,13 +256,13 @@ void QwtPlotTradingCurve::setSymbolBrush(
 
    \sa setSymbolPen(), symbolBrush()
  */
-QBrush QwtPlotTradingCurve::symbolBrush( Direction direction ) const
+QBrush QwtPlotTradingCurve::symbolBrush(Direction direction) const
 {
-    const int index = static_cast< int >( direction );
-    if ( index < 0 || index >= 2 )
-        return QBrush();
+  const int index = static_cast<int>(direction);
+  if (index < 0 || index >= 2)
+    return QBrush();
 
-    return m_data->symbolBrush[ index ];
+  return m_data->symbolBrush[index];
 }
 
 /*!
@@ -281,16 +278,16 @@ QBrush QwtPlotTradingCurve::symbolBrush( Direction direction ) const
    \sa symbolExtent(), scaledSymbolWidth(),
       setMinSymbolWidth(), setMaxSymbolWidth()
  */
-void QwtPlotTradingCurve::setSymbolExtent( double extent )
+void QwtPlotTradingCurve::setSymbolExtent(double extent)
 {
-    extent = qwtMaxF( 0.0, extent );
-    if ( extent != m_data->symbolExtent )
-    {
-        m_data->symbolExtent = extent;
+  extent = qwtMaxF(0.0, extent);
+  if (extent != m_data->symbolExtent)
+  {
+    m_data->symbolExtent = extent;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -300,7 +297,7 @@ void QwtPlotTradingCurve::setSymbolExtent( double extent )
  */
 double QwtPlotTradingCurve::symbolExtent() const
 {
-    return m_data->symbolExtent;
+  return m_data->symbolExtent;
 }
 
 /*!
@@ -309,16 +306,16 @@ double QwtPlotTradingCurve::symbolExtent() const
    \param width Width in paint device coordinates
    \sa minSymbolWidth(), setMaxSymbolWidth(), setSymbolExtent()
  */
-void QwtPlotTradingCurve::setMinSymbolWidth( double width )
+void QwtPlotTradingCurve::setMinSymbolWidth(double width)
 {
-    width = qwtMaxF( width, 0.0 );
-    if ( width != m_data->minSymbolWidth )
-    {
-        m_data->minSymbolWidth = width;
+  width = qwtMaxF(width, 0.0);
+  if (width != m_data->minSymbolWidth)
+  {
+    m_data->minSymbolWidth = width;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -327,7 +324,7 @@ void QwtPlotTradingCurve::setMinSymbolWidth( double width )
  */
 double QwtPlotTradingCurve::minSymbolWidth() const
 {
-    return m_data->minSymbolWidth;
+  return m_data->minSymbolWidth;
 }
 
 /*!
@@ -338,15 +335,15 @@ double QwtPlotTradingCurve::minSymbolWidth() const
    \param width Width in paint device coordinates
    \sa maxSymbolWidth(), setMinSymbolWidth(), setSymbolExtent()
  */
-void QwtPlotTradingCurve::setMaxSymbolWidth( double width )
+void QwtPlotTradingCurve::setMaxSymbolWidth(double width)
 {
-    if ( width != m_data->maxSymbolWidth )
-    {
-        m_data->maxSymbolWidth = width;
+  if (width != m_data->maxSymbolWidth)
+  {
+    m_data->maxSymbolWidth = width;
 
-        legendChanged();
-        itemChanged();
-    }
+    legendChanged();
+    itemChanged();
+  }
 }
 
 /*!
@@ -355,7 +352,7 @@ void QwtPlotTradingCurve::setMaxSymbolWidth( double width )
  */
 double QwtPlotTradingCurve::maxSymbolWidth() const
 {
-    return m_data->maxSymbolWidth;
+  return m_data->maxSymbolWidth;
 }
 
 /*!
@@ -364,11 +361,11 @@ double QwtPlotTradingCurve::maxSymbolWidth() const
  */
 QRectF QwtPlotTradingCurve::boundingRect() const
 {
-    QRectF rect = QwtPlotSeriesItem::boundingRect();
-    if ( orientation() == Qt::Vertical )
-        rect.setRect( rect.y(), rect.x(), rect.height(), rect.width() );
+  QRectF rect = QwtPlotSeriesItem::boundingRect();
+  if (orientation() == Qt::Vertical)
+    rect.setRect(rect.y(), rect.x(), rect.height(), rect.width());
 
-    return rect;
+  return rect;
 }
 
 /*!
@@ -384,25 +381,26 @@ QRectF QwtPlotTradingCurve::boundingRect() const
 
    \sa drawSymbols()
  */
-void QwtPlotTradingCurve::drawSeries(QPainter* painter,
-    const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, int from, int to ) const
+void QwtPlotTradingCurve::drawSeries(QPainter *painter, const QwtScaleMap &xMap,
+                                     const QwtScaleMap &yMap,
+                                     const QRectF &canvasRect, int from,
+                                     int to) const
 {
-    if ( to < 0 )
-        to = dataSize() - 1;
+  if (to < 0)
+    to = dataSize() - 1;
 
-    if ( from < 0 )
-        from = 0;
+  if (from < 0)
+    from = 0;
 
-    if ( from > to )
-        return;
+  if (from > to)
+    return;
 
-    painter->save();
+  painter->save();
 
-    if ( m_data->symbolStyle != QwtPlotTradingCurve::NoSymbol )
-        drawSymbols( painter, xMap, yMap, canvasRect, from, to );
+  if (m_data->symbolStyle != QwtPlotTradingCurve::NoSymbol)
+    drawSymbols(painter, xMap, yMap, canvasRect, from, to);
 
-    painter->restore();
+  painter->restore();
 }
 
 /*!
@@ -417,104 +415,101 @@ void QwtPlotTradingCurve::drawSeries(QPainter* painter,
 
    \sa drawSeries()
  */
-void QwtPlotTradingCurve::drawSymbols( QPainter* painter,
-    const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect, int from, int to ) const
+void QwtPlotTradingCurve::drawSymbols(QPainter *painter,
+                                      const QwtScaleMap &xMap,
+                                      const QwtScaleMap &yMap,
+                                      const QRectF &canvasRect, int from,
+                                      int to) const
 {
-    const QRectF tr = QwtScaleMap::invTransform( xMap, yMap, canvasRect );
+  const QRectF tr = QwtScaleMap::invTransform(xMap, yMap, canvasRect);
 
-    const QwtScaleMap* timeMap, * valueMap;
-    double tMin, tMax, vMin, vMax;
+  const QwtScaleMap *timeMap, *valueMap;
+  double tMin, tMax, vMin, vMax;
 
-    const Qt::Orientation orient = orientation();
-    if ( orient == Qt::Vertical )
+  const Qt::Orientation orient = orientation();
+  if (orient == Qt::Vertical)
+  {
+    timeMap = &xMap;
+    valueMap = &yMap;
+
+    tMin = tr.left();
+    tMax = tr.right();
+    vMin = tr.top();
+    vMax = tr.bottom();
+  }
+  else
+  {
+    timeMap = &yMap;
+    valueMap = &xMap;
+
+    vMin = tr.left();
+    vMax = tr.right();
+    tMin = tr.top();
+    tMax = tr.bottom();
+  }
+
+  const bool inverted = timeMap->isInverting();
+  const bool doClip = m_data->paintAttributes & ClipSymbols;
+  const bool doAlign = QwtPainter::roundingAlignment(painter);
+
+  double symbolWidth = scaledSymbolWidth(xMap, yMap, canvasRect);
+  if (doAlign)
+    symbolWidth = std::floor(0.5 * symbolWidth) * 2.0;
+
+  QPen pen = m_data->symbolPen;
+  pen.setCapStyle(Qt::FlatCap);
+
+  painter->setPen(pen);
+
+  for (int i = from; i <= to; i++)
+  {
+    const QwtOHLCSample s = sample(i);
+
+    if (!doClip || qwtIsSampleInside(s, tMin, tMax, vMin, vMax))
     {
-        timeMap = &xMap;
-        valueMap = &yMap;
+      QwtOHLCSample translatedSample;
 
-        tMin = tr.left();
-        tMax = tr.right();
-        vMin = tr.top();
-        vMax = tr.bottom();
-    }
-    else
-    {
-        timeMap = &yMap;
-        valueMap = &xMap;
+      translatedSample.time = timeMap->transform(s.time);
+      translatedSample.open = valueMap->transform(s.open);
+      translatedSample.high = valueMap->transform(s.high);
+      translatedSample.low = valueMap->transform(s.low);
+      translatedSample.close = valueMap->transform(s.close);
 
-        vMin = tr.left();
-        vMax = tr.right();
-        tMin = tr.top();
-        tMax = tr.bottom();
-    }
+      const int brushIndex = (s.open < s.close)
+                                 ? QwtPlotTradingCurve::Increasing
+                                 : QwtPlotTradingCurve::Decreasing;
 
-    const bool inverted = timeMap->isInverting();
-    const bool doClip = m_data->paintAttributes & ClipSymbols;
-    const bool doAlign = QwtPainter::roundingAlignment( painter );
+      if (doAlign)
+      {
+        translatedSample.time = qRound(translatedSample.time);
+        translatedSample.open = qRound(translatedSample.open);
+        translatedSample.high = qRound(translatedSample.high);
+        translatedSample.low = qRound(translatedSample.low);
+        translatedSample.close = qRound(translatedSample.close);
+      }
 
-    double symbolWidth = scaledSymbolWidth( xMap, yMap, canvasRect );
-    if ( doAlign )
-        symbolWidth = std::floor( 0.5 * symbolWidth ) * 2.0;
-
-    QPen pen = m_data->symbolPen;
-    pen.setCapStyle( Qt::FlatCap );
-
-    painter->setPen( pen );
-
-    for ( int i = from; i <= to; i++ )
-    {
-        const QwtOHLCSample s = sample( i );
-
-        if ( !doClip || qwtIsSampleInside( s, tMin, tMax, vMin, vMax ) )
-        {
-            QwtOHLCSample translatedSample;
-
-            translatedSample.time = timeMap->transform( s.time );
-            translatedSample.open = valueMap->transform( s.open );
-            translatedSample.high = valueMap->transform( s.high );
-            translatedSample.low = valueMap->transform( s.low );
-            translatedSample.close = valueMap->transform( s.close );
-
-            const int brushIndex = ( s.open < s.close )
-                ? QwtPlotTradingCurve::Increasing
-                : QwtPlotTradingCurve::Decreasing;
-
-            if ( doAlign )
-            {
-                translatedSample.time = qRound( translatedSample.time );
-                translatedSample.open = qRound( translatedSample.open );
-                translatedSample.high = qRound( translatedSample.high );
-                translatedSample.low = qRound( translatedSample.low );
-                translatedSample.close = qRound( translatedSample.close );
-            }
-
-            switch( m_data->symbolStyle )
-            {
-                case Bar:
-                {
-                    drawBar( painter, translatedSample,
-                        orient, inverted, symbolWidth );
-                    break;
-                }
-                case CandleStick:
-                {
-                    painter->setBrush( m_data->symbolBrush[ brushIndex ] );
-                    drawCandleStick( painter, translatedSample,
-                        orient, symbolWidth );
-                    break;
-                }
-                default:
-                {
-                    if ( m_data->symbolStyle >= UserSymbol )
-                    {
-                        painter->setBrush( m_data->symbolBrush[ brushIndex ] );
-                        drawUserSymbol( painter, m_data->symbolStyle,
-                            translatedSample, orient, inverted, symbolWidth );
-                    }
-                }
-            }
+      switch (m_data->symbolStyle)
+      {
+        case Bar: {
+          drawBar(painter, translatedSample, orient, inverted, symbolWidth);
+          break;
         }
+        case CandleStick: {
+          painter->setBrush(m_data->symbolBrush[brushIndex]);
+          drawCandleStick(painter, translatedSample, orient, symbolWidth);
+          break;
+        }
+        default: {
+          if (m_data->symbolStyle >= UserSymbol)
+          {
+            painter->setBrush(m_data->symbolBrush[brushIndex]);
+            drawUserSymbol(painter, m_data->symbolStyle, translatedSample,
+                           orient, inverted, symbolWidth);
+          }
+        }
+      }
     }
+  }
 }
 
 /*!
@@ -531,16 +526,16 @@ void QwtPlotTradingCurve::drawSymbols( QPainter* painter,
                   in the opposite direction as QPainter coordinates.
    \param symbolWidth Width of the symbol in paint device coordinates
  */
-void QwtPlotTradingCurve::drawUserSymbol( QPainter* painter,
-    SymbolStyle symbolStyle, const QwtOHLCSample& sample,
-    Qt::Orientation orientation, bool inverted, double symbolWidth ) const
+void QwtPlotTradingCurve::drawUserSymbol(
+    QPainter *painter, SymbolStyle symbolStyle, const QwtOHLCSample &sample,
+    Qt::Orientation orientation, bool inverted, double symbolWidth) const
 {
-    Q_UNUSED( painter )
-    Q_UNUSED( symbolStyle )
-    Q_UNUSED( orientation )
-    Q_UNUSED( inverted )
-    Q_UNUSED( symbolWidth )
-    Q_UNUSED( sample )
+  Q_UNUSED(painter)
+  Q_UNUSED(symbolStyle)
+  Q_UNUSED(orientation)
+  Q_UNUSED(inverted)
+  Q_UNUSED(symbolWidth)
+  Q_UNUSED(sample)
 }
 
 /*!
@@ -559,33 +554,34 @@ void QwtPlotTradingCurve::drawUserSymbol( QPainter* painter,
 
    \sa Bar
  */
-void QwtPlotTradingCurve::drawBar( QPainter* painter,
-    const QwtOHLCSample& sample, Qt::Orientation orientation,
-    bool inverted, double width ) const
+void QwtPlotTradingCurve::drawBar(QPainter *painter,
+                                  const QwtOHLCSample &sample,
+                                  Qt::Orientation orientation, bool inverted,
+                                  double width) const
 {
-    double w2 = 0.5 * width;
-    if ( inverted )
-        w2 *= -1;
+  double w2 = 0.5 * width;
+  if (inverted)
+    w2 *= -1;
 
-    if ( orientation == Qt::Vertical )
-    {
-        QwtPainter::drawLine( painter,
-            sample.time, sample.low, sample.time, sample.high );
+  if (orientation == Qt::Vertical)
+  {
+    QwtPainter::drawLine(painter, sample.time, sample.low, sample.time,
+                         sample.high);
 
-        QwtPainter::drawLine( painter,
-            sample.time - w2, sample.open, sample.time, sample.open );
-        QwtPainter::drawLine( painter,
-            sample.time + w2, sample.close, sample.time, sample.close );
-    }
-    else
-    {
-        QwtPainter::drawLine( painter, sample.low, sample.time,
-            sample.high, sample.time );
-        QwtPainter::drawLine( painter,
-            sample.open, sample.time - w2, sample.open, sample.time );
-        QwtPainter::drawLine( painter,
-            sample.close, sample.time + w2, sample.close, sample.time );
-    }
+    QwtPainter::drawLine(painter, sample.time - w2, sample.open, sample.time,
+                         sample.open);
+    QwtPainter::drawLine(painter, sample.time + w2, sample.close, sample.time,
+                         sample.close);
+  }
+  else
+  {
+    QwtPainter::drawLine(painter, sample.low, sample.time, sample.high,
+                         sample.time);
+    QwtPainter::drawLine(painter, sample.open, sample.time - w2, sample.open,
+                         sample.time);
+    QwtPainter::drawLine(painter, sample.close, sample.time + w2, sample.close,
+                         sample.time);
+  }
 }
 
 /*!
@@ -598,36 +594,37 @@ void QwtPlotTradingCurve::drawBar( QPainter* painter,
 
    \sa CandleStick
  */
-void QwtPlotTradingCurve::drawCandleStick( QPainter* painter,
-    const QwtOHLCSample& sample, Qt::Orientation orientation,
-    double width ) const
+void QwtPlotTradingCurve::drawCandleStick(QPainter *painter,
+                                          const QwtOHLCSample &sample,
+                                          Qt::Orientation orientation,
+                                          double width) const
 {
-    const double t = sample.time;
-    const double v1 = qwtMinF( sample.low, sample.high );
-    const double v2 = qwtMinF( sample.open, sample.close );
-    const double v3 = qwtMaxF( sample.low, sample.high );
-    const double v4 = qwtMaxF( sample.open, sample.close );
+  const double t = sample.time;
+  const double v1 = qwtMinF(sample.low, sample.high);
+  const double v2 = qwtMinF(sample.open, sample.close);
+  const double v3 = qwtMaxF(sample.low, sample.high);
+  const double v4 = qwtMaxF(sample.open, sample.close);
 
-    if ( orientation == Qt::Vertical )
-    {
-        QwtPainter::drawLine( painter, t, v1, t, v2 );
-        QwtPainter::drawLine( painter, t, v3, t, v4 );
+  if (orientation == Qt::Vertical)
+  {
+    QwtPainter::drawLine(painter, t, v1, t, v2);
+    QwtPainter::drawLine(painter, t, v3, t, v4);
 
-        QRectF rect( t - 0.5 * width, sample.open,
-            width, sample.close - sample.open );
+    QRectF rect(t - 0.5 * width, sample.open, width,
+                sample.close - sample.open);
 
-        QwtPainter::drawRect( painter, rect );
-    }
-    else
-    {
-        QwtPainter::drawLine( painter, v1, t, v2, t );
-        QwtPainter::drawLine( painter, v3, t, v4, t );
+    QwtPainter::drawRect(painter, rect);
+  }
+  else
+  {
+    QwtPainter::drawLine(painter, v1, t, v2, t);
+    QwtPainter::drawLine(painter, v3, t, v4, t);
 
-        const QRectF rect( sample.open, t - 0.5 * width,
-            sample.close - sample.open, width );
+    const QRectF rect(sample.open, t - 0.5 * width, sample.close - sample.open,
+                      width);
 
-        QwtPainter::drawRect( painter, rect );
-    }
+    QwtPainter::drawRect(painter, rect);
+  }
 }
 
 /*!
@@ -639,11 +636,10 @@ void QwtPlotTradingCurve::drawCandleStick( QPainter* painter,
 
    \sa setLegendIconSize(), legendData()
  */
-QwtGraphic QwtPlotTradingCurve::legendIcon( int index,
-    const QSizeF& size ) const
+QwtGraphic QwtPlotTradingCurve::legendIcon(int index, const QSizeF &size) const
 {
-    Q_UNUSED( index );
-    return defaultIcon( m_data->symbolPen.color(), size );
+  Q_UNUSED(index);
+  return defaultIcon(m_data->symbolPen.color(), size);
 }
 
 /*!
@@ -661,28 +657,27 @@ QwtGraphic QwtPlotTradingCurve::legendIcon( int index,
 
    \sa symbolExtent(), minSymbolWidth(), maxSymbolWidth()
  */
-double QwtPlotTradingCurve::scaledSymbolWidth(
-    const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-    const QRectF& canvasRect ) const
+double QwtPlotTradingCurve::scaledSymbolWidth(const QwtScaleMap &xMap,
+                                              const QwtScaleMap &yMap,
+                                              const QRectF &canvasRect) const
 {
-    Q_UNUSED( canvasRect );
+  Q_UNUSED(canvasRect);
 
-    if ( m_data->maxSymbolWidth > 0.0 &&
-        m_data->minSymbolWidth >= m_data->maxSymbolWidth )
-    {
-        return m_data->minSymbolWidth;
-    }
+  if (m_data->maxSymbolWidth > 0.0
+      && m_data->minSymbolWidth >= m_data->maxSymbolWidth)
+  {
+    return m_data->minSymbolWidth;
+  }
 
-    const QwtScaleMap* map =
-        ( orientation() == Qt::Vertical ) ? &xMap : &yMap;
+  const QwtScaleMap *map = (orientation() == Qt::Vertical) ? &xMap : &yMap;
 
-    const double pos = map->transform( map->s1() + m_data->symbolExtent );
+  const double pos = map->transform(map->s1() + m_data->symbolExtent);
 
-    double width = qAbs( pos - map->p1() );
+  double width = qAbs(pos - map->p1());
 
-    width = qwtMaxF( width,  m_data->minSymbolWidth );
-    if ( m_data->maxSymbolWidth > 0.0 )
-        width = qwtMinF( width, m_data->maxSymbolWidth );
+  width = qwtMaxF(width, m_data->minSymbolWidth);
+  if (m_data->maxSymbolWidth > 0.0)
+    width = qwtMinF(width, m_data->maxSymbolWidth);
 
-    return width;
+  return width;
 }

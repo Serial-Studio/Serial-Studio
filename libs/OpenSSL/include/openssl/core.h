@@ -39,8 +39,8 @@ typedef struct ossl_core_bio_st OSSL_CORE_BIO;
  */
 struct ossl_dispatch_st
 {
-    int function_id;
-    void (*function)(void);
+  int function_id;
+  void (*function)(void);
 };
 
 /*
@@ -58,8 +58,8 @@ struct ossl_dispatch_st
  */
 struct ossl_item_st
 {
-    unsigned int id;
-    void *ptr;
+  unsigned int id;
+  void *ptr;
 };
 
 /*
@@ -70,10 +70,10 @@ struct ossl_item_st
  */
 struct ossl_algorithm_st
 {
-    const char *algorithm_names; /* key */
-    const char *property_definition; /* key */
-    const OSSL_DISPATCH *implementation;
-    const char *algorithm_description;
+  const char *algorithm_names;     /* key */
+  const char *property_definition; /* key */
+  const OSSL_DISPATCH *implementation;
+  const char *algorithm_description;
 };
 
 /*
@@ -84,11 +84,11 @@ struct ossl_algorithm_st
  */
 struct ossl_param_st
 {
-    const char *key; /* the name of the parameter */
-    unsigned int data_type; /* declare what kind of content is in buffer */
-    void *data; /* value being passed in or out */
-    size_t data_size; /* data size */
-    size_t return_size; /* returned content size */
+  const char *key;        /* the name of the parameter */
+  unsigned int data_type; /* declare what kind of content is in buffer */
+  void *data;             /* value being passed in or out */
+  size_t data_size;       /* data size */
+  size_t return_size;     /* returned content size */
 };
 
 /* Currently supported OSSL_PARAM data types */
@@ -190,15 +190,16 @@ typedef void (*OSSL_thread_stop_handler_fn)(void *arg);
  *              provider needs it.  This value is passed to other provider
  *              functions, notably other context constructors.
  */
-typedef int(OSSL_provider_init_fn)(const OSSL_CORE_HANDLE *handle, const OSSL_DISPATCH *in,
+typedef int(OSSL_provider_init_fn)(const OSSL_CORE_HANDLE *handle,
+                                   const OSSL_DISPATCH *in,
                                    const OSSL_DISPATCH **out, void **provctx);
 #ifdef __VMS
-#    pragma names save
-#    pragma names uppercase, truncated
+#  pragma names save
+#  pragma names uppercase, truncated
 #endif
 OPENSSL_EXPORT OSSL_provider_init_fn OSSL_provider_init;
 #ifdef __VMS
-#    pragma names restore
+#  pragma names restore
 #endif
 
 /*
@@ -215,14 +216,16 @@ OPENSSL_EXPORT OSSL_provider_init_fn OSSL_provider_init;
  * application callback it knows about.
  */
 typedef int(OSSL_CALLBACK)(const OSSL_PARAM params[], void *arg);
-typedef int(OSSL_INOUT_CALLBACK)(const OSSL_PARAM in_params[], OSSL_PARAM out_params[], void *arg);
+typedef int(OSSL_INOUT_CALLBACK)(const OSSL_PARAM in_params[],
+                                 OSSL_PARAM out_params[], void *arg);
 /*
  * Passphrase callback function signature
  *
  * This is similar to the generic callback function above, but adds a
  * result parameter.
  */
-typedef int(OSSL_PASSPHRASE_CALLBACK)(char *pass, size_t pass_size, size_t *pass_len,
+typedef int(OSSL_PASSPHRASE_CALLBACK)(char *pass, size_t pass_size,
+                                      size_t *pass_len,
                                       const OSSL_PARAM params[], void *arg);
 
 #ifdef __cplusplus

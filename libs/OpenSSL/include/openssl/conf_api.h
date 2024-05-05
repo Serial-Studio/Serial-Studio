@@ -13,7 +13,7 @@
 
 #include <openssl/macros.h>
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define HEADER_CONF_API_H
+#  define HEADER_CONF_API_H
 #endif
 
 #include <openssl/lhash.h>
@@ -28,7 +28,8 @@ CONF_VALUE *_CONF_new_section(CONF *conf, const char *section);
 /* Up until OpenSSL 0.9.5a, this was get_section */
 CONF_VALUE *_CONF_get_section(const CONF *conf, const char *section);
 /* Up until OpenSSL 0.9.5a, this was CONF_get_section */
-STACK_OF(CONF_VALUE) * _CONF_get_section_values(const CONF *conf, const char *section);
+STACK_OF(CONF_VALUE)
+    * _CONF_get_section_values(const CONF *conf, const char *section);
 
 int _CONF_add_string(CONF *conf, CONF_VALUE *section, CONF_VALUE *value);
 char *_CONF_get_string(const CONF *conf, const char *section, const char *name);

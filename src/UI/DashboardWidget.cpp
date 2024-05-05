@@ -39,16 +39,16 @@
  * Constructor function
  */
 UI::DashboardWidget::DashboardWidget(QQuickItem *parent)
-    : DeclarativeWidget(parent)
-    , m_index(-1)
-    , m_isGpsMap(false)
-    , m_widgetVisible(false)
-    , m_isExternalWindow(false)
+  : DeclarativeWidget(parent)
+  , m_index(-1)
+  , m_isGpsMap(false)
+  , m_widgetVisible(false)
+  , m_isExternalWindow(false)
 {
-    // clang-format off
+  // clang-format off
     connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetVisibilityChanged,
             this, &UI::DashboardWidget::updateWidgetVisible);
-    // clang-format on
+  // clang-format on
 }
 
 /**
@@ -56,26 +56,26 @@ UI::DashboardWidget::DashboardWidget(QQuickItem *parent)
  */
 UI::DashboardWidget::~DashboardWidget()
 {
-    if (m_dbWidget)
-        m_dbWidget->deleteLater();
+  if (m_dbWidget)
+    m_dbWidget->deleteLater();
 }
 
 /**
- * Returns the global index of the widget (index of the current widget in relation to all
- * registered widgets).
+ * Returns the global index of the widget (index of the current widget in
+ * relation to all registered widgets).
  */
 int UI::DashboardWidget::widgetIndex() const
 {
-    return m_index;
+  return m_index;
 }
 
 /**
- * Returns the relative index of the widget (e.g. index of a bar widget in relation to the
- * total number of bar widgets).
+ * Returns the relative index of the widget (e.g. index of a bar widget in
+ * relation to the total number of bar widgets).
  */
 int UI::DashboardWidget::relativeIndex() const
 {
-    return UI::Dashboard::instance().relativeIndex(widgetIndex());
+  return UI::Dashboard::instance().relativeIndex(widgetIndex());
 }
 
 /**
@@ -83,7 +83,7 @@ int UI::DashboardWidget::relativeIndex() const
  */
 bool UI::DashboardWidget::widgetVisible() const
 {
-    return m_widgetVisible;
+  return m_widgetVisible;
 }
 
 /**
@@ -91,7 +91,7 @@ bool UI::DashboardWidget::widgetVisible() const
  */
 QString UI::DashboardWidget::widgetIcon() const
 {
-    return UI::Dashboard::instance().widgetIcon(widgetIndex());
+  return UI::Dashboard::instance().widgetIcon(widgetIndex());
 }
 
 /**
@@ -99,14 +99,14 @@ QString UI::DashboardWidget::widgetIcon() const
  */
 QString UI::DashboardWidget::widgetTitle() const
 {
-    if (widgetIndex() >= 0)
-    {
-        auto titles = UI::Dashboard::instance().widgetTitles();
-        if (widgetIndex() < titles.count())
-            return titles.at(widgetIndex());
-    }
+  if (widgetIndex() >= 0)
+  {
+    auto titles = UI::Dashboard::instance().widgetTitles();
+    if (widgetIndex() < titles.count())
+      return titles.at(widgetIndex());
+  }
 
-    return tr("Invalid");
+  return tr("Invalid");
 }
 
 /**
@@ -118,7 +118,7 @@ QString UI::DashboardWidget::widgetTitle() const
  */
 bool UI::DashboardWidget::isExternalWindow() const
 {
-    return m_isExternalWindow;
+  return m_isExternalWindow;
 }
 
 /**
@@ -126,7 +126,7 @@ bool UI::DashboardWidget::isExternalWindow() const
  */
 UI::Dashboard::WidgetType UI::DashboardWidget::widgetType() const
 {
-    return UI::Dashboard::instance().widgetType(widgetIndex());
+  return UI::Dashboard::instance().widgetType(widgetIndex());
 }
 
 /**
@@ -151,7 +151,7 @@ UI::Dashboard::WidgetType UI::DashboardWidget::widgetType() const
  */
 bool UI::DashboardWidget::isGpsMap() const
 {
-    return m_isGpsMap;
+  return m_isGpsMap;
 }
 
 /**
@@ -160,10 +160,10 @@ bool UI::DashboardWidget::isGpsMap() const
  */
 qreal UI::DashboardWidget::gpsAltitude() const
 {
-    if (isGpsMap() && m_dbWidget)
-        return static_cast<Widgets::GPS*>(m_dbWidget)->altitude();
+  if (isGpsMap() && m_dbWidget)
+    return static_cast<Widgets::GPS *>(m_dbWidget)->altitude();
 
-    return 0;
+  return 0;
 }
 
 /**
@@ -172,10 +172,10 @@ qreal UI::DashboardWidget::gpsAltitude() const
  */
 qreal UI::DashboardWidget::gpsLatitude() const
 {
-    if (isGpsMap() && m_dbWidget)
-        return static_cast<Widgets::GPS*>(m_dbWidget)->latitude();
+  if (isGpsMap() && m_dbWidget)
+    return static_cast<Widgets::GPS *>(m_dbWidget)->latitude();
 
-    return 0;
+  return 0;
 }
 
 /**
@@ -184,10 +184,10 @@ qreal UI::DashboardWidget::gpsLatitude() const
  */
 qreal UI::DashboardWidget::gpsLongitude() const
 {
-    if (isGpsMap() && m_dbWidget)
-        return static_cast<Widgets::GPS*>(m_dbWidget)->longitude();
+  if (isGpsMap() && m_dbWidget)
+    return static_cast<Widgets::GPS *>(m_dbWidget)->longitude();
 
-    return 0;
+  return 0;
 }
 
 /**
@@ -195,11 +195,11 @@ qreal UI::DashboardWidget::gpsLongitude() const
  */
 void UI::DashboardWidget::setVisible(const bool visible)
 {
-    if (m_dbWidget)
-    {
-        m_dbWidget->setEnabled(visible);
-        update();
-    }
+  if (m_dbWidget)
+  {
+    m_dbWidget->setEnabled(visible);
+    update();
+  }
 }
 
 /**
@@ -207,78 +207,77 @@ void UI::DashboardWidget::setVisible(const bool visible)
  */
 void UI::DashboardWidget::setWidgetIndex(const int index)
 {
-    if (index < UI::Dashboard::instance().totalWidgetCount() && index >= 0)
+  if (index < UI::Dashboard::instance().totalWidgetCount() && index >= 0)
+  {
+    // Update widget index
+    m_index = index;
+
+    // Delete previous widget
+    if (m_dbWidget)
     {
-        // Update widget index
-        m_index = index;
-
-        // Delete previous widget
-        if (m_dbWidget)
-        {
-            m_dbWidget->deleteLater();
-            m_dbWidget = nullptr;
-        }
-
-        // Initialize the GPS indicator flag to false by default
-        m_isGpsMap = false;
-
-        // Construct new widget
-        switch (widgetType())
-        {
-        case UI::Dashboard::WidgetType::Group:
-            m_dbWidget = new Widgets::DataGroup(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::MultiPlot:
-            m_dbWidget = new Widgets::MultiPlot(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::FFT:
-            m_dbWidget = new Widgets::FFTPlot(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::Plot:
-            m_dbWidget = new Widgets::Plot(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::Bar:
-            m_dbWidget = new Widgets::Bar(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::Gauge:
-            m_dbWidget = new Widgets::Gauge(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::Compass:
-            m_dbWidget = new Widgets::Compass(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::Gyroscope:
-            m_dbWidget = new Widgets::Gyroscope(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::Accelerometer:
-            m_dbWidget = new Widgets::Accelerometer(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::GPS:
-            m_isGpsMap = true;
-            m_dbWidget = new Widgets::GPS(relativeIndex());
-            break;
-        case UI::Dashboard::WidgetType::LED:
-            m_dbWidget = new Widgets::LEDPanel(relativeIndex());
-            break;
-        default:
-            break;
-        }
-
-        // Configure widget
-        if (m_dbWidget)
-        {
-            setWidget(m_dbWidget);
-            updateWidgetVisible();
-            connect(m_dbWidget, &Widgets::DashboardWidgetBase::updated, this,
-                    [=]() {
-                        if (!isGpsMap())
-                            update();
-                        else
-                            Q_EMIT gpsDataChanged();
-                    });
-
-            Q_EMIT widgetIndexChanged();
-        }
+      m_dbWidget->deleteLater();
+      m_dbWidget = nullptr;
     }
+
+    // Initialize the GPS indicator flag to false by default
+    m_isGpsMap = false;
+
+    // Construct new widget
+    switch (widgetType())
+    {
+      case UI::Dashboard::WidgetType::Group:
+        m_dbWidget = new Widgets::DataGroup(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::MultiPlot:
+        m_dbWidget = new Widgets::MultiPlot(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::FFT:
+        m_dbWidget = new Widgets::FFTPlot(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::Plot:
+        m_dbWidget = new Widgets::Plot(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::Bar:
+        m_dbWidget = new Widgets::Bar(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::Gauge:
+        m_dbWidget = new Widgets::Gauge(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::Compass:
+        m_dbWidget = new Widgets::Compass(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::Gyroscope:
+        m_dbWidget = new Widgets::Gyroscope(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::Accelerometer:
+        m_dbWidget = new Widgets::Accelerometer(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::GPS:
+        m_isGpsMap = true;
+        m_dbWidget = new Widgets::GPS(relativeIndex());
+        break;
+      case UI::Dashboard::WidgetType::LED:
+        m_dbWidget = new Widgets::LEDPanel(relativeIndex());
+        break;
+      default:
+        break;
+    }
+
+    // Configure widget
+    if (m_dbWidget)
+    {
+      setWidget(m_dbWidget);
+      updateWidgetVisible();
+      connect(m_dbWidget, &Widgets::DashboardWidgetBase::updated, this, [=]() {
+        if (!isGpsMap())
+          update();
+        else
+          Q_EMIT gpsDataChanged();
+      });
+
+      Q_EMIT widgetIndexChanged();
+    }
+  }
 }
 
 /**
@@ -292,8 +291,8 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
  */
 void UI::DashboardWidget::setIsExternalWindow(const bool isWindow)
 {
-    m_isExternalWindow = isWindow;
-    Q_EMIT isExternalWindowChanged();
+  m_isExternalWindow = isWindow;
+  Q_EMIT isExternalWindowChanged();
 }
 
 /**
@@ -302,22 +301,18 @@ void UI::DashboardWidget::setIsExternalWindow(const bool isWindow)
  */
 void UI::DashboardWidget::updateWidgetVisible()
 {
-    bool visible = UI::Dashboard::instance().widgetVisible(widgetIndex());
+  bool visible = UI::Dashboard::instance().widgetVisible(widgetIndex());
 
-    if (widgetVisible() != visible && !isExternalWindow())
+  if (widgetVisible() != visible && !isExternalWindow())
+  {
+    m_widgetVisible = visible;
+
+    if (m_dbWidget)
     {
-        m_widgetVisible = visible;
-
-        if (m_dbWidget)
-        {
-            m_dbWidget->setEnabled(visible);
-            update();
-        }
-
-        Q_EMIT widgetVisibleChanged();
+      m_dbWidget->setEnabled(visible);
+      update();
     }
-}
 
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_DashboardWidget.cpp"
-#endif
+    Q_EMIT widgetVisibleChanged();
+  }
+}

@@ -40,144 +40,142 @@ class QwtScaleDraw;
 
 class QWT_EXPORT QwtPolarGrid : public QwtPolarItem
 {
-  public:
+public:
+  /*!
+     Mysterious flags trying to avoid conflicts, when painting the
+     scales and grid lines.
+
+     The default setting enables all flags.
+
+     \sa setDisplayFlag(), testDisplayFlag()
+   */
+  enum DisplayFlag
+  {
     /*!
-       Mysterious flags trying to avoid conflicts, when painting the
-       scales and grid lines.
-
-       The default setting enables all flags.
-
-       \sa setDisplayFlag(), testDisplayFlag()
+       Try to avoid situations, where the label of the origin is
+       painted over another axis.
      */
-    enum DisplayFlag
-    {
-        /*!
-           Try to avoid situations, where the label of the origin is
-           painted over another axis.
-         */
-        SmartOriginLabel = 1,
-
-        /*!
-           Often the outermost tick of the radial scale is close to the
-           canvas border. With HideMaxRadiusLabel enabled it is not painted.
-         */
-        HideMaxRadiusLabel = 2,
-
-        /*!
-           The tick labels of the radial scales might be hard to read, when
-           they are painted on top of the radial grid lines ( or on top
-           of a curve/spectrogram ). When ClipAxisBackground the bounding rect
-           of each label is added to the clip region.
-         */
-        ClipAxisBackground = 4,
-
-        /*!
-           Don't paint the backbone of the radial axes, when they are very close
-           to a line of the azimuth grid.
-         */
-        SmartScaleDraw = 8,
-
-        /*!
-           All grid lines are clipped against the plot area before being painted.
-           When the plot is zoomed in this will have an significant impact
-           on the performance of the painting code.
-         */
-        ClipGridLines = 16
-    };
-
-    Q_DECLARE_FLAGS( DisplayFlags, DisplayFlag )
+    SmartOriginLabel = 1,
 
     /*!
-       \brief Grid attributes
-       \sa setGridAttributes(), testGridAttributes()
+       Often the outermost tick of the radial scale is close to the
+       canvas border. With HideMaxRadiusLabel enabled it is not painted.
      */
-    enum GridAttribute
-    {
-        /*!
-           When AutoScaling is enabled, the radial axes will be adjusted
-           to the interval, that is currently visible on the canvas plot.
-         */
-        AutoScaling = 0x01
-    };
+    HideMaxRadiusLabel = 2,
 
-    Q_DECLARE_FLAGS( GridAttributes, GridAttribute )
+    /*!
+       The tick labels of the radial scales might be hard to read, when
+       they are painted on top of the radial grid lines ( or on top
+       of a curve/spectrogram ). When ClipAxisBackground the bounding rect
+       of each label is added to the clip region.
+     */
+    ClipAxisBackground = 4,
 
-    explicit QwtPolarGrid();
-    virtual ~QwtPolarGrid();
+    /*!
+       Don't paint the backbone of the radial axes, when they are very close
+       to a line of the azimuth grid.
+     */
+    SmartScaleDraw = 8,
 
-    virtual int rtti() const QWT_OVERRIDE;
+    /*!
+       All grid lines are clipped against the plot area before being painted.
+       When the plot is zoomed in this will have an significant impact
+       on the performance of the painting code.
+     */
+    ClipGridLines = 16
+  };
 
-    void setDisplayFlag( DisplayFlag, bool on = true );
-    bool testDisplayFlag( DisplayFlag ) const;
+  Q_DECLARE_FLAGS(DisplayFlags, DisplayFlag)
 
-    void setGridAttribute( GridAttribute, bool on = true );
-    bool testGridAttribute( GridAttribute ) const;
+  /*!
+     \brief Grid attributes
+     \sa setGridAttributes(), testGridAttributes()
+   */
+  enum GridAttribute
+  {
+    /*!
+       When AutoScaling is enabled, the radial axes will be adjusted
+       to the interval, that is currently visible on the canvas plot.
+     */
+    AutoScaling = 0x01
+  };
 
-    void showGrid( int scaleId, bool show = true );
-    bool isGridVisible( int scaleId ) const;
+  Q_DECLARE_FLAGS(GridAttributes, GridAttribute)
 
-    void showMinorGrid( int scaleId, bool show = true );
-    bool isMinorGridVisible( int scaleId ) const;
+  explicit QwtPolarGrid();
+  virtual ~QwtPolarGrid();
 
-    void showAxis( int axisId, bool show = true );
-    bool isAxisVisible( int axisId ) const;
+  virtual int rtti() const QWT_OVERRIDE;
 
-    void setPen( const QPen& p );
-    void setFont( const QFont& );
+  void setDisplayFlag(DisplayFlag, bool on = true);
+  bool testDisplayFlag(DisplayFlag) const;
 
-    void setMajorGridPen( const QPen& p );
-    void setMajorGridPen( int scaleId, const QPen& p );
-    QPen majorGridPen( int scaleId ) const;
+  void setGridAttribute(GridAttribute, bool on = true);
+  bool testGridAttribute(GridAttribute) const;
 
-    void setMinorGridPen( const QPen& p );
-    void setMinorGridPen( int scaleId, const QPen& p );
-    QPen minorGridPen( int scaleId ) const;
+  void showGrid(int scaleId, bool show = true);
+  bool isGridVisible(int scaleId) const;
 
-    void setAxisPen( int axisId, const QPen& p );
-    QPen axisPen( int axisId ) const;
+  void showMinorGrid(int scaleId, bool show = true);
+  bool isMinorGridVisible(int scaleId) const;
 
-    void setAxisFont( int axisId, const QFont& p );
-    QFont axisFont( int axisId ) const;
+  void showAxis(int axisId, bool show = true);
+  bool isAxisVisible(int axisId) const;
 
-    void setScaleDraw( int axisId, QwtScaleDraw* );
-    const QwtScaleDraw* scaleDraw( int axisId ) const;
-    QwtScaleDraw* scaleDraw( int axisId );
+  void setPen(const QPen &p);
+  void setFont(const QFont &);
 
-    void setAzimuthScaleDraw( QwtRoundScaleDraw* );
-    const QwtRoundScaleDraw* azimuthScaleDraw() const;
-    QwtRoundScaleDraw* azimuthScaleDraw();
+  void setMajorGridPen(const QPen &p);
+  void setMajorGridPen(int scaleId, const QPen &p);
+  QPen majorGridPen(int scaleId) const;
 
-    virtual void draw( QPainter* p,
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, double radius,
-        const QRectF& rect ) const QWT_OVERRIDE;
+  void setMinorGridPen(const QPen &p);
+  void setMinorGridPen(int scaleId, const QPen &p);
+  QPen minorGridPen(int scaleId) const;
 
-    virtual void updateScaleDiv( const QwtScaleDiv& azimuthMap,
-        const QwtScaleDiv& radialMap, const QwtInterval& ) QWT_OVERRIDE;
+  void setAxisPen(int axisId, const QPen &p);
+  QPen axisPen(int axisId) const;
 
-    virtual int marginHint() const QWT_OVERRIDE;
+  void setAxisFont(int axisId, const QFont &p);
+  QFont axisFont(int axisId) const;
 
-  protected:
-    void drawRays( QPainter*, const QRectF&,
-        const QPointF& pole, double radius,
-        const QwtScaleMap& azimuthMap, const QList< double >& ) const;
-    void drawCircles( QPainter*, const QRectF&,
-        const QPointF& pole, const QwtScaleMap& radialMap,
-        const QList< double >& ) const;
+  void setScaleDraw(int axisId, QwtScaleDraw *);
+  const QwtScaleDraw *scaleDraw(int axisId) const;
+  QwtScaleDraw *scaleDraw(int axisId);
 
-    void drawAxis( QPainter*, int axisId ) const;
+  void setAzimuthScaleDraw(QwtRoundScaleDraw *);
+  const QwtRoundScaleDraw *azimuthScaleDraw() const;
+  QwtRoundScaleDraw *azimuthScaleDraw();
 
-  private:
-    void updateScaleDraws(
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, const double radius ) const;
+  virtual void draw(QPainter *p, const QwtScaleMap &azimuthMap,
+                    const QwtScaleMap &radialMap, const QPointF &pole,
+                    double radius, const QRectF &rect) const QWT_OVERRIDE;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+  virtual void updateScaleDiv(const QwtScaleDiv &azimuthMap,
+                              const QwtScaleDiv &radialMap,
+                              const QwtInterval &) QWT_OVERRIDE;
+
+  virtual int marginHint() const QWT_OVERRIDE;
+
+protected:
+  void drawRays(QPainter *, const QRectF &, const QPointF &pole, double radius,
+                const QwtScaleMap &azimuthMap, const QList<double> &) const;
+  void drawCircles(QPainter *, const QRectF &, const QPointF &pole,
+                   const QwtScaleMap &radialMap, const QList<double> &) const;
+
+  void drawAxis(QPainter *, int axisId) const;
+
+private:
+  void updateScaleDraws(const QwtScaleMap &azimuthMap,
+                        const QwtScaleMap &radialMap, const QPointF &pole,
+                        const double radius) const;
+
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPolarGrid::DisplayFlags )
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPolarGrid::GridAttributes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPolarGrid::DisplayFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPolarGrid::GridAttributes)
 
 #endif

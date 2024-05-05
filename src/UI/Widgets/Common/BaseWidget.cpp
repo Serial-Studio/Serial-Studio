@@ -27,86 +27,87 @@
 #include <UI/Widgets/Common/BaseWidget.h>
 
 Widgets::BaseWidget::BaseWidget()
-    : m_index(-1)
-    , m_widget(Q_NULLPTR)
-    , m_resizeWidget(true)
+  : m_index(-1)
+  , m_widget(Q_NULLPTR)
+  , m_resizeWidget(true)
 {
-    // Workaround for unused variables
-    (void)m_index;
+  // Workaround for unused variables
+  (void)m_index;
 
-    // Set window palette
-    QPalette palette;
-    auto theme = &Misc::ThemeManager::instance();
-    palette.setColor(QPalette::Base, theme->widgetWindowBackground());
-    palette.setColor(QPalette::Window, theme->widgetWindowBackground());
-    setPalette(palette);
+  // Set window palette
+  QPalette palette;
+  auto theme = &Misc::ThemeManager::instance();
+  palette.setColor(QPalette::Base, theme->widgetWindowBackground());
+  palette.setColor(QPalette::Window, theme->widgetWindowBackground());
+  setPalette(palette);
 
-    // Configure label style
-    m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  // Configure label style
+  m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
-    // Set stylesheets
-    // clang-format off
+  // Set stylesheets
+  // clang-format off
     auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
                         theme->base(),
                         theme->widgetForegroundPrimary(),
                         theme->widgetIndicator());
     m_label.setStyleSheet(valueQSS);
-    // clang-format on
+  // clang-format on
 }
 
 void Widgets::BaseWidget::setValue(const QString &label)
 {
-    // Change label text
-    if (m_label.text() != label)
-    {
-        m_label.setText(label);
+  // Change label text
+  if (m_label.text() != label)
+  {
+    m_label.setText(label);
 
-        // Resize label font (so it fits inside the box)
-        while (QFontMetrics(m_label.font()).horizontalAdvance(label) + 24
-               > m_label.width())
-        {
-            QFont font = m_label.font();
-            font.setPixelSize(font.pixelSize() - 1);
-            m_label.setFont(font);
-        }
+    // Resize label font (so it fits inside the box)
+    while (QFontMetrics(m_label.font()).horizontalAdvance(label) + 24
+           > m_label.width())
+    {
+      QFont font = m_label.font();
+      font.setPixelSize(font.pixelSize() - 1);
+      m_label.setFont(font);
     }
+  }
 }
 
-void Widgets::BaseWidget::setWidget(QWidget *widget, const Qt::Alignment &alignment,
+void Widgets::BaseWidget::setWidget(QWidget *widget,
+                                    const Qt::Alignment &alignment,
                                     const bool autoresize)
 {
-    Q_ASSERT(widget != Q_NULLPTR);
+  Q_ASSERT(widget != Q_NULLPTR);
 
-    if (m_widget == Q_NULLPTR)
-    {
-        m_widget = widget;
-        m_resizeWidget = autoresize;
+  if (m_widget == Q_NULLPTR)
+  {
+    m_widget = widget;
+    m_resizeWidget = autoresize;
 
-        m_layout.setSpacing(24);
-        m_layout.addWidget(m_widget);
-        m_layout.addWidget(&m_label);
-        m_layout.setAlignment(m_widget, alignment);
-        m_layout.setContentsMargins(24, 24, 24, 24);
-        setLayout(&m_layout);
-    }
+    m_layout.setSpacing(24);
+    m_layout.addWidget(m_widget);
+    m_layout.addWidget(&m_label);
+    m_layout.setAlignment(m_widget, alignment);
+    m_layout.setContentsMargins(24, 24, 24, 24);
+    setLayout(&m_layout);
+  }
 
-    requestRepaint();
+  requestRepaint();
 }
 
 void Widgets::BaseWidget::resizeEvent(QResizeEvent *event)
 {
-    // Get width & height (exluding layout margins & spacing)
-    auto width = event->size().width() - 72;
-    auto height = event->size().height() - 48;
+  // Get width & height (exluding layout margins & spacing)
+  auto width = event->size().width() - 72;
+  auto height = event->size().height() - 48;
 
-    // Get fonts & calculate size
-    auto labelFont = UI::Dashboard::instance().monoFont();
-    auto gaugeFont = UI::Dashboard::instance().monoFont();
-    labelFont.setPixelSize(qMax(8, width / 18));
-    gaugeFont.setPixelSize(qMax(8, width / 24));
+  // Get fonts & calculate size
+  auto labelFont = UI::Dashboard::instance().monoFont();
+  auto gaugeFont = UI::Dashboard::instance().monoFont();
+  labelFont.setPixelSize(qMax(8, width / 18));
+  gaugeFont.setPixelSize(qMax(8, width / 24));
 
-    // Set label font (so it fits inside the box)
-    // clang-format off
+  // Set label font (so it fits inside the box)
+  // clang-format off
     m_label.setFont(labelFont);
     while (QFontMetrics(m_label.font()).horizontalAdvance(m_label.text()) + 12 > m_label.width())
     {
@@ -119,29 +120,25 @@ void Widgets::BaseWidget::resizeEvent(QResizeEvent *event)
         else
             break;
     }
-    // clang-format on
+  // clang-format on
 
-    // Set widget font
-    if (m_widget)
-        m_widget->setFont(gaugeFont);
+  // Set widget font
+  if (m_widget)
+    m_widget->setFont(gaugeFont);
 
-    // Set widget sizes
-    m_label.setMinimumWidth(width * 0.4);
-    m_label.setMaximumWidth(width * 0.4);
-    m_label.setMaximumHeight(height * 0.4);
+  // Set widget sizes
+  m_label.setMinimumWidth(width * 0.4);
+  m_label.setMaximumWidth(width * 0.4);
+  m_label.setMaximumHeight(height * 0.4);
 
-    // Set widget size
-    if (m_resizeWidget && m_widget)
-    {
-        m_widget->setMinimumWidth(width * 0.6);
-        m_widget->setMaximumWidth(width * 0.6);
-    }
+  // Set widget size
+  if (m_resizeWidget && m_widget)
+  {
+    m_widget->setMinimumWidth(width * 0.6);
+    m_widget->setMaximumWidth(width * 0.6);
+  }
 
-    // Accept event
-    event->accept();
-    Q_EMIT resized();
+  // Accept event
+  event->accept();
+  Q_EMIT resized();
 }
-
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_BaseWidget.cpp"
-#endif

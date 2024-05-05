@@ -51,36 +51,35 @@
  */
 class QWT_EXPORT QwtDateScaleDraw : public QwtScaleDraw
 {
-  public:
-    explicit QwtDateScaleDraw( Qt::TimeSpec = Qt::LocalTime );
-    virtual ~QwtDateScaleDraw();
+public:
+  explicit QwtDateScaleDraw(Qt::TimeSpec = Qt::LocalTime);
+  virtual ~QwtDateScaleDraw();
 
-    void setDateFormat( QwtDate::IntervalType, const QString& );
-    QString dateFormat( QwtDate::IntervalType ) const;
+  void setDateFormat(QwtDate::IntervalType, const QString &);
+  QString dateFormat(QwtDate::IntervalType) const;
 
-    void setTimeSpec( Qt::TimeSpec );
-    Qt::TimeSpec timeSpec() const;
+  void setTimeSpec(Qt::TimeSpec);
+  Qt::TimeSpec timeSpec() const;
 
-    void setUtcOffset( int seconds );
-    int utcOffset() const;
+  void setUtcOffset(int seconds);
+  int utcOffset() const;
 
-    void setWeek0Type( QwtDate::Week0Type );
-    QwtDate::Week0Type week0Type() const;
+  void setWeek0Type(QwtDate::Week0Type);
+  QwtDate::Week0Type week0Type() const;
 
-    virtual QwtText label( double ) const QWT_OVERRIDE;
+  virtual QwtText label(double) const QWT_OVERRIDE;
 
-    QDateTime toDateTime( double ) const;
+  QDateTime toDateTime(double) const;
 
-  protected:
-    virtual QwtDate::IntervalType
-    intervalType( const QwtScaleDiv& ) const;
+protected:
+  virtual QwtDate::IntervalType intervalType(const QwtScaleDiv &) const;
 
-    virtual QString dateFormatOfDate( const QDateTime&,
-        QwtDate::IntervalType ) const;
+  virtual QString dateFormatOfDate(const QDateTime &,
+                                   QwtDate::IntervalType) const;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

@@ -29,132 +29,130 @@ class QwtCurveFitter;
 
 class QWT_EXPORT QwtPolarCurve : public QwtPolarItem
 {
-  public:
-    /*!
-        Curve styles.
-        \sa setStyle(), style()
-     */
-    enum CurveStyle
-    {
-        //! Don't draw a curve. Note: This doesn't affect the symbols.
-        NoCurve,
-
-        /*!
-           Connect the points with straight lines. The lines might
-           be interpolated depending on the 'Fitted' attribute. Curve
-           fitting can be configured using setCurveFitter().
-         */
-        Lines,
-
-        //! Values > 100 are reserved for user specific curve styles
-        UserCurve = 100
-    };
+public:
+  /*!
+      Curve styles.
+      \sa setStyle(), style()
+   */
+  enum CurveStyle
+  {
+    //! Don't draw a curve. Note: This doesn't affect the symbols.
+    NoCurve,
 
     /*!
-        \brief Attributes how to represent the curve on the legend
-
-        If none of the flags is activated QwtPlotCurve tries to find
-        a color representing the curve and paints a rectangle with it.
-        In the default setting all attributes are off.
-
-        \sa setLegendAttribute(), testLegendAttribute()
+       Connect the points with straight lines. The lines might
+       be interpolated depending on the 'Fitted' attribute. Curve
+       fitting can be configured using setCurveFitter().
      */
+    Lines,
 
-    enum LegendAttribute
-    {
-        /*!
-           If the curveStyle() is not NoCurve a line is painted with the
-           curvePen().
-         */
-        LegendShowLine = 0x01,
+    //! Values > 100 are reserved for user specific curve styles
+    UserCurve = 100
+  };
 
-        //! If the curve has a valid symbol it is painted.
-        LegendShowSymbol = 0x02
-    };
+  /*!
+      \brief Attributes how to represent the curve on the legend
 
-    Q_DECLARE_FLAGS( LegendAttributes, LegendAttribute )
+      If none of the flags is activated QwtPlotCurve tries to find
+      a color representing the curve and paints a rectangle with it.
+      In the default setting all attributes are off.
 
+      \sa setLegendAttribute(), testLegendAttribute()
+   */
 
-    explicit QwtPolarCurve();
-    explicit QwtPolarCurve( const QwtText& title );
-    explicit QwtPolarCurve( const QString& title );
+  enum LegendAttribute
+  {
+    /*!
+       If the curveStyle() is not NoCurve a line is painted with the
+       curvePen().
+     */
+    LegendShowLine = 0x01,
 
-    virtual ~QwtPolarCurve();
+    //! If the curve has a valid symbol it is painted.
+    LegendShowSymbol = 0x02
+  };
 
-    virtual int rtti() const QWT_OVERRIDE;
+  Q_DECLARE_FLAGS(LegendAttributes, LegendAttribute)
 
-    void setLegendAttribute( LegendAttribute, bool on = true );
-    bool testLegendAttribute( LegendAttribute ) const;
+  explicit QwtPolarCurve();
+  explicit QwtPolarCurve(const QwtText &title);
+  explicit QwtPolarCurve(const QString &title);
 
-    void setData( QwtSeriesData< QwtPointPolar >* data );
-    const QwtSeriesData< QwtPointPolar >* data() const;
+  virtual ~QwtPolarCurve();
 
-    int dataSize() const;
-    QwtPointPolar sample( int i ) const;
+  virtual int rtti() const QWT_OVERRIDE;
 
-    void setPen( const QPen& );
-    const QPen& pen() const;
+  void setLegendAttribute(LegendAttribute, bool on = true);
+  bool testLegendAttribute(LegendAttribute) const;
 
-    void setStyle( CurveStyle style );
-    CurveStyle style() const;
+  void setData(QwtSeriesData<QwtPointPolar> *data);
+  const QwtSeriesData<QwtPointPolar> *data() const;
 
-    void setSymbol( QwtSymbol* );
-    const QwtSymbol* symbol() const;
+  int dataSize() const;
+  QwtPointPolar sample(int i) const;
 
-    void setCurveFitter( QwtCurveFitter* );
-    QwtCurveFitter* curveFitter() const;
+  void setPen(const QPen &);
+  const QPen &pen() const;
 
-    virtual void draw( QPainter* p,
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, double radius,
-        const QRectF& canvasRect ) const QWT_OVERRIDE;
+  void setStyle(CurveStyle style);
+  CurveStyle style() const;
 
-    virtual void draw( QPainter* p,
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, int from, int to ) const;
+  void setSymbol(QwtSymbol *);
+  const QwtSymbol *symbol() const;
 
-    virtual QwtInterval boundingInterval( int scaleId ) const QWT_OVERRIDE;
+  void setCurveFitter(QwtCurveFitter *);
+  QwtCurveFitter *curveFitter() const;
 
-    virtual QwtGraphic legendIcon( int index, const QSizeF& ) const QWT_OVERRIDE;
+  virtual void draw(QPainter *p, const QwtScaleMap &azimuthMap,
+                    const QwtScaleMap &radialMap, const QPointF &pole,
+                    double radius, const QRectF &canvasRect) const QWT_OVERRIDE;
 
-  protected:
+  virtual void draw(QPainter *p, const QwtScaleMap &azimuthMap,
+                    const QwtScaleMap &radialMap, const QPointF &pole, int from,
+                    int to) const;
 
-    void init();
+  virtual QwtInterval boundingInterval(int scaleId) const QWT_OVERRIDE;
 
-    virtual void drawCurve( QPainter*, int style,
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, int from, int to ) const;
+  virtual QwtGraphic legendIcon(int index, const QSizeF &) const QWT_OVERRIDE;
 
-    virtual void drawSymbols( QPainter*, const QwtSymbol&,
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, int from, int to ) const;
+protected:
+  void init();
 
-    void drawLines( QPainter*,
-        const QwtScaleMap& azimuthMap, const QwtScaleMap& radialMap,
-        const QPointF& pole, int from, int to ) const;
+  virtual void drawCurve(QPainter *, int style, const QwtScaleMap &azimuthMap,
+                         const QwtScaleMap &radialMap, const QPointF &pole,
+                         int from, int to) const;
 
-  private:
-    QwtSeriesData< QwtPointPolar >* m_series;
+  virtual void drawSymbols(QPainter *, const QwtSymbol &,
+                           const QwtScaleMap &azimuthMap,
+                           const QwtScaleMap &radialMap, const QPointF &pole,
+                           int from, int to) const;
 
-    class PrivateData;
-    PrivateData* m_data;
+  void drawLines(QPainter *, const QwtScaleMap &azimuthMap,
+                 const QwtScaleMap &radialMap, const QPointF &pole, int from,
+                 int to) const;
+
+private:
+  QwtSeriesData<QwtPointPolar> *m_series;
+
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 //! \return the the curve data
-inline const QwtSeriesData< QwtPointPolar >* QwtPolarCurve::data() const
+inline const QwtSeriesData<QwtPointPolar> *QwtPolarCurve::data() const
 {
-    return m_series;
+  return m_series;
 }
 
 /*!
     \param i index
     \return point at position i
  */
-inline QwtPointPolar QwtPolarCurve::sample( int i ) const
+inline QwtPointPolar QwtPolarCurve::sample(int i) const
 {
-    return m_series->sample( i );
+  return m_series->sample(i);
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPolarCurve::LegendAttributes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPolarCurve::LegendAttributes)
 
 #endif

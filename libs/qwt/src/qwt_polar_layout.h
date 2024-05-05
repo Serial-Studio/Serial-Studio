@@ -22,55 +22,54 @@
  */
 class QWT_EXPORT QwtPolarLayout
 {
-  public:
+public:
+  //! \brief Options to configure the plot layout engine
+  enum Option
+  {
+    //! Ignore the dimension of the scrollbars.
+    IgnoreScrollbars = 0x01,
 
-    //! \brief Options to configure the plot layout engine
-    enum Option
-    {
-        //! Ignore the dimension of the scrollbars.
-        IgnoreScrollbars = 0x01,
+    //! Ignore all frames.
+    IgnoreFrames = 0x02,
 
-        //! Ignore all frames.
-        IgnoreFrames     = 0x02,
+    //! Ignore the title.
+    IgnoreTitle = 0x04,
 
-        //! Ignore the title.
-        IgnoreTitle      = 0x04,
+    //! Ignore the legend.
+    IgnoreLegend = 0x08
+  };
 
-        //! Ignore the legend.
-        IgnoreLegend     = 0x08
-    };
+  Q_DECLARE_FLAGS(Options, Option)
 
-    Q_DECLARE_FLAGS( Options, Option )
+  explicit QwtPolarLayout();
+  virtual ~QwtPolarLayout();
 
-    explicit QwtPolarLayout();
-    virtual ~QwtPolarLayout();
+  void setLegendPosition(QwtPolarPlot::LegendPosition pos, double ratio);
+  void setLegendPosition(QwtPolarPlot::LegendPosition pos);
+  QwtPolarPlot::LegendPosition legendPosition() const;
 
-    void setLegendPosition( QwtPolarPlot::LegendPosition pos, double ratio );
-    void setLegendPosition( QwtPolarPlot::LegendPosition pos );
-    QwtPolarPlot::LegendPosition legendPosition() const;
+  void setLegendRatio(double ratio);
+  double legendRatio() const;
 
-    void setLegendRatio( double ratio );
-    double legendRatio() const;
+  virtual void activate(const QwtPolarPlot *, const QRectF &rect,
+                        Options options = Options());
 
-    virtual void activate( const QwtPolarPlot*,
-        const QRectF& rect, Options options = Options() );
+  virtual void invalidate();
 
-    virtual void invalidate();
+  const QRectF &titleRect() const;
+  const QRectF &legendRect() const;
+  const QRectF &canvasRect() const;
 
-    const QRectF& titleRect() const;
-    const QRectF& legendRect() const;
-    const QRectF& canvasRect() const;
+  class LayoutData;
 
-    class LayoutData;
+protected:
+  QRectF layoutLegend(Options options, QRectF &) const;
 
-  protected:
-    QRectF layoutLegend( Options options, QRectF& ) const;
-
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPolarLayout::Options )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPolarLayout::Options)
 
 #endif

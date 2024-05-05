@@ -32,7 +32,7 @@
 #include <Misc/ModuleManager.h>
 
 #ifdef Q_OS_WIN
-#    include <windows.h>
+#  include <windows.h>
 #endif
 
 /**
@@ -40,11 +40,8 @@
  */
 static void cliShowVersion()
 {
-    auto appver = QString("%1 version %2").arg(APP_NAME, APP_VERSION);
-    auto author = QString("Written by Alex Spataru <https://github.com/alex-spataru>");
-
-    qDebug() << appver.toStdString().c_str();
-    qDebug() << author.toStdString().c_str();
+  qDebug() << APP_NAME << "version" << APP_VERSION;
+  qDebug() << "Written by Alex Spataru <https://github.com/alex-spataru>";
 }
 
 /**
@@ -52,8 +49,8 @@ static void cliShowVersion()
  */
 static void cliResetSettings()
 {
-    QSettings(APP_DEVELOPER, APP_NAME).clear();
-    qDebug() << APP_NAME << "settings cleared!";
+  QSettings(APP_DEVELOPER, APP_NAME).clear();
+  qDebug() << APP_NAME << "settings cleared!";
 }
 
 /**
@@ -66,74 +63,75 @@ static void cliResetSettings()
  */
 int main(int argc, char **argv)
 {
-    // Fix console output on Windows (https://stackoverflow.com/a/41701133)
-    // This code will only execute if the application is started from the comamnd prompt
+  // Fix console output on Windows (https://stackoverflow.com/a/41701133)
+  // This code will only execute if the application is started from the comamnd
+  // prompt
 #ifdef _WIN32
-    if (AttachConsole(ATTACH_PARENT_PROCESS))
-    {
-        // Open the console's active buffer
-        (void)freopen("CONOUT$", "w", stdout);
-        (void)freopen("CONOUT$", "w", stderr);
+  if (AttachConsole(ATTACH_PARENT_PROCESS))
+  {
+    // Open the console's active buffer
+    (void)freopen("CONOUT$", "w", stdout);
+    (void)freopen("CONOUT$", "w", stderr);
 
-        // Force print new-line (to avoid printing text over user commands)
-        printf("\n");
-    }
+    // Force print new-line (to avoid printing text over user commands)
+    printf("\n");
+  }
 #endif
 
-    // Set application attributes
+  // Set application attributes
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    // Avoid 200% scaling on 150% scaling...
-    auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
-    QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
+  // Avoid 200% scaling on 150% scaling...
+  auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
+  QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
 
-    // Init. application
-    QApplication app(argc, argv);
-    app.setApplicationName(APP_NAME);
-    app.setApplicationVersion(APP_VERSION);
-    app.setOrganizationName(APP_DEVELOPER);
-    app.setOrganizationDomain(APP_SUPPORT_URL);
+  // Init. application
+  QApplication app(argc, argv);
+  app.setApplicationName(APP_NAME);
+  app.setApplicationVersion(APP_VERSION);
+  app.setOrganizationName(APP_DEVELOPER);
+  app.setOrganizationDomain(APP_SUPPORT_URL);
 
-    // Set application style
-    app.setStyle(QStyleFactory::create("Fusion"));
-    QQuickStyle::setStyle("Fusion");
+  // Set application style
+  app.setStyle(QStyleFactory::create("Fusion"));
+  QQuickStyle::setStyle("Fusion");
 
-    // Read arguments
-    QString arguments;
-    if (app.arguments().count() >= 2)
-        arguments = app.arguments().at(1);
+  // Read arguments
+  QString arguments;
+  if (app.arguments().count() >= 2)
+    arguments = app.arguments().at(1);
 
-    // There are some CLI arguments, read them
-    if (!arguments.isEmpty() && arguments.startsWith("-"))
+  // There are some CLI arguments, read them
+  if (!arguments.isEmpty() && arguments.startsWith("-"))
+  {
+    if (arguments == "-v" || arguments == "--version")
     {
-        if (arguments == "-v" || arguments == "--version")
-        {
-            cliShowVersion();
-            return EXIT_SUCCESS;
-        }
-
-        else if (arguments == "-r" || arguments == "--reset")
-        {
-            cliResetSettings();
-            return EXIT_SUCCESS;
-        }
+      cliShowVersion();
+      return EXIT_SUCCESS;
     }
 
-    // Create module manager
-    Misc::ModuleManager moduleManager;
-    moduleManager.configureUpdater();
-
-    // Initialize QML interface
-    moduleManager.registerQmlTypes();
-    moduleManager.initializeQmlInterface();
-    if (moduleManager.engine()->rootObjects().isEmpty())
+    else if (arguments == "-r" || arguments == "--reset")
     {
-        qCritical() << "Critical QML error";
-        return EXIT_FAILURE;
+      cliResetSettings();
+      return EXIT_SUCCESS;
     }
+  }
 
-    // Enter application event loop
-    return app.exec();
+  // Create module manager
+  Misc::ModuleManager moduleManager;
+  moduleManager.configureUpdater();
+
+  // Initialize QML interface
+  moduleManager.registerQmlTypes();
+  moduleManager.initializeQmlInterface();
+  if (moduleManager.engine()->rootObjects().isEmpty())
+  {
+    qCritical() << "Critical QML error";
+    return EXIT_FAILURE;
+  }
+
+  // Enter application event loop
+  return app.exec();
 }

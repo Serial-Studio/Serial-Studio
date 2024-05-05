@@ -3,7 +3,7 @@
 qcomplexnumber.cpp - Source file for QComplexNumber
 
 Template class for handling complex numbers with a real and imaginary
-part. 
+part.
 
 ************************************************************************
 
@@ -41,104 +41,108 @@ qrealfourier@gmail.com
 
 #include "qcomplexnumber.h"
 
-template <typename T>
+template<typename T>
 QComplexNumber<T>::QComplexNumber()
 {
-	mReal = 0;
-	mImaginary = 0;
+  mReal = 0;
+  mImaginary = 0;
 }
 
-template <typename T>
+template<typename T>
 QComplexNumber<T>::QComplexNumber(T real, T imaginary)
 {
-	mReal = real;
-	mImaginary = imaginary;
+  mReal = real;
+  mImaginary = imaginary;
 }
 
-template <typename T>
+template<typename T>
 void QComplexNumber<T>::setReal(T real)
 {
-	mReal = real;
+  mReal = real;
 }
 
-template <typename T>
+template<typename T>
 void QComplexNumber<T>::setImaginary(T imaginary)
 {
-	mImaginary = imaginary;
+  mImaginary = imaginary;
 }
 
-template <typename T>
+template<typename T>
 void QComplexNumber<T>::set(T real, T imaginary)
 {
-	mReal = real;
-	mImaginary = imaginary;
+  mReal = real;
+  mImaginary = imaginary;
 }
 
-template <typename T>
+template<typename T>
 void QComplexNumber<T>::set(QComplexNumber complex)
 {
-	mReal = complex.real();
-	mImaginary = complex.imaginary();
+  mReal = complex.real();
+  mImaginary = complex.imaginary();
 }
 
-template <typename T>
+template<typename T>
 T QComplexNumber<T>::real()
 {
-	return mReal;
+  return mReal;
 }
 
-template <typename T>
+template<typename T>
 T QComplexNumber<T>::imaginary()
 {
-	return mImaginary;
+  return mImaginary;
 }
 
-template <typename T>
-QComplexNumber<T>& QComplexNumber<T>::operator+=(const QComplexNumber<T> &number)
+template<typename T>
+QComplexNumber<T> &
+QComplexNumber<T>::operator+=(const QComplexNumber<T> &number)
 {
-	mReal += number.mReal;
-	mImaginary += number.mImaginary;
-	return *this;
+  mReal += number.mReal;
+  mImaginary += number.mImaginary;
+  return *this;
 }
 
-template <typename T>
-QComplexNumber<T>& QComplexNumber<T>::operator-=(const QComplexNumber<T> &number)
+template<typename T>
+QComplexNumber<T> &
+QComplexNumber<T>::operator-=(const QComplexNumber<T> &number)
 {
-	mReal -= number.mReal;
-	mImaginary -= number.mImaginary;
-	return *this;
+  mReal -= number.mReal;
+  mImaginary -= number.mImaginary;
+  return *this;
 }
 
-template <typename T>
-QComplexNumber<T>& QComplexNumber<T>::operator/=(const QComplexNumber<T> &number)
+template<typename T>
+QComplexNumber<T> &
+QComplexNumber<T>::operator/=(const QComplexNumber<T> &number)
 {
-	mReal /= number.mReal;
-	mImaginary /= number.mImaginary;
-	return *this;
+  mReal /= number.mReal;
+  mImaginary /= number.mImaginary;
+  return *this;
 }
 
-template <typename T>
-QComplexNumber<T>& QComplexNumber<T>::operator*=(const QComplexNumber<T> &number)
+template<typename T>
+QComplexNumber<T> &
+QComplexNumber<T>::operator*=(const QComplexNumber<T> &number)
 {
-	mReal *= number.mReal;
-	mImaginary *= number.mImaginary;
-	return *this;
+  mReal *= number.mReal;
+  mImaginary *= number.mImaginary;
+  return *this;
 }
 
-template <typename T>
-QComplexNumber<T>& QComplexNumber<T>::operator/=(const T &value)
+template<typename T>
+QComplexNumber<T> &QComplexNumber<T>::operator/=(const T &value)
 {
-	mReal /= value;
-	mImaginary /= value;
-	return *this;
+  mReal /= value;
+  mImaginary /= value;
+  return *this;
 }
 
-template <typename T>
-QComplexNumber<T>& QComplexNumber<T>::operator*=(const T &value)
+template<typename T>
+QComplexNumber<T> &QComplexNumber<T>::operator*=(const T &value)
 {
-	mReal *= value;
-	mImaginary *= value;
-	return *this;
+  mReal *= value;
+  mImaginary *= value;
+  return *this;
 }
 
 template class QComplexNumber<short>;

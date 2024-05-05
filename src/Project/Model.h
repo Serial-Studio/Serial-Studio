@@ -40,7 +40,7 @@ namespace Project
  */
 class Model : public QObject
 {
-    // clang-format off
+  // clang-format off
     Q_OBJECT
     Q_PROPERTY(int groupCount
                READ groupCount
@@ -70,127 +70,144 @@ class Model : public QObject
     Q_PROPERTY(QString jsonFileName
                READ jsonFileName
                NOTIFY jsonFileChanged)
-    // clang-format on
+  // clang-format on
 
 Q_SIGNALS:
-    void titleChanged();
-    void jsonFileChanged();
-    void modifiedChanged();
-    void separatorChanged();
-    void groupCountChanged();
-    void groupOrderChanged();
-    void frameParserCodeChanged();
-    void frameEndSequenceChanged();
-    void frameStartSequenceChanged();
-    void groupChanged(const int group);
-    void datasetChanged(const int group, const int dataset);
+  void titleChanged();
+  void jsonFileChanged();
+  void modifiedChanged();
+  void separatorChanged();
+  void groupCountChanged();
+  void groupOrderChanged();
+  void frameParserCodeChanged();
+  void frameEndSequenceChanged();
+  void frameStartSequenceChanged();
+  void groupChanged(const int group);
+  void datasetChanged(const int group, const int dataset);
 
 private:
-    explicit Model();
-    Model(Model &&) = delete;
-    Model(const Model &) = delete;
-    Model &operator=(Model &&) = delete;
-    Model &operator=(const Model &) = delete;
+  explicit Model();
+  Model(Model &&) = delete;
+  Model(const Model &) = delete;
+  Model &operator=(Model &&) = delete;
+  Model &operator=(const Model &) = delete;
 
 public:
-    static Model &instance();
+  static Model &instance();
 
-    Q_INVOKABLE StringList availableGroupLevelWidgets();
-    Q_INVOKABLE StringList availableDatasetLevelWidgets();
+  Q_INVOKABLE StringList availableGroupLevelWidgets();
+  Q_INVOKABLE StringList availableDatasetLevelWidgets();
 
-    QString jsonProjectsPath() const;
+  QString jsonProjectsPath() const;
 
-    QString title() const;
-    QString separator() const;
-    QString frameEndSequence() const;
-    QString frameStartSequence() const;
+  QString title() const;
+  QString separator() const;
+  QString frameEndSequence() const;
+  QString frameStartSequence() const;
 
-    bool modified() const;
-    int groupCount() const;
-    QString jsonFilePath() const;
-    QString jsonFileName() const;
+  bool modified() const;
+  int groupCount() const;
+  QString jsonFilePath() const;
+  QString jsonFileName() const;
 
-    Q_INVOKABLE bool askSave();
-    Q_INVOKABLE bool saveJsonFile();
-    Q_INVOKABLE int datasetCount(const int group) const;
+  Q_INVOKABLE bool askSave();
+  Q_INVOKABLE bool saveJsonFile();
+  Q_INVOKABLE int datasetCount(const int group) const;
 
-    Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
-    Q_INVOKABLE const JSON::Dataset &getDataset(const int group, const int index) const;
+  Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
+  Q_INVOKABLE const JSON::Dataset &getDataset(const int group,
+                                              const int index) const;
 
-    Q_INVOKABLE QString frameParserCode() const;
-    Q_INVOKABLE QString groupTitle(const int group) const;
-    Q_INVOKABLE QString groupWidget(const int group) const;
-    Q_INVOKABLE int groupWidgetIndex(const int group) const;
-    Q_INVOKABLE int datasetIndex(const int group, const int dataset) const;
-    Q_INVOKABLE bool datasetLED(const int group, const int dataset) const;
-    Q_INVOKABLE bool datasetGraph(const int group, const int dataset) const;
-    Q_INVOKABLE bool datasetFftPlot(const int group, const int dataset) const;
-    Q_INVOKABLE bool datasetLogPlot(const int group, const int dataset) const;
-    Q_INVOKABLE QString datasetTitle(const int group, const int dataset) const;
-    Q_INVOKABLE QString datasetUnits(const int group, const int dataset) const;
-    Q_INVOKABLE QString datasetWidget(const int group, const int dataset) const;
-    Q_INVOKABLE int datasetWidgetIndex(const int group, const int dataset) const;
-    Q_INVOKABLE QString datasetWidgetMin(const int group, const int dataset) const;
-    Q_INVOKABLE QString datasetWidgetMax(const int group, const int dataset) const;
-    Q_INVOKABLE QString datasetFFTSamples(const int group, const int dataset) const;
-    Q_INVOKABLE QString datasetWidgetAlarm(const int group, const int dataset) const;
+  Q_INVOKABLE QString frameParserCode() const;
+  Q_INVOKABLE QString groupTitle(const int group) const;
+  Q_INVOKABLE QString groupWidget(const int group) const;
+  Q_INVOKABLE int groupWidgetIndex(const int group) const;
+  Q_INVOKABLE int datasetIndex(const int group, const int dataset) const;
+  Q_INVOKABLE bool datasetLED(const int group, const int dataset) const;
+  Q_INVOKABLE bool datasetGraph(const int group, const int dataset) const;
+  Q_INVOKABLE bool datasetFftPlot(const int group, const int dataset) const;
+  Q_INVOKABLE bool datasetLogPlot(const int group, const int dataset) const;
+  Q_INVOKABLE QString datasetTitle(const int group, const int dataset) const;
+  Q_INVOKABLE QString datasetUnits(const int group, const int dataset) const;
+  Q_INVOKABLE QString datasetWidget(const int group, const int dataset) const;
+  Q_INVOKABLE int datasetWidgetIndex(const int group, const int dataset) const;
+  Q_INVOKABLE QString datasetWidgetMin(const int group,
+                                       const int dataset) const;
+  Q_INVOKABLE QString datasetWidgetMax(const int group,
+                                       const int dataset) const;
+  Q_INVOKABLE QString datasetFFTSamples(const int group,
+                                        const int dataset) const;
+  Q_INVOKABLE QString datasetWidgetAlarm(const int group,
+                                         const int dataset) const;
 
-    Q_INVOKABLE bool setGroupWidget(const int group, const int widgetId);
+  Q_INVOKABLE bool setGroupWidget(const int group, const int widgetId);
 
 public Q_SLOTS:
-    void newJsonFile();
-    void openJsonFile();
-    void openJsonFile(const QString &path);
+  void newJsonFile();
+  void openJsonFile();
+  void openJsonFile(const QString &path);
 
-    void setTitle(const QString &title);
-    void setSeparator(const QString &separator);
-    void setFrameParserCode(const QString &code);
-    void setFrameEndSequence(const QString &sequence);
-    void setFrameStartSequence(const QString &sequence);
+  void setTitle(const QString &title);
+  void setSeparator(const QString &separator);
+  void setFrameParserCode(const QString &code);
+  void setFrameEndSequence(const QString &sequence);
+  void setFrameStartSequence(const QString &sequence);
 
-    void addGroup();
-    void deleteGroup(const int group);
-    void moveGroupUp(const int group);
-    void moveGroupDown(const int group);
-    void setGroupTitle(const int group, const QString &title);
-    void setGroupWidgetData(const int group, const QString &widget);
+  void addGroup();
+  void deleteGroup(const int group);
+  void moveGroupUp(const int group);
+  void moveGroupDown(const int group);
+  void setGroupTitle(const int group, const QString &title);
+  void setGroupWidgetData(const int group, const QString &widget);
 
-    void addDataset(const int group);
-    void deleteDataset(const int group, const int dataset);
-    void setDatasetWidget(const int group, const int dataset, const int widgetId);
-    void setDatasetTitle(const int group, const int dataset, const QString &title);
-    void setDatasetUnits(const int group, const int dataset, const QString &units);
-    void setDatasetIndex(const int group, const int dataset, const int frameIndex);
-    void setDatasetLED(const int group, const int dataset, const bool generateLED);
-    void setDatasetGraph(const int group, const int dataset, const bool generateGraph);
-    void setDatasetFftPlot(const int group, const int dataset, const bool generateFft);
-    void setDatasetLogPlot(const int group, const int dataset, const bool generateLog);
-    void setDatasetWidgetMin(const int group, const int dataset, const QString &minimum);
-    void setDatasetWidgetMax(const int group, const int dataset, const QString &maximum);
-    void setDatasetWidgetData(const int group, const int dataset, const QString &widget);
-    void setDatasetWidgetAlarm(const int group, const int dataset, const QString &alarm);
-    void setDatasetFFTSamples(const int group, const int dataset, const QString &samples);
+  void addDataset(const int group);
+  void deleteDataset(const int group, const int dataset);
+  void setDatasetWidget(const int group, const int dataset, const int widgetId);
+  void setDatasetTitle(const int group, const int dataset,
+                       const QString &title);
+  void setDatasetUnits(const int group, const int dataset,
+                       const QString &units);
+  void setDatasetIndex(const int group, const int dataset,
+                       const int frameIndex);
+  void setDatasetLED(const int group, const int dataset,
+                     const bool generateLED);
+  void setDatasetGraph(const int group, const int dataset,
+                       const bool generateGraph);
+  void setDatasetFftPlot(const int group, const int dataset,
+                         const bool generateFft);
+  void setDatasetLogPlot(const int group, const int dataset,
+                         const bool generateLog);
+  void setDatasetWidgetMin(const int group, const int dataset,
+                           const QString &minimum);
+  void setDatasetWidgetMax(const int group, const int dataset,
+                           const QString &maximum);
+  void setDatasetWidgetData(const int group, const int dataset,
+                            const QString &widget);
+  void setDatasetWidgetAlarm(const int group, const int dataset,
+                             const QString &alarm);
+  void setDatasetFFTSamples(const int group, const int dataset,
+                            const QString &samples);
 
 private Q_SLOTS:
-    void onJsonLoaded();
-    void onModelChanged();
-    void onGroupChanged(const int group);
-    void setModified(const bool modified);
-    void onDatasetChanged(const int group, const int dataset);
+  void onJsonLoaded();
+  void onModelChanged();
+  void onGroupChanged(const int group);
+  void setModified(const bool modified);
+  void onDatasetChanged(const int group, const int dataset);
 
 private:
-    int nextDatasetIndex();
+  int nextDatasetIndex();
 
 private:
-    QString m_title;
-    QString m_separator;
-    QString m_frameParserCode;
-    QString m_frameEndSequence;
-    QString m_frameStartSequence;
+  QString m_title;
+  QString m_separator;
+  QString m_frameParserCode;
+  QString m_frameEndSequence;
+  QString m_frameStartSequence;
 
-    bool m_modified;
-    QString m_filePath;
+  bool m_modified;
+  QString m_filePath;
 
-    QVector<JSON::Group> m_groups;
+  QVector<JSON::Group> m_groups;
 };
-}
+} // namespace Project

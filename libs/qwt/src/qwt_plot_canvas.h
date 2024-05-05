@@ -28,106 +28,105 @@ class QPainterPath;
  */
 class QWT_EXPORT QwtPlotCanvas : public QFrame, public QwtPlotAbstractCanvas
 {
-    Q_OBJECT
+  Q_OBJECT
 
-    Q_PROPERTY( double borderRadius READ borderRadius WRITE setBorderRadius )
+  Q_PROPERTY(double borderRadius READ borderRadius WRITE setBorderRadius)
 
-  public:
+public:
+  /*!
+     \brief Paint attributes
+
+     The default setting enables BackingStore and Opaque.
+
+     \sa setPaintAttribute(), testPaintAttribute()
+   */
+  enum PaintAttribute
+  {
+    /*!
+       \brief Paint double buffered reusing the content
+             of the pixmap buffer when possible.
+
+       Using a backing store might improve the performance
+       significantly, when working with widget overlays ( like rubber bands ).
+       Disabling the cache might improve the performance for
+       incremental paints (using QwtPlotDirectPainter ).
+
+       \sa backingStore(), invalidateBackingStore()
+     */
+    BackingStore = 1,
 
     /*!
-       \brief Paint attributes
+       \brief Try to fill the complete contents rectangle
+             of the plot canvas
 
-       The default setting enables BackingStore and Opaque.
+       When using styled backgrounds Qt assumes, that the
+       canvas doesn't fill its area completely
+       ( f.e because of rounded borders ) and fills the area
+       below the canvas. When this is done with gradients it might
+       result in a serious performance bottleneck - depending on the size.
 
-       \sa setPaintAttribute(), testPaintAttribute()
+       When the Opaque attribute is enabled the canvas tries to
+       identify the gaps with some heuristics and to fill those only.
+
+       \warning Will not work for semitransparent backgrounds
      */
-    enum PaintAttribute
-    {
-        /*!
-           \brief Paint double buffered reusing the content
-                 of the pixmap buffer when possible.
+    Opaque = 2,
 
-           Using a backing store might improve the performance
-           significantly, when working with widget overlays ( like rubber bands ).
-           Disabling the cache might improve the performance for
-           incremental paints (using QwtPlotDirectPainter ).
+    /*!
+       \brief Try to improve painting of styled backgrounds
 
-           \sa backingStore(), invalidateBackingStore()
-         */
-        BackingStore = 1,
+       QwtPlotCanvas supports the box model attributes for
+       customizing the layout with style sheets. Unfortunately
+       the design of Qt style sheets has no concept how to
+       handle backgrounds with rounded corners - beside of padding.
 
-        /*!
-           \brief Try to fill the complete contents rectangle
-                 of the plot canvas
+       When HackStyledBackground is enabled the plot canvas tries
+       to separate the background from the background border
+       by reverse engineering to paint the background before and
+       the border after the plot items. In this order the border
+       gets perfectly antialiased and you can avoid some pixel
+       artifacts in the corners.
+     */
+    HackStyledBackground = 4,
 
-           When using styled backgrounds Qt assumes, that the
-           canvas doesn't fill its area completely
-           ( f.e because of rounded borders ) and fills the area
-           below the canvas. When this is done with gradients it might
-           result in a serious performance bottleneck - depending on the size.
+    /*!
+       When ImmediatePaint is set replot() calls repaint()
+       instead of update().
 
-           When the Opaque attribute is enabled the canvas tries to
-           identify the gaps with some heuristics and to fill those only.
+       \sa replot(), QWidget::repaint(), QWidget::update()
+     */
+    ImmediatePaint = 8
+  };
 
-           \warning Will not work for semitransparent backgrounds
-         */
-        Opaque       = 2,
+  Q_DECLARE_FLAGS(PaintAttributes, PaintAttribute)
 
-        /*!
-           \brief Try to improve painting of styled backgrounds
+  explicit QwtPlotCanvas(QwtPlot * = NULL);
+  virtual ~QwtPlotCanvas();
 
-           QwtPlotCanvas supports the box model attributes for
-           customizing the layout with style sheets. Unfortunately
-           the design of Qt style sheets has no concept how to
-           handle backgrounds with rounded corners - beside of padding.
+  void setPaintAttribute(PaintAttribute, bool on = true);
+  bool testPaintAttribute(PaintAttribute) const;
 
-           When HackStyledBackground is enabled the plot canvas tries
-           to separate the background from the background border
-           by reverse engineering to paint the background before and
-           the border after the plot items. In this order the border
-           gets perfectly antialiased and you can avoid some pixel
-           artifacts in the corners.
-         */
-        HackStyledBackground = 4,
+  const QPixmap *backingStore() const;
+  Q_INVOKABLE void invalidateBackingStore();
 
-        /*!
-           When ImmediatePaint is set replot() calls repaint()
-           instead of update().
+  virtual bool event(QEvent *) QWT_OVERRIDE;
 
-           \sa replot(), QWidget::repaint(), QWidget::update()
-         */
-        ImmediatePaint = 8
-    };
+  Q_INVOKABLE QPainterPath borderPath(const QRect &) const;
 
-    Q_DECLARE_FLAGS( PaintAttributes, PaintAttribute )
+public Q_SLOTS:
+  void replot();
 
-    explicit QwtPlotCanvas( QwtPlot* = NULL );
-    virtual ~QwtPlotCanvas();
+protected:
+  virtual void paintEvent(QPaintEvent *) QWT_OVERRIDE;
+  virtual void resizeEvent(QResizeEvent *) QWT_OVERRIDE;
 
-    void setPaintAttribute( PaintAttribute, bool on = true );
-    bool testPaintAttribute( PaintAttribute ) const;
+  virtual void drawBorder(QPainter *) QWT_OVERRIDE;
 
-    const QPixmap* backingStore() const;
-    Q_INVOKABLE void invalidateBackingStore();
-
-    virtual bool event( QEvent* ) QWT_OVERRIDE;
-
-    Q_INVOKABLE QPainterPath borderPath( const QRect& ) const;
-
-  public Q_SLOTS:
-    void replot();
-
-  protected:
-    virtual void paintEvent( QPaintEvent* ) QWT_OVERRIDE;
-    virtual void resizeEvent( QResizeEvent* ) QWT_OVERRIDE;
-
-    virtual void drawBorder( QPainter* ) QWT_OVERRIDE;
-
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPlotCanvas::PaintAttributes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPlotCanvas::PaintAttributes)
 
 #endif

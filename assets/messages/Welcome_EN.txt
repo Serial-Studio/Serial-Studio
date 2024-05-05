@@ -22,4 +22,4 @@ the wiki:
 
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
-Tip: use the JSON Editor to create and edit Serial Studio project files.
+Tip: use the Project Editor to create and edit Serial Studio project files.

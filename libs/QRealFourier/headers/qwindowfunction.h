@@ -1,8 +1,8 @@
 /***********************************************************************
 
 qwindowfunction.h - Header file for QWindowFunction,
-					QWindowFunctionManager, QRectangularFunction,
-					QHammingFunction, QHannFunction
+                                        QWindowFunctionManager,
+QRectangularFunction, QHammingFunction, QHannFunction
 
 Template classes necessary for applying a window function to a discrete
 set of samples.
@@ -54,84 +54,72 @@ qrealfourier@gmail.com
 QWindowFunction
 **********************************************************/
 
-template <typename T>
+template<typename T>
 class QWindowFunction
 {
 
-	typedef QVector<T> QWindow;
+  typedef QVector<T> QWindow;
 
-	public:
+public:
+  virtual ~QWindowFunction() = default;
+  void apply(T *data, int size);
+  void create(int size);
 
-        virtual ~QWindowFunction() = default;
-		void apply(T *data, int size);
-		void create(int size);
+protected:
+  void fillWindow(int size);
+  virtual T calculate(int currentSample, int totalSamples) = 0;
 
-	protected:
-
-		void fillWindow(int size);
-		virtual T calculate(int currentSample, int totalSamples) = 0;
-
-	protected:
-
-		QWindow mWindow;
-
+protected:
+  QWindow mWindow;
 };
 
 /**********************************************************
 QWindowFunctionManager
 **********************************************************/
 
-template <typename T>
+template<typename T>
 class QWindowFunctionManager
 {
 
-	public:
-
-		static QWindowFunction<T>* createFunction(QString functionName);
-		static QStringList functions();
-
+public:
+  static QWindowFunction<T> *createFunction(QString functionName);
+  static QStringList functions();
 };
 
 /**********************************************************
 QRectangularFunction
 **********************************************************/
 
-template <typename T>
+template<typename T>
 class QRectangularFunction : public QWindowFunction<T>
 {
 
-	protected:
-
-		T calculate(int currentSample, int totalSamples);
-
+protected:
+  T calculate(int currentSample, int totalSamples);
 };
 
 /**********************************************************
 QHammingFunction
 **********************************************************/
 
-template <typename T>
+template<typename T>
 class QHammingFunction : public QWindowFunction<T>
 {
 
-	protected:
-
-		T calculate(int currentSample, int totalSamples);
-
+protected:
+  T calculate(int currentSample, int totalSamples);
 };
 
 /**********************************************************
 QHannFunction
 **********************************************************/
 
-template <typename T>
+template<typename T>
 class QHannFunction : public QWindowFunction<T>
 {
 
-	protected:
-
-		T calculate(int currentSample, int totalSamples);
-
+protected:
+  T calculate(int currentSample, int totalSamples);
 };
 
 #endif

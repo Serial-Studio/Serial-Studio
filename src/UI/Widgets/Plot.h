@@ -33,23 +33,23 @@ namespace Widgets
 {
 class Plot : public DashboardWidgetBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    Plot(const int index = -1);
+  Plot(const int index = -1);
 
 private Q_SLOTS:
-    void updateData();
-    void updateRange();
+  void updateData();
+  void updateRange();
 
 private:
-    int m_index;
-    double m_min;
-    double m_max;
-    bool m_autoscale;
+  int m_index;
+  double m_min;
+  double m_max;
+  bool m_autoscale;
 
-    QwtPlot m_plot;
-    QwtPlotCurve m_curve;
-    QVBoxLayout m_layout;
+  QwtPlot m_plot;
+  QwtPlotCurve m_curve;
+  QVBoxLayout m_layout;
 };
-}
+} // namespace Widgets

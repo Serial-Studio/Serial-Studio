@@ -23,37 +23,37 @@
 import QtQuick
 
 Item {
-    id: root
-    property real topMargin: -8
-    property real leftMargin: -8
-    property real rightMargin: -10
-    property real bottomMargin: -10
-    property alias border: borderImage.border
-    property alias source: borderImage.source
-    property alias shadowOpacity: borderImage.opacity
+  id: root
+  property real topMargin: -8
+  property real leftMargin: -8
+  property real rightMargin: -10
+  property real bottomMargin: -10
+  property alias border: borderImage.border
+  property alias source: borderImage.source
+  property alias shadowOpacity: borderImage.opacity
 
-    BorderImage {
-        id: borderImage
+  BorderImage {
+    id: borderImage
 
-        opacity: 0.5
-        smooth: true
-        anchors.fill: parent
-        source: "qrc:/images/shadow.png"
-        verticalTileMode: BorderImage.Round
-        horizontalTileMode: BorderImage.Round
+    opacity: 0.5
+    smooth: true
+    anchors.fill: parent
+    source: "qrc:/images/shadow.png"
+    verticalTileMode: BorderImage.Round
+    horizontalTileMode: BorderImage.Round
 
-        anchors {
-            topMargin: root.topMargin
-            leftMargin: root.leftMargin
-            rightMargin: root.rightMargin
-            bottomMargin: root.bottomMargin
-        }
-
-        border {
-            left: 10
-            top: 10
-            right: 10
-            bottom: 10
-        }
+    anchors {
+      topMargin: root.topMargin
+      leftMargin: root.leftMargin
+      rightMargin: root.rightMargin
+      bottomMargin: root.bottomMargin
     }
+
+    border {
+      left: 10
+      top: 10
+      right: 10
+      bottom: 10
+    }
+  }
 }

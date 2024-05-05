@@ -30,125 +30,125 @@ import "../Widgets" as Widgets
 import "../FramelessWindow" as FramelessWindow
 
 Item {
-    id: root
+  id: root
 
-    property int widgetIndex: -1
-    property FramelessWindow.CustomWindow externalWindow: null
+  property int widgetIndex: -1
+  property FramelessWindow.CustomWindow externalWindow: null
 
-    Widgets.Window {
-        id: window
+  Widgets.Window {
+    id: window
+    anchors.fill: parent
+    title: widget.widgetTitle
+    icon.source: widget.widgetIcon
+    headerDoubleClickEnabled: true
+    borderColor: Cpp_ThemeManager.widgetWindowBorder
+    onHeaderDoubleClicked: {
+      if (root.externalWindow !== null)
+        root.externalWindow.showNormal()
+      else
+        externalWindowLoader.active = true
+    }
+
+    DashboardWidget {
+      id: widget
+      widgetIndex: root.widgetIndex
+      anchors {
+        fill: parent
+        leftMargin: window.borderWidth
+        rightMargin: window.borderWidth
+        bottomMargin: window.borderWidth
+      }
+
+      //
+      // Hack: render a GPS map using QML code instead of QtWidgets
+      //
+      Loader {
         anchors.fill: parent
-        title: widget.widgetTitle
-        icon.source: widget.widgetIcon
-        headerDoubleClickEnabled: true
-        borderColor: Cpp_ThemeManager.widgetWindowBorder
-        onHeaderDoubleClicked: {
-            if (root.externalWindow !== null)
-                root.externalWindow.showNormal()
-            else
-                externalWindowLoader.active = true
+        asynchronous: true
+        active: widget.isGpsMap
+        visible: widget.isGpsMap && status == Loader.Ready
+        sourceComponent: Widgets.GpsMap {
+          altitude: widget.gpsAltitude
+          latitude: widget.gpsLatitude
+          longitude: widget.gpsLongitude
+        }
+      }
+    }
+  }
+
+  Loader {
+    id: externalWindowLoader
+
+    active: false
+    asynchronous: true
+
+    sourceComponent: FramelessWindow.CustomWindow {
+      id: _window
+      minimumWidth: 640 + shadowMargin
+      minimumHeight: 480 + shadowMargin
+      title: externalWidget.widgetTitle
+      titlebarText: Cpp_ThemeManager.text
+      titlebarColor: Cpp_ThemeManager.widgetWindowBackground
+      backgroundColor: Cpp_ThemeManager.widgetWindowBackground
+      borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
+      extraFlags: Qt.WindowStaysOnTopHint | Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
+
+      Timer {
+        id: timer
+        interval: 200
+        onTriggered: _window.showNormal()
+      }
+
+      Component.onCompleted: {
+        root.externalWindow = this
+        timer.start()
+      }
+
+      Rectangle {
+        clip: true
+        anchors.fill: parent
+        radius: _window.radius
+        anchors.margins: _window.shadowMargin
+        color: Cpp_ThemeManager.widgetWindowBackground
+        anchors.topMargin: _window.titlebar.height + _window.shadowMargin
+
+        Rectangle {
+          height: _window.radius
+          color: Cpp_ThemeManager.widgetWindowBackground
+          anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+          }
         }
 
         DashboardWidget {
-            id: widget
-            widgetIndex: root.widgetIndex
-            anchors {
-                fill: parent
-                leftMargin: window.borderWidth
-                rightMargin: window.borderWidth
-                bottomMargin: window.borderWidth
-            }
+          id: externalWidget
+          anchors.fill: parent
+          isExternalWindow: true
+          widgetIndex: root.widgetIndex
+          widgetVisible: _window.visible
+          anchors.margins: _window.radius
 
-            //
-            // Hack: render a GPS map using QML code instead of QtWidgets
-            //
-            Loader {
-                anchors.fill: parent
-                asynchronous: true
-                active: widget.isGpsMap
-                visible: widget.isGpsMap && status == Loader.Ready
-                sourceComponent: Widgets.GpsMap {
-                    altitude: widget.gpsAltitude
-                    latitude: widget.gpsLatitude
-                    longitude: widget.gpsLongitude
-                }
+          Loader {
+            anchors.fill: parent
+            asynchronous: true
+            active: externalWidget.isGpsMap
+            visible: externalWidget.isGpsMap && status == Loader.Ready
+            sourceComponent: Widgets.GpsMap {
+              altitude: externalWidget.gpsAltitude
+              latitude: externalWidget.gpsLatitude
+              longitude: externalWidget.gpsLongitude
             }
+          }
         }
+      }
+
+      FramelessWindow.ResizeHandles {
+        window: _window
+        anchors.fill: parent
+        handleSize: _window.handleSize
+      }
     }
-
-    Loader {
-        id: externalWindowLoader
-
-        active: false
-        asynchronous: true
-
-        sourceComponent: FramelessWindow.CustomWindow {
-            id: _window
-            minimumWidth: 640 + shadowMargin
-            minimumHeight: 480 + shadowMargin
-            title: externalWidget.widgetTitle
-            titlebarText: Cpp_ThemeManager.text
-            titlebarColor: Cpp_ThemeManager.widgetWindowBackground
-            backgroundColor: Cpp_ThemeManager.widgetWindowBackground
-            borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
-            extraFlags: Qt.WindowStaysOnTopHint | Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
-
-            Timer {
-                id: timer
-                interval: 200
-                onTriggered: _window.showNormal()
-            }
-
-            Component.onCompleted: {
-                root.externalWindow = this
-                timer.start()
-            }
-
-            Rectangle {
-                clip: true
-                anchors.fill: parent
-                radius: _window.radius
-                anchors.margins: _window.shadowMargin
-                color: Cpp_ThemeManager.widgetWindowBackground
-                anchors.topMargin: _window.titlebar.height + _window.shadowMargin
-
-                Rectangle {
-                    height: _window.radius
-                    color: Cpp_ThemeManager.widgetWindowBackground
-                    anchors {
-                        top: parent.top
-                        left: parent.left
-                        right: parent.right
-                    }
-                }
-
-                DashboardWidget {
-                    id: externalWidget
-                    anchors.fill: parent
-                    isExternalWindow: true
-                    widgetIndex: root.widgetIndex
-                    widgetVisible: _window.visible
-                    anchors.margins: _window.radius
-
-                    Loader {
-                        anchors.fill: parent
-                        asynchronous: true
-                        active: externalWidget.isGpsMap
-                        visible: externalWidget.isGpsMap && status == Loader.Ready
-                        sourceComponent: Widgets.GpsMap {
-                            altitude: externalWidget.gpsAltitude
-                            latitude: externalWidget.gpsLatitude
-                            longitude: externalWidget.gpsLongitude
-                        }
-                    }
-                }
-            }
-
-            FramelessWindow.ResizeHandles {
-                window: _window
-                anchors.fill: parent
-                handleSize: _window.handleSize
-            }
-        }
-    }
+  }
 }

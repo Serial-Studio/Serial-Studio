@@ -22,30 +22,28 @@
  */
 class QWT_EXPORT QwtArrowButton : public QPushButton
 {
-  public:
-    explicit QwtArrowButton ( int num, Qt::ArrowType, QWidget* parent = NULL );
-    virtual ~QwtArrowButton();
+public:
+  explicit QwtArrowButton(int num, Qt::ArrowType, QWidget *parent = NULL);
+  virtual ~QwtArrowButton();
 
-    Qt::ArrowType arrowType() const;
-    int num() const;
+  Qt::ArrowType arrowType() const;
+  int num() const;
 
-    virtual QSize sizeHint() const QWT_OVERRIDE;
-    virtual QSize minimumSizeHint() const QWT_OVERRIDE;
+  virtual QSize sizeHint() const QWT_OVERRIDE;
+  virtual QSize minimumSizeHint() const QWT_OVERRIDE;
 
-  protected:
-    virtual void paintEvent( QPaintEvent*) QWT_OVERRIDE;
-    virtual void keyPressEvent( QKeyEvent* ) QWT_OVERRIDE;
+protected:
+  virtual void paintEvent(QPaintEvent *) QWT_OVERRIDE;
+  virtual void keyPressEvent(QKeyEvent *) QWT_OVERRIDE;
 
-    virtual void drawButtonLabel( QPainter* );
-    virtual void drawArrow( QPainter*,
-        const QRect&, Qt::ArrowType ) const;
-    virtual QRect labelRect() const;
-    virtual QSize arrowSize( Qt::ArrowType,
-        const QSize& boundingSize ) const;
+  virtual void drawButtonLabel(QPainter *);
+  virtual void drawArrow(QPainter *, const QRect &, Qt::ArrowType) const;
+  virtual QRect labelRect() const;
+  virtual QSize arrowSize(Qt::ArrowType, const QSize &boundingSize) const;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

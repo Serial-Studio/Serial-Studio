@@ -29,16 +29,16 @@ namespace Widgets
 {
 class Compass : public BaseWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    Compass(const int index = -1);
+  Compass(const int index = -1);
 
 private Q_SLOTS:
-    void update();
+  void update();
 
 private:
-    int m_index;
-    QwtCompass m_compass;
+  int m_index;
+  QwtCompass m_compass;
 };
-}
+} // namespace Widgets

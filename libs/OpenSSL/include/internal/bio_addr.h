@@ -16,14 +16,14 @@
 #ifndef OPENSSL_NO_SOCK
 union bio_addr_st
 {
-    struct sockaddr sa;
-#    if OPENSSL_USE_IPV6
-    struct sockaddr_in6 s_in6;
-#    endif
-    struct sockaddr_in s_in;
-#    ifndef OPENSSL_NO_UNIX_SOCK
-    struct sockaddr_un s_un;
-#    endif
+  struct sockaddr sa;
+#  if OPENSSL_USE_IPV6
+  struct sockaddr_in6 s_in6;
+#  endif
+  struct sockaddr_in s_in;
+#  ifndef OPENSSL_NO_UNIX_SOCK
+  struct sockaddr_un s_un;
+#  endif
 };
 #endif
 

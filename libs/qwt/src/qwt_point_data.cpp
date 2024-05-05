@@ -17,10 +17,10 @@
 
    \sa setInterval(), setSize()
  */
-QwtSyntheticPointData::QwtSyntheticPointData(
-        int size, const QwtInterval& interval )
-    : m_size( size )
-    , m_interval( interval )
+QwtSyntheticPointData::QwtSyntheticPointData(int size,
+                                             const QwtInterval &interval)
+  : m_size(size)
+  , m_interval(interval)
 {
 }
 
@@ -30,9 +30,9 @@ QwtSyntheticPointData::QwtSyntheticPointData(
    \param size Number of points
    \sa size(), setInterval()
  */
-void QwtSyntheticPointData::setSize( int size )
+void QwtSyntheticPointData::setSize(int size)
 {
-    m_size = size;
+  m_size = size;
 }
 
 /*!
@@ -41,7 +41,7 @@ void QwtSyntheticPointData::setSize( int size )
  */
 int QwtSyntheticPointData::size() const
 {
-    return m_size;
+  return m_size;
 }
 
 /*!
@@ -50,9 +50,9 @@ int QwtSyntheticPointData::size() const
    \param interval Interval
    \sa interval(), setSize()
  */
-void QwtSyntheticPointData::setInterval( const QwtInterval& interval )
+void QwtSyntheticPointData::setInterval(const QwtInterval &interval)
 {
-    m_interval = interval.normalized();
+  m_interval = interval.normalized();
 }
 
 /*!
@@ -61,7 +61,7 @@ void QwtSyntheticPointData::setInterval( const QwtInterval& interval )
  */
 QwtInterval QwtSyntheticPointData::interval() const
 {
-    return m_interval;
+  return m_interval;
 }
 
 /*!
@@ -75,11 +75,10 @@ QwtInterval QwtSyntheticPointData::interval() const
 
    \sa rectOfInterest()
  */
-void QwtSyntheticPointData::setRectOfInterest( const QRectF& rect )
+void QwtSyntheticPointData::setRectOfInterest(const QRectF &rect)
 {
-    m_rectOfInterest = rect;
-    m_intervalOfInterest = QwtInterval(
-        rect.left(), rect.right() ).normalized();
+  m_rectOfInterest = rect;
+  m_intervalOfInterest = QwtInterval(rect.left(), rect.right()).normalized();
 }
 
 /*!
@@ -88,7 +87,7 @@ void QwtSyntheticPointData::setRectOfInterest( const QRectF& rect )
  */
 QRectF QwtSyntheticPointData::rectOfInterest() const
 {
-    return m_rectOfInterest;
+  return m_rectOfInterest;
 }
 
 /*!
@@ -104,13 +103,12 @@ QRectF QwtSyntheticPointData::rectOfInterest() const
  */
 QRectF QwtSyntheticPointData::boundingRect() const
 {
-    if ( m_size == 0 ||
-        !( m_interval.isValid() || m_intervalOfInterest.isValid() ) )
-    {
-        return QRectF( 1.0, 1.0, -2.0, -2.0 ); // something invalid
-    }
+  if (m_size == 0 || !(m_interval.isValid() || m_intervalOfInterest.isValid()))
+  {
+    return QRectF(1.0, 1.0, -2.0, -2.0); // something invalid
+  }
 
-    return qwtBoundingRect( *this );
+  return qwtBoundingRect(*this);
 }
 
 /*!
@@ -122,15 +120,15 @@ QRectF QwtSyntheticPointData::boundingRect() const
    \warning For invalid indices ( index < 0 || index >= size() )
             (0, 0) is returned.
  */
-QPointF QwtSyntheticPointData::sample( int index ) const
+QPointF QwtSyntheticPointData::sample(int index) const
 {
-    if ( index >= m_size )
-        return QPointF( 0, 0 );
+  if (index >= m_size)
+    return QPointF(0, 0);
 
-    const double xValue = x( index );
-    const double yValue = y( xValue );
+  const double xValue = x(index);
+  const double yValue = y(xValue);
 
-    return QPointF( xValue, yValue );
+  return QPointF(xValue, yValue);
 }
 
 /*!
@@ -145,17 +143,17 @@ QPointF QwtSyntheticPointData::sample( int index ) const
 
    \sa interval(), rectOfInterest(), y()
  */
-double QwtSyntheticPointData::x( uint index ) const
+double QwtSyntheticPointData::x(uint index) const
 {
-    const QwtInterval& interval = m_interval.isValid() ?
-        m_interval : m_intervalOfInterest;
+  const QwtInterval &interval
+      = m_interval.isValid() ? m_interval : m_intervalOfInterest;
 
-    if ( !interval.isValid() )
-        return 0.0;
+  if (!interval.isValid())
+    return 0.0;
 
-    if ( m_size <= 1 )
-        return interval.minValue();
+  if (m_size <= 1)
+    return interval.minValue();
 
-    const double dx = interval.width() / ( m_size - 1 );
-    return interval.minValue() + index * dx;
+  const double dx = interval.width() / (m_size - 1);
+  return interval.minValue() + index * dx;
 }

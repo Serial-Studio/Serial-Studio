@@ -70,45 +70,45 @@ namespace JSON
 class Dataset
 {
 public:
-    Dataset();
+  Dataset();
 
-    bool fft() const;
-    bool led() const;
-    bool log() const;
-    int index() const;
-    bool graph() const;
-    double min() const;
-    double max() const;
-    double alarm() const;
-    QString title() const;
-    QString value() const;
-    QString units() const;
-    QString widget() const;
-    int fftSamples() const;
-    QJsonObject jsonData() const;
+  bool fft() const;
+  bool led() const;
+  bool log() const;
+  int index() const;
+  bool graph() const;
+  double min() const;
+  double max() const;
+  double alarm() const;
+  QString title() const;
+  QString value() const;
+  QString units() const;
+  QString widget() const;
+  int fftSamples() const;
+  QJsonObject jsonData() const;
 
-    bool read(const QJsonObject &object);
-    void setTitle(const QString &title) { m_title = title; }
+  bool read(const QJsonObject &object);
+  void setTitle(const QString &title) { m_title = title; }
 
 private:
-    bool m_fft;
-    bool m_led;
-    bool m_log;
-    bool m_graph;
+  bool m_fft;
+  bool m_led;
+  bool m_log;
+  bool m_graph;
 
-    QString m_title;
-    QString m_value;
-    QString m_units;
-    QString m_widget;
-    QJsonObject m_jsonData;
+  QString m_title;
+  QString m_value;
+  QString m_units;
+  QString m_widget;
+  QJsonObject m_jsonData;
 
-    // Editor-related variables
-    int m_index;
-    double m_max;
-    double m_min;
-    double m_alarm;
-    int m_fftSamples;
+  // Editor-related variables
+  int m_index;
+  double m_max;
+  double m_min;
+  double m_alarm;
+  int m_fftSamples;
 
-    friend class Project::Model;
+  friend class Project::Model;
 };
-}
+} // namespace JSON

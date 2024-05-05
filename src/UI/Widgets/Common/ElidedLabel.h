@@ -28,25 +28,25 @@ namespace Widgets
 {
 class ElidedLabel : public QLabel
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit ElidedLabel(QWidget *parent = Q_NULLPTR,
-                         Qt::WindowFlags flags = Qt::WindowFlags());
-    explicit ElidedLabel(const QString &text, QWidget *parent = Q_NULLPTR,
-                         Qt::WindowFlags flags = Qt::WindowFlags());
-    void setType(const Qt::TextElideMode type);
+  explicit ElidedLabel(QWidget *parent = Q_NULLPTR,
+                       Qt::WindowFlags flags = Qt::WindowFlags());
+  explicit ElidedLabel(const QString &text, QWidget *parent = Q_NULLPTR,
+                       Qt::WindowFlags flags = Qt::WindowFlags());
+  void setType(const Qt::TextElideMode type);
 
 public Q_SLOTS:
-    void setText(const QString &text);
-    void elide();
+  void setText(const QString &text);
+  void elide();
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+  void resizeEvent(QResizeEvent *event);
 
 private:
-    bool m_eliding;
-    QString m_originalText;
-    Qt::TextElideMode m_elideMode;
+  bool m_eliding;
+  QString m_originalText;
+  Qt::TextElideMode m_elideMode;
 };
-}
+} // namespace Widgets

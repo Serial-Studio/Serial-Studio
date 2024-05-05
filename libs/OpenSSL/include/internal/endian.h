@@ -22,32 +22,32 @@
  */
 
 #if defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__)
-#    define DECLARE_IS_ENDIAN                                                                      \
-        const int ossl_is_little_endian = __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-#    define IS_LITTLE_ENDIAN (ossl_is_little_endian)
-#    define IS_BIG_ENDIAN (!ossl_is_little_endian)
-#    if defined(L_ENDIAN) && (__BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__)
-#        error "L_ENDIAN defined on a big endian machine"
-#    endif
-#    if defined(B_ENDIAN) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
-#        error "B_ENDIAN defined on a little endian machine"
-#    endif
-#    if !defined(L_ENDIAN) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
-#        define L_ENDIAN
-#    endif
-#    if !defined(B_ENDIAN) && (__BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__)
-#        define B_ENDIAN
-#    endif
+#  define DECLARE_IS_ENDIAN                                                    \
+    const int ossl_is_little_endian = __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#  define IS_LITTLE_ENDIAN (ossl_is_little_endian)
+#  define IS_BIG_ENDIAN (!ossl_is_little_endian)
+#  if defined(L_ENDIAN) && (__BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__)
+#    error "L_ENDIAN defined on a big endian machine"
+#  endif
+#  if defined(B_ENDIAN) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
+#    error "B_ENDIAN defined on a little endian machine"
+#  endif
+#  if !defined(L_ENDIAN) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
+#    define L_ENDIAN
+#  endif
+#  if !defined(B_ENDIAN) && (__BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__)
+#    define B_ENDIAN
+#  endif
 #else
-#    define DECLARE_IS_ENDIAN                                                                      \
-        const union                                                                                \
-        {                                                                                          \
-            long one;                                                                              \
-            char little;                                                                           \
-        } ossl_is_endian = { 1 }
+#  define DECLARE_IS_ENDIAN                                                    \
+    const union                                                                \
+    {                                                                          \
+      long one;                                                                \
+      char little;                                                             \
+    } ossl_is_endian = {1}
 
-#    define IS_LITTLE_ENDIAN (ossl_is_endian.little != 0)
-#    define IS_BIG_ENDIAN (ossl_is_endian.little == 0)
+#  define IS_LITTLE_ENDIAN (ossl_is_endian.little != 0)
+#  define IS_BIG_ENDIAN (ossl_is_endian.little == 0)
 #endif
 
 #endif

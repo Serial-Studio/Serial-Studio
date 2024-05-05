@@ -35,9 +35,9 @@ class QPalette;
     The following example shows how to replace the left axis, by a scale item
     at the x position 0.0.
     \code
-      QwtPlotScaleItem *scaleItem = new QwtPlotScaleItem( QwtScaleDraw::RightScale, 0.0 );
-      scaleItem->setFont( plot->axisWidget( QwtAxis::YLeft )->font() );
-      scaleItem->attach(plot);
+      QwtPlotScaleItem *scaleItem = new QwtPlotScaleItem(
+   QwtScaleDraw::RightScale, 0.0 ); scaleItem->setFont( plot->axisWidget(
+   QwtAxis::YLeft )->font() ); scaleItem->attach(plot);
 
       plot->setAxisVisible( QwtAxis::YLeft, false );
     \endcode
@@ -45,50 +45,49 @@ class QPalette;
 
 class QWT_EXPORT QwtPlotScaleItem : public QwtPlotItem
 {
-  public:
-    explicit QwtPlotScaleItem(
-        QwtScaleDraw::Alignment = QwtScaleDraw::BottomScale,
-        const double pos = 0.0 );
+public:
+  explicit QwtPlotScaleItem(QwtScaleDraw::Alignment = QwtScaleDraw::BottomScale,
+                            const double pos = 0.0);
 
-    virtual ~QwtPlotScaleItem();
+  virtual ~QwtPlotScaleItem();
 
-    virtual int rtti() const QWT_OVERRIDE;
+  virtual int rtti() const QWT_OVERRIDE;
 
-    void setScaleDiv( const QwtScaleDiv& );
-    const QwtScaleDiv& scaleDiv() const;
+  void setScaleDiv(const QwtScaleDiv &);
+  const QwtScaleDiv &scaleDiv() const;
 
-    void setScaleDivFromAxis( bool on );
-    bool isScaleDivFromAxis() const;
+  void setScaleDivFromAxis(bool on);
+  bool isScaleDivFromAxis() const;
 
-    void setPalette( const QPalette& );
-    QPalette palette() const;
+  void setPalette(const QPalette &);
+  QPalette palette() const;
 
-    void setFont( const QFont& );
-    QFont font() const;
+  void setFont(const QFont &);
+  QFont font() const;
 
-    void setScaleDraw( QwtScaleDraw* );
+  void setScaleDraw(QwtScaleDraw *);
 
-    const QwtScaleDraw* scaleDraw() const;
-    QwtScaleDraw* scaleDraw();
+  const QwtScaleDraw *scaleDraw() const;
+  QwtScaleDraw *scaleDraw();
 
-    void setPosition( double pos );
-    double position() const;
+  void setPosition(double pos);
+  double position() const;
 
-    void setBorderDistance( int );
-    int borderDistance() const;
+  void setBorderDistance(int);
+  int borderDistance() const;
 
-    void setAlignment( QwtScaleDraw::Alignment );
+  void setAlignment(QwtScaleDraw::Alignment);
 
-    virtual void draw( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect ) const QWT_OVERRIDE;
+  virtual void draw(QPainter *, const QwtScaleMap &xMap,
+                    const QwtScaleMap &yMap,
+                    const QRectF &canvasRect) const QWT_OVERRIDE;
 
-    virtual void updateScaleDiv(
-        const QwtScaleDiv&, const QwtScaleDiv& ) QWT_OVERRIDE;
+  virtual void updateScaleDiv(const QwtScaleDiv &,
+                              const QwtScaleDiv &) QWT_OVERRIDE;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

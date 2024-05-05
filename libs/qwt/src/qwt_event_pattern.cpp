@@ -17,17 +17,15 @@
  */
 
 QwtEventPattern::QwtEventPattern()
-    : m_mousePattern( MousePatternCount )
-    , m_keyPattern( KeyPatternCount )
+  : m_mousePattern(MousePatternCount)
+  , m_keyPattern(KeyPatternCount)
 {
-    initKeyPattern();
-    initMousePattern( 3 );
+  initKeyPattern();
+  initMousePattern(3);
 }
 
 //! Destructor
-QwtEventPattern::~QwtEventPattern()
-{
-}
+QwtEventPattern::~QwtEventPattern() {}
 
 /*!
    Set default mouse patterns, depending on the number of mouse buttons
@@ -35,42 +33,39 @@ QwtEventPattern::~QwtEventPattern()
    \param numButtons Number of mouse buttons ( <= 3 )
    \sa MousePatternCode
  */
-void QwtEventPattern::initMousePattern( int numButtons )
+void QwtEventPattern::initMousePattern(int numButtons)
 {
-    m_mousePattern.resize( MousePatternCount );
+  m_mousePattern.resize(MousePatternCount);
 
-    switch ( numButtons )
-    {
-        case 1:
-        {
-            setMousePattern( MouseSelect1, Qt::LeftButton );
-            setMousePattern( MouseSelect2, Qt::LeftButton, Qt::ControlModifier );
-            setMousePattern( MouseSelect3, Qt::LeftButton, Qt::AltModifier );
-            break;
-        }
-        case 2:
-        {
-            setMousePattern( MouseSelect1, Qt::LeftButton );
-            setMousePattern( MouseSelect2, Qt::RightButton );
-            setMousePattern( MouseSelect3, Qt::LeftButton, Qt::AltModifier );
-            break;
-        }
-        default:
-        {
-            setMousePattern( MouseSelect1, Qt::LeftButton );
-            setMousePattern( MouseSelect2, Qt::RightButton );
-            setMousePattern( MouseSelect3, Qt::MiddleButton );
-        }
+  switch (numButtons)
+  {
+    case 1: {
+      setMousePattern(MouseSelect1, Qt::LeftButton);
+      setMousePattern(MouseSelect2, Qt::LeftButton, Qt::ControlModifier);
+      setMousePattern(MouseSelect3, Qt::LeftButton, Qt::AltModifier);
+      break;
     }
+    case 2: {
+      setMousePattern(MouseSelect1, Qt::LeftButton);
+      setMousePattern(MouseSelect2, Qt::RightButton);
+      setMousePattern(MouseSelect3, Qt::LeftButton, Qt::AltModifier);
+      break;
+    }
+    default: {
+      setMousePattern(MouseSelect1, Qt::LeftButton);
+      setMousePattern(MouseSelect2, Qt::RightButton);
+      setMousePattern(MouseSelect3, Qt::MiddleButton);
+    }
+  }
 
-    setMousePattern( MouseSelect4, m_mousePattern[MouseSelect1].button,
-        m_mousePattern[MouseSelect1].modifiers | Qt::ShiftModifier );
+  setMousePattern(MouseSelect4, m_mousePattern[MouseSelect1].button,
+                  m_mousePattern[MouseSelect1].modifiers | Qt::ShiftModifier);
 
-    setMousePattern( MouseSelect5, m_mousePattern[MouseSelect2].button,
-        m_mousePattern[MouseSelect2].modifiers | Qt::ShiftModifier );
+  setMousePattern(MouseSelect5, m_mousePattern[MouseSelect2].button,
+                  m_mousePattern[MouseSelect2].modifiers | Qt::ShiftModifier);
 
-    setMousePattern( MouseSelect6, m_mousePattern[MouseSelect3].button,
-        m_mousePattern[MouseSelect3].modifiers | Qt::ShiftModifier );
+  setMousePattern(MouseSelect6, m_mousePattern[MouseSelect3].button,
+                  m_mousePattern[MouseSelect3].modifiers | Qt::ShiftModifier);
 }
 
 /*!
@@ -80,20 +75,20 @@ void QwtEventPattern::initMousePattern( int numButtons )
  */
 void QwtEventPattern::initKeyPattern()
 {
-    m_keyPattern.resize( KeyPatternCount );
+  m_keyPattern.resize(KeyPatternCount);
 
-    setKeyPattern( KeySelect1, Qt::Key_Return );
-    setKeyPattern( KeySelect2, Qt::Key_Space );
-    setKeyPattern( KeyAbort, Qt::Key_Escape );
+  setKeyPattern(KeySelect1, Qt::Key_Return);
+  setKeyPattern(KeySelect2, Qt::Key_Space);
+  setKeyPattern(KeyAbort, Qt::Key_Escape);
 
-    setKeyPattern( KeyLeft, Qt::Key_Left );
-    setKeyPattern( KeyRight, Qt::Key_Right );
-    setKeyPattern( KeyUp, Qt::Key_Up );
-    setKeyPattern( KeyDown, Qt::Key_Down );
+  setKeyPattern(KeyLeft, Qt::Key_Left);
+  setKeyPattern(KeyRight, Qt::Key_Right);
+  setKeyPattern(KeyUp, Qt::Key_Up);
+  setKeyPattern(KeyDown, Qt::Key_Down);
 
-    setKeyPattern( KeyRedo, Qt::Key_Plus );
-    setKeyPattern( KeyUndo, Qt::Key_Minus );
-    setKeyPattern( KeyHome, Qt::Key_Escape );
+  setKeyPattern(KeyRedo, Qt::Key_Plus);
+  setKeyPattern(KeyUndo, Qt::Key_Minus);
+  setKeyPattern(KeyHome, Qt::Key_Escape);
 }
 
 /*!
@@ -105,14 +100,15 @@ void QwtEventPattern::initKeyPattern()
 
    \sa QMouseEvent
  */
-void QwtEventPattern::setMousePattern( MousePatternCode pattern,
-    Qt::MouseButton button, Qt::KeyboardModifiers modifiers )
+void QwtEventPattern::setMousePattern(MousePatternCode pattern,
+                                      Qt::MouseButton button,
+                                      Qt::KeyboardModifiers modifiers)
 {
-    if ( pattern >= 0 && pattern < MousePatternCount )
-    {
-        m_mousePattern[ pattern ].button = button;
-        m_mousePattern[ pattern ].modifiers = modifiers;
-    }
+  if (pattern >= 0 && pattern < MousePatternCount)
+  {
+    m_mousePattern[pattern].button = button;
+    m_mousePattern[pattern].modifiers = modifiers;
+  }
 }
 
 /*!
@@ -124,52 +120,51 @@ void QwtEventPattern::setMousePattern( MousePatternCode pattern,
 
    \sa QKeyEvent
  */
-void QwtEventPattern::setKeyPattern( KeyPatternCode pattern,
-    int key, Qt::KeyboardModifiers modifiers )
+void QwtEventPattern::setKeyPattern(KeyPatternCode pattern, int key,
+                                    Qt::KeyboardModifiers modifiers)
 {
-    if ( pattern >= 0 && pattern < KeyPatternCount )
-    {
-        m_keyPattern[ pattern ].key = key;
-        m_keyPattern[ pattern ].modifiers = modifiers;
-    }
+  if (pattern >= 0 && pattern < KeyPatternCount)
+  {
+    m_keyPattern[pattern].key = key;
+    m_keyPattern[pattern].modifiers = modifiers;
+  }
 }
 
 //! Change the mouse event patterns
-void QwtEventPattern::setMousePattern( const QVector< MousePattern >& pattern )
+void QwtEventPattern::setMousePattern(const QVector<MousePattern> &pattern)
 {
-    m_mousePattern = pattern;
+  m_mousePattern = pattern;
 }
 
 //! Change the key event patterns
-void QwtEventPattern::setKeyPattern( const QVector< KeyPattern >& pattern )
+void QwtEventPattern::setKeyPattern(const QVector<KeyPattern> &pattern)
 {
-    m_keyPattern = pattern;
+  m_keyPattern = pattern;
 }
 
 //! \return Mouse pattern
-const QVector< QwtEventPattern::MousePattern >&
+const QVector<QwtEventPattern::MousePattern> &
 QwtEventPattern::mousePattern() const
 {
-    return m_mousePattern;
+  return m_mousePattern;
 }
 
 //! \return Key pattern
-const QVector< QwtEventPattern::KeyPattern >&
-QwtEventPattern::keyPattern() const
+const QVector<QwtEventPattern::KeyPattern> &QwtEventPattern::keyPattern() const
 {
-    return m_keyPattern;
+  return m_keyPattern;
 }
 
 //! \return Mouse pattern
-QVector< QwtEventPattern::MousePattern >& QwtEventPattern::mousePattern()
+QVector<QwtEventPattern::MousePattern> &QwtEventPattern::mousePattern()
 {
-    return m_mousePattern;
+  return m_mousePattern;
 }
 
 //! \return Key pattern
-QVector< QwtEventPattern::KeyPattern >& QwtEventPattern::keyPattern()
+QVector<QwtEventPattern::KeyPattern> &QwtEventPattern::keyPattern()
 {
-    return m_keyPattern;
+  return m_keyPattern;
 }
 
 /*!
@@ -185,13 +180,13 @@ QVector< QwtEventPattern::KeyPattern >& QwtEventPattern::keyPattern()
 
    \sa keyMatch()
  */
-bool QwtEventPattern::mouseMatch( MousePatternCode code,
-    const QMouseEvent* event ) const
+bool QwtEventPattern::mouseMatch(MousePatternCode code,
+                                 const QMouseEvent *event) const
 {
-    if ( code >= 0 && code < MousePatternCount )
-        return mouseMatch( m_mousePattern[ code ], event );
+  if (code >= 0 && code < MousePatternCount)
+    return mouseMatch(m_mousePattern[code], event);
 
-    return false;
+  return false;
 }
 
 /*!
@@ -208,14 +203,14 @@ bool QwtEventPattern::mouseMatch( MousePatternCode code,
    \sa keyMatch()
  */
 
-bool QwtEventPattern::mouseMatch( const MousePattern& pattern,
-    const QMouseEvent* event ) const
+bool QwtEventPattern::mouseMatch(const MousePattern &pattern,
+                                 const QMouseEvent *event) const
 {
-    if ( event == NULL )
-        return false;
+  if (event == NULL)
+    return false;
 
-    const MousePattern mousePattern( event->button(), event->modifiers() );
-    return mousePattern == pattern;
+  const MousePattern mousePattern(event->button(), event->modifiers());
+  return mousePattern == pattern;
 }
 
 /*!
@@ -231,13 +226,13 @@ bool QwtEventPattern::mouseMatch( const MousePattern& pattern,
 
    \sa mouseMatch()
  */
-bool QwtEventPattern::keyMatch( KeyPatternCode code,
-    const QKeyEvent* event ) const
+bool QwtEventPattern::keyMatch(KeyPatternCode code,
+                               const QKeyEvent *event) const
 {
-    if ( code >= 0 && code < KeyPatternCount )
-        return keyMatch( m_keyPattern[ code ], event );
+  if (code >= 0 && code < KeyPatternCount)
+    return keyMatch(m_keyPattern[code], event);
 
-    return false;
+  return false;
 }
 
 /*!
@@ -254,12 +249,12 @@ bool QwtEventPattern::keyMatch( KeyPatternCode code,
    \sa mouseMatch()
  */
 
-bool QwtEventPattern::keyMatch(
-    const KeyPattern& pattern, const QKeyEvent* event ) const
+bool QwtEventPattern::keyMatch(const KeyPattern &pattern,
+                               const QKeyEvent *event) const
 {
-    if ( event == NULL )
-        return false;
+  if (event == NULL)
+    return false;
 
-    const KeyPattern keyPattern( event->key(), event->modifiers() );
-    return keyPattern == pattern;
+  const KeyPattern keyPattern(event->key(), event->modifiers());
+  return keyPattern == pattern;
 }

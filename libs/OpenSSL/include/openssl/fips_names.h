@@ -30,8 +30,8 @@ extern "C" {
  */
 #define OSSL_PROV_FIPS_PARAM_INSTALL_VERSION "install-version"
 /*
- * The calculated MAC of the install status indicator (Used for FIPS Self Testing)
- * Type: OSSL_PARAM_UTF8_STRING
+ * The calculated MAC of the install status indicator (Used for FIPS Self
+ * Testing) Type: OSSL_PARAM_UTF8_STRING
  */
 #define OSSL_PROV_FIPS_PARAM_INSTALL_MAC "install-mac"
 /*

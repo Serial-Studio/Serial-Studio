@@ -34,9 +34,9 @@
  * Constructor function
  */
 Plugins::Server::Server()
-    : m_enabled(false)
+  : m_enabled(false)
 {
-    // clang-format off
+  // clang-format off
 
     // Send processed data at 1 Hz
     connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged,
@@ -52,15 +52,15 @@ Plugins::Server::Server()
     connect(&m_server, &QTcpServer::newConnection,
             this, &Plugins::Server::acceptConnection);
 
-    // clang-format on
+  // clang-format on
 
-    // Begin listening on TCP port
-    if (!m_server.listen(QHostAddress::Any, PLUGINS_TCP_PORT))
-    {
-        Misc::Utilities::showMessageBox(tr("Unable to start plugin TCP server"),
-                                        m_server.errorString());
-        m_server.close();
-    }
+  // Begin listening on TCP port
+  if (!m_server.listen(QHostAddress::Any, PLUGINS_TCP_PORT))
+  {
+    Misc::Utilities::showMessageBox(tr("Unable to start plugin TCP server"),
+                                    m_server.errorString());
+    m_server.close();
+  }
 }
 
 /**
@@ -68,7 +68,7 @@ Plugins::Server::Server()
  */
 Plugins::Server::~Server()
 {
-    m_server.close();
+  m_server.close();
 }
 
 /**
@@ -76,8 +76,8 @@ Plugins::Server::~Server()
  */
 Plugins::Server &Plugins::Server::instance()
 {
-    static Server singleton;
-    return singleton;
+  static Server singleton;
+  return singleton;
 }
 
 /**
@@ -85,7 +85,7 @@ Plugins::Server &Plugins::Server::instance()
  */
 bool Plugins::Server::enabled() const
 {
-    return m_enabled;
+  return m_enabled;
 }
 
 /**
@@ -93,24 +93,24 @@ bool Plugins::Server::enabled() const
  */
 void Plugins::Server::removeConnection()
 {
-    // Get caller socket
-    auto socket = static_cast<QTcpSocket *>(QObject::sender());
+  // Get caller socket
+  auto socket = static_cast<QTcpSocket *>(QObject::sender());
 
-    // Remove socket from registered sockets
-    if (socket)
+  // Remove socket from registered sockets
+  if (socket)
+  {
+    for (int i = 0; i < m_sockets.count(); ++i)
     {
-        for (int i = 0; i < m_sockets.count(); ++i)
-        {
-            if (m_sockets.at(i) == socket)
-            {
-                m_sockets.removeAt(i);
-                i = 0;
-            }
-        }
-
-        // Delete socket handler
-        socket->deleteLater();
+      if (m_sockets.at(i) == socket)
+      {
+        m_sockets.removeAt(i);
+        i = 0;
+      }
     }
+
+    // Delete socket handler
+    socket->deleteLater();
+  }
 }
 
 /**
@@ -118,29 +118,29 @@ void Plugins::Server::removeConnection()
  */
 void Plugins::Server::setEnabled(const bool enabled)
 {
-    // Change value
-    m_enabled = enabled;
-    Q_EMIT enabledChanged();
+  // Change value
+  m_enabled = enabled;
+  Q_EMIT enabledChanged();
 
-    // If not enabled, remove all connections
-    if (!enabled)
+  // If not enabled, remove all connections
+  if (!enabled)
+  {
+    for (int i = 0; i < m_sockets.count(); ++i)
     {
-        for (int i = 0; i < m_sockets.count(); ++i)
-        {
-            auto socket = m_sockets.at(i);
+      auto socket = m_sockets.at(i);
 
-            if (socket)
-            {
-                socket->abort();
-                socket->deleteLater();
-            }
-        }
-
-        m_sockets.clear();
+      if (socket)
+      {
+        socket->abort();
+        socket->deleteLater();
+      }
     }
 
-    // Clear frames array to avoid memory leaks
-    m_frames.clear();
+    m_sockets.clear();
+  }
+
+  // Clear frames array to avoid memory leaks
+  m_frames.clear();
 }
 
 /**
@@ -148,12 +148,12 @@ void Plugins::Server::setEnabled(const bool enabled)
  */
 void Plugins::Server::onDataReceived()
 {
-    // Get caller socket
-    auto socket = static_cast<QTcpSocket *>(QObject::sender());
+  // Get caller socket
+  auto socket = static_cast<QTcpSocket *>(QObject::sender());
 
-    // Write incoming data to manager
-    if (enabled() && socket)
-        IO::Manager::instance().writeData(socket->readAll());
+  // Write incoming data to manager
+  if (enabled() && socket)
+    IO::Manager::instance().writeData(socket->readAll());
 }
 
 /**
@@ -161,33 +161,35 @@ void Plugins::Server::onDataReceived()
  */
 void Plugins::Server::acceptConnection()
 {
-    // Get & validate socket
-    auto socket = m_server.nextPendingConnection();
-    if (!socket && enabled())
+  // Get & validate socket
+  auto socket = m_server.nextPendingConnection();
+  if (!socket && enabled())
+  {
+    Misc::Utilities::showMessageBox(tr("Plugin server"),
+                                    tr("Invalid pending connection"));
+    return;
+  }
+
+  // Close connection if system is not enabled
+  if (!enabled())
+  {
+    if (socket)
     {
-        Misc::Utilities::showMessageBox(tr("Plugin server"),
-                                        tr("Invalid pending connection"));
-        return;
+      socket->close();
+      socket->deleteLater();
     }
 
-    // Close connection if system is not enabled
-    if (!enabled())
-    {
-        if (socket)
-        {
-            socket->close();
-            socket->deleteLater();
-        }
+    return;
+  }
 
-        return;
-    }
+  // Connect socket signals/slots
+  connect(socket, &QTcpSocket::readyRead, this,
+          &Plugins::Server::onDataReceived);
+  connect(socket, &QTcpSocket::disconnected, this,
+          &Plugins::Server::removeConnection);
 
-    // Connect socket signals/slots
-    connect(socket, &QTcpSocket::readyRead, this, &Plugins::Server::onDataReceived);
-    connect(socket, &QTcpSocket::disconnected, this, &Plugins::Server::removeConnection);
-
-    // React to socket errors
-    // clang-format off
+  // React to socket errors
+  // clang-format off
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
             this,     SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
@@ -195,10 +197,10 @@ void Plugins::Server::acceptConnection()
     connect(socket, &QTcpSocket::errorOccurred,
             this, &Plugins::Server::onErrorOccurred);
 #endif
-    // clang-format on
+  // clang-format on
 
-    // Add socket to sockets list
-    m_sockets.append(socket);
+  // Add socket to sockets list
+  m_sockets.append(socket);
 }
 
 /**
@@ -209,111 +211,108 @@ void Plugins::Server::acceptConnection()
  */
 void Plugins::Server::sendProcessedData()
 {
-    // Stop if system is not enabled
-    if (!enabled())
-        return;
+  // Stop if system is not enabled
+  if (!enabled())
+    return;
 
-    // Stop if frame list is empty
-    if (m_frames.count() <= 0)
-        return;
+  // Stop if frame list is empty
+  if (m_frames.count() <= 0)
+    return;
 
-    // Stop if no sockets are available
-    if (m_sockets.count() < 1)
-        return;
+  // Stop if no sockets are available
+  if (m_sockets.count() < 1)
+    return;
 
-    // Create JSON array with frame data
-    QJsonArray array;
-    for (int i = 0; i < m_frames.count(); ++i)
-    {
-        QJsonObject object;
-        auto frame = m_frames.at(i);
-        object.insert("data", frame);
-        array.append(object);
-    }
-
-    // Create JSON document with frame arrays
-    if (array.count() > 0)
-    {
-        // Construct QByteArray with data
-        QJsonObject object;
-        object.insert("frames", array);
-        const QJsonDocument document(object);
-        auto json = document.toJson(QJsonDocument::Compact) + "\n";
-
-        // Send data to each plugin
-        Q_FOREACH (auto socket, m_sockets)
-        {
-            if (!socket)
-                continue;
-
-            if (socket->isWritable())
-                socket->write(json);
-        }
-    }
-
-    // Clear frame list
-    m_frames.clear();
-}
-
-/**
- * Encodes the given @a data in Base64 and sends it through the TCP socket connected
- * to the localhost.
- */
-void Plugins::Server::sendRawData(const QByteArray &data)
-{
-    // Stop if system is not enabled
-    if (!enabled())
-        return;
-
-    // Stop if no sockets are available
-    if (m_sockets.count() < 1)
-        return;
-
-    // Create JSON structure with incoming data encoded in Base-64
+  // Create JSON array with frame data
+  QJsonArray array;
+  for (int i = 0; i < m_frames.count(); ++i)
+  {
     QJsonObject object;
-    object.insert("data", QString::fromUtf8(data.toBase64()));
+    auto frame = m_frames.at(i);
+    object.insert("data", frame);
+    array.append(object);
+  }
 
-    // Get JSON string in compact format & send it over the TCP socket
-    QJsonDocument document(object);
+  // Create JSON document with frame arrays
+  if (array.count() > 0)
+  {
+    // Construct QByteArray with data
+    QJsonObject object;
+    object.insert("frames", array);
+    const QJsonDocument document(object);
     auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
     // Send data to each plugin
     Q_FOREACH (auto socket, m_sockets)
     {
-        if (!socket)
-            continue;
+      if (!socket)
+        continue;
 
-        if (socket->isWritable())
-            socket->write(json);
+      if (socket->isWritable())
+        socket->write(json);
     }
+  }
+
+  // Clear frame list
+  m_frames.clear();
 }
 
 /**
- * Obtains the latest JSON dataframe & appends it to the JSON list, which is later read
- * and sent by the @c sendProcessedData() function.
+ * Encodes the given @a data in Base64 and sends it through the TCP socket
+ * connected to the localhost.
+ */
+void Plugins::Server::sendRawData(const QByteArray &data)
+{
+  // Stop if system is not enabled
+  if (!enabled())
+    return;
+
+  // Stop if no sockets are available
+  if (m_sockets.count() < 1)
+    return;
+
+  // Create JSON structure with incoming data encoded in Base-64
+  QJsonObject object;
+  object.insert("data", QString::fromUtf8(data.toBase64()));
+
+  // Get JSON string in compact format & send it over the TCP socket
+  QJsonDocument document(object);
+  auto json = document.toJson(QJsonDocument::Compact) + "\n";
+
+  // Send data to each plugin
+  Q_FOREACH (auto socket, m_sockets)
+  {
+    if (!socket)
+      continue;
+
+    if (socket->isWritable())
+      socket->write(json);
+  }
+}
+
+/**
+ * Obtains the latest JSON dataframe & appends it to the JSON list, which is
+ * later read and sent by the @c sendProcessedData() function.
  */
 void Plugins::Server::registerFrame(const QJsonObject &json)
 {
-    if (enabled())
-        m_frames.append(json);
+  if (enabled())
+    m_frames.append(json);
 }
 
 /**
- * This function is called whenever a socket error occurs, it disconnects the socket
- * from the host and displays the error in a message box.
+ * This function is called whenever a socket error occurs, it disconnects the
+ * socket from the host and displays the error in a message box.
  */
-void Plugins::Server::onErrorOccurred(const QAbstractSocket::SocketError socketError)
+void Plugins::Server::onErrorOccurred(
+    const QAbstractSocket::SocketError socketError)
 {
-    // Get caller socket
-    auto socket = static_cast<QTcpSocket *>(QObject::sender());
+  // Get caller socket
+  auto socket = static_cast<QTcpSocket *>(QObject::sender());
 
-    // Print error
-    if (socket)
-        qDebug() << socket->errorString();
-    else
-        qDebug() << socketError;
+  // Print error
+  if (socket)
+    qDebug() << socket->errorString();
+  else
+    qDebug() << socketError;
 }
-
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_Server.cpp"
-#endif

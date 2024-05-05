@@ -28,197 +28,197 @@ import QtQuick.Controls
 import "../FramelessWindow" as FramelessWindow
 
 FramelessWindow.CustomWindow {
-    id: root
+  id: root
 
-    //
-    // Custom properties
-    //
-    readonly property int year: new Date().getFullYear()
+  //
+  // Custom properties
+  //
+  readonly property int year: new Date().getFullYear()
 
-    //
-    // Window options
-    //
-    title: qsTr("About")
-    width: minimumWidth
-    height: minimumHeight
-    x: (Screen.desktopAvailableWidth - width) / 2
-    y: (Screen.desktopAvailableHeight - height) / 2
-    extraFlags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
-    minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-    maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-    minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
-    maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+  //
+  // Window options
+  //
+  title: qsTr("About")
+  width: minimumWidth
+  height: minimumHeight
+  x: (Screen.desktopAvailableWidth - width) / 2
+  y: (Screen.desktopAvailableHeight - height) / 2
+  extraFlags: Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
+  minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+  maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
+  minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+  maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
 
-    //
-    // Titlebar options
-    //
-    minimizeEnabled: false
-    maximizeEnabled: false
-    titlebarText: Cpp_ThemeManager.text
-    titlebarColor: Cpp_ThemeManager.dialogBackground
-    backgroundColor: Cpp_ThemeManager.dialogBackground
+  //
+  // Titlebar options
+  //
+  minimizeEnabled: false
+  maximizeEnabled: false
+  titlebarText: Cpp_ThemeManager.text
+  titlebarColor: Cpp_ThemeManager.dialogBackground
+  backgroundColor: Cpp_ThemeManager.dialogBackground
 
-    //
-    // Use page item to set application palette
-    //
-    Page {
-        anchors {
-            fill: parent
-            margins: root.shadowMargin
-            topMargin: titlebar.height + root.shadowMargin
-        }
-
-        palette.alternateBase: Cpp_ThemeManager.base
-        palette.base: Cpp_ThemeManager.base
-        palette.brightText: Cpp_ThemeManager.brightText
-        palette.button: Cpp_ThemeManager.button
-        palette.buttonText: Cpp_ThemeManager.buttonText
-        palette.highlight: Cpp_ThemeManager.highlight
-        palette.highlightedText: Cpp_ThemeManager.highlightedText
-        palette.link: Cpp_ThemeManager.link
-        palette.placeholderText: Cpp_ThemeManager.placeholderText
-        palette.text: Cpp_ThemeManager.text
-        palette.toolTipBase: Cpp_ThemeManager.tooltipBase
-        palette.toolTipText: Cpp_ThemeManager.tooltipText
-        palette.window: Cpp_ThemeManager.window
-        palette.windowText: Cpp_ThemeManager.windowText
-
-        background: Rectangle {
-            radius: root.radius
-            color: root.backgroundColor
-
-            Rectangle {
-                height: root.radius
-                color: root.backgroundColor
-
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
-                }
-            }
-        }
-
-        //
-        // Window drag handler
-        //
-        Item {
-            anchors.fill: parent
-
-            MouseArea {
-                anchors.fill: parent
-                onPressedChanged: {
-                    if (pressed)
-                        root.startSystemMove()
-                }
-            }
-        }
-
-        //
-        // Window controls
-        //
-        ColumnLayout {
-            id: column
-            spacing: app.spacing
-            anchors.centerIn: parent
-
-            RowLayout {
-                spacing: app.spacing
-                Layout.fillWidth: true
-
-                Image {
-                    width: 128
-                    height: 128
-                    Layout.alignment: Qt.AlignVCenter
-                    sourceSize: Qt.size(width, height)
-                    source: {
-                        if (Screen.pixelDensity >= 2)
-                            return "qrc:/images/icon@2x.png"
-
-                        return "qrc:/images/icon@1x.png"
-                    }
-                }
-
-                ColumnLayout {
-                    spacing: app.spacing
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignVCenter
-
-                    Label {
-                        font.bold: true
-                        text: Cpp_AppName
-                        font.pixelSize: 28
-                    }
-
-                    Label {
-                        opacity: 0.5
-                        font.pixelSize: 16
-                        text: qsTr("Version %1").arg(Cpp_AppVersion)
-                    }
-                }
-            }
-
-            Label {
-                opacity: 0.8
-                Layout.fillWidth: true
-                Layout.maximumWidth: 320
-                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(Cpp_AppOrganization)
-            }
-
-            Label {
-                opacity: 0.8
-                font.pixelSize: 12
-                Layout.fillWidth: true
-                Layout.maximumWidth: 320
-                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                color: Cpp_ThemeManager.highlightedTextAlternative
-                text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.")
-            }
-
-            Item {
-                height: app.spacing
-            }
-
-            Button {
-                Layout.fillWidth: true
-                text: qsTr("Website")
-                onClicked: Qt.openUrlExternally("https://serial-studio.github.io/")
-            }
-
-            Button {
-                Layout.fillWidth: true
-                text: qsTr("Make a donation")
-                onClicked: app.donateDialog.show()
-            }
-
-            Button {
-                Layout.fillWidth: true
-                text: qsTr("Report bug")
-                onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
-            }
-
-            Button {
-                Layout.fillWidth: true
-                text: qsTr("Documentation")
-                onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
-            }
-
-            Button {
-                Layout.fillWidth: true
-                text: qsTr("Acknowledgements")
-                onClicked: acknowledgementsDialog.show()
-            }
-
-            Item {
-                height: app.spacing
-            }
-
-            Button {
-                Layout.fillWidth: true
-                onClicked: root.close()
-                text: qsTr("Close")
-            }
-        }
+  //
+  // Use page item to set application palette
+  //
+  Page {
+    anchors {
+      fill: parent
+      margins: root.shadowMargin
+      topMargin: titlebar.height + root.shadowMargin
     }
+
+    palette.alternateBase: Cpp_ThemeManager.base
+    palette.base: Cpp_ThemeManager.base
+    palette.brightText: Cpp_ThemeManager.brightText
+    palette.button: Cpp_ThemeManager.button
+    palette.buttonText: Cpp_ThemeManager.buttonText
+    palette.highlight: Cpp_ThemeManager.highlight
+    palette.highlightedText: Cpp_ThemeManager.highlightedText
+    palette.link: Cpp_ThemeManager.link
+    palette.placeholderText: Cpp_ThemeManager.placeholderText
+    palette.text: Cpp_ThemeManager.text
+    palette.toolTipBase: Cpp_ThemeManager.tooltipBase
+    palette.toolTipText: Cpp_ThemeManager.tooltipText
+    palette.window: Cpp_ThemeManager.window
+    palette.windowText: Cpp_ThemeManager.windowText
+
+    background: Rectangle {
+      radius: root.radius
+      color: root.backgroundColor
+
+      Rectangle {
+        height: root.radius
+        color: root.backgroundColor
+
+        anchors {
+          top: parent.top
+          left: parent.left
+          right: parent.right
+        }
+      }
+    }
+
+    //
+    // Window drag handler
+    //
+    Item {
+      anchors.fill: parent
+
+      MouseArea {
+        anchors.fill: parent
+        onPressedChanged: {
+          if (pressed)
+            root.startSystemMove()
+        }
+      }
+    }
+
+    //
+    // Window controls
+    //
+    ColumnLayout {
+      id: column
+      spacing: app.spacing
+      anchors.centerIn: parent
+
+      RowLayout {
+        spacing: app.spacing
+        Layout.fillWidth: true
+
+        Image {
+          width: 128
+          height: 128
+          Layout.alignment: Qt.AlignVCenter
+          sourceSize: Qt.size(width, height)
+          source: {
+            if (Screen.pixelDensity >= 2)
+              return "qrc:/images/icon@2x.png"
+
+            return "qrc:/images/icon@1x.png"
+          }
+        }
+
+        ColumnLayout {
+          spacing: app.spacing
+          Layout.fillWidth: true
+          Layout.alignment: Qt.AlignVCenter
+
+          Label {
+            font.bold: true
+            text: Cpp_AppName
+            font.pixelSize: 28
+          }
+
+          Label {
+            opacity: 0.5
+            font.pixelSize: 16
+            text: qsTr("Version %1").arg(Cpp_AppVersion)
+          }
+        }
+      }
+
+      Label {
+        opacity: 0.8
+        Layout.fillWidth: true
+        Layout.maximumWidth: 320
+        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(Cpp_AppOrganization)
+      }
+
+      Label {
+        opacity: 0.8
+        font.pixelSize: 12
+        Layout.fillWidth: true
+        Layout.maximumWidth: 320
+        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        color: Cpp_ThemeManager.highlightedTextAlternative
+        text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.")
+      }
+
+      Item {
+        height: app.spacing
+      }
+
+      Button {
+        Layout.fillWidth: true
+        text: qsTr("Website")
+        onClicked: Qt.openUrlExternally("https://serial-studio.github.io/")
+      }
+
+      Button {
+        Layout.fillWidth: true
+        text: qsTr("Make a donation")
+        onClicked: app.donateDialog.show()
+      }
+
+      Button {
+        Layout.fillWidth: true
+        text: qsTr("Report bug")
+        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
+      }
+
+      Button {
+        Layout.fillWidth: true
+        text: qsTr("Documentation")
+        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
+      }
+
+      Button {
+        Layout.fillWidth: true
+        text: qsTr("Acknowledgements")
+        onClicked: acknowledgementsDialog.show()
+      }
+
+      Item {
+        height: app.spacing
+      }
+
+      Button {
+        Layout.fillWidth: true
+        onClicked: root.close()
+        text: qsTr("Close")
+      }
+    }
+  }
 }

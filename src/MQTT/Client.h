@@ -40,26 +40,28 @@ namespace MQTT
  */
 enum MQTTClientMode
 {
-    ClientPublisher = 0,
-    ClientSubscriber = 1
+  ClientPublisher = 0,
+  ClientSubscriber = 1
 };
 
 /**
  * @brief The Client class
  *
- * Implements a simple MQTT client, which allows Serial Studio to upload received frames
- * to a MQTT broker so that other devices and/or services can make use of that
- * information. By acting as a MQTT subscriber, Serial Studio can display & process frames
- * from a remote Serial Studio instance that is setup as a MQTT publisher. As you might
- * notice, this has a lot of interesting applications.
+ * Implements a simple MQTT client, which allows Serial Studio to upload
+ * received frames to a MQTT broker so that other devices and/or services can
+ * make use of that information. By acting as a MQTT subscriber, Serial Studio
+ * can display & process frames from a remote Serial Studio instance that is
+ * setup as a MQTT publisher. As you might notice, this has a lot of interesting
+ * applications.
  *
- * For example, you can receive frames from a CanSat mission and display them almost in
- * real-time in another location, such as the "ground control" centre or by the media team
- * which streams the GCS display on the internet as the mission is developing.
+ * For example, you can receive frames from a CanSat mission and display them
+ * almost in real-time in another location, such as the "ground control" centre
+ * or by the media team which streams the GCS display on the internet as the
+ * mission is developing.
  */
 class Client : public QObject
 {
-    // clang-format off
+  // clang-format off
     Q_OBJECT
     Q_PROPERTY(quint16 port
                READ port
@@ -136,105 +138,105 @@ class Client : public QObject
     Q_PROPERTY(QString caFilePath
                READ caFilePath
                NOTIFY caFilePathChanged)
-    // clang-format on
+  // clang-format on
 
 Q_SIGNALS:
-    void qosChanged();
-    void portChanged();
-    void hostChanged();
-    void topicChanged();
-    void retainChanged();
-    void usernameChanged();
-    void passwordChanged();
-    void keepAliveChanged();
-    void connectedChanged();
-    void caFilePathChanged();
-    void clientModeChanged();
-    void sslEnabledChanged();
-    void sslProtocolChanged();
-    void mqttVersionChanged();
-    void lookupActiveChanged();
+  void qosChanged();
+  void portChanged();
+  void hostChanged();
+  void topicChanged();
+  void retainChanged();
+  void usernameChanged();
+  void passwordChanged();
+  void keepAliveChanged();
+  void connectedChanged();
+  void caFilePathChanged();
+  void clientModeChanged();
+  void sslEnabledChanged();
+  void sslProtocolChanged();
+  void mqttVersionChanged();
+  void lookupActiveChanged();
 
 private:
-    explicit Client();
-    Client(Client &&) = delete;
-    Client(const Client &) = delete;
-    Client &operator=(Client &&) = delete;
-    Client &operator=(const Client &) = delete;
+  explicit Client();
+  Client(Client &&) = delete;
+  Client(const Client &) = delete;
+  Client &operator=(Client &&) = delete;
+  Client &operator=(const Client &) = delete;
 
-    ~Client();
+  ~Client();
 
 public:
-    static Client &instance();
+  static Client &instance();
 
-    quint8 qos() const;
-    bool retain() const;
-    quint16 port() const;
-    QString host() const;
-    QString topic() const;
-    int clientMode() const;
-    int sslProtocol() const;
-    int mqttVersion() const;
-    bool sslEnabled() const;
-    QString username() const;
-    QString password() const;
-    quint16 keepAlive() const;
-    bool lookupActive() const;
-    bool isSubscribed() const;
-    bool isConnectedToHost() const;
+  quint8 qos() const;
+  bool retain() const;
+  quint16 port() const;
+  QString host() const;
+  QString topic() const;
+  int clientMode() const;
+  int sslProtocol() const;
+  int mqttVersion() const;
+  bool sslEnabled() const;
+  QString username() const;
+  QString password() const;
+  quint16 keepAlive() const;
+  bool lookupActive() const;
+  bool isSubscribed() const;
+  bool isConnectedToHost() const;
 
-    StringList qosLevels() const;
-    StringList clientModes() const;
-    StringList mqttVersions() const;
-    StringList sslProtocols() const;
+  StringList qosLevels() const;
+  StringList clientModes() const;
+  StringList mqttVersions() const;
+  StringList sslProtocols() const;
 
-    QString caFilePath() const;
-    quint16 defaultPort() const { return 1883; }
-    QString defaultHost() const { return "127.0.0.1"; }
+  QString caFilePath() const;
+  quint16 defaultPort() const { return 1883; }
+  QString defaultHost() const { return "127.0.0.1"; }
 
 public Q_SLOTS:
-    void loadCaFile();
-    void connectToHost();
-    void toggleConnection();
-    void disconnectFromHost();
-    void setQos(const quint8 qos);
-    void lookup(const QString &host);
-    void setPort(const quint16 port);
-    void setHost(const QString &host);
-    void setRetain(const bool retain);
-    void setClientMode(const int mode);
-    void setTopic(const QString &topic);
-    void loadCaFile(const QString &path);
-    void setSslProtocol(const int index);
-    void setSslEnabled(const bool enabled);
-    void setUsername(const QString &username);
-    void setPassword(const QString &password);
-    void setKeepAlive(const quint16 keepAlive);
-    void setMqttVersion(const int versionIndex);
+  void loadCaFile();
+  void connectToHost();
+  void toggleConnection();
+  void disconnectFromHost();
+  void setQos(const quint8 qos);
+  void lookup(const QString &host);
+  void setPort(const quint16 port);
+  void setHost(const QString &host);
+  void setRetain(const bool retain);
+  void setClientMode(const int mode);
+  void setTopic(const QString &topic);
+  void loadCaFile(const QString &path);
+  void setSslProtocol(const int index);
+  void setSslEnabled(const bool enabled);
+  void setUsername(const QString &username);
+  void setPassword(const QString &password);
+  void setKeepAlive(const quint16 keepAlive);
+  void setMqttVersion(const int versionIndex);
 
 private Q_SLOTS:
-    void sendData();
-    void resetStatistics();
-    void onConnectedChanged();
-    void lookupFinished(const QHostInfo &info);
-    void onError(const QMQTT::ClientError error);
-    void onFrameReceived(const QByteArray &frame);
-    void onSslErrors(const QList<QSslError> &errors);
-    void onMessageReceived(const QMQTT::Message &message);
+  void sendData();
+  void resetStatistics();
+  void onConnectedChanged();
+  void lookupFinished(const QHostInfo &info);
+  void onError(const QMQTT::ClientError error);
+  void onFrameReceived(const QByteArray &frame);
+  void onSslErrors(const QList<QSslError> &errors);
+  void onMessageReceived(const QMQTT::Message &message);
 
 private:
-    void regenerateClient();
+  void regenerateClient();
 
 private:
-    QString m_topic;
-    bool m_sslEnabled;
-    int m_sslProtocol;
-    bool m_lookupActive;
-    QString m_caFilePath;
-    quint16 m_sentMessages;
-    MQTTClientMode m_clientMode;
-    QVector<QByteArray> m_frames;
-    QPointer<QMQTT::Client> m_client;
-    QSslConfiguration m_sslConfiguration;
+  QString m_topic;
+  bool m_sslEnabled;
+  int m_sslProtocol;
+  bool m_lookupActive;
+  QString m_caFilePath;
+  quint16 m_sentMessages;
+  MQTTClientMode m_clientMode;
+  QVector<QByteArray> m_frames;
+  QPointer<QMQTT::Client> m_client;
+  QSslConfiguration m_sslConfiguration;
 };
-}
+} // namespace MQTT

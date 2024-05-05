@@ -30,28 +30,30 @@ namespace IO
 /**
  * @brief The HAL_Driver class
  *
- * Abstract class that defines common I/O and data access functions for different types of
- * devices. I/O drivers (e.g. serial port & network) are sub-classes of this class.
+ * Abstract class that defines common I/O and data access functions for
+ * different types of devices. I/O drivers (e.g. serial port & network) are
+ * sub-classes of this class.
  *
- * This allows the rest of the I/O module to interact with a wide range of devices and
- * protocols without the need of understanding protocol-specific implementation details.
+ * This allows the rest of the I/O module to interact with a wide range of
+ * devices and protocols without the need of understanding protocol-specific
+ * implementation details.
  */
 class HAL_Driver : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
 Q_SIGNALS:
-    void configurationChanged();
-    void dataSent(const QByteArray &data);
-    void dataReceived(const QByteArray &data);
+  void configurationChanged();
+  void dataSent(const QByteArray &data);
+  void dataReceived(const QByteArray &data);
 
 public:
-    virtual void close() = 0;
-    virtual bool isOpen() const = 0;
-    virtual bool isReadable() const = 0;
-    virtual bool isWritable() const = 0;
-    virtual bool configurationOk() const = 0;
-    virtual quint64 write(const QByteArray &data) = 0;
-    virtual bool open(const QIODevice::OpenMode mode) = 0;
+  virtual void close() = 0;
+  virtual bool isOpen() const = 0;
+  virtual bool isReadable() const = 0;
+  virtual bool isWritable() const = 0;
+  virtual bool configurationOk() const = 0;
+  virtual quint64 write(const QByteArray &data) = 0;
+  virtual bool open(const QIODevice::OpenMode mode) = 0;
 };
-}
+} // namespace IO

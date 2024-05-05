@@ -29,90 +29,90 @@ import "Devices" as Devices
 import "../../Windows" as Windows
 
 Control {
-    id: root
+  id: root
+
+  //
+  // Save settings
+  //
+  QtSettings.Settings {
+    property alias driver: _driverCombo.currentIndex
+    property alias parity: serial.parity
+    property alias baudRate: serial.baudRate
+    property alias dataBits: serial.dataBits
+    property alias stopBits: serial.stopBits
+    property alias flowControl: serial.flowControl
+    property alias autoReconnect: serial.autoReconnect
+    property alias address: network.address
+    property alias tcpPort: network.tcpPort
+    property alias socketType: network.socketType
+    property alias udpLocalPort: network.udpLocalPort
+    property alias udpRemotePort: network.udpRemotePort
+    property alias udpMulticastEnabled: network.udpMulticastEnabled
+    property alias udpProcessDatagramsDirectly: network.udpProcessDatagramsDirectly
+  }
+
+  ColumnLayout {
+    id: layout
+    anchors.fill: parent
+    anchors.margins: app.spacing
 
     //
-    // Save settings
+    // Device type selector
     //
-    QtSettings.Settings {
-        property alias driver: _driverCombo.currentIndex
-        property alias parity: serial.parity
-        property alias baudRate: serial.baudRate
-        property alias dataBits: serial.dataBits
-        property alias stopBits: serial.stopBits
-        property alias flowControl: serial.flowControl
-        property alias autoReconnect: serial.autoReconnect
-        property alias address: network.address
-        property alias tcpPort: network.tcpPort
-        property alias socketType: network.socketType
-        property alias udpLocalPort: network.udpLocalPort
-        property alias udpRemotePort: network.udpRemotePort
-        property alias udpMulticastEnabled: network.udpMulticastEnabled
-        property alias udpProcessDatagramsDirectly: network.udpProcessDatagramsDirectly
+    RowLayout {
+      spacing: app.spacing
+      Layout.fillWidth: true
+
+      Label {
+        text: qsTr("Data source") + ":"
+        Layout.alignment: Qt.AlignVCenter
+      }
+
+      ComboBox {
+        id: _driverCombo
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignVCenter
+        model: Cpp_IO_Manager.availableDrivers()
+        onCurrentIndexChanged: Cpp_IO_Manager.selectedDriver = currentIndex
+      }
     }
 
-    ColumnLayout {
-        id: layout
-        anchors.fill: parent
-        anchors.margins: app.spacing
+    //
+    // Device configuration
+    //
+    StackLayout {
+      id: stack
+      clip: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      currentIndex: Cpp_IO_Manager.selectedDriver
 
-        //
-        // Device type selector
-        //
-        RowLayout {
-            spacing: app.spacing
-            Layout.fillWidth: true
-
-            Label {
-                text: qsTr("Data source") + ":"
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            ComboBox {
-                id: _driverCombo
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter
-                model: Cpp_IO_Manager.availableDrivers()
-                onCurrentIndexChanged: Cpp_IO_Manager.selectedDriver = currentIndex
-            }
+      Devices.Serial {
+        id: serial
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        background: TextField {
+          enabled: false
         }
+      }
 
-        //
-        // Device configuration
-        //
-        StackLayout {
-            id: stack
-            clip: true
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            currentIndex: Cpp_IO_Manager.selectedDriver
-
-            Devices.Serial {
-                id: serial
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                background: TextField {
-                    enabled: false
-                }
-            }
-
-            Devices.Network {
-                id: network
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                background: TextField {
-                    enabled: false
-                }
-            }
-
-            Devices.BluetoothLE {
-                id: bluetoothLE
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                background: TextField {
-                    enabled: false
-                }
-            }
+      Devices.Network {
+        id: network
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        background: TextField {
+          enabled: false
         }
+      }
+
+      Devices.BluetoothLE {
+        id: bluetoothLE
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        background: TextField {
+          enabled: false
+        }
+      }
     }
+  }
 }

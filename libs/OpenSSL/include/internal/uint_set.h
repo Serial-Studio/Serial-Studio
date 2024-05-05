@@ -26,14 +26,14 @@
  */
 typedef struct uint_range_st
 {
-    uint64_t start, end;
+  uint64_t start, end;
 } UINT_RANGE;
 
 typedef struct uint_set_item_st UINT_SET_ITEM;
 struct uint_set_item_st
 {
-    OSSL_LIST_MEMBER(uint_set, UINT_SET_ITEM);
-    UINT_RANGE range;
+  OSSL_LIST_MEMBER(uint_set, UINT_SET_ITEM);
+  UINT_RANGE range;
 };
 
 DEFINE_LIST_OF(uint_set, UINT_SET_ITEM);

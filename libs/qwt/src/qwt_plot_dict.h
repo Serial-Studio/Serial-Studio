@@ -15,8 +15,8 @@
 
 #include <qlist.h>
 
-typedef QList< QwtPlotItem* > QwtPlotItemList;
-typedef QList< QwtPlotItem* >::ConstIterator QwtPlotItemIterator;
+typedef QList<QwtPlotItem *> QwtPlotItemList;
+typedef QList<QwtPlotItem *>::ConstIterator QwtPlotItemIterator;
 
 /*!
    \brief A dictionary for plot items
@@ -31,26 +31,26 @@ typedef QList< QwtPlotItem* >::ConstIterator QwtPlotItemIterator;
  */
 class QWT_EXPORT QwtPlotDict
 {
-  public:
-    explicit QwtPlotDict();
-    virtual ~QwtPlotDict();
+public:
+  explicit QwtPlotDict();
+  virtual ~QwtPlotDict();
 
-    void setAutoDelete( bool );
-    bool autoDelete() const;
+  void setAutoDelete(bool);
+  bool autoDelete() const;
 
-    const QwtPlotItemList& itemList() const;
-    QwtPlotItemList itemList( int rtti ) const;
+  const QwtPlotItemList &itemList() const;
+  QwtPlotItemList itemList(int rtti) const;
 
-    void detachItems( int rtti = QwtPlotItem::Rtti_PlotItem,
-        bool autoDelete = true );
+  void detachItems(int rtti = QwtPlotItem::Rtti_PlotItem,
+                   bool autoDelete = true);
 
-  protected:
-    void insertItem( QwtPlotItem* );
-    void removeItem( QwtPlotItem* );
+protected:
+  void insertItem(QwtPlotItem *);
+  void removeItem(QwtPlotItem *);
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

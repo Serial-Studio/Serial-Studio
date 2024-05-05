@@ -29,21 +29,21 @@ namespace Widgets
 {
 class Gyroscope : public BaseWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    Gyroscope(const int index = -1);
+  Gyroscope(const int index = -1);
 
 private Q_SLOTS:
-    void updateData();
-    void updateLabel();
+  void updateData();
+  void updateLabel();
 
 private:
-    int m_index;
-    int m_displayNum;
-    QString m_yaw;
-    QString m_roll;
-    QString m_pitch;
-    AttitudeIndicator m_gauge;
+  int m_index;
+  int m_displayNum;
+  QString m_yaw;
+  QString m_roll;
+  QString m_pitch;
+  AttitudeIndicator m_gauge;
 };
-}
+} // namespace Widgets

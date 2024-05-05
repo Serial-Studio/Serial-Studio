@@ -16,16 +16,16 @@
 
 //! Constructor
 QwtSplineCurveFitter::QwtSplineCurveFitter()
-    : QwtCurveFitter( QwtCurveFitter::Path )
+  : QwtCurveFitter(QwtCurveFitter::Path)
 {
-    m_spline = new QwtSplineLocal( QwtSplineLocal::Cardinal );
-    m_spline->setParametrization( QwtSplineParametrization::ParameterUniform );
+  m_spline = new QwtSplineLocal(QwtSplineLocal::Cardinal);
+  m_spline->setParametrization(QwtSplineParametrization::ParameterUniform);
 }
 
 //! Destructor
 QwtSplineCurveFitter::~QwtSplineCurveFitter()
 {
-    delete m_spline;
+  delete m_spline;
 }
 
 /*!
@@ -37,31 +37,31 @@ QwtSplineCurveFitter::~QwtSplineCurveFitter()
    \param spline Spline
    \sa spline()
  */
-void QwtSplineCurveFitter::setSpline( QwtSpline* spline )
+void QwtSplineCurveFitter::setSpline(QwtSpline *spline)
 {
-    if ( m_spline == spline )
-        return;
+  if (m_spline == spline)
+    return;
 
-    delete m_spline;
-    m_spline = spline;
+  delete m_spline;
+  m_spline = spline;
 }
 
 /*!
    \return Spline
    \sa setSpline()
  */
-const QwtSpline* QwtSplineCurveFitter::spline() const
+const QwtSpline *QwtSplineCurveFitter::spline() const
 {
-    return m_spline;
+  return m_spline;
 }
 
 /*!
    \return Spline
    \sa setSpline()
  */
-QwtSpline* QwtSplineCurveFitter::spline()
+QwtSpline *QwtSplineCurveFitter::spline()
 {
-    return m_spline;
+  return m_spline;
 }
 
 /*!
@@ -72,15 +72,15 @@ QwtSpline* QwtSplineCurveFitter::spline()
 
    \sa fitCurvePath()
  */
-QPolygonF QwtSplineCurveFitter::fitCurve( const QPolygonF& points ) const
+QPolygonF QwtSplineCurveFitter::fitCurve(const QPolygonF &points) const
 {
-    const QPainterPath path = fitCurvePath( points );
+  const QPainterPath path = fitCurvePath(points);
 
-    const QList< QPolygonF > subPaths = path.toSubpathPolygons();
-    if ( subPaths.size() == 1 )
-        subPaths.first();
+  const QList<QPolygonF> subPaths = path.toSubpathPolygons();
+  if (subPaths.size() == 1)
+    subPaths.first();
 
-    return QPolygonF();
+  return QPolygonF();
 }
 
 /*!
@@ -91,12 +91,12 @@ QPolygonF QwtSplineCurveFitter::fitCurve( const QPolygonF& points ) const
 
    \sa fitCurve()
  */
-QPainterPath QwtSplineCurveFitter::fitCurvePath( const QPolygonF& points ) const
+QPainterPath QwtSplineCurveFitter::fitCurvePath(const QPolygonF &points) const
 {
-    QPainterPath path;
+  QPainterPath path;
 
-    if ( m_spline )
-        path = m_spline->painterPath( points );
+  if (m_spline)
+    path = m_spline->painterPath(points);
 
-    return path;
+  return path;
 }

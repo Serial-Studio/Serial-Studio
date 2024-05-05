@@ -16,140 +16,166 @@
 
 #include <openssl/macros.h>
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define HEADER_CT_H
+#  define HEADER_CT_H
 #endif
 
 #include <openssl/opensslconf.h>
 
 #ifndef OPENSSL_NO_CT
-#    include <openssl/types.h>
-#    include <openssl/safestack.h>
-#    include <openssl/x509.h>
-#    include <openssl/cterr.h>
-#    ifdef __cplusplus
+#  include <openssl/types.h>
+#  include <openssl/safestack.h>
+#  include <openssl/x509.h>
+#  include <openssl/cterr.h>
+#  ifdef __cplusplus
 extern "C" {
-#    endif
+#  endif
 
 /* Minimum RSA key size, from RFC6962 */
-#    define SCT_MIN_RSA_BITS 2048
+#  define SCT_MIN_RSA_BITS 2048
 
 /* All hashes are SHA256 in v1 of Certificate Transparency */
-#    define CT_V1_HASHLEN SHA256_DIGEST_LENGTH
+#  define CT_V1_HASHLEN SHA256_DIGEST_LENGTH
 
 SKM_DEFINE_STACK_OF_INTERNAL(SCT, SCT, SCT)
-#    define sk_SCT_num(sk) OPENSSL_sk_num(ossl_check_const_SCT_sk_type(sk))
-#    define sk_SCT_value(sk, idx) ((SCT *)OPENSSL_sk_value(ossl_check_const_SCT_sk_type(sk), (idx)))
-#    define sk_SCT_new(cmp) ((STACK_OF(SCT) *)OPENSSL_sk_new(ossl_check_SCT_compfunc_type(cmp)))
-#    define sk_SCT_new_null() ((STACK_OF(SCT) *)OPENSSL_sk_new_null())
-#    define sk_SCT_new_reserve(cmp, n)                                                             \
-        ((STACK_OF(SCT) *)OPENSSL_sk_new_reserve(ossl_check_SCT_compfunc_type(cmp), (n)))
-#    define sk_SCT_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_SCT_sk_type(sk), (n))
-#    define sk_SCT_free(sk) OPENSSL_sk_free(ossl_check_SCT_sk_type(sk))
-#    define sk_SCT_zero(sk) OPENSSL_sk_zero(ossl_check_SCT_sk_type(sk))
-#    define sk_SCT_delete(sk, i) ((SCT *)OPENSSL_sk_delete(ossl_check_SCT_sk_type(sk), (i)))
-#    define sk_SCT_delete_ptr(sk, ptr)                                                             \
-        ((SCT *)OPENSSL_sk_delete_ptr(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr)))
-#    define sk_SCT_push(sk, ptr)                                                                   \
-        OPENSSL_sk_push(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr))
-#    define sk_SCT_unshift(sk, ptr)                                                                \
-        OPENSSL_sk_unshift(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr))
-#    define sk_SCT_pop(sk) ((SCT *)OPENSSL_sk_pop(ossl_check_SCT_sk_type(sk)))
-#    define sk_SCT_shift(sk) ((SCT *)OPENSSL_sk_shift(ossl_check_SCT_sk_type(sk)))
-#    define sk_SCT_pop_free(sk, freefunc)                                                          \
-        OPENSSL_sk_pop_free(ossl_check_SCT_sk_type(sk), ossl_check_SCT_freefunc_type(freefunc))
-#    define sk_SCT_insert(sk, ptr, idx)                                                            \
-        OPENSSL_sk_insert(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr), (idx))
-#    define sk_SCT_set(sk, idx, ptr)                                                               \
-        ((SCT *)OPENSSL_sk_set(ossl_check_SCT_sk_type(sk), (idx), ossl_check_SCT_type(ptr)))
-#    define sk_SCT_find(sk, ptr)                                                                   \
-        OPENSSL_sk_find(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr))
-#    define sk_SCT_find_ex(sk, ptr)                                                                \
-        OPENSSL_sk_find_ex(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr))
-#    define sk_SCT_find_all(sk, ptr, pnum)                                                         \
-        OPENSSL_sk_find_all(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr), pnum)
-#    define sk_SCT_sort(sk) OPENSSL_sk_sort(ossl_check_SCT_sk_type(sk))
-#    define sk_SCT_is_sorted(sk) OPENSSL_sk_is_sorted(ossl_check_const_SCT_sk_type(sk))
-#    define sk_SCT_dup(sk) ((STACK_OF(SCT) *)OPENSSL_sk_dup(ossl_check_const_SCT_sk_type(sk)))
-#    define sk_SCT_deep_copy(sk, copyfunc, freefunc)                                               \
-        ((STACK_OF(SCT) *)OPENSSL_sk_deep_copy(ossl_check_const_SCT_sk_type(sk),                   \
-                                               ossl_check_SCT_copyfunc_type(copyfunc),             \
-                                               ossl_check_SCT_freefunc_type(freefunc)))
-#    define sk_SCT_set_cmp_func(sk, cmp)                                                           \
-        ((sk_SCT_compfunc)OPENSSL_sk_set_cmp_func(ossl_check_SCT_sk_type(sk),                      \
-                                                  ossl_check_SCT_compfunc_type(cmp)))
+#  define sk_SCT_num(sk) OPENSSL_sk_num(ossl_check_const_SCT_sk_type(sk))
+#  define sk_SCT_value(sk, idx)                                                \
+    ((SCT *)OPENSSL_sk_value(ossl_check_const_SCT_sk_type(sk), (idx)))
+#  define sk_SCT_new(cmp)                                                      \
+    ((STACK_OF(SCT) *)OPENSSL_sk_new(ossl_check_SCT_compfunc_type(cmp)))
+#  define sk_SCT_new_null() ((STACK_OF(SCT) *)OPENSSL_sk_new_null())
+#  define sk_SCT_new_reserve(cmp, n)                                           \
+    ((STACK_OF(SCT) *)OPENSSL_sk_new_reserve(                                  \
+        ossl_check_SCT_compfunc_type(cmp), (n)))
+#  define sk_SCT_reserve(sk, n)                                                \
+    OPENSSL_sk_reserve(ossl_check_SCT_sk_type(sk), (n))
+#  define sk_SCT_free(sk) OPENSSL_sk_free(ossl_check_SCT_sk_type(sk))
+#  define sk_SCT_zero(sk) OPENSSL_sk_zero(ossl_check_SCT_sk_type(sk))
+#  define sk_SCT_delete(sk, i)                                                 \
+    ((SCT *)OPENSSL_sk_delete(ossl_check_SCT_sk_type(sk), (i)))
+#  define sk_SCT_delete_ptr(sk, ptr)                                           \
+    ((SCT *)OPENSSL_sk_delete_ptr(ossl_check_SCT_sk_type(sk),                  \
+                                  ossl_check_SCT_type(ptr)))
+#  define sk_SCT_push(sk, ptr)                                                 \
+    OPENSSL_sk_push(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr))
+#  define sk_SCT_unshift(sk, ptr)                                              \
+    OPENSSL_sk_unshift(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr))
+#  define sk_SCT_pop(sk) ((SCT *)OPENSSL_sk_pop(ossl_check_SCT_sk_type(sk)))
+#  define sk_SCT_shift(sk) ((SCT *)OPENSSL_sk_shift(ossl_check_SCT_sk_type(sk)))
+#  define sk_SCT_pop_free(sk, freefunc)                                        \
+    OPENSSL_sk_pop_free(ossl_check_SCT_sk_type(sk),                            \
+                        ossl_check_SCT_freefunc_type(freefunc))
+#  define sk_SCT_insert(sk, ptr, idx)                                          \
+    OPENSSL_sk_insert(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr),    \
+                      (idx))
+#  define sk_SCT_set(sk, idx, ptr)                                             \
+    ((SCT *)OPENSSL_sk_set(ossl_check_SCT_sk_type(sk), (idx),                  \
+                           ossl_check_SCT_type(ptr)))
+#  define sk_SCT_find(sk, ptr)                                                 \
+    OPENSSL_sk_find(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr))
+#  define sk_SCT_find_ex(sk, ptr)                                              \
+    OPENSSL_sk_find_ex(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr))
+#  define sk_SCT_find_all(sk, ptr, pnum)                                       \
+    OPENSSL_sk_find_all(ossl_check_SCT_sk_type(sk), ossl_check_SCT_type(ptr),  \
+                        pnum)
+#  define sk_SCT_sort(sk) OPENSSL_sk_sort(ossl_check_SCT_sk_type(sk))
+#  define sk_SCT_is_sorted(sk)                                                 \
+    OPENSSL_sk_is_sorted(ossl_check_const_SCT_sk_type(sk))
+#  define sk_SCT_dup(sk)                                                       \
+    ((STACK_OF(SCT) *)OPENSSL_sk_dup(ossl_check_const_SCT_sk_type(sk)))
+#  define sk_SCT_deep_copy(sk, copyfunc, freefunc)                             \
+    ((STACK_OF(SCT) *)OPENSSL_sk_deep_copy(                                    \
+        ossl_check_const_SCT_sk_type(sk),                                      \
+        ossl_check_SCT_copyfunc_type(copyfunc),                                \
+        ossl_check_SCT_freefunc_type(freefunc)))
+#  define sk_SCT_set_cmp_func(sk, cmp)                                         \
+    ((sk_SCT_compfunc)OPENSSL_sk_set_cmp_func(                                 \
+        ossl_check_SCT_sk_type(sk), ossl_check_SCT_compfunc_type(cmp)))
 SKM_DEFINE_STACK_OF_INTERNAL(CTLOG, CTLOG, CTLOG)
-#    define sk_CTLOG_num(sk) OPENSSL_sk_num(ossl_check_const_CTLOG_sk_type(sk))
-#    define sk_CTLOG_value(sk, idx)                                                                \
-        ((CTLOG *)OPENSSL_sk_value(ossl_check_const_CTLOG_sk_type(sk), (idx)))
-#    define sk_CTLOG_new(cmp)                                                                      \
-        ((STACK_OF(CTLOG) *)OPENSSL_sk_new(ossl_check_CTLOG_compfunc_type(cmp)))
-#    define sk_CTLOG_new_null() ((STACK_OF(CTLOG) *)OPENSSL_sk_new_null())
-#    define sk_CTLOG_new_reserve(cmp, n)                                                           \
-        ((STACK_OF(CTLOG) *)OPENSSL_sk_new_reserve(ossl_check_CTLOG_compfunc_type(cmp), (n)))
-#    define sk_CTLOG_reserve(sk, n) OPENSSL_sk_reserve(ossl_check_CTLOG_sk_type(sk), (n))
-#    define sk_CTLOG_free(sk) OPENSSL_sk_free(ossl_check_CTLOG_sk_type(sk))
-#    define sk_CTLOG_zero(sk) OPENSSL_sk_zero(ossl_check_CTLOG_sk_type(sk))
-#    define sk_CTLOG_delete(sk, i) ((CTLOG *)OPENSSL_sk_delete(ossl_check_CTLOG_sk_type(sk), (i)))
-#    define sk_CTLOG_delete_ptr(sk, ptr)                                                           \
-        ((CTLOG *)OPENSSL_sk_delete_ptr(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr)))
-#    define sk_CTLOG_push(sk, ptr)                                                                 \
-        OPENSSL_sk_push(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr))
-#    define sk_CTLOG_unshift(sk, ptr)                                                              \
-        OPENSSL_sk_unshift(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr))
-#    define sk_CTLOG_pop(sk) ((CTLOG *)OPENSSL_sk_pop(ossl_check_CTLOG_sk_type(sk)))
-#    define sk_CTLOG_shift(sk) ((CTLOG *)OPENSSL_sk_shift(ossl_check_CTLOG_sk_type(sk)))
-#    define sk_CTLOG_pop_free(sk, freefunc)                                                        \
-        OPENSSL_sk_pop_free(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_freefunc_type(freefunc))
-#    define sk_CTLOG_insert(sk, ptr, idx)                                                          \
-        OPENSSL_sk_insert(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr), (idx))
-#    define sk_CTLOG_set(sk, idx, ptr)                                                             \
-        ((CTLOG *)OPENSSL_sk_set(ossl_check_CTLOG_sk_type(sk), (idx), ossl_check_CTLOG_type(ptr)))
-#    define sk_CTLOG_find(sk, ptr)                                                                 \
-        OPENSSL_sk_find(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr))
-#    define sk_CTLOG_find_ex(sk, ptr)                                                              \
-        OPENSSL_sk_find_ex(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr))
-#    define sk_CTLOG_find_all(sk, ptr, pnum)                                                       \
-        OPENSSL_sk_find_all(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr), pnum)
-#    define sk_CTLOG_sort(sk) OPENSSL_sk_sort(ossl_check_CTLOG_sk_type(sk))
-#    define sk_CTLOG_is_sorted(sk) OPENSSL_sk_is_sorted(ossl_check_const_CTLOG_sk_type(sk))
-#    define sk_CTLOG_dup(sk) ((STACK_OF(CTLOG) *)OPENSSL_sk_dup(ossl_check_const_CTLOG_sk_type(sk)))
-#    define sk_CTLOG_deep_copy(sk, copyfunc, freefunc)                                             \
-        ((STACK_OF(CTLOG) *)OPENSSL_sk_deep_copy(ossl_check_const_CTLOG_sk_type(sk),               \
-                                                 ossl_check_CTLOG_copyfunc_type(copyfunc),         \
-                                                 ossl_check_CTLOG_freefunc_type(freefunc)))
-#    define sk_CTLOG_set_cmp_func(sk, cmp)                                                         \
-        ((sk_CTLOG_compfunc)OPENSSL_sk_set_cmp_func(ossl_check_CTLOG_sk_type(sk),                  \
-                                                    ossl_check_CTLOG_compfunc_type(cmp)))
+#  define sk_CTLOG_num(sk) OPENSSL_sk_num(ossl_check_const_CTLOG_sk_type(sk))
+#  define sk_CTLOG_value(sk, idx)                                              \
+    ((CTLOG *)OPENSSL_sk_value(ossl_check_const_CTLOG_sk_type(sk), (idx)))
+#  define sk_CTLOG_new(cmp)                                                    \
+    ((STACK_OF(CTLOG) *)OPENSSL_sk_new(ossl_check_CTLOG_compfunc_type(cmp)))
+#  define sk_CTLOG_new_null() ((STACK_OF(CTLOG) *)OPENSSL_sk_new_null())
+#  define sk_CTLOG_new_reserve(cmp, n)                                         \
+    ((STACK_OF(CTLOG) *)OPENSSL_sk_new_reserve(                                \
+        ossl_check_CTLOG_compfunc_type(cmp), (n)))
+#  define sk_CTLOG_reserve(sk, n)                                              \
+    OPENSSL_sk_reserve(ossl_check_CTLOG_sk_type(sk), (n))
+#  define sk_CTLOG_free(sk) OPENSSL_sk_free(ossl_check_CTLOG_sk_type(sk))
+#  define sk_CTLOG_zero(sk) OPENSSL_sk_zero(ossl_check_CTLOG_sk_type(sk))
+#  define sk_CTLOG_delete(sk, i)                                               \
+    ((CTLOG *)OPENSSL_sk_delete(ossl_check_CTLOG_sk_type(sk), (i)))
+#  define sk_CTLOG_delete_ptr(sk, ptr)                                         \
+    ((CTLOG *)OPENSSL_sk_delete_ptr(ossl_check_CTLOG_sk_type(sk),              \
+                                    ossl_check_CTLOG_type(ptr)))
+#  define sk_CTLOG_push(sk, ptr)                                               \
+    OPENSSL_sk_push(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr))
+#  define sk_CTLOG_unshift(sk, ptr)                                            \
+    OPENSSL_sk_unshift(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr))
+#  define sk_CTLOG_pop(sk)                                                     \
+    ((CTLOG *)OPENSSL_sk_pop(ossl_check_CTLOG_sk_type(sk)))
+#  define sk_CTLOG_shift(sk)                                                   \
+    ((CTLOG *)OPENSSL_sk_shift(ossl_check_CTLOG_sk_type(sk)))
+#  define sk_CTLOG_pop_free(sk, freefunc)                                      \
+    OPENSSL_sk_pop_free(ossl_check_CTLOG_sk_type(sk),                          \
+                        ossl_check_CTLOG_freefunc_type(freefunc))
+#  define sk_CTLOG_insert(sk, ptr, idx)                                        \
+    OPENSSL_sk_insert(ossl_check_CTLOG_sk_type(sk),                            \
+                      ossl_check_CTLOG_type(ptr), (idx))
+#  define sk_CTLOG_set(sk, idx, ptr)                                           \
+    ((CTLOG *)OPENSSL_sk_set(ossl_check_CTLOG_sk_type(sk), (idx),              \
+                             ossl_check_CTLOG_type(ptr)))
+#  define sk_CTLOG_find(sk, ptr)                                               \
+    OPENSSL_sk_find(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr))
+#  define sk_CTLOG_find_ex(sk, ptr)                                            \
+    OPENSSL_sk_find_ex(ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_type(ptr))
+#  define sk_CTLOG_find_all(sk, ptr, pnum)                                     \
+    OPENSSL_sk_find_all(ossl_check_CTLOG_sk_type(sk),                          \
+                        ossl_check_CTLOG_type(ptr), pnum)
+#  define sk_CTLOG_sort(sk) OPENSSL_sk_sort(ossl_check_CTLOG_sk_type(sk))
+#  define sk_CTLOG_is_sorted(sk)                                               \
+    OPENSSL_sk_is_sorted(ossl_check_const_CTLOG_sk_type(sk))
+#  define sk_CTLOG_dup(sk)                                                     \
+    ((STACK_OF(CTLOG) *)OPENSSL_sk_dup(ossl_check_const_CTLOG_sk_type(sk)))
+#  define sk_CTLOG_deep_copy(sk, copyfunc, freefunc)                           \
+    ((STACK_OF(CTLOG) *)OPENSSL_sk_deep_copy(                                  \
+        ossl_check_const_CTLOG_sk_type(sk),                                    \
+        ossl_check_CTLOG_copyfunc_type(copyfunc),                              \
+        ossl_check_CTLOG_freefunc_type(freefunc)))
+#  define sk_CTLOG_set_cmp_func(sk, cmp)                                       \
+    ((sk_CTLOG_compfunc)OPENSSL_sk_set_cmp_func(                               \
+        ossl_check_CTLOG_sk_type(sk), ossl_check_CTLOG_compfunc_type(cmp)))
 
 typedef enum
 {
-    CT_LOG_ENTRY_TYPE_NOT_SET = -1,
-    CT_LOG_ENTRY_TYPE_X509 = 0,
-    CT_LOG_ENTRY_TYPE_PRECERT = 1
+  CT_LOG_ENTRY_TYPE_NOT_SET = -1,
+  CT_LOG_ENTRY_TYPE_X509 = 0,
+  CT_LOG_ENTRY_TYPE_PRECERT = 1
 } ct_log_entry_type_t;
 
 typedef enum
 {
-    SCT_VERSION_NOT_SET = -1,
-    SCT_VERSION_V1 = 0
+  SCT_VERSION_NOT_SET = -1,
+  SCT_VERSION_V1 = 0
 } sct_version_t;
 
 typedef enum
 {
-    SCT_SOURCE_UNKNOWN,
-    SCT_SOURCE_TLS_EXTENSION,
-    SCT_SOURCE_X509V3_EXTENSION,
-    SCT_SOURCE_OCSP_STAPLED_RESPONSE
+  SCT_SOURCE_UNKNOWN,
+  SCT_SOURCE_TLS_EXTENSION,
+  SCT_SOURCE_X509V3_EXTENSION,
+  SCT_SOURCE_OCSP_STAPLED_RESPONSE
 } sct_source_t;
 
 typedef enum
 {
-    SCT_VALIDATION_STATUS_NOT_SET,
-    SCT_VALIDATION_STATUS_UNKNOWN_LOG,
-    SCT_VALIDATION_STATUS_VALID,
-    SCT_VALIDATION_STATUS_INVALID,
-    SCT_VALIDATION_STATUS_UNVERIFIED,
-    SCT_VALIDATION_STATUS_UNKNOWN_VERSION
+  SCT_VALIDATION_STATUS_NOT_SET,
+  SCT_VALIDATION_STATUS_UNKNOWN_LOG,
+  SCT_VALIDATION_STATUS_VALID,
+  SCT_VALIDATION_STATUS_INVALID,
+  SCT_VALIDATION_STATUS_UNVERIFIED,
+  SCT_VALIDATION_STATUS_UNKNOWN_VERSION
 } sct_validation_status_t;
 
 /******************************************
@@ -162,7 +188,8 @@ typedef enum
  * The caller is responsible for calling CT_POLICY_EVAL_CTX_free when finished
  * with the CT_POLICY_EVAL_CTX.
  */
-CT_POLICY_EVAL_CTX *CT_POLICY_EVAL_CTX_new_ex(OSSL_LIB_CTX *libctx, const char *propq);
+CT_POLICY_EVAL_CTX *CT_POLICY_EVAL_CTX_new_ex(OSSL_LIB_CTX *libctx,
+                                              const char *propq);
 
 /*
  * The same as CT_POLICY_EVAL_CTX_new_ex() but the default library
@@ -194,10 +221,12 @@ X509 *CT_POLICY_EVAL_CTX_get0_issuer(const CT_POLICY_EVAL_CTX *ctx);
 int CT_POLICY_EVAL_CTX_set1_issuer(CT_POLICY_EVAL_CTX *ctx, X509 *issuer);
 
 /* Gets the CT logs that are trusted sources of SCTs */
-const CTLOG_STORE *CT_POLICY_EVAL_CTX_get0_log_store(const CT_POLICY_EVAL_CTX *ctx);
+const CTLOG_STORE *
+CT_POLICY_EVAL_CTX_get0_log_store(const CT_POLICY_EVAL_CTX *ctx);
 
 /* Sets the log store that is in use. It must outlive the CT_POLICY_EVAL_CTX. */
-void CT_POLICY_EVAL_CTX_set_shared_CTLOG_STORE(CT_POLICY_EVAL_CTX *ctx, CTLOG_STORE *log_store);
+void CT_POLICY_EVAL_CTX_set_shared_CTLOG_STORE(CT_POLICY_EVAL_CTX *ctx,
+                                               CTLOG_STORE *log_store);
 
 /*
  * Gets the time, in milliseconds since the Unix epoch, that will be used as the
@@ -230,7 +259,8 @@ SCT *SCT_new(void);
  */
 SCT *SCT_new_from_base64(unsigned char version, const char *logid_base64,
                          ct_log_entry_type_t entry_type, uint64_t timestamp,
-                         const char *extensions_base64, const char *signature_base64);
+                         const char *extensions_base64,
+                         const char *signature_base64);
 
 /*
  * Frees the SCT and the underlying data structures.
@@ -284,7 +314,8 @@ __owur int SCT_set0_log_id(SCT *sct, unsigned char *log_id, size_t log_id_len);
  * This makes a copy of the log_id.
  * Returns 1 on success, 0 otherwise.
  */
-__owur int SCT_set1_log_id(SCT *sct, const unsigned char *log_id, size_t log_id_len);
+__owur int SCT_set1_log_id(SCT *sct, const unsigned char *log_id,
+                           size_t log_id_len);
 
 /*
  * Returns the timestamp for the SCT (epoch time in milliseconds).
@@ -329,7 +360,8 @@ void SCT_set0_extensions(SCT *sct, unsigned char *ext, size_t ext_len);
  * This takes a copy of the ext.
  * Returns 1 on success, 0 otherwise.
  */
-__owur int SCT_set1_extensions(SCT *sct, const unsigned char *ext, size_t ext_len);
+__owur int SCT_set1_extensions(SCT *sct, const unsigned char *ext,
+                               size_t ext_len);
 
 /*
  * Set *sig to point to the signature for the SCT. sig must not be NULL.
@@ -348,7 +380,8 @@ void SCT_set0_signature(SCT *sct, unsigned char *sig, size_t sig_len);
  * Set the signature of an SCT to be a copy of the *sig specified.
  * Returns 1 on success, 0 otherwise.
  */
-__owur int SCT_set1_signature(SCT *sct, const unsigned char *sig, size_t sig_len);
+__owur int SCT_set1_signature(SCT *sct, const unsigned char *sig,
+                              size_t sig_len);
 
 /*
  * The origin of this SCT, e.g. TLS extension, OCSP response, etc.
@@ -381,8 +414,8 @@ void SCT_print(const SCT *sct, BIO *out, int indent, const CTLOG_STORE *logs);
  * If |logs| is not NULL, it will be used to lookup the CT log that each SCT
  * came from, so that the log names can be printed.
  */
-void SCT_LIST_print(const STACK_OF(SCT) * sct_list, BIO *out, int indent, const char *separator,
-                    const CTLOG_STORE *logs);
+void SCT_LIST_print(const STACK_OF(SCT) * sct_list, BIO *out, int indent,
+                    const char *separator, const CTLOG_STORE *logs);
 
 /*
  * Gets the last result of validating this SCT.
@@ -406,7 +439,8 @@ __owur int SCT_validate(SCT *sct, const CT_POLICY_EVAL_CTX *ctx);
  * Returns 0 if at least one SCT is invalid or could not be verified.
  * Returns a negative integer if an error occurs.
  */
-__owur int SCT_LIST_validate(const STACK_OF(SCT) * scts, CT_POLICY_EVAL_CTX *ctx);
+__owur int SCT_LIST_validate(const STACK_OF(SCT) * scts,
+                             CT_POLICY_EVAL_CTX *ctx);
 
 /*********************************
  * SCT parsing and serialization *
@@ -436,7 +470,8 @@ __owur int i2o_SCT_LIST(const STACK_OF(SCT) * a, unsigned char **pp);
  * Upon failure, a NULL pointer will be returned, and the position of "*pp" is
  * not defined.
  */
-STACK_OF(SCT) * o2i_SCT_LIST(STACK_OF(SCT) * *a, const unsigned char **pp, size_t len);
+STACK_OF(SCT)
+    * o2i_SCT_LIST(STACK_OF(SCT) * *a, const unsigned char **pp, size_t len);
 
 /*
  * Serialize (to DER format) a stack of SCTs and return the length.
@@ -462,13 +497,14 @@ __owur int i2d_SCT_LIST(const STACK_OF(SCT) * a, unsigned char **pp);
  * Upon failure, a NULL pointer will be returned, and the position of "*pp" is
  * not defined.
  */
-STACK_OF(SCT) * d2i_SCT_LIST(STACK_OF(SCT) * *a, const unsigned char **pp, long len);
+STACK_OF(SCT)
+    * d2i_SCT_LIST(STACK_OF(SCT) * *a, const unsigned char **pp, long len);
 
 /*
  * Serialize (to TLS format) an |sct| and write it to |out|.
- * If |out| is null, no SCT will be output but the length will still be returned.
- * If |out| points to a null pointer, a string will be allocated to hold the
- * TLS-format SCT. It is the responsibility of the caller to free it.
+ * If |out| is null, no SCT will be output but the length will still be
+ * returned. If |out| points to a null pointer, a string will be allocated to
+ * hold the TLS-format SCT. It is the responsibility of the caller to free it.
  * If |out| points to an allocated string, the TLS-format SCT will be written
  * to it.
  * The length of the SCT in TLS format will be returned.
@@ -500,8 +536,8 @@ SCT *o2i_SCT(SCT **psct, const unsigned char **in, size_t len);
  * Returns NULL if malloc fails or if |public_key| cannot be converted to DER.
  * Should be deleted by the caller using CTLOG_free when no longer needed.
  */
-CTLOG *CTLOG_new_ex(EVP_PKEY *public_key, const char *name, OSSL_LIB_CTX *libctx,
-                    const char *propq);
+CTLOG *CTLOG_new_ex(EVP_PKEY *public_key, const char *name,
+                    OSSL_LIB_CTX *libctx, const char *propq);
 
 /*
  * The same as CTLOG_new_ex except that the default library context and
@@ -517,15 +553,17 @@ CTLOG *CTLOG_new(EVP_PKEY *public_key, const char *name);
  * Returns 1 on success, 0 on failure.
  * Should be deleted by the caller using CTLOG_free when no longer needed.
  */
-int CTLOG_new_from_base64_ex(CTLOG **ct_log, const char *pkey_base64, const char *name,
-                             OSSL_LIB_CTX *libctx, const char *propq);
+int CTLOG_new_from_base64_ex(CTLOG **ct_log, const char *pkey_base64,
+                             const char *name, OSSL_LIB_CTX *libctx,
+                             const char *propq);
 
 /*
  * The same as CTLOG_new_from_base64_ex() except that the default
  * library context and property query string are used.
  * Returns 1 on success, 0 on failure.
  */
-int CTLOG_new_from_base64(CTLOG **ct_log, const char *pkey_base64, const char *name);
+int CTLOG_new_from_base64(CTLOG **ct_log, const char *pkey_base64,
+                          const char *name);
 
 /*
  * Deletes a CT log instance and its fields.
@@ -535,7 +573,8 @@ void CTLOG_free(CTLOG *log);
 /* Gets the name of the CT log */
 const char *CTLOG_get0_name(const CTLOG *log);
 /* Gets the ID of the CT log */
-void CTLOG_get0_log_id(const CTLOG *log, const uint8_t **log_id, size_t *log_id_len);
+void CTLOG_get0_log_id(const CTLOG *log, const uint8_t **log_id,
+                       size_t *log_id_len);
 /* Gets the public key of the CT log */
 EVP_PKEY *CTLOG_get0_public_key(const CTLOG *log);
 
@@ -566,7 +605,8 @@ void CTLOG_STORE_free(CTLOG_STORE *store);
  * Finds a CT log in the store based on its log ID.
  * Returns the CT log, or NULL if no match is found.
  */
-const CTLOG *CTLOG_STORE_get0_log_by_id(const CTLOG_STORE *store, const uint8_t *log_id,
+const CTLOG *CTLOG_STORE_get0_log_by_id(const CTLOG_STORE *store,
+                                        const uint8_t *log_id,
                                         size_t log_id_len);
 
 /*
@@ -581,8 +621,8 @@ __owur int CTLOG_STORE_load_file(CTLOG_STORE *store, const char *file);
  */
 __owur int CTLOG_STORE_load_default_file(CTLOG_STORE *store);
 
-#    ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#    endif
+#  endif
 #endif
 #endif

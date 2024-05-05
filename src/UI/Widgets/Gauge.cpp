@@ -28,46 +28,47 @@
  * Constructor function, configures widget style & signal/slot connections.
  */
 Widgets::Gauge::Gauge(const int index)
-    : m_index(index)
+  : m_index(index)
 {
-    // Get pointers to Serial Studio modules
-    auto dash = &UI::Dashboard::instance();
-    auto theme = &Misc::ThemeManager::instance();
+  // Get pointers to Serial Studio modules
+  auto dash = &UI::Dashboard::instance();
+  auto theme = &Misc::ThemeManager::instance();
 
-    // Invalid index, abort initialization
-    if (m_index < 0 || m_index >= dash->gaugeCount())
-        return;
+  // Invalid index, abort initialization
+  if (m_index < 0 || m_index >= dash->gaugeCount())
+    return;
 
-    // Get needle & knob color
-    QString needleColor;
-    auto colors = theme->widgetColors();
-    auto knobColor = theme->widgetControlBackground();
-    if (colors.count() > m_index)
-        needleColor = colors.at(m_index);
-    else
-        needleColor = colors.at(colors.count() % m_index);
+  // Get needle & knob color
+  QString needleColor;
+  auto colors = theme->widgetColors();
+  auto knobColor = theme->widgetControlBackground();
+  if (colors.count() > m_index)
+    needleColor = colors.at(m_index);
+  else
+    needleColor = colors.at(colors.count() % m_index);
 
-    // Configure gauge needle
-    auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
-                                          QColor(needleColor), knobColor);
-    m_gauge.setNeedle(needle);
-    m_gauge.setFont(dash->monoFont());
+  // Configure gauge needle
+  auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
+                                        QColor(needleColor), knobColor);
+  m_gauge.setNeedle(needle);
+  m_gauge.setFont(dash->monoFont());
 
-    // Set gauge scale
-    auto dataset = dash->getGauge(m_index);
-    m_gauge.setScale(dataset.min(), dataset.max());
+  // Set gauge scale
+  auto dataset = dash->getGauge(m_index);
+  m_gauge.setScale(dataset.min(), dataset.max());
 
-    // Set gauge palette
-    QPalette palette;
-    palette.setColor(QPalette::WindowText, theme->base());
-    palette.setColor(QPalette::Text, theme->widgetIndicator());
-    m_gauge.setPalette(palette);
+  // Set gauge palette
+  QPalette palette;
+  palette.setColor(QPalette::WindowText, theme->base());
+  palette.setColor(QPalette::Text, theme->widgetIndicator());
+  m_gauge.setPalette(palette);
 
-    // Set widget pointer
-    setWidget(&m_gauge);
+  // Set widget pointer
+  setWidget(&m_gauge);
 
-    // React to dashboard events
-    connect(dash, SIGNAL(updated()), this, SLOT(updateData()), Qt::QueuedConnection);
+  // React to dashboard events
+  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
+          Qt::QueuedConnection);
 }
 
 /**
@@ -79,26 +80,22 @@ Widgets::Gauge::Gauge(const int index)
  */
 void Widgets::Gauge::updateData()
 {
-    // Widget not enabled, do nothing
-    if (!isEnabled())
-        return;
+  // Widget not enabled, do nothing
+  if (!isEnabled())
+    return;
 
-    // Invalid index, abort update
-    auto dash = &UI::Dashboard::instance();
-    if (m_index < 0 || m_index >= dash->gaugeCount())
-        return;
+  // Invalid index, abort update
+  auto dash = &UI::Dashboard::instance();
+  if (m_index < 0 || m_index >= dash->gaugeCount())
+    return;
 
-    // Update gauge value
-    auto dataset = dash->getGauge(m_index);
-    m_gauge.setValue(dataset.value().toDouble());
-    setValue(QString("%1 %2").arg(
-        QString::number(dataset.value().toDouble(), 'f', dash->precision()),
-        dataset.units()));
+  // Update gauge value
+  auto dataset = dash->getGauge(m_index);
+  m_gauge.setValue(dataset.value().toDouble());
+  setValue(QString("%1 %2").arg(
+      QString::number(dataset.value().toDouble(), 'f', dash->precision()),
+      dataset.units()));
 
-    // Repaint widget
-    requestRepaint();
+  // Repaint widget
+  requestRepaint();
 }
-
-#ifdef SERIAL_STUDIO_INCLUDE_MOC
-#    include "moc_Gauge.cpp"
-#endif

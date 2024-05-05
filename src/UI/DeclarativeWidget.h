@@ -31,44 +31,44 @@ namespace UI
 {
 class DeclarativeWidget : public QQuickPaintedItem
 {
-    Q_OBJECT
-    Q_PROPERTY(QWidget *widget READ widget WRITE setWidget NOTIFY widgetChanged)
+  Q_OBJECT
+  Q_PROPERTY(QWidget *widget READ widget WRITE setWidget NOTIFY widgetChanged)
 
 Q_SIGNALS:
-    void widgetChanged();
+  void widgetChanged();
 
 public:
-    DeclarativeWidget(QQuickItem *parent = 0);
+  DeclarativeWidget(QQuickItem *parent = 0);
 
-    QWidget *widget();
-    void update(const QRect &rect = QRect());
+  QWidget *widget();
+  void update(const QRect &rect = QRect());
 
-    virtual void paint(QPainter *painter) override;
+  virtual void paint(QPainter *painter) override;
 
-    virtual void keyPressEvent(QKeyEvent *event) override;
-    virtual void keyReleaseEvent(QKeyEvent *event) override;
-    virtual void inputMethodEvent(QInputMethodEvent *event) override;
-    virtual void focusInEvent(QFocusEvent *event) override;
-    virtual void focusOutEvent(QFocusEvent *event) override;
-    virtual void mousePressEvent(QMouseEvent *event) override;
-    virtual void mouseMoveEvent(QMouseEvent *event) override;
-    virtual void mouseReleaseEvent(QMouseEvent *event) override;
-    virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
-    virtual void wheelEvent(QWheelEvent *event) override;
-    virtual void dragEnterEvent(QDragEnterEvent *event) override;
-    virtual void dragMoveEvent(QDragMoveEvent *event) override;
-    virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
-    virtual void dropEvent(QDropEvent *event) override;
+  virtual void keyPressEvent(QKeyEvent *event) override;
+  virtual void keyReleaseEvent(QKeyEvent *event) override;
+  virtual void inputMethodEvent(QInputMethodEvent *event) override;
+  virtual void focusInEvent(QFocusEvent *event) override;
+  virtual void focusOutEvent(QFocusEvent *event) override;
+  virtual void mousePressEvent(QMouseEvent *event) override;
+  virtual void mouseMoveEvent(QMouseEvent *event) override;
+  virtual void mouseReleaseEvent(QMouseEvent *event) override;
+  virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+  virtual void wheelEvent(QWheelEvent *event) override;
+  virtual void dragEnterEvent(QDragEnterEvent *event) override;
+  virtual void dragMoveEvent(QDragMoveEvent *event) override;
+  virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
+  virtual void dropEvent(QDropEvent *event) override;
 
 public Q_SLOTS:
-    void resizeWidget();
-    void setWidget(QWidget *widget);
+  void resizeWidget();
+  void setWidget(QWidget *widget);
 
 private:
-    void execEvent(void *function, void *event);
+  void execEvent(void *function, void *event);
 
 private:
-    QPixmap m_pixmap;
-    QPointer<QWidget> m_widget;
+  QPixmap m_pixmap;
+  QPointer<QWidget> m_widget;
 };
-}
+} // namespace UI

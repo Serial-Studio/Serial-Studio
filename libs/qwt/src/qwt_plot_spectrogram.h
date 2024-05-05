@@ -15,7 +15,8 @@
 #include "qwt_plot_rasteritem.h"
 
 class QwtColorMap;
-template< typename T > class QList;
+template<typename T>
+class QList;
 
 /*!
    \brief A plot item, which displays a spectrogram
@@ -35,84 +36,83 @@ template< typename T > class QList;
 
 class QWT_EXPORT QwtPlotSpectrogram : public QwtPlotRasterItem
 {
-  public:
-    /*!
-       The display mode controls how the raster data will be represented.
-       \sa setDisplayMode(), testDisplayMode()
-     */
+public:
+  /*!
+     The display mode controls how the raster data will be represented.
+     \sa setDisplayMode(), testDisplayMode()
+   */
 
-    enum DisplayMode
-    {
-        //! The values are mapped to colors using a color map.
-        ImageMode = 0x01,
+  enum DisplayMode
+  {
+    //! The values are mapped to colors using a color map.
+    ImageMode = 0x01,
 
-        //! The data is displayed using contour lines
-        ContourMode = 0x02
-    };
+    //! The data is displayed using contour lines
+    ContourMode = 0x02
+  };
 
-    Q_DECLARE_FLAGS( DisplayModes, DisplayMode )
+  Q_DECLARE_FLAGS(DisplayModes, DisplayMode)
 
-    explicit QwtPlotSpectrogram( const QString& title = QString() );
-    virtual ~QwtPlotSpectrogram();
+  explicit QwtPlotSpectrogram(const QString &title = QString());
+  virtual ~QwtPlotSpectrogram();
 
-    void setDisplayMode( DisplayMode, bool on = true );
-    bool testDisplayMode( DisplayMode ) const;
+  void setDisplayMode(DisplayMode, bool on = true);
+  bool testDisplayMode(DisplayMode) const;
 
-    void setData( QwtRasterData* data );
-    const QwtRasterData* data() const;
-    QwtRasterData* data();
+  void setData(QwtRasterData *data);
+  const QwtRasterData *data() const;
+  QwtRasterData *data();
 
-    void setColorMap( QwtColorMap* );
-    const QwtColorMap* colorMap() const;
+  void setColorMap(QwtColorMap *);
+  const QwtColorMap *colorMap() const;
 
-    void setColorTableSize( int numColors );
-    int colorTableSize() const;
+  void setColorTableSize(int numColors);
+  int colorTableSize() const;
 
-    virtual QwtInterval interval( Qt::Axis ) const QWT_OVERRIDE;
-    virtual QRectF pixelHint( const QRectF& ) const QWT_OVERRIDE;
+  virtual QwtInterval interval(Qt::Axis) const QWT_OVERRIDE;
+  virtual QRectF pixelHint(const QRectF &) const QWT_OVERRIDE;
 
-    void setDefaultContourPen( const QColor&,
-        qreal width = 0.0, Qt::PenStyle = Qt::SolidLine );
-    void setDefaultContourPen( const QPen& );
-    QPen defaultContourPen() const;
+  void setDefaultContourPen(const QColor &, qreal width = 0.0,
+                            Qt::PenStyle = Qt::SolidLine);
+  void setDefaultContourPen(const QPen &);
+  QPen defaultContourPen() const;
 
-    virtual QPen contourPen( double level ) const;
+  virtual QPen contourPen(double level) const;
 
-    void setConrecFlag( QwtRasterData::ConrecFlag, bool on );
-    bool testConrecFlag( QwtRasterData::ConrecFlag ) const;
+  void setConrecFlag(QwtRasterData::ConrecFlag, bool on);
+  bool testConrecFlag(QwtRasterData::ConrecFlag) const;
 
-    void setContourLevels( const QList< double >& );
-    QList< double > contourLevels() const;
+  void setContourLevels(const QList<double> &);
+  QList<double> contourLevels() const;
 
-    virtual int rtti() const QWT_OVERRIDE;
+  virtual int rtti() const QWT_OVERRIDE;
 
-    virtual void draw( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect ) const QWT_OVERRIDE;
+  virtual void draw(QPainter *, const QwtScaleMap &xMap,
+                    const QwtScaleMap &yMap,
+                    const QRectF &canvasRect) const QWT_OVERRIDE;
 
-  protected:
-    virtual QImage renderImage(
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& area, const QSize& imageSize ) const QWT_OVERRIDE;
+protected:
+  virtual QImage renderImage(const QwtScaleMap &xMap, const QwtScaleMap &yMap,
+                             const QRectF &area,
+                             const QSize &imageSize) const QWT_OVERRIDE;
 
-    virtual QSize contourRasterSize(
-        const QRectF&, const QRect& ) const;
+  virtual QSize contourRasterSize(const QRectF &, const QRect &) const;
 
-    virtual QwtRasterData::ContourLines renderContourLines(
-        const QRectF& rect, const QSize& raster ) const;
+  virtual QwtRasterData::ContourLines
+  renderContourLines(const QRectF &rect, const QSize &raster) const;
 
-    virtual void drawContourLines( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QwtRasterData::ContourLines& ) const;
+  virtual void drawContourLines(QPainter *, const QwtScaleMap &xMap,
+                                const QwtScaleMap &yMap,
+                                const QwtRasterData::ContourLines &) const;
 
-    void renderTile( const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRect& tile, QImage* ) const;
+  void renderTile(const QwtScaleMap &xMap, const QwtScaleMap &yMap,
+                  const QRect &tile, QImage *) const;
 
-  private:
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtPlotSpectrogram::DisplayModes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(QwtPlotSpectrogram::DisplayModes)
 
 #endif

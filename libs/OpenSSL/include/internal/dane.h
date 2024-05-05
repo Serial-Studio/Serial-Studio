@@ -42,12 +42,12 @@
 
 typedef struct danetls_record_st
 {
-    uint8_t usage;
-    uint8_t selector;
-    uint8_t mtype;
-    unsigned char *data;
-    size_t dlen;
-    EVP_PKEY *spki;
+  uint8_t usage;
+  uint8_t selector;
+  uint8_t mtype;
+  unsigned char *data;
+  size_t dlen;
+  EVP_PKEY *spki;
 } danetls_record;
 
 DEFINE_STACK_OF(danetls_record)
@@ -57,10 +57,10 @@ DEFINE_STACK_OF(danetls_record)
  */
 struct dane_ctx_st
 {
-    const EVP_MD **mdevp; /* mtype -> digest */
-    uint8_t *mdord; /* mtype -> preference */
-    uint8_t mdmax; /* highest supported mtype */
-    unsigned long flags; /* feature bitmask */
+  const EVP_MD **mdevp; /* mtype -> digest */
+  uint8_t *mdord;       /* mtype -> preference */
+  uint8_t mdmax;        /* highest supported mtype */
+  unsigned long flags;  /* feature bitmask */
 };
 
 /*
@@ -68,18 +68,19 @@ struct dane_ctx_st
  */
 struct ssl_dane_st
 {
-    struct dane_ctx_st *dctx;
-    STACK_OF(danetls_record) * trecs;
-    STACK_OF(X509) * certs; /* DANE-TA(2) Cert(0) Full(0) certs */
-    danetls_record *mtlsa; /* Matching TLSA record */
-    X509 *mcert; /* DANE matched cert */
-    uint32_t umask; /* Usages present */
-    int mdpth; /* Depth of matched cert */
-    int pdpth; /* Depth of PKIX trust */
-    unsigned long flags; /* feature bitmask */
+  struct dane_ctx_st *dctx;
+  STACK_OF(danetls_record) * trecs;
+  STACK_OF(X509) * certs; /* DANE-TA(2) Cert(0) Full(0) certs */
+  danetls_record *mtlsa;  /* Matching TLSA record */
+  X509 *mcert;            /* DANE matched cert */
+  uint32_t umask;         /* Usages present */
+  int mdpth;              /* Depth of matched cert */
+  int pdpth;              /* Depth of PKIX trust */
+  unsigned long flags;    /* feature bitmask */
 };
 
-#define DANETLS_ENABLED(dane) ((dane) != NULL && sk_danetls_record_num((dane)->trecs) > 0)
+#define DANETLS_ENABLED(dane)                                                  \
+  ((dane) != NULL && sk_danetls_record_num((dane)->trecs) > 0)
 
 #define DANETLS_USAGE_BIT(u) (((uint32_t)1) << u)
 
@@ -98,9 +99,13 @@ struct ssl_dane_st
 #define DANETLS_HAS_TA(dane) ((dane) && ((dane)->umask & DANETLS_TA_MASK))
 #define DANETLS_HAS_EE(dane) ((dane) && ((dane)->umask & DANETLS_EE_MASK))
 
-#define DANETLS_HAS_PKIX_TA(dane) ((dane) && ((dane)->umask & DANETLS_PKIX_TA_MASK))
-#define DANETLS_HAS_PKIX_EE(dane) ((dane) && ((dane)->umask & DANETLS_PKIX_EE_MASK))
-#define DANETLS_HAS_DANE_TA(dane) ((dane) && ((dane)->umask & DANETLS_DANE_TA_MASK))
-#define DANETLS_HAS_DANE_EE(dane) ((dane) && ((dane)->umask & DANETLS_DANE_EE_MASK))
+#define DANETLS_HAS_PKIX_TA(dane)                                              \
+  ((dane) && ((dane)->umask & DANETLS_PKIX_TA_MASK))
+#define DANETLS_HAS_PKIX_EE(dane)                                              \
+  ((dane) && ((dane)->umask & DANETLS_PKIX_EE_MASK))
+#define DANETLS_HAS_DANE_TA(dane)                                              \
+  ((dane) && ((dane)->umask & DANETLS_DANE_TA_MASK))
+#define DANETLS_HAS_DANE_EE(dane)                                              \
+  ((dane) && ((dane)->umask & DANETLS_DANE_EE_MASK))
 
 #endif /* OSSL_INTERNAL_DANE_H */

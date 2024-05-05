@@ -28,7 +28,7 @@ extern "C" {
 #define OSSL_OBJECT_NAME 1 /* char * */
 #define OSSL_OBJECT_PKEY 2 /* EVP_PKEY * */
 #define OSSL_OBJECT_CERT 3 /* X509 * */
-#define OSSL_OBJECT_CRL 4 /* X509_CRL * */
+#define OSSL_OBJECT_CRL 4  /* X509_CRL * */
 
 /*
  * The rest of the associated OSSL_PARAM elements is described in core_names.h

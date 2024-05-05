@@ -32,26 +32,27 @@ namespace Widgets
 {
 class BaseWidget : public DashboardWidgetBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
 Q_SIGNALS:
-    void resized();
+  void resized();
 
 public:
-    BaseWidget();
+  BaseWidget();
 
-    void setValue(const QString &label);
-    void setWidget(QWidget *widget, const Qt::Alignment &alignment = Qt::AlignHCenter,
-                   const bool autoresize = true);
+  void setValue(const QString &label);
+  void setWidget(QWidget *widget,
+                 const Qt::Alignment &alignment = Qt::AlignHCenter,
+                 const bool autoresize = true);
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+  void resizeEvent(QResizeEvent *event);
 
 private:
-    int m_index;
-    QLabel m_label;
-    QWidget *m_widget;
-    bool m_resizeWidget;
-    QHBoxLayout m_layout;
+  int m_index;
+  QLabel m_label;
+  QWidget *m_widget;
+  bool m_resizeWidget;
+  QHBoxLayout m_layout;
 };
-}
+} // namespace Widgets

@@ -22,23 +22,27 @@
 DSA *ossl_dsa_new(OSSL_LIB_CTX *libctx);
 void ossl_dsa_set0_libctx(DSA *d, OSSL_LIB_CTX *libctx);
 
-int ossl_dsa_generate_ffc_parameters(DSA *dsa, int type, int pbits, int qbits, BN_GENCB *cb);
+int ossl_dsa_generate_ffc_parameters(DSA *dsa, int type, int pbits, int qbits,
+                                     BN_GENCB *cb);
 
-int ossl_dsa_sign_int(int type, const unsigned char *dgst, int dlen, unsigned char *sig,
-                      unsigned int *siglen, DSA *dsa, unsigned int nonce_type,
-                      const char *digestname, OSSL_LIB_CTX *libctx, const char *propq);
+int ossl_dsa_sign_int(int type, const unsigned char *dgst, int dlen,
+                      unsigned char *sig, unsigned int *siglen, DSA *dsa,
+                      unsigned int nonce_type, const char *digestname,
+                      OSSL_LIB_CTX *libctx, const char *propq);
 
 FFC_PARAMS *ossl_dsa_get0_params(DSA *dsa);
 int ossl_dsa_ffc_params_fromdata(DSA *dsa, const OSSL_PARAM params[]);
-int ossl_dsa_key_fromdata(DSA *dsa, const OSSL_PARAM params[], int include_private);
-DSA *ossl_dsa_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf, OSSL_LIB_CTX *libctx,
-                             const char *propq);
+int ossl_dsa_key_fromdata(DSA *dsa, const OSSL_PARAM params[],
+                          int include_private);
+DSA *ossl_dsa_key_from_pkcs8(const PKCS8_PRIV_KEY_INFO *p8inf,
+                             OSSL_LIB_CTX *libctx, const char *propq);
 
-int ossl_dsa_generate_public_key(BN_CTX *ctx, const DSA *dsa, const BIGNUM *priv_key,
-                                 BIGNUM *pub_key);
+int ossl_dsa_generate_public_key(BN_CTX *ctx, const DSA *dsa,
+                                 const BIGNUM *priv_key, BIGNUM *pub_key);
 int ossl_dsa_check_params(const DSA *dsa, int checktype, int *ret);
 int ossl_dsa_check_pub_key(const DSA *dsa, const BIGNUM *pub_key, int *ret);
-int ossl_dsa_check_pub_key_partial(const DSA *dsa, const BIGNUM *pub_key, int *ret);
+int ossl_dsa_check_pub_key_partial(const DSA *dsa, const BIGNUM *pub_key,
+                                   int *ret);
 int ossl_dsa_check_priv_key(const DSA *dsa, const BIGNUM *priv_key, int *ret);
 int ossl_dsa_check_pairwise(const DSA *dsa);
 int ossl_dsa_is_foreign(const DSA *dsa);

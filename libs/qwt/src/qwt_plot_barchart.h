@@ -15,7 +15,8 @@
 
 class QwtColumnRect;
 class QwtColumnSymbol;
-template< typename T > class QwtSeriesData;
+template<typename T>
+class QwtSeriesData;
 
 /*!
    \brief QwtPlotBarChart displays a series of a values as bars.
@@ -38,87 +39,85 @@ template< typename T > class QwtSeriesData;
    \sa QwtPlotMultiBarChart, QwtPlotHistogram, QwtPlotCurve::Sticks,
       QwtPlotSeriesItem::orientation(), QwtPlotAbstractBarChart::baseline()
  */
-class QWT_EXPORT QwtPlotBarChart
-    : public QwtPlotAbstractBarChart
-    , public QwtSeriesStore< QPointF >
+class QWT_EXPORT QwtPlotBarChart : public QwtPlotAbstractBarChart,
+                                   public QwtSeriesStore<QPointF>
 {
-  public:
+public:
+  /*!
+     \brief Legend modes.
+
+     The default setting is QwtPlotBarChart::LegendChartTitle.
+     \sa setLegendMode(), legendMode()
+   */
+  enum LegendMode
+  {
     /*!
-       \brief Legend modes.
+       One entry on the legend showing the default symbol
+       and the title() of the chart
 
-       The default setting is QwtPlotBarChart::LegendChartTitle.
-       \sa setLegendMode(), legendMode()
+       \sa QwtPlotItem::title()
      */
-    enum LegendMode
-    {
-        /*!
-           One entry on the legend showing the default symbol
-           and the title() of the chart
+    LegendChartTitle,
 
-           \sa QwtPlotItem::title()
-         */
-        LegendChartTitle,
+    /*!
+       One entry for each value showing the individual symbol
+       of the corresponding bar and the bar title.
 
-        /*!
-           One entry for each value showing the individual symbol
-           of the corresponding bar and the bar title.
+       \sa specialSymbol(), barTitle()
+     */
+    LegendBarTitles
+  };
 
-           \sa specialSymbol(), barTitle()
-         */
-        LegendBarTitles
-    };
+  explicit QwtPlotBarChart(const QString &title = QString());
+  explicit QwtPlotBarChart(const QwtText &title);
 
-    explicit QwtPlotBarChart( const QString& title = QString() );
-    explicit QwtPlotBarChart( const QwtText& title );
+  virtual ~QwtPlotBarChart();
 
-    virtual ~QwtPlotBarChart();
+  virtual int rtti() const QWT_OVERRIDE;
 
-    virtual int rtti() const QWT_OVERRIDE;
+  void setSamples(const QVector<QPointF> &);
+  void setSamples(const QVector<double> &);
+  void setSamples(QwtSeriesData<QPointF> *);
 
-    void setSamples( const QVector< QPointF >& );
-    void setSamples( const QVector< double >& );
-    void setSamples( QwtSeriesData< QPointF >* );
+  void setSymbol(QwtColumnSymbol *);
+  const QwtColumnSymbol *symbol() const;
 
-    void setSymbol( QwtColumnSymbol* );
-    const QwtColumnSymbol* symbol() const;
+  void setLegendMode(LegendMode);
+  LegendMode legendMode() const;
 
-    void setLegendMode( LegendMode );
-    LegendMode legendMode() const;
+  virtual void drawSeries(QPainter *, const QwtScaleMap &xMap,
+                          const QwtScaleMap &yMap, const QRectF &canvasRect,
+                          int from, int to) const QWT_OVERRIDE;
 
-    virtual void drawSeries( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, int from, int to ) const QWT_OVERRIDE;
+  virtual QRectF boundingRect() const QWT_OVERRIDE;
 
-    virtual QRectF boundingRect() const QWT_OVERRIDE;
+  virtual QwtColumnSymbol *specialSymbol(int sampleIndex,
+                                         const QPointF &) const;
 
-    virtual QwtColumnSymbol* specialSymbol(
-        int sampleIndex, const QPointF& ) const;
+  virtual QwtText barTitle(int sampleIndex) const;
 
-    virtual QwtText barTitle( int sampleIndex ) const;
+protected:
+  virtual void drawSample(QPainter *painter, const QwtScaleMap &xMap,
+                          const QwtScaleMap &yMap, const QRectF &canvasRect,
+                          const QwtInterval &boundingInterval, int index,
+                          const QPointF &sample) const;
 
-  protected:
-    virtual void drawSample( QPainter* painter,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, const QwtInterval& boundingInterval,
-        int index, const QPointF& sample ) const;
+  virtual void drawBar(QPainter *, int sampleIndex, const QPointF &sample,
+                       const QwtColumnRect &) const;
 
-    virtual void drawBar( QPainter*,
-        int sampleIndex, const QPointF& sample,
-        const QwtColumnRect& ) const;
+  QwtColumnRect columnRect(const QwtScaleMap &xMap, const QwtScaleMap &yMap,
+                           const QRectF &canvasRect,
+                           const QwtInterval &boundingInterval,
+                           const QPointF &sample) const;
 
-    QwtColumnRect columnRect(
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& canvasRect, const QwtInterval& boundingInterval,
-        const QPointF& sample ) const;
+  QList<QwtLegendData> legendData() const QWT_OVERRIDE;
+  QwtGraphic legendIcon(int index, const QSizeF &) const QWT_OVERRIDE;
 
-    QList< QwtLegendData > legendData() const QWT_OVERRIDE;
-    QwtGraphic legendIcon( int index, const QSizeF& ) const QWT_OVERRIDE;
+private:
+  void init();
 
-  private:
-    void init();
-
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

@@ -27,13 +27,13 @@ class QByteArray;
 
 class QWT_EXPORT QwtPlotSvgItem : public QwtPlotGraphicItem
 {
-  public:
-    explicit QwtPlotSvgItem( const QString& title = QString() );
-    explicit QwtPlotSvgItem( const QwtText& title );
-    virtual ~QwtPlotSvgItem();
+public:
+  explicit QwtPlotSvgItem(const QString &title = QString());
+  explicit QwtPlotSvgItem(const QwtText &title);
+  virtual ~QwtPlotSvgItem();
 
-    bool loadFile( const QRectF&, const QString& fileName );
-    bool loadData( const QRectF&, const QByteArray& );
+  bool loadFile(const QRectF &, const QString &fileName);
+  bool loadData(const QRectF &, const QByteArray &);
 };
 
 #endif

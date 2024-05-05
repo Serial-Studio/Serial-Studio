@@ -27,72 +27,71 @@ class QwtPointPolar;
  */
 class QWT_EXPORT QwtPolarPicker : public QwtPicker
 {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    explicit QwtPolarPicker( QwtPolarCanvas* );
-    virtual ~QwtPolarPicker();
+public:
+  explicit QwtPolarPicker(QwtPolarCanvas *);
+  virtual ~QwtPolarPicker();
 
-    explicit QwtPolarPicker(
-        RubberBand rubberBand, DisplayMode trackerMode,
-        QwtPolarCanvas* );
+  explicit QwtPolarPicker(RubberBand rubberBand, DisplayMode trackerMode,
+                          QwtPolarCanvas *);
 
-    QwtPolarPlot* plot();
-    const QwtPolarPlot* plot() const;
+  QwtPolarPlot *plot();
+  const QwtPolarPlot *plot() const;
 
-    QwtPolarCanvas* canvas();
-    const QwtPolarCanvas* canvas() const;
+  QwtPolarCanvas *canvas();
+  const QwtPolarCanvas *canvas() const;
 
-    virtual QRect pickRect() const;
+  virtual QRect pickRect() const;
 
-  Q_SIGNALS:
+Q_SIGNALS:
 
-    /*!
-       A signal emitted in case of selectionFlags() & PointSelection.
-       \param pos Selected point
-     */
-    void selected( const QwtPointPolar& pos );
+  /*!
+     A signal emitted in case of selectionFlags() & PointSelection.
+     \param pos Selected point
+   */
+  void selected(const QwtPointPolar &pos);
 
-    /*!
-       A signal emitting the selected points,
-       at the end of a selection.
+  /*!
+     A signal emitting the selected points,
+     at the end of a selection.
 
-       \param points Selected points
-     */
-    void selected( const QVector< QwtPointPolar >& points );
+     \param points Selected points
+   */
+  void selected(const QVector<QwtPointPolar> &points);
 
-    /*!
-       A signal emitted when a point has been appended to the selection
+  /*!
+     A signal emitted when a point has been appended to the selection
 
-       \param pos Position of the appended point.
-       \sa append(). moved()
-     */
-    void appended( const QwtPointPolar& pos );
+     \param pos Position of the appended point.
+     \sa append(). moved()
+   */
+  void appended(const QwtPointPolar &pos);
 
-    /*!
-       A signal emitted whenever the last appended point of the
-       selection has been moved.
+  /*!
+     A signal emitted whenever the last appended point of the
+     selection has been moved.
 
-       \param pos Position of the moved last point of the selection.
-       \sa move(), appended()
-     */
-    void moved( const QwtPointPolar& pos );
+     \param pos Position of the moved last point of the selection.
+     \sa move(), appended()
+   */
+  void moved(const QwtPointPolar &pos);
 
-  protected:
-    QwtPointPolar invTransform( const QPoint& ) const;
+protected:
+  QwtPointPolar invTransform(const QPoint &) const;
 
-    virtual QwtText trackerText( const QPoint& ) const QWT_OVERRIDE;
-    virtual QwtText trackerTextPolar( const QwtPointPolar& ) const;
+  virtual QwtText trackerText(const QPoint &) const QWT_OVERRIDE;
+  virtual QwtText trackerTextPolar(const QwtPointPolar &) const;
 
-    virtual void move( const QPoint& ) QWT_OVERRIDE;
-    virtual void append( const QPoint& ) QWT_OVERRIDE;
-    virtual bool end( bool ok = true ) QWT_OVERRIDE;
+  virtual void move(const QPoint &) QWT_OVERRIDE;
+  virtual void append(const QPoint &) QWT_OVERRIDE;
+  virtual bool end(bool ok = true) QWT_OVERRIDE;
 
-  private:
-    virtual QPainterPath pickArea() const QWT_OVERRIDE;
+private:
+  virtual QPainterPath pickArea() const QWT_OVERRIDE;
 
-    class PrivateData;
-    PrivateData* m_data;
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif

@@ -13,13 +13,13 @@
 //! \return true, if the elapsed timer is valid
 bool QwtSystemClock::isNull() const
 {
-    return m_timer.isValid();
+  return m_timer.isValid();
 }
 
 //! Start the elapsed timer
 void QwtSystemClock::start()
 {
-    m_timer.start();
+  m_timer.start();
 }
 
 /*!
@@ -28,13 +28,13 @@ void QwtSystemClock::start()
  */
 double QwtSystemClock::restart()
 {
-    const qint64 nsecs = m_timer.restart();
-    return nsecs / 1e6;
+  const qint64 nsecs = m_timer.restart();
+  return nsecs / 1e6;
 }
 
 //! \return elapsed time in multiples of milliseconds
 double QwtSystemClock::elapsed() const
 {
-    const qint64 nsecs = m_timer.nsecsElapsed();
-    return nsecs / 1e6;
+  const qint64 nsecs = m_timer.nsecsElapsed();
+  return nsecs / 1e6;
 }

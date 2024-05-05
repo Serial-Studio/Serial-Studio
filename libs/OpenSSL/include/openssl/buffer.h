@@ -13,12 +13,12 @@
 
 #include <openssl/macros.h>
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define HEADER_BUFFER_H
+#  define HEADER_BUFFER_H
 #endif
 
 #include <openssl/types.h>
 #ifndef OPENSSL_CRYPTO_H
-#    include <openssl/crypto.h>
+#  include <openssl/crypto.h>
 #endif
 #include <openssl/buffererr.h>
 
@@ -30,20 +30,20 @@ extern "C" {
 #include <sys/types.h>
 
 #ifndef OPENSSL_NO_DEPRECATED_3_0
-#    define BUF_strdup(s) OPENSSL_strdup(s)
-#    define BUF_strndup(s, size) OPENSSL_strndup(s, size)
-#    define BUF_memdup(data, size) OPENSSL_memdup(data, size)
-#    define BUF_strlcpy(dst, src, size) OPENSSL_strlcpy(dst, src, size)
-#    define BUF_strlcat(dst, src, size) OPENSSL_strlcat(dst, src, size)
-#    define BUF_strnlen(str, maxlen) OPENSSL_strnlen(str, maxlen)
+#  define BUF_strdup(s) OPENSSL_strdup(s)
+#  define BUF_strndup(s, size) OPENSSL_strndup(s, size)
+#  define BUF_memdup(data, size) OPENSSL_memdup(data, size)
+#  define BUF_strlcpy(dst, src, size) OPENSSL_strlcpy(dst, src, size)
+#  define BUF_strlcat(dst, src, size) OPENSSL_strlcat(dst, src, size)
+#  define BUF_strnlen(str, maxlen) OPENSSL_strnlen(str, maxlen)
 #endif
 
 struct buf_mem_st
 {
-    size_t length; /* current number of bytes */
-    char *data;
-    size_t max; /* size of buffer */
-    unsigned long flags;
+  size_t length; /* current number of bytes */
+  char *data;
+  size_t max; /* size of buffer */
+  unsigned long flags;
 };
 
 #define BUF_MEM_FLAG_SECURE 0x01

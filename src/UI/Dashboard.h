@@ -32,12 +32,13 @@ namespace UI
 /**
  * @brief The Dashboard class
  *
- * The @c Dashboard class receives data from the @c JSON::Generator class and builds the
- * vector modules used by the QML user interface and the C++ widgets to display the
- * current frame.
+ * The @c Dashboard class receives data from the @c JSON::Generator class and
+ * builds the vector modules used by the QML user interface and the C++ widgets
+ * to display the current frame.
  *
- * This class is very large, but its really simple to understand. Most of the code here is
- * repeated in order to support all the widgets implemented by Serial Studio.
+ * This class is very large, but its really simple to understand. Most of the
+ * code here is repeated in order to support all the widgets implemented by
+ * Serial Studio.
  *
  * The important functions are:
  *
@@ -52,12 +53,12 @@ namespace UI
  * - @c Dashboard::getWidgetDatasets()
  * - @c Dashboard::processLatestJSON()
  *
- * The rest of the functions of this class rely on the procedures above in order to
- * implement common functionality features for each widget type.
+ * The rest of the functions of this class rely on the procedures above in order
+ * to implement common functionality features for each widget type.
  */
 class Dashboard : public QObject
 {
-    // clang-format off
+  // clang-format off
     Q_OBJECT
     Q_PROPERTY(QString title
                READ title
@@ -142,177 +143,178 @@ class Dashboard : public QObject
     Q_PROPERTY(StringList accelerometerTitles
                READ accelerometerTitles
                NOTIFY widgetCountChanged)
-    // clang-format on
+  // clang-format on
 
 Q_SIGNALS:
-    void updated();
-    void dataReset();
-    void titleChanged();
-    void pointsChanged();
-    void precisionChanged();
-    void widgetCountChanged();
-    void widgetVisibilityChanged();
+  void updated();
+  void dataReset();
+  void titleChanged();
+  void pointsChanged();
+  void precisionChanged();
+  void widgetCountChanged();
+  void widgetVisibilityChanged();
 
 private:
-    explicit Dashboard();
-    Dashboard(Dashboard &&) = delete;
-    Dashboard(const Dashboard &) = delete;
-    Dashboard &operator=(Dashboard &&) = delete;
-    Dashboard &operator=(const Dashboard &) = delete;
+  explicit Dashboard();
+  Dashboard(Dashboard &&) = delete;
+  Dashboard(const Dashboard &) = delete;
+  Dashboard &operator=(Dashboard &&) = delete;
+  Dashboard &operator=(const Dashboard &) = delete;
 
 public:
-    enum class WidgetType
-    {
-        Group,
-        MultiPlot,
-        FFT,
-        Plot,
-        Bar,
-        Gauge,
-        Compass,
-        Gyroscope,
-        Accelerometer,
-        GPS,
-        LED,
-        Unknown
-    };
-    Q_ENUM(WidgetType)
+  enum class WidgetType
+  {
+    Group,
+    MultiPlot,
+    FFT,
+    Plot,
+    Bar,
+    Gauge,
+    Compass,
+    Gyroscope,
+    Accelerometer,
+    GPS,
+    LED,
+    Unknown
+  };
+  Q_ENUM(WidgetType)
 
-    static Dashboard &instance();
+  static Dashboard &instance();
 
-    QFont monoFont() const;
-    const JSON::Group &getLED(const int index) const;
-    const JSON::Group &getGPS(const int index) const;
-    const JSON::Dataset &getFFT(const int index) const;
-    const JSON::Dataset &getBar(const int index) const;
-    const JSON::Group &getGroups(const int index) const;
-    const JSON::Dataset &getPlot(const int index) const;
-    const JSON::Dataset &getGauge(const int index) const;
-    const JSON::Group &getGyroscope(const int index) const;
-    const JSON::Dataset &getCompass(const int index) const;
-    const JSON::Group &getMultiplot(const int index) const;
-    const JSON::Group &getAccelerometer(const int index) const;
+  QFont monoFont() const;
+  const JSON::Group &getLED(const int index) const;
+  const JSON::Group &getGPS(const int index) const;
+  const JSON::Dataset &getFFT(const int index) const;
+  const JSON::Dataset &getBar(const int index) const;
+  const JSON::Group &getGroups(const int index) const;
+  const JSON::Dataset &getPlot(const int index) const;
+  const JSON::Dataset &getGauge(const int index) const;
+  const JSON::Group &getGyroscope(const int index) const;
+  const JSON::Dataset &getCompass(const int index) const;
+  const JSON::Group &getMultiplot(const int index) const;
+  const JSON::Group &getAccelerometer(const int index) const;
 
-    QString title();
-    bool available();
-    int points() const;
-    int precision() const;
+  QString title();
+  bool available();
+  int points() const;
+  int precision() const;
 
-    int totalWidgetCount() const;
-    int gpsCount() const;
-    int ledCount() const;
-    int fftCount() const;
-    int barCount() const;
-    int plotCount() const;
-    int groupCount() const;
-    int gaugeCount() const;
-    int compassCount() const;
-    int gyroscopeCount() const;
-    int multiPlotCount() const;
-    int accelerometerCount() const;
+  int totalWidgetCount() const;
+  int gpsCount() const;
+  int ledCount() const;
+  int fftCount() const;
+  int barCount() const;
+  int plotCount() const;
+  int groupCount() const;
+  int gaugeCount() const;
+  int compassCount() const;
+  int gyroscopeCount() const;
+  int multiPlotCount() const;
+  int accelerometerCount() const;
 
-    Q_INVOKABLE bool frameValid() const;
-    Q_INVOKABLE StringList widgetTitles();
-    Q_INVOKABLE int relativeIndex(const int globalIndex) const;
-    Q_INVOKABLE bool widgetVisible(const int globalIndex) const;
-    Q_INVOKABLE QString widgetIcon(const int globalIndex) const;
-    Q_INVOKABLE UI::Dashboard::WidgetType widgetType(const int globalIndex) const;
+  Q_INVOKABLE bool frameValid() const;
+  Q_INVOKABLE StringList widgetTitles();
+  Q_INVOKABLE int relativeIndex(const int globalIndex) const;
+  Q_INVOKABLE bool widgetVisible(const int globalIndex) const;
+  Q_INVOKABLE QString widgetIcon(const int globalIndex) const;
+  Q_INVOKABLE UI::Dashboard::WidgetType widgetType(const int globalIndex) const;
 
-    Q_INVOKABLE bool barVisible(const int index) const;
-    Q_INVOKABLE bool fftVisible(const int index) const;
-    Q_INVOKABLE bool gpsVisible(const int index) const;
-    Q_INVOKABLE bool ledVisible(const int index) const;
-    Q_INVOKABLE bool plotVisible(const int index) const;
-    Q_INVOKABLE bool groupVisible(const int index) const;
-    Q_INVOKABLE bool gaugeVisible(const int index) const;
-    Q_INVOKABLE bool compassVisible(const int index) const;
-    Q_INVOKABLE bool gyroscopeVisible(const int index) const;
-    Q_INVOKABLE bool multiPlotVisible(const int index) const;
-    Q_INVOKABLE bool accelerometerVisible(const int index) const;
+  Q_INVOKABLE bool barVisible(const int index) const;
+  Q_INVOKABLE bool fftVisible(const int index) const;
+  Q_INVOKABLE bool gpsVisible(const int index) const;
+  Q_INVOKABLE bool ledVisible(const int index) const;
+  Q_INVOKABLE bool plotVisible(const int index) const;
+  Q_INVOKABLE bool groupVisible(const int index) const;
+  Q_INVOKABLE bool gaugeVisible(const int index) const;
+  Q_INVOKABLE bool compassVisible(const int index) const;
+  Q_INVOKABLE bool gyroscopeVisible(const int index) const;
+  Q_INVOKABLE bool multiPlotVisible(const int index) const;
+  Q_INVOKABLE bool accelerometerVisible(const int index) const;
 
-    StringList barTitles();
-    StringList fftTitles();
-    StringList gpsTitles();
-    StringList ledTitles();
-    StringList plotTitles();
-    StringList groupTitles();
-    StringList gaugeTitles();
-    StringList compassTitles();
-    StringList gyroscopeTitles();
-    StringList multiPlotTitles();
-    StringList accelerometerTitles();
+  StringList barTitles();
+  StringList fftTitles();
+  StringList gpsTitles();
+  StringList ledTitles();
+  StringList plotTitles();
+  StringList groupTitles();
+  StringList gaugeTitles();
+  StringList compassTitles();
+  StringList gyroscopeTitles();
+  StringList multiPlotTitles();
+  StringList accelerometerTitles();
 
-    const PlotData &xPlotValues() { return m_xData; }
-    const JSON::Frame &currentFrame() { return m_currentFrame; }
-    const QVector<PlotData> &fftPlotValues() { return m_fftPlotValues; }
-    const QVector<PlotData> &linearPlotValues() { return m_linearPlotValues; }
+  const PlotData &xPlotValues() { return m_xData; }
+  const JSON::Frame &currentFrame() { return m_currentFrame; }
+  const QVector<PlotData> &fftPlotValues() { return m_fftPlotValues; }
+  const QVector<PlotData> &linearPlotValues() { return m_linearPlotValues; }
 
 public Q_SLOTS:
-    void setPoints(const int points);
-    void setPrecision(const int precision);
-    void setBarVisible(const int index, const bool visible);
-    void setFFTVisible(const int index, const bool visible);
-    void setGpsVisible(const int index, const bool visible);
-    void setLedVisible(const int index, const bool visible);
-    void setPlotVisible(const int index, const bool visible);
-    void setGroupVisible(const int index, const bool visible);
-    void setGaugeVisible(const int index, const bool visible);
-    void setCompassVisible(const int index, const bool visible);
-    void setGyroscopeVisible(const int index, const bool visible);
-    void setMultiplotVisible(const int index, const bool visible);
-    void setAccelerometerVisible(const int index, const bool visible);
+  void setPoints(const int points);
+  void setPrecision(const int precision);
+  void setBarVisible(const int index, const bool visible);
+  void setFFTVisible(const int index, const bool visible);
+  void setGpsVisible(const int index, const bool visible);
+  void setLedVisible(const int index, const bool visible);
+  void setPlotVisible(const int index, const bool visible);
+  void setGroupVisible(const int index, const bool visible);
+  void setGaugeVisible(const int index, const bool visible);
+  void setCompassVisible(const int index, const bool visible);
+  void setGyroscopeVisible(const int index, const bool visible);
+  void setMultiplotVisible(const int index, const bool visible);
+  void setAccelerometerVisible(const int index, const bool visible);
 
 private Q_SLOTS:
-    void resetData();
-    void updatePlots();
-    void processLatestJSON(const QJsonObject &json);
+  void resetData();
+  void updatePlots();
+  void processLatestJSON(const QJsonObject &json);
 
 private:
-    QVector<JSON::Group> getLEDWidgets();
-    QVector<JSON::Dataset> getFFTWidgets();
-    QVector<JSON::Dataset> getPlotWidgets();
-    QVector<JSON::Group> getWidgetGroups(const QString &handle);
-    QVector<JSON::Dataset> getWidgetDatasets(const QString &handle);
+  QVector<JSON::Group> getLEDWidgets();
+  QVector<JSON::Dataset> getFFTWidgets();
+  QVector<JSON::Dataset> getPlotWidgets();
+  QVector<JSON::Group> getWidgetGroups(const QString &handle);
+  QVector<JSON::Dataset> getWidgetDatasets(const QString &handle);
 
-    StringList groupTitles(const QVector<JSON::Group> &vector);
-    StringList datasetTitles(const QVector<JSON::Dataset> &vector);
+  StringList groupTitles(const QVector<JSON::Group> &vector);
+  StringList datasetTitles(const QVector<JSON::Dataset> &vector);
 
-    bool getVisibility(const QVector<bool> &vector, const int index) const;
-    void setVisibility(QVector<bool> &vector, const int index, const bool visible);
+  bool getVisibility(const QVector<bool> &vector, const int index) const;
+  void setVisibility(QVector<bool> &vector, const int index,
+                     const bool visible);
 
 private:
-    int m_points;
-    int m_precision;
-    PlotData m_xData;
-    QVector<PlotData> m_fftPlotValues;
-    QVector<PlotData> m_linearPlotValues;
-    QVector<QVector<PlotData>> m_multiplotValues;
+  int m_points;
+  int m_precision;
+  PlotData m_xData;
+  QVector<PlotData> m_fftPlotValues;
+  QVector<PlotData> m_linearPlotValues;
+  QVector<QVector<PlotData>> m_multiplotValues;
 
-    QVector<bool> m_barVisibility;
-    QVector<bool> m_fftVisibility;
-    QVector<bool> m_gpsVisibility;
-    QVector<bool> m_ledVisibility;
-    QVector<bool> m_plotVisibility;
-    QVector<bool> m_groupVisibility;
-    QVector<bool> m_gaugeVisibility;
-    QVector<bool> m_compassVisibility;
-    QVector<bool> m_gyroscopeVisibility;
-    QVector<bool> m_multiPlotVisibility;
-    QVector<bool> m_accelerometerVisibility;
+  QVector<bool> m_barVisibility;
+  QVector<bool> m_fftVisibility;
+  QVector<bool> m_gpsVisibility;
+  QVector<bool> m_ledVisibility;
+  QVector<bool> m_plotVisibility;
+  QVector<bool> m_groupVisibility;
+  QVector<bool> m_gaugeVisibility;
+  QVector<bool> m_compassVisibility;
+  QVector<bool> m_gyroscopeVisibility;
+  QVector<bool> m_multiPlotVisibility;
+  QVector<bool> m_accelerometerVisibility;
 
-    QVector<JSON::Dataset> m_barWidgets;
-    QVector<JSON::Dataset> m_fftWidgets;
-    QVector<JSON::Dataset> m_plotWidgets;
-    QVector<JSON::Dataset> m_gaugeWidgets;
-    QVector<JSON::Dataset> m_compassWidgets;
+  QVector<JSON::Dataset> m_barWidgets;
+  QVector<JSON::Dataset> m_fftWidgets;
+  QVector<JSON::Dataset> m_plotWidgets;
+  QVector<JSON::Dataset> m_gaugeWidgets;
+  QVector<JSON::Dataset> m_compassWidgets;
 
-    QVector<JSON::Group> m_ledWidgets;
-    QVector<JSON::Group> m_gpsWidgets;
-    QVector<JSON::Group> m_groupWidgets;
-    QVector<JSON::Group> m_multiPlotWidgets;
-    QVector<JSON::Group> m_gyroscopeWidgets;
-    QVector<JSON::Group> m_accelerometerWidgets;
+  QVector<JSON::Group> m_ledWidgets;
+  QVector<JSON::Group> m_gpsWidgets;
+  QVector<JSON::Group> m_groupWidgets;
+  QVector<JSON::Group> m_multiPlotWidgets;
+  QVector<JSON::Group> m_gyroscopeWidgets;
+  QVector<JSON::Group> m_accelerometerWidgets;
 
-    JSON::Frame m_currentFrame;
+  JSON::Frame m_currentFrame;
 };
-}
+} // namespace UI

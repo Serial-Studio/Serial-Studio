@@ -44,89 +44,83 @@ class QwtSymbol;
 
 class QWT_EXPORT QwtPlotMarker : public QwtPlotItem
 {
-  public:
+public:
+  /*!
+      Line styles.
+      \sa setLineStyle(), lineStyle()
+   */
+  enum LineStyle
+  {
+    //! No line
+    NoLine,
 
-    /*!
-        Line styles.
-        \sa setLineStyle(), lineStyle()
-     */
-    enum LineStyle
-    {
-        //! No line
-        NoLine,
+    //! A horizontal line
+    HLine,
 
-        //! A horizontal line
-        HLine,
+    //! A vertical line
+    VLine,
 
-        //! A vertical line
-        VLine,
+    //! A crosshair
+    Cross
+  };
 
-        //! A crosshair
-        Cross
-    };
+  explicit QwtPlotMarker();
+  explicit QwtPlotMarker(const QString &title);
+  explicit QwtPlotMarker(const QwtText &title);
 
-    explicit QwtPlotMarker();
-    explicit QwtPlotMarker( const QString& title );
-    explicit QwtPlotMarker( const QwtText& title );
+  virtual ~QwtPlotMarker();
 
-    virtual ~QwtPlotMarker();
+  virtual int rtti() const QWT_OVERRIDE;
 
-    virtual int rtti() const QWT_OVERRIDE;
+  double xValue() const;
+  double yValue() const;
+  QPointF value() const;
 
-    double xValue() const;
-    double yValue() const;
-    QPointF value() const;
+  void setXValue(double);
+  void setYValue(double);
+  void setValue(double, double);
+  void setValue(const QPointF &);
 
-    void setXValue( double );
-    void setYValue( double );
-    void setValue( double, double );
-    void setValue( const QPointF& );
+  void setLineStyle(LineStyle);
+  LineStyle lineStyle() const;
 
-    void setLineStyle( LineStyle );
-    LineStyle lineStyle() const;
+  void setLinePen(const QColor &, qreal width = 0.0,
+                  Qt::PenStyle = Qt::SolidLine);
+  void setLinePen(const QPen &);
+  const QPen &linePen() const;
 
-    void setLinePen( const QColor&, qreal width = 0.0, Qt::PenStyle = Qt::SolidLine );
-    void setLinePen( const QPen& );
-    const QPen& linePen() const;
+  void setSymbol(const QwtSymbol *);
+  const QwtSymbol *symbol() const;
 
-    void setSymbol( const QwtSymbol* );
-    const QwtSymbol* symbol() const;
+  void setLabel(const QwtText &);
+  QwtText label() const;
 
-    void setLabel( const QwtText& );
-    QwtText label() const;
+  void setLabelAlignment(Qt::Alignment);
+  Qt::Alignment labelAlignment() const;
 
-    void setLabelAlignment( Qt::Alignment );
-    Qt::Alignment labelAlignment() const;
+  void setLabelOrientation(Qt::Orientation);
+  Qt::Orientation labelOrientation() const;
 
-    void setLabelOrientation( Qt::Orientation );
-    Qt::Orientation labelOrientation() const;
+  void setSpacing(int);
+  int spacing() const;
 
-    void setSpacing( int );
-    int spacing() const;
+  virtual void draw(QPainter *, const QwtScaleMap &xMap,
+                    const QwtScaleMap &yMap, const QRectF &) const QWT_OVERRIDE;
 
-    virtual void draw( QPainter*,
-        const QwtScaleMap& xMap, const QwtScaleMap& yMap,
-        const QRectF& ) const QWT_OVERRIDE;
+  virtual QRectF boundingRect() const QWT_OVERRIDE;
 
-    virtual QRectF boundingRect() const QWT_OVERRIDE;
+  virtual QwtGraphic legendIcon(int index, const QSizeF &) const QWT_OVERRIDE;
 
-    virtual QwtGraphic legendIcon(
-        int index, const QSizeF& ) const QWT_OVERRIDE;
+protected:
+  virtual void drawLines(QPainter *, const QRectF &, const QPointF &) const;
 
-  protected:
-    virtual void drawLines( QPainter*,
-        const QRectF&, const QPointF& ) const;
+  virtual void drawSymbol(QPainter *, const QRectF &, const QPointF &) const;
 
-    virtual void drawSymbol( QPainter*,
-        const QRectF&, const QPointF& ) const;
+  virtual void drawLabel(QPainter *, const QRectF &, const QPointF &) const;
 
-    virtual void drawLabel( QPainter*,
-        const QRectF&, const QPointF& ) const;
-
-  private:
-
-    class PrivateData;
-    PrivateData* m_data;
+private:
+  class PrivateData;
+  PrivateData *m_data;
 };
 
 #endif
