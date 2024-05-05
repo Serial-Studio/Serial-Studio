@@ -127,7 +127,7 @@ jobs:
 
     - name: '📦 Package application'
       run: |
-        macdeployqt ${{env.EXECUTABLE}}.app -qmldir="${{env.QML_DIR_NIX}}"
+        macdeployqt ${{env.EXECUTABLE}}.app -appstore-compliant -qmldir="${{env.QML_DIR_NIX}}"
         mv "${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
 
     - name: '🪪 Import Code Signing Certificate'
