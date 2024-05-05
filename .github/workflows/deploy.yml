@@ -97,6 +97,7 @@ jobs:
   # macOS build (ARM64)
   #
   build-mac-arm:
+    if: false
     runs-on: macos-latest
     name: '🍎 macOS (ARM64)'
     steps:
