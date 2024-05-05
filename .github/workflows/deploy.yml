@@ -17,7 +17,7 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  VERSION: "2.0.0"
+  VERSION: "2.1.0"
   EXECUTABLE: "SerialStudio"
   APPLICATION: "Serial Studio"
   UNIXNAME: "serial-studio"
@@ -88,7 +88,7 @@ jobs:
         mv *.AppImage ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
 
     - name: '📤 Upload artifact: AppImage'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
@@ -215,7 +215,7 @@ jobs:
         Compress-Archive -Path "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows" -DestinationPath "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip"
 
     - name: '📦 Make NSIS installer'
-      uses: joncloud/makensis-action@v3.6
+      uses: joncloud/makensis-action@v4.1
       with:
         script-file: deploy/windows/nsis/setup.nsi
 
@@ -231,13 +231,13 @@ jobs:
         ren *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
 
     - name: '📤 Upload artifact: NSIS installer'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
         path: deploy/windows/nsis/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
 
     - name: '📤 Upload artifact: Portable application'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip
@@ -264,7 +264,7 @@ jobs:
       shell: bash
 
     - name: '🧰 Checkout'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
         submodules: recursive
@@ -291,7 +291,7 @@ jobs:
         MINGW_INSTALLS: ${{ matrix.msystem }}
 
     - name: '📤 Upload artifact: MSYS2 ${{ matrix.arch }} package'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: msys2-pkgs
         path: msys2/*.zst
