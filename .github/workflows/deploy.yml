@@ -94,11 +94,11 @@ jobs:
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
 
   #
-  # macOS build
+  # macOS build (ARM64)
   #
-  build-mac:
+  build-mac-arm:
     runs-on: macos-latest
-    name: '🍎 macOS'
+    name: '🍎 macOS (ARM64)'
     steps:
 
     - name: '🧰 Checkout'
@@ -144,12 +144,12 @@ jobs:
         npm install --global create-dmg
         rm LICENSE.md
         create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
-        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Arm64.dmg"
 
     - name: '📋 Notarize'
       uses: alex-spataru/xcode-notarize@v2
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Arm64.dmg
         appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
         appstore-connect-teamid: ${{secrets.NOTARIZATION_TEAMID}}
         appstore-connect-password: ${{secrets.NOTARIZATION_PASSWORD}}
@@ -157,13 +157,86 @@ jobs:
     - name: '📌 Staple'
       uses: BoundfoxStudios/action-xcode-staple@v1
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Arm64.dmg
 
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Arm64.dmg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Arm64.dmg
+
+  
+  #
+  # macOS build (Intel)
+  #
+  build-mac-intel:
+    runs-on: macos-latest-large
+    name: '🍎 macOS (Intel)'
+    steps:
+
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: '⚙️ Install Qt'
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: ${{env.QT_VERSION}}
+        modules: ${{env.QT_MODULES}}
+        cache: true
+        arch: clang_64
+        install-deps: 'true'
+
+    - name: '⚙️ Install Node'
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: '🚧 Compile application'
+      run: |
+        ${{env.QMAKE}} ${{env.QMAKE_PROJECT}} CONFIG+=release
+        make -j${{env.CORES}}
+
+    - name: '📦 Package application'
+      run: |
+        macdeployqt ${{env.EXECUTABLE}}.app -appstore-compliant -qmldir="${{env.QML_DIR_NIX}}"
+        mv "${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
+
+    - name: '🪪 Import Code Signing Certificate'
+      uses: apple-actions/import-codesign-certs@v2
+      with:
+        p12-file-base64: ${{secrets.CERTIFICATES_P12}}
+        p12-password: ${{secrets.CERTIFICATES_P12_PASSWORD}}
+
+    - name: '✍🏻 Sign Application'
+      run: codesign --force --deep --options runtime --sign "${{secrets.DEVELOPER_ID}}" "${{env.APPLICATION}}.app"
+
+    - name: '💽 Create nice DMG'
+      run: |
+        npm install --global create-dmg
+        rm LICENSE.md
+        create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg"
+
+    - name: '📋 Notarize'
+      uses: alex-spataru/xcode-notarize@v2
+      with:
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
+        appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
+        appstore-connect-teamid: ${{secrets.NOTARIZATION_TEAMID}}
+        appstore-connect-password: ${{secrets.NOTARIZATION_PASSWORD}}
+
+    - name: '📌 Staple'
+      uses: BoundfoxStudios/action-xcode-staple@v1
+      with:
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
+
+    - name: '📤 Upload artifact: DMG'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
 
   #
   # Windows build
@@ -348,7 +421,8 @@ jobs:
       name: '🗂 Create release and upload artifacts'
       needs:
         - build-linux
-        - build-mac
+        - build-mac-arm
+        - build-mac-intel
         - build-windows
       runs-on: ubuntu-latest
       steps:
@@ -365,6 +439,7 @@ jobs:
             wget -q https://github.com/TheAssassin/pyuploadtool/releases/download/continuous/pyuploadtool-x86_64.AppImage
             chmod +x pyuploadtool-x86_64.AppImage
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Arm64.dmg
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.zip
