@@ -43,7 +43,6 @@ jobs:
     runs-on: ubuntu-20.04
     name: '🐧 Ubuntu 20.04'
     steps:
-
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
       with:
@@ -99,10 +98,6 @@ jobs:
   build-mac-arm:
     runs-on: macos-latest
     name: '🍎 macOS (ARM64)'
-    
-    # Avoid hitting concurreny limit
-    needs:
-        - build-linux
         
     steps:
     - name: '🧰 Checkout'
@@ -174,16 +169,9 @@ jobs:
   # macOS build (Intel)
   #
   build-mac-intel:        
-    runs-on: macos-14-large
+    runs-on: macos-12
     name: '🍎 macOS (Intel)'
-
-    # Avoid hitting concurreny limit
-    needs:
-        - build-linux
-        - build-mac-arm
-        
     steps:
-
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
       with:
@@ -254,13 +242,6 @@ jobs:
   build-windows:
     runs-on: windows-latest
     name: '🧊 Windows'
-    
-    # Avoid hitting concurreny limit
-    needs:
-        - build-linux
-        - build-mac-arm
-        - build-mac-intel
-        
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -334,101 +315,101 @@ jobs:
   #
   # Windows MSYS2 build
   #
-  msys2-makepkg:
-    if: ${{false}}
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { icon: '🟪', msystem: MINGW64, arch: x86_64 }
-          - { icon: '🟦', msystem: MINGW32, arch: i686   }
-    name:  ${{ matrix.icon }} ${{ matrix.msystem }} | ${{ matrix.arch }} | makepkg
-    defaults:
-      run:
-        shell: msys2 {0}
-    steps:
-
-    - run: git config --global core.autocrlf input
-      shell: bash
-
-    - name: '🧰 Checkout'
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        submodules: recursive
-
-    - name: '${{ matrix.icon }} Setup MSYS2'
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: ${{ matrix.msystem }}
-        update: true
-        install: >
-          base-devel
-          mingw-w64-${{ matrix.arch }}-toolchain
-
-    - name: '🚧 Build'
-      run: |
-        cd msys2
-        tries=0
-        # Try building three times due to the arbitrary 'Bad address' error
-        while [ $tries -lt 3 ]; do
-          makepkg-mingw --noconfirm --noprogressbar -sCLf && break || tries=$((tries+1))
-        done
-
-      env:
-        MINGW_INSTALLS: ${{ matrix.msystem }}
-
-    - name: '📤 Upload artifact: MSYS2 ${{ matrix.arch }} package'
-      uses: actions/upload-artifact@v4
-      with:
-        name: msys2-pkgs
-        path: msys2/*.zst
+  # msys2-makepkg:
+  #   if: ${{false}}
+  #   runs-on: windows-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include:
+  #         - { icon: '🟪', msystem: MINGW64, arch: x86_64 }
+  #         - { icon: '🟦', msystem: MINGW32, arch: i686   }
+  #   name:  ${{ matrix.icon }} ${{ matrix.msystem }} | ${{ matrix.arch }} | makepkg
+  #   defaults:
+  #     run:
+  #       shell: msys2 {0}
+  #   steps:
+  # 
+  #   - run: git config --global core.autocrlf input
+  #     shell: bash
+  # 
+  #   - name: '🧰 Checkout'
+  #     uses: actions/checkout@v4
+  #     with:
+  #       fetch-depth: 0
+  #       submodules: recursive
+  # 
+  #   - name: '${{ matrix.icon }} Setup MSYS2'
+  #     uses: msys2/setup-msys2@v2
+  #     with:
+  #       msystem: ${{ matrix.msystem }}
+  #       update: true
+  #       install: >
+  #         base-devel
+  #         mingw-w64-${{ matrix.arch }}-toolchain
+  # 
+  #   - name: '🚧 Build'
+  #     run: |
+  #       cd msys2
+  #       tries=0
+  #       # Try building three times due to the arbitrary 'Bad address' error
+  #       while [ $tries -lt 3 ]; do
+  #         makepkg-mingw --noconfirm --noprogressbar -sCLf && break || tries=$((tries+1))
+  #       done
+  # 
+  #     env:
+  #       MINGW_INSTALLS: ${{ matrix.msystem }}
+  # 
+  #   - name: '📤 Upload artifact: MSYS2 ${{ matrix.arch }} package'
+  #     uses: actions/upload-artifact@v4
+  #     with:
+  #       name: msys2-pkgs
+  #       path: msys2/*.zst
 
   #
   # Test Windows MSYS2 packages
   #
-  msys2-test:
-    if: ${{false}}
-    needs: msys2-makepkg
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { icon: '🟪', msystem: MINGW64, arch: x86_64 }
-          - { icon: '🟦', msystem: MINGW32, arch: i686   }
-    name: ${{ matrix.icon }} ${{ matrix.msystem }} | ${{ matrix.arch }} | Test
-    defaults:
-      run:
-        shell: msys2 {0}
-    steps:
-
-    - name: '${{ matrix.icon }} Setup MSYS2'
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: ${{ matrix.msystem }}
-        update: true
-        install: >
-          tree
-          tar
-          zstd
-
-    - name: '📥 Download artifacts: MSYS2 packages'
-      uses: actions/download-artifact@v2
-      with:
-        name: msys2-pkgs
-
-    - name: 'Install MSYS2 package'
-      run: |
-        pacman -U --noconfirm --noprogressbar *${{ matrix.arch }}*.zst
-
-    - name: 'List contents of package'
-      run: |
-        mkdir tmp
-        cd tmp
-        /usr/bin/tar xf ../*${{ matrix.arch }}*.zst
-        tree ${{ matrix.msystem }}
+  #  msys2-test:
+  #   if: ${{false}}
+  #   needs: msys2-makepkg
+  #   runs-on: windows-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include:
+  #         - { icon: '🟪', msystem: MINGW64, arch: x86_64 }
+  #         - { icon: '🟦', msystem: MINGW32, arch: i686   }
+  #   name: ${{ matrix.icon }} ${{ matrix.msystem }} | ${{ matrix.arch }} | Test
+  #   defaults:
+  #     run:
+  #       shell: msys2 {0}
+  #   steps:
+  # 
+  #   - name: '${{ matrix.icon }} Setup MSYS2'
+  #     uses: msys2/setup-msys2@v2
+  #     with:
+  #       msystem: ${{ matrix.msystem }}
+  #       update: true
+  #       install: >
+  #         tree
+  #         tar
+  #         zstd
+  # 
+  #   - name: '📥 Download artifacts: MSYS2 packages'
+  #     uses: actions/download-artifact@v2
+  #     with:
+  #       name: msys2-pkgs
+  # 
+  #   - name: 'Install MSYS2 package'
+  #     run: |
+  #       pacman -U --noconfirm --noprogressbar *${{ matrix.arch }}*.zst
+  # 
+  #   - name: 'List contents of package'
+  #     run: |
+  #       mkdir tmp
+  #       cd tmp
+  #       /usr/bin/tar xf ../*${{ matrix.arch }}*.zst
+  #       tree ${{ matrix.msystem }}
 
   #
   # Upload continuous build
