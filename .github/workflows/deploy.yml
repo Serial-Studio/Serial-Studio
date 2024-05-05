@@ -350,10 +350,10 @@ jobs:
         - build-linux
         - build-mac
         - build-windows
-      runs-on: ubuntu-20.04
+      runs-on: ubuntu-latest
       steps:
       - name: '📥 Download artifacts'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
       - name: '🗂 Inspect directory after downloading artifacts'
         run: ls -alFR
       - name: '🚀 Create release and upload artifacts'
