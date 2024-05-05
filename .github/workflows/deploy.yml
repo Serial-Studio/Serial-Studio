@@ -170,7 +170,6 @@ jobs:
   # macOS build (Intel)
   #
   build-mac-intel:
-    if: false
     runs-on: macos-14-large
     name: '🍎 macOS (Intel)'
     steps:
@@ -423,7 +422,7 @@ jobs:
       needs:
         - build-linux
         - build-mac-arm
-        #- build-mac-intel
+        - build-mac-intel
         - build-windows
       runs-on: ubuntu-latest
       steps:
