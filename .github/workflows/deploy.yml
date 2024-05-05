@@ -170,7 +170,7 @@ jobs:
   # macOS build (Intel)
   #
   build-mac-intel:
-    runs-on: macos-latest-large
+    runs-on: macos-14-large
     name: '🍎 macOS (Intel)'
     steps:
 
