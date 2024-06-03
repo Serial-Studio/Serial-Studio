@@ -633,7 +633,10 @@ void IO::Drivers::Serial::refreshSerialDevices()
   Q_FOREACH (QSerialPortInfo info, validPortList)
   {
     if (!info.isNull())
-      ports.append(info.portName());
+    {
+      QString p = info.portName() + "  " + info.description();
+      ports.append(p);
+    }
   }
 
   // Update list only if necessary
