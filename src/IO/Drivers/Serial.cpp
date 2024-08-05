@@ -187,6 +187,7 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
     {
       connect(port(), &QIODevice::readyRead, this,
               &IO::Drivers::Serial::onReadyRead);
+      port()->setDataTerminalReady(true);
       return true;
     }
   }
