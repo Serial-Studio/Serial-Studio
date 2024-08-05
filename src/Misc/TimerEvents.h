@@ -43,7 +43,7 @@ Q_SIGNALS:
   void timeout20Hz();
 
 private:
-  TimerEvents(){};
+  TimerEvents() {};
   TimerEvents(TimerEvents &&) = delete;
   TimerEvents(const TimerEvents &) = delete;
   TimerEvents &operator=(TimerEvents &&) = delete;

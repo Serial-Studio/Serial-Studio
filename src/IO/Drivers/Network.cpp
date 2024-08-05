@@ -539,4 +539,3 @@ void IO::Drivers::Network::onErrorOccurred(
   Manager::instance().disconnectDriver();
   Misc::Utilities::showMessageBox(tr("Network socket error"), error);
 }
-

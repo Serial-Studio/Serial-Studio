@@ -661,4 +661,3 @@ IO::Manager::integrityChecks(const QByteArray &frame, const QByteArray &cursor,
   // Checksum data incomplete
   return ValidationStatus::ChecksumIncomplete;
 }
-

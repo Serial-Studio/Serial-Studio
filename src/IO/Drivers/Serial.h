@@ -44,56 +44,60 @@ namespace Drivers
 class Serial : public HAL_Driver
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(QString portName
-               READ portName
-               NOTIFY portChanged)
-    Q_PROPERTY(bool autoReconnect
-               READ autoReconnect
-               WRITE setAutoReconnect
-               NOTIFY autoReconnectChanged)
-    Q_PROPERTY(quint8 portIndex
-               READ portIndex
-               WRITE setPortIndex
-               NOTIFY portIndexChanged)
-    Q_PROPERTY(quint8 parityIndex
-               READ parityIndex
-               WRITE setParity
-               NOTIFY parityChanged)
-    Q_PROPERTY(quint8 dataBitsIndex
-               READ dataBitsIndex
-               WRITE setDataBits
-               NOTIFY dataBitsChanged)
-    Q_PROPERTY(quint8 stopBitsIndex
-               READ stopBitsIndex
-               WRITE setStopBits
-               NOTIFY stopBitsChanged)
-    Q_PROPERTY(quint8 flowControlIndex
-               READ flowControlIndex
-               WRITE setFlowControl
-               NOTIFY flowControlChanged)
-    Q_PROPERTY(qint32 baudRate
-               READ baudRate
-               WRITE setBaudRate
-               NOTIFY baudRateChanged)
-    Q_PROPERTY(StringList portList
-               READ portList
-               NOTIFY availablePortsChanged)
-    Q_PROPERTY(StringList parityList
-               READ parityList
-               CONSTANT)
-    Q_PROPERTY(StringList baudRateList
-               READ baudRateList
-               NOTIFY baudRateListChanged)
-    Q_PROPERTY(StringList dataBitsList
-               READ dataBitsList
-               CONSTANT)
-    Q_PROPERTY(StringList stopBitsList
-               READ stopBitsList
-               CONSTANT)
-    Q_PROPERTY(StringList flowControlList
-               READ flowControlList
-               CONSTANT)
+  Q_OBJECT
+  Q_PROPERTY(QString portName
+             READ portName
+             NOTIFY portChanged)
+  Q_PROPERTY(bool autoReconnect
+             READ autoReconnect
+             WRITE setAutoReconnect
+             NOTIFY autoReconnectChanged)
+  Q_PROPERTY(bool dtrEnabled
+             READ dtrEnabled
+             WRITE setDtrEnabled
+             NOTIFY dtrEnabledChanged)
+  Q_PROPERTY(quint8 portIndex
+             READ portIndex
+             WRITE setPortIndex
+             NOTIFY portIndexChanged)
+  Q_PROPERTY(quint8 parityIndex
+             READ parityIndex
+             WRITE setParity
+             NOTIFY parityChanged)
+  Q_PROPERTY(quint8 dataBitsIndex
+             READ dataBitsIndex
+             WRITE setDataBits
+             NOTIFY dataBitsChanged)
+  Q_PROPERTY(quint8 stopBitsIndex
+             READ stopBitsIndex
+             WRITE setStopBits
+             NOTIFY stopBitsChanged)
+  Q_PROPERTY(quint8 flowControlIndex
+             READ flowControlIndex
+             WRITE setFlowControl
+             NOTIFY flowControlChanged)
+  Q_PROPERTY(qint32 baudRate
+             READ baudRate
+             WRITE setBaudRate
+             NOTIFY baudRateChanged)
+  Q_PROPERTY(StringList portList
+             READ portList
+             NOTIFY availablePortsChanged)
+  Q_PROPERTY(StringList parityList
+             READ parityList
+             CONSTANT)
+  Q_PROPERTY(StringList baudRateList
+             READ baudRateList
+             NOTIFY baudRateListChanged)
+  Q_PROPERTY(StringList dataBitsList
+             READ dataBitsList
+             CONSTANT)
+  Q_PROPERTY(StringList stopBitsList
+             READ stopBitsList
+             CONSTANT)
+  Q_PROPERTY(StringList flowControlList
+             READ flowControlList
+             CONSTANT)
   // clang-format on
 
 Q_SIGNALS:
@@ -103,6 +107,7 @@ Q_SIGNALS:
   void dataBitsChanged();
   void stopBitsChanged();
   void portIndexChanged();
+  void dtrEnabledChanged();
   void flowControlChanged();
   void baudRateListChanged();
   void autoReconnectChanged();
@@ -137,6 +142,7 @@ public:
   QSerialPort *port() const;
   bool autoReconnect() const;
 
+  bool dtrEnabled() const;
   quint8 portIndex() const;
   quint8 parityIndex() const;
   quint8 displayMode() const;
@@ -160,6 +166,7 @@ public:
 public Q_SLOTS:
   void disconnectDevice();
   void setBaudRate(const qint32 rate);
+  void setDtrEnabled(const bool enabled);
   void setParity(const quint8 parityIndex);
   void setPortIndex(const quint8 portIndex);
   void appendBaudRate(const QString &baudRate);
@@ -181,6 +188,7 @@ private:
 private:
   QSerialPort *m_port;
 
+  bool m_dtrEnabled;
   bool m_autoReconnect;
   int m_lastSerialDeviceIndex;
 

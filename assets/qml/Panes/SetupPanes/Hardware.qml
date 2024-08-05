@@ -36,12 +36,15 @@ Control {
   //
   QtSettings.Settings {
     property alias driver: _driverCombo.currentIndex
+
+    property alias dtr: serial.dtr
     property alias parity: serial.parity
     property alias baudRate: serial.baudRate
     property alias dataBits: serial.dataBits
     property alias stopBits: serial.stopBits
     property alias flowControl: serial.flowControl
     property alias autoReconnect: serial.autoReconnect
+
     property alias address: network.address
     property alias tcpPort: network.tcpPort
     property alias socketType: network.socketType

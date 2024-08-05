@@ -35,6 +35,7 @@
  */
 IO::Drivers::Serial::Serial()
   : m_port(Q_NULLPTR)
+  , m_dtrEnabled(true)
   , m_autoReconnect(false)
   , m_lastSerialDeviceIndex(0)
   , m_portIndex(0)
@@ -52,13 +53,13 @@ IO::Drivers::Serial::Serial()
 
   // clang-format off
 
-    // Build serial devices list and refresh it every second
-    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
-            this, &IO::Drivers::Serial::refreshSerialDevices);
+  // Build serial devices list and refresh it every second
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
+          this, &IO::Drivers::Serial::refreshSerialDevices);
 
-    // Update connect button status when user selects a serial device
-    connect(this, &IO::Drivers::Serial::portIndexChanged,
-            this, &IO::Drivers::Serial::configurationChanged);
+  // Update connect button status when user selects a serial device
+  connect(this, &IO::Drivers::Serial::portIndexChanged,
+          this, &IO::Drivers::Serial::configurationChanged);
 
   // clang-format on
 }
@@ -187,7 +188,9 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
     {
       connect(port(), &QIODevice::readyRead, this,
               &IO::Drivers::Serial::onReadyRead);
-      port()->setDataTerminalReady(true);
+
+      port()->setDataTerminalReady(dtrEnabled());
+
       return true;
     }
   }
@@ -226,6 +229,16 @@ QSerialPort *IO::Drivers::Serial::port() const
 bool IO::Drivers::Serial::autoReconnect() const
 {
   return m_autoReconnect;
+}
+
+/**
+ * Returns @c true if the module shall manually send the DTR
+ * (Data Terminal Ready) signal to the connected device upon opening the
+ * serial port connection.
+ */
+bool IO::Drivers::Serial::dtrEnabled() const
+{
+  return m_dtrEnabled;
 }
 
 /**
@@ -425,6 +438,28 @@ void IO::Drivers::Serial::setBaudRate(const qint32 rate)
 
   // Update user interface
   Q_EMIT baudRateChanged();
+}
+
+/**
+ * Sets the Data Terminal Ready (DTR) signal state.
+ *
+ * This function is called when the DTR checkbox state is changed. It updates
+ * the internal state to reflect whether DTR is enabled or disabled and
+ * communicates this change to the serial port if it is open.
+ *
+ * If the serial port is currently open, the DTR signal is set accordingly.
+ *
+ * This change is also emitted as a signal to notify any connected slots of the
+ * change.
+ */
+void IO::Drivers::Serial::setDtrEnabled(const bool enabled)
+{
+  m_dtrEnabled = enabled;
+
+  if (port() && port()->isOpen())
+    port()->setDataTerminalReady(enabled);
+
+  Q_EMIT dtrEnabledChanged();
 }
 
 /**
