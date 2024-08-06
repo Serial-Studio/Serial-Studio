@@ -487,8 +487,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
   // Only use \n as line separator
   auto data = string;
-  data = data.replace("\r\n", "\n");
-  data = data.replace("\r", "\n");
+  data = data.remove("\r");
 
   // Get timestamp
   QString timestamp;
