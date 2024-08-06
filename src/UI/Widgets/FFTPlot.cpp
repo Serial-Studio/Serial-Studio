@@ -90,9 +90,9 @@ Widgets::FFTPlot::FFTPlot(int index)
   m_curve.setSamples(QVector<QPointF>(m_size, QPointF(0, 0)));
 
   // Configure plot axes and titles
-  m_plot.setAxisScale(QwtPlot::yLeft, 0, 1);
+  m_plot.setAxisScale(QwtPlot::yLeft, -100, 0);
   m_plot.setAxisTitle(QwtPlot::xBottom, tr("Frequency (Hz)"));
-  m_plot.setAxisTitle(QwtPlot::yLeft, tr("FFT of %1").arg(dataset.title()));
+  m_plot.setAxisTitle(QwtPlot::yLeft, tr("Magnitude (dB)"));
   m_plot.replot();
 
   // Start timer
@@ -117,24 +117,46 @@ void Widgets::FFTPlot::updateData()
   auto plotData = UI::Dashboard::instance().fftPlotValues();
   if (plotData.count() > m_index)
   {
+    // Obtain samples from data
     auto data = plotData.at(m_index);
     for (int i = 0; i < m_size; ++i)
       m_samples[i] = static_cast<float>(data[i]);
 
+    // Obtain FFT transformation
     m_transformer.forwardTransform(m_samples.data(), m_fft.data());
     m_transformer.rescale(m_fft.data());
 
-    QVector<QPointF> points(m_size);
+    // Create a final array with the magnitudes for each point
+    qreal maxMagnitude = 0;
+    QVector<QPointF> points(m_size / 2);
     for (int i = 0; i < m_size / 2; ++i)
     {
-      float frequency = i * m_samplingRate / m_size;
-      points[i] = QPointF(frequency, m_fft[i]);
+      const qreal re = m_fft[i];
+      const qreal im = m_fft[m_size / 2 + i];
+      const qreal magnitude = sqrt(re * re + im * im);
+      const qreal frequency = i * m_samplingRate / m_size;
+      points[i] = QPointF(frequency, magnitude);
+      if (magnitude > maxMagnitude)
+        maxMagnitude = magnitude;
     }
 
-    m_curve.setSamples(points.mid(0, m_size / 2));
+    // Convert to decibels
+    for (int i = 0; i < m_size / 2; ++i)
+    {
+      const qreal re = m_fft[i];
+      const qreal im = m_fft[m_size / 2 + i];
+      const qreal magnitude = sqrt(re * re + im * im) / maxMagnitude;
+      const qreal dB = 20 * log10(magnitude);
+      const qreal frequency = i * m_samplingRate / m_size;
+      points[i] = QPointF(frequency, dB);
+    }
+
+    // Plot obtained data, remember Nyquist's theorem? :)
+    m_curve.setSamples(points);
     m_plot.setAxisScale(QwtPlot::xBottom, 0, m_samplingRate / 2);
     m_plot.replot();
 
+    // Redraw the widget
     requestRepaint();
   }
 }
