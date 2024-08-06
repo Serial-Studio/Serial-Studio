@@ -59,7 +59,7 @@ Widgets::MultiPlot::MultiPlot(const int index)
 
   // Configure layout
   m_layout.addWidget(&m_plot);
-  m_layout.setContentsMargins(24, 24, 24, 24);
+  m_layout.setContentsMargins(8, 8, 8, 8);
   setLayout(&m_layout);
 
   // Fit data horizontally
@@ -113,14 +113,10 @@ Widgets::MultiPlot::MultiPlot(const int index)
   m_plot.show();
 
   // React to dashboard events
-  // clang-format off
-    connect(dash, SIGNAL(updated()),
-            this, SLOT(updateData()),
-            Qt::QueuedConnection);
-    connect(dash, SIGNAL(pointsChanged()),
-            this, SLOT(updateRange()),
-            Qt::QueuedConnection);
-  // clang-format on
+  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
+          Qt::QueuedConnection);
+  connect(dash, SIGNAL(pointsChanged()), this, SLOT(updateRange()),
+          Qt::QueuedConnection);
 }
 
 /**

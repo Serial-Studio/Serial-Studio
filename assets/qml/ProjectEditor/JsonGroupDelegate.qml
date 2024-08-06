@@ -43,7 +43,6 @@ Page {
   property int group
   readonly property int minSize: 320
   readonly property int maxSize: 380
-  readonly property int cellHeight: 420
   readonly property int columns: Math.floor((grid.width - 2 * scroll.width) / cWidth)
   readonly property int cellWidth: cWidth + ((grid.width - 2 * scroll.width) - (cWidth) * columns) / columns
   readonly property int cWidth: Math.min(maxSize, Math.max(minSize, (grid.width - 2 * scroll.width) / grid.model))
@@ -262,8 +261,18 @@ Page {
         anchors.margins: 1
         anchors.fill: parent
         cellWidth: root.cellWidth
-        cellHeight: root.cellHeight
         model: Cpp_Project_Model.datasetCount(group)
+
+        function updateLayout() {
+          var maxHeight = 100;
+          for (var i = 0; i < grid.count; i++) {
+            var item = grid.itemAtIndex(i);
+            if (item)
+              maxHeight = Math.max(maxHeight, item.height);
+          }
+
+          grid.cellHeight = maxHeight
+        }
 
         ScrollBar.vertical: ScrollBar {
           id: scroll
@@ -272,7 +281,9 @@ Page {
 
         delegate: Item {
           width: grid.cellWidth
-          height: grid.cellHeight
+          height: loader.implicitHeight + 64
+          onHeightChanged: grid.updateLayout()
+          Component.onCompleted: grid.updateLayout()
 
           Loader {
             id: loader

@@ -25,31 +25,27 @@
 #include <UI/Widgets/FFTPlot.h>
 
 /**
- * Constructor function, configures widget style & signal/slot connections.
+ * @brief Constructor to initialize the FFTPlot.
+ * @param index Index of the FFT plot data.
  */
-Widgets::FFTPlot::FFTPlot(const int index)
+Widgets::FFTPlot::FFTPlot(int index)
   : m_size(0)
   , m_index(index)
+  , m_samplingRate(0.0)
+  , m_transformer(0, "Hann")
 {
-  // Get pointers to serial studio modules
+  // Get pointers to Serial Studio modules
   auto dash = &UI::Dashboard::instance();
   auto theme = &Misc::ThemeManager::instance();
 
-  // Initialize pointers to NULL
-  m_fft = Q_NULLPTR;
-  m_samples = Q_NULLPTR;
-
-  // Invalid index, abort initialization
+  // Validate index
   if (m_index < 0 || m_index >= dash->fftCount())
     return;
 
-  // Set window palette
+  // Set widget palette
   QPalette palette;
   palette.setColor(QPalette::Base, theme->widgetWindowBackground());
   palette.setColor(QPalette::Window, theme->widgetWindowBackground());
-  setPalette(palette);
-
-  // Set plot palette
   palette.setColor(QPalette::Base, theme->base());
   palette.setColor(QPalette::Highlight, QColor(255, 0, 0));
   palette.setColor(QPalette::Text, theme->widgetIndicator());
@@ -57,118 +53,88 @@ Widgets::FFTPlot::FFTPlot(const int index)
   palette.setColor(QPalette::Light, theme->widgetIndicator());
   palette.setColor(QPalette::ButtonText, theme->widgetIndicator());
   palette.setColor(QPalette::WindowText, theme->widgetIndicator());
+  setPalette(palette);
+
+  // Configure plot appearance
   m_plot.setPalette(palette);
   m_plot.setCanvasBackground(theme->base());
   m_plot.setFrameStyle(QFrame::Plain);
-
-  // Configure layout
   m_layout.addWidget(&m_plot);
-  m_layout.setContentsMargins(24, 24, 24, 24);
+  m_layout.setContentsMargins(8, 8, 8, 8);
   setLayout(&m_layout);
 
-  // Fit data horizontally
+  // Configure x-axis
   auto xAxisEngine = m_plot.axisScaleEngine(QwtPlot::xBottom);
   xAxisEngine->setAttribute(QwtScaleEngine::Floating, true);
 
-  // Create curve from data
+  // Attach curve to plot
   m_curve.attach(&m_plot);
-  m_plot.replot();
-  m_plot.show();
 
-  // Get curve color
+  // Set curve color
   QString color;
-  const StringList colors = theme->widgetColors();
-  if (colors.count() > m_index)
-    color = colors.at(m_index);
-  else
-    color = colors.at(colors.count() % m_index);
-
-  // Set curve color & plot style
+  const auto colors = theme->widgetColors();
+  color = colors.count() > m_index ? colors.at(m_index)
+                                   : colors.at(colors.count() % m_index);
   m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
-  // Get dataset max freq. & calculate fft size
-  auto dataset = UI::Dashboard::instance().getFFT(m_index);
+  // Initialize FFT size
+  auto dataset = dash->getFFT(m_index);
   int size = qMax(8, dataset.fftSamples());
-
-  // Ensure that FFT size is valid
   while (m_transformer.setSize(size) != QFourierTransformer::FixedSize)
     --size;
-
-  // Set FFT size
   m_size = size;
 
-  // Initialize samples & FFT arrays
-  m_fft = (float *)calloc(m_size, sizeof(float));
-  m_samples = (float *)calloc(m_size, sizeof(float));
+  // Allocate FFT and sample arrays
+  m_fft.reset(new float[m_size]);
+  m_samples.reset(new float[m_size]);
+  m_curve.setSamples(QVector<QPointF>(m_size, QPointF(0, 0)));
 
-  // Clear Y-axis data
-  PlotData xData;
-  PlotData yData;
-  xData.reserve(m_size);
-  yData.reserve(m_size);
-  for (int i = 0; i < m_size; ++i)
-  {
-    yData.append(0);
-    xData.append(i);
-  }
-
-  // Set y-scale from -1 to 1
-  m_plot.setAxisScale(QwtPlot::yLeft, -1, 1);
-
-  // Set axis titles
-  m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
+  // Configure plot axes and titles
+  m_plot.setAxisScale(QwtPlot::yLeft, 0, 1);
+  m_plot.setAxisTitle(QwtPlot::xBottom, tr("Frequency (Hz)"));
   m_plot.setAxisTitle(QwtPlot::yLeft, tr("FFT of %1").arg(dataset.title()));
-
-  // Set curve data & replot
-  m_curve.setSamples(xData, yData);
   m_plot.replot();
 
-  // React to dashboard events
-  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
+  // Start timer
+  m_timer.start();
+
+  // Connect update signal
+  connect(dash, &UI::Dashboard::updated, this, &FFTPlot::updateData,
           Qt::QueuedConnection);
 }
 
 /**
- * Destructor function
- */
-Widgets::FFTPlot::~FFTPlot()
-{
-  free(m_fft);
-  free(m_samples);
-  m_fft = Q_NULLPTR;
-  m_samples = Q_NULLPTR;
-}
-
-/**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
- *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the new data shall be saved to the plot
- * vector, but the widget shall not be redrawn.
+ * @brief Slot to update the FFT data and replot the graph.
  */
 void Widgets::FFTPlot::updateData()
 {
-  // Verify that FFT sample arrays are valid
-  if (!m_samples || !m_fft)
-    return;
+  // Measure the time elapsed since the last call
+  qint64 elapsedTime = m_timer.restart();
+  if (elapsedTime > 0)
+    m_samplingRate = 1000.0 / static_cast<float>(elapsedTime);
 
-  // Replot
+  // Update FFT data and plot
   auto plotData = UI::Dashboard::instance().fftPlotValues();
   if (plotData.count() > m_index)
   {
-    // Copy data to samples array
     auto data = plotData.at(m_index);
     for (int i = 0; i < m_size; ++i)
       m_samples[i] = static_cast<float>(data[i]);
 
-    // Execute FFT
-    m_transformer.forwardTransform(m_samples, m_fft);
-    m_transformer.rescale(m_fft);
-    m_curve.setSamples(m_fft, m_size);
+    m_transformer.forwardTransform(m_samples.data(), m_fft.data());
+    m_transformer.rescale(m_fft.data());
+
+    QVector<QPointF> points(m_size);
+    for (int i = 0; i < m_size / 2; ++i)
+    {
+      float frequency = i * m_samplingRate / m_size;
+      points[i] = QPointF(frequency, m_fft[i]);
+    }
+
+    m_curve.setSamples(points.mid(0, m_size / 2));
+    m_plot.setAxisScale(QwtPlot::xBottom, 0, m_samplingRate / 2);
     m_plot.replot();
 
-    // Repaint widget
     requestRepaint();
   }
 }

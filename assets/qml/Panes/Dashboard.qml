@@ -52,7 +52,7 @@ Item {
       DashboardItems.ViewOptions {
         Layout.fillHeight: true
         Layout.minimumWidth: 280
-        onWidgetSizeChanged:(maxSize) => widgetGrid.maxSize = maxSize
+        onColumnsChanged:(columns) => widgetGrid.columns = columns
       }
 
       //

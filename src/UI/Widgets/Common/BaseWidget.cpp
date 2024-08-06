@@ -62,11 +62,17 @@ void Widgets::BaseWidget::setValue(const QString &label)
     m_label.setText(label);
 
     // Resize label font (so it fits inside the box)
+    const int minFontSize = 1;
     while (QFontMetrics(m_label.font()).horizontalAdvance(label) + 24
            > m_label.width())
     {
       QFont font = m_label.font();
-      font.setPixelSize(font.pixelSize() - 1);
+      int newSize = font.pixelSize() - 1;
+
+      if (newSize < minFontSize)
+        break;
+
+      font.setPixelSize(newSize);
       m_label.setFont(font);
     }
   }
@@ -96,7 +102,7 @@ void Widgets::BaseWidget::setWidget(QWidget *widget,
 
 void Widgets::BaseWidget::resizeEvent(QResizeEvent *event)
 {
-  // Get width & height (exluding layout margins & spacing)
+  // Get width & height (excluding layout margins & spacing)
   auto width = event->size().width() - 72;
   auto height = event->size().height() - 48;
 
@@ -107,20 +113,20 @@ void Widgets::BaseWidget::resizeEvent(QResizeEvent *event)
   gaugeFont.setPixelSize(qMax(8, width / 24));
 
   // Set label font (so it fits inside the box)
-  // clang-format off
-    m_label.setFont(labelFont);
-    while (QFontMetrics(m_label.font()).horizontalAdvance(m_label.text()) + 12 > m_label.width())
+  m_label.setFont(labelFont);
+  while (QFontMetrics(m_label.font()).horizontalAdvance(m_label.text()) + 12
+         > m_label.width())
+  {
+    QFont font = m_label.font();
+    if (font.pixelSize() > 2)
     {
-        QFont font = m_label.font();
-        if (font.pixelSize() > 2) {
-            font.setPixelSize(font.pixelSize() - 1);
-            m_label.setFont(font);
-        }
-
-        else
-            break;
+      font.setPixelSize(font.pixelSize() - 1);
+      m_label.setFont(font);
     }
-  // clang-format on
+
+    else
+      break;
+  }
 
   // Set widget font
   if (m_widget)

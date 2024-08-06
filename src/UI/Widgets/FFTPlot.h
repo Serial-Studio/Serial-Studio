@@ -25,34 +25,41 @@
 #include <QWidget>
 #include <QwtPlot>
 #include <QVBoxLayout>
+#include <QElapsedTimer>
 #include <QwtPlotCurve>
 #include <QwtScaleEngine>
-
-#include <UI/DashboardWidget.h>
+#include <QScopedArrayPointer>
 #include <qfouriertransformer.h>
+#include <UI/DashboardWidget.h>
 
 namespace Widgets
 {
+
+/**
+ * @class FFTPlot
+ * @brief Class to plot FFT data using QwtPlot and QFourierTransformer.
+ */
 class FFTPlot : public DashboardWidgetBase
 {
   Q_OBJECT
 
 public:
-  FFTPlot(const int index = -1);
-  ~FFTPlot();
+  FFTPlot(int index);
 
-private Q_SLOTS:
+private slots:
   void updateData();
 
 private:
-  float *m_fft;
-  float *m_samples;
-
-  int m_size;
-  int m_index;
-  QwtPlot m_plot;
-  QwtPlotCurve m_curve;
-  QVBoxLayout m_layout;
-  QFourierTransformer m_transformer;
+  int m_size;                       ///< Size of the FFT data array.
+  int m_index;                      ///< Index of the FFT plot data.
+  float m_samplingRate;             ///< Sampling rate calculated dynamically.
+  QElapsedTimer m_timer;            ///< Timer to measure time between updates.
+  QwtPlot m_plot;                   ///< Plot widget for FFT.
+  QwtPlotCurve m_curve;             ///< Curve for the FFT data.
+  QVBoxLayout m_layout;             ///< Layout for the plot widget.
+  QScopedArrayPointer<float> m_fft; ///< FFT data array.
+  QScopedArrayPointer<float> m_samples; ///< Sample data array.
+  QFourierTransformer m_transformer;    ///< Fourier transformer for FFT.
 };
+
 } // namespace Widgets

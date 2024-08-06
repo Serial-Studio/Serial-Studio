@@ -39,12 +39,9 @@ Widgets.Window {
   backgroundColor: Cpp_ThemeManager.paneWindowBackground
 
   // Hacks for calculating cell width
-  property int maxSize: 480
-  readonly property int minSize: maxSize * 356/480
-  readonly property int cellHeight: cellWidth * (2/3)
-  readonly property int columns: Math.floor((grid.width - 2 * scroll.width) / cWidth)
-  readonly property int cellWidth: cWidth + ((grid.width - 2 * scroll.width) - (cWidth) * columns) / columns
-  readonly property int cWidth: Math.min(Math.max(minSize, (grid.width - 2 * scroll.width) / model.count), maxSize)
+  property int columns: 4
+  readonly property int cellWidth: (grid.width - 2 * scroll.width) / columns
+  readonly property int cellHeight: cellWidth * (2 / 3)
 
   //
   // Put everything into a flickable to enable scrolling

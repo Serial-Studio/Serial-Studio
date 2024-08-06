@@ -74,7 +74,7 @@ QVector<JSON::Group> &JSON::Frame::groups()
  */
 bool JSON::Frame::read(const QJsonObject &object)
 {
-  // Rest frame data
+  // Reset frame data
   clear();
 
   // Get title & groups array

@@ -73,6 +73,26 @@ CONFIG(release, debug|release) {
     }
 }
 
+win32-g++ {
+    QMAKE_CXXFLAGS += -O3 -Wall -Wextra -g0 -flto -funroll-loops
+    QMAKE_LFLAGS += -Wl,--gc-sections -flto
+}
+
+win32-msvc* {
+    QMAKE_CXXFLAGS += /O2 /W3 /GL /arch:AVX2 /fp:fast /Zi
+    QMAKE_LFLAGS_RELEASE += /OPT:REF /OPT:ICF /LTCG /DEBUG
+}
+
+macx {
+    QMAKE_CXXFLAGS += -O3 -Wall -Wextra -g0 -flto=full -funroll-loops
+    QMAKE_LFLAGS += -Wl,-dead_strip -flto=full
+}
+
+unix:!macx {
+    QMAKE_CXXFLAGS += -O3 -Wall -Wextra -g0 -flto -funroll-loops
+    QMAKE_LFLAGS += -Wl,--gc-sections -flto
+}
+
 #-------------------------------------------------------------------------------
 # Serial Studio compile-time settings
 #-------------------------------------------------------------------------------

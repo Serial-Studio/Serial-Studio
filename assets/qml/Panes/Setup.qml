@@ -86,7 +86,6 @@ Item {
     //
     property alias language: settings.language
     property alias tcpPlugins: settings.tcpPlugins
-    property alias windowShadows: settings.windowShadows
   }
 
   //

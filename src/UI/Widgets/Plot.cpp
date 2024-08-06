@@ -62,7 +62,7 @@ Widgets::Plot::Plot(const int index)
 
   // Configure layout
   m_layout.addWidget(&m_plot);
-  m_layout.setContentsMargins(24, 24, 24, 24);
+  m_layout.setContentsMargins(8, 8, 8, 8);
   setLayout(&m_layout);
 
   // Fit data horizontally
@@ -106,9 +106,9 @@ Widgets::Plot::Plot(const int index)
 
   // Enable logarithmic scale
   // clang-format off
-    if (dataset.log())
-        m_plot.setAxisScaleEngine(QwtPlot::yLeft,
-                                  new QwtLogScaleEngine(10));
+  if (dataset.log())
+      m_plot.setAxisScaleEngine(QwtPlot::yLeft,
+                                new QwtLogScaleEngine(10));
   // clang-format on
 
   // Set axis titles

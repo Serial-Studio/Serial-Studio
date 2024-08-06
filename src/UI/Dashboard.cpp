@@ -856,7 +856,7 @@ QVector<JSON::Group> UI::Dashboard::getLEDWidgets()
     {
       if (dataset.led())
       {
-        dataset.setTitle(dataset.title() + " (" + group.title() + ")");
+        dataset.setTitle(dataset.title());
         widgets.append(dataset);
       }
     }
@@ -887,7 +887,7 @@ QVector<JSON::Dataset> UI::Dashboard::getFFTWidgets()
     {
       if (dataset.fft())
       {
-        dataset.setTitle(dataset.title() + " (" + group.title() + ")");
+        dataset.setTitle(dataset.title());
         widgets.append(dataset);
       }
     }
@@ -908,7 +908,7 @@ QVector<JSON::Dataset> UI::Dashboard::getPlotWidgets()
     {
       if (dataset.graph())
       {
-        dataset.setTitle(dataset.title() + " (" + group.title() + ")");
+        dataset.setTitle(dataset.title());
         widgets.append(dataset);
       }
     }
@@ -948,7 +948,7 @@ QVector<JSON::Dataset> UI::Dashboard::getWidgetDatasets(const QString &handle)
     {
       if (dataset.widget() == handle)
       {
-        dataset.setTitle(dataset.title() + " (" + group.title() + ")");
+        dataset.setTitle(dataset.title());
         widgets.append(dataset);
       }
     }
