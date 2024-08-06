@@ -51,17 +51,13 @@ IO::Drivers::Serial::Serial()
   setParity(parityList().indexOf(tr("None")));
   setFlowControl(flowControlList().indexOf(tr("None")));
 
-  // clang-format off
-
   // Build serial devices list and refresh it every second
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
-          this, &IO::Drivers::Serial::refreshSerialDevices);
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
+          &IO::Drivers::Serial::refreshSerialDevices);
 
   // Update connect button status when user selects a serial device
-  connect(this, &IO::Drivers::Serial::portIndexChanged,
-          this, &IO::Drivers::Serial::configurationChanged);
-
-  // clang-format on
+  connect(this, &IO::Drivers::Serial::portIndexChanged, this,
+          &IO::Drivers::Serial::configurationChanged);
 }
 
 /**
@@ -295,7 +291,11 @@ quint8 IO::Drivers::Serial::flowControlIndex() const
  */
 StringList IO::Drivers::Serial::portList() const
 {
-  return m_portList;
+  if (m_portList.count() > 0)
+    return m_portList;
+
+  else
+    return StringList{tr("Select port")};
 }
 
 /**
