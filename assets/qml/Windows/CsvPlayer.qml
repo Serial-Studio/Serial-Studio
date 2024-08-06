@@ -64,9 +64,9 @@ FramelessWindow.CustomWindow {
     target: Cpp_CSV_Player
     function onOpenChanged() {
       if (Cpp_CSV_Player.isOpen)
-        root.visible = true
+        root.showNormal()
       else
-        root.visible = false
+        root.hide()
     }
   }
 
