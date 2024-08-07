@@ -487,18 +487,8 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
   // Only use \n as line separator
   auto data = string;
-  switch (lineEnding())
-  {
-    case LineEnding::BothNewLineAndCarriageReturn: // Expecting \r\n, but only need to render \n
-    case LineEnding::NoLineEnding: // Expecting nothing, but still render any \n for readability
-    case LineEnding::NewLine: // Since we're expecting \n, ignore any \r
-      data = data.remove("\r");
-      break;
-    case LineEnding::CarriageReturn: // Expecting \r, so ignore existing \n then convert any \r
-      data = data.remove("\n");
-      data = data.replace("\r", "\n");
-      break;
-  }
+  data = data.replace("\r\n", "\n");
+  data = data.replace("\r", "\n");
 
   // Get timestamp
   QString timestamp;
