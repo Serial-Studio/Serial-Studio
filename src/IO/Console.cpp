@@ -502,7 +502,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
   // Only use \n as line separator for rendering
   data = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
-  data = data.replace(QStringLiteral("\n\n"), QStringLiteral("\n"));
+  data = data.replace(QStringLiteral("\n\r"), QStringLiteral("\n"));
   data = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
 
   // Get timestamp
