@@ -57,13 +57,11 @@ UI::DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
   setAcceptedMouseButtons(Qt::AllButtons);
   setFillColor(Misc::ThemeManager::instance().base());
 
-  // clang-format off
-    connect(this, &QQuickPaintedItem::widthChanged,
-            this, &UI::DeclarativeWidget::resizeWidget);
-    connect(this, &QQuickPaintedItem::heightChanged,
-            this, &UI::DeclarativeWidget::resizeWidget);
-    connect(this, &UI::DeclarativeWidget::widgetChanged, [=](){update();});
-  // clang-format on
+  connect(this, &QQuickPaintedItem::widthChanged, this,
+          &UI::DeclarativeWidget::resizeWidget);
+  connect(this, &QQuickPaintedItem::heightChanged, this,
+          &UI::DeclarativeWidget::resizeWidget);
+  connect(this, &UI::DeclarativeWidget::widgetChanged, [=]() { update(); });
 }
 
 /**

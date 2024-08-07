@@ -103,11 +103,11 @@ void Widgets::GPS::updateData()
   for (int i = 0; i < group.datasetCount(); ++i)
   {
     auto dataset = group.getDataset(i);
-    if (dataset.widget() == "lat")
+    if (dataset.widget() == QStringLiteral("lat"))
       m_latitude = dataset.value().toDouble();
-    else if (dataset.widget() == "lon")
+    else if (dataset.widget() == QStringLiteral("lon"))
       m_longitude = dataset.value().toDouble();
-    else if (dataset.widget() == "alt")
+    else if (dataset.widget() == QStringLiteral("alt"))
       m_altitude = dataset.value().toDouble();
   }
 

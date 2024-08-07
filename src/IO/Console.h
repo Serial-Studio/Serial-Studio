@@ -23,7 +23,6 @@
 #pragma once
 
 #include <QObject>
-#include <DataTypes.h>
 
 namespace IO
 {
@@ -40,37 +39,37 @@ namespace IO
 class Console : public QObject
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(bool echo
-               READ echo
-               WRITE setEcho
-               NOTIFY echoChanged)
-    Q_PROPERTY(bool autoscroll
-               READ autoscroll
-               WRITE setAutoscroll
-               NOTIFY autoscrollChanged)
-    Q_PROPERTY(bool showTimestamp
-               READ showTimestamp
-               WRITE setShowTimestamp
-               NOTIFY showTimestampChanged)
-    Q_PROPERTY(bool saveAvailable
-               READ saveAvailable
-               NOTIFY dataReceived)
-    Q_PROPERTY(IO::Console::DataMode dataMode
-               READ dataMode
-               WRITE setDataMode
-               NOTIFY dataModeChanged)
-    Q_PROPERTY(IO::Console::LineEnding lineEnding
-               READ lineEnding
-               WRITE setLineEnding
-               NOTIFY lineEndingChanged)
-    Q_PROPERTY(IO::Console::DisplayMode displayMode
-               READ displayMode
-               WRITE setDisplayMode
-               NOTIFY displayModeChanged)
-    Q_PROPERTY(QString currentHistoryString
-               READ currentHistoryString
-               NOTIFY historyItemChanged)
+  Q_OBJECT
+  Q_PROPERTY(bool echo
+             READ echo
+             WRITE setEcho
+             NOTIFY echoChanged)
+  Q_PROPERTY(bool autoscroll
+             READ autoscroll
+             WRITE setAutoscroll
+             NOTIFY autoscrollChanged)
+  Q_PROPERTY(bool showTimestamp
+             READ showTimestamp
+             WRITE setShowTimestamp
+             NOTIFY showTimestampChanged)
+  Q_PROPERTY(bool saveAvailable
+             READ saveAvailable
+             NOTIFY dataReceived)
+  Q_PROPERTY(IO::Console::DataMode dataMode
+             READ dataMode
+             WRITE setDataMode
+             NOTIFY dataModeChanged)
+  Q_PROPERTY(IO::Console::LineEnding lineEnding
+             READ lineEnding
+             WRITE setLineEnding
+             NOTIFY lineEndingChanged)
+  Q_PROPERTY(IO::Console::DisplayMode displayMode
+             READ displayMode
+             WRITE setDisplayMode
+             NOTIFY displayModeChanged)
+  Q_PROPERTY(QString currentHistoryString
+             READ currentHistoryString
+             NOTIFY historyItemChanged)
   // clang-format on
 
 Q_SIGNALS:
@@ -128,9 +127,9 @@ public:
   DisplayMode displayMode() const;
   QString currentHistoryString() const;
 
-  Q_INVOKABLE StringList dataModes() const;
-  Q_INVOKABLE StringList lineEndings() const;
-  Q_INVOKABLE StringList displayModes() const;
+  Q_INVOKABLE QStringList dataModes() const;
+  Q_INVOKABLE QStringList lineEndings() const;
+  Q_INVOKABLE QStringList displayModes() const;
   Q_INVOKABLE QString formatUserHex(const QString &text);
 
 public Q_SLOTS:
@@ -172,8 +171,8 @@ private:
   bool m_isStartingLine;
   bool m_lastCharWasCR;
 
-  StringList m_lines;
-  StringList m_historyItems;
+  QStringList m_lines;
+  QStringList m_historyItems;
 
   QString m_printFont;
   QString m_textBuffer;

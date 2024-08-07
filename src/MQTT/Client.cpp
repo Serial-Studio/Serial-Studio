@@ -223,42 +223,37 @@ bool MQTT::Client::isConnectedToHost() const
 /**
  * Returns a list with the available quality-of-service modes.
  */
-StringList MQTT::Client::qosLevels() const
+QStringList MQTT::Client::qosLevels() const
 {
-  // clang-format off
-    return StringList {
-        tr("0: At most once"),
-        tr("1: At least once"),
-        tr("2: Exactly once")
-    };
-  // clang-format on
+  return QStringList{tr("0: At most once"), tr("1: At least once"),
+                     tr("2: Exactly once")};
 }
 
 /**
  * Returns a list with the available client operation modes.
  */
-StringList MQTT::Client::clientModes() const
+QStringList MQTT::Client::clientModes() const
 {
-  return StringList{tr("Publisher"), tr("Subscriber")};
+  return QStringList{tr("Publisher"), tr("Subscriber")};
 }
 
 /**
  * Returns a list with the supported MQTT versions
  */
-StringList MQTT::Client::mqttVersions() const
+QStringList MQTT::Client::mqttVersions() const
 {
-  return StringList{"MQTT 3.1.0", "MQTT 3.1.1"};
+  return QStringList{"MQTT 3.1.0", "MQTT 3.1.1"};
 }
 
 /**
  * Returns a list with the supported SSL/TLS protocols
  */
-StringList MQTT::Client::sslProtocols() const
+QStringList MQTT::Client::sslProtocols() const
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-  return StringList{tr("System default"), "TLS v1.0", "TLS v1.1", "TLS v1.2"};
+  return QStringList{tr("System default"), "TLS v1.0", "TLS v1.1", "TLS v1.2"};
 #else
-  return StringList{
+  return QStringList{
       tr("System default"),  "TLS v1.0",  "TLS v1.1",  "TLS v1.2",
       "TLS v1.3 (or later)", "DTLS v1.0", "DTLS v1.2", "DTLS v1.2 (or later)"};
 #endif
@@ -860,20 +855,17 @@ void MQTT::Client::regenerateClient()
   m_client->setPassword(password.toUtf8());
 
   // Connect signals/slots
-  // clang-format off
-    connect(m_client, &QMQTT::Client::error,
-            this, &MQTT::Client::onError);
-    connect(m_client, &QMQTT::Client::sslErrors,
-            this, &MQTT::Client::onSslErrors);
-    connect(m_client, &QMQTT::Client::received,
-            this, &MQTT::Client::onMessageReceived);
-    connect(m_client, &QMQTT::Client::connected,
-            this, &MQTT::Client::connectedChanged);
-    connect(m_client, &QMQTT::Client::connected,
-            this, &MQTT::Client::onConnectedChanged);
-    connect(m_client, &QMQTT::Client::disconnected,
-            this, &MQTT::Client::connectedChanged);
-    connect(m_client, &QMQTT::Client::disconnected,
-            this, &MQTT::Client::onConnectedChanged);
-  // clang-format on
+  connect(m_client, &QMQTT::Client::error, this, &MQTT::Client::onError);
+  connect(m_client, &QMQTT::Client::sslErrors, this,
+          &MQTT::Client::onSslErrors);
+  connect(m_client, &QMQTT::Client::received, this,
+          &MQTT::Client::onMessageReceived);
+  connect(m_client, &QMQTT::Client::connected, this,
+          &MQTT::Client::connectedChanged);
+  connect(m_client, &QMQTT::Client::connected, this,
+          &MQTT::Client::onConnectedChanged);
+  connect(m_client, &QMQTT::Client::disconnected, this,
+          &MQTT::Client::connectedChanged);
+  connect(m_client, &QMQTT::Client::disconnected, this,
+          &MQTT::Client::onConnectedChanged);
 }

@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <DataTypes.h>
 #include <IO/HAL_Driver.h>
 
 #include <QObject>
@@ -80,22 +79,22 @@ class Serial : public HAL_Driver
              READ baudRate
              WRITE setBaudRate
              NOTIFY baudRateChanged)
-  Q_PROPERTY(StringList portList
+  Q_PROPERTY(QStringList portList
              READ portList
              NOTIFY availablePortsChanged)
-  Q_PROPERTY(StringList parityList
+  Q_PROPERTY(QStringList parityList
              READ parityList
              CONSTANT)
-  Q_PROPERTY(StringList baudRateList
+  Q_PROPERTY(QStringList baudRateList
              READ baudRateList
              NOTIFY baudRateListChanged)
-  Q_PROPERTY(StringList dataBitsList
+  Q_PROPERTY(QStringList dataBitsList
              READ dataBitsList
              CONSTANT)
-  Q_PROPERTY(StringList stopBitsList
+  Q_PROPERTY(QStringList stopBitsList
              READ stopBitsList
              CONSTANT)
-  Q_PROPERTY(StringList flowControlList
+  Q_PROPERTY(QStringList flowControlList
              READ flowControlList
              CONSTANT)
   // clang-format on
@@ -150,12 +149,12 @@ public:
   quint8 stopBitsIndex() const;
   quint8 flowControlIndex() const;
 
-  StringList portList() const;
-  StringList parityList() const;
-  StringList baudRateList() const;
-  StringList dataBitsList() const;
-  StringList stopBitsList() const;
-  StringList flowControlList() const;
+  QStringList portList() const;
+  QStringList parityList() const;
+  QStringList baudRateList() const;
+  QStringList dataBitsList() const;
+  QStringList stopBitsList() const;
+  QStringList flowControlList() const;
 
   qint32 baudRate() const;
   QSerialPort::Parity parity() const;
@@ -205,8 +204,8 @@ private:
   quint8 m_stopBitsIndex;
   quint8 m_flowControlIndex;
 
-  StringList m_portList;
-  StringList m_baudRateList;
+  QStringList m_portList;
+  QStringList m_baudRateList;
 };
 } // namespace Drivers
 } // namespace IO

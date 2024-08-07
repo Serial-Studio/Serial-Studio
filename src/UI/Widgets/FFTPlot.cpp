@@ -32,7 +32,7 @@ Widgets::FFTPlot::FFTPlot(int index)
   : m_size(0)
   , m_index(index)
   , m_samplingRate(0.0)
-  , m_transformer(0, "Hann")
+  , m_transformer(0, QStringLiteral("Hann"))
 {
   // Get pointers to Serial Studio modules
   auto dash = &UI::Dashboard::instance();

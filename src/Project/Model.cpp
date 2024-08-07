@@ -60,33 +60,29 @@ Project::Model::Model()
   , m_modified(false)
   , m_filePath("")
 {
-  // clang-format off
+  // Connect signals/slots
+  connect(this, &Project::Model::groupChanged, this,
+          &Project::Model::onGroupChanged);
+  connect(this, &Project::Model::titleChanged, this,
+          &Project::Model::onModelChanged);
+  connect(this, &Project::Model::datasetChanged, this,
+          &Project::Model::onDatasetChanged);
+  connect(this, &Project::Model::separatorChanged, this,
+          &Project::Model::onModelChanged);
+  connect(this, &Project::Model::groupCountChanged, this,
+          &Project::Model::onModelChanged);
+  connect(this, &Project::Model::groupOrderChanged, this,
+          &Project::Model::onModelChanged);
+  connect(this, &Project::Model::frameParserCodeChanged, this,
+          &Project::Model::onModelChanged);
+  connect(this, &Project::Model::frameEndSequenceChanged, this,
+          &Project::Model::onModelChanged);
+  connect(this, &Project::Model::frameStartSequenceChanged, this,
+          &Project::Model::onModelChanged);
 
-    // Connect signals/slots
-    connect(this, &Project::Model::groupChanged,
-            this, &Project::Model::onGroupChanged);
-    connect(this, &Project::Model::titleChanged,
-            this, &Project::Model::onModelChanged);
-    connect(this, &Project::Model::datasetChanged,
-            this, &Project::Model::onDatasetChanged);
-    connect(this, &Project::Model::separatorChanged,
-            this, &Project::Model::onModelChanged);
-    connect(this, &Project::Model::groupCountChanged,
-            this, &Project::Model::onModelChanged);
-    connect(this, &Project::Model::groupOrderChanged,
-            this, &Project::Model::onModelChanged);
-    connect(this, &Project::Model::frameParserCodeChanged,
-            this, &Project::Model::onModelChanged);
-    connect(this, &Project::Model::frameEndSequenceChanged,
-            this, &Project::Model::onModelChanged);
-    connect(this, &Project::Model::frameStartSequenceChanged,
-            this, &Project::Model::onModelChanged);
-
-    // Load current JSON map file into C++ model
-    connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
-            this, &Project::Model::onJsonLoaded);
-
-  // clang-format on
+  // Load current JSON map file into C++ model
+  connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
+          this, &Project::Model::onJsonLoaded);
 }
 
 /**
@@ -107,10 +103,10 @@ Project::Model &Project::Model::instance()
  * the user interface to allow the user to build accelerometer, gyro & map
  * widgets directly from the UI.
  */
-StringList Project::Model::availableGroupLevelWidgets()
+QStringList Project::Model::availableGroupLevelWidgets()
 {
-  return StringList{tr("Dataset widgets"), tr("Accelerometer"), tr("Gyroscope"),
-                    tr("GPS"), tr("Multiple data plot")};
+  return QStringList{tr("Dataset widgets"), tr("Accelerometer"),
+                     tr("Gyroscope"), tr("GPS"), tr("Multiple data plot")};
 }
 
 /**
@@ -118,9 +114,9 @@ StringList Project::Model::availableGroupLevelWidgets()
  * the user interface to allow the user to build gauge, bar & compass widgets
  * directly from the UI.
  */
-StringList Project::Model::availableDatasetLevelWidgets()
+QStringList Project::Model::availableDatasetLevelWidgets()
 {
-  return StringList{tr("None"), tr("Gauge"), tr("Bar/level"), tr("Compass")};
+  return QStringList{tr("None"), tr("Gauge"), tr("Bar/level"), tr("Compass")};
 }
 
 /**
@@ -660,12 +656,9 @@ void Project::Model::newJsonFile()
  */
 void Project::Model::openJsonFile()
 {
-  // clang-format off
-    auto path = QFileDialog::getOpenFileName(Q_NULLPTR,
-                                             tr("Select JSON file"),
-                                             jsonProjectsPath(),
-                                             "*.json");
-  // clang-format on
+  // Let user select a file
+  const auto path = QFileDialog::getOpenFileName(
+      Q_NULLPTR, tr("Select JSON file"), jsonProjectsPath(), "*.json");
 
   // Invalid path, abort
   if (path.isEmpty())

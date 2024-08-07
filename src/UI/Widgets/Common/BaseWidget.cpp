@@ -45,13 +45,10 @@ Widgets::BaseWidget::BaseWidget()
   m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
   // Set stylesheets
-  // clang-format off
-    auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
-                        theme->base(),
-                        theme->widgetForegroundPrimary(),
-                        theme->widgetIndicator());
-    m_label.setStyleSheet(valueQSS);
-  // clang-format on
+  auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
+                      theme->base(), theme->widgetForegroundPrimary(),
+                      theme->widgetIndicator());
+  m_label.setStyleSheet(valueQSS);
 }
 
 void Widgets::BaseWidget::setValue(const QString &label)

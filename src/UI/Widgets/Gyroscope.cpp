@@ -52,10 +52,8 @@ Widgets::Gyroscope::Gyroscope(const int index)
   setWidget(&m_gauge);
 
   // Show different values each second
-  // clang-format off
-    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
-            this, &Widgets::Gyroscope::updateLabel);
-  // clang-format on
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
+          &Widgets::Gyroscope::updateLabel);
 
   // React to dashboard events
   connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
@@ -93,11 +91,11 @@ void Widgets::Gyroscope::updateData()
   for (int i = 0; i < 3; ++i)
   {
     auto dataset = group.getDataset(i);
-    if (dataset.widget() == "pitch")
+    if (dataset.widget() == QStringLiteral("pitch"))
       p = dataset.value().toDouble();
-    if (dataset.widget() == "roll")
+    if (dataset.widget() == QStringLiteral("roll"))
       r = dataset.value().toDouble();
-    if (dataset.widget() == "yaw")
+    if (dataset.widget() == QStringLiteral("yaw"))
       y = dataset.value().toDouble();
   }
 
@@ -119,13 +117,13 @@ void Widgets::Gyroscope::updateLabel()
   switch (m_displayNum)
   {
     case 0:
-      setValue(QString("%1° PITCH").arg(m_pitch));
+      setValue(QStringLiteral("%1° PITCH").arg(m_pitch));
       break;
     case 1:
-      setValue(QString("%1° ROLL").arg(m_roll));
+      setValue(QStringLiteral("%1° ROLL").arg(m_roll));
       break;
     case 2:
-      setValue(QString("%1° YAW").arg(m_yaw));
+      setValue(QStringLiteral("%1° YAW").arg(m_yaw));
       break;
   }
 

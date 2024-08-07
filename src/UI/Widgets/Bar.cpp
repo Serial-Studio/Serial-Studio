@@ -102,7 +102,7 @@ void Widgets::Bar::updateData()
   auto dataset = dash->getBar(m_index);
   auto value = dataset.value().toDouble();
   m_thermo.setValue(value);
-  setValue(QString("%1 %2").arg(
+  setValue(QStringLiteral("%1 %2").arg(
       QString::number(value, 'f', UI::Dashboard::instance().precision()),
       dataset.units()));
 

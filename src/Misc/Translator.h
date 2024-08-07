@@ -25,7 +25,6 @@
 #include <QLocale>
 #include <QObject>
 #include <QTranslator>
-#include <DataTypes.h>
 
 #ifdef QT_QML_LIB
 #  include <QtQml>
@@ -43,14 +42,14 @@ namespace Misc
 class Translator : public QObject
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(int language
-               READ language
-               WRITE setLanguage
-               NOTIFY languageChanged)
-    Q_PROPERTY(StringList availableLanguages
-               READ availableLanguages
-               CONSTANT)
+  Q_OBJECT
+  Q_PROPERTY(int language
+             READ language
+             WRITE setLanguage
+             NOTIFY languageChanged)
+  Q_PROPERTY(QStringList availableLanguages
+             READ availableLanguages
+             CONSTANT)
   // clang-format on
 
 Q_SIGNALS:
@@ -68,7 +67,7 @@ public:
 
   int language() const;
   int systemLanguage() const;
-  StringList availableLanguages() const;
+  QStringList availableLanguages() const;
   Q_INVOKABLE QString welcomeConsoleText() const;
   Q_INVOKABLE QString acknowledgementsText() const;
 

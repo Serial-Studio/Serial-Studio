@@ -24,6 +24,7 @@
 #include "Model.h"
 
 #include <QFile>
+#include <QTimer>
 #include <QJSEngine>
 #include <QFileDialog>
 #include <Misc/Utilities.h>

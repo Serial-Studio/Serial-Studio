@@ -45,30 +45,26 @@ IO::Drivers::Network::Network()
   setUdpRemotePort(defaultUdpRemotePort());
   setSocketType(QAbstractSocket::TcpSocket);
 
-  // clang-format off
+  // Update connect button status when the configuration is changed
+  connect(this, &IO::Drivers::Network::addressChanged, this,
+          &IO::Drivers::Network::configurationChanged);
+  connect(this, &IO::Drivers::Network::socketTypeChanged, this,
+          &IO::Drivers::Network::configurationChanged);
+  connect(this, &IO::Drivers::Network::portChanged, this,
+          &IO::Drivers::Network::configurationChanged);
 
-    // Update connect button status when the configuration is changed
-    connect(this, &IO::Drivers::Network::addressChanged,
-            this, &IO::Drivers::Network::configurationChanged);
-    connect(this, &IO::Drivers::Network::socketTypeChanged,
-            this, &IO::Drivers::Network::configurationChanged);
-    connect(this, &IO::Drivers::Network::portChanged,
-            this, &IO::Drivers::Network::configurationChanged);
-
-    // Report socket errors
+  // Report socket errors
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-    connect(&m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this,           SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
-    connect(&m_udpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this,           SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
+  connect(&m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+          SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
+  connect(&m_udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+          SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
 #else
-    connect(&m_tcpSocket, &QTcpSocket::errorOccurred,
-            this, &IO::Drivers::Network::onErrorOccurred);
-    connect(&m_udpSocket, &QUdpSocket::errorOccurred,
-            this, &IO::Drivers::Network::onErrorOccurred);
+  connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this,
+          &IO::Drivers::Network::onErrorOccurred);
+  connect(&m_udpSocket, &QUdpSocket::errorOccurred, this,
+          &IO::Drivers::Network::onErrorOccurred);
 #endif
-
-  // clang-format on
 }
 
 /**
@@ -197,11 +193,8 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
   else if (socketType() == QAbstractSocket::UdpSocket)
   {
     // Bind the UDP socket
-    // clang-format off
-        m_udpSocket.bind(udpLocalPort(),
-                         QAbstractSocket::ShareAddress |
-                         QAbstractSocket::ReuseAddressHint);
-    // clang-format on
+    m_udpSocket.bind(udpLocalPort(), QAbstractSocket::ShareAddress
+                                         | QAbstractSocket::ReuseAddressHint);
 
     // Join the multicast group (if required)
     if (udpMulticast())
@@ -303,9 +296,9 @@ int IO::Drivers::Network::socketTypeIndex() const
 /**
  * Returns a list with the available socket types
  */
-StringList IO::Drivers::Network::socketTypes() const
+QStringList IO::Drivers::Network::socketTypes() const
 {
-  return StringList{"TCP", "UDP"};
+  return QStringList{QStringLiteral("TCP"), QStringLiteral("UDP")};
 }
 
 /**

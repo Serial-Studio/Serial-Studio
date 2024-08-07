@@ -23,13 +23,13 @@
 #pragma once
 
 #include <QObject>
+#include <QPointer>
 #include <QHostInfo>
 #include <QByteArray>
 #include <QHostAddress>
 #include <QSslConfiguration>
 
 #include <qmqtt.h>
-#include <DataTypes.h>
 
 namespace MQTT
 {
@@ -62,82 +62,82 @@ enum MQTTClientMode
 class Client : public QObject
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(quint16 port
-               READ port
-               WRITE setPort
-               NOTIFY portChanged)
-    Q_PROPERTY(quint8 qos
-               READ qos
-               WRITE setQos
-               NOTIFY qosChanged)
-    Q_PROPERTY(QString host
-               READ host
-               WRITE setHost
-               NOTIFY hostChanged)
-    Q_PROPERTY(bool retain
-               READ retain
-               WRITE setRetain
-               NOTIFY retainChanged)
-    Q_PROPERTY(quint16 keepAlive
-               READ keepAlive
-               WRITE setKeepAlive
-               NOTIFY keepAliveChanged)
-    Q_PROPERTY(QString topic
-               READ topic
-               WRITE setTopic
-               NOTIFY topicChanged)
-    Q_PROPERTY(int mqttVersion
-               READ mqttVersion
-               WRITE setMqttVersion
-               NOTIFY mqttVersionChanged)
-    Q_PROPERTY(int clientMode
-               READ clientMode
-               WRITE setClientMode
-               NOTIFY clientModeChanged)
-    Q_PROPERTY(QString username
-               READ username
-               WRITE setUsername
-               NOTIFY usernameChanged)
-    Q_PROPERTY(QString password
-               READ password
-               WRITE setPassword
-               NOTIFY passwordChanged)
-    Q_PROPERTY(bool sslEnabled
-               READ sslEnabled
-               WRITE setSslEnabled
-               NOTIFY sslEnabledChanged)
-    Q_PROPERTY(int sslProtocol
-               READ sslProtocol
-               WRITE setSslProtocol
-               NOTIFY sslProtocolChanged)
-    Q_PROPERTY(bool isConnectedToHost
-               READ isConnectedToHost
-               NOTIFY connectedChanged)
-    Q_PROPERTY(bool lookupActive
-               READ lookupActive
-               NOTIFY lookupActiveChanged)
-    Q_PROPERTY(StringList mqttVersions
-               READ mqttVersions
-               CONSTANT)
-    Q_PROPERTY(StringList clientModes
-               READ clientModes
-               CONSTANT)
-    Q_PROPERTY(StringList qosLevels
-               READ qosLevels
-               CONSTANT)
-    Q_PROPERTY(StringList sslProtocols
-               READ sslProtocols
-               CONSTANT)
-    Q_PROPERTY(quint16 defaultPort
-               READ defaultPort
-               CONSTANT)
-    Q_PROPERTY(QString defaultHost
-               READ defaultHost
-               CONSTANT)
-    Q_PROPERTY(QString caFilePath
-               READ caFilePath
-               NOTIFY caFilePathChanged)
+  Q_OBJECT
+  Q_PROPERTY(quint16 port
+             READ port
+             WRITE setPort
+             NOTIFY portChanged)
+  Q_PROPERTY(quint8 qos
+             READ qos
+             WRITE setQos
+             NOTIFY qosChanged)
+  Q_PROPERTY(QString host
+             READ host
+             WRITE setHost
+             NOTIFY hostChanged)
+  Q_PROPERTY(bool retain
+             READ retain
+             WRITE setRetain
+             NOTIFY retainChanged)
+  Q_PROPERTY(quint16 keepAlive
+             READ keepAlive
+             WRITE setKeepAlive
+             NOTIFY keepAliveChanged)
+  Q_PROPERTY(QString topic
+             READ topic
+             WRITE setTopic
+             NOTIFY topicChanged)
+  Q_PROPERTY(int mqttVersion
+             READ mqttVersion
+             WRITE setMqttVersion
+             NOTIFY mqttVersionChanged)
+  Q_PROPERTY(int clientMode
+             READ clientMode
+             WRITE setClientMode
+             NOTIFY clientModeChanged)
+  Q_PROPERTY(QString username
+             READ username
+             WRITE setUsername
+             NOTIFY usernameChanged)
+  Q_PROPERTY(QString password
+             READ password
+             WRITE setPassword
+             NOTIFY passwordChanged)
+  Q_PROPERTY(bool sslEnabled
+             READ sslEnabled
+             WRITE setSslEnabled
+             NOTIFY sslEnabledChanged)
+  Q_PROPERTY(int sslProtocol
+             READ sslProtocol
+             WRITE setSslProtocol
+             NOTIFY sslProtocolChanged)
+  Q_PROPERTY(bool isConnectedToHost
+             READ isConnectedToHost
+             NOTIFY connectedChanged)
+  Q_PROPERTY(bool lookupActive
+             READ lookupActive
+             NOTIFY lookupActiveChanged)
+  Q_PROPERTY(QStringList mqttVersions
+             READ mqttVersions
+             CONSTANT)
+  Q_PROPERTY(QStringList clientModes
+             READ clientModes
+             CONSTANT)
+  Q_PROPERTY(QStringList qosLevels
+             READ qosLevels
+             CONSTANT)
+  Q_PROPERTY(QStringList sslProtocols
+             READ sslProtocols
+             CONSTANT)
+  Q_PROPERTY(quint16 defaultPort
+             READ defaultPort
+             CONSTANT)
+  Q_PROPERTY(QString defaultHost
+             READ defaultHost
+             CONSTANT)
+  Q_PROPERTY(QString caFilePath
+             READ caFilePath
+             NOTIFY caFilePathChanged)
   // clang-format on
 
 Q_SIGNALS:
@@ -185,10 +185,10 @@ public:
   bool isSubscribed() const;
   bool isConnectedToHost() const;
 
-  StringList qosLevels() const;
-  StringList clientModes() const;
-  StringList mqttVersions() const;
-  StringList sslProtocols() const;
+  QStringList qosLevels() const;
+  QStringList clientModes() const;
+  QStringList mqttVersions() const;
+  QStringList sslProtocols() const;
 
   QString caFilePath() const;
   quint16 defaultPort() const { return 1883; }

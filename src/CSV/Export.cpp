@@ -148,8 +148,8 @@ void CSV::Export::writeValues()
       createCsvFile(frame);
 
     // Write RX date/time
-    m_textStream << frame.rxDateTime.toString("yyyy/MM/dd/ HH:mm:ss::zzz")
-                 << ",";
+    const auto format = QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz");
+    m_textStream << frame.rxDateTime.toString(format) << QStringLiteral(",");
 
     // Write frame data
     for (auto j = 0; j < fields.count(); ++j)
@@ -164,10 +164,10 @@ void CSV::Export::writeValues()
         if (d > 0)
         {
           for (auto k = 0; k < d - 1; ++k)
-            m_textStream << ",";
+            m_textStream << QStringLiteral(",");
         }
 
-        m_textStream << "\n";
+        m_textStream << QStringLiteral("\n");
       }
     }
   }
@@ -185,11 +185,12 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
   auto projectTitle = UI::Dashboard::instance().title();
 
   // Get file name
-  const QString fileName = frame.rxDateTime.toString("HH-mm-ss") + ".csv";
+  const QString fileName
+      = frame.rxDateTime.toString(QStringLiteral("HH-mm-ss")) + ".csv";
 
   // Get path
-  const QString format = frame.rxDateTime.toString("yyyy/MMM/dd/");
-  const QString path = QString("%1/Documents/%2/CSV/%3/%4")
+  const auto format = frame.rxDateTime.toString("yyyy/MMM/dd/");
+  const QString path = QStringLiteral("%1/Documents/%2/CSV/%3/%4")
                            .arg(QDir::homePath(), qApp->applicationName(),
                                 projectTitle, format);
 
@@ -235,15 +236,16 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
 
   // Add table titles
   m_fieldCount = fields.count();
-  m_textStream << "RX Date/Time,";
+  m_textStream << QStringLiteral("RX Date/Time,");
   for (auto i = 0; i < m_fieldCount; ++i)
   {
-    m_textStream << titles.at(i) << "(field " << i + 1 << ")";
+    m_textStream << titles.at(i) << QStringLiteral("(field ") << i + 1
+                 << QStringLiteral(")");
 
     if (i < m_fieldCount - 1)
-      m_textStream << ",";
+      m_textStream << QStringLiteral(",");
     else
-      m_textStream << "\n";
+      m_textStream << QStringLiteral("\n");
   }
 
   // Update UI

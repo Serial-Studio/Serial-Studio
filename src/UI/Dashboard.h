@@ -24,7 +24,6 @@
 
 #include <QFont>
 #include <QObject>
-#include <DataTypes.h>
 #include <JSON/Frame.h>
 
 namespace UI
@@ -59,90 +58,90 @@ namespace UI
 class Dashboard : public QObject
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(QString title
-               READ title
-               NOTIFY titleChanged)
-    Q_PROPERTY(bool available
-               READ available
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int points
-               READ points
-               WRITE setPoints
-               NOTIFY pointsChanged)
-    Q_PROPERTY(int precision
-               READ precision
-               WRITE setPrecision
-               NOTIFY precisionChanged)
-    Q_PROPERTY(int totalWidgetCount
-               READ totalWidgetCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int gpsCount
-               READ gpsCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int ledCount
-               READ ledCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int barCount
-               READ barCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int fftCount
-               READ fftCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int plotCount
-               READ plotCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int groupCount
-               READ groupCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int gaugeCount
-               READ gaugeCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int compassCount
-               READ compassCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int gyroscopeCount
-               READ gyroscopeCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int multiPlotCount
-               READ multiPlotCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(int accelerometerCount
-               READ accelerometerCount
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList gpsTitles
-               READ gpsTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList ledTitles
-               READ ledTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList barTitles
-               READ barTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList fftTitles
-               READ fftTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList plotTitles
-               READ plotTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList groupTitles
-               READ groupTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList gaugeTitles
-               READ gaugeTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList compassTitles
-               READ compassTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList gyroscopeTitles
-               READ gyroscopeTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList multiPlotTitles
-               READ multiPlotTitles
-               NOTIFY widgetCountChanged)
-    Q_PROPERTY(StringList accelerometerTitles
-               READ accelerometerTitles
-               NOTIFY widgetCountChanged)
+  Q_OBJECT
+  Q_PROPERTY(QString title
+             READ title
+             NOTIFY titleChanged)
+  Q_PROPERTY(bool available
+             READ available
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int points
+             READ points
+             WRITE setPoints
+             NOTIFY pointsChanged)
+  Q_PROPERTY(int precision
+             READ precision
+             WRITE setPrecision
+             NOTIFY precisionChanged)
+  Q_PROPERTY(int totalWidgetCount
+             READ totalWidgetCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int gpsCount
+             READ gpsCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int ledCount
+             READ ledCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int barCount
+             READ barCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int fftCount
+             READ fftCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int plotCount
+             READ plotCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int groupCount
+             READ groupCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int gaugeCount
+             READ gaugeCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int compassCount
+             READ compassCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int gyroscopeCount
+             READ gyroscopeCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int multiPlotCount
+             READ multiPlotCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int accelerometerCount
+             READ accelerometerCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList gpsTitles
+             READ gpsTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList ledTitles
+             READ ledTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList barTitles
+             READ barTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList fftTitles
+             READ fftTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList plotTitles
+             READ plotTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList groupTitles
+             READ groupTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList gaugeTitles
+             READ gaugeTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList compassTitles
+             READ compassTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList gyroscopeTitles
+             READ gyroscopeTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList multiPlotTitles
+             READ multiPlotTitles
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList accelerometerTitles
+             READ accelerometerTitles
+             NOTIFY widgetCountChanged)
   // clang-format on
 
 Q_SIGNALS:
@@ -213,7 +212,7 @@ public:
   int accelerometerCount() const;
 
   Q_INVOKABLE bool frameValid() const;
-  Q_INVOKABLE StringList widgetTitles();
+  Q_INVOKABLE QStringList widgetTitles();
   Q_INVOKABLE int relativeIndex(const int globalIndex) const;
   Q_INVOKABLE bool widgetVisible(const int globalIndex) const;
   Q_INVOKABLE QString widgetIcon(const int globalIndex) const;
@@ -231,22 +230,25 @@ public:
   Q_INVOKABLE bool multiPlotVisible(const int index) const;
   Q_INVOKABLE bool accelerometerVisible(const int index) const;
 
-  StringList barTitles();
-  StringList fftTitles();
-  StringList gpsTitles();
-  StringList ledTitles();
-  StringList plotTitles();
-  StringList groupTitles();
-  StringList gaugeTitles();
-  StringList compassTitles();
-  StringList gyroscopeTitles();
-  StringList multiPlotTitles();
-  StringList accelerometerTitles();
+  QStringList barTitles();
+  QStringList fftTitles();
+  QStringList gpsTitles();
+  QStringList ledTitles();
+  QStringList plotTitles();
+  QStringList groupTitles();
+  QStringList gaugeTitles();
+  QStringList compassTitles();
+  QStringList gyroscopeTitles();
+  QStringList multiPlotTitles();
+  QStringList accelerometerTitles();
 
-  const PlotData &xPlotValues() { return m_xData; }
+  const QVector<qreal> &xPlotValues() { return m_xData; }
   const JSON::Frame &currentFrame() { return m_currentFrame; }
-  const QVector<PlotData> &fftPlotValues() { return m_fftPlotValues; }
-  const QVector<PlotData> &linearPlotValues() { return m_linearPlotValues; }
+  const QVector<QVector<qreal>> &fftPlotValues() { return m_fftPlotValues; }
+  const QVector<QVector<qreal>> &linearPlotValues()
+  {
+    return m_linearPlotValues;
+  }
 
 public Q_SLOTS:
   void setPoints(const int points);
@@ -275,8 +277,8 @@ private:
   QVector<JSON::Group> getWidgetGroups(const QString &handle);
   QVector<JSON::Dataset> getWidgetDatasets(const QString &handle);
 
-  StringList groupTitles(const QVector<JSON::Group> &vector);
-  StringList datasetTitles(const QVector<JSON::Dataset> &vector);
+  QStringList groupTitles(const QVector<JSON::Group> &vector);
+  QStringList datasetTitles(const QVector<JSON::Dataset> &vector);
 
   bool getVisibility(const QVector<bool> &vector, const int index) const;
   void setVisibility(QVector<bool> &vector, const int index,
@@ -285,10 +287,10 @@ private:
 private:
   int m_points;
   int m_precision;
-  PlotData m_xData;
-  QVector<PlotData> m_fftPlotValues;
-  QVector<PlotData> m_linearPlotValues;
-  QVector<QVector<PlotData>> m_multiplotValues;
+  QVector<qreal> m_xData;
+  QVector<QVector<qreal>> m_fftPlotValues;
+  QVector<QVector<qreal>> m_linearPlotValues;
+  QVector<QVector<QVector<qreal>>> m_multiplotValues;
 
   QVector<bool> m_barVisibility;
   QVector<bool> m_fftVisibility;

@@ -38,35 +38,31 @@ IO::Drivers::BluetoothLE::BluetoothLE()
   , m_service(Q_NULLPTR)
   , m_controller(Q_NULLPTR)
 {
-  // clang-format off
+  // Update connect button status when a BLE device is selected by the user
+  connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged, this,
+          &IO::Drivers::BluetoothLE::configurationChanged);
+  connect(this, &IO::Drivers::BluetoothLE::deviceConnectedChanged,
+          &IO::Manager::instance(), &IO::Manager::connectedChanged);
 
-    // Update connect button status when a BLE device is selected by the user
-    connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged,
-            this, &IO::Drivers::BluetoothLE::configurationChanged);
-    connect(this, &IO::Drivers::BluetoothLE::deviceConnectedChanged,
-            &IO::Manager::instance(), &IO::Manager::connectedChanged);
+  // Operating system not supported, abort initialization process
+  if (!operatingSystemSupported())
+    return;
 
-    // Operating system not supported, abort initialization process
-    if (!operatingSystemSupported())
-        return;
+  // Register discovered devices
+  connect(&m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
+          this, &IO::Drivers::BluetoothLE::onDeviceDiscovered);
 
-    // Register discovered devices
-    connect(&m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
-            this, &IO::Drivers::BluetoothLE::onDeviceDiscovered);
-
-    // Report BLE discovery errors
+  // Report BLE discovery errors
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    connect(&m_discoveryAgent,
-            static_cast<void (QBluetoothDeviceDiscoveryAgent::*)(
-                QBluetoothDeviceDiscoveryAgent::Error)>(
-                &QBluetoothDeviceDiscoveryAgent::error),
-            this, &IO::Drivers::BluetoothLE::onDiscoveryError);
+  connect(&m_discoveryAgent,
+          static_cast<void (QBluetoothDeviceDiscoveryAgent::*)(
+              QBluetoothDeviceDiscoveryAgent::Error)>(
+              &QBluetoothDeviceDiscoveryAgent::error),
+          this, &IO::Drivers::BluetoothLE::onDiscoveryError);
 #else
-    connect(&m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
-            this, &IO::Drivers::BluetoothLE::onDiscoveryError);
+  connect(&m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
+          this, &IO::Drivers::BluetoothLE::onDiscoveryError);
 #endif
-
-  // clang-format on
 }
 
 /**
@@ -330,16 +326,14 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
     m_service = m_controller->createServiceObject(serviceUuid, this);
     if (m_service)
     {
-      // clang-format off
-            connect(m_service, &QLowEnergyService::characteristicChanged, this,
-                    &IO::Drivers::BluetoothLE::onCharacteristicChanged);
-            connect(m_service, &QLowEnergyService::characteristicRead, this,
-                    &IO::Drivers::BluetoothLE::onCharacteristicChanged);
-            connect(m_service, &QLowEnergyService::stateChanged, this,
-                    &IO::Drivers::BluetoothLE::onServiceStateChanged);
-            connect(m_service, &QLowEnergyService::errorOccurred, this,
-                    &IO::Drivers::BluetoothLE::onServiceError);
-      // clang-format on
+      connect(m_service, &QLowEnergyService::characteristicChanged, this,
+              &IO::Drivers::BluetoothLE::onCharacteristicChanged);
+      connect(m_service, &QLowEnergyService::characteristicRead, this,
+              &IO::Drivers::BluetoothLE::onCharacteristicChanged);
+      connect(m_service, &QLowEnergyService::stateChanged, this,
+              &IO::Drivers::BluetoothLE::onServiceStateChanged);
+      connect(m_service, &QLowEnergyService::errorOccurred, this,
+              &IO::Drivers::BluetoothLE::onServiceError);
 
       if (m_service->state() == QLowEnergyService::RemoteService)
         m_service->discoverDetails();

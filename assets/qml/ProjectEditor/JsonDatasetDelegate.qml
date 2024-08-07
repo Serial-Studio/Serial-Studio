@@ -71,9 +71,11 @@ Widgets.Window {
     x: 0
     columns: 2
     anchors.fill: parent
-    rowSpacing: app.spacing
     columnSpacing: app.spacing
-    anchors.margins: app.spacing * 2
+    anchors.margins: app.spacing
+    rowSpacing: app.spacing / 2
+    anchors.leftMargin: app.spacing * 2
+    anchors.rightMargin: app.spacing * 2
 
     //
     // Dataset title

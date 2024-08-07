@@ -104,11 +104,11 @@ void Widgets::Accelerometer::updateData()
   for (int i = 0; i < 3; ++i)
   {
     auto dataset = accelerometer.getDataset(i);
-    if (dataset.widget() == "x")
+    if (dataset.widget() == QStringLiteral("x"))
       x = dataset.value().toDouble();
-    if (dataset.widget() == "y")
+    if (dataset.widget() == QStringLiteral("y"))
       y = dataset.value().toDouble();
-    if (dataset.widget() == "z")
+    if (dataset.widget() == QStringLiteral("z"))
       z = dataset.value().toDouble();
   }
 
@@ -122,7 +122,7 @@ void Widgets::Accelerometer::updateData()
 
   // Update gauge
   m_gauge.setValue(G);
-  setValue(QString("%1 G").arg(
+  setValue(QStringLiteral("%1 G").arg(
       QString::number(G, 'f', UI::Dashboard::instance().precision())));
 
   // Repaint the widget

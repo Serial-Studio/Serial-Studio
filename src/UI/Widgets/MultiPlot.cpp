@@ -69,7 +69,7 @@ Widgets::MultiPlot::MultiPlot(const int index)
   // Create curves from datasets
   bool normalize = true;
   auto group = dash->getMultiplot(m_index);
-  StringList colors = theme->widgetColors();
+  QStringList colors = theme->widgetColors();
   m_curves.reserve(group.datasetCount());
   for (int i = 0; i < group.datasetCount(); ++i)
   {
@@ -196,7 +196,7 @@ void Widgets::MultiPlot::updateRange()
   auto group = UI::Dashboard::instance().getMultiplot(m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
-    m_yData.append(PlotData());
+    m_yData.append(QVector<qreal>());
     m_yData.last().resize(dash->points());
     std::fill(m_yData.last().begin(), m_yData.last().end(), 0.0001);
   }

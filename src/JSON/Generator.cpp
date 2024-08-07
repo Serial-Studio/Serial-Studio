@@ -40,11 +40,8 @@
 JSON::Generator::Generator()
   : m_opMode(kAutomatic)
 {
-  // clang-format off
-    connect(&IO::Manager::instance(), &IO::Manager::frameReceived,
-            this, &JSON::Generator::readData);
-  // clang-format on
-
+  connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
+          &JSON::Generator::readData);
   readSettings();
 }
 
@@ -106,12 +103,10 @@ JSON::Generator::OperationMode JSON::Generator::operationMode() const
  */
 void JSON::Generator::loadJsonMap()
 {
-  // clang-format off
-    auto file = QFileDialog::getOpenFileName(Q_NULLPTR,
-                                             tr("Select JSON map file"),
-                                             Project::Model::instance().jsonProjectsPath(),
-                                             tr("JSON files") + " (*.json)");
-  // clang-format on
+  const auto file = QFileDialog::getOpenFileName(
+      Q_NULLPTR, tr("Select JSON map file"),
+      Project::Model::instance().jsonProjectsPath(),
+      tr("JSON files") + QStringLiteral(" (*.json)"));
 
   if (!file.isEmpty())
     loadJsonMap(file);
@@ -157,7 +152,7 @@ void JSON::Generator::loadJsonMap(const QString &path)
       writeSettings(path);
 
       // Load compacted JSON document
-      document.object().remove("frameParser");
+      document.object().remove(QStringLiteral("frameParser"));
       m_json = document.object();
     }
 
@@ -204,7 +199,8 @@ void JSON::Generator::setOperationMode(
  */
 void JSON::Generator::readSettings()
 {
-  auto path = m_settings.value("json_map_location", "").toString();
+  auto path
+      = m_settings.value(QStringLiteral("json_map_location"), "").toString();
   if (!path.isEmpty())
     loadJsonMap(path);
 }
@@ -214,7 +210,7 @@ void JSON::Generator::readSettings()
  */
 void JSON::Generator::writeSettings(const QString &path)
 {
-  m_settings.setValue("json_map_location", path);
+  m_settings.setValue(QStringLiteral("json_map_location"), path);
 }
 
 /**
@@ -252,39 +248,41 @@ void JSON::Generator::readData(const QByteArray &data)
         QString::fromUtf8(data), IO::Manager::instance().separatorSequence());
 
     // Replace data in JSON map
-    auto groups = jsonData.value("groups").toArray();
+    auto groups = jsonData.value(QStringLiteral("groups")).toArray();
     for (int i = 0; i < groups.count(); ++i)
     {
       // Get group & list of datasets
       auto group = groups.at(i).toObject();
-      auto datasets = group.value("datasets").toArray();
+      auto datasets = group.value(QStringLiteral("datasets")).toArray();
 
       // Evaluate each dataset
       for (int j = 0; j < datasets.count(); ++j)
       {
         auto dataset = datasets.at(j).toObject();
-        auto index = dataset.value("index").toInt();
+        auto index = dataset.value(QStringLiteral("index")).toInt();
 
         if (index <= fields.count() && index >= 1)
         {
-          dataset.remove("value");
-          dataset.insert("value", QJsonValue(fields.at(index - 1)));
+          const auto value = QJsonValue(fields.at(index - 1));
+
+          dataset.remove(QStringLiteral("value"));
+          dataset.insert(QStringLiteral("value"), value);
           datasets.removeAt(j);
           datasets.insert(j, dataset);
         }
       }
 
       // Update datasets in group
-      group.remove("datasets");
-      group.insert("datasets", datasets);
+      group.remove(QStringLiteral("datasets"));
+      group.insert(QStringLiteral("datasets"), datasets);
 
       // Update group in groups array
       groups.removeAt(i);
       groups.insert(i, group);
 
       // Update groups array in JSON frame
-      jsonData.remove("groups");
-      jsonData.insert("groups", groups);
+      jsonData.remove(QStringLiteral("groups"));
+      jsonData.insert(QStringLiteral("groups"), groups);
     }
   }
 

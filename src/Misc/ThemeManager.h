@@ -25,7 +25,6 @@
 #include <QColor>
 #include <QObject>
 #include <QSettings>
-#include <DataTypes.h>
 
 namespace Misc
 {
@@ -191,10 +190,10 @@ class ThemeManager : public QObject
     Q_PROPERTY(QColor mqttButton
                READ mqttButton
                CONSTANT)
-    Q_PROPERTY(StringList widgetColors
+    Q_PROPERTY(QStringList widgetColors
                READ widgetColors
                CONSTANT)
-    Q_PROPERTY(StringList availableThemes
+    Q_PROPERTY(QStringList availableThemes
                READ availableThemes
                NOTIFY availableThemesChanged)
     Q_PROPERTY(bool customWindowDecorations
@@ -270,8 +269,8 @@ public:
   QColor connectButtonUnchecked() const;
   QColor mqttButton() const;
 
-  StringList widgetColors() const;
-  StringList availableThemes() const;
+  QStringList widgetColors() const;
+  QStringList availableThemes() const;
 
 public Q_SLOTS:
   void setTheme(const int id);
@@ -287,8 +286,8 @@ private:
 
   QSettings m_settings;
   bool m_titlebarSeparator;
-  StringList m_availableThemes;
-  StringList m_availableThemesPaths;
+  QStringList m_availableThemes;
+  QStringList m_availableThemesPaths;
 
   QColor m_base;
   QColor m_link;
@@ -337,7 +336,7 @@ private:
   QColor m_connectButtonChecked;
   QColor m_connectButtonUnchecked;
   QColor m_mqttButton;
-  StringList m_widgetColors;
+  QStringList m_widgetColors;
 };
 } // namespace Misc
 

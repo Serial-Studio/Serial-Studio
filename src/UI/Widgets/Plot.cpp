@@ -77,7 +77,7 @@ Widgets::Plot::Plot(const int index)
 
   // Get curve color
   QString color;
-  StringList colors = theme->widgetColors();
+  QStringList colors = theme->widgetColors();
   if (colors.count() > m_index)
     color = colors.at(m_index);
   else
@@ -105,25 +105,18 @@ Widgets::Plot::Plot(const int index)
   }
 
   // Enable logarithmic scale
-  // clang-format off
   if (dataset.log())
-      m_plot.setAxisScaleEngine(QwtPlot::yLeft,
-                                new QwtLogScaleEngine(10));
-  // clang-format on
+    m_plot.setAxisScaleEngine(QwtPlot::yLeft, new QwtLogScaleEngine(10));
 
   // Set axis titles
   m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
   m_plot.setAxisTitle(QwtPlot::yLeft, dataset.title());
 
   // React to dashboard events
-  // clang-format off
-    connect(dash, SIGNAL(updated()),
-            this, SLOT(updateData()),
-            Qt::QueuedConnection);
-    connect(dash, SIGNAL(pointsChanged()),
-            this, SLOT(updateRange()),
-            Qt::QueuedConnection);
-  // clang-format on
+  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
+          Qt::QueuedConnection);
+  connect(dash, SIGNAL(pointsChanged()), this, SLOT(updateRange()),
+          Qt::QueuedConnection);
 }
 
 /**
@@ -220,7 +213,7 @@ void Widgets::Plot::updateRange()
   auto dash = &UI::Dashboard::instance();
 
   // Clear Y-axis data
-  PlotData tempYData;
+  QVector<qreal> tempYData;
   tempYData.reserve(dash->points());
   for (int i = 0; i < dash->points(); ++i)
     tempYData.append(0);

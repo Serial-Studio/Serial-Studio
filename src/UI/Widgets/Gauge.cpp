@@ -92,7 +92,7 @@ void Widgets::Gauge::updateData()
   // Update gauge value
   auto dataset = dash->getGauge(m_index);
   m_gauge.setValue(dataset.value().toDouble());
-  setValue(QString("%1 %2").arg(
+  setValue(QStringLiteral("%1 %2").arg(
       QString::number(dataset.value().toDouble(), 'f', dash->precision()),
       dataset.units()));
 

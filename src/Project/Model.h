@@ -23,7 +23,6 @@
 #pragma once
 
 #include <QObject>
-#include <DataTypes.h>
 #include <JSON/Group.h>
 #include <JSON/Dataset.h>
 
@@ -41,35 +40,35 @@ namespace Project
 class Model : public QObject
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(int groupCount
-               READ groupCount
-               NOTIFY groupCountChanged)
-    Q_PROPERTY(bool modified
-               READ modified
-               NOTIFY modifiedChanged)
-    Q_PROPERTY(QString title
-               READ title
-               WRITE setTitle
-               NOTIFY titleChanged)
-    Q_PROPERTY(QString separator
-               READ separator
-               WRITE setSeparator
-               NOTIFY separatorChanged)
-    Q_PROPERTY(QString frameEndSequence
-               READ frameEndSequence
-               WRITE setFrameEndSequence
-               NOTIFY frameEndSequenceChanged)
-    Q_PROPERTY(QString frameStartSequence
-               READ frameStartSequence
-               WRITE setFrameStartSequence
-               NOTIFY frameStartSequenceChanged)
-    Q_PROPERTY(QString jsonFilePath
-               READ jsonFilePath
-               NOTIFY jsonFileChanged)
-    Q_PROPERTY(QString jsonFileName
-               READ jsonFileName
-               NOTIFY jsonFileChanged)
+  Q_OBJECT
+  Q_PROPERTY(int groupCount
+             READ groupCount
+             NOTIFY groupCountChanged)
+  Q_PROPERTY(bool modified
+             READ modified
+             NOTIFY modifiedChanged)
+  Q_PROPERTY(QString title
+             READ title
+             WRITE setTitle
+             NOTIFY titleChanged)
+  Q_PROPERTY(QString separator
+             READ separator
+             WRITE setSeparator
+             NOTIFY separatorChanged)
+  Q_PROPERTY(QString frameEndSequence
+             READ frameEndSequence
+             WRITE setFrameEndSequence
+             NOTIFY frameEndSequenceChanged)
+  Q_PROPERTY(QString frameStartSequence
+             READ frameStartSequence
+             WRITE setFrameStartSequence
+             NOTIFY frameStartSequenceChanged)
+  Q_PROPERTY(QString jsonFilePath
+             READ jsonFilePath
+             NOTIFY jsonFileChanged)
+  Q_PROPERTY(QString jsonFileName
+             READ jsonFileName
+             NOTIFY jsonFileChanged)
   // clang-format on
 
 Q_SIGNALS:
@@ -95,8 +94,8 @@ private:
 public:
   static Model &instance();
 
-  Q_INVOKABLE StringList availableGroupLevelWidgets();
-  Q_INVOKABLE StringList availableDatasetLevelWidgets();
+  Q_INVOKABLE QStringList availableGroupLevelWidgets();
+  Q_INVOKABLE QStringList availableDatasetLevelWidgets();
 
   QString jsonProjectsPath() const;
 

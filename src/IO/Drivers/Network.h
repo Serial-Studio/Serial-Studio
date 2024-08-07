@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <DataTypes.h>
 #include <IO/HAL_Driver.h>
 
 #include <QHostInfo>
@@ -44,57 +43,57 @@ namespace Drivers
 class Network : public HAL_Driver
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(QString remoteAddress
-               READ remoteAddress
-               WRITE setRemoteAddress
-               NOTIFY addressChanged)
-    Q_PROPERTY(quint16 tcpPort
-               READ tcpPort
-               WRITE setTcpPort
-               NOTIFY portChanged)
-    Q_PROPERTY(quint16 udpLocalPort
-               READ udpLocalPort
-               WRITE setUdpLocalPort
-               NOTIFY portChanged)
-    Q_PROPERTY(quint16 udpRemotePort
-               READ udpRemotePort
-               WRITE setUdpRemotePort
-               NOTIFY portChanged)
-    Q_PROPERTY(QAbstractSocket::SocketType socketType
-               READ socketType
-               WRITE setSocketType
-               NOTIFY socketTypeChanged)
-    Q_PROPERTY(int socketTypeIndex
-               READ socketTypeIndex
-               WRITE setSocketTypeIndex
-               NOTIFY socketTypeChanged)
-    Q_PROPERTY(StringList socketTypes
-               READ socketTypes
-               CONSTANT)
-    Q_PROPERTY(QString defaultAddress
-               READ defaultAddress
-               CONSTANT)
-    Q_PROPERTY(quint16 defaultTcpPort
-               READ defaultTcpPort
-               CONSTANT)
-    Q_PROPERTY(quint16 defaultUdpLocalPort
-               READ defaultUdpLocalPort
-               CONSTANT)
-    Q_PROPERTY(quint16 defaultUdpRemotePort
-               READ defaultUdpRemotePort
-               CONSTANT)
-    Q_PROPERTY(bool lookupActive
-               READ lookupActive
-               NOTIFY lookupActiveChanged)
-    Q_PROPERTY(bool udpMulticast
-               READ udpMulticast
-               WRITE setUdpMulticast
-               NOTIFY udpMulticastChanged)
-    Q_PROPERTY(bool udpIgnoreFrameSequences
-               READ udpIgnoreFrameSequences
-               WRITE setUdpIgnoreFrameSequences
-               NOTIFY udpIgnoreFrameSequencesChanged)
+  Q_OBJECT
+  Q_PROPERTY(QString remoteAddress
+             READ remoteAddress
+             WRITE setRemoteAddress
+             NOTIFY addressChanged)
+  Q_PROPERTY(quint16 tcpPort
+             READ tcpPort
+             WRITE setTcpPort
+             NOTIFY portChanged)
+  Q_PROPERTY(quint16 udpLocalPort
+             READ udpLocalPort
+             WRITE setUdpLocalPort
+             NOTIFY portChanged)
+  Q_PROPERTY(quint16 udpRemotePort
+             READ udpRemotePort
+             WRITE setUdpRemotePort
+             NOTIFY portChanged)
+  Q_PROPERTY(QAbstractSocket::SocketType socketType
+             READ socketType
+             WRITE setSocketType
+             NOTIFY socketTypeChanged)
+  Q_PROPERTY(int socketTypeIndex
+             READ socketTypeIndex
+             WRITE setSocketTypeIndex
+             NOTIFY socketTypeChanged)
+  Q_PROPERTY(QStringList socketTypes
+             READ socketTypes
+             CONSTANT)
+  Q_PROPERTY(QString defaultAddress
+             READ defaultAddress
+             CONSTANT)
+  Q_PROPERTY(quint16 defaultTcpPort
+             READ defaultTcpPort
+             CONSTANT)
+  Q_PROPERTY(quint16 defaultUdpLocalPort
+             READ defaultUdpLocalPort
+             CONSTANT)
+  Q_PROPERTY(quint16 defaultUdpRemotePort
+             READ defaultUdpRemotePort
+             CONSTANT)
+  Q_PROPERTY(bool lookupActive
+             READ lookupActive
+             NOTIFY lookupActiveChanged)
+  Q_PROPERTY(bool udpMulticast
+             READ udpMulticast
+             WRITE setUdpMulticast
+             NOTIFY udpMulticastChanged)
+  Q_PROPERTY(bool udpIgnoreFrameSequences
+             READ udpIgnoreFrameSequences
+             WRITE setUdpIgnoreFrameSequences
+             NOTIFY udpIgnoreFrameSequencesChanged)
   // clang-format on
 
 Q_SIGNALS:
@@ -135,7 +134,7 @@ public:
   bool udpMulticast() const;
   bool lookupActive() const;
   int socketTypeIndex() const;
-  StringList socketTypes() const;
+  QStringList socketTypes() const;
   bool udpIgnoreFrameSequences() const;
   QAbstractSocket::SocketType socketType() const;
 

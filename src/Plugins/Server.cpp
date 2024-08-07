@@ -36,23 +36,20 @@
 Plugins::Server::Server()
   : m_enabled(false)
 {
-  // clang-format off
 
-    // Send processed data at 1 Hz
-    connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged,
-            this, &Plugins::Server::registerFrame);
-    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz,
-            this, &Plugins::Server::sendProcessedData);
+  // Send processed data at 1 Hz
+  connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged, this,
+          &Plugins::Server::registerFrame);
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
+          &Plugins::Server::sendProcessedData);
 
-    // Send I/O "raw" data directly
-    connect(&IO::Manager::instance(), &IO::Manager::dataReceived,
-            this, &Plugins::Server::sendRawData);
+  // Send I/O "raw" data directly
+  connect(&IO::Manager::instance(), &IO::Manager::dataReceived, this,
+          &Plugins::Server::sendRawData);
 
-    // Configure TCP server
-    connect(&m_server, &QTcpServer::newConnection,
-            this, &Plugins::Server::acceptConnection);
-
-  // clang-format on
+  // Configure TCP server
+  connect(&m_server, &QTcpServer::newConnection, this,
+          &Plugins::Server::acceptConnection);
 
   // Begin listening on TCP port
   if (!m_server.listen(QHostAddress::Any, PLUGINS_TCP_PORT))
@@ -189,15 +186,13 @@ void Plugins::Server::acceptConnection()
           &Plugins::Server::removeConnection);
 
   // React to socket errors
-  // clang-format off
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this,     SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
+  connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+          SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
 #else
-    connect(socket, &QTcpSocket::errorOccurred,
-            this, &Plugins::Server::onErrorOccurred);
+  connect(socket, &QTcpSocket::errorOccurred, this,
+          &Plugins::Server::onErrorOccurred);
 #endif
-  // clang-format on
 
   // Add socket to sockets list
   m_sockets.append(socket);
@@ -229,7 +224,7 @@ void Plugins::Server::sendProcessedData()
   {
     QJsonObject object;
     auto frame = m_frames.at(i);
-    object.insert("data", frame);
+    object.insert(QStringLiteral("data"), frame);
     array.append(object);
   }
 
@@ -238,7 +233,7 @@ void Plugins::Server::sendProcessedData()
   {
     // Construct QByteArray with data
     QJsonObject object;
-    object.insert("frames", array);
+    object.insert(QStringLiteral("frames"), array);
     const QJsonDocument document(object);
     auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
@@ -273,11 +268,11 @@ void Plugins::Server::sendRawData(const QByteArray &data)
 
   // Create JSON structure with incoming data encoded in Base-64
   QJsonObject object;
-  object.insert("data", QString::fromUtf8(data.toBase64()));
+  object.insert(QStringLiteral("data"), QString::fromUtf8(data.toBase64()));
 
   // Get JSON string in compact format & send it over the TCP socket
   QJsonDocument document(object);
-  auto json = document.toJson(QJsonDocument::Compact) + "\n";
+  const auto json = document.toJson(QJsonDocument::Compact) + "\n";
 
   // Send data to each plugin
   Q_FOREACH (auto socket, m_sockets)

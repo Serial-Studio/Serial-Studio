@@ -23,7 +23,6 @@
 #pragma once
 
 #include <QObject>
-#include <DataTypes.h>
 #include <IO/HAL_Driver.h>
 
 namespace IO
@@ -58,38 +57,38 @@ namespace IO
 class Manager : public QObject
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(bool readOnly
-               READ readOnly
-               NOTIFY connectedChanged)
-    Q_PROPERTY(bool readWrite
-               READ readWrite
-               NOTIFY connectedChanged)
-    Q_PROPERTY(bool connected
-               READ connected
-               NOTIFY connectedChanged)
-    Q_PROPERTY(bool deviceAvailable
-               READ deviceAvailable
-               NOTIFY driverChanged)
-    Q_PROPERTY(IO::Manager::SelectedDriver selectedDriver
-               READ selectedDriver
-               WRITE setSelectedDriver
-               NOTIFY selectedDriverChanged)
-    Q_PROPERTY(QString startSequence
-               READ startSequence
-               WRITE setStartSequence
-               NOTIFY startSequenceChanged)
-    Q_PROPERTY(QString finishSequence
-               READ finishSequence
-               WRITE setFinishSequence
-               NOTIFY finishSequenceChanged)
-    Q_PROPERTY(QString separatorSequence
-               READ separatorSequence
-               WRITE setSeparatorSequence
-               NOTIFY separatorSequenceChanged)
-    Q_PROPERTY(bool configurationOk
-               READ configurationOk
-               NOTIFY configurationChanged)
+  Q_OBJECT
+  Q_PROPERTY(bool readOnly
+             READ readOnly
+             NOTIFY connectedChanged)
+  Q_PROPERTY(bool readWrite
+             READ readWrite
+             NOTIFY connectedChanged)
+  Q_PROPERTY(bool connected
+             READ connected
+             NOTIFY connectedChanged)
+  Q_PROPERTY(bool deviceAvailable
+             READ deviceAvailable
+             NOTIFY driverChanged)
+  Q_PROPERTY(IO::Manager::SelectedDriver selectedDriver
+             READ selectedDriver
+             WRITE setSelectedDriver
+             NOTIFY selectedDriverChanged)
+  Q_PROPERTY(QString startSequence
+             READ startSequence
+             WRITE setStartSequence
+             NOTIFY startSequenceChanged)
+  Q_PROPERTY(QString finishSequence
+             READ finishSequence
+             WRITE setFinishSequence
+             NOTIFY finishSequenceChanged)
+  Q_PROPERTY(QString separatorSequence
+             READ separatorSequence
+             WRITE setSeparatorSequence
+             NOTIFY separatorSequenceChanged)
+  Q_PROPERTY(bool configurationOk
+             READ configurationOk
+             NOTIFY configurationChanged)
   // clang-format on
 
 Q_SIGNALS:
@@ -149,7 +148,7 @@ public:
   QString finishSequence() const;
   QString separatorSequence() const;
 
-  Q_INVOKABLE StringList availableDrivers() const;
+  Q_INVOKABLE QStringList availableDrivers() const;
   Q_INVOKABLE qint64 writeData(const QByteArray &data);
 
 public Q_SLOTS:

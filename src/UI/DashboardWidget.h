@@ -50,10 +50,8 @@ Q_SIGNALS:
 public:
   DashboardWidgetBase()
   {
-    // clang-format off
-        connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz,
-                this, &Widgets::DashboardWidgetBase::repaint);
-    // clang-format on
+    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz,
+            this, &Widgets::DashboardWidgetBase::repaint);
   }
 
   void repaint()
@@ -100,40 +98,40 @@ namespace UI
 class DashboardWidget : public DeclarativeWidget
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(int widgetIndex
-               READ widgetIndex
-               WRITE setWidgetIndex
-               NOTIFY widgetIndexChanged)
-    Q_PROPERTY(int relativeIndex
-               READ relativeIndex
-               NOTIFY widgetIndexChanged)
-    Q_PROPERTY(QString widgetIcon
-               READ widgetIcon
-               NOTIFY widgetIndexChanged)
-    Q_PROPERTY(QString widgetTitle
-               READ widgetTitle
-               NOTIFY widgetIndexChanged)
-    Q_PROPERTY(bool isExternalWindow
-               READ isExternalWindow
-               WRITE setIsExternalWindow
-               NOTIFY isExternalWindowChanged)
-    Q_PROPERTY(bool widgetVisible
-               READ widgetVisible
-               WRITE setVisible
-               NOTIFY widgetVisibleChanged)
-    Q_PROPERTY(bool isGpsMap
-               READ isGpsMap
-               NOTIFY widgetIndexChanged)
-    Q_PROPERTY(qreal gpsAltitude
-               READ gpsAltitude
-               NOTIFY gpsDataChanged)
-    Q_PROPERTY(qreal gpsLatitude
-               READ gpsLatitude
-               NOTIFY gpsDataChanged)
-    Q_PROPERTY(qreal gpsLongitude
-               READ gpsLongitude
-               NOTIFY gpsDataChanged)
+  Q_OBJECT
+  Q_PROPERTY(int widgetIndex
+             READ widgetIndex
+             WRITE setWidgetIndex
+             NOTIFY widgetIndexChanged)
+  Q_PROPERTY(int relativeIndex
+             READ relativeIndex
+             NOTIFY widgetIndexChanged)
+  Q_PROPERTY(QString widgetIcon
+             READ widgetIcon
+             NOTIFY widgetIndexChanged)
+  Q_PROPERTY(QString widgetTitle
+             READ widgetTitle
+             NOTIFY widgetIndexChanged)
+  Q_PROPERTY(bool isExternalWindow
+             READ isExternalWindow
+             WRITE setIsExternalWindow
+             NOTIFY isExternalWindowChanged)
+  Q_PROPERTY(bool widgetVisible
+             READ widgetVisible
+             WRITE setVisible
+             NOTIFY widgetVisibleChanged)
+  Q_PROPERTY(bool isGpsMap
+             READ isGpsMap
+             NOTIFY widgetIndexChanged)
+  Q_PROPERTY(qreal gpsAltitude
+             READ gpsAltitude
+             NOTIFY gpsDataChanged)
+  Q_PROPERTY(qreal gpsLatitude
+             READ gpsLatitude
+             NOTIFY gpsDataChanged)
+  Q_PROPERTY(qreal gpsLongitude
+             READ gpsLongitude
+             NOTIFY gpsDataChanged)
   // clang-format on
 
 Q_SIGNALS:

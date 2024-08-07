@@ -70,8 +70,8 @@ Control {
       id: layout
       columns: 2
       Layout.fillWidth: true
-      rowSpacing: app.spacing
-      columnSpacing: app.spacing
+      rowSpacing: app.spacing / 2
+      columnSpacing: app.spacing / 2
 
       //
       // COM port selector

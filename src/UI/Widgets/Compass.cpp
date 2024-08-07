@@ -92,14 +92,14 @@ void Widgets::Compass::update()
   // Get dataset value & set text format
   auto dataset = dash->getCompass(m_index);
   auto value = dataset.value().toDouble();
-  auto text = QString("%1°").arg(
+  auto text = QStringLiteral("%1°").arg(
       QString::number(value, 'f', UI::Dashboard::instance().precision()));
 
   // Ensure that angle always has 3 characters
   if (text.length() == 2)
-    text.prepend("00");
+    text.prepend(QStringLiteral("00"));
   else if (text.length() == 3)
-    text.prepend("0");
+    text.prepend(QStringLiteral("0"));
 
   // Update gauge
   setValue(text);

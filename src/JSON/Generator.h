@@ -60,17 +60,17 @@ namespace JSON
 class Generator : public QObject
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(QString jsonMapFilename
-               READ jsonMapFilename
-               NOTIFY jsonFileMapChanged)
-    Q_PROPERTY(QString jsonMapFilepath
-               READ jsonMapFilepath
-               NOTIFY jsonFileMapChanged)
-    Q_PROPERTY(OperationMode operationMode
-               READ operationMode
-               WRITE setOperationMode
-               NOTIFY operationModeChanged)
+  Q_OBJECT
+  Q_PROPERTY(QString jsonMapFilename
+             READ jsonMapFilename
+             NOTIFY jsonFileMapChanged)
+  Q_PROPERTY(QString jsonMapFilepath
+             READ jsonMapFilepath
+             NOTIFY jsonFileMapChanged)
+  Q_PROPERTY(OperationMode operationMode
+             READ operationMode
+             WRITE setOperationMode
+             NOTIFY operationModeChanged)
   // clang-format on
 
 Q_SIGNALS:

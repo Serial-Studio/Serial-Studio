@@ -23,6 +23,7 @@
 #include "Player.h"
 
 #include <QtMath>
+#include <QTimer>
 #include <QFileDialog>
 #include <QApplication>
 
@@ -124,7 +125,7 @@ QString CSV::Player::timestamp() const
 QString CSV::Player::csvFilesPath() const
 {
   // Get file name and path
-  const auto path = QString("%1/Documents/%2/CSV/")
+  const auto path = QStringLiteral("%1/Documents/%2/CSV/")
                         .arg(QDir::homePath(), qApp->applicationName());
 
   // Generate file path if required
@@ -169,20 +170,14 @@ void CSV::Player::toggle()
  */
 void CSV::Player::openFile()
 {
-  // clang-format off
+  // Get file name
+  auto file = QFileDialog::getOpenFileName(
+      Q_NULLPTR, tr("Select CSV file"), csvFilesPath(),
+      tr("CSV files") + QStringLiteral(" (*.csv)"));
 
-    // Get file name
-    auto file = QFileDialog::getOpenFileName(
-                Q_NULLPTR,
-                tr("Select CSV file"),
-                csvFilesPath(),
-                tr("CSV files") + " (*.csv)");
-
-    // Open CSV file
-    if (!file.isEmpty())
-        openFile(file);
-
-  // clang-format on
+  // Open CSV file
+  if (!file.isEmpty())
+    openFile(file);
 }
 
 /**
@@ -363,17 +358,13 @@ void CSV::Player::updateData()
       // No error, calculate difference & schedule update
       if (!error)
       {
-        auto format = "yyyy/MM/dd/ HH:mm:ss::zzz"; // Same as in Export.cpp
-        auto currDateTime = QDateTime::fromString(currTime, format);
-        auto nextDateTime = QDateTime::fromString(nextTime, format);
-        auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
+        const auto format = QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz");
+        const auto currDateTime = QDateTime::fromString(currTime, format);
+        const auto nextDateTime = QDateTime::fromString(nextTime, format);
+        const auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
 
-        // clang-format off
-                QTimer::singleShot(msecsToNextF,
-                                   Qt::PreciseTimer,
-                                   this,
-                                   SLOT(nextFrame()));
-        // clang-format on
+        QTimer::singleShot(msecsToNextF, Qt::PreciseTimer, this,
+                           SLOT(nextFrame()));
       }
 
       // Error - pause playback

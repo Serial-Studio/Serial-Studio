@@ -37,14 +37,16 @@
  */
 static QString HexDump(const char *data, const size_t size)
 {
-  char str[4096] = "";
+  QString result;
   char ascii[17];
-
-  size_t i, j;
   ascii[16] = '\0';
-  for (i = 0; i < size; ++i)
+
+  for (size_t i = 0; i < size; ++i)
   {
-    sprintf(str + strlen(str), "%02X ", static_cast<quint8>(data[i]));
+    char hexBuffer[4];
+    snprintf(hexBuffer, sizeof(hexBuffer), "%02X ",
+             static_cast<quint8>(data[i]));
+    result += hexBuffer;
 
     if (data[i] >= ' ' && data[i] <= '~')
       ascii[i % 16] = data[i];
@@ -53,25 +55,25 @@ static QString HexDump(const char *data, const size_t size)
 
     if ((i + 1) % 8 == 0 || i + 1 == size)
     {
-      sprintf(str + strlen(str), " ");
+      result += ' ';
       if ((i + 1) % 16 == 0)
-        sprintf(str + strlen(str), "|  %s \n", ascii);
+        result += QString("|  %1 \n").arg(ascii);
 
       else if (i + 1 == size)
       {
         ascii[(i + 1) % 16] = '\0';
 
         if ((i + 1) % 16 <= 8)
-          sprintf(str + strlen(str), " ");
-        for (j = (i + 1) % 16; j < 16; ++j)
-          sprintf(str + strlen(str), "   ");
+          result += ' ';
+        for (size_t j = (i + 1) % 16; j < 16; ++j)
+          result += "   ";
 
-        sprintf(str + strlen(str), "|  %s \n", ascii);
+        result += QString("|  %1 \n").arg(ascii);
       }
     }
   }
 
-  return QString(str);
+  return result;
 }
 
 /**
@@ -201,9 +203,9 @@ QString IO::Console::currentHistoryString() const
  * Returns a list with the available data (sending) modes. This list must be
  * synchronized with the order of the @c DataMode enums.
  */
-StringList IO::Console::dataModes() const
+QStringList IO::Console::dataModes() const
 {
-  StringList list;
+  QStringList list;
   list.append(tr("ASCII"));
   list.append(tr("HEX"));
   return list;
@@ -213,13 +215,13 @@ StringList IO::Console::dataModes() const
  * Returns a list with the available line endings options. This list must be
  * synchronized with the order of the @c LineEnding enums.
  */
-StringList IO::Console::lineEndings() const
+QStringList IO::Console::lineEndings() const
 {
-  StringList list;
+  QStringList list;
   list.append(tr("No line ending"));
   list.append(tr("New line"));
   list.append(tr("Carriage return"));
-  list.append(tr("NL + CR"));
+  list.append(tr("CR + NL"));
   return list;
 }
 
@@ -227,9 +229,9 @@ StringList IO::Console::lineEndings() const
  * Returns a list with the available console display modes. This list must be
  * synchronized with the order of the @c DisplayMode enums.
  */
-StringList IO::Console::displayModes() const
+QStringList IO::Console::displayModes() const
 {
-  StringList list;
+  QStringList list;
   list.append(tr("Plain text"));
   list.append(tr("Hexadecimal"));
   return list;
@@ -243,7 +245,7 @@ QString IO::Console::formatUserHex(const QString &text)
 {
   // Remove spaces & stuff
   auto data = text.simplified();
-  data = data.replace(" ", "");
+  data = data.replace(QStringLiteral(" "), "");
 
   // Convert to hex string with spaces between bytes
   QString str;
@@ -306,7 +308,7 @@ void IO::Console::clear()
 }
 
 /**
- * Comamnds sent by the user are stored in a @c StringList, in which the first
+ * Comamnds sent by the user are stored in a @c QStringList, in which the first
  * items are the oldest commands.
  *
  * The user can navigate the list using the up/down keys. This function allows
@@ -322,7 +324,7 @@ void IO::Console::historyUp()
 }
 
 /**
- * Comamnds sent by the user are stored in a @c StringList, in which the first
+ * Comamnds sent by the user are stored in a @c QStringList, in which the first
  * items are the oldest commands.
  *
  * The user can navigate the list using the up/down keys. This function allows
@@ -347,11 +349,12 @@ void IO::Console::historyDown()
 void IO::Console::send(const QString &data)
 {
   // Check conditions
-  if (data.isEmpty() || !Manager::instance().connected())
+  if (!Manager::instance().connected())
     return;
 
   // Add user command to history
-  addToHistory(data);
+  if (!data.isEmpty())
+    addToHistory(data);
 
   // Convert data to byte array
   QByteArray bin;
@@ -366,19 +369,20 @@ void IO::Console::send(const QString &data)
     case LineEnding::NoLineEnding:
       break;
     case LineEnding::NewLine:
-      bin.append("\n");
+      bin.append('\n');
       break;
     case LineEnding::CarriageReturn:
-      bin.append("\r");
+      bin.append('\r');
       break;
     case LineEnding::BothNewLineAndCarriageReturn:
-      bin.append("\r");
-      bin.append("\n");
+      bin.append('\r');
+      bin.append('\n');
       break;
   }
 
   // Write data to device
-  Manager::instance().writeData(bin);
+  if (!bin.isEmpty())
+    Manager::instance().writeData(bin);
 }
 
 /**
@@ -488,24 +492,25 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
     return;
 
   auto data = string;
-  
+
   // Omit leading \n if a trailing \r was already rendered from previous payload
-  if (m_lastCharWasCR && data.startsWith("\n"))
+  if (m_lastCharWasCR && data.startsWith('\n'))
     data.removeFirst();
 
   // Record trailing \r
-  m_lastCharWasCR = data.endsWith("\r");
+  m_lastCharWasCR = data.endsWith('\r');
 
   // Only use \n as line separator for rendering
-  data = data.replace("\r\n", "\n");
-  data = data.replace("\r", "\n");
+  data = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
+  data = data.replace(QStringLiteral("\n\n"), QStringLiteral("\n"));
+  data = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
 
   // Get timestamp
   QString timestamp;
   if (addTimestamp)
   {
     QDateTime dateTime = QDateTime::currentDateTime();
-    timestamp = dateTime.toString("HH:mm:ss.zzz -> ");
+    timestamp = dateTime.toString(QStringLiteral("HH:mm:ss.zzz -> "));
   }
 
   // Initialize final string
@@ -513,14 +518,14 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   processedString.reserve(data.length() + timestamp.length());
 
   // Create list with lines (keep separators)
-  StringList tokens;
+  QStringList tokens;
   QString currentToken;
   for (int i = 0; i < data.length(); ++i)
   {
     if (data.at(i) == '\n')
     {
       tokens.append(currentToken);
-      tokens.append("\n");
+      tokens.append(QStringLiteral("\n"));
       currentToken.clear();
     }
 
@@ -540,7 +545,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
     auto token = tokens.first();
     processedString.append(token);
-    m_isStartingLine = (token == "\n");
+    m_isStartingLine = (token == QStringLiteral("\n"));
     tokens.removeFirst();
   }
 
@@ -560,7 +565,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 void IO::Console::onDataSent(const QByteArray &data)
 {
   if (echo())
-    append(dataToString(data) + "\n", showTimestamp());
+    append(dataToString(data) + QStringLiteral("\n"), showTimestamp());
 }
 
 /**
@@ -592,14 +597,14 @@ void IO::Console::addToHistory(const QString &command)
 QByteArray IO::Console::hexToBytes(const QString &data)
 {
   QString withoutSpaces = data;
-  withoutSpaces.replace(" ", "");
+  withoutSpaces.replace(QStringLiteral(" "), "");
 
   QByteArray array;
   for (int i = 0; i < withoutSpaces.length(); i += 2)
   {
     auto chr1 = withoutSpaces.at(i);
     auto chr2 = withoutSpaces.at(i + 1);
-    auto byte = QString("%1%2").arg(chr1, chr2).toInt(Q_NULLPTR, 16);
+    auto byte = QStringLiteral("%1%2").arg(chr1, chr2).toInt(Q_NULLPTR, 16);
     array.append(byte);
   }
 

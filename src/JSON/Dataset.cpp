@@ -162,19 +162,19 @@ bool JSON::Dataset::read(const QJsonObject &object)
 {
   if (!object.isEmpty())
   {
-    m_fft = object.value("fft").toBool();
-    m_led = object.value("led").toBool();
-    m_log = object.value("log").toBool();
-    m_min = object.value("min").toDouble();
-    m_max = object.value("max").toDouble();
-    m_index = object.value("index").toInt();
-    m_alarm = object.value("alarm").toDouble();
-    m_graph = object.value("graph").toBool();
-    m_title = object.value("title").toString();
-    m_value = object.value("value").toString();
-    m_units = object.value("units").toString();
-    m_widget = object.value("widget").toString();
-    m_fftSamples = object.value("fftSamples").toInt();
+    m_fft = object.value(QStringLiteral("fft")).toBool();
+    m_led = object.value(QStringLiteral("led")).toBool();
+    m_log = object.value(QStringLiteral("log")).toBool();
+    m_min = object.value(QStringLiteral("min")).toDouble();
+    m_max = object.value(QStringLiteral("max")).toDouble();
+    m_index = object.value(QStringLiteral("index")).toInt();
+    m_alarm = object.value(QStringLiteral("alarm")).toDouble();
+    m_graph = object.value(QStringLiteral("graph")).toBool();
+    m_title = object.value(QStringLiteral("title")).toString();
+    m_value = object.value(QStringLiteral("value")).toString();
+    m_units = object.value(QStringLiteral("units")).toString();
+    m_widget = object.value(QStringLiteral("widget")).toString();
+    m_fftSamples = object.value(QStringLiteral("fftSamples")).toInt();
 
     if (m_value.isEmpty())
       m_value = "--.--";

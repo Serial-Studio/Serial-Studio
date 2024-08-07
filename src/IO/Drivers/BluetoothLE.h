@@ -27,7 +27,6 @@
 #include <QLowEnergyController>
 #include <QBluetoothDeviceDiscoveryAgent>
 
-#include <DataTypes.h>
 #include <IO/HAL_Driver.h>
 
 namespace IO
@@ -41,26 +40,26 @@ namespace Drivers
 class BluetoothLE : public HAL_Driver
 {
   // clang-format off
-    Q_OBJECT
-    Q_PROPERTY(int deviceCount
-               READ deviceCount
-               NOTIFY devicesChanged)
-    Q_PROPERTY(StringList deviceNames
-               READ deviceNames
-               NOTIFY devicesChanged)
-    Q_PROPERTY(StringList serviceNames
-               READ serviceNames
-               NOTIFY servicesChanged)
-    Q_PROPERTY(int deviceIndex
-               READ deviceIndex
-               WRITE selectDevice
-               NOTIFY devicesChanged)
-    Q_PROPERTY(bool isOpen
-               READ isOpen
-               NOTIFY deviceConnectedChanged)
-    Q_PROPERTY(bool operatingSystemSupported
-               READ operatingSystemSupported
-               CONSTANT)
+  Q_OBJECT
+  Q_PROPERTY(int deviceCount
+             READ deviceCount
+             NOTIFY devicesChanged)
+  Q_PROPERTY(QStringList deviceNames
+             READ deviceNames
+             NOTIFY devicesChanged)
+  Q_PROPERTY(QStringList serviceNames
+             READ serviceNames
+             NOTIFY servicesChanged)
+  Q_PROPERTY(int deviceIndex
+             READ deviceIndex
+             WRITE selectDevice
+             NOTIFY devicesChanged)
+  Q_PROPERTY(bool isOpen
+             READ isOpen
+             NOTIFY deviceConnectedChanged)
+  Q_PROPERTY(bool operatingSystemSupported
+             READ operatingSystemSupported
+             CONSTANT)
   // clang-format on
 
 Q_SIGNALS:
@@ -93,8 +92,8 @@ public:
 
   int deviceCount() const;
   int deviceIndex() const;
-  StringList deviceNames() const;
-  StringList serviceNames() const;
+  QStringList deviceNames() const;
+  QStringList serviceNames() const;
   bool operatingSystemSupported() const;
 
 public Q_SLOTS:
@@ -119,8 +118,8 @@ private:
   QLowEnergyService *m_service;
   QLowEnergyController *m_controller;
 
-  StringList m_deviceNames;
-  StringList m_serviceNames;
+  QStringList m_deviceNames;
+  QStringList m_serviceNames;
   QList<QBluetoothDeviceInfo> m_devices;
   QBluetoothDeviceDiscoveryAgent m_discoveryAgent;
 };

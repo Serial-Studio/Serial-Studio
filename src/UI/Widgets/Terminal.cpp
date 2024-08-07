@@ -67,12 +67,10 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   m_textEdit.setPalette(palette);
 
   // Connect signals/slots
-  // clang-format off
-    connect(&IO::Console::instance(), &IO::Console::stringReceived,
-            this, &Widgets::Terminal::insertText);
-    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout10Hz,
-            this, &Widgets::Terminal::repaint);
-  // clang-format on
+  connect(&IO::Console::instance(), &IO::Console::stringReceived, this,
+          &Widgets::Terminal::insertText);
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout10Hz, this,
+          &Widgets::Terminal::repaint);
 
   // React to widget events
   connect(&m_textEdit, SIGNAL(copyAvailable(bool)), this,
@@ -784,7 +782,7 @@ Widgets::AnsiEscapeCodeHandler::parseText(const FormattedText &input)
       }
       // get the number
       QString strNumber;
-      StringList numbers;
+      QStringList numbers;
       while (!strippedText.isEmpty())
       {
         if (strippedText.at(0).isDigit())

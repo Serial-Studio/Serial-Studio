@@ -51,6 +51,6 @@ private:
   QwtLegend m_legend;
   QVBoxLayout m_layout;
   QVector<QwtPlotCurve *> m_curves;
-  QVector<PlotData> m_yData;
+  QVector<QVector<qreal>> m_yData;
 };
 } // namespace Widgets

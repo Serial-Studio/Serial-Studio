@@ -40,7 +40,7 @@
 Misc::ThemeManager::ThemeManager()
 {
   populateThemes();
-  loadTheme(m_settings.value("themeId", 0).toInt());
+  loadTheme(m_settings.value(QStringLiteral("themeId"), 0).toInt());
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
   setCustomWindowDecorations(false);
@@ -94,15 +94,13 @@ void Misc::ThemeManager::setTheme(const int id)
 
   // Save settings for next run
   m_themeId = id;
-  m_settings.setValue("themeId", m_themeId);
+  m_settings.setValue(QStringLiteral("themeId"), m_themeId);
 
   // Ask user to quit application
-  // clang-format off
-    auto ans = Utilities::showMessageBox(
-                tr("The theme change will take effect after restart"),
-                tr("Do you want to restart %1 now?").arg(APP_NAME), APP_NAME,
-                QMessageBox::Yes | QMessageBox::No);
-  // clang-format on
+  const auto ans = Utilities::showMessageBox(
+      tr("The theme change will take effect after restart"),
+      tr("Do you want to restart %1 now?").arg(APP_NAME), APP_NAME,
+      QMessageBox::Yes | QMessageBox::No);
 
   // Restart application
   if (ans == QMessageBox::Yes)
@@ -510,12 +508,12 @@ QColor Misc::ThemeManager::mqttButton() const
   return m_mqttButton;
 }
 
-StringList Misc::ThemeManager::widgetColors() const
+QStringList Misc::ThemeManager::widgetColors() const
 {
   return m_widgetColors;
 }
 
-StringList Misc::ThemeManager::availableThemes() const
+QStringList Misc::ThemeManager::availableThemes() const
 {
   return m_availableThemes;
 }

@@ -25,8 +25,6 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
-#include <DataTypes.h>
-
 namespace Misc
 {
 /**

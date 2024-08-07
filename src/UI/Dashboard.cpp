@@ -38,16 +38,14 @@ UI::Dashboard::Dashboard()
   : m_points(100)
   , m_precision(2)
 {
-  // clang-format off
-    connect(&CSV::Player::instance(), &CSV::Player::openChanged,
-            this, &UI::Dashboard::resetData);
-    connect(&IO::Manager::instance(), &IO::Manager::connectedChanged,
-            this, &UI::Dashboard::resetData);
-    connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged,
-            this, &UI::Dashboard::processLatestJSON);
-    connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
-            this, &UI::Dashboard::resetData);
-  // clang-format on
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this,
+          &UI::Dashboard::resetData);
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
+          &UI::Dashboard::resetData);
+  connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged, this,
+          &UI::Dashboard::processLatestJSON);
+  connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
+          this, &UI::Dashboard::resetData);
 }
 
 /**
@@ -144,18 +142,18 @@ bool UI::Dashboard::frameValid() const
 int UI::Dashboard::totalWidgetCount() const
 {
   // clang-format off
-    const int count =
-            gpsCount() +
-            ledCount() +
-            barCount() +
-            fftCount() +
-            plotCount() +
-            gaugeCount() +
-            groupCount() +
-            compassCount() +
-            multiPlotCount() +
-            gyroscopeCount() +
-            accelerometerCount();
+  const int count =
+          gpsCount() +
+          ledCount() +
+          barCount() +
+          fftCount() +
+          plotCount() +
+          gaugeCount() +
+          groupCount() +
+          compassCount() +
+          multiPlotCount() +
+          gyroscopeCount() +
+          accelerometerCount();
   // clang-format on
 
   return count;
@@ -186,23 +184,23 @@ int UI::Dashboard::accelerometerCount() const { return m_accelerometerWidgets.co
  * We need to be careful to sincronize the order of the widgets in order to
  * allow the global-index system to work correctly.
  */
-StringList UI::Dashboard::widgetTitles()
+QStringList UI::Dashboard::widgetTitles()
 {
   // Warning: maintain same order as the view option repeaters in
   // ViewOptions.qml!
 
   // clang-format off
-    return groupTitles() +
-            multiPlotTitles() +
-            ledTitles() +
-            fftTitles() +
-            plotTitles() +
-            barTitles() +
-            gaugeTitles() +
-            compassTitles() +
-            gyroscopeTitles() +
-            accelerometerTitles() +
-            gpsTitles();
+  return groupTitles() +
+          multiPlotTitles() +
+          ledTitles() +
+          fftTitles() +
+          plotTitles() +
+          barTitles() +
+          gaugeTitles() +
+          compassTitles() +
+          gyroscopeTitles() +
+          accelerometerTitles() +
+          gpsTitles();
   // clang-format on
 }
 
@@ -539,17 +537,17 @@ bool UI::Dashboard::accelerometerVisible(const int index) const { return getVisi
 //----------------------------------------------------------------------------------------
 
 // clang-format off
-StringList UI::Dashboard::gpsTitles()           { return groupTitles(m_gpsWidgets);           }
-StringList UI::Dashboard::ledTitles()           { return groupTitles(m_ledWidgets);           }
-StringList UI::Dashboard::groupTitles()         { return groupTitles(m_groupWidgets);         }
-StringList UI::Dashboard::barTitles()           { return datasetTitles(m_barWidgets);         }
-StringList UI::Dashboard::fftTitles()           { return datasetTitles(m_fftWidgets);         }
-StringList UI::Dashboard::plotTitles()          { return datasetTitles(m_plotWidgets);        }
-StringList UI::Dashboard::gaugeTitles()         { return datasetTitles(m_gaugeWidgets);       }
-StringList UI::Dashboard::compassTitles()       { return datasetTitles(m_compassWidgets);     }
-StringList UI::Dashboard::gyroscopeTitles()     { return groupTitles(m_gyroscopeWidgets);     }
-StringList UI::Dashboard::multiPlotTitles()     { return groupTitles(m_multiPlotWidgets);     }
-StringList UI::Dashboard::accelerometerTitles() { return groupTitles(m_accelerometerWidgets); }
+QStringList UI::Dashboard::gpsTitles()           { return groupTitles(m_gpsWidgets);           }
+QStringList UI::Dashboard::ledTitles()           { return groupTitles(m_ledWidgets);           }
+QStringList UI::Dashboard::groupTitles()         { return groupTitles(m_groupWidgets);         }
+QStringList UI::Dashboard::barTitles()           { return datasetTitles(m_barWidgets);         }
+QStringList UI::Dashboard::fftTitles()           { return datasetTitles(m_fftWidgets);         }
+QStringList UI::Dashboard::plotTitles()          { return datasetTitles(m_plotWidgets);        }
+QStringList UI::Dashboard::gaugeTitles()         { return datasetTitles(m_gaugeWidgets);       }
+QStringList UI::Dashboard::compassTitles()       { return datasetTitles(m_compassWidgets);     }
+QStringList UI::Dashboard::gyroscopeTitles()     { return groupTitles(m_gyroscopeWidgets);     }
+QStringList UI::Dashboard::multiPlotTitles()     { return groupTitles(m_multiPlotWidgets);     }
+QStringList UI::Dashboard::accelerometerTitles() { return groupTitles(m_accelerometerWidgets); }
 // clang-format on
 
 //----------------------------------------------------------------------------------------
@@ -686,14 +684,10 @@ void UI::Dashboard::updatePlots()
 
     for (int i = 0; i < linearDatasets.count(); ++i)
     {
-      m_linearPlotValues.append(PlotData());
+      m_linearPlotValues.append(QVector<qreal>());
       m_linearPlotValues.last().resize(points());
-
-      // clang-format off
-            std::fill(m_linearPlotValues.last().begin(),
-                      m_linearPlotValues.last().end(),
-                      0.0001);
-      // clang-format on
+      std::fill(m_linearPlotValues.last().begin(),
+                m_linearPlotValues.last().end(), 0.0001);
     }
   }
 
@@ -704,14 +698,10 @@ void UI::Dashboard::updatePlots()
 
     for (int i = 0; i < fftDatasets.count(); ++i)
     {
-      m_fftPlotValues.append(PlotData());
+      m_fftPlotValues.append(QVector<qreal>());
       m_fftPlotValues.last().resize(fftDatasets[i].fftSamples());
-
-      // clang-format off
-            std::fill(m_fftPlotValues.last().begin(),
-                      m_fftPlotValues.last().end(),
-                      0);
-      // clang-format on
+      std::fill(m_fftPlotValues.last().begin(), m_fftPlotValues.last().end(),
+                0);
     }
   }
 
@@ -960,9 +950,9 @@ QVector<JSON::Dataset> UI::Dashboard::getWidgetDatasets(const QString &handle)
 /**
  * Returns the titles of the datasets contained in the specified @a vector.
  */
-StringList UI::Dashboard::datasetTitles(const QVector<JSON::Dataset> &vector)
+QStringList UI::Dashboard::datasetTitles(const QVector<JSON::Dataset> &vector)
 {
-  StringList list;
+  QStringList list;
   Q_FOREACH (auto set, vector)
     list.append(set.title());
 
@@ -972,9 +962,9 @@ StringList UI::Dashboard::datasetTitles(const QVector<JSON::Dataset> &vector)
 /**
  * Returns the titles of the groups contained in the specified @a vector.
  */
-StringList UI::Dashboard::groupTitles(const QVector<JSON::Group> &vector)
+QStringList UI::Dashboard::groupTitles(const QVector<JSON::Group> &vector)
 {
-  StringList list;
+  QStringList list;
   Q_FOREACH (auto group, vector)
     list.append(group.title());
 

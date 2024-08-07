@@ -87,9 +87,9 @@ bool JSON::Group::read(const QJsonObject &object)
 {
   if (!object.isEmpty())
   {
-    auto title = object.value("title").toString();
-    auto array = object.value("datasets").toArray();
-    auto widget = object.value("widget").toString();
+    auto title = object.value(QStringLiteral("title")).toString();
+    auto array = object.value(QStringLiteral("datasets")).toArray();
+    auto widget = object.value(QStringLiteral("widget")).toString();
 
     if (!title.isEmpty() && !array.isEmpty())
     {

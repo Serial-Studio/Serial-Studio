@@ -45,10 +45,8 @@ UI::DashboardWidget::DashboardWidget(QQuickItem *parent)
   , m_widgetVisible(false)
   , m_isExternalWindow(false)
 {
-  // clang-format off
-    connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetVisibilityChanged,
-            this, &UI::DashboardWidget::updateWidgetVisible);
-  // clang-format on
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetVisibilityChanged,
+          this, &UI::DashboardWidget::updateWidgetVisible);
 }
 
 /**

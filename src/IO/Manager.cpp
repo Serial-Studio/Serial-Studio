@@ -40,13 +40,13 @@
 static QString ADD_ESCAPE_SEQUENCES(const QString &str)
 {
   auto escapedStr = str;
-  escapedStr = escapedStr.replace("\\a", "\a");
-  escapedStr = escapedStr.replace("\\b", "\b");
-  escapedStr = escapedStr.replace("\\f", "\f");
-  escapedStr = escapedStr.replace("\\n", "\n");
-  escapedStr = escapedStr.replace("\\r", "\r");
-  escapedStr = escapedStr.replace("\\t", "\t");
-  escapedStr = escapedStr.replace("\\v", "\v");
+  escapedStr = escapedStr.replace(QStringLiteral("\\a"), QStringLiteral("\a"));
+  escapedStr = escapedStr.replace(QStringLiteral("\\b"), QStringLiteral("\b"));
+  escapedStr = escapedStr.replace(QStringLiteral("\\f"), QStringLiteral("\f"));
+  escapedStr = escapedStr.replace(QStringLiteral("\\n"), QStringLiteral("\n"));
+  escapedStr = escapedStr.replace(QStringLiteral("\\r"), QStringLiteral("\r"));
+  escapedStr = escapedStr.replace(QStringLiteral("\\t"), QStringLiteral("\t"));
+  escapedStr = escapedStr.replace(QStringLiteral("\\v"), QStringLiteral("\v"));
   return escapedStr;
 }
 
@@ -59,21 +59,17 @@ IO::Manager::Manager()
   , m_maxBufferSize(1024 * 1024)
   , m_driver(Q_NULLPTR)
   , m_receivedBytes(0)
-  , m_startSequence("/*")
-  , m_finishSequence("*/")
-  , m_separatorSequence(",")
+  , m_startSequence(QStringLiteral("/*"))
+  , m_finishSequence(QStringLiteral("*/"))
+  , m_separatorSequence(QStringLiteral(","))
 {
   // Set initial settings
   setMaxBufferSize(1024 * 1024);
   setSelectedDriver(SelectedDriver::Serial);
 
-  // clang-format off
-
-    // Update connect button status when device type is changed
-    connect(this, &IO::Manager::selectedDriverChanged,
-            this, &IO::Manager::configurationChanged);
-
-  // clang-format on
+  // Update connect button status when device type is changed
+  connect(this, &IO::Manager::selectedDriverChanged, this,
+          &IO::Manager::configurationChanged);
 }
 
 /**
@@ -198,9 +194,9 @@ QString IO::Manager::separatorSequence() const
 /**
  * Returns a list with the possible data source options.
  */
-StringList IO::Manager::availableDrivers() const
+QStringList IO::Manager::availableDrivers() const
 {
-  StringList list;
+  QStringList list;
   list.append(tr("Serial port"));
   list.append(tr("Network port"));
   list.append(tr("Bluetooth LE device"));
@@ -360,7 +356,7 @@ void IO::Manager::setStartSequence(const QString &sequence)
 {
   m_startSequence = ADD_ESCAPE_SEQUENCES(sequence);
   if (m_startSequence.isEmpty())
-    m_startSequence = "/*";
+    m_startSequence = QStringLiteral("/*");
 
   Q_EMIT startSequenceChanged();
 }
@@ -373,7 +369,7 @@ void IO::Manager::setFinishSequence(const QString &sequence)
 {
   m_finishSequence = ADD_ESCAPE_SEQUENCES(sequence);
   if (m_finishSequence.isEmpty())
-    m_finishSequence = "*/";
+    m_finishSequence = QStringLiteral("*/");
 
   Q_EMIT finishSequenceChanged();
 }
@@ -386,7 +382,7 @@ void IO::Manager::setSeparatorSequence(const QString &sequence)
 {
   m_separatorSequence = ADD_ESCAPE_SEQUENCES(sequence);
   if (m_separatorSequence.isEmpty())
-    m_separatorSequence = ",";
+    m_separatorSequence = QStringLiteral(",");
 
   Q_EMIT separatorSequenceChanged();
 }

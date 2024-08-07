@@ -176,6 +176,8 @@ Item {
         height: 24
         font: textEdit.font
         Layout.fillWidth: true
+        opacity: enabled ? 1 : 0.5
+        Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
         palette.text: Cpp_ThemeManager.consoleText
         palette.base: Cpp_ThemeManager.consoleBase
@@ -226,6 +228,7 @@ Item {
         text: "HEX"
         id: hexCheckbox
         opacity: enabled ? 1 : 0.5
+        Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
         checked: Cpp_IO_Console.dataMode === 1
         onCheckedChanged: Cpp_IO_Console.dataMode = checked ? 1 : 0
@@ -237,10 +240,24 @@ Item {
         id: echoCheckbox
         opacity: enabled ? 1 : 0.5
         checked: Cpp_IO_Console.echo
+        Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
         onCheckedChanged: {
           if (Cpp_IO_Console.echo !== checked)
             Cpp_IO_Console.echo = checked
+        }
+      }
+
+      ComboBox {
+        id: lineEndingCombo
+        opacity: enabled ? 1 : 0.5
+        enabled: Cpp_IO_Manager.readWrite
+        Layout.alignment: Qt.AlignVCenter
+        model: Cpp_IO_Console.lineEndings()
+        currentIndex: Cpp_IO_Console.lineEnding
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_IO_Console.lineEnding)
+            Cpp_IO_Console.lineEnding = currentIndex
         }
       }
     }
@@ -275,17 +292,6 @@ Item {
 
       Item {
         Layout.fillWidth: true
-      }
-
-      ComboBox {
-        id: lineEndingCombo
-        Layout.alignment: Qt.AlignVCenter
-        model: Cpp_IO_Console.lineEndings()
-        currentIndex: Cpp_IO_Console.lineEnding
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_Console.lineEnding)
-            Cpp_IO_Console.lineEnding = currentIndex
-        }
       }
 
       ComboBox {

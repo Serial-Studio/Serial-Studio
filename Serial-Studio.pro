@@ -158,7 +158,6 @@ HEADERS += \
     src/AppInfo.h \
     src/CSV/Export.h \
     src/CSV/Player.h \
-    src/DataTypes.h \
     src/IO/Checksum.h \
     src/IO/Console.h \
     src/IO/Drivers/BluetoothLE.h \
