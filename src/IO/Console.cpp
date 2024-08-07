@@ -86,6 +86,7 @@ IO::Console::Console()
   , m_autoscroll(true)
   , m_showTimestamp(false)
   , m_isStartingLine(true)
+  , m_lastCharWasCR(false)
 {
   // Clear buffer & reserve memory
   clear();
@@ -300,6 +301,7 @@ void IO::Console::clear()
   m_textBuffer.clear();
   m_textBuffer.reserve(10 * 1000);
   m_isStartingLine = true;
+  m_lastCharWasCR = false;
   Q_EMIT dataReceived();
 }
 
@@ -485,8 +487,16 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   if (string.isEmpty())
     return;
 
-  // Only use \n as line separator
   auto data = string;
+  
+  // Omit leading \n if a trailing \r was already rendered from previous payload
+  if (m_lastCharWasCR && data.startsWith("\n"))
+    data.removeFirst();
+
+  // Record trailing \r
+  m_lastCharWasCR = data.endsWith("\r");
+
+  // Only use \n as line separator for rendering
   data = data.replace("\r\n", "\n");
   data = data.replace("\r", "\n");
 

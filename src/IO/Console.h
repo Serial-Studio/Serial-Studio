@@ -170,6 +170,7 @@ private:
   bool m_autoscroll;
   bool m_showTimestamp;
   bool m_isStartingLine;
+  bool m_lastCharWasCR;
 
   StringList m_lines;
   StringList m_historyItems;
