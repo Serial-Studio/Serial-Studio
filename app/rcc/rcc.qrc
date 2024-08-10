@@ -1,0 +1,40 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fonts/Hack-Regular.ttf</file>
+        <file>fonts/Inter-Bold.ttf</file>
+        <file>fonts/Inter-Regular.ttf</file>
+        <file>icons/code-editor/copy.svg</file>
+        <file>icons/code-editor/cut.svg</file>
+        <file>icons/code-editor/help.svg</file>
+        <file>icons/code-editor/new.svg</file>
+        <file>icons/code-editor/open.svg</file>
+        <file>icons/code-editor/paste.svg</file>
+        <file>icons/code-editor/redo.svg</file>
+        <file>icons/code-editor/save.svg</file>
+        <file>icons/code-editor/undo.svg</file>
+        <file>icons/toolbar/bug.svg</file>
+        <file>icons/toolbar/connect.svg</file>
+        <file>icons/toolbar/console.svg</file>
+        <file>icons/toolbar/csv.svg</file>
+        <file>icons/toolbar/dashboard.svg</file>
+        <file>icons/toolbar/disconnect.svg</file>
+        <file>icons/toolbar/help.svg</file>
+        <file>icons/toolbar/project-editor.svg</file>
+        <file>icons/toolbar/setup.svg</file>
+        <file>images/donate-qr.svg</file>
+        <file>images/icon-small@1x.png</file>
+        <file>images/icon-small@2x.png</file>
+        <file>images/icon@1x.png</file>
+        <file>images/icon@2x.png</file>
+        <file>messages/Acknowledgements.txt</file>
+        <file>messages/Welcome_DE.txt</file>
+        <file>messages/Welcome_EN.txt</file>
+        <file>messages/Welcome_ES.txt</file>
+        <file>messages/Welcome_RU.txt</file>
+        <file>messages/Welcome_ZH.txt</file>
+        <file>scripts/frame-parser.js</file>
+        <file>themes/Breeze.json</file>
+        <file>themes/Dark.json</file>
+        <file>themes/Light.json</file>
+    </qresource>
+</RCC>

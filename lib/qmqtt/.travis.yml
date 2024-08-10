@@ -1,0 +1,24 @@
+dist: xenial
+
+language: cpp
+compiler:
+ - gcc
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:beineri/opt-qt571-xenial'
+    packages:
+      - qt57base
+      - qt57tools
+      - qt57websockets
+      - cmake
+
+before_install:
+ - source /opt/qt57/bin/qt57-env.sh
+
+script:
+ - qmake --version
+ - $CXX --version
+ - qmake
+ - make CXX=$CXX
