@@ -80,9 +80,13 @@ Project::Model::Model()
   connect(this, &Project::Model::frameStartSequenceChanged, this,
           &Project::Model::onModelChanged);
 
-  // Load current JSON map file into C++ model
+  // Re-load JSON map file into C++ model
   connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
           this, &Project::Model::onJsonLoaded);
+
+  // Load current JSON map file into C++ model
+  if (!JSON::Generator::instance().jsonMapFilepath().isEmpty())
+    onJsonLoaded();
 }
 
 /**

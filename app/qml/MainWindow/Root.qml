@@ -31,6 +31,16 @@ import "../Widgets" as Widgets
 
 Window {
   id: root
+  title: qsTr("%1 - %2").arg(documentTitle).arg(Cpp_AppName)
+
+  //
+  // Custom properties
+  //
+  property int appLaunchCount: 0
+  property bool isMaximized: false
+  property string documentTitle: ""
+  property bool firstValidFrame: false
+  property bool automaticUpdates: false
 
   //
   // Global properties
@@ -40,14 +50,6 @@ Window {
   readonly property bool dashboardVisible: dashboard.visible
 
   //
-  // Custom properties
-  //
-  property int appLaunchCount: 0
-  property bool firstValidFrame: false
-  property bool automaticUpdates: false
-  property alias vt100emulation: terminal.vt100emulation
-
-  //
   // Toolbar functions aliases
   //
   function showSetup()     { toolbar.setupClicked()     }
@@ -55,8 +57,61 @@ Window {
   function showDashboard() { dbTimer.start() }
 
   //
-  // Wait a little before showing the dashboard to avoid UI glitches and/or overloading
-  // the rendering engine
+  // Obtain document title
+  //
+  function updateDocumentTitle() {
+    if (Cpp_JSON_Generator.operationMode == 1)
+      documentTitle = qsTr("Device Defined Project")
+
+    else if (Cpp_JSON_Generator.jsonMapFilename.length > 0)
+      documentTitle = Cpp_Project_Model.title
+
+    else
+      documentTitle = qsTr("Empty Project")
+  }
+
+  //
+  // Ensure that window is visible
+  //
+  function displayWindow() {
+    if (root.isMaximized)
+      root.showMaximized()
+
+    else {
+      if (root.x > Screen.desktopAvailableWidth - root.minimumWidth || root.x <= 0)
+        root.x = (Screen.desktopAvailableWidth - root.minimumWidth) / 2
+      if (root.y > Screen.desktopAvailableHeight - root.minimumHeight || root.y <= 0)
+        root.y = (Screen.desktopAvailableHeight - root.minimumHeight) / 2
+      if (root.width >= Screen.desktopAvailableWidth - 100)
+        root.width = root.minimumWidth
+      if (root.height >= Screen.desktopAvailableHeight - 100)
+        root.height = root.minimumHeight
+
+      root.showNormal()
+    }
+  }
+
+  //
+  // React to maximize/unmaximize event
+  //
+  onVisibilityChanged: {
+    if (root.visible) {
+      if (root.visibility === Window.Maximized)
+        root.isMaximized = true
+
+      else if (root.isMaximized && root.visibility !== Window.Minimized) {
+        root.isMaximized = false
+        root.width = root.minimumWidth
+        root.height = root.minimumHeight
+        root.x = (Screen.desktopAvailableWidth - root.minimumWidth) / 2
+        root.y = (Screen.desktopAvailableHeight - root.minimumHeight) / 2
+      }
+    }
+  }
+
+  //
+  // Wait a little before showing the dashboard to avoid UI glitches and/or
+  // overloading the rendering engine
   //
   Timer {
     id: dbTimer
@@ -65,72 +120,29 @@ Window {
   }
 
   //
-  // Console-related functions
+  // Update document title automatically
   //
-  function consoleCopy()      { terminal.copy()      }
-  function consoleClear()     { terminal.clear()     }
-  function consoleSelectAll() { terminal.selectAll() }
-
-  //
-  // Window geometry
-  //
-  visible: false
-  title: Cpp_AppName
-  width: minimumWidth
-  height: minimumHeight
-  minimumWidth: 1120 + 2 * root.shadowMargin
-  minimumHeight: 650 + 2 * root.shadowMargin + root.titlebar.height
-
-  //
-  // Startup code
-  //
-  Component.onCompleted: {
-    // Load welcome text
-    terminal.showWelcomeGuide()
-
-    // Increment app launch count
-    ++appLaunchCount
-
-    // Show app window
-    if (root.isFullscreen)
-      root.showFullScreen()
-    else if (root.isMaximized)
-      root.showMaximized()
-    else {
-      // Fix maximize not working on first try on macOS & Windows
-      root.opacity = 0
-      var x = root.x
-      var y = root.y
-      var w = root.width
-      var h = root.height
-      root.showMaximized()
-      root.showNormal()
-      root.setGeometry(x, y, w,h)
-      root.opacity = 1
+  Connections {
+    target: Cpp_JSON_Generator
+    function onOperationModeChanged() {
+      updateDocumentTitle()
     }
 
-    // Force active focus
-    root.requestActivate()
-    root.requestUpdate()
-
-    // Show donations dialog every 15 launches
-    if (root.appLaunchCount % 15 == 0 && !app.donateDialog.doNotShowAgain)
-      app.donateDialog.showAutomatically()
-
-    // Ask user if he/she wants to enable automatic updates
-    if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
-      if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
-        root.automaticUpdates = true
-        Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
-      }
-
-      else
-        root.automaticUpdates = false
+    function onJsonFileMapChanged() {
+      updateDocumentTitle()
     }
+  }
 
-    // Check for updates (if we are allowed)
-    if (root.automaticUpdates && Cpp_UpdaterEnabled)
-      Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+  //
+  // Show console tab on serial disconnect
+  //
+  Connections {
+    target: Cpp_UI_Dashboard
+    function onDataReset() {
+      setup.show()
+      root.showConsole()
+      root.firstValidFrame = false
+    }
   }
 
   //
@@ -158,86 +170,97 @@ Window {
   }
 
   //
-  // Show console tab on serial disconnect
+  // Close shortcut
   //
-  Connections {
-    target: Cpp_UI_Dashboard
-    function onDataReset() {
-      setup.show()
-      root.showConsole()
-      root.firstValidFrame = false
-    }
+  Shortcut {
+    sequences: [StandardKey.Close]
+    onActivated: root.close()
   }
 
   //
-  // Save window size & position
+  // Quit shortcut
+  //
+  Shortcut {
+    sequences: [StandardKey.Quit]
+    onActivated: root.close()
+  }
+
+  //
+  // Loading code
+  //
+  Component.onCompleted: {
+    // Make window caption same color as toolbar
+    Cpp_NativeWindow.addWindow(root)
+
+    // Increment app launch count
+    ++appLaunchCount
+
+    // Show donations dialog every 15 launches
+    if (root.appLaunchCount % 15 == 0 && !donateDialog.doNotShowAgain)
+      donateDialog.showAutomatically()
+
+    // Ask user if he/she wants to enable automatic updates
+    if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
+      if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
+        root.automaticUpdates = true
+        Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+      }
+
+      else
+        root.automaticUpdates = false
+    }
+
+    // Check for updates (if we are allowed)
+    if (root.automaticUpdates && Cpp_UpdaterEnabled)
+      Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+
+    // Obtain document title from JSON project editor & display the window
+    updateDocumentTitle()
+    displayWindow()
+  }
+
+  //
+  // Save settings
   //
   Settings {
-    property alias wx: root.x
-    property alias wy: root.y
-    property alias ww: root.width
-    property alias wh: root.height
-    property alias wm: root.isMaximized
-    property alias wf: root.isFullscreen
+    property alias ax: root.x
+    property alias ay: root.y
+    property alias aw: root.width
+    property alias ah: root.height
+    property alias am: root.isMaximized
     property alias appStatus: root.appLaunchCount
     property alias autoUpdater: root.automaticUpdates
   }
 
-
   //
-  // Rectangle for the menubar (only used if custom window flags are disabled)
-  //
-  Rectangle {
-    color: root.titlebarColor
-    anchors.fill: menubarLayout
-    visible: !Cpp_ThemeManager.customWindowDecorations
-  }
-
-  //
-  // Main layout
+  // Load user interface component
   //
   Page {
-    clip: true
     anchors.fill: parent
-
-    palette.alternateBase: Cpp_ThemeManager.base
-    palette.base: Cpp_ThemeManager.base
-    palette.brightText: Cpp_ThemeManager.brightText
-    palette.button: Cpp_ThemeManager.button
-    palette.buttonText: Cpp_ThemeManager.buttonText
-    palette.highlight: Cpp_ThemeManager.highlight
-    palette.highlightedText: Cpp_ThemeManager.highlightedText
-    palette.link: Cpp_ThemeManager.link
-    palette.placeholderText: Cpp_ThemeManager.placeholderText
-    palette.text: Cpp_ThemeManager.text
-    palette.toolTipBase: Cpp_ThemeManager.tooltipBase
-    palette.toolTipText: Cpp_ThemeManager.tooltipText
-    palette.window: Cpp_ThemeManager.window
-    palette.windowText: Cpp_ThemeManager.windowText
-
-    background: Rectangle {
-      radius: root.radius
-      color: Cpp_ThemeManager.windowBackground
-    }
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.highlight: Cpp_ThemeManager.colors["highlight"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     ColumnLayout {
       spacing: 0
       anchors.fill: parent
 
       //
-      // Application toolbar
+      // Toolbar
       //
       Panes.Toolbar {
+        z: 2
         id: toolbar
-        window: root
-        z: titlebar.z
         Layout.fillWidth: true
+
         setupChecked: root.setupVisible
         consoleChecked: root.consoleVisible
-        Layout.minimumHeight: implicitHeight
-        Layout.maximumHeight: implicitHeight
         dashboardChecked: root.dashboardVisible
-        onProjectEditorClicked: app.projectEditorWindow.show()
         onSetupClicked: setup.visible ? setup.hide() : setup.show()
 
         onDashboardClicked: {
@@ -260,13 +283,16 @@ Window {
       }
 
       //
-      // Console, dashboard & setup panel
+      // User interface
       //
       RowLayout {
+        z: 1
         spacing: 0
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        Layout.topMargin: -1
 
+        //
+        // Dashboard + Console view
+        //
         StackView {
           id: stack
           clip: true
@@ -290,6 +316,27 @@ Window {
           ]
         }
 
+        //
+        // Panel border rectangle
+        //
+        Rectangle {
+          z: 2
+          width: 1
+          Layout.fillHeight: true
+          color: Cpp_ThemeManager.colors["setup_border"]
+
+          Rectangle {
+            width: 1
+            height: 32
+            anchors.top: parent.top
+            anchors.left: parent.left
+            color: Cpp_ThemeManager.colors["pane_caption_border"]
+          }
+        }
+
+        //
+        // Setup panel
+        //
         Panes.Setup {
           id: setup
           Layout.fillHeight: true
@@ -299,13 +346,13 @@ Window {
         }
       }
     }
-  }
 
-  //
-  // JSON project drop area
-  //
-  Widgets.JSONDropArea {
-    anchors.fill: parent
-    enabled: !Cpp_IO_Manager.connected
+    //
+    // JSON project drop area
+    //
+    Widgets.JSONDropArea {
+      anchors.fill: parent
+      enabled: !Cpp_IO_Manager.connected
+    }
   }
 }

@@ -24,12 +24,10 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
-
 Rectangle {
   id: root
   color: Cpp_ThemeManager.toolbarGradient2
-  height: footer.implicitHeight + 4 * app.spacing
+  height: footer.implicitHeight + 32
 
   //
   // Signals
@@ -68,12 +66,12 @@ Rectangle {
   //
   RowLayout {
     id: footer
-    spacing: app.spacing
+    spacing: 8
 
     anchors {
       left: parent.left
       right: parent.right
-      margins: app.spacing * 2
+      margins: 8 * 2
       verticalCenter: parent.verticalCenter
     }
 

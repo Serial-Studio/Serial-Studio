@@ -26,6 +26,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "Sections"
 import "../ProjectEditor"
 import "../Widgets" as Widgets
 
@@ -37,7 +38,7 @@ Window {
   //
   minimumWidth: 910
   minimumHeight: 720
-  title: qsTr("Project Editor - %1").arg(Cpp_Project_Model.jsonFileName)
+  title: qsTr("%1 - Project Editor").arg(Cpp_Project_Model.jsonFileName)
 
   //
   // Ensure that current JSON file is shown
@@ -69,40 +70,16 @@ Window {
   // Use page item to set application palette
   //
   Page {
-    clip: true
     anchors.fill: parent
-    anchors.margins: root.shadowMargin
-    anchors.topMargin: titlebar.height + root.shadowMargin
-
-    palette.alternateBase: Cpp_ThemeManager.base
-    palette.base: Cpp_ThemeManager.base
-    palette.brightText: Cpp_ThemeManager.brightText
-    palette.button: Cpp_ThemeManager.button
-    palette.buttonText: Cpp_ThemeManager.buttonText
-    palette.highlight: Cpp_ThemeManager.highlight
-    palette.highlightedText: Cpp_ThemeManager.highlightedText
-    palette.link: Cpp_ThemeManager.link
-    palette.placeholderText: Cpp_ThemeManager.placeholderText
-    palette.text: Cpp_ThemeManager.text
-    palette.toolTipBase: Cpp_ThemeManager.tooltipBase
-    palette.toolTipText: Cpp_ThemeManager.tooltipText
-    palette.window: Cpp_ThemeManager.window
-    palette.windowText: Cpp_ThemeManager.windowText
-
-    background: Rectangle {
-      radius: root.radius
-      color: Cpp_ThemeManager.windowBackground
-    }
-
-    //
-    // Shadows
-    //
-    Widgets.Shadow {
-      anchors.fill: header
-    } Widgets.Shadow {
-      anchors.fill: footer
-      anchors.bottomMargin: footer.height / 2
-    }
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.windowText: Cpp_ThemeManager.colors["text"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     //
     // Header (project properties)
@@ -140,7 +117,7 @@ Window {
     RowLayout {
       clip: true
       anchors.fill: parent
-      spacing: app.spacing
+      spacing: 8
       anchors.topMargin: header.height
       anchors.bottomMargin: footer.height
 
@@ -149,8 +126,8 @@ Window {
       //
       Item {
         Layout.fillHeight: true
-        Layout.minimumWidth: app.spacing
-        Layout.maximumWidth: app.spacing
+        Layout.minimumWidth: 8
+        Layout.maximumWidth: 8
       }
 
       //
@@ -161,8 +138,8 @@ Window {
         Layout.fillHeight: true
         Layout.minimumWidth: 240
         Layout.maximumWidth: 240
-        Layout.topMargin: app.spacing * 2
-        Layout.bottomMargin: app.spacing * 2
+        Layout.topMargin: 8 * 2
+        Layout.bottomMargin: 8 * 2
         visible: Cpp_Project_Model.groupCount !== 0
       }*/
 
@@ -185,29 +162,27 @@ Window {
         visible: Cpp_Project_Model.groupCount === 0
 
         ColumnLayout {
-          spacing: app.spacing
+          spacing: 8
           anchors.centerIn: parent
 
-          Widgets.Icon {
-            width: 128
-            height: 128
-            color: Cpp_ThemeManager.text
+          Image {
+            sourceSize: Qt.size(128, 128)
             Layout.alignment: Qt.AlignHCenter
-            source: "qrc:/icons/developer-board.svg"
+            source: "qrc:/images/microcontroller.svg"
           }
 
           Label {
             font.bold: true
             font.pixelSize: 24
             Layout.alignment: Qt.AlignHCenter
-            text: qsTr("Start something awesome")
+            text: qsTr("Start Something Awesome")
           }
 
           Label {
             opacity: 0.8
             font.pixelSize: 18
             Layout.alignment: Qt.AlignHCenter
-            text: qsTr("Click on the \"Add group\" button to begin")
+            text: qsTr("Click on the \"Add Group\" Button to Begin")
           }
         }
       }
@@ -217,8 +192,8 @@ Window {
       //
       Item {
         Layout.fillHeight: true
-        Layout.minimumWidth: app.spacing
-        Layout.maximumWidth: app.spacing
+        Layout.minimumWidth: 8
+        Layout.maximumWidth: 8
       }
     }
   }

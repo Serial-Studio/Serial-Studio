@@ -28,7 +28,6 @@ import SerialStudio as SerialStudio
 
 Item {
   id: root
-  property bool isExternalWindow: false
   property alias widgetEnabled: textEdit.widgetEnabled
   property alias vt100emulation: textEdit.vt100emulation
 
@@ -43,6 +42,14 @@ Item {
     property alias vt100Enabled: textEdit.vt100emulation
     property alias lineEnding: lineEndingCombo.currentIndex
     property alias displayMode: displayModeCombo.currentIndex
+  }
+
+  //
+  // Load welcome guide
+  //
+  function showWelcomeGuide() {
+    clear()
+    Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
   }
 
   //
@@ -73,6 +80,17 @@ Item {
   //
   function selectAll() {
     textEdit.selectAll()
+  }
+
+  //
+  // Re-load welcome text when the language is changed
+  //
+  Component.onCompleted: root.showWelcomeGuide()
+  Connections {
+    target: Cpp_Misc_Translator
+    function onLanguageChanged() {
+      root.showWelcomeGuide()
+    }
   }
 
   //
@@ -124,9 +142,9 @@ Item {
   // Controls
   //
   ColumnLayout {
+    spacing: 4
     anchors.fill: parent
-    spacing: app.spacing
-    anchors.margins: app.spacing * 1.5
+    anchors.topMargin: -6
 
     //
     // Console display
@@ -178,20 +196,15 @@ Item {
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
-        palette.text: Cpp_ThemeManager.consoleText
-        palette.base: Cpp_ThemeManager.consoleBase
-        placeholderText: qsTr("Send data to device") + "..."
-        Component.onCompleted: {
-          if (Cpp_Qt6)
-            placeholderTextColor = Cpp_ThemeManager.consolePlaceholderText
-        }
+        placeholderText: qsTr("Send Data to Device") + "..."
 
-        //
-        // Validate hex strings
-        //
-        //validator: RegExpValidator {
-        //    regExp: hexCheckbox.checked ? /^(?:([a-f0-9]{2})\s*)+$/i : /[\s\S]*/
-        //}
+        palette.base: Cpp_ThemeManager.colors["console_base"]
+        palette.text: Cpp_ThemeManager.colors["console_text"]
+        palette.button: Cpp_ThemeManager.colors["console_button"]
+        palette.window: Cpp_ThemeManager.colors["console_window"]
+        palette.buttonText: Cpp_ThemeManager.colors["console_button_text"]
+        palette.placeholderText: Cpp_ThemeManager.colors["console_placeholder_text"]
+        palette.highlightedText: Cpp_ThemeManager.colors["console_highlighted_text"]
 
         //
         // Send data on <enter>
@@ -280,12 +293,23 @@ Item {
 
       CheckBox {
         id: timestampCheck
-        text: qsTr("Show timestamp")
+        text: qsTr("Show Timestamp")
         Layout.alignment: Qt.AlignVCenter
         checked: Cpp_IO_Console.showTimestamp
         onCheckedChanged: {
           if (Cpp_IO_Console.showTimestamp !== checked)
             Cpp_IO_Console.showTimestamp = checked
+        }
+      }
+
+      CheckBox {
+        id: vt100Check
+        text: qsTr("Emulate VT-100")
+        Layout.alignment: Qt.AlignVCenter
+        checked: textEdit.vt100emulation
+        onCheckedChanged: {
+          if (textEdit.vt100emulation !== checked)
+            textEdit.vt100emulation = checked
         }
       }
 
@@ -295,9 +319,12 @@ Item {
 
       ComboBox {
         id: displayModeCombo
+        Layout.fillWidth: true
+        Layout.maximumWidth: 164
         Layout.alignment: Qt.AlignVCenter
         model: Cpp_IO_Console.displayModes()
         currentIndex: Cpp_IO_Console.displayMode
+        displayText: qsTr("Display: %1").arg(currentText)
         onCurrentIndexChanged: {
           if (currentIndex !== Cpp_IO_Console.displayMode)
             Cpp_IO_Console.displayMode = currentIndex
@@ -306,22 +333,38 @@ Item {
 
       Button {
         height: 24
+        icon.width: 18
+        icon.height: 18
         Layout.maximumWidth: 32
-        icon.color: palette.text
         opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Console.save()
-        icon.source: "qrc:/icons/save.svg"
         enabled: Cpp_IO_Console.saveAvailable
+        icon.source: "qrc:/icons/buttons/save.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
       }
 
       Button {
         height: 24
+        icon.width: 18
+        icon.height: 18
         Layout.maximumWidth: 32
-        icon.color: palette.text
         opacity: enabled ? 1 : 0.5
-        onClicked: root.clear()
-        icon.source: "qrc:/icons/delete.svg"
+        onClicked: Cpp_IO_Console.print()
         enabled: Cpp_IO_Console.saveAvailable
+        icon.source: "qrc:/icons/buttons/print.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
+      }
+
+      Button {
+        height: 24
+        icon.width: 18
+        icon.height: 18
+        onClicked: root.clear()
+        Layout.maximumWidth: 32
+        opacity: enabled ? 1 : 0.5
+        enabled: Cpp_IO_Console.saveAvailable
+        icon.source: "qrc:/icons/buttons/clear.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }
   }

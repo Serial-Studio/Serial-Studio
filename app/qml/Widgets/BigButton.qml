@@ -30,8 +30,7 @@ ToolButton {
   icon.width: 32
   icon.height: 32
   icon.color: "transparent"
-  display: mainWindow.dumbInterface ? AbstractButton.TextBesideIcon :
-                                      AbstractButton.TextUnderIcon
+  display: AbstractButton.TextUnderIcon
 
   Layout.minimumWidth: Math.max(implicitWidth, 72)
   Layout.maximumWidth: Math.max(implicitWidth, 72)

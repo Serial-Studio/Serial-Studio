@@ -33,11 +33,8 @@ Widgets.Pane {
   //
   // Window properties
   //
-  gradient: true
   title: qsTr("View")
-  headerDoubleClickEnabled: false
-  icon.source: "qrc:/icons/visibility.svg"
-  backgroundColor: Cpp_ThemeManager.paneWindowBackground
+  icon: "qrc:/icons/panes/view.svg"
 
   //
   // Signals
@@ -87,7 +84,7 @@ Widgets.Pane {
     clip: true
     contentWidth: -1
     anchors.fill: parent
-    anchors.margins: app.spacing
+    anchors.margins: 8
     anchors.topMargin: root.borderWidth
     anchors.bottomMargin: root.borderWidth
 
@@ -96,31 +93,31 @@ Widgets.Pane {
     //
     ColumnLayout {
       id: layout
-      x: app.spacing
-      spacing: app.spacing / 2
-      width: parent.width - 10 - 2 * app.spacing
+      x: 8
+      spacing: 8 / 2
+      width: parent.width - 10 - 2 * 8
 
       //
       // Spacer
       //
       Item {
-        height: app.spacing
+        height: 8
       }
 
       //
       // View options title
       //
       RowLayout {
-        spacing: app.spacing
+        spacing: 8
         Layout.fillWidth: true
         visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
 
-        Widgets.Icon {
+        /*Widgets.Icon {
           width: 18
           height: 18
           color: palette.text
           source: "qrc:/icons/visibility.svg"
-        }
+        }*/
 
         Label {
           font.bold: true
@@ -136,7 +133,7 @@ Widgets.Pane {
       // Spacer
       //
       Item {
-        height: app.spacing
+        height: 8
       }
 
       //
@@ -144,8 +141,8 @@ Widgets.Pane {
       //
       GridLayout {
         columns: 3
-        rowSpacing: app.spacing
-        columnSpacing: app.spacing
+        rowSpacing: 8
+        columnSpacing: 8
 
         //
         // Number of plot points slider
@@ -208,7 +205,7 @@ Widgets.Pane {
       // Spacer
       //
       Item {
-        height: app.spacing
+        height: 8
       }
 
       //

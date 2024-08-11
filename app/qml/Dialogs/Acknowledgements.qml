@@ -36,58 +36,38 @@ Window {
   title: qsTr("Acknowledgements")
   x: (Screen.desktopAvailableWidth - width) / 2
   y: (Screen.desktopAvailableHeight - height) / 2
-  minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-  maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-  minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
-  maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+  minimumWidth: column.implicitWidth + 32
+  maximumWidth: column.implicitWidth + 32
+  minimumHeight: column.implicitHeight + 32
+  maximumHeight: column.implicitHeight + 32
+  Component.onCompleted: {
+    root.flags = Qt.Dialog |
+        Qt.WindowTitleHint |
+        Qt.WindowStaysOnTopHint |
+        Qt.WindowCloseButtonHint
+  }
 
   //
   // Use page item to set application palette
   //
   Page {
-    anchors {
-      fill: parent
-      margins: root.shadowMargin
-      topMargin: titlebar.height + root.shadowMargin
-    }
-
-    palette.alternateBase: Cpp_ThemeManager.base
-    palette.base: Cpp_ThemeManager.base
-    palette.brightText: Cpp_ThemeManager.brightText
-    palette.button: Cpp_ThemeManager.button
-    palette.buttonText: Cpp_ThemeManager.buttonText
-    palette.highlight: Cpp_ThemeManager.highlight
-    palette.highlightedText: Cpp_ThemeManager.highlightedText
-    palette.link: Cpp_ThemeManager.link
-    palette.placeholderText: Cpp_ThemeManager.placeholderText
-    palette.text: Cpp_ThemeManager.text
-    palette.toolTipBase: Cpp_ThemeManager.tooltipBase
-    palette.toolTipText: Cpp_ThemeManager.tooltipText
-    palette.window: Cpp_ThemeManager.window
-    palette.windowText: Cpp_ThemeManager.windowText
-
-    background: Rectangle {
-      radius: root.radius
-      color: root.backgroundColor
-
-      Rectangle {
-        height: root.radius
-        color: root.backgroundColor
-
-        anchors {
-          top: parent.top
-          left: parent.left
-          right: parent.right
-        }
-      }
-    }
+    anchors.fill: parent
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.windowText: Cpp_ThemeManager.colors["text"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     //
     // Window controls
     //
     ColumnLayout {
       id: column
-      spacing: app.spacing
+      spacing: 8
       anchors.centerIn: parent
 
       ScrollView {

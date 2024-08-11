@@ -26,7 +26,7 @@ import QtQuick.Controls
 
 import SerialStudio
 
-import "../Widgets" as Widgets
+import "../../Widgets" as Widgets
 
 Item {
   id: root
@@ -34,19 +34,19 @@ Item {
   property int widgetIndex: -1
   property Window externalWindow: null
 
-  Widgets.Window {
+  Widgets.Pane {
     id: window
     anchors.fill: parent
     title: widget.widgetTitle
-    icon.source: widget.widgetIcon
-    headerDoubleClickEnabled: true
+    icon: widget.widgetIcon
+    /*headerDoubleClickEnabled: true
     borderColor: Cpp_ThemeManager.widgetWindowBorder
     onHeaderDoubleClicked: {
       if (root.externalWindow !== null)
         root.externalWindow.showNormal()
       else
         externalWindowLoader.active = true
-    }
+    }*/
 
     DashboardWidget {
       id: widget
@@ -86,11 +86,6 @@ Item {
       minimumWidth: 640
       minimumHeight: 480
       title: externalWidget.widgetTitle
-      titlebarText: Cpp_ThemeManager.text
-      titlebarColor: Cpp_ThemeManager.widgetWindowBackground
-      backgroundColor: Cpp_ThemeManager.widgetWindowBackground
-      borderColor: isMaximized ? backgroundColor : Cpp_ThemeManager.highlight
-      extraFlags: Qt.WindowStaysOnTopHint | Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowTitleHint
 
       Timer {
         id: timer
@@ -140,12 +135,6 @@ Item {
             }
           }
         }
-      }
-
-      FramelessWindow.ResizeHandles {
-        window: _window
-        anchors.fill: parent
-        handleSize: _window.handleSize
       }
     }
   }

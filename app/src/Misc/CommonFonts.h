@@ -41,6 +41,9 @@ class CommonFonts : public QObject
   Q_PROPERTY(const QFont& monoFont
              READ monoFont
              CONSTANT)
+  Q_PROPERTY(const QFont& boldUiFont
+             READ boldUiFont
+             CONSTANT)
   // clang-format on
 
 private:
@@ -56,13 +59,14 @@ public:
 
   [[nodiscard]] const QFont &uiFont() const;
   [[nodiscard]] const QFont &monoFont() const;
+  [[nodiscard]] const QFont &boldUiFont() const;
 
   Q_INVOKABLE static QFont customUiFont(int pixelSize = 12, bool bold = false);
   Q_INVOKABLE static QFont customMonoFont(int pixelSize = 12);
 
 private:
   QFont m_uiFont;
-  QFont m_sansFont;
   QFont m_monoFont;
+  QFont m_boldUiFont;
 };
 } // namespace Misc

@@ -39,7 +39,7 @@ Control {
   ColumnLayout {
     id: layout
     anchors.fill: parent
-    anchors.margins: app.spacing
+    anchors.margins: 8
 
     //
     // Controls
@@ -47,8 +47,8 @@ Control {
     GridLayout {
       columns: 2
       Layout.fillWidth: true
-      rowSpacing: app.spacing / 2
-      columnSpacing: app.spacing / 2
+      rowSpacing: 8 / 2
+      columnSpacing: 8 / 2
 
       //
       // Language selector
@@ -74,10 +74,10 @@ Control {
       } ComboBox {
         id: _themeCombo
         Layout.fillWidth: true
+        currentIndex: Cpp_ThemeManager.theme
         model: Cpp_ThemeManager.availableThemes
-        currentIndex: Cpp_ThemeManager.themeId
         onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_ThemeManager.themeId)
+          if (currentIndex !== Cpp_ThemeManager.theme)
             Cpp_ThemeManager.setTheme(currentIndex)
         }
       }
@@ -86,12 +86,13 @@ Control {
       // Plugins enabled
       //
       Label {
-        text: qsTr("Plugin system") + ": "
+        text: qsTr("Plugin System") + ": "
       } Switch {
         id: _tcpPlugins
-        Layout.leftMargin: -app.spacing
+        Layout.leftMargin: -8
         Layout.alignment: Qt.AlignLeft
         checked: Cpp_Plugins_Bridge.enabled
+        palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
         onCheckedChanged: {
           if (checked !== Cpp_Plugins_Bridge.enabled)
             Cpp_Plugins_Bridge.enabled = checked
@@ -100,16 +101,70 @@ Control {
     }
 
     //
+    // Vertical spacer
+    //
+    Item {
+      Layout.fillHeight: true
+    }
+
+    //
     // Plugins label
     //
-    Label {
-      opacity: 0.8
-      font.pixelSize: 12
-      Layout.fillWidth: true
-      wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-      color: Cpp_ThemeManager.highlightedTextAlternative
-      text: qsTr("Applications/plugins can interact with %1 by " +
-                 "establishing a TCP connection on port 7777.").arg(Cpp_AppName)
+    RowLayout {
+      spacing: 8
+
+      Image {
+        sourceSize: Qt.size(48, 48)
+        source: "qrc:/images/tip.svg"
+        Layout.alignment: Qt.AlignVCenter
+      }
+
+      Label {
+        opacity: 0.6
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignVCenter
+        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        text: qsTr("Using the plugin system, other applications \& scripts can " +
+                   "interact with %1 by establishing a TCP connection on port " +
+                   "7777.").arg(Cpp_AppName)
+      }
+
+      Item {
+        Layout.minimumWidth: 16
+      }
+    }
+
+    //
+    // Spacer
+    //
+    Item {
+      Layout.minimumHeight: 16
+    }
+
+    //
+    // Examples label
+    //
+    RowLayout {
+      spacing: 8
+
+      Image {
+        sourceSize: Qt.size(48, 48)
+        source: "qrc:/images/code.svg"
+        Layout.alignment: Qt.AlignVCenter
+      }
+
+      Label {
+        opacity: 0.6
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignVCenter
+        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        text: qsTr("Reproducible test cases and examples in the wiki make use " +
+                   "of a Python script that acts as a %1 plugin.").arg(Cpp_AppName)
+      }
+
+      Item {
+        Layout.minimumWidth: 16
+      }
     }
 
     //

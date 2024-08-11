@@ -94,14 +94,14 @@ DropArea {
     opacity: 0
     border.width: 1
     anchors.centerIn: parent
-    color: Cpp_ThemeManager.highlight
-    border.color: Cpp_ThemeManager.text
-    width: dropLayout.implicitWidth + 6 * app.spacing
-    height: dropLayout.implicitHeight + 6 * app.spacing
+    width: dropLayout.implicitWidth + 48
+    height: dropLayout.implicitHeight + 48
+    color: Cpp_ThemeManager.colors["highlight"]
+    border.color: Cpp_ThemeManager.colors["text"]
 
     ColumnLayout {
+      spacing: 16
       id: dropLayout
-      spacing: app.spacing * 2
       anchors.centerIn: parent
 
       ToolButton {
@@ -111,15 +111,14 @@ DropArea {
         icon.height: 128
         Layout.alignment: Qt.AlignHCenter
         icon.source: "qrc:/icons/drag-drop.svg"
-        icon.color: Cpp_ThemeManager.highlightedText
+        icon.color: Cpp_ThemeManager.colors["highlighted_text"]
       }
 
       Label {
-        font.bold: true
-        font.pixelSize: 24
         Layout.alignment: Qt.AlignHCenter
-        color: Cpp_ThemeManager.highlightedText
         text: qsTr("Drop JSON and CSV files here")
+        font: Cpp_Misc_CommonFonts.customUiFont(24, true)
+        color: Cpp_ThemeManager.colors["highlighted_text"]
       }
     }
 

@@ -44,18 +44,18 @@ Project::CodeEditor::CodeEditor()
 
   // Setup toolbar
   // clang-format off
-  auto acNew = m_toolbar.addAction(QIcon(":/code-editor-icons/new.svg"), tr("New"));
-  auto acOpen = m_toolbar.addAction(QIcon(":/code-editor-icons/open.svg"), tr("Open"));
-  auto acSave = m_toolbar.addAction(QIcon(":/code-editor-icons/save.svg"), tr("Save"));
+  auto acNew = m_toolbar.addAction(QIcon(":/icons/code-editor/new.svg"), tr("New"));
+  auto acOpen = m_toolbar.addAction(QIcon(":/icons/code-editor/open.svg"), tr("Open"));
+  auto acSave = m_toolbar.addAction(QIcon(":/icons/code-editor/save.svg"), tr("Save"));
   m_toolbar.addSeparator();
-  auto acUndo = m_toolbar.addAction(QIcon(":/code-editor-icons/undo.svg"), tr("Undo"));
-  auto acRedo = m_toolbar.addAction(QIcon(":/code-editor-icons/redo.svg"), tr("Redo"));
+  auto acUndo = m_toolbar.addAction(QIcon(":/icons/code-editor/undo.svg"), tr("Undo"));
+  auto acRedo = m_toolbar.addAction(QIcon(":/icons/code-editor/redo.svg"), tr("Redo"));
   m_toolbar.addSeparator();
-  auto acCut = m_toolbar.addAction(QIcon(":/code-editor-icons/cut.svg"), tr("Cut"));
-  auto acCopy = m_toolbar.addAction(QIcon(":/code-editor-icons/copy.svg"), tr("Copy"));
-  auto acPaste = m_toolbar.addAction(QIcon(":/code-editor-icons/paste.svg"), tr("Paste"));
+  auto acCut = m_toolbar.addAction(QIcon(":/icons/code-editor/cut.svg"), tr("Cut"));
+  auto acCopy = m_toolbar.addAction(QIcon(":/icons/code-editor/copy.svg"), tr("Copy"));
+  auto acPaste = m_toolbar.addAction(QIcon(":/icons/code-editor/paste.svg"), tr("Paste"));
   m_toolbar.addSeparator();
-  auto acHelp = m_toolbar.addAction(QIcon(":/code-editor-icons/help.svg"), tr("Help"));
+  auto acHelp = m_toolbar.addAction(QIcon(":/icons/code-editor/help.svg"), tr("Help"));
   // clang-format on
 
   // Connect action signals/slots

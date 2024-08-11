@@ -34,12 +34,18 @@ Window {
   width: minimumWidth
   height: minimumHeight
   title: qsTr("CSV Player")
+  minimumWidth: column.implicitWidth + 32
+  maximumWidth: column.implicitWidth + 32
+  minimumHeight: column.implicitHeight + 32
+  maximumHeight: column.implicitHeight + 32
   x: (Screen.desktopAvailableWidth - width) / 2
   y: (Screen.desktopAvailableHeight - height) / 2
-  minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-  maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-  minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
-  maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+  Component.onCompleted: {
+    root.flags = Qt.Dialog |
+        Qt.WindowTitleHint |
+        Qt.WindowStaysOnTopHint  |
+        Qt.WindowCloseButtonHint
+  }
 
   //
   // Close CSV file when window is closed
@@ -66,50 +72,25 @@ Window {
   // Use page item to set application palette
   //
   Page {
-    anchors {
-      fill: parent
-      margins: root.shadowMargin
-      topMargin: titlebar.height + root.shadowMargin
-    }
-
-    palette.alternateBase: Cpp_ThemeManager.base
-    palette.base: Cpp_ThemeManager.base
-    palette.brightText: Cpp_ThemeManager.brightText
-    palette.button: Cpp_ThemeManager.button
-    palette.buttonText: Cpp_ThemeManager.buttonText
-    palette.highlight: Cpp_ThemeManager.highlight
-    palette.highlightedText: Cpp_ThemeManager.highlightedText
-    palette.link: Cpp_ThemeManager.link
-    palette.placeholderText: Cpp_ThemeManager.placeholderText
-    palette.text: Cpp_ThemeManager.text
-    palette.toolTipBase: Cpp_ThemeManager.tooltipBase
-    palette.toolTipText: Cpp_ThemeManager.tooltipText
-    palette.window: Cpp_ThemeManager.window
-    palette.windowText: Cpp_ThemeManager.windowText
-
-    background: Rectangle {
-      radius: root.radius
-      color: root.backgroundColor
-
-      Rectangle {
-        height: root.radius
-        color: root.backgroundColor
-
-        anchors {
-          top: parent.top
-          left: parent.left
-          right: parent.right
-        }
-      }
-    }
+    anchors.fill: parent
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.windowText: Cpp_ThemeManager.colors["text"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     //
     // Window controls
     //
     ColumnLayout {
       id: column
-      anchors.centerIn: parent
-      spacing: app.spacing * 2
+      spacing: 4
+      anchors.margins: 16
+      anchors.fill: parent
 
       //
       // Timestamp display
@@ -133,39 +114,50 @@ Window {
       }
 
       //
+      // Spacer
+      //
+      Item {
+        Layout.minimumHeight: 4
+      }
+
+      //
       // Play/pause buttons
       //
       RowLayout {
-        spacing: app.spacing
+        spacing: 8
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.alignment: Qt.AlignHCenter
 
         Button {
+          icon.width: 18
+          icon.height: 18
           opacity: enabled ? 1 : 0.5
-          icon.color: Cpp_ThemeManager.text
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_CSV_Player.previousFrame()
-          icon.source: "qrc:/icons/media-prev.svg"
+          icon.source: "qrc:/icons/buttons/media-prev.svg"
+          icon.color: Cpp_ThemeManager.colors["button_text"]
           enabled: Cpp_CSV_Player.progress > 0 && !Cpp_CSV_Player.isPlaying
         }
 
         Button {
           icon.width: 32
           icon.height: 32
-          icon.color: Cpp_ThemeManager.text
           onClicked: Cpp_CSV_Player.toggle()
           Layout.alignment: Qt.AlignVCenter
-          icon.source: Cpp_CSV_Player.isPlaying ? "qrc:/icons/media-pause.svg" :
-                                                  "qrc:/icons/media-play.svg"
+          icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: Cpp_CSV_Player.isPlaying ? "qrc:/icons/buttons/media-pause.svg" :
+                                                  "qrc:/icons/buttons/media-play.svg"
         }
 
         Button {
+          icon.width: 18
+          icon.height: 18
           opacity: enabled ? 1 : 0.5
-          icon.color: Cpp_ThemeManager.text
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_CSV_Player.nextFrame()
-          icon.source: "qrc:/icons/media-next.svg"
+          icon.source: "qrc:/icons/buttons/media-next.svg"
+          icon.color: Cpp_ThemeManager.colors["button_text"]
           enabled: Cpp_CSV_Player.progress < 1 && !Cpp_CSV_Player.isPlaying
         }
       }

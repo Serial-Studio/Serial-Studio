@@ -53,11 +53,13 @@ Misc::CommonFonts::CommonFonts()
                                  QStringLiteral("Regular"), 12);
   m_monoFont = QFontDatabase::font(QStringLiteral("Hack"),
                                    QStringLiteral("Regular"), 12);
+  m_boldUiFont = QFontDatabase::font(QStringLiteral("Inter"),
+                                     QStringLiteral("Bold"), 12);
 
   // Set pixel sizes for each font
   m_uiFont.setPixelSize(12);
   m_monoFont.setPixelSize(12);
-  m_sansFont.setPixelSize(12);
+  m_boldUiFont.setPixelSize(12);
 }
 
 /**
@@ -86,6 +88,15 @@ const QFont &Misc::CommonFonts::uiFont() const
 const QFont &Misc::CommonFonts::monoFont() const
 {
   return m_monoFont;
+}
+
+/**
+ * @brief Retrieves the bold UI font.
+ * @return The bold UI font.
+ */
+const QFont &Misc::CommonFonts::boldUiFont() const
+{
+  return m_boldUiFont;
 }
 
 /**

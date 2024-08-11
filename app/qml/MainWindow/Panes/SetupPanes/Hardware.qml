@@ -26,7 +26,6 @@ import QtQuick.Controls
 import QtCore as QtSettings
 
 import "Devices" as Devices
-import "../../Windows" as Windows
 
 Control {
   id: root
@@ -35,8 +34,6 @@ Control {
   // Save settings
   //
   QtSettings.Settings {
-    property alias driver: _driverCombo.currentIndex
-
     property alias dtr: serial.dtr
     property alias parity: serial.parity
     property alias baudRate: serial.baudRate
@@ -56,29 +53,9 @@ Control {
 
   ColumnLayout {
     id: layout
+    spacing: 4
+    anchors.margins: 8
     anchors.fill: parent
-    anchors.margins: app.spacing
-
-    //
-    // Device type selector
-    //
-    RowLayout {
-      spacing: app.spacing
-      Layout.fillWidth: true
-
-      Label {
-        text: qsTr("Data source") + ":"
-        Layout.alignment: Qt.AlignVCenter
-      }
-
-      ComboBox {
-        id: _driverCombo
-        Layout.fillWidth: true
-        Layout.alignment: Qt.AlignVCenter
-        model: Cpp_IO_Manager.availableDrivers()
-        onCurrentIndexChanged: Cpp_IO_Manager.selectedDriver = currentIndex
-      }
-    }
 
     //
     // Device configuration
@@ -94,27 +71,18 @@ Control {
         id: serial
         Layout.fillWidth: true
         Layout.fillHeight: true
-        background: TextField {
-          enabled: false
-        }
       }
 
       Devices.Network {
         id: network
         Layout.fillWidth: true
         Layout.fillHeight: true
-        background: TextField {
-          enabled: false
-        }
       }
 
       Devices.BluetoothLE {
         id: bluetoothLE
         Layout.fillWidth: true
         Layout.fillHeight: true
-        background: TextField {
-          enabled: false
-        }
       }
     }
   }

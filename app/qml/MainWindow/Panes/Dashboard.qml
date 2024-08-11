@@ -24,98 +24,46 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../../Widgets" as Widgets
 import "../Dashboard" as DashboardItems
 
-Item {
+RowLayout {
   id: root
+  spacing: 0
 
   //
-  // Main layout
+  // View options window
   //
-  ColumnLayout {
-    anchors.fill: parent
-    spacing: app.spacing
-    anchors.margins: (app.spacing * 1.5) - 5
+  DashboardItems.ViewOptions {
+    Layout.fillHeight: true
+    Layout.minimumWidth: 280
+    onColumnsChanged:(columns) => widgetGrid.columns = columns
+  }
 
-    //
-    // Widget selector + widgets
-    //
-    RowLayout {
-      spacing: app.spacing
-      Layout.fillWidth: true
-      Layout.fillHeight: true
+  //
+  // Panel border rectangle
+  //
+  Rectangle {
+    z: 2
+    width: 1
+    Layout.fillHeight: true
+    color: Cpp_ThemeManager.colors["setup_border"]
 
-      //
-      // View options window
-      //
-      DashboardItems.ViewOptions {
-        Layout.fillHeight: true
-        Layout.minimumWidth: 280
-        onColumnsChanged:(columns) => widgetGrid.columns = columns
-      }
-
-      //
-      // Widget grid + console
-      //
-      ColumnLayout {
-        spacing: terminalView.enabled ? app.spacing : 0
-
-        DashboardItems.WidgetGrid {
-          id: widgetGrid
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          Layout.minimumWidth: 240
-        }
-
-
-        Item {
-          enabled: false
-          id: terminalView
-          Layout.fillWidth: true
-          Layout.fillHeight: false
-          Layout.maximumHeight: 280
-          Layout.minimumHeight: 280
-          visible: Layout.bottomMargin > -Layout.minimumHeight
-          Layout.bottomMargin: enabled ? 0 : -Layout.minimumHeight
-
-          Behavior on Layout.bottomMargin { NumberAnimation{} }
-
-          Widgets.Window {
-            id: terminal
-            gradient: true
-            anchors.fill: parent
-            title: qsTr("Console")
-            altButtonEnabled: true
-            headerDoubleClickEnabled: false
-            icon.source: "qrc:/icons/code.svg"
-            altButtonIcon.source: "qrc:/icons/scroll-down.svg"
-            backgroundColor: Cpp_ThemeManager.paneWindowBackground
-            onAltButtonClicked: {
-              terminalView.enabled = false
-              dbTitle.consoleChecked = false
-            }
-
-            Widgets.Terminal {
-              anchors.fill: parent
-              widgetEnabled: terminalView.enabled
-            }
-          }
-        }
-      }
-    }
-
-    //
-    // Dashboard title window
-    //
-    DashboardItems.DashboardTitle {
-      id: dbTitle
+    Rectangle {
+      width: 1
       height: 32
-      Layout.fillWidth: true
-      onConsoleCheckedChanged: {
-        if (terminalView.enabled != consoleChecked)
-          terminalView.enabled = consoleChecked
-      }
+      anchors.top: parent.top
+      anchors.left: parent.left
+      color: Cpp_ThemeManager.colors["pane_caption_border"]
     }
+  }
+
+  //
+  // Widget grid
+  //
+  DashboardItems.WidgetGrid {
+    id: widgetGrid
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    Layout.minimumWidth: 240
   }
 }

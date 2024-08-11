@@ -25,7 +25,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
+import "../../Widgets" as Widgets
 
 Rectangle {
   id: root
@@ -50,21 +50,21 @@ Rectangle {
   }
 
   RowLayout {
-    spacing: app.spacing
+    spacing: 8
 
     anchors {
       margins: 0
       left: parent.left
       right: parent.right
-      leftMargin: app.spacing
-      rightMargin: app.spacing
+      leftMargin: 8
+      rightMargin: 8
       verticalCenter: parent.verticalCenter
     }
 
-    Widgets.Icon {
+    /*Widgets.Icon {
       Layout.alignment: Qt.AlignVCenter
       source: "qrc:/icons/arrow-right.svg"
-    }
+    }*/
 
     Label {
       color: palette.brightText

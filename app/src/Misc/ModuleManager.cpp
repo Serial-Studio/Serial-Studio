@@ -55,6 +55,7 @@
 
 #include <QQuickWindow>
 #include <QSimpleUpdater.h>
+#include <Platform/NativeWindow.h>
 
 /**
  * Configures the application font and configures application signals/slots to
@@ -152,31 +153,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Initialize third-party modules
   auto updater = QSimpleUpdater::getInstance();
 
-  // Operating system flags
-  bool isWin = false;
-  bool isMac = false;
-  bool isNix = false;
-  QString osName = tr("Unknown OS");
-#if defined(Q_OS_MAC)
-  isMac = true;
-  osName = "macOS";
-#elif defined(Q_OS_WIN)
-  isWin = true;
-  osName = "Windows";
-#elif defined(Q_OS_LINUX)
-  isNix = true;
-  osName = "GNU/Linux";
-#else
-  isNix = true;
-  osName = "UNIX";
-#endif
-
-  // Qt version QML flag
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  const bool qt6 = false;
-#else
-  const bool qt6 = true;
-#endif
+  // Initialize non-singleton modules
+  NativeWindow nativeWindow;
 
   // Start common event timers
   miscTimerEvents->startTimers();
@@ -187,11 +165,6 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   // Register C++ modules with QML
   auto c = engine()->rootContext();
-  c->setContextProperty("Cpp_Qt6", qt6);
-  c->setContextProperty("Cpp_IsWin", isWin);
-  c->setContextProperty("Cpp_IsMac", isMac);
-  c->setContextProperty("Cpp_IsNix", isNix);
-  c->setContextProperty("Cpp_OSName", osName);
   c->setContextProperty("Cpp_Updater", updater);
   c->setContextProperty("Cpp_IO_Serial", ioSerial);
   c->setContextProperty("Cpp_CSV_Export", csvExport);
@@ -200,6 +173,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_Manager", ioManager);
   c->setContextProperty("Cpp_IO_Network", ioNetwork);
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);
+  c->setContextProperty("Cpp_NativeWindow", &nativeWindow);
   c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
   c->setContextProperty("Cpp_Project_Model", projectModel);
   c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);

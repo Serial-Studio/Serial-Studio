@@ -24,8 +24,6 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
-
 ColumnLayout {
   id: root
   spacing: 0
@@ -62,7 +60,7 @@ ColumnLayout {
   // Spacer
   //
   Item {
-    height: app.spacing
+    height: 8
   }
 
   //
@@ -111,6 +109,6 @@ ColumnLayout {
   // Spacer
   //
   Item {
-    height: app.spacing
+    height: 8
   }
 }

@@ -41,13 +41,28 @@ Misc::ThemeManager::ThemeManager()
 {
   // Set theme files
   QStringList themes = {
-      QStringLiteral(":/rcc/themes/Breeze.json"),
-      QStringLiteral(":/rcc/themes/Light.json"),
-      QStringLiteral(":/rcc/themes/Dark.json"),
+      QStringLiteral(":/themes/Breeze.json"),
+      QStringLiteral(":/themes/Light.json"),
+      QStringLiteral(":/themes/Dark.json"),
   };
 
+  // Load theme files
+  foreach (auto theme, themes)
+  {
+    QFile file(theme);
+    if (file.open(QFile::ReadOnly))
+    {
+      auto document = QJsonDocument::fromJson(file.readAll());
+      auto title = document.object().value("title").toString();
+      auto colors = document.object().value("colors").toObject();
+      m_themes.insert(title, colors);
+
+      file.close();
+    }
+  }
+
   // Set application theme
-  setTheme(m_settings.value("Theme", 1).toInt());
+  setTheme(0);
 
   // Automatically react to theme changes
   qApp->installEventFilter(this);
@@ -113,33 +128,6 @@ QColor Misc::ThemeManager::getColor(const QString &name) const
 }
 
 /**
- * @brief Event filter to intercept application-wide events.
- *
- * This method is an overridden event filter that specifically listens for the
- * @c QEvent::ApplicationPaletteChange event.
- *
- * When this event is detected, it triggers a theme update to match the new
- * system palette.
- *
- * @param watched The object where the event originated.
- * @param event The event that is being filtered.
- * @return true if the event was handled and should not be processed further
- */
-bool Misc::ThemeManager::eventFilter(QObject *watched, QEvent *event)
-{
-  if (event->type() == QEvent::ApplicationPaletteChange)
-  {
-    if (theme() == 0)
-    {
-      setTheme(0);
-      return true;
-    }
-  }
-
-  return QObject::eventFilter(watched, event);
-}
-
-/**
  * @brief Sets the current theme to the theme at the specified index.
  *
  * @param index The index of the theme in the available themes list to set as
@@ -149,18 +137,12 @@ bool Misc::ThemeManager::eventFilter(QObject *watched, QEvent *event)
  */
 void Misc::ThemeManager::setTheme(const int index)
 {
-  // Load colors from theme
-  auto fixedIndex = index;
-  if (index > 0 && index < availableThemes().count())
+  if (index >= 0 && index < availableThemes().count())
+  {
+    m_theme = index;
+    m_settings.setValue("Theme", index);
     m_themeName = availableThemes().at(index);
-  else
-    fixedIndex = 0;
-
-  // Update the theme
-  m_theme = fixedIndex;
-  m_settings.setValue("Theme", fixedIndex);
-  m_colors = m_themes.value(m_themeName);
-
-  // Update UI
-  Q_EMIT themeChanged();
+    m_colors = m_themes.value(m_themeName);
+    Q_EMIT themeChanged();
+  }
 }

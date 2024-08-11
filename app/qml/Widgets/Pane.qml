@@ -127,8 +127,8 @@ Controls.GroupBox {
       Controls.Label {
         id: _title
         text: root.title
-        font: Cpp_CommonFonts.boldUiFont
         Layout.alignment: Qt.AlignVCenter
+        font: Cpp_Misc_CommonFonts.boldUiFont
         Layout.leftMargin: root.hardBorder ? -6 : undefined
         color: root.hardBorder ?
                  Cpp_ThemeManager.colors["pane_hard_caption_foreground"] :

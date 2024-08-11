@@ -27,19 +27,8 @@ import QtQuick.Controls
 
 import "../../Widgets" as Widgets
 
-Control {
+ToolBar {
   id: root
-  implicitHeight: 76
-
-  //
-  // Reference to parent window to be able to drag it with the toolbar
-  //
-  property Window window
-
-  //
-  // Dummy string to increase width of buttons
-  //
-  readonly property string _btSpacer: "  "
 
   //
   // Custom signals
@@ -57,29 +46,57 @@ Control {
   property alias dashboardChecked: dashboardBt.checked
 
   //
-  // Background gradient + border
+  // Calculate offset based on platform
   //
-  Rectangle {
-    id: bg
-    anchors.fill: parent
-
-    gradient: Gradient {
-      GradientStop { position: 0; color: Cpp_ThemeManager.toolbarGradient1 }
-      GradientStop { position: 1; color: Cpp_ThemeManager.toolbarGradient2 }
+  property int titlebarHeight: Cpp_NativeWindow.titlebarHeight(mainWindow)
+  Connections {
+    target: mainWindow
+    function onVisibilityChanged() {
+      root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(mainWindow)
     }
+  }
 
-    Rectangle {
-      border.width: 1
-      anchors.fill: parent
-      color: "transparent"
-      visible: Cpp_ThemeManager.titlebarSeparator
-      border.color: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
+  //
+  // Set toolbar height
+  //
+  Layout.minimumHeight: titlebarHeight + 76
+  Layout.maximumHeight: titlebarHeight + 76
+
+  //
+  // Titlebar text
+  //
+  Label {
+    text: mainWindow.title
+    visible: root.titlebarHeight > 0
+    color: Cpp_ThemeManager.colors["titlebar_text"]
+    font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+
+    anchors {
+      topMargin: 6
+      top: parent.top
+      horizontalCenter: parent.horizontalCenter
+    }
+  }
+
+  //
+  // Toolbar background
+  //
+  background: Rectangle {
+    gradient: Gradient {
+      GradientStop {
+        position: 0
+        color: Cpp_ThemeManager.colors["toolbar_top"]
+      }
+
+      GradientStop {
+        position: 1
+        color: Cpp_ThemeManager.colors["toolbar_bottom"]
+      }
     }
 
     Rectangle {
       height: 1
-      visible: Cpp_ThemeManager.titlebarSeparator
-      color: Qt.darker(Cpp_ThemeManager.toolbarGradient1, 1.5)
+      color: Cpp_ThemeManager.colors["toolbar_border"]
 
       anchors {
         left: parent.left
@@ -87,33 +104,49 @@ Control {
         bottom: parent.bottom
       }
     }
+
+    DragHandler {
+      target: null
+      onActiveChanged: {
+        if (active)
+          mainWindow.startSystemMove()
+      }
+    }
   }
 
   //
-  // Toolbar icons
+  // Toolbar controls
   //
   RowLayout {
-    spacing: app.spacing
-    anchors.fill: parent
-    anchors.margins: app.spacing
+    spacing: 8
 
-    Button {
-      flat: true
-      icon.width: 27
-      icon.height: 27
-      Layout.fillHeight: true
-      icon.color: "transparent"
+    anchors {
+      margins: 2
+      left: parent.left
+      right: parent.right
+      verticalCenter: parent.verticalCenter
+      verticalCenterOffset: root.titlebarHeight / 2
+    }
+
+    //
+    // Project Editor
+    //
+    Widgets.BigButton {
       text: qsTr("Project Setup")
-      display: AbstractButton.TextUnderIcon
-      onClicked: root.projectEditorClicked()
-      Layout.minimumWidth: Math.max(implicitWidth, 81)
-      Layout.maximumWidth: Math.max(implicitWidth, 81)
-      palette.buttonText: Cpp_ThemeManager.menubarText
-      palette.button: Cpp_ThemeManager.toolbarGradient1
-      palette.window: Cpp_ThemeManager.toolbarGradient1
-      icon.source: "qrc:/toolbar-icons/project-editor.svg"
+      Layout.alignment: Qt.AlignVCenter
+      onClicked: app.showProjectEditor()
+      enabled: Cpp_JSON_Generator.operationMode == 0
+      icon.source: "qrc:/icons/toolbar/project-setup.svg"
+    }
 
-      background: Item {}
+    //
+    // CSV Player
+    //
+    Widgets.BigButton {
+      text: qsTr("CSV Player")
+      Layout.alignment: Qt.AlignVCenter
+      onClicked: Cpp_CSV_Player.openFile()
+      icon.source: "qrc:/icons/toolbar/csv.svg"
     }
 
     //
@@ -121,122 +154,46 @@ Control {
     //
     Rectangle {
       width: 1
-      opacity: 0.2
       Layout.fillHeight: true
       Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
-      color: Cpp_ThemeManager.menubarText
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
 
-    Button {
-      id: setupBt
-
-      flat: true
-      icon.width: 27
-      icon.height: 27
-      text: qsTr("Settings")
-      Layout.fillHeight: true
-      icon.color: "transparent"
-      onClicked: root.setupClicked()
-      display: AbstractButton.TextUnderIcon
-      icon.source: "qrc:/toolbar-icons/setup.svg"
-      Layout.minimumWidth: Math.max(implicitWidth, 81)
-      Layout.maximumWidth: Math.max(implicitWidth, 81)
-      palette.buttonText: Cpp_ThemeManager.menubarText
-      palette.button: Cpp_ThemeManager.toolbarGradient1
-      palette.window: Cpp_ThemeManager.toolbarGradient1
-
-      background: Rectangle {
-        radius: 3
-        border.width: 1
-        color: "transparent"
-        border.color: "#040600"
-        opacity: parent.checked ? 0.2 : 0.0
-
-        Rectangle {
-          border.width: 1
-          color: "#626262"
-          anchors.fill: parent
-          border.color: "#c2c2c2"
-          radius: parent.radius - 1
-          anchors.margins: parent.border.width
-        }
-      }
-    }
-
-    Button {
+    //
+    // Console
+    //
+    Widgets.BigButton {
       id: consoleBt
-
-      flat: true
-      icon.width: 27
-      icon.height: 27
-      Layout.fillHeight: true
-      icon.color: "transparent"
+      opacity: 1
+      text: qsTr("Console")
       enabled: dashboardBt.enabled
       onClicked: root.consoleClicked()
-      text: qsTr("Console")
-      display: AbstractButton.TextUnderIcon
-      icon.source: "qrc:/toolbar-icons/console.svg"
-      Layout.minimumWidth: Math.max(implicitWidth, 81)
-      Layout.maximumWidth: Math.max(implicitWidth, 81)
-      palette.buttonText: Cpp_ThemeManager.menubarText
-      palette.button: Cpp_ThemeManager.toolbarGradient1
-      palette.window: Cpp_ThemeManager.toolbarGradient1
-
-      background: Rectangle {
-        radius: 3
-        border.width: 1
-        color: "transparent"
-        border.color: "#040600"
-        opacity: parent.checked ? 0.2 : 0.0
-
-        Rectangle {
-          border.width: 1
-          color: "#626262"
-          anchors.fill: parent
-          border.color: "#c2c2c2"
-          radius: parent.radius - 1
-          anchors.margins: parent.border.width
-        }
-      }
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/icons/toolbar/console.svg"
     }
 
-    Button {
+    //
+    // Setup
+    //
+    Widgets.BigButton {
+      id: setupBt
+      text: qsTr("Device Setup")
+      onClicked: root.setupClicked()
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/icons/toolbar/device-setup.svg"
+    }
+
+    //
+    // Dashboard
+    //
+    Widgets.BigButton {
       id: dashboardBt
-
-      flat: true
-      icon.width: 27
-      icon.height: 27
-      Layout.fillHeight: true
-      icon.color: "transparent"
-      opacity: enabled ? 1 : 0.5
-      onClicked: root.dashboardClicked()
-      enabled: Cpp_UI_Dashboard.available
       text: qsTr("Dashboard")
-      display: AbstractButton.TextUnderIcon
-      icon.source: "qrc:/toolbar-icons/dashboard.svg"
-      Layout.minimumWidth: Math.max(implicitWidth, 81)
-      Layout.maximumWidth: Math.max(implicitWidth, 81)
-      palette.buttonText: Cpp_ThemeManager.menubarText
-      palette.button: Cpp_ThemeManager.toolbarGradient1
-      palette.window: Cpp_ThemeManager.toolbarGradient1
-
-      background: Rectangle {
-        radius: 3
-        border.width: 1
-        color: "transparent"
-        border.color: "#040600"
-        opacity: parent.checked ? 0.2 : 0.0
-
-        Rectangle {
-          border.width: 1
-          color: "#626262"
-          anchors.fill: parent
-          border.color: "#c2c2c2"
-          radius: parent.radius - 1
-          anchors.margins: parent.border.width
-        }
-      }
+      onClicked: root.dashboardClicked()
+      Layout.alignment: Qt.AlignVCenter
+      enabled: Cpp_UI_Dashboard.available
+      icon.source: "qrc:/icons/toolbar/dashboard.svg"
     }
 
     //
@@ -244,124 +201,85 @@ Control {
     //
     Rectangle {
       width: 1
-      opacity: 0.2
       Layout.fillHeight: true
       Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
-      color: Cpp_ThemeManager.menubarText
-    }
-
-    Button {
-      flat: true
-      icon.width: 27
-      icon.height: 27
-      Layout.fillHeight: true
-      icon.color: "transparent"
-      text: qsTr("Help")
-      display: AbstractButton.TextUnderIcon
-      Layout.minimumWidth: Math.max(implicitWidth, 81)
-      Layout.maximumWidth: Math.max(implicitWidth, 81)
-      palette.buttonText: Cpp_ThemeManager.menubarText
-      palette.button: Cpp_ThemeManager.toolbarGradient1
-      palette.window: Cpp_ThemeManager.toolbarGradient1
-      icon.source: "qrc:/toolbar-icons/help.svg"
-
-      background: Item {}
-    }
-
-    Button {
-      flat: true
-      icon.width: 27
-      icon.height: 27
-      Layout.fillHeight: true
-      icon.color: "transparent"
-      text: qsTr("Report Bug")
-      display: AbstractButton.TextUnderIcon
-      Layout.minimumWidth: Math.max(implicitWidth, 81)
-      Layout.maximumWidth: Math.max(implicitWidth, 81)
-      palette.buttonText: Cpp_ThemeManager.menubarText
-      palette.button: Cpp_ThemeManager.toolbarGradient1
-      palette.window: Cpp_ThemeManager.toolbarGradient1
-      icon.source: "qrc:/toolbar-icons/bug.svg"
-
-      background: Item {}
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
 
     //
-    // Window drag handler
+    // MQTT Setup
+    //
+    Widgets.BigButton {
+      text: qsTr("MQTT Setup")
+      Layout.alignment: Qt.AlignVCenter
+      onClicked: app.showMqttConfiguration()
+      icon.source: "qrc:/icons/toolbar/mqtt.svg"
+    }
+
+    //
+    // Separator
+    //
+    Rectangle {
+      width: 1
+      Layout.fillHeight: true
+      Layout.maximumHeight: 64
+      Layout.alignment: Qt.AlignVCenter
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
+    }
+
+    //
+    // Report Bug
+    //
+    Widgets.BigButton {
+      text: qsTr("Report Bug")
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/icons/toolbar/github.svg"
+      onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
+    }
+
+    //
+    // Help
+    //
+    Widgets.BigButton {
+      text: qsTr("Help")
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/icons/toolbar/help.svg"
+      onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
+    }
+
+    //
+    // Help
+    //
+    Widgets.BigButton {
+      text: qsTr("About")
+      onClicked: app.showAboutDialog()
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/icons/toolbar/about.svg"
+    }
+
+    //
+    // Horizontal spacer
     //
     Item {
-      height: parent.height
       Layout.fillWidth: true
-
-      MouseArea {
-        anchors.fill: parent
-        onPressedChanged: {
-          if (pressed)
-            window.startSystemMove()
-        }
-      }
     }
 
-    Button {
-      flat: true
-      icon.width: 27
-      icon.height: 27
-      Layout.fillHeight: true
-      icon.color: "transparent"
-      opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_CSV_Player.isOpen
-      text: qsTr("Open CSV")
-      display: AbstractButton.TextUnderIcon
-      icon.source: "qrc:/toolbar-icons/csv.svg"
-      Layout.minimumWidth: Math.max(implicitWidth, 81)
-      Layout.maximumWidth: Math.max(implicitWidth, 81)
-      palette.buttonText: Cpp_ThemeManager.menubarText
-      palette.button: Cpp_ThemeManager.toolbarGradient1
-      palette.window: Cpp_ThemeManager.toolbarGradient1
-
-      onClicked: {
-        if (Cpp_CSV_Export.isOpen)
-          Cpp_CSV_Export.openCurrentCsv()
-        else
-          Cpp_CSV_Player.openFile()
-      }
-
-      background: Item{}
-    }
-
-    Button {
-      id: connectBt
-
-      //
-      // Button properties
-      //
-      flat: true
-      icon.width: 27
-      icon.height: 27
-      Layout.fillHeight: true
-      font: Cpp_Misc_CommonFonts.customUiFont(12, true)
-
-      //
-      // Connection-dependent
-      //
-      icon.color: "transparent"
+    //
+    // Connect/Disconnect button
+    //
+    Widgets.BigButton {
       checked: Cpp_IO_Manager.connected
-      display: AbstractButton.TextUnderIcon
-      Layout.minimumWidth: Math.max(implicitWidth, 81)
-      Layout.maximumWidth: Math.max(implicitWidth, 81)
-      palette.buttonText: Cpp_ThemeManager.menubarText
-      palette.button: Cpp_ThemeManager.toolbarGradient1
-      palette.window: Cpp_ThemeManager.toolbarGradient1
-      text: (checked ? qsTr("Disconnect") : qsTr("Connect"))
-      icon.source: checked ? "qrc:/toolbar-icons/disconnect.svg" :
-                             "qrc:/toolbar-icons/connect.svg"
-
-      //
-      // Only enable button if it can be clicked
-      //
-      opacity: enabled ? 1 : 0.5
+      Layout.alignment: Qt.AlignVCenter
+      font: Cpp_Misc_CommonFonts.boldUiFont
+      Layout.minimumWidth: metrics.width + 32
+      Layout.maximumWidth: metrics.width + 32
       enabled: Cpp_IO_Manager.configurationOk
+      text: checked ? qsTr("Disconnect") : qsTr("Connect")
+      icon.source: checked ? "qrc:/icons/toolbar/connect.svg" :
+                             "qrc:/icons/toolbar/disconnect.svg"
+
+
 
       //
       // Connect/disconnect device when button is clicked
@@ -369,23 +287,12 @@ Control {
       onClicked: Cpp_IO_Manager.toggleConnection()
 
       //
-      // Custom button background
+      // Obtain maximum width of the button
       //
-      background: Rectangle {
-        radius: 3
-        border.width: 1
-        color: "transparent"
-        border.color: "#040600"
-        opacity: parent.checked ? 0.2 : 0.0
-
-        Rectangle {
-          border.width: 1
-          color: "#626262"
-          anchors.fill: parent
-          border.color: "#c2c2c2"
-          radius: parent.radius - 1
-          anchors.margins: parent.border.width
-        }
+      TextMetrics {
+        id: metrics
+        font: Cpp_Misc_CommonFonts.boldUiFont
+        text: " " + qsTr("Disconnect") + " "
       }
     }
   }

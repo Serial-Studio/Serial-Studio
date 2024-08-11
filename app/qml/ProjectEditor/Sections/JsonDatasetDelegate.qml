@@ -24,26 +24,17 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
+import "../../Widgets" as Widgets
 
-Widgets.Window {
+Widgets.Pane {
   id: root
 
   //
   // Window properties
   //
-  headerDoubleClickEnabled: false
-  icon.source: "qrc:/icons/dataset.svg"
-  borderColor: Cpp_ThemeManager.widgetWindowBorder
+  icon: "qrc:/icons/dataset.svg"
   palette.window: Cpp_ThemeManager.widgetWindowBackground
   title: qsTr("Dataset %1 - %2").arg(dataset + 1).arg(Cpp_Project_Model.datasetTitle(group, dataset))
-
-  //
-  // Delete dataset button
-  //
-  altButtonEnabled: !showGroupWidget
-  altButtonIcon.source: "qrc:/icons/close.svg"
-  onAltButtonClicked: Cpp_Project_Model.deleteDataset(group, dataset)
 
   //
   // Custom properties
@@ -71,11 +62,11 @@ Widgets.Window {
     x: 0
     columns: 2
     anchors.fill: parent
-    columnSpacing: app.spacing
-    anchors.margins: app.spacing
-    rowSpacing: app.spacing / 2
-    anchors.leftMargin: app.spacing * 2
-    anchors.rightMargin: app.spacing * 2
+    columnSpacing: 8
+    anchors.margins: 8
+    rowSpacing: 8 / 2
+    anchors.leftMargin: 8 * 2
+    anchors.rightMargin: 8 * 2
 
     //
     // Dataset title
@@ -126,7 +117,7 @@ Widgets.Window {
       text: qsTr("Display LED:")
     } Switch {
       id: led
-      Layout.leftMargin: -app.spacing
+      Layout.leftMargin: -8
       checked: Cpp_Project_Model.datasetLED(group, dataset)
       onCheckedChanged: Cpp_Project_Model.setDatasetLED(group, dataset, checked)
     }
@@ -138,7 +129,7 @@ Widgets.Window {
       text: qsTr("Generate plot:")
     } Switch {
       id: linearPlot
-      Layout.leftMargin: -app.spacing
+      Layout.leftMargin: -8
       checked: Cpp_Project_Model.datasetGraph(group, dataset)
       onCheckedChanged: {
         if (!checked)
@@ -157,7 +148,7 @@ Widgets.Window {
     } CheckBox {
       id: logPlot
       visible: linearPlot.checked
-      Layout.leftMargin: -app.spacing
+      Layout.leftMargin: -8
       checked: Cpp_Project_Model.datasetLogPlot(group, dataset)
       onCheckedChanged: Cpp_Project_Model.setDatasetLogPlot(group, dataset, checked)
     }
@@ -169,7 +160,7 @@ Widgets.Window {
       text: qsTr("FFT plot:")
     } Switch {
       id: fftCheck
-      Layout.leftMargin: -app.spacing
+      Layout.leftMargin: -8
       checked: Cpp_Project_Model.datasetFftPlot(group, dataset)
       onCheckedChanged: Cpp_Project_Model.setDatasetFftPlot(group, dataset, checked)
     }
@@ -288,14 +279,14 @@ Widgets.Window {
     //
     // Compass note label
     //
-    Widgets.Icon {
+    /*Widgets.Icon {
       width: 32
       height: 32
       color: palette.text
       source: "qrc:/icons/compass.svg"
       Layout.alignment: Qt.AlignHCenter
       visible: widget.currentIndex === 3
-    } Label {
+    }*/ Label {
       font.pixelSize: 16
       Layout.fillWidth: true
       wrapMode: Label.WordWrap

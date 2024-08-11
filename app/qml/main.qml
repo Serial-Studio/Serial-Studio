@@ -24,28 +24,12 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
-import "Dialogs" as Windows
+import "Dialogs" as Dialogs
 import "MainWindow" as MainWindow
 import "ProjectEditor" as ProjectEditor
 
 Item {
   id: app
-
-  //
-  // Global propeties
-  //
-  readonly property int spacing: 8
-  readonly property string monoFont: "Roboto Mono"
-
-  //
-  // Access to dialogs & windows
-  //
-  property Window aboutDialog: null
-  property Window donateDialog: null
-  property Window mainWindow: null
-  property Window csvPlayerDialog: null
-  property Window projectEditorWindow: null
-  property Window acknowledgementsDialog: null
 
   //
   // Check for updates (non-silent mode)
@@ -56,65 +40,45 @@ Item {
   }
 
   //
-  // MainWindow
+  // Main window + subdialogs
   //
-  Loader {
-    asynchronous: true
-    sourceComponent: MainWindow.Root {
-      Component.onCompleted: {
-        app.forceActiveFocus()
-        app.mainWindow = this
-      }
+  MainWindow.Root {
+    id: mainWindow
+
+    Dialogs.CsvPlayer {
+      id: csvPlayer
+    }
+
+    Dialogs.Donate {
+      id: donateDialog
+    }
+
+    DialogLoader {
+      id: projectEditor
+      source: "qrc:/app/qml/ProjectEditor/Root.qml"
+    }
+
+    DialogLoader {
+      id: mqttConfiguration
+      source: "qrc:/app/qml/Dialogs/MQTTConfiguration.qml"
+    }
+
+    DialogLoader {
+      id: aboutDialog
+      source: "qrc:/app/qml/Dialogs/About.qml"
+    }
+
+    DialogLoader {
+      id: acknowledgementsDialog
+      source: "qrc:/app/qml/Dialogs/Acknowledgements.qml"
     }
   }
 
   //
-  // About window
+  // Dialog display functions
   //
-  Loader {
-    asynchronous: true
-    sourceComponent: Windows.About {
-      Component.onCompleted: app.aboutDialog = this
-    }
-  }
-
-  //
-  // CSV player window
-  //
-  Loader {
-    asynchronous: true
-    sourceComponent: Windows.CsvPlayer {
-      Component.onCompleted: app.csvPlayerDialog = this
-    }
-  }
-
-  //
-  // Project editor dialog
-  //
-  Loader {
-    asynchronous: true
-    sourceComponent: ProjectEditor.Root {
-      Component.onCompleted: app.projectEditorWindow = this
-    }
-  }
-
-  //
-  // Donations dialog
-  //
-  Loader {
-    asynchronous: false
-    sourceComponent: Windows.Donate {
-      Component.onCompleted: app.donateDialog = this
-    }
-  }
-
-  //
-  // Acknowledgements dialog
-  //
-  Loader {
-    asynchronous: true
-    sourceComponent: Windows.Acknowledgements {
-      Component.onCompleted: app.acknowledgementsDialog = this
-    }
-  }
+  function showAboutDialog()       { aboutDialog.active = true }
+  function showProjectEditor()     { projectEditor.active = true }
+  function showMqttConfiguration() { mqttConfiguration.active = true }
+  function showAcknowledgements()  { acknowledgementsDialog.active = true }
 }

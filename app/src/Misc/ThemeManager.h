@@ -109,9 +109,6 @@ public:
 public Q_SLOTS:
   void setTheme(int index);
 
-protected:
-  bool eventFilter(QObject *watched, QEvent *event) override;
-
 private:
   int m_theme;
   QString m_themeName;

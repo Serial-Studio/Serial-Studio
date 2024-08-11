@@ -24,8 +24,6 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
-
 Page {
   id: root
 
@@ -67,9 +65,9 @@ Page {
   //
   ColumnLayout {
     id: column
-    spacing: app.spacing
+    spacing: 8
     anchors.fill: parent
-    anchors.margins: app.spacing
+    anchors.margins: 8
 
     //
     // Notes rectangle
@@ -79,22 +77,22 @@ Page {
       radius: 16
       Layout.fillWidth: true
       color: Cpp_ThemeManager.highlight
-      Layout.minimumHeight: 32 + 2 * app.spacing
+      Layout.minimumHeight: 32 + 2 * 8
       visible: widget.currentIndex === 1 || widget.currentIndex === 2
 
       RowLayout {
-        spacing: app.spacing
+        spacing: 8
         anchors.centerIn: parent
         Layout.alignment: Qt.AlignHCenter
         visible: widget.currentIndex === 1
 
-        Widgets.Icon {
+        /*Widgets.Icon {
           width: 32
           height: 32
           color: palette.highlightedText
           Layout.alignment: Qt.AlignHCenter
           source: "qrc:/icons/accelerometer.svg"
-        } Label {
+        }*/ Label {
           font.pixelSize: 18
           wrapMode: Label.WordWrap
           color: palette.highlightedText
@@ -103,18 +101,18 @@ Page {
       }
 
       RowLayout {
-        spacing: app.spacing
+        spacing: 8
         anchors.centerIn: parent
         Layout.alignment: Qt.AlignHCenter
         visible: widget.currentIndex === 2
 
-        Widgets.Icon {
+        /*Widgets.Icon {
           width: 32
           height: 32
           source: "qrc:/icons/gyro.svg"
           color: palette.highlightedText
           Layout.alignment: Qt.AlignHCenter
-        } Label {
+        }*/ Label {
           font.pixelSize: 18
           wrapMode: Label.WordWrap
           color: palette.highlightedText
@@ -127,7 +125,7 @@ Page {
     // Group title
     //
     RowLayout {
-      spacing: app.spacing
+      spacing: 8
       Layout.fillWidth: true
 
       Label {
@@ -223,17 +221,17 @@ Page {
       // Empty group text & icon
       //
       ColumnLayout {
-        spacing: app.spacing
+        spacing: 8
         anchors.centerIn: parent
         visible: grid.model === 0
 
-        Widgets.Icon {
+        /*Widgets.Icon {
           width: 128
           height: 128
           color: Cpp_ThemeManager.text
           source: "qrc:/icons/group.svg"
           Layout.alignment: Qt.AlignHCenter
-        }
+        }*/
 
         Label {
           font.bold: true
@@ -247,7 +245,7 @@ Page {
           font.pixelSize: 18
           Layout.alignment: Qt.AlignHCenter
           wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-          Layout.maximumWidth: grid.width - 8 * app.spacing
+          Layout.maximumWidth: grid.width - 8 * 8
           text: qsTr("Set group title and click on the \"Add dataset\" button to begin")
         }
       }
@@ -288,7 +286,7 @@ Page {
           Loader {
             id: loader
             anchors.fill: parent
-            anchors.margins: app.spacing
+            anchors.margins: 8
 
             sourceComponent: JsonDatasetDelegate {
               dataset: index

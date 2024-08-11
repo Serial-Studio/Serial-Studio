@@ -24,7 +24,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-Control {
+Item {
   id: root
 
   //
@@ -42,15 +42,15 @@ Control {
   //
   ColumnLayout {
     id: layout
-    spacing: app.spacing
+    spacing: 4
+    anchors.margins: 0
     anchors.fill: parent
-    anchors.margins: app.spacing
 
     //
     // Device selector + refresh button
     //
     RowLayout {
-      spacing: app.spacing
+      spacing: 4
       visible: opacity > 0
       opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount > 0 ? 1 : 0
 
@@ -93,7 +93,7 @@ Control {
     // Service selector
     //
     RowLayout {
-      spacing: app.spacing
+      spacing: 4
       visible: opacity > 0
       opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && serviceNames.count > 1 ? 1 : 0
 
@@ -116,7 +116,7 @@ Control {
     // Scanning indicator
     //
     RowLayout {
-      spacing: app.spacing
+      spacing: 4
       visible: opacity > 0
       opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount < 1 ? 1 : 0
 
@@ -138,7 +138,7 @@ Control {
     // OS not supported indicator
     //
     RowLayout {
-      spacing: app.spacing
+      spacing: 4
       visible: opacity > 0
       opacity: !Cpp_IO_Bluetooth_LE.operatingSystemSupported
 
@@ -156,9 +156,9 @@ Control {
         Layout.fillWidth: true
         wrapMode: Label.WordWrap
         Layout.alignment: Qt.AlignVCenter
-        text: qsTr("Sorry, this version of %1 is not supported yet. " +
+        text: qsTr("Sorry, this system is not supported yet. " +
                    "We'll update Serial Studio to work with this operating " +
-                   "system as soon as Qt officially supports it.").arg(Cpp_OSName);
+                   "system as soon as Qt officially supports it.")
       }
     }
 

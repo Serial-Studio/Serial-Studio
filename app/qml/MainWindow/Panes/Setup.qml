@@ -25,18 +25,20 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
 import "SetupPanes" as SetupPanes
+import "../../Widgets" as Widgets
 
-Item {
+Widgets.Pane {
   id: root
+  title: qsTr("Device Setup")
+  icon: "qrc:/icons/panes/setup.svg"
 
   //
   // Custom properties
   //
   property int setupMargin: 0
-  property int displayedWidth: 380 + app.spacing * 1.5
-  readonly property int maxItemWidth: column.width - 2 * spacing
+  property int displayedWidth: 344
+  readonly property int maxItemWidth: column.width - 8
 
   //
   // Displays the setup panel
@@ -71,17 +73,6 @@ Item {
     property alias csvExport: csvLogging.checked
 
     //
-    // MQTT settings
-    //
-    property alias mqttHost: mqtt.host
-    property alias mqttPort: mqtt.port
-    property alias mqttUser: mqtt.user
-    property alias mqttMode: mqtt.mode
-    property alias mqttTopic: mqtt.topic
-    property alias mqttVersion: mqtt.version
-    property alias mqttPassword: mqtt.password
-
-    //
     // App settings
     //
     property alias language: settings.language
@@ -100,185 +91,163 @@ Item {
   }
 
   //
-  // Window
+  // Control arrangement
   //
-  Widgets.Window {
-    gradient: true
-    title: qsTr("Setup")
+  ColumnLayout {
+    id: column
+    spacing: 4
     anchors.fill: parent
-    anchors.leftMargin: 0
-    headerDoubleClickEnabled: false
-    icon.source: "qrc:/icons/settings.svg"
-    anchors.margins: (app.spacing * 1.5) - 5
-    backgroundColor: Cpp_ThemeManager.paneWindowBackground
+    anchors.topMargin: -6
 
     //
-    // Control arrangement
+    // Device type selector
     //
-    ColumnLayout {
-      id: column
-      anchors.fill: parent
-      spacing: app.spacing / 2
-      anchors.margins: app.spacing * 1.5
+    Label {
+      text: qsTr("Device Setup") + ":"
+      font: Cpp_Misc_CommonFonts.customUiFont(10, true)
+      color: Cpp_ThemeManager.colors["pane_section_label"]
+      Component.onCompleted: font.capitalization = Font.AllUppercase
+    } ComboBox {
+      id: _driverCombo
+      Layout.fillWidth: true
+      model: Cpp_IO_Manager.availableDrivers()
+      displayText: qsTr("I/O Interface: %1").arg(currentText)
+      onCurrentIndexChanged: Cpp_IO_Manager.selectedDriver = currentIndex
+    }
 
-      //
-      // Comm mode selector
-      //
-      Label {
-        text: qsTr("Communication Mode") + ":"
-        font: Cpp_Misc_CommonFonts.customUiFont(12, true)
-      } RadioButton {
-        id: commAuto
-        checked: true
-        Layout.maximumWidth: root.maxItemWidth
-        text: qsTr("No parsing (device sends JSON data)")
-        onCheckedChanged: {
-          if (checked)
-            Cpp_JSON_Generator.setOperationMode(1)
-          else
-            Cpp_JSON_Generator.setOperationMode(0)
-        }
-      } RadioButton {
-        id: commManual
-        checked: false
-        Layout.maximumWidth: root.maxItemWidth
-        text: qsTr("Parse via JSON project file")
-        onCheckedChanged: {
-          if (checked)
-            Cpp_JSON_Generator.setOperationMode(0)
-          else
-            Cpp_JSON_Generator.setOperationMode(1)
-        }
+    //
+    // CSV generator
+    //
+    Switch {
+      id: csvLogging
+      Layout.leftMargin: -6
+      text: qsTr("Create CSV File")
+      Layout.alignment: Qt.AlignLeft
+      checked: Cpp_CSV_Export.exportEnabled
+      palette.highlight: Cpp_ThemeManager.colors["csv_switch"]
+
+      onCheckedChanged:  {
+        if (Cpp_CSV_Export.exportEnabled !== checked)
+          Cpp_CSV_Export.exportEnabled = checked
+      }
+    }
+
+    //
+    // Spacer
+    //
+    Item {
+      height: 4
+    }
+
+    //
+    // Comm mode selector
+    //
+    Label {
+      text: qsTr("Frame Parsing") + ":"
+      font: Cpp_Misc_CommonFonts.customUiFont(10, true)
+      color: Cpp_ThemeManager.colors["pane_section_label"]
+      Component.onCompleted: font.capitalization = Font.AllUppercase
+    } RadioButton {
+      id: commAuto
+      Layout.maximumHeight: 18
+      Layout.maximumWidth: root.maxItemWidth
+      checked: Cpp_JSON_Generator.operationMode === 1
+      text: qsTr("No Parsing (Device Sends JSON Data)")
+      onCheckedChanged: {
+        if (checked && Cpp_JSON_Generator.operationMode !== 1)
+          Cpp_JSON_Generator.setOperationMode(1)
+        else if (!checked)
+          Cpp_JSON_Generator.setOperationMode(0)
+      }
+    } RadioButton {
+      id: commManual
+      Layout.maximumHeight: 18
+      Layout.maximumWidth: root.maxItemWidth
+      text: qsTr("Parse via JSON Project File")
+      checked: Cpp_JSON_Generator.operationMode === 0
+      onCheckedChanged: {
+        if (checked && Cpp_JSON_Generator.operationMode !== 0)
+          Cpp_JSON_Generator.setOperationMode(0)
+        else if (!checked)
+          Cpp_JSON_Generator.setOperationMode(1)
+      }
+    }
+
+    //
+    // Map file selector button
+    //
+    Button {
+      Layout.fillWidth: true
+      opacity: enabled ? 1 : 0.5
+      enabled: commManual.checked
+      Layout.maximumWidth: root.maxItemWidth
+      onClicked: Cpp_JSON_Generator.loadJsonMap()
+      text: (Cpp_JSON_Generator.jsonMapFilename.length ?
+               qsTr("Change Project File (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
+               qsTr("Select Project File") + "...")
+    }
+
+    //
+    // Spacer
+    //
+    Item {
+      height: 4
+    }
+
+    //
+    // Tab bar
+    //
+    TabBar {
+      height: 24
+      id: tab
+      Layout.fillWidth: true
+      Layout.maximumWidth: root.maxItemWidth
+
+      TabButton {
+        text: qsTr("Device")
+        height: tab.height + 3
+        width: implicitWidth + 2 * 8
       }
 
-      //
-      // Map file selector button
-      //
-      Button {
-        Layout.fillWidth: true
-        opacity: enabled ? 1 : 0.5
-        enabled: commManual.checked
-        Layout.maximumWidth: root.maxItemWidth
-        onClicked: Cpp_JSON_Generator.loadJsonMap()
-        text: (Cpp_JSON_Generator.jsonMapFilename.length ? qsTr("Change project file (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
-                                                           qsTr("Select project file") + "...")
+      TabButton {
+        text: qsTr("Settings")
+        height: tab.height + 3
+        width: implicitWidth + 2 * 8
       }
+    }
 
-      //
-      // Spacer
-      //
-      Item {
-        height: app.spacing / 2
-      }
+    //
+    // Tab bar contents
+    //
+    StackLayout {
+      id: stack
+      clip: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      currentIndex: tab.currentIndex
+      Layout.topMargin: -parent.spacing - 1
 
-      //
-      // Enable/disable CSV logging
-      //
-      RowLayout {
-        Layout.fillWidth: true
-
-        Switch {
-          id: csvLogging
-          text: qsTr("Create CSV file")
-          Layout.alignment: Qt.AlignVCenter
-          checked: Cpp_CSV_Export.exportEnabled
-          Layout.maximumWidth: root.maxItemWidth
-          palette.highlight: Cpp_ThemeManager.csvCheckbox
-
-          onCheckedChanged:  {
-            if (Cpp_CSV_Export.exportEnabled !== checked)
-              Cpp_CSV_Export.exportEnabled = checked
-          }
-        }
-
-        Item {
-          Layout.fillWidth: true
-        }
-
-        RoundButton {
-          icon.width: 24
-          icon.height: 24
-          icon.color: Cpp_ThemeManager.text
-          Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/icons/help.svg"
-          onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
-        }
-      }
-
-      //
-      // Spacer
-      //
-      Item {
-        height: app.spacing / 2
-      }
-
-      //
-      // Tab bar
-      //
-      TabBar {
-        height: 24
-        id: tab
-        Layout.fillWidth: true
-        Layout.maximumWidth: root.maxItemWidth
-
-        TabButton {
-          text: qsTr("Device")
-          height: tab.height + 3
-          width: implicitWidth + 2 * app.spacing
-        }
-
-        TabButton {
-          text: qsTr("MQTT")
-          height: tab.height + 3
-          width: implicitWidth + 2 * app.spacing
-        }
-
-        TabButton {
-          text: qsTr("Settings")
-          height: tab.height + 3
-          width: implicitWidth + 2 * app.spacing
-        }
-      }
-
-      //
-      // Tab bar contents
-      //
-      StackLayout {
-        id: stack
-        clip: true
+      SetupPanes.Hardware {
+        id: hardware
         Layout.fillWidth: true
         Layout.fillHeight: true
-        currentIndex: tab.currentIndex
-        Layout.topMargin: -parent.spacing - 1
-
-        SetupPanes.Hardware {
-          id: hardware
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          background: TextField {
-            enabled: false
-            palette.base: Cpp_ThemeManager.setupPanelBackground
-          }
+        background: Rectangle {
+          radius: 2
+          border.width: 1
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
         }
+      }
 
-        SetupPanes.MQTT {
-          id: mqtt
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          background: TextField {
-            enabled: false
-            palette.base: Cpp_ThemeManager.setupPanelBackground
-          }
-        }
-
-        SetupPanes.Settings {
-          id: settings
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          background: TextField {
-            enabled: false
-            palette.base: Cpp_ThemeManager.setupPanelBackground
-          }
+      SetupPanes.Settings {
+        id: settings
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        background: Rectangle {
+          radius: 2
+          border.width: 1
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
         }
       }
     }

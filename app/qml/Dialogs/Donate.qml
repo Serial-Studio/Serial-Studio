@@ -35,12 +35,18 @@ Window {
   title: qsTr("Donate")
   width: minimumWidth
   height: minimumHeight
+  minimumWidth: column.implicitWidth + 32
+  maximumWidth: column.implicitWidth + 32
+  minimumHeight: column.implicitHeight + 32
+  maximumHeight: column.implicitHeight + 32
   x: (Screen.desktopAvailableWidth - width) / 2
   y: (Screen.desktopAvailableHeight - height) / 2
-  minimumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-  maximumWidth: column.implicitWidth + 4 * app.spacing + 2 * root.shadowMargin
-  minimumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
-  maximumHeight: column.implicitHeight + 4 * app.spacing + titlebar.height + 2 * root.shadowMargin
+  Component.onCompleted: {
+    root.flags = Qt.Dialog |
+        Qt.WindowTitleHint |
+        Qt.WindowStaysOnTopHint |
+        Qt.WindowCloseButtonHint
+  }
 
   //
   // Custom properties
@@ -84,70 +90,29 @@ Window {
   // Use page item to set application palette
   //
   Page {
-    anchors {
-      fill: parent
-      margins: root.shadowMargin
-      topMargin: titlebar.height + root.shadowMargin
-    }
-
-    palette.alternateBase: Cpp_ThemeManager.base
-    palette.base: Cpp_ThemeManager.base
-    palette.brightText: Cpp_ThemeManager.brightText
-    palette.button: Cpp_ThemeManager.button
-    palette.buttonText: Cpp_ThemeManager.buttonText
-    palette.highlight: Cpp_ThemeManager.highlight
-    palette.highlightedText: Cpp_ThemeManager.highlightedText
-    palette.link: Cpp_ThemeManager.link
-    palette.placeholderText: Cpp_ThemeManager.placeholderText
-    palette.text: Cpp_ThemeManager.text
-    palette.toolTipBase: Cpp_ThemeManager.tooltipBase
-    palette.toolTipText: Cpp_ThemeManager.tooltipText
-    palette.window: Cpp_ThemeManager.window
-    palette.windowText: Cpp_ThemeManager.windowText
-
-    background: Rectangle {
-      radius: root.radius
-      color: root.backgroundColor
-
-      Rectangle {
-        height: root.radius
-        color: root.backgroundColor
-
-        anchors {
-          top: parent.top
-          left: parent.left
-          right: parent.right
-        }
-      }
-    }
-
-    //
-    // Window drag handler
-    //
-    Item {
-      anchors.fill: parent
-
-      MouseArea {
-        anchors.fill: parent
-        onPressedChanged: {
-          if (pressed)
-            root.startSystemMove()
-        }
-      }
-    }
+    anchors.fill: parent
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.windowText: Cpp_ThemeManager.colors["text"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     //
     // Window controls
     //
     ColumnLayout {
       id: column
+      spacing: 16
       anchors.centerIn: parent
-      spacing: app.spacing * 2
 
       RowLayout {
+        spacing: 16
         Layout.fillWidth: true
         Layout.fillHeight: true
-        spacing: app.spacing * 2
 
         Image {
           sourceSize: Qt.size(120, 120)
@@ -163,7 +128,7 @@ Window {
         }
 
         ColumnLayout {
-          spacing: app.spacing * 2
+          spacing: 4
           Layout.fillWidth: true
           Layout.fillHeight: true
 
@@ -173,10 +138,9 @@ Window {
 
           Label {
             id: title
-            font.bold: true
-            font.pixelSize: 16
             Layout.fillWidth: true
             Layout.minimumHeight: font.pixelSize
+            font: Cpp_Misc_CommonFonts.customUiFont(16, true)
             text: qsTr("Support the development of %1!").arg(Cpp_AppName)
           }
 
@@ -196,7 +160,6 @@ Window {
             Layout.minimumHeight: font.pixelSize * 2
             Layout.maximumWidth: title.implicitWidth
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            color: Cpp_ThemeManager.highlightedTextAlternative
             text: qsTr("You can also support this project by sharing it, reporting bugs and proposing new features!")
           }
 
@@ -207,12 +170,12 @@ Window {
       }
 
       RowLayout {
+        spacing: 4
         Layout.fillWidth: true
-        spacing: app.spacing
 
         CheckBox {
+          Layout.leftMargin: -6
           id: doNotShowAgainCheck
-          Layout.leftMargin: -app.spacing
           Layout.alignment: Qt.AlignVCenter
           text: qsTr("Don't annoy me again!")
         }

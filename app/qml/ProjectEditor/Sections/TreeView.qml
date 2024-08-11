@@ -65,22 +65,22 @@ Widgets.Window {
   ListView {
     id: view
     anchors.fill: parent
-    spacing: app.spacing * 2
-    anchors.margins: app.spacing
+    spacing: 8 * 2
+    anchors.margins: 8
     model: Cpp_Project_Model.groupCount
 
     delegate: Loader {
-      width: view.width - app.spacing * 2
+      width: view.width - 8 * 2
       height: Cpp_Project_Model.datasetCount(index) * 24 + 24
 
       sourceComponent: ColumnLayout {
         id: groupDelegate
-        spacing: app.spacing
+        spacing: 8
 
         readonly property var groupId: index
 
         RowLayout {
-          spacing: app.spacing
+          spacing: 8
           Layout.fillWidth: true
 
           Widgets.Icon {
@@ -114,10 +114,10 @@ Widgets.Window {
           delegate: Loader {
             Layout.fillWidth: true
             sourceComponent: RowLayout {
-              spacing: app.spacing
+              spacing: 8
 
               Item {
-                width: 2 * app.spacing
+                width: 2 * 8
               }
 
               Widgets.Icon {

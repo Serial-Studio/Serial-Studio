@@ -24,11 +24,11 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
+import "../../Widgets" as Widgets
 
 Rectangle {
   id: root
-  height: header.implicitHeight + 4 * app.spacing
+  height: header.implicitHeight + 32
 
   //
   // Background & border
@@ -42,7 +42,6 @@ Rectangle {
 
     Rectangle {
       height: 1
-      visible: Cpp_ThemeManager.titlebarSeparator
       color: Qt.darker(Cpp_ThemeManager.toolbarGradient1, 1.5)
 
       anchors {
@@ -59,13 +58,13 @@ Rectangle {
   GridLayout {
     id: header
     columns: 2
-    rowSpacing: app.spacing
-    columnSpacing: app.spacing * 2
+    rowSpacing: 8
+    columnSpacing: 8 * 2
 
     anchors {
       left: parent.left
       right: parent.right
-      margins: app.spacing * 2
+      margins: 8 * 2
       verticalCenter: parent.verticalCenter
     }
 
@@ -73,13 +72,13 @@ Rectangle {
     // Project title
     //
     RowLayout {
-      spacing: app.spacing
+      spacing: 8
       Layout.fillWidth: true
 
-      Widgets.Icon {
+      /*Widgets.Icon {
         color: Cpp_ThemeManager.menubarText
         source: "qrc:/icons/registration.svg"
-      }
+      }*/
 
       TextField {
         Layout.fillWidth: true
@@ -102,13 +101,13 @@ Rectangle {
     // Separator character
     //
     RowLayout {
-      spacing: app.spacing
+      spacing: 8
       Layout.fillWidth: true
 
-      Widgets.Icon {
+      /*Widgets.Icon {
         color: Cpp_ThemeManager.menubarText
         source: "qrc:/icons/separator.svg"
-      }
+      }*/
 
       TextField {
         Layout.fillWidth: true
@@ -131,13 +130,13 @@ Rectangle {
     // Start sequence
     //
     RowLayout {
-      spacing: app.spacing
+      spacing: 8
       Layout.fillWidth: true
 
-      Widgets.Icon {
+      /*Widgets.Icon {
         color: Cpp_ThemeManager.menubarText
         source: "qrc:/icons/start-sequence.svg"
-      }
+      }*/
 
       TextField {
         Layout.fillWidth: true
@@ -160,13 +159,13 @@ Rectangle {
     // End sequence
     //
     RowLayout {
-      spacing: app.spacing
+      spacing: 8
       Layout.fillWidth: true
 
-      Widgets.Icon {
+      /*Widgets.Icon {
         color: Cpp_ThemeManager.menubarText
         source: "qrc:/icons/end-sequence.svg"
-      }
+      }*/
 
       TextField {
         Layout.fillWidth: true

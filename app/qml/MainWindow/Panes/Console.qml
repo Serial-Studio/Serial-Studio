@@ -24,10 +24,12 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
+import "../../Widgets" as Widgets
 
-Item {
+Widgets.Pane {
   id: root
+  title: qsTr("Console")
+  icon: "qrc:/icons/panes/console.svg"
 
   //
   // Custom properties
@@ -48,40 +50,11 @@ Item {
   }
 
   //
-  // Load welcome guide
-  //
-  function showWelcomeGuide() {
-    clear()
-    Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
-  }
-
-  //
-  // Re-load welcome text when the language is changed
-  //
-  Connections {
-    target: Cpp_Misc_Translator
-    function onLanguageChanged() {
-      root.showWelcomeGuide()
-    }
-  }
-
-  //
   // Console window
   //
-  Widgets.Window {
-    id: window
-    gradient: true
+  Widgets.Terminal {
+    id: terminal
+    widgetEnabled: true
     anchors.fill: parent
-    title: qsTr("Console")
-    headerDoubleClickEnabled: false
-    icon.source: "qrc:/icons/code.svg"
-    anchors.margins: (app.spacing * 1.5) - 5
-    backgroundColor: Cpp_ThemeManager.paneWindowBackground
-
-    Widgets.Terminal {
-      id: terminal
-      widgetEnabled: true
-      anchors.fill: parent
-    }
   }
 }

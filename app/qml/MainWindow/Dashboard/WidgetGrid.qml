@@ -24,21 +24,16 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
+import "../../Widgets" as Widgets
 
-Widgets.Window {
+Widgets.Pane {
   id: root
-
-  //
-  // Window properties
-  //
-  gradient: true
   title: qsTr("Data")
-  headerDoubleClickEnabled: false
-  icon.source: "qrc:/icons/dataset.svg"
-  backgroundColor: Cpp_ThemeManager.paneWindowBackground
+  icon: "qrc:/icons/panes/dashboard.svg"
 
+  //
   // Hacks for calculating cell width
+  //
   property int columns: 4
   readonly property int cellWidth: (grid.width - 2 * scroll.width) / columns
   readonly property int cellHeight: cellWidth * (2 / 3)
@@ -56,8 +51,8 @@ Widgets.Window {
 
       anchors {
         fill: parent
-        margins: app.spacing * 2
-        rightMargin: app.spacing
+        margins: 8
+        rightMargin: 4
       }
 
       ScrollBar.vertical: ScrollBar {
@@ -66,10 +61,10 @@ Widgets.Window {
 
       Grid {
         id: grid
+        rowSpacing: 4
+        columnSpacing: 4
         width: parent.width
         columns: root.columns
-        rowSpacing: app.spacing
-        columnSpacing: app.spacing
         height: childrenRect.height
 
         Timer {
@@ -104,21 +99,6 @@ Widgets.Window {
           model: Cpp_UI_Dashboard.totalWidgetCount
         }
       }
-    }
-  }
-
-  //
-  // Redraw bottom window border over flickable items
-  //
-  Rectangle {
-    height: root.borderWidth
-    color: root.gradientColor1
-    anchors {
-      left: parent.left
-      right: parent.right
-      bottom: parent.bottom
-      leftMargin: root.radius
-      rightMargin: root.radius
     }
   }
 }

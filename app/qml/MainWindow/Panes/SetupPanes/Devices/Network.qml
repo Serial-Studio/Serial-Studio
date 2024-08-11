@@ -24,7 +24,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-Control {
+Item {
   id: root
 
   //
@@ -66,14 +66,14 @@ Control {
   //
   ColumnLayout {
     id: layout
+    anchors.margins: 0
     anchors.fill: parent
-    anchors.margins: app.spacing
 
     GridLayout {
       columns: 2
+      rowSpacing: 4
+      columnSpacing: 4
       Layout.fillWidth: true
-      rowSpacing: app.spacing / 2
-      columnSpacing: app.spacing / 2
 
       //
       // Socket type
@@ -229,7 +229,7 @@ Control {
         id: _udpMulticast
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignLeft
-        Layout.leftMargin: -app.spacing
+        Layout.leftMargin: -8
         checked: Cpp_IO_Network.udpMulticast
         visible: Cpp_IO_Network.socketTypeIndex === 1
         palette.base: Cpp_ThemeManager.setupPanelBackground
@@ -252,7 +252,7 @@ Control {
         id: _udpProcessDatagrams
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignLeft
-        Layout.leftMargin: -app.spacing
+        Layout.leftMargin: -8
         visible: Cpp_IO_Network.socketTypeIndex === 1
         checked: Cpp_IO_Network.udpIgnoreFrameSequences
         palette.base: Cpp_ThemeManager.setupPanelBackground
@@ -263,14 +263,6 @@ Control {
             Cpp_IO_Network.udpIgnoreFrameSequences = checked
         }
       }
-    }
-
-    //
-    // Spacer
-    //
-    Item {
-      Layout.fillHeight: true
-      Layout.minimumHeight: app.spacing
     }
 
     //

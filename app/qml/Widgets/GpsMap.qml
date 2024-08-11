@@ -67,12 +67,12 @@ Item {
   // UI controls
   //
   ColumnLayout {
-    spacing: app.spacing
+    spacing: 8
     anchors.fill: parent
-    anchors.margins: app.spacing
+    anchors.margins: 8
 
     RowLayout {
-      spacing: app.spacing
+      spacing: 8
 
       Label {
         text: qsTr("Map Type:")

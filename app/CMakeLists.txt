@@ -38,16 +38,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #-------------------------------------------------------------------------------
-# Allow source code to access project information
-#-------------------------------------------------------------------------------
-
-add_definitions(-DPROJECT_VENDOR="${PROJECT_VENDOR}")
-add_definitions(-DPROJECT_CONTACT="${PROJECT_CONTACT}")
-add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
-add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
-add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
-
-#-------------------------------------------------------------------------------
 # Add external dependencies (Qt)
 #-------------------------------------------------------------------------------
 
@@ -182,7 +172,6 @@ set(QML_CODE
     qml/MainWindow/Panes/Dashboard.qml
     qml/MainWindow/Panes/SetupPanes/Settings.qml
     qml/MainWindow/Panes/SetupPanes/Hardware.qml
-    qml/MainWindow/Panes/SetupPanes/MQTT.qml
     qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml
     qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml
     qml/MainWindow/Panes/SetupPanes/Devices/Network.qml

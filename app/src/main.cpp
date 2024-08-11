@@ -87,6 +87,8 @@ int main(int argc, char **argv)
 
   // Init. application
   QApplication app(argc, argv);
+
+  // Set application information
   app.setApplicationName(APP_NAME);
   app.setApplicationVersion(APP_VERSION);
   app.setOrganizationName(APP_DEVELOPER);

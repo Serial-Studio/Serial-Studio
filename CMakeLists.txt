@@ -45,6 +45,16 @@ set(PROJECT_FILE_NAME           "${PROJECT_EXECUTABLE}-v${PROJECT_VERSION}")
 set(PROJECT_FILE_LICENSE        "${PROJECT_ROOT_DIR}/LICENSE.md")
 
 #-------------------------------------------------------------------------------
+# Allow source code to access project information
+#-------------------------------------------------------------------------------
+
+add_definitions(-DPROJECT_VENDOR="${PROJECT_VENDOR}")
+add_definitions(-DPROJECT_CONTACT="${PROJECT_CONTACT}")
+add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
+add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
+add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
+
+#-------------------------------------------------------------------------------
 # Compiler flags
 #-------------------------------------------------------------------------------
 

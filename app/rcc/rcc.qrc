@@ -12,15 +12,19 @@
         <file>icons/code-editor/redo.svg</file>
         <file>icons/code-editor/save.svg</file>
         <file>icons/code-editor/undo.svg</file>
-        <file>icons/toolbar/bug.svg</file>
+        <file>icons/panes/console.svg</file>
+        <file>icons/panes/setup.svg</file>
+        <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/connect.svg</file>
         <file>icons/toolbar/console.svg</file>
         <file>icons/toolbar/csv.svg</file>
         <file>icons/toolbar/dashboard.svg</file>
+        <file>icons/toolbar/device-setup.svg</file>
         <file>icons/toolbar/disconnect.svg</file>
+        <file>icons/toolbar/github.svg</file>
         <file>icons/toolbar/help.svg</file>
-        <file>icons/toolbar/project-editor.svg</file>
-        <file>icons/toolbar/setup.svg</file>
+        <file>icons/toolbar/mqtt.svg</file>
+        <file>icons/toolbar/project-setup.svg</file>
         <file>images/donate-qr.svg</file>
         <file>images/icon-small@1x.png</file>
         <file>images/icon-small@2x.png</file>
@@ -36,5 +40,23 @@
         <file>themes/Breeze.json</file>
         <file>themes/Dark.json</file>
         <file>themes/Light.json</file>
+        <file>images/tip.svg</file>
+        <file>images/code.svg</file>
+        <file>icons/buttons/media-next.svg</file>
+        <file>icons/buttons/media-pause.svg</file>
+        <file>icons/buttons/media-play.svg</file>
+        <file>icons/buttons/media-prev.svg</file>
+        <file>icons/buttons/apply.svg</file>
+        <file>icons/buttons/open.svg</file>
+        <file>icons/buttons/visibility.svg</file>
+        <file>icons/buttons/connected.svg</file>
+        <file>icons/buttons/disconnected.svg</file>
+        <file>icons/buttons/close.svg</file>
+        <file>icons/buttons/clear.svg</file>
+        <file>icons/buttons/print.svg</file>
+        <file>icons/buttons/save.svg</file>
+        <file>images/microcontroller.svg</file>
+        <file>icons/panes/dashboard.svg</file>
+        <file>icons/panes/view.svg</file>
     </qresource>
 </RCC>

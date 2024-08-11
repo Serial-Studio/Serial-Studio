@@ -24,7 +24,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-Control {
+Item {
   id: root
 
   //
@@ -62,10 +62,10 @@ Control {
   GridLayout {
     id: layout
     columns: 2
+    rowSpacing: 4
+    columnSpacing: 4
+    anchors.margins: 0
     anchors.fill: parent
-    anchors.margins: app.spacing
-    rowSpacing: app.spacing / 2
-    columnSpacing: app.spacing / 2
 
     //
     // COM port selector
@@ -121,58 +121,11 @@ Control {
     // Spacer
     //
     Item {
-      Layout.minimumHeight: app.spacing / 2
-      Layout.maximumHeight: app.spacing / 2
+      Layout.minimumHeight: 8 / 2
+      Layout.maximumHeight: 8 / 2
     } Item {
-      Layout.minimumHeight: app.spacing / 2
-      Layout.maximumHeight: app.spacing / 2
-    }
-
-    //
-    // Auto-reconnect
-    //
-    Label {
-      text: qsTr("Auto-reconnect") + ":"
-    } CheckBox {
-      id: _autoreconnect
-      Layout.maximumHeight: 18
-      Layout.leftMargin: -app.spacing
-      checked: Cpp_IO_Serial.autoReconnect
-      Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-      palette.base: Cpp_ThemeManager.setupPanelBackground
-      onCheckedChanged: {
-        if (Cpp_IO_Serial.autoReconnect !== checked)
-          Cpp_IO_Serial.autoReconnect = checked
-      }
-    }
-
-    //
-    // DTR Signal
-    //
-    Label {
-      text: qsTr("Send DTR Signal") + ":"
-    } CheckBox {
-      id: _dtr
-      Layout.maximumHeight: 18
-      Layout.leftMargin: -app.spacing
-      checked: Cpp_IO_Serial.dtrEnabled
-      Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-      palette.base: Cpp_ThemeManager.setupPanelBackground
-      onCheckedChanged: {
-        if (Cpp_IO_Serial.dtrEnabled !== checked)
-          Cpp_IO_Serial.dtrEnabled = checked
-      }
-    }
-
-    //
-    // Spacer
-    //
-    Item {
-      Layout.minimumHeight: app.spacing / 2
-      Layout.maximumHeight: app.spacing / 2
-    } Item {
-      Layout.minimumHeight: app.spacing / 2
-      Layout.maximumHeight: app.spacing / 2
+      Layout.minimumHeight: 8 / 2
+      Layout.maximumHeight: 8 / 2
     }
 
     //
@@ -240,6 +193,53 @@ Control {
       onCurrentIndexChanged: {
         if (Cpp_IO_Serial.flowControlIndex !== currentIndex)
           Cpp_IO_Serial.flowControlIndex = currentIndex
+      }
+    }
+
+    //
+    // Spacer
+    //
+    Item {
+      Layout.minimumHeight: 8 / 2
+      Layout.maximumHeight: 8 / 2
+    } Item {
+      Layout.minimumHeight: 8 / 2
+      Layout.maximumHeight: 8 / 2
+    }
+
+    //
+    // Auto-reconnect
+    //
+    Label {
+      text: qsTr("Auto Reconnect") + ":"
+    } CheckBox {
+      id: _autoreconnect
+      Layout.maximumHeight: 18
+      Layout.leftMargin: -8
+      checked: Cpp_IO_Serial.autoReconnect
+      Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+      palette.base: Cpp_ThemeManager.setupPanelBackground
+      onCheckedChanged: {
+        if (Cpp_IO_Serial.autoReconnect !== checked)
+          Cpp_IO_Serial.autoReconnect = checked
+      }
+    }
+
+    //
+    // DTR Signal
+    //
+    Label {
+      text: qsTr("Send DTR Signal") + ":"
+    } CheckBox {
+      id: _dtr
+      Layout.maximumHeight: 18
+      Layout.leftMargin: -8
+      checked: Cpp_IO_Serial.dtrEnabled
+      Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+      palette.base: Cpp_ThemeManager.setupPanelBackground
+      onCheckedChanged: {
+        if (Cpp_IO_Serial.dtrEnabled !== checked)
+          Cpp_IO_Serial.dtrEnabled = checked
       }
     }
 

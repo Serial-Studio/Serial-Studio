@@ -2,12 +2,10 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "../Widgets" as Widgets
-
 ColumnLayout {
   id: root
   visible: count > 0
-  spacing: app.spacing
+  spacing: 8
 
   property int count: 0
   property var titles:[""]
@@ -25,16 +23,16 @@ ColumnLayout {
   }
 
   RowLayout {
-    spacing: app.spacing
+    spacing: 8
     visible: root.count > 0
 
-    Widgets.Icon {
+    /*Widgets.Icon {
       width: 18
       height: 18
       source: root.icon
       color: palette.text
       opacity: hideAll.checked ? 0.5 : 1
-    }
+    }*/
 
     Label {
       font.bold: true
@@ -53,7 +51,7 @@ ColumnLayout {
       flat: true
       checkable: true
       icon.color: palette.text
-      Layout.rightMargin: -app.spacing
+      Layout.rightMargin: -8
       icon.source: checked ? "qrc:/icons/show-all.svg" : "qrc:/icons/hide-all.svg"
       onCheckedChanged: {
         for (var i = 0; i < root.count; ++i)
@@ -74,7 +72,7 @@ ColumnLayout {
   }
 
   Item {
-    height: app.spacing
+    height: 8
     visible: !hideAll.checked && count > 0
   }
 }
