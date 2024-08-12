@@ -186,6 +186,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
   void repaint();
+  void onThemeChanged();
   void updateScrollbarVisibility();
   void setCopyAvailable(const bool yes);
   void addText(const QString &text, const bool enableVt100);

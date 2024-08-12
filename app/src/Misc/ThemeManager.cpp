@@ -41,9 +41,9 @@ Misc::ThemeManager::ThemeManager()
 {
   // Set theme files
   QStringList themes = {
-      QStringLiteral(":/themes/Breeze.json"),
-      QStringLiteral(":/themes/Light.json"),
-      QStringLiteral(":/themes/Dark.json"),
+      QStringLiteral(":/rcc/themes/Breeze.json"),
+      QStringLiteral(":/rcc/themes/Light.json"),
+      QStringLiteral(":/rcc/themes/Dark.json"),
   };
 
   // Load theme files

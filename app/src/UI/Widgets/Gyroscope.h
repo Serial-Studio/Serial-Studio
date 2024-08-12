@@ -37,6 +37,7 @@ public:
 private Q_SLOTS:
   void updateData();
   void updateLabel();
+  void onThemeChanged();
 
 private:
   int m_index;

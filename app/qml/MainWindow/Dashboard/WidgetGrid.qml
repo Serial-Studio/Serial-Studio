@@ -28,32 +28,41 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
-  title: qsTr("Data")
-  icon: "qrc:/icons/panes/dashboard.svg"
+  title: qsTr("Dashboard")
+  icon: "qrc:/rcc/icons/panes/dashboard.svg"
 
   //
   // Hacks for calculating cell width
   //
   property int columns: 4
-  readonly property int cellWidth: (grid.width - 2 * scroll.width) / columns
+  readonly property int cellSpacerWidths: Math.max(0, (columns - 1)) * 4
+  readonly property int cellWidth: (page.width - 16 - cellSpacerWidths) / columns
   readonly property int cellHeight: cellWidth * (2 / 3)
 
   //
   // Put everything into a flickable to enable scrolling
   //
-  Item {
+  Page {
+    id: page
     clip: true
     anchors.fill: parent
+    anchors.topMargin: -16
+    anchors.leftMargin: -9
+    anchors.rightMargin: -9
+    anchors.bottomMargin: -9
+
+    Rectangle {
+      anchors.fill: parent
+      color: Cpp_ThemeManager.colors["dashboard_background"]
+    }
 
     Flickable {
+      anchors.fill: parent
       contentWidth: width
+      anchors.topMargin: 8
+      anchors.leftMargin: 8
+      anchors.bottomMargin: 8
       contentHeight: grid.height
-
-      anchors {
-        fill: parent
-        margins: 8
-        rightMargin: 4
-      }
 
       ScrollBar.vertical: ScrollBar {
         id: scroll

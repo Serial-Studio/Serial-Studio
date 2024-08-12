@@ -62,6 +62,7 @@ private Q_SLOTS:
   void onOpenClicked();
   void onSaveClicked();
   void onHelpClicked();
+  void onThemeChanged();
 
 private:
   bool checkModified();

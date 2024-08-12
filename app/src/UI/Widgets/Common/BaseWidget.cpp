@@ -34,24 +34,13 @@ Widgets::BaseWidget::BaseWidget()
   // Workaround for unused variables
   (void)m_index;
 
-  // Set window palette
-  QPalette palette;
-  auto theme = &Misc::ThemeManager::instance();
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("widget_background")));
-  palette.setColor(QPalette::Window,
-                   theme->getColor(QStringLiteral("widget_background")));
-  setPalette(palette);
-
   // Configure label style
   m_label.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
-  // Set stylesheets
-  auto valueQSS = QSS("background-color:%1; color:%2; border:1px solid %3;",
-                      theme->getColor("base"),
-                      theme->getColor("widget_foreground_primary"),
-                      theme->getColor("widget_indicator"));
-  m_label.setStyleSheet(valueQSS);
+  // Configure visual style
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::BaseWidget::onThemeChanged);
 }
 
 void Widgets::BaseWidget::setValue(const QString &label)
@@ -89,11 +78,11 @@ void Widgets::BaseWidget::setWidget(QWidget *widget,
     m_widget = widget;
     m_resizeWidget = autoresize;
 
-    m_layout.setSpacing(24);
+    m_layout.setSpacing(4);
     m_layout.addWidget(m_widget);
     m_layout.addWidget(&m_label);
     m_layout.setAlignment(m_widget, alignment);
-    m_layout.setContentsMargins(24, 24, 24, 24);
+    m_layout.setContentsMargins(8, 8, 8, 8);
     setLayout(&m_layout);
   }
 
@@ -103,8 +92,8 @@ void Widgets::BaseWidget::setWidget(QWidget *widget,
 void Widgets::BaseWidget::resizeEvent(QResizeEvent *event)
 {
   // Get width & height (excluding layout margins & spacing)
-  auto width = event->size().width() - 72;
-  auto height = event->size().height() - 48;
+  auto width = qMax(0, event->size().width() - 20);
+  auto height = qMax(0, event->size().height() - 16);
 
   // Get fonts & calculate size
   auto labelFont = UI::Dashboard::instance().monoFont();
@@ -147,4 +136,30 @@ void Widgets::BaseWidget::resizeEvent(QResizeEvent *event)
   // Accept event
   event->accept();
   Q_EMIT resized();
+}
+
+/**
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
+ */
+void Widgets::BaseWidget::onThemeChanged()
+{
+  // Set window palette
+  QPalette palette;
+  auto theme = &Misc::ThemeManager::instance();
+  palette.setColor(QPalette::Base,
+                   theme->getColor(QStringLiteral("widget_base")));
+  palette.setColor(QPalette::Window,
+                   theme->getColor(QStringLiteral("widget_window")));
+  setPalette(palette);
+
+  // Set stylesheets
+  const auto stylesheet = QSS(
+      "background-color:%1; color:%2; border:1px solid %3;",
+      theme->getColor("groupbox_background"), theme->getColor("widget_text"),
+      theme->getColor("groupbox_hard_border"));
+  m_label.setStyleSheet(stylesheet);
+
+  // Redraw widget
+  update();
 }

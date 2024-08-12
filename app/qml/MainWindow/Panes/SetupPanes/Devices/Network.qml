@@ -89,7 +89,6 @@ Item {
         model: Cpp_IO_Network.socketTypes
         enabled: !Cpp_IO_Manager.connected
         currentIndex: Cpp_IO_Network.socketTypeIndex
-        palette.base: Cpp_ThemeManager.setupPanelBackground
         onCurrentIndexChanged: {
           if (currentIndex !== Cpp_IO_Network.socketTypeIndex)
             Cpp_IO_Network.socketTypeIndex = currentIndex
@@ -109,7 +108,6 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.connected
         placeholderText: Cpp_IO_Network.defaultAddress
-        palette.base: Cpp_ThemeManager.setupPanelBackground
         Component.onCompleted: text = Cpp_IO_Network.remoteAddress
         onTextChanged: {
           if (Cpp_IO_Network.remoteAddress !== text && text.length > 0)
@@ -134,7 +132,6 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.connected
         placeholderText: Cpp_IO_Network.defaultTcpPort
-        palette.base: Cpp_ThemeManager.setupPanelBackground
         Component.onCompleted: text = Cpp_IO_Network.tcpPort
         onTextChanged: {
           if (Cpp_IO_Network.tcpPort !== text && text.length > 0)
@@ -166,7 +163,6 @@ Item {
         id: _udpLocalPort
         Layout.fillWidth: true
         placeholderText: qsTr("Type 0 for automatic port")
-        palette.base: Cpp_ThemeManager.setupPanelBackground
         Component.onCompleted: text = Cpp_IO_Network.udpLocalPort
         onTextChanged: {
           if (Cpp_IO_Network.udpLocalPort !== text && text.length > 0)
@@ -199,7 +195,6 @@ Item {
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.connected
-        palette.base: Cpp_ThemeManager.setupPanelBackground
         placeholderText: Cpp_IO_Network.defaultUdpRemotePort
         Component.onCompleted: text = Cpp_IO_Network.udpRemotePort
         visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
@@ -232,7 +227,6 @@ Item {
         Layout.leftMargin: -8
         checked: Cpp_IO_Network.udpMulticast
         visible: Cpp_IO_Network.socketTypeIndex === 1
-        palette.base: Cpp_ThemeManager.setupPanelBackground
         enabled: Cpp_IO_Network.socketTypeIndex === 1 && !Cpp_IO_Manager.connected
 
         onCheckedChanged: {
@@ -255,7 +249,6 @@ Item {
         Layout.leftMargin: -8
         visible: Cpp_IO_Network.socketTypeIndex === 1
         checked: Cpp_IO_Network.udpIgnoreFrameSequences
-        palette.base: Cpp_ThemeManager.setupPanelBackground
         enabled: Cpp_IO_Network.socketTypeIndex === 1 && !Cpp_IO_Manager.connected
 
         onCheckedChanged: {

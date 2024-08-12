@@ -48,6 +48,9 @@ public:
 protected:
   void resizeEvent(QResizeEvent *event);
 
+private slots:
+  void onThemeChanged();
+
 private:
   int m_index;
   QLabel m_label;

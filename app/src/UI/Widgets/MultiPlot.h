@@ -44,6 +44,7 @@ public:
 private Q_SLOTS:
   void updateData();
   void updateRange();
+  void onThemeChanged();
 
 private:
   int m_index;

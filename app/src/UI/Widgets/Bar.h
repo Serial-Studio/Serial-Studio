@@ -35,8 +35,9 @@ public:
   Bar(const int index = -1);
 
 private Q_SLOTS:
-  void updateData();
   void onResized();
+  void updateData();
+  void onThemeChanged();
 
 private:
   int m_index;

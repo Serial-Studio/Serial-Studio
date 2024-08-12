@@ -80,7 +80,7 @@ Rectangle {
       icon.height: 24
       onClicked: root.closeWindow()
       text: qsTr("Close") + _btSpacer
-      icon.source: "qrc:/icons/close.svg"
+      icon.source: "qrc:/rcc/icons/close.svg"
       icon.color: Cpp_ThemeManager.menubarText
       palette.buttonText: Cpp_ThemeManager.menubarText
       palette.button: Cpp_ThemeManager.toolbarGradient1
@@ -98,7 +98,7 @@ Rectangle {
       highlighted: true
       Layout.fillWidth: true
       text: qsTr("Add group")
-      icon.source: "qrc:/icons/add.svg"
+      icon.source: "qrc:/rcc/icons/add.svg"
       icon.color: Cpp_ThemeManager.menubarText
       palette.buttonText: Cpp_ThemeManager.menubarText
       palette.button: Cpp_ThemeManager.toolbarGradient1
@@ -113,7 +113,7 @@ Rectangle {
       icon.width: 24
       icon.height: 24
       Layout.fillWidth: true
-      icon.source: "qrc:/icons/code.svg"
+      icon.source: "qrc:/rcc/icons/code.svg"
       text: qsTr("Customize frame parser")
       icon.color: Cpp_ThemeManager.menubarText
       onClicked: Cpp_Project_CodeEditor.displayWindow()
@@ -129,7 +129,7 @@ Rectangle {
     Button {
       icon.width: 24
       icon.height: 24
-      icon.source: "qrc:/icons/open.svg"
+      icon.source: "qrc:/rcc/icons/open.svg"
       icon.color: Cpp_ThemeManager.menubarText
       onClicked: Cpp_Project_Model.openJsonFile()
       palette.buttonText: Cpp_ThemeManager.menubarText
@@ -141,7 +141,7 @@ Rectangle {
     Button {
       icon.width: 24
       icon.height: 24
-      icon.source: "qrc:/icons/new.svg"
+      icon.source: "qrc:/rcc/icons/new.svg"
       icon.color: Cpp_ThemeManager.menubarText
       onClicked: Cpp_Project_Model.newJsonFile()
       text: qsTr("Create new project") + _btSpacer
@@ -155,7 +155,7 @@ Rectangle {
       icon.height: 24
       opacity: enabled ? 1: 0.5
       enabled: Cpp_Project_Model.modified
-      icon.source: "qrc:/icons/apply.svg"
+      icon.source: "qrc:/rcc/icons/apply.svg"
       icon.color: Cpp_ThemeManager.menubarText
       palette.buttonText: Cpp_ThemeManager.menubarText
       palette.button: Cpp_ThemeManager.toolbarGradient1

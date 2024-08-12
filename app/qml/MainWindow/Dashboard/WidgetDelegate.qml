@@ -32,31 +32,22 @@ Item {
   id: root
 
   property int widgetIndex: -1
-  property Window externalWindow: null
 
   Widgets.Pane {
     id: window
+    hardBorder: true
     anchors.fill: parent
-    title: widget.widgetTitle
     icon: widget.widgetIcon
-    /*headerDoubleClickEnabled: true
-    borderColor: Cpp_ThemeManager.widgetWindowBorder
-    onHeaderDoubleClicked: {
-      if (root.externalWindow !== null)
-        root.externalWindow.showNormal()
-      else
-        externalWindowLoader.active = true
-    }*/
+    title: widget.widgetTitle
 
     DashboardWidget {
       id: widget
+      anchors.fill: parent
+      anchors.topMargin: -16
+      anchors.leftMargin: -8
+      anchors.rightMargin: -8
+      anchors.bottomMargin: -7
       widgetIndex: root.widgetIndex
-      anchors {
-        fill: parent
-        leftMargin: window.borderWidth
-        rightMargin: window.borderWidth
-        bottomMargin: window.borderWidth
-      }
 
       //
       // Hack: render a GPS map using QML code instead of QtWidgets
@@ -70,70 +61,6 @@ Item {
           altitude: widget.gpsAltitude
           latitude: widget.gpsLatitude
           longitude: widget.gpsLongitude
-        }
-      }
-    }
-  }
-
-  Loader {
-    id: externalWindowLoader
-
-    active: false
-    asynchronous: true
-
-    sourceComponent: Window {
-      id: _window
-      minimumWidth: 640
-      minimumHeight: 480
-      title: externalWidget.widgetTitle
-
-      Timer {
-        id: timer
-        interval: 200
-        onTriggered: _window.showNormal()
-      }
-
-      Component.onCompleted: {
-        root.externalWindow = this
-        timer.start()
-      }
-
-      Rectangle {
-        clip: true
-        anchors.fill: parent
-        radius: _window.radius
-        anchors.topMargin: _window.titlebar.height
-        color: Cpp_ThemeManager.widgetWindowBackground
-
-        Rectangle {
-          height: _window.radius
-          color: Cpp_ThemeManager.widgetWindowBackground
-          anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-          }
-        }
-
-        DashboardWidget {
-          id: externalWidget
-          anchors.fill: parent
-          isExternalWindow: true
-          widgetIndex: root.widgetIndex
-          widgetVisible: _window.visible
-          anchors.margins: _window.radius
-
-          Loader {
-            anchors.fill: parent
-            asynchronous: true
-            active: externalWidget.isGpsMap
-            visible: externalWidget.isGpsMap && status == Loader.Ready
-            sourceComponent: Widgets.GpsMap {
-              altitude: externalWidget.gpsAltitude
-              latitude: externalWidget.gpsLatitude
-              longitude: externalWidget.gpsLongitude
-            }
-          }
         }
       }
     }

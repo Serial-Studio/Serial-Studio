@@ -35,39 +35,22 @@ Widgets::Accelerometer::Accelerometer(const int index)
 {
   // Get pointers to Serial Studio modules
   auto dash = &UI::Dashboard::instance();
-  auto theme = &Misc::ThemeManager::instance();
 
   // Invalid index, abort initialization
   if (m_index < 0 || m_index >= dash->accelerometerCount())
     return;
 
-  // Get needle & knob color
-  QString needleColor;
-  auto colors = theme->colors()["widget_colors"].toArray();
-  auto knobColor = theme->getColor(QStringLiteral("widget_control"));
-  if (colors.count() > m_index)
-    needleColor = colors.at(m_index).toString();
-  else
-    needleColor = colors.at(colors.count() % m_index).toString();
-
-  // Configure gauge needle
-  m_gauge.setNeedle(new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
-                                            QColor(needleColor), knobColor));
-
   // Set gauge scale & display angles
   m_gauge.setScale(0, 12);
   m_gauge.setScaleArc(90, 360);
 
-  // Set gauge palette
-  QPalette palette;
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("base")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_text")));
-  m_gauge.setPalette(palette);
-
   // Set widget pointer
   setWidget(&m_gauge);
+
+  // Set visual style
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::Accelerometer::onThemeChanged);
 
   // React to dashboard events
   connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
@@ -129,4 +112,35 @@ void Widgets::Accelerometer::updateData()
 
   // Repaint the widget
   requestRepaint();
+}
+
+/**
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
+ */
+void Widgets::Accelerometer::onThemeChanged()
+{
+  // Get needle & knob color
+  auto theme = &Misc::ThemeManager::instance();
+  const auto knobColor = theme->getColor("widget_text");
+  const auto colors = theme->colors()["widget_colors"].toArray();
+  const auto needleColor = colors.count() > m_index
+                               ? colors.at(m_index).toString()
+                               : colors.at(colors.count() % m_index).toString();
+
+  // Configure gauge needle
+  auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
+                                        QColor(needleColor), knobColor);
+
+  // Set gauge palette
+  QPalette palette;
+  palette.setColor(QPalette::WindowText,
+                   theme->getColor(QStringLiteral("groupbox_background")));
+  palette.setColor(QPalette::Text,
+                   theme->getColor(QStringLiteral("widget_text")));
+
+  // Update gauge colors
+  m_gauge.setPalette(palette);
+  m_gauge.setNeedle(needle);
+  update();
 }

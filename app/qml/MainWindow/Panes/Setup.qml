@@ -31,7 +31,7 @@ import "../../Widgets" as Widgets
 Widgets.Pane {
   id: root
   title: qsTr("Device Setup")
-  icon: "qrc:/icons/panes/setup.svg"
+  icon: "qrc:/rcc/icons/panes/setup.svg"
 
   //
   // Custom properties

@@ -44,18 +44,18 @@ Project::CodeEditor::CodeEditor()
 
   // Setup toolbar
   // clang-format off
-  auto acNew = m_toolbar.addAction(QIcon(":/icons/code-editor/new.svg"), tr("New"));
-  auto acOpen = m_toolbar.addAction(QIcon(":/icons/code-editor/open.svg"), tr("Open"));
-  auto acSave = m_toolbar.addAction(QIcon(":/icons/code-editor/save.svg"), tr("Save"));
+  auto acNew = m_toolbar.addAction(QIcon(":/rcc/icons/code-editor/new.svg"), tr("New"));
+  auto acOpen = m_toolbar.addAction(QIcon(":/rcc/icons/code-editor/open.svg"), tr("Open"));
+  auto acSave = m_toolbar.addAction(QIcon(":/rcc/icons/code-editor/save.svg"), tr("Save"));
   m_toolbar.addSeparator();
-  auto acUndo = m_toolbar.addAction(QIcon(":/icons/code-editor/undo.svg"), tr("Undo"));
-  auto acRedo = m_toolbar.addAction(QIcon(":/icons/code-editor/redo.svg"), tr("Redo"));
+  auto acUndo = m_toolbar.addAction(QIcon(":/rcc/icons/code-editor/undo.svg"), tr("Undo"));
+  auto acRedo = m_toolbar.addAction(QIcon(":/rcc/icons/code-editor/redo.svg"), tr("Redo"));
   m_toolbar.addSeparator();
-  auto acCut = m_toolbar.addAction(QIcon(":/icons/code-editor/cut.svg"), tr("Cut"));
-  auto acCopy = m_toolbar.addAction(QIcon(":/icons/code-editor/copy.svg"), tr("Copy"));
-  auto acPaste = m_toolbar.addAction(QIcon(":/icons/code-editor/paste.svg"), tr("Paste"));
+  auto acCut = m_toolbar.addAction(QIcon(":/rcc/icons/code-editor/cut.svg"), tr("Cut"));
+  auto acCopy = m_toolbar.addAction(QIcon(":/rcc/icons/code-editor/copy.svg"), tr("Copy"));
+  auto acPaste = m_toolbar.addAction(QIcon(":/rcc/icons/code-editor/paste.svg"), tr("Paste"));
   m_toolbar.addSeparator();
-  auto acHelp = m_toolbar.addAction(QIcon(":/icons/code-editor/help.svg"), tr("Help"));
+  auto acHelp = m_toolbar.addAction(QIcon(":/rcc/icons/code-editor/help.svg"), tr("Help"));
   // clang-format on
 
   // Connect action signals/slots
@@ -74,18 +74,9 @@ Project::CodeEditor::CodeEditor()
           &Project::CodeEditor::onHelpClicked);
 
   // Set widget palette
-  QPalette palette;
-  auto theme = &Misc::ThemeManager::instance();
-  /*palette.setColor(QPalette::Text, theme->consoleText());
-  palette.setColor(QPalette::Base, theme->consoleBase());
-  palette.setColor(QPalette::Button, theme->consoleButton());
-  palette.setColor(QPalette::Window, theme->consoleWindow());
-  palette.setColor(QPalette::Highlight, theme->consoleHighlight());
-  palette.setColor(QPalette::HighlightedText, theme->consoleHighlightedText());
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-  palette.setColor(QPalette::PlaceholderText, theme->consolePlaceholderText());
-#endif
-  setPalette(palette);*/
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Project::CodeEditor::onThemeChanged);
 
   // Setup layout
   auto layout = new QVBoxLayout(this);
@@ -99,7 +90,7 @@ Project::CodeEditor::CodeEditor()
 
   // Setup window
   setMinimumSize(QSize(640, 480));
-  setWindowTitle(tr("Customize frame parser"));
+  setWindowTitle(tr("Frame Parsing Code"));
 
   // Load code from JSON model automatically
   connect(&Project::Model::instance(), &Model::frameParserCodeChanged, this,
@@ -117,7 +108,7 @@ Project::CodeEditor &Project::CodeEditor::instance()
 QString Project::CodeEditor::defaultCode() const
 {
   QString code;
-  QFile file(":/scripts/frame-parser.js");
+  QFile file(":/rcc/scripts/frame-parser.js");
   if (file.open(QFile::ReadOnly))
   {
     code = QString::fromUtf8(file.readAll());
@@ -212,6 +203,22 @@ void Project::CodeEditor::onHelpClicked()
   const auto url = QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki");
   QDesktopServices::openUrl(QUrl(url));
   // clang-format on
+}
+
+void Project::CodeEditor::onThemeChanged()
+{
+  QPalette palette;
+  auto theme = &Misc::ThemeManager::instance();
+  palette.setColor(QPalette::Text, theme->getColor("text"));
+  palette.setColor(QPalette::Base, theme->getColor("base"));
+  palette.setColor(QPalette::Button, theme->getColor("button"));
+  palette.setColor(QPalette::Window, theme->getColor("window"));
+  palette.setColor(QPalette::Highlight, theme->getColor("highlight"));
+  palette.setColor(QPalette::HighlightedText,
+                   theme->getColor("highlighted_text"));
+  palette.setColor(QPalette::PlaceholderText,
+                   theme->getColor("placeholder_text"));
+  setPalette(palette);
 }
 
 bool Project::CodeEditor::save(const bool silent)

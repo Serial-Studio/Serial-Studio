@@ -88,9 +88,9 @@ int Misc::Utilities::showMessageBox(const QString &text,
   // Get app icon
   QPixmap icon;
   if (qApp->devicePixelRatio() >= 2)
-    icon.load(":/images/icon-small@2x.png");
+    icon.load(":/rcc/images/icon-small@2x.png");
   else
-    icon.load(":/images/icon-small@1x.png");
+    icon.load(":/rcc/images/icon-small@1x.png");
 
   // Create message box & set options
   QMessageBox box;

@@ -412,7 +412,7 @@ Window {
               icon.color: palette.text
               Layout.maximumWidth: height
               Layout.alignment: Qt.AlignVCenter
-              icon.source: "qrc:/icons/buttons/visibility.svg"
+              icon.source: "qrc:/rcc/icons/buttons/visibility.svg"
               onCheckedChanged: _password.echoMode = (checked ? TextField.Normal :
                                                                 TextField.Password)
             }
@@ -486,7 +486,7 @@ Window {
               Layout.maximumWidth: height
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_MQTT_Client.loadCaFile()
-              icon.source: "qrc:/icons/buttons/open.svg"
+              icon.source: "qrc:/rcc/icons/buttons/open.svg"
               enabled: _certificateMode.currentIndex === 1  && _ssl.checked
             }
           }
@@ -554,7 +554,7 @@ Window {
           onClicked: root.close()
           text: qsTr("Close") + "  "
           Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/icons/buttons/close.svg"
+          icon.source: "qrc:/rcc/icons/buttons/close.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
         }
 
@@ -571,8 +571,8 @@ Window {
           onClicked: Cpp_MQTT_Client.toggleConnection()
           icon.color: Cpp_ThemeManager.colors["button_text"]
           text: (checked ? qsTr("Disconnect") : qsTr("Connect")) + "  "
-          icon.source: checked ? "qrc:/icons/buttons/connected.svg" :
-                                 "qrc:/icons/buttons/disconnected.svg"
+          icon.source: checked ? "qrc:/rcc/icons/buttons/connected.svg" :
+                                 "qrc:/rcc/icons/buttons/disconnected.svg"
         }
       }
     }

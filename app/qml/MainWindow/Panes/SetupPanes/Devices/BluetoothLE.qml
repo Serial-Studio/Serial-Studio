@@ -68,7 +68,6 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.connected
         model: Cpp_IO_Bluetooth_LE.deviceNames
-        palette.base: Cpp_ThemeManager.setupPanelBackground
         onCurrentIndexChanged: {
           if (currentIndex !== Cpp_IO_Bluetooth_LE.currentDevice)
             Cpp_IO_Bluetooth_LE.selectDevice(currentIndex)
@@ -81,11 +80,10 @@ Item {
         icon.width: 16
         icon.height: 16
         opacity: enabled ? 1 : 0.5
-        icon.color: Cpp_ThemeManager.text
         enabled: !Cpp_IO_Manager.connected
-        icon.source: "qrc:/icons/refresh.svg"
         onClicked: Cpp_IO_Bluetooth_LE.startDiscovery()
-        palette.base: Cpp_ThemeManager.setupPanelBackground
+        icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }
 
@@ -107,7 +105,6 @@ Item {
         id: serviceNames
         Layout.fillWidth: true
         model: Cpp_IO_Bluetooth_LE.serviceNames
-        palette.base: Cpp_ThemeManager.setupPanelBackground
         onCurrentIndexChanged: Cpp_IO_Bluetooth_LE.selectService(currentIndex)
       }
     }
@@ -142,14 +139,10 @@ Item {
       visible: opacity > 0
       opacity: !Cpp_IO_Bluetooth_LE.operatingSystemSupported
 
-      ToolButton {
-        flat: true
-        enabled: false
-        icon.width: 32
-        icon.height: 32
+      Image {
+        sourceSize: Qt.size(96, 96)
         Layout.alignment: Qt.AlignVCenter
-        icon.source: "qrc:/icons/heart-broken.svg"
-        icon.color: Cpp_ThemeManager.connectButtonChecked
+        source: "qrc:/rcc/images/hammer.svg"
       }
 
       Label {

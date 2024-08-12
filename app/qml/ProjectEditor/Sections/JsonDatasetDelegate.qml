@@ -32,7 +32,7 @@ Widgets.Pane {
   //
   // Window properties
   //
-  icon: "qrc:/icons/dataset.svg"
+  icon: "qrc:/rcc/icons/dataset.svg"
   palette.window: Cpp_ThemeManager.widgetWindowBackground
   title: qsTr("Dataset %1 - %2").arg(dataset + 1).arg(Cpp_Project_Model.datasetTitle(group, dataset))
 
@@ -283,7 +283,7 @@ Widgets.Pane {
       width: 32
       height: 32
       color: palette.text
-      source: "qrc:/icons/compass.svg"
+      source: "qrc:/rcc/icons/compass.svg"
       Layout.alignment: Qt.AlignHCenter
       visible: widget.currentIndex === 3
     }*/ Label {

@@ -36,7 +36,6 @@ Widgets::Compass::Compass(const int index)
 {
   // Get pointers to serial studio modules
   auto dash = &UI::Dashboard::instance();
-  auto theme = &Misc::ThemeManager::instance();
 
   // Invalid index, abort initialization
   if (m_index < 0 || m_index >= dash->compassCount())
@@ -58,19 +57,17 @@ Widgets::Compass::Compass(const int index)
   m_compass.setNeedle(
       new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
 
-  // Set compass palette
-  QPalette palette;
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("base")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  m_compass.setPalette(palette);
-
   // Set widget pointer
   setWidget(&m_compass);
 
-  // React to dashboard events
-  connect(dash, SIGNAL(updated()), this, SLOT(update()), Qt::QueuedConnection);
+  // Set visual style
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::Compass::onThemeChanged);
+
+  // Connect update signal
+  connect(dash, &UI::Dashboard::updated, this, &Compass::update,
+          Qt::QueuedConnection);
 }
 
 /**
@@ -109,4 +106,20 @@ void Widgets::Compass::update()
 
   // Repaint the widget
   requestRepaint();
+}
+
+/**
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
+ */
+void Widgets::Compass::onThemeChanged()
+{
+  auto theme = &Misc::ThemeManager::instance();
+  QPalette palette;
+  palette.setColor(QPalette::WindowText,
+                   theme->getColor(QStringLiteral("groupbox_background")));
+  palette.setColor(QPalette::Text,
+                   theme->getColor(QStringLiteral("widget_text")));
+  m_compass.setPalette(palette);
+  update();
 }

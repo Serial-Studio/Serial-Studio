@@ -377,40 +377,40 @@ QString UI::Dashboard::widgetIcon(const int globalIndex) const
   switch (widgetType(globalIndex))
   {
     case WidgetType::Group:
-      return "qrc:/icons/group.svg";
+      return "qrc:/rcc/icons/dashboard/group.svg";
       break;
     case WidgetType::MultiPlot:
-      return "qrc:/icons/multiplot.svg";
+      return "qrc:/rcc/icons/dashboard/multiplot.svg";
       break;
     case WidgetType::FFT:
-      return "qrc:/icons/fft.svg";
+      return "qrc:/rcc/icons/dashboard/fft.svg";
       break;
     case WidgetType::Plot:
-      return "qrc:/icons/plot.svg";
+      return "qrc:/rcc/icons/dashboard/plot.svg";
       break;
     case WidgetType::Bar:
-      return "qrc:/icons/bar.svg";
+      return "qrc:/rcc/icons/dashboard/bar.svg";
       break;
     case WidgetType::Gauge:
-      return "qrc:/icons/gauge.svg";
+      return "qrc:/rcc/icons/dashboard/gauge.svg";
       break;
     case WidgetType::Compass:
-      return "qrc:/icons/compass.svg";
+      return "qrc:/rcc/icons/dashboard/compass.svg";
       break;
     case WidgetType::Gyroscope:
-      return "qrc:/icons/gyro.svg";
+      return "qrc:/rcc/icons/dashboard/gyroscope.svg";
       break;
     case WidgetType::Accelerometer:
-      return "qrc:/icons/accelerometer.svg";
+      return "qrc:/rcc/icons/dashboard/accelerometer.svg";
       break;
     case WidgetType::GPS:
-      return "qrc:/icons/gps.svg";
+      return "qrc:/rcc/icons/dashboard/gps.svg";
       break;
     case WidgetType::LED:
-      return "qrc:/icons/led.svg";
+      return "qrc:/rcc/icons/dashboard/led.svg";
       break;
     default:
-      return "qrc:/icons/close.svg";
+      return "qrc:/rcc/icons/dashboard/close.svg";
       break;
   }
 }

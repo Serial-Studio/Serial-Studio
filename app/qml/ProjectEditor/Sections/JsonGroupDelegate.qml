@@ -28,14 +28,6 @@ Page {
   id: root
 
   //
-  // Page background
-  //
-  background: TextField {
-    enabled: false
-    palette.base: Cpp_ThemeManager.setupPanelBackground
-  }
-
-  //
   // Custom properties
   //
   property int group
@@ -91,7 +83,7 @@ Page {
           height: 32
           color: palette.highlightedText
           Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/icons/accelerometer.svg"
+          source: "qrc:/rcc/icons/accelerometer.svg"
         }*/ Label {
           font.pixelSize: 18
           wrapMode: Label.WordWrap
@@ -109,7 +101,7 @@ Page {
         /*Widgets.Icon {
           width: 32
           height: 32
-          source: "qrc:/icons/gyro.svg"
+          source: "qrc:/rcc/icons/gyro.svg"
           color: palette.highlightedText
           Layout.alignment: Qt.AlignHCenter
         }*/ Label {
@@ -174,7 +166,7 @@ Page {
         icon.height: 18
         enabled: group > 0
         opacity: enabled ? 1 : 0.5
-        icon.source: "qrc:/icons/up.svg"
+        icon.source: "qrc:/rcc/icons/up.svg"
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.text
         onClicked: Cpp_Project_Model.moveGroupUp(group)
@@ -186,7 +178,7 @@ Page {
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.text
-        icon.source: "qrc:/icons/down.svg"
+        icon.source: "qrc:/rcc/icons/down.svg"
         enabled: group < Cpp_Project_Model.groupCount - 1
         onClicked: Cpp_Project_Model.moveGroupDown(group)
       }
@@ -196,7 +188,7 @@ Page {
         icon.height: 18
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.text
-        icon.source: "qrc:/icons/delete-item.svg"
+        icon.source: "qrc:/rcc/icons/delete-item.svg"
         onClicked: Cpp_Project_Model.deleteGroup(group)
       }
     }
@@ -229,7 +221,7 @@ Page {
           width: 128
           height: 128
           color: Cpp_ThemeManager.text
-          source: "qrc:/icons/group.svg"
+          source: "qrc:/rcc/icons/group.svg"
           Layout.alignment: Qt.AlignHCenter
         }*/
 
@@ -307,7 +299,7 @@ Page {
       icon.height: 24
       Layout.fillWidth: true
       text: qsTr("Add dataset")
-      icon.source: "qrc:/icons/add.svg"
+      icon.source: "qrc:/rcc/icons/add.svg"
       icon.color: Cpp_ThemeManager.menubarText
       palette.buttonText: Cpp_ThemeManager.menubarText
       palette.button: Cpp_ThemeManager.toolbarGradient1

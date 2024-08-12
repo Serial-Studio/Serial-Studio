@@ -36,22 +36,18 @@ Widgets::Gyroscope::Gyroscope(const int index)
 {
   // Get pointers to Serial Studio modules
   auto dash = &UI::Dashboard::instance();
-  auto theme = &Misc::ThemeManager::instance();
 
   // Invalid index, abort initialization
   if (m_index < 0 || m_index >= dash->gyroscopeCount())
     return;
 
-  // Set gauge palette
-  QPalette palette;
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("base")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  m_gauge.setPalette(palette);
-
   // Set widget pointer
   setWidget(&m_gauge);
+
+  // Set visual style
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::Gyroscope::onThemeChanged);
 
   // Show different values each second
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
@@ -114,6 +110,9 @@ void Widgets::Gyroscope::updateData()
   requestRepaint();
 }
 
+/**
+ * Updates the label from time to time
+ */
 void Widgets::Gyroscope::updateLabel()
 {
   switch (m_displayNum)
@@ -132,4 +131,19 @@ void Widgets::Gyroscope::updateLabel()
   ++m_displayNum;
   if (m_displayNum > 2)
     m_displayNum = 0;
+}
+
+/**
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
+ */
+void Widgets::Gyroscope::onThemeChanged()
+{
+  auto theme = &Misc::ThemeManager::instance();
+  QPalette palette;
+  palette.setColor(QPalette::WindowText,
+                   theme->getColor(QStringLiteral("groupbox_background")));
+  palette.setColor(QPalette::Text,
+                   theme->getColor(QStringLiteral("widget_text")));
+  m_gauge.setPalette(palette);
 }

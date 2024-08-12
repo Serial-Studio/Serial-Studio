@@ -53,19 +53,9 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   m_textEdit.setSizeAdjustPolicy(QPlainTextEdit::AdjustToContents);
 
   // Set widget palette
-  // clang-format off
-  QPalette palette;
-  auto theme = &Misc::ThemeManager::instance();
-  palette.setColor(QPalette::Text, theme->getColor("console_text"));
-  palette.setColor(QPalette::Base, theme->getColor("console_base"));
-  palette.setColor(QPalette::Button, theme->getColor("console_button"));
-  palette.setColor(QPalette::Window, theme->getColor("console_window"));
-  palette.setColor(QPalette::ButtonText, theme->getColor("console_button"));
-  palette.setColor(QPalette::Highlight, theme->getColor("console_highlight"));
-  palette.setColor(QPalette::HighlightedText, theme->getColor("console_highlighted_text"));
-  palette.setColor(QPalette::PlaceholderText, theme->getColor("console_placeholder_text"));
-  m_textEdit.setPalette(palette);
-  // clang-format on
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::Terminal::onThemeChanged);
 
   // Connect signals/slots
   connect(&IO::Console::instance(), &IO::Console::stringReceived, this,
@@ -515,6 +505,28 @@ void Widgets::Terminal::repaint()
     if (m_textChanged)
       Q_EMIT textChanged();
   }
+}
+
+/**
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
+ */
+void Widgets::Terminal::onThemeChanged()
+{
+  // clang-format off
+  QPalette palette;
+  auto theme = &Misc::ThemeManager::instance();
+  palette.setColor(QPalette::Text, theme->getColor("console_text"));
+  palette.setColor(QPalette::Base, theme->getColor("console_base"));
+  palette.setColor(QPalette::Button, theme->getColor("console_button"));
+  palette.setColor(QPalette::Window, theme->getColor("console_window"));
+  palette.setColor(QPalette::ButtonText, theme->getColor("console_button"));
+  palette.setColor(QPalette::Highlight, theme->getColor("console_highlight"));
+  palette.setColor(QPalette::HighlightedText, theme->getColor("console_highlighted_text"));
+  palette.setColor(QPalette::PlaceholderText, theme->getColor("console_placeholder_text"));
+  m_textEdit.setPalette(palette);
+  update();
+  // clang-format on
 }
 
 /**

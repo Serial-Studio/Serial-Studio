@@ -109,7 +109,7 @@ QString Misc::Translator::welcomeConsoleText() const
   }
 
   QString text = QObject::tr("Failed to load welcome text :(");
-  QFile file(":/messages/Welcome_" + lang + ".txt");
+  QFile file(":/rcc/messages/Welcome_" + lang + ".txt");
   if (file.open(QFile::ReadOnly))
   {
     text = QString::fromUtf8(file.readAll());
@@ -125,7 +125,7 @@ QString Misc::Translator::welcomeConsoleText() const
 QString Misc::Translator::acknowledgementsText() const
 {
   QString text = "";
-  QFile file(QStringLiteral(":/messages/Acknowledgements.txt"));
+  QFile file(QStringLiteral(":/rcc/messages/Acknowledgements.txt"));
   if (file.open(QFile::ReadOnly))
   {
     text = QString::fromUtf8(file.readAll());
@@ -202,7 +202,7 @@ void Misc::Translator::setLanguage(const QLocale &locale,
                                    const QString &language)
 {
   qApp->removeTranslator(&m_translator);
-  const auto qmPath = QStringLiteral(":/translations/%1.qm").arg(language);
+  const auto qmPath = QStringLiteral(":/rcc/translations/%1.qm").arg(language);
   if (m_translator.load(locale, qmPath))
   {
     qApp->installTranslator(&m_translator);

@@ -34,7 +34,6 @@ Widgets::LEDPanel::LEDPanel(const int index)
 {
   // Get pointers to serial studio modules
   auto dash = &UI::Dashboard::instance();
-  auto theme = &Misc::ThemeManager::instance();
 
   // Invalid index, abort initialization
   if (m_index < 0 || m_index >= dash->ledCount())
@@ -42,18 +41,6 @@ Widgets::LEDPanel::LEDPanel(const int index)
 
   // Get group reference
   auto group = dash->getLED(m_index);
-
-  // Generate widget stylesheets
-  auto titleQSS
-      = QSS("color:%1", theme->getColor(QStringLiteral("led_enabled")));
-
-  // Set window palette
-  QPalette windowPalette;
-  windowPalette.setColor(QPalette::Base,
-                         theme->getColor(QStringLiteral("widget_background")));
-  windowPalette.setColor(QPalette::Window,
-                         theme->getColor(QStringLiteral("widget_background")));
-  setPalette(windowPalette);
 
   // Configure scroll area container
   m_dataContainer = new QWidget(this);
@@ -78,14 +65,12 @@ Widgets::LEDPanel::LEDPanel(const int index)
     auto title = m_titles.last();
 
     // Set label styles & fonts
-    title->setStyleSheet(titleQSS);
     title->setFont(dash->monoFont());
     title->setText(group.getDataset(dataset).title());
 
     // Set LED color & style
     led->setLook(KLed::Sunken);
     led->setShape(KLed::Circular);
-    led->setColor(theme->getColor("led_enabled"));
 
     // Calculate column and row
     int column = 0;
@@ -121,6 +106,11 @@ Widgets::LEDPanel::LEDPanel(const int index)
   m_mainLayout->addWidget(m_scrollArea);
   m_mainLayout->setContentsMargins(0, 0, 0, 0);
   setLayout(m_mainLayout);
+
+  // Configure visual style
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::LEDPanel::onThemeChanged);
 
   // React to dashboard events
   connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
@@ -200,4 +190,36 @@ void Widgets::LEDPanel::resizeEvent(QResizeEvent *event)
   }
 
   event->accept();
+}
+
+/**
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
+ */
+void Widgets::LEDPanel::onThemeChanged()
+{
+  // Generate widget stylesheets
+  auto theme = &Misc::ThemeManager::instance();
+
+  // Set window palette
+  QPalette palette;
+  palette.setColor(QPalette::Base,
+                   theme->getColor(QStringLiteral("widget_base")));
+  palette.setColor(QPalette::Window,
+                   theme->getColor(QStringLiteral("widget_window")));
+  palette.setColor(QPalette::Text,
+                   theme->getColor(QStringLiteral("widget_text")));
+  setPalette(palette);
+
+  // Configure each LED
+  for (int i = 0; i < m_leds.count(); ++i)
+  {
+    auto *led = m_leds.at(i);
+    auto *title = m_titles.at(i);
+    title->setPalette(palette);
+    led->setColor(theme->getColor("widget_highlight"));
+  }
+
+  // Redraw widget
+  update();
 }

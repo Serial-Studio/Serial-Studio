@@ -41,6 +41,7 @@ public:
 
 private Q_SLOTS:
   void updateData();
+  void onThemeChanged();
 
 protected:
   void resizeEvent(QResizeEvent *event);

@@ -42,9 +42,9 @@ Misc::CommonFonts::CommonFonts()
   // Add common fonts to application database
   // clang-format off
   addFonts(
-      QStringLiteral(":/fonts/Hack-Regular.ttf"),
-      QStringLiteral(":/fonts/Inter-Regular.ttf"),
-      QStringLiteral(":/fonts/Inter-Bold.ttf")
+      QStringLiteral(":/rcc/fonts/Hack-Regular.ttf"),
+      QStringLiteral(":/rcc/fonts/Inter-Regular.ttf"),
+      QStringLiteral(":/rcc/fonts/Inter-Bold.ttf")
   );
   // clang-format on
 

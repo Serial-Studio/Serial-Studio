@@ -117,7 +117,7 @@ Window {
         Image {
           sourceSize: Qt.size(120, 120)
           Layout.alignment: Qt.AlignVCenter
-          source: "qrc:/images/donate-qr.svg"
+          source: "qrc:/rcc/images/donate-qr.svg"
 
           Rectangle {
             border.width: 2

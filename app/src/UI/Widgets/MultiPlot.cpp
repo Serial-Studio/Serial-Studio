@@ -33,36 +33,10 @@ Widgets::MultiPlot::MultiPlot(const int index)
 {
   // Get pointers to serial studio modules
   auto dash = &UI::Dashboard::instance();
-  auto theme = &Misc::ThemeManager::instance();
 
   // Invalid index, abort initialization
   if (m_index < 0 || m_index >= dash->multiPlotCount())
     return;
-
-  // Set window palette
-  QPalette palette;
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("widget_background")));
-  palette.setColor(QPalette::Window,
-                   theme->getColor(QStringLiteral("widget_background")));
-  setPalette(palette);
-
-  // Set plot palette
-  palette.setColor(QPalette::Base, theme->getColor(QStringLiteral("base")));
-  palette.setColor(QPalette::Highlight, QColor(255, 0, 0));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::Dark,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::Light,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::ButtonText,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  m_plot.setPalette(palette);
-  m_plot.setCanvasBackground(theme->getColor(QStringLiteral("base")));
-  m_plot.setFrameStyle(QFrame::Plain);
 
   // Configure layout
   m_layout.addWidget(&m_plot);
@@ -76,7 +50,6 @@ Widgets::MultiPlot::MultiPlot(const int index)
   // Create curves from datasets
   bool normalize = true;
   auto group = dash->getMultiplot(m_index);
-  const auto colors = theme->colors()["widget_colors"].toArray();
   m_curves.reserve(group.datasetCount());
   for (int i = 0; i < group.datasetCount(); ++i)
   {
@@ -86,27 +59,18 @@ Widgets::MultiPlot::MultiPlot(const int index)
     title = dataset.title();
     normalize &= dataset.max() > dataset.min();
 
-    // Create curve
+    // Create curve & register curve
     auto curve = new QwtPlotCurve(title);
-
-    // Get curve color
-    const auto color = colors.count() > m_index
-                           ? colors.at(i).toString()
-                           : colors.at(colors.count() % i).toString();
-
-    // Configure curve
-    curve->setPen(QColor(color), 2, Qt::SolidLine);
     curve->attach(&m_plot);
-
-    // Register curve
     m_curves.append(curve);
   }
 
   // Add plot legend to display curve names
+  m_plot.setFrameStyle(QFrame::Plain);
   m_legend.setFrameStyle(QFrame::Plain);
   m_plot.setAxisTitle(QwtPlot::yLeft, group.title());
   m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
-  m_plot.insertLegend(&m_legend, QwtPlot::BottomLegend);
+  // m_plot.insertLegend(&m_legend, QwtPlot::BottomLegend);
 
   // Normalize data curves
   if (normalize)
@@ -116,6 +80,11 @@ Widgets::MultiPlot::MultiPlot(const int index)
   updateRange();
   m_plot.replot();
   m_plot.show();
+
+  // Configure visual style
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::MultiPlot::onThemeChanged);
 
   // React to dashboard events
   connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
@@ -213,4 +182,54 @@ void Widgets::MultiPlot::updateRange()
 
   // Repaint widget
   requestRepaint();
+}
+
+/**
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
+ */
+void Widgets::MultiPlot::onThemeChanged()
+{
+  // Set window palette
+  auto theme = &Misc::ThemeManager::instance();
+  QPalette palette;
+  palette.setColor(QPalette::Base,
+                   theme->getColor(QStringLiteral("widget_base")));
+  palette.setColor(QPalette::Window,
+                   theme->getColor(QStringLiteral("widget_window")));
+  setPalette(palette);
+
+  // Set plot palette
+  palette.setColor(QPalette::Base,
+                   theme->getColor(QStringLiteral("widget_base")));
+  palette.setColor(QPalette::Highlight,
+                   theme->getColor(QStringLiteral("widget_highlight")));
+  palette.setColor(QPalette::Text,
+                   theme->getColor(QStringLiteral("widget_text")));
+  palette.setColor(QPalette::ButtonText,
+                   theme->getColor(QStringLiteral("widget_text")));
+  palette.setColor(QPalette::WindowText,
+                   theme->getColor(QStringLiteral("widget_text")));
+  palette.setColor(QPalette::Dark,
+                   theme->getColor(QStringLiteral("groupbox_hard_border")));
+  palette.setColor(QPalette::Light,
+                   theme->getColor(QStringLiteral("groupbox_hard_border")));
+  m_plot.setPalette(palette);
+  m_plot.setCanvasBackground(
+      theme->getColor(QStringLiteral("groupbox_background")));
+
+  // Update curve color
+  const auto colors = theme->colors()["widget_colors"].toArray();
+  for (int i = 0; i < m_curves.count(); ++i)
+  {
+    auto curve = m_curves.at(i);
+    const auto color = colors.count() > m_index
+                           ? colors.at(i).toString()
+                           : colors.at(colors.count() % i).toString();
+
+    curve->setPen(QColor(color), 2, Qt::SolidLine);
+  }
+
+  // Re-draw widget
+  update();
 }

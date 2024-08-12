@@ -164,7 +164,6 @@ set(HEADERS
 set(QML_CODE
     qml/MainWindow/Dashboard/WidgetDelegate.qml
     qml/MainWindow/Dashboard/WidgetModel.qml
-    qml/MainWindow/Dashboard/DashboardTitle.qml
     qml/MainWindow/Dashboard/ViewOptionsDelegate.qml
     qml/MainWindow/Dashboard/ViewOptions.qml
     qml/MainWindow/Dashboard/WidgetGrid.qml

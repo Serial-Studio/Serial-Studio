@@ -81,7 +81,6 @@ Item {
       model: Cpp_IO_Serial.portList
       enabled: !Cpp_IO_Manager.connected
       currentIndex: Cpp_IO_Serial.portIndex
-      palette.base: Cpp_ThemeManager.setupPanelBackground
       onCurrentIndexChanged: {
         if (currentIndex !== Cpp_IO_Serial.portIndex)
           Cpp_IO_Serial.portIndex = currentIndex
@@ -100,7 +99,6 @@ Item {
       currentIndex: 4
       Layout.fillWidth: true
       model: Cpp_IO_Serial.baudRateList
-      palette.base: Cpp_ThemeManager.setupPanelBackground
 
       validator: IntValidator {
         bottom: 1
@@ -138,7 +136,6 @@ Item {
       Layout.fillWidth: true
       model: Cpp_IO_Serial.dataBitsList
       currentIndex: Cpp_IO_Serial.dataBitsIndex
-      palette.base: Cpp_ThemeManager.setupPanelBackground
       onCurrentIndexChanged: {
         if (Cpp_IO_Serial.dataBitsIndex !== currentIndex)
           Cpp_IO_Serial.dataBitsIndex = currentIndex
@@ -155,7 +152,6 @@ Item {
       Layout.fillWidth: true
       model: Cpp_IO_Serial.parityList
       currentIndex: Cpp_IO_Serial.parityIndex
-      palette.base: Cpp_ThemeManager.setupPanelBackground
       onCurrentIndexChanged: {
         if (Cpp_IO_Serial.parityIndex !== currentIndex)
           Cpp_IO_Serial.parityIndex = currentIndex
@@ -172,7 +168,6 @@ Item {
       Layout.fillWidth: true
       model: Cpp_IO_Serial.stopBitsList
       currentIndex: Cpp_IO_Serial.stopBitsIndex
-      palette.base: Cpp_ThemeManager.setupPanelBackground
       onCurrentIndexChanged: {
         if (Cpp_IO_Serial.stopBitsIndex !== currentIndex)
           Cpp_IO_Serial.stopBitsIndex = currentIndex
@@ -189,7 +184,6 @@ Item {
       Layout.fillWidth: true
       model: Cpp_IO_Serial.flowControlList
       currentIndex: Cpp_IO_Serial.flowControlIndex
-      palette.base: Cpp_ThemeManager.setupPanelBackground
       onCurrentIndexChanged: {
         if (Cpp_IO_Serial.flowControlIndex !== currentIndex)
           Cpp_IO_Serial.flowControlIndex = currentIndex
@@ -218,7 +212,6 @@ Item {
       Layout.leftMargin: -8
       checked: Cpp_IO_Serial.autoReconnect
       Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-      palette.base: Cpp_ThemeManager.setupPanelBackground
       onCheckedChanged: {
         if (Cpp_IO_Serial.autoReconnect !== checked)
           Cpp_IO_Serial.autoReconnect = checked
@@ -236,7 +229,6 @@ Item {
       Layout.leftMargin: -8
       checked: Cpp_IO_Serial.dtrEnabled
       Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-      palette.base: Cpp_ThemeManager.setupPanelBackground
       onCheckedChanged: {
         if (Cpp_IO_Serial.dtrEnabled !== checked)
           Cpp_IO_Serial.dtrEnabled = checked

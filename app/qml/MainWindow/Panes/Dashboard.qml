@@ -31,11 +31,35 @@ RowLayout {
   spacing: 0
 
   //
+  // Custom properties
+  //
+  property int structureMargin: 0
+  readonly property int structureWidth: 280
+  readonly property bool structureVisible: structureMargin > -1 * structureWidth
+
+  //
+  // Hides/shows the structure tree
+  //
+  function toggleStructureTree() {
+    if (structureMargin < 0)
+      structureMargin = 0
+    else
+      structureMargin = -1 * root.structureWidth
+  }
+
+  //
+  // Animations
+  //
+  Behavior on structureMargin {NumberAnimation{}}
+
+  //
   // View options window
   //
   DashboardItems.ViewOptions {
     Layout.fillHeight: true
     Layout.minimumWidth: 280
+    visible: root.structureVisible
+    Layout.leftMargin: root.structureMargin
     onColumnsChanged:(columns) => widgetGrid.columns = columns
   }
 
@@ -46,6 +70,7 @@ RowLayout {
     z: 2
     width: 1
     Layout.fillHeight: true
+    visible: root.structureVisible
     color: Cpp_ThemeManager.colors["setup_border"]
 
     Rectangle {

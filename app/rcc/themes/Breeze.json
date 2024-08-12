@@ -28,9 +28,11 @@
   "toolbar_checked_button_border": "#394046",
   "toolbar_checked_button_background": "#394046",
 
-  "csv_switch": "#3dae2f",
+  "error": "#f95258",
+  "csv_switch": "#479e73",
   "view_switch": "#3daee9",
   "switch_highlight": "#3daee9",
+  "dashboard_background": "#e0e3e5",
 
   "text": "#232629",
   "base": "#f9f9f9",
@@ -50,19 +52,27 @@
   "console_highlighted_text": "#ffffff",
   "console_placeholder_text": "#929497",
 
-  "widget_control": "#f6f6f6",
   "widget_text": "#232629",
+  "widget_base": "#f9f9f9",
+  "widget_button": "#eff0f1",
+  "widget_window": "#f9f9f9",
+  "widget_highlight": "#3daee9",
+  "widget_button_text": "#232629",
+  "widget_highlighted_text": "#ffffff",
+  "widget_placeholder_text": "#929497",
+
   "widget_colors": [
-   "#7eb9f5",
-   "#fcb9b2",
-   "#f9e07f",
-   "#b0e1ba",
-   "#f7d6e0",
-   "#ff8eb0",
-   "#bebebe",
-   "#c1e7e3",
-   "#ffc195",
-   "#b8a9c9"
+   "#1f76b4",
+   "#ff7f0f",
+   "#2aa02b",
+   "#d62628",
+   "#9467bd",
+   "#8c564c",
+   "#e377c1",
+   "#7f7f7f",
+   "#bcbd21",
+   "#19bdcf",
+   "#1955fe"
   ]
  }
 }

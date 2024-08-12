@@ -77,7 +77,7 @@ Rectangle {
 
       /*Widgets.Icon {
         color: Cpp_ThemeManager.menubarText
-        source: "qrc:/icons/registration.svg"
+        source: "qrc:/rcc/icons/registration.svg"
       }*/
 
       TextField {
@@ -106,7 +106,7 @@ Rectangle {
 
       /*Widgets.Icon {
         color: Cpp_ThemeManager.menubarText
-        source: "qrc:/icons/separator.svg"
+        source: "qrc:/rcc/icons/separator.svg"
       }*/
 
       TextField {
@@ -135,7 +135,7 @@ Rectangle {
 
       /*Widgets.Icon {
         color: Cpp_ThemeManager.menubarText
-        source: "qrc:/icons/start-sequence.svg"
+        source: "qrc:/rcc/icons/start-sequence.svg"
       }*/
 
       TextField {
@@ -164,7 +164,7 @@ Rectangle {
 
       /*Widgets.Icon {
         color: Cpp_ThemeManager.menubarText
-        source: "qrc:/icons/end-sequence.svg"
+        source: "qrc:/rcc/icons/end-sequence.svg"
       }*/
 
       TextField {

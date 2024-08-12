@@ -1,8 +1,22 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/rcc">
         <file>fonts/Hack-Regular.ttf</file>
         <file>fonts/Inter-Bold.ttf</file>
         <file>fonts/Inter-Regular.ttf</file>
+        <file>icons/buttons/apply.svg</file>
+        <file>icons/buttons/clear.svg</file>
+        <file>icons/buttons/close.svg</file>
+        <file>icons/buttons/connected.svg</file>
+        <file>icons/buttons/disconnected.svg</file>
+        <file>icons/buttons/media-next.svg</file>
+        <file>icons/buttons/media-pause.svg</file>
+        <file>icons/buttons/media-play.svg</file>
+        <file>icons/buttons/media-prev.svg</file>
+        <file>icons/buttons/open.svg</file>
+        <file>icons/buttons/print.svg</file>
+        <file>icons/buttons/refresh.svg</file>
+        <file>icons/buttons/save.svg</file>
+        <file>icons/buttons/visibility.svg</file>
         <file>icons/code-editor/copy.svg</file>
         <file>icons/code-editor/cut.svg</file>
         <file>icons/code-editor/help.svg</file>
@@ -12,8 +26,24 @@
         <file>icons/code-editor/redo.svg</file>
         <file>icons/code-editor/save.svg</file>
         <file>icons/code-editor/undo.svg</file>
+        <file>icons/dashboard/accelerometer.svg</file>
+        <file>icons/dashboard/bar.svg</file>
+        <file>icons/dashboard/compass.svg</file>
+        <file>icons/dashboard/fft.svg</file>
+        <file>icons/dashboard/gauge.svg</file>
+        <file>icons/dashboard/gps.svg</file>
+        <file>icons/dashboard/group.svg</file>
+        <file>icons/dashboard/gyroscope.svg</file>
+        <file>icons/dashboard/hide-all.svg</file>
+        <file>icons/dashboard/led.svg</file>
+        <file>icons/dashboard/multiplot.svg</file>
+        <file>icons/dashboard/plot.svg</file>
+        <file>icons/dashboard/show-all.svg</file>
+        <file>icons/dashboard/view.svg</file>
         <file>icons/panes/console.svg</file>
+        <file>icons/panes/dashboard.svg</file>
         <file>icons/panes/setup.svg</file>
+        <file>icons/panes/structure.svg</file>
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/connect.svg</file>
         <file>icons/toolbar/console.svg</file>
@@ -25,11 +55,17 @@
         <file>icons/toolbar/help.svg</file>
         <file>icons/toolbar/mqtt.svg</file>
         <file>icons/toolbar/project-setup.svg</file>
+        <file>icons/toolbar/structure.svg</file>
+        <file>images/code.svg</file>
         <file>images/donate-qr.svg</file>
+        <file>images/drag-and-drop.svg</file>
+        <file>images/hammer.svg</file>
         <file>images/icon-small@1x.png</file>
         <file>images/icon-small@2x.png</file>
         <file>images/icon@1x.png</file>
         <file>images/icon@2x.png</file>
+        <file>images/microcontroller.svg</file>
+        <file>images/tip.svg</file>
         <file>messages/Acknowledgements.txt</file>
         <file>messages/Welcome_DE.txt</file>
         <file>messages/Welcome_EN.txt</file>
@@ -40,23 +76,5 @@
         <file>themes/Breeze.json</file>
         <file>themes/Dark.json</file>
         <file>themes/Light.json</file>
-        <file>images/tip.svg</file>
-        <file>images/code.svg</file>
-        <file>icons/buttons/media-next.svg</file>
-        <file>icons/buttons/media-pause.svg</file>
-        <file>icons/buttons/media-play.svg</file>
-        <file>icons/buttons/media-prev.svg</file>
-        <file>icons/buttons/apply.svg</file>
-        <file>icons/buttons/open.svg</file>
-        <file>icons/buttons/visibility.svg</file>
-        <file>icons/buttons/connected.svg</file>
-        <file>icons/buttons/disconnected.svg</file>
-        <file>icons/buttons/close.svg</file>
-        <file>icons/buttons/clear.svg</file>
-        <file>icons/buttons/print.svg</file>
-        <file>icons/buttons/save.svg</file>
-        <file>images/microcontroller.svg</file>
-        <file>icons/panes/dashboard.svg</file>
-        <file>icons/panes/view.svg</file>
     </qresource>
 </RCC>

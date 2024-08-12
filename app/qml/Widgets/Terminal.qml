@@ -339,7 +339,7 @@ Item {
         opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Console.save()
         enabled: Cpp_IO_Console.saveAvailable
-        icon.source: "qrc:/icons/buttons/save.svg"
+        icon.source: "qrc:/rcc/icons/buttons/save.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
 
@@ -351,7 +351,7 @@ Item {
         opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Console.print()
         enabled: Cpp_IO_Console.saveAvailable
-        icon.source: "qrc:/icons/buttons/print.svg"
+        icon.source: "qrc:/rcc/icons/buttons/print.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
 
@@ -363,7 +363,7 @@ Item {
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Console.saveAvailable
-        icon.source: "qrc:/icons/buttons/clear.svg"
+        icon.source: "qrc:/rcc/icons/buttons/clear.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
     }

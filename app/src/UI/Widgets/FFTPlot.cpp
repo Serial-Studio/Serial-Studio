@@ -36,36 +36,12 @@ Widgets::FFTPlot::FFTPlot(int index)
 {
   // Get pointers to Serial Studio modules
   auto dash = &UI::Dashboard::instance();
-  auto theme = &Misc::ThemeManager::instance();
 
   // Validate index
   if (m_index < 0 || m_index >= dash->fftCount())
     return;
 
-  // Set widget palette
-  QPalette palette;
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("widget_background")));
-  palette.setColor(QPalette::Window,
-                   theme->getColor(QStringLiteral("widget_background")));
-  palette.setColor(QPalette::Base, theme->getColor(QStringLiteral("base")));
-  palette.setColor(QPalette::Highlight, QColor(255, 0, 0));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::Dark,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::Light,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::ButtonText,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  setPalette(palette);
-
-  // Configure plot appearance
-  m_plot.setPalette(palette);
-  m_plot.setCanvasBackground(theme->getColor(QStringLiteral("base")));
-  m_plot.setFrameStyle(QFrame::Plain);
+  // Configure layout
   m_layout.addWidget(&m_plot);
   m_layout.setContentsMargins(8, 8, 8, 8);
   setLayout(&m_layout);
@@ -76,13 +52,6 @@ Widgets::FFTPlot::FFTPlot(int index)
 
   // Attach curve to plot
   m_curve.attach(&m_plot);
-
-  // Set curve color
-  const auto colors = theme->colors()["widget_colors"].toArray();
-  const auto color = colors.count() > m_index
-                         ? colors.at(m_index).toString()
-                         : colors.at(colors.count() % m_index).toString();
-  m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
   // Initialize FFT size
   auto dataset = dash->getFFT(m_index);
@@ -97,6 +66,7 @@ Widgets::FFTPlot::FFTPlot(int index)
   m_curve.setSamples(QVector<QPointF>(m_size, QPointF(0, 0)));
 
   // Configure plot axes and titles
+  m_plot.setFrameStyle(QFrame::Plain);
   m_plot.setAxisScale(QwtPlot::yLeft, -100, 0);
   m_plot.setAxisTitle(QwtPlot::xBottom, tr("Frequency (Hz)"));
   m_plot.setAxisTitle(QwtPlot::yLeft, tr("Magnitude (dB)"));
@@ -104,6 +74,11 @@ Widgets::FFTPlot::FFTPlot(int index)
 
   // Start timer
   m_timer.start();
+
+  // Configure visual style
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::FFTPlot::onThemeChanged);
 
   // Connect update signal
   connect(dash, &UI::Dashboard::updated, this, &FFTPlot::updateData,
@@ -166,4 +141,51 @@ void Widgets::FFTPlot::updateData()
     // Redraw the widget
     requestRepaint();
   }
+}
+
+/**
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
+ */
+void Widgets::FFTPlot::onThemeChanged()
+{
+  // Set window palette
+  auto theme = &Misc::ThemeManager::instance();
+  QPalette palette;
+  palette.setColor(QPalette::Base,
+                   theme->getColor(QStringLiteral("widget_base")));
+  palette.setColor(QPalette::Window,
+                   theme->getColor(QStringLiteral("widget_window")));
+  setPalette(palette);
+
+  // Set plot palette
+  palette.setColor(QPalette::Base,
+                   theme->getColor(QStringLiteral("widget_base")));
+  palette.setColor(QPalette::Highlight,
+                   theme->getColor(QStringLiteral("widget_highlight")));
+  palette.setColor(QPalette::Text,
+                   theme->getColor(QStringLiteral("widget_text")));
+  palette.setColor(QPalette::ButtonText,
+                   theme->getColor(QStringLiteral("widget_text")));
+  palette.setColor(QPalette::WindowText,
+                   theme->getColor(QStringLiteral("widget_text")));
+  palette.setColor(QPalette::Dark,
+                   theme->getColor(QStringLiteral("groupbox_hard_border")));
+  palette.setColor(QPalette::Light,
+                   theme->getColor(QStringLiteral("groupbox_hard_border")));
+  m_plot.setPalette(palette);
+  m_plot.setCanvasBackground(
+      theme->getColor(QStringLiteral("groupbox_background")));
+
+  // Get curve color
+  const auto colors = theme->colors()["widget_colors"].toArray();
+  const auto color = colors.count() > m_index
+                         ? colors.at(m_index).toString()
+                         : colors.at(colors.count() % m_index).toString();
+
+  // Set curve color & plot style
+  m_curve.setPen(QColor(color), 2, Qt::SolidLine);
+
+  // Redraw widget
+  update();
 }

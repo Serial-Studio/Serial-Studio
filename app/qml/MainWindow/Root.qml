@@ -31,6 +31,8 @@ import "../Widgets" as Widgets
 
 Window {
   id: root
+  minimumWidth: layout.implicitWidth + 32
+  minimumHeight: layout.implicitHeight + 32
   title: qsTr("%1 - %2").arg(documentTitle).arg(Cpp_AppName)
 
   //
@@ -195,6 +197,12 @@ Window {
     // Increment app launch count
     ++appLaunchCount
 
+    // Ensure that window size stays within minimum size
+    if (width < minimumWidth)
+      width = minimumWidth
+    if (height < minimumHeight)
+      height = minimumHeight
+
     // Show donations dialog every 15 launches
     if (root.appLaunchCount % 15 == 0 && !donateDialog.doNotShowAgain)
       donateDialog.showAutomatically()
@@ -247,6 +255,7 @@ Window {
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     ColumnLayout {
+      id: layout
       spacing: 0
       anchors.fill: parent
 
@@ -261,7 +270,9 @@ Window {
         setupChecked: root.setupVisible
         consoleChecked: root.consoleVisible
         dashboardChecked: root.dashboardVisible
+        onStructureClicked: dashboard.toggleStructureTree()
         onSetupClicked: setup.visible ? setup.hide() : setup.show()
+        structureChecked: dashboard.structureVisible && Cpp_UI_Dashboard.available
 
         onDashboardClicked: {
           if (Cpp_UI_Dashboard.available) {
@@ -289,6 +300,7 @@ Window {
         z: 1
         spacing: 0
         Layout.topMargin: -1
+        Layout.minimumWidth: 640 + 344
 
         //
         // Dashboard + Console view
@@ -299,6 +311,9 @@ Window {
           initialItem: terminal
           Layout.fillWidth: true
           Layout.fillHeight: true
+          Layout.minimumWidth: 640
+          Layout.minimumHeight: 480
+
           data: [
             Panes.Console {
               id: terminal
@@ -322,6 +337,7 @@ Window {
         Rectangle {
           z: 2
           width: 1
+          visible: setup.visible
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["setup_border"]
 

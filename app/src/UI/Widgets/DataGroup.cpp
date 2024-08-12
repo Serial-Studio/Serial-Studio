@@ -47,7 +47,6 @@ Widgets::DataGroup::DataGroup(const int index)
 {
   // Get pointers to serial studio modules
   auto dash = &UI::Dashboard::instance();
-  auto theme = &Misc::ThemeManager::instance();
 
   // Invalid index, abort initialization
   if (m_index < 0 || m_index >= dash->groupCount())
@@ -55,24 +54,6 @@ Widgets::DataGroup::DataGroup(const int index)
 
   // Get group reference
   auto group = dash->getGroups(m_index);
-
-  // Generate widget stylesheets
-  auto titleQSS
-      = QSS("color:%1", theme->getColor(QStringLiteral("widget_text_primary")));
-  auto unitsQSS = QSS("color:%1",
-                      theme->getColor(QStringLiteral("widget_text_secondary")));
-  auto valueQSS = QSS(
-      "color:%1", theme->getColor(QStringLiteral("widget_foreground_primary")));
-  auto iconsQSS = QSS("color:%1; font-weight:600;",
-                      theme->getColor(QStringLiteral("widget_text_secondary")));
-
-  // Set window palette
-  QPalette windowPalette;
-  windowPalette.setColor(QPalette::Base,
-                         theme->getColor(QStringLiteral("widget_background")));
-  windowPalette.setColor(QPalette::Window,
-                         theme->getColor(QStringLiteral("widget_background")));
-  setPalette(windowPalette);
 
   // Configure scroll area container
   m_dataContainer = new QWidget(this);
@@ -115,10 +96,6 @@ Widgets::DataGroup::DataGroup(const int index)
     value->setFont(valueFont);
     title->setFont(dash->monoFont());
     units->setFont(dash->monoFont());
-    title->setStyleSheet(titleQSS);
-    value->setStyleSheet(valueQSS);
-    units->setStyleSheet(unitsQSS);
-    dicon->setStyleSheet(iconsQSS);
 
     // Set label initial data
     auto set = group.getDataset(dataset);
@@ -156,6 +133,11 @@ Widgets::DataGroup::DataGroup(const int index)
   m_mainLayout->addWidget(m_scrollArea);
   m_mainLayout->setContentsMargins(0, 0, 0, 0);
   setLayout(m_mainLayout);
+
+  // Set visual style
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::DataGroup::onThemeChanged);
 
   // React to dashboard events
   connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
@@ -206,7 +188,7 @@ void Widgets::DataGroup::updateData()
   auto group = dash->getGroups(m_index);
 
   // Regular expresion handler
-  const QRegularExpression regex("^[+-]?(\\d*\\.)?\\d+$");
+  static const QRegularExpression regex("^[+-]?(\\d*\\.)?\\d+$");
 
   // Update labels
   for (int i = 0; i < group.datasetCount(); ++i)
@@ -226,6 +208,46 @@ void Widgets::DataGroup::updateData()
 
   // Repaint widget
   requestRepaint();
+}
+
+/**
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
+ */
+void Widgets::DataGroup::onThemeChanged()
+{
+  // Generate widget stylesheets
+  // clang-format off
+  auto theme = &Misc::ThemeManager::instance();
+  const auto valueQSS = QSS("color:%1", theme->getColor(QStringLiteral("widget_text")));
+  const auto titleQSS = QSS("color:%1", theme->getColor(QStringLiteral("widget_text")));
+  const auto unitsQSS = QSS("color:%1", theme->getColor(QStringLiteral("widget_highlight")));
+  const auto iconsQSS = QSS("color:%1; font-weight:600;", theme->getColor(QStringLiteral("widget_highlight")));
+  // clang-format on
+
+  // Set palette
+  // clang-format off
+  QPalette palette;
+  palette.setColor(QPalette::Base, theme->getColor(QStringLiteral("widget_base")));
+  palette.setColor(QPalette::Window, theme->getColor(QStringLiteral("widget_window")));
+  setPalette(palette);
+  // clang-format on
+
+  // Update styles for each label
+  for (int i = 0; i < m_titles.count(); ++i)
+  {
+    auto dicon = m_icons.at(i);
+    auto units = m_units.at(i);
+    auto title = m_titles.at(i);
+    auto value = m_values.at(i);
+    title->setStyleSheet(titleQSS);
+    value->setStyleSheet(valueQSS);
+    units->setStyleSheet(unitsQSS);
+    dicon->setStyleSheet(iconsQSS);
+  }
+
+  // Redraw widget
+  update();
 }
 
 /**

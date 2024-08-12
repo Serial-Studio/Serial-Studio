@@ -168,7 +168,7 @@ Window {
           Image {
             sourceSize: Qt.size(128, 128)
             Layout.alignment: Qt.AlignHCenter
-            source: "qrc:/images/microcontroller.svg"
+            source: "qrc:/rcc/images/microcontroller.svg"
           }
 
           Label {

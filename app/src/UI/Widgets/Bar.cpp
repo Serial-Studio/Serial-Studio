@@ -34,38 +34,14 @@ Widgets::Bar::Bar(const int index)
 {
   // Get pointers to serial studio modules
   auto dash = &UI::Dashboard::instance();
-  auto theme = &Misc::ThemeManager::instance();
 
   // Invalid index, abort initialization
   if (m_index < 0 || m_index >= dash->barCount())
     return;
 
-  // Set thermo palette
-  QPalette palette;
-  palette.setColor(QPalette::Base, theme->getColor(QStringLiteral("base")));
-  palette.setColor(QPalette::Highlight, QColor(255, 0, 0));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::Dark,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::Light,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::ButtonText,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("widget_indicator")));
-  m_thermo.setPalette(palette);
-
-  // Get thermo color
-  const auto colors = theme->colors()["widget_colors"].toArray();
-  const auto color = colors.count() > m_index
-                         ? colors.at(m_index).toString()
-                         : colors.at(colors.count() % m_index).toString();
-
   // Configure thermo style
   m_thermo.setPipeWidth(64);
   m_thermo.setBorderWidth(1);
-  m_thermo.setFillBrush(QBrush(QColor(color)));
 
   // Get initial properties from dataset
   auto dataset = UI::Dashboard::instance().getBar(m_index);
@@ -76,11 +52,24 @@ Widgets::Bar::Bar(const int index)
   // Set widget pointer & disable auto resize
   setWidget(&m_thermo, Qt::AlignHCenter, false);
 
+  // Configure visual style
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &Widgets::Bar::onThemeChanged);
+
   // React to dashboard events
   connect(this, SIGNAL(resized()), this, SLOT(onResized()),
           Qt::QueuedConnection);
   connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
           Qt::QueuedConnection);
+}
+
+/**
+ * Resizes the thermo to fit the size of the parent window.
+ */
+void Widgets::Bar::onResized()
+{
+  m_thermo.setPipeWidth(width() * 0.25);
 }
 
 /**
@@ -114,9 +103,37 @@ void Widgets::Bar::updateData()
 }
 
 /**
- * Resizes the thermo to fit the size of the parent window.
+ * Updates the widget's visual style and color palette to match the colors
+ * defined by the application theme file.
  */
-void Widgets::Bar::onResized()
+void Widgets::Bar::onThemeChanged()
 {
-  m_thermo.setPipeWidth(width() * 0.25);
+  // Set thermo palette
+  auto theme = &Misc::ThemeManager::instance();
+  QPalette palette;
+  palette.setColor(QPalette::Base,
+                   theme->getColor(QStringLiteral("groupbox_background")));
+  palette.setColor(QPalette::Window,
+                   theme->getColor(QStringLiteral("widget_window")));
+  palette.setColor(QPalette::Highlight,
+                   theme->getColor(QStringLiteral("widget_highlight")));
+  palette.setColor(QPalette::Text,
+                   theme->getColor(QStringLiteral("widget_text")));
+  palette.setColor(QPalette::Dark,
+                   theme->getColor(QStringLiteral("groupbox_hard_border")));
+  palette.setColor(QPalette::Light,
+                   theme->getColor(QStringLiteral("groupbox_hard_border")));
+  palette.setColor(QPalette::WindowText,
+                   theme->getColor(QStringLiteral("widget_text")));
+  m_thermo.setPalette(palette);
+
+  // Get thermo color
+  const auto colors = theme->colors()["widget_colors"].toArray();
+  const auto color = colors.count() > m_index
+                         ? colors.at(m_index).toString()
+                         : colors.at(colors.count() % m_index).toString();
+
+  m_thermo.setFillBrush(QBrush(QColor(color)));
+
+  update();
 }

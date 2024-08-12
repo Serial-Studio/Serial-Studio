@@ -115,7 +115,7 @@ Control {
 
       Image {
         sourceSize: Qt.size(48, 48)
-        source: "qrc:/images/tip.svg"
+        source: "qrc:/rcc/images/tip.svg"
         Layout.alignment: Qt.AlignVCenter
       }
 
@@ -149,7 +149,7 @@ Control {
 
       Image {
         sourceSize: Qt.size(48, 48)
-        source: "qrc:/images/code.svg"
+        source: "qrc:/rcc/images/code.svg"
         Layout.alignment: Qt.AlignVCenter
       }
 

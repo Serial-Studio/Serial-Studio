@@ -86,9 +86,9 @@ Window {
           sourceSize: Qt.size(width, height)
           source: {
             if (Screen.pixelDensity >= 2)
-              return "qrc:/images/icon@2x.png"
+              return "qrc:/rcc/images/icon@2x.png"
 
-            return "qrc:/images/icon@1x.png"
+            return "qrc:/rcc/images/icon@1x.png"
           }
         }
 

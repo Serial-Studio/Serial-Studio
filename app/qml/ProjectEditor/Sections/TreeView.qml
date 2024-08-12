@@ -35,7 +35,7 @@ Widgets.Window {
   gradient: true
   headerDoubleClickEnabled: false
   title: qsTr("JSON Project Tree")
-  icon.source: "qrc:/icons/json.svg"
+  icon.source: "qrc:/rcc/icons/json.svg"
 
   //
   // Connections with JSON editor model
@@ -87,7 +87,7 @@ Widgets.Window {
             width: 18
             height: 18
             color: Cpp_ThemeManager.text
-            source: "qrc:/icons/group.svg"
+            source: "qrc:/rcc/icons/group.svg"
             Layout.alignment: Qt.AlignVCenter
           }
 
@@ -124,7 +124,7 @@ Widgets.Window {
                 width: 18
                 height: 18
                 color: Cpp_ThemeManager.text
-                source: "qrc:/icons/dataset.svg"
+                source: "qrc:/rcc/icons/dataset.svg"
                 Layout.alignment: Qt.AlignVCenter
               }
 

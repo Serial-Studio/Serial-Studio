@@ -102,26 +102,8 @@ Controls.GroupBox {
 
       Image {
         source: root.icon
-        visible: !root.hardBorder
         sourceSize: Qt.size(16, 16)
         Layout.alignment: Qt.AlignVCenter
-      }
-
-      Controls.ToolButton {
-        flat: true
-        enabled: false
-        icon.width: 24
-        icon.height: 24
-        background: Item {}
-        Layout.leftMargin: -8
-        icon.source: root.icon
-        Layout.minimumWidth: 32
-        Layout.maximumWidth: 32
-        visible: root.hardBorder
-        Layout.alignment: Qt.AlignVCenter
-        icon.color: root.hardBorder ?
-                      Cpp_ThemeManager.colors["pane_hard_caption_foreground"] :
-                      Cpp_ThemeManager.colors["pane_caption_foreground"]
       }
 
       Controls.Label {
@@ -129,7 +111,6 @@ Controls.GroupBox {
         text: root.title
         Layout.alignment: Qt.AlignVCenter
         font: Cpp_Misc_CommonFonts.boldUiFont
-        Layout.leftMargin: root.hardBorder ? -6 : undefined
         color: root.hardBorder ?
                  Cpp_ThemeManager.colors["pane_hard_caption_foreground"] :
                  Cpp_ThemeManager.colors["pane_caption_foreground"]

@@ -36,6 +36,7 @@ ToolBar {
   signal setupClicked()
   signal consoleClicked()
   signal dashboardClicked()
+  signal structureClicked()
   signal projectEditorClicked()
 
   //
@@ -44,6 +45,7 @@ ToolBar {
   property alias setupChecked: setupBt.checked
   property alias consoleChecked: consoleBt.checked
   property alias dashboardChecked: dashboardBt.checked
+  property alias structureChecked: structureBt.checked
 
   //
   // Calculate offset based on platform
@@ -136,7 +138,7 @@ ToolBar {
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showProjectEditor()
       enabled: Cpp_JSON_Generator.operationMode == 0
-      icon.source: "qrc:/icons/toolbar/project-setup.svg"
+      icon.source: "qrc:/rcc/icons/toolbar/project-setup.svg"
     }
 
     //
@@ -146,7 +148,7 @@ ToolBar {
       text: qsTr("CSV Player")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_CSV_Player.openFile()
-      icon.source: "qrc:/icons/toolbar/csv.svg"
+      icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
     }
 
     //
@@ -161,6 +163,17 @@ ToolBar {
     }
 
     //
+    // Setup
+    //
+    Widgets.BigButton {
+      id: setupBt
+      text: qsTr("Devices")
+      onClicked: root.setupClicked()
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/rcc/icons/toolbar/device-setup.svg"
+    }
+
+    //
     // Console
     //
     Widgets.BigButton {
@@ -170,18 +183,30 @@ ToolBar {
       enabled: dashboardBt.enabled
       onClicked: root.consoleClicked()
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/icons/toolbar/console.svg"
+      icon.source: "qrc:/rcc/icons/toolbar/console.svg"
     }
 
     //
-    // Setup
+    // Separator
+    //
+    Rectangle {
+      width: 1
+      Layout.fillHeight: true
+      Layout.maximumHeight: 64
+      Layout.alignment: Qt.AlignVCenter
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
+    }
+
+    //
+    // Dashboard Structure
     //
     Widgets.BigButton {
-      id: setupBt
-      text: qsTr("Device Setup")
-      onClicked: root.setupClicked()
+      id: structureBt
+      text: qsTr("Widgets")
+      enabled: dashboardBt.checked
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/icons/toolbar/device-setup.svg"
+      onClicked: root.structureClicked()
+      icon.source: "qrc:/rcc/icons/toolbar/structure.svg"
     }
 
     //
@@ -193,7 +218,7 @@ ToolBar {
       onClicked: root.dashboardClicked()
       Layout.alignment: Qt.AlignVCenter
       enabled: Cpp_UI_Dashboard.available
-      icon.source: "qrc:/icons/toolbar/dashboard.svg"
+      icon.source: "qrc:/rcc/icons/toolbar/dashboard.svg"
     }
 
     //
@@ -214,7 +239,7 @@ ToolBar {
       text: qsTr("MQTT Setup")
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showMqttConfiguration()
-      icon.source: "qrc:/icons/toolbar/mqtt.svg"
+      icon.source: "qrc:/rcc/icons/toolbar/mqtt.svg"
     }
 
     //
@@ -234,7 +259,7 @@ ToolBar {
     Widgets.BigButton {
       text: qsTr("Report Bug")
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/icons/toolbar/github.svg"
+      icon.source: "qrc:/rcc/icons/toolbar/github.svg"
       onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
     }
 
@@ -244,7 +269,7 @@ ToolBar {
     Widgets.BigButton {
       text: qsTr("Help")
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/icons/toolbar/help.svg"
+      icon.source: "qrc:/rcc/icons/toolbar/help.svg"
       onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
     }
 
@@ -255,7 +280,7 @@ ToolBar {
       text: qsTr("About")
       onClicked: app.showAboutDialog()
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/icons/toolbar/about.svg"
+      icon.source: "qrc:/rcc/icons/toolbar/about.svg"
     }
 
     //
@@ -276,8 +301,8 @@ ToolBar {
       Layout.maximumWidth: metrics.width + 32
       enabled: Cpp_IO_Manager.configurationOk
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
-      icon.source: checked ? "qrc:/icons/toolbar/connect.svg" :
-                             "qrc:/icons/toolbar/disconnect.svg"
+      icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
+                             "qrc:/rcc/icons/toolbar/disconnect.svg"
 
 
 

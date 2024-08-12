@@ -28,7 +28,7 @@ DropArea {
   //
   // Show rectangle and set color based on file extension on drag enter
   //
-  onEntered: {
+  onEntered: (drag) => {
     // Get file name & set color of rectangle accordingly
     if (drag.urls.length > 0) {
       var path = drag.urls[0].toString()
@@ -39,7 +39,7 @@ DropArea {
 
       // Invalid file name, show red rectangle
       else
-        dropRectangle.color = Cpp_ThemeManager.alternativeHighlight
+        dropRectangle.color = Cpp_ThemeManager.colors["error"]
 
       // Show drag&drop rectangle
       dropRectangle.opacity = 0.8
@@ -49,13 +49,13 @@ DropArea {
   //
   // Open *.json & *.csv files on drag drop
   //
-  onDropped: {
+  onDropped: (drop) => {
     // Hide rectangle
     dropRectangle.hide()
 
     // Get dropped file URL and remove prefixed "file://"
     var path = drop.urls[0].toString()
-    if (!Cpp_IsWin)
+    if (Qt.platform.os !== "windows")
       path = path.replace(/^(file:\/{2})/,"");
     else
       path = path.replace(/^(file:\/{3})/,"");
@@ -104,14 +104,10 @@ DropArea {
       id: dropLayout
       anchors.centerIn: parent
 
-      ToolButton {
-        flat: true
-        enabled: false
-        icon.width: 128
-        icon.height: 128
+      Image {
+        sourceSize: Qt.size(128, 128)
         Layout.alignment: Qt.AlignHCenter
-        icon.source: "qrc:/icons/drag-drop.svg"
-        icon.color: Cpp_ThemeManager.colors["highlighted_text"]
+        source: "qrc:/rcc/images/drag-and-drop.svg"
       }
 
       Label {
