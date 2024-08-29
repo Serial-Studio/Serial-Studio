@@ -22,10 +22,10 @@
 
 #include <QResizeEvent>
 
-#include <UI/Dashboard.h>
-#include <Misc/TimerEvents.h>
-#include <Misc/ThemeManager.h>
-#include <UI/Widgets/Gyroscope.h>
+#include "UI/Dashboard.h"
+#include "Misc/TimerEvents.h"
+#include "Misc/ThemeManager.h"
+#include "UI/Widgets/Gyroscope.h"
 
 /**
  * Constructor function, configures widget style & signal/slot connections.

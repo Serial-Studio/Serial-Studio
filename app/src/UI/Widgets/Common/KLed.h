@@ -216,7 +216,7 @@ public:
   QSize sizeHint() const override;
   QSize minimumSizeHint() const override;
 
-public Q_SLOTS:
+public slots:
 
   /**
    * Toggles the state of the led from Off to On or vice versa.

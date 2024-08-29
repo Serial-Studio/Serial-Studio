@@ -37,7 +37,7 @@ public:
   qreal latitude() const;
   qreal longitude() const;
 
-private Q_SLOTS:
+private slots:
   void updateData();
   void onThemeChanged();
 

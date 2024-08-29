@@ -149,7 +149,7 @@ public:
   void setScaleDraw(QwtScaleDraw *);
   const QwtScaleDraw *scaleDraw() const;
 
-public Q_SLOTS:
+public slots:
   virtual void setValue(double);
 
 protected:

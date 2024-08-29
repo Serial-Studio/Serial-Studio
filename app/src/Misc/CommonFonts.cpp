@@ -22,7 +22,8 @@
 
 #include <QDebug>
 #include <QFontDatabase>
-#include <Misc/CommonFonts.h>
+
+#include "Misc/CommonFonts.h"
 
 /**
  * @brief Constructs the CommonFonts object, registering common fonts and

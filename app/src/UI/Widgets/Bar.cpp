@@ -22,9 +22,9 @@
 
 #include <QResizeEvent>
 
-#include <UI/Dashboard.h>
-#include <UI/Widgets/Bar.h>
-#include <Misc/ThemeManager.h>
+#include "UI/Dashboard.h"
+#include "UI/Widgets/Bar.h"
+#include "Misc/ThemeManager.h"
 
 /**
  * Constructor function, configures widget style & signal/slot connections.

@@ -20,14 +20,14 @@
  * THE SOFTWARE.
  */
 
-#include <IO/Manager.h>
-#include <IO/Drivers/Network.h>
+#include "IO/Manager.h"
+#include "IO/Drivers/Network.h"
 
-#include <Misc/Utilities.h>
+#include "Misc/Utilities.h"
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Constructor & singleton access functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Constructor function
@@ -76,9 +76,9 @@ IO::Drivers::Network &IO::Drivers::Network::instance()
   return singleton;
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // HAL driver implementation
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Closes the current network connection and discards signals/slots with the
@@ -220,17 +220,9 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
   return false;
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Driver specifics
-//----------------------------------------------------------------------------------------
-
-/**
- * Returns the host address
- */
-QString IO::Drivers::Network::remoteAddress() const
-{
-  return m_address;
-}
+//------------------------------------------------------------------------------
 
 /**
  * Returns the TCP port number
@@ -294,11 +286,26 @@ int IO::Drivers::Network::socketTypeIndex() const
 }
 
 /**
+ * Returns the host address
+ */
+const QString &IO::Drivers::Network::remoteAddress() const
+{
+  return m_address;
+}
+
+/**
  * Returns a list with the available socket types
  */
-QStringList IO::Drivers::Network::socketTypes() const
+const QStringList &IO::Drivers::Network::socketTypes()
 {
-  return QStringList{QStringLiteral("TCP"), QStringLiteral("UDP")};
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(QStringLiteral("TCP"));
+    list.append(QStringLiteral("UDP"));
+  }
+
+  return list;
 }
 
 /**

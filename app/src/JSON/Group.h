@@ -62,13 +62,13 @@ class Group
 public:
   ~Group();
 
-  QString title() const;
-  QString widget() const;
-  int datasetCount() const;
-  QVector<JSON::Dataset> &datasets();
-  bool read(const QJsonObject &object);
+  [[nodiscard]] bool read(const QJsonObject &object);
 
-  Q_INVOKABLE const JSON::Dataset &getDataset(const int index) const;
+  [[nodiscard]] int datasetCount() const;
+  [[nodiscard]] const QString& title() const;
+  [[nodiscard]] const QString &widget() const;
+  [[nodiscard]] const QVector<JSON::Dataset> &datasets() const;
+  [[nodiscard]] const JSON::Dataset &getDataset(const int index) const;
 
 private:
   QString m_title;

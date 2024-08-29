@@ -73,7 +73,7 @@ class Generator : public QObject
              NOTIFY operationModeChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void jsonFileMapChanged();
   void operationModeChanged();
   void jsonChanged(const QJsonObject &json);
@@ -95,21 +95,21 @@ public:
 
   static Generator &instance();
 
-  QJsonObject &json();
-  QString jsonMapFilename() const;
-  QString jsonMapFilepath() const;
-  OperationMode operationMode() const;
+  [[nodiscard]] QString jsonMapFilename() const;
+  [[nodiscard]] QString jsonMapFilepath() const;
+  [[nodiscard]] const QJsonObject &json() const;
+  [[nodiscard]] OperationMode operationMode() const;
 
-public Q_SLOTS:
+public slots:
   void loadJsonMap();
   void loadJsonMap(const QString &path);
-  void setOperationMode(const JSON::Generator::OperationMode &mode);
+  void setOperationMode(const JSON::Generator::OperationMode mode);
 
-public Q_SLOTS:
+public slots:
   void readSettings();
   void writeSettings(const QString &path);
 
-private Q_SLOTS:
+private slots:
   void readData(const QByteArray &data);
 
 private:

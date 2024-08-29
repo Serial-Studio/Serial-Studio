@@ -139,6 +139,12 @@ Window {
 
       Button {
         Layout.fillWidth: true
+        text: qsTr("Check for Updates")
+        onClicked: app.checkForUpdates()
+      }
+
+      Button {
+        Layout.fillWidth: true
         text: qsTr("Make a Donation")
         onClicked: donateDialog.show()
       }

@@ -40,10 +40,29 @@
         <file>icons/dashboard/plot.svg</file>
         <file>icons/dashboard/show-all.svg</file>
         <file>icons/dashboard/view.svg</file>
+        <file>icons/panes/clear.svg</file>
         <file>icons/panes/console.svg</file>
         <file>icons/panes/dashboard.svg</file>
         <file>icons/panes/setup.svg</file>
         <file>icons/panes/structure.svg</file>
+        <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
+        <file>icons/project-editor/toolbar/add-dataset.svg</file>
+        <file>icons/project-editor/toolbar/add-gps.svg</file>
+        <file>icons/project-editor/toolbar/add-group.svg</file>
+        <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
+        <file>icons/project-editor/toolbar/add-multiplot.svg</file>
+        <file>icons/project-editor/toolbar/code-editor.svg</file>
+        <file>icons/project-editor/toolbar/new.svg</file>
+        <file>icons/project-editor/toolbar/open.svg</file>
+        <file>icons/project-editor/toolbar/save-as.svg</file>
+        <file>icons/project-editor/toolbar/save.svg</file>
+        <file>icons/project-editor/windows/group.svg</file>
+        <file>icons/project-editor/windows/project-setup.svg</file>
+        <file>icons/project-editor/windows/project-structure.svg</file>
+        <file>icons/project-editor/frame-end.svg</file>
+        <file>icons/project-editor/frame-start.svg</file>
+        <file>icons/project-editor/project-title.svg</file>
+        <file>icons/project-editor/separator.svg</file>
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/connect.svg</file>
         <file>icons/toolbar/console.svg</file>

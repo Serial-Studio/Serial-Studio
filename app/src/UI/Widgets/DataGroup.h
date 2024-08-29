@@ -39,7 +39,7 @@ public:
   DataGroup(const int index = -1);
   ~DataGroup();
 
-private Q_SLOTS:
+private slots:
   void updateData();
   void onThemeChanged();
 

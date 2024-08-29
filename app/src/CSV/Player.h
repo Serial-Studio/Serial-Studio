@@ -47,12 +47,12 @@ class Player : public QObject
   Q_PROPERTY(bool isPlaying
              READ isPlaying
              NOTIFY playerStateChanged)
-  Q_PROPERTY(QString timestamp
+  Q_PROPERTY(const QString& timestamp
              READ timestamp
              NOTIFY timestampChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void openChanged();
   void timestampChanged();
   void playerStateChanged();
@@ -67,16 +67,17 @@ private:
 public:
   static Player &instance();
 
-  bool isOpen() const;
-  qreal progress() const;
-  bool isPlaying() const;
-  int frameCount() const;
-  QString filename() const;
-  int framePosition() const;
-  QString timestamp() const;
-  QString csvFilesPath() const;
+  [[nodiscard]] bool isOpen() const;
+  [[nodiscard]] qreal progress() const;
+  [[nodiscard]] bool isPlaying() const;
+  [[nodiscard]] int frameCount() const;
+  [[nodiscard]] int framePosition() const;
 
-public Q_SLOTS:
+  [[nodiscard]] QString filename() const;
+  [[nodiscard]] QString csvFilesPath() const;
+  [[nodiscard]] const QString &timestamp() const;
+
+public slots:
   void play();
   void pause();
   void toggle();
@@ -85,9 +86,9 @@ public Q_SLOTS:
   void nextFrame();
   void previousFrame();
   void openFile(const QString &filePath);
-  void setProgress(const qreal &progress);
+  void setProgress(const qreal progress);
 
-private Q_SLOTS:
+private slots:
   void updateData();
 
 private:

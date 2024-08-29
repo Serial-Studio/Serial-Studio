@@ -274,14 +274,14 @@ Q_SIGNALS:
   void legendDataChanged(const QVariant &itemInfo,
                          const QList<QwtLegendData> &data);
 
-public Q_SLOTS:
+public slots:
   virtual void replot();
   void autoRefresh();
 
 protected:
   virtual void resizeEvent(QResizeEvent *) QWT_OVERRIDE;
 
-private Q_SLOTS:
+private slots:
   void updateLegendItems(const QVariant &itemInfo,
                          const QList<QwtLegendData> &legendData);
 

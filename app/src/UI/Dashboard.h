@@ -144,7 +144,7 @@ class Dashboard : public QObject
              NOTIFY widgetCountChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void updated();
   void dataReset();
   void titleChanged();
@@ -180,36 +180,37 @@ public:
 
   static Dashboard &instance();
 
-  QFont monoFont() const;
-  const JSON::Group &getLED(const int index) const;
-  const JSON::Group &getGPS(const int index) const;
-  const JSON::Dataset &getFFT(const int index) const;
-  const JSON::Dataset &getBar(const int index) const;
-  const JSON::Group &getGroups(const int index) const;
-  const JSON::Dataset &getPlot(const int index) const;
-  const JSON::Dataset &getGauge(const int index) const;
-  const JSON::Group &getGyroscope(const int index) const;
-  const JSON::Dataset &getCompass(const int index) const;
-  const JSON::Group &getMultiplot(const int index) const;
-  const JSON::Group &getAccelerometer(const int index) const;
+  [[nodiscard]] const QFont &monoFont() const;
+  [[nodiscard]] const JSON::Group &getLED(const int index) const;
+  [[nodiscard]] const JSON::Group &getGPS(const int index) const;
+  [[nodiscard]] const JSON::Dataset &getFFT(const int index) const;
+  [[nodiscard]] const JSON::Dataset &getBar(const int index) const;
+  [[nodiscard]] const JSON::Group &getGroups(const int index) const;
+  [[nodiscard]] const JSON::Dataset &getPlot(const int index) const;
+  [[nodiscard]] const JSON::Dataset &getGauge(const int index) const;
+  [[nodiscard]] const JSON::Group &getGyroscope(const int index) const;
+  [[nodiscard]] const JSON::Dataset &getCompass(const int index) const;
+  [[nodiscard]] const JSON::Group &getMultiplot(const int index) const;
+  [[nodiscard]] const JSON::Group &getAccelerometer(const int index) const;
 
-  QString title();
-  bool available();
-  int points() const;
-  int precision() const;
+  [[nodiscard]] const QString &title() const;
 
-  int totalWidgetCount() const;
-  int gpsCount() const;
-  int ledCount() const;
-  int fftCount() const;
-  int barCount() const;
-  int plotCount() const;
-  int groupCount() const;
-  int gaugeCount() const;
-  int compassCount() const;
-  int gyroscopeCount() const;
-  int multiPlotCount() const;
-  int accelerometerCount() const;
+  [[nodiscard]] bool available();
+  [[nodiscard]] int points() const;
+  [[nodiscard]] int precision() const;
+
+  [[nodiscard]] int totalWidgetCount() const;
+  [[nodiscard]] int gpsCount() const;
+  [[nodiscard]] int ledCount() const;
+  [[nodiscard]] int fftCount() const;
+  [[nodiscard]] int barCount() const;
+  [[nodiscard]] int plotCount() const;
+  [[nodiscard]] int groupCount() const;
+  [[nodiscard]] int gaugeCount() const;
+  [[nodiscard]] int compassCount() const;
+  [[nodiscard]] int gyroscopeCount() const;
+  [[nodiscard]] int multiPlotCount() const;
+  [[nodiscard]] int accelerometerCount() const;
 
   Q_INVOKABLE bool frameValid() const;
   Q_INVOKABLE QStringList widgetTitles();
@@ -250,7 +251,8 @@ public:
     return m_linearPlotValues;
   }
 
-public Q_SLOTS:
+public slots:
+  void resetData();
   void setPoints(const int points);
   void setPrecision(const int precision);
   void setBarVisible(const int index, const bool visible);
@@ -265,8 +267,7 @@ public Q_SLOTS:
   void setMultiplotVisible(const int index, const bool visible);
   void setAccelerometerVisible(const int index, const bool visible);
 
-private Q_SLOTS:
-  void resetData();
+private slots:
   void updatePlots();
   void processLatestJSON(const QJsonObject &json);
 

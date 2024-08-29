@@ -37,7 +37,7 @@ class TimerEvents : public QObject
 {
   Q_OBJECT
 
-Q_SIGNALS:
+signals:
   void timeout1Hz();
   void timeout10Hz();
   void timeout20Hz();
@@ -55,7 +55,7 @@ public:
 protected:
   void timerEvent(QTimerEvent *event) override;
 
-public Q_SLOTS:
+public slots:
   void stopTimers();
   void startTimers();
 

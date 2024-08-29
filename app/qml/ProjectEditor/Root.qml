@@ -43,7 +43,10 @@ Window {
   //
   // Ensure that current JSON file is shown
   //
-  Component.onCompleted: Cpp_Project_Model.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
+  Component.onCompleted: {
+    Cpp_NativeWindow.addWindow(root)
+    Cpp_Project_Model.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
+  }
 
   //
   // Ask user to save changes before closing the window
@@ -81,85 +84,71 @@ Window {
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-    //
-    // Header (project properties)
-    //
-    Header {
-      id: header
-      anchors {
-        margins: 0
-        top: parent.top
-        left: parent.left
-        right: parent.right
-      }
-    }
-
-    //
-    // Footer background
-    //
-    Footer {
-      id: footer
-      radius: root.radius
-      onCloseWindow: root.close()
-      onScrollToBottom: groupEditor.selectLastGroup()
-
-      anchors {
-        margins: 0
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
-      }
-    }
-
-    //
-    // Window controls
-    //
-    RowLayout {
-      clip: true
+    ColumnLayout {
+      id: layout
+      spacing: 0
       anchors.fill: parent
-      spacing: 8
-      anchors.topMargin: header.height
-      anchors.bottomMargin: footer.height
 
       //
-      // Horizontal spacer
+      // Toolbar
       //
-      Item {
-        Layout.fillHeight: true
-        Layout.minimumWidth: 8
-        Layout.maximumWidth: 8
+      Toolbar {
+        z: 2
+        Layout.fillWidth: true
       }
 
       //
-      // JSON structure tree
+      // Header (project properties)
       //
-      /*TreeView {
-        id: jsonTree
-        Layout.fillHeight: true
-        Layout.minimumWidth: 240
-        Layout.maximumWidth: 240
-        Layout.topMargin: 8 * 2
-        Layout.bottomMargin: 8 * 2
-        visible: Cpp_Project_Model.groupCount !== 0
-      }*/
+      Header {
+        Layout.topMargin: -1
+        Layout.fillWidth: true
+      }
 
       //
-      // Group editor
+      // Main Layout (project structure + group editor)
       //
-      GroupEditor {
-        id: groupEditor
+      RowLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         visible: Cpp_Project_Model.groupCount !== 0
+
+        TreeView {
+          Layout.fillHeight: true
+          Layout.minimumWidth: 144
+        }
+
+        Widgets.Pane {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          title: qsTr("Group Editor")
+          icon: "qrc:/rcc/icons/project-editor/windows/group.svg"
+
+          GroupEditor {
+            anchors.fill: parent
+            anchors.topMargin: -6
+          }
+        }
       }
 
       //
       // Empty project text & icon
       //
-      Item {
+      Rectangle {
         Layout.fillWidth: true
         Layout.fillHeight: true
         visible: Cpp_Project_Model.groupCount === 0
+        color: Cpp_ThemeManager.colors["alternate_window"]
+
+        Rectangle {
+          height: 1
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+          anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+          }
+        }
 
         ColumnLayout {
           spacing: 8
@@ -176,24 +165,17 @@ Window {
             font.pixelSize: 24
             Layout.alignment: Qt.AlignHCenter
             text: qsTr("Start Something Awesome")
+            color: Cpp_ThemeManager.colors["text"]
           }
 
           Label {
             opacity: 0.8
             font.pixelSize: 18
             Layout.alignment: Qt.AlignHCenter
+            color: Cpp_ThemeManager.colors["text"]
             text: qsTr("Click on the \"Add Group\" Button to Begin")
           }
         }
-      }
-
-      //
-      // Horizontal spacer
-      //
-      Item {
-        Layout.fillHeight: true
-        Layout.minimumWidth: 8
-        Layout.maximumWidth: 8
       }
     }
   }

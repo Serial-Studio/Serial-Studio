@@ -97,11 +97,11 @@ Q_SIGNALS:
    */
   void checked(const QVariant &itemInfo, bool on, int index);
 
-public Q_SLOTS:
+public slots:
   virtual void updateLegend(const QVariant &,
                             const QList<QwtLegendData> &) QWT_OVERRIDE;
 
-protected Q_SLOTS:
+protected slots:
   void itemClicked();
   void itemChecked(bool);
 

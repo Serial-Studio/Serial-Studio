@@ -113,7 +113,7 @@ public:
 
   Q_INVOKABLE QPainterPath borderPath(const QRect &) const;
 
-public Q_SLOTS:
+public slots:
   void replot();
 
 protected:

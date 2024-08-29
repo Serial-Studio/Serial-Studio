@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-#include <UI/Dashboard.h>
-#include <UI/Widgets/GPS.h>
-#include <Misc/ThemeManager.h>
+#include "UI/Dashboard.h"
+#include "UI/Widgets/GPS.h"
+#include "Misc/ThemeManager.h"
 
 /**
  * Generates the user interface elements & layout

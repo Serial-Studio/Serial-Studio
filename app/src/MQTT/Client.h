@@ -140,7 +140,7 @@ class Client : public QObject
              NOTIFY caFilePathChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void qosChanged();
   void portChanged();
   void hostChanged();
@@ -169,32 +169,32 @@ private:
 public:
   static Client &instance();
 
-  quint8 qos() const;
-  bool retain() const;
-  quint16 port() const;
-  QString host() const;
-  QString topic() const;
-  int clientMode() const;
-  int sslProtocol() const;
-  int mqttVersion() const;
-  bool sslEnabled() const;
-  QString username() const;
-  QString password() const;
-  quint16 keepAlive() const;
-  bool lookupActive() const;
-  bool isSubscribed() const;
-  bool isConnectedToHost() const;
+  [[nodiscard]] quint8 qos() const;
+  [[nodiscard]] bool retain() const;
+  [[nodiscard]] quint16 port() const;
+  [[nodiscard]] QString host() const;
+  [[nodiscard]] QString topic() const;
+  [[nodiscard]] int clientMode() const;
+  [[nodiscard]] int sslProtocol() const;
+  [[nodiscard]] int mqttVersion() const;
+  [[nodiscard]] bool sslEnabled() const;
+  [[nodiscard]] QString username() const;
+  [[nodiscard]] QString password() const;
+  [[nodiscard]] quint16 keepAlive() const;
+  [[nodiscard]] bool lookupActive() const;
+  [[nodiscard]] bool isSubscribed() const;
+  [[nodiscard]] bool isConnectedToHost() const;
 
-  QStringList qosLevels() const;
-  QStringList clientModes() const;
-  QStringList mqttVersions() const;
-  QStringList sslProtocols() const;
+  [[nodiscard]] QStringList qosLevels() const;
+  [[nodiscard]] QStringList clientModes() const;
+  [[nodiscard]] QStringList mqttVersions() const;
+  [[nodiscard]] QStringList sslProtocols() const;
 
-  QString caFilePath() const;
-  quint16 defaultPort() const { return 1883; }
-  QString defaultHost() const { return "127.0.0.1"; }
+  [[nodiscard]] QString caFilePath() const;
+  [[nodiscard]] quint16 defaultPort() const { return 1883; }
+  [[nodiscard]] QString defaultHost() const { return "127.0.0.1"; }
 
-public Q_SLOTS:
+public slots:
   void loadCaFile();
   void connectToHost();
   void toggleConnection();
@@ -214,7 +214,7 @@ public Q_SLOTS:
   void setKeepAlive(const quint16 keepAlive);
   void setMqttVersion(const int versionIndex);
 
-private Q_SLOTS:
+private slots:
   void sendData();
   void resetStatistics();
   void onConnectedChanged();

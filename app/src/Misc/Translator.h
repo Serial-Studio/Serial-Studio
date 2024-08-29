@@ -50,9 +50,15 @@ class Translator : public QObject
   Q_PROPERTY(QStringList availableLanguages
              READ availableLanguages
              CONSTANT)
+  Q_PROPERTY(QString welcomeConsoleText
+             READ welcomeConsoleText
+             NOTIFY languageChanged)
+  Q_PROPERTY(QString acknowledgementsText
+             READ acknowledgementsText
+             NOTIFY languageChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void languageChanged();
 
 private:
@@ -65,13 +71,14 @@ private:
 public:
   static Translator &instance();
 
-  int language() const;
-  int systemLanguage() const;
-  QStringList availableLanguages() const;
-  Q_INVOKABLE QString welcomeConsoleText() const;
-  Q_INVOKABLE QString acknowledgementsText() const;
+  [[nodiscard]] int language() const;
+  [[nodiscard]] int systemLanguage() const;
+  [[nodiscard]] static QStringList& availableLanguages();
 
-public Q_SLOTS:
+  [[nodiscard]] QString welcomeConsoleText() const;
+  [[nodiscard]] QString acknowledgementsText() const;
+
+public slots:
   void setLanguage(const int language);
   void setLanguage(const QLocale &locale, const QString &language);
 

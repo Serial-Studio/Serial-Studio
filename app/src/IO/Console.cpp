@@ -27,11 +27,11 @@
 #include <QPrintDialog>
 #include <QTextDocument>
 
-#include <IO/Manager.h>
-#include <IO/Console.h>
-#include <Misc/Utilities.h>
-#include <Misc/TimerEvents.h>
-#include <Misc/CommonFonts.h>
+#include "IO/Manager.h"
+#include "IO/Console.h"
+#include "Misc/Utilities.h"
+#include "Misc/TimerEvents.h"
+#include "Misc/CommonFonts.h"
 
 /**
  * Generates a hexdump of the given data
@@ -204,11 +204,15 @@ QString IO::Console::currentHistoryString() const
  * Returns a list with the available data (sending) modes. This list must be
  * synchronized with the order of the @c DataMode enums.
  */
-QStringList IO::Console::dataModes() const
+QStringList &IO::Console::dataModes()
 {
-  QStringList list;
-  list.append(tr("ASCII"));
-  list.append(tr("HEX"));
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(tr("ASCII"));
+    list.append(tr("HEX"));
+  }
+
   return list;
 }
 
@@ -216,13 +220,17 @@ QStringList IO::Console::dataModes() const
  * Returns a list with the available line endings options. This list must be
  * synchronized with the order of the @c LineEnding enums.
  */
-QStringList IO::Console::lineEndings() const
+QStringList &IO::Console::lineEndings()
 {
-  QStringList list;
-  list.append(tr("No line ending"));
-  list.append(tr("New line"));
-  list.append(tr("Carriage return"));
-  list.append(tr("CR + NL"));
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(tr("No Line Ending"));
+    list.append(tr("New Line"));
+    list.append(tr("Carriage Return"));
+    list.append(tr("CR + NL"));
+  }
+
   return list;
 }
 
@@ -230,11 +238,15 @@ QStringList IO::Console::lineEndings() const
  * Returns a list with the available console display modes. This list must be
  * synchronized with the order of the @c DisplayMode enums.
  */
-QStringList IO::Console::displayModes() const
+QStringList &IO::Console::displayModes()
 {
-  QStringList list;
-  list.append(tr("Plain text"));
-  list.append(tr("Hexadecimal"));
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(tr("Plain Text"));
+    list.append(tr("Hexadecimal"));
+  }
+
   return list;
 }
 
@@ -275,9 +287,9 @@ void IO::Console::save()
     return;
 
   // Get file name
-  auto path = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Export console data"),
+  auto path = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Export Console Data"),
                                            QDir::homePath(),
-                                           tr("Text files") + " (*.txt)");
+                                           tr("Text Files") + " (*.txt)");
 
   // Create file
   if (!path.isEmpty())
@@ -291,7 +303,7 @@ void IO::Console::save()
     }
 
     else
-      Misc::Utilities::showMessageBox(tr("File save error"),
+      Misc::Utilities::showMessageBox(tr("Error while exporting console data"),
                                       file.errorString());
   }
 }

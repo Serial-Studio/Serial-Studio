@@ -54,11 +54,6 @@ Item {
     }
 
     DialogLoader {
-      id: projectEditor
-      source: "qrc:/app/qml/ProjectEditor/Root.qml"
-    }
-
-    DialogLoader {
       id: mqttConfiguration
       source: "qrc:/app/qml/Dialogs/MQTTConfiguration.qml"
     }
@@ -75,10 +70,26 @@ Item {
   }
 
   //
+  // Project Editor
+  //
+  ProjectEditor.Root {
+    id: projectEditor
+  }
+
+  //
+  // External console
+  //
+  DialogLoader {
+    id: externalConsole
+    source: "qrc:/app/qml/Dialogs/ExternalConsole.qml"
+  }
+
+  //
   // Dialog display functions
   //
   function showAboutDialog()       { aboutDialog.active = true }
-  function showProjectEditor()     { projectEditor.active = true }
+  function showProjectEditor()     { projectEditor.showNormal() }
+  function showExternalConsole()   { externalConsole.active = true }
   function showMqttConfiguration() { mqttConfiguration.active = true }
   function showAcknowledgements()  { acknowledgementsDialog.active = true }
 }

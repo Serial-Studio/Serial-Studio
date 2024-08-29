@@ -21,9 +21,7 @@
  */
 
 #include <QJsonArray>
-#include <JSON/Group.h>
-
-static JSON::Dataset EMPTY_DATASET;
+#include "JSON/Group.h"
 
 /**
  * Destructor function
@@ -34,9 +32,47 @@ JSON::Group::~Group()
 }
 
 /**
+ * Reads the group information and all its asociated datasets from the given
+ * JSON @c object.
+ *
+ * @return @c true on success, @c false on failure
+ */
+bool JSON::Group::read(const QJsonObject &object)
+{
+  if (!object.isEmpty())
+  {
+    const auto title = object.value(QStringLiteral("title")).toString();
+    const auto array = object.value(QStringLiteral("datasets")).toArray();
+    const auto widget = object.value(QStringLiteral("widget")).toString();
+
+    if (!title.isEmpty() && !array.isEmpty())
+    {
+      m_title = title;
+      m_widget = widget;
+      m_datasets.clear();
+
+      for (auto i = 0; i < array.count(); ++i)
+      {
+        const auto object = array.at(i).toObject();
+        if (!object.isEmpty())
+        {
+          Dataset dataset;
+          if (dataset.read(object))
+            m_datasets.append(dataset);
+        }
+      }
+
+      return datasetCount() > 0;
+    }
+  }
+
+  return false;
+}
+
+/**
  * @return The title/description of this group
  */
-QString JSON::Group::title() const
+const QString &JSON::Group::title() const
 {
   return m_title;
 }
@@ -44,7 +80,7 @@ QString JSON::Group::title() const
 /**
  * @return The widget type of this group (if any)
  */
-QString JSON::Group::widget() const
+const QString &JSON::Group::widget() const
 {
   return m_widget;
 }
@@ -60,7 +96,7 @@ int JSON::Group::datasetCount() const
 /**
  * @return A list with all the dataset objects contained in this group
  */
-QVector<JSON::Dataset> &JSON::Group::datasets()
+const QVector<JSON::Dataset> &JSON::Group::datasets() const
 {
   return m_datasets;
 }
@@ -71,46 +107,5 @@ QVector<JSON::Dataset> &JSON::Group::datasets()
  */
 const JSON::Dataset &JSON::Group::getDataset(const int index) const
 {
-  if (m_datasets.count() > index)
-    return m_datasets.at(index);
-
-  return EMPTY_DATASET;
-}
-
-/**
- * Reads the group information and all its asociated datasets from the given
- * JSON @c object.
- *
- * @return @c true on success, @c false on failure
- */
-bool JSON::Group::read(const QJsonObject &object)
-{
-  if (!object.isEmpty())
-  {
-    auto title = object.value(QStringLiteral("title")).toString();
-    auto array = object.value(QStringLiteral("datasets")).toArray();
-    auto widget = object.value(QStringLiteral("widget")).toString();
-
-    if (!title.isEmpty() && !array.isEmpty())
-    {
-      m_title = title;
-      m_widget = widget;
-      m_datasets.clear();
-
-      for (auto i = 0; i < array.count(); ++i)
-      {
-        auto object = array.at(i).toObject();
-        if (!object.isEmpty())
-        {
-          Dataset dataset;
-          if (dataset.read(object))
-            m_datasets.append(dataset);
-        }
-      }
-
-      return datasetCount() > 0;
-    }
-  }
-
-  return false;
+  return m_datasets.at(index);
 }

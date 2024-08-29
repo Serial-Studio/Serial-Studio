@@ -40,14 +40,15 @@ class ModuleManager : public QObject
 
 public:
   ModuleManager();
+
+  [[nodiscard]] bool autoUpdaterEnabled() const;
+  [[nodiscard]] const QQmlApplicationEngine& engine() const;
+
+public slots:
+  void onQuit();
   void configureUpdater();
   void registerQmlTypes();
-  bool autoUpdaterEnabled();
   void initializeQmlInterface();
-  QQmlApplicationEngine *engine();
-
-public Q_SLOTS:
-  void onQuit();
 
 private:
   QQmlApplicationEngine m_engine;

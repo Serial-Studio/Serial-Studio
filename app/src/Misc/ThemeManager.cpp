@@ -22,10 +22,10 @@
 
 #include "ThemeManager.h"
 
-#include <QApplication>
 #include <QDir>
-#include <QJsonDocument>
 #include <QPalette>
+#include <QApplication>
+#include <QJsonDocument>
 
 /**
  * @brief Constructs the ThemeManager object and initializes theme loading.
@@ -62,7 +62,7 @@ Misc::ThemeManager::ThemeManager()
   }
 
   // Set application theme
-  setTheme(0);
+  setTheme(m_settings.value("Theme", 0).toInt());
 
   // Automatically react to theme changes
   qApp->installEventFilter(this);
@@ -137,12 +137,13 @@ QColor Misc::ThemeManager::getColor(const QString &name) const
  */
 void Misc::ThemeManager::setTheme(const int index)
 {
-  if (index >= 0 && index < availableThemes().count())
-  {
-    m_theme = index;
-    m_settings.setValue("Theme", index);
-    m_themeName = availableThemes().at(index);
-    m_colors = m_themes.value(m_themeName);
-    Q_EMIT themeChanged();
-  }
+  auto filteredIndex = index;
+  if (index < 0 || index >= availableThemes().count())
+    filteredIndex = 0;
+
+  m_theme = filteredIndex;
+  m_settings.setValue("Theme", filteredIndex);
+  m_themeName = availableThemes().at(filteredIndex);
+  m_colors = m_themes.value(m_themeName);
+  Q_EMIT themeChanged();
 }

@@ -42,7 +42,7 @@ class HAL_Driver : public QObject
 {
   Q_OBJECT
 
-Q_SIGNALS:
+signals:
   void configurationChanged();
   void dataSent(const QByteArray &data);
   void dataReceived(const QByteArray &data);

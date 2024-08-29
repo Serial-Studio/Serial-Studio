@@ -21,13 +21,13 @@
  * THE SOFTWARE.
  */
 
-#include <IO/Manager.h>
-#include <IO/Checksum.h>
-#include <IO/Drivers/Serial.h>
-#include <IO/Drivers/Network.h>
-#include <IO/Drivers/BluetoothLE.h>
+#include "IO/Manager.h"
+#include "IO/Checksum.h"
+#include "IO/Drivers/Serial.h"
+#include "IO/Drivers/Network.h"
+#include "IO/Drivers/BluetoothLE.h"
 
-#include <MQTT/Client.h>
+#include "MQTT/Client.h"
 
 /**
  * Adds support for C escape sequences to the given @a str.
@@ -166,7 +166,7 @@ IO::Manager::SelectedDriver IO::Manager::selectedDriver() const
  * application shall ignore incoming data. The only thing that wont ignore the
  * incoming data will be the console.
  */
-QString IO::Manager::startSequence() const
+const QString &IO::Manager::startSequence() const
 {
   return m_startSequence;
 }
@@ -177,7 +177,7 @@ QString IO::Manager::startSequence() const
  * application shall ignore incoming data. The only thing that wont ignore the
  * incoming data will be the console.
  */
-QString IO::Manager::finishSequence() const
+const QString &IO::Manager::finishSequence() const
 {
   return m_finishSequence;
 }
@@ -186,7 +186,7 @@ QString IO::Manager::finishSequence() const
  * Returns the separator sequence string used by the application to know where
  * to consider that a data item ends.
  */
-QString IO::Manager::separatorSequence() const
+const QString &IO::Manager::separatorSequence() const
 {
   return m_separatorSequence;
 }
@@ -194,12 +194,16 @@ QString IO::Manager::separatorSequence() const
 /**
  * Returns a list with the possible data source options.
  */
-QStringList IO::Manager::availableDrivers() const
+QStringList &IO::Manager::availableDrivers()
 {
-  QStringList list;
-  list.append(tr("Serial port"));
-  list.append(tr("Network port"));
-  list.append(tr("Bluetooth LE device"));
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(tr("Serial Port"));
+    list.append(tr("Network Socket"));
+    list.append(tr("Bluetooth LE"));
+  }
+
   return list;
 }
 

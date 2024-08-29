@@ -236,7 +236,7 @@ public:
 
   QPolygon selection() const;
 
-public Q_SLOTS:
+public slots:
   void setEnabled(bool);
 
 Q_SIGNALS:

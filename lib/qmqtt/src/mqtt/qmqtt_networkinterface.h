@@ -73,7 +73,7 @@ public:
   virtual void setSslConfiguration(const QSslConfiguration &config) = 0;
 #endif // QT_NO_SSL
 
-public Q_SLOTS:
+public slots:
   virtual void connectToHost(const QHostAddress &host, const quint16 port) = 0;
   virtual void connectToHost(const QString &hostName, const quint16 port) = 0;
   virtual void disconnectFromHost() = 0;

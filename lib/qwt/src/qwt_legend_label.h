@@ -44,7 +44,7 @@ public:
 
   bool isChecked() const;
 
-public Q_SLOTS:
+public slots:
   void setChecked(bool on);
 
 Q_SIGNALS:

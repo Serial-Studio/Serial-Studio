@@ -21,7 +21,7 @@
  */
 
 #include <QTimerEvent>
-#include <Misc/TimerEvents.h>
+#include "Misc/TimerEvents.h"
 
 /**
  * Returns a pointer to the only instance of the class

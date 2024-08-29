@@ -101,10 +101,10 @@ Control {
     }
 
     //
-    // Vertical spacer
+    // Spacer
     //
     Item {
-      Layout.fillHeight: true
+      Layout.minimumHeight: 16
     }
 
     //
@@ -127,39 +127,6 @@ Control {
         text: qsTr("Using the plugin system, other applications \& scripts can " +
                    "interact with %1 by establishing a TCP connection on port " +
                    "7777.").arg(Cpp_AppName)
-      }
-
-      Item {
-        Layout.minimumWidth: 16
-      }
-    }
-
-    //
-    // Spacer
-    //
-    Item {
-      Layout.minimumHeight: 16
-    }
-
-    //
-    // Examples label
-    //
-    RowLayout {
-      spacing: 8
-
-      Image {
-        sourceSize: Qt.size(48, 48)
-        source: "qrc:/rcc/images/code.svg"
-        Layout.alignment: Qt.AlignVCenter
-      }
-
-      Label {
-        opacity: 0.6
-        Layout.fillWidth: true
-        Layout.alignment: Qt.AlignVCenter
-        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-        text: qsTr("Reproducible test cases and examples in the wiki make use " +
-                   "of a Python script that acts as a %1 plugin.").arg(Cpp_AppName)
       }
 
       Item {

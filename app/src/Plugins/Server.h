@@ -59,7 +59,7 @@ class Server : public QObject
   Q_OBJECT
   Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
 
-Q_SIGNALS:
+signals:
   void enabledChanged();
 
 private:
@@ -73,13 +73,13 @@ private:
 
 public:
   static Server &instance();
-  bool enabled() const;
+  [[nodiscard]] bool enabled() const;
 
-public Q_SLOTS:
+public slots:
   void removeConnection();
   void setEnabled(const bool enabled);
 
-private Q_SLOTS:
+private slots:
   void onDataReceived();
   void acceptConnection();
   void sendProcessedData();

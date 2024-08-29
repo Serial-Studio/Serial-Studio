@@ -20,10 +20,9 @@
  * THE SOFTWARE.
  */
 
-#include <CSV/Player.h>
-#include <UI/Dashboard.h>
-#include <Misc/ThemeManager.h>
-#include <UI/Widgets/MultiPlot.h>
+#include "UI/Dashboard.h"
+#include "Misc/ThemeManager.h"
+#include "UI/Widgets/MultiPlot.h"
 
 /**
  * Constructor function, configures widget style & signal/slot connections.

@@ -24,11 +24,11 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include <IO/Manager.h>
-#include <JSON/Generator.h>
-#include <Misc/Utilities.h>
-#include <Plugins/Server.h>
-#include <Misc/TimerEvents.h>
+#include "IO/Manager.h"
+#include "JSON/Generator.h"
+#include "Misc/Utilities.h"
+#include "Plugins/Server.h"
+#include "Misc/TimerEvents.h"
 
 /**
  * Constructor function

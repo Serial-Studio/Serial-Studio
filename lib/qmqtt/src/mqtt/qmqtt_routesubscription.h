@@ -60,7 +60,7 @@ public:
 Q_SIGNALS:
   void received(const RoutedMessage &message);
 
-private Q_SLOTS:
+private slots:
   void routeMessage(const Message &message);
 
 private:

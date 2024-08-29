@@ -62,7 +62,7 @@ class BluetoothLE : public HAL_Driver
              CONSTANT)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void devicesChanged();
   void servicesChanged();
   void deviceIndexChanged();
@@ -79,29 +79,27 @@ private:
 public:
   static BluetoothLE &instance();
 
-  //
-  // HAL functions
-  //
   void close() override;
-  bool isOpen() const override;
-  bool isReadable() const override;
-  bool isWritable() const override;
-  bool configurationOk() const override;
-  quint64 write(const QByteArray &data) override;
-  bool open(const QIODevice::OpenMode mode) override;
 
-  int deviceCount() const;
-  int deviceIndex() const;
-  QStringList deviceNames() const;
-  QStringList serviceNames() const;
-  bool operatingSystemSupported() const;
+  [[nodiscard]] bool isOpen() const override;
+  [[nodiscard]] bool isReadable() const override;
+  [[nodiscard]] bool isWritable() const override;
+  [[nodiscard]] bool configurationOk() const override;
+  [[nodiscard]] quint64 write(const QByteArray &data) override;
+  [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
-public Q_SLOTS:
+  [[nodiscard]] int deviceCount() const;
+  [[nodiscard]] int deviceIndex() const;
+  [[nodiscard]] QStringList deviceNames() const;
+  [[nodiscard]] QStringList serviceNames() const;
+  [[nodiscard]] bool operatingSystemSupported() const;
+
+public slots:
   void startDiscovery();
   void selectDevice(const int index);
   void selectService(const int index);
 
-private Q_SLOTS:
+private slots:
   void configureCharacteristics();
   void onServiceDiscoveryFinished();
   void onDeviceDiscovered(const QBluetoothDeviceInfo &device);

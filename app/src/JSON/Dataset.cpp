@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include <JSON/Dataset.h>
-#include <JSON/Generator.h>
+#include "JSON/Dataset.h"
 
 JSON::Dataset::Dataset()
   : m_fft(false)
@@ -107,7 +106,7 @@ double JSON::Dataset::alarm() const
 /**
  * @return The title/description of this dataset
  */
-QString JSON::Dataset::title() const
+const QString& JSON::Dataset::title() const
 {
   return m_title;
 }
@@ -115,7 +114,7 @@ QString JSON::Dataset::title() const
 /**
  * @return The value/reading of this dataset
  */
-QString JSON::Dataset::value() const
+const QString& JSON::Dataset::value() const
 {
   return m_value;
 }
@@ -123,7 +122,7 @@ QString JSON::Dataset::value() const
 /**
  * @return The units of this dataset
  */
-QString JSON::Dataset::units() const
+const QString& JSON::Dataset::units() const
 {
   return m_units;
 }
@@ -131,7 +130,7 @@ QString JSON::Dataset::units() const
 /**
  * @return The widget value of this dataset
  */
-QString JSON::Dataset::widget() const
+const QString& JSON::Dataset::widget() const
 {
   return m_widget;
 }
@@ -147,7 +146,7 @@ int JSON::Dataset::fftSamples() const
 /**
  * Returns the JSON data that represents this widget
  */
-QJsonObject JSON::Dataset::jsonData() const
+const QJsonObject&JSON::Dataset::jsonData() const
 {
   return m_jsonData;
 }
@@ -177,7 +176,7 @@ bool JSON::Dataset::read(const QJsonObject &object)
     m_fftSamples = object.value(QStringLiteral("fftSamples")).toInt();
 
     if (m_value.isEmpty())
-      m_value = "--.--";
+      m_value = QStringLiteral("--.--");
 
     return true;
   }

@@ -42,6 +42,7 @@
   "button_text": "#232629",
   "highlighted_text": "#ffffff",
   "placeholder_text": "#929497",
+  "alternate_window": "#e9e9e9",
 
   "console_text": "#434649",
   "console_base": "#fcfcfc",

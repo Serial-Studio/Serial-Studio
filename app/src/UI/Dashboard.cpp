@@ -20,17 +20,15 @@
  * THE SOFTWARE.
  */
 
-#include <IO/Manager.h>
-#include <IO/Console.h>
-#include <CSV/Player.h>
-#include <UI/Dashboard.h>
-#include <JSON/Generator.h>
-#include <Misc/TimerEvents.h>
-#include <Misc/CommonFonts.h>
+#include "IO/Manager.h"
+#include "CSV/Player.h"
+#include "UI/Dashboard.h"
+#include "JSON/Generator.h"
+#include "Misc/CommonFonts.h"
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Constructor of the class.
@@ -58,11 +56,11 @@ UI::Dashboard &UI::Dashboard::instance()
   return singleton;
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Group/Dataset access functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-QFont UI::Dashboard::monoFont() const
+const QFont&UI::Dashboard::monoFont() const
 {
   return Misc::CommonFonts::instance().monoFont();
 }
@@ -81,14 +79,14 @@ const JSON::Group &UI::Dashboard::getMultiplot(const int index) const     { retu
 const JSON::Group &UI::Dashboard::getAccelerometer(const int index) const { return m_accelerometerWidgets.at(index); }
 // clang-format on
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Misc member access functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Returns the title of the current JSON project/frame.
  */
-QString UI::Dashboard::title()
+const QString& UI::Dashboard::title() const
 {
   return m_currentFrame.title();
 }
@@ -126,9 +124,9 @@ bool UI::Dashboard::frameValid() const
   return m_currentFrame.isValid();
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Widget count functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Returns the total number of widgets that compose the current JSON frame.
@@ -174,9 +172,9 @@ int UI::Dashboard::multiPlotCount() const     { return m_multiPlotWidgets.count(
 int UI::Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(); }
 // clang-format on
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Relative-to-global widget index utility functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Returns a @c list with the titles of all the widgets that compose the current
@@ -515,9 +513,9 @@ UI::Dashboard::WidgetType UI::Dashboard::widgetType(const int globalIndex) const
   return WidgetType::Unknown;
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Widget visibility access functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // clang-format off
 bool UI::Dashboard::barVisible(const int index) const           { return getVisibility(m_barVisibility, index);           }
@@ -533,9 +531,9 @@ bool UI::Dashboard::multiPlotVisible(const int index) const     { return getVisi
 bool UI::Dashboard::accelerometerVisible(const int index) const { return getVisibility(m_accelerometerVisibility, index); }
 // clang-format on
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Widget title functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // clang-format off
 QStringList UI::Dashboard::gpsTitles()           { return groupTitles(m_gpsWidgets);           }
@@ -551,9 +549,9 @@ QStringList UI::Dashboard::multiPlotTitles()     { return groupTitles(m_multiPlo
 QStringList UI::Dashboard::accelerometerTitles() { return groupTitles(m_accelerometerWidgets); }
 // clang-format on
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Plot & widget options
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void UI::Dashboard::setPoints(const int points)
 {
@@ -585,9 +583,9 @@ void UI::Dashboard::setPrecision(const int precision)
   }
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Visibility-related slots
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // clang-format off
 void UI::Dashboard::setBarVisible(const int i, const bool v)           { setVisibility(m_barVisibility, i, v);           }
@@ -603,9 +601,9 @@ void UI::Dashboard::setMultiplotVisible(const int i, const bool v)     { setVisi
 void UI::Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisibility(m_accelerometerVisibility, i, v); }
 // clang-format on
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Frame data handling slots
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Removes all available data from the UI when the device is disconnected or the
@@ -614,7 +612,7 @@ void UI::Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisi
 void UI::Dashboard::resetData()
 {
   // Make latest frame invalid
-  m_currentFrame.read(QJsonObject{});
+  (void) m_currentFrame.read(QJsonObject{});
 
   // Clear plot data
   m_fftPlotValues.clear();
@@ -827,9 +825,9 @@ void UI::Dashboard::processLatestJSON(const QJsonObject &json)
   Q_EMIT updated();
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Widget utility functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Returns a group with all the datasets that need to be shown in the LED status

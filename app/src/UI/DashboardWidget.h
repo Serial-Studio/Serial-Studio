@@ -44,7 +44,7 @@ class DashboardWidgetBase : public QWidget
 {
   Q_OBJECT
 
-Q_SIGNALS:
+signals:
   void updated();
 
 public:
@@ -134,7 +134,7 @@ class DashboardWidget : public DeclarativeWidget
              NOTIFY gpsDataChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void gpsDataChanged();
   void widgetIndexChanged();
   void widgetVisibleChanged();
@@ -144,25 +144,25 @@ public:
   DashboardWidget(QQuickItem *parent = 0);
   ~DashboardWidget();
 
-  int widgetIndex() const;
-  int relativeIndex() const;
-  bool widgetVisible() const;
-  QString widgetIcon() const;
-  QString widgetTitle() const;
-  bool isExternalWindow() const;
-  UI::Dashboard::WidgetType widgetType() const;
+  [[nodiscard]] int widgetIndex() const;
+  [[nodiscard]] int relativeIndex() const;
+  [[nodiscard]] bool widgetVisible() const;
+  [[nodiscard]] QString widgetIcon() const;
+  [[nodiscard]] QString widgetTitle() const;
+  [[nodiscard]] bool isExternalWindow() const;
+  [[nodiscard]] UI::Dashboard::WidgetType widgetType() const;
 
-  bool isGpsMap() const;
-  qreal gpsAltitude() const;
-  qreal gpsLatitude() const;
-  qreal gpsLongitude() const;
+  [[nodiscard]] bool isGpsMap() const;
+  [[nodiscard]] qreal gpsAltitude() const;
+  [[nodiscard]] qreal gpsLatitude() const;
+  [[nodiscard]] qreal gpsLongitude() const;
 
-public Q_SLOTS:
+public slots:
   void setVisible(const bool visible);
   void setWidgetIndex(const int index);
   void setIsExternalWindow(const bool isWindow);
 
-private Q_SLOTS:
+private slots:
   void updateWidgetVisible();
 
 private:

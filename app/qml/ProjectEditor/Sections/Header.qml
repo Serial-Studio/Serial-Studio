@@ -26,169 +26,128 @@ import QtQuick.Controls
 
 import "../../Widgets" as Widgets
 
-Rectangle {
+Widgets.Pane {
   id: root
-  height: header.implicitHeight + 32
-
-  //
-  // Background & border
-  //
-  Rectangle {
-    id: bg
-    anchors.fill: parent
-    color: Cpp_ThemeManager.toolbarGradient2
-    border.width: Cpp_ThemeManager.titlebarSeparator ? 1 : 0
-    border.color: Qt.darker(Cpp_ThemeManager.toolbarGradient2, 1.5)
-
-    Rectangle {
-      height: 1
-      color: Qt.darker(Cpp_ThemeManager.toolbarGradient1, 1.5)
-
-      anchors {
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
-      }
-    }
-  }
+  title: qsTr("Project Setup")
+  Layout.minimumHeight: layout.implicitHeight + 16
+  icon: "qrc:/rcc/icons/project-editor/windows/project-setup.svg"
 
   //
   // Main layout
   //
-  GridLayout {
-    id: header
-    columns: 2
-    rowSpacing: 8
-    columnSpacing: 8 * 2
+  GroupBox {
+    id: layout
+    anchors.fill: parent
+    anchors.topMargin: -6
 
-    anchors {
-      left: parent.left
-      right: parent.right
-      margins: 8 * 2
-      verticalCenter: parent.verticalCenter
+    background: Rectangle {
+      radius: 2
+      border.width: 1
+      color: Cpp_ThemeManager.colors["groupbox_background"]
+      border.color: Cpp_ThemeManager.colors["groupbox_border"]
     }
 
-    //
-    // Project title
-    //
-    RowLayout {
-      spacing: 8
-      Layout.fillWidth: true
+    GridLayout {
+      columns: 2
+      rowSpacing: 8
+      columnSpacing: 8
+      anchors.fill: parent
 
-      /*Widgets.Icon {
-        color: Cpp_ThemeManager.menubarText
-        source: "qrc:/rcc/icons/registration.svg"
-      }*/
-
-      TextField {
+      //
+      // Project title
+      //
+      RowLayout {
+        spacing: 4
         Layout.fillWidth: true
-        Layout.minimumWidth: 320
-        Layout.maximumHeight: 24
-        Layout.minimumHeight: 24
-        text: Cpp_Project_Model.title
-        onTextChanged: Cpp_Project_Model.setTitle(text)
-        placeholderText: qsTr("Project title (required)")
 
-        palette {
-          base: "#fff"
-          text: "#000"
-          //placeholderText: "#444"
+        Image {
+          sourceSize: Qt.size(18, 18)
+          Layout.alignment: Qt.AlignVCenter
+          source: "qrc:/rcc/icons/project-editor/project-title.svg"
+        }
+
+        TextField {
+          Layout.fillWidth: true
+          Layout.minimumWidth: 320
+          Layout.maximumHeight: 24
+          Layout.minimumHeight: 24
+          text: Cpp_Project_Model.title
+          onTextChanged: Cpp_Project_Model.setTitle(text)
+          placeholderText: qsTr("Title (required)")
+        }
+      }
+
+      //
+      // Separator character
+      //
+      RowLayout {
+        spacing: 4
+        Layout.fillWidth: true
+
+        Image {
+          sourceSize: Qt.size(18, 18)
+          Layout.alignment: Qt.AlignVCenter
+          source: "qrc:/rcc/icons/project-editor/separator.svg"
+        }
+
+        TextField {
+          Layout.fillWidth: true
+          Layout.minimumWidth: 420
+          Layout.maximumHeight: 24
+          Layout.minimumHeight: 24
+          text: Cpp_Project_Model.separator
+          onTextChanged: Cpp_Project_Model.setSeparator(text)
+          placeholderText: qsTr("Data separator (default is ',')")
+        }
+      }
+
+      //
+      // Start sequence
+      //
+      RowLayout {
+        spacing: 4
+        Layout.fillWidth: true
+
+        Image {
+          sourceSize: Qt.size(18, 18)
+          Layout.alignment: Qt.AlignVCenter
+          source: "qrc:/rcc/icons/project-editor/frame-start.svg"
+        }
+
+        TextField {
+          Layout.fillWidth: true
+          Layout.minimumWidth: 256
+          Layout.maximumHeight: 24
+          Layout.minimumHeight: 24
+          text: Cpp_Project_Model.frameStartSequence
+          onTextChanged: Cpp_Project_Model.setFrameStartSequence(text)
+          placeholderText: qsTr("Frame start sequence (default is '/*')")
+        }
+      }
+
+      //
+      // End sequence
+      //
+      RowLayout {
+        spacing: 4
+        Layout.fillWidth: true
+
+        Image {
+          sourceSize: Qt.size(18, 18)
+          Layout.alignment: Qt.AlignVCenter
+          source: "qrc:/rcc/icons/project-editor/frame-end.svg"
+        }
+
+        TextField {
+          Layout.fillWidth: true
+          Layout.minimumWidth: 256
+          Layout.maximumHeight: 24
+          Layout.minimumHeight: 24
+          text: Cpp_Project_Model.frameEndSequence
+          onTextChanged: Cpp_Project_Model.setFrameEndSequence(text)
+          placeholderText: qsTr("Frame end sequence (default is '*/')")
         }
       }
     }
-
-    //
-    // Separator character
-    //
-    RowLayout {
-      spacing: 8
-      Layout.fillWidth: true
-
-      /*Widgets.Icon {
-        color: Cpp_ThemeManager.menubarText
-        source: "qrc:/rcc/icons/separator.svg"
-      }*/
-
-      TextField {
-        Layout.fillWidth: true
-        Layout.minimumWidth: 420
-        Layout.maximumHeight: 24
-        Layout.minimumHeight: 24
-        text: Cpp_Project_Model.separator
-        onTextChanged: Cpp_Project_Model.setSeparator(text)
-        placeholderText: qsTr("Data separator (default is ',')")
-
-        palette {
-          base: "#fff"
-          text: "#000"
-          //placeholderText: "#444"
-        }
-      }
-    }
-
-    //
-    // Start sequence
-    //
-    RowLayout {
-      spacing: 8
-      Layout.fillWidth: true
-
-      /*Widgets.Icon {
-        color: Cpp_ThemeManager.menubarText
-        source: "qrc:/rcc/icons/start-sequence.svg"
-      }*/
-
-      TextField {
-        Layout.fillWidth: true
-        Layout.minimumWidth: 256
-        Layout.maximumHeight: 24
-        Layout.minimumHeight: 24
-        text: Cpp_Project_Model.frameStartSequence
-        onTextChanged: Cpp_Project_Model.setFrameStartSequence(text)
-        placeholderText: qsTr("Frame start sequence (default is '/*')")
-
-        palette {
-          base: "#fff"
-          text: "#000"
-          //placeholderText: "#444"
-        }
-      }
-    }
-
-    //
-    // End sequence
-    //
-    RowLayout {
-      spacing: 8
-      Layout.fillWidth: true
-
-      /*Widgets.Icon {
-        color: Cpp_ThemeManager.menubarText
-        source: "qrc:/rcc/icons/end-sequence.svg"
-      }*/
-
-      TextField {
-        Layout.fillWidth: true
-        Layout.minimumWidth: 256
-        Layout.maximumHeight: 24
-        Layout.minimumHeight: 24
-        text: Cpp_Project_Model.frameEndSequence
-        onTextChanged: Cpp_Project_Model.setFrameEndSequence(text)
-        placeholderText: qsTr("Frame end sequence (default is '*/')")
-
-        palette {
-          base: "#fff"
-          text: "#000"
-          //placeholderText: "#444"
-        }
-      }
-    }
-  }
-
-  anchors {
-    margins: 0
-    top: parent.top
-    left: parent.left
-    right: parent.right
   }
 }

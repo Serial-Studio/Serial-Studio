@@ -51,15 +51,15 @@ find_package(Qt6 COMPONENTS Gui Core Widgets REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(SOURCES
-    languagedata.cpp
-    qsourcehighliter.cpp
-    qsourcehighliterthemes.cpp
+ languagedata.cpp
+ qsourcehighliter.cpp
+ qsourcehighliterthemes.cpp
 )
 
 set(HEADERS
-    languagedata.h
-    qsourcehighliter.h
-    qsourcehighliterthemes.h
+ languagedata.h
+ qsourcehighliter.h
+ qsourcehighliterthemes.h
 )
 
 #-------------------------------------------------------------------------------
@@ -67,23 +67,23 @@ set(HEADERS
 #-------------------------------------------------------------------------------
 
 add_library(
-    QSourceHighlite
-    STATIC
-    ${SOURCES}
-    ${HEADERS}
+ QSourceHighlite
+ STATIC
+ ${SOURCES}
+ ${HEADERS}
 )
 
 target_link_libraries(
-    QSourceHighlite PUBLIC
+ QSourceHighlite PUBLIC
 
-    Qt6::Core
-    Qt6::Gui
-    Qt6::Widgets
+ Qt6::Core
+ Qt6::Gui
+ Qt6::Widgets
 )
 
 target_include_directories(
-    QSourceHighlite PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
+ QSourceHighlite PUBLIC
+ ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 #-------------------------------------------------------------------------------
@@ -91,9 +91,9 @@ target_include_directories(
 #-------------------------------------------------------------------------------
 
 set_target_properties(
-    QSourceHighlite PROPERTIES
-    UNITY_BUILD ON
-    UNITY_BUILD_MODE BATCH
-    UNITY_BUILD_BATCH_SIZE 128
-    INTERPROCEDURAL_OPTIMIZATION TRUE
+ QSourceHighlite PROPERTIES
+ UNITY_BUILD ON
+ UNITY_BUILD_MODE BATCH
+ UNITY_BUILD_BATCH_SIZE 128
+ INTERPROCEDURAL_OPTIMIZATION TRUE
 )

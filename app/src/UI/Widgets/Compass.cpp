@@ -24,9 +24,9 @@
 #include <QwtCompassScaleDraw>
 #include <QwtCompassMagnetNeedle>
 
-#include <UI/Dashboard.h>
-#include <Misc/ThemeManager.h>
-#include <UI/Widgets/Compass.h>
+#include "UI/Dashboard.h"
+#include "Misc/ThemeManager.h"
+#include "UI/Widgets/Compass.h"
 
 /**
  * Constructor function, configures widget style & signal/slot connections.

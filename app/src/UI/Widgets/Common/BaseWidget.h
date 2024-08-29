@@ -34,7 +34,7 @@ class BaseWidget : public DashboardWidgetBase
 {
   Q_OBJECT
 
-Q_SIGNALS:
+signals:
   void resized();
 
 public:

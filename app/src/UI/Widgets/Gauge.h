@@ -34,7 +34,7 @@ class Gauge : public BaseWidget
 public:
   Gauge(const int index = -1);
 
-private Q_SLOTS:
+private slots:
   void updateData();
   void onThemeChanged();
 

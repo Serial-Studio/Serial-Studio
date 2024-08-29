@@ -58,13 +58,13 @@ public:
   ~Frame();
 
   void clear();
-  QString title() const;
-  int groupCount() const;
-  QVector<Group> &groups();
-  bool read(const QJsonObject &object);
-  Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
+  [[nodiscard]] bool isValid() const;
+  [[nodiscard]] bool read(const QJsonObject &object);
 
-  inline bool isValid() const { return !title().isEmpty() && groupCount() > 0; }
+  [[nodiscard]] int groupCount() const;
+  [[nodiscard]] const QString &title() const;
+  [[nodiscard]] const QVector<Group> &groups() const;
+  [[nodiscard]] const JSON::Group &getGroup(const int index) const;
 
 private:
   QString m_title;

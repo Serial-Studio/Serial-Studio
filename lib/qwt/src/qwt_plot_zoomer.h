@@ -103,7 +103,7 @@ public:
 
   uint zoomRectIndex() const;
 
-public Q_SLOTS:
+public slots:
   void moveBy(double dx, double dy);
   virtual void moveTo(const QPointF &);
 

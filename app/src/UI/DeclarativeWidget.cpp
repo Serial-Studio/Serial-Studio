@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#include <Misc/ThemeManager.h>
-#include <UI/DeclarativeWidget.h>
+#include "Misc/ThemeManager.h"
+#include "UI/DeclarativeWidget.h"
 
 /**
  * Creates a subclass of @c QWidget that allows us to call the given

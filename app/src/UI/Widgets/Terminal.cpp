@@ -23,14 +23,14 @@
 #include <QtMath>
 #include <QScrollBar>
 
-#include <IO/Console.h>
-#include <Misc/TimerEvents.h>
-#include <Misc/ThemeManager.h>
-#include <UI/Widgets/Terminal.h>
+#include "IO/Console.h"
+#include "Misc/TimerEvents.h"
+#include "Misc/ThemeManager.h"
+#include "UI/Widgets/Terminal.h"
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // QML PlainTextEdit implementation
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Constructor function
@@ -615,10 +615,10 @@ QString Widgets::Terminal::vt100Processing(const QString &data)
   return cleanLine;
 }
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // VT-100 / ANSI terminal hacks
 // https://code.qt.io/cgit/qt-creator/qt-creator.git/tree/src/libs/utils/ansiescapecodehandler.cpp
-//---------------------------------------------------------º----------------------------------------
+//------------------------------------------------------------------------------
 
 #define QTC_ASSERT(cond, action)                                               \
   if (Q_LIKELY(cond))                                                          \

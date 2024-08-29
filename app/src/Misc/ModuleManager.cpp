@@ -20,42 +20,42 @@
  * THE SOFTWARE.
  */
 
-#include <AppInfo.h>
-
-#include <CSV/Export.h>
-#include <CSV/Player.h>
-
-#include <JSON/Frame.h>
-#include <JSON/Group.h>
-#include <JSON/Dataset.h>
-#include <JSON/Generator.h>
-
-#include <Project/Model.h>
-#include <Project/CodeEditor.h>
-
-#include <IO/Manager.h>
-#include <IO/Console.h>
-#include <IO/Drivers/Serial.h>
-#include <IO/Drivers/Network.h>
-#include <IO/Drivers/BluetoothLE.h>
-
-#include <Misc/Utilities.h>
-#include <Misc/Translator.h>
-#include <Misc/CommonFonts.h>
-#include <Misc/TimerEvents.h>
-#include <Misc/ThemeManager.h>
-#include <Misc/ModuleManager.h>
-
-#include <MQTT/Client.h>
-#include <Plugins/Server.h>
-
-#include <UI/Dashboard.h>
-#include <UI/DashboardWidget.h>
-#include <UI/Widgets/Terminal.h>
-
 #include <QQuickWindow>
 #include <QSimpleUpdater.h>
-#include <Platform/NativeWindow.h>
+
+#include "AppInfo.h"
+
+#include "CSV/Export.h"
+#include "CSV/Player.h"
+
+#include "JSON/Group.h"
+#include "JSON/Dataset.h"
+#include "JSON/Generator.h"
+
+#include "Project/Model.h"
+#include "Project/CodeEditor.h"
+
+#include "IO/Manager.h"
+#include "IO/Console.h"
+#include "IO/Drivers/Serial.h"
+#include "IO/Drivers/Network.h"
+#include "IO/Drivers/BluetoothLE.h"
+
+#include "Misc/Utilities.h"
+#include "Misc/Translator.h"
+#include "Misc/CommonFonts.h"
+#include "Misc/TimerEvents.h"
+#include "Misc/ThemeManager.h"
+#include "Misc/ModuleManager.h"
+
+#include "MQTT/Client.h"
+#include "Plugins/Server.h"
+
+#include "UI/Dashboard.h"
+#include "UI/DashboardWidget.h"
+#include "UI/Widgets/Terminal.h"
+
+#include "Platform/NativeWindow.h"
 
 /**
  * Configures the application font and configures application signals/slots to
@@ -71,15 +71,45 @@ Misc::ModuleManager::ModuleManager()
   QApplication::setFont(common_fonts->uiFont());
 
   // Stop modules when application is about to quit
-  connect(engine(), SIGNAL(quit()), this, SLOT(onQuit()));
+  connect(&m_engine, &QQmlApplicationEngine::quit, this,
+          &Misc::ModuleManager::onQuit);
 }
 
 /**
  * Returns a pointer to the QML application engine
  */
-QQmlApplicationEngine *Misc::ModuleManager::engine()
+const QQmlApplicationEngine &Misc::ModuleManager::engine() const
 {
-  return &m_engine;
+  return m_engine;
+}
+
+/**
+ * Enables or disables the auto-updater system (QSimpleUpdater).
+ *
+ * To disable QSimpleUpdater, you need to add DEFINES += DISABLE_QSU in the
+ * qmake project file. This option is provided for package managers, users are
+ * expected to update the application using the same package manager they used
+ * for installing it.
+ */
+bool Misc::ModuleManager::autoUpdaterEnabled() const
+{
+#ifdef DISABLE_QSU
+  return false;
+#else
+  return true;
+#endif
+}
+
+/**
+ * Calls the functions needed to safely quit the application
+ */
+void Misc::ModuleManager::onQuit()
+{
+  CSV::Export::instance().closeFile();
+  CSV::Player::instance().closeFile();
+  IO::Manager::instance().disconnectDriver();
+  Misc::TimerEvents::instance().stopTimers();
+  Plugins::Server::instance().removeConnection();
 }
 
 /**
@@ -105,23 +135,6 @@ void Misc::ModuleManager::registerQmlTypes()
 {
   qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
-}
-
-/**
- * Enables or disables the auto-updater system (QSimpleUpdater).
- *
- * To disable QSimpleUpdater, you need to add DEFINES += DISABLE_QSU in the
- * qmake project file. This option is provided for package managers, users are
- * expected to update the application using the same package manager they used
- * for installing it.
- */
-bool Misc::ModuleManager::autoUpdaterEnabled()
-{
-#ifdef DISABLE_QSU
-  return false;
-#else
-  return true;
-#endif
 }
 
 /**
@@ -159,12 +172,12 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Start common event timers
   miscTimerEvents->startTimers();
 
-  // Retranslate the QML interface automagically
-  connect(miscTranslator, SIGNAL(languageChanged()), engine(),
-          SLOT(retranslate()));
+  // Retranslate the QML interface automatically
+  connect(miscTranslator, &Misc::Translator::languageChanged, &m_engine,
+          &QQmlApplicationEngine::retranslate);
 
   // Register C++ modules with QML
-  auto c = engine()->rootContext();
+  const auto c = m_engine.rootContext();
   c->setContextProperty("Cpp_Updater", updater);
   c->setContextProperty("Cpp_IO_Serial", ioSerial);
   c->setContextProperty("Cpp_CSV_Export", csvExport);
@@ -197,17 +210,5 @@ void Misc::ModuleManager::initializeQmlInterface()
                         qApp->organizationDomain());
 
   // Load main.qml
-  engine()->load(QUrl(QStringLiteral("qrc:/app/qml/main.qml")));
-}
-
-/**
- * Calls the functions needed to safely quit the application
- */
-void Misc::ModuleManager::onQuit()
-{
-  CSV::Export::instance().closeFile();
-  CSV::Player::instance().closeFile();
-  IO::Manager::instance().disconnectDriver();
-  Misc::TimerEvents::instance().stopTimers();
-  Plugins::Server::instance().removeConnection();
+  m_engine.load(QUrl(QStringLiteral("qrc:/app/qml/main.qml")));
 }

@@ -110,7 +110,7 @@ Widgets.Pane {
     } ComboBox {
       id: _driverCombo
       Layout.fillWidth: true
-      model: Cpp_IO_Manager.availableDrivers()
+      model: Cpp_IO_Manager.availableDrivers
       displayText: qsTr("I/O Interface: %1").arg(currentText)
       onCurrentIndexChanged: Cpp_IO_Manager.selectedDriver = currentIndex
     }

@@ -41,7 +41,7 @@ class MultiPlot : public DashboardWidgetBase
 public:
   MultiPlot(const int index = -1);
 
-private Q_SLOTS:
+private slots:
   void updateData();
   void updateRange();
   void onThemeChanged();

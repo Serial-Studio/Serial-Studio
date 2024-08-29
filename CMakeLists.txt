@@ -59,20 +59,20 @@ add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 #-------------------------------------------------------------------------------
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    if(WIN32 AND MINGW)
-        set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -g0 -flto -funroll-loops")
-        set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -flto")
-    elseif (WIN32 AND MSVC)
-        set(CMAKE_CXX_FLAGS "/O2 /W3 /GL /arch:AVX2 /fp:fast /Zi")
-        set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/OPT:REF /OPT:ICF /LTCG /DEBUG")
-    elseif(APPLE)
-        set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -g0 -flto=full -funroll-loops")
-        set(CMAKE_EXE_LINKER_FLAGS "-Wl,-dead_strip -flto=full")
-    elseif(UNIX)
-        set(PROJECT_EXECUTABLE "serial-studio")
-        set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -g0 -flto -funroll-loops")
-        set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -flto")
-    endif()
+ if(WIN32 AND MINGW)
+  set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -g0 -flto -funroll-loops")
+  set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -flto")
+ elseif (WIN32 AND MSVC)
+  set(CMAKE_CXX_FLAGS "/O2 /W3 /GL /arch:AVX2 /fp:fast /Zi")
+  set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/OPT:REF /OPT:ICF /LTCG /DEBUG")
+ elseif(APPLE)
+  set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -g0 -flto=full -funroll-loops")
+  set(CMAKE_EXE_LINKER_FLAGS "-Wl,-dead_strip -flto=full")
+ elseif(UNIX)
+  set(PROJECT_EXECUTABLE "serial-studio")
+  set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -g0 -flto -funroll-loops")
+  set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -flto")
+ endif()
 endif()
 
 #-------------------------------------------------------------------------------
@@ -82,10 +82,10 @@ endif()
 project(${PROJECT_EXECUTABLE}-RootDir)
 
 find_package(
-    Qt6 REQUIRED 
-    COMPONENTS
-        Core 
-        Qml
+ Qt6 REQUIRED
+ COMPONENTS
+ Core
+ Qml
 )
 
 #-------------------------------------------------------------------------------

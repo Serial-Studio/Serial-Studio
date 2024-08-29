@@ -52,41 +52,41 @@ include_directories(headers)
 include_directories(fftreal)
 
 set(SOURCES
-    sources/qcomplexnumber.cpp
-    sources/qfouriercalculator.cpp
-    sources/qfourierfixedcalculator.cpp
-    sources/qfouriertransformer.cpp
-    sources/qfouriervariablecalculator.cpp
-    sources/qwindowfunction.cpp
+ sources/qcomplexnumber.cpp
+ sources/qfouriercalculator.cpp
+ sources/qfourierfixedcalculator.cpp
+ sources/qfouriertransformer.cpp
+ sources/qfouriervariablecalculator.cpp
+ sources/qwindowfunction.cpp
 )
 
 set(HEADERS
-    fftreal/Array.h
-    fftreal/Array.hpp
-    fftreal/DynArray.h
-    fftreal/DynArray.hpp
-    fftreal/FFTReal.h
-    fftreal/FFTReal.hpp
-    fftreal/FFTRealFixLen.h
-    fftreal/FFTRealFixLen.hpp
-    fftreal/FFTRealFixLenParam.h
-    fftreal/FFTRealPassDirect.h
-    fftreal/FFTRealPassDirect.hpp
-    fftreal/FFTRealPassInverse.h
-    fftreal/FFTRealPassInverse.hpp
-    fftreal/FFTRealSelect.h
-    fftreal/FFTRealSelect.hpp
-    fftreal/FFTRealUseTrigo.h
-    fftreal/FFTRealUseTrigo.hpp
-    fftreal/OscSinCos.h
-    fftreal/OscSinCos.hpp
-    fftreal/def.h
-    headers/qcomplexnumber.h
-    headers/qfouriercalculator.h
-    headers/qfourierfixedcalculator.h
-    headers/qfouriertransformer.h
-    headers/qfouriervariablecalculator.h
-    headers/qwindowfunction.h
+ fftreal/Array.h
+ fftreal/Array.hpp
+ fftreal/DynArray.h
+ fftreal/DynArray.hpp
+ fftreal/FFTReal.h
+ fftreal/FFTReal.hpp
+ fftreal/FFTRealFixLen.h
+ fftreal/FFTRealFixLen.hpp
+ fftreal/FFTRealFixLenParam.h
+ fftreal/FFTRealPassDirect.h
+ fftreal/FFTRealPassDirect.hpp
+ fftreal/FFTRealPassInverse.h
+ fftreal/FFTRealPassInverse.hpp
+ fftreal/FFTRealSelect.h
+ fftreal/FFTRealSelect.hpp
+ fftreal/FFTRealUseTrigo.h
+ fftreal/FFTRealUseTrigo.hpp
+ fftreal/OscSinCos.h
+ fftreal/OscSinCos.hpp
+ fftreal/def.h
+ headers/qcomplexnumber.h
+ headers/qfouriercalculator.h
+ headers/qfourierfixedcalculator.h
+ headers/qfouriertransformer.h
+ headers/qfouriervariablecalculator.h
+ headers/qwindowfunction.h
 )
 
 #-------------------------------------------------------------------------------
@@ -94,20 +94,20 @@ set(HEADERS
 #-------------------------------------------------------------------------------
 
 add_library(
-    QRealFourier
-    STATIC
-    ${SOURCES}
-    ${HEADERS}
+ QRealFourier
+ STATIC
+ ${SOURCES}
+ ${HEADERS}
 )
 
 target_link_libraries(
-    QRealFourier PUBLIC
-    Qt6::Core
+ QRealFourier PUBLIC
+ Qt6::Core
 )
 
 target_include_directories(
-    QRealFourier PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/headers
+ QRealFourier PUBLIC
+ ${CMAKE_CURRENT_SOURCE_DIR}/headers
 )
 
 #-------------------------------------------------------------------------------
@@ -115,9 +115,9 @@ target_include_directories(
 #-------------------------------------------------------------------------------
 
 set_target_properties(
-    QRealFourier PROPERTIES
-    UNITY_BUILD ON
-    UNITY_BUILD_MODE BATCH
-    UNITY_BUILD_BATCH_SIZE 128
-    INTERPROCEDURAL_OPTIMIZATION TRUE
+ QRealFourier PROPERTIES
+ UNITY_BUILD ON
+ UNITY_BUILD_MODE BATCH
+ UNITY_BUILD_BATCH_SIZE 128
+ INTERPROCEDURAL_OPTIMIZATION TRUE
 )

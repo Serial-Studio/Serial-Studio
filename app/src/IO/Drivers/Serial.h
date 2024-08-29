@@ -99,7 +99,7 @@ class Serial : public HAL_Driver
              CONSTANT)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void portChanged();
   void parityChanged();
   void baudRateChanged();
@@ -126,43 +126,42 @@ private:
 public:
   static Serial &instance();
 
-  //
-  // HAL functions
-  //
   void close() override;
-  bool isOpen() const override;
-  bool isReadable() const override;
-  bool isWritable() const override;
-  bool configurationOk() const override;
-  quint64 write(const QByteArray &data) override;
-  bool open(const QIODevice::OpenMode mode) override;
 
-  QString portName() const;
-  QSerialPort *port() const;
-  bool autoReconnect() const;
+  [[nodiscard]] bool isOpen() const override;
+  [[nodiscard]] bool isReadable() const override;
+  [[nodiscard]] bool isWritable() const override;
+  [[nodiscard]] bool configurationOk() const override;
+  [[nodiscard]] quint64 write(const QByteArray &data) override;
+  [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
-  bool dtrEnabled() const;
-  quint8 portIndex() const;
-  quint8 parityIndex() const;
-  quint8 displayMode() const;
-  quint8 dataBitsIndex() const;
-  quint8 stopBitsIndex() const;
-  quint8 flowControlIndex() const;
+  [[nodiscard]] QString portName() const;
+  [[nodiscard]] QSerialPort *port() const;
+  [[nodiscard]] bool autoReconnect() const;
 
-  QStringList portList() const;
-  QStringList parityList() const;
-  QStringList baudRateList() const;
-  QStringList dataBitsList() const;
-  QStringList stopBitsList() const;
-  QStringList flowControlList() const;
+  [[nodiscard]] bool dtrEnabled() const;
+  [[nodiscard]] quint8 portIndex() const;
+  [[nodiscard]] quint8 parityIndex() const;
+  [[nodiscard]] quint8 displayMode() const;
+  [[nodiscard]] quint8 dataBitsIndex() const;
+  [[nodiscard]] quint8 stopBitsIndex() const;
+  [[nodiscard]] quint8 flowControlIndex() const;
 
-  qint32 baudRate() const;
-  QSerialPort::Parity parity() const;
-  QSerialPort::DataBits dataBits() const;
-  QSerialPort::StopBits stopBits() const;
-  QSerialPort::FlowControl flowControl() const;
+  [[nodiscard]] QStringList portList() const;
+  [[nodiscard]] const QStringList& baudRateList() const;
 
-public Q_SLOTS:
+  [[nodiscard]] static QStringList& parityList();
+  [[nodiscard]] static QStringList& dataBitsList();
+  [[nodiscard]] static QStringList& stopBitsList();
+  [[nodiscard]] static QStringList& flowControlList();
+
+  [[nodiscard]] qint32 baudRate() const;
+  [[nodiscard]] QSerialPort::Parity parity() const;
+  [[nodiscard]] QSerialPort::DataBits dataBits() const;
+  [[nodiscard]] QSerialPort::StopBits stopBits() const;
+  [[nodiscard]] QSerialPort::FlowControl flowControl() const;
+
+public slots:
   void disconnectDevice();
   void setBaudRate(const qint32 rate);
   void setDtrEnabled(const bool enabled);
@@ -174,7 +173,7 @@ public Q_SLOTS:
   void setAutoReconnect(const bool autoreconnect);
   void setFlowControl(const quint8 flowControlIndex);
 
-private Q_SLOTS:
+private slots:
   void onReadyRead();
   void readSettings();
   void writeSettings();

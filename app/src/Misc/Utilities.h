@@ -52,7 +52,7 @@ public:
                  const QMessageBox::StandardButtons &bt = QMessageBox::Ok);
   // clang-format on
 
-public Q_SLOTS:
+public slots:
   static void aboutQt();
   static void revealFile(const QString &pathToReveal);
 };

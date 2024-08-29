@@ -89,9 +89,12 @@ class Manager : public QObject
   Q_PROPERTY(bool configurationOk
              READ configurationOk
              NOTIFY configurationChanged)
+  Q_PROPERTY(QStringList availableDrivers
+             READ availableDrivers
+             CONSTANT)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void driverChanged();
   void connectedChanged();
   void writeEnabledChanged();
@@ -133,25 +136,25 @@ public:
 
   static Manager &instance();
 
-  bool readOnly();
-  bool readWrite();
-  bool connected();
-  bool deviceAvailable();
-  bool configurationOk();
+  [[nodiscard]] bool readOnly();
+  [[nodiscard]] bool readWrite();
+  [[nodiscard]] bool connected();
+  [[nodiscard]] bool deviceAvailable();
+  [[nodiscard]] bool configurationOk();
 
-  int maxBufferSize() const;
+  [[nodiscard]] int maxBufferSize() const;
 
-  HAL_Driver *driver();
-  SelectedDriver selectedDriver() const;
+  [[nodiscard]] HAL_Driver *driver();
+  [[nodiscard]] SelectedDriver selectedDriver() const;
 
-  QString startSequence() const;
-  QString finishSequence() const;
-  QString separatorSequence() const;
+  [[nodiscard]] const QString& startSequence() const;
+  [[nodiscard]] const QString& finishSequence() const;
+  [[nodiscard]] const QString& separatorSequence() const;
 
-  Q_INVOKABLE QStringList availableDrivers() const;
+  static QStringList& availableDrivers();
   Q_INVOKABLE qint64 writeData(const QByteArray &data);
 
-public Q_SLOTS:
+public slots:
   void connectDevice();
   void toggleConnection();
   void disconnectDriver();
@@ -163,7 +166,7 @@ public Q_SLOTS:
   void setSeparatorSequence(const QString &sequence);
   void setSelectedDriver(const IO::Manager::SelectedDriver &driver);
 
-private Q_SLOTS:
+private slots:
   void readFrames();
   void clearTempBuffer();
   void setDriver(HAL_Driver *driver);

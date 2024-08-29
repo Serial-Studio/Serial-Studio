@@ -58,7 +58,7 @@ public:
 
   virtual int scrollExtent(Qt::Orientation) const;
 
-public Q_SLOTS:
+public slots:
 
   /*!
      \brief Update the entries for a plot item

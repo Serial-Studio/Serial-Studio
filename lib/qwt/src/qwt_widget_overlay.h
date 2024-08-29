@@ -122,7 +122,7 @@ public:
 
   virtual bool eventFilter(QObject *, QEvent *) QWT_OVERRIDE;
 
-public Q_SLOTS:
+public slots:
   void updateOverlay();
 
 protected:

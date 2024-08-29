@@ -22,12 +22,12 @@
 
 #include <QOperatingSystemVersion>
 
-#include <IO/Manager.h>
-#include <IO/Drivers/BluetoothLE.h>
+#include "IO/Manager.h"
+#include "IO/Drivers/BluetoothLE.h"
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Constructor & singleton access functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Constructor function, configures the signals/slots of the BLE module
@@ -74,9 +74,9 @@ IO::Drivers::BluetoothLE &IO::Drivers::BluetoothLE::instance()
   return singleton;
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // HAL driver implementation
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void IO::Drivers::BluetoothLE::close()
 {
@@ -191,9 +191,9 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
   return true;
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Driver specifics
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * @return The total number of discovered devices.
@@ -217,7 +217,7 @@ int IO::Drivers::BluetoothLE::deviceIndex() const
 QStringList IO::Drivers::BluetoothLE::deviceNames() const
 {
   QStringList list;
-  list.append(tr("Select device"));
+  list.append(tr("Select Device"));
   list.append(m_deviceNames);
   return list;
 }
@@ -228,7 +228,7 @@ QStringList IO::Drivers::BluetoothLE::deviceNames() const
 QStringList IO::Drivers::BluetoothLE::serviceNames() const
 {
   QStringList list;
-  list.append(tr("Select service"));
+  list.append(tr("Select Service"));
   list.append(m_serviceNames);
   return list;
 }

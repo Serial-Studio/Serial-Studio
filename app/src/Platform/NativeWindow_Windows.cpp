@@ -14,7 +14,7 @@
 #include <QWindow>
 
 #include "NativeWindow.h"
-#include "Utilities/ThemeManager.h"
+#include "Misc/ThemeManager.h"
 
 /**
  * @brief Constructor for NativeWindow class.
@@ -26,8 +26,8 @@
 NativeWindow::NativeWindow(QObject *parent)
   : QObject(parent)
 {
-  connect(&ThemeManager::instance(), &ThemeManager::themeChanged, this,
-          &NativeWindow::onThemeChanged);
+  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+          this, &NativeWindow::onThemeChanged);
 }
 
 /**
@@ -92,10 +92,8 @@ void NativeWindow::onActiveChanged()
     return;
 
   // Get color name
-  const auto &colors = ThemeManager::instance().colors();
-  auto name = colors.value("toolbar_active_top").toString();
-  if (!window->isActive())
-    name = colors.value("toolbar_inactive_top").toString();
+  const auto &colors = Misc::ThemeManager::instance().colors();
+  auto name = colors.value("toolbar_top").toString();
 
   // Convert hex string to native Windows color
   const auto c = QColor(name);

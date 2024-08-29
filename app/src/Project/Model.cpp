@@ -30,10 +30,10 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include <AppInfo.h>
-#include <IO/Manager.h>
-#include <JSON/Generator.h>
-#include <Misc/Utilities.h>
+#include "AppInfo.h"
+#include "IO/Manager.h"
+#include "JSON/Generator.h"
+#include "Misc/Utilities.h"
 
 //
 // For invalid group returns, avoids crashes while creating a new project & the
@@ -41,9 +41,9 @@
 //
 static JSON::Group EMPTY_GROUP;
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Constructor function. Initializes internal members and configures the
@@ -98,9 +98,9 @@ Project::Model &Project::Model::instance()
   return singleton;
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Member access functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Returns a list with the available group-level widgets. This list is used by
@@ -143,7 +143,7 @@ QString Project::Model::jsonProjectsPath() const
 /**
  * Returns the title of the current project
  */
-QString Project::Model::title() const
+const QString& Project::Model::title() const
 {
   return m_title;
 }
@@ -151,7 +151,7 @@ QString Project::Model::title() const
 /**
  * Returns the data separator sequence for the current project.
  */
-QString Project::Model::separator() const
+const QString& Project::Model::separator() const
 {
   return m_separator;
 }
@@ -159,7 +159,7 @@ QString Project::Model::separator() const
 /**
  * Returns the frame end sequence for the current project.
  */
-QString Project::Model::frameEndSequence() const
+const QString& Project::Model::frameEndSequence() const
 {
   return m_frameEndSequence;
 }
@@ -167,7 +167,7 @@ QString Project::Model::frameEndSequence() const
 /**
  * Returns the frame start sequence for the current project.
  */
-QString Project::Model::frameStartSequence() const
+const QString& Project::Model::frameStartSequence() const
 {
   return m_frameStartSequence;
 }
@@ -193,7 +193,7 @@ int Project::Model::groupCount() const
 /**
  * Returns the full path of the current JSON project file.
  */
-QString Project::Model::jsonFilePath() const
+const QString& Project::Model::jsonFilePath() const
 {
   return m_filePath;
 }
@@ -389,10 +389,7 @@ int Project::Model::datasetCount(const int group) const
  */
 const JSON::Group &Project::Model::getGroup(const int index) const
 {
-  if (m_groups.count() > index)
-    return m_groups.at(index);
-
-  return EMPTY_GROUP;
+  return m_groups.at(index);
 }
 
 /**
@@ -408,7 +405,7 @@ const JSON::Dataset &Project::Model::getDataset(const int group,
 /**
  * Returns the JavaScript code used to parse incoming frames
  */
-QString Project::Model::frameParserCode() const
+const QString& Project::Model::frameParserCode() const
 {
   return m_frameParserCode;
 }
@@ -416,7 +413,7 @@ QString Project::Model::frameParserCode() const
 /**
  * Returns the title of the given @a group.
  */
-QString Project::Model::groupTitle(const int group) const
+const QString& Project::Model::groupTitle(const int group) const
 {
   return getGroup(group).title();
 }
@@ -424,7 +421,7 @@ QString Project::Model::groupTitle(const int group) const
 /**
  * Returns the widget of the given @a group.
  */
-QString Project::Model::groupWidget(const int group) const
+const QString& Project::Model::groupWidget(const int group) const
 {
   return getGroup(group).widget();
 }
@@ -521,7 +518,7 @@ bool Project::Model::datasetLogPlot(const int group, const int dataset) const
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Project::Model::datasetTitle(const int group, const int dataset) const
+const QString& Project::Model::datasetTitle(const int group, const int dataset) const
 {
   return getDataset(group, dataset).title();
 }
@@ -532,7 +529,7 @@ QString Project::Model::datasetTitle(const int group, const int dataset) const
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Project::Model::datasetUnits(const int group, const int dataset) const
+const QString& Project::Model::datasetUnits(const int group, const int dataset) const
 {
   return getDataset(group, dataset).units();
 }
@@ -543,7 +540,7 @@ QString Project::Model::datasetUnits(const int group, const int dataset) const
  * @param group   index of the group in which the dataset belongs
  * @param dataset index of the dataset
  */
-QString Project::Model::datasetWidget(const int group, const int dataset) const
+const QString& Project::Model::datasetWidget(const int group, const int dataset) const
 {
   return getDataset(group, dataset).widget();
 }
@@ -626,9 +623,9 @@ QString Project::Model::datasetWidgetAlarm(const int group,
   return QString::number(set.alarm());
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Public slots
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Resets the C++ model used to represent the JSON project file.

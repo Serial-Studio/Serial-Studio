@@ -123,7 +123,7 @@ public:
 
   double value() const;
 
-public Q_SLOTS:
+public slots:
   void setValue(double);
 
 Q_SIGNALS:
@@ -144,7 +144,7 @@ protected:
   virtual void wheelEvent(QWheelEvent *) QWT_OVERRIDE;
   virtual void keyPressEvent(QKeyEvent *) QWT_OVERRIDE;
 
-private Q_SLOTS:
+private slots:
   void btnReleased();
   void btnClicked();
   void textChanged();

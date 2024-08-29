@@ -254,16 +254,6 @@ ToolBar {
     }
 
     //
-    // Report Bug
-    //
-    Widgets.BigButton {
-      text: qsTr("Report Bug")
-      Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/toolbar/github.svg"
-      onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
-    }
-
-    //
     // Help
     //
     Widgets.BigButton {

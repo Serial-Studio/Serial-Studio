@@ -189,7 +189,7 @@ Q_SIGNALS:
    */
   void layoutChanged();
 
-public Q_SLOTS:
+public slots:
   virtual void replot();
   void autoRefresh();
   void setAzimuthOrigin(double);

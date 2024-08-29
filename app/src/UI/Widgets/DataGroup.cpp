@@ -23,9 +23,9 @@
 #include <QResizeEvent>
 #include <QRegularExpression>
 
-#include <UI/Dashboard.h>
-#include <Misc/ThemeManager.h>
-#include <UI/Widgets/DataGroup.h>
+#include "UI/Dashboard.h"
+#include "Misc/ThemeManager.h"
+#include "UI/Widgets/DataGroup.h"
 
 #define DG_EXEC_EVENT(pointer, function, event)                                \
   if (pointer)                                                                 \

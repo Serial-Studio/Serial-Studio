@@ -31,7 +31,6 @@ class FormattedText
 {
 public:
   FormattedText() = default;
-  FormattedText(const FormattedText &other) = default;
   FormattedText(const QString &txt,
                 const QTextCharFormat &fmt = QTextCharFormat())
     : text(txt)
@@ -125,7 +124,7 @@ class Terminal : public UI::DeclarativeWidget
              NOTIFY vt100EmulationChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void textChanged();
   void fontChanged();
   void readOnlyChanged();
@@ -162,7 +161,7 @@ public:
   QString placeholderText() const;
   QTextDocument *document() const;
 
-public Q_SLOTS:
+public slots:
   void copy();
   void clear();
   void selectAll();
@@ -184,7 +183,7 @@ public Q_SLOTS:
   void scrollToBottom(const bool repaint = false);
   void setMaximumBlockCount(const int maxBlockCount);
 
-private Q_SLOTS:
+private slots:
   void repaint();
   void onThemeChanged();
   void updateScrollbarVisibility();

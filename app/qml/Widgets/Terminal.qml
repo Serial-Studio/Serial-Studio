@@ -49,7 +49,7 @@ Item {
   //
   function showWelcomeGuide() {
     clear()
-    Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText() + "\n")
+    Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText + "\n")
   }
 
   //
@@ -265,7 +265,7 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Manager.readWrite
         Layout.alignment: Qt.AlignVCenter
-        model: Cpp_IO_Console.lineEndings()
+        model: Cpp_IO_Console.lineEndings
         currentIndex: Cpp_IO_Console.lineEnding
         onCurrentIndexChanged: {
           if (currentIndex !== Cpp_IO_Console.lineEnding)
@@ -322,7 +322,7 @@ Item {
         Layout.fillWidth: true
         Layout.maximumWidth: 164
         Layout.alignment: Qt.AlignVCenter
-        model: Cpp_IO_Console.displayModes()
+        model: Cpp_IO_Console.displayModes
         currentIndex: Cpp_IO_Console.displayMode
         displayText: qsTr("Display: %1").arg(currentText)
         onCurrentIndexChanged: {

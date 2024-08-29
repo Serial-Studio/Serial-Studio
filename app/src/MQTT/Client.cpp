@@ -23,10 +23,10 @@
 #include <QFile>
 #include <QFileDialog>
 
-#include <IO/Manager.h>
-#include <MQTT/Client.h>
-#include <Misc/Utilities.h>
-#include <Misc/TimerEvents.h>
+#include "IO/Manager.h"
+#include "MQTT/Client.h"
+#include "Misc/Utilities.h"
+#include "Misc/TimerEvents.h"
 
 /**
  * Constructor function

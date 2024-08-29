@@ -23,9 +23,9 @@
 #include <QtMath>
 #include <QResizeEvent>
 
-#include <UI/Dashboard.h>
-#include <Misc/ThemeManager.h>
-#include <UI/Widgets/Accelerometer.h>
+#include "UI/Dashboard.h"
+#include "Misc/ThemeManager.h"
+#include "UI/Widgets/Accelerometer.h"
 
 /**
  * Constructor function, configures widget style & signal/slot connections.

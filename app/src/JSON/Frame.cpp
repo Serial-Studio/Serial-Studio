@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include <JSON/Frame.h>
+#include "JSON/Frame.h"
 
 /**
  * Destructor function, free memory used by the @c Group objects before
@@ -42,28 +42,12 @@ void JSON::Frame::clear()
 }
 
 /**
- * Returns the title of the frame.
+ * @brief Returns @c true if the project has a defined title and it has at least
+ *        one dataset group.
  */
-QString JSON::Frame::title() const
+bool JSON::Frame::isValid() const
 {
-  return m_title;
-}
-
-/**
- * Returns the number of groups contained in the frame.
- */
-int JSON::Frame::groupCount() const
-{
-  return m_groups.count();
-}
-
-/**
- * Returns a vector of pointers to the @c Group objects associated to this
- * frame.
- */
-QVector<JSON::Group> &JSON::Frame::groups()
-{
-  return m_groups;
+  return !title().isEmpty() && groupCount() > 0;
 }
 
 /**
@@ -78,8 +62,8 @@ bool JSON::Frame::read(const QJsonObject &object)
   clear();
 
   // Get title & groups array
-  auto title = object.value(QStringLiteral("title")).toString();
-  auto groups = object.value(QStringLiteral("groups")).toArray();
+  const auto title = object.value(QStringLiteral("title")).toString();
+  const auto groups = object.value(QStringLiteral("groups")).toArray();
 
   // We need to have a project title and at least one group
   if (!title.isEmpty() && !groups.isEmpty())
@@ -102,6 +86,31 @@ bool JSON::Frame::read(const QJsonObject &object)
   // Error
   clear();
   return false;
+}
+
+/**
+ * Returns the number of groups contained in the frame.
+ */
+int JSON::Frame::groupCount() const
+{
+  return m_groups.count();
+}
+
+/**
+ * Returns the title of the frame.
+ */
+const QString &JSON::Frame::title() const
+{
+  return m_title;
+}
+
+/**
+ * Returns a vector of pointers to the @c Group objects associated to this
+ * frame.
+ */
+const QVector<JSON::Group> &JSON::Frame::groups() const
+{
+  return m_groups;
 }
 
 /**

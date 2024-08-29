@@ -70,9 +70,18 @@ class Console : public QObject
   Q_PROPERTY(QString currentHistoryString
              READ currentHistoryString
              NOTIFY historyItemChanged)
+  Q_PROPERTY(QStringList dataModes
+             READ dataModes
+             CONSTANT)
+  Q_PROPERTY(QStringList lineEndings
+             READ lineEndings
+             CONSTANT)
+  Q_PROPERTY(QStringList displayModes
+             READ displayModes
+             CONSTANT)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void echoChanged();
   void dataReceived();
   void dataModeChanged();
@@ -117,22 +126,23 @@ public:
 
   static Console &instance();
 
-  bool echo() const;
-  bool autoscroll() const;
-  bool saveAvailable() const;
-  bool showTimestamp() const;
+  [[nodiscard]] bool echo() const;
+  [[nodiscard]] bool autoscroll() const;
+  [[nodiscard]] bool saveAvailable() const;
+  [[nodiscard]] bool showTimestamp() const;
 
-  DataMode dataMode() const;
-  LineEnding lineEnding() const;
-  DisplayMode displayMode() const;
-  QString currentHistoryString() const;
+  [[nodiscard]] DataMode dataMode() const;
+  [[nodiscard]] LineEnding lineEnding() const;
+  [[nodiscard]] DisplayMode displayMode() const;
+  [[nodiscard]] QString currentHistoryString() const;
 
-  Q_INVOKABLE QStringList dataModes() const;
-  Q_INVOKABLE QStringList lineEndings() const;
-  Q_INVOKABLE QStringList displayModes() const;
+  static QStringList& dataModes();
+  static QStringList& lineEndings();
+  static QStringList& displayModes();
+
   Q_INVOKABLE QString formatUserHex(const QString &text);
 
-public Q_SLOTS:
+public slots:
   void save();
   void clear();
   void print();
@@ -147,7 +157,7 @@ public Q_SLOTS:
   void setDisplayMode(const IO::Console::DisplayMode &mode);
   void append(const QString &str, const bool addTimestamp = false);
 
-private Q_SLOTS:
+private slots:
   void onDataSent(const QByteArray &data);
   void addToHistory(const QString &command);
   void onDataReceived(const QByteArray &data);

@@ -20,17 +20,17 @@
  * THE SOFTWARE.
  */
 
-#include "CodeEditor.h"
-#include "Model.h"
-
 #include <QFile>
 #include <QTimer>
 #include <QJSEngine>
 #include <QFileDialog>
 #include <QDesktopServices>
-#include <Misc/Utilities.h>
-#include <Misc/CommonFonts.h>
-#include <Misc/ThemeManager.h>
+
+#include "Model.h"
+#include "CodeEditor.h"
+#include "Misc/Utilities.h"
+#include "Misc/CommonFonts.h"
+#include "Misc/ThemeManager.h"
 
 Project::CodeEditor::CodeEditor()
 {

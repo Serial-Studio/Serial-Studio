@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include <Misc/Translator.h>
+#include "Misc/Translator.h"
 
 /**
  * Constructor function
@@ -138,11 +138,19 @@ QString Misc::Translator::acknowledgementsText() const
 /**
  * Returns a list with the available translation languages.
  */
-QStringList Misc::Translator::availableLanguages() const
+QStringList &Misc::Translator::availableLanguages()
 {
-  return QStringList{QStringLiteral("English"), QStringLiteral("Español"),
-                     QStringLiteral("简体中文"), QStringLiteral("Deutsch"),
-                     QStringLiteral("Русский")};
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(QStringLiteral("English"));
+    list.append(QStringLiteral("Español"));
+    list.append(QStringLiteral("简体中文"));
+    list.append(QStringLiteral("Deutsch"));
+    list.append(QStringLiteral("Русский"));
+  }
+
+  return list;
 }
 
 /**

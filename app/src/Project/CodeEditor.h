@@ -51,13 +51,15 @@ private:
 
 public:
   static CodeEditor &instance();
-  QString defaultCode() const;
-  QStringList parse(const QString &frame, const QString &separator);
 
-public Q_SLOTS:
+  [[nodiscard]] QString defaultCode() const;
+  [[nodiscard]] QStringList parse(const QString &frame,
+                                  const QString &separator);
+
+public slots:
   void displayWindow();
 
-private Q_SLOTS:
+private slots:
   void onNewClicked();
   void onOpenClicked();
   void onSaveClicked();

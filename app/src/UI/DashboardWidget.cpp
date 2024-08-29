@@ -20,20 +20,19 @@
  * THE SOFTWARE.
  */
 
-#include <Misc/ThemeManager.h>
-#include <UI/DashboardWidget.h>
+#include "UI/DashboardWidget.h"
 
-#include <UI/Widgets/Bar.h>
-#include <UI/Widgets/GPS.h>
-#include <UI/Widgets/Plot.h>
-#include <UI/Widgets/Gauge.h>
-#include <UI/Widgets/Compass.h>
-#include <UI/Widgets/FFTPlot.h>
-#include <UI/Widgets/LEDPanel.h>
-#include <UI/Widgets/DataGroup.h>
-#include <UI/Widgets/Gyroscope.h>
-#include <UI/Widgets/MultiPlot.h>
-#include <UI/Widgets/Accelerometer.h>
+#include "UI/Widgets/Bar.h"
+#include "UI/Widgets/GPS.h"
+#include "UI/Widgets/Plot.h"
+#include "UI/Widgets/Gauge.h"
+#include "UI/Widgets/Compass.h"
+#include "UI/Widgets/FFTPlot.h"
+#include "UI/Widgets/LEDPanel.h"
+#include "UI/Widgets/DataGroup.h"
+#include "UI/Widgets/Gyroscope.h"
+#include "UI/Widgets/MultiPlot.h"
+#include "UI/Widgets/Accelerometer.h"
 
 /**
  * Constructor function

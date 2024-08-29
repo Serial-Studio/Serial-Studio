@@ -34,17 +34,17 @@ class DeclarativeWidget : public QQuickPaintedItem
   Q_OBJECT
   Q_PROPERTY(QWidget *widget READ widget WRITE setWidget NOTIFY widgetChanged)
 
-Q_SIGNALS:
+signals:
   void widgetChanged();
 
 public:
   DeclarativeWidget(QQuickItem *parent = 0);
 
-  QWidget *widget();
+  [[nodiscard]] QWidget *widget();
+
   void update(const QRect &rect = QRect());
 
   virtual void paint(QPainter *painter) override;
-
   virtual void keyPressEvent(QKeyEvent *event) override;
   virtual void keyReleaseEvent(QKeyEvent *event) override;
   virtual void inputMethodEvent(QInputMethodEvent *event) override;
@@ -60,7 +60,7 @@ public:
   virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
   virtual void dropEvent(QDropEvent *event) override;
 
-public Q_SLOTS:
+public slots:
   void resizeWidget();
   void setWidget(QWidget *widget);
 

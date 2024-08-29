@@ -28,20 +28,41 @@
 #include <QSettings>
 #include <QJsonObject>
 
-inline QString QSS(const QString &style, const QColor &color)
-{
-  return QString(style).arg(color.name());
-}
+#include <QString>
+#include <QColor>
 
-inline QString QSS(const QString &style, const QColor &c1, const QColor &c2)
+/**
+ * @brief Generates a styled QString using a format string and a variable number
+ *        of QColor arguments.
+ *
+ * This function takes a QString representing a style (such as a CSS-like
+ * string) and a variable number of QColor objects. It replaces placeholders in
+ * the style string (e.g., %1, %2, etc.) with the hexadecimal color codes of the
+ * provided QColor objects.
+ *
+ * The number of QColor arguments must match the number of placeholders in the
+ * style string. If fewer colors are provided than placeholders, the
+ * placeholders that are not matched will not be replaced. If more colors are
+ * provided than placeholders, the extra colors will be ignored.
+ *
+ * @param style The format string that includes placeholders (e.g., %1, %2, ...)
+ * @param colors A variable number of QColor objects to replace the placeholders
+ *               in the format string.
+ *
+ * @return A QString with the placeholders replaced by the color codes.
+ *
+ * @note Example usage:
+ * @code
+ * QString styleString = QSS("background-color: %1; color: %2;", QColor("red"),
+ * QColor("blue"));
+ * // Result: "background-color: #ff0000; color: #0000ff;"
+ * @endcode
+ */
+template<typename... Colors>
+inline QString QSS(const QString &style, const Colors &...colors)
 {
-  return QString(style).arg(c1.name(), c2.name());
-}
-
-inline QString QSS(const QString &style, const QColor &c1, const QColor &c2,
-                   const QColor &c3)
-{
-  return QString(style).arg(c1.name(), c2.name(), c3.name());
+  QStringList colorNames = {colors.name()...};
+  return QString(style).arg(colorNames.join(','));
 }
 
 /**
@@ -87,7 +108,7 @@ class ThemeManager : public QObject
              CONSTANT)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void themeChanged();
 
 private:
@@ -106,7 +127,7 @@ public:
   [[nodiscard]] QStringList availableThemes() const;
   [[nodiscard]] QColor getColor(const QString &name) const;
 
-public Q_SLOTS:
+public slots:
   void setTheme(int index);
 
 private:

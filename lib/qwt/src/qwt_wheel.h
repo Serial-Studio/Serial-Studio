@@ -110,7 +110,7 @@ public:
 
   double mass() const;
 
-public Q_SLOTS:
+public slots:
   void setValue(double);
   void setTotalAngle(double);
   void setViewAngle(double);

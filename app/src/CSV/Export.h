@@ -62,7 +62,7 @@ class Export : public QObject
              NOTIFY enabledChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void openChanged();
   void enabledChanged();
 
@@ -78,15 +78,15 @@ private:
 public:
   static Export &instance();
 
-  bool isOpen() const;
-  bool exportEnabled() const;
+  [[nodiscard]] bool isOpen() const;
+  [[nodiscard]] bool exportEnabled() const;
 
-public Q_SLOTS:
+public slots:
   void closeFile();
   void openCurrentCsv();
   void setExportEnabled(const bool enabled);
 
-private Q_SLOTS:
+private slots:
   void writeValues();
   void registerFrame(const QByteArray &data);
   void createCsvFile(const CSV::RawFrame &frame);

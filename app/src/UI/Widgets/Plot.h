@@ -38,7 +38,7 @@ class Plot : public DashboardWidgetBase
 public:
   Plot(const int index = -1);
 
-private Q_SLOTS:
+private slots:
   void updateData();
   void updateRange();
   void onThemeChanged();

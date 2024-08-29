@@ -72,22 +72,24 @@ class Dataset
 public:
   Dataset();
 
-  bool fft() const;
-  bool led() const;
-  bool log() const;
-  int index() const;
-  bool graph() const;
-  double min() const;
-  double max() const;
-  double alarm() const;
-  QString title() const;
-  QString value() const;
-  QString units() const;
-  QString widget() const;
-  int fftSamples() const;
-  QJsonObject jsonData() const;
+  [[nodiscard]] bool fft() const;
+  [[nodiscard]] bool led() const;
+  [[nodiscard]] bool log() const;
+  [[nodiscard]] int index() const;
+  [[nodiscard]] bool graph() const;
+  [[nodiscard]] double min() const;
+  [[nodiscard]] double max() const;
+  [[nodiscard]] double alarm() const;
+  [[nodiscard]] int fftSamples() const;
 
-  bool read(const QJsonObject &object);
+  [[nodiscard]] const QString& title() const;
+  [[nodiscard]] const QString& value() const;
+  [[nodiscard]] const QString& units() const;
+  [[nodiscard]] const QString& widget() const;
+  [[nodiscard]] const QJsonObject& jsonData() const;
+
+  [[nodiscard]] bool read(const QJsonObject &object);
+
   void setTitle(const QString &title) { m_title = title; }
 
 private:

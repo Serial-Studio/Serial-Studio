@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-#include <UI/Dashboard.h>
-#include <Misc/ThemeManager.h>
-#include <UI/Widgets/FFTPlot.h>
+#include "UI/Dashboard.h"
+#include "Misc/ThemeManager.h"
+#include "UI/Widgets/FFTPlot.h"
 
 /**
  * @brief Constructor to initialize the FFTPlot.

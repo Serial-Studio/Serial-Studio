@@ -81,8 +81,8 @@ Window {
         TextArea {
           readOnly: true
           textFormat: TextArea.MarkdownText
+          text: Cpp_Misc_Translator.acknowledgementsText
           wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
-          text: Cpp_Misc_Translator.acknowledgementsText()
 
           background: TextField {
             enabled: false

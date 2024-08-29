@@ -30,8 +30,8 @@
 #include <qtcsv/stringdata.h>
 #include <qtcsv/reader.h>
 
-#include <IO/Manager.h>
-#include <Misc/Utilities.h>
+#include "IO/Manager.h"
+#include "Misc/Utilities.h"
 
 /**
  * Constructor function
@@ -79,20 +79,6 @@ bool CSV::Player::isPlaying() const
 }
 
 /**
- * Returns the short filename of the current CSV file
- */
-QString CSV::Player::filename() const
-{
-  if (isOpen())
-  {
-    auto fileInfo = QFileInfo(m_csvFile.fileName());
-    return fileInfo.fileName();
-  }
-
-  return "";
-}
-
-/**
  * Returns the total number of frames in the CSV file. This can be calculated
  * by getting the number of rows of the CSV and substracting 1 (because the
  * title cells do not count as a valid frame).
@@ -112,11 +98,17 @@ int CSV::Player::framePosition() const
 }
 
 /**
- * Returns the timestamp of the current data frame / row.
+ * Returns the short filename of the current CSV file
  */
-QString CSV::Player::timestamp() const
+QString CSV::Player::filename() const
 {
-  return m_timestamp;
+  if (isOpen())
+  {
+    auto fileInfo = QFileInfo(m_csvFile.fileName());
+    return fileInfo.fileName();
+  }
+
+  return "";
 }
 
 /**
@@ -134,6 +126,14 @@ QString CSV::Player::csvFilesPath() const
     dir.mkpath(".");
 
   return path;
+}
+
+/**
+ * Returns the timestamp of the current data frame / row.
+ */
+const QString& CSV::Player::timestamp() const
+{
+  return m_timestamp;
 }
 
 /**
@@ -294,7 +294,7 @@ void CSV::Player::openFile(const QString &filePath)
  * Reads a specific row from the @a progress range (which can have a value
  * ranging from 0.0 to 1.0).
  */
-void CSV::Player::setProgress(const qreal &progress)
+void CSV::Player::setProgress(const qreal progress)
 {
   // Ensure that progress value is between 0 and 1
   auto validProgress = progress;

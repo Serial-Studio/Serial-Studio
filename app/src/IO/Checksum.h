@@ -23,11 +23,10 @@
 #pragma once
 
 #include <cstdint>
-#include <cstdlib>
 
 namespace IO
 {
-uint8_t crc8(const char *data, const int length);
-uint16_t crc16(const char *data, const int length);
-uint32_t crc32(const char *data, const int length);
+[[nodiscard]] uint8_t crc8(const char *data, const int length);
+[[nodiscard]] uint16_t crc16(const char *data, const int length);
+[[nodiscard]] uint32_t crc32(const char *data, const int length);
 } // namespace IO

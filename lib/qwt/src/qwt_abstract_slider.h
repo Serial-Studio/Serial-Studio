@@ -81,7 +81,7 @@ public:
   void setInvertedControls(bool);
   bool invertedControls() const;
 
-public Q_SLOTS:
+public slots:
   void setValue(double value);
 
 Q_SIGNALS:

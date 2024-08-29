@@ -40,7 +40,7 @@ public:
   LEDPanel(const int index = -1);
   ~LEDPanel();
 
-private Q_SLOTS:
+private slots:
   void updateData();
   void onThemeChanged();
 

@@ -44,7 +44,7 @@ public:
   QwtPolarCanvas *canvas();
   const QwtPolarCanvas *canvas() const;
 
-public Q_SLOTS:
+public slots:
   virtual void rescale(double factor) QWT_OVERRIDE;
   void unzoom();
 

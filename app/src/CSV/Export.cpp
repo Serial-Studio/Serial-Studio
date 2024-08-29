@@ -28,12 +28,12 @@
 #include <QApplication>
 #include <QDesktopServices>
 
-#include <AppInfo.h>
-#include <IO/Manager.h>
-#include <UI/Dashboard.h>
-#include <Project/Model.h>
-#include <Misc/Utilities.h>
-#include <Misc/TimerEvents.h>
+#include "AppInfo.h"
+#include "IO/Manager.h"
+#include "UI/Dashboard.h"
+#include "Project/Model.h"
+#include "Misc/Utilities.h"
+#include "Misc/TimerEvents.h"
 
 /**
  * Connect JSON Parser & Serial Manager signals to begin registering JSON

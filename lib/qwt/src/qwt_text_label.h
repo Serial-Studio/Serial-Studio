@@ -39,7 +39,7 @@ public:
   void setPlainText(const QString &);
   QString plainText() const;
 
-public Q_SLOTS:
+public slots:
   void setText(const QString &,
                QwtText::TextFormat textFormat = QwtText::AutoText);
   virtual void setText(const QwtText &);

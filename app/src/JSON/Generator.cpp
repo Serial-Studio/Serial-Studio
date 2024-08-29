@@ -20,19 +20,16 @@
  * THE SOFTWARE.
  */
 
-#include "Generator.h"
-
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QRegularExpression>
 
-#include <Project/Model.h>
-#include <Project/CodeEditor.h>
+#include "Generator.h"
+#include "Project/Model.h"
+#include "Project/CodeEditor.h"
 
-#include <CSV/Player.h>
-#include <IO/Manager.h>
-#include <MQTT/Client.h>
-#include <Misc/Utilities.h>
+#include "IO/Manager.h"
+#include "Misc/Utilities.h"
 
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
@@ -52,14 +49,6 @@ JSON::Generator &JSON::Generator::instance()
 {
   static Generator singleton;
   return singleton;
-}
-
-/**
- * Returns the JSON map data from the loaded file as a string
- */
-QJsonObject &JSON::Generator::json()
-{
-  return m_json;
 }
 
 /**
@@ -88,6 +77,14 @@ QString JSON::Generator::jsonMapFilepath() const
   }
 
   return "";
+}
+
+/**
+ * Returns the JSON map data from the loaded file as a string
+ */
+const QJsonObject &JSON::Generator::json() const
+{
+  return m_json;
 }
 
 /**
@@ -187,8 +184,7 @@ void JSON::Generator::loadJsonMap(const QString &path)
  * @c kAutomatic serial data contains the JSON data frame, good for simple
  *               applications or for prototyping.
  */
-void JSON::Generator::setOperationMode(
-    const JSON::Generator::OperationMode &mode)
+void JSON::Generator::setOperationMode(const OperationMode mode)
 {
   m_opMode = mode;
   Q_EMIT operationModeChanged();

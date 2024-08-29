@@ -20,15 +20,15 @@
  * THE SOFTWARE.
  */
 
-#include <IO/Manager.h>
-#include <IO/Drivers/Serial.h>
+#include "IO/Manager.h"
+#include "IO/Drivers/Serial.h"
 
-#include <Misc/Utilities.h>
-#include <Misc/TimerEvents.h>
+#include "Misc/Utilities.h"
+#include "Misc/TimerEvents.h"
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Constructor function
@@ -81,9 +81,9 @@ IO::Drivers::Serial &IO::Drivers::Serial::instance()
   return singleton;
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // HAL-driver implementation
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Closes the current serial port connection
@@ -196,9 +196,9 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
   return false;
 }
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Driver specifics
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 /**
  * Returns the name of the current serial port device
@@ -295,61 +295,86 @@ QStringList IO::Drivers::Serial::portList() const
     return m_portList;
 
   else
-    return QStringList{tr("Select port")};
-}
-
-/**
- * Returns a list with the available parity configurations.
- * This function can be used with a combo-box to build UIs.
- */
-QStringList IO::Drivers::Serial::parityList() const
-{
-  QStringList list;
-  list.append(tr("None"));
-  list.append(tr("Even"));
-  list.append(tr("Odd"));
-  list.append(tr("Space"));
-  list.append(tr("Mark"));
-  return list;
+    return QStringList{tr("Select Port")};
 }
 
 /**
  * Returns a list with the available baud rate configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList IO::Drivers::Serial::baudRateList() const
+const QStringList &IO::Drivers::Serial::baudRateList() const
 {
   return m_baudRateList;
+}
+
+/**
+ * Returns a list with the available parity configurations.
+ * This function can be used with a combo-box to build UIs.
+ */
+QStringList &IO::Drivers::Serial::parityList()
+{
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(tr("None"));
+    list.append(tr("Even"));
+    list.append(tr("Odd"));
+    list.append(tr("Space"));
+    list.append(tr("Mark"));
+  }
+
+  return list;
 }
 
 /**
  * Returns a list with the available data bits configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList IO::Drivers::Serial::dataBitsList() const
+QStringList &IO::Drivers::Serial::dataBitsList()
 {
-  return QStringList{"5", "6", "7", "8"};
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(QStringLiteral("5"));
+    list.append(QStringLiteral("6"));
+    list.append(QStringLiteral("7"));
+    list.append(QStringLiteral("8"));
+  }
+
+  return list;
 }
 
 /**
  * Returns a list with the available stop bits configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList IO::Drivers::Serial::stopBitsList() const
+QStringList &IO::Drivers::Serial::stopBitsList()
 {
-  return QStringList{"1", "1.5", "2"};
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(QStringLiteral("1"));
+    list.append(QStringLiteral("1.5"));
+    list.append(QStringLiteral("2"));
+  }
+
+  return list;
 }
 
 /**
  * Returns a list with the available flow control configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList IO::Drivers::Serial::flowControlList() const
+QStringList &IO::Drivers::Serial::flowControlList()
 {
-  QStringList list;
-  list.append(tr("None"));
-  list.append("RTS/CTS");
-  list.append("XON/XOFF");
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(tr("None"));
+    list.append(tr("RTS/CTS"));
+    list.append(tr("XON/XOFF"));
+  }
+
   return list;
 }
 
@@ -662,7 +687,7 @@ void IO::Drivers::Serial::refreshSerialDevices()
   // Create device list, starting with dummy header
   // (for a more friendly UI when no devices are attached)
   QStringList ports;
-  ports.append(tr("Select port"));
+  ports.append(tr("Select Port"));
 
   // Search for available ports and add them to the lsit
   auto validPortList = validPorts();
