@@ -166,9 +166,6 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Initialize third-party modules
   auto updater = QSimpleUpdater::getInstance();
 
-  // Initialize non-singleton modules
-  NativeWindow nativeWindow;
-
   // Start common event timers
   miscTimerEvents->startTimers();
 
@@ -186,9 +183,9 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_Manager", ioManager);
   c->setContextProperty("Cpp_IO_Network", ioNetwork);
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);
-  c->setContextProperty("Cpp_NativeWindow", &nativeWindow);
   c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
   c->setContextProperty("Cpp_Project_Model", projectModel);
+  c->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
   c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
   c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
   c->setContextProperty("Cpp_Misc_Utilities", miscUtilities);

@@ -24,6 +24,7 @@
 #define _PLATFORM_NATIVE_WINDOW_H
 
 #include <QObject>
+#include <QWindow>
 
 /**
  * @class NativeWindow
@@ -40,7 +41,6 @@
  * platform-specific window customizations such as transparent title bars on
  * macOS or caption colorization on Windows.
  */
-class QWindow;
 class NativeWindow : public QObject
 {
   Q_OBJECT
@@ -52,6 +52,13 @@ public:
 
 public slots:
   void addWindow(QObject *window);
+  void removeWindow(QObject *window)
+  {
+    auto *win = qobject_cast<QWindow *>(window);
+    auto index = m_windows.indexOf(win);
+    if (index != -1 && index >= 0)
+      m_windows.removeAt(index);
+  }
 
 private slots:
   void onThemeChanged();

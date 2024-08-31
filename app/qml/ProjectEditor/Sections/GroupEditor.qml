@@ -24,91 +24,173 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-ColumnLayout {
-  id: root
-  spacing: 0
+import "../../Widgets" as Widgets
+
+Widgets.Pane {
+  title: qsTr("Group Editor")
+  icon: "qrc:/rcc/icons/project-editor/windows/group.svg"
+
+  property int groupIndex: 0
 
   //
-  // Connections with JSON editor model
+  // User interface elements
   //
-  Connections {
-    target: Cpp_Project_Model
+  Page {
+    anchors.fill: parent
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.highlight: Cpp_ThemeManager.colors["highlight"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-    function onGroupCountChanged() {
-      tabRepeater.model = 0
-      stackRepeater.model = 0
-      tabRepeater.model = Cpp_Project_Model.groupCount
-      stackRepeater.model = Cpp_Project_Model.groupCount
-    }
-
-    function onGroupOrderChanged() {
-      tabRepeater.model = 0
-      stackRepeater.model = 0
-      tabRepeater.model = Cpp_Project_Model.groupCount
-      stackRepeater.model = Cpp_Project_Model.groupCount
-    }
-  }
-
-  //
-  // Function to scroll to the last group
-  //
-  function selectLastGroup() {
-    tabBar.currentIndex = tabBar.count - 1
-  }
-
-  //
-  // Spacer
-  //
-  Item {
-    height: 8
-  }
-
-  //
-  // Tab widget
-  //
-  TabBar {
-    id: tabBar
-    Layout.fillWidth: true
-    visible: tabRepeater.model > 0
-
-    Repeater {
-      id: tabRepeater
-      delegate: TabButton {
-        height: 24
-        text: qsTr("Group %1").arg(index + 1) + " <i>" + (Cpp_Project_Model.groupTitle(index)) + "</i>"
+    ColumnLayout {
+      spacing: 0
+      anchors {
+        fill: parent
+        topMargin: -16
+        leftMargin: -9
+        rightMargin: -9
+        bottomMargin: -10
       }
-    }
-  }
 
-  //
-  // StackView
-  //
-  StackLayout {
-    id: swipe
-    Layout.fillWidth: true
-    Layout.fillHeight: true
-    currentIndex: tabBar.currentIndex
-    Layout.topMargin: -parent.spacing - 1
-
-    Repeater {
-      id: stackRepeater
-
-      delegate: Loader {
+      //
+      // Group actions panel
+      //
+      Rectangle {
+        z: 2
         Layout.fillWidth: true
-        Layout.fillHeight: true
-        active: swipe.currentIndex == index
+        Layout.minimumHeight: 64
+        Layout.maximumHeight: Layout.minimumHeight
+        color: Cpp_ThemeManager.colors["groupbox_background"]
 
-        sourceComponent: JsonGroupDelegate {
-          group: index
+        //
+        // Buttons
+        //
+        RowLayout {
+          spacing: 4
+
+          anchors {
+            margins: 8
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+          }
+
+          //
+          // Add generic dataset
+          //
+          Widgets.BigButton {
+            icon.width: 24
+            icon.height: 24
+            text: qsTr("Dataset")
+            Layout.alignment: Qt.AlignVCenter
+            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
+          }
+
+          //
+          // Add plot
+          //
+          Widgets.BigButton {
+            icon.width: 24
+            icon.height: 24
+            text: qsTr("Plot")
+            Layout.alignment: Qt.AlignVCenter
+            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
+          }
+
+          //
+          // Add FFT plot
+          //
+          Widgets.BigButton {
+            icon.width: 24
+            icon.height: 24
+            text: qsTr("FFT Plot")
+            Layout.alignment: Qt.AlignVCenter
+            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
+          }
+
+          //
+          // Add bar
+          //
+          Widgets.BigButton {
+            icon.width: 24
+            icon.height: 24
+            text: qsTr("Bar/Level")
+            Layout.alignment: Qt.AlignVCenter
+            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
+          }
+
+          //
+          // Add gauge
+          //
+          Widgets.BigButton {
+            icon.width: 24
+            icon.height: 24
+            text: qsTr("Gauge")
+            Layout.alignment: Qt.AlignVCenter
+            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
+          }
+
+          //
+          // Add compass
+          //
+          Widgets.BigButton {
+            icon.width: 24
+            icon.height: 24
+            text: qsTr("Compass")
+            Layout.alignment: Qt.AlignVCenter
+            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
+          }
+
+          //
+          // Spacer
+          //
+          Item {
+            Layout.fillWidth: true
+          }
+
+
+          //
+          // Delete group
+          //
+          Widgets.BigButton {
+            icon.width: 24
+            icon.height: 24
+            text: qsTr("Delete Group")
+            Layout.alignment: Qt.AlignVCenter
+            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+            icon.source: "qrc:/rcc/icons/project-editor/actions/delete-group.svg"
+          }
+        }
+
+        //
+        // Bottom border
+        //
+        Rectangle {
+          height: 1
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          color: Cpp_ThemeManager.colors["groupbox_border"]
         }
       }
-    }
-  }
 
-  //
-  // Spacer
-  //
-  Item {
-    height: 8
+      //
+      // Datasets
+      //
+      Item {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+      }
+    }
   }
 }

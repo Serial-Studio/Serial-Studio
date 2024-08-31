@@ -20,40 +20,14 @@
  * THE SOFTWARE.
  */
 
-#pragma once
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 
-#include <QObject>
-#include <QQmlApplicationEngine>
+import "../../Widgets" as Widgets
 
-#include "Platform/NativeWindow.h"
-
-namespace Misc
-{
-/**
- * @brief The ModuleManager class
- *
- * The @c ModuleManager class is in charge of initializing all the C++ modules
- * that are part of Serial Studio in the correct order.
- */
-class ModuleManager : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(bool autoUpdaterEnabled READ autoUpdaterEnabled CONSTANT)
-
-public:
-  ModuleManager();
-
-  [[nodiscard]] bool autoUpdaterEnabled() const;
-  [[nodiscard]] const QQmlApplicationEngine& engine() const;
-
-public slots:
-  void onQuit();
-  void configureUpdater();
-  void registerQmlTypes();
-  void initializeQmlInterface();
-
-private:
-  NativeWindow m_nativeWindow;
-  QQmlApplicationEngine m_engine;
-};
-} // namespace Misc
+Widgets.Pane {
+  id: root
+  title: qsTr("Project Setup")
+  icon: "qrc:/rcc/icons/project-editor/windows/project-setup.svg"
+}

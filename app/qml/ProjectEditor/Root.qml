@@ -36,22 +36,22 @@ Window {
   //
   // Window options
   //
-  minimumWidth: 910
-  minimumHeight: 720
+  minimumWidth: 970
+  minimumHeight: 640
   title: qsTr("%1 - Project Editor").arg(Cpp_Project_Model.jsonFileName)
 
   //
   // Ensure that current JSON file is shown
   //
-  Component.onCompleted: {
-    Cpp_NativeWindow.addWindow(root)
-    Cpp_Project_Model.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
-  }
+  onVisibleChanged: {
+    if (visible) {
+      Cpp_NativeWindow.addWindow(root)
+      Cpp_Project_Model.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
+    }
 
-  //
-  // Ask user to save changes before closing the window
-  //
-  onClosing: (close) => close.accepted = Cpp_Project_Model.askSave()
+    else
+      Cpp_NativeWindow.removeWindow(root)
+  }
 
   //
   // Dummy string to increase width of buttons
@@ -95,39 +95,62 @@ Window {
       Toolbar {
         z: 2
         Layout.fillWidth: true
+        onGroupAdded: (index) => groupEditor.groupIndex = index
       }
 
       //
-      // Header (project properties)
-      //
-      Header {
-        Layout.topMargin: -1
-        Layout.fillWidth: true
-      }
-
-      //
-      // Main Layout (project structure + group editor)
+      // Main Layout
       //
       RowLayout {
+        spacing: 0
+        Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
         visible: Cpp_Project_Model.groupCount !== 0
 
-        TreeView {
+        //
+        // Project structure
+        //
+        ProjectStructure {
           Layout.fillHeight: true
-          Layout.minimumWidth: 144
+          Layout.minimumWidth: 256
         }
 
-        Widgets.Pane {
+        //
+        // Panel border
+        //
+        Rectangle {
+          z: 2
+          width: 1
+          Layout.fillHeight: true
+          color: Cpp_ThemeManager.colors["setup_border"]
+
+          Rectangle {
+            width: 1
+            height: 32
+            anchors.top: parent.top
+            anchors.left: parent.left
+            color: Cpp_ThemeManager.colors["pane_caption_border"]
+          }
+        }
+
+        //
+        // Group editor
+        //
+        GroupEditor {
+          id: groupEditor
           Layout.fillWidth: true
           Layout.fillHeight: true
-          title: qsTr("Group Editor")
-          icon: "qrc:/rcc/icons/project-editor/windows/group.svg"
+        }
 
-          GroupEditor {
-            anchors.fill: parent
-            anchors.topMargin: -6
-          }
+        //
+        // Project setup
+        //
+        ProjectSetup {
+          visible: false
+          id: projectSetup
+          Layout.fillWidth: true
+          Layout.fillHeight: true
         }
       }
 
@@ -140,16 +163,6 @@ Window {
         visible: Cpp_Project_Model.groupCount === 0
         color: Cpp_ThemeManager.colors["alternate_window"]
 
-        Rectangle {
-          height: 1
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-          anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-          }
-        }
-
         ColumnLayout {
           spacing: 8
           anchors.centerIn: parent
@@ -157,7 +170,7 @@ Window {
           Image {
             sourceSize: Qt.size(128, 128)
             Layout.alignment: Qt.AlignHCenter
-            source: "qrc:/rcc/images/microcontroller.svg"
+            source: "qrc:/rcc/images/soldering-iron.svg"
           }
 
           Label {

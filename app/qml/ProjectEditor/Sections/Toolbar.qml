@@ -31,6 +31,11 @@ ToolBar {
   id: root
 
   //
+  // Signals for group view widget
+  //
+  signal groupAdded(var index)
+
+  //
   // Calculate offset based on platform
   //
   property int titlebarHeight: Cpp_NativeWindow.titlebarHeight(projectEditor)
@@ -117,17 +122,30 @@ ToolBar {
     // New project
     //
     Widgets.BigButton {
-      text: qsTr("New")
+      text: qsTr("New Project")
       Layout.alignment: Qt.AlignVCenter
+      onClicked: Cpp_Project_Model.newJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/new.svg"
+    }
+
+    //
+    // Separator
+    //
+    Rectangle {
+      width: 1
+      Layout.fillHeight: true
+      Layout.maximumHeight: 64
+      Layout.alignment: Qt.AlignVCenter
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
 
     //
     // Open
     //
     Widgets.BigButton {
-      text: qsTr("Open")
+      text: qsTr("Load Project")
       Layout.alignment: Qt.AlignVCenter
+      onClicked: Cpp_Project_Model.openJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/open.svg"
     }
 
@@ -135,8 +153,10 @@ ToolBar {
     // Save
     //
     Widgets.BigButton {
-      text: qsTr("Save")
+      text: qsTr("Save Project")
       Layout.alignment: Qt.AlignVCenter
+      enabled: Cpp_Project_Model.modified
+      onClicked: Cpp_Project_Model.saveJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
     }
 
@@ -158,6 +178,11 @@ ToolBar {
       text: qsTr("Generic Group")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
+      onClicked: {
+        const gIndex = Cpp_Project_Model.groupCount
+        Cpp_Project_Model.addGroup(qsTr("Generic Group"), 0)
+        root.groupAdded(gIndex)
+      }
     }
 
     //
@@ -167,6 +192,11 @@ ToolBar {
       text: qsTr("Multiple Plots")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
+      onClicked: {
+        const gIndex = Cpp_Project_Model.groupCount
+        Cpp_Project_Model.addGroup(qsTr("Multiple Plot"), 4)
+        root.groupAdded(gIndex)
+      }
     }
 
     //
@@ -176,6 +206,11 @@ ToolBar {
       text: qsTr("Accelerometer")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
+      onClicked: {
+        const gIndex = Cpp_Project_Model.groupCount
+        Cpp_Project_Model.addGroup(qsTr("Accelerometer"), 1)
+        root.groupAdded(gIndex)
+      }
     }
 
     //
@@ -185,6 +220,11 @@ ToolBar {
       text: qsTr("Gyroscope")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
+      onClicked: {
+        const gIndex = Cpp_Project_Model.groupCount
+        Cpp_Project_Model.addGroup(qsTr("Gyroscope"), 2)
+        root.groupAdded(gIndex)
+      }
     }
 
     //
@@ -194,17 +234,18 @@ ToolBar {
       text: qsTr("Map")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
+      onClicked: {
+        const gIndex = Cpp_Project_Model.groupCount
+        Cpp_Project_Model.addGroup(qsTr("GPS Map"), 3)
+        root.groupAdded(gIndex)
+      }
     }
 
     //
-    // Separator
+    // Horizontal spacer
     //
-    Rectangle {
-      width: 1
-      Layout.fillHeight: true
-      Layout.maximumHeight: 64
-      Layout.alignment: Qt.AlignVCenter
-      color: Cpp_ThemeManager.colors["toolbar_separator"]
+    Item {
+      Layout.fillWidth: true
     }
 
     //
@@ -213,14 +254,8 @@ ToolBar {
     Widgets.BigButton {
       text: qsTr("Frame Parsing")
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/code-editor.svg"
-    }
-
-    //
-    // Horizontal spacer
-    //
-    Item {
-      Layout.fillWidth: true
+      onClicked: Cpp_Project_CodeEditor.showNormal()
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/script.svg"
     }
   }
 }

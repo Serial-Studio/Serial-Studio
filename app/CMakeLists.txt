@@ -177,11 +177,9 @@ set(QML_CODE
  qml/MainWindow/Panes/Console.qml
  qml/MainWindow/Panes/Setup.qml
  qml/MainWindow/Root.qml
- qml/ProjectEditor/Sections/JsonGroupDelegate.qml
- qml/ProjectEditor/Sections/JsonDatasetDelegate.qml
  qml/ProjectEditor/Sections/GroupEditor.qml
- qml/ProjectEditor/Sections/Header.qml
- qml/ProjectEditor/Sections/TreeView.qml
+ qml/ProjectEditor/Sections/ProjectSetup.qml
+ qml/ProjectEditor/Sections/ProjectStructure.qml
  qml/ProjectEditor/Sections/Toolbar.qml
  qml/ProjectEditor/Root.qml
  qml/Dialogs/Acknowledgements.qml

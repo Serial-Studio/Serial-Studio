@@ -45,24 +45,31 @@
         <file>icons/panes/dashboard.svg</file>
         <file>icons/panes/setup.svg</file>
         <file>icons/panes/structure.svg</file>
+        <file>icons/project-editor/actions/add-bar.svg</file>
+        <file>icons/project-editor/actions/add-compass.svg</file>
+        <file>icons/project-editor/actions/add-dataset.svg</file>
+        <file>icons/project-editor/actions/add-fft.svg</file>
+        <file>icons/project-editor/actions/add-gauge.svg</file>
+        <file>icons/project-editor/actions/add-plot.svg</file>
+        <file>icons/project-editor/actions/delete-dataset.svg</file>
+        <file>icons/project-editor/actions/delete-group.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
         <file>icons/project-editor/toolbar/add-dataset.svg</file>
         <file>icons/project-editor/toolbar/add-gps.svg</file>
         <file>icons/project-editor/toolbar/add-group.svg</file>
         <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
-        <file>icons/project-editor/toolbar/code-editor.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
+        <file>icons/project-editor/toolbar/script.svg</file>
+        <file>icons/project-editor/treeview/dataset.svg</file>
+        <file>icons/project-editor/treeview/group.svg</file>
+        <file>icons/project-editor/treeview/indicator.svg</file>
         <file>icons/project-editor/windows/group.svg</file>
         <file>icons/project-editor/windows/project-setup.svg</file>
         <file>icons/project-editor/windows/project-structure.svg</file>
-        <file>icons/project-editor/frame-end.svg</file>
-        <file>icons/project-editor/frame-start.svg</file>
-        <file>icons/project-editor/project-title.svg</file>
-        <file>icons/project-editor/separator.svg</file>
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/connect.svg</file>
         <file>icons/toolbar/console.svg</file>
@@ -83,7 +90,7 @@
         <file>images/icon-small@2x.png</file>
         <file>images/icon@1x.png</file>
         <file>images/icon@2x.png</file>
-        <file>images/microcontroller.svg</file>
+        <file>images/soldering-iron.svg</file>
         <file>images/tip.svg</file>
         <file>messages/Acknowledgements.txt</file>
         <file>messages/Welcome_DE.txt</file>
@@ -95,5 +102,14 @@
         <file>themes/Breeze.json</file>
         <file>themes/Dark.json</file>
         <file>themes/Light.json</file>
+        <file>icons/project-editor/treeview/accelerometer.svg</file>
+        <file>icons/project-editor/treeview/gps.svg</file>
+        <file>icons/project-editor/treeview/gyroscope.svg</file>
+        <file>icons/project-editor/treeview/multiplot.svg</file>
+        <file>icons/project-editor/treeview/frame-end.svg</file>
+        <file>icons/project-editor/treeview/frame-start.svg</file>
+        <file>icons/project-editor/treeview/project-setup.svg</file>
+        <file>icons/project-editor/treeview/project-title.svg</file>
+        <file>icons/project-editor/treeview/separator.svg</file>
     </qresource>
 </RCC>

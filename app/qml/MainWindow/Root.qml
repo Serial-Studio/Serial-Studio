@@ -191,9 +191,6 @@ Window {
   // Loading code
   //
   Component.onCompleted: {
-    // Make window caption same color as toolbar
-    Cpp_NativeWindow.addWindow(root)
-
     // Increment app launch count
     ++appLaunchCount
 
@@ -225,6 +222,16 @@ Window {
     // Obtain document title from JSON project editor & display the window
     updateDocumentTitle()
     displayWindow()
+  }
+
+  //
+  // Handle platform-specific window initialization code
+  //
+  onVisibleChanged: {
+    if (visible)
+      Cpp_NativeWindow.addWindow(root)
+    else
+      Cpp_NativeWindow.removeWindow(root)
   }
 
   //

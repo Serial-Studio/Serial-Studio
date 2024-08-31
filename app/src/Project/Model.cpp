@@ -59,6 +59,7 @@ Project::Model::Model()
   , m_frameStartSequence("")
   , m_modified(false)
   , m_filePath("")
+  , m_treeModel(nullptr)
 {
   // Connect signals/slots
   connect(this, &Project::Model::groupChanged, this,
@@ -70,8 +71,6 @@ Project::Model::Model()
   connect(this, &Project::Model::separatorChanged, this,
           &Project::Model::onModelChanged);
   connect(this, &Project::Model::groupCountChanged, this,
-          &Project::Model::onModelChanged);
-  connect(this, &Project::Model::groupOrderChanged, this,
           &Project::Model::onModelChanged);
   connect(this, &Project::Model::frameParserCodeChanged, this,
           &Project::Model::onModelChanged);
@@ -143,7 +142,7 @@ QString Project::Model::jsonProjectsPath() const
 /**
  * Returns the title of the current project
  */
-const QString& Project::Model::title() const
+const QString &Project::Model::title() const
 {
   return m_title;
 }
@@ -151,7 +150,7 @@ const QString& Project::Model::title() const
 /**
  * Returns the data separator sequence for the current project.
  */
-const QString& Project::Model::separator() const
+const QString &Project::Model::separator() const
 {
   return m_separator;
 }
@@ -159,7 +158,7 @@ const QString& Project::Model::separator() const
 /**
  * Returns the frame end sequence for the current project.
  */
-const QString& Project::Model::frameEndSequence() const
+const QString &Project::Model::frameEndSequence() const
 {
   return m_frameEndSequence;
 }
@@ -167,7 +166,7 @@ const QString& Project::Model::frameEndSequence() const
 /**
  * Returns the frame start sequence for the current project.
  */
-const QString& Project::Model::frameStartSequence() const
+const QString &Project::Model::frameStartSequence() const
 {
   return m_frameStartSequence;
 }
@@ -193,9 +192,14 @@ int Project::Model::groupCount() const
 /**
  * Returns the full path of the current JSON project file.
  */
-const QString& Project::Model::jsonFilePath() const
+const QString &Project::Model::jsonFilePath() const
 {
   return m_filePath;
+}
+
+QStandardItemModel *Project::Model::treeModel() const
+{
+  return m_treeModel;
 }
 
 /**
@@ -405,7 +409,7 @@ const JSON::Dataset &Project::Model::getDataset(const int group,
 /**
  * Returns the JavaScript code used to parse incoming frames
  */
-const QString& Project::Model::frameParserCode() const
+const QString &Project::Model::frameParserCode() const
 {
   return m_frameParserCode;
 }
@@ -413,7 +417,7 @@ const QString& Project::Model::frameParserCode() const
 /**
  * Returns the title of the given @a group.
  */
-const QString& Project::Model::groupTitle(const int group) const
+const QString &Project::Model::groupTitle(const int group) const
 {
   return getGroup(group).title();
 }
@@ -421,34 +425,45 @@ const QString& Project::Model::groupTitle(const int group) const
 /**
  * Returns the widget of the given @a group.
  */
-const QString& Project::Model::groupWidget(const int group) const
+const QString &Project::Model::groupWidget(const int group) const
 {
   return getGroup(group).widget();
 }
 
 /**
- * Returns the widget ID of the given @a group. The widget ID is a number
- * that represents a group-level widget. The ID depends on the widget type
- * and the order of the widgets returned by the @c availableGroupLevelWidgets()
- * function.
+ * Returns the title of the specified dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
  */
-int Project::Model::groupWidgetIndex(const int group) const
+const QString &Project::Model::datasetTitle(const int group,
+                                            const int dataset) const
 {
-  auto widget = groupWidget(group);
+  return getDataset(group, dataset).title();
+}
 
-  if (widget == "accelerometer")
-    return 1;
+/**
+ * Returns the measurement units of the specified dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+const QString &Project::Model::datasetUnits(const int group,
+                                            const int dataset) const
+{
+  return getDataset(group, dataset).units();
+}
 
-  if (widget == "gyro")
-    return 2;
-
-  if (widget == "map")
-    return 3;
-
-  if (widget == "multiplot")
-    return 4;
-
-  return 0;
+/**
+ * Returns the widget string of the specified dataset.
+ *
+ * @param group   index of the group in which the dataset belongs
+ * @param dataset index of the dataset
+ */
+const QString &Project::Model::datasetWidget(const int group,
+                                             const int dataset) const
+{
+  return getDataset(group, dataset).widget();
 }
 
 /**
@@ -510,39 +525,6 @@ bool Project::Model::datasetFftPlot(const int group, const int dataset) const
 bool Project::Model::datasetLogPlot(const int group, const int dataset) const
 {
   return getDataset(group, dataset).log();
-}
-
-/**
- * Returns the title of the specified dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-const QString& Project::Model::datasetTitle(const int group, const int dataset) const
-{
-  return getDataset(group, dataset).title();
-}
-
-/**
- * Returns the measurement units of the specified dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-const QString& Project::Model::datasetUnits(const int group, const int dataset) const
-{
-  return getDataset(group, dataset).units();
-}
-
-/**
- * Returns the widget string of the specified dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-const QString& Project::Model::datasetWidget(const int group, const int dataset) const
-{
-  return getDataset(group, dataset).widget();
 }
 
 /**
@@ -723,9 +705,7 @@ void Project::Model::openJsonFile(const QString &path)
     auto group = groups.at(g).toObject();
 
     // Register group with C++ model
-    addGroup();
-    setGroupTitle(g, group.value("title").toString());
-    setGroupWidgetData(g, group.value("widget").toString());
+    addGroup(group.value("title").toString(), group.value("widget").toString());
 
     // Get JSON group datasets
     auto datasets = group.value("datasets").toArray();
@@ -754,10 +734,12 @@ void Project::Model::openJsonFile(const QString &path)
       setDatasetWidgetMin(g, d, QString::number(min));
       setDatasetWidgetMax(g, d, QString::number(max));
       setDatasetWidgetAlarm(g, d, QString::number(alarm));
-      ;
       setDatasetFFTSamples(g, d, QString::number(fftSamples));
     }
   }
+
+  // Regenerate the tree model
+  regenerateTreeModel();
 
   // Update UI
   Q_EMIT groupCountChanged();
@@ -834,17 +816,6 @@ void Project::Model::setFrameStartSequence(const QString &sequence)
 }
 
 /**
- * Adds a new group to the C++ model that represents the JSON project file.
- */
-void Project::Model::addGroup()
-{
-  m_groups.append(JSON::Group());
-  setGroupTitle(m_groups.count() - 1, tr("New Group"));
-
-  Q_EMIT groupCountChanged();
-}
-
-/**
  * Removes the given @a group from the C++ model that represents the JSON
  * project file.
  */
@@ -863,27 +834,101 @@ void Project::Model::deleteGroup(const int group)
 }
 
 /**
- * Changes the position of the given @a group in the C++ model.
+ * Adds a new group to the C++ model that represents the JSON project file.
+ * If a group with the same title already exists, appends a number to the title.
  */
-void Project::Model::moveGroupUp(const int group)
+void Project::Model::addGroup(const QString &title, const int widget)
 {
-  if (group > 0)
+  // Check if any existing group has the same title
+  int count = 1;
+  QString newTitle = title;
+  for (const auto &group : m_groups)
   {
-    m_groups.move(group, group - 1);
-    Q_EMIT groupOrderChanged();
+    if (group.m_title == newTitle)
+    {
+      count++;
+      newTitle = QString("%1 (%2)").arg(title).arg(count);
+    }
   }
+
+  // If the title was modified, ensure it is unique
+  while (count > 1)
+  {
+    bool titleExists = false;
+    for (const auto &group : m_groups)
+    {
+      if (group.m_title == newTitle)
+      {
+        count++;
+        newTitle = QString("%1 (%2)").arg(title).arg(count);
+        titleExists = true;
+        break;
+      }
+    }
+
+    if (!titleExists)
+      break;
+  }
+
+  // Create a new group
+  JSON::Group group;
+  group.m_title = newTitle;
+
+  // Register the group & add the widget
+  m_groups.append(group);
+  setGroupWidget(m_groups.count() - 1, widget);
+
+  // Update the user interface
+  Q_EMIT groupCountChanged();
 }
 
 /**
- * Changes the position of the given @a group in the C++ model.
+ * Adds a new group to the C++ model that represents the JSON project file.
+ * If a group with the same title already exists, appends a number to the title.
  */
-void Project::Model::moveGroupDown(const int group)
+void Project::Model::addGroup(const QString &title, const QString &widget)
 {
-  if (group < groupCount() - 1)
+  // Check if any existing group has the same title
+  int count = 1;
+  QString newTitle = title;
+  for (const auto &group : m_groups)
   {
-    m_groups.move(group, group + 1);
-    Q_EMIT groupOrderChanged();
+    if (group.m_title == newTitle)
+    {
+      count++;
+      newTitle = QString("%1 (%2)").arg(title).arg(count);
+    }
   }
+
+  // If the title was modified, ensure it is unique
+  while (count > 1)
+  {
+    bool titleExists = false;
+    for (const auto &group : m_groups)
+    {
+      if (group.m_title == newTitle)
+      {
+        count++;
+        newTitle = QString("%1 (%2)").arg(title).arg(count);
+        titleExists = true;
+        break;
+      }
+    }
+
+    if (!titleExists)
+      break;
+  }
+
+  // Create a new group
+  JSON::Group group;
+  group.m_title = newTitle;
+
+  // Register the group & add the widget
+  m_groups.append(group);
+  setGroupWidgetData(m_groups.count() - 1, widget);
+
+  // Update the user interface
+  Q_EMIT groupCountChanged();
 }
 
 /**
@@ -914,12 +959,15 @@ bool Project::Model::setGroupWidget(const int group, const int widgetId)
     }
   }
 
+  // Dataset widget
+  if (widgetId == 0)
+    grp.m_widget = "";
+
   // Accelerometer widget
-  if (widgetId == 1)
+  else if (widgetId == 1)
   {
-    // Set widget title
+    // Set widget type
     grp.m_widget = "accelerometer";
-    grp.m_title = tr("Accelerometer");
 
     // Create datasets
     JSON::Dataset x, y, z;
@@ -951,9 +999,8 @@ bool Project::Model::setGroupWidget(const int group, const int widgetId)
   // Gyroscope widget
   else if (widgetId == 2)
   {
-    // Set widget title
+    // Set widget type
     grp.m_widget = "gyro";
-    grp.m_title = tr("Gyroscope");
 
     // Create datasets
     JSON::Dataset x, y, z;
@@ -985,9 +1032,8 @@ bool Project::Model::setGroupWidget(const int group, const int widgetId)
   // Map widget
   else if (widgetId == 3)
   {
-    // Set widget title
+    // Set widget type
     grp.m_widget = "map";
-    grp.m_title = tr("GPS");
 
     // Create datasets
     JSON::Dataset lat, lon, alt;
@@ -1477,12 +1523,123 @@ void Project::Model::onJsonLoaded()
 }
 
 /**
- * Sets the modified flag to @c true when the user adds/removes/moves
+ * Sets the modified flag to @c true when the user adds/removes
  * one of the groups contained in the JSON project.
  */
 void Project::Model::onModelChanged()
 {
+  regenerateTreeModel();
   setModified(true);
+}
+
+/**
+ * @brief Regenerates the hierarchical tree model used in the QML TreeView.
+ *
+ * This function rebuilds the tree model from the current project structure,
+ * ensuring that any changes to groups or datasets are reflected in the UI.
+ * It creates a new QStandardItemModel, iterates through the existing groups
+ * and their datasets, and populates the model accordingly. The model is then
+ * assigned to the QML TreeView, and a signal is emitted to notify QML that
+ * the model has been updated.
+ *
+ * The model's structure:
+ * - Each group is represented as a root item in the tree.
+ * - Each dataset within a group is represented as a child item of that group.
+ *
+ * The function also manages memory by deleting the old model before creating
+ * a new one, preventing memory leaks.
+ *
+ * @note This function should be called whenever the project structure changes.
+ */
+void Project::Model::regenerateTreeModel()
+{
+  // Check if the existing tree model needs to be deleted
+  if (m_treeModel)
+    delete m_treeModel;
+
+  // Create a new QStandardItemModel for the tree
+  m_treeModel = new QStandardItemModel(this);
+
+  // Add project information section
+  auto *projectInfo = new QStandardItem(tr("Project Information"));
+  auto *projectTitle = new QStandardItem(tr("Project Title"));
+  auto *projectSeparator = new QStandardItem(tr("Separator Sequence"));
+  auto *projectStartSeq = new QStandardItem(tr("Frame Start Sequence"));
+  auto *projectEndSeq = new QStandardItem(tr("Frame End Sequence"));
+
+  // Set display roles for project information section
+  projectInfo->setData(projectInfo->text(), Qt::DisplayRole);
+  projectTitle->setData(projectTitle->text(), Qt::DisplayRole);
+  projectSeparator->setData(projectSeparator->text(), Qt::DisplayRole);
+  projectStartSeq->setData(projectStartSeq->text(), Qt::DisplayRole);
+  projectEndSeq->setData(projectEndSeq->text(), Qt::DisplayRole);
+
+  // Set decoration roles (icons) for project information section
+  projectInfo->setData(
+      "qrc:/rcc/icons/project-editor/treeview/project-setup.svg",
+      Qt::DecorationRole);
+  projectTitle->setData(
+      "qrc:/rcc/icons/project-editor/treeview/project-title.svg",
+      Qt::DecorationRole);
+  projectSeparator->setData(
+      "qrc:/rcc/icons/project-editor/treeview/separator.svg",
+      Qt::DecorationRole);
+  projectStartSeq->setData(
+      "qrc:/rcc/icons/project-editor/treeview/frame-start.svg",
+      Qt::DecorationRole);
+  projectEndSeq->setData("qrc:/rcc/icons/project-editor/treeview/frame-end.svg",
+                         Qt::DecorationRole);
+
+  // Set project information hierarchy
+  projectInfo->appendRow(projectTitle);
+  projectInfo->appendRow(projectSeparator);
+  projectInfo->appendRow(projectStartSeq);
+  projectInfo->appendRow(projectEndSeq);
+  m_treeModel->appendRow(projectInfo);
+
+  // Iterate through the groups and add them to the model
+  for (int gIndex = 0; gIndex < m_groups.size(); ++gIndex)
+  {
+    const auto group = m_groups[gIndex];
+    auto *groupItem = new QStandardItem(group.title());
+
+    QString icon;
+    if (group.widget() == "map")
+      icon = "qrc:/rcc/icons/project-editor/treeview/gps.svg";
+    else if (group.widget() == "accelerometer")
+      icon = "qrc:/rcc/icons/project-editor/treeview/accelerometer.svg";
+    else if (group.widget() == "gyro")
+      icon = "qrc:/rcc/icons/project-editor/treeview/gyroscope.svg";
+    else if (group.widget() == "multiplot")
+      icon = "qrc:/rcc/icons/project-editor/treeview/multiplot.svg";
+    else
+      icon = "qrc:/rcc/icons/project-editor/treeview/group.svg";
+
+    groupItem->setData(icon, Qt::DecorationRole);
+    groupItem->setData(group.title(), Qt::DisplayRole);
+    groupItem->setData(-1, Qt::WhatsThisRole);
+
+    // Iterate through the datasets within this group and add them as children
+    for (int dIndex = 0; dIndex < group.datasets().size(); ++dIndex)
+    {
+      const auto dataset = group.datasets()[dIndex];
+      auto *datasetItem = new QStandardItem(dataset.title());
+
+      const auto icon = "qrc:/rcc/icons/project-editor/treeview/dataset.svg";
+
+      datasetItem->setData(icon, Qt::DecorationRole);
+      datasetItem->setData(dataset.title(), Qt::DisplayRole);
+      datasetItem->setData(dataset.index(), Qt::WhatsThisRole);
+
+      groupItem->appendRow(datasetItem);
+    }
+
+    // Add the group item to the root of the tree model
+    m_treeModel->appendRow(groupItem);
+  }
+
+  // Notify QML that the tree model has changed
+  Q_EMIT treeModelChanged();
 }
 
 /**
@@ -1492,6 +1649,7 @@ void Project::Model::onModelChanged()
 void Project::Model::onGroupChanged(const int group)
 {
   (void)group;
+  regenerateTreeModel();
   setModified(true);
 }
 
@@ -1506,6 +1664,7 @@ void Project::Model::onDatasetChanged(const int group, const int dataset)
 {
   (void)group;
   (void)dataset;
+  regenerateTreeModel();
   setModified(true);
 }
 
