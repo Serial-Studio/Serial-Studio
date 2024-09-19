@@ -35,7 +35,7 @@
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
 JSON::Generator::Generator()
-  : m_opMode(kAutomatic)
+  : m_opMode(kManual)
 {
   connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
           &JSON::Generator::readData);
