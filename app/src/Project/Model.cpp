@@ -123,6 +123,10 @@ Project::Model::Model()
   // Load current JSON map file into C++ model
   if (!JSON::Generator::instance().jsonMapFilepath().isEmpty())
     onJsonLoaded();
+
+  // Create a new project
+  else
+    newJsonFile();
 }
 
 /**
