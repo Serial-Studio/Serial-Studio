@@ -72,28 +72,28 @@ Widgets.Pane {
       // Keyboard navigation
       //
       Keys.onPressed: (event) => {
-        // Move down to the next sibling (or parent if collapsed)
-        if (event.key === Qt.Key_Down) {
-          let nextIndex = treeView.index(treeView.currentRow + 1, treeView.currentColumn)
-          if (nextIndex.isValid)
-            treeView.selectionModel.setCurrentIndex(nextIndex, ItemSelectionModel.ClearAndSelect)
-        }
+                        // Move down to the next sibling (or parent if collapsed)
+                        if (event.key === Qt.Key_Down) {
+                          let nextIndex = treeView.index(treeView.currentRow + 1, treeView.currentColumn)
+                          if (nextIndex.isValid)
+                          treeView.selectionModel.setCurrentIndex(nextIndex, ItemSelectionModel.ClearAndSelect)
+                        }
 
-        // Move up to the previous sibling (or parent)
-        else if (event.key === Qt.Key_Up) {
-          let prevIndex = treeView.index(treeView.currentRow - 1, treeView.currentColumn)
-          if (prevIndex.isValid)
-            treeView.selectionModel.setCurrentIndex(prevIndex, ItemSelectionModel.ClearAndSelect)
-        }
+                        // Move up to the previous sibling (or parent)
+                        else if (event.key === Qt.Key_Up) {
+                          let prevIndex = treeView.index(treeView.currentRow - 1, treeView.currentColumn)
+                          if (prevIndex.isValid)
+                          treeView.selectionModel.setCurrentIndex(prevIndex, ItemSelectionModel.ClearAndSelect)
+                        }
 
-        // Delete current item
-        else if (event.key === Qt.Key_Delete) {
-          if (Cpp_Project_Model.currentView === ProjectModel.DatasetView)
-            Cpp_Project_Model.deleteCurrentDataset()
-          else if (Cpp_Project_Model.currentView === ProjectModel.GroupView)
-            Cpp_Project_Model.deleteCurrentGroup()
-        }
-      }
+                        // Delete current item
+                        else if (event.key === Qt.Key_Delete) {
+                          if (Cpp_Project_Model.currentView === ProjectModel.DatasetView)
+                          Cpp_Project_Model.deleteCurrentDataset()
+                          else if (Cpp_Project_Model.currentView === ProjectModel.GroupView)
+                          Cpp_Project_Model.deleteCurrentGroup()
+                        }
+                      }
 
       //
       // Set background item
