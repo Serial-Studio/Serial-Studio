@@ -569,7 +569,33 @@ void Project::Model::deleteCurrentDataset()
 
 void Project::Model::duplicateCurrentGroup() {}
 
-void Project::Model::duplicateCurrentDataset() {}
+void Project::Model::duplicateCurrentDataset()
+{
+  // Initialize a new dataset
+  auto dataset = m_selectedDataset;
+  dataset.m_title = tr("%1 (Copy)").arg(dataset.title());
+  dataset.m_index = nextDatasetIndex();
+  dataset.m_datasetId = m_groups[dataset.groupId()].datasetCount();
+
+  // Register the dataset to the group
+  m_groups[dataset.groupId()].m_datasets.append(dataset);
+
+  // Build tree model & set modification flag
+  buildTreeModel();
+  setModified(true);
+
+  // Select dataset
+  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
+  {
+    if (i.value().groupId() == dataset.groupId()
+        && i.value().datasetId() == dataset.datasetId())
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
+  }
+}
 
 void Project::Model::changeDatasetParentGroup() {}
 

@@ -128,5 +128,6 @@
         <file>themes/Outdoor Night.json</file>
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
+        <file>images/tree.svg</file>
     </qresource>
 </RCC>

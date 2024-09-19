@@ -43,19 +43,39 @@ Widgets.Pane {
     anchors.bottomMargin: -9
     modelPointer: Cpp_Project_Model.projectModel
 
-    footerItem: Image {
-      readonly property real aspectRatio: 696 / 280
-      readonly property real idealWidth: delegate.width * 0.8
-      readonly property real idealHeight: delegate.height - delegate.tableHeight
-      readonly property real maxWidth: idealHeight * aspectRatio
-      readonly property real maxHeight: idealWidth / aspectRatio
-      readonly property real actualWidth: Math.min(idealWidth, maxWidth)
-      readonly property real actualHeight: Math.min(idealHeight, maxHeight)
+    footerItem: ColumnLayout {
+      spacing: 0
 
-      smooth: true
-      antialiasing: true
-      source: "qrc:/rcc/diagrams/project-dfd.svg"
-      sourceSize: Qt.size(actualWidth, actualHeight)
+      Image {
+        sourceSize: Qt.size(128, 128)
+        Layout.alignment: Qt.AlignHCenter
+        source: "qrc:/rcc/images/soldering-iron.svg"
+      }
+
+      Item {
+        height: 16
+      }
+
+      Label {
+        Layout.alignment: Qt.AlignHCenter
+        text: qsTr("Start Building Now!")
+        horizontalAlignment: Label.AlignHCenter
+        font: Cpp_Misc_CommonFonts.customUiFont(24, true)
+      }
+
+      Item {
+        height: 8
+      }
+
+      Label {
+        opacity: 0.8
+        Layout.alignment: Qt.AlignHCenter
+        horizontalAlignment: Label.AlignHCenter
+        Layout.maximumWidth: delegate.width * 0.9
+        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        font: Cpp_Misc_CommonFonts.customUiFont(18, false)
+        text: qsTr("Get started by adding a group with the toolbar buttons above.")
+      }
     }
   }
 }

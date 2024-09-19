@@ -24,6 +24,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
 import "../../Widgets" as Widgets
 
 Widgets.Pane {
@@ -61,10 +62,38 @@ Widgets.Pane {
 
     TreeView {
       id: treeView
+      focus: true
       reuseItems: false
       model: Cpp_Project_Model.treeModel
       boundsBehavior: TreeView.StopAtBounds
       selectionModel: Cpp_Project_Model.selectionModel
+
+      //
+      // Keyboard navigation
+      //
+      Keys.onPressed: (event) => {
+        // Move down to the next sibling (or parent if collapsed)
+        if (event.key === Qt.Key_Down) {
+          let nextIndex = treeView.index(treeView.currentRow + 1, treeView.currentColumn)
+          if (nextIndex.isValid)
+            treeView.selectionModel.setCurrentIndex(nextIndex, ItemSelectionModel.ClearAndSelect)
+        }
+
+        // Move up to the previous sibling (or parent)
+        else if (event.key === Qt.Key_Up) {
+          let prevIndex = treeView.index(treeView.currentRow - 1, treeView.currentColumn)
+          if (prevIndex.isValid)
+            treeView.selectionModel.setCurrentIndex(prevIndex, ItemSelectionModel.ClearAndSelect)
+        }
+
+        // Delete current item
+        else if (event.key === Qt.Key_Delete) {
+          if (Cpp_Project_Model.currentView === ProjectModel.DatasetView)
+            Cpp_Project_Model.deleteCurrentDataset()
+          else if (Cpp_Project_Model.currentView === ProjectModel.GroupView)
+            Cpp_Project_Model.deleteCurrentGroup()
+        }
+      }
 
       //
       // Set background item
@@ -114,6 +143,7 @@ Widgets.Pane {
         // Select the item and open the associated view automatically.
         //
         function onLabelClicked() {
+          treeView.forceActiveFocus()
           let index = treeView.index(row, column)
           treeView.selectionModel.setCurrentIndex(index, ItemSelectionModel.ClearAndSelect)
         }
@@ -123,6 +153,7 @@ Widgets.Pane {
         // Otherwise, select the item and open the associated view.
         //
         function onLabelDoubleClicked() {
+          treeView.forceActiveFocus()
           if (!toggleExpanded()) {
             onLabelClicked()
           }
