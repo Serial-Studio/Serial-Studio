@@ -300,7 +300,7 @@ elseif(UNIX)
  install(TARGETS ${PROJECT_EXECUTABLE} RUNTIME DESTINATION /usr/bin)
 
  install(
-  FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.svg
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio.png
   DESTINATION /usr/share/pixmaps
  )
 
@@ -365,7 +365,7 @@ if(WIN32)
  set(CPACK_PACKAGE_ICON              "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\icon.ico")
  set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}")
 else()
- set(CPACK_PACKAGE_ICON              "${CMAKE_CURRENT_SOURCE_DIR}/deploy/icon.svg")
+ set(CPACK_PACKAGE_ICON              "${CMAKE_CURRENT_SOURCE_DIR}/deploy/icon.png")
  set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}")
 endif()
 
