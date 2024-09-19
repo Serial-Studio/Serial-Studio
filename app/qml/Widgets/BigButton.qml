@@ -27,6 +27,8 @@ import QtQuick.Controls
 ToolButton {
   id: root
 
+  property bool toolbarButton: true
+
   icon.width: 32
   icon.height: 32
   icon.color: "transparent"
@@ -36,15 +38,22 @@ ToolButton {
   Layout.maximumWidth: Math.max(implicitWidth, icon.width / 32 * 72)
   palette.buttonText: Cpp_ThemeManager.colors["toolbar_text"]
 
-  background: Rectangle {
-    border.width: 1
-    radius: 3
-    color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
-    border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
+  background: Item {
+    Rectangle {
+      radius: 3
+      border.width: 1
+      anchors.fill: parent
+      visible: root.toolbarButton
+      color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
+      border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
+      opacity: root.checked ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0.0
+    }
 
-    opacity: parent.checked ?
-               Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] :
-               0.0
+    ToolButton {
+      checked: true
+      anchors.fill: parent
+      visible: root.checked && !root.toolbarButton
+    }
   }
 
   opacity: enabled ? 1 : 0.5

@@ -101,11 +101,19 @@ Widgets.Pane {
         Widgets.BigButton {
           icon.width: 24
           icon.height: 24
+          checkable: true
           text: qsTr("Plot")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
-          onClicked: Cpp_Project_Model.changeDatasetOptions(ProjectModel.DatasetPlot)
+          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetPlot
+          onClicked: {
+            const option = ProjectModel.DatasetPlot
+            const value = Cpp_Project_Model.datasetOptions & option
+            if (checked !== value)
+              Cpp_Project_Model.changeDatasetOption(option, checked)
+          }
         }
 
         //
@@ -114,11 +122,19 @@ Widgets.Pane {
         Widgets.BigButton {
           icon.width: 24
           icon.height: 24
+          checkable: true
+          toolbarButton: false
           text: qsTr("FFT Plot")
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
-          onClicked: Cpp_Project_Model.changeDatasetOptions(ProjectModel.DatasetFFT)
+          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetFFT
+          onClicked: {
+            const option = ProjectModel.DatasetFFT
+            const value = Cpp_Project_Model.datasetOptions & option
+            if (checked !== value)
+              Cpp_Project_Model.changeDatasetOption(option, checked)
+          }
         }
 
         //
@@ -127,11 +143,19 @@ Widgets.Pane {
         Widgets.BigButton {
           icon.width: 24
           icon.height: 24
+          checkable: true
+          toolbarButton: false
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
-          onClicked: Cpp_Project_Model.changeDatasetOptions(ProjectModel.DatasetBar)
+          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetBar
+          onClicked: {
+            const option = ProjectModel.DatasetBar
+            const value = Cpp_Project_Model.datasetOptions & option
+            if (checked !== value)
+              Cpp_Project_Model.changeDatasetOption(option, checked)
+          }
         }
 
         //
@@ -140,11 +164,19 @@ Widgets.Pane {
         Widgets.BigButton {
           icon.width: 24
           icon.height: 24
+          checkable: true
           text: qsTr("Gauge")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
-          onClicked: Cpp_Project_Model.changeDatasetOptions(ProjectModel.DatasetGauge)
+          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetGauge
+          onClicked: {
+            const option = ProjectModel.DatasetGauge
+            const value = Cpp_Project_Model.datasetOptions & option
+            if (checked !== value)
+              Cpp_Project_Model.changeDatasetOption(option, checked)
+          }
         }
 
         //
@@ -153,11 +185,19 @@ Widgets.Pane {
         Widgets.BigButton {
           icon.width: 24
           icon.height: 24
+          checkable: true
+          toolbarButton: false
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
-          onClicked: Cpp_Project_Model.changeDatasetOptions(ProjectModel.DatasetCompass)
+          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetCompass
+          onClicked: {
+            const option = ProjectModel.DatasetCompass
+            const value = Cpp_Project_Model.datasetOptions & option
+            if (checked !== value)
+              Cpp_Project_Model.changeDatasetOption(option, checked)
+          }
         }
 
         //

@@ -226,6 +226,28 @@ int Project::Model::groupCount() const
   return groups().count();
 }
 
+quint8 Project::Model::datasetOptions() const
+{
+  quint8 option = DatasetGeneric;
+
+  if (m_selectedDataset.graph())
+    option |= DatasetPlot;
+
+  if (m_selectedDataset.fft())
+    option |= DatasetFFT;
+
+  if (m_selectedDataset.widget() == QStringLiteral("bar"))
+    option |= DatasetBar;
+
+  else if (m_selectedDataset.widget() == QStringLiteral("gauge"))
+    option |= DatasetGauge;
+
+  else if (m_selectedDataset.widget() == QStringLiteral("compass"))
+    option |= DatasetCompass;
+
+  return option;
+}
+
 const QVector<JSON::Group> &Project::Model::groups() const
 {
   return m_groups;
@@ -643,25 +665,26 @@ void Project::Model::addDataset(const DatasetOption option)
   }
 }
 
-void Project::Model::changeDatasetOptions(const DatasetOption option)
+void Project::Model::changeDatasetOption(const DatasetOption option,
+                                         const bool checked)
 {
   // Modify dataset options
   switch (option)
   {
     case DatasetPlot:
-      m_selectedDataset.m_graph = true;
+      m_selectedDataset.m_graph = checked;
       break;
     case DatasetFFT:
-      m_selectedDataset.m_fft = true;
+      m_selectedDataset.m_fft = checked;
       break;
     case DatasetBar:
-      m_selectedDataset.m_widget = QStringLiteral("bar");
+      m_selectedDataset.m_widget = checked ? QStringLiteral("bar") : "";
       break;
     case DatasetGauge:
-      m_selectedDataset.m_widget = QStringLiteral("gauge");
+      m_selectedDataset.m_widget = checked ? QStringLiteral("gauge") : "";
       break;
     case DatasetCompass:
-      m_selectedDataset.m_widget = QStringLiteral("compass");
+      m_selectedDataset.m_widget = checked ? QStringLiteral("compass") : "";
       break;
     default:
       break;

@@ -74,6 +74,9 @@ class Model : public QObject
   Q_PROPERTY(int groupCount
              READ groupCount
              NOTIFY modifiedChanged)
+  Q_PROPERTY(quint8 datasetOptions
+             READ datasetOptions
+             NOTIFY datasetModelChanged)
   // clang-format on
 
 signals:
@@ -127,16 +130,18 @@ public:
   };
   Q_ENUM(GroupWidget)
 
+  // clang-format off
   enum DatasetOption
   {
-    DatasetGeneric,
-    DatasetPlot,
-    DatasetFFT,
-    DatasetBar,
-    DatasetGauge,
-    DatasetCompass
+    DatasetGeneric = 0b00000000,
+    DatasetPlot    = 0b00000001,
+    DatasetFFT     = 0b00000010,
+    DatasetBar     = 0b00000100,
+    DatasetGauge   = 0b00001000,
+    DatasetCompass = 0b00010000
   };
   Q_ENUM(DatasetOption)
+  // clang-format on
 
   enum EditorWidget
   {
@@ -181,6 +186,7 @@ public:
   [[nodiscard]] const QString &thunderforestApiKey() const;
 
   [[nodiscard]] int groupCount() const;
+  [[nodiscard]] quint8 datasetOptions() const;
   [[nodiscard]] const QVector<JSON::Group> &groups() const;
 
   [[nodiscard]] CustomModel *treeModel() const;
@@ -204,7 +210,7 @@ public slots:
   void duplicateCurrentDataset();
   void changeDatasetParentGroup();
   void addDataset(const DatasetOption options);
-  void changeDatasetOptions(const DatasetOption options);
+  void changeDatasetOption(const DatasetOption option, const bool checked);
 
   void addGroup(const QString &title, const GroupWidget widget);
   bool setGroupWidget(const int group, const GroupWidget widget);
