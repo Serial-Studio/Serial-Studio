@@ -163,7 +163,7 @@ jobs:
     - name: '💽 Create nice DMG'
       run: |
         npm install --global create-dmg
-        rm LICENSE.rtf
+        rm LICENSE.md
         create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
         mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg"
 
