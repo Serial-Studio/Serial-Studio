@@ -25,7 +25,7 @@
 #-------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.19)
-project(${PROJECT_EXECUTABLE} LANGUAGES CXX)
+project(app LANGUAGES CXX)
 
 #-------------------------------------------------------------------------------
 # C++ options

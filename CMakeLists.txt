@@ -79,7 +79,7 @@ endif()
 # Define project name & find Qt packages for correct CPack calls
 #-------------------------------------------------------------------------------
 
-project(${PROJECT_EXECUTABLE}-RootDir)
+project(Serial-Studio)
 
 find_package(
  Qt6 REQUIRED
