@@ -115,7 +115,6 @@ target_compile_definitions( ${PROJECT_NAME}
  PRIVATE
  QT_NO_CAST_FROM_ASCII
  QT_NO_CAST_TO_ASCII
- QT_STATIC
 )
 
 # Where to look for headers while compiling the target or when compiling against
