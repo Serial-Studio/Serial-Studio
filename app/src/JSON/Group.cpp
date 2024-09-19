@@ -24,11 +24,45 @@
 #include "JSON/Group.h"
 
 /**
+ * @brief Constructor function
+ */
+JSON::Group::Group(const int groupId)
+  : m_groupId(groupId)
+  , m_title("")
+  , m_widget("")
+{
+}
+
+/**
  * Destructor function
  */
 JSON::Group::~Group()
 {
   m_datasets.clear();
+}
+
+/**
+ * @brief Serializes the group information and its associated datasets into a
+ * QJsonObject.
+ *
+ * This function encodes the group's properties (title and widget) and each
+ * dataset within the group into a JSON object. Calls the `encode()` method for
+ * each dataset to ensure that all dataset details are properly serialized.
+ *
+ * @return A QJsonObject containing the group's properties and an array of
+ * encoded datasets.
+ */
+QJsonObject JSON::Group::serialize() const
+{
+  QJsonArray datasetArray;
+  for (const auto &dataset : m_datasets)
+    datasetArray.append(dataset.serialize());
+
+  QJsonObject object;
+  object.insert(QStringLiteral("title"), m_title);
+  object.insert(QStringLiteral("widget"), m_widget);
+  object.insert(QStringLiteral("datasets"), datasetArray);
+  return object;
 }
 
 /**
@@ -56,7 +90,7 @@ bool JSON::Group::read(const QJsonObject &object)
         const auto object = array.at(i).toObject();
         if (!object.isEmpty())
         {
-          Dataset dataset;
+          Dataset dataset(m_groupId, i);
           if (dataset.read(object))
             m_datasets.append(dataset);
         }
@@ -83,6 +117,16 @@ const QString &JSON::Group::title() const
 const QString &JSON::Group::widget() const
 {
   return m_widget;
+}
+
+/**
+ * @return The group groupId in the project array, only used for interacting
+ *         with the project model (which is used to build the Project Editor
+ *         GUI).
+ */
+int JSON::Group::groupId() const
+{
+  return m_groupId;
 }
 
 /**

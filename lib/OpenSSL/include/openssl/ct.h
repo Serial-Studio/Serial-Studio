@@ -471,7 +471,7 @@ __owur int i2o_SCT_LIST(const STACK_OF(SCT) * a, unsigned char **pp);
  * not defined.
  */
 STACK_OF(SCT)
-    * o2i_SCT_LIST(STACK_OF(SCT) * *a, const unsigned char **pp, size_t len);
+*o2i_SCT_LIST(STACK_OF(SCT) * *a, const unsigned char **pp, size_t len);
 
 /*
  * Serialize (to DER format) a stack of SCTs and return the length.
@@ -498,7 +498,7 @@ __owur int i2d_SCT_LIST(const STACK_OF(SCT) * a, unsigned char **pp);
  * not defined.
  */
 STACK_OF(SCT)
-    * d2i_SCT_LIST(STACK_OF(SCT) * *a, const unsigned char **pp, long len);
+*d2i_SCT_LIST(STACK_OF(SCT) * *a, const unsigned char **pp, long len);
 
 /*
  * Serialize (to TLS format) an |sct| and write it to |out|.

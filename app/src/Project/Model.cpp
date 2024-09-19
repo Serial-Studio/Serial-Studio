@@ -21,7 +21,7 @@
  */
 
 #include "Model.h"
-#include "CodeEditor.h"
+#include "FrameParser.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -35,11 +35,47 @@
 #include "JSON/Generator.h"
 #include "Misc/Utilities.h"
 
-//
-// For invalid group returns, avoids crashes while creating a new project & the
-// UI is in the process of being updated
-//
-static JSON::Group EMPTY_GROUP;
+//------------------------------------------------------------------------------
+// Private enums to keep track of which item the user selected/modified
+//------------------------------------------------------------------------------
+
+typedef enum
+{
+  kRootItem,
+  kFrameParser,
+} TopLevelItem;
+
+typedef enum
+{
+  kProjectView_Title,
+  kProjectView_ItemSeparator,
+  kProjectView_FrameStartSequence,
+  kProjectView_FrameEndSequence,
+  kProjectView_FrameDecoder,
+  kProjectView_ThunderforestApiKey
+} ProjectItem;
+
+typedef enum
+{
+  kDatasetView_Title,
+  kDatasetView_Index,
+  kDatasetView_Units,
+  kDatasetView_Widget,
+  kDatasetView_FFT,
+  kDatasetView_LED,
+  kDatasetView_LED_High,
+  kDatasetView_Plot,
+  kDatasetView_Min,
+  kDatasetView_Max,
+  kDatasetView_Alarm,
+  kDatasetView_FFT_Samples,
+} DatasetItem;
+
+typedef enum
+{
+  kGroupView_Title,
+  kGroupView_Widget
+} GroupItem;
 
 //------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
@@ -57,27 +93,28 @@ Project::Model::Model()
   , m_frameParserCode("")
   , m_frameEndSequence("")
   , m_frameStartSequence("")
+  , m_currentView(ProjectView)
+  , m_frameDecoder(Normal)
   , m_modified(false)
   , m_filePath("")
   , m_treeModel(nullptr)
+  , m_selectionModel(nullptr)
+  , m_groupModel(nullptr)
+  , m_projectModel(nullptr)
+  , m_datasetModel(nullptr)
 {
-  // Connect signals/slots
-  connect(this, &Project::Model::groupChanged, this,
-          &Project::Model::onGroupChanged);
-  connect(this, &Project::Model::titleChanged, this,
-          &Project::Model::onModelChanged);
-  connect(this, &Project::Model::datasetChanged, this,
-          &Project::Model::onDatasetChanged);
-  connect(this, &Project::Model::separatorChanged, this,
-          &Project::Model::onModelChanged);
-  connect(this, &Project::Model::groupCountChanged, this,
-          &Project::Model::onModelChanged);
-  connect(this, &Project::Model::frameParserCodeChanged, this,
-          &Project::Model::onModelChanged);
-  connect(this, &Project::Model::frameEndSequenceChanged, this,
-          &Project::Model::onModelChanged);
-  connect(this, &Project::Model::frameStartSequenceChanged, this,
-          &Project::Model::onModelChanged);
+  // Generate data sources for project model
+  generateComboBoxModels();
+
+  // Clear selection model when JSON file is changed
+  connect(this, &Project::Model::jsonFileChanged, this, [=] {
+    if (m_selectionModel)
+    {
+      auto index = m_treeModel->index(0, 0);
+      m_selectionModel->setCurrentIndex(index,
+                                        QItemSelectionModel::ClearAndSelect);
+    }
+  });
 
   // Re-load JSON map file into C++ model
   connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
@@ -98,114 +135,23 @@ Project::Model &Project::Model::instance()
 }
 
 //------------------------------------------------------------------------------
-// Member access functions
+// Document status access functions
 //------------------------------------------------------------------------------
 
-/**
- * Returns a list with the available group-level widgets. This list is used by
- * the user interface to allow the user to build accelerometer, gyro & map
- * widgets directly from the UI.
- */
-QStringList Project::Model::availableGroupLevelWidgets()
-{
-  return QStringList{tr("Dataset widgets"), tr("Accelerometer"),
-                     tr("Gyroscope"), tr("GPS"), tr("Multiple data plot")};
-}
-
-/**
- * Returns a list with the available dataset-level widgets. This list is used by
- * the user interface to allow the user to build gauge, bar & compass widgets
- * directly from the UI.
- */
-QStringList Project::Model::availableDatasetLevelWidgets()
-{
-  return QStringList{tr("None"), tr("Gauge"), tr("Bar/level"), tr("Compass")};
-}
-
-/**
- * Returns the default path for saving JSON project files
- */
-QString Project::Model::jsonProjectsPath() const
-{
-  // Get file name and path
-  QString path = QString("%1/Documents/%2/JSON Projects/")
-                     .arg(QDir::homePath(), qApp->applicationName());
-
-  // Generate file path if required
-  QDir dir(path);
-  if (!dir.exists())
-    dir.mkpath(".");
-
-  return path;
-}
-
-/**
- * Returns the title of the current project
- */
-const QString &Project::Model::title() const
-{
-  return m_title;
-}
-
-/**
- * Returns the data separator sequence for the current project.
- */
-const QString &Project::Model::separator() const
-{
-  return m_separator;
-}
-
-/**
- * Returns the frame end sequence for the current project.
- */
-const QString &Project::Model::frameEndSequence() const
-{
-  return m_frameEndSequence;
-}
-
-/**
- * Returns the frame start sequence for the current project.
- */
-const QString &Project::Model::frameStartSequence() const
-{
-  return m_frameStartSequence;
-}
-
-/**
- * Returns @c true if the user modified the current project. This is
- * used to know if Serial Studio shall prompt the user to save his/her
- * modifications before closing the editor window.
- */
 bool Project::Model::modified() const
 {
   return m_modified;
 }
 
-/**
- * Returns the number of groups contained in the current JSON project.
- */
-int Project::Model::groupCount() const
+Project::Model::CurrentView Project::Model::currentView() const
 {
-  return m_groups.count();
+  return m_currentView;
 }
 
-/**
- * Returns the full path of the current JSON project file.
- */
-const QString &Project::Model::jsonFilePath() const
-{
-  return m_filePath;
-}
+//------------------------------------------------------------------------------
+// Document information functions
+//------------------------------------------------------------------------------
 
-QStandardItemModel *Project::Model::treeModel() const
-{
-  return m_treeModel;
-}
-
-/**
- * Returns the simplified file name of the current JSON project file.
- * This is used to change the title of the Editor window.
- */
 QString Project::Model::jsonFileName() const
 {
   if (!jsonFilePath().isEmpty())
@@ -217,10 +163,103 @@ QString Project::Model::jsonFileName() const
   return tr("New Project");
 }
 
-/**
- * Checks if the current project has been modified and prompts the
- * user to save his/her changes.
- */
+QString Project::Model::jsonProjectsPath() const
+{
+  // Get file name and path
+  static QString path = QString("%1/Documents/%2/JSON Projects/")
+                            .arg(QDir::homePath(), qApp->applicationName());
+
+  // Generate file path if required
+  QDir dir(path);
+  if (!dir.exists())
+    dir.mkpath(".");
+
+  return path;
+}
+
+QString Project::Model::selectedText() const
+{
+  if (!m_selectionModel || !m_treeModel)
+    return "";
+
+  const auto index = m_selectionModel->currentIndex();
+  const auto data = m_treeModel->data(index, TreeViewText);
+  return data.toString();
+}
+
+QString Project::Model::selectedIcon() const
+{
+  if (!m_selectionModel || !m_treeModel)
+    return "";
+
+  const auto index = m_selectionModel->currentIndex();
+  const auto data = m_treeModel->data(index, TreeViewIcon);
+  return data.toString();
+}
+
+const QString &Project::Model::title() const
+{
+  return m_title;
+}
+
+const QString &Project::Model::jsonFilePath() const
+{
+  return m_filePath;
+}
+
+const QString &Project::Model::frameParserCode() const
+{
+  return m_frameParserCode;
+}
+
+const QString &Project::Model::thunderforestApiKey() const
+{
+  return m_thunderforestApiKey;
+}
+
+int Project::Model::groupCount() const
+{
+  return groups().count();
+}
+
+const QVector<JSON::Group> &Project::Model::groups() const
+{
+  return m_groups;
+}
+
+//------------------------------------------------------------------------------
+// Model access functions
+//------------------------------------------------------------------------------
+
+Project::CustomModel *Project::Model::treeModel() const
+{
+  return m_treeModel;
+}
+
+QItemSelectionModel *Project::Model::selectionModel() const
+{
+  return m_selectionModel;
+}
+
+Project::CustomModel *Project::Model::groupModel() const
+{
+  return m_groupModel;
+}
+
+Project::CustomModel *Project::Model::projectModel() const
+{
+  return m_projectModel;
+}
+
+Project::CustomModel *Project::Model::datasetModel() const
+{
+  return m_datasetModel;
+}
+
+//------------------------------------------------------------------------------
+// Document saving/export
+//------------------------------------------------------------------------------
+
 bool Project::Model::askSave()
 {
   if (!modified())
@@ -240,66 +279,14 @@ bool Project::Model::askSave()
   return saveJsonFile();
 }
 
-/**
- * Validates the configuration of the current JSON project and saves the JSON
- * document on the hard disk.
- */
 bool Project::Model::saveJsonFile()
 {
   // Validate project title
-  if (title().isEmpty())
+  if (m_title.isEmpty())
   {
     Misc::Utilities::showMessageBox(tr("Project error"),
                                     tr("Project title cannot be empty!"));
     return false;
-  }
-
-  // Validate group titles
-  for (int i = 0; i < groupCount(); ++i)
-  {
-    if (groupTitle(i).isEmpty())
-    {
-      Misc::Utilities::showMessageBox(tr("Project error - Group %1").arg(i + 1),
-                                      tr("Group title cannot be empty!"));
-      return false;
-    }
-  }
-
-  // Validate dataset titles
-  for (int i = 0; i < groupCount(); ++i)
-  {
-    for (int j = 0; j < datasetCount(i); ++j)
-    {
-      if (datasetTitle(i, j).isEmpty())
-      {
-        Misc::Utilities::showMessageBox(
-            tr("Project error - Group %1, Dataset %2").arg(i + 1).arg(j + 1),
-            tr("Dataset title cannot be empty!"));
-        return false;
-      }
-    }
-  }
-
-  // Validate dataset indexes
-  QVector<int> indexes;
-  for (int i = 0; i < groupCount(); ++i)
-  {
-    for (int j = 0; j < datasetCount(i); ++j)
-    {
-      if (!indexes.contains(datasetIndex(i, j)))
-        indexes.append(datasetIndex(i, j));
-
-      else
-      {
-        auto ret = Misc::Utilities::showMessageBox(
-            tr("Warning - Group %1, Dataset %2").arg(i + 1).arg(j + 1),
-            tr("Dataset contains duplicate frame index position! Continue?"),
-            APP_NAME, QMessageBox::Yes | QMessageBox::No);
-
-        if (ret == QMessageBox::No)
-          return false;
-      }
-    }
   }
 
   // Get file save path
@@ -323,52 +310,21 @@ bool Project::Model::saveJsonFile()
 
   // Create JSON document & add properties
   QJsonObject json;
-  json.insert("title", title());
-  json.insert("separator", separator());
-  json.insert("frameEnd", frameEndSequence());
-  json.insert("frameParser", frameParserCode());
-  json.insert("frameStart", frameStartSequence());
+  json.insert("title", m_title);
+  json.insert("separator", m_separator);
+  json.insert("decoder", m_frameDecoder);
+  json.insert("frameEnd", m_frameEndSequence);
+  json.insert("frameParser", m_frameParserCode);
+  json.insert("frameStart", m_frameStartSequence);
+  json.insert("thunderforestApiKey", m_thunderforestApiKey);
 
   // Create group array
-  QJsonArray groups;
-  for (int i = 0; i < groupCount(); ++i)
-  {
-    // Create group
-    QJsonObject group;
-    group.insert("title", groupTitle(i));
-    group.insert("widget", groupWidget(i));
-
-    // Create dataset array
-    QJsonArray datasets;
-    for (int j = 0; j < datasetCount(i); ++j)
-    {
-      // Create dataset
-      QJsonObject dataset;
-      dataset.insert("led", datasetLED(i, j));
-      dataset.insert("fft", datasetFftPlot(i, j));
-      dataset.insert("log", datasetLogPlot(i, j));
-      dataset.insert("title", datasetTitle(i, j));
-      dataset.insert("units", datasetUnits(i, j));
-      dataset.insert("graph", datasetGraph(i, j));
-      dataset.insert("widget", datasetWidget(i, j));
-      dataset.insert("min", datasetWidgetMin(i, j).toDouble());
-      dataset.insert("max", datasetWidgetMax(i, j).toDouble());
-      dataset.insert("alarm", datasetWidgetAlarm(i, j).toDouble());
-      dataset.insert("fftSamples", datasetFFTSamples(i, j).toInt());
-      dataset.insert("index", datasetIndex(i, j));
-      dataset.insert("value", "");
-
-      // Add dataset to array
-      datasets.append(dataset);
-    }
-
-    // Add datasets to group
-    group.insert("datasets", datasets);
-    groups.append(group);
-  }
+  QJsonArray groupArray;
+  for (const auto &group : m_groups)
+    groupArray.append(group.serialize());
 
   // Add groups array to JSON
-  json.insert("groups", groups);
+  json.insert("groups", groupArray);
 
   // Write JSON data to file
   file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
@@ -380,263 +336,48 @@ bool Project::Model::saveJsonFile()
   return true;
 }
 
-/**
- * Returns the number of datasets contained by the given @a group index.
- */
-int Project::Model::datasetCount(const int group) const
-{
-  return getGroup(group).m_datasets.count();
-}
-
-/**
- * Returns a pointer to the group object positioned at the given @a index
- */
-const JSON::Group &Project::Model::getGroup(const int index) const
-{
-  return m_groups.at(index);
-}
-
-/**
- * Returns a pointer to the dataset object contained by the @a group at
- * the given @a index
- */
-const JSON::Dataset &Project::Model::getDataset(const int group,
-                                                const int index) const
-{
-  return getGroup(group).getDataset(index);
-}
-
-/**
- * Returns the JavaScript code used to parse incoming frames
- */
-const QString &Project::Model::frameParserCode() const
-{
-  return m_frameParserCode;
-}
-
-/**
- * Returns the title of the given @a group.
- */
-const QString &Project::Model::groupTitle(const int group) const
-{
-  return getGroup(group).title();
-}
-
-/**
- * Returns the widget of the given @a group.
- */
-const QString &Project::Model::groupWidget(const int group) const
-{
-  return getGroup(group).widget();
-}
-
-/**
- * Returns the title of the specified dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-const QString &Project::Model::datasetTitle(const int group,
-                                            const int dataset) const
-{
-  return getDataset(group, dataset).title();
-}
-
-/**
- * Returns the measurement units of the specified dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-const QString &Project::Model::datasetUnits(const int group,
-                                            const int dataset) const
-{
-  return getDataset(group, dataset).units();
-}
-
-/**
- * Returns the widget string of the specified dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-const QString &Project::Model::datasetWidget(const int group,
-                                             const int dataset) const
-{
-  return getDataset(group, dataset).widget();
-}
-
-/**
- * Returns the position in the frame that holds the value for the given
- * @a dataset (which is contained by the specified @a group).
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-int Project::Model::datasetIndex(const int group, const int dataset) const
-{
-  return getDataset(group, dataset).m_index;
-}
-
-/**
- * Returns @c true if Serial Studio should generate a LED with the given
- * @a dataset (which is contained by the specified @a group).
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-bool Project::Model::datasetLED(const int group, const int dataset) const
-{
-  return getDataset(group, dataset).led();
-}
-
-/**
- * Returns @c true if Serial Studio should graph the data of the given
- * @a dataset (which is contained by the specified @a group).
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-bool Project::Model::datasetGraph(const int group, const int dataset) const
-{
-  return getDataset(group, dataset).graph();
-}
-
-/**
- * Returns @c true if Serial Studio should graph the data of the given
- * @a dataset (which is contained by the specified @a group).
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-bool Project::Model::datasetFftPlot(const int group, const int dataset) const
-{
-  return getDataset(group, dataset).fft();
-}
-
-/**
- * Returns @c true if Serial Studio should graph the data of the given
- * @a dataset (which is contained by the specified @a group) with a
- * logarithmic scale.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-bool Project::Model::datasetLogPlot(const int group, const int dataset) const
-{
-  return getDataset(group, dataset).log();
-}
-
-/**
- * Returns the widget ID of the specified dataset. The widget ID
- * corresponds to the list returned by the
- * @c availableDatasetLevelWidgets() function.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-int Project::Model::datasetWidgetIndex(const int group, const int dataset) const
-{
-  auto widget = datasetWidget(group, dataset);
-
-  if (widget == "gauge")
-    return 1;
-  if (widget == "bar")
-    return 2;
-  if (widget == "compass")
-    return 3;
-
-  return 0;
-}
-
-/**
- * Returns the minimum widget value of the specified dataset.
- * This option is used by the bar & gauge widgets.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-QString Project::Model::datasetWidgetMin(const int group,
-                                         const int dataset) const
-{
-  return QString::number(getDataset(group, dataset).min());
-}
-
-/**
- * Returns the maximum widget value of the specified dataset.
- * This option is used by the bar & gauge widgets.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-QString Project::Model::datasetWidgetMax(const int group,
-                                         const int dataset) const
-{
-  return QString::number(getDataset(group, dataset).max());
-}
-
-/**
- * Returns the maximum FFT frequency value of the specified dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-QString Project::Model::datasetFFTSamples(const int group,
-                                          const int dataset) const
-{
-  return QString::number(getDataset(group, dataset).fftSamples());
-}
-
-/**
- * Returns the widget alarm value of the specified dataset.
- * This option is used by the bar & gauge widgets.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-QString Project::Model::datasetWidgetAlarm(const int group,
-                                           const int dataset) const
-{
-  auto set = getDataset(group, dataset);
-
-  if (set.alarm() <= set.min())
-    return QString::number(set.max());
-
-  return QString::number(set.alarm());
-}
-
 //------------------------------------------------------------------------------
-// Public slots
+// Document initialization
 //------------------------------------------------------------------------------
 
-/**
- * Resets the C++ model used to represent the JSON project file.
- */
 void Project::Model::newJsonFile()
 {
   // Clear groups list
   m_groups.clear();
 
   // Reset project properties
-  setTitle("");
-  setSeparator("");
-  setFrameParserCode("");
-  setFrameEndSequence("");
-  setFrameStartSequence("");
+  m_separator = ",";
+  m_frameDecoder = Normal;
+  m_frameEndSequence = "*/";
+  m_thunderforestApiKey = "";
+  m_frameStartSequence = "/*";
+  m_title = tr("Untitled Project");
+  m_frameParserCode = Project::FrameParser::defaultCode();
 
   // Update file path
   m_filePath = "";
-  Q_EMIT jsonFileChanged();
 
-  // Update UI
-  Q_EMIT groupCountChanged();
+  // Update the models
+  buildTreeModel();
+  buildProjectModel();
+
+  // Remove modified state
   setModified(false);
+
+  // Set project view
+  setCurrentView(ProjectView);
+
+  // Emit signals
+  Q_EMIT titleChanged();
+  Q_EMIT jsonFileChanged();
+  Q_EMIT frameParserCodeChanged();
+  Q_EMIT thunderforestApyKeyChanged();
 }
 
-/**
- * Prompts the user to select a JSON project file & generates the appropiate C++
- * model that represents the JSON document.
- */
+//------------------------------------------------------------------------------
+// Document loading/import
+//------------------------------------------------------------------------------
+
 void Project::Model::openJsonFile()
 {
   // Let user select a file
@@ -651,10 +392,6 @@ void Project::Model::openJsonFile()
   openJsonFile(path);
 }
 
-/**
- * Opens the JSON document at the given @a path & generates the appropiate C++
- * model that represents the JSON document.
- */
 void Project::Model::openJsonFile(const QString &path)
 {
   // Open file
@@ -679,20 +416,21 @@ void Project::Model::openJsonFile(const QString &path)
 
   // Update current JSON document
   m_filePath = path;
-  Q_EMIT jsonFileChanged();
 
   // Read data from JSON document
   auto json = document.object();
-  setTitle(json.value("title").toString());
-  setSeparator(json.value("separator").toString());
-  setFrameEndSequence(json.value("frameEnd").toString());
-  setFrameParserCode(json.value("frameParser").toString());
-  setFrameStartSequence(json.value("frameStart").toString());
+  m_title = json.value("title").toString();
+  m_separator = json.value("separator").toString();
+  m_frameEndSequence = json.value("frameEnd").toString();
+  m_frameParserCode = json.value("frameParser").toString();
+  m_frameStartSequence = json.value("frameStart").toString();
+  m_thunderforestApiKey = json.value("thunderforestApiKey").toString();
+  m_frameDecoder = static_cast<DecoderMethod>(json.value("decoder").toInt());
 
   // Modify IO manager settings
-  IO::Manager::instance().setSeparatorSequence(separator());
-  IO::Manager::instance().setFinishSequence(frameEndSequence());
-  IO::Manager::instance().setStartSequence(frameStartSequence());
+  IO::Manager::instance().setSeparatorSequence(m_separator);
+  IO::Manager::instance().setFinishSequence(m_frameEndSequence);
+  IO::Manager::instance().setStartSequence(m_frameStartSequence);
 
   // Set JSON::Generator operation mode to manual
   JSON::Generator::instance().setOperationMode(JSON::Generator::kManual);
@@ -701,143 +439,252 @@ void Project::Model::openJsonFile(const QString &path)
   auto groups = json.value("groups").toArray();
   for (int g = 0; g < groups.count(); ++g)
   {
-    // Get JSON group data
-    auto group = groups.at(g).toObject();
-
-    // Register group with C++ model
-    addGroup(group.value("title").toString(), group.value("widget").toString());
-
-    // Get JSON group datasets
-    auto datasets = group.value("datasets").toArray();
-    for (int d = 0; d < datasets.count(); ++d)
-    {
-      // Get dataset JSON data
-      auto dataset = datasets.at(d).toObject();
-
-      // Register dataset with C++ model
-      addDataset(g);
-      setDatasetLED(g, d, dataset.value("led").toBool());
-      setDatasetFftPlot(g, d, dataset.value("fft").toBool());
-      setDatasetLogPlot(g, d, dataset.value("log").toBool());
-      setDatasetGraph(g, d, dataset.value("graph").toBool());
-      setDatasetTitle(g, d, dataset.value("title").toString());
-      setDatasetUnits(g, d, dataset.value("units").toString());
-      setDatasetWidgetData(g, d, dataset.value("widget").toString());
-
-      // Get max/min texts
-      auto min = dataset.value("min").toDouble();
-      auto max = dataset.value("max").toDouble();
-      auto index = dataset.value("index").toInt();
-      auto alarm = dataset.value("alarm").toDouble();
-      auto fftSamples = dataset.value("fftSamples").toInt();
-      setDatasetIndex(g, d, index);
-      setDatasetWidgetMin(g, d, QString::number(min));
-      setDatasetWidgetMax(g, d, QString::number(max));
-      setDatasetWidgetAlarm(g, d, QString::number(alarm));
-      setDatasetFFTSamples(g, d, QString::number(fftSamples));
-    }
+    JSON::Group group(g);
+    if (group.read(groups.at(g).toObject()))
+      m_groups.append(group);
   }
 
   // Regenerate the tree model
-  regenerateTreeModel();
-
-  // Update UI
-  Q_EMIT groupCountChanged();
+  buildProjectModel();
+  buildTreeModel();
 
   // Reset modified flag
   setModified(false);
+
+  // Show project view
+  setCurrentView(ProjectView);
+
+  // Update UI
+  Q_EMIT titleChanged();
+  Q_EMIT jsonFileChanged();
+  Q_EMIT frameParserCodeChanged();
+  Q_EMIT thunderforestApyKeyChanged();
 }
 
-/**
- * Changes the title of the JSON project file.
- */
-void Project::Model::setTitle(const QString &title)
+//------------------------------------------------------------------------------
+// Group/dataset operations
+//------------------------------------------------------------------------------
+
+void Project::Model::deleteCurrentGroup()
 {
-  if (title != m_title)
-  {
-    m_title = title;
-    Q_EMIT titleChanged();
-  }
-}
-
-/**
- * Changes the data separator sequence of the JSON project file.
- */
-void Project::Model::setSeparator(const QString &separator)
-{
-  if (separator != m_separator)
-  {
-    m_separator = separator;
-    Q_EMIT separatorChanged();
-  }
-}
-
-/**
- * Updates the JavaScript code used to parse incoming frames
- */
-void Project::Model::setFrameParserCode(const QString &code)
-{
-  if (code != m_frameParserCode)
-  {
-    // Update internal model
-    m_frameParserCode = code;
-
-    // Load default code if required
-    if (m_frameParserCode.isEmpty())
-      m_frameParserCode = CodeEditor::instance().defaultCode();
-
-    // Update UI
-    Q_EMIT frameParserCodeChanged();
-  }
-}
-
-/**
- * Changes the frame end sequence of the JSON project file.
- */
-void Project::Model::setFrameEndSequence(const QString &sequence)
-{
-  if (sequence != m_frameEndSequence)
-  {
-    m_frameEndSequence = sequence;
-    Q_EMIT frameEndSequenceChanged();
-  }
-}
-
-/**
- * Changes the frame start sequence of the JSON project file.
- */
-void Project::Model::setFrameStartSequence(const QString &sequence)
-{
-  if (sequence != m_frameStartSequence)
-  {
-    m_frameStartSequence = sequence;
-    Q_EMIT frameStartSequenceChanged();
-  }
-}
-
-/**
- * Removes the given @a group from the C++ model that represents the JSON
- * project file.
- */
-void Project::Model::deleteGroup(const int group)
-{
-  auto ret = Misc::Utilities::showMessageBox(
-      tr("Delete group \"%1\"").arg(groupTitle(group)),
-      tr("Are you sure you want to delete this group?"), APP_NAME,
+  // Ask the user for confirmation
+  const auto ret = Misc::Utilities::showMessageBox(
+      tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title()),
+      tr("This action cannot be undone. Do you wish to proceed?"), APP_NAME,
       QMessageBox::Yes | QMessageBox::No);
 
-  if (ret == QMessageBox::Yes)
+  // Validate the user input
+  if (ret != QMessageBox::Yes)
+    return;
+
+  // Delete the group
+  m_groups.removeAt(m_selectedGroup.groupId());
+
+  // Regenerate group IDs
+  int id = 0;
+  for (auto g = m_groups.begin(); g != m_groups.end(); ++g, ++id)
   {
-    m_groups.removeAt(group);
-    Q_EMIT groupCountChanged();
+    g->m_groupId = id;
+    for (auto d = g->m_datasets.begin(); d != g->m_datasets.end(); ++d)
+      d->m_groupId = id;
+  }
+
+  // Build tree model & set modification flag
+  buildTreeModel();
+  setModified(true);
+
+  // Select project item
+  const auto index = m_treeModel->index(0, 0);
+  m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+}
+
+void Project::Model::deleteCurrentDataset()
+{
+  // Ask the user for confirmation
+  const auto ret = Misc::Utilities::showMessageBox(
+      tr("Do you want to delete dataset \"%1\"?")
+          .arg(m_selectedDataset.title()),
+      tr("This action cannot be undone. Do you wish to proceed?"), APP_NAME,
+      QMessageBox::Yes | QMessageBox::No);
+
+  // Validate the user input
+  if (ret != QMessageBox::Yes)
+    return;
+
+  // Get group ID & dataset ID
+  const auto groupId = m_selectedDataset.groupId();
+  const auto datasetId = m_selectedDataset.datasetId();
+
+  // Remove dataset
+  m_groups[groupId].m_datasets.removeAt(datasetId);
+
+  // Reassign dataset IDs
+  int id = 0;
+  auto begin = m_groups[groupId].m_datasets.begin();
+  auto end = m_groups[groupId].m_datasets.end();
+  for (auto dataset = begin; dataset != end; ++dataset, ++id)
+    dataset->m_datasetId = id;
+
+  // Build tree model & set modification flag
+  buildTreeModel();
+  setModified(true);
+
+  // Select parent group
+  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
+  {
+    if (i.value().groupId() == groupId)
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
   }
 }
 
-/**
- * Adds a new group to the C++ model that represents the JSON project file.
- * If a group with the same title already exists, appends a number to the title.
- */
-void Project::Model::addGroup(const QString &title, const int widget)
+void Project::Model::duplicateCurrentGroup() {}
+
+void Project::Model::duplicateCurrentDataset() {}
+
+void Project::Model::changeDatasetParentGroup() {}
+
+void Project::Model::addDataset(const DatasetOption option)
+{
+  // Initialize a new dataset
+  const auto groupId = m_selectedGroup.groupId();
+  JSON::Dataset dataset(groupId);
+
+  // Configure dataset options
+  QString title;
+  switch (option)
+  {
+    case DatasetGeneric:
+      title = tr("New Dataset");
+      break;
+    case DatasetPlot:
+      title = tr("New Plot");
+      dataset.m_graph = true;
+      break;
+    case DatasetFFT:
+      title = tr("New FFT Plot");
+      dataset.m_fft = true;
+      break;
+    case DatasetBar:
+      title = tr("New Bar Widget");
+      dataset.m_widget = QStringLiteral("bar");
+      break;
+    case DatasetGauge:
+      title = tr("New Gauge");
+      dataset.m_widget = QStringLiteral("gauge");
+      break;
+    case DatasetCompass:
+      title = tr("New Compass");
+      dataset.m_widget = QStringLiteral("compass");
+      break;
+    default:
+      break;
+  }
+
+  // Check if any existing dataset has the same title
+  int count = 1;
+  QString newTitle = title;
+  for (const auto &d : m_groups[groupId].m_datasets)
+  {
+    if (d.m_title == newTitle)
+    {
+      count++;
+      newTitle = QString("%1 (%2)").arg(title).arg(count);
+    }
+  }
+
+  // If the title was modified, ensure it is unique
+  while (count > 1)
+  {
+    bool titleExists = false;
+    for (const auto &d : m_groups[groupId].m_datasets)
+    {
+      if (d.m_title == newTitle)
+      {
+        count++;
+        newTitle = QString("%1 (%2)").arg(title).arg(count);
+        titleExists = true;
+        break;
+      }
+    }
+
+    if (!titleExists)
+      break;
+  }
+
+  // Assign dataset title, ID & frame index
+  dataset.m_title = newTitle;
+  dataset.m_index = nextDatasetIndex();
+  dataset.m_datasetId = m_groups[groupId].m_datasets.count();
+
+  // Add dataset to group
+  m_groups[groupId].m_datasets.append(dataset);
+
+  // Build tree model & set modification flag
+  buildTreeModel();
+  setModified(true);
+
+  // Select group item again to rebuild dataset model
+  for (auto i = m_groupItems.begin(); i != m_groupItems.end(); ++i)
+  {
+    if (i.value().groupId() == groupId)
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
+  }
+}
+
+void Project::Model::changeDatasetOptions(const DatasetOption option)
+{
+  // Modify dataset options
+  switch (option)
+  {
+    case DatasetPlot:
+      m_selectedDataset.m_graph = true;
+      break;
+    case DatasetFFT:
+      m_selectedDataset.m_fft = true;
+      break;
+    case DatasetBar:
+      m_selectedDataset.m_widget = QStringLiteral("bar");
+      break;
+    case DatasetGauge:
+      m_selectedDataset.m_widget = QStringLiteral("gauge");
+      break;
+    case DatasetCompass:
+      m_selectedDataset.m_widget = QStringLiteral("compass");
+      break;
+    default:
+      break;
+  }
+
+  // Replace dataset
+  const auto groupId = m_selectedDataset.groupId();
+  const auto datasetId = m_selectedDataset.datasetId();
+  m_groups[groupId].m_datasets.replace(datasetId, m_selectedDataset);
+
+  // Build tree model & set modification flag
+  buildTreeModel();
+  setModified(true);
+
+  // Select dataset item again to rebuild dataset model
+  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
+  {
+    if (i.value().datasetId() == datasetId)
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
+  }
+}
+
+void Project::Model::addGroup(const QString &title, const GroupWidget widget)
 {
   // Check if any existing group has the same title
   int count = 1;
@@ -871,7 +718,7 @@ void Project::Model::addGroup(const QString &title, const int widget)
   }
 
   // Create a new group
-  JSON::Group group;
+  JSON::Group group(m_groups.count());
   group.m_title = newTitle;
 
   // Register the group & add the widget
@@ -879,71 +726,27 @@ void Project::Model::addGroup(const QString &title, const int widget)
   setGroupWidget(m_groups.count() - 1, widget);
 
   // Update the user interface
-  Q_EMIT groupCountChanged();
+  buildTreeModel();
+  setModified(true);
+
+  // Select group
+  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
+  {
+    if (i.value().title() == group.title())
+      Q_EMIT groupAdded(i.key()->index());
+  }
 }
 
-/**
- * Adds a new group to the C++ model that represents the JSON project file.
- * If a group with the same title already exists, appends a number to the title.
- */
-void Project::Model::addGroup(const QString &title, const QString &widget)
+bool Project::Model::setGroupWidget(const int group, const GroupWidget widget)
 {
-  // Check if any existing group has the same title
-  int count = 1;
-  QString newTitle = title;
-  for (const auto &group : m_groups)
-  {
-    if (group.m_title == newTitle)
-    {
-      count++;
-      newTitle = QString("%1 (%2)").arg(title).arg(count);
-    }
-  }
-
-  // If the title was modified, ensure it is unique
-  while (count > 1)
-  {
-    bool titleExists = false;
-    for (const auto &group : m_groups)
-    {
-      if (group.m_title == newTitle)
-      {
-        count++;
-        newTitle = QString("%1 (%2)").arg(title).arg(count);
-        titleExists = true;
-        break;
-      }
-    }
-
-    if (!titleExists)
-      break;
-  }
-
-  // Create a new group
-  JSON::Group group;
-  group.m_title = newTitle;
-
-  // Register the group & add the widget
-  m_groups.append(group);
-  setGroupWidgetData(m_groups.count() - 1, widget);
-
-  // Update the user interface
-  Q_EMIT groupCountChanged();
-}
-
-/**
- * Changes the group-level widget for the specified @a group.
- * If necessary, this function shall generate the appropiate datasets
- * needed to implement the widget (e.g. x,y,z for accelerometer widgets).
- */
-bool Project::Model::setGroupWidget(const int group, const int widgetId)
-{
-  auto grp = getGroup(group);
+  // Get group data
+  auto grp = m_groups.at(group);
+  const auto groupId = grp.groupId();
 
   // Warn user if group contains existing datasets
-  if (!(grp.m_datasets.isEmpty()) && widgetId != 4)
+  if (!(grp.m_datasets.isEmpty()) && widget != 4)
   {
-    if (widgetId == 0 && grp.widget() == "multiplot")
+    if (widget == CustomGroup && grp.widget() == "multiplot")
       grp.m_widget = "";
 
     else
@@ -960,17 +763,27 @@ bool Project::Model::setGroupWidget(const int group, const int widgetId)
   }
 
   // Dataset widget
-  if (widgetId == 0)
+  if (widget == CustomGroup)
     grp.m_widget = "";
 
   // Accelerometer widget
-  else if (widgetId == 1)
+  else if (widget == Accelerometer)
   {
     // Set widget type
     grp.m_widget = "accelerometer";
 
     // Create datasets
     JSON::Dataset x, y, z;
+
+    // Set dataset IDs
+    x.m_datasetId = 0;
+    y.m_datasetId = 1;
+    z.m_datasetId = 2;
+
+    // Register parent group for the datasets
+    x.m_groupId = groupId;
+    y.m_groupId = groupId;
+    z.m_groupId = groupId;
 
     // Set dataset indexes
     x.m_index = nextDatasetIndex();
@@ -997,13 +810,23 @@ bool Project::Model::setGroupWidget(const int group, const int widgetId)
   }
 
   // Gyroscope widget
-  else if (widgetId == 2)
+  else if (widget == Gyroscope)
   {
     // Set widget type
     grp.m_widget = "gyro";
 
     // Create datasets
     JSON::Dataset x, y, z;
+
+    // Set dataset IDs
+    x.m_datasetId = 0;
+    y.m_datasetId = 1;
+    z.m_datasetId = 2;
+
+    // Register parent group for the datasets
+    x.m_groupId = groupId;
+    y.m_groupId = groupId;
+    z.m_groupId = groupId;
 
     // Set dataset indexes
     x.m_index = nextDatasetIndex();
@@ -1030,13 +853,23 @@ bool Project::Model::setGroupWidget(const int group, const int widgetId)
   }
 
   // Map widget
-  else if (widgetId == 3)
+  else if (widget == GPS)
   {
     // Set widget type
     grp.m_widget = "map";
 
     // Create datasets
     JSON::Dataset lat, lon, alt;
+
+    // Set dataset IDs
+    lat.m_datasetId = 0;
+    lon.m_datasetId = 1;
+    alt.m_datasetId = 2;
+
+    // Register parent group for the datasets
+    lat.m_groupId = groupId;
+    lon.m_groupId = groupId;
+    alt.m_groupId = groupId;
 
     // Set dataset indexes
     lat.m_index = nextDatasetIndex();
@@ -1063,546 +896,101 @@ bool Project::Model::setGroupWidget(const int group, const int widgetId)
   }
 
   // Multi plot widget
-  else if (widgetId == 4)
+  else if (widget == MultiPlot)
     grp.m_widget = "multiplot";
 
   // Replace previous group with new group
   m_groups.replace(group, grp);
 
   // Update UI
-  Q_EMIT groupChanged(group);
   return true;
 }
 
-/**
- * Changes the @a title for the given @a group in the C++ model
- */
-void Project::Model::setGroupTitle(const int group, const QString &title)
+//------------------------------------------------------------------------------
+// Frame parser code modification
+//------------------------------------------------------------------------------
+
+void Project::Model::setFrameParserCode(const QString &code)
 {
-  // Get group
-  auto grp = getGroup(group);
-
-  // Change group values & update groups vector
-  grp.m_title = title;
-  m_groups.replace(group, grp);
-
-  // Update UI
-  Q_EMIT groupChanged(group);
-}
-
-/**
- * Changes the @a widget for the given @a group in the C++ model
- */
-void Project::Model::setGroupWidgetData(const int group, const QString &widget)
-{
-  // Get group
-  auto grp = getGroup(group);
-
-  // Change group values & update groups vector
-  grp.m_widget = widget;
-  m_groups.replace(group, grp);
-
-  // Update UI
-  Q_EMIT groupChanged(group);
-}
-
-/**
- * Adds a new dataset to the given @a group & increments the frame
- * index counter (to avoid having datasets that pull data from the
- * same position in the MCU frame).
- */
-void Project::Model::addDataset(const int group)
-{
-  // Get group
-  auto grp = getGroup(group);
-
-  // Change group values & update groups vector
-  grp.m_datasets.append(JSON::Dataset());
-  m_groups.replace(group, grp);
-
-  // Set dataset title & index
-  setDatasetIndex(group, grp.m_datasets.count() - 1, nextDatasetIndex());
-  setDatasetTitle(group, grp.m_datasets.count() - 1, tr("New dataset"));
-
-  // Update UI
-  Q_EMIT groupChanged(group);
-}
-
-/**
- * Removes the given @a dataset from the specified @a group.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::deleteDataset(const int group, const int dataset)
-{
-  auto ret = Misc::Utilities::showMessageBox(
-      tr("Delete dataset \"%1\"").arg(getDataset(group, dataset).title()),
-      tr("Are you sure you want to delete this dataset?"), APP_NAME,
-      QMessageBox::Yes | QMessageBox::No);
-
-  if (ret == QMessageBox::Yes)
+  if (code != m_frameParserCode)
   {
-    auto grp = getGroup(group);
-    grp.m_datasets.removeAt(dataset);
-    m_groups.replace(group, grp);
-    Q_EMIT groupChanged(group);
+    m_frameParserCode = code;
+    setModified(true);
+
+    Q_EMIT frameParserCodeChanged();
   }
 }
 
-/**
- * Updates the @a title of the given @a dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetTitle(const int group, const int dataset,
-                                     const QString &title)
+//------------------------------------------------------------------------------
+// Model generation code
+//------------------------------------------------------------------------------
+
+void Project::Model::buildTreeModel()
 {
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
+  // Clear model/pointer maps
+  m_rootItems.clear();
+  m_groupItems.clear();
+  m_datasetItems.clear();
 
-  // Update dataset & group
-  if (set.m_title != title)
-  {
-    set.m_title = title;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the measurement @a units of the given @a dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetUnits(const int group, const int dataset,
-                                     const QString &units)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_units != units)
-  {
-    set.m_units = units;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a frameIndex of the given @a dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetIndex(const int group, const int dataset,
-                                     const int frameIndex)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_index != frameIndex)
-  {
-    set.m_index = frameIndex;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a generateLED flag of the given @a dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetLED(const int group, const int dataset,
-                                   const bool generateLED)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_led != generateLED)
-  {
-    set.m_led = generateLED;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a generateGraph flag of the given @a dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetGraph(const int group, const int dataset,
-                                     const bool generateGraph)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_graph != generateGraph)
-  {
-    set.m_graph = generateGraph;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a generateFft flag of the given @a dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetFftPlot(const int group, const int dataset,
-                                       const bool generateFft)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_fft != generateFft)
-  {
-    set.m_fft = generateFft;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a generateLog flag of the given @a dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetLogPlot(const int group, const int dataset,
-                                       const bool generateLog)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_log != generateLog)
-  {
-    set.m_log = generateLog;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a widgetId of the given @a dataset. The widget ID is dependent
- * on the order of the widgets returned by the @c availableDatasetLevelWidgets()
- * function.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetWidget(const int group, const int dataset,
-                                      const int widgetId)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Get widget string
-  QString widget;
-  if (widgetId == 1)
-    widget = "gauge";
-  else if (widgetId == 2)
-    widget = "bar";
-  else if (widgetId == 3)
-  {
-    widget = "compass";
-    set.m_min = 0;
-    set.m_max = 360;
-  }
-
-  // Update dataset & group
-  if (set.m_widget != widget)
-  {
-    set.m_widget = widget;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a minimum value used by the bar & gauge widgets for the given
- * @a dataset. The value is specified in a @c QString to facilitate integration
- * with the QML user interface.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetWidgetMin(const int group, const int dataset,
-                                         const QString &minimum)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_min != minimum.toDouble())
-  {
-    set.m_min = minimum.toDouble();
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a maximum value used by the bar & gauge widgets for the given
- * @a dataset. The value is specified in a @c QString to facilitate integration
- * with the QML user interface.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetWidgetMax(const int group, const int dataset,
-                                         const QString &maximum)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_max != maximum.toDouble())
-  {
-    set.m_max = maximum.toDouble();
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a widget string of the given @a dataset.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetWidgetData(const int group, const int dataset,
-                                          const QString &widget)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_widget != widget)
-  {
-    set.m_widget = widget;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a alarm value used by the bar & gauge widgets for the given
- * @a dataset. The value is specified in a @c QString to facilitate integration
- * with the QML user interface.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetWidgetAlarm(const int group, const int dataset,
-                                           const QString &alarm)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Update dataset & group
-  if (set.m_alarm != alarm.toDouble())
-  {
-    set.m_alarm = alarm.toDouble();
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a samples used for FFT plotting.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::setDatasetFFTSamples(const int group, const int dataset,
-                                          const QString &samples)
-{
-  // Get dataset & group
-  auto grp = getGroup(group);
-  auto set = getDataset(group, dataset);
-
-  // Validate FFT samples
-  auto sample = samples.toInt();
-  if (sample < 128)
-    sample = 128;
-
-  // Update dataset & group
-  if (set.m_fftSamples != sample)
-  {
-    set.m_fftSamples = sample;
-    grp.m_datasets.replace(dataset, set);
-    m_groups.replace(group, grp);
-
-    // Update UI
-    Q_EMIT datasetChanged(group, dataset);
-  }
-}
-
-/**
- * Updates the @a modified flag of the current JSON project.
- * This flag is used to know if we should ask the user to save
- * his/her modifications to the project file.
- */
-void Project::Model::setModified(const bool modified)
-{
-  m_modified = modified;
-  Q_EMIT modifiedChanged();
-}
-
-/**
- * Ensures that the JSON project file is the same as the one used by
- * the JSON Generator class.
- */
-void Project::Model::onJsonLoaded()
-{
-  if (jsonFilePath() != JSON::Generator::instance().jsonMapFilepath())
-    openJsonFile(JSON::Generator::instance().jsonMapFilepath());
-}
-
-/**
- * Sets the modified flag to @c true when the user adds/removes
- * one of the groups contained in the JSON project.
- */
-void Project::Model::onModelChanged()
-{
-  regenerateTreeModel();
-  setModified(true);
-}
-
-/**
- * @brief Regenerates the hierarchical tree model used in the QML TreeView.
- *
- * This function rebuilds the tree model from the current project structure,
- * ensuring that any changes to groups or datasets are reflected in the UI.
- * It creates a new QStandardItemModel, iterates through the existing groups
- * and their datasets, and populates the model accordingly. The model is then
- * assigned to the QML TreeView, and a signal is emitted to notify QML that
- * the model has been updated.
- *
- * The model's structure:
- * - Each group is represented as a root item in the tree.
- * - Each dataset within a group is represented as a child item of that group.
- *
- * The function also manages memory by deleting the old model before creating
- * a new one, preventing memory leaks.
- *
- * @note This function should be called whenever the project structure changes.
- */
-void Project::Model::regenerateTreeModel()
-{
-  // Check if the existing tree model needs to be deleted
+  // Store previous tree model's expanded states in a hash
+  QHash<QString, bool> expandedStates;
   if (m_treeModel)
-    delete m_treeModel;
+    saveExpandedStateMap(m_treeModel->invisibleRootItem(), expandedStates, "");
 
-  // Create a new QStandardItemModel for the tree
-  m_treeModel = new QStandardItemModel(this);
+  // Delete the existing selection model
+  if (m_selectionModel)
+  {
+    disconnect(m_selectionModel);
+    m_selectionModel->deleteLater();
+    m_selectionModel = nullptr;
+  }
+
+  // Delete the existing tree model
+  if (m_treeModel)
+  {
+    disconnect(m_treeModel);
+    m_treeModel->deleteLater();
+    m_treeModel = nullptr;
+  }
+
+  // Create a new CustomModel for the tree
+  m_treeModel = new CustomModel(this);
 
   // Add project information section
-  auto *projectInfo = new QStandardItem(tr("Project Information"));
-  auto *projectTitle = new QStandardItem(tr("Project Title"));
-  auto *projectSeparator = new QStandardItem(tr("Separator Sequence"));
-  auto *projectStartSeq = new QStandardItem(tr("Frame Start Sequence"));
-  auto *projectEndSeq = new QStandardItem(tr("Frame End Sequence"));
+  auto *root = new QStandardItem(title());
+  root->setData(root->text(), TreeViewText);
 
-  // Set display roles for project information section
-  projectInfo->setData(projectInfo->text(), Qt::DisplayRole);
-  projectTitle->setData(projectTitle->text(), Qt::DisplayRole);
-  projectSeparator->setData(projectSeparator->text(), Qt::DisplayRole);
-  projectStartSeq->setData(projectStartSeq->text(), Qt::DisplayRole);
-  projectEndSeq->setData(projectEndSeq->text(), Qt::DisplayRole);
+  // Add "root" project items
+  auto *frameParsingCode = new QStandardItem(tr("Frame Parser Function"));
 
-  // Set decoration roles (icons) for project information section
-  projectInfo->setData(
-      "qrc:/rcc/icons/project-editor/treeview/project-setup.svg",
-      Qt::DecorationRole);
-  projectTitle->setData(
-      "qrc:/rcc/icons/project-editor/treeview/project-title.svg",
-      Qt::DecorationRole);
-  projectSeparator->setData(
-      "qrc:/rcc/icons/project-editor/treeview/separator.svg",
-      Qt::DecorationRole);
-  projectStartSeq->setData(
-      "qrc:/rcc/icons/project-editor/treeview/frame-start.svg",
-      Qt::DecorationRole);
-  projectEndSeq->setData("qrc:/rcc/icons/project-editor/treeview/frame-end.svg",
-                         Qt::DecorationRole);
+  // Set display roles for root project items
+  frameParsingCode->setData(frameParsingCode->text(), TreeViewText);
 
-  // Set project information hierarchy
-  projectInfo->appendRow(projectTitle);
-  projectInfo->appendRow(projectSeparator);
-  projectInfo->appendRow(projectStartSeq);
-  projectInfo->appendRow(projectEndSeq);
-  m_treeModel->appendRow(projectInfo);
+  // Set decoration roles (icons) for root items section
+  // clang-format off
+  root->setData("qrc:/rcc/icons/project-editor/treeview/project-setup.svg", TreeViewIcon);
+  frameParsingCode->setData("qrc:/rcc/icons/project-editor/treeview/code.svg", TreeViewIcon);
+  // clang-format on
+
+  // Expand project root item
+  root->setData(true, TreeViewExpanded);
+
+  // Generate tree hierarchy for root items
+  root->appendRow(frameParsingCode);
+  m_treeModel->appendRow(root);
+
+  // Create relationship with root items & indices
+  m_rootItems.insert(root, kRootItem);
+  m_rootItems.insert(frameParsingCode, kFrameParser);
 
   // Iterate through the groups and add them to the model
   for (int gIndex = 0; gIndex < m_groups.size(); ++gIndex)
   {
+    // Create group item
     const auto group = m_groups[gIndex];
     auto *groupItem = new QStandardItem(group.title());
 
+    // Decide which icon to use for the group
     QString icon;
     if (group.widget() == "map")
       icon = "qrc:/rcc/icons/project-editor/treeview/gps.svg";
@@ -1615,78 +1003,731 @@ void Project::Model::regenerateTreeModel()
     else
       icon = "qrc:/rcc/icons/project-editor/treeview/group.svg";
 
-    groupItem->setData(icon, Qt::DecorationRole);
-    groupItem->setData(group.title(), Qt::DisplayRole);
-    groupItem->setData(-1, Qt::WhatsThisRole);
+    // Set metadata for the group item
+    groupItem->setData(icon, TreeViewIcon);
+    groupItem->setData(-1, TreeViewFrameIndex);
+    groupItem->setData(group.title(), TreeViewText);
 
     // Iterate through the datasets within this group and add them as children
     for (int dIndex = 0; dIndex < group.datasets().size(); ++dIndex)
     {
+      // Create dataset item
       const auto dataset = group.datasets()[dIndex];
       auto *datasetItem = new QStandardItem(dataset.title());
-
       const auto icon = "qrc:/rcc/icons/project-editor/treeview/dataset.svg";
+      datasetItem->setData(icon, TreeViewIcon);
+      datasetItem->setData(dataset.title(), TreeViewText);
+      datasetItem->setData(dataset.index(), TreeViewFrameIndex);
 
-      datasetItem->setData(icon, Qt::DecorationRole);
-      datasetItem->setData(dataset.title(), Qt::DisplayRole);
-      datasetItem->setData(dataset.index(), Qt::WhatsThisRole);
-
+      // Add dataset item as child for group item
       groupItem->appendRow(datasetItem);
+
+      // Create relationship with dataset item & actual dataset
+      m_datasetItems.insert(datasetItem, dataset);
     }
 
-    // Add the group item to the root of the tree model
-    m_treeModel->appendRow(groupItem);
+    // Restore expanded states for the group
+    restoreExpandedStateMap(groupItem, expandedStates,
+                            root->text() + "/" + group.title());
+
+    // Add the group item to the root
+    root->appendRow(groupItem);
+
+    // Create relationship with group item & actual group
+    m_groupItems.insert(groupItem, group);
   }
 
-  // Notify QML that the tree model has changed
+  // Construct selection model
+  m_selectionModel = new QItemSelectionModel(m_treeModel);
+  connect(m_selectionModel, &QItemSelectionModel::currentChanged, this,
+          &Project::Model::onCurrentSelectionChanged);
+
+  // Update user interface
   Q_EMIT treeModelChanged();
 }
 
-/**
- * Sets the modified flag to @c true when the user changes the title
- * or the widget of one of the groups contained in the JSON project.
- */
-void Project::Model::onGroupChanged(const int group)
+void Project::Model::buildProjectModel()
 {
-  (void)group;
-  regenerateTreeModel();
+  // Clear the existing model
+  if (m_projectModel)
+  {
+    disconnect(m_projectModel);
+    m_projectModel->deleteLater();
+  }
+
+  // Create a new model
+  m_projectModel = new CustomModel(this);
+
+  // Add project title
+  auto title = new QStandardItem();
+  title->setEditable(true);
+  title->setData(TextField, WidgetType);
+  title->setData(m_title, EditableValue);
+  title->setData(tr("Title"), ParameterName);
+  title->setData(kProjectView_Title, ParameterType);
+  title->setData(tr("Untitled Project"), PlaceholderValue);
+  title->setData(tr("Project name/description"), ParameterDescription);
+  m_projectModel->appendRow(title);
+
+  // Add separator sequence
+  auto separator = new QStandardItem();
+  separator->setEditable(true);
+  separator->setData(TextField, WidgetType);
+  separator->setData(m_separator, EditableValue);
+  separator->setData(tr("Separator Sequence"), ParameterName);
+  separator->setData(kProjectView_ItemSeparator, ParameterType);
+  separator->setData(QStringLiteral(","), PlaceholderValue);
+  separator->setData(tr("String used to split items in a frame"),
+                     ParameterDescription);
+  m_projectModel->appendRow(separator);
+
+  // Add frame start sequence
+  auto frameStart = new QStandardItem();
+  frameStart->setEditable(true);
+  frameStart->setData(TextField, WidgetType);
+  frameStart->setData(m_frameStartSequence, EditableValue);
+  frameStart->setData(tr("Frame Start Delimeter"), ParameterName);
+  frameStart->setData(kProjectView_FrameStartSequence, ParameterType);
+  frameStart->setData(QStringLiteral("/*"), PlaceholderValue);
+  frameStart->setData(tr("String marking the start of a frame"),
+                      ParameterDescription);
+  m_projectModel->appendRow(frameStart);
+
+  // Add frame end sequence
+  auto frameEnd = new QStandardItem();
+  frameEnd->setEditable(true);
+  frameEnd->setData(TextField, WidgetType);
+  frameEnd->setData(m_frameEndSequence, EditableValue);
+  frameEnd->setData(tr("Frame End Delimeter"), ParameterName);
+  frameEnd->setData(kProjectView_FrameEndSequence, ParameterType);
+  frameEnd->setData(QStringLiteral("*/"), PlaceholderValue);
+  frameEnd->setData(tr("String marking the end of a frame"),
+                    ParameterDescription);
+  m_projectModel->appendRow(frameEnd);
+
+  // Add decoding
+  auto decoding = new QStandardItem();
+  decoding->setEditable(true);
+  decoding->setData(ComboBox, WidgetType);
+  decoding->setData(m_decoderOptions, ComboBoxData);
+  decoding->setData(m_frameDecoder, EditableValue);
+  decoding->setData(tr("Data Conversion Method"), ParameterName);
+  decoding->setData(kProjectView_FrameDecoder, ParameterType);
+  decoding->setData(tr("Input data format for frame parser"),
+                    ParameterDescription);
+  m_projectModel->appendRow(decoding);
+
+  // Add OSM API Key
+  auto apiKey = new QStandardItem();
+  apiKey->setEditable(true);
+  apiKey->setData(TextField, WidgetType);
+  apiKey->setData(m_thunderforestApiKey, EditableValue);
+  apiKey->setData(tr("Thunderforest API Key"), ParameterName);
+  apiKey->setData(kProjectView_ThunderforestApiKey, ParameterType);
+  apiKey->setData(tr("None"), PlaceholderValue);
+  apiKey->setData(tr("Required for GPS map widget"), ParameterDescription);
+  m_projectModel->appendRow(apiKey);
+
+  // Handle edits
+  connect(m_projectModel, &CustomModel::itemChanged, this,
+          &Project::Model::onProjectItemChanged);
+
+  // Update user interface
+  Q_EMIT projectModelChanged();
+}
+
+void Project::Model::buildGroupModel(const JSON::Group &group)
+{
+  // Clear the existing model
+  if (m_groupModel)
+  {
+    disconnect(m_groupModel);
+    m_groupModel->deleteLater();
+  }
+
+  // Create a new model
+  m_selectedGroup = group;
+  m_groupModel = new CustomModel(this);
+
+  // Add group title
+  auto title = new QStandardItem();
+  title->setEditable(true);
+  title->setData(TextField, WidgetType);
+  title->setData(group.title(), EditableValue);
+  title->setData(tr("Title"), ParameterName);
+  title->setData(kGroupView_Title, ParameterType);
+  title->setData(tr("Untitled Group"), PlaceholderValue);
+  title->setData(tr("Name or description of the group"), ParameterDescription);
+  m_groupModel->appendRow(title);
+
+  // Get appropiate widget index for current group
+  int index = 0;
+  bool found = false;
+  for (auto it = m_groupWidgets.begin(); it != m_groupWidgets.end();
+       ++it, ++index)
+  {
+    if (it.key() == group.widget())
+    {
+      found = true;
+      break;
+    }
+  }
+
+  // If not found, reset the index to 0
+  if (!found)
+    index = 0;
+
+  // Add widgets
+  auto widget = new QStandardItem();
+  widget->setEditable(true);
+  widget->setData(ComboBox, WidgetType);
+  widget->setData(m_groupWidgets.values(), ComboBoxData);
+  widget->setData(index, EditableValue);
+  widget->setData(tr("Widget"), ParameterName);
+  widget->setData(kGroupView_Widget, ParameterType);
+  widget->setData(tr("Group display widget (optional)"), ParameterDescription);
+  m_groupModel->appendRow(widget);
+
+  // Handle edits
+  connect(m_groupModel, &CustomModel::itemChanged, this,
+          &Project::Model::onGroupItemChanged);
+
+  // Update user interface
+  emit groupModelChanged();
+}
+
+void Project::Model::buildDatasetModel(const JSON::Dataset &dataset)
+{
+  // Clear the existing model
+  if (m_datasetModel)
+  {
+    disconnect(m_datasetModel);
+    m_datasetModel->deleteLater();
+  }
+
+  // Create a new model
+  m_selectedDataset = dataset;
+  m_datasetModel = new CustomModel(this);
+
+  // Add dataset title
+  auto title = new QStandardItem();
+  title->setEditable(true);
+  title->setData(TextField, WidgetType);
+  title->setData(dataset.title(), EditableValue);
+  title->setData(tr("Title"), ParameterName);
+  title->setData(kDatasetView_Title, ParameterType);
+  title->setData(tr("Untitled Dataset"), PlaceholderValue);
+  title->setData(tr("Name or description of the dataset"),
+                 ParameterDescription);
+  m_datasetModel->appendRow(title);
+
+  // Add dataset index
+  auto index = new QStandardItem();
+  index->setEditable(true);
+  index->setData(IntField, WidgetType);
+  index->setData(dataset.index(), EditableValue);
+  index->setData(tr("Frame Index"), ParameterName);
+  index->setData(kDatasetView_Index, ParameterType);
+  index->setData(nextDatasetIndex(), PlaceholderValue);
+  index->setData(tr("Position in the frame"), ParameterDescription);
+  m_datasetModel->appendRow(index);
+
+  // Add units
+  auto units = new QStandardItem();
+  units->setEditable(true);
+  units->setData(TextField, WidgetType);
+  units->setData(dataset.units(), EditableValue);
+  units->setData(tr("Measurement Unit"), ParameterName);
+  units->setData(kDatasetView_Units, ParameterType);
+  units->setData(tr("Volts, Amps, etc."), PlaceholderValue);
+  units->setData(tr("Unit of measurement (optional)"), ParameterDescription);
+  m_datasetModel->appendRow(units);
+
+  // Get appropiate widget index for current dataset
+  int widgetIndex = 0;
+  bool found = false;
+  for (auto it = m_datasetWidgets.begin(); it != m_datasetWidgets.end();
+       ++it, ++widgetIndex)
+  {
+    if (it.key() == dataset.widget())
+    {
+      found = true;
+      break;
+    }
+  }
+
+  // If not found, reset the index to 0
+  if (!found)
+    widgetIndex = 0;
+
+  // Add widgets
+  auto widget = new QStandardItem();
+  widget->setEditable(true);
+  widget->setData(ComboBox, WidgetType);
+  widget->setData(m_datasetWidgets.values(), ComboBoxData);
+  widget->setData(widgetIndex, EditableValue);
+  widget->setData(tr("Widget"), ParameterName);
+  widget->setData(kDatasetView_Widget, ParameterType);
+  widget->setData(tr("Display widget (optional)"), ParameterDescription);
+  m_datasetModel->appendRow(widget);
+
+  // Add minimum value
+  auto min = new QStandardItem();
+  min->setEditable(true);
+  min->setData(FloatField, WidgetType);
+  min->setData(dataset.min(), EditableValue);
+  min->setData(tr("Minimum Value"), ParameterName);
+  min->setData(kDatasetView_Min, ParameterType);
+  min->setData(0, PlaceholderValue);
+  min->setData(tr("Required for bar/gauge widgets"), ParameterDescription);
+  m_datasetModel->appendRow(min);
+
+  // Add maximum value
+  auto max = new QStandardItem();
+  max->setEditable(true);
+  max->setData(FloatField, WidgetType);
+  max->setData(dataset.max(), EditableValue);
+  max->setData(tr("Maximum Value"), ParameterName);
+  max->setData(kDatasetView_Max, ParameterType);
+  max->setData(0, PlaceholderValue);
+  max->setData(tr("Required for bar/gauge widgets"), ParameterDescription);
+  m_datasetModel->appendRow(max);
+
+  // Add alarm value
+  auto alarm = new QStandardItem();
+  alarm->setEditable(true);
+  alarm->setData(FloatField, WidgetType);
+  alarm->setData(dataset.alarm(), EditableValue);
+  alarm->setData(tr("Alarm Value"), ParameterName);
+  alarm->setData(kDatasetView_Alarm, ParameterType);
+  alarm->setData(0, PlaceholderValue);
+  alarm->setData(tr("Triggers alarm in bar widgets and LED panels"),
+                 ParameterDescription);
+  m_datasetModel->appendRow(alarm);
+
+  // Get appropiate plotting mode index for current dataset
+  found = false;
+  int plotIndex = 0;
+  const auto currentPair = qMakePair(dataset.graph(), dataset.log());
+  for (auto it = m_plotOptions.begin(); it != m_plotOptions.end();
+       ++it, ++plotIndex)
+  {
+    if (it.key() == currentPair)
+    {
+      found = true;
+      break;
+    }
+  }
+
+  // If not found, reset the index to 0
+  if (!found)
+    plotIndex = 0;
+
+  // Add plotting mode
+  auto plot = new QStandardItem();
+  plot->setEditable(true);
+  plot->setData(ComboBox, WidgetType);
+  plot->setData(m_plotOptions.values(), ComboBoxData);
+  plot->setData(plotIndex, EditableValue);
+  plot->setData(tr("Oscilloscope Plot"), ParameterName);
+  plot->setData(kDatasetView_Plot, ParameterType);
+  plot->setData(tr("Plot data in real-time"), ParameterDescription);
+  m_datasetModel->appendRow(plot);
+
+  // Add FFT checkbox
+  auto fft = new QStandardItem();
+  fft->setEditable(true);
+  fft->setData(CheckBox, WidgetType);
+  fft->setData(dataset.fft(), EditableValue);
+  fft->setData(tr("FFT Plot"), ParameterName);
+  fft->setData(kDatasetView_FFT, ParameterType);
+  fft->setData(0, PlaceholderValue);
+  fft->setData(tr("Plot frequency-domain data"), ParameterDescription);
+  m_datasetModel->appendRow(fft);
+
+  // Get FFT window size index
+  const auto windowSize = QString::number(dataset.fftSamples());
+  int windowIndex = m_fftSamples.indexOf(windowSize);
+  if (windowIndex < 0)
+    windowIndex = 7;
+
+  // Add FFT window size
+  auto fftWindow = new QStandardItem();
+  fftWindow->setEditable(true);
+  fftWindow->setData(ComboBox, WidgetType);
+  fftWindow->setData(m_fftSamples, ComboBoxData);
+  fftWindow->setData(windowIndex, EditableValue);
+  fftWindow->setData(tr("FFT Window Size"), ParameterName);
+  fftWindow->setData(kDatasetView_FFT_Samples, ParameterType);
+  fftWindow->setData(tr("Samples for FFT calculation"), ParameterDescription);
+  m_datasetModel->appendRow(fftWindow);
+
+  // Add LED panel checkbox
+  auto led = new QStandardItem();
+  led->setEditable(true);
+  led->setData(CheckBox, WidgetType);
+  led->setData(dataset.led(), EditableValue);
+  led->setData(tr("Show in LED Panel"), ParameterName);
+  led->setData(kDatasetView_LED, ParameterType);
+  led->setData(0, PlaceholderValue);
+  led->setData(tr("Quick status monitoring"), ParameterDescription);
+  m_datasetModel->appendRow(led);
+
+  // Add LED High value
+  auto ledHigh = new QStandardItem();
+  ledHigh->setEditable(true);
+  ledHigh->setData(FloatField, WidgetType);
+  ledHigh->setData(dataset.ledHigh(), EditableValue);
+  ledHigh->setData(tr("LED High (On) Value"), ParameterName);
+  ledHigh->setData(kDatasetView_LED_High, ParameterType);
+  ledHigh->setData(0, PlaceholderValue);
+  ledHigh->setData(tr("Threshold for LED on"), ParameterDescription);
+  m_datasetModel->appendRow(ledHigh);
+
+  // Handle edits
+  connect(m_datasetModel, &CustomModel::itemChanged, this,
+          &Project::Model::onDatasetItemChanged);
+
+  // Update user interface
+  emit datasetModelChanged();
+}
+
+//------------------------------------------------------------------------------
+// Re-generate project model when user opens another JSON file
+//------------------------------------------------------------------------------
+
+void Project::Model::onJsonLoaded()
+{
+  if (jsonFilePath() != JSON::Generator::instance().jsonMapFilepath())
+    openJsonFile(JSON::Generator::instance().jsonMapFilepath());
+}
+
+//------------------------------------------------------------------------------
+// Re-generate combobox data sources when the language is changed
+//------------------------------------------------------------------------------
+
+void Project::Model::generateComboBoxModels()
+{
+  // Initialize FFT window sizes list
+  m_fftSamples.clear();
+  m_fftSamples.append("8");
+  m_fftSamples.append("16");
+  m_fftSamples.append("32");
+  m_fftSamples.append("64");
+  m_fftSamples.append("128");
+  m_fftSamples.append("256");
+  m_fftSamples.append("512");
+  m_fftSamples.append("1024");
+  m_fftSamples.append("2048");
+  m_fftSamples.append("4096");
+  m_fftSamples.append("8192");
+  m_fftSamples.append("16384");
+
+  // Initialize decoder options
+  m_decoderOptions.clear();
+  m_decoderOptions.append(tr("Normal (UTF8)"));
+  m_decoderOptions.append(tr("Hexadecimal"));
+  m_decoderOptions.append(tr("Base64"));
+
+  // Initialize group-level widgets
+  m_groupWidgets.clear();
+  m_groupWidgets.insert(QStringLiteral(""), tr("None"));
+  m_groupWidgets.insert(QStringLiteral("map"), tr("GPS Map"));
+  m_groupWidgets.insert(QStringLiteral("gyro"), tr("Gyroscope"));
+  m_groupWidgets.insert(QStringLiteral("multiplot"), tr("Multiple Plot"));
+  m_groupWidgets.insert(QStringLiteral("accelerometer"), tr("Accelerometer"));
+
+  // Initialize dataset-level widgets
+  m_datasetWidgets.clear();
+  m_datasetWidgets.insert(QStringLiteral(""), tr("None"));
+  m_datasetWidgets.insert(QStringLiteral("bar"), tr("Bar"));
+  m_datasetWidgets.insert(QStringLiteral("gauge"), tr("Gauge"));
+  m_datasetWidgets.insert(QStringLiteral("compass"), tr("Compass"));
+
+  // Initialize plot options
+  m_plotOptions.clear();
+  m_plotOptions.insert(qMakePair(false, false), tr("No"));
+  m_plotOptions.insert(qMakePair(true, false), tr("Linear Plot"));
+  m_plotOptions.insert(qMakePair(true, true), tr("Logarithmic Plot"));
+}
+
+//------------------------------------------------------------------------------
+// Document status modification
+//------------------------------------------------------------------------------
+
+void Project::Model::setModified(const bool modified)
+{
+  m_modified = modified;
+  Q_EMIT modifiedChanged();
+}
+
+void Project::Model::setCurrentView(const CurrentView currentView)
+{
+  m_currentView = currentView;
+  Q_EMIT currentViewChanged();
+}
+
+//------------------------------------------------------------------------------
+// Model modification functions
+//------------------------------------------------------------------------------
+
+void Project::Model::onGroupItemChanged(QStandardItem *item)
+{
+  // Validate item pointer
+  if (!item)
+    return;
+
+  // Construct lists with key values for QMap-based comboboxes
+  static QStringList widgets;
+  if (widgets.isEmpty())
+    for (auto i = m_groupWidgets.begin(); i != m_groupWidgets.end(); ++i)
+      widgets.append(i.key());
+
+  // Obtain which item was modified & its new value
+  const auto id = item->data(ParameterType);
+  const auto value = item->data(EditableValue);
+
+  // Update dataset parameters accordingly
+  switch (static_cast<GroupItem>(id.toInt()))
+  {
+    case kGroupView_Title:
+      m_selectedGroup.m_title = value.toString();
+      break;
+    case kGroupView_Widget:
+      m_selectedGroup.m_widget = widgets.at(value.toInt());
+      break;
+    default:
+      break;
+  }
+
+  // Replace group in project
+  m_groups.replace(m_selectedGroup.groupId(), m_selectedGroup);
+  buildTreeModel();
+
+  // Mark document as modified
   setModified(true);
 }
 
-/**
- * Sets the modified flag to @c true when the user modifies the
- * properties of one of the datasets contained in the JSON project.
- *
- * @param group   index of the group in which the dataset belongs
- * @param dataset index of the dataset
- */
-void Project::Model::onDatasetChanged(const int group, const int dataset)
+void Project::Model::onProjectItemChanged(QStandardItem *item)
 {
-  (void)group;
-  (void)dataset;
-  regenerateTreeModel();
+  // Validate item pointer
+  if (!item)
+    return;
+
+  // Obtain which item was modified & its new value
+  const auto id = item->data(ParameterType);
+  const auto value = item->data(EditableValue);
+
+  // Update internal members of the class accordingly
+  switch (static_cast<ProjectItem>(id.toInt()))
+  {
+    case kProjectView_Title:
+      m_title = value.toString();
+      Q_EMIT titleChanged();
+      break;
+    case kProjectView_ItemSeparator:
+      m_separator = value.toString();
+      break;
+    case kProjectView_FrameEndSequence:
+      m_frameEndSequence = value.toString();
+      break;
+    case kProjectView_FrameStartSequence:
+      m_frameStartSequence = value.toString();
+      break;
+    case kProjectView_FrameDecoder:
+      m_frameDecoder = static_cast<DecoderMethod>(value.toInt());
+      break;
+    case kProjectView_ThunderforestApiKey:
+      m_thunderforestApiKey = value.toString();
+      Q_EMIT thunderforestApyKeyChanged();
+      break;
+    default:
+      break;
+  }
+
+  // Mark document as modified
   setModified(true);
 }
 
-/**
- * Gets the number of datasets registered in the projects and
- * adds 1 to the result.
- *
- * This function is used when registering new datasets, so that
- * the user does not need to manually specify dataset indexes.
- */
+void Project::Model::onDatasetItemChanged(QStandardItem *item)
+{
+  // Validate item pointer
+  if (!item)
+    return;
+
+  // Construct lists with key values for QMap-based comboboxes
+  static QStringList widgets;
+  static QList<QPair<bool, bool>> plotOptions;
+
+  // Construct widget list
+  if (widgets.isEmpty())
+    for (auto i = m_datasetWidgets.begin(); i != m_datasetWidgets.end(); ++i)
+      widgets.append(i.key());
+
+  // Construct plot options list
+  if (plotOptions.isEmpty())
+    for (auto i = m_plotOptions.begin(); i != m_plotOptions.end(); ++i)
+      plotOptions.append(i.key());
+
+  // Obtain which item was modified & its new value
+  const auto id = item->data(ParameterType);
+  const auto value = item->data(EditableValue);
+
+  // Update dataset parameters accordingly
+  switch (static_cast<DatasetItem>(id.toInt()))
+  {
+    case kDatasetView_Title:
+      m_selectedDataset.m_title = value.toString();
+      break;
+    case kDatasetView_Index:
+      m_selectedDataset.m_index = value.toInt();
+      break;
+    case kDatasetView_Units:
+      m_selectedDataset.m_units = value.toString();
+      break;
+    case kDatasetView_Widget:
+      m_selectedDataset.m_widget = widgets.at(value.toInt());
+      break;
+    case kDatasetView_FFT:
+      m_selectedDataset.m_fft = value.toBool();
+      break;
+    case kDatasetView_LED:
+      m_selectedDataset.m_led = value.toBool();
+      break;
+    case kDatasetView_LED_High:
+      m_selectedDataset.m_ledHigh = value.toFloat();
+      break;
+    case kDatasetView_Plot:
+      m_selectedDataset.m_graph = plotOptions.at(value.toInt()).first;
+      m_selectedDataset.m_log = plotOptions.at(value.toInt()).second;
+      break;
+    case kDatasetView_Min:
+      m_selectedDataset.m_min = value.toFloat();
+      break;
+    case kDatasetView_Max:
+      m_selectedDataset.m_max = value.toFloat();
+      break;
+    case kDatasetView_Alarm:
+      m_selectedDataset.m_alarm = value.toFloat();
+      break;
+    case kDatasetView_FFT_Samples:
+      m_selectedDataset.m_fftSamples = m_fftSamples.at(value.toInt()).toInt();
+      break;
+    default:
+      break;
+  }
+
+  // Replace dataset in parent group
+  auto group = m_groups.at(m_selectedDataset.groupId());
+  group.m_datasets.replace(m_selectedDataset.datasetId(), m_selectedDataset);
+  m_groups.replace(m_selectedDataset.groupId(), group);
+  buildTreeModel();
+
+  // Mark document as modified
+  setModified(true);
+}
+
+//------------------------------------------------------------------------------
+// Change view & select group/dataset when user navigates project structure
+//------------------------------------------------------------------------------
+
+void Project::Model::onCurrentSelectionChanged(const QModelIndex &current,
+                                               const QModelIndex &previous)
+{
+  // Ignore previous item, we don't need it
+  (void)previous;
+
+  // Obtain standard item pointer from the index
+  auto item = m_treeModel->itemFromIndex(current);
+
+  // Check if the user selected a group
+  if (m_groupItems.contains(item))
+  {
+    const auto group = m_groupItems.value(item);
+    buildGroupModel(group);
+    setCurrentView(GroupView);
+  }
+
+  // Check if the user selected a dataset
+  else if (m_datasetItems.contains(item))
+  {
+    const auto dataset = m_datasetItems.value(item);
+    buildDatasetModel(dataset);
+    setCurrentView(DatasetView);
+  }
+
+  // Finally, check if the user selected one of the root items
+  else if (m_rootItems.contains(item))
+  {
+    const auto id = m_rootItems.value(item);
+    if (id == kFrameParser)
+      setCurrentView(FrameParserView);
+
+    else
+    {
+      buildProjectModel();
+      setCurrentView(ProjectView);
+    }
+  }
+}
+
+//------------------------------------------------------------------------------
+// Functions to automatically set dataset indexes & titles
+//------------------------------------------------------------------------------
+
 int Project::Model::nextDatasetIndex()
 {
   int maxIndex = 1;
-  for (int i = 0; i < groupCount(); ++i)
+  for (auto i = 0; i < m_groups.count(); ++i)
   {
-    for (int j = 0; j < datasetCount(i); ++j)
+    for (auto j = 0; j < m_groups.at(i).datasetCount(); ++j)
     {
-      auto dataset = getDataset(i, j);
+      const auto dataset = m_groups.at(i).datasets().at(j);
       if (dataset.m_index >= maxIndex)
         maxIndex = dataset.m_index + 1;
     }
   }
 
   return maxIndex;
+}
+
+//------------------------------------------------------------------------------
+// Save & restore expanded items of project structure upon modification
+//------------------------------------------------------------------------------
+
+void Project::Model::saveExpandedStateMap(QStandardItem *item,
+                                          QHash<QString, bool> &map,
+                                          const QString &title)
+{
+  // Validate item
+  if (!item)
+    return;
+
+  // Obtain expanded state for current item
+  map[title] = item->data(TreeViewExpanded).toBool();
+
+  // Recursively save the expanded state of child items
+  for (auto i = 0; i < item->rowCount(); ++i)
+  {
+    QStandardItem *child = item->child(i);
+    auto childT = title.isEmpty() ? child->text() : title + "/" + child->text();
+    saveExpandedStateMap(child, map, childT);
+  }
+}
+
+void Project::Model::restoreExpandedStateMap(QStandardItem *item,
+                                             QHash<QString, bool> &map,
+                                             const QString &title)
+{
+  // Validate item
+  if (!item)
+    return;
+
+  // Restore expanded state for registered items
+  if (map.contains(title))
+    item->setData(map[title], TreeViewExpanded);
+
+  // Expand unregistered items
+  else
+    item->setData(true, TreeViewExpanded);
 }

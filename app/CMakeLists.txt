@@ -101,7 +101,7 @@ set(SOURCES
  src/IO/Checksum.cpp
  src/IO/Console.cpp
  src/IO/Manager.cpp
- src/Project/CodeEditor.cpp
+ src/Project/FrameParser.cpp
  src/Project/Model.cpp
  src/JSON/Generator.cpp
  src/JSON/Frame.cpp
@@ -149,7 +149,7 @@ set(HEADERS
  src/IO/Manager.h
  src/IO/HAL_Driver.h
  src/IO/Checksum.h
- src/Project/CodeEditor.h
+ src/Project/FrameParser.h
  src/Project/Model.h
  src/JSON/Frame.h
  src/JSON/Dataset.h
@@ -177,10 +177,13 @@ set(QML_CODE
  qml/MainWindow/Panes/Console.qml
  qml/MainWindow/Panes/Setup.qml
  qml/MainWindow/Root.qml
- qml/ProjectEditor/Sections/GroupEditor.qml
- qml/ProjectEditor/Sections/ProjectSetup.qml
  qml/ProjectEditor/Sections/ProjectStructure.qml
  qml/ProjectEditor/Sections/Toolbar.qml
+ qml/ProjectEditor/Views/FrameParserView.qml
+ qml/ProjectEditor/Views/GroupView.qml
+ qml/ProjectEditor/Views/ProjectView.qml
+ qml/ProjectEditor/Views/DatasetView.qml
+ qml/ProjectEditor/Views/TableDelegate.qml
  qml/ProjectEditor/Root.qml
  qml/Dialogs/Acknowledgements.qml
  qml/Dialogs/About.qml
@@ -193,6 +196,7 @@ set(QML_CODE
  qml/Widgets/Pane.qml
  qml/Widgets/GpsMap.qml
  qml/Widgets/JSONDropArea.qml
+ qml/Widgets/DarkImage.qml
  qml/DialogLoader.qml
  qml/main.qml
 )

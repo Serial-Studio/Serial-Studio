@@ -22,7 +22,7 @@
 
 #include "JSON/Dataset.h"
 
-JSON::Dataset::Dataset()
+JSON::Dataset::Dataset(const int groupId, const int datasetId)
   : m_fft(false)
   , m_led(false)
   , m_log(false)
@@ -35,7 +35,10 @@ JSON::Dataset::Dataset()
   , m_max(0)
   , m_min(0)
   , m_alarm(0)
+  , m_ledHigh(1)
   , m_fftSamples(1024)
+  , m_groupId(groupId)
+  , m_datasetId(datasetId)
 {
 }
 
@@ -104,9 +107,17 @@ double JSON::Dataset::alarm() const
 }
 
 /**
+ * Returns the LED active threshold value.
+ */
+double JSON::Dataset::ledHigh() const
+{
+  return m_ledHigh;
+}
+
+/**
  * @return The title/description of this dataset
  */
-const QString& JSON::Dataset::title() const
+const QString &JSON::Dataset::title() const
 {
   return m_title;
 }
@@ -114,7 +125,7 @@ const QString& JSON::Dataset::title() const
 /**
  * @return The value/reading of this dataset
  */
-const QString& JSON::Dataset::value() const
+const QString &JSON::Dataset::value() const
 {
   return m_value;
 }
@@ -122,7 +133,7 @@ const QString& JSON::Dataset::value() const
 /**
  * @return The units of this dataset
  */
-const QString& JSON::Dataset::units() const
+const QString &JSON::Dataset::units() const
 {
   return m_units;
 }
@@ -130,7 +141,7 @@ const QString& JSON::Dataset::units() const
 /**
  * @return The widget value of this dataset
  */
-const QString& JSON::Dataset::widget() const
+const QString &JSON::Dataset::widget() const
 {
   return m_widget;
 }
@@ -144,11 +155,59 @@ int JSON::Dataset::fftSamples() const
 }
 
 /**
+ * @return The index of the group to which the dataset belongs to, used by
+ *         the project model to easily identify which group/dataset to update
+ *         when the user modifies a parameter in the project model.
+ */
+int JSON::Dataset::groupId() const
+{
+  return m_groupId;
+}
+
+/**
+ * @return The index of the dataset relative to the available datasets of the
+ *         parent group.
+ */
+int JSON::Dataset::datasetId() const
+{
+  return m_datasetId;
+}
+
+/**
  * Returns the JSON data that represents this widget
  */
-const QJsonObject&JSON::Dataset::jsonData() const
+const QJsonObject &JSON::Dataset::jsonData() const
 {
   return m_jsonData;
+}
+
+/**
+ * @brief Encodes the dataset information into a QJsonObject.
+ *
+ * This function serializes the dataset's properties into a JSON object.
+ * Note that the "m_value" field is deliberately excluded from the encoding
+ * process.
+ *
+ * @return A QJsonObject containing the dataset's properties.
+ */
+QJsonObject JSON::Dataset::serialize() const
+{
+  QJsonObject object;
+  object.insert(QStringLiteral("fft"), m_fft);
+  object.insert(QStringLiteral("led"), m_led);
+  object.insert(QStringLiteral("log"), m_log);
+  object.insert(QStringLiteral("min"), m_min);
+  object.insert(QStringLiteral("max"), m_max);
+  object.insert(QStringLiteral("value"), m_value);
+  object.insert(QStringLiteral("index"), m_index);
+  object.insert(QStringLiteral("alarm"), m_alarm);
+  object.insert(QStringLiteral("graph"), m_graph);
+  object.insert(QStringLiteral("title"), m_title);
+  object.insert(QStringLiteral("units"), m_units);
+  object.insert(QStringLiteral("widget"), m_widget);
+  object.insert(QStringLiteral("ledHigh"), m_ledHigh);
+  object.insert(QStringLiteral("fftSamples"), m_fftSamples);
+  return object;
 }
 
 /**
@@ -173,6 +232,7 @@ bool JSON::Dataset::read(const QJsonObject &object)
     m_value = object.value(QStringLiteral("value")).toString();
     m_units = object.value(QStringLiteral("units")).toString();
     m_widget = object.value(QStringLiteral("widget")).toString();
+    m_ledHigh = object.value(QStringLiteral("ledHigh")).toDouble();
     m_fftSamples = object.value(QStringLiteral("fftSamples")).toInt();
 
     if (m_value.isEmpty())

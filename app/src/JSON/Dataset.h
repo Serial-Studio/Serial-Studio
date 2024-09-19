@@ -67,10 +67,11 @@ namespace JSON
  * @note All of the dataset fields are optional, except the "value"
  *       field and the "title" field.
  */
+class Group;
 class Dataset
 {
 public:
-  Dataset();
+  Dataset(const int groupId = -1, const int datasetId = -1);
 
   [[nodiscard]] bool fft() const;
   [[nodiscard]] bool led() const;
@@ -80,14 +81,19 @@ public:
   [[nodiscard]] double min() const;
   [[nodiscard]] double max() const;
   [[nodiscard]] double alarm() const;
+  [[nodiscard]] double ledHigh() const;
   [[nodiscard]] int fftSamples() const;
 
-  [[nodiscard]] const QString& title() const;
-  [[nodiscard]] const QString& value() const;
-  [[nodiscard]] const QString& units() const;
-  [[nodiscard]] const QString& widget() const;
-  [[nodiscard]] const QJsonObject& jsonData() const;
+  [[nodiscard]] int groupId() const;
+  [[nodiscard]] int datasetId() const;
 
+  [[nodiscard]] const QString &title() const;
+  [[nodiscard]] const QString &value() const;
+  [[nodiscard]] const QString &units() const;
+  [[nodiscard]] const QString &widget() const;
+  [[nodiscard]] const QJsonObject &jsonData() const;
+
+  [[nodiscard]] QJsonObject serialize() const;
   [[nodiscard]] bool read(const QJsonObject &object);
 
   void setTitle(const QString &title) { m_title = title; }
@@ -104,12 +110,15 @@ private:
   QString m_widget;
   QJsonObject m_jsonData;
 
-  // Editor-related variables
   int m_index;
   double m_max;
   double m_min;
   double m_alarm;
+  double m_ledHigh;
   int m_fftSamples;
+
+  int m_groupId;
+  int m_datasetId;
 
   friend class Project::Model;
 };

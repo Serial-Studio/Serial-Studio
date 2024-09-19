@@ -258,7 +258,7 @@ struct x509_store_ctx_st
   STACK_OF(X509) * (*lookup_certs)(X509_STORE_CTX *ctx, const X509_NAME *nm);
   /* cannot constify 'ctx' param due to lookup_certs_sk() in x509_vfy.c */
   STACK_OF(X509_CRL)
-      * (*lookup_crls)(const X509_STORE_CTX *ctx, const X509_NAME *nm);
+  *(*lookup_crls)(const X509_STORE_CTX *ctx, const X509_NAME *nm);
   int (*cleanup)(X509_STORE_CTX *ctx);
   /* The following is built up */
   /* if 0, rebuild chain */

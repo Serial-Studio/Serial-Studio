@@ -32,6 +32,14 @@ Item {
   property alias vt100emulation: textEdit.vt100emulation
 
   //
+  // Super important to for shortcuts
+  //
+  onVisibleChanged: {
+    if (visible)
+      textEdit.forceActiveFocus()
+  }
+
+  //
   // Save settings
   //
   Settings {
@@ -83,6 +91,23 @@ Item {
   }
 
   //
+  // Shortcuts
+  //
+  Shortcut {
+    onActivated: root.selectAll()
+    sequences: [StandardKey.SelectAll]
+  } Shortcut {
+    onActivated: root.copy()
+    sequences: [StandardKey.Copy]
+  } Shortcut {
+    onActivated: Cpp_IO_Console.save()
+    sequences: [StandardKey.Save, StandardKey.SaveAs]
+  } Shortcut {
+    onActivated: Cpp_IO_Console.print()
+    sequences: [StandardKey.Print]
+  }
+
+  //
   // Re-load welcome text when the language is changed
   //
   Component.onCompleted: root.showWelcomeGuide()
@@ -98,6 +123,7 @@ Item {
   //
   Menu {
     id: contextMenu
+    onClosed: textEdit.forceActiveFocus()
 
     MenuItem {
       id: copyMenu

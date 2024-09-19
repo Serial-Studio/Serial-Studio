@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QLabel>
+#include <QTimer>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -57,5 +58,7 @@ private:
   QVBoxLayout *m_mainLayout;
   QGridLayout *m_gridLayout;
   QScrollArea *m_scrollArea;
+
+  QTimer m_blinkerTimer;
 };
 } // namespace Widgets

@@ -26,8 +26,10 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
-import "Sections"
-import "../ProjectEditor"
+import SerialStudio
+
+import "Views" as Views
+import "Sections" as Sections
 import "../Widgets" as Widgets
 
 Window {
@@ -38,7 +40,12 @@ Window {
   //
   minimumWidth: 970
   minimumHeight: 640
-  title: qsTr("%1 - Project Editor").arg(Cpp_Project_Model.jsonFileName)
+  title: qsTr("%1 - Project Editor").arg(Cpp_Project_Model.title + (Cpp_Project_Model.modified ? " (" + qsTr("modified") + ")" : ""))
+
+  //
+  // Ask user to save changes when closing the dialog
+  //
+  onClosing: (close) => close.accepted = Cpp_Project_Model.askSave()
 
   //
   // Ensure that current JSON file is shown
@@ -70,6 +77,23 @@ Window {
   }
 
   //
+  // Shortcuts
+  //
+  Shortcut {
+    sequences: [StandardKey.Open]
+    onActivated: Cpp_Project_Model.openJsonFile()
+  } Shortcut {
+    sequences: [StandardKey.New]
+    onActivated: Cpp_Project_Model.newJsonFile()
+  } Shortcut {
+    sequences: [StandardKey.Save]
+    onActivated: Cpp_Project_Model.saveJsonFile()
+  } Shortcut {
+    sequences: [StandardKey.Close]
+    onActivated: root.close()
+  }
+
+  //
   // Use page item to set application palette
   //
   Page {
@@ -92,10 +116,9 @@ Window {
       //
       // Toolbar
       //
-      Toolbar {
+      Sections.Toolbar {
         z: 2
         Layout.fillWidth: true
-        onGroupAdded: (index) => groupEditor.groupIndex = index
       }
 
       //
@@ -106,12 +129,12 @@ Window {
         Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
-        visible: Cpp_Project_Model.groupCount !== 0
 
         //
         // Project structure
         //
-        ProjectStructure {
+        Sections.ProjectStructure {
+          id: projectStructure
           Layout.fillHeight: true
           Layout.minimumWidth: 256
         }
@@ -135,59 +158,39 @@ Window {
         }
 
         //
-        // Group editor
-        //
-        GroupEditor {
-          id: groupEditor
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-        }
-
-        //
         // Project setup
         //
-        ProjectSetup {
-          visible: false
-          id: projectSetup
+        Views.ProjectView {
           Layout.fillWidth: true
           Layout.fillHeight: true
+          visible: Cpp_Project_Model.currentView === ProjectModel.ProjectView
         }
-      }
 
-      //
-      // Empty project text & icon
-      //
-      Rectangle {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        visible: Cpp_Project_Model.groupCount === 0
-        color: Cpp_ThemeManager.colors["alternate_window"]
+        //
+        // Group view
+        //
+        Views.GroupView {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          visible: Cpp_Project_Model.currentView === ProjectModel.GroupView
+        }
 
-        ColumnLayout {
-          spacing: 8
-          anchors.centerIn: parent
+        //
+        // Dataset view
+        //
+        Views.DatasetView {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          visible: Cpp_Project_Model.currentView === ProjectModel.DatasetView
+        }
 
-          Image {
-            sourceSize: Qt.size(128, 128)
-            Layout.alignment: Qt.AlignHCenter
-            source: "qrc:/rcc/images/soldering-iron.svg"
-          }
-
-          Label {
-            font.bold: true
-            font.pixelSize: 24
-            Layout.alignment: Qt.AlignHCenter
-            text: qsTr("Start Something Awesome")
-            color: Cpp_ThemeManager.colors["text"]
-          }
-
-          Label {
-            opacity: 0.8
-            font.pixelSize: 18
-            Layout.alignment: Qt.AlignHCenter
-            color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Click on the \"Add Group\" Button to Begin")
-          }
+        //
+        // Frame parser function
+        //
+        Views.FrameParserView {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          visible: Cpp_Project_Model.currentView === ProjectModel.FrameParserView
         }
       }
     }

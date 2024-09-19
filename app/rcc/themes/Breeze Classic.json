@@ -1,5 +1,5 @@
 {
- "title": "Dark",
+ "title": "Breeze Classic",
  "colors": {
   "groupbox_border": "#c2c2c2",
   "groupbox_background": "#eff0f1",
@@ -61,6 +61,16 @@
   "widget_button_text": "#232629",
   "widget_highlighted_text": "#ffffff",
   "widget_placeholder_text": "#929497",
+
+  "table_bg_a": "#f5f5f5",
+  "table_bg_b": "#ffffff",
+  "table_text": "#232629",
+  "table_bg_header": "#FFE792",
+  "table_fg_header": "#232629",
+  "table_separator": "#D3D4D4",
+  "table_border_header": "#FFD74A",
+  "table_separator_header": "#FFD74A",
+  "led_color": "#CC323B",
 
   "widget_colors": [
    "#1f76b4",

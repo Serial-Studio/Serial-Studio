@@ -26,6 +26,7 @@ import QtQuick.Controls as Controls
 
 Controls.GroupBox {
   id: root
+  clip: true
   bottomPadding: 8
   topPadding: label.height + 16
 

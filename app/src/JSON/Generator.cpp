@@ -26,7 +26,7 @@
 
 #include "Generator.h"
 #include "Project/Model.h"
-#include "Project/CodeEditor.h"
+#include "Project/FrameParser.h"
 
 #include "IO/Manager.h"
 #include "Misc/Utilities.h"
@@ -172,6 +172,15 @@ void JSON::Generator::loadJsonMap(const QString &path)
 }
 
 /**
+ * @brief Assigns an instance to the frame parser to be used to split frame
+ *        data/elements into individual parts.
+ */
+void JSON::Generator::setFrameParser(Project::FrameParser *parser)
+{
+  m_frameParser = parser;
+}
+
+/**
  * Changes the operation mode of the JSON parser. There are two possible op.
  * modes:
  *
@@ -234,14 +243,29 @@ void JSON::Generator::readData(const QByteArray &data)
     jsonData = QJsonDocument::fromJson(data).object();
 
   // Data is separated and parsed by Serial Studio (manual mode)
-  else
+  else if (m_frameParser)
   {
     // Copy JSON map
     jsonData = m_json;
 
+    // Encode frame data as HEX (for dealing with binary data)
+    QString frameData;
+    QString separator;
+    if (jsonData.value("hex").toBool(false) == true)
+    {
+      frameData = QString::fromUtf8(data.toHex());
+      separator = "";
+    }
+
+    // Encode frame data as a "normal" string
+    else
+    {
+      frameData = QString::fromUtf8(data);
+      separator = IO::Manager::instance().separatorSequence();
+    }
+
     // Get fields from frame parser function
-    auto fields = Project::CodeEditor::instance().parse(
-        QString::fromUtf8(data), IO::Manager::instance().separatorSequence());
+    auto fields = m_frameParser->parse(frameData, separator);
 
     // Replace data in JSON map
     auto groups = jsonData.value(QStringLiteral("groups")).toArray();

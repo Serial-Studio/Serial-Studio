@@ -235,7 +235,7 @@ PKCS7 *PKCS12_pack_p7encdata_ex(int pbe_nid, const char *pass, int passlen,
                                 OSSL_LIB_CTX *ctx, const char *propq);
 
 STACK_OF(PKCS12_SAFEBAG)
-    * PKCS12_unpack_p7encdata(PKCS7 *p7, const char *pass, int passlen);
+*PKCS12_unpack_p7encdata(PKCS7 *p7, const char *pass, int passlen);
 
 int PKCS12_pack_authsafes(PKCS12 *p12, STACK_OF(PKCS7) * safes);
 STACK_OF(PKCS7) * PKCS12_unpack_authsafes(const PKCS12 *p12);

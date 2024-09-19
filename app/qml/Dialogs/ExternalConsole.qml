@@ -47,6 +47,14 @@ Window {
   }
 
   //
+  // Close shortcut
+  //
+  Shortcut {
+    sequences: [StandardKey.Close]
+    onActivated: root.close()
+  }
+
+  //
   // Save settings
   //
   Settings {
@@ -63,8 +71,9 @@ Window {
     palette.text: Cpp_ThemeManager.colors["text"]
     palette.button: Cpp_ThemeManager.colors["button"]
     palette.window: Cpp_ThemeManager.colors["window"]
-    palette.highlight: Cpp_ThemeManager.colors["highlight"]
+    palette.windowText: Cpp_ThemeManager.colors["text"]
     palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 

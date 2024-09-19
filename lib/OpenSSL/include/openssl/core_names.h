@@ -97,22 +97,25 @@ extern "C" {
 #define OSSL_CIPHER_PARAM_SPEED "speed"         /* uint */
 #define OSSL_CIPHER_PARAM_CTS_MODE "cts_mode"   /* utf8_string */
 /* For passing the AlgorithmIdentifier parameter in DER form */
-#define OSSL_CIPHER_PARAM_ALGORITHM_ID_PARAMS "alg_id_param" /* octet_string   \
-                                                              */
-#define OSSL_CIPHER_PARAM_XTS_STANDARD "xts_standard"        /* utf8_string */
+#define OSSL_CIPHER_PARAM_ALGORITHM_ID_PARAMS                                  \
+  "alg_id_param"                                      /* octet_string          \
+                                                       */
+#define OSSL_CIPHER_PARAM_XTS_STANDARD "xts_standard" /* utf8_string */
 
 #define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_MAX_SEND_FRAGMENT                    \
   "tls1multi_maxsndfrag" /* uint */
 #define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_MAX_BUFSIZE                          \
   "tls1multi_maxbufsz" /* size_t */
 #define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_INTERLEAVE                           \
-  "tls1multi_interleave"                                      /* uint */
-#define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_AAD "tls1multi_aad" /* octet_string  \
-                                                               */
+  "tls1multi_interleave" /* uint */
+#define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_AAD                                  \
+  "tls1multi_aad" /* octet_string                                              \
+                   */
 #define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_AAD_PACKLEN                          \
-  "tls1multi_aadpacklen"                                      /* uint */
-#define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_ENC "tls1multi_enc" /* octet_string  \
-                                                               */
+  "tls1multi_aadpacklen" /* uint */
+#define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_ENC                                  \
+  "tls1multi_enc" /* octet_string                                              \
+                   */
 #define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_ENC_IN                               \
   "tls1multi_encin" /* octet_string */
 #define OSSL_CIPHER_PARAM_TLS1_MULTIBLOCK_ENC_LEN                              \
@@ -449,8 +452,9 @@ extern "C" {
 
 /* Key Exchange parameters */
 #define OSSL_EXCHANGE_PARAM_PAD "pad" /* uint */
-#define OSSL_EXCHANGE_PARAM_EC_ECDH_COFACTOR_MODE "ecdh-cofactor-mode" /* int  \
-                                                                        */
+#define OSSL_EXCHANGE_PARAM_EC_ECDH_COFACTOR_MODE                              \
+  "ecdh-cofactor-mode"                              /* int                     \
+                                                     */
 #define OSSL_EXCHANGE_PARAM_KDF_TYPE "kdf-type"     /* utf8_string */
 #define OSSL_EXCHANGE_PARAM_KDF_DIGEST "kdf-digest" /* utf8_string */
 #define OSSL_EXCHANGE_PARAM_KDF_DIGEST_PROPS                                   \

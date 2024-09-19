@@ -561,8 +561,9 @@ void X509_STORE_CTX_set_depth(X509_STORE_CTX *ctx, int depth);
 #define X509_V_ERR_PROXY_SUBJECT_NAME_VIOLATION 72
 /* OCSP status errors */
 #define X509_V_ERR_OCSP_VERIFY_NEEDED 73 /* Need OCSP verification */
-#define X509_V_ERR_OCSP_VERIFY_FAILED 74 /* Couldn't verify cert through OCSP  \
-                                          */
+#define X509_V_ERR_OCSP_VERIFY_FAILED                                          \
+  74 /* Couldn't verify cert through OCSP                                      \
+      */
 #define X509_V_ERR_OCSP_CERT_UNKNOWN                                           \
   75 /* Certificate wasn't recognized by the OCSP responder */
 
@@ -673,9 +674,9 @@ int X509_STORE_up_ref(X509_STORE *xs);
 STACK_OF(X509_OBJECT) * X509_STORE_get0_objects(const X509_STORE *xs);
 STACK_OF(X509) * X509_STORE_get1_all_certs(X509_STORE *xs);
 STACK_OF(X509)
-    * X509_STORE_CTX_get1_certs(X509_STORE_CTX *xs, const X509_NAME *nm);
+*X509_STORE_CTX_get1_certs(X509_STORE_CTX *xs, const X509_NAME *nm);
 STACK_OF(X509_CRL)
-    * X509_STORE_CTX_get1_crls(const X509_STORE_CTX *st, const X509_NAME *nm);
+*X509_STORE_CTX_get1_crls(const X509_STORE_CTX *st, const X509_NAME *nm);
 int X509_STORE_set_flags(X509_STORE *xs, unsigned long flags);
 int X509_STORE_set_purpose(X509_STORE *xs, int purpose);
 int X509_STORE_set_trust(X509_STORE *xs, int trust);

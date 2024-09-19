@@ -32,8 +32,8 @@ ToolButton {
   icon.color: "transparent"
   display: AbstractButton.TextUnderIcon
 
-  Layout.minimumWidth: Math.max(implicitWidth, 72)
-  Layout.maximumWidth: Math.max(implicitWidth, 72)
+  Layout.minimumWidth: Math.max(implicitWidth, icon.width / 32 * 72)
+  Layout.maximumWidth: Math.max(implicitWidth, icon.width / 32 * 72)
   palette.buttonText: Cpp_ThemeManager.colors["toolbar_text"]
 
   background: Rectangle {

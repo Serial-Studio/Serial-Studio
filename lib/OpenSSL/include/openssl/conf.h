@@ -175,15 +175,15 @@ typedef void conf_finish_func(CONF_IMODULE *md);
 int CONF_set_default_method(CONF_METHOD *meth);
 void CONF_set_nconf(CONF *conf, LHASH_OF(CONF_VALUE) * hash);
 LHASH_OF(CONF_VALUE)
-    * CONF_load(LHASH_OF(CONF_VALUE) * conf, const char *file, long *eline);
+*CONF_load(LHASH_OF(CONF_VALUE) * conf, const char *file, long *eline);
 #ifndef OPENSSL_NO_STDIO
 LHASH_OF(CONF_VALUE)
-    * CONF_load_fp(LHASH_OF(CONF_VALUE) * conf, FILE *fp, long *eline);
+*CONF_load_fp(LHASH_OF(CONF_VALUE) * conf, FILE *fp, long *eline);
 #endif
 LHASH_OF(CONF_VALUE)
-    * CONF_load_bio(LHASH_OF(CONF_VALUE) * conf, BIO *bp, long *eline);
+*CONF_load_bio(LHASH_OF(CONF_VALUE) * conf, BIO *bp, long *eline);
 STACK_OF(CONF_VALUE)
-    * CONF_get_section(LHASH_OF(CONF_VALUE) * conf, const char *section);
+*CONF_get_section(LHASH_OF(CONF_VALUE) * conf, const char *section);
 char *CONF_get_string(LHASH_OF(CONF_VALUE) * conf, const char *group,
                       const char *name);
 long CONF_get_number(LHASH_OF(CONF_VALUE) * conf, const char *group,

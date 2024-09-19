@@ -33,7 +33,7 @@
 #include "JSON/Generator.h"
 
 #include "Project/Model.h"
-#include "Project/CodeEditor.h"
+#include "Project/FrameParser.h"
 
 #include "IO/Manager.h"
 #include "IO/Console.h"
@@ -54,8 +54,6 @@
 #include "UI/Dashboard.h"
 #include "UI/DashboardWidget.h"
 #include "UI/Widgets/Terminal.h"
-
-#include "Platform/NativeWindow.h"
 
 /**
  * Configures the application font and configures application signals/slots to
@@ -134,6 +132,8 @@ void Misc::ModuleManager::configureUpdater()
 void Misc::ModuleManager::registerQmlTypes()
 {
   qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
+  qmlRegisterType<Project::Model>("SerialStudio", 1, 0, "ProjectModel");
+  qmlRegisterType<Project::FrameParser>("SerialStudio", 1, 0, "FrameParser");
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
 }
 
@@ -160,7 +160,6 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscTimerEvents = &Misc::TimerEvents::instance();
   auto miscCommonFonts = &Misc::CommonFonts::instance();
   auto miscThemeManager = &Misc::ThemeManager::instance();
-  auto projectCodeEditor = &Project::CodeEditor::instance();
   auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
 
   // Initialize third-party modules
@@ -194,7 +193,6 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
   c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
-  c->setContextProperty("Cpp_Project_CodeEditor", projectCodeEditor);
   c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
   c->setContextProperty("Cpp_ModuleManager", this);
 

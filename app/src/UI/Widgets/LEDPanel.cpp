@@ -107,6 +107,11 @@ Widgets::LEDPanel::LEDPanel(const int index)
   m_mainLayout->setContentsMargins(0, 0, 0, 0);
   setLayout(m_mainLayout);
 
+  // Configure blinker timer
+  m_blinkerTimer.setTimerType(Qt::PreciseTimer);
+  m_blinkerTimer.setInterval(250);
+  m_blinkerTimer.start();
+
   // Configure visual style
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
@@ -161,12 +166,20 @@ void Widgets::LEDPanel::updateData()
     if (m_leds.count() < i)
       break;
 
-    // Get dataset value (we compare with 0.1 for low voltages)
-    auto value = group.getDataset(i).value().toDouble();
-    if (qAbs(value) < 0.10)
-      m_leds.at(i)->off();
-    else
+    // Get dataset value
+    const auto dataset = group.getDataset(i);
+    const auto value = dataset.value().toDouble();
+    if (value >= dataset.ledHigh())
       m_leds.at(i)->on();
+    else
+      m_leds.at(i)->off();
+
+    // Blink the LED if alarm value is exceeded
+    if (value >= dataset.alarm())
+      connect(&m_blinkerTimer, &QTimer::timeout, m_leds.at(i), &KLed::toggle);
+    else
+      disconnect(&m_blinkerTimer, &QTimer::timeout, m_leds.at(i),
+                 &KLed::toggle);
   }
 
   // Repaint widget
@@ -217,7 +230,7 @@ void Widgets::LEDPanel::onThemeChanged()
     auto *led = m_leds.at(i);
     auto *title = m_titles.at(i);
     title->setPalette(palette);
-    led->setColor(theme->getColor("widget_highlight"));
+    led->setColor(theme->getColor("led_color"));
   }
 
   // Redraw widget

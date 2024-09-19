@@ -44,7 +44,7 @@ public:
   ModuleManager();
 
   [[nodiscard]] bool autoUpdaterEnabled() const;
-  [[nodiscard]] const QQmlApplicationEngine& engine() const;
+  [[nodiscard]] const QQmlApplicationEngine &engine() const;
 
 public slots:
   void onQuit();

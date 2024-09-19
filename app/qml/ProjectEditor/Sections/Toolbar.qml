@@ -25,7 +25,10 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
+
 import "../../Widgets" as Widgets
+
 
 ToolBar {
   id: root
@@ -175,14 +178,10 @@ ToolBar {
     // Add group
     //
     Widgets.BigButton {
-      text: qsTr("Generic Group")
+      text: qsTr("Custom Group")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
-      onClicked: {
-        const gIndex = Cpp_Project_Model.groupCount
-        Cpp_Project_Model.addGroup(qsTr("Generic Group"), 0)
-        root.groupAdded(gIndex)
-      }
+      onClicked: Cpp_Project_Model.addGroup(qsTr("Custom Group"), ProjectModel.CustomGroup)
     }
 
     //
@@ -192,11 +191,7 @@ ToolBar {
       text: qsTr("Multiple Plots")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
-      onClicked: {
-        const gIndex = Cpp_Project_Model.groupCount
-        Cpp_Project_Model.addGroup(qsTr("Multiple Plot"), 4)
-        root.groupAdded(gIndex)
-      }
+      onClicked: Cpp_Project_Model.addGroup(qsTr("Multiple Plot"), ProjectModel.MultiPlot)
     }
 
     //
@@ -206,11 +201,7 @@ ToolBar {
       text: qsTr("Accelerometer")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
-      onClicked: {
-        const gIndex = Cpp_Project_Model.groupCount
-        Cpp_Project_Model.addGroup(qsTr("Accelerometer"), 1)
-        root.groupAdded(gIndex)
-      }
+      onClicked: Cpp_Project_Model.addGroup(qsTr("Accelerometer"), ProjectModel.Accelerometer)
     }
 
     //
@@ -220,11 +211,7 @@ ToolBar {
       text: qsTr("Gyroscope")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
-      onClicked: {
-        const gIndex = Cpp_Project_Model.groupCount
-        Cpp_Project_Model.addGroup(qsTr("Gyroscope"), 2)
-        root.groupAdded(gIndex)
-      }
+      onClicked: Cpp_Project_Model.addGroup(qsTr("Gyroscope"), ProjectModel.Gyroscope)
     }
 
     //
@@ -234,11 +221,7 @@ ToolBar {
       text: qsTr("Map")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
-      onClicked: {
-        const gIndex = Cpp_Project_Model.groupCount
-        Cpp_Project_Model.addGroup(qsTr("GPS Map"), 3)
-        root.groupAdded(gIndex)
-      }
+      onClicked: Cpp_Project_Model.addGroup(qsTr("GPS Map"), ProjectModel.GPS)
     }
 
     //
@@ -246,16 +229,6 @@ ToolBar {
     //
     Item {
       Layout.fillWidth: true
-    }
-
-    //
-    // Frame parser
-    //
-    Widgets.BigButton {
-      text: qsTr("Frame Parsing")
-      Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_Project_CodeEditor.showNormal()
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/script.svg"
     }
   }
 }

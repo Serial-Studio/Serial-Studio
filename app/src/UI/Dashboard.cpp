@@ -60,7 +60,7 @@ UI::Dashboard &UI::Dashboard::instance()
 // Group/Dataset access functions
 //------------------------------------------------------------------------------
 
-const QFont&UI::Dashboard::monoFont() const
+const QFont &UI::Dashboard::monoFont() const
 {
   return Misc::CommonFonts::instance().monoFont();
 }
@@ -86,7 +86,7 @@ const JSON::Group &UI::Dashboard::getAccelerometer(const int index) const { retu
 /**
  * Returns the title of the current JSON project/frame.
  */
-const QString& UI::Dashboard::title() const
+const QString &UI::Dashboard::title() const
 {
   return m_currentFrame.title();
 }
@@ -612,7 +612,7 @@ void UI::Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisi
 void UI::Dashboard::resetData()
 {
   // Make latest frame invalid
-  (void) m_currentFrame.read(QJsonObject{});
+  (void)m_currentFrame.read(QJsonObject{});
 
   // Clear plot data
   m_fftPlotValues.clear();

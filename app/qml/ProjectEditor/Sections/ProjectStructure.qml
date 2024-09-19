@@ -31,27 +31,26 @@ Widgets.Pane {
   title: qsTr("Project Structure")
   icon: "qrc:/rcc/icons/project-editor/windows/project-structure.svg"
 
+  signal groupClicked(var title)
+  signal datasetClicked(var title)
 
-  TreeView {
-    id: treeView
+  //
+  // Select last added groups and datasets automatically
+  //
+  Connections {
+    target: Cpp_Project_Model
 
-    clip: true
-    model: Cpp_Project_Model.treeModel
-
-    //
-    // Always expand the model items
-    //
-    onModelChanged: {
-      for (let i = 0; i < model.rowCount(); i++) {
-        let index = model.index(i, 0)
-        if (!treeView.isExpanded(index))
-          treeView.expand(index)
-      }
+    function onGroupAdded(index) {
+      treeView.selectionModel.setCurrentIndex(index, ItemSelectionModel.ClearAndSelect)
     }
+  }
 
-    //
-    // Set widget anchors
-    //
+  //
+  // Put tree view inside a scroll view
+  //
+  ScrollView {
+    id: scrollView
+    contentWidth: -1
     anchors {
       fill: parent
       topMargin: -16
@@ -60,112 +59,168 @@ Widgets.Pane {
       bottomMargin: -9
     }
 
-    //
-    // Set background item
-    //
-    delegate: Item {
-      id: item
-      implicitHeight: 18
-      implicitWidth: treeView.width
+    TreeView {
+      id: treeView
+      reuseItems: false
+      model: Cpp_Project_Model.treeModel
+      boundsBehavior: TreeView.StopAtBounds
+      selectionModel: Cpp_Project_Model.selectionModel
 
-      required property int row
-      required property int depth
-      required property int column
-      required property bool current
-      required property bool expanded
-      required property bool isTreeNode
-      required property int hasChildren
-      required property TreeView treeView
+      //
+      // Set background item
+      //
+      delegate: Item {
+        id: item
+        implicitWidth: treeView.width
+        implicitHeight: depth === 0 ? 30 : 18
+        Component.onCompleted: syncExpandedState()
 
-      readonly property real padding: 4
-      readonly property real indentation: 32
+        required property int row
+        required property int depth
+        required property int column
+        required property bool current
+        required property bool expanded
+        required property bool isTreeNode
+        required property bool hasChildren
+        required property TreeView treeView
 
-      function toggleExpanded() {
-        let index = treeView.index(row, column)
-        treeView.toggleExpanded(index)
-      }
+        readonly property real padding: 4
+        readonly property real indentation: 16
 
-      function onLabelClicked() {
-        if (isTreeNode) {
+        //
+        // Restore expanded state from C++ model
+        //
+        function syncExpandedState() {
+          if (model.treeViewExpanded === true)
+            treeView.expand(row)
+          else
+            treeView.collapse(row)
+        }
+
+        //
+        // Show/hide the children of the current item.
+        //
+        function toggleExpanded() {
+          if (hasChildren) {
+            treeView.toggleExpanded(row)
+            model.treeViewExpanded = expanded
+            return true
+          }
+
+          return false
+        }
+
+        //
+        // Select the item and open the associated view automatically.
+        //
+        function onLabelClicked() {
           let index = treeView.index(row, column)
-          treeView.toggleExpanded(index)
+          treeView.selectionModel.setCurrentIndex(index, ItemSelectionModel.ClearAndSelect)
         }
 
-        else
-          current = true
-      }
-
-      Rectangle {
-        id: background
-        anchors.fill: parent
-        color: current ? Cpp_ThemeManager.colors["highlighted"] : "transparent"
-      }
-
-      RowLayout {
-        spacing: 0
-        anchors.fill: parent
-        anchors.rightMargin: 8
-        anchors.leftMargin: padding + (isTreeNode ? depth * indentation : 0)
-
-        Image {
-          id: indicator
-          sourceSize: Qt.size(8, 8)
-          rotation: expanded ? 0 : 270
-          Layout.alignment: Qt.AlignVCenter
-          visible: isTreeNode && hasChildren
-          source: "qrc:/rcc/icons/project-editor/treeview/indicator.svg"
-
-          TapHandler {
-            onSingleTapped: item.toggleExpanded()
+        //
+        // If item has children, expand on double click.
+        // Otherwise, select the item and open the associated view.
+        //
+        function onLabelDoubleClicked() {
+          if (!toggleExpanded()) {
+            onLabelClicked()
           }
         }
 
-        Item {
-          width: 6
-          visible: indicator.visible
-        }
-
-        Image {
-          id: icon
-          source: model.decoration
-          sourceSize: Qt.size(12, 12)
-          Layout.alignment: Qt.AlignVCenter
+        //
+        // Item background
+        //
+        Rectangle {
+          id: background
+          anchors.fill: parent
+          color: current ? Cpp_ThemeManager.colors["highlight"] : "transparent"
 
           MouseArea {
-            onDoubleClicked: item.onLabelClicked()
+            anchors.fill: parent
+            onClicked: onLabelClicked()
+            onDoubleClicked: onLabelDoubleClicked()
           }
         }
 
-        Item {
-          width: 4
-        }
+        //
+        // Item controls
+        //
+        RowLayout {
+          spacing: 0
+          anchors.fill: parent
+          anchors.rightMargin: 16
+          anchors.leftMargin: padding + (isTreeNode ? depth * indentation : 0)
 
-        Label {
-          id: label
-          text: model.display
-          Layout.fillWidth: true
-          elide: Label.ElideRight
-          Layout.alignment: Qt.AlignVCenter
-          color: Cpp_ThemeManager.colors["text"]
-          font: depth === 0 ? Cpp_Misc_CommonFonts.boldUiFont :
-                              Cpp_Misc_CommonFonts.uiFont
+          //
+          // Expanded indicator
+          //
+          Image {
+            id: indicator
+            enabled: hasChildren
+            sourceSize: Qt.size(8, 8)
+            opacity: hasChildren ? 1 : 0
+            Layout.alignment: Qt.AlignVCenter
+            rotation: model.treeViewExpanded ? 0 : 270
+            source: "qrc:/rcc/icons/project-editor/treeview/indicator.svg"
 
-          MouseArea {
-            onDoubleClicked: item.onLabelClicked()
+            MouseArea {
+              anchors.fill: parent
+              onClicked: toggleExpanded()
+            }
           }
-        }
 
-        Label {
-          opacity: 0.7
-          id: frameIndex
-          visible: model.whatsThis >= 1
-          Layout.alignment: Qt.AlignVCenter
-          font: Cpp_Misc_CommonFonts.monoFont
-          color: Cpp_ThemeManager.colors["text"]
-          text: "[" + qsTr("IDX → %1").arg(model.whatsThis) + "]"
+          //
+          // Spacer
+          //
+          Item {
+            width: 6
+          }
 
-          MouseArea {
-            onDoubleClicked: item.onLabelClicked()
+          //
+          // Item icon
+          //
+          Image {
+            id: icon
+            source: model.treeViewIcon
+            sourceSize: Qt.size(12, 12)
+            Layout.alignment: Qt.AlignVCenter
+          }
+
+          //
+          // Spacer
+          //
+          Item {
+            width: 4
+          }
+
+          //
+          // Item text
+          //
+          Label {
+            id: label
+            Layout.fillWidth: true
+            elide: Label.ElideRight
+            text: model.treeViewText
+            Layout.alignment: Qt.AlignVCenter
+            font: depth === 0 ? Cpp_Misc_CommonFonts.boldUiFont :
+                                Cpp_Misc_CommonFonts.uiFont
+            color: current ? Cpp_ThemeManager.colors["highlighted_text"] :
+                             Cpp_ThemeManager.colors["text"]
+          }
+
+          //
+          // Frame index indicator (only for datasets)
+          //
+          Label {
+            opacity: 0.7
+            id: frameIndex
+            visible: depth > 1
+            Layout.alignment: Qt.AlignVCenter
+            font: Cpp_Misc_CommonFonts.monoFont
+            text: "[" + qsTr("IDX → %1").arg(model.treeViewFrameIndex) + "]"
+            color: current ? Cpp_ThemeManager.colors["highlighted_text"] :
+                             Cpp_ThemeManager.colors["text"]
           }
         }
       }

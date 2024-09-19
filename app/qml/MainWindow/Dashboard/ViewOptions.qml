@@ -77,342 +77,363 @@ Widgets.Pane {
     property alias decimalPlaces: decimalPlaces.value
   }
 
-  ColumnLayout {
-    spacing: 0
+  //
+  // Use page item to set application palette
+  //
+  Page {
     anchors.fill: parent
     anchors.topMargin: -16
     anchors.leftMargin: -9
     anchors.rightMargin: -9
     anchors.bottomMargin: -9
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.windowText: Cpp_ThemeManager.colors["text"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-    //
-    // Put most items inside a scrollview
-    //
-    ScrollView {
-      clip: true
-      contentWidth: -1
-      Layout.leftMargin: 9
-      Layout.fillWidth: true
-      Layout.fillHeight: true
+    ColumnLayout {
+      spacing: 0
+      anchors.fill: parent
 
       //
-      // Main layout
+      // Put most items inside a scrollview
       //
-      ColumnLayout {
-        x: 4
-        id: layout
-        spacing: 4
-        width: parent.width - 24
+      ScrollView {
+        clip: true
+        contentWidth: -1
+        Layout.leftMargin: 9
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-        //
-        // Spacer
-        //
-        Item {
-          height: 10
+        ScrollBar.horizontal.interactive: false
+        ScrollBar.vertical: ScrollBar {
+          id: scrollbar
         }
 
         //
-        // View options title
+        // Main layout
         //
-        RowLayout {
+        ColumnLayout {
+          x: 4
+          id: layout
           spacing: 4
-          Layout.fillWidth: true
+          width: parent.width - 24
 
-          Image {
-            sourceSize: Qt.size(18, 18)
-            Layout.alignment: Qt.AlignVCenter
-            source: "qrc:/rcc/icons/dashboard/view.svg"
-          }
-
-          Label {
-            Layout.alignment: Qt.AlignVCenter
-            text: qsTr("Visualization Options")
-            font: Cpp_Misc_CommonFonts.customUiFont(10, true)
-            color: Cpp_ThemeManager.colors["pane_section_label"]
-            Component.onCompleted: font.capitalization = Font.AllUppercase
-          }
-
+          //
+          // Spacer
+          //
           Item {
-            Layout.fillWidth: true
+            height: 10
           }
-        }
-
-        //
-        // Spacer
-        //
-        Item {
-          height: 4
-        }
-
-        //
-        // Visualization controls
-        //
-        GridLayout {
-          columns: 3
-          rowSpacing: 4
-          columnSpacing: 4
 
           //
-          // Number of plot points slider
+          // View options title
           //
-          Label {
-            text: qsTr("Points:")
-            visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
-          } Slider {
-            id: plotPoints
-            from: 0
-            to: 100
+          RowLayout {
+            spacing: 4
             Layout.fillWidth: true
-            value: logposition(100)
-            visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
-            onValueChanged: {
-              var log = logslider(value)
-              if (Cpp_UI_Dashboard.points !== log)
-                Cpp_UI_Dashboard.points = log
+
+            Image {
+              sourceSize: Qt.size(18, 18)
+              Layout.alignment: Qt.AlignVCenter
+              source: "qrc:/rcc/icons/dashboard/view.svg"
             }
-          } Label {
-            text: logslider(plotPoints.value)
-            visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+
+            Label {
+              Layout.alignment: Qt.AlignVCenter
+              text: qsTr("Visualization Options")
+              font: Cpp_Misc_CommonFonts.customUiFont(10, true)
+              color: Cpp_ThemeManager.colors["pane_section_label"]
+              Component.onCompleted: font.capitalization = Font.AllUppercase
+            }
+
+            Item {
+              Layout.fillWidth: true
+            }
           }
 
           //
-          // Number of decimal places
+          // Spacer
           //
-          Label {
-            text: qsTr("Decimal places:")
-            visible: Cpp_UI_Dashboard.groupCount > 0
-          } Slider {
-            id: decimalPlaces
-            to: 6
-            from: 0
-            value: 2
-            Layout.fillWidth: true
-            visible: Cpp_UI_Dashboard.groupCount > 0
-            onValueChanged: Cpp_UI_Dashboard.precision = value
-          } Label {
-            text: Cpp_UI_Dashboard.precision
-            visible: Cpp_UI_Dashboard.groupCount > 0
+          Item {
+            height: 4
           }
 
           //
-          // Number of plot points slider
+          // Visualization controls
           //
-          Label {
-            text: qsTr("Columns:")
-          } Slider {
-            id: columns
-            to: 5
-            from: 1
-            value: 3
-            Layout.fillWidth: true
-            onValueChanged: columnsChanged(Math.round(value))
-          } Label {
-            text: Math.round(columns.value)
+          GridLayout {
+            columns: 3
+            rowSpacing: 4
+            columnSpacing: 4
+
+            //
+            // Number of plot points slider
+            //
+            Label {
+              text: qsTr("Points:")
+              visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+            } Slider {
+              id: plotPoints
+              from: 0
+              to: 100
+              Layout.fillWidth: true
+              value: logposition(100)
+              visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+              onValueChanged: {
+                var log = logslider(value)
+                if (Cpp_UI_Dashboard.points !== log)
+                  Cpp_UI_Dashboard.points = log
+              }
+            } Label {
+              text: logslider(plotPoints.value)
+              visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+            }
+
+            //
+            // Number of decimal places
+            //
+            Label {
+              text: qsTr("Decimal places:")
+              visible: Cpp_UI_Dashboard.groupCount > 0
+            } Slider {
+              id: decimalPlaces
+              to: 6
+              from: 0
+              value: 2
+              Layout.fillWidth: true
+              visible: Cpp_UI_Dashboard.groupCount > 0
+              onValueChanged: Cpp_UI_Dashboard.precision = value
+            } Label {
+              text: Cpp_UI_Dashboard.precision
+              visible: Cpp_UI_Dashboard.groupCount > 0
+            }
+
+            //
+            // Number of plot points slider
+            //
+            Label {
+              text: qsTr("Columns:")
+            } Slider {
+              id: columns
+              to: 5
+              from: 1
+              value: 3
+              Layout.fillWidth: true
+              onValueChanged: columnsChanged(Math.round(value))
+            } Label {
+              text: Math.round(columns.value)
+            }
           }
-        }
 
-        //
-        // Spacer
-        //
-        Item {
-          height: 8
-        }
+          //
+          // Spacer
+          //
+          Item {
+            height: 8
+          }
 
-        //
-        // Groups
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Dataset Values")
-          count: Cpp_UI_Dashboard.groupCount
-          titles: Cpp_UI_Dashboard.groupTitles
-          icon: "qrc:/rcc/icons/dashboard/group.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGroupVisible(index, checked)
-        }
+          //
+          // Groups
+          //
+          ViewOptionsDelegate {
+            title: qsTr("Dataset Values")
+            count: Cpp_UI_Dashboard.groupCount
+            titles: Cpp_UI_Dashboard.groupTitles
+            icon: "qrc:/rcc/icons/dashboard/group.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGroupVisible(index, checked)
+          }
 
-        //
-        // Multiplots
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Multiple Data Plots")
-          count: Cpp_UI_Dashboard.multiPlotCount
-          titles: Cpp_UI_Dashboard.multiPlotTitles
-          icon: "qrc:/rcc/icons/dashboard/multiplot.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setMultiplotVisible(index, checked)
-        }
+          //
+          // Multiplots
+          //
+          ViewOptionsDelegate {
+            title: qsTr("Multiple Data Plots")
+            count: Cpp_UI_Dashboard.multiPlotCount
+            titles: Cpp_UI_Dashboard.multiPlotTitles
+            icon: "qrc:/rcc/icons/dashboard/multiplot.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setMultiplotVisible(index, checked)
+          }
 
-        //
-        // LEDs
-        //
-        ViewOptionsDelegate {
-          title: qsTr("LED Panels")
-          count: Cpp_UI_Dashboard.ledCount
-          titles: Cpp_UI_Dashboard.ledTitles
-          icon: "qrc:/rcc/icons/dashboard/led.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setLedVisible(index, checked)
-        }
+          //
+          // LEDs
+          //
+          ViewOptionsDelegate {
+            title: qsTr("LED Panels")
+            count: Cpp_UI_Dashboard.ledCount
+            titles: Cpp_UI_Dashboard.ledTitles
+            icon: "qrc:/rcc/icons/dashboard/led.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setLedVisible(index, checked)
+          }
 
-        //
-        // FFT
-        //
-        ViewOptionsDelegate {
-          title: qsTr("FFT Plots")
-          count: Cpp_UI_Dashboard.fftCount
-          titles: Cpp_UI_Dashboard.fftTitles
-          icon: "qrc:/rcc/icons/dashboard/fft.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setFFTVisible(index, checked)
-        }
+          //
+          // FFT
+          //
+          ViewOptionsDelegate {
+            title: qsTr("FFT Plots")
+            count: Cpp_UI_Dashboard.fftCount
+            titles: Cpp_UI_Dashboard.fftTitles
+            icon: "qrc:/rcc/icons/dashboard/fft.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setFFTVisible(index, checked)
+          }
 
-        //
-        // Plots
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Data Plots")
-          count: Cpp_UI_Dashboard.plotCount
-          titles: Cpp_UI_Dashboard.plotTitles
-          icon: "qrc:/rcc/icons/dashboard/plot.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setPlotVisible(index, checked)
-        }
+          //
+          // Plots
+          //
+          ViewOptionsDelegate {
+            title: qsTr("Data Plots")
+            count: Cpp_UI_Dashboard.plotCount
+            titles: Cpp_UI_Dashboard.plotTitles
+            icon: "qrc:/rcc/icons/dashboard/plot.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setPlotVisible(index, checked)
+          }
 
-        //
-        // Bars
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Bars")
-          count: Cpp_UI_Dashboard.barCount
-          titles: Cpp_UI_Dashboard.barTitles
-          icon: "qrc:/rcc/icons/dashboard/bar.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setBarVisible(index, checked)
-        }
+          //
+          // Bars
+          //
+          ViewOptionsDelegate {
+            title: qsTr("Bars")
+            count: Cpp_UI_Dashboard.barCount
+            titles: Cpp_UI_Dashboard.barTitles
+            icon: "qrc:/rcc/icons/dashboard/bar.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setBarVisible(index, checked)
+          }
 
-        //
-        // Gauges
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Gauges")
-          count: Cpp_UI_Dashboard.gaugeCount
-          titles: Cpp_UI_Dashboard.gaugeTitles
-          icon: "qrc:/rcc/icons/dashboard/gauge.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGaugeVisible(index, checked)
-        }
+          //
+          // Gauges
+          //
+          ViewOptionsDelegate {
+            title: qsTr("Gauges")
+            count: Cpp_UI_Dashboard.gaugeCount
+            titles: Cpp_UI_Dashboard.gaugeTitles
+            icon: "qrc:/rcc/icons/dashboard/gauge.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGaugeVisible(index, checked)
+          }
 
-        //
-        // Compasses
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Compasses")
-          count: Cpp_UI_Dashboard.compassCount
-          titles: Cpp_UI_Dashboard.compassTitles
-          icon: "qrc:/rcc/icons/dashboard/compass.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setCompassVisible(index, checked)
-        }
+          //
+          // Compasses
+          //
+          ViewOptionsDelegate {
+            title: qsTr("Compasses")
+            count: Cpp_UI_Dashboard.compassCount
+            titles: Cpp_UI_Dashboard.compassTitles
+            icon: "qrc:/rcc/icons/dashboard/compass.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setCompassVisible(index, checked)
+          }
 
-        //
-        // Gyroscopes
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Gyroscopes")
-          count: Cpp_UI_Dashboard.gyroscopeCount
-          titles: Cpp_UI_Dashboard.gyroscopeTitles
-          icon: "qrc:/rcc/icons/dashboard/gyroscope.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGyroscopeVisible(index, checked)
-        }
+          //
+          // Gyroscopes
+          //
+          ViewOptionsDelegate {
+            title: qsTr("Gyroscopes")
+            count: Cpp_UI_Dashboard.gyroscopeCount
+            titles: Cpp_UI_Dashboard.gyroscopeTitles
+            icon: "qrc:/rcc/icons/dashboard/gyroscope.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGyroscopeVisible(index, checked)
+          }
 
-        //
-        // Accelerometers
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Accelerometers")
-          count: Cpp_UI_Dashboard.accelerometerCount
-          titles: Cpp_UI_Dashboard.accelerometerTitles
-          icon: "qrc:/rcc/icons/dashboard/accelerometer.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setAccelerometerVisible(index, checked)
-        }
+          //
+          // Accelerometers
+          //
+          ViewOptionsDelegate {
+            title: qsTr("Accelerometers")
+            count: Cpp_UI_Dashboard.accelerometerCount
+            titles: Cpp_UI_Dashboard.accelerometerTitles
+            icon: "qrc:/rcc/icons/dashboard/accelerometer.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setAccelerometerVisible(index, checked)
+          }
 
-        //
-        // Maps
-        //
-        ViewOptionsDelegate {
-          title: qsTr("GPS")
-          count: Cpp_UI_Dashboard.gpsCount
-          titles: Cpp_UI_Dashboard.gpsTitles
-          icon: "qrc:/rcc/icons/dashboard/gps.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGpsVisible(index, checked)
+          //
+          // Maps
+          //
+          ViewOptionsDelegate {
+            title: qsTr("GPS")
+            count: Cpp_UI_Dashboard.gpsCount
+            titles: Cpp_UI_Dashboard.gpsTitles
+            icon: "qrc:/rcc/icons/dashboard/gps.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGpsVisible(index, checked)
+          }
         }
       }
-    }
 
-    //
-    // Spacer
-    //
-    Item {
-      Layout.fillHeight: true
-    }
+      //
+      // Spacer
+      //
+      Item {
+        Layout.fillHeight: true
+      }
 
-    //
-    // Add buttons
-    //
-    Rectangle {
-      height: 1
-      Layout.fillWidth: true
-      color: Cpp_ThemeManager.colors["groupbox_border"]
-    } Rectangle {
-      Layout.fillWidth: true
-      height: buttons.implicitHeight + 18
-      color: Cpp_ThemeManager.colors["groupbox_background"]
+      //
+      // Add buttons
+      //
+      Rectangle {
+        height: 1
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["groupbox_border"]
+      } Rectangle {
+        Layout.fillWidth: true
+        height: buttons.implicitHeight + 18
+        color: Cpp_ThemeManager.colors["groupbox_background"]
 
-      ColumnLayout {
-        id: buttons
-        anchors.fill: parent
-        anchors.margins: 9
+        ColumnLayout {
+          id: buttons
+          anchors.fill: parent
+          anchors.margins: 9
 
-        Button {
-          Layout.fillWidth: true
-          onClicked: Cpp_UI_Dashboard.resetData()
+          Button {
+            Layout.fillWidth: true
+            onClicked: Cpp_UI_Dashboard.resetData()
 
-          RowLayout {
-            id: layout1
-            spacing: 8
-            anchors.centerIn: parent
-            width: Math.max(layout1.implicitWidth,
-                            layout2.implicitWidth)
+            RowLayout {
+              id: layout1
+              spacing: 8
+              anchors.centerIn: parent
+              width: Math.max(layout1.implicitWidth,
+                              layout2.implicitWidth)
 
-            Image {
-              sourceSize: Qt.size(18, 18)
-              Layout.alignment: Qt.AlignVCenter
-              source: "qrc:/rcc/icons/panes/clear.svg"
-            }
+              Image {
+                sourceSize: Qt.size(18, 18)
+                Layout.alignment: Qt.AlignVCenter
+                source: "qrc:/rcc/icons/panes/clear.svg"
+              }
 
-            Label {
-              text: qsTr("Clear Dashboard Data")
-              Layout.alignment: Qt.AlignVCenter
-              horizontalAlignment: Text.AlignLeft
-              color: Cpp_ThemeManager.colors["button_text"]
+              Label {
+                text: qsTr("Clear Dashboard Data")
+                Layout.alignment: Qt.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                color: Cpp_ThemeManager.colors["button_text"]
+              }
             }
           }
-        }
 
-        Button {
-          Layout.fillWidth: true
-          onClicked: app.showExternalConsole()
+          Button {
+            Layout.fillWidth: true
+            onClicked: app.showExternalConsole()
 
-          RowLayout {
-            id: layout2
-            spacing: 8
-            anchors.centerIn: parent
-            width: Math.max(layout1.implicitWidth,
-                            layout2.implicitWidth)
+            RowLayout {
+              id: layout2
+              spacing: 8
+              anchors.centerIn: parent
+              width: Math.max(layout1.implicitWidth,
+                              layout2.implicitWidth)
 
-            Image {
-              sourceSize: Qt.size(18, 18)
-              Layout.alignment: Qt.AlignVCenter
-              source: "qrc:/rcc/icons/panes/console.svg"
-            }
+              Image {
+                sourceSize: Qt.size(18, 18)
+                Layout.alignment: Qt.AlignVCenter
+                source: "qrc:/rcc/icons/panes/console.svg"
+              }
 
-            Label {
-              text: qsTr("Display Console Window")
-              Layout.alignment: Qt.AlignVCenter
-              horizontalAlignment: Text.AlignLeft
-              color: Cpp_ThemeManager.colors["button_text"]
+              Label {
+                text: qsTr("Display Console Window")
+                Layout.alignment: Qt.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                color: Cpp_ThemeManager.colors["button_text"]
+              }
             }
           }
         }

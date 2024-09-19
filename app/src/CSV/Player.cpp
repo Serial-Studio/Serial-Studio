@@ -131,7 +131,7 @@ QString CSV::Player::csvFilesPath() const
 /**
  * Returns the timestamp of the current data frame / row.
  */
-const QString& CSV::Player::timestamp() const
+const QString &CSV::Player::timestamp() const
 {
   return m_timestamp;
 }

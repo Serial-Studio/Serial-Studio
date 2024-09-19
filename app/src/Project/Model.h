@@ -26,53 +26,54 @@
 #include <JSON/Group.h>
 #include <JSON/Dataset.h>
 #include <QStandardItemModel>
+#include <QItemSelectionModel>
 
 namespace Project
 {
-/**
- * @brief The Model class
- *
- * The model class allows the representation of a Serial Studio JSON
- * project file in the graphical user interface.
- *
- * Additionaly, the class facilitates the modificiation of a project
- * file or the creation of new JSON project files.
- */
+class CustomModel;
 class Model : public QObject
 {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(int groupCount
-             READ groupCount
-             NOTIFY groupCountChanged)
   Q_PROPERTY(bool modified
              READ modified
              NOTIFY modifiedChanged)
   Q_PROPERTY(QString title
              READ title
-             WRITE setTitle
              NOTIFY titleChanged)
-  Q_PROPERTY(QString separator
-             READ separator
-             WRITE setSeparator
-             NOTIFY separatorChanged)
-  Q_PROPERTY(QString frameEndSequence
-             READ frameEndSequence
-             WRITE setFrameEndSequence
-             NOTIFY frameEndSequenceChanged)
-  Q_PROPERTY(QString frameStartSequence
-             READ frameStartSequence
-             WRITE setFrameStartSequence
-             NOTIFY frameStartSequenceChanged)
   Q_PROPERTY(QString jsonFilePath
              READ jsonFilePath
              NOTIFY jsonFileChanged)
   Q_PROPERTY(QString jsonFileName
              READ jsonFileName
              NOTIFY jsonFileChanged)
-  Q_PROPERTY(QStandardItemModel* treeModel
+  Q_PROPERTY(CustomModel* groupModel
+             READ groupModel
+             NOTIFY groupModelChanged)
+  Q_PROPERTY(CustomModel* projectModel
+             READ projectModel
+             NOTIFY projectModelChanged)
+  Q_PROPERTY(CustomModel* datasetModel
+             READ datasetModel
+             NOTIFY datasetModelChanged)
+  Q_PROPERTY(CustomModel* treeModel
              READ treeModel
              NOTIFY treeModelChanged)
+  Q_PROPERTY(QItemSelectionModel* selectionModel
+             READ selectionModel
+             NOTIFY treeModelChanged)
+  Q_PROPERTY(CurrentView currentView
+             READ currentView
+             NOTIFY currentViewChanged)
+  Q_PROPERTY(QString selectedText
+             READ selectedText
+             NOTIFY currentViewChanged)
+  Q_PROPERTY(QString selectedIcon
+             READ selectedIcon
+             NOTIFY currentViewChanged)
+  Q_PROPERTY(int groupCount
+             READ groupCount
+             NOTIFY modifiedChanged)
   // clang-format on
 
 signals:
@@ -80,13 +81,14 @@ signals:
   void jsonFileChanged();
   void modifiedChanged();
   void treeModelChanged();
-  void separatorChanged();
-  void groupCountChanged();
+  void groupModelChanged();
+  void currentViewChanged();
+  void projectModelChanged();
+  void datasetModelChanged();
   void frameParserCodeChanged();
-  void frameEndSequenceChanged();
-  void frameStartSequenceChanged();
-  void groupChanged(const int group);
-  void datasetChanged(const int group, const int dataset);
+  void thunderforestApyKeyChanged();
+  void groupAdded(const QModelIndex &index);
+  void datasetAdded(const QModelIndex &index);
 
 private:
   explicit Model();
@@ -98,115 +100,139 @@ private:
 public:
   static Model &instance();
 
-  Q_INVOKABLE QStringList availableGroupLevelWidgets();
-  Q_INVOKABLE QStringList availableDatasetLevelWidgets();
+  enum CurrentView
+  {
+    ProjectView,
+    GroupView,
+    DatasetView,
+    FrameParserView,
+  };
+  Q_ENUM(CurrentView)
 
-  [[nodiscard]] QString jsonProjectsPath() const;
+  enum DecoderMethod
+  {
+    Normal,
+    Hexadecimal,
+    Base64
+  };
+  Q_ENUM(DecoderMethod)
 
-  [[nodiscard]] const QString &title() const;
-  [[nodiscard]] const QString &separator() const;
-  [[nodiscard]] const QString &frameEndSequence() const;
-  [[nodiscard]] const QString &frameStartSequence() const;
+  enum GroupWidget
+  {
+    CustomGroup,
+    Accelerometer,
+    Gyroscope,
+    GPS,
+    MultiPlot
+  };
+  Q_ENUM(GroupWidget)
+
+  enum DatasetOption
+  {
+    DatasetGeneric,
+    DatasetPlot,
+    DatasetFFT,
+    DatasetBar,
+    DatasetGauge,
+    DatasetCompass
+  };
+  Q_ENUM(DatasetOption)
+
+  enum EditorWidget
+  {
+    TextField,
+    IntField,
+    FloatField,
+    CheckBox,
+    ComboBox
+  };
+  Q_ENUM(EditorWidget)
+
+  enum CustomRoles
+  {
+    TreeViewIcon = 0x01,
+    TreeViewText = 0x02,
+    TreeViewExpanded = 0x03,
+    TreeViewFrameIndex = 0x04,
+
+    ParameterName = 0x10,
+    EditableValue = 0x11,
+    ParameterType = 0x12,
+    PlaceholderValue = 0x13,
+    ParameterDescription = 0x14,
+
+    WidgetType = 0x20,
+    ComboBoxData = 0x21,
+  };
+  Q_ENUM(CustomRoles)
 
   [[nodiscard]] bool modified() const;
-  [[nodiscard]] int groupCount() const;
+  [[nodiscard]] CurrentView currentView() const;
 
   [[nodiscard]] QString jsonFileName() const;
-  [[nodiscard]] const QString &jsonFilePath() const;
+  [[nodiscard]] QString jsonProjectsPath() const;
 
-  [[nodiscard]] QStandardItemModel *treeModel() const;
+  [[nodiscard]] QString selectedText() const;
+  [[nodiscard]] QString selectedIcon() const;
+
+  [[nodiscard]] const QString &title() const;
+  [[nodiscard]] const QString &jsonFilePath() const;
+  [[nodiscard]] const QString &frameParserCode() const;
+  [[nodiscard]] const QString &thunderforestApiKey() const;
+
+  [[nodiscard]] int groupCount() const;
+  [[nodiscard]] const QVector<JSON::Group> &groups() const;
+
+  [[nodiscard]] CustomModel *treeModel() const;
+  [[nodiscard]] QItemSelectionModel *selectionModel() const;
+
+  [[nodiscard]] CustomModel *groupModel() const;
+  [[nodiscard]] CustomModel *projectModel() const;
+  [[nodiscard]] CustomModel *datasetModel() const;
 
   Q_INVOKABLE bool askSave();
   Q_INVOKABLE bool saveJsonFile();
-  Q_INVOKABLE int datasetCount(const int group) const;
-
-  Q_INVOKABLE const JSON::Group &getGroup(const int index) const;
-  Q_INVOKABLE const JSON::Dataset &getDataset(const int group,
-                                              const int index) const;
-
-  Q_INVOKABLE const QString &groupTitle(const int group) const;
-  Q_INVOKABLE const QString &groupWidget(const int group) const;
-  Q_INVOKABLE const QString &datasetTitle(const int group,
-                                          const int dataset) const;
-  Q_INVOKABLE const QString &datasetUnits(const int group,
-                                          const int dataset) const;
-  Q_INVOKABLE const QString &datasetWidget(const int group,
-                                           const int dataset) const;
-
-  Q_INVOKABLE const QString &frameParserCode() const;
-
-  Q_INVOKABLE int datasetIndex(const int group, const int dataset) const;
-  Q_INVOKABLE bool datasetLED(const int group, const int dataset) const;
-  Q_INVOKABLE bool datasetGraph(const int group, const int dataset) const;
-  Q_INVOKABLE bool datasetFftPlot(const int group, const int dataset) const;
-  Q_INVOKABLE bool datasetLogPlot(const int group, const int dataset) const;
-  Q_INVOKABLE int datasetWidgetIndex(const int group, const int dataset) const;
-  Q_INVOKABLE QString datasetWidgetMin(const int group,
-                                       const int dataset) const;
-  Q_INVOKABLE QString datasetWidgetMax(const int group,
-                                       const int dataset) const;
-  Q_INVOKABLE QString datasetFFTSamples(const int group,
-                                        const int dataset) const;
-  Q_INVOKABLE QString datasetWidgetAlarm(const int group,
-                                         const int dataset) const;
-
-  Q_INVOKABLE bool setGroupWidget(const int group, const int widgetId);
 
 public slots:
   void newJsonFile();
   void openJsonFile();
   void openJsonFile(const QString &path);
 
-  void setTitle(const QString &title);
-  void setSeparator(const QString &separator);
+  void deleteCurrentGroup();
+  void deleteCurrentDataset();
+  void duplicateCurrentGroup();
+  void duplicateCurrentDataset();
+  void changeDatasetParentGroup();
+  void addDataset(const DatasetOption options);
+  void changeDatasetOptions(const DatasetOption options);
+
+  void addGroup(const QString &title, const GroupWidget widget);
+  bool setGroupWidget(const int group, const GroupWidget widget);
+
   void setFrameParserCode(const QString &code);
-  void setFrameEndSequence(const QString &sequence);
-  void setFrameStartSequence(const QString &sequence);
 
-  void deleteGroup(const int group);
-  void addGroup(const QString &title, const int widget);
-  void addGroup(const QString &title, const QString& widget);
-  void setGroupTitle(const int group, const QString &title);
-  void setGroupWidgetData(const int group, const QString &widget);
-
-  void addDataset(const int group);
-  void deleteDataset(const int group, const int dataset);
-  void setDatasetWidget(const int group, const int dataset, const int widgetId);
-  void setDatasetTitle(const int group, const int dataset,
-                       const QString &title);
-  void setDatasetUnits(const int group, const int dataset,
-                       const QString &units);
-  void setDatasetIndex(const int group, const int dataset,
-                       const int frameIndex);
-  void setDatasetLED(const int group, const int dataset,
-                     const bool generateLED);
-  void setDatasetGraph(const int group, const int dataset,
-                       const bool generateGraph);
-  void setDatasetFftPlot(const int group, const int dataset,
-                         const bool generateFft);
-  void setDatasetLogPlot(const int group, const int dataset,
-                         const bool generateLog);
-  void setDatasetWidgetMin(const int group, const int dataset,
-                           const QString &minimum);
-  void setDatasetWidgetMax(const int group, const int dataset,
-                           const QString &maximum);
-  void setDatasetWidgetData(const int group, const int dataset,
-                            const QString &widget);
-  void setDatasetWidgetAlarm(const int group, const int dataset,
-                             const QString &alarm);
-  void setDatasetFFTSamples(const int group, const int dataset,
-                            const QString &samples);
+  void buildTreeModel();
+  void buildProjectModel();
+  void buildGroupModel(const JSON::Group &group);
+  void buildDatasetModel(const JSON::Dataset &dataset);
 
 private slots:
   void onJsonLoaded();
-  void onModelChanged();
-  void regenerateTreeModel();
-  void onGroupChanged(const int group);
+  void generateComboBoxModels();
   void setModified(const bool modified);
-  void onDatasetChanged(const int group, const int dataset);
+  void setCurrentView(const CurrentView view);
+  void onGroupItemChanged(QStandardItem *item);
+  void onProjectItemChanged(QStandardItem *item);
+  void onDatasetItemChanged(QStandardItem *item);
+  void onCurrentSelectionChanged(const QModelIndex &current,
+                                 const QModelIndex &previous);
 
 private:
   int nextDatasetIndex();
+  void saveExpandedStateMap(QStandardItem *item, QHash<QString, bool> &map,
+                            const QString &title);
+  void restoreExpandedStateMap(QStandardItem *item, QHash<QString, bool> &map,
+                               const QString &title);
 
 private:
   QString m_title;
@@ -214,11 +240,62 @@ private:
   QString m_frameParserCode;
   QString m_frameEndSequence;
   QString m_frameStartSequence;
+  QString m_thunderforestApiKey;
+
+  CurrentView m_currentView;
+  DecoderMethod m_frameDecoder;
 
   bool m_modified;
   QString m_filePath;
 
+  QMap<QStandardItem *, int> m_rootItems;
+  QMap<QStandardItem *, JSON::Group> m_groupItems;
+  QMap<QStandardItem *, JSON::Dataset> m_datasetItems;
+
   QVector<JSON::Group> m_groups;
-  QStandardItemModel *m_treeModel;
+
+  CustomModel *m_treeModel;
+  QItemSelectionModel *m_selectionModel;
+
+  CustomModel *m_groupModel;
+  CustomModel *m_projectModel;
+  CustomModel *m_datasetModel;
+
+  QStringList m_fftSamples;
+  QStringList m_decoderOptions;
+  QMap<QString, QString> m_groupWidgets;
+  QMap<QString, QString> m_datasetWidgets;
+  QMap<QPair<bool, bool>, QString> m_plotOptions;
+
+  JSON::Group m_selectedGroup;
+  JSON::Dataset m_selectedDataset;
+};
+
+class CustomModel : public QStandardItemModel
+{
+public:
+  explicit CustomModel(QObject *parent = 0)
+    : QStandardItemModel(parent)
+  {
+  }
+
+  QHash<int, QByteArray> roleNames() const override
+  {
+    QHash<int, QByteArray> names;
+#define BAL(x) QByteArrayLiteral(x)
+    names.insert(Model::TreeViewIcon, BAL("treeViewIcon"));
+    names.insert(Model::TreeViewText, BAL("treeViewText"));
+    names.insert(Model::TreeViewExpanded, BAL("treeViewExpanded"));
+    names.insert(Model::TreeViewFrameIndex, BAL("treeViewFrameIndex"));
+    names.insert(Model::ParameterName, BAL("parameterName"));
+    names.insert(Model::EditableValue, BAL("editableValue"));
+    names.insert(Model::ParameterType, BAL("parameterType"));
+    names.insert(Model::PlaceholderValue, BAL("placeholderValue"));
+    names.insert(Model::ParameterDescription, BAL("parameterDescription"));
+    names.insert(Model::WidgetType, BAL("widgetType"));
+    names.insert(Model::ComboBoxData, BAL("comboBoxData"));
+#undef BAL
+    return names;
+  }
 };
 } // namespace Project

@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/rcc">
+        <file>diagrams/group-dfd.svg</file>
+        <file>diagrams/project-dfd.svg</file>
         <file>fonts/Hack-Regular.ttf</file>
         <file>fonts/Inter-Bold.ttf</file>
         <file>fonts/Inter-Regular.ttf</file>
@@ -17,14 +19,14 @@
         <file>icons/buttons/refresh.svg</file>
         <file>icons/buttons/save.svg</file>
         <file>icons/buttons/visibility.svg</file>
+        <file>icons/code-editor/apply.svg</file>
         <file>icons/code-editor/copy.svg</file>
         <file>icons/code-editor/cut.svg</file>
         <file>icons/code-editor/help.svg</file>
-        <file>icons/code-editor/new.svg</file>
-        <file>icons/code-editor/open.svg</file>
+        <file>icons/code-editor/import.svg</file>
         <file>icons/code-editor/paste.svg</file>
         <file>icons/code-editor/redo.svg</file>
-        <file>icons/code-editor/save.svg</file>
+        <file>icons/code-editor/reload.svg</file>
         <file>icons/code-editor/undo.svg</file>
         <file>icons/dashboard/accelerometer.svg</file>
         <file>icons/dashboard/bar.svg</file>
@@ -51,22 +53,38 @@
         <file>icons/project-editor/actions/add-fft.svg</file>
         <file>icons/project-editor/actions/add-gauge.svg</file>
         <file>icons/project-editor/actions/add-plot.svg</file>
-        <file>icons/project-editor/actions/delete-dataset.svg</file>
-        <file>icons/project-editor/actions/delete-group.svg</file>
+        <file>icons/project-editor/actions/bar.svg</file>
+        <file>icons/project-editor/actions/change-group.svg</file>
+        <file>icons/project-editor/actions/compass.svg</file>
+        <file>icons/project-editor/actions/delete.svg</file>
+        <file>icons/project-editor/actions/duplicate.svg</file>
+        <file>icons/project-editor/actions/fft.svg</file>
+        <file>icons/project-editor/actions/gauge.svg</file>
+        <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
-        <file>icons/project-editor/toolbar/add-dataset.svg</file>
         <file>icons/project-editor/toolbar/add-gps.svg</file>
         <file>icons/project-editor/toolbar/add-group.svg</file>
         <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
-        <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
-        <file>icons/project-editor/toolbar/script.svg</file>
+        <file>icons/project-editor/treeview/accelerometer.svg</file>
+        <file>icons/project-editor/treeview/code.svg</file>
         <file>icons/project-editor/treeview/dataset.svg</file>
+        <file>icons/project-editor/treeview/encoding.svg</file>
+        <file>icons/project-editor/treeview/frame-end.svg</file>
+        <file>icons/project-editor/treeview/frame-start.svg</file>
+        <file>icons/project-editor/treeview/gps.svg</file>
         <file>icons/project-editor/treeview/group.svg</file>
+        <file>icons/project-editor/treeview/gyroscope.svg</file>
         <file>icons/project-editor/treeview/indicator.svg</file>
+        <file>icons/project-editor/treeview/multiplot.svg</file>
+        <file>icons/project-editor/treeview/project-setup.svg</file>
+        <file>icons/project-editor/treeview/project-title.svg</file>
+        <file>icons/project-editor/treeview/separator.svg</file>
+        <file>icons/project-editor/windows/code.svg</file>
+        <file>icons/project-editor/windows/dataset.svg</file>
         <file>icons/project-editor/windows/group.svg</file>
         <file>icons/project-editor/windows/project-setup.svg</file>
         <file>icons/project-editor/windows/project-structure.svg</file>
@@ -99,17 +117,10 @@
         <file>messages/Welcome_RU.txt</file>
         <file>messages/Welcome_ZH.txt</file>
         <file>scripts/frame-parser.js</file>
-        <file>themes/Breeze.json</file>
-        <file>themes/Dark.json</file>
-        <file>themes/Light.json</file>
-        <file>icons/project-editor/treeview/accelerometer.svg</file>
-        <file>icons/project-editor/treeview/gps.svg</file>
-        <file>icons/project-editor/treeview/gyroscope.svg</file>
-        <file>icons/project-editor/treeview/multiplot.svg</file>
-        <file>icons/project-editor/treeview/frame-end.svg</file>
-        <file>icons/project-editor/treeview/frame-start.svg</file>
-        <file>icons/project-editor/treeview/project-setup.svg</file>
-        <file>icons/project-editor/treeview/project-title.svg</file>
-        <file>icons/project-editor/treeview/separator.svg</file>
+        <file>shaders/invert_color.frag</file>
+        <file>shaders/invert_color.qsb</file>
+        <file>themes/Breeze Classic.json</file>
+        <file>themes/Breeze Dark.json</file>
+        <file>themes/Breeze Light.json</file>
     </qresource>
 </RCC>

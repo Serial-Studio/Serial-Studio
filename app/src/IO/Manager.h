@@ -147,11 +147,11 @@ public:
   [[nodiscard]] HAL_Driver *driver();
   [[nodiscard]] SelectedDriver selectedDriver() const;
 
-  [[nodiscard]] const QString& startSequence() const;
-  [[nodiscard]] const QString& finishSequence() const;
-  [[nodiscard]] const QString& separatorSequence() const;
+  [[nodiscard]] const QString &startSequence() const;
+  [[nodiscard]] const QString &finishSequence() const;
+  [[nodiscard]] const QString &separatorSequence() const;
 
-  static QStringList& availableDrivers();
+  static QStringList &availableDrivers();
   Q_INVOKABLE qint64 writeData(const QByteArray &data);
 
 public slots:

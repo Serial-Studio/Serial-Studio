@@ -22,13 +22,13 @@
 
 #pragma once
 
+#include <QTimer>
+#include <QEvent>
 #include <QObject>
-#include <QDialog>
-#include <QToolBar>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
+#include <QWidget>
+#include <QPainter>
 #include <QPlainTextEdit>
+#include <QQuickPaintedItem>
 
 #include <QJSValue>
 #include <QJSEngine>
@@ -37,48 +37,71 @@
 
 namespace Project
 {
-class CodeEditor : public QDialog
+class FrameParser : public QQuickPaintedItem
 {
   Q_OBJECT
+  Q_PROPERTY(QString text READ text NOTIFY textChanged)
+  Q_PROPERTY(bool isModified READ isModified NOTIFY modifiedChanged)
 
-private:
-  explicit CodeEditor();
-  ~CodeEditor();
-  CodeEditor(CodeEditor &&) = delete;
-  CodeEditor(const CodeEditor &) = delete;
-  CodeEditor &operator=(CodeEditor &&) = delete;
-  CodeEditor &operator=(const CodeEditor &) = delete;
+signals:
+  void textChanged();
+  void modifiedChanged();
 
 public:
-  static CodeEditor &instance();
+  FrameParser(QQuickItem *parent = 0);
 
-  [[nodiscard]] QString defaultCode() const;
+  static const QString &defaultCode();
+
+  [[nodiscard]] QString text() const;
+  [[nodiscard]] bool isModified() const;
   [[nodiscard]] QStringList parse(const QString &frame,
                                   const QString &separator);
 
+  void update(const QRect &rect = QRect());
+  virtual void paint(QPainter *painter) override;
+  virtual void keyPressEvent(QKeyEvent *event) override;
+  virtual void keyReleaseEvent(QKeyEvent *event) override;
+  virtual void inputMethodEvent(QInputMethodEvent *event) override;
+  virtual void focusInEvent(QFocusEvent *event) override;
+  virtual void focusOutEvent(QFocusEvent *event) override;
+  virtual void mousePressEvent(QMouseEvent *event) override;
+  virtual void mouseMoveEvent(QMouseEvent *event) override;
+  virtual void mouseReleaseEvent(QMouseEvent *event) override;
+  virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+  virtual void wheelEvent(QWheelEvent *event) override;
+  virtual void dragEnterEvent(QDragEnterEvent *event) override;
+  virtual void dragMoveEvent(QDragMoveEvent *event) override;
+  virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
+  virtual void dropEvent(QDropEvent *event) override;
+
 public slots:
-  void displayWindow();
+  void cut();
+  void undo();
+  void redo();
+  void help();
+  void copy();
+  void paste();
+  void apply();
+  void reload();
+  void import();
+  void selectAll();
+  void resizeWidget();
 
 private slots:
-  void onNewClicked();
-  void onOpenClicked();
-  void onSaveClicked();
-  void onHelpClicked();
   void onThemeChanged();
 
 private:
-  bool checkModified();
   bool save(const bool silent = false);
   bool loadScript(const QString &script);
-  void closeEvent(QCloseEvent *event) override;
+  void execEvent(void *function, void *event);
 
 private slots:
   void readCode();
-  void writeChanges();
 
 private:
+  QTimer m_timer;
+  QPixmap m_pixmap;
   QJSEngine m_engine;
-  QToolBar m_toolbar;
   QJSValue m_parseFunction;
   QPlainTextEdit m_textEdit;
   QSourceHighlite::QSourceHighliter *m_highlighter;

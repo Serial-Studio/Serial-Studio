@@ -136,9 +136,9 @@ public:
   [[nodiscard]] DisplayMode displayMode() const;
   [[nodiscard]] QString currentHistoryString() const;
 
-  static QStringList& dataModes();
-  static QStringList& lineEndings();
-  static QStringList& displayModes();
+  static QStringList &dataModes();
+  static QStringList &lineEndings();
+  static QStringList &displayModes();
 
   Q_INVOKABLE QString formatUserHex(const QString &text);
 

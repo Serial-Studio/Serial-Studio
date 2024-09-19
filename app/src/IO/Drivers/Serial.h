@@ -148,12 +148,12 @@ public:
   [[nodiscard]] quint8 flowControlIndex() const;
 
   [[nodiscard]] QStringList portList() const;
-  [[nodiscard]] const QStringList& baudRateList() const;
+  [[nodiscard]] const QStringList &baudRateList() const;
 
-  [[nodiscard]] static QStringList& parityList();
-  [[nodiscard]] static QStringList& dataBitsList();
-  [[nodiscard]] static QStringList& stopBitsList();
-  [[nodiscard]] static QStringList& flowControlList();
+  [[nodiscard]] static QStringList &parityList();
+  [[nodiscard]] static QStringList &dataBitsList();
+  [[nodiscard]] static QStringList &stopBitsList();
+  [[nodiscard]] static QStringList &flowControlList();
 
   [[nodiscard]] qint32 baudRate() const;
   [[nodiscard]] QSerialPort::Parity parity() const;

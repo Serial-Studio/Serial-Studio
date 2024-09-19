@@ -1,19 +1,21 @@
-/* 
- * @brief Frame parsing function, you can modify this to suit your needs.
- * 
- * By customizing this code, you can use a single JSON project file to 
- * process different kinds of frames that are sent by the microcontroller 
- * or any data source that is connected to Serial Studio. Frame parsing code
- * is specific to every JSON project that you create.
+/**
+ * This function splits a data frame using the project-specified separator,
+ * allowing you to customize frame parsing for different project requirements.
  *
- * @param frame      string with the latest received frame.
- * @param separator  data separator sequence defined by the JSON project.
+ * Global variables can maintain a constant output array, enabling a single
+ * Serial Studio project to display information consistently, even with varying
+ * frame types.
  *
- * @note.            only data that is *inside* the data delimiters will
- *                   be processed by the frame parser.
+ * @param[in]  frame      The latest received frame as a string.
+ * @param[in]  separator  The data separator defined in the JSON project.
+ * @return     Array of strings containing the parsed frame elements.
  *
- * @note             you can safely declare global variables outside the
- *                   @c parse() function.
+ * @note Only data within the delimiters is processed.
+ * @note Declare global variables outside @c parse() for state/configuration.
+ *
+ * @example
+ * Given frame: "value1,value2,value3", separator: ","
+ * Returns: ["value1", "value2", "value3"]
  */
 function parse(frame, separator) {
     return frame.split(separator);

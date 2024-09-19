@@ -1459,7 +1459,7 @@ int X509at_get_attr_by_OBJ(const STACK_OF(X509_ATTRIBUTE) * sk,
 X509_ATTRIBUTE *X509at_get_attr(const STACK_OF(X509_ATTRIBUTE) * x, int loc);
 X509_ATTRIBUTE *X509at_delete_attr(STACK_OF(X509_ATTRIBUTE) * x, int loc);
 STACK_OF(X509_ATTRIBUTE)
-    * X509at_add1_attr(STACK_OF(X509_ATTRIBUTE) * *x, X509_ATTRIBUTE *attr);
+*X509at_add1_attr(STACK_OF(X509_ATTRIBUTE) * *x, X509_ATTRIBUTE *attr);
 STACK_OF(X509_ATTRIBUTE)
 *X509at_add1_attr_by_OBJ(STACK_OF(X509_ATTRIBUTE) * *x, const ASN1_OBJECT *obj,
                          int type, const unsigned char *bytes, int len);

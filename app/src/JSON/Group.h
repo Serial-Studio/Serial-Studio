@@ -60,17 +60,21 @@ namespace JSON
 class Group
 {
 public:
+  Group(const int groupId = -1);
   ~Group();
 
+  [[nodiscard]] QJsonObject serialize() const;
   [[nodiscard]] bool read(const QJsonObject &object);
 
+  [[nodiscard]] int groupId() const;
   [[nodiscard]] int datasetCount() const;
-  [[nodiscard]] const QString& title() const;
+  [[nodiscard]] const QString &title() const;
   [[nodiscard]] const QString &widget() const;
   [[nodiscard]] const QVector<JSON::Dataset> &datasets() const;
   [[nodiscard]] const JSON::Dataset &getDataset(const int index) const;
 
 private:
+  int m_groupId;
   QString m_title;
   QString m_widget;
   QVector<JSON::Dataset> m_datasets;

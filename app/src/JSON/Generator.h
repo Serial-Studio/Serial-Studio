@@ -31,6 +31,7 @@
 #include <QJsonDocument>
 
 #include <JSON/Frame.h>
+#include <Project/FrameParser.h>
 
 namespace JSON
 {
@@ -103,6 +104,7 @@ public:
 public slots:
   void loadJsonMap();
   void loadJsonMap(const QString &path);
+  void setFrameParser(Project::FrameParser *editor);
   void setOperationMode(const JSON::Generator::OperationMode mode);
 
 public slots:
@@ -118,5 +120,6 @@ private:
   QSettings m_settings;
   OperationMode m_opMode;
   QJsonParseError m_error;
+  Project::FrameParser *m_frameParser;
 };
 } // namespace JSON

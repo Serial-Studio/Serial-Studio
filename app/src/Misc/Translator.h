@@ -73,7 +73,7 @@ public:
 
   [[nodiscard]] int language() const;
   [[nodiscard]] int systemLanguage() const;
-  [[nodiscard]] static QStringList& availableLanguages();
+  [[nodiscard]] static QStringList &availableLanguages();
 
   [[nodiscard]] QString welcomeConsoleText() const;
   [[nodiscard]] QString acknowledgementsText() const;

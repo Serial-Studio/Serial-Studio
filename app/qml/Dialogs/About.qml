@@ -53,6 +53,14 @@ Window {
   }
 
   //
+  // Close shortcut
+  //
+  Shortcut {
+    sequences: [StandardKey.Close]
+    onActivated: root.close()
+  }
+
+  //
   // Use page item to set application palette
   //
   Page {

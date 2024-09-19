@@ -50,11 +50,24 @@ Widgets.Pane {
   }
 
   //
-  // Console window
+  // Use page item to set application palette
   //
-  Widgets.Terminal {
-    id: terminal
-    widgetEnabled: true
+  Page {
     anchors.fill: parent
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.windowText: Cpp_ThemeManager.colors["text"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
+
+    Widgets.Terminal {
+      id: terminal
+      widgetEnabled: true
+      anchors.fill: parent
+    }
   }
 }

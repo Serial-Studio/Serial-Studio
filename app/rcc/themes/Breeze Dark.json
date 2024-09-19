@@ -1,0 +1,88 @@
+{
+  "title": "Breeze Dark",
+  "colors": {
+    "groupbox_border": "#43494F",
+    "groupbox_background": "#31363b",
+    "groupbox_hard_border": "#43494F",
+
+    "pane_background": "#1C1E20",
+    "pane_section_label": "#eff0f1",
+    "pane_caption_bg_top": "#232629",
+    "pane_caption_border": "#43494F",
+    "pane_caption_bg_bottom": "#232629",
+    "pane_caption_foreground": "#eff0f1",
+
+    "pane_hard_caption_bg_top": "#232629",
+    "pane_hard_caption_border": "#43494F",
+    "pane_hard_caption_bg_bottom": "#232629",
+    "pane_hard_caption_foreground": "#eff0f1",
+
+    "setup_border": "#43494F",
+    "toolbar_top": "#31363A",
+    "titlebar_text": "#ffffff",
+    "toolbar_text": "#eff0f1",
+    "toolbar_bottom": "#31363A",
+    "toolbar_border": "#43494F",
+    "toolbar_separator": "#43494F",
+    "toolbar_checked_button_opacity": 0.4,
+    "toolbar_checked_button_border": "#515658",
+    "toolbar_checked_button_background": "#4e5559",
+
+    "error": "#f95258",
+    "csv_switch": "#479e73",
+    "view_switch": "#3daee9",
+    "switch_highlight": "#3daee9",
+    "dashboard_background": "#0C0E10",
+
+    "text": "#eff0f1",
+    "base": "#1C1E20",
+    "button": "#31363A",
+    "window": "#1C1E20",
+    "highlight": "#3daee9",
+    "button_text": "#eff0f1",
+    "highlighted_text": "#31363b",
+    "placeholder_text": "#929497",
+    "alternate_window": "#33363a",
+
+    "console_text": "#eff0f1",
+    "console_base": "#2e3439",
+    "console_button": "#31363A",
+    "console_window": "#1C1E20",
+    "console_highlight": "#3daee9",
+    "console_button_text": "#eff0f1",
+    "console_highlighted_text": "#31363b",
+    "console_placeholder_text": "#929497",
+
+    "widget_text": "#eff0f1",
+    "widget_base": "#1C1E20",
+    "widget_button": "#31363A",
+    "widget_window": "#1C1E20",
+    "widget_highlight": "#3daee9",
+    "widget_button_text": "#eff0f1",
+    "widget_highlighted_text": "#31363b",
+    "widget_placeholder_text": "#929497",
+    "led_color": "#CC323B",
+
+    "table_bg_a": "#f5f5f5",
+    "table_bg_b": "#ffffff",
+    "table_text": "#232629",
+    "table_bg_header": "#FFE792",
+    "table_fg_header": "#232629",
+    "table_separator": "#D3D4D4",
+    "table_border_header": "#FFD74A",
+    "table_separator_header": "#FFD74A",
+
+    "widget_colors": [
+      "#3571c6",
+      "#cc6666",
+      "#cc9930",
+      "#4d996f",
+      "#bb5c9e",
+      "#db5ea2",
+      "#6a6a6a",
+      "#2a9999",
+      "#e5944d",
+      "#7a53a0"
+    ]
+  }
+}

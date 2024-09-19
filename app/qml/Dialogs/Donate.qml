@@ -49,6 +49,14 @@ Window {
   }
 
   //
+  // Close shortcut
+  //
+  Shortcut {
+    sequences: [StandardKey.Close]
+    onActivated: root.close()
+  }
+
+  //
   // Custom properties
   //
   property alias doNotShowAgain: doNotShowAgainCheck.checked

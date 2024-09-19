@@ -73,6 +73,14 @@ Window {
   }
 
   //
+  // Close shortcut
+  //
+  Shortcut {
+    sequences: [StandardKey.Close]
+    onActivated: root.close()
+  }
+
+  //
   // Use page item to set application palette
   //
   Page {
@@ -81,8 +89,9 @@ Window {
     palette.text: Cpp_ThemeManager.colors["text"]
     palette.button: Cpp_ThemeManager.colors["button"]
     palette.window: Cpp_ThemeManager.colors["window"]
-    palette.highlight: Cpp_ThemeManager.colors["highlight"]
+    palette.windowText: Cpp_ThemeManager.colors["text"]
     palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
@@ -115,10 +124,8 @@ Window {
           //
           Label {
             text: qsTr("Version") + ":"
-            color: Cpp_ThemeManager.colors["text"]
           } Label {
             text: qsTr("Mode") + ":"
-            color: Cpp_ThemeManager.colors["text"]
           }
 
           //
@@ -166,12 +173,10 @@ Window {
           Label {
             opacity: enabled ? 1 : 0.5
             text: qsTr("QOS Level") + ":"
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           } Label {
             opacity: enabled ? 1 : 0.5
             text: qsTr("Keep Alive (s)") + ":"
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           }
 
@@ -232,12 +237,10 @@ Window {
           Label {
             text: qsTr("Host") + ":"
             opacity: enabled ? 1 : 0.5
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           } Label {
             text: qsTr("Port") + ":"
             opacity: enabled ? 1 : 0.5
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           }
 
@@ -300,12 +303,10 @@ Window {
           Label {
             text: qsTr("Topic") + ":"
             opacity: enabled ? 1 : 0.5
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           } Label {
             text: qsTr("Retain") + ":"
             opacity: enabled ? 1 : 0.5
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           }
 
@@ -359,12 +360,10 @@ Window {
           Label {
             text: qsTr("User") + ":"
             opacity: enabled ? 1 : 0.5
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           } Label {
             text: qsTr("Password") + ":"
             opacity: enabled ? 1 : 0.5
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           }
 
@@ -432,12 +431,10 @@ Window {
           Label {
             text: qsTr("Enable SSL/TLS:")
             opacity: enabled ? 1 : 0.5
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           } Label {
             text: qsTr("Certificate:")
             opacity: enabled ? 1 : 0.5
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
           }
 
@@ -508,7 +505,6 @@ Window {
           } Label {
             text: qsTr("Protocol:")
             opacity: enabled ? 1 : 0.5
-            color: Cpp_ThemeManager.colors["text"]
             enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
           }
 

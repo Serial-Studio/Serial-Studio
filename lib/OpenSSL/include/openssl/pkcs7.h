@@ -532,7 +532,7 @@ int PKCS7_final(PKCS7 *p7, BIO *data, int flags);
 int PKCS7_verify(PKCS7 *p7, STACK_OF(X509) * certs, X509_STORE *store,
                  BIO *indata, BIO *out, int flags);
 STACK_OF(X509)
-    * PKCS7_get0_signers(PKCS7 *p7, STACK_OF(X509) * certs, int flags);
+*PKCS7_get0_signers(PKCS7 *p7, STACK_OF(X509) * certs, int flags);
 PKCS7 *PKCS7_encrypt(STACK_OF(X509) * certs, BIO *in, const EVP_CIPHER *cipher,
                      int flags);
 PKCS7 *PKCS7_encrypt_ex(STACK_OF(X509) * certs, BIO *in,

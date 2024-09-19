@@ -28,6 +28,34 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
-  title: qsTr("Project Setup")
-  icon: "qrc:/rcc/icons/project-editor/windows/project-setup.svg"
+  implicitWidth: 0
+  implicitHeight: 0
+  icon: Cpp_Project_Model.selectedIcon
+  title: Cpp_Project_Model.selectedText
+  Component.onCompleted: Cpp_Project_Model.buildProjectModel()
+
+  TableDelegate {
+    id: delegate
+    anchors.fill: parent
+    anchors.topMargin: -16
+    anchors.leftMargin: -10
+    anchors.rightMargin: -10
+    anchors.bottomMargin: -9
+    modelPointer: Cpp_Project_Model.projectModel
+
+    footerItem: Image {
+      readonly property real aspectRatio: 696 / 280
+      readonly property real idealWidth: delegate.width * 0.8
+      readonly property real idealHeight: delegate.height - delegate.tableHeight
+      readonly property real maxWidth: idealHeight * aspectRatio
+      readonly property real maxHeight: idealWidth / aspectRatio
+      readonly property real actualWidth: Math.min(idealWidth, maxWidth)
+      readonly property real actualHeight: Math.min(idealHeight, maxHeight)
+
+      smooth: true
+      antialiasing: true
+      source: "qrc:/rcc/diagrams/project-dfd.svg"
+      sourceSize: Qt.size(actualWidth, actualHeight)
+    }
+  }
 }

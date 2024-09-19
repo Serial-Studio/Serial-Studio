@@ -415,7 +415,7 @@ X509_STORE *TS_VERIFY_CTX_set_store(TS_VERIFY_CTX *ctx, X509_STORE *s);
       TS_VERIFY_CTX_set_certs(ctx, cert)
 #  endif
 STACK_OF(X509)
-    * TS_VERIFY_CTX_set_certs(TS_VERIFY_CTX *ctx, STACK_OF(X509) * certs);
+*TS_VERIFY_CTX_set_certs(TS_VERIFY_CTX *ctx, STACK_OF(X509) * certs);
 
 /*-
  * If ctx is NULL, it allocates and returns a new object, otherwise

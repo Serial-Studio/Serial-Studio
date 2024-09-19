@@ -44,6 +44,13 @@ Item {
   //
   MainWindow.Root {
     id: mainWindow
+    onClosing: (close) => {
+                 close.accepted = false
+                 if (Cpp_Project_Model.askSave()) {
+                   close.accepted = true
+                   Qt.quit()
+                 }
+               }
 
     Dialogs.CsvPlayer {
       id: csvPlayer

@@ -219,7 +219,7 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
 #endif
 
   // Get number of fields by counting datasets with non-duplicated indexes
-  QVector<int> fields;
+  /*QVector<int> fields;
   QVector<QString> titles;
   for (int i = 0; i < Project::Model::instance().groupCount(); ++i)
   {
@@ -246,7 +246,7 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
       m_textStream << QStringLiteral(",");
     else
       m_textStream << QStringLiteral("\n");
-  }
+  }*/
 
   // Update UI
   Q_EMIT openChanged();
