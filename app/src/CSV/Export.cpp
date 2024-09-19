@@ -219,22 +219,23 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
 #endif
 
   // Get number of fields by counting datasets with non-duplicated indexes
-  /*QVector<int> fields;
+  QVector<int> fields;
   QVector<QString> titles;
-  for (int i = 0; i < Project::Model::instance().groupCount(); ++i)
+  auto &groups = Project::Model::instance().groups();
+  for (auto g = groups.constBegin(); g != groups.constEnd(); ++g)
   {
-    for (int j = 0; j < Project::Model::instance().datasetCount(i); ++j)
+    auto &datasets = g->datasets();
+    for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
     {
-      auto dataset = Project::Model::instance().getDataset(i, j);
-      if (!fields.contains(dataset.index()))
+      if (!fields.contains(d->index()))
       {
-        fields.append(dataset.index());
-        titles.append(dataset.title());
+        fields.append(d->index());
+        titles.append(QString("%1/%2").arg(g->title(), d->title()));
       }
     }
   }
 
-  // Add table titles
+  // Add CSV header
   m_fieldCount = fields.count();
   m_textStream << QStringLiteral("RX Date/Time,");
   for (auto i = 0; i < m_fieldCount; ++i)
@@ -246,7 +247,7 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
       m_textStream << QStringLiteral(",");
     else
       m_textStream << QStringLiteral("\n");
-  }*/
+  }
 
   // Update UI
   Q_EMIT openChanged();
