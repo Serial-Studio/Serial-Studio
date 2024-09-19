@@ -46,7 +46,6 @@ if(${PROJECT_NAME}_WEBSOCKETS)
 endif()
 
 set(CMAKE_AUTOMOC ON )
-cmake_policy( SET CMP0020 NEW ) # Automatically link Qt executables to qtmain target on Windows.
 
 
 # ===================================================================
@@ -106,11 +105,6 @@ list( APPEND SOURCES
 )
 endif()
 
-
-# Mark public headers as such
-set_source_files_properties( ${PUBLIC_HEADERS} PROPERTIES PUBLIC_HEADER 1 )
-
-
 # ===================================================================
 # Library target
 
@@ -136,16 +130,14 @@ set_target_properties( ${PROJECT_NAME}
  PROPERTIES
  VERSION                   ${PROJECT_VERSION}
  SOVERSION                 ${PROJECT_VERSION_MAJOR}
- CXX_STANDARD              11
+ CXX_STANDARD              17
  CXX_STANDARD_REQUIRED     OFF  # Whether CXX_STANDARD is enforced
 )
 
-if ( ${CMAKE_HOST_WIN32} )
- # On Windows, libraries are not generally prefixed with "lib".
- # If left unchanged, cmake will still add this prefix.
- set_target_properties( ${PROJECT_NAME}
-  PROPERTIES
-  PREFIX        ""
-  IMPORT_PREFIX ""
- )
-endif()
+set_target_properties(
+ ${PROJECT_NAME} PROPERTIES
+ UNITY_BUILD ON
+ UNITY_BUILD_MODE BATCH
+ UNITY_BUILD_BATCH_SIZE 128
+ INTERPROCEDURAL_OPTIMIZATION TRUE
+)
