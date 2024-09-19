@@ -37,22 +37,14 @@ ToolButton {
   palette.buttonText: Cpp_ThemeManager.colors["toolbar_text"]
 
   background: Rectangle {
-    radius: 3
     border.width: 1
-    color: "transparent"
+    radius: 3
+    color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
     border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
+
     opacity: parent.checked ?
                Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] :
                0.0
-
-    Rectangle {
-      border.width: 1
-      anchors.fill: parent
-      radius: parent.radius - 1
-      anchors.margins: parent.border.width
-      color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
-      border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
-    }
   }
 
   opacity: enabled ? 1 : 0.5

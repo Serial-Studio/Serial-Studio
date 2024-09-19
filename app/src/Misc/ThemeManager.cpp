@@ -40,16 +40,24 @@ Misc::ThemeManager::ThemeManager()
   : m_theme(0)
 {
   // Set theme files
-  QStringList themes = {
-      QStringLiteral(":/rcc/themes/Breeze Classic.json"),
-      QStringLiteral(":/rcc/themes/Breeze Dark.json"),
-      QStringLiteral(":/rcc/themes/Breeze Light.json"),
+  // clang-format off
+  m_availableThemes = {
+    QStringLiteral("Default"),
+    QStringLiteral("Outdoor Day"),
+    QStringLiteral("Outdoor Night"),
+    QStringLiteral("Breeze Light"),
+    QStringLiteral("Breeze Dark"),
+    QStringLiteral("macOS Light"),
+    QStringLiteral("macOS Dark"),
+    QStringLiteral("Yaru Light"),
+    QStringLiteral("Yaru Dark"),
   };
+  // clang-format on
 
   // Load theme files
-  foreach (auto theme, themes)
+  foreach (auto theme, m_availableThemes)
   {
-    QFile file(theme);
+    QFile file(QStringLiteral(":/rcc/themes/%1.json").arg(theme));
     if (file.open(QFile::ReadOnly))
     {
       auto document = QJsonDocument::fromJson(file.readAll());
@@ -109,9 +117,9 @@ const QJsonObject &Misc::ThemeManager::colors() const
  * @brief Returns a list of theme names that are available.
  * @return QStringList containing the names of all loaded themes.
  */
-QStringList Misc::ThemeManager::availableThemes() const
+const QStringList &Misc::ThemeManager::availableThemes() const
 {
-  return m_themes.keys();
+  return m_availableThemes;
 }
 
 /**
@@ -137,13 +145,42 @@ QColor Misc::ThemeManager::getColor(const QString &name) const
  */
 void Misc::ThemeManager::setTheme(const int index)
 {
+  // Validate index
   auto filteredIndex = index;
   if (index < 0 || index >= availableThemes().count())
     filteredIndex = 0;
 
+  // Update the theme & obtain the colors
   m_theme = filteredIndex;
   m_settings.setValue("Theme", filteredIndex);
   m_themeName = availableThemes().at(filteredIndex);
   m_colors = m_themes.value(m_themeName);
+
+  // Set application palette
+  QPalette palette;
+  palette.setColor(QPalette::Mid, getColor("mid"));
+  palette.setColor(QPalette::Dark, getColor("dark"));
+  palette.setColor(QPalette::Text, getColor("text"));
+  palette.setColor(QPalette::Base, getColor("base"));
+  palette.setColor(QPalette::Link, getColor("link"));
+  palette.setColor(QPalette::Light, getColor("light"));
+  palette.setColor(QPalette::Window, getColor("window"));
+  palette.setColor(QPalette::Shadow, getColor("shadow"));
+  palette.setColor(QPalette::Accent, getColor("accent"));
+  palette.setColor(QPalette::Button, getColor("button"));
+  palette.setColor(QPalette::Midlight, getColor("midlight"));
+  palette.setColor(QPalette::Highlight, getColor("highlight"));
+  palette.setColor(QPalette::WindowText, getColor("window_text"));
+  palette.setColor(QPalette::BrightText, getColor("bright_text"));
+  palette.setColor(QPalette::ButtonText, getColor("button_text"));
+  palette.setColor(QPalette::ToolTipBase, getColor("tooltip_base"));
+  palette.setColor(QPalette::ToolTipText, getColor("tooltip_text"));
+  palette.setColor(QPalette::LinkVisited, getColor("link_visited"));
+  palette.setColor(QPalette::AlternateBase, getColor("alternate_base"));
+  palette.setColor(QPalette::PlaceholderText, getColor("placeholder_text"));
+  palette.setColor(QPalette::HighlightedText, getColor("highlighted_text"));
+  qApp->setPalette(palette);
+
+  // Update UI
   Q_EMIT themeChanged();
 }

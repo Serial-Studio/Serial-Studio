@@ -119,8 +119,14 @@
         <file>scripts/frame-parser.js</file>
         <file>shaders/invert_color.frag</file>
         <file>shaders/invert_color.qsb</file>
-        <file>themes/Breeze Classic.json</file>
         <file>themes/Breeze Dark.json</file>
         <file>themes/Breeze Light.json</file>
+        <file>themes/Default.json</file>
+        <file>themes/macOS Dark.json</file>
+        <file>themes/macOS Light.json</file>
+        <file>themes/Outdoor Day.json</file>
+        <file>themes/Outdoor Night.json</file>
+        <file>themes/Yaru Dark.json</file>
+        <file>themes/Yaru Light.json</file>
     </qresource>
 </RCC>

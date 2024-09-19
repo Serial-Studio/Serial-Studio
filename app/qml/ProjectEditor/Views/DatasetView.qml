@@ -38,12 +38,25 @@ Widgets.Pane {
   // User interface elements
   //
   Page {
-    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.mid: Cpp_ThemeManager.colors["mid"]
+    palette.dark: Cpp_ThemeManager.colors["dark"]
     palette.text: Cpp_ThemeManager.colors["text"]
-    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.link: Cpp_ThemeManager.colors["link"]
+    palette.light: Cpp_ThemeManager.colors["light"]
     palette.window: Cpp_ThemeManager.colors["window"]
+    palette.shadow: Cpp_ThemeManager.colors["shadow"]
+    palette.accent: Cpp_ThemeManager.colors["accent"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.midlight: Cpp_ThemeManager.colors["midlight"]
     palette.highlight: Cpp_ThemeManager.colors["highlight"]
+    palette.windowText: Cpp_ThemeManager.colors["window_text"]
+    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
     palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
+    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
+    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
+    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 

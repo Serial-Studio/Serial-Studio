@@ -124,7 +124,7 @@ public:
   [[nodiscard]] int theme() const;
   [[nodiscard]] const QString &themeName() const;
   [[nodiscard]] const QJsonObject &colors() const;
-  [[nodiscard]] QStringList availableThemes() const;
+  [[nodiscard]] const QStringList &availableThemes() const;
   [[nodiscard]] QColor getColor(const QString &name) const;
 
 public slots:
@@ -136,6 +136,8 @@ private:
 
   QSettings m_settings;
   QJsonObject m_colors;
+
+  QStringList m_availableThemes;
   QMap<QString, QJsonObject> m_themes;
 };
 } // namespace Misc
