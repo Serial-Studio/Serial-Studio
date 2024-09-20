@@ -39,53 +39,77 @@
 // Private enums to keep track of which item the user selected/modified
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Enum representing top-level items in the project structure.
+ */
+// clang-format off
 typedef enum
 {
-  kRootItem,
-  kFrameParser,
+  kRootItem,     /**< Represents the root item of the project. */
+  kFrameParser,  /**< Represents the frame parser function item. */
 } TopLevelItem;
+// clang-format on
 
+/**
+ * @brief Enum representing items in the project view.
+ */
+// clang-format off
 typedef enum
 {
-  kProjectView_Title,
-  kProjectView_ItemSeparator,
-  kProjectView_FrameStartSequence,
-  kProjectView_FrameEndSequence,
-  kProjectView_FrameDecoder,
-  kProjectView_ThunderforestApiKey
+  kProjectView_Title,              /**< Represents the project title item. */
+  kProjectView_ItemSeparator,      /**< Represents the item separator. */
+  kProjectView_FrameStartSequence, /**< Represents the frame start sequence. */
+  kProjectView_FrameEndSequence,   /**< Represents the frame end sequence. */
+  kProjectView_FrameDecoder,       /**< Represents the frame decoder item. */
+  kProjectView_ThunderforestApiKey /**< Represents the Thunderforest API key. */
 } ProjectItem;
+// clang-format on
 
+/**
+ * @brief Enum representing items in the dataset view.
+ */
+// clang-format off
 typedef enum
 {
-  kDatasetView_Title,
-  kDatasetView_Index,
-  kDatasetView_Units,
-  kDatasetView_Widget,
-  kDatasetView_FFT,
-  kDatasetView_LED,
-  kDatasetView_LED_High,
-  kDatasetView_Plot,
-  kDatasetView_Min,
-  kDatasetView_Max,
-  kDatasetView_Alarm,
-  kDatasetView_FFT_Samples,
+  kDatasetView_Title,         /**< Represents the dataset title item. */
+  kDatasetView_Index,         /**< Represents the dataset frame index item. */
+  kDatasetView_Units,         /**< Represents the dataset units item. */
+  kDatasetView_Widget,        /**< Represents the dataset widget item. */
+  kDatasetView_FFT,           /**< Represents the FFT plot checkbox item. */
+  kDatasetView_LED,           /**< Represents the LED panel checkbox item. */
+  kDatasetView_LED_High,      /**< Represents the LED high (on) value item. */
+  kDatasetView_Plot,          /**< Represents the dataset plot mode item. */
+  kDatasetView_Min,           /**< Represents the dataset minimum value item. */
+  kDatasetView_Max,           /**< Represents the dataset maximum value item. */
+  kDatasetView_Alarm,         /**< Represents the dataset alarm value item. */
+  kDatasetView_FFT_Samples    /**< Represents the FFT window size item. */
 } DatasetItem;
+// clang-format on
 
+/**
+ * @brief Enum representing items in the group view.
+ */
+// clang-format off
 typedef enum
 {
-  kGroupView_Title,
-  kGroupView_Widget
+  kGroupView_Title,  /**< Represents the group title item. */
+  kGroupView_Widget  /**< Represents the group widget item. */
 } GroupItem;
+// clang-format on
 
 //------------------------------------------------------------------------------
-// Constructor/deconstructor & singleton
+// Constructor/deconstructor & singleton instance access function
 //------------------------------------------------------------------------------
 
 /**
- * Constructor function. Initializes internal members and configures the
- * signals/slots so that the editor can know if the user modified the JSON
- * document. Finally, the constructor configures signals/slots with the JSON
- * Generator to share the same JSON document file.
+ * @brief Constructor for the Project::Model class.
+ *
+ * Initializes the Model class by setting default values for member variables,
+ * generating the necessary combo box models, and connecting signals to handle J
+ * SON file changes.
+ *
+ * This constructor also loads the current JSON map file into the model or
+ * creates a new project if no file is present.
  */
 Project::Model::Model()
   : m_title("")
@@ -130,7 +154,9 @@ Project::Model::Model()
 }
 
 /**
- * Returns a pointer to the only instance of the editor class.
+ * @brief Retrieves the singleton instance of the Project::Model class.
+ *
+ * @return Reference to the singleton instance of Project::Model.
  */
 Project::Model &Project::Model::instance()
 {
@@ -142,11 +168,26 @@ Project::Model &Project::Model::instance()
 // Document status access functions
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Checks if the document has been modified.
+ *
+ * This function returns the current modification status of the project.
+ *
+ * @return True if the document is modified, false otherwise.
+ */
 bool Project::Model::modified() const
 {
   return m_modified;
 }
 
+/**
+ * @brief Retrieves the current view of the project.
+ *
+ * This function returns the current view mode (e.g., ProjectView, GroupView,
+ * DatasetView, etc.) that is active.
+ *
+ * @return The current view as a value from the CurrentView enum.
+ */
 Project::Model::CurrentView Project::Model::currentView() const
 {
   return m_currentView;
@@ -156,6 +197,14 @@ Project::Model::CurrentView Project::Model::currentView() const
 // Document information functions
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Retrieves the name of the JSON file associated with the project.
+ *
+ * If the file path is not empty, it extracts and returns the file name.
+ * If no file path is set, it returns "New Project".
+ *
+ * @return The name of the JSON file or "New Project" if no file is present.
+ */
 QString Project::Model::jsonFileName() const
 {
   if (!jsonFilePath().isEmpty())
@@ -167,6 +216,14 @@ QString Project::Model::jsonFileName() const
   return tr("New Project");
 }
 
+/**
+ * @brief Retrieves the default path for JSON project files.
+ *
+ * Returns the path where JSON project files are stored, creating the directory
+ * if it does not exist.
+ *
+ * @return The default file path for JSON project files.
+ */
 QString Project::Model::jsonProjectsPath() const
 {
   // Get file name and path
@@ -181,6 +238,14 @@ QString Project::Model::jsonProjectsPath() const
   return path;
 }
 
+/**
+ * @brief Retrieves the currently selected item's text.
+ *
+ * This function returns the text of the currently selected item in the tree
+ * model. If no item is selected, an empty string is returned.
+ *
+ * @return The selected item's text, or an empty string if nothing is selected.
+ */
 QString Project::Model::selectedText() const
 {
   if (!m_selectionModel || !m_treeModel)
@@ -191,6 +256,14 @@ QString Project::Model::selectedText() const
   return data.toString();
 }
 
+/**
+ * @brief Retrieves the currently selected item's icon.
+ *
+ * This function returns the icon associated with the currently selected item
+ * in the tree model. If no item is selected, an empty string is returned.
+ *
+ * @return The selected item's icon, or an empty string if nothing is selected.
+ */
 QString Project::Model::selectedIcon() const
 {
   if (!m_selectionModel || !m_treeModel)
@@ -201,31 +274,78 @@ QString Project::Model::selectedIcon() const
   return data.toString();
 }
 
+/**
+ * @brief Retrieves the project title.
+ *
+ * This function returns the title of the current project.
+ *
+ * @return A reference to the project title.
+ */
 const QString &Project::Model::title() const
 {
   return m_title;
 }
 
+/**
+ * @brief Retrieves the file path of the JSON file.
+ *
+ * This function returns the full path of the current JSON file associated with
+ * the project.
+ *
+ * @return A reference to the file path of the JSON file.
+ */
 const QString &Project::Model::jsonFilePath() const
 {
   return m_filePath;
 }
 
+/**
+ * @brief Retrieves the frame parser code.
+ *
+ * This function returns the code used for parsing frames in the project.
+ *
+ * @return A reference to the frame parser code.
+ */
 const QString &Project::Model::frameParserCode() const
 {
   return m_frameParserCode;
 }
 
+/**
+ * @brief Retrieves the Thunderforest API key used by the project.
+ *
+ * This function returns the API key used for accessing Thunderforest mapping
+ * services.
+ *
+ * @return A reference to the Thunderforest API key.
+ */
 const QString &Project::Model::thunderforestApiKey() const
 {
   return m_thunderforestApiKey;
 }
 
+/**
+ * @brief Retrieves the number of groups in the project.
+ *
+ * This function returns the total count of groups currently present in the
+ * project.
+ *
+ * @return The number of groups.
+ */
 int Project::Model::groupCount() const
 {
   return groups().count();
 }
 
+/**
+ * @brief Retrieves the dataset options for the selected dataset.
+ *
+ * This function returns a bitmask representing the options enabled for the
+ * selected dataset, such as whether it supports plotting, FFT, or specific
+ * widgets (bar, gauge, compass).
+ *
+ * @return A bitmask of dataset options as a quint8 value.
+ */
 quint8 Project::Model::datasetOptions() const
 {
   quint8 option = DatasetGeneric;
@@ -248,6 +368,14 @@ quint8 Project::Model::datasetOptions() const
   return option;
 }
 
+/**
+ * @brief Retrieves the list of groups in the project.
+ *
+ * This function returns a reference to the vector of JSON::Group objects,
+ * representing all the groups present in the project.
+ *
+ * @return A reference to the vector of groups.
+ */
 const QVector<JSON::Group> &Project::Model::groups() const
 {
   return m_groups;
@@ -257,26 +385,67 @@ const QVector<JSON::Group> &Project::Model::groups() const
 // Model access functions
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Retrieves the tree model used in the project.
+ *
+ * This function returns the @c CustomModel that represents the tree structure
+ * of the project.
+ *
+ * @return A pointer to the tree model.
+ */
 Project::CustomModel *Project::Model::treeModel() const
 {
   return m_treeModel;
 }
 
+/**
+ * @brief Retrieves the selection model.
+ *
+ * This function returns the @c QItemSelectionModel used to manage and track
+ * item selections in the tree model.
+ *
+ * @return A pointer to the selection model.
+ */
 QItemSelectionModel *Project::Model::selectionModel() const
 {
   return m_selectionModel;
 }
 
+/**
+ * @brief Retrieves the model for the current group.
+ *
+ * This function returns the @c CustomModel that represents the data of the
+ * currently selected group in the project.
+ *
+ * @return A pointer to the group model.
+ */
 Project::CustomModel *Project::Model::groupModel() const
 {
   return m_groupModel;
 }
 
+/**
+ * @brief Retrieves the project model.
+ *
+ * This function returns the @c CustomModel that represents the basic parameters
+ * of the project, such as it's title, the start/end sequences and data
+ * conversion method to use.
+ *
+ * @return A pointer to the project model.
+ */
 Project::CustomModel *Project::Model::projectModel() const
 {
   return m_projectModel;
 }
 
+/**
+ * @brief Retrieves the model for the current dataset.
+ *
+ * This function returns the @c CustomModel that represents the data of the
+ * currently selected dataset in the project.
+ *
+ * @return A pointer to the dataset model.
+ */
 Project::CustomModel *Project::Model::datasetModel() const
 {
   return m_datasetModel;
@@ -286,6 +455,18 @@ Project::CustomModel *Project::Model::datasetModel() const
 // Document saving/export
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Prompts the user to save unsaved changes in the project.
+ *
+ * If the project has been modified, this function asks the user whether they
+ * want to save, discard, or cancel the operation.
+ *
+ * It will save the project if the user selects "Save" and return a
+ * corresponding boolean value based on the user's choice.
+ *
+ * @return True if the user chooses to save or discard changes, false if the
+ *         user cancels the operation.
+ */
 bool Project::Model::askSave()
 {
   if (!modified())
@@ -305,6 +486,16 @@ bool Project::Model::askSave()
   return saveJsonFile();
 }
 
+/**
+ * @brief Saves the current project as a JSON file.
+ *
+ * This function saves the current state of the project, including its title,
+ * decoder settings, and groups, into a JSON file. If the file path is not
+ * specified, the user is prompted to provide one. It writes the JSON data to
+ * disk and loads the saved file into the application.
+ *
+ * @return True if the project was saved successfully, false otherwise.
+ */
 bool Project::Model::saveJsonFile()
 {
   // Validate project title
@@ -366,6 +557,18 @@ bool Project::Model::saveJsonFile()
 // Document initialization
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Initializes a new JSON project.
+ *
+ * This function clears the current groups, resets project properties
+ * (such as the title, separator, frame decoder, and sequences), and sets
+ * default values for the project.
+ *
+ * It also updates the internal models, removes the modified state, and
+ * switches the view to the project view.
+ *
+ * Relevant signals are emitted to notify the UI of these changes.
+ */
 void Project::Model::newJsonFile()
 {
   // Clear groups list
@@ -404,6 +607,14 @@ void Project::Model::newJsonFile()
 // Document loading/import
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Opens a JSON file by prompting the user to select a file.
+ *
+ * This function opens a file dialog for the user to select a JSON project file.
+ * If a valid file is selected, the project is loaded from the file.
+ *
+ * If the file path is invalid or no file is selected, the operation is aborted.
+ */
 void Project::Model::openJsonFile()
 {
   // Let user select a file
@@ -418,6 +629,19 @@ void Project::Model::openJsonFile()
   openJsonFile(path);
 }
 
+/**
+ * @brief Opens and loads a JSON project file from the given path.
+ *
+ * This function opens a JSON file from the specified file path, validates the
+ * content, and loads the project data into the application.
+ *
+ * It reads the project settings, groups, and updates the models accordingly.
+ *
+ * It also modifies the @c IO::Manager settings based on the loaded data and
+ * emitssignals to update the UI.
+ *
+ * @param path The file path of the JSON project to load.
+ */
 void Project::Model::openJsonFile(const QString &path)
 {
   // Open file
@@ -491,6 +715,14 @@ void Project::Model::openJsonFile(const QString &path)
 // Group/dataset operations
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Deletes the currently selected group.
+ *
+ * This function prompts the user for confirmation before deleting the currently
+ * selected group. If the user confirms, the group is removed from the project,
+ * and group and dataset IDs areregenerated. The tree model is rebuilt,
+ * the modified flag is set, and the project item is selected in the UI.
+ */
 void Project::Model::deleteCurrentGroup()
 {
   // Ask the user for confirmation
@@ -524,6 +756,15 @@ void Project::Model::deleteCurrentGroup()
   m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
 }
 
+/**
+ * @brief Deletes the currently selected dataset.
+ *
+ * This function prompts the user for confirmation before deleting the currently
+ * selected dataset. If the user confirms, the dataset is removed from the
+ * associated group, and dataset IDs within the group are reassigned.
+ * The tree model is rebuilt, the modified flag is set, and the parent group is
+ * selected in the UI.
+ */
 void Project::Model::deleteCurrentDataset()
 {
   // Ask the user for confirmation
@@ -567,8 +808,54 @@ void Project::Model::deleteCurrentDataset()
   }
 }
 
-void Project::Model::duplicateCurrentGroup() {}
+/**
+ * @brief Duplicates the currently selected group.
+ *
+ * This function creates a copy of the currently selected group, including all
+ * its datasets. The new group is registered, the tree model is updated, and
+ * the modified flag is set. The duplicated group is then selected in the UI.
+ */
+void Project::Model::duplicateCurrentGroup()
+{
+  // Initialize a new group
+  auto group = JSON::Group(m_groups.count());
+  group.m_widget = m_selectedGroup.widget();
+  group.m_title = tr("%1 (Copy)").arg(m_selectedGroup.title());
+  for (auto i = 0; i < m_selectedGroup.m_datasets.count(); ++i)
+  {
+    auto dataset = m_selectedGroup.m_datasets.at(i);
+    dataset.m_groupId = group.groupId();
+    dataset.m_index = nextDatasetIndex() + i;
+    group.m_datasets.append(dataset);
+  }
 
+  // Register the group
+  m_groups.append(group);
+
+  // Build tree model & set modification flag
+  buildTreeModel();
+  setModified(true);
+
+  // Select the group
+  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
+  {
+    if (i.value().groupId() == group.groupId())
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
+  }
+}
+
+/**
+ * @brief Duplicates the currently selected dataset.
+ *
+ * This function creates a copy of the currently selected dataset.
+ * The new dataset is registered under the same group, the tree model is
+ * updated, and the modified flag is set. The duplicated dataset is then
+ * selected in the UI.
+ */
 void Project::Model::duplicateCurrentDataset()
 {
   // Initialize a new dataset
@@ -597,8 +884,17 @@ void Project::Model::duplicateCurrentDataset()
   }
 }
 
-void Project::Model::changeDatasetParentGroup() {}
-
+/**
+ * @brief Adds a new dataset to the currently selected group.
+ *
+ * This function creates a new dataset based on the provided option, assigns it
+ * a unique title, ID, and frame index, and adds it to the selected group.
+ * The tree model is rebuilt, the modification flag is set, and the group is
+ * reselected to rebuild the dataset model.
+ *
+ * @param option The dataset option that defines the type of dataset to add
+ *               (e.g., Plot, FFT, Bar, Gauge, Compass).
+ */
 void Project::Model::addDataset(const DatasetOption option)
 {
   // Initialize a new dataset
@@ -691,6 +987,18 @@ void Project::Model::addDataset(const DatasetOption option)
   }
 }
 
+/**
+ * @brief Changes the selected dataset's options.
+ *
+ * This function modifies the currently selected dataset's options (e.g.,
+ * enabling/disabling plots, FFT, or widgets) based on the provided option and
+ * checked state. The dataset is updated, the tree model is rebuilt, and the
+ * dataset is reselected to rebuild the dataset model.
+ *
+ * @param option The dataset option to modify (e.g., Plot, Bar, Gauge, etc).
+ * @param checked A boolean indicating whether the option should be enabled
+ *                (true) or disabled (false).
+ */
 void Project::Model::changeDatasetOption(const DatasetOption option,
                                          const bool checked)
 {
@@ -737,6 +1045,17 @@ void Project::Model::changeDatasetOption(const DatasetOption option,
   }
 }
 
+/**
+ * @brief Adds a new group to the project with the specified title and widget.
+ *
+ * This function creates a new group, ensuring the title is unique by appending
+ * a number if necessary. It then registers the group, sets its widget type,
+ * updates the tree model, and sets the modified flag. The newly added group is
+ * selected in the user interface.
+ *
+ * @param title The desired title for the new group.
+ * @param widget The widget type associated with the group.
+ */
 void Project::Model::addGroup(const QString &title, const GroupWidget widget)
 {
   // Check if any existing group has the same title
@@ -790,6 +1109,23 @@ void Project::Model::addGroup(const QString &title, const GroupWidget widget)
   }
 }
 
+/**
+ * @brief Sets the widget type for the specified group and optionally creates
+ *        associated datasets.
+ *
+ * This function assigns a widget type to the specified group based on the
+ * provided `GroupWidget` value. If the group contains existing datasets and a
+ * new widget type is selected, the user is prompted for confirmation as
+ * existing datasets may be deleted.
+ *
+ * Depending on the selected widget (e.g., Accelerometer, Gyroscope, GPS), the
+ * function may create default datasets with specific properties. The group is
+ * updated in the internal list and the UI is refreshed.
+ *
+ * @param group The index of the group to modify.
+ * @param widget The type of widget to assign to the group.
+ * @return True if the widget was successfully assigned, false otherwise.
+ */
 bool Project::Model::setGroupWidget(const int group, const GroupWidget widget)
 {
   // Get group data
@@ -963,6 +1299,15 @@ bool Project::Model::setGroupWidget(const int group, const GroupWidget widget)
 // Frame parser code modification
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Sets the frame parser code for the project.
+ *
+ * This function updates the frame parser code with the provided string if it
+ * differs from the current value. It also sets the project as modified and
+ * emits the `frameParserCodeChanged()` signal to notify the UI of the change.
+ *
+ * @param code The new frame parser code to set.
+ */
 void Project::Model::setFrameParserCode(const QString &code)
 {
   if (code != m_frameParserCode)
@@ -978,6 +1323,21 @@ void Project::Model::setFrameParserCode(const QString &code)
 // Model generation code
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Builds the tree model that represents the hierarchical structure of
+ *        the project.
+ *
+ * This function clears the current tree model and its associated selection
+ * model, then creates a new `CustomModel` for the project hierarchy.
+ *
+ * It populates the tree with the root project information, the frame parser
+ * function, and groups with their respective datasets.
+ *
+ * The function also restores the expanded state of the tree items from the
+ * previous model and sets up the selection model for interaction.
+ *
+ * Finally, it emits the `treeModelChanged()` signal to update the UI.
+ */
 void Project::Model::buildTreeModel()
 {
   // Clear model/pointer maps
@@ -1099,6 +1459,18 @@ void Project::Model::buildTreeModel()
   Q_EMIT treeModelChanged();
 }
 
+/**
+ * @brief Builds the project model that contains project configuration settings.
+ *
+ * This function creates a new `CustomModel` for managing and displaying
+ * project-level settings such as the title, separator sequence, frame start
+ * and end delimiters, data conversion method, and the Thunderforest API key.
+ *
+ * Each item in the model is editable and has associated metadata like
+ * placeholders and descriptions. The function also sets up a signal to handle
+ * changes made to the model items and emits the `projectModelChanged()` signal
+ * to update the user interface.
+ */
 void Project::Model::buildProjectModel()
 {
   // Clear the existing model
@@ -1189,6 +1561,19 @@ void Project::Model::buildProjectModel()
   Q_EMIT projectModelChanged();
 }
 
+/**
+ * @brief Builds the group model for managing the settings of a specific group.
+ *
+ * This function creates a new `CustomModel` to represent the settings of the
+ * provided group. It includes editable fields such as the group's title and
+ * associated widget. The widget selection is pre-populated with available
+ * options, and the current widget is set based on the group's data.
+ *
+ * The function also sets up a signal to handle item changes in the model and
+ * emits the `groupModelChanged()` signal to update the user interface.
+ *
+ * @param group The group for which the model is being built.
+ */
 void Project::Model::buildGroupModel(const JSON::Group &group)
 {
   // Clear the existing model
@@ -1249,6 +1634,24 @@ void Project::Model::buildGroupModel(const JSON::Group &group)
   emit groupModelChanged();
 }
 
+/**
+ * @brief Builds the dataset model for managing the settings of a dataset.
+ *
+ * This function creates a new `CustomModel` to represent the settings of the
+ * provided dataset.
+ *
+ * It includes editable fields such as the dataset title, frame index,
+ * measurement units, widget type, minimum and maximum values, alarm values,
+ * plotting modes, FFT settings, and LED panel options.
+ *
+ * The appropriate widget and plot mode indices are calculated based on the
+ * dataset's current configuration.
+ *
+ * The function also sets up a signal to handle item changes in the model and
+ * emits the `datasetModelChanged()` signal to update the user interface.
+ *
+ * @param dataset The dataset for which the model is being built.
+ */
 void Project::Model::buildDatasetModel(const JSON::Dataset &dataset)
 {
   // Clear the existing model
@@ -1449,6 +1852,13 @@ void Project::Model::buildDatasetModel(const JSON::Dataset &dataset)
 // Re-generate project model when user opens another JSON file
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Reloads the project model when a new JSON file is loaded.
+ *
+ * This function checks if the current JSON file path differs from the one
+ * loaded by `JSON::Generator`. If they differ, it opens the new JSON file and
+ * reloads the project model.
+ */
 void Project::Model::onJsonLoaded()
 {
   if (jsonFilePath() != JSON::Generator::instance().jsonMapFilepath())
@@ -1459,6 +1869,16 @@ void Project::Model::onJsonLoaded()
 // Re-generate combobox data sources when the language is changed
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Generates data sources for combo boxes used in the project.
+ *
+ * This function initializes the data lists for various combo box models used
+ * in the project. It includes options for FFT window sizes, decoder methods,
+ * group-level widgets, dataset-level widgets, and plotting options.
+ *
+ * These sources are re-generated when the language is changed to ensure proper
+ * localization.
+ */
 void Project::Model::generateComboBoxModels()
 {
   // Initialize FFT window sizes list
@@ -1508,12 +1928,29 @@ void Project::Model::generateComboBoxModels()
 // Document status modification
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Sets the modification status of the project.
+ *
+ * This function updates the modified flag of the project and emits the
+ * `modifiedChanged()` signal to notify the user interface of the change.
+ *
+ * @param modified A boolean indicating whether the project has been modified (
+ *                 true) or not (false).
+ */
 void Project::Model::setModified(const bool modified)
 {
   m_modified = modified;
   Q_EMIT modifiedChanged();
 }
 
+/**
+ * @brief Sets the current view of the project.
+ *
+ * This function updates the current view mode of the project and emits the
+ * `currentViewChanged()` signal to notify the user interface of the change.
+ *
+ * @param currentView The new view mode, selected from the `CurrentView` enum.
+ */
 void Project::Model::setCurrentView(const CurrentView currentView)
 {
   m_currentView = currentView;
@@ -1524,6 +1961,19 @@ void Project::Model::setCurrentView(const CurrentView currentView)
 // Model modification functions
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Handles changes made to a group item in the group model.
+ *
+ * This function processes changes to group items such as the group title or
+ * widget type. It validates the modified item, updates the group title or
+ * widget accordingly, and rebuilds the tree model to reflect the changes.
+ *
+ * If the group was modified, it sets the modified flag. Finally, it reselects
+ * the group in the user interface.
+ *
+ * @param item A pointer to the modified `QStandardItem` representing the
+ *             changed group property.
+ */
 void Project::Model::onGroupItemChanged(QStandardItem *item)
 {
   // Validate item pointer
@@ -1537,30 +1987,72 @@ void Project::Model::onGroupItemChanged(QStandardItem *item)
       widgets.append(i.key());
 
   // Obtain which item was modified & its new value
-  const auto id = item->data(ParameterType);
+  const auto id = static_cast<GroupItem>(item->data(ParameterType).toInt());
   const auto value = item->data(EditableValue);
 
-  // Update dataset parameters accordingly
-  switch (static_cast<GroupItem>(id.toInt()))
+  // Obtain group ID
+  bool modified = false;
+  const auto groupId = m_selectedGroup.groupId();
+
+  // Change group title
+  if (id == kGroupView_Title)
   {
-    case kGroupView_Title:
-      m_selectedGroup.m_title = value.toString();
-      break;
-    case kGroupView_Widget:
-      m_selectedGroup.m_widget = widgets.at(value.toInt());
-      break;
-    default:
-      break;
+    modified = m_selectedGroup.m_title != value.toString();
+    m_selectedGroup.m_title = value.toString();
+    m_groups.replace(groupId, m_selectedGroup);
   }
 
-  // Replace group in project
-  m_groups.replace(m_selectedGroup.groupId(), m_selectedGroup);
-  buildTreeModel();
+  // Change group widget
+  else if (id == kGroupView_Widget)
+  {
+    // Obtain widget enum from string
+    GroupWidget widget;
+    const auto widgetStr = widgets.at(value.toInt());
+    if (widgetStr == "accelerometer")
+      widget = Accelerometer;
+    else if (widgetStr == "multiplot")
+      widget = MultiPlot;
+    else if (widgetStr == "gyro")
+      widget = Gyroscope;
+    else if (widgetStr == "map")
+      widget = GPS;
+    else
+      widget = CustomGroup;
 
-  // Mark document as modified
-  setModified(true);
+    // Update group
+    modified = setGroupWidget(groupId, widget);
+  }
+
+  // Re-build tree model
+  buildTreeModel();
+  if (modified)
+    setModified(true);
+
+  // Select current group again
+  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
+  {
+    if (i.value().groupId() == groupId)
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
+  }
 }
 
+/**
+ * @brief Handles changes made to a project item in the project model.
+ *
+ * This function processes changes to project items such as the title,
+ * separator, frame sequences, decoder method, and Thunderforest API key.
+ *
+ * It updates the relevant internal members and emits signals to notify the
+ * user interface of changes. After updating the internal state, it marks the
+ * document as modified.
+ *
+ * @param item A pointer to the modified `QStandardItem` representing the
+ *             changed project property.
+ */
 void Project::Model::onProjectItemChanged(QStandardItem *item)
 {
   // Validate item pointer
@@ -1602,6 +2094,18 @@ void Project::Model::onProjectItemChanged(QStandardItem *item)
   setModified(true);
 }
 
+/**
+ * @brief Handles changes made to a dataset item in the dataset model.
+ *
+ * This function processes changes to dataset items such as the title, index,
+ * units, widget type, FFT settings, LED settings, plotting mode, and
+ * min/max/alarm values. It updates the relevant parameters of the selected
+ * dataset, replaces the dataset in its parent group, and rebuilds the tree
+ * model. After updating the dataset, it marks the document as modified.
+ *
+ * @param item A pointer to the modified `QStandardItem` representing the
+ *             changed dataset property.
+ */
 void Project::Model::onDatasetItemChanged(QStandardItem *item)
 {
   // Validate item pointer
@@ -1684,6 +2188,20 @@ void Project::Model::onDatasetItemChanged(QStandardItem *item)
 // Change view & select group/dataset when user navigates project structure
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Handles changes in the current selection within the project structure.
+ *
+ * This function responds to user navigation within the project structure by
+ * checking the type of item selected (group, dataset, or root item).
+ *
+ * It updates the view accordingly, building the appropriate model (group,
+ * dataset, or project) and setting the current view to the corresponding
+ * mode (e.g., GroupView, DatasetView, FrameParserView, or ProjectView).
+ *
+ * @param current The currently selected index in the tree model.
+ * @param previous The previously selected index in the tree model
+ *                 (unused in this function).
+ */
 void Project::Model::onCurrentSelectionChanged(const QModelIndex &current,
                                                const QModelIndex &previous)
 {
@@ -1725,9 +2243,18 @@ void Project::Model::onCurrentSelectionChanged(const QModelIndex &current,
 }
 
 //------------------------------------------------------------------------------
-// Functions to automatically set dataset indexes & titles
+// Function to automatically set dataset indexes
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Determines the next available dataset index.
+ *
+ * This function iterates through all datasets in the project to find the
+ * maximum dataset index. It then returns the next available index, which is
+ * one greater than the current maximum.
+ *
+ * @return The next available dataset index.
+ */
 int Project::Model::nextDatasetIndex()
 {
   int maxIndex = 1;
@@ -1748,6 +2275,18 @@ int Project::Model::nextDatasetIndex()
 // Save & restore expanded items of project structure upon modification
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Recursively saves the expanded state of tree view items.
+ *
+ * This function stores the expanded state of the given `QStandardItem` and its
+ * child items in a `QHash`, with the item's text serving as the key.
+ *
+ * The expanded state is saved recursively for all child items.
+ *
+ * @param item Pointer to the `QStandardItem` whose state is being saved.
+ * @param map A reference to a `QHash` that stores the state of each item.
+ * @param title The current item's title, used as the key in the hash.
+ */
 void Project::Model::saveExpandedStateMap(QStandardItem *item,
                                           QHash<QString, bool> &map,
                                           const QString &title)
@@ -1768,6 +2307,18 @@ void Project::Model::saveExpandedStateMap(QStandardItem *item,
   }
 }
 
+/**
+ * @brief Restores the expanded state of tree view items.
+ *
+ * This function restores the expanded state of the given `QStandardItem` and
+ * based on the saved states in a `QHash`.
+ *
+ * If an item is not found in the hash, it is expanded  by default.
+ *
+ * @param item A pointer to the `QStandardItem` whose state is being restored.
+ * @param map A reference to a `QHash` containing the saved expanded states.
+ * @param title The current item's title, used to look up its state in the hash.
+ */
 void Project::Model::restoreExpandedStateMap(QStandardItem *item,
                                              QHash<QString, bool> &map,
                                              const QString &title)

@@ -31,6 +31,35 @@
 namespace Project
 {
 class CustomModel;
+
+/**
+ * @brief The core class for managing the project structure and data models in
+ *        the application.
+ *
+ * The `Model` class handles the loading, saving, and modification of project
+ * data from JSON files.
+ *
+ * It provides access to project properties such as groups, datasets, and
+ * settings. The class supports operations for modifying the project structure,
+ * including adding, deleting, and duplicating groups and datasets.
+ *
+ * It also builds and manages various models that represent the project's
+ * hierarchical data, such as the tree model, group model, and dataset model.
+ *
+ * Key functionalities include:
+ * - Loading and saving projects from/to JSON files.
+ * - Managing and organizing groups and datasets.
+ * - Handling user interactions such as changing the view and editing
+ *   project properties.
+ * - Emitting signals to notify the user interface of changes.
+ *
+ * This class follows a singleton pattern, ensuring there is only one instance
+ * managing the project.
+ *
+ * It integrates closely with other components of the application, including
+ * the tree view for project navigation and data parsing mechanisms for frame
+ * analysis.
+ */
 class Model : public QObject
 {
   // clang-format off
@@ -208,7 +237,6 @@ public slots:
   void deleteCurrentDataset();
   void duplicateCurrentGroup();
   void duplicateCurrentDataset();
-  void changeDatasetParentGroup();
   void addDataset(const DatasetOption options);
   void changeDatasetOption(const DatasetOption option, const bool checked);
 
@@ -277,6 +305,21 @@ private:
   JSON::Dataset m_selectedDataset;
 };
 
+/**
+ * @brief A custom data model extending QStandardItemModel for managing
+ *        project-specific data in the UI.
+ *
+ * The `CustomModel` class is a specialized model used for representing
+ * different types of project data (such as groups, datasets, and settings) in
+ * the user interface. It provides the ability to define custom roles for
+ * accessing item properties in QML, enabling dynamic interaction with the
+ * project data in a tree view or other UI components.
+ *
+ * The class overrides the `roleNames()` function to return a custom set of
+ * roles, which are essential for mapping data between the C++ backend and the
+ * QML frontend. It supports common Qt item model functionalities, allowing data
+ * to be set, modified, and accessed within the project structure.
+ */
 class CustomModel : public QStandardItemModel
 {
 public:

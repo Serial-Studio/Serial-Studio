@@ -221,19 +221,6 @@ Widgets.Pane {
         }
 
         //
-        // Change group
-        //
-        Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
-          text: qsTr("Change Group")
-          Layout.alignment: Qt.AlignVCenter
-          onClicked: Cpp_Project_Model.changeDatasetParentGroup()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/icons/project-editor/actions/change-group.svg"
-        }
-
-        //
         // Delete dataset
         //
         Widgets.BigButton {
