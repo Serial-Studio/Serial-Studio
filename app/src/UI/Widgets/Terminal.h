@@ -147,8 +147,8 @@ public slots:
   void setVt100Emulation(const bool enabled);
   void setUndoRedoEnabled(const bool enabled);
   void setPlaceholderText(const QString &text);
-  void scrollToBottom(const bool repaint = false);
   void setMaximumBlockCount(const int maxBlockCount);
+  void scrollToBottom(const bool repaint = false);
 
 private slots:
   void repaint();
@@ -167,7 +167,7 @@ private:
   void clearFromStartToCursor();
   void clearFromCursorToEndOfLine();
   void clearFromStartOfLineToCursor();
-  void moveCursorTo(const QString &params);
+  void moveCursorTo(int row, int col);
   void applyTextFormatting(const QString &params);
 
 private:

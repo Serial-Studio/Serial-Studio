@@ -24,6 +24,7 @@
 #include <QScrollBar>
 
 #include "IO/Console.h"
+#include "IO/Manager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/Terminal.h"
@@ -362,7 +363,7 @@ void Widgets::Terminal::setAutoscroll(const bool enabled)
 
   // Scroll to bottom if autoscroll is enabled
   if (enabled)
-    scrollToBottom(true);
+    scrollToBottom();
 
   // Update console configuration
   IO::Console::instance().setAutoscroll(enabled);
@@ -455,7 +456,7 @@ void Widgets::Terminal::scrollToBottom(const bool repaint)
   auto lineCount = m_textEdit.document()->blockCount();
   auto visibleLines = qRound(height() / m_textEdit.fontMetrics().height());
 
-  // Abort operation if control is not visible
+  // Abort operation no text is visible
   if (visibleLines <= 0)
     return;
 
@@ -469,7 +470,7 @@ void Widgets::Terminal::scrollToBottom(const bool repaint)
   else
     bar->setValue(0);
 
-  // Trigger UI repaint
+  // Trigger UI repaint if requested
   if (repaint)
     requestRepaint();
 }
@@ -566,11 +567,11 @@ void Widgets::Terminal::addText(const QString &text, const bool enableVt100)
   if (enableVt100)
     textToInsert = vt100Processing(text);
 
-  // Clear terminal scrollback after 10000 lines
-  if (m_textEdit.blockCount() >= 10000)
+  // Ensure that at most we show 1000 lines
+  if (m_textEdit.blockCount() > 1000)
     m_textEdit.clear();
 
-  // Add text at the end of the text document
+  // Add text at the current cursor position
   QTextCursor cursor(m_textEdit.document());
   cursor.beginEditBlock();
   cursor.movePosition(QTextCursor::End);
@@ -578,7 +579,6 @@ void Widgets::Terminal::addText(const QString &text, const bool enableVt100)
   cursor.endEditBlock();
 
   // Autoscroll to bottom (if needed)
-  updateScrollbarVisibility();
   if (autoscroll())
     scrollToBottom();
 
@@ -604,17 +604,57 @@ QString Widgets::Terminal::vt100Processing(const QString &data)
 {
   QString result;
   int i = 0;
+
   while (i < data.length())
   {
-    if (data[i] == '\x1b')
+    if (data[i] == '\xFF') // Telnet IAC (Interpret As Command) - 0xFF
     {
-      // Escape character
+      // Handle Telnet commands
+      if (i + 1 < data.length())
+      {
+        char command = data[i + 1].toLatin1();
+        if (command == '\xF0') // Telnet SE (End of subnegotiation)
+        {
+          // Handle subnegotiation end
+          i += 2;
+          continue;
+        }
+        else if (command == '\xFB' || command == '\xFD') // WILL or DO
+        {
+          // Handle Telnet WILL or DO (option negotiation)
+          // We can inspect the following byte for the option code.
+          i += 3; // Skip the IAC, command, and option byte
+          continue;
+        }
+        else if (command == '\xFA') // Telnet SB (subnegotiation start)
+        {
+          // Handle subnegotiation start (for things like NAWS)
+          // Typically you would capture the subnegotiation data here
+          i += 2;
+          while (i < data.length() && data[i] != '\xFF')
+            i++; // Move through subnegotiation data
+          continue;
+        }
+        else
+        {
+          // Skip over any unhandled Telnet commands
+          i += 2;
+          continue;
+        }
+      }
+    }
+    else if (data[i] == '\x1b') // ANSI/VT-100 Escape character
+    {
       if (data.mid(i, 2) == "\x1b[")
       {
-        // Parse CSI sequence
         i += 2; // Skip the escape and [
+
+        // Initialize parameters string for the escape sequence
         QString params;
-        while (i < data.length() && data[i].isDigit())
+
+        // Extract parameters until we find a non-digit or semicolon (indicating
+        // we are in the CSI sequence)
+        while (i < data.length() && (data[i].isDigit() || data[i] == ';'))
         {
           params += data[i];
           ++i;
@@ -656,10 +696,24 @@ QString Widgets::Terminal::vt100Processing(const QString &data)
           continue;
         }
 
-        // Cursor positioning
+        // Cursor positioning command \x1b[<row>;<col>H or \x1b[<row>;<col>f
         else if (data[i] == 'H' || data[i] == 'f')
         {
-          moveCursorTo(params);
+          // Default row and column to (1, 1) for \x1b[H (move to home position)
+          int row = 1, col = 1;
+
+          if (!params.isEmpty())
+          {
+            QStringList coordinates = params.split(';');
+            if (coordinates.size() > 0)
+              row = coordinates[0].toInt(); // Row number
+            if (coordinates.size() > 1)
+              col = coordinates[1].toInt(); // Column number
+          }
+
+          // Call moveCursorTo with the parsed row and column
+          moveCursorTo(row, col);
+
           ++i;
           continue;
         }
@@ -668,6 +722,7 @@ QString Widgets::Terminal::vt100Processing(const QString &data)
       }
     }
 
+    // Handle normal text data by appending to the result
     result += data[i];
     ++i;
   }
@@ -710,21 +765,40 @@ void Widgets::Terminal::clearFromStartOfLineToCursor()
   cursor.removeSelectedText();
 }
 
-void Widgets::Terminal::moveCursorTo(const QString &params)
+void Widgets::Terminal::moveCursorTo(int row, int col)
 {
+  if (autoscroll())
+    scrollToBottom();
+
+  // Get the current cursor position and visible area
   QTextCursor cursor = m_textEdit.textCursor();
-  int row = 1, col = 1;
-  QStringList coords = params.split(';');
-  if (coords.size() >= 2)
-  {
-    row = coords[0].toInt();
-    col = coords[1].toInt();
-  }
 
+  // Get the block count (lines) in the document
+  int totalBlockCount = m_textEdit.document()->blockCount();
+
+  // Get the first visible block index (starting at the top of the visible area)
+  int firstBlock = m_textEdit.cursorForPosition(QPoint(0, 0)).blockNumber();
+
+  // Move cursor to the visible area (relative to the viewport)
+  int targetBlock = firstBlock + row - 1;
+
+  // Ensure target block is within valid range
+  if (targetBlock < 0)
+    targetBlock = 0;
+  if (targetBlock >= totalBlockCount)
+    targetBlock = totalBlockCount - 1;
+
+  // Move to the target block (row)
   cursor.movePosition(QTextCursor::Start);
-  cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, row - 1);
-  cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, col - 1);
+  for (int i = 0; i < targetBlock; ++i)
+    cursor.movePosition(QTextCursor::Down);
 
+  // Move to the start of the block and then move to the desired column
+  cursor.movePosition(QTextCursor::StartOfBlock);
+  for (int i = 1; i < col; ++i)
+    cursor.movePosition(QTextCursor::Right);
+
+  // Set the new cursor position in the text edit
   m_textEdit.setTextCursor(cursor);
 }
 
