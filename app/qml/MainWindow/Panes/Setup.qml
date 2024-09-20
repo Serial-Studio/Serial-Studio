@@ -71,6 +71,7 @@ Widgets.Pane {
     property alias manual: commManual.checked
     property alias tabIndex: tab.currentIndex
     property alias csvExport: csvLogging.checked
+    property alias driver: driverCombo.currentIndex
 
     //
     // App settings
@@ -137,11 +138,14 @@ Widgets.Pane {
         color: Cpp_ThemeManager.colors["pane_section_label"]
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } ComboBox {
-        id: _driverCombo
+        id: driverCombo
         Layout.fillWidth: true
         model: Cpp_IO_Manager.availableDrivers
         displayText: qsTr("I/O Interface: %1").arg(currentText)
-        onCurrentIndexChanged: Cpp_IO_Manager.selectedDriver = currentIndex
+        onCurrentIndexChanged: {
+          if (Cpp_IO_Manager.selectedDriver !== currentIndex)
+            Cpp_IO_Manager.selectedDriver = currentIndex
+        }
       }
 
       //

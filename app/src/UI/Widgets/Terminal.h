@@ -27,39 +27,6 @@
 
 namespace Widgets
 {
-class FormattedText
-{
-public:
-  FormattedText() = default;
-  FormattedText(const QString &txt,
-                const QTextCharFormat &fmt = QTextCharFormat())
-    : text(txt)
-    , format(fmt)
-  {
-  }
-
-  QString text;
-  QTextCharFormat format;
-};
-
-class AnsiEscapeCodeHandler
-{
-public:
-  QVector<FormattedText> parseText(const FormattedText &input);
-  void setTextEdit(QPlainTextEdit *widget);
-  void endFormatScope();
-
-private:
-  void setFormatScope(const QTextCharFormat &charFormat);
-
-  QString m_pendingText;
-  QPlainTextEdit *textEdit;
-  QString m_alternateTerminator;
-  QTextCharFormat m_previousFormat;
-  bool m_previousFormatClosed = true;
-  bool m_waitingForTerminator = false;
-};
-
 class Terminal : public UI::DeclarativeWidget
 {
   // clang-format off
@@ -191,8 +158,17 @@ private slots:
   void addText(const QString &text, const bool enableVt100);
 
 private:
-  QString vt100Processing(const QString &data);
   void requestRepaint(const bool textChanged = false);
+
+  // VT-100 emulation
+  QString vt100Processing(const QString &data);
+  void clearEntireLine();
+  void clearFromCursorToEnd();
+  void clearFromStartToCursor();
+  void clearFromCursorToEndOfLine();
+  void clearFromStartOfLineToCursor();
+  void moveCursorTo(const QString &params);
+  void applyTextFormatting(const QString &params);
 
 private:
   bool m_repaint;
@@ -202,6 +178,5 @@ private:
   bool m_copyAvailable;
 
   QPlainTextEdit m_textEdit;
-  AnsiEscapeCodeHandler m_escapeCodeHandler;
 };
 } // namespace Widgets

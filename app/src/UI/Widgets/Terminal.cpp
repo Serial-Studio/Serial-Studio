@@ -45,7 +45,6 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
 {
   // Set widget & configure VT-100 emulator
   setWidget(&m_textEdit);
-  m_escapeCodeHandler.setTextEdit(&m_textEdit);
 
   // Setup default options
   setScrollbarWidth(14);
@@ -597,368 +596,185 @@ void Widgets::Terminal::requestRepaint(const bool textChanged)
   m_textChanged = textChanged;
 }
 
-/**
- * Processes the given @a data to remove the escape sequences from the text
- * using code from Qt Creator output terminal. Check the next code block for
- * more info.
- */
+//------------------------------------------------------------------------------
+// VT-100 emulation
+//------------------------------------------------------------------------------
+
 QString Widgets::Terminal::vt100Processing(const QString &data)
 {
-  auto formattedText = m_escapeCodeHandler.parseText(FormattedText(data));
-  const QString cleanLine = std::accumulate(
-      formattedText.begin(), formattedText.end(), QString(),
-      [](const FormattedText &t1, const FormattedText &t2) -> QString {
-        return t1.text + t2.text;
-      });
-  m_escapeCodeHandler.endFormatScope();
-
-  return cleanLine;
-}
-
-//------------------------------------------------------------------------------
-// VT-100 / ANSI terminal hacks
-// https://code.qt.io/cgit/qt-creator/qt-creator.git/tree/src/libs/utils/ansiescapecodehandler.cpp
-//------------------------------------------------------------------------------
-
-#define QTC_ASSERT(cond, action)                                               \
-  if (Q_LIKELY(cond))                                                          \
-  {                                                                            \
-  }                                                                            \
-  else                                                                         \
-  {                                                                            \
-    action;                                                                    \
-  }                                                                            \
-  do                                                                           \
-  {                                                                            \
-  } while (0)
-
-static QColor ansiColor(uint code)
-{
-  QTC_ASSERT(code < 8, return QColor());
-
-  const int red = code & 1 ? 170 : 0;
-  const int green = code & 2 ? 170 : 0;
-  const int blue = code & 4 ? 170 : 0;
-  return QColor(red, green, blue);
-}
-
-QVector<Widgets::FormattedText>
-Widgets::AnsiEscapeCodeHandler::parseText(const FormattedText &input)
-{
-  enum AnsiEscapeCodes
+  QString result;
+  int i = 0;
+  while (i < data.length())
   {
-    ResetFormat = 0,
-    BoldText = 1,
-    TextColorStart = 30,
-    TextColorEnd = 37,
-    RgbTextColor = 38,
-    DefaultTextColor = 39,
-    BackgroundColorStart = 40,
-    BackgroundColorEnd = 47,
-    RgbBackgroundColor = 48,
-    DefaultBackgroundColor = 49
-  };
+    if (data[i] == '\x1b')
+    {
+      // Escape character
+      if (data.mid(i, 2) == "\x1b[")
+      {
+        // Parse CSI sequence
+        i += 2; // Skip the escape and [
+        QString params;
+        while (i < data.length() && data[i].isDigit())
+        {
+          params += data[i];
+          ++i;
+        }
 
-  const QString escape = "\x1b[";
-  const QChar semicolon = ';';
-  const QChar colorTerminator = 'm';
-  const QChar eraseToEol = 'K';
+        // Text formatting (color, bold, etc.)
+        if (data[i] == 'm')
+        {
+          applyTextFormatting(params);
+          ++i;
+          continue;
+        }
 
-  QVector<FormattedText> outputData;
-  QTextCharFormat charFormat
-      = m_previousFormatClosed ? input.format : m_previousFormat;
-  QString strippedText;
-  if (m_pendingText.isEmpty())
-    strippedText = input.text;
+        // Clear screen command
+        else if (data[i] == 'J')
+        {
+          if (params.isEmpty() || params == "2")
+            m_textEdit.clear();
+          else if (params == "0")
+            clearFromCursorToEnd();
+          else if (params == "1")
+            clearFromStartToCursor();
 
-  else
-  {
-    strippedText = m_pendingText.append(input.text);
-    m_pendingText.clear();
+          ++i;
+          continue;
+        }
+
+        // Clear line command
+        else if (data[i] == 'K')
+        {
+          if (params.isEmpty() || params == "0")
+            clearFromCursorToEndOfLine();
+          else if (params == "1")
+            clearFromStartOfLineToCursor();
+          else if (params == "2")
+            clearEntireLine();
+
+          ++i;
+          continue;
+        }
+
+        // Cursor positioning
+        else if (data[i] == 'H' || data[i] == 'f')
+        {
+          moveCursorTo(params);
+          ++i;
+          continue;
+        }
+
+        // Add more VT-100 sequences as necessary (cursor movement, etc.)
+      }
+    }
+
+    result += data[i];
+    ++i;
   }
 
-  while (!strippedText.isEmpty())
+  return result;
+}
+
+void Widgets::Terminal::clearEntireLine()
+{
+  QTextCursor cursor = m_textEdit.textCursor();
+  cursor.select(QTextCursor::BlockUnderCursor);
+  cursor.removeSelectedText();
+}
+
+void Widgets::Terminal::clearFromCursorToEnd()
+{
+  QTextCursor cursor = m_textEdit.textCursor();
+  cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+  cursor.removeSelectedText();
+}
+
+void Widgets::Terminal::clearFromStartToCursor()
+{
+  QTextCursor cursor = m_textEdit.textCursor();
+  cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+  cursor.removeSelectedText();
+}
+
+void Widgets::Terminal::clearFromCursorToEndOfLine()
+{
+  QTextCursor cursor = m_textEdit.textCursor();
+  cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+  cursor.removeSelectedText();
+}
+
+void Widgets::Terminal::clearFromStartOfLineToCursor()
+{
+  QTextCursor cursor = m_textEdit.textCursor();
+  cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+  cursor.removeSelectedText();
+}
+
+void Widgets::Terminal::moveCursorTo(const QString &params)
+{
+  QTextCursor cursor = m_textEdit.textCursor();
+  int row = 1, col = 1;
+  QStringList coords = params.split(';');
+  if (coords.size() >= 2)
   {
-    QTC_ASSERT(m_pendingText.isEmpty(), break);
-    if (m_waitingForTerminator)
+    row = coords[0].toInt();
+    col = coords[1].toInt();
+  }
+
+  cursor.movePosition(QTextCursor::Start);
+  cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, row - 1);
+  cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, col - 1);
+
+  m_textEdit.setTextCursor(cursor);
+}
+
+void Widgets::Terminal::applyTextFormatting(const QString &params)
+{
+  QTextCharFormat format = m_textEdit.currentCharFormat();
+  QStringList codes = params.split(';');
+
+  for (const QString &codeStr : codes)
+  {
+    int code = codeStr.toInt();
+    switch (code)
     {
-      // We ignore all escape codes taking string arguments.
-      QString terminator = "\x1b\\";
-      int terminatorPos = strippedText.indexOf(terminator);
-      if (terminatorPos == -1 && !m_alternateTerminator.isEmpty())
-      {
-        terminator = m_alternateTerminator;
-        terminatorPos = strippedText.indexOf(terminator);
-      }
-      if (terminatorPos == -1)
-      {
-        m_pendingText = strippedText;
+      case 0: // Reset
+        format.setForeground(Qt::black);
+        format.setBackground(Qt::white);
+        format.setFontWeight(QFont::Normal);
         break;
-      }
-      m_waitingForTerminator = false;
-      m_alternateTerminator.clear();
-      strippedText.remove(0, terminatorPos + terminator.length());
-      if (strippedText.isEmpty())
+      case 1: // Bold
+        format.setFontWeight(QFont::Bold);
         break;
-    }
-    const int escapePos = strippedText.indexOf(escape.at(0));
-    if (escapePos < 0)
-    {
-      outputData << FormattedText(strippedText, charFormat);
-      break;
-    }
-    else if (escapePos != 0)
-    {
-      outputData << FormattedText(strippedText.left(escapePos), charFormat);
-      strippedText.remove(0, escapePos);
-    }
-    QTC_ASSERT(strippedText.at(0) == escape.at(0), break);
-
-    while (!strippedText.isEmpty() && escape.at(0) == strippedText.at(0))
-    {
-      if (escape.startsWith(strippedText))
-      {
-        // control secquence is not complete
-        m_pendingText += strippedText;
-        strippedText.clear();
+      case 30: // Black text
+        format.setForeground(Qt::black);
         break;
-      }
-      if (!strippedText.startsWith(escape))
-      {
-        switch (strippedText.at(1).toLatin1())
-        {
-          case '\\': // Unexpected terminator sequence.
-            Q_FALLTHROUGH();
-          case 'N':
-          case 'O': // Ignore unsupported single-character sequences.
-            strippedText.remove(0, 2);
-            break;
-          case ']':
-            m_alternateTerminator = QChar(7);
-            Q_FALLTHROUGH();
-          case 'P':
-          case 'X':
-          case '^':
-          case '_':
-            strippedText.remove(0, 2);
-            m_waitingForTerminator = true;
-            break;
-          default:
-            // not a control sequence
-            m_pendingText.clear();
-            outputData << FormattedText(strippedText.left(1), charFormat);
-            strippedText.remove(0, 1);
-            continue;
-        }
+      case 31: // Red text
+        format.setForeground(Qt::red);
         break;
-      }
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-      m_pendingText += strippedText.midRef(0, escape.length());
-#else
-      m_pendingText
-          += QStringView{strippedText}.mid(0, escape.length()).toString();
-#endif
-
-      strippedText.remove(0, escape.length());
-
-      // Get stripped text in uppercase
-      auto upperCase = strippedText.toUpper();
-
-      // Clear line
-      if (upperCase.contains("2K"))
-      {
-        textEdit->setFocus();
-        auto storedCursor = textEdit->textCursor();
-        textEdit->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-        textEdit->moveCursor(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-        textEdit->moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
-        textEdit->textCursor().removeSelectedText();
-        textEdit->textCursor().deletePreviousChar();
-        textEdit->setTextCursor(storedCursor);
-        return outputData;
-      }
-
-      // Clear screen
-      if (upperCase.contains("2J"))
-      {
-        textEdit->clear();
-        return QVector<FormattedText>();
-      }
-
-      // \e[K is not supported. Just strip it.
-      if (strippedText.startsWith(eraseToEol))
-      {
-        m_pendingText.clear();
-        strippedText.remove(0, 1);
-        continue;
-      }
-      // get the number
-      QString strNumber;
-      QStringList numbers;
-      while (!strippedText.isEmpty())
-      {
-        if (strippedText.at(0).isDigit())
-        {
-          strNumber += strippedText.at(0);
-        }
-        else
-        {
-          if (!strNumber.isEmpty())
-            numbers << strNumber;
-          if (strNumber.isEmpty() || strippedText.at(0) != semicolon)
-            break;
-          strNumber.clear();
-        }
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        m_pendingText += strippedText.midRef(0, 1);
-#else
-        m_pendingText += QStringView{strippedText}.mid(0, 1).toString();
-#endif
-        strippedText.remove(0, 1);
-      }
-      if (strippedText.isEmpty())
+      case 32: // Green text
+        format.setForeground(Qt::green);
         break;
-
-      // remove terminating char
-      if (!strippedText.startsWith(colorTerminator))
-      {
-        m_pendingText.clear();
-        strippedText.remove(0, 1);
+      case 33: // Yellow text
+        format.setForeground(Qt::yellow);
         break;
-      }
-      // got consistent control sequence, ok to clear pending text
-      m_pendingText.clear();
-      strippedText.remove(0, 1);
-
-      if (numbers.isEmpty())
-      {
-        charFormat = input.format;
-        endFormatScope();
-      }
-
-      for (int i = 0; i < numbers.size(); ++i)
-      {
-        const uint code = numbers.at(i).toUInt();
-
-        if (code >= TextColorStart && code <= TextColorEnd)
-        {
-          charFormat.setForeground(ansiColor(code - TextColorStart));
-          setFormatScope(charFormat);
-        }
-        else if (code >= BackgroundColorStart && code <= BackgroundColorEnd)
-        {
-          charFormat.setBackground(ansiColor(code - BackgroundColorStart));
-          setFormatScope(charFormat);
-        }
-        else
-        {
-          switch (code)
-          {
-            case ResetFormat:
-              charFormat = input.format;
-              endFormatScope();
-              break;
-            case BoldText:
-              charFormat.setFontWeight(QFont::Bold);
-              setFormatScope(charFormat);
-              break;
-            case DefaultTextColor:
-              charFormat.setForeground(input.format.foreground());
-              setFormatScope(charFormat);
-              break;
-            case DefaultBackgroundColor:
-              charFormat.setBackground(input.format.background());
-              setFormatScope(charFormat);
-              break;
-            case RgbTextColor:
-            case RgbBackgroundColor:
-              // See http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
-              if (++i >= numbers.size())
-                break;
-              switch (numbers.at(i).toInt())
-              {
-                case 2:
-                  // RGB set with format: 38;2;<r>;<g>;<b>
-                  if ((i + 3) < numbers.size())
-                  {
-                    (code == RgbTextColor)
-                        ? charFormat.setForeground(
-                              QColor(numbers.at(i + 1).toInt(),
-                                     numbers.at(i + 2).toInt(),
-                                     numbers.at(i + 3).toInt()))
-                        : charFormat.setBackground(
-                              QColor(numbers.at(i + 1).toInt(),
-                                     numbers.at(i + 2).toInt(),
-                                     numbers.at(i + 3).toInt()));
-                    setFormatScope(charFormat);
-                  }
-                  i += 3;
-                  break;
-                case 5:
-                  // 256 color mode with format: 38;5;<i>
-                  uint index = numbers.at(i + 1).toUInt();
-
-                  QColor color;
-                  if (index < 8)
-                  {
-                    // The first 8 colors are standard low-intensity
-                    // ANSI colors.
-                    color = ansiColor(index);
-                  }
-                  else if (index < 16)
-                  {
-                    // The next 8 colors are standard high-intensity
-                    // ANSI colors.
-                    color = ansiColor(index - 8).lighter(150);
-                  }
-                  else if (index < 232)
-                  {
-                    // The next 216 colors are a 6x6x6 RGB cube.
-                    uint o = index - 16;
-                    color = QColor((o / 36) * 51, ((o / 6) % 6) * 51,
-                                   (o % 6) * 51);
-                  }
-                  else
-                  {
-                    // The last 24 colors are a greyscale gradient.
-                    int grey = int((index - 232) * 11);
-                    color = QColor(grey, grey, grey);
-                  }
-
-                  if (code == RgbTextColor)
-                    charFormat.setForeground(color);
-                  else
-                    charFormat.setBackground(color);
-
-                  setFormatScope(charFormat);
-                  ++i;
-                  break;
-              }
-              break;
-            default:
-              break;
-          }
-        }
-      }
+      case 34: // Blue text
+        format.setForeground(Qt::blue);
+        break;
+      case 35: // Magenta text
+        format.setForeground(Qt::magenta);
+        break;
+      case 36: // Cyan text
+        format.setForeground(Qt::cyan);
+        break;
+      case 37: // White text
+        format.setForeground(Qt::white);
+        break;
+      default:
+        break;
+        // Add more color codes and background settings if necessary
     }
   }
-  return outputData;
-}
 
-void Widgets::AnsiEscapeCodeHandler::setTextEdit(QPlainTextEdit *widget)
-{
-  textEdit = widget;
-}
-
-void Widgets::AnsiEscapeCodeHandler::endFormatScope()
-{
-  m_previousFormatClosed = true;
-}
-
-void Widgets::AnsiEscapeCodeHandler::setFormatScope(
-    const QTextCharFormat &charFormat)
-{
-  m_previousFormat = charFormat;
-  m_previousFormatClosed = false;
+  m_textEdit.setCurrentCharFormat(format);
 }

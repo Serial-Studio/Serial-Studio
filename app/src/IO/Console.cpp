@@ -30,7 +30,6 @@
 #include "IO/Manager.h"
 #include "IO/Console.h"
 #include "Misc/Utilities.h"
-#include "Misc/TimerEvents.h"
 #include "Misc/CommonFonts.h"
 
 /**
