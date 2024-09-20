@@ -84,8 +84,7 @@ static QString HexDump(const char *data, const size_t size)
  * critical, fatal) emitted by the Qt framework.
  *
  * It formats the message with a corresponding prefix based on the message type
- * (e.g., "[Debug]", "[Warning]"). For fatal messages, the function terminates
- * the program.
+ * (e.g., "[Debug]", "[Warning]").
  *
  * @param type The type of the message.
  * @param context The message log context (file, line, function).
@@ -115,7 +114,6 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
       break;
     case QtFatalMsg:
       output = QStringLiteral("\n[Fatal]: %1").arg(msg);
-      abort();
       break;
     default:
       break;
