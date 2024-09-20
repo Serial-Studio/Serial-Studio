@@ -106,6 +106,12 @@ class Model : public QObject
   Q_PROPERTY(quint8 datasetOptions
              READ datasetOptions
              NOTIFY datasetModelChanged)
+  Q_PROPERTY(bool currentGroupIsEditable
+             READ currentGroupIsEditable
+             NOTIFY groupModelChanged)
+  Q_PROPERTY(bool currentDatasetIsEditable
+             READ currentDatasetIsEditable
+             NOTIFY datasetModelChanged)
   // clang-format on
 
 signals:
@@ -132,6 +138,10 @@ private:
 public:
   static Model &instance();
 
+  /**
+   * @brief Enum representing the different views available in the project
+   *        editor.
+   */
   enum CurrentView
   {
     ProjectView,
@@ -141,6 +151,9 @@ public:
   };
   Q_ENUM(CurrentView)
 
+  /**
+   * @brief Enum representing the different methods available for decoding data.
+   */
   enum DecoderMethod
   {
     Normal,
@@ -149,6 +162,9 @@ public:
   };
   Q_ENUM(DecoderMethod)
 
+  /**
+   * @brief Enum representing the different widget types available for groups.
+   */
   enum GroupWidget
   {
     CustomGroup,
@@ -159,6 +175,12 @@ public:
   };
   Q_ENUM(GroupWidget)
 
+  /**
+   * @brief Enum representing the options available for datasets.
+   *
+   * These options are represented as bit flags, allowing for combinations of
+   * multiple options.
+   */
   // clang-format off
   enum DatasetOption
   {
@@ -167,11 +189,16 @@ public:
     DatasetFFT     = 0b00000010,
     DatasetBar     = 0b00000100,
     DatasetGauge   = 0b00001000,
-    DatasetCompass = 0b00010000
+    DatasetCompass = 0b00010000,
+    DatasetLED     = 0b00100000,
   };
   Q_ENUM(DatasetOption)
   // clang-format on
 
+  /**
+   * @brief Enum representing the different types of editor widgets available
+   *        for editing parameters.
+   */
   enum EditorWidget
   {
     TextField,
@@ -182,6 +209,10 @@ public:
   };
   Q_ENUM(EditorWidget)
 
+  /**
+   * @brief Enum representing custom roles used in the tree view for data
+   *        access.
+   */
   enum CustomRoles
   {
     TreeViewIcon = 0x01,
@@ -213,6 +244,9 @@ public:
   [[nodiscard]] const QString &jsonFilePath() const;
   [[nodiscard]] const QString &frameParserCode() const;
   [[nodiscard]] const QString &thunderforestApiKey() const;
+
+  [[nodiscard]] bool currentGroupIsEditable() const;
+  [[nodiscard]] bool currentDatasetIsEditable() const;
 
   [[nodiscard]] int groupCount() const;
   [[nodiscard]] quint8 datasetOptions() const;

@@ -102,6 +102,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Dataset")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
           onClicked: Cpp_Project_Model.addDataset(ProjectModel.DatasetGeneric)
@@ -115,6 +116,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Plot")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
           onClicked: Cpp_Project_Model.addDataset(ProjectModel.DatasetPlot)
@@ -128,6 +130,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("FFT Plot")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
           onClicked: Cpp_Project_Model.addDataset(ProjectModel.DatasetFFT)
@@ -141,6 +144,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
           onClicked: Cpp_Project_Model.addDataset(ProjectModel.DatasetBar)
@@ -154,6 +158,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Gauge")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
           onClicked: Cpp_Project_Model.addDataset(ProjectModel.DatasetGauge)
@@ -167,9 +172,23 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
           onClicked: Cpp_Project_Model.addDataset(ProjectModel.DatasetCompass)
+        }
+
+        //
+        // Add LED
+        //
+        Widgets.BigButton {
+          icon.width: 24
+          icon.height: 24
+          text: qsTr("LED")
+          Layout.alignment: Qt.AlignVCenter
+          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
+          onClicked: Cpp_Project_Model.addDataset(ProjectModel.DatasetLED)
         }
 
         //

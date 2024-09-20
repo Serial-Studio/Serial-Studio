@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/rcc">
-        <file>diagrams/group-dfd.svg</file>
-        <file>diagrams/project-dfd.svg</file>
         <file>fonts/Hack-Regular.ttf</file>
         <file>fonts/Inter-Bold.ttf</file>
         <file>fonts/Inter-Regular.ttf</file>
@@ -52,6 +50,7 @@
         <file>icons/project-editor/actions/add-dataset.svg</file>
         <file>icons/project-editor/actions/add-fft.svg</file>
         <file>icons/project-editor/actions/add-gauge.svg</file>
+        <file>icons/project-editor/actions/add-led.svg</file>
         <file>icons/project-editor/actions/add-plot.svg</file>
         <file>icons/project-editor/actions/bar.svg</file>
         <file>icons/project-editor/actions/change-group.svg</file>
@@ -60,6 +59,7 @@
         <file>icons/project-editor/actions/duplicate.svg</file>
         <file>icons/project-editor/actions/fft.svg</file>
         <file>icons/project-editor/actions/gauge.svg</file>
+        <file>icons/project-editor/actions/led.svg</file>
         <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
         <file>icons/project-editor/toolbar/add-gps.svg</file>
@@ -110,6 +110,7 @@
         <file>images/icon@2x.png</file>
         <file>images/soldering-iron.svg</file>
         <file>images/tip.svg</file>
+        <file>images/tree.svg</file>
         <file>messages/Acknowledgements.txt</file>
         <file>messages/Welcome_DE.txt</file>
         <file>messages/Welcome_EN.txt</file>
@@ -117,8 +118,6 @@
         <file>messages/Welcome_RU.txt</file>
         <file>messages/Welcome_ZH.txt</file>
         <file>scripts/frame-parser.js</file>
-        <file>shaders/invert_color.frag</file>
-        <file>shaders/invert_color.qsb</file>
         <file>themes/Breeze Dark.json</file>
         <file>themes/Breeze Light.json</file>
         <file>themes/Default.json</file>
@@ -128,6 +127,5 @@
         <file>themes/Outdoor Night.json</file>
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
-        <file>images/tree.svg</file>
     </qresource>
 </RCC>

@@ -147,6 +147,7 @@ Widgets.Pane {
           toolbarButton: false
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
           checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetBar
@@ -168,6 +169,7 @@ Widgets.Pane {
           text: qsTr("Gauge")
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
           checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetGauge
@@ -189,11 +191,34 @@ Widgets.Pane {
           toolbarButton: false
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
           checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetCompass
           onClicked: {
             const option = ProjectModel.DatasetCompass
+            const value = Cpp_Project_Model.datasetOptions & option
+            if (checked !== value)
+              Cpp_Project_Model.changeDatasetOption(option, checked)
+          }
+        }
+
+        //
+        // Add compass
+        //
+        Widgets.BigButton {
+          icon.width: 24
+          icon.height: 24
+          checkable: true
+          toolbarButton: false
+          text: qsTr("LED")
+          Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentDatasetIsEditable
+          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
+          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetLED
+          onClicked: {
+            const option = ProjectModel.DatasetLED
             const value = Cpp_Project_Model.datasetOptions & option
             if (checked !== value)
               Cpp_Project_Model.changeDatasetOption(option, checked)
@@ -215,6 +240,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentDatasetIsEditable
           onClicked: Cpp_Project_Model.duplicateCurrentDataset()
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
@@ -228,6 +254,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentDatasetIsEditable
           onClicked: Cpp_Project_Model.deleteCurrentDataset()
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"

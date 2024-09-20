@@ -325,6 +325,49 @@ const QString &Project::Model::thunderforestApiKey() const
 }
 
 /**
+ * @brief Determines whether the currently selected group is editable.
+ *
+ * This function checks if the currently selected group is editable.
+ *
+ * Groups with automatically generateddatasets (such as those with specific
+ * widgets like "accelerometer" or "gyroscope") are not editable.
+ *
+ * Only custom groups or groups with the "multiplot" widget are editable.
+ *
+ * @return True if the group is editable, false otherwise.
+ */
+bool Project::Model::currentGroupIsEditable() const
+{
+  const auto widget = m_selectedGroup.widget();
+  if (widget != "" && widget != "multiplot")
+    return false;
+
+  return true;
+}
+
+/**
+ * @brief Determines whether the currently selected dataset is editable.
+ *
+ * This function checks if the currently selected dataset is editable.
+ * Datasets within groups that have automatically generated datasets
+ * (such as those associated with widgets like "accelerometer" or "gyroscope")
+ * are not editable.
+ *
+ * Only datasets in custom groups or groups with the "multiplot" widget are
+ * editable.
+ *
+ * @return True if the dataset is editable, false otherwise.
+ */
+bool Project::Model::currentDatasetIsEditable() const
+{
+  const auto widget = m_groups[m_selectedDataset.groupId()].widget();
+  if (widget != "" && widget != "multiplot")
+    return false;
+
+  return true;
+}
+
+/**
  * @brief Retrieves the number of groups in the project.
  *
  * This function returns the total count of groups currently present in the
@@ -355,6 +398,9 @@ quint8 Project::Model::datasetOptions() const
 
   if (m_selectedDataset.fft())
     option |= DatasetFFT;
+
+  if (m_selectedDataset.led())
+    option |= DatasetLED;
 
   if (m_selectedDataset.widget() == QStringLiteral("bar"))
     option |= DatasetBar;
@@ -928,6 +974,10 @@ void Project::Model::addDataset(const DatasetOption option)
       title = tr("New Compass");
       dataset.m_widget = QStringLiteral("compass");
       break;
+    case DatasetLED:
+      title = tr("New LED Indicator");
+      dataset.m_led = true;
+      break;
     default:
       break;
   }
@@ -1019,6 +1069,9 @@ void Project::Model::changeDatasetOption(const DatasetOption option,
       break;
     case DatasetCompass:
       m_selectedDataset.m_widget = checked ? QStringLiteral("compass") : "";
+      break;
+    case DatasetLED:
+      m_selectedDataset.m_led = checked;
       break;
     default:
       break;
@@ -1699,33 +1752,37 @@ void Project::Model::buildDatasetModel(const JSON::Dataset &dataset)
   units->setData(tr("Unit of measurement (optional)"), ParameterDescription);
   m_datasetModel->appendRow(units);
 
-  // Get appropiate widget index for current dataset
-  int widgetIndex = 0;
-  bool found = false;
-  for (auto it = m_datasetWidgets.begin(); it != m_datasetWidgets.end();
-       ++it, ++widgetIndex)
+  // Add widget combobox item
+  if (currentDatasetIsEditable())
   {
-    if (it.key() == dataset.widget())
+    // Get appropiate widget index for current dataset
+    int widgetIndex = 0;
+    bool found = false;
+    for (auto it = m_datasetWidgets.begin(); it != m_datasetWidgets.end();
+         ++it, ++widgetIndex)
     {
-      found = true;
-      break;
+      if (it.key() == dataset.widget())
+      {
+        found = true;
+        break;
+      }
     }
+
+    // If not found, reset the index to 0
+    if (!found)
+      widgetIndex = 0;
+
+    // Add widget combobox
+    auto widget = new QStandardItem();
+    widget->setEditable(true);
+    widget->setData(ComboBox, WidgetType);
+    widget->setData(m_datasetWidgets.values(), ComboBoxData);
+    widget->setData(widgetIndex, EditableValue);
+    widget->setData(tr("Widget"), ParameterName);
+    widget->setData(kDatasetView_Widget, ParameterType);
+    widget->setData(tr("Display widget (optional)"), ParameterDescription);
+    m_datasetModel->appendRow(widget);
   }
-
-  // If not found, reset the index to 0
-  if (!found)
-    widgetIndex = 0;
-
-  // Add widgets
-  auto widget = new QStandardItem();
-  widget->setEditable(true);
-  widget->setData(ComboBox, WidgetType);
-  widget->setData(m_datasetWidgets.values(), ComboBoxData);
-  widget->setData(widgetIndex, EditableValue);
-  widget->setData(tr("Widget"), ParameterName);
-  widget->setData(kDatasetView_Widget, ParameterType);
-  widget->setData(tr("Display widget (optional)"), ParameterDescription);
-  m_datasetModel->appendRow(widget);
 
   // Add minimum value
   auto min = new QStandardItem();
@@ -1762,8 +1819,8 @@ void Project::Model::buildDatasetModel(const JSON::Dataset &dataset)
   m_datasetModel->appendRow(alarm);
 
   // Get appropiate plotting mode index for current dataset
-  found = false;
   int plotIndex = 0;
+  bool found = false;
   const auto currentPair = qMakePair(dataset.graph(), dataset.log());
   for (auto it = m_plotOptions.begin(); it != m_plotOptions.end();
        ++it, ++plotIndex)
