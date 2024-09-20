@@ -103,17 +103,20 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
   QString output;
   switch (type)
   {
+    case QtInfoMsg:
+      output = QStringLiteral("⧗ %1").arg(msg);
+      break;
     case QtDebugMsg:
-      output = QStringLiteral("\n[Debug]: %1").arg(msg);
+      output = QStringLiteral("\n[DEBUG]: %1").arg(msg);
       break;
     case QtWarningMsg:
-      output = QStringLiteral("\n[Warning]: %1").arg(msg);
+      output = QStringLiteral("\n[WARNING]: %1").arg(msg);
       break;
     case QtCriticalMsg:
-      output = QStringLiteral("\n[Critical]: %1").arg(msg);
+      output = QStringLiteral("\n[CRITICAL]: %1").arg(msg);
       break;
     case QtFatalMsg:
-      output = QStringLiteral("\n[Fatal]: %1").arg(msg);
+      output = QStringLiteral("\n[FATAL]: %1").arg(msg);
       break;
     default:
       break;

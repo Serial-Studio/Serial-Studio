@@ -1,28 +1,25 @@
-________           _____       ______   ____________       _____________       
-__  ___/______________(_)_____ ___  /   __  ___/_  /____  _______  /__(_)_____ 
+________           _____       ______   ____________       _____________
+__  ___/______________(_)_____ ___  /   __  ___/_  /____  _______  /__(_)_____
 _____ \_  _ \_  ___/_  /_  __ `/_  /    _____ \_  __/  / / /  __  /__  /_  __ \
 ____/ //  __/  /   _  / / /_/ /_  /     ____/ // /_ / /_/ // /_/ / _  / / /_/ /
-/____/ \___//_/    /_/  \__,_/ /_/      /____/ \__/ \__,_/ \__,_/  /_/  \____/ 
-                                                                               
-                                                 
-Willkommen bei Serial Studio! Um zu beginnen, wählen Sie bitte einen COM-Port
-und eine Baudrate in dem Geräte-Fenster auf der rechten Seite. Wenn die serielle
-Verbindung erfolgreich ist und die eingehenden Daten korrekt interpretiert
-werden, wird dieses Fenster automatisch geschlossen und das Dashboard wird
-angezeigt. Andernfalls können Sie die Konsole verwenden, um die Quelle Ihres
-Problemes zu finden.
+/____/ \___//_/    /_/  \__,_/ /_/      /____/ \__/ \__,_/ \__,_/  /_/  \____/
 
-Verwenden Sie die Schaltflächen der Symbolleiste, um die Funktionen anzuzeigen
-die Sie verwenden möchten. Wenn Sie ein Problem mit Serial Studio haben, melden
-Sie es bitte an:
+Willkommen bei Serial Studio! So fangen Sie an:
+1. Wählen Sie einen COM-Port und eine Baudrate im Gerätebereich rechts aus.
+2. Wenn die serielle Verbindung erfolgreich ist und die Daten korrekt
+   interpretiert werden, schließt sich dieser Bereich automatisch und das
+   Dashboard wird angezeigt.
+3. Andernfalls verwenden Sie die Konsole, um das Problem zu identifizieren und
+   zu beheben.
 
+Verwenden Sie die Schaltflächen in der Symbolleiste, um auf die gewünschten
+Funktionen zuzugreifen.
+
+Wenn Sie auf ein Problem stoßen, melden Sie es bitte hier:
 → https://github.com/Serial-Studio/Serial-Studio/issues
 
-Sie können auch die Links im Fenster "Über" verwenden. Für Dokumentation
-bezüglich der Verwendung von Serial Studio und Integration mit Ihren aktuellen
-MCU-Projekten, lesen Sie bitte das Wiki:
-
+Für weitere Ressourcen, einschließlich Dokumentation und Integration mit Ihren
+Embedded-Projekten, besuchen Sie das Wiki:
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
-Tipp: Verwenden Sie den Projekt-Editor zum Erstellen und Bearbeiten von 
-      Serial Studio-Projektdateien.
+Tipp: Verwenden Sie den Projekteditor, um Projektdateien zu erstellen und anzupassen.

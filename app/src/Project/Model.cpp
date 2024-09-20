@@ -2255,13 +2255,26 @@ void Project::Model::onDatasetItemChanged(QStandardItem *item)
   }
 
   // Replace dataset in parent group
-  auto group = m_groups.at(m_selectedDataset.groupId());
-  group.m_datasets.replace(m_selectedDataset.datasetId(), m_selectedDataset);
-  m_groups.replace(m_selectedDataset.groupId(), group);
+  const auto groupId = m_selectedDataset.groupId();
+  const auto datasetId = m_selectedDataset.datasetId();
+  auto group = m_groups.at(groupId);
+  group.m_datasets.replace(datasetId, m_selectedDataset);
+  m_groups.replace(groupId, group);
   buildTreeModel();
 
   // Mark document as modified
   setModified(true);
+
+  // Select current DATASET again
+  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
+  {
+    if (i.value().groupId() == groupId && i.value().datasetId() == datasetId)
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
+  }
 }
 
 //------------------------------------------------------------------------------

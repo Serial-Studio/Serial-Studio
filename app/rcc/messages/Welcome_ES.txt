@@ -1,25 +1,24 @@
-________           _____       ______   ____________       _____________       
-__  ___/______________(_)_____ ___  /   __  ___/_  /____  _______  /__(_)_____ 
+________           _____       ______   ____________       _____________
+__  ___/______________(_)_____ ___  /   __  ___/_  /____  _______  /__(_)_____
 _____ \_  _ \_  ___/_  /_  __ `/_  /    _____ \_  __/  / / /  __  /__  /_  __ \
 ____/ //  __/  /   _  / / /_/ /_  /     ____/ // /_ / /_/ // /_/ / _  / / /_/ /
-/____/ \___//_/    /_/  \__,_/ /_/      /____/ \__/ \__,_/ \__,_/  /_/  \____/ 
-                                                                               
-                                                 
-¡Bienvenido/a a Serial Studio! Para comenzar, seleccione un puerto COM y
-velocidad en baudios en el panel de dispositivos a la derecha. Si la conexión en
-serie es exitosa y los datos entrantes se interpretan correctamente, este panel
-se cerrará automáticamente y el el tablero de instrumentos se mostrará. 
-De lo contrario, puede usar la consola para encontrar el origen de su problema.
+/____/ \___//_/    /_/  \__,_/ /_/      /____/ \__/ \__,_/ \__,_/  /_/  \____/
 
-Utilice los botones de la barra de herramientas para mostrar las funciones que
-desea utilizar. Si encuentra un problema con Serial Studio, infórmelo en:
-	
+¡Bienvenido a Serial Studio! Para comenzar:
+1. Selecciona un puerto COM y la velocidad de baudios en el panel de dispositivos
+   a la derecha.
+2. Si la conexión serial es exitosa y los datos se interpretan correctamente,
+   este panel se cerrará automáticamente, mostrando el tablero.
+3. Si no, utiliza la Consola para identificar y solucionar el problema.
+
+Usa los botones de la barra de herramientas para acceder a las funciones que
+necesitas.
+
+Si encuentras algún problema, por favor repórtalo aquí:
 → https://github.com/Serial-Studio/Serial-Studio/issues
 
-También puede utilizar los enlaces de la ventana "Acerca de". Para obtener
-documentación sobre uso de Serial Studio e integración con sus proyectos
-actuales, por favor lea la wiki:
-
+Para más recursos, incluyendo documentación e integración con tus proyectos
+embebidos, visita el wiki:
 → https://github.com/Serial-Studio/Serial-Studio/wiki
 
-Consejo: utilice el Editor de Proyectos para crear y editar proyectos de Serial Studio.
+Consejo: Usa el Editor de Proyectos para crear y personalizar archivos de proyecto.

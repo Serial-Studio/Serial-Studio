@@ -134,7 +134,7 @@ ToolBar {
     // Project Editor
     //
     Widgets.BigButton {
-      text: qsTr("Project Setup")
+      text: qsTr("Project Editor")
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showProjectEditor()
       enabled: Cpp_JSON_Generator.operationMode == 0
