@@ -233,6 +233,7 @@ public:
 
   [[nodiscard]] bool modified() const;
   [[nodiscard]] CurrentView currentView() const;
+  [[nodiscard]] DecoderMethod decoderMethod() const;
 
   [[nodiscard]] QString jsonFileName() const;
   [[nodiscard]] QString jsonProjectsPath() const;

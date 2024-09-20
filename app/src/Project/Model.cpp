@@ -193,6 +193,20 @@ Project::Model::CurrentView Project::Model::currentView() const
   return m_currentView;
 }
 
+/**
+ * @brief Retrieves the current method used for decoding data frames.
+ *
+ * This function returns the decoder method currently set for parsing data
+ * frames. The decoder method determines how incoming data is interpreted
+ * (e.g., as normal UTF-8, hexadecimal, or Base64).
+ *
+ * @return The current decoder method as a value from the `DecoderMethod` enum.
+ */
+Project::Model::DecoderMethod Project::Model::decoderMethod() const
+{
+  return m_frameDecoder;
+}
+
 //------------------------------------------------------------------------------
 // Document information functions
 //------------------------------------------------------------------------------
@@ -338,9 +352,12 @@ const QString &Project::Model::thunderforestApiKey() const
  */
 bool Project::Model::currentGroupIsEditable() const
 {
-  const auto widget = m_selectedGroup.widget();
-  if (widget != "" && widget != "multiplot")
-    return false;
+  if (m_currentView == GroupView)
+  {
+    const auto widget = m_selectedGroup.widget();
+    if (widget != "" && widget != "multiplot")
+      return false;
+  }
 
   return true;
 }
@@ -360,9 +377,16 @@ bool Project::Model::currentGroupIsEditable() const
  */
 bool Project::Model::currentDatasetIsEditable() const
 {
-  const auto widget = m_groups[m_selectedDataset.groupId()].widget();
-  if (widget != "" && widget != "multiplot")
-    return false;
+  if (m_currentView == DatasetView)
+  {
+    const auto groupId = m_selectedDataset.groupId();
+    if (m_groups.count() > groupId)
+    {
+      const auto widget = m_groups[groupId].widget();
+      if (widget != "" && widget != "multiplot")
+        return false;
+    }
+  }
 
   return true;
 }
@@ -1089,7 +1113,7 @@ void Project::Model::changeDatasetOption(const DatasetOption option,
   // Select dataset item again to rebuild dataset model
   for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
   {
-    if (i.value().datasetId() == datasetId)
+    if (i.value().datasetId() == datasetId && i.value().groupId() == groupId)
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1918,8 +1942,7 @@ void Project::Model::buildDatasetModel(const JSON::Dataset &dataset)
  */
 void Project::Model::onJsonLoaded()
 {
-  if (jsonFilePath() != JSON::Generator::instance().jsonMapFilepath())
-    openJsonFile(JSON::Generator::instance().jsonMapFilepath());
+  openJsonFile(JSON::Generator::instance().jsonMapFilepath());
 }
 
 //------------------------------------------------------------------------------
@@ -2272,16 +2295,16 @@ void Project::Model::onCurrentSelectionChanged(const QModelIndex &current,
   if (m_groupItems.contains(item))
   {
     const auto group = m_groupItems.value(item);
-    buildGroupModel(group);
     setCurrentView(GroupView);
+    buildGroupModel(group);
   }
 
   // Check if the user selected a dataset
   else if (m_datasetItems.contains(item))
   {
     const auto dataset = m_datasetItems.value(item);
-    buildDatasetModel(dataset);
     setCurrentView(DatasetView);
+    buildDatasetModel(dataset);
   }
 
   // Finally, check if the user selected one of the root items
@@ -2293,8 +2316,8 @@ void Project::Model::onCurrentSelectionChanged(const QModelIndex &current,
 
     else
     {
-      buildProjectModel();
       setCurrentView(ProjectView);
+      buildProjectModel();
     }
   }
 }

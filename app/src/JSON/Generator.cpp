@@ -39,6 +39,7 @@ JSON::Generator::Generator()
 {
   connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
           &JSON::Generator::readData);
+
   readSettings();
 }
 
@@ -248,20 +249,27 @@ void JSON::Generator::readData(const QByteArray &data)
     // Copy JSON map
     jsonData = m_json;
 
-    // Encode frame data as HEX (for dealing with binary data)
+    // Convert binary frame data to a string
     QString frameData;
     QString separator;
-    if (jsonData.value("hex").toBool(false) == true)
+    switch (Project::Model::instance().decoderMethod())
     {
-      frameData = QString::fromUtf8(data.toHex());
-      separator = "";
-    }
-
-    // Encode frame data as a "normal" string
-    else
-    {
-      frameData = QString::fromUtf8(data);
-      separator = IO::Manager::instance().separatorSequence();
+      case Project::Model::Normal:
+        frameData = QString::fromUtf8(data);
+        separator = IO::Manager::instance().separatorSequence();
+        break;
+      case Project::Model::Hexadecimal:
+        frameData = QString::fromUtf8(data.toHex());
+        separator = "";
+        break;
+      case Project::Model::Base64:
+        frameData = QString::fromUtf8(data.toBase64());
+        separator = "";
+        break;
+      default:
+        frameData = QString::fromUtf8(data);
+        separator = IO::Manager::instance().separatorSequence();
+        break;
     }
 
     // Get fields from frame parser function

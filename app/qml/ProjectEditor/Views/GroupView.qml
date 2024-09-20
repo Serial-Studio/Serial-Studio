@@ -186,6 +186,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("LED")
           Layout.alignment: Qt.AlignVCenter
+          enabled: Cpp_Project_Model.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
           onClicked: Cpp_Project_Model.addDataset(ProjectModel.DatasetLED)

@@ -204,7 +204,7 @@ Widgets.Pane {
         }
 
         //
-        // Add compass
+        // Add LED
         //
         Widgets.BigButton {
           icon.width: 24
@@ -213,7 +213,6 @@ Widgets.Pane {
           toolbarButton: false
           text: qsTr("LED")
           Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_Project_Model.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
           checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetLED

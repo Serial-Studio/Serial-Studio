@@ -72,6 +72,10 @@ Project::FrameParser::FrameParser(QQuickItem *parent)
   // Setup text editor
   m_textEdit.setFont(Misc::CommonFonts::instance().monoFont());
 
+  // Configure JavaScript engine
+  m_engine.installExtensions(QJSEngine::ConsoleExtension
+                             | QJSEngine::GarbageCollectionExtension);
+
   // Load template code
   reload();
 
@@ -141,12 +145,12 @@ QStringList Project::FrameParser::parse(const QString &frame,
   args << frame << separator;
 
   // Evaluate frame parsing function
-  auto out = m_parseFunction.call(args).toVariant().toList();
+  auto out = m_parseFunction.call(args).toVariant().toStringList();
 
   // Convert output to QStringList
   QStringList list;
   for (auto i = 0; i < out.count(); ++i)
-    list.append(out.at(i).toString());
+    list.append(out.at(i));
 
   // Return fields list
   return list;
@@ -433,6 +437,10 @@ bool Project::FrameParser::save(const bool silent)
 
 bool Project::FrameParser::loadScript(const QString &script)
 {
+  // Ensure that engine is configured correctly
+  m_engine.installExtensions(QJSEngine::ConsoleExtension
+                             | QJSEngine::GarbageCollectionExtension);
+
   // Check if there are no general JS errors
   QStringList errors;
   m_engine.evaluate(script, "", 1, &errors);
