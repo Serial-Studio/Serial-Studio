@@ -18,9 +18,9 @@ Serial Studio 是一个跨平台、功能多样的数据可视化工具，专为
 
 如今，Serial Studio 是一个强大且灵活的工具，不仅适用于 CanSat 竞赛，也适用于任何数据采集和可视化项目。它支持从多种来源获取数据，包括串行端口、MQTT、蓝牙低功耗 (BLE) 和网络套接字 (TCP/UDP)。
 
-*阅读其他语言版本的文档*: [Español](doc/README_ES.md) [简体中文](doc/README_ZH.md) [Deutsch](doc/README_DE.md) [Русский](doc/README_RU.md)
+*阅读其他语言版本的文档*: [Español](/doc/README_ES.md) [简体中文](/doc/README_ZH.md) [Deutsch](/doc/README_DE.md) [Русский](/doc/README_RU.md)
 
-![软件使用](doc/screenshot.png)
+![软件使用](/doc/screenshot.png)
 
 ## 功能
 
@@ -108,7 +108,7 @@ cmake --build . --config Release -j 10
 
 下面是一个简化的示意图，展示了 Serial Studio 各个模块如何交互。有关更详细的信息，请查阅完整的 DOXYGEN 文档 [这里](https://serial-studio.github.io/hackers/)。
 
-![架构](doc/architecture/architecture.png)
+![架构](/doc/architecture/architecture.png)
 
 ## 许可证
 

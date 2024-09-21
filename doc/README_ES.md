@@ -18,9 +18,9 @@ La herramienta nació de mi experiencia en múltiples competencias basadas en Ca
 
 Hoy en día, Serial Studio es una herramienta poderosa y adaptable, adecuada no solo para competencias de CanSat, sino para cualquier proyecto de adquisición y visualización de datos. Soporta la recuperación de datos desde una amplia gama de fuentes, incluyendo puertos seriales, MQTT, Bluetooth Low Energy (BLE), y sockets de red (TCP/UDP).
 
-*Lee este documento en otros idiomas*: [Español](doc/README_ES.md) [简体中文](doc/README_ZH.md) [Deutsch](doc/README_DE.md) [Русский](doc/README_RU.md)
+*Lee este documento en otros idiomas*: [Español](/doc/README_ES.md) [简体中文](/doc/README_ZH.md) [Deutsch](/doc/README_DE.md) [Русский](/doc/README_RU.md)
 
-![Uso del Software](doc/screenshot.png)
+![Uso del Software](/doc/screenshot.png)
 
 ## Características
 
@@ -108,7 +108,7 @@ cmake --build . --config Release -j 10
 
 A continuación, se muestra un diagrama simplificado que ilustra cómo interactúan los diferentes módulos de Serial Studio. Para más información detallada, consulta la documentación completa de DOXYGEN [aquí](https://serial-studio.github.io/hackers/).
 
-![Arquitectura](doc/architecture/architecture.png)
+![Arquitectura](/doc/architecture/architecture.png)
 
 ## Licencia
 
