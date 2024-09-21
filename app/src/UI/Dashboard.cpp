@@ -821,8 +821,11 @@ void UI::Dashboard::processLatestJSON(const QJsonObject &json)
     Q_EMIT widgetVisibilityChanged();
   }
 
-  // Update UI;
+  // Update UI
   Q_EMIT updated();
+
+  // Share the frame with other models
+  Q_EMIT frameReceived(m_currentFrame);
 }
 
 //------------------------------------------------------------------------------

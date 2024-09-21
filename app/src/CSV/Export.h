@@ -30,6 +30,8 @@
 #include <QTextStream>
 #include <QJsonObject>
 
+#include "JSON/Frame.h"
+
 namespace CSV
 {
 /**
@@ -45,9 +47,9 @@ namespace CSV
  */
 typedef struct
 {
-  QByteArray data;
+  JSON::Frame data;
   QDateTime rxDateTime;
-} RawFrame;
+} TimestampFrame;
 
 class Export : public QObject
 {
@@ -88,14 +90,13 @@ public slots:
 
 private slots:
   void writeValues();
-  void registerFrame(const QByteArray &data);
-  void createCsvFile(const CSV::RawFrame &frame);
+  void registerFrame(const JSON::Frame &frame);
+  void createCsvFile(const CSV::TimestampFrame &frame);
 
 private:
   QFile m_csvFile;
-  int m_fieldCount;
   bool m_exportEnabled;
   QTextStream m_textStream;
-  QVector<RawFrame> m_frames;
+  QVector<TimestampFrame> m_frames;
 };
 } // namespace CSV

@@ -152,6 +152,7 @@ signals:
   void precisionChanged();
   void widgetCountChanged();
   void widgetVisibilityChanged();
+  void frameReceived(const JSON::Frame &frame);
 
 private:
   explicit Dashboard();

@@ -28,10 +28,8 @@
 #include <QApplication>
 #include <QDesktopServices>
 
-#include "AppInfo.h"
 #include "IO/Manager.h"
 #include "UI/Dashboard.h"
-#include "Project/Model.h"
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
 
@@ -40,14 +38,14 @@
  * dataframes into JSON list.
  */
 CSV::Export::Export()
-  : m_fieldCount(0)
-  , m_exportEnabled(true)
+  : m_exportEnabled(true)
 {
-  auto io = &IO::Manager::instance();
-  auto te = &Misc::TimerEvents::instance();
-  connect(io, &IO::Manager::connectedChanged, this, &Export::closeFile);
-  connect(io, &IO::Manager::frameReceived, this, &Export::registerFrame);
-  connect(te, &Misc::TimerEvents::timeout1Hz, this, &Export::writeValues);
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
+          &Export::closeFile);
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::frameReceived, this,
+          &Export::registerFrame);
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
+          &Export::writeValues);
 }
 
 /**
@@ -120,7 +118,6 @@ void CSV::Export::closeFile()
     while (!m_frames.isEmpty())
       writeValues();
 
-    m_fieldCount = 0;
     m_csvFile.close();
     m_textStream.setDevice(Q_NULLPTR);
 
@@ -134,42 +131,38 @@ void CSV::Export::closeFile()
  */
 void CSV::Export::writeValues()
 {
-  // Get separator sequence
-  auto sep = IO::Manager::instance().separatorSequence();
-
   // Write each frame
-  for (auto i = 0; i < m_frames.count(); ++i)
+  for (auto i = m_frames.begin(); i != m_frames.end(); ++i)
   {
-    auto frame = m_frames.at(i);
-    auto fields = QString::fromUtf8(frame.data).split(sep);
-
     // File not open, create it & add cell titles
     if (!isOpen() && exportEnabled())
-      createCsvFile(frame);
+      createCsvFile(*i);
+
+    // Obtain frame data
+    const auto &data = i->data;
+    const auto &rxTime = i->rxDateTime;
 
     // Write RX date/time
     const auto format = QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz");
-    m_textStream << frame.rxDateTime.toString(format) << QStringLiteral(",");
+    m_textStream << rxTime.toString(format) << QStringLiteral(",");
 
     // Write frame data
-    for (auto j = 0; j < fields.count(); ++j)
+    const auto &groups = data.groups();
+    for (auto g = groups.begin(); g != groups.end(); ++g)
     {
-      m_textStream << fields.at(j);
-      if (j < fields.count() - 1)
-        m_textStream << ",";
-
-      else
+      const auto &datasets = g->datasets();
+      for (auto d = datasets.begin(); d != datasets.end(); ++d)
       {
-        auto d = m_fieldCount - fields.count();
-        if (d > 0)
-        {
-          for (auto k = 0; k < d - 1; ++k)
-            m_textStream << QStringLiteral(",");
-        }
-
-        m_textStream << QStringLiteral("\n");
+        m_textStream << d->value();
+        if (d->datasetId() < datasets.count() - 1)
+          m_textStream << QStringLiteral(",");
+        else
+          m_textStream << QStringLiteral("\n");
       }
     }
+
+    // Flush the stream after every frame is written
+    m_textStream.flush();
   }
 
   // Clear frames
@@ -180,19 +173,20 @@ void CSV::Export::writeValues()
  * Creates a new CSV file corresponding to the current project title & field
  * count
  */
-void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
-{ // Get project title
-  auto projectTitle = UI::Dashboard::instance().title();
+void CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
+{
+  // Obtain frame data
+  const auto &data = frame.data;
+  const auto &rxTime = frame.rxDateTime;
 
   // Get file name
-  const QString fileName
-      = frame.rxDateTime.toString(QStringLiteral("HH-mm-ss")) + ".csv";
+  const auto fileName = rxTime.toString(QStringLiteral("HH-mm-ss")) + ".csv";
 
   // Get path
-  const auto format = frame.rxDateTime.toString("yyyy/MMM/dd/");
+  const auto format = rxTime.toString("yyyy/MMM/dd/");
   const QString path = QStringLiteral("%1/Documents/%2/CSV/%3/%4")
                            .arg(QDir::homePath(), qApp->applicationName(),
-                                projectTitle, format);
+                                data.title(), format);
 
   // Generate file path if required
   QDir dir(path);
@@ -220,51 +214,51 @@ void CSV::Export::createCsvFile(const CSV::RawFrame &frame)
 
   // Get number of fields by counting datasets with non-duplicated indexes
   QVector<int> fields;
-  QVector<QString> titles;
-  auto &groups = Project::Model::instance().groups();
+  QVector<QString> headers;
+  const auto &groups = data.groups();
   for (auto g = groups.constBegin(); g != groups.constEnd(); ++g)
   {
-    auto &datasets = g->datasets();
+    const auto &datasets = g->datasets();
     for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
     {
       if (!fields.contains(d->index()))
       {
         fields.append(d->index());
-        titles.append(QString("%1/%2").arg(g->title(), d->title()));
+        headers.append(QString("%1/%2").arg(g->title(), d->title()));
       }
     }
   }
 
   // Add CSV header
-  m_fieldCount = fields.count();
   m_textStream << QStringLiteral("RX Date/Time,");
-  for (auto i = 0; i < m_fieldCount; ++i)
+  for (auto i = 0; i < fields.count(); ++i)
   {
-    m_textStream << titles.at(i) << QStringLiteral("(field ") << i + 1
-                 << QStringLiteral(")");
-
-    if (i < m_fieldCount - 1)
+    m_textStream << headers.at(i);
+    if (i < fields.count() - 1)
       m_textStream << QStringLiteral(",");
     else
       m_textStream << QStringLiteral("\n");
   }
+
+  // Flush the stream
+  m_textStream.flush();
 
   // Update UI
   Q_EMIT openChanged();
 }
 
 /**
- * Appends the latest data from the device to the output buffer
+ * Appends the latest frame from the device to the output buffer
  */
-void CSV::Export::registerFrame(const QByteArray &data)
+void CSV::Export::registerFrame(const JSON::Frame &frame)
 {
   // Ignore if device is not connected (we don't want to generate a CSV file
   // when we are reading another CSV file don't we?)
   if (!IO::Manager::instance().connected())
     return;
 
-  // Ignore if current dashboard frame hasn't been loaded yet
-  if (!UI::Dashboard::instance().currentFrame().isValid())
+  // Ignore if frame is invalid
+  if (!frame.isValid())
     return;
 
   // Ignore if CSV export is disabled
@@ -272,8 +266,8 @@ void CSV::Export::registerFrame(const QByteArray &data)
     return;
 
   // Register raw frame to list
-  RawFrame frame;
-  frame.data = data;
-  frame.rxDateTime = QDateTime::currentDateTime();
-  m_frames.append(frame);
+  TimestampFrame tframe;
+  tframe.data = frame;
+  tframe.rxDateTime = QDateTime::currentDateTime();
+  m_frames.append(tframe);
 }
