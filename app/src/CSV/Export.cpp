@@ -160,10 +160,10 @@ void CSV::Export::writeValues()
           m_textStream << QStringLiteral("\n");
       }
     }
-
-    // Flush the stream after every frame is written
-    m_textStream.flush();
   }
+
+  // Flush the stream to writte it to the hard disk
+  m_textStream.flush();
 
   // Clear frames
   m_frames.clear();
@@ -239,9 +239,6 @@ void CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
     else
       m_textStream << QStringLiteral("\n");
   }
-
-  // Flush the stream
-  m_textStream.flush();
 
   // Update UI
   Q_EMIT openChanged();
