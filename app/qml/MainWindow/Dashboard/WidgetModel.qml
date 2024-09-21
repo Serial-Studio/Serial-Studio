@@ -36,6 +36,7 @@ Repeater {
 
     sourceComponent: WidgetDelegate {
       widgetIndex: index
+      visible: loader.visible && loader.opacity > 0
     }
 
     Connections {

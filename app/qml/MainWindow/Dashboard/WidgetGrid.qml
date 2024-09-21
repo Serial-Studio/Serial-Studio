@@ -68,6 +68,40 @@ Widgets.Pane {
         id: scroll
       }
 
+      //
+      // Viewport size and position tracking
+      //
+      onWidthChanged: updateVisibleWidgets()
+      onHeightChanged: updateVisibleWidgets()
+      onContentXChanged: updateVisibleWidgets()
+      onContentYChanged: updateVisibleWidgets()
+
+      //
+      // Only render pixmaps for widgets that are inside the viewport
+      //
+      function updateVisibleWidgets() {
+        const viewportTop = contentY
+        const viewportLeft = contentX
+        const viewportRight = contentX + width
+        const viewportBottom = contentY + height
+
+        // Notify the model to update the visibility of each widget
+        for (let i = 0; i < grid.children.length; i++) {
+          let item = grid.children[i]
+          let itemTop = item.y
+          let itemLeft = item.x
+          let itemRight = item.x + item.width
+          let itemBottom = item.y + item.height
+
+          // Check if the item is within the viewport bounds
+          let isVisibleVertically = (itemBottom > viewportTop) && (itemTop < viewportBottom)
+          let isVisibleHorizontally = (itemRight > viewportLeft) && (itemLeft < viewportRight)
+
+          // Update visibility based on position in the viewport
+          item.opacity = isVisibleVertically && isVisibleHorizontally ? 1 : 0
+        }
+      }
+
       Grid {
         id: grid
         rowSpacing: 4
