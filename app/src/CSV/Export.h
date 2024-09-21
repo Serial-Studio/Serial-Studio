@@ -91,7 +91,9 @@ public slots:
 private slots:
   void writeValues();
   void registerFrame(const JSON::Frame &frame);
-  void createCsvFile(const CSV::TimestampFrame &frame);
+
+private:
+  QVector<QPair<int, QString>> createCsvFile(const CSV::TimestampFrame &frame);
 
 private:
   QFile m_csvFile;

@@ -131,34 +131,55 @@ void CSV::Export::closeFile()
  */
 void CSV::Export::writeValues()
 {
+  // Initialize a list of pairs between indexes & headers
+  static QVector<QPair<int, QString>> indexHeaderPairs;
+
   // Write each frame
   for (auto i = m_frames.begin(); i != m_frames.end(); ++i)
   {
     // File not open, create it & add cell titles
     if (!isOpen() && exportEnabled())
-      createCsvFile(*i);
+    {
+      indexHeaderPairs.clear();
+      indexHeaderPairs = createCsvFile(*i);
+    }
+
+    // Continue if index/header pairs is not empty
+    if (indexHeaderPairs.isEmpty())
+      return;
 
     // Obtain frame data
     const auto &data = i->data;
     const auto &rxTime = i->rxDateTime;
 
     // Write RX date/time
-    const auto format = QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz");
+    const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
     m_textStream << rxTime.toString(format) << QStringLiteral(",");
 
-    // Write frame data
+    // Write frame data in the order of sorted fields
     const auto &groups = data.groups();
-    for (auto g = groups.begin(); g != groups.end(); ++g)
+    QMap<int, QString> fieldValues;
+
+    // Iterate through groups and datasets to collect field values
+    for (auto g = groups.constBegin(); g != groups.constEnd(); ++g)
     {
       const auto &datasets = g->datasets();
-      for (auto d = datasets.begin(); d != datasets.end(); ++d)
-      {
-        m_textStream << d->value();
-        if (d->datasetId() < datasets.count() - 1)
-          m_textStream << QStringLiteral(",");
-        else
-          m_textStream << QStringLiteral("\n");
-      }
+      for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
+        fieldValues[d->index()] = d->value();
+    }
+
+    // Write data according to the sorted field order
+    for (int i = 0; i < indexHeaderPairs.count(); ++i)
+    {
+      // Print value for current pair
+      const auto fieldIndex = indexHeaderPairs[i].first;
+      m_textStream << fieldValues.value(fieldIndex, QStringLiteral(""));
+
+      // Add comma or newline based on the position in the row
+      if (i < indexHeaderPairs.count() - 1)
+        m_textStream << QStringLiteral(",");
+      else
+        m_textStream << QStringLiteral("\n");
     }
   }
 
@@ -173,7 +194,8 @@ void CSV::Export::writeValues()
  * Creates a new CSV file corresponding to the current project title & field
  * count
  */
-void CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
+QVector<QPair<int, QString>>
+CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
 {
   // Obtain frame data
   const auto &data = frame.data;
@@ -200,7 +222,7 @@ void CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
     Misc::Utilities::showMessageBox(tr("CSV File Error"),
                                     tr("Cannot open CSV file for writing!"));
     closeFile();
-    return;
+    return QVector<QPair<int, QString>>();
   }
 
   // Add cell titles & force UTF-8 codec
@@ -213,28 +235,39 @@ void CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
 #endif
 
   // Get number of fields by counting datasets with non-duplicated indexes
-  QVector<int> fields;
   QVector<QString> headers;
+  QVector<int> datasetIndexes;
   const auto &groups = data.groups();
   for (auto g = groups.constBegin(); g != groups.constEnd(); ++g)
   {
     const auto &datasets = g->datasets();
     for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
     {
-      if (!fields.contains(d->index()))
+      if (!datasetIndexes.contains(d->index()))
       {
-        fields.append(d->index());
+        datasetIndexes.append(d->index());
         headers.append(QString("%1/%2").arg(g->title(), d->title()));
       }
     }
   }
 
-  // Add CSV header
+  // Combine fields and headers into pairs for sorting
+  QVector<QPair<int, QString>> fieldHeaderPairs;
+  for (int i = 0; i < datasetIndexes.count(); ++i)
+    fieldHeaderPairs.append(qMakePair(datasetIndexes[i], headers[i]));
+
+  // Sort the pairs based on the field values (first element of the pair)
+  std::sort(fieldHeaderPairs.begin(), fieldHeaderPairs.end(),
+            [](const QPair<int, QString> &a, const QPair<int, QString> &b) {
+              return a.first < b.first;
+            });
+
+  // Add CSV header directly from sorted pairs
   m_textStream << QStringLiteral("RX Date/Time,");
-  for (auto i = 0; i < fields.count(); ++i)
+  for (int i = 0; i < fieldHeaderPairs.count(); ++i)
   {
-    m_textStream << headers.at(i);
-    if (i < fields.count() - 1)
+    m_textStream << fieldHeaderPairs[i].second;
+    if (i < fieldHeaderPairs.count() - 1)
       m_textStream << QStringLiteral(",");
     else
       m_textStream << QStringLiteral("\n");
@@ -242,6 +275,7 @@ void CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
 
   // Update UI
   Q_EMIT openChanged();
+  return fieldHeaderPairs;
 }
 
 /**

@@ -275,8 +275,7 @@ void CSV::Player::openFile(const QString &filePath)
 
     // Play next frame (to force UI to generate groups, graphs & widgets)
     // Note: nextFrame() MUST BE CALLED AFTER emiting the openChanged() signal
-    // in
-    //       order for this monstrosity to work
+    // in order for this monstrosity to work
     nextFrame();
   }
 

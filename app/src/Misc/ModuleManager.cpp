@@ -80,21 +80,31 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
   if (msg.isEmpty())
     return;
 
+  // Add function to string
+  QString message;
+  if (context.function)
+    message = QStringLiteral("%1 - %2").arg(context.function, msg);
+  else
+    message = msg;
+
   // Show message & warning level
   QString output;
   switch (type)
   {
+    case QtInfoMsg:
+      output = QStringLiteral("[INFO] %1").arg(message);
+      break;
     case QtDebugMsg:
-      output = QStringLiteral("[DEBUG]: %1").arg(msg);
+      output = QStringLiteral("[DEBG] %1").arg(message);
       break;
     case QtWarningMsg:
-      output = QStringLiteral("[WARNING]: %1").arg(msg);
+      output = QStringLiteral("[WARN] %1").arg(message);
       break;
     case QtCriticalMsg:
-      output = QStringLiteral("[CRITICAL]: %1").arg(msg);
+      output = QStringLiteral("[CRIT] %1").arg(message);
       break;
     case QtFatalMsg:
-      output = QStringLiteral("[FATAL]: %1").arg(msg);
+      output = QStringLiteral("[FATL] %1").arg(message);
       break;
     default:
       break;
