@@ -105,13 +105,13 @@ class Model : public QObject
              NOTIFY modifiedChanged)
   Q_PROPERTY(quint8 datasetOptions
              READ datasetOptions
-             NOTIFY datasetModelChanged)
+             NOTIFY datasetOptionsChanged)
   Q_PROPERTY(bool currentGroupIsEditable
              READ currentGroupIsEditable
-             NOTIFY groupModelChanged)
+             NOTIFY editableOptionsChanged)
   Q_PROPERTY(bool currentDatasetIsEditable
              READ currentDatasetIsEditable
-             NOTIFY datasetModelChanged)
+             NOTIFY editableOptionsChanged)
   // clang-format on
 
 signals:
@@ -123,6 +123,8 @@ signals:
   void currentViewChanged();
   void projectModelChanged();
   void datasetModelChanged();
+  void datasetOptionsChanged();
+  void editableOptionsChanged();
   void frameParserCodeChanged();
   void thunderforestApyKeyChanged();
   void groupAdded(const QModelIndex &index);

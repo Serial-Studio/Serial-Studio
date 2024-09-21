@@ -140,6 +140,14 @@ Project::Model::Model()
     }
   });
 
+  // Ensure toolbar actions are synched with models
+  connect(this, &Project::Model::groupModelChanged, this,
+          &Project::Model::editableOptionsChanged);
+  connect(this, &Project::Model::datasetModelChanged, this,
+          &Project::Model::editableOptionsChanged);
+  connect(this, &Project::Model::datasetModelChanged, this,
+          &Project::Model::datasetOptionsChanged);
+
   // Re-load JSON map file into C++ model
   connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
           this, &Project::Model::onJsonLoaded);
@@ -714,6 +722,10 @@ void Project::Model::openJsonFile()
  */
 void Project::Model::openJsonFile(const QString &path)
 {
+  // Validate path
+  if (path.isEmpty())
+    return;
+
   // Open file
   QFile file(path);
   QJsonDocument document;
@@ -2101,6 +2113,8 @@ void Project::Model::onGroupItemChanged(QStandardItem *item)
 
     // Update group
     modified = setGroupWidget(groupId, widget);
+    if (modified)
+      m_selectedGroup.m_widget = widgetStr;
   }
 
   // Re-build tree model
@@ -2108,16 +2122,8 @@ void Project::Model::onGroupItemChanged(QStandardItem *item)
   if (modified)
     setModified(true);
 
-  // Select current group again
-  for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
-  {
-    if (i.value().groupId() == groupId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
-      break;
-    }
-  }
+  // Ensure toolbar items are synched
+  Q_EMIT editableOptionsChanged();
 }
 
 /**
@@ -2265,16 +2271,9 @@ void Project::Model::onDatasetItemChanged(QStandardItem *item)
   // Mark document as modified
   setModified(true);
 
-  // Select current DATASET again
-  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
-  {
-    if (i.value().groupId() == groupId && i.value().datasetId() == datasetId)
-    {
-      m_selectionModel->setCurrentIndex(i.key()->index(),
-                                        QItemSelectionModel::ClearAndSelect);
-      break;
-    }
-  }
+  // Ensure toolbar items are synched
+  Q_EMIT datasetOptionsChanged();
+  Q_EMIT editableOptionsChanged();
 }
 
 //------------------------------------------------------------------------------
