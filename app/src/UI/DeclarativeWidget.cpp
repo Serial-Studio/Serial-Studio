@@ -71,7 +71,7 @@ UI::DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
           &UI::DeclarativeWidget::resizeWidget);
 
   // Configure render loop
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout10Hz, this,
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
           &UI::DeclarativeWidget::renderWidget);
 }
 
@@ -241,6 +241,9 @@ void UI::DeclarativeWidget::resizeWidget()
   if (widget())
   {
     if (width() > 0 && height() > 0)
+    {
       widget()->setFixedSize(width(), height());
+      update();
+    }
   }
 }

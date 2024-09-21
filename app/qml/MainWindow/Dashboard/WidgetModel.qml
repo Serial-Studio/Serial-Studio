@@ -33,8 +33,6 @@ Repeater {
     asynchronous: true
     width: root.cellWidth
     height: root.cellHeight
-
-    property bool widgetVisible: true
     readonly property bool widgetInViewPort: opacity > 0
 
     // Uncomment to verify that lazy widget rendering is working
@@ -42,14 +40,14 @@ Repeater {
 
     sourceComponent: WidgetDelegate {
       widgetIndex: index
-      active: loader.widgetVisible && loader.widgetInViewPort
+      active: loader.visible && loader.widgetInViewPort
     }
 
     Connections {
       target: Cpp_UI_Dashboard
 
       function onWidgetVisibilityChanged() {
-        loader.widgetVisible = Cpp_UI_Dashboard.widgetVisible(index)
+        loader.visible = Cpp_UI_Dashboard.widgetVisible(index)
       }
     }
   }

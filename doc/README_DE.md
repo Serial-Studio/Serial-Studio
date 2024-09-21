@@ -12,66 +12,110 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE)
 
-Serial Studio ist ein plattformübergreifendes Programm zur Visualisierung serieller Daten. Ziel dieses Projekts ist es, eingebetteten Entwicklern und Machern die einfache Visualisierung, Präsentation und Analyse der von ihren Projekten und Geräten generierten Daten zu ermöglichen, ohne dass für jedes Projekt eine spezielle Computersoftware geschrieben werden muss.
+Serial Studio ist ein plattformübergreifendes und vielseitiges Datenvisualisierungstool, das für Ingenieure eingebetteter Systeme, Studenten, Hacker und Lehrer entwickelt wurde. Es ermöglicht Nutzern, die Daten ihrer Projekte und Geräte zu visualisieren, zu analysieren und darzustellen, ohne für jedes Projekt eine spezifische Visualisierungssoftware entwickeln zu müssen. Serial Studio bietet eine flexible Lösung, die sich an eine Vielzahl von Anwendungsfällen anpasst und sowohl für Bildungs- als auch für professionelle Umgebungen ideal ist.
 
-Die Notwendigkeit für dieses Projekt entstand während der Entwicklung der Bodenstationssoftware für mehrere CanSat-basierte Wettbewerbe, an denen ich teilnehme. Es ist einfach nicht nachhaltig, für jeden Wettbewerb und jedes Projekt unterschiedliche GSS-Programme zu entwickeln und zu pflegen. Die intelligente Lösung besteht darin, eine gemeinsame Ground Station-Software zu haben und jedem CanSat zu ermöglichen, zu definieren, wie die Daten dem Endbenutzer mithilfe eines erweiterbaren Kommunikationsprotokolls präsentiert werden.
+Das Tool entstand aus meinen Erfahrungen bei mehreren CanSat-Wettbewerben, bei denen ich oft neue Bodenstationssoftware für jedes Projekt entwickeln musste. Mit der Zeit stellte ich fest, dass es effizienter und nachhaltiger wäre, ein einziges, flexibles Programm zu pflegen, das es Nutzern ermöglicht, zu definieren, wie eingehende Daten verarbeitet und angezeigt werden.
 
-Darüber hinaus kann dieser Ansatz auf nahezu jede Art von Projekt ausgedehnt werden, bei dem Daten erfasst und gemessen werden.
+Heute ist Serial Studio ein leistungsstarkes und anpassungsfähiges Tool, das nicht nur für CanSat-Wettbewerbe, sondern auch für jedes Projekt zur Datenerfassung und -visualisierung geeignet ist. Es unterstützt die Datenabfrage aus einer Vielzahl von Quellen, darunter serielle Schnittstellen, MQTT, Bluetooth Low Energy (BLE) und Netzwerksockets (TCP/UDP).
 
-**HINWEIS:** Informationen zum Kommunikationsprotokoll finden Sie im [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol).
+*Lies dieses Dokument in anderen Sprachen*: [Español](doc/README_ES.md) [简体中文](doc/README_ZH.md) [Deutsch](doc/README_DE.md) [Русский](doc/README_RU.md)
 
-*Lesen Sie dies in anderen Sprachen:* [English](../README.md) [简体中文](README_ZH.md) [Español](README_ES.md)
+![Software-Benutzung](doc/screenshot.png)
 
-![Software usage](mockup.png)
+## Funktionen
 
-## Bauanweisungen
+- **Plattformübergreifend:** Kompatibel mit Windows, macOS und Linux.
+- **CSV-Export:** Speichert empfangene Daten mühelos in CSV-Dateien zur späteren Analyse oder Weiterverarbeitung.
+- **Unterstützung für mehrere Datenquellen:** Unterstützt eine Vielzahl von Quellen, darunter serielle Schnittstellen, MQTT, Bluetooth Low Energy (BLE) und Netzwerksockets (TCP/UDP).
+- **Anpassbare Visualisierung:** Ermöglicht das Definieren und Anzeigen von Daten mit verschiedenen Widgets, die über den Projekt-Editor an spezifische Benutzeranforderungen angepasst werden können.
+- **Anpassbare Frame-Analyse:** Bietet die Möglichkeit, eine JavaScript-Funktion zu modifizieren, um eingehende Datenrahmen zu interpretieren, was die Vorverarbeitung von Rohsensordaten und die Handhabung komplexer Binärformate erleichtert.
+- **MQTT-Publishing und -Empfang:** Sendet und empfängt Daten über das Internet und ermöglicht so die Echtzeit-Visualisierung von Daten von überall auf der Welt.
 
-#### Bedarf
+## Installation
 
-Die einzige Voraussetzung zum Kompilieren der Anwendung ist, dass [Qt](http://www.qt.io/download-open-source/) auf Ihrem System installiert ist. Die Desktop-Anwendung wird mit **Qt 5.15** kompiliert.
+Du kannst die neueste Version von Serial Studio für deine bevorzugte Plattform [hier](https://github.com/Serial-Studio/Serial-Studio/releases/latest) herunterladen und installieren.
 
-Auf GNU / Linux-Systemen müssen Sie außerdem `libgl1-mesa-dev` installieren, um die Anwendung zu kompilieren.
+### Installation unter Linux
 
-Vollständige Liste der verwendeten Qt-Module:
+Für GNU/Linux-Nutzer: Nach dem Herunterladen der AppImage-Datei stelle sicher, dass sie die richtigen Ausführungsberechtigungen hat, bevor du die Anwendung startest:
+
+```bash
+chmod +x SerialStudio-2.1.0-Linux.AppImage
+./SerialStudio-2.1.0-Linux.AppImage
+```
+
+Alternativ kannst du Serial Studio mithilfe von [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/) in dein System integrieren.
+
+### Vorgefertigte Linux-Pakete
+
+Für Arch-Linux-Nutzer kannst du Serial Studio über das AUR installieren:
+
+```bash
+aur fetch serial-studio-git
+aur build
+sudo pacman -S serial-studio-git
+```
+
+**Hinweis:** Das AUR-Paket-Rezept könnte veraltet sein, stelle daher sicher, dass du auf Updates achtest.
+
+## Entwicklung
+
+### Anforderungen
+
+Zum Kompilieren von Serial Studio ist die einzige erforderliche Abhängigkeit [Qt](http://www.qt.io/download-open-source/). Die Desktop-Anwendung wird mit **Qt 6.7.1** kompiliert.
+
+Wenn du unter GNU/Linux kompilierst, musst du auch `libgl1-mesa-dev` installieren:
+
+```bash
+sudo apt install libgl1-mesa-dev
+```
+
+Hier ist eine Liste der benötigten Qt-Module:
 
 - Qt SVG
 - Qt Quick
 - Qt Widgets
+- Qt Location
+- Qt Bluetooth
 - Qt Networking
+- Qt Positioning
 - Qt Serial Port
 - Qt Print Support
 - Qt Quick Widgets
 - Qt Quick Controls 2
 
-#### Klonen
+### Repository klonen
 
-Dieses Repository verwendet [`git submodule`](https://git-scm.com/book/en/v2/Git-Tools-Submodules). Führen Sie die folgenden Befehle auf Ihrem Terminal aus, um sie zu klonen:
+Um das Repository mit den erforderlichen Submodulen zu klonen, führe aus:
 
-	git clone https://github.com/Serial-Studio/Serial-Studio
-	cd Serial-Studio
-	git submodule init
-	git submodule update
-	
-Alternativ können Sie auch Folgendes ausführen:
+```bash
+git clone https://github.com/Serial-Studio/Serial-Studio
+cd Serial-Studio
+```
 
-	git clone --recursive https://github.com/Serial-Studio/Serial-Studio
-    
-#### Kompilieren
+### Anwendung kompilieren
 
-Sobald Sie Qt installiert haben, öffnen Sie *Serial-Studio.pro* in Qt Creator und klicken Sie auf die Schaltfläche "Ausführen".
+Nachdem Qt installiert ist, kannst du das Projekt kompilieren, indem du die **CMakeLists.txt**-Datei in deiner bevorzugten IDE öffnest oder die Befehlszeile verwendest:
 
-Alternativ können Sie auch die folgenden Befehle verwenden:
+```bash
+mkdir build
+cd build 
+cmake ../ -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release -j 10
+```
 
-	qmake
-	make -j4
-	
-### Softwarearchitektur
+## Software-Architektur
 
-Unten sehen Sie ein vereinfachtes Diagramm, das erklärt, wie die verschiedenen Module von Serial Studio miteinander interagieren. Sie finden die DOXYGEN-Dokumentation, indem Sie [hier](https://serial-studio.github.io/hackers/) klicken.
+Im Folgenden siehst du ein vereinfachtes Diagramm, das zeigt, wie die verschiedenen Serial Studio-Module interagieren. Für detailliertere Informationen, siehe die vollständige DOXYGEN-Dokumentation [hier](https://serial-studio.github.io/hackers/).
 
-![Architektur](architecture/architecture.png)
+![Architektur](doc/architecture/architecture.png)
 
 ## Lizenz
 
-Dieses Projekt wird unter der MIT-Lizenz veröffentlicht. Weitere Informationen finden Sie in der Datei [LICENSE](LICENSE.md)
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Details findest du in der Datei [LICENSE](LICENSE.md).
 
+## Unterstützung und Spenden
+
+Wenn du Serial Studio nützlich findest, erwäge bitte, die Entwicklung durch eine [Spende via PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE) zu unterstützen.
+
+Alternativ, wenn du jemals in [Cancún, Mexiko](https://de.wikipedia.org/wiki/Canc%C3%BAn) bist und mich auf ein Bier persönlich einladen möchtest, zögere nicht, mir [eine Nachricht auf Instagram zu senden](https://instagram.com/aspatru). Ich würde mich freuen, dich kennenzulernen!

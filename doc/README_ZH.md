@@ -12,68 +12,110 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE)
 
-Serial Studio是一个多平台，多用途的串行数据可视化的应用软件。本项目的目标是使嵌入式开发人员和制造商可以轻松地可视化的呈现和分析其项目和设备生成的数据，而无需为每个项目编写专用的计算机软件。
+Serial Studio 是一个跨平台、功能多样的数据可视化工具，专为嵌入式系统工程师、学生、黑客和教师设计。它允许用户可视化、分析和展示他们项目和设备中的数据，而无需为每个项目开发特定的可视化软件。**Serial Studio** 提供了一种灵活的解决方案，适应各种使用场景，非常适合教育和专业环境。
 
-在我参加过的一些基于CanSat比赛的地面工作站的软件开发过程中，对这个项目的需求有所增加。为每个竞赛和项目开发和维护不同的GSS软件是不可持续的。正确的解决方案是拥有一个通用的地面工作站软件，并让每个CanSat定义如何使用可扩展的通信协议并将数据呈现给最终用户。
+这个工具源于我在多个 CanSat 比赛中的经验，那时我经常需要为每个项目开发新的地面站软件。随着时间的推移，我意识到维护一个灵活的通用软件，让用户可以定义如何处理和显示传入的数据，会更加高效和可持续。
 
-此外，本项目使用的方法可以扩展到涉及某种数据采集和测量的几乎任何类型的项目中。
+如今，Serial Studio 是一个强大且灵活的工具，不仅适用于 CanSat 竞赛，也适用于任何数据采集和可视化项目。它支持从多种来源获取数据，包括串行端口、MQTT、蓝牙低功耗 (BLE) 和网络套接字 (TCP/UDP)。
 
-**注意:** 有关通信协议的说明在[Wiki中](https://github.com/Serial-Studio/Serial-Studio/wiki/Communication-Protocol)提供。
+*阅读其他语言版本的文档*: [Español](doc/README_ES.md) [简体中文](doc/README_ZH.md) [Deutsch](doc/README_DE.md) [Русский](doc/README_RU.md)
 
-*其他语言请阅读*  :[English](../README.md)、 [Español](README_ES.md)、 [Deutsch](README_DE.md)
+![软件使用](doc/screenshot.png)
 
-![Software usage](mockup.png)
+## 功能
 
-## 编译说明
+- **跨平台：** 兼容 Windows、macOS 和 Linux。
+- **CSV 导出：** 轻松将接收到的数据保存为 CSV 文件，以便进一步分析或处理。
+- **多数据源支持：** 支持多种来源，包括串行端口、MQTT、蓝牙低功耗 (BLE) 和网络套接字 (TCP/UDP)。
+- **可自定义可视化：** 通过项目编辑器定义和显示数据，使用各种可配置的小部件以满足用户的具体需求。
+- **可自定义帧解析：** 提供修改 JavaScript 函数的选项，以解析传入的数据帧，方便处理原始传感器数据并支持复杂的二进制格式。
+- **通过 MQTT 发布和接收：** 通过互联网发送和接收数据，支持从世界任何地方实时可视化数据。
 
-#### 要求
+## 安装
 
-编译本项目的唯一要求是在你的电脑系统中安装 QT ， 本项目编译支持 **Qt 5.15***。
+你可以从 [这里](https://github.com/Serial-Studio/Serial-Studio/releases/latest) 下载并安装适用于你首选平台的最新版本 **Serial Studio**。
 
-在GNU/Linux系统上，还需要安装`libgl1-mesa-dev`才能编译应用程序。
+### Linux 安装
 
-已使用的Qt模块的完整列表：
+对于 GNU/Linux 用户，在下载 AppImage 后，确保为其设置正确的可执行权限，然后运行应用程序：
+
+```bash
+chmod +x SerialStudio-2.1.0-Linux.AppImage
+./SerialStudio-2.1.0-Linux.AppImage
+```
+
+或者，你可以使用 [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/) 将 **Serial Studio** 集成到你的系统中。
+
+### 预编译的 Linux 软件包
+
+对于 Arch Linux 用户，你可以通过 AUR 安装 **Serial Studio**：
+
+```bash
+aur fetch serial-studio-git
+aur build
+sudo pacman -S serial-studio-git
+```
+
+**注意：** AUR 软件包可能过时，请确保检查更新。
+
+## 开发
+
+### 要求
+
+编译 Serial Studio 的唯一必要依赖项是 [Qt](http://www.qt.io/download-open-source/)。桌面应用程序使用 **Qt 6.7.1** 进行编译。
+
+如果你在 GNU/Linux 上进行编译，你还需要安装 `libgl1-mesa-dev`：
+
+```bash
+sudo apt install libgl1-mesa-dev
+```
+
+以下是需要的 Qt 模块列表：
 
 - Qt SVG
 - Qt Quick
 - Qt Widgets
+- Qt Location
+- Qt Bluetooth
 - Qt Networking
+- Qt Positioning
 - Qt Serial Port
 - Qt Print Support
 - Qt Quick Widgets
 - Qt Quick Controls 2
 
-#### 克隆
+### 克隆仓库
 
-本仓库使用[`git submodule`](https://git-scm.com/book/en/v2/Git-Tools-Submodules)。为了克隆它，请在终端上执行以下命令：
+要克隆包含必要子模块的仓库，请执行以下命令：
 
-	git clone https://github.com/Serial-Studio/Serial-Studio
-	cd Serial-Studio
-	git submodule init
-	git submodule update
+```bash
+git clone https://github.com/Serial-Studio/Serial-Studio
+cd Serial-Studio
+```
 
-或者，只运行:
+### 编译应用程序
 
-	git clone --recursive https://github.com/Serial-Studio/Serial-Studio
+安装 Qt 后，你可以通过在你喜欢的 IDE 中打开 **CMakeLists.txt** 文件或使用命令行编译项目：
 
-#### 编译
+```bash
+mkdir build
+cd build 
+cmake ../ -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release -j 10
+```
 
-安装 Qt 后，在 Qt Creator 中打开 *Serial-Studio.pro*，然后单击 “运行” 按钮。
-
-或者，您也可以使用以下命令：
-
-	qmake
-	make -j4
-	
 ## 软件架构
 
-下面是一个简化图，解释了不同的 Serial Studio 模块如何相互交互。 您可以通过单击 [此处](https://serial-studio.github.io/hackers/) 找到 DOXYGEN 文档。
+下面是一个简化的示意图，展示了 Serial Studio 各个模块如何交互。有关更详细的信息，请查阅完整的 DOXYGEN 文档 [这里](https://serial-studio.github.io/hackers/)。
 
-![架构](architecture/architecture.png)
+![架构](doc/architecture/architecture.png)
 
-## Licence
+## 许可证
 
-本项目是根据MIT许可证发布的，更多信息，请查看[LICENSE](https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md)文件。
+此项目根据 MIT 许可证授权。更多详细信息，请参阅 [LICENSE](LICENSE.md) 文件。
 
+## 支持与捐赠
 
+如果你觉得 Serial Studio 有用，欢迎通过 [PayPal 捐赠](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE) 支持其开发。
 
+或者，如果你有机会来到 [墨西哥坎昆](https://zh.wikipedia.org/wiki/坎昆)，并想亲自请我喝一杯，随时可以通过 [Instagram 给我发消息](https://instagram.com/aspatru)。我很乐意认识你！

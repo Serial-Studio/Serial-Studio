@@ -236,7 +236,7 @@ ToolBar {
     // MQTT Setup
     //
     Widgets.BigButton {
-      text: qsTr("MQTT Setup")
+      text: qsTr("MQTT")
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showMqttConfiguration()
       icon.source: "qrc:/rcc/icons/toolbar/mqtt.svg"

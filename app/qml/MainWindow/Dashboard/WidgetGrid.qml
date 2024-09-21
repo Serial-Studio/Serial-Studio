@@ -77,15 +77,6 @@ Widgets.Pane {
       onContentXChanged: updateVisibleWidgets()
       onContentYChanged: updateVisibleWidgets()
 
-      Connections {
-        target: root
-        function onColumnsChanged() {
-          const contentX = flickable.contentX
-          flickable.contentX = -1
-          flickable.contentX = contentX
-        }
-      }
-
       //
       // Only render pixmaps for widgets that are inside the viewport
       //
@@ -112,6 +103,18 @@ Widgets.Pane {
         }
       }
 
+      //
+      // Obtain which widgets to render when user changes widget sizes
+      //
+      Connections {
+        target: root
+        function onColumnsChanged() {
+          const contentX = flickable.contentX
+          flickable.contentX = -1
+          flickable.contentX = contentX
+        }
+      }
+
       Grid {
         id: grid
         rowSpacing: 4
@@ -123,7 +126,10 @@ Widgets.Pane {
         Timer {
           id: timer
           interval: 200
-          onTriggered: transition.enabled = false
+          onTriggered: {
+            transition.enabled = false
+            flickable.updateVisibleWidgets()
+          }
         }
 
         Connections {
