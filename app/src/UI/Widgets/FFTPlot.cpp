@@ -137,9 +137,6 @@ void Widgets::FFTPlot::updateData()
     m_curve.setSamples(points);
     m_plot.setAxisScale(QwtPlot::xBottom, 0, m_samplingRate / 2);
     m_plot.replot();
-
-    // Redraw the widget
-    requestRepaint();
   }
 }
 

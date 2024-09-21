@@ -24,16 +24,15 @@
 
 #include <QLabel>
 #include <QTimer>
+#include <QWidget>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QScrollArea>
-
-#include <UI/DashboardWidget.h>
 #include <UI/Widgets/Common/KLed.h>
 
 namespace Widgets
 {
-class LEDPanel : public DashboardWidgetBase
+class LEDPanel : public QWidget
 {
   Q_OBJECT
 

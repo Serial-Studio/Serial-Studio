@@ -85,8 +85,6 @@ void Widgets::BaseWidget::setWidget(QWidget *widget,
     m_layout.setContentsMargins(8, 8, 8, 8);
     setLayout(&m_layout);
   }
-
-  requestRepaint();
 }
 
 void Widgets::BaseWidget::resizeEvent(QResizeEvent *event)
@@ -159,7 +157,4 @@ void Widgets::BaseWidget::onThemeChanged()
       theme->getColor("groupbox_background"), theme->getColor("widget_text"),
       theme->getColor("groupbox_hard_border"));
   m_label.setStyleSheet(stylesheet);
-
-  // Redraw widget
-  update();
 }

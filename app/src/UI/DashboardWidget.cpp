@@ -193,10 +193,7 @@ qreal UI::DashboardWidget::gpsLongitude() const
 void UI::DashboardWidget::setVisible(const bool visible)
 {
   if (m_dbWidget)
-  {
     m_dbWidget->setEnabled(visible);
-    update();
-  }
 }
 
 /**
@@ -265,12 +262,9 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
     {
       setWidget(m_dbWidget);
       updateWidgetVisible();
-      connect(m_dbWidget, &Widgets::DashboardWidgetBase::updated, this, [=]() {
-        if (!isGpsMap())
-          update();
-        else
-          Q_EMIT gpsDataChanged();
-      });
+      /*connect(m_dbWidget, &Widgets::DashboardWidgetBase::updated, this, [=]()
+      { if (isGpsMap()) Q_EMIT gpsDataChanged();
+      });*/
 
       Q_EMIT widgetIndexChanged();
     }
@@ -303,12 +297,8 @@ void UI::DashboardWidget::updateWidgetVisible()
   if (widgetVisible() != visible && !isExternalWindow())
   {
     m_widgetVisible = visible;
-
     if (m_dbWidget)
-    {
       m_dbWidget->setEnabled(visible);
-      update();
-    }
 
     Q_EMIT widgetVisibleChanged();
   }

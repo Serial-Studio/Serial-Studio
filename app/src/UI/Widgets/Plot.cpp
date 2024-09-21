@@ -167,9 +167,6 @@ void Widgets::Plot::updateData()
     // Replot graph
     m_curve.setSamples(plotData.at(m_index));
     m_plot.replot();
-
-    // Repaint widget
-    requestRepaint();
   }
 }
 
@@ -190,9 +187,6 @@ void Widgets::Plot::updateRange()
   // Redraw graph
   m_curve.setSamples(dash->xPlotValues(), tempYData);
   m_plot.replot();
-
-  // Repaint widget
-  requestRepaint();
 }
 
 /**

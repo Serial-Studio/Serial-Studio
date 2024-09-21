@@ -27,11 +27,10 @@
 #include <QVBoxLayout>
 #include <QwtPlotCurve>
 #include <QwtScaleEngine>
-#include <UI/DashboardWidget.h>
 
 namespace Widgets
 {
-class Plot : public DashboardWidgetBase
+class Plot : public QWidget
 {
   Q_OBJECT
 

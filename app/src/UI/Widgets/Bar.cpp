@@ -97,9 +97,6 @@ void Widgets::Bar::updateData()
   setValue(QStringLiteral("%1 %2").arg(
       QString::number(value, 'f', UI::Dashboard::instance().precision()),
       dataset.units()));
-
-  // Repaint widget
-  requestRepaint();
 }
 
 /**

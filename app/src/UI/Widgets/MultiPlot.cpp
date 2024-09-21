@@ -148,10 +148,7 @@ void Widgets::MultiPlot::updateData()
 
   // Plot widget again
   if (isEnabled())
-  {
     m_plot.replot();
-    requestRepaint();
-  }
 }
 
 /**
@@ -178,9 +175,6 @@ void Widgets::MultiPlot::updateRange()
   for (int i = 0; i < group.datasetCount(); ++i)
     if (m_curves.count() > i)
       m_curves.at(i)->setSamples(dash->xPlotValues(), m_yData[i]);
-
-  // Repaint widget
-  requestRepaint();
 }
 
 /**
@@ -228,7 +222,4 @@ void Widgets::MultiPlot::onThemeChanged()
 
     curve->setPen(QColor(color), 2, Qt::SolidLine);
   }
-
-  // Re-draw widget
-  update();
 }

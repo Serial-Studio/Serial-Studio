@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QwtPlot>
+#include <QWidget>
 #include <QwtLegend>
 #include <QComboBox>
 #include <QVBoxLayout>
@@ -34,7 +35,7 @@
 
 namespace Widgets
 {
-class MultiPlot : public DashboardWidgetBase
+class MultiPlot : public QWidget
 {
   Q_OBJECT
 

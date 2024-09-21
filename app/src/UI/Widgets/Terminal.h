@@ -133,6 +133,7 @@ public slots:
   void clear();
   void selectAll();
   void clearSelection();
+  void scrollToBottom();
   void setReadOnly(const bool ro);
   void setFont(const QFont &font);
   void append(const QString &text);
@@ -148,18 +149,15 @@ public slots:
   void setUndoRedoEnabled(const bool enabled);
   void setPlaceholderText(const QString &text);
   void setMaximumBlockCount(const int maxBlockCount);
-  void scrollToBottom(const bool repaint = false);
 
 private slots:
-  void repaint();
+  ;
   void onThemeChanged();
   void updateScrollbarVisibility();
   void setCopyAvailable(const bool yes);
   void addText(const QString &text, const bool enableVt100);
 
 private:
-  void requestRepaint(const bool textChanged = false);
-
   // VT-100 emulation
   QString vt100Processing(const QString &data);
   void clearEntireLine();

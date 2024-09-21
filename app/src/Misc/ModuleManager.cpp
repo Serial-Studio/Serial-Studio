@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include <iostream>
 #include <QQuickWindow>
 #include <QSimpleUpdater.h>
 
@@ -54,6 +55,58 @@
 #include "UI/Dashboard.h"
 #include "UI/DashboardWidget.h"
 #include "UI/Widgets/Terminal.h"
+
+/**
+ * @brief Custom message handler for Qt debug, warning, critical, and fatal
+ *        messages.
+ *
+ * This static function handles messages of various types (debug, warning,
+ * critical, fatal) emitted by the Qt framework.
+ *
+ * It formats the message with a corresponding prefix based on the message type
+ * (e.g., "[Debug]", "[Warning]").
+ *
+ * @param type The type of the message.
+ * @param context The message log context (file, line, function).
+ * @param msg The actual message that was emitted by the Qt system.
+ *
+ * @note The function appends the formatted message to the console handler.
+ */
+static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
+                           const QString &msg)
+{
+  // Skip empty messages
+  (void)context;
+  if (msg.isEmpty())
+    return;
+
+  // Show message & warning level
+  QString output;
+  switch (type)
+  {
+    case QtDebugMsg:
+      output = QStringLiteral("[DEBUG]: %1").arg(msg);
+      break;
+    case QtWarningMsg:
+      output = QStringLiteral("[WARNING]: %1").arg(msg);
+      break;
+    case QtCriticalMsg:
+      output = QStringLiteral("[CRITICAL]: %1").arg(msg);
+      break;
+    case QtFatalMsg:
+      output = QStringLiteral("[FATAL]: %1").arg(msg);
+      break;
+    default:
+      break;
+  }
+
+  // Add a newline at the end
+  std::cout << output.toStdString() << std::endl;
+  output.append("\n");
+
+  // Use IO::Manager signal to avoid messing up tokens in console
+  Q_EMIT IO::Manager::instance().dataReceived(output.toUtf8());
+}
 
 /**
  * Configures the application font and configures application signals/slots to
@@ -206,4 +259,7 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   // Load main.qml
   m_engine.load(QUrl(QStringLiteral("qrc:/app/qml/main.qml")));
+
+  // Install custom message handler to redirect qDebug output to console
+  qInstallMessageHandler(MessageHandler);
 }

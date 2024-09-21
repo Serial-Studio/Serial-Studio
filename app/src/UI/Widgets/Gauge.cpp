@@ -78,9 +78,6 @@ void Widgets::Gauge::updateData()
   setValue(QStringLiteral("%1 %2").arg(
       QString::number(dataset.value().toDouble(), 'f', dash->precision()),
       dataset.units()));
-
-  // Repaint widget
-  requestRepaint();
 }
 
 /**

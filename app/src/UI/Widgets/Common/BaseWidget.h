@@ -30,7 +30,7 @@
 
 namespace Widgets
 {
-class BaseWidget : public DashboardWidgetBase
+class BaseWidget : public QWidget
 {
   Q_OBJECT
 

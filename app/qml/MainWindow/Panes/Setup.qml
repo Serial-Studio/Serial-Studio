@@ -30,7 +30,7 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
-  title: qsTr("Device Setup")
+  title: qsTr("Setup")
   icon: "qrc:/rcc/icons/panes/setup.svg"
 
   //

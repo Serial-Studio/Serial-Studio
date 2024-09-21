@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"
 #include "UI/DeclarativeWidget.h"
 
@@ -37,7 +38,6 @@
       using QWidget::function;                                                 \
     };                                                                         \
     static_cast<PwnedWidget *>(pointer.data())->function(event);               \
-    update();                                                                  \
   }
 
 /**
@@ -47,21 +47,32 @@
 UI::DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
   : QQuickPaintedItem(parent)
 {
-  setMipmap(true);
-  setAntialiasing(true);
+  // Disable mipmap & antialiasing, we don't need them
+  setMipmap(false);
+  setAntialiasing(false);
+
+  // Disable alpha channel
   setOpaquePainting(true);
-  setAcceptTouchEvents(true);
+  setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
+
+  // Widgets don't process touch events, disable it
+  setAcceptTouchEvents(false);
+
+  // Set item flags, we need these to forward Quick events to the widget
   setFlag(ItemHasContents, true);
   setFlag(ItemIsFocusScope, true);
   setFlag(ItemAcceptsInputMethod, true);
   setAcceptedMouseButtons(Qt::AllButtons);
-  setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
 
+  // Resize widget to fit QtQuick item
   connect(this, &QQuickPaintedItem::widthChanged, this,
           &UI::DeclarativeWidget::resizeWidget);
   connect(this, &QQuickPaintedItem::heightChanged, this,
           &UI::DeclarativeWidget::resizeWidget);
-  connect(this, &UI::DeclarativeWidget::widgetChanged, [=]() { update(); });
+
+  // Configure render loop
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout10Hz, this,
+          &UI::DeclarativeWidget::renderWidget);
 }
 
 /**
@@ -70,20 +81,6 @@ UI::DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
 QWidget *UI::DeclarativeWidget::widget()
 {
   return m_widget;
-}
-
-/**
- * Grabs an image/pixmap of the contained widget. The pixmap is later
- * used to render the widget in the QML interface without causing signal/slot
- * interferences with the scenegraph render thread.
- */
-void UI::DeclarativeWidget::update(const QRect &rect)
-{
-  if (widget())
-  {
-    m_pixmap = m_widget->grab();
-    QQuickPaintedItem::update(rect);
-  }
 }
 
 /**
@@ -209,21 +206,6 @@ void UI::DeclarativeWidget::dropEvent(QDropEvent *event)
 }
 
 /**
- * Resizes the widget to fit inside the QML painted item.
- */
-void UI::DeclarativeWidget::resizeWidget()
-{
-  if (widget())
-  {
-    if (width() > 0 && height() > 0)
-    {
-      widget()->setFixedSize(width(), height());
-      update();
-    }
-  }
-}
-
-/**
  * Changes the @param widget to be rendered in the QML interface.
  */
 void UI::DeclarativeWidget::setWidget(QWidget *widget)
@@ -235,5 +217,30 @@ void UI::DeclarativeWidget::setWidget(QWidget *widget)
 
     m_widget = widget;
     Q_EMIT widgetChanged();
+  }
+}
+
+/**
+ * @brief Renders the widget as a pixmap, which is then painted in the QML
+ *        user interface.
+ */
+void UI::DeclarativeWidget::renderWidget()
+{
+  if (widget() && isVisible())
+  {
+    m_pixmap = widget()->grab();
+    update();
+  }
+}
+
+/**
+ * Resizes the widget to fit inside the QML painted item.
+ */
+void UI::DeclarativeWidget::resizeWidget()
+{
+  if (widget())
+  {
+    if (width() > 0 && height() > 0)
+      widget()->setFixedSize(width(), height());
   }
 }

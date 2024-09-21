@@ -36,7 +36,6 @@
       using QScrollArea::function;                                             \
     };                                                                         \
     static_cast<PwnedWidget *>(pointer)->function(event);                      \
-    requestRepaint();                                                          \
   }
 
 /**
@@ -205,9 +204,6 @@ void Widgets::DataGroup::updateData()
     if (m_values.count() > i)
       m_values.at(i)->setText(value + " ");
   }
-
-  // Repaint widget
-  requestRepaint();
 }
 
 /**

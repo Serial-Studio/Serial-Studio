@@ -167,7 +167,7 @@ ToolBar {
     //
     Widgets.BigButton {
       id: setupBt
-      text: qsTr("Devices")
+      text: qsTr("Setup")
       onClicked: root.setupClicked()
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/toolbar/device-setup.svg"

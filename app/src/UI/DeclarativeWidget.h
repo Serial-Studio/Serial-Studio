@@ -42,8 +42,6 @@ public:
 
   [[nodiscard]] QWidget *widget();
 
-  void update(const QRect &rect = QRect());
-
   virtual void paint(QPainter *painter) override;
   virtual void keyPressEvent(QKeyEvent *event) override;
   virtual void keyReleaseEvent(QKeyEvent *event) override;
@@ -61,11 +59,11 @@ public:
   virtual void dropEvent(QDropEvent *event) override;
 
 public slots:
-  void resizeWidget();
   void setWidget(QWidget *widget);
 
-private:
-  void execEvent(void *function, void *event);
+private slots:
+  void renderWidget();
+  void resizeWidget();
 
 private:
   QPixmap m_pixmap;

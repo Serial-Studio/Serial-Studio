@@ -26,50 +26,6 @@
 #include <Misc/TimerEvents.h>
 #include <UI/DeclarativeWidget.h>
 
-namespace Widgets
-{
-/**
- * @brief The DashboardWidgetBase class
- *
- * A simple QWidget with an additional @c update() signal, which is used by the
- * @c UI::DashboardWidget to know when it should trigger a re-paint request to
- * the scene render thread.
- *
- * The widget also contains a @c requestUpdate() function, which is called by
- * the widgets that inherit this class when they finish updating the displayed
- * data. This function is used to schedule a re-paint at a controlled frequency,
- * which is limited at 20 Hz.
- */
-class DashboardWidgetBase : public QWidget
-{
-  Q_OBJECT
-
-signals:
-  void updated();
-
-public:
-  DashboardWidgetBase()
-  {
-    connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz,
-            this, &Widgets::DashboardWidgetBase::repaint);
-  }
-
-  void repaint()
-  {
-    if (m_repaint)
-    {
-      m_repaint = false;
-      Q_EMIT updated();
-    }
-  }
-
-  void requestRepaint() { m_repaint = true; }
-
-private:
-  bool m_repaint;
-};
-} // namespace Widgets
-
 namespace UI
 {
 /**
@@ -170,6 +126,6 @@ private:
   bool m_isGpsMap;
   bool m_widgetVisible;
   bool m_isExternalWindow;
-  Widgets::DashboardWidgetBase *m_dbWidget;
+  QWidget *m_dbWidget;
 };
 } // namespace UI

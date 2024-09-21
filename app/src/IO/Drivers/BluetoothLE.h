@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include <QTimer>
 #include <QObject>
 #include <QLowEnergyController>
 #include <QBluetoothDeviceDiscoveryAgent>

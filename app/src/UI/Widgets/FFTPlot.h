@@ -39,7 +39,7 @@ namespace Widgets
  * @class FFTPlot
  * @brief Class to plot FFT data using QwtPlot and QFourierTransformer.
  */
-class FFTPlot : public DashboardWidgetBase
+class FFTPlot : public QWidget
 {
   Q_OBJECT
 

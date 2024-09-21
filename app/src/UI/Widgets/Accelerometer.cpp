@@ -109,9 +109,6 @@ void Widgets::Accelerometer::updateData()
   m_gauge.setValue(G);
   setValue(QStringLiteral("%1 G").arg(
       QString::number(G, 'f', UI::Dashboard::instance().precision())));
-
-  // Repaint the widget
-  requestRepaint();
 }
 
 /**

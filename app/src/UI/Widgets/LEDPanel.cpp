@@ -181,9 +181,6 @@ void Widgets::LEDPanel::updateData()
       disconnect(&m_blinkerTimer, &QTimer::timeout, m_leds.at(i),
                  &KLed::toggle);
   }
-
-  // Repaint widget
-  requestRepaint();
 }
 
 /**

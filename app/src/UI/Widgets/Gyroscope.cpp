@@ -105,9 +105,6 @@ void Widgets::Gyroscope::updateData()
   // Update gauge
   m_gauge.setValue(p);
   m_gauge.setGradient(r / 360.0);
-
-  // Repaint the widget
-  requestRepaint();
 }
 
 /**

@@ -22,11 +22,11 @@
 
 #pragma once
 
-#include <UI/DashboardWidget.h>
+#include <QWidget>
 
 namespace Widgets
 {
-class GPS : public DashboardWidgetBase
+class GPS : public QWidget
 {
   Q_OBJECT
 

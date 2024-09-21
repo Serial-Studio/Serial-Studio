@@ -22,22 +22,22 @@
 
 #pragma once
 
-#include <QTimer>
 #include <QEvent>
 #include <QObject>
 #include <QWidget>
 #include <QPainter>
 #include <QPlainTextEdit>
-#include <QQuickPaintedItem>
 
 #include <QJSValue>
 #include <QJSEngine>
 
 #include <qsourcehighliter.h>
 
+#include <UI/DeclarativeWidget.h>
+
 namespace Project
 {
-class FrameParser : public QQuickPaintedItem
+class FrameParser : public UI::DeclarativeWidget
 {
   Q_OBJECT
   Q_PROPERTY(QString text READ text NOTIFY textChanged)
@@ -57,23 +57,6 @@ public:
   [[nodiscard]] QStringList parse(const QString &frame,
                                   const QString &separator);
 
-  void update(const QRect &rect = QRect());
-  virtual void paint(QPainter *painter) override;
-  virtual void keyPressEvent(QKeyEvent *event) override;
-  virtual void keyReleaseEvent(QKeyEvent *event) override;
-  virtual void inputMethodEvent(QInputMethodEvent *event) override;
-  virtual void focusInEvent(QFocusEvent *event) override;
-  virtual void focusOutEvent(QFocusEvent *event) override;
-  virtual void mousePressEvent(QMouseEvent *event) override;
-  virtual void mouseMoveEvent(QMouseEvent *event) override;
-  virtual void mouseReleaseEvent(QMouseEvent *event) override;
-  virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
-  virtual void wheelEvent(QWheelEvent *event) override;
-  virtual void dragEnterEvent(QDragEnterEvent *event) override;
-  virtual void dragMoveEvent(QDragMoveEvent *event) override;
-  virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
-  virtual void dropEvent(QDropEvent *event) override;
-
 public slots:
   void cut();
   void undo();
@@ -85,7 +68,6 @@ public slots:
   void reload();
   void import();
   void selectAll();
-  void resizeWidget();
 
 private slots:
   void onThemeChanged();
@@ -99,8 +81,6 @@ private slots:
   void readCode();
 
 private:
-  QTimer m_timer;
-  QPixmap m_pixmap;
   QJSEngine m_engine;
   QJSValue m_parseFunction;
   QPlainTextEdit m_textEdit;

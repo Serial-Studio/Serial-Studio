@@ -77,67 +77,6 @@ static QString HexDump(const char *data, const size_t size)
 }
 
 /**
- * @brief Custom message handler for Qt debug, warning, critical, and fatal
- *        messages.
- *
- * This static function handles messages of various types (debug, warning,
- * critical, fatal) emitted by the Qt framework.
- *
- * It formats the message with a corresponding prefix based on the message type
- * (e.g., "[Debug]", "[Warning]").
- *
- * @param type The type of the message.
- * @param context The message log context (file, line, function).
- * @param msg The actual message that was emitted by the Qt system.
- *
- * @note The function appends the formatted message to the console handler.
- */
-static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
-                           const QString &msg)
-{
-  // Skip empty messages
-  if (msg.isEmpty())
-    return;
-
-  // Show message & warning level
-  QString output;
-  switch (type)
-  {
-    case QtInfoMsg:
-      output = QStringLiteral("⧗ %1").arg(msg);
-      break;
-    case QtDebugMsg:
-      output = QStringLiteral("\n[DEBUG]: %1").arg(msg);
-      break;
-    case QtWarningMsg:
-      output = QStringLiteral("\n[WARNING]: %1").arg(msg);
-      break;
-    case QtCriticalMsg:
-      output = QStringLiteral("\n[CRITICAL]: %1").arg(msg);
-      break;
-    case QtFatalMsg:
-      output = QStringLiteral("\n[FATAL]: %1").arg(msg);
-      break;
-    default:
-      break;
-  }
-
-  // Append context information (file and line)
-  if (context.file && context.line > 0)
-  {
-    output.append(QStringLiteral(" (File: %1, Line: %2)")
-                      .arg(context.file)
-                      .arg(context.line));
-  }
-
-  // Add a newline at the end
-  output.append("\n");
-
-  // Use IO::Manager signal to avoid messing up tokens in console
-  Q_EMIT IO::Manager::instance().dataReceived(output.toUtf8());
-}
-
-/**
  * Constructor function
  */
 IO::Console::Console()
@@ -158,9 +97,6 @@ IO::Console::Console()
   auto dm = &Manager::instance();
   connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent);
   connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived);
-
-  // Install custom message handler to redirect qDebug output to console
-  qInstallMessageHandler(MessageHandler);
 }
 
 /**

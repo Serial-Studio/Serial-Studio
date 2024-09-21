@@ -31,39 +31,11 @@
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 
-/**
- * Creates a subclass of @c QWidget that allows us to call the given
- * protected/private
- * @a function and pass the given @a event as a parameter to the @a function.
- */
-#define DW_EXEC_EVENT(pointer, function, event)                                \
-  class PwnedWidget : public QPlainTextEdit                                    \
-  {                                                                            \
-  public:                                                                      \
-    using QPlainTextEdit::function;                                            \
-  };                                                                           \
-  static_cast<PwnedWidget *>(pointer)->function(event);                        \
-  update();
-
 Project::FrameParser::FrameParser(QQuickItem *parent)
-  : QQuickPaintedItem(parent)
+  : UI::DeclarativeWidget(parent)
 {
-  // Configure QML painter item
-  setMipmap(true);
-  setAntialiasing(true);
-  setOpaquePainting(true);
-  setAcceptTouchEvents(true);
-  setFlag(ItemHasContents, true);
-  setFlag(ItemIsFocusScope, true);
-  setFlag(ItemAcceptsInputMethod, true);
-  setAcceptedMouseButtons(Qt::AllButtons);
-  setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
-
-  // Redraw widget when it's size is changed
-  connect(this, &QQuickPaintedItem::widthChanged, this,
-          &Project::FrameParser::resizeWidget);
-  connect(this, &QQuickPaintedItem::heightChanged, this,
-          &Project::FrameParser::resizeWidget);
+  // Set widget
+  setWidget(&m_textEdit);
 
   // Setup syntax highlighter
   m_highlighter = new QSourceHighlite::QSourceHighliter(m_textEdit.document());
@@ -91,20 +63,6 @@ Project::FrameParser::FrameParser(QQuickItem *parent)
   // Load code from JSON model automatically
   connect(&Project::Model::instance(), &Model::frameParserCodeChanged, this,
           &Project::FrameParser::readCode);
-
-  // Use a timer to redraw the widget (yeah...I want the block cursor to blink)
-  m_timer.setTimerType(Qt::PreciseTimer);
-  connect(&m_timer, &QTimer::timeout, this, [=] { update(); });
-  connect(this, &QQuickPaintedItem::visibleChanged, this, [=] {
-    if (isVisible())
-      m_timer.start(1000 / 24);
-    else
-      m_timer.stop();
-  });
-
-  // Start the drawing loop
-  if (isVisible())
-    m_timer.start(1000 / 24);
 
   // Bridge signals
   connect(&m_textEdit, &QPlainTextEdit::textChanged, this,
@@ -154,139 +112,6 @@ QStringList Project::FrameParser::parse(const QString &frame,
 
   // Return fields list
   return list;
-}
-
-/**
- * Grabs an image/pixmap of the contained widget. The pixmap is later
- * used to render the widget in the QML interface without causing signal/slot
- * interferences with the scenegraph render thread.
- */
-void Project::FrameParser::update(const QRect &rect)
-{
-  m_pixmap = m_textEdit.grab();
-  QQuickPaintedItem::update(rect);
-}
-
-/**
- * Displays the pixmap generated in the @c update() function in the QML
- * interface through the given @a painter pointer.
- */
-void Project::FrameParser::paint(QPainter *painter)
-{
-  if (painter)
-    painter->drawPixmap(0, 0, m_pixmap);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::keyPressEvent(QKeyEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, keyPressEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::keyReleaseEvent(QKeyEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, keyReleaseEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::inputMethodEvent(QInputMethodEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, inputMethodEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::focusInEvent(QFocusEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, focusInEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::focusOutEvent(QFocusEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, focusOutEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::mousePressEvent(QMouseEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, mousePressEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::mouseMoveEvent(QMouseEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, mouseMoveEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::mouseReleaseEvent(QMouseEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, mouseReleaseEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::mouseDoubleClickEvent(QMouseEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, mouseDoubleClickEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::wheelEvent(QWheelEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, wheelEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::dragEnterEvent(QDragEnterEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, dragEnterEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::dragMoveEvent(QDragMoveEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, dragMoveEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::dragLeaveEvent(QDragLeaveEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, dragLeaveEvent, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void Project::FrameParser::dropEvent(QDropEvent *event)
-{
-  DW_EXEC_EVENT(&m_textEdit, dropEvent, event);
 }
 
 void Project::FrameParser::cut()
@@ -382,19 +207,6 @@ void Project::FrameParser::import()
 void Project::FrameParser::selectAll()
 {
   m_textEdit.selectAll();
-  update();
-}
-
-/**
- * Resizes the widget to fit inside the QML painted item.
- */
-void Project::FrameParser::resizeWidget()
-{
-  if (width() > 0 && height() > 0)
-  {
-    m_textEdit.setFixedSize(width(), height());
-    update();
-  }
 }
 
 void Project::FrameParser::onThemeChanged()

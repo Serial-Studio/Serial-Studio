@@ -24,8 +24,6 @@
 #include <QScrollBar>
 
 #include "IO/Console.h"
-#include "IO/Manager.h"
-#include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/Terminal.h"
 
@@ -60,8 +58,6 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   // Connect signals/slots
   connect(&IO::Console::instance(), &IO::Console::stringReceived, this,
           &Widgets::Terminal::insertText);
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout10Hz, this,
-          &Widgets::Terminal::repaint);
 
   // React to widget events
   connect(&m_textEdit, SIGNAL(copyAvailable(bool)), this,
@@ -232,7 +228,8 @@ void Widgets::Terminal::clear()
 {
   m_textEdit.clear();
   updateScrollbarVisibility();
-  requestRepaint(true);
+
+  m_textChanged = true;
 }
 
 /**
@@ -241,7 +238,6 @@ void Widgets::Terminal::clear()
 void Widgets::Terminal::selectAll()
 {
   m_textEdit.selectAll();
-  requestRepaint();
 }
 
 /**
@@ -253,7 +249,6 @@ void Widgets::Terminal::clearSelection()
   cursor.clearSelection();
   m_textEdit.setTextCursor(cursor);
   updateScrollbarVisibility();
-  requestRepaint();
 }
 
 /**
@@ -265,8 +260,6 @@ void Widgets::Terminal::clearSelection()
 void Widgets::Terminal::setReadOnly(const bool ro)
 {
   m_textEdit.setReadOnly(ro);
-  requestRepaint();
-
   Q_EMIT readOnlyChanged();
 }
 
@@ -277,7 +270,6 @@ void Widgets::Terminal::setFont(const QFont &font)
 {
   m_textEdit.setFont(font);
   updateScrollbarVisibility();
-  requestRepaint();
 
   Q_EMIT fontChanged();
 }
@@ -296,7 +288,8 @@ void Widgets::Terminal::append(const QString &text)
   if (autoscroll())
     scrollToBottom();
 
-  requestRepaint(true);
+  // Mark text changed flag
+  m_textChanged = true;
 }
 
 /**
@@ -313,7 +306,8 @@ void Widgets::Terminal::setText(const QString &text)
   if (autoscroll())
     scrollToBottom();
 
-  requestRepaint(true);
+  // Mark text changed flag
+  m_textChanged = true;
 }
 
 /**
@@ -323,7 +317,6 @@ void Widgets::Terminal::setScrollbarWidth(const int width)
 {
   auto bar = m_textEdit.verticalScrollBar();
   bar->setFixedWidth(width);
-  requestRepaint();
 
   Q_EMIT scrollbarWidthChanged();
 }
@@ -334,8 +327,6 @@ void Widgets::Terminal::setScrollbarWidth(const int width)
 void Widgets::Terminal::setPalette(const QPalette &palette)
 {
   m_textEdit.setPalette(palette);
-  requestRepaint();
-
   Q_EMIT colorPaletteChanged();
 }
 
@@ -345,8 +336,6 @@ void Widgets::Terminal::setPalette(const QPalette &palette)
 void Widgets::Terminal::setWidgetEnabled(const bool enabled)
 {
   m_textEdit.setEnabled(enabled);
-  requestRepaint();
-
   Q_EMIT widgetEnabledChanged();
 }
 
@@ -369,7 +358,6 @@ void Widgets::Terminal::setAutoscroll(const bool enabled)
   IO::Console::instance().setAutoscroll(enabled);
 
   // Update UI
-  requestRepaint();
   Q_EMIT autoscrollChanged();
 }
 
@@ -392,7 +380,6 @@ void Widgets::Terminal::setWordWrapMode(const int mode)
 {
   m_textEdit.setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
   updateScrollbarVisibility();
-  requestRepaint();
 
   Q_EMIT wordWrapModeChanged();
 }
@@ -407,8 +394,6 @@ void Widgets::Terminal::setWordWrapMode(const int mode)
 void Widgets::Terminal::setCenterOnScroll(const bool enabled)
 {
   m_textEdit.setCenterOnScroll(enabled);
-  requestRepaint();
-
   Q_EMIT centerOnScrollChanged();
 }
 
@@ -429,8 +414,6 @@ void Widgets::Terminal::setVt100Emulation(const bool enabled)
 void Widgets::Terminal::setUndoRedoEnabled(const bool enabled)
 {
   m_textEdit.setUndoRedoEnabled(enabled);
-  requestRepaint();
-
   Q_EMIT undoRedoEnabledChanged();
 }
 
@@ -441,15 +424,13 @@ void Widgets::Terminal::setUndoRedoEnabled(const bool enabled)
 void Widgets::Terminal::setPlaceholderText(const QString &text)
 {
   m_textEdit.setPlaceholderText(text);
-  requestRepaint();
-
   Q_EMIT placeholderTextChanged();
 }
 
 /**
  * Moves the position of the vertical scrollbar to the end of the document.
  */
-void Widgets::Terminal::scrollToBottom(const bool repaint)
+void Widgets::Terminal::scrollToBottom()
 {
   // Get scrollbar pointer, calculate line count & visible text lines
   auto *bar = m_textEdit.verticalScrollBar();
@@ -469,10 +450,6 @@ void Widgets::Terminal::scrollToBottom(const bool repaint)
     bar->setValue(lineCount - visibleLines + 2);
   else
     bar->setValue(0);
-
-  // Trigger UI repaint if requested
-  if (repaint)
-    requestRepaint();
 }
 
 /**
@@ -486,25 +463,7 @@ void Widgets::Terminal::scrollToBottom(const bool repaint)
 void Widgets::Terminal::setMaximumBlockCount(const int maxBlockCount)
 {
   m_textEdit.setMaximumBlockCount(maxBlockCount);
-  requestRepaint();
-
   Q_EMIT maximumBlockCountChanged();
-}
-
-/**
- * Redraws the widget. This function is called by a timer to reduce the number
- * of paint requests (and thus avoid considerable slow-downs).
- */
-void Widgets::Terminal::repaint()
-{
-  if (m_repaint)
-  {
-    m_repaint = false;
-    update();
-
-    if (m_textChanged)
-      Q_EMIT textChanged();
-  }
 }
 
 /**
@@ -525,7 +484,6 @@ void Widgets::Terminal::onThemeChanged()
   palette.setColor(QPalette::HighlightedText, theme->getColor("console_highlighted_text"));
   palette.setColor(QPalette::PlaceholderText, theme->getColor("console_placeholder_text"));
   m_textEdit.setPalette(palette);
-  update();
   // clang-format on
 }
 
@@ -582,18 +540,8 @@ void Widgets::Terminal::addText(const QString &text, const bool enableVt100)
   if (autoscroll())
     scrollToBottom();
 
-  // Repaint the widget
-  requestRepaint(true);
-}
-
-/**
- * Enables the re-paint flag, which is later used by the @c repaint() function
- * to know if the widget shall be repainted.
- */
-void Widgets::Terminal::requestRepaint(const bool textChanged)
-{
-  m_repaint = true;
-  m_textChanged = textChanged;
+  // Mark text changed flag
+  m_textChanged = true;
 }
 
 //------------------------------------------------------------------------------

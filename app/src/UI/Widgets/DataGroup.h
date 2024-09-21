@@ -22,16 +22,16 @@
 
 #pragma once
 
+#include <QWidget>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QScrollArea>
 
-#include <UI/DashboardWidget.h>
 #include <UI/Widgets/Common/ElidedLabel.h>
 
 namespace Widgets
 {
-class DataGroup : public DashboardWidgetBase
+class DataGroup : public QWidget
 {
   Q_OBJECT
 

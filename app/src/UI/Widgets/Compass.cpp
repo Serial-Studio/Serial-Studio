@@ -103,9 +103,6 @@ void Widgets::Compass::update()
   // Update gauge
   setValue(text);
   m_compass.setValue(value);
-
-  // Repaint the widget
-  requestRepaint();
 }
 
 /**

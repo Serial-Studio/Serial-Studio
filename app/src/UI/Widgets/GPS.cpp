@@ -110,7 +110,7 @@ void Widgets::GPS::updateData()
   }
 
   // Update the QML user interface with the new data
-  Q_EMIT updated();
+  // Q_EMIT updated();
 }
 
 /**
