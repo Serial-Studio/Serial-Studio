@@ -57,6 +57,7 @@ Widgets.Pane {
     }
 
     Flickable {
+      id: flickable
       anchors.fill: parent
       contentWidth: width
       anchors.topMargin: 8
@@ -76,6 +77,15 @@ Widgets.Pane {
       onContentXChanged: updateVisibleWidgets()
       onContentYChanged: updateVisibleWidgets()
 
+      Connections {
+        target: root
+        function onColumnsChanged() {
+          const contentX = flickable.contentX
+          flickable.contentX = -1
+          flickable.contentX = contentX
+        }
+      }
+
       //
       // Only render pixmaps for widgets that are inside the viewport
       //
@@ -90,8 +100,8 @@ Widgets.Pane {
           let item = grid.children[i]
           let itemTop = item.y
           let itemLeft = item.x
-          let itemRight = item.x + item.width
-          let itemBottom = item.y + item.height
+          let itemRight = item.x + cellWidth
+          let itemBottom = item.y + cellHeight
 
           // Check if the item is within the viewport bounds
           let isVisibleVertically = (itemBottom > viewportTop) && (itemTop < viewportBottom)

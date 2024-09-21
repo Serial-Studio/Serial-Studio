@@ -34,16 +34,22 @@ Repeater {
     width: root.cellWidth
     height: root.cellHeight
 
+    property bool widgetVisible: true
+    readonly property bool widgetInViewPort: opacity > 0
+
+    // Uncomment to verify that lazy widget rendering is working
+    //Behavior on opacity {NumberAnimation{}}
+
     sourceComponent: WidgetDelegate {
       widgetIndex: index
-      visible: loader.visible && loader.opacity > 0
+      active: loader.widgetVisible && loader.widgetInViewPort
     }
 
     Connections {
       target: Cpp_UI_Dashboard
 
       function onWidgetVisibilityChanged() {
-        loader.visible = Cpp_UI_Dashboard.widgetVisible(index)
+        loader.widgetVisible = Cpp_UI_Dashboard.widgetVisible(index)
       }
     }
   }

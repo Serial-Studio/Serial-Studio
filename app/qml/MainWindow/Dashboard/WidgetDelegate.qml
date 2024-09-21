@@ -28,40 +28,37 @@ import SerialStudio
 
 import "../../Widgets" as Widgets
 
-Item {
+Widgets.Pane {
   id: root
+  hardBorder: true
+  icon: widget.widgetIcon
+  title: widget.widgetTitle
 
+  property bool active: true
   property int widgetIndex: -1
 
-  Widgets.Pane {
-    id: window
-    hardBorder: true
+  DashboardWidget {
+    id: widget
+    visible: root.active
     anchors.fill: parent
-    icon: widget.widgetIcon
-    title: widget.widgetTitle
+    anchors.topMargin: -16
+    anchors.leftMargin: -8
+    anchors.rightMargin: -8
+    anchors.bottomMargin: -7
+    widgetIndex: root.widgetIndex
 
-    DashboardWidget {
-      id: widget
+    //
+    // Hack: render a GPS map using QML code instead of QtWidgets
+    //
+    Loader {
       anchors.fill: parent
-      anchors.topMargin: -16
-      anchors.leftMargin: -8
-      anchors.rightMargin: -8
-      anchors.bottomMargin: -7
-      widgetIndex: root.widgetIndex
-
-      //
-      // Hack: render a GPS map using QML code instead of QtWidgets
-      //
-      Loader {
-        anchors.fill: parent
-        asynchronous: true
-        active: widget.isGpsMap
-        visible: widget.isGpsMap && status == Loader.Ready
-        sourceComponent: Widgets.GpsMap {
-          altitude: widget.gpsAltitude
-          latitude: widget.gpsLatitude
-          longitude: widget.gpsLongitude
-        }
+      asynchronous: true
+      active: widget.isGpsMap
+      visible: widget.isGpsMap && status == Loader.Ready
+      sourceComponent: Widgets.GpsMap {
+        altitude: widget.gpsAltitude
+        latitude: widget.gpsLatitude
+        longitude: widget.gpsLongitude
       }
     }
   }
