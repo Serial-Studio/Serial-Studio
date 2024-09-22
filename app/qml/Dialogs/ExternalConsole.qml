@@ -33,17 +33,67 @@ Window {
   //
   // Window options
   //
-  minimumWidth: 640
-  minimumHeight: 240
   title: qsTr("Console")
-  Component.onCompleted: {
-    root.flags = Qt.Dialog |
-        Qt.WindowTitleHint |
-        Qt.WindowStaysOnTopHint |
-        Qt.WindowCloseButtonHint
+  minimumWidth: 640
+  minimumHeight: 240 + root.titlebarHeight
 
-    x = (Screen.desktopAvailableWidth - width) / 2
-    y = (Screen.desktopAvailableHeight - height) / 2
+  //
+  // Make window stay on top
+  //
+  Component.onCompleted: root.flags |= Qt.WindowStaysOnTopHint
+
+  //
+  // Native window registration
+  //
+  property real titlebarHeight: 0
+  onVisibleChanged: {
+    if (visible) {
+      Cpp_NativeWindow.addWindow(root)
+      root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
+
+      x = (Screen.desktopAvailableWidth - width) / 2
+      y = (Screen.desktopAvailableHeight - height) / 2
+    }
+
+    else {
+      root.titlebarHeight = 0
+      Cpp_NativeWindow.removeWindow(root)
+    }
+  }
+
+  //
+  // Background + window title on macOS
+  //
+  Rectangle {
+    anchors.fill: parent
+    color: Cpp_ThemeManager.colors["window"]
+
+    //
+    // Drag the window anywhere
+    //
+    DragHandler {
+      target: null
+      onActiveChanged: {
+        if (active)
+          root.startSystemMove()
+      }
+    }
+
+    //
+    // Titlebar text
+    //
+    Label {
+      text: root.title
+      visible: root.titlebarHeight > 0
+      color: Cpp_ThemeManager.colors["titlebar_text"]
+      font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+
+      anchors {
+        topMargin: 6
+        top: parent.top
+        horizontalCenter: parent.horizontalCenter
+      }
+    }
   }
 
   //
@@ -67,6 +117,7 @@ Window {
   //
   Page {
     anchors.fill: parent
+    anchors.topMargin: root.titlebarHeight
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
     palette.text: Cpp_ThemeManager.colors["text"]
@@ -92,7 +143,6 @@ Window {
     Widgets.Terminal {
       anchors.margins: 8
       anchors.fill: parent
-      anchors.topMargin: 16
     }
   }
 }

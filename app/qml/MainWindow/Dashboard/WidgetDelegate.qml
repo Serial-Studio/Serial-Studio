@@ -33,12 +33,26 @@ Widgets.Pane {
   hardBorder: true
   icon: widget.widgetIcon
   title: widget.widgetTitle
-  onActionButtonClicked: window.showNormal()
-  buttonIcon: "qrc:/rcc/icons/buttons/expand.svg"
 
+  //
+  // Create an external window when user clicks on the action button of the pane
+  //
+  buttonIcon: "qrc:/rcc/icons/buttons/expand.svg"
+  onActionButtonClicked: windowLoader.active = true
+
+  //
+  // Disable widget rendering when it is not visible on the user's screen
+  //
   property bool active: true
+
+  //
+  // Used to keep track of which C++ widget to render
+  //
   property int widgetIndex: -1
 
+  //
+  // Render a widget inside the pane
+  //
   DashboardWidget {
     id: widget
     visible: root.active
@@ -62,42 +76,85 @@ Widgets.Pane {
     }
   }
 
-  Window {
-    id: window
-    width: 640
-    height: 480
-    visible: false
-    minimumWidth: 640 / 2
-    minimumHeight: 480 / 2
-    title: widget.widgetTitle
-    Component.onCompleted: {
-      window.flags = Qt.Dialog |
-          Qt.WindowTitleHint |
-          Qt.WindowStaysOnTopHint |
-          Qt.WindowCloseButtonHint
-    }
+  //
+  // Loader for the external window
+  //
+  Loader {
+    id: windowLoader
+    active: false
+    asynchronous: true
+    onLoaded: windowLoader.item.showNormal()
 
-    Rectangle {
-      anchors.fill: parent
-      color: Cpp_ThemeManager.colors["widget_base"]
-    }
+    sourceComponent: Window {
+      id: window
+      width: 640
+      height: 480
+      visible: false
+      minimumWidth: 640 / 2
+      minimumHeight: 480 / 2
+      title: widget.widgetTitle
+      Component.onCompleted: Cpp_NativeWindow.addWindow(window)
+      onClosing: {
+        Cpp_NativeWindow.removeWindow(window)
+        windowLoader.active = false
+      }
 
-    DashboardWidget {
-      id: windowWidget
-      anchors.margins: 4
-      anchors.fill: parent
-      visible: window.visible
-      widgetIndex: root.widgetIndex
-
-      Loader {
+      //
+      // Background + window title on macOS
+      //
+      Rectangle {
         anchors.fill: parent
-        asynchronous: true
-        active: windowWidget.isGpsMap
-        visible: windowWidget.isGpsMap && status == Loader.Ready
-        sourceComponent: Widgets.GpsMap {
-          altitude: windowWidget.gpsAltitude
-          latitude: windowWidget.gpsLatitude
-          longitude: windowWidget.gpsLongitude
+        color: Cpp_ThemeManager.colors["widget_base"]
+
+        //
+        // Drag the window anywhere
+        //
+        DragHandler {
+          target: null
+          onActiveChanged: {
+            if (active)
+              window.startSystemMove()
+          }
+        }
+
+        //
+        // Titlebar text
+        //
+        Label {
+          text: window.title
+          color: Cpp_ThemeManager.colors["titlebar_text"]
+          font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+          visible: Cpp_NativeWindow.titlebarHeight(window) > 0
+
+          anchors {
+            topMargin: 6
+            top: parent.top
+            horizontalCenter: parent.horizontalCenter
+          }
+        }
+      }
+
+      //
+      // Dashboard widget item
+      //
+      DashboardWidget {
+        id: windowWidget
+        anchors.margins: 4
+        anchors.fill: parent
+        visible: window.visible
+        widgetIndex: root.widgetIndex
+        anchors.topMargin: Cpp_NativeWindow.titlebarHeight(window)
+
+        Loader {
+          anchors.fill: parent
+          asynchronous: true
+          active: windowWidget.isGpsMap
+          visible: windowWidget.isGpsMap && status == Loader.Ready
+          sourceComponent: Widgets.GpsMap {
+            altitude: windowWidget.gpsAltitude
+            latitude: windowWidget.gpsLatitude
+            longitude: windowWidget.gpsLongitude
+          }
         }
       }
     }
