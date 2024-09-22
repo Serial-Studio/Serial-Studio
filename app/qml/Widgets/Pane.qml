@@ -31,8 +31,11 @@ Controls.GroupBox {
   topPadding: label.height + 16
 
   property string icon: ""
+  property string buttonIcon: ""
   property bool hardBorder: false
   property bool headerVisible: true
+
+  signal actionButtonClicked()
 
   label: Controls.ToolBar {
     z: 2000
@@ -99,6 +102,7 @@ Controls.GroupBox {
       spacing: 4
       anchors.leftMargin: 0
       anchors.left: parent.left
+      anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
 
       Image {
@@ -119,6 +123,26 @@ Controls.GroupBox {
 
       Item {
         Layout.fillWidth: true
+      }
+
+      Controls.ToolButton {
+        flat: true
+        icon.width: 18
+        icon.height: 18
+        background: Item {}
+        icon.color: _title.color
+        visible: icon.source !== ""
+        enabled: icon.source !== ""
+        icon.source: root.buttonIcon
+        onClicked: root.actionButtonClicked()
+        opacity: mouseArea.containsMouse ? 1 : 0.5
+
+        MouseArea {
+          id: mouseArea
+          hoverEnabled: true
+          anchors.fill: parent
+          onClicked: root.actionButtonClicked()
+        }
       }
     }
   }

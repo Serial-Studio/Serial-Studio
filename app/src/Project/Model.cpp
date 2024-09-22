@@ -1222,9 +1222,11 @@ bool Project::Model::setGroupWidget(const int group, const GroupWidget widget)
   const auto groupId = grp.groupId();
 
   // Warn user if group contains existing datasets
-  if (!(grp.m_datasets.isEmpty()) && widget != 4)
+  if (!(grp.m_datasets.isEmpty()))
   {
-    if (widget == CustomGroup && grp.widget() == "multiplot")
+    if ((widget == DataGrid || widget == MultiPlot || widget == NoGroupWidget)
+        && (grp.widget() == "multiplot" || grp.widget() == "datagrid"
+            || grp.widget() == ""))
       grp.m_widget = "";
 
     else
@@ -1240,9 +1242,17 @@ bool Project::Model::setGroupWidget(const int group, const GroupWidget widget)
     }
   }
 
-  // Dataset widget
-  if (widget == CustomGroup)
+  // No widget
+  if (widget == NoGroupWidget)
     grp.m_widget = "";
+
+  // Data grid widget
+  if (widget == DataGrid)
+    grp.m_widget = "datagrid";
+
+  // Multiplot widget
+  else if (widget == MultiPlot)
+    grp.m_widget = "multiplot";
 
   // Accelerometer widget
   else if (widget == Accelerometer)
@@ -1373,10 +1383,6 @@ bool Project::Model::setGroupWidget(const int group, const GroupWidget widget)
     grp.m_datasets.append(alt);
   }
 
-  // Multi plot widget
-  else if (widget == MultiPlot)
-    grp.m_widget = "multiplot";
-
   // Replace previous group with new group
   m_groups.replace(group, grp);
 
@@ -1502,6 +1508,8 @@ void Project::Model::buildTreeModel()
       icon = "qrc:/rcc/icons/project-editor/treeview/gyroscope.svg";
     else if (group.widget() == "multiplot")
       icon = "qrc:/rcc/icons/project-editor/treeview/multiplot.svg";
+    else if (group.widget() == "datagrid")
+      icon = "qrc:/rcc/icons/project-editor/treeview/datagrid.svg";
     else
       icon = "qrc:/rcc/icons/project-editor/treeview/group.svg";
 
@@ -1996,11 +2004,12 @@ void Project::Model::generateComboBoxModels()
 
   // Initialize group-level widgets
   m_groupWidgets.clear();
-  m_groupWidgets.insert(QStringLiteral(""), tr("None"));
+  m_groupWidgets.insert(QStringLiteral("datagrid"), tr("Data Grid"));
   m_groupWidgets.insert(QStringLiteral("map"), tr("GPS Map"));
   m_groupWidgets.insert(QStringLiteral("gyro"), tr("Gyroscope"));
   m_groupWidgets.insert(QStringLiteral("multiplot"), tr("Multiple Plot"));
   m_groupWidgets.insert(QStringLiteral("accelerometer"), tr("Accelerometer"));
+  m_groupWidgets.insert(QStringLiteral(""), tr("None"));
 
   // Initialize dataset-level widgets
   m_datasetWidgets.clear();
@@ -2108,13 +2117,32 @@ void Project::Model::onGroupItemChanged(QStandardItem *item)
       widget = Gyroscope;
     else if (widgetStr == "map")
       widget = GPS;
+    else if (widgetStr == "datagrid")
+      widget = DataGrid;
     else
-      widget = CustomGroup;
+      widget = NoGroupWidget;
 
     // Update group
     modified = setGroupWidget(groupId, widget);
     if (modified)
       m_selectedGroup.m_widget = widgetStr;
+
+    // User canceled the operation, reload model GUI to restore previous value
+    else
+    {
+      buildTreeModel();
+      for (auto g = m_groupItems.begin(); g != m_groupItems.end(); ++g)
+      {
+        if (g.value().groupId() == m_selectedGroup.groupId())
+        {
+          m_selectionModel->setCurrentIndex(
+              g.key()->index(), QItemSelectionModel::ClearAndSelect);
+          break;
+        }
+      }
+
+      return;
+    }
   }
 
   // Re-build tree model

@@ -169,11 +169,12 @@ public:
    */
   enum GroupWidget
   {
-    CustomGroup,
+    DataGrid,
     Accelerometer,
     Gyroscope,
     GPS,
-    MultiPlot
+    MultiPlot,
+    NoGroupWidget,
   };
   Q_ENUM(GroupWidget)
 

@@ -113,7 +113,7 @@ void Widgets::Bar::onThemeChanged()
   palette.setColor(QPalette::Window,
                    theme->getColor(QStringLiteral("widget_window")));
   palette.setColor(QPalette::Highlight,
-                   theme->getColor(QStringLiteral("widget_highlight")));
+                   theme->getColor(QStringLiteral("alarm")));
   palette.setColor(QPalette::Text,
                    theme->getColor(QStringLiteral("widget_text")));
   palette.setColor(QPalette::Dark,

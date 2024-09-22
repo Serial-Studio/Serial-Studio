@@ -91,8 +91,8 @@ class Dashboard : public QObject
   Q_PROPERTY(int plotCount
              READ plotCount
              NOTIFY widgetCountChanged)
-  Q_PROPERTY(int groupCount
-             READ groupCount
+  Q_PROPERTY(int datagridCount
+             READ datagridCount
              NOTIFY widgetCountChanged)
   Q_PROPERTY(int gaugeCount
              READ gaugeCount
@@ -124,8 +124,8 @@ class Dashboard : public QObject
   Q_PROPERTY(QStringList plotTitles
              READ plotTitles
              NOTIFY widgetCountChanged)
-  Q_PROPERTY(QStringList groupTitles
-             READ groupTitles
+  Q_PROPERTY(QStringList datagridTitles
+             READ datagridTitles
              NOTIFY widgetCountChanged)
   Q_PROPERTY(QStringList gaugeTitles
              READ gaugeTitles
@@ -164,7 +164,7 @@ private:
 public:
   enum class WidgetType
   {
-    Group,
+    DataGrid,
     MultiPlot,
     FFT,
     Plot,
@@ -186,9 +186,9 @@ public:
   [[nodiscard]] const JSON::Group &getGPS(const int index) const;
   [[nodiscard]] const JSON::Dataset &getFFT(const int index) const;
   [[nodiscard]] const JSON::Dataset &getBar(const int index) const;
-  [[nodiscard]] const JSON::Group &getGroups(const int index) const;
   [[nodiscard]] const JSON::Dataset &getPlot(const int index) const;
   [[nodiscard]] const JSON::Dataset &getGauge(const int index) const;
+  [[nodiscard]] const JSON::Group &getDataGrid(const int index) const;
   [[nodiscard]] const JSON::Group &getGyroscope(const int index) const;
   [[nodiscard]] const JSON::Dataset &getCompass(const int index) const;
   [[nodiscard]] const JSON::Group &getMultiplot(const int index) const;
@@ -206,9 +206,9 @@ public:
   [[nodiscard]] int fftCount() const;
   [[nodiscard]] int barCount() const;
   [[nodiscard]] int plotCount() const;
-  [[nodiscard]] int groupCount() const;
   [[nodiscard]] int gaugeCount() const;
   [[nodiscard]] int compassCount() const;
+  [[nodiscard]] int datagridCount() const;
   [[nodiscard]] int gyroscopeCount() const;
   [[nodiscard]] int multiPlotCount() const;
   [[nodiscard]] int accelerometerCount() const;
@@ -225,9 +225,9 @@ public:
   Q_INVOKABLE bool gpsVisible(const int index) const;
   Q_INVOKABLE bool ledVisible(const int index) const;
   Q_INVOKABLE bool plotVisible(const int index) const;
-  Q_INVOKABLE bool groupVisible(const int index) const;
   Q_INVOKABLE bool gaugeVisible(const int index) const;
   Q_INVOKABLE bool compassVisible(const int index) const;
+  Q_INVOKABLE bool datagridVisible(const int index) const;
   Q_INVOKABLE bool gyroscopeVisible(const int index) const;
   Q_INVOKABLE bool multiPlotVisible(const int index) const;
   Q_INVOKABLE bool accelerometerVisible(const int index) const;
@@ -237,9 +237,9 @@ public:
   QStringList gpsTitles();
   QStringList ledTitles();
   QStringList plotTitles();
-  QStringList groupTitles();
   QStringList gaugeTitles();
   QStringList compassTitles();
+  QStringList datagridTitles();
   QStringList gyroscopeTitles();
   QStringList multiPlotTitles();
   QStringList accelerometerTitles();
@@ -261,9 +261,9 @@ public slots:
   void setGpsVisible(const int index, const bool visible);
   void setLedVisible(const int index, const bool visible);
   void setPlotVisible(const int index, const bool visible);
-  void setGroupVisible(const int index, const bool visible);
   void setGaugeVisible(const int index, const bool visible);
   void setCompassVisible(const int index, const bool visible);
+  void setDataGridVisible(const int index, const bool visible);
   void setGyroscopeVisible(const int index, const bool visible);
   void setMultiplotVisible(const int index, const bool visible);
   void setAccelerometerVisible(const int index, const bool visible);
@@ -299,9 +299,9 @@ private:
   QVector<bool> m_gpsVisibility;
   QVector<bool> m_ledVisibility;
   QVector<bool> m_plotVisibility;
-  QVector<bool> m_groupVisibility;
   QVector<bool> m_gaugeVisibility;
   QVector<bool> m_compassVisibility;
+  QVector<bool> m_datagridVisibility;
   QVector<bool> m_gyroscopeVisibility;
   QVector<bool> m_multiPlotVisibility;
   QVector<bool> m_accelerometerVisibility;
@@ -314,7 +314,7 @@ private:
 
   QVector<JSON::Group> m_ledWidgets;
   QVector<JSON::Group> m_gpsWidgets;
-  QVector<JSON::Group> m_groupWidgets;
+  QVector<JSON::Group> m_datagridWidgets;
   QVector<JSON::Group> m_multiPlotWidgets;
   QVector<JSON::Group> m_gyroscopeWidgets;
   QVector<JSON::Group> m_accelerometerWidgets;

@@ -25,7 +25,7 @@
 
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
-#include "UI/Widgets/DataGroup.h"
+#include "UI/Widgets/DataGrid.h"
 
 #define DG_EXEC_EVENT(pointer, function, event)                                \
   if (pointer)                                                                 \
@@ -41,18 +41,18 @@
 /**
  * Generates the user interface elements & layout
  */
-Widgets::DataGroup::DataGroup(const int index)
+Widgets::DataGrid::DataGrid(const int index)
   : m_index(index)
 {
   // Get pointers to serial studio modules
   auto dash = &UI::Dashboard::instance();
 
   // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->groupCount())
+  if (m_index < 0 || m_index >= dash->datagridCount())
     return;
 
   // Get group reference
-  auto group = dash->getGroups(m_index);
+  auto group = dash->getDataGrid(m_index);
 
   // Configure scroll area container
   m_dataContainer = new QWidget(this);
@@ -136,7 +136,7 @@ Widgets::DataGroup::DataGroup(const int index)
   // Set visual style
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::DataGroup::onThemeChanged);
+          this, &Widgets::DataGrid::onThemeChanged);
 
   // React to dashboard events
   connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
@@ -146,7 +146,7 @@ Widgets::DataGroup::DataGroup(const int index)
 /**
  * Frees the memory allocated for each label that represents a dataset
  */
-Widgets::DataGroup::~DataGroup()
+Widgets::DataGrid::~DataGrid()
 {
   Q_FOREACH (auto icon, m_icons)
     delete icon;
@@ -172,7 +172,7 @@ Widgets::DataGroup::~DataGroup()
  * If the widget is disabled (e.g. the user hides it, or the external
  * window is hidden), then the widget shall ignore the update request.
  */
-void Widgets::DataGroup::updateData()
+void Widgets::DataGrid::updateData()
 {
   // Widget not enabled, do nothing
   if (!isEnabled())
@@ -180,11 +180,11 @@ void Widgets::DataGroup::updateData()
 
   // Invalid index, abort update
   auto dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->groupCount())
+  if (m_index < 0 || m_index >= dash->datagridCount())
     return;
 
   // Get group reference
-  auto group = dash->getGroups(m_index);
+  auto group = dash->getDataGrid(m_index);
 
   // Regular expresion handler
   static const QRegularExpression regex("^[+-]?(\\d*\\.)?\\d+$");
@@ -210,7 +210,7 @@ void Widgets::DataGroup::updateData()
  * Updates the widget's visual style and color palette to match the colors
  * defined by the application theme file.
  */
-void Widgets::DataGroup::onThemeChanged()
+void Widgets::DataGrid::onThemeChanged()
 {
   // Generate widget stylesheets
   // clang-format off
@@ -249,7 +249,7 @@ void Widgets::DataGroup::onThemeChanged()
 /**
  * Changes the size of the labels when the widget is resized
  */
-void Widgets::DataGroup::resizeEvent(QResizeEvent *event)
+void Widgets::DataGrid::resizeEvent(QResizeEvent *event)
 {
   auto width = event->size().width();
   QFont font = UI::Dashboard::instance().monoFont();
@@ -270,27 +270,27 @@ void Widgets::DataGroup::resizeEvent(QResizeEvent *event)
   event->accept();
 }
 
-void Widgets::DataGroup::wheelEvent(QWheelEvent *event)
+void Widgets::DataGrid::wheelEvent(QWheelEvent *event)
 {
   DG_EXEC_EVENT(m_scrollArea, wheelEvent, event);
 }
 
-void Widgets::DataGroup::mouseMoveEvent(QMouseEvent *event)
+void Widgets::DataGrid::mouseMoveEvent(QMouseEvent *event)
 {
   DG_EXEC_EVENT(m_scrollArea, mouseMoveEvent, event);
 }
 
-void Widgets::DataGroup::mousePressEvent(QMouseEvent *event)
+void Widgets::DataGrid::mousePressEvent(QMouseEvent *event)
 {
   DG_EXEC_EVENT(m_scrollArea, mousePressEvent, event);
 }
 
-void Widgets::DataGroup::mouseReleaseEvent(QMouseEvent *event)
+void Widgets::DataGrid::mouseReleaseEvent(QMouseEvent *event)
 {
   DG_EXEC_EVENT(m_scrollArea, mouseReleaseEvent, event);
 }
 
-void Widgets::DataGroup::mouseDoubleClickEvent(QMouseEvent *event)
+void Widgets::DataGrid::mouseDoubleClickEvent(QMouseEvent *event)
 {
   DG_EXEC_EVENT(m_scrollArea, mouseDoubleClickEvent, event);
 }

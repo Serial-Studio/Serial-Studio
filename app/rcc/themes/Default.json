@@ -83,6 +83,7 @@
   "table_border_header": "#FFD74A",
   "table_separator_header": "#FFD74A",
   "led_color": "#CC323B",
+  "alarm": "#ba252e",
 
   "widget_colors": [
    "#1f76b4",

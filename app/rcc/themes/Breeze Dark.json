@@ -74,6 +74,7 @@
   "widget_highlighted_text": "#31363b",
   "widget_placeholder_text": "#929497",
   "led_color": "#CC323B",
+  "alarm": "#ba252e",
 
   "table_bg_a": "#33363a",
   "table_bg_b": "#1C1E20",

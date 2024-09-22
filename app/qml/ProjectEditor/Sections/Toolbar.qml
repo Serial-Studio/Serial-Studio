@@ -175,13 +175,13 @@ ToolBar {
     }
 
     //
-    // Add group
+    // Add data grid
     //
     Widgets.BigButton {
-      text: qsTr("Custom Group")
+      text: qsTr("Data Grid")
       Layout.alignment: Qt.AlignVCenter
-      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
-      onClicked: Cpp_Project_Model.addGroup(qsTr("Custom Group"), ProjectModel.CustomGroup)
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-datagrid.svg"
+      onClicked: Cpp_Project_Model.addGroup(qsTr("Data Grid"), ProjectModel.DataGrid)
     }
 
     //
@@ -222,6 +222,16 @@ ToolBar {
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
       onClicked: Cpp_Project_Model.addGroup(qsTr("GPS Map"), ProjectModel.GPS)
+    }
+
+    //
+    // Add group
+    //
+    Widgets.BigButton {
+      text: qsTr("Container")
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
+      onClicked: Cpp_Project_Model.addGroup(qsTr("Dataset Container"), ProjectModel.NoGroupWidget)
     }
 
     //

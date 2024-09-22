@@ -33,6 +33,8 @@ Widgets.Pane {
   hardBorder: true
   icon: widget.widgetIcon
   title: widget.widgetTitle
+  onActionButtonClicked: window.showNormal()
+  buttonIcon: "qrc:/rcc/icons/buttons/expand.svg"
 
   property bool active: true
   property int widgetIndex: -1
@@ -47,9 +49,6 @@ Widgets.Pane {
     anchors.bottomMargin: -7
     widgetIndex: root.widgetIndex
 
-    //
-    // Hack: render a GPS map using QML code instead of QtWidgets
-    //
     Loader {
       anchors.fill: parent
       asynchronous: true
@@ -59,6 +58,47 @@ Widgets.Pane {
         altitude: widget.gpsAltitude
         latitude: widget.gpsLatitude
         longitude: widget.gpsLongitude
+      }
+    }
+  }
+
+  Window {
+    id: window
+    width: 640
+    height: 480
+    visible: false
+    minimumWidth: 640 / 2
+    minimumHeight: 480 / 2
+    title: widget.widgetTitle
+    Component.onCompleted: {
+      window.flags = Qt.Dialog |
+          Qt.WindowTitleHint |
+          Qt.WindowStaysOnTopHint |
+          Qt.WindowCloseButtonHint
+    }
+
+    Rectangle {
+      anchors.fill: parent
+      color: Cpp_ThemeManager.colors["widget_base"]
+    }
+
+    DashboardWidget {
+      id: windowWidget
+      anchors.margins: 4
+      anchors.fill: parent
+      visible: window.visible
+      widgetIndex: root.widgetIndex
+
+      Loader {
+        anchors.fill: parent
+        asynchronous: true
+        active: windowWidget.isGpsMap
+        visible: windowWidget.isGpsMap && status == Loader.Ready
+        sourceComponent: Widgets.GpsMap {
+          altitude: windowWidget.gpsAltitude
+          latitude: windowWidget.gpsLatitude
+          longitude: windowWidget.gpsLongitude
+        }
       }
     }
   }

@@ -89,7 +89,7 @@ set(SOURCES
  src/UI/Widgets/Common/KLed.cpp
  src/UI/Widgets/Common/AnalogGauge.cpp
  src/UI/Widgets/Common/BaseWidget.cpp
- src/UI/Widgets/DataGroup.cpp
+ src/UI/Widgets/DataGrid.cpp
  src/UI/Widgets/Terminal.cpp
  src/UI/Widgets/Gyroscope.cpp
  src/UI/Widgets/GPS.cpp
@@ -127,7 +127,7 @@ set(HEADERS
  src/UI/Widgets/MultiPlot.h
  src/UI/Widgets/Gauge.h
  src/UI/Widgets/Plot.h
- src/UI/Widgets/DataGroup.h
+ src/UI/Widgets/DataGrid.h
  src/UI/Widgets/FFTPlot.h
  src/UI/Widgets/Gyroscope.h
  src/UI/Widgets/Bar.h

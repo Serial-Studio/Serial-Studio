@@ -8,6 +8,7 @@
         <file>icons/buttons/close.svg</file>
         <file>icons/buttons/connected.svg</file>
         <file>icons/buttons/disconnected.svg</file>
+        <file>icons/buttons/expand.svg</file>
         <file>icons/buttons/media-next.svg</file>
         <file>icons/buttons/media-pause.svg</file>
         <file>icons/buttons/media-play.svg</file>
@@ -29,6 +30,7 @@
         <file>icons/dashboard/accelerometer.svg</file>
         <file>icons/dashboard/bar.svg</file>
         <file>icons/dashboard/compass.svg</file>
+        <file>icons/dashboard/datagrid.svg</file>
         <file>icons/dashboard/fft.svg</file>
         <file>icons/dashboard/gauge.svg</file>
         <file>icons/dashboard/gps.svg</file>
@@ -62,6 +64,7 @@
         <file>icons/project-editor/actions/led.svg</file>
         <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
+        <file>icons/project-editor/toolbar/add-datagrid.svg</file>
         <file>icons/project-editor/toolbar/add-gps.svg</file>
         <file>icons/project-editor/toolbar/add-group.svg</file>
         <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
@@ -71,6 +74,7 @@
         <file>icons/project-editor/toolbar/save.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
+        <file>icons/project-editor/treeview/datagrid.svg</file>
         <file>icons/project-editor/treeview/dataset.svg</file>
         <file>icons/project-editor/treeview/encoding.svg</file>
         <file>icons/project-editor/treeview/frame-end.svg</file>

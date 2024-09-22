@@ -71,8 +71,8 @@ const JSON::Group &UI::Dashboard::getGPS(const int index) const           { retu
 const JSON::Dataset &UI::Dashboard::getBar(const int index) const         { return m_barWidgets.at(index);           }
 const JSON::Dataset &UI::Dashboard::getFFT(const int index) const         { return m_fftWidgets.at(index);           }
 const JSON::Dataset &UI::Dashboard::getPlot(const int index) const        { return m_plotWidgets.at(index);          }
-const JSON::Group &UI::Dashboard::getGroups(const int index) const        { return m_groupWidgets.at(index);         }
 const JSON::Dataset &UI::Dashboard::getGauge(const int index) const       { return m_gaugeWidgets.at(index);         }
+const JSON::Group &UI::Dashboard::getDataGrid(const int index) const      { return m_datagridWidgets.at(index);      }
 const JSON::Group &UI::Dashboard::getGyroscope(const int index) const     { return m_gyroscopeWidgets.at(index);     }
 const JSON::Dataset &UI::Dashboard::getCompass(const int index) const     { return m_compassWidgets.at(index);       }
 const JSON::Group &UI::Dashboard::getMultiplot(const int index) const     { return m_multiPlotWidgets.at(index);     }
@@ -148,7 +148,7 @@ int UI::Dashboard::totalWidgetCount() const
           fftCount() +
           plotCount() +
           gaugeCount() +
-          groupCount() +
+          datagridCount() +
           compassCount() +
           multiPlotCount() +
           gyroscopeCount() +
@@ -165,8 +165,8 @@ int UI::Dashboard::barCount() const           { return m_barWidgets.count();    
 int UI::Dashboard::fftCount() const           { return m_fftWidgets.count();           }
 int UI::Dashboard::plotCount() const          { return m_plotWidgets.count();          }
 int UI::Dashboard::gaugeCount() const         { return m_gaugeWidgets.count();         }
-int UI::Dashboard::groupCount() const         { return m_groupWidgets.count();         }
 int UI::Dashboard::compassCount() const       { return m_compassWidgets.count();       }
+int UI::Dashboard::datagridCount() const      { return m_datagridWidgets.count();      }
 int UI::Dashboard::gyroscopeCount() const     { return m_gyroscopeWidgets.count();     }
 int UI::Dashboard::multiPlotCount() const     { return m_multiPlotWidgets.count();     }
 int UI::Dashboard::accelerometerCount() const { return m_accelerometerWidgets.count(); }
@@ -189,7 +189,7 @@ QStringList UI::Dashboard::widgetTitles()
   // ViewOptions.qml!
 
   // clang-format off
-  return groupTitles() +
+  return datagridTitles() +
           multiPlotTitles() +
           ledTitles() +
           fftTitles() +
@@ -231,11 +231,11 @@ int UI::Dashboard::relativeIndex(const int globalIndex) const
 
   // Check if we should return group widget
   int index = globalIndex;
-  if (index < groupCount())
+  if (index < datagridCount())
     return index;
 
   // Check if we should return multi-plot widget
-  index -= groupCount();
+  index -= datagridCount();
   if (index < multiPlotCount())
     return index;
 
@@ -312,8 +312,8 @@ bool UI::Dashboard::widgetVisible(const int globalIndex) const
 
   switch (widgetType(globalIndex))
   {
-    case WidgetType::Group:
-      visible = groupVisible(index);
+    case WidgetType::DataGrid:
+      visible = datagridVisible(index);
       break;
     case WidgetType::MultiPlot:
       visible = multiPlotVisible(index);
@@ -374,8 +374,8 @@ QString UI::Dashboard::widgetIcon(const int globalIndex) const
 {
   switch (widgetType(globalIndex))
   {
-    case WidgetType::Group:
-      return "qrc:/rcc/icons/dashboard/group.svg";
+    case WidgetType::DataGrid:
+      return "qrc:/rcc/icons/dashboard/datagrid.svg";
       break;
     case WidgetType::MultiPlot:
       return "qrc:/rcc/icons/dashboard/multiplot.svg";
@@ -408,7 +408,7 @@ QString UI::Dashboard::widgetIcon(const int globalIndex) const
       return "qrc:/rcc/icons/dashboard/led.svg";
       break;
     default:
-      return "qrc:/rcc/icons/dashboard/close.svg";
+      return "qrc:/rcc/icons/dashboard/group.svg";
       break;
   }
 }
@@ -418,7 +418,7 @@ QString UI::Dashboard::widgetIcon(const int globalIndex) const
  *
  * Possible return values are:
  * - @c WidgetType::Unknown
- * - @c WidgetType::Group
+ * - @c WidgetType::DataGrid
  * - @c WidgetType::MultiPlot
  * - @c WidgetType::FFT
  * - @c WidgetType::Plot
@@ -456,11 +456,11 @@ UI::Dashboard::WidgetType UI::Dashboard::widgetType(const int globalIndex) const
 
   // Check if we should return group widget
   int index = globalIndex;
-  if (index < groupCount())
-    return WidgetType::Group;
+  if (index < datagridCount())
+    return WidgetType::DataGrid;
 
   // Check if we should return multi-plot widget
-  index -= groupCount();
+  index -= datagridCount();
   if (index < multiPlotCount())
     return WidgetType::MultiPlot;
 
@@ -523,7 +523,7 @@ bool UI::Dashboard::fftVisible(const int index) const           { return getVisi
 bool UI::Dashboard::gpsVisible(const int index) const           { return getVisibility(m_gpsVisibility, index);           }
 bool UI::Dashboard::ledVisible(const int index) const           { return getVisibility(m_ledVisibility, index);           }
 bool UI::Dashboard::plotVisible(const int index) const          { return getVisibility(m_plotVisibility, index);          }
-bool UI::Dashboard::groupVisible(const int index) const         { return getVisibility(m_groupVisibility, index);         }
+bool UI::Dashboard::datagridVisible(const int index) const      { return getVisibility(m_datagridVisibility, index);         }
 bool UI::Dashboard::gaugeVisible(const int index) const         { return getVisibility(m_gaugeVisibility, index);         }
 bool UI::Dashboard::compassVisible(const int index) const       { return getVisibility(m_compassVisibility, index);       }
 bool UI::Dashboard::gyroscopeVisible(const int index) const     { return getVisibility(m_gyroscopeVisibility, index);     }
@@ -538,12 +538,12 @@ bool UI::Dashboard::accelerometerVisible(const int index) const { return getVisi
 // clang-format off
 QStringList UI::Dashboard::gpsTitles()           { return groupTitles(m_gpsWidgets);           }
 QStringList UI::Dashboard::ledTitles()           { return groupTitles(m_ledWidgets);           }
-QStringList UI::Dashboard::groupTitles()         { return groupTitles(m_groupWidgets);         }
 QStringList UI::Dashboard::barTitles()           { return datasetTitles(m_barWidgets);         }
 QStringList UI::Dashboard::fftTitles()           { return datasetTitles(m_fftWidgets);         }
 QStringList UI::Dashboard::plotTitles()          { return datasetTitles(m_plotWidgets);        }
 QStringList UI::Dashboard::gaugeTitles()         { return datasetTitles(m_gaugeWidgets);       }
 QStringList UI::Dashboard::compassTitles()       { return datasetTitles(m_compassWidgets);     }
+QStringList UI::Dashboard::datagridTitles()      { return groupTitles(m_datagridWidgets);      }
 QStringList UI::Dashboard::gyroscopeTitles()     { return groupTitles(m_gyroscopeWidgets);     }
 QStringList UI::Dashboard::multiPlotTitles()     { return groupTitles(m_multiPlotWidgets);     }
 QStringList UI::Dashboard::accelerometerTitles() { return groupTitles(m_accelerometerWidgets); }
@@ -593,7 +593,7 @@ void UI::Dashboard::setFFTVisible(const int i, const bool v)           { setVisi
 void UI::Dashboard::setGpsVisible(const int i, const bool v)           { setVisibility(m_gpsVisibility, i, v);           }
 void UI::Dashboard::setLedVisible(const int i, const bool v)           { setVisibility(m_ledVisibility, i, v);           }
 void UI::Dashboard::setPlotVisible(const int i, const bool v)          { setVisibility(m_plotVisibility, i, v);          }
-void UI::Dashboard::setGroupVisible(const int i, const bool v)         { setVisibility(m_groupVisibility, i, v);         }
+void UI::Dashboard::setDataGridVisible(const int i, const bool v)         { setVisibility(m_datagridVisibility, i, v);         }
 void UI::Dashboard::setGaugeVisible(const int i, const bool v)         { setVisibility(m_gaugeVisibility, i, v);         }
 void UI::Dashboard::setCompassVisible(const int i, const bool v)       { setVisibility(m_compassVisibility, i, v);       }
 void UI::Dashboard::setGyroscopeVisible(const int i, const bool v)     { setVisibility(m_gyroscopeVisibility, i, v);     }
@@ -625,7 +625,7 @@ void UI::Dashboard::resetData()
   m_ledWidgets.clear();
   m_plotWidgets.clear();
   m_gaugeWidgets.clear();
-  m_groupWidgets.clear();
+  m_datagridWidgets.clear();
   m_compassWidgets.clear();
   m_gyroscopeWidgets.clear();
   m_multiPlotWidgets.clear();
@@ -638,7 +638,7 @@ void UI::Dashboard::resetData()
   m_ledVisibility.clear();
   m_plotVisibility.clear();
   m_gaugeVisibility.clear();
-  m_groupVisibility.clear();
+  m_datagridVisibility.clear();
   m_compassVisibility.clear();
   m_gyroscopeVisibility.clear();
   m_multiPlotVisibility.clear();
@@ -734,9 +734,9 @@ void UI::Dashboard::processLatestJSON(const QJsonObject &json)
   const int gpsC = gpsCount();
   const int ledC = ledCount();
   const int plotC = plotCount();
-  const int groupC = groupCount();
   const int gaugeC = gaugeCount();
   const int compassC = compassCount();
+  const int datagridC = datagridCount();
   const int gyroscopeC = gyroscopeCount();
   const int multiPlotC = multiPlotCount();
   const int accelerometerC = accelerometerCount();
@@ -755,11 +755,11 @@ void UI::Dashboard::processLatestJSON(const QJsonObject &json)
   m_fftWidgets = getFFTWidgets();
   m_ledWidgets = getLEDWidgets();
   m_plotWidgets = getPlotWidgets();
-  m_groupWidgets = getWidgetGroups("");
   m_gpsWidgets = getWidgetGroups("map");
   m_barWidgets = getWidgetDatasets("bar");
   m_gaugeWidgets = getWidgetDatasets("gauge");
   m_gyroscopeWidgets = getWidgetGroups("gyro");
+  m_datagridWidgets = getWidgetGroups("datagrid");
   m_compassWidgets = getWidgetDatasets("compass");
   m_multiPlotWidgets = getWidgetGroups("multiplot");
   m_accelerometerWidgets = getWidgetGroups("accelerometer");
@@ -784,8 +784,8 @@ void UI::Dashboard::processLatestJSON(const QJsonObject &json)
   regenerateWidgets |= (ledC != ledCount());
   regenerateWidgets |= (plotC != plotCount());
   regenerateWidgets |= (gaugeC != gaugeCount());
-  regenerateWidgets |= (groupC != groupCount());
   regenerateWidgets |= (compassC != compassCount());
+  regenerateWidgets |= (datagridC != datagridCount());
   regenerateWidgets |= (gyroscopeC != gyroscopeCount());
   regenerateWidgets |= (multiPlotC != multiPlotCount());
   regenerateWidgets |= (accelerometerC != accelerometerCount());
@@ -799,8 +799,8 @@ void UI::Dashboard::processLatestJSON(const QJsonObject &json)
     m_ledVisibility.resize(ledCount());
     m_plotVisibility.resize(plotCount());
     m_gaugeVisibility.resize(gaugeCount());
-    m_groupVisibility.resize(groupCount());
     m_compassVisibility.resize(compassCount());
+    m_datagridVisibility.resize(datagridCount());
     m_gyroscopeVisibility.resize(gyroscopeCount());
     m_multiPlotVisibility.resize(multiPlotCount());
     m_accelerometerVisibility.resize(accelerometerCount());
@@ -810,8 +810,8 @@ void UI::Dashboard::processLatestJSON(const QJsonObject &json)
     std::fill(m_ledVisibility.begin(), m_ledVisibility.end(), 1);
     std::fill(m_plotVisibility.begin(), m_plotVisibility.end(), 1);
     std::fill(m_gaugeVisibility.begin(), m_gaugeVisibility.end(), 1);
-    std::fill(m_groupVisibility.begin(), m_groupVisibility.end(), 1);
     std::fill(m_compassVisibility.begin(), m_compassVisibility.end(), 1);
+    std::fill(m_datagridVisibility.begin(), m_datagridVisibility.end(), 1);
     std::fill(m_gyroscopeVisibility.begin(), m_gyroscopeVisibility.end(), 1);
     std::fill(m_multiPlotVisibility.begin(), m_multiPlotVisibility.end(), 1);
     std::fill(m_accelerometerVisibility.begin(),

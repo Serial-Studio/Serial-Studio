@@ -31,13 +31,13 @@
 
 namespace Widgets
 {
-class DataGroup : public QWidget
+class DataGrid : public QWidget
 {
   Q_OBJECT
 
 public:
-  DataGroup(const int index = -1);
-  ~DataGroup();
+  DataGrid(const int index = -1);
+  ~DataGrid();
 
 private slots:
   void updateData();

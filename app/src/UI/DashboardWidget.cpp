@@ -29,7 +29,7 @@
 #include "UI/Widgets/Compass.h"
 #include "UI/Widgets/FFTPlot.h"
 #include "UI/Widgets/LEDPanel.h"
-#include "UI/Widgets/DataGroup.h"
+#include "UI/Widgets/DataGrid.h"
 #include "UI/Widgets/Gyroscope.h"
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Accelerometer.h"
@@ -219,8 +219,8 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
     // Construct new widget
     switch (widgetType())
     {
-      case UI::Dashboard::WidgetType::Group:
-        m_dbWidget = new Widgets::DataGroup(relativeIndex());
+      case UI::Dashboard::WidgetType::DataGrid:
+        m_dbWidget = new Widgets::DataGrid(relativeIndex());
         break;
       case UI::Dashboard::WidgetType::MultiPlot:
         m_dbWidget = new Widgets::MultiPlot(relativeIndex());

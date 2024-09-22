@@ -255,11 +255,11 @@ Widgets.Pane {
           // Groups
           //
           ViewOptionsDelegate {
-            title: qsTr("Dataset Values")
-            count: Cpp_UI_Dashboard.groupCount
-            titles: Cpp_UI_Dashboard.groupTitles
-            icon: "qrc:/rcc/icons/dashboard/group.svg"
-            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGroupVisible(index, checked)
+            title: qsTr("Data Grids")
+            count: Cpp_UI_Dashboard.datagridCount
+            titles: Cpp_UI_Dashboard.datagridTitles
+            icon: "qrc:/rcc/icons/dashboard/datagrid.svg"
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setDataGridVisible(index, checked)
           }
 
           //
