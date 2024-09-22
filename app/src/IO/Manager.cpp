@@ -252,9 +252,6 @@ void IO::Manager::toggleConnection()
  */
 void IO::Manager::connectDevice()
 {
-  // Reset driver
-  setSelectedDriver(selectedDriver());
-
   // Configure current device
   if (deviceAvailable())
   {
@@ -416,7 +413,14 @@ void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
 
   // Try to open a BLE connection
   else if (selectedDriver() == SelectedDriver::BluetoothLE)
-    setDriver(&(Drivers::BluetoothLE::instance()));
+  {
+    auto *driver = &Drivers::BluetoothLE::instance();
+    if (driver->operatingSystemSupported())
+    {
+      setDriver(static_cast<HAL_Driver *>(driver));
+      driver->startDiscovery();
+    }
+  }
 
   // Invalid driver
   else

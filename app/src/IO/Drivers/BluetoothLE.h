@@ -118,7 +118,7 @@ private:
   QStringList m_deviceNames;
   QStringList m_serviceNames;
   QList<QBluetoothDeviceInfo> m_devices;
-  QBluetoothDeviceDiscoveryAgent m_discoveryAgent;
+  QBluetoothDeviceDiscoveryAgent *m_discoveryAgent;
 };
 } // namespace Drivers
 } // namespace IO

@@ -37,32 +37,13 @@ IO::Drivers::BluetoothLE::BluetoothLE()
   , m_deviceConnected(false)
   , m_service(Q_NULLPTR)
   , m_controller(Q_NULLPTR)
+  , m_discoveryAgent(Q_NULLPTR)
 {
   // Update connect button status when a BLE device is selected by the user
   connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged, this,
           &IO::Drivers::BluetoothLE::configurationChanged);
   connect(this, &IO::Drivers::BluetoothLE::deviceConnectedChanged,
           &IO::Manager::instance(), &IO::Manager::connectedChanged);
-
-  // Operating system not supported, abort initialization process
-  if (!operatingSystemSupported())
-    return;
-
-  // Register discovered devices
-  connect(&m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
-          this, &IO::Drivers::BluetoothLE::onDeviceDiscovered);
-
-  // Report BLE discovery errors
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  connect(&m_discoveryAgent,
-          static_cast<void (QBluetoothDeviceDiscoveryAgent::*)(
-              QBluetoothDeviceDiscoveryAgent::Error)>(
-              &QBluetoothDeviceDiscoveryAgent::error),
-          this, &IO::Drivers::BluetoothLE::onDiscoveryError);
-#else
-  connect(&m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
-          this, &IO::Drivers::BluetoothLE::onDiscoveryError);
-#endif
 }
 
 /**
@@ -102,6 +83,7 @@ void IO::Drivers::BluetoothLE::close()
   }
 
   // Update UI
+  Q_EMIT devicesChanged();
   Q_EMIT servicesChanged();
   Q_EMIT deviceConnectedChanged();
 }
@@ -270,8 +252,35 @@ void IO::Drivers::BluetoothLE::startDiscovery()
   Q_EMIT devicesChanged();
   Q_EMIT deviceIndexChanged();
 
+  // Delete previous discovery agent
+  if (m_discoveryAgent)
+  {
+    disconnect(m_discoveryAgent);
+    m_discoveryAgent->deleteLater();
+    m_discoveryAgent = nullptr;
+  }
+
+  // Initialize a discovery agent
+  m_discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
+
+  // Register discovered devices
+  connect(m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
+          this, &IO::Drivers::BluetoothLE::onDeviceDiscovered);
+
+  // Report BLE discovery errors
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  connect(&m_discoveryAgent,
+          static_cast<void (QBluetoothDeviceDiscoveryAgent::*)(
+              QBluetoothDeviceDiscoveryAgent::Error)>(
+              &QBluetoothDeviceDiscoveryAgent::error),
+          this, &IO::Drivers::BluetoothLE::onDiscoveryError);
+#else
+  connect(m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
+          this, &IO::Drivers::BluetoothLE::onDiscoveryError);
+#endif
+
   // Start device discovery process
-  m_discoveryAgent.start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
+  m_discoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
 }
 
 /**
@@ -396,6 +405,10 @@ void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
 void IO::Drivers::BluetoothLE::onDeviceDiscovered(
     const QBluetoothDeviceInfo &device)
 {
+  // Stop if BLE controller is already connected or user selected a device
+  if (m_controller || m_deviceIndex > 0)
+    return;
+
   // Only register BLE devices
   if (device.coreConfigurations()
       & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
@@ -409,7 +422,6 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(
     {
       m_devices.append(device);
       m_deviceNames.append(device.name());
-
       Q_EMIT devicesChanged();
     }
   }
