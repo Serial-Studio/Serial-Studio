@@ -251,7 +251,7 @@ ColumnLayout {
 
             onTextEdited: {
               const num = Number(text);
-              if (!isNaN(num)) {
+              if (!isNaN(num) && num > 0) {
                 root.modelPointer.setData(
                       view.index(row, column),
                       Number(text),
