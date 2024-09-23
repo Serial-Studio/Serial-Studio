@@ -31,8 +31,6 @@ Today, Serial Studio is a powerful and adaptable tool, suitable not only for Can
 - **Customizable frame analysis:** Provides the option to modify a JavaScript function to interpret incoming data frames, enabling the preprocessing of raw sensor data and handling of complex binary formats.
 - **MQTT publishing and receiving:** Sends and receives data over the internet, enabling real-time data visualization from anywhere in the world.
 
-This translation retains the original meaning and flow while adapting it to English.
-
 ## Installation
 
 You can download and install the latest version of Serial Studio for your preferred platform from [here](https://github.com/Serial-Studio/Serial-Studio/releases/latest).
