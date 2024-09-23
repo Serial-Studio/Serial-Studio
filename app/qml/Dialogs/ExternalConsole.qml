@@ -38,11 +38,6 @@ Window {
   minimumHeight: 240 + root.titlebarHeight
 
   //
-  // Make window stay on top
-  //
-  Component.onCompleted: root.flags |= Qt.WindowStaysOnTopHint
-
-  //
   // Native window registration
   //
   property real titlebarHeight: 0
