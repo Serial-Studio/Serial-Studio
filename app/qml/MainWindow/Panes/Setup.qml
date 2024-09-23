@@ -37,7 +37,7 @@ Widgets.Pane {
   // Custom properties
   //
   property int setupMargin: 0
-  property int displayedWidth: 344
+  property int displayedWidth: 360
   readonly property int maxItemWidth: column.width - 8
 
   //

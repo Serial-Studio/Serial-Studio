@@ -61,6 +61,7 @@ Misc::CommonFonts::CommonFonts()
   m_uiFont.setPixelSize(12);
   m_monoFont.setPixelSize(12);
   m_boldUiFont.setPixelSize(12);
+  m_monoFont.setStyleHint(QFont::Monospace);
 }
 
 /**

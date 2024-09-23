@@ -2194,7 +2194,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="310"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
         <source>Disconnect</source>
         <translation>Desconectar</translation>
     </message>

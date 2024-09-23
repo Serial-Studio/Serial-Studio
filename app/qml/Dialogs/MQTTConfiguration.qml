@@ -42,8 +42,8 @@ Window {
   title: qsTr("MQTT Setup")
   x: (Screen.desktopAvailableWidth - width) / 2
   y: (Screen.desktopAvailableHeight - height) / 2
-  minimumWidth: column.implicitWidth + root.titlebarHeight
-  maximumWidth: column.implicitWidth + root.titlebarHeight
+  minimumWidth: column.implicitWidth + 32
+  maximumWidth: column.implicitWidth + 32
   minimumHeight: column.implicitHeight + root.titlebarHeight + 32
   maximumHeight: column.implicitHeight + root.titlebarHeight + 32
 
