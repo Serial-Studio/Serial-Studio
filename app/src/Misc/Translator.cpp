@@ -167,27 +167,27 @@ void Misc::Translator::setLanguage(const int language)
   switch (language)
   {
     case 0:
-      langName = QStringLiteral("en");
+      langName = QStringLiteral("en_US");
       locale = QLocale(QLocale::English);
       break;
     case 1:
-      langName = QStringLiteral("es");
+      langName = QStringLiteral("es_MX");
       locale = QLocale(QLocale::Spanish);
       break;
     case 2:
-      langName = QStringLiteral("zh");
+      langName = QStringLiteral("zh_CN");
       locale = QLocale(QLocale::Chinese);
       break;
     case 3:
-      langName = QStringLiteral("de");
+      langName = QStringLiteral("de_DE");
       locale = QLocale(QLocale::German);
       break;
     case 4:
-      langName = QStringLiteral("ru");
+      langName = QStringLiteral("ru_RU");
       locale = QLocale(QLocale::Russian);
       break;
     default:
-      langName = QStringLiteral("en");
+      langName = QStringLiteral("en_US");
       locale = QLocale(QLocale::English);
       break;
   }
@@ -210,7 +210,7 @@ void Misc::Translator::setLanguage(const QLocale &locale,
                                    const QString &language)
 {
   qApp->removeTranslator(&m_translator);
-  const auto qmPath = QStringLiteral(":/rcc/translations/%1.qm").arg(language);
+  const auto qmPath = QStringLiteral(":/qm/%1.qm").arg(language);
   if (m_translator.load(locale, qmPath))
   {
     qApp->installTranslator(&m_translator);

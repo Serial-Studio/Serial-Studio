@@ -55,6 +55,7 @@ find_package(
  Bluetooth
  Positioning
  PrintSupport
+ LinguistTools
  QuickControls2
 )
 
@@ -62,7 +63,7 @@ qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
 
 #-------------------------------------------------------------------------------
-# Import source code & resources
+# Import source code
 #-------------------------------------------------------------------------------
 
 include_directories(src)
@@ -224,10 +225,16 @@ elseif(UNIX)
 endif()
 
 #-------------------------------------------------------------------------------
-# Generate resources
+# Add resources
 #-------------------------------------------------------------------------------
 
 qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
+
+#-------------------------------------------------------------------------------
+# Add translations
+#-------------------------------------------------------------------------------
+
+qt_add_resources(QM_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #-------------------------------------------------------------------------------
 # Create executable
@@ -239,6 +246,9 @@ qt_add_executable(
  ${HEADERS}
  ${QML_RCC}
  ${RES_RCC}
+ ${QM_RCC}
+ ${QT_RCC_TRANSLATIONS}
+ ${APP_RCC_TRANSLATIONS}
  MANUAL_FINALIZATION
 )
 

@@ -746,7 +746,7 @@ void IO::Drivers::Serial::refreshSerialDevices()
 void IO::Drivers::Serial::handleError(QSerialPort::SerialPortError error)
 {
   if (error != QSerialPort::NoError)
-    Manager::instance().disconnectDriver();
+    Manager::instance().disconnectDevice();
 }
 
 /**

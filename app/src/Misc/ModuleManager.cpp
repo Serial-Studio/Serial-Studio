@@ -168,7 +168,7 @@ void Misc::ModuleManager::onQuit()
 {
   CSV::Export::instance().closeFile();
   CSV::Player::instance().closeFile();
-  IO::Manager::instance().disconnectDriver();
+  IO::Manager::instance().disconnectDevice();
   Misc::TimerEvents::instance().stopTimers();
   Plugins::Server::instance().removeConnection();
 }

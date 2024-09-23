@@ -244,7 +244,7 @@ void CSV::Player::openFile(const QString &filePath)
            "to disconnect from the serial port"),
         qAppName(), QMessageBox::No | QMessageBox::Yes);
     if (response == QMessageBox::Yes)
-      IO::Manager::instance().disconnectDriver();
+      IO::Manager::instance().disconnectDevice();
     else
       return;
   }

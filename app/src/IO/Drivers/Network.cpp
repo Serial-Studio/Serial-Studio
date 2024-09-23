@@ -536,6 +536,6 @@ void IO::Drivers::Network::onErrorOccurred(
   else
     error = QString::number(socketError);
 
-  Manager::instance().disconnectDriver();
+  Manager::instance().disconnectDevice();
   Misc::Utilities::showMessageBox(tr("Network socket error"), error);
 }

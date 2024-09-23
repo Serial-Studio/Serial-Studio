@@ -295,7 +295,6 @@ ToolBar {
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
 
 
-
       //
       // Connect/disconnect device when button is clicked
       //

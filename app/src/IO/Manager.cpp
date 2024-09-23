@@ -241,7 +241,7 @@ qint64 IO::Manager::writeData(const QByteArray &data)
 void IO::Manager::toggleConnection()
 {
   if (connected())
-    disconnectDriver();
+    disconnectDevice();
   else
     connectDevice();
 }
@@ -269,7 +269,7 @@ void IO::Manager::connectDevice()
 
     // Error opening the device
     else
-      disconnectDriver();
+      disconnectDevice();
 
     // Update UI
     Q_EMIT connectedChanged();
@@ -279,21 +279,18 @@ void IO::Manager::connectDevice()
 /**
  * Disconnects from the current device and clears temp. data
  */
-void IO::Manager::disconnectDriver()
+void IO::Manager::disconnectDevice()
 {
   if (deviceAvailable())
   {
     // Disconnect device signals/slots
     disconnect(driver(), &IO::HAL_Driver::dataReceived, this,
                &IO::Manager::onDataReceived);
-    disconnect(driver(), &IO::HAL_Driver::configurationChanged, this,
-               &IO::Manager::configurationChanged);
 
     // Close driver device
     driver()->close();
 
-    // Update device pointer
-    m_driver = Q_NULLPTR;
+    // Reset data buffer
     m_receivedBytes = 0;
     m_dataBuffer.clear();
     m_dataBuffer.reserve(maxBufferSize());
@@ -395,13 +392,10 @@ void IO::Manager::setSeparatorSequence(const QString &sequence)
 void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
 {
   // Disconnect current driver
-  disconnectDriver();
+  disconnectDevice();
 
   // Change data source
   m_selectedDriver = driver;
-
-  // Disconnect previous device (if any)
-  disconnectDriver();
 
   // Try to open a serial port connection
   if (selectedDriver() == SelectedDriver::Serial)
@@ -537,7 +531,7 @@ void IO::Manager::onDataReceived(const QByteArray &data)
 {
   // Verify that device is still valid
   if (!driver())
-    disconnectDriver();
+    disconnectDevice();
 
   // Read data & append it to buffer
   auto bytes = data.length();

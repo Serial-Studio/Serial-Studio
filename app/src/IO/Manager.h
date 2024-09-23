@@ -157,7 +157,7 @@ public:
 public slots:
   void connectDevice();
   void toggleConnection();
-  void disconnectDriver();
+  void disconnectDevice();
   void setWriteEnabled(const bool enabled);
   void processPayload(const QByteArray &payload);
   void setMaxBufferSize(const int maxBufferSize);
