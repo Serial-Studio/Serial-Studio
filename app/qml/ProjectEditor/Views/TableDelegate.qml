@@ -250,10 +250,13 @@ ColumnLayout {
             color: Cpp_ThemeManager.colors["table_text"]
 
             onTextEdited: {
-              root.modelPointer.setData(
-                    view.index(row, column),
-                    Number(text),
-                    ProjectModel.EditableValue)
+              const num = Number(text);
+              if (!isNaN(num)) {
+                root.modelPointer.setData(
+                      view.index(row, column),
+                      Number(text),
+                      ProjectModel.EditableValue)
+              }
             }
 
             validator: IntValidator {
@@ -282,13 +285,25 @@ ColumnLayout {
             color: Cpp_ThemeManager.colors["table_text"]
 
             onTextEdited: {
-              root.modelPointer.setData(
-                    view.index(row, column),
-                    Number(text),
-                    ProjectModel.EditableValue)
+              // Don't convert or set the data if it's an incomplete number
+              if (text === "-" || text === "." || text === "-.")
+                return;
+
+              // Convert to number only if the input is valid
+              const num = Number(text);
+              if (!isNaN(num)) {
+                root.modelPointer.setData(
+                      view.index(row, column),
+                      num,
+                      ProjectModel.EditableValue
+                      );
+              }
             }
 
             validator: DoubleValidator {
+              id: validator
+              bottom: -1000000
+              top: 1000000
             }
 
             background: Item {}

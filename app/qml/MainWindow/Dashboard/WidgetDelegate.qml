@@ -122,7 +122,7 @@ Widgets.Pane {
         //
         Label {
           text: window.title
-          color: Cpp_ThemeManager.colors["titlebar_text"]
+          color: Cpp_ThemeManager.colors["text"]
           font: Cpp_Misc_CommonFonts.customUiFont(13, true)
           visible: Cpp_NativeWindow.titlebarHeight(window) > 0
 

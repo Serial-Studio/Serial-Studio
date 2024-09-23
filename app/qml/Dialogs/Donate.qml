@@ -87,7 +87,7 @@ Window {
     Label {
       text: root.title
       visible: root.titlebarHeight > 0
-      color: Cpp_ThemeManager.colors["titlebar_text"]
+      color: Cpp_ThemeManager.colors["text"]
       font: Cpp_Misc_CommonFonts.customUiFont(13, true)
 
       anchors {
