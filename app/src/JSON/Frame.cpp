@@ -39,6 +39,7 @@ void JSON::Frame::clear()
 {
   m_title = "";
   m_groups.clear();
+  m_actions.clear();
 }
 
 /**
@@ -64,6 +65,7 @@ bool JSON::Frame::read(const QJsonObject &object)
   // Get title & groups array
   const auto title = object.value(QStringLiteral("title")).toString();
   const auto groups = object.value(QStringLiteral("groups")).toArray();
+  const auto actions = object.value(QStringLiteral("actions")).toArray();
 
   // We need to have a project title and at least one group
   if (!title.isEmpty() && !groups.isEmpty())
@@ -77,6 +79,14 @@ bool JSON::Frame::read(const QJsonObject &object)
       Group group;
       if (group.read(groups.at(i).toObject()))
         m_groups.append(group);
+    }
+
+    // Generate actions from data frame
+    for (auto i = 0; i < actions.count(); ++i)
+    {
+      Action action;
+      if (action.read(actions.at(i).toObject()))
+        m_actions.append(action);
     }
 
     // Return status
@@ -114,9 +124,10 @@ const QVector<JSON::Group> &JSON::Frame::groups() const
 }
 
 /**
- * @return The group at the given @a index
+ * Returns a vector of pointers to the @c Action objects associated to this
+ * frame.
  */
-const JSON::Group &JSON::Frame::getGroup(const int index) const
+const QVector<JSON::Action> &JSON::Frame::actions() const
 {
-  return m_groups.at(index);
+  return m_actions;
 }

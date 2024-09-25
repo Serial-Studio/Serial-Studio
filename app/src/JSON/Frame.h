@@ -28,6 +28,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <JSON/Group.h>
+#include <JSON/Action.h>
 
 namespace JSON
 {
@@ -64,10 +65,11 @@ public:
   [[nodiscard]] int groupCount() const;
   [[nodiscard]] const QString &title() const;
   [[nodiscard]] const QVector<Group> &groups() const;
-  [[nodiscard]] const JSON::Group &getGroup(const int index) const;
+  [[nodiscard]] const QVector<Action> &actions() const;
 
 private:
   QString m_title;
   QVector<Group> m_groups;
+  QVector<Action> m_actions;
 };
 } // namespace JSON

@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <JSON/Group.h>
+#include <JSON/Action.h>
 #include <JSON/Dataset.h>
 #include <QStandardItemModel>
 #include <QItemSelectionModel>
@@ -79,6 +80,9 @@ class Model : public QObject
   Q_PROPERTY(CustomModel* groupModel
              READ groupModel
              NOTIFY groupModelChanged)
+  Q_PROPERTY(CustomModel* actionModel
+             READ actionModel
+             NOTIFY actionModelChanged)
   Q_PROPERTY(CustomModel* projectModel
              READ projectModel
              NOTIFY projectModelChanged)
@@ -112,6 +116,12 @@ class Model : public QObject
   Q_PROPERTY(bool currentDatasetIsEditable
              READ currentDatasetIsEditable
              NOTIFY editableOptionsChanged)
+  Q_PROPERTY(QString actionIcon
+             READ actionIcon
+             NOTIFY actionModelChanged)
+  Q_PROPERTY(QStringList availableActionIcons
+             READ availableActionIcons
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -121,14 +131,13 @@ signals:
   void treeModelChanged();
   void groupModelChanged();
   void currentViewChanged();
+  void actionModelChanged();
   void projectModelChanged();
   void datasetModelChanged();
   void datasetOptionsChanged();
   void editableOptionsChanged();
   void frameParserCodeChanged();
   void thunderforestApyKeyChanged();
-  void groupAdded(const QModelIndex &index);
-  void datasetAdded(const QModelIndex &index);
 
 private:
   explicit Model();
@@ -150,6 +159,7 @@ public:
     GroupView,
     DatasetView,
     FrameParserView,
+    ActionView
   };
   Q_ENUM(CurrentView)
 
@@ -208,7 +218,8 @@ public:
     IntField,
     FloatField,
     CheckBox,
-    ComboBox
+    ComboBox,
+    IconPicker
   };
   Q_ENUM(EditorWidget)
 
@@ -244,6 +255,9 @@ public:
   [[nodiscard]] QString selectedText() const;
   [[nodiscard]] QString selectedIcon() const;
 
+  [[nodiscard]] const QString actionIcon() const;
+  [[nodiscard]] const QStringList &availableActionIcons() const;
+
   [[nodiscard]] const QString &title() const;
   [[nodiscard]] const QString &jsonFilePath() const;
   [[nodiscard]] const QString &frameParserCode() const;
@@ -260,6 +274,7 @@ public:
   [[nodiscard]] QItemSelectionModel *selectionModel() const;
 
   [[nodiscard]] CustomModel *groupModel() const;
+  [[nodiscard]] CustomModel *actionModel() const;
   [[nodiscard]] CustomModel *projectModel() const;
   [[nodiscard]] CustomModel *datasetModel() const;
 
@@ -272,12 +287,15 @@ public slots:
   void openJsonFile(const QString &path);
 
   void deleteCurrentGroup();
+  void deleteCurrentAction();
   void deleteCurrentDataset();
   void duplicateCurrentGroup();
+  void duplicateCurrentAction();
   void duplicateCurrentDataset();
   void addDataset(const DatasetOption options);
   void changeDatasetOption(const DatasetOption option, const bool checked);
 
+  void addAction();
   void addGroup(const QString &title, const GroupWidget widget);
   bool setGroupWidget(const int group, const GroupWidget widget);
 
@@ -286,6 +304,7 @@ public slots:
   void buildTreeModel();
   void buildProjectModel();
   void buildGroupModel(const JSON::Group &group);
+  void buildActionModel(const JSON::Action &action);
   void buildDatasetModel(const JSON::Dataset &dataset);
 
 private slots:
@@ -294,6 +313,7 @@ private slots:
   void setModified(const bool modified);
   void setCurrentView(const CurrentView view);
   void onGroupItemChanged(QStandardItem *item);
+  void onActionItemChanged(QStandardItem *item);
   void onProjectItemChanged(QStandardItem *item);
   void onDatasetItemChanged(QStandardItem *item);
   void onCurrentSelectionChanged(const QModelIndex &current,
@@ -322,24 +342,29 @@ private:
 
   QMap<QStandardItem *, int> m_rootItems;
   QMap<QStandardItem *, JSON::Group> m_groupItems;
+  QMap<QStandardItem *, JSON::Action> m_actionItems;
   QMap<QStandardItem *, JSON::Dataset> m_datasetItems;
 
   QVector<JSON::Group> m_groups;
+  QVector<JSON::Action> m_actions;
 
   CustomModel *m_treeModel;
   QItemSelectionModel *m_selectionModel;
 
   CustomModel *m_groupModel;
+  CustomModel *m_actionModel;
   CustomModel *m_projectModel;
   CustomModel *m_datasetModel;
 
   QStringList m_fftSamples;
   QStringList m_decoderOptions;
+  QMap<QString, QString> m_eolSequences;
   QMap<QString, QString> m_groupWidgets;
   QMap<QString, QString> m_datasetWidgets;
   QMap<QPair<bool, bool>, QString> m_plotOptions;
 
   JSON::Group m_selectedGroup;
+  JSON::Action m_selectedAction;
   JSON::Dataset m_selectedDataset;
 };
 

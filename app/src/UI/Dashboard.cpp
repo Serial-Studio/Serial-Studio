@@ -128,6 +128,11 @@ bool UI::Dashboard::frameValid() const
 // Widget count functions
 //------------------------------------------------------------------------------
 
+int UI::Dashboard::actionCount() const
+{
+  return m_actions.count();
+}
+
 /**
  * Returns the total number of widgets that compose the current JSON frame.
  * This function is used as a helper to the functions that use the global-index
@@ -535,6 +540,24 @@ bool UI::Dashboard::accelerometerVisible(const int index) const { return getVisi
 // Widget title functions
 //------------------------------------------------------------------------------
 
+QStringList UI::Dashboard::actionIcons()
+{
+  QStringList list;
+  for (auto &action : m_actions)
+    list.append(QStringLiteral("qrc:/rcc/actions/%1.svg").arg(action.icon()));
+
+  return list;
+}
+
+QStringList UI::Dashboard::actionTitles()
+{
+  QStringList list;
+  for (auto &action : m_actions)
+    list.append(action.title());
+
+  return list;
+}
+
 // clang-format off
 QStringList UI::Dashboard::gpsTitles()           { return groupTitles(m_gpsWidgets);           }
 QStringList UI::Dashboard::ledTitles()           { return groupTitles(m_ledWidgets);           }
@@ -583,6 +606,16 @@ void UI::Dashboard::setPrecision(const int precision)
   }
 }
 
+void UI::Dashboard::activateAction(const int index)
+{
+  if (index < m_actions.count())
+  {
+    const auto &action = m_actions[index];
+    const auto data = action.txData() + action.eolSequence();
+    IO::Manager::instance().writeData(data.toUtf8());
+  }
+}
+
 //------------------------------------------------------------------------------
 // Visibility-related slots
 //------------------------------------------------------------------------------
@@ -593,9 +626,9 @@ void UI::Dashboard::setFFTVisible(const int i, const bool v)           { setVisi
 void UI::Dashboard::setGpsVisible(const int i, const bool v)           { setVisibility(m_gpsVisibility, i, v);           }
 void UI::Dashboard::setLedVisible(const int i, const bool v)           { setVisibility(m_ledVisibility, i, v);           }
 void UI::Dashboard::setPlotVisible(const int i, const bool v)          { setVisibility(m_plotVisibility, i, v);          }
-void UI::Dashboard::setDataGridVisible(const int i, const bool v)         { setVisibility(m_datagridVisibility, i, v);         }
 void UI::Dashboard::setGaugeVisible(const int i, const bool v)         { setVisibility(m_gaugeVisibility, i, v);         }
 void UI::Dashboard::setCompassVisible(const int i, const bool v)       { setVisibility(m_compassVisibility, i, v);       }
+void UI::Dashboard::setDataGridVisible(const int i, const bool v)      { setVisibility(m_datagridVisibility, i, v);      }
 void UI::Dashboard::setGyroscopeVisible(const int i, const bool v)     { setVisibility(m_gyroscopeVisibility, i, v);     }
 void UI::Dashboard::setMultiplotVisible(const int i, const bool v)     { setVisibility(m_multiPlotVisibility, i, v);     }
 void UI::Dashboard::setAccelerometerVisible(const int i, const bool v) { setVisibility(m_accelerometerVisibility, i, v); }
@@ -644,10 +677,14 @@ void UI::Dashboard::resetData()
   m_multiPlotVisibility.clear();
   m_accelerometerVisibility.clear();
 
+  // Clear actions
+  m_actions.clear();
+
   // Update UI
   Q_EMIT updated();
   Q_EMIT dataReset();
   Q_EMIT titleChanged();
+  Q_EMIT actionCountChanged();
   Q_EMIT widgetCountChanged();
   Q_EMIT widgetVisibilityChanged();
 }
@@ -750,6 +787,12 @@ void UI::Dashboard::processLatestJSON(const QJsonObject &json)
 
   // Regenerate plot data
   updatePlots();
+
+  // Update actions
+  const int actionC = actionCount();
+  m_actions = m_currentFrame.actions();
+  if (actionCount() != actionC)
+    Q_EMIT actionCountChanged();
 
   // Update widget vectors
   m_fftWidgets = getFFTWidgets();

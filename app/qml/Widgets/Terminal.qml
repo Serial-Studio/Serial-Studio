@@ -44,7 +44,6 @@ Item {
   //
   Settings {
     property alias hex: hexCheckbox.checked
-    property alias echo: echoCheckbox.checked
     property alias timestamp: timestampCheck.checked
     property alias autoscroll: autoscrollCheck.checked
     property alias vt100Enabled: textEdit.vt100emulation
@@ -270,20 +269,6 @@ Item {
         enabled: Cpp_IO_Manager.readWrite
         checked: Cpp_IO_Console.dataMode === 1
         onCheckedChanged: Cpp_IO_Console.dataMode = checked ? 1 : 0
-      }
-
-      CheckBox {
-        visible: false
-        text: qsTr("Echo")
-        id: echoCheckbox
-        opacity: enabled ? 1 : 0.5
-        checked: Cpp_IO_Console.echo
-        Layout.alignment: Qt.AlignVCenter
-        enabled: Cpp_IO_Manager.readWrite
-        onCheckedChanged: {
-          if (Cpp_IO_Console.echo !== checked)
-            Cpp_IO_Console.echo = checked
-        }
       }
 
       ComboBox {

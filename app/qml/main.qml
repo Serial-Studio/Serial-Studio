@@ -52,6 +52,10 @@ Item {
                  }
                }
 
+    Dialogs.IconPicker {
+      id: actionIconPicker
+    }
+
     Dialogs.CsvPlayer {
       id: csvPlayer
     }

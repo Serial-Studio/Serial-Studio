@@ -84,7 +84,6 @@ IO::Console::Console()
   , m_lineEnding(LineEnding::NoLineEnding)
   , m_displayMode(DisplayMode::DisplayPlainText)
   , m_historyItem(0)
-  , m_echo(false)
   , m_autoscroll(true)
   , m_showTimestamp(false)
   , m_isStartingLine(true)
@@ -106,15 +105,6 @@ IO::Console &IO::Console::instance()
 {
   static Console singleton;
   return singleton;
-}
-
-/**
- * Returns @c true if the console shall display the commands that the user has
- * sent to the serial/network device.
- */
-bool IO::Console::echo() const
-{
-  return m_echo;
 }
 
 /**
@@ -398,16 +388,6 @@ void IO::Console::send(const QString &data)
 }
 
 /**
- * Enables or disables displaying sent data in the console screen. See @c echo()
- * for more information.
- */
-void IO::Console::setEcho(const bool enabled)
-{
-  m_echo = enabled;
-  Q_EMIT echoChanged();
-}
-
-/**
  * Creates a text document with current console output & prints it using native
  * system libraries/toolkits.
  */
@@ -569,8 +549,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
  */
 void IO::Console::onDataSent(const QByteArray &data)
 {
-  if (echo())
-    append(dataToString(data) + QStringLiteral("\n"), showTimestamp());
+  append(dataToString(data) + QStringLiteral("\n"), showTimestamp());
 }
 
 /**

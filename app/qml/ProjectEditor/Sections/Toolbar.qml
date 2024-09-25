@@ -34,11 +34,6 @@ ToolBar {
   id: root
 
   //
-  // Signals for group view widget
-  //
-  signal groupAdded(var index)
-
-  //
   // Calculate offset based on platform
   //
   property int titlebarHeight: Cpp_NativeWindow.titlebarHeight(projectEditor)
@@ -125,7 +120,7 @@ ToolBar {
     // New project
     //
     Widgets.BigButton {
-      text: qsTr("New Project")
+      text: qsTr("New")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_Project_Model.newJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/new.svg"
@@ -146,7 +141,7 @@ ToolBar {
     // Open
     //
     Widgets.BigButton {
-      text: qsTr("Load Project")
+      text: qsTr("Open")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_Project_Model.openJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/open.svg"
@@ -156,11 +151,32 @@ ToolBar {
     // Save
     //
     Widgets.BigButton {
-      text: qsTr("Save Project")
+      text: qsTr("Save")
       Layout.alignment: Qt.AlignVCenter
       enabled: Cpp_Project_Model.modified
       onClicked: Cpp_Project_Model.saveJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
+    }
+
+    //
+    // Separator
+    //
+    Rectangle {
+      width: 1
+      Layout.fillHeight: true
+      Layout.maximumHeight: 64
+      Layout.alignment: Qt.AlignVCenter
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
+    }
+
+    //
+    // Add action
+    //
+    Widgets.BigButton {
+      text: qsTr("Action")
+      Layout.alignment: Qt.AlignVCenter
+      onClicked: Cpp_Project_Model.addAction()
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-action.svg"
     }
 
     //

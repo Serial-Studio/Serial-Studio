@@ -142,6 +142,15 @@ class Dashboard : public QObject
   Q_PROPERTY(QStringList accelerometerTitles
              READ accelerometerTitles
              NOTIFY widgetCountChanged)
+  Q_PROPERTY(int actionCount
+             READ actionCount
+             NOTIFY actionCountChanged)
+  Q_PROPERTY(QStringList actionTitles
+             READ actionTitles
+             NOTIFY actionCountChanged)
+  Q_PROPERTY(QStringList actionIcons
+             READ actionIcons
+             NOTIFY actionCountChanged)
   // clang-format on
 
 signals:
@@ -150,6 +159,7 @@ signals:
   void titleChanged();
   void pointsChanged();
   void precisionChanged();
+  void actionCountChanged();
   void widgetCountChanged();
   void widgetVisibilityChanged();
   void frameReceived(const JSON::Frame &frame);
@@ -200,6 +210,8 @@ public:
   [[nodiscard]] int points() const;
   [[nodiscard]] int precision() const;
 
+  [[nodiscard]] int actionCount() const;
+
   [[nodiscard]] int totalWidgetCount() const;
   [[nodiscard]] int gpsCount() const;
   [[nodiscard]] int ledCount() const;
@@ -232,6 +244,9 @@ public:
   Q_INVOKABLE bool multiPlotVisible(const int index) const;
   Q_INVOKABLE bool accelerometerVisible(const int index) const;
 
+  QStringList actionIcons();
+  QStringList actionTitles();
+
   QStringList barTitles();
   QStringList fftTitles();
   QStringList gpsTitles();
@@ -255,6 +270,7 @@ public:
 public slots:
   void resetData();
   void setPoints(const int points);
+  void activateAction(const int index);
   void setPrecision(const int precision);
   void setBarVisible(const int index, const bool visible);
   void setFFTVisible(const int index, const bool visible);
@@ -305,6 +321,8 @@ private:
   QVector<bool> m_gyroscopeVisibility;
   QVector<bool> m_multiPlotVisibility;
   QVector<bool> m_accelerometerVisibility;
+
+  QVector<JSON::Action> m_actions;
 
   QVector<JSON::Dataset> m_barWidgets;
   QVector<JSON::Dataset> m_fftWidgets;

@@ -51,18 +51,76 @@ Widgets.Pane {
     anchors.rightMargin: -9
     anchors.bottomMargin: -9
 
+    //
+    // Background
+    //
     Rectangle {
       anchors.fill: parent
       color: Cpp_ThemeManager.colors["dashboard_background"]
     }
 
+    //
+    // Actions
+    //
+    Rectangle {
+      z: 2
+      id: header
+      height: visible ? 64 : 0
+      visible: Cpp_UI_Dashboard.actionCount > 0
+      color: Cpp_ThemeManager.colors["groupbox_background"]
+      anchors {
+        top: parent.top
+        left: parent.left
+        right: parent.right
+      }
+
+      RowLayout {
+        spacing: 4
+
+        anchors {
+          margins: 8
+          left: parent.left
+          right: parent.right
+          verticalCenter: parent.verticalCenter
+        }
+
+        Repeater {
+          model: Cpp_UI_Dashboard.actionCount
+          delegate: Widgets.BigButton {
+            icon.width: 24
+            icon.height: 24
+            Layout.alignment: Qt.AlignVCenter
+            text: Cpp_UI_Dashboard.actionTitles[index]
+            icon.source: Cpp_UI_Dashboard.actionIcons[index]
+            onClicked: Cpp_UI_Dashboard.activateAction(index)
+            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          }
+        }
+
+        Item {
+          Layout.fillWidth: true
+        }
+      }
+
+      Rectangle {
+        height: 1
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        color: Cpp_ThemeManager.colors["groupbox_border"]
+      }
+    }
+
+    //
+    // Widgets
+    //
     Flickable {
       id: flickable
       anchors.fill: parent
       contentWidth: width
-      anchors.topMargin: 8
       anchors.leftMargin: 8
       anchors.bottomMargin: 8
+      anchors.topMargin: header.height + 8
       contentHeight: grid.height
 
       ScrollBar.vertical: ScrollBar {

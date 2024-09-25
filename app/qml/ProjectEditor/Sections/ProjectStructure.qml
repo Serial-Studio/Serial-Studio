@@ -36,17 +36,6 @@ Widgets.Pane {
   signal datasetClicked(var title)
 
   //
-  // Select last added groups and datasets automatically
-  //
-  Connections {
-    target: Cpp_Project_Model
-
-    function onGroupAdded(index) {
-      treeView.selectionModel.setCurrentIndex(index, ItemSelectionModel.ClearAndSelect)
-    }
-  }
-
-  //
   // Put tree view inside a scroll view
   //
   ScrollView {

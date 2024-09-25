@@ -1,5 +1,113 @@
 <RCC>
     <qresource prefix="/rcc">
+        <file>actions/Abscissa.svg</file>
+        <file>actions/Accuracy.svg</file>
+        <file>actions/Add properties.svg</file>
+        <file>actions/Alpha.svg</file>
+        <file>actions/Alphabetical Sorting.svg</file>
+        <file>actions/America.svg</file>
+        <file>actions/Angry Face Meme.svg</file>
+        <file>actions/Atmospheric Pressure.svg</file>
+        <file>actions/Audio Cable.svg</file>
+        <file>actions/Azimuth.svg</file>
+        <file>actions/Battery Level.svg</file>
+        <file>actions/Beta.svg</file>
+        <file>actions/Binary File.svg</file>
+        <file>actions/Bluetooth.svg</file>
+        <file>actions/Capacitor.svg</file>
+        <file>actions/Cellular Network.svg</file>
+        <file>actions/Close.svg</file>
+        <file>actions/Cloud Lightning.svg</file>
+        <file>actions/Clouds.svg</file>
+        <file>actions/Code Fork.svg</file>
+        <file>actions/Code.svg</file>
+        <file>actions/Comparator.svg</file>
+        <file>actions/Connected.svg</file>
+        <file>actions/Counter.svg</file>
+        <file>actions/Cursor.svg</file>
+        <file>actions/Data Transfer.svg</file>
+        <file>actions/Delete Document.svg</file>
+        <file>actions/Dew Point.svg</file>
+        <file>actions/Disconnected.svg</file>
+        <file>actions/Display.svg</file>
+        <file>actions/Done.svg</file>
+        <file>actions/Edit Property.svg</file>
+        <file>actions/Edit.svg</file>
+        <file>actions/Electricity.svg</file>
+        <file>actions/Erase.svg</file>
+        <file>actions/Futurama Bender.svg</file>
+        <file>actions/Gamma.svg</file>
+        <file>actions/Gears.svg</file>
+        <file>actions/Geometry.svg</file>
+        <file>actions/GPS Antenna.svg</file>
+        <file>actions/GPS Disconnected.svg</file>
+        <file>actions/GPS Signal.svg</file>
+        <file>actions/Ground Symbol.svg</file>
+        <file>actions/Gyroscope.svg</file>
+        <file>actions/Hammer.svg</file>
+        <file>actions/Home.svg</file>
+        <file>actions/Homer Simpson.svg</file>
+        <file>actions/Idea.svg</file>
+        <file>actions/Important Property.svg</file>
+        <file>actions/Infrared Sensor.svg</file>
+        <file>actions/Infrared.svg</file>
+        <file>actions/Jewel.svg</file>
+        <file>actions/Ladder.svg</file>
+        <file>actions/Lambda.svg</file>
+        <file>actions/LED Diode.svg</file>
+        <file>actions/Length.svg</file>
+        <file>actions/Lock.svg</file>
+        <file>actions/Matrix Desktop.svg</file>
+        <file>actions/Motion Sensor.svg</file>
+        <file>actions/Mu.svg</file>
+        <file>actions/Omega.svg</file>
+        <file>actions/Orthogonal View.svg</file>
+        <file>actions/Oscillator.svg</file>
+        <file>actions/Padlock.svg</file>
+        <file>actions/Pause.svg</file>
+        <file>actions/Pi.svg</file>
+        <file>actions/Play Graph Report.svg</file>
+        <file>actions/Play Property.svg</file>
+        <file>actions/Play.svg</file>
+        <file>actions/Plot.svg</file>
+        <file>actions/Potentiometer.svg</file>
+        <file>actions/Processor.svg</file>
+        <file>actions/Project Setup.svg</file>
+        <file>actions/Properties Script.svg</file>
+        <file>actions/Proximity Sensor.svg</file>
+        <file>actions/Radar.svg</file>
+        <file>actions/Relay.svg</file>
+        <file>actions/Resistor.svg</file>
+        <file>actions/Restart.svg</file>
+        <file>actions/Robotic Arm.svg</file>
+        <file>actions/Satellite Signal.svg</file>
+        <file>actions/Scared Face Meme.svg</file>
+        <file>actions/Search Property.svg</file>
+        <file>actions/Sensor.svg</file>
+        <file>actions/Services.svg</file>
+        <file>actions/Show Property.svg</file>
+        <file>actions/Shuffle.svg</file>
+        <file>actions/Shutdown.svg</file>
+        <file>actions/Sigma.svg</file>
+        <file>actions/Signal.svg</file>
+        <file>actions/Sleep Mode.svg</file>
+        <file>actions/Slider.svg</file>
+        <file>actions/Stop Property.svg</file>
+        <file>actions/Stop.svg</file>
+        <file>actions/System Task.svg</file>
+        <file>actions/Toolbox.svg</file>
+        <file>actions/Transistor.svg</file>
+        <file>actions/Upload to the Cloud.svg</file>
+        <file>actions/Urgent Property.svg</file>
+        <file>actions/Wind Gauge.svg</file>
+        <file>actions/Windsock.svg</file>
+        <file>actions/Workflow.svg</file>
+        <file>actions/Xbox A.svg</file>
+        <file>actions/Xbox B.svg</file>
+        <file>actions/Xbox X.svg</file>
+        <file>actions/Xbox Y.svg</file>
+        <file>actions/Zoom In.svg</file>
+        <file>actions/Zoom Out.svg</file>
         <file>fonts/Hack-Regular.ttf</file>
         <file>fonts/Inter-Bold.ttf</file>
         <file>fonts/Inter-Regular.ttf</file>
@@ -64,6 +172,7 @@
         <file>icons/project-editor/actions/led.svg</file>
         <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
+        <file>icons/project-editor/toolbar/add-action.svg</file>
         <file>icons/project-editor/toolbar/add-datagrid.svg</file>
         <file>icons/project-editor/toolbar/add-gps.svg</file>
         <file>icons/project-editor/toolbar/add-group.svg</file>
@@ -73,6 +182,7 @@
         <file>icons/project-editor/toolbar/open.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>
+        <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
         <file>icons/project-editor/treeview/datagrid.svg</file>
         <file>icons/project-editor/treeview/dataset.svg</file>
@@ -104,6 +214,7 @@
         <file>icons/toolbar/mqtt.svg</file>
         <file>icons/toolbar/project-setup.svg</file>
         <file>icons/toolbar/structure.svg</file>
+        <file>images/action.svg</file>
         <file>images/code.svg</file>
         <file>images/donate-qr.svg</file>
         <file>images/drag-and-drop.svg</file>

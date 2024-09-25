@@ -106,6 +106,7 @@ set(SOURCES
  src/Project/Model.cpp
  src/JSON/Generator.cpp
  src/JSON/Frame.cpp
+ src/JSON/Action.cpp
  src/JSON/Dataset.cpp
  src/JSON/Group.cpp
  src/CSV/Player.cpp
@@ -153,6 +154,7 @@ set(HEADERS
  src/Project/FrameParser.h
  src/Project/Model.h
  src/JSON/Frame.h
+ src/JSON/Action.h
  src/JSON/Dataset.h
  src/JSON/Group.h
  src/JSON/Generator.h
@@ -185,11 +187,13 @@ set(QML_CODE
  qml/ProjectEditor/Views/ProjectView.qml
  qml/ProjectEditor/Views/DatasetView.qml
  qml/ProjectEditor/Views/TableDelegate.qml
+ qml/ProjectEditor/Views/ActionView.qml
  qml/ProjectEditor/Root.qml
  qml/Dialogs/Acknowledgements.qml
  qml/Dialogs/About.qml
  qml/Dialogs/CsvPlayer.qml
  qml/Dialogs/Donate.qml
+ qml/Dialogs/IconPicker.qml
  qml/Dialogs/ExternalConsole.qml
  qml/Dialogs/MQTTConfiguration.qml
  qml/Widgets/Terminal.qml

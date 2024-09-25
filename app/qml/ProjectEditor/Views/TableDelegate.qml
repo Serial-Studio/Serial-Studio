@@ -234,6 +234,64 @@ ColumnLayout {
         }
 
         //
+        // Icon picker
+        //
+        Loader {
+          Layout.alignment: Qt.AlignVCenter
+          Layout.minimumWidth: root.valueWidth
+          Layout.maximumWidth: root.valueWidth
+          active: model.widgetType === ProjectModel.IconPicker
+          visible: model.widgetType === ProjectModel.IconPicker
+
+          sourceComponent: RowLayout {
+            id: layout
+
+            Connections {
+              target: actionIconPicker
+
+              function onIconSelected(icon) {
+                if (layout.visible)
+                  model.editableValue = icon
+              }
+            }
+
+            TextField {
+              readOnly: true
+              Layout.fillWidth: true
+              text: model.editableValue
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.monoFont
+              placeholderText: model.placeholderValue
+              color: Cpp_ThemeManager.colors["table_text"]
+              background: Item {}
+            }
+
+            Item {
+              width: 2
+            }
+
+            Button {
+              icon.width: 18
+              icon.height: 18
+              Layout.maximumWidth: 32
+              Layout.alignment: Qt.AlignVCenter
+              icon.source: "qrc:/rcc/icons/buttons/open.svg"
+              icon.color: Cpp_ThemeManager.colors["table_text"]
+              onClicked: {
+                actionIconPicker.selectedIcon = model.editableValue
+                actionIconPicker.showNormal()
+              }
+
+              background: Item {}
+            }
+
+            Item {
+              width: 2
+            }
+          }
+        }
+
+        //
         // Int number field value editor
         //
         Loader {

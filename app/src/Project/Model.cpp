@@ -28,6 +28,7 @@
 #include <QJsonArray>
 #include <QFileDialog>
 #include <QJsonObject>
+#include <QDirIterator>
 #include <QJsonDocument>
 
 #include "AppInfo.h"
@@ -84,6 +85,19 @@ typedef enum
   kDatasetView_Alarm,         /**< Represents the dataset alarm value item. */
   kDatasetView_FFT_Samples    /**< Represents the FFT window size item. */
 } DatasetItem;
+// clang-format on
+
+/**
+ * @brief Enum representing items in the action view.
+ */
+// clang-format off
+typedef enum
+{
+  kActionView_Title, /**< Represents the action title item. */
+  kActionView_Icon,  /**< Represents the icon item. */
+  kActionView_EOL,   /**< Represents the EOL (end of line) item. */
+  kActionView_Data   /**< Represents the TX data item. */
+} ActionItem;
 // clang-format on
 
 /**
@@ -309,6 +323,43 @@ const QString &Project::Model::title() const
 }
 
 /**
+ * @brief Retrieves the current icon of the selected action.
+ */
+const QString Project::Model::actionIcon() const
+{
+  return m_selectedAction.icon();
+}
+
+/**
+ * @brief Retrieves the list of available action icons.
+ *
+ * This function searches for all SVG files in a predefined resource path,
+ * strips their paths and file extensions, and returns the base names as a list.
+ * The icons are cached the first time this function is called to improve
+ * performance on subsequent calls.
+ *
+ * @return A QStringList containing the base names of all available action
+ * icons.
+ */
+const QStringList &Project::Model::availableActionIcons() const
+{
+  static QStringList icons;
+
+  if (icons.isEmpty())
+  {
+    const auto path = QStringLiteral(":/rcc/actions/");
+    QDirIterator it(path, QStringList() << "*.svg", QDir::Files);
+    while (it.hasNext())
+    {
+      const auto filePath = it.next();
+      const QFileInfo fileInfo(filePath);
+      icons.append(fileInfo.baseName());
+    }
+  }
+
+  return icons;
+}
+/**
  * @brief Retrieves the file path of the JSON file.
  *
  * This function returns the full path of the current JSON file associated with
@@ -503,6 +554,19 @@ Project::CustomModel *Project::Model::groupModel() const
 }
 
 /**
+ * @brief Retrieves the model for the current action.
+ *
+ * This function returns the @c CustomModel that represents the data of the
+ * currently selected action in the project.
+ *
+ * @return A pointer to the action model.
+ */
+Project::CustomModel *Project::Model::actionModel() const
+{
+  return m_actionModel;
+}
+
+/**
  * @brief Retrieves the project model.
  *
  * This function returns the @c CustomModel that represents the basic parameters
@@ -621,6 +685,14 @@ bool Project::Model::saveJsonFile()
   // Add groups array to JSON
   json.insert("groups", groupArray);
 
+  // Create actions array
+  QJsonArray actionsArray;
+  for (const auto &action : m_actions)
+    actionsArray.append(action.serialize());
+
+  // Insert actions array to JSON
+  json.insert("actions", actionsArray);
+
   // Write JSON data to file
   file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
   file.close();
@@ -651,6 +723,9 @@ void Project::Model::newJsonFile()
 {
   // Clear groups list
   m_groups.clear();
+
+  // Clear actions list
+  m_actions.clear();
 
   // Reset project properties
   m_separator = ",";
@@ -776,6 +851,15 @@ void Project::Model::openJsonFile(const QString &path)
       m_groups.append(group);
   }
 
+  // Read actions from JSON document
+  auto actions = json.value("actions").toArray();
+  for (int a = 0; a < actions.count(); ++a)
+  {
+    JSON::Action action(a);
+    if (action.read(actions.at(a).toObject()))
+      m_actions.append(action);
+  }
+
   // Regenerate the tree model
   buildProjectModel();
   buildTreeModel();
@@ -828,6 +912,43 @@ void Project::Model::deleteCurrentGroup()
     for (auto d = g->m_datasets.begin(); d != g->m_datasets.end(); ++d)
       d->m_groupId = id;
   }
+
+  // Build tree model & set modification flag
+  buildTreeModel();
+  setModified(true);
+
+  // Select project item
+  const auto index = m_treeModel->index(0, 0);
+  m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+}
+
+/**
+ * @brief Deletes the currently action group.
+ *
+ * This function prompts the user for confirmation before deleting the currently
+ * selected action. If the user confirms, the action is removed from the
+ * project, and action IDs areregenerated. The tree model is rebuilt, the
+ * modified flag is set, and the project item is selected in the UI.
+ */
+void Project::Model::deleteCurrentAction()
+{
+  // Ask the user for confirmation
+  const auto ret = Misc::Utilities::showMessageBox(
+      tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title()),
+      tr("This action cannot be undone. Do you wish to proceed?"), APP_NAME,
+      QMessageBox::Yes | QMessageBox::No);
+
+  // Validate the user input
+  if (ret != QMessageBox::Yes)
+    return;
+
+  // Delete the action
+  m_actions.removeAt(m_selectedAction.actionId());
+
+  // Regenerate action IDs
+  int id = 0;
+  for (auto a = m_actions.begin(); a != m_actions.end(); ++a, ++id)
+    a->m_actionId = id;
 
   // Build tree model & set modification flag
   buildTreeModel();
@@ -922,6 +1043,41 @@ void Project::Model::duplicateCurrentGroup()
   for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
   {
     if (i.value().groupId() == group.groupId())
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
+  }
+}
+
+/**
+ * @brief Duplicates the currently selected action.
+ *
+ * This function creates a copy of the currently selected action.
+ * The new action is registered, the tree model is updated, and
+ * the modified flag is set. The duplicated action is then selected in the UI.
+ */
+void Project::Model::duplicateCurrentAction()
+{
+  // Initialize a new group
+  auto action = JSON::Action(m_actions.count());
+  action.m_title = tr("%1 (Copy)").arg(m_selectedAction.title());
+  action.m_eolSequence = m_selectedAction.eolSequence();
+  action.m_txData = m_selectedAction.txData();
+  action.m_icon = m_selectedAction.icon();
+
+  // Register the group
+  m_actions.append(action);
+
+  // Build tree model & set modification flag
+  buildTreeModel();
+  setModified(true);
+
+  // Select the action
+  for (auto i = m_actionItems.constBegin(); i != m_actionItems.constEnd(); ++i)
+  {
+    if (i.value().actionId() == action.actionId())
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1135,6 +1291,70 @@ void Project::Model::changeDatasetOption(const DatasetOption option,
 }
 
 /**
+ * @brief Adds a new action to the project.
+ *
+ * This function creates a new action, ensuring the title is unique by appending
+ * a number if necessary. It then registers the action, updates the tree model,
+ * and sets the modified flag. The newly added action is selected in the user
+ * interface.
+ */
+void Project::Model::addAction()
+{
+  // Check if any existing group has the same title
+  int count = 1;
+  QString title = tr("New Action");
+  for (const auto &action : m_actions)
+  {
+    if (action.m_title == title)
+    {
+      count++;
+      title = QString("%1 (%2)").arg(title).arg(count);
+    }
+  }
+
+  // If the title was modified, ensure it is unique
+  while (count > 1)
+  {
+    bool titleExists = false;
+    for (const auto &action : m_actions)
+    {
+      if (action.m_title == title)
+      {
+        count++;
+        title = QString("%1 (%2)").arg(title).arg(count);
+        titleExists = true;
+        break;
+      }
+    }
+
+    if (!titleExists)
+      break;
+  }
+
+  // Create a new action
+  JSON::Action action(m_actions.count());
+  action.m_title = title;
+
+  // Register the action
+  m_actions.append(action);
+
+  // Update the user interface
+  buildTreeModel();
+  setModified(true);
+
+  // Select action
+  for (auto i = m_actionItems.constBegin(); i != m_actionItems.constEnd(); ++i)
+  {
+    if (i.value().actionId() == action.actionId())
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
+  }
+}
+
+/**
  * @brief Adds a new group to the project with the specified title and widget.
  *
  * This function creates a new group, ensuring the title is unique by appending
@@ -1193,8 +1413,12 @@ void Project::Model::addGroup(const QString &title, const GroupWidget widget)
   // Select group
   for (auto i = m_groupItems.constBegin(); i != m_groupItems.constEnd(); ++i)
   {
-    if (i.value().title() == group.title())
-      Q_EMIT groupAdded(i.key()->index());
+    if (i.value().groupId() == group.groupId())
+    {
+      m_selectionModel->setCurrentIndex(i.key()->index(),
+                                        QItemSelectionModel::ClearAndSelect);
+      break;
+    }
   }
 }
 
@@ -1438,6 +1662,7 @@ void Project::Model::buildTreeModel()
   // Clear model/pointer maps
   m_rootItems.clear();
   m_groupItems.clear();
+  m_actionItems.clear();
   m_datasetItems.clear();
 
   // Store previous tree model's expanded states in a hash
@@ -1490,6 +1715,24 @@ void Project::Model::buildTreeModel()
   // Create relationship with root items & indices
   m_rootItems.insert(root, kRootItem);
   m_rootItems.insert(frameParsingCode, kFrameParser);
+
+  // Iterare through the actions and add them to the model
+  for (int aIndex = 0; aIndex < m_actions.size(); ++aIndex)
+  {
+    // Create action item
+    const auto action = m_actions[aIndex];
+    auto *actionItem = new QStandardItem(action.title());
+
+    // Configure action item
+    const auto icon = "qrc:/rcc/icons/project-editor/treeview/action.svg";
+    actionItem->setData(-1, TreeViewFrameIndex);
+    actionItem->setData(icon, TreeViewIcon);
+    actionItem->setData(action.title(), TreeViewText);
+
+    // Register action item
+    root->appendRow(actionItem);
+    m_actionItems.insert(actionItem, action);
+  }
 
   // Iterate through the groups and add them to the model
   for (int gIndex = 0; gIndex < m_groups.size(); ++gIndex)
@@ -1729,6 +1972,89 @@ void Project::Model::buildGroupModel(const JSON::Group &group)
 
   // Update user interface
   emit groupModelChanged();
+}
+
+void Project::Model::buildActionModel(const JSON::Action &action)
+{
+  // Clear the existing model
+  if (m_actionModel)
+  {
+    disconnect(m_actionModel);
+    m_actionModel->deleteLater();
+  }
+
+  // Create a new model
+  m_selectedAction = action;
+  m_actionModel = new CustomModel(this);
+
+  // Add action title
+  auto title = new QStandardItem();
+  title->setEditable(true);
+  title->setData(TextField, WidgetType);
+  title->setData(action.title(), EditableValue);
+  title->setData(tr("Title"), ParameterName);
+  title->setData(kActionView_Title, ParameterType);
+  title->setData(tr("Untitled Action"), PlaceholderValue);
+  title->setData(tr("Name or description of the action"), ParameterDescription);
+  m_actionModel->appendRow(title);
+
+  // Add action icon
+  auto icon = new QStandardItem();
+  icon->setEditable(true);
+  icon->setData(IconPicker, WidgetType);
+  icon->setData(action.icon(), EditableValue);
+  icon->setData(tr("Icon"), ParameterName);
+  icon->setData(kActionView_Icon, ParameterType);
+  icon->setData(tr("Default Icon"), PlaceholderValue);
+  icon->setData(tr("Icon to display in the dashboard"), ParameterDescription);
+  m_actionModel->appendRow(icon);
+
+  // Add action data
+  auto data = new QStandardItem();
+  data->setEditable(true);
+  data->setData(TextField, WidgetType);
+  data->setData(action.txData(), EditableValue);
+  data->setData(tr("TX Data"), ParameterName);
+  data->setData(kActionView_Data, ParameterType);
+  data->setData(tr("Command"), PlaceholderValue);
+  data->setData(tr("Data to transmit when the action is triggered."),
+                ParameterDescription);
+  m_actionModel->appendRow(data);
+
+  // Get appropiate end of line index for current action
+  int eolIndex = 0;
+  bool found = false;
+  for (auto it = m_eolSequences.begin(); it != m_eolSequences.end();
+       ++it, ++eolIndex)
+  {
+    if (it.key() == action.eolSequence())
+    {
+      found = true;
+      break;
+    }
+  }
+
+  // If not found, reset the index to 0
+  if (!found)
+    eolIndex = 0;
+
+  // Add EOL combobox
+  auto eol = new QStandardItem();
+  eol->setEditable(true);
+  eol->setData(ComboBox, WidgetType);
+  eol->setData(m_eolSequences.values(), ComboBoxData);
+  eol->setData(eolIndex, EditableValue);
+  eol->setData(tr("EOL Sequence"), ParameterName);
+  eol->setData(kActionView_EOL, ParameterType);
+  eol->setData(tr("End-of-line (EOL) sequence to use"), ParameterDescription);
+  m_actionModel->appendRow(eol);
+
+  // Handle edits
+  connect(m_actionModel, &CustomModel::itemChanged, this,
+          &Project::Model::onActionItemChanged);
+
+  // Update user interface
+  emit actionModelChanged();
 }
 
 /**
@@ -2018,6 +2344,14 @@ void Project::Model::generateComboBoxModels()
   m_datasetWidgets.insert(QStringLiteral("gauge"), tr("Gauge"));
   m_datasetWidgets.insert(QStringLiteral("compass"), tr("Compass"));
 
+  // Initialize EOL options
+  m_eolSequences.clear();
+  m_eolSequences.insert(QStringLiteral(""), tr("None"));
+  m_eolSequences.insert(QStringLiteral("\n"), tr("New Line (\\n)"));
+  m_eolSequences.insert(QStringLiteral("\r"), tr("Carriage Return (\\r)"));
+  m_eolSequences.insert(QStringLiteral("\n\r"), tr("NL + CR (\\n\\r)"));
+  m_eolSequences.insert(QStringLiteral("\r\n"), tr("CR + NL (\\r\\n)"));
+
   // Initialize plot options
   m_plotOptions.clear();
   m_plotOptions.insert(qMakePair(false, false), tr("No"));
@@ -2152,6 +2486,64 @@ void Project::Model::onGroupItemChanged(QStandardItem *item)
 
   // Ensure toolbar items are synched
   Q_EMIT editableOptionsChanged();
+}
+
+/**
+ * @brief Handles changes made to a action item in the action model.
+ *
+ * This function processes changes to action items such as the title, data or
+ * icon, it updates the action data and rebuilds the tree model to reflect the
+ * changes.
+ *
+ * If the action was modified, it sets the modified flag. Finally, it reselects
+ * the action in the user interface.
+ *
+ * @param item A pointer to the modified `QStandardItem` representing the
+ *             changed action property.
+ */
+void Project::Model::onActionItemChanged(QStandardItem *item)
+{
+  // Validate item pointer
+  if (!item)
+    return;
+
+  // Construct lists with key values for QMap-based comboboxes
+  static QStringList eolSequences;
+  if (eolSequences.isEmpty())
+    for (auto i = m_eolSequences.begin(); i != m_eolSequences.end(); ++i)
+      eolSequences.append(i.key());
+
+  // Obtain which item was modified & its new value
+  const auto id = item->data(ParameterType);
+  const auto value = item->data(EditableValue);
+
+  // Update internal members of the class accordingly
+  switch (static_cast<ActionItem>(id.toInt()))
+  {
+    case kActionView_Title:
+      m_selectedAction.m_title = value.toString();
+      break;
+    case kActionView_Data:
+      m_selectedAction.m_txData = value.toString();
+      break;
+    case kActionView_EOL:
+      m_selectedAction.m_eolSequence = eolSequences.at(value.toInt());
+      break;
+    case kActionView_Icon:
+      m_selectedAction.m_icon = value.toString();
+      Q_EMIT actionModelChanged();
+      break;
+    default:
+      break;
+  }
+
+  // Replace action data
+  const auto actionId = m_selectedAction.actionId();
+  m_actions.replace(actionId, m_selectedAction);
+  buildTreeModel();
+
+  // Mark document as modified
+  setModified(true);
 }
 
 /**
@@ -2345,6 +2737,14 @@ void Project::Model::onCurrentSelectionChanged(const QModelIndex &current,
     const auto dataset = m_datasetItems.value(item);
     setCurrentView(DatasetView);
     buildDatasetModel(dataset);
+  }
+
+  // Check if user selected an action
+  else if (m_actionItems.contains(item))
+  {
+    const auto action = m_actionItems.value(item);
+    setCurrentView(ActionView);
+    buildActionModel(action);
   }
 
   // Finally, check if the user selected one of the root items

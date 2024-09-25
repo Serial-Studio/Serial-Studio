@@ -211,8 +211,7 @@ QJsonObject JSON::Dataset::serialize() const
 }
 
 /**
- * Reads dataset information from the given @a object and evaluates any JS code
- * in the "value" field of the dataset.
+ * Reads dataset information from the given @a object.
  *
  * @return @c true on read success, @c false on failure
  */

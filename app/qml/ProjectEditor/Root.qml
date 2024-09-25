@@ -170,6 +170,15 @@ Window {
         }
 
         //
+        // Action view
+        //
+        Views.ActionView {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          visible: Cpp_Project_Model.currentView === ProjectModel.ActionView
+        }
+
+        //
         // Project setup
         //
         Views.ProjectView {
