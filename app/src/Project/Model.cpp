@@ -35,6 +35,7 @@
 #include "IO/Manager.h"
 #include "JSON/Generator.h"
 #include "Misc/Utilities.h"
+#include "Misc/Translator.h"
 
 //------------------------------------------------------------------------------
 // Private enums to keep track of which item the user selected/modified
@@ -165,6 +166,31 @@ Project::Model::Model()
   // Re-load JSON map file into C++ model
   connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
           this, &Project::Model::onJsonLoaded);
+
+  // Generate combo-boxes again when app is translated
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, [=] {
+            generateComboBoxModels();
+            buildTreeModel();
+
+            switch (currentView())
+            {
+              case ProjectView:
+                buildProjectModel();
+                break;
+              case GroupView:
+                buildGroupModel(m_selectedGroup);
+                break;
+              case ActionView:
+                buildActionModel(m_selectedAction);
+                break;
+              case DatasetView:
+                buildDatasetModel(m_selectedDataset);
+                break;
+              default:
+                break;
+            }
+          });
 
   // Load current JSON map file into C++ model
   if (!JSON::Generator::instance().jsonMapFilepath().isEmpty())
