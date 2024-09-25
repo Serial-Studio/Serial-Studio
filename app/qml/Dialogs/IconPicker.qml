@@ -110,6 +110,8 @@ Window {
           anchors.margins: 4
           anchors.fill: parent
           model: Cpp_Project_Model.availableActionIcons
+          ScrollBar.vertical: ScrollBar {}
+
           delegate: Item {
             width: 48
             height: 48

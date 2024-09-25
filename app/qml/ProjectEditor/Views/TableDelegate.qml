@@ -271,12 +271,12 @@ ColumnLayout {
             }
 
             Button {
-              icon.width: 18
-              icon.height: 18
+              icon.width: 16
+              icon.height: 16
               Layout.maximumWidth: 32
               Layout.alignment: Qt.AlignVCenter
-              icon.source: "qrc:/rcc/icons/buttons/open.svg"
               icon.color: Cpp_ThemeManager.colors["table_text"]
+              icon.source: "qrc:/rcc/icons/project-editor/open.svg"
               onClicked: {
                 actionIconPicker.selectedIcon = model.editableValue
                 actionIconPicker.showNormal()

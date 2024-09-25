@@ -242,5 +242,6 @@
         <file>themes/Outdoor Night.json</file>
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
+        <file>icons/project-editor/open.svg</file>
     </qresource>
 </RCC>
