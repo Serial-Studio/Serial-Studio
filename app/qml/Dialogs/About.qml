@@ -49,7 +49,12 @@ Window {
   //
   // Make window stay on top
   //
-  Component.onCompleted: root.flags |= Qt.WindowStaysOnTopHint
+  Component.onCompleted: {
+    root.flags = Qt.Dialog |
+        Qt.WindowTitleHint |
+        Qt.WindowStaysOnTopHint |
+        Qt.WindowCloseButtonHint
+  }
 
   //
   // Native window registration

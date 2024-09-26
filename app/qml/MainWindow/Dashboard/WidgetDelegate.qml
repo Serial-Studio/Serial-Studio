@@ -93,7 +93,15 @@ Widgets.Pane {
       minimumWidth: 640 / 2
       minimumHeight: 480 / 2
       title: widget.widgetTitle
-      Component.onCompleted: Cpp_NativeWindow.addWindow(window)
+      Component.onCompleted: {
+        root.flags = Qt.Dialog |
+            Qt.WindowTitleHint |
+            Qt.WindowStaysOnTopHint |
+            Qt.WindowCloseButtonHint
+
+        Cpp_NativeWindow.addWindow(window)
+      }
+
       onClosing: {
         Cpp_NativeWindow.removeWindow(window)
         windowLoader.active = false

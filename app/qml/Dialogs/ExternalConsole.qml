@@ -36,6 +36,12 @@ Window {
   title: qsTr("Console")
   minimumWidth: 640
   minimumHeight: 240 + root.titlebarHeight
+  Component.onCompleted: {
+    root.flags = Qt.Dialog |
+        Qt.WindowTitleHint |
+        Qt.WindowStaysOnTopHint |
+        Qt.WindowCloseButtonHint
+  }
 
   //
   // Native window registration
