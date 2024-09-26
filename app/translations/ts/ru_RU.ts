@@ -576,57 +576,57 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="211"/>
+        <location filename="../../src/IO/Console.cpp" line="201"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="212"/>
+        <location filename="../../src/IO/Console.cpp" line="202"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="227"/>
+        <location filename="../../src/IO/Console.cpp" line="217"/>
         <source>No Line Ending</source>
         <translation>Без окончания строки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="228"/>
+        <location filename="../../src/IO/Console.cpp" line="218"/>
         <source>New Line</source>
         <translation>Новая строка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="229"/>
+        <location filename="../../src/IO/Console.cpp" line="219"/>
         <source>Carriage Return</source>
         <translation>Возврат каретки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="230"/>
+        <location filename="../../src/IO/Console.cpp" line="220"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="245"/>
+        <location filename="../../src/IO/Console.cpp" line="235"/>
         <source>Plain Text</source>
         <translation>Простой текст</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="246"/>
+        <location filename="../../src/IO/Console.cpp" line="236"/>
         <source>Hexadecimal</source>
         <translation>Шестнадцатеричный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="289"/>
+        <location filename="../../src/IO/Console.cpp" line="279"/>
         <source>Export Console Data</source>
         <translation>Экспорт данных консоли</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="291"/>
+        <location filename="../../src/IO/Console.cpp" line="281"/>
         <source>Text Files</source>
         <translation>Текстовые файлы</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="305"/>
+        <location filename="../../src/IO/Console.cpp" line="295"/>
         <source>Error while exporting console data</source>
         <translation>Ошибка при экспорте данных консоли</translation>
     </message>
@@ -809,12 +809,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>Выберите иконку</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="157"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="159"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="166"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="168"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -1459,509 +1459,509 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>Project::Model</name>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="252"/>
+        <location filename="../../src/Project/Model.cpp" line="278"/>
         <source>New Project</source>
         <translation>Новый проект</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="618"/>
+        <location filename="../../src/Project/Model.cpp" line="644"/>
         <source>Do you want to save your changes?</source>
         <translation>Вы хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="619"/>
+        <location filename="../../src/Project/Model.cpp" line="645"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>У вас есть несохраненные изменения в этом проекте!</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="646"/>
+        <location filename="../../src/Project/Model.cpp" line="672"/>
         <source>Project error</source>
         <translation>Ошибка проекта</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="647"/>
+        <location filename="../../src/Project/Model.cpp" line="673"/>
         <source>Project title cannot be empty!</source>
         <translation>Название проекта не может быть пустым!</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="654"/>
+        <location filename="../../src/Project/Model.cpp" line="680"/>
         <source>Save JSON project</source>
         <translation>Сохранить проект JSON</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="666"/>
+        <location filename="../../src/Project/Model.cpp" line="692"/>
         <source>File open error</source>
         <translation>Ошибка открытия файла</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="736"/>
-        <location filename="../../src/Project/Model.cpp" line="1833"/>
+        <location filename="../../src/Project/Model.cpp" line="762"/>
+        <location filename="../../src/Project/Model.cpp" line="1859"/>
         <source>Untitled Project</source>
         <translation>Безымянный проект</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="775"/>
+        <location filename="../../src/Project/Model.cpp" line="801"/>
         <source>Select JSON file</source>
         <translation>Выберите файл JSON</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="896"/>
+        <location filename="../../src/Project/Model.cpp" line="922"/>
         <source>Do you want to delete group &quot;%1&quot;?</source>
         <translation>Вы хотите удалить группу &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="897"/>
-        <location filename="../../src/Project/Model.cpp" line="938"/>
-        <location filename="../../src/Project/Model.cpp" line="977"/>
+        <location filename="../../src/Project/Model.cpp" line="923"/>
+        <location filename="../../src/Project/Model.cpp" line="964"/>
+        <location filename="../../src/Project/Model.cpp" line="1003"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Это действие не может быть отменено. Вы хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="937"/>
+        <location filename="../../src/Project/Model.cpp" line="963"/>
         <source>Do you want to delete action &quot;%1&quot;?</source>
         <translation>Вы хотите удалить действие «%1»?</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="975"/>
+        <location filename="../../src/Project/Model.cpp" line="1001"/>
         <source>Do you want to delete dataset &quot;%1&quot;?</source>
         <translation>Вы хотите удалить набор данных &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1026"/>
-        <location filename="../../src/Project/Model.cpp" line="1065"/>
-        <location filename="../../src/Project/Model.cpp" line="1101"/>
+        <location filename="../../src/Project/Model.cpp" line="1052"/>
+        <location filename="../../src/Project/Model.cpp" line="1091"/>
+        <location filename="../../src/Project/Model.cpp" line="1127"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Копия)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1147"/>
+        <location filename="../../src/Project/Model.cpp" line="1173"/>
         <source>New Dataset</source>
         <translation>Новый набор данных</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1150"/>
+        <location filename="../../src/Project/Model.cpp" line="1176"/>
         <source>New Plot</source>
         <translation>Новый график</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1154"/>
+        <location filename="../../src/Project/Model.cpp" line="1180"/>
         <source>New FFT Plot</source>
         <translation>Новый график FFT</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1158"/>
+        <location filename="../../src/Project/Model.cpp" line="1184"/>
         <source>New Bar Widget</source>
         <translation>Новый виджет полосы</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1162"/>
+        <location filename="../../src/Project/Model.cpp" line="1188"/>
         <source>New Gauge</source>
         <translation>Новый измерительный прибор</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1166"/>
+        <location filename="../../src/Project/Model.cpp" line="1192"/>
         <source>New Compass</source>
         <translation>Новый компас</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1170"/>
+        <location filename="../../src/Project/Model.cpp" line="1196"/>
         <source>New LED Indicator</source>
         <translation>Новый LED индикатор</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1305"/>
+        <location filename="../../src/Project/Model.cpp" line="1331"/>
         <source>New Action</source>
         <translation>Новое действие</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1459"/>
+        <location filename="../../src/Project/Model.cpp" line="1485"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Вы уверены, что хотите изменить виджет группы?</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1460"/>
+        <location filename="../../src/Project/Model.cpp" line="1486"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Существующие наборы данных для этой группы будут удалены</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1514"/>
-        <location filename="../../src/Project/Model.cpp" line="1515"/>
-        <location filename="../../src/Project/Model.cpp" line="1516"/>
+        <location filename="../../src/Project/Model.cpp" line="1540"/>
+        <location filename="../../src/Project/Model.cpp" line="1541"/>
+        <location filename="../../src/Project/Model.cpp" line="1542"/>
         <source>Accelerometer %1</source>
         <translation>Акселерометр %1</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1557"/>
-        <location filename="../../src/Project/Model.cpp" line="1558"/>
-        <location filename="../../src/Project/Model.cpp" line="1559"/>
+        <location filename="../../src/Project/Model.cpp" line="1583"/>
+        <location filename="../../src/Project/Model.cpp" line="1584"/>
+        <location filename="../../src/Project/Model.cpp" line="1585"/>
         <source>Gyro %1</source>
         <translation>Гироскоп %1</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1600"/>
+        <location filename="../../src/Project/Model.cpp" line="1626"/>
         <source>Latitude</source>
         <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1601"/>
+        <location filename="../../src/Project/Model.cpp" line="1627"/>
         <source>Longitude</source>
         <translation>Долгота</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1602"/>
+        <location filename="../../src/Project/Model.cpp" line="1628"/>
         <source>Altitude</source>
         <translation>Высота</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1697"/>
+        <location filename="../../src/Project/Model.cpp" line="1723"/>
         <source>Frame Parser Function</source>
         <translation>Функция разбора фреймов</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1831"/>
-        <location filename="../../src/Project/Model.cpp" line="1935"/>
-        <location filename="../../src/Project/Model.cpp" line="1995"/>
-        <location filename="../../src/Project/Model.cpp" line="2096"/>
+        <location filename="../../src/Project/Model.cpp" line="1857"/>
+        <location filename="../../src/Project/Model.cpp" line="1961"/>
+        <location filename="../../src/Project/Model.cpp" line="2021"/>
+        <location filename="../../src/Project/Model.cpp" line="2122"/>
         <source>Title</source>
         <translation>Заголовок</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1834"/>
+        <location filename="../../src/Project/Model.cpp" line="1860"/>
         <source>Project name/description</source>
         <translation>Название/описание проекта</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1842"/>
+        <location filename="../../src/Project/Model.cpp" line="1868"/>
         <source>Separator Sequence</source>
         <translation>Последовательность разделителей</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1845"/>
+        <location filename="../../src/Project/Model.cpp" line="1871"/>
         <source>String used to split items in a frame</source>
         <translation>Строка, используемая для разделения элементов в кадре</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1854"/>
+        <location filename="../../src/Project/Model.cpp" line="1880"/>
         <source>Frame Start Delimeter</source>
         <translation>Разделитель начала фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1857"/>
+        <location filename="../../src/Project/Model.cpp" line="1883"/>
         <source>String marking the start of a frame</source>
         <translation>Строка, обозначающая начало фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1866"/>
+        <location filename="../../src/Project/Model.cpp" line="1892"/>
         <source>Frame End Delimeter</source>
         <translation>Разделитель конца фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1869"/>
+        <location filename="../../src/Project/Model.cpp" line="1895"/>
         <source>String marking the end of a frame</source>
         <translation>Строка, обозначающая конец фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1879"/>
+        <location filename="../../src/Project/Model.cpp" line="1905"/>
         <source>Data Conversion Method</source>
         <translation>Метод преобразования данных</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1881"/>
+        <location filename="../../src/Project/Model.cpp" line="1907"/>
         <source>Input data format for frame parser</source>
         <translation>Формат входных данных для разбора фреймов</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1890"/>
+        <location filename="../../src/Project/Model.cpp" line="1916"/>
         <source>Thunderforest API Key</source>
         <translation>API-ключ Thunderforest</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1892"/>
-        <location filename="../../src/Project/Model.cpp" line="2338"/>
-        <location filename="../../src/Project/Model.cpp" line="2342"/>
-        <location filename="../../src/Project/Model.cpp" line="2349"/>
+        <location filename="../../src/Project/Model.cpp" line="1918"/>
+        <location filename="../../src/Project/Model.cpp" line="2364"/>
+        <location filename="../../src/Project/Model.cpp" line="2368"/>
+        <location filename="../../src/Project/Model.cpp" line="2375"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1893"/>
+        <location filename="../../src/Project/Model.cpp" line="1919"/>
         <source>Required for GPS map widget</source>
         <translation>Требуется для виджета GPS карты</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1937"/>
+        <location filename="../../src/Project/Model.cpp" line="1963"/>
         <source>Untitled Group</source>
         <translation>Безымянная группа</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1938"/>
+        <location filename="../../src/Project/Model.cpp" line="1964"/>
         <source>Name or description of the group</source>
         <translation>Название или описание группы</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1964"/>
-        <location filename="../../src/Project/Model.cpp" line="2151"/>
+        <location filename="../../src/Project/Model.cpp" line="1990"/>
+        <location filename="../../src/Project/Model.cpp" line="2177"/>
         <source>Widget</source>
         <translation>Виджет</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1966"/>
+        <location filename="../../src/Project/Model.cpp" line="1992"/>
         <source>Group display widget (optional)</source>
         <translation>Виджет отображения группы (опционально)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1997"/>
+        <location filename="../../src/Project/Model.cpp" line="2023"/>
         <source>Untitled Action</source>
         <translation>Безымянное действие</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="1998"/>
+        <location filename="../../src/Project/Model.cpp" line="2024"/>
         <source>Name or description of the action</source>
         <translation>Имя или описание действия</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2006"/>
+        <location filename="../../src/Project/Model.cpp" line="2032"/>
         <source>Icon</source>
         <translation>Иконка</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2008"/>
+        <location filename="../../src/Project/Model.cpp" line="2034"/>
         <source>Default Icon</source>
         <translation>Иконка по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2009"/>
+        <location filename="../../src/Project/Model.cpp" line="2035"/>
         <source>Icon to display in the dashboard</source>
         <translation>Иконка для отображения на панели управления</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2017"/>
+        <location filename="../../src/Project/Model.cpp" line="2043"/>
         <source>TX Data</source>
         <translation>Данные для передачи</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2019"/>
+        <location filename="../../src/Project/Model.cpp" line="2045"/>
         <source>Command</source>
         <translation>Команда</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2020"/>
+        <location filename="../../src/Project/Model.cpp" line="2046"/>
         <source>Data to transmit when the action is triggered.</source>
         <translation>Данные для передачи при выполнении действия.</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2047"/>
+        <location filename="../../src/Project/Model.cpp" line="2073"/>
         <source>EOL Sequence</source>
         <translation>Последовательность EOL</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2049"/>
+        <location filename="../../src/Project/Model.cpp" line="2075"/>
         <source>End-of-line (EOL) sequence to use</source>
         <translation>Последовательность конца строки (EOL) для использования</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2098"/>
+        <location filename="../../src/Project/Model.cpp" line="2124"/>
         <source>Untitled Dataset</source>
         <translation>Безымянный набор данных</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2099"/>
+        <location filename="../../src/Project/Model.cpp" line="2125"/>
         <source>Name or description of the dataset</source>
         <translation>Название или описание набора данных</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2108"/>
+        <location filename="../../src/Project/Model.cpp" line="2134"/>
         <source>Frame Index</source>
         <translation>Индекс фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2111"/>
+        <location filename="../../src/Project/Model.cpp" line="2137"/>
         <source>Position in the frame</source>
         <translation>Позиция в фрейме</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2119"/>
+        <location filename="../../src/Project/Model.cpp" line="2145"/>
         <source>Measurement Unit</source>
         <translation>Единица измерения</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2121"/>
+        <location filename="../../src/Project/Model.cpp" line="2147"/>
         <source>Volts, Amps, etc.</source>
         <translation>Вольты, Амперы и т.д.</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2122"/>
+        <location filename="../../src/Project/Model.cpp" line="2148"/>
         <source>Unit of measurement (optional)</source>
         <translation>Единица измерения (опционально)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2153"/>
+        <location filename="../../src/Project/Model.cpp" line="2179"/>
         <source>Display widget (optional)</source>
         <translation>Виджет отображения (опционально)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2162"/>
+        <location filename="../../src/Project/Model.cpp" line="2188"/>
         <source>Minimum Value</source>
         <translation>Минимальное значение</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2165"/>
-        <location filename="../../src/Project/Model.cpp" line="2176"/>
+        <location filename="../../src/Project/Model.cpp" line="2191"/>
+        <location filename="../../src/Project/Model.cpp" line="2202"/>
         <source>Required for bar/gauge widgets</source>
         <translation>Требуется для виджетов шкал/графиков</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2173"/>
+        <location filename="../../src/Project/Model.cpp" line="2199"/>
         <source>Maximum Value</source>
         <translation>Максимальное значение</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2184"/>
+        <location filename="../../src/Project/Model.cpp" line="2210"/>
         <source>Alarm Value</source>
         <translation>Значение тревоги</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2187"/>
+        <location filename="../../src/Project/Model.cpp" line="2213"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
         <translation>Запускает тревогу в виджетах шкал и светодиодных панелях</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2215"/>
+        <location filename="../../src/Project/Model.cpp" line="2241"/>
         <source>Oscilloscope Plot</source>
         <translation>График осциллографа</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2217"/>
+        <location filename="../../src/Project/Model.cpp" line="2243"/>
         <source>Plot data in real-time</source>
         <translation>Построение данных в реальном времени</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2225"/>
+        <location filename="../../src/Project/Model.cpp" line="2251"/>
         <source>FFT Plot</source>
         <translation>График FFT</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2228"/>
+        <location filename="../../src/Project/Model.cpp" line="2254"/>
         <source>Plot frequency-domain data</source>
         <translation>Построение данных в частотной области</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2243"/>
+        <location filename="../../src/Project/Model.cpp" line="2269"/>
         <source>FFT Window Size</source>
         <translation>Размер окна FFT</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2245"/>
+        <location filename="../../src/Project/Model.cpp" line="2271"/>
         <source>Samples for FFT calculation</source>
         <translation>Образцы для расчета FFT</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2253"/>
+        <location filename="../../src/Project/Model.cpp" line="2279"/>
         <source>Show in LED Panel</source>
         <translation>Отображать на светодиодной панели</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2256"/>
+        <location filename="../../src/Project/Model.cpp" line="2282"/>
         <source>Quick status monitoring</source>
         <translation>Быстрый мониторинг состояния</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2264"/>
+        <location filename="../../src/Project/Model.cpp" line="2290"/>
         <source>LED High (On) Value</source>
         <translation>Высокое значение LED (включено)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2267"/>
+        <location filename="../../src/Project/Model.cpp" line="2293"/>
         <source>Threshold for LED on</source>
         <translation>Порог включения LED</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2327"/>
+        <location filename="../../src/Project/Model.cpp" line="2353"/>
         <source>Normal (UTF8)</source>
         <translation>Обычный (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2328"/>
+        <location filename="../../src/Project/Model.cpp" line="2354"/>
         <source>Hexadecimal</source>
         <translation>Шестнадцатеричный</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2329"/>
+        <location filename="../../src/Project/Model.cpp" line="2355"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2333"/>
+        <location filename="../../src/Project/Model.cpp" line="2359"/>
         <source>Data Grid</source>
         <translation>Таблица данных</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2334"/>
+        <location filename="../../src/Project/Model.cpp" line="2360"/>
         <source>GPS Map</source>
         <translation>GPS карта</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2335"/>
+        <location filename="../../src/Project/Model.cpp" line="2361"/>
         <source>Gyroscope</source>
         <translation>Гироскоп</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2336"/>
+        <location filename="../../src/Project/Model.cpp" line="2362"/>
         <source>Multiple Plot</source>
         <translation>Множественный график</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2337"/>
+        <location filename="../../src/Project/Model.cpp" line="2363"/>
         <source>Accelerometer</source>
         <translation>Акселерометр</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2343"/>
+        <location filename="../../src/Project/Model.cpp" line="2369"/>
         <source>Bar</source>
         <translation>Гистограмма</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2344"/>
+        <location filename="../../src/Project/Model.cpp" line="2370"/>
         <source>Gauge</source>
         <translation>Индикатор</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2345"/>
+        <location filename="../../src/Project/Model.cpp" line="2371"/>
         <source>Compass</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2350"/>
+        <location filename="../../src/Project/Model.cpp" line="2376"/>
         <source>New Line (\n)</source>
         <translation>Новая строка (\n)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2351"/>
+        <location filename="../../src/Project/Model.cpp" line="2377"/>
         <source>Carriage Return (\r)</source>
         <translation>Возврат каретки (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2352"/>
+        <location filename="../../src/Project/Model.cpp" line="2378"/>
         <source>NL + CR (\n\r)</source>
         <translation>НС + ВК (\n\r)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2353"/>
+        <location filename="../../src/Project/Model.cpp" line="2379"/>
         <source>CR + NL (\r\n)</source>
         <translation>ВК + НС (\r\n)</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2357"/>
+        <location filename="../../src/Project/Model.cpp" line="2383"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2358"/>
+        <location filename="../../src/Project/Model.cpp" line="2384"/>
         <source>Linear Plot</source>
         <translation>Линейный график</translation>
     </message>
     <message>
-        <location filename="../../src/Project/Model.cpp" line="2359"/>
+        <location filename="../../src/Project/Model.cpp" line="2385"/>
         <source>Logarithmic Plot</source>
         <translation>Логарифмический график</translation>
     </message>
@@ -2223,62 +2223,61 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="130"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="129"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="137"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="136"/>
         <source>Select all</source>
         <translation>Выбрать всё</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="144"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="143"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="154"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="153"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="161"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="160"/>
         <source>Save as</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="192"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="191"/>
         <source>No data received so far</source>
         <translation>Данные пока не получены</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="225"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="224"/>
         <source>Send Data to Device</source>
         <translation>Отправить данные на устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="277"/>
         <source>Echo</source>
-        <translation>Эхо</translation>
+        <translation type="vanished">Эхо</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="311"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="296"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="322"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="307"/>
         <source>Show Timestamp</source>
         <translation>Показать временные метки</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="333"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="318"/>
         <source>Emulate VT-100</source>
         <translation>Эмуляция VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="353"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="338"/>
         <source>Display: %1</source>
         <translation>Отображение: %1</translation>
     </message>

@@ -118,7 +118,6 @@ def collect_sources(app_dir, lib_dir):
 if __name__ == "__main__":
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Manage translations with lupdate and lrelease.")
-    
     parser.add_argument('--new-ts', metavar='LANGUAGE', help='Create a new .ts file for the given language code (e.g., "es" for Spanish).')
     parser.add_argument('--lupdate', action='store_true', help='Run lupdate to update all existing .ts files.')
     parser.add_argument('--lrelease', action='store_true', help='Run lrelease to compile .ts files into .qm files.')
