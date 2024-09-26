@@ -99,7 +99,7 @@ Widgets.Pane {
             Qt.WindowStaysOnTopHint |
             Qt.WindowCloseButtonHint
 
-        Cpp_NativeWindow.addWindow(window)
+        Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["widget_base"])
       }
 
       onClosing: {

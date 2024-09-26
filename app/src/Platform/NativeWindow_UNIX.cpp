@@ -36,9 +36,10 @@ int NativeWindow::titlebarHeight(QObject *window)
 /**
  * @brief Configures the native window customization for *NIX environments.
  */
-void NativeWindow::addWindow(QObject *window)
+void NativeWindow::addWindow(QObject *window, const QString &color)
 {
   (void)window;
+  (void)color;
 }
 
 /**

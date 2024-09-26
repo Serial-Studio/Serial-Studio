@@ -77,8 +77,10 @@ int NativeWindow::titlebarHeight(QObject *window)
  * @param window A pointer to the QWindow object that represents the window
  *               being customized.
  */
-void NativeWindow::addWindow(QObject *window)
+void NativeWindow::addWindow(QObject *window, const QString &color)
 {
+  (void)color;
+
   QWindow *win = qobject_cast<QWindow *>(window);
   NSView *view = reinterpret_cast<NSView *>(win->winId());
   NSWindow *w = [view window];

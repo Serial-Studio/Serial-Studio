@@ -50,12 +50,13 @@ int NativeWindow::titlebarHeight(QObject *window)
  * Registers the window for active change notifications and emits an initial
  * active changed signal.
  */
-void NativeWindow::addWindow(QObject *window)
+void NativeWindow::addWindow(QObject *window, const QString &color)
 {
   auto *w = qobject_cast<QWindow *>(window);
   if (!m_windows.contains(w))
   {
     m_windows.append(w);
+    m_colors.insert(w, color);
     connect(w, &QWindow::activeChanged, this, &NativeWindow::onActiveChanged);
 
     Q_EMIT w->activeChanged();
@@ -91,12 +92,18 @@ void NativeWindow::onActiveChanged()
   if (!window || !m_windows.contains(window))
     return;
 
+  // Get color from color list
+  auto color = m_colors.value(window);
+
   // Get color name
-  const auto &colors = Misc::ThemeManager::instance().colors();
-  auto name = colors.value("toolbar_top").toString();
+  if (color.isEmpty())
+  {
+    const auto &colors = Misc::ThemeManager::instance().colors();
+    color = colors.value("toolbar_top").toString();
+  }
 
   // Convert hex string to native Windows color
-  const auto c = QColor(name);
+  const auto c = QColor(color);
   const COLORREF colorref = c.red() | (c.green() << 8) | (c.blue() << 16);
 
   // Change color of the caption

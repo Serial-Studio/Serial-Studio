@@ -23,6 +23,7 @@
 #ifndef _PLATFORM_NATIVE_WINDOW_H
 #define _PLATFORM_NATIVE_WINDOW_H
 
+#include <QMap>
 #include <QObject>
 #include <QWindow>
 
@@ -51,13 +52,17 @@ public:
   Q_INVOKABLE int titlebarHeight(QObject *window);
 
 public slots:
-  void addWindow(QObject *window);
+  void addWindow(QObject *window, const QString &color = "");
   void removeWindow(QObject *window)
   {
     auto *win = qobject_cast<QWindow *>(window);
     auto index = m_windows.indexOf(win);
     if (index != -1 && index >= 0)
+    {
       m_windows.removeAt(index);
+      if (m_colors.contains(win))
+        m_colors.remove(win);
+    }
   }
 
 private slots:
@@ -66,6 +71,7 @@ private slots:
 
 private:
   QList<QWindow *> m_windows;
+  QMap<QWindow *, QString> m_colors;
 };
 
 #endif
