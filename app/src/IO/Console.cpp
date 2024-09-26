@@ -85,6 +85,7 @@ IO::Console::Console()
   , m_lineEnding(LineEnding::NoLineEnding)
   , m_displayMode(DisplayMode::DisplayPlainText)
   , m_historyItem(0)
+  , m_echo(true)
   , m_autoscroll(true)
   , m_showTimestamp(false)
   , m_isStartingLine(true)
@@ -110,6 +111,14 @@ IO::Console &IO::Console::instance()
 {
   static Console singleton;
   return singleton;
+}
+
+/**
+ * @brief Returns @c true if the console shall display sent commands
+ */
+bool IO::Console::echo() const
+{
+  return m_echo;
 }
 
 /**
@@ -418,6 +427,18 @@ void IO::Console::setShowTimestamp(const bool enabled)
 }
 
 /**
+ * Enables/disables showing the sent data on the console
+ */
+void IO::Console::setEcho(const bool enabled)
+{
+  if (echo() != enabled)
+  {
+    m_echo = enabled;
+    Q_EMIT echoChanged();
+  }
+}
+
+/**
  * Enables/disables autoscrolling of the console text.
  */
 void IO::Console::setAutoscroll(const bool enabled)
@@ -542,7 +563,8 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
  */
 void IO::Console::onDataSent(const QByteArray &data)
 {
-  append(dataToString(data) + QStringLiteral("\n"), showTimestamp());
+  if (echo())
+    append(dataToString(data) + QStringLiteral("\n"), showTimestamp());
 }
 
 /**

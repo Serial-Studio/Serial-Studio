@@ -451,102 +451,152 @@ void IO::Manager::readFrames()
   if (mode == JSON::Generator::ProjectFile
       || mode == JSON::Generator::DeviceSendsJSON)
   {
-    auto bytes = 0;
-    auto prevBytes = 0;
-    auto cursor = m_dataBuffer;
     auto start = startSequence().toUtf8();
     auto finish = finishSequence().toUtf8();
-    while (cursor.contains(start) && cursor.contains(finish))
+    int bytesProcessed = 0;
+
+    while (true)
     {
-      // Remove the part of the buffer prior to (and including) the start seq.
-      auto sIndex = cursor.indexOf(start);
-      cursor = cursor.mid(sIndex + start.length(), -1);
-      bytes += sIndex + start.length();
+      // Get start index
+      int sIndex = m_dataBuffer.indexOf(start, bytesProcessed);
+      if (sIndex == -1)
+        break;
 
-      // Copy a sub-buffer that goes until the finish sequence
-      auto fIndex = cursor.indexOf(finish);
-      auto frame = cursor.left(fIndex);
+      // Get end index
+      int fIndex = m_dataBuffer.indexOf(finish, sIndex + start.size());
+      if (fIndex == -1)
+        break;
 
-      // Parse frame
+      // Extract the frame between start and finish sequences
+      int frameStart = sIndex + start.size();
+      int frameLength = fIndex - frameStart;
+      QByteArray frame = m_dataBuffer.mid(frameStart, frameLength);
+
+      // Parse frame if not empty
       if (!frame.isEmpty())
       {
-        // Checksum verification & Q_EMIT RX frame
+        // Checksum verification & emit frame if valid
         int chop = 0;
-        auto result = integrityChecks(frame, cursor, &chop);
+        auto result = integrityChecks(frame, m_dataBuffer, &chop);
         if (result == ValidationStatus::FrameOk)
-          Q_EMIT frameReceived(frame);
-
-        // Checksum data incomplete, try next time...
-        else if (result == ValidationStatus::ChecksumIncomplete)
         {
-          bytes = prevBytes;
-          break;
+          Q_EMIT frameReceived(frame);
+          bytesProcessed = fIndex + finish.size() + chop;
         }
 
-        // Remove the data including the finish sequence from the master buffer
-        cursor = cursor.mid(fIndex + chop, -1);
-        bytes += fIndex + chop;
+        // Incomplete data; wait for more data
+        else if (result == ValidationStatus::ChecksumIncomplete)
+          break;
 
-        // Frame read successfully, save the number of bytes to chop.
-        // This is used to manage frames with incomplete checksums
-        prevBytes = bytes;
+        // Invalid frame; skip past finish sequence
+        else
+          bytesProcessed = fIndex + finish.size() + chop;
       }
 
-      // Frame empty, wait for more data...
+      // Empty frame; move past the finish sequence
       else
-        bytes = prevBytes;
+        bytesProcessed = fIndex + finish.size();
     }
 
-    // Remove parsed data from master buffer
-    m_dataBuffer.remove(0, bytes);
+    // Remove processed data from buffer
+    if (bytesProcessed > 0)
+      m_dataBuffer.remove(0, bytesProcessed);
 
-    // Clear temp. buffer (e.g. device sends a lot of invalid data)
+    // Clear temp buffer if it exceeds maximum size
     if (m_dataBuffer.size() > maxBufferSize())
       clearTempBuffer();
   }
 
-  // Handle data with line breaks (\n, \r, \n\r, or \r\n)
+  // Handle data with line breaks (\n, \r, or \r\n)
   else if (mode == JSON::Generator::CommaSeparatedValues)
   {
-    // Loop while any line break is found in the buffer
-    auto bytes = 0;
-    auto cursor = m_dataBuffer;
-    QList<QByteArray> lineBreaks = {"\n", "\r", "\n\r", "\r\n"};
+    // Set maximum frame size to 1 KB
+    const int maxFrameSize = 1024;
+    int bytesProcessed = 0;
+
     while (true)
     {
-      // Find the first line break in the buffer
-      int smallestIndex = -1;
+      // Find the earliest line break in the buffer
+      int lineEndIndex = -1;
       QByteArray lineBreak;
-      for (const auto &breakSeq : lineBreaks)
+      for (const QByteArray &lb : {"\r\n", "\n", "\r"})
       {
-        int index = cursor.indexOf(breakSeq);
-        if (index != -1 && (smallestIndex == -1 || index < smallestIndex))
+        int index = m_dataBuffer.indexOf(lb, bytesProcessed);
+        if (index != -1 && (lineEndIndex == -1 || index < lineEndIndex))
         {
-          smallestIndex = index;
-          lineBreak = breakSeq;
+          lineEndIndex = index;
+          lineBreak = lb;
         }
       }
 
-      // If no line break is found, break the loop
-      if (smallestIndex == -1)
+      // No complete line found
+      if (lineEndIndex == -1)
         break;
 
-      // Extract the frame from the buffer until the line break
-      auto frame = cursor.left(smallestIndex);
+      // Extract the frame up to the line break
+      int frameLength = lineEndIndex - bytesProcessed;
+      QByteArray frame = m_dataBuffer.mid(bytesProcessed, frameLength);
 
-      // Emit the frame if it's not empty
+      // Process frame
       if (!frame.isEmpty())
-        Q_EMIT frameReceived(frame);
+      {
+        // Skip larger frames
+        if (frame.size() > maxFrameSize)
+        {
+          qWarning() << "Frame size exceeds maximum allowed size and will be "
+                        "discarded.";
+        }
 
-      // Remove the processed frame and line break from the buffer
-      cursor = cursor.mid(smallestIndex + lineBreak.size(), -1);
-      bytes += smallestIndex + lineBreak.size();
+        // Validate that frame only contains numerical data
+        else
+        {
+          // Obtain a list of elements
+          const QList<QByteArray> elements = frame.split(',');
+
+          // Validate numerical data
+          bool validFrame = true;
+          bool hasValidNumber = false;
+          for (const QByteArray &element : elements)
+          {
+            // Remove spaces, tabs, etc from element
+            const QString trimmedElement = QString::fromUtf8(element).trimmed();
+            if (trimmedElement.isEmpty())
+              continue;
+
+            // Try to convert the element to a double
+            bool ok;
+            trimmedElement.toDouble(&ok);
+
+            // Conversion failed, skip frame
+            if (!ok)
+            {
+              validFrame = false;
+              break;
+            }
+
+            // Set valid number flag
+            hasValidNumber = true;
+          }
+
+          // Only process frame if it has numerical data and at least one item
+          if (validFrame && hasValidNumber)
+            Q_EMIT frameReceived(frame);
+
+          // Log invalid frames
+          else
+            qWarning() << "Invalid frame received (non-numeric data):" << frame;
+        }
+      }
+
+      // Move past the line break
+      bytesProcessed = lineEndIndex + lineBreak.size();
     }
 
-    // Remove the parsed data from the master buffer
-    m_dataBuffer.remove(0, bytes);
+    // Remove processed data from buffer
+    if (bytesProcessed > 0)
+      m_dataBuffer.remove(0, bytesProcessed);
 
-    // Clear the temp buffer if the size exceeds the limit
+    // Clear temp buffer if it exceeds maximum size
     if (m_dataBuffer.size() > maxBufferSize())
       clearTempBuffer();
   }

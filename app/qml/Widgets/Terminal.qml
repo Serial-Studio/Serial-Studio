@@ -43,6 +43,7 @@ Item {
   // Save settings
   //
   Settings {
+    property alias echo: echoCheck.checked
     property alias hex: hexCheckbox.checked
     property alias timestamp: timestampCheck.checked
     property alias autoscroll: autoscrollCheck.checked
@@ -310,6 +311,17 @@ Item {
         onCheckedChanged: {
           if (Cpp_IO_Console.showTimestamp !== checked)
             Cpp_IO_Console.showTimestamp = checked
+        }
+      }
+
+      CheckBox {
+        id: echoCheck
+        text: qsTr("Echo")
+        checked: Cpp_IO_Console.echo
+        Layout.alignment: Qt.AlignVCenter
+        onCheckedChanged: {
+          if (Cpp_IO_Console.echo !== checked)
+            Cpp_IO_Console.echo = checked
         }
       }
 
