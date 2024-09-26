@@ -439,7 +439,7 @@ bool Project::Model::currentGroupIsEditable() const
   if (m_currentView == GroupView)
   {
     const auto widget = m_selectedGroup.widget();
-    if (widget != "" && widget != "multiplot")
+    if (widget != "" && widget != "multiplot" && widget != "datagrid")
       return false;
   }
 
@@ -467,7 +467,7 @@ bool Project::Model::currentDatasetIsEditable() const
     if (m_groups.count() > groupId)
     {
       const auto widget = m_groups[groupId].widget();
-      if (widget != "" && widget != "multiplot")
+      if (widget != "" && widget != "multiplot" && widget != "datagrid")
         return false;
     }
   }
