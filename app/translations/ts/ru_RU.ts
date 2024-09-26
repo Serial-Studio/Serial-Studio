@@ -9,52 +9,52 @@
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="178"/>
+        <location filename="../../qml/Dialogs/About.qml" line="183"/>
         <source>Version %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="189"/>
+        <location filename="../../qml/Dialogs/About.qml" line="194"/>
         <source>Copyright © 2020-%1 %2, released under the MIT License.</source>
         <translation>Авторские права © 2020-%1 %2, выпущено под лицензией MIT.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="198"/>
+        <location filename="../../qml/Dialogs/About.qml" line="203"/>
         <source>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</source>
         <translation>Программа предоставляется «КАК ЕСТЬ» БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, ВКЛЮЧАЯ ГАРАНТИИ ДИЗАЙНА, ТОВАРНОЙ ПРИГОДНОСТИ И ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЕННОЙ ЦЕЛИ.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="207"/>
+        <location filename="../../qml/Dialogs/About.qml" line="212"/>
         <source>Website</source>
         <translation>Вебсайт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="213"/>
+        <location filename="../../qml/Dialogs/About.qml" line="218"/>
         <source>Check for Updates</source>
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="219"/>
+        <location filename="../../qml/Dialogs/About.qml" line="224"/>
         <source>Make a Donation</source>
         <translation>Сделать пожертвование</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="225"/>
+        <location filename="../../qml/Dialogs/About.qml" line="230"/>
         <source>Report Bug</source>
         <translation>Сообщить об ошибке</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="231"/>
+        <location filename="../../qml/Dialogs/About.qml" line="236"/>
         <source>Documentation</source>
         <translation>Документация</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="237"/>
+        <location filename="../../qml/Dialogs/About.qml" line="242"/>
         <source>Acknowledgements</source>
         <translation>Благодарности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="246"/>
+        <location filename="../../qml/Dialogs/About.qml" line="251"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -67,7 +67,7 @@
         <translation>Благодарности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="170"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -242,37 +242,37 @@
     <name>Donate</name>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="35"/>
-        <location filename="../../qml/Dialogs/Donate.qml" line="266"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="271"/>
         <source>Donate</source>
         <translation>Пожертвовать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="123"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="128"/>
         <source>Later</source>
         <translation>Позже</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="136"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="141"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="215"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="220"/>
         <source>Support the development of %1!</source>
         <translation>Поддержите разработку %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="223"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="228"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating to support development efforts :)</source>
         <translation>Serial Studio — это бесплатное программное обеспечение с открытым исходным кодом, поддерживаемое волонтерами. Подумайте о пожертвовании, чтобы поддержать разработку :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="234"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="239"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Вы также можете поддержать этот проект, поделившись им, сообщая об ошибках и предлагая новые функции!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="251"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="256"/>
         <source>Don&apos;t annoy me again!</source>
         <translation>Не беспокоить больше!</translation>
     </message>
@@ -576,57 +576,57 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="204"/>
+        <location filename="../../src/IO/Console.cpp" line="213"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="205"/>
+        <location filename="../../src/IO/Console.cpp" line="214"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="216"/>
+        <location filename="../../src/IO/Console.cpp" line="225"/>
         <source>No Line Ending</source>
         <translation>Без окончания строки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="217"/>
+        <location filename="../../src/IO/Console.cpp" line="226"/>
         <source>New Line</source>
         <translation>Новая строка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="218"/>
+        <location filename="../../src/IO/Console.cpp" line="227"/>
         <source>Carriage Return</source>
         <translation>Возврат каретки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="219"/>
+        <location filename="../../src/IO/Console.cpp" line="228"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="230"/>
+        <location filename="../../src/IO/Console.cpp" line="239"/>
         <source>Plain Text</source>
         <translation>Простой текст</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="231"/>
+        <location filename="../../src/IO/Console.cpp" line="240"/>
         <source>Hexadecimal</source>
         <translation>Шестнадцатеричный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="272"/>
+        <location filename="../../src/IO/Console.cpp" line="281"/>
         <source>Export Console Data</source>
         <translation>Экспорт данных консоли</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="274"/>
+        <location filename="../../src/IO/Console.cpp" line="283"/>
         <source>Text Files</source>
         <translation>Текстовые файлы</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="288"/>
+        <location filename="../../src/IO/Console.cpp" line="297"/>
         <source>Error while exporting console data</source>
         <translation>Ошибка при экспорте данных консоли</translation>
     </message>
@@ -809,12 +809,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>Выберите иконку</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="159"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="164"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="168"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="173"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -1107,112 +1107,112 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>Настройка MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="190"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="192"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="197"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="239"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="244"/>
         <source>QOS Level</source>
         <translation>Уровень QOS</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="243"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="248"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (сек)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="302"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>Host</source>
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="306"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="311"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="368"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="373"/>
         <source>Topic</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="372"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="377"/>
         <source>Retain</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="385"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="390"/>
         <source>MQTT Topic</source>
         <translation>Тема MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="402"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="407"/>
         <source>Add Retain Flag</source>
         <translation>Добавить флаг Retain</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="425"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="430"/>
         <source>User</source>
         <translation>Пользователь</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="429"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="434"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="442"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="447"/>
         <source>MQTT Username</source>
         <translation>Имя пользователя MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="464"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="469"/>
         <source>MQTT Password</source>
         <translation>Пароль MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="501"/>
         <source>Enable SSL/TLS:</source>
         <translation>Включить SSL/TLS:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="500"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="505"/>
         <source>Certificate:</source>
         <translation>Сертификат:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="534"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="539"/>
         <source>Use System Database</source>
         <translation>Использовать системную базу данных</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="535"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="540"/>
         <source>Custom CA File</source>
         <translation>Пользовательский файл CA</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="570"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="575"/>
         <source>Protocol:</source>
         <translation>Протокол:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="615"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="620"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="633"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="638"/>
         <source>Disconnect</source>
         <translation>Отключиться</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="633"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="638"/>
         <source>Connect</source>
         <translation>Подключиться</translation>
     </message>
@@ -2144,17 +2144,17 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="73"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="75"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="89"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="91"/>
         <source>Plugin System</source>
         <translation>Система плагинов</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="129"/>
         <source>Using the plugin system, other applications &amp; scripts can interact with %1 by establishing a TCP connection on port 7777.</source>
         <translation>Используя систему плагинов, другие приложения и скрипты могут взаимодействовать с %1, установив TCP-соединение на порту 7777.</translation>
     </message>
@@ -2253,61 +2253,62 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="129"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="130"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="136"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="137"/>
         <source>Select all</source>
         <translation>Выбрать всё</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="143"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="144"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="153"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="154"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="160"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="161"/>
         <source>Save as</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="191"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="192"/>
         <source>No data received so far</source>
         <translation>Данные пока не получены</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="224"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="225"/>
         <source>Send Data to Device</source>
         <translation>Отправить данные на устройство</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Terminal.qml" line="319"/>
         <source>Echo</source>
-        <translation type="vanished">Эхо</translation>
+        <translation>Эхо</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="296"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="297"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="307"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="308"/>
         <source>Show Timestamp</source>
         <translation>Показать временные метки</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="318"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="330"/>
         <source>Emulate VT-100</source>
         <translation>Эмуляция VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="338"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="350"/>
         <source>Display: %1</source>
         <translation>Отображение: %1</translation>
     </message>
@@ -2523,67 +2524,67 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>Колонки:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="259"/>
         <source>Data Grids</source>
         <translation>Таблицы данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="269"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="271"/>
         <source>Multiple Data Plots</source>
         <translation>Несколько графиков данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="283"/>
         <source>LED Panels</source>
         <translation>Светодиодные панели</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="291"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="294"/>
         <source>FFT Plots</source>
         <translation>Графики FFT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="302"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="305"/>
         <source>Data Plots</source>
         <translation>Графики данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="313"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="316"/>
         <source>Bars</source>
         <translation>Столбцы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="327"/>
         <source>Gauges</source>
         <translation>Шкалы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="335"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="338"/>
         <source>Compasses</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="350"/>
         <source>Gyroscopes</source>
         <translation>Гироскопы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="357"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="362"/>
         <source>Accelerometers</source>
         <translation>Акселерометры</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="373"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="419"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="425"/>
         <source>Clear Dashboard Data</source>
         <translation>Очистить данные панели</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="445"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="451"/>
         <source>Display Console Window</source>
         <translation>Показать окно консоли</translation>
     </message>

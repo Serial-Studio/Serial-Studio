@@ -9,52 +9,52 @@
         <translation>Acerca de</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="178"/>
+        <location filename="../../qml/Dialogs/About.qml" line="183"/>
         <source>Version %1</source>
         <translation>Versión %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="189"/>
+        <location filename="../../qml/Dialogs/About.qml" line="194"/>
         <source>Copyright © 2020-%1 %2, released under the MIT License.</source>
         <translation>Copyright © 2020-%1 %2, liberado bajo la Licencia MIT.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="198"/>
+        <location filename="../../qml/Dialogs/About.qml" line="203"/>
         <source>The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</source>
         <translation>El programa se proporciona TAL CUAL, SIN GARANTÍA DE NINGÚN TIPO, INCLUYENDO LA GARANTÍA DE DISEÑO, COMERCIABILIDAD O ADECUACIÓN PARA UN PROPÓSITO PARTICULAR.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="207"/>
+        <location filename="../../qml/Dialogs/About.qml" line="212"/>
         <source>Website</source>
         <translation>Sitio Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="213"/>
+        <location filename="../../qml/Dialogs/About.qml" line="218"/>
         <source>Check for Updates</source>
         <translation>Buscar Actualizaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="219"/>
+        <location filename="../../qml/Dialogs/About.qml" line="224"/>
         <source>Make a Donation</source>
         <translation>Hacer una Donación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="225"/>
+        <location filename="../../qml/Dialogs/About.qml" line="230"/>
         <source>Report Bug</source>
         <translation>Reportar un Error</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="231"/>
+        <location filename="../../qml/Dialogs/About.qml" line="236"/>
         <source>Documentation</source>
         <translation>Documentación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="237"/>
+        <location filename="../../qml/Dialogs/About.qml" line="242"/>
         <source>Acknowledgements</source>
         <translation>Agradecimientos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="246"/>
+        <location filename="../../qml/Dialogs/About.qml" line="251"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -67,7 +67,7 @@
         <translation>Agradecimientos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="170"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -242,37 +242,37 @@
     <name>Donate</name>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="35"/>
-        <location filename="../../qml/Dialogs/Donate.qml" line="266"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="271"/>
         <source>Donate</source>
         <translation>Donar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="123"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="128"/>
         <source>Later</source>
         <translation>Más tarde</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="136"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="141"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="215"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="220"/>
         <source>Support the development of %1!</source>
         <translation>¡Apoya el desarrollo de %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="223"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="228"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating to support development efforts :)</source>
         <translation>Serial Studio es un software libre y de código abierto apoyado por voluntarios. Considera hacer una donación para apoyar los esfuerzos de desarrollo :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="234"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="239"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>¡También puedes apoyar este proyecto compartiéndolo, reportando errores y proponiendo nuevas funciones!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="251"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="256"/>
         <source>Don&apos;t annoy me again!</source>
         <translation>¡No me molestes de nuevo!</translation>
     </message>
@@ -576,57 +576,57 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="204"/>
+        <location filename="../../src/IO/Console.cpp" line="213"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="205"/>
+        <location filename="../../src/IO/Console.cpp" line="214"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="216"/>
+        <location filename="../../src/IO/Console.cpp" line="225"/>
         <source>No Line Ending</source>
         <translation>Sin terminación de línea</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="217"/>
+        <location filename="../../src/IO/Console.cpp" line="226"/>
         <source>New Line</source>
         <translation>Nueva línea</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="218"/>
+        <location filename="../../src/IO/Console.cpp" line="227"/>
         <source>Carriage Return</source>
         <translation>Retorno de carro</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="219"/>
+        <location filename="../../src/IO/Console.cpp" line="228"/>
         <source>CR + NL</source>
         <translation>RC + NL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="230"/>
+        <location filename="../../src/IO/Console.cpp" line="239"/>
         <source>Plain Text</source>
         <translation>Texto plano</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="231"/>
+        <location filename="../../src/IO/Console.cpp" line="240"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="272"/>
+        <location filename="../../src/IO/Console.cpp" line="281"/>
         <source>Export Console Data</source>
         <translation>Exportar datos de la consola</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="274"/>
+        <location filename="../../src/IO/Console.cpp" line="283"/>
         <source>Text Files</source>
         <translation>Archivos de texto</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="288"/>
+        <location filename="../../src/IO/Console.cpp" line="297"/>
         <source>Error while exporting console data</source>
         <translation>Error al exportar datos de la consola</translation>
     </message>
@@ -805,12 +805,12 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation>Seleccionar Ícono</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="159"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="164"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="168"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="173"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -1103,112 +1103,112 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation>Configuración MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="190"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
         <source>Version</source>
         <translation>Versión</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="192"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="197"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="239"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="244"/>
         <source>QOS Level</source>
         <translation>Nivel de QOS</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="243"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="248"/>
         <source>Keep Alive (s)</source>
         <translation>Mantener activo (s)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="302"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="306"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="311"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="368"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="373"/>
         <source>Topic</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="372"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="377"/>
         <source>Retain</source>
         <translation>Retener</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="385"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="390"/>
         <source>MQTT Topic</source>
         <translation>Tema MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="402"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="407"/>
         <source>Add Retain Flag</source>
         <translation>Agregar bandera de retención</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="425"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="430"/>
         <source>User</source>
         <translation>Usuario</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="429"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="434"/>
         <source>Password</source>
         <translation>Contraseña</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="442"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="447"/>
         <source>MQTT Username</source>
         <translation>Usuario MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="464"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="469"/>
         <source>MQTT Password</source>
         <translation>Contraseña MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="501"/>
         <source>Enable SSL/TLS:</source>
         <translation>Habilitar SSL/TLS:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="500"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="505"/>
         <source>Certificate:</source>
         <translation>Certificado:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="534"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="539"/>
         <source>Use System Database</source>
         <translation>Usar base de datos del sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="535"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="540"/>
         <source>Custom CA File</source>
         <translation>Archivo CA personalizado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="570"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="575"/>
         <source>Protocol:</source>
         <translation>Protocolo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="615"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="620"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="633"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="638"/>
         <source>Disconnect</source>
         <translation>Desconectar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="633"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="638"/>
         <source>Connect</source>
         <translation>Conectar</translation>
     </message>
@@ -2140,17 +2140,17 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation>Idioma</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="73"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="75"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="89"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="91"/>
         <source>Plugin System</source>
         <translation>Sistema de plugins</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Settings.qml" line="129"/>
         <source>Using the plugin system, other applications &amp; scripts can interact with %1 by establishing a TCP connection on port 7777.</source>
         <translation>Usando el sistema de plugins, otras aplicaciones y scripts pueden interactuar con %1 estableciendo una conexión TCP en el puerto 7777.</translation>
     </message>
@@ -2249,61 +2249,62 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="129"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="130"/>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="136"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="137"/>
         <source>Select all</source>
         <translation>Seleccionar todo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="143"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="144"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="153"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="154"/>
         <source>Print</source>
         <translation>Imprimir</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="160"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="161"/>
         <source>Save as</source>
         <translation>Guardar como</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="191"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="192"/>
         <source>No data received so far</source>
         <translation>No se han recibido datos hasta ahora</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="224"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="225"/>
         <source>Send Data to Device</source>
         <translation>Enviar datos al dispositivo</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Terminal.qml" line="319"/>
         <source>Echo</source>
-        <translation type="vanished">Eco</translation>
+        <translation>Eco</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="296"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="297"/>
         <source>Autoscroll</source>
         <translation>Desplazamiento automático</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="307"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="308"/>
         <source>Show Timestamp</source>
         <translation>Mostrar marca de tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="318"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="330"/>
         <source>Emulate VT-100</source>
         <translation>Emular VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="338"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="350"/>
         <source>Display: %1</source>
         <translation>Mostrar: %1</translation>
     </message>
@@ -2519,67 +2520,67 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation>Columnas:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="259"/>
         <source>Data Grids</source>
         <translation>Cuadrículas de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="269"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="271"/>
         <source>Multiple Data Plots</source>
         <translation>Gráficas de Datos Múltiples</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="283"/>
         <source>LED Panels</source>
         <translation>Paneles LED</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="291"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="294"/>
         <source>FFT Plots</source>
         <translation>Gráficas FFT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="302"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="305"/>
         <source>Data Plots</source>
         <translation>Gráficas de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="313"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="316"/>
         <source>Bars</source>
         <translation>Barras</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="327"/>
         <source>Gauges</source>
         <translation>Medidores</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="335"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="338"/>
         <source>Compasses</source>
         <translation>Brújulas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="350"/>
         <source>Gyroscopes</source>
         <translation>Giroscopios</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="357"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="362"/>
         <source>Accelerometers</source>
         <translation>Acelerómetros</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="373"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="419"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="425"/>
         <source>Clear Dashboard Data</source>
         <translation>Limpiar Tablero</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="445"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="451"/>
         <source>Display Console Window</source>
         <translation>Mostrar Consola</translation>
     </message>
