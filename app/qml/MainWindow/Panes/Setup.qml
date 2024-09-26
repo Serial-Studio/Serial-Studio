@@ -25,6 +25,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
 import "SetupPanes" as SetupPanes
 import "../../Widgets" as Widgets
 
@@ -67,8 +68,6 @@ Widgets.Pane {
     //
     // Misc settings
     //
-    property alias auto: commAuto.checked
-    property alias manual: commManual.checked
     property alias tabIndex: tab.currentIndex
     property alias csvExport: csvLogging.checked
     property alias driver: driverCombo.currentIndex
@@ -78,17 +77,6 @@ Widgets.Pane {
     //
     property alias language: settings.language
     property alias tcpPlugins: settings.tcpPlugins
-  }
-
-  //
-  // Update manual/auto checkboxes
-  //
-  Connections {
-    target: Cpp_JSON_Generator
-    function onOperationModeChanged() {
-      commAuto.checked = (Cpp_JSON_Generator.operationMode === 1)
-      commManual.checked = (Cpp_JSON_Generator.operationMode === 0)
-    }
   }
 
   //
@@ -181,28 +169,32 @@ Widgets.Pane {
         color: Cpp_ThemeManager.colors["pane_section_label"]
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } RadioButton {
-        id: commAuto
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
-        checked: Cpp_JSON_Generator.operationMode === 1
         text: qsTr("No Parsing (Device Sends JSON Data)")
+        checked: Cpp_JSON_Generator.operationMode === JsonGenerator.DeviceSendsJSON
         onCheckedChanged: {
-          if (checked && Cpp_JSON_Generator.operationMode !== 1)
-            Cpp_JSON_Generator.setOperationMode(1)
-          else if (!checked)
-            Cpp_JSON_Generator.setOperationMode(0)
+          if (checked)
+            Cpp_JSON_Generator.operationMode = JsonGenerator.DeviceSendsJSON
         }
       } RadioButton {
-        id: commManual
+        Layout.maximumHeight: 18
+        Layout.maximumWidth: root.maxItemWidth
+        text: qsTr("Quick Plot (Comma Separated Values)")
+        checked: Cpp_JSON_Generator.operationMode === JsonGenerator.CommaSeparatedValues
+        onCheckedChanged: {
+          if (checked)
+            Cpp_JSON_Generator.operationMode = JsonGenerator.CommaSeparatedValues
+        }
+      }
+      RadioButton {
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Parse via JSON Project File")
-        checked: Cpp_JSON_Generator.operationMode === 0
+        checked: Cpp_JSON_Generator.operationMode === JsonGenerator.ProjectFile
         onCheckedChanged: {
-          if (checked && Cpp_JSON_Generator.operationMode !== 0)
-            Cpp_JSON_Generator.setOperationMode(0)
-          else if (!checked)
-            Cpp_JSON_Generator.setOperationMode(1)
+          if (checked)
+            Cpp_JSON_Generator.operationMode = JsonGenerator.ProjectFile
         }
       }
 
@@ -212,9 +204,9 @@ Widgets.Pane {
       Button {
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
-        enabled: commManual.checked
         Layout.maximumWidth: root.maxItemWidth
         onClicked: Cpp_JSON_Generator.loadJsonMap()
+        enabled: Cpp_JSON_Generator.operationMode === JsonGenerator.ProjectFile
         text: (Cpp_JSON_Generator.jsonMapFilename.length ?
                  qsTr("Change Project File (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
                  qsTr("Select Project File") + "...")

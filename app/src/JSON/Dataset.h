@@ -68,6 +68,7 @@ namespace JSON
  *       field and the "title" field.
  */
 class Group;
+class Generator;
 class Dataset
 {
 public:
@@ -121,5 +122,6 @@ private:
   int m_datasetId;
 
   friend class Project::Model;
+  friend class JSON::Generator;
 };
 } // namespace JSON

@@ -196,6 +196,7 @@ void Misc::ModuleManager::registerQmlTypes()
 {
   qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
   qmlRegisterType<Project::Model>("SerialStudio", 1, 0, "ProjectModel");
+  qmlRegisterType<JSON::Generator>("SerialStudio", 1, 0, "JsonGenerator");
   qmlRegisterType<Project::FrameParser>("SerialStudio", 1, 0, "FrameParser");
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
 }

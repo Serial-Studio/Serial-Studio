@@ -89,8 +89,9 @@ private:
 public:
   enum OperationMode
   {
-    kManual = 0x00,
-    kAutomatic = 0x01
+    ProjectFile,
+    DeviceSendsJSON,
+    CommaSeparatedValues,
   };
   Q_ENUM(OperationMode)
 
@@ -108,8 +109,7 @@ public slots:
   void setOperationMode(const JSON::Generator::OperationMode mode);
 
 public slots:
-  void readSettings();
-  void writeSettings(const QString &path);
+  void setJsonPathSetting(const QString &path);
 
 private slots:
   void readData(const QByteArray &data);

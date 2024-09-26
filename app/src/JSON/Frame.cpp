@@ -52,6 +52,29 @@ bool JSON::Frame::isValid() const
 }
 
 /**
+ * @brief Serializes the frame information and its data into a JSON object.
+ *
+ * @return A QJsonObject containing the group's properties and an array of
+ * encoded datasets.
+ */
+QJsonObject JSON::Frame::serialize() const
+{
+  QJsonArray groupArray;
+  for (const auto &group : m_groups)
+    groupArray.append(group.serialize());
+
+  QJsonArray actionArray;
+  for (const auto &action : m_actions)
+    actionArray.append(action.serialize());
+
+  QJsonObject object;
+  object.insert(QStringLiteral("title"), m_title);
+  object.insert(QStringLiteral("groups"), groupArray);
+  object.insert(QStringLiteral("actions"), actionArray);
+  return object;
+}
+
+/**
  * Reads the frame information and all its asociated groups (and datatsets) from
  * the given JSON @c object.
  *

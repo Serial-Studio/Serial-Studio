@@ -28,6 +28,7 @@
 #include "IO/Drivers/BluetoothLE.h"
 
 #include "MQTT/Client.h"
+#include "JSON/Generator.h"
 #include "Misc/Translator.h"
 
 /**
@@ -436,64 +437,119 @@ void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
  */
 void IO::Manager::readFrames()
 {
+  // Obtain pointer to JSON generator
+  static auto *generator = &JSON::Generator::instance();
+
   // No device connected, abort
   if (!connected())
     return;
 
+  // Obtain operation mode from JSON generator
+  const auto mode = generator->operationMode();
+
   // Read until start/finish combinations are not found
-  auto bytes = 0;
-  auto prevBytes = 0;
-  auto cursor = m_dataBuffer;
-  auto start = startSequence().toUtf8();
-  auto finish = finishSequence().toUtf8();
-  while (cursor.contains(start) && cursor.contains(finish))
+  if (mode == JSON::Generator::ProjectFile
+      || mode == JSON::Generator::DeviceSendsJSON)
   {
-    // Remove the part of the buffer prior to, and including, the start
-    // sequence.
-    auto sIndex = cursor.indexOf(start);
-    cursor = cursor.mid(sIndex + start.length(), -1);
-    bytes += sIndex + start.length();
-
-    // Copy a sub-buffer that goes until the finish sequence
-    auto fIndex = cursor.indexOf(finish);
-    auto frame = cursor.left(fIndex);
-
-    // Parse frame
-    if (!frame.isEmpty())
+    auto bytes = 0;
+    auto prevBytes = 0;
+    auto cursor = m_dataBuffer;
+    auto start = startSequence().toUtf8();
+    auto finish = finishSequence().toUtf8();
+    while (cursor.contains(start) && cursor.contains(finish))
     {
-      // Checksum verification & Q_EMIT RX frame
-      int chop = 0;
-      auto result = integrityChecks(frame, cursor, &chop);
-      if (result == ValidationStatus::FrameOk)
-        Q_EMIT frameReceived(frame);
+      // Remove the part of the buffer prior to (and including) the start seq.
+      auto sIndex = cursor.indexOf(start);
+      cursor = cursor.mid(sIndex + start.length(), -1);
+      bytes += sIndex + start.length();
 
-      // Checksum data incomplete, try next time...
-      else if (result == ValidationStatus::ChecksumIncomplete)
+      // Copy a sub-buffer that goes until the finish sequence
+      auto fIndex = cursor.indexOf(finish);
+      auto frame = cursor.left(fIndex);
+
+      // Parse frame
+      if (!frame.isEmpty())
       {
-        bytes = prevBytes;
-        break;
+        // Checksum verification & Q_EMIT RX frame
+        int chop = 0;
+        auto result = integrityChecks(frame, cursor, &chop);
+        if (result == ValidationStatus::FrameOk)
+          Q_EMIT frameReceived(frame);
+
+        // Checksum data incomplete, try next time...
+        else if (result == ValidationStatus::ChecksumIncomplete)
+        {
+          bytes = prevBytes;
+          break;
+        }
+
+        // Remove the data including the finish sequence from the master buffer
+        cursor = cursor.mid(fIndex + chop, -1);
+        bytes += fIndex + chop;
+
+        // Frame read successfully, save the number of bytes to chop.
+        // This is used to manage frames with incomplete checksums
+        prevBytes = bytes;
       }
 
-      // Remove the data including the finish sequence from the master buffer
-      cursor = cursor.mid(fIndex + chop, -1);
-      bytes += fIndex + chop;
-
-      // Frame read successfully, save the number of bytes to chop.
-      // This is used to manage frames with incomplete checksums
-      prevBytes = bytes;
+      // Frame empty, wait for more data...
+      else
+        bytes = prevBytes;
     }
 
-    // Frame empty, wait for more data...
-    else
-      bytes = prevBytes;
+    // Remove parsed data from master buffer
+    m_dataBuffer.remove(0, bytes);
+
+    // Clear temp. buffer (e.g. device sends a lot of invalid data)
+    if (m_dataBuffer.size() > maxBufferSize())
+      clearTempBuffer();
   }
 
-  // Remove parsed data from master buffer
-  m_dataBuffer.remove(0, bytes);
+  // Handle data with line breaks (\n, \r, \n\r, or \r\n)
+  else if (mode == JSON::Generator::CommaSeparatedValues)
+  {
+    // Loop while any line break is found in the buffer
+    auto bytes = 0;
+    auto cursor = m_dataBuffer;
+    QList<QByteArray> lineBreaks = {"\n", "\r", "\n\r", "\r\n"};
+    while (true)
+    {
+      // Find the first line break in the buffer
+      int smallestIndex = -1;
+      QByteArray lineBreak;
+      for (const auto &breakSeq : lineBreaks)
+      {
+        int index = cursor.indexOf(breakSeq);
+        if (index != -1 && (smallestIndex == -1 || index < smallestIndex))
+        {
+          smallestIndex = index;
+          lineBreak = breakSeq;
+        }
+      }
 
-  // Clear temp. buffer (e.g. device sends a lot of invalid data)
-  if (m_dataBuffer.size() > maxBufferSize())
-    clearTempBuffer();
+      // If no line break is found, break the loop
+      if (smallestIndex == -1)
+        break;
+
+      // Extract the frame from the buffer until the line break
+      auto frame = cursor.left(smallestIndex);
+
+      // Emit the frame if it's not empty
+      if (!frame.isEmpty())
+        Q_EMIT frameReceived(frame);
+
+      // Remove the processed frame and line break from the buffer
+      cursor = cursor.mid(smallestIndex + lineBreak.size(), -1);
+      bytes += smallestIndex + lineBreak.size();
+    }
+
+    // Remove the parsed data from the master buffer
+    m_dataBuffer.remove(0, bytes);
+
+    // Clear the temp buffer if the size exceeds the limit
+    if (m_dataBuffer.size() > maxBufferSize())
+      clearTempBuffer();
+  }
 }
 
 /**

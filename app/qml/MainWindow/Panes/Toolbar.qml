@@ -25,6 +25,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
 import "../../Widgets" as Widgets
 
 ToolBar {
@@ -137,8 +138,8 @@ ToolBar {
       text: qsTr("Project Editor")
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showProjectEditor()
-      enabled: Cpp_JSON_Generator.operationMode == 0
       icon.source: "qrc:/rcc/icons/toolbar/project-setup.svg"
+      enabled: Cpp_JSON_Generator.operationMode == JsonGenerator.ProjectFile
     }
 
     //

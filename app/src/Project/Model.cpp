@@ -32,7 +32,6 @@
 #include <QJsonDocument>
 
 #include "AppInfo.h"
-#include "IO/Manager.h"
 #include "JSON/Generator.h"
 #include "Misc/Utilities.h"
 #include "Misc/Translator.h"
@@ -859,14 +858,6 @@ void Project::Model::openJsonFile(const QString &path)
   m_frameStartSequence = json.value("frameStart").toString();
   m_thunderforestApiKey = json.value("thunderforestApiKey").toString();
   m_frameDecoder = static_cast<DecoderMethod>(json.value("decoder").toInt());
-
-  // Modify IO manager settings
-  IO::Manager::instance().setSeparatorSequence(m_separator);
-  IO::Manager::instance().setFinishSequence(m_frameEndSequence);
-  IO::Manager::instance().setStartSequence(m_frameStartSequence);
-
-  // Set JSON::Generator operation mode to manual
-  JSON::Generator::instance().setOperationMode(JSON::Generator::kManual);
 
   // Read groups from JSON document
   auto groups = json.value("groups").toArray();

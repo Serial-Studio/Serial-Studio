@@ -26,6 +26,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
 import "Panes" as Panes
 import "../Widgets" as Widgets
 
@@ -62,8 +63,11 @@ Window {
   // Obtain document title
   //
   function updateDocumentTitle() {
-    if (Cpp_JSON_Generator.operationMode == 1)
+    if (Cpp_JSON_Generator.operationMode == JsonGenerator.DeviceSendsJSON)
       documentTitle = qsTr("Device Defined Project")
+
+    else if (Cpp_JSON_Generator.operationMode == JsonGenerator.CommaSeparatedValues)
+      documentTitle = qsTr("Quick Plot Mode")
 
     else if (Cpp_JSON_Generator.jsonMapFilename.length > 0)
       documentTitle = Cpp_Project_Model.title

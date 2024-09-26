@@ -57,6 +57,7 @@ namespace JSON
  * - Widget
  * - A vector of datasets
  */
+class Generator;
 class Group
 {
 public:
@@ -81,5 +82,6 @@ private:
 
   friend class UI::Dashboard;
   friend class Project::Model;
+  friend class JSON::Generator;
 };
 } // namespace JSON

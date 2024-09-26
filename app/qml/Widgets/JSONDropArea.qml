@@ -24,6 +24,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
+
 DropArea {
   //
   // Show rectangle and set color based on file extension on drag enter
@@ -65,7 +67,7 @@ DropArea {
 
     // Process JSON files
     if (cleanPath.endsWith(".json")) {
-      Cpp_JSON_Generator.setOperationMode(0)
+      Cpp_JSON_Generator.operationMode = JsonGenerator.ProjectFile
       Cpp_JSON_Generator.loadJsonMap(cleanPath)
     }
 
