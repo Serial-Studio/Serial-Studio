@@ -296,15 +296,11 @@ const QString &IO::Drivers::Network::remoteAddress() const
 /**
  * Returns a list with the available socket types
  */
-const QStringList &IO::Drivers::Network::socketTypes()
+QStringList IO::Drivers::Network::socketTypes() const
 {
-  static QStringList list;
-  if (list.isEmpty())
-  {
-    list.append(QStringLiteral("TCP"));
-    list.append(QStringLiteral("UDP"));
-  }
-
+  QStringList list;
+  list.append(QStringLiteral("TCP"));
+  list.append(QStringLiteral("UDP"));
   return list;
 }
 

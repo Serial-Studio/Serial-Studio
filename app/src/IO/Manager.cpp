@@ -28,6 +28,7 @@
 #include "IO/Drivers/BluetoothLE.h"
 
 #include "MQTT/Client.h"
+#include "Misc/Translator.h"
 
 /**
  * Adds support for C escape sequences to the given @a str.
@@ -70,6 +71,10 @@ IO::Manager::Manager()
   // Update connect button status when device type is changed
   connect(this, &IO::Manager::selectedDriverChanged, this,
           &IO::Manager::configurationChanged);
+
+  // Update lists when language changes
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &IO::Manager::languageChanged);
 }
 
 /**
@@ -194,16 +199,12 @@ const QString &IO::Manager::separatorSequence() const
 /**
  * Returns a list with the possible data source options.
  */
-QStringList &IO::Manager::availableDrivers()
+QStringList IO::Manager::availableDrivers() const
 {
-  static QStringList list;
-  if (list.isEmpty())
-  {
-    list.append(tr("Serial Port"));
-    list.append(tr("Network Socket"));
-    list.append(tr("Bluetooth LE"));
-  }
-
+  QStringList list;
+  list.append(tr("Serial Port"));
+  list.append(tr("Network Socket"));
+  list.append(tr("Bluetooth LE"));
   return list;
 }
 

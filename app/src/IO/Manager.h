@@ -91,11 +91,12 @@ class Manager : public QObject
              NOTIFY configurationChanged)
   Q_PROPERTY(QStringList availableDrivers
              READ availableDrivers
-             CONSTANT)
+             NOTIFY languageChanged)
   // clang-format on
 
 signals:
   void driverChanged();
+  void languageChanged();
   void connectedChanged();
   void writeEnabledChanged();
   void configurationChanged();
@@ -151,7 +152,7 @@ public:
   [[nodiscard]] const QString &finishSequence() const;
   [[nodiscard]] const QString &separatorSequence() const;
 
-  static QStringList &availableDrivers();
+  [[nodiscard]] QStringList availableDrivers() const;
   Q_INVOKABLE qint64 writeData(const QByteArray &data);
 
 public slots:

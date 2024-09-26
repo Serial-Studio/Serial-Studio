@@ -84,24 +84,25 @@ class Serial : public HAL_Driver
              NOTIFY availablePortsChanged)
   Q_PROPERTY(QStringList parityList
              READ parityList
-             CONSTANT)
+             NOTIFY languageChanged)
   Q_PROPERTY(QStringList baudRateList
              READ baudRateList
              NOTIFY baudRateListChanged)
   Q_PROPERTY(QStringList dataBitsList
              READ dataBitsList
-             CONSTANT)
+             NOTIFY languageChanged)
   Q_PROPERTY(QStringList stopBitsList
              READ stopBitsList
-             CONSTANT)
+             NOTIFY languageChanged)
   Q_PROPERTY(QStringList flowControlList
              READ flowControlList
-             CONSTANT)
+             NOTIFY languageChanged)
   // clang-format on
 
 signals:
   void portChanged();
   void parityChanged();
+  void languageChanged();
   void baudRateChanged();
   void dataBitsChanged();
   void stopBitsChanged();
@@ -150,10 +151,10 @@ public:
   [[nodiscard]] QStringList portList() const;
   [[nodiscard]] const QStringList &baudRateList() const;
 
-  [[nodiscard]] static QStringList &parityList();
-  [[nodiscard]] static QStringList &dataBitsList();
-  [[nodiscard]] static QStringList &stopBitsList();
-  [[nodiscard]] static QStringList &flowControlList();
+  [[nodiscard]] QStringList parityList() const;
+  [[nodiscard]] QStringList dataBitsList() const;
+  [[nodiscard]] QStringList stopBitsList() const;
+  [[nodiscard]] QStringList flowControlList() const;
 
   [[nodiscard]] qint32 baudRate() const;
   [[nodiscard]] QSerialPort::Parity parity() const;

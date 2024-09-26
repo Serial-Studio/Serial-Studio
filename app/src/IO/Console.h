@@ -68,18 +68,19 @@ class Console : public QObject
              NOTIFY historyItemChanged)
   Q_PROPERTY(QStringList dataModes
              READ dataModes
-             CONSTANT)
+             NOTIFY languageChanged)
   Q_PROPERTY(QStringList lineEndings
              READ lineEndings
-             CONSTANT)
+             NOTIFY languageChanged)
   Q_PROPERTY(QStringList displayModes
              READ displayModes
-             CONSTANT)
+             NOTIFY languageChanged)
   // clang-format on
 
 signals:
   void dataReceived();
   void dataModeChanged();
+  void languageChanged();
   void autoscrollChanged();
   void lineEndingChanged();
   void displayModeChanged();
@@ -130,9 +131,9 @@ public:
   [[nodiscard]] DisplayMode displayMode() const;
   [[nodiscard]] QString currentHistoryString() const;
 
-  static QStringList &dataModes();
-  static QStringList &lineEndings();
-  static QStringList &displayModes();
+  [[nodiscard]] QStringList dataModes() const;
+  [[nodiscard]] QStringList lineEndings() const;
+  [[nodiscard]] QStringList displayModes() const;
 
   Q_INVOKABLE QString formatUserHex(const QString &text);
 

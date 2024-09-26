@@ -576,57 +576,57 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="201"/>
+        <location filename="../../src/IO/Console.cpp" line="204"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="202"/>
+        <location filename="../../src/IO/Console.cpp" line="205"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="217"/>
+        <location filename="../../src/IO/Console.cpp" line="216"/>
         <source>No Line Ending</source>
         <translation>Без окончания строки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="218"/>
+        <location filename="../../src/IO/Console.cpp" line="217"/>
         <source>New Line</source>
         <translation>Новая строка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="219"/>
+        <location filename="../../src/IO/Console.cpp" line="218"/>
         <source>Carriage Return</source>
         <translation>Возврат каретки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="220"/>
+        <location filename="../../src/IO/Console.cpp" line="219"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="235"/>
+        <location filename="../../src/IO/Console.cpp" line="230"/>
         <source>Plain Text</source>
         <translation>Простой текст</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="236"/>
+        <location filename="../../src/IO/Console.cpp" line="231"/>
         <source>Hexadecimal</source>
         <translation>Шестнадцатеричный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="279"/>
+        <location filename="../../src/IO/Console.cpp" line="272"/>
         <source>Export Console Data</source>
         <translation>Экспорт данных консоли</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="281"/>
+        <location filename="../../src/IO/Console.cpp" line="274"/>
         <source>Text Files</source>
         <translation>Текстовые файлы</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="295"/>
+        <location filename="../../src/IO/Console.cpp" line="288"/>
         <source>Error while exporting console data</source>
         <translation>Ошибка при экспорте данных консоли</translation>
     </message>
@@ -716,7 +716,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="540"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="536"/>
         <source>Network socket error</source>
         <translation>Ошибка сетевого сокета</translation>
     </message>
@@ -724,61 +724,61 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Drivers::Serial</name>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="51"/>
         <location filename="../../src/IO/Drivers/Serial.cpp" line="52"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="319"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="373"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="53"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="322"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="364"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="211"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="216"/>
         <source>No Device</source>
         <translation>Нет устройства</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="298"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="690"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="303"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="679"/>
         <source>Select Port</source>
         <translation>Выберите порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="320"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="323"/>
         <source>Even</source>
         <translation>Четный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="321"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="324"/>
         <source>Odd</source>
         <translation>Нечетный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="322"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="325"/>
         <source>Space</source>
         <translation>Пробел</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="323"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="326"/>
         <source>Mark</source>
         <translation>Маркер</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="374"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="365"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="375"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="366"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="556"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="545"/>
         <source>Baud rate registered successfully</source>
         <translation>Скорость передачи успешно зарегистрирована</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="557"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="546"/>
         <source>Rate &quot;%1&quot; has been added to baud rate list</source>
         <translation>Скорость &quot;%1&quot; добавлена в список скоростей передачи</translation>
     </message>
@@ -786,17 +786,17 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="202"/>
+        <location filename="../../src/IO/Manager.cpp" line="205"/>
         <source>Serial Port</source>
         <translation>Сериал порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="203"/>
+        <location filename="../../src/IO/Manager.cpp" line="206"/>
         <source>Network Socket</source>
         <translation>Сетевой сокет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="204"/>
+        <location filename="../../src/IO/Manager.cpp" line="207"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>

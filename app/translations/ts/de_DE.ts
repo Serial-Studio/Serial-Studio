@@ -429,6 +429,10 @@
         <source>1 second</source>
         <translation>1 Sekunde</translation>
     </message>
+    <message>
+        <source>Open</source>
+        <translation type="obsolete">Öffnen</translation>
+    </message>
 </context>
 <context>
     <name>ExternalConsole</name>
@@ -572,57 +576,57 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="201"/>
+        <location filename="../../src/IO/Console.cpp" line="204"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="202"/>
+        <location filename="../../src/IO/Console.cpp" line="205"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="217"/>
+        <location filename="../../src/IO/Console.cpp" line="216"/>
         <source>No Line Ending</source>
         <translation>Kein Zeilenende</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="218"/>
+        <location filename="../../src/IO/Console.cpp" line="217"/>
         <source>New Line</source>
         <translation>Neue Zeile</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="219"/>
+        <location filename="../../src/IO/Console.cpp" line="218"/>
         <source>Carriage Return</source>
         <translation>Wagenrücklauf</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="220"/>
+        <location filename="../../src/IO/Console.cpp" line="219"/>
         <source>CR + NL</source>
         <translation>WR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="235"/>
+        <location filename="../../src/IO/Console.cpp" line="230"/>
         <source>Plain Text</source>
         <translation>Reiner Text</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="236"/>
+        <location filename="../../src/IO/Console.cpp" line="231"/>
         <source>Hexadecimal</source>
         <translation>Hexadezimal</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="279"/>
+        <location filename="../../src/IO/Console.cpp" line="272"/>
         <source>Export Console Data</source>
         <translation>Konsolendaten exportieren</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="281"/>
+        <location filename="../../src/IO/Console.cpp" line="274"/>
         <source>Text Files</source>
         <translation>Textdateien</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="295"/>
+        <location filename="../../src/IO/Console.cpp" line="288"/>
         <source>Error while exporting console data</source>
         <translation>Fehler beim Exportieren der Konsolendaten</translation>
     </message>
@@ -708,7 +712,7 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="540"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="536"/>
         <source>Network socket error</source>
         <translation>Netzwerk-Socket-Fehler</translation>
     </message>
@@ -716,61 +720,61 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
 <context>
     <name>IO::Drivers::Serial</name>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="51"/>
         <location filename="../../src/IO/Drivers/Serial.cpp" line="52"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="319"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="373"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="53"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="322"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="364"/>
         <source>None</source>
         <translation>Keine</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="211"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="216"/>
         <source>No Device</source>
         <translation>Kein Gerät</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="298"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="690"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="303"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="679"/>
         <source>Select Port</source>
         <translation>Port auswählen</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="320"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="323"/>
         <source>Even</source>
         <translation>Gerade</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="321"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="324"/>
         <source>Odd</source>
         <translation>Ungerade</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="322"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="325"/>
         <source>Space</source>
         <translation>Leerstelle</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="323"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="326"/>
         <source>Mark</source>
         <translation>Markierung</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="374"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="365"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="375"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="366"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="556"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="545"/>
         <source>Baud rate registered successfully</source>
         <translation>Baudrate erfolgreich registriert</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="557"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="546"/>
         <source>Rate &quot;%1&quot; has been added to baud rate list</source>
         <translation>Rate &quot;%1&quot; wurde zur Baudratenliste hinzugefügt</translation>
     </message>
@@ -778,17 +782,17 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="202"/>
+        <location filename="../../src/IO/Manager.cpp" line="205"/>
         <source>Serial Port</source>
         <translation>Serieller Anschluss</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="203"/>
+        <location filename="../../src/IO/Manager.cpp" line="206"/>
         <source>Network Socket</source>
         <translation>Netzwerk-Socket</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="204"/>
+        <location filename="../../src/IO/Manager.cpp" line="207"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
@@ -850,14 +854,24 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
 <context>
     <name>KLed</name>
     <message>
+        <source>LED on</source>
+        <translation type="vanished">LED an</translation>
+    </message>
+    <message>
+        <source>LED off</source>
+        <translation type="vanished">LED aus</translation>
+    </message>
+    <message>
         <location filename="../../src/UI/Widgets/Common/KLed.cpp" line="177"/>
         <source>LED on</source>
-        <translation>LED an</translation>
+        <comment>Accessible name of a Led whose state is on</comment>
+        <translation type="unfinished">LED an</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Common/KLed.cpp" line="179"/>
         <source>LED off</source>
-        <translation>LED aus</translation>
+        <comment>Accessible name of a Led whose state is off</comment>
+        <translation type="unfinished">LED aus</translation>
     </message>
 </context>
 <context>
@@ -1025,8 +1039,12 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="702"/>
+        <source>Socket temprary error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Socket temporary error</source>
-        <translation>Socket-Übergangsfehler</translation>
+        <translation type="vanished">Socket-Übergangsfehler</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="705"/>

@@ -30,6 +30,7 @@
 #include "IO/Manager.h"
 #include "IO/Console.h"
 #include "Misc/Utilities.h"
+#include "Misc/Translator.h"
 #include "Misc/CommonFonts.h"
 
 /**
@@ -96,6 +97,10 @@ IO::Console::Console()
   auto dm = &Manager::instance();
   connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent);
   connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived);
+
+  // Update lists when language changes
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &IO::Console::languageChanged);
 }
 
 /**
@@ -193,15 +198,11 @@ QString IO::Console::currentHistoryString() const
  * Returns a list with the available data (sending) modes. This list must be
  * synchronized with the order of the @c DataMode enums.
  */
-QStringList &IO::Console::dataModes()
+QStringList IO::Console::dataModes() const
 {
-  static QStringList list;
-  if (list.isEmpty())
-  {
-    list.append(tr("ASCII"));
-    list.append(tr("HEX"));
-  }
-
+  QStringList list;
+  list.append(tr("ASCII"));
+  list.append(tr("HEX"));
   return list;
 }
 
@@ -209,17 +210,13 @@ QStringList &IO::Console::dataModes()
  * Returns a list with the available line endings options. This list must be
  * synchronized with the order of the @c LineEnding enums.
  */
-QStringList &IO::Console::lineEndings()
+QStringList IO::Console::lineEndings() const
 {
-  static QStringList list;
-  if (list.isEmpty())
-  {
-    list.append(tr("No Line Ending"));
-    list.append(tr("New Line"));
-    list.append(tr("Carriage Return"));
-    list.append(tr("CR + NL"));
-  }
-
+  QStringList list;
+  list.append(tr("No Line Ending"));
+  list.append(tr("New Line"));
+  list.append(tr("Carriage Return"));
+  list.append(tr("CR + NL"));
   return list;
 }
 
@@ -227,15 +224,11 @@ QStringList &IO::Console::lineEndings()
  * Returns a list with the available console display modes. This list must be
  * synchronized with the order of the @c DisplayMode enums.
  */
-QStringList &IO::Console::displayModes()
+QStringList IO::Console::displayModes() const
 {
-  static QStringList list;
-  if (list.isEmpty())
-  {
-    list.append(tr("Plain Text"));
-    list.append(tr("Hexadecimal"));
-  }
-
+  QStringList list;
+  list.append(tr("Plain Text"));
+  list.append(tr("Hexadecimal"));
   return list;
 }
 

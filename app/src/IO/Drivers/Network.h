@@ -137,7 +137,7 @@ public:
   [[nodiscard]] QUdpSocket *udpSocket() { return &m_udpSocket; }
 
   [[nodiscard]] const QString &remoteAddress() const;
-  [[nodiscard]] static const QStringList &socketTypes();
+  [[nodiscard]] QStringList socketTypes() const;
 
   static quint16 defaultTcpPort() { return 23; }
   static quint16 defaultUdpLocalPort() { return 0; }

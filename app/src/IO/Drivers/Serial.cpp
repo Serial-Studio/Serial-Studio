@@ -24,6 +24,7 @@
 #include "IO/Drivers/Serial.h"
 
 #include "Misc/Utilities.h"
+#include "Misc/Translator.h"
 #include "Misc/TimerEvents.h"
 
 //------------------------------------------------------------------------------
@@ -58,6 +59,10 @@ IO::Drivers::Serial::Serial()
   // Update connect button status when user selects a serial device
   connect(this, &IO::Drivers::Serial::portIndexChanged, this,
           &IO::Drivers::Serial::configurationChanged);
+
+  // Update lists when language changes
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &IO::Drivers::Serial::languageChanged);
 }
 
 /**
@@ -311,18 +316,14 @@ const QStringList &IO::Drivers::Serial::baudRateList() const
  * Returns a list with the available parity configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList &IO::Drivers::Serial::parityList()
+QStringList IO::Drivers::Serial::parityList() const
 {
-  static QStringList list;
-  if (list.isEmpty())
-  {
-    list.append(tr("None"));
-    list.append(tr("Even"));
-    list.append(tr("Odd"));
-    list.append(tr("Space"));
-    list.append(tr("Mark"));
-  }
-
+  QStringList list;
+  list.append(tr("None"));
+  list.append(tr("Even"));
+  list.append(tr("Odd"));
+  list.append(tr("Space"));
+  list.append(tr("Mark"));
   return list;
 }
 
@@ -330,17 +331,13 @@ QStringList &IO::Drivers::Serial::parityList()
  * Returns a list with the available data bits configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList &IO::Drivers::Serial::dataBitsList()
+QStringList IO::Drivers::Serial::dataBitsList() const
 {
-  static QStringList list;
-  if (list.isEmpty())
-  {
-    list.append(QStringLiteral("5"));
-    list.append(QStringLiteral("6"));
-    list.append(QStringLiteral("7"));
-    list.append(QStringLiteral("8"));
-  }
-
+  QStringList list;
+  list.append(QStringLiteral("5"));
+  list.append(QStringLiteral("6"));
+  list.append(QStringLiteral("7"));
+  list.append(QStringLiteral("8"));
   return list;
 }
 
@@ -348,16 +345,12 @@ QStringList &IO::Drivers::Serial::dataBitsList()
  * Returns a list with the available stop bits configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList &IO::Drivers::Serial::stopBitsList()
+QStringList IO::Drivers::Serial::stopBitsList() const
 {
-  static QStringList list;
-  if (list.isEmpty())
-  {
-    list.append(QStringLiteral("1"));
-    list.append(QStringLiteral("1.5"));
-    list.append(QStringLiteral("2"));
-  }
-
+  QStringList list;
+  list.append(QStringLiteral("1"));
+  list.append(QStringLiteral("1.5"));
+  list.append(QStringLiteral("2"));
   return list;
 }
 
@@ -365,16 +358,12 @@ QStringList &IO::Drivers::Serial::stopBitsList()
  * Returns a list with the available flow control configurations.
  * This function can be used with a combo-box to build UIs.
  */
-QStringList &IO::Drivers::Serial::flowControlList()
+QStringList IO::Drivers::Serial::flowControlList() const
 {
-  static QStringList list;
-  if (list.isEmpty())
-  {
-    list.append(tr("None"));
-    list.append(tr("RTS/CTS"));
-    list.append(tr("XON/XOFF"));
-  }
-
+  QStringList list;
+  list.append(tr("None"));
+  list.append(tr("RTS/CTS"));
+  list.append(tr("XON/XOFF"));
   return list;
 }
 
