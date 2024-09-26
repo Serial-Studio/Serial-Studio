@@ -139,6 +139,13 @@ Window {
     }
   }
 
+  Connections {
+    target: Cpp_Misc_Translator
+    function onLanguageChanged() {
+      updateDocumentTitle()
+    }
+  }
+
   //
   // Show console tab on serial disconnect
   //
