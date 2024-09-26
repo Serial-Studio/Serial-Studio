@@ -61,6 +61,9 @@ private:
   QScopedArrayPointer<float> m_fft; ///< FFT data array.
   QScopedArrayPointer<float> m_samples; ///< Sample data array.
   QFourierTransformer m_transformer;    ///< Fourier transformer for FFT.
+
+  // EMA filter for sampling rate calculation
+  float m_smoothedSamplingRate = 0.0f;
 };
 
 } // namespace Widgets
