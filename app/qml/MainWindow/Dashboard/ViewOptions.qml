@@ -255,6 +255,7 @@ Widgets.Pane {
           // Groups
           //
           ViewOptionsDelegate {
+            colorfulSwitches: false
             title: qsTr("Data Grids")
             count: Cpp_UI_Dashboard.datagridCount
             titles: Cpp_UI_Dashboard.datagridTitles
@@ -266,6 +267,7 @@ Widgets.Pane {
           // Multiplots
           //
           ViewOptionsDelegate {
+            colorfulSwitches: false
             title: qsTr("Multiple Data Plots")
             count: Cpp_UI_Dashboard.multiPlotCount
             titles: Cpp_UI_Dashboard.multiPlotTitles
@@ -277,6 +279,7 @@ Widgets.Pane {
           // LEDs
           //
           ViewOptionsDelegate {
+            colorfulSwitches: false
             title: qsTr("LED Panels")
             count: Cpp_UI_Dashboard.ledCount
             titles: Cpp_UI_Dashboard.ledTitles
@@ -343,6 +346,7 @@ Widgets.Pane {
           // Gyroscopes
           //
           ViewOptionsDelegate {
+            colorfulSwitches: false
             title: qsTr("Gyroscopes")
             count: Cpp_UI_Dashboard.gyroscopeCount
             titles: Cpp_UI_Dashboard.gyroscopeTitles
@@ -354,6 +358,7 @@ Widgets.Pane {
           // Accelerometers
           //
           ViewOptionsDelegate {
+            colorfulSwitches: false
             title: qsTr("Accelerometers")
             count: Cpp_UI_Dashboard.accelerometerCount
             titles: Cpp_UI_Dashboard.accelerometerTitles
@@ -366,6 +371,7 @@ Widgets.Pane {
           //
           ViewOptionsDelegate {
             title: qsTr("GPS")
+            colorfulSwitches: false
             count: Cpp_UI_Dashboard.gpsCount
             titles: Cpp_UI_Dashboard.gpsTitles
             icon: "qrc:/rcc/icons/dashboard/gps.svg"

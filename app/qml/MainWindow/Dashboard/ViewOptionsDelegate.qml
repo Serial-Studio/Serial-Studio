@@ -11,6 +11,8 @@ ColumnLayout {
   property var titles:[""]
   property string icon: ""
   property string title: ""
+  property bool colorfulSwitches: true
+  readonly property var widgetColors: Cpp_ThemeManager.colors["widget_colors"]
 
   signal checkedChanged(var index, var checked)
 
@@ -56,7 +58,7 @@ ColumnLayout {
       Layout.rightMargin: -6
       icon.color: "transparent"
       icon.source: !checked ? "qrc:/rcc/icons/dashboard/show-all.svg" :
-                             "qrc:/rcc/icons/dashboard/hide-all.svg"
+                              "qrc:/rcc/icons/dashboard/hide-all.svg"
       onCheckedChanged: {
         for (var i = 0; i < root.count; ++i)
           root.checkedChanged(i, !checked)
@@ -73,7 +75,9 @@ ColumnLayout {
       text: root.titles[index]
       Layout.maximumHeight: 24
       onCheckedChanged: root.checkedChanged(index, checked)
-      palette.highlight: Cpp_ThemeManager.colors["view_switch"]
+      palette.highlight: root.colorfulSwitches ?
+                           root.widgetColors[index % root.widgetColors.length] :
+                           Cpp_ThemeManager.colors["view_switch"]
     }
   }
 
