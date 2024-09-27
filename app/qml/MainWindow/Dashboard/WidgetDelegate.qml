@@ -93,18 +93,34 @@ Widgets.Pane {
       minimumWidth: 640 / 2
       minimumHeight: 480 / 2
       title: widget.widgetTitle
+
+      //
+      // Make window stay on top
+      //
       Component.onCompleted: {
-        root.flags = Qt.Dialog |
+        window.flags = Qt.Dialog |
             Qt.WindowTitleHint |
             Qt.WindowStaysOnTopHint |
             Qt.WindowCloseButtonHint
-
-        Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["widget_base"])
       }
 
+      //
+      // Destroy widget on close
+      //
       onClosing: {
         Cpp_NativeWindow.removeWindow(window)
         windowLoader.active = false
+      }
+
+      //
+      // Native window registration
+      //
+      property real titlebarHeight: 0
+      onVisibleChanged: {
+        if (visible) {
+          Cpp_NativeWindow.addWindow(window, Cpp_ThemeManager.colors["widget_base"])
+          window.titlebarHeight = Cpp_NativeWindow.titlebarHeight(window)
+        }
       }
 
       //
@@ -130,9 +146,9 @@ Widgets.Pane {
         //
         Label {
           text: window.title
+          visible: window.titlebarHeight > 0
           color: Cpp_ThemeManager.colors["text"]
           font: Cpp_Misc_CommonFonts.customUiFont(13, true)
-          visible: Cpp_NativeWindow.titlebarHeight(window) > 0
 
           anchors {
             topMargin: 6
@@ -151,7 +167,7 @@ Widgets.Pane {
         anchors.fill: parent
         visible: window.visible
         widgetIndex: root.widgetIndex
-        anchors.topMargin: Cpp_NativeWindow.titlebarHeight(window)
+        anchors.topMargin: window.titlebarHeight
 
         Loader {
           anchors.fill: parent
