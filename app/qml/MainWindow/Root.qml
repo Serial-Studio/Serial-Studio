@@ -63,14 +63,14 @@ Window {
   // Obtain document title
   //
   function updateDocumentTitle() {
-    if (Cpp_JSON_Generator.operationMode == JsonGenerator.DeviceSendsJSON)
+    if (Cpp_JSON_FrameBuilder.operationMode == JsonGenerator.DeviceSendsJSON)
       documentTitle = qsTr("Device Defined Project")
 
-    else if (Cpp_JSON_Generator.operationMode == JsonGenerator.CommaSeparatedValues)
+    else if (Cpp_JSON_FrameBuilder.operationMode == JsonGenerator.CommaSeparatedValues)
       documentTitle = qsTr("Quick Plot Mode")
 
-    else if (Cpp_JSON_Generator.jsonMapFilename.length > 0)
-      documentTitle = Cpp_Project_Model.title
+    else if (Cpp_JSON_FrameBuilder.jsonMapFilename.length > 0)
+      documentTitle = Cpp_JSON_ProjectModel.title
 
     else
       documentTitle = qsTr("Empty Project")
@@ -129,7 +129,7 @@ Window {
   // Update document title automatically
   //
   Connections {
-    target: Cpp_JSON_Generator
+    target: Cpp_JSON_FrameBuilder
     function onOperationModeChanged() {
       updateDocumentTitle()
     }

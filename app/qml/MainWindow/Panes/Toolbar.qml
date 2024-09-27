@@ -139,7 +139,7 @@ ToolBar {
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showProjectEditor()
       icon.source: "qrc:/rcc/icons/toolbar/project-setup.svg"
-      enabled: Cpp_JSON_Generator.operationMode == JsonGenerator.ProjectFile
+      enabled: Cpp_JSON_FrameBuilder.operationMode == JsonGenerator.ProjectFile
     }
 
     //

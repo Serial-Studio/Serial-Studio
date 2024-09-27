@@ -31,10 +31,9 @@
 
 #include "JSON/Group.h"
 #include "JSON/Dataset.h"
-#include "JSON/Generator.h"
-
-#include "Project/Model.h"
-#include "Project/FrameParser.h"
+#include "JSON/FrameParser.h"
+#include "JSON/ProjectModel.h"
+#include "JSON/FrameBuilder.h"
 
 #include "IO/Manager.h"
 #include "IO/Console.h"
@@ -195,9 +194,9 @@ void Misc::ModuleManager::configureUpdater()
 void Misc::ModuleManager::registerQmlTypes()
 {
   qmlRegisterType<Widgets::Terminal>("SerialStudio", 1, 0, "Terminal");
-  qmlRegisterType<Project::Model>("SerialStudio", 1, 0, "ProjectModel");
-  qmlRegisterType<JSON::Generator>("SerialStudio", 1, 0, "JsonGenerator");
-  qmlRegisterType<Project::FrameParser>("SerialStudio", 1, 0, "FrameParser");
+  qmlRegisterType<JSON::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
+  qmlRegisterType<JSON::FrameBuilder>("SerialStudio", 1, 0, "JsonGenerator");
+  qmlRegisterType<JSON::FrameParser>("SerialStudio", 1, 0, "FrameParser");
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
 }
 
@@ -214,13 +213,13 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto ioConsole = &IO::Console::instance();
   auto mqttClient = &MQTT::Client::instance();
   auto uiDashboard = &UI::Dashboard::instance();
-  auto projectModel = &Project::Model::instance();
   auto ioSerial = &IO::Drivers::Serial::instance();
-  auto jsonGenerator = &JSON::Generator::instance();
   auto pluginsBridge = &Plugins::Server::instance();
   auto miscUtilities = &Misc::Utilities::instance();
   auto ioNetwork = &IO::Drivers::Network::instance();
+  auto frameBuilder = &JSON::FrameBuilder::instance();
   auto miscTranslator = &Misc::Translator::instance();
+  auto projectModel = &JSON::ProjectModel::instance();
   auto miscTimerEvents = &Misc::TimerEvents::instance();
   auto miscCommonFonts = &Misc::CommonFonts::instance();
   auto miscThemeManager = &Misc::ThemeManager::instance();
@@ -247,14 +246,14 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_Network", ioNetwork);
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);
   c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
-  c->setContextProperty("Cpp_Project_Model", projectModel);
   c->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
-  c->setContextProperty("Cpp_JSON_Generator", jsonGenerator);
   c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
   c->setContextProperty("Cpp_Misc_Utilities", miscUtilities);
   c->setContextProperty("Cpp_IO_Bluetooth_LE", ioBluetoothLE);
   c->setContextProperty("Cpp_ThemeManager", miscThemeManager);
   c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
+  c->setContextProperty("Cpp_JSON_ProjectModel", projectModel);
+  c->setContextProperty("Cpp_JSON_FrameBuilder", frameBuilder);
   c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
   c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());

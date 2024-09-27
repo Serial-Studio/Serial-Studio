@@ -53,7 +53,7 @@ namespace JSON
  * 9) UI dashboard updates the widgets with the C++ model provided by this
  * class.
  */
-class Generator;
+class FrameBuilder;
 class Frame
 {
 public:
@@ -66,15 +66,24 @@ public:
   [[nodiscard]] bool read(const QJsonObject &object);
 
   [[nodiscard]] int groupCount() const;
+
   [[nodiscard]] const QString &title() const;
+  [[nodiscard]] const QString &frameEnd() const;
+  [[nodiscard]] const QString &separator() const;
+  [[nodiscard]] const QString &frameStart() const;
+
   [[nodiscard]] const QVector<Group> &groups() const;
   [[nodiscard]] const QVector<Action> &actions() const;
 
 private:
   QString m_title;
+  QString m_frameEnd;
+  QString m_separator;
+  QString m_frameStart;
+
   QVector<Group> m_groups;
   QVector<Action> m_actions;
 
-  friend class JSON::Generator;
+  friend class JSON::FrameBuilder;
 };
 } // namespace JSON

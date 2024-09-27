@@ -31,8 +31,8 @@ Widgets.Pane {
   id: root
   implicitWidth: 0
   implicitHeight: 0
-  icon: Cpp_Project_Model.selectedIcon
-  title: Cpp_Project_Model.selectedText
+  icon: Cpp_JSON_ProjectModel.selectedIcon
+  title: Cpp_JSON_ProjectModel.selectedText
 
   //
   // User interface elements
@@ -107,12 +107,12 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
-          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetPlot
+          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetPlot
           onClicked: {
             const option = ProjectModel.DatasetPlot
-            const value = Cpp_Project_Model.datasetOptions & option
+            const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
-              Cpp_Project_Model.changeDatasetOption(option, checked)
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
           }
         }
 
@@ -128,12 +128,12 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
-          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetFFT
+          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetFFT
           onClicked: {
             const option = ProjectModel.DatasetFFT
-            const value = Cpp_Project_Model.datasetOptions & option
+            const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
-              Cpp_Project_Model.changeDatasetOption(option, checked)
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
           }
         }
 
@@ -147,15 +147,15 @@ Widgets.Pane {
           toolbarButton: false
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_Project_Model.currentDatasetIsEditable
+          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
-          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetBar
+          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetBar
           onClicked: {
             const option = ProjectModel.DatasetBar
-            const value = Cpp_Project_Model.datasetOptions & option
+            const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
-              Cpp_Project_Model.changeDatasetOption(option, checked)
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
           }
         }
 
@@ -169,15 +169,15 @@ Widgets.Pane {
           text: qsTr("Gauge")
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_Project_Model.currentDatasetIsEditable
+          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
-          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetGauge
+          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetGauge
           onClicked: {
             const option = ProjectModel.DatasetGauge
-            const value = Cpp_Project_Model.datasetOptions & option
+            const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
-              Cpp_Project_Model.changeDatasetOption(option, checked)
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
           }
         }
 
@@ -191,15 +191,15 @@ Widgets.Pane {
           toolbarButton: false
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_Project_Model.currentDatasetIsEditable
+          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
-          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetCompass
+          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetCompass
           onClicked: {
             const option = ProjectModel.DatasetCompass
-            const value = Cpp_Project_Model.datasetOptions & option
+            const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
-              Cpp_Project_Model.changeDatasetOption(option, checked)
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
           }
         }
 
@@ -215,12 +215,12 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
-          checked: Cpp_Project_Model.datasetOptions & ProjectModel.DatasetLED
+          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetLED
           onClicked: {
             const option = ProjectModel.DatasetLED
-            const value = Cpp_Project_Model.datasetOptions & option
+            const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
-              Cpp_Project_Model.changeDatasetOption(option, checked)
+              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
           }
         }
 
@@ -239,8 +239,8 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_Project_Model.currentDatasetIsEditable
-          onClicked: Cpp_Project_Model.duplicateCurrentDataset()
+          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
+          onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
         }
@@ -253,8 +253,8 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
-          enabled: Cpp_Project_Model.currentDatasetIsEditable
-          onClicked: Cpp_Project_Model.deleteCurrentDataset()
+          enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
+          onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
         }
@@ -278,7 +278,7 @@ Widgets.Pane {
     TableDelegate {
       anchors.fill: parent
       anchors.topMargin: header.height
-      modelPointer: Cpp_Project_Model.datasetModel
+      modelPointer: Cpp_JSON_ProjectModel.datasetModel
     }
   }
 }

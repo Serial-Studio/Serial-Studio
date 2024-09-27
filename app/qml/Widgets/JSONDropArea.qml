@@ -67,8 +67,8 @@ DropArea {
 
     // Process JSON files
     if (cleanPath.endsWith(".json")) {
-      Cpp_JSON_Generator.operationMode = JsonGenerator.ProjectFile
-      Cpp_JSON_Generator.loadJsonMap(cleanPath)
+      Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.ProjectFile
+      Cpp_JSON_FrameBuilder.loadJsonMap(cleanPath)
     }
 
     // Process CSV files

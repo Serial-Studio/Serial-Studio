@@ -31,8 +31,8 @@ Widgets.Pane {
   id: root
   implicitWidth: 0
   implicitHeight: 0
-  icon: Cpp_Project_Model.selectedIcon
-  title: Cpp_Project_Model.selectedText
+  icon: Cpp_JSON_ProjectModel.selectedIcon
+  title: Cpp_JSON_ProjectModel.selectedText
 
   //
   // User interface elements
@@ -104,9 +104,9 @@ Widgets.Pane {
           text: qsTr("Change Icon")
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-          icon.source: "qrc:/rcc/actions/" + Cpp_Project_Model.actionIcon + ".svg"
+          icon.source: "qrc:/rcc/actions/" + Cpp_JSON_ProjectModel.actionIcon + ".svg"
           onClicked: {
-            actionIconPicker.selectedIcon = Cpp_Project_Model.actionIcon
+            actionIconPicker.selectedIcon = Cpp_JSON_ProjectModel.actionIcon
             actionIconPicker.showNormal()
           }
         }
@@ -126,7 +126,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
-          onClicked: Cpp_Project_Model.duplicateCurrentAction()
+          onClicked: Cpp_JSON_ProjectModel.duplicateCurrentAction()
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
         }
@@ -139,7 +139,7 @@ Widgets.Pane {
           icon.height: 24
           text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
-          onClicked: Cpp_Project_Model.deleteCurrentAction()
+          onClicked: Cpp_JSON_ProjectModel.deleteCurrentAction()
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
         }
@@ -164,7 +164,7 @@ Widgets.Pane {
       id: delegate
       anchors.fill: parent
       anchors.topMargin: header.height
-      modelPointer: Cpp_Project_Model.actionModel
+      modelPointer: Cpp_JSON_ProjectModel.actionModel
 
       footerItem: ColumnLayout {
         spacing: 0

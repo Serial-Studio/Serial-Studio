@@ -29,7 +29,7 @@
 #include <QStandardItemModel>
 #include <QItemSelectionModel>
 
-namespace Project
+namespace JSON
 {
 class CustomModel;
 
@@ -61,7 +61,7 @@ class CustomModel;
  * the tree view for project navigation and data parsing mechanisms for frame
  * analysis.
  */
-class Model : public QObject
+class ProjectModel : public QObject
 {
   // clang-format off
   Q_OBJECT
@@ -140,14 +140,14 @@ signals:
   void thunderforestApyKeyChanged();
 
 private:
-  explicit Model();
-  Model(Model &&) = delete;
-  Model(const Model &) = delete;
-  Model &operator=(Model &&) = delete;
-  Model &operator=(const Model &) = delete;
+  explicit ProjectModel();
+  ProjectModel(ProjectModel &&) = delete;
+  ProjectModel(const ProjectModel &) = delete;
+  ProjectModel &operator=(ProjectModel &&) = delete;
+  ProjectModel &operator=(const ProjectModel &) = delete;
 
 public:
-  static Model &instance();
+  static ProjectModel &instance();
 
   /**
    * @brief Enum representing the different views available in the project
@@ -395,19 +395,20 @@ public:
   {
     QHash<int, QByteArray> names;
 #define BAL(x) QByteArrayLiteral(x)
-    names.insert(Model::TreeViewIcon, BAL("treeViewIcon"));
-    names.insert(Model::TreeViewText, BAL("treeViewText"));
-    names.insert(Model::TreeViewExpanded, BAL("treeViewExpanded"));
-    names.insert(Model::TreeViewFrameIndex, BAL("treeViewFrameIndex"));
-    names.insert(Model::ParameterName, BAL("parameterName"));
-    names.insert(Model::EditableValue, BAL("editableValue"));
-    names.insert(Model::ParameterType, BAL("parameterType"));
-    names.insert(Model::PlaceholderValue, BAL("placeholderValue"));
-    names.insert(Model::ParameterDescription, BAL("parameterDescription"));
-    names.insert(Model::WidgetType, BAL("widgetType"));
-    names.insert(Model::ComboBoxData, BAL("comboBoxData"));
+    names.insert(ProjectModel::TreeViewIcon, BAL("treeViewIcon"));
+    names.insert(ProjectModel::TreeViewText, BAL("treeViewText"));
+    names.insert(ProjectModel::TreeViewExpanded, BAL("treeViewExpanded"));
+    names.insert(ProjectModel::TreeViewFrameIndex, BAL("treeViewFrameIndex"));
+    names.insert(ProjectModel::ParameterName, BAL("parameterName"));
+    names.insert(ProjectModel::EditableValue, BAL("editableValue"));
+    names.insert(ProjectModel::ParameterType, BAL("parameterType"));
+    names.insert(ProjectModel::PlaceholderValue, BAL("placeholderValue"));
+    names.insert(ProjectModel::ParameterDescription,
+                 BAL("parameterDescription"));
+    names.insert(ProjectModel::WidgetType, BAL("widgetType"));
+    names.insert(ProjectModel::ComboBoxData, BAL("comboBoxData"));
 #undef BAL
     return names;
   }
 };
-} // namespace Project
+} // namespace JSON

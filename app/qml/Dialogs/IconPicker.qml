@@ -114,7 +114,7 @@ Window {
           cellHeight: 48
           anchors.margins: 4
           anchors.fill: parent
-          model: Cpp_Project_Model.availableActionIcons
+          model: Cpp_JSON_ProjectModel.availableActionIcons
           ScrollBar.vertical: ScrollBar {}
 
           delegate: Item {

@@ -25,13 +25,14 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 
-#include "Model.h"
-#include "FrameParser.h"
+#include "JSON/FrameParser.h"
+#include "JSON/ProjectModel.h"
+
 #include "Misc/Utilities.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 
-Project::FrameParser::FrameParser(QQuickItem *parent)
+JSON::FrameParser::FrameParser(QQuickItem *parent)
   : UI::DeclarativeWidget(parent)
 {
   // Set widget
@@ -54,22 +55,23 @@ Project::FrameParser::FrameParser(QQuickItem *parent)
   // Set widget palette
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Project::FrameParser::onThemeChanged);
+          this, &JSON::FrameParser::onThemeChanged);
 
   // Connect modification check signals
   connect(m_textEdit.document(), &QTextDocument::modificationChanged, this,
           [=] { Q_EMIT modifiedChanged(); });
 
   // Load code from JSON model automatically
-  connect(&Project::Model::instance(), &Model::frameParserCodeChanged, this,
-          &Project::FrameParser::readCode);
+  connect(&JSON::ProjectModel::instance(),
+          &ProjectModel::frameParserCodeChanged, this,
+          &JSON::FrameParser::readCode);
 
   // Bridge signals
   connect(&m_textEdit, &QPlainTextEdit::textChanged, this,
-          &Project::FrameParser::textChanged);
+          &JSON::FrameParser::textChanged);
 }
 
-const QString &Project::FrameParser::defaultCode()
+const QString &JSON::FrameParser::defaultCode()
 {
   static QString code;
   if (code.isEmpty())
@@ -85,18 +87,18 @@ const QString &Project::FrameParser::defaultCode()
   return code;
 }
 
-QString Project::FrameParser::text() const
+QString JSON::FrameParser::text() const
 {
   return m_textEdit.document()->toPlainText();
 }
 
-bool Project::FrameParser::isModified() const
+bool JSON::FrameParser::isModified() const
 {
   return m_textEdit.document()->isModified();
 }
 
-QStringList Project::FrameParser::parse(const QString &frame,
-                                        const QString &separator)
+QStringList JSON::FrameParser::parse(const QString &frame,
+                                     const QString &separator)
 {
   // Construct function arguments
   QJSValueList args;
@@ -114,34 +116,34 @@ QStringList Project::FrameParser::parse(const QString &frame,
   return list;
 }
 
-void Project::FrameParser::cut()
+void JSON::FrameParser::cut()
 {
   m_textEdit.cut();
 }
 
-void Project::FrameParser::undo()
+void JSON::FrameParser::undo()
 {
   m_textEdit.undo();
 }
 
-void Project::FrameParser::redo()
+void JSON::FrameParser::redo()
 {
   m_textEdit.redo();
 }
 
-void Project::FrameParser::help()
+void JSON::FrameParser::help()
 { // clang-format off
   const auto url = QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki");
   QDesktopServices::openUrl(QUrl(url));
   // clang-format on
 }
 
-void Project::FrameParser::copy()
+void JSON::FrameParser::copy()
 {
   m_textEdit.copy();
 }
 
-void Project::FrameParser::paste()
+void JSON::FrameParser::paste()
 {
   if (m_textEdit.canPaste())
   {
@@ -150,12 +152,12 @@ void Project::FrameParser::paste()
   }
 }
 
-void Project::FrameParser::apply()
+void JSON::FrameParser::apply()
 {
   save(true);
 }
 
-void Project::FrameParser::reload()
+void JSON::FrameParser::reload()
 {
   // Document has been modified, ask user if he/she wants to continue
   if (m_textEdit.document()->isModified())
@@ -173,7 +175,7 @@ void Project::FrameParser::reload()
   save(true);
 }
 
-void Project::FrameParser::import()
+void JSON::FrameParser::import()
 {
   // Document has been modified, ask user if he/she wants to continue
   if (m_textEdit.document()->isModified())
@@ -204,12 +206,12 @@ void Project::FrameParser::import()
   }
 }
 
-void Project::FrameParser::selectAll()
+void JSON::FrameParser::selectAll()
 {
   m_textEdit.selectAll();
 }
 
-void Project::FrameParser::onThemeChanged()
+void JSON::FrameParser::onThemeChanged()
 {
   QPalette palette;
   auto theme = &Misc::ThemeManager::instance();
@@ -225,13 +227,13 @@ void Project::FrameParser::onThemeChanged()
   m_textEdit.setPalette(palette);
 }
 
-bool Project::FrameParser::save(const bool silent)
+bool JSON::FrameParser::save(const bool silent)
 {
   // Update text edit
   if (loadScript(m_textEdit.toPlainText()))
   {
     m_textEdit.document()->setModified(false);
-    Model::instance().setFrameParserCode(m_textEdit.toPlainText());
+    ProjectModel::instance().setFrameParserCode(m_textEdit.toPlainText());
 
     // Show save messagebox
     if (!silent)
@@ -247,7 +249,7 @@ bool Project::FrameParser::save(const bool silent)
   return false;
 }
 
-bool Project::FrameParser::loadScript(const QString &script)
+bool JSON::FrameParser::loadScript(const QString &script)
 {
   // Ensure that engine is configured correctly
   m_engine.installExtensions(QJSEngine::ConsoleExtension
@@ -322,9 +324,9 @@ bool Project::FrameParser::loadScript(const QString &script)
   return true;
 }
 
-void Project::FrameParser::readCode()
+void JSON::FrameParser::readCode()
 {
-  m_textEdit.setPlainText(Model::instance().frameParserCode());
+  m_textEdit.setPlainText(ProjectModel::instance().frameParserCode());
   m_textEdit.document()->setModified(false);
   loadScript(m_textEdit.toPlainText());
 }

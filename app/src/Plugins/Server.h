@@ -84,13 +84,13 @@ private slots:
   void acceptConnection();
   void sendProcessedData();
   void sendRawData(const QByteArray &data);
-  void registerFrame(const QJsonObject &json);
+  void registerFrame(const JSON::Frame &frame);
   void onErrorOccurred(const QAbstractSocket::SocketError socketError);
 
 private:
   bool m_enabled;
   QTcpServer m_server;
-  QVector<QJsonObject> m_frames;
+  QVector<JSON::Frame> m_frames;
   QVector<QTcpSocket *> m_sockets;
 };
 } // namespace Plugins

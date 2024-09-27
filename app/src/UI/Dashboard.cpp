@@ -23,7 +23,7 @@
 #include "IO/Manager.h"
 #include "CSV/Player.h"
 #include "UI/Dashboard.h"
-#include "JSON/Generator.h"
+#include "JSON/FrameBuilder.h"
 #include "Misc/CommonFonts.h"
 
 //------------------------------------------------------------------------------
@@ -41,10 +41,11 @@ UI::Dashboard::Dashboard()
           &UI::Dashboard::resetData);
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &UI::Dashboard::resetData);
-  connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged, this,
-          &UI::Dashboard::processLatestJSON);
-  connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
-          this, &UI::Dashboard::resetData);
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
+          this, &UI::Dashboard::processFrame);
+  connect(&JSON::FrameBuilder::instance(),
+          &JSON::FrameBuilder::jsonFileMapChanged, this,
+          &UI::Dashboard::resetData);
 }
 
 /**
@@ -763,7 +764,7 @@ void UI::Dashboard::updatePlots()
 /**
  * Regenerates the data displayed on the dashboard widgets
  */
-void UI::Dashboard::processLatestJSON(const QJsonObject &json)
+void UI::Dashboard::processFrame(const JSON::Frame &frame)
 {
   // Save widget count
   const int barC = barCount();
@@ -782,8 +783,11 @@ void UI::Dashboard::processLatestJSON(const QJsonObject &json)
   auto pTitle = title();
 
   // Try to read latest frame for widget updating
-  if (!m_currentFrame.read(json))
+  if (!frame.isValid())
     return;
+
+  // Copy frame data
+  m_currentFrame = frame;
 
   // Regenerate plot data
   updatePlots();

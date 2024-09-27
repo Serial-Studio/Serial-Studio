@@ -28,9 +28,9 @@ import SerialStudio as SerialStudio
 import "../../Widgets" as Widgets
 
 Widgets.Pane {
-  icon: Cpp_Project_Model.selectedIcon
-  title: Cpp_Project_Model.selectedText
-  Component.onCompleted: Cpp_JSON_Generator.setFrameParser(frameParser)
+  icon: Cpp_JSON_ProjectModel.selectedIcon
+  title: Cpp_JSON_ProjectModel.selectedText
+  Component.onCompleted: Cpp_JSON_FrameBuilder.setFrameParser(frameParser)
 
   //
   // Super important to allow the user to type on a C++ widget from QML

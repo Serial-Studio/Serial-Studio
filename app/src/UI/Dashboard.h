@@ -286,7 +286,7 @@ public slots:
 
 private slots:
   void updatePlots();
-  void processLatestJSON(const QJsonObject &json);
+  void processFrame(const JSON::Frame &frame);
 
 private:
   QVector<JSON::Group> getLEDWidgets();

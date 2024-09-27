@@ -31,34 +31,22 @@
 #include <QJsonDocument>
 
 #include <JSON/Frame.h>
-#include <Project/FrameParser.h>
+#include <JSON/FrameParser.h>
 
 namespace JSON
 {
 /**
- * @brief The Generator class
+ * @brief The FrameBuilder class
  *
- * The JSON generator class receives raw frame data from the I/O manager
- * class and generates a JSON file that represents the project title,
+ * The JSON frame builder class receives raw frame data from the I/O manager
+ * class and generates a frame object that represents the project title,
  * the groups that compose the project and the datasets that compose each
  * group.
  *
- * As described in the documentation of the @c Frame class, the process
- * of receiving data and generating the Serial Studio user interface is:
- * 1) Physical device sends data
- * 2) I/O driver receives data
- * 3) I/O manager processes the data and separates the frames
- * 4) JSON generator creates a JSON file with the data contained in each frame.
- * 5) UI dashboard class receives the JSON file.
- * 6) TimerEvents class notifies the UI dashboard that the user interface should
- *    be re-generated.
- * 7) UI dashboard feeds JSON data to a @c Frame object.
- * 8) The @c Frame object creates a model of the JSON data with the values of
- *    the latest received frame.
- * 9) UI dashboard updates the widgets with the C++ model provided by this
- * class.
+ * This frame is later shared with the rest of the modules, and is updated
+ * automatically with new incoming raw data.
  */
-class Generator : public QObject
+class FrameBuilder : public QObject
 {
   // clang-format off
   Q_OBJECT
@@ -77,14 +65,14 @@ class Generator : public QObject
 signals:
   void jsonFileMapChanged();
   void operationModeChanged();
-  void jsonChanged(const QJsonObject &json);
+  void frameChanged(const JSON::Frame &frame);
 
 private:
-  explicit Generator();
-  Generator(Generator &&) = delete;
-  Generator(const Generator &) = delete;
-  Generator &operator=(Generator &&) = delete;
-  Generator &operator=(const Generator &) = delete;
+  explicit FrameBuilder();
+  FrameBuilder(FrameBuilder &&) = delete;
+  FrameBuilder(const FrameBuilder &) = delete;
+  FrameBuilder &operator=(FrameBuilder &&) = delete;
+  FrameBuilder &operator=(const FrameBuilder &) = delete;
 
 public:
   enum OperationMode
@@ -95,18 +83,17 @@ public:
   };
   Q_ENUM(OperationMode)
 
-  static Generator &instance();
+  static FrameBuilder &instance();
 
-  [[nodiscard]] QString jsonMapFilename() const;
   [[nodiscard]] QString jsonMapFilepath() const;
-  [[nodiscard]] const QJsonObject &json() const;
+  [[nodiscard]] QString jsonMapFilename() const;
   [[nodiscard]] OperationMode operationMode() const;
 
 public slots:
   void loadJsonMap();
   void loadJsonMap(const QString &path);
-  void setFrameParser(Project::FrameParser *editor);
-  void setOperationMode(const JSON::Generator::OperationMode mode);
+  void setFrameParser(JSON::FrameParser *editor);
+  void setOperationMode(const JSON::FrameBuilder::OperationMode mode);
 
 public slots:
   void setJsonPathSetting(const QString &path);
@@ -116,10 +103,9 @@ private slots:
 
 private:
   QFile m_jsonMap;
-  QJsonObject m_json;
+  JSON::Frame m_frame;
   QSettings m_settings;
   OperationMode m_opMode;
-  QJsonParseError m_error;
-  Project::FrameParser *m_frameParser;
+  JSON::FrameParser *m_frameParser;
 };
 } // namespace JSON

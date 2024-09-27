@@ -357,11 +357,24 @@ void CSV::Player::updateData()
       // No error, calculate difference & schedule update
       if (!error)
       {
-        const auto format = QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz");
-        const auto currDateTime = QDateTime::fromString(currTime, format);
-        const auto nextDateTime = QDateTime::fromString(nextTime, format);
+        // Define possible date/time formats
+        const auto formatA = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
+        const auto formatB = QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz");
+
+        // Get date/time for current row
+        auto currDateTime = QDateTime::fromString(currTime, formatA);
+        if (!currDateTime.isValid())
+          currDateTime = QDateTime::fromString(currTime, formatB);
+
+        // Get date/time for next row
+        auto nextDateTime = QDateTime::fromString(nextTime, formatA);
+        if (!nextDateTime.isValid())
+          nextDateTime = QDateTime::fromString(nextTime, formatB);
+
+        // Obtain millis between the two frames
         const auto msecsToNextF = currDateTime.msecsTo(nextDateTime);
 
+        // Jump to next frame
         QTimer::singleShot(msecsToNextF, Qt::PreciseTimer, this,
                            SLOT(nextFrame()));
       }

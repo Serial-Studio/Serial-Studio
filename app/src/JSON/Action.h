@@ -26,9 +26,9 @@
 #include <QVariant>
 #include <QJsonObject>
 
-namespace Project
+namespace JSON
 {
-class Model;
+class ProjectModel;
 }
 
 namespace JSON
@@ -65,6 +65,6 @@ private:
   QString m_txData;
   QString m_eolSequence;
 
-  friend class Project::Model;
+  friend class JSON::ProjectModel;
 };
 } // namespace JSON

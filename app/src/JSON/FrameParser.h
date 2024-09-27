@@ -35,7 +35,7 @@
 
 #include <UI/DeclarativeWidget.h>
 
-namespace Project
+namespace JSON
 {
 class FrameParser : public UI::DeclarativeWidget
 {
@@ -86,4 +86,4 @@ private:
   QPlainTextEdit m_textEdit;
   QSourceHighlite::QSourceHighliter *m_highlighter;
 };
-} // namespace Project
+} // namespace JSON

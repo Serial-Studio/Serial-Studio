@@ -26,9 +26,9 @@
 #include <QVariant>
 #include <QJsonObject>
 
-namespace Project
+namespace JSON
 {
-class Model;
+class ProjectModel;
 }
 
 namespace JSON
@@ -68,7 +68,7 @@ namespace JSON
  *       field and the "title" field.
  */
 class Group;
-class Generator;
+class FrameBuilder;
 class Dataset
 {
 public:
@@ -121,7 +121,7 @@ private:
   int m_groupId;
   int m_datasetId;
 
-  friend class Project::Model;
-  friend class JSON::Generator;
+  friend class JSON::ProjectModel;
+  friend class JSON::FrameBuilder;
 };
 } // namespace JSON

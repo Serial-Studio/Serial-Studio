@@ -46,7 +46,7 @@ Item {
     id: mainWindow
     onClosing: (close) => {
                  close.accepted = false
-                 if (Cpp_Project_Model.askSave()) {
+                 if (Cpp_JSON_ProjectModel.askSave()) {
                    close.accepted = true
                    Qt.quit()
                  }

@@ -102,9 +102,9 @@ set(SOURCES
  src/IO/Checksum.cpp
  src/IO/Console.cpp
  src/IO/Manager.cpp
- src/Project/FrameParser.cpp
- src/Project/Model.cpp
- src/JSON/Generator.cpp
+ src/JSON/FrameParser.cpp
+ src/JSON/ProjectModel.cpp
+ src/JSON/FrameBuilder.cpp
  src/JSON/Frame.cpp
  src/JSON/Action.cpp
  src/JSON/Dataset.cpp
@@ -151,13 +151,13 @@ set(HEADERS
  src/IO/Manager.h
  src/IO/HAL_Driver.h
  src/IO/Checksum.h
- src/Project/FrameParser.h
- src/Project/Model.h
+ src/JSON/FrameParser.h
+ src/JSON/ProjectModel.h
  src/JSON/Frame.h
  src/JSON/Action.h
  src/JSON/Dataset.h
  src/JSON/Group.h
- src/JSON/Generator.h
+ src/JSON/FrameBuilder.h
  src/CSV/Export.h
  src/CSV/Player.h
  src/MQTT/Client.h

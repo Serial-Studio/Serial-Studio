@@ -30,9 +30,9 @@ Widgets.Pane {
   id: root
   implicitWidth: 0
   implicitHeight: 0
-  icon: Cpp_Project_Model.selectedIcon
-  title: Cpp_Project_Model.selectedText
-  Component.onCompleted: Cpp_Project_Model.buildProjectModel()
+  icon: Cpp_JSON_ProjectModel.selectedIcon
+  title: Cpp_JSON_ProjectModel.selectedText
+  Component.onCompleted: Cpp_JSON_ProjectModel.buildProjectModel()
 
   TableDelegate {
     id: delegate
@@ -41,7 +41,7 @@ Widgets.Pane {
     anchors.leftMargin: -10
     anchors.rightMargin: -10
     anchors.bottomMargin: -9
-    modelPointer: Cpp_Project_Model.projectModel
+    modelPointer: Cpp_JSON_ProjectModel.projectModel
 
     footerItem: ColumnLayout {
       spacing: 0

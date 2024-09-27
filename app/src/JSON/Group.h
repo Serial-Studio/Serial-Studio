@@ -30,9 +30,9 @@ namespace UI
 class Dashboard;
 }
 
-namespace Project
+namespace JSON
 {
-class Model;
+class ProjectModel;
 }
 
 namespace JSON
@@ -57,7 +57,7 @@ namespace JSON
  * - Widget
  * - A vector of datasets
  */
-class Generator;
+class FrameBuilder;
 class Group
 {
 public:
@@ -81,7 +81,7 @@ private:
   QVector<JSON::Dataset> m_datasets;
 
   friend class UI::Dashboard;
-  friend class Project::Model;
-  friend class JSON::Generator;
+  friend class JSON::ProjectModel;
+  friend class JSON::FrameBuilder;
 };
 } // namespace JSON

@@ -28,7 +28,7 @@
 #include "IO/Drivers/BluetoothLE.h"
 
 #include "MQTT/Client.h"
-#include "JSON/Generator.h"
+#include "JSON/FrameBuilder.h"
 #include "Misc/Translator.h"
 
 /**
@@ -438,7 +438,7 @@ void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
 void IO::Manager::readFrames()
 {
   // Obtain pointer to JSON generator
-  static auto *generator = &JSON::Generator::instance();
+  static auto *generator = &JSON::FrameBuilder::instance();
 
   // No device connected, abort
   if (!connected())
@@ -448,8 +448,8 @@ void IO::Manager::readFrames()
   const auto mode = generator->operationMode();
 
   // Read until start/finish combinations are not found
-  if (mode == JSON::Generator::ProjectFile
-      || mode == JSON::Generator::DeviceSendsJSON)
+  if (mode == JSON::FrameBuilder::ProjectFile
+      || mode == JSON::FrameBuilder::DeviceSendsJSON)
   {
     auto start = startSequence().toUtf8();
     auto finish = finishSequence().toUtf8();
@@ -508,7 +508,7 @@ void IO::Manager::readFrames()
   }
 
   // Handle data with line breaks (\n, \r, or \r\n)
-  else if (mode == JSON::Generator::CommaSeparatedValues)
+  else if (mode == JSON::FrameBuilder::CommaSeparatedValues)
   {
     // Set maximum frame size to 1 KB
     const int maxFrameSize = 1024;

@@ -53,9 +53,9 @@ Widgets.Pane {
       id: treeView
       focus: true
       reuseItems: false
-      model: Cpp_Project_Model.treeModel
+      model: Cpp_JSON_ProjectModel.treeModel
       boundsBehavior: TreeView.StopAtBounds
-      selectionModel: Cpp_Project_Model.selectionModel
+      selectionModel: Cpp_JSON_ProjectModel.selectionModel
 
       //
       // Keyboard navigation
@@ -77,10 +77,10 @@ Widgets.Pane {
 
                         // Delete current item
                         else if (event.key === Qt.Key_Delete) {
-                          if (Cpp_Project_Model.currentView === ProjectModel.DatasetView)
-                          Cpp_Project_Model.deleteCurrentDataset()
-                          else if (Cpp_Project_Model.currentView === ProjectModel.GroupView)
-                          Cpp_Project_Model.deleteCurrentGroup()
+                          if (Cpp_JSON_ProjectModel.currentView === ProjectModel.DatasetView)
+                          Cpp_JSON_ProjectModel.deleteCurrentDataset()
+                          else if (Cpp_JSON_ProjectModel.currentView === ProjectModel.GroupView)
+                          Cpp_JSON_ProjectModel.deleteCurrentGroup()
                         }
                       }
 

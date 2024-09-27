@@ -25,7 +25,7 @@
 #include <QJsonDocument>
 
 #include "IO/Manager.h"
-#include "JSON/Generator.h"
+#include "JSON/FrameBuilder.h"
 #include "Misc/Utilities.h"
 #include "Plugins/Server.h"
 #include "Misc/TimerEvents.h"
@@ -38,8 +38,8 @@ Plugins::Server::Server()
 {
 
   // Send processed data at 1 Hz
-  connect(&JSON::Generator::instance(), &JSON::Generator::jsonChanged, this,
-          &Plugins::Server::registerFrame);
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
+          this, &Plugins::Server::registerFrame);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Plugins::Server::sendProcessedData);
 
@@ -224,7 +224,7 @@ void Plugins::Server::sendProcessedData()
   {
     QJsonObject object;
     auto frame = m_frames.at(i);
-    object.insert(QStringLiteral("data"), frame);
+    object.insert(QStringLiteral("data"), frame.serialize());
     array.append(object);
   }
 
@@ -289,10 +289,10 @@ void Plugins::Server::sendRawData(const QByteArray &data)
  * Obtains the latest JSON dataframe & appends it to the JSON list, which is
  * later read and sent by the @c sendProcessedData() function.
  */
-void Plugins::Server::registerFrame(const QJsonObject &json)
+void Plugins::Server::registerFrame(const JSON::Frame &frame)
 {
   if (enabled())
-    m_frames.append(json);
+    m_frames.append(frame);
 }
 
 /**

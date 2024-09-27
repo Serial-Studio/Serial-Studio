@@ -122,7 +122,7 @@ ToolBar {
     Widgets.BigButton {
       text: qsTr("New")
       Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_Project_Model.newJsonFile()
+      onClicked: Cpp_JSON_ProjectModel.newJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/new.svg"
     }
 
@@ -143,7 +143,7 @@ ToolBar {
     Widgets.BigButton {
       text: qsTr("Open")
       Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_Project_Model.openJsonFile()
+      onClicked: Cpp_JSON_ProjectModel.openJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/open.svg"
     }
 
@@ -153,8 +153,8 @@ ToolBar {
     Widgets.BigButton {
       text: qsTr("Save")
       Layout.alignment: Qt.AlignVCenter
-      enabled: Cpp_Project_Model.modified
-      onClicked: Cpp_Project_Model.saveJsonFile()
+      enabled: Cpp_JSON_ProjectModel.modified
+      onClicked: Cpp_JSON_ProjectModel.saveJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
     }
 
@@ -175,7 +175,7 @@ ToolBar {
     Widgets.BigButton {
       text: qsTr("Action")
       Layout.alignment: Qt.AlignVCenter
-      onClicked: Cpp_Project_Model.addAction()
+      onClicked: Cpp_JSON_ProjectModel.addAction()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-action.svg"
     }
 
@@ -197,7 +197,7 @@ ToolBar {
       text: qsTr("Data Grid")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-datagrid.svg"
-      onClicked: Cpp_Project_Model.addGroup(qsTr("Data Grid"), ProjectModel.DataGrid)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), ProjectModel.DataGrid)
     }
 
     //
@@ -207,7 +207,7 @@ ToolBar {
       text: qsTr("Multiple Plots")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
-      onClicked: Cpp_Project_Model.addGroup(qsTr("Multiple Plot"), ProjectModel.MultiPlot)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), ProjectModel.MultiPlot)
     }
 
     //
@@ -217,7 +217,7 @@ ToolBar {
       text: qsTr("Accelerometer")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
-      onClicked: Cpp_Project_Model.addGroup(qsTr("Accelerometer"), ProjectModel.Accelerometer)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), ProjectModel.Accelerometer)
     }
 
     //
@@ -227,7 +227,7 @@ ToolBar {
       text: qsTr("Gyroscope")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
-      onClicked: Cpp_Project_Model.addGroup(qsTr("Gyroscope"), ProjectModel.Gyroscope)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), ProjectModel.Gyroscope)
     }
 
     //
@@ -237,7 +237,7 @@ ToolBar {
       text: qsTr("Map")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
-      onClicked: Cpp_Project_Model.addGroup(qsTr("GPS Map"), ProjectModel.GPS)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), ProjectModel.GPS)
     }
 
     //
@@ -247,7 +247,7 @@ ToolBar {
       text: qsTr("Container")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
-      onClicked: Cpp_Project_Model.addGroup(qsTr("Dataset Container"), ProjectModel.NoGroupWidget)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), ProjectModel.NoGroupWidget)
     }
 
     //

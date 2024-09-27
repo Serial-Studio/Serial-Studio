@@ -172,29 +172,29 @@ Widgets.Pane {
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("No Parsing (Device Sends JSON Data)")
-        checked: Cpp_JSON_Generator.operationMode === JsonGenerator.DeviceSendsJSON
+        checked: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.DeviceSendsJSON
         onCheckedChanged: {
           if (checked)
-            Cpp_JSON_Generator.operationMode = JsonGenerator.DeviceSendsJSON
+            Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.DeviceSendsJSON
         }
       } RadioButton {
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Quick Plot (Comma Separated Values)")
-        checked: Cpp_JSON_Generator.operationMode === JsonGenerator.CommaSeparatedValues
+        checked: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.CommaSeparatedValues
         onCheckedChanged: {
           if (checked)
-            Cpp_JSON_Generator.operationMode = JsonGenerator.CommaSeparatedValues
+            Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.CommaSeparatedValues
         }
       }
       RadioButton {
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Parse via JSON Project File")
-        checked: Cpp_JSON_Generator.operationMode === JsonGenerator.ProjectFile
+        checked: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.ProjectFile
         onCheckedChanged: {
           if (checked)
-            Cpp_JSON_Generator.operationMode = JsonGenerator.ProjectFile
+            Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.ProjectFile
         }
       }
 
@@ -205,10 +205,10 @@ Widgets.Pane {
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
-        onClicked: Cpp_JSON_Generator.loadJsonMap()
-        enabled: Cpp_JSON_Generator.operationMode === JsonGenerator.ProjectFile
-        text: (Cpp_JSON_Generator.jsonMapFilename.length ?
-                 qsTr("Change Project File (%1)").arg(Cpp_JSON_Generator.jsonMapFilename) :
+        onClicked: Cpp_JSON_FrameBuilder.loadJsonMap()
+        enabled: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.ProjectFile
+        text: (Cpp_JSON_FrameBuilder.jsonMapFilename.length ?
+                 qsTr("Change Project File (%1)").arg(Cpp_JSON_FrameBuilder.jsonMapFilename) :
                  qsTr("Select Project File") + "...")
       }
 

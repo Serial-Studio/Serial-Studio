@@ -40,12 +40,12 @@ Window {
   //
   minimumWidth: 970
   minimumHeight: 640
-  title: qsTr("%1 - Project Editor").arg(Cpp_Project_Model.title + (Cpp_Project_Model.modified ? " (" + qsTr("modified") + ")" : ""))
+  title: qsTr("%1 - Project Editor").arg(Cpp_JSON_ProjectModel.title + (Cpp_JSON_ProjectModel.modified ? " (" + qsTr("modified") + ")" : ""))
 
   //
   // Ask user to save changes when closing the dialog
   //
-  onClosing: (close) => close.accepted = Cpp_Project_Model.askSave()
+  onClosing: (close) => close.accepted = Cpp_JSON_ProjectModel.askSave()
 
   //
   // Ensure that current JSON file is shown
@@ -53,7 +53,7 @@ Window {
   onVisibleChanged: {
     if (visible) {
       Cpp_NativeWindow.addWindow(root)
-      Cpp_Project_Model.openJsonFile(Cpp_JSON_Generator.jsonMapFilepath)
+      Cpp_JSON_ProjectModel.openJsonFile(Cpp_JSON_FrameBuilder.jsonMapFilepath)
     }
 
     else
@@ -81,13 +81,13 @@ Window {
   //
   Shortcut {
     sequences: [StandardKey.Open]
-    onActivated: Cpp_Project_Model.openJsonFile()
+    onActivated: Cpp_JSON_ProjectModel.openJsonFile()
   } Shortcut {
     sequences: [StandardKey.New]
-    onActivated: Cpp_Project_Model.newJsonFile()
+    onActivated: Cpp_JSON_ProjectModel.newJsonFile()
   } Shortcut {
     sequences: [StandardKey.Save]
-    onActivated: Cpp_Project_Model.saveJsonFile()
+    onActivated: Cpp_JSON_ProjectModel.saveJsonFile()
   } Shortcut {
     sequences: [StandardKey.Close]
     onActivated: root.close()
@@ -175,7 +175,7 @@ Window {
         Views.ActionView {
           Layout.fillWidth: true
           Layout.fillHeight: true
-          visible: Cpp_Project_Model.currentView === ProjectModel.ActionView
+          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.ActionView
         }
 
         //
@@ -184,7 +184,7 @@ Window {
         Views.ProjectView {
           Layout.fillWidth: true
           Layout.fillHeight: true
-          visible: Cpp_Project_Model.currentView === ProjectModel.ProjectView
+          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.ProjectView
         }
 
         //
@@ -193,7 +193,7 @@ Window {
         Views.GroupView {
           Layout.fillWidth: true
           Layout.fillHeight: true
-          visible: Cpp_Project_Model.currentView === ProjectModel.GroupView
+          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.GroupView
         }
 
         //
@@ -202,7 +202,7 @@ Window {
         Views.DatasetView {
           Layout.fillWidth: true
           Layout.fillHeight: true
-          visible: Cpp_Project_Model.currentView === ProjectModel.DatasetView
+          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.DatasetView
         }
 
         //
@@ -211,7 +211,7 @@ Window {
         Views.FrameParserView {
           Layout.fillWidth: true
           Layout.fillHeight: true
-          visible: Cpp_Project_Model.currentView === ProjectModel.FrameParserView
+          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.FrameParserView
         }
       }
     }

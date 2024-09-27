@@ -20,9 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include "Model.h"
-#include "FrameParser.h"
-
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonArray>
@@ -32,9 +29,12 @@
 #include <QJsonDocument>
 
 #include "AppInfo.h"
-#include "JSON/Generator.h"
 #include "Misc/Utilities.h"
 #include "Misc/Translator.h"
+
+#include "JSON/FrameParser.h"
+#include "JSON/ProjectModel.h"
+#include "JSON/FrameBuilder.h"
 
 //------------------------------------------------------------------------------
 // Private enums to keep track of which item the user selected/modified
@@ -116,16 +116,16 @@ typedef enum
 //------------------------------------------------------------------------------
 
 /**
- * @brief Constructor for the Project::Model class.
+ * @brief Constructor for the JSON::ProjectModel class.
  *
- * Initializes the Model class by setting default values for member variables,
- * generating the necessary combo box models, and connecting signals to handle J
- * SON file changes.
+ * Initializes the ProjectModel class by setting default values for member
+ * variables, generating the necessary combo box models, and connecting signals
+ * to handle J SON file changes.
  *
  * This constructor also loads the current JSON map file into the model or
  * creates a new project if no file is present.
  */
-Project::Model::Model()
+JSON::ProjectModel::ProjectModel()
   : m_title("")
   , m_separator("")
   , m_frameParserCode("")
@@ -145,7 +145,7 @@ Project::Model::Model()
   generateComboBoxModels();
 
   // Clear selection model when JSON file is changed
-  connect(this, &Project::Model::jsonFileChanged, this, [=] {
+  connect(this, &JSON::ProjectModel::jsonFileChanged, this, [=] {
     if (m_selectionModel)
     {
       auto index = m_treeModel->index(0, 0);
@@ -155,16 +155,17 @@ Project::Model::Model()
   });
 
   // Ensure toolbar actions are synched with models
-  connect(this, &Project::Model::groupModelChanged, this,
-          &Project::Model::editableOptionsChanged);
-  connect(this, &Project::Model::datasetModelChanged, this,
-          &Project::Model::editableOptionsChanged);
-  connect(this, &Project::Model::datasetModelChanged, this,
-          &Project::Model::datasetOptionsChanged);
+  connect(this, &JSON::ProjectModel::groupModelChanged, this,
+          &JSON::ProjectModel::editableOptionsChanged);
+  connect(this, &JSON::ProjectModel::datasetModelChanged, this,
+          &JSON::ProjectModel::editableOptionsChanged);
+  connect(this, &JSON::ProjectModel::datasetModelChanged, this,
+          &JSON::ProjectModel::datasetOptionsChanged);
 
   // Re-load JSON map file into C++ model
-  connect(&JSON::Generator::instance(), &JSON::Generator::jsonFileMapChanged,
-          this, &Project::Model::onJsonLoaded);
+  connect(&JSON::FrameBuilder::instance(),
+          &JSON::FrameBuilder::jsonFileMapChanged, this,
+          &JSON::ProjectModel::onJsonLoaded);
 
   // Generate combo-boxes again when app is translated
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
@@ -192,7 +193,7 @@ Project::Model::Model()
           });
 
   // Load current JSON map file into C++ model
-  if (!JSON::Generator::instance().jsonMapFilepath().isEmpty())
+  if (!JSON::FrameBuilder::instance().jsonMapFilepath().isEmpty())
     onJsonLoaded();
 
   // Create a new project
@@ -201,13 +202,13 @@ Project::Model::Model()
 }
 
 /**
- * @brief Retrieves the singleton instance of the Project::Model class.
+ * @brief Retrieves the singleton instance of the JSON::ProjectModel class.
  *
- * @return Reference to the singleton instance of Project::Model.
+ * @return Reference to the singleton instance of JSON::ProjectModel.
  */
-Project::Model &Project::Model::instance()
+JSON::ProjectModel &JSON::ProjectModel::instance()
 {
-  static Model singleton;
+  static ProjectModel singleton;
   return singleton;
 }
 
@@ -222,7 +223,7 @@ Project::Model &Project::Model::instance()
  *
  * @return True if the document is modified, false otherwise.
  */
-bool Project::Model::modified() const
+bool JSON::ProjectModel::modified() const
 {
   return m_modified;
 }
@@ -235,7 +236,7 @@ bool Project::Model::modified() const
  *
  * @return The current view as a value from the CurrentView enum.
  */
-Project::Model::CurrentView Project::Model::currentView() const
+JSON::ProjectModel::CurrentView JSON::ProjectModel::currentView() const
 {
   return m_currentView;
 }
@@ -249,7 +250,7 @@ Project::Model::CurrentView Project::Model::currentView() const
  *
  * @return The current decoder method as a value from the `DecoderMethod` enum.
  */
-Project::Model::DecoderMethod Project::Model::decoderMethod() const
+JSON::ProjectModel::DecoderMethod JSON::ProjectModel::decoderMethod() const
 {
   return m_frameDecoder;
 }
@@ -262,11 +263,11 @@ Project::Model::DecoderMethod Project::Model::decoderMethod() const
  * @brief Retrieves the name of the JSON file associated with the project.
  *
  * If the file path is not empty, it extracts and returns the file name.
- * If no file path is set, it returns "New Project".
+ * If no file path is set, it returns "New JSON".
  *
- * @return The name of the JSON file or "New Project" if no file is present.
+ * @return The name of the JSON file or "New JSON" if no file is present.
  */
-QString Project::Model::jsonFileName() const
+QString JSON::ProjectModel::jsonFileName() const
 {
   if (!jsonFilePath().isEmpty())
   {
@@ -285,7 +286,7 @@ QString Project::Model::jsonFileName() const
  *
  * @return The default file path for JSON project files.
  */
-QString Project::Model::jsonProjectsPath() const
+QString JSON::ProjectModel::jsonProjectsPath() const
 {
   // Get file name and path
   static QString path = QString("%1/Documents/%2/JSON Projects/")
@@ -307,7 +308,7 @@ QString Project::Model::jsonProjectsPath() const
  *
  * @return The selected item's text, or an empty string if nothing is selected.
  */
-QString Project::Model::selectedText() const
+QString JSON::ProjectModel::selectedText() const
 {
   if (!m_selectionModel || !m_treeModel)
     return "";
@@ -325,7 +326,7 @@ QString Project::Model::selectedText() const
  *
  * @return The selected item's icon, or an empty string if nothing is selected.
  */
-QString Project::Model::selectedIcon() const
+QString JSON::ProjectModel::selectedIcon() const
 {
   if (!m_selectionModel || !m_treeModel)
     return "";
@@ -342,7 +343,7 @@ QString Project::Model::selectedIcon() const
  *
  * @return A reference to the project title.
  */
-const QString &Project::Model::title() const
+const QString &JSON::ProjectModel::title() const
 {
   return m_title;
 }
@@ -350,7 +351,7 @@ const QString &Project::Model::title() const
 /**
  * @brief Retrieves the current icon of the selected action.
  */
-const QString Project::Model::actionIcon() const
+const QString JSON::ProjectModel::actionIcon() const
 {
   return m_selectedAction.icon();
 }
@@ -366,7 +367,7 @@ const QString Project::Model::actionIcon() const
  * @return A QStringList containing the base names of all available action
  * icons.
  */
-const QStringList &Project::Model::availableActionIcons() const
+const QStringList &JSON::ProjectModel::availableActionIcons() const
 {
   static QStringList icons;
 
@@ -392,7 +393,7 @@ const QStringList &Project::Model::availableActionIcons() const
  *
  * @return A reference to the file path of the JSON file.
  */
-const QString &Project::Model::jsonFilePath() const
+const QString &JSON::ProjectModel::jsonFilePath() const
 {
   return m_filePath;
 }
@@ -404,7 +405,7 @@ const QString &Project::Model::jsonFilePath() const
  *
  * @return A reference to the frame parser code.
  */
-const QString &Project::Model::frameParserCode() const
+const QString &JSON::ProjectModel::frameParserCode() const
 {
   return m_frameParserCode;
 }
@@ -417,7 +418,7 @@ const QString &Project::Model::frameParserCode() const
  *
  * @return A reference to the Thunderforest API key.
  */
-const QString &Project::Model::thunderforestApiKey() const
+const QString &JSON::ProjectModel::thunderforestApiKey() const
 {
   return m_thunderforestApiKey;
 }
@@ -434,7 +435,7 @@ const QString &Project::Model::thunderforestApiKey() const
  *
  * @return True if the group is editable, false otherwise.
  */
-bool Project::Model::currentGroupIsEditable() const
+bool JSON::ProjectModel::currentGroupIsEditable() const
 {
   if (m_currentView == GroupView)
   {
@@ -459,7 +460,7 @@ bool Project::Model::currentGroupIsEditable() const
  *
  * @return True if the dataset is editable, false otherwise.
  */
-bool Project::Model::currentDatasetIsEditable() const
+bool JSON::ProjectModel::currentDatasetIsEditable() const
 {
   if (m_currentView == DatasetView)
   {
@@ -483,7 +484,7 @@ bool Project::Model::currentDatasetIsEditable() const
  *
  * @return The number of groups.
  */
-int Project::Model::groupCount() const
+int JSON::ProjectModel::groupCount() const
 {
   return groups().count();
 }
@@ -497,7 +498,7 @@ int Project::Model::groupCount() const
  *
  * @return A bitmask of dataset options as a quint8 value.
  */
-quint8 Project::Model::datasetOptions() const
+quint8 JSON::ProjectModel::datasetOptions() const
 {
   quint8 option = DatasetGeneric;
 
@@ -530,7 +531,7 @@ quint8 Project::Model::datasetOptions() const
  *
  * @return A reference to the vector of groups.
  */
-const QVector<JSON::Group> &Project::Model::groups() const
+const QVector<JSON::Group> &JSON::ProjectModel::groups() const
 {
   return m_groups;
 }
@@ -547,7 +548,7 @@ const QVector<JSON::Group> &Project::Model::groups() const
  *
  * @return A pointer to the tree model.
  */
-Project::CustomModel *Project::Model::treeModel() const
+JSON::CustomModel *JSON::ProjectModel::treeModel() const
 {
   return m_treeModel;
 }
@@ -560,7 +561,7 @@ Project::CustomModel *Project::Model::treeModel() const
  *
  * @return A pointer to the selection model.
  */
-QItemSelectionModel *Project::Model::selectionModel() const
+QItemSelectionModel *JSON::ProjectModel::selectionModel() const
 {
   return m_selectionModel;
 }
@@ -573,7 +574,7 @@ QItemSelectionModel *Project::Model::selectionModel() const
  *
  * @return A pointer to the group model.
  */
-Project::CustomModel *Project::Model::groupModel() const
+JSON::CustomModel *JSON::ProjectModel::groupModel() const
 {
   return m_groupModel;
 }
@@ -586,7 +587,7 @@ Project::CustomModel *Project::Model::groupModel() const
  *
  * @return A pointer to the action model.
  */
-Project::CustomModel *Project::Model::actionModel() const
+JSON::CustomModel *JSON::ProjectModel::actionModel() const
 {
   return m_actionModel;
 }
@@ -600,7 +601,7 @@ Project::CustomModel *Project::Model::actionModel() const
  *
  * @return A pointer to the project model.
  */
-Project::CustomModel *Project::Model::projectModel() const
+JSON::CustomModel *JSON::ProjectModel::projectModel() const
 {
   return m_projectModel;
 }
@@ -613,7 +614,7 @@ Project::CustomModel *Project::Model::projectModel() const
  *
  * @return A pointer to the dataset model.
  */
-Project::CustomModel *Project::Model::datasetModel() const
+JSON::CustomModel *JSON::ProjectModel::datasetModel() const
 {
   return m_datasetModel;
 }
@@ -634,7 +635,7 @@ Project::CustomModel *Project::Model::datasetModel() const
  * @return True if the user chooses to save or discard changes, false if the
  *         user cancels the operation.
  */
-bool Project::Model::askSave()
+bool JSON::ProjectModel::askSave()
 {
   if (!modified())
     return true;
@@ -663,7 +664,7 @@ bool Project::Model::askSave()
  *
  * @return True if the project was saved successfully, false otherwise.
  */
-bool Project::Model::saveJsonFile()
+bool JSON::ProjectModel::saveJsonFile()
 {
   // Validate project title
   if (m_title.isEmpty())
@@ -724,7 +725,7 @@ bool Project::Model::saveJsonFile()
 
   // Load JSON file to Serial Studio
   openJsonFile(file.fileName());
-  JSON::Generator::instance().loadJsonMap(file.fileName());
+  JSON::FrameBuilder::instance().loadJsonMap(file.fileName());
   return true;
 }
 
@@ -744,7 +745,7 @@ bool Project::Model::saveJsonFile()
  *
  * Relevant signals are emitted to notify the UI of these changes.
  */
-void Project::Model::newJsonFile()
+void JSON::ProjectModel::newJsonFile()
 {
   // Clear groups list
   m_groups.clear();
@@ -759,7 +760,7 @@ void Project::Model::newJsonFile()
   m_thunderforestApiKey = "";
   m_frameStartSequence = "/*";
   m_title = tr("Untitled Project");
-  m_frameParserCode = Project::FrameParser::defaultCode();
+  m_frameParserCode = JSON::FrameParser::defaultCode();
 
   // Update file path
   m_filePath = "";
@@ -793,7 +794,7 @@ void Project::Model::newJsonFile()
  *
  * If the file path is invalid or no file is selected, the operation is aborted.
  */
-void Project::Model::openJsonFile()
+void JSON::ProjectModel::openJsonFile()
 {
   // Let user select a file
   const auto path = QFileDialog::getOpenFileName(
@@ -820,7 +821,7 @@ void Project::Model::openJsonFile()
  *
  * @param path The file path of the JSON project to load.
  */
-void Project::Model::openJsonFile(const QString &path)
+void JSON::ProjectModel::openJsonFile(const QString &path)
 {
   // Validate path
   if (path.isEmpty())
@@ -840,8 +841,8 @@ void Project::Model::openJsonFile(const QString &path)
     return;
 
   // Let the generator use the given JSON file
-  if (JSON::Generator::instance().jsonMapFilepath() != path)
-    JSON::Generator::instance().loadJsonMap(path);
+  if (JSON::FrameBuilder::instance().jsonMapFilepath() != path)
+    JSON::FrameBuilder::instance().loadJsonMap(path);
 
   // Reset C++ model
   newJsonFile();
@@ -906,7 +907,7 @@ void Project::Model::openJsonFile(const QString &path)
  * and group and dataset IDs areregenerated. The tree model is rebuilt,
  * the modified flag is set, and the project item is selected in the UI.
  */
-void Project::Model::deleteCurrentGroup()
+void JSON::ProjectModel::deleteCurrentGroup()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
@@ -947,7 +948,7 @@ void Project::Model::deleteCurrentGroup()
  * project, and action IDs areregenerated. The tree model is rebuilt, the
  * modified flag is set, and the project item is selected in the UI.
  */
-void Project::Model::deleteCurrentAction()
+void JSON::ProjectModel::deleteCurrentAction()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
@@ -985,7 +986,7 @@ void Project::Model::deleteCurrentAction()
  * The tree model is rebuilt, the modified flag is set, and the parent group is
  * selected in the UI.
  */
-void Project::Model::deleteCurrentDataset()
+void JSON::ProjectModel::deleteCurrentDataset()
 {
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
@@ -1035,7 +1036,7 @@ void Project::Model::deleteCurrentDataset()
  * its datasets. The new group is registered, the tree model is updated, and
  * the modified flag is set. The duplicated group is then selected in the UI.
  */
-void Project::Model::duplicateCurrentGroup()
+void JSON::ProjectModel::duplicateCurrentGroup()
 {
   // Initialize a new group
   auto group = JSON::Group(m_groups.count());
@@ -1075,7 +1076,7 @@ void Project::Model::duplicateCurrentGroup()
  * The new action is registered, the tree model is updated, and
  * the modified flag is set. The duplicated action is then selected in the UI.
  */
-void Project::Model::duplicateCurrentAction()
+void JSON::ProjectModel::duplicateCurrentAction()
 {
   // Initialize a new group
   auto action = JSON::Action(m_actions.count());
@@ -1111,7 +1112,7 @@ void Project::Model::duplicateCurrentAction()
  * updated, and the modified flag is set. The duplicated dataset is then
  * selected in the UI.
  */
-void Project::Model::duplicateCurrentDataset()
+void JSON::ProjectModel::duplicateCurrentDataset()
 {
   // Initialize a new dataset
   auto dataset = m_selectedDataset;
@@ -1150,7 +1151,7 @@ void Project::Model::duplicateCurrentDataset()
  * @param option The dataset option that defines the type of dataset to add
  *               (e.g., Plot, FFT, Bar, Gauge, Compass).
  */
-void Project::Model::addDataset(const DatasetOption option)
+void JSON::ProjectModel::addDataset(const DatasetOption option)
 {
   // Initialize a new dataset
   const auto groupId = m_selectedGroup.groupId();
@@ -1258,8 +1259,8 @@ void Project::Model::addDataset(const DatasetOption option)
  * @param checked A boolean indicating whether the option should be enabled
  *                (true) or disabled (false).
  */
-void Project::Model::changeDatasetOption(const DatasetOption option,
-                                         const bool checked)
+void JSON::ProjectModel::changeDatasetOption(const DatasetOption option,
+                                             const bool checked)
 {
   // Modify dataset options
   switch (option)
@@ -1315,7 +1316,7 @@ void Project::Model::changeDatasetOption(const DatasetOption option,
  * and sets the modified flag. The newly added action is selected in the user
  * interface.
  */
-void Project::Model::addAction()
+void JSON::ProjectModel::addAction()
 {
   // Check if any existing group has the same title
   int count = 1;
@@ -1382,7 +1383,8 @@ void Project::Model::addAction()
  * @param title The desired title for the new group.
  * @param widget The widget type associated with the group.
  */
-void Project::Model::addGroup(const QString &title, const GroupWidget widget)
+void JSON::ProjectModel::addGroup(const QString &title,
+                                  const GroupWidget widget)
 {
   // Check if any existing group has the same title
   int count = 1;
@@ -1456,7 +1458,8 @@ void Project::Model::addGroup(const QString &title, const GroupWidget widget)
  * @param widget The type of widget to assign to the group.
  * @return True if the widget was successfully assigned, false otherwise.
  */
-bool Project::Model::setGroupWidget(const int group, const GroupWidget widget)
+bool JSON::ProjectModel::setGroupWidget(const int group,
+                                        const GroupWidget widget)
 {
   // Get group data
   auto grp = m_groups.at(group);
@@ -1644,7 +1647,7 @@ bool Project::Model::setGroupWidget(const int group, const GroupWidget widget)
  *
  * @param code The new frame parser code to set.
  */
-void Project::Model::setFrameParserCode(const QString &code)
+void JSON::ProjectModel::setFrameParserCode(const QString &code)
 {
   if (code != m_frameParserCode)
   {
@@ -1674,7 +1677,7 @@ void Project::Model::setFrameParserCode(const QString &code)
  *
  * Finally, it emits the `treeModelChanged()` signal to update the UI.
  */
-void Project::Model::buildTreeModel()
+void JSON::ProjectModel::buildTreeModel()
 {
   // Clear model/pointer maps
   m_rootItems.clear();
@@ -1810,7 +1813,7 @@ void Project::Model::buildTreeModel()
   // Construct selection model
   m_selectionModel = new QItemSelectionModel(m_treeModel);
   connect(m_selectionModel, &QItemSelectionModel::currentChanged, this,
-          &Project::Model::onCurrentSelectionChanged);
+          &JSON::ProjectModel::onCurrentSelectionChanged);
 
   // Update user interface
   Q_EMIT treeModelChanged();
@@ -1828,7 +1831,7 @@ void Project::Model::buildTreeModel()
  * changes made to the model items and emits the `projectModelChanged()` signal
  * to update the user interface.
  */
-void Project::Model::buildProjectModel()
+void JSON::ProjectModel::buildProjectModel()
 {
   // Clear the existing model
   if (m_projectModel)
@@ -1912,7 +1915,7 @@ void Project::Model::buildProjectModel()
 
   // Handle edits
   connect(m_projectModel, &CustomModel::itemChanged, this,
-          &Project::Model::onProjectItemChanged);
+          &JSON::ProjectModel::onProjectItemChanged);
 
   // Update user interface
   Q_EMIT projectModelChanged();
@@ -1931,7 +1934,7 @@ void Project::Model::buildProjectModel()
  *
  * @param group The group for which the model is being built.
  */
-void Project::Model::buildGroupModel(const JSON::Group &group)
+void JSON::ProjectModel::buildGroupModel(const JSON::Group &group)
 {
   // Clear the existing model
   if (m_groupModel)
@@ -1985,13 +1988,13 @@ void Project::Model::buildGroupModel(const JSON::Group &group)
 
   // Handle edits
   connect(m_groupModel, &CustomModel::itemChanged, this,
-          &Project::Model::onGroupItemChanged);
+          &JSON::ProjectModel::onGroupItemChanged);
 
   // Update user interface
   emit groupModelChanged();
 }
 
-void Project::Model::buildActionModel(const JSON::Action &action)
+void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
 {
   // Clear the existing model
   if (m_actionModel)
@@ -2068,7 +2071,7 @@ void Project::Model::buildActionModel(const JSON::Action &action)
 
   // Handle edits
   connect(m_actionModel, &CustomModel::itemChanged, this,
-          &Project::Model::onActionItemChanged);
+          &JSON::ProjectModel::onActionItemChanged);
 
   // Update user interface
   emit actionModelChanged();
@@ -2092,7 +2095,7 @@ void Project::Model::buildActionModel(const JSON::Action &action)
  *
  * @param dataset The dataset for which the model is being built.
  */
-void Project::Model::buildDatasetModel(const JSON::Dataset &dataset)
+void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
 {
   // Clear the existing model
   if (m_datasetModel)
@@ -2286,7 +2289,7 @@ void Project::Model::buildDatasetModel(const JSON::Dataset &dataset)
 
   // Handle edits
   connect(m_datasetModel, &CustomModel::itemChanged, this,
-          &Project::Model::onDatasetItemChanged);
+          &JSON::ProjectModel::onDatasetItemChanged);
 
   // Update user interface
   emit datasetModelChanged();
@@ -2300,12 +2303,12 @@ void Project::Model::buildDatasetModel(const JSON::Dataset &dataset)
  * @brief Reloads the project model when a new JSON file is loaded.
  *
  * This function checks if the current JSON file path differs from the one
- * loaded by `JSON::Generator`. If they differ, it opens the new JSON file and
- * reloads the project model.
+ * loaded by `JSON::FrameBuilder`. If they differ, it opens the new JSON file
+ * and reloads the project model.
  */
-void Project::Model::onJsonLoaded()
+void JSON::ProjectModel::onJsonLoaded()
 {
-  openJsonFile(JSON::Generator::instance().jsonMapFilepath());
+  openJsonFile(JSON::FrameBuilder::instance().jsonMapFilepath());
 }
 
 //------------------------------------------------------------------------------
@@ -2322,7 +2325,7 @@ void Project::Model::onJsonLoaded()
  * These sources are re-generated when the language is changed to ensure proper
  * localization.
  */
-void Project::Model::generateComboBoxModels()
+void JSON::ProjectModel::generateComboBoxModels()
 {
   // Initialize FFT window sizes list
   m_fftSamples.clear();
@@ -2389,7 +2392,7 @@ void Project::Model::generateComboBoxModels()
  * @param modified A boolean indicating whether the project has been modified (
  *                 true) or not (false).
  */
-void Project::Model::setModified(const bool modified)
+void JSON::ProjectModel::setModified(const bool modified)
 {
   m_modified = modified;
   Q_EMIT modifiedChanged();
@@ -2403,7 +2406,7 @@ void Project::Model::setModified(const bool modified)
  *
  * @param currentView The new view mode, selected from the `CurrentView` enum.
  */
-void Project::Model::setCurrentView(const CurrentView currentView)
+void JSON::ProjectModel::setCurrentView(const CurrentView currentView)
 {
   m_currentView = currentView;
   Q_EMIT currentViewChanged();
@@ -2426,7 +2429,7 @@ void Project::Model::setCurrentView(const CurrentView currentView)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed group property.
  */
-void Project::Model::onGroupItemChanged(QStandardItem *item)
+void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
 {
   // Validate item pointer
   if (!item)
@@ -2518,7 +2521,7 @@ void Project::Model::onGroupItemChanged(QStandardItem *item)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed action property.
  */
-void Project::Model::onActionItemChanged(QStandardItem *item)
+void JSON::ProjectModel::onActionItemChanged(QStandardItem *item)
 {
   // Validate item pointer
   if (!item)
@@ -2576,7 +2579,7 @@ void Project::Model::onActionItemChanged(QStandardItem *item)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed project property.
  */
-void Project::Model::onProjectItemChanged(QStandardItem *item)
+void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
 {
   // Validate item pointer
   if (!item)
@@ -2629,7 +2632,7 @@ void Project::Model::onProjectItemChanged(QStandardItem *item)
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed dataset property.
  */
-void Project::Model::onDatasetItemChanged(QStandardItem *item)
+void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
 {
   // Validate item pointer
   if (!item)
@@ -2731,8 +2734,8 @@ void Project::Model::onDatasetItemChanged(QStandardItem *item)
  * @param previous The previously selected index in the tree model
  *                 (unused in this function).
  */
-void Project::Model::onCurrentSelectionChanged(const QModelIndex &current,
-                                               const QModelIndex &previous)
+void JSON::ProjectModel::onCurrentSelectionChanged(const QModelIndex &current,
+                                                   const QModelIndex &previous)
 {
   // Ignore previous item, we don't need it
   (void)previous;
@@ -2792,7 +2795,7 @@ void Project::Model::onCurrentSelectionChanged(const QModelIndex &current,
  *
  * @return The next available dataset index.
  */
-int Project::Model::nextDatasetIndex()
+int JSON::ProjectModel::nextDatasetIndex()
 {
   int maxIndex = 1;
   for (auto i = 0; i < m_groups.count(); ++i)
@@ -2824,9 +2827,9 @@ int Project::Model::nextDatasetIndex()
  * @param map A reference to a `QHash` that stores the state of each item.
  * @param title The current item's title, used as the key in the hash.
  */
-void Project::Model::saveExpandedStateMap(QStandardItem *item,
-                                          QHash<QString, bool> &map,
-                                          const QString &title)
+void JSON::ProjectModel::saveExpandedStateMap(QStandardItem *item,
+                                              QHash<QString, bool> &map,
+                                              const QString &title)
 {
   // Validate item
   if (!item)
@@ -2856,9 +2859,9 @@ void Project::Model::saveExpandedStateMap(QStandardItem *item,
  * @param map A reference to a `QHash` containing the saved expanded states.
  * @param title The current item's title, used to look up its state in the hash.
  */
-void Project::Model::restoreExpandedStateMap(QStandardItem *item,
-                                             QHash<QString, bool> &map,
-                                             const QString &title)
+void JSON::ProjectModel::restoreExpandedStateMap(QStandardItem *item,
+                                                 QHash<QString, bool> &map,
+                                                 const QString &title)
 {
   // Validate item
   if (!item)
