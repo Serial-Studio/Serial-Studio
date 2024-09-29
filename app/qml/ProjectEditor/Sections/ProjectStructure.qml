@@ -238,7 +238,7 @@ Widgets.Pane {
             visible: depth > 1
             Layout.alignment: Qt.AlignVCenter
             font: Cpp_Misc_CommonFonts.monoFont
-            text: "[" + qsTr("IDX → %1").arg(model.treeViewFrameIndex) + "]"
+            text: "[" + qsTr("IDX %1").arg(model.treeViewFrameIndex) + "]"
             color: current ? Cpp_ThemeManager.colors["highlighted_text"] :
                              Cpp_ThemeManager.colors["text"]
           }
