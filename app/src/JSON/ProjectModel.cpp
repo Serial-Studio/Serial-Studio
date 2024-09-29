@@ -1947,7 +1947,7 @@ void JSON::ProjectModel::buildProjectModel()
   thunderforest->setData(tr("Thunderforest API Key"), ParameterName);
   thunderforest->setData(kProjectView_ThunderforestApiKey, ParameterType);
   thunderforest->setData(tr("None"), PlaceholderValue);
-  thunderforest->setData(tr("Required for OpenStreetMap maps"),
+  thunderforest->setData(tr("Required for Thunderforest maps"),
                          ParameterDescription);
   m_projectModel->appendRow(thunderforest);
 
