@@ -58,12 +58,8 @@
 
   "console_text": "#98C379",
   "console_base": "#2e3439",
-  "console_button": "#31363A",
-  "console_window": "#1C1E20",
-  "console_highlight": "#3daee9",
-  "console_button_text": "#eff0f1",
-  "console_highlighted_text": "#ffffff",
-  "console_placeholder_text": "#929497",
+  "console_border": "#43494F",
+  "console_highlight": "#033557",
 
   "widget_text": "#eff0f1",
   "widget_base": "#1C1E20",

@@ -40,10 +40,6 @@ class Console : public QObject
 {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(bool autoscroll
-             READ autoscroll
-             WRITE setAutoscroll
-             NOTIFY autoscrollChanged)
   Q_PROPERTY(bool echo
              READ echo
              WRITE setEcho
@@ -86,13 +82,12 @@ signals:
   void dataReceived();
   void dataModeChanged();
   void languageChanged();
-  void autoscrollChanged();
   void lineEndingChanged();
   void displayModeChanged();
   void historyItemChanged();
   void textDocumentChanged();
   void showTimestampChanged();
-  void stringReceived(const QString &text);
+  void displayString(const QString &text);
 
 private:
   explicit Console();
@@ -128,7 +123,6 @@ public:
   static Console &instance();
 
   [[nodiscard]] bool echo() const;
-  [[nodiscard]] bool autoscroll() const;
   [[nodiscard]] bool saveAvailable() const;
   [[nodiscard]] bool showTimestamp() const;
 
@@ -151,7 +145,6 @@ public slots:
   void historyDown();
   void send(const QString &data);
   void setEcho(const bool enabled);
-  void setAutoscroll(const bool enabled);
   void setShowTimestamp(const bool enabled);
   void setDataMode(const IO::Console::DataMode &mode);
   void setLineEnding(const IO::Console::LineEnding &mode);
@@ -177,7 +170,6 @@ private:
   int m_historyItem;
 
   bool m_echo;
-  bool m_autoscroll;
   bool m_showTimestamp;
   bool m_isStartingLine;
   bool m_lastCharWasCR;

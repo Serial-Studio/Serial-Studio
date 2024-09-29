@@ -71,7 +71,7 @@ UI::DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
           &UI::DeclarativeWidget::resizeWidget);
 
   // Configure render loop
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
           &UI::DeclarativeWidget::renderWidget);
 }
 

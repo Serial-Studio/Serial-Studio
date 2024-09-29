@@ -86,7 +86,6 @@ IO::Console::Console()
   , m_displayMode(DisplayMode::DisplayPlainText)
   , m_historyItem(0)
   , m_echo(true)
-  , m_autoscroll(true)
   , m_showTimestamp(false)
   , m_isStartingLine(true)
   , m_lastCharWasCR(false)
@@ -119,15 +118,6 @@ IO::Console &IO::Console::instance()
 bool IO::Console::echo() const
 {
   return m_echo;
-}
-
-/**
- * Returns @c true if the vertical position of the console display shall be
- * automatically moved to show latest data.
- */
-bool IO::Console::autoscroll() const
-{
-  return m_autoscroll;
 }
 
 /**
@@ -439,18 +429,6 @@ void IO::Console::setEcho(const bool enabled)
 }
 
 /**
- * Enables/disables autoscrolling of the console text.
- */
-void IO::Console::setAutoscroll(const bool enabled)
-{
-  if (autoscroll() != enabled)
-  {
-    m_autoscroll = enabled;
-    Q_EMIT autoscrollChanged();
-  }
-}
-
-/**
  * Changes the data mode for user commands. See @c dataMode() for more
  * information.
  */
@@ -553,7 +531,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
   // Update UI
   Q_EMIT dataReceived();
-  Q_EMIT stringReceived(processedString);
+  Q_EMIT displayString(processedString);
 }
 
 /**
@@ -595,16 +573,39 @@ void IO::Console::addToHistory(const QString &command)
  */
 QByteArray IO::Console::hexToBytes(const QString &data)
 {
+  // Remove spaces from the input data
   QString withoutSpaces = data;
   withoutSpaces.replace(QStringLiteral(" "), "");
 
+  // Check if the length of the string is even
+  if (withoutSpaces.length() % 2 != 0)
+  {
+    qWarning() << data << "is not a valid hexadecimal array";
+    return QByteArray();
+  }
+
+  // Iterate over the string in steps of 2
+  bool ok;
   QByteArray array;
   for (int i = 0; i < withoutSpaces.length(); i += 2)
   {
+    // Get two characters (a hex pair)
     auto chr1 = withoutSpaces.at(i);
     auto chr2 = withoutSpaces.at(i + 1);
-    auto byte = QStringLiteral("%1%2").arg(chr1, chr2).toInt(Q_NULLPTR, 16);
-    array.append(byte);
+
+    // Convert the hex pair into a byte
+    QString byteStr = QStringLiteral("%1%2").arg(chr1, chr2);
+    int byte = byteStr.toInt(&ok, 16);
+
+    // If the conversion fails, return an empty array
+    if (!ok)
+    {
+      qWarning() << data << "is not a valid hexadecimal array";
+      return QByteArray();
+    }
+
+    // Append the byte to the result array
+    array.append(static_cast<char>(byte));
   }
 
   return array;

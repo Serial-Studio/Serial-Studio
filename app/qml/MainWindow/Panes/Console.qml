@@ -79,7 +79,6 @@ Widgets.Pane {
 
     Widgets.Terminal {
       id: terminal
-      widgetEnabled: true
       anchors.fill: parent
     }
   }

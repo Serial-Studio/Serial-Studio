@@ -28,15 +28,14 @@ import SerialStudio as SerialStudio
 
 Item {
   id: root
-  property alias widgetEnabled: textEdit.widgetEnabled
-  property alias vt100emulation: textEdit.vt100emulation
+  property alias vt100emulation: terminal.vt100emulation
 
   //
   // Super important to for shortcuts
   //
   onVisibleChanged: {
     if (visible)
-      textEdit.forceActiveFocus()
+      root.forceActiveFocus()
   }
 
   //
@@ -46,8 +45,7 @@ Item {
     property alias echo: echoCheck.checked
     property alias hex: hexCheckbox.checked
     property alias timestamp: timestampCheck.checked
-    property alias autoscroll: autoscrollCheck.checked
-    property alias vt100Enabled: textEdit.vt100emulation
+    property alias vt100Enabled: terminal.vt100emulation
     property alias lineEnding: lineEndingCombo.currentIndex
     property alias displayMode: displayModeCombo.currentIndex
   }
@@ -73,21 +71,21 @@ Item {
   //
   function clear() {
     Cpp_IO_Console.clear()
-    textEdit.clear()
+    terminal.clear()
   }
 
   //
   // Copy function
   //
   function copy() {
-    textEdit.copy()
+    terminal.copy()
   }
 
   //
   // Select all text
   //
   function selectAll() {
-    textEdit.selectAll()
+    terminal.selectAll()
   }
 
   //
@@ -123,21 +121,21 @@ Item {
   //
   Menu {
     id: contextMenu
-    onClosed: textEdit.forceActiveFocus()
+    onClosed: terminal.forceActiveFocus()
 
     MenuItem {
       id: copyMenu
       text: qsTr("Copy")
       opacity: enabled ? 1 : 0.5
-      onClicked: textEdit.copy()
-      enabled: textEdit.copyAvailable
+      onClicked: terminal.copy()
+      enabled: terminal.copyAvailable
     }
 
     MenuItem {
       text: qsTr("Select all")
-      enabled: !textEdit.empty
+      enabled: !terminal.empty
       opacity: enabled ? 1 : 0.5
-      onTriggered: textEdit.selectAll()
+      onTriggered: terminal.selectAll()
     }
 
     MenuItem {
@@ -176,20 +174,17 @@ Item {
     // Console display
     //
     SerialStudio.Terminal {
-      id: textEdit
-      focus: true
-      readOnly: true
+      id: terminal
       vt100emulation: true
-      centerOnScroll: false
-      undoRedoEnabled: false
       Layout.fillWidth: true
       Layout.fillHeight: true
-      maximumBlockCount: 12000
-      font: Cpp_Misc_CommonFonts.monoFont
-      autoscroll: Cpp_IO_Console.autoscroll
-      renderTarget: PaintedItem.FramebufferObject
-      wordWrapMode: Text.WrapAtWordBoundaryOrAnywhere
-      placeholderText: qsTr("No data received so far") + "..."
+
+      Rectangle {
+        border.width: 1
+        color: "transparent"
+        anchors.fill: parent
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+      }
 
       MouseArea {
         id: mouseArea
@@ -197,7 +192,6 @@ Item {
         cursorShape: Qt.IBeamCursor
         propagateComposedEvents: true
         acceptedButtons: Qt.RightButton
-        anchors.rightMargin: textEdit.scrollbarWidth
 
         onClicked: (mouse) => {
                      if (mouse.button === Qt.RightButton) {
@@ -217,20 +211,23 @@ Item {
       TextField {
         id: send
         height: 24
-        font: textEdit.font
+        font: terminal.font
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
         placeholderText: qsTr("Send Data to Device") + "..."
-
         palette.base: Cpp_ThemeManager.colors["console_base"]
         palette.text: Cpp_ThemeManager.colors["console_text"]
-        palette.button: Cpp_ThemeManager.colors["console_button"]
-        palette.window: Cpp_ThemeManager.colors["console_window"]
-        palette.buttonText: Cpp_ThemeManager.colors["console_button_text"]
-        palette.placeholderText: Cpp_ThemeManager.colors["console_placeholder_text"]
-        palette.highlightedText: Cpp_ThemeManager.colors["console_highlighted_text"]
+        palette.highlight: Cpp_ThemeManager.colors["console_highlight"]
+        palette.highlightedText: Cpp_ThemeManager.colors["console_text"]
+        palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+
+        background: Rectangle {
+          border.width: 1
+          color: Cpp_ThemeManager.colors["console_base"]
+          border.color: Cpp_ThemeManager.colors["console_border"]
+        }
 
         //
         // Send data on <enter>
@@ -293,17 +290,6 @@ Item {
       Layout.fillWidth: true
 
       CheckBox {
-        id: autoscrollCheck
-        text: qsTr("Autoscroll")
-        Layout.alignment: Qt.AlignVCenter
-        checked: Cpp_IO_Console.autoscroll
-        onCheckedChanged: {
-          if (Cpp_IO_Console.autoscroll !== checked)
-            Cpp_IO_Console.autoscroll = checked
-        }
-      }
-
-      CheckBox {
         id: timestampCheck
         text: qsTr("Show Timestamp")
         Layout.alignment: Qt.AlignVCenter
@@ -329,10 +315,10 @@ Item {
         id: vt100Check
         text: qsTr("Emulate VT-100")
         Layout.alignment: Qt.AlignVCenter
-        checked: textEdit.vt100emulation
+        checked: terminal.vt100emulation
         onCheckedChanged: {
-          if (textEdit.vt100emulation !== checked)
-            textEdit.vt100emulation = checked
+          if (terminal.vt100emulation !== checked)
+            terminal.vt100emulation = checked
         }
       }
 

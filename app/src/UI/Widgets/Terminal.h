@@ -22,12 +22,26 @@
 
 #pragma once
 
-#include <QPlainTextEdit>
-#include <UI/DeclarativeWidget.h>
+#include <QTimer>
+#include <QPalette>
+#include <QQuickPaintedItem>
 
 namespace Widgets
 {
-class Terminal : public UI::DeclarativeWidget
+/**
+ * @class Terminal
+ * @brief A QML terminal widget with optional VT-100 emulation.
+ *
+ * The Terminal class is a QQuickPaintedItem that implements a fully interactive
+ * terminal emulator. It supports VT-100 emulation and provides features like
+ * text selection, autoscroll, and customizable fonts and color palettes. The
+ * terminal can process escape sequences, manage cursor positions, and handle
+ * mouse and keyboard events effectively.
+ *
+ * This class is suitable for embedding a terminal interface in QML-based GUI
+ * applications, with multiple customizable features exposed as properties.
+ */
+class Terminal : public QQuickPaintedItem
 {
   // clang-format off
   Q_OBJECT
@@ -35,146 +49,134 @@ class Terminal : public UI::DeclarativeWidget
              READ font
              WRITE setFont
              NOTIFY fontChanged)
-  Q_PROPERTY(QString text
-             READ text
-             WRITE setText
-             NOTIFY textChanged)
   Q_PROPERTY(bool autoscroll
              READ autoscroll
              WRITE setAutoscroll
              NOTIFY autoscrollChanged)
-  Q_PROPERTY(QString placeholderText
-             READ placeholderText
-             WRITE setPlaceholderText
-             NOTIFY placeholderTextChanged)
-  Q_PROPERTY(bool undoRedoEnabled
-             READ undoRedoEnabled
-             WRITE setUndoRedoEnabled
-             NOTIFY undoRedoEnabledChanged)
-  Q_PROPERTY(int wordWrapMode
-             READ wordWrapMode
-             WRITE setWordWrapMode
-             NOTIFY wordWrapModeChanged)
-  Q_PROPERTY(bool readOnly
-             READ readOnly
-             WRITE setReadOnly
-             NOTIFY readOnlyChanged)
-  Q_PROPERTY(bool centerOnScroll
-             READ centerOnScroll
-             WRITE setCenterOnScroll
-             NOTIFY centerOnScrollChanged)
-  Q_PROPERTY(bool widgetEnabled
-             READ widgetEnabled
-             WRITE setWidgetEnabled
-             NOTIFY widgetEnabledChanged)
   Q_PROPERTY(QPalette palette
              READ palette
              WRITE setPalette
              NOTIFY colorPaletteChanged)
-  Q_PROPERTY(int maximumBlockCount
-             READ maximumBlockCount
-             WRITE setMaximumBlockCount
-             NOTIFY maximumBlockCountChanged)
   Q_PROPERTY(bool copyAvailable
              READ copyAvailable
-             NOTIFY copyAvailableChanged)
-  Q_PROPERTY(bool empty
-             READ empty
-             NOTIFY textChanged)
-  Q_PROPERTY(int scrollbarWidth
-             READ scrollbarWidth
-             WRITE setScrollbarWidth
-             NOTIFY scrollbarWidthChanged)
+             NOTIFY selectionChanged)
   Q_PROPERTY(bool vt100emulation
              READ vt100emulation
              WRITE setVt100Emulation
              NOTIFY vt100EmulationChanged)
+  Q_PROPERTY(int scrollOffsetY
+             READ scrollOffsetY
+             WRITE setScrollOffsetY
+             NOTIFY scrollOffsetYChanged)
   // clang-format on
 
 signals:
-  void textChanged();
   void fontChanged();
-  void readOnlyChanged();
+  void cursorMoved();
+  void selectionChanged();
   void autoscrollChanged();
   void colorPaletteChanged();
-  void wordWrapModeChanged();
   void copyAvailableChanged();
-  void widgetEnabledChanged();
-  void scrollbarWidthChanged();
-  void centerOnScrollChanged();
+  void scrollOffsetYChanged();
   void vt100EmulationChanged();
-  void placeholderTextChanged();
-  void undoRedoEnabledChanged();
-  void maximumBlockCountChanged();
 
 public:
   Terminal(QQuickItem *parent = 0);
+  void paint(QPainter *painter) override;
 
-  QFont font() const;
-  QString text() const;
+  enum Direction
+  {
+    LeftDirection,
+    RightDirection
+  };
+  Q_ENUM(Direction);
 
-  bool empty() const;
-  bool readOnly() const;
-  bool autoscroll() const;
-  QPalette palette() const;
-  int wordWrapMode() const;
-  int scrollbarWidth() const;
-  bool copyAvailable() const;
-  bool widgetEnabled() const;
-  bool centerOnScroll() const;
-  bool vt100emulation() const;
-  bool undoRedoEnabled() const;
-  int maximumBlockCount() const;
-  QString placeholderText() const;
-  QTextDocument *document() const;
+  enum State
+  {
+    Text,
+    Escape,
+    Format,
+    ResetFont
+  };
+  Q_ENUM(State);
+
+  [[nodiscard]] QFont font() const;
+  [[nodiscard]] QPalette palette() const;
+
+  [[nodiscard]] bool autoscroll() const;
+  [[nodiscard]] bool copyAvailable() const;
+  [[nodiscard]] bool vt100emulation() const;
+
+  [[nodiscard]] int lineCount() const;
+  [[nodiscard]] int linesPerPage() const;
+  [[nodiscard]] int scrollOffsetY() const;
+
+  [[nodiscard]] QPoint cursorPosition() const;
+  [[nodiscard]] QPoint positionToCursor(const QPoint &pos) const;
 
 public slots:
   void copy();
   void clear();
   void selectAll();
-  void clearSelection();
-  void scrollToBottom();
-  void setReadOnly(const bool ro);
   void setFont(const QFont &font);
-  void append(const QString &text);
-  void setText(const QString &text);
-  void insertText(const QString &text);
-  void setWordWrapMode(const int mode);
   void setAutoscroll(const bool enabled);
-  void setScrollbarWidth(const int width);
+  void setScrollOffsetY(const int offset);
   void setPalette(const QPalette &palette);
-  void setWidgetEnabled(const bool enabled);
-  void setCenterOnScroll(const bool enabled);
   void setVt100Emulation(const bool enabled);
-  void setUndoRedoEnabled(const bool enabled);
-  void setPlaceholderText(const QString &text);
-  void setMaximumBlockCount(const int maxBlockCount);
 
 private slots:
-  ;
+  void toggleCursor();
   void onThemeChanged();
-  void updateScrollbarVisibility();
-  void setCopyAvailable(const bool yes);
-  void addText(const QString &text, const bool enableVt100);
+  void append(const QString &data);
+  void appendString(const QString &string);
+  void removeStringFromCursor(const Direction direction = RightDirection,
+                              int len = INT_MAX);
 
 private:
-  // VT-100 emulation
-  QString vt100Processing(const QString &data);
-  void clearEntireLine();
-  void clearFromCursorToEnd();
-  void clearFromStartToCursor();
-  void clearFromCursorToEndOfLine();
-  void clearFromStartOfLineToCursor();
-  void moveCursorTo(int row, int col);
-  void applyTextFormatting(const QString &params);
+  void initBuffer();
+  void processText(const QChar &byte, QString &text);
+  void processEscape(const QChar &byte, QString &text);
+  void processFormat(const QChar &byte, QString &text);
+  void processResetFont(const QChar &byte, QString &text);
+
+  void setCursorPosition(const QPoint position);
+  void setCursorPosition(const int x, const int y);
+  void replaceData(qsizetype x, qsizetype y, QChar byte);
+
+protected:
+  void wheelEvent(QWheelEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
-  bool m_repaint;
+  QPalette m_palette;
+  QStringList m_data;
+
+  QFont m_font;
+  int m_cWidth;
+  int m_cHeight;
+
+  int m_borderX;
+  int m_borderY;
+  int m_scrollOffsetY;
+
+  QTimer m_cursorTimer;
+  QPoint m_cursorPosition;
+
+  QPoint m_selectionEnd;
+  QPoint m_selectionStart;
+  QPoint m_selectionStartCursor;
+
+  State m_state;
   bool m_autoscroll;
-  bool m_textChanged;
   bool m_emulateVt100;
-  bool m_copyAvailable;
+  bool m_cursorVisible;
+  bool m_mouseTracking;
 
-  QPlainTextEdit m_textEdit;
+  int m_formatValue;
+  int m_formatValueY;
+  bool m_useFormatValueY;
 };
 } // namespace Widgets

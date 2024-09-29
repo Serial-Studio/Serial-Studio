@@ -58,12 +58,8 @@
 
   "console_text": "#000000",
   "console_base": "#ffffff",
-  "console_button": "#f0f0f0",
-  "console_window": "#ffffff",
-  "console_highlight": "#007aff",
-  "console_button_text": "#000000",
-  "console_highlighted_text": "#ffffff",
-  "console_placeholder_text": "#888888",
+  "console_border": "#e5e5e5",
+  "console_highlight": "#99CAFF",
 
   "widget_text": "#000000",
   "widget_base": "#ffffff",

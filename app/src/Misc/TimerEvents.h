@@ -40,7 +40,7 @@ class TimerEvents : public QObject
 signals:
   void timeout1Hz();
   void timeout10Hz();
-  void timeout20Hz();
+  void timeout24Hz();
 
 private:
   TimerEvents() {};
@@ -62,6 +62,6 @@ public slots:
 private:
   QBasicTimer m_timer1Hz;
   QBasicTimer m_timer10Hz;
-  QBasicTimer m_timer20Hz;
+  QBasicTimer m_timer24Hz;
 };
 } // namespace Misc

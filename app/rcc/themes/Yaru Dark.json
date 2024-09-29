@@ -56,14 +56,10 @@
   "placeholder_text": "#888888",
   "highlighted_text": "#ffffff",
 
-  "console_text": "#98C379",
-  "console_base": "#2d2d2f",
-  "console_button": "#39393b",
-  "console_window": "#2d2d2f",
+  "console_text": "#ffffff",
+  "console_base": "#1a1a1a",
+  "console_border": "#cccccc",
   "console_highlight": "#e95420",
-  "console_button_text": "#f1f1f1",
-  "console_highlighted_text": "#ffffff",
-  "console_placeholder_text": "#a1a1a1",
 
   "widget_text": "#eeeeec",
   "widget_base": "#222222",

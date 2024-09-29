@@ -20,85 +20,268 @@
  * THE SOFTWARE.
  */
 
-#include <QtMath>
-#include <QScrollBar>
+#include <QPainter>
+#include <QClipboard>
+#include <QFontMetrics>
+#include <QGuiApplication>
 
 #include "IO/Console.h"
+#include "IO/Manager.h"
+#include "Misc/TimerEvents.h"
+#include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/Terminal.h"
 
-//------------------------------------------------------------------------------
-// QML PlainTextEdit implementation
-//------------------------------------------------------------------------------
-
 /**
- * Constructor function
+ * @brief Constructs a Terminal object with the given parent item.
+ *
+ * Initializes the terminal widget, setting up various configurations, including
+ * font, palette, and buffer. It also establishes multiple signal-slot
+ * connections to handle theme changes, data input, device connections, and
+ * cursor blinking.
+ *
+ * @param parent Pointer to the parent QQuickItem.
+ *
+ * The constructor performs the following key actions:
+ * - Initializes internal buffers using `initBuffer()`.
+ * - Configures item flags to allow the terminal to accept mouse input, have
+ *   content, and manage focus appropriately.
+ * - Sets a monospaced font for text rendering using
+ *   `Misc::CommonFonts::instance().monoFont()`.
+ * - Configures the initial color palette by calling `onThemeChanged()`.
+ * - Connects to the theme manager to update the palette whenever the theme
+ *   changes.
+ * - Connects to the IO Console handler to receive and append new data for
+ *   display.
+ * - Clears the screen when a device connection status changes.
+ * - Sets up a cursor blink timer and connects it to toggle the cursor
+ *   visibility.
+ * - Establishes a connection to redraw the terminal at a rate of 24 Hz for
+ *   smooth updates.
+ *
+ * @note The cursor flash time is retrieved from
+ * `QGuiApplication::styleHints()`, and the blink interval is adjusted
+ * accordingly.
  */
 Widgets::Terminal::Terminal(QQuickItem *parent)
-  : UI::DeclarativeWidget(parent)
-  , m_repaint(false)
+  : QQuickPaintedItem(parent)
+  , m_scrollOffsetY(0)
+  , m_state(Text)
   , m_autoscroll(true)
-  , m_textChanged(false)
   , m_emulateVt100(false)
-  , m_copyAvailable(false)
+  , m_cursorVisible(true)
+  , m_mouseTracking(false)
+  , m_formatValue(0)
+  , m_formatValueY(0)
+  , m_useFormatValueY(false)
 {
-  // Set widget & configure VT-100 emulator
-  setWidget(&m_textEdit);
+  // Initialize data buffer
+  initBuffer();
 
-  // Setup default options
-  setScrollbarWidth(14);
-  m_textEdit.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  m_textEdit.setSizeAdjustPolicy(QPlainTextEdit::AdjustToContents);
+  // Configure QML item flags to accept mouse input
+  setFlag(ItemHasContents, true);
+  setFlag(ItemIsFocusScope, true);
+  setFlag(ItemAcceptsInputMethod, true);
+  setAcceptedMouseButtons(Qt::AllButtons);
 
-  // Set widget palette
+  // Set font
+  setFont(Misc::CommonFonts::instance().monoFont());
+
+  // Set palette
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &Widgets::Terminal::onThemeChanged);
 
-  // Connect signals/slots
-  connect(&IO::Console::instance(), &IO::Console::stringReceived, this,
-          &Widgets::Terminal::insertText);
+  // Receive data from the IO::Console handler
+  connect(&IO::Console::instance(), &IO::Console::displayString, this,
+          &Widgets::Terminal::append);
 
-  // React to widget events
-  connect(&m_textEdit, SIGNAL(copyAvailable(bool)), this,
-          SLOT(setCopyAvailable(bool)));
+  // Clear the screen when device is connected/disconnected
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] {
+    if (IO::Manager::instance().connected())
+      clear();
+  });
+
+  // Blink the cursor
+  m_cursorTimer.start(200);
+  m_cursorTimer.setTimerType(Qt::PreciseTimer);
+  connect(&m_cursorTimer, &QTimer::timeout, this,
+          &Widgets::Terminal::toggleCursor);
+
+  // Redraw the widget at 24 Hz... no more, no less
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+          [=] { update(); });
 }
 
 /**
- * Returns the font used by the QPlainTextEdit widget
+ * @brief Paints the terminal widget content.
+ *
+ * This method overrides the QQuickPaintedItem::paint() to render the terminal's
+ * content, including the text, cursor, and optional scrollbar.
+ *
+ * @param painter A QPainter object used to draw the terminal's content.
+ *
+ * The paint method performs the following key tasks:
+ * - Skips rendering if the terminal is not visible.
+ * - Prepares the painter by setting the current font and fills the terminal
+ *   background.
+ * - Draws each visible line of terminal data, using the current palette.
+ * - Draws the cursor if it is currently visible and within the visible range of
+ *   lines.
+ * - Draws a vertical scrollbar if autoscroll is disabled and not all lines are
+ *   visible.
+ *
+ * @note This function handles rendering for different terminal states,
+ * including cursor visibility and scrolling requirements.
+ */
+void Widgets::Terminal::paint(QPainter *painter)
+{
+  // Skip if item is not visible
+  if (!isVisible())
+    return;
+
+  // Set font and prepare painter
+  painter->setFont(m_font);
+  int lineHeight = m_cHeight;
+
+  // Draw background and border
+  QRect terminalRect(0, 0, width(), height());
+  painter->fillRect(terminalRect, m_palette.color(QPalette::Base));
+  painter->drawRect(terminalRect);
+
+  // Calculate the range of lines to be painted
+  int firstLine = m_scrollOffsetY;
+  int lastVLine = qMin(firstLine + linesPerPage(), lineCount() - 1);
+
+  // Draw selection rectangles
+  int y = m_borderY;
+  for (int i = firstLine; i <= lastVLine; ++i, y += lineHeight)
+  {
+    // Check if the line is selected
+    bool isLineSelected = true;
+    isLineSelected &= !m_selectionEnd.isNull();
+    isLineSelected &= (i <= m_selectionEnd.y());
+    isLineSelected &= (i >= m_selectionStart.y());
+
+    // Draw selection rectangle if applicable
+    if (isLineSelected)
+    {
+      // Obtain X coordinates for selection start
+      int selectionStartX;
+      if (i == m_selectionStart.y())
+        selectionStartX = m_selectionStart.x() * m_cWidth + m_borderX;
+      else
+        selectionStartX = m_borderX;
+
+      // Obtain X coordinates for selection end
+      int selectionEndX;
+      if (i == m_selectionEnd.y())
+        selectionEndX = m_selectionEnd.x() * m_cWidth - m_borderX;
+      else
+        selectionEndX = width() - m_borderX;
+
+      // Adjust if the selection start and end points are inverted
+      if (m_selectionStart.y() == m_selectionEnd.y())
+      {
+        if (m_selectionStart.x() > m_selectionEnd.x())
+          std::swap(selectionStartX, selectionEndX);
+      }
+
+      // Check if the selection spans the entire line
+      if (i != m_selectionStart.y() && i != m_selectionEnd.y())
+      {
+        selectionStartX = m_borderX;
+        selectionEndX = width() - m_borderX;
+      }
+
+      // Ensure selection start/end X is inside the borders
+      selectionEndX = qMax(m_borderX, selectionEndX);
+      selectionStartX = qMax(m_borderX, selectionStartX);
+
+      // Draw the selection rectangle
+      const auto w = selectionEndX - selectionStartX;
+      QRect rect(selectionStartX, y, w, m_cHeight + 3);
+      painter->fillRect(rect, m_palette.color(QPalette::Highlight));
+    }
+  }
+
+  // Draw text for each line in the visible range
+  y = m_borderY;
+  for (int i = firstLine; i <= lastVLine; ++i, y += lineHeight)
+  {
+    const QString &line = m_data[i];
+    painter->setPen(m_palette.color(QPalette::Text));
+    if (!line.isEmpty())
+      painter->drawText(m_borderX, y + lineHeight, line);
+  }
+
+  // Draw cursor if visible
+  if (m_cursorVisible && m_cursorPosition.y() >= firstLine
+      && m_cursorPosition.y() <= lastVLine)
+  {
+    // clang-format off
+    const int cursorX = m_cursorPosition.x() * m_cWidth + m_borderX;
+    const int cursorY = (m_cursorPosition.y() - firstLine + 1) * lineHeight + m_borderY;
+    // clang-format on
+
+    // Draw the cursor as a filled block character
+    painter->setPen(m_palette.color(QPalette::Text));
+    painter->drawText(cursorX, cursorY, QStringLiteral("█"));
+  }
+
+  // Draw scrollbar if required
+  if (!autoscroll() && lineCount() > linesPerPage())
+  {
+    // Get available height
+    const int availableHeight = height() - 2 * m_borderY;
+
+    // Set dimensions
+    const int scrollbarWidth = 6;
+    int scrollbarHeight = qMax(20.0, qPow(availableHeight, 2) / lineCount());
+    if (scrollbarHeight > availableHeight / 2)
+      scrollbarHeight = availableHeight / 2;
+
+    // Set scrollbar position
+    // clang-format off
+    int x = width() - scrollbarWidth - m_borderX;
+    int y = (m_scrollOffsetY / static_cast<float>(lineCount() - linesPerPage())) * (availableHeight - scrollbarHeight) - m_borderY;
+    y = qMax(m_borderY, y);
+    // clang-format on
+
+    // Draw the scrollbar
+    QRect scrollbarRect(x, y, scrollbarWidth, scrollbarHeight);
+    QBrush scrollbarBrush(m_palette.color(QPalette::Window));
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setBrush(scrollbarBrush);
+    painter->setPen(Qt::NoPen);
+    painter->drawRoundedRect(scrollbarRect, scrollbarWidth / 2,
+                             scrollbarWidth / 2);
+  }
+}
+/**
+ * @brief Gets the current font used by the terminal.
+ *
+ * @return The QFont object representing the terminal's current font.
  */
 QFont Widgets::Terminal::font() const
 {
-  return m_textEdit.font();
+  return m_font;
 }
 
 /**
- * Returns the plain text of the QPlainTextEdit widget
+ * @brief Gets the current color palette used by the terminal.
+ *
+ * @return The QPalette object representing the terminal's color palette.
  */
-QString Widgets::Terminal::text() const
+QPalette Widgets::Terminal::palette() const
 {
-  return m_textEdit.toPlainText();
+  return m_palette;
 }
 
 /**
- * Returns @c true if the text document is empty
- */
-bool Widgets::Terminal::empty() const
-{
-  return m_textEdit.document()->isEmpty();
-}
-
-/**
- * Returns @c true if the widget is set to read-only
- */
-bool Widgets::Terminal::readOnly() const
-{
-  return m_textEdit.isReadOnly();
-}
-
-/**
- * Returns @c true if the widget shall scroll automatically to the bottom when
- * new text is appended to the widget.
+ * @brief Checks if autoscroll is enabled.
+ *
+ * @return True if autoscroll is enabled, false otherwise.
  */
 bool Widgets::Terminal::autoscroll() const
 {
@@ -106,63 +289,29 @@ bool Widgets::Terminal::autoscroll() const
 }
 
 /**
- * Returns the palette used by the QPlainTextEdit widget
- */
-QPalette Widgets::Terminal::palette() const
-{
-  return m_textEdit.palette();
-}
-
-/**
- * Returns the wrap mode of the QPlainTextEdit casted to an integer type (so
- * that it can be used from the QML interface).
- */
-int Widgets::Terminal::wordWrapMode() const
-{
-  return static_cast<int>(m_textEdit.wordWrapMode());
-}
-
-/**
- * Returns the width of the vertical scrollbar
- */
-int Widgets::Terminal::scrollbarWidth() const
-{
-  return m_textEdit.verticalScrollBar()->width();
-}
-
-/**
- * Returns @c true if the user is able to copy any text from the document. This
- * value is updated through the copyAvailable() signal sent by the
- * QPlainTextEdit.
+ * @brief Checks if there is a valid text selection available for copying.
+ *
+ * This function determines whether a selection is available in the terminal
+ * for copying. A selection is considered invalid if:
+ *
+ * - The selection start or selection end is null.
+ * - The terminal's data buffer is empty.
+ *
+ * @return True if no valid selection is available, otherwise false.
+ *
+ * @note This function effectively checks if it is possible to perform a copy
+ * operation.
  */
 bool Widgets::Terminal::copyAvailable() const
 {
-  return m_copyAvailable;
+  return (!m_selectionEnd.isNull() || !m_selectionStart.isNull())
+         && !m_data.isEmpty();
 }
 
 /**
- * Returns @c true if the QPlainTextEdit widget is enabled
- */
-bool Widgets::Terminal::widgetEnabled() const
-{
-  return m_textEdit.isEnabled();
-}
-
-/**
- * If set to true, the plain text edit scrolls the document vertically to make
- * the cursor visible at the center of the viewport. This also allows the text
- * edit to scroll below the end of the document. Otherwise, if set to false, the
- * plain text edit scrolls the smallest amount possible to ensure the cursor is
- * visible.
- */
-bool Widgets::Terminal::centerOnScroll() const
-{
-  return m_textEdit.centerOnScroll();
-}
-
-/**
- * Returns true if the control shall parse basic VT-100 escape secuences. This
- * can be useful if you need to interface with a shell/CLI from Serial Studio.
+ * @brief Checks if VT-100 emulation mode is enabled.
+ *
+ * @return True if VT-100 emulation is enabled, false otherwise.
  */
 bool Widgets::Terminal::vt100emulation() const
 {
@@ -170,237 +319,253 @@ bool Widgets::Terminal::vt100emulation() const
 }
 
 /**
- * This property holds whether undo and redo are enabled.
- * Users are only able to undo or redo actions if this property is true, and if
- * there is an action that can be undone (or redone).
- */
-bool Widgets::Terminal::undoRedoEnabled() const
-{
-  return m_textEdit.isUndoRedoEnabled();
-}
-
-/**
- * This property holds the limit for blocks in the document.
+ * @brief Gets the total number of lines in the terminal's data buffer.
  *
- * Specifies the maximum number of blocks the document may have. If there are
- * more blocks in the document that specified with this property blocks are
- * removed from the beginning of the document.
+ * @return The number of lines currently stored in the terminal's data buffer.
+ */
+int Widgets::Terminal::lineCount() const
+{
+  return m_data.size();
+}
+
+/**
+ * @brief Gets the number of lines that can be displayed per page.
  *
- * A negative or zero value specifies that the document may contain an unlimited
- * amount of blocks.
+ * @return The number of lines that fit within the current terminal height.
  */
-int Widgets::Terminal::maximumBlockCount() const
+int Widgets::Terminal::linesPerPage() const
 {
-  return m_textEdit.maximumBlockCount();
+  return static_cast<int>(qFloor((height() - 2 * m_borderY) / m_cHeight));
 }
 
 /**
- * This property holds the editor placeholder text.
+ * @brief Gets the current vertical scroll offset.
  *
- * Setting this property makes the editor display a grayed-out placeholder text
- * as long as the document is empty.
+ * @return The vertical scroll offset in lines.
  */
-QString Widgets::Terminal::placeholderText() const
+int Widgets::Terminal::scrollOffsetY() const
 {
-  return m_textEdit.placeholderText();
+  return m_scrollOffsetY;
 }
 
 /**
- * Returns the pointer to the text document
+ * @brief Gets the current cursor position within the terminal.
+ *
+ * @return A QPoint representing the current cursor position, in character
+ *         coordinates.
  */
-QTextDocument *Widgets::Terminal::document() const
+QPoint Widgets::Terminal::cursorPosition() const
 {
-  return m_textEdit.document();
+  return m_cursorPosition;
 }
 
 /**
- * Copies any selected text to the clipboard.
+ * @brief Converts a pixel position to a cursor position.
+ *
+ * @param pos The pixel position within the terminal.
+ * @return A QPoint representing the cursor position corresponding to the given
+ *         pixel position.
+ */
+QPoint Widgets::Terminal::positionToCursor(const QPoint &pos) const
+{
+
+  return QPoint((pos.x() - m_borderX) / m_cWidth,
+                ((pos.y() - m_borderY) / m_cHeight) + m_scrollOffsetY);
+}
+
+/**
+ * @brief Copies the currently selected text to the system clipboard.
+ *
+ * This function copies the currently selected text from the terminal buffer
+ * to the system clipboard, ensuring the correct order of the start and end
+ * points of the selection:
+ * - If no valid selection is available (`copyAvailable()` returns true), the
+ *   function returns without action.
+ * - The correct selection boundaries are determined and adjusted if needed.
+ * - Iterates over the selected lines and extracts the corresponding text,
+ *   preserving line breaks.
+ * - Copies the extracted text to the system clipboard for use in other
+ *   applications.
+ *
+ * @note The copied text includes line breaks between lines to preserve
+ * formatting.
+ *
+ * @see copyAvailable(), QClipboard, QGuiApplication::clipboard()
  */
 void Widgets::Terminal::copy()
 {
-  m_textEdit.copy();
+  // Ensure that there is a valid selection
+  if (!copyAvailable())
+    return;
+
+  // Determine the correct order of start and end for selection
+  QString copiedText;
+  QPoint start = m_selectionStart;
+  QPoint end = m_selectionEnd;
+
+  if (start.y() > end.y() || (start.y() == end.y() && start.x() > end.x()))
+    std::swap(start, end);
+
+  // Iterate over the lines within the selection range
+  for (int lineIndex = start.y(); lineIndex <= end.y(); ++lineIndex)
+  {
+    const QString &line = m_data[lineIndex];
+
+    int startX = (lineIndex == start.y()) ? start.x() : 0;
+    int endX = (lineIndex == end.y()) ? end.x() : line.size();
+
+    // Adjust if the selection is inverted
+    if (start.y() == end.y() && start.x() > end.x())
+      std::swap(startX, endX);
+
+    // Check if the selection spans the entire line
+    if (lineIndex != start.y() && lineIndex != end.y())
+    {
+      startX = 0;
+      endX = line.size();
+    }
+
+    // Extract the selected portion of the line
+    if (startX < endX)
+      copiedText.append(line.mid(startX, endX - startX));
+
+    // If the selection spans the entire line, add a newline character
+    if (lineIndex != end.y() || (startX == 0 && endX == line.size()))
+      copiedText.append('\n');
+  }
+
+  // Copy the selected text to the clipboard
+  QClipboard *clipboard = QGuiApplication::clipboard();
+  clipboard->setText(copiedText);
 }
 
 /**
- * Deletes all the text in the text edit.
+ * @brief Clears the terminal's content.
+ *
+ * Resets the data buffer, moves the cursor to the top-left position,
+ * and enables autoscroll. This effectively clears the terminal's display.
  */
 void Widgets::Terminal::clear()
 {
-  m_textEdit.clear();
-  updateScrollbarVisibility();
-
-  m_textChanged = true;
+  initBuffer();
+  setCursorPosition(0, 0);
+  setAutoscroll(true);
 }
 
 /**
- * Selects all the text of the text edit.
+ * @brief Selects all the text currently present in the terminal.
+ *
+ * Updates the selection state to encompass all text in the terminal, if
+ * available. Emits the selectionChanged() signal to notify that the selection
+ * has been updated.
  */
 void Widgets::Terminal::selectAll()
 {
-  m_textEdit.selectAll();
+  // Skip if there is no data to select
+  if (m_data.isEmpty())
+    return;
+
+  // Set selection start at the beginning (top-left corner)
+  m_selectionStart = QPoint(0, 0);
+
+  // Set selection end at the last character of the last line
+  int lastLineIndex = m_data.size() - 1;
+  int lastCharIndex = m_data[lastLineIndex].size();
+  m_selectionEnd = QPoint(lastCharIndex, lastLineIndex);
+
+  // Since we're selecting everything, we do not need a "start cursor"
+  m_selectionStartCursor = m_selectionStart;
+
+  // Emit signal to indicate that the selection has changed
+  Q_EMIT selectionChanged();
 }
 
 /**
- * Clears the text selection
- */
-void Widgets::Terminal::clearSelection()
-{
-  auto cursor = QTextCursor(m_textEdit.document());
-  cursor.clearSelection();
-  m_textEdit.setTextCursor(cursor);
-  updateScrollbarVisibility();
-}
-
-/**
- * Changes the read-only state of the text edit.
+ * @brief Sets the font used for rendering the terminal text.
  *
- * In a read-only text edit the user can only navigate through the text and
- * select text; modifying the text is not possible.
- */
-void Widgets::Terminal::setReadOnly(const bool ro)
-{
-  m_textEdit.setReadOnly(ro);
-  Q_EMIT readOnlyChanged();
-}
-
-/**
- * Changes the font used to display the text of the text edit.
+ * @param font The QFont object to be used for terminal text.
+ *
+ * Updates the internal font, recalculates character dimensions, and adjusts the
+ * terminal border accordingly. Emits the fontChanged() signal to notify about
+ * the change.
+ * |
+ * |
  */
 void Widgets::Terminal::setFont(const QFont &font)
 {
-  m_textEdit.setFont(font);
-  updateScrollbarVisibility();
+  // Update font
+  m_font = font;
 
+  // Get size of font (in pixels)
+  auto metrics = QFontMetrics(font);
+
+  // Update character widths
+  m_cHeight = metrics.height();
+  m_cWidth = metrics.averageCharWidth();
+
+  // Update terminal border
+  m_borderX = qMax(m_cWidth, m_cHeight) / 2;
+  m_borderY = qMax(m_cWidth, m_cHeight) / 2;
+
+  // Notify QML
   Q_EMIT fontChanged();
 }
 
 /**
- * Appends a new paragraph with text to the end of the text edit.
+ * @brief Enables or disables autoscroll.
  *
- * If @c autoscroll() is enabled, this function shall also update the scrollbar
- * position to scroll to the bottom of the text.
- */
-void Widgets::Terminal::append(const QString &text)
-{
-  m_textEdit.appendPlainText(text);
-  updateScrollbarVisibility();
-
-  if (autoscroll())
-    scrollToBottom();
-
-  // Mark text changed flag
-  m_textChanged = true;
-}
-
-/**
- * Replaces the text of the text editor with @c text.
+ * @param enabled If true, autoscroll is enabled; otherwise, it is disabled.
  *
- * If @c autoscroll() is enabled, this function shall also update the scrollbar
- * position to scroll to the bottom of the text.
- */
-void Widgets::Terminal::setText(const QString &text)
-{
-  m_textEdit.setPlainText(text);
-  updateScrollbarVisibility();
-
-  if (autoscroll())
-    scrollToBottom();
-
-  // Mark text changed flag
-  m_textChanged = true;
-}
-
-/**
- * Changes the width of the vertical scrollbar
- */
-void Widgets::Terminal::setScrollbarWidth(const int width)
-{
-  auto bar = m_textEdit.verticalScrollBar();
-  bar->setFixedWidth(width);
-
-  Q_EMIT scrollbarWidthChanged();
-}
-
-/**
- * Changes the @c QPalette of the text editor widget and its children.
- */
-void Widgets::Terminal::setPalette(const QPalette &palette)
-{
-  m_textEdit.setPalette(palette);
-  Q_EMIT colorPaletteChanged();
-}
-
-/**
- * Enables or disables the text editor widget.
- */
-void Widgets::Terminal::setWidgetEnabled(const bool enabled)
-{
-  m_textEdit.setEnabled(enabled);
-  Q_EMIT widgetEnabledChanged();
-}
-
-/**
- * Enables/disable automatic scrolling. If automatic scrolling is enabled, then
- * the vertical scrollbar shall automatically scroll to the end of the document
- * when the text of the text editor is changed.
+ * Changes the autoscroll behavior of the terminal and emits the
+ * autoscrollChanged() signal.
  */
 void Widgets::Terminal::setAutoscroll(const bool enabled)
 {
-  // Change internal variables
   m_autoscroll = enabled;
-  updateScrollbarVisibility();
-
-  // Scroll to bottom if autoscroll is enabled
-  if (enabled)
-    scrollToBottom();
-
-  // Update console configuration
-  IO::Console::instance().setAutoscroll(enabled);
-
-  // Update UI
   Q_EMIT autoscrollChanged();
 }
 
 /**
- * Inserts the given @a text directly, no additional line breaks added.
- */
-void Widgets::Terminal::insertText(const QString &text)
-{
-  if (widgetEnabled())
-    addText(text, vt100emulation());
-}
-
-/**
- * Changes the word wrap mode of the text editor.
+ * @brief Sets the vertical scroll offset for the terminal.
  *
- * This property holds the mode QPlainTextEdit will use when wrapping text by
- * words.
+ * @param offset The new vertical scroll offset value.
+ *
+ * If the scroll offset is changed, it updates the internal offset, emits the
+ * scrollOffsetYChanged() signal, and triggers a redraw of the terminal.
  */
-void Widgets::Terminal::setWordWrapMode(const int mode)
+void Widgets::Terminal::setScrollOffsetY(const int offset)
 {
-  m_textEdit.setWordWrapMode(static_cast<QTextOption::WrapMode>(mode));
-  updateScrollbarVisibility();
-
-  Q_EMIT wordWrapModeChanged();
+  if (m_scrollOffsetY != offset)
+  {
+    m_scrollOffsetY = offset;
+    Q_EMIT scrollOffsetYChanged();
+    update();
+  }
 }
 
 /**
- * If set to true, the plain text edit scrolls the document vertically to make
- * the cursor visible at the center of the viewport. This also allows the text
- * edit to scroll below the end of the document. Otherwise, if set to false, the
- * plain text edit scrolls the smallest amount possible to ensure the cursor is
- * visible.
+ * @brief Sets the color palette used by the terminal.
+ *
+ * @param palette The QPalette object representing the new color palette.
+ *
+ * Updates the terminal's color palette and emits the colorPaletteChanged()
+ * signal to indicate that the palette has been updated.
  */
-void Widgets::Terminal::setCenterOnScroll(const bool enabled)
+void Widgets::Terminal::setPalette(const QPalette &palette)
 {
-  m_textEdit.setCenterOnScroll(enabled);
-  Q_EMIT centerOnScrollChanged();
+  m_palette = palette;
+  Q_EMIT colorPaletteChanged();
 }
 
 /**
- * Enables/disables interpretation of VT-100 escape secuences. This can be
- * useful when interfacing through network ports or interfacing with a MCU that
- * implements some kind of shell.
+ * @brief Enables or disables VT-100 emulation.
+ *
+ * @param enabled If true, VT-100 emulation is enabled; otherwise, it is
+ * disabled.
+ *
+ * Controls whether the terminal interprets VT-100 escape sequences for
+ * additional terminal functionality. Emits the vt100EmulationChanged() signal
+ * on change.
  */
 void Widgets::Terminal::setVt100Emulation(const bool enabled)
 {
@@ -409,394 +574,752 @@ void Widgets::Terminal::setVt100Emulation(const bool enabled)
 }
 
 /**
- * Enables/disables undo/redo history support.
- */
-void Widgets::Terminal::setUndoRedoEnabled(const bool enabled)
-{
-  m_textEdit.setUndoRedoEnabled(enabled);
-  Q_EMIT undoRedoEnabledChanged();
-}
-
-/**
- * Changes the placeholder text of the text editor. The placeholder text is only
- * displayed when the document is empty.
- */
-void Widgets::Terminal::setPlaceholderText(const QString &text)
-{
-  m_textEdit.setPlaceholderText(text);
-  Q_EMIT placeholderTextChanged();
-}
-
-/**
- * Moves the position of the vertical scrollbar to the end of the document.
- */
-void Widgets::Terminal::scrollToBottom()
-{
-  // Get scrollbar pointer, calculate line count & visible text lines
-  auto *bar = m_textEdit.verticalScrollBar();
-  auto lineCount = m_textEdit.document()->blockCount();
-  auto visibleLines = qRound(height() / m_textEdit.fontMetrics().height());
-
-  // Abort operation no text is visible
-  if (visibleLines <= 0)
-    return;
-
-  // Update scrolling range
-  bar->setMinimum(0);
-  bar->setMaximum(lineCount);
-
-  // Do not scroll to bottom if all text fits in current window
-  if (lineCount > visibleLines)
-    bar->setValue(lineCount - visibleLines + 2);
-  else
-    bar->setValue(0);
-}
-
-/**
- * Specifies the maximum number of blocks the document may have. If there are
- * more blocks in the document that specified with this property blocks are
- * removed from the beginning of the document.
+ * @brief Toggles the visibility of the cursor.
  *
- * A negative or zero value specifies that the document may contain an unlimited
- * amount of blocks.
+ * Flips the visibility state of the cursor, which is typically used to create
+ * a blinking cursor effect.
  */
-void Widgets::Terminal::setMaximumBlockCount(const int maxBlockCount)
+void Widgets::Terminal::toggleCursor()
 {
-  m_textEdit.setMaximumBlockCount(maxBlockCount);
-  Q_EMIT maximumBlockCountChanged();
+  m_cursorVisible = !m_cursorVisible;
 }
 
 /**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
+ * @brief Updates the terminal's color palette when the theme changes.
+ *
+ * Retrieves the current theme colors from the ThemeManager and updates the
+ * terminal's color palette accordingly. The new palette is used for rendering
+ * various elements, such as text, background, buttons, and highlights.
+ *
+ * @note After updating the palette, the terminal is redrawn to reflect the
+ *       changes.
  */
 void Widgets::Terminal::onThemeChanged()
 {
   // clang-format off
-  QPalette palette;
-  auto theme = &Misc::ThemeManager::instance();
-  palette.setColor(QPalette::Text, theme->getColor("console_text"));
-  palette.setColor(QPalette::Base, theme->getColor("console_base"));
-  palette.setColor(QPalette::Button, theme->getColor("console_button"));
-  palette.setColor(QPalette::Window, theme->getColor("console_window"));
-  palette.setColor(QPalette::ButtonText, theme->getColor("console_button"));
-  palette.setColor(QPalette::Highlight, theme->getColor("console_highlight"));
-  palette.setColor(QPalette::HighlightedText, theme->getColor("console_highlighted_text"));
-  palette.setColor(QPalette::PlaceholderText, theme->getColor("console_placeholder_text"));
-  m_textEdit.setPalette(palette);
+  const auto theme = &Misc::ThemeManager::instance();
+  m_palette.setColor(QPalette::Text, theme->getColor("console_text"));
+  m_palette.setColor(QPalette::Base, theme->getColor("console_base"));
+  m_palette.setColor(QPalette::Window, theme->getColor("console_border"));
+  m_palette.setColor(QPalette::Highlight, theme->getColor("console_highlight"));
+  update();
   // clang-format on
 }
 
 /**
- * Hides or shows the scrollbar
+ * @brief Appends a string of data to the terminal, processing each character
+ *        accordingly.
+ *
+ * @param data The string of data to be appended to the terminal.
+ *
+ * This method processes each character in the provided data string,
+ * interpreting escape sequences, formatting commands, and resetting font styles
+ * based on the terminal's current state (Text, Escape, Format, ResetFont).
+ *
+ * The processed text is accumulated and then appended to the terminal's buffer.
+ *
+ * @see processText(), processEscape(), processFormat(), processResetFont(),
+ * appendString()
  */
-void Widgets::Terminal::updateScrollbarVisibility()
+void Widgets::Terminal::append(const QString &data)
 {
-  // Get current line count & visible lines
-  auto lineCount = m_textEdit.document()->blockCount();
-  auto visibleLines = qCeil(height() / m_textEdit.fontMetrics().height());
+  QString text;
+  auto it = data.constBegin();
 
-  // Autoscroll enabled or text content is less than widget height
-  if (autoscroll() || visibleLines >= lineCount)
-    m_textEdit.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  while (it != data.constEnd())
+  {
+    auto byte = *it;
+    switch (m_state)
+    {
+      case Text:
+        processText(byte, text);
+        break;
+      case Escape:
+        processEscape(byte, text);
+        break;
+      case Format:
+        processFormat(byte, text);
+        break;
+      case ResetFont:
+        processResetFont(byte, text);
+        break;
+    }
 
-  // Show the scrollbar if the text content is greater than the widget height
+    ++it;
+  }
+
+  appendString(text);
+}
+
+/**
+ * @brief Appends a string to the terminal's data buffer, updating the cursor
+ *        position.
+ *
+ * @param string The QString to be appended to the terminal.
+ *
+ * This method processes each character in the given string by:
+ * - Registering it in the terminal's internal buffer at the current cursor
+ *   position.
+ * - Moving the cursor to the right after each character is placed.
+ *
+ * If autoscroll is enabled, the vertical scroll offset (`scrollOffsetY`) is
+ * adjusted to ensure that the cursor remains visible, and
+ * `scrollOffsetYChanged()` is emitted to notify of any changes.
+ *
+ * @see replaceData(), setCursorPosition(), autoscroll()
+ */
+void Widgets::Terminal::appendString(const QString &string)
+{
+  // Register each character in the provided string
+  foreach (QChar character, string)
+  {
+    // Obtain the current (x, y) cursor position
+    int cursorX = m_cursorPosition.x();
+    int cursorY = m_cursorPosition.y();
+
+    // Replace data in the console buffer at the current cursor position
+    replaceData(cursorX, cursorY, character);
+
+    // Increment the cursor position to the right after placing the character
+    setCursorPosition(cursorX + 1, cursorY);
+  }
+
+  // Adjust the scroll offset if autoscroll is enabled
+  if (autoscroll())
+  {
+    // Set the scroll offset to ensure the cursor line is visible
+    int cursorLine = m_cursorPosition.y();
+
+    // Ensure we don't scroll past the maximum content height
+    m_scrollOffsetY = qMax(0, cursorLine - linesPerPage() + 1);
+    Q_EMIT scrollOffsetYChanged();
+  }
+}
+
+/**
+ * @brief Removes characters from the terminal buffer starting from the cursor
+ *        position.
+ *
+ * @param direction The direction to remove characters: either LeftDirection or
+ *                  RightDirection.
+ *
+ * @param len The number of characters to remove. Defaults to INT_MAX if a
+ *            negative value is provided.
+ *
+ * This method removes characters from the terminal buffer either to the left or
+ * right of the current cursor position:
+ *
+ * - If `direction` is `RightDirection`, it removes characters starting from the
+ *   cursor and moving to the right, up to the specified length or the end of
+ *   theline.
+ * - If `direction` is `LeftDirection`, it removes characters to the left of the
+ *   cursor, up to the specified length.
+ *
+ * Characters removed are replaced with a clear character (`'\x7F'`).
+ *
+ * @see replaceData(), setCursorPosition()
+ */
+void Widgets::Terminal::removeStringFromCursor(const Direction direction,
+                                               int len)
+{
+  // Obtain (x, y) position
+  const auto positionX = m_cursorPosition.x();
+  const auto positionY = m_cursorPosition.y();
+
+  // Ensure valid length
+  if (len < 0)
+    len = INT_MAX;
+
+  // Cap bytes to remove (right)
+  int removeSize = 0;
+  if (direction == RightDirection)
+  {
+    qsizetype l1 = m_data[positionY].size() - positionX;
+    qsizetype l2 = static_cast<qsizetype>(len);
+    removeSize = qMin(l1, l2);
+  }
+
+  // Cap bytes to remove (left)
   else
-    m_textEdit.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    removeSize = qMin(len, m_cursorPosition.x());
+
+  // Removal operation
+  int offset = 0;
+  const QChar clearChar('\x7F');
+  for (int i = 0; i < removeSize; ++i)
+  {
+    // Get offset depending on removal direction
+    if (direction == LeftDirection)
+      offset = -1;
+    else if (direction == RightDirection)
+      offset = i;
+
+    // Replace data in console screen
+    replaceData(m_cursorPosition.x() + offset, positionY, clearChar);
+  }
 }
 
 /**
- * Updates the value of copy-available. This function is automatically called by
- * the text editor widget when the user makes any text selection/deselection.
+ * @brief Initializes the terminal's data buffer.
+ *
+ * Clears the existing data buffer and reserves memory for 1024 * 100 lines of
+ * terminal content.
+ *
+ * This function is typically used to reset the terminal state, ensuring
+ * efficient memory management for upcoming operations.
  */
-void Widgets::Terminal::setCopyAvailable(const bool yes)
+void Widgets::Terminal::initBuffer()
 {
-  m_copyAvailable = yes;
-  Q_EMIT copyAvailableChanged();
+  m_data.clear();
+  m_data.reserve(1024 * 100);
 }
 
 /**
- * Inserts the given @a text directly, no additional line breaks added.
+ * @brief Processes a single character in the context of normal text input.
+ *
+ * @param byte The character to be processed.
+ * @param text A reference to a QString that accumulates printable characters.
+ *
+ * This method handles normal text input processing, managing different
+ * character cases:
+ * - If the character is an escape character (`0x1b`) and VT-100 emulation is
+ *   enabled, it switches the state to `Escape` after appending the current
+ *   accumulated text.
+ * - If the character is a newline (`'\n'`), the accumulated text is appended,
+ *   and a new line is created in the buffer.
+ * - If the character is a backspace (`'\b'`) and VT-100 emulation is enabled,
+ *   the cursor is moved one position to the left.
+ * - If the character is printable, it is appended to the accumulated `text`.
+ *
+ * This function helps manage cursor positioning and character input depending
+ * on the current state.
+ *
+ * @see appendString(), setCursorPosition(), vt100emulation()
  */
-void Widgets::Terminal::addText(const QString &text, const bool enableVt100)
+void Widgets::Terminal::processText(const QChar &byte, QString &text)
 {
-  // Get text to insert
-  QString textToInsert = text;
-  if (enableVt100)
-    textToInsert = vt100Processing(text);
-
-  // Ensure that at most we show 1000 lines
-  if (m_textEdit.blockCount() > 1000)
-    m_textEdit.clear();
-
-  // Add text at the current cursor position
-  QTextCursor cursor(m_textEdit.document());
-  cursor.beginEditBlock();
-  cursor.movePosition(QTextCursor::End);
-  cursor.insertText(textToInsert);
-  cursor.endEditBlock();
-
-  // Autoscroll to bottom (if needed)
-  if (autoscroll())
-    scrollToBottom();
-
-  // Mark text changed flag
-  m_textChanged = true;
-}
-
-//------------------------------------------------------------------------------
-// VT-100 emulation
-//------------------------------------------------------------------------------
-
-QString Widgets::Terminal::vt100Processing(const QString &data)
-{
-  QString result;
-  int i = 0;
-
-  while (i < data.length())
+  if (byte.toLatin1() == 0x1b && vt100emulation())
   {
-    if (data[i] == '\xFF') // Telnet IAC (Interpret As Command) - 0xFF
-    {
-      // Handle Telnet commands
-      if (i + 1 < data.length())
-      {
-        char command = data[i + 1].toLatin1();
-        if (command == '\xF0') // Telnet SE (End of subnegotiation)
-        {
-          // Handle subnegotiation end
-          i += 2;
-          continue;
-        }
-        else if (command == '\xFB' || command == '\xFD') // WILL or DO
-        {
-          // Handle Telnet WILL or DO (option negotiation)
-          // We can inspect the following byte for the option code.
-          i += 3; // Skip the IAC, command, and option byte
-          continue;
-        }
-        else if (command == '\xFA') // Telnet SB (subnegotiation start)
-        {
-          // Handle subnegotiation start (for things like NAWS)
-          // Typically you would capture the subnegotiation data here
-          i += 2;
-          while (i < data.length() && data[i] != '\xFF')
-            i++; // Move through subnegotiation data
-          continue;
-        }
-        else
-        {
-          // Skip over any unhandled Telnet commands
-          i += 2;
-          continue;
-        }
-      }
-    }
-    else if (data[i] == '\x1b') // ANSI/VT-100 Escape character
-    {
-      if (data.mid(i, 2) == "\x1b[")
-      {
-        i += 2; // Skip the escape and [
-
-        // Initialize parameters string for the escape sequence
-        QString params;
-
-        // Extract parameters until we find a non-digit or semicolon (indicating
-        // we are in the CSI sequence)
-        while (i < data.length() && (data[i].isDigit() || data[i] == ';'))
-        {
-          params += data[i];
-          ++i;
-        }
-
-        // Text formatting (color, bold, etc.)
-        if (data[i] == 'm')
-        {
-          applyTextFormatting(params);
-          ++i;
-          continue;
-        }
-
-        // Clear screen command
-        else if (data[i] == 'J')
-        {
-          if (params.isEmpty() || params == "2")
-            m_textEdit.clear();
-          else if (params == "0")
-            clearFromCursorToEnd();
-          else if (params == "1")
-            clearFromStartToCursor();
-
-          ++i;
-          continue;
-        }
-
-        // Clear line command
-        else if (data[i] == 'K')
-        {
-          if (params.isEmpty() || params == "0")
-            clearFromCursorToEndOfLine();
-          else if (params == "1")
-            clearFromStartOfLineToCursor();
-          else if (params == "2")
-            clearEntireLine();
-
-          ++i;
-          continue;
-        }
-
-        // Cursor positioning command \x1b[<row>;<col>H or \x1b[<row>;<col>f
-        else if (data[i] == 'H' || data[i] == 'f')
-        {
-          // Default row and column to (1, 1) for \x1b[H (move to home position)
-          int row = 1, col = 1;
-
-          if (!params.isEmpty())
-          {
-            QStringList coordinates = params.split(';');
-            if (coordinates.size() > 0)
-              row = coordinates[0].toInt(); // Row number
-            if (coordinates.size() > 1)
-              col = coordinates[1].toInt(); // Column number
-          }
-
-          // Call moveCursorTo with the parsed row and column
-          moveCursorTo(row, col);
-
-          ++i;
-          continue;
-        }
-
-        // Add more VT-100 sequences as necessary (cursor movement, etc.)
-      }
-    }
-
-    // Handle normal text data by appending to the result
-    result += data[i];
-    ++i;
+    appendString(text);
+    text.clear();
+    m_state = Escape;
   }
 
-  return result;
-}
-
-void Widgets::Terminal::clearEntireLine()
-{
-  QTextCursor cursor = m_textEdit.textCursor();
-  cursor.select(QTextCursor::BlockUnderCursor);
-  cursor.removeSelectedText();
-}
-
-void Widgets::Terminal::clearFromCursorToEnd()
-{
-  QTextCursor cursor = m_textEdit.textCursor();
-  cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-  cursor.removeSelectedText();
-}
-
-void Widgets::Terminal::clearFromStartToCursor()
-{
-  QTextCursor cursor = m_textEdit.textCursor();
-  cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
-  cursor.removeSelectedText();
-}
-
-void Widgets::Terminal::clearFromCursorToEndOfLine()
-{
-  QTextCursor cursor = m_textEdit.textCursor();
-  cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-  cursor.removeSelectedText();
-}
-
-void Widgets::Terminal::clearFromStartOfLineToCursor()
-{
-  QTextCursor cursor = m_textEdit.textCursor();
-  cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
-  cursor.removeSelectedText();
-}
-
-void Widgets::Terminal::moveCursorTo(int row, int col)
-{
-  if (autoscroll())
-    scrollToBottom();
-
-  // Get the current cursor position and visible area
-  QTextCursor cursor = m_textEdit.textCursor();
-
-  // Get the block count (lines) in the document
-  int totalBlockCount = m_textEdit.document()->blockCount();
-
-  // Get the first visible block index (starting at the top of the visible area)
-  int firstBlock = m_textEdit.cursorForPosition(QPoint(0, 0)).blockNumber();
-
-  // Move cursor to the visible area (relative to the viewport)
-  int targetBlock = firstBlock + row - 1;
-
-  // Ensure target block is within valid range
-  if (targetBlock < 0)
-    targetBlock = 0;
-  if (targetBlock >= totalBlockCount)
-    targetBlock = totalBlockCount - 1;
-
-  // Move to the target block (row)
-  cursor.movePosition(QTextCursor::Start);
-  for (int i = 0; i < targetBlock; ++i)
-    cursor.movePosition(QTextCursor::Down);
-
-  // Move to the start of the block and then move to the desired column
-  cursor.movePosition(QTextCursor::StartOfBlock);
-  for (int i = 1; i < col; ++i)
-    cursor.movePosition(QTextCursor::Right);
-
-  // Set the new cursor position in the text edit
-  m_textEdit.setTextCursor(cursor);
-}
-
-void Widgets::Terminal::applyTextFormatting(const QString &params)
-{
-  QTextCharFormat format = m_textEdit.currentCharFormat();
-  QStringList codes = params.split(';');
-
-  for (const QString &codeStr : codes)
+  else if (byte == '\n')
   {
-    int code = codeStr.toInt();
-    switch (code)
+    appendString(text);
+    text.clear();
+    m_data.append("");
+    setCursorPosition(0, m_cursorPosition.y() + 1);
+  }
+
+  else if (byte == '\b' && vt100emulation())
+  {
+    if (m_cursorPosition.x())
     {
-      case 0: // Reset
-        format.setForeground(Qt::black);
-        format.setBackground(Qt::white);
-        format.setFontWeight(QFont::Normal);
-        break;
-      case 1: // Bold
-        format.setFontWeight(QFont::Bold);
-        break;
-      case 30: // Black text
-        format.setForeground(Qt::black);
-        break;
-      case 31: // Red text
-        format.setForeground(Qt::red);
-        break;
-      case 32: // Green text
-        format.setForeground(Qt::green);
-        break;
-      case 33: // Yellow text
-        format.setForeground(Qt::yellow);
-        break;
-      case 34: // Blue text
-        format.setForeground(Qt::blue);
-        break;
-      case 35: // Magenta text
-        format.setForeground(Qt::magenta);
-        break;
-      case 36: // Cyan text
-        format.setForeground(Qt::cyan);
-        break;
-      case 37: // White text
-        format.setForeground(Qt::white);
-        break;
-      default:
-        break;
-        // Add more color codes and background settings if necessary
+      appendString(text);
+      text.clear();
+      setCursorPosition(m_cursorPosition.x() - 1, m_cursorPosition.y());
     }
   }
 
-  m_textEdit.setCurrentCharFormat(format);
+  else if (byte.isPrint())
+    text.append(byte);
+}
+
+/**
+ * @brief Processes an escape sequence character.
+ *
+ * @param byte The character to be processed as part of the escape sequence.
+ * @param text A reference to a QString (currently unused in this method).
+ *
+ * This method handles the initial part of an escape sequence:
+ * - Resets the format values (`m_formatValue`, `m_formatValueY`) and related
+ *   state.
+ * - If the character is `'['`, it switches to `Format` state to process
+ *   additional formatting characters.
+ * - If the character is `'('`, it switches to `ResetFont` state for further
+ *   processing.
+ *
+ * @see processFormat(), m_state, m_formatValue, m_formatValueY
+ */
+void Widgets::Terminal::processEscape(const QChar &byte, QString &text)
+{
+  (void)text;
+
+  m_formatValue = 0;
+  m_formatValueY = 0;
+  m_useFormatValueY = false;
+
+  if (byte == '[')
+    m_state = Format;
+
+  else if (byte == '(')
+    m_state = ResetFont;
+}
+
+/**
+ * @brief Processes characters in the context of a terminal format command.
+ *
+ * @param byte The character to be processed as part of a format command.
+ * @param text A reference to a QString (currently unused in this method).
+ *
+ * This method handles terminal formatting commands, including text formatting,
+ * cursor movement, and screen clearing:
+ * - Numeric characters are accumulated as format values (`m_formatValue`,
+ *   `m_formatValueY`).
+ * - The `';'` character indicates multiple format values, and subsequent values
+ *   are processed.
+ * - The `'m'` character exits the formatting state and returns to normal text.
+ * - Cursor movement commands (`'A'`, `'B'`, `'C'`, `'D'`) adjust the cursor
+ *   position.
+ * - The `'H'` character moves the cursor to the specified position
+ *   (`m_formatValue`, `m_formatValueY`).
+ * - The `'J'` character clears the screen based on `m_formatValue`.
+ * - The `'K'` character clears part of the current line, depending on
+ *   `m_formatValue`.
+ * - The `'P'` character removes characters from the cursor position.
+ * - If an unrecognized character is received, the state is reset to `Text`.
+ *
+ * @note Some functions (`J` and `K` with certain values) are not implemented
+ *       and will produce warnings.
+ *
+ * @see setCursorPosition(), removeStringFromCursor(), m_state, m_formatValue
+ */
+void Widgets::Terminal::processFormat(const QChar &byte, QString &text)
+{
+  (void)text;
+
+  // Obtain format value
+  if (byte >= '0' && byte <= '9')
+  {
+    if (m_useFormatValueY)
+      m_formatValueY = m_formatValueY * 10 + (byte.cell() - '0');
+    else
+      m_formatValue = m_formatValue * 10 + (byte.cell() - '0');
+  }
+
+  // Control sequences
+  else
+  {
+    // Text formatting (ignored)
+    if (byte == ';')
+    {
+      m_formatValueY = 0;
+      m_useFormatValueY = true;
+      m_state = Format;
+    }
+
+    // Exit text formatting
+    else if (byte == 'm')
+      m_state = Text;
+
+    // Cursor movement
+    else if (byte >= 'A' && byte <= 'D')
+    {
+      if (!m_formatValue)
+        m_formatValue++;
+
+      int x = 0;
+      int y = 0;
+      switch (byte.toLatin1())
+      {
+        case 'A':
+          x = m_cursorPosition.x();
+          y = qMax(0, m_cursorPosition.y() - m_formatValue);
+          setCursorPosition(x, y);
+          break;
+        case 'B':
+          x = m_cursorPosition.x();
+          y = m_cursorPosition.y() + m_formatValue;
+          setCursorPosition(x, y);
+          break;
+        case 'C':
+          x = m_cursorPosition.x() + m_formatValue;
+          y = m_cursorPosition.y();
+          setCursorPosition(x, y);
+          break;
+        case 'D':
+          x = qMax(0, m_cursorPosition.x() - m_formatValue);
+          y = m_cursorPosition.y();
+          setCursorPosition(x, y);
+          break;
+        default:
+          break;
+      }
+
+      m_state = Text;
+    }
+
+    // Move cursor to current format value?
+    else if (byte == 'H')
+    {
+      setCursorPosition(m_formatValue, m_formatValueY);
+      m_state = Text;
+    }
+
+    // J function
+    else if (byte == 'J')
+    {
+      switch (m_formatValue)
+      {
+        case 0:
+        case 1:
+        case 2:
+          clear();
+          break;
+        default:
+          qWarning() << "J" << m_formatValue << "function not implemented!";
+          break;
+      }
+
+      m_state = Text;
+    }
+
+    // K function
+    else if (byte == 'K')
+    {
+      switch (m_formatValue)
+      {
+        case 0:
+          removeStringFromCursor(RightDirection);
+          break;
+        case 1:
+        case 2:
+          qWarning() << "K" << m_formatValue << "function not implemented!";
+          break;
+      }
+
+      m_state = Text;
+    }
+
+    // P function
+    else if (byte == 'P')
+    {
+      removeStringFromCursor(LeftDirection, m_formatValue);
+      removeStringFromCursor(RightDirection);
+      m_state = Text;
+    }
+
+    // Reset state
+    else
+      m_state = Text;
+  }
+}
+
+/**
+ * @brief Processes a reset font command in the terminal's state machine.
+ *
+ * @param byte The character to be processed (unused in this method).
+ * @param text A reference to a QString (unused in this method).
+ *
+ * This method simply resets the terminal's state back to `Text`, ending any
+ * font reset operations. This is typically used to handle the completion of
+ * a font reset escape sequence.
+ *
+ * @see m_state
+ */
+void Widgets::Terminal::processResetFont(const QChar &byte, QString &text)
+{
+  (void)byte;
+  (void)text;
+  m_state = Text;
+}
+
+/**
+ * @brief Sets the cursor position to a specified point.
+ *
+ * @param position The new cursor position as a QPoint object.
+ *
+ * Updates the cursor position to the specified point if it differs from the
+ * current position, and emits the cursorMoved() signal to indicate the change.
+ *
+ * @see cursorMoved()
+ */
+void Widgets::Terminal::setCursorPosition(const QPoint position)
+{
+  if (m_cursorPosition != position)
+  {
+    m_cursorPosition = position;
+    Q_EMIT cursorMoved();
+  }
+}
+
+/**
+ * @brief Sets the cursor position to specified coordinates.
+ *
+ * @param x The new x-coordinate of the cursor.
+ * @param y The new y-coordinate of the cursor.
+ *
+ * Calls the overloaded `setCursorPosition()` function with a QPoint constructed
+ * from the provided coordinates.
+ *
+ * @see setCursorPosition(const QPoint)
+ */
+void Widgets::Terminal::setCursorPosition(const int x, const int y)
+{
+  setCursorPosition(QPoint(x, y));
+}
+
+/**
+ * @brief Replaces or inserts a character in the terminal buffer at a specified
+ * position.
+ *
+ * @param x The x-coordinate (column) where the character should be replaced or
+ *          inserted.
+ * @param y The y-coordinate (line) where the character should be replaced or
+ *          inserted.
+ * @param byte The character to be placed at the specified position.
+ *
+ * This method ensures that:
+ * - The buffer is resized to accommodate the line specified by `y` if it does
+ *   not already exist.
+ * - The line at `y` is long enough to hold the character at position `x`,
+ *   padding with spaces if necessary.
+ * - The character (`byte`) is printable; otherwise, it is replaced with a dot.
+ *
+ * If the position `x` is within the length of the current line, the character
+ * is replaced. If `x` exceeds the current length, the character is appended to
+ * the line.
+ *
+ * @note Non-printable characters are replaced with a dot (`'.'`).
+ *
+ * @see lineCount(), m_data
+ */
+void Widgets::Terminal::replaceData(qsizetype x, qsizetype y, QChar byte)
+{
+  // Make sure the line at y exists in the buffer
+  if (y >= lineCount())
+    m_data.resize(y + 1);
+
+  // Get reference to current line
+  QString &currentLine = m_data[y];
+
+  // Ensure the current line is long enough to hold the character at x
+  if (x > currentLine.size())
+    currentLine = currentLine.leftJustified(x, ' ');
+
+  // Ensure that byte is a printable character
+  if (!byte.isPrint())
+    byte = '.';
+
+  // Replace or insert the character at the cursor position
+  if (x < currentLine.size())
+    currentLine[x] = byte;
+  else
+    currentLine.append(byte);
+}
+
+/**
+ * @brief Handles mouse wheel events for scrolling the terminal content.
+ *
+ * @param event A pointer to the QWheelEvent object containing details of the
+ * event.
+ *
+ * This method manages vertical scrolling of the terminal content when the mouse
+ * wheel is used:
+ * - Determines the number of steps to scroll based on the delta values in the
+ *   wheel event.
+ * - Converts wheel steps to line scrolling steps and adjusts the scroll offset
+ *   accordingly.
+ * - If scrolling up, autoscroll is disabled to prevent the view from
+ *   auto-resetting.
+ * - Ensures that the scroll offset remains within valid bounds, and re-enables
+ *   autoscroll if the end of the content is reached.
+ *
+ * @note This method is responsible for maintaining a smooth and user-friendly
+ * scrolling experience, including handling scenarios where autoscroll is
+ * temporarily disabled.
+ *
+ * @see setScrollOffsetY(), setAutoscroll(), linesPerPage(), lineCount()
+ */
+void Widgets::Terminal::wheelEvent(QWheelEvent *event)
+{
+  // Calculate the number of steps
+  int numSteps = 0;
+  auto pixelDelta = event->pixelDelta();
+  auto angleDelta = event->angleDelta();
+  if (!pixelDelta.isNull())
+    numSteps = pixelDelta.y();
+  else
+    numSteps = angleDelta.y();
+
+  // Convert steps to lines
+  if (numSteps > 0)
+    numSteps = qMax(1, numSteps / m_cHeight);
+  else if (numSteps < 0)
+    numSteps = qMin(-1, numSteps / m_cHeight);
+
+  // Disable auto scroll when scrolling up
+  if (numSteps > 0 && autoscroll() && linesPerPage() < lineCount())
+    setAutoscroll(false);
+
+  // Update scroll offset by the number of lines, each step scrolls a few lines
+  if (numSteps != 0)
+  {
+    // Calculate maximum lines that can be displayed in the viewport
+    const int maxScrollOffset = qMax(0, lineCount() - linesPerPage() + 2);
+
+    // Calculate the new scroll offset
+    int offset = m_scrollOffsetY - numSteps;
+
+    // Clamp the offset to stay within valid bounds
+    offset = qMax(0, offset);
+    offset = qMin(offset, maxScrollOffset);
+
+    // Re-enable autoscroll
+    if (offset == maxScrollOffset && !autoscroll())
+      setAutoscroll(true);
+
+    // Update offset
+    setScrollOffsetY(offset);
+  }
+
+  event->accept();
+}
+
+/**
+ * @brief Handles mouse move events for updating the text selection.
+ *
+ * @param event A pointer to the QMouseEvent object containing details of the
+ * event.
+ *
+ * If mouse tracking is enabled and there is an active selection
+ * (`m_selectionStartCursor` is set), this method:
+ * - Updates the end of the selection as the mouse moves.
+ * - Dynamically adjusts the selection start and end points based on the current
+ *   cursor position, allowing selection in any direction.
+ * - Updates the terminal view to visually reflect the selection change.
+ *
+ * @see positionToCursor(), update()
+ */
+void Widgets::Terminal::mouseMoveEvent(QMouseEvent *event)
+{
+  if (!m_mouseTracking)
+    return;
+
+  // Determine the current cursor position based on the mouse event
+  QPoint currentCursorPos = positionToCursor(event->pos());
+
+  // Check if selection is inverted (from bottom-right to top-left or similar)
+  if ((m_selectionStartCursor.y() > currentCursorPos.y())
+      || (m_selectionStartCursor.y() == currentCursorPos.y()
+          && m_selectionStartCursor.x() > currentCursorPos.x()))
+  {
+    m_selectionStart = currentCursorPos;
+    m_selectionEnd = m_selectionStartCursor;
+  }
+
+  // Normal selection (from top-left to bottom-right or similar)
+  else
+  {
+    m_selectionStart = m_selectionStartCursor;
+    m_selectionEnd = currentCursorPos;
+  }
+
+  Q_EMIT selectionChanged();
+}
+
+/**
+ * @brief Handles mouse press events for starting text selection.
+ *
+ * @param event A pointer to the QMouseEvent object containing details of the
+ * event.
+ *
+ * When the left mouse button is pressed:
+ * - Enables mouse tracking (`m_mouseTracking`) to allow text selection.
+ * - Clears any existing selection and sets the initial selection point
+ *   (`m_selectionStartCursor`).
+ * - Requests a view update to reflect the start of the selection visually.
+ *
+ * @see update(), positionToCursor()
+ */
+void Widgets::Terminal::mousePressEvent(QMouseEvent *event)
+{
+  if (event->button() == Qt::LeftButton)
+  {
+    m_mouseTracking = true;
+    m_selectionStartCursor = positionToCursor(event->pos());
+    m_selectionStart = m_selectionStartCursor;
+    m_selectionEnd = m_selectionStartCursor;
+    Q_EMIT selectionChanged();
+  }
+}
+
+/**
+ * @brief Handles mouse release events for finalizing text selection.
+ *
+ * @param event A pointer to the QMouseEvent object containing details of the
+ * event.
+ *
+ * When the left mouse button is released:
+ * - If the start and end of the selection are the same, clears the selection.
+ * - Disables mouse tracking and resets the selection starting point.
+ * - Requests a view update to finalize the visual representation of the
+ *   selection.
+ *
+ * @see update(), positionToCursor()
+ */
+void Widgets::Terminal::mouseReleaseEvent(QMouseEvent *event)
+{
+  if (event->button() == Qt::LeftButton)
+  {
+    if (m_selectionStart == m_selectionEnd)
+    {
+      m_selectionStart = QPoint();
+      m_selectionEnd = QPoint();
+    }
+
+    m_selectionStartCursor = QPoint();
+    m_mouseTracking = false;
+    Q_EMIT selectionChanged();
+  }
+}
+
+/**
+ * @brief Handles mouse double-click events for selecting the word under the
+ * cursor.
+ *
+ * @param event A pointer to the QMouseEvent object containing details of the
+ *              event.
+ *
+ * When the user double-clicks within the terminal, this method:
+ * - Determines the cursor's position based on the double-click location.
+ * - Expands the selection to include the entire word under the cursor, using
+ *   spaces as delimiters.
+ * - Emits the `selectionChanged()` signal to update the visual representation
+ *   of the selection.
+ *
+ * @note This method ensures that a double-click selects a word, similar to
+ *       behavior in standard text editors or terminal emulators.
+ *
+ * @see positionToCursor(), selectionChanged()
+ */
+void Widgets::Terminal::mouseDoubleClickEvent(QMouseEvent *event)
+{
+  auto cursorPos = positionToCursor(event->pos());
+  if (cursorPos.y() >= 0 && cursorPos.y() < m_data.size())
+  {
+    const QString &line = m_data[cursorPos.y()];
+
+    // Find word boundaries by expanding to the left and right
+    int wordStartX = cursorPos.x();
+    int wordEndX = cursorPos.x();
+
+    // Expand to the left until a space or start of the line is found
+    while (wordStartX > 0 && !line[wordStartX - 1].isSpace())
+      wordStartX--;
+
+    // Expand to the right until a space or end of the line is found
+    while (wordEndX < line.size() && !line[wordEndX].isSpace())
+      wordEndX++;
+
+    // Set selection start and end points
+    m_selectionStart = QPoint(wordStartX, cursorPos.y());
+    m_selectionEnd = QPoint(wordEndX, cursorPos.y());
+
+    // Update view to reflect the selection
+    Q_EMIT selectionChanged();
+    return;
+  }
 }
