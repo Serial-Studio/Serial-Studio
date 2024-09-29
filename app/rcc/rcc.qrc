@@ -243,5 +243,6 @@
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
         <file>fonts/NotoSansMono.ttf</file>
+        <file>icons/buttons/center.svg</file>
     </qresource>
 </RCC>

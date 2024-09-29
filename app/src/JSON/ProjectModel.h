@@ -28,6 +28,7 @@
 #include <JSON/Dataset.h>
 #include <QStandardItemModel>
 #include <QItemSelectionModel>
+#include <Misc/OsmTemplateServer.h>
 
 namespace JSON
 {
@@ -122,6 +123,9 @@ class ProjectModel : public QObject
   Q_PROPERTY(QStringList availableActionIcons
              READ availableActionIcons
              CONSTANT)
+  Q_PROPERTY(QString osmAddress
+             READ osmAddress
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -130,6 +134,7 @@ signals:
   void modifiedChanged();
   void treeModelChanged();
   void groupModelChanged();
+  void gpsApiKeysChanged();
   void currentViewChanged();
   void actionModelChanged();
   void projectModelChanged();
@@ -137,7 +142,6 @@ signals:
   void datasetOptionsChanged();
   void editableOptionsChanged();
   void frameParserCodeChanged();
-  void thunderforestApyKeyChanged();
 
 private:
   explicit ProjectModel();
@@ -252,6 +256,7 @@ public:
   [[nodiscard]] QString jsonFileName() const;
   [[nodiscard]] QString jsonProjectsPath() const;
 
+  [[nodiscard]] QString osmAddress() const;
   [[nodiscard]] QString selectedText() const;
   [[nodiscard]] QString selectedIcon() const;
 
@@ -261,6 +266,7 @@ public:
   [[nodiscard]] const QString &title() const;
   [[nodiscard]] const QString &jsonFilePath() const;
   [[nodiscard]] const QString &frameParserCode() const;
+  [[nodiscard]] const QString &mapTilerApiKey() const;
   [[nodiscard]] const QString &thunderforestApiKey() const;
 
   [[nodiscard]] bool currentGroupIsEditable() const;
@@ -309,6 +315,7 @@ public slots:
 
 private slots:
   void onJsonLoaded();
+  void onGpsApiKeysChanged();
   void generateComboBoxModels();
   void setModified(const bool modified);
   void setCurrentView(const CurrentView view);
@@ -332,6 +339,8 @@ private:
   QString m_frameParserCode;
   QString m_frameEndSequence;
   QString m_frameStartSequence;
+
+  QString m_mapTilerApiKey;
   QString m_thunderforestApiKey;
 
   CurrentView m_currentView;
@@ -366,6 +375,8 @@ private:
   JSON::Group m_selectedGroup;
   JSON::Action m_selectedAction;
   JSON::Dataset m_selectedDataset;
+
+  OsmTemplateServer m_server;
 };
 
 /**

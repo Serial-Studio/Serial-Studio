@@ -57,12 +57,13 @@ typedef enum
 // clang-format off
 typedef enum
 {
-  kProjectView_Title,              /**< Represents the project title item. */
-  kProjectView_ItemSeparator,      /**< Represents the item separator. */
-  kProjectView_FrameStartSequence, /**< Represents the frame start sequence. */
-  kProjectView_FrameEndSequence,   /**< Represents the frame end sequence. */
-  kProjectView_FrameDecoder,       /**< Represents the frame decoder item. */
-  kProjectView_ThunderforestApiKey /**< Represents the Thunderforest API key. */
+  kProjectView_Title,               /**< Represents the project title item. */
+  kProjectView_ItemSeparator,       /**< Represents the item separator. */
+  kProjectView_FrameStartSequence,  /**< Represents the frame start sequence. */
+  kProjectView_FrameEndSequence,    /**< Represents the frame end sequence. */
+  kProjectView_FrameDecoder,        /**< Represents the frame decoder item. */
+  kProjectView_ThunderforestApiKey, /**< Represents the Thunderforest API key. */
+  kProjectView_MapTilerApiKey       /**< Represents the MapTiler API key. */
 } ProjectItem;
 // clang-format on
 
@@ -112,6 +113,13 @@ typedef enum
 // clang-format on
 
 //------------------------------------------------------------------------------
+// Define ports for the OSM server
+//------------------------------------------------------------------------------
+
+static quint16 SERVER_PORT = 9727;
+static quint16 TILE_SERVER_PORT = 2701;
+
+//------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton instance access function
 //------------------------------------------------------------------------------
 
@@ -140,6 +148,7 @@ JSON::ProjectModel::ProjectModel()
   , m_groupModel(nullptr)
   , m_projectModel(nullptr)
   , m_datasetModel(nullptr)
+  , m_server("", "", TILE_SERVER_PORT, SERVER_PORT, nullptr)
 {
   // Generate data sources for project model
   generateComboBoxModels();
@@ -166,6 +175,10 @@ JSON::ProjectModel::ProjectModel()
   connect(&JSON::FrameBuilder::instance(),
           &JSON::FrameBuilder::jsonFileMapChanged, this,
           &JSON::ProjectModel::onJsonLoaded);
+
+  // Apply map provider API keys
+  connect(this, &JSON::ProjectModel::gpsApiKeysChanged, this,
+          &JSON::ProjectModel::onGpsApiKeysChanged);
 
   // Generate combo-boxes again when app is translated
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
@@ -301,6 +314,14 @@ QString JSON::ProjectModel::jsonProjectsPath() const
 }
 
 /**
+ * @brief Returns the server address of the OSM provider from SdrAngel
+ */
+QString JSON::ProjectModel::osmAddress() const
+{
+  return QStringLiteral("http://localhost:%1").arg(m_server.serverPort());
+}
+
+/**
  * @brief Retrieves the currently selected item's text.
  *
  * This function returns the text of the currently selected item in the tree
@@ -408,6 +429,19 @@ const QString &JSON::ProjectModel::jsonFilePath() const
 const QString &JSON::ProjectModel::frameParserCode() const
 {
   return m_frameParserCode;
+}
+
+/**
+ * @brief Retrieves the MapTiler API key used by the project.
+ *
+ * This function returns the API key used for accessing MapTiler mapping
+ * services.
+ *
+ * @return A reference to the Thunderforest API key.
+ */
+const QString &JSON::ProjectModel::mapTilerApiKey() const
+{
+  return m_mapTilerApiKey;
 }
 
 /**
@@ -701,6 +735,7 @@ bool JSON::ProjectModel::saveJsonFile()
   json.insert("frameEnd", m_frameEndSequence);
   json.insert("frameParser", m_frameParserCode);
   json.insert("frameStart", m_frameStartSequence);
+  json.insert("mapTilerApiKey", m_mapTilerApiKey);
   json.insert("thunderforestApiKey", m_thunderforestApiKey);
 
   // Create group array
@@ -757,6 +792,7 @@ void JSON::ProjectModel::newJsonFile()
   m_separator = ",";
   m_frameDecoder = Normal;
   m_frameEndSequence = "*/";
+  m_mapTilerApiKey = "";
   m_thunderforestApiKey = "";
   m_frameStartSequence = "/*";
   m_title = tr("Untitled Project");
@@ -778,8 +814,8 @@ void JSON::ProjectModel::newJsonFile()
   // Emit signals
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
+  Q_EMIT gpsApiKeysChanged();
   Q_EMIT frameParserCodeChanged();
-  Q_EMIT thunderforestApyKeyChanged();
 }
 
 //------------------------------------------------------------------------------
@@ -857,6 +893,7 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   m_frameEndSequence = json.value("frameEnd").toString();
   m_frameParserCode = json.value("frameParser").toString();
   m_frameStartSequence = json.value("frameStart").toString();
+  m_mapTilerApiKey = json.value("mapTilerApiKey").toString();
   m_thunderforestApiKey = json.value("thunderforestApiKey").toString();
   m_frameDecoder = static_cast<DecoderMethod>(json.value("decoder").toInt());
 
@@ -891,8 +928,8 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   // Update UI
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
+  Q_EMIT gpsApiKeysChanged();
   Q_EMIT frameParserCodeChanged();
-  Q_EMIT thunderforestApyKeyChanged();
 }
 
 //------------------------------------------------------------------------------
@@ -1902,16 +1939,28 @@ void JSON::ProjectModel::buildProjectModel()
                     ParameterDescription);
   m_projectModel->appendRow(decoding);
 
-  // Add OSM API Key
-  auto apiKey = new QStandardItem();
-  apiKey->setEditable(true);
-  apiKey->setData(TextField, WidgetType);
-  apiKey->setData(m_thunderforestApiKey, EditableValue);
-  apiKey->setData(tr("Thunderforest API Key"), ParameterName);
-  apiKey->setData(kProjectView_ThunderforestApiKey, ParameterType);
-  apiKey->setData(tr("None"), PlaceholderValue);
-  apiKey->setData(tr("Required for GPS map widget"), ParameterDescription);
-  m_projectModel->appendRow(apiKey);
+  // Add Thunderforest API Key
+  auto thunderforest = new QStandardItem();
+  thunderforest->setEditable(true);
+  thunderforest->setData(TextField, WidgetType);
+  thunderforest->setData(m_thunderforestApiKey, EditableValue);
+  thunderforest->setData(tr("Thunderforest API Key"), ParameterName);
+  thunderforest->setData(kProjectView_ThunderforestApiKey, ParameterType);
+  thunderforest->setData(tr("None"), PlaceholderValue);
+  thunderforest->setData(tr("Required for OpenStreetMap maps"),
+                         ParameterDescription);
+  m_projectModel->appendRow(thunderforest);
+
+  // Add MapTiler API Key
+  auto mapTiler = new QStandardItem();
+  mapTiler->setEditable(true);
+  mapTiler->setData(TextField, WidgetType);
+  mapTiler->setData(m_mapTilerApiKey, EditableValue);
+  mapTiler->setData(tr("MapTiler API Key"), ParameterName);
+  mapTiler->setData(kProjectView_MapTilerApiKey, ParameterType);
+  mapTiler->setData(tr("None"), PlaceholderValue);
+  mapTiler->setData(tr("Required for satellite maps"), ParameterDescription);
+  m_projectModel->appendRow(mapTiler);
 
   // Handle edits
   connect(m_projectModel, &CustomModel::itemChanged, this,
@@ -2311,6 +2360,15 @@ void JSON::ProjectModel::onJsonLoaded()
   openJsonFile(JSON::FrameBuilder::instance().jsonMapFilepath());
 }
 
+/**
+ * @brief Sets the API keys for the map providers.
+ */
+void JSON::ProjectModel::onGpsApiKeysChanged()
+{
+  m_server.setMaptilerAPIKey(m_mapTilerApiKey);
+  m_server.setThunderforestAPIKey(m_thunderforestApiKey);
+}
+
 //------------------------------------------------------------------------------
 // Re-generate combobox data sources when the language is changed
 //------------------------------------------------------------------------------
@@ -2610,7 +2668,11 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
       break;
     case kProjectView_ThunderforestApiKey:
       m_thunderforestApiKey = value.toString();
-      Q_EMIT thunderforestApyKeyChanged();
+      Q_EMIT gpsApiKeysChanged();
+      break;
+    case kProjectView_MapTilerApiKey:
+      m_mapTilerApiKey = value.toString();
+      Q_EMIT gpsApiKeysChanged();
       break;
     default:
       break;

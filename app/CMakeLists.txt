@@ -144,6 +144,7 @@ set(HEADERS
  src/UI/Widgets/Terminal.h
  src/Plugins/Server.h
  src/Platform/NativeWindow.h
+ src/Misc/OsmTemplateServer.h
  src/IO/Console.h
  src/IO/Drivers/Serial.h
  src/IO/Drivers/Network.h

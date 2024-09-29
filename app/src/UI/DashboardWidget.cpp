@@ -262,9 +262,14 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
     {
       setWidget(m_dbWidget);
       updateWidgetVisible();
-      /*connect(m_dbWidget, &Widgets::DashboardWidgetBase::updated, this, [=]()
-      { if (isGpsMap()) Q_EMIT gpsDataChanged();
-      });*/
+
+      if (widgetType() == UI::Dashboard::WidgetType::GPS)
+      {
+        auto *gps = qobject_cast<Widgets::GPS *>(m_dbWidget);
+        if (gps)
+          connect(gps, &Widgets::GPS::updated, this,
+                  &UI::DashboardWidget::gpsDataChanged);
+      }
 
       Q_EMIT widgetIndexChanged();
     }

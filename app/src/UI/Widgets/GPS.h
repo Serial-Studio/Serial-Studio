@@ -30,6 +30,9 @@ class GPS : public QWidget
 {
   Q_OBJECT
 
+signals:
+  void updated();
+
 public:
   GPS(const int index = -1);
 

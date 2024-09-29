@@ -35,213 +35,214 @@ Item {
   //
   property real latitude: 0
   property real longitude: 0
-  property real altitude: 0 // Not used yet :(
-  onLatitudeChanged: {
-    if (autoCenter.checked)
-      centerMap()
-  }
-
-  onLongitudeChanged: {
-    if (autoCenter.checked)
-      centerMap()
-  }
+  property real altitude: 0
+  property real previousLatitude: 0
+  property real previousLongitude: 0
 
   //
   // Centers the map to the current coordinates
   //
+  onLatitudeChanged: root.centerMap()
+  onLongitudeChanged: root.centerMap()
   function centerMap() {
-    map.center = QtPositioning.coordinate(root.latitude, root.longitude)
+    if (root.previousLatitude == 0 || root.previousLongitude == 0) {
+      root.previousLatitude = root.latitude
+      root.previousLongitude = root.longitude
+      map.center = QtPositioning.coordinate(root.latitude, root.longitude)
+    }
   }
 
   //
-  // Save settings accross runs
+  // Save settings
   //
   Settings {
-    property alias mapTilt: tiltSlider.value
-    property alias mapZoom: zoomSlider.value
-    property alias mapCenter: autoCenter.checked
-    property alias mapVariant: mapType.currentIndex
+    property alias activeMapType: mapType.currentIndex
   }
 
   //
-  // UI controls
+  // User interface
   //
-  ColumnLayout {
-    spacing: 8
+  Page {
     anchors.fill: parent
-    anchors.margins: 8
+    palette.mid: Cpp_ThemeManager.colors["mid"]
+    palette.dark: Cpp_ThemeManager.colors["dark"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.link: Cpp_ThemeManager.colors["link"]
+    palette.light: Cpp_ThemeManager.colors["light"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.shadow: Cpp_ThemeManager.colors["shadow"]
+    palette.accent: Cpp_ThemeManager.colors["accent"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.midlight: Cpp_ThemeManager.colors["midlight"]
+    palette.highlight: Cpp_ThemeManager.colors["highlight"]
+    palette.windowText: Cpp_ThemeManager.colors["window_text"]
+    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
+    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
+    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
+    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-    RowLayout {
-      spacing: 8
+    ColumnLayout {
+      spacing: 0
+      anchors.fill: parent
 
-      Label {
-        text: qsTr("Map Type:")
-        Layout.alignment: Qt.AlignVCenter
+      //
+      // Spacer
+      //
+      Item {
+        height: 4
       }
 
-      ComboBox {
-        id: mapType
+      //
+      // Map type selector
+      //
+      RowLayout {
+        spacing: 4
+        Layout.leftMargin: 4
+        Layout.rightMargin: 4
         Layout.fillWidth: true
-        textRole: "description"
-        model: map.supportedMapTypes
-        Layout.alignment: Qt.AlignVCenter
-        onCurrentIndexChanged: map.activeMapType = map.supportedMapTypes[currentIndex]
-      }
-    }
 
-    //
-    // Center map + zoom slider
-    //
-    RowLayout {
-      CheckBox {
-        id: autoCenter
-        checked: true
-        checkable: true
-        Layout.leftMargin: -6
-        Layout.alignment: Qt.AlignHCenter
-        text: qsTr("Center on coordinate")
-        onCheckedChanged: {
-          if (checked)
-            root.centerMap()
+        Button {
+          icon.width: 18
+          icon.height: 18
+          Layout.minimumWidth: 24
+          Layout.maximumWidth: 24
+          Layout.minimumHeight: 24
+          Layout.maximumHeight: 24
+          Layout.alignment: Qt.AlignVCenter
+          icon.color: Cpp_ThemeManager.colors["text"]
+          icon.source: "qrc:/rcc/icons/buttons/center.svg"
+          onClicked: map.center = QtPositioning.coordinate(root.latitude, root.longitude)
+        }
+
+        ComboBox {
+          id: mapType
+          Layout.fillWidth: true
+          textRole: "description"
+          Layout.minimumHeight: 24
+          Layout.maximumHeight: 24
+          model: map.supportedMapTypes
+          Layout.alignment: Qt.AlignVCenter
+          displayText: qsTr("Map Type: %1").arg(currentText)
+          onCurrentIndexChanged: map.activeMapType = map.supportedMapTypes[currentIndex]
         }
       }
 
-      Slider {
-        id: zoomSlider
-        value: map.zoomLevel
-        Layout.fillWidth: true
-        to: map.maximumZoomLevel
-        from: map.minimumZoomLevel
-        Layout.alignment: Qt.AlignHCenter
-        onValueChanged: {
-          if (map.zoomLevel !== value)
-            map.zoomLevel = value
-        }
+      //
+      // Spacer
+      //
+      Item {
+        height: 4
       }
-    }
 
-    //
-    // Map
-    //
-    RowLayout {
       //
-      // Tilt slider
+      // Map widget
       //
-      Slider {
-        id: tiltSlider
-        orientation: Qt.Vertical
+      Map {
+        id: map
+        opacity: 0.99
+        Layout.fillWidth: true
         Layout.fillHeight: true
-        from: map.minimumTilt
-        to: map.maximumTilt
-        value: map.tilt
-        onValueChanged: {
-          if (map.tilt != value)
-            map.tilt = value
-        }
-      }
+        property geoCoordinate startCentroid
 
-      //
-      // Map
-      //
-      Rectangle {
-        id: mapRect
-        clip: true
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        plugin: Plugin {
+          preferred: "osm"
 
-        border {
-          width: 2
-          color: Cpp_ThemeManager.border
-        }
-
-        gradient: Gradient {
-          GradientStop {
-            color: "#6ba9d1"
-            position: Math.max(0.4,
-                               (map.maximumTilt - map.tilt) /
-                               map.maximumTilt)
+          PluginParameter {
+            name: "osm.mapping.highdpi_tiles"
+            value: true
           }
 
-          GradientStop {
-            position: 0
-            color: "#283e51"
+          PluginParameter {
+            name: "osm.mapping.providersrepository.address"
+            value: Cpp_JSON_ProjectModel.osmAddress
           }
         }
 
-        Map {
-          id: map
-          smooth: true
-          antialiasing: true
-          color: "transparent"
-          anchors.fill: parent
-          copyrightsVisible: false
-          anchors.margins: parent.border.width
-
-          tilt: 27
-          zoomLevel: 16
-
-          MapQuickItem {
-            anchorPoint: Qt.point(sourceItem.width / 2,
-                                  sourceItem.height/ 2)
-            coordinate: QtPositioning.coordinate(root.latitude,
-                                                 root.longitude)
-
-            sourceItem: Rectangle {
-              id: dot
-              width: 20
-              height: 20
-              opacity: 0.8
-              border.width: 2
-              radius: width / 2
-              color: "#ff0000"
-              border.color: "#ffffff"
-            }
-          }
-
-          plugin: Plugin {
-            preferred: "osm"
-
-            PluginParameter {
-              name: "osm.mapping.highdpi_tiles"
-              value: true
-            }
+        //
+        // Position indicator
+        //
+        MapQuickItem {
+          anchorPoint: Qt.point(sourceItem.width / 2, sourceItem.height/ 2)
+          coordinate: QtPositioning.coordinate(root.latitude, root.longitude)
+          sourceItem: Button {
+            width: 48
+            height: 48
+            flat: true
+            icon.width: 32
+            icon.height: 32
+            icon.color: "#ff0000"
+            background: Item {}
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: "qrc:/rcc/icons/buttons/center.svg"
           }
         }
 
-        Rectangle {
-          id: smog
-          height: 32
-          opacity: 0.5
+        //
+        // Pinch handler
+        //
+        PinchHandler {
+          id: pinch
+          target: null
+          grabPermissions: PointerHandler.TakeOverForbidden
+          onActiveChanged: if (active) {
+                             map.startCentroid = map.toCoordinate(pinch.centroid.position, false)
+                           }
+          onScaleChanged: (delta) => {
+                            map.zoomLevel += Math.log2(delta)
+                            map.alignCoordinateToPoint(map.startCentroid, pinch.centroid.position)
+                          }
+          onRotationChanged: (delta) => {
+                               map.bearing -= delta
+                               map.alignCoordinateToPoint(map.startCentroid, pinch.centroid.position)
+                             }
 
-          Connections {
-            target: map
-            function onTiltChanged() {
-              var x = map.tilt / map.maximumTilt
-              smog.y = (1.666 * x - 1.416) * mapRect.height
-            }
-          }
+        }
 
-          gradient: Gradient {
-            GradientStop {
-              position: 0
-              color: "transparent"
-            }
+        //
+        // Zoom handler
+        //
+        WheelHandler {
+          id: wheel
+          // workaround for QTBUG-87646 / QTBUG-112394 / QTBUG-112432:
+          // Magic Mouse pretends to be a trackpad but doesn't work with PinchHandler
+          // and we don't yet distinguish mice and trackpads on Wayland either
+          acceptedDevices: Qt.platform.pluginName === "cocoa" || Qt.platform.pluginName === "wayland"
+                           ? PointerDevice.Mouse | PointerDevice.TouchPad
+                           : PointerDevice.Mouse
+          rotationScale: 1/120
+          property: "zoomLevel"
+        }
 
-            GradientStop {
-              position: 0.5
-              color: "#dedede"
-            }
+        //
+        // Drag handler to pan the map
+        //
+        DragHandler {
+          id: drag
+          target: null
+          onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
+        }
 
-            GradientStop {
-              position: 1
-              color: "transparent"
-            }
-          }
+        //
+        // Zoom in shortcut
+        //
+        Shortcut {
+          enabled: map.zoomLevel < map.maximumZoomLevel
+          sequence: StandardKey.ZoomIn
+          onActivated: map.zoomLevel = Math.round(map.zoomLevel + 1)
+        }
 
-          anchors {
-            left: parent.left
-            right: parent.right
-          }
+        //
+        // Zoom out shortcut
+        //
+        Shortcut {
+          enabled: map.zoomLevel > map.minimumZoomLevel
+          sequence: StandardKey.ZoomOut
+          onActivated: map.zoomLevel = Math.round(map.zoomLevel - 1)
         }
       }
     }
