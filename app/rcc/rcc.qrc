@@ -108,7 +108,6 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
-        <file>fonts/Hack-Regular.ttf</file>
         <file>fonts/Inter-Bold.ttf</file>
         <file>fonts/Inter-Regular.ttf</file>
         <file>icons/buttons/apply.svg</file>
@@ -202,6 +201,7 @@
         <file>icons/project-editor/windows/group.svg</file>
         <file>icons/project-editor/windows/project-setup.svg</file>
         <file>icons/project-editor/windows/project-structure.svg</file>
+        <file>icons/project-editor/open.svg</file>
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/connect.svg</file>
         <file>icons/toolbar/console.svg</file>
@@ -242,6 +242,6 @@
         <file>themes/Outdoor Night.json</file>
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
-        <file>icons/project-editor/open.svg</file>
+        <file>fonts/NotoSansMono.ttf</file>
     </qresource>
 </RCC>

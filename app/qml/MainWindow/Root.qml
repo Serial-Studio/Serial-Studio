@@ -331,7 +331,6 @@ Window {
         z: 1
         spacing: 0
         Layout.topMargin: -1
-        Layout.minimumWidth: 640 + 344
 
         //
         // Dashboard + Console view
@@ -342,7 +341,7 @@ Window {
           initialItem: terminal
           Layout.fillWidth: true
           Layout.fillHeight: true
-          Layout.minimumWidth: 640
+          Layout.minimumWidth: 680
           Layout.minimumHeight: 480
 
           data: [

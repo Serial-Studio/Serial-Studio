@@ -43,7 +43,7 @@ Misc::CommonFonts::CommonFonts()
   // Add common fonts to application database
   // clang-format off
   addFonts(
-      QStringLiteral(":/rcc/fonts/Hack-Regular.ttf"),
+      QStringLiteral(":/rcc/fonts/NotoSansMono.ttf"),
       QStringLiteral(":/rcc/fonts/Inter-Regular.ttf"),
       QStringLiteral(":/rcc/fonts/Inter-Bold.ttf")
   );
@@ -52,7 +52,7 @@ Misc::CommonFonts::CommonFonts()
   // Load common fonts
   m_uiFont = QFontDatabase::font(QStringLiteral("Inter"),
                                  QStringLiteral("Regular"), 12);
-  m_monoFont = QFontDatabase::font(QStringLiteral("Hack"),
+  m_monoFont = QFontDatabase::font(QStringLiteral("Noto Sans Mono"),
                                    QStringLiteral("Regular"), 12);
   m_boldUiFont = QFontDatabase::font(QStringLiteral("Inter"),
                                      QStringLiteral("Bold"), 12);

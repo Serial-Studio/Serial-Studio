@@ -27,6 +27,7 @@
 
 #include "IO/Console.h"
 #include "IO/Manager.h"
+#include "Misc/Translator.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
@@ -102,6 +103,10 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
       clear();
   });
 
+  // Change character widths when changing language
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, [=] { setFont(Misc::CommonFonts::instance().monoFont()); });
+
   // Blink the cursor
   m_cursorTimer.start(200);
   m_cursorTimer.setTimerType(Qt::PreciseTimer);
@@ -153,66 +158,84 @@ void Widgets::Terminal::paint(QPainter *painter)
   int firstLine = m_scrollOffsetY;
   int lastVLine = qMin(firstLine + linesPerPage(), lineCount() - 1);
 
-  // Draw selection rectangles
+  // Draw selection rectangles for each line in the visible range
   int y = m_borderY;
   for (int i = firstLine; i <= lastVLine; ++i, y += lineHeight)
   {
-    // Check if the line is selected
-    bool isLineSelected = true;
-    isLineSelected &= !m_selectionEnd.isNull();
-    isLineSelected &= (i <= m_selectionEnd.y());
-    isLineSelected &= (i >= m_selectionStart.y());
-
-    // Draw selection rectangle if applicable
-    if (isLineSelected)
+    // Check if the line is within the selection range
+    if (!m_selectionEnd.isNull() && i >= m_selectionStart.y()
+        && i <= m_selectionEnd.y())
     {
-      // Obtain X coordinates for selection start
-      int selectionStartX;
-      if (i == m_selectionStart.y())
-        selectionStartX = m_selectionStart.x() * m_cWidth + m_borderX;
-      else
-        selectionStartX = m_borderX;
-
-      // Obtain X coordinates for selection end
+      // Initialize parameters
       int selectionEndX;
-      if (i == m_selectionEnd.y())
-        selectionEndX = m_selectionEnd.x() * m_cWidth - m_borderX;
-      else
-        selectionEndX = width() - m_borderX;
+      int selectionStartX;
+      bool isLineSelected = false;
 
-      // Adjust if the selection start and end points are inverted
-      if (m_selectionStart.y() == m_selectionEnd.y())
+      // Selection is within the same line
+      if (i == m_selectionStart.y() && i == m_selectionEnd.y())
       {
+        isLineSelected = true;
+        selectionStartX = m_selectionStart.x() * m_cWidth + m_borderX;
+        selectionEndX = m_selectionEnd.x() * m_cWidth + m_borderX;
+
+        // Adjust if start and end points are inverted
         if (m_selectionStart.x() > m_selectionEnd.x())
           std::swap(selectionStartX, selectionEndX);
       }
 
-      // Check if the selection spans the entire line
-      if (i != m_selectionStart.y() && i != m_selectionEnd.y())
+      // Line is where selection starts
+      else if (i == m_selectionStart.y())
       {
+        isLineSelected = true;
+        selectionStartX = m_selectionStart.x() * m_cWidth + m_borderX;
+        selectionEndX = width() - m_borderX;
+      }
+
+      // Line is where selection ends
+      else if (i == m_selectionEnd.y())
+      {
+        isLineSelected = true;
+        selectionStartX = m_borderX;
+        selectionEndX = m_selectionEnd.x() * m_cWidth + m_borderX;
+      }
+
+      // Entire line is selected
+      else
+      {
+        isLineSelected = true;
         selectionStartX = m_borderX;
         selectionEndX = width() - m_borderX;
       }
 
-      // Ensure selection start/end X is inside the borders
-      selectionEndX = qMax(m_borderX, selectionEndX);
-      selectionStartX = qMax(m_borderX, selectionStartX);
+      // Draw the selection rectangle for the entire line, whether empty or not
+      if (isLineSelected)
+      {
+        // Ensure selection start/end X is inside the borders
+        selectionEndX = qMax(m_borderX, selectionEndX);
+        selectionStartX = qMax(m_borderX, selectionStartX);
+        int w = selectionEndX - selectionStartX;
+        while (selectionStartX + w > width() - m_borderX)
+          w -= 1;
 
-      // Draw the selection rectangle
-      const auto w = selectionEndX - selectionStartX;
-      QRect rect(selectionStartX, y, w, m_cHeight + 3);
-      painter->fillRect(rect, m_palette.color(QPalette::Highlight));
+        // Draw selection rectangle
+        QRect charRect(selectionStartX, y, w, m_cHeight + 2);
+        painter->fillRect(charRect, m_palette.color(QPalette::Highlight));
+      }
     }
   }
 
-  // Draw text for each line in the visible range
+  // Draw characters one by one (to ensure that m_cWidth assumption is true)
   y = m_borderY;
   for (int i = firstLine; i <= lastVLine; ++i, y += lineHeight)
   {
     const QString &line = m_data[i];
     painter->setPen(m_palette.color(QPalette::Text));
-    if (!line.isEmpty())
-      painter->drawText(m_borderX, y + lineHeight, line);
+
+    for (int j = 0; j < line.length(); ++j)
+    {
+      int charX = m_borderX + j * m_cWidth;
+      painter->drawText(charX, y + lineHeight, line.mid(j, 1));
+    }
   }
 
   // Draw cursor if visible
@@ -242,11 +265,11 @@ void Widgets::Terminal::paint(QPainter *painter)
       scrollbarHeight = availableHeight / 2;
 
     // Set scrollbar position
-    // clang-format off
     int x = width() - scrollbarWidth - m_borderX;
-    int y = (m_scrollOffsetY / static_cast<float>(lineCount() - linesPerPage())) * (availableHeight - scrollbarHeight) - m_borderY;
+    int y = (m_scrollOffsetY / static_cast<float>(lineCount() - linesPerPage()))
+                * (availableHeight - scrollbarHeight)
+            - m_borderY;
     y = qMax(m_borderY, y);
-    // clang-format on
 
     // Draw the scrollbar
     QRect scrollbarRect(x, y, scrollbarWidth, scrollbarHeight);
@@ -258,6 +281,7 @@ void Widgets::Terminal::paint(QPainter *painter)
                              scrollbarWidth / 2);
   }
 }
+
 /**
  * @brief Gets the current font used by the terminal.
  *
@@ -488,8 +512,6 @@ void Widgets::Terminal::selectAll()
  * Updates the internal font, recalculates character dimensions, and adjusts the
  * terminal border accordingly. Emits the fontChanged() signal to notify about
  * the change.
- * |
- * |
  */
 void Widgets::Terminal::setFont(const QFont &font)
 {
@@ -502,6 +524,10 @@ void Widgets::Terminal::setFont(const QFont &font)
   // Update character widths
   m_cHeight = metrics.height();
   m_cWidth = metrics.averageCharWidth();
+
+  // Special case for Chinese
+  if (Misc::Translator::instance().language() == 2)
+    m_cWidth = font.pixelSize();
 
   // Update terminal border
   m_borderX = qMax(m_cWidth, m_cHeight) / 2;
@@ -1111,6 +1137,33 @@ void Widgets::Terminal::replaceData(qsizetype x, qsizetype y, QChar byte)
 }
 
 /**
+ * @brief Determines whether a given character should end a text selection.
+ *
+ * This function is used to decide if a given character (`c`) marks the boundary
+ * for ending a text selection operation, such as when selecting a word in a
+ * terminal. The selection ends if the character is a space, a non-character, or
+ * not a letter or number.
+ *
+ * @param c The character to evaluate.
+ * @return true if the character should end the selection, false otherwise.
+ *
+ * The selection will end if:
+ * 1. `c` is a space character (e.g., space, tab).
+ * 2. `c` is a non-character, which includes control characters or other
+ *    special non-printable characters.
+ * 3. `c` is neither a letter nor a number, meaning punctuation marks, symbols,
+ *    and other non-alphanumeric characters will end the selection.
+ */
+bool Widgets::Terminal::shouldEndSelection(const QChar c)
+{
+  bool end = false;
+  end |= c.isSpace();
+  end |= c.isNonCharacter();
+  end |= (!c.isLetter() && !c.isNumber());
+  return end;
+}
+
+/**
  * @brief Handles mouse wheel events for scrolling the terminal content.
  *
  * @param event A pointer to the QWheelEvent object containing details of the
@@ -1285,8 +1338,7 @@ void Widgets::Terminal::mouseReleaseEvent(QMouseEvent *event)
  *
  * When the user double-clicks within the terminal, this method:
  * - Determines the cursor's position based on the double-click location.
- * - Expands the selection to include the entire word under the cursor, using
- *   spaces as delimiters.
+ * - Expands the selection to include the entire word under the cursor.
  * - Emits the `selectionChanged()` signal to update the visual representation
  *   of the selection.
  *
@@ -1307,11 +1359,11 @@ void Widgets::Terminal::mouseDoubleClickEvent(QMouseEvent *event)
     int wordEndX = cursorPos.x();
 
     // Expand to the left until a space or start of the line is found
-    while (wordStartX > 0 && !line[wordStartX - 1].isSpace())
+    while (wordStartX > 0 && !shouldEndSelection(line[wordStartX - 1]))
       wordStartX--;
 
     // Expand to the right until a space or end of the line is found
-    while (wordEndX < line.size() && !line[wordEndX].isSpace())
+    while (wordEndX < line.size() && !shouldEndSelection(line[wordEndX]))
       wordEndX++;
 
     // Set selection start and end points

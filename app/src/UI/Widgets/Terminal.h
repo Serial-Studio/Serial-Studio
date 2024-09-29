@@ -144,6 +144,7 @@ private:
   void replaceData(qsizetype x, qsizetype y, QChar byte);
 
 protected:
+  bool shouldEndSelection(const QChar c);
   void wheelEvent(QWheelEvent *event) override;
   void mouseMoveEvent(QMouseEvent *event) override;
   void mousePressEvent(QMouseEvent *event) override;
