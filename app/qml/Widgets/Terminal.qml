@@ -55,7 +55,9 @@ Item {
   //
   function showWelcomeGuide() {
     clear()
+    terminal.autoscroll = false
     Cpp_IO_Console.append(Cpp_Misc_Translator.welcomeConsoleText + "\n")
+    terminal.autoscroll = true
   }
 
   //
