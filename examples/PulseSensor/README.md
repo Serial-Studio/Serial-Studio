@@ -18,7 +18,7 @@ PPG sensors are often used in pulse oximeters to measure heart rate and estimate
 
 ## Hardware Setup
 
-To get started, you will need a **heart pulse sensor (Photoplethysmogram)** and an Arduino board. Connect the **signal output** of the pulse sensor to the **analog pin A0** of the Arduino.
+To get started, you will need a [**heart pulse sensor**](https://pulsesensor.com/) and an Arduino board. Connect the **signal output** of the pulse sensor to the **analog pin A0** of the Arduino.
 
 ### Connections
 
