@@ -111,7 +111,7 @@ cmake --build . --config Release -j 10
 
 ## 许可证
 
-此项目根据 MIT 许可证授权。更多详细信息，请参阅 [LICENSE](LICENSE.md) 文件。
+此项目根据 MIT 许可证授权。更多详细信息，请参阅 [LICENSE](/LICENSE.md) 文件。
 
 ## 支持与捐赠
 
