@@ -111,7 +111,7 @@ A continuación, se muestra un diagrama simplificado que ilustra cómo interact�
 
 ## Licencia
 
-Este proyecto está licenciado bajo la Licencia MIT. Para más detalles, consulta el archivo [LICENSE](LICENSE.md).
+Este proyecto está licenciado bajo la Licencia MIT. Para más detalles, consulta el archivo [LICENSE](/LICENSE.md).
 
 ## Soporte y Donaciones
 
