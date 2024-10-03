@@ -1,8 +1,8 @@
-# Pulse Sensor + Serial Studio Example
+# Pulse Sensor (Photoplethysmogram) + Serial Studio Example
 
 ## Overview
 
-This project demonstrates how to use Serial Studio to visualize data from a pulse sensor connected to an Arduino. The Arduino program reads raw data from the pulse sensor, applies a low-pass filter to remove high-frequency noise, and uses a moving average filter to further smooth the signal. The filtered signal is then transmitted via serial communication for real-time visualization.
+This project demonstrates how to use Serial Studio to visualize data from a **heart pulse sensor** connected to an Arduino. The Arduino program reads raw data from the pulse sensor, applies a low-pass filter to remove high-frequency noise, and uses a moving average filter to further smooth the signal. The filtered signal is then transmitted via serial communication for real-time visualization.
 
 With **Serial Studio**, you can use the **Quick Plot** feature to easily visualize the data, similar to the Arduino IDE's Serial Plotter, and also export the data into a playable CSV file for later analysis.
 
@@ -10,9 +10,15 @@ With **Serial Studio**, you can use the **Quick Plot** feature to easily visuali
 
 **Compatibility**: This project is compatible with any pulse sensor module connected to an analog pin on an Arduino. The program uses analog pin **A0** for reading the pulse sensor data.
 
+### What is a Photoplethysmogram (PPG)?
+
+A **Photoplethysmogram (PPG)** is a type of signal that measures changes in blood volume in the small blood vessels of the skin. It works by using a light source, like an LED, to shine light on the skin, and a phototransistor to measure how much light is either reflected or passed through the tissue. When the heart beats, the amount of blood in the skin changes, which also affects how much light is absorbed. This variation creates a waveform that shows each heartbeat as a peak.
+
+PPG sensors are often used in pulse oximeters to measure heart rate and estimate blood oxygen levels. They can also provide information related to breathing patterns and blood flow. The PPG waveform can look slightly different depending on where the sensor is placed on the body, as factors such as tissue composition and vascular structure influence the signal.
+
 ## Hardware Setup
 
-To get started, you will need a pulse sensor and an Arduino board. Connect the **signal output** of the pulse sensor to the **analog pin A0** of the Arduino.
+To get started, you will need a **heart pulse sensor (Photoplethysmogram)** and an Arduino board. Connect the **signal output** of the pulse sensor to the **analog pin A0** of the Arduino.
 
 ### Connections
 
@@ -23,7 +29,7 @@ To get started, you will need a pulse sensor and an Arduino board. Connect the *
 
 ### 1. Arduino Sketch (`PulseSensor.ino`)
 
-This sketch reads the analog value from the pulse sensor, applies filtering, and transmits the filtered data over the serial port.
+This sketch reads the analog value from the heart pulse sensor, applies filtering, and transmits the filtered data over the serial port.
 
 #### Program Overview:
 
@@ -61,7 +67,7 @@ The final filtered signal is printed to the serial port, allowing you to visuali
 
 4. **CSV Export**:
 
-One of the advantages of Serial Studio is that it allows you to export a **playable CSV file** of the serial data, even if you have not created a JSON project. This file can be used for further analysis or for sharing your results.
+   One of the advantages of Serial Studio is that it allows you to export a **playable CSV file** of the serial data, even if you have not created a JSON project. This file can be used for further analysis or for sharing your results.
 
 ![Serial Studio Quick Plot](doc/csv.png)
 
