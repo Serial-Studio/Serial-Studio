@@ -111,7 +111,7 @@ Im Folgenden siehst du ein vereinfachtes Diagramm, das zeigt, wie die verschiede
 
 ## Lizenz
 
-Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Details findest du in der Datei [LICENSE](LICENSE.md).
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Details findest du in der Datei [LICENSE](/LICENSE.md).
 
 ## Unterstützung und Spenden
 
