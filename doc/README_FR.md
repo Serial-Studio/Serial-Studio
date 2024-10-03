@@ -108,11 +108,11 @@ cmake --build . --config Release -j 10
 
 Voici un schéma simplifié illustrant comment les différents modules de Serial Studio interagissent. Pour plus d'informations détaillées, consultez la documentation complète DOXYGEN [ici](https://serial-studio.github.io/hackers/).
 
-![Architecture](doc/architecture/architecture.png)
+![Architecture](/doc/architecture/architecture.png)
 
 ## Licence
 
-Ce projet est sous licence MIT. Pour plus de détails, consultez le fichier [LICENSE](LICENSE.md).
+Ce projet est sous licence MIT. Pour plus de détails, consultez le fichier [LICENSE](/LICENSE.md).
 
 ## Support & Contribution
 
