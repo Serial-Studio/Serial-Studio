@@ -17,7 +17,7 @@ Das Tool entstand aus meinen Erfahrungen bei mehreren CanSat-Wettbewerben, bei d
 
 Heute ist Serial Studio ein leistungsstarkes und anpassungsfähiges Tool, das nicht nur für CanSat-Wettbewerbe, sondern auch für jedes Projekt zur Datenerfassung und -visualisierung geeignet ist. Es unterstützt die Datenabfrage aus einer Vielzahl von Quellen, darunter serielle Schnittstellen, MQTT, Bluetooth Low Energy (BLE) und Netzwerksockets (TCP/UDP).
 
-*Lies dieses Dokument in anderen Sprachen*: [Español](/doc/README_ES.md) [简体中文](/doc/README_ZH.md) [Deutsch](/doc/README_DE.md) [Русский](/doc/README_RU.md)
+*Lies dieses Dokument in anderen Sprachen*: [Español](/doc/README_ES.md) [简体中文](/doc/README_ZH.md) [Deutsch](/doc/README_DE.md) [Русский](/doc/README_RU.md) [Français](/doc/README_FR.md)
 
 ![Software-Benutzung](/doc/screenshot.png)
 

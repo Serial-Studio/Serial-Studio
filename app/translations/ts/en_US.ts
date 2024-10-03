@@ -2017,7 +2017,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="111"/>
+        <location filename="../../src/Misc/Translator.cpp" line="117"/>
         <source>Failed to load welcome text :(</source>
         <translation></translation>
     </message>
@@ -2255,52 +2255,52 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="128"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="130"/>
         <source>Copy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="135"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="137"/>
         <source>Select all</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="142"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="144"/>
         <source>Clear</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="152"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="154"/>
         <source>Print</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="159"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="161"/>
         <source>Save as</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="219"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="221"/>
         <source>Send Data to Device</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="294"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="296"/>
         <source>Show Timestamp</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="305"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="307"/>
         <source>Echo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="316"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="318"/>
         <source>Emulate VT-100</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="336"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="338"/>
         <source>Display: %1</source>
         <translation></translation>
     </message>

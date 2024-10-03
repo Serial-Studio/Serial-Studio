@@ -72,6 +72,9 @@ int Misc::Translator::systemLanguage() const
     case QLocale::Russian:
       lang = 4;
       break;
+    case QLocale::French:
+      lang = 5;
+      break;
     default:
       lang = 0;
       break;
@@ -102,6 +105,9 @@ QString Misc::Translator::welcomeConsoleText() const
       break;
     case 4:
       lang = QStringLiteral("RU");
+      break;
+    case 5:
+      lang = QStringLiteral("FR");
       break;
     default:
       lang = QStringLiteral("EN");
@@ -148,6 +154,7 @@ QStringList &Misc::Translator::availableLanguages()
     list.append(QStringLiteral("简体中文"));
     list.append(QStringLiteral("Deutsch"));
     list.append(QStringLiteral("Русский"));
+    list.append(QStringLiteral("Français"));
   }
 
   return list;
@@ -185,6 +192,10 @@ void Misc::Translator::setLanguage(const int language)
     case 4:
       langName = QStringLiteral("ru_RU");
       locale = QLocale(QLocale::Russian);
+      break;
+    case 5:
+      langName = QStringLiteral("fr_FR");
+      locale = QLocale(QLocale::French);
       break;
     default:
       langName = QStringLiteral("en_US");

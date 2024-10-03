@@ -2547,7 +2547,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="111"/>
+        <location filename="../../src/Misc/Translator.cpp" line="117"/>
         <source>Failed to load welcome text :(</source>
         <translation>Error al cargar el texto de bienvenida :(</translation>
     </message>
@@ -2785,27 +2785,27 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="128"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="130"/>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="135"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="137"/>
         <source>Select all</source>
         <translation>Seleccionar todo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="142"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="144"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="152"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="154"/>
         <source>Print</source>
         <translation>Imprimir</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="159"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="161"/>
         <source>Save as</source>
         <translation>Guardar como</translation>
     </message>
@@ -2814,12 +2814,12 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation type="vanished">No se han recibido datos hasta ahora</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="219"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="221"/>
         <source>Send Data to Device</source>
         <translation>Enviar datos al dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="305"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="307"/>
         <source>Echo</source>
         <translation>Eco</translation>
     </message>
@@ -2828,17 +2828,17 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation type="vanished">Desplazamiento automático</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="294"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="296"/>
         <source>Show Timestamp</source>
         <translation>Mostrar marca de tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="316"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="318"/>
         <source>Emulate VT-100</source>
         <translation>Emular VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Terminal.qml" line="336"/>
+        <location filename="../../qml/Widgets/Terminal.qml" line="338"/>
         <source>Display: %1</source>
         <translation>Mostrar: %1</translation>
     </message>

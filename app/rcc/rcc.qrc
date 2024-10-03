@@ -110,7 +110,9 @@
         <file>actions/Zoom Out.svg</file>
         <file>fonts/Inter-Bold.ttf</file>
         <file>fonts/Inter-Regular.ttf</file>
+        <file>fonts/NotoSansMono.ttf</file>
         <file>icons/buttons/apply.svg</file>
+        <file>icons/buttons/center.svg</file>
         <file>icons/buttons/clear.svg</file>
         <file>icons/buttons/close.svg</file>
         <file>icons/buttons/connected.svg</file>
@@ -230,6 +232,7 @@
         <file>messages/Welcome_DE.txt</file>
         <file>messages/Welcome_EN.txt</file>
         <file>messages/Welcome_ES.txt</file>
+        <file>messages/Welcome_FR.txt</file>
         <file>messages/Welcome_RU.txt</file>
         <file>messages/Welcome_ZH.txt</file>
         <file>scripts/frame-parser.js</file>
@@ -242,7 +245,5 @@
         <file>themes/Outdoor Night.json</file>
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
-        <file>fonts/NotoSansMono.ttf</file>
-        <file>icons/buttons/center.svg</file>
     </qresource>
 </RCC>
