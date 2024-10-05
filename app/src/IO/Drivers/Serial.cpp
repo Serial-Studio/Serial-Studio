@@ -696,6 +696,7 @@ void IO::Drivers::Serial::refreshSerialDevices()
     m_portList = ports;
 
     // Update current port index
+    bool indexChanged = false;
     if (port())
     {
       auto name = port()->portName();
@@ -704,6 +705,7 @@ void IO::Drivers::Serial::refreshSerialDevices()
         auto info = validPortList.at(i);
         if (info.portName() == name)
         {
+          indexChanged = true;
           m_portIndex = i + 1;
           break;
         }
@@ -725,6 +727,10 @@ void IO::Drivers::Serial::refreshSerialDevices()
 
     // Update UI
     Q_EMIT availablePortsChanged();
+
+    // Update serial port index after the port list has been updated
+    if (indexChanged)
+      Q_EMIT portIndexChanged();
   }
 }
 

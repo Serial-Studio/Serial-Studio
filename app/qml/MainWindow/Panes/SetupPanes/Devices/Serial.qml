@@ -82,8 +82,10 @@ Item {
       enabled: !Cpp_IO_Manager.connected
       currentIndex: Cpp_IO_Serial.portIndex
       onCurrentIndexChanged: {
-        if (currentIndex !== Cpp_IO_Serial.portIndex)
-          Cpp_IO_Serial.portIndex = currentIndex
+        if (enabled) {
+          if (currentIndex !== Cpp_IO_Serial.portIndex)
+            Cpp_IO_Serial.portIndex = currentIndex
+        }
       }
     }
 
