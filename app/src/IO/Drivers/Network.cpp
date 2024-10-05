@@ -180,7 +180,7 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
     hostAddr = defaultAddress();
 
   // Init socket pointer
-  QIODevice *socket = Q_NULLPTR;
+  QIODevice *socket = nullptr;
 
   // TCP connection, assign socket pointer & connect to host
   if (socketType() == QAbstractSocket::TcpSocket)

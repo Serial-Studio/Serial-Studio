@@ -80,7 +80,7 @@ public:
    *
    * @param parent The parent widget.
    */
-  explicit KLed(QWidget *parent = Q_NULLPTR);
+  explicit KLed(QWidget *parent = nullptr);
 
   /**
    * Constructs a round LED widget with the supplied color which will
@@ -90,7 +90,7 @@ public:
    * @param parent The parent widget.
    * @short Constructor
    */
-  explicit KLed(const QColor &color, QWidget *parent = Q_NULLPTR);
+  explicit KLed(const QColor &color, QWidget *parent = nullptr);
 
   /**
    * Constructor with the color, state and look.
@@ -105,7 +105,7 @@ public:
    * @short Constructor
    */
   KLed(const QColor &color, KLed::State state, KLed::Look look,
-       KLed::Shape shape, QWidget *parent = Q_NULLPTR);
+       KLed::Shape shape, QWidget *parent = nullptr);
 
   /**
    * Destroys the LED widget.

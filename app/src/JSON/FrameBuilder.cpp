@@ -100,7 +100,7 @@ JSON::FrameBuilder::OperationMode JSON::FrameBuilder::operationMode() const
 void JSON::FrameBuilder::loadJsonMap()
 {
   const auto file = QFileDialog::getOpenFileName(
-      Q_NULLPTR, tr("Select JSON map file"),
+      nullptr, tr("Select JSON map file"),
       JSON::ProjectModel::instance().jsonProjectsPath(),
       tr("JSON files") + QStringLiteral(" (*.json)"));
 

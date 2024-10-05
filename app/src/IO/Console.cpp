@@ -268,7 +268,7 @@ void IO::Console::save()
     return;
 
   // Get file name
-  auto path = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Export Console Data"),
+  auto path = QFileDialog::getSaveFileName(nullptr, tr("Export Console Data"),
                                            QDir::homePath(),
                                            tr("Text Files") + " (*.txt)");
 
@@ -397,7 +397,7 @@ void IO::Console::print()
   printer.setPageOrientation(QPageLayout::Portrait);
 
   // Show print dialog
-  QPrintDialog printDialog(&printer, Q_NULLPTR);
+  QPrintDialog printDialog(&printer, nullptr);
   if (printDialog.exec() == QDialog::Accepted)
   {
     document.print(&printer);

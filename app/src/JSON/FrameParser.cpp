@@ -190,7 +190,7 @@ void JSON::FrameParser::import()
 
   // Get file from system
   auto path = QFileDialog::getOpenFileName(
-      Q_NULLPTR, tr("Select Javascript file to import"), QDir::homePath(),
+      nullptr, tr("Select Javascript file to import"), QDir::homePath(),
       "*.js");
 
   // Load file into code editor

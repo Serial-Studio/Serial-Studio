@@ -172,7 +172,7 @@ void CSV::Player::openFile()
 {
   // Get file name
   auto file = QFileDialog::getOpenFileName(
-      Q_NULLPTR, tr("Select CSV file"), csvFilesPath(),
+      nullptr, tr("Select CSV file"), csvFilesPath(),
       tr("CSV files") + QStringLiteral(" (*.csv)"));
 
   // Open CSV file

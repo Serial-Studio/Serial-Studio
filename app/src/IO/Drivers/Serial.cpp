@@ -35,7 +35,7 @@
  * Constructor function
  */
 IO::Drivers::Serial::Serial()
-  : m_port(Q_NULLPTR)
+  : m_port(nullptr)
   , m_dtrEnabled(true)
   , m_autoReconnect(false)
   , m_lastSerialDeviceIndex(0)
@@ -418,7 +418,7 @@ QSerialPort::FlowControl IO::Drivers::Serial::flowControl() const
 void IO::Drivers::Serial::disconnectDevice()
 {
   // Check if serial port pointer is valid
-  if (port() != Q_NULLPTR)
+  if (port() != nullptr)
   {
     // Disconnect signals/slots
     port()->disconnect(this, SLOT(onReadyRead()));
@@ -430,7 +430,7 @@ void IO::Drivers::Serial::disconnectDevice()
   }
 
   // Reset pointer
-  m_port = Q_NULLPTR;
+  m_port = nullptr;
   Q_EMIT portChanged();
   Q_EMIT availablePortsChanged();
 }

@@ -35,9 +35,9 @@
 IO::Drivers::BluetoothLE::BluetoothLE()
   : m_deviceIndex(-1)
   , m_deviceConnected(false)
-  , m_service(Q_NULLPTR)
-  , m_controller(Q_NULLPTR)
-  , m_discoveryAgent(Q_NULLPTR)
+  , m_service(nullptr)
+  , m_controller(nullptr)
+  , m_discoveryAgent(nullptr)
 {
   // Update connect button status when a BLE device is selected by the user
   connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged, this,
@@ -70,7 +70,7 @@ void IO::Drivers::BluetoothLE::close()
   {
     disconnect(m_service);
     m_service->deleteLater();
-    m_service = Q_NULLPTR;
+    m_service = nullptr;
   }
 
   // Delete previous controller
@@ -79,7 +79,7 @@ void IO::Drivers::BluetoothLE::close()
     disconnect(m_controller);
     m_controller->disconnectFromDevice();
     m_controller->deleteLater();
-    m_controller = Q_NULLPTR;
+    m_controller = nullptr;
   }
 
   // Update UI
@@ -152,14 +152,14 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
     {
       disconnect(m_service);
       m_service->deleteLater();
-      m_service = Q_NULLPTR;
+      m_service = nullptr;
     }
 
     if (m_controller)
     {
       disconnect(m_controller);
       m_controller->deleteLater();
-      m_controller = Q_NULLPTR;
+      m_controller = nullptr;
     }
 
     m_deviceConnected = false;
@@ -324,7 +324,7 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
   {
     disconnect(m_service);
     m_service->deleteLater();
-    m_service = Q_NULLPTR;
+    m_service = nullptr;
   }
 
   // Ensure that index is valid

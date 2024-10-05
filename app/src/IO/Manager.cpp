@@ -59,7 +59,7 @@ IO::Manager::Manager()
   : m_enableCrc(false)
   , m_writeEnabled(true)
   , m_maxBufferSize(1024 * 1024)
-  , m_driver(Q_NULLPTR)
+  , m_driver(nullptr)
   , m_receivedBytes(0)
   , m_startSequence(QStringLiteral("/*"))
   , m_finishSequence(QStringLiteral("*/"))
@@ -120,7 +120,7 @@ bool IO::Manager::connected()
  */
 bool IO::Manager::deviceAvailable()
 {
-  return driver() != Q_NULLPTR;
+  return driver() != nullptr;
 }
 
 /**
@@ -149,7 +149,7 @@ int IO::Manager::maxBufferSize() const
  * Returns a pointer to the currently selected driver.
  *
  * @warning you need to check this pointer before using it, it can have a @c
- * Q_NULLPTR value during normal operations.
+ * nullptr value during normal operations.
  */
 IO::HAL_Driver *IO::Manager::driver()
 {
@@ -420,7 +420,7 @@ void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
 
   // Invalid driver
   else
-    setDriver(Q_NULLPTR);
+    setDriver(nullptr);
 
   // Update UI
   Q_EMIT selectedDriverChanged();

@@ -31,9 +31,9 @@ class ElidedLabel : public QLabel
   Q_OBJECT
 
 public:
-  explicit ElidedLabel(QWidget *parent = Q_NULLPTR,
+  explicit ElidedLabel(QWidget *parent = nullptr,
                        Qt::WindowFlags flags = Qt::WindowFlags());
-  explicit ElidedLabel(const QString &text, QWidget *parent = Q_NULLPTR,
+  explicit ElidedLabel(const QString &text, QWidget *parent = nullptr,
                        Qt::WindowFlags flags = Qt::WindowFlags());
   void setType(const Qt::TextElideMode type);
 

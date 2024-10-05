@@ -711,7 +711,7 @@ bool JSON::ProjectModel::saveJsonFile()
   // Get file save path
   if (jsonFilePath().isEmpty())
   {
-    auto path = QFileDialog::getSaveFileName(Q_NULLPTR, tr("Save JSON project"),
+    auto path = QFileDialog::getSaveFileName(nullptr, tr("Save JSON project"),
                                              jsonProjectsPath(), "*.json");
     if (path.isEmpty())
       return false;
@@ -834,7 +834,7 @@ void JSON::ProjectModel::openJsonFile()
 {
   // Let user select a file
   const auto path = QFileDialog::getOpenFileName(
-      Q_NULLPTR, tr("Select JSON file"), jsonProjectsPath(), "*.json");
+      nullptr, tr("Select JSON file"), jsonProjectsPath(), "*.json");
 
   // Invalid path, abort
   if (path.isEmpty())

@@ -146,7 +146,7 @@ const QVector<JSON::Dataset> &JSON::Group::datasets() const
 }
 
 /**
- * @return The dataset at the given @a index,vreturns @c Q_NULLPTR on invalid
+ * @return The dataset at the given @a index,vreturns @c nullptr on invalid
  * index
  */
 const JSON::Dataset &JSON::Group::getDataset(const int index) const

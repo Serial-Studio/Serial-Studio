@@ -28,6 +28,24 @@
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
 
+//----------------------------------------------------------------------------
+// Suppress deprecated warnings
+//----------------------------------------------------------------------------
+
+#if defined(__GNUC__) || defined(__clang__)
+#  define DISABLE_DEPRECATED_WARNING                                           \
+    _Pragma("GCC diagnostic push")                                             \
+        _Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
+#  define ENABLE_DEPRECATED_WARNING _Pragma("GCC diagnostic pop")
+#elif defined(_MSC_VER)
+#  define DISABLE_DEPRECATED_WARNING                                           \
+    __pragma(warning(push)) __pragma(warning(disable : 4996))
+#  define ENABLE_DEPRECATED_WARNING __pragma(warning(pop))
+#else
+#  define DISABLE_DEPRECATED_WARNING
+#  define ENABLE_DEPRECATED_WARNING
+#endif
+
 /**
  * Constructor function
  */
@@ -36,7 +54,7 @@ MQTT::Client::Client()
   , m_lookupActive(false)
   , m_sentMessages(0)
   , m_clientMode(MQTTClientMode::ClientPublisher)
-  , m_client(Q_NULLPTR)
+  , m_client(nullptr)
 {
   // Configure new client
   regenerateClient();
@@ -275,7 +293,7 @@ void MQTT::Client::loadCaFile()
 {
   // Prompt user to select a CA file
   // clang-format off
-    auto path = QFileDialog::getOpenFileName(Q_NULLPTR, 
+    auto path = QFileDialog::getOpenFileName(nullptr, 
                                              tr("Select CA file"), 
                                              QDir::homePath());
   // clang-format on
@@ -453,10 +471,14 @@ void MQTT::Client::setSslProtocol(const int index)
       m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
       break;
     case 1:
+      DISABLE_DEPRECATED_WARNING
       m_sslConfiguration.setProtocol(QSsl::TlsV1_0);
+      ENABLE_DEPRECATED_WARNING
       break;
     case 2:
+      DISABLE_DEPRECATED_WARNING
       m_sslConfiguration.setProtocol(QSsl::TlsV1_1);
+      ENABLE_DEPRECATED_WARNING
       break;
     case 3:
       m_sslConfiguration.setProtocol(QSsl::TlsV1_2);
@@ -465,7 +487,9 @@ void MQTT::Client::setSslProtocol(const int index)
       m_sslConfiguration.setProtocol(QSsl::TlsV1_3OrLater);
       break;
     case 5:
+      DISABLE_DEPRECATED_WARNING
       m_sslConfiguration.setProtocol(QSsl::DtlsV1_0);
+      ENABLE_DEPRECATED_WARNING
       break;
     case 6:
       m_sslConfiguration.setProtocol(QSsl::DtlsV1_2);
@@ -826,11 +850,11 @@ void MQTT::Client::regenerateClient()
     host = m_client->host().toString();
     password = QString::fromUtf8(m_client->password());
 
-    disconnect(m_client, &QMQTT::Client::error, Q_NULLPTR, 0);
-    disconnect(m_client, &QMQTT::Client::received, Q_NULLPTR, 0);
-    disconnect(m_client, &QMQTT::Client::connected, Q_NULLPTR, 0);
-    disconnect(m_client, &QMQTT::Client::sslErrors, Q_NULLPTR, 0);
-    disconnect(m_client, &QMQTT::Client::disconnected, Q_NULLPTR, 0);
+    disconnect(m_client, &QMQTT::Client::error, nullptr, 0);
+    disconnect(m_client, &QMQTT::Client::received, nullptr, 0);
+    disconnect(m_client, &QMQTT::Client::connected, nullptr, 0);
+    disconnect(m_client, &QMQTT::Client::sslErrors, nullptr, 0);
+    disconnect(m_client, &QMQTT::Client::disconnected, nullptr, 0);
 
     m_client->disconnectFromHost();
     delete m_client;

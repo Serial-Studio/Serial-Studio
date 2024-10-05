@@ -119,7 +119,7 @@ void CSV::Export::closeFile()
       writeValues();
 
     m_csvFile.close();
-    m_textStream.setDevice(Q_NULLPTR);
+    m_textStream.setDevice(nullptr);
 
     Q_EMIT openChanged();
   }

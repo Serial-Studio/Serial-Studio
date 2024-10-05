@@ -28,7 +28,7 @@
 
 Widgets::BaseWidget::BaseWidget()
   : m_index(-1)
-  , m_widget(Q_NULLPTR)
+  , m_widget(nullptr)
   , m_resizeWidget(true)
 {
   // Workaround for unused variables
@@ -71,9 +71,9 @@ void Widgets::BaseWidget::setWidget(QWidget *widget,
                                     const Qt::Alignment &alignment,
                                     const bool autoresize)
 {
-  Q_ASSERT(widget != Q_NULLPTR);
+  Q_ASSERT(widget != nullptr);
 
-  if (m_widget == Q_NULLPTR)
+  if (m_widget == nullptr)
   {
     m_widget = widget;
     m_resizeWidget = autoresize;
