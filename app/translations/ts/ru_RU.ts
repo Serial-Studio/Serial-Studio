@@ -1560,208 +1560,208 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>MQTT::Client</name>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="228"/>
+        <location filename="../../src/MQTT/Client.cpp" line="246"/>
         <source>0: At most once</source>
         <translation>0: Не более одного раза</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="228"/>
+        <location filename="../../src/MQTT/Client.cpp" line="246"/>
         <source>1: At least once</source>
         <translation>1: Как минимум один раз</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="229"/>
+        <location filename="../../src/MQTT/Client.cpp" line="247"/>
         <source>2: Exactly once</source>
         <translation>2: Точно один раз</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="237"/>
+        <location filename="../../src/MQTT/Client.cpp" line="255"/>
         <source>Publisher</source>
         <translation>Издатель</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="237"/>
+        <location filename="../../src/MQTT/Client.cpp" line="255"/>
         <source>Subscriber</source>
         <translation>Подписчик</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="254"/>
-        <location filename="../../src/MQTT/Client.cpp" line="257"/>
+        <location filename="../../src/MQTT/Client.cpp" line="272"/>
+        <location filename="../../src/MQTT/Client.cpp" line="275"/>
         <source>System default</source>
         <translation>Системное значение по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="279"/>
+        <location filename="../../src/MQTT/Client.cpp" line="297"/>
         <source>Select CA file</source>
         <translation>Выберите файл CA</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="415"/>
+        <location filename="../../src/MQTT/Client.cpp" line="433"/>
         <source>Cannot open CA file!</source>
         <translation>Не удается открыть файл CA!</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="619"/>
+        <location filename="../../src/MQTT/Client.cpp" line="643"/>
         <source>IP address lookup error</source>
         <translation>Ошибка поиска IP-адреса</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="633"/>
+        <location filename="../../src/MQTT/Client.cpp" line="657"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="636"/>
+        <location filename="../../src/MQTT/Client.cpp" line="660"/>
         <source>Connection refused</source>
         <translation>Соединение отклонено</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="639"/>
+        <location filename="../../src/MQTT/Client.cpp" line="663"/>
         <source>Remote host closed the connection</source>
         <translation>Удаленный хост закрыл соединение</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="642"/>
+        <location filename="../../src/MQTT/Client.cpp" line="666"/>
         <source>Host not found</source>
         <translation>Хост не найден</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="645"/>
+        <location filename="../../src/MQTT/Client.cpp" line="669"/>
         <source>Socket access error</source>
         <translation>Ошибка доступа к сокету</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="648"/>
+        <location filename="../../src/MQTT/Client.cpp" line="672"/>
         <source>Socket resource error</source>
         <translation>Ошибка ресурса сокета</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="651"/>
+        <location filename="../../src/MQTT/Client.cpp" line="675"/>
         <source>Socket timeout</source>
         <translation>Тайм-аут сокета</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="654"/>
+        <location filename="../../src/MQTT/Client.cpp" line="678"/>
         <source>Socket datagram too large</source>
         <translation>Датаграмма сокета слишком велика</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="657"/>
+        <location filename="../../src/MQTT/Client.cpp" line="681"/>
         <source>Network error</source>
         <translation>Сетевая ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="660"/>
+        <location filename="../../src/MQTT/Client.cpp" line="684"/>
         <source>Address in use</source>
         <translation>Адрес уже используется</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="663"/>
+        <location filename="../../src/MQTT/Client.cpp" line="687"/>
         <source>Address not available</source>
         <translation>Адрес недоступен</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="666"/>
+        <location filename="../../src/MQTT/Client.cpp" line="690"/>
         <source>Unsupported socket operation</source>
         <translation>Операция с сокетом не поддерживается</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="669"/>
+        <location filename="../../src/MQTT/Client.cpp" line="693"/>
         <source>Unfinished socket operation</source>
         <translation>Незавершенная операция с сокетом</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="672"/>
+        <location filename="../../src/MQTT/Client.cpp" line="696"/>
         <source>Proxy authentication required</source>
         <translation>Требуется аутентификация прокси</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="675"/>
+        <location filename="../../src/MQTT/Client.cpp" line="699"/>
         <source>SSL handshake failed</source>
         <translation>Ошибка SSL рукопожатия</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="678"/>
+        <location filename="../../src/MQTT/Client.cpp" line="702"/>
         <source>Proxy connection refused</source>
         <translation>Соединение через прокси отклонено</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="681"/>
+        <location filename="../../src/MQTT/Client.cpp" line="705"/>
         <source>Proxy connection closed</source>
         <translation>Соединение через прокси закрыто</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="684"/>
+        <location filename="../../src/MQTT/Client.cpp" line="708"/>
         <source>Proxy connection timeout</source>
         <translation>Тайм-аут соединения через прокси</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="687"/>
+        <location filename="../../src/MQTT/Client.cpp" line="711"/>
         <source>Proxy not found</source>
         <translation>Прокси не найден</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="690"/>
+        <location filename="../../src/MQTT/Client.cpp" line="714"/>
         <source>Proxy protocol error</source>
         <translation>Ошибка протокола прокси</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="693"/>
+        <location filename="../../src/MQTT/Client.cpp" line="717"/>
         <source>Operation error</source>
         <translation>Ошибка операции</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="696"/>
+        <location filename="../../src/MQTT/Client.cpp" line="720"/>
         <source>SSL internal error</source>
         <translation>Внутренняя ошибка SSL</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="699"/>
+        <location filename="../../src/MQTT/Client.cpp" line="723"/>
         <source>Invalid SSL user data</source>
         <translation>Недопустимые данные пользователя SSL</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="702"/>
+        <location filename="../../src/MQTT/Client.cpp" line="726"/>
         <source>Socket temprary error</source>
         <translation>Временная ошибка сокета</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="705"/>
+        <location filename="../../src/MQTT/Client.cpp" line="729"/>
         <source>Unacceptable MQTT protocol</source>
         <translation>Неприемлемый протокол MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="708"/>
+        <location filename="../../src/MQTT/Client.cpp" line="732"/>
         <source>MQTT identifier rejected</source>
         <translation>Идентификатор MQTT отклонен</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="711"/>
+        <location filename="../../src/MQTT/Client.cpp" line="735"/>
         <source>MQTT server unavailable</source>
         <translation>Сервер MQTT недоступен</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="714"/>
+        <location filename="../../src/MQTT/Client.cpp" line="738"/>
         <source>Bad MQTT username or password</source>
         <translation>Неправильное имя пользователя или пароль MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="717"/>
+        <location filename="../../src/MQTT/Client.cpp" line="741"/>
         <source>MQTT authorization error</source>
         <translation>Ошибка авторизации MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="720"/>
+        <location filename="../../src/MQTT/Client.cpp" line="744"/>
         <source>MQTT no ping response</source>
         <translation>Нет ответа на ping MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="728"/>
+        <location filename="../../src/MQTT/Client.cpp" line="752"/>
         <source>MQTT client error</source>
         <translation>Ошибка клиента MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="761"/>
+        <location filename="../../src/MQTT/Client.cpp" line="785"/>
         <source>MQTT client SSL/TLS error, ignore?</source>
         <translation>Ошибка SSL/TLS клиента MQTT, игнорировать?</translation>
     </message>
@@ -2637,37 +2637,37 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>COM порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="95"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="97"/>
         <source>Baud Rate</source>
         <translation>Скорость передачи данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="135"/>
         <source>Data Bits</source>
         <translation>Биты данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="149"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="151"/>
         <source>Parity</source>
         <translation>Чётность</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="165"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="167"/>
         <source>Stop Bits</source>
         <translation>Стоповые биты</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="181"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="183"/>
         <source>Flow Control</source>
         <translation>Управление потоком</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="208"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="210"/>
         <source>Auto Reconnect</source>
         <translation>Автоподключение</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="227"/>
         <source>Send DTR Signal</source>
         <translation>Отправить сигнал DTR</translation>
     </message>
@@ -2891,17 +2891,22 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="271"/>
+        <source>Examples</source>
+        <translation>Примеры</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="292"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="310"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="315"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="331"/>
         <source>Disconnect</source>
         <translation>Отключиться</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="315"/>
         <source>Connect</source>
         <translation>Подключиться</translation>
     </message>

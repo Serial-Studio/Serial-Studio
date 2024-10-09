@@ -62,7 +62,7 @@ sudo pacman -S serial-studio-git
 
 ### Prérequis
 
-Pour compiler Serial Studio, la seule dépendance requise est [Qt](http://www.qt.io/download-open-source/). L'application de bureau est compilée avec **Qt 6.7.1**.
+Pour compiler Serial Studio, la seule dépendance requise est [Qt](http://www.qt.io/download-open-source/). L'application de bureau est compilée avec **Qt 6.8.0**.
 
 Si vous compilez sous GNU/Linux, vous devrez également installer `libgl1-mesa-dev` :
 

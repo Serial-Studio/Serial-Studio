@@ -61,7 +61,7 @@ sudo pacman -S serial-studio-git
 
 ### 要求
 
-编译 Serial Studio 的唯一必要依赖项是 [Qt](http://www.qt.io/download-open-source/)。桌面应用程序使用 **Qt 6.7.1** 进行编译。
+编译 Serial Studio 的唯一必要依赖项是 [Qt](http://www.qt.io/download-open-source/)。桌面应用程序使用 **Qt 6.8.0** 进行编译。
 
 如果你在 GNU/Linux 上进行编译，你还需要安装 `libgl1-mesa-dev`：
 
