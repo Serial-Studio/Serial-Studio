@@ -388,7 +388,11 @@ void IO::Console::print()
   // Create text document
   QTextDocument document;
   document.setPlainText(m_textBuffer);
-  document.setDefaultFont(Misc::CommonFonts::instance().monoFont());
+
+  // Set font
+  auto font = Misc::CommonFonts::instance().monoFont();
+  font.setPixelSize(10);
+  document.setDefaultFont(font);
 
   // Create printer object
   QPrinter printer(QPrinter::PrinterResolution);
