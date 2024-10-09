@@ -48,7 +48,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{env.QT_VERSION_LINUX}}
         modules: ${{env.QT_MODULES}}
@@ -112,7 +112,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{env.QT_VERSION_MACOS}}
         modules: ${{env.QT_MODULES}}
@@ -197,7 +197,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{env.QT_VERSION_MACOS}}
         modules: ${{env.QT_MODULES}}
@@ -283,11 +283,12 @@ jobs:
       uses: actions/checkout@v4
 
     - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{env.QT_VERSION_WINDOWS}}
         modules: ${{env.QT_MODULES}}
         cache: 'true'
+        arch: win64_msvc2022_64
       
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
