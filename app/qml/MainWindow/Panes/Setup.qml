@@ -174,7 +174,8 @@ Widgets.Pane {
         text: qsTr("No Parsing (Device Sends JSON Data)")
         checked: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.DeviceSendsJSON
         onCheckedChanged: {
-          if (checked)
+          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== JsonGenerator.DeviceSendsJSON
+          if (checked && shouldChange)
             Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.DeviceSendsJSON
         }
       } RadioButton {
@@ -183,17 +184,18 @@ Widgets.Pane {
         text: qsTr("Quick Plot (Comma Separated Values)")
         checked: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.CommaSeparatedValues
         onCheckedChanged: {
-          if (checked)
+          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== JsonGenerator.CommaSeparatedValues
+          if (checked && shouldChange)
             Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.CommaSeparatedValues
         }
-      }
-      RadioButton {
+      } RadioButton {
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Parse via JSON Project File")
         checked: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.ProjectFile
         onCheckedChanged: {
-          if (checked)
+          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== JsonGenerator.ProjectFile
+          if (checked && shouldChange)
             Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.ProjectFile
         }
       }
