@@ -8,12 +8,10 @@ on:
   push:               # Run on push
     paths-ignore:     # File patterns to ignore
     - '**.md'         # Ignore changes to *.md files
-    - '**.tar.gz'     # Ignore database updates
 
   pull_request:       # Run on pull-request
     paths-ignore:     # File-patterns to ignore
     - '**.md'         # Ignore changes to *.md files
-    - '**.tar.gz'     # Ignore database updates
 
 #--------------------------------------------------------------------------------
 # Define application name & version
@@ -30,7 +28,6 @@ env:
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
   QT_MODULES: qtserialport qtconnectivity qtpositioning qtlocation
-  CORES: 16
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -88,7 +85,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 10
+        cmake --build . --config Release --parallel
 
     - name: '⚙️ Install linuxdeploy'
       run: |
@@ -152,7 +149,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 10
+        cmake --build . --config Release --parallel
 
     - name: '📦 Package application'
       run: |
@@ -237,7 +234,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 10
+        cmake --build . --config Release --parallel
 
     - name: '📦 Package application'
       run: |
@@ -318,7 +315,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 10
+        cmake --build . --config Release --parallel
 
     - name: '📦 Package application'
       run: |
