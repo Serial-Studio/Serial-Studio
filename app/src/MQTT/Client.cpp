@@ -193,6 +193,15 @@ QString MQTT::Client::password() const
 }
 
 /**
+ * Returns the MQTT client ID
+ */
+QString MQTT::Client::clientId() const
+{
+  Q_ASSERT(m_client);
+  return m_client->clientId();
+}
+
+/**
  * Returns the IP address of the MQTT broker/server
  */
 QString MQTT::Client::host() const
@@ -537,6 +546,16 @@ void MQTT::Client::setPassword(const QString &password)
 }
 
 /**
+ * Changes the client ID used for the MQTT connection.
+ */
+void MQTT::Client::setClientId(const QString &clientId)
+{
+  Q_ASSERT(m_client);
+  m_client->setClientId(clientId);
+  Q_EMIT clientIdChanged();
+}
+
+/**
  * Sets the maximum time interval that is permitted to elapse between the point
  * at which the Client finishes transmitting one Control Packet and the point it
  * starts sending the next packet.
@@ -836,15 +855,18 @@ void MQTT::Client::regenerateClient()
   quint16 port = defaultPort();
   QString host = defaultHost();
   QMQTT::MQTTVersion version = QMQTT::V3_1_1;
+  QString clientId = QStringLiteral("SerialStudio");
 
   // There is an existing client, copy its configuration and delete it from
   // memory
   if (m_client)
   {
     port = m_client->port();
+
     qos = m_client->willQos();
     user = m_client->username();
     version = m_client->version();
+    clientId = m_client->clientId();
     retain = m_client->willRetain();
     keepAlive = m_client->keepAlive();
     host = m_client->host().toString();
@@ -873,7 +895,7 @@ void MQTT::Client::regenerateClient()
   m_client->setWillQos(qos);
   m_client->setUsername(user);
   m_client->setVersion(version);
-  m_client->setWillRetain(retain);
+  m_client->setClientId(clientId);
   m_client->setWillRetain(retain);
   m_client->setKeepAlive(keepAlive);
   m_client->setPassword(password.toUtf8());

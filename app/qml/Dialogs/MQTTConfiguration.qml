@@ -123,6 +123,7 @@ Window {
     property alias retain: _retain.checked
     property alias user: _user.text
     property alias password: _password.text
+    property alias clientId: _clientId.text
     property alias ssl: _ssl.checked
     property alias certificate: _certificateMode.currentIndex
     property alias protocol: _protocols.currentIndex
@@ -486,6 +487,7 @@ Window {
             }
           }
 
+          //
           // Spacers
           //
           Item {
@@ -495,16 +497,33 @@ Window {
           }
 
           //
-          // SSL & certificate titles
+          // Client ID + SSL Switch
           //
           Label {
-            text: qsTr("Enable SSL/TLS:")
+            text: qsTr("Client ID:")
             opacity: enabled ? 1 : 0.5
             enabled: !Cpp_MQTT_Client.isConnectedToHost
           } Label {
-            text: qsTr("Certificate:")
+            text: qsTr("Enable SSL/TLS:")
             opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
+            enabled: !Cpp_MQTT_Client.isConnectedToHost
+          }
+
+          //
+          // Client ID
+          //
+          TextField {
+            id: _clientId
+            Layout.fillWidth: true
+            opacity: enabled ? 1 : 0.5
+            text: Cpp_MQTT_Client.clientId
+            placeholderText: qsTr("MQTT Client ID")
+            enabled: !Cpp_MQTT_Client.isConnectedToHost
+
+            onTextChanged: {
+              if (Cpp_MQTT_Client.clientId !== text)
+                Cpp_MQTT_Client.clientId = text
+            }
           }
 
           //
@@ -520,6 +539,44 @@ Window {
             onCheckedChanged: {
               if (Cpp_MQTT_Client.sslEnabled !== checked)
                 Cpp_MQTT_Client.sslEnabled = checked
+            }
+          }
+
+          //
+          // Spacers
+          //
+          Item {
+            height: 8
+          } Item {
+            height: 8
+          }
+
+          //
+          // SSL Protocol & certificate titles
+          //
+          Label {
+            text: qsTr("Protocol:")
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
+          } Label {
+            text: qsTr("Certificate:")
+            opacity: enabled ? 1 : 0.5
+            enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
+          }
+
+          //
+          // SSL/TLS protocol selection
+          //
+          ComboBox {
+            id: _protocols
+            Layout.fillWidth: true
+            opacity: enabled ? 1 : 0.5
+            model: Cpp_MQTT_Client.sslProtocols
+            enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
+
+            onCurrentIndexChanged: {
+              if (currentIndex !== Cpp_MQTT_Client.sslProtocol)
+                Cpp_MQTT_Client.sslProtocol = currentIndex
             }
           }
 
@@ -554,44 +611,6 @@ Window {
               onClicked: Cpp_MQTT_Client.loadCaFile()
               icon.source: "qrc:/rcc/icons/buttons/open.svg"
               enabled: _certificateMode.currentIndex === 1  && _ssl.checked
-            }
-          }
-
-          //
-          // Spacers
-          //
-          Item {
-            height: 8
-          } Item {
-            height: 8
-          }
-
-          //
-          // SSL/TLS protocol selection title
-          //
-          Item {
-            Layout.fillWidth: true
-          } Label {
-            text: qsTr("Protocol:")
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
-          }
-
-          //
-          // SSL/TLS protocol selection
-          //
-          Item {
-            Layout.fillWidth: true
-          } ComboBox {
-            id: _protocols
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            model: Cpp_MQTT_Client.sslProtocols
-            enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
-
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_MQTT_Client.sslProtocol)
-                Cpp_MQTT_Client.sslProtocol = currentIndex
             }
           }
 
