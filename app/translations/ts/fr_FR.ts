@@ -1505,168 +1505,168 @@ Utilisez les boutons de la barre d&apos;outils ci-dessus pour ajouter un ensembl
 <context>
     <name>MQTT::Client</name>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="246"/>
+        <location filename="../../src/MQTT/Client.cpp" line="252"/>
         <source>0: At most once</source>
         <translation>0: Au plus une fois</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="246"/>
+        <location filename="../../src/MQTT/Client.cpp" line="252"/>
         <source>1: At least once</source>
         <translation>1: Au moins une fois</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="247"/>
+        <location filename="../../src/MQTT/Client.cpp" line="253"/>
         <source>2: Exactly once</source>
         <translation>2: Exactement une fois</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="255"/>
+        <location filename="../../src/MQTT/Client.cpp" line="261"/>
         <source>Publisher</source>
         <translation>Éditeur</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="255"/>
+        <location filename="../../src/MQTT/Client.cpp" line="261"/>
         <source>Subscriber</source>
         <translation>Abonné</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="272"/>
-        <location filename="../../src/MQTT/Client.cpp" line="275"/>
+        <location filename="../../src/MQTT/Client.cpp" line="278"/>
+        <location filename="../../src/MQTT/Client.cpp" line="281"/>
         <source>System default</source>
         <translation>Paramètre par défaut du système</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="297"/>
+        <location filename="../../src/MQTT/Client.cpp" line="303"/>
         <source>Select CA file</source>
         <translation>Sélectionner le fichier CA</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="433"/>
+        <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>Cannot open CA file!</source>
         <translation>Impossible d&apos;ouvrir le fichier CA !</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="643"/>
+        <location filename="../../src/MQTT/Client.cpp" line="659"/>
         <source>IP address lookup error</source>
         <translation>Erreur de recherche d&apos;adresse IP</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="657"/>
+        <location filename="../../src/MQTT/Client.cpp" line="673"/>
         <source>Unknown error</source>
         <translation>Erreur inconnue</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="660"/>
+        <location filename="../../src/MQTT/Client.cpp" line="676"/>
         <source>Connection refused</source>
         <translation>Connexion refusée</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="663"/>
+        <location filename="../../src/MQTT/Client.cpp" line="679"/>
         <source>Remote host closed the connection</source>
         <translation>L&apos;hôte distant a fermé la connexion</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="666"/>
+        <location filename="../../src/MQTT/Client.cpp" line="682"/>
         <source>Host not found</source>
         <translation>Hôte non trouvé</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="669"/>
+        <location filename="../../src/MQTT/Client.cpp" line="685"/>
         <source>Socket access error</source>
         <translation>Erreur d&apos;accès au socket</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="672"/>
+        <location filename="../../src/MQTT/Client.cpp" line="688"/>
         <source>Socket resource error</source>
         <translation>Erreur de ressource socket</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="675"/>
+        <location filename="../../src/MQTT/Client.cpp" line="691"/>
         <source>Socket timeout</source>
         <translation>Délai d&apos;attente du socket</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="678"/>
+        <location filename="../../src/MQTT/Client.cpp" line="694"/>
         <source>Socket datagram too large</source>
         <translation>Datagramme de socket trop grand</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="681"/>
+        <location filename="../../src/MQTT/Client.cpp" line="697"/>
         <source>Network error</source>
         <translation>Erreur réseau</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="684"/>
+        <location filename="../../src/MQTT/Client.cpp" line="700"/>
         <source>Address in use</source>
         <translation>Adresse en cours d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="687"/>
+        <location filename="../../src/MQTT/Client.cpp" line="703"/>
         <source>Address not available</source>
         <translation>Adresse non disponible</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="690"/>
+        <location filename="../../src/MQTT/Client.cpp" line="706"/>
         <source>Unsupported socket operation</source>
         <translation>Opération socket non prise en charge</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="693"/>
+        <location filename="../../src/MQTT/Client.cpp" line="709"/>
         <source>Unfinished socket operation</source>
         <translation>Opération socket inachevée</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="696"/>
+        <location filename="../../src/MQTT/Client.cpp" line="712"/>
         <source>Proxy authentication required</source>
         <translation>Authentification du proxy requise</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="699"/>
+        <location filename="../../src/MQTT/Client.cpp" line="715"/>
         <source>SSL handshake failed</source>
         <translation>Échec de la poignée de main SSL</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="702"/>
+        <location filename="../../src/MQTT/Client.cpp" line="718"/>
         <source>Proxy connection refused</source>
         <translation>Connexion au proxy refusée</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="705"/>
+        <location filename="../../src/MQTT/Client.cpp" line="721"/>
         <source>Proxy connection closed</source>
         <translation>Connexion au proxy fermée</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="708"/>
+        <location filename="../../src/MQTT/Client.cpp" line="724"/>
         <source>Proxy connection timeout</source>
         <translation>Délai d&apos;attente de la connexion au proxy</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="711"/>
+        <location filename="../../src/MQTT/Client.cpp" line="727"/>
         <source>Proxy not found</source>
         <translation>Proxy non trouvé</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="714"/>
+        <location filename="../../src/MQTT/Client.cpp" line="730"/>
         <source>Proxy protocol error</source>
         <translation>Erreur de protocole du proxy</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="717"/>
+        <location filename="../../src/MQTT/Client.cpp" line="733"/>
         <source>Operation error</source>
         <translation>Erreur d&apos;opération</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="720"/>
+        <location filename="../../src/MQTT/Client.cpp" line="736"/>
         <source>SSL internal error</source>
         <translation>Erreur interne SSL</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="723"/>
+        <location filename="../../src/MQTT/Client.cpp" line="739"/>
         <source>Invalid SSL user data</source>
         <translation>Données utilisateur SSL invalides</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="726"/>
+        <location filename="../../src/MQTT/Client.cpp" line="742"/>
         <source>Socket temprary error</source>
         <translation>Erreur temporaire du socket</translation>
     </message>
@@ -1675,42 +1675,42 @@ Utilisez les boutons de la barre d&apos;outils ci-dessus pour ajouter un ensembl
         <translation type="vanished">Erreur temporaire du socket</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="729"/>
+        <location filename="../../src/MQTT/Client.cpp" line="745"/>
         <source>Unacceptable MQTT protocol</source>
         <translation>Protocole MQTT inacceptable</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="732"/>
+        <location filename="../../src/MQTT/Client.cpp" line="748"/>
         <source>MQTT identifier rejected</source>
         <translation>Identifiant MQTT rejeté</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="735"/>
+        <location filename="../../src/MQTT/Client.cpp" line="751"/>
         <source>MQTT server unavailable</source>
         <translation>Serveur MQTT indisponible</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="738"/>
+        <location filename="../../src/MQTT/Client.cpp" line="754"/>
         <source>Bad MQTT username or password</source>
         <translation>Nom d&apos;utilisateur ou mot de passe MQTT incorrect</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="741"/>
+        <location filename="../../src/MQTT/Client.cpp" line="757"/>
         <source>MQTT authorization error</source>
         <translation>Erreur d&apos;autorisation MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="744"/>
+        <location filename="../../src/MQTT/Client.cpp" line="760"/>
         <source>MQTT no ping response</source>
         <translation>Aucune réponse au ping MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="752"/>
+        <location filename="../../src/MQTT/Client.cpp" line="768"/>
         <source>MQTT client error</source>
         <translation>Erreur du client MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="785"/>
+        <location filename="../../src/MQTT/Client.cpp" line="804"/>
         <source>MQTT client SSL/TLS error, ignore?</source>
         <translation>Erreur SSL/TLS du client MQTT, ignorer ?</translation>
     </message>
@@ -1723,112 +1723,122 @@ Utilisez les boutons de la barre d&apos;outils ci-dessus pour ajouter un ensembl
         <translation>Configuration MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="196"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="197"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="198"/>
         <source>Mode</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="244"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="245"/>
         <source>QOS Level</source>
         <translation>Niveau QOS</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="248"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="249"/>
         <source>Keep Alive (s)</source>
         <translation>Durée de vie (s)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="308"/>
         <source>Host</source>
         <translation>Hôte</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="311"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="312"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="373"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="374"/>
         <source>Topic</source>
         <translation>Topic</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="377"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="378"/>
         <source>Retain</source>
         <translation>Conserver</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="390"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="391"/>
         <source>MQTT Topic</source>
         <translation>Topic MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="407"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="408"/>
         <source>Add Retain Flag</source>
         <translation>Ajouter le drapeau Conserver</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="430"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="431"/>
         <source>User</source>
         <translation>Utilisateur</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="434"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="435"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="447"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="448"/>
         <source>MQTT Username</source>
         <translation>Nom d&apos;utilisateur MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="469"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="470"/>
         <source>MQTT Password</source>
         <translation>Mot de passe MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="501"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="503"/>
+        <source>Client ID:</source>
+        <translation>ID Client :</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="507"/>
         <source>Enable SSL/TLS:</source>
         <translation>Activer SSL/TLS :</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="505"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="520"/>
+        <source>MQTT Client ID</source>
+        <translation>ID Client MQTT</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="562"/>
         <source>Certificate:</source>
         <translation>Certificat :</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="539"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="596"/>
         <source>Use System Database</source>
         <translation>Utiliser la base de données système</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="540"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="597"/>
         <source>Custom CA File</source>
         <translation>Fichier CA personnalisé</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="575"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="558"/>
         <source>Protocol:</source>
         <translation>Protocole :</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="620"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="639"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="638"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="657"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="638"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="657"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -2207,32 +2217,32 @@ Utilisez les boutons de la barre d&apos;outils ci-dessus pour ajouter un ensembl
         <translation>Pas d&apos;Analyse (L&apos;Appareil Envoie des Données JSON)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="184"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>Graphique Rapide (Valeurs Séparées par des Virgules)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="194"/>
         <source>Parse via JSON Project File</source>
         <translation>Analyser via un Fichier de Projet JSON</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="213"/>
         <source>Change Project File (%1)</source>
         <translation>Changer le Fichier de Projet (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="214"/>
         <source>Select Project File</source>
         <translation>Sélectionner le Fichier de Projet</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="234"/>
         <source>Device</source>
         <translation>Appareil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="240"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
@@ -2356,28 +2366,28 @@ Utilisez les boutons de la barre d&apos;outils ci-dessus pour ajouter un ensembl
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="275"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
         <source>Examples</source>
         <translation>Exemples</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="292"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="285"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="315"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="331"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="324"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="315"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -2453,7 +2463,7 @@ Utilisez les boutons de la barre d&apos;outils ci-dessus pour ajouter un ensembl
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="908"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="911"/>
         <source>Status Panel</source>
         <translation>Panneau de Statut</translation>
     </message>

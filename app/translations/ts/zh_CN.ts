@@ -1564,208 +1564,208 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>MQTT::Client</name>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="246"/>
+        <location filename="../../src/MQTT/Client.cpp" line="252"/>
         <source>0: At most once</source>
         <translation>0：最多一次</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="246"/>
+        <location filename="../../src/MQTT/Client.cpp" line="252"/>
         <source>1: At least once</source>
         <translation>1：至少一次</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="247"/>
+        <location filename="../../src/MQTT/Client.cpp" line="253"/>
         <source>2: Exactly once</source>
         <translation>2：刚好一次</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="255"/>
+        <location filename="../../src/MQTT/Client.cpp" line="261"/>
         <source>Publisher</source>
         <translation>发布者</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="255"/>
+        <location filename="../../src/MQTT/Client.cpp" line="261"/>
         <source>Subscriber</source>
         <translation>订阅者</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="272"/>
-        <location filename="../../src/MQTT/Client.cpp" line="275"/>
+        <location filename="../../src/MQTT/Client.cpp" line="278"/>
+        <location filename="../../src/MQTT/Client.cpp" line="281"/>
         <source>System default</source>
         <translation>系统默认</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="297"/>
+        <location filename="../../src/MQTT/Client.cpp" line="303"/>
         <source>Select CA file</source>
         <translation>选择CA文件</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="433"/>
+        <location filename="../../src/MQTT/Client.cpp" line="439"/>
         <source>Cannot open CA file!</source>
         <translation>无法打开CA文件！</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="643"/>
+        <location filename="../../src/MQTT/Client.cpp" line="659"/>
         <source>IP address lookup error</source>
         <translation>IP地址查找错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="657"/>
+        <location filename="../../src/MQTT/Client.cpp" line="673"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="660"/>
+        <location filename="../../src/MQTT/Client.cpp" line="676"/>
         <source>Connection refused</source>
         <translation>连接被拒绝</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="663"/>
+        <location filename="../../src/MQTT/Client.cpp" line="679"/>
         <source>Remote host closed the connection</source>
         <translation>远程主机关闭了连接</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="666"/>
+        <location filename="../../src/MQTT/Client.cpp" line="682"/>
         <source>Host not found</source>
         <translation>未找到主机</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="669"/>
+        <location filename="../../src/MQTT/Client.cpp" line="685"/>
         <source>Socket access error</source>
         <translation>套接字访问错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="672"/>
+        <location filename="../../src/MQTT/Client.cpp" line="688"/>
         <source>Socket resource error</source>
         <translation>套接字资源错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="675"/>
+        <location filename="../../src/MQTT/Client.cpp" line="691"/>
         <source>Socket timeout</source>
         <translation>套接字超时</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="678"/>
+        <location filename="../../src/MQTT/Client.cpp" line="694"/>
         <source>Socket datagram too large</source>
         <translation>套接字数据报太大</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="681"/>
+        <location filename="../../src/MQTT/Client.cpp" line="697"/>
         <source>Network error</source>
         <translation>网络错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="684"/>
+        <location filename="../../src/MQTT/Client.cpp" line="700"/>
         <source>Address in use</source>
         <translation>地址已在使用</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="687"/>
+        <location filename="../../src/MQTT/Client.cpp" line="703"/>
         <source>Address not available</source>
         <translation>地址不可用</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="690"/>
+        <location filename="../../src/MQTT/Client.cpp" line="706"/>
         <source>Unsupported socket operation</source>
         <translation>不支持的套接字操作</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="693"/>
+        <location filename="../../src/MQTT/Client.cpp" line="709"/>
         <source>Unfinished socket operation</source>
         <translation>未完成的套接字操作</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="696"/>
+        <location filename="../../src/MQTT/Client.cpp" line="712"/>
         <source>Proxy authentication required</source>
         <translation>需要代理身份验证</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="699"/>
+        <location filename="../../src/MQTT/Client.cpp" line="715"/>
         <source>SSL handshake failed</source>
         <translation>SSL握手失败</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="702"/>
+        <location filename="../../src/MQTT/Client.cpp" line="718"/>
         <source>Proxy connection refused</source>
         <translation>代理连接被拒绝</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="705"/>
+        <location filename="../../src/MQTT/Client.cpp" line="721"/>
         <source>Proxy connection closed</source>
         <translation>代理连接关闭</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="708"/>
+        <location filename="../../src/MQTT/Client.cpp" line="724"/>
         <source>Proxy connection timeout</source>
         <translation>代理连接超时</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="711"/>
+        <location filename="../../src/MQTT/Client.cpp" line="727"/>
         <source>Proxy not found</source>
         <translation>未找到代理</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="714"/>
+        <location filename="../../src/MQTT/Client.cpp" line="730"/>
         <source>Proxy protocol error</source>
         <translation>代理协议错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="717"/>
+        <location filename="../../src/MQTT/Client.cpp" line="733"/>
         <source>Operation error</source>
         <translation>操作错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="720"/>
+        <location filename="../../src/MQTT/Client.cpp" line="736"/>
         <source>SSL internal error</source>
         <translation>SSL内部错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="723"/>
+        <location filename="../../src/MQTT/Client.cpp" line="739"/>
         <source>Invalid SSL user data</source>
         <translation>无效的SSL用户数据</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="726"/>
+        <location filename="../../src/MQTT/Client.cpp" line="742"/>
         <source>Socket temprary error</source>
         <translation>套接字临时错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="729"/>
+        <location filename="../../src/MQTT/Client.cpp" line="745"/>
         <source>Unacceptable MQTT protocol</source>
         <translation>不可接受的MQTT协议</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="732"/>
+        <location filename="../../src/MQTT/Client.cpp" line="748"/>
         <source>MQTT identifier rejected</source>
         <translation>MQTT标识符被拒绝</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="735"/>
+        <location filename="../../src/MQTT/Client.cpp" line="751"/>
         <source>MQTT server unavailable</source>
         <translation>MQTT服务器不可用</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="738"/>
+        <location filename="../../src/MQTT/Client.cpp" line="754"/>
         <source>Bad MQTT username or password</source>
         <translation>MQTT用户名或密码错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="741"/>
+        <location filename="../../src/MQTT/Client.cpp" line="757"/>
         <source>MQTT authorization error</source>
         <translation>MQTT授权错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="744"/>
+        <location filename="../../src/MQTT/Client.cpp" line="760"/>
         <source>MQTT no ping response</source>
         <translation>MQTT无Ping响应</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="752"/>
+        <location filename="../../src/MQTT/Client.cpp" line="768"/>
         <source>MQTT client error</source>
         <translation>MQTT客户端错误</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="785"/>
+        <location filename="../../src/MQTT/Client.cpp" line="804"/>
         <source>MQTT client SSL/TLS error, ignore?</source>
         <translation>MQTT客户端SSL/TLS错误，是否忽略？</translation>
     </message>
@@ -1778,112 +1778,122 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>MQTT 设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="196"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="197"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="198"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="244"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="245"/>
         <source>QOS Level</source>
         <translation>QOS 级别</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="248"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="249"/>
         <source>Keep Alive (s)</source>
         <translation>保持活跃（秒）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="308"/>
         <source>Host</source>
         <translation>主机</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="311"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="312"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="373"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="374"/>
         <source>Topic</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="377"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="378"/>
         <source>Retain</source>
         <translation>保持</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="390"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="391"/>
         <source>MQTT Topic</source>
         <translation>MQTT 主题</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="407"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="408"/>
         <source>Add Retain Flag</source>
         <translation>添加保持标志</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="430"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="431"/>
         <source>User</source>
         <translation>用户</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="434"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="435"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="447"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="448"/>
         <source>MQTT Username</source>
         <translation>MQTT 用户名</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="469"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="470"/>
         <source>MQTT Password</source>
         <translation>MQTT 密码</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="501"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="503"/>
+        <source>Client ID:</source>
+        <translation>客户端ID：</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="507"/>
         <source>Enable SSL/TLS:</source>
         <translation>启用 SSL/TLS：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="505"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="520"/>
+        <source>MQTT Client ID</source>
+        <translation>MQTT客户端ID</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="562"/>
         <source>Certificate:</source>
         <translation>证书：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="539"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="596"/>
         <source>Use System Database</source>
         <translation>使用系统数据库</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="540"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="597"/>
         <source>Custom CA File</source>
         <translation>自定义 CA 文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="575"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="558"/>
         <source>Protocol:</source>
         <translation>协议：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="620"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="639"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="638"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="657"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="638"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="657"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
@@ -2732,32 +2742,32 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>无解析（设备发送JSON数据）</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="184"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>快速绘图 (CSV格式)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="194"/>
         <source>Parse via JSON Project File</source>
         <translation>通过JSON项目文件解析</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="213"/>
         <source>Change Project File (%1)</source>
         <translation>更改项目文件 (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="214"/>
         <source>Select Project File</source>
         <translation>选择项目文件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="234"/>
         <source>Device</source>
         <translation>设备</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="238"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="240"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
@@ -2889,28 +2899,28 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="261"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="275"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
         <source>Examples</source>
         <translation>示例</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="292"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="285"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="315"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="331"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="324"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="315"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
@@ -2986,7 +2996,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="908"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="911"/>
         <source>Status Panel</source>
         <translation>状态面板</translation>
     </message>

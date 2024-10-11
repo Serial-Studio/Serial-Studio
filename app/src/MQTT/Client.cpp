@@ -26,7 +26,6 @@
 #include "IO/Manager.h"
 #include "MQTT/Client.h"
 #include "Misc/Utilities.h"
-#include "Misc/TimerEvents.h"
 
 //----------------------------------------------------------------------------
 // Suppress deprecated warnings
@@ -62,8 +61,6 @@ MQTT::Client::Client()
   // Send data periodically & reset statistics when disconnected/connected to a
   // device
   auto io = &IO::Manager::instance();
-  auto te = &Misc::TimerEvents::instance();
-  connect(te, &Misc::TimerEvents::timeout1Hz, this, &MQTT::Client::sendData);
   connect(io, &IO::Manager::frameReceived, this,
           &MQTT::Client::onFrameReceived);
   connect(io, &IO::Manager::connectedChanged, this,
@@ -787,7 +784,10 @@ void MQTT::Client::onFrameReceived(const QByteArray &frame)
 
   // Validate frame & append it to frame list
   if (!frame.isEmpty())
+  {
     m_frames.append(frame);
+    sendData();
+  }
 }
 
 /**

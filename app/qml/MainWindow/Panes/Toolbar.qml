@@ -240,7 +240,11 @@ ToolBar {
       text: qsTr("MQTT")
       Layout.alignment: Qt.AlignVCenter
       onClicked: app.showMqttConfiguration()
-      icon.source: "qrc:/rcc/icons/toolbar/mqtt.svg"
+      icon.source: Cpp_MQTT_Client.isConnectedToHost ?
+                     (Cpp_MQTT_Client.clientMode === 1 ?
+                        "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
+                        "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
+                     "qrc:/rcc/icons/toolbar/mqtt.svg"
     }
 
     //

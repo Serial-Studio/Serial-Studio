@@ -23,6 +23,7 @@
 #include "IO/Manager.h"
 #include "CSV/Player.h"
 #include "UI/Dashboard.h"
+#include "MQTT/Client.h"
 #include "JSON/FrameBuilder.h"
 #include "Misc/CommonFonts.h"
 
@@ -40,6 +41,8 @@ UI::Dashboard::Dashboard()
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this,
           &UI::Dashboard::resetData);
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
+          &UI::Dashboard::resetData);
+  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
           &UI::Dashboard::resetData);
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
           this, &UI::Dashboard::processFrame);

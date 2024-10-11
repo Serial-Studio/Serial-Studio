@@ -213,6 +213,8 @@
         <file>icons/toolbar/disconnect.svg</file>
         <file>icons/toolbar/examples.svg</file>
         <file>icons/toolbar/help.svg</file>
+        <file>icons/toolbar/mqtt-publisher.svg</file>
+        <file>icons/toolbar/mqtt-subscriber.svg</file>
         <file>icons/toolbar/mqtt.svg</file>
         <file>icons/toolbar/project-setup.svg</file>
         <file>icons/toolbar/structure.svg</file>

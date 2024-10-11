@@ -151,6 +151,7 @@ Window {
   //
   Connections {
     target: Cpp_UI_Dashboard
+
     function onDataReset() {
       setup.show()
       root.showConsole()
@@ -168,7 +169,13 @@ Window {
       if (root.firstValidFrame)
         return
 
-      if ((Cpp_IO_Manager.connected || Cpp_CSV_Player.isOpen) && Cpp_UI_Dashboard.frameValid()) {
+      const frameValid = Cpp_UI_Dashboard.frameValid()
+      const deviceConnected = Cpp_IO_Manager.connected
+      const csvPlayerActive = Cpp_CSV_Player.isOpen
+      const mqttSubscribed = Cpp_MQTT_Client.isConnectedToHost && Cpp_MQTT_Client.clientMode === 1
+      const dataAvailable = deviceConnected || csvPlayerActive || mqttSubscribed
+
+      if (dataAvailable && frameValid) {
         setup.hide()
         root.showDashboard()
         root.firstValidFrame = true
