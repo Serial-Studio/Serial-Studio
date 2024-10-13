@@ -85,7 +85,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release --parallel
+        cmake --build . --config Release -j 16
 
     - name: '⚙️ Install linuxdeploy'
       run: |
@@ -149,7 +149,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release --parallel
+        cmake --build . --config Release -j 16
 
     - name: '📦 Package application'
       run: |
@@ -234,7 +234,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release --parallel
+        cmake --build . --config Release -j 16
 
     - name: '📦 Package application'
       run: |
@@ -315,7 +315,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release --parallel
+        cmake --build . --config Release -j 16
 
     - name: '📦 Package application'
       run: |
