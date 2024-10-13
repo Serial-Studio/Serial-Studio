@@ -182,6 +182,21 @@ int UI::Dashboard::accelerometerCount() const { return m_accelerometerWidgets.co
 // clang-format on
 
 //------------------------------------------------------------------------------
+// Axis visibility settings
+//------------------------------------------------------------------------------
+
+UI::Dashboard::AxisVisibility UI::Dashboard::axisVisibility() const
+{
+  return m_axisVisibility;
+}
+
+QStringList UI::Dashboard::axisVisibilityOptions() const
+{
+  return QStringList{tr("Show both X and Y axes"), tr("Show only X axis"),
+                     tr("Show only Y axis"), tr("Hide all axes")};
+}
+
+//------------------------------------------------------------------------------
 // Relative-to-global widget index utility functions
 //------------------------------------------------------------------------------
 
@@ -607,6 +622,15 @@ void UI::Dashboard::setPrecision(const int precision)
   {
     m_precision = precision;
     Q_EMIT precisionChanged();
+  }
+}
+
+void UI::Dashboard::setAxisVisibility(const AxisVisibility option)
+{
+  if (m_axisVisibility != option)
+  {
+    m_axisVisibility = option;
+    Q_EMIT axisVisibilityChanged();
   }
 }
 

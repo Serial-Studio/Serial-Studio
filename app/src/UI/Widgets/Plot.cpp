@@ -82,10 +82,13 @@ Widgets::Plot::Plot(const int index)
           this, &Widgets::Plot::onThemeChanged);
 
   // React to dashboard events
-  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
+  onAxisOptionsChanged();
+  connect(dash, &UI::Dashboard::updated, this, &Plot::updateData,
           Qt::QueuedConnection);
-  connect(dash, SIGNAL(pointsChanged()), this, SLOT(updateRange()),
+  connect(dash, &UI::Dashboard::pointsChanged, this, &Plot::updateRange,
           Qt::QueuedConnection);
+  connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
+          &Plot::onAxisOptionsChanged, Qt::QueuedConnection);
 }
 
 /**
@@ -231,5 +234,44 @@ void Widgets::Plot::onThemeChanged()
 
   // Set curve color & plot style
   m_curve.setPen(QColor(color), 2, Qt::SolidLine);
+  update();
+}
+
+/**
+ * @brief Updates the visibility of the plot axes based on user-selected axis
+ *        options.
+ *
+ * This function responds to changes in axis visibility settings from the
+ * dashboard. Depending on the user’s selection, it will set the visibility of
+ * the X and/or Y axes on the plot.
+ *
+ * After adjusting the visibility settings, the plot is updated by calling the
+ * `update()` method.
+ *
+ * @see UI::Dashboard::axisVisibility()
+ * @see QwtPlot::setAxisVisible()
+ */
+void Widgets::Plot::onAxisOptionsChanged()
+{
+  switch (UI::Dashboard::instance().axisVisibility())
+  {
+    case UI::Dashboard::AxisXY:
+      m_plot.setAxisVisible(QwtPlot::yLeft, true);
+      m_plot.setAxisVisible(QwtPlot::xBottom, true);
+      break;
+    case UI::Dashboard::AxisXOnly:
+      m_plot.setAxisVisible(QwtPlot::yLeft, false);
+      m_plot.setAxisVisible(QwtPlot::xBottom, true);
+      break;
+    case UI::Dashboard::AxisYOnly:
+      m_plot.setAxisVisible(QwtPlot::yLeft, true);
+      m_plot.setAxisVisible(QwtPlot::xBottom, false);
+      break;
+    case UI::Dashboard::NoAxesVisible:
+      m_plot.setAxisVisible(QwtPlot::yLeft, false);
+      m_plot.setAxisVisible(QwtPlot::xBottom, false);
+      break;
+  }
+
   update();
 }

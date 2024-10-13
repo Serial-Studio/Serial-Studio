@@ -46,6 +46,7 @@ private slots:
   void updateData();
   void updateRange();
   void onThemeChanged();
+  void onAxisOptionsChanged();
 
 private:
   int m_index;

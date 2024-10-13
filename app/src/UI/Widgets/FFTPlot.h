@@ -49,6 +49,7 @@ public:
 private slots:
   void updateData();
   void onThemeChanged();
+  void onAxisOptionsChanged();
 
 private:
   int m_size;                       ///< Size of the FFT data array.

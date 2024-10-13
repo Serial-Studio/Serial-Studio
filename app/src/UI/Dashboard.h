@@ -151,6 +151,13 @@ class Dashboard : public QObject
   Q_PROPERTY(QStringList actionIcons
              READ actionIcons
              NOTIFY actionCountChanged)
+  Q_PROPERTY(AxisVisibility axisVisibility
+             READ axisVisibility
+             WRITE setAxisVisibility
+             NOTIFY axisVisibilityChanged)
+  Q_PROPERTY(QStringList axisVisibilityOptions
+             READ axisVisibilityOptions
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -161,6 +168,7 @@ signals:
   void precisionChanged();
   void actionCountChanged();
   void widgetCountChanged();
+  void axisVisibilityChanged();
   void widgetVisibilityChanged();
   void frameReceived(const JSON::Frame &frame);
 
@@ -188,6 +196,15 @@ public:
     Unknown
   };
   Q_ENUM(WidgetType)
+
+  enum AxisVisibility
+  {
+    AxisXY = 0,
+    AxisXOnly = 1,
+    AxisYOnly = 2,
+    NoAxesVisible = 3
+  };
+  Q_ENUM(AxisVisibility)
 
   static Dashboard &instance();
 
@@ -224,6 +241,9 @@ public:
   [[nodiscard]] int gyroscopeCount() const;
   [[nodiscard]] int multiPlotCount() const;
   [[nodiscard]] int accelerometerCount() const;
+
+  [[nodiscard]] AxisVisibility axisVisibility() const;
+  [[nodiscard]] QStringList axisVisibilityOptions() const;
 
   Q_INVOKABLE bool frameValid() const;
   Q_INVOKABLE QStringList widgetTitles();
@@ -272,6 +292,7 @@ public slots:
   void setPoints(const int points);
   void activateAction(const int index);
   void setPrecision(const int precision);
+  void setAxisVisibility(const AxisVisibility option);
   void setBarVisible(const int index, const bool visible);
   void setFFTVisible(const int index, const bool visible);
   void setGpsVisible(const int index, const bool visible);
@@ -305,6 +326,8 @@ private:
 private:
   int m_points;
   int m_precision;
+  AxisVisibility m_axisVisibility;
+
   QVector<qreal> m_xData;
   QVector<QVector<qreal>> m_fftPlotValues;
   QVector<QVector<qreal>> m_linearPlotValues;

@@ -200,7 +200,6 @@ Widgets.Pane {
             height: 2
           }
 
-
           //
           // Visualization controls
           //

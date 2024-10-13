@@ -81,8 +81,11 @@ Widgets::FFTPlot::FFTPlot(int index)
           this, &Widgets::FFTPlot::onThemeChanged);
 
   // Connect update signal
+  onAxisOptionsChanged();
   connect(dash, &UI::Dashboard::updated, this, &FFTPlot::updateData,
           Qt::QueuedConnection);
+  connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
+          &FFTPlot::onAxisOptionsChanged, Qt::QueuedConnection);
 }
 
 /**
@@ -199,5 +202,44 @@ void Widgets::FFTPlot::onThemeChanged()
   m_curve.setPen(QColor(color), 2, Qt::SolidLine);
 
   // Redraw widget
+  update();
+}
+
+/**
+ * @brief Updates the visibility of the plot axes based on user-selected axis
+ *        options.
+ *
+ * This function responds to changes in axis visibility settings from the
+ * dashboard. Depending on the user’s selection, it will set the visibility of
+ * the X and/or Y axes on the plot.
+ *
+ * After adjusting the visibility settings, the plot is updated by calling the
+ * `update()` method.
+ *
+ * @see UI::Dashboard::axisVisibility()
+ * @see QwtPlot::setAxisVisible()
+ */
+void Widgets::FFTPlot::onAxisOptionsChanged()
+{
+  switch (UI::Dashboard::instance().axisVisibility())
+  {
+    case UI::Dashboard::AxisXY:
+      m_plot.setAxisVisible(QwtPlot::yLeft, true);
+      m_plot.setAxisVisible(QwtPlot::xBottom, true);
+      break;
+    case UI::Dashboard::AxisXOnly:
+      m_plot.setAxisVisible(QwtPlot::yLeft, false);
+      m_plot.setAxisVisible(QwtPlot::xBottom, true);
+      break;
+    case UI::Dashboard::AxisYOnly:
+      m_plot.setAxisVisible(QwtPlot::yLeft, true);
+      m_plot.setAxisVisible(QwtPlot::xBottom, false);
+      break;
+    case UI::Dashboard::NoAxesVisible:
+      m_plot.setAxisVisible(QwtPlot::yLeft, false);
+      m_plot.setAxisVisible(QwtPlot::xBottom, false);
+      break;
+  }
+
   update();
 }
