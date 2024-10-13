@@ -51,8 +51,9 @@ find_package(
  Quick
  Widgets
  Location
- SerialPort
  Bluetooth
+ Concurrent
+ SerialPort
  Positioning
  PrintSupport
  LinguistTools
@@ -61,6 +62,7 @@ find_package(
 
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0004 NEW)
 
 #-------------------------------------------------------------------------------
 # Import source code
@@ -276,6 +278,7 @@ target_link_libraries(
  Qt6::Widgets
  Qt6::Location
  Qt6::Bluetooth
+ Qt6::Concurrent
  Qt6::SerialPort
  Qt6::Positioning
  Qt6::PrintSupport
