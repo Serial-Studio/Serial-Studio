@@ -260,7 +260,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_ModuleManager", this);
 
   // Register app info with QML
-  c->setContextProperty("Cpp_AppName", qApp->applicationName());
+  c->setContextProperty("Cpp_AppName", qApp->applicationDisplayName());
   c->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
   c->setContextProperty("Cpp_AppVersion", qApp->applicationVersion());
   c->setContextProperty("Cpp_AppOrganization", qApp->organizationName());

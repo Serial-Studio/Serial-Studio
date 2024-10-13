@@ -206,9 +206,10 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
 
   // Get path
   const auto format = rxTime.toString("yyyy/MMM/dd/");
-  const QString path = QStringLiteral("%1/Documents/%2/CSV/%3/%4")
-                           .arg(QDir::homePath(), qApp->applicationName(),
-                                data.title(), format);
+  const QString path
+      = QStringLiteral("%1/Documents/%2/CSV/%3/%4")
+            .arg(QDir::homePath(), qApp->applicationDisplayName(), data.title(),
+                 format);
 
   // Generate file path if required
   QDir dir(path);

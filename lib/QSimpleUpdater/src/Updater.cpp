@@ -42,7 +42,7 @@ Updater::Updater()
   m_notifyOnFinish = false;
   m_updateAvailable = false;
   m_downloaderEnabled = true;
-  m_moduleName = qApp->applicationName();
+  m_moduleName = qApp->applicationDisplayName();
   m_moduleVersion = qApp->applicationVersion();
   m_mandatoryUpdate = false;
 
@@ -63,7 +63,7 @@ Updater::Updater()
 
   setUserAgentString(
       QString("%1/%2 (Qt; QSimpleUpdater)")
-          .arg(qApp->applicationName(), qApp->applicationVersion()));
+          .arg(qApp->applicationDisplayName(), qApp->applicationVersion()));
 
   connect(m_downloader, SIGNAL(downloadFinished(QString, QString)), this,
           SIGNAL(downloadFinished(QString, QString)));

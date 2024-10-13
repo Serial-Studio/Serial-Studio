@@ -154,6 +154,7 @@
         <file>icons/panes/clear.svg</file>
         <file>icons/panes/console.svg</file>
         <file>icons/panes/dashboard.svg</file>
+        <file>icons/panes/scale.svg</file>
         <file>icons/panes/setup.svg</file>
         <file>icons/panes/structure.svg</file>
         <file>icons/project-editor/actions/add-bar.svg</file>

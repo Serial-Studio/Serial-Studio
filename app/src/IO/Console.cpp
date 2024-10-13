@@ -397,7 +397,7 @@ void IO::Console::print()
   // Create printer object
   QPrinter printer(QPrinter::PrinterResolution);
   printer.setFullPage(true);
-  printer.setDocName(qApp->applicationName());
+  printer.setDocName(qApp->applicationDisplayName());
   printer.setPageOrientation(QPageLayout::Portrait);
 
   // Show print dialog

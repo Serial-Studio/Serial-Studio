@@ -802,7 +802,8 @@ void MQTT::Client::onSslErrors(const QList<QSslError> &errors)
   {
     auto ret = Misc::Utilities::showMessageBox(
         tr("MQTT client SSL/TLS error, ignore?"), error.errorString(),
-        qApp->applicationName(), QMessageBox::Ignore | QMessageBox::Abort);
+        qApp->applicationDisplayName(),
+        QMessageBox::Ignore | QMessageBox::Abort);
 
     if (ret == QMessageBox::Abort)
     {
@@ -889,7 +890,7 @@ void MQTT::Client::regenerateClient()
     m_client = new QMQTT::Client(QHostAddress(host), port);
 
   // Set client ID
-  m_client->setClientId(qApp->applicationName());
+  m_client->setClientId(qApp->applicationDisplayName());
 
   // Set MQTT client options
   m_client->setWillQos(qos);

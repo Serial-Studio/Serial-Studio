@@ -56,11 +56,11 @@ RowLayout {
   // View options window
   //
   DashboardItems.ViewOptions {
+    id: viewOptions
     Layout.fillHeight: true
     Layout.minimumWidth: 280
     visible: root.structureVisible
     Layout.leftMargin: root.structureMargin
-    onColumnsChanged:(columns) => widgetGrid.columns = columns
   }
 
   //
@@ -90,5 +90,6 @@ RowLayout {
     Layout.fillWidth: true
     Layout.fillHeight: true
     Layout.minimumWidth: 240
+    columns: viewOptions.widgetColumns
   }
 }

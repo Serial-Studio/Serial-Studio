@@ -39,7 +39,7 @@ Widgets.Pane {
   //
   // Signals
   //
-  signal columnsChanged(var columns)
+  property int widgetColumns: Math.round(columns.value)
 
   //
   // Maps the slider position to points
@@ -238,7 +238,8 @@ Widgets.Pane {
               from: 1
               value: 3
               Layout.fillWidth: true
-              onValueChanged: columnsChanged(Math.round(value))
+              onValueChanged: root.widgetColumns = Math.round(value)
+              Component.onCompleted: root.widgetColumns = Math.round(value)
             } Label {
               text: Math.round(columns.value)
             }
@@ -403,6 +404,9 @@ Widgets.Pane {
           id: buttons
           anchors.fill: parent
           anchors.margins: 9
+          visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+
+
 
           Button {
             Layout.fillWidth: true
@@ -413,7 +417,8 @@ Widgets.Pane {
               spacing: 8
               anchors.centerIn: parent
               width: Math.max(layout1.implicitWidth,
-                              layout2.implicitWidth)
+                              layout2.implicitWidth,
+                              layout3.implicitWidth)
 
               Image {
                 sourceSize: Qt.size(18, 18)
@@ -427,6 +432,10 @@ Widgets.Pane {
                 horizontalAlignment: Text.AlignLeft
                 color: Cpp_ThemeManager.colors["button_text"]
               }
+
+              Item {
+                Layout.fillWidth: true
+              }
             }
           }
 
@@ -439,7 +448,8 @@ Widgets.Pane {
               spacing: 8
               anchors.centerIn: parent
               width: Math.max(layout1.implicitWidth,
-                              layout2.implicitWidth)
+                              layout2.implicitWidth,
+                              layout3.implicitWidth)
 
               Image {
                 sourceSize: Qt.size(18, 18)
@@ -452,6 +462,42 @@ Widgets.Pane {
                 Layout.alignment: Qt.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 color: Cpp_ThemeManager.colors["button_text"]
+              }
+
+              Item {
+                Layout.fillWidth: true
+              }
+            }
+          }
+
+          Button {
+            opacity: 0.5
+            enabled: false
+            Layout.fillWidth: true
+
+            RowLayout {
+              id: layout3
+              spacing: 8
+              anchors.centerIn: parent
+              width: Math.max(layout1.implicitWidth,
+                              layout2.implicitWidth,
+                              layout3.implicitWidth)
+
+              Image {
+                sourceSize: Qt.size(18, 18)
+                Layout.alignment: Qt.AlignVCenter
+                source: "qrc:/rcc/icons/panes/scale.svg"
+              }
+
+              Label {
+                Layout.alignment: Qt.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text: qsTr("Adjust Plot Scales & Positions")
+                color: Cpp_ThemeManager.colors["button_text"]
+              }
+
+              Item {
+                Layout.fillWidth: true
               }
             }
           }
