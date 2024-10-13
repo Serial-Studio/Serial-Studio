@@ -52,17 +52,20 @@ Here’s the custom JavaScript parser function used by this project:
 
 ```javascript
 /**
- * Parses the hexadecimal frame and converts it to an array of 8-bit decimal values (0-255).
+ * This function parses a binary data frame (represented as a hexadecimal string),
+ * and converts it into an array of decimal values (0-255).
+ *
  * @param[in]  frame  The latest received frame as a hexadecimal string.
  * @return     Array of integers containing the parsed frame elements.
  */
-function parse(frame) {
+function parse(frame, separator) {
     let dataArray = [];
     for (let i = 0; i < frame.length; i += 2) {
         let hexByte = frame.substring(i, i + 2);
         let decimalValue = parseInt(hexByte, 16);
         dataArray.push(decimalValue);
     }
+
     return dataArray;
 }
 ```
