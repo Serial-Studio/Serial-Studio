@@ -97,7 +97,7 @@ private:
   void convertColumnToDateTime(int columnIndex);
 
   QDateTime getDateTime(int row);
-  QDateTime getDateTime(const QString& cell);
+  QDateTime getDateTime(const QString &cell);
 
   QByteArray getFrame(const int row);
   QString getCellValue(const int row, const int column, bool &error);

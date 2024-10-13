@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <qglobal.h>
+
 // clang-format off
 #define APP_NAME        PROJECT_DISPNAME
 #define APP_VERSION     PROJECT_VERSION
@@ -29,3 +31,9 @@
 #define APP_SUPPORT_URL PROJECT_CONTACT
 #define APP_UPDATER_URL PROJECT_APPCAST
 // clang-format on
+
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+#  define APP_EXECUTABLE QStringLiteral("Serial-Studio")
+#else
+#  define APP_EXECUTABLE QStringLiteral("serial-studio")
+#endif

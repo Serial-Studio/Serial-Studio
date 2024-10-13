@@ -1916,9 +1916,13 @@ Utilisez les boutons de la barre d&apos;outils ci-dessus pour ajouter un ensembl
         <translation>Vérifier les mises à jour automatiquement ?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>%1 doit-il vérifier automatiquement les mises à jour ? Vous pouvez toujours vérifier les mises à jour manuellement dans le menu &quot;Aide&quot;</translation>
+        <translation type="vanished">%1 doit-il vérifier automatiquement les mises à jour ? Vous pouvez toujours vérifier les mises à jour manuellement dans le menu &quot;Aide&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation>%1 doit-il vérifier automatiquement les mises à jour ? Vous pouvez toujours vérifier les mises à jour manuellement à partir de la fenêtre &quot;À propos&quot;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="105"/>

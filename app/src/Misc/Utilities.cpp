@@ -71,7 +71,7 @@ bool Misc::Utilities::askAutomaticUpdates()
       = showMessageBox(tr("Check for updates automatically?"),
                        tr("Should %1 automatically check for updates? "
                           "You can always check for updates manually from "
-                          "the \"Help\" menu")
+                          "the \"About\" dialog")
                            .arg(APP_NAME),
                        APP_NAME, QMessageBox::Yes | QMessageBox::No);
   return result == QMessageBox::Yes;

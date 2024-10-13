@@ -33,6 +33,13 @@
 #  include <windows.h>
 #endif
 
+#ifdef Q_OS_LINUX
+#  include <QDir>
+#  include <QFile>
+#  include <QFileInfo>
+#  include <QStandardPaths>
+#endif
+
 /**
  * Prints the current application version to the console
  */
@@ -61,6 +68,13 @@ static void cliResetSettings()
  */
 int main(int argc, char **argv)
 {
+  // Set application info
+  QApplication::setApplicationName(APP_EXECUTABLE);
+  QApplication::setOrganizationName(APP_DEVELOPER);
+  QApplication::setApplicationVersion(APP_VERSION);
+  QApplication::setApplicationDisplayName(APP_NAME);
+  QApplication::setOrganizationDomain(APP_SUPPORT_URL);
+
   // Fix console output on Windows (https://stackoverflow.com/a/41701133)
   // This code will only execute if the application is started from the comamnd
   // prompt
@@ -76,6 +90,42 @@ int main(int argc, char **argv)
   }
 #endif
 
+// Fix AppImage icon on GNU/Linux
+#ifdef Q_OS_LINUX
+  // Define the icon path where the icon should be copied to
+  const auto pixmapPath
+      = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+        + "/icons/hicolor/256x256/apps/";
+  const auto pixmapFile = pixmapPath + APP_EXECUTABLE + ".png";
+  const auto resourcePath = ":/rcc/images/icon@2x.png";
+
+  // Check if the file already exists
+  if (!QFileInfo::exists(pixmapFile))
+  {
+    // Ensure the directory exists, create it if it doesn't
+    QDir dir;
+    if (!dir.exists(pixmapPath))
+    {
+      if (!dir.mkpath(pixmapPath))
+        return;
+    }
+
+    // Copy the icon from resources to the destination
+    QFile resourceFile(resourcePath);
+    if (resourceFile.open(QIODevice::ReadOnly))
+    {
+      QFile localFile(pixmapFile);
+      if (localFile.open(QIODevice::WriteOnly))
+      {
+        localFile.write(resourceFile.readAll());
+        localFile.close();
+      }
+
+      resourceFile.close();
+    }
+  }
+#endif
+
   // Set application attributes
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -87,12 +137,6 @@ int main(int argc, char **argv)
 
   // Init. application
   QApplication app(argc, argv);
-
-  // Set application information
-  app.setApplicationName(APP_NAME);
-  app.setApplicationVersion(APP_VERSION);
-  app.setOrganizationName(APP_DEVELOPER);
-  app.setOrganizationDomain(APP_SUPPORT_URL);
 
   // Set application style
   app.setStyle(QStyleFactory::create("Fusion"));

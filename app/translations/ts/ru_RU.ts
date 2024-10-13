@@ -1967,9 +1967,13 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>Проверять обновления автоматически?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>Должен ли %1 автоматически проверять обновления? Вы всегда можете проверить обновления вручную через меню &quot;Справка&quot;</translation>
+        <translation type="vanished">Должен ли %1 автоматически проверять обновления? Вы всегда можете проверить обновления вручную через меню &quot;Справка&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation>Должен ли %1 автоматически проверять обновления? Вы всегда можете вручную проверить обновления через диалоговое окно &quot;О программе&quot;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="105"/>

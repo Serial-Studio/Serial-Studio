@@ -1975,9 +1975,13 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
         <translation>Automatisch auf Updates prüfen?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>Soll %1 automatisch nach Updates suchen? Sie können jederzeit manuell im &quot;Hilfe&quot;-Menü nach Updates suchen</translation>
+        <translation type="vanished">Soll %1 automatisch nach Updates suchen? Sie können jederzeit manuell im &quot;Hilfe&quot;-Menü nach Updates suchen</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation>Soll %1 automatisch nach Updates suchen? Sie können jederzeit manuell über das &quot;Über&quot;-Dialog nach Updates suchen</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="105"/>

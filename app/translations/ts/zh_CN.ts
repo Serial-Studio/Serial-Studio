@@ -1971,9 +1971,13 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>自动检查更新？</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>%1 是否应该自动检查更新？您可以随时从“帮助”菜单中手动检查更新</translation>
+        <translation type="vanished">%1 是否应该自动检查更新？您可以随时从“帮助”菜单中手动检查更新</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation>%1 是否应自动检查更新？您始终可以从“关于”对话框手动检查更新</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="105"/>

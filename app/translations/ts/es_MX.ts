@@ -1963,9 +1963,13 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation>¿Buscar actualizaciones automáticamente?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;Help&quot; menu</source>
-        <translation>¿Debería %1 buscar actualizaciones automáticamente? Siempre puedes buscar actualizaciones manualmente desde el menú &quot;Ayuda&quot;</translation>
+        <translation type="vanished">¿Debería %1 buscar actualizaciones automáticamente? Siempre puedes buscar actualizaciones manualmente desde el menú &quot;Ayuda&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/Utilities.cpp" line="72"/>
+        <source>Should %1 automatically check for updates? You can always check for updates manually from the &quot;About&quot; dialog</source>
+        <translation>¿Debería %1 buscar actualizaciones automáticamente? Siempre puede buscar actualizaciones manualmente desde el diálogo &quot;Acerca de&quot;</translation>
     </message>
     <message>
         <location filename="../../src/Misc/Utilities.cpp" line="105"/>
