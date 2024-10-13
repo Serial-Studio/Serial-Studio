@@ -440,6 +440,15 @@ void IO::Manager::readFrames()
   // Obtain pointer to JSON generator
   static auto *generator = &JSON::FrameBuilder::instance();
 
+  // Initialize a static list with possible line breaks
+  static QList<QByteArray> linebreaks;
+  if (linebreaks.isEmpty())
+  {
+    linebreaks.append(QByteArray("\n"));
+    linebreaks.append(QByteArray("\r"));
+    linebreaks.append(QByteArray("\r\n"));
+  }
+
   // No device connected, abort
   if (!connected())
     return;
@@ -519,7 +528,7 @@ void IO::Manager::readFrames()
       // Find the earliest line break in the buffer
       int lineEndIndex = -1;
       QByteArray lineBreak;
-      for (const QByteArray lb : {"\r\n", "\n", "\r"})
+      for (const QByteArray &lb : linebreaks)
       {
         int index = m_dataBuffer.indexOf(lb, bytesProcessed);
         if (index != -1 && (lineEndIndex == -1 || index < lineEndIndex))
