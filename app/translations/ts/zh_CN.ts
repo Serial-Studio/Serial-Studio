@@ -149,32 +149,97 @@
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="175"/>
+        <location filename="../../src/CSV/Player.cpp" line="177"/>
         <source>Select CSV file</source>
         <translation>选择 CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="176"/>
+        <location filename="../../src/CSV/Player.cpp" line="178"/>
         <source>CSV files</source>
         <translation>CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="242"/>
+        <location filename="../../src/CSV/Player.cpp" line="261"/>
         <source>Serial port open, do you want to continue?</source>
         <translation>串口已打开，是否继续？</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="243"/>
-        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
-        <translation>为了使用此功能，您需要先断开串口连接</translation>
+        <location filename="../../src/CSV/Player.cpp" line="262"/>
+        <source>In order to use this feature, it&apos;s necessary to disconnect from the serial port</source>
+        <translation>要使用此功能，必须先断开串口连接</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="286"/>
+        <location filename="../../src/CSV/Player.cpp" line="428"/>
+        <source>Invalid CSV</source>
+        <translation>无效的CSV文件</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="429"/>
+        <source>The CSV file does not contain any data or headers.</source>
+        <translation>CSV文件不包含任何数据或标题。</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="439"/>
+        <source>Select a date/time column</source>
+        <translation>选择日期/时间列</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="439"/>
+        <location filename="../../src/CSV/Player.cpp" line="449"/>
+        <source>Set interval manually</source>
+        <translation>手动设置间隔</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="441"/>
+        <source>CSV Date/Time Selection</source>
+        <translation>CSV日期/时间选择</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="442"/>
+        <source>Choose how to handle the date/time data:</source>
+        <translation>选择如何处理日期/时间数据：</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="452"/>
+        <source>Set Interval</source>
+        <translation>设置间隔</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="453"/>
+        <source>Please enter the interval between rows in milliseconds:</source>
+        <translation>请输入行之间的间隔（以毫秒为单位）：</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="467"/>
+        <source>Select Date/Time Column</source>
+        <translation>选择日期/时间列</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="468"/>
+        <source>Please select the column that contains the date/time data:</source>
+        <translation>请选择包含日期/时间数据的列：</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="478"/>
+        <source>Invalid Selection</source>
+        <translation>无效的选择</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="478"/>
+        <source>The selected column is not valid.</source>
+        <translation>所选列无效。</translation>
+    </message>
+    <message>
+        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
+        <translation type="vanished">为了使用此功能，您需要先断开串口连接</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="314"/>
         <source>Cannot read CSV file</source>
         <translation>无法读取 CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="287"/>
+        <location filename="../../src/CSV/Player.cpp" line="315"/>
         <source>Please check file permissions &amp; location</source>
         <translation>请检查文件权限和位置</translation>
     </message>

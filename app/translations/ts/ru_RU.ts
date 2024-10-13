@@ -149,32 +149,97 @@
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="175"/>
+        <location filename="../../src/CSV/Player.cpp" line="177"/>
         <source>Select CSV file</source>
         <translation>Выберите файл CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="176"/>
+        <location filename="../../src/CSV/Player.cpp" line="178"/>
         <source>CSV files</source>
         <translation>Файлы CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="242"/>
+        <location filename="../../src/CSV/Player.cpp" line="261"/>
         <source>Serial port open, do you want to continue?</source>
         <translation>Серийный порт открыт, вы хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="243"/>
-        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
-        <translation>Для использования этой функции необходимо отключиться от серийного порта</translation>
+        <location filename="../../src/CSV/Player.cpp" line="262"/>
+        <source>In order to use this feature, it&apos;s necessary to disconnect from the serial port</source>
+        <translation>Для использования этой функции необходимо отключиться от последовательного порта</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="286"/>
+        <location filename="../../src/CSV/Player.cpp" line="428"/>
+        <source>Invalid CSV</source>
+        <translation>Неверный CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="429"/>
+        <source>The CSV file does not contain any data or headers.</source>
+        <translation>Файл CSV не содержит данных или заголовков.</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="439"/>
+        <source>Select a date/time column</source>
+        <translation>Выберите колонку с датой/временем</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="439"/>
+        <location filename="../../src/CSV/Player.cpp" line="449"/>
+        <source>Set interval manually</source>
+        <translation>Установить интервал вручную</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="441"/>
+        <source>CSV Date/Time Selection</source>
+        <translation>Выбор даты/времени в CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="442"/>
+        <source>Choose how to handle the date/time data:</source>
+        <translation>Выберите, как обрабатывать данные даты/времени:</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="452"/>
+        <source>Set Interval</source>
+        <translation>Установить интервал</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="453"/>
+        <source>Please enter the interval between rows in milliseconds:</source>
+        <translation>Введите интервал между строками в миллисекундах:</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="467"/>
+        <source>Select Date/Time Column</source>
+        <translation>Выберите колонку с датой/временем</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="468"/>
+        <source>Please select the column that contains the date/time data:</source>
+        <translation>Выберите колонку, содержащую данные даты/времени:</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="478"/>
+        <source>Invalid Selection</source>
+        <translation>Неверный выбор</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="478"/>
+        <source>The selected column is not valid.</source>
+        <translation>Выбранная колонка недействительна.</translation>
+    </message>
+    <message>
+        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
+        <translation type="vanished">Для использования этой функции необходимо отключиться от серийного порта</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="314"/>
         <source>Cannot read CSV file</source>
         <translation>Не удается прочитать файл CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="287"/>
+        <location filename="../../src/CSV/Player.cpp" line="315"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Пожалуйста, проверьте разрешения и местоположение файла</translation>
     </message>

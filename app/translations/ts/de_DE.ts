@@ -149,32 +149,97 @@
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="175"/>
+        <location filename="../../src/CSV/Player.cpp" line="177"/>
         <source>Select CSV file</source>
         <translation>CSV-Datei auswählen</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="176"/>
+        <location filename="../../src/CSV/Player.cpp" line="178"/>
         <source>CSV files</source>
         <translation>CSV-Dateien</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="242"/>
+        <location filename="../../src/CSV/Player.cpp" line="261"/>
         <source>Serial port open, do you want to continue?</source>
         <translation>Serieller Port ist geöffnet, möchten Sie fortfahren?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="243"/>
-        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
+        <location filename="../../src/CSV/Player.cpp" line="262"/>
+        <source>In order to use this feature, it&apos;s necessary to disconnect from the serial port</source>
         <translation>Um diese Funktion zu nutzen, ist es notwendig, die Verbindung zum seriellen Port zu trennen</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="286"/>
+        <location filename="../../src/CSV/Player.cpp" line="428"/>
+        <source>Invalid CSV</source>
+        <translation>Ungültige CSV</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="429"/>
+        <source>The CSV file does not contain any data or headers.</source>
+        <translation>Die CSV-Datei enthält keine Daten oder Überschriften.</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="439"/>
+        <source>Select a date/time column</source>
+        <translation>Wählen Sie eine Datum/Uhrzeit-Spalte aus</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="439"/>
+        <location filename="../../src/CSV/Player.cpp" line="449"/>
+        <source>Set interval manually</source>
+        <translation>Intervall manuell festlegen</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="441"/>
+        <source>CSV Date/Time Selection</source>
+        <translation>CSV Datum/Uhrzeit Auswahl</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="442"/>
+        <source>Choose how to handle the date/time data:</source>
+        <translation>Wählen Sie, wie mit den Datum/Uhrzeit-Daten umgegangen werden soll:</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="452"/>
+        <source>Set Interval</source>
+        <translation>Intervall festlegen</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="453"/>
+        <source>Please enter the interval between rows in milliseconds:</source>
+        <translation>Bitte geben Sie das Intervall zwischen den Zeilen in Millisekunden ein:</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="467"/>
+        <source>Select Date/Time Column</source>
+        <translation>Datum/Uhrzeit-Spalte auswählen</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="468"/>
+        <source>Please select the column that contains the date/time data:</source>
+        <translation>Bitte wählen Sie die Spalte aus, die die Datum/Uhrzeit-Daten enthält:</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="478"/>
+        <source>Invalid Selection</source>
+        <translation>Ungültige Auswahl</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="478"/>
+        <source>The selected column is not valid.</source>
+        <translation>Die ausgewählte Spalte ist ungültig.</translation>
+    </message>
+    <message>
+        <source>In order to use this feature, its necessary to disconnect from the serial port</source>
+        <translation type="vanished">Um diese Funktion zu nutzen, ist es notwendig, die Verbindung zum seriellen Port zu trennen</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="314"/>
         <source>Cannot read CSV file</source>
         <translation>CSV-Datei kann nicht gelesen werden</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="287"/>
+        <location filename="../../src/CSV/Player.cpp" line="315"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Bitte überprüfen Sie die Dateiberechtigungen und den Speicherort</translation>
     </message>

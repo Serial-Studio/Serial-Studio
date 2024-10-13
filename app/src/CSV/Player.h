@@ -92,6 +92,13 @@ private slots:
   void updateData();
 
 private:
+  bool promptUserForDateTimeOrInterval();
+  void generateDateTimeForRows(int interval);
+  void convertColumnToDateTime(int columnIndex);
+
+  QDateTime getDateTime(int row);
+  QDateTime getDateTime(const QString& cell);
+
   QByteArray getFrame(const int row);
   QString getCellValue(const int row, const int column, bool &error);
 
