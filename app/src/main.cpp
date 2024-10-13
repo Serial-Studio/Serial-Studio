@@ -104,24 +104,25 @@ int main(int argc, char **argv)
   {
     // Ensure the directory exists, create it if it doesn't
     QDir dir;
-    if (!dir.exists(pixmapPath))
-    {
-      if (!dir.mkpath(pixmapPath))
-        return;
-    }
+    bool pathExists = dir.exists(pixmapPath);
+    if (!pathExists)
+      pathExists = dir.mkpath(pixmapPath);
 
     // Copy the icon from resources to the destination
-    QFile resourceFile(resourcePath);
-    if (resourceFile.open(QIODevice::ReadOnly))
+    if (pathExists)
     {
-      QFile localFile(pixmapFile);
-      if (localFile.open(QIODevice::WriteOnly))
+      QFile resourceFile(resourcePath);
+      if (resourceFile.open(QIODevice::ReadOnly))
       {
-        localFile.write(resourceFile.readAll());
-        localFile.close();
-      }
+        QFile localFile(pixmapFile);
+        if (localFile.open(QIODevice::WriteOnly))
+        {
+          localFile.write(resourceFile.readAll());
+          localFile.close();
+        }
 
-      resourceFile.close();
+        resourceFile.close();
+      }
     }
   }
 #endif
