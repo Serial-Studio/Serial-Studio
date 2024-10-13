@@ -519,7 +519,7 @@ void IO::Manager::readFrames()
       // Find the earliest line break in the buffer
       int lineEndIndex = -1;
       QByteArray lineBreak;
-      for (const QByteArray &lb : {"\r\n", "\n", "\r"})
+      for (const QByteArray lb : {"\r\n", "\n", "\r"})
       {
         int index = m_dataBuffer.indexOf(lb, bytesProcessed);
         if (index != -1 && (lineEndIndex == -1 || index < lineEndIndex))
