@@ -133,10 +133,13 @@ void Widgets::FFTPlot::updateData()
       points[i] = QPointF(frequency, dB);
     }
 
-    // Plot obtained data
+    // Update curve with new data
     m_curve.setSamples(points);
     m_plot.setAxisScale(QwtPlot::xBottom, 0, m_samplingRate / 2);
-    m_plot.replot();
+
+    // Replot graph
+    if (isEnabled())
+      m_plot.replot();
   }
 }
 

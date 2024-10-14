@@ -216,6 +216,7 @@ void UI::DeclarativeWidget::setWidget(QWidget *widget)
       delete m_widget;
 
     m_widget = widget;
+    m_widget->setAttribute(Qt::WA_UpdatesDisabled, true);
     Q_EMIT widgetChanged();
   }
 }
@@ -228,6 +229,7 @@ void UI::DeclarativeWidget::renderWidget()
 {
   if (widget() && isVisible())
   {
+    widget()->update();
     m_pixmap = widget()->grab();
     update();
   }

@@ -167,9 +167,12 @@ void Widgets::Plot::updateData()
       }
     }
 
-    // Replot graph
+    // Add new data to curve
     m_curve.setSamples(plotData.at(m_index));
-    m_plot.replot();
+
+    // Replot graph
+    if (isEnabled())
+      m_plot.replot();
   }
 }
 

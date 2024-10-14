@@ -61,8 +61,14 @@
 template<typename... Colors>
 inline QString QSS(const QString &style, const Colors &...colors)
 {
-  QStringList colorNames = {colors.name()...};
-  return QString(style).arg(colorNames.join(','));
+  QStringList colorNames;
+  (colorNames << ... << colors.name());
+  QString result = style;
+  for (int i = 0; i < colorNames.size(); ++i)
+  {
+    result = result.arg(colorNames[i]);
+  }
+  return result;
 }
 
 /**
