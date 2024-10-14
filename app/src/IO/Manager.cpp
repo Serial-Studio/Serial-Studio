@@ -64,6 +64,7 @@ IO::Manager::Manager()
   , m_startSequence(QStringLiteral("/*"))
   , m_finishSequence(QStringLiteral("*/"))
   , m_separatorSequence(QStringLiteral(","))
+  , m_samplingRate(0)
 {
   // Set initial settings
   setMaxBufferSize(1024 * 1024);
@@ -143,6 +144,14 @@ bool IO::Manager::configurationOk()
 int IO::Manager::maxBufferSize() const
 {
   return m_maxBufferSize;
+}
+
+/**
+ * Returns the calculated sampling rate of the data
+ */
+qreal IO::Manager::samplingRate() const
+{
+  return m_samplingRate;
 }
 
 /**
@@ -273,6 +282,10 @@ void IO::Manager::connectDevice()
     else
       disconnectDevice();
 
+    // Restart sampling rate timer
+    m_samplingRate = 0;
+    m_samplingRateTimer.start();
+
     // Update UI
     Q_EMIT connectedChanged();
   }
@@ -296,6 +309,10 @@ void IO::Manager::disconnectDevice()
     m_receivedBytes = 0;
     m_dataBuffer.clear();
     m_dataBuffer.reserve(maxBufferSize());
+
+    // Stop sampling rate timer
+    m_samplingRate = 0;
+    m_samplingRateTimer.invalidate();
 
     // Update UI
     Q_EMIT driverChanged();
@@ -324,6 +341,9 @@ void IO::Manager::processPayload(const QByteArray &payload)
 {
   if (!payload.isEmpty())
   {
+    // Update sampling rate
+    updateSamplingRate();
+
     // Update received bytes indicator
     m_receivedBytes += payload.size();
     if (m_receivedBytes >= UINT64_MAX)
@@ -623,6 +643,32 @@ void IO::Manager::clearTempBuffer()
 }
 
 /**
+ * Calculates the sampling rate of the processed data
+ */
+void IO::Manager::updateSamplingRate()
+{
+  // Measure the time elapsed since the last call
+  qint64 elapsedTime = m_samplingRateTimer.restart();
+  if (elapsedTime > 0)
+  {
+    // Calculate the new sampling rate from the elapsed time.
+    // The elapsed time is in milliseconds, so we convert it to Hz (samples per
+    // second).
+    float newSamplingRate = 1000.0f / static_cast<float>(elapsedTime);
+
+    // Apply an exponential moving average (EMA) to smooth the sampling rate.
+    // The smoothing factor is made time-dependent: 'factor' is based on the
+    // elapsed time, converted to seconds (elapsedTime * 1e-3). We also cap
+    // 'factor' at 0.5 to prevent the system from overreacting to large timing
+    // variations. This helps balance responsiveness to larger timing shifts and
+    // smoothing during periods of stability.
+    const float factor = qMin(elapsedTime * 1e-3, 0.5f);
+    m_samplingRate
+        = (factor * newSamplingRate) + ((1.0f - factor) * m_samplingRate);
+  }
+}
+
+/**
  * Changes the target device pointer. Deletion should be handled by the
  * interface implementation, not by this class.
  */
@@ -648,6 +694,9 @@ void IO::Manager::onDataReceived(const QByteArray &data)
   // Verify that device is still valid
   if (!driver())
     disconnectDevice();
+
+  // Update sampling rate
+  updateSamplingRate();
 
   // Read data & append it to buffer
   auto bytes = data.length();

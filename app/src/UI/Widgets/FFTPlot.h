@@ -25,7 +25,6 @@
 #include <QWidget>
 #include <QwtPlot>
 #include <QVBoxLayout>
-#include <QElapsedTimer>
 #include <QwtPlotCurve>
 #include <QwtScaleEngine>
 #include <QScopedArrayPointer>
@@ -52,19 +51,14 @@ private slots:
   void onAxisOptionsChanged();
 
 private:
-  int m_size;                       ///< Size of the FFT data array.
-  int m_index;                      ///< Index of the FFT plot data.
-  float m_samplingRate;             ///< Sampling rate calculated dynamically.
-  QElapsedTimer m_timer;            ///< Timer to measure time between updates.
-  QwtPlot m_plot;                   ///< Plot widget for FFT.
-  QwtPlotCurve m_curve;             ///< Curve for the FFT data.
-  QVBoxLayout m_layout;             ///< Layout for the plot widget.
-  QScopedArrayPointer<float> m_fft; ///< FFT data array.
+  int m_size;                           ///< Size of the FFT data array.
+  int m_index;                          ///< Index of the FFT plot data.
+  QwtPlot m_plot;                       ///< Plot widget for FFT.
+  QwtPlotCurve m_curve;                 ///< Curve for the FFT data.
+  QVBoxLayout m_layout;                 ///< Layout for the plot widget.
+  QScopedArrayPointer<float> m_fft;     ///< FFT data array.
   QScopedArrayPointer<float> m_samples; ///< Sample data array.
   QFourierTransformer m_transformer;    ///< Fourier transformer for FFT.
-
-  // EMA filter for sampling rate calculation
-  float m_smoothedSamplingRate = 0.0f;
 };
 
 } // namespace Widgets

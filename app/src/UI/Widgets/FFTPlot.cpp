@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "IO/Manager.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/FFTPlot.h"
@@ -31,7 +32,6 @@
 Widgets::FFTPlot::FFTPlot(int index)
   : m_size(0)
   , m_index(index)
-  , m_samplingRate(0.0)
   , m_transformer(0, QStringLiteral("Hann"))
 {
   // Get pointers to Serial Studio modules
@@ -72,9 +72,6 @@ Widgets::FFTPlot::FFTPlot(int index)
   m_plot.setAxisTitle(QwtPlot::yLeft, tr("Magnitude (dB)"));
   m_plot.replot();
 
-  // Start timer
-  m_timer.start();
-
   // Configure visual style
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
@@ -93,30 +90,13 @@ Widgets::FFTPlot::FFTPlot(int index)
  */
 void Widgets::FFTPlot::updateData()
 {
-  // Measure the time elapsed since the last call
-  qint64 elapsedTime = m_timer.restart();
-  if (elapsedTime > 0)
-  {
-    // Calculate the new sampling rate from the elapsed time.
-    // The elapsed time is in milliseconds, so we convert it to Hz (samples per
-    // second).
-    float newSamplingRate = 1000.0f / static_cast<float>(elapsedTime);
-
-    // Apply an exponential moving average (EMA) to smooth the sampling rate.
-    // The smoothing factor is made time-dependent: 'factor' is based on the
-    // elapsed time, converted to seconds (elapsedTime * 1e-3). We also cap
-    // 'factor' at 0.5 to prevent the system from overreacting to large timing
-    // variations. This helps balance responsiveness to larger timing shifts and
-    // smoothing during periods of stability.
-    const float factor = qMin(elapsedTime * 1e-3, 0.5f);
-    m_smoothedSamplingRate = (factor * newSamplingRate)
-                             + ((1.0f - factor) * m_smoothedSamplingRate);
-  }
-
   // Update FFT data and plot
   auto plotData = UI::Dashboard::instance().fftPlotValues();
   if (plotData.count() > m_index)
   {
+    // Obtain sampling rate from dashboard
+    const auto samplingRate = IO::Manager::instance().samplingRate();
+
     // Obtain samples from data
     auto data = plotData.at(m_index);
     for (int i = 0; i < m_size; ++i)
@@ -134,7 +114,8 @@ void Widgets::FFTPlot::updateData()
       const qreal re = m_fft[i];
       const qreal im = m_fft[m_size / 2 + i];
       const qreal magnitude = sqrt(re * re + im * im);
-      const qreal frequency = i * m_smoothedSamplingRate / m_size;
+      const qreal frequency
+          = static_cast<qreal>(i) * samplingRate / static_cast<qreal>(m_size);
       points[i] = QPointF(frequency, magnitude);
       if (magnitude > maxMagnitude)
         maxMagnitude = magnitude;
@@ -146,14 +127,16 @@ void Widgets::FFTPlot::updateData()
       const qreal re = m_fft[i];
       const qreal im = m_fft[m_size / 2 + i];
       const qreal magnitude = sqrt(re * re + im * im) / maxMagnitude;
-      const qreal dB = 20 * log10(magnitude);
-      const qreal frequency = i * m_smoothedSamplingRate / m_size;
+      const qreal dB = (magnitude > 0) ? 20 * log10(magnitude)
+                                       : -INFINITY; // Avoid log10(0)
+      const qreal frequency
+          = static_cast<qreal>(i) * samplingRate / static_cast<qreal>(m_size);
       points[i] = QPointF(frequency, dB);
     }
 
-    // Plot obtained data, remember Nyquist's theorem? :)
+    // Plot obtained data
     m_curve.setSamples(points);
-    m_plot.setAxisScale(QwtPlot::xBottom, 0, m_smoothedSamplingRate / 2);
+    m_plot.setAxisScale(QwtPlot::xBottom, 0, samplingRate / 2);
     m_plot.replot();
   }
 }

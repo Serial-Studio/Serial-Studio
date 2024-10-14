@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include <QElapsedTimer>
 #include <IO/HAL_Driver.h>
 
 namespace IO
@@ -144,6 +145,7 @@ public:
   [[nodiscard]] bool configurationOk();
 
   [[nodiscard]] int maxBufferSize() const;
+  [[nodiscard]] qreal samplingRate() const;
 
   [[nodiscard]] HAL_Driver *driver();
   [[nodiscard]] SelectedDriver selectedDriver() const;
@@ -170,6 +172,7 @@ public slots:
 private slots:
   void readFrames();
   void clearTempBuffer();
+  void updateSamplingRate();
   void setDriver(HAL_Driver *driver);
   void onDataReceived(const QByteArray &data);
 
@@ -189,5 +192,8 @@ private:
   QString m_finishSequence;
   QString m_separatorSequence;
   SelectedDriver m_selectedDriver;
+
+  qreal m_samplingRate;
+  QElapsedTimer m_samplingRateTimer;
 };
 } // namespace IO

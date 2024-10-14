@@ -24,8 +24,9 @@
 #include "CSV/Player.h"
 #include "UI/Dashboard.h"
 #include "MQTT/Client.h"
-#include "JSON/FrameBuilder.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/TimerEvents.h"
+#include "JSON/FrameBuilder.h"
 
 //------------------------------------------------------------------------------
 // Constructor/deconstructor & singleton
@@ -49,6 +50,13 @@ UI::Dashboard::Dashboard()
   connect(&JSON::FrameBuilder::instance(),
           &JSON::FrameBuilder::jsonFileMapChanged, this,
           &UI::Dashboard::resetData);
+
+  // Update widgets at 20 Hz (max)
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+          [=] {
+            if (m_currentFrame.isValid())
+              Q_EMIT updated();
+          });
 }
 
 /**
@@ -151,17 +159,17 @@ int UI::Dashboard::totalWidgetCount() const
 {
   // clang-format off
   const int count =
-          gpsCount() +
-          ledCount() +
-          barCount() +
-          fftCount() +
-          plotCount() +
-          gaugeCount() +
-          datagridCount() +
-          compassCount() +
-          multiPlotCount() +
-          gyroscopeCount() +
-          accelerometerCount();
+      gpsCount() +
+      ledCount() +
+      barCount() +
+      fftCount() +
+      plotCount() +
+      gaugeCount() +
+      datagridCount() +
+      compassCount() +
+      multiPlotCount() +
+      gyroscopeCount() +
+      accelerometerCount();
   // clang-format on
 
   return count;
@@ -214,16 +222,16 @@ QStringList UI::Dashboard::widgetTitles()
 
   // clang-format off
   return datagridTitles() +
-          multiPlotTitles() +
-          ledTitles() +
-          fftTitles() +
-          plotTitles() +
-          barTitles() +
-          gaugeTitles() +
-          compassTitles() +
-          gyroscopeTitles() +
-          accelerometerTitles() +
-          gpsTitles();
+         multiPlotTitles() +
+         ledTitles() +
+         fftTitles() +
+         plotTitles() +
+         barTitles() +
+         gaugeTitles() +
+         compassTitles() +
+         gyroscopeTitles() +
+         accelerometerTitles() +
+         gpsTitles();
   // clang-format on
 }
 
@@ -894,9 +902,6 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
     Q_EMIT widgetCountChanged();
     Q_EMIT widgetVisibilityChanged();
   }
-
-  // Update UI
-  Q_EMIT updated();
 
   // Share the frame with other models
   Q_EMIT frameReceived(m_currentFrame);
