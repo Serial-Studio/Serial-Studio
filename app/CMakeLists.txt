@@ -62,7 +62,12 @@ find_package(
 
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
-qt_policy(SET QTP0004 NEW)
+
+# Check the Qt version and set QTP0004 conditionally
+if(QT_VERSION VERSION_GREATER_EQUAL "6.8.0")
+    qt_policy(SET QTP0004 NEW)
+endif()
+
 
 #-------------------------------------------------------------------------------
 # Import source code
