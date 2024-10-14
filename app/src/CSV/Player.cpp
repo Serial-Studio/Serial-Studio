@@ -586,7 +586,6 @@ QDateTime CSV::Player::getDateTime(const int row)
 QDateTime CSV::Player::getDateTime(const QString &cell)
 {
   // Initialize parameters
-  bool error;
   QDateTime dateTime;
 
   // Create a list of available date/time formats
