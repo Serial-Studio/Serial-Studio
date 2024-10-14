@@ -29,6 +29,7 @@
  */
 Widgets::MultiPlot::MultiPlot(const int index)
   : m_index(index)
+  , m_replot(false)
 {
   // Get pointers to serial studio modules
   auto dash = &UI::Dashboard::instance();
@@ -75,12 +76,8 @@ Widgets::MultiPlot::MultiPlot(const int index)
   if (normalize)
     m_plot.setAxisScale(QwtPlot::yLeft, 0, 1);
 
-  // Show plot
-  updateRange();
-  m_plot.replot();
-  m_plot.show();
-
   // Configure visual style
+  updateRange();
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &Widgets::MultiPlot::onThemeChanged);
@@ -93,6 +90,16 @@ Widgets::MultiPlot::MultiPlot(const int index)
           Qt::DirectConnection);
   connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
           &MultiPlot::onAxisOptionsChanged, Qt::DirectConnection);
+
+  // Plot data at 20 Hz
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
+          [=] {
+            if (m_replot && isEnabled())
+            {
+              m_plot.replot();
+              m_replot = false;
+            }
+          });
 }
 
 /**
@@ -105,6 +112,10 @@ Widgets::MultiPlot::MultiPlot(const int index)
  */
 void Widgets::MultiPlot::updateData()
 {
+  // Widget not enabled, do not redraw
+  if (!isEnabled())
+    return;
+
   // Invalid index, abort update
   auto dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->multiPlotCount())
@@ -141,17 +152,10 @@ void Widgets::MultiPlot::updateData()
     else
       m_yData[i][count - 1] = dataset.value().toDouble();
 
-    // Widget not enabled, do not redraw
-    if (!isEnabled())
-      continue;
-
     // Plot new data
+    m_replot = true;
     m_curves.at(i)->setSamples(m_yData[i]);
   }
-
-  // Plot widget again
-  if (isEnabled())
-    m_plot.replot();
 }
 
 /**

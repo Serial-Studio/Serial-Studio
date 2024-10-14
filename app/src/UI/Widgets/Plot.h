@@ -47,6 +47,7 @@ private:
   int m_index;
   double m_min;
   double m_max;
+  bool m_replot;
   bool m_autoscale;
 
   QwtPlot m_plot;

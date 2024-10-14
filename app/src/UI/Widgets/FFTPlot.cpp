@@ -61,6 +61,7 @@ Widgets::FFTPlot::FFTPlot(int index)
 
   // Obtain sampling rate from dataset
   m_samplingRate = dataset.fftSamplingRate();
+  m_plot.setAxisScale(QwtPlot::xBottom, 0, m_samplingRate / 2);
 
   // Allocate FFT and sample arrays
   m_fft.reset(new float[m_size]);
@@ -72,7 +73,6 @@ Widgets::FFTPlot::FFTPlot(int index)
   m_plot.setAxisScale(QwtPlot::yLeft, -100, 0);
   m_plot.setAxisTitle(QwtPlot::xBottom, tr("Frequency (Hz)"));
   m_plot.setAxisTitle(QwtPlot::yLeft, tr("Magnitude (dB)"));
-  m_plot.replot();
 
   // Configure visual style
   onThemeChanged();
@@ -85,13 +85,27 @@ Widgets::FFTPlot::FFTPlot(int index)
           Qt::DirectConnection);
   connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
           &FFTPlot::onAxisOptionsChanged, Qt::DirectConnection);
+
+  // Plot data at 20 Hz
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
+          [=] {
+            if (m_replot && isEnabled())
+            {
+              m_plot.replot();
+              m_replot = false;
+            }
+          });
 }
 
 /**
- * @brief Slot to update the FFT data and replot the graph.
+ * @brief Slot to update the FFT data.
  */
 void Widgets::FFTPlot::updateData()
 {
+  // Check if widget is disabled
+  if (!isEnabled())
+    return;
+
   // Update FFT data and plot
   auto plotData = UI::Dashboard::instance().fftPlotValues();
   if (plotData.count() > m_index)
@@ -134,12 +148,8 @@ void Widgets::FFTPlot::updateData()
     }
 
     // Update curve with new data
+    m_replot = true;
     m_curve.setSamples(points);
-    m_plot.setAxisScale(QwtPlot::xBottom, 0, m_samplingRate / 2);
-
-    // Replot graph
-    if (isEnabled())
-      m_plot.replot();
   }
 }
 

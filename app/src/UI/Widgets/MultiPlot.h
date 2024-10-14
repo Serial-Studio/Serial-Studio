@@ -50,6 +50,7 @@ private slots:
 
 private:
   int m_index;
+  bool m_replot;
   QwtPlot m_plot;
   QwtLegend m_legend;
   QVBoxLayout m_layout;

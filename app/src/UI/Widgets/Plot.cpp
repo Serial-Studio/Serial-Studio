@@ -22,6 +22,7 @@
 
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Plot.h"
+#include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"
 
 /**
@@ -31,6 +32,7 @@ Widgets::Plot::Plot(const int index)
   : m_index(index)
   , m_min(INT_MAX)
   , m_max(INT_MIN)
+  , m_replot(false)
   , m_autoscale(true)
 {
   // Get pointers to serial studio modules
@@ -53,8 +55,6 @@ Widgets::Plot::Plot(const int index)
   updateRange();
   m_plot.setFrameStyle(QFrame::Plain);
   m_curve.attach(&m_plot);
-  m_plot.replot();
-  m_plot.show();
 
   // Update graph scale
   auto dataset = UI::Dashboard::instance().getPlot(m_index);
@@ -89,6 +89,16 @@ Widgets::Plot::Plot(const int index)
           Qt::DirectConnection);
   connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
           &Plot::onAxisOptionsChanged, Qt::DirectConnection);
+
+  // Plot data at 20 Hz
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
+          [=] {
+            if (m_replot && isEnabled())
+            {
+              m_plot.replot();
+              m_replot = false;
+            }
+          });
 }
 
 /**
@@ -168,11 +178,8 @@ void Widgets::Plot::updateData()
     }
 
     // Add new data to curve
+    m_replot = true;
     m_curve.setSamples(plotData.at(m_index));
-
-    // Replot graph
-    if (isEnabled())
-      m_plot.replot();
   }
 }
 
