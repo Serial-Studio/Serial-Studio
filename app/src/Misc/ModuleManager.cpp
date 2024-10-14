@@ -133,9 +133,6 @@ Misc::ModuleManager::ModuleManager()
   // Stop modules when application is about to quit
   connect(&m_engine, &QQmlApplicationEngine::quit, this,
           &Misc::ModuleManager::onQuit);
-
-  // Use software rendering to avoid crashes
-  QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
 }
 
 /**
