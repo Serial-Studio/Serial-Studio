@@ -67,7 +67,7 @@ Widgets::Compass::Compass(const int index)
 
   // Connect update signal
   connect(dash, &UI::Dashboard::updated, this, &Compass::update,
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
 }
 
 /**

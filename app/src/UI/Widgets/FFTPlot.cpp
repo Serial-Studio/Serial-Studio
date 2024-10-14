@@ -82,9 +82,9 @@ Widgets::FFTPlot::FFTPlot(int index)
   // Connect update signal
   onAxisOptionsChanged();
   connect(dash, &UI::Dashboard::updated, this, &FFTPlot::updateData,
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
   connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
-          &FFTPlot::onAxisOptionsChanged, Qt::QueuedConnection);
+          &FFTPlot::onAxisOptionsChanged, Qt::DirectConnection);
 }
 
 /**

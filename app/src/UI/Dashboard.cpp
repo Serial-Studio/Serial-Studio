@@ -25,7 +25,6 @@
 #include "UI/Dashboard.h"
 #include "MQTT/Client.h"
 #include "Misc/CommonFonts.h"
-#include "Misc/TimerEvents.h"
 #include "JSON/FrameBuilder.h"
 
 //------------------------------------------------------------------------------
@@ -50,16 +49,6 @@ UI::Dashboard::Dashboard()
   connect(&JSON::FrameBuilder::instance(),
           &JSON::FrameBuilder::jsonFileMapChanged, this,
           &UI::Dashboard::resetData);
-
-  // Update widgets at 20 Hz (max)
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
-          [=] {
-            if (m_updateRequired)
-            {
-              m_updateRequired = false;
-              Q_EMIT updated();
-            }
-          });
 }
 
 /**
@@ -826,7 +815,6 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
 
   // Copy frame data
   m_currentFrame = frame;
-  m_updateRequired = true;
 
   // Regenerate plot data
   updatePlots();
@@ -908,6 +896,7 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   }
 
   // Share the frame with other models
+  Q_EMIT updated();
   Q_EMIT frameReceived(m_currentFrame);
 }
 

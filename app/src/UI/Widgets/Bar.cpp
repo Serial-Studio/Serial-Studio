@@ -59,9 +59,9 @@ Widgets::Bar::Bar(const int index)
 
   // React to dashboard events
   connect(this, SIGNAL(resized()), this, SLOT(onResized()),
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
   connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
 }
 
 /**

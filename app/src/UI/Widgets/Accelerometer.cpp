@@ -54,7 +54,7 @@ Widgets::Accelerometer::Accelerometer(const int index)
 
   // React to dashboard events
   connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
 }
 
 /**

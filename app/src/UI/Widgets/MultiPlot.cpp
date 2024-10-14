@@ -88,11 +88,11 @@ Widgets::MultiPlot::MultiPlot(const int index)
   // React to dashboard events
   onAxisOptionsChanged();
   connect(dash, &UI::Dashboard::updated, this, &MultiPlot::updateData,
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
   connect(dash, &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange,
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
   connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
-          &MultiPlot::onAxisOptionsChanged, Qt::QueuedConnection);
+          &MultiPlot::onAxisOptionsChanged, Qt::DirectConnection);
 }
 
 /**

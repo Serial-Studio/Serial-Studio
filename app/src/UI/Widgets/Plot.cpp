@@ -84,11 +84,11 @@ Widgets::Plot::Plot(const int index)
   // React to dashboard events
   onAxisOptionsChanged();
   connect(dash, &UI::Dashboard::updated, this, &Plot::updateData,
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
   connect(dash, &UI::Dashboard::pointsChanged, this, &Plot::updateRange,
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
   connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
-          &Plot::onAxisOptionsChanged, Qt::QueuedConnection);
+          &Plot::onAxisOptionsChanged, Qt::DirectConnection);
 }
 
 /**
