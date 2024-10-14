@@ -84,7 +84,8 @@ typedef enum
   kDatasetView_Min,           /**< Represents the dataset minimum value item. */
   kDatasetView_Max,           /**< Represents the dataset maximum value item. */
   kDatasetView_Alarm,         /**< Represents the dataset alarm value item. */
-  kDatasetView_FFT_Samples    /**< Represents the FFT window size item. */
+  kDatasetView_FFT_Samples,    /**< Represents the FFT window size item. */
+  kDatasetView_FFT_SamplingRate, /**< Represents the FFT sampling rate item. */
 } DatasetItem;
 // clang-format on
 
@@ -2315,6 +2316,18 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   fftWindow->setData(tr("Samples for FFT calculation"), ParameterDescription);
   m_datasetModel->appendRow(fftWindow);
 
+  // Add FFT sampling rate
+  auto fftSamplingRate = new QStandardItem();
+  fftSamplingRate->setEditable(true);
+  fftSamplingRate->setData(IntField, WidgetType);
+  fftSamplingRate->setData(100, PlaceholderValue);
+  fftSamplingRate->setData(dataset.fftSamplingRate(), EditableValue);
+  fftSamplingRate->setData(tr("FFT Sampling Rate"), ParameterName);
+  fftSamplingRate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
+  fftSamplingRate->setData(tr("Sampling rate (Hz) for FFT calculation"),
+                           ParameterDescription);
+  m_datasetModel->appendRow(fftSamplingRate);
+
   // Add LED panel checkbox
   auto led = new QStandardItem();
   led->setEditable(true);
@@ -2758,6 +2771,9 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       break;
     case kDatasetView_FFT_Samples:
       m_selectedDataset.m_fftSamples = m_fftSamples.at(value.toInt()).toInt();
+      break;
+    case kDatasetView_FFT_SamplingRate:
+      m_selectedDataset.m_fftSamplingRate = value.toInt();
       break;
     default:
       break;

@@ -52,6 +52,7 @@ private slots:
 
 private:
   int m_size;                           ///< Size of the FFT data array.
+  int m_samplingRate;                   ///< Sampling rate for the FFT data.
   int m_index;                          ///< Index of the FFT plot data.
   QwtPlot m_plot;                       ///< Plot widget for FFT.
   QwtPlotCurve m_curve;                 ///< Curve for the FFT data.

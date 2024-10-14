@@ -84,6 +84,7 @@ public:
   [[nodiscard]] double alarm() const;
   [[nodiscard]] double ledHigh() const;
   [[nodiscard]] int fftSamples() const;
+  [[nodiscard]] int fftSamplingRate() const;
 
   [[nodiscard]] int groupId() const;
   [[nodiscard]] int datasetId() const;
@@ -117,6 +118,7 @@ private:
   double m_alarm;
   double m_ledHigh;
   int m_fftSamples;
+  int m_fftSamplingRate;
 
   int m_groupId;
   int m_datasetId;

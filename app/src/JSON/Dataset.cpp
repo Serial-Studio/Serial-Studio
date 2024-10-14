@@ -37,6 +37,7 @@ JSON::Dataset::Dataset(const int groupId, const int datasetId)
   , m_alarm(0)
   , m_ledHigh(1)
   , m_fftSamples(1024)
+  , m_fftSamplingRate(100)
   , m_groupId(groupId)
   , m_datasetId(datasetId)
 {
@@ -155,6 +156,14 @@ int JSON::Dataset::fftSamples() const
 }
 
 /**
+ * Returns the sampling rate for the FFT transform
+ */
+int JSON::Dataset::fftSamplingRate() const
+{
+  return m_fftSamplingRate;
+}
+
+/**
  * @return The index of the group to which the dataset belongs to, used by
  *         the project model to easily identify which group/dataset to update
  *         when the user modifies a parameter in the project model.
@@ -207,6 +216,7 @@ QJsonObject JSON::Dataset::serialize() const
   object.insert(QStringLiteral("widget"), m_widget);
   object.insert(QStringLiteral("ledHigh"), m_ledHigh);
   object.insert(QStringLiteral("fftSamples"), m_fftSamples);
+  object.insert(QStringLiteral("fftSamplingRate"), m_fftSamplingRate);
   return object;
 }
 
@@ -233,7 +243,7 @@ bool JSON::Dataset::read(const QJsonObject &object)
     m_widget = object.value(QStringLiteral("widget")).toString();
     m_ledHigh = object.value(QStringLiteral("ledHigh")).toDouble();
     m_fftSamples = object.value(QStringLiteral("fftSamples")).toInt();
-
+    m_fftSamplingRate = object.value(QStringLiteral("fftSamplingRate")).toInt();
     if (m_value.isEmpty())
       m_value = QStringLiteral("--.--");
 

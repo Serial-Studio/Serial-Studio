@@ -136,12 +136,12 @@
         <translation>找不到 CSV 导出文件！</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="222"/>
+        <location filename="../../src/CSV/Export.cpp" line="223"/>
         <source>CSV File Error</source>
         <translation>CSV 文件错误</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Export.cpp" line="223"/>
+        <location filename="../../src/CSV/Export.cpp" line="224"/>
         <source>Cannot open CSV file for writing!</source>
         <translation>无法打开 CSV 文件进行写入！</translation>
     </message>
@@ -1073,228 +1073,228 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::ProjectModel</name>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="291"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="292"/>
         <source>New Project</source>
         <translation>新项目</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="678"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="680"/>
         <source>Do you want to save your changes?</source>
         <translation>是否保存更改？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="679"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="681"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>您在此项目中有未保存的修改！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="706"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="708"/>
         <source>Project error</source>
         <translation>项目错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="707"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="709"/>
         <source>Project title cannot be empty!</source>
         <translation>项目标题不能为空！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="714"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="716"/>
         <source>Save JSON project</source>
         <translation>保存 JSON 项目</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="726"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="728"/>
         <source>File open error</source>
         <translation>文件打开错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="798"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1890"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="800"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1892"/>
         <source>Untitled Project</source>
         <translation>未命名项目</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="837"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="839"/>
         <source>Select JSON file</source>
         <translation>选择 JSON 文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="951"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="953"/>
         <source>Do you want to delete group &quot;%1&quot;?</source>
         <translation>您要删除组 &quot;%1&quot; 吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="952"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="993"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1032"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="954"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="995"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1034"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>此操作无法撤销。是否继续？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="992"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="994"/>
         <source>Do you want to delete action &quot;%1&quot;?</source>
         <translation>您要删除操作 &quot;%1&quot; 吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1030"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1032"/>
         <source>Do you want to delete dataset &quot;%1&quot;?</source>
         <translation>您要删除数据集 &quot;%1&quot; 吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1081"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1120"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1156"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1083"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1122"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1158"/>
         <source>%1 (Copy)</source>
         <translation>%1 (副本)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1202"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1204"/>
         <source>New Dataset</source>
         <translation>新数据集</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1205"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1207"/>
         <source>New Plot</source>
         <translation>新图表</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1209"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1211"/>
         <source>New FFT Plot</source>
         <translation>新 FFT 图表</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1213"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1215"/>
         <source>New Bar Widget</source>
         <translation>新柱状图组件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1217"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1219"/>
         <source>New Gauge</source>
         <translation>新仪表</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1221"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1223"/>
         <source>New Compass</source>
         <translation>新指南针</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1225"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1227"/>
         <source>New LED Indicator</source>
         <translation>新 LED 指示器</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1360"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1362"/>
         <source>New Action</source>
         <translation>新操作</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1516"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1518"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>您确定要更改组级组件吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1517"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1519"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>该组的现有数据集将被删除</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1571"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1572"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1573"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1574"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1575"/>
         <source>Accelerometer %1</source>
         <translation>加速度计 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1614"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1615"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1616"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1617"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1618"/>
         <source>Gyro %1</source>
         <translation>陀螺仪 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1657"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1659"/>
         <source>Latitude</source>
         <translation>纬度</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1658"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1660"/>
         <source>Longitude</source>
         <translation>经度</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1659"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1661"/>
         <source>Altitude</source>
         <translation>高度</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1754"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1756"/>
         <source>Frame Parser Function</source>
         <translation>帧解析函数</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1888"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2004"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2064"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2165"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1890"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2006"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2066"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2167"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1891"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1893"/>
         <source>Project name/description</source>
         <translation>项目名称/描述</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1899"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1901"/>
         <source>Separator Sequence</source>
         <translation>分隔符序列</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1902"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1904"/>
         <source>String used to split items in a frame</source>
         <translation>用于在帧中拆分项目的字符串</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1911"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1913"/>
         <source>Frame Start Delimeter</source>
         <translation>帧起始分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1914"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1916"/>
         <source>String marking the start of a frame</source>
         <translation>标记帧起始的字符串</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1923"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1925"/>
         <source>Frame End Delimeter</source>
         <translation>帧结束分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1926"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1928"/>
         <source>String marking the end of a frame</source>
         <translation>标记帧结束的字符串</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1936"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1938"/>
         <source>Data Conversion Method</source>
         <translation>数据转换方法</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1938"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1940"/>
         <source>Input data format for frame parser</source>
         <translation>帧解析器的输入数据格式</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1947"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1949"/>
         <source>Thunderforest API Key</source>
         <translation>Thunderforest API 密钥</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1949"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1961"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2416"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2420"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2427"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1951"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1963"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2430"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2434"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2441"/>
         <source>None</source>
         <translation>无</translation>
     </message>
@@ -1303,294 +1303,304 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">GPS 地图组件所需</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1950"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1952"/>
         <source>Required for Thunderforest maps</source>
         <translation>Thunderforest 地图所需</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1959"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1961"/>
         <source>MapTiler API Key</source>
         <translation>MapTiler API 密钥</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1962"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1964"/>
         <source>Required for satellite maps</source>
         <translation>卫星地图所需</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2006"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2008"/>
         <source>Untitled Group</source>
         <translation>未命名组</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2007"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2009"/>
         <source>Name or description of the group</source>
         <translation>组名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2033"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2220"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2035"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2222"/>
         <source>Widget</source>
         <translation>组件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2035"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2037"/>
         <source>Group display widget (optional)</source>
         <translation>组显示组件（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2066"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2068"/>
         <source>Untitled Action</source>
         <translation>未命名操作</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2067"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2069"/>
         <source>Name or description of the action</source>
         <translation>操作名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2075"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2077"/>
         <source>Icon</source>
         <translation>图标</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2077"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2079"/>
         <source>Default Icon</source>
         <translation>默认图标</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2078"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2080"/>
         <source>Icon to display in the dashboard</source>
         <translation>仪表板中显示的图标</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2086"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2088"/>
         <source>TX Data</source>
         <translation>发送数据</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2088"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2090"/>
         <source>Command</source>
         <translation>命令</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2089"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2091"/>
         <source>Data to transmit when the action is triggered.</source>
         <translation>操作触发时传输的数据。</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2116"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2118"/>
         <source>EOL Sequence</source>
         <translation>行尾序列</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2118"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2120"/>
         <source>End-of-line (EOL) sequence to use</source>
         <translation>要使用的行尾（EOL）序列</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2167"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2169"/>
         <source>Untitled Dataset</source>
         <translation>未命名数据集</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2168"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2170"/>
         <source>Name or description of the dataset</source>
         <translation>数据集名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2177"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2179"/>
         <source>Frame Index</source>
         <translation>帧索引</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2180"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2182"/>
         <source>Position in the frame</source>
         <translation>在帧中的位置</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2188"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2190"/>
         <source>Measurement Unit</source>
         <translation>测量单位</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2190"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2192"/>
         <source>Volts, Amps, etc.</source>
         <translation>伏特，安培等。</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2191"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2193"/>
         <source>Unit of measurement (optional)</source>
         <translation>测量单位（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2222"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2224"/>
         <source>Display widget (optional)</source>
         <translation>显示组件（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2231"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2233"/>
         <source>Minimum Value</source>
         <translation>最小值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2234"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2245"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2236"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2247"/>
         <source>Required for bar/gauge widgets</source>
         <translation>柱状图/仪表组件所需</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2242"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2244"/>
         <source>Maximum Value</source>
         <translation>最大值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2253"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2255"/>
         <source>Alarm Value</source>
         <translation>报警值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2256"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2258"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
         <translation>在柱状图组件和 LED 面板中触发警报</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2284"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2286"/>
         <source>Oscilloscope Plot</source>
         <translation>示波器图</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2286"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2288"/>
         <source>Plot data in real-time</source>
         <translation>实时绘制数据</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2294"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2296"/>
         <source>FFT Plot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2297"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2299"/>
         <source>Plot frequency-domain data</source>
         <translation>绘制频域数据</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2312"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2314"/>
         <source>FFT Window Size</source>
         <translation>FFT 窗口大小</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2314"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2316"/>
         <source>Samples for FFT calculation</source>
         <translation>FFT 计算的样本</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2322"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2325"/>
+        <source>FFT Sampling Rate</source>
+        <translation>FFT采样率</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2327"/>
+        <source>Sampling rate (Hz) for FFT calculation</source>
+        <translation>用于FFT计算的采样率（Hz）</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2336"/>
         <source>Show in LED Panel</source>
         <translation>在 LED 面板中显示</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2325"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2339"/>
         <source>Quick status monitoring</source>
         <translation>快速状态监控</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2333"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2347"/>
         <source>LED High (On) Value</source>
         <translation>LED 高电平（开）值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2336"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2350"/>
         <source>Threshold for LED on</source>
         <translation>LED 开启阈值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2405"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2419"/>
         <source>Normal (UTF8)</source>
         <translation>普通（UTF8）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2406"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2420"/>
         <source>Hexadecimal</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2407"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2421"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2411"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2425"/>
         <source>Data Grid</source>
         <translation>数据网格</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2412"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2426"/>
         <source>GPS Map</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2413"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2427"/>
         <source>Gyroscope</source>
         <translation>陀螺仪</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2414"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2428"/>
         <source>Multiple Plot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2415"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2429"/>
         <source>Accelerometer</source>
         <translation>加速度计</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2421"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2435"/>
         <source>Bar</source>
         <translation>条形图</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2422"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2436"/>
         <source>Gauge</source>
         <translation>仪表</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2423"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2437"/>
         <source>Compass</source>
         <translation>指南针</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2428"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2442"/>
         <source>New Line (\n)</source>
         <translation>换行符（\n）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2429"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2443"/>
         <source>Carriage Return (\r)</source>
         <translation>回车符（\r）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2430"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2444"/>
         <source>NL + CR (\n\r)</source>
         <translation>换行符 + 回车符（\n\r）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2431"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2445"/>
         <source>CR + NL (\r\n)</source>
         <translation>回车符 + 换行符（\r\n）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2435"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2449"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2436"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2450"/>
         <source>Linear Plot</source>
         <translation>线性图</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2437"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2451"/>
         <source>Logarithmic Plot</source>
         <translation>对数图</translation>
     </message>
@@ -3065,7 +3075,27 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="911"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="203"/>
+        <source>Show both X and Y axes</source>
+        <translation>显示X轴和Y轴</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="203"/>
+        <source>Show only X axis</source>
+        <translation>仅显示X轴</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="204"/>
+        <source>Show only Y axis</source>
+        <translation>仅显示Y轴</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="204"/>
+        <source>Hide all axes</source>
+        <translation>隐藏所有坐标轴</translation>
+    </message>
+    <message>
+        <location filename="../../src/UI/Dashboard.cpp" line="940"/>
         <source>Status Panel</source>
         <translation>状态面板</translation>
     </message>
@@ -3109,94 +3139,99 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>ViewOptions</name>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="36"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="37"/>
         <source>Widget Setup</source>
         <translation>小部件设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="162"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="164"/>
         <source>Visualization Options</source>
         <translation>可视化选项</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="192"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="215"/>
         <source>Points:</source>
         <translation>点数：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="215"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="238"/>
         <source>Decimal places:</source>
         <translation>小数位数：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="257"/>
         <source>Columns:</source>
         <translation>列数：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="283"/>
         <source>Data Grids</source>
         <translation>数据网格</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="295"/>
         <source>Multiple Data Plots</source>
         <translation>多数据绘图</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="283"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="307"/>
         <source>LED Panels</source>
         <translation>LED面板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="318"/>
         <source>FFT Plots</source>
         <translation>FFT绘图</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="305"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="329"/>
         <source>Data Plots</source>
         <translation>数据绘图</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="316"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="340"/>
         <source>Bars</source>
         <translation>柱状图</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="351"/>
         <source>Gauges</source>
         <translation>仪表盘</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="362"/>
         <source>Compasses</source>
         <translation>指南针</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="350"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="374"/>
         <source>Gyroscopes</source>
         <translation>陀螺仪</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="362"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="386"/>
         <source>Accelerometers</source>
         <translation>加速度计</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="373"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="397"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="425"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="453"/>
         <source>Clear Dashboard Data</source>
         <translation>清除仪表盘数据</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="451"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="484"/>
         <source>Display Console Window</source>
         <translation>显示控制台窗口</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="518"/>
+        <source>Adjust Plot Scales &amp; Positions</source>
+        <translation>调整图表的比例和位置</translation>
     </message>
 </context>
 <context>
@@ -3210,12 +3245,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>Widgets::FFTPlot</name>
     <message>
-        <location filename="../../src/UI/Widgets/FFTPlot.cpp" line="71"/>
+        <location filename="../../src/UI/Widgets/FFTPlot.cpp" line="73"/>
         <source>Frequency (Hz)</source>
         <translation>频率（Hz）</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/FFTPlot.cpp" line="72"/>
+        <location filename="../../src/UI/Widgets/FFTPlot.cpp" line="74"/>
         <source>Magnitude (dB)</source>
         <translation>幅度（dB）</translation>
     </message>

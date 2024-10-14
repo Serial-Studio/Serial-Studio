@@ -20,7 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include "IO/Manager.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/FFTPlot.h"
@@ -60,6 +59,9 @@ Widgets::FFTPlot::FFTPlot(int index)
     --size;
   m_size = size;
 
+  // Obtain sampling rate from dataset
+  m_samplingRate = dataset.fftSamplingRate();
+
   // Allocate FFT and sample arrays
   m_fft.reset(new float[m_size]);
   m_samples.reset(new float[m_size]);
@@ -94,9 +96,6 @@ void Widgets::FFTPlot::updateData()
   auto plotData = UI::Dashboard::instance().fftPlotValues();
   if (plotData.count() > m_index)
   {
-    // Obtain sampling rate from dashboard
-    const auto samplingRate = IO::Manager::instance().samplingRate();
-
     // Obtain samples from data
     auto data = plotData.at(m_index);
     for (int i = 0; i < m_size; ++i)
@@ -115,7 +114,7 @@ void Widgets::FFTPlot::updateData()
       const qreal im = m_fft[m_size / 2 + i];
       const qreal magnitude = sqrt(re * re + im * im);
       const qreal frequency
-          = static_cast<qreal>(i) * samplingRate / static_cast<qreal>(m_size);
+          = static_cast<qreal>(i) * m_samplingRate / static_cast<qreal>(m_size);
       points[i] = QPointF(frequency, magnitude);
       if (magnitude > maxMagnitude)
         maxMagnitude = magnitude;
@@ -130,13 +129,13 @@ void Widgets::FFTPlot::updateData()
       const qreal dB = (magnitude > 0) ? 20 * log10(magnitude)
                                        : -INFINITY; // Avoid log10(0)
       const qreal frequency
-          = static_cast<qreal>(i) * samplingRate / static_cast<qreal>(m_size);
+          = static_cast<qreal>(i) * m_samplingRate / static_cast<qreal>(m_size);
       points[i] = QPointF(frequency, dB);
     }
 
     // Plot obtained data
     m_curve.setSamples(points);
-    m_plot.setAxisScale(QwtPlot::xBottom, 0, samplingRate / 2);
+    m_plot.setAxisScale(QwtPlot::xBottom, 0, m_samplingRate / 2);
     m_plot.replot();
   }
 }
