@@ -185,9 +185,6 @@ void Widgets::FFTPlot::onThemeChanged()
 
   // Set curve color & plot style
   m_curve.setPen(QColor(color), 2, Qt::SolidLine);
-
-  // Redraw widget
-  update();
 }
 
 /**
@@ -197,9 +194,6 @@ void Widgets::FFTPlot::onThemeChanged()
  * This function responds to changes in axis visibility settings from the
  * dashboard. Depending on the user’s selection, it will set the visibility of
  * the X and/or Y axes on the plot.
- *
- * After adjusting the visibility settings, the plot is updated by calling the
- * `update()` method.
  *
  * @see UI::Dashboard::axisVisibility()
  * @see QwtPlot::setAxisVisible()
@@ -225,6 +219,4 @@ void Widgets::FFTPlot::onAxisOptionsChanged()
       m_plot.setAxisVisible(QwtPlot::xBottom, false);
       break;
   }
-
-  update();
 }

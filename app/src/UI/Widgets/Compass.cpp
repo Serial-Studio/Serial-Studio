@@ -66,7 +66,7 @@ Widgets::Compass::Compass(const int index)
           this, &Widgets::Compass::onThemeChanged);
 
   // Connect update signal
-  connect(dash, &UI::Dashboard::updated, this, &Compass::update,
+  connect(dash, &UI::Dashboard::updated, this, &Compass::updateData,
           Qt::DirectConnection);
 }
 
@@ -75,9 +75,9 @@ Widgets::Compass::Compass(const int index)
  * to display the latest data frame.
  *
  * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the widget shall ignore the update request.
+ * window is hidden), then the widget shall ignore the updateData request.
  */
-void Widgets::Compass::update()
+void Widgets::Compass::updateData()
 {
   // Widget disabled
   if (!isEnabled())
@@ -118,5 +118,4 @@ void Widgets::Compass::onThemeChanged()
   palette.setColor(QPalette::Text,
                    theme->getColor(QStringLiteral("widget_text")));
   m_compass.setPalette(palette);
-  update();
 }

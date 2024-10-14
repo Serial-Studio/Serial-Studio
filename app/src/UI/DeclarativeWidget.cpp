@@ -71,7 +71,7 @@ UI::DeclarativeWidget::DeclarativeWidget(QQuickItem *parent)
           &UI::DeclarativeWidget::resizeWidget);
 
   // Configure render loop
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
           &UI::DeclarativeWidget::renderWidget);
 }
 
@@ -216,7 +216,7 @@ void UI::DeclarativeWidget::setWidget(QWidget *widget)
       delete m_widget;
 
     m_widget = widget;
-    m_widget->setAttribute(Qt::WA_UpdatesDisabled, true);
+    m_widget->setUpdatesEnabled(false);
     Q_EMIT widgetChanged();
   }
 }
@@ -227,10 +227,11 @@ void UI::DeclarativeWidget::setWidget(QWidget *widget)
  */
 void UI::DeclarativeWidget::renderWidget()
 {
-  if (widget() && isVisible())
+  if (m_widget && isVisible())
   {
-    widget()->update();
+    m_widget->setUpdatesEnabled(true);
     m_pixmap = widget()->grab();
+    m_widget->setUpdatesEnabled(false);
     update();
   }
 }
@@ -245,7 +246,7 @@ void UI::DeclarativeWidget::resizeWidget()
     if (width() > 0 && height() > 0)
     {
       widget()->setFixedSize(width(), height());
-      update();
+      renderWidget();
     }
   }
 }

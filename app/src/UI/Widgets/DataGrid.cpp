@@ -241,9 +241,6 @@ void Widgets::DataGrid::onThemeChanged()
     units->setStyleSheet(unitsQSS);
     dicon->setStyleSheet(iconsQSS);
   }
-
-  // Redraw widget
-  update();
 }
 
 /**

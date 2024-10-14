@@ -39,6 +39,7 @@ void Misc::TimerEvents::stopTimers()
 {
   m_timer1Hz.stop();
   m_timer10Hz.stop();
+  m_timer20Hz.stop();
   m_timer24Hz.stop();
 }
 
@@ -53,6 +54,9 @@ void Misc::TimerEvents::timerEvent(QTimerEvent *event)
   else if (event->timerId() == m_timer10Hz.timerId())
     Q_EMIT timeout10Hz();
 
+  else if (event->timerId() == m_timer20Hz.timerId())
+    Q_EMIT timeout20Hz();
+
   else if (event->timerId() == m_timer24Hz.timerId())
     Q_EMIT timeout24Hz();
 }
@@ -63,6 +67,7 @@ void Misc::TimerEvents::timerEvent(QTimerEvent *event)
 void Misc::TimerEvents::startTimers()
 {
   m_timer1Hz.start(1000, Qt::PreciseTimer, this);
+  m_timer20Hz.start(1000 / 20, Qt::PreciseTimer, this);
   m_timer24Hz.start(1000 / 24, Qt::PreciseTimer, this);
   m_timer10Hz.start(1000 / 10, Qt::PreciseTimer, this);
 }

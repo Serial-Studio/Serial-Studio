@@ -229,7 +229,4 @@ void Widgets::LEDPanel::onThemeChanged()
     title->setPalette(palette);
     led->setColor(theme->getColor("led_color"));
   }
-
-  // Redraw widget
-  update();
 }

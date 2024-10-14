@@ -35,7 +35,7 @@ public:
   Compass(const int index = -1);
 
 private slots:
-  void update();
+  void updateData();
   void onThemeChanged();
 
 private:

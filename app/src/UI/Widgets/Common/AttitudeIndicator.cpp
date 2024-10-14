@@ -108,10 +108,7 @@ void AttitudeIndicator::setGradient(const double &gradient)
   auto grad = qMin(1.0, qMax(gradient, -1.0));
 
   if (m_gradient != grad)
-  {
     m_gradient = grad;
-    update();
-  }
 }
 
 void AttitudeIndicator::drawScale(QPainter *painter, const QPointF &center,

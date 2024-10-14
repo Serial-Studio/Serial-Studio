@@ -108,5 +108,4 @@ void Widgets::Gauge::onThemeChanged()
   // Update gauge colors
   m_gauge.setPalette(palette);
   m_gauge.setNeedle(needle);
-  update();
 }

@@ -131,6 +131,4 @@ void Widgets::Bar::onThemeChanged()
                          : colors.at(colors.count() % m_index).toString();
 
   m_thermo.setFillBrush(QBrush(QColor(color)));
-
-  update();
 }

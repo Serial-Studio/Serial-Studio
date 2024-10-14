@@ -235,9 +235,6 @@ void Widgets::MultiPlot::onThemeChanged()
  * dashboard. Depending on the user’s selection, it will set the visibility of
  * the X and/or Y axes on the plot.
  *
- * After adjusting the visibility settings, the plot is updated by calling the
- * `update()` method.
- *
  * @see UI::Dashboard::axisVisibility()
  * @see QwtPlot::setAxisVisible()
  */
@@ -262,6 +259,4 @@ void Widgets::MultiPlot::onAxisOptionsChanged()
       m_plot.setAxisVisible(QwtPlot::xBottom, false);
       break;
   }
-
-  update();
 }

@@ -126,5 +126,4 @@ void Widgets::GPS::onThemeChanged()
   palette.setColor(QPalette::Window,
                    theme->getColor(QStringLiteral("widget_window")));
   setPalette(palette);
-  update();
 }
