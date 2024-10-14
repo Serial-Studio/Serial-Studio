@@ -110,6 +110,7 @@ public:
   [[nodiscard]] int lineCount() const;
   [[nodiscard]] int linesPerPage() const;
   [[nodiscard]] int scrollOffsetY() const;
+  [[nodiscard]] int maxCharsPerLine() const;
 
   [[nodiscard]] QPoint cursorPosition() const;
   [[nodiscard]] QPoint positionToCursor(const QPoint &pos) const;
