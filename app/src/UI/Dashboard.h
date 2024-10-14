@@ -326,6 +326,7 @@ private:
 private:
   int m_points;
   int m_precision;
+  bool m_updateRequired;
   AxisVisibility m_axisVisibility;
 
   QVector<qreal> m_xData;

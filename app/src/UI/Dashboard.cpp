@@ -54,8 +54,11 @@ UI::Dashboard::Dashboard()
   // Update widgets at 20 Hz (max)
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
           [=] {
-            if (m_currentFrame.isValid())
+            if (m_updateRequired)
+            {
+              m_updateRequired = false;
               Q_EMIT updated();
+            }
           });
 }
 
@@ -823,6 +826,7 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
 
   // Copy frame data
   m_currentFrame = frame;
+  m_updateRequired = true;
 
   // Regenerate plot data
   updatePlots();
