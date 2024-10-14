@@ -62,5 +62,5 @@ void loop() {
   Serial.write('\n');
 
   // Small delay to manage the sampling rate
-  delay(1);
+  delay(10);
 }
