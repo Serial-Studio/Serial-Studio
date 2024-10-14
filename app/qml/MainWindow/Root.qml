@@ -32,8 +32,8 @@ import "../Widgets" as Widgets
 
 Window {
   id: root
-  minimumWidth: layout.implicitWidth + 32
-  minimumHeight: layout.implicitHeight + 32
+  minimumWidth: 1100
+  minimumHeight: 660
   title: qsTr("%1 - %2").arg(documentTitle).arg(Cpp_AppName)
 
   //
@@ -348,8 +348,6 @@ Window {
           initialItem: terminal
           Layout.fillWidth: true
           Layout.fillHeight: true
-          Layout.minimumWidth: 680
-          Layout.minimumHeight: 480
 
           data: [
             Panes.Console {
