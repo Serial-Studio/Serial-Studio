@@ -147,6 +147,7 @@ ToolBar {
     //
     Widgets.BigButton {
       text: qsTr("CSV Player")
+      enabled: !Cpp_CSV_Player.isOpen
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_CSV_Player.openFile()
       icon.source: "qrc:/rcc/icons/toolbar/csv.svg"

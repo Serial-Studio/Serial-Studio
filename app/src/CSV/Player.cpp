@@ -307,9 +307,9 @@ void CSV::Player::openFile(const QString &filePath)
     nextFrame();
   }
 
+  // Open error
   else
   {
-    // Open error
     Misc::Utilities::showMessageBox(
         tr("Cannot read CSV file"),
         tr("Please check file permissions & location"));
