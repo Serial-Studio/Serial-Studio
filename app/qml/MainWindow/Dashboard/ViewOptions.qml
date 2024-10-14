@@ -143,7 +143,7 @@ Widgets.Pane {
           // Spacer
           //
           Item {
-            height: 10
+            implicitHeight: 10
           }
 
           //
@@ -176,7 +176,7 @@ Widgets.Pane {
           // Spacer
           //
           Item {
-            height: 4
+            implicitHeight: 4
           }
 
           //
@@ -187,6 +187,7 @@ Widgets.Pane {
             Layout.fillWidth: true
             model: Cpp_UI_Dashboard.axisVisibilityOptions
             currentIndex: Cpp_UI_Dashboard.axisVisibility
+            visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.fftCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
             onCurrentIndexChanged: {
               if (currentIndex !== Cpp_UI_Dashboard.axisVisibility)
                 Cpp_UI_Dashboard.axisVisibility = currentIndex
@@ -197,7 +198,7 @@ Widgets.Pane {
           // Spacer
           //
           Item {
-            height: 2
+            implicitHeight: 2
           }
 
           //
@@ -272,7 +273,7 @@ Widgets.Pane {
           // Spacer
           //
           Item {
-            height: 8
+            implicitHeight: 8
           }
 
           //
@@ -415,21 +416,18 @@ Widgets.Pane {
       // Add buttons
       //
       Rectangle {
-        height: 1
+        implicitHeight: 1
         Layout.fillWidth: true
         color: Cpp_ThemeManager.colors["groupbox_border"]
       } Rectangle {
         Layout.fillWidth: true
-        height: buttons.implicitHeight + 18
+        implicitHeight: buttons.implicitHeight + 18
         color: Cpp_ThemeManager.colors["groupbox_background"]
 
         ColumnLayout {
           id: buttons
           anchors.fill: parent
           anchors.margins: 9
-          visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
-
-
 
           Button {
             Layout.fillWidth: true
@@ -497,6 +495,7 @@ Widgets.Pane {
             opacity: 0.5
             enabled: false
             Layout.fillWidth: true
+            visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
 
             RowLayout {
               id: layout3
@@ -510,6 +509,7 @@ Widgets.Pane {
                 sourceSize: Qt.size(18, 18)
                 Layout.alignment: Qt.AlignVCenter
                 source: "qrc:/rcc/icons/panes/scale.svg"
+                visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
               }
 
               Label {
@@ -517,6 +517,7 @@ Widgets.Pane {
                 horizontalAlignment: Text.AlignLeft
                 text: qsTr("Adjust Plot Scales & Positions")
                 color: Cpp_ThemeManager.colors["button_text"]
+                visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
               }
 
               Item {

@@ -59,7 +59,6 @@ void loop() {
 
   // Write the frame end delimiter (';') and a new line character
   Serial.write(';');
-  Serial.write('\n');
 
   // Small delay to manage the sampling rate
   delay(1);

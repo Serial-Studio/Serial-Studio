@@ -50,9 +50,9 @@ ColumnLayout {
   //
   Rectangle {
     id: header
-    height: root.rowHeight
     Layout.fillWidth: true
     visible: view.rows > 0
+    implicitHeight: root.rowHeight
     color: Cpp_ThemeManager.colors["table_bg_header"]
 
     Rectangle {

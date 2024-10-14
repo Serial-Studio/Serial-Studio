@@ -232,9 +232,9 @@ Window {
           // Spacers
           //
           Item {
-            height: 8
+            implicitHeight: 8
           } Item {
-            height: 8
+            implicitHeight: 8
           }
 
           //
@@ -296,9 +296,9 @@ Window {
           // Spacers
           //
           Item {
-            height: 8
+            implicitHeight: 8
           } Item {
-            height: 8
+            implicitHeight: 8
           }
 
           //
@@ -362,9 +362,9 @@ Window {
           // Spacers
           //
           Item {
-            height: 8
+            implicitHeight: 8
           } Item {
-            height: 8
+            implicitHeight: 8
           }
 
           //
@@ -419,9 +419,9 @@ Window {
           // Spacers
           //
           Item {
-            height: 8
+            implicitHeight: 8
           } Item {
-            height: 8
+            implicitHeight: 8
           }
 
           //
@@ -491,9 +491,9 @@ Window {
           // Spacers
           //
           Item {
-            height: 8
+            implicitHeight: 8
           } Item {
-            height: 8
+            implicitHeight: 8
           }
 
           //
@@ -546,9 +546,9 @@ Window {
           // Spacers
           //
           Item {
-            height: 8
+            implicitHeight: 8
           } Item {
-            height: 8
+            implicitHeight: 8
           }
 
           //
@@ -618,9 +618,9 @@ Window {
           // Spacers
           //
           Item {
-            height: 8
+            implicitHeight: 8
           } Item {
-            height: 8
+            implicitHeight: 8
           }
         }
       }

@@ -149,7 +149,7 @@ Window {
       }
 
       Item {
-        height: 4
+        implicitHeight: 4
       }
 
       RowLayout {

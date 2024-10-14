@@ -188,7 +188,7 @@ Window {
       // Spacer
       //
       Item {
-        Layout.minimumHeight: 4
+        implicitHeight: 4
       }
 
       //

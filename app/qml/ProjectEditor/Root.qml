@@ -156,7 +156,7 @@ Window {
         //
         Rectangle {
           z: 2
-          width: 1
+          implicitWidth: 1
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["setup_border"]
 

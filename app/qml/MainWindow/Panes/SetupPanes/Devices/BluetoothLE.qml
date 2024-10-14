@@ -75,10 +75,10 @@ Item {
       }
 
       Button {
-        width: 24
-        height: 24
         icon.width: 16
         icon.height: 16
+        implicitWidth: 24
+        implicitHeight: 24
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.connected
         onClicked: Cpp_IO_Bluetooth_LE.startDiscovery()

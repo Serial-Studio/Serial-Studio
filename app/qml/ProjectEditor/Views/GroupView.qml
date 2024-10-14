@@ -257,7 +257,7 @@ Widgets.Pane {
         }
 
         Item {
-          height: 16
+          implicitHeight: 16
         }
 
         Label {
@@ -268,7 +268,7 @@ Widgets.Pane {
         }
 
         Item {
-          height: 8
+          implicitHeight: 8
         }
 
         Label {

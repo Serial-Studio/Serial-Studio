@@ -49,12 +49,12 @@ ColumnLayout {
 
     RoundButton {
       id: hideAll
-      width: 24
-      height: 24
       flat: true
       checkable: true
       icon.width: 18
       icon.height: 18
+      implicitWidth: 24
+      implicitHeight: 24
       Layout.rightMargin: -6
       icon.color: "transparent"
       icon.source: !checked ? "qrc:/rcc/icons/dashboard/show-all.svg" :
@@ -82,7 +82,7 @@ ColumnLayout {
   }
 
   Item {
-    height: 8
+    implicitHeight: 8
     visible: !hideAll.checked && count > 0
   }
 }

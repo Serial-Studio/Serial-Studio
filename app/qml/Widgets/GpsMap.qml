@@ -94,7 +94,7 @@ Item {
       // Spacer
       //
       Item {
-        height: 4
+        implicitHeight: 4
       }
 
       //
@@ -136,7 +136,7 @@ Item {
       // Spacer
       //
       Item {
-        height: 4
+        implicitHeight: 4
       }
 
       //

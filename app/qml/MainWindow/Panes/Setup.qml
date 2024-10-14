@@ -157,7 +157,7 @@ Widgets.Pane {
       // Spacer
       //
       Item {
-        height: 4
+        implicitHeight: 4
       }
 
       //
@@ -218,15 +218,15 @@ Widgets.Pane {
       // Spacer
       //
       Item {
-        height: 4
+        implicitHeight: 4
       }
 
       //
       // Tab bar
       //
       TabBar {
-        height: 24
         id: tab
+        implicitHeight: 24
         Layout.fillWidth: true
         Layout.maximumWidth: root.maxItemWidth
 

@@ -212,7 +212,7 @@ Item {
 
       TextField {
         id: send
-        height: 24
+        implicitHeight: 24
         font: terminal.font
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
@@ -330,6 +330,8 @@ Item {
 
       ComboBox {
         id: displayModeCombo
+
+        implicitHeight: 24
         Layout.fillWidth: true
         Layout.maximumWidth: 164
         Layout.alignment: Qt.AlignVCenter
@@ -343,9 +345,9 @@ Item {
       }
 
       Button {
-        height: 24
         icon.width: 18
         icon.height: 18
+        implicitHeight: 24
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Console.save()
@@ -355,9 +357,9 @@ Item {
       }
 
       Button {
-        height: 24
         icon.width: 18
         icon.height: 18
+        implicitHeight: 24
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Console.print()
@@ -367,9 +369,9 @@ Item {
       }
 
       Button {
-        height: 24
         icon.width: 18
         icon.height: 18
+        implicitHeight: 24
         onClicked: root.clear()
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5

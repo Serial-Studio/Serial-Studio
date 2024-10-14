@@ -373,7 +373,7 @@ Window {
         //
         Rectangle {
           z: 2
-          width: 1
+          implicitWidth: 1
           visible: setup.visible
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["setup_border"]

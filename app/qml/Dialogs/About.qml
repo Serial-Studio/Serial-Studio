@@ -156,10 +156,10 @@ Window {
         Layout.fillWidth: true
 
         Image {
-          width: 128
-          height: 128
+          implicitWidth: 128
+          implicitHeight: 128
           Layout.alignment: Qt.AlignVCenter
-          sourceSize: Qt.size(width, height)
+          sourceSize: Qt.size(implicitWidth, implicitHeight)
           source: {
             if (Screen.pixelDensity >= 2)
               return "qrc:/rcc/images/icon@2x.png"
@@ -204,7 +204,7 @@ Window {
       }
 
       Item {
-        height: 8
+        implicitHeight: 8
       }
 
       Button {
@@ -244,7 +244,7 @@ Window {
       }
 
       Item {
-        height: 8
+        implicitHeight: 8
       }
 
       Button {
