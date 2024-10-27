@@ -221,6 +221,7 @@
         <file>icons/toolbar/structure.svg</file>
         <file>images/action.svg</file>
         <file>images/code.svg</file>
+        <file>images/crosshair.svg</file>
         <file>images/donate-qr.svg</file>
         <file>images/drag-and-drop.svg</file>
         <file>images/hammer.svg</file>
@@ -231,6 +232,12 @@
         <file>images/soldering-iron.svg</file>
         <file>images/tip.svg</file>
         <file>images/tree.svg</file>
+        <file>instruments/attitude_crosshair.svg</file>
+        <file>instruments/attitude_dial.svg</file>
+        <file>instruments/attitude_pointer.svg</file>
+        <file>instruments/compass_background.svg</file>
+        <file>instruments/compass_case.svg</file>
+        <file>instruments/compass_needle.svg</file>
         <file>messages/Acknowledgements.txt</file>
         <file>messages/Welcome_DE.txt</file>
         <file>messages/Welcome_EN.txt</file>

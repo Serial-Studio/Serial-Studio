@@ -30,13 +30,41 @@
 
 #include "Misc/Utilities.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"
 
+/**
+ * Creates a subclass of @c QPlainTextEdit that allows us to call the given
+ * protected/private @a function and pass the given @a event as a parameter to
+ * the @a function.
+ */
+#define DW_EXEC_EVENT(pointer, function, event)                                \
+  class PwnedWidget : public QPlainTextEdit                                    \
+  {                                                                            \
+  public:                                                                      \
+    using QPlainTextEdit::function;                                            \
+  };                                                                           \
+  static_cast<PwnedWidget *>(pointer)->function(event);
+
 JSON::FrameParser::FrameParser(QQuickItem *parent)
-  : UI::DeclarativeWidget(parent)
+  : QQuickPaintedItem(parent)
 {
-  // Set widget
-  setWidget(&m_textEdit);
+  // Disable mipmap & antialiasing, we don't need them
+  setMipmap(false);
+  setAntialiasing(false);
+
+  // Disable alpha channel
+  setOpaquePainting(true);
+  setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
+
+  // Widgets don't process touch events, disable it
+  setAcceptTouchEvents(false);
+
+  // Set item flags, we need these to forward Quick events to the widget
+  setFlag(ItemHasContents, true);
+  setFlag(ItemIsFocusScope, true);
+  setFlag(ItemAcceptsInputMethod, true);
+  setAcceptedMouseButtons(Qt::AllButtons);
 
   // Setup syntax highlighter
   m_highlighter = new QSourceHighlite::QSourceHighliter(m_textEdit.document());
@@ -69,6 +97,16 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
   // Bridge signals
   connect(&m_textEdit, &QPlainTextEdit::textChanged, this,
           &JSON::FrameParser::textChanged);
+
+  // Resize widget to fit QtQuick item
+  connect(this, &QQuickPaintedItem::widthChanged, this,
+          &JSON::FrameParser::resizeWidget);
+  connect(this, &QQuickPaintedItem::heightChanged, this,
+          &JSON::FrameParser::resizeWidget);
+
+  // Configure render loop
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+          &JSON::FrameParser::renderWidget);
 }
 
 const QString &JSON::FrameParser::defaultCode()
@@ -329,4 +367,151 @@ void JSON::FrameParser::readCode()
   m_textEdit.setPlainText(ProjectModel::instance().frameParserCode());
   m_textEdit.document()->setModified(false);
   loadScript(m_textEdit.toPlainText());
+}
+
+/**
+ * @brief Renders the widget as a pixmap, which is then painted in the QML
+ *        user interface.
+ */
+void JSON::FrameParser::renderWidget()
+{
+  if (isVisible())
+  {
+    m_pixmap = m_textEdit.grab();
+    update();
+  }
+}
+
+/**
+ * Resizes the widget to fit inside the QML painted item.
+ */
+void JSON::FrameParser::resizeWidget()
+{
+  if (width() > 0 && height() > 0)
+  {
+    m_textEdit.setFixedSize(width(), height());
+    renderWidget();
+  }
+}
+
+/**
+ * Displays the pixmap generated in the @c update() function in the QML
+ * interface through the given @a painter pointer.
+ */
+void JSON::FrameParser::paint(QPainter *painter)
+{
+  if (painter)
+    painter->drawPixmap(0, 0, m_pixmap);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::keyPressEvent(QKeyEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, keyPressEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::keyReleaseEvent(QKeyEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, keyReleaseEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::inputMethodEvent(QInputMethodEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, inputMethodEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::focusInEvent(QFocusEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, focusInEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::focusOutEvent(QFocusEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, focusOutEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::mousePressEvent(QMouseEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, mousePressEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::mouseMoveEvent(QMouseEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, mouseMoveEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::mouseReleaseEvent(QMouseEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, mouseReleaseEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::mouseDoubleClickEvent(QMouseEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, mouseDoubleClickEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::wheelEvent(QWheelEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, wheelEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::dragEnterEvent(QDragEnterEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, dragEnterEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::dragMoveEvent(QDragMoveEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, dragMoveEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::dragLeaveEvent(QDragLeaveEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, dragLeaveEvent, event);
+}
+
+/**
+ * Passes the given @param event to the contained widget (if any).
+ */
+void JSON::FrameParser::dropEvent(QDropEvent *event)
+{
+  DW_EXEC_EVENT(&m_textEdit, dropEvent, event);
 }

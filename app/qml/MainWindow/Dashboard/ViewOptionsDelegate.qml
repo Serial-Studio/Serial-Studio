@@ -8,11 +8,10 @@ ColumnLayout {
   visible: count > 0
 
   property int count: 0
-  property var titles:[""]
+  property var titles: [""]
   property string icon: ""
   property string title: ""
-  property bool colorfulSwitches: true
-  readonly property var widgetColors: Cpp_ThemeManager.colors["widget_colors"]
+  property var colors: [Cpp_ThemeManager.colors["view_switch"]]
 
   signal checkedChanged(var index, var checked)
 
@@ -75,9 +74,7 @@ ColumnLayout {
       text: root.titles[index]
       Layout.maximumHeight: 24
       onCheckedChanged: root.checkedChanged(index, checked)
-      palette.highlight: root.colorfulSwitches ?
-                           root.widgetColors[index % root.widgetColors.length] :
-                           Cpp_ThemeManager.colors["view_switch"]
+      palette.highlight: root.colors.length > index ? root.colors[index] : Cpp_ThemeManager.colors["view_switch"]
     }
   }
 

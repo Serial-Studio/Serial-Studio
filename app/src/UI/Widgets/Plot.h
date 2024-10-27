@@ -22,36 +22,55 @@
 
 #pragma once
 
-#include <QwtPlot>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QwtPlotCurve>
-#include <QwtScaleEngine>
+#include <QtQuick>
+#include <QVector>
+#include <QLineSeries>
 
 namespace Widgets
 {
-class Plot : public QWidget
+/**
+ * @brief A widget that displays a real-time plot of data points.
+ */
+class Plot : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(QString yLabel READ yLabel CONSTANT)
+  Q_PROPERTY(qreal minX READ minX NOTIFY rangeChanged)
+  Q_PROPERTY(qreal maxX READ maxX NOTIFY rangeChanged)
+  Q_PROPERTY(qreal minY READ minY NOTIFY rangeChanged)
+  Q_PROPERTY(qreal maxY READ maxY NOTIFY rangeChanged)
+  Q_PROPERTY(qreal xTickInterval READ xTickInterval NOTIFY rangeChanged)
+  Q_PROPERTY(qreal yTickInterval READ yTickInterval NOTIFY rangeChanged)
+
+signals:
+  void rangeChanged();
 
 public:
-  Plot(const int index = -1);
+  explicit Plot(const int index = -1, QQuickItem *parent = nullptr);
+
+  [[nodiscard]] qreal minX() const;
+  [[nodiscard]] qreal maxX() const;
+  [[nodiscard]] qreal minY() const;
+  [[nodiscard]] qreal maxY() const;
+  [[nodiscard]] qreal xTickInterval() const;
+  [[nodiscard]] qreal yTickInterval() const;
+  [[nodiscard]] const QString &yLabel() const;
+
+public slots:
+  void draw(QLineSeries *series);
 
 private slots:
   void updateData();
   void updateRange();
-  void onThemeChanged();
-  void onAxisOptionsChanged();
+  void calculateAutoScaleRange();
 
 private:
   int m_index;
-  double m_min;
-  double m_max;
-  bool m_replot;
-  bool m_autoscale;
-
-  QwtPlot m_plot;
-  QwtPlotCurve m_curve;
-  QVBoxLayout m_layout;
+  qreal m_minX;
+  qreal m_maxX;
+  qreal m_minY;
+  qreal m_maxY;
+  QString m_yLabel;
+  QVector<QPointF> m_data;
 };
 } // namespace Widgets

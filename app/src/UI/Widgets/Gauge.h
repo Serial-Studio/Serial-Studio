@@ -22,24 +22,44 @@
 
 #pragma once
 
-#include <UI/Widgets/Common/BaseWidget.h>
-#include <UI/Widgets/Common/AnalogGauge.h>
+#include <QtQuick>
 
 namespace Widgets
 {
-class Gauge : public BaseWidget
+/**
+ * @brief A widget that displays a gauge.
+ */
+class Gauge : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(QString units READ units CONSTANT)
+  Q_PROPERTY(qreal value READ value NOTIFY updated)
+  Q_PROPERTY(qreal minValue READ minValue CONSTANT)
+  Q_PROPERTY(qreal maxValue READ maxValue CONSTANT)
+  Q_PROPERTY(qreal alarmValue READ alarmValue CONSTANT)
+
+signals:
+  void updated();
 
 public:
-  Gauge(const int index = -1);
+  explicit Gauge(const int index = -1, QQuickItem *parent = nullptr);
+
+  [[nodiscard]] const QString &units() const;
+
+  [[nodiscard]] qreal value() const;
+  [[nodiscard]] qreal minValue() const;
+  [[nodiscard]] qreal maxValue() const;
+  [[nodiscard]] qreal alarmValue() const;
 
 private slots:
   void updateData();
-  void onThemeChanged();
 
 private:
   int m_index;
-  AnalogGauge m_gauge;
+  QString m_units;
+  qreal m_value;
+  qreal m_minValue;
+  qreal m_maxValue;
+  qreal m_alarmValue;
 };
 } // namespace Widgets

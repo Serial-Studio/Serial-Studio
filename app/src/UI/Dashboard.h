@@ -155,9 +155,21 @@ class Dashboard : public QObject
              READ axisVisibility
              WRITE setAxisVisibility
              NOTIFY axisVisibilityChanged)
-  Q_PROPERTY(QStringList axisVisibilityOptions
-             READ axisVisibilityOptions
-             CONSTANT)
+  Q_PROPERTY(QStringList barColors
+             READ barColors
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList fftColors
+             READ fftColors
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList plotColors
+             READ plotColors
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList gaugeColors
+             READ gaugeColors
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QStringList compassColors
+             READ compassColors
+             NOTIFY widgetCountChanged)
   // clang-format on
 
 signals:
@@ -199,10 +211,10 @@ public:
 
   enum AxisVisibility
   {
-    AxisXY = 0,
-    AxisXOnly = 1,
-    AxisYOnly = 2,
-    NoAxesVisible = 3
+    AxisXY = 0b11,
+    AxisX = 0b01,
+    AxisY = 0b10,
+    NoAxesVisible = 0b00,
   };
   Q_ENUM(AxisVisibility)
 
@@ -243,13 +255,13 @@ public:
   [[nodiscard]] int accelerometerCount() const;
 
   [[nodiscard]] AxisVisibility axisVisibility() const;
-  [[nodiscard]] QStringList axisVisibilityOptions() const;
 
   Q_INVOKABLE bool frameValid() const;
   Q_INVOKABLE QStringList widgetTitles();
   Q_INVOKABLE int relativeIndex(const int globalIndex) const;
   Q_INVOKABLE bool widgetVisible(const int globalIndex) const;
   Q_INVOKABLE QString widgetIcon(const int globalIndex) const;
+  Q_INVOKABLE const JSON::Dataset &widgetDataset(const int globalIndex) const;
   Q_INVOKABLE UI::Dashboard::WidgetType widgetType(const int globalIndex) const;
 
   Q_INVOKABLE bool barVisible(const int index) const;
@@ -267,6 +279,12 @@ public:
   QStringList actionIcons();
   QStringList actionTitles();
 
+  QStringList barColors();
+  QStringList fftColors();
+  QStringList plotColors();
+  QStringList gaugeColors();
+  QStringList compassColors();
+
   QStringList barTitles();
   QStringList fftTitles();
   QStringList gpsTitles();
@@ -279,12 +297,16 @@ public:
   QStringList multiPlotTitles();
   QStringList accelerometerTitles();
 
-  const QVector<qreal> &xPlotValues() { return m_xData; }
   const JSON::Frame &currentFrame() { return m_currentFrame; }
   const QVector<QVector<qreal>> &fftPlotValues() { return m_fftPlotValues; }
   const QVector<QVector<qreal>> &linearPlotValues()
   {
     return m_linearPlotValues;
+  }
+
+  const QVector<QVector<QVector<qreal>>> &multiplotValues()
+  {
+    return m_multiplotValues;
   }
 
 public slots:
@@ -318,6 +340,7 @@ private:
 
   QStringList groupTitles(const QVector<JSON::Group> &vector);
   QStringList datasetTitles(const QVector<JSON::Dataset> &vector);
+  QStringList datasetColors(const QVector<JSON::Dataset> &vector);
 
   bool getVisibility(const QVector<bool> &vector, const int index) const;
   void setVisibility(QVector<bool> &vector, const int index,
@@ -326,9 +349,9 @@ private:
 private:
   int m_points;
   int m_precision;
+  bool m_updateRequired;
   AxisVisibility m_axisVisibility;
 
-  QVector<qreal> m_xData;
   QVector<QVector<qreal>> m_fftPlotValues;
   QVector<QVector<qreal>> m_linearPlotValues;
   QVector<QVector<QVector<qreal>>> m_multiplotValues;

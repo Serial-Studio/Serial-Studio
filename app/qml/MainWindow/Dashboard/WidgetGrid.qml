@@ -35,8 +35,9 @@ Widgets.Pane {
   // Hacks for calculating cell width
   //
   property int columns: 4
-  readonly property int cellSpacerWidths: Math.max(0, (columns - 1)) * 4
-  readonly property int cellWidth: (page.width - 16 - cellSpacerWidths) / columns
+  property int appliedColumns: Cpp_UI_Dashboard.totalWidgetCount === 1 ? 1 : Math.min(columns, Math.max(1, Math.floor((page.width - 16) / 140)))
+  readonly property int cellSpacerWidths: Math.max(0, (appliedColumns - 1)) * 4
+  readonly property int cellWidth: Math.max(140, (page.width - 16 - cellSpacerWidths) / appliedColumns)
   readonly property int cellHeight: cellWidth * (2 / 3)
 
   //
@@ -178,8 +179,8 @@ Widgets.Pane {
         rowSpacing: 4
         columnSpacing: 4
         width: parent.width
-        columns: root.columns
         height: childrenRect.height
+        columns: root.appliedColumns
 
         Timer {
           id: timer

@@ -22,27 +22,32 @@
 
 #pragma once
 
-#include <QWidget>
+#include <QQuickItem>
 
 namespace Widgets
 {
-class GPS : public QWidget
+/**
+ * @brief A widget that displays the GPS data on a map.
+ */
+class GPS : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(qreal altitude READ altitude NOTIFY updated)
+  Q_PROPERTY(qreal latitude READ latitude NOTIFY updated)
+  Q_PROPERTY(qreal longitude READ longitude NOTIFY updated)
 
 signals:
   void updated();
 
 public:
-  GPS(const int index = -1);
+  GPS(const int index = -1, QQuickItem *parent = nullptr);
 
-  qreal altitude() const;
-  qreal latitude() const;
-  qreal longitude() const;
+  [[nodiscard]] qreal altitude() const;
+  [[nodiscard]] qreal latitude() const;
+  [[nodiscard]] qreal longitude() const;
 
 private slots:
   void updateData();
-  void onThemeChanged();
 
 private:
   int m_index;

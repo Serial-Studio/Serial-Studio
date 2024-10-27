@@ -20,102 +20,96 @@
  * THE SOFTWARE.
  */
 
-#include <QResizeEvent>
-#include <QwtCompassScaleDraw>
-#include <QwtCompassMagnetNeedle>
-
 #include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
 #include "UI/Widgets/Compass.h"
 
 /**
- * Constructor function, configures widget style & signal/slot connections.
+ * @brief Constructs a Compass widget.
+ * @param index The index of the compass in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::Compass::Compass(const int index)
-  : m_index(index)
+Widgets::Compass::Compass(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
+  , m_value(0)
 {
-  // Get pointers to serial studio modules
-  auto dash = &UI::Dashboard::instance();
-
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->compassCount())
-    return;
-
-  // Set compass style
-  QwtCompassScaleDraw *scaleDraw = new QwtCompassScaleDraw();
-  scaleDraw->enableComponent(QwtAbstractScaleDraw::Ticks, true);
-  scaleDraw->enableComponent(QwtAbstractScaleDraw::Labels, true);
-  scaleDraw->enableComponent(QwtAbstractScaleDraw::Backbone, false);
-  scaleDraw->setTickLength(QwtScaleDiv::MinorTick, 1);
-  scaleDraw->setTickLength(QwtScaleDiv::MediumTick, 1);
-  scaleDraw->setTickLength(QwtScaleDiv::MajorTick, 3);
-
-  // Configure compass scale & needle
-  m_compass.setScaleDraw(scaleDraw);
-  m_compass.setScaleMaxMajor(36);
-  m_compass.setScaleMaxMinor(5);
-  m_compass.setNeedle(
-      new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
-
-  // Set widget pointer
-  setWidget(&m_compass);
-
-  // Set visual style
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::Compass::onThemeChanged);
-
-  // Connect update signal
-  connect(dash, &UI::Dashboard::updated, this, &Compass::updateData,
-          Qt::DirectConnection);
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+          &Compass::updateData);
 }
 
 /**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
+ * @brief Returns the current value of the compass.
+ * @return The current value of the compass.
+ */
+qreal Widgets::Compass::value() const
+{
+  return m_value;
+}
+
+/**
+ * @brief Returns the text representation of the compass value.
+ * @return The text representation of the compass value.
+ */
+QString Widgets::Compass::text() const
+{
+  return m_text;
+}
+
+/**
+ * @brief Updates the compass data from the Dashboard.
  *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the widget shall ignore the updateData request.
+ * This method retrieves the latest data for this compass from the Dashboard
+ * and updates the compass's value and text display accordingly.
  */
 void Widgets::Compass::updateData()
 {
-  // Widget disabled
-  if (!isEnabled())
-    return;
-
-  // Invalid index, abort update
+  // Get the Dashboard instance and check if the index is valid
   auto dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->compassCount())
     return;
 
-  // Get dataset value & set text format
+  // Get the compass data and update the value and text
   auto dataset = dash->getCompass(m_index);
-  auto value = dataset.value().toDouble();
-  auto text = QStringLiteral("%1°").arg(
-      QString::number(value, 'f', UI::Dashboard::instance().precision()));
 
-  // Ensure that angle always has 3 characters
-  if (text.length() == 2)
-    text.prepend(QStringLiteral("00"));
-  else if (text.length() == 3)
-    text.prepend(QStringLiteral("0"));
+  // Redraw widget if required
+  const auto value = dataset.value().toDouble();
+  if (!qFuzzyCompare(value, m_value))
+  {
+    // Update values
+    m_value = qMin(360.0, qMax(0.0, value));
+    m_text = QString::number(m_value, 'f', dash->precision());
 
-  // Update gauge
-  setValue(text);
-  m_compass.setValue(value);
-}
+    // Ensure that angle always has 3 characters to avoid jiggling
+    const int deg = qCeil(m_value);
+    if (deg < 10)
+      m_text.prepend(QStringLiteral("00"));
+    else if (deg < 100)
+      m_text.prepend(QStringLiteral("0"));
 
-/**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
- */
-void Widgets::Compass::onThemeChanged()
-{
-  auto theme = &Misc::ThemeManager::instance();
-  QPalette palette;
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("groupbox_background")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_text")));
-  m_compass.setPalette(palette);
+    // Determine the direction based on the angle value
+    QString direction;
+    if ((m_value >= 0 && m_value < 22.5)
+        || (m_value >= 337.5 && m_value <= 360))
+      direction = tr("N") + " ";
+    else if (m_value >= 22.5 && m_value < 67.5)
+      direction = tr("NE");
+    else if (m_value >= 67.5 && m_value < 112.5)
+      direction = tr("E") + " ";
+    else if (m_value >= 112.5 && m_value < 157.5)
+      direction = tr("SE");
+    else if (m_value >= 157.5 && m_value < 202.5)
+      direction = tr("S") + " ";
+    else if (m_value >= 202.5 && m_value < 247.5)
+      direction = tr("SW");
+    else if (m_value >= 247.5 && m_value < 292.5)
+      direction = tr("W") + " ";
+    else if (m_value >= 292.5 && m_value < 337.5)
+      direction = tr("NW");
+
+    // Append the direction to the text
+    m_text += " " + direction;
+
+    // Request a redraw of the item
+    Q_EMIT updated();
+  }
 }

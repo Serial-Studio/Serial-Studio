@@ -49,10 +49,10 @@ find_package(
  Qml
  Core
  Quick
+ Graphs
  Widgets
  Location
  Bluetooth
- Concurrent
  SerialPort
  Positioning
  PrintSupport
@@ -83,7 +83,6 @@ set(SOURCES
  src/Misc/ModuleManager.cpp
  src/Misc/TimerEvents.cpp
  src/UI/DashboardWidget.cpp
- src/UI/DeclarativeWidget.cpp
  src/UI/Dashboard.cpp
  src/UI/Widgets/LEDPanel.cpp
  src/UI/Widgets/Gauge.cpp
@@ -92,11 +91,6 @@ set(SOURCES
  src/UI/Widgets/Bar.cpp
  src/UI/Widgets/FFTPlot.cpp
  src/UI/Widgets/Accelerometer.cpp
- src/UI/Widgets/Common/AttitudeIndicator.cpp
- src/UI/Widgets/Common/ElidedLabel.cpp
- src/UI/Widgets/Common/KLed.cpp
- src/UI/Widgets/Common/AnalogGauge.cpp
- src/UI/Widgets/Common/BaseWidget.cpp
  src/UI/Widgets/DataGrid.cpp
  src/UI/Widgets/Terminal.cpp
  src/UI/Widgets/Gyroscope.cpp
@@ -131,7 +125,6 @@ set(HEADERS
  src/Misc/Translator.h
  src/UI/Dashboard.h
  src/UI/DashboardWidget.h
- src/UI/DeclarativeWidget.h
  src/UI/Widgets/GPS.h
  src/UI/Widgets/MultiPlot.h
  src/UI/Widgets/Gauge.h
@@ -142,11 +135,6 @@ set(HEADERS
  src/UI/Widgets/Bar.h
  src/UI/Widgets/Accelerometer.h
  src/UI/Widgets/LEDPanel.h
- src/UI/Widgets/Common/KLed.h
- src/UI/Widgets/Common/AnalogGauge.h
- src/UI/Widgets/Common/AttitudeIndicator.h
- src/UI/Widgets/Common/BaseWidget.h
- src/UI/Widgets/Common/ElidedLabel.h
  src/UI/Widgets/Compass.h
  src/UI/Widgets/Terminal.h
  src/Plugins/Server.h
@@ -204,12 +192,24 @@ set(QML_CODE
  qml/Dialogs/IconPicker.qml
  qml/Dialogs/ExternalConsole.qml
  qml/Dialogs/MQTTConfiguration.qml
- qml/Widgets/Terminal.qml
  qml/Widgets/BigButton.qml
  qml/Widgets/Pane.qml
- qml/Widgets/GpsMap.qml
+ qml/Widgets/Plot.qml
  qml/Widgets/JSONDropArea.qml
- qml/Widgets/DarkImage.qml
+ qml/Widgets/VisualRange.qml
+ qml/Widgets/CircularSlider.qml
+ qml/Widgets/Dashboard/Accelerometer.qml
+ qml/Widgets/Dashboard/Bar.qml
+ qml/Widgets/Dashboard/Compass.qml
+ qml/Widgets/Dashboard/DataGrid.qml
+ qml/Widgets/Dashboard/FFTPlot.qml
+ qml/Widgets/Dashboard/Gauge.qml
+ qml/Widgets/Dashboard/GPS.qml
+ qml/Widgets/Dashboard/Gyroscope.qml
+ qml/Widgets/Dashboard/LEDPanel.qml
+ qml/Widgets/Dashboard/MultiPlot.qml
+ qml/Widgets/Dashboard/Plot.qml
+ qml/Widgets/Dashboard/Terminal.qml
  qml/DialogLoader.qml
  qml/main.qml
 )
@@ -280,16 +280,15 @@ target_link_libraries(
  Qt6::Gui
  Qt6::Qml
  Qt6::Quick
+ Qt6::Graphs
  Qt6::Widgets
  Qt6::Location
  Qt6::Bluetooth
- Qt6::Concurrent
  Qt6::SerialPort
  Qt6::Positioning
  Qt6::PrintSupport
  Qt6::QuickControls2
 
- qwt
  qmqtt
  qtcsv
  QRealFourier

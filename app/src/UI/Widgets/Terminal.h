@@ -180,5 +180,7 @@ private:
   int m_formatValue;
   int m_formatValueY;
   bool m_useFormatValueY;
+
+  bool m_stateChanged;
 };
 } // namespace Widgets

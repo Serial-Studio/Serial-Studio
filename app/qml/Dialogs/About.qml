@@ -156,10 +156,12 @@ Window {
         Layout.fillWidth: true
 
         Image {
-          implicitWidth: 128
-          implicitHeight: 128
+          Layout.minimumWidth: 128
+          Layout.maximumWidth: 128
+          Layout.minimumHeight: 128
+          Layout.maximumHeight: 128
           Layout.alignment: Qt.AlignVCenter
-          sourceSize: Qt.size(implicitWidth, implicitHeight)
+          sourceSize: Qt.size(128, 128)
           source: {
             if (Screen.pixelDensity >= 2)
               return "qrc:/rcc/images/icon@2x.png"

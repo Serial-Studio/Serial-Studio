@@ -807,9 +807,6 @@ void JSON::ProjectModel::newJsonFile()
   buildTreeModel();
   buildProjectModel();
 
-  // Remove modified state
-  setModified(false);
-
   // Set project view
   setCurrentView(ProjectView);
 
@@ -818,6 +815,9 @@ void JSON::ProjectModel::newJsonFile()
   Q_EMIT jsonFileChanged();
   Q_EMIT gpsApiKeysChanged();
   Q_EMIT frameParserCodeChanged();
+
+  // Reset modified flag
+  setModified(false);
 }
 
 //------------------------------------------------------------------------------
@@ -921,9 +921,6 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   buildProjectModel();
   buildTreeModel();
 
-  // Reset modified flag
-  setModified(false);
-
   // Show project view
   setCurrentView(ProjectView);
 
@@ -932,6 +929,9 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   Q_EMIT jsonFileChanged();
   Q_EMIT gpsApiKeysChanged();
   Q_EMIT frameParserCodeChanged();
+
+  // Reset modified flag
+  setModified(false);
 }
 
 //------------------------------------------------------------------------------
@@ -1570,6 +1570,9 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     x.m_widget = "x";
     y.m_widget = "y";
     z.m_widget = "z";
+    x.m_graph = true;
+    y.m_graph = true;
+    z.m_graph = true;
     x.m_title = tr("Accelerometer %1").arg("X");
     y.m_title = tr("Accelerometer %1").arg("Y");
     z.m_title = tr("Accelerometer %1").arg("Z");
@@ -1605,17 +1608,20 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     z.m_index = nextDatasetIndex() + 2;
 
     // Set measurement units
-    x.m_units = "°";
-    y.m_units = "°";
-    z.m_units = "°";
+    x.m_units = "deg/s";
+    y.m_units = "deg/s";
+    z.m_units = "deg/s";
 
     // Set dataset properties
-    x.m_widget = "roll";
-    y.m_widget = "pitch";
-    z.m_widget = "yaw";
-    x.m_title = tr("Gyro %1").arg("Roll");
-    y.m_title = tr("Gyro %1").arg("Pitch");
-    z.m_title = tr("Gyro %1").arg("Yaw");
+    x.m_widget = "x";
+    y.m_widget = "y";
+    z.m_widget = "z";
+    x.m_graph = true;
+    y.m_graph = true;
+    z.m_graph = true;
+    x.m_title = tr("Gyro %1").arg("X");
+    y.m_title = tr("Gyro %1").arg("Y");
+    z.m_title = tr("Gyro %1").arg("Z");
 
     // Add datasets to group
     grp.m_datasets.append(x);
@@ -2448,7 +2454,7 @@ void JSON::ProjectModel::generateComboBoxModels()
   m_plotOptions.clear();
   m_plotOptions.insert(qMakePair(false, false), tr("No"));
   m_plotOptions.insert(qMakePair(true, false), tr("Linear Plot"));
-  m_plotOptions.insert(qMakePair(true, true), tr("Logarithmic Plot"));
+  // m_plotOptions.insert(qMakePair(true, true), tr("Logarithmic Plot"));
 }
 
 //------------------------------------------------------------------------------

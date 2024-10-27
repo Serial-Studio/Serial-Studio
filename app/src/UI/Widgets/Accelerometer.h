@@ -22,24 +22,35 @@
 
 #pragma once
 
-#include <UI/Widgets/Common/BaseWidget.h>
-#include <UI/Widgets/Common/AnalogGauge.h>
+#include <QtQuick>
 
 namespace Widgets
 {
-class Accelerometer : public BaseWidget
+/**
+ * @brief A widget that displays the accelerometer data.
+ */
+class Accelerometer : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(qreal theta READ theta NOTIFY updated)
+  Q_PROPERTY(qreal magnitude READ magnitude NOTIFY updated)
+
+signals:
+  void updated();
 
 public:
-  Accelerometer(const int index = -1);
+  explicit Accelerometer(const int index = -1, QQuickItem *parent = nullptr);
+
+  [[nodiscard]] qreal theta() const;
+  [[nodiscard]] qreal magnitude() const;
 
 private slots:
   void updateData();
-  void onThemeChanged();
 
 private:
   int m_index;
-  AnalogGauge m_gauge;
+  qreal m_theta;
+  qreal m_magnitude;
 };
+
 } // namespace Widgets

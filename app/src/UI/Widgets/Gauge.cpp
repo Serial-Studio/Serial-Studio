@@ -22,90 +22,98 @@
 
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Gauge.h"
-#include "Misc/ThemeManager.h"
 
 /**
- * Constructor function, configures widget style & signal/slot connections.
+ * @brief Constructs a Gauge widget.
+ * @param index The index of the gauge in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::Gauge::Gauge(const int index)
-  : m_index(index)
+Widgets::Gauge::Gauge(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
+  , m_value(0)
+  , m_minValue(0)
+  , m_maxValue(100)
+  , m_alarmValue(0)
 {
-  // Get pointers to Serial Studio modules
   auto dash = &UI::Dashboard::instance();
+  if (m_index >= 0 && m_index < dash->gaugeCount())
+  {
+    auto dataset = dash->getGauge(m_index);
 
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->gaugeCount())
-    return;
-
-  // Set gauge scale
-  auto dataset = dash->getGauge(m_index);
-  m_gauge.setScale(dataset.min(), dataset.max());
-
-  // Set widget pointer
-  setWidget(&m_gauge);
-
-  // Set visual style
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::Gauge::onThemeChanged);
-
-  // React to dashboard events
-  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
-          Qt::DirectConnection);
+    m_units = dataset.units();
+    m_minValue = dataset.min();
+    m_maxValue = dataset.max();
+    m_alarmValue = dataset.alarm();
+    connect(dash, &UI::Dashboard::updated, this, &Gauge::updateData);
+  }
 }
 
 /**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
+ * @brief Returns the measurement units of the dataset.
+ */
+const QString &Widgets::Gauge::units() const
+{
+  return m_units;
+}
+
+/**
+ * @brief Returns the current value of the gauge.
+ * @return The current value of the gauge.
+ */
+qreal Widgets::Gauge::value() const
+{
+  return m_value;
+}
+
+/**
+ * @brief Returns the minimum value of the gauge scale.
+ * @return The minimum value of the gauge scale.
+ */
+qreal Widgets::Gauge::minValue() const
+{
+  return m_minValue;
+}
+
+/**
+ * @brief Returns the maximum value of the gauge scale.
+ * @return The maximum value of the gauge scale.
+ */
+qreal Widgets::Gauge::maxValue() const
+{
+  return m_maxValue;
+}
+
+/**
+ * @brief Returns the alarm level of the gauge.
+ * @return The alarm level of the gauge.
+ */
+qreal Widgets::Gauge::alarmValue() const
+{
+  return m_alarmValue;
+}
+
+/**
+ * @brief Updates the gauge data from the Dashboard.
  *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the widget shall ignore the update request.
+ * This method retrieves the latest data for this gauge from the Dashboard
+ * and updates the gauge's value and text display accordingly.
  */
 void Widgets::Gauge::updateData()
 {
-  // Widget not enabled, do nothing
-  if (!isEnabled())
-    return;
-
-  // Invalid index, abort update
-  auto dash = &UI::Dashboard::instance();
+  // Get the dashboard instance and check if the index is valid
+  static const auto *dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->gaugeCount())
     return;
 
-  // Update gauge value
-  auto dataset = dash->getGauge(m_index);
-  m_gauge.setValue(dataset.value().toDouble());
-  setValue(QStringLiteral("%1 %2").arg(
-      QString::number(dataset.value().toDouble(), 'f', dash->precision()),
-      dataset.units()));
-}
+  // Get the gauge data from the Dashboard
+  auto &dataset = dash->getGauge(m_index);
+  auto value = qMax(m_minValue, qMin(m_maxValue, dataset.value().toDouble()));
 
-/**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
- */
-void Widgets::Gauge::onThemeChanged()
-{
-  // Get needle & knob color
-  auto theme = &Misc::ThemeManager::instance();
-  const auto knobColor = theme->getColor("widget_text");
-  const auto colors = theme->colors()["widget_colors"].toArray();
-  const auto needleColor = colors.count() > m_index
-                               ? colors.at(m_index).toString()
-                               : colors.at(colors.count() % m_index).toString();
-
-  // Configure gauge needle
-  auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
-                                        QColor(needleColor), knobColor);
-
-  // Set gauge palette
-  QPalette palette;
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("groupbox_background")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_text")));
-
-  // Update gauge colors
-  m_gauge.setPalette(palette);
-  m_gauge.setNeedle(needle);
+  // Redraw widget if required
+  if (!qFuzzyCompare(value, m_value))
+  {
+    m_value = value;
+    Q_EMIT updated();
+  }
 }

@@ -22,42 +22,49 @@
 
 #pragma once
 
-#include <QLabel>
+#include <QList>
 #include <QTimer>
-#include <QWidget>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QScrollArea>
-#include <UI/Widgets/Common/KLed.h>
+#include <QtQuick>
 
 namespace Widgets
 {
-class LEDPanel : public QWidget
+/**
+ * @brief A widget that displays a panel of LEDs.
+ */
+class LEDPanel : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(int count READ count CONSTANT)
+  Q_PROPERTY(QStringList titles READ titles CONSTANT)
+  Q_PROPERTY(QList<bool> states READ states NOTIFY updated)
+  Q_PROPERTY(QList<bool> alarms READ alarms NOTIFY updated)
+  Q_PROPERTY(QStringList colors READ colors NOTIFY themeChanged)
+
+signals:
+  void updated();
+  void themeChanged();
 
 public:
-  LEDPanel(const int index = -1);
-  ~LEDPanel();
+  explicit LEDPanel(const int index = -1, QQuickItem *parent = nullptr);
+
+  [[nodiscard]] int count() const;
+  [[nodiscard]] const QList<bool> &alarms() const;
+  [[nodiscard]] const QList<bool> &states() const;
+  [[nodiscard]] const QStringList &colors() const;
+  [[nodiscard]] const QStringList &titles() const;
 
 private slots:
   void updateData();
+  void onAlarmTimeout();
   void onThemeChanged();
-
-protected:
-  void resizeEvent(QResizeEvent *event);
 
 private:
   int m_index;
-
-  QVector<KLed *> m_leds;
-  QVector<QLabel *> m_titles;
-
-  QWidget *m_dataContainer;
-  QVBoxLayout *m_mainLayout;
-  QGridLayout *m_gridLayout;
-  QScrollArea *m_scrollArea;
-
-  QTimer m_blinkerTimer;
+  QTimer m_alarmTimer;
+  QList<bool> m_alarms;
+  QList<bool> m_states;
+  QStringList m_titles;
+  QStringList m_colors;
 };
+
 } // namespace Widgets

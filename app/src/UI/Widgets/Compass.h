@@ -22,24 +22,34 @@
 
 #pragma once
 
-#include <QwtCompass>
-#include <UI/Widgets/Common/BaseWidget.h>
+#include <QtQuick>
 
 namespace Widgets
 {
-class Compass : public BaseWidget
+/**
+ * @brief A widget that displays a compass.
+ */
+class Compass : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(qreal value READ value NOTIFY updated)
+  Q_PROPERTY(QString text READ text NOTIFY updated)
+
+signals:
+  void updated();
 
 public:
-  Compass(const int index = -1);
+  explicit Compass(const int index = -1, QQuickItem *parent = nullptr);
+
+  [[nodiscard]] qreal value() const;
+  [[nodiscard]] QString text() const;
 
 private slots:
   void updateData();
-  void onThemeChanged();
 
 private:
   int m_index;
-  QwtCompass m_compass;
+  qreal m_value;
+  QString m_text;
 };
 } // namespace Widgets

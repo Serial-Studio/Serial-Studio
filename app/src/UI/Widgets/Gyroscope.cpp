@@ -20,127 +20,126 @@
  * THE SOFTWARE.
  */
 
-#include <QResizeEvent>
-
 #include "UI/Dashboard.h"
-#include "Misc/TimerEvents.h"
-#include "Misc/ThemeManager.h"
 #include "UI/Widgets/Gyroscope.h"
 
 /**
- * Constructor function, configures widget style & signal/slot connections.
+ * @brief Constructs a Gyroscope widget.
+ * @param index The index of the gyroscope in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::Gyroscope::Gyroscope(const int index)
-  : m_index(index)
-  , m_displayNum(0)
+Widgets::Gyroscope::Gyroscope(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
+  , m_yaw(0)
+  , m_roll(0)
+  , m_pitch(0)
 {
-  // Get pointers to Serial Studio modules
-  auto dash = &UI::Dashboard::instance();
-
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->gyroscopeCount())
-    return;
-
-  // Set widget pointer
-  setWidget(&m_gauge);
-
-  // Set visual style
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::Gyroscope::onThemeChanged);
-
-  // Show different values each second
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
-          &Widgets::Gyroscope::updateLabel);
-
-  // React to dashboard events
-  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
-          Qt::DirectConnection);
+  m_timer.start();
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+          &Gyroscope::updateData);
 }
 
 /**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
+ * @brief Returns the yaw value of the gyroscope.
+ * @return The yaw value in degrees.
+ */
+qreal Widgets::Gyroscope::yaw() const
+{
+  return m_yaw;
+}
+
+/**
+ * @brief Returns the roll value of the gyroscope.
+ * @return The roll value in degrees.
+ */
+qreal Widgets::Gyroscope::roll() const
+{
+  return m_roll;
+}
+
+/**
+ * @brief Returns the pitch value of the gyroscope.
+ * @return The pitch value in degrees.
+ */
+qreal Widgets::Gyroscope::pitch() const
+{
+  return m_pitch;
+}
+
+/**
+ * @brief Updates the gyroscope data from the Dashboard.
  *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the widget shall ignore the update request.
+ * This method retrieves the latest data for this gyroscope from the
+ * Dashboard and updates the pitch, roll, and yaw values accordingly
+ * by integrating the data over time.
  */
 void Widgets::Gyroscope::updateData()
 {
-  if (!isEnabled())
-    return;
-
-  // Invalid index, abort update
-  auto dash = &UI::Dashboard::instance();
+  // Get the dashboard instance and check if the index is valid
+  static const auto *dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->gyroscopeCount())
     return;
 
-  // Get group reference & validate dataset count
-  auto group = dash->getGyroscope(m_index);
-  if (group.datasetCount() != 3)
+  // Get the gyroscope data and validate the dataset count
+  auto gyroscope = dash->getGyroscope(m_index);
+  if (gyroscope.datasetCount() != 3)
     return;
 
-  // Initialize values for pitch, roll & yaw
-  double p = 0;
-  double r = 0;
-  double y = 0;
+  // Backup previous readings
+  const qreal previousYaw = m_yaw;
+  const qreal previousRoll = m_roll;
+  const qreal previousPitch = m_pitch;
 
-  // Extract pitch, roll & yaw from group datasets
+  // Obtain delta-T for integration
+  const qreal deltaT = qMax(1, m_timer.elapsed()) / 1000.0;
+  m_timer.restart();
+
+  // Update the pitch, roll, and yaw values by integration
   for (int i = 0; i < 3; ++i)
   {
-    auto dataset = group.getDataset(i);
-    if (dataset.widget() == QStringLiteral("pitch"))
-      p = dataset.value().toDouble();
-    if (dataset.widget() == QStringLiteral("roll"))
-      r = dataset.value().toDouble();
-    if (dataset.widget() == QStringLiteral("yaw"))
-      y = dataset.value().toDouble();
+    // Obtain dataset
+    auto dataset = gyroscope.getDataset(i);
+
+    // clang-format off
+    const qreal angle = dataset.value().toDouble();
+    const bool isYaw = (dataset.widget() == QStringLiteral("z")) ||
+                       (dataset.widget() == QStringLiteral("yaw"));
+    const bool isRoll = (dataset.widget() == QStringLiteral("y")) ||
+                        (dataset.widget() == QStringLiteral("roll"));
+    const bool isPitch = (dataset.widget() == QStringLiteral("x")) ||
+                         (dataset.widget() == QStringLiteral("pitch"));
+    // clang-format on
+
+    // Update orientation angles
+    if (isYaw)
+      m_yaw += angle * deltaT;
+    else if (isRoll)
+      m_roll += angle * deltaT;
+    else if (isPitch)
+      m_pitch += angle * deltaT;
   }
 
-  // Construct strings from pitch, roll & yaw
-  m_yaw = QString::number(qAbs(y), 'f', dash->precision());
-  m_roll = QString::number(qAbs(r), 'f', dash->precision());
-  m_pitch = QString::number(qAbs(p), 'f', dash->precision());
+  // Normalize yaw angle from -180 to 180
+  m_yaw = std::fmod(m_yaw + 180.0, 360.0);
+  if (m_yaw < 0)
+    m_yaw += 360.0;
+  m_yaw -= 180.0;
 
-  // Update gauge
-  m_gauge.setValue(p);
-  m_gauge.setGradient(r / 360.0);
-}
+  // Normalize roll angle from -180 to 180
+  m_roll = std::fmod(m_roll + 180.0, 360.0);
+  if (m_roll < 0)
+    m_roll += 360.0;
+  m_roll -= 180.0;
 
-/**
- * Updates the label from time to time
- */
-void Widgets::Gyroscope::updateLabel()
-{
-  switch (m_displayNum)
-  {
-    case 0:
-      setValue(QStringLiteral("%1° PITCH").arg(m_pitch));
-      break;
-    case 1:
-      setValue(QStringLiteral("%1° ROLL").arg(m_roll));
-      break;
-    case 2:
-      setValue(QStringLiteral("%1° YAW").arg(m_yaw));
-      break;
-  }
+  // Normalize pitch angle from -180 to 180
+  m_pitch = std::fmod(m_pitch + 180.0, 360.0);
+  if (m_pitch < 0)
+    m_pitch += 360.0;
+  m_pitch -= 180.0;
 
-  ++m_displayNum;
-  if (m_displayNum > 2)
-    m_displayNum = 0;
-}
-
-/**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
- */
-void Widgets::Gyroscope::onThemeChanged()
-{
-  auto theme = &Misc::ThemeManager::instance();
-  QPalette palette;
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("groupbox_background")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_text")));
-  m_gauge.setPalette(palette);
+  // Request a repaint of the widget
+  if (!qFuzzyCompare(m_yaw, previousYaw) || !qFuzzyCompare(m_roll, previousRoll)
+      || !qFuzzyCompare(m_pitch, previousPitch))
+    Q_EMIT updated();
 }

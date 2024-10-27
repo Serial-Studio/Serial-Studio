@@ -22,25 +22,49 @@
 
 #pragma once
 
-#include <QwtThermo>
-#include <UI/Widgets/Common/BaseWidget.h>
+#include <QtQuick>
 
 namespace Widgets
 {
-class Bar : public BaseWidget
+/**
+ * @brief A widget that displays a bar/level indicator.
+ */
+class Bar : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(QString units READ units CONSTANT)
+  Q_PROPERTY(qreal value READ value NOTIFY updated)
+  Q_PROPERTY(qreal minValue READ minValue CONSTANT)
+  Q_PROPERTY(qreal maxValue READ maxValue CONSTANT)
+  Q_PROPERTY(qreal alarmValue READ alarmValue CONSTANT)
+  Q_PROPERTY(qreal fractionalValue READ fractionalValue NOTIFY updated)
+  Q_PROPERTY(qreal alarmFractionalValue READ alarmFractionalValue CONSTANT)
+
+signals:
+  void updated();
 
 public:
-  Bar(const int index = -1);
+  explicit Bar(const int index = -1, QQuickItem *parent = nullptr);
+
+  [[nodiscard]] const QString &units() const;
+
+  [[nodiscard]] qreal value() const;
+  [[nodiscard]] qreal minValue() const;
+  [[nodiscard]] qreal maxValue() const;
+  [[nodiscard]] qreal alarmValue() const;
+  [[nodiscard]] qreal fractionalValue() const;
+  [[nodiscard]] qreal alarmFractionalValue() const;
 
 private slots:
-  void onResized();
   void updateData();
-  void onThemeChanged();
 
 private:
   int m_index;
-  QwtThermo m_thermo;
+  QString m_units;
+  qreal m_value;
+  qreal m_minValue;
+  qreal m_maxValue;
+  qreal m_alarmValue;
+  qreal m_fractionalValue;
 };
 } // namespace Widgets

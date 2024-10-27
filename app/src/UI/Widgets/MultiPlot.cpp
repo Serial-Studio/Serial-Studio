@@ -25,242 +25,351 @@
 #include "UI/Widgets/MultiPlot.h"
 
 /**
- * Constructor function, configures widget style & signal/slot connections.
+ * @brief Constructs a MultiPlot widget.
+ * @param index The index of the multiplot in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::MultiPlot::MultiPlot(const int index)
-  : m_index(index)
-  , m_replot(false)
+Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
+  , m_minX(0)
+  , m_maxX(0)
+  , m_minY(0)
+  , m_maxY(0)
 {
-  // Get pointers to serial studio modules
+  // Obtain group information
   auto dash = &UI::Dashboard::instance();
-
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->multiPlotCount())
-    return;
-
-  // Configure layout
-  m_layout.addWidget(&m_plot);
-  m_layout.setContentsMargins(8, 8, 8, 8);
-  setLayout(&m_layout);
-
-  // Fit data horizontally
-  m_plot.axisScaleEngine(QwtPlot::xBottom)
-      ->setAttribute(QwtScaleEngine::Floating, true);
-
-  // Create curves from datasets
-  bool normalize = true;
-  auto group = dash->getMultiplot(m_index);
-  m_curves.reserve(group.datasetCount());
-  for (int i = 0; i < group.datasetCount(); ++i)
+  if (m_index >= 0 && m_index < dash->multiPlotCount())
   {
-    // Get dataset title & min/max values
-    QString title = tr("Unknown");
-    auto dataset = group.getDataset(i);
-    title = dataset.title();
-    normalize &= dataset.max() > dataset.min();
+    // Obtain min/max values from datasets
+    const auto &group = dash->getMultiplot(m_index);
+    m_minY = std::numeric_limits<double>::max();
+    m_maxY = std::numeric_limits<double>::lowest();
+    for (const auto &dataset : group.datasets())
+    {
+      m_minY = qMin(m_minY, dataset.min());
+      m_maxY = qMax(m_maxY, dataset.max());
+    }
 
-    // Create curve & register curve
-    auto curve = new QwtPlotCurve(title);
-    curve->attach(&m_plot);
-    m_curves.append(curve);
+    // Obtain group title
+    m_yLabel = group.title();
+
+    // Resize data container to fit curves
+    m_data.resize(group.datasetCount());
+    for (auto i = 0; i < group.datasetCount(); ++i)
+      m_data[i].resize(dash->points());
   }
 
-  // Add plot legend to display curve names
-  m_plot.setFrameStyle(QFrame::Plain);
-  m_legend.setFrameStyle(QFrame::Plain);
-  m_plot.setAxisTitle(QwtPlot::yLeft, group.title());
-  m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
-  // m_plot.insertLegend(&m_legend, QwtPlot::BottomLegend);
+  // Connect to the dashboard signals to update the plot data and range
+  connect(dash, &UI::Dashboard::updated, this, &MultiPlot::updateData);
+  connect(dash, &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange);
 
-  // Normalize data curves
-  if (normalize)
-    m_plot.setAxisScale(QwtPlot::yLeft, 0, 1);
-
-  // Configure visual style
-  updateRange();
+  // Connect to the theme manager to update the curve colors
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::MultiPlot::onThemeChanged);
+          this, &MultiPlot::onThemeChanged);
 
-  // React to dashboard events
-  onAxisOptionsChanged();
-  connect(dash, &UI::Dashboard::updated, this, &MultiPlot::updateData,
-          Qt::DirectConnection);
-  connect(dash, &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange,
-          Qt::DirectConnection);
-  connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
-          &MultiPlot::onAxisOptionsChanged, Qt::DirectConnection);
-
-  // Plot data at 20 Hz
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
-          [=] {
-            if (m_replot && isEnabled())
-            {
-              m_plot.replot();
-              m_replot = false;
-            }
-          });
+  // Update the range
+  calculateAutoScaleRange();
+  updateRange();
 }
 
 /**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
- *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the new data shall be saved to the plot
- * vectors, but the widget shall not be redrawn.
+ * @brief Returns the number of datasets in the multiplot.
+ * @return The number of datasets.
+ */
+int Widgets::MultiPlot::count() const
+{
+  return m_data.count();
+}
+
+/**
+ * @brief Returns the minimum X-axis value.
+ * @return The minimum X-axis value.
+ */
+qreal Widgets::MultiPlot::minX() const
+{
+  return m_minX;
+}
+
+/**
+ * @brief Returns the maximum X-axis value.
+ * @return The maximum X-axis value.
+ */
+qreal Widgets::MultiPlot::maxX() const
+{
+  return m_maxX;
+}
+
+/**
+ * @brief Returns the minimum Y-axis value.
+ * @return The minimum Y-axis value.
+ */
+qreal Widgets::MultiPlot::minY() const
+{
+  return m_minY;
+}
+
+/**
+ * @brief Returns the maximum Y-axis value.
+ * @return The maximum Y-axis value.
+ */
+qreal Widgets::MultiPlot::maxY() const
+{
+  return m_maxY;
+}
+
+/**
+ * @brief Returns the X-axis tick interval.
+ * @return The X-axis tick interval.
+ */
+qreal Widgets::MultiPlot::xTickInterval() const
+{
+  const auto range = qAbs(m_maxX - m_minX);
+  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
+  const qreal r = std::pow(10.0, -digits) * 10;
+  const qreal v = std::ceil(range * r) / r;
+  qreal step = qMax(0.0001, v * 0.2);
+  if (std::fmod(range, step) != 0.0)
+    step = range / std::ceil(range / step);
+
+  return step;
+}
+
+/**
+ * @brief Returns the Y-axis tick interval.
+ * @return The Y-axis tick interval.
+ */
+qreal Widgets::MultiPlot::yTickInterval() const
+{
+  const auto range = qAbs(m_maxY - m_minY);
+  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
+  const qreal r = std::pow(10.0, -digits) * 10;
+  const qreal v = std::ceil(range * r) / r;
+  qreal step = qMax(0.0001, v * 0.2);
+  if (std::fmod(range, step) != 0.0)
+    step = range / std::ceil(range / step);
+
+  return step;
+}
+
+/**
+ * @brief Returns the Y-axis label.
+ * @return The Y-axis label.
+ */
+const QString &Widgets::MultiPlot::yLabel() const
+{
+  return m_yLabel;
+}
+
+/**
+ * @brief Returns the colors of the datasets.
+ * @return The colors of the datasets.
+ */
+const QStringList &Widgets::MultiPlot::colors() const
+{
+  return m_colors;
+}
+
+/**
+ * @brief Draws the data on the given QLineSeries.
+ * @param series The QLineSeries to draw the data on.
+ * @param index The index of the dataset to draw.
+ */
+void Widgets::MultiPlot::draw(QLineSeries *series, const int index)
+{
+  if (series && index >= 0 && index < count())
+  {
+    if (index == 0)
+      calculateAutoScaleRange();
+
+    series->replace(m_data[index]);
+    Q_EMIT series->update();
+  }
+}
+
+/**
+ * @brief Updates the data of the multiplot.
  */
 void Widgets::MultiPlot::updateData()
 {
-  // Widget not enabled, do not redraw
-  if (!isEnabled())
-    return;
-
-  // Invalid index, abort update
+  // Get plot data from dashboard
   auto dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->multiPlotCount())
-    return;
+  const auto &plotData = dash->multiplotValues();
 
-  // Get group
-  auto group = dash->getMultiplot(m_index);
-
-  // Plot each dataset
-  for (int i = 0; i < group.datasetCount(); ++i)
+  // If the plot data is valid, update the plot
+  if (m_index >= 0 && plotData.count() > m_index)
   {
-    // Check vector size
-    if (m_yData.count() < i)
-      break;
-
-    // Get dataset
-    auto dataset = group.getDataset(i);
-
-    // Add point to plot data
-    auto data = m_yData[i].data();
-    auto count = m_yData[i].count();
-    memmove(data, data + 1, count * sizeof(double));
-
-    // Normalize dataset value
-    if (dataset.max() > dataset.min())
+    // Update data for each curve in the multiplot
+    const auto &curves = plotData[m_index];
+    for (int i = 0; i < curves.count(); ++i)
     {
-      auto vmin = dataset.min();
-      auto vmax = dataset.max();
-      auto v = dataset.value().toDouble();
-      m_yData[i][count - 1] = (v - vmin) / (vmax - vmin);
+      // Get the plot values from the dashboard
+      const auto &values = curves[i];
+
+      // Resize plot data vector if required
+      if (m_data[i].count() != values.count())
+        m_data[i].resize(values.count());
+
+      // Add the plot values to the plot data
+      for (int j = 0; j < values.count(); ++j)
+        m_data[i][j] = QPointF(j, values[j]);
     }
-
-    // Plot dataset value directly
-    else
-      m_yData[i][count - 1] = dataset.value().toDouble();
-
-    // Plot new data
-    m_replot = true;
-    m_curves.at(i)->setSamples(m_yData[i]);
   }
 }
 
 /**
- * Updates the number of horizontal divisions of the plot
+ * @brief Updates the range of the multiplot.
  */
 void Widgets::MultiPlot::updateRange()
 {
-  // Invalid index, abort update
+  // Get the dashboard instance and check if the index is valid
   auto dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->multiPlotCount())
     return;
 
-  // Set number of points
-  m_yData.clear();
-  auto group = UI::Dashboard::instance().getMultiplot(m_index);
+  // Clear the data
+  m_data.clear();
+
+  // Get the multiplot group and loop through each dataset
+  auto group = dash->getMultiplot(m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
-    m_yData.append(QVector<qreal>());
-    m_yData.last().resize(dash->points());
-    std::fill(m_yData.last().begin(), m_yData.last().end(), 0.0001);
+    m_data.append(QVector<QPointF>());
+    m_data.last().resize(dash->points() + 1);
   }
 
-  // Create curve from data
-  for (int i = 0; i < group.datasetCount(); ++i)
-    if (m_curves.count() > i)
-      m_curves.at(i)->setSamples(dash->xPlotValues(), m_yData[i]);
+  // Update X-axis range
+  m_minX = 0;
+  m_maxX = dash->points();
+
+  // Update the plot
+  Q_EMIT rangeChanged();
 }
 
 /**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
+ * @brief Updates the theme of the multiplot.
  */
 void Widgets::MultiPlot::onThemeChanged()
 {
-  // Set window palette
-  auto theme = &Misc::ThemeManager::instance();
-  QPalette palette;
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("widget_base")));
-  palette.setColor(QPalette::Window,
-                   theme->getColor(QStringLiteral("widget_window")));
-  setPalette(palette);
+  // clang-format off
+  const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
+  // clang-format on
 
-  // Set plot palette
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("widget_base")));
-  palette.setColor(QPalette::Highlight,
-                   theme->getColor(QStringLiteral("widget_highlight")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_text")));
-  palette.setColor(QPalette::ButtonText,
-                   theme->getColor(QStringLiteral("widget_text")));
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("widget_text")));
-  palette.setColor(QPalette::Dark,
-                   theme->getColor(QStringLiteral("groupbox_hard_border")));
-  palette.setColor(QPalette::Light,
-                   theme->getColor(QStringLiteral("groupbox_hard_border")));
-  m_plot.setPalette(palette);
-  m_plot.setCanvasBackground(
-      theme->getColor(QStringLiteral("groupbox_background")));
-
-  // Update curve color
-  const auto colors = theme->colors()["widget_colors"].toArray();
-  for (int i = 0; i < m_curves.count(); ++i)
+  // Obtain colors for each dataset in the widget
+  m_colors.clear();
+  auto dash = &UI::Dashboard::instance();
+  if (m_index >= 0 && m_index < dash->multiPlotCount())
   {
-    auto curve = m_curves.at(i);
-    const auto color = colors.count() > m_index
-                           ? colors.at(i).toString()
-                           : colors.at(colors.count() % i).toString();
+    const auto &group = dash->getMultiplot(m_index);
+    m_colors.resize(group.datasetCount());
 
-    curve->setPen(QColor(color), 2, Qt::SolidLine);
+    for (int i = 0; i < group.datasetCount(); ++i)
+    {
+      const auto &dataset = group.getDataset(i);
+      const auto index = group.getDataset(i).index() - 1;
+      const auto color = colors.count() > index
+                             ? colors.at(index).toString()
+                             : colors.at(colors.count() % index).toString();
+
+      m_colors[i] = color;
+    }
   }
+
+  // Update user interface
+  Q_EMIT themeChanged();
 }
 
 /**
- * @brief Updates the visibility of the plot axes based on user-selected axis
- *        options.
- *
- * This function responds to changes in axis visibility settings from the
- * dashboard. Depending on the user’s selection, it will set the visibility of
- * the X and/or Y axes on the plot.
- *
- * @see UI::Dashboard::axisVisibility()
- * @see QwtPlot::setAxisVisible()
+ * @brief Calculates the auto scale range of the multiplot.
  */
-void Widgets::MultiPlot::onAxisOptionsChanged()
+void Widgets::MultiPlot::calculateAutoScaleRange()
 {
-  switch (UI::Dashboard::instance().axisVisibility())
+  // Store previous values
+  bool ok = true;
+  const auto prevMinY = m_minY;
+  const auto prevMaxY = m_maxY;
+
+  // If the data is empty, set the range to 0-1
+  if (m_data.isEmpty())
   {
-    case UI::Dashboard::AxisXY:
-      m_plot.setAxisVisible(QwtPlot::yLeft, true);
-      m_plot.setAxisVisible(QwtPlot::xBottom, true);
-      break;
-    case UI::Dashboard::AxisXOnly:
-      m_plot.setAxisVisible(QwtPlot::yLeft, false);
-      m_plot.setAxisVisible(QwtPlot::xBottom, true);
-      break;
-    case UI::Dashboard::AxisYOnly:
-      m_plot.setAxisVisible(QwtPlot::yLeft, true);
-      m_plot.setAxisVisible(QwtPlot::xBottom, false);
-      break;
-    case UI::Dashboard::NoAxesVisible:
-      m_plot.setAxisVisible(QwtPlot::yLeft, false);
-      m_plot.setAxisVisible(QwtPlot::xBottom, false);
-      break;
+    m_minY = 0;
+    m_maxY = 1;
   }
+
+  // Obtain min/max values from datasets
+  else
+  {
+    const auto &group = UI::Dashboard::instance().getMultiplot(m_index);
+    m_minY = std::numeric_limits<double>::max();
+    m_maxY = std::numeric_limits<double>::lowest();
+    for (const auto &dataset : group.datasets())
+    {
+      ok &= !qFuzzyCompare(dataset.min(), dataset.max());
+      if (ok)
+      {
+        m_minY = qMin(m_minY, dataset.min());
+        m_maxY = qMax(m_maxY, dataset.max());
+      }
+
+      else
+        break;
+    }
+  }
+
+  // Set the min and max to the lowest and highest values
+  if (!ok)
+  {
+    // Initialize values to ensure that min/max are set
+    m_minY = std::numeric_limits<double>::max();
+    m_maxY = std::numeric_limits<double>::lowest();
+
+    // Loop through each dataset and find the min and max values
+    for (const auto &dataset : m_data)
+    {
+      for (const auto &point : dataset)
+      {
+        m_minY = qMin(m_minY, point.y());
+        m_maxY = qMax(m_maxY, point.y());
+      }
+    }
+
+    // If the min and max are the same, set the range to 0-1
+    if (qFuzzyCompare(m_minY, m_maxY))
+    {
+      if (qFuzzyIsNull(m_minY))
+      {
+        m_minY = -1;
+        m_maxY = 1;
+      }
+
+      else
+      {
+        double absValue = qAbs(m_minY);
+        m_minY = m_minY - absValue * 0.1;
+        m_maxY = m_maxY + absValue * 0.1;
+      }
+    }
+
+    // If the min and max are not the same, set the range to 10% more
+    else
+    {
+      double range = m_maxY - m_minY;
+      m_minY -= range * 0.1;
+      m_maxY += range * 0.1;
+    }
+
+    // Round to integer numbers
+    m_maxY = std::ceil(m_maxY);
+    m_minY = std::floor(m_minY);
+    if (qFuzzyCompare(m_maxY, m_minY))
+    {
+      m_minY -= 1;
+      m_maxY += 1;
+    }
+  }
+
+  // Update user interface if required
+  if (qFuzzyCompare(prevMinY, m_minY) || qFuzzyCompare(prevMaxY, m_maxY))
+    Q_EMIT rangeChanged();
 }

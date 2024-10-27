@@ -22,260 +22,260 @@
 
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Plot.h"
-#include "Misc/TimerEvents.h"
-#include "Misc/ThemeManager.h"
 
 /**
- * Constructor function, configures widget style & signal/slot connections.
+ * @brief Constructs a Plot widget.
+ * @param index The index of the plot in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::Plot::Plot(const int index)
-  : m_index(index)
-  , m_min(INT_MAX)
-  , m_max(INT_MIN)
-  , m_replot(false)
-  , m_autoscale(true)
+Widgets::Plot::Plot(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
+  , m_minX(0)
+  , m_maxX(0)
+  , m_minY(0)
+  , m_maxY(0)
 {
-  // Get pointers to serial studio modules
+  // Obtain dataset information
   auto dash = &UI::Dashboard::instance();
-
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->plotCount())
-    return;
-
-  // Configure layout
-  m_layout.addWidget(&m_plot);
-  m_layout.setContentsMargins(8, 8, 8, 8);
-  setLayout(&m_layout);
-
-  // Fit data horizontally
-  auto xAxisEngine = m_plot.axisScaleEngine(QwtPlot::xBottom);
-  xAxisEngine->setAttribute(QwtScaleEngine::Floating, true);
-
-  // Create curve from data
-  updateRange();
-  m_plot.setFrameStyle(QFrame::Plain);
-  m_curve.attach(&m_plot);
-
-  // Update graph scale
-  auto dataset = UI::Dashboard::instance().getPlot(m_index);
-  auto max = dataset.max();
-  auto min = dataset.min();
-  if (max > min)
+  if (m_index >= 0 && m_index < dash->plotCount())
   {
-    m_max = max;
-    m_min = min;
-    m_autoscale = false;
-    m_plot.setAxisScale(QwtPlot::yLeft, m_min, m_max);
+    auto dataset = dash->getPlot(m_index);
+
+    m_minY = dataset.min();
+    m_maxY = dataset.max();
+    m_yLabel = dataset.title();
+
+    if (!dataset.units().isEmpty())
+      m_yLabel += " (" + dataset.units() + ")";
   }
 
-  // Enable logarithmic scale
-  if (dataset.log())
-    m_plot.setAxisScaleEngine(QwtPlot::yLeft, new QwtLogScaleEngine(10));
+  // Connect to the dashboard signals to update the plot data and range
+  connect(dash, &UI::Dashboard::updated, this, &Plot::updateData);
+  connect(dash, &UI::Dashboard::pointsChanged, this, &Plot::updateRange);
 
-  // Set axis titles
-  m_plot.setAxisTitle(QwtPlot::xBottom, tr("Samples"));
-  m_plot.setAxisTitle(QwtPlot::yLeft, dataset.title());
-
-  // Configure visual style
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::Plot::onThemeChanged);
-
-  // React to dashboard events
-  onAxisOptionsChanged();
-  connect(dash, &UI::Dashboard::updated, this, &Plot::updateData,
-          Qt::DirectConnection);
-  connect(dash, &UI::Dashboard::pointsChanged, this, &Plot::updateRange,
-          Qt::DirectConnection);
-  connect(dash, &UI::Dashboard::axisVisibilityChanged, this,
-          &Plot::onAxisOptionsChanged, Qt::DirectConnection);
-
-  // Plot data at 20 Hz
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
-          [=] {
-            if (m_replot && isEnabled())
-            {
-              m_plot.replot();
-              m_replot = false;
-            }
-          });
+  // Update the plot data and range
+  calculateAutoScaleRange();
+  updateRange();
 }
 
 /**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
- *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the new data shall be saved to the plot
- * vector, but the widget shall not be redrawn.
+ * @brief Returns the minimum X-axis value.
+ * @return The minimum X-axis value.
+ */
+qreal Widgets::Plot::minX() const
+{
+  return m_minX;
+}
+
+/**
+ * @brief Returns the maximum X-axis value.
+ * @return The maximum X-axis value.
+ */
+qreal Widgets::Plot::maxX() const
+{
+  return m_maxX;
+}
+
+/**
+ * @brief Returns the minimum Y-axis value.
+ * @return The minimum Y-axis value.
+ */
+qreal Widgets::Plot::minY() const
+{
+  return m_minY;
+}
+
+/**
+ * @brief Returns the maximum Y-axis value.
+ * @return The maximum Y-axis value.
+ */
+qreal Widgets::Plot::maxY() const
+{
+  return m_maxY;
+}
+
+/**
+ * @brief Returns the X-axis tick interval.
+ * @return The X-axis tick interval.
+ */
+qreal Widgets::Plot::xTickInterval() const
+{
+  const auto range = qAbs(m_maxX - m_minX);
+  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
+  const qreal r = std::pow(10.0, -digits) * 10;
+  const qreal v = std::ceil(range * r) / r;
+  qreal step = qMax(0.0001, v * 0.2);
+  if (std::fmod(range, step) != 0.0)
+    step = range / std::ceil(range / step);
+
+  return step;
+}
+
+/**
+ * @brief Returns the Y-axis tick interval.
+ * @return The Y-axis tick interval.
+ */
+qreal Widgets::Plot::yTickInterval() const
+{
+  const auto range = qAbs(m_maxY - m_minY);
+  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
+  const qreal r = std::pow(10.0, -digits) * 10;
+  const qreal v = std::ceil(range * r) / r;
+  qreal step = qMax(0.0001, v * 0.2);
+  if (std::fmod(range, step) != 0.0)
+    step = range / std::ceil(range / step);
+
+  return step;
+}
+
+/**
+ * @brief Returns the Y-axis label.
+ * @return The Y-axis label.
+ */
+const QString &Widgets::Plot::yLabel() const
+{
+  return m_yLabel;
+}
+
+/**
+ * @brief Draws the data on the given QLineSeries.
+ * @param series The QLineSeries to draw the data on.
+ */
+void Widgets::Plot::draw(QLineSeries *series)
+{
+  if (series)
+  {
+    series->replace(m_data);
+    calculateAutoScaleRange();
+    Q_EMIT series->update();
+  }
+}
+
+/**
+ * @brief Updates the plot data from the Dashboard.
  */
 void Widgets::Plot::updateData()
 {
-  // Widget not enabled, do not redraw
-  if (!isEnabled())
-    return;
+  // Get the plot data from the dashboard
+  auto dash = &UI::Dashboard::instance();
+  const auto &plotData = dash->linearPlotValues();
 
-  // Get new data
-  auto plotData = UI::Dashboard::instance().linearPlotValues();
-  if (plotData.count() > m_index)
+  // If the plot data is valid, update the plot
+  if (m_index >= 0 && plotData.count() > m_index)
   {
-    // Check if we need to update graph scale
-    if (m_autoscale)
-    {
-      // Scan new values to see if chart should be updated
-      bool changed = false;
-      for (int i = 0; i < plotData.at(m_index).count(); ++i)
-      {
-        auto v = plotData.at(m_index).at(i);
-        if (v > m_max)
-        {
-          m_max = v + 1;
-          changed = true;
-        }
+    // Get the plot values from the dashboard
+    const auto &values = plotData[m_index];
 
-        if (v < m_min)
-        {
-          m_min = v - 1;
-          changed = true;
-        }
-      }
+    // Resize plot data vector if required
+    if (m_data.count() != values.count())
+      m_data.resize(dash->points());
 
-      // Update graph scale
-      if (changed)
-      {
-        // Get central value
-        double median = qMax<double>(1, (m_max + m_min)) / 2;
-        if (m_max == m_min)
-          median = m_max;
-
-        // Center graph verticaly
-        double mostDiff
-            = qMax<double>(qAbs<double>(m_min), qAbs<double>(m_max));
-        double min = median * (1 - 0.5) - qAbs<double>(median - mostDiff);
-        double max = median * (1 + 0.5) + qAbs<double>(median - mostDiff);
-        if (m_min < 0)
-          min = max * -1;
-
-        // Fix issues when min & max are equal
-        if (min == max)
-        {
-          max = qAbs<double>(max);
-          min = max * -1;
-        }
-
-        // Fix issues on min = max = (0,0)
-        if (min == 0 && max == 0)
-        {
-          max = 1;
-          min = -1;
-        }
-
-        // Update axis scale
-        m_max = max;
-        m_min = min;
-        m_plot.setAxisScale(m_plot.yLeft, m_min, m_max);
-      }
-    }
-
-    // Add new data to curve
-    m_replot = true;
-    m_curve.setSamples(plotData.at(m_index));
+    // Add the plot values to the plot data
+    for (int i = 0; i < values.count(); ++i)
+      m_data[i] = QPointF(i, values[i]);
   }
 }
 
 /**
- * Updates the number of horizontal divisions of the plot
+ * @brief Updates the range of the X-axis values.
  */
 void Widgets::Plot::updateRange()
 {
-  // Get pointer to dashboard manager
+  // Get the dashboard instance and clear the plot data
   auto dash = &UI::Dashboard::instance();
 
-  // Clear Y-axis data
-  QVector<qreal> tempYData;
-  tempYData.reserve(dash->points());
-  for (int i = 0; i < dash->points(); ++i)
-    tempYData.append(0);
+  // Reserve the number of points in the dashboard
+  m_data.clear();
+  m_data.resize(dash->points() + 1);
 
-  // Redraw graph
-  m_curve.setSamples(dash->xPlotValues(), tempYData);
-  m_plot.replot();
+  // Update x-axis
+  m_minX = 0;
+  m_maxX = dash->points();
+
+  // Update the plot
+  Q_EMIT rangeChanged();
 }
 
 /**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
+ * @brief Calculates the auto-scale range for the Y-axis.
  */
-void Widgets::Plot::onThemeChanged()
+void Widgets::Plot::calculateAutoScaleRange()
 {
-  // Set window palette
-  auto theme = &Misc::ThemeManager::instance();
-  QPalette palette;
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("widget_base")));
-  palette.setColor(QPalette::Window,
-                   theme->getColor(QStringLiteral("widget_window")));
-  setPalette(palette);
+  // Store previous values
+  bool ok = true;
+  const auto prevMinY = m_minY;
+  const auto prevMaxY = m_maxY;
 
-  // Set plot palette
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("widget_base")));
-  palette.setColor(QPalette::Highlight,
-                   theme->getColor(QStringLiteral("widget_highlight")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_text")));
-  palette.setColor(QPalette::ButtonText,
-                   theme->getColor(QStringLiteral("widget_text")));
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("widget_text")));
-  palette.setColor(QPalette::Dark,
-                   theme->getColor(QStringLiteral("groupbox_hard_border")));
-  palette.setColor(QPalette::Light,
-                   theme->getColor(QStringLiteral("groupbox_hard_border")));
-  m_plot.setPalette(palette);
-  m_plot.setCanvasBackground(
-      theme->getColor(QStringLiteral("groupbox_background")));
-
-  // Get curve color
-  const auto colors = theme->colors()["widget_colors"].toArray();
-  const auto color = colors.count() > m_index
-                         ? colors.at(m_index).toString()
-                         : colors.at(colors.count() % m_index).toString();
-
-  // Set curve color & plot style
-  m_curve.setPen(QColor(color), 2, Qt::SolidLine);
-}
-
-/**
- * @brief Updates the visibility of the plot axes based on user-selected axis
- *        options.
- *
- * This function responds to changes in axis visibility settings from the
- * dashboard. Depending on the user’s selection, it will set the visibility of
- * the X and/or Y axes on the plot.
- *
- * @see UI::Dashboard::axisVisibility()
- * @see QwtPlot::setAxisVisible()
- */
-void Widgets::Plot::onAxisOptionsChanged()
-{
-  switch (UI::Dashboard::instance().axisVisibility())
+  // If the data is empty, set the range to 0-1
+  if (m_data.isEmpty())
   {
-    case UI::Dashboard::AxisXY:
-      m_plot.setAxisVisible(QwtPlot::yLeft, true);
-      m_plot.setAxisVisible(QwtPlot::xBottom, true);
-      break;
-    case UI::Dashboard::AxisXOnly:
-      m_plot.setAxisVisible(QwtPlot::yLeft, false);
-      m_plot.setAxisVisible(QwtPlot::xBottom, true);
-      break;
-    case UI::Dashboard::AxisYOnly:
-      m_plot.setAxisVisible(QwtPlot::yLeft, true);
-      m_plot.setAxisVisible(QwtPlot::xBottom, false);
-      break;
-    case UI::Dashboard::NoAxesVisible:
-      m_plot.setAxisVisible(QwtPlot::yLeft, false);
-      m_plot.setAxisVisible(QwtPlot::xBottom, false);
-      break;
+    m_minY = 0;
+    m_maxY = 1;
   }
+
+  // Obtain min/max values from datasets
+  else
+  {
+    const auto &dataset = UI::Dashboard::instance().getPlot(m_index);
+    ok &= !qFuzzyCompare(dataset.min(), dataset.max());
+    if (ok)
+    {
+      m_minY = qMin(m_minY, dataset.min());
+      m_maxY = qMax(m_maxY, dataset.max());
+    }
+  }
+
+  // Set the min and max to the lowest and highest values
+  if (!ok)
+  {
+    // Initialize values to ensure that min/max are set
+    m_minY = std::numeric_limits<double>::max();
+    m_maxY = std::numeric_limits<double>::lowest();
+
+    // Loop through the plot data and update the min and max
+    for (const auto &point : m_data)
+    {
+      m_minY = qMin(m_minY, point.y());
+      m_maxY = qMax(m_maxY, point.y());
+    }
+
+    // If min and max are the same, adjust the range
+    if (qFuzzyCompare(m_minY, m_maxY))
+    {
+      if (qFuzzyIsNull(m_minY))
+      {
+        m_minY = -1;
+        m_maxY = 1;
+      }
+
+      else
+      {
+        double absValue = qAbs(m_minY);
+        m_minY = m_minY - absValue * 0.1;
+        m_maxY = m_maxY + absValue * 0.1;
+      }
+    }
+
+    // If the min and max are not the same, set the range to 10% more
+    else
+    {
+      double range = m_maxY - m_minY;
+      m_minY -= range * 0.1;
+      m_maxY += range * 0.1;
+    }
+
+    // Round to integer numbers
+    m_maxY = std::ceil(m_maxY);
+    m_minY = std::floor(m_minY);
+    if (qFuzzyCompare(m_maxY, m_minY))
+    {
+      m_minY -= 1;
+      m_maxY += 1;
+    }
+  }
+
+  // Update user interface if required
+  if (qFuzzyCompare(prevMinY, m_minY) || qFuzzyCompare(prevMaxY, m_maxY))
+    Q_EMIT rangeChanged();
 }

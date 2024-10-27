@@ -114,15 +114,14 @@ Controls.GroupBox {
       Controls.Label {
         id: _title
         text: root.title
+        elide: Qt.ElideRight
+        Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
+        horizontalAlignment: Qt.AlignLeft
         font: Cpp_Misc_CommonFonts.boldUiFont
         color: root.hardBorder ?
                  Cpp_ThemeManager.colors["pane_hard_caption_foreground"] :
                  Cpp_ThemeManager.colors["pane_caption_foreground"]
-      }
-
-      Item {
-        Layout.fillWidth: true
       }
 
       Controls.ToolButton {

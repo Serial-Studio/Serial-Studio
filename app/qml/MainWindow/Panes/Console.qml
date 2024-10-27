@@ -25,6 +25,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../../Widgets" as Widgets
+import "../../Widgets/Dashboard" as Dashboard
 
 Widgets.Pane {
   id: root
@@ -77,7 +78,7 @@ Widgets.Pane {
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-    Widgets.Terminal {
+    Dashboard.Terminal {
       id: terminal
       anchors.fill: parent
     }

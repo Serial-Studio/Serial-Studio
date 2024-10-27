@@ -25,6 +25,8 @@
 #include "UI/Dashboard.h"
 #include "MQTT/Client.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/TimerEvents.h"
+#include "Misc/ThemeManager.h"
 #include "JSON/FrameBuilder.h"
 
 //------------------------------------------------------------------------------
@@ -49,6 +51,15 @@ UI::Dashboard::Dashboard()
   connect(&JSON::FrameBuilder::instance(),
           &JSON::FrameBuilder::jsonFileMapChanged, this,
           &UI::Dashboard::resetData);
+
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
+          [=] {
+            if (m_updateRequired)
+            {
+              m_updateRequired = false;
+              Q_EMIT updated();
+            }
+          });
 }
 
 /**
@@ -188,12 +199,6 @@ int UI::Dashboard::accelerometerCount() const { return m_accelerometerWidgets.co
 UI::Dashboard::AxisVisibility UI::Dashboard::axisVisibility() const
 {
   return m_axisVisibility;
-}
-
-QStringList UI::Dashboard::axisVisibilityOptions() const
-{
-  return QStringList{tr("Show both X and Y axes"), tr("Show only X axis"),
-                     tr("Show only Y axis"), tr("Hide all axes")};
 }
 
 //------------------------------------------------------------------------------
@@ -437,6 +442,34 @@ QString UI::Dashboard::widgetIcon(const int globalIndex) const
   }
 }
 
+const JSON::Dataset &UI::Dashboard::widgetDataset(const int globalIndex) const
+{
+  static auto invalidDataset = JSON::Dataset();
+
+  switch (widgetType(globalIndex))
+  {
+    case WidgetType::FFT:
+      return getFFT(relativeIndex(globalIndex));
+      break;
+    case WidgetType::Plot:
+      return getPlot(relativeIndex(globalIndex));
+      break;
+    case WidgetType::Bar:
+      return getBar(relativeIndex(globalIndex));
+      break;
+    case WidgetType::Gauge:
+      return getGauge(relativeIndex(globalIndex));
+      break;
+    case WidgetType::Compass:
+      return getCompass(relativeIndex(globalIndex));
+      break;
+    default:
+      break;
+  }
+
+  return invalidDataset;
+}
+
 /**
  * Returns the type of widget that corresponds to the given @a globalIndex.
  *
@@ -547,7 +580,7 @@ bool UI::Dashboard::fftVisible(const int index) const           { return getVisi
 bool UI::Dashboard::gpsVisible(const int index) const           { return getVisibility(m_gpsVisibility, index);           }
 bool UI::Dashboard::ledVisible(const int index) const           { return getVisibility(m_ledVisibility, index);           }
 bool UI::Dashboard::plotVisible(const int index) const          { return getVisibility(m_plotVisibility, index);          }
-bool UI::Dashboard::datagridVisible(const int index) const      { return getVisibility(m_datagridVisibility, index);         }
+bool UI::Dashboard::datagridVisible(const int index) const      { return getVisibility(m_datagridVisibility, index);      }
 bool UI::Dashboard::gaugeVisible(const int index) const         { return getVisibility(m_gaugeVisibility, index);         }
 bool UI::Dashboard::compassVisible(const int index) const       { return getVisibility(m_compassVisibility, index);       }
 bool UI::Dashboard::gyroscopeVisible(const int index) const     { return getVisibility(m_gyroscopeVisibility, index);     }
@@ -578,6 +611,14 @@ QStringList UI::Dashboard::actionTitles()
 }
 
 // clang-format off
+QStringList UI::Dashboard::barColors()     { return datasetColors(m_barWidgets); }
+QStringList UI::Dashboard::fftColors()     { return datasetColors(m_fftWidgets); }
+QStringList UI::Dashboard::plotColors()    { return datasetColors(m_plotWidgets); }
+QStringList UI::Dashboard::gaugeColors()   { return datasetColors(m_gaugeWidgets); }
+QStringList UI::Dashboard::compassColors() { return datasetColors(m_compassWidgets); }
+// clang-format on
+
+// clang-format off
 QStringList UI::Dashboard::gpsTitles()           { return groupTitles(m_gpsWidgets);           }
 QStringList UI::Dashboard::ledTitles()           { return groupTitles(m_ledWidgets);           }
 QStringList UI::Dashboard::barTitles()           { return datasetTitles(m_barWidgets);         }
@@ -603,13 +644,8 @@ void UI::Dashboard::setPoints(const int points)
     m_points = points;
 
     // Clear values
-    m_fftPlotValues.clear();
+    m_multiplotValues.clear();
     m_linearPlotValues.clear();
-
-    // Regenerate x-axis values
-    m_xData.resize(points);
-    for (int i = 0; i < points; ++i)
-      m_xData[i] = i;
 
     // Update plots
     Q_EMIT pointsChanged();
@@ -677,6 +713,7 @@ void UI::Dashboard::resetData()
 
   // Clear plot data
   m_fftPlotValues.clear();
+  m_multiplotValues.clear();
   m_linearPlotValues.clear();
 
   // Clear widget data
@@ -726,11 +763,19 @@ void UI::Dashboard::updatePlots()
   // datasets that need to be plotted.
   QVector<JSON::Dataset> fftDatasets;
   QVector<JSON::Dataset> linearDatasets;
+  QVector<QVector<JSON::Dataset>> multiplotGroups;
 
   // Create list with datasets that need to be graphed
   for (int i = 0; i < m_currentFrame.groupCount(); ++i)
   {
     auto group = m_currentFrame.groups().at(i);
+
+    const bool multiplot = (group.widget() == "multiplot")
+                           || (group.widget() == "accelerometer")
+                           || (group.widget() == "gyro");
+    if (multiplot)
+      multiplotGroups.append(QVector<JSON::Dataset>());
+
     for (int j = 0; j < group.datasetCount(); ++j)
     {
       auto dataset = group.getDataset(j);
@@ -738,6 +783,8 @@ void UI::Dashboard::updatePlots()
         fftDatasets.append(dataset);
       if (dataset.graph())
         linearDatasets.append(dataset);
+      if (multiplot)
+        multiplotGroups.last().append(dataset);
     }
   }
 
@@ -749,7 +796,7 @@ void UI::Dashboard::updatePlots()
     for (int i = 0; i < linearDatasets.count(); ++i)
     {
       m_linearPlotValues.append(QVector<qreal>());
-      m_linearPlotValues.last().resize(points());
+      m_linearPlotValues.last().resize(points() + 1);
       std::fill(m_linearPlotValues.last().begin(),
                 m_linearPlotValues.last().end(), 0.0001);
     }
@@ -769,12 +816,30 @@ void UI::Dashboard::updatePlots()
     }
   }
 
+  // Check if we need to update multiplot widgets
+  if (m_multiplotValues.count() != multiplotGroups.count())
+  {
+    m_multiplotValues.clear();
+
+    for (int i = 0; i < multiplotGroups.count(); ++i)
+    {
+      m_multiplotValues.append(QVector<QVector<qreal>>());
+      m_multiplotValues.last().resize(multiplotGroups[i].count());
+      for (int j = 0; j < multiplotGroups[i].count(); ++j)
+      {
+        m_multiplotValues[i][j].resize(points() + 1);
+        std::fill(m_multiplotValues[i][j].begin(),
+                  m_multiplotValues[i][j].end(), 0.0001);
+      }
+    }
+  }
+
   // Append latest values to linear plot data
   for (int i = 0; i < linearDatasets.count(); ++i)
   {
     auto data = m_linearPlotValues[i].data();
     auto count = m_linearPlotValues[i].count();
-    memmove(data, data + 1, count * sizeof(double));
+    memmove(data, data + 1, count * sizeof(qreal));
     m_linearPlotValues[i][count - 1] = linearDatasets[i].value().toDouble();
   }
 
@@ -783,8 +848,22 @@ void UI::Dashboard::updatePlots()
   {
     auto data = m_fftPlotValues[i].data();
     auto count = m_fftPlotValues[i].count();
-    memmove(data, data + 1, count * sizeof(double));
+    memmove(data, data + 1, count * sizeof(qreal));
     m_fftPlotValues[i][count - 1] = fftDatasets[i].value().toDouble();
+  }
+
+  // Append latest values to multiplot data
+  for (int i = 0; i < multiplotGroups.count(); ++i)
+  {
+    auto curveCount = m_multiplotValues[i].count();
+    for (int j = 0; j < curveCount; ++j)
+    {
+      auto data = m_multiplotValues[i][j].data();
+      auto count = m_multiplotValues[i][j].count();
+      memmove(data, data + 1, count * sizeof(qreal));
+      m_multiplotValues[i][j][count - 1]
+          = multiplotGroups[i][j].value().toDouble();
+    }
   }
 }
 
@@ -896,7 +975,7 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   }
 
   // Share the frame with other models
-  Q_EMIT updated();
+  m_updateRequired = true;
   Q_EMIT frameReceived(m_currentFrame);
 }
 
@@ -1029,6 +1108,29 @@ QStringList UI::Dashboard::datasetTitles(const QVector<JSON::Dataset> &vector)
   QStringList list;
   Q_FOREACH (auto set, vector)
     list.append(set.title());
+
+  return list;
+}
+
+/**
+ * Returns the associated colors for the datasets contained in the specified
+ * @a vector.
+ */
+QStringList UI::Dashboard::datasetColors(const QVector<JSON::Dataset> &vector)
+{
+  // clang-format off
+  const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
+  // clang-format on
+
+  QStringList list;
+  Q_FOREACH (auto set, vector)
+  {
+    const auto index = set.index() - 1;
+    const auto color = colors.count() > index
+                           ? colors.at(index).toString()
+                           : colors.at(colors.count() % index).toString();
+    list.append(color);
+  }
 
   return list;
 }

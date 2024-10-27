@@ -122,7 +122,7 @@ QFont Misc::CommonFonts::customUiFont(const int pixelSize, const bool bold)
  */
 QFont Misc::CommonFonts::customMonoFont(const int pixelSize)
 {
-  QFont font = QFontDatabase::font(QStringLiteral("Hack"),
+  QFont font = QFontDatabase::font(QStringLiteral("Noto Sans Mono"),
                                    QStringLiteral("Regular"), 12);
   font.setPixelSize(qMax(1, pixelSize));
   return font;

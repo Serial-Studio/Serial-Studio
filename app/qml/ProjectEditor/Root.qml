@@ -61,6 +61,11 @@ Window {
   }
 
   //
+  // Load project file on start
+  //
+  Component.onCompleted: Cpp_JSON_ProjectModel.openJsonFile(Cpp_JSON_FrameBuilder.jsonMapFilepath)
+
+  //
   // Dummy string to increase width of buttons
   //
   readonly property string _btSpacer: "  "

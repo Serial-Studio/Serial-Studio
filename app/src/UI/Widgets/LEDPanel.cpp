@@ -20,213 +20,190 @@
  * THE SOFTWARE.
  */
 
-#include <QResizeEvent>
-
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/LEDPanel.h"
 
 /**
- * Generates the user interface elements & layout
+ * @brief Constructs an LEDPanel widget.
+ * @param index The index of the LED panel in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::LEDPanel::LEDPanel(const int index)
-  : m_index(index)
+Widgets::LEDPanel::LEDPanel(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
 {
-  // Get pointers to serial studio modules
+  // Populate the LED states, titles, and alarm states
   auto dash = &UI::Dashboard::instance();
-
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->ledCount())
-    return;
-
-  // Get group reference
-  auto group = dash->getLED(m_index);
-
-  // Configure scroll area container
-  m_dataContainer = new QWidget(this);
-
-  // Make the value label larger
-  auto valueFont = dash->monoFont();
-  valueFont.setPixelSize(dash->monoFont().pixelSize() * 1.3);
-
-  // Configure grid layout
-  m_leds.reserve(group.datasetCount());
-  m_titles.reserve(group.datasetCount());
-  m_gridLayout = new QGridLayout(m_dataContainer);
-  m_gridLayout->setSpacing(16);
-  for (int dataset = 0; dataset < group.datasetCount(); ++dataset)
+  if (m_index >= 0 && m_index < dash->ledCount())
   {
-    // Create labels
-    m_leds.append(new KLed(m_dataContainer));
-    m_titles.append(new QLabel(m_dataContainer));
+    auto group = dash->getLED(m_index);
+    m_states.resize(group.datasetCount());
+    m_titles.resize(group.datasetCount());
+    m_colors.resize(group.datasetCount());
+    m_alarms.resize(group.datasetCount());
 
-    // Get pointers to labels
-    auto led = m_leds.last();
-    auto title = m_titles.last();
-
-    // Set label styles & fonts
-    title->setFont(dash->monoFont());
-    title->setText(group.getDataset(dataset).title());
-
-    // Set LED color & style
-    led->setLook(KLed::Sunken);
-    led->setShape(KLed::Circular);
-
-    // Calculate column and row
-    int column = 0;
-    int row = dataset;
-    int count = dataset + 1;
-    while (count > 3)
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
-      count -= 3;
-      row -= 3;
-      column += 2;
+      m_states[i] = false;
+      m_alarms[i] = false;
+      m_titles[i] = group.getDataset(i).title();
     }
-
-    // Add label and LED to grid layout
-    m_gridLayout->addWidget(led, row, column);
-    m_gridLayout->addWidget(title, row, column + 1);
-    m_gridLayout->setAlignment(led, Qt::AlignRight | Qt::AlignVCenter);
-    m_gridLayout->setAlignment(title, Qt::AlignLeft | Qt::AlignVCenter);
   }
 
-  // Load layout into container widget
-  m_dataContainer->setLayout(m_gridLayout);
+  // Connect to the Dashboard to update the LED states
+  connect(dash, &UI::Dashboard::updated, this, &LEDPanel::updateData);
 
-  // Configure scroll area
-  m_scrollArea = new QScrollArea(this);
-  m_scrollArea->setWidgetResizable(true);
-  m_scrollArea->setWidget(m_dataContainer);
-  m_scrollArea->setFrameShape(QFrame::NoFrame);
-  m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  // Configure alarm blinker timer
+  m_alarmTimer.setInterval(250);
+  m_alarmTimer.setTimerType(Qt::PreciseTimer);
+  connect(&m_alarmTimer, &QTimer::timeout, this,
+          &Widgets::LEDPanel::onAlarmTimeout);
+  m_alarmTimer.start();
 
-  // Configure main layout
-  m_mainLayout = new QVBoxLayout(this);
-  m_mainLayout->addWidget(m_scrollArea);
-  m_mainLayout->setContentsMargins(0, 0, 0, 0);
-  setLayout(m_mainLayout);
-
-  // Configure blinker timer
-  m_blinkerTimer.setTimerType(Qt::PreciseTimer);
-  m_blinkerTimer.setInterval(250);
-  m_blinkerTimer.start();
-
-  // Configure visual style
+  // Set dataset colors
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &Widgets::LEDPanel::onThemeChanged);
-
-  // React to dashboard events
-  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
-          Qt::DirectConnection);
 }
 
 /**
- * Frees the memory allocated for each label and LED that represents a dataset
+ * @brief Returns the number of LEDs in the panel.
+ * @return An integer number with the number/count of LEDs in the panel.
  */
-Widgets::LEDPanel::~LEDPanel()
+int Widgets::LEDPanel::count() const
 {
-  Q_FOREACH (auto led, m_leds)
-    delete led;
-
-  Q_FOREACH (auto title, m_titles)
-    delete title;
-
-  delete m_gridLayout;
-  delete m_scrollArea;
-  delete m_mainLayout;
+  return m_titles.count();
 }
 
 /**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
+ * @brief Returns the alarm states of the LEDs in the panel.
+ * @return A vector of boolean values representing the alarm states of the LEDs.
+ */
+const QList<bool> &Widgets::LEDPanel::alarms() const
+{
+  return m_alarms;
+}
+
+/**
+ * @brief Returns the states of the LEDs in the panel.
+ * @return A vector of boolean values representing the states of the LEDs.
+ */
+const QList<bool> &Widgets::LEDPanel::states() const
+{
+  return m_states;
+}
+
+/**
+ * @brief Returns the colors of the LEDs in the panel.
+ * @return A vector of strings representing the activated colors of the LEDs.
+ */
+const QStringList &Widgets::LEDPanel::colors() const
+{
+  return m_colors;
+}
+
+/**
+ * @brief Returns the titles of the LEDs in the panel.
+ * @return A vector of strings representing the titles of the LEDs.
+ */
+const QStringList &Widgets::LEDPanel::titles() const
+{
+  return m_titles;
+}
+
+/**
+ * @brief Updates the LED panel data from the Dashboard.
  *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the widget shall ignore the update request.
+ * This method retrieves the latest data for this LED panel from the Dashboard
+ * and updates the LEDs' states and titles accordingly.
  */
 void Widgets::LEDPanel::updateData()
 {
-  // Widget not enabled, do nothing
-  if (!isEnabled())
-    return;
-
-  // Invalid index, abort update
-  auto dash = &UI::Dashboard::instance();
+  // Get the dashboard instance and check if the index is valid
+  static const auto *dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->ledCount())
     return;
 
-  // Get group pointer
+  // Get the LED group and update the LED states
+  bool changed = false;
   auto group = dash->getLED(m_index);
-
-  // Update labels
   for (int i = 0; i < group.datasetCount(); ++i)
   {
-    // Check vector size
-    if (m_leds.count() < i)
-      break;
-
-    // Get dataset value
+    // Get the dataset and its values
     const auto dataset = group.getDataset(i);
     const auto value = dataset.value().toDouble();
-    if (value >= dataset.ledHigh())
-      m_leds.at(i)->on();
-    else
-      m_leds.at(i)->off();
+    const auto alarmValue = dataset.alarm();
 
-    // Blink the LED if alarm value is exceeded
-    if (value >= dataset.alarm())
-      connect(&m_blinkerTimer, &QTimer::timeout, m_leds.at(i), &KLed::toggle);
-    else
-      disconnect(&m_blinkerTimer, &QTimer::timeout, m_leds.at(i),
-                 &KLed::toggle);
+    // Obtain the LED state
+    const bool enabled = (value >= dataset.ledHigh());
+    const bool alarm = (alarmValue != 0 && value >= alarmValue);
+
+    // Update the alarm state
+    if (m_alarms[i] != alarm)
+    {
+      changed = true;
+      m_alarms[i] = alarm;
+    }
+
+    // Update the LED state
+    if (!alarm && m_states[i] != enabled)
+    {
+      changed = true;
+      m_states[i] = enabled;
+    }
   }
+
+  // Redraw the widget
+  if (changed)
+    Q_EMIT updated();
 }
 
-/**
- * Changes the size of the labels when the widget is resized
- */
-void Widgets::LEDPanel::resizeEvent(QResizeEvent *event)
+void Widgets::LEDPanel::onAlarmTimeout()
 {
-  auto width = event->size().width();
-  QFont font = UI::Dashboard::instance().monoFont();
-  font.setPixelSize(qMax(8, width / 24));
-  auto fHeight = QFontMetrics(font).height() * 1.5;
-
-  for (int i = 0; i < m_titles.count(); ++i)
+  bool changed = false;
+  for (int i = 0; i < m_alarms.count(); ++i)
   {
-    m_titles.at(i)->setFont(font);
-    m_leds.at(i)->setMinimumSize(fHeight, fHeight);
+    if (m_alarms[i])
+    {
+      changed = true;
+      m_states[i] = !m_states[i];
+    }
   }
 
-  event->accept();
+  if (changed)
+    Q_EMIT updated();
 }
 
 /**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
+ * @brief Updates the colors for each dataset in the widget based on the
+ *        colorscheme defined by the application's currently loaded theme.
  */
 void Widgets::LEDPanel::onThemeChanged()
 {
-  // Generate widget stylesheets
-  auto theme = &Misc::ThemeManager::instance();
+  // clang-format off
+  const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
+  // clang-format on
 
-  // Set window palette
-  QPalette palette;
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("widget_base")));
-  palette.setColor(QPalette::Window,
-                   theme->getColor(QStringLiteral("widget_window")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_text")));
-  setPalette(palette);
-
-  // Configure each LED
-  for (int i = 0; i < m_leds.count(); ++i)
+  // Obtain colors for each dataset in the widget
+  m_colors.clear();
+  auto dash = &UI::Dashboard::instance();
+  if (m_index >= 0 && m_index < dash->ledCount())
   {
-    auto *led = m_leds.at(i);
-    auto *title = m_titles.at(i);
-    title->setPalette(palette);
-    led->setColor(theme->getColor("led_color"));
+    auto group = dash->getLED(m_index);
+    m_colors.resize(group.datasetCount());
+
+    for (int i = 0; i < group.datasetCount(); ++i)
+    {
+      auto dataset = group.getDataset(i);
+      const auto index = group.getDataset(i).index() - 1;
+      const auto color = colors.count() > index
+                             ? colors.at(index).toString()
+                             : colors.at(colors.count() % index).toString();
+      m_colors[i] = color;
+    }
   }
+
+  // Update user interface
+  Q_EMIT themeChanged();
 }

@@ -27,17 +27,16 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPlainTextEdit>
+#include <QQuickPaintedItem>
 
 #include <QJSValue>
 #include <QJSEngine>
 
 #include <qsourcehighliter.h>
 
-#include <UI/DeclarativeWidget.h>
-
 namespace JSON
 {
-class FrameParser : public UI::DeclarativeWidget
+class FrameParser : public QQuickPaintedItem
 {
   Q_OBJECT
   Q_PROPERTY(QString text READ text NOTIFY textChanged)
@@ -75,12 +74,31 @@ private slots:
 private:
   bool save(const bool silent = false);
   bool loadScript(const QString &script);
-  void execEvent(void *function, void *event);
 
 private slots:
   void readCode();
+  void renderWidget();
+  void resizeWidget();
 
 private:
+  virtual void paint(QPainter *painter) override;
+  virtual void keyPressEvent(QKeyEvent *event) override;
+  virtual void keyReleaseEvent(QKeyEvent *event) override;
+  virtual void inputMethodEvent(QInputMethodEvent *event) override;
+  virtual void focusInEvent(QFocusEvent *event) override;
+  virtual void focusOutEvent(QFocusEvent *event) override;
+  virtual void mousePressEvent(QMouseEvent *event) override;
+  virtual void mouseMoveEvent(QMouseEvent *event) override;
+  virtual void mouseReleaseEvent(QMouseEvent *event) override;
+  virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+  virtual void wheelEvent(QWheelEvent *event) override;
+  virtual void dragEnterEvent(QDragEnterEvent *event) override;
+  virtual void dragMoveEvent(QDragMoveEvent *event) override;
+  virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
+  virtual void dropEvent(QDropEvent *event) override;
+
+private:
+  QPixmap m_pixmap;
   QJSEngine m_engine;
   QJSValue m_parseFunction;
   QPlainTextEdit m_textEdit;

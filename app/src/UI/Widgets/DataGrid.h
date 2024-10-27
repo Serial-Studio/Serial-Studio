@@ -22,46 +22,46 @@
 
 #pragma once
 
-#include <QWidget>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QScrollArea>
-
-#include <UI/Widgets/Common/ElidedLabel.h>
+#include <QtQuick>
 
 namespace Widgets
 {
-class DataGrid : public QWidget
+class DataGrid : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(int count READ count CONSTANT)
+  Q_PROPERTY(QStringList units READ units CONSTANT)
+  Q_PROPERTY(QStringList titles READ titles CONSTANT)
+  Q_PROPERTY(QStringList values READ values NOTIFY updated)
+  Q_PROPERTY(QList<bool> alarms READ alarms NOTIFY updated)
+  Q_PROPERTY(QStringList colors READ colors NOTIFY themeChanged)
+
+signals:
+  void updated();
+  void themeChanged();
 
 public:
-  DataGrid(const int index = -1);
-  ~DataGrid();
+  explicit DataGrid(const int index = -1, QQuickItem *parent = nullptr);
+
+  [[nodiscard]] int count() const;
+  [[nodiscard]] const QList<bool> &alarms() const;
+
+  [[nodiscard]] const QStringList &units() const;
+  [[nodiscard]] const QStringList &colors() const;
+  [[nodiscard]] const QStringList &titles() const;
+  [[nodiscard]] const QStringList &values() const;
 
 private slots:
   void updateData();
   void onThemeChanged();
 
-protected:
-  void resizeEvent(QResizeEvent *event);
-  void wheelEvent(QWheelEvent *event);
-  void mouseMoveEvent(QMouseEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
-  void mouseDoubleClickEvent(QMouseEvent *event);
-
 private:
   int m_index;
+  QList<bool> m_alarms;
 
-  QVector<QLabel *> m_icons;
-  QVector<QLabel *> m_units;
-  QVector<ElidedLabel *> m_titles;
-  QVector<ElidedLabel *> m_values;
-
-  QWidget *m_dataContainer;
-  QVBoxLayout *m_mainLayout;
-  QGridLayout *m_gridLayout;
-  QScrollArea *m_scrollArea;
+  QStringList m_units;
+  QStringList m_titles;
+  QStringList m_values;
+  QStringList m_colors;
 };
 } // namespace Widgets

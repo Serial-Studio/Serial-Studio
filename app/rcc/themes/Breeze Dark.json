@@ -62,15 +62,19 @@
   "console_highlight": "#033557",
 
   "widget_text": "#eff0f1",
-  "widget_base": "#1C1E20",
+  "widget_base": "#31363A",
   "widget_button": "#31363A",
   "widget_window": "#1C1E20",
+  "widget_border": "#43494F",
   "widget_highlight": "#3daee9",
   "widget_button_text": "#eff0f1",
   "widget_highlighted_text": "#31363b",
   "widget_placeholder_text": "#929497",
-  "led_color": "#CC323B",
   "alarm": "#ba252e",
+
+  "polar_background": "#1C1E20",
+  "polar_foreground": "#dedede",
+  "polar_indicator": "#EA6654",
 
   "table_bg_a": "#33363a",
   "table_bg_b": "#1C1E20",

@@ -59,8 +59,8 @@ QJsonObject JSON::Group::serialize() const
     datasetArray.append(dataset.serialize());
 
   QJsonObject object;
-  object.insert(QStringLiteral("title"), m_title);
-  object.insert(QStringLiteral("widget"), m_widget);
+  object.insert(QStringLiteral("title"), m_title.trimmed());
+  object.insert(QStringLiteral("widget"), m_widget.trimmed());
   object.insert(QStringLiteral("datasets"), datasetArray);
   return object;
 }
@@ -75,9 +75,11 @@ bool JSON::Group::read(const QJsonObject &object)
 {
   if (!object.isEmpty())
   {
-    const auto title = object.value(QStringLiteral("title")).toString();
+    // clang-format off
     const auto array = object.value(QStringLiteral("datasets")).toArray();
-    const auto widget = object.value(QStringLiteral("widget")).toString();
+    const auto title = object.value(QStringLiteral("title")).toString().trimmed();
+    const auto widget = object.value(QStringLiteral("widget")).toString().trimmed();
+    // clang-format on
 
     if (!title.isEmpty() && !array.isEmpty())
     {

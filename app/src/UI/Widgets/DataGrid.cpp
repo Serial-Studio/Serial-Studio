@@ -20,274 +20,190 @@
  * THE SOFTWARE.
  */
 
-#include <QResizeEvent>
-#include <QRegularExpression>
-
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/DataGrid.h"
 
-#define DG_EXEC_EVENT(pointer, function, event)                                \
-  if (pointer)                                                                 \
-  {                                                                            \
-    class PwnedWidget : public QScrollArea                                     \
-    {                                                                          \
-    public:                                                                    \
-      using QScrollArea::function;                                             \
-    };                                                                         \
-    static_cast<PwnedWidget *>(pointer)->function(event);                      \
-  }
-
 /**
- * Generates the user interface elements & layout
+ * @brief Constructs a DataGrid widget.
+ * @param index The index of the data grid in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::DataGrid::DataGrid(const int index)
-  : m_index(index)
+Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
 {
-  // Get pointers to serial studio modules
+  // Get the dashboard instance and populate the titles, values, and units
   auto dash = &UI::Dashboard::instance();
-
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->datagridCount())
-    return;
-
-  // Get group reference
-  auto group = dash->getDataGrid(m_index);
-
-  // Configure scroll area container
-  m_dataContainer = new QWidget(this);
-
-  // Make the value label larger
-  auto valueFont = dash->monoFont();
-  valueFont.setPixelSize(dash->monoFont().pixelSize() * 1.3);
-
-  // Configure grid layout
-  m_units.reserve(group.datasetCount());
-  m_icons.reserve(group.datasetCount());
-  m_titles.reserve(group.datasetCount());
-  m_values.reserve(group.datasetCount());
-  m_gridLayout = new QGridLayout(m_dataContainer);
-  for (int dataset = 0; dataset < group.datasetCount(); ++dataset)
+  if (m_index >= 0 && m_index < dash->datagridCount())
   {
-    // Create labels
-    m_units.append(new QLabel(m_dataContainer));
-    m_icons.append(new QLabel(m_dataContainer));
-    m_titles.append(new ElidedLabel(m_dataContainer));
-    m_values.append(new ElidedLabel(m_dataContainer));
+    auto group = dash->getDataGrid(m_index);
 
-    // Get pointers to labels
-    auto dicon = m_icons.last();
-    auto units = m_units.last();
-    auto title = m_titles.last();
-    auto value = m_values.last();
+    m_units.resize(group.datasetCount());
+    m_titles.resize(group.datasetCount());
+    m_values.resize(group.datasetCount());
+    m_alarms.resize(group.datasetCount());
 
-    // Set elide modes for title & value fields
-    title->setType(Qt::ElideRight);
-    value->setType(Qt::ElideRight);
+    for (int i = 0; i < group.datasetCount(); ++i)
+    {
+      auto dataset = group.getDataset(i);
 
-    // Set label alignments
-    units->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    value->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    title->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    dicon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    // Set label styles & fonts
-    value->setFont(valueFont);
-    title->setFont(dash->monoFont());
-    units->setFont(dash->monoFont());
-
-    // Set label initial data
-    auto set = group.getDataset(dataset);
-    title->setText(set.title());
-    if (!set.units().isEmpty())
-      units->setText(QString("[%1]").arg(set.units()));
-
-    // Set icon text
-    dicon->setText("⤑");
-
-    // Add labels to grid layout
-    m_gridLayout->addWidget(title, dataset, 0);
-    m_gridLayout->addWidget(dicon, dataset, 1);
-    m_gridLayout->addWidget(value, dataset, 2);
-    m_gridLayout->addWidget(units, dataset, 3);
+      m_values[i] = "";
+      m_alarms[i] = false;
+      m_titles[i] = dataset.title();
+      m_units[i] = dataset.units().isEmpty()
+                       ? ""
+                       : QString("[%1]").arg(dataset.units());
+    }
   }
 
-  // Load layout into container widget
-  m_gridLayout->setColumnStretch(0, 2);
-  m_gridLayout->setColumnStretch(1, 1);
-  m_gridLayout->setColumnStretch(2, 2);
-  m_gridLayout->setColumnStretch(3, 0);
-  m_dataContainer->setLayout(m_gridLayout);
+  // Connect to the dashboard update event
+  connect(dash, &UI::Dashboard::updated, this, &DataGrid::updateData);
 
-  // Configure scroll area
-  m_scrollArea = new QScrollArea(this);
-  m_scrollArea->setWidgetResizable(true);
-  m_scrollArea->setWidget(m_dataContainer);
-  m_scrollArea->setFrameShape(QFrame::NoFrame);
-  m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-  // Configure main layout
-  m_mainLayout = new QVBoxLayout(this);
-  m_mainLayout->addWidget(m_scrollArea);
-  m_mainLayout->setContentsMargins(0, 0, 0, 0);
-  setLayout(m_mainLayout);
-
-  // Set visual style
+  // Set dataset colors
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &Widgets::DataGrid::onThemeChanged);
-
-  // React to dashboard events
-  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
-          Qt::DirectConnection);
 }
 
 /**
- * Frees the memory allocated for each label that represents a dataset
+ * @brief Returns the number of datasets in the panel.
+ * @return An integer number with the number/count of datasets in the panel.
  */
-Widgets::DataGrid::~DataGrid()
+int Widgets::DataGrid::count() const
 {
-  Q_FOREACH (auto icon, m_icons)
-    delete icon;
-
-  Q_FOREACH (auto title, m_titles)
-    delete title;
-
-  Q_FOREACH (auto value, m_values)
-    delete value;
-
-  Q_FOREACH (auto units, m_units)
-    delete units;
-
-  delete m_gridLayout;
-  delete m_scrollArea;
-  delete m_mainLayout;
+  return m_titles.count();
 }
 
 /**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
+ * @brief Returns the alarm states of the datasets in the panel.
+ * @return A vector of booleans representing the alarm states of the datasets.
+ */
+const QList<bool> &Widgets::DataGrid::alarms() const
+{
+  return m_alarms;
+}
+
+/**
+ * @brief Returns the units of the datasets in the data grid.
+ * @return A vector of strings representing the units of the datasets.
+ */
+const QStringList &Widgets::DataGrid::units() const
+{
+  return m_units;
+}
+
+/**
+ * @brief Returns the colors of the datasets in the data grid.
+ * @return A vector of strings representing the colors of the datasets.
+ */
+const QStringList &Widgets::DataGrid::colors() const
+{
+  return m_colors;
+}
+
+/**
+ * @brief Returns the titles of the datasets in the data grid.
+ * @return A vector of strings representing the titles of the datasets.
+ */
+const QStringList &Widgets::DataGrid::titles() const
+{
+  return m_titles;
+}
+
+/**
+ * @brief Returns the values of the datasets in the data grid.
+ * @return A vector of strings representing the values of the datasets.
+ */
+const QStringList &Widgets::DataGrid::values() const
+{
+  return m_values;
+}
+
+/**
+ * @brief Updates the data grid data from the Dashboard.
  *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the widget shall ignore the update request.
+ * This method retrieves the latest data for this data grid from the Dashboard
+ * and updates the displayed values accordingly.
  */
 void Widgets::DataGrid::updateData()
 {
-  // Widget not enabled, do nothing
-  if (!isEnabled())
-    return;
-
-  // Invalid index, abort update
-  auto dash = &UI::Dashboard::instance();
+  // Get the dashboard instance and check if the index is valid
+  static const auto *dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->datagridCount())
     return;
 
-  // Get group reference
-  auto group = dash->getDataGrid(m_index);
-
-  // Regular expresion handler
+  // Regular expression to check if the value is a number
   static const QRegularExpression regex("^[+-]?(\\d*\\.)?\\d+$");
 
-  // Update labels
+  // Get the datagrid group and update the LED states
+  bool changed = false;
+  auto group = dash->getDataGrid(m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
-    // Get dataset value
-    auto value = group.getDataset(i).value();
+    // Get the dataset and its values
+    auto dataset = group.getDataset(i);
+    auto value = dataset.value();
+    auto alarmValue = dataset.alarm();
 
-    // Check if value is a number, if so make sure that
-    // we always show a fixed number of decimal places
+    // Process dataset numerical value
+    bool alarm = false;
     if (regex.match(value).hasMatch())
-      value = QString::number(value.toDouble(), 'f', dash->precision());
+    {
+      const double v = value.toDouble();
+      value = QString::number(v, 'f', dash->precision());
+      alarm = (alarmValue != 0 && v >= alarmValue);
+    }
 
-    // Update label
-    if (m_values.count() > i)
-      m_values.at(i)->setText(value + " ");
+    // Update the alarm state
+    if (m_alarms[i] != alarm)
+    {
+      changed = true;
+      m_alarms[i] = alarm;
+    }
+
+    // Update value text
+    if (m_values[i] != value)
+    {
+      changed = true;
+      m_values[i] = value;
+    }
   }
+
+  // Redraw the widget
+  if (changed)
+    Q_EMIT updated();
 }
 
 /**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
+ * @brief Updates the colors for each dataset in the widget based on the
+ *        colorscheme defined by the application's currently loaded theme.
  */
 void Widgets::DataGrid::onThemeChanged()
 {
-  // Generate widget stylesheets
   // clang-format off
-  auto theme = &Misc::ThemeManager::instance();
-  const auto valueQSS = QSS("color:%1", theme->getColor(QStringLiteral("widget_text")));
-  const auto titleQSS = QSS("color:%1", theme->getColor(QStringLiteral("widget_text")));
-  const auto unitsQSS = QSS("color:%1", theme->getColor(QStringLiteral("widget_highlight")));
-  const auto iconsQSS = QSS("color:%1; font-weight:600;", theme->getColor(QStringLiteral("widget_highlight")));
+  const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
   // clang-format on
 
-  // Set palette
-  // clang-format off
-  QPalette palette;
-  palette.setColor(QPalette::Base, theme->getColor(QStringLiteral("widget_base")));
-  palette.setColor(QPalette::Window, theme->getColor(QStringLiteral("widget_window")));
-  setPalette(palette);
-  // clang-format on
-
-  // Update styles for each label
-  for (int i = 0; i < m_titles.count(); ++i)
+  // Obtain colors for each dataset in the widget
+  m_colors.clear();
+  auto dash = &UI::Dashboard::instance();
+  if (m_index >= 0 && m_index < dash->datagridCount())
   {
-    auto dicon = m_icons.at(i);
-    auto units = m_units.at(i);
-    auto title = m_titles.at(i);
-    auto value = m_values.at(i);
-    title->setStyleSheet(titleQSS);
-    value->setStyleSheet(valueQSS);
-    units->setStyleSheet(unitsQSS);
-    dicon->setStyleSheet(iconsQSS);
-  }
-}
+    auto group = dash->getDataGrid(m_index);
+    m_colors.resize(group.datasetCount());
 
-/**
- * Changes the size of the labels when the widget is resized
- */
-void Widgets::DataGrid::resizeEvent(QResizeEvent *event)
-{
-  auto width = event->size().width();
-  QFont font = UI::Dashboard::instance().monoFont();
-  QFont icon = font;
-  QFont valueFont = font;
-  icon.setPixelSize(qMax(8, width / 16));
-  font.setPixelSize(qMax(8, width / 24));
-  valueFont.setPixelSize(font.pixelSize() * 1.3);
-
-  for (int i = 0; i < m_titles.count(); ++i)
-  {
-    m_units.at(i)->setFont(font);
-    m_icons.at(i)->setFont(icon);
-    m_titles.at(i)->setFont(font);
-    m_values.at(i)->setFont(valueFont);
+    for (int i = 0; i < group.datasetCount(); ++i)
+    {
+      auto dataset = group.getDataset(i);
+      const auto index = group.getDataset(i).index() - 1;
+      const auto color = colors.count() > index
+                             ? colors.at(index).toString()
+                             : colors.at(colors.count() % index).toString();
+      m_colors[i] = color;
+    }
   }
 
-  event->accept();
-}
-
-void Widgets::DataGrid::wheelEvent(QWheelEvent *event)
-{
-  DG_EXEC_EVENT(m_scrollArea, wheelEvent, event);
-}
-
-void Widgets::DataGrid::mouseMoveEvent(QMouseEvent *event)
-{
-  DG_EXEC_EVENT(m_scrollArea, mouseMoveEvent, event);
-}
-
-void Widgets::DataGrid::mousePressEvent(QMouseEvent *event)
-{
-  DG_EXEC_EVENT(m_scrollArea, mousePressEvent, event);
-}
-
-void Widgets::DataGrid::mouseReleaseEvent(QMouseEvent *event)
-{
-  DG_EXEC_EVENT(m_scrollArea, mouseReleaseEvent, event);
-}
-
-void Widgets::DataGrid::mouseDoubleClickEvent(QMouseEvent *event)
-{
-  DG_EXEC_EVENT(m_scrollArea, mouseDoubleClickEvent, event);
+  // Update user interface
+  Q_EMIT themeChanged();
 }

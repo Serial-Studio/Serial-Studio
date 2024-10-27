@@ -62,13 +62,18 @@
   "console_highlight": "#B1DFF6",
 
   "widget_text": "#232629",
-  "widget_base": "#f9f9f9",
+  "widget_base": "#eff0f1",
   "widget_button": "#eff0f1",
+  "widget_border": "#c2c2c2",
   "widget_window": "#f9f9f9",
   "widget_highlight": "#3daee9",
   "widget_button_text": "#232629",
   "widget_highlighted_text": "#ffffff",
   "widget_placeholder_text": "#929497",
+
+  "polar_background": "#3daee9",
+  "polar_foreground": "#3daee9",
+  "polar_indicator": "#D8343D",
 
   "table_bg_a": "#f5f5f5",
   "table_bg_b": "#ffffff",
@@ -78,7 +83,6 @@
   "table_separator": "#D3D4D4",
   "table_border_header": "#FFD74A",
   "table_separator_header": "#FFD74A",
-  "led_color": "#CC323B",
   "alarm": "#ba252e",
 
   "widget_colors": [

@@ -22,45 +22,56 @@
 
 #pragma once
 
-#include <QWidget>
-#include <QwtPlot>
-#include <QVBoxLayout>
-#include <QwtPlotCurve>
-#include <QwtScaleEngine>
-#include <QScopedArrayPointer>
+#include <QtQuick>
+#include <QVector>
+#include <QLineSeries>
 #include <qfouriertransformer.h>
-#include <UI/DashboardWidget.h>
 
 namespace Widgets
 {
-
 /**
- * @class FFTPlot
- * @brief Class to plot FFT data using QwtPlot and QFourierTransformer.
+ * @brief A widget that plots the FFT of a dataset.
  */
-class FFTPlot : public QWidget
+class FFTPlot : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(qreal minX READ minX CONSTANT)
+  Q_PROPERTY(qreal maxX READ maxX CONSTANT)
+  Q_PROPERTY(qreal minY READ minY CONSTANT)
+  Q_PROPERTY(qreal maxY READ maxY CONSTANT)
+  Q_PROPERTY(qreal xTickInterval READ xTickInterval CONSTANT)
+  Q_PROPERTY(qreal yTickInterval READ yTickInterval CONSTANT)
 
 public:
-  FFTPlot(int index);
+  explicit FFTPlot(const int index = -1, QQuickItem *parent = nullptr);
+
+  [[nodiscard]] qreal minX() const;
+  [[nodiscard]] qreal maxX() const;
+  [[nodiscard]] qreal minY() const;
+  [[nodiscard]] qreal maxY() const;
+  [[nodiscard]] qreal xTickInterval() const;
+  [[nodiscard]] qreal yTickInterval() const;
+
+public slots:
+  void draw(QLineSeries *series);
 
 private slots:
   void updateData();
-  void onThemeChanged();
-  void onAxisOptionsChanged();
 
 private:
-  bool m_replot;
-  int m_size;                           ///< Size of the FFT data array.
-  int m_samplingRate;                   ///< Sampling rate for the FFT data.
-  int m_index;                          ///< Index of the FFT plot data.
-  QwtPlot m_plot;                       ///< Plot widget for FFT.
-  QwtPlotCurve m_curve;                 ///< Curve for the FFT data.
-  QVBoxLayout m_layout;                 ///< Layout for the plot widget.
-  QScopedArrayPointer<float> m_fft;     ///< FFT data array.
-  QScopedArrayPointer<float> m_samples; ///< Sample data array.
-  QFourierTransformer m_transformer;    ///< Fourier transformer for FFT.
-};
+  int m_size;
+  int m_index;
+  int m_samplingRate;
 
+  qreal m_minX;
+  qreal m_maxX;
+  qreal m_minY;
+  qreal m_maxY;
+
+  QFourierTransformer m_transformer;
+
+  QList<QPointF> m_data;
+  QScopedArrayPointer<float> m_fft;
+  QScopedArrayPointer<float> m_samples;
+};
 } // namespace Widgets

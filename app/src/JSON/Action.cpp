@@ -101,9 +101,9 @@ QJsonObject JSON::Action::serialize() const
 {
   QJsonObject object;
   object.insert(QStringLiteral("icon"), m_icon);
-  object.insert(QStringLiteral("title"), m_title);
   object.insert(QStringLiteral("txData"), m_txData);
   object.insert(QStringLiteral("eol"), m_eolSequence);
+  object.insert(QStringLiteral("title"), m_title.trimmed());
   return object;
 }
 
@@ -125,9 +125,9 @@ bool JSON::Action::read(const QJsonObject &object)
   if (!object.isEmpty())
   {
     m_icon = object.value(QStringLiteral("icon")).toString();
-    m_title = object.value(QStringLiteral("title")).toString();
     m_txData = object.value(QStringLiteral("txData")).toString();
     m_eolSequence = object.value(QStringLiteral("eol")).toString();
+    m_title = object.value(QStringLiteral("title")).toString().trimmed();
 
     return true;
   }

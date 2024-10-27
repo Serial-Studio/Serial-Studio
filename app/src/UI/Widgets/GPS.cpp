@@ -22,32 +22,21 @@
 
 #include "UI/Dashboard.h"
 #include "UI/Widgets/GPS.h"
-#include "Misc/ThemeManager.h"
 
 /**
- * Generates the user interface elements & layout
+ * @brief Constructs a GPS widget.
+ * @param index The index of the GPS widget in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::GPS::GPS(const int index)
-  : m_index(index)
+Widgets::GPS::GPS(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
   , m_altitude(0)
   , m_latitude(0)
   , m_longitude(0)
 {
-  // Get pointers to serial studio modules
-  auto dash = &UI::Dashboard::instance();
-
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->gpsCount())
-    return;
-
-  // Set visual style
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::GPS::onThemeChanged);
-
-  // React to Qt signals
-  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
-          Qt::DirectConnection);
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+          &Widgets::GPS::updateData);
 }
 
 /**
@@ -88,7 +77,7 @@ void Widgets::GPS::updateData()
     return;
 
   // Invalid index, abort update
-  auto dash = &UI::Dashboard::instance();
+  static const auto *dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->gpsCount())
     return;
 
@@ -96,34 +85,25 @@ void Widgets::GPS::updateData()
   auto group = dash->getGPS(m_index);
 
   // Get latitiude/longitude from datasets
-  m_altitude = 0, m_latitude = 0;
-  m_longitude = 0;
+  qreal lat = 0, lon = 0, alt = 0;
   for (int i = 0; i < group.datasetCount(); ++i)
   {
     auto dataset = group.getDataset(i);
     if (dataset.widget() == QStringLiteral("lat"))
-      m_latitude = dataset.value().toDouble();
+      lat = dataset.value().toDouble();
     else if (dataset.widget() == QStringLiteral("lon"))
-      m_longitude = dataset.value().toDouble();
+      lon = dataset.value().toDouble();
     else if (dataset.widget() == QStringLiteral("alt"))
-      m_altitude = dataset.value().toDouble();
+      alt = dataset.value().toDouble();
   }
 
-  // Update the QML user interface with the new data
-  Q_EMIT updated();
-}
-
-/**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
- */
-void Widgets::GPS::onThemeChanged()
-{
-  auto theme = &Misc::ThemeManager::instance();
-  QPalette palette;
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("widget_base")));
-  palette.setColor(QPalette::Window,
-                   theme->getColor(QStringLiteral("widget_window")));
-  setPalette(palette);
+  // Redraw widget if required
+  if (!qFuzzyCompare(lat, m_latitude) || !qFuzzyCompare(lon, m_longitude)
+      || !qFuzzyCompare(alt, m_altitude))
+  {
+    m_latitude = lat;
+    m_altitude = alt;
+    m_longitude = lon;
+    Q_EMIT updated();
+  }
 }

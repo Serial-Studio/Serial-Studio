@@ -140,6 +140,14 @@ Window {
   }
 
   Connections {
+    target: Cpp_JSON_ProjectModel
+
+    function onJsonFileChanged() {
+      updateDocumentTitle()
+    }
+  }
+
+  Connections {
     target: Cpp_Misc_Translator
     function onLanguageChanged() {
       updateDocumentTitle()

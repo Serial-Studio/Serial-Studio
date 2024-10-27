@@ -337,17 +337,15 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
       dataset.m_index = channel;
       dataset.m_title = tr("Channel %1").arg(channel);
       dataset.m_value = QString::fromUtf8(field);
-      dataset.m_graph = true;
+      dataset.m_graph = false;
       datasets.append(dataset);
 
       ++channel;
     }
 
-    // Create a plotting group from the dataset array
-    JSON::Group plots;
-    plots.m_datasets = datasets;
-    plots.m_title = tr("Multiple Plots");
-    plots.m_widget = QStringLiteral("multiplot");
+    // Create a project frame from the groups
+    JSON::Frame frame;
+    frame.m_title = tr("Quick Plot");
 
     // Create a datagrid group from the dataset array
     JSON::Group datagrid;
@@ -355,13 +353,21 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     datagrid.m_title = tr("Data Grid");
     datagrid.m_widget = QStringLiteral("datagrid");
     for (int i = 0; i < datagrid.m_datasets.count(); ++i)
-      datagrid.m_datasets[i].m_graph = false;
+      datagrid.m_datasets[i].m_graph = true;
 
-    // Create a project frame from the groups
-    JSON::Frame frame;
-    frame.m_groups.append(plots);
+    // Append datagrid to frame
     frame.m_groups.append(datagrid);
-    frame.m_title = tr("Quick Plot");
+
+    // Create a multiplot group when multiple datasets are found
+    if (datasets.count() > 1)
+    {
+      JSON::Group plots;
+      plots.m_datasets = datasets;
+      plots.m_title = tr("Multiple Plots");
+      plots.m_widget = QStringLiteral("multiplot");
+      frame.m_groups.append(plots);
+    }
+
     Q_EMIT frameChanged(frame);
   }
 }

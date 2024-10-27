@@ -20,115 +20,138 @@
  * THE SOFTWARE.
  */
 
-#include <QResizeEvent>
-
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Bar.h"
-#include "Misc/ThemeManager.h"
 
 /**
- * Constructor function, configures widget style & signal/slot connections.
+ * @brief Constructs a Bar widget.
+ * @param index The index of the bar in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::Bar::Bar(const int index)
-  : m_index(index)
+Widgets::Bar::Bar(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
+  , m_value(0)
+  , m_minValue(0)
+  , m_maxValue(100)
+  , m_alarmValue(0)
 {
-  // Get pointers to serial studio modules
   auto dash = &UI::Dashboard::instance();
+  if (m_index >= 0 && m_index < dash->barCount())
+  {
+    auto dataset = dash->getBar(m_index);
 
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->barCount())
-    return;
+    m_units = dataset.units();
+    m_minValue = dataset.min();
+    m_maxValue = dataset.max();
+    m_alarmValue = dataset.alarm();
 
-  // Configure thermo style
-  m_thermo.setPipeWidth(64);
-  m_thermo.setBorderWidth(1);
-
-  // Get initial properties from dataset
-  auto dataset = UI::Dashboard::instance().getBar(m_index);
-  m_thermo.setAlarmLevel(dataset.alarm());
-  m_thermo.setAlarmEnabled(m_thermo.alarmLevel() > 0);
-  m_thermo.setScale(dataset.min(), dataset.max());
-
-  // Set widget pointer & disable auto resize
-  setWidget(&m_thermo, Qt::AlignHCenter, false);
-
-  // Configure visual style
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::Bar::onThemeChanged);
-
-  // React to dashboard events
-  connect(this, SIGNAL(resized()), this, SLOT(onResized()),
-          Qt::DirectConnection);
-  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
-          Qt::DirectConnection);
+    connect(dash, &UI::Dashboard::updated, this, &Bar::updateData);
+  }
 }
 
 /**
- * Resizes the thermo to fit the size of the parent window.
+ * @brief Returns the measurement units of the dataset.
  */
-void Widgets::Bar::onResized()
+const QString &Widgets::Bar::units() const
 {
-  m_thermo.setPipeWidth(width() * 0.25);
+  return m_units;
 }
 
 /**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
+ * @brief Returns the current value of the bar.
+ * @return The current value of the bar.
+ */
+qreal Widgets::Bar::value() const
+{
+  return m_value;
+}
+
+/**
+ * @brief Returns the minimum value of the bar scale.
+ * @return The minimum value of the bar scale.
+ */
+qreal Widgets::Bar::minValue() const
+{
+  return m_minValue;
+}
+
+/**
+ * @brief Returns the maximum value of the bar scale.
+ * @return The maximum value of the bar scale.
+ */
+qreal Widgets::Bar::maxValue() const
+{
+  return m_maxValue;
+}
+
+/**
+ * @brief Returns the alarm level of the bar.
+ * @return The alarm level of the bar.
+ */
+qreal Widgets::Bar::alarmValue() const
+{
+  return m_alarmValue;
+}
+
+/**
+ * @brief Calculates the fractional value of the bar's current level.
  *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the widget shall ignore the update request.
+ * This function computes the relative position of the current value within
+ * the range defined by minValue() and maxValue(). It is used to determine
+ * the visual height of the bar in the UI.
+ */
+qreal Widgets::Bar::fractionalValue() const
+{
+  qreal min = qMin(minValue(), maxValue());
+  qreal max = qMax(minValue(), maxValue());
+  const qreal range = max - min;
+  if (qFuzzyIsNull(range))
+    return 0.0;
+
+  const qreal level = value() - min;
+  return qBound(0.0, level / range, 1.0);
+}
+
+/**
+ * @brief Calculates the fractional value of the bar's alarm level.
+ *
+ * This function computes the relative position of the alarm level within
+ * the range defined by minValue() and maxValue(). It is used to determine
+ * the position where the bar's color should change to indicate an alarm state.
+ */
+qreal Widgets::Bar::alarmFractionalValue() const
+{
+  const qreal range = maxValue() - minValue();
+  if (qFuzzyIsNull(range))
+    return 0.0;
+
+  const qreal clampedAlarmLevel = qBound(minValue(), m_alarmValue, maxValue());
+  const qreal alarmPosition = clampedAlarmLevel - minValue();
+  return qBound(0.0, alarmPosition / range, 1.0);
+}
+
+/**
+ * @brief Updates the bar data from the Dashboard.
+ *
+ * This method retrieves the latest data for this bar from the Dashboard
+ * and updates the bar's value and text display accordingly.
  */
 void Widgets::Bar::updateData()
 {
-  // Widget not enabled, do nothing
-  if (!isEnabled())
-    return;
-
-  // Invalid index, abort update
-  auto dash = &UI::Dashboard::instance();
+  // Get the dashboard instance and check if the index is valid
+  static const auto *dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->barCount())
     return;
 
-  // Update bar level
-  auto dataset = dash->getBar(m_index);
-  auto value = dataset.value().toDouble();
-  m_thermo.setValue(value);
-  setValue(QStringLiteral("%1 %2").arg(
-      QString::number(value, 'f', UI::Dashboard::instance().precision()),
-      dataset.units()));
-}
+  // Get the gauge data from the Dashboard
+  auto &dataset = dash->getBar(m_index);
+  auto value = qMax(m_minValue, qMin(m_maxValue, dataset.value().toDouble()));
 
-/**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
- */
-void Widgets::Bar::onThemeChanged()
-{
-  // Set thermo palette
-  auto theme = &Misc::ThemeManager::instance();
-  QPalette palette;
-  palette.setColor(QPalette::Base,
-                   theme->getColor(QStringLiteral("groupbox_background")));
-  palette.setColor(QPalette::Window,
-                   theme->getColor(QStringLiteral("widget_window")));
-  palette.setColor(QPalette::Highlight,
-                   theme->getColor(QStringLiteral("alarm")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_text")));
-  palette.setColor(QPalette::Dark,
-                   theme->getColor(QStringLiteral("groupbox_hard_border")));
-  palette.setColor(QPalette::Light,
-                   theme->getColor(QStringLiteral("groupbox_hard_border")));
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("widget_text")));
-  m_thermo.setPalette(palette);
-
-  // Get thermo color
-  const auto colors = theme->colors()["widget_colors"].toArray();
-  const auto color = colors.count() > m_index
-                         ? colors.at(m_index).toString()
-                         : colors.at(colors.count() % m_index).toString();
-
-  m_thermo.setFillBrush(QBrush(QColor(color)));
+  // Redraw widget if required
+  if (!qFuzzyCompare(value, m_value))
+  {
+    m_value = value;
+    Q_EMIT updated();
+  }
 }

@@ -22,36 +22,29 @@
 
 #pragma once
 
+#include <QQuickItem>
 #include <UI/Dashboard.h>
 #include <Misc/TimerEvents.h>
-#include <UI/DeclarativeWidget.h>
 
 namespace UI
 {
 /**
  * @brief The DashboardWidget class
  *
- * The @c DashboardWidget class acts as a man-in-the-middle between the QML UI
- * and the C++ widgets. C++ widgets are loaded and initialized by this class,
- * and all the QML/Qt events are re-routed to the widgets using this class.
- * Finally, the C++ widget is "painted" on the QML interface in realtime,
- * effectively allowing us to use QWidget object directly in the QML user
- * interface.
+ * The DashboardWidget class serves as a container and manager for various
+ * dashboard widgets in a QML interface. It dynamically creates and manages
+ * QQuickItem-based widgets (including QQuickPaintedItems) based on the widget
+ * type specified by the UI::Dashboard class.
  *
- * By using this approach, the QML user interface only needs to know the total
- * number of widgets and use the "global-index" approach to initialize every
- * widget using a Repeater item.
+ * This class handles the creation, sizing, and visibility of widgets, as well
+ * as providing a consistent interface for different widget types to the QML
+ * layer. It supports both QQuickItem and QQuickPaintedItem derived widgets,
+ * allowing for flexible and efficient rendering strategies.
  *
- * On the other hand, this class figures out which widget should be loaded and
- * displayed in the user interface by knowing the "global-index" provider by the
- * QML Repeater.
- *
- * See the following files for more information:
- *      assets/qml/Dashboard/WidgetDelegate.qml
- *      assets/qml/Dashboard/WidgetLoader.qml
- *      assets/qml/Dashboard/WidgetGrid.qml
+ * The class also manages special cases like GPS widgets and external windows,
+ * providing properties and methods to handle these scenarios.
  */
-class DashboardWidget : public DeclarativeWidget
+class DashboardWidget : public QQuickItem
 {
   // clang-format off
   Q_OBJECT
@@ -62,39 +55,26 @@ class DashboardWidget : public DeclarativeWidget
   Q_PROPERTY(int relativeIndex
              READ relativeIndex
              NOTIFY widgetIndexChanged)
+  Q_PROPERTY(QColor widgetColor
+             READ widgetColor
+             NOTIFY widgetColorChanged)
   Q_PROPERTY(QString widgetIcon
              READ widgetIcon
              NOTIFY widgetIndexChanged)
   Q_PROPERTY(QString widgetTitle
              READ widgetTitle
              NOTIFY widgetIndexChanged)
-  Q_PROPERTY(bool isExternalWindow
-             READ isExternalWindow
-             WRITE setIsExternalWindow
-             NOTIFY isExternalWindowChanged)
-  Q_PROPERTY(bool widgetVisible
-             READ widgetVisible
-             WRITE setVisible
-             NOTIFY widgetVisibleChanged)
-  Q_PROPERTY(bool isGpsMap
-             READ isGpsMap
+  Q_PROPERTY(QString widgetQmlPath
+             READ widgetQmlPath
              NOTIFY widgetIndexChanged)
-  Q_PROPERTY(qreal gpsAltitude
-             READ gpsAltitude
-             NOTIFY gpsDataChanged)
-  Q_PROPERTY(qreal gpsLatitude
-             READ gpsLatitude
-             NOTIFY gpsDataChanged)
-  Q_PROPERTY(qreal gpsLongitude
-             READ gpsLongitude
-             NOTIFY gpsDataChanged)
+  Q_PROPERTY(QQuickItem* widgetModel
+             READ widgetModel
+             NOTIFY widgetIndexChanged)
   // clang-format on
 
 signals:
-  void gpsDataChanged();
   void widgetIndexChanged();
-  void widgetVisibleChanged();
-  void isExternalWindowChanged();
+  void widgetColorChanged();
 
 public:
   DashboardWidget(QQuickItem *parent = 0);
@@ -102,30 +82,20 @@ public:
 
   [[nodiscard]] int widgetIndex() const;
   [[nodiscard]] int relativeIndex() const;
-  [[nodiscard]] bool widgetVisible() const;
+  [[nodiscard]] QColor widgetColor() const;
   [[nodiscard]] QString widgetIcon() const;
   [[nodiscard]] QString widgetTitle() const;
-  [[nodiscard]] bool isExternalWindow() const;
   [[nodiscard]] UI::Dashboard::WidgetType widgetType() const;
 
-  [[nodiscard]] bool isGpsMap() const;
-  [[nodiscard]] qreal gpsAltitude() const;
-  [[nodiscard]] qreal gpsLatitude() const;
-  [[nodiscard]] qreal gpsLongitude() const;
+  [[nodiscard]] QString widgetQmlPath() const;
+  [[nodiscard]] QQuickItem *widgetModel() const;
 
 public slots:
-  void setVisible(const bool visible);
   void setWidgetIndex(const int index);
-  void setIsExternalWindow(const bool isWindow);
-
-private slots:
-  void updateWidgetVisible();
 
 private:
   int m_index;
-  bool m_isGpsMap;
-  bool m_widgetVisible;
-  bool m_isExternalWindow;
-  QWidget *m_dbWidget;
+  QString m_qmlPath;
+  QQuickItem *m_dbWidget;
 };
 } // namespace UI

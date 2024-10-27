@@ -28,16 +28,6 @@ Item {
   id: root
 
   //
-  // Start BLE scanning 2 seconds after the control is created
-  //
-  Component.onCompleted: timer.start()
-  Timer {
-    id: timer
-    interval: 2000
-    onTriggered: Cpp_IO_Bluetooth_LE.startDiscovery()
-  }
-
-  //
   // Control layout
   //
   ColumnLayout {

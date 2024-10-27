@@ -24,6 +24,8 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
+import QtGraphs
+import "Widgets" as Widgets
 import "Dialogs" as Dialogs
 import "MainWindow" as MainWindow
 import "ProjectEditor" as ProjectEditor
@@ -40,17 +42,22 @@ Item {
   }
 
   //
+  // Ask the user to save the project file before closing the app
+  //
+  function handleClose(close) {
+    close.accepted = false
+    if (Cpp_JSON_ProjectModel.askSave()) {
+      close.accepted = true
+      Qt.quit();
+    }
+  }
+
+  //
   // Main window + subdialogs
   //
   MainWindow.Root {
     id: mainWindow
-    onClosing: (close) => {
-                 close.accepted = false
-                 if (Cpp_JSON_ProjectModel.askSave()) {
-                   close.accepted = true
-                   Qt.quit()
-                 }
-               }
+    onClosing: (close) => app.handleClose(close)
 
     Dialogs.IconPicker {
       id: actionIconPicker

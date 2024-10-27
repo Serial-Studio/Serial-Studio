@@ -20,123 +20,81 @@
  * THE SOFTWARE.
  */
 
-#include <QtMath>
-#include <QResizeEvent>
-
 #include "UI/Dashboard.h"
-#include "Misc/ThemeManager.h"
 #include "UI/Widgets/Accelerometer.h"
 
 /**
- * Constructor function, configures widget style & signal/slot connections.
+ * @brief Constructs an Accelerometer widget.
+ * @param index The index of the accelerometer in the Dashboard.
+ * @param parent The parent QQuickItem (optional).
  */
-Widgets::Accelerometer::Accelerometer(const int index)
-  : m_index(index)
+Widgets::Accelerometer::Accelerometer(const int index, QQuickItem *parent)
+  : QQuickItem(parent)
+  , m_index(index)
+  , m_theta(0)
+  , m_magnitude(0)
 {
-  // Get pointers to Serial Studio modules
-  auto dash = &UI::Dashboard::instance();
-
-  // Invalid index, abort initialization
-  if (m_index < 0 || m_index >= dash->accelerometerCount())
-    return;
-
-  // Set gauge scale & display angles
-  m_gauge.setScale(0, 12);
-  m_gauge.setScaleArc(90, 360);
-
-  // Set widget pointer
-  setWidget(&m_gauge);
-
-  // Set visual style
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::Accelerometer::onThemeChanged);
-
-  // React to dashboard events
-  connect(dash, SIGNAL(updated()), this, SLOT(updateData()),
-          Qt::DirectConnection);
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+          &Accelerometer::updateData);
 }
 
 /**
- * Checks if the widget is enabled, if so, the widget shall be updated
- * to display the latest data frame.
+ * @brief Returns the current G-force magnitude of the accelerometer.
+ * @return The current G-force magnitude.
+ */
+qreal Widgets::Accelerometer::magnitude() const
+{
+  return m_magnitude;
+}
+
+/**
+ * @brief Returns the current theta of the G-Force vector.
+ */
+qreal Widgets::Accelerometer::theta() const
+{
+  return m_theta;
+}
+
+/**
+ * @brief Updates the accelerometer data from the Dashboard.
  *
- * If the widget is disabled (e.g. the user hides it, or the external
- * window is hidden), then the widget shall ignore the update request.
+ * This method retrieves the latest data for this accelerometer from the
+ * Dashboard and updates the G-force value and display accordingly.
  */
 void Widgets::Accelerometer::updateData()
 {
-  // Widget disabled
-  if (!isEnabled())
-    return;
-
-  // Invalid index, abort update
-  auto dash = &UI::Dashboard::instance();
+  // Get the dashboard instance and check if the index is valid
+  static const auto *dash = &UI::Dashboard::instance();
   if (m_index < 0 || m_index >= dash->accelerometerCount())
     return;
 
-  // Get accelerometer group & validate it
+  // Get the accelerometer data and validate the dataset count
   auto accelerometer = dash->getAccelerometer(m_index);
   if (accelerometer.datasetCount() != 3)
     return;
 
-  // Initialize x, y, z
-  double x = 0;
-  double y = 0;
-  double z = 0;
-
-  // Extract x, y, z from accelerometer group
+  // Obtain the X, Y, and Z acceleration values
+  qreal x = 0, y = 0;
   for (int i = 0; i < 3; ++i)
   {
     auto dataset = accelerometer.getDataset(i);
     if (dataset.widget() == QStringLiteral("x"))
       x = dataset.value().toDouble();
-    if (dataset.widget() == QStringLiteral("y"))
+    else if (dataset.widget() == QStringLiteral("y"))
       y = dataset.value().toDouble();
-    if (dataset.widget() == QStringLiteral("z"))
-      z = dataset.value().toDouble();
   }
 
-  // Divide accelerations by gravitational constant
-  x /= 9.81;
-  y /= 9.81;
-  z /= 9.81;
+  // Calculate the radius (magnitude) using only X and Y
+  const qreal r = qSqrt(qPow(x / 9.81, 2) + qPow(y / 9.81, 2));
 
-  // Normalize acceleration vector
-  const double G = qSqrt(qPow(x, 2) + qPow(y, 2) + qPow(z, 2));
+  // Calculate the angle using atan2 for the X-Y plane
+  const qreal theta = qAtan2(y, x) * (180.0 / M_PI);
 
-  // Update gauge
-  m_gauge.setValue(G);
-  setValue(QStringLiteral("%1 G").arg(
-      QString::number(G, 'f', UI::Dashboard::instance().precision())));
-}
-
-/**
- * Updates the widget's visual style and color palette to match the colors
- * defined by the application theme file.
- */
-void Widgets::Accelerometer::onThemeChanged()
-{
-  // Get needle & knob color
-  auto theme = &Misc::ThemeManager::instance();
-  const auto knobColor = theme->getColor("widget_text");
-  const auto colors = theme->colors()["widget_colors"].toArray();
-  const auto needleColor = colors.count() > m_index
-                               ? colors.at(m_index).toString()
-                               : colors.at(colors.count() % m_index).toString();
-
-  // Configure gauge needle
-  auto needle = new QwtDialSimpleNeedle(QwtDialSimpleNeedle::Arrow, true,
-                                        QColor(needleColor), knobColor);
-
-  // Set gauge palette
-  QPalette palette;
-  palette.setColor(QPalette::WindowText,
-                   theme->getColor(QStringLiteral("groupbox_background")));
-  palette.setColor(QPalette::Text,
-                   theme->getColor(QStringLiteral("widget_text")));
-
-  // Update gauge colors
-  m_gauge.setPalette(palette);
-  m_gauge.setNeedle(needle);
+  // Redraw item if required
+  if (!qFuzzyCompare(r, m_magnitude) || !qFuzzyCompare(theta, m_theta))
+  {
+    m_theta = theta;
+    m_magnitude = r;
+    Q_EMIT updated();
+  }
 }

@@ -22,29 +22,39 @@
 
 #pragma once
 
-#include <UI/Widgets/Common/BaseWidget.h>
-#include <UI/Widgets/Common/AttitudeIndicator.h>
+#include <QtQuick>
 
 namespace Widgets
 {
-class Gyroscope : public BaseWidget
+/**
+ * @brief A widget that displays the gyroscope data on an attitude indicator.
+ */
+class Gyroscope : public QQuickItem
 {
   Q_OBJECT
+  Q_PROPERTY(qreal yaw READ yaw NOTIFY updated)
+  Q_PROPERTY(qreal roll READ roll NOTIFY updated)
+  Q_PROPERTY(qreal pitch READ pitch NOTIFY updated)
+
+signals:
+  void updated();
 
 public:
-  Gyroscope(const int index = -1);
+  explicit Gyroscope(const int index = -1, QQuickItem *parent = nullptr);
+
+  [[nodiscard]] qreal yaw() const;
+  [[nodiscard]] qreal roll() const;
+  [[nodiscard]] qreal pitch() const;
 
 private slots:
   void updateData();
-  void updateLabel();
-  void onThemeChanged();
 
 private:
   int m_index;
-  int m_displayNum;
-  QString m_yaw;
-  QString m_roll;
-  QString m_pitch;
-  AttitudeIndicator m_gauge;
+  qreal m_yaw;
+  qreal m_roll;
+  qreal m_pitch;
+  QElapsedTimer m_timer;
 };
+
 } // namespace Widgets

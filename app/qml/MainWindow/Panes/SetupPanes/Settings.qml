@@ -100,6 +100,22 @@ Control {
             Cpp_Plugins_Bridge.enabled = checked
         }
       }
+
+      //
+      // Auto-updater
+      //
+      Label {
+        text: qsTr("Automatic Updates") + ":"
+      } Switch {
+        Layout.leftMargin: -8
+        Layout.alignment: Qt.AlignLeft
+        checked: mainWindow.automaticUpdates
+        palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+        onCheckedChanged: {
+          if (checked !== mainWindow.automaticUpdates)
+            mainWindow.automaticUpdates = checked
+        }
+      }
     }
 
     //
