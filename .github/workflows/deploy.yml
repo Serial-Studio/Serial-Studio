@@ -27,7 +27,8 @@ env:
   UNIXNAME: "serial-studio"
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
-  QT_MODULES: qtserialport qtconnectivity qtpositioning qtlocation qtgraphs qtquick3d qt3d
+  QT_MODULES: qtserialport qtconnectivity qtpositioning qtlocation qtgraphs qtquick3d qt3d qtdatavis3d qtshadertools
+ 
 
 #--------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
