@@ -687,6 +687,9 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
     if (key != WC::DashboardNoWidget)
       m_widgetGroups[key].append(group);
 
+    if (key == WC::DashboardAccelerometer || key == WC::DashboardGyroscope)
+      m_widgetGroups[WC::DashboardMultiPlot].append(group);
+
     for (const auto &dataset : group.datasets())
     {
       auto keys = WC::getDashboardWidgets(dataset);
