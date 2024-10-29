@@ -392,6 +392,7 @@ void IO::Console::print()
   // Set font
   auto font = Misc::CommonFonts::instance().monoFont();
   font.setPixelSize(10);
+  font.setPointSize(10);
   document.setDefaultFont(font);
 
   // Create printer object
@@ -483,7 +484,6 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
   // Only use \n as line separator for rendering
   data = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
-  data = data.replace(QStringLiteral("\n\r"), QStringLiteral("\n"));
   data = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
 
   // Get timestamp

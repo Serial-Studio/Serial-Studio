@@ -2449,8 +2449,7 @@ void JSON::ProjectModel::generateComboBoxModels()
   m_eolSequences.insert(QStringLiteral(""), tr("None"));
   m_eolSequences.insert(QStringLiteral("\n"), tr("New Line (\\n)"));
   m_eolSequences.insert(QStringLiteral("\r"), tr("Carriage Return (\\r)"));
-  m_eolSequences.insert(QStringLiteral("\n\r"), tr("NL + CR (\\n\\r)"));
-  m_eolSequences.insert(QStringLiteral("\r\n"), tr("CR + NL (\\r\\n)"));
+  m_eolSequences.insert(QStringLiteral("\r\n"), tr("CRLF (\\r\\n)"));
 
   // Initialize plot options
   m_plotOptions.clear();
