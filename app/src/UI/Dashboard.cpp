@@ -331,7 +331,7 @@ QStringList UI::Dashboard::actionIcons() const
 {
   QStringList icons;
   for (const auto &action : m_actions)
-    icons.append(action.icon());
+    icons.append(QString("qrc:/rcc/actions/%1.svg").arg(action.icon()));
 
   return icons;
 }
