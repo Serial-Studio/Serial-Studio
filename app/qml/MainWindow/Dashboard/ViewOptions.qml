@@ -184,6 +184,8 @@ Widgets.Pane {
         ComboBox {
           id: axisVisibility
           Layout.fillWidth: true
+          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible
+
           model: [
             qsTr("Show both X and Y axes"),
             qsTr("Show only X axis"),
@@ -203,8 +205,6 @@ Widgets.Pane {
               return 3;
             }
           }
-
-          visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.fftCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
 
           onCurrentIndexChanged: {
             switch (currentIndex) {
@@ -244,14 +244,14 @@ Widgets.Pane {
           //
           Label {
             text: qsTr("Points:")
-            visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+            visible: Cpp_UI_Dashboard.pointsWidgetVisible
           } Slider {
             id: plotPoints
             from: 0
             to: 100
             Layout.fillWidth: true
             value: logposition(100)
-            visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+            visible: Cpp_UI_Dashboard.pointsWidgetVisible
             onValueChanged: {
               var log = logslider(value)
               if (Cpp_UI_Dashboard.points !== log)
@@ -259,7 +259,7 @@ Widgets.Pane {
             }
           } Label {
             text: logslider(plotPoints.value)
-            visible: Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
+            visible: Cpp_UI_Dashboard.pointsWidgetVisible
           }
 
           //
@@ -267,15 +267,18 @@ Widgets.Pane {
           //
           Label {
             text: qsTr("Decimal places:")
+            visible: Cpp_UI_Dashboard.precisionWidgetVisible
           } Slider {
             id: decimalPlaces
             to: 6
             from: 0
             value: 2
             Layout.fillWidth: true
+            visible: Cpp_UI_Dashboard.precisionWidgetVisible
             onValueChanged: Cpp_UI_Dashboard.precision = value
           } Label {
             text: Cpp_UI_Dashboard.precision
+            visible: Cpp_UI_Dashboard.precisionWidgetVisible
           }
 
           //
@@ -283,16 +286,19 @@ Widgets.Pane {
           //
           Label {
             text: qsTr("Columns:")
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 1
           } Slider {
             id: columns
             to: 10
             from: 1
             value: 3
             Layout.fillWidth: true
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 1
             onValueChanged: root.widgetColumns = Math.round(value)
             Component.onCompleted: root.widgetColumns = Math.round(value)
           } Label {
             text: Math.round(columns.value)
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 1
           }
         }
 
@@ -304,129 +310,18 @@ Widgets.Pane {
         }
 
         //
-        // Groups
+        // Groups & Widgets
         //
-        ViewOptionsDelegate {
-          title: qsTr("Data Grids")
-          count: Cpp_UI_Dashboard.datagridCount
-          titles: Cpp_UI_Dashboard.datagridTitles
-          icon: "qrc:/rcc/icons/dashboard/datagrid.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setDataGridVisible(index, checked)
-        }
-
-        //
-        // Multiplots
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Multiple Data Plots")
-          count: Cpp_UI_Dashboard.multiPlotCount
-          titles: Cpp_UI_Dashboard.multiPlotTitles
-          icon: "qrc:/rcc/icons/dashboard/multiplot.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setMultiplotVisible(index, checked)
-        }
-
-        //
-        // LEDs
-        //
-        ViewOptionsDelegate {
-          title: qsTr("LED Panels")
-          count: Cpp_UI_Dashboard.ledCount
-          titles: Cpp_UI_Dashboard.ledTitles
-          icon: "qrc:/rcc/icons/dashboard/led.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setLedVisible(index, checked)
-        }
-
-        //
-        // FFT
-        //
-        ViewOptionsDelegate {
-          title: qsTr("FFT Plots")
-          count: Cpp_UI_Dashboard.fftCount
-          colors: Cpp_UI_Dashboard.fftColors
-          titles: Cpp_UI_Dashboard.fftTitles
-          icon: "qrc:/rcc/icons/dashboard/fft.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setFFTVisible(index, checked)
-        }
-
-        //
-        // Plots
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Data Plots")
-          count: Cpp_UI_Dashboard.plotCount
-          colors: Cpp_UI_Dashboard.plotColors
-          titles: Cpp_UI_Dashboard.plotTitles
-          icon: "qrc:/rcc/icons/dashboard/plot.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setPlotVisible(index, checked)
-        }
-
-        //
-        // Bars
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Bars")
-          count: Cpp_UI_Dashboard.barCount
-          colors: Cpp_UI_Dashboard.barColors
-          titles: Cpp_UI_Dashboard.barTitles
-          icon: "qrc:/rcc/icons/dashboard/bar.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setBarVisible(index, checked)
-        }
-
-        //
-        // Gauges
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Gauges")
-          count: Cpp_UI_Dashboard.gaugeCount
-          colors: Cpp_UI_Dashboard.gaugeColors
-          titles: Cpp_UI_Dashboard.gaugeTitles
-          icon: "qrc:/rcc/icons/dashboard/gauge.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGaugeVisible(index, checked)
-        }
-
-        //
-        // Compasses
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Compasses")
-          count: Cpp_UI_Dashboard.compassCount
-          colors: Cpp_UI_Dashboard.compassColors
-          titles: Cpp_UI_Dashboard.compassTitles
-          icon: "qrc:/rcc/icons/dashboard/compass.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setCompassVisible(index, checked)
-        }
-
-        //
-        // Gyroscopes
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Gyroscopes")
-          count: Cpp_UI_Dashboard.gyroscopeCount
-          titles: Cpp_UI_Dashboard.gyroscopeTitles
-          icon: "qrc:/rcc/icons/dashboard/gyroscope.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGyroscopeVisible(index, checked)
-        }
-
-        //
-        // Accelerometers
-        //
-        ViewOptionsDelegate {
-          title: qsTr("Accelerometers")
-          count: Cpp_UI_Dashboard.accelerometerCount
-          titles: Cpp_UI_Dashboard.accelerometerTitles
-          icon: "qrc:/rcc/icons/dashboard/accelerometer.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setAccelerometerVisible(index, checked)
-        }
-
-        //
-        // Maps
-        //
-        ViewOptionsDelegate {
-          title: qsTr("GPS")
-          count: Cpp_UI_Dashboard.gpsCount
-          titles: Cpp_UI_Dashboard.gpsTitles
-          icon: "qrc:/rcc/icons/dashboard/gps.svg"
-          onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setGpsVisible(index, checked)
+        Repeater {
+          model: Cpp_UI_Dashboard.availableWidgets
+          delegate: ViewOptionsDelegate {
+            count: Cpp_UI_Dashboard.widgetCount(modelData)
+            colors: Cpp_UI_Dashboard.widgetColors(modelData)
+            titles: Cpp_UI_Dashboard.widgetTitles(modelData)
+            icon: Cpp_UI_Dashboard.availableWidgetIcons[index]
+            title: Cpp_UI_Dashboard.availableWidgetTitles[index]
+            onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setWidgetVisible(modelData, index, checked)
+          }
         }
       }
     }

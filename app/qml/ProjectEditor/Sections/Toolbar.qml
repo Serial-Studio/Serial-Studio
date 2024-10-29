@@ -197,7 +197,7 @@ ToolBar {
       text: qsTr("Data Grid")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-datagrid.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), ProjectModel.DataGrid)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), WC.DataGrid)
     }
 
     //
@@ -207,7 +207,7 @@ ToolBar {
       text: qsTr("Multiple Plots")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), ProjectModel.MultiPlot)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), WC.MultiPlot)
     }
 
     //
@@ -217,7 +217,7 @@ ToolBar {
       text: qsTr("Accelerometer")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), ProjectModel.Accelerometer)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), WC.Accelerometer)
     }
 
     //
@@ -227,7 +227,7 @@ ToolBar {
       text: qsTr("Gyroscope")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), ProjectModel.Gyroscope)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), WC.Gyroscope)
     }
 
     //
@@ -237,7 +237,7 @@ ToolBar {
       text: qsTr("Map")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), ProjectModel.GPS)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), WC.GPS)
     }
 
     //
@@ -247,7 +247,7 @@ ToolBar {
       text: qsTr("Container")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), ProjectModel.NoGroupWidget)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), WC.NoGroupWidget)
     }
 
     //

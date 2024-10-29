@@ -25,6 +25,7 @@
 #include <QSimpleUpdater.h>
 
 #include "AppInfo.h"
+#include "WidgetsCommon.h"
 
 #include "CSV/Export.h"
 #include "CSV/Player.h"
@@ -226,6 +227,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<JSON::FrameBuilder>("SerialStudio", 1, 0, "JsonGenerator");
 
   // Register generic dashboard widget
+  qmlRegisterType<WC>("SerialStudio", 1, 0, "WC");
   qmlRegisterType<UI::Dashboard>("SerialStudio", 1, 0, "Dashboard");
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
 }

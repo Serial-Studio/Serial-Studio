@@ -104,8 +104,8 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetGeneric)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
-          onClicked: Cpp_JSON_ProjectModel.addDataset(ProjectModel.DatasetGeneric)
         }
 
         //
@@ -118,8 +118,8 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetPlot)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
-          onClicked: Cpp_JSON_ProjectModel.addDataset(ProjectModel.DatasetPlot)
         }
 
         //
@@ -132,8 +132,8 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetFFT)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
-          onClicked: Cpp_JSON_ProjectModel.addDataset(ProjectModel.DatasetFFT)
         }
 
         //
@@ -146,8 +146,8 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetBar)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
-          onClicked: Cpp_JSON_ProjectModel.addDataset(ProjectModel.DatasetBar)
         }
 
         //
@@ -160,8 +160,8 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetGauge)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
-          onClicked: Cpp_JSON_ProjectModel.addDataset(ProjectModel.DatasetGauge)
         }
 
         //
@@ -174,8 +174,8 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetCompass)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
-          onClicked: Cpp_JSON_ProjectModel.addDataset(ProjectModel.DatasetCompass)
         }
 
         //
@@ -188,8 +188,8 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetLED)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
-          onClicked: Cpp_JSON_ProjectModel.addDataset(ProjectModel.DatasetLED)
         }
 
         //

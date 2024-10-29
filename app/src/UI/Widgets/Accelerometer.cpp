@@ -65,19 +65,19 @@ void Widgets::Accelerometer::updateData()
 {
   // Get the dashboard instance and check if the index is valid
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->accelerometerCount())
+  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardAccelerometer))
     return;
 
   // Get the accelerometer data and validate the dataset count
-  auto accelerometer = dash->getAccelerometer(m_index);
-  if (accelerometer.datasetCount() != 3)
+  const auto &acc = dash->getGroupWidget(WC::DashboardAccelerometer, m_index);
+  if (acc.datasetCount() != 3)
     return;
 
   // Obtain the X, Y, and Z acceleration values
   qreal x = 0, y = 0;
   for (int i = 0; i < 3; ++i)
   {
-    auto dataset = accelerometer.getDataset(i);
+    auto dataset = acc.getDataset(i);
     if (dataset.widget() == QStringLiteral("x"))
       x = dataset.value().toDouble();
     else if (dataset.widget() == QStringLiteral("y"))

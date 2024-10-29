@@ -35,9 +35,9 @@ Widgets::LEDPanel::LEDPanel(const int index, QQuickItem *parent)
 {
   // Populate the LED states, titles, and alarm states
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->ledCount())
+  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardLED))
   {
-    auto group = dash->getLED(m_index);
+    const auto &group = dash->getGroupWidget(WC::DashboardLED, m_index);
     m_states.resize(group.datasetCount());
     m_titles.resize(group.datasetCount());
     m_colors.resize(group.datasetCount());
@@ -122,16 +122,16 @@ void Widgets::LEDPanel::updateData()
 {
   // Get the dashboard instance and check if the index is valid
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->ledCount())
+  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardLED))
     return;
 
   // Get the LED group and update the LED states
   bool changed = false;
-  auto group = dash->getLED(m_index);
+  const auto &group = dash->getGroupWidget(WC::DashboardLED, m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
     // Get the dataset and its values
-    const auto dataset = group.getDataset(i);
+    const auto &dataset = group.getDataset(i);
     const auto value = dataset.value().toDouble();
     const auto alarmValue = dataset.alarm();
 
@@ -188,15 +188,15 @@ void Widgets::LEDPanel::onThemeChanged()
   // Obtain colors for each dataset in the widget
   m_colors.clear();
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->ledCount())
+  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardLED))
   {
-    auto group = dash->getLED(m_index);
+    const auto &group = dash->getGroupWidget(WC::DashboardLED, m_index);
     m_colors.resize(group.datasetCount());
 
     for (int i = 0; i < group.datasetCount(); ++i)
     {
-      auto dataset = group.getDataset(i);
-      const auto index = group.getDataset(i).index() - 1;
+      const auto &dataset = group.getDataset(i);
+      const auto index = dataset.index() - 1;
       const auto color = colors.count() > index
                              ? colors.at(index).toString()
                              : colors.at(colors.count() % index).toString();

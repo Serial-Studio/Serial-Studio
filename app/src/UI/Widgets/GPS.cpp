@@ -78,17 +78,17 @@ void Widgets::GPS::updateData()
 
   // Invalid index, abort update
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->gpsCount())
+  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardGPS))
     return;
 
   // Get group reference
-  auto group = dash->getGPS(m_index);
+  const auto &group = dash->getGroupWidget(WC::DashboardGPS, m_index);
 
   // Get latitiude/longitude from datasets
   qreal lat = 0, lon = 0, alt = 0;
   for (int i = 0; i < group.datasetCount(); ++i)
   {
-    auto dataset = group.getDataset(i);
+    const auto &dataset = group.getDataset(i);
     if (dataset.widget() == QStringLiteral("lat"))
       lat = dataset.value().toDouble();
     else if (dataset.widget() == QStringLiteral("lon"))

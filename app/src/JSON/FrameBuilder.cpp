@@ -286,15 +286,15 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     QString separator;
     switch (JSON::ProjectModel::instance().decoderMethod())
     {
-      case JSON::ProjectModel::Normal:
+      case WC::Normal:
         frameData = QString::fromUtf8(data);
         separator = IO::Manager::instance().separatorSequence();
         break;
-      case JSON::ProjectModel::Hexadecimal:
+      case WC::Hexadecimal:
         frameData = QString::fromUtf8(data.toHex());
         separator = "";
         break;
-      case JSON::ProjectModel::Base64:
+      case WC::Base64:
         frameData = QString::fromUtf8(data.toBase64());
         separator = "";
         break;

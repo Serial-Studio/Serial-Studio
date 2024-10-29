@@ -8,10 +8,10 @@ ColumnLayout {
   visible: count > 0
 
   property int count: 0
+  property var colors: [""]
   property var titles: [""]
   property string icon: ""
   property string title: ""
-  property var colors: [Cpp_ThemeManager.colors["view_switch"]]
 
   signal checkedChanged(var index, var checked)
 

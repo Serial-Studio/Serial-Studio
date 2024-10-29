@@ -37,9 +37,9 @@ Widgets::Gauge::Gauge(const int index, QQuickItem *parent)
   , m_alarmValue(0)
 {
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->gaugeCount())
+  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardGauge))
   {
-    auto dataset = dash->getGauge(m_index);
+    const auto &dataset = dash->getDatasetWidget(WC::DashboardGauge, m_index);
 
     m_units = dataset.units();
     m_minValue = dataset.min();
@@ -103,11 +103,11 @@ void Widgets::Gauge::updateData()
 {
   // Get the dashboard instance and check if the index is valid
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->gaugeCount())
+  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardGauge))
     return;
 
   // Get the gauge data from the Dashboard
-  auto &dataset = dash->getGauge(m_index);
+  const auto &dataset = dash->getDatasetWidget(WC::DashboardGauge, m_index);
   auto value = qMax(m_minValue, qMin(m_maxValue, dataset.value().toDouble()));
 
   // Redraw widget if required

@@ -141,7 +141,7 @@ JSON::ProjectModel::ProjectModel()
   , m_frameEndSequence("")
   , m_frameStartSequence("")
   , m_currentView(ProjectView)
-  , m_frameDecoder(Normal)
+  , m_frameDecoder(WC::Normal)
   , m_modified(false)
   , m_filePath("")
   , m_treeModel(nullptr)
@@ -264,7 +264,7 @@ JSON::ProjectModel::CurrentView JSON::ProjectModel::currentView() const
  *
  * @return The current decoder method as a value from the `DecoderMethod` enum.
  */
-JSON::ProjectModel::DecoderMethod JSON::ProjectModel::decoderMethod() const
+WC::DecoderMethod JSON::ProjectModel::decoderMethod() const
 {
   return m_frameDecoder;
 }
@@ -536,25 +536,25 @@ int JSON::ProjectModel::groupCount() const
  */
 quint8 JSON::ProjectModel::datasetOptions() const
 {
-  quint8 option = DatasetGeneric;
+  quint8 option = WC::DatasetGeneric;
 
   if (m_selectedDataset.graph())
-    option |= DatasetPlot;
+    option |= WC::DatasetPlot;
 
   if (m_selectedDataset.fft())
-    option |= DatasetFFT;
+    option |= WC::DatasetFFT;
 
   if (m_selectedDataset.led())
-    option |= DatasetLED;
+    option |= WC::DatasetLED;
 
   if (m_selectedDataset.widget() == QStringLiteral("bar"))
-    option |= DatasetBar;
+    option |= WC::DatasetBar;
 
   else if (m_selectedDataset.widget() == QStringLiteral("gauge"))
-    option |= DatasetGauge;
+    option |= WC::DatasetGauge;
 
   else if (m_selectedDataset.widget() == QStringLiteral("compass"))
-    option |= DatasetCompass;
+    option |= WC::DatasetCompass;
 
   return option;
 }
@@ -792,7 +792,7 @@ void JSON::ProjectModel::newJsonFile()
 
   // Reset project properties
   m_separator = ",";
-  m_frameDecoder = Normal;
+  m_frameDecoder = WC::Normal;
   m_frameEndSequence = "*/";
   m_mapTilerApiKey = "";
   m_thunderforestApiKey = "";
@@ -897,7 +897,8 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   m_frameStartSequence = json.value("frameStart").toString();
   m_mapTilerApiKey = json.value("mapTilerApiKey").toString();
   m_thunderforestApiKey = json.value("thunderforestApiKey").toString();
-  m_frameDecoder = static_cast<DecoderMethod>(json.value("decoder").toInt());
+  m_frameDecoder
+      = static_cast<WC::DecoderMethod>(json.value("decoder").toInt());
 
   // Read groups from JSON document
   auto groups = json.value("groups").toArray();
@@ -1190,7 +1191,7 @@ void JSON::ProjectModel::duplicateCurrentDataset()
  * @param option The dataset option that defines the type of dataset to add
  *               (e.g., Plot, FFT, Bar, Gauge, Compass).
  */
-void JSON::ProjectModel::addDataset(const DatasetOption option)
+void JSON::ProjectModel::addDataset(const WC::DatasetOption option)
 {
   // Initialize a new dataset
   const auto groupId = m_selectedGroup.groupId();
@@ -1200,30 +1201,30 @@ void JSON::ProjectModel::addDataset(const DatasetOption option)
   QString title;
   switch (option)
   {
-    case DatasetGeneric:
+    case WC::DatasetGeneric:
       title = tr("New Dataset");
       break;
-    case DatasetPlot:
+    case WC::DatasetPlot:
       title = tr("New Plot");
       dataset.m_graph = true;
       break;
-    case DatasetFFT:
+    case WC::DatasetFFT:
       title = tr("New FFT Plot");
       dataset.m_fft = true;
       break;
-    case DatasetBar:
+    case WC::DatasetBar:
       title = tr("New Bar Widget");
       dataset.m_widget = QStringLiteral("bar");
       break;
-    case DatasetGauge:
+    case WC::DatasetGauge:
       title = tr("New Gauge");
       dataset.m_widget = QStringLiteral("gauge");
       break;
-    case DatasetCompass:
+    case WC::DatasetCompass:
       title = tr("New Compass");
       dataset.m_widget = QStringLiteral("compass");
       break;
-    case DatasetLED:
+    case WC::DatasetLED:
       title = tr("New LED Indicator");
       dataset.m_led = true;
       break;
@@ -1298,28 +1299,28 @@ void JSON::ProjectModel::addDataset(const DatasetOption option)
  * @param checked A boolean indicating whether the option should be enabled
  *                (true) or disabled (false).
  */
-void JSON::ProjectModel::changeDatasetOption(const DatasetOption option,
+void JSON::ProjectModel::changeDatasetOption(const WC::DatasetOption option,
                                              const bool checked)
 {
   // Modify dataset options
   switch (option)
   {
-    case DatasetPlot:
+    case WC::DatasetPlot:
       m_selectedDataset.m_graph = checked;
       break;
-    case DatasetFFT:
+    case WC::DatasetFFT:
       m_selectedDataset.m_fft = checked;
       break;
-    case DatasetBar:
+    case WC::DatasetBar:
       m_selectedDataset.m_widget = checked ? QStringLiteral("bar") : "";
       break;
-    case DatasetGauge:
+    case WC::DatasetGauge:
       m_selectedDataset.m_widget = checked ? QStringLiteral("gauge") : "";
       break;
-    case DatasetCompass:
+    case WC::DatasetCompass:
       m_selectedDataset.m_widget = checked ? QStringLiteral("compass") : "";
       break;
-    case DatasetLED:
+    case WC::DatasetLED:
       m_selectedDataset.m_led = checked;
       break;
     default:
@@ -1423,7 +1424,7 @@ void JSON::ProjectModel::addAction()
  * @param widget The widget type associated with the group.
  */
 void JSON::ProjectModel::addGroup(const QString &title,
-                                  const GroupWidget widget)
+                                  const WC::GroupWidget widget)
 {
   // Check if any existing group has the same title
   int count = 1;
@@ -1498,7 +1499,7 @@ void JSON::ProjectModel::addGroup(const QString &title,
  * @return True if the widget was successfully assigned, false otherwise.
  */
 bool JSON::ProjectModel::setGroupWidget(const int group,
-                                        const GroupWidget widget)
+                                        const WC::GroupWidget widget)
 {
   // Get group data
   auto grp = m_groups.at(group);
@@ -1507,7 +1508,8 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
   // Warn user if group contains existing datasets
   if (!(grp.m_datasets.isEmpty()))
   {
-    if ((widget == DataGrid || widget == MultiPlot || widget == NoGroupWidget)
+    if ((widget == WC::DataGrid || widget == WC::MultiPlot
+         || widget == WC::NoGroupWidget)
         && (grp.widget() == "multiplot" || grp.widget() == "datagrid"
             || grp.widget() == ""))
       grp.m_widget = "";
@@ -1526,19 +1528,19 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
   }
 
   // No widget
-  if (widget == NoGroupWidget)
+  if (widget == WC::NoGroupWidget)
     grp.m_widget = "";
 
   // Data grid widget
-  if (widget == DataGrid)
+  if (widget == WC::DataGrid)
     grp.m_widget = "datagrid";
 
   // Multiplot widget
-  else if (widget == MultiPlot)
+  else if (widget == WC::MultiPlot)
     grp.m_widget = "multiplot";
 
   // Accelerometer widget
-  else if (widget == Accelerometer)
+  else if (widget == WC::Accelerometer)
   {
     // Set widget type
     grp.m_widget = "accelerometer";
@@ -1584,7 +1586,7 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
   }
 
   // Gyroscope widget
-  else if (widget == Gyroscope)
+  else if (widget == WC::Gyroscope)
   {
     // Set widget type
     grp.m_widget = "gyro";
@@ -1630,7 +1632,7 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
   }
 
   // Map widget
-  else if (widget == GPS)
+  else if (widget == WC::GPS)
   {
     // Set widget type
     grp.m_widget = "map";
@@ -2539,20 +2541,20 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
   else if (id == kGroupView_Widget)
   {
     // Obtain widget enum from string
-    GroupWidget widget;
+    WC::GroupWidget widget;
     const auto widgetStr = widgets.at(value.toInt());
     if (widgetStr == "accelerometer")
-      widget = Accelerometer;
+      widget = WC::Accelerometer;
     else if (widgetStr == "multiplot")
-      widget = MultiPlot;
+      widget = WC::MultiPlot;
     else if (widgetStr == "gyro")
-      widget = Gyroscope;
+      widget = WC::Gyroscope;
     else if (widgetStr == "map")
-      widget = GPS;
+      widget = WC::GPS;
     else if (widgetStr == "datagrid")
-      widget = DataGrid;
+      widget = WC::DataGrid;
     else
-      widget = NoGroupWidget;
+      widget = WC::NoGroupWidget;
 
     // Update group
     modified = setGroupWidget(groupId, widget);
@@ -2684,7 +2686,7 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
       m_frameStartSequence = value.toString();
       break;
     case kProjectView_FrameDecoder:
-      m_frameDecoder = static_cast<DecoderMethod>(value.toInt());
+      m_frameDecoder = static_cast<WC::DecoderMethod>(value.toInt());
       break;
     case kProjectView_ThunderforestApiKey:
       m_thunderforestApiKey = value.toString();

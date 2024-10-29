@@ -51,34 +51,6 @@ Item {
   readonly property bool xLabelVisible: root.height >= 120 && (Cpp_UI_Dashboard.axisVisibility & Dashboard.AxisX)
 
   //
-  // Y-axis label
-  //
-  Item {
-    id: _yLabelContainer
-    width: _yLabel.height
-    visible: root.yLabelVisible
-
-    anchors {
-      top: parent.top
-      left: parent.left
-      bottom: parent.bottom
-    }
-
-    Label {
-      id: _yLabel
-      rotation: 270
-      elide: Qt.ElideRight
-      width: parent.height
-      anchors.centerIn: parent
-      horizontalAlignment: Qt.AlignHCenter
-      font: Cpp_Misc_CommonFonts.customMonoFont(11)
-      color: Cpp_ThemeManager.colors["widget_text"]
-      anchors.verticalCenterOffset: _yLabel.implicitWidth <= _graph.height ?
-                                      -1 * Math.abs(_graph.marginBottom - _graph.marginTop) : 0
-    }
-  }
-
-  //
   // Plot widget
   //
   GraphsView {
@@ -180,6 +152,34 @@ Item {
   }
 
   //
+  // Y-axis label
+  //
+  Item {
+    id: _yLabelContainer
+    width: _yLabel.height
+    visible: root.yLabelVisible
+
+    anchors {
+      top: parent.top
+      left: parent.left
+      bottom: parent.bottom
+    }
+
+    Label {
+      id: _yLabel
+      rotation: 270
+      elide: Qt.ElideRight
+      width: parent.height
+      anchors.centerIn: parent
+      horizontalAlignment: Qt.AlignHCenter
+      font: Cpp_Misc_CommonFonts.customMonoFont(11)
+      color: Cpp_ThemeManager.colors["widget_text"]
+      anchors.verticalCenterOffset: root.xLabelVisible && _yLabel.implicitWidth <= _graph.height ?
+                                      -1 * Math.abs(_graph.marginBottom - _graph.marginTop) : 0
+    }
+  }
+
+  //
   // X-axis label
   //
   Item {
@@ -202,7 +202,7 @@ Item {
       horizontalAlignment: Qt.AlignHCenter
       font: Cpp_Misc_CommonFonts.customMonoFont(11)
       color: Cpp_ThemeManager.colors["widget_text"]
-      anchors.horizontalCenterOffset: Math.abs(_graph.marginLeft - _graph.marginRight)
+      anchors.horizontalCenterOffset: root.yLabelVisible ? Math.abs(_graph.marginLeft - _graph.marginRight) : 0
     }
   }
 }

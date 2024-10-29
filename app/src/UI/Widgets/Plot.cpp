@@ -38,9 +38,9 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
 {
   // Obtain dataset information
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->plotCount())
+  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardPlot))
   {
-    auto dataset = dash->getPlot(m_index);
+    const auto &dataset = dash->getDatasetWidget(WC::DashboardPlot, m_index);
 
     m_minY = dataset.min();
     m_maxY = dataset.max();
@@ -217,7 +217,9 @@ void Widgets::Plot::calculateAutoScaleRange()
   // Obtain min/max values from datasets
   else
   {
-    const auto &dataset = UI::Dashboard::instance().getPlot(m_index);
+    const auto &dataset = UI::Dashboard::instance().getDatasetWidget(
+        WC::DashboardPlot, m_index);
+
     ok &= !qFuzzyCompare(dataset.min(), dataset.max());
     if (ok)
     {

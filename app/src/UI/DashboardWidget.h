@@ -85,7 +85,7 @@ public:
   [[nodiscard]] QColor widgetColor() const;
   [[nodiscard]] QString widgetIcon() const;
   [[nodiscard]] QString widgetTitle() const;
-  [[nodiscard]] UI::Dashboard::WidgetType widgetType() const;
+  [[nodiscard]] WC::DashboardWidget widgetType() const;
 
   [[nodiscard]] QString widgetQmlPath() const;
   [[nodiscard]] QQuickItem *widgetModel() const;
@@ -95,6 +95,9 @@ public slots:
 
 private:
   int m_index;
+  int m_relativeIndex;
+  WC::DashboardWidget m_widgetType;
+
   QString m_qmlPath;
   QQuickItem *m_dbWidget;
 };

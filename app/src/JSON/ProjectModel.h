@@ -30,6 +30,8 @@
 #include <QItemSelectionModel>
 #include <Misc/OsmTemplateServer.h>
 
+#include <WidgetsCommon.h>
+
 namespace JSON
 {
 class CustomModel;
@@ -168,51 +170,6 @@ public:
   Q_ENUM(CurrentView)
 
   /**
-   * @brief Enum representing the different methods available for decoding data.
-   */
-  enum DecoderMethod
-  {
-    Normal,
-    Hexadecimal,
-    Base64
-  };
-  Q_ENUM(DecoderMethod)
-
-  /**
-   * @brief Enum representing the different widget types available for groups.
-   */
-  enum GroupWidget
-  {
-    DataGrid,
-    Accelerometer,
-    Gyroscope,
-    GPS,
-    MultiPlot,
-    NoGroupWidget,
-  };
-  Q_ENUM(GroupWidget)
-
-  /**
-   * @brief Enum representing the options available for datasets.
-   *
-   * These options are represented as bit flags, allowing for combinations of
-   * multiple options.
-   */
-  // clang-format off
-  enum DatasetOption
-  {
-    DatasetGeneric = 0b00000000,
-    DatasetPlot    = 0b00000001,
-    DatasetFFT     = 0b00000010,
-    DatasetBar     = 0b00000100,
-    DatasetGauge   = 0b00001000,
-    DatasetCompass = 0b00010000,
-    DatasetLED     = 0b00100000,
-  };
-  Q_ENUM(DatasetOption)
-  // clang-format on
-
-  /**
    * @brief Enum representing the different types of editor widgets available
    *        for editing parameters.
    */
@@ -251,7 +208,7 @@ public:
 
   [[nodiscard]] bool modified() const;
   [[nodiscard]] CurrentView currentView() const;
-  [[nodiscard]] DecoderMethod decoderMethod() const;
+  [[nodiscard]] WC::DecoderMethod decoderMethod() const;
 
   [[nodiscard]] QString jsonFileName() const;
   [[nodiscard]] QString jsonProjectsPath() const;
@@ -298,12 +255,12 @@ public slots:
   void duplicateCurrentGroup();
   void duplicateCurrentAction();
   void duplicateCurrentDataset();
-  void addDataset(const DatasetOption options);
-  void changeDatasetOption(const DatasetOption option, const bool checked);
+  void addDataset(const WC::DatasetOption options);
+  void changeDatasetOption(const WC::DatasetOption option, const bool checked);
 
   void addAction();
-  void addGroup(const QString &title, const GroupWidget widget);
-  bool setGroupWidget(const int group, const GroupWidget widget);
+  void addGroup(const QString &title, const WC::GroupWidget widget);
+  bool setGroupWidget(const int group, const WC::GroupWidget widget);
 
   void setFrameParserCode(const QString &code);
 
@@ -344,7 +301,7 @@ private:
   QString m_thunderforestApiKey;
 
   CurrentView m_currentView;
-  DecoderMethod m_frameDecoder;
+  WC::DecoderMethod m_frameDecoder;
 
   bool m_modified;
   QString m_filePath;

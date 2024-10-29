@@ -42,6 +42,8 @@
 UI::DashboardWidget::DashboardWidget(QQuickItem *parent)
   : QQuickItem(parent)
   , m_index(-1)
+  , m_relativeIndex(-1)
+  , m_widgetType(WC::DashboardNoWidget)
   , m_qmlPath("")
   , m_dbWidget(nullptr)
 {
@@ -75,7 +77,7 @@ int UI::DashboardWidget::widgetIndex() const
  */
 int UI::DashboardWidget::relativeIndex() const
 {
-  return UI::Dashboard::instance().relativeIndex(widgetIndex());
+  return m_relativeIndex;
 }
 
 /**
@@ -83,19 +85,14 @@ int UI::DashboardWidget::relativeIndex() const
  */
 QColor UI::DashboardWidget::widgetColor() const
 {
-  // clang-format off
-  const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
-  // clang-format on
+  static auto *dash = &UI::Dashboard::instance();
+  if (WC::isDatasetWidget(m_widgetType))
+  {
+    const auto &dataset = dash->getDatasetWidget(m_widgetType, m_relativeIndex);
+    return QColor(WC::getDatasetColor(dataset.index()));
+  }
 
-  // Obtain color for dataset index
-  const auto dataset = UI::Dashboard::instance().widgetDataset(m_index);
-  const auto index = dataset.index() - 1;
-  const auto color = colors.count() > index
-                         ? colors.at(index).toString()
-                         : colors.at(colors.count() % index).toString();
-
-  // Convert color string to QColor
-  return QColor(color);
+  return QColor::fromRgba(qRgba(0, 0, 0, 0));
 }
 
 /**
@@ -103,7 +100,7 @@ QColor UI::DashboardWidget::widgetColor() const
  */
 QString UI::DashboardWidget::widgetIcon() const
 {
-  return UI::Dashboard::instance().widgetIcon(widgetIndex());
+  return WC::dashboardWidgetIcon(m_widgetType);
 }
 
 /**
@@ -111,11 +108,17 @@ QString UI::DashboardWidget::widgetIcon() const
  */
 QString UI::DashboardWidget::widgetTitle() const
 {
-  if (widgetIndex() >= 0)
+  static auto *dash = &UI::Dashboard::instance();
+  if (WC::isDatasetWidget(m_widgetType))
   {
-    auto titles = UI::Dashboard::instance().widgetTitles();
-    if (widgetIndex() < titles.count())
-      return titles.at(widgetIndex());
+    const auto &dataset = dash->getDatasetWidget(m_widgetType, m_relativeIndex);
+    return dataset.title();
+  }
+
+  else if (WC::isGroupWidget(m_widgetType))
+  {
+    const auto &group = dash->getGroupWidget(m_widgetType, m_relativeIndex);
+    return group.title();
   }
 
   return tr("Invalid");
@@ -124,9 +127,9 @@ QString UI::DashboardWidget::widgetTitle() const
 /**
  * Returns the type of the current widget (e.g. group, plot, bar, gauge, etc...)
  */
-UI::Dashboard::WidgetType UI::DashboardWidget::widgetType() const
+WC::DashboardWidget UI::DashboardWidget::widgetType() const
 {
-  return UI::Dashboard::instance().widgetType(widgetIndex());
+  return m_widgetType;
 }
 
 /**
@@ -154,6 +157,8 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
   {
     // Update widget index
     m_index = index;
+    m_widgetType = UI::Dashboard::instance().widgetType(index);
+    m_relativeIndex = UI::Dashboard::instance().relativeIndex(index);
 
     // Delete previous widget
     if (m_dbWidget)
@@ -165,47 +170,47 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
     // Construct new widget
     switch (widgetType())
     {
-      case UI::Dashboard::WidgetType::DataGrid:
+      case WC::DashboardDataGrid:
         m_dbWidget = new Widgets::DataGrid(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/DataGrid.qml";
         break;
-      case UI::Dashboard::WidgetType::MultiPlot:
+      case WC::DashboardMultiPlot:
         m_dbWidget = new Widgets::MultiPlot(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/MultiPlot.qml";
         break;
-      case UI::Dashboard::WidgetType::FFT:
+      case WC::DashboardFFT:
         m_dbWidget = new Widgets::FFTPlot(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/FFTPlot.qml";
         break;
-      case UI::Dashboard::WidgetType::Plot:
+      case WC::DashboardPlot:
         m_dbWidget = new Widgets::Plot(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Plot.qml";
         break;
-      case UI::Dashboard::WidgetType::Bar:
+      case WC::DashboardBar:
         m_dbWidget = new Widgets::Bar(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Bar.qml";
         break;
-      case UI::Dashboard::WidgetType::Gauge:
+      case WC::DashboardGauge:
         m_dbWidget = new Widgets::Gauge(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Gauge.qml";
         break;
-      case UI::Dashboard::WidgetType::Compass:
+      case WC::DashboardCompass:
         m_dbWidget = new Widgets::Compass(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Compass.qml";
         break;
-      case UI::Dashboard::WidgetType::Gyroscope:
+      case WC::DashboardGyroscope:
         m_dbWidget = new Widgets::Gyroscope(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Gyroscope.qml";
         break;
-      case UI::Dashboard::WidgetType::Accelerometer:
+      case WC::DashboardAccelerometer:
         m_dbWidget = new Widgets::Accelerometer(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Accelerometer.qml";
         break;
-      case UI::Dashboard::WidgetType::GPS:
+      case WC::DashboardGPS:
         m_dbWidget = new Widgets::GPS(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/GPS.qml";
         break;
-      case UI::Dashboard::WidgetType::LED:
+      case WC::DashboardLED:
         m_dbWidget = new Widgets::LEDPanel(relativeIndex(), this);
         m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/LEDPanel.qml";
         break;

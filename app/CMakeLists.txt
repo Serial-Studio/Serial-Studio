@@ -114,6 +114,7 @@ set(SOURCES
  src/CSV/Export.cpp
  src/MQTT/Client.cpp
  src/main.cpp
+ src/WidgetsCommon.cpp
 )
 
 set(HEADERS
@@ -158,6 +159,7 @@ set(HEADERS
  src/CSV/Player.h
  src/MQTT/Client.h
  src/AppInfo.h
+ src/WidgetsCommon.h
 )
 
 set(QML_CODE

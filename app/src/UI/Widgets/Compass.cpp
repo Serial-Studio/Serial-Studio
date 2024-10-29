@@ -65,11 +65,11 @@ void Widgets::Compass::updateData()
 {
   // Get the Dashboard instance and check if the index is valid
   auto dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->compassCount())
+  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardCompass))
     return;
 
   // Get the compass data and update the value and text
-  auto dataset = dash->getCompass(m_index);
+  const auto &dataset = dash->getDatasetWidget(WC::DashboardCompass, m_index);
 
   // Redraw widget if required
   const auto value = dataset.value().toDouble();

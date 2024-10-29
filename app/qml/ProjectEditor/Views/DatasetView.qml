@@ -107,9 +107,9 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetPlot
+          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetPlot
           onClicked: {
-            const option = ProjectModel.DatasetPlot
+            const option = WC.DatasetPlot
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -128,9 +128,9 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetFFT
+          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetFFT
           onClicked: {
-            const option = ProjectModel.DatasetFFT
+            const option = WC.DatasetFFT
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -150,9 +150,9 @@ Widgets.Pane {
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetBar
+          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetBar
           onClicked: {
-            const option = ProjectModel.DatasetBar
+            const option = WC.DatasetBar
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -172,9 +172,9 @@ Widgets.Pane {
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetGauge
+          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetGauge
           onClicked: {
-            const option = ProjectModel.DatasetGauge
+            const option = WC.DatasetGauge
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -194,9 +194,9 @@ Widgets.Pane {
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetCompass
+          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetCompass
           onClicked: {
-            const option = ProjectModel.DatasetCompass
+            const option = WC.DatasetCompass
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -215,9 +215,9 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & ProjectModel.DatasetLED
+          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetLED
           onClicked: {
-            const option = ProjectModel.DatasetLED
+            const option = WC.DatasetLED
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)

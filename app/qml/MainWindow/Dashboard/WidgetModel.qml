@@ -47,7 +47,9 @@ Repeater {
       target: Cpp_UI_Dashboard
 
       function onWidgetVisibilityChanged() {
-        loader.visible = Cpp_UI_Dashboard.widgetVisible(index)
+        const widget = Cpp_UI_Dashboard.widgetType(index)
+        const idx = Cpp_UI_Dashboard.relativeIndex(index)
+        loader.visible = Cpp_UI_Dashboard.widgetVisible(widget, idx)
       }
     }
   }

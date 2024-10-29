@@ -35,9 +35,9 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
 {
   // Get the dashboard instance and populate the titles, values, and units
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->datagridCount())
+  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardDataGrid))
   {
-    auto group = dash->getDataGrid(m_index);
+    const auto &group = dash->getGroupWidget(WC::DashboardDataGrid, m_index);
 
     m_units.resize(group.datasetCount());
     m_titles.resize(group.datasetCount());
@@ -130,7 +130,7 @@ void Widgets::DataGrid::updateData()
 {
   // Get the dashboard instance and check if the index is valid
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->datagridCount())
+  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardDataGrid))
     return;
 
   // Regular expression to check if the value is a number
@@ -138,13 +138,13 @@ void Widgets::DataGrid::updateData()
 
   // Get the datagrid group and update the LED states
   bool changed = false;
-  auto group = dash->getDataGrid(m_index);
+  const auto &group = dash->getGroupWidget(WC::DashboardDataGrid, m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
     // Get the dataset and its values
-    auto dataset = group.getDataset(i);
+    const auto &dataset = group.getDataset(i);
+    const auto alarmValue = dataset.alarm();
     auto value = dataset.value();
-    auto alarmValue = dataset.alarm();
 
     // Process dataset numerical value
     bool alarm = false;
@@ -188,15 +188,15 @@ void Widgets::DataGrid::onThemeChanged()
   // Obtain colors for each dataset in the widget
   m_colors.clear();
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->datagridCount())
+  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardDataGrid))
   {
-    auto group = dash->getDataGrid(m_index);
+    const auto &group = dash->getGroupWidget(WC::DashboardDataGrid, m_index);
     m_colors.resize(group.datasetCount());
 
     for (int i = 0; i < group.datasetCount(); ++i)
     {
-      auto dataset = group.getDataset(i);
-      const auto index = group.getDataset(i).index() - 1;
+      const auto &dataset = group.getDataset(i);
+      const auto index = dataset.index() - 1;
       const auto color = colors.count() > index
                              ? colors.at(index).toString()
                              : colors.at(colors.count() % index).toString();

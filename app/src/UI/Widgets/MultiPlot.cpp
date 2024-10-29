@@ -39,10 +39,10 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
 {
   // Obtain group information
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->multiPlotCount())
+  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardMultiPlot))
   {
     // Obtain min/max values from datasets
-    const auto &group = dash->getMultiplot(m_index);
+    const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();
     for (const auto &dataset : group.datasets())
@@ -225,14 +225,14 @@ void Widgets::MultiPlot::updateRange()
 {
   // Get the dashboard instance and check if the index is valid
   auto dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->multiPlotCount())
+  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardMultiPlot))
     return;
 
   // Clear the data
   m_data.clear();
 
   // Get the multiplot group and loop through each dataset
-  auto group = dash->getMultiplot(m_index);
+  const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
     m_data.append(QVector<QPointF>());
@@ -259,15 +259,15 @@ void Widgets::MultiPlot::onThemeChanged()
   // Obtain colors for each dataset in the widget
   m_colors.clear();
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->multiPlotCount())
+  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardMultiPlot))
   {
-    const auto &group = dash->getMultiplot(m_index);
+    const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);
     m_colors.resize(group.datasetCount());
 
     for (int i = 0; i < group.datasetCount(); ++i)
     {
       const auto &dataset = group.getDataset(i);
-      const auto index = group.getDataset(i).index() - 1;
+      const auto index = dataset.index() - 1;
       const auto color = colors.count() > index
                              ? colors.at(index).toString()
                              : colors.at(colors.count() % index).toString();
@@ -300,9 +300,12 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   // Obtain min/max values from datasets
   else
   {
-    const auto &group = UI::Dashboard::instance().getMultiplot(m_index);
+    const auto &group = UI::Dashboard::instance().getGroupWidget(
+        WC::DashboardMultiPlot, m_index);
+
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();
+
     for (const auto &dataset : group.datasets())
     {
       ok &= !qFuzzyCompare(dataset.min(), dataset.max());

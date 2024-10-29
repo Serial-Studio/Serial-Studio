@@ -78,12 +78,12 @@ void Widgets::Gyroscope::updateData()
 {
   // Get the dashboard instance and check if the index is valid
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->gyroscopeCount())
+  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardGyroscope))
     return;
 
   // Get the gyroscope data and validate the dataset count
-  auto gyroscope = dash->getGyroscope(m_index);
-  if (gyroscope.datasetCount() != 3)
+  const auto &gyro = dash->getGroupWidget(WC::DashboardGyroscope, m_index);
+  if (gyro.datasetCount() != 3)
     return;
 
   // Backup previous readings
@@ -99,7 +99,7 @@ void Widgets::Gyroscope::updateData()
   for (int i = 0; i < 3; ++i)
   {
     // Obtain dataset
-    auto dataset = gyroscope.getDataset(i);
+    const auto &dataset = gyro.getDataset(i);
 
     // clang-format off
     const qreal angle = dataset.value().toDouble();
