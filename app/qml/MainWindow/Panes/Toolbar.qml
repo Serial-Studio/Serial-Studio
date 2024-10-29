@@ -147,10 +147,10 @@ ToolBar {
     //
     Widgets.BigButton {
       text: qsTr("CSV Player")
-      enabled: !Cpp_CSV_Player.isOpen
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_CSV_Player.openFile()
       icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
+      enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.connected
     }
 
     //
@@ -305,7 +305,7 @@ ToolBar {
       font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.minimumWidth: metrics.width + 32
       Layout.maximumWidth: metrics.width + 32
-      enabled: Cpp_IO_Manager.configurationOk
+      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
