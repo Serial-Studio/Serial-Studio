@@ -1,24 +1,24 @@
 {
    "updates":{
       "windows":{
-         "open-url":"",
-         "latest-version":"2.0.0",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v2.0.0/SerialStudio-2.0.0-Windows.exe",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v2.0.0",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.0.0",
+         "latest-version":"3.0.0",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.0.0/Serial-Studio-3.0.0-Windows.exe",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.0.0",
          "mandatory":false
       },
       "osx":{
-         "open-url":"",
-         "latest-version":"2.0.0",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v2.0.0/SerialStudio-2.0.0-macOS.zip",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v2.0.0",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.0.0",
+         "latest-version":"3.0.0",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.0.0/Serial-Studio-3.0.0-macOS-arm64.dmg",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.0.0",
          "mandatory":false
       },
       "linux":{
-         "open-url":"",
-         "latest-version":"2.0.0",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v2.0.0/SerialStudio-2.0.0-Linux.AppImage",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v2.0.0",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.0.0",
+         "latest-version":"3.0.0",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.0.0/Serial-Studio-3.0.0-Linux.AppImage",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.0.0",
          "mandatory":false
       }
    }
