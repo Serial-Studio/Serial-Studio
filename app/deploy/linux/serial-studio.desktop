@@ -8,5 +8,5 @@ StartupNotify=true
 Categories=Electronics;Engineering;Science;
 Icon=serial-studio
 X-AppImage-Name=Serial Studio
-X-AppImage-Version=3.0.1
+X-AppImage-Version=3.0.2
 X-AppImage-Arch=x86_64
