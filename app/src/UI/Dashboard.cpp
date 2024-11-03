@@ -562,7 +562,7 @@ void UI::Dashboard::updatePlots()
   }
 
   // Check if we need to re-initialize FFT plots data
-  if (m_fftPlotValues.count() != widgetCount(WC::DashboardPlot))
+  if (m_fftPlotValues.count() != widgetCount(WC::DashboardFFT))
   {
     m_fftPlotValues.clear();
     for (int i = 0; i < widgetCount(WC::DashboardFFT); ++i)
