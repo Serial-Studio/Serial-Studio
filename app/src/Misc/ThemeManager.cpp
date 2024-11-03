@@ -54,6 +54,8 @@ Misc::ThemeManager::ThemeManager()
     QStringLiteral("Deep Purple"),
     QStringLiteral("Deep Blue"),
     QStringLiteral("Deep Red"),
+    QStringLiteral("Deep Green"),
+    QStringLiteral("Pulse"),
     QStringLiteral("Resistance"),
     QStringLiteral("Dominion"),
   };

@@ -260,5 +260,7 @@
         <file>themes/Deep Red.json</file>
         <file>themes/Resistance.json</file>
         <file>themes/Dominion.json</file>
+        <file>themes/Deep Green.json</file>
+        <file>themes/Pulse.json</file>
     </qresource>
 </RCC>
