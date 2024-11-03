@@ -55,6 +55,10 @@ Widgets.Pane {
   //
   Page {
     anchors.fill: parent
+    anchors.topMargin: -16
+    anchors.leftMargin: -9
+    anchors.rightMargin: -9
+    anchors.bottomMargin: -9
 
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
@@ -81,6 +85,10 @@ Widgets.Pane {
     Dashboard.Terminal {
       id: terminal
       anchors.fill: parent
+      anchors.topMargin: 16
+      anchors.leftMargin: 9
+      anchors.rightMargin: 9
+      anchors.bottomMargin: 9
     }
   }
 }

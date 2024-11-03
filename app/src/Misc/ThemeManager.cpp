@@ -51,6 +51,11 @@ Misc::ThemeManager::ThemeManager()
     QStringLiteral("macOS Dark"),
     QStringLiteral("Yaru Light"),
     QStringLiteral("Yaru Dark"),
+    QStringLiteral("Deep Purple"),
+    QStringLiteral("Deep Blue"),
+    QStringLiteral("Deep Red"),
+    QStringLiteral("Resistance"),
+    QStringLiteral("Dominion"),
   };
   // clang-format on
 

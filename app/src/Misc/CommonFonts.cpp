@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QFontDatabase>
 
+#include "Misc/Translator.h"
 #include "Misc/CommonFonts.h"
 
 /**
@@ -49,19 +50,10 @@ Misc::CommonFonts::CommonFonts()
   );
   // clang-format on
 
-  // Load common fonts
-  m_uiFont = QFontDatabase::font(QStringLiteral("Inter"),
-                                 QStringLiteral("Regular"), 12);
-  m_monoFont = QFontDatabase::font(QStringLiteral("Noto Sans Mono"),
-                                   QStringLiteral("Regular"), 12);
-  m_boldUiFont = QFontDatabase::font(QStringLiteral("Inter"),
-                                     QStringLiteral("Bold"), 12);
-
-  // Set pixel sizes for each font
-  m_uiFont.setPixelSize(12);
-  m_monoFont.setPixelSize(12);
-  m_boldUiFont.setPixelSize(12);
-  m_monoFont.setStyleHint(QFont::Monospace);
+  // Load font names for current language
+  onLanguageChanged();
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &Misc::CommonFonts::onLanguageChanged);
 }
 
 /**
@@ -110,7 +102,7 @@ const QFont &Misc::CommonFonts::boldUiFont() const
 QFont Misc::CommonFonts::customUiFont(const int pixelSize, const bool bold)
 {
   auto weight = bold ? QStringLiteral("Bold") : QStringLiteral("Regular");
-  QFont font = QFontDatabase::font(QStringLiteral("Inter"), weight, 12);
+  QFont font = QFontDatabase::font(m_uiName, weight, 12);
   font.setPixelSize(qMax(1, pixelSize));
   return font;
 }
@@ -122,8 +114,41 @@ QFont Misc::CommonFonts::customUiFont(const int pixelSize, const bool bold)
  */
 QFont Misc::CommonFonts::customMonoFont(const int pixelSize)
 {
-  QFont font = QFontDatabase::font(QStringLiteral("Noto Sans Mono"),
-                                   QStringLiteral("Regular"), 12);
+  QFont font = QFontDatabase::font(m_monoName, QStringLiteral("Regular"), 12);
   font.setPixelSize(qMax(1, pixelSize));
   return font;
+}
+
+/**
+ * @brief Updates the UI and monospace fonts when the language is changed.
+ *
+ * This function sets the appropriate UI and monospace font names based on the
+ * current language selected in the translator. It then loads the fonts with
+ * specified attributes such as style and size from the QFontDatabase.
+ */
+void Misc::CommonFonts::onLanguageChanged()
+{
+  switch (Misc::Translator::instance().language())
+  {
+    case Misc::Translator::English:
+    case Misc::Translator::Spanish:
+    case Misc::Translator::German:
+    case Misc::Translator::Russian:
+    case Misc::Translator::French:
+    case Misc::Translator::Chinese:
+      m_uiName = QStringLiteral("Inter");
+      m_monoName = QStringLiteral("Noto Sans Mono");
+      break;
+  }
+
+  m_uiFont = QFontDatabase::font(m_uiName, QStringLiteral("Regular"), 12);
+  m_boldUiFont = QFontDatabase::font(m_uiName, QStringLiteral("Bold"), 12);
+  m_monoFont = QFontDatabase::font(m_monoName, QStringLiteral("Regular"), 12);
+
+  m_uiFont.setPixelSize(12);
+  m_monoFont.setPixelSize(12);
+  m_boldUiFont.setPixelSize(12);
+  m_monoFont.setStyleHint(QFont::Monospace);
+
+  Q_EMIT fontsChanged();
 }

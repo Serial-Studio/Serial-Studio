@@ -85,7 +85,10 @@ Widgets.Pane {
   Page {
     implicitWidth: 0
     anchors.fill: parent
-    anchors.topMargin: -6
+    anchors.topMargin: -16
+    anchors.leftMargin: -9
+    anchors.rightMargin: -9
+    anchors.bottomMargin: -9
 
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
@@ -115,7 +118,13 @@ Widgets.Pane {
     ColumnLayout {
       id: column
       spacing: 4
-      anchors.fill: parent
+      anchors {
+        fill: parent
+        topMargin: 10
+        leftMargin: 9
+        rightMargin: 9
+        bottomMargin: 9
+      }
 
       //
       // Device type selector

@@ -43,7 +43,7 @@ class Translator : public QObject
 {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(int language
+  Q_PROPERTY(Language language
              READ language
              WRITE setLanguage
              NOTIFY languageChanged)
@@ -71,19 +71,30 @@ private:
 public:
   static Translator &instance();
 
-  [[nodiscard]] int language() const;
-  [[nodiscard]] int systemLanguage() const;
+  enum Language
+  {
+    English = 0,
+    Spanish = 1,
+    Chinese = 2,
+    German = 3,
+    Russian = 4,
+    French = 5
+  };
+  Q_ENUM(Language);
+
+  [[nodiscard]] Language language() const;
+  [[nodiscard]] Language systemLanguage() const;
   [[nodiscard]] static QStringList &availableLanguages();
 
   [[nodiscard]] QString welcomeConsoleText() const;
   [[nodiscard]] QString acknowledgementsText() const;
 
 public slots:
-  void setLanguage(const int language);
+  void setLanguage(const Language language);
   void setLanguage(const QLocale &locale, const QString &language);
 
 private:
-  int m_language;
+  Language m_language;
   QSettings m_settings;
   QTranslator m_translator;
 };

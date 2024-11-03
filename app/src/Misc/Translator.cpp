@@ -27,7 +27,9 @@
  */
 Misc::Translator::Translator()
 {
-  setLanguage(m_settings.value("language", systemLanguage()).toInt());
+  const auto sysLang = static_cast<int>(systemLanguage());
+  const auto language = m_settings.value("language", sysLang).toInt();
+  setLanguage(static_cast<Language>(language));
 }
 
 /**
@@ -43,7 +45,7 @@ Misc::Translator &Misc::Translator::instance()
  * Returns the current language ID, which corresponds to the indexes of the
  * languages returned by the \c availableLanguages() function.
  */
-int Misc::Translator::language() const
+Misc::Translator::Language Misc::Translator::language() const
 {
   return m_language;
 }
@@ -52,31 +54,31 @@ int Misc::Translator::language() const
  * Returns the appropiate language ID based on the current locale settings of
  * the host's operating system.
  */
-int Misc::Translator::systemLanguage() const
+Misc::Translator::Language Misc::Translator::systemLanguage() const
 {
-  int lang;
+  Language lang;
   switch (QLocale::system().language())
   {
     case QLocale::English:
-      lang = 0;
+      lang = English;
       break;
     case QLocale::Spanish:
-      lang = 1;
+      lang = Spanish;
       break;
     case QLocale::Chinese:
-      lang = 2;
+      lang = Chinese;
       break;
     case QLocale::German:
-      lang = 3;
+      lang = German;
       break;
     case QLocale::Russian:
-      lang = 4;
+      lang = Russian;
       break;
     case QLocale::French:
-      lang = 5;
+      lang = French;
       break;
     default:
-      lang = 0;
+      lang = English;
       break;
   }
 
@@ -91,22 +93,22 @@ QString Misc::Translator::welcomeConsoleText() const
   QString lang;
   switch (language())
   {
-    case 0:
+    case English:
       lang = QStringLiteral("EN");
       break;
-    case 1:
+    case Spanish:
       lang = QStringLiteral("ES");
       break;
-    case 2:
+    case Chinese:
       lang = QStringLiteral("ZH");
       break;
-    case 3:
+    case German:
       lang = QStringLiteral("DE");
       break;
-    case 4:
+    case Russian:
       lang = QStringLiteral("RU");
       break;
-    case 5:
+    case French:
       lang = QStringLiteral("FR");
       break;
     default:
@@ -167,33 +169,33 @@ QStringList &Misc::Translator::availableLanguages()
  * @param language language ID based on the indexes of the \a
  * availableLanguages() function
  */
-void Misc::Translator::setLanguage(const int language)
+void Misc::Translator::setLanguage(const Language language)
 {
   QString langName;
   QLocale locale;
   switch (language)
   {
-    case 0:
+    case English:
       langName = QStringLiteral("en_US");
       locale = QLocale(QLocale::English);
       break;
-    case 1:
+    case Spanish:
       langName = QStringLiteral("es_MX");
       locale = QLocale(QLocale::Spanish);
       break;
-    case 2:
+    case Chinese:
       langName = QStringLiteral("zh_CN");
       locale = QLocale(QLocale::Chinese);
       break;
-    case 3:
+    case German:
       langName = QStringLiteral("de_DE");
       locale = QLocale(QLocale::German);
       break;
-    case 4:
+    case Russian:
       langName = QStringLiteral("ru_RU");
       locale = QLocale(QLocale::Russian);
       break;
-    case 5:
+    case French:
       langName = QStringLiteral("fr_FR");
       locale = QLocale(QLocale::French);
       break;

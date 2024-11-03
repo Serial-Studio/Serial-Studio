@@ -230,10 +230,10 @@ elseif(APPLE)
   ${ICON_MACOSX}
   PROPERTIES MACOSX_PACKAGE_LOCATION "Resources"
  )
-set(SOURCES ${SOURCES} ${ICON_MACOSX} "src/Platform/NativeWindow_macOS.mm")
-set_source_files_properties(
- "src/Platform/NativeWindow_macOS.mm" PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
-)
+ set(SOURCES ${SOURCES} ${ICON_MACOSX} "src/Platform/NativeWindow_macOS.mm")
+ set_source_files_properties(
+  "src/Platform/NativeWindow_macOS.mm" PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
+ )
 elseif(UNIX)
  set(SOURCES ${SOURCES} "src/Platform/NativeWindow_UNIX.cpp")
 endif()

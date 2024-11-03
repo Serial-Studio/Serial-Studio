@@ -255,5 +255,10 @@
         <file>themes/Outdoor Night.json</file>
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
+        <file>themes/Deep Purple.json</file>
+        <file>themes/Deep Blue.json</file>
+        <file>themes/Deep Red.json</file>
+        <file>themes/Resistance.json</file>
+        <file>themes/Dominion.json</file>
     </qresource>
 </RCC>

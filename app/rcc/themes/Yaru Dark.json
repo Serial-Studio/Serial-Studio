@@ -30,7 +30,6 @@
 
   "error": "#e95420",
   "csv_switch": "#4caf50",
-  "view_switch": "#e95420",
   "switch_highlight": "#e95420",
   "dashboard_background": "#222222",
 
@@ -58,7 +57,7 @@
 
   "console_text": "#ffffff",
   "console_base": "#1a1a1a",
-  "console_border": "#cccccc",
+  "console_border": "#4a4a4a",
   "console_highlight": "#e95420",
 
   "widget_text": "#eeeeec",
@@ -86,17 +85,17 @@
   "table_separator_header": "#4a4a4a",
 
   "widget_colors": [
-   "#e95420",
-   "#ffdd57",
-   "#34c759",
-   "#d64937",
-   "#bf52ff",
+   "#61afef",
+   "#98c379",
+   "#e06c75",
+   "#d19a66",
+   "#c678dd",
    "#ffcc00",
    "#ff2d55",
-   "#6c757d",
+   "#7a7c80",
    "#8e8e93",
-   "#0088cc",
-   "#5e81ac"
+   "#b16286",
+   "#56b6c2"
   ]
  }
 }

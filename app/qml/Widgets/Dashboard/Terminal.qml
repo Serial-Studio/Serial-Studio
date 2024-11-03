@@ -186,7 +186,7 @@ Item {
         border.width: 1
         color: "transparent"
         anchors.fill: parent
-        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        border.color: Cpp_ThemeManager.colors["console_border"]
       }
 
       MouseArea {

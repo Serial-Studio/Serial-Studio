@@ -74,7 +74,7 @@ ColumnLayout {
       text: root.titles[index]
       Layout.maximumHeight: 24
       onCheckedChanged: root.checkedChanged(index, checked)
-      palette.highlight: root.colors.length > index ? root.colors[index] : Cpp_ThemeManager.colors["view_switch"]
+      palette.highlight: root.colors.length > index ? root.colors[index] : Cpp_ThemeManager.colors["switch_highlight"]
     }
   }
 

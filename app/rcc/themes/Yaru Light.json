@@ -30,7 +30,6 @@
 
   "error": "#e95420",
   "csv_switch": "#4caf50",
-  "view_switch": "#e95420",
   "switch_highlight": "#e95420",
   "dashboard_background": "#f8f8f8",
 
@@ -86,17 +85,17 @@
   "table_separator_header": "#dcdcdc",
 
   "widget_colors": [
-   "#e95420",
-   "#ffdd57",
+   "#007aff",
+   "#ff9500",
    "#34c759",
-   "#d64937",
-   "#bf52ff",
+   "#ff3b30",
+   "#af52de",
    "#ffcc00",
    "#ff2d55",
-   "#6c757d",
+   "#c7c7cc",
    "#8e8e93",
-   "#0088cc",
-   "#5e81ac"
+   "#007aff",
+   "#5856d6"
   ]
  }
 }

@@ -628,7 +628,7 @@ void Widgets::Terminal::setFont(const QFont &font)
   m_cWidth = metrics.averageCharWidth();
 
   // Special case for Chinese
-  if (Misc::Translator::instance().language() == 2)
+  if (Misc::Translator::instance().language() == Misc::Translator::Chinese)
     m_cWidth = font.pixelSize();
 
   // Update terminal border

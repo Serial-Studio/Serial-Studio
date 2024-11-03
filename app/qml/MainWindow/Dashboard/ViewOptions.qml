@@ -315,12 +315,21 @@ Widgets.Pane {
         Repeater {
           model: Cpp_UI_Dashboard.availableWidgets
           delegate: ViewOptionsDelegate {
+            id: _viewDelegate
             count: Cpp_UI_Dashboard.widgetCount(modelData)
             colors: Cpp_UI_Dashboard.widgetColors(modelData)
             titles: Cpp_UI_Dashboard.widgetTitles(modelData)
             icon: Cpp_UI_Dashboard.availableWidgetIcons[index]
             title: Cpp_UI_Dashboard.availableWidgetTitles[index]
             onCheckedChanged: (index, checked) => Cpp_UI_Dashboard.setWidgetVisible(modelData, index, checked)
+
+            Connections {
+              target: Cpp_ThemeManager
+
+              function onThemeChanged() {
+                _viewDelegate.colors = Cpp_UI_Dashboard.widgetColors(modelData)
+              }
+            }
           }
         }
       }

@@ -30,7 +30,6 @@
 
   "error": "#ff453a",
   "csv_switch": "#007D19",
-  "view_switch": "#0a84ff",
   "switch_highlight": "#0a84ff",
   "dashboard_background": "#1c1c1e",
 
@@ -62,9 +61,9 @@
   "console_highlight": "#525251",
 
   "widget_text": "#f1f1f1",
-  "widget_base": "#1c1c1e",
+  "widget_base": "#2b2b2b",
   "widget_button": "#2c2c2e",
-  "widget_window": "#2b2b2b",
+  "widget_window": "#1c1c1e",
   "widget_border": "#4a4a4a",
   "widget_highlight": "#0a84ff",
   "widget_button_text": "#f1f1f1",
@@ -86,17 +85,17 @@
   "table_separator_header": "#4a4a4a",
 
   "widget_colors": [
-   "#0a84ff",
-   "#ff9f0a",
-   "#32d74b",
-   "#ff453a",
-   "#bf5af2",
-   "#ffd60a",
-   "#ff375f",
-   "#636366",
+   "#61afef",
+   "#98c379",
+   "#e06c75",
+   "#d19a66",
+   "#c678dd",
+   "#ffcc00",
+   "#ff2d55",
+   "#7a7c80",
    "#8e8e93",
-   "#0a84ff",
-   "#5e5ce6"
+   "#b16286",
+   "#56b6c2"
   ]
  }
 }

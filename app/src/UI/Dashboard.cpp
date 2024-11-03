@@ -259,7 +259,7 @@ QStringList UI::Dashboard::widgetColors(const WC::DashboardWidget widget)
   if (list.isEmpty())
   {
     const auto colors = Misc::ThemeManager::instance().colors();
-    list.append(colors["view_switch"].toString());
+    list.append(colors["switch_highlight"].toString());
   }
 
   return list;
