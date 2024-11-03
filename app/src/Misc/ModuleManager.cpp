@@ -267,6 +267,10 @@ void Misc::ModuleManager::initializeQmlInterface()
   connect(miscTranslator, &Misc::Translator::languageChanged, &m_engine,
           &QQmlApplicationEngine::retranslate);
 
+  // Obtain build date/time
+  const auto buildDate = QStringLiteral(__DATE__);
+  const auto buildTime = QStringLiteral(__TIME__);
+
   // Register C++ modules with QML
   const auto c = m_engine.rootContext();
   c->setContextProperty("Cpp_Updater", updater);
@@ -290,6 +294,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
   c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
   c->setContextProperty("Cpp_ModuleManager", this);
+  c->setContextProperty("Cpp_BuildDate", buildDate);
+  c->setContextProperty("Cpp_BuildTime", buildTime);
 
   // Register app info with QML
   c->setContextProperty("Cpp_AppName", qApp->applicationDisplayName());

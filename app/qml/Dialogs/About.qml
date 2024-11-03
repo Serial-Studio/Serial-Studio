@@ -171,13 +171,17 @@ Window {
         }
 
         ColumnLayout {
-          spacing: 8
+          spacing: 0
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
 
           Label {
             text: Cpp_AppName
             font: Cpp_Misc_CommonFonts.customUiFont(28, true)
+          }
+
+          Item {
+            implicitHeight: 8
           }
 
           Label {
