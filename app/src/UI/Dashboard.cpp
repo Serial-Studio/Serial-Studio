@@ -47,7 +47,7 @@ UI::Dashboard::Dashboard()
           &JSON::FrameBuilder::jsonFileMapChanged, this,
           &UI::Dashboard::resetData);
 
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout20Hz, this,
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
           [=] {
             if (m_updateRequired)
             {
