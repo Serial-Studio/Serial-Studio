@@ -141,7 +141,7 @@ Widgets.Pane {
       property real titlebarHeight: 0
       onVisibleChanged: {
         if (visible) {
-          Cpp_NativeWindow.addWindow(window, Cpp_ThemeManager.colors["widget_base"])
+          Cpp_NativeWindow.addWindow(window, Cpp_ThemeManager.colors["widget_window"])
           window.titlebarHeight = Cpp_NativeWindow.titlebarHeight(window)
         }
       }
