@@ -16,11 +16,12 @@ This directory contains various examples demonstrating how to use Serial Studio 
 - **Description**: This example captures motion and orientation data from an MPU6050 accelerometer and gyroscope. Processed data is sent to Serial Studio for real-time visualization on widgets like a g-meter or attitude indicator.
 - **Contents**:
   - **MPU6050.ino**: Arduino code for capturing and transmitting MPU6050 data.
+  - **MPU6050.json**: Serial Studio project file for visualizing accelerometer, gyroscope and temperature data from the MPU6050 module.
   - **README.md**: Detailed setup instructions, including Serial Studio configuration.
   - **Screenshots**: `project-setup.png` and `screenshot.png` provide visual references for Serial Studio setup and data visualization.
 
 ### 3. PulseSensor
-- **Description**: This example filters and smooths pulse data from a heart rate sensor and visualizes it in Serial Studio. The filtered pulse signal is transmitted for live monitoring and CSV logging.
+- **Description**: This example filters and smooths pulse data from a heart rate sensor and visualizes it in Serial Studio using **quick plot mode**. The filtered pulse signal is transmitted for live monitoring and CSV logging.
 - **Contents**:
   - **PulseSensor.ino**: Arduino code for filtering and transmitting pulse data.
   - **README.md**: Step-by-step guide for setup and visualization in Serial Studio.
