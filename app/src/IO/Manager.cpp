@@ -592,8 +592,9 @@ void IO::Manager::readFrames()
             Q_EMIT frameReceived(frame);
 
           // Log invalid frames
-          else
-            qWarning() << "Invalid frame received (non-numeric data):" << frame;
+          // else
+          //  qWarning() << "Invalid frame received (non-numeric data):" <<
+          //  frame;
         }
       }
 

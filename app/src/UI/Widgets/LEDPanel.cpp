@@ -199,7 +199,7 @@ void Widgets::LEDPanel::onThemeChanged()
       const auto index = dataset.index() - 1;
       const auto color = colors.count() > index
                              ? colors.at(index).toString()
-                             : colors.at(colors.count() % index).toString();
+                             : colors.at(index % colors.count()).toString();
       m_colors[i] = color;
     }
   }

@@ -367,6 +367,6 @@ QString WC::getDatasetColor(const int index)
   const auto colors = theme->colors()["widget_colors"].toArray();
   const auto color = colors.count() > idx
                          ? colors.at(idx).toString()
-                         : colors.at(colors.count() % idx).toString();
+                         : colors.at(idx % colors.count()).toString();
   return color;
 }
