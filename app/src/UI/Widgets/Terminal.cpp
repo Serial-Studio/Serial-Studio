@@ -107,6 +107,12 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
       clear();
   });
 
+  // Redraw widget as soon as it is visible
+  connect(this, &Widgets::Terminal::visibleChanged, this, [=] {
+    if (isVisible())
+      update();
+  });
+
   // Change character widths when changing language
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
           this, [=] { setFont(Misc::CommonFonts::instance().monoFont()); });
@@ -821,7 +827,7 @@ void Widgets::Terminal::appendString(const QString &string)
   }
 
   // Adjust the scroll offset if autoscroll is enabled
-  if (autoscroll() && isVisible())
+  if (autoscroll())
   {
     // Calculate the total number of wrapped lines for the current line
     int cursorLine = m_cursorPosition.y();
@@ -837,7 +843,8 @@ void Widgets::Terminal::appendString(const QString &string)
 
     // Set the scroll offset to ensure the bottom of the wrapped line is visible
     m_scrollOffsetY = qMax(0, visualBottom - linesPerPage() + 1);
-    Q_EMIT scrollOffsetYChanged();
+    if (isVisible())
+      Q_EMIT scrollOffsetYChanged();
   }
 }
 

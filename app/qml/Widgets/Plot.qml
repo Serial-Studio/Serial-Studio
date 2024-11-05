@@ -71,6 +71,8 @@ Item {
     marginLeft: root.yLabelVisible ? -8 : (root.xLabelVisible ? -40 : -60)
     marginBottom: root.xLabelVisible ? -8 : (root.yLabelVisible ? -20 : -40)
 
+
+
     //
     // Set plot colors
     //
@@ -149,6 +151,61 @@ Item {
       left: root.yLabelVisible ? _yLabelContainer.right : parent.left
       bottom: root.xLabelVisible ? _xLabelContainer.top : parent.bottom
     }
+
+    //
+    // Mouse area to detect cursor position
+    //
+    /*MouseArea {
+      id: crosshairMouseArea
+      anchors.fill: parent
+      hoverEnabled: true
+      onPositionChanged: (mouse) => {
+        verticalCrosshair.x = mouse.x
+        horizontalCrosshair.y = mouse.y
+      }
+
+      onEntered: {
+        verticalCrosshair.visible = true
+        horizontalCrosshair.visible = true
+      }
+
+      onExited: {
+        verticalCrosshair.visible = false
+        horizontalCrosshair.visible = false
+      }
+    }
+
+    //
+    // Vertical crosshair
+    //
+    Rectangle {
+      id: verticalCrosshair
+
+      width: 1
+      visible: false
+      color: Cpp_ThemeManager.colors["widget_highlight"]
+
+      anchors {
+        top: parent.top
+        bottom: parent.bottom
+      }
+    }
+
+    //
+    // Horizontal crosshair
+    //
+    Rectangle {
+      id: horizontalCrosshair
+
+      height: 1
+      visible: false
+      color: Cpp_ThemeManager.colors["widget_highlight"]
+
+      anchors {
+        left: parent.left
+        right: parent.right
+      }
+    }*/
   }
 
   //

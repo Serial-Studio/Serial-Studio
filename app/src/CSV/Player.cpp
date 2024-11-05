@@ -218,7 +218,7 @@ void CSV::Player::nextFrame()
     // Populate the dashboard with a range of frames up to the new position
     UI::Dashboard::instance().resetData(false);
     int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(0, m_framePos - framesToLoad);
+    int startFrame = std::max(1, m_framePos - framesToLoad);
     for (int i = startFrame; i <= m_framePos; ++i)
       IO::Manager::instance().processPayload(getFrame(i));
 
@@ -244,7 +244,7 @@ void CSV::Player::previousFrame()
     // Populate the dashboard with a range of frames up to the new position
     UI::Dashboard::instance().resetData(false);
     int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(0, m_framePos - framesToLoad);
+    int startFrame = std::max(1, m_framePos - framesToLoad);
     for (int i = startFrame; i <= m_framePos; ++i)
       IO::Manager::instance().processPayload(getFrame(i));
 
@@ -403,7 +403,7 @@ void CSV::Player::setProgress(const qreal progress)
 
     // Calculate frames to load around the new frame position
     int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame = std::max(0, m_framePos - framesToLoad);
+    int startFrame = std::max(1, m_framePos - framesToLoad);
     int endFrame = std::min(frameCount() - 1, m_framePos);
 
     // Populate dashboard with frames within capped range
@@ -459,8 +459,13 @@ void CSV::Player::updateData()
         const auto msecsToNextF = abs(currTime.msecsTo(nextTime));
 
         // Jump to next frame
-        QTimer::singleShot(msecsToNextF, Qt::PreciseTimer, this,
-                           &CSV::Player::nextFrame);
+        QTimer::singleShot(msecsToNextF, Qt::PreciseTimer, this, [=] {
+          if (isOpen() && isPlaying() && framePosition() < frameCount())
+          {
+            ++m_framePos;
+            updateData();
+          }
+        });
       }
 
       // Error - pause playback
