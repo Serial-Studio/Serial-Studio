@@ -151,6 +151,9 @@ Widgets.Pane {
         RowLayout {
           spacing: 4
           Layout.fillWidth: true
+          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
+                   Cpp_UI_Dashboard.pointsWidgetVisible ||
+                   Cpp_UI_Dashboard.totalWidgetCount > 1
 
           Image {
             sourceSize: Qt.size(18, 18)
@@ -176,6 +179,9 @@ Widgets.Pane {
         //
         Item {
           implicitHeight: 4
+          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
+                   Cpp_UI_Dashboard.pointsWidgetVisible ||
+                   Cpp_UI_Dashboard.totalWidgetCount > 1
         }
 
         //
@@ -229,6 +235,9 @@ Widgets.Pane {
         //
         Item {
           implicitHeight: 2
+          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
+                   Cpp_UI_Dashboard.pointsWidgetVisible ||
+                   Cpp_UI_Dashboard.totalWidgetCount > 1
         }
 
         //
@@ -238,6 +247,9 @@ Widgets.Pane {
           columns: 3
           rowSpacing: 4
           columnSpacing: 4
+          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
+                   Cpp_UI_Dashboard.pointsWidgetVisible ||
+                   Cpp_UI_Dashboard.totalWidgetCount > 1
 
           //
           // Number of plot points slider
@@ -307,6 +319,9 @@ Widgets.Pane {
         //
         Item {
           implicitHeight: 8
+          visible: Cpp_UI_Dashboard.axisOptionsWidgetVisible ||
+                   Cpp_UI_Dashboard.pointsWidgetVisible ||
+                   Cpp_UI_Dashboard.totalWidgetCount > 1
         }
 
         //
