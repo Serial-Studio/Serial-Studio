@@ -21,6 +21,16 @@ ColumnLayout {
   property real maximumWidth: root.width
 
   //
+  // Helper function to calculate padding
+  //
+  function getPaddedText(value) {
+    const valueText = value.toFixed(Cpp_UI_Dashboard.precision)
+    const maxText = root.maxValue.toFixed(Cpp_UI_Dashboard.precision)
+    const leftSpaces = " ".repeat(Math.max(0, maxText.length - valueText.length))
+    return leftSpaces + value
+  }
+
+  //
   // Max value
   //
   Label {
@@ -73,7 +83,7 @@ ColumnLayout {
     horizontalAlignment: Text.AlignHCenter
     color: Cpp_ThemeManager.colors["widget_text"]
     text: root.textValue !== "" ? root.textValue :
-                                  root.value.toFixed(Cpp_UI_Dashboard.precision) + " " + root.units
+                                  root.getPaddedText(root.value) + " " + root.units
     font: root.rangeVisible ? Cpp_Misc_CommonFonts.customMonoFont(14) :
                               Cpp_Misc_CommonFonts.customMonoFont(12)
 
