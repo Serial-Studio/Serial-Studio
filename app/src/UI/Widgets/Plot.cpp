@@ -101,32 +101,16 @@ qreal Widgets::Plot::maxY() const
  */
 qreal Widgets::Plot::xTickInterval() const
 {
-  const auto range = qAbs(m_maxX - m_minX);
-  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
-  const qreal r = std::pow(10.0, -digits) * 10;
-  const qreal v = std::ceil(range * r) / r;
-  qreal step = qMax(0.0001, v * 0.2);
-  if (std::fmod(range, step) != 0.0)
-    step = range / std::ceil(range / step);
-
-  return step;
+  return UI::Dashboard::smartInterval(m_minX, m_maxX);
 }
 
 /**
- * @brief Returns the Y-axis tick interval.
+ * @brief Returns the Y-axis tick interval with human-readable values.
  * @return The Y-axis tick interval.
  */
 qreal Widgets::Plot::yTickInterval() const
 {
-  const auto range = qAbs(m_maxY - m_minY);
-  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
-  const qreal r = std::pow(10.0, -digits) * 10;
-  const qreal v = std::ceil(range * r) / r;
-  qreal step = qMax(0.0001, v * 0.2);
-  if (std::fmod(range, step) != 0.0)
-    step = range / std::ceil(range / step);
-
-  return step;
+  return UI::Dashboard::smartInterval(m_minY, m_maxY);
 }
 
 /**

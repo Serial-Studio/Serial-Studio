@@ -113,15 +113,7 @@ qreal Widgets::FFTPlot::maxY() const
  */
 qreal Widgets::FFTPlot::xTickInterval() const
 {
-  const auto range = qAbs(m_maxX - m_minX);
-  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
-  const qreal r = std::pow(10.0, -digits) * 10;
-  const qreal v = std::ceil(range * r) / r;
-  qreal step = qMax(0.0001, v * 0.1);
-  if (std::fmod(range, step) != 0.0)
-    step = range / std::ceil(range / step);
-
-  return step;
+  return UI::Dashboard::smartInterval(m_minX, m_maxX);
 }
 
 /**
@@ -130,15 +122,7 @@ qreal Widgets::FFTPlot::xTickInterval() const
  */
 qreal Widgets::FFTPlot::yTickInterval() const
 {
-  const auto range = qAbs(m_maxY - m_minY);
-  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
-  const qreal r = std::pow(10.0, -digits) * 10;
-  const qreal v = std::ceil(range * r) / r;
-  qreal step = qMax(0.0001, v * 0.2);
-  if (std::fmod(range, step) != 0.0)
-    step = range / std::ceil(range / step);
-
-  return step;
+  return UI::Dashboard::smartInterval(m_minY, m_maxY);
 }
 
 /**

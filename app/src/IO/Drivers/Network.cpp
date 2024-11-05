@@ -198,7 +198,8 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 
     // Join the multicast group (if required)
     if (udpMulticast())
-      m_udpSocket.joinMulticastGroup(QHostAddress(m_address));
+      m_udpSocket.joinMulticastGroup(
+          QHostAddress(QHostAddress(m_address).toIPv6Address()));
 
     // Set socket pointer
     socket = static_cast<QIODevice *>(&m_udpSocket);

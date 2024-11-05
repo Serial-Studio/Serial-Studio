@@ -99,6 +99,8 @@ public:
   Q_ENUM(AxisVisibility)
 
   static Dashboard &instance();
+  static qreal smartInterval(const qreal min, const qreal max,
+                             const qreal multiplier = 0.2);
 
   [[nodiscard]] bool available() const;
   [[nodiscard]] bool pointsWidgetVisible() const;

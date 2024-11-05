@@ -68,6 +68,67 @@ UI::Dashboard &UI::Dashboard::instance()
 }
 
 /**
+ * @brief Calculates a suitable interval for dividing a range into "nice" steps.
+ *
+ * Determines an interval size that is visually pleasing and divides the
+ * specified range evenly, adjusting for both small and large scales.
+ *
+ * @param min The minimum value of the range.
+ * @param max The maximum value of the range.
+ * @param multiplier Scaling factor for step size granularity (default = 0.2).
+ * @return qreal The computed interval size for the given range.
+ *
+ * @note Common intervals (e.g., 0.1, 0.2, 0.5, 1, 2, 5, 10) are selected
+ *       to enhance readability. Ensures the interval divides the range evenly.
+ */
+qreal UI::Dashboard::smartInterval(const qreal min, const qreal max,
+                                   const qreal multiplier)
+{
+  // Calculate an initial step size
+  const auto range = qAbs(max - min);
+  const auto digits = static_cast<int>(std::ceil(std::log10(range)));
+  const qreal r = std::pow(10.0, -digits) * 10;
+  const qreal v = std::ceil(range * r) / r;
+  qreal step = qMax(0.0001, v * multiplier);
+
+  // For smaller steps, use 0.1, 0.2, 0.5, etc.
+  if (step < 1.0)
+  {
+    if (step <= 0.1)
+      step = 0.1;
+    else if (step <= 0.2)
+      step = 0.2;
+    else if (step <= 0.5)
+      step = 0.5;
+    else
+      step = 1.0;
+  }
+
+  // For larger steps, round to 1, 2, 5, 10, etc.
+  else
+  {
+    const qreal factor = std::pow(10.0, std::floor(std::log10(step)));
+    const qreal normalizedStep = step / factor;
+
+    if (normalizedStep <= 1.0)
+      step = factor;
+    else if (normalizedStep <= 2.0)
+      step = 2 * factor;
+    else if (normalizedStep <= 5.0)
+      step = 5 * factor;
+    else
+      step = 10 * factor;
+  }
+
+  // Recompute step to ensure it divides the range cleanly
+  if (std::fmod(range, step) != 0.0)
+    step = range / std::ceil(range / step);
+
+  // Return obtained step size
+  return step;
+}
+
+/**
  * @brief Checks if the dashboard is currently available, determined by the
  *        total widget count.
  *
