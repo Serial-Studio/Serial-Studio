@@ -25,6 +25,7 @@
 #include <QFile>
 #include <QObject>
 #include <QVector>
+#include <QKeyEvent>
 
 namespace CSV
 {
@@ -101,6 +102,10 @@ private:
 
   QByteArray getFrame(const int row);
   QString getCellValue(const int row, const int column, bool &error);
+
+protected:
+  bool eventFilter(QObject *obj, QEvent *event) override;
+  bool handleKeyPress(QKeyEvent *keyEvent);
 
 private:
   int m_framePos;

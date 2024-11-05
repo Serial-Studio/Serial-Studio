@@ -141,10 +141,10 @@ public:
   [[nodiscard]] const QVector<MultipleCurves> &multiplotValues();
 
 public slots:
-  void resetData();
   void setPoints(const int points);
   void activateAction(const int index);
   void setPrecision(const int precision);
+  void resetData(const bool notify = true);
   void setAxisVisibility(const AxisVisibility option);
   void setWidgetVisible(const WC::DashboardWidget widget, const int index,
                         const bool visible);

@@ -35,17 +35,13 @@
  */
 UI::Dashboard::Dashboard()
 {
-  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this,
-          &UI::Dashboard::resetData);
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &UI::Dashboard::resetData);
-  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
-          &UI::Dashboard::resetData);
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &UI::Dashboard::processFrame);
-  connect(&JSON::FrameBuilder::instance(),
-          &JSON::FrameBuilder::jsonFileMapChanged, this,
-          &UI::Dashboard::resetData);
+  // clang-format off
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(); });
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(); });
+  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] { resetData(); });
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); });
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame);
+  // clang-format on
 
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
           [=] {
@@ -481,38 +477,6 @@ const QVector<MultipleCurves> &UI::Dashboard::multiplotValues()
 }
 
 /**
- * @brief Resets all data in the dashboard, including plot values,
- *        widget structures, and actions. Emits relevant signals to notify the
- *        UI about the reset state.
- */
-void UI::Dashboard::resetData()
-{
-  // Clear plotting data
-  m_fftPlotValues.clear();
-  m_multiplotValues.clear();
-  m_linearPlotValues.clear();
-
-  // Clear widget & action structures
-  m_widgetCount = 0;
-  m_actions.clear();
-  m_widgetGroups.clear();
-  m_widgetMap.clear();
-  m_widgetDatasets.clear();
-  m_widgetVisibility.clear();
-  m_availableWidgets.clear();
-
-  // Reset frame data
-  m_currentFrame = JSON::Frame();
-
-  // Notify user interface
-  Q_EMIT updated();
-  Q_EMIT dataReset();
-  Q_EMIT actionCountChanged();
-  Q_EMIT widgetCountChanged();
-  Q_EMIT widgetVisibilityChanged();
-}
-
-/**
  * @brief Sets the number of data points displayed in the dashboard plots.
  *        Clears existing multiplot and linear plot values and emits the
  *        @c pointsChanged signal.
@@ -557,6 +521,41 @@ void UI::Dashboard::setPrecision(const int precision)
   {
     m_precision = precision;
     Q_EMIT precisionChanged();
+  }
+}
+
+/**
+ * @brief Resets all data in the dashboard, including plot values,
+ *        widget structures, and actions. Emits relevant signals to notify the
+ *        UI about the reset state.
+ */
+void UI::Dashboard::resetData(const bool notify)
+{
+  // Clear plotting data
+  m_fftPlotValues.clear();
+  m_multiplotValues.clear();
+  m_linearPlotValues.clear();
+
+  // Clear widget & action structures
+  m_widgetCount = 0;
+  m_actions.clear();
+  m_widgetMap.clear();
+  m_widgetGroups.clear();
+  m_widgetDatasets.clear();
+  m_widgetVisibility.clear();
+  m_availableWidgets.clear();
+
+  // Reset frame data
+  m_currentFrame = JSON::Frame();
+
+  // Notify user interface
+  if (notify)
+  {
+    Q_EMIT updated();
+    Q_EMIT dataReset();
+    Q_EMIT actionCountChanged();
+    Q_EMIT widgetCountChanged();
+    Q_EMIT widgetVisibilityChanged();
   }
 }
 

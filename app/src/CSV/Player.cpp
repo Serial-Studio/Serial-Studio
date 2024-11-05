@@ -28,10 +28,11 @@
 #include <QInputDialog>
 #include <QApplication>
 
-#include <qtcsv/stringdata.h>
 #include <qtcsv/reader.h>
+#include <qtcsv/stringdata.h>
 
 #include "IO/Manager.h"
+#include "UI/Dashboard.h"
 #include "Misc/Utilities.h"
 
 /**
@@ -42,6 +43,7 @@ CSV::Player::Player()
   , m_playing(false)
   , m_timestamp("")
 {
+  qApp->installEventFilter(this);
   connect(this, &CSV::Player::playerStateChanged, this,
           &CSV::Player::updateData);
 }
@@ -200,25 +202,53 @@ void CSV::Player::closeFile()
 }
 
 /**
- * Reads & processes the next CSV row (until we get to the last row)
+ * @brief Reads & processes the next CSV row, capped at the last row.
+ *
+ * Moves the frame position forward by one, up to the last frame in the CSV.
+ * Resets and repopulates the dashboard with the appropriate frames for
+ * synchronized display.
  */
 void CSV::Player::nextFrame()
 {
-  if (framePosition() < frameCount())
+  if (framePosition() < frameCount() - 1)
   {
+    // Increase the frame position
     ++m_framePos;
+
+    // Populate the dashboard with a range of frames up to the new position
+    UI::Dashboard::instance().resetData(false);
+    int framesToLoad = UI::Dashboard::instance().points();
+    int startFrame = std::max(0, m_framePos - framesToLoad);
+    for (int i = startFrame; i <= m_framePos; ++i)
+      IO::Manager::instance().processPayload(getFrame(i));
+
+    // Keep timestamp and data in sync
     updateData();
   }
 }
 
 /**
- * Reads & processes the previous CSV row (until we get to the first row)
+ * @brief Reads & processes the previous CSV row, capped at the first row.
+ *
+ * Moves the frame position backward by one, down to the first frame in the CSV.
+ * Resets and repopulates the dashboard with the appropriate frames for
+ * synchronized display.
  */
 void CSV::Player::previousFrame()
 {
   if (framePosition() > 0)
   {
+    // Decrease the frame position
     --m_framePos;
+
+    // Populate the dashboard with a range of frames up to the new position
+    UI::Dashboard::instance().resetData(false);
+    int framesToLoad = UI::Dashboard::instance().points();
+    int startFrame = std::max(0, m_framePos - framesToLoad);
+    for (int i = startFrame; i <= m_framePos; ++i)
+      IO::Manager::instance().processPayload(getFrame(i));
+
+    // Keep timestamp and data in sync
     updateData();
   }
 }
@@ -318,31 +348,71 @@ void CSV::Player::openFile(const QString &filePath)
 }
 
 /**
- * Reads a specific row from the @a progress range (which can have a value
- * ranging from 0.0 to 1.0).
+ * @brief Adjusts the playback position in the CSV data based on a normalized
+ *        progress value.
+ *
+ * This function sets the playback position to a specified point within the CSV
+ * file, where the position is defined by a normalized progress value between
+ * 0 and 1. A value of 0 represents the start of the CSV file, and 1 represents
+ * the end. When the new position differs from the current playback position,
+ * this function processes the update by resetting and reloading the necessary
+ * frames.
+ *
+ * If moving backward, the dashboard plots are reset silently and reloaded with
+ * frames in the range leading up to the new position, effectively simulating a
+ * rewind effect. For forward movement, the function caps the frame range to
+ * prevent overshooting the end of the CSV.
+ *
+ * - **Backward Movement**: The dashboard is reset, and frames are reloaded from
+ *   a range capped by the current position back to `UI::Dashboard::points()`
+ *   frames earlier, or the start of the CSV, whichever comes first.
+ * - **Forward Movement**: The dashboard is similarly reset, and frames are
+ *   reloaded up to the new position, but capped to prevent going beyond the
+ *   end of the CSV file.
+ *
+ * @param progress A normalized value between 0.0 and 1.0 representing the
+ *                 desired position in the CSV file.
+ *
+ * This function ensures that:
+ * - The playback position does not exceed the CSV boundaries.
+ * - Plot data accurately reflects the new position on both forward and
+ *   backward movements.
+ * - Timestamp tracking remains synchronized with the current playback position.
+ *
+ * @note A silent reset is performed to refresh the dashboard plots without
+ *       emitting unnecessary signals.
  */
 void CSV::Player::setProgress(const qreal progress)
 {
-  // Ensure that progress value is between 0 and 1
-  auto validProgress = progress;
-  if (validProgress > 1)
-    validProgress = 1;
-  else if (validProgress < 0)
-    validProgress = 0;
+  // Clamp progress between 0 and 1
+  const auto validProgress = std::clamp(progress, 0.0, 1.0);
 
-  // Pause player to avoid messing the scheduled timer (if playing)
+  // Pause if playing to avoid interference with the timer
   if (isPlaying())
     pause();
 
-  // Calculate frame position & update data
-  m_framePos = qCeil(frameCount() * validProgress);
-  if (validProgress == 0)
-    m_framePos = 0;
-  else if (validProgress == 1)
-    m_framePos = frameCount();
+  // Calculate new frame position based on progress
+  int newFramePos = qCeil(frameCount() * validProgress);
 
-  // Update CSV values
-  updateData();
+  // Only process if position changes
+  if (newFramePos != m_framePos)
+  {
+    // Update frame position and reset dashboard data silently
+    m_framePos = newFramePos;
+    UI::Dashboard::instance().resetData(false);
+
+    // Calculate frames to load around the new frame position
+    int framesToLoad = UI::Dashboard::instance().points();
+    int startFrame = std::max(0, m_framePos - framesToLoad);
+    int endFrame = std::min(frameCount() - 1, m_framePos);
+
+    // Populate dashboard with frames within capped range
+    for (int i = startFrame; i <= endFrame; ++i)
+      IO::Manager::instance().processPayload(getFrame(i));
+
+    // Update with current data
+    updateData();
+  }
 }
 
 /**
@@ -652,4 +722,75 @@ QString CSV::Player::getCellValue(const int row, const int column, bool &error)
 
   error = true;
   return "";
+}
+
+/**
+ * @brief Event filter to capture and handle key events for playback controls.
+ *
+ * This function intercepts key events when the CSV player is open and routes
+ * them to `handleKeyPress` for processing. If the key event corresponds to a
+ * playback control (e.g., play/pause, next, previous), the event is handled;
+ * otherwise, it is passed to the default event filter.
+ *
+ * @param obj The object that the event is dispatched to.
+ * @param event The event being processed.
+ * @return true if the event was handled, false otherwise.
+ */
+bool CSV::Player::eventFilter(QObject *obj, QEvent *event)
+{
+  if (isOpen() && event->type() == QEvent::KeyPress)
+  {
+    auto *keyEvent = static_cast<QKeyEvent *>(event);
+    return handleKeyPress(keyEvent);
+  }
+
+  return QObject::eventFilter(obj, event);
+}
+
+/**
+ * @brief Handles key press events to control playback actions.
+ *
+ * This function is called by the `eventFilter` when a key press event occurs.
+ * It checks for specific keys related to media control (e.g., space for
+ * play/pause, arrow keys for frame navigation) and invokes the corresponding
+ * playback function.
+ *
+ * Supported keys:
+ * - Space, MediaPlay, MediaPause, MediaTogglePlayPause: Toggles play/pause.
+ * - Left, Down, MediaPrevious: Moves to the previous frame.
+ * - Right, Up, MediaNext: Moves to the next frame.
+ *
+ * @param keyEvent The key event to handle.
+ * @return true if the event was handled, false otherwise.
+ */
+bool CSV::Player::handleKeyPress(QKeyEvent *keyEvent)
+{
+  bool handled;
+  switch (keyEvent->key())
+  {
+    case Qt::Key_Space:
+    case Qt::Key_MediaPlay:
+    case Qt::Key_MediaPause:
+    case Qt::Key_MediaTogglePlayPause:
+      toggle();
+      handled = true;
+      break;
+    case Qt::Key_Left:
+    case Qt::Key_Down:
+    case Qt::Key_MediaPrevious:
+      previousFrame();
+      handled = true;
+      break;
+    case Qt::Key_Right:
+    case Qt::Key_Up:
+    case Qt::Key_MediaNext:
+      nextFrame();
+      handled = true;
+      break;
+    default:
+      handled = false;
+      break;
+  }
+
+  return handled;
 }
