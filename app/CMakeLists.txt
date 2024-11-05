@@ -68,7 +68,6 @@ if(QT_VERSION VERSION_GREATER_EQUAL "6.8.0")
     qt_policy(SET QTP0004 NEW)
 endif()
 
-
 #-------------------------------------------------------------------------------
 # Import source code
 #-------------------------------------------------------------------------------
@@ -340,7 +339,7 @@ endif()
 
 set_target_properties(
  ${PROJECT_EXECUTABLE} PROPERTIES
- UNITY_BUILD OFF
+ UNITY_BUILD ON
  UNITY_BUILD_MODE BATCH
  UNITY_BUILD_BATCH_SIZE 128
  INTERPROCEDURAL_OPTIMIZATION TRUE

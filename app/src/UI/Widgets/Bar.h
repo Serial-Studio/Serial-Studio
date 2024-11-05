@@ -65,6 +65,5 @@ private:
   qreal m_minValue;
   qreal m_maxValue;
   qreal m_alarmValue;
-  qreal m_fractionalValue;
 };
 } // namespace Widgets
