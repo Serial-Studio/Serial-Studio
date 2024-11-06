@@ -36,26 +36,41 @@ Puedes descargar e instalar la última versión de Serial Studio para tu platafo
 
 ### Instalación en Linux
 
-Para usuarios de GNU/Linux, después de descargar el AppImage, asegúrate de que tenga los permisos de ejecución correctos antes de ejecutar la aplicación:
+Para los usuarios de GNU/Linux, hay varias formas de instalar y ejecutar la aplicación:
 
-```bash
-chmod +x SerialStudio-2.1.0-Linux.AppImage
-./SerialStudio-2.1.0-Linux.AppImage
+#### 1. AppImage
+
+Descarga el archivo AppImage y asegúrate de que tenga los permisos de ejecución correctos antes de ejecutarlo:
+
+```
+chmod +x SerialStudio-3.0.5-Linux-x86_64.AppImage
+./SerialStudio-3.0.5-Linux-x86_64.AppImage
 ```
 
-Alternativamente, puedes integrar Serial Studio en tu sistema utilizando [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/).
+*Nota:* Es posible que necesites instalar libfuse2 para que el AppImage funcione. En sistemas basados en Debian/Ubuntu, puedes instalarlo con:
 
-### Paquetes Linux Precompilados
-
-Para los usuarios de Arch Linux, puedes instalar Serial Studio usando el AUR:
-
-```bash
-aur fetch serial-studio-git
-aur build
-sudo pacman -S serial-studio-git
+```
+sudo apt update
+sudo apt install libfuse2
 ```
 
-**Nota:** La receta del paquete AUR puede estar desactualizada, así que asegúrate de verificar actualizaciones.
+Puedes integrar el AppImage de Serial Studio en tu sistema más fácilmente utilizando AppImageLauncher.
+
+#### 2. Paquetes DEB/RPM (experimental)
+
+También puedes instalar Serial Studio usando paquetes DEB o RPM, que actualmente se encuentran en una etapa experimental. Por favor, informa cualquier problema que encuentres.
+
+Para distribuciones basadas en Debian (p. ej., Debian, Ubuntu, Linux Mint, etc.):
+
+```
+sudo dpkg -i SerialStudio-3.0.5-Linux-x86_64.deb
+```
+
+Para distribuciones basadas en RPM (p. ej., Fedora, RHEL, OpenSUSE, etc.):
+
+```
+sudo rpm -i SerialStudio-3.0.5-Linux-x86_64.rpm
+```
 
 ## Desarrollo
 
