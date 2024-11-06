@@ -54,7 +54,7 @@ sudo apt update
 sudo apt install libfuse2
 ```
 
-Puedes integrar el AppImage de Serial Studio en tu sistema más fácilmente utilizando AppImageLauncher.
+Puedes integrar el AppImage de Serial Studio en tu sistema más fácilmente utilizando [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/).
 
 #### 2. Paquetes DEB/RPM (experimental)
 
