@@ -62,13 +62,13 @@ You can integrate the Serial Studio *AppImage* into your system more easily usin
 
 You can also install Serial Studio using DEB or RPM packages, which are currently in an experimental stage. Please report any issues you encounter.
 
-For Debian-based distributions (e.g., Debian, Ubuntu, Linux Mint):
+For Debian-based distributions (e.g., Debian, Ubuntu, Linux Mint, etc):
 
 ```bash
 sudo dpkg -i SerialStudio-3.0.5-Linux-x86_64.deb
 ```
 
-For RPM-based distributions (e.g., Fedora, RHEL):
+For RPM-based distributions (e.g., Fedora, RHEL, OpenSUSE, etc):
 
 ```bash
 sudo rpm -i SerialStudio-3.0.5-Linux-x86_64.rpm
