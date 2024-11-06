@@ -34,28 +34,45 @@ Serial Studio 是一个跨平台、功能多样的数据可视化工具，专为
 
 你可以从 [这里](https://github.com/Serial-Studio/Serial-Studio/releases/latest) 下载并安装适用于你首选平台的最新版本 **Serial Studio**。
 
+以下是您的 Linux 安装说明的中文翻译：
+
 ### Linux 安装
 
-对于 GNU/Linux 用户，在下载 AppImage 后，确保为其设置正确的可执行权限，然后运行应用程序：
+对于 GNU/Linux 用户，有多种方式可以安装和运行该应用程序：
 
-```bash
-chmod +x SerialStudio-2.1.0-Linux.AppImage
-./SerialStudio-2.1.0-Linux.AppImage
+#### 1. AppImage
+
+下载 AppImage 文件，并确保它具有正确的执行权限，然后运行：
+
+```
+chmod +x SerialStudio-3.0.5-Linux-x86_64.AppImage
+./SerialStudio-3.0.5-Linux-x86_64.AppImage
 ```
 
-或者，你可以使用 [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/) 将 **Serial Studio** 集成到你的系统中。
+注意： 可能需要安装 libfuse2 以确保 AppImage 能够正常工作。在基于 Debian/Ubuntu 的系统上，可以使用以下命令进行安装：
 
-### 预编译的 Linux 软件包
-
-对于 Arch Linux 用户，你可以通过 AUR 安装 **Serial Studio**：
-
-```bash
-aur fetch serial-studio-git
-aur build
-sudo pacman -S serial-studio-git
+```
+sudo apt update
+sudo apt install libfuse2
 ```
 
-**注意：** AUR 软件包可能过时，请确保检查更新。
+您还可以使用 [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/) 更轻松地将 Serial Studio 的 AppImage 集成到您的系统中。
+
+#### 2. DEB/RPM 包（实验性）
+
+您还可以通过 DEB 或 RPM 包安装 Serial Studio，目前这些包处于实验阶段。如果遇到任何问题，请反馈。
+
+对于基于 Debian 的发行版（例如 Debian、Ubuntu、Linux Mint 等）：
+
+```
+sudo dpkg -i SerialStudio-3.0.5-Linux-x86_64.deb
+```
+
+对于基于 RPM 的发行版（例如 Fedora、RHEL、OpenSUSE 等）：
+
+```
+sudo rpm -i SerialStudio-3.0.5-Linux-x86_64.rpm
+```
 
 ## 开发
 
