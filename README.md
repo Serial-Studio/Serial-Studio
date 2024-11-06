@@ -34,28 +34,45 @@ Today, Serial Studio is a powerful and adaptable tool, suitable not only for Can
 
 You can download and install the latest version of Serial Studio for your preferred platform from [here](https://github.com/Serial-Studio/Serial-Studio/releases/latest).
 
+Here’s an updated version of your Linux installation instructions with the additional details:
+
 ### Linux Installation
 
-For GNU/Linux users, after downloading the AppImage, ensure it has the correct executable permissions before running the application:
+For GNU/Linux users, there are multiple ways to install and run the application:
+
+#### 1. AppImage
+
+Download the AppImage file and ensure it has the correct executable permissions before running:
 
 ```bash
-chmod +x SerialStudio-2.1.0-Linux.AppImage
-./SerialStudio-2.1.0-Linux.AppImage
+chmod +x SerialStudio-3.0.5-Linux-x86_64.AppImage
+./SerialStudio-3.0.5-Linux-x86_64.AppImage
 ```
 
-Alternatively, you can integrate Serial Studio into your system using [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/).
-
-### Prebuilt Linux Packages
-
-For Arch Linux users, you can install Serial Studio using the AUR:
+*Note:* You may need to install libfuse2 for the AppImage to work. On Debian/Ubuntu-based systems, you can install it using:
 
 ```bash
-aur fetch serial-studio-git
-aur build
-sudo pacman -S serial-studio-git
+sudo apt update
+sudo apt install libfuse2
 ```
 
-**Note:** The AUR package recipe may be outdated, so be sure to check for updates.
+You can integrate the Serial Studio *AppImage* into your system more easily using [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/)..
+
+#### 2. DEB/RPM Packages (Experimental)
+
+You can also install Serial Studio using DEB or RPM packages, which are currently in an experimental stage. Please report any issues you encounter.
+
+For Debian-based distributions (e.g., Debian, Ubuntu, Linux Mint):
+
+```bash
+sudo dpkg -i SerialStudio-3.0.5-Linux-x86_64.deb
+```
+
+For RPM-based distributions (e.g., Fedora, RHEL):
+
+```bash
+sudo rpm -i SerialStudio-3.0.5-Linux-x86_64.rpm
+```
 
 ## Development
 
