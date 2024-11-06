@@ -27,6 +27,7 @@ env:
   UNIXNAME: "serial-studio"
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
+  DESCRIPTION: "Multi-purpose serial data visualization & processing program"
   QT_MODULES: qtserialport qtconnectivity qtpositioning qtlocation qtgraphs qtquick3d qt3d qtdatavis3d qtshadertools
  
 #-------------------------------------------------------------------------------
@@ -38,8 +39,8 @@ jobs:
   # Linux build
   #
   build-linux:
-    runs-on: ubuntu-20.04
-    name: '🐧 Ubuntu 20.04'
+    runs-on: ubuntu-22.04
+    name: '🐧 Ubuntu 22.04'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -69,7 +70,10 @@ jobs:
         libxcb-util0-dev \
         libxcb-cursor-dev \
         libssl-dev \
-        libudev-dev
+        libudev-dev \
+        rpm \
+        libfuse2 \
+        fakeroot
         
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -87,30 +91,61 @@ jobs:
         cd build
         cmake --build . --config Release -j 16
 
-    - name: '⚙️ Install linuxdeploy'
-      run: |
-        cd "build/app"
-        wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-        wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-        chmod +x linuxdeploy-x86_64.AppImage
-        chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
-
     - name: '📦 Create AppImage'
       run: |
         cd "build/app"
+        wget https://github.com/dantti/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+        wget https://github.com/dantti/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+        chmod +x linuxdeploy-x86_64.AppImage
+        chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+        
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
+        export LINUXDEPLOY_EXCLUDED_LIBRARIES="libqsqlmimer.so"
         export QMAKE=/home/runner/work/${{env.EXECUTABLE}}/Qt/${{env.QT_VERSION_LINUX}}/gcc_64/bin/qmake
         export PATH=/home/runner/work/${{env.EXECUTABLE}}/Qt/${{env.QT_VERSION_LINUX}}/gcc_64/libexec:$PATH
-        ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.png -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
+        
+        ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
+        
         rm linuxdeploy-x86_64.AppImage
         rm linuxdeploy-plugin-qt-x86_64.AppImage
-        mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+        
+        mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
+
+    - name: '📦 Create Native Packages'
+      run: |
+        cd "build/app"
+
+        export LDNP_DESCRIPTION="${{env.DESCRIPTION}}"
+        wget https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages/releases/download/continuous/linuxdeploy-plugin-native_packages-x86_64.AppImage
+        chmod +x linuxdeploy-plugin-native_packages-x86_64.AppImage
+        
+        fakeroot ./linuxdeploy-plugin-native_packages-x86_64.AppImage --appdir AppDir --build deb
+        fakeroot ./linuxdeploy-plugin-native_packages-x86_64.AppImage --appdir AppDir --build rpm
+        
+        rm -rf AppDir
+        rm linuxdeploy-plugin-native_packages-x86_64.AppImage
+        
+        mv *.deb ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
+        mv *.rpm ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
           
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
+
+    - name: '📤 Upload artifact: Debian Package'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
+
+    - name: '📤 Upload artifact: RPM Package'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
+
 
   #
   # macOS (arm64) build
@@ -261,12 +296,12 @@ jobs:
         npm install --global create-dmg
         rm LICENSE.md
         create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
-        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg"
 
     - name: '📋 Notarize'
       uses: alex-spataru/xcode-notarize@v2
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
         appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
         appstore-connect-teamid: ${{secrets.NOTARIZATION_TEAMID}}
         appstore-connect-password: ${{secrets.NOTARIZATION_PASSWORD}}
@@ -274,13 +309,13 @@ jobs:
     - name: '📌 Staple'
       uses: BoundfoxStudios/action-xcode-staple@v1
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
 
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
 
   #
   # Windows build
@@ -321,14 +356,14 @@ jobs:
       run: |
         cd build
         cpack --verbose
-        mv *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-        mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe ../
+        mv *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
+        mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe ../
         
     - name: '📤 Upload artifact: NSIS installer'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
 
   # Upload continuous build
   upload:
@@ -352,8 +387,10 @@ jobs:
             sudo apt-get install libfuse2
             wget -q https://github.com/TheAssassin/pyuploadtool/releases/download/continuous/pyuploadtool-x86_64.AppImage
             chmod +x pyuploadtool-x86_64.AppImage
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Intel.dmg
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
 
