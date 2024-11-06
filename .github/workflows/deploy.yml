@@ -100,7 +100,6 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
         
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-        export LINUXDEPLOY_EXCLUDED_LIBRARIES="libqsqlmimer.so"
         export QMAKE=/home/runner/work/${{env.EXECUTABLE}}/Qt/${{env.QT_VERSION_LINUX}}/gcc_64/bin/qmake
         export PATH=/home/runner/work/${{env.EXECUTABLE}}/Qt/${{env.QT_VERSION_LINUX}}/gcc_64/libexec:$PATH
         
