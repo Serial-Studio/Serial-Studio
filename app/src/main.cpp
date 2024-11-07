@@ -51,8 +51,8 @@ static void cliShowVersion();
 static void cliResetSettings();
 
 #ifdef Q_OS_LINUX
-void setupAppImageIcon(const QString &appExecutableName,
-                       const QString &iconResourcePath);
+static void setupAppImageIcon(const QString &appExecutableName,
+                              const QString &iconResourcePath);
 #endif
 
 #ifdef Q_OS_WINDOWS
@@ -187,8 +187,8 @@ static void cliResetSettings()
  * @param iconResourcePath The path to the icon in the application's resources
  *                         (e.g., `:/rcc/images/icon@2x.png`).
  */
-void setupAppImageIcon(const QString &appExecutableName,
-                       const QString &iconResourcePath)
+static void setupAppImageIcon(const QString &appExecutableName,
+                              const QString &iconResourcePath)
 {
   // clang-format off
   const QString pixmapPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/icons/hicolor/256x256/apps/";
@@ -235,7 +235,7 @@ void setupAppImageIcon(const QString &appExecutableName,
  * prints a newline to avoid overlapping text with any previous user commands
  * in the console.
  */
-void attachToConsole()
+static void attachToConsole()
 {
   if (AttachConsole(ATTACH_PARENT_PROCESS))
   {
@@ -261,7 +261,7 @@ void attachToConsole()
  * @param argc Reference to the argument count from `main()`.
  * @param argv Array of command-line arguments from `main()`.
  */
-void adjustArgumentsForFreeType(int &argc, char **argv)
+static void adjustArgumentsForFreeType(int &argc, char **argv)
 {
   // Check if the devicePixelRatio is approximately
   const auto *screen = QApplication::primaryScreen();
