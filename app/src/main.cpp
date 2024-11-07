@@ -136,8 +136,22 @@ int main(int argc, char **argv)
   auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
   QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
 
-  // Init. application
+  // Initialize application, force freetype font rendering on Windows
+#ifdef Q_OS_WIN
+  // Dynamically add "-platform windows:fontengine=freetype"
+  const char *platformArgument = "-platform";
+  const char *platformOption = "windows:fontengine=freetype";
+
+  // Resize argv array to hold two additional arguments
+  std::vector<char *> newArgv(argv, argv + argc);
+  newArgv.push_back(const_cast<char *>(platformArgument));
+  newArgv.push_back(const_cast<char *>(platformOption));
+  argc += 2;
+
+  QApplication app(argc, newArgv.data());
+#else
   QApplication app(argc, argv);
+#endif
 
   // Set application style
   app.setStyle(QStyleFactory::create("Fusion"));
