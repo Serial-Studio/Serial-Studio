@@ -85,8 +85,9 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   setFlag(ItemAcceptsInputMethod, true);
   setAcceptedMouseButtons(Qt::AllButtons);
 
-  // Set performance hints
+  // Set rendering hints
   setMipmap(false);
+  setAntialiasing(true);
   setOpaquePainting(true);
 
   // Set font
