@@ -3,9 +3,9 @@
     ],
     "decoder": 0,
     "frameDetection": 1,
-    "frameEnd": "*/",
+    "frameEnd": ";",
     "frameParser": "/**\n * This function splits a data frame using the project-specified separator,\n * allowing you to customize frame parsing for different project requirements.\n *\n * Global variables can maintain a constant output array, enabling a single\n * Serial Studio project to display information consistently, even with varying\n * frame types.\n *\n * @param[in]  frame      The latest received frame as a string.\n * @param[in]  separator  The data separator defined in the JSON project.\n * @return     Array of strings containing the parsed frame elements.\n *\n * @note Only data within the delimiters is processed.\n * @note Declare global variables outside @c parse() for state/configuration.\n *\n * @example\n * Given frame: \"value1,value2,value3\", separator: \",\"\n * Returns: [\"value1\", \"value2\", \"value3\"]\n */\nfunction parse(frame, separator) {\n    return frame.split(separator);\n}\n",
-    "frameStart": "/*",
+    "frameStart": "$",
     "groups": [
         {
             "datasets": [
