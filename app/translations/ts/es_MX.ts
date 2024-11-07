@@ -1285,7 +1285,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1945"/>
         <source>Frame Detection</source>
-        <translation>Detección de tramas</translation>
+        <translation type="unfinished">Detección de Tramas</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1947"/>

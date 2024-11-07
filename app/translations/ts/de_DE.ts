@@ -1285,12 +1285,12 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1945"/>
         <source>Frame Detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Rahmenerkennung</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1947"/>
         <source>Strategy used for identifying frame data</source>
-        <translation type="unfinished"></translation>
+        <translation>Strategie zur Identifizierung von Rahmendaten</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1983"/>
@@ -1565,12 +1565,12 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2465"/>
         <source>Plain Text (UTF8)</source>
-        <translation type="unfinished"></translation>
+        <translation>Klartext (UTF8)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2495"/>
         <source>CRLF (\r\n)</source>
-        <translation type="unfinished"></translation>
+        <translation>CRLF (\r\n)</translation>
     </message>
     <message>
         <source>Normal (UTF8)</source>
@@ -1589,12 +1589,12 @@ Verwende die Schaltflächen in der Symbolleiste oben, um einen Datensatz zu dies
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2471"/>
         <source>End Delimiter Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur Ende-Trennzeichen</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2472"/>
         <source>Start + End Delimiter</source>
-        <translation type="unfinished"></translation>
+        <translation>Start- und Ende-Trennzeichen</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2476"/>

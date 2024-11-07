@@ -1285,12 +1285,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1945"/>
         <source>Frame Detection</source>
-        <translation type="unfinished"></translation>
+        <translation>帧检测</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1947"/>
         <source>Strategy used for identifying frame data</source>
-        <translation type="unfinished"></translation>
+        <translation>用于识别帧数据的策略</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1983"/>
@@ -1565,12 +1565,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2465"/>
         <source>Plain Text (UTF8)</source>
-        <translation type="unfinished"></translation>
+        <translation>纯文本 (UTF8)</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2495"/>
         <source>CRLF (\r\n)</source>
-        <translation type="unfinished"></translation>
+        <translation>CRLF (\r\n)</translation>
     </message>
     <message>
         <source>Normal (UTF8)</source>
@@ -1589,12 +1589,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2471"/>
         <source>End Delimiter Only</source>
-        <translation type="unfinished"></translation>
+        <translation>仅结束分隔符</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2472"/>
         <source>Start + End Delimiter</source>
-        <translation type="unfinished"></translation>
+        <translation>开始+结束分隔符</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2476"/>
