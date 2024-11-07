@@ -147,11 +147,11 @@ jobs:
 
 
   #
-  # macOS (arm64) build
+  # macOS (aarch64) build
   #
-  build-mac-arm64:
+  build-mac-aarch64:
     runs-on: macos-latest
-    name: '🍎 macOS (arm64)'
+    name: '🍎 macOS (aarch64)'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -210,12 +210,12 @@ jobs:
         npm install --global create-dmg
         rm LICENSE.md
         create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
-        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-aarch64.dmg"
 
     - name: '📋 Notarize'
       uses: alex-spataru/xcode-notarize@v2
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-aarch64.dmg
         appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
         appstore-connect-teamid: ${{secrets.NOTARIZATION_TEAMID}}
         appstore-connect-password: ${{secrets.NOTARIZATION_PASSWORD}}
@@ -223,13 +223,13 @@ jobs:
     - name: '📌 Staple'
       uses: BoundfoxStudios/action-xcode-staple@v1
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-aarch64.dmg
 
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-aarch64.dmg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-aarch64.dmg
         
   #
   # macOS (Intel) build
@@ -368,7 +368,7 @@ jobs:
   upload:
       name: '🗂 Create release and upload artifacts'
       needs:
-        - build-mac-arm64
+        - build-mac-aarch64
         - build-mac-intel
         - build-windows
         - build-linux
@@ -389,7 +389,7 @@ jobs:
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-aarch64.dmg
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
 
