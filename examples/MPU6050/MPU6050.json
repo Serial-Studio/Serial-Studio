@@ -1,0 +1,152 @@
+{
+    "actions": [
+    ],
+    "decoder": 0,
+    "frameDetection": 1,
+    "frameEnd": ";",
+    "frameParser": "/**\n * This function splits a data frame using the project-specified separator,\n * allowing you to customize frame parsing for different project requirements.\n *\n * Global variables can maintain a constant output array, enabling a single\n * Serial Studio project to display information consistently, even with varying\n * frame types.\n *\n * @param[in]  frame      The latest received frame as a string.\n * @param[in]  separator  The data separator defined in the JSON project.\n * @return     Array of strings containing the parsed frame elements.\n *\n * @note Only data within the delimiters is processed.\n * @note Declare global variables outside @c parse() for state/configuration.\n *\n * @example\n * Given frame: \"value1,value2,value3\", separator: \",\"\n * Returns: [\"value1\", \"value2\", \"value3\"]\n */\nfunction parse(frame, separator) {\n    return frame.split(separator);\n}\n",
+    "frameStart": "$",
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Accelerometer X",
+                    "units": "m/s²",
+                    "value": "",
+                    "widget": "x"
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Accelerometer Y",
+                    "units": "m/s²",
+                    "value": "",
+                    "widget": "y"
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Accelerometer Z",
+                    "units": "m/s²",
+                    "value": "",
+                    "widget": "z"
+                }
+            ],
+            "title": "Accelerometer",
+            "widget": "accelerometer"
+        },
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Gyro X",
+                    "units": "deg/s",
+                    "value": "",
+                    "widget": "x"
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 5,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Gyro Y",
+                    "units": "deg/s",
+                    "value": "",
+                    "widget": "y"
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 6,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Gyro Z",
+                    "units": "deg/s",
+                    "value": "",
+                    "widget": "z"
+                }
+            ],
+            "title": "Gyroscope",
+            "widget": "gyro"
+        },
+        {
+            "datasets": [
+                {
+                    "alarm": 40,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 7,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 100,
+                    "min": 0,
+                    "title": "Temperature",
+                    "units": "℃",
+                    "value": "",
+                    "widget": "bar"
+                }
+            ],
+            "title": "Temperature",
+            "widget": ""
+        }
+    ],
+    "mapTilerApiKey": "",
+    "separator": ",",
+    "thunderforestApiKey": "",
+    "title": "MPU6050"
+}
