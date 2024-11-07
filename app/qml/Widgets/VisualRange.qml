@@ -27,7 +27,7 @@ ColumnLayout {
     const valueText = value.toFixed(Cpp_UI_Dashboard.precision)
     const maxText = root.maxValue.toFixed(Cpp_UI_Dashboard.precision)
     const leftSpaces = " ".repeat(Math.max(0, maxText.length - valueText.length))
-    return leftSpaces + value
+    return leftSpaces + valueText
   }
 
   //

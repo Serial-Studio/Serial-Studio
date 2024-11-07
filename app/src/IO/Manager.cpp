@@ -28,8 +28,9 @@
 #include "IO/Drivers/BluetoothLE.h"
 
 #include "MQTT/Client.h"
-#include "JSON/FrameBuilder.h"
 #include "Misc/Translator.h"
+#include "JSON/FrameBuilder.h"
+#include "JSON/ProjectModel.h"
 
 /**
  * Adds support for C escape sequences to the given @a str.
@@ -438,6 +439,7 @@ void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
 void IO::Manager::readFrames()
 {
   // Obtain pointer to JSON generator
+  static auto *model = &JSON::ProjectModel::instance();
   static auto *generator = &JSON::FrameBuilder::instance();
 
   // Initialize a static list with possible line breaks
@@ -457,159 +459,21 @@ void IO::Manager::readFrames()
   const auto mode = generator->operationMode();
 
   // Read until start/finish combinations are not found
-  if (mode == JSON::FrameBuilder::ProjectFile
-      || mode == JSON::FrameBuilder::DeviceSendsJSON)
+  if (mode == JSON::FrameBuilder::DeviceSendsJSON)
+    readStartEndDelimetedFrames();
+
+  // Project mode, obtain which frame detection method to use
+  else if (mode == JSON::FrameBuilder::ProjectFile)
   {
-    auto start = startSequence().toUtf8();
-    auto finish = finishSequence().toUtf8();
-    int bytesProcessed = 0;
-
-    while (true)
-    {
-      // Get start index
-      int sIndex = m_dataBuffer.indexOf(start, bytesProcessed);
-      if (sIndex == -1)
-        break;
-
-      // Get end index
-      int fIndex = m_dataBuffer.indexOf(finish, sIndex + start.size());
-      if (fIndex == -1)
-        break;
-
-      // Extract the frame between start and finish sequences
-      int frameStart = sIndex + start.size();
-      int frameLength = fIndex - frameStart;
-      QByteArray frame = m_dataBuffer.mid(frameStart, frameLength);
-
-      // Parse frame if not empty
-      if (!frame.isEmpty())
-      {
-        // Checksum verification & emit frame if valid
-        int chop = 0;
-        auto result = integrityChecks(frame, m_dataBuffer, &chop);
-        if (result == ValidationStatus::FrameOk)
-        {
-          Q_EMIT frameReceived(frame);
-          bytesProcessed = fIndex + finish.size() + chop;
-        }
-
-        // Incomplete data; wait for more data
-        else if (result == ValidationStatus::ChecksumIncomplete)
-          break;
-
-        // Invalid frame; skip past finish sequence
-        else
-          bytesProcessed = fIndex + finish.size() + chop;
-      }
-
-      // Empty frame; move past the finish sequence
-      else
-        bytesProcessed = fIndex + finish.size();
-    }
-
-    // Remove processed data from buffer
-    if (bytesProcessed > 0)
-      m_dataBuffer.remove(0, bytesProcessed);
-
-    // Clear temp buffer if it exceeds maximum size
-    if (m_dataBuffer.size() > maxBufferSize())
-      clearTempBuffer();
+    if (model->frameDetection() == WC::EndDelimiterOnly)
+      readEndDelimetedFrames(QList<QByteArray>{finishSequence().toUtf8()});
+    else if (model->frameDetection() == WC::StartAndEndDelimiter)
+      readStartEndDelimetedFrames();
   }
 
   // Handle data with line breaks (\n, \r, or \r\n)
   else if (mode == JSON::FrameBuilder::CommaSeparatedValues)
-  {
-    // Set maximum frame size to 1 KB
-    const int maxFrameSize = 1024;
-    int bytesProcessed = 0;
-
-    while (true)
-    {
-      // Find the earliest line break in the buffer
-      int lineEndIndex = -1;
-      QByteArray lineBreak;
-      for (const QByteArray &lb : linebreaks)
-      {
-        int index = m_dataBuffer.indexOf(lb, bytesProcessed);
-        if (index != -1 && (lineEndIndex == -1 || index < lineEndIndex))
-        {
-          lineEndIndex = index;
-          lineBreak = lb;
-        }
-      }
-
-      // No complete line found
-      if (lineEndIndex == -1)
-        break;
-
-      // Extract the frame up to the line break
-      int frameLength = lineEndIndex - bytesProcessed;
-      QByteArray frame = m_dataBuffer.mid(bytesProcessed, frameLength);
-
-      // Process frame
-      if (!frame.isEmpty())
-      {
-        // Skip larger frames
-        if (frame.size() > maxFrameSize)
-        {
-          qWarning() << "Frame size exceeds maximum allowed size and will be "
-                        "discarded.";
-        }
-
-        // Validate that frame only contains numerical data
-        else
-        {
-          // Obtain a list of elements
-          const QList<QByteArray> elements = frame.split(',');
-
-          // Validate numerical data
-          bool validFrame = true;
-          bool hasValidNumber = false;
-          for (const QByteArray &element : elements)
-          {
-            // Remove spaces, tabs, etc from element
-            const QString trimmedElement = QString::fromUtf8(element).trimmed();
-            if (trimmedElement.isEmpty())
-              continue;
-
-            // Try to convert the element to a double
-            bool ok;
-            trimmedElement.toDouble(&ok);
-
-            // Conversion failed, skip frame
-            if (!ok)
-            {
-              validFrame = false;
-              break;
-            }
-
-            // Set valid number flag
-            hasValidNumber = true;
-          }
-
-          // Only process frame if it has numerical data and at least one item
-          if (validFrame && hasValidNumber)
-            Q_EMIT frameReceived(frame);
-
-          // Log invalid frames
-          // else
-          //  qWarning() << "Invalid frame received (non-numeric data):" <<
-          //  frame;
-        }
-      }
-
-      // Move past the line break
-      bytesProcessed = lineEndIndex + lineBreak.size();
-    }
-
-    // Remove processed data from buffer
-    if (bytesProcessed > 0)
-      m_dataBuffer.remove(0, bytesProcessed);
-
-    // Clear temp buffer if it exceeds maximum size
-    if (m_dataBuffer.size() > maxBufferSize())
-      clearTempBuffer();
-  }
+    readEndDelimetedFrames(linebreaks);
 }
 
 /**
@@ -665,6 +529,162 @@ void IO::Manager::onDataReceived(const QByteArray &data)
   // Notify user interface
   Q_EMIT receivedBytesChanged();
   Q_EMIT dataReceived(data);
+}
+
+/**
+ * @brief Processes data buffer to detect and emit frames using start and end
+ *        delimiters.
+ *
+ * This function continuously scans the internal data buffer for frames that are
+ * delimited by predefined start and end sequences.
+ *
+ * When a frame is detected, its content is extracted and validated.
+ * If the frame passes integrity checks, it is emitted as a complete frame.
+ *
+ * - If the start delimiter is found but the end delimiter is missing, the
+ *   function waits for more data.
+ * - If the frame fails validation, it is discarded, and processing resumes
+ *   after the end delimiter.
+ * - Processed data is removed from the buffer to maintain memory efficiency.
+ *
+ * The function also ensures the buffer does not exceed a maximum size by
+ * clearing temporary data if necessary.
+ */
+void IO::Manager::readStartEndDelimetedFrames()
+{
+  auto start = startSequence().toUtf8();
+  auto finish = finishSequence().toUtf8();
+  int bytesProcessed = 0;
+
+  while (true)
+  {
+    // Get start index
+    int sIndex = m_dataBuffer.indexOf(start, bytesProcessed);
+    if (sIndex == -1)
+      break;
+
+    // Get end index
+    int fIndex = m_dataBuffer.indexOf(finish, sIndex + start.size());
+    if (fIndex == -1)
+      break;
+
+    // Extract the frame between start and finish sequences
+    int frameStart = sIndex + start.size();
+    int frameLength = fIndex - frameStart;
+    QByteArray frame = m_dataBuffer.mid(frameStart, frameLength);
+
+    // Parse frame if not empty
+    if (!frame.isEmpty())
+    {
+      // Checksum verification & emit frame if valid
+      int chop = 0;
+      auto result = integrityChecks(frame, m_dataBuffer, &chop);
+      if (result == ValidationStatus::FrameOk)
+      {
+        Q_EMIT frameReceived(frame);
+        bytesProcessed = fIndex + finish.size() + chop;
+      }
+
+      // Incomplete data; wait for more data
+      else if (result == ValidationStatus::ChecksumIncomplete)
+        break;
+
+      // Invalid frame; skip past finish sequence
+      else
+        bytesProcessed = fIndex + finish.size() + chop;
+    }
+
+    // Empty frame; move past the finish sequence
+    else
+      bytesProcessed = fIndex + finish.size();
+  }
+
+  // Remove processed data from buffer
+  if (bytesProcessed > 0)
+    m_dataBuffer.remove(0, bytesProcessed);
+
+  // Clear temp buffer if it exceeds maximum size
+  if (m_dataBuffer.size() > maxBufferSize())
+    clearTempBuffer();
+}
+
+/**
+ * @brief Processes data buffer to detect and emit frames using end delimiters
+ *        only.
+ *
+ * This function scans the internal data buffer for frames separated by
+ * specified line break sequences.
+ *
+ * When a frame is detected up to a line break, it is emitted as a complete
+ * frame.
+ *
+ * - Frames exceeding a set maximum size (10 KB) are discarded to avoid
+ *   excessive memory usage.
+ * - If the frame contains non-numeric data, it is marked invalid and skipped.
+ * - Processed data is removed from the buffer, and the buffer size is monitored
+ *   to prevent overflow.
+ *
+ * This function is designed for continuous streams where frames end with
+ * newlines or other delimiters.
+ *
+ * @param delimeters List of QByteArray delimiters that indicate the end of a
+ *                   frame.
+ */
+void IO::Manager::readEndDelimetedFrames(const QList<QByteArray> &delimeters)
+{
+  // Set maximum frame size to 10 KB
+  const int maxFrameSize = 10 * 1024;
+  int bytesProcessed = 0;
+
+  while (true)
+  {
+    // Find the earliest line break in the buffer
+    int endIndex = -1;
+    QByteArray delimeter;
+    for (const QByteArray &d : delimeters)
+    {
+      int index = m_dataBuffer.indexOf(d, bytesProcessed);
+      if (index != -1 && (endIndex == -1 || index < endIndex))
+      {
+        endIndex = index;
+        delimeter = d;
+      }
+    }
+
+    // No complete line found
+    if (endIndex == -1)
+      break;
+
+    // Extract the frame up to the line break
+    int frameLength = endIndex - bytesProcessed;
+    QByteArray frame = m_dataBuffer.mid(bytesProcessed, frameLength);
+
+    // Process frame
+    if (!frame.isEmpty())
+    {
+      // Skip larger frames
+      if (frame.size() > maxFrameSize)
+      {
+        qWarning() << "Frame size exceeds maximum allowed size and will be "
+                      "discarded.";
+      }
+
+      // Emit frame
+      else
+        Q_EMIT frameReceived(frame);
+    }
+
+    // Move past the line break
+    bytesProcessed = endIndex + delimeter.size();
+  }
+
+  // Remove processed data from buffer
+  if (bytesProcessed > 0)
+    m_dataBuffer.remove(0, bytesProcessed);
+
+  // Clear temp buffer if it exceeds maximum size
+  if (m_dataBuffer.size() > maxBufferSize())
+    clearTempBuffer();
 }
 
 /**

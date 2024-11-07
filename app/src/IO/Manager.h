@@ -175,6 +175,10 @@ private slots:
   void onDataReceived(const QByteArray &data);
 
 private:
+  void readStartEndDelimetedFrames();
+  void readEndDelimetedFrames(const QList<QByteArray> &delimeters);
+
+private:
   ValidationStatus integrityChecks(const QByteArray &frame,
                                    const QByteArray &masterBuffer,
                                    int *bytesToChop);

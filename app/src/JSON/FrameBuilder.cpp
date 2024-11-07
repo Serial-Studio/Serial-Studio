@@ -286,7 +286,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     QString separator;
     switch (JSON::ProjectModel::instance().decoderMethod())
     {
-      case WC::Normal:
+      case WC::PlainText:
         frameData = QString::fromUtf8(data);
         separator = IO::Manager::instance().separatorSequence();
         break;

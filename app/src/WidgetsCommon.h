@@ -69,15 +69,36 @@ class WC : public QObject
 
 public:
   /**
-   * @brief Enum representing the different methods available for decoding data.
+   * @enum DecoderMethod
+   * @brief Specifies the available methods for decoding data from a continuous
+   * stream.
+   *
+   * This enum defines different decoding strategies that can be applied to
+   * interpret incoming data. Each value represents a specific decoding format.
    */
   enum DecoderMethod
   {
-    Normal,
-    Hexadecimal,
-    Base64
+    PlainText,   /**< Standard decoding, interprets data as plain text. */
+    Hexadecimal, /**< Decodes data assuming a hexadecimal-encoded format. */
+    Base64       /**< Decodes data assuming a Base64-encoded format. */
   };
   Q_ENUM(DecoderMethod)
+
+  /**
+   * @brief Specifies the method used to detect data frames within a continuous
+   *        stream.
+   *
+   * This enum is used to define the strategy for identifying the start and end
+   * of a data frame in a continuous stream. Each value represents a specific
+   * detection method.
+   */
+  enum FrameDetection
+  {
+    EndDelimiterOnly,    /**< Detects frames based only on an end delimiter. */
+    StartAndEndDelimiter /**< Detects frames based on both start and end
+                            delimiters. */
+  };
+  Q_ENUM(FrameDetection)
 
   /**
    * @brief Enum representing the different widget types available for groups.

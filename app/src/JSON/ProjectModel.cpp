@@ -62,6 +62,7 @@ typedef enum
   kProjectView_FrameStartSequence,  /**< Represents the frame start sequence. */
   kProjectView_FrameEndSequence,    /**< Represents the frame end sequence. */
   kProjectView_FrameDecoder,        /**< Represents the frame decoder item. */
+  kProjectView_FrameDetection,      /**< Represents the frame detection item. */
   kProjectView_ThunderforestApiKey, /**< Represents the Thunderforest API key. */
   kProjectView_MapTilerApiKey       /**< Represents the MapTiler API key. */
 } ProjectItem;
@@ -141,7 +142,8 @@ JSON::ProjectModel::ProjectModel()
   , m_frameEndSequence("")
   , m_frameStartSequence("")
   , m_currentView(ProjectView)
-  , m_frameDecoder(WC::Normal)
+  , m_frameDecoder(WC::PlainText)
+  , m_frameDetection(WC::EndDelimiterOnly)
   , m_modified(false)
   , m_filePath("")
   , m_treeModel(nullptr)
@@ -267,6 +269,19 @@ JSON::ProjectModel::CurrentView JSON::ProjectModel::currentView() const
 WC::DecoderMethod JSON::ProjectModel::decoderMethod() const
 {
   return m_frameDecoder;
+}
+
+/**
+ * @brief Retrieves the current strategy used for detecting data frames.
+ *
+ * This function returns the detection method currently set for identifying data
+ * frames.
+ *
+ * @return The current decoder method as a value from the `FrameDetection` enum.
+ */
+WC::FrameDetection JSON::ProjectModel::frameDetection() const
+{
+  return m_frameDetection;
 }
 
 //------------------------------------------------------------------------------
@@ -736,6 +751,7 @@ bool JSON::ProjectModel::saveJsonFile()
   json.insert("decoder", m_frameDecoder);
   json.insert("frameEnd", m_frameEndSequence);
   json.insert("frameParser", m_frameParserCode);
+  json.insert("frameDetection", m_frameDetection);
   json.insert("frameStart", m_frameStartSequence);
   json.insert("mapTilerApiKey", m_mapTilerApiKey);
   json.insert("thunderforestApiKey", m_thunderforestApiKey);
@@ -792,11 +808,12 @@ void JSON::ProjectModel::newJsonFile()
 
   // Reset project properties
   m_separator = ",";
-  m_frameDecoder = WC::Normal;
-  m_frameEndSequence = "*/";
+  m_frameDecoder = WC::PlainText;
+  m_frameDetection = WC::EndDelimiterOnly;
+  m_frameEndSequence = "\\n";
   m_mapTilerApiKey = "";
   m_thunderforestApiKey = "";
-  m_frameStartSequence = "/*";
+  m_frameStartSequence = "$";
   m_title = tr("Untitled Project");
   m_frameParserCode = JSON::FrameParser::defaultCode();
 
@@ -899,6 +916,12 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   m_thunderforestApiKey = json.value("thunderforestApiKey").toString();
   m_frameDecoder
       = static_cast<WC::DecoderMethod>(json.value("decoder").toInt());
+  m_frameDetection
+      = static_cast<WC::FrameDetection>(json.value("frameDetection").toInt());
+
+  // Preserve compatibility with previous projects
+  if (!json.contains("frameDetection"))
+    m_frameDetection = WC::StartAndEndDelimiter;
 
   // Read groups from JSON document
   auto groups = json.value("groups").toArray();
@@ -1901,29 +1924,44 @@ void JSON::ProjectModel::buildProjectModel()
   title->setData(tr("Project name/description"), ParameterDescription);
   m_projectModel->appendRow(title);
 
-  // Add separator sequence
-  auto separator = new QStandardItem();
-  separator->setEditable(true);
-  separator->setData(TextField, WidgetType);
-  separator->setData(m_separator, EditableValue);
-  separator->setData(tr("Separator Sequence"), ParameterName);
-  separator->setData(kProjectView_ItemSeparator, ParameterType);
-  separator->setData(QStringLiteral(","), PlaceholderValue);
-  separator->setData(tr("String used to split items in a frame"),
-                     ParameterDescription);
-  m_projectModel->appendRow(separator);
+  // Add decoding
+  auto decoding = new QStandardItem();
+  decoding->setEditable(true);
+  decoding->setData(ComboBox, WidgetType);
+  decoding->setData(m_decoderOptions, ComboBoxData);
+  decoding->setData(m_frameDecoder, EditableValue);
+  decoding->setData(tr("Data Conversion Method"), ParameterName);
+  decoding->setData(kProjectView_FrameDecoder, ParameterType);
+  decoding->setData(tr("Input data format for frame parser"),
+                    ParameterDescription);
+  m_projectModel->appendRow(decoding);
+
+  // Add frame detection method
+  auto frameDetection = new QStandardItem();
+  frameDetection->setEditable(true);
+  frameDetection->setData(ComboBox, WidgetType);
+  frameDetection->setData(m_frameDetectionMethods, ComboBoxData);
+  frameDetection->setData(m_frameDetection, EditableValue);
+  frameDetection->setData(tr("Frame Detection"), ParameterName);
+  frameDetection->setData(kProjectView_FrameDetection, ParameterType);
+  frameDetection->setData(tr("Strategy used for identifying frame data"),
+                          ParameterDescription);
+  m_projectModel->appendRow(frameDetection);
 
   // Add frame start sequence
-  auto frameStart = new QStandardItem();
-  frameStart->setEditable(true);
-  frameStart->setData(TextField, WidgetType);
-  frameStart->setData(m_frameStartSequence, EditableValue);
-  frameStart->setData(tr("Frame Start Delimeter"), ParameterName);
-  frameStart->setData(kProjectView_FrameStartSequence, ParameterType);
-  frameStart->setData(QStringLiteral("/*"), PlaceholderValue);
-  frameStart->setData(tr("String marking the start of a frame"),
-                      ParameterDescription);
-  m_projectModel->appendRow(frameStart);
+  if (m_frameDetection == WC::StartAndEndDelimiter)
+  {
+    auto frameStart = new QStandardItem();
+    frameStart->setEditable(true);
+    frameStart->setData(TextField, WidgetType);
+    frameStart->setData(m_frameStartSequence, EditableValue);
+    frameStart->setData(tr("Frame Start Delimeter"), ParameterName);
+    frameStart->setData(kProjectView_FrameStartSequence, ParameterType);
+    frameStart->setData(QStringLiteral("/*"), PlaceholderValue);
+    frameStart->setData(tr("String marking the start of a frame"),
+                        ParameterDescription);
+    m_projectModel->appendRow(frameStart);
+  }
 
   // Add frame end sequence
   auto frameEnd = new QStandardItem();
@@ -1937,17 +1975,17 @@ void JSON::ProjectModel::buildProjectModel()
                     ParameterDescription);
   m_projectModel->appendRow(frameEnd);
 
-  // Add decoding
-  auto decoding = new QStandardItem();
-  decoding->setEditable(true);
-  decoding->setData(ComboBox, WidgetType);
-  decoding->setData(m_decoderOptions, ComboBoxData);
-  decoding->setData(m_frameDecoder, EditableValue);
-  decoding->setData(tr("Data Conversion Method"), ParameterName);
-  decoding->setData(kProjectView_FrameDecoder, ParameterType);
-  decoding->setData(tr("Input data format for frame parser"),
-                    ParameterDescription);
-  m_projectModel->appendRow(decoding);
+  // Add separator sequence
+  auto separator = new QStandardItem();
+  separator->setEditable(true);
+  separator->setData(TextField, WidgetType);
+  separator->setData(m_separator, EditableValue);
+  separator->setData(tr("Separator Sequence"), ParameterName);
+  separator->setData(kProjectView_ItemSeparator, ParameterType);
+  separator->setData(QStringLiteral(","), PlaceholderValue);
+  separator->setData(tr("String used to split items in a frame"),
+                     ParameterDescription);
+  m_projectModel->appendRow(separator);
 
   // Add Thunderforest API Key
   auto thunderforest = new QStandardItem();
@@ -2424,9 +2462,14 @@ void JSON::ProjectModel::generateComboBoxModels()
 
   // Initialize decoder options
   m_decoderOptions.clear();
-  m_decoderOptions.append(tr("Normal (UTF8)"));
+  m_decoderOptions.append(tr("Plain Text (UTF8)"));
   m_decoderOptions.append(tr("Hexadecimal"));
   m_decoderOptions.append(tr("Base64"));
+
+  // Initialize frame detection methods
+  m_frameDetectionMethods.clear();
+  m_frameDetectionMethods.append(tr("End Delimiter Only"));
+  m_frameDetectionMethods.append(tr("Start + End Delimiter"));
 
   // Initialize group-level widgets
   m_groupWidgets.clear();
@@ -2686,6 +2729,10 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
       break;
     case kProjectView_FrameDecoder:
       m_frameDecoder = static_cast<WC::DecoderMethod>(value.toInt());
+      break;
+    case kProjectView_FrameDetection:
+      m_frameDetection = static_cast<WC::FrameDetection>(value.toInt());
+      buildProjectModel();
       break;
     case kProjectView_ThunderforestApiKey:
       m_thunderforestApiKey = value.toString();

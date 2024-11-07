@@ -209,6 +209,7 @@ public:
   [[nodiscard]] bool modified() const;
   [[nodiscard]] CurrentView currentView() const;
   [[nodiscard]] WC::DecoderMethod decoderMethod() const;
+  [[nodiscard]] WC::FrameDetection frameDetection() const;
 
   [[nodiscard]] QString jsonFileName() const;
   [[nodiscard]] QString jsonProjectsPath() const;
@@ -302,6 +303,7 @@ private:
 
   CurrentView m_currentView;
   WC::DecoderMethod m_frameDecoder;
+  WC::FrameDetection m_frameDetection;
 
   bool m_modified;
   QString m_filePath;
@@ -324,6 +326,7 @@ private:
 
   QStringList m_fftSamples;
   QStringList m_decoderOptions;
+  QStringList m_frameDetectionMethods;
   QMap<QString, QString> m_eolSequences;
   QMap<QString, QString> m_groupWidgets;
   QMap<QString, QString> m_datasetWidgets;
