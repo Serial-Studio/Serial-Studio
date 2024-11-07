@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include <QScreen>
 #include <QSysInfo>
 #include <QSettings>
 #include <QQuickStyle>
@@ -42,23 +43,26 @@
 #  include <QStandardPaths>
 #endif
 
-/**
- * Prints the current application version to the console
- */
-static void cliShowVersion()
-{
-  qDebug() << APP_NAME << "version" << APP_VERSION;
-  qDebug() << "Written by Alex Spataru <https://github.com/alex-spataru>";
-}
+//------------------------------------------------------------------------------
+// Declare utility functions
+//------------------------------------------------------------------------------
 
-/**
- * Removes all application settings
- */
-static void cliResetSettings()
-{
-  QSettings(APP_DEVELOPER, APP_NAME).clear();
-  qDebug() << APP_NAME << "settings cleared!";
-}
+static void cliShowVersion();
+static void cliResetSettings();
+
+#ifdef Q_OS_LINUX
+void setupAppImageIcon(const QString &appExecutableName,
+                       const QString &iconResourcePath);
+#endif
+
+#ifdef Q_OS_WINDOWS
+static void attachToConsole();
+static void adjustArgumentsForFreeType(int &argc, char **argv);
+#endif
+
+//------------------------------------------------------------------------------
+// Entry-point function
+//------------------------------------------------------------------------------
 
 /**
  * @brief Entry-point function of the application
@@ -77,83 +81,23 @@ int main(int argc, char **argv)
   QApplication::setApplicationDisplayName(APP_NAME);
   QApplication::setOrganizationDomain(APP_SUPPORT_URL);
 
-  // Fix console output on Windows (https://stackoverflow.com/a/41701133)
-  // This code will only execute if the application is started from the comamnd
-  // prompt
-#ifdef _WIN32
-  if (AttachConsole(ATTACH_PARENT_PROCESS))
-  {
-    // Open the console's active buffer
-    (void)freopen("CONOUT$", "w", stdout);
-    (void)freopen("CONOUT$", "w", stderr);
-
-    // Force print new-line (to avoid printing text over user commands)
-    printf("\n");
-  }
+  // Windows-specific initialization code
+#ifdef Q_OS_WIN
+  attachToConsole();
+  adjustArgumentsForFreeType(int &argc, char **argv);
 #endif
 
-// Fix AppImage icon on GNU/Linux
+// Linux specific initialization code
 #ifdef Q_OS_LINUX
-  // Define the icon path where the icon should be copied to
-  const auto pixmapPath
-      = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
-        + "/icons/hicolor/256x256/apps/";
-  const auto pixmapFile = pixmapPath + APP_EXECUTABLE + ".png";
-  const auto resourcePath = ":/rcc/images/icon@2x.png";
-
-  // Check if the file already exists
-  if (!QFileInfo::exists(pixmapFile))
-  {
-    // Ensure the directory exists, create it if it doesn't
-    QDir dir;
-    bool pathExists = dir.exists(pixmapPath);
-    if (!pathExists)
-      pathExists = dir.mkpath(pixmapPath);
-
-    // Copy the icon from resources to the destination
-    if (pathExists)
-    {
-      QFile resourceFile(resourcePath);
-      if (resourceFile.open(QIODevice::ReadOnly))
-      {
-        QFile localFile(pixmapFile);
-        if (localFile.open(QIODevice::WriteOnly))
-        {
-          localFile.write(resourceFile.readAll());
-          localFile.close();
-        }
-
-        resourceFile.close();
-      }
-    }
-  }
-#endif
-
-  // Set application attributes
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  setupAppImageIcon(APP_EXECUTABLE, QStringLiteral(":/rcc/images/icon@2x.png"));
 #endif
 
   // Avoid 200% scaling on 150% scaling...
   auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
   QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
 
-  // Initialize application, force freetype font rendering on Windows
-#ifdef Q_OS_WIN
-  // Dynamically add "-platform windows:fontengine=freetype"
-  const char *platformArgument = "-platform";
-  const char *platformOption = "windows:fontengine=freetype";
-
-  // Resize argv array to hold two additional arguments
-  std::vector<char *> newArgv(argv, argv + argc);
-  newArgv.push_back(const_cast<char *>(platformArgument));
-  newArgv.push_back(const_cast<char *>(platformOption));
-  argc += 2;
-
-  QApplication app(argc, newArgv.data());
-#else
+  // Initialize application
   QApplication app(argc, argv);
-#endif
 
   // Set application style
   app.setStyle(QStyleFactory::create("Fusion"));
@@ -196,3 +140,145 @@ int main(int argc, char **argv)
   // Enter application event loop
   return app.exec();
 }
+
+//------------------------------------------------------------------------------
+// Implement utility functions
+//------------------------------------------------------------------------------
+
+/**
+ * Prints the current application version to the console
+ */
+static void cliShowVersion()
+{
+  qDebug() << APP_NAME << "version" << APP_VERSION;
+  qDebug() << "Written by Alex Spataru <https://github.com/alex-spataru>";
+}
+
+/**
+ * Removes all application settings
+ */
+static void cliResetSettings()
+{
+  QSettings(APP_DEVELOPER, APP_NAME).clear();
+  qDebug() << APP_NAME << "settings cleared!";
+}
+
+//------------------------------------------------------------------------------
+// Linux-specific initialization code
+//------------------------------------------------------------------------------
+
+#ifdef Q_OS_LINUX
+/**
+ * @brief Ensures the application icon is set correctly for AppImage deployments
+ *        on GNU/Linux.
+ *
+ * This function copies the application icon from the resource file to the
+ * appropriate icon directory on GNU/Linux systems.
+ *
+ * If the icon file does not already exist in the local user's icons directory,
+ * it is copied from the application’s resources to ensure proper display in the
+ * desktop environment, even when running the application as an AppImage.
+ *
+ * The function creates any necessary directories if they do not exist, and
+ * performs file checks to prevent redundant copying.
+ *
+ * @param appExecutableName The name of the application executable, used to name
+ *                          the icon file.
+ * @param iconResourcePath The path to the icon in the application's resources
+ *                         (e.g., `:/rcc/images/icon@2x.png`).
+ */
+void setupAppImageIcon(const QString &appExecutableName,
+                       const QString &iconResourcePath)
+{
+  // clang-format off
+  const QString pixmapPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/icons/hicolor/256x256/apps/";
+  const QString pixmapFile = pixmapPath + appExecutableName + ".png";
+  // clang-format on
+
+  // Check if the icon file already exists to avoid redundant copying
+  if (!QFileInfo::exists(pixmapFile))
+  {
+    // Ensure the directory exists; create it if it doesn't
+    QDir dir;
+    if (!dir.exists(pixmapPath) && !dir.mkpath(pixmapPath))
+      return;
+
+    // Copy the icon from resources to the destination
+    QFile resourceFile(iconResourcePath);
+    if (resourceFile.open(QIODevice::ReadOnly))
+    {
+      QFile localFile(pixmapFile);
+      if (localFile.open(QIODevice::WriteOnly))
+      {
+        localFile.write(resourceFile.readAll());
+        localFile.close();
+      }
+
+      resourceFile.close();
+    }
+  }
+}
+#endif
+
+//------------------------------------------------------------------------------
+// Windows-specific initialization code
+//------------------------------------------------------------------------------
+
+#ifdef Q_OS_WIN
+/**
+ * @brief Attaches the application to the parent console and redirects output
+ *        streams on Windows.
+ *
+ * This function attaches the application to the parent process's console if it
+ * was launched from the command prompt. It redirects the `stdout` and `stderr`
+ * streams to the console to enable proper output display. Additionally, it
+ * prints a newline to avoid overlapping text with any previous user commands
+ * in the console.
+ */
+void attachToConsole()
+{
+  if (AttachConsole(ATTACH_PARENT_PROCESS))
+  {
+    (void)freopen("CONOUT$", "w", stdout);
+    (void)freopen("CONOUT$", "w", stderr);
+    printf("\n");
+  }
+}
+
+/**
+ * @brief Adjusts command-line arguments to enable FreeType font rendering on
+ *        Windows for low-resolution screens.
+ *
+ * This function modifies the application's command-line arguments to include
+ * FreeType font rendering options if the primary display has a device pixel
+ * ratio approximately equal to 1.
+ *
+ * This condition generally corresponds to low-resolution or legacy screens.
+ * If the condition is met, the function forces the application to use FreeType
+ * font rendering instead of DirectWrite. This approach fixes pixelated fonts
+ * being shown in the user interface in older computers.
+ *
+ * @param argc Reference to the argument count from `main()`.
+ * @param argv Array of command-line arguments from `main()`.
+ */
+void adjustArgumentsForFreeType(int &argc, char **argv)
+{
+  // Check if the devicePixelRatio is approximately
+  const auto *screen = QApplication::primaryScreen();
+  if (screen && qFuzzyCompare(screen->devicePixelRatio(), 1.0))
+  {
+    // Define the additional FreeType arguments for Windows
+    const char *platformArgument = "-platform";
+    const char *platformOption = "windows:fontengine=freetype";
+
+    // Resize argv array to hold two additional arguments
+    std::vector<char *> newArgv(argv, argv + argc);
+    newArgv.push_back(const_cast<char *>(platformArgument));
+    newArgv.push_back(const_cast<char *>(platformOption));
+
+    // Update argc and argv
+    argc += 2;
+    argv = newArgv.data();
+  }
+}
+#endif

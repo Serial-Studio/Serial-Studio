@@ -163,10 +163,6 @@ void Widgets::Terminal::paint(QPainter *painter)
   if (!isVisible() || !painter)
     return;
 
-  // Set painter flags
-  painter->setRenderHint(QPainter::Antialiasing, true);
-  painter->setRenderHint(QPainter::TextAntialiasing, true);
-
   // Set font and prepare painter
   painter->setFont(m_font);
   int lineHeight = m_cHeight;
