@@ -86,7 +86,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   setAcceptedMouseButtons(Qt::AllButtons);
 
   // Set performance hints
-  setMipmap(true);
+  setMipmap(false);
   setOpaquePainting(true);
 
   // Set font
@@ -159,8 +159,12 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
 void Widgets::Terminal::paint(QPainter *painter)
 {
   // Skip if item is not visible
-  if (!isVisible())
+  if (!isVisible() || !painter)
     return;
+
+  // Set painter flags
+  painter->setRenderHint(QPainter::Antialiasing, true);
+  painter->setRenderHint(QPainter::TextAntialiasing, true);
 
   // Set font and prepare painter
   painter->setFont(m_font);
@@ -625,6 +629,9 @@ void Widgets::Terminal::setFont(const QFont &font)
 {
   // Update font
   m_font = font;
+
+  // Ensure that antialiasing is enabled
+  m_font.setStyleStrategy(QFont::PreferAntialias);
 
   // Get size of font (in pixels)
   auto metrics = QFontMetrics(font);
