@@ -35,8 +35,6 @@ Window {
   title: qsTr("Donate")
   width: minimumWidth
   height: minimumHeight
-  x: (Screen.desktopAvailableWidth - width) / 2
-  y: (Screen.desktopAvailableHeight - height) / 2
   minimumWidth: column.implicitWidth + 32
   maximumWidth: column.implicitWidth + 32
   minimumHeight: column.implicitHeight + root.titlebarHeight + 32
@@ -112,41 +110,21 @@ Window {
   }
 
   //
-  // Custom properties
-  //
-  property alias doNotShowAgain: doNotShowAgainCheck.checked
-
-  //
-  // Enables the "do not show again" checkbox and sets
-  // the text of the close button to "later".
-  //
   // This is used when the window is shown automatically
   // every now and then to the user.
   //
   function showAutomatically() {
-    doNotShowAgainCheck.visible = true
     closeBt.text = qsTr("Later")
     showNormal()
   }
 
   //
-  // Disables the "do not show again" checkbox and sets
-  // the text of the close button to "close".
-  //
   // This is used when the user opens this dialog from
   // the "about" window.
   //
   function show() {
-    doNotShowAgainCheck.visible = false
     closeBt.text = qsTr("Close")
     showNormal()
-  }
-
-  //
-  // Save settings
-  //
-  Settings {
-    property alias disableDonationsWindow: root.doNotShowAgain
   }
 
   //
@@ -248,13 +226,6 @@ Window {
       RowLayout {
         spacing: 4
         Layout.fillWidth: true
-
-        CheckBox {
-          Layout.leftMargin: -6
-          id: doNotShowAgainCheck
-          Layout.alignment: Qt.AlignVCenter
-          text: qsTr("Don't annoy me again!")
-        }
 
         Item {
           Layout.fillWidth: true

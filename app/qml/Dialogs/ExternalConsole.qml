@@ -51,9 +51,6 @@ Window {
     if (visible) {
       Cpp_NativeWindow.addWindow(root, Cpp_ThemeManager.colors["base"])
       root.titlebarHeight = Cpp_NativeWindow.titlebarHeight(root)
-
-      x = (Screen.desktopAvailableWidth - width) / 2
-      y = (Screen.desktopAvailableHeight - height) / 2
     }
 
     else {

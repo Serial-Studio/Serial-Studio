@@ -32,7 +32,7 @@ import "Views" as Views
 import "Sections" as Sections
 import "../Widgets" as Widgets
 
-Window {
+Widgets.SmartWindow {
   id: root
 
   //
@@ -40,6 +40,7 @@ Window {
   //
   minimumWidth: 970
   minimumHeight: 640
+  category: "ProjectEditor"
   title: qsTr("%1 - Project Editor").arg(Cpp_JSON_ProjectModel.title + (Cpp_JSON_ProjectModel.modified ? " (" + qsTr("modified") + ")" : ""))
 
   //
@@ -71,17 +72,6 @@ Window {
   readonly property string _btSpacer: "  "
 
   //
-  // Save window size
-  //
-  Settings {
-    category: "ProjectEditor"
-    property alias windowX: root.x
-    property alias windowY: root.y
-    property alias windowWidth: root.width
-    property alias windowHeight: root.height
-  }
-
-  //
   // Shortcuts
   //
   Shortcut {
@@ -93,9 +83,6 @@ Window {
   } Shortcut {
     sequences: [StandardKey.Save]
     onActivated: Cpp_JSON_ProjectModel.saveJsonFile()
-  } Shortcut {
-    sequences: [StandardKey.Close]
-    onActivated: root.close()
   }
 
   //

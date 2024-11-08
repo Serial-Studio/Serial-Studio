@@ -44,8 +44,6 @@ Window {
   minimumHeight: 480 + 32
   maximumHeight: 480 + 32
   title: qsTr("Select Icon")
-  x: (Screen.desktopAvailableWidth - width) / 2
-  y: (Screen.desktopAvailableHeight - height) / 2
 
   //
   // Make window stay on top

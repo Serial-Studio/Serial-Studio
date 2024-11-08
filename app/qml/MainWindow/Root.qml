@@ -30,20 +30,28 @@ import SerialStudio
 import "Panes" as Panes
 import "../Widgets" as Widgets
 
-Window {
+Widgets.SmartWindow {
   id: root
   minimumWidth: 1100
   minimumHeight: 660
+  category: "MainWindow"
   title: qsTr("%1 - %2").arg(documentTitle).arg(Cpp_AppName)
 
   //
   // Custom properties
   //
   property int appLaunchCount: 0
-  property bool isMaximized: false
   property string documentTitle: ""
   property bool firstValidFrame: false
   property bool automaticUpdates: false
+
+  //
+  // Save settings
+  //
+  Settings {
+    property alias launchCount: root.appLaunchCount
+    property alias automaticUpdater: root.automaticUpdates
+  }
 
   //
   // Global properties
@@ -77,45 +85,6 @@ Window {
   }
 
   //
-  // Ensure that window is visible
-  //
-  function displayWindow() {
-    if (root.isMaximized)
-      root.showMaximized()
-
-    else {
-      if (root.x > Screen.desktopAvailableWidth - root.minimumWidth || root.x <= 0)
-        root.x = (Screen.desktopAvailableWidth - root.minimumWidth) / 2
-      if (root.y > Screen.desktopAvailableHeight - root.minimumHeight || root.y <= 0)
-        root.y = (Screen.desktopAvailableHeight - root.minimumHeight) / 2
-      if (root.width >= Screen.desktopAvailableWidth - 100)
-        root.width = root.minimumWidth
-      if (root.height >= Screen.desktopAvailableHeight - 100)
-        root.height = root.minimumHeight
-
-      root.showNormal()
-    }
-  }
-
-  //
-  // React to maximize/unmaximize event
-  //
-  onVisibilityChanged: {
-    if (root.visible) {
-      if (root.visibility === Window.Maximized)
-        root.isMaximized = true
-
-      else if (root.isMaximized && root.visibility !== Window.Minimized) {
-        root.isMaximized = false
-        root.width = root.minimumWidth
-        root.height = root.minimumHeight
-        root.x = (Screen.desktopAvailableWidth - root.minimumWidth) / 2
-        root.y = (Screen.desktopAvailableHeight - root.minimumHeight) / 2
-      }
-    }
-  }
-
-  //
   // Wait a little before showing the dashboard to avoid UI glitches and/or
   // overloading the rendering engine
   //
@@ -130,28 +99,14 @@ Window {
   //
   Connections {
     target: Cpp_JSON_FrameBuilder
-    function onOperationModeChanged() {
-      updateDocumentTitle()
-    }
-
-    function onJsonFileMapChanged() {
-      updateDocumentTitle()
-    }
-  }
-
-  Connections {
+    function onOperationModeChanged() { root.updateDocumentTitle() }
+    function onJsonFileMapChanged()   { root.updateDocumentTitle() }
+  } Connections {
     target: Cpp_JSON_ProjectModel
-
-    function onJsonFileChanged() {
-      updateDocumentTitle()
-    }
-  }
-
-  Connections {
+    function onJsonFileChanged() { root.updateDocumentTitle() }
+  } Connections {
     target: Cpp_Misc_Translator
-    function onLanguageChanged() {
-      updateDocumentTitle()
-    }
+    function onLanguageChanged() { root.updateDocumentTitle() }
   }
 
   //
@@ -198,36 +153,14 @@ Window {
   }
 
   //
-  // Close shortcut
-  //
-  Shortcut {
-    sequences: [StandardKey.Close]
-    onActivated: root.close()
-  }
-
-  //
-  // Quit shortcut
-  //
-  Shortcut {
-    sequences: [StandardKey.Quit]
-    onActivated: root.close()
-  }
-
-  //
   // Loading code
   //
   Component.onCompleted: {
     // Increment app launch count
     ++appLaunchCount
 
-    // Ensure that window size stays within minimum size
-    if (width < minimumWidth)
-      width = minimumWidth
-    if (height < minimumHeight)
-      height = minimumHeight
-
     // Show donations dialog every 15 launches
-    if (root.appLaunchCount % 15 == 0 && !donateDialog.doNotShowAgain)
+    if (root.appLaunchCount % 15 == 0)
       donateDialog.showAutomatically()
 
     // Ask user if he/she wants to enable automatic updates
@@ -246,8 +179,8 @@ Window {
       Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
 
     // Obtain document title from JSON project editor & display the window
-    updateDocumentTitle()
-    displayWindow()
+    root.updateDocumentTitle()
+    root.displayWindow()
   }
 
   //
@@ -258,19 +191,6 @@ Window {
       Cpp_NativeWindow.addWindow(root)
     else
       Cpp_NativeWindow.removeWindow(root)
-  }
-
-  //
-  // Save settings
-  //
-  Settings {
-    property alias ax: root.x
-    property alias ay: root.y
-    property alias aw: root.width
-    property alias ah: root.height
-    property alias am: root.isMaximized
-    property alias appStatus: root.appLaunchCount
-    property alias autoUpdater: root.automaticUpdates
   }
 
   //

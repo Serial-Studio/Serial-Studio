@@ -24,7 +24,6 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 
-import QtGraphs
 import "Widgets" as Widgets
 import "Dialogs" as Dialogs
 import "MainWindow" as MainWindow
@@ -106,7 +105,7 @@ Item {
   // Dialog display functions
   //
   function showAboutDialog()       { aboutDialog.active = true }
-  function showProjectEditor()     { projectEditor.showNormal() }
+  function showProjectEditor()     { projectEditor.displayWindow() }
   function showExternalConsole()   { externalConsole.active = true }
   function showMqttConfiguration() { mqttConfiguration.active = true }
   function showAcknowledgements()  { acknowledgementsDialog.active = true }

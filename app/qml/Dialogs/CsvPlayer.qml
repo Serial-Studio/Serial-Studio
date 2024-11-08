@@ -34,8 +34,6 @@ Window {
   width: minimumWidth
   height: minimumHeight
   title: qsTr("CSV Player")
-  x: (Screen.desktopAvailableWidth - width) / 2
-  y: (Screen.desktopAvailableHeight - height) / 2
   minimumWidth: column.implicitWidth + 32
   maximumWidth: column.implicitWidth + 32
   minimumHeight: column.implicitHeight + root.titlebarHeight + 32

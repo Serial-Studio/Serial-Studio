@@ -196,6 +196,7 @@ set(QML_CODE
  qml/Widgets/BigButton.qml
  qml/Widgets/Pane.qml
  qml/Widgets/Plot.qml
+ qml/Widgets/SmartWindow.qml
  qml/Widgets/JSONDropArea.qml
  qml/Widgets/VisualRange.qml
  qml/Widgets/CircularSlider.qml
