@@ -20,7 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include <QScreen>
 #include <QSysInfo>
 #include <QSettings>
 #include <QQuickStyle>
