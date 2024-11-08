@@ -57,7 +57,7 @@ static void setupAppImageIcon(const QString &appExecutableName,
 
 #ifdef Q_OS_WINDOWS
 static void attachToConsole();
-static void adjustArgumentsForFreeType(int &argc, char **argv);
+static char** adjustArgumentsForFreeType(int &argc, char **argv);
 #endif
 
 //------------------------------------------------------------------------------
@@ -84,10 +84,10 @@ int main(int argc, char **argv)
   // Windows-specific initialization code
 #ifdef Q_OS_WIN
   attachToConsole();
-  adjustArgumentsForFreeType(int &argc, char **argv);
+  argv = adjustArgumentsForFreeType(argc, argv);
 #endif
 
-// Linux specific initialization code
+  // Linux specific initialization code
 #ifdef Q_OS_LINUX
   setupAppImageIcon(APP_EXECUTABLE, QStringLiteral(":/rcc/images/icon@2x.png"));
 #endif
@@ -138,7 +138,18 @@ int main(int argc, char **argv)
   }
 
   // Enter application event loop
-  return app.exec();
+  const auto status = app.exec();
+
+  // Free dynamically-generated argv on Windows
+#ifdef Q_OS_WIN
+  for (int i = 0; i < argc; ++i)
+    free(argv[i]);
+
+  delete[] argv;
+#endif
+
+  // Exit application
+  return status;
 }
 
 //------------------------------------------------------------------------------
@@ -247,38 +258,34 @@ static void attachToConsole()
 
 /**
  * @brief Adjusts command-line arguments to enable FreeType font rendering on
- *        Windows for low-resolution screens.
+ *        Windows.
  *
- * This function modifies the application's command-line arguments to include
- * FreeType font rendering options if the primary display has a device pixel
- * ratio approximately equal to 1.
- *
- * This condition generally corresponds to low-resolution or legacy screens.
- * If the condition is met, the function forces the application to use FreeType
- * font rendering instead of DirectWrite. This approach fixes pixelated fonts
- * being shown in the user interface in older computers.
+ * This function forces the application to use FreeType font rendering instead
+ * of DirectWrite or GDI. This approach fixes pixelated fonts being shown in
+ * the user interface in screens whose scale factor is 100%.
  *
  * @param argc Reference to the argument count from `main()`.
  * @param argv Array of command-line arguments from `main()`.
  */
-static void adjustArgumentsForFreeType(int &argc, char **argv)
+static char** adjustArgumentsForFreeType(int &argc, char **argv)
 {
-  // Check if the devicePixelRatio is approximately
-  const auto *screen = QApplication::primaryScreen();
-  if (screen && qFuzzyCompare(screen->devicePixelRatio(), 1.0))
-  {
-    // Define the additional FreeType arguments for Windows
-    const char *platformArgument = "-platform";
-    const char *platformOption = "windows:fontengine=freetype";
+  // Define the additional FreeType arguments for Windows
+  const char *platformArgument = "-platform";
+  const char *platformOption = "windows:fontengine=freetype";
 
-    // Resize argv array to hold two additional arguments
-    std::vector<char *> newArgv(argv, argv + argc);
-    newArgv.push_back(const_cast<char *>(platformArgument));
-    newArgv.push_back(const_cast<char *>(platformOption));
+  // Dynamically allocate a new array of char* pointers
+  char **newArgv = new char*[argc + 2];
 
-    // Update argc and argv
-    argc += 2;
-    argv = newArgv.data();
-  }
+  // Copy original argv into newArgv
+  for (int i = 0; i < argc; ++i)
+    newArgv[i] = strdup(argv[i]);
+
+  // Add new arguments to the end
+  newArgv[argc] = const_cast<char *>(platformArgument);
+  newArgv[argc + 1] = const_cast<char *>(platformOption);
+
+  // Update argc and return the new array
+  argc += 2;
+  return newArgv;
 }
 #endif
