@@ -24,6 +24,7 @@
 
 #include <QDir>
 #include <QPalette>
+#include <QStyleHints>
 #include <QApplication>
 #include <QJsonDocument>
 
@@ -162,6 +163,14 @@ void Misc::ThemeManager::setTheme(const int index)
   m_settings.setValue("Theme", filteredIndex);
   m_themeName = availableThemes().at(filteredIndex);
   m_colors = m_themes.value(m_themeName);
+
+  // Tell OS if we prefer dark mode or light mode
+  auto bg = getColor("base");
+  auto fg = getColor("text");
+  if (fg.lightness() > bg.lightness())
+    qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+  else
+    qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
 
   // Set application palette
   QPalette palette;

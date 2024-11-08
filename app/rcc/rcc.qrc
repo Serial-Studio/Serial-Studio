@@ -108,9 +108,9 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
-        <file>fonts/Inter-Bold.ttf</file>
-        <file>fonts/Inter-Regular.ttf</file>
+        <file>fonts/NotoSans.ttf</file>
         <file>fonts/NotoSansMono.ttf</file>
+        <file>fonts/NotoSansSC.ttf</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/center.svg</file>
         <file>icons/buttons/clear.svg</file>
@@ -248,19 +248,19 @@
         <file>scripts/frame-parser.js</file>
         <file>themes/Breeze Dark.json</file>
         <file>themes/Breeze Light.json</file>
+        <file>themes/Deep Blue.json</file>
+        <file>themes/Deep Green.json</file>
+        <file>themes/Deep Purple.json</file>
+        <file>themes/Deep Red.json</file>
         <file>themes/Default.json</file>
+        <file>themes/Dominion.json</file>
         <file>themes/macOS Dark.json</file>
         <file>themes/macOS Light.json</file>
         <file>themes/Outdoor Day.json</file>
         <file>themes/Outdoor Night.json</file>
+        <file>themes/Pulse.json</file>
+        <file>themes/Resistance.json</file>
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
-        <file>themes/Deep Purple.json</file>
-        <file>themes/Deep Blue.json</file>
-        <file>themes/Deep Red.json</file>
-        <file>themes/Resistance.json</file>
-        <file>themes/Dominion.json</file>
-        <file>themes/Deep Green.json</file>
-        <file>themes/Pulse.json</file>
     </qresource>
 </RCC>

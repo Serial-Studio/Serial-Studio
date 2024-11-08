@@ -21,6 +21,7 @@
  */
 
 #include <QDebug>
+#include <QApplication>
 #include <QFontDatabase>
 
 #include "Misc/Translator.h"
@@ -44,13 +45,13 @@ Misc::CommonFonts::CommonFonts()
   // Add common fonts to application database
   // clang-format off
   addFonts(
-      QStringLiteral(":/rcc/fonts/NotoSansMono.ttf"),
-      QStringLiteral(":/rcc/fonts/Inter-Regular.ttf"),
-      QStringLiteral(":/rcc/fonts/Inter-Bold.ttf")
-  );
+      QStringLiteral(":/rcc/fonts/NotoSans.ttf"),
+      QStringLiteral(":/rcc/fonts/NotoSansSC.ttf"),
+      QStringLiteral(":/rcc/fonts/NotoSansMono.ttf")
+      );
   // clang-format on
 
-  // Load font names for current language
+  // Load appropiate fonts for current language
   onLanguageChanged();
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
           this, &Misc::CommonFonts::onLanguageChanged);
@@ -128,6 +129,7 @@ QFont Misc::CommonFonts::customMonoFont(const int pixelSize)
  */
 void Misc::CommonFonts::onLanguageChanged()
 {
+  // Obtain fonts to use for current language
   switch (Misc::Translator::instance().language())
   {
     case Misc::Translator::English:
@@ -135,20 +137,27 @@ void Misc::CommonFonts::onLanguageChanged()
     case Misc::Translator::German:
     case Misc::Translator::Russian:
     case Misc::Translator::French:
+      m_uiName = QStringLiteral("Noto Sans");
+      m_monoName = QStringLiteral("Noto Sans Mono");
+      break;
     case Misc::Translator::Chinese:
-      m_uiName = QStringLiteral("Inter");
+      m_uiName = QStringLiteral("Noto Sans SC");
       m_monoName = QStringLiteral("Noto Sans Mono");
       break;
   }
 
+  // Load fonts
   m_uiFont = QFontDatabase::font(m_uiName, QStringLiteral("Regular"), 12);
   m_boldUiFont = QFontDatabase::font(m_uiName, QStringLiteral("Bold"), 12);
   m_monoFont = QFontDatabase::font(m_monoName, QStringLiteral("Regular"), 12);
 
+  // Set font properties
   m_uiFont.setPixelSize(12);
   m_monoFont.setPixelSize(12);
   m_boldUiFont.setPixelSize(12);
   m_monoFont.setStyleHint(QFont::Monospace);
 
+  // Update both app-level font & QML-dependent fonts
+  qApp->setFont(m_uiFont);
   Q_EMIT fontsChanged();
 }
