@@ -49,6 +49,7 @@ Widgets.Pane {
   // Used to keep track of which C++ widget to render
   //
   property int widgetIndex: -1
+
   //
   // Render a widget inside the pane
   //
@@ -115,7 +116,6 @@ Widgets.Pane {
       Component.onCompleted: {
         window.flags = Qt.Dialog |
             Qt.WindowTitleHint |
-            Qt.WindowStaysOnTopHint |
             Qt.WindowCloseButtonHint
       }
 

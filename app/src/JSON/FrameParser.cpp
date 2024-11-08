@@ -46,6 +46,9 @@
   };                                                                           \
   static_cast<PwnedWidget *>(pointer)->function(event);
 
+/**
+ * @brief Constructor function for the code editor widget.
+ */
 JSON::FrameParser::FrameParser(QQuickItem *parent)
   : QQuickPaintedItem(parent)
 {
@@ -109,6 +112,10 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
           &JSON::FrameParser::renderWidget);
 }
 
+/**
+ * @brief Returns a string with the default frame parser function code.
+ * @return
+ */
 const QString &JSON::FrameParser::defaultCode()
 {
   static QString code;
@@ -125,16 +132,31 @@ const QString &JSON::FrameParser::defaultCode()
   return code;
 }
 
+/**
+ * @brief Returns the current text/data displayed in the code editor.
+ */
 QString JSON::FrameParser::text() const
 {
   return m_textEdit.document()->toPlainText();
 }
 
+/**
+ * @brief Indicates whenever there are any unsaved changes in the code editor.
+ * @return
+ */
 bool JSON::FrameParser::isModified() const
 {
   return m_textEdit.document()->isModified();
 }
 
+/**
+ * @brief Executes the current frame parser function over the input data.
+ *
+ * @param frame current/latest frame data.
+ * @param separator separator sequence to use.
+ *
+ * @return An array of strings with the values returned by the JS frame parser.
+ */
 QStringList JSON::FrameParser::parse(const QString &frame,
                                      const QString &separator)
 {
@@ -154,33 +176,53 @@ QStringList JSON::FrameParser::parse(const QString &frame,
   return list;
 }
 
+/**
+ * @brief Removes the selected text from the code editor widget and copies it
+ *        into the system's clipboard.
+ */
 void JSON::FrameParser::cut()
 {
   m_textEdit.cut();
 }
 
+/**
+ * @brief Undoes the last user's action.
+ */
 void JSON::FrameParser::undo()
 {
   m_textEdit.undo();
 }
 
+/**
+ * @brief Redoes an undone action.
+ */
 void JSON::FrameParser::redo()
 {
   m_textEdit.redo();
 }
 
+/**
+ * @brief Opens a website with documentation relevant to the frame parser.
+ */
 void JSON::FrameParser::help()
-{ // clang-format off
-  const auto url = QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki");
+{
+  // clang-format off
+  const auto url = QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki/Project-Editor#frame-parser-function-view");
   QDesktopServices::openUrl(QUrl(url));
   // clang-format on
 }
 
+/**
+ * @brief Copies the selected text into the system's clipboard.
+ */
 void JSON::FrameParser::copy()
 {
   m_textEdit.copy();
 }
 
+/**
+ * @brief Pastes data from the system's clipboard into the code editor.
+ */
 void JSON::FrameParser::paste()
 {
   if (m_textEdit.canPaste())
@@ -190,11 +232,17 @@ void JSON::FrameParser::paste()
   }
 }
 
+/**
+ * @brief Writes the current code into the project file.
+ */
 void JSON::FrameParser::apply()
 {
   save(true);
 }
 
+/**
+ * @brief Loads the default frame parser function into the code editor.
+ */
 void JSON::FrameParser::reload()
 {
   // Document has been modified, ask user if he/she wants to continue
@@ -213,6 +261,9 @@ void JSON::FrameParser::reload()
   save(true);
 }
 
+/**
+ * @brief Prompts the user to select a JS file to import into the code editor.
+ */
 void JSON::FrameParser::import()
 {
   // Document has been modified, ask user if he/she wants to continue
@@ -244,11 +295,18 @@ void JSON::FrameParser::import()
   }
 }
 
+/**
+ * @brief Selects all the text present in the code editor widget.
+ */
 void JSON::FrameParser::selectAll()
 {
   m_textEdit.selectAll();
 }
 
+/**
+ * @brief Modifies the palette of the code editor to match the colorscheme
+ *        of the currently loaded theme file.
+ */
 void JSON::FrameParser::onThemeChanged()
 {
   QPalette palette;
@@ -265,6 +323,13 @@ void JSON::FrameParser::onThemeChanged()
   m_textEdit.setPalette(palette);
 }
 
+/**
+ * @brief Validates the script and stores it into the project model.
+ * @param silent if set to @c false, the user shall be notified that the script
+ *               data was processed correctly.
+ *
+ * @return @c true on success, @c false on failure
+ */
 bool JSON::FrameParser::save(const bool silent)
 {
   // Update text edit
@@ -287,6 +352,20 @@ bool JSON::FrameParser::save(const bool silent)
   return false;
 }
 
+/**
+ * @brief Generates a callable JS function given the script code.
+ *
+ * This function validates that the given @a script data does not contain any
+ * syntax errors and that it can be executed by the JavaScript Engine.
+ *
+ * If the conditions required to execute the frame parser code are met, this
+ * function proceeds to generate a callable JS function that can be used
+ * by the rest of the application modules.
+ *
+ * @param script JavaScript code
+ *
+ * @return @a true if the JS code is valid and contains to errors
+ */
 bool JSON::FrameParser::loadScript(const QString &script)
 {
   // Ensure that engine is configured correctly
@@ -362,6 +441,9 @@ bool JSON::FrameParser::loadScript(const QString &script)
   return true;
 }
 
+/**
+ * @brief Loads the code stored in the project file into the code editor.
+ */
 void JSON::FrameParser::readCode()
 {
   m_textEdit.setPlainText(ProjectModel::instance().frameParserCode());
