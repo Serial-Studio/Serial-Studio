@@ -57,7 +57,7 @@ static void setupAppImageIcon(const QString &appExecutableName,
 
 #ifdef Q_OS_WINDOWS
 static void attachToConsole();
-static char** adjustArgumentsForFreeType(int &argc, char **argv);
+static char **adjustArgumentsForFreeType(int &argc, char **argv);
 #endif
 
 //------------------------------------------------------------------------------
@@ -267,14 +267,14 @@ static void attachToConsole()
  * @param argc Reference to the argument count from `main()`.
  * @param argv Array of command-line arguments from `main()`.
  */
-static char** adjustArgumentsForFreeType(int &argc, char **argv)
+static char **adjustArgumentsForFreeType(int &argc, char **argv)
 {
   // Define the additional FreeType arguments for Windows
   const char *platformArgument = "-platform";
   const char *platformOption = "windows:fontengine=freetype";
 
   // Dynamically allocate a new array of char* pointers
-  char **newArgv = new char*[argc + 2];
+  char **newArgv = new char *[argc + 2];
 
   // Copy original argv into newArgv
   for (int i = 0; i < argc; ++i)
