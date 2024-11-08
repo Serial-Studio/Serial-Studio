@@ -33,7 +33,6 @@
 #ifdef Q_OS_WIN
 #  include <windows.h>
 #  include <cstring>
-#  include <vector>
 #endif
 
 #ifdef Q_OS_LINUX
