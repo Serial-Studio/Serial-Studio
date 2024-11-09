@@ -24,7 +24,6 @@
 #include <QApplication>
 #include <QFontDatabase>
 
-#include "Misc/Translator.h"
 #include "Misc/CommonFonts.h"
 
 /**
@@ -42,21 +41,22 @@ Misc::CommonFonts::CommonFonts()
     (addFont(fonts), ...);
   };
 
-  // Add common fonts to application database
-  // clang-format off
-  addFonts(
-      QStringLiteral(":/rcc/fonts/NotoSans-Bold.ttf"),
-      QStringLiteral(":/rcc/fonts/NotoSansSC-Bold.ttf"),
-      QStringLiteral(":/rcc/fonts/NotoSans-Regular.ttf"),
-      QStringLiteral(":/rcc/fonts/NotoSansSC-Regular.ttf"),
-      QStringLiteral(":/rcc/fonts/NotoSansMono-Regular.ttf")
-  );
-  // clang-format on
+  // Register the monospace fonts only
+  addFonts(QStringLiteral(":/rcc/fonts/SourceCodePro-Regular.ttf"));
 
-  // Load appropiate fonts for current language
-  onLanguageChanged();
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &Misc::CommonFonts::onLanguageChanged);
+  // Set the UI font to the system default
+  m_uiFont = QApplication::font();
+  m_boldUiFont = m_uiFont;
+  m_boldUiFont.setBold(true);
+
+  // Set the monospace font from the embedded font
+  m_monoName = QStringLiteral("Source Code Pro");
+  m_monoFont = QFontDatabase::font(m_monoName, QStringLiteral("Regular"),
+                                   m_uiFont.pointSize());
+  m_monoFont.setStyleHint(QFont::Monospace);
+
+  // Update application fonts
+  QApplication::setFont(m_uiFont);
 }
 
 /**
@@ -98,74 +98,25 @@ const QFont &Misc::CommonFonts::boldUiFont() const
 
 /**
  * @brief Creates a custom UI font with specified pixel size and boldness.
- * @param pixelSize The pixel size of the font.
+ * @param pointSize The pixel size of the font.
  * @param bold True if the font should be bold, otherwise false.
  * @return The custom UI font.
  */
-QFont Misc::CommonFonts::customUiFont(const int pixelSize, const bool bold)
+QFont Misc::CommonFonts::customUiFont(const int pointSize, const bool bold)
 {
-  auto weight = bold ? QStringLiteral("Bold") : QStringLiteral("Regular");
-  QFont font = QFontDatabase::font(m_uiName, weight, 12);
-  font.setPixelSize(qMax(1, pixelSize));
+  QFont font = bold ? m_boldUiFont : m_uiFont;
+  font.setPointSize(qMax(1, pointSize));
   return font;
 }
 
 /**
  * @brief Creates a custom monospace font with specified pixel size.
- * @param pixelSize The pixel size of the font.
+ * @param pointSize The pixel size of the font.
  * @return The custom monospace font.
  */
-QFont Misc::CommonFonts::customMonoFont(const int pixelSize)
+QFont Misc::CommonFonts::customMonoFont(const int pointSize)
 {
   QFont font = QFontDatabase::font(m_monoName, QStringLiteral("Regular"), 12);
-  font.setPixelSize(qMax(1, pixelSize));
+  font.setPointSize(qMax(1, pointSize));
   return font;
-}
-
-/**
- * @brief Updates the UI and monospace fonts when the language is changed.
- *
- * This function sets the appropriate UI and monospace font names based on the
- * current language selected in the translator. It then loads the fonts with
- * specified attributes such as style and size from the QFontDatabase.
- */
-void Misc::CommonFonts::onLanguageChanged()
-{
-  // Obtain fonts to use for current language
-  switch (Misc::Translator::instance().language())
-  {
-    case Misc::Translator::English:
-    case Misc::Translator::Spanish:
-    case Misc::Translator::German:
-    case Misc::Translator::Russian:
-    case Misc::Translator::French:
-      m_uiName = QStringLiteral("Noto Sans");
-      m_monoName = QStringLiteral("Noto Sans Mono");
-      break;
-    case Misc::Translator::Chinese:
-      m_uiName = QStringLiteral("Noto Sans SC");
-      m_monoName = QStringLiteral("Noto Sans Mono");
-      break;
-  }
-
-  // Load fonts
-  m_uiFont = QFontDatabase::font(m_uiName, QStringLiteral("Regular"), 12);
-  m_boldUiFont = QFontDatabase::font(m_uiName, QStringLiteral("Bold"), 12);
-  m_monoFont = QFontDatabase::font(m_monoName, QStringLiteral("Regular"), 12);
-
-  // Set font size
-  m_uiFont.setPixelSize(12);
-  m_monoFont.setPixelSize(12);
-  m_boldUiFont.setPixelSize(12);
-
-  // Set font properties
-  m_uiFont.setStyleHint(QFont::SansSerif);
-  m_monoFont.setStyleHint(QFont::Monospace);
-  m_boldUiFont.setStyleHint(QFont::SansSerif);
-
-  // Update application fonts
-  QApplication::setFont(m_uiFont);
-
-  // Update fonts
-  Q_EMIT fontsChanged();
 }

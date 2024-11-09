@@ -323,6 +323,24 @@ void Widgets::Terminal::paint(QPainter *painter)
 }
 
 /**
+ * @brief Returns the width of a single terminal character.
+ * @return
+ */
+int Widgets::Terminal::charWidth() const
+{
+  return m_cWidth;
+}
+
+/**
+ * @brief Returns the height of a single terminal character.
+ * @return
+ */
+int Widgets::Terminal::charHeight() const
+{
+  return m_cHeight;
+}
+
+/**
  * @brief Gets the current font used by the terminal.
  *
  * @return The QFont object representing the terminal's current font.
@@ -636,10 +654,6 @@ void Widgets::Terminal::setFont(const QFont &font)
   // Update character widths
   m_cHeight = metrics.height();
   m_cWidth = metrics.averageCharWidth();
-
-  // Special case for Chinese
-  if (Misc::Translator::instance().language() == Misc::Translator::Chinese)
-    m_cWidth = font.pixelSize();
 
   // Update terminal border
   m_borderX = qMax(m_cWidth, m_cHeight) / 2;

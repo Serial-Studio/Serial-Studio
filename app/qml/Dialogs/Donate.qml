@@ -91,7 +91,7 @@ Window {
       text: root.title
       visible: root.titlebarHeight > 0
       color: Cpp_ThemeManager.colors["text"]
-      font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+      font: Cpp_Misc_CommonFonts.customUiFont(14, true)
 
       anchors {
         topMargin: 6
@@ -193,14 +193,14 @@ Window {
           Label {
             id: title
             Layout.fillWidth: true
-            Layout.minimumHeight: font.pixelSize
+            Layout.minimumHeight: font.pointSize
             font: Cpp_Misc_CommonFonts.customUiFont(16, true)
             text: qsTr("Support the development of %1!").arg(Cpp_AppName)
           }
 
           Label {
             Layout.fillWidth: true
-            Layout.minimumHeight: font.pixelSize * 3
+            Layout.minimumHeight: font.pointSize * 3
             Layout.maximumWidth: title.implicitWidth
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
             text: qsTr("Serial Studio is free & open-source software supported by volunteers. " +
@@ -209,9 +209,9 @@ Window {
 
           Label {
             opacity: 0.8
-            font.pixelSize: 12
+            font.pointSize: 12
             Layout.fillWidth: true
-            Layout.minimumHeight: font.pixelSize * 2
+            Layout.minimumHeight: font.pointSize * 2
             Layout.maximumWidth: title.implicitWidth
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
             text: qsTr("You can also support this project by sharing it, reporting bugs and proposing new features!")

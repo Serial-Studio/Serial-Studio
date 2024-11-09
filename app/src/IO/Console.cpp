@@ -391,7 +391,6 @@ void IO::Console::print()
 
   // Set font
   auto font = Misc::CommonFonts::instance().monoFont();
-  font.setPixelSize(10);
   font.setPointSize(10);
   document.setDefaultFont(font);
 

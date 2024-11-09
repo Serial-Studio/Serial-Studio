@@ -29,9 +29,9 @@ import SerialStudio
 
 import "../../Widgets" as Widgets
 
-
-ToolBar {
+Rectangle {
   id: root
+  implicitWidth: layout.implicitWidth + 32
 
   //
   // Calculate offset based on platform
@@ -57,7 +57,7 @@ ToolBar {
     text: projectEditor.title
     visible: root.titlebarHeight > 0
     color: Cpp_ThemeManager.colors["titlebar_text"]
-    font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+    font: Cpp_Misc_CommonFonts.customUiFont(14, true)
 
     anchors {
       topMargin: 6
@@ -69,36 +69,40 @@ ToolBar {
   //
   // Toolbar background
   //
-  background: Rectangle {
-    gradient: Gradient {
-      GradientStop {
-        position: 0
-        color: Cpp_ThemeManager.colors["toolbar_top"]
-      }
-
-      GradientStop {
-        position: 1
-        color: Cpp_ThemeManager.colors["toolbar_bottom"]
-      }
+  gradient: Gradient {
+    GradientStop {
+      position: 0
+      color: Cpp_ThemeManager.colors["toolbar_top"]
     }
 
-    Rectangle {
-      height: 1
-      color: Cpp_ThemeManager.colors["toolbar_border"]
-
-      anchors {
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
-      }
+    GradientStop {
+      position: 1
+      color: Cpp_ThemeManager.colors["toolbar_bottom"]
     }
+  }
 
-    DragHandler {
-      target: null
-      onActiveChanged: {
-        if (active)
-          projectEditor.startSystemMove()
-      }
+  //
+  // Toolbar bottom border
+  //
+  Rectangle {
+    height: 1
+    color: Cpp_ThemeManager.colors["toolbar_border"]
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+    }
+  }
+
+  //
+  // Move window with toolbar
+  //
+  DragHandler {
+    target: null
+    onActiveChanged: {
+      if (active)
+        projectEditor.startSystemMove()
     }
   }
 
@@ -106,6 +110,7 @@ ToolBar {
   // Toolbar controls
   //
   RowLayout {
+    id: layout
     spacing: 8
 
     anchors {

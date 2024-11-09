@@ -32,9 +32,9 @@ import "../Widgets" as Widgets
 
 Widgets.SmartWindow {
   id: root
-  minimumWidth: 1100
-  minimumHeight: 660
   category: "MainWindow"
+  minimumWidth: layout.implicitWidth
+  minimumHeight: layout.implicitHeight
   title: qsTr("%1 - %2").arg(documentTitle).arg(Cpp_AppName)
 
   //
@@ -276,6 +276,8 @@ Widgets.SmartWindow {
           initialItem: terminal
           Layout.fillWidth: true
           Layout.fillHeight: true
+          Layout.minimumHeight: Math.max(dashboard.implicitHeight, terminal.implicitHeight, setup.implicitHeight)
+          Layout.minimumWidth: Math.max(dashboard.implicitWidth, terminal.implicitWidth) + (setup.visible ? 0 : setup.displayedWidth + 1)
 
           data: [
             Panes.Console {

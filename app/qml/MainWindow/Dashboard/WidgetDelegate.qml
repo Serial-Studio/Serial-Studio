@@ -171,7 +171,7 @@ Widgets.Pane {
           text: window.title
           visible: window.titlebarHeight > 0
           color: Cpp_ThemeManager.colors["text"]
-          font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+          font: Cpp_Misc_CommonFonts.customUiFont(14, true)
 
           anchors {
             topMargin: 6

@@ -33,10 +33,20 @@ ToolButton {
   icon.height: 32
   icon.color: "transparent"
   display: AbstractButton.TextUnderIcon
-
-  Layout.minimumWidth: Math.max(implicitWidth, icon.width / 32 * 72)
-  Layout.maximumWidth: Math.max(implicitWidth, icon.width / 32 * 72)
   palette.buttonText: Cpp_ThemeManager.colors["toolbar_text"]
+
+  Layout.minimumWidth: implicitWidth
+  Layout.maximumWidth: implicitWidth
+  implicitWidth: Math.max(Math.ceil(metrics.width + 32), icon.width / 32 * 72)
+
+  opacity: enabled ? 1 : 0.5
+  Behavior on opacity {NumberAnimation{}}
+
+  TextMetrics {
+    id: metrics
+    text: root.text
+    font: Cpp_Misc_CommonFonts.uiFont
+  }
 
   background: Item {
     Rectangle {
@@ -55,7 +65,4 @@ ToolButton {
       visible: root.checked && !root.toolbarButton
     }
   }
-
-  opacity: enabled ? 1 : 0.5
-  Behavior on opacity {NumberAnimation{}}
 }

@@ -28,8 +28,9 @@ import QtQuick.Controls
 import SerialStudio
 import "../../Widgets" as Widgets
 
-ToolBar {
+Rectangle {
   id: root
+  implicitWidth: (layout.implicitWidth + 32)
 
   //
   // Custom signals
@@ -72,7 +73,7 @@ ToolBar {
     text: mainWindow.title
     visible: root.titlebarHeight > 0
     color: Cpp_ThemeManager.colors["titlebar_text"]
-    font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+    font: Cpp_Misc_CommonFonts.customUiFont(14, true)
 
     anchors {
       topMargin: 6
@@ -84,36 +85,40 @@ ToolBar {
   //
   // Toolbar background
   //
-  background: Rectangle {
-    gradient: Gradient {
-      GradientStop {
-        position: 0
-        color: Cpp_ThemeManager.colors["toolbar_top"]
-      }
-
-      GradientStop {
-        position: 1
-        color: Cpp_ThemeManager.colors["toolbar_bottom"]
-      }
+  gradient: Gradient {
+    GradientStop {
+      position: 0
+      color: Cpp_ThemeManager.colors["toolbar_top"]
     }
 
-    Rectangle {
-      height: 1
-      color: Cpp_ThemeManager.colors["toolbar_border"]
-
-      anchors {
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
-      }
+    GradientStop {
+      position: 1
+      color: Cpp_ThemeManager.colors["toolbar_bottom"]
     }
+  }
 
-    DragHandler {
-      target: null
-      onActiveChanged: {
-        if (active)
-          mainWindow.startSystemMove()
-      }
+  //
+  // Toolbar border
+  //
+  Rectangle {
+    height: 1
+    color: Cpp_ThemeManager.colors["toolbar_border"]
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+    }
+  }
+
+  //
+  // Drag main window with the toolbar
+  //
+  DragHandler {
+    target: null
+    onActiveChanged: {
+      if (active)
+        mainWindow.startSystemMove()
     }
   }
 
@@ -121,6 +126,7 @@ ToolBar {
   // Toolbar controls
   //
   RowLayout {
+    id: layout
     spacing: 8
 
     anchors {
@@ -157,7 +163,7 @@ ToolBar {
     // Separator
     //
     Rectangle {
-      width: 1
+      implicitWidth: 1
       Layout.fillHeight: true
       Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
@@ -192,7 +198,7 @@ ToolBar {
     // Separator
     //
     Rectangle {
-      width: 1
+      implicitWidth: 1
       Layout.fillHeight: true
       Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
@@ -227,7 +233,7 @@ ToolBar {
     // Separator
     //
     Rectangle {
-      width: 1
+      implicitWidth: 1
       Layout.fillHeight: true
       Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
@@ -252,7 +258,7 @@ ToolBar {
     // Separator
     //
     Rectangle {
-      width: 1
+      implicitWidth: 1
       Layout.fillHeight: true
       Layout.maximumHeight: 64
       Layout.alignment: Qt.AlignVCenter
@@ -293,6 +299,7 @@ ToolBar {
     // Horizontal spacer
     //
     Item {
+      implicitWidth: 1
       Layout.fillWidth: true
     }
 
@@ -302,6 +309,7 @@ ToolBar {
     Widgets.BigButton {
       checked: Cpp_IO_Manager.connected
       Layout.alignment: Qt.AlignVCenter
+      implicitWidth: metrics.width + 32
       font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.minimumWidth: metrics.width + 32
       Layout.maximumWidth: metrics.width + 32
@@ -324,6 +332,13 @@ ToolBar {
         font: Cpp_Misc_CommonFonts.boldUiFont
         text: " " + qsTr("Disconnect") + " "
       }
+    }
+
+    //
+    // Horizontal spacer
+    //
+    Item {
+      implicitWidth: 1
     }
   }
 }

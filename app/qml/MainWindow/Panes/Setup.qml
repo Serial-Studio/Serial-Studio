@@ -33,6 +33,7 @@ Widgets.Pane {
   id: root
   title: qsTr("Setup")
   icon: "qrc:/rcc/icons/panes/setup.svg"
+  implicitHeight: column.implicitHeight + 32
 
   //
   // Custom properties

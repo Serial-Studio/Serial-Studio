@@ -29,6 +29,8 @@ import SerialStudio
 
 Item {
   id: root
+  implicitWidth: layout.implicitWidth + 32
+  implicitHeight: layout.implicitHeight + 32
   property alias vt100emulation: terminal.vt100emulation
 
   //
@@ -169,6 +171,7 @@ Item {
   // Controls
   //
   ColumnLayout {
+    id: layout
     spacing: 4
     anchors.fill: parent
     anchors.topMargin: -6
@@ -181,6 +184,8 @@ Item {
       vt100emulation: true
       Layout.fillWidth: true
       Layout.fillHeight: true
+      Layout.minimumWidth: terminal.charWidth * 80
+      Layout.minimumHeight: terminal.charHeight * 24
 
       Rectangle {
         border.width: 1
