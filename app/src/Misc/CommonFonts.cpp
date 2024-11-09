@@ -45,10 +45,12 @@ Misc::CommonFonts::CommonFonts()
   // Add common fonts to application database
   // clang-format off
   addFonts(
-      QStringLiteral(":/rcc/fonts/NotoSans.ttf"),
-      QStringLiteral(":/rcc/fonts/NotoSansSC.ttf"),
-      QStringLiteral(":/rcc/fonts/NotoSansMono.ttf")
-      );
+      QStringLiteral(":/rcc/fonts/NotoSans-Bold.ttf"),
+      QStringLiteral(":/rcc/fonts/NotoSansSC-Bold.ttf"),
+      QStringLiteral(":/rcc/fonts/NotoSans-Regular.ttf"),
+      QStringLiteral(":/rcc/fonts/NotoSansSC-Regular.ttf"),
+      QStringLiteral(":/rcc/fonts/NotoSansMono-Regular.ttf")
+  );
   // clang-format on
 
   // Load appropiate fonts for current language
@@ -151,13 +153,19 @@ void Misc::CommonFonts::onLanguageChanged()
   m_boldUiFont = QFontDatabase::font(m_uiName, QStringLiteral("Bold"), 12);
   m_monoFont = QFontDatabase::font(m_monoName, QStringLiteral("Regular"), 12);
 
-  // Set font properties
+  // Set font size
   m_uiFont.setPixelSize(12);
   m_monoFont.setPixelSize(12);
   m_boldUiFont.setPixelSize(12);
-  m_monoFont.setStyleHint(QFont::Monospace);
 
-  // Update both app-level font & QML-dependent fonts
-  qApp->setFont(m_uiFont);
+  // Set font properties
+  m_uiFont.setStyleHint(QFont::SansSerif);
+  m_monoFont.setStyleHint(QFont::Monospace);
+  m_boldUiFont.setStyleHint(QFont::SansSerif);
+
+  // Update application fonts
+  QApplication::setFont(m_uiFont);
+
+  // Update fonts
   Q_EMIT fontsChanged();
 }

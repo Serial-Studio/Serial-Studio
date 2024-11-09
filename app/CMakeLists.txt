@@ -344,7 +344,7 @@ set_target_properties(
  UNITY_BUILD_MODE BATCH
  UNITY_BUILD_BATCH_SIZE 128
  INTERPROCEDURAL_OPTIMIZATION TRUE
- QT_QMLCACHEGEN_ARGUMENTS "--only-bytecode"
+ QT_QMLCACHEGEN_ARGUMENTS "--static"
 )
 
 #-------------------------------------------------------------------------------

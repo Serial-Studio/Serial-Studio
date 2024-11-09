@@ -139,10 +139,6 @@ Misc::ModuleManager::ModuleManager()
   // Init translator
   (void)Misc::Translator::instance();
 
-  // Load custom fonts
-  auto *common_fonts = &Misc::CommonFonts::instance();
-  QApplication::setFont(common_fonts->uiFont());
-
   // Stop modules when application is about to quit
   connect(&m_engine, &QQmlApplicationEngine::quit, this,
           &Misc::ModuleManager::onQuit);

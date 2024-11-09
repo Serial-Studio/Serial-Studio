@@ -299,9 +299,9 @@ void MQTT::Client::loadCaFile()
 {
   // Prompt user to select a CA file
   // clang-format off
-    auto path = QFileDialog::getOpenFileName(nullptr, 
-                                             tr("Select CA file"), 
-                                             QDir::homePath());
+  auto path = QFileDialog::getOpenFileName(nullptr,
+                                           tr("Select CA file"),
+                                           QDir::homePath());
   // clang-format on
 
   // Try to load the *.ca file

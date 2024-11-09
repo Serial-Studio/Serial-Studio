@@ -79,7 +79,7 @@ int main(int argc, char **argv)
   QApplication::setApplicationDisplayName(APP_NAME);
   QApplication::setOrganizationDomain(APP_SUPPORT_URL);
 
-  // Windows-specific initialization code
+  // Windows specific initialization code
 #ifdef Q_OS_WIN
   attachToConsole();
   argv = adjustArgumentsForFreeType(argc, argv);

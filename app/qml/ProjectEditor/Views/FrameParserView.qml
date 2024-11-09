@@ -30,7 +30,7 @@ import "../../Widgets" as Widgets
 Widgets.Pane {
   icon: Cpp_JSON_ProjectModel.selectedIcon
   Component.onCompleted: Cpp_JSON_FrameBuilder.setFrameParser(frameParser)
-  title: Cpp_JSON_ProjectModel.selectedText + (frameParser.modified ? " (" + qsTr("modified") + ")" : "")
+  title: Cpp_JSON_ProjectModel.selectedText + (frameParser.isModified ? " (" + qsTr("modified") + ")" : "")
 
   //
   // Super important to allow the user to type on a C++ widget from QML
@@ -223,7 +223,7 @@ Widgets.Pane {
           // Spacer
           //
           Rectangle {
-            width: 1
+            implicitWidth: 1
             Layout.fillHeight: true
             Layout.maximumHeight: 48
             Layout.alignment: Qt.AlignVCenter
@@ -262,7 +262,7 @@ Widgets.Pane {
           // Spacer
           //
           Rectangle {
-            width: 1
+            implicitWidth: 1
             Layout.fillHeight: true
             Layout.maximumHeight: 48
             Layout.alignment: Qt.AlignVCenter
@@ -312,7 +312,7 @@ Widgets.Pane {
           // Spacer
           //
           Rectangle {
-            width: 1
+            implicitWidth: 1
             Layout.fillHeight: true
             Layout.maximumHeight: 48
             Layout.alignment: Qt.AlignVCenter
