@@ -390,8 +390,7 @@ void IO::Console::print()
   document.setPlainText(m_textBuffer);
 
   // Set font
-  auto font = Misc::CommonFonts::instance().monoFont();
-  font.setPointSize(10);
+  auto font = Misc::CommonFonts::instance().customMonoFont(0.8);
   document.setDefaultFont(font);
 
   // Create printer object
