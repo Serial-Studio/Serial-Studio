@@ -202,14 +202,13 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
   const auto &rxTime = frame.rxDateTime;
 
   // Get file name
-  const auto fileName = rxTime.toString(QStringLiteral("HH-mm-ss")) + ".csv";
+  const auto fileName
+      = rxTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + ".csv";
 
   // Get path
-  const auto format = rxTime.toString("yyyy/MMM/dd/");
-  const QString path
-      = QStringLiteral("%1/Documents/%2/CSV/%3/%4")
-            .arg(QDir::homePath(), qApp->applicationDisplayName(), data.title(),
-                 format);
+  const QString path = QStringLiteral("%1/Documents/%2/CSV/%3/")
+                           .arg(QDir::homePath(),
+                                qApp->applicationDisplayName(), data.title());
 
   // Generate file path if required
   QDir dir(path);
