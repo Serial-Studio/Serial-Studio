@@ -73,7 +73,7 @@ Widgets.Pane {
     Rectangle {
       z: 2
       id: header
-      height: 64
+      height: layout.implicitHeight + 12
       color: Cpp_ThemeManager.colors["groupbox_background"]
       anchors {
         top: parent.top
@@ -85,6 +85,7 @@ Widgets.Pane {
       // Buttons
       //
       RowLayout {
+        id: layout
         spacing: 4
 
         anchors {
@@ -98,8 +99,7 @@ Widgets.Pane {
         // Add generic dataset
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Dataset")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
@@ -112,8 +112,7 @@ Widgets.Pane {
         // Add plot
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Plot")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
@@ -126,8 +125,7 @@ Widgets.Pane {
         // Add FFT plot
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("FFT Plot")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
@@ -140,8 +138,7 @@ Widgets.Pane {
         // Add bar
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
@@ -154,8 +151,7 @@ Widgets.Pane {
         // Add gauge
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Gauge")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
@@ -168,8 +164,7 @@ Widgets.Pane {
         // Add compass
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
@@ -182,8 +177,7 @@ Widgets.Pane {
         // Add LED
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("LED")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
@@ -203,8 +197,7 @@ Widgets.Pane {
         // Duplicate group
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentGroup()
@@ -216,8 +209,7 @@ Widgets.Pane {
         // Delete group
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentGroup()

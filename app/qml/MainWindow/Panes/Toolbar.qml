@@ -63,8 +63,8 @@ Rectangle {
   //
   // Set toolbar height
   //
-  Layout.minimumHeight: titlebarHeight + 76
-  Layout.maximumHeight: titlebarHeight + 76
+  Layout.minimumHeight: titlebarHeight + 64 + 12
+  Layout.maximumHeight: titlebarHeight + 64 + 12
 
   //
   // Titlebar text
@@ -135,6 +135,13 @@ Rectangle {
       right: parent.right
       verticalCenter: parent.verticalCenter
       verticalCenterOffset: root.titlebarHeight / 2
+    }
+
+    //
+    // Horizontal spacer
+    //
+    Item {
+      implicitWidth: 1
     }
 
     //
@@ -309,10 +316,10 @@ Rectangle {
     Widgets.BigButton {
       checked: Cpp_IO_Manager.connected
       Layout.alignment: Qt.AlignVCenter
-      implicitWidth: metrics.width + 32
+      implicitWidth: metrics.width + 16
       font: Cpp_Misc_CommonFonts.boldUiFont
-      Layout.minimumWidth: metrics.width + 32
-      Layout.maximumWidth: metrics.width + 32
+      Layout.minimumWidth: metrics.width + 16
+      Layout.maximumWidth: metrics.width + 16
       enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :

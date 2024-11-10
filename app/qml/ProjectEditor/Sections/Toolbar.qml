@@ -47,8 +47,8 @@ Rectangle {
   //
   // Set toolbar height
   //
-  Layout.minimumHeight: titlebarHeight + 76
-  Layout.maximumHeight: titlebarHeight + 76
+  Layout.minimumHeight: titlebarHeight + 64 + 12
+  Layout.maximumHeight: titlebarHeight + 64 + 12
 
   //
   // Titlebar text

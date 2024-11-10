@@ -21,48 +21,140 @@
  */
 
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
-ToolButton {
+Item {
   id: root
 
+  //
+  // Signals
+  //
+  signal clicked()
+
+  //
+  // Display properties
+  //
+  property alias icon: _icon
+  property real iconSize: 32
+  property alias font: _label.font
+  property alias text: _label.text
   property bool toolbarButton: true
 
-  icon.width: 32
-  icon.height: 32
-  icon.color: "transparent"
-  display: AbstractButton.TextUnderIcon
-  palette.buttonText: Cpp_ThemeManager.colors["toolbar_text"]
+  //
+  // State properties
+  //
+  property bool checked: false
+  property bool checkable: false
 
+  //
+  // Layout preferences
+  //
   Layout.minimumWidth: implicitWidth
   Layout.maximumWidth: implicitWidth
-  implicitWidth: Math.max(Math.ceil(metrics.width + 32), icon.width / 32 * 72)
+  implicitHeight: iconSize + _label.implicitHeight + 20
+  implicitWidth: Math.max(Math.ceil(metrics.width + 16), icon.width / 32 * 72)
 
+  //
+  // Animations
+  //
   opacity: enabled ? 1 : 0.5
   Behavior on opacity {NumberAnimation{}}
 
-  TextMetrics {
-    id: metrics
-    text: root.text
-    font: Cpp_Misc_CommonFonts.uiFont
+  //
+  // Checked background (toolbar)
+  //
+  Rectangle {
+    radius: 3
+    border.width: 1
+    anchors.fill: parent
+    visible: root.toolbarButton
+    color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
+    border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
+    opacity: root.checked ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0.0
   }
 
-  background: Item {
-    Rectangle {
-      radius: 3
-      border.width: 1
-      anchors.fill: parent
-      visible: root.toolbarButton
-      color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
-      border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
-      opacity: root.checked ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0.0
+  //
+  // Checked background (non-toolbar)
+  //
+  ToolButton {
+    checked: true
+    anchors.fill: parent
+    visible: root.checked && !root.toolbarButton
+  }
+
+  //
+  // Button display
+  //
+  ColumnLayout {
+    id: _layout
+    spacing: 0
+    anchors.fill: parent
+
+    Item {
+      Layout.fillHeight: true
     }
 
-    ToolButton {
-      checked: true
-      anchors.fill: parent
-      visible: root.checked && !root.toolbarButton
+    Image {
+      id: _icon
+      sourceSize.width: root.iconSize
+      sourceSize.height: root.iconSize
+      Layout.alignment: Qt.AlignHCenter
     }
+
+    Item {
+      Layout.fillHeight: true
+    }
+
+    Label {
+      id: _label
+      elide: Qt.ElideRight
+      Layout.maximumWidth: root.width
+      Layout.alignment: Qt.AlignHCenter
+      horizontalAlignment: Qt.AlignHCenter
+      color: Cpp_ThemeManager.colors["toolbar_text"]
+    }
+
+    Item {
+      Layout.fillHeight: true
+    }
+  }
+
+  //
+  // Button width calculation
+  //
+  TextMetrics {
+    id: metrics
+    font: _label.font
+    text: " " + root.text + " "
+  }
+
+  //
+  // Mouse Area
+  //
+  MouseArea {
+    id: _mouseArea
+    hoverEnabled: true
+    anchors.fill: parent
+    onClicked: {
+      if (root.checkable)
+        root.checked = !root.checked
+
+      root.clicked()
+    }
+  }
+
+  //
+  // Visual effects
+  //
+  MultiEffect {
+    source: _layout
+    anchors.fill: _layout
+    saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
+    brightness: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
+
+    Behavior on saturation {NumberAnimation{}}
+    Behavior on brightness {NumberAnimation{}}
   }
 }

@@ -74,7 +74,7 @@ Widgets.Pane {
     Rectangle {
       z: 2
       id: header
-      height: 64
+      height: layout.implicitHeight + 12
       color: Cpp_ThemeManager.colors["groupbox_background"]
       anchors {
         top: parent.top
@@ -86,6 +86,7 @@ Widgets.Pane {
       // Buttons
       //
       RowLayout {
+        id: layout
         spacing: 4
 
         anchors {
@@ -99,8 +100,7 @@ Widgets.Pane {
         // Change icon
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Change Icon")
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
@@ -122,8 +122,7 @@ Widgets.Pane {
         // Duplicate action
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentAction()
@@ -135,8 +134,7 @@ Widgets.Pane {
         // Delete action
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentAction()

@@ -74,7 +74,7 @@ Widgets.Pane {
     Rectangle {
       z: 2
       id: header
-      height: 64
+      height: layout.implicitHeight + 12
       color: Cpp_ThemeManager.colors["groupbox_background"]
       anchors {
         top: parent.top
@@ -86,6 +86,7 @@ Widgets.Pane {
       // Buttons
       //
       RowLayout {
+        id: layout
         spacing: 4
 
         anchors {
@@ -99,8 +100,7 @@ Widgets.Pane {
         // Add plot
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           text: qsTr("Plot")
           toolbarButton: false
@@ -120,8 +120,7 @@ Widgets.Pane {
         // Add FFT plot
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           toolbarButton: false
           text: qsTr("FFT Plot")
@@ -141,8 +140,7 @@ Widgets.Pane {
         // Add bar
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           toolbarButton: false
           text: qsTr("Bar/Level")
@@ -163,8 +161,7 @@ Widgets.Pane {
         // Add gauge
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           text: qsTr("Gauge")
           toolbarButton: false
@@ -185,8 +182,7 @@ Widgets.Pane {
         // Add compass
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           toolbarButton: false
           text: qsTr("Compass")
@@ -207,11 +203,10 @@ Widgets.Pane {
         // Add LED
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
-          toolbarButton: false
           text: qsTr("LED")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
@@ -235,8 +230,7 @@ Widgets.Pane {
         // Duplicate dataset
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
@@ -249,8 +243,7 @@ Widgets.Pane {
         // Delete dataset
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable

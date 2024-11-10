@@ -162,14 +162,15 @@ Widgets.Pane {
       Rectangle {
         z: 2
         Layout.fillWidth: true
-        Layout.minimumHeight: 64
         Layout.maximumHeight: Layout.minimumHeight
+        Layout.minimumHeight: layout.implicitHeight + 12
         color: Cpp_ThemeManager.colors["groupbox_background"]
 
         //
         // Buttons
         //
         RowLayout {
+          id: layout
           spacing: 4
 
           anchors {
@@ -183,8 +184,7 @@ Widgets.Pane {
           // Load default document
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Reset")
             onClicked: frameParser.reload()
             Layout.alignment: Qt.AlignVCenter
@@ -196,8 +196,7 @@ Widgets.Pane {
           // Import code file
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Import")
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
@@ -209,8 +208,7 @@ Widgets.Pane {
           // Save changes
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Apply")
             onClicked: frameParser.apply()
             enabled: frameParser.isModified
@@ -234,8 +232,7 @@ Widgets.Pane {
           // Undo
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Undo")
             onClicked: frameParser.undo()
             enabled: frameParser.isModified
@@ -248,8 +245,7 @@ Widgets.Pane {
           // Redo
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Redo")
             onClicked: frameParser.redo()
             enabled: frameParser.isModified
@@ -273,8 +269,7 @@ Widgets.Pane {
           // Cut
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Cut")
             onClicked: frameParser.cut()
             Layout.alignment: Qt.AlignVCenter
@@ -286,8 +281,7 @@ Widgets.Pane {
           // Copy
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Copy")
             onClicked: frameParser.copy()
             Layout.alignment: Qt.AlignVCenter
@@ -299,8 +293,7 @@ Widgets.Pane {
           // Paste
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Paste")
             onClicked: frameParser.paste()
             Layout.alignment: Qt.AlignVCenter
@@ -323,8 +316,7 @@ Widgets.Pane {
           // Help
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Help")
             onClicked: frameParser.help()
             Layout.alignment: Qt.AlignVCenter
