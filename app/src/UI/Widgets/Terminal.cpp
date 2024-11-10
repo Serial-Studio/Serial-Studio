@@ -171,33 +171,45 @@ void Widgets::Terminal::paint(QPainter *painter)
   const int firstLine = m_scrollOffsetY;
   const int lastVLine = qMin(firstLine + linesPerPage(), lineCount() - 1);
 
-  // First pass: Draw selection rectangles
+  // Draw selection rectangles
   int y = m_borderY;
   for (int i = firstLine; i <= lastVLine && y < height() - m_borderY; ++i)
   {
+    // Obtain the line data
     const QString &line = m_data[i];
 
     // Check if this line is within the selection range
     bool lineFullySelected = !m_selectionEnd.isNull()
-                             && i > m_selectionStart.y()
-                             && i < m_selectionEnd.y();
+                             && i >= m_selectionStart.y()
+                             && i <= m_selectionEnd.y();
 
     // Handle empty lines
     if (line.isEmpty())
     {
+      // Draw selection rectangle if required for this line
       if (lineFullySelected
           || (!m_selectionEnd.isNull() && i >= m_selectionStart.y()
               && i <= m_selectionEnd.y()))
       {
-        QRect selectionRect(m_borderX, y, width() - 2 * m_borderX,
-                            m_cHeight + 2);
+        QRect selectionRect(m_borderX, y, width() - 2 * m_borderX, m_cHeight);
         painter->fillRect(selectionRect, m_palette.color(QPalette::Highlight));
       }
+
+      // Go to next line
       y += lineHeight;
       continue;
     }
 
-    // Render selection for line while using word-wrapping
+    // If the line is fully selected, draw a single rectangle
+    if (lineFullySelected)
+    {
+      QRect selectionRect(m_borderX, y, width() - 2 * m_borderX, m_cHeight);
+      painter->fillRect(selectionRect, m_palette.color(QPalette::Highlight));
+      y += lineHeight;
+      continue;
+    }
+
+    // Render selection for line with word-wrapping and variable-width chars
     int start = 0;
     while (start < line.length())
     {
@@ -208,34 +220,53 @@ void Widgets::Terminal::paint(QPainter *painter)
       {
         int selectionStartX, selectionEndX;
 
-        // Select the entire width for fully selected lines
-        if (lineFullySelected)
+        // Specific case for the first line of the selection
+        if (i == m_selectionStart.y())
         {
-          selectionStartX = start;
-          selectionEndX = start + maxCharsPerLine();
-        }
-
-        else
-        {
-          selectionStartX = (i == m_selectionStart.y())
-                                ? qMax(m_selectionStart.x(), start)
-                                : start;
+          selectionStartX = qMax(m_selectionStart.x(), start);
           selectionEndX = (i == m_selectionEnd.y())
                               ? qMin(m_selectionEnd.x(), lineEnd)
                               : lineEnd;
         }
 
+        // Specific case for the last line of the selection
+        else if (i == m_selectionEnd.y())
+        {
+          selectionStartX = start;
+          selectionEndX = qMin(m_selectionEnd.x(), lineEnd);
+        }
+
+        // Entire line selected within the bounds of start and end
+        else
+        {
+          selectionStartX = start;
+          selectionEndX = lineEnd;
+        }
+
         if (selectionStartX < selectionEndX)
         {
-          int startX = m_borderX + (selectionStartX - start) * m_cWidth;
-          int w = (selectionEndX - selectionStartX) * m_cWidth;
-          if (lineFullySelected)
+          int startX = m_borderX;
+          int selectionWidth = 0;
+
+          // Cap for selection width
+          int maxSelectionWidth = width() - 2 * m_borderX;
+
+          for (int j = start; j < selectionEndX; ++j)
           {
-            startX = m_borderX;
-            w = width() - 2 * m_borderX;
+            int charWidth = painter->fontMetrics().horizontalAdvance(line[j]);
+
+            if (j < selectionStartX)
+              startX += charWidth;
+            else
+              selectionWidth += charWidth;
           }
 
-          QRect selectionRect(startX, y, w, m_cHeight + 2);
+          // Cap the selection width to fit within the allowed area
+          selectionWidth
+              = qMin(selectionWidth, maxSelectionWidth - (startX - m_borderX));
+
+          // Draw the selection rectangle
+          QRect selectionRect(startX, y, selectionWidth, m_cHeight);
           painter->fillRect(selectionRect,
                             m_palette.color(QPalette::Highlight));
         }
@@ -246,7 +277,7 @@ void Widgets::Terminal::paint(QPainter *painter)
     }
   }
 
-  // Draw characters one by one (to ensure that m_cWidth assumption is true)
+  // Draw characters one by one with variable width handling
   y = m_borderY;
   for (int i = firstLine; i <= lastVLine && y < height() - m_borderY; ++i)
   {
@@ -260,17 +291,29 @@ void Widgets::Terminal::paint(QPainter *painter)
       continue;
     }
 
-    // Render line while using word-wrapping
+    // Render line with word-wrapping
     int start = 0;
     while (start < line.length())
     {
       const int end = qMin<int>(start + maxCharsPerLine(), line.length());
       const QString segment = line.mid(start, end - start);
+      int x = m_borderX;
+
       for (int j = 0; j < segment.length(); ++j)
       {
-        int charX = m_borderX + j * m_cWidth;
+        // Get character to render
+        const QString character = segment.mid(j, 1);
+
+        // Measure the character width dynamically
+        int charWidth = painter->fontMetrics().horizontalAdvance(character);
+
+        // Draw the character at the centered position within its cell
         painter->setPen(m_palette.color(QPalette::Text));
-        painter->drawText(charX, y + lineHeight, segment.mid(j, 1));
+        painter->drawText(x, y, charWidth, m_cHeight, Qt::AlignCenter,
+                          character);
+
+        // Move to the next character position
+        x += charWidth;
       }
 
       y += lineHeight;
@@ -476,9 +519,7 @@ QPoint Widgets::Terminal::cursorPosition() const
  */
 QPoint Widgets::Terminal::positionToCursor(const QPoint &pos) const
 {
-  int x = (pos.x() - m_borderX) / m_cWidth;
   int y = (pos.y() - m_borderY) / m_cHeight + m_scrollOffsetY;
-
   int actualY = 0;
   int actualX = 0;
   int remainingY = y;
@@ -501,11 +542,20 @@ QPoint Widgets::Terminal::positionToCursor(const QPoint &pos) const
       if (remainingY < lines)
       {
         actualY = i;
-        actualX = (remainingY * maxCharsPerLine()) + x;
+        int x = pos.x() - m_borderX;
+        int widthSum = 0;
+        for (int j = 0; j < line.length(); ++j)
+        {
+          int charWidth = QFontMetrics(m_font).horizontalAdvance(line[j]);
+          if (widthSum + charWidth > x)
+          {
+            actualX = j;
+            return QPoint(actualX, actualY);
+          }
+          widthSum += charWidth;
+        }
 
-        if (actualX >= line.length())
-          actualX = line.length() - 1;
-
+        actualX = line.length();
         return QPoint(actualX, actualY);
       }
 
@@ -516,7 +566,7 @@ QPoint Widgets::Terminal::positionToCursor(const QPoint &pos) const
   if (!m_data.isEmpty())
   {
     actualY = m_data.size() - 1;
-    actualX = m_data.last().length() - 1;
+    actualX = m_data.last().length();
   }
 
   return QPoint(qMax(0, actualX), qMax(0, actualY));
@@ -649,11 +699,11 @@ void Widgets::Terminal::setFont(const QFont &font)
   m_font.setStyleStrategy(QFont::PreferAntialias);
 
   // Get size of font (in pixels)
-  auto metrics = QFontMetrics(font);
+  auto metrics = QFontMetrics(m_font);
 
-  // Update character widths
+  // Update character sizes
   m_cHeight = metrics.height();
-  m_cWidth = metrics.averageCharWidth();
+  m_cWidth = metrics.horizontalAdvance("M");
 
   // Update terminal border
   m_borderX = qMax(m_cWidth, m_cHeight) / 2;

@@ -34,8 +34,8 @@ Window {
   // Window options
   //
   title: qsTr("Console")
-  minimumWidth: 640
-  minimumHeight: 240 + root.titlebarHeight
+  minimumWidth: terminal.implicitWidth + 16
+  minimumHeight: terminal.implicitHeight + 16 + root.titlebarHeight
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |
@@ -138,6 +138,7 @@ Window {
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     Dashboard.Terminal {
+      id: terminal
       anchors.margins: 8
       anchors.fill: parent
     }
