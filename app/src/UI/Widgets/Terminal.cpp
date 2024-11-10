@@ -124,10 +124,10 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   connect(&m_cursorTimer, &QTimer::timeout, this,
           &Widgets::Terminal::toggleCursor);
 
-  // Redraw the widget at 24 Hz and only when necessary
+  // Redraw the widget only when necessary
   m_stateChanged = true;
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
-          [=] {
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeoutScreen,
+          this, [=] {
             if (isVisible() && m_stateChanged)
             {
               m_stateChanged = false;

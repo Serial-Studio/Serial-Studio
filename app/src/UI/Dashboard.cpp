@@ -43,8 +43,8 @@ UI::Dashboard::Dashboard()
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame);
   // clang-format on
 
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
-          [=] {
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeoutScreen,
+          this, [=] {
             if (m_updateRequired)
             {
               m_updateRequired = false;

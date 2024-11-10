@@ -292,6 +292,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_ModuleManager", this);
   c->setContextProperty("Cpp_BuildDate", buildDate);
   c->setContextProperty("Cpp_BuildTime", buildTime);
+  c->setContextProperty("Cpp_PrimaryScreen", qApp->primaryScreen());
 
   // Register app info with QML
   c->setContextProperty("Cpp_AppName", qApp->applicationDisplayName());
