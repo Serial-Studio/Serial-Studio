@@ -264,7 +264,7 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignHCenter
           text: qsTr("Let's Add Some Datasets")
           horizontalAlignment: Label.AlignHCenter
-          font: Cpp_Misc_CommonFonts.customUiFont(24, true)
+          font: Cpp_Misc_CommonFonts.customUiFont(2, true)
         }
 
         Item {
@@ -277,7 +277,7 @@ Widgets.Pane {
           horizontalAlignment: Label.AlignHCenter
           Layout.maximumWidth: delegate.width * 0.9
           wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-          font: Cpp_Misc_CommonFonts.customUiFont(18, false)
+          font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
           text: qsTr("Datasets describe individual readings (e.g. X, Y, Z in an accelerometer).\n" +
                      "Use the toolbar buttons above to add a dataset to this group.")
         }

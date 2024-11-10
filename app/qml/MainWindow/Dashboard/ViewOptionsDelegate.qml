@@ -37,7 +37,7 @@ ColumnLayout {
       text: root.title
       Layout.alignment: Qt.AlignVCenter
       opacity: hideAll.checked ? 0.5 : 1
-      font: Cpp_Misc_CommonFonts.customUiFont(10, true)
+      font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
       color: Cpp_ThemeManager.colors["pane_section_label"]
       Component.onCompleted: font.capitalization = Font.AllUppercase
     }

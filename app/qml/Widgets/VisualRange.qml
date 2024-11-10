@@ -84,8 +84,8 @@ ColumnLayout {
     color: Cpp_ThemeManager.colors["widget_text"]
     text: root.textValue !== "" ? root.textValue :
                                   root.getPaddedText(root.value) + " " + root.units
-    font: root.rangeVisible ? Cpp_Misc_CommonFonts.customMonoFont(14) :
-                              Cpp_Misc_CommonFonts.customMonoFont(12)
+    font: root.rangeVisible ? Cpp_Misc_CommonFonts.customMonoFont(1.16) :
+                              Cpp_Misc_CommonFonts.customMonoFont(1)
 
     background: Rectangle {
       z: 0

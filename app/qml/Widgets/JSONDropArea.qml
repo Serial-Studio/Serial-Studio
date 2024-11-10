@@ -115,7 +115,7 @@ DropArea {
       Label {
         Layout.alignment: Qt.AlignHCenter
         text: qsTr("Drop JSON and CSV files here")
-        font: Cpp_Misc_CommonFonts.customUiFont(24, true)
+        font: Cpp_Misc_CommonFonts.customUiFont(2, true)
         color: Cpp_ThemeManager.colors["highlighted_text"]
       }
     }

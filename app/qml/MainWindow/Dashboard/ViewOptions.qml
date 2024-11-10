@@ -164,7 +164,7 @@ Widgets.Pane {
           Label {
             Layout.alignment: Qt.AlignVCenter
             text: qsTr("Visualization Options")
-            font: Cpp_Misc_CommonFonts.customUiFont(10, true)
+            font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
             color: Cpp_ThemeManager.colors["pane_section_label"]
             Component.onCompleted: font.capitalization = Font.AllUppercase
           }

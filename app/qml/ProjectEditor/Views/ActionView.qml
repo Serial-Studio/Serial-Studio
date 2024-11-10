@@ -183,7 +183,7 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignHCenter
           text: qsTr("Send commands with a button click")
           horizontalAlignment: Label.AlignHCenter
-          font: Cpp_Misc_CommonFonts.customUiFont(24, true)
+          font: Cpp_Misc_CommonFonts.customUiFont(2, true)
         }
 
         Item {
@@ -196,7 +196,7 @@ Widgets.Pane {
           horizontalAlignment: Label.AlignHCenter
           Layout.maximumWidth: delegate.width * 0.9
           wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-          font: Cpp_Misc_CommonFonts.customUiFont(18, false)
+          font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
           text: qsTr("Actions let you send custom commands to the connected device with a single button press.")
         }
       }

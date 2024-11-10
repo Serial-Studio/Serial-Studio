@@ -91,7 +91,7 @@ Window {
       text: root.title
       visible: root.titlebarHeight > 0
       color: Cpp_ThemeManager.colors["text"]
-      font: Cpp_Misc_CommonFonts.customUiFont(14, true)
+      font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
 
       anchors {
         topMargin: 6
@@ -194,7 +194,7 @@ Window {
             id: title
             Layout.fillWidth: true
             Layout.minimumHeight: font.pointSize
-            font: Cpp_Misc_CommonFonts.customUiFont(16, true)
+            font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
             text: qsTr("Support the development of %1!").arg(Cpp_AppName)
           }
 

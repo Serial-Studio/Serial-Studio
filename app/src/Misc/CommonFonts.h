@@ -64,8 +64,8 @@ public:
   [[nodiscard]] const QFont &monoFont() const;
   [[nodiscard]] const QFont &boldUiFont() const;
 
-  Q_INVOKABLE QFont customUiFont(int pointSize = 12, bool bold = false);
-  Q_INVOKABLE QFont customMonoFont(int pointSize = 12);
+  Q_INVOKABLE QFont customUiFont(qreal fraction = 1, bool bold = false);
+  Q_INVOKABLE QFont customMonoFont(qreal fraction = 1);
 
 private:
   QFont m_uiFont;

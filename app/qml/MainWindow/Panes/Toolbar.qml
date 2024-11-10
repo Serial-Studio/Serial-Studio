@@ -73,7 +73,7 @@ Rectangle {
     text: mainWindow.title
     visible: root.titlebarHeight > 0
     color: Cpp_ThemeManager.colors["titlebar_text"]
-    font: Cpp_Misc_CommonFonts.customUiFont(14, true)
+    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
 
     anchors {
       topMargin: 6

@@ -94,7 +94,7 @@ Window {
       text: root.title
       visible: root.titlebarHeight > 0
       color: Cpp_ThemeManager.colors["text"]
-      font: Cpp_Misc_CommonFonts.customUiFont(14, true)
+      font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
 
       anchors {
         topMargin: 6
@@ -174,7 +174,7 @@ Window {
 
           Label {
             text: Cpp_AppName
-            font: Cpp_Misc_CommonFonts.customUiFont(28, true)
+            font: Cpp_Misc_CommonFonts.customUiFont(2, true)
           }
 
           Item {
@@ -184,7 +184,7 @@ Window {
           Label {
             opacity: 0.5
             text: qsTr("Version %1").arg(Cpp_AppVersion)
-            font: Cpp_Misc_CommonFonts.customUiFont(16, false)
+            font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
           }
         }
       }

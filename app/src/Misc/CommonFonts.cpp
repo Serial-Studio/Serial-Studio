@@ -52,7 +52,7 @@ Misc::CommonFonts::CommonFonts()
   // Set the monospace font from the embedded font
   m_monoName = QStringLiteral("Source Code Pro");
   m_monoFont = QFontDatabase::font(m_monoName, QStringLiteral("Regular"),
-                                   m_uiFont.pointSize());
+                                   m_uiFont.pointSizeF());
   m_monoFont.setStyleHint(QFont::Monospace);
 
   // Update application fonts
@@ -97,26 +97,26 @@ const QFont &Misc::CommonFonts::boldUiFont() const
 }
 
 /**
- * @brief Creates a custom UI font with specified pixel size and boldness.
- * @param pointSize The pixel size of the font.
+ * @brief Creates a custom UI font with specified size and boldness.
+ * @param fraction The fractional size of the font (1=100% of normal font size)
  * @param bold True if the font should be bold, otherwise false.
  * @return The custom UI font.
  */
-QFont Misc::CommonFonts::customUiFont(const int pointSize, const bool bold)
+QFont Misc::CommonFonts::customUiFont(const qreal fraction, const bool bold)
 {
   QFont font = bold ? m_boldUiFont : m_uiFont;
-  font.setPointSize(qMax(1, pointSize));
+  font.setPointSizeF(m_uiFont.pointSizeF() * qMax(0.1, fraction));
   return font;
 }
 
 /**
- * @brief Creates a custom monospace font with specified pixel size.
- * @param pointSize The pixel size of the font.
+ * @brief Creates a custom monospace font with specified size.
+ * @param fraction The fractional size of the font (1=100% of normal font size)
  * @return The custom monospace font.
  */
-QFont Misc::CommonFonts::customMonoFont(const int pointSize)
+QFont Misc::CommonFonts::customMonoFont(const qreal fraction)
 {
   QFont font = QFontDatabase::font(m_monoName, QStringLiteral("Regular"), 12);
-  font.setPointSize(qMax(1, pointSize));
+  font.setPointSizeF(m_monoFont.pointSizeF() * qMax(0.1, fraction));
   return font;
 }
