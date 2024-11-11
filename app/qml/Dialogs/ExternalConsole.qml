@@ -139,6 +139,8 @@ Window {
 
     Dashboard.Terminal {
       id: terminal
+      minimumRows: 5
+      minimumColumns: 80
       anchors.margins: 8
       anchors.fill: parent
     }

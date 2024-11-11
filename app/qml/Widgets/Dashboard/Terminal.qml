@@ -42,6 +42,12 @@ Item {
   }
 
   //
+  // Custom properties
+  //
+  property int minimumRows: 24
+  property int minimumColumns: 80
+
+  //
   // Save settings
   //
   Settings {
@@ -184,8 +190,8 @@ Item {
       vt100emulation: true
       Layout.fillWidth: true
       Layout.fillHeight: true
-      Layout.minimumWidth: terminal.charWidth * 80
-      Layout.minimumHeight: terminal.charHeight * 24
+      Layout.minimumHeight: terminal.charHeight * root.minimumRows
+      Layout.minimumWidth: terminal.charWidth * root.minimumColumns
 
       Rectangle {
         border.width: 1
