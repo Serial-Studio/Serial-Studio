@@ -32,31 +32,30 @@
  */
 Misc::CommonFonts::CommonFonts()
 {
-  // Lambda function to register any number of fonts
-  const auto addFonts = [](const auto &...fonts) {
-    const auto addFont = [](const auto &font) {
-      if (QFontDatabase::addApplicationFont(font) == -1)
-        qWarning() << "Failed to load font: " << font;
-    };
-    (addFont(fonts), ...);
-  };
-
-  // Register the monospace fonts only
-  addFonts(QStringLiteral(":/rcc/fonts/SourceCodePro-Regular.ttf"));
+  // Platform-specific font selection
+#ifdef Q_OS_LINUX
+  m_monoName = QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
+#elif defined(Q_OS_MAC)
+  m_monoName = QStringLiteral("Menlo");
+#elif defined(Q_OS_WIN)
+  m_monoName = QStringLiteral("Consolas");
+#else
+  m_monoName = QStringLiteral("Courier");
+#endif
 
   // Set the UI font to the system default
   m_uiFont = QApplication::font();
   m_boldUiFont = m_uiFont;
   m_boldUiFont.setBold(true);
 
-  // Set the monospace font from the embedded font
-  m_monoName = QStringLiteral("Source Code Pro");
-  m_monoFont = QFontDatabase::font(m_monoName, QStringLiteral("Regular"),
-                                   m_uiFont.pointSizeF());
+  // Setup monospace font
+  m_monoFont = QFont(m_monoName);
+  m_monoFont.setPointSizeF(m_uiFont.pointSizeF());
   m_monoFont.setStyleHint(QFont::Monospace);
 
-  // Update application fonts
-  QApplication::setFont(m_uiFont);
+  // Verify that the font was loaded correctly
+  if (m_monoFont.family() != m_monoName)
+    m_monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 }
 
 /**

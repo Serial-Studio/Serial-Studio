@@ -169,12 +169,12 @@ public slots:
   void setSelectedDriver(const IO::Manager::SelectedDriver &driver);
 
 private slots:
-  void readFrames();
   void clearTempBuffer();
   void setDriver(HAL_Driver *driver);
   void onDataReceived(const QByteArray &data);
 
 private:
+  void readFrames();
   void readStartEndDelimetedFrames();
   void readEndDelimetedFrames(const QList<QByteArray> &delimeters);
 

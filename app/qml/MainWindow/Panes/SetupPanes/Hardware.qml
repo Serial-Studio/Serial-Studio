@@ -27,8 +27,9 @@ import QtCore as QtSettings
 
 import "Devices" as Devices
 
-Control {
+Item {
   id: root
+  implicitHeight: layout.implicitHeight + 32
 
   //
   // Save settings
@@ -51,9 +52,22 @@ Control {
     property alias udpProcessDatagramsDirectly: network.udpProcessDatagramsDirectly
   }
 
+  //
+  // Background
+  //
+  Rectangle {
+    radius: 2
+    border.width: 1
+    anchors.fill: parent
+    color: Cpp_ThemeManager.colors["groupbox_background"]
+    border.color: Cpp_ThemeManager.colors["groupbox_border"]
+  }
+
+  //
+  // Layout
+  //
   ColumnLayout {
     id: layout
-    spacing: 4
     anchors.margins: 8
     anchors.fill: parent
 
@@ -66,6 +80,7 @@ Control {
       Layout.fillWidth: true
       Layout.fillHeight: true
       currentIndex: Cpp_IO_Manager.selectedDriver
+      implicitHeight: Math.max(serial.implicitHeight, network.implicitHeight, bluetoothLE.implicitHeight)
 
       Devices.Serial {
         id: serial

@@ -275,7 +275,10 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   {
     auto jsonData = QJsonDocument::fromJson(data).object();
     if (m_frame.read(jsonData))
-      Q_EMIT frameChanged(m_frame);
+    {
+      QMetaObject::invokeMethod(
+          this, [=] { Q_EMIT frameChanged(m_frame); }, Qt::QueuedConnection);
+    }
   }
 
   // Data is separated and parsed by Serial Studio project
@@ -319,7 +322,8 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     }
 
     // Update user interface
-    Q_EMIT frameChanged(m_frame);
+    QMetaObject::invokeMethod(
+        this, [=] { Q_EMIT frameChanged(m_frame); }, Qt::QueuedConnection);
   }
 
   // Data is separated by comma separated values
@@ -368,6 +372,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
       frame.m_groups.append(plots);
     }
 
-    Q_EMIT frameChanged(frame);
+    QMetaObject::invokeMethod(
+        this, [=] { Q_EMIT frameChanged(frame); }, Qt::QueuedConnection);
   }
 }

@@ -857,5 +857,6 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   updatePlots();
 
   // Notify rest of application about the current frame
-  Q_EMIT frameReceived(frame);
+  QMetaObject::invokeMethod(
+      this, [=] { Q_EMIT frameReceived(frame); }, Qt::QueuedConnection);
 }

@@ -33,14 +33,14 @@ Widgets.Pane {
   id: root
   title: qsTr("Setup")
   icon: "qrc:/rcc/icons/panes/setup.svg"
-  implicitHeight: column.implicitHeight + 32
+  implicitHeight: layout.implicitHeight + 32
 
   //
   // Custom properties
   //
   property int setupMargin: 0
   property int displayedWidth: 360
-  readonly property int maxItemWidth: column.width - 8
+  readonly property int maxItemWidth: layout.width - 8
 
   //
   // Displays the setup panel
@@ -117,7 +117,7 @@ Widgets.Pane {
     // Control arrangement
     //
     ColumnLayout {
-      id: column
+      id: layout
       spacing: 4
       anchors {
         fill: parent
@@ -263,29 +263,18 @@ Widgets.Pane {
         Layout.fillHeight: true
         currentIndex: tab.currentIndex
         Layout.topMargin: -parent.spacing - 1
+        implicitHeight: Math.max(hardware.implicitHeight, settings.implicitHeight)
 
         SetupPanes.Hardware {
           id: hardware
           Layout.fillWidth: true
           Layout.fillHeight: true
-          background: Rectangle {
-            radius: 2
-            border.width: 1
-            color: Cpp_ThemeManager.colors["groupbox_background"]
-            border.color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
         }
 
         SetupPanes.Settings {
           id: settings
           Layout.fillWidth: true
           Layout.fillHeight: true
-          background: Rectangle {
-            radius: 2
-            border.width: 1
-            color: Cpp_ThemeManager.colors["groupbox_background"]
-            border.color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
         }
       }
     }

@@ -26,6 +26,7 @@ import QtQuick.Controls
 
 Item {
   id: root
+  implicitHeight: layout.implicitHeight
 
   //
   // Control layout

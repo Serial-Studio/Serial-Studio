@@ -428,55 +428,6 @@ void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
 }
 
 /**
- * Read frames from temporary buffer, every frame that contains the appropiate
- * start/end sequence is removed from the buffer as soon as its read.
- *
- * This function also checks that the buffer size does not exceed specified size
- * limitations.
- *
- * Implemementation credits: @jpnorair and @alex-spataru
- */
-void IO::Manager::readFrames()
-{
-  // Obtain pointer to JSON generator
-  static auto *model = &JSON::ProjectModel::instance();
-  static auto *generator = &JSON::FrameBuilder::instance();
-
-  // Initialize a static list with possible line breaks
-  static QList<QByteArray> linebreaks;
-  if (linebreaks.isEmpty())
-  {
-    linebreaks.append(QByteArray("\n"));
-    linebreaks.append(QByteArray("\r"));
-    linebreaks.append(QByteArray("\r\n"));
-  }
-
-  // No device connected, abort
-  if (!connected())
-    return;
-
-  // Obtain operation mode from JSON generator
-  const auto mode = generator->operationMode();
-
-  // Read until start/finish combinations are not found
-  if (mode == JSON::FrameBuilder::DeviceSendsJSON)
-    readStartEndDelimetedFrames();
-
-  // Project mode, obtain which frame detection method to use
-  else if (mode == JSON::FrameBuilder::ProjectFile)
-  {
-    if (model->frameDetection() == WC::EndDelimiterOnly)
-      readEndDelimetedFrames(QList<QByteArray>{finishSequence().toUtf8()});
-    else if (model->frameDetection() == WC::StartAndEndDelimiter)
-      readStartEndDelimetedFrames();
-  }
-
-  // Handle data with line breaks (\n, \r, or \r\n)
-  else if (mode == JSON::FrameBuilder::CommaSeparatedValues)
-    readEndDelimetedFrames(linebreaks);
-}
-
-/**
  * Deletes the contents of the temporary buffer. This function is called
  * automatically by the class when the temporary buffer size exceeds the limit
  * imposed by the
@@ -532,6 +483,55 @@ void IO::Manager::onDataReceived(const QByteArray &data)
 }
 
 /**
+ * Read frames from temporary buffer, every frame that contains the appropiate
+ * start/end sequence is removed from the buffer as soon as its read.
+ *
+ * This function also checks that the buffer size does not exceed specified size
+ * limitations.
+ *
+ * Implemementation credits: @jpnorair and @alex-spataru
+ */
+void IO::Manager::readFrames()
+{
+  // Obtain pointer to JSON generator
+  static auto *model = &JSON::ProjectModel::instance();
+  static auto *generator = &JSON::FrameBuilder::instance();
+
+  // Initialize a static list with possible line breaks
+  static QList<QByteArray> linebreaks;
+  if (linebreaks.isEmpty())
+  {
+    linebreaks.append(QByteArray("\n"));
+    linebreaks.append(QByteArray("\r"));
+    linebreaks.append(QByteArray("\r\n"));
+  }
+
+  // No device connected, abort
+  if (!connected())
+    return;
+
+  // Obtain operation mode from JSON generator
+  const auto mode = generator->operationMode();
+
+  // Read until start/finish combinations are not found
+  if (mode == JSON::FrameBuilder::DeviceSendsJSON)
+    readStartEndDelimetedFrames();
+
+  // Project mode, obtain which frame detection method to use
+  else if (mode == JSON::FrameBuilder::ProjectFile)
+  {
+    if (model->frameDetection() == WC::EndDelimiterOnly)
+      readEndDelimetedFrames(QList<QByteArray>{finishSequence().toUtf8()});
+    else if (model->frameDetection() == WC::StartAndEndDelimiter)
+      readStartEndDelimetedFrames();
+  }
+
+  // Handle data with line breaks (\n, \r, or \r\n)
+  else if (mode == JSON::FrameBuilder::CommaSeparatedValues)
+    readEndDelimetedFrames(linebreaks);
+}
+
+/**
  * @brief Processes data buffer to detect and emit frames using start and end
  *        delimiters.
  *
@@ -581,7 +581,9 @@ void IO::Manager::readStartEndDelimetedFrames()
       auto result = integrityChecks(frame, m_dataBuffer, &chop);
       if (result == ValidationStatus::FrameOk)
       {
-        Q_EMIT frameReceived(frame);
+        QMetaObject::invokeMethod(
+            this, [=] { Q_EMIT frameReceived(frame); }, Qt::QueuedConnection);
+
         bytesProcessed = fIndex + finish.size() + chop;
       }
 
@@ -671,7 +673,10 @@ void IO::Manager::readEndDelimetedFrames(const QList<QByteArray> &delimeters)
 
       // Emit frame
       else
-        Q_EMIT frameReceived(frame);
+      {
+        QMetaObject::invokeMethod(
+            this, [=] { Q_EMIT frameReceived(frame); }, Qt::QueuedConnection);
+      }
     }
 
     // Move past the line break
