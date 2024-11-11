@@ -89,6 +89,8 @@ Item {
   //
   ColumnLayout {
     id: _layout
+    visible: false
+
     spacing: 0
     anchors.fill: parent
 
@@ -113,7 +115,8 @@ Item {
       Layout.maximumWidth: root.width
       Layout.alignment: Qt.AlignHCenter
       horizontalAlignment: Qt.AlignHCenter
-      color: Cpp_ThemeManager.colors["toolbar_text"]
+      color: root.toolbarButton ? Cpp_ThemeManager.colors["toolbar_text"] :
+                                  Cpp_ThemeManager.colors["button_text"]
     }
 
     Item {

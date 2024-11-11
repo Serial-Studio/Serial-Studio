@@ -105,7 +105,6 @@ Widgets.Pane {
           text: qsTr("Plot")
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
           checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetPlot
           onClicked: {
@@ -125,7 +124,6 @@ Widgets.Pane {
           toolbarButton: false
           text: qsTr("FFT Plot")
           Layout.alignment: Qt.AlignVCenter
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
           checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetFFT
           onClicked: {
@@ -146,7 +144,6 @@ Widgets.Pane {
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
           checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetBar
           onClicked: {
@@ -167,7 +164,6 @@ Widgets.Pane {
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
           checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetGauge
           onClicked: {
@@ -188,7 +184,6 @@ Widgets.Pane {
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
           checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetCompass
           onClicked: {
@@ -208,7 +203,6 @@ Widgets.Pane {
           text: qsTr("LED")
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
           checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetLED
           onClicked: {
@@ -231,11 +225,11 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
+          toolbarButton: false
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
         }
 
@@ -245,10 +239,10 @@ Widgets.Pane {
         Widgets.BigButton {
           iconSize: 24
           text: qsTr("Delete")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
         }
       }

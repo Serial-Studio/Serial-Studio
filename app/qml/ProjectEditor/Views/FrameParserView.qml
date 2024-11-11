@@ -186,10 +186,10 @@ Widgets.Pane {
           Widgets.BigButton {
             iconSize: 24
             text: qsTr("Reset")
+            toolbarButton: false
             onClicked: frameParser.reload()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/reload.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
@@ -198,10 +198,10 @@ Widgets.Pane {
           Widgets.BigButton {
             iconSize: 24
             text: qsTr("Import")
+            toolbarButton: false
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/import.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
@@ -210,11 +210,11 @@ Widgets.Pane {
           Widgets.BigButton {
             iconSize: 24
             text: qsTr("Apply")
+            toolbarButton: false
             onClicked: frameParser.apply()
             enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/apply.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
@@ -234,11 +234,11 @@ Widgets.Pane {
           Widgets.BigButton {
             iconSize: 24
             text: qsTr("Undo")
+            toolbarButton: false
             onClicked: frameParser.undo()
             enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/undo.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
@@ -247,11 +247,11 @@ Widgets.Pane {
           Widgets.BigButton {
             iconSize: 24
             text: qsTr("Redo")
+            toolbarButton: false
             onClicked: frameParser.redo()
             enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/redo.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
@@ -271,10 +271,10 @@ Widgets.Pane {
           Widgets.BigButton {
             iconSize: 24
             text: qsTr("Cut")
+            toolbarButton: false
             onClicked: frameParser.cut()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/cut.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
@@ -283,10 +283,10 @@ Widgets.Pane {
           Widgets.BigButton {
             iconSize: 24
             text: qsTr("Copy")
+            toolbarButton: false
             onClicked: frameParser.copy()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/copy.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
@@ -295,10 +295,10 @@ Widgets.Pane {
           Widgets.BigButton {
             iconSize: 24
             text: qsTr("Paste")
+            toolbarButton: false
             onClicked: frameParser.paste()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/paste.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
@@ -318,10 +318,10 @@ Widgets.Pane {
           Widgets.BigButton {
             iconSize: 24
             text: qsTr("Help")
+            toolbarButton: false
             onClicked: frameParser.help()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/help.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //

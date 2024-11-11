@@ -100,10 +100,10 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
+          toolbarButton: false
           text: qsTr("Dataset")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetGeneric)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
         }
@@ -114,9 +114,9 @@ Widgets.Pane {
         Widgets.BigButton {
           iconSize: 24
           text: qsTr("Plot")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetPlot)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
         }
@@ -126,10 +126,10 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
+          toolbarButton: false
           text: qsTr("FFT Plot")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetFFT)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
         }
@@ -139,10 +139,10 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
+          toolbarButton: false
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetBar)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
         }
@@ -153,9 +153,9 @@ Widgets.Pane {
         Widgets.BigButton {
           iconSize: 24
           text: qsTr("Gauge")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetGauge)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
         }
@@ -165,10 +165,10 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
+          toolbarButton: false
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetCompass)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
         }
@@ -179,9 +179,9 @@ Widgets.Pane {
         Widgets.BigButton {
           iconSize: 24
           text: qsTr("LED")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetLED)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
         }
@@ -198,10 +198,10 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
+          toolbarButton: false
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentGroup()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
         }
 
@@ -210,10 +210,10 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
+          toolbarButton: false
           text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentGroup()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
         }
       }
