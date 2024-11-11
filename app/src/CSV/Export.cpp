@@ -27,6 +27,7 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QStandardPaths>
 
 #include "IO/Manager.h"
 #include "UI/Dashboard.h"
@@ -206,8 +207,8 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
       = rxTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + ".csv";
 
   // Get path
-  const QString path = QStringLiteral("%1/Documents/%2/CSV/%3/")
-                           .arg(QDir::homePath(),
+  const QString path = QStringLiteral("%1/%2/CSV/%3/")
+                           .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                 qApp->applicationDisplayName(), data.title());
 
   // Generate file path if required
