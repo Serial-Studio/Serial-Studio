@@ -172,47 +172,47 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
     {
       case WC::DashboardDataGrid:
         m_dbWidget = new Widgets::DataGrid(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/DataGrid.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/DataGrid.qml";
         break;
       case WC::DashboardMultiPlot:
         m_dbWidget = new Widgets::MultiPlot(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/MultiPlot.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/MultiPlot.qml";
         break;
       case WC::DashboardFFT:
         m_dbWidget = new Widgets::FFTPlot(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/FFTPlot.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/FFTPlot.qml";
         break;
       case WC::DashboardPlot:
         m_dbWidget = new Widgets::Plot(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Plot.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Plot.qml";
         break;
       case WC::DashboardBar:
         m_dbWidget = new Widgets::Bar(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Bar.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Bar.qml";
         break;
       case WC::DashboardGauge:
         m_dbWidget = new Widgets::Gauge(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Gauge.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Gauge.qml";
         break;
       case WC::DashboardCompass:
         m_dbWidget = new Widgets::Compass(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Compass.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Compass.qml";
         break;
       case WC::DashboardGyroscope:
         m_dbWidget = new Widgets::Gyroscope(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Gyroscope.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Gyroscope.qml";
         break;
       case WC::DashboardAccelerometer:
         m_dbWidget = new Widgets::Accelerometer(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Accelerometer.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Accelerometer.qml";
         break;
       case WC::DashboardGPS:
         m_dbWidget = new Widgets::GPS(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/GPS.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/GPS.qml";
         break;
       case WC::DashboardLED:
         m_dbWidget = new Widgets::LEDPanel(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/LEDPanel.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/LEDPanel.qml";
         break;
       default:
         break;

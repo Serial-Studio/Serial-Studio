@@ -72,17 +72,17 @@ Item {
 
     DialogLoader {
       id: mqttConfiguration
-      source: "qrc:/app/qml/Dialogs/MQTTConfiguration.qml"
+      source: "qrc:/qml/Dialogs/MQTTConfiguration.qml"
     }
 
     DialogLoader {
       id: aboutDialog
-      source: "qrc:/app/qml/Dialogs/About.qml"
+      source: "qrc:/qml/Dialogs/About.qml"
     }
 
     DialogLoader {
       id: acknowledgementsDialog
-      source: "qrc:/app/qml/Dialogs/Acknowledgements.qml"
+      source: "qrc:/qml/Dialogs/Acknowledgements.qml"
     }
   }
 
@@ -98,7 +98,7 @@ Item {
   //
   DialogLoader {
     id: externalConsole
-    source: "qrc:/app/qml/Dialogs/ExternalConsole.qml"
+    source: "qrc:/qml/Dialogs/ExternalConsole.qml"
   }
 
   //

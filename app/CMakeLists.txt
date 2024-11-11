@@ -158,61 +158,6 @@ set(HEADERS
  src/WidgetsCommon.h
 )
 
-set(QML_CODE
- qml/MainWindow/Dashboard/WidgetDelegate.qml
- qml/MainWindow/Dashboard/WidgetModel.qml
- qml/MainWindow/Dashboard/ViewOptionsDelegate.qml
- qml/MainWindow/Dashboard/ViewOptions.qml
- qml/MainWindow/Dashboard/WidgetGrid.qml
- qml/MainWindow/Panes/Toolbar.qml
- qml/MainWindow/Panes/Dashboard.qml
- qml/MainWindow/Panes/SetupPanes/Settings.qml
- qml/MainWindow/Panes/SetupPanes/Hardware.qml
- qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml
- qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml
- qml/MainWindow/Panes/SetupPanes/Devices/Network.qml
- qml/MainWindow/Panes/Console.qml
- qml/MainWindow/Panes/Setup.qml
- qml/MainWindow/Root.qml
- qml/ProjectEditor/Sections/ProjectStructure.qml
- qml/ProjectEditor/Sections/Toolbar.qml
- qml/ProjectEditor/Views/FrameParserView.qml
- qml/ProjectEditor/Views/GroupView.qml
- qml/ProjectEditor/Views/ProjectView.qml
- qml/ProjectEditor/Views/DatasetView.qml
- qml/ProjectEditor/Views/TableDelegate.qml
- qml/ProjectEditor/Views/ActionView.qml
- qml/ProjectEditor/Root.qml
- qml/Dialogs/Acknowledgements.qml
- qml/Dialogs/About.qml
- qml/Dialogs/CsvPlayer.qml
- qml/Dialogs/Donate.qml
- qml/Dialogs/IconPicker.qml
- qml/Dialogs/ExternalConsole.qml
- qml/Dialogs/MQTTConfiguration.qml
- qml/Widgets/BigButton.qml
- qml/Widgets/Pane.qml
- qml/Widgets/Plot.qml
- qml/Widgets/SmartWindow.qml
- qml/Widgets/JSONDropArea.qml
- qml/Widgets/VisualRange.qml
- qml/Widgets/CircularSlider.qml
- qml/Widgets/Dashboard/Accelerometer.qml
- qml/Widgets/Dashboard/Bar.qml
- qml/Widgets/Dashboard/Compass.qml
- qml/Widgets/Dashboard/DataGrid.qml
- qml/Widgets/Dashboard/FFTPlot.qml
- qml/Widgets/Dashboard/Gauge.qml
- qml/Widgets/Dashboard/GPS.qml
- qml/Widgets/Dashboard/Gyroscope.qml
- qml/Widgets/Dashboard/LEDPanel.qml
- qml/Widgets/Dashboard/MultiPlot.qml
- qml/Widgets/Dashboard/Plot.qml
- qml/Widgets/Dashboard/Terminal.qml
- qml/DialogLoader.qml
- qml/main.qml
-)
-
 #-------------------------------------------------------------------------------
 # Platform-specific configuration
 #-------------------------------------------------------------------------------
@@ -239,12 +184,8 @@ endif()
 # Add resources
 #-------------------------------------------------------------------------------
 
+qt_add_resources(QML_RCC ${CMAKE_CURRENT_SOURCE_DIR}/qml/qml.qrc)
 qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
-
-#-------------------------------------------------------------------------------
-# Add translations
-#-------------------------------------------------------------------------------
-
 qt_add_resources(QM_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #-------------------------------------------------------------------------------

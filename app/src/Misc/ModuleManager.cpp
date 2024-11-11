@@ -303,7 +303,7 @@ void Misc::ModuleManager::initializeQmlInterface()
                         qApp->organizationDomain());
 
   // Load main.qml
-  m_engine.load(QUrl(QStringLiteral("qrc:/app/qml/main.qml")));
+  m_engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);
