@@ -129,7 +129,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
     output.append("\n");
 
     // Use IO::Manager signal to avoid messing up tokens in console
-    // Q_EMIT IO::Manager::instance().dataReceived(output.toUtf8());
+    Q_EMIT IO::Manager::instance().dataReceived(output.toUtf8());
   }
 }
 
