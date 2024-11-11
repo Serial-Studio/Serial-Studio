@@ -45,7 +45,7 @@
     return ossl_pqueue_num((OSSL_PQUEUE *)pq);                                 \
   }                                                                            \
   static ossl_unused ossl_inline int ossl_pqueue_##type##_push(                \
-      PRIORITY_QUEUE_OF(type) * pq, ctype * data, size_t * elem)               \
+      PRIORITY_QUEUE_OF(type) * pq, ctype * data, size_t *elem)                \
   {                                                                            \
     return ossl_pqueue_push((OSSL_PQUEUE *)pq, (void *)data, elem);            \
   }                                                                            \

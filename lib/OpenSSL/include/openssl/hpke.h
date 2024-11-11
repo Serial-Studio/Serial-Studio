@@ -84,10 +84,8 @@ typedef struct
  *          OSSL_HPKE_SUITE myvar = OSSL_HPKE_SUITE_DEFAULT;
  */
 #define OSSL_HPKE_SUITE_DEFAULT                                                \
-  {                                                                            \
-    OSSL_HPKE_KEM_ID_X25519, OSSL_HPKE_KDF_ID_HKDF_SHA256,                     \
-        OSSL_HPKE_AEAD_ID_AES_GCM_128                                          \
-  }
+  {OSSL_HPKE_KEM_ID_X25519, OSSL_HPKE_KDF_ID_HKDF_SHA256,                      \
+   OSSL_HPKE_AEAD_ID_AES_GCM_128}
 
 typedef struct ossl_hpke_ctx_st OSSL_HPKE_CTX;
 
