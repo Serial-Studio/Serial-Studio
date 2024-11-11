@@ -3,6 +3,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+.cache
 
 # Build & IDEs
 *.kdev*
