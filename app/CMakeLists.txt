@@ -61,12 +61,9 @@ find_package(
 )
 
 qt_standard_project_setup()
-qt_policy(SET QTP0001 NEW)
 
-# Check the Qt version and set QTP0004 conditionally
-if(QT_VERSION VERSION_GREATER_EQUAL "6.8.0")
-    qt_policy(SET QTP0004 NEW)
-endif()
+qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0004 NEW)
 
 #-------------------------------------------------------------------------------
 # Import source code
@@ -344,7 +341,6 @@ set_target_properties(
  UNITY_BUILD_MODE BATCH
  UNITY_BUILD_BATCH_SIZE 128
  INTERPROCEDURAL_OPTIMIZATION TRUE
- QT_QMLCACHEGEN_ARGUMENTS "--static"
 )
 
 #-------------------------------------------------------------------------------
