@@ -34,6 +34,11 @@
  *        processing.
  */
 UI::Dashboard::Dashboard()
+  : m_points(100)
+  , m_precision(2)
+  , m_widgetCount(0)
+  , m_updateRequired(false)
+  , m_axisVisibility(AxisXY)
 {
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(); });
