@@ -126,8 +126,8 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
 
   // Redraw the widget only when necessary
   m_stateChanged = true;
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeoutScreen,
-          this, [=] {
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+          [=] {
             if (isVisible() && m_stateChanged)
             {
               m_stateChanged = false;

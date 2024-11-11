@@ -42,7 +42,6 @@ signals:
   void timeout10Hz();
   void timeout20Hz();
   void timeout24Hz();
-  void timeoutScreen();
 
 private:
   TimerEvents() {};
@@ -66,6 +65,5 @@ private:
   QBasicTimer m_timer10Hz;
   QBasicTimer m_timer20Hz;
   QBasicTimer m_timer24Hz;
-  QBasicTimer m_screenTimer;
 };
 } // namespace Misc

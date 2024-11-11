@@ -214,6 +214,7 @@ void Widgets::MultiPlot::updateRange()
 
   // Clear the data
   m_data.clear();
+  m_data.squeeze();
 
   // Get the multiplot group and loop through each dataset
   const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);

@@ -20,8 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include <QScreen>
-#include <QApplication>
 #include <QTimerEvent>
 #include "Misc/TimerEvents.h"
 
@@ -61,9 +59,6 @@ void Misc::TimerEvents::timerEvent(QTimerEvent *event)
 
   else if (event->timerId() == m_timer24Hz.timerId())
     Q_EMIT timeout24Hz();
-
-  else if (event->timerId() == m_screenTimer.timerId())
-    Q_EMIT timeoutScreen();
 }
 
 /**
@@ -71,13 +66,8 @@ void Misc::TimerEvents::timerEvent(QTimerEvent *event)
  */
 void Misc::TimerEvents::startTimers()
 {
-  int screenHz = 32;
-  if (qApp->primaryScreen())
-    screenHz = qMin(screenHz, qFloor(qApp->primaryScreen()->refreshRate()));
-
   m_timer1Hz.start(1000, Qt::PreciseTimer, this);
   m_timer20Hz.start(1000 / 20, Qt::PreciseTimer, this);
   m_timer24Hz.start(1000 / 24, Qt::PreciseTimer, this);
   m_timer10Hz.start(1000 / 10, Qt::PreciseTimer, this);
-  m_screenTimer.start(1000 / screenHz, Qt::PreciseTimer, this);
 }

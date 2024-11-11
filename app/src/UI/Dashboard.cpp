@@ -43,8 +43,8 @@ UI::Dashboard::Dashboard()
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame);
   // clang-format on
 
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeoutScreen,
-          this, [=] {
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+          [=] {
             if (m_updateRequired)
             {
               m_updateRequired = false;
@@ -612,6 +612,7 @@ void UI::Dashboard::updatePlots()
   if (m_linearPlotValues.count() != widgetCount(WC::DashboardPlot))
   {
     m_linearPlotValues.clear();
+    m_linearPlotValues.squeeze();
     for (int i = 0; i < widgetCount(WC::DashboardPlot); ++i)
     {
       m_linearPlotValues.append(Curve());
@@ -625,6 +626,7 @@ void UI::Dashboard::updatePlots()
   if (m_fftPlotValues.count() != widgetCount(WC::DashboardFFT))
   {
     m_fftPlotValues.clear();
+    m_fftPlotValues.squeeze();
     for (int i = 0; i < widgetCount(WC::DashboardFFT); ++i)
     {
       const auto &dataset = getDatasetWidget(WC::DashboardFFT, i);
@@ -639,6 +641,7 @@ void UI::Dashboard::updatePlots()
   if (m_multiplotValues.count() != widgetCount(WC::DashboardMultiPlot))
   {
     m_multiplotValues.clear();
+    m_multiplotValues.squeeze();
     for (int i = 0; i < widgetCount(WC::DashboardMultiPlot); ++i)
     {
       const auto &group = getGroupWidget(WC::DashboardMultiPlot, i);

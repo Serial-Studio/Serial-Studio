@@ -110,7 +110,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
       output = QStringLiteral("[DEBG] %1").arg(message);
       break;
     case QtWarningMsg:
-      output = QStringLiteral("[WARN] %1").arg(message);
+      // output = QStringLiteral("[WARN] %1").arg(message);
       break;
     case QtCriticalMsg:
       output = QStringLiteral("[CRIT] %1").arg(message);
@@ -122,12 +122,15 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
       break;
   }
 
-  // Add a newline at the end
-  std::cout << output.toStdString() << std::endl;
-  output.append("\n");
+  if (!output.isEmpty())
+  {
+    // Add a newline at the end
+    std::cout << output.toStdString() << std::endl;
+    output.append("\n");
 
-  // Use IO::Manager signal to avoid messing up tokens in console
-  Q_EMIT IO::Manager::instance().dataReceived(output.toUtf8());
+    // Use IO::Manager signal to avoid messing up tokens in console
+    // Q_EMIT IO::Manager::instance().dataReceived(output.toUtf8());
+  }
 }
 
 /**

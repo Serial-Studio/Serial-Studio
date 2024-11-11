@@ -171,6 +171,7 @@ void Widgets::Plot::updateRange()
 
   // Reserve the number of points in the dashboard
   m_data.clear();
+  m_data.squeeze();
   m_data.resize(dash->points() + 1);
 
   // Update x-axis

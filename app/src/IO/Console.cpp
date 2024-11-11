@@ -34,6 +34,11 @@
 #include "Misc/CommonFonts.h"
 
 /**
+ * @brief Defines the maximum number of characters in the console buffer.
+ */
+static const qsizetype MAX_BUFFER_SIZE = 256 * 1024;
+
+/**
  * Generates a hexdump of the given data
  */
 static QString HexDump(const char *data, const size_t size)
@@ -295,7 +300,7 @@ void IO::Console::save()
 void IO::Console::clear()
 {
   m_textBuffer.clear();
-  m_textBuffer.reserve(10 * 1000);
+  m_textBuffer.reserve(MAX_BUFFER_SIZE);
   m_isStartingLine = true;
   m_lastCharWasCR = false;
   Q_EMIT dataReceived();
@@ -530,6 +535,13 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
   // Add data to saved text buffer
   m_textBuffer.append(processedString);
+
+  // Check if the buffer size exceeds the maximum allowed size
+  if (m_textBuffer.size() > MAX_BUFFER_SIZE)
+  {
+    const auto excessSize = m_textBuffer.size() - MAX_BUFFER_SIZE;
+    m_textBuffer.remove(0, excessSize);
+  }
 
   // Update UI
   Q_EMIT dataReceived();
