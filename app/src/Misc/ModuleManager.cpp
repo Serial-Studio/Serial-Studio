@@ -110,7 +110,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
       output = QStringLiteral("[DEBG] %1").arg(message);
       break;
     case QtWarningMsg:
-      // output = QStringLiteral("[WARN] %1").arg(message);
+      output = QStringLiteral("[WARN] %1").arg(message);
       break;
     case QtCriticalMsg:
       output = QStringLiteral("[CRIT] %1").arg(message);
