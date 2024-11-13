@@ -29,6 +29,7 @@
 #include <QDesktopServices>
 
 #include "IO/Manager.h"
+#include "CSV/Player.h"
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
 #include "JSON/FrameBuilder.h"
@@ -310,9 +311,8 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
  */
 void CSV::Export::registerFrame(const JSON::Frame &frame)
 {
-  // Ignore if device is not connected (we don't want to generate a CSV file
-  // when we are reading another CSV file don't we?)
-  if (!IO::Manager::instance().connected())
+  // Don't generate a CSV file when we are playing a CSV file
+  if (CSV::Player::instance().isOpen())
     return;
 
   // Ignore if frame is invalid
