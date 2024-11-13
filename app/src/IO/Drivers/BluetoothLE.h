@@ -73,6 +73,10 @@ class BluetoothLE : public HAL_Driver
              READ characteristicIndex
              WRITE setCharacteristicIndex
              NOTIFY characteristicIndexChanged)
+  Q_PROPERTY(bool ignoreFrameSequences
+             READ ignoreFrameSequences
+             WRITE setIgnoreFrameSequences
+             NOTIFY ignoreFrameSequencesChanged)
   // clang-format on
 
 signals:
@@ -84,6 +88,7 @@ signals:
   void deviceConnectedChanged();
   void descriptorIndexChanged();
   void characteristicIndexChanged();
+  void ignoreFrameSequencesChanged();
   void error(const QString &message);
 
 private:
@@ -105,6 +110,7 @@ public:
   [[nodiscard]] quint64 write(const QByteArray &data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
+  [[nodiscard]] bool ignoreFrameSequences() const;
   [[nodiscard]] bool operatingSystemSupported() const;
 
   [[nodiscard]] int deviceCount() const;
@@ -123,6 +129,7 @@ public slots:
   void selectService(const int index);
   void setDescriptorIndex(const int index);
   void setCharacteristicIndex(const int index);
+  void setIgnoreFrameSequences(const bool enabled);
 
 private slots:
   void configureCharacteristics();
@@ -138,6 +145,7 @@ private:
   int m_deviceIndex;
   bool m_deviceConnected;
   int m_selectedDescriptor;
+  bool m_ignoreFrameSequences;
   int m_selectedCharacteristic;
 
   QLowEnergyService *m_service;

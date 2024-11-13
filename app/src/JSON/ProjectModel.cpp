@@ -511,6 +511,26 @@ int JSON::ProjectModel::groupCount() const
 }
 
 /**
+ * @brief Retrieves the number of datasets in the project.
+ *
+ * This function returns the total count of datasets currently present in the
+ * project.
+ *
+ * @return The number of datasets.
+ */
+int JSON::ProjectModel::datasetCount() const
+{
+  int count = 0;
+  for (auto i = 0; i < m_groups.count(); ++i)
+  {
+    for (auto j = 0; j < m_groups.at(i).datasetCount(); ++j)
+      ++count;
+  }
+
+  return count;
+}
+
+/**
  * @brief Retrieves the dataset options for the selected dataset.
  *
  * This function returns a bitmask representing the options enabled for the
@@ -698,8 +718,9 @@ bool JSON::ProjectModel::saveJsonFile()
   // Get file save path
   if (jsonFilePath().isEmpty())
   {
+    const auto name = jsonProjectsPath() + "/" + title() + ".json";
     auto path = QFileDialog::getSaveFileName(nullptr, tr("Save JSON project"),
-                                             jsonProjectsPath(), "*.json");
+                                             name, "*.json");
     if (path.isEmpty())
       return false;
 

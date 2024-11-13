@@ -75,6 +75,7 @@ Widgets.Pane {
   // Settings
   //
   Settings {
+    category: "Dashboard"
     property alias points: plotPoints.value
     property alias columns: columns.value
     property alias decimalPlaces: decimalPlaces.value

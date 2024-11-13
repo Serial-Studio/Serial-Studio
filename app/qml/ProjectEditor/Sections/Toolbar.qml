@@ -158,7 +158,7 @@ Rectangle {
     Widgets.BigButton {
       text: qsTr("Save")
       Layout.alignment: Qt.AlignVCenter
-      enabled: Cpp_JSON_ProjectModel.modified
+      enabled: Cpp_JSON_ProjectModel.modified && Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
       onClicked: Cpp_JSON_ProjectModel.saveJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
     }

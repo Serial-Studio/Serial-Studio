@@ -66,16 +66,11 @@ Widgets.Pane {
   // Save settings
   //
   Settings {
-    //
-    // Misc settings
-    //
+    category: "SetupPanel"
+
     property alias tabIndex: tab.currentIndex
     property alias csvExport: csvLogging.checked
     property alias driver: driverCombo.currentIndex
-
-    //
-    // App settings
-    //
     property alias language: settings.language
     property alias tcpPlugins: settings.tcpPlugins
   }

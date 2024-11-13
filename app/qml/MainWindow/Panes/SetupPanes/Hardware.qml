@@ -35,21 +35,24 @@ Item {
   // Save settings
   //
   QtSettings.Settings {
-    property alias dtr: serial.dtr
-    property alias parity: serial.parity
-    property alias baudRate: serial.baudRate
-    property alias dataBits: serial.dataBits
-    property alias stopBits: serial.stopBits
-    property alias flowControl: serial.flowControl
-    property alias autoReconnect: serial.autoReconnect
+    category: "HardwareSetup"
+    property alias serialDtr: serial.dtr
+    property alias serialParity: serial.parity
+    property alias serialBaudRate: serial.baudRate
+    property alias serialDataBits: serial.dataBits
+    property alias serialStopBits: serial.stopBits
+    property alias serialFlowControl: serial.flowControl
+    property alias serialAutoReconnect: serial.autoReconnect
 
-    property alias address: network.address
-    property alias tcpPort: network.tcpPort
-    property alias socketType: network.socketType
-    property alias udpLocalPort: network.udpLocalPort
-    property alias udpRemotePort: network.udpRemotePort
-    property alias udpMulticastEnabled: network.udpMulticastEnabled
-    property alias udpProcessDatagramsDirectly: network.udpProcessDatagramsDirectly
+    property alias networkAddress: network.address
+    property alias newtorkTcpPort: network.tcpPort
+    property alias networkSocketType: network.socketType
+    property alias networkUdpLocalPort: network.udpLocalPort
+    property alias networkUdpRemotePort: network.udpRemotePort
+    property alias networkUdpMulticastEnabled: network.udpMulticastEnabled
+    property alias networkUdpProcessDatagramsDirectly: network.udpProcessDatagramsDirectly
+
+    property alias bleIgnoreDataDelimeters: bluetoothLE.ignoreDataDelimeters
   }
 
   //

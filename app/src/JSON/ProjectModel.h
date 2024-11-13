@@ -110,6 +110,9 @@ class ProjectModel : public QObject
   Q_PROPERTY(int groupCount
              READ groupCount
              NOTIFY modifiedChanged)
+  Q_PROPERTY(int datasetCount
+             READ datasetCount
+             NOTIFY modifiedChanged)
   Q_PROPERTY(quint8 datasetOptions
              READ datasetOptions
              NOTIFY datasetOptionsChanged)
@@ -232,6 +235,7 @@ public:
   [[nodiscard]] bool currentDatasetIsEditable() const;
 
   [[nodiscard]] int groupCount() const;
+  [[nodiscard]] int datasetCount() const;
   [[nodiscard]] quint8 datasetOptions() const;
   [[nodiscard]] const QVector<JSON::Group> &groups() const;
 
