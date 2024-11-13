@@ -229,7 +229,7 @@ public slots:
 private slots:
   void resetStatistics();
   void onConnectedChanged();
-  void sendFrame(const JSON::Frame &frame);
+  void sendFrame(const QByteArray &frame);
   void lookupFinished(const QHostInfo &info);
   void onError(const QMQTT::ClientError error);
   void onSslErrors(const QList<QSslError> &errors);

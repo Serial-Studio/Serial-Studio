@@ -26,7 +26,6 @@
 #include "IO/Manager.h"
 #include "MQTT/Client.h"
 #include "Misc/Utilities.h"
-#include "JSON/FrameBuilder.h"
 
 //----------------------------------------------------------------------------
 // Suppress deprecated warnings
@@ -60,8 +59,8 @@ MQTT::Client::Client()
   regenerateClient();
 
   // Send data periodically & reset statistics when disconnected/connected to a
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &MQTT::Client::sendFrame);
+  connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
+          &MQTT::Client::sendFrame);
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &MQTT::Client::resetStatistics);
 
@@ -617,15 +616,11 @@ void MQTT::Client::onConnectedChanged()
 }
 
 /**
- * @brief Sends a JSON frame as a CSV-like MQTT message.
+ * @brief Sends a data frame to the MQTT broker
  *
- * Constructs a CSV-like message from the dataset values in the given frame,
- * ordered by dataset index, and publishes it to the MQTT topic if the client
- * is connected and in publisher mode.
- *
- * @param frame The JSON frame containing the data to be sent.
+ * @param frame The frame containing the data to be sent.
  */
-void MQTT::Client::sendFrame(const JSON::Frame &frame)
+void MQTT::Client::sendFrame(const QByteArray &frame)
 {
   Q_ASSERT(m_client);
 
@@ -641,31 +636,10 @@ void MQTT::Client::sendFrame(const JSON::Frame &frame)
   else if (clientMode() != ClientPublisher)
     return;
 
-  // Write frame data in the order of the frame indexes
-  const auto &groups = frame.groups();
-  QMap<int, QString> fieldValues;
-
-  // Iterate through groups and datasets to collect field values
-  for (auto g = groups.constBegin(); g != groups.constEnd(); ++g)
-  {
-    const auto &datasets = g->datasets();
-    for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
-      fieldValues[d->index()] = d->value();
-  }
-
-  // Construct byte array with CSV-like frame with ordered dataset indexes
-  QByteArray data;
-  for (auto it = fieldValues.begin(); it != fieldValues.end(); ++it)
-  {
-    data.append(it.value().toUtf8());
-    if (std::next(it) != fieldValues.end())
-      data.append(',');
-  }
-
   // Create & send MQTT message
-  if (!data.isEmpty())
+  if (!frame.isEmpty())
   {
-    QMQTT::Message message(m_sentMessages, topic(), data);
+    QMQTT::Message message(m_sentMessages, topic(), frame);
     m_client->publish(message);
     ++m_sentMessages;
   }
@@ -845,10 +819,6 @@ void MQTT::Client::onMessageReceived(const QMQTT::Message &message)
   // Ignore if topic is not equal to current topic
   if (topic() != mtopic)
     return;
-
-  // Add EOL character
-  if (!mpayld.endsWith('\n'))
-    mpayld.append('\n');
 
   // Let IO manager process incoming data
   QMetaObject::invokeMethod(

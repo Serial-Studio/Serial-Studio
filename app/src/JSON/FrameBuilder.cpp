@@ -288,11 +288,10 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   {
     // Obtain state of the app
     const bool csvPlaying = CSV::Player::instance().isOpen();
-    const bool mqttSubscribed = MQTT::Client::instance().isSubscribed();
 
     // Real-time data, parse data & perform conversion
     QStringList fields;
-    if (!csvPlaying && !mqttSubscribed)
+    if (!csvPlaying)
     {
       // Convert binary frame data to a string
       QString frameData;
@@ -322,7 +321,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
       fields = m_frameParser->parse(frameData, separator);
     }
 
-    // CSV/MQTT data, no need to perform conversions or use frame parser
+    // CSV data, no need to perform conversions or use frame parser
     else
       fields = QString::fromUtf8(data.simplified()).split(',');
 

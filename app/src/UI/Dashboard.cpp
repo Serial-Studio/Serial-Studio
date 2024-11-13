@@ -48,11 +48,15 @@ UI::Dashboard::Dashboard()
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
-  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
-          [=] {
-            if (MQTT::Client::instance().isSubscribed())
-              resetData();
-          });
+  connect(
+      &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] {
+        const bool subscribed = MQTT::Client::instance().isSubscribed();
+        const bool wasSubscribed = !MQTT::Client::instance().isConnectedToHost()
+                                   && MQTT::Client::instance().clientMode()
+                                          == MQTT::ClientSubscriber;
+        if (subscribed || wasSubscribed)
+          resetData();
+      });
 
   // Update the dashboard widgets at 24 Hz
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
