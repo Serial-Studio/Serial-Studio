@@ -35,9 +35,11 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
 {
   // Get the dashboard instance and populate the titles, values, and units
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardDataGrid))
+  if (m_index >= 0
+      && m_index < dash->widgetCount(SerialStudio::DashboardDataGrid))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardDataGrid, m_index);
+    const auto &group
+        = dash->getGroupWidget(SerialStudio::DashboardDataGrid, m_index);
 
     m_units.resize(group.datasetCount());
     m_titles.resize(group.datasetCount());
@@ -130,7 +132,8 @@ void Widgets::DataGrid::updateData()
 {
   // Get the dashboard instance and check if the index is valid
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardDataGrid))
+  if (m_index < 0
+      || m_index >= dash->widgetCount(SerialStudio::DashboardDataGrid))
     return;
 
   // Regular expression to check if the value is a number
@@ -138,7 +141,8 @@ void Widgets::DataGrid::updateData()
 
   // Get the datagrid group and update the LED states
   bool changed = false;
-  const auto &group = dash->getGroupWidget(WC::DashboardDataGrid, m_index);
+  const auto &group
+      = dash->getGroupWidget(SerialStudio::DashboardDataGrid, m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
     // Get the dataset and its values
@@ -188,9 +192,11 @@ void Widgets::DataGrid::onThemeChanged()
   // Obtain colors for each dataset in the widget
   m_colors.clear();
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardDataGrid))
+  if (m_index >= 0
+      && m_index < dash->widgetCount(SerialStudio::DashboardDataGrid))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardDataGrid, m_index);
+    const auto &group
+        = dash->getGroupWidget(SerialStudio::DashboardDataGrid, m_index);
     m_colors.resize(group.datasetCount());
 
     for (int i = 0; i < group.datasetCount(); ++i)

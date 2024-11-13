@@ -71,10 +71,10 @@ Widgets.SmartWindow {
   // Obtain document title
   //
   function updateDocumentTitle() {
-    if (Cpp_JSON_FrameBuilder.operationMode == JsonGenerator.DeviceSendsJSON)
+    if (Cpp_JSON_FrameBuilder.operationMode == SerialStudio.DeviceSendsJSON)
       documentTitle = qsTr("Device Defined Project")
 
-    else if (Cpp_JSON_FrameBuilder.operationMode == JsonGenerator.CommaSeparatedValues)
+    else if (Cpp_JSON_FrameBuilder.operationMode == SerialStudio.QuickPlot)
       documentTitle = qsTr("Quick Plot Mode")
 
     else if (Cpp_JSON_FrameBuilder.jsonMapFilename.length > 0)

@@ -30,8 +30,10 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include <JSON/Frame.h>
-#include <JSON/FrameParser.h>
+#include "SerialStudio.h"
+
+#include "JSON/Frame.h"
+#include "JSON/FrameParser.h"
 
 namespace JSON
 {
@@ -56,7 +58,7 @@ class FrameBuilder : public QObject
   Q_PROPERTY(QString jsonMapFilepath
              READ jsonMapFilepath
              NOTIFY jsonFileMapChanged)
-  Q_PROPERTY(OperationMode operationMode
+  Q_PROPERTY(SerialStudio::OperationMode operationMode
              READ operationMode
              WRITE setOperationMode
              NOTIFY operationModeChanged)
@@ -75,25 +77,18 @@ private:
   FrameBuilder &operator=(const FrameBuilder &) = delete;
 
 public:
-  enum OperationMode
-  {
-    ProjectFile,
-    DeviceSendsJSON,
-    CommaSeparatedValues,
-  };
-  Q_ENUM(OperationMode)
-
   static FrameBuilder &instance();
 
   [[nodiscard]] QString jsonMapFilepath() const;
   [[nodiscard]] QString jsonMapFilename() const;
-  [[nodiscard]] OperationMode operationMode() const;
+  [[nodiscard]] SerialStudio::OperationMode operationMode() const;
 
 public slots:
   void loadJsonMap();
+  void setupExternalConnections();
   void loadJsonMap(const QString &path);
   void setFrameParser(JSON::FrameParser *editor);
-  void setOperationMode(const JSON::FrameBuilder::OperationMode mode);
+  void setOperationMode(const SerialStudio::OperationMode mode);
 
 public slots:
   void setJsonPathSetting(const QString &path);
@@ -105,7 +100,7 @@ private:
   QFile m_jsonMap;
   JSON::Frame m_frame;
   QSettings m_settings;
-  OperationMode m_opMode;
+  SerialStudio::OperationMode m_opMode;
   JSON::FrameParser *m_frameParser;
 };
 } // namespace JSON

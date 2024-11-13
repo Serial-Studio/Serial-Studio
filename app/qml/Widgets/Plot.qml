@@ -47,8 +47,8 @@ Item {
   //
   // Set axis visibility based on user options and/or widget size
   //
-  readonly property bool yLabelVisible: root.height >= 120 && (Cpp_UI_Dashboard.axisVisibility & Dashboard.AxisY)
-  readonly property bool xLabelVisible: root.height >= 120 && (Cpp_UI_Dashboard.axisVisibility & Dashboard.AxisX)
+  readonly property bool yLabelVisible: root.height >= 120 && (Cpp_UI_Dashboard.axisVisibility & SerialStudio.AxisY)
+  readonly property bool xLabelVisible: root.height >= 120 && (Cpp_UI_Dashboard.axisVisibility & SerialStudio.AxisX)
 
   //
   // Plot widget

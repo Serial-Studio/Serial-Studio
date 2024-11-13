@@ -52,17 +52,9 @@ IO::Drivers::Serial::Serial()
   setParity(parityList().indexOf(tr("None")));
   setFlowControl(flowControlList().indexOf(tr("None")));
 
-  // Build serial devices list and refresh it every second
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
-          &IO::Drivers::Serial::refreshSerialDevices);
-
   // Update connect button status when user selects a serial device
   connect(this, &IO::Drivers::Serial::portIndexChanged, this,
           &IO::Drivers::Serial::configurationChanged);
-
-  // Update lists when language changes
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &IO::Drivers::Serial::languageChanged);
 }
 
 /**
@@ -191,7 +183,6 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
               &IO::Drivers::Serial::onReadyRead);
 
       port()->setDataTerminalReady(dtrEnabled());
-
       return true;
     }
   }
@@ -433,6 +424,20 @@ void IO::Drivers::Serial::disconnectDevice()
   m_port = nullptr;
   Q_EMIT portChanged();
   Q_EMIT availablePortsChanged();
+}
+
+/**
+ * Configures the signal/slot connections with the rest of the modules of the
+ * application.
+ */
+void IO::Drivers::Serial::setupExternalConnections()
+{
+  // Build serial devices list and refresh it every second
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
+          &IO::Drivers::Serial::refreshSerialDevices);
+  // Update lists when language changes
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &IO::Drivers::Serial::languageChanged);
 }
 
 /**
@@ -713,7 +718,7 @@ void IO::Drivers::Serial::refreshSerialDevices()
     }
 
     // Auto reconnect
-    if (Manager::instance().selectedDriver() == Manager::SelectedDriver::Serial)
+    if (Manager::instance().busType() == SerialStudio::BusType::Serial)
     {
       if (autoReconnect() && m_lastSerialDeviceIndex > 0)
       {
@@ -745,13 +750,16 @@ void IO::Drivers::Serial::handleError(QSerialPort::SerialPortError error)
 }
 
 /**
- * Reads all the data from the serial port & sends it to the @c IO::Manager
- * class
+ * Reads all the data from the serial port.
  */
 void IO::Drivers::Serial::onReadyRead()
 {
   if (isOpen())
-    Q_EMIT dataReceived(port()->readAll());
+  {
+    QMetaObject::invokeMethod(
+        this, [=] { Q_EMIT dataReceived(port()->readAll()); },
+        Qt::QueuedConnection);
+  }
 }
 
 /**

@@ -95,17 +95,7 @@ IO::Console::Console()
   , m_isStartingLine(true)
   , m_lastCharWasCR(false)
 {
-  // Clear buffer & reserve memory
   clear();
-
-  // Read received data automatically
-  auto dm = &Manager::instance();
-  connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent);
-  connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived);
-
-  // Update lists when language changes
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &IO::Console::languageChanged);
 }
 
 /**
@@ -339,6 +329,24 @@ void IO::Console::historyDown()
 }
 
 /**
+ * Configures the signal/slot connections with the rest of the modules of the
+ * application.
+ */
+void IO::Console::setupExternalConnections()
+{
+  // Read received data automatically
+  auto dm = &Manager::instance();
+  connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent,
+          Qt::QueuedConnection);
+  connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived,
+          Qt::QueuedConnection);
+
+  // Update lists when language changes
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &IO::Console::languageChanged);
+}
+
+/**
  * Sends the given @a data to the currently connected device using the options
  * specified by the user with the rest of the functions of this class.
  *
@@ -544,8 +552,13 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   }
 
   // Update UI
-  Q_EMIT dataReceived();
-  Q_EMIT displayString(processedString);
+  QMetaObject::invokeMethod(
+      this,
+      [=] {
+        Q_EMIT dataReceived();
+        Q_EMIT displayString(processedString);
+      },
+      Qt::QueuedConnection);
 }
 
 /**

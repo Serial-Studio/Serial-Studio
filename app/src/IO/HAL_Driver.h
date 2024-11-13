@@ -28,15 +28,30 @@
 namespace IO
 {
 /**
- * @brief The HAL_Driver class
+ * @class HAL_Driver
+ * @brief Abstract base class for hardware abstraction layer (HAL) drivers.
  *
- * Abstract class that defines common I/O and data access functions for
- * different types of devices. I/O drivers (e.g. serial port & network) are
- * sub-classes of this class.
+ * The `HAL_Driver` class provides a unified interface for I/O operations and
+ * data access across different types of devices (e.g., serial ports, network
+ * connections, Bluetooth). Subclasses implement protocol-specific
+ * functionality, allowing the rest of the I/O module to interact with devices
+ * without requiring knowledge of protocol details.
  *
- * This allows the rest of the I/O module to interact with a wide range of
- * devices and protocols without the need of understanding protocol-specific
- * implementation details.
+ * Key Features:
+ * - Abstracts protocol-specific implementation details.
+ * - Provides a common interface for opening, closing, and writing to devices.
+ * - Supports signals for configuration changes, data sent, and data received.
+ * - Ensures flexibility and extensibility for supporting new device types.
+ *
+ * Subclasses should override all pure virtual functions to provide
+ * device-specific implementations.
+ *
+ * @signals
+ * - `configurationChanged()`: Emitted when the driver's configuration changes.
+ * - `dataSent(const QByteArray &data)`: Emitted when data is successfully
+ *   written to the device.
+ * - `dataReceived(const QByteArray &data)`: Emitted when data is received from
+ *   the device.
  */
 class HAL_Driver : public QObject
 {

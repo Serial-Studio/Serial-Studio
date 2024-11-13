@@ -49,6 +49,12 @@ class BluetoothLE : public HAL_Driver
   Q_PROPERTY(QStringList serviceNames
              READ serviceNames
              NOTIFY servicesChanged)
+  Q_PROPERTY(QStringList characteristicNames
+             READ characteristicNames
+             NOTIFY characteristicsChanged)
+  Q_PROPERTY(QStringList descriptorNames
+             READ descriptorNames
+             NOTIFY descriptorsChanged)
   Q_PROPERTY(int deviceIndex
              READ deviceIndex
              WRITE selectDevice
@@ -59,13 +65,25 @@ class BluetoothLE : public HAL_Driver
   Q_PROPERTY(bool operatingSystemSupported
              READ operatingSystemSupported
              CONSTANT)
+  Q_PROPERTY(int descriptorIndex
+             READ descriptorIndex
+             WRITE setDescriptorIndex
+             NOTIFY descriptorIndexChanged)
+  Q_PROPERTY(int characteristicIndex
+             READ characteristicIndex
+             WRITE setCharacteristicIndex
+             NOTIFY characteristicIndexChanged)
   // clang-format on
 
 signals:
   void devicesChanged();
   void servicesChanged();
+  void descriptorsChanged();
   void deviceIndexChanged();
+  void characteristicsChanged();
   void deviceConnectedChanged();
+  void descriptorIndexChanged();
+  void characteristicIndexChanged();
   void error(const QString &message);
 
 private:
@@ -87,16 +105,24 @@ public:
   [[nodiscard]] quint64 write(const QByteArray &data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
+  [[nodiscard]] bool operatingSystemSupported() const;
+
   [[nodiscard]] int deviceCount() const;
   [[nodiscard]] int deviceIndex() const;
+  [[nodiscard]] int descriptorIndex() const;
+  [[nodiscard]] int characteristicIndex() const;
+
   [[nodiscard]] QStringList deviceNames() const;
   [[nodiscard]] QStringList serviceNames() const;
-  [[nodiscard]] bool operatingSystemSupported() const;
+  [[nodiscard]] QStringList descriptorNames() const;
+  [[nodiscard]] QStringList characteristicNames() const;
 
 public slots:
   void startDiscovery();
   void selectDevice(const int index);
   void selectService(const int index);
+  void setDescriptorIndex(const int index);
+  void setCharacteristicIndex(const int index);
 
 private slots:
   void configureCharacteristics();
@@ -111,14 +137,21 @@ private slots:
 private:
   int m_deviceIndex;
   bool m_deviceConnected;
+  int m_selectedDescriptor;
+  int m_selectedCharacteristic;
 
   QLowEnergyService *m_service;
   QLowEnergyController *m_controller;
+  QBluetoothDeviceDiscoveryAgent *m_discoveryAgent;
 
   QStringList m_deviceNames;
   QStringList m_serviceNames;
+  QStringList m_descriptorNames;
+  QStringList m_characteristicNames;
+
   QList<QBluetoothDeviceInfo> m_devices;
-  QBluetoothDeviceDiscoveryAgent *m_discoveryAgent;
+  QList<QLowEnergyDescriptor> m_descriptors;
+  QList<QLowEnergyCharacteristic> m_characteristics;
 };
 } // namespace Drivers
 } // namespace IO

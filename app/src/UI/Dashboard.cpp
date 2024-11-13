@@ -38,7 +38,7 @@ UI::Dashboard::Dashboard()
   , m_precision(2)
   , m_widgetCount(0)
   , m_updateRequired(false)
-  , m_axisVisibility(AxisXY)
+  , m_axisVisibility(SerialStudio::AxisXY)
 {
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(); });
@@ -148,8 +148,8 @@ bool UI::Dashboard::available() const
  */
 bool UI::Dashboard::pointsWidgetVisible() const
 {
-  return m_widgetGroups.contains(WC::DashboardMultiPlot)
-         || m_widgetDatasets.contains(WC::DashboardPlot);
+  return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
+         || m_widgetDatasets.contains(SerialStudio::DashboardPlot);
 }
 
 /**
@@ -160,12 +160,12 @@ bool UI::Dashboard::pointsWidgetVisible() const
  */
 bool UI::Dashboard::precisionWidgetVisible() const
 {
-  return m_widgetGroups.contains(WC::DashboardAccelerometer)
-         || m_widgetGroups.contains(WC::DashboardGyroscope)
-         || m_widgetGroups.contains(WC::DashboardDataGrid)
-         || m_widgetDatasets.contains(WC::DashboardBar)
-         || m_widgetDatasets.contains(WC::DashboardGauge)
-         || m_widgetDatasets.contains(WC::DashboardCompass);
+  return m_widgetGroups.contains(SerialStudio::DashboardAccelerometer)
+         || m_widgetGroups.contains(SerialStudio::DashboardGyroscope)
+         || m_widgetGroups.contains(SerialStudio::DashboardDataGrid)
+         || m_widgetDatasets.contains(SerialStudio::DashboardBar)
+         || m_widgetDatasets.contains(SerialStudio::DashboardGauge)
+         || m_widgetDatasets.contains(SerialStudio::DashboardCompass);
 }
 
 /**
@@ -176,16 +176,16 @@ bool UI::Dashboard::precisionWidgetVisible() const
  */
 bool UI::Dashboard::axisOptionsWidgetVisible() const
 {
-  return m_widgetGroups.contains(WC::DashboardMultiPlot)
-         || m_widgetDatasets.contains(WC::DashboardPlot)
-         || m_widgetDatasets.contains(WC::DashboardFFT);
+  return m_widgetGroups.contains(SerialStudio::DashboardMultiPlot)
+         || m_widgetDatasets.contains(SerialStudio::DashboardPlot)
+         || m_widgetDatasets.contains(SerialStudio::DashboardFFT);
 }
 
 /**
  * @brief Retrieves the current visibility setting for the dashboard's axes.
  * @return Current AxisVisibility setting.
  */
-UI::Dashboard::AxisVisibility UI::Dashboard::axisVisibility() const
+SerialStudio::AxisVisibility UI::Dashboard::axisVisibility() const
 {
   return m_axisVisibility;
 }
@@ -255,14 +255,15 @@ int UI::Dashboard::relativeIndex(const int widgetIndex)
  * @brief Retrieves the type of widget associated with a given widget index.
  *
  * @param widgetIndex The global index of the widget.
- * @return The widget type, or WC::DashboardNoWidget if the index is not found.
+ * @return The widget type, or SerialStudio::DashboardNoWidget if the index is
+ * not found.
  */
-WC::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex)
+SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex)
 {
   if (m_widgetMap.contains(widgetIndex))
     return m_widgetMap.value(widgetIndex).first;
 
-  return WC::DashboardNoWidget;
+  return SerialStudio::DashboardNoWidget;
 }
 
 /**
@@ -272,12 +273,12 @@ WC::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex)
  * @param widget The type of widget to count.
  * @return The count of instances for the specified widget type.
  */
-int UI::Dashboard::widgetCount(const WC::DashboardWidget widget) const
+int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
 {
-  if (WC::isGroupWidget(widget))
+  if (SerialStudio::isGroupWidget(widget))
     return m_widgetGroups.value(widget).count();
 
-  else if (WC::isDatasetWidget(widget))
+  else if (SerialStudio::isDatasetWidget(widget))
     return m_widgetDatasets.value(widget).count();
 
   return 0;
@@ -288,15 +289,16 @@ int UI::Dashboard::widgetCount(const WC::DashboardWidget widget) const
  * @param widget The type of widget whose titles are requested.
  * @return A list of titles associated with the specified widget type.
  */
-QStringList UI::Dashboard::widgetTitles(const WC::DashboardWidget widget)
+QStringList
+UI::Dashboard::widgetTitles(const SerialStudio::DashboardWidget widget)
 {
   QStringList titles;
 
-  if (WC::isGroupWidget(widget))
+  if (SerialStudio::isGroupWidget(widget))
     for (const auto &group : m_widgetGroups[widget])
       titles.append(group.title());
 
-  else if (WC::isDatasetWidget(widget))
+  else if (SerialStudio::isDatasetWidget(widget))
     for (const auto &dataset : m_widgetDatasets[widget])
       titles.append(dataset.title());
 
@@ -308,14 +310,16 @@ QStringList UI::Dashboard::widgetTitles(const WC::DashboardWidget widget)
  * @param widget The type of widget whose colors are requested.
  * @return A list of color values for the specified widget type.
  */
-QStringList UI::Dashboard::widgetColors(const WC::DashboardWidget widget)
+QStringList
+UI::Dashboard::widgetColors(const SerialStudio::DashboardWidget widget)
 {
   QStringList list;
 
-  if (WC::isDatasetWidget(widget) && m_widgetDatasets.contains(widget))
+  if (SerialStudio::isDatasetWidget(widget)
+      && m_widgetDatasets.contains(widget))
   {
     for (const auto &dataset : m_widgetDatasets[widget])
-      list.append(WC::getDatasetColor(dataset.index()));
+      list.append(SerialStudio::getDatasetColor(dataset.index()));
   }
 
   if (list.isEmpty())
@@ -333,7 +337,7 @@ QStringList UI::Dashboard::widgetColors(const WC::DashboardWidget widget)
  * @param index The index of the widget instance within its type.
  * @return True if the widget instance is visible; false otherwise.
  */
-bool UI::Dashboard::widgetVisible(const WC::DashboardWidget widget,
+bool UI::Dashboard::widgetVisible(const SerialStudio::DashboardWidget widget,
                                   const int index) const
 {
   Q_ASSERT(index >= 0 && index < m_widgetVisibility[widget].count());
@@ -348,7 +352,7 @@ const QStringList UI::Dashboard::availableWidgetIcons() const
 {
   QStringList list;
   for (auto widget : availableWidgets())
-    list.append(WC::dashboardWidgetIcon(widget));
+    list.append(SerialStudio::dashboardWidgetIcon(widget));
 
   return list;
 }
@@ -361,17 +365,18 @@ const QStringList UI::Dashboard::availableWidgetTitles() const
 {
   QStringList list;
   for (auto widget : availableWidgets())
-    list.append(WC::dashboardWidgetTitle(widget));
+    list.append(SerialStudio::dashboardWidgetTitle(widget));
 
   return list;
 }
 
 /**
  * @brief Provides a list of available widget types on the dashboard.
- * @return A list of WC::DashboardWidget items representing each available
- *         widget type.
+ * @return A list of SerialStudio::DashboardWidget items representing each
+ * available widget type.
  */
-const QList<WC::DashboardWidget> UI::Dashboard::availableWidgets() const
+const QList<SerialStudio::DashboardWidget>
+UI::Dashboard::availableWidgets() const
 {
   return m_availableWidgets;
 }
@@ -421,7 +426,7 @@ QStringList UI::Dashboard::actionTitles() const
  * @throws An assertion failure if the index is out of bounds.
  */
 const JSON::Group &
-UI::Dashboard::getGroupWidget(const WC::DashboardWidget widget,
+UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
                               const int index) const
 {
   Q_ASSERT(index >= 0 && index < m_widgetGroups[widget].count());
@@ -438,7 +443,7 @@ UI::Dashboard::getGroupWidget(const WC::DashboardWidget widget,
  * @throws An assertion failure if the index is out of bounds.
  */
 const JSON::Dataset &
-UI::Dashboard::getDatasetWidget(const WC::DashboardWidget widget,
+UI::Dashboard::getDatasetWidget(const SerialStudio::DashboardWidget widget,
                                 const int index) const
 {
   Q_ASSERT(index >= 0 && index < m_widgetDatasets[widget].count());
@@ -570,7 +575,7 @@ void UI::Dashboard::resetData(const bool notify)
  *
  * @param option The new axis visibility setting.
  */
-void UI::Dashboard::setAxisVisibility(const AxisVisibility option)
+void UI::Dashboard::setAxisVisibility(const SerialStudio::AxisVisibility option)
 {
   if (m_axisVisibility != option)
   {
@@ -588,7 +593,7 @@ void UI::Dashboard::setAxisVisibility(const AxisVisibility option)
  * @param visible True to make the widget visible; false to hide it.
  * @throws An assertion failure if the index is out of bounds.
  */
-void UI::Dashboard::setWidgetVisible(const WC::DashboardWidget widget,
+void UI::Dashboard::setWidgetVisible(const SerialStudio::DashboardWidget widget,
                                      const int index, const bool visible)
 {
   Q_ASSERT(index >= 0 && m_widgetVisibility[widget].count() > index);
@@ -614,11 +619,11 @@ void UI::Dashboard::setWidgetVisible(const WC::DashboardWidget widget,
 void UI::Dashboard::updatePlots()
 {
   // Check if we need to re-initialize linear plots data
-  if (m_linearPlotValues.count() != widgetCount(WC::DashboardPlot))
+  if (m_linearPlotValues.count() != widgetCount(SerialStudio::DashboardPlot))
   {
     m_linearPlotValues.clear();
     m_linearPlotValues.squeeze();
-    for (int i = 0; i < widgetCount(WC::DashboardPlot); ++i)
+    for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i)
     {
       m_linearPlotValues.append(Curve());
       m_linearPlotValues.last().resize(points() + 1);
@@ -628,13 +633,13 @@ void UI::Dashboard::updatePlots()
   }
 
   // Check if we need to re-initialize FFT plots data
-  if (m_fftPlotValues.count() != widgetCount(WC::DashboardFFT))
+  if (m_fftPlotValues.count() != widgetCount(SerialStudio::DashboardFFT))
   {
     m_fftPlotValues.clear();
     m_fftPlotValues.squeeze();
-    for (int i = 0; i < widgetCount(WC::DashboardFFT); ++i)
+    for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
     {
-      const auto &dataset = getDatasetWidget(WC::DashboardFFT, i);
+      const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
       m_fftPlotValues.append(Curve());
       m_fftPlotValues.last().resize(dataset.fftSamples());
       std::fill(m_fftPlotValues.last().begin(), m_fftPlotValues.last().end(),
@@ -643,13 +648,14 @@ void UI::Dashboard::updatePlots()
   }
 
   // Check if we need to re-initialize multiplot data
-  if (m_multiplotValues.count() != widgetCount(WC::DashboardMultiPlot))
+  if (m_multiplotValues.count()
+      != widgetCount(SerialStudio::DashboardMultiPlot))
   {
     m_multiplotValues.clear();
     m_multiplotValues.squeeze();
-    for (int i = 0; i < widgetCount(WC::DashboardMultiPlot); ++i)
+    for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
     {
-      const auto &group = getGroupWidget(WC::DashboardMultiPlot, i);
+      const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
       m_multiplotValues.append(MultipleCurves());
       m_multiplotValues.last().resize(group.datasetCount());
       for (int j = 0; j < group.datasetCount(); ++j)
@@ -662,9 +668,9 @@ void UI::Dashboard::updatePlots()
   }
 
   // Append latest values to linear plots data
-  for (int i = 0; i < widgetCount(WC::DashboardPlot); ++i)
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i)
   {
-    const auto &dataset = getDatasetWidget(WC::DashboardPlot, i);
+    const auto &dataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
     auto *data = m_linearPlotValues[i].data();
     auto count = m_linearPlotValues[i].count();
     memmove(data, data + 1, count * sizeof(qreal));
@@ -672,9 +678,9 @@ void UI::Dashboard::updatePlots()
   }
 
   // Append latest values to FFT plots data
-  for (int i = 0; i < widgetCount(WC::DashboardFFT); ++i)
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
   {
-    const auto &dataset = getDatasetWidget(WC::DashboardFFT, i);
+    const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     auto *data = m_fftPlotValues[i].data();
     auto count = m_fftPlotValues[i].count();
     memmove(data, data + 1, count * sizeof(qreal));
@@ -682,9 +688,9 @@ void UI::Dashboard::updatePlots()
   }
 
   // Append latest values to multiplots data
-  for (int i = 0; i < widgetCount(WC::DashboardMultiPlot); ++i)
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
   {
-    const auto &group = getGroupWidget(WC::DashboardMultiPlot, i);
+    const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
     for (int j = 0; j < group.datasetCount(); ++j)
     {
       const auto &dataset = group.datasets()[j];
@@ -728,7 +734,7 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   // Get previous counts & title
   const auto previousTitle = title();
   const auto previousActionCount = actionCount();
-  QMap<WC::DashboardWidget, int> previousCounts;
+  QMap<SerialStudio::DashboardWidget, int> previousCounts;
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
     previousCounts[i.key()] = widgetCount(i.key());
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
@@ -751,22 +757,23 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   JSON::Group ledPanel;
   for (const auto &group : frame.groups())
   {
-    const auto key = WC::getDashboardWidget(group);
-    if (key != WC::DashboardNoWidget)
+    const auto key = SerialStudio::getDashboardWidget(group);
+    if (key != SerialStudio::DashboardNoWidget)
       m_widgetGroups[key].append(group);
 
-    if (key == WC::DashboardAccelerometer || key == WC::DashboardGyroscope)
-      m_widgetGroups[WC::DashboardMultiPlot].append(group);
+    if (key == SerialStudio::DashboardAccelerometer
+        || key == SerialStudio::DashboardGyroscope)
+      m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
 
     for (const auto &dataset : group.datasets())
     {
-      auto keys = WC::getDashboardWidgets(dataset);
+      auto keys = SerialStudio::getDashboardWidgets(dataset);
       for (const auto &key : keys)
       {
-        if (key == WC::DashboardLED)
+        if (key == SerialStudio::DashboardLED)
           ledPanel.m_datasets.append(dataset);
 
-        else if (key != WC::DashboardNoWidget)
+        else if (key != SerialStudio::DashboardNoWidget)
           m_widgetDatasets[key].append(dataset);
       }
     }
@@ -776,12 +783,12 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
   if (ledPanel.datasetCount() > 0)
   {
     ledPanel.m_title = tr("Status Panel");
-    m_widgetGroups[WC::DashboardLED].append(ledPanel);
+    m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
   }
 
   // Get current counts & title
   const auto currentTitle = title();
-  QMap<WC::DashboardWidget, int> currentCounts;
+  QMap<SerialStudio::DashboardWidget, int> currentCounts;
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i)
     currentCounts[i.key()] = widgetCount(i.key());
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
@@ -855,8 +862,4 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
 
   // Update plot data
   updatePlots();
-
-  // Notify rest of application about the current frame
-  QMetaObject::invokeMethod(
-      this, [=] { Q_EMIT frameReceived(frame); }, Qt::QueuedConnection);
 }

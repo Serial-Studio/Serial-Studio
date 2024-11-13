@@ -201,13 +201,13 @@ Widgets.Pane {
 
           currentIndex: {
             switch (Cpp_UI_Dashboard.axisVisibility) {
-            case Dashboard.AxisXY:
+            case SerialStudio.AxisXY:
               return 0;
-            case Dashboard.AxisX:
+            case SerialStudio.AxisX:
               return 1;
-            case Dashboard.AxisY:
+            case SerialStudio.AxisY:
               return 2;
-            case Dashboard.NoAxesVisible:
+            case SerialStudio.NoAxesVisible:
               return 3;
             }
           }
@@ -215,16 +215,16 @@ Widgets.Pane {
           onCurrentIndexChanged: {
             switch (currentIndex) {
             case 0:
-              Cpp_UI_Dashboard.axisVisibility = Dashboard.AxisXY
+              Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisXY
               break
             case 1:
-              Cpp_UI_Dashboard.axisVisibility = Dashboard.AxisX
+              Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisX
               break
             case 2:
-              Cpp_UI_Dashboard.axisVisibility = Dashboard.AxisY
+              Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisY
               break
             case 3:
-              Cpp_UI_Dashboard.axisVisibility = Dashboard.NoAxesVisible
+              Cpp_UI_Dashboard.axisVisibility = SerialStudio.NoAxesVisible
               break
             }
           }

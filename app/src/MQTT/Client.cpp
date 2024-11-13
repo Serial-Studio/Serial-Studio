@@ -61,8 +61,8 @@ MQTT::Client::Client()
   // Send data periodically & reset statistics when disconnected/connected to a
   // device
   auto io = &IO::Manager::instance();
-  connect(io, &IO::Manager::frameReceived, this,
-          &MQTT::Client::onFrameReceived);
+  connect(io, &IO::Manager::frameReceived, this, &MQTT::Client::onFrameReceived,
+          Qt::QueuedConnection);
   connect(io, &IO::Manager::connectedChanged, this,
           &MQTT::Client::resetStatistics);
 }

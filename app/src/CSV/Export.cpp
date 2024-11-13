@@ -29,9 +29,9 @@
 #include <QDesktopServices>
 
 #include "IO/Manager.h"
-#include "UI/Dashboard.h"
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
+#include "JSON/FrameBuilder.h"
 
 /**
  * Connect JSON Parser & Serial Manager signals to begin registering JSON
@@ -40,12 +40,6 @@
 CSV::Export::Export()
   : m_exportEnabled(true)
 {
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &Export::closeFile);
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::frameReceived, this,
-          &Export::registerFrame);
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
-          &Export::writeValues);
 }
 
 /**
@@ -91,6 +85,20 @@ void CSV::Export::openCurrentCsv()
   else
     Misc::Utilities::showMessageBox(tr("CSV file not open"),
                                     tr("Cannot find CSV export file!"));
+}
+
+/**
+ * Configures the signal/slot connections with the rest of the modules of the
+ * application.
+ */
+void CSV::Export::setupExternalConnections()
+{
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
+          &Export::closeFile);
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
+          this, &Export::registerFrame);
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
+          &Export::writeValues);
 }
 
 /**

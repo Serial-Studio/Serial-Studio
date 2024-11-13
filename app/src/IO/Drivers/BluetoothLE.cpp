@@ -22,7 +22,6 @@
 
 #include <QOperatingSystemVersion>
 
-#include "IO/Manager.h"
 #include "IO/Drivers/BluetoothLE.h"
 
 //------------------------------------------------------------------------------
@@ -39,11 +38,8 @@ IO::Drivers::BluetoothLE::BluetoothLE()
   , m_controller(nullptr)
   , m_discoveryAgent(nullptr)
 {
-  // Update connect button status when a BLE device is selected by the user
   connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged, this,
           &IO::Drivers::BluetoothLE::configurationChanged);
-  connect(this, &IO::Drivers::BluetoothLE::deviceConnectedChanged,
-          &IO::Manager::instance(), &IO::Manager::connectedChanged);
 }
 
 /**
@@ -59,11 +55,27 @@ IO::Drivers::BluetoothLE &IO::Drivers::BluetoothLE::instance()
 // HAL driver implementation
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Closes the Bluetooth LE connection.
+ *
+ * This function clears all internal states, deletes existing services
+ * and controllers, and resets the connection flags.
+ */
 void IO::Drivers::BluetoothLE::close()
 {
-  // Clear services list & reset flags
-  m_serviceNames.clear();
+  // Clear connected flag
   m_deviceConnected = false;
+
+  // Restore initial conditions
+  m_descriptors.clear();
+  m_serviceNames.clear();
+  m_characteristics.clear();
+  m_descriptorNames.clear();
+  m_characteristicNames.clear();
+
+  // Forget selected characteristic & descriptor
+  m_selectedDescriptor = -1;
+  m_selectedCharacteristic = -1;
 
   // Delete previous service
   if (m_service)
@@ -83,38 +95,105 @@ void IO::Drivers::BluetoothLE::close()
   }
 
   // Update UI
-  Q_EMIT devicesChanged();
   Q_EMIT servicesChanged();
+  Q_EMIT descriptorsChanged();
+  Q_EMIT characteristicsChanged();
   Q_EMIT deviceConnectedChanged();
 }
 
+/**
+ * @brief Checks if the Bluetooth LE device is open (connected).
+ * @return True if the device is connected, false otherwise.
+ */
 bool IO::Drivers::BluetoothLE::isOpen() const
 {
   return m_deviceConnected;
 }
 
+/**
+ * @brief Checks if the Bluetooth LE device is readable.
+ * @return Always true, as the device supports reading.
+ */
 bool IO::Drivers::BluetoothLE::isReadable() const
 {
-  return false;
+  return true;
 }
 
+/**
+ * @brief Checks if the Bluetooth LE device is writable.
+ * @return Always true, as the device supports writing.
+ */
 bool IO::Drivers::BluetoothLE::isWritable() const
 {
-  return false;
+  return true;
 }
 
+/**
+ * @brief Verifies if the Bluetooth LE device configuration is valid.
+ *
+ * This function checks if the operating system is supported and if
+ * the device index is valid.
+ *
+ * @return True if the configuration is valid, false otherwise.
+ */
 bool IO::Drivers::BluetoothLE::configurationOk() const
 {
   return operatingSystemSupported() && deviceIndex() >= 0;
 }
 
+/**
+ * @brief Writes data to the Bluetooth LE device.
+ *
+ * This function sends data to the currently selected characteristic
+ * and descriptor of the BLE device.
+ *
+ * @param data The data to be written to the BLE device.
+ * @return The number of bytes written, or -1 if an error occurs.
+ */
 quint64 IO::Drivers::BluetoothLE::write(const QByteArray &data)
 {
-  // TODO
-  (void)data;
+  if (m_service && m_selectedCharacteristic >= 0 && m_selectedDescriptor >= 0)
+  {
+    const auto &characteristic = m_characteristics.at(m_selectedCharacteristic);
+    if (characteristic.isValid())
+    {
+      const auto &descr = m_descriptors.at(m_selectedDescriptor);
+      if (descr.isValid())
+      {
+        m_service->writeDescriptor(descr, data);
+        return data.length();
+      }
+
+      else
+      {
+        qWarning() << "Failed to write data to BLE device: invalid descriptor";
+        return -1;
+      }
+    }
+
+    else
+    {
+      qWarning()
+          << "Failed to write data to BLE device: invalid characteristic";
+      return -1;
+    }
+  }
+
+  qWarning() << "Failed to write data to BLE device: ensure that a "
+                "characteristic and a descriptor are selected";
+
   return -1;
 }
 
+/**
+ * @brief Opens a connection to a Bluetooth LE device.
+ *
+ * This function initializes the BLE controller, sets up signals/slots,
+ * and attempts to connect to the specified device.
+ *
+ * @param mode Not used. Maintained for compatibility with QIODevice interface.
+ * @return True if the connection is successful, false otherwise.
+ */
 bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
 {
   // I/O mode not used
@@ -173,6 +252,22 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
   return true;
 }
 
+/**
+ * Returns @c false on macOS Monterey, for more info, please check this link:
+ * https://forum.qt.io/topic/132285/mac-os-sdk12-not-working-with-qt-bluetooth
+ */
+bool IO::Drivers::BluetoothLE::operatingSystemSupported() const
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#  if defined(Q_OS_MAC)
+  if (QOperatingSystemVersion::current() > QOperatingSystemVersion::MacOSBigSur)
+    return false;
+#  endif
+#endif
+
+  return true;
+}
+
 //------------------------------------------------------------------------------
 // Driver specifics
 //------------------------------------------------------------------------------
@@ -191,6 +286,22 @@ int IO::Drivers::BluetoothLE::deviceCount() const
 int IO::Drivers::BluetoothLE::deviceIndex() const
 {
   return m_deviceIndex;
+}
+
+/**
+ * @return The index of the descriptor selected by the user.
+ */
+int IO::Drivers::BluetoothLE::descriptorIndex() const
+{
+  return m_selectedDescriptor + 1;
+}
+
+/**
+ * @return The index of the characteristic selected by the user.
+ */
+int IO::Drivers::BluetoothLE::characteristicIndex() const
+{
+  return m_selectedCharacteristic + 1;
 }
 
 /**
@@ -216,19 +327,27 @@ QStringList IO::Drivers::BluetoothLE::serviceNames() const
 }
 
 /**
- * Returns @c false on macOS Monterey, for more info, please check this link:
- * https://forum.qt.io/topic/132285/mac-os-sdk12-not-working-with-qt-bluetooth
+ * @return A list with the discovered BLE descriptors for the current
+ *         characteristic.
  */
-bool IO::Drivers::BluetoothLE::operatingSystemSupported() const
+QStringList IO::Drivers::BluetoothLE::descriptorNames() const
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#  if defined(Q_OS_MAC)
-  if (QOperatingSystemVersion::current() > QOperatingSystemVersion::MacOSBigSur)
-    return false;
-#  endif
-#endif
+  QStringList list;
+  list.append(tr("Select Descriptor"));
+  list.append(m_descriptorNames);
+  return list;
+}
 
-  return true;
+/**
+ * @return A list with the discovered BLE characteristics for the current
+ *         service.
+ */
+QStringList IO::Drivers::BluetoothLE::characteristicNames() const
+{
+  QStringList list;
+  list.append(tr("Select Characteristic"));
+  list.append(m_characteristicNames);
+  return list;
 }
 
 /**
@@ -240,17 +359,14 @@ void IO::Drivers::BluetoothLE::startDiscovery()
   if (!operatingSystemSupported())
     return;
 
-  // Restore initial conditions
-  m_devices.clear();
-  m_deviceIndex = -1;
-  m_deviceNames.clear();
-
   // Close previous device
   close();
 
-  // Update UI
+  // Clear devices
+  m_devices.clear();
+  m_deviceIndex = -1;
+  m_deviceNames.clear();
   Q_EMIT devicesChanged();
-  Q_EMIT deviceIndexChanged();
 
   // Delete previous discovery agent
   if (m_discoveryAgent)
@@ -327,6 +443,16 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
     m_service = nullptr;
   }
 
+  // Forget characteristics & descriptors from previous service
+  m_descriptors.clear();
+  m_characteristics.clear();
+  m_descriptorNames.clear();
+  m_characteristicNames.clear();
+
+  // Forget selected characteristic & descriptor
+  m_selectedDescriptor = -1;
+  m_selectedCharacteristic = -1;
+
   // Ensure that index is valid
   if (index >= 1 && index <= m_serviceNames.count())
   {
@@ -354,11 +480,93 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
     if (!m_service)
       Q_EMIT error(tr("Error while configuring BLE service"));
   }
+
+  // Update UI
+  Q_EMIT descriptorsChanged();
+  Q_EMIT characteristicsChanged();
 }
 
 /**
- * Sets the interaction options between each characteristic of the BLE device
- * and the BLE module.
+ * Selects a descriptor from the @a descriptorNames() list and selects it
+ * for writting in the console widget.
+ */
+void IO::Drivers::BluetoothLE::setDescriptorIndex(const int index)
+{
+  // Operating system not supported, abort process
+  if (!operatingSystemSupported())
+    return;
+
+  // No service selected, abort process
+  if (!m_service)
+    return;
+
+  // No charactersitic selected, abort process
+  if (m_selectedCharacteristic < 0)
+    return;
+
+  // Update descriptor index
+  if (index >= 0 && index <= m_descriptors.count())
+    m_selectedDescriptor = index - 1;
+  else
+    m_selectedDescriptor = -1;
+
+  // Update UI
+  Q_EMIT descriptorIndexChanged();
+}
+
+/**
+ * Selects a characteristic from the @a characteristicNames() list and obtains
+ * the available descriptors for the characteristic, enables notifications if
+ * possible.
+ */
+void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
+{
+  // Operating system not supported, abort process
+  if (!operatingSystemSupported())
+    return;
+
+  // No service selected, abort process
+  if (!m_service)
+    return;
+
+  // Update characteristic index
+  if (index >= 0 && index <= m_characteristics.count())
+    m_selectedCharacteristic = index - 1;
+  else
+    m_selectedCharacteristic = -1;
+
+  // Query characteristic for information
+  if (m_selectedCharacteristic >= 0)
+  {
+    // Obtain the characteristic
+    const auto &c = m_characteristics.at(m_selectedCharacteristic);
+
+    // Enable notifications for the CCCD
+    const auto &descriptor = c.clientCharacteristicConfiguration();
+    if (descriptor.isValid())
+      m_service->writeDescriptor(descriptor, QByteArray::fromHex("0100"));
+
+    // Populate available descriptors
+    m_descriptors = c.descriptors();
+    for (const auto &descriptor : m_descriptors)
+    {
+      if (!descriptor.name().trimmed().isEmpty())
+        m_descriptorNames.append(descriptor.name());
+      else
+        m_descriptorNames.append(descriptor.uuid().toString());
+    }
+
+    // Notify UI about available descriptors
+    Q_EMIT descriptorsChanged();
+  }
+
+  // Update UI
+  Q_EMIT characteristicIndexChanged();
+}
+
+/**
+ * Queries and registers the available characteristics for the currently
+ * selected service.
  */
 void IO::Drivers::BluetoothLE::configureCharacteristics()
 {
@@ -366,18 +574,36 @@ void IO::Drivers::BluetoothLE::configureCharacteristics()
   if (!m_service)
     return;
 
+  // Forget characteristics & descriptors from previous service
+  m_descriptors.clear();
+  m_characteristics.clear();
+  m_descriptorNames.clear();
+  m_characteristicNames.clear();
+
+  // Forget selected characteristic & descriptor
+  m_selectedDescriptor = -1;
+  m_selectedCharacteristic = -1;
+
   // Test & validate all service characteristics
-  foreach (QLowEnergyCharacteristic c, m_service->characteristics())
+  foreach (const QLowEnergyCharacteristic &c, m_service->characteristics())
   {
     // Validate characteristic
     if (!c.isValid())
       continue;
 
-    // Set client/descriptor connection properties
-    auto descriptor = c.clientCharacteristicConfiguration();
-    if (descriptor.isValid())
-      m_service->writeDescriptor(descriptor, QByteArray::fromHex("0100"));
+    // Register characteristic
+    m_characteristics.append(c);
+    if (!c.name().trimmed().isEmpty())
+      m_characteristicNames.append(c.name());
+    else
+      m_characteristicNames.append(c.uuid().toString());
   }
+
+  // Update UI
+  Q_EMIT descriptorsChanged();
+  Q_EMIT descriptorIndexChanged();
+  Q_EMIT characteristicsChanged();
+  Q_EMIT characteristicIndexChanged();
 }
 
 /**
@@ -392,8 +618,8 @@ void IO::Drivers::BluetoothLE::onServiceDiscoveryFinished()
 
   // Generate services list
   m_serviceNames.clear();
-  for (auto i = 0; i < m_controller->services().count(); ++i)
-    m_serviceNames.append(m_controller->services().at(i).toString());
+  for (const auto &service : m_controller->services())
+    m_serviceNames.append(service.toString());
 
   // Update UI
   Q_EMIT servicesChanged();
@@ -504,6 +730,8 @@ void IO::Drivers::BluetoothLE::onServiceStateChanged(
 void IO::Drivers::BluetoothLE::onCharacteristicChanged(
     const QLowEnergyCharacteristic &info, const QByteArray &value)
 {
-  (void)info;
-  Q_EMIT dataReceived(value);
+  if (m_selectedCharacteristic == -1
+      || info == m_characteristics.at(m_selectedCharacteristic))
+    QMetaObject::invokeMethod(
+        this, [=] { Q_EMIT dataReceived(value); }, Qt::QueuedConnection);
 }

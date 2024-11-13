@@ -22,38 +22,62 @@
 
 #pragma once
 
+#include <QThread>
 #include <QObject>
-#include <QElapsedTimer>
-#include <IO/HAL_Driver.h>
+
+#include "HAL_Driver.h"
+#include "FrameReader.h"
+#include "SerialStudio.h"
 
 namespace IO
 {
 /**
- * @brief The Manager class
+ * @class IO::Manager
+ * @brief Centralized manager for I/O operations across multiple communication
+ * protocols.
  *
- * The I/O Manager class provides an abstraction layer between the physical
- * device (e.g. a serial or network port) and the rest of the application.
+ * The `IO::Manager` class orchestrates the communication between various
+ * devices and protocols, such as serial ports, network connections, and
+ * Bluetooth Low Energy (BLE). It acts as the primary interface for configuring,
+ * connecting, and interacting with hardware devices, and it manages data
+ * transmission and reception efficiently.
  *
- * Additionaly, all frame parsing, checksum verification and data processing
- * is done directly by this class. In this way, programmers can focus on
- * implementing the code to read and write data to a device, while the manager
- * class deals with the processing of the received data and generates frames.
+ * Key Features:
+ * - **Multiple Bus Types**: Supports Serial, Network, and Bluetooth LE
+ *   communication.
+ * - **Dynamic Driver Management**: Automatically handles driver initialization,
+ *   configuration, and cleanup when switching between bus types.
+ * - **Frame Parsing**: Integrates with `FrameReader` to process and parse
+ *   incoming data streams based on configurable start and end sequences or
+ *   delimiters.
+ * - **Thread Safety**: Executes frame processing in a dedicated worker thread,
+ *   ensuring responsiveness and isolation from the main application thread.
+ * - **Signals**: Emits various signals to notify changes in configuration,
+ *   connection state, and data transmission/reception.
  *
- * A "frame" is equivalent to a packet of data. To identify frames, the manager
- * class needs to know three things:
- * - The start sequence or header of the frame
- * - The end sequence or footer of the frame
- * - The data separator sequence, which allows Serial Studio to differentiate
- *   between a dataset value and another dataset value.
+ * @signals
+ * - `connectedChanged()`: Emitted when the connection state changes.
+ * - `driverChanged()`: Emitted when the driver instance is updated.
+ * - `configurationChanged()`: Emitted when the configuration settings are
+ *   modified.
+ * - `dataSent(const QByteArray &data)`: Emitted when data is successfully sent
+ *    to the device.
+ * - `dataReceived(const QByteArray &data)`: Emitted when raw data is received.
+ * - `frameReceived(const QByteArray &frame)`: Emitted when a valid frame is
+ *   parsed.
+ * - `busTypeChanged()`: Emitted when the bus type is changed.
+ * - `startSequenceChanged()`: Emitted when the start sequence for frame
+ *   detection is updated.
+ * - `finishSequenceChanged()`: Emitted when the finish sequence for frame
+ *   detection is updated.
+ * - `separatorSequenceChanged()`: Emitted when the separator sequence is
+ *   updated.
+ * - `writeEnabledChanged()`: Emitted when the write-enabled flag is modified.
+ * - `busListChanged()`: Emitted when the list of available buses changes.
  *
- * Example of a frame:
- *
- *   $A,B,C,D,E,F,G;
- *
- * In this case, the start sequence of the frame is "$", while the end sequence
- * is ";". The data separator sequence is ",". Knowing this, Serial Studio
- * can process the frame and deduce that A,B,C,D,E,F and G are individual
- * dataset values.
+ * This class is designed to simplify I/O operations and promote modularity by
+ * abstracting low-level driver interactions, making it easy to extend support
+ * for additional protocols and devices.
  */
 class Manager : public QObject
 {
@@ -68,13 +92,10 @@ class Manager : public QObject
   Q_PROPERTY(bool connected
              READ connected
              NOTIFY connectedChanged)
-  Q_PROPERTY(bool deviceAvailable
-             READ deviceAvailable
-             NOTIFY driverChanged)
-  Q_PROPERTY(IO::Manager::SelectedDriver selectedDriver
-             READ selectedDriver
-             WRITE setSelectedDriver
-             NOTIFY selectedDriverChanged)
+  Q_PROPERTY(SerialStudio::BusType busType
+             READ busType
+             WRITE setBusType
+             NOTIFY busTypeChanged)
   Q_PROPERTY(QString startSequence
              READ startSequence
              WRITE setStartSequence
@@ -90,24 +111,22 @@ class Manager : public QObject
   Q_PROPERTY(bool configurationOk
              READ configurationOk
              NOTIFY configurationChanged)
-  Q_PROPERTY(QStringList availableDrivers
-             READ availableDrivers
-             NOTIFY languageChanged)
+  Q_PROPERTY(QStringList availableBuses
+             READ availableBuses
+             NOTIFY busListChanged)
   // clang-format on
 
 signals:
   void driverChanged();
-  void languageChanged();
+  void busTypeChanged();
+  void busListChanged();
   void connectedChanged();
   void writeEnabledChanged();
   void configurationChanged();
-  void receivedBytesChanged();
   void maxBufferSizeChanged();
   void startSequenceChanged();
   void finishSequenceChanged();
-  void selectedDriverChanged();
   void separatorSequenceChanged();
-  void frameValidationRegexChanged();
   void dataSent(const QByteArray &data);
   void dataReceived(const QByteArray &data);
   void frameReceived(const QByteArray &frame);
@@ -120,79 +139,48 @@ private:
   Manager &operator=(const Manager &) = delete;
 
 public:
-  enum class SelectedDriver
-  {
-    Serial,
-    Network,
-    BluetoothLE
-  };
-  Q_ENUM(SelectedDriver)
-
-  enum class ValidationStatus
-  {
-    FrameOk,
-    ChecksumError,
-    ChecksumIncomplete
-  };
-  Q_ENUM(ValidationStatus)
-
   static Manager &instance();
 
   [[nodiscard]] bool readOnly();
   [[nodiscard]] bool readWrite();
   [[nodiscard]] bool connected();
-  [[nodiscard]] bool deviceAvailable();
   [[nodiscard]] bool configurationOk();
 
-  [[nodiscard]] int maxBufferSize() const;
-
   [[nodiscard]] HAL_Driver *driver();
-  [[nodiscard]] SelectedDriver selectedDriver() const;
+  [[nodiscard]] SerialStudio::BusType busType() const;
 
   [[nodiscard]] const QString &startSequence() const;
   [[nodiscard]] const QString &finishSequence() const;
   [[nodiscard]] const QString &separatorSequence() const;
 
-  [[nodiscard]] QStringList availableDrivers() const;
+  [[nodiscard]] QStringList availableBuses() const;
   Q_INVOKABLE qint64 writeData(const QByteArray &data);
 
 public slots:
   void connectDevice();
   void toggleConnection();
   void disconnectDevice();
+  void setupExternalConnections();
   void setWriteEnabled(const bool enabled);
   void processPayload(const QByteArray &payload);
-  void setMaxBufferSize(const int maxBufferSize);
   void setStartSequence(const QString &sequence);
   void setFinishSequence(const QString &sequence);
   void setSeparatorSequence(const QString &sequence);
-  void setSelectedDriver(const IO::Manager::SelectedDriver &driver);
+  void setBusType(const SerialStudio::BusType &driver);
 
 private slots:
-  void clearTempBuffer();
   void setDriver(HAL_Driver *driver);
-  void onDataReceived(const QByteArray &data);
 
 private:
-  void readFrames();
-  void readStartEndDelimetedFrames();
-  void readEndDelimetedFrames(const QList<QByteArray> &delimeters);
-
-private:
-  ValidationStatus integrityChecks(const QByteArray &frame,
-                                   const QByteArray &masterBuffer,
-                                   int *bytesToChop);
-
-private:
-  bool m_enableCrc;
   bool m_writeEnabled;
-  int m_maxBufferSize;
+  SerialStudio::BusType m_busType;
+
   HAL_Driver *m_driver;
-  QByteArray m_dataBuffer;
-  quint64 m_receivedBytes;
+  QThread m_workerThread;
+  FrameReader m_frameReader;
+
   QString m_startSequence;
   QString m_finishSequence;
   QString m_separatorSequence;
-  SelectedDriver m_selectedDriver;
 };
 } // namespace IO

@@ -79,7 +79,7 @@ Item {
       clip: true
       Layout.fillWidth: true
       Layout.fillHeight: true
-      currentIndex: Cpp_IO_Manager.selectedDriver
+      currentIndex: Cpp_IO_Manager.busType
       implicitHeight: Math.max(serial.implicitHeight, network.implicitHeight, bluetoothLE.implicitHeight)
 
       Devices.Serial {

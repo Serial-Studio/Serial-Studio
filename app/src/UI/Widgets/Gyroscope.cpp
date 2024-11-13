@@ -78,11 +78,13 @@ void Widgets::Gyroscope::updateData()
 {
   // Get the dashboard instance and check if the index is valid
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardGyroscope))
+  if (m_index < 0
+      || m_index >= dash->widgetCount(SerialStudio::DashboardGyroscope))
     return;
 
   // Get the gyroscope data and validate the dataset count
-  const auto &gyro = dash->getGroupWidget(WC::DashboardGyroscope, m_index);
+  const auto &gyro
+      = dash->getGroupWidget(SerialStudio::DashboardGyroscope, m_index);
   if (gyro.datasetCount() != 3)
     return;
 

@@ -67,7 +67,7 @@ DropArea {
 
     // Process JSON files
     if (cleanPath.endsWith(".json")) {
-      Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.ProjectFile
+      Cpp_JSON_FrameBuilder.operationMode = SerialStudio.ProjectFile
       Cpp_JSON_FrameBuilder.loadJsonMap(cleanPath)
     }
 

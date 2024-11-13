@@ -202,7 +202,7 @@ Rectangle {
       text: qsTr("Data Grid")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-datagrid.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), WC.DataGrid)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), SerialStudio.DataGrid)
     }
 
     //
@@ -212,7 +212,7 @@ Rectangle {
       text: qsTr("Multiple Plots")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), WC.MultiPlot)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), SerialStudio.MultiPlot)
     }
 
     //
@@ -222,7 +222,7 @@ Rectangle {
       text: qsTr("Accelerometer")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), WC.Accelerometer)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), SerialStudio.Accelerometer)
     }
 
     //
@@ -232,7 +232,7 @@ Rectangle {
       text: qsTr("Gyroscope")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), WC.Gyroscope)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), SerialStudio.Gyroscope)
     }
 
     //
@@ -242,7 +242,7 @@ Rectangle {
       text: qsTr("Map")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), WC.GPS)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), SerialStudio.GPS)
     }
 
     //
@@ -252,7 +252,7 @@ Rectangle {
       text: qsTr("Container")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), WC.NoGroupWidget)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), SerialStudio.NoGroupWidget)
     }
 
     //

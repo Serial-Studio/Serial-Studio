@@ -99,6 +99,7 @@ set(SOURCES
  src/IO/Checksum.cpp
  src/IO/Console.cpp
  src/IO/Manager.cpp
+ src/IO/FrameReader.cpp
  src/JSON/FrameParser.cpp
  src/JSON/ProjectModel.cpp
  src/JSON/FrameBuilder.cpp
@@ -110,7 +111,7 @@ set(SOURCES
  src/CSV/Export.cpp
  src/MQTT/Client.cpp
  src/main.cpp
- src/WidgetsCommon.cpp
+ src/SerialStudio.cpp
 )
 
 set(HEADERS
@@ -144,6 +145,7 @@ set(HEADERS
  src/IO/Manager.h
  src/IO/HAL_Driver.h
  src/IO/Checksum.h
+ src/IO/FrameReader.h
  src/JSON/FrameParser.h
  src/JSON/ProjectModel.h
  src/JSON/Frame.h
@@ -155,7 +157,7 @@ set(HEADERS
  src/CSV/Player.h
  src/MQTT/Client.h
  src/AppInfo.h
- src/WidgetsCommon.h
+ src/SerialStudio.h
 )
 
 #-------------------------------------------------------------------------------

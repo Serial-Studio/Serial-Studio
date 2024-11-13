@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include <WidgetsCommon.h>
+#include <SerialStudio.h>
 #include <Misc/ThemeManager.h>
 
 #include <QJsonArray>
@@ -34,7 +34,7 @@
  * @param widget The `DashboardWidget` type to check.
  * @return True if the widget is a group widget; false otherwise.
  */
-bool WC::isGroupWidget(const DashboardWidget widget)
+bool SerialStudio::isGroupWidget(const DashboardWidget widget)
 {
   switch (widget)
   {
@@ -57,7 +57,7 @@ bool WC::isGroupWidget(const DashboardWidget widget)
  * @param widget The `DashboardWidget` type to check.
  * @return True if the widget is a dataset widget; false otherwise.
  */
-bool WC::isDatasetWidget(const DashboardWidget widget)
+bool SerialStudio::isDatasetWidget(const DashboardWidget widget)
 {
   switch (widget)
   {
@@ -79,7 +79,7 @@ bool WC::isDatasetWidget(const DashboardWidget widget)
  * @param w The `DashboardWidget` for which to retrieve the icon.
  * @return A QString representing the path to the widget's icon.
  */
-QString WC::dashboardWidgetIcon(const DashboardWidget w)
+QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w)
 {
   switch (w)
   {
@@ -130,7 +130,7 @@ QString WC::dashboardWidgetIcon(const DashboardWidget w)
  * @param w The `DashboardWidget` for which to retrieve the title.
  * @return A QString containing the widget's display title.
  */
-QString WC::dashboardWidgetTitle(const DashboardWidget w)
+QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
 {
   switch (w)
   {
@@ -183,7 +183,8 @@ QString WC::dashboardWidgetTitle(const DashboardWidget w)
  * @return The corresponding `DashboardWidget` type, or `DashboardNoWidget` if
  *         not recognized.
  */
-WC::DashboardWidget WC::getDashboardWidget(const JSON::Group &group)
+SerialStudio::DashboardWidget
+SerialStudio::getDashboardWidget(const JSON::Group &group)
 {
   const auto &widget = group.widget();
 
@@ -211,7 +212,8 @@ WC::DashboardWidget WC::getDashboardWidget(const JSON::Group &group)
  * @return A QList of `DashboardWidget` types matching the widgets generated
  *         by the input @c dataset parameter.
  */
-QList<WC::DashboardWidget> WC::getDashboardWidgets(const JSON::Dataset &dataset)
+QList<SerialStudio::DashboardWidget>
+SerialStudio::getDashboardWidgets(const JSON::Dataset &dataset)
 {
   QList<DashboardWidget> list;
   const auto &widget = dataset.widget();
@@ -246,7 +248,7 @@ QList<WC::DashboardWidget> WC::getDashboardWidgets(const JSON::Dataset &dataset)
  * @param widget The `GroupWidget` type to get the ID for.
  * @return A QString representing the widget ID.
  */
-QString WC::groupWidgetId(const GroupWidget widget)
+QString SerialStudio::groupWidgetId(const GroupWidget widget)
 {
   switch (widget)
   {
@@ -280,7 +282,7 @@ QString WC::groupWidgetId(const GroupWidget widget)
  * @return The corresponding `GroupWidget` type, or `NoGroupWidget` if not
  *         recognized.
  */
-WC::GroupWidget WC::groupWidgetFromId(const QString &id)
+SerialStudio::GroupWidget SerialStudio::groupWidgetFromId(const QString &id)
 {
   if (id == "datagrid")
     return DataGrid;
@@ -305,7 +307,7 @@ WC::GroupWidget WC::groupWidgetFromId(const QString &id)
  * @param widget The `DatasetWidget` type to get the ID for.
  * @return A QString representing the widget ID.
  */
-QString WC::datasetWidgetId(const DatasetWidget widget)
+QString SerialStudio::datasetWidgetId(const DatasetWidget widget)
 {
   switch (widget)
   {
@@ -333,7 +335,7 @@ QString WC::datasetWidgetId(const DatasetWidget widget)
  * @return The corresponding `DatasetWidget` type, or `NoDatasetWidget` if not
  *         recognized.
  */
-WC::DatasetWidget WC::datasetWidgetFromId(const QString &id)
+SerialStudio::DatasetWidget SerialStudio::datasetWidgetFromId(const QString &id)
 {
   if (id == "bar")
     return Bar;
@@ -360,7 +362,7 @@ WC::DatasetWidget WC::datasetWidgetFromId(const QString &id)
  * @param index The frame index of the dataset.
  * @return A QString representing the color associated with the dataset index.
  */
-QString WC::getDatasetColor(const int index)
+QString SerialStudio::getDatasetColor(const int index)
 {
   static const auto *theme = &Misc::ThemeManager::instance();
   const auto idx = index - 1;

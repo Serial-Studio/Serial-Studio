@@ -39,10 +39,12 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
 {
   // Obtain group information
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardMultiPlot))
+  if (m_index >= 0
+      && m_index < dash->widgetCount(SerialStudio::DashboardMultiPlot))
   {
     // Obtain min/max values from datasets
-    const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);
+    const auto &group
+        = dash->getGroupWidget(SerialStudio::DashboardMultiPlot, m_index);
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();
     for (const auto &dataset : group.datasets())
@@ -209,7 +211,8 @@ void Widgets::MultiPlot::updateRange()
 {
   // Get the dashboard instance and check if the index is valid
   auto dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardMultiPlot))
+  if (m_index < 0
+      || m_index >= dash->widgetCount(SerialStudio::DashboardMultiPlot))
     return;
 
   // Clear the data
@@ -217,7 +220,8 @@ void Widgets::MultiPlot::updateRange()
   m_data.squeeze();
 
   // Get the multiplot group and loop through each dataset
-  const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);
+  const auto &group
+      = dash->getGroupWidget(SerialStudio::DashboardMultiPlot, m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
     m_data.append(QVector<QPointF>());
@@ -244,9 +248,11 @@ void Widgets::MultiPlot::onThemeChanged()
   // Obtain colors for each dataset in the widget
   m_colors.clear();
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardMultiPlot))
+  if (m_index >= 0
+      && m_index < dash->widgetCount(SerialStudio::DashboardMultiPlot))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);
+    const auto &group
+        = dash->getGroupWidget(SerialStudio::DashboardMultiPlot, m_index);
     m_colors.resize(group.datasetCount());
 
     for (int i = 0; i < group.datasetCount(); ++i)
@@ -286,7 +292,7 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   else
   {
     const auto &group = UI::Dashboard::instance().getGroupWidget(
-        WC::DashboardMultiPlot, m_index);
+        SerialStudio::DashboardMultiPlot, m_index);
 
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();

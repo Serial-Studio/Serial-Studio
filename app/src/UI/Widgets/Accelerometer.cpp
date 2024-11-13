@@ -65,11 +65,13 @@ void Widgets::Accelerometer::updateData()
 {
   // Get the dashboard instance and check if the index is valid
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardAccelerometer))
+  if (m_index < 0
+      || m_index >= dash->widgetCount(SerialStudio::DashboardAccelerometer))
     return;
 
   // Get the accelerometer data and validate the dataset count
-  const auto &acc = dash->getGroupWidget(WC::DashboardAccelerometer, m_index);
+  const auto &acc
+      = dash->getGroupWidget(SerialStudio::DashboardAccelerometer, m_index);
   if (acc.datasetCount() != 3)
     return;
 

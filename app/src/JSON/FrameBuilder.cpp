@@ -22,7 +22,6 @@
 
 #include <QFileInfo>
 #include <QFileDialog>
-#include <QRegularExpression>
 
 #include "IO/Manager.h"
 #include "Misc/Utilities.h"
@@ -34,19 +33,16 @@
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
 JSON::FrameBuilder::FrameBuilder()
-  : m_opMode(ProjectFile)
+  : m_opMode(SerialStudio::ProjectFile)
 {
-  connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
-          &JSON::FrameBuilder::readData);
-
   // Read JSON map location
   auto path = m_settings.value("json_map_location", "").toString();
   if (!path.isEmpty())
     loadJsonMap(path);
 
   // Obtain operation mode from settings
-  auto mode = m_settings.value("operation_mode", CommaSeparatedValues).toInt();
-  setOperationMode(static_cast<OperationMode>(mode));
+  auto m = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
+  setOperationMode(static_cast<SerialStudio::OperationMode>(m));
 }
 
 /**
@@ -89,7 +85,7 @@ QString JSON::FrameBuilder::jsonMapFilename() const
 /**
  * Returns the operation mode
  */
-JSON::FrameBuilder::OperationMode JSON::FrameBuilder::operationMode() const
+SerialStudio::OperationMode JSON::FrameBuilder::operationMode() const
 {
   return m_opMode;
 }
@@ -106,6 +102,16 @@ void JSON::FrameBuilder::loadJsonMap()
 
   if (!file.isEmpty())
     loadJsonMap(file);
+}
+
+/**
+ * Configures the signal/slot connections with the rest of the modules of the
+ * application.
+ */
+void JSON::FrameBuilder::setupExternalConnections()
+{
+  connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
+          &JSON::FrameBuilder::readData, Qt::QueuedConnection);
 }
 
 /**
@@ -155,7 +161,7 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
       // Update I/O manager settings
       if (ok && m_frame.isValid())
       {
-        if (operationMode() == ProjectFile)
+        if (operationMode() == SerialStudio::ProjectFile)
         {
           IO::Manager::instance().setFinishSequence(m_frame.frameEnd());
           IO::Manager::instance().setStartSequence(m_frame.frameStart());
@@ -213,23 +219,24 @@ void JSON::FrameBuilder::setFrameParser(JSON::FrameParser *parser)
  * @c kAutomatic serial data contains the JSON data frame, good for simple
  *               applications or for prototyping.
  */
-void JSON::FrameBuilder::setOperationMode(const OperationMode mode)
+void JSON::FrameBuilder::setOperationMode(
+    const SerialStudio::OperationMode mode)
 {
   m_opMode = mode;
 
   switch (mode)
   {
-    case DeviceSendsJSON:
+    case SerialStudio::DeviceSendsJSON:
       IO::Manager::instance().setStartSequence("");
       IO::Manager::instance().setFinishSequence("");
       IO::Manager::instance().setSeparatorSequence("");
       break;
-    case ProjectFile:
+    case SerialStudio::ProjectFile:
       IO::Manager::instance().setFinishSequence(m_frame.frameEnd());
       IO::Manager::instance().setStartSequence(m_frame.frameStart());
       IO::Manager::instance().setSeparatorSequence(m_frame.separator());
       break;
-    case CommaSeparatedValues:
+    case SerialStudio::QuickPlot:
       IO::Manager::instance().setStartSequence("");
       IO::Manager::instance().setFinishSequence("");
       IO::Manager::instance().setSeparatorSequence("");
@@ -271,33 +278,30 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     return;
 
   // Serial device sends JSON (auto mode)
-  if (operationMode() == JSON::FrameBuilder::DeviceSendsJSON)
+  if (operationMode() == SerialStudio::DeviceSendsJSON)
   {
     auto jsonData = QJsonDocument::fromJson(data).object();
     if (m_frame.read(jsonData))
-    {
-      QMetaObject::invokeMethod(
-          this, [=] { Q_EMIT frameChanged(m_frame); }, Qt::QueuedConnection);
-    }
+      Q_EMIT frameChanged(m_frame);
   }
 
   // Data is separated and parsed by Serial Studio project
-  else if (operationMode() == JSON::FrameBuilder::ProjectFile && m_frameParser)
+  else if (operationMode() == SerialStudio::ProjectFile && m_frameParser)
   {
     // Convert binary frame data to a string
     QString frameData;
     QString separator;
     switch (JSON::ProjectModel::instance().decoderMethod())
     {
-      case WC::PlainText:
+      case SerialStudio::PlainText:
         frameData = QString::fromUtf8(data);
         separator = IO::Manager::instance().separatorSequence();
         break;
-      case WC::Hexadecimal:
+      case SerialStudio::Hexadecimal:
         frameData = QString::fromUtf8(data.toHex());
         separator = "";
         break;
-      case WC::Base64:
+      case SerialStudio::Base64:
         frameData = QString::fromUtf8(data.toBase64());
         separator = "";
         break;
@@ -322,12 +326,11 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     }
 
     // Update user interface
-    QMetaObject::invokeMethod(
-        this, [=] { Q_EMIT frameChanged(m_frame); }, Qt::QueuedConnection);
+    Q_EMIT frameChanged(m_frame);
   }
 
   // Data is separated by comma separated values
-  else if (operationMode() == CommaSeparatedValues)
+  else if (operationMode() == SerialStudio::QuickPlot)
   {
     // Obtain fields from data frame
     auto fields = data.split(',');
@@ -372,7 +375,6 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
       frame.m_groups.append(plots);
     }
 
-    QMetaObject::invokeMethod(
-        this, [=] { Q_EMIT frameChanged(frame); }, Qt::QueuedConnection);
+    Q_EMIT frameChanged(frame);
   }
 }

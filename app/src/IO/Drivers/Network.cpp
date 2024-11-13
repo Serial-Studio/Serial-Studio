@@ -461,9 +461,6 @@ void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
  */
 void IO::Drivers::Network::onReadyRead()
 {
-  // Initialize byte array
-  QByteArray data;
-
   // Check if we need to use UDP socket functions
   if (socketType() == QAbstractSocket::UdpSocket)
   {
@@ -477,21 +474,26 @@ void IO::Drivers::Network::onReadyRead()
       // Add datagram to data buffer
       if (!udpIgnoreFrameSequences())
       {
-        data.append(datagram);
-        Q_EMIT dataReceived(data);
+        QMetaObject::invokeMethod(
+            this, [=] { Q_EMIT dataReceived(datagram); }, Qt::QueuedConnection);
       }
 
       // Ingore start/end sequences & process frame directly
       else
-        IO::Manager::instance().processPayload(datagram);
+      {
+        QMetaObject::invokeMethod(
+            this, [=] { IO::Manager::instance().processPayload(datagram); },
+            Qt::QueuedConnection);
+      }
     }
   }
 
   // We are using the TCP socket...
   else if (socketType() == QAbstractSocket::TcpSocket)
   {
-    data = tcpSocket()->readAll();
-    Q_EMIT dataReceived(data);
+    QMetaObject::invokeMethod(
+        this, [=] { Q_EMIT dataReceived(tcpSocket()->readAll()); },
+        Qt::QueuedConnection);
   }
 }
 

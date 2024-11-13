@@ -78,11 +78,11 @@ void Widgets::GPS::updateData()
 
   // Invalid index, abort update
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardGPS))
+  if (m_index < 0 || m_index >= dash->widgetCount(SerialStudio::DashboardGPS))
     return;
 
   // Get group reference
-  const auto &group = dash->getGroupWidget(WC::DashboardGPS, m_index);
+  const auto &group = dash->getGroupWidget(SerialStudio::DashboardGPS, m_index);
 
   // Get latitiude/longitude from datasets
   qreal lat = 0, lon = 0, alt = 0;

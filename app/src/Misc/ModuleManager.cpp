@@ -25,7 +25,7 @@
 #include <QSimpleUpdater.h>
 
 #include "AppInfo.h"
-#include "WidgetsCommon.h"
+#include "SerialStudio.h"
 
 #include "CSV/Export.h"
 #include "CSV/Player.h"
@@ -223,12 +223,12 @@ void Misc::ModuleManager::registerQmlTypes()
   // Register JSON custom items
   qmlRegisterType<JSON::FrameParser>("SerialStudio", 1, 0, "FrameParser");
   qmlRegisterType<JSON::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
-  qmlRegisterType<JSON::FrameBuilder>("SerialStudio", 1, 0, "JsonGenerator");
 
   // Register generic dashboard widget
-  qmlRegisterType<WC>("SerialStudio", 1, 0, "WC");
-  qmlRegisterType<UI::Dashboard>("SerialStudio", 1, 0, "Dashboard");
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
+
+  // Regsiter common Serial Studio enums & values
+  qmlRegisterType<SerialStudio>("SerialStudio", 1, 0, "SerialStudio");
 }
 
 /**
@@ -307,6 +307,14 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   // Load main.qml
   m_engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
+  // Setup singleton module interconnections
+  ioSerial->setupExternalConnections();
+  csvExport->setupExternalConnections();
+  ioConsole->setupExternalConnections();
+  ioManager->setupExternalConnections();
+  projectModel->setupExternalConnections();
+  frameBuilder->setupExternalConnections();
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);

@@ -40,10 +40,11 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
   , m_transformer(0, QStringLiteral("Hann"))
 {
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardFFT))
+  if (m_index >= 0 && m_index < dash->widgetCount(SerialStudio::DashboardFFT))
   {
     // Get FFT dataset
-    const auto &dataset = dash->getDatasetWidget(WC::DashboardFFT, m_index);
+    const auto &dataset
+        = dash->getDatasetWidget(SerialStudio::DashboardFFT, m_index);
 
     // Initialize FFT size
     int size = qMax(8, dataset.fftSamples());

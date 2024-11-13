@@ -86,6 +86,7 @@ public:
 public slots:
   void closeFile();
   void openCurrentCsv();
+  void setupExternalConnections();
   void setExportEnabled(const bool enabled);
 
 private slots:

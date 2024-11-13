@@ -35,9 +35,10 @@ Widgets::LEDPanel::LEDPanel(const int index, QQuickItem *parent)
 {
   // Populate the LED states, titles, and alarm states
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardLED))
+  if (m_index >= 0 && m_index < dash->widgetCount(SerialStudio::DashboardLED))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardLED, m_index);
+    const auto &group
+        = dash->getGroupWidget(SerialStudio::DashboardLED, m_index);
     m_states.resize(group.datasetCount());
     m_titles.resize(group.datasetCount());
     m_colors.resize(group.datasetCount());
@@ -122,12 +123,12 @@ void Widgets::LEDPanel::updateData()
 {
   // Get the dashboard instance and check if the index is valid
   static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardLED))
+  if (m_index < 0 || m_index >= dash->widgetCount(SerialStudio::DashboardLED))
     return;
 
   // Get the LED group and update the LED states
   bool changed = false;
-  const auto &group = dash->getGroupWidget(WC::DashboardLED, m_index);
+  const auto &group = dash->getGroupWidget(SerialStudio::DashboardLED, m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
     // Get the dataset and its values
@@ -188,9 +189,10 @@ void Widgets::LEDPanel::onThemeChanged()
   // Obtain colors for each dataset in the widget
   m_colors.clear();
   auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardLED))
+  if (m_index >= 0 && m_index < dash->widgetCount(SerialStudio::DashboardLED))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardLED, m_index);
+    const auto &group
+        = dash->getGroupWidget(SerialStudio::DashboardLED, m_index);
     m_colors.resize(group.datasetCount());
 
     for (int i = 0; i < group.datasetCount(); ++i)

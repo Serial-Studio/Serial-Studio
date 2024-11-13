@@ -280,7 +280,10 @@ Item {
         Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
         checked: Cpp_IO_Console.dataMode === 1
-        onCheckedChanged: Cpp_IO_Console.dataMode = checked ? 1 : 0
+        onCheckedChanged: {
+          if (Cpp_IO_Console.dataMode !== checked)
+            Cpp_IO_Console.dataMode = checked ? 1 : 0
+        }
       }
 
       ComboBox {

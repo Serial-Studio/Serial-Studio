@@ -45,7 +45,7 @@ Plugins::Server::Server()
 
   // Send I/O "raw" data directly
   connect(&IO::Manager::instance(), &IO::Manager::dataReceived, this,
-          &Plugins::Server::sendRawData);
+          &Plugins::Server::sendRawData, Qt::QueuedConnection);
 
   // Configure TCP server
   connect(&m_server, &QTcpServer::newConnection, this,

@@ -106,9 +106,9 @@ Widgets.Pane {
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetPlot
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetPlot
           onClicked: {
-            const option = WC.DatasetPlot
+            const option = SerialStudio.DatasetPlot
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -125,9 +125,9 @@ Widgets.Pane {
           text: qsTr("FFT Plot")
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetFFT
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetFFT
           onClicked: {
-            const option = WC.DatasetFFT
+            const option = SerialStudio.DatasetFFT
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -145,9 +145,9 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetBar
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetBar
           onClicked: {
-            const option = WC.DatasetBar
+            const option = SerialStudio.DatasetBar
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -165,9 +165,9 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetGauge
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetGauge
           onClicked: {
-            const option = WC.DatasetGauge
+            const option = SerialStudio.DatasetGauge
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -185,9 +185,9 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetCompass
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetCompass
           onClicked: {
-            const option = WC.DatasetCompass
+            const option = SerialStudio.DatasetCompass
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -204,9 +204,9 @@ Widgets.Pane {
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetLED
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetLED
           onClicked: {
-            const option = WC.DatasetLED
+            const option = SerialStudio.DatasetLED
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)

@@ -164,6 +164,7 @@ public:
 
 public slots:
   void disconnectDevice();
+  void setupExternalConnections();
   void setBaudRate(const qint32 rate);
   void setDtrEnabled(const bool enabled);
   void setParity(const quint8 parityIndex);

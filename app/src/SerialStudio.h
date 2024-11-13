@@ -40,30 +40,46 @@ typedef QVector<qreal> Curve;
 typedef QVector<Curve> MultipleCurves;
 
 /**
- * @class WC
- * @brief Provides centralized widget definitions and utilities for the
- *        dashboard UI and the project editor.
+ * @class SerialStudio
+ * @brief A central utility class for managing data visualization and decoding
+ * logic.
  *
- * The `WC` class defines enums and utility functions for managing different
- * widget types used across the application, ensuring consistent widget behavior
- * and avoiding code duplication.
+ * The `SerialStudio` class provides a set of tools and enums for working with
+ * continuous data streams, decoding strategies, and visualization elements. It
+ * serves as a foundation for configuring, parsing, and visualizing incoming
+ * data from various sources such as serial ports, network sockets, and
+ * Bluetooth LE devices.
  *
- * It includes enums for widget types and dataset options, as well as methods to
- * r etrieve widget IDs, interpret widget types from IDs, and obtain display
- * properties like icons, titles, and colors.
+ * Key Features:
+ * - **Decoding Methods**: Support for PlainText, Hexadecimal, and Base64
+ * decoding.
+ * - **Frame Detection**: Configurable methods for detecting data frames in
+ * streams, including end-delimiter-only and start-and-end-delimiter strategies.
+ * - **Operation Modes**: Different approaches for building dashboards, such as
+ *   reading from project files, JSON devices, or quick plots.
+ * - **Visualization Widgets**: Enumerations for different widget types
+ * available for groups, datasets, and dashboards.
+ * - **Utility Functions**: Static functions for managing widgets, colors, and
+ *   icon/title associations in dashboards.
  *
- * Key Features
- * - Widget Definitions: Enumerates types and IDs for groups, datasets, and
- *                       dashboard widgets.
- * - Utility Functions: Offers functions for retrieving widget icons, titles,
- *                      and colors based on type.
- * - Centralized Management: Acts as a namespace for widget-related data,
- *                           promoting modular design and maintainability.
+ * @details
+ * This class is highly modular, enabling developers to work with a wide variety
+ * of visualization tools and data handling methods. It supports the
+ * customization of dashboard components and datasets to suit specific
+ * application needs.
  *
- * @note This class is implemented as a namespace-style singleton and does not
- *       manage instance data.
+ * @enums
+ * - **DecoderMethod**: Defines methods for decoding data streams.
+ * - **FrameDetection**: Configures strategies for detecting frames in data
+ *                       streams.
+ * - **OperationMode**: Specifies methods for building dashboards.
+ * - **BusType**: Enumerates the available data sources.
+ * - **GroupWidget**: Lists visualization widget types for groups.
+ * - **DatasetWidget**: Lists visualization widget types for datasets.
+ * - **DashboardWidget**: Enumerates visualization widget types for dashboards.
+ * - **DatasetOption**: Bit-flag options for dataset configurations.
  */
-class WC : public QObject
+class SerialStudio : public QObject
 {
   Q_OBJECT
 
@@ -99,6 +115,56 @@ public:
                             delimiters. */
   };
   Q_ENUM(FrameDetection)
+
+  /**
+   * @enum OperationMode
+   * @brief Specifies the method used to construct a dashboard.
+   *
+   * The `OperationMode` enum defines the strategies for building dashboards
+   * based on the data source or project configuration. Each mode represents
+   * a different approach to interpreting and visualizing the incoming data.
+   */
+  enum OperationMode
+  {
+    ProjectFile, /**< Builds the dashboard using a predefined project file. */
+    DeviceSendsJSON, /**< Builds the dashboard from device-sent JSON. */
+    QuickPlot,       /**< Quick and simple data plotting mode. */
+  };
+  Q_ENUM(OperationMode)
+
+  /**
+   * @enum BusType
+   * @brief Enumerates the available data sources for communication.
+   *
+   * The `BusType` enum defines the supported communication protocols or data
+   * sources used for receiving data streams. Each bus type corresponds to a
+   * specific hardware or network interface.
+   */
+  enum class BusType
+  {
+    Serial,     /**< Serial port communication. */
+    Network,    /**< Network socket communication. */
+    BluetoothLE /**< Bluetooth Low Energy communication. */
+  };
+  Q_ENUM(BusType)
+
+  /**
+   * @enum AxisVisibility
+   * @brief Specifies the visibility options for axes in a plot or
+   * visualization.
+   *
+   * The `AxisVisibility` enum defines bitwise flags to control the visibility
+   * of the X and Y axes in a plot or visualization. These flags allow
+   * fine-grained control over which axes are displayed.
+   */
+  enum AxisVisibility
+  {
+    AxisXY = 0b11,        /**< Both X and Y axes are visible. */
+    AxisX = 0b01,         /**< Only the X axis is visible. */
+    AxisY = 0b10,         /**< Only the Y axis is visible. */
+    NoAxesVisible = 0b00, /**< Neither axis is visible. */
+  };
+  Q_ENUM(AxisVisibility)
 
   /**
    * @brief Enum representing the different widget types available for groups.
