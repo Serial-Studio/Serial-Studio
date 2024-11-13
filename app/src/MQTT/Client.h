@@ -144,6 +144,9 @@ class Client : public QObject
   Q_PROPERTY(QString caFilePath
              READ caFilePath
              NOTIFY caFilePathChanged)
+  Q_PROPERTY(bool isSubscribed
+             READ isSubscribed
+             NOTIFY connectedChanged)
   // clang-format on
 
 signals:

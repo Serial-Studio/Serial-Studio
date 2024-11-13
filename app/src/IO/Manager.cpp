@@ -152,7 +152,7 @@ bool IO::Manager::connected()
   if (driver())
     return driver()->isOpen();
 
-  return MQTT::Client::instance().isSubscribed();
+  return false;
 }
 
 /**

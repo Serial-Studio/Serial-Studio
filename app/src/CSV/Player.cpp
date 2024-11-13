@@ -288,7 +288,7 @@ void CSV::Player::openFile(const QString &filePath)
   if (IO::Manager::instance().connected())
   {
     auto response = Misc::Utilities::showMessageBox(
-        tr("Serial port open, do you want to continue?"),
+        tr("Real-time connection open, do you want to continue?"),
         tr("In order to use this feature, it's necessary "
            "to disconnect from the serial port"),
         qAppName(), QMessageBox::No | QMessageBox::Yes);

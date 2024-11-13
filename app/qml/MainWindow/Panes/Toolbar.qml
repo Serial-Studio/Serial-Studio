@@ -320,7 +320,7 @@ Rectangle {
       font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.minimumWidth: metrics.width + 16
       Layout.maximumWidth: metrics.width + 16
-      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen
+      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !Cpp_MQTT_Client.isSubscribed
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
