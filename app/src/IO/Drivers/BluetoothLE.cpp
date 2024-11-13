@@ -547,7 +547,9 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
     if (descriptor.isValid())
       m_service->writeDescriptor(descriptor, QByteArray::fromHex("0100"));
 
-    // Populate available descriptors
+    // Re-populate available descriptors
+    m_descriptors.clear();
+    m_descriptorNames.clear();
     m_descriptors = c.descriptors();
     for (const auto &descriptor : m_descriptors)
     {
