@@ -26,6 +26,7 @@
 #include "IO/Manager.h"
 #include "Misc/Utilities.h"
 
+#include "CSV/Player.h"
 #include "JSON/ProjectModel.h"
 #include "JSON/FrameBuilder.h"
 
@@ -165,7 +166,6 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
         {
           IO::Manager::instance().setFinishSequence(m_frame.frameEnd());
           IO::Manager::instance().setStartSequence(m_frame.frameStart());
-          IO::Manager::instance().setSeparatorSequence(m_frame.separator());
         }
       }
 
@@ -229,17 +229,14 @@ void JSON::FrameBuilder::setOperationMode(
     case SerialStudio::DeviceSendsJSON:
       IO::Manager::instance().setStartSequence("");
       IO::Manager::instance().setFinishSequence("");
-      IO::Manager::instance().setSeparatorSequence("");
       break;
     case SerialStudio::ProjectFile:
       IO::Manager::instance().setFinishSequence(m_frame.frameEnd());
       IO::Manager::instance().setStartSequence(m_frame.frameStart());
-      IO::Manager::instance().setSeparatorSequence(m_frame.separator());
       break;
     case SerialStudio::QuickPlot:
       IO::Manager::instance().setStartSequence("");
       IO::Manager::instance().setFinishSequence("");
-      IO::Manager::instance().setSeparatorSequence("");
       break;
     default:
       qWarning() << "Invalid operation mode selected" << mode;
@@ -288,31 +285,41 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   // Data is separated and parsed by Serial Studio project
   else if (operationMode() == SerialStudio::ProjectFile && m_frameParser)
   {
-    // Convert binary frame data to a string
-    QString frameData;
-    QString separator;
-    switch (JSON::ProjectModel::instance().decoderMethod())
+    // Real-time data, parse data & perform conversion
+    QStringList fields;
+    if (!CSV::Player::instance().isOpen())
     {
-      case SerialStudio::PlainText:
-        frameData = QString::fromUtf8(data);
-        separator = IO::Manager::instance().separatorSequence();
-        break;
-      case SerialStudio::Hexadecimal:
-        frameData = QString::fromUtf8(data.toHex());
-        separator = "";
-        break;
-      case SerialStudio::Base64:
-        frameData = QString::fromUtf8(data.toBase64());
-        separator = "";
-        break;
-      default:
-        frameData = QString::fromUtf8(data);
-        separator = IO::Manager::instance().separatorSequence();
-        break;
+      // Convert binary frame data to a string
+      QString frameData;
+      QString separator;
+      switch (JSON::ProjectModel::instance().decoderMethod())
+      {
+        case SerialStudio::PlainText:
+          frameData = QString::fromUtf8(data);
+          separator = m_frame.separator();
+          break;
+        case SerialStudio::Hexadecimal:
+          frameData = QString::fromUtf8(data.toHex());
+          separator = "";
+          break;
+        case SerialStudio::Base64:
+          frameData = QString::fromUtf8(data.toBase64());
+          separator = "";
+          break;
+        default:
+          frameData = QString::fromUtf8(data);
+          separator = m_frame.separator();
+          ;
+          break;
+      }
+
+      // Get fields from frame parser function
+      fields = m_frameParser->parse(frameData, separator);
     }
 
-    // Get fields from frame parser function
-    auto fields = m_frameParser->parse(frameData, separator);
+    // CSV data, no need to perform conversions or use frame parser
+    else
+      fields = QString::fromUtf8(data).split(',');
 
     // Replace data in frame
     for (auto g = m_frame.m_groups.begin(); g != m_frame.m_groups.end(); ++g)

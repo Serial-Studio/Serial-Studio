@@ -35,7 +35,6 @@
 IO::Drivers::BluetoothLE::BluetoothLE()
   : m_deviceIndex(-1)
   , m_deviceConnected(false)
-  , m_ignoreFrameSequences(false)
   , m_service(nullptr)
   , m_controller(nullptr)
   , m_discoveryAgent(nullptr)
@@ -252,17 +251,6 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
   // Pair with the BLE device
   m_controller->connectToDevice();
   return true;
-}
-
-/**
- * Returns @c true if the BLE module shall inject received data directly
- * to the IO::Manager as a frame, instead of relying on the frame detection
- * algorithm. This can be useful for characteristics that notify data by sending
- * a single byte.
- */
-bool IO::Drivers::BluetoothLE::ignoreFrameSequences() const
-{
-  return m_ignoreFrameSequences;
 }
 
 /**
@@ -578,18 +566,6 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
 }
 
 /**
- * Enables or disables direct payload injection into the IO::Manager class.
- */
-void IO::Drivers::BluetoothLE::setIgnoreFrameSequences(const bool enabled)
-{
-  if (m_ignoreFrameSequences != enabled)
-  {
-    m_ignoreFrameSequences = enabled;
-    Q_EMIT ignoreFrameSequencesChanged();
-  }
-}
-
-/**
  * Queries and registers the available characteristics for the currently
  * selected service.
  */
@@ -755,15 +731,8 @@ void IO::Drivers::BluetoothLE::onServiceStateChanged(
 void IO::Drivers::BluetoothLE::onCharacteristicChanged(
     const QLowEnergyCharacteristic &info, const QByteArray &value)
 {
-  if (ignoreFrameSequences())
-  {
-    QMetaObject::invokeMethod(
-        this, [=] { IO::Manager::instance().processPayload(value); },
-        Qt::QueuedConnection);
-  }
-
-  else if (m_selectedCharacteristic == -1
-           || info == m_characteristics.at(m_selectedCharacteristic))
-    QMetaObject::invokeMethod(
-        this, [=] { Q_EMIT dataReceived(value); }, Qt::QueuedConnection);
+  const bool anyCharacteristic = (m_selectedCharacteristic == -1);
+  const bool current = (info == m_characteristics.at(m_selectedCharacteristic));
+  if (anyCharacteristic || current)
+    processData(value);
 }

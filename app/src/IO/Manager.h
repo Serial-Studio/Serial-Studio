@@ -33,51 +33,13 @@ namespace IO
 {
 /**
  * @class IO::Manager
- * @brief Centralized manager for I/O operations across multiple communication
- * protocols.
+ * @brief Central manager for I/O operations across multiple protocols.
  *
- * The `IO::Manager` class orchestrates the communication between various
- * devices and protocols, such as serial ports, network connections, and
- * Bluetooth Low Energy (BLE). It acts as the primary interface for configuring,
- * connecting, and interacting with hardware devices, and it manages data
- * transmission and reception efficiently.
+ * Handles communication with devices over Serial, Network, and Bluetooth LE,
+ * managing configuration, connection, and data transfer.
  *
- * Key Features:
- * - **Multiple Bus Types**: Supports Serial, Network, and Bluetooth LE
- *   communication.
- * - **Dynamic Driver Management**: Automatically handles driver initialization,
- *   configuration, and cleanup when switching between bus types.
- * - **Frame Parsing**: Integrates with `FrameReader` to process and parse
- *   incoming data streams based on configurable start and end sequences or
- *   delimiters.
- * - **Thread Safety**: Executes frame processing in a dedicated worker thread,
- *   ensuring responsiveness and isolation from the main application thread.
- * - **Signals**: Emits various signals to notify changes in configuration,
- *   connection state, and data transmission/reception.
- *
- * @signals
- * - `connectedChanged()`: Emitted when the connection state changes.
- * - `driverChanged()`: Emitted when the driver instance is updated.
- * - `configurationChanged()`: Emitted when the configuration settings are
- *   modified.
- * - `dataSent(const QByteArray &data)`: Emitted when data is successfully sent
- *    to the device.
- * - `dataReceived(const QByteArray &data)`: Emitted when raw data is received.
- * - `frameReceived(const QByteArray &frame)`: Emitted when a valid frame is
- *   parsed.
- * - `busTypeChanged()`: Emitted when the bus type is changed.
- * - `startSequenceChanged()`: Emitted when the start sequence for frame
- *   detection is updated.
- * - `finishSequenceChanged()`: Emitted when the finish sequence for frame
- *   detection is updated.
- * - `separatorSequenceChanged()`: Emitted when the separator sequence is
- *   updated.
- * - `writeEnabledChanged()`: Emitted when the write-enabled flag is modified.
- * - `busListChanged()`: Emitted when the list of available buses changes.
- *
- * This class is designed to simplify I/O operations and promote modularity by
- * abstracting low-level driver interactions, making it easy to extend support
- * for additional protocols and devices.
+ * Integrates with `FrameReader` for parsing data streams and ensures
+ * thread-safe operation using a dedicated worker thread.
  */
 class Manager : public QObject
 {
@@ -104,10 +66,6 @@ class Manager : public QObject
              READ finishSequence
              WRITE setFinishSequence
              NOTIFY finishSequenceChanged)
-  Q_PROPERTY(QString separatorSequence
-             READ separatorSequence
-             WRITE setSeparatorSequence
-             NOTIFY separatorSequenceChanged)
   Q_PROPERTY(bool configurationOk
              READ configurationOk
              NOTIFY configurationChanged)
@@ -126,7 +84,6 @@ signals:
   void maxBufferSizeChanged();
   void startSequenceChanged();
   void finishSequenceChanged();
-  void separatorSequenceChanged();
   void dataSent(const QByteArray &data);
   void dataReceived(const QByteArray &data);
   void frameReceived(const QByteArray &frame);
@@ -151,7 +108,6 @@ public:
 
   [[nodiscard]] const QString &startSequence() const;
   [[nodiscard]] const QString &finishSequence() const;
-  [[nodiscard]] const QString &separatorSequence() const;
 
   [[nodiscard]] QStringList availableBuses() const;
   Q_INVOKABLE qint64 writeData(const QByteArray &data);
@@ -165,7 +121,6 @@ public slots:
   void processPayload(const QByteArray &payload);
   void setStartSequence(const QString &sequence);
   void setFinishSequence(const QString &sequence);
-  void setSeparatorSequence(const QString &sequence);
   void setBusType(const SerialStudio::BusType &driver);
 
 private slots:
@@ -181,6 +136,5 @@ private:
 
   QString m_startSequence;
   QString m_finishSequence;
-  QString m_separatorSequence;
 };
 } // namespace IO

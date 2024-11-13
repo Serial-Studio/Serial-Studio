@@ -134,8 +134,13 @@ bool IO::Drivers::Serial::configurationOk() const
 }
 
 /**
- * Writes the given @a data to the serial device and returns the number of bytes
- * written
+ * @brief Writes data to the serial port.
+ *
+ * Sends the provided data to the serial port if it is writable.
+ *
+ * @param data The data to be written to the port.
+ * @return The number of bytes written on success, or `-1` if the port is not
+ *         writable.
  */
 quint64 IO::Drivers::Serial::write(const QByteArray &data)
 {
@@ -146,8 +151,14 @@ quint64 IO::Drivers::Serial::write(const QByteArray &data)
 }
 
 /**
- * Connects to the currently selected serial port device, returns @c true on
- * success
+ * @brief Opens the currently selected serial port with the specified mode.
+ *
+ * This function initializes and configures a serial port based on the current
+ * settings and attempts to open it. If successful, it connects the necessary
+ * signals for data handling and error reporting.
+ *
+ * @param mode The mode in which to open the serial port (e.g., read/write).
+ * @return `true` if the port is successfully opened, `false` otherwise.
  */
 bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
 {
@@ -173,8 +184,8 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
     port()->setFlowControl(flowControl());
 
     // Connect signals/slots
-    connect(port(), SIGNAL(errorOccurred(QSerialPort::SerialPortError)), this,
-            SLOT(handleError(QSerialPort::SerialPortError)));
+    connect(port(), &QSerialPort::errorOccurred, this,
+            &IO::Drivers::Serial::handleError);
 
     // Open device
     if (port()->open(mode))
@@ -412,8 +423,7 @@ void IO::Drivers::Serial::disconnectDevice()
   if (port() != nullptr)
   {
     // Disconnect signals/slots
-    port()->disconnect(this, SLOT(onReadyRead()));
-    port()->disconnect(this, SLOT(handleError(QSerialPort::SerialPortError)));
+    disconnect(port());
 
     // Close & delete serial port handler
     port()->close();
@@ -755,11 +765,7 @@ void IO::Drivers::Serial::handleError(QSerialPort::SerialPortError error)
 void IO::Drivers::Serial::onReadyRead()
 {
   if (isOpen())
-  {
-    QMetaObject::invokeMethod(
-        this, [=] { Q_EMIT dataReceived(port()->readAll()); },
-        Qt::QueuedConnection);
-  }
+    processData(port()->readAll());
 }
 
 /**

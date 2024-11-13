@@ -38,7 +38,7 @@ namespace Drivers
 {
 /**
  * @brief The Serial class
- * Serial Studio driver class to interact with serial port devices.
+ * Serial Studio "driver" class to interact with serial port devices.
  */
 class Serial : public HAL_Driver
 {

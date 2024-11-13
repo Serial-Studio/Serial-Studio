@@ -71,7 +71,6 @@ IO::Manager::Manager()
   , m_driver(nullptr)
   , m_startSequence(QStringLiteral("/*"))
   , m_finishSequence(QStringLiteral("*/"))
-  , m_separatorSequence(QStringLiteral(","))
 {
   // Move the frame parser worker to its dedicated thread
   m_frameReader.moveToThread(&m_workerThread);
@@ -224,18 +223,6 @@ const QString &IO::Manager::finishSequence() const
 }
 
 /**
- * @brief Retrieves the separator sequence used in data streams.
- *
- * The separator sequence is used to delimit values within a frame.
- *
- * @return A reference to the separator sequence string.
- */
-const QString &IO::Manager::separatorSequence() const
-{
-  return m_separatorSequence;
-}
-
-/**
  * @brief Retrieves a list of available bus types.
  *
  * Provides a list of all supported communication mediums, including Serial,
@@ -317,6 +304,8 @@ void IO::Manager::connectDevice()
     {
       connect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
               &FrameReader::processData, Qt::QueuedConnection);
+      connect(driver(), &IO::HAL_Driver::payloadReceived, this,
+              &IO::Manager::processPayload, Qt::QueuedConnection);
     }
 
     // Error opening the device
@@ -342,6 +331,8 @@ void IO::Manager::disconnectDevice()
     // Disconnect bus signals/slots
     disconnect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
                &FrameReader::processData);
+    disconnect(driver(), &IO::HAL_Driver::payloadReceived, this,
+               &IO::Manager::processPayload);
 
     // Close driver device
     driver()->close();
@@ -453,24 +444,6 @@ void IO::Manager::setFinishSequence(const QString &sequence)
       Qt::QueuedConnection);
 
   Q_EMIT finishSequenceChanged();
-}
-
-/**
- * @brief Sets the separator sequence for value delimitation.
- *
- * Configures the sequence that separates values within a frame. If the sequence
- * is empty, a default value (",") is used. Emits a signal to notify about the
- * change.
- *
- * @param sequence The new separator sequence as a QString.
- */
-void IO::Manager::setSeparatorSequence(const QString &sequence)
-{
-  m_separatorSequence = ADD_ESCAPE_SEQUENCES(sequence);
-  if (m_separatorSequence.isEmpty())
-    m_separatorSequence = QStringLiteral(",");
-
-  Q_EMIT separatorSequenceChanged();
 }
 
 /**

@@ -690,7 +690,6 @@ QDateTime CSV::Player::getDateTime(const QString &cell)
 QByteArray CSV::Player::getFrame(const int row)
 {
   QByteArray frame;
-  auto sep = IO::Manager::instance().separatorSequence();
 
   if (m_csvData.count() > row)
   {
@@ -699,7 +698,7 @@ QByteArray CSV::Player::getFrame(const int row)
     {
       frame.append(list[i].toUtf8());
       if (i < list.count() - 1)
-        frame.append(sep.toUtf8());
+        frame.append(',');
       else
         frame.append('\n');
     }

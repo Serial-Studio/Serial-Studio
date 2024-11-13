@@ -43,6 +43,7 @@ Item {
     property alias serialStopBits: serial.stopBits
     property alias serialFlowControl: serial.flowControl
     property alias serialAutoReconnect: serial.autoReconnect
+    property alias serialIgnoreDataDelimeters: serial.ignoreDataDelimeters
 
     property alias networkAddress: network.address
     property alias newtorkTcpPort: network.tcpPort
@@ -50,7 +51,7 @@ Item {
     property alias networkUdpLocalPort: network.udpLocalPort
     property alias networkUdpRemotePort: network.udpRemotePort
     property alias networkUdpMulticastEnabled: network.udpMulticastEnabled
-    property alias networkUdpProcessDatagramsDirectly: network.udpProcessDatagramsDirectly
+    property alias networkIgnoreDataDelimeters: network.ignoreDataDelimeters
 
     property alias bleIgnoreDataDelimeters: bluetoothLE.ignoreDataDelimeters
   }

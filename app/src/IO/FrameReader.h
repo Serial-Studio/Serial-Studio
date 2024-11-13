@@ -38,38 +38,12 @@ enum class ValidationStatus
 
 /**
  * @class IO::FrameReader
- * @brief A multithreaded frame reader for processing streamed data with
- *        flexible frame detection.
+ * @brief Multithreaded frame reader for detecting and processing streamed data.
  *
- * The `FrameReader` class processes incoming data streams by detecting frames
- * based on configurable start and end sequences, or end delimiters. It is
- * designed to handle various operational modes, including quick plotting, JSON
- * streaming, and project file processing.
- *
- * Features include:
- * - Configurable start and end sequences for frame detection.
- * - Support for multiple operation modes:
- *   - `SerialStudio::QuickPlot`: Processes data based on common line
- * delimiters.
- *   - `SerialStudio::DeviceSendsJSON`: Extracts JSON data frames.
- *   - `SerialStudio::ProjectFile`: Uses project-specific detection methods.
- * - Integrity checks using CRC-8, CRC-16, or CRC-32.
- * - Buffer management with a customizable maximum size.
- * - Signal-slot mechanisms for notifying about processed frames and received
- *   data.
- *
- * This class is designed to operate in a multithreaded environment, ensuring
- * thread-safe handling of data streams and synchronization with external
- * components.
- *
- * @note To use `FrameReader`, configure its operational and frame detection
- *       modes and connect to its signals to handle emitted frames.
- *
- * @signals
- * - `frameReady(const QByteArray &frame)`: Emitted when a valid frame is
- *   detected.
- * - `dataReceived(const QByteArray &data)`: Emitted when new raw data is
- *   appended.
+ * Processes incoming data streams by detecting frames using configurable start
+ * and end sequences or delimiters. Supports multiple modes for flexible data
+ * handling, such as quick plotting, JSON extraction, and project-specific
+ * parsing.
  */
 class FrameReader : public QObject
 {

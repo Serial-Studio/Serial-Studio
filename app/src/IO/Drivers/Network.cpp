@@ -36,7 +36,6 @@ IO::Drivers::Network::Network()
   : m_hostExists(false)
   , m_udpMulticast(false)
   , m_lookupActive(false)
-  , m_udpIgnoreFrameSequences(false)
 {
   // Set initial configuration
   setRemoteAddress("");
@@ -149,8 +148,13 @@ bool IO::Drivers::Network::configurationOk() const
 }
 
 /**
- * Writes the given @a data to the network device and returns the number of
- * bytes written
+ * @brief Writes data to the network socket.
+ *
+ * Sends the provided data to the network socket if it is writable.
+ *
+ * @param data The data to be written to the port.
+ * @return The number of bytes written on success, or `-1` if the socket is not
+ *         writable.
  */
 quint64 IO::Drivers::Network::write(const QByteArray &data)
 {
@@ -166,8 +170,14 @@ quint64 IO::Drivers::Network::write(const QByteArray &data)
 }
 
 /**
- * Attempts to make a connection to the given host, port and TCP/UDP socket
- * type. Returns @c true on success, @c false on failure
+ * @brief Opens a network connection with the specified mode.
+ *
+ * Initializes and configures the network socket based on the selected socket
+ * type (TCP or UDP). For TCP, it connects to the remote host, while for UDP,
+ * it binds to the specified local port and joins a multicast group if required.
+ *
+ * @param mode The mode in which to open the network connection.
+ * @return `true` if the connection is successfully opened, `false` otherwise.
  */
 bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 {
@@ -306,15 +316,6 @@ QStringList IO::Drivers::Network::socketTypes() const
 }
 
 /**
- * Returns @c true if the @c IO::Manager should not check for start/end
- * frame sequences when an UDP datagram is received.
- */
-bool IO::Drivers::Network::udpIgnoreFrameSequences() const
-{
-  return m_udpIgnoreFrameSequences;
-}
-
-/**
  * Returns the socket type. Valid return values are:
  *
  * @c QAbstractSocket::TcpSocket
@@ -392,19 +393,6 @@ void IO::Drivers::Network::setRemoteAddress(const QString &address)
 }
 
 /**
- * If @a ignore is set to @c true, then the @c IO::Manager should not check
- * for start/end frame sequences when an UDP datagram is received.
- *
- * Otherwise, the @c IO::Manager shall check for start/end sequences to identify
- * incoming frames.
- */
-void IO::Drivers::Network::setUdpIgnoreFrameSequences(const bool ignore)
-{
-  m_udpIgnoreFrameSequences = ignore;
-  Q_EMIT udpIgnoreFrameSequencesChanged();
-}
-
-/**
  * Performs a DNS lookup for the given @a host name
  */
 void IO::Drivers::Network::lookup(const QString &host)
@@ -466,35 +454,16 @@ void IO::Drivers::Network::onReadyRead()
   {
     while (udpSocket()->hasPendingDatagrams())
     {
-      // Read datagram data
       QByteArray datagram;
       datagram.resize(int(udpSocket()->pendingDatagramSize()));
       udpSocket()->readDatagram(datagram.data(), datagram.size());
-
-      // Add datagram to data buffer
-      if (!udpIgnoreFrameSequences())
-      {
-        QMetaObject::invokeMethod(
-            this, [=] { Q_EMIT dataReceived(datagram); }, Qt::QueuedConnection);
-      }
-
-      // Ingore start/end sequences & process frame directly
-      else
-      {
-        QMetaObject::invokeMethod(
-            this, [=] { IO::Manager::instance().processPayload(datagram); },
-            Qt::QueuedConnection);
-      }
+      processData(datagram);
     }
   }
 
   // We are using the TCP socket...
   else if (socketType() == QAbstractSocket::TcpSocket)
-  {
-    QMetaObject::invokeMethod(
-        this, [=] { Q_EMIT dataReceived(tcpSocket()->readAll()); },
-        Qt::QueuedConnection);
-  }
+    processData(tcpSocket()->readAll());
 }
 
 /**
