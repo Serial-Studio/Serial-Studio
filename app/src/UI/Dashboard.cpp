@@ -43,11 +43,18 @@ UI::Dashboard::Dashboard()
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(); });
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(); });
-  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] { resetData(); });
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); });
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame);
   // clang-format on
 
+  // Reset dashboard data if MQTT client is subscribed
+  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
+          [=] {
+            if (MQTT::Client::instance().isSubscribed())
+              resetData();
+          });
+
+  // Update the dashboard widgets at 24 Hz
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
           [=] {
             if (m_updateRequired)

@@ -27,6 +27,7 @@
 #include "Misc/Utilities.h"
 
 #include "CSV/Player.h"
+#include "MQTT/Client.h"
 #include "JSON/ProjectModel.h"
 #include "JSON/FrameBuilder.h"
 
@@ -285,9 +286,13 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
   // Data is separated and parsed by Serial Studio project
   else if (operationMode() == SerialStudio::ProjectFile && m_frameParser)
   {
+    // Obtain state of the app
+    const bool csvPlaying = CSV::Player::instance().isOpen();
+    const bool mqttSubscribed = MQTT::Client::instance().isSubscribed();
+
     // Real-time data, parse data & perform conversion
     QStringList fields;
-    if (!CSV::Player::instance().isOpen())
+    if (!csvPlaying && !mqttSubscribed)
     {
       // Convert binary frame data to a string
       QString frameData;
@@ -317,9 +322,9 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
       fields = m_frameParser->parse(frameData, separator);
     }
 
-    // CSV data, no need to perform conversions or use frame parser
+    // CSV/MQTT data, no need to perform conversions or use frame parser
     else
-      fields = QString::fromUtf8(data).split(',');
+      fields = QString::fromUtf8(data.simplified()).split(',');
 
     // Replace data in frame
     for (auto g = m_frame.m_groups.begin(); g != m_frame.m_groups.end(); ++g)

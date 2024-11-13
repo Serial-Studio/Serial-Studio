@@ -26,6 +26,7 @@
 #include "IO/Manager.h"
 #include "MQTT/Client.h"
 #include "Misc/Utilities.h"
+#include "JSON/FrameBuilder.h"
 
 //----------------------------------------------------------------------------
 // Suppress deprecated warnings
@@ -59,11 +60,9 @@ MQTT::Client::Client()
   regenerateClient();
 
   // Send data periodically & reset statistics when disconnected/connected to a
-  // device
-  auto io = &IO::Manager::instance();
-  connect(io, &IO::Manager::frameReceived, this, &MQTT::Client::onFrameReceived,
-          Qt::QueuedConnection);
-  connect(io, &IO::Manager::connectedChanged, this,
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
+          this, &MQTT::Client::sendFrame);
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &MQTT::Client::resetStatistics);
 }
 
@@ -587,39 +586,11 @@ void MQTT::Client::setMqttVersion(const int versionIndex)
 }
 
 /**
- * Publishes all the received data to the MQTT broker
- */
-void MQTT::Client::sendData()
-{
-  Q_ASSERT(m_client);
-
-  // Create data byte array
-  QByteArray data;
-  for (int i = 0; i < m_frames.count(); ++i)
-  {
-    data.append(m_frames.at(i));
-    data.append("\n");
-  }
-
-  // Create & send MQTT message
-  if (!data.isEmpty())
-  {
-    QMQTT::Message message(m_sentMessages, topic(), data);
-    m_client->publish(message);
-    ++m_sentMessages;
-  }
-
-  // Clear frame list
-  m_frames.clear();
-}
-
-/**
  * Clears the JSON frames & sets the sent messages to 0
  */
 void MQTT::Client::resetStatistics()
 {
   m_sentMessages = 0;
-  m_frames.clear();
 }
 
 /**
@@ -634,6 +605,61 @@ void MQTT::Client::onConnectedChanged()
     m_client->subscribe(topic());
   else
     m_client->unsubscribe(topic());
+}
+
+/**
+ * @brief Sends a JSON frame as a CSV-like MQTT message.
+ *
+ * Constructs a CSV-like message from the dataset values in the given frame,
+ * ordered by dataset index, and publishes it to the MQTT topic if the client
+ * is connected and in publisher mode.
+ *
+ * @param frame The JSON frame containing the data to be sent.
+ */
+void MQTT::Client::sendFrame(const JSON::Frame &frame)
+{
+  Q_ASSERT(m_client);
+
+  // Ignore if device is not connected
+  if (!IO::Manager::instance().connected())
+    return;
+
+  // Ignore if client is not connected
+  else if (!isConnectedToHost())
+    return;
+
+  // Ignore if mode is not set to publisher
+  else if (clientMode() != ClientPublisher)
+    return;
+
+  // Write frame data in the order of the frame indexes
+  const auto &groups = frame.groups();
+  QMap<int, QString> fieldValues;
+
+  // Iterate through groups and datasets to collect field values
+  for (auto g = groups.constBegin(); g != groups.constEnd(); ++g)
+  {
+    const auto &datasets = g->datasets();
+    for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
+      fieldValues[d->index()] = d->value();
+  }
+
+  // Construct byte array with CSV-like frame with ordered dataset indexes
+  QByteArray data;
+  for (auto it = fieldValues.begin(); it != fieldValues.end(); ++it)
+  {
+    data.append(it.value().toUtf8());
+    if (std::next(it) != fieldValues.end())
+      data.append(',');
+  }
+
+  // Create & send MQTT message
+  if (!data.isEmpty())
+  {
+    QMQTT::Message message(m_sentMessages, topic(), data);
+    m_client->publish(message);
+    ++m_sentMessages;
+  }
 }
 
 /**
@@ -769,28 +795,6 @@ void MQTT::Client::onError(const QMQTT::ClientError error)
 }
 
 /**
- * Registers the given @a frame data to the list of frames that shall be
- * published to the MQTT broker/server
- */
-void MQTT::Client::onFrameReceived(const QByteArray &frame)
-{
-  // Ignore if device is not connected
-  if (!IO::Manager::instance().connected())
-    return;
-
-  // Ignore if mode is not set to publisher
-  else if (clientMode() != ClientPublisher)
-    return;
-
-  // Validate frame & append it to frame list
-  if (!frame.isEmpty())
-  {
-    m_frames.append(frame);
-    sendData();
-  }
-}
-
-/**
  * Displays the SSL errors that occur and allows the user to decide if he/she
  * wants to ignore those errors.
  */
@@ -838,7 +842,9 @@ void MQTT::Client::onMessageReceived(const QMQTT::Message &message)
     mpayld.append('\n');
 
   // Let IO manager process incoming data
-  IO::Manager::instance().processPayload(mpayld);
+  QMetaObject::invokeMethod(
+      this, [=] { IO::Manager::instance().processPayload(mpayld); },
+      Qt::QueuedConnection);
 }
 
 /**

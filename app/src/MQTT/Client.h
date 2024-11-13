@@ -31,6 +31,8 @@
 
 #include <qmqtt.h>
 
+#include "JSON/Frame.h"
+
 namespace MQTT
 {
 /**
@@ -222,12 +224,11 @@ public slots:
   void setMqttVersion(const int versionIndex);
 
 private slots:
-  void sendData();
   void resetStatistics();
   void onConnectedChanged();
+  void sendFrame(const JSON::Frame &frame);
   void lookupFinished(const QHostInfo &info);
   void onError(const QMQTT::ClientError error);
-  void onFrameReceived(const QByteArray &frame);
   void onSslErrors(const QList<QSslError> &errors);
   void onMessageReceived(const QMQTT::Message &message);
 
@@ -242,7 +243,6 @@ private:
   QString m_caFilePath;
   quint16 m_sentMessages;
   MQTTClientMode m_clientMode;
-  QVector<QByteArray> m_frames;
   QPointer<QMQTT::Client> m_client;
   QSslConfiguration m_sslConfiguration;
 };

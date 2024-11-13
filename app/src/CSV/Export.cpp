@@ -134,8 +134,18 @@ void CSV::Export::closeFile()
 }
 
 /**
- * Creates a CSV file based on the JSON frames contained in the JSON list.
- * @note This function is called periodically every 1 second.
+ * @brief Writes frame data to the current CSV file.
+ *
+ * This function writes the data from all stored frames (`m_frames`) to the
+ * currently open CSV file. It ensures that values in each row are written
+ * in the same order as the headers, based on dataset indexes.
+ *
+ * If the file is not open, it creates the CSV file using the first frame and
+ * sets up the headers before writing data. Missing dataset values are replaced
+ * with empty strings.
+ *
+ * After writing, the stream is flushed to ensure the data is saved, and
+ * the frame buffer (`m_frames`) is cleared.
  */
 void CSV::Export::writeValues()
 {
@@ -199,8 +209,17 @@ void CSV::Export::writeValues()
 }
 
 /**
- * Creates a new CSV file corresponding to the current project title & field
- * count
+ * @brief Creates and initializes a new CSV file for exporting frame data.
+ *
+ * This function generates a CSV file in a project-specific directory using the
+ * frame's data and timestamps. The dataset headers are added to the CSV file,
+ * sorted by their indexes, ensuring ordered column headers. If the file cannot
+ * be created or opened, an error message is displayed, and the function returns
+ * an empty vector.
+ *
+ * @param frame The frame containing data and timestamp information.
+ * @return A vector of pairs, each containing a dataset index and its
+ * corresponding header string, sorted by the dataset index.
  */
 QVector<QPair<int, QString>>
 CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)

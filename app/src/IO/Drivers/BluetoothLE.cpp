@@ -553,7 +553,7 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
     m_descriptors = c.descriptors();
     for (const auto &descriptor : m_descriptors)
     {
-      if (!descriptor.name().trimmed().isEmpty())
+      if (!descriptor.name().simplified().isEmpty())
         m_descriptorNames.append(descriptor.name());
       else
         m_descriptorNames.append(descriptor.uuid().toString());
@@ -596,7 +596,7 @@ void IO::Drivers::BluetoothLE::configureCharacteristics()
 
     // Register characteristic
     m_characteristics.append(c);
-    if (!c.name().trimmed().isEmpty())
+    if (!c.name().simplified().isEmpty())
       m_characteristicNames.append(c.name());
     else
       m_characteristicNames.append(c.uuid().toString());
