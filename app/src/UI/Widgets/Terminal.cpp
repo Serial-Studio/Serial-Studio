@@ -181,15 +181,13 @@ void Widgets::Terminal::paint(QPainter *painter)
     // Check if this line is within the selection range
     bool lineFullySelected = !m_selectionEnd.isNull()
                              && i >= m_selectionStart.y()
-                             && i <= m_selectionEnd.y();
+                             && i < m_selectionEnd.y();
 
     // Handle empty lines
     if (line.isEmpty())
     {
       // Draw selection rectangle if required for this line
-      if (lineFullySelected
-          || (!m_selectionEnd.isNull() && i >= m_selectionStart.y()
-              && i <= m_selectionEnd.y()))
+      if (lineFullySelected)
       {
         QRect selectionRect(m_borderX, y, width() - 2 * m_borderX, m_cHeight);
         painter->fillRect(selectionRect, m_palette.color(QPalette::Highlight));
