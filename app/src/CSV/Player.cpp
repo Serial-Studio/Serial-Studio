@@ -32,8 +32,6 @@
 #include "UI/Dashboard.h"
 #include "Misc/Utilities.h"
 
-static QString EMPTY_STRING;
-
 /**
  * Constructor function
  */
@@ -730,6 +728,8 @@ QByteArray CSV::Player::getFrame(const int row)
 const QString &CSV::Player::getCellValue(const int row, const int column,
                                          bool &error)
 {
+  static auto defaultValue = QStringLiteral("");
+
   if (m_csvData.count() > row)
   {
     const auto &list = m_csvData[row];
@@ -741,7 +741,7 @@ const QString &CSV::Player::getCellValue(const int row, const int column,
   }
 
   error = true;
-  return EMPTY_STRING;
+  return defaultValue;
 }
 
 /**
