@@ -288,10 +288,11 @@ QString JSON::ProjectModel::jsonFileName() const
 QString JSON::ProjectModel::jsonProjectsPath() const
 {
   // Get file name and path
-  static QString path
-      = QString("%1/%2/JSON Projects/")
-            .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-              qApp->applicationDisplayName());
+  static QString path = QString("%1/%2/JSON Projects/")
+                            .arg(QStandardPaths::writableLocation(
+                                     QStandardPaths::DocumentsLocation),
+                                 qApp->applicationDisplayName());
+
   // Generate file path if required
   QDir dir(path);
   if (!dir.exists())

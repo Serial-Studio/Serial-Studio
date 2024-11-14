@@ -43,6 +43,10 @@
 CSV::Export::Export()
   : m_exportEnabled(true)
 {
+  m_csvPath = QStringLiteral("%1/%2/CSV")
+                  .arg(QStandardPaths::writableLocation(
+                           QStandardPaths::DocumentsLocation),
+                       qApp->applicationDisplayName());
 }
 
 /**
@@ -99,7 +103,7 @@ void CSV::Export::setupExternalConnections()
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &Export::closeFile);
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &Export::registerFrame);
+          this, &Export::registerFrame, Qt::QueuedConnection);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Export::writeValues);
 }
@@ -239,9 +243,7 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
       = rxTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + ".csv";
 
   // Get path
-  const QString path = QStringLiteral("%1/%2/CSV/%3/")
-                           .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-                                qApp->applicationDisplayName(), data.title());
+  const QString path = QStringLiteral("%1/%2/").arg(m_csvPath, data.title());
 
   // Generate file path if required
   QDir dir(path);
@@ -320,13 +322,14 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
   // Ignore if CSV export is disabled
   if (!exportEnabled())
     return;
-  
+
   // Don't generate a CSV file when we are playing a CSV file
   if (CSV::Player::instance().isOpen())
     return;
 
   // Don't save CSV data when the device/service is not connected
-  if (!IO::Manager::instance().connected() && !MQTT::Client::instance().isSubscribed())
+  if (!IO::Manager::instance().connected()
+      && !MQTT::Client::instance().isSubscribed())
     return;
 
   // Ignore if frame is invalid

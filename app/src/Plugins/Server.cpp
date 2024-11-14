@@ -39,7 +39,7 @@ Plugins::Server::Server()
 
   // Send processed data at 1 Hz
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &Plugins::Server::registerFrame);
+          this, &Plugins::Server::registerFrame, Qt::QueuedConnection);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Plugins::Server::sendProcessedData);
 

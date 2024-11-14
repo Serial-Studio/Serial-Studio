@@ -44,7 +44,7 @@ UI::Dashboard::Dashboard()
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(); });
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(); });
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); });
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame);
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame, Qt::QueuedConnection);
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed

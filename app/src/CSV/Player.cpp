@@ -120,8 +120,9 @@ QString CSV::Player::csvFilesPath() const
 {
   // Get file name and path
   const auto path = QStringLiteral("%1/%2/CSV/")
-                        .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-                          qApp->applicationDisplayName());
+                        .arg(QStandardPaths::writableLocation(
+                                 QStandardPaths::DocumentsLocation),
+                             qApp->applicationDisplayName());
 
   // Generate file path if required
   QDir dir(path);
@@ -348,14 +349,15 @@ void CSV::Player::openFile(const QString &filePath)
       updateData();
       nextFrame();
       Q_EMIT openChanged();
-    } 
+    }
 
     // Handle case where CSV file does not contain at least two frames
-    else 
+    else
     {
       Misc::Utilities::showMessageBox(
-        tr("Insufficient Data in CSV File"),
-        tr("The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again."));
+          tr("Insufficient Data in CSV File"),
+          tr("The CSV file must contain at least two frames (data rows) to "
+             "proceed. Please check the file and try again."));
       closeFile();
     }
   }

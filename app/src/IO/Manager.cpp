@@ -93,6 +93,7 @@ IO::Manager::Manager()
   });
 
   // Start the worker thread
+  m_workerThread.setPriority(QThread::TimeCriticalPriority);
   m_workerThread.start();
 
   // Set default data interface to serial port
