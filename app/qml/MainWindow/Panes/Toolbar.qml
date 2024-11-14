@@ -63,8 +63,8 @@ Rectangle {
   //
   // Set toolbar height
   //
-  Layout.minimumHeight: titlebarHeight + 64 + 12
-  Layout.maximumHeight: titlebarHeight + 64 + 12
+  Layout.minimumHeight: titlebarHeight + 64 + 16
+  Layout.maximumHeight: titlebarHeight + 64 + 16
 
   //
   // Titlebar text
@@ -127,7 +127,7 @@ Rectangle {
   //
   RowLayout {
     id: layout
-    spacing: 8
+    spacing: 4
 
     anchors {
       margins: 2
