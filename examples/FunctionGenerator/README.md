@@ -91,8 +91,6 @@ To visualize the transmitted data:
    - In Serial Studio, click on the **Quick Plot** checkbox in the **Setup** pane.
    - This feature plots numerical values transmitted via UDP in real time.
 
-![Serial Studio Quick Plot](doc/quick_plot.png)
-
 4. **Run the Program**:
    Execute the `udp_function_generator` program. Waveforms will be displayed in Serial Studio's real-time plot.
 
@@ -115,7 +113,7 @@ The program formats the waveform data into a comma-separated string and transmit
 ### Troubleshooting
 
 - **No Waveforms in Serial Studio**: Ensure that the UDP port matches between the program and Serial Studio, and that the **host** is set to `localhost`.
-- **Distorted Waveforms**: Reduce the frequency of the waveforms if they approach the Nyquist limit. The program issues warnings for frequencies near this threshold.
+- **Distorted Waveforms**: Reduce the frequency of the waveforms if they approach the Nyquist limit. The program issues warnings for frequencies near this threshold. If the frequencies are ok, please open a [bug report](https://github.com/Serial-Studio/Serial-Studio/issues/new?assignees=alex-spataru&labels=bug&projects=&template=bug_report.md).
 - **No Data Output**: Ensure the program is running and the network configuration is correct.
 
 ## Examples
