@@ -113,6 +113,7 @@ void CSV::Export::setExportEnabled(const bool enabled)
   if (!exportEnabled() && isOpen())
   {
     m_frames.clear();
+    m_frames.squeeze();
     closeFile();
   }
 }
@@ -160,6 +161,7 @@ void CSV::Export::writeValues()
     if (!isOpen() && exportEnabled())
     {
       indexHeaderPairs.clear();
+      indexHeaderPairs.squeeze();
       indexHeaderPairs = createCsvFile(*i);
     }
 
@@ -184,7 +186,7 @@ void CSV::Export::writeValues()
     {
       const auto &datasets = g->datasets();
       for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
-        fieldValues[d->index()] = d->value();
+        fieldValues[d->index()] = d->value().simplified();
     }
 
     // Write data according to the sorted field order
@@ -207,6 +209,7 @@ void CSV::Export::writeValues()
 
   // Clear frames
   m_frames.clear();
+  m_frames.squeeze();
 }
 
 /**
@@ -273,8 +276,9 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
     {
       if (!datasetIndexes.contains(d->index()))
       {
+        auto header = QString("%1/%2").arg(g->title(), d->title()).simplified();
         datasetIndexes.append(d->index());
-        headers.append(QString("%1/%2").arg(g->title(), d->title()));
+        headers.append(header);
       }
     }
   }

@@ -39,6 +39,7 @@ JSON::Group::Group(const int groupId)
 JSON::Group::~Group()
 {
   m_datasets.clear();
+  m_datasets.squeeze();
 }
 
 /**
@@ -86,6 +87,7 @@ bool JSON::Group::read(const QJsonObject &object)
       m_title = title;
       m_widget = widget;
       m_datasets.clear();
+      m_datasets.squeeze();
 
       for (auto i = 0; i < array.count(); ++i)
       {

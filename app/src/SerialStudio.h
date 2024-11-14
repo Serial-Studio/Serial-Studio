@@ -52,13 +52,14 @@ typedef QVector<Curve> MultipleCurves;
  *
  * Key Features:
  * - **Decoding Methods**: Support for PlainText, Hexadecimal, and Base64
- * decoding.
+ *   decoding.
  * - **Frame Detection**: Configurable methods for detecting data frames in
- * streams, including end-delimiter-only and start-and-end-delimiter strategies.
+ *   streams, including end-delimiter-only and start-and-end-delimiter
+ * strategies.
  * - **Operation Modes**: Different approaches for building dashboards, such as
  *   reading from project files, JSON devices, or quick plots.
  * - **Visualization Widgets**: Enumerations for different widget types
- * available for groups, datasets, and dashboards.
+ *   available for groups, datasets, and dashboards.
  * - **Utility Functions**: Static functions for managing widgets, colors, and
  *   icon/title associations in dashboards.
  *

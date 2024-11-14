@@ -27,6 +27,12 @@
 #include <JSON/Frame.h>
 #include <SerialStudio.h>
 
+// clang-format off
+#define GET_GROUP(type, index) UI::Dashboard::instance().getGroupWidget(type, index)
+#define GET_DATASET(type, index) UI::Dashboard::instance().getDatasetWidget(type, index)
+#define VALIDATE_WIDGET(type, index) (index >= 0 && index < UI::Dashboard::instance().widgetCount(type))
+// clang-format on
+
 namespace UI
 {
 

@@ -118,6 +118,7 @@ void IO::FrameReader::reset()
 {
   m_enableCrc = false;
   m_dataBuffer.clear();
+  m_dataBuffer.squeeze();
   m_dataBuffer.reserve(m_maxBufferSize);
 }
 

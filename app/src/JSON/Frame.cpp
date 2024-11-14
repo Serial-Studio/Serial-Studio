@@ -29,6 +29,9 @@
 JSON::Frame::~Frame()
 {
   m_groups.clear();
+  m_actions.clear();
+  m_groups.squeeze();
+  m_actions.squeeze();
 }
 
 /**
@@ -44,6 +47,8 @@ void JSON::Frame::clear()
 
   m_groups.clear();
   m_actions.clear();
+  m_groups.squeeze();
+  m_actions.squeeze();
 }
 
 /**

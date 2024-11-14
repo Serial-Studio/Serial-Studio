@@ -138,6 +138,7 @@ void Plugins::Server::setEnabled(const bool enabled)
 
   // Clear frames array to avoid memory leaks
   m_frames.clear();
+  m_frames.squeeze();
 }
 
 /**
@@ -250,6 +251,7 @@ void Plugins::Server::sendProcessedData()
 
   // Clear frame list
   m_frames.clear();
+  m_frames.squeeze();
 }
 
 /**

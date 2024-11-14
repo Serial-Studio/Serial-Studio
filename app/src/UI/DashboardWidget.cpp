@@ -85,11 +85,13 @@ int UI::DashboardWidget::relativeIndex() const
  */
 QColor UI::DashboardWidget::widgetColor() const
 {
-  static auto *dash = &UI::Dashboard::instance();
-  if (SerialStudio::isDatasetWidget(m_widgetType))
+  if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex))
   {
-    const auto &dataset = dash->getDatasetWidget(m_widgetType, m_relativeIndex);
-    return QColor(SerialStudio::getDatasetColor(dataset.index()));
+    if (SerialStudio::isDatasetWidget(m_widgetType))
+    {
+      const auto &dataset = GET_DATASET(m_widgetType, m_relativeIndex);
+      return QColor(SerialStudio::getDatasetColor(dataset.index()));
+    }
   }
 
   return QColor::fromRgba(qRgba(0, 0, 0, 0));
@@ -108,17 +110,19 @@ QString UI::DashboardWidget::widgetIcon() const
  */
 QString UI::DashboardWidget::widgetTitle() const
 {
-  static auto *dash = &UI::Dashboard::instance();
-  if (SerialStudio::isDatasetWidget(m_widgetType))
+  if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex))
   {
-    const auto &dataset = dash->getDatasetWidget(m_widgetType, m_relativeIndex);
-    return dataset.title();
-  }
+    if (SerialStudio::isDatasetWidget(m_widgetType))
+    {
+      const auto &dataset = GET_DATASET(m_widgetType, m_relativeIndex);
+      return dataset.title();
+    }
 
-  else if (SerialStudio::isGroupWidget(m_widgetType))
-  {
-    const auto &group = dash->getGroupWidget(m_widgetType, m_relativeIndex);
-    return group.title();
+    else if (SerialStudio::isGroupWidget(m_widgetType))
+    {
+      const auto &group = GET_GROUP(m_widgetType, m_relativeIndex);
+      return group.title();
+    }
   }
 
   return tr("Invalid");

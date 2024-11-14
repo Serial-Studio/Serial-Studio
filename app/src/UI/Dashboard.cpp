@@ -351,8 +351,10 @@ UI::Dashboard::widgetColors(const SerialStudio::DashboardWidget widget)
 bool UI::Dashboard::widgetVisible(const SerialStudio::DashboardWidget widget,
                                   const int index) const
 {
-  Q_ASSERT(index >= 0 && index < m_widgetVisibility[widget].count());
-  return m_widgetVisibility[widget].at(index);
+  if (index >= 0 && index < m_widgetVisibility[widget].count())
+    return m_widgetVisibility[widget].at(index);
+
+  return false;
 }
 
 /**
@@ -511,6 +513,8 @@ void UI::Dashboard::setPoints(const int points)
     m_points = points;
     m_multiplotValues.clear();
     m_linearPlotValues.clear();
+    m_multiplotValues.squeeze();
+    m_linearPlotValues.squeeze();
 
     Q_EMIT pointsChanged();
   }
@@ -523,11 +527,12 @@ void UI::Dashboard::setPoints(const int points)
  */
 void UI::Dashboard::activateAction(const int index)
 {
-  Q_ASSERT(index >= 0 && index < m_actions.count());
-
-  const auto &action = m_actions[index];
-  const auto &data = action.txData() + action.eolSequence();
-  IO::Manager::instance().writeData(data.toUtf8());
+  if (index >= 0 && index < m_actions.count())
+  {
+    const auto &action = m_actions[index];
+    const auto &data = action.txData() + action.eolSequence();
+    IO::Manager::instance().writeData(data.toUtf8());
+  }
 }
 
 /**
@@ -556,10 +561,14 @@ void UI::Dashboard::resetData(const bool notify)
   m_fftPlotValues.clear();
   m_multiplotValues.clear();
   m_linearPlotValues.clear();
+  m_fftPlotValues.squeeze();
+  m_multiplotValues.squeeze();
+  m_linearPlotValues.squeeze();
 
   // Clear widget & action structures
   m_widgetCount = 0;
   m_actions.clear();
+  m_actions.squeeze();
   m_widgetMap.clear();
   m_widgetGroups.clear();
   m_widgetDatasets.clear();
@@ -607,13 +616,14 @@ void UI::Dashboard::setAxisVisibility(const SerialStudio::AxisVisibility option)
 void UI::Dashboard::setWidgetVisible(const SerialStudio::DashboardWidget widget,
                                      const int index, const bool visible)
 {
-  Q_ASSERT(index >= 0 && m_widgetVisibility[widget].count() > index);
-
-  const auto currentValue = m_widgetVisibility[widget][index];
-  if (currentValue != visible)
+  if (index >= 0 && m_widgetVisibility[widget].count() > index)
   {
-    m_widgetVisibility[widget][index] = visible;
-    Q_EMIT widgetVisibilityChanged();
+    const auto currentValue = m_widgetVisibility[widget][index];
+    if (currentValue != visible)
+    {
+      m_widgetVisibility[widget][index] = visible;
+      Q_EMIT widgetVisibilityChanged();
+    }
   }
 }
 

@@ -290,6 +290,7 @@ void IO::Console::save()
 void IO::Console::clear()
 {
   m_textBuffer.clear();
+  m_textBuffer.squeeze();
   m_textBuffer.reserve(MAX_BUFFER_SIZE);
   m_isStartingLine = true;
   m_lastCharWasCR = false;

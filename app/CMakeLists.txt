@@ -232,7 +232,6 @@ target_link_libraries(
  Qt6::QuickControls2
 
  qmqtt
- qtcsv
  QRealFourier
  QSimpleUpdater
  QSourceHighlite

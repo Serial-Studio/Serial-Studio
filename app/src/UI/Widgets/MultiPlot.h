@@ -50,6 +50,17 @@ signals:
 
 public:
   explicit MultiPlot(const int index = -1, QQuickItem *parent = nullptr);
+  ~MultiPlot()
+  {
+    for (auto &curve : m_data)
+    {
+      curve.clear();
+      curve.squeeze();
+    }
+
+    m_data.clear();
+    m_data.squeeze();
+  }
 
   [[nodiscard]] int count() const;
   [[nodiscard]] qreal minX() const;
