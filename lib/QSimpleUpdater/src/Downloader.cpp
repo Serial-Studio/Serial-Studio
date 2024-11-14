@@ -30,6 +30,7 @@
 #include <QNetworkAccessManager>
 
 #include <math.h>
+#include <QStandardPaths>
 
 #include "Downloader.h"
 
@@ -52,7 +53,7 @@ Downloader::Downloader(QWidget *parent)
   m_mandatoryUpdate = false;
 
   /* Set download directory */
-  m_downloadDir.setPath(QDir::homePath() + "/Downloads/");
+  m_downloadDir.setPath(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
 
   /* Make the window look like a modal dialog */
   setWindowIcon(QIcon());
