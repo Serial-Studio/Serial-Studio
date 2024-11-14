@@ -342,12 +342,22 @@ void CSV::Player::openFile(const QString &filePath)
     m_framePos = 0;
     m_csvData.removeFirst();
 
-    // Read first data & Q_EMIT UI signals
-    updateData();
-    Q_EMIT openChanged();
+    // Begin reading data
+    if (m_csvData.count() >= 2)
+    {
+      updateData();
+      nextFrame();
+      Q_EMIT openChanged();
+    } 
 
-    // Play next frame (to force UI to generate groups, graphs & widgets)
-    nextFrame();
+    // Handle case where CSV file does not contain at least two frames
+    else 
+    {
+      Misc::Utilities::showMessageBox(
+        tr("Insufficient Data in CSV File"),
+        tr("The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again."));
+      closeFile();
+    }
   }
 
   // Open error
