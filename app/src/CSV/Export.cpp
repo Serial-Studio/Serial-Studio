@@ -31,6 +31,7 @@
 
 #include "IO/Manager.h"
 #include "CSV/Player.h"
+#include "MQTT/Client.h"
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
 #include "JSON/FrameBuilder.h"
@@ -316,16 +317,20 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
  */
 void CSV::Export::registerFrame(const JSON::Frame &frame)
 {
+  // Ignore if CSV export is disabled
+  if (!exportEnabled())
+    return;
+  
   // Don't generate a CSV file when we are playing a CSV file
   if (CSV::Player::instance().isOpen())
     return;
 
-  // Ignore if frame is invalid
-  if (!frame.isValid())
+  // Don't save CSV data when the device/service is not connected
+  if (!IO::Manager::instance().connected() && !MQTT::Client::instance().isSubscribed())
     return;
 
-  // Ignore if CSV export is disabled
-  if (!exportEnabled())
+  // Ignore if frame is invalid
+  if (!frame.isValid())
     return;
 
   // Register raw frame to list
