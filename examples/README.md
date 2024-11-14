@@ -1,6 +1,8 @@
-# Arduino + Serial Studio Examples
+# Serial Studio Examples
 
-This directory contains various examples demonstrating how to use Serial Studio to visualize data from sensors connected to an Arduino. Each example includes the Arduino code, a README file with setup instructions, and screenshots. Some examples also include Serial Studio project files (`*.json`) to simplify the visualization setup.
+This directory contains various examples demonstrating how to use Serial Studio to visualize data from sensors connected to a microcontroller or another program. Each example includes an Arduino implementation (if required for the project), a README file with setup instructions, and screenshots. 
+
+Some examples also include Serial Studio project files (`*.json`) to simplify the visualization setup.
 
 ## Examples Overview
 
