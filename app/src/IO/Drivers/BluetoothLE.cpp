@@ -227,26 +227,8 @@ bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
   });
 
   // React to disconnection event with BLE device
-  connect(m_controller, &QLowEnergyController::disconnected, this, [this]() {
-    if (m_service)
-    {
-      disconnect(m_service);
-      m_service->deleteLater();
-      m_service = nullptr;
-    }
-
-    if (m_controller)
-    {
-      disconnect(m_controller);
-      m_controller->deleteLater();
-      m_controller = nullptr;
-    }
-
-    m_deviceConnected = false;
-
-    Q_EMIT deviceConnectedChanged();
-    Q_EMIT error(tr("The BLE device has been disconnected"));
-  });
+  connect(m_controller, &QLowEnergyController::disconnected, this,
+          &IO::Drivers::BluetoothLE::close);
 
   // Pair with the BLE device
   m_controller->connectToDevice();
