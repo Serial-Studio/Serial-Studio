@@ -78,6 +78,7 @@ Widgets.Pane {
     category: "Dashboard"
     property alias points: plotPoints.value
     property alias columns: columns.value
+    property alias showLegends: legends.checked
     property alias decimalPlaces: decimalPlaces.value
     property alias axisOptions: axisVisibility.currentIndex
   }
@@ -323,6 +324,7 @@ Widgets.Pane {
             text: qsTr("Show Legends")
             visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
           } CheckBox {
+            id: legends
             Layout.leftMargin: -8
             Layout.alignment: Qt.AlignLeft
             checked: Cpp_UI_Dashboard.showLegends
