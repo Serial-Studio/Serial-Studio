@@ -68,6 +68,7 @@ class Dashboard : public QObject
   Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY widgetCountChanged)
   Q_PROPERTY(int precision READ precision WRITE setPrecision NOTIFY precisionChanged)
   Q_PROPERTY(bool pointsWidgetVisible READ pointsWidgetVisible NOTIFY widgetCountChanged)
+  Q_PROPERTY(bool showLegends READ showLegends WRITE setShowLegends NOTIFY showLegendsChanged)
   Q_PROPERTY(bool precisionWidgetVisible READ precisionWidgetVisible NOTIFY widgetCountChanged)
   Q_PROPERTY(bool axisOptionsWidgetVisible READ axisOptionsWidgetVisible NOTIFY widgetCountChanged)
   Q_PROPERTY(QStringList availableWidgetIcons READ availableWidgetIcons NOTIFY widgetCountChanged)
@@ -81,6 +82,7 @@ signals:
   void dataReset();
   void pointsChanged();
   void precisionChanged();
+  void showLegendsChanged();
   void actionCountChanged();
   void widgetCountChanged();
   void axisVisibilityChanged();
@@ -99,6 +101,7 @@ public:
                              const qreal multiplier = 0.2);
 
   [[nodiscard]] bool available() const;
+  [[nodiscard]] bool showLegends() const;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool precisionWidgetVisible() const;
   [[nodiscard]] bool axisOptionsWidgetVisible() const;
@@ -143,6 +146,7 @@ public slots:
   void setPoints(const int points);
   void activateAction(const int index);
   void setPrecision(const int precision);
+  void setShowLegends(const bool enabled);
   void resetData(const bool notify = true);
   void setAxisVisibility(const SerialStudio::AxisVisibility option);
   void setWidgetVisible(const SerialStudio::DashboardWidget widget,
@@ -156,6 +160,7 @@ private:
   int m_points;
   int m_precision;
   int m_widgetCount;
+  bool m_showLegends;
   bool m_updateRequired;
   SerialStudio::AxisVisibility m_axisVisibility;
 

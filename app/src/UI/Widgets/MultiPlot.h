@@ -36,6 +36,7 @@ class MultiPlot : public QQuickItem
   Q_OBJECT
   Q_PROPERTY(qreal count READ count CONSTANT)
   Q_PROPERTY(QString yLabel READ yLabel CONSTANT)
+  Q_PROPERTY(QStringList labels READ labels CONSTANT)
   Q_PROPERTY(qreal minX READ minX NOTIFY rangeChanged)
   Q_PROPERTY(qreal maxX READ maxX NOTIFY rangeChanged)
   Q_PROPERTY(qreal minY READ minY NOTIFY rangeChanged)
@@ -71,6 +72,7 @@ public:
   [[nodiscard]] qreal yTickInterval() const;
   [[nodiscard]] const QString &yLabel() const;
   [[nodiscard]] const QStringList &colors() const;
+  [[nodiscard]] const QStringList &labels() const;
 
 public slots:
   void draw(QLineSeries *series, const int index);
@@ -89,6 +91,7 @@ private:
   qreal m_maxY;
   QString m_yLabel;
   QStringList m_colors;
+  QStringList m_labels;
   QVector<QVector<QPointF>> m_data;
 };
 } // namespace Widgets

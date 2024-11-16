@@ -46,6 +46,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
     m_maxY = std::numeric_limits<double>::lowest();
     for (const auto &dataset : group.datasets())
     {
+      m_labels.append(dataset.title());
       m_minY = qMin(m_minY, dataset.min());
       m_maxY = qMax(m_maxY, dataset.max());
     }
@@ -154,6 +155,15 @@ const QString &Widgets::MultiPlot::yLabel() const
 const QStringList &Widgets::MultiPlot::colors() const
 {
   return m_colors;
+}
+
+/**
+ * @brief Returns the labels of the datasets.
+ * @return The labels of the datasets.
+ */
+const QStringList &Widgets::MultiPlot::labels() const
+{
+  return m_labels;
 }
 
 /**

@@ -71,8 +71,6 @@ Item {
     marginLeft: root.yLabelVisible ? -8 : (root.xLabelVisible ? -40 : -60)
     marginBottom: root.xLabelVisible ? -8 : (root.yLabelVisible ? -20 : -40)
 
-
-
     //
     // Set plot colors
     //

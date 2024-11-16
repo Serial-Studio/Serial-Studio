@@ -37,6 +37,7 @@ UI::Dashboard::Dashboard()
   : m_points(100)
   , m_precision(2)
   , m_widgetCount(0)
+  , m_showLegends(true)
   , m_updateRequired(false)
   , m_axisVisibility(SerialStudio::AxisXY)
 {
@@ -149,6 +150,15 @@ qreal UI::Dashboard::smartInterval(const qreal min, const qreal max,
 bool UI::Dashboard::available() const
 {
   return totalWidgetCount() > 0;
+}
+
+/**
+ * @brief Returns @c true whenever the user has enabled the option to show
+ *        legends in multiplot widgets.
+ */
+bool UI::Dashboard::showLegends() const
+{
+  return m_showLegends;
 }
 
 /**
@@ -547,6 +557,21 @@ void UI::Dashboard::setPrecision(const int precision)
   {
     m_precision = precision;
     Q_EMIT precisionChanged();
+  }
+}
+
+/**
+ * @brief Instructs multiplot widgets to display (or hide) the legend labels
+ *        for each one of the curves that it contains.
+ *
+ * @param enabled The new enabled setting.
+ */
+void UI::Dashboard::setShowLegends(const bool enabled)
+{
+  if (m_showLegends != enabled)
+  {
+    m_showLegends = enabled;
+    Q_EMIT showLegendsChanged();
   }
 }
 

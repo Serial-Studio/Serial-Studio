@@ -241,6 +241,8 @@ Widgets.Pane {
                    Cpp_UI_Dashboard.totalWidgetCount > 1
         }
 
+
+
         //
         // Visualization controls
         //
@@ -313,7 +315,31 @@ Widgets.Pane {
             text: Math.round(columns.value)
             visible: Cpp_UI_Dashboard.totalWidgetCount > 1
           }
+
+          //
+          // Show Legends
+          //
+          Label {
+            text: qsTr("Show Legends")
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
+          } CheckBox {
+            Layout.leftMargin: -8
+            Layout.alignment: Qt.AlignLeft
+            checked: Cpp_UI_Dashboard.showLegends
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
+            onCheckedChanged: {
+              if (checked !== Cpp_UI_Dashboard.showLegends)
+                Cpp_UI_Dashboard.showLegends = checked
+            }
+          } Item {
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
+          }
         }
+
+        //
+        // Show Legends
+        //
+
 
         //
         // Spacer
