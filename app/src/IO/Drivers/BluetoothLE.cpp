@@ -82,7 +82,7 @@ void IO::Drivers::BluetoothLE::close()
   if (m_service)
   {
     disconnect(m_service);
-    m_service->deleteLater();
+    delete m_service;
     m_service = nullptr;
   }
 
@@ -90,10 +90,9 @@ void IO::Drivers::BluetoothLE::close()
   if (m_controller)
   {
     disconnect(m_controller);
-    if (m_controller->state() != QLowEnergyController::UnconnectedState)
-      m_controller->disconnectFromDevice();
+    m_controller->disconnectFromDevice();
 
-    m_controller->deleteLater();
+    delete m_controller;
     m_controller = nullptr;
   }
 
