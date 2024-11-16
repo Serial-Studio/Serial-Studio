@@ -34,6 +34,7 @@
  */
 IO::Drivers::BluetoothLE::BluetoothLE()
   : m_deviceIndex(-1)
+  , m_filterIndex(-1)
   , m_deviceConnected(false)
   , m_service(nullptr)
   , m_controller(nullptr)
@@ -44,6 +45,12 @@ IO::Drivers::BluetoothLE::BluetoothLE()
           &IO::Drivers::BluetoothLE::configurationChanged);
   connect(this, &IO::Drivers::BluetoothLE::deviceConnectedChanged,
           &IO::Manager::instance(), &IO::Manager::connectedChanged);
+
+  // Init Filter types
+  m_filterTypes.append(tr("Mac Address"));
+  m_filterTypes.append(tr("Device Name"));
+  m_filterTypes.append(tr("Service Name"));
+
 }
 
 /**
@@ -215,6 +222,14 @@ QStringList IO::Drivers::BluetoothLE::serviceNames() const
   return list;
 }
 
+QStringList IO::Drivers::BluetoothLE::filterTypes() const
+{
+  QStringList list;
+  list.append(tr("Filter By"));
+  list.append(m_filterTypes);
+  return list;
+}
+
 /**
  * Returns @c false on macOS Monterey, for more info, please check this link:
  * https://forum.qt.io/topic/132285/mac-os-sdk12-not-working-with-qt-bluetooth
@@ -354,6 +369,11 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
     if (!m_service)
       Q_EMIT error(tr("Error while configuring BLE service"));
   }
+}
+
+void IO::Drivers::BluetoothLE::selectFilter(const int index)
+{
+  m_filterIndex = index;
 }
 
 /**

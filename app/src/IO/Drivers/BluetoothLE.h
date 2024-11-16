@@ -49,6 +49,9 @@ class BluetoothLE : public HAL_Driver
   Q_PROPERTY(QStringList serviceNames
              READ serviceNames
              NOTIFY servicesChanged)
+  Q_PROPERTY(QStringList filterTypes
+             READ filterTypes
+             NOTIFY filterChanged)
   Q_PROPERTY(int deviceIndex
              READ deviceIndex
              WRITE selectDevice
@@ -64,6 +67,7 @@ class BluetoothLE : public HAL_Driver
 signals:
   void devicesChanged();
   void servicesChanged();
+  void filterChanged();
   void deviceIndexChanged();
   void deviceConnectedChanged();
   void error(const QString &message);
@@ -91,12 +95,14 @@ public:
   [[nodiscard]] int deviceIndex() const;
   [[nodiscard]] QStringList deviceNames() const;
   [[nodiscard]] QStringList serviceNames() const;
+  [[nodiscard]] QStringList filterTypes() const;
   [[nodiscard]] bool operatingSystemSupported() const;
 
 public slots:
   void startDiscovery();
   void selectDevice(const int index);
   void selectService(const int index);
+  void selectFilter(const int index);
 
 private slots:
   void configureCharacteristics();
@@ -110,6 +116,7 @@ private slots:
 
 private:
   int m_deviceIndex;
+  int m_filterIndex;
   bool m_deviceConnected;
 
   QLowEnergyService *m_service;
@@ -117,6 +124,7 @@ private:
 
   QStringList m_deviceNames;
   QStringList m_serviceNames;
+  QStringList m_filterTypes;
   QList<QBluetoothDeviceInfo> m_devices;
   QBluetoothDeviceDiscoveryAgent *m_discoveryAgent;
 };

@@ -39,6 +39,34 @@ Item {
     //
     // Device selector + refresh button
     //
+    ColumnLayout {
+      RowLayout {
+          spacing:4
+
+          Label {
+            id:filterLabel
+            text: qsTr("Filter")+":"
+            Layout.minimumWidth: Math.max(filterLabel.implicitWidth, filterLabel.implicitWidth)
+          }
+
+          ComboBox {
+            id:filterComboBox
+            Layout.fillWidth: true
+            model:Cpp_IO_Bluetooth_LE.filterTypes
+            onCurrentIndexChanged: {
+              Cpp_IO_Bluetooth_LE.selectFilter(currentIndex)
+            }
+          }
+      }
+
+      TextInput {
+          id:filterStr
+          text:""
+          Layout.fillWidth: true
+          Layout.leftMargin: Math.max(filterLabel.implicitWidth, filterLabel.implicitWidth)
+      }
+    }
+
     RowLayout {
       spacing: 4
       visible: opacity > 0
