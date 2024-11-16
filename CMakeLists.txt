@@ -58,26 +58,84 @@ add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 # Compiler flags
 #-------------------------------------------------------------------------------
 
+#
+# MinGW-specific settings
+#
 if(WIN32 AND MINGW)
- set(CMAKE_CXX_FLAGS_RELEASE "-O2 -Wall -Wextra")
- set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-Wl,--gc-sections")
- #set(CMAKE_CXX_FLAGS_DEBUG "-g -fsanitize=address -Wall -Wextra")
- #set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-fsanitize=address")
-elseif (WIN32 AND MSVC)
- set(CMAKE_CXX_FLAGS_RELEASE "/O2 /W3 /GL /Zi /MT")
- set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/OPT:REF /OPT:ICF /LTCG /DEBUG")
- #set(CMAKE_CXX_FLAGS_DEBUG "/Zi /W3 /MTd /fsanitize=address")
- #set(CMAKE_LINKER_FLAGS_DEBUG "/DEBUG /fsanitize=address")
+ add_compile_options(
+  -O2                  # Optimize for speed
+  -Wall                # Enable most warning messages
+  -Wextra              # Enable additional warning messages
+  -fuse-linker-plugin  # Use LTO plugin to enable link-time optimization
+ )
+ add_link_options(
+  -Wl,--gc-sections    # Remove unused sections during linking
+  -fuse-linker-plugin  # Enable LTO during linking
+ )
+
+ # Uncomment if needed for debugging
+ # add_compile_options(-g -fsanitize=address)  # Enable debugging and Address Sanitizer
+ # add_link_options(-fsanitize=address)        # Link with Address Sanitizer
+
+#
+# MSVC-specific settings
+#
+elseif(WIN32 AND MSVC)
+ add_compile_options(
+  /permissive-           # Enable strict ISO compliance, disable MSVC extensions
+  /Zc:__cplusplus        # Correct __cplusplus value to reflect the C++ standard
+  /Zc:preprocessor       # Enable standards-conforming preprocessor
+  /MP                    # Multi-processor compilation for faster builds
+  /vmg                   # Use general pointer-to-member representation
+  /O2                    # Optimize for speed
+  /W3                    # Warning level 3 (reasonable warnings without being too verbose)
+  /GL                    # Enable whole program optimization
+  /Zi                    # Generate debugging information in PDB files
+  /MT                    # Use static runtime libraries
+ )
+ add_link_options(
+  /OPT:REF               # Remove unreferenced functions/data
+  /OPT:ICF               # Remove identical COMDATs to reduce binary size
+  /LTCG                  # Link-time code generation for further optimization
+  /DEBUG                 # Generate debugging information in the output binary
+ )
+
+ # Uncomment if needed for debugging with Address Sanitizer
+ # add_compile_options(/fsanitize=address)    # Enable Address Sanitizer
+ # add_link_options(/fsanitize=address)       # Link with Address Sanitizer
+
+#
+# macOS-specific settings
+#
 elseif(APPLE)
- set(CMAKE_CXX_FLAGS_RELEASE "-O2 -Wall -Wextra")
- set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-Wl,-dead_strip")
- #set(CMAKE_CXX_FLAGS_DEBUG "-g -fsanitize=address -Wall -Wextra")
- #set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-fsanitize=address")
+ add_compile_options(
+  -O2                  # Optimize for speed
+  -Wall                # Enable most warning messages
+  -Wextra              # Enable additional warning messages
+ )
+ add_link_options(
+  -Wl,-dead_strip      # Remove unused code and data during linking
+ )
+ # Uncomment if needed for debugging
+ # add_compile_options(-g -fsanitize=address)  # Enable debugging and Address Sanitizer
+ # add_link_options(-fsanitize=address)        # Link with Address Sanitizer
+
+#
+# Generic UNIX/Linux settings
+#
 elseif(UNIX)
- set(CMAKE_CXX_FLAGS_RELEASE "-O2 -Wall -Wextra")
- set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-Wl,--gc-sections")
- #set(CMAKE_CXX_FLAGS_DEBUG "-g -fsanitize=address -Wall -Wextra")
- #set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-fsanitize=address")
+ add_compile_options(
+  -O2                  # Optimize for speed
+  -Wall                # Enable most warning messages
+  -Wextra              # Enable additional warning messages
+ )
+ add_link_options(
+  -Wl,--gc-sections    # Remove unused sections during linking
+ )
+
+ # Uncomment if needed for debugging
+ # add_compile_options(-g -fsanitize=address)  # Enable debugging and Address Sanitizer
+ # add_link_options(-fsanitize=address)        # Link with Address Sanitizer
 endif()
 
 if (UNIX AND NOT APPLE)
