@@ -337,11 +337,6 @@ Widgets.Pane {
         }
 
         //
-        // Show Legends
-        //
-
-
-        //
         // Spacer
         //
         Item {
