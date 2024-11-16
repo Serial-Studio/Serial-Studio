@@ -96,38 +96,49 @@ Item {
       Rectangle {
         width: parent.width
         anchors.centerIn: parent
-        height: _legends.implicitHeight + 8
+        height: Math.min(_legends.implicitHeight + 8, parent.height)
 
         border.width: 1
         color: Cpp_ThemeManager.colors["widget_base"]
         border.color: Cpp_ThemeManager.colors["widget_border"]
 
-        ColumnLayout {
-          id: _legends
-          spacing: 4
+        Flickable {
+          clip: true
           anchors.margins: 4
+          contentWidth: width
           anchors.fill: parent
+          contentHeight: _legends.implicitHeight
 
-          Repeater {
-            model: root.model.count
-            delegate: RowLayout {
-              id: _label
-              spacing: 4
-              Layout.fillWidth: true
+          ScrollBar.vertical: ScrollBar {
+            id: scroll
+          }
 
-              Rectangle {
-                width: 14
-                height: 14
-                color: root.model.colors[index]
-                Layout.alignment: Qt.AlignVCenter
-              }
+          ColumnLayout {
+            id: _legends
+            spacing: 4
+            width: parent.width
 
-              Label {
-                elide: Qt.ElideMiddle
-                text: root.model.labels[index]
-                Layout.alignment: Qt.AlignVCenter
-                font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
-                Layout.maximumWidth: 128 - 14 - 8
+            Repeater {
+              model: root.model.count
+              delegate: RowLayout {
+                id: _label
+                spacing: 4
+                Layout.fillWidth: true
+
+                Rectangle {
+                  width: 14
+                  height: 14
+                  color: root.model.colors[index]
+                  Layout.alignment: Qt.AlignVCenter
+                }
+
+                Label {
+                  elide: Qt.ElideMiddle
+                  text: root.model.labels[index]
+                  Layout.alignment: Qt.AlignVCenter
+                  font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
+                  Layout.maximumWidth: 128 - 14 - 8
+                }
               }
             }
           }
