@@ -40,18 +40,17 @@ The waveforms can be used for:
 
 ### 1. Compile the Program
 
-To compile the program, use the following command:
+To compile the program in UNIX systems, use the following command:
 
 ```bash
 gcc -o udp_function_generator udp_function_generator.c -lm
 ```
 
-You can also simply type:
+On Windows, you will need to use:
 
 ```bash
-make udp_function_generator
+gcc -o udp_function_generator udp_function_generator.c -lws2_32 -lm
 ```
-
 
 ### 2. Run the Program
 

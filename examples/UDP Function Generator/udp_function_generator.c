@@ -35,8 +35,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
+
+#ifdef _WIN32
+#  include <winsock2.h>
+#  include <windows.h>
+#  pragma comment(lib, "ws2_32.lib")
+#else
+#  include <time.h>
+#  include <unistd.h>
+#  include <arpa/inet.h>
+#endif
 
 #define MAX_BUFFER_SIZE 128
 #define TWO_PI 6.28318530718
@@ -55,10 +63,14 @@
  */
 void sleep_ms(double milliseconds)
 {
+#ifdef _WIN32
+  Sleep((DWORD)(milliseconds));
+#else
   struct timespec ts;
   ts.tv_sec = (time_t)(milliseconds / 1000);
   ts.tv_nsec = (long)((milliseconds - (ts.tv_sec * 1000)) * 1e6);
   nanosleep(&ts, NULL);
+#endif
 }
 
 /**
@@ -159,6 +171,59 @@ void validate_frequency(float frequency, double send_interval_ms)
 }
 
 /**
+ * @brief Parses command-line arguments and configures program settings.
+ *
+ * This function processes command-line arguments passed to the program
+ * and updates the provided variables for UDP port, send interval, number
+ * of waveforms, and verbose mode based on the user's input. If invalid or
+ * incomplete arguments are detected, the function prints an error message
+ * and terminates the program.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv The array of command-line argument strings.
+ * @param udp_port Pointer to an integer where the UDP port will be stored.
+ * @param send_interval_ms Pointer to a double where the send interval in
+ *                         milliseconds will be stored.
+ * @param num_functions Pointer to an integer where the number of waveforms
+ *                      will be stored.
+ * @param verbose Pointer to an integer where the verbose flag will be stored
+ *                (1 for enabled, 0 for disabled).
+ */
+void parse_arguments(int argc, char *argv[], int *udp_port,
+                     double *send_interval_ms, int *num_functions, int *verbose)
+{
+  for (int i = 1; i < argc; i++)
+  {
+    if (strcmp(argv[i], "-p") == 0 && i + 1 < argc)
+      *udp_port = atoi(argv[++i]);
+
+    else if (strcmp(argv[i], "-i") == 0 && i + 1 < argc)
+      *send_interval_ms = atof(argv[++i]);
+
+    else if (strcmp(argv[i], "-n") == 0 && i + 1 < argc)
+    {
+      *num_functions = atoi(argv[++i]);
+      if (*num_functions < 1)
+      {
+        fprintf(stderr, "Number of functions must be at least 1\n");
+        exit(1);
+      }
+    }
+
+    else if (strcmp(argv[i], "-v") == 0)
+      *verbose = 1;
+
+    else
+    {
+      fprintf(stderr,
+              "Usage: %s [-p port] [-i interval] [-n num_functions] [-v]\n",
+              argv[0]);
+      exit(1);
+    }
+  }
+}
+
+/**
  * @brief Main program entry point.
  *
  * This function parses command-line arguments, collects user input for
@@ -171,41 +236,21 @@ void validate_frequency(float frequency, double send_interval_ms)
  */
 int main(int argc, char *argv[])
 {
-  int udp_port = DEFAULT_UDP_PORT;
-  int num_functions = DEFAULT_NUM_FUNCTIONS;
-  double send_interval_ms = DEFAULT_SEND_INTERVAL_MS;
+#ifdef _WIN32
+  WSADATA wsa_data;
+  if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0)
+  {
+    fprintf(stderr, "WSAStartup failed\n");
+    return 1;
+  }
+#endif
 
   // Parse command-line arguments
-  int opt;
-  int verbose = 0;
-  while ((opt = getopt(argc, argv, "p:i:n:v")) != -1)
-  {
-    switch (opt)
-    {
-      case 'p':
-        udp_port = atoi(optarg);
-        break;
-      case 'i':
-        send_interval_ms = atof(optarg);
-        break;
-      case 'n':
-        num_functions = atoi(optarg);
-        if (num_functions < 1)
-        {
-          fprintf(stderr, "Number of functions must be at least 1\n");
-          return 1;
-        }
-        break;
-      case 'v':
-        verbose = 1;
-        break;
-      default:
-        fprintf(stderr,
-                "Usage: %s [-p port] [-i interval] [-n num_functions]\n",
-                argv[0]);
-        return 1;
-    }
-  }
+  double send_interval_ms = DEFAULT_SEND_INTERVAL_MS;
+  int udp_port = DEFAULT_UDP_PORT, num_functions = DEFAULT_NUM_FUNCTIONS,
+      verbose = 0;
+  parse_arguments(argc, argv, &udp_port, &send_interval_ms, &num_functions,
+                  &verbose);
 
   print_tutorial();
   printf("Program started with the following options:\n");
@@ -243,10 +288,17 @@ int main(int argc, char *argv[])
   }
 
   // Create UDP socket
+#ifdef _WIN32
+  int sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+#else
   int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+#endif
   if (sockfd < 0)
   {
     perror("Socket creation failed");
+#ifdef _WIN32
+    WSACleanup();
+#endif
     return 1;
   }
 
@@ -303,9 +355,14 @@ int main(int argc, char *argv[])
     // clang-format on
     if (sent_bytes < 0)
     {
+#ifdef _WIN32
+      fprintf(stderr, "Send failed: %d\n", WSAGetLastError());
+      closesocket(sockfd);
+      WSACleanup();
+#else
       perror("Send failed");
       close(sockfd);
-      return 1;
+#endif
     }
 
     // Optionally print the generated data
@@ -316,6 +373,11 @@ int main(int argc, char *argv[])
     sleep_ms(send_interval_ms);
   }
 
+#ifdef _WIN32
+  closesocket(sockfd);
+  WSACleanup();
+#else
   close(sockfd);
+#endif
   return 0;
 }
