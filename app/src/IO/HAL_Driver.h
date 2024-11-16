@@ -138,15 +138,17 @@ protected:
    */
   void processData(const QByteArray &data)
   {
+    QByteArray dataCopy(data);
     if (!ignoreDataDelimeters())
     {
       QMetaObject::invokeMethod(
-          this, [=] { Q_EMIT dataReceived(data); }, Qt::QueuedConnection);
+          this, [=] { Q_EMIT dataReceived(dataCopy); }, Qt::QueuedConnection);
     }
     else
     {
       QMetaObject::invokeMethod(
-          this, [=] { Q_EMIT payloadReceived(data); }, Qt::QueuedConnection);
+          this, [=] { Q_EMIT payloadReceived(dataCopy); },
+          Qt::QueuedConnection);
     }
   }
 
