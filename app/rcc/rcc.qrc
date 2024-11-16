@@ -260,5 +260,6 @@
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
         <file>images/spinner.svg</file>
+        <file>icons/buttons/media-stop.svg</file>
     </qresource>
 </RCC>

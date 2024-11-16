@@ -146,6 +146,9 @@ const QString &CSV::Player::timestamp() const
  */
 void CSV::Player::play()
 {
+  if (m_framePos >= frameCount() - 1)
+    m_framePos = 0;
+
   m_playing = true;
   Q_EMIT playerStateChanged();
 }
@@ -165,8 +168,10 @@ void CSV::Player::pause()
  */
 void CSV::Player::toggle()
 {
-  m_playing = !m_playing;
-  Q_EMIT playerStateChanged();
+  if (m_playing)
+    pause();
+  else
+    play();
 }
 
 /**
@@ -347,7 +352,6 @@ void CSV::Player::openFile(const QString &filePath)
     if (m_csvData.count() >= 2)
     {
       updateData();
-      nextFrame();
       Q_EMIT openChanged();
     }
 
@@ -417,7 +421,7 @@ void CSV::Player::setProgress(const qreal progress)
     pause();
 
   // Calculate new frame position based on progress
-  int newFramePos = qCeil(frameCount() * validProgress);
+  int newFramePos = qMin(frameCount() - 1, qCeil(frameCount() * validProgress));
 
   // Only process if position changes
   if (newFramePos != m_framePos)
@@ -460,18 +464,16 @@ void CSV::Player::updateData()
   if (!error)
   {
     m_timestamp = timestamp;
+    IO::Manager::instance().processPayload(getFrame(framePosition()));
     Q_EMIT timestampChanged();
   }
 
-  // Construct frame from CSV and send it to the IO manager
-  IO::Manager::instance().processPayload(getFrame(framePosition() + 1));
-
   // If the user wants to 'play' the CSV, get time difference between this
   // frame and the next frame & schedule an automated update
-  if (isPlaying())
+  if (!error && isPlaying())
   {
     // Get first frame
-    if (framePosition() < frameCount())
+    if (framePosition() < frameCount() - 1)
     {
       // Obtain time for current & next frame
       auto currTime = getDateTime(framePosition());

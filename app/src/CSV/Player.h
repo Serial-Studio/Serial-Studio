@@ -45,6 +45,12 @@ class Player : public QObject
   Q_PROPERTY(qreal progress
              READ progress
              NOTIFY timestampChanged)
+  Q_PROPERTY(qreal frameCount
+             READ frameCount
+             NOTIFY playerStateChanged)
+  Q_PROPERTY(qreal framePosition
+             READ framePosition
+             NOTIFY timestampChanged)
   Q_PROPERTY(bool isPlaying
              READ isPlaying
              NOTIFY playerStateChanged)

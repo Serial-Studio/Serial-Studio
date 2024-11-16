@@ -206,7 +206,7 @@ Window {
           onClicked: Cpp_CSV_Player.previousFrame()
           icon.source: "qrc:/rcc/icons/buttons/media-prev.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          enabled: Cpp_CSV_Player.progress > 0 && !Cpp_CSV_Player.isPlaying
+          enabled: Cpp_CSV_Player.framePosition > 0 && !Cpp_CSV_Player.isPlaying
         }
 
         Button {
@@ -215,8 +215,10 @@ Window {
           onClicked: Cpp_CSV_Player.toggle()
           Layout.alignment: Qt.AlignVCenter
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          icon.source: Cpp_CSV_Player.isPlaying ? "qrc:/rcc/icons/buttons/media-pause.svg" :
-                                                  "qrc:/rcc/icons/buttons/media-play.svg"
+          icon.source: (Cpp_CSV_Player.framePosition >= Cpp_CSV_Player.frameCount - 1) ?
+                         "qrc:/rcc/icons/buttons/media-stop.svg" :
+                         (Cpp_CSV_Player.isPlaying ? "qrc:/rcc/icons/buttons/media-pause.svg" :
+                                                     "qrc:/rcc/icons/buttons/media-play.svg")
         }
 
         Button {
@@ -227,7 +229,7 @@ Window {
           onClicked: Cpp_CSV_Player.nextFrame()
           icon.source: "qrc:/rcc/icons/buttons/media-next.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          enabled: Cpp_CSV_Player.progress < 1 && !Cpp_CSV_Player.isPlaying
+          enabled: (Cpp_CSV_Player.framePosition < Cpp_CSV_Player.frameCount - 1) && !Cpp_CSV_Player.isPlaying
         }
       }
     }
