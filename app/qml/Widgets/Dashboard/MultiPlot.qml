@@ -126,7 +126,7 @@ Item {
                 elide: Qt.ElideMiddle
                 text: root.model.labels[index]
                 Layout.alignment: Qt.AlignVCenter
-                font: Cpp_Misc_CommonFonts.monoFont
+                font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
                 Layout.maximumWidth: 128 - 14 - 8
               }
             }
