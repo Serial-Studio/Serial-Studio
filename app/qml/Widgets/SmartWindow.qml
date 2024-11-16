@@ -70,6 +70,8 @@ Window {
   //
   // Save previous values for maximize/unmaximize cycle with delay
   //
+  x: 100
+  y: 100
   onXChanged: savePreviousDimensions()
   onYChanged: savePreviousDimensions()
   onWidthChanged: savePreviousDimensions()
@@ -132,6 +134,19 @@ Window {
   // Ensure that window size stays within minimum size
   //
   Component.onCompleted: {
+    // Set initial window position within the primary screen bounds
+    const screenGeometry = Cpp_PrimaryScreen.geometry
+    if (root.x < screenGeometry.x || root.x > screenGeometry.x + screenGeometry.width - root.width)
+      root.x = screenGeometry.x + (screenGeometry.width - root.width) / 2
+    if (root.y < screenGeometry.y || root.y > screenGeometry.y + screenGeometry.height - root.height)
+      root.y = screenGeometry.y + (screenGeometry.height - root.height) / 2
+
+    // Ensure minimum width and height
+    if (width < minimumWidth)
+      width = minimumWidth
+    if (height < minimumHeight)
+      height = minimumHeight
+
     if (width < minimumWidth)
       width = minimumWidth
     if (height < minimumHeight)

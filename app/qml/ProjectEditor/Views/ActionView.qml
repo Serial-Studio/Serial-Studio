@@ -74,7 +74,7 @@ Widgets.Pane {
     Rectangle {
       z: 2
       id: header
-      height: 64
+      height: layout.implicitHeight + 12
       color: Cpp_ThemeManager.colors["groupbox_background"]
       anchors {
         top: parent.top
@@ -86,6 +86,7 @@ Widgets.Pane {
       // Buttons
       //
       RowLayout {
+        id: layout
         spacing: 4
 
         anchors {
@@ -99,8 +100,7 @@ Widgets.Pane {
         // Change icon
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Change Icon")
           Layout.alignment: Qt.AlignVCenter
           palette.buttonText: Cpp_ThemeManager.colors["button_text"]
@@ -122,8 +122,7 @@ Widgets.Pane {
         // Duplicate action
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentAction()
@@ -135,8 +134,7 @@ Widgets.Pane {
         // Delete action
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentAction()
@@ -183,7 +181,7 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignHCenter
           text: qsTr("Send commands with a button click")
           horizontalAlignment: Label.AlignHCenter
-          font: Cpp_Misc_CommonFonts.customUiFont(24, true)
+          font: Cpp_Misc_CommonFonts.customUiFont(2, true)
         }
 
         Item {
@@ -196,7 +194,7 @@ Widgets.Pane {
           horizontalAlignment: Label.AlignHCenter
           Layout.maximumWidth: delegate.width * 0.9
           wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-          font: Cpp_Misc_CommonFonts.customUiFont(18, false)
+          font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
           text: qsTr("Actions let you send custom commands to the connected device with a single button press.")
         }
       }

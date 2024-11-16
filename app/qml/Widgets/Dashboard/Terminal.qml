@@ -29,6 +29,8 @@ import SerialStudio
 
 Item {
   id: root
+  implicitWidth: layout.implicitWidth + 32
+  implicitHeight: layout.implicitHeight + 32
   property alias vt100emulation: terminal.vt100emulation
 
   //
@@ -38,6 +40,12 @@ Item {
     if (visible)
       root.forceActiveFocus()
   }
+
+  //
+  // Custom properties
+  //
+  property int minimumRows: 24
+  property int minimumColumns: 80
 
   //
   // Save settings
@@ -169,6 +177,7 @@ Item {
   // Controls
   //
   ColumnLayout {
+    id: layout
     spacing: 4
     anchors.fill: parent
     anchors.topMargin: -6
@@ -181,6 +190,8 @@ Item {
       vt100emulation: true
       Layout.fillWidth: true
       Layout.fillHeight: true
+      Layout.minimumHeight: terminal.charHeight * root.minimumRows
+      Layout.minimumWidth: terminal.charWidth * root.minimumColumns
 
       Rectangle {
         border.width: 1
@@ -269,7 +280,10 @@ Item {
         Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
         checked: Cpp_IO_Console.dataMode === 1
-        onCheckedChanged: Cpp_IO_Console.dataMode = checked ? 1 : 0
+        onCheckedChanged: {
+          if (Cpp_IO_Console.dataMode !== checked)
+            Cpp_IO_Console.dataMode = checked ? 1 : 0
+        }
       }
 
       ComboBox {

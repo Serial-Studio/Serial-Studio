@@ -30,7 +30,7 @@ import "../../Widgets" as Widgets
 Widgets.Pane {
   icon: Cpp_JSON_ProjectModel.selectedIcon
   Component.onCompleted: Cpp_JSON_FrameBuilder.setFrameParser(frameParser)
-  title: Cpp_JSON_ProjectModel.selectedText + (frameParser.modified ? " (" + qsTr("modified") + ")" : "")
+  title: Cpp_JSON_ProjectModel.selectedText + (frameParser.isModified ? " (" + qsTr("modified") + ")" : "")
 
   //
   // Super important to allow the user to type on a C++ widget from QML
@@ -162,14 +162,15 @@ Widgets.Pane {
       Rectangle {
         z: 2
         Layout.fillWidth: true
-        Layout.minimumHeight: 64
         Layout.maximumHeight: Layout.minimumHeight
+        Layout.minimumHeight: layout.implicitHeight + 12
         color: Cpp_ThemeManager.colors["groupbox_background"]
 
         //
         // Buttons
         //
         RowLayout {
+          id: layout
           spacing: 4
 
           anchors {
@@ -183,47 +184,44 @@ Widgets.Pane {
           // Load default document
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Reset")
+            toolbarButton: false
             onClicked: frameParser.reload()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/reload.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
           // Import code file
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Import")
+            toolbarButton: false
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/import.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
           // Save changes
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Apply")
+            toolbarButton: false
             onClicked: frameParser.apply()
             enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/apply.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
           // Spacer
           //
           Rectangle {
-            width: 1
+            implicitWidth: 1
             Layout.fillHeight: true
             Layout.maximumHeight: 48
             Layout.alignment: Qt.AlignVCenter
@@ -234,35 +232,33 @@ Widgets.Pane {
           // Undo
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Undo")
+            toolbarButton: false
             onClicked: frameParser.undo()
             enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/undo.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
           // Redo
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Redo")
+            toolbarButton: false
             onClicked: frameParser.redo()
             enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/redo.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
           // Spacer
           //
           Rectangle {
-            width: 1
+            implicitWidth: 1
             Layout.fillHeight: true
             Layout.maximumHeight: 48
             Layout.alignment: Qt.AlignVCenter
@@ -273,46 +269,43 @@ Widgets.Pane {
           // Cut
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Cut")
+            toolbarButton: false
             onClicked: frameParser.cut()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/cut.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
           // Copy
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Copy")
+            toolbarButton: false
             onClicked: frameParser.copy()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/copy.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
           // Paste
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Paste")
+            toolbarButton: false
             onClicked: frameParser.paste()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/paste.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //
           // Spacer
           //
           Rectangle {
-            width: 1
+            implicitWidth: 1
             Layout.fillHeight: true
             Layout.maximumHeight: 48
             Layout.alignment: Qt.AlignVCenter
@@ -323,13 +316,12 @@ Widgets.Pane {
           // Help
           //
           Widgets.BigButton {
-            icon.width: 24
-            icon.height: 24
+            iconSize: 24
             text: qsTr("Help")
+            toolbarButton: false
             onClicked: frameParser.help()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/help.svg"
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
 
           //

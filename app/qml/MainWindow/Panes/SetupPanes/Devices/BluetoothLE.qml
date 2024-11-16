@@ -26,6 +26,12 @@ import QtQuick.Controls
 
 Item {
   id: root
+  implicitHeight: layout.implicitHeight
+
+  //
+  // Custom properties
+  //
+  property alias ignoreDataDelimeters: _ignoreDataDelimeters.checked
 
   //
   // Control layout
@@ -69,15 +75,18 @@ Item {
 
     RowLayout {
       spacing: 4
-      visible: opacity > 0
-      opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount > 0 ? 1 : 0
+      Layout.fillWidth: true
+      visible: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount > 0
 
       Label {
         id: devLabel
         opacity: enabled ? 1 : 0.5
         text: qsTr("Device") + ":"
         enabled: !Cpp_IO_Manager.connected
-        Layout.minimumWidth: Math.max(devLabel.implicitWidth, servLabel.implicitWidth)
+        Layout.minimumWidth: Math.max(devLabel.implicitWidth,
+                                      servLabel.implicitWidth,
+                                      charLabel.implicitWidth,
+                                      descriptorLabel.implicitWidth)
       }
 
       ComboBox {
@@ -110,13 +119,16 @@ Item {
     //
     RowLayout {
       spacing: 4
-      visible: opacity > 0
-      opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && serviceNames.count > 1 ? 1 : 0
+      Layout.fillWidth: true
+      visible: Cpp_IO_Bluetooth_LE.operatingSystemSupported && serviceNames.count > 1
 
       Label {
         id: servLabel
         text: qsTr("Service") + ":"
-        Layout.minimumWidth: Math.max(devLabel.implicitWidth, servLabel.implicitWidth)
+        Layout.minimumWidth: Math.max(devLabel.implicitWidth,
+                                      servLabel.implicitWidth,
+                                      charLabel.implicitWidth,
+                                      descriptorLabel.implicitWidth)
       }
 
       ComboBox {
@@ -128,18 +140,123 @@ Item {
     }
 
     //
+    // Characteristic selector
+    //
+    RowLayout {
+      id: characteristicSelector
+
+      spacing: 4
+      Layout.fillWidth: true
+      visible: Cpp_IO_Bluetooth_LE.operatingSystemSupported && characteristicNames.count > 1
+
+      Label {
+        id: charLabel
+        text: qsTr("Characteristic") + ":"
+        Layout.minimumWidth: Math.max(devLabel.implicitWidth,
+                                      servLabel.implicitWidth,
+                                      charLabel.implicitWidth,
+                                      descriptorLabel.implicitWidth)
+      }
+
+      ComboBox {
+        id: characteristicNames
+        Layout.fillWidth: true
+        model: Cpp_IO_Bluetooth_LE.characteristicNames
+        currentIndex: Cpp_IO_Bluetooth_LE.characteristicIndex
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_IO_Bluetooth_LE.characteristicIndex)
+            Cpp_IO_Bluetooth_LE.characteristicIndex = currentIndex
+        }
+      }
+    }
+
+    //
+    // Descriptor selector
+    //
+    RowLayout {
+      spacing: 4
+      Layout.fillWidth: true
+      enabled: opacity == 1
+      visible: characteristicSelector.visible
+      opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && descriptorNames.count > 1 ? 1 : 0.5
+
+      Label {
+        id: descriptorLabel
+        text: qsTr("Descriptor") + ":"
+        Layout.minimumWidth: Math.max(devLabel.implicitWidth,
+                                      servLabel.implicitWidth,
+                                      charLabel.implicitWidth,
+                                      descriptorLabel.implicitWidth)
+      }
+
+      ComboBox {
+        id: descriptorNames
+        Layout.fillWidth: true
+        model: Cpp_IO_Bluetooth_LE.descriptorNames
+        currentIndex: Cpp_IO_Bluetooth_LE.descriptorIndex
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_IO_Bluetooth_LE.descriptorIndex)
+            Cpp_IO_Bluetooth_LE.descriptorIndex = currentIndex
+        }
+      }
+    }
+
+    //
+    // Ignore data delimeters
+    //
+    RowLayout {
+      spacing: 4
+      enabled: opacity == 1
+      Layout.fillWidth: true
+      visible: characteristicSelector.visible
+      opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && descriptorNames.count > 1 ? 1 : 0.5
+      Label {
+        text: qsTr("No Delimiters") + ":"
+        enabled: opacity == 1
+      } CheckBox {
+        id: _ignoreDataDelimeters
+        Layout.alignment: Qt.AlignLeft
+        Layout.leftMargin: -8
+        checked: Cpp_IO_Bluetooth_LE.ignoreDataDelimeters
+        onCheckedChanged: {
+          if (Cpp_IO_Bluetooth_LE.ignoreDataDelimeters !== checked)
+            Cpp_IO_Bluetooth_LE.ignoreDataDelimeters = checked
+        }
+      }
+    }
+
+    //
     // Scanning indicator
     //
     RowLayout {
       spacing: 4
-      visible: opacity > 0
-      opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount < 1 ? 1 : 0
+      Layout.fillWidth: true
+      visible: Cpp_IO_Bluetooth_LE.operatingSystemSupported && Cpp_IO_Bluetooth_LE.deviceCount < 1
 
-      BusyIndicator {
-        running: parent.visible
-        Layout.minimumWidth: 16
-        Layout.minimumHeight: 16
+      Image {
+        id: spinner
+        visible: running
+        sourceSize: Qt.size(18, 18)
         Layout.alignment: Qt.AlignVCenter
+        source: "qrc:/rcc/images/spinner.svg"
+
+        property bool running: parent.visible
+
+        onRunningChanged: spinner.rotation += 360
+        Component.onCompleted: spinner.rotation += 360
+
+        Timer {
+          repeat: true
+          interval: 1000
+          running: spinner.running
+          onTriggered: spinner.rotation += 360
+        }
+
+        Behavior on rotation {
+          NumberAnimation {
+            duration: 1000
+          }
+        }
       }
 
       Label {
@@ -154,8 +271,8 @@ Item {
     //
     RowLayout {
       spacing: 4
-      visible: opacity > 0
-      opacity: !Cpp_IO_Bluetooth_LE.operatingSystemSupported
+      Layout.fillWidth: true
+      visible: !Cpp_IO_Bluetooth_LE.operatingSystemSupported
 
       Image {
         sourceSize: Qt.size(96, 96)

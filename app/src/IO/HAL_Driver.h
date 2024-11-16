@@ -28,32 +28,129 @@
 namespace IO
 {
 /**
- * @brief The HAL_Driver class
+ * @class HAL_Driver
+ * @brief Base class for hardware abstraction layer (HAL) drivers.
  *
- * Abstract class that defines common I/O and data access functions for
- * different types of devices. I/O drivers (e.g. serial port & network) are
- * sub-classes of this class.
+ * Provides a common interface for device I/O operations and data access.
+ * Subclasses must implement all pure virtual methods to handle
+ * protocol-specific functionality.
  *
- * This allows the rest of the I/O module to interact with a wide range of
- * devices and protocols without the need of understanding protocol-specific
- * implementation details.
+ * Signals are available for configuration changes, data transmission, and data
+ * reception.
  */
 class HAL_Driver : public QObject
 {
+  // clang-format off
   Q_OBJECT
+  Q_PROPERTY(bool ignoreDataDelimeters
+             READ ignoreDataDelimeters
+             WRITE setIgnoreDataDelimeters
+             NOTIFY ignoreDataDelimetersChanged)
+  // clang-format on
 
 signals:
+  /**
+   * @brief Emitted when the driver's configuration changes.
+   */
   void configurationChanged();
+
+  /**
+   * @brief Emitted when the `ignoreDataDelimeters` property changes.
+   */
+  void ignoreDataDelimetersChanged();
+
+  /**
+   * @brief Emitted when data is successfully written to the device.
+   */
   void dataSent(const QByteArray &data);
+
+  /**
+   * @brief Emitted when data is received and should be appended to a buffer.
+   */
   void dataReceived(const QByteArray &data);
 
+  /**
+   * @brief Emitted when data is received and should be processed directly.
+   */
+  void payloadReceived(const QByteArray &data);
+
 public:
+  /**
+   * @brief Close the device connection.
+   */
   virtual void close() = 0;
-  virtual bool isOpen() const = 0;
-  virtual bool isReadable() const = 0;
-  virtual bool isWritable() const = 0;
-  virtual bool configurationOk() const = 0;
-  virtual quint64 write(const QByteArray &data) = 0;
-  virtual bool open(const QIODevice::OpenMode mode) = 0;
+
+  /**
+   * @brief Check if the device is open.
+   */
+  [[nodiscard]] virtual bool isOpen() const = 0;
+
+  /**
+   * @brief Check if the device is ready for reading.
+   */
+  [[nodiscard]] virtual bool isReadable() const = 0;
+
+  /**
+   * @brief Check if the device is ready for writing.
+   */
+  [[nodiscard]] virtual bool isWritable() const = 0;
+
+  /**
+   * @brief Check if the device configuration is valid.
+   */
+  [[nodiscard]] virtual bool configurationOk() const = 0;
+
+  /**
+   * @brief Write data to the device. Returns the number of bytes written.
+   */
+  [[nodiscard]] virtual quint64 write(const QByteArray &data) = 0;
+
+  /**
+   * @brief Open the device in the specified mode.
+   */
+  [[nodiscard]] virtual bool open(const QIODevice::OpenMode mode) = 0;
+
+  /**
+   * Get the current value of the `ignoreDataDelimeters` property.
+   */
+  [[nodiscard]] bool ignoreDataDelimeters() const
+  {
+    return m_ignoreDataDelimeters;
+  }
+
+public slots:
+  /**
+   * Set the `ignoreDataDelimeters` property.
+   * @param ignore If true, received data is processed as payload directly.
+   */
+  void setIgnoreDataDelimeters(const bool ignore)
+  {
+    m_ignoreDataDelimeters = ignore;
+    Q_EMIT ignoreDataDelimetersChanged();
+  }
+
+protected:
+  /**
+   * Process incoming data.
+   * @param data The received data to process.
+   * Emits either `dataReceived` or `payloadReceived` based on the
+   * `ignoreDataDelimeters` property.
+   */
+  void processData(const QByteArray &data)
+  {
+    if (!ignoreDataDelimeters())
+    {
+      QMetaObject::invokeMethod(
+          this, [=] { Q_EMIT dataReceived(data); }, Qt::QueuedConnection);
+    }
+    else
+    {
+      QMetaObject::invokeMethod(
+          this, [=] { Q_EMIT payloadReceived(data); }, Qt::QueuedConnection);
+    }
+  }
+
+private:
+  bool m_ignoreDataDelimeters = false;
 };
 } // namespace IO

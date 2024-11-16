@@ -143,6 +143,7 @@ public slots:
   void print();
   void historyUp();
   void historyDown();
+  void setupExternalConnections();
   void send(const QString &data);
   void setEcho(const bool enabled);
   void setShowTimestamp(const bool enabled);

@@ -94,7 +94,7 @@ Window {
       text: root.title
       visible: root.titlebarHeight > 0
       color: Cpp_ThemeManager.colors["text"]
-      font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+      font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
 
       anchors {
         topMargin: 6
@@ -174,7 +174,7 @@ Window {
 
           Label {
             text: Cpp_AppName
-            font: Cpp_Misc_CommonFonts.customUiFont(28, true)
+            font: Cpp_Misc_CommonFonts.customUiFont(2, true)
           }
 
           Item {
@@ -184,7 +184,7 @@ Window {
           Label {
             opacity: 0.5
             text: qsTr("Version %1").arg(Cpp_AppVersion)
-            font: Cpp_Misc_CommonFonts.customUiFont(16, false)
+            font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
           }
         }
       }
@@ -193,15 +193,16 @@ Window {
         opacity: 0.8
         Layout.fillWidth: true
         Layout.maximumWidth: 320
+        font: Cpp_Misc_CommonFonts.uiFont
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("Copyright © 2020-%1 %2, released under the MIT License.").arg(root.year).arg(Cpp_AppOrganization)
       }
 
       Label {
         opacity: 0.8
-        font.pixelSize: 12
         Layout.fillWidth: true
         Layout.maximumWidth: 320
+        font: Cpp_Misc_CommonFonts.uiFont
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.")
       }

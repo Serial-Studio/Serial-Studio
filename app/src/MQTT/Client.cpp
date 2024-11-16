@@ -59,12 +59,19 @@ MQTT::Client::Client()
   regenerateClient();
 
   // Send data periodically & reset statistics when disconnected/connected to a
-  // device
-  auto io = &IO::Manager::instance();
-  connect(io, &IO::Manager::frameReceived, this,
-          &MQTT::Client::onFrameReceived);
-  connect(io, &IO::Manager::connectedChanged, this,
+  connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
+          &MQTT::Client::sendFrame);
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
           &MQTT::Client::resetStatistics);
+
+  // Disconenct from current IO connection when MQTT client is subscribed
+  connect(this, &MQTT::Client::connectedChanged, this, [=] {
+    if (isSubscribed())
+    {
+      if (IO::Manager::instance().connected())
+        IO::Manager::instance().disconnectDevice();
+    }
+  });
 }
 
 /**
@@ -299,9 +306,9 @@ void MQTT::Client::loadCaFile()
 {
   // Prompt user to select a CA file
   // clang-format off
-    auto path = QFileDialog::getOpenFileName(nullptr, 
-                                             tr("Select CA file"), 
-                                             QDir::homePath());
+  auto path = QFileDialog::getOpenFileName(nullptr,
+                                           tr("Select CA file"),
+                                           QDir::homePath());
   // clang-format on
 
   // Try to load the *.ca file
@@ -587,39 +594,11 @@ void MQTT::Client::setMqttVersion(const int versionIndex)
 }
 
 /**
- * Publishes all the received data to the MQTT broker
- */
-void MQTT::Client::sendData()
-{
-  Q_ASSERT(m_client);
-
-  // Create data byte array
-  QByteArray data;
-  for (int i = 0; i < m_frames.count(); ++i)
-  {
-    data.append(m_frames.at(i));
-    data.append("\n");
-  }
-
-  // Create & send MQTT message
-  if (!data.isEmpty())
-  {
-    QMQTT::Message message(m_sentMessages, topic(), data);
-    m_client->publish(message);
-    ++m_sentMessages;
-  }
-
-  // Clear frame list
-  m_frames.clear();
-}
-
-/**
  * Clears the JSON frames & sets the sent messages to 0
  */
 void MQTT::Client::resetStatistics()
 {
   m_sentMessages = 0;
-  m_frames.clear();
 }
 
 /**
@@ -634,6 +613,36 @@ void MQTT::Client::onConnectedChanged()
     m_client->subscribe(topic());
   else
     m_client->unsubscribe(topic());
+}
+
+/**
+ * @brief Sends a data frame to the MQTT broker
+ *
+ * @param frame The frame containing the data to be sent.
+ */
+void MQTT::Client::sendFrame(const QByteArray &frame)
+{
+  Q_ASSERT(m_client);
+
+  // Ignore if device is not connected
+  if (!IO::Manager::instance().connected())
+    return;
+
+  // Ignore if client is not connected
+  else if (!isConnectedToHost())
+    return;
+
+  // Ignore if mode is not set to publisher
+  else if (clientMode() != ClientPublisher)
+    return;
+
+  // Create & send MQTT message
+  if (!frame.isEmpty())
+  {
+    QMQTT::Message message(m_sentMessages, topic(), frame);
+    m_client->publish(message);
+    ++m_sentMessages;
+  }
 }
 
 /**
@@ -769,28 +778,6 @@ void MQTT::Client::onError(const QMQTT::ClientError error)
 }
 
 /**
- * Registers the given @a frame data to the list of frames that shall be
- * published to the MQTT broker/server
- */
-void MQTT::Client::onFrameReceived(const QByteArray &frame)
-{
-  // Ignore if device is not connected
-  if (!IO::Manager::instance().connected())
-    return;
-
-  // Ignore if mode is not set to publisher
-  else if (clientMode() != ClientPublisher)
-    return;
-
-  // Validate frame & append it to frame list
-  if (!frame.isEmpty())
-  {
-    m_frames.append(frame);
-    sendData();
-  }
-}
-
-/**
  * Displays the SSL errors that occur and allows the user to decide if he/she
  * wants to ignore those errors.
  */
@@ -833,12 +820,10 @@ void MQTT::Client::onMessageReceived(const QMQTT::Message &message)
   if (topic() != mtopic)
     return;
 
-  // Add EOL character
-  if (!mpayld.endsWith('\n'))
-    mpayld.append('\n');
-
   // Let IO manager process incoming data
-  IO::Manager::instance().processPayload(mpayld);
+  QMetaObject::invokeMethod(
+      this, [=] { IO::Manager::instance().processPayload(mpayld); },
+      Qt::QueuedConnection);
 }
 
 /**

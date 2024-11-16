@@ -33,11 +33,9 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
   : QQuickItem(parent)
   , m_index(index)
 {
-  // Get the dashboard instance and populate the titles, values, and units
-  auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardDataGrid))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardDataGrid, m_index);
+    const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
 
     m_units.resize(group.datasetCount());
     m_titles.resize(group.datasetCount());
@@ -55,15 +53,14 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem *parent)
                        ? ""
                        : QString("[%1]").arg(dataset.units());
     }
+
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &DataGrid::updateData);
+
+    onThemeChanged();
+    connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+            this, &Widgets::DataGrid::onThemeChanged);
   }
-
-  // Connect to the dashboard update event
-  connect(dash, &UI::Dashboard::updated, this, &DataGrid::updateData);
-
-  // Set dataset colors
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::DataGrid::onThemeChanged);
 }
 
 /**
@@ -128,51 +125,52 @@ const QStringList &Widgets::DataGrid::values() const
  */
 void Widgets::DataGrid::updateData()
 {
-  // Get the dashboard instance and check if the index is valid
-  static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardDataGrid))
+  if (!isEnabled())
     return;
 
-  // Regular expression to check if the value is a number
-  static const QRegularExpression regex("^[+-]?(\\d*\\.)?\\d+$");
-
-  // Get the datagrid group and update the LED states
-  bool changed = false;
-  const auto &group = dash->getGroupWidget(WC::DashboardDataGrid, m_index);
-  for (int i = 0; i < group.datasetCount(); ++i)
+  if (VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
   {
-    // Get the dataset and its values
-    const auto &dataset = group.getDataset(i);
-    const auto alarmValue = dataset.alarm();
-    auto value = dataset.value();
+    // Regular expression to check if the value is a number
+    static const QRegularExpression regex("^[+-]?(\\d*\\.)?\\d+$");
 
-    // Process dataset numerical value
-    bool alarm = false;
-    if (regex.match(value).hasMatch())
+    // Get the datagrid group and update the value readings
+    bool changed = false;
+    const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
-      const double v = value.toDouble();
-      value = QString::number(v, 'f', dash->precision());
-      alarm = (alarmValue != 0 && v >= alarmValue);
+      // Get the dataset and its values
+      const auto &dataset = group.getDataset(i);
+      const auto alarmValue = dataset.alarm();
+      auto value = dataset.value();
+
+      // Process dataset numerical value
+      bool alarm = false;
+      if (regex.match(value).hasMatch())
+      {
+        const double v = value.toDouble();
+        value = QString::number(v, 'f', UI::Dashboard::instance().precision());
+        alarm = (alarmValue != 0 && v >= alarmValue);
+      }
+
+      // Update the alarm state
+      if (m_alarms[i] != alarm)
+      {
+        changed = true;
+        m_alarms[i] = alarm;
+      }
+
+      // Update value text
+      if (m_values[i] != value)
+      {
+        changed = true;
+        m_values[i] = value;
+      }
     }
 
-    // Update the alarm state
-    if (m_alarms[i] != alarm)
-    {
-      changed = true;
-      m_alarms[i] = alarm;
-    }
-
-    // Update value text
-    if (m_values[i] != value)
-    {
-      changed = true;
-      m_values[i] = value;
-    }
+    // Redraw the widget
+    if (changed)
+      Q_EMIT updated();
   }
-
-  // Redraw the widget
-  if (changed)
-    Q_EMIT updated();
 }
 
 /**
@@ -185,14 +183,12 @@ void Widgets::DataGrid::onThemeChanged()
   const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
   // clang-format on
 
-  // Obtain colors for each dataset in the widget
-  m_colors.clear();
-  auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardDataGrid))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardDataGrid, m_index))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardDataGrid, m_index);
-    m_colors.resize(group.datasetCount());
+    const auto &group = GET_GROUP(SerialStudio::DashboardDataGrid, m_index);
 
+    m_colors.clear();
+    m_colors.resize(group.datasetCount());
     for (int i = 0; i < group.datasetCount(); ++i)
     {
       const auto &dataset = group.getDataset(i);
@@ -202,8 +198,7 @@ void Widgets::DataGrid::onThemeChanged()
                              : colors.at(index % colors.count()).toString();
       m_colors[i] = color;
     }
-  }
 
-  // Update user interface
-  Q_EMIT themeChanged();
+    Q_EMIT themeChanged();
+  }
 }

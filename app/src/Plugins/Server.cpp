@@ -39,13 +39,13 @@ Plugins::Server::Server()
 
   // Send processed data at 1 Hz
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
-          this, &Plugins::Server::registerFrame);
+          this, &Plugins::Server::registerFrame, Qt::QueuedConnection);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Plugins::Server::sendProcessedData);
 
   // Send I/O "raw" data directly
   connect(&IO::Manager::instance(), &IO::Manager::dataReceived, this,
-          &Plugins::Server::sendRawData);
+          &Plugins::Server::sendRawData, Qt::QueuedConnection);
 
   // Configure TCP server
   connect(&m_server, &QTcpServer::newConnection, this,
@@ -138,6 +138,7 @@ void Plugins::Server::setEnabled(const bool enabled)
 
   // Clear frames array to avoid memory leaks
   m_frames.clear();
+  m_frames.squeeze();
 }
 
 /**
@@ -250,6 +251,7 @@ void Plugins::Server::sendProcessedData()
 
   // Clear frame list
   m_frames.clear();
+  m_frames.squeeze();
 }
 
 /**

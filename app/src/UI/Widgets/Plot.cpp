@@ -36,11 +36,9 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
   , m_minY(0)
   , m_maxY(0)
 {
-  // Obtain dataset information
-  auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardPlot))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
-    const auto &dataset = dash->getDatasetWidget(WC::DashboardPlot, m_index);
+    const auto &dataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
 
     m_minY = dataset.min();
     m_maxY = dataset.max();
@@ -48,15 +46,15 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
 
     if (!dataset.units().isEmpty())
       m_yLabel += " (" + dataset.units() + ")";
+
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &Plot::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this,
+            &Plot::updateRange);
+
+    calculateAutoScaleRange();
+    updateRange();
   }
-
-  // Connect to the dashboard signals to update the plot data and range
-  connect(dash, &UI::Dashboard::updated, this, &Plot::updateData);
-  connect(dash, &UI::Dashboard::pointsChanged, this, &Plot::updateRange);
-
-  // Update the plot data and range
-  calculateAutoScaleRange();
-  updateRange();
 }
 
 /**
@@ -141,23 +139,22 @@ void Widgets::Plot::draw(QLineSeries *series)
  */
 void Widgets::Plot::updateData()
 {
-  // Get the plot data from the dashboard
-  auto dash = &UI::Dashboard::instance();
-  const auto &plotData = dash->linearPlotValues();
+  if (!isEnabled())
+    return;
 
-  // If the plot data is valid, update the plot
-  if (m_index >= 0 && plotData.count() > m_index)
+  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
-    // Get the plot values from the dashboard
-    const auto &values = plotData[m_index];
+    const auto &plotData = UI::Dashboard::instance().linearPlotValues();
 
-    // Resize plot data vector if required
-    if (m_data.count() != values.count())
-      m_data.resize(dash->points());
+    if (m_index >= 0 && plotData.count() > m_index)
+    {
+      const auto &values = plotData[m_index];
+      if (m_data.count() != values.count())
+        m_data.resize(UI::Dashboard::instance().points());
 
-    // Add the plot values to the plot data
-    for (int i = 0; i < values.count(); ++i)
-      m_data[i] = QPointF(i, values[i]);
+      for (int i = 0; i < values.count(); ++i)
+        m_data[i] = QPointF(i, values[i]);
+    }
   }
 }
 
@@ -166,16 +163,14 @@ void Widgets::Plot::updateData()
  */
 void Widgets::Plot::updateRange()
 {
-  // Get the dashboard instance and clear the plot data
-  auto dash = &UI::Dashboard::instance();
-
   // Reserve the number of points in the dashboard
   m_data.clear();
-  m_data.resize(dash->points() + 1);
+  m_data.squeeze();
+  m_data.resize(UI::Dashboard::instance().points() + 1);
 
   // Update x-axis
   m_minX = 0;
-  m_maxX = dash->points();
+  m_maxX = UI::Dashboard::instance().points();
 
   // Update the plot
   Q_EMIT rangeChanged();
@@ -199,11 +194,9 @@ void Widgets::Plot::calculateAutoScaleRange()
   }
 
   // Obtain min/max values from datasets
-  else
+  else if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
-    const auto &dataset = UI::Dashboard::instance().getDatasetWidget(
-        WC::DashboardPlot, m_index);
-
+    const auto &dataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
     ok &= !qFuzzyCompare(dataset.min(), dataset.max());
     if (ok)
     {

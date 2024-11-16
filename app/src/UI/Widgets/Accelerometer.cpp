@@ -34,8 +34,9 @@ Widgets::Accelerometer::Accelerometer(const int index, QQuickItem *parent)
   , m_theta(0)
   , m_magnitude(0)
 {
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-          &Accelerometer::updateData);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardAccelerometer, m_index))
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &Accelerometer::updateData);
 }
 
 /**
@@ -63,13 +64,16 @@ qreal Widgets::Accelerometer::theta() const
  */
 void Widgets::Accelerometer::updateData()
 {
+  // Widget not enabled, do nothing
+  if (!isEnabled())
+    return;
+
   // Get the dashboard instance and check if the index is valid
-  static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardAccelerometer))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardAccelerometer, m_index))
     return;
 
   // Get the accelerometer data and validate the dataset count
-  const auto &acc = dash->getGroupWidget(WC::DashboardAccelerometer, m_index);
+  const auto &acc = GET_GROUP(SerialStudio::DashboardAccelerometer, m_index);
   if (acc.datasetCount() != 3)
     return;
 

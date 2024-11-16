@@ -79,7 +79,7 @@ int main(int argc, char **argv)
   QApplication::setApplicationDisplayName(APP_NAME);
   QApplication::setOrganizationDomain(APP_SUPPORT_URL);
 
-  // Windows-specific initialization code
+  // Windows specific initialization code
 #ifdef Q_OS_WIN
   attachToConsole();
   argv = adjustArgumentsForFreeType(argc, argv);
@@ -168,7 +168,7 @@ static void cliShowVersion()
  */
 static void cliResetSettings()
 {
-  QSettings(APP_DEVELOPER, APP_NAME).clear();
+  QSettings(APP_SUPPORT_URL, APP_NAME).clear();
   qDebug() << APP_NAME << "settings cleared!";
 }
 

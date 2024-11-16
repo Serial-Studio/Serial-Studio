@@ -38,9 +38,9 @@ Widgets.SmartWindow {
   //
   // Window options
   //
-  minimumWidth: 970
-  minimumHeight: 640
   category: "ProjectEditor"
+  minimumWidth: layout.implicitWidth + 32
+  minimumHeight: layout.implicitHeight + 32
   title: qsTr("%1 - Project Editor").arg(Cpp_JSON_ProjectModel.title + (Cpp_JSON_ProjectModel.modified ? " (" + qsTr("modified") + ")" : ""))
 
   //
@@ -133,6 +133,7 @@ Widgets.SmartWindow {
         Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.minimumHeight: 540
 
         //
         // Project structure

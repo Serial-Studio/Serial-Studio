@@ -35,8 +35,9 @@ Widgets::GPS::GPS(const int index, QQuickItem *parent)
   , m_latitude(0)
   , m_longitude(0)
 {
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-          &Widgets::GPS::updateData);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &Widgets::GPS::updateData);
 }
 
 /**
@@ -72,38 +73,32 @@ qreal Widgets::GPS::longitude() const
  */
 void Widgets::GPS::updateData()
 {
-  // Widget not enabled, do nothing
   if (!isEnabled())
     return;
 
-  // Invalid index, abort update
-  static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardGPS))
-    return;
-
-  // Get group reference
-  const auto &group = dash->getGroupWidget(WC::DashboardGPS, m_index);
-
-  // Get latitiude/longitude from datasets
-  qreal lat = 0, lon = 0, alt = 0;
-  for (int i = 0; i < group.datasetCount(); ++i)
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGPS, m_index))
   {
-    const auto &dataset = group.getDataset(i);
-    if (dataset.widget() == QStringLiteral("lat"))
-      lat = dataset.value().toDouble();
-    else if (dataset.widget() == QStringLiteral("lon"))
-      lon = dataset.value().toDouble();
-    else if (dataset.widget() == QStringLiteral("alt"))
-      alt = dataset.value().toDouble();
-  }
+    const auto &group = GET_GROUP(SerialStudio::DashboardGPS, m_index);
 
-  // Redraw widget if required
-  if (!qFuzzyCompare(lat, m_latitude) || !qFuzzyCompare(lon, m_longitude)
-      || !qFuzzyCompare(alt, m_altitude))
-  {
-    m_latitude = lat;
-    m_altitude = alt;
-    m_longitude = lon;
-    Q_EMIT updated();
+    qreal lat = 0, lon = 0, alt = 0;
+    for (int i = 0; i < group.datasetCount(); ++i)
+    {
+      const auto &dataset = group.getDataset(i);
+      if (dataset.widget() == QStringLiteral("lat"))
+        lat = dataset.value().toDouble();
+      else if (dataset.widget() == QStringLiteral("lon"))
+        lon = dataset.value().toDouble();
+      else if (dataset.widget() == QStringLiteral("alt"))
+        alt = dataset.value().toDouble();
+    }
+
+    if (!qFuzzyCompare(lat, m_latitude) || !qFuzzyCompare(lon, m_longitude)
+        || !qFuzzyCompare(alt, m_altitude))
+    {
+      m_latitude = lat;
+      m_altitude = alt;
+      m_longitude = lon;
+      Q_EMIT updated();
+    }
   }
 }

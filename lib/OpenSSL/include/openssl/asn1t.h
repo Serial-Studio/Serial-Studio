@@ -285,18 +285,14 @@ extern "C" {
 /* This helps with the template wrapper form of ASN1_ITEM */
 
 #define ASN1_EX_TEMPLATE_TYPE(flags, tag, name, type)                          \
-  {                                                                            \
-    (flags), (tag), 0, #name, ASN1_ITEM_ref(type)                              \
-  }
+  {(flags), (tag), 0, #name, ASN1_ITEM_ref(type)}
 
 /* These help with SEQUENCE or CHOICE components */
 
 /* used to declare other types */
 
 #define ASN1_EX_TYPE(flags, tag, stname, field, type)                          \
-  {                                                                            \
-    (flags), (tag), offsetof(stname, field), #field, ASN1_ITEM_ref(type)       \
-  }
+  {(flags), (tag), offsetof(stname, field), #field, ASN1_ITEM_ref(type)}
 
 /* implicit and explicit helper macros */
 
@@ -309,13 +305,9 @@ extern "C" {
 /* Any defined by macros: the field used is in the table itself */
 
 #define ASN1_ADB_OBJECT(tblname)                                               \
-  {                                                                            \
-    ASN1_TFLG_ADB_OID, -1, 0, #tblname, tblname##_adb                          \
-  }
+  {ASN1_TFLG_ADB_OID, -1, 0, #tblname, tblname##_adb}
 #define ASN1_ADB_INTEGER(tblname)                                              \
-  {                                                                            \
-    ASN1_TFLG_ADB_INT, -1, 0, #tblname, tblname##_adb                          \
-  }
+  {ASN1_TFLG_ADB_INT, -1, 0, #tblname, tblname##_adb}
 
 /* Plain simple type */
 #define ASN1_SIMPLE(stname, field, type) ASN1_EX_TYPE(0, 0, stname, field, type)
@@ -425,10 +417,7 @@ extern "C" {
   }                                                                            \
   void dummy_function(void)
 
-#define ADB_ENTRY(val, template)                                               \
-  {                                                                            \
-    val, template                                                              \
-  }
+#define ADB_ENTRY(val, template) {val, template}
 
 #define ASN1_ADB_TEMPLATE(name) static const ASN1_TEMPLATE name##_tt
 

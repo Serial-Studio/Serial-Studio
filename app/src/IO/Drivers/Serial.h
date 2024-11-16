@@ -38,7 +38,7 @@ namespace Drivers
 {
 /**
  * @brief The Serial class
- * Serial Studio driver class to interact with serial port devices.
+ * Serial Studio "driver" class to interact with serial port devices.
  */
 class Serial : public HAL_Driver
 {
@@ -164,6 +164,7 @@ public:
 
 public slots:
   void disconnectDevice();
+  void setupExternalConnections();
   void setBaudRate(const qint32 rate);
   void setDtrEnabled(const bool enabled);
   void setParity(const quint8 parityIndex);

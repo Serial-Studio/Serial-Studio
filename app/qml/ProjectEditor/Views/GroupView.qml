@@ -73,7 +73,7 @@ Widgets.Pane {
     Rectangle {
       z: 2
       id: header
-      height: 64
+      height: layout.implicitHeight + 12
       color: Cpp_ThemeManager.colors["groupbox_background"]
       anchors {
         top: parent.top
@@ -85,6 +85,7 @@ Widgets.Pane {
       // Buttons
       //
       RowLayout {
+        id: layout
         spacing: 4
 
         anchors {
@@ -98,13 +99,12 @@ Widgets.Pane {
         // Add generic dataset
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
+          toolbarButton: false
           text: qsTr("Dataset")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetGeneric)
+          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
         }
 
@@ -112,13 +112,12 @@ Widgets.Pane {
         // Add plot
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Plot")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetPlot)
+          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
         }
 
@@ -126,13 +125,12 @@ Widgets.Pane {
         // Add FFT plot
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
+          toolbarButton: false
           text: qsTr("FFT Plot")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetFFT)
+          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
         }
 
@@ -140,13 +138,12 @@ Widgets.Pane {
         // Add bar
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
+          toolbarButton: false
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetBar)
+          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
         }
 
@@ -154,13 +151,12 @@ Widgets.Pane {
         // Add gauge
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Gauge")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetGauge)
+          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
         }
 
@@ -168,13 +164,12 @@ Widgets.Pane {
         // Add compass
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
+          toolbarButton: false
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetCompass)
+          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
         }
 
@@ -182,13 +177,12 @@ Widgets.Pane {
         // Add LED
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("LED")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-          onClicked: Cpp_JSON_ProjectModel.addDataset(WC.DatasetLED)
+          onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
           icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
         }
 
@@ -203,12 +197,11 @@ Widgets.Pane {
         // Duplicate group
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
+          toolbarButton: false
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentGroup()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
         }
 
@@ -216,12 +209,11 @@ Widgets.Pane {
         // Delete group
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
+          toolbarButton: false
           text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentGroup()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
         }
       }
@@ -264,7 +256,7 @@ Widgets.Pane {
           Layout.alignment: Qt.AlignHCenter
           text: qsTr("Let's Add Some Datasets")
           horizontalAlignment: Label.AlignHCenter
-          font: Cpp_Misc_CommonFonts.customUiFont(24, true)
+          font: Cpp_Misc_CommonFonts.customUiFont(2, true)
         }
 
         Item {
@@ -277,7 +269,7 @@ Widgets.Pane {
           horizontalAlignment: Label.AlignHCenter
           Layout.maximumWidth: delegate.width * 0.9
           wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-          font: Cpp_Misc_CommonFonts.customUiFont(18, false)
+          font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
           text: qsTr("Datasets describe individual readings (e.g. X, Y, Z in an accelerometer).\n" +
                      "Use the toolbar buttons above to add a dataset to this group.")
         }

@@ -34,6 +34,11 @@
 #include "Misc/CommonFonts.h"
 
 /**
+ * @brief Defines the maximum number of characters in the console buffer.
+ */
+static const qsizetype MAX_BUFFER_SIZE = 256 * 1024;
+
+/**
  * Generates a hexdump of the given data
  */
 static QString HexDump(const char *data, const size_t size)
@@ -90,17 +95,7 @@ IO::Console::Console()
   , m_isStartingLine(true)
   , m_lastCharWasCR(false)
 {
-  // Clear buffer & reserve memory
   clear();
-
-  // Read received data automatically
-  auto dm = &Manager::instance();
-  connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent);
-  connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived);
-
-  // Update lists when language changes
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &IO::Console::languageChanged);
 }
 
 /**
@@ -295,7 +290,8 @@ void IO::Console::save()
 void IO::Console::clear()
 {
   m_textBuffer.clear();
-  m_textBuffer.reserve(10 * 1000);
+  m_textBuffer.squeeze();
+  m_textBuffer.reserve(MAX_BUFFER_SIZE);
   m_isStartingLine = true;
   m_lastCharWasCR = false;
   Q_EMIT dataReceived();
@@ -331,6 +327,24 @@ void IO::Console::historyDown()
     ++m_historyItem;
     Q_EMIT historyItemChanged();
   }
+}
+
+/**
+ * Configures the signal/slot connections with the rest of the modules of the
+ * application.
+ */
+void IO::Console::setupExternalConnections()
+{
+  // Read received data automatically
+  auto dm = &Manager::instance();
+  connect(dm, &Manager::dataSent, this, &IO::Console::onDataSent,
+          Qt::QueuedConnection);
+  connect(dm, &Manager::dataReceived, this, &IO::Console::onDataReceived,
+          Qt::QueuedConnection);
+
+  // Update lists when language changes
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &IO::Console::languageChanged);
 }
 
 /**
@@ -390,9 +404,7 @@ void IO::Console::print()
   document.setPlainText(m_textBuffer);
 
   // Set font
-  auto font = Misc::CommonFonts::instance().monoFont();
-  font.setPixelSize(10);
-  font.setPointSize(10);
+  auto font = Misc::CommonFonts::instance().customMonoFont(0.8);
   document.setDefaultFont(font);
 
   // Create printer object
@@ -533,9 +545,21 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   // Add data to saved text buffer
   m_textBuffer.append(processedString);
 
+  // Check if the buffer size exceeds the maximum allowed size
+  if (m_textBuffer.size() > MAX_BUFFER_SIZE)
+  {
+    const auto excessSize = m_textBuffer.size() - MAX_BUFFER_SIZE;
+    m_textBuffer.remove(0, excessSize);
+  }
+
   // Update UI
-  Q_EMIT dataReceived();
-  Q_EMIT displayString(processedString);
+  QMetaObject::invokeMethod(
+      this,
+      [=] {
+        Q_EMIT dataReceived();
+        Q_EMIT displayString(processedString);
+      },
+      Qt::QueuedConnection);
 }
 
 /**

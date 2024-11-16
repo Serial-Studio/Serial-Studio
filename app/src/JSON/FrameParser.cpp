@@ -237,7 +237,7 @@ void JSON::FrameParser::paste()
  */
 void JSON::FrameParser::apply()
 {
-  save(true);
+  save(false);
 }
 
 /**

@@ -25,7 +25,13 @@
 #include <QFont>
 #include <QObject>
 #include <JSON/Frame.h>
-#include <WidgetsCommon.h>
+#include <SerialStudio.h>
+
+// clang-format off
+#define GET_GROUP(type, index) UI::Dashboard::instance().getGroupWidget(type, index)
+#define GET_DATASET(type, index) UI::Dashboard::instance().getDatasetWidget(type, index)
+#define VALIDATE_WIDGET(type, index) (index >= 0 && index < UI::Dashboard::instance().widgetCount(type))
+// clang-format on
 
 namespace UI
 {
@@ -66,8 +72,8 @@ class Dashboard : public QObject
   Q_PROPERTY(bool axisOptionsWidgetVisible READ axisOptionsWidgetVisible NOTIFY widgetCountChanged)
   Q_PROPERTY(QStringList availableWidgetIcons READ availableWidgetIcons NOTIFY widgetCountChanged)
   Q_PROPERTY(QStringList availableWidgetTitles READ availableWidgetTitles NOTIFY widgetCountChanged)
-  Q_PROPERTY(QList<WC::DashboardWidget> availableWidgets READ availableWidgets NOTIFY widgetCountChanged)
-  Q_PROPERTY(AxisVisibility axisVisibility READ axisVisibility WRITE setAxisVisibility NOTIFY axisVisibilityChanged)
+  Q_PROPERTY(QList<SerialStudio::DashboardWidget> availableWidgets READ availableWidgets NOTIFY widgetCountChanged)
+  Q_PROPERTY(SerialStudio::AxisVisibility axisVisibility READ axisVisibility WRITE setAxisVisibility NOTIFY axisVisibilityChanged)
   // clang-format on
 
 signals:
@@ -79,7 +85,6 @@ signals:
   void widgetCountChanged();
   void axisVisibilityChanged();
   void widgetVisibilityChanged();
-  void frameReceived(const JSON::Frame &frame);
 
 private:
   explicit Dashboard();
@@ -89,15 +94,6 @@ private:
   Dashboard &operator=(const Dashboard &) = delete;
 
 public:
-  enum AxisVisibility
-  {
-    AxisXY = 0b11,
-    AxisX = 0b01,
-    AxisY = 0b10,
-    NoAxesVisible = 0b00,
-  };
-  Q_ENUM(AxisVisibility)
-
   static Dashboard &instance();
   static qreal smartInterval(const qreal min, const qreal max,
                              const qreal multiplier = 0.2);
@@ -106,7 +102,7 @@ public:
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool precisionWidgetVisible() const;
   [[nodiscard]] bool axisOptionsWidgetVisible() const;
-  [[nodiscard]] AxisVisibility axisVisibility() const;
+  [[nodiscard]] SerialStudio::AxisVisibility axisVisibility() const;
 
   [[nodiscard]] int points() const;
   [[nodiscard]] int precision() const;
@@ -115,24 +111,27 @@ public:
 
   Q_INVOKABLE bool frameValid() const;
   Q_INVOKABLE int relativeIndex(const int widgetIndex);
-  Q_INVOKABLE WC::DashboardWidget widgetType(const int widgetIndex);
-  Q_INVOKABLE int widgetCount(const WC::DashboardWidget widget) const;
-  Q_INVOKABLE QStringList widgetTitles(const WC::DashboardWidget widget);
-  Q_INVOKABLE QStringList widgetColors(const WC::DashboardWidget widget);
-  Q_INVOKABLE bool widgetVisible(const WC::DashboardWidget widget,
+  Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex);
+  Q_INVOKABLE int widgetCount(const SerialStudio::DashboardWidget widget) const;
+  Q_INVOKABLE QStringList
+  widgetTitles(const SerialStudio::DashboardWidget widget);
+  Q_INVOKABLE QStringList
+  widgetColors(const SerialStudio::DashboardWidget widget);
+  Q_INVOKABLE bool widgetVisible(const SerialStudio::DashboardWidget widget,
                                  const int index) const;
 
   [[nodiscard]] const QStringList availableWidgetIcons() const;
   [[nodiscard]] const QStringList availableWidgetTitles() const;
-  [[nodiscard]] const QList<WC::DashboardWidget> availableWidgets() const;
+  [[nodiscard]] const QList<SerialStudio::DashboardWidget>
+  availableWidgets() const;
 
   [[nodiscard]] const QString &title() const;
   [[nodiscard]] QStringList actionIcons() const;
   [[nodiscard]] QStringList actionTitles() const;
 
   // clang-format off
-  [[nodiscard]] const JSON::Group &getGroupWidget(const WC::DashboardWidget widget, const int index) const;
-  [[nodiscard]] const JSON::Dataset &getDatasetWidget(const WC::DashboardWidget widget, const int index) const;
+  [[nodiscard]] const JSON::Group &getGroupWidget(const SerialStudio::DashboardWidget widget, const int index) const;
+  [[nodiscard]] const JSON::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const;
   // clang-format on
 
   [[nodiscard]] const JSON::Frame &currentFrame();
@@ -145,9 +144,9 @@ public slots:
   void activateAction(const int index);
   void setPrecision(const int precision);
   void resetData(const bool notify = true);
-  void setAxisVisibility(const AxisVisibility option);
-  void setWidgetVisible(const WC::DashboardWidget widget, const int index,
-                        const bool visible);
+  void setAxisVisibility(const SerialStudio::AxisVisibility option);
+  void setWidgetVisible(const SerialStudio::DashboardWidget widget,
+                        const int index, const bool visible);
 
 private slots:
   void updatePlots();
@@ -158,18 +157,18 @@ private:
   int m_precision;
   int m_widgetCount;
   bool m_updateRequired;
-  AxisVisibility m_axisVisibility;
+  SerialStudio::AxisVisibility m_axisVisibility;
 
   QVector<Curve> m_fftPlotValues;
   QVector<Curve> m_linearPlotValues;
   QVector<MultipleCurves> m_multiplotValues;
 
   QVector<JSON::Action> m_actions;
-  QList<WC::DashboardWidget> m_availableWidgets;
-  QMap<int, QPair<WC::DashboardWidget, int>> m_widgetMap;
-  QMap<WC::DashboardWidget, QVector<bool>> m_widgetVisibility;
-  QMap<WC::DashboardWidget, QVector<JSON::Group>> m_widgetGroups;
-  QMap<WC::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
+  QList<SerialStudio::DashboardWidget> m_availableWidgets;
+  QMap<int, QPair<SerialStudio::DashboardWidget, int>> m_widgetMap;
+  QMap<SerialStudio::DashboardWidget, QVector<bool>> m_widgetVisibility;
+  QMap<SerialStudio::DashboardWidget, QVector<JSON::Group>> m_widgetGroups;
+  QMap<SerialStudio::DashboardWidget, QVector<JSON::Dataset>> m_widgetDatasets;
 
   JSON::Frame m_currentFrame;
 };

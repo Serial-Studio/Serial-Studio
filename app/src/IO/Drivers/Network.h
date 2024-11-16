@@ -90,10 +90,6 @@ class Network : public HAL_Driver
              READ udpMulticast
              WRITE setUdpMulticast
              NOTIFY udpMulticastChanged)
-  Q_PROPERTY(bool udpIgnoreFrameSequences
-             READ udpIgnoreFrameSequences
-             WRITE setUdpIgnoreFrameSequences
-             NOTIFY udpIgnoreFrameSequencesChanged)
   // clang-format on
 
 signals:
@@ -102,7 +98,6 @@ signals:
   void socketTypeChanged();
   void udpMulticastChanged();
   void lookupActiveChanged();
-  void udpIgnoreFrameSequencesChanged();
 
 private:
   explicit Network();
@@ -130,7 +125,6 @@ public:
   [[nodiscard]] bool udpMulticast() const;
   [[nodiscard]] bool lookupActive() const;
   [[nodiscard]] int socketTypeIndex() const;
-  [[nodiscard]] bool udpIgnoreFrameSequences() const;
   [[nodiscard]] QAbstractSocket::SocketType socketType() const;
 
   [[nodiscard]] QTcpSocket *tcpSocket() { return &m_tcpSocket; }
@@ -158,7 +152,6 @@ public slots:
   void setSocketTypeIndex(const int index);
   void setUdpRemotePort(const quint16 port);
   void setRemoteAddress(const QString &address);
-  void setUdpIgnoreFrameSequences(const bool ignore);
   void setSocketType(const QAbstractSocket::SocketType type);
 
 private slots:
@@ -174,7 +167,6 @@ private:
   bool m_lookupActive;
   quint16 m_udpLocalPort;
   quint16 m_udpRemotePort;
-  bool m_udpIgnoreFrameSequences;
   QAbstractSocket::SocketType m_socketType;
 
   QTcpSocket m_tcpSocket;

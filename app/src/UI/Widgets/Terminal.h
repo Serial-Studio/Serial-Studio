@@ -49,6 +49,12 @@ class Terminal : public QQuickPaintedItem
              READ font
              WRITE setFont
              NOTIFY fontChanged)
+  Q_PROPERTY(int charWidth
+             READ charWidth
+             NOTIFY fontChanged)
+  Q_PROPERTY(int charHeight
+             READ charHeight
+             NOTIFY fontChanged)
   Q_PROPERTY(bool autoscroll
              READ autoscroll
              WRITE setAutoscroll
@@ -99,6 +105,9 @@ public:
     ResetFont
   };
   Q_ENUM(State);
+
+  [[nodiscard]] int charWidth() const;
+  [[nodiscard]] int charHeight() const;
 
   [[nodiscard]] QFont font() const;
   [[nodiscard]] QPalette palette() const;

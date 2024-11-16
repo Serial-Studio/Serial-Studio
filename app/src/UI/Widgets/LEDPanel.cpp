@@ -33,11 +33,9 @@ Widgets::LEDPanel::LEDPanel(const int index, QQuickItem *parent)
   : QQuickItem(parent)
   , m_index(index)
 {
-  // Populate the LED states, titles, and alarm states
-  auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardLED))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardLED, m_index);
+    const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
     m_states.resize(group.datasetCount());
     m_titles.resize(group.datasetCount());
     m_colors.resize(group.datasetCount());
@@ -49,22 +47,20 @@ Widgets::LEDPanel::LEDPanel(const int index, QQuickItem *parent)
       m_alarms[i] = false;
       m_titles[i] = group.getDataset(i).title();
     }
+
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &LEDPanel::updateData);
+
+    m_alarmTimer.setInterval(250);
+    m_alarmTimer.setTimerType(Qt::PreciseTimer);
+    connect(&m_alarmTimer, &QTimer::timeout, this,
+            &Widgets::LEDPanel::onAlarmTimeout);
+    m_alarmTimer.start();
+
+    onThemeChanged();
+    connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+            this, &Widgets::LEDPanel::onThemeChanged);
   }
-
-  // Connect to the Dashboard to update the LED states
-  connect(dash, &UI::Dashboard::updated, this, &LEDPanel::updateData);
-
-  // Configure alarm blinker timer
-  m_alarmTimer.setInterval(250);
-  m_alarmTimer.setTimerType(Qt::PreciseTimer);
-  connect(&m_alarmTimer, &QTimer::timeout, this,
-          &Widgets::LEDPanel::onAlarmTimeout);
-  m_alarmTimer.start();
-
-  // Set dataset colors
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &Widgets::LEDPanel::onThemeChanged);
 }
 
 /**
@@ -120,45 +116,49 @@ const QStringList &Widgets::LEDPanel::titles() const
  */
 void Widgets::LEDPanel::updateData()
 {
-  // Get the dashboard instance and check if the index is valid
-  static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardLED))
+  if (!isEnabled())
     return;
 
-  // Get the LED group and update the LED states
-  bool changed = false;
-  const auto &group = dash->getGroupWidget(WC::DashboardLED, m_index);
-  for (int i = 0; i < group.datasetCount(); ++i)
+  if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index))
   {
-    // Get the dataset and its values
-    const auto &dataset = group.getDataset(i);
-    const auto value = dataset.value().toDouble();
-    const auto alarmValue = dataset.alarm();
-
-    // Obtain the LED state
-    const bool enabled = (value >= dataset.ledHigh());
-    const bool alarm = (alarmValue != 0 && value >= alarmValue);
-
-    // Update the alarm state
-    if (m_alarms[i] != alarm)
+    // Get the LED group and update the LED states
+    bool changed = false;
+    const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
+    for (int i = 0; i < group.datasetCount(); ++i)
     {
-      changed = true;
-      m_alarms[i] = alarm;
+      // Get the dataset and its values
+      const auto &dataset = group.getDataset(i);
+      const auto value = dataset.value().toDouble();
+      const auto alarmValue = dataset.alarm();
+
+      // Obtain the LED state
+      const bool enabled = (value >= dataset.ledHigh());
+      const bool alarm = (alarmValue != 0 && value >= alarmValue);
+
+      // Update the alarm state
+      if (m_alarms[i] != alarm)
+      {
+        changed = true;
+        m_alarms[i] = alarm;
+      }
+
+      // Update the LED state
+      if (!alarm && m_states[i] != enabled)
+      {
+        changed = true;
+        m_states[i] = enabled;
+      }
     }
 
-    // Update the LED state
-    if (!alarm && m_states[i] != enabled)
-    {
-      changed = true;
-      m_states[i] = enabled;
-    }
+    // Redraw the widget
+    if (changed)
+      Q_EMIT updated();
   }
-
-  // Redraw the widget
-  if (changed)
-    Q_EMIT updated();
 }
 
+/**
+ * @brief Toggles the LED enabled state when the alarm blinker timer expires
+ */
 void Widgets::LEDPanel::onAlarmTimeout()
 {
   bool changed = false;
@@ -185,14 +185,12 @@ void Widgets::LEDPanel::onThemeChanged()
   const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
   // clang-format on
 
-  // Obtain colors for each dataset in the widget
-  m_colors.clear();
-  auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardLED))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardLED, m_index);
-    m_colors.resize(group.datasetCount());
+    const auto &group = GET_GROUP(SerialStudio::DashboardLED, m_index);
 
+    m_colors.clear();
+    m_colors.resize(group.datasetCount());
     for (int i = 0; i < group.datasetCount(); ++i)
     {
       const auto &dataset = group.getDataset(i);
@@ -202,8 +200,7 @@ void Widgets::LEDPanel::onThemeChanged()
                              : colors.at(index % colors.count()).toString();
       m_colors[i] = color;
     }
-  }
 
-  // Update user interface
-  Q_EMIT themeChanged();
+    Q_EMIT themeChanged();
+  }
 }

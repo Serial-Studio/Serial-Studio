@@ -30,7 +30,7 @@
 #include <QItemSelectionModel>
 #include <Misc/OsmTemplateServer.h>
 
-#include <WidgetsCommon.h>
+#include <SerialStudio.h>
 
 namespace JSON
 {
@@ -110,6 +110,9 @@ class ProjectModel : public QObject
   Q_PROPERTY(int groupCount
              READ groupCount
              NOTIFY modifiedChanged)
+  Q_PROPERTY(int datasetCount
+             READ datasetCount
+             NOTIFY modifiedChanged)
   Q_PROPERTY(quint8 datasetOptions
              READ datasetOptions
              NOTIFY datasetOptionsChanged)
@@ -142,6 +145,7 @@ signals:
   void projectModelChanged();
   void datasetModelChanged();
   void datasetOptionsChanged();
+  void frameDetectionChanged();
   void editableOptionsChanged();
   void frameParserCodeChanged();
 
@@ -208,8 +212,8 @@ public:
 
   [[nodiscard]] bool modified() const;
   [[nodiscard]] CurrentView currentView() const;
-  [[nodiscard]] WC::DecoderMethod decoderMethod() const;
-  [[nodiscard]] WC::FrameDetection frameDetection() const;
+  [[nodiscard]] SerialStudio::DecoderMethod decoderMethod() const;
+  [[nodiscard]] SerialStudio::FrameDetection frameDetection() const;
 
   [[nodiscard]] QString jsonFileName() const;
   [[nodiscard]] QString jsonProjectsPath() const;
@@ -231,6 +235,7 @@ public:
   [[nodiscard]] bool currentDatasetIsEditable() const;
 
   [[nodiscard]] int groupCount() const;
+  [[nodiscard]] int datasetCount() const;
   [[nodiscard]] quint8 datasetOptions() const;
   [[nodiscard]] const QVector<JSON::Group> &groups() const;
 
@@ -246,6 +251,8 @@ public:
   Q_INVOKABLE bool saveJsonFile();
 
 public slots:
+  void setupExternalConnections();
+
   void newJsonFile();
   void openJsonFile();
   void openJsonFile(const QString &path);
@@ -256,12 +263,13 @@ public slots:
   void duplicateCurrentGroup();
   void duplicateCurrentAction();
   void duplicateCurrentDataset();
-  void addDataset(const WC::DatasetOption options);
-  void changeDatasetOption(const WC::DatasetOption option, const bool checked);
+  void addDataset(const SerialStudio::DatasetOption options);
+  void changeDatasetOption(const SerialStudio::DatasetOption option,
+                           const bool checked);
 
   void addAction();
-  void addGroup(const QString &title, const WC::GroupWidget widget);
-  bool setGroupWidget(const int group, const WC::GroupWidget widget);
+  void addGroup(const QString &title, const SerialStudio::GroupWidget widget);
+  bool setGroupWidget(const int group, const SerialStudio::GroupWidget widget);
 
   void setFrameParserCode(const QString &code);
 
@@ -302,8 +310,8 @@ private:
   QString m_thunderforestApiKey;
 
   CurrentView m_currentView;
-  WC::DecoderMethod m_frameDecoder;
-  WC::FrameDetection m_frameDetection;
+  SerialStudio::DecoderMethod m_frameDecoder;
+  SerialStudio::FrameDetection m_frameDetection;
 
   bool m_modified;
   QString m_filePath;

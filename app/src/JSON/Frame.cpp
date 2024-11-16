@@ -29,6 +29,9 @@
 JSON::Frame::~Frame()
 {
   m_groups.clear();
+  m_actions.clear();
+  m_groups.squeeze();
+  m_actions.squeeze();
 }
 
 /**
@@ -44,6 +47,8 @@ void JSON::Frame::clear()
 
   m_groups.clear();
   m_actions.clear();
+  m_groups.squeeze();
+  m_actions.squeeze();
 }
 
 /**
@@ -72,7 +77,7 @@ QJsonObject JSON::Frame::serialize() const
     actionArray.append(action.serialize());
 
   QJsonObject object;
-  object.insert(QStringLiteral("title"), m_title.trimmed());
+  object.insert(QStringLiteral("title"), m_title.simplified());
   object.insert(QStringLiteral("groups"), groupArray);
   object.insert(QStringLiteral("actions"), actionArray);
   return object;
@@ -92,7 +97,8 @@ bool JSON::Frame::read(const QJsonObject &object)
   // Get title & groups array
   const auto groups = object.value(QStringLiteral("groups")).toArray();
   const auto actions = object.value(QStringLiteral("actions")).toArray();
-  const auto title = object.value(QStringLiteral("title")).toString().trimmed();
+  const auto title
+      = object.value(QStringLiteral("title")).toString().simplified();
 
   // We need to have a project title and at least one group
   if (!title.isEmpty() && !groups.isEmpty())

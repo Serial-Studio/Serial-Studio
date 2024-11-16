@@ -22,23 +22,27 @@
  */
 
 #include "IO/Manager.h"
-#include "IO/Checksum.h"
 #include "IO/Drivers/Serial.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
 
 #include "MQTT/Client.h"
 #include "Misc/Translator.h"
-#include "JSON/FrameBuilder.h"
-#include "JSON/ProjectModel.h"
+
+#include <QApplication>
 
 /**
- * Adds support for C escape sequences to the given @a str.
- * When user inputs "\n" in a textbox, Qt automatically converts that string to
- * "\\n". For our purposes, we need to convert "\\n" back to "\n", and so on
- * with the rest of the escape sequences supported by C.
+ * @brief Converts C-style escape sequences in a string to their actual values.
  *
- * TODO: add support for numbers
+ * This function processes a string to replace escape sequences (e.g., "\\n")
+ * with their corresponding character values ("\n"). It is useful for handling
+ * user input in a format compatible with C escape sequences.
+ *
+ * @param str The input string containing escape sequences.
+ * @return A string with escape sequences replaced by their actual values.
+ *
+ * @note Currently supports basic escape sequences. Numbers are not yet
+ *       supported (TODO).
  */
 static QString ADD_ESCAPE_SEQUENCES(const QString &str)
 {
@@ -54,42 +58,68 @@ static QString ADD_ESCAPE_SEQUENCES(const QString &str)
 }
 
 /**
- * Constructor function
+ * @brief Constructs the `Manager` instance.
+ *
+ * Initializes the I/O manager with default settings, sets up the `FrameReader`
+ * in a separate thread, and connects relevant signals for data and
+ * configuration management.
+ *
+ * By default, the manager is configured for serial communication.
  */
 IO::Manager::Manager()
-  : m_enableCrc(false)
-  , m_writeEnabled(true)
-  , m_maxBufferSize(1024 * 1024)
+  : m_writeEnabled(true)
   , m_driver(nullptr)
-  , m_receivedBytes(0)
   , m_startSequence(QStringLiteral("/*"))
   , m_finishSequence(QStringLiteral("*/"))
-  , m_separatorSequence(QStringLiteral(","))
 {
-  // Set initial settings
-  setMaxBufferSize(1024 * 1024);
-  setSelectedDriver(SelectedDriver::Serial);
+  // Move the frame parser worker to its dedicated thread
+  m_frameReader.moveToThread(&m_workerThread);
 
-  // Update connect button status when device type is changed
-  connect(this, &IO::Manager::selectedDriverChanged, this,
+  // Connect frame parser worker signals to manager signals
+  connect(&m_frameReader, &IO::FrameReader::frameReady, this,
+          &IO::Manager::frameReceived, Qt::QueuedConnection);
+  connect(&m_frameReader, &IO::FrameReader::dataReceived, this,
+          &IO::Manager::dataReceived, Qt::QueuedConnection);
+
+  // Automatically enable/disable the connect button when bus type changes
+  connect(this, &IO::Manager::busTypeChanged, this,
           &IO::Manager::configurationChanged);
 
-  // Update lists when language changes
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, &IO::Manager::languageChanged);
+  // Avoid crashing the app when quitting
+  connect(qApp, &QApplication::aboutToQuit, this, [=] {
+    disconnect(&m_frameReader, nullptr, nullptr, nullptr);
+    m_workerThread.quit();
+    m_workerThread.wait();
+  });
+
+  // Start the worker thread
+  m_workerThread.start(QThread::TimeCriticalPriority);
+
+  // Set default data interface to serial port
+  setBusType(SerialStudio::BusType::Serial);
 }
 
 /**
- * Returns the only instance of the class
+ * @brief Retrieves the singleton instance of the `Manager`.
+ *
+ * This function implements the singleton pattern, ensuring that there is only
+ * one instance of the `Manager` in the application.
+ *
+ * @return A reference to the `Manager` instance.
  */
 IO::Manager &IO::Manager::instance()
 {
-  static Manager singleton;
-  return singleton;
+  static Manager instance;
+  return instance;
 }
 
 /**
- * Returns @c true if a device is connected and its open in read-only mode
+ * @brief Checks if the Manager is in read-only mode.
+ *
+ * Read-only mode is determined by whether the device is connected and
+ * write operations are disabled.
+ *
+ * @return True if the Manager is in read-only mode, false otherwise.
  */
 bool IO::Manager::readOnly()
 {
@@ -97,7 +127,12 @@ bool IO::Manager::readOnly()
 }
 
 /**
- * Returns @c true if a device is connected and its open in read/write mode
+ * @brief Checks if the Manager is in read-write mode.
+ *
+ * Read-write mode is determined by whether the device is connected and
+ * write operations are enabled.
+ *
+ * @return True if the Manager is in read-write mode, false otherwise.
  */
 bool IO::Manager::readWrite()
 {
@@ -105,28 +140,28 @@ bool IO::Manager::readWrite()
 }
 
 /**
- * Returns @c true if a device is currently selected and opened or if the MQTT
- * client is currently connected as a subscriber.
+ * @brief Checks if the Manager is connected to a device.
+ *
+ * Determines the connection state by checking the driver status or the MQTT
+ * subscription status.
+ *
+ * @return True if a device is connected or subscribed, false otherwise.
  */
 bool IO::Manager::connected()
 {
   if (driver())
     return driver()->isOpen();
 
-  return MQTT::Client::instance().isSubscribed();
+  return false;
 }
 
 /**
- * Returns @c true if a device is currently selected
- */
-bool IO::Manager::deviceAvailable()
-{
-  return driver() != nullptr;
-}
-
-/**
- * Returns @c true if we are able to connect to a device/port with the current
- * config.
+ * @brief Validates the current configuration of the Manager.
+ *
+ * Checks the configuration validity of the active driver. Returns false
+ * if no driver is present or the configuration is invalid.
+ *
+ * @return True if the configuration is valid, false otherwise.
  */
 bool IO::Manager::configurationOk()
 {
@@ -137,20 +172,12 @@ bool IO::Manager::configurationOk()
 }
 
 /**
- * Returns the maximum size of the buffer. This is useful to avoid consuming to
- * much memory when a large block of invalid data is received (for example, when
- * the user selects an invalid baud rate configuration).
- */
-int IO::Manager::maxBufferSize() const
-{
-  return m_maxBufferSize;
-}
-
-/**
- * Returns a pointer to the currently selected driver.
+ * @brief Retrieves the current hardware abstraction layer (HAL) driver.
  *
- * @warning you need to check this pointer before using it, it can have a @c
- * nullptr value during normal operations.
+ * The HAL driver is responsible for interfacing with the connected I/O device.
+ *
+ * @return A pointer to the active `HAL_Driver` instance, or nullptr if none is
+ * active.
  */
 IO::HAL_Driver *IO::Manager::driver()
 {
@@ -158,20 +185,25 @@ IO::HAL_Driver *IO::Manager::driver()
 }
 
 /**
- * Returns the currently selected data source, possible return values:
- * - @c DataSource::Serial  use a serial port as a data source
- * - @c DataSource::Network use a network port as a data source
+ * @brief Retrieves the current bus type used by the Manager.
+ *
+ * The bus type determines the communication medium (e.g., Serial, Network,
+ * Bluetooth).
+ *
+ * @return The current bus type as a `SerialStudio::BusType` enum.
  */
-IO::Manager::SelectedDriver IO::Manager::selectedDriver() const
+SerialStudio::BusType IO::Manager::busType() const
 {
-  return m_selectedDriver;
+  return m_busType;
 }
 
 /**
- * Returns the start sequence string used by the application to know where to
- * consider that a frame begins. If the start sequence is empty, then the
- * application shall ignore incoming data. The only thing that wont ignore the
- * incoming data will be the console.
+ * @brief Retrieves the start sequence used for frame detection.
+ *
+ * The start sequence is used to identify the beginning of frames in the data
+ * stream.
+ *
+ * @return A reference to the start sequence string.
  */
 const QString &IO::Manager::startSequence() const
 {
@@ -179,10 +211,11 @@ const QString &IO::Manager::startSequence() const
 }
 
 /**
- * Returns the finish sequence string used by the application to know where to
- * consider that a frame ends. If the start sequence is empty, then the
- * application shall ignore incoming data. The only thing that wont ignore the
- * incoming data will be the console.
+ * @brief Retrieves the finish sequence used for frame detection.
+ *
+ * The finish sequence is used to identify the end of frames in the data stream.
+ *
+ * @return A reference to the finish sequence string.
  */
 const QString &IO::Manager::finishSequence() const
 {
@@ -190,18 +223,14 @@ const QString &IO::Manager::finishSequence() const
 }
 
 /**
- * Returns the separator sequence string used by the application to know where
- * to consider that a data item ends.
+ * @brief Retrieves a list of available bus types.
+ *
+ * Provides a list of all supported communication mediums, including Serial,
+ * Network, and Bluetooth LE.
+ *
+ * @return A list of available bus types as strings.
  */
-const QString &IO::Manager::separatorSequence() const
-{
-  return m_separatorSequence;
-}
-
-/**
- * Returns a list with the possible data source options.
- */
-QStringList IO::Manager::availableDrivers() const
+QStringList IO::Manager::availableBuses() const
 {
   QStringList list;
   list.append(tr("Serial Port"));
@@ -211,18 +240,21 @@ QStringList IO::Manager::availableDrivers() const
 }
 
 /**
- * Tries to write the given @a data to the current device.
+ * @brief Writes data to the connected device.
  *
- * @returns the number of bytes written to the target device
+ * Sends the specified data to the connected device through the active driver.
+ * Emits the `dataSent` signal upon successful transmission.
+ *
+ * @param data The data to be written.
+ * @return The number of bytes written, or -1 if an error occurs or no device is
+ *         connected.
  */
 qint64 IO::Manager::writeData(const QByteArray &data)
 {
   if (connected())
   {
-    // Write data to device
-    auto bytes = driver()->write(data);
+    const auto bytes = driver()->write(data);
 
-    // Show sent data in console
     if (bytes > 0)
     {
       auto writtenData = data;
@@ -230,7 +262,6 @@ qint64 IO::Manager::writeData(const QByteArray &data)
       Q_EMIT dataSent(writtenData);
     }
 
-    // Return number of bytes written
     return bytes;
   }
 
@@ -238,8 +269,10 @@ qint64 IO::Manager::writeData(const QByteArray &data)
 }
 
 /**
- * Connects/disconnects the application from the currently selected device. This
- * function is used as a convenience for the connect/disconnect button.
+ * @brief Toggles the connection state of the Manager.
+ *
+ * If the Manager is currently connected, it disconnects the device. If it is
+ * not connected, it attempts to establish a connection.
  */
 void IO::Manager::toggleConnection()
 {
@@ -250,24 +283,29 @@ void IO::Manager::toggleConnection()
 }
 
 /**
- * Closes the currently selected device and tries to open & configure a new
- * connection. A data source must be selected before calling this function.
+ * @brief Connects to the configured device.
+ *
+ * Attempts to open the device in the appropriate mode (read-only or read-write)
+ * and sets up the `FrameReader` to process incoming data. Emits a signal to
+ * update the connection state.
  */
 void IO::Manager::connectDevice()
 {
   // Configure current device
-  if (deviceAvailable())
+  if (driver())
   {
     // Set open flag
     QIODevice::OpenMode mode = QIODevice::ReadOnly;
     if (m_writeEnabled)
       mode = QIODevice::ReadWrite;
 
-    // Open device
+    // Open device & instruct frame reader to obtain data from it
     if (driver()->open(mode))
     {
-      connect(driver(), &IO::HAL_Driver::dataReceived, this,
-              &IO::Manager::onDataReceived);
+      connect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
+              &FrameReader::processData, Qt::QueuedConnection);
+      connect(driver(), &IO::HAL_Driver::payloadReceived, this,
+              &IO::Manager::processPayload, Qt::QueuedConnection);
     }
 
     // Error opening the device
@@ -280,35 +318,60 @@ void IO::Manager::connectDevice()
 }
 
 /**
- * Disconnects from the current device and clears temp. data
+ * @brief Disconnects from the current device.
+ *
+ * Closes the connection to the device, clears the frame reader buffer, and
+ * disconnects any associated signals. Emits signals to update the UI and
+ * reflect the new state.
  */
 void IO::Manager::disconnectDevice()
 {
-  if (deviceAvailable())
+  if (driver())
   {
-    // Disconnect device signals/slots
-    disconnect(driver(), &IO::HAL_Driver::dataReceived, this,
-               &IO::Manager::onDataReceived);
+    // Disconnect bus signals/slots
+    disconnect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
+               &FrameReader::processData);
+    disconnect(driver(), &IO::HAL_Driver::payloadReceived, this,
+               &IO::Manager::processPayload);
 
     // Close driver device
     driver()->close();
 
-    // Reset data buffer
-    m_receivedBytes = 0;
-    m_dataBuffer.clear();
-    m_dataBuffer.reserve(maxBufferSize());
+    // Clear the data buffer in the frame rader
+    QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
+                              Qt::QueuedConnection);
 
     // Update UI
     Q_EMIT driverChanged();
     Q_EMIT connectedChanged();
   }
-
-  // Disable CRC checking
-  m_enableCrc = false;
 }
 
 /**
- * Enables/disables RW mode
+ * @brief Sets up external connections for the Manager.
+ *
+ * Connects external components, such as the translator for bus list updates and
+ * the frame reader for parameter synchronization.
+ */
+void IO::Manager::setupExternalConnections()
+{
+  // Update the bus list when the language is changed
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, &IO::Manager::busListChanged);
+
+  // Update the frame reader parameters automatically
+  QMetaObject::invokeMethod(&m_frameReader,
+                            &FrameReader::setupExternalConnections,
+                            Qt::QueuedConnection);
+}
+
+/**
+ * @brief Enables or disables write functionality.
+ *
+ * Updates the internal write flag and emits a signal to notify about the
+ * change.
+ *
+ * @param enabled True to enable writing, false to disable.
  */
 void IO::Manager::setWriteEnabled(const bool enabled)
 {
@@ -317,41 +380,35 @@ void IO::Manager::setWriteEnabled(const bool enabled)
 }
 
 /**
- * Reads the given payload and emits it as if it were received from a device.
- * This function is for convenience to interact with other application modules &
- * plugins.
+ * @brief Processes a received payload.
+ *
+ * Invokes signals to notify about the received raw data and parsed frame in a
+ * thread-safe manner.
+ *
+ * @param payload The data payload to process.
  */
 void IO::Manager::processPayload(const QByteArray &payload)
 {
   if (!payload.isEmpty())
   {
-    // Update received bytes indicator
-    m_receivedBytes += payload.size();
-    if (m_receivedBytes >= UINT64_MAX)
-      m_receivedBytes = 0;
-
-    // Notify user interface & application modules
-    Q_EMIT dataReceived(payload);
-    Q_EMIT frameReceived(payload);
-    Q_EMIT receivedBytesChanged();
+    QMetaObject::invokeMethod(
+        this,
+        [=] {
+          Q_EMIT dataReceived(payload);
+          Q_EMIT frameReceived(payload);
+        },
+        Qt::QueuedConnection);
   }
 }
 
 /**
- * Changes the maximum permited buffer size. Check the @c maxBufferSize()
- * function for more information.
- */
-void IO::Manager::setMaxBufferSize(const int maxBufferSize)
-{
-  m_maxBufferSize = maxBufferSize;
-  Q_EMIT maxBufferSizeChanged();
-
-  m_dataBuffer.reserve(maxBufferSize);
-}
-
-/**
- * Changes the frame start sequence. Check the @c startSequence() function for
- * more information.
+ * @brief Sets the start sequence for frame detection.
+ *
+ * Configures the sequence that identifies the beginning of a frame. If the
+ * sequence is empty, a default value is used. Updates the frame reader
+ * asynchronously and emits a signal to notify about the change.
+ *
+ * @param sequence The new start sequence as a QString.
  */
 void IO::Manager::setStartSequence(const QString &sequence)
 {
@@ -359,12 +416,21 @@ void IO::Manager::setStartSequence(const QString &sequence)
   if (m_startSequence.isEmpty())
     m_startSequence = QStringLiteral("/*");
 
+  QMetaObject::invokeMethod(
+      &m_frameReader, [=] { m_frameReader.setStartSequence(m_startSequence); },
+      Qt::QueuedConnection);
+
   Q_EMIT startSequenceChanged();
 }
 
 /**
- * Changes the frame end sequence. Check the @c finishSequence() function for
- * more information.
+ * @brief Sets the finish sequence for frame detection.
+ *
+ * Configures the sequence that identifies the end of a frame. If the sequence
+ * is empty, a default value is used. Updates the frame reader asynchronously
+ * and emits a signal to notify about the change.
+ *
+ * @param sequence The new finish sequence as a QString.
  */
 void IO::Manager::setFinishSequence(const QString &sequence)
 {
@@ -372,46 +438,52 @@ void IO::Manager::setFinishSequence(const QString &sequence)
   if (m_finishSequence.isEmpty())
     m_finishSequence = QStringLiteral("*/");
 
+  QMetaObject::invokeMethod(
+      &m_frameReader,
+      [=] { m_frameReader.setFinishSequence(m_finishSequence); },
+      Qt::QueuedConnection);
+
   Q_EMIT finishSequenceChanged();
 }
 
 /**
- * Changes the frame separator sequence. Check the @c separatorSequence()
- * function for more information.
+ * @brief Sets the bus type and updates the associated driver.
+ *
+ * Configures the data source by setting the appropriate bus type (e.g., Serial,
+ * Network, Bluetooth LE). Disconnects the current driver, assigns a new driver
+ * instance based on the bus type, and attempts to initialize the connection.
+ * Emits a signal to update the UI on bus type changes.
+ *
+ * Supported bus types:
+ * - `SerialStudio::BusType::Serial`: Serial communication.
+ * - `SerialStudio::BusType::Network`: Network-based communication.
+ * - `SerialStudio::BusType::BluetoothLE`: Bluetooth Low Energy communication.
+ *
+ * @param driver The new bus type as a `SerialStudio::BusType` enum.
  */
-void IO::Manager::setSeparatorSequence(const QString &sequence)
-{
-  m_separatorSequence = ADD_ESCAPE_SEQUENCES(sequence);
-  if (m_separatorSequence.isEmpty())
-    m_separatorSequence = QStringLiteral(",");
-
-  Q_EMIT separatorSequenceChanged();
-}
-
-/**
- * Changes the data source type. Check the @c dataSource() funciton for more
- * information.
- */
-void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
+void IO::Manager::setBusType(const SerialStudio::BusType &driver)
 {
   // Disconnect current driver
   disconnectDevice();
 
   // Change data source
-  m_selectedDriver = driver;
+  m_busType = driver;
 
   // Try to open a serial port connection
-  if (selectedDriver() == SelectedDriver::Serial)
-    setDriver(&(Drivers::Serial::instance()));
+  if (busType() == SerialStudio::BusType::Serial)
+    setDriver(static_cast<HAL_Driver *>(&(Drivers::Serial::instance())));
 
   // Try to open a network connection
-  else if (selectedDriver() == SelectedDriver::Network)
-    setDriver(&(Drivers::Network::instance()));
+  else if (busType() == SerialStudio::BusType::Network)
+    setDriver(static_cast<HAL_Driver *>(&(Drivers::Network::instance())));
 
   // Try to open a BLE connection
-  else if (selectedDriver() == SelectedDriver::BluetoothLE)
+  else if (busType() == SerialStudio::BusType::BluetoothLE)
   {
     auto *driver = &Drivers::BluetoothLE::instance();
+    connect(driver, &IO::Drivers::BluetoothLE::deviceConnectedChanged, this,
+            &IO::Manager::connectedChanged);
+
     if (driver->operatingSystemSupported())
     {
       setDriver(static_cast<HAL_Driver *>(driver));
@@ -424,375 +496,32 @@ void IO::Manager::setSelectedDriver(const IO::Manager::SelectedDriver &driver)
     setDriver(nullptr);
 
   // Update UI
-  Q_EMIT selectedDriverChanged();
+  Q_EMIT busTypeChanged();
 }
 
 /**
- * Read frames from temporary buffer, every frame that contains the appropiate
- * start/end sequence is removed from the buffer as soon as its read.
+ * @brief Sets the hardware abstraction layer (HAL) driver.
  *
- * This function also checks that the buffer size does not exceed specified size
- * limitations.
+ * Updates the current driver and establishes the necessary signal-slot
+ * connections for configuration changes. Disconnects the previous driver,
+ * if any, and emits signals to notify about driver and configuration updates.
  *
- * Implemementation credits: @jpnorair and @alex-spataru
- */
-void IO::Manager::readFrames()
-{
-  // Obtain pointer to JSON generator
-  static auto *model = &JSON::ProjectModel::instance();
-  static auto *generator = &JSON::FrameBuilder::instance();
-
-  // Initialize a static list with possible line breaks
-  static QList<QByteArray> linebreaks;
-  if (linebreaks.isEmpty())
-  {
-    linebreaks.append(QByteArray("\n"));
-    linebreaks.append(QByteArray("\r"));
-    linebreaks.append(QByteArray("\r\n"));
-  }
-
-  // No device connected, abort
-  if (!connected())
-    return;
-
-  // Obtain operation mode from JSON generator
-  const auto mode = generator->operationMode();
-
-  // Read until start/finish combinations are not found
-  if (mode == JSON::FrameBuilder::DeviceSendsJSON)
-    readStartEndDelimetedFrames();
-
-  // Project mode, obtain which frame detection method to use
-  else if (mode == JSON::FrameBuilder::ProjectFile)
-  {
-    if (model->frameDetection() == WC::EndDelimiterOnly)
-      readEndDelimetedFrames(QList<QByteArray>{finishSequence().toUtf8()});
-    else if (model->frameDetection() == WC::StartAndEndDelimiter)
-      readStartEndDelimetedFrames();
-  }
-
-  // Handle data with line breaks (\n, \r, or \r\n)
-  else if (mode == JSON::FrameBuilder::CommaSeparatedValues)
-    readEndDelimetedFrames(linebreaks);
-}
-
-/**
- * Deletes the contents of the temporary buffer. This function is called
- * automatically by the class when the temporary buffer size exceeds the limit
- * imposed by the
- * @c maxBufferSize() function.
- */
-void IO::Manager::clearTempBuffer()
-{
-  m_dataBuffer.clear();
-}
-
-/**
- * Changes the target device pointer. Deletion should be handled by the
- * interface implementation, not by this class.
+ * @param driver A pointer to the new `HAL_Driver` instance, or nullptr if no
+ *               driver is to be set.
  */
 void IO::Manager::setDriver(HAL_Driver *driver)
 {
-  if (driver)
-    connect(driver, &IO::HAL_Driver::configurationChanged, this,
-            &IO::Manager::configurationChanged);
-
-  m_driver = driver;
-
-  Q_EMIT driverChanged();
-  Q_EMIT configurationChanged();
-}
-
-/**
- * Reads incoming data from the I/O device, updates the console object,
- * registers incoming data to temporary buffer & extracts valid data frames from
- * the buffer using the @c readFrame() function.
- */
-void IO::Manager::onDataReceived(const QByteArray &data)
-{
-  // Verify that device is still valid
-  if (!driver())
-    disconnectDevice();
-
-  // Read data & append it to buffer
-  auto bytes = data.length();
-
-  // Obtain frames from data buffer
-  m_dataBuffer.append(data);
-  readFrames();
-
-  // Update received bytes indicator
-  m_receivedBytes += bytes;
-  if (m_receivedBytes >= UINT64_MAX)
-    m_receivedBytes = 0;
-
-  // Notify user interface
-  Q_EMIT receivedBytesChanged();
-  Q_EMIT dataReceived(data);
-}
-
-/**
- * @brief Processes data buffer to detect and emit frames using start and end
- *        delimiters.
- *
- * This function continuously scans the internal data buffer for frames that are
- * delimited by predefined start and end sequences.
- *
- * When a frame is detected, its content is extracted and validated.
- * If the frame passes integrity checks, it is emitted as a complete frame.
- *
- * - If the start delimiter is found but the end delimiter is missing, the
- *   function waits for more data.
- * - If the frame fails validation, it is discarded, and processing resumes
- *   after the end delimiter.
- * - Processed data is removed from the buffer to maintain memory efficiency.
- *
- * The function also ensures the buffer does not exceed a maximum size by
- * clearing temporary data if necessary.
- */
-void IO::Manager::readStartEndDelimetedFrames()
-{
-  auto start = startSequence().toUtf8();
-  auto finish = finishSequence().toUtf8();
-  int bytesProcessed = 0;
-
-  while (true)
+  if (m_driver != driver)
   {
-    // Get start index
-    int sIndex = m_dataBuffer.indexOf(start, bytesProcessed);
-    if (sIndex == -1)
-      break;
+    if (driver)
+      connect(driver, &IO::HAL_Driver::configurationChanged, this,
+              &IO::Manager::configurationChanged);
 
-    // Get end index
-    int fIndex = m_dataBuffer.indexOf(finish, sIndex + start.size());
-    if (fIndex == -1)
-      break;
+    if (m_driver)
+      disconnect(m_driver);
 
-    // Extract the frame between start and finish sequences
-    int frameStart = sIndex + start.size();
-    int frameLength = fIndex - frameStart;
-    QByteArray frame = m_dataBuffer.mid(frameStart, frameLength);
-
-    // Parse frame if not empty
-    if (!frame.isEmpty())
-    {
-      // Checksum verification & emit frame if valid
-      int chop = 0;
-      auto result = integrityChecks(frame, m_dataBuffer, &chop);
-      if (result == ValidationStatus::FrameOk)
-      {
-        Q_EMIT frameReceived(frame);
-        bytesProcessed = fIndex + finish.size() + chop;
-      }
-
-      // Incomplete data; wait for more data
-      else if (result == ValidationStatus::ChecksumIncomplete)
-        break;
-
-      // Invalid frame; skip past finish sequence
-      else
-        bytesProcessed = fIndex + finish.size() + chop;
-    }
-
-    // Empty frame; move past the finish sequence
-    else
-      bytesProcessed = fIndex + finish.size();
+    m_driver = driver;
+    Q_EMIT driverChanged();
+    Q_EMIT configurationChanged();
   }
-
-  // Remove processed data from buffer
-  if (bytesProcessed > 0)
-    m_dataBuffer.remove(0, bytesProcessed);
-
-  // Clear temp buffer if it exceeds maximum size
-  if (m_dataBuffer.size() > maxBufferSize())
-    clearTempBuffer();
-}
-
-/**
- * @brief Processes data buffer to detect and emit frames using end delimiters
- *        only.
- *
- * This function scans the internal data buffer for frames separated by
- * specified line break sequences.
- *
- * When a frame is detected up to a line break, it is emitted as a complete
- * frame.
- *
- * - Frames exceeding a set maximum size (10 KB) are discarded to avoid
- *   excessive memory usage.
- * - If the frame contains non-numeric data, it is marked invalid and skipped.
- * - Processed data is removed from the buffer, and the buffer size is monitored
- *   to prevent overflow.
- *
- * This function is designed for continuous streams where frames end with
- * newlines or other delimiters.
- *
- * @param delimeters List of QByteArray delimiters that indicate the end of a
- *                   frame.
- */
-void IO::Manager::readEndDelimetedFrames(const QList<QByteArray> &delimeters)
-{
-  // Set maximum frame size to 10 KB
-  const int maxFrameSize = 10 * 1024;
-  int bytesProcessed = 0;
-
-  while (true)
-  {
-    // Find the earliest line break in the buffer
-    int endIndex = -1;
-    QByteArray delimeter;
-    for (const QByteArray &d : delimeters)
-    {
-      int index = m_dataBuffer.indexOf(d, bytesProcessed);
-      if (index != -1 && (endIndex == -1 || index < endIndex))
-      {
-        endIndex = index;
-        delimeter = d;
-      }
-    }
-
-    // No complete line found
-    if (endIndex == -1)
-      break;
-
-    // Extract the frame up to the line break
-    int frameLength = endIndex - bytesProcessed;
-    QByteArray frame = m_dataBuffer.mid(bytesProcessed, frameLength);
-
-    // Process frame
-    if (!frame.isEmpty())
-    {
-      // Skip larger frames
-      if (frame.size() > maxFrameSize)
-      {
-        qWarning() << "Frame size exceeds maximum allowed size and will be "
-                      "discarded.";
-      }
-
-      // Emit frame
-      else
-        Q_EMIT frameReceived(frame);
-    }
-
-    // Move past the line break
-    bytesProcessed = endIndex + delimeter.size();
-  }
-
-  // Remove processed data from buffer
-  if (bytesProcessed > 0)
-    m_dataBuffer.remove(0, bytesProcessed);
-
-  // Clear temp buffer if it exceeds maximum size
-  if (m_dataBuffer.size() > maxBufferSize())
-    clearTempBuffer();
-}
-
-/**
- * Checks if the @c cursor has a checksum corresponding to the given @a frame.
- * If so, the function shall calculate the appropiate checksum to for the @a
- * frame and compare it with the received checksum to verify the integrity of
- * received data.
- *
- * @param frame data in which we shall perform integrity checks
- * @param cursor master buffer, should start with checksum type header
- * @param bytes pointer to the number of bytes that we need to chop from the
- * master buffer
- */
-IO::Manager::ValidationStatus
-IO::Manager::integrityChecks(const QByteArray &frame, const QByteArray &cursor,
-                             int *bytes)
-{
-  // Get finish sequence as byte array
-  auto finish = finishSequence().toUtf8();
-  auto crc8Header = finish + "crc8:";
-  auto crc16Header = finish + "crc16:";
-  auto crc32Header = finish + "crc32:";
-
-  // Check CRC-8
-  if (cursor.contains(crc8Header))
-  {
-    // Enable the CRC flag
-    m_enableCrc = true;
-    auto offset = cursor.indexOf(crc8Header) + crc8Header.length() - 1;
-
-    // Check if we have enough data in the buffer
-    if (cursor.length() >= offset + 1)
-    {
-      // Increment the number of bytes to remove from master buffer
-      *bytes += crc8Header.length() + 1;
-
-      // Get 8-bit checksum
-      const quint8 crc = cursor.at(offset + 1);
-
-      // Compare checksums
-      if (crc8(frame.data(), frame.length()) == crc)
-        return ValidationStatus::FrameOk;
-      else
-        return ValidationStatus::ChecksumError;
-    }
-  }
-
-  // Check CRC-16
-  else if (cursor.contains(crc16Header))
-  {
-    // Enable the CRC flag
-    m_enableCrc = true;
-    auto offset = cursor.indexOf(crc16Header) + crc16Header.length() - 1;
-
-    // Check if we have enough data in the buffer
-    if (cursor.length() >= offset + 2)
-    {
-      // Increment the number of bytes to remove from master buffer
-      *bytes += crc16Header.length() + 2;
-
-      // Get 16-bit checksum
-      const quint8 a = cursor.at(offset + 1);
-      const quint8 b = cursor.at(offset + 2);
-      const quint16 crc = (a << 8) | (b & 0xff);
-
-      // Compare checksums
-      if (crc16(frame.data(), frame.length()) == crc)
-        return ValidationStatus::FrameOk;
-      else
-        return ValidationStatus::ChecksumError;
-    }
-  }
-
-  // Check CRC-32
-  else if (cursor.contains(crc32Header))
-  {
-    // Enable the CRC flag
-    m_enableCrc = true;
-    auto offset = cursor.indexOf(crc32Header) + crc32Header.length() - 1;
-
-    // Check if we have enough data in the buffer
-    if (cursor.length() >= offset + 4)
-    {
-      // Increment the number of bytes to remove from master buffer
-      *bytes += crc32Header.length() + 4;
-
-      // Get 32-bit checksum
-      const quint8 a = cursor.at(offset + 1);
-      const quint8 b = cursor.at(offset + 2);
-      const quint8 c = cursor.at(offset + 3);
-      const quint8 d = cursor.at(offset + 4);
-      const quint32 crc = (a << 24) | (b << 16) | (c << 8) | (d & 0xff);
-
-      // Compare checksums
-      if (crc32(frame.data(), frame.length()) == crc)
-        return ValidationStatus::FrameOk;
-      else
-        return ValidationStatus::ChecksumError;
-    }
-  }
-
-  // Buffer does not contain CRC code
-  else if (!m_enableCrc)
-  {
-    *bytes += finish.length();
-    return ValidationStatus::FrameOk;
-  }
-
-  // Checksum data incomplete
-  return ValidationStatus::ChecksumIncomplete;
 }

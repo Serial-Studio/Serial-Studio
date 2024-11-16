@@ -61,12 +61,9 @@ find_package(
 )
 
 qt_standard_project_setup()
-qt_policy(SET QTP0001 NEW)
 
-# Check the Qt version and set QTP0004 conditionally
-if(QT_VERSION VERSION_GREATER_EQUAL "6.8.0")
-    qt_policy(SET QTP0004 NEW)
-endif()
+qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0004 NEW)
 
 #-------------------------------------------------------------------------------
 # Import source code
@@ -102,6 +99,7 @@ set(SOURCES
  src/IO/Checksum.cpp
  src/IO/Console.cpp
  src/IO/Manager.cpp
+ src/IO/FrameReader.cpp
  src/JSON/FrameParser.cpp
  src/JSON/ProjectModel.cpp
  src/JSON/FrameBuilder.cpp
@@ -113,7 +111,7 @@ set(SOURCES
  src/CSV/Export.cpp
  src/MQTT/Client.cpp
  src/main.cpp
- src/WidgetsCommon.cpp
+ src/SerialStudio.cpp
 )
 
 set(HEADERS
@@ -147,6 +145,7 @@ set(HEADERS
  src/IO/Manager.h
  src/IO/HAL_Driver.h
  src/IO/Checksum.h
+ src/IO/FrameReader.h
  src/JSON/FrameParser.h
  src/JSON/ProjectModel.h
  src/JSON/Frame.h
@@ -158,62 +157,7 @@ set(HEADERS
  src/CSV/Player.h
  src/MQTT/Client.h
  src/AppInfo.h
- src/WidgetsCommon.h
-)
-
-set(QML_CODE
- qml/MainWindow/Dashboard/WidgetDelegate.qml
- qml/MainWindow/Dashboard/WidgetModel.qml
- qml/MainWindow/Dashboard/ViewOptionsDelegate.qml
- qml/MainWindow/Dashboard/ViewOptions.qml
- qml/MainWindow/Dashboard/WidgetGrid.qml
- qml/MainWindow/Panes/Toolbar.qml
- qml/MainWindow/Panes/Dashboard.qml
- qml/MainWindow/Panes/SetupPanes/Settings.qml
- qml/MainWindow/Panes/SetupPanes/Hardware.qml
- qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml
- qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml
- qml/MainWindow/Panes/SetupPanes/Devices/Network.qml
- qml/MainWindow/Panes/Console.qml
- qml/MainWindow/Panes/Setup.qml
- qml/MainWindow/Root.qml
- qml/ProjectEditor/Sections/ProjectStructure.qml
- qml/ProjectEditor/Sections/Toolbar.qml
- qml/ProjectEditor/Views/FrameParserView.qml
- qml/ProjectEditor/Views/GroupView.qml
- qml/ProjectEditor/Views/ProjectView.qml
- qml/ProjectEditor/Views/DatasetView.qml
- qml/ProjectEditor/Views/TableDelegate.qml
- qml/ProjectEditor/Views/ActionView.qml
- qml/ProjectEditor/Root.qml
- qml/Dialogs/Acknowledgements.qml
- qml/Dialogs/About.qml
- qml/Dialogs/CsvPlayer.qml
- qml/Dialogs/Donate.qml
- qml/Dialogs/IconPicker.qml
- qml/Dialogs/ExternalConsole.qml
- qml/Dialogs/MQTTConfiguration.qml
- qml/Widgets/BigButton.qml
- qml/Widgets/Pane.qml
- qml/Widgets/Plot.qml
- qml/Widgets/SmartWindow.qml
- qml/Widgets/JSONDropArea.qml
- qml/Widgets/VisualRange.qml
- qml/Widgets/CircularSlider.qml
- qml/Widgets/Dashboard/Accelerometer.qml
- qml/Widgets/Dashboard/Bar.qml
- qml/Widgets/Dashboard/Compass.qml
- qml/Widgets/Dashboard/DataGrid.qml
- qml/Widgets/Dashboard/FFTPlot.qml
- qml/Widgets/Dashboard/Gauge.qml
- qml/Widgets/Dashboard/GPS.qml
- qml/Widgets/Dashboard/Gyroscope.qml
- qml/Widgets/Dashboard/LEDPanel.qml
- qml/Widgets/Dashboard/MultiPlot.qml
- qml/Widgets/Dashboard/Plot.qml
- qml/Widgets/Dashboard/Terminal.qml
- qml/DialogLoader.qml
- qml/main.qml
+ src/SerialStudio.h
 )
 
 set(TS_FILES)
@@ -245,12 +189,8 @@ endif()
 # Add resources
 #-------------------------------------------------------------------------------
 
+qt_add_resources(QML_RCC ${CMAKE_CURRENT_SOURCE_DIR}/qml/qml.qrc)
 qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
-
-#-------------------------------------------------------------------------------
-# Add translations
-#-------------------------------------------------------------------------------
-
 qt_add_resources(QM_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #-------------------------------------------------------------------------------
@@ -295,7 +235,6 @@ target_link_libraries(
  Qt6::QuickControls2
 
  qmqtt
- qtcsv
  QRealFourier
  QSimpleUpdater
  QSourceHighlite
@@ -347,7 +286,6 @@ set_target_properties(
  UNITY_BUILD_MODE BATCH
  UNITY_BUILD_BATCH_SIZE 128
  INTERPROCEDURAL_OPTIMIZATION TRUE
- QT_QMLCACHEGEN_ARGUMENTS "--only-bytecode"
 )
 
 #-------------------------------------------------------------------------------

@@ -38,11 +38,10 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
   , m_maxY(0)
 {
   // Obtain group information
-  auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardMultiPlot))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
   {
     // Obtain min/max values from datasets
-    const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);
+    const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();
     for (const auto &dataset : group.datasets())
@@ -57,21 +56,23 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
     // Resize data container to fit curves
     m_data.resize(group.datasetCount());
     for (auto i = 0; i < group.datasetCount(); ++i)
-      m_data[i].resize(dash->points());
+      m_data[i].resize(UI::Dashboard::instance().points());
+
+    // Connect to the dashboard signals to update the plot data and range
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &MultiPlot::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this,
+            &MultiPlot::updateRange);
+
+    // Connect to the theme manager to update the curve colors
+    onThemeChanged();
+    connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
+            this, &MultiPlot::onThemeChanged);
+
+    // Update the range
+    calculateAutoScaleRange();
+    updateRange();
   }
-
-  // Connect to the dashboard signals to update the plot data and range
-  connect(dash, &UI::Dashboard::updated, this, &MultiPlot::updateData);
-  connect(dash, &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange);
-
-  // Connect to the theme manager to update the curve colors
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
-          this, &MultiPlot::onThemeChanged);
-
-  // Update the range
-  calculateAutoScaleRange();
-  updateRange();
 }
 
 /**
@@ -177,27 +178,24 @@ void Widgets::MultiPlot::draw(QLineSeries *series, const int index)
  */
 void Widgets::MultiPlot::updateData()
 {
-  // Get plot data from dashboard
-  auto dash = &UI::Dashboard::instance();
-  const auto &plotData = dash->multiplotValues();
+  if (!isEnabled())
+    return;
 
-  // If the plot data is valid, update the plot
-  if (m_index >= 0 && plotData.count() > m_index)
+  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
   {
-    // Update data for each curve in the multiplot
-    const auto &curves = plotData[m_index];
-    for (int i = 0; i < curves.count(); ++i)
+    const auto &plotData = UI::Dashboard::instance().multiplotValues();
+    if (m_index >= 0 && plotData.count() > m_index)
     {
-      // Get the plot values from the dashboard
-      const auto &values = curves[i];
+      const auto &curves = plotData[m_index];
+      for (int i = 0; i < curves.count(); ++i)
+      {
+        const auto &values = curves[i];
+        if (m_data[i].count() != values.count())
+          m_data[i].resize(values.count());
 
-      // Resize plot data vector if required
-      if (m_data[i].count() != values.count())
-        m_data[i].resize(values.count());
-
-      // Add the plot values to the plot data
-      for (int j = 0; j < values.count(); ++j)
-        m_data[i][j] = QPointF(j, values[j]);
+        for (int j = 0; j < values.count(); ++j)
+          m_data[i][j] = QPointF(j, values[j]);
+      }
     }
   }
 }
@@ -208,24 +206,24 @@ void Widgets::MultiPlot::updateData()
 void Widgets::MultiPlot::updateRange()
 {
   // Get the dashboard instance and check if the index is valid
-  auto dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardMultiPlot))
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
   // Clear the data
   m_data.clear();
+  m_data.squeeze();
 
   // Get the multiplot group and loop through each dataset
-  const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);
+  const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
   for (int i = 0; i < group.datasetCount(); ++i)
   {
     m_data.append(QVector<QPointF>());
-    m_data.last().resize(dash->points() + 1);
+    m_data.last().resize(UI::Dashboard::instance().points() + 1);
   }
 
   // Update X-axis range
   m_minX = 0;
-  m_maxX = dash->points();
+  m_maxX = UI::Dashboard::instance().points();
 
   // Update the plot
   Q_EMIT rangeChanged();
@@ -240,14 +238,12 @@ void Widgets::MultiPlot::onThemeChanged()
   const auto colors = Misc::ThemeManager::instance().colors()["widget_colors"].toArray();
   // clang-format on
 
-  // Obtain colors for each dataset in the widget
-  m_colors.clear();
-  auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardMultiPlot))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
   {
-    const auto &group = dash->getGroupWidget(WC::DashboardMultiPlot, m_index);
-    m_colors.resize(group.datasetCount());
+    const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
 
+    m_colors.clear();
+    m_colors.resize(group.datasetCount());
     for (int i = 0; i < group.datasetCount(); ++i)
     {
       const auto &dataset = group.getDataset(i);
@@ -258,10 +254,9 @@ void Widgets::MultiPlot::onThemeChanged()
 
       m_colors[i] = color;
     }
-  }
 
-  // Update user interface
-  Q_EMIT themeChanged();
+    Q_EMIT themeChanged();
+  }
 }
 
 /**
@@ -282,10 +277,9 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   }
 
   // Obtain min/max values from datasets
-  else
+  else if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
   {
-    const auto &group = UI::Dashboard::instance().getGroupWidget(
-        WC::DashboardMultiPlot, m_index);
+    const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
 
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();

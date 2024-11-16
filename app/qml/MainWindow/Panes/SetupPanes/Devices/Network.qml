@@ -26,6 +26,7 @@ import QtQuick.Controls
 
 Item {
   id: root
+  implicitHeight: layout.implicitHeight
 
   //
   // Access to properties
@@ -36,7 +37,7 @@ Item {
   property alias udpRemotePort: _udpRemotePort.text
   property alias socketType: _typeCombo.currentIndex
   property alias udpMulticastEnabled: _udpMulticast.checked
-  property alias udpProcessDatagramsDirectly: _udpProcessDatagrams.checked
+  property alias ignoreDataDelimeters: _ignoreDataDelimeters.checked
 
   //
   // React to network manager events
@@ -236,24 +237,20 @@ Item {
       }
 
       //
-      // UDP multicast checkbox
+      // Ingore data delimeters checkbox
       //
       Label {
-        text: qsTr("Ignore data delimiters") + ":"
-        opacity: _udpProcessDatagrams.enabled ? 1 : 0.5
-        visible: Cpp_IO_Network.socketTypeIndex === 1
+        text: qsTr("No Delimiters") + ":"
+        opacity: _ignoreDataDelimeters.enabled ? 1 : 0.5
       } CheckBox {
-        id: _udpProcessDatagrams
+        id: _ignoreDataDelimeters
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignLeft
         Layout.leftMargin: -8
-        visible: Cpp_IO_Network.socketTypeIndex === 1
-        checked: Cpp_IO_Network.udpIgnoreFrameSequences
-        enabled: Cpp_IO_Network.socketTypeIndex === 1 && !Cpp_IO_Manager.connected
-
+        checked: Cpp_IO_Network.ignoreDataDelimeters
         onCheckedChanged: {
-          if (Cpp_IO_Network.udpIgnoreFrameSequences !== checked)
-            Cpp_IO_Network.udpIgnoreFrameSequences = checked
+          if (Cpp_IO_Network.ignoreDataDelimeters !== checked)
+            Cpp_IO_Network.ignoreDataDelimeters = checked
         }
       }
     }

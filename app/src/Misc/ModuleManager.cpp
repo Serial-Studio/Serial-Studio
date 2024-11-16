@@ -25,7 +25,7 @@
 #include <QSimpleUpdater.h>
 
 #include "AppInfo.h"
-#include "WidgetsCommon.h"
+#include "SerialStudio.h"
 
 #include "CSV/Export.h"
 #include "CSV/Player.h"
@@ -122,12 +122,15 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext &context,
       break;
   }
 
-  // Add a newline at the end
-  std::cout << output.toStdString() << std::endl;
-  output.append("\n");
+  if (!output.isEmpty())
+  {
+    // Add a newline at the end
+    std::cout << output.toStdString() << std::endl;
+    output.append("\n");
 
-  // Use IO::Manager signal to avoid messing up tokens in console
-  Q_EMIT IO::Manager::instance().dataReceived(output.toUtf8());
+    // Use IO::Manager signal to avoid messing up tokens in console
+    Q_EMIT IO::Manager::instance().dataReceived(output.toUtf8());
+  }
 }
 
 /**
@@ -138,10 +141,6 @@ Misc::ModuleManager::ModuleManager()
 {
   // Init translator
   (void)Misc::Translator::instance();
-
-  // Load custom fonts
-  auto *common_fonts = &Misc::CommonFonts::instance();
-  QApplication::setFont(common_fonts->uiFont());
 
   // Stop modules when application is about to quit
   connect(&m_engine, &QQmlApplicationEngine::quit, this,
@@ -224,12 +223,12 @@ void Misc::ModuleManager::registerQmlTypes()
   // Register JSON custom items
   qmlRegisterType<JSON::FrameParser>("SerialStudio", 1, 0, "FrameParser");
   qmlRegisterType<JSON::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
-  qmlRegisterType<JSON::FrameBuilder>("SerialStudio", 1, 0, "JsonGenerator");
 
   // Register generic dashboard widget
-  qmlRegisterType<WC>("SerialStudio", 1, 0, "WC");
-  qmlRegisterType<UI::Dashboard>("SerialStudio", 1, 0, "Dashboard");
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
+
+  // Regsiter common Serial Studio enums & values
+  qmlRegisterType<SerialStudio>("SerialStudio", 1, 0, "SerialStudio");
 }
 
 /**
@@ -296,6 +295,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_ModuleManager", this);
   c->setContextProperty("Cpp_BuildDate", buildDate);
   c->setContextProperty("Cpp_BuildTime", buildTime);
+  c->setContextProperty("Cpp_PrimaryScreen", qApp->primaryScreen());
 
   // Register app info with QML
   c->setContextProperty("Cpp_AppName", qApp->applicationDisplayName());
@@ -306,7 +306,15 @@ void Misc::ModuleManager::initializeQmlInterface()
                         qApp->organizationDomain());
 
   // Load main.qml
-  m_engine.load(QUrl(QStringLiteral("qrc:/app/qml/main.qml")));
+  m_engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
+  // Setup singleton module interconnections
+  ioSerial->setupExternalConnections();
+  csvExport->setupExternalConnections();
+  ioConsole->setupExternalConnections();
+  ioManager->setupExternalConnections();
+  projectModel->setupExternalConnections();
+  frameBuilder->setupExternalConnections();
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);

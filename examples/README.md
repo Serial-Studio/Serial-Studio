@@ -1,6 +1,8 @@
-# Arduino + Serial Studio Examples
+# Serial Studio Examples
 
-This directory contains various examples demonstrating how to use Serial Studio to visualize data from sensors connected to an Arduino. Each example includes the Arduino code, a README file with setup instructions, and screenshots. Some examples also include Serial Studio project files (`*.json`) to simplify the visualization setup.
+This directory contains various examples demonstrating how to use Serial Studio to visualize data from sensors connected to a microcontroller or another program. Each example includes an Arduino implementation (if required for the project), a README file with setup instructions, and screenshots. 
+
+Some examples also include Serial Studio project files (`*.json`) to simplify the visualization setup.
 
 ## Examples Overview
 
@@ -34,6 +36,21 @@ This directory contains various examples demonstrating how to use Serial Studio 
   - **TinyGPS.json**: Serial Studio project file to visualize GPS data on a map.
   - **README.md**: Comprehensive setup instructions for GPS configuration, including Serial Studio setup.
   - **Screenshots**: `project-setup.png` and `screenshot.png` for guidance on map visualization in Serial Studio.
+
+### 5. UDP Function Generator
+
+- **Description**: This example generates real-time waveforms (sine, triangle, sawtooth, and square) and transmits them over an UDP socket locally. It is designed to generate data that can be visualized in **Serial Studio**, where you can observe and analyze the generated signals in real-time. The program is versatile and can also be used to stress-test Serial Studio's performance under continuous, high-frequency data streams.
+- **Contents**:
+  - **udp_function_generator.c**: The main C program that generates waveforms and sends them via UDP.
+  - **README.md**: Detailed setup and usage instructions for configuring and running the program with Serial Studio.
+  - **Screenshots**: Includes `serial-studio-setup.png` for configuration and `waveform-visualization.png` showcasing real-time waveform plots in Serial Studio.
+- **Key Features**:
+  - Generates multiple waveform types: sine, triangle, sawtooth, and square.
+  - Configurable waveform properties: frequency, phase, and transmission interval.
+  - Sends waveform data over UDP, making it ideal for network-based signal processing.
+  - Option to print generated data for debugging and analysis.
+  - Warns about high frequencies that may cause aliasing or distortion.
+- :warning: Using sub-millisecond intervals is likely to overload Serial Studio's event system, potentially causing crashes and/or hangs. If you encounter this issue, consider running Serial Studio with a debugger and sharing your findings to help improve and address this limitation in future releases. Your feedback is invaluable in making Serial Studio more robust!
 
 ## Getting Started
 

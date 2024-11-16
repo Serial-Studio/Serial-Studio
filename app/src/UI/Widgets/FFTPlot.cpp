@@ -39,11 +39,10 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
   , m_maxY(0)
   , m_transformer(0, QStringLiteral("Hann"))
 {
-  auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardFFT))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
   {
     // Get FFT dataset
-    const auto &dataset = dash->getDatasetWidget(WC::DashboardFFT, m_index);
+    const auto &dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
 
     // Initialize FFT size
     int size = qMax(8, dataset.fftSamples());
@@ -67,7 +66,8 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem *parent)
     m_maxX = m_samplingRate / 2;
 
     // Update widget
-    connect(dash, &UI::Dashboard::updated, this, &FFTPlot::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &FFTPlot::updateData);
   }
 }
 
@@ -143,6 +143,9 @@ void Widgets::FFTPlot::draw(QLineSeries *series)
  */
 void Widgets::FFTPlot::updateData()
 {
+  if (!isEnabled())
+    return;
+
   // Get the plot data
   auto dash = &UI::Dashboard::instance();
   auto plotData = dash->fftPlotValues();

@@ -669,7 +669,7 @@ size_t BIO_ctrl_wpending(BIO *b);
 #define BIO_set_write_buf_size(b, size)                                        \
   (int)BIO_ctrl(b, BIO_C_SET_WRITE_BUF_SIZE, size, NULL)
 #define BIO_get_write_buf_size(b, size)                                        \
-  (size_t) BIO_ctrl(b, BIO_C_GET_WRITE_BUF_SIZE, size, NULL)
+  (size_t)BIO_ctrl(b, BIO_C_GET_WRITE_BUF_SIZE, size, NULL)
 #define BIO_make_bio_pair(b1, b2) (int)BIO_ctrl(b1, BIO_C_MAKE_BIO_PAIR, 0, b2)
 #define BIO_destroy_bio_pair(b)                                                \
   (int)BIO_ctrl(b, BIO_C_DESTROY_BIO_PAIR, 0, NULL)
@@ -705,9 +705,9 @@ int BIO_ctrl_reset_read_request(BIO *b);
 #define BIO_dgram_set_local_addr_enable(b, enable)                             \
   (int)BIO_ctrl((b), BIO_CTRL_DGRAM_SET_LOCAL_ADDR_ENABLE, (enable), NULL)
 #define BIO_dgram_get_effective_caps(b)                                        \
-  (uint32_t) BIO_ctrl((b), BIO_CTRL_DGRAM_GET_EFFECTIVE_CAPS, 0, NULL)
+  (uint32_t)BIO_ctrl((b), BIO_CTRL_DGRAM_GET_EFFECTIVE_CAPS, 0, NULL)
 #define BIO_dgram_get_caps(b)                                                  \
-  (uint32_t) BIO_ctrl((b), BIO_CTRL_DGRAM_GET_CAPS, 0, NULL)
+  (uint32_t)BIO_ctrl((b), BIO_CTRL_DGRAM_GET_CAPS, 0, NULL)
 #define BIO_dgram_set_caps(b, caps)                                            \
   (int)BIO_ctrl((b), BIO_CTRL_DGRAM_SET_CAPS, (long)(caps), NULL)
 #define BIO_dgram_get_no_trunc(b)                                              \

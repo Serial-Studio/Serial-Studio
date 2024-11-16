@@ -74,7 +74,7 @@ Widgets.Pane {
     Rectangle {
       z: 2
       id: header
-      height: 64
+      height: layout.implicitHeight + 12
       color: Cpp_ThemeManager.colors["groupbox_background"]
       anchors {
         top: parent.top
@@ -86,6 +86,7 @@ Widgets.Pane {
       // Buttons
       //
       RowLayout {
+        id: layout
         spacing: 4
 
         anchors {
@@ -99,17 +100,15 @@ Widgets.Pane {
         // Add plot
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           text: qsTr("Plot")
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/plot.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetPlot
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetPlot
           onClicked: {
-            const option = WC.DatasetPlot
+            const option = SerialStudio.DatasetPlot
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -120,17 +119,15 @@ Widgets.Pane {
         // Add FFT plot
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           toolbarButton: false
           text: qsTr("FFT Plot")
           Layout.alignment: Qt.AlignVCenter
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/fft.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetFFT
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetFFT
           onClicked: {
-            const option = WC.DatasetFFT
+            const option = SerialStudio.DatasetFFT
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -141,18 +138,16 @@ Widgets.Pane {
         // Add bar
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           toolbarButton: false
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/bar.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetBar
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetBar
           onClicked: {
-            const option = WC.DatasetBar
+            const option = SerialStudio.DatasetBar
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -163,18 +158,16 @@ Widgets.Pane {
         // Add gauge
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           text: qsTr("Gauge")
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetGauge
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetGauge
           onClicked: {
-            const option = WC.DatasetGauge
+            const option = SerialStudio.DatasetGauge
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -185,18 +178,16 @@ Widgets.Pane {
         // Add compass
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
           toolbarButton: false
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/compass.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetCompass
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetCompass
           onClicked: {
-            const option = WC.DatasetCompass
+            const option = SerialStudio.DatasetCompass
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -207,17 +198,15 @@ Widgets.Pane {
         // Add LED
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           checkable: true
-          toolbarButton: false
           text: qsTr("LED")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
-          checked: Cpp_JSON_ProjectModel.datasetOptions & WC.DatasetLED
+          checked: Cpp_JSON_ProjectModel.datasetOptions & SerialStudio.DatasetLED
           onClicked: {
-            const option = WC.DatasetLED
+            const option = SerialStudio.DatasetLED
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
             if (checked !== value)
               Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
@@ -235,13 +224,12 @@ Widgets.Pane {
         // Duplicate dataset
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
+          toolbarButton: false
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
         }
 
@@ -249,13 +237,12 @@ Widgets.Pane {
         // Delete dataset
         //
         Widgets.BigButton {
-          icon.width: 24
-          icon.height: 24
+          iconSize: 24
           text: qsTr("Delete")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           enabled: Cpp_JSON_ProjectModel.currentDatasetIsEditable
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
         }
       }

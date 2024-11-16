@@ -212,10 +212,10 @@ QJsonObject JSON::Dataset::serialize() const
   object.insert(QStringLiteral("graph"), m_graph);
   object.insert(QStringLiteral("ledHigh"), m_ledHigh);
   object.insert(QStringLiteral("fftSamples"), m_fftSamples);
-  object.insert(QStringLiteral("value"), m_value.trimmed());
-  object.insert(QStringLiteral("title"), m_title.trimmed());
-  object.insert(QStringLiteral("units"), m_units.trimmed());
-  object.insert(QStringLiteral("widget"), m_widget.trimmed());
+  object.insert(QStringLiteral("value"), m_value.simplified());
+  object.insert(QStringLiteral("title"), m_title.simplified());
+  object.insert(QStringLiteral("units"), m_units.simplified());
+  object.insert(QStringLiteral("widget"), m_widget.simplified());
   object.insert(QStringLiteral("fftSamplingRate"), m_fftSamplingRate);
   return object;
 }
@@ -239,10 +239,10 @@ bool JSON::Dataset::read(const QJsonObject &object)
     m_graph = object.value(QStringLiteral("graph")).toBool();
     m_ledHigh = object.value(QStringLiteral("ledHigh")).toDouble();
     m_fftSamples = object.value(QStringLiteral("fftSamples")).toInt();
-    m_title = object.value(QStringLiteral("title")).toString().trimmed();
-    m_value = object.value(QStringLiteral("value")).toString().trimmed();
-    m_units = object.value(QStringLiteral("units")).toString().trimmed();
-    m_widget = object.value(QStringLiteral("widget")).toString().trimmed();
+    m_title = object.value(QStringLiteral("title")).toString().simplified();
+    m_value = object.value(QStringLiteral("value")).toString().simplified();
+    m_units = object.value(QStringLiteral("units")).toString().simplified();
+    m_widget = object.value(QStringLiteral("widget")).toString().simplified();
     m_fftSamplingRate = object.value(QStringLiteral("fftSamplingRate")).toInt();
     if (m_value.isEmpty())
       m_value = QStringLiteral("--.--");

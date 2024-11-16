@@ -64,11 +64,8 @@ public:
   [[nodiscard]] const QFont &monoFont() const;
   [[nodiscard]] const QFont &boldUiFont() const;
 
-  Q_INVOKABLE QFont customUiFont(int pixelSize = 12, bool bold = false);
-  Q_INVOKABLE QFont customMonoFont(int pixelSize = 12);
-
-private slots:
-  void onLanguageChanged();
+  Q_INVOKABLE QFont customUiFont(qreal fraction = 1, bool bold = false);
+  Q_INVOKABLE QFont customMonoFont(qreal fraction = 1);
 
 private:
   QFont m_uiFont;

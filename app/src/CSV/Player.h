@@ -101,7 +101,8 @@ private:
   QDateTime getDateTime(const QString &cell);
 
   QByteArray getFrame(const int row);
-  QString getCellValue(const int row, const int column, bool &error);
+
+  const QString &getCellValue(const int row, const int column, bool &error);
 
 protected:
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -112,6 +113,6 @@ private:
   bool m_playing;
   QFile m_csvFile;
   QString m_timestamp;
-  QVector<QVector<QString>> m_csvData;
+  QList<QStringList> m_csvData;
 };
 } // namespace CSV

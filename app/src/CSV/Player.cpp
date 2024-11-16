@@ -27,9 +27,7 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QApplication>
-
-#include <qtcsv/reader.h>
-#include <qtcsv/stringdata.h>
+#include <QStandardPaths>
 
 #include "IO/Manager.h"
 #include "UI/Dashboard.h"
@@ -89,7 +87,7 @@ bool CSV::Player::isPlaying() const
  */
 int CSV::Player::frameCount() const
 {
-  return m_csvData.count() - 1;
+  return m_csvData.count();
 }
 
 /**
@@ -121,8 +119,10 @@ QString CSV::Player::filename() const
 QString CSV::Player::csvFilesPath() const
 {
   // Get file name and path
-  const auto path = QStringLiteral("%1/Documents/%2/CSV/")
-                        .arg(QDir::homePath(), qApp->applicationDisplayName());
+  const auto path = QStringLiteral("%1/%2/CSV/")
+                        .arg(QStandardPaths::writableLocation(
+                                 QStandardPaths::DocumentsLocation),
+                             qApp->applicationDisplayName());
 
   // Generate file path if required
   QDir dir(path);
@@ -193,6 +193,7 @@ void CSV::Player::closeFile()
   m_framePos = 0;
   m_csvFile.close();
   m_csvData.clear();
+  m_csvData.squeeze();
   m_playing = false;
   m_timestamp = "--.--";
 
@@ -288,9 +289,9 @@ void CSV::Player::openFile(const QString &filePath)
   if (IO::Manager::instance().connected())
   {
     auto response = Misc::Utilities::showMessageBox(
-        tr("Serial port open, do you want to continue?"),
-        tr("In order to use this feature, it's necessary "
-           "to disconnect from the serial port"),
+        tr("Device Connection Active"),
+        tr("To use this feature, you must disconnect from the device. "
+           "Do you want to proceed?"),
         qAppName(), QMessageBox::No | QMessageBox::Yes);
     if (response == QMessageBox::Yes)
       IO::Manager::instance().disconnectDevice();
@@ -303,22 +304,31 @@ void CSV::Player::openFile(const QString &filePath)
   if (m_csvFile.open(QIODevice::ReadOnly))
   {
     // Read CSV file into string matrix
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QVector<QString> row;
-    auto csv = QtCSV::Reader::readToList(m_csvFile);
-    for (int i = 0; i < csv.count(); ++i)
+    QTextStream in(&m_csvFile);
+    while (!in.atEnd())
     {
-      row.clear();
-      for (int j = 0; j < csv.at(i).count(); ++j)
-        row.append(csv[i][j]);
+      // Read a line and split it into a list of items
+      QStringList row = in.readLine().split(',');
 
-      m_csvData.append(row);
+      // Remove surrounding quotes and trim whitespace from each item
+      for (auto &item : row)
+      {
+        item = item.simplified();
+        item.remove(QStringLiteral("\""));
+      }
+
+      // Filter out rows that are empty or contain only empty items
+      bool isRowValid
+          = !row.isEmpty()
+            && std::any_of(row.cbegin(), row.cend(),
+                           [](const QString &item) { return !item.isEmpty(); });
+
+      // Only register valid rows
+      if (isRowValid)
+        m_csvData.append(row);
     }
-#else
-    m_csvData = QtCSV::Reader::readToList(m_csvFile);
-#endif
 
-    // Validate the first column for date/time format
+    // Validate the cell at (1,1) for date/time format
     if (!getDateTime(1).isValid())
     {
       // Ask user to select date/time column or set interval manually
@@ -329,12 +339,27 @@ void CSV::Player::openFile(const QString &filePath)
       }
     }
 
-    // Read first data & Q_EMIT UI signals
-    updateData();
-    Q_EMIT openChanged();
+    // Remove the header row from the data
+    m_framePos = 0;
+    m_csvData.removeFirst();
 
-    // Play next frame (to force UI to generate groups, graphs & widgets)
-    nextFrame();
+    // Begin reading data
+    if (m_csvData.count() >= 2)
+    {
+      updateData();
+      nextFrame();
+      Q_EMIT openChanged();
+    }
+
+    // Handle case where CSV file does not contain at least two frames
+    else
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Insufficient Data in CSV File"),
+          tr("The CSV file must contain at least two frames (data rows) to "
+             "proceed. Please check the file and try again."));
+      closeFile();
+    }
   }
 
   // Open error
@@ -431,7 +456,7 @@ void CSV::Player::updateData()
 
   // Update timestamp string
   bool error = true;
-  auto timestamp = getCellValue(framePosition() + 1, 0, error);
+  auto timestamp = getCellValue(framePosition(), 0, error);
   if (!error)
   {
     m_timestamp = timestamp;
@@ -449,8 +474,8 @@ void CSV::Player::updateData()
     if (framePosition() < frameCount())
     {
       // Obtain time for current & next frame
-      auto currTime = getDateTime(framePosition() + 1);
-      auto nextTime = getDateTime(framePosition() + 2);
+      auto currTime = getDateTime(framePosition());
+      auto nextTime = getDateTime(framePosition() + 1);
 
       // No error, calculate difference & schedule update
       if (currTime.isValid() && nextTime.isValid())
@@ -472,7 +497,8 @@ void CSV::Player::updateData()
       else
       {
         pause();
-        qWarning() << "Error getting timestamp difference";
+        qWarning() << "Error getting timestamp difference" << currTime
+                   << nextTime;
       }
     }
 
@@ -634,6 +660,7 @@ QDateTime CSV::Player::getDateTime(const int row)
 {
   bool error;
   auto value = getCellValue(row, 0, error);
+
   if (!error)
     return getDateTime(value);
 
@@ -690,7 +717,6 @@ QDateTime CSV::Player::getDateTime(const QString &cell)
 QByteArray CSV::Player::getFrame(const int row)
 {
   QByteArray frame;
-  auto sep = IO::Manager::instance().separatorSequence();
 
   if (m_csvData.count() > row)
   {
@@ -699,7 +725,7 @@ QByteArray CSV::Player::getFrame(const int row)
     {
       frame.append(list[i].toUtf8());
       if (i < list.count() - 1)
-        frame.append(sep.toUtf8());
+        frame.append(',');
       else
         frame.append('\n');
     }
@@ -713,8 +739,11 @@ QByteArray CSV::Player::getFrame(const int row)
  * error occurs or the cell does not exist, the value of @a error shall be set
  * to @c true.
  */
-QString CSV::Player::getCellValue(const int row, const int column, bool &error)
+const QString &CSV::Player::getCellValue(const int row, const int column,
+                                         bool &error)
 {
+  static auto defaultValue = QStringLiteral("");
+
   if (m_csvData.count() > row)
   {
     const auto &list = m_csvData[row];
@@ -726,7 +755,7 @@ QString CSV::Player::getCellValue(const int row, const int column, bool &error)
   }
 
   error = true;
-  return "";
+  return defaultValue;
 }
 
 /**

@@ -33,13 +33,14 @@ Widgets.Pane {
   id: root
   title: qsTr("Setup")
   icon: "qrc:/rcc/icons/panes/setup.svg"
+  implicitHeight: layout.implicitHeight + 32
 
   //
   // Custom properties
   //
   property int setupMargin: 0
   property int displayedWidth: 360
-  readonly property int maxItemWidth: column.width - 8
+  readonly property int maxItemWidth: layout.width - 8
 
   //
   // Displays the setup panel
@@ -65,16 +66,11 @@ Widgets.Pane {
   // Save settings
   //
   Settings {
-    //
-    // Misc settings
-    //
+    category: "SetupPanel"
+
     property alias tabIndex: tab.currentIndex
     property alias csvExport: csvLogging.checked
     property alias driver: driverCombo.currentIndex
-
-    //
-    // App settings
-    //
     property alias language: settings.language
     property alias tcpPlugins: settings.tcpPlugins
   }
@@ -116,7 +112,7 @@ Widgets.Pane {
     // Control arrangement
     //
     ColumnLayout {
-      id: column
+      id: layout
       spacing: 4
       anchors {
         fill: parent
@@ -131,17 +127,17 @@ Widgets.Pane {
       //
       Label {
         text: qsTr("Device Setup") + ":"
-        font: Cpp_Misc_CommonFonts.customUiFont(10, true)
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
         color: Cpp_ThemeManager.colors["pane_section_label"]
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } ComboBox {
         id: driverCombo
         Layout.fillWidth: true
-        model: Cpp_IO_Manager.availableDrivers
+        model: Cpp_IO_Manager.availableBuses
         displayText: qsTr("I/O Interface: %1").arg(currentText)
         onCurrentIndexChanged: {
-          if (Cpp_IO_Manager.selectedDriver !== currentIndex)
-            Cpp_IO_Manager.selectedDriver = currentIndex
+          if (Cpp_IO_Manager.busType !== currentIndex)
+            Cpp_IO_Manager.busType = currentIndex
         }
       }
 
@@ -174,38 +170,38 @@ Widgets.Pane {
       //
       Label {
         text: qsTr("Frame Parsing") + ":"
-        font: Cpp_Misc_CommonFonts.customUiFont(10, true)
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
         color: Cpp_ThemeManager.colors["pane_section_label"]
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } RadioButton {
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("No Parsing (Device Sends JSON Data)")
-        checked: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.DeviceSendsJSON
+        checked: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.DeviceSendsJSON
         onCheckedChanged: {
-          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== JsonGenerator.DeviceSendsJSON
+          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== SerialStudio.DeviceSendsJSON
           if (checked && shouldChange)
-            Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.DeviceSendsJSON
+            Cpp_JSON_FrameBuilder.operationMode = SerialStudio.DeviceSendsJSON
         }
       } RadioButton {
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Quick Plot (Comma Separated Values)")
-        checked: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.CommaSeparatedValues
+        checked: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.QuickPlot
         onCheckedChanged: {
-          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== JsonGenerator.CommaSeparatedValues
+          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== SerialStudio.QuickPlot
           if (checked && shouldChange)
-            Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.CommaSeparatedValues
+            Cpp_JSON_FrameBuilder.operationMode = SerialStudio.QuickPlot
         }
       } RadioButton {
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Parse via JSON Project File")
-        checked: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.ProjectFile
+        checked: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.ProjectFile
         onCheckedChanged: {
-          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== JsonGenerator.ProjectFile
+          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== SerialStudio.ProjectFile
           if (checked && shouldChange)
-            Cpp_JSON_FrameBuilder.operationMode = JsonGenerator.ProjectFile
+            Cpp_JSON_FrameBuilder.operationMode = SerialStudio.ProjectFile
         }
       }
 
@@ -217,7 +213,7 @@ Widgets.Pane {
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         onClicked: Cpp_JSON_FrameBuilder.loadJsonMap()
-        enabled: Cpp_JSON_FrameBuilder.operationMode === JsonGenerator.ProjectFile
+        enabled: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.ProjectFile
         text: (Cpp_JSON_FrameBuilder.jsonMapFilename.length ?
                  qsTr("Change Project File (%1)").arg(Cpp_JSON_FrameBuilder.jsonMapFilename) :
                  qsTr("Select Project File") + "...")
@@ -262,29 +258,18 @@ Widgets.Pane {
         Layout.fillHeight: true
         currentIndex: tab.currentIndex
         Layout.topMargin: -parent.spacing - 1
+        implicitHeight: Math.max(hardware.implicitHeight, settings.implicitHeight)
 
         SetupPanes.Hardware {
           id: hardware
           Layout.fillWidth: true
           Layout.fillHeight: true
-          background: Rectangle {
-            radius: 2
-            border.width: 1
-            color: Cpp_ThemeManager.colors["groupbox_background"]
-            border.color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
         }
 
         SetupPanes.Settings {
           id: settings
           Layout.fillWidth: true
           Layout.fillHeight: true
-          background: Rectangle {
-            radius: 2
-            border.width: 1
-            color: Cpp_ThemeManager.colors["groupbox_background"]
-            border.color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
         }
       }
     }

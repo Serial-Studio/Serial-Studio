@@ -22,6 +22,15 @@
 
 #include "IO/Checksum.h"
 
+/**
+ * @brief Computes an 8-bit CRC (Cyclic Redundancy Check) for the given data.
+ *
+ * This function calculates the CRC-8 checksum using the polynomial 0x31.
+ *
+ * @param data Pointer to the input data array.
+ * @param length Length of the input data array.
+ * @return The computed 8-bit CRC checksum.
+ */
 uint8_t IO::crc8(const char *data, const int length)
 {
   uint8_t crc = 0xff;
@@ -40,6 +49,15 @@ uint8_t IO::crc8(const char *data, const int length)
   return crc;
 }
 
+/**
+ * @brief Computes a 16-bit CRC (Cyclic Redundancy Check) for the given data.
+ *
+ * This function calculates the CRC-16 checksum using a bitwise algorithm.
+ *
+ * @param data Pointer to the input data array.
+ * @param length Length of the input data array.
+ * @return The computed 16-bit CRC checksum.
+ */
 uint16_t IO::crc16(const char *data, const int length)
 {
   uint8_t x;
@@ -56,6 +74,15 @@ uint16_t IO::crc16(const char *data, const int length)
   return crc;
 }
 
+/**
+ * @brief Computes a 32-bit CRC (Cyclic Redundancy Check) for the given data.
+ *
+ * This function calculates the CRC-32 checksum using the polynomial 0xEDB88320.
+ *
+ * @param data Pointer to the input data array.
+ * @param length Length of the input data array.
+ * @return The computed 32-bit CRC checksum.
+ */
 uint32_t IO::crc32(const char *data, const int length)
 {
   uint32_t mask;

@@ -36,16 +36,16 @@ Widgets::Gauge::Gauge(const int index, QQuickItem *parent)
   , m_maxValue(100)
   , m_alarmValue(0)
 {
-  auto dash = &UI::Dashboard::instance();
-  if (m_index >= 0 && m_index < dash->widgetCount(WC::DashboardGauge))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index))
   {
-    const auto &dataset = dash->getDatasetWidget(WC::DashboardGauge, m_index);
+    const auto &dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
 
     m_units = dataset.units();
     m_minValue = dataset.min();
     m_maxValue = dataset.max();
     m_alarmValue = dataset.alarm();
-    connect(dash, &UI::Dashboard::updated, this, &Gauge::updateData);
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &Gauge::updateData);
   }
 }
 
@@ -101,19 +101,17 @@ qreal Widgets::Gauge::alarmValue() const
  */
 void Widgets::Gauge::updateData()
 {
-  // Get the dashboard instance and check if the index is valid
-  static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardGauge))
+  if (!isEnabled())
     return;
 
-  // Get the gauge data from the Dashboard
-  const auto &dataset = dash->getDatasetWidget(WC::DashboardGauge, m_index);
-  auto value = qMax(m_minValue, qMin(m_maxValue, dataset.value().toDouble()));
-
-  // Redraw widget if required
-  if (!qFuzzyCompare(value, m_value))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index))
   {
-    m_value = value;
-    Q_EMIT updated();
+    const auto &dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
+    auto value = qMax(m_minValue, qMin(m_maxValue, dataset.value().toDouble()));
+    if (!qFuzzyCompare(value, m_value))
+    {
+      m_value = value;
+      Q_EMIT updated();
+    }
   }
 }

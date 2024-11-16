@@ -51,6 +51,7 @@ Window {
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |
+        Qt.WindowStaysOnTopHint |
         Qt.WindowCloseButtonHint
   }
 
@@ -95,7 +96,7 @@ Window {
       text: root.title
       visible: root.titlebarHeight > 0
       color: Cpp_ThemeManager.colors["text"]
-      font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+      font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
 
       anchors {
         topMargin: 6

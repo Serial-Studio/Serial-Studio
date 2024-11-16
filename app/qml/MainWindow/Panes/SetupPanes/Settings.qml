@@ -24,14 +24,26 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-Control {
+Item {
   id: root
+  implicitHeight: layout.implicitHeight + 16
 
   //
   // Access to properties
   //
   property alias tcpPlugins: _tcpPlugins.checked
   property alias language: _langCombo.currentIndex
+
+  //
+  // Background
+  //
+  Rectangle {
+    radius: 2
+    border.width: 1
+    anchors.fill: parent
+    color: Cpp_ThemeManager.colors["groupbox_background"]
+    border.color: Cpp_ThemeManager.colors["groupbox_border"]
+  }
 
   //
   // Layout

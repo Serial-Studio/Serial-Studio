@@ -142,8 +142,8 @@ JSON::ProjectModel::ProjectModel()
   , m_frameEndSequence("")
   , m_frameStartSequence("")
   , m_currentView(ProjectView)
-  , m_frameDecoder(WC::PlainText)
-  , m_frameDetection(WC::EndDelimiterOnly)
+  , m_frameDecoder(SerialStudio::PlainText)
+  , m_frameDetection(SerialStudio::EndDelimiterOnly)
   , m_modified(false)
   , m_filePath("")
   , m_treeModel(nullptr)
@@ -174,39 +174,9 @@ JSON::ProjectModel::ProjectModel()
   connect(this, &JSON::ProjectModel::datasetModelChanged, this,
           &JSON::ProjectModel::datasetOptionsChanged);
 
-  // Re-load JSON map file into C++ model
-  connect(&JSON::FrameBuilder::instance(),
-          &JSON::FrameBuilder::jsonFileMapChanged, this,
-          &JSON::ProjectModel::onJsonLoaded);
-
   // Apply map provider API keys
   connect(this, &JSON::ProjectModel::gpsApiKeysChanged, this,
           &JSON::ProjectModel::onGpsApiKeysChanged);
-
-  // Generate combo-boxes again when app is translated
-  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, [=] {
-            generateComboBoxModels();
-            buildTreeModel();
-
-            switch (currentView())
-            {
-              case ProjectView:
-                buildProjectModel();
-                break;
-              case GroupView:
-                buildGroupModel(m_selectedGroup);
-                break;
-              case ActionView:
-                buildActionModel(m_selectedAction);
-                break;
-              case DatasetView:
-                buildDatasetModel(m_selectedDataset);
-                break;
-              default:
-                break;
-            }
-          });
 
   // Load current JSON map file into C++ model
   if (!JSON::FrameBuilder::instance().jsonMapFilepath().isEmpty())
@@ -266,7 +236,7 @@ JSON::ProjectModel::CurrentView JSON::ProjectModel::currentView() const
  *
  * @return The current decoder method as a value from the `DecoderMethod` enum.
  */
-WC::DecoderMethod JSON::ProjectModel::decoderMethod() const
+SerialStudio::DecoderMethod JSON::ProjectModel::decoderMethod() const
 {
   return m_frameDecoder;
 }
@@ -279,7 +249,7 @@ WC::DecoderMethod JSON::ProjectModel::decoderMethod() const
  *
  * @return The current decoder method as a value from the `FrameDetection` enum.
  */
-WC::FrameDetection JSON::ProjectModel::frameDetection() const
+SerialStudio::FrameDetection JSON::ProjectModel::frameDetection() const
 {
   return m_frameDetection;
 }
@@ -318,9 +288,10 @@ QString JSON::ProjectModel::jsonFileName() const
 QString JSON::ProjectModel::jsonProjectsPath() const
 {
   // Get file name and path
-  static QString path
-      = QString("%1/Documents/%2/JSON Projects/")
-            .arg(QDir::homePath(), qApp->applicationDisplayName());
+  static QString path = QString("%1/%2/JSON Projects/")
+                            .arg(QStandardPaths::writableLocation(
+                                     QStandardPaths::DocumentsLocation),
+                                 qApp->applicationDisplayName());
 
   // Generate file path if required
   QDir dir(path);
@@ -541,6 +512,26 @@ int JSON::ProjectModel::groupCount() const
 }
 
 /**
+ * @brief Retrieves the number of datasets in the project.
+ *
+ * This function returns the total count of datasets currently present in the
+ * project.
+ *
+ * @return The number of datasets.
+ */
+int JSON::ProjectModel::datasetCount() const
+{
+  int count = 0;
+  for (auto i = 0; i < m_groups.count(); ++i)
+  {
+    for (auto j = 0; j < m_groups.at(i).datasetCount(); ++j)
+      ++count;
+  }
+
+  return count;
+}
+
+/**
  * @brief Retrieves the dataset options for the selected dataset.
  *
  * This function returns a bitmask representing the options enabled for the
@@ -551,25 +542,25 @@ int JSON::ProjectModel::groupCount() const
  */
 quint8 JSON::ProjectModel::datasetOptions() const
 {
-  quint8 option = WC::DatasetGeneric;
+  quint8 option = SerialStudio::DatasetGeneric;
 
   if (m_selectedDataset.graph())
-    option |= WC::DatasetPlot;
+    option |= SerialStudio::DatasetPlot;
 
   if (m_selectedDataset.fft())
-    option |= WC::DatasetFFT;
+    option |= SerialStudio::DatasetFFT;
 
   if (m_selectedDataset.led())
-    option |= WC::DatasetLED;
+    option |= SerialStudio::DatasetLED;
 
   if (m_selectedDataset.widget() == QStringLiteral("bar"))
-    option |= WC::DatasetBar;
+    option |= SerialStudio::DatasetBar;
 
   else if (m_selectedDataset.widget() == QStringLiteral("gauge"))
-    option |= WC::DatasetGauge;
+    option |= SerialStudio::DatasetGauge;
 
   else if (m_selectedDataset.widget() == QStringLiteral("compass"))
-    option |= WC::DatasetCompass;
+    option |= SerialStudio::DatasetCompass;
 
   return option;
 }
@@ -728,8 +719,9 @@ bool JSON::ProjectModel::saveJsonFile()
   // Get file save path
   if (jsonFilePath().isEmpty())
   {
+    const auto name = jsonProjectsPath() + "/" + title() + ".json";
     auto path = QFileDialog::getSaveFileName(nullptr, tr("Save JSON project"),
-                                             jsonProjectsPath(), "*.json");
+                                             name, "*.json");
     if (path.isEmpty())
       return false;
 
@@ -783,6 +775,47 @@ bool JSON::ProjectModel::saveJsonFile()
 }
 
 //------------------------------------------------------------------------------
+// Signal/slot handling
+//------------------------------------------------------------------------------
+
+/**
+ * Configures the signal/slot connections with the rest of the modules of the
+ * application.
+ */
+void JSON::ProjectModel::setupExternalConnections()
+{
+  // Re-load JSON map file into C++ model
+  connect(&JSON::FrameBuilder::instance(),
+          &JSON::FrameBuilder::jsonFileMapChanged, this,
+          &JSON::ProjectModel::onJsonLoaded);
+
+  // Generate combo-boxes again when app is translated
+  connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
+          this, [=] {
+            generateComboBoxModels();
+            buildTreeModel();
+
+            switch (currentView())
+            {
+              case ProjectView:
+                buildProjectModel();
+                break;
+              case GroupView:
+                buildGroupModel(m_selectedGroup);
+                break;
+              case ActionView:
+                buildActionModel(m_selectedAction);
+                break;
+              case DatasetView:
+                buildDatasetModel(m_selectedDataset);
+                break;
+              default:
+                break;
+            }
+          });
+}
+
+//------------------------------------------------------------------------------
 // Document initialization
 //------------------------------------------------------------------------------
 
@@ -808,8 +841,8 @@ void JSON::ProjectModel::newJsonFile()
 
   // Reset project properties
   m_separator = ",";
-  m_frameDecoder = WC::PlainText;
-  m_frameDetection = WC::EndDelimiterOnly;
+  m_frameDecoder = SerialStudio::PlainText;
+  m_frameDetection = SerialStudio::EndDelimiterOnly;
   m_frameEndSequence = "\\n";
   m_mapTilerApiKey = "";
   m_thunderforestApiKey = "";
@@ -831,6 +864,7 @@ void JSON::ProjectModel::newJsonFile()
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
   Q_EMIT gpsApiKeysChanged();
+  Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
 
   // Reset modified flag
@@ -915,13 +949,13 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   m_mapTilerApiKey = json.value("mapTilerApiKey").toString();
   m_thunderforestApiKey = json.value("thunderforestApiKey").toString();
   m_frameDecoder
-      = static_cast<WC::DecoderMethod>(json.value("decoder").toInt());
-  m_frameDetection
-      = static_cast<WC::FrameDetection>(json.value("frameDetection").toInt());
+      = static_cast<SerialStudio::DecoderMethod>(json.value("decoder").toInt());
+  m_frameDetection = static_cast<SerialStudio::FrameDetection>(
+      json.value("frameDetection").toInt());
 
   // Preserve compatibility with previous projects
   if (!json.contains("frameDetection"))
-    m_frameDetection = WC::StartAndEndDelimiter;
+    m_frameDetection = SerialStudio::StartAndEndDelimiter;
 
   // Read groups from JSON document
   auto groups = json.value("groups").toArray();
@@ -952,6 +986,7 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
   Q_EMIT gpsApiKeysChanged();
+  Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
 
   // Reset modified flag
@@ -1214,7 +1249,7 @@ void JSON::ProjectModel::duplicateCurrentDataset()
  * @param option The dataset option that defines the type of dataset to add
  *               (e.g., Plot, FFT, Bar, Gauge, Compass).
  */
-void JSON::ProjectModel::addDataset(const WC::DatasetOption option)
+void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
 {
   // Initialize a new dataset
   const auto groupId = m_selectedGroup.groupId();
@@ -1224,30 +1259,30 @@ void JSON::ProjectModel::addDataset(const WC::DatasetOption option)
   QString title;
   switch (option)
   {
-    case WC::DatasetGeneric:
+    case SerialStudio::DatasetGeneric:
       title = tr("New Dataset");
       break;
-    case WC::DatasetPlot:
+    case SerialStudio::DatasetPlot:
       title = tr("New Plot");
       dataset.m_graph = true;
       break;
-    case WC::DatasetFFT:
+    case SerialStudio::DatasetFFT:
       title = tr("New FFT Plot");
       dataset.m_fft = true;
       break;
-    case WC::DatasetBar:
+    case SerialStudio::DatasetBar:
       title = tr("New Bar Widget");
       dataset.m_widget = QStringLiteral("bar");
       break;
-    case WC::DatasetGauge:
+    case SerialStudio::DatasetGauge:
       title = tr("New Gauge");
       dataset.m_widget = QStringLiteral("gauge");
       break;
-    case WC::DatasetCompass:
+    case SerialStudio::DatasetCompass:
       title = tr("New Compass");
       dataset.m_widget = QStringLiteral("compass");
       break;
-    case WC::DatasetLED:
+    case SerialStudio::DatasetLED:
       title = tr("New LED Indicator");
       dataset.m_led = true;
       break;
@@ -1322,28 +1357,28 @@ void JSON::ProjectModel::addDataset(const WC::DatasetOption option)
  * @param checked A boolean indicating whether the option should be enabled
  *                (true) or disabled (false).
  */
-void JSON::ProjectModel::changeDatasetOption(const WC::DatasetOption option,
-                                             const bool checked)
+void JSON::ProjectModel::changeDatasetOption(
+    const SerialStudio::DatasetOption option, const bool checked)
 {
   // Modify dataset options
   switch (option)
   {
-    case WC::DatasetPlot:
+    case SerialStudio::DatasetPlot:
       m_selectedDataset.m_graph = checked;
       break;
-    case WC::DatasetFFT:
+    case SerialStudio::DatasetFFT:
       m_selectedDataset.m_fft = checked;
       break;
-    case WC::DatasetBar:
+    case SerialStudio::DatasetBar:
       m_selectedDataset.m_widget = checked ? QStringLiteral("bar") : "";
       break;
-    case WC::DatasetGauge:
+    case SerialStudio::DatasetGauge:
       m_selectedDataset.m_widget = checked ? QStringLiteral("gauge") : "";
       break;
-    case WC::DatasetCompass:
+    case SerialStudio::DatasetCompass:
       m_selectedDataset.m_widget = checked ? QStringLiteral("compass") : "";
       break;
-    case WC::DatasetLED:
+    case SerialStudio::DatasetLED:
       m_selectedDataset.m_led = checked;
       break;
     default:
@@ -1447,7 +1482,7 @@ void JSON::ProjectModel::addAction()
  * @param widget The widget type associated with the group.
  */
 void JSON::ProjectModel::addGroup(const QString &title,
-                                  const WC::GroupWidget widget)
+                                  const SerialStudio::GroupWidget widget)
 {
   // Check if any existing group has the same title
   int count = 1;
@@ -1522,7 +1557,7 @@ void JSON::ProjectModel::addGroup(const QString &title,
  * @return True if the widget was successfully assigned, false otherwise.
  */
 bool JSON::ProjectModel::setGroupWidget(const int group,
-                                        const WC::GroupWidget widget)
+                                        const SerialStudio::GroupWidget widget)
 {
   // Get group data
   auto grp = m_groups.at(group);
@@ -1531,8 +1566,8 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
   // Warn user if group contains existing datasets
   if (!(grp.m_datasets.isEmpty()))
   {
-    if ((widget == WC::DataGrid || widget == WC::MultiPlot
-         || widget == WC::NoGroupWidget)
+    if ((widget == SerialStudio::DataGrid || widget == SerialStudio::MultiPlot
+         || widget == SerialStudio::NoGroupWidget)
         && (grp.widget() == "multiplot" || grp.widget() == "datagrid"
             || grp.widget() == ""))
       grp.m_widget = "";
@@ -1551,19 +1586,19 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
   }
 
   // No widget
-  if (widget == WC::NoGroupWidget)
+  if (widget == SerialStudio::NoGroupWidget)
     grp.m_widget = "";
 
   // Data grid widget
-  if (widget == WC::DataGrid)
+  if (widget == SerialStudio::DataGrid)
     grp.m_widget = "datagrid";
 
   // Multiplot widget
-  else if (widget == WC::MultiPlot)
+  else if (widget == SerialStudio::MultiPlot)
     grp.m_widget = "multiplot";
 
   // Accelerometer widget
-  else if (widget == WC::Accelerometer)
+  else if (widget == SerialStudio::Accelerometer)
   {
     // Set widget type
     grp.m_widget = "accelerometer";
@@ -1609,7 +1644,7 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
   }
 
   // Gyroscope widget
-  else if (widget == WC::Gyroscope)
+  else if (widget == SerialStudio::Gyroscope)
   {
     // Set widget type
     grp.m_widget = "gyro";
@@ -1655,7 +1690,7 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
   }
 
   // Map widget
-  else if (widget == WC::GPS)
+  else if (widget == SerialStudio::GPS)
   {
     // Set widget type
     grp.m_widget = "map";
@@ -1949,7 +1984,7 @@ void JSON::ProjectModel::buildProjectModel()
   m_projectModel->appendRow(frameDetection);
 
   // Add frame start sequence
-  if (m_frameDetection == WC::StartAndEndDelimiter)
+  if (m_frameDetection == SerialStudio::StartAndEndDelimiter)
   {
     auto frameStart = new QStandardItem();
     frameStart->setEditable(true);
@@ -2583,20 +2618,20 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
   else if (id == kGroupView_Widget)
   {
     // Obtain widget enum from string
-    WC::GroupWidget widget;
+    SerialStudio::GroupWidget widget;
     const auto widgetStr = widgets.at(value.toInt());
     if (widgetStr == "accelerometer")
-      widget = WC::Accelerometer;
+      widget = SerialStudio::Accelerometer;
     else if (widgetStr == "multiplot")
-      widget = WC::MultiPlot;
+      widget = SerialStudio::MultiPlot;
     else if (widgetStr == "gyro")
-      widget = WC::Gyroscope;
+      widget = SerialStudio::Gyroscope;
     else if (widgetStr == "map")
-      widget = WC::GPS;
+      widget = SerialStudio::GPS;
     else if (widgetStr == "datagrid")
-      widget = WC::DataGrid;
+      widget = SerialStudio::DataGrid;
     else
-      widget = WC::NoGroupWidget;
+      widget = SerialStudio::NoGroupWidget;
 
     // Update group
     modified = setGroupWidget(groupId, widget);
@@ -2728,10 +2763,12 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
       m_frameStartSequence = value.toString();
       break;
     case kProjectView_FrameDecoder:
-      m_frameDecoder = static_cast<WC::DecoderMethod>(value.toInt());
+      m_frameDecoder = static_cast<SerialStudio::DecoderMethod>(value.toInt());
       break;
     case kProjectView_FrameDetection:
-      m_frameDetection = static_cast<WC::FrameDetection>(value.toInt());
+      m_frameDetection
+          = static_cast<SerialStudio::FrameDetection>(value.toInt());
+      Q_EMIT frameDetectionChanged();
       buildProjectModel();
       break;
     case kProjectView_ThunderforestApiKey:

@@ -126,8 +126,8 @@ void FFTRealFixLen<LL2>::do_ifft(const DataType f[], DataType x[])
   assert(FFT_LEN_L2 >= 3);
 
   // Do the transform in several passes
-  DataType *s_ptr = FFTRealSelect<FFT_LEN_L2 & 1>::sel_bin(&_buffer[0], x);
-  DataType *d_ptr = FFTRealSelect<FFT_LEN_L2 & 1>::sel_bin(x, &_buffer[0]);
+  DataType *s_ptr = FFTRealSelect < FFT_LEN_L2 & 1 > ::sel_bin(&_buffer[0], x);
+  DataType *d_ptr = FFTRealSelect < FFT_LEN_L2 & 1 > ::sel_bin(x, &_buffer[0]);
   const DataType *cos_ptr = &_trigo_data[0];
   const long *br_ptr = &_br_data[0];
 

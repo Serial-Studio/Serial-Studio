@@ -3,6 +3,11 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+.cache
+
+# Binary builds
+udp_function_generator
+udp_function_generator.exe
 
 # Build & IDEs
 *.kdev*

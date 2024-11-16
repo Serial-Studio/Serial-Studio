@@ -47,6 +47,11 @@ signals:
 
 public:
   explicit Plot(const int index = -1, QQuickItem *parent = nullptr);
+  ~Plot()
+  {
+    m_data.clear();
+    m_data.squeeze();
+  }
 
   [[nodiscard]] qreal minX() const;
   [[nodiscard]] qreal maxX() const;

@@ -22,7 +22,6 @@
 
 cmake_minimum_required(VERSION 3.19)
 
-add_subdirectory(qtcsv)
 add_subdirectory(qmqtt)
 add_subdirectory(OpenSSL)
 add_subdirectory(QRealFourier)

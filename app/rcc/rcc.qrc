@@ -108,9 +108,6 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
-        <file>fonts/NotoSans.ttf</file>
-        <file>fonts/NotoSansMono.ttf</file>
-        <file>fonts/NotoSansSC.ttf</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/center.svg</file>
         <file>icons/buttons/clear.svg</file>
@@ -262,5 +259,6 @@
         <file>themes/Resistance.json</file>
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
+        <file>images/spinner.svg</file>
     </qresource>
 </RCC>

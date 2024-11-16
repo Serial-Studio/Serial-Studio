@@ -35,9 +35,12 @@ Widgets::Gyroscope::Gyroscope(const int index, QQuickItem *parent)
   , m_roll(0)
   , m_pitch(0)
 {
-  m_timer.start();
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-          &Gyroscope::updateData);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
+  {
+    m_timer.start();
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &Gyroscope::updateData);
+  }
 }
 
 /**
@@ -76,70 +79,72 @@ qreal Widgets::Gyroscope::pitch() const
  */
 void Widgets::Gyroscope::updateData()
 {
-  // Get the dashboard instance and check if the index is valid
-  static const auto *dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardGyroscope))
+  if (!isEnabled())
     return;
 
-  // Get the gyroscope data and validate the dataset count
-  const auto &gyro = dash->getGroupWidget(WC::DashboardGyroscope, m_index);
-  if (gyro.datasetCount() != 3)
-    return;
-
-  // Backup previous readings
-  const qreal previousYaw = m_yaw;
-  const qreal previousRoll = m_roll;
-  const qreal previousPitch = m_pitch;
-
-  // Obtain delta-T for integration
-  const qreal deltaT = qMax(1, m_timer.elapsed()) / 1000.0;
-  m_timer.restart();
-
-  // Update the pitch, roll, and yaw values by integration
-  for (int i = 0; i < 3; ++i)
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
   {
-    // Obtain dataset
-    const auto &dataset = gyro.getDataset(i);
+    // Get the gyroscope data and validate the dataset count
+    const auto &gyro = GET_GROUP(SerialStudio::DashboardGyroscope, m_index);
+    if (gyro.datasetCount() != 3)
+      return;
 
-    // clang-format off
-    const qreal angle = dataset.value().toDouble();
-    const bool isYaw = (dataset.widget() == QStringLiteral("z")) ||
-                       (dataset.widget() == QStringLiteral("yaw"));
-    const bool isRoll = (dataset.widget() == QStringLiteral("y")) ||
-                        (dataset.widget() == QStringLiteral("roll"));
-    const bool isPitch = (dataset.widget() == QStringLiteral("x")) ||
-                         (dataset.widget() == QStringLiteral("pitch"));
-    // clang-format on
+    // Backup previous readings
+    const qreal previousYaw = m_yaw;
+    const qreal previousRoll = m_roll;
+    const qreal previousPitch = m_pitch;
 
-    // Update orientation angles
-    if (isYaw)
-      m_yaw += angle * deltaT;
-    else if (isRoll)
-      m_roll += angle * deltaT;
-    else if (isPitch)
-      m_pitch += angle * deltaT;
+    // Obtain delta-T for integration
+    const qreal deltaT = qMax(1, m_timer.elapsed()) / 1000.0;
+    m_timer.restart();
+
+    // Update the pitch, roll, and yaw values by integration
+    for (int i = 0; i < 3; ++i)
+    {
+      // Obtain dataset
+      const auto &dataset = gyro.getDataset(i);
+
+      // clang-format off
+      const qreal angle = dataset.value().toDouble();
+      const bool isYaw = (dataset.widget() == QStringLiteral("z")) ||
+                         (dataset.widget() == QStringLiteral("yaw"));
+      const bool isRoll = (dataset.widget() == QStringLiteral("y")) ||
+                          (dataset.widget() == QStringLiteral("roll"));
+      const bool isPitch = (dataset.widget() == QStringLiteral("x")) ||
+                           (dataset.widget() == QStringLiteral("pitch"));
+      // clang-format on
+
+      // Update orientation angles
+      if (isYaw)
+        m_yaw += angle * deltaT;
+      else if (isRoll)
+        m_roll += angle * deltaT;
+      else if (isPitch)
+        m_pitch += angle * deltaT;
+    }
+
+    // Normalize yaw angle from -180 to 180
+    m_yaw = std::fmod(m_yaw + 180.0, 360.0);
+    if (m_yaw < 0)
+      m_yaw += 360.0;
+    m_yaw -= 180.0;
+
+    // Normalize roll angle from -180 to 180
+    m_roll = std::fmod(m_roll + 180.0, 360.0);
+    if (m_roll < 0)
+      m_roll += 360.0;
+    m_roll -= 180.0;
+
+    // Normalize pitch angle from -180 to 180
+    m_pitch = std::fmod(m_pitch + 180.0, 360.0);
+    if (m_pitch < 0)
+      m_pitch += 360.0;
+    m_pitch -= 180.0;
+
+    // Request a repaint of the widget
+    if (!qFuzzyCompare(m_yaw, previousYaw)
+        || !qFuzzyCompare(m_roll, previousRoll)
+        || !qFuzzyCompare(m_pitch, previousPitch))
+      Q_EMIT updated();
   }
-
-  // Normalize yaw angle from -180 to 180
-  m_yaw = std::fmod(m_yaw + 180.0, 360.0);
-  if (m_yaw < 0)
-    m_yaw += 360.0;
-  m_yaw -= 180.0;
-
-  // Normalize roll angle from -180 to 180
-  m_roll = std::fmod(m_roll + 180.0, 360.0);
-  if (m_roll < 0)
-    m_roll += 360.0;
-  m_roll -= 180.0;
-
-  // Normalize pitch angle from -180 to 180
-  m_pitch = std::fmod(m_pitch + 180.0, 360.0);
-  if (m_pitch < 0)
-    m_pitch += 360.0;
-  m_pitch -= 180.0;
-
-  // Request a repaint of the widget
-  if (!qFuzzyCompare(m_yaw, previousYaw) || !qFuzzyCompare(m_roll, previousRoll)
-      || !qFuzzyCompare(m_pitch, previousPitch))
-    Q_EMIT updated();
 }

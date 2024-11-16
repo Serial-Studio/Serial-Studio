@@ -27,33 +27,51 @@ import QtCore as QtSettings
 
 import "Devices" as Devices
 
-Control {
+Item {
   id: root
+  implicitHeight: layout.implicitHeight + 32
 
   //
   // Save settings
   //
   QtSettings.Settings {
-    property alias dtr: serial.dtr
-    property alias parity: serial.parity
-    property alias baudRate: serial.baudRate
-    property alias dataBits: serial.dataBits
-    property alias stopBits: serial.stopBits
-    property alias flowControl: serial.flowControl
-    property alias autoReconnect: serial.autoReconnect
+    category: "HardwareSetup"
+    property alias serialDtr: serial.dtr
+    property alias serialParity: serial.parity
+    property alias serialBaudRate: serial.baudRate
+    property alias serialDataBits: serial.dataBits
+    property alias serialStopBits: serial.stopBits
+    property alias serialFlowControl: serial.flowControl
+    property alias serialAutoReconnect: serial.autoReconnect
+    property alias serialIgnoreDataDelimeters: serial.ignoreDataDelimeters
 
-    property alias address: network.address
-    property alias tcpPort: network.tcpPort
-    property alias socketType: network.socketType
-    property alias udpLocalPort: network.udpLocalPort
-    property alias udpRemotePort: network.udpRemotePort
-    property alias udpMulticastEnabled: network.udpMulticastEnabled
-    property alias udpProcessDatagramsDirectly: network.udpProcessDatagramsDirectly
+    property alias networkAddress: network.address
+    property alias newtorkTcpPort: network.tcpPort
+    property alias networkSocketType: network.socketType
+    property alias networkUdpLocalPort: network.udpLocalPort
+    property alias networkUdpRemotePort: network.udpRemotePort
+    property alias networkUdpMulticastEnabled: network.udpMulticastEnabled
+    property alias networkIgnoreDataDelimeters: network.ignoreDataDelimeters
+
+    property alias bleIgnoreDataDelimeters: bluetoothLE.ignoreDataDelimeters
   }
 
+  //
+  // Background
+  //
+  Rectangle {
+    radius: 2
+    border.width: 1
+    anchors.fill: parent
+    color: Cpp_ThemeManager.colors["groupbox_background"]
+    border.color: Cpp_ThemeManager.colors["groupbox_border"]
+  }
+
+  //
+  // Layout
+  //
   ColumnLayout {
     id: layout
-    spacing: 4
     anchors.margins: 8
     anchors.fill: parent
 
@@ -65,7 +83,8 @@ Control {
       clip: true
       Layout.fillWidth: true
       Layout.fillHeight: true
-      currentIndex: Cpp_IO_Manager.selectedDriver
+      currentIndex: Cpp_IO_Manager.busType
+      implicitHeight: Math.max(serial.implicitHeight, network.implicitHeight, bluetoothLE.implicitHeight)
 
       Devices.Serial {
         id: serial

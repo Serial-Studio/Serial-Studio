@@ -75,6 +75,7 @@ Widgets.Pane {
   // Settings
   //
   Settings {
+    category: "Dashboard"
     property alias points: plotPoints.value
     property alias columns: columns.value
     property alias decimalPlaces: decimalPlaces.value
@@ -164,7 +165,7 @@ Widgets.Pane {
           Label {
             Layout.alignment: Qt.AlignVCenter
             text: qsTr("Visualization Options")
-            font: Cpp_Misc_CommonFonts.customUiFont(10, true)
+            font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
             color: Cpp_ThemeManager.colors["pane_section_label"]
             Component.onCompleted: font.capitalization = Font.AllUppercase
           }
@@ -201,13 +202,13 @@ Widgets.Pane {
 
           currentIndex: {
             switch (Cpp_UI_Dashboard.axisVisibility) {
-            case Dashboard.AxisXY:
+            case SerialStudio.AxisXY:
               return 0;
-            case Dashboard.AxisX:
+            case SerialStudio.AxisX:
               return 1;
-            case Dashboard.AxisY:
+            case SerialStudio.AxisY:
               return 2;
-            case Dashboard.NoAxesVisible:
+            case SerialStudio.NoAxesVisible:
               return 3;
             }
           }
@@ -215,16 +216,16 @@ Widgets.Pane {
           onCurrentIndexChanged: {
             switch (currentIndex) {
             case 0:
-              Cpp_UI_Dashboard.axisVisibility = Dashboard.AxisXY
+              Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisXY
               break
             case 1:
-              Cpp_UI_Dashboard.axisVisibility = Dashboard.AxisX
+              Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisX
               break
             case 2:
-              Cpp_UI_Dashboard.axisVisibility = Dashboard.AxisY
+              Cpp_UI_Dashboard.axisVisibility = SerialStudio.AxisY
               break
             case 3:
-              Cpp_UI_Dashboard.axisVisibility = Dashboard.NoAxesVisible
+              Cpp_UI_Dashboard.axisVisibility = SerialStudio.NoAxesVisible
               break
             }
           }

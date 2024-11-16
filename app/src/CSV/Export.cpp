@@ -27,11 +27,14 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QStandardPaths>
 
 #include "IO/Manager.h"
-#include "UI/Dashboard.h"
+#include "CSV/Player.h"
+#include "MQTT/Client.h"
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
+#include "JSON/FrameBuilder.h"
 
 /**
  * Connect JSON Parser & Serial Manager signals to begin registering JSON
@@ -40,12 +43,10 @@
 CSV::Export::Export()
   : m_exportEnabled(true)
 {
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &Export::closeFile);
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::frameReceived, this,
-          &Export::registerFrame);
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
-          &Export::writeValues);
+  m_csvPath = QStringLiteral("%1/%2/CSV")
+                  .arg(QStandardPaths::writableLocation(
+                           QStandardPaths::DocumentsLocation),
+                       qApp->applicationDisplayName());
 }
 
 /**
@@ -94,6 +95,20 @@ void CSV::Export::openCurrentCsv()
 }
 
 /**
+ * Configures the signal/slot connections with the rest of the modules of the
+ * application.
+ */
+void CSV::Export::setupExternalConnections()
+{
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
+          &Export::closeFile);
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged,
+          this, &Export::registerFrame, Qt::QueuedConnection);
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
+          &Export::writeValues);
+}
+
+/**
  * Enables or disables data export
  */
 void CSV::Export::setExportEnabled(const bool enabled)
@@ -104,6 +119,7 @@ void CSV::Export::setExportEnabled(const bool enabled)
   if (!exportEnabled() && isOpen())
   {
     m_frames.clear();
+    m_frames.squeeze();
     closeFile();
   }
 }
@@ -126,8 +142,18 @@ void CSV::Export::closeFile()
 }
 
 /**
- * Creates a CSV file based on the JSON frames contained in the JSON list.
- * @note This function is called periodically every 1 second.
+ * @brief Writes frame data to the current CSV file.
+ *
+ * This function writes the data from all stored frames (`m_frames`) to the
+ * currently open CSV file. It ensures that values in each row are written
+ * in the same order as the headers, based on dataset indexes.
+ *
+ * If the file is not open, it creates the CSV file using the first frame and
+ * sets up the headers before writing data. Missing dataset values are replaced
+ * with empty strings.
+ *
+ * After writing, the stream is flushed to ensure the data is saved, and
+ * the frame buffer (`m_frames`) is cleared.
  */
 void CSV::Export::writeValues()
 {
@@ -141,6 +167,7 @@ void CSV::Export::writeValues()
     if (!isOpen() && exportEnabled())
     {
       indexHeaderPairs.clear();
+      indexHeaderPairs.squeeze();
       indexHeaderPairs = createCsvFile(*i);
     }
 
@@ -165,7 +192,7 @@ void CSV::Export::writeValues()
     {
       const auto &datasets = g->datasets();
       for (auto d = datasets.constBegin(); d != datasets.constEnd(); ++d)
-        fieldValues[d->index()] = d->value();
+        fieldValues[d->index()] = d->value().simplified();
     }
 
     // Write data according to the sorted field order
@@ -188,11 +215,21 @@ void CSV::Export::writeValues()
 
   // Clear frames
   m_frames.clear();
+  m_frames.squeeze();
 }
 
 /**
- * Creates a new CSV file corresponding to the current project title & field
- * count
+ * @brief Creates and initializes a new CSV file for exporting frame data.
+ *
+ * This function generates a CSV file in a project-specific directory using the
+ * frame's data and timestamps. The dataset headers are added to the CSV file,
+ * sorted by their indexes, ensuring ordered column headers. If the file cannot
+ * be created or opened, an error message is displayed, and the function returns
+ * an empty vector.
+ *
+ * @param frame The frame containing data and timestamp information.
+ * @return A vector of pairs, each containing a dataset index and its
+ * corresponding header string, sorted by the dataset index.
  */
 QVector<QPair<int, QString>>
 CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
@@ -202,14 +239,11 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
   const auto &rxTime = frame.rxDateTime;
 
   // Get file name
-  const auto fileName = rxTime.toString(QStringLiteral("HH-mm-ss")) + ".csv";
+  const auto fileName
+      = rxTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + ".csv";
 
   // Get path
-  const auto format = rxTime.toString("yyyy/MMM/dd/");
-  const QString path
-      = QStringLiteral("%1/Documents/%2/CSV/%3/%4")
-            .arg(QDir::homePath(), qApp->applicationDisplayName(), data.title(),
-                 format);
+  const QString path = QStringLiteral("%1/%2/").arg(m_csvPath, data.title());
 
   // Generate file path if required
   QDir dir(path);
@@ -246,8 +280,9 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
     {
       if (!datasetIndexes.contains(d->index()))
       {
+        auto header = QString("%1/%2").arg(g->title(), d->title()).simplified();
         datasetIndexes.append(d->index());
-        headers.append(QString("%1/%2").arg(g->title(), d->title()));
+        headers.append(header);
       }
     }
   }
@@ -284,17 +319,21 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
  */
 void CSV::Export::registerFrame(const JSON::Frame &frame)
 {
-  // Ignore if device is not connected (we don't want to generate a CSV file
-  // when we are reading another CSV file don't we?)
-  if (!IO::Manager::instance().connected())
+  // Ignore if CSV export is disabled
+  if (!exportEnabled())
+    return;
+
+  // Don't generate a CSV file when we are playing a CSV file
+  if (CSV::Player::instance().isOpen())
+    return;
+
+  // Don't save CSV data when the device/service is not connected
+  if (!IO::Manager::instance().connected()
+      && !MQTT::Client::instance().isSubscribed())
     return;
 
   // Ignore if frame is invalid
   if (!frame.isValid())
-    return;
-
-  // Ignore if CSV export is disabled
-  if (!exportEnabled())
     return;
 
   // Register raw frame to list

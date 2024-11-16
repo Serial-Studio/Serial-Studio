@@ -29,9 +29,9 @@ import SerialStudio
 
 import "../../Widgets" as Widgets
 
-
-ToolBar {
+Rectangle {
   id: root
+  implicitWidth: layout.implicitWidth + 32
 
   //
   // Calculate offset based on platform
@@ -47,8 +47,8 @@ ToolBar {
   //
   // Set toolbar height
   //
-  Layout.minimumHeight: titlebarHeight + 76
-  Layout.maximumHeight: titlebarHeight + 76
+  Layout.minimumHeight: titlebarHeight + 64 + 16
+  Layout.maximumHeight: titlebarHeight + 64 + 16
 
   //
   // Titlebar text
@@ -57,7 +57,7 @@ ToolBar {
     text: projectEditor.title
     visible: root.titlebarHeight > 0
     color: Cpp_ThemeManager.colors["titlebar_text"]
-    font: Cpp_Misc_CommonFonts.customUiFont(13, true)
+    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
 
     anchors {
       topMargin: 6
@@ -69,36 +69,40 @@ ToolBar {
   //
   // Toolbar background
   //
-  background: Rectangle {
-    gradient: Gradient {
-      GradientStop {
-        position: 0
-        color: Cpp_ThemeManager.colors["toolbar_top"]
-      }
-
-      GradientStop {
-        position: 1
-        color: Cpp_ThemeManager.colors["toolbar_bottom"]
-      }
+  gradient: Gradient {
+    GradientStop {
+      position: 0
+      color: Cpp_ThemeManager.colors["toolbar_top"]
     }
 
-    Rectangle {
-      height: 1
-      color: Cpp_ThemeManager.colors["toolbar_border"]
-
-      anchors {
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
-      }
+    GradientStop {
+      position: 1
+      color: Cpp_ThemeManager.colors["toolbar_bottom"]
     }
+  }
 
-    DragHandler {
-      target: null
-      onActiveChanged: {
-        if (active)
-          projectEditor.startSystemMove()
-      }
+  //
+  // Toolbar bottom border
+  //
+  Rectangle {
+    height: 1
+    color: Cpp_ThemeManager.colors["toolbar_border"]
+
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
+    }
+  }
+
+  //
+  // Move window with toolbar
+  //
+  DragHandler {
+    target: null
+    onActiveChanged: {
+      if (active)
+        projectEditor.startSystemMove()
     }
   }
 
@@ -106,7 +110,8 @@ ToolBar {
   // Toolbar controls
   //
   RowLayout {
-    spacing: 8
+    id: layout
+    spacing: 4
 
     anchors {
       margins: 2
@@ -153,7 +158,7 @@ ToolBar {
     Widgets.BigButton {
       text: qsTr("Save")
       Layout.alignment: Qt.AlignVCenter
-      enabled: Cpp_JSON_ProjectModel.modified
+      enabled: Cpp_JSON_ProjectModel.modified && Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
       onClicked: Cpp_JSON_ProjectModel.saveJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
     }
@@ -197,7 +202,7 @@ ToolBar {
       text: qsTr("Data Grid")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-datagrid.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), WC.DataGrid)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), SerialStudio.DataGrid)
     }
 
     //
@@ -207,7 +212,7 @@ ToolBar {
       text: qsTr("Multiple Plots")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), WC.MultiPlot)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Multiple Plot"), SerialStudio.MultiPlot)
     }
 
     //
@@ -217,7 +222,7 @@ ToolBar {
       text: qsTr("Accelerometer")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), WC.Accelerometer)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), SerialStudio.Accelerometer)
     }
 
     //
@@ -227,7 +232,7 @@ ToolBar {
       text: qsTr("Gyroscope")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), WC.Gyroscope)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), SerialStudio.Gyroscope)
     }
 
     //
@@ -237,7 +242,7 @@ ToolBar {
       text: qsTr("Map")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gps.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), WC.GPS)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), SerialStudio.GPS)
     }
 
     //
@@ -247,7 +252,7 @@ ToolBar {
       text: qsTr("Container")
       Layout.alignment: Qt.AlignVCenter
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"
-      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), WC.NoGroupWidget)
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), SerialStudio.NoGroupWidget)
     }
 
     //

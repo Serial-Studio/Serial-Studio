@@ -43,7 +43,7 @@ UI::DashboardWidget::DashboardWidget(QQuickItem *parent)
   : QQuickItem(parent)
   , m_index(-1)
   , m_relativeIndex(-1)
-  , m_widgetType(WC::DashboardNoWidget)
+  , m_widgetType(SerialStudio::DashboardNoWidget)
   , m_qmlPath("")
   , m_dbWidget(nullptr)
 {
@@ -85,11 +85,13 @@ int UI::DashboardWidget::relativeIndex() const
  */
 QColor UI::DashboardWidget::widgetColor() const
 {
-  static auto *dash = &UI::Dashboard::instance();
-  if (WC::isDatasetWidget(m_widgetType))
+  if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex))
   {
-    const auto &dataset = dash->getDatasetWidget(m_widgetType, m_relativeIndex);
-    return QColor(WC::getDatasetColor(dataset.index()));
+    if (SerialStudio::isDatasetWidget(m_widgetType))
+    {
+      const auto &dataset = GET_DATASET(m_widgetType, m_relativeIndex);
+      return QColor(SerialStudio::getDatasetColor(dataset.index()));
+    }
   }
 
   return QColor::fromRgba(qRgba(0, 0, 0, 0));
@@ -100,7 +102,7 @@ QColor UI::DashboardWidget::widgetColor() const
  */
 QString UI::DashboardWidget::widgetIcon() const
 {
-  return WC::dashboardWidgetIcon(m_widgetType);
+  return SerialStudio::dashboardWidgetIcon(m_widgetType);
 }
 
 /**
@@ -108,17 +110,19 @@ QString UI::DashboardWidget::widgetIcon() const
  */
 QString UI::DashboardWidget::widgetTitle() const
 {
-  static auto *dash = &UI::Dashboard::instance();
-  if (WC::isDatasetWidget(m_widgetType))
+  if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex))
   {
-    const auto &dataset = dash->getDatasetWidget(m_widgetType, m_relativeIndex);
-    return dataset.title();
-  }
+    if (SerialStudio::isDatasetWidget(m_widgetType))
+    {
+      const auto &dataset = GET_DATASET(m_widgetType, m_relativeIndex);
+      return dataset.title();
+    }
 
-  else if (WC::isGroupWidget(m_widgetType))
-  {
-    const auto &group = dash->getGroupWidget(m_widgetType, m_relativeIndex);
-    return group.title();
+    else if (SerialStudio::isGroupWidget(m_widgetType))
+    {
+      const auto &group = GET_GROUP(m_widgetType, m_relativeIndex);
+      return group.title();
+    }
   }
 
   return tr("Invalid");
@@ -127,7 +131,7 @@ QString UI::DashboardWidget::widgetTitle() const
 /**
  * Returns the type of the current widget (e.g. group, plot, bar, gauge, etc...)
  */
-WC::DashboardWidget UI::DashboardWidget::widgetType() const
+SerialStudio::DashboardWidget UI::DashboardWidget::widgetType() const
 {
   return m_widgetType;
 }
@@ -170,49 +174,49 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
     // Construct new widget
     switch (widgetType())
     {
-      case WC::DashboardDataGrid:
+      case SerialStudio::DashboardDataGrid:
         m_dbWidget = new Widgets::DataGrid(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/DataGrid.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/DataGrid.qml";
         break;
-      case WC::DashboardMultiPlot:
+      case SerialStudio::DashboardMultiPlot:
         m_dbWidget = new Widgets::MultiPlot(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/MultiPlot.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/MultiPlot.qml";
         break;
-      case WC::DashboardFFT:
+      case SerialStudio::DashboardFFT:
         m_dbWidget = new Widgets::FFTPlot(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/FFTPlot.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/FFTPlot.qml";
         break;
-      case WC::DashboardPlot:
+      case SerialStudio::DashboardPlot:
         m_dbWidget = new Widgets::Plot(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Plot.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Plot.qml";
         break;
-      case WC::DashboardBar:
+      case SerialStudio::DashboardBar:
         m_dbWidget = new Widgets::Bar(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Bar.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Bar.qml";
         break;
-      case WC::DashboardGauge:
+      case SerialStudio::DashboardGauge:
         m_dbWidget = new Widgets::Gauge(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Gauge.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Gauge.qml";
         break;
-      case WC::DashboardCompass:
+      case SerialStudio::DashboardCompass:
         m_dbWidget = new Widgets::Compass(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Compass.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Compass.qml";
         break;
-      case WC::DashboardGyroscope:
+      case SerialStudio::DashboardGyroscope:
         m_dbWidget = new Widgets::Gyroscope(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Gyroscope.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Gyroscope.qml";
         break;
-      case WC::DashboardAccelerometer:
+      case SerialStudio::DashboardAccelerometer:
         m_dbWidget = new Widgets::Accelerometer(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/Accelerometer.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/Accelerometer.qml";
         break;
-      case WC::DashboardGPS:
+      case SerialStudio::DashboardGPS:
         m_dbWidget = new Widgets::GPS(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/GPS.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/GPS.qml";
         break;
-      case WC::DashboardLED:
+      case SerialStudio::DashboardLED:
         m_dbWidget = new Widgets::LEDPanel(relativeIndex(), this);
-        m_qmlPath = "qrc:/app/qml/Widgets/Dashboard/LEDPanel.qml";
+        m_qmlPath = "qrc:/qml/Widgets/Dashboard/LEDPanel.qml";
         break;
       default:
         break;

@@ -33,8 +33,9 @@ Widgets::Compass::Compass(const int index, QQuickItem *parent)
   , m_index(index)
   , m_value(0)
 {
-  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
-          &Compass::updateData);
+  if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index))
+    connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
+            &Compass::updateData);
 }
 
 /**
@@ -63,53 +64,52 @@ QString Widgets::Compass::text() const
  */
 void Widgets::Compass::updateData()
 {
-  // Get the Dashboard instance and check if the index is valid
-  auto dash = &UI::Dashboard::instance();
-  if (m_index < 0 || m_index >= dash->widgetCount(WC::DashboardCompass))
+  if (!isEnabled())
     return;
 
-  // Get the compass data and update the value and text
-  const auto &dataset = dash->getDatasetWidget(WC::DashboardCompass, m_index);
-
-  // Redraw widget if required
-  const auto value = dataset.value().toDouble();
-  if (!qFuzzyCompare(value, m_value))
+  if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index))
   {
-    // Update values
-    m_value = qMin(360.0, qMax(0.0, value));
-    m_text = QString::number(m_value, 'f', dash->precision());
+    const auto &dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
+    const auto value = dataset.value().toDouble();
+    if (!qFuzzyCompare(value, m_value))
+    {
+      // Update values
+      m_value = qMin(360.0, qMax(0.0, value));
+      m_text = QString::number(m_value, 'f',
+                               UI::Dashboard::instance().precision());
 
-    // Ensure that angle always has 3 characters to avoid jiggling
-    const int deg = qCeil(m_value);
-    if (deg < 10)
-      m_text.prepend(QStringLiteral("00"));
-    else if (deg < 100)
-      m_text.prepend(QStringLiteral("0"));
+      // Ensure that angle always has 3 characters to avoid jiggling
+      const int deg = qCeil(m_value);
+      if (deg < 10)
+        m_text.prepend(QStringLiteral("00"));
+      else if (deg < 100)
+        m_text.prepend(QStringLiteral("0"));
 
-    // Determine the direction based on the angle value
-    QString direction;
-    if ((m_value >= 0 && m_value < 22.5)
-        || (m_value >= 337.5 && m_value <= 360))
-      direction = tr("N") + " ";
-    else if (m_value >= 22.5 && m_value < 67.5)
-      direction = tr("NE");
-    else if (m_value >= 67.5 && m_value < 112.5)
-      direction = tr("E") + " ";
-    else if (m_value >= 112.5 && m_value < 157.5)
-      direction = tr("SE");
-    else if (m_value >= 157.5 && m_value < 202.5)
-      direction = tr("S") + " ";
-    else if (m_value >= 202.5 && m_value < 247.5)
-      direction = tr("SW");
-    else if (m_value >= 247.5 && m_value < 292.5)
-      direction = tr("W") + " ";
-    else if (m_value >= 292.5 && m_value < 337.5)
-      direction = tr("NW");
+      // Determine the direction based on the angle value
+      QString direction;
+      if ((m_value >= 0 && m_value < 22.5)
+          || (m_value >= 337.5 && m_value <= 360))
+        direction = tr("N") + " ";
+      else if (m_value >= 22.5 && m_value < 67.5)
+        direction = tr("NE");
+      else if (m_value >= 67.5 && m_value < 112.5)
+        direction = tr("E") + " ";
+      else if (m_value >= 112.5 && m_value < 157.5)
+        direction = tr("SE");
+      else if (m_value >= 157.5 && m_value < 202.5)
+        direction = tr("S") + " ";
+      else if (m_value >= 202.5 && m_value < 247.5)
+        direction = tr("SW");
+      else if (m_value >= 247.5 && m_value < 292.5)
+        direction = tr("W") + " ";
+      else if (m_value >= 292.5 && m_value < 337.5)
+        direction = tr("NW");
 
-    // Append the direction to the text
-    m_text += " " + direction;
+      // Append the direction to the text
+      m_text += " " + direction;
 
-    // Request a redraw of the item
-    Q_EMIT updated();
+      // Request a redraw of the item
+      Q_EMIT updated();
+    }
   }
 }
