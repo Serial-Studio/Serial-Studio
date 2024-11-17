@@ -16,8 +16,9 @@
 /// - Frequency validation to warn about potential aliasing.
 ///
 /// Usage:
-/// - Compile: `gcc -o udp_function_generator udp_function_generator.c -lm`
-/// - Run: `./udp_function_generator [-p port] [-i interval] [-n num_functions]`
+/// - Compile: (UNIX): gcc -o udp_function_generator udp_function_generator.c -lm
+/// - Compile (Windows):  gcc -o udp_function_generator.exe udp_function_generator.c -lws2_32 -lm
+/// - Run: ./udp_function_generator [-p port] [-i interval] [-n num_functions]
 ///
 /// Options:
 /// - `-p <port>`: UDP port (default: 9000)
