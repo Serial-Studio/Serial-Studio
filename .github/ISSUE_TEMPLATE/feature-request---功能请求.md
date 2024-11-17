@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: Feature request / 功能请求
 about: Suggest an idea for this project
 title: ''
 labels: enhancement
@@ -42,13 +42,14 @@ Include any other context, screenshots, or examples that might help explain your
 ### **Important Notes**
 
 - **Feature requests are treated with lower priority than bug fixes.**  
+- **I am an open-source developer.** I provide this software as-is and cannot be responsible for long-term maintenance or personalized service. The source code is available freely, and if the issue is urgent, you’re encouraged to fix it yourself or hire someone (including myself) to do so.  
 - If you urgently need a specific enhancement, you’re welcome to support the project by [donating at this link](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE). Donations help prioritize feature development.
 
 Thank you for contributing to the improvement of this software!
 
 ---
 
-### **For Chinese Users / 对于中国用户**
+### **对于中国用户 / For Chinese users, please delete this part if you speak English**
 
 **1. 您的功能需求是否与某个问题有关？请描述。**  
 > 示例: "当我 […] 时会感到很沮丧。"  
@@ -72,6 +73,7 @@ Thank you for contributing to the improvement of this software!
 
 ### 注意事项  
 - **功能请求的优先级低于错误修复。**  
+- **我是一个开源开发者。** 我提供此软件是“按原样”的，我无法负责长期维护或个性化服务。源代码是免费提供的，如果问题很紧急，建议您自己修复或雇佣他人（包括我）进行修复。  
 - 如果您迫切需要某项增强功能，欢迎通过以下链接支持该项目: [捐赠链接](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE)。捐赠有助于优先开发功能。
 
 感谢您为改进本软件做出的贡献！
