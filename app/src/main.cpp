@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include <QThread>
 #include <QSysInfo>
 #include <QSettings>
 #include <QQuickStyle>
@@ -27,6 +28,7 @@
 #include <QStyleFactory>
 
 #include "AppInfo.h"
+#include "SerialStudio.h"
 #include "Misc/ModuleManager.h"
 
 #ifdef Q_OS_WIN
@@ -96,6 +98,9 @@ int main(int argc, char **argv)
 
   // Initialize application
   QApplication app(argc, argv);
+
+  // Set thread priority
+  QThread::currentThread()->setPriority(QThread::HighestPriority);
 
   // Set application style
   app.setStyle(QStyleFactory::create("Fusion"));

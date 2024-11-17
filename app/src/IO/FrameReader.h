@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <QThread>
 #include <QObject>
 #include <QByteArray>
 

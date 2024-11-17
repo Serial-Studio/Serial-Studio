@@ -16,8 +16,10 @@
 /// - Frequency validation to warn about potential aliasing.
 ///
 /// Usage:
-/// - Compile: (UNIX): gcc -o udp_function_generator udp_function_generator.c -lm
-/// - Compile (Windows):  gcc -o udp_function_generator.exe udp_function_generator.c -lws2_32 -lm
+/// - Compile: (UNIX): gcc -o udp_function_generator udp_function_generator.c
+/// -lm
+/// - Compile (Windows):  gcc -o udp_function_generator.exe
+/// udp_function_generator.c -lws2_32 -lm
 /// - Run: ./udp_function_generator [-p port] [-i interval] [-n num_functions]
 ///
 /// Options:
@@ -256,7 +258,7 @@ int main(int argc, char *argv[])
   print_tutorial();
   printf("Program started with the following options:\n");
   printf("- UDP Port:            %d\n", udp_port);
-  printf("- Tx Interval (ms):    %.3f\n", send_interval_ms);
+  printf("- Tx Interval (ms):    %.6f\n", send_interval_ms);
   printf("- Number of waveforms: %d\n\n", num_functions);
 
   // Collect waveform details from the user
