@@ -42,10 +42,6 @@ class HAL_Driver : public QObject
 {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(bool ignoreDataDelimeters
-             READ ignoreDataDelimeters
-             WRITE setIgnoreDataDelimeters
-             NOTIFY ignoreDataDelimetersChanged)
   // clang-format on
 
 signals:
@@ -53,11 +49,6 @@ signals:
    * @brief Emitted when the driver's configuration changes.
    */
   void configurationChanged();
-
-  /**
-   * @brief Emitted when the `ignoreDataDelimeters` property changes.
-   */
-  void ignoreDataDelimetersChanged();
 
   /**
    * @brief Emitted when data is successfully written to the device.
@@ -110,49 +101,16 @@ public:
    */
   [[nodiscard]] virtual bool open(const QIODevice::OpenMode mode) = 0;
 
-  /**
-   * Get the current value of the `ignoreDataDelimeters` property.
-   */
-  [[nodiscard]] bool ignoreDataDelimeters() const
-  {
-    return m_ignoreDataDelimeters;
-  }
-
-public slots:
-  /**
-   * Set the `ignoreDataDelimeters` property.
-   * @param ignore If true, received data is processed as payload directly.
-   */
-  void setIgnoreDataDelimeters(const bool ignore)
-  {
-    m_ignoreDataDelimeters = ignore;
-    Q_EMIT ignoreDataDelimetersChanged();
-  }
-
 protected:
   /**
    * Process incoming data.
    * @param data The received data to process.
-   * Emits either `dataReceived` or `payloadReceived` based on the
-   * `ignoreDataDelimeters` property.
    */
   void processData(const QByteArray &data)
   {
     QByteArray dataCopy(data);
-    if (!ignoreDataDelimeters())
-    {
-      QMetaObject::invokeMethod(
-          this, [=] { Q_EMIT dataReceived(dataCopy); }, Qt::QueuedConnection);
-    }
-    else
-    {
-      QMetaObject::invokeMethod(
-          this, [=] { Q_EMIT payloadReceived(dataCopy); },
-          Qt::QueuedConnection);
-    }
+    QMetaObject::invokeMethod(
+        this, [=] { Q_EMIT dataReceived(dataCopy); }, Qt::QueuedConnection);
   }
-
-private:
-  bool m_ignoreDataDelimeters = false;
 };
 } // namespace IO

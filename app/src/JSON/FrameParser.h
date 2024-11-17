@@ -53,8 +53,10 @@ public:
 
   [[nodiscard]] QString text() const;
   [[nodiscard]] bool isModified() const;
-  [[nodiscard]] QStringList parse(const QString &frame,
-                                  const QString &separator);
+  [[nodiscard]] QStringList parse(const QString &frame);
+
+  [[nodiscard]] bool save(const bool silent = false);
+  [[nodiscard]] bool loadScript(const QString &script);
 
 public slots:
   void cut();
@@ -66,17 +68,13 @@ public slots:
   void apply();
   void reload();
   void import();
+  void readCode();
   void selectAll();
 
 private slots:
   void onThemeChanged();
 
-private:
-  bool save(const bool silent = false);
-  bool loadScript(const QString &script);
-
 private slots:
-  void readCode();
   void renderWidget();
   void resizeWidget();
 

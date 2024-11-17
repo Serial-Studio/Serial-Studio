@@ -29,11 +29,6 @@ Item {
   implicitHeight: layout.implicitHeight
 
   //
-  // Custom properties
-  //
-  property alias ignoreDataDelimeters: _ignoreDataDelimeters.checked
-
-  //
   // Control layout
   //
   ColumnLayout {
@@ -169,30 +164,6 @@ Item {
         onCurrentIndexChanged: {
           if (currentIndex !== Cpp_IO_Bluetooth_LE.descriptorIndex)
             Cpp_IO_Bluetooth_LE.descriptorIndex = currentIndex
-        }
-      }
-    }
-
-    //
-    // Ignore data delimeters
-    //
-    RowLayout {
-      spacing: 4
-      enabled: opacity == 1
-      Layout.fillWidth: true
-      visible: characteristicSelector.visible
-      opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && descriptorNames.count > 1 ? 1 : 0.5
-      Label {
-        text: qsTr("No Delimiters") + ":"
-        enabled: opacity == 1
-      } CheckBox {
-        id: _ignoreDataDelimeters
-        Layout.alignment: Qt.AlignLeft
-        Layout.leftMargin: -8
-        checked: Cpp_IO_Bluetooth_LE.ignoreDataDelimeters
-        onCheckedChanged: {
-          if (Cpp_IO_Bluetooth_LE.ignoreDataDelimeters !== checked)
-            Cpp_IO_Bluetooth_LE.ignoreDataDelimeters = checked
         }
       }
     }

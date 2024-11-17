@@ -103,37 +103,36 @@
 <context>
     <name>BluetoothLE</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="56"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="51"/>
         <source>Device</source>
         <translation>设备</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="99"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="94"/>
         <source>Service</source>
         <translation>服务</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="126"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="121"/>
         <source>Characteristic</source>
         <translation>特性</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="157"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="152"/>
         <source>Descriptor</source>
         <translation>描述符</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="186"/>
         <source>No Delimiters</source>
-        <translation>无分隔符</translation>
+        <translation type="vanished">无分隔符</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="207"/>
         <source>Scanning....</source>
         <translation>正在扫描....</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="230"/>
         <source>Sorry, this system is not supported yet. We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
         <translation>抱歉，此系统尚不支持。我们会在 Qt 官方支持此操作系统后尽快更新 Serial Studio 以兼容。</translation>
     </message>
@@ -377,152 +376,152 @@
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="108"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="341"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="342"/>
         <source>Downloading updates</source>
         <translation>下载更新中</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="423"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="111"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="424"/>
         <source>Time remaining</source>
         <translation>剩余时间</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="111"/>
         <source>unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="188"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="189"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="189"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="190"/>
         <source>Cannot find downloaded update!</source>
         <translation>找不到已下载的更新！</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="208"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="209"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="209"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="210"/>
         <source>Download complete!</source>
         <translation>下载完成！</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="210"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="211"/>
         <source>The installer will open separately</source>
         <translation>安装程序将单独打开</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="217"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="218"/>
         <source>Click &quot;OK&quot; to begin installing the update</source>
         <translation>点击“确定”开始安装更新</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="219"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="220"/>
         <source>In order to install the update, you may need to quit the application.</source>
         <translation>为了安装更新，您可能需要退出应用程序。</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="223"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="224"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
         <translation>为了安装更新，您可能需要退出应用程序。这是强制更新，现在退出将关闭应用程序</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="243"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="244"/>
         <source>Click the &quot;Open&quot; button to apply the update</source>
         <translation>点击“打开”按钮以应用更新</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="257"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="258"/>
         <source>Updater</source>
         <translation>更新程序</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="261"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="262"/>
         <source>Are you sure you want to cancel the download?</source>
         <translation>您确定要取消下载吗？</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="264"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="265"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
         <translation>您确定要取消下载吗？这是强制更新，现在退出将关闭应用程序</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="324"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="333"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="325"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="334"/>
         <source>%1 bytes</source>
         <translation>%1 字节</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="327"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="336"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="328"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="337"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="330"/>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="339"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="331"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="340"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="342"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="343"/>
         <source>of</source>
         <translation>的</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="367"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="368"/>
         <source>Downloading Updates</source>
         <translation>下载更新</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="369"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="370"/>
         <source>Time Remaining</source>
         <translation>剩余时间</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="369"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="370"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="397"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="398"/>
         <source>about %1 hours</source>
         <translation>大约 %1 小时</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="399"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="400"/>
         <source>about one hour</source>
         <translation>大约一小时</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="408"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="409"/>
         <source>%1 minutes</source>
         <translation>%1 分钟</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="410"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="411"/>
         <source>1 minute</source>
         <translation>1 分钟</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="418"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="419"/>
         <source>%1 seconds</source>
         <translation>%1 秒</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="420"/>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="421"/>
         <source>1 second</source>
         <translation>1 秒</translation>
     </message>
@@ -781,82 +780,82 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">BLE设备已断开连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="297"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="296"/>
         <source>Select Device</source>
         <translation>选择设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="308"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="307"/>
         <source>Select Service</source>
         <translation>选择服务</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="320"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="319"/>
         <source>Select Descriptor</source>
         <translation>选择描述符</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="332"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="331"/>
         <source>Select Characteristic</source>
         <translation>选择特性</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="465"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="464"/>
         <source>Error while configuring BLE service</source>
         <translation>配置BLE服务时出错</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="651"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="650"/>
         <source>Operation error</source>
         <translation>操作错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="654"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="653"/>
         <source>Characteristic write error</source>
         <translation>特性写入错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="657"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="656"/>
         <source>Descriptor write error</source>
         <translation>描述符写入错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="660"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="659"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="663"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="662"/>
         <source>Characteristic read error</source>
         <translation>特性读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="666"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="665"/>
         <source>Descriptor read error</source>
         <translation>描述符读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="683"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="682"/>
         <source>Bluetooth adapter is off!</source>
         <translation>蓝牙适配器已关闭！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="686"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="685"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>无效的蓝牙适配器！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="689"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="688"/>
         <source>Unsuported platform or operating system</source>
         <translation>不支持的平台或操作系统</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="692"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="691"/>
         <source>Unsupported discovery method</source>
         <translation>不支持的发现方法</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="695"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="694"/>
         <source>General I/O error</source>
         <translation>通用I/O错误</translation>
     </message>
@@ -934,17 +933,17 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="236"/>
+        <location filename="../../src/IO/Manager.cpp" line="235"/>
         <source>Serial Port</source>
         <translation>串口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="237"/>
+        <location filename="../../src/IO/Manager.cpp" line="236"/>
         <source>Network Socket</source>
         <translation>网络套接字</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="238"/>
+        <location filename="../../src/IO/Manager.cpp" line="237"/>
         <source>Bluetooth LE</source>
         <translation>蓝牙低功耗</translation>
     </message>
@@ -970,52 +969,52 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="101"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="108"/>
         <source>Select JSON map file</source>
         <translation>选择JSON映射文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="103"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="110"/>
         <source>JSON files</source>
         <translation>JSON文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="149"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="156"/>
         <source>JSON parse error</source>
         <translation>JSON解析错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="179"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="186"/>
         <source>Invalid JSON project format</source>
         <translation>JSON 项目格式无效</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="192"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="199"/>
         <source>Cannot read JSON file</source>
         <translation>无法读取JSON文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="193"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="200"/>
         <source>Please check file permissions &amp; location</source>
         <translation>请检查文件权限和位置</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="356"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="357"/>
         <source>Channel %1</source>
         <translation>通道 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="384"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="385"/>
         <source>Multiple Plots</source>
         <translation>多个绘图</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="371"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="372"/>
         <source>Data Grid</source>
         <translation>数据网格</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="366"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="367"/>
         <source>Quick Plot</source>
         <translation>快速绘图</translation>
     </message>
@@ -1023,94 +1022,104 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::FrameParser</name>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="252"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="273"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="379"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="400"/>
         <source>The document has been modified!</source>
         <translation>文档已被修改！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="253"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="274"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="380"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="401"/>
         <source>Are you sure you want to continue?</source>
         <translation>确定要继续吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="282"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="409"/>
         <source>Select Javascript file to import</source>
         <translation>选择要导入的 Javascript 文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="344"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="196"/>
         <source>Frame parser code updated successfully!</source>
         <translation>帧解析器代码更新成功！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="345"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="197"/>
         <source>No errors have been detected in the code.</source>
         <translation>代码中未检测到任何错误。</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="384"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="236"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="246"/>
         <source>Frame parser error!</source>
         <translation>帧解析器错误！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="385"/>
         <source>No parse() function has been declared!</source>
-        <translation>未声明 parse() 函数！</translation>
+        <translation type="vanished">未声明 parse() 函数！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="397"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="237"/>
+        <source>The &apos;parse&apos; function is not declared or is not callable!</source>
+        <translation>未声明或无法调用函数 ‘parse’！</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/FrameParser.cpp" line="247"/>
+        <source>No valid &apos;parse&apos; function declaration found in the script!</source>
+        <translation>脚本中未找到有效的 ‘parse’ 函数声明！</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/FrameParser.cpp" line="259"/>
         <source>Frame parser syntax error!</source>
         <translation>帧解析器语法错误！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="398"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="260"/>
         <source>Error on line %1.</source>
         <translation>第 %1 行出错。</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="409"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="271"/>
         <source>Generic error</source>
         <translation>通用错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="412"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="274"/>
         <source>Evaluation error</source>
         <translation>评估错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="415"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="277"/>
         <source>Range error</source>
         <translation>范围错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="418"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="280"/>
         <source>Reference error</source>
         <translation>引用错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="421"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="283"/>
         <source>Syntax error</source>
         <translation>语法错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="424"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="286"/>
         <source>Type error</source>
         <translation>类型错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="427"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
         <source>URI error</source>
         <translation>URI 错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="430"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="292"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="434"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="296"/>
         <source>Frame parser error detected!</source>
         <translation>检测到帧解析器错误！</translation>
     </message>
@@ -1157,238 +1166,236 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::ProjectModel</name>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="277"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="275"/>
         <source>New Project</source>
         <translation>新项目</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="686"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="684"/>
         <source>Do you want to save your changes?</source>
         <translation>是否保存更改？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="687"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="685"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>您在此项目中有未保存的修改！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="714"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="712"/>
         <source>Project error</source>
         <translation>项目错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="715"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="713"/>
         <source>Project title cannot be empty!</source>
         <translation>项目标题不能为空！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="723"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="721"/>
         <source>Save JSON project</source>
         <translation>保存 JSON 项目</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="735"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="733"/>
         <source>File open error</source>
         <translation>文件打开错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="850"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1958"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="846"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1954"/>
         <source>Untitled Project</source>
         <translation>未命名项目</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="890"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="886"/>
         <source>Select JSON file</source>
         <translation>选择 JSON 文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1012"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1007"/>
         <source>Do you want to delete group &quot;%1&quot;?</source>
         <translation>您要删除组 &quot;%1&quot; 吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1013"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1054"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1093"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1008"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1049"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1088"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>此操作无法撤销。是否继续？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1053"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1048"/>
         <source>Do you want to delete action &quot;%1&quot;?</source>
         <translation>您要删除操作 &quot;%1&quot; 吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1091"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1086"/>
         <source>Do you want to delete dataset &quot;%1&quot;?</source>
         <translation>您要删除数据集 &quot;%1&quot; 吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1142"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1181"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1217"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1137"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1176"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1212"/>
         <source>%1 (Copy)</source>
         <translation>%1 (副本)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1263"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1258"/>
         <source>New Dataset</source>
         <translation>新数据集</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1266"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1261"/>
         <source>New Plot</source>
         <translation>新图表</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1270"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1265"/>
         <source>New FFT Plot</source>
         <translation>新 FFT 图表</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1274"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1269"/>
         <source>New Bar Widget</source>
         <translation>新柱状图组件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1278"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1273"/>
         <source>New Gauge</source>
         <translation>新仪表</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1282"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1277"/>
         <source>New Compass</source>
         <translation>新指南针</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1286"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1281"/>
         <source>New LED Indicator</source>
         <translation>新 LED 指示器</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1421"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1417"/>
         <source>New Action</source>
         <translation>新操作</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1578"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1574"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>您确定要更改组级组件吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1579"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1575"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>该组的现有数据集将被删除</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1636"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1637"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1638"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1632"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1633"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1634"/>
         <source>Accelerometer %1</source>
         <translation>加速度计 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1682"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1683"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1684"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1678"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1679"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1680"/>
         <source>Gyro %1</source>
         <translation>陀螺仪 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1725"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1721"/>
         <source>Latitude</source>
         <translation>纬度</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1726"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1722"/>
         <source>Longitude</source>
         <translation>经度</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1727"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1723"/>
         <source>Altitude</source>
         <translation>高度</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1822"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1818"/>
         <source>Frame Parser Function</source>
         <translation>帧解析函数</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1956"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2087"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2147"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2248"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1952"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2075"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2135"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2236"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1959"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1955"/>
         <source>Project name/description</source>
         <translation>项目名称/描述</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1980"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1976"/>
         <source>Frame Detection</source>
         <translation>帧检测</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1982"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1978"/>
         <source>Strategy used for identifying frame data</source>
         <translation>用于识别帧数据的策略</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2018"/>
         <source>Separator Sequence</source>
-        <translation>分隔符序列</translation>
+        <translation type="vanished">分隔符序列</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2021"/>
         <source>String used to split items in a frame</source>
-        <translation>用于在帧中拆分项目的字符串</translation>
+        <translation type="vanished">用于在帧中拆分项目的字符串</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1993"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1989"/>
         <source>Frame Start Delimeter</source>
         <translation>帧起始分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1996"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1992"/>
         <source>String marking the start of a frame</source>
         <translation>标记帧起始的字符串</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2006"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2005"/>
         <source>Frame End Delimeter</source>
         <translation>帧结束分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2009"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2008"/>
         <source>String marking the end of a frame</source>
         <translation>标记帧结束的字符串</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1968"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1964"/>
         <source>Data Conversion Method</source>
         <translation>数据转换方法</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="1970"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="1966"/>
         <source>Input data format for frame parser</source>
         <translation>帧解析器的输入数据格式</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2030"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2018"/>
         <source>Thunderforest API Key</source>
         <translation>Thunderforest API 密钥</translation>
     </message>
     <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2020"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2032"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2044"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2505"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2509"/>
         <location filename="../../src/JSON/ProjectModel.cpp" line="2516"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2520"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2527"/>
         <source>None</source>
         <translation>无</translation>
     </message>
@@ -1397,298 +1404,318 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">GPS 地图组件所需</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2033"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2021"/>
         <source>Required for Thunderforest maps</source>
         <translation>Thunderforest 地图所需</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2042"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2030"/>
         <source>MapTiler API Key</source>
         <translation>MapTiler API 密钥</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2045"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2033"/>
         <source>Required for satellite maps</source>
         <translation>卫星地图所需</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2089"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2077"/>
         <source>Untitled Group</source>
         <translation>未命名组</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2090"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2078"/>
         <source>Name or description of the group</source>
         <translation>组名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2116"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2303"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2104"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2291"/>
         <source>Widget</source>
         <translation>组件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2118"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2106"/>
         <source>Group display widget (optional)</source>
         <translation>组显示组件（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2149"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2137"/>
         <source>Untitled Action</source>
         <translation>未命名操作</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2150"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2138"/>
         <source>Name or description of the action</source>
         <translation>操作名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2158"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2146"/>
         <source>Icon</source>
         <translation>图标</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2160"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2148"/>
         <source>Default Icon</source>
         <translation>默认图标</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2161"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2149"/>
         <source>Icon to display in the dashboard</source>
         <translation>仪表板中显示的图标</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2169"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2157"/>
         <source>TX Data</source>
         <translation>发送数据</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2171"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2159"/>
         <source>Command</source>
         <translation>命令</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2172"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2160"/>
         <source>Data to transmit when the action is triggered.</source>
         <translation>操作触发时传输的数据。</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2199"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2187"/>
         <source>EOL Sequence</source>
         <translation>行尾序列</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2201"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2189"/>
         <source>End-of-line (EOL) sequence to use</source>
         <translation>要使用的行尾（EOL）序列</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2250"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2238"/>
         <source>Untitled Dataset</source>
         <translation>未命名数据集</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2251"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2239"/>
         <source>Name or description of the dataset</source>
         <translation>数据集名称或描述</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2260"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2248"/>
         <source>Frame Index</source>
         <translation>帧索引</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2263"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2251"/>
         <source>Position in the frame</source>
         <translation>在帧中的位置</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2271"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2259"/>
         <source>Measurement Unit</source>
         <translation>测量单位</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2273"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2261"/>
         <source>Volts, Amps, etc.</source>
         <translation>伏特，安培等。</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2274"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2262"/>
         <source>Unit of measurement (optional)</source>
         <translation>测量单位（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2305"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2293"/>
         <source>Display widget (optional)</source>
         <translation>显示组件（可选）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2314"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2302"/>
         <source>Minimum Value</source>
         <translation>最小值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2317"/>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2328"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2305"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2316"/>
         <source>Required for bar/gauge widgets</source>
         <translation>柱状图/仪表组件所需</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2325"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2313"/>
         <source>Maximum Value</source>
         <translation>最大值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2336"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2324"/>
         <source>Alarm Value</source>
         <translation>报警值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2339"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2327"/>
         <source>Triggers alarm in bar widgets and LED panels</source>
         <translation>在柱状图组件和 LED 面板中触发警报</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2367"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2355"/>
         <source>Oscilloscope Plot</source>
         <translation>示波器图</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2369"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2357"/>
         <source>Plot data in real-time</source>
         <translation>实时绘制数据</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2377"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2365"/>
         <source>FFT Plot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2380"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2368"/>
         <source>Plot frequency-domain data</source>
         <translation>绘制频域数据</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2395"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2383"/>
         <source>FFT Window Size</source>
         <translation>FFT 窗口大小</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2397"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2385"/>
         <source>Samples for FFT calculation</source>
         <translation>FFT 计算的样本</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2406"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2394"/>
         <source>FFT Sampling Rate</source>
         <translation>FFT采样率</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2408"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2396"/>
         <source>Sampling rate (Hz) for FFT calculation</source>
         <translation>用于FFT计算的采样率（Hz）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2417"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2405"/>
         <source>Show in LED Panel</source>
         <translation>在 LED 面板中显示</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2420"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2408"/>
         <source>Quick status monitoring</source>
         <translation>快速状态监控</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2428"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2416"/>
         <source>LED High (On) Value</source>
         <translation>LED 高电平（开）值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2431"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2419"/>
         <source>Threshold for LED on</source>
         <translation>LED 开启阈值</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2500"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2488"/>
         <source>Plain Text (UTF8)</source>
         <translation>纯文本 (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2530"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2496"/>
+        <source>No Delimiters</source>
+        <translation>无分隔符</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2519"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r\n)</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2565"/>
+        <source>Save changes to frame parser code?</source>
+        <translation>是否保存对帧解析器代码的更改？</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2566"/>
+        <source>Select &apos;Save&apos; to keep your changes, &apos;Discard&apos; to lose them permanently, or &apos;Cancel&apos; to return.</source>
+        <translation>选择“保存”以保留更改，“放弃”以永久丢弃更改，或“取消”以返回。</translation>
+    </message>
+    <message>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2568"/>
+        <source>Save Changes</source>
+        <translation>保存更改</translation>
     </message>
     <message>
         <source>Normal (UTF8)</source>
         <translation type="vanished">普通（UTF8）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2501"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2489"/>
         <source>Hexadecimal</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2502"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2490"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2506"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2494"/>
         <source>End Delimiter Only</source>
         <translation>仅结束分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2507"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2495"/>
         <source>Start + End Delimiter</source>
         <translation>开始+结束分隔符</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2511"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2500"/>
         <source>Data Grid</source>
         <translation>数据网格</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2512"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2501"/>
         <source>GPS Map</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2513"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2502"/>
         <source>Gyroscope</source>
         <translation>陀螺仪</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2514"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2503"/>
         <source>Multiple Plot</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2515"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2504"/>
         <source>Accelerometer</source>
         <translation>加速度计</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2521"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2510"/>
         <source>Bar</source>
         <translation>条形图</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2522"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2511"/>
         <source>Gauge</source>
         <translation>仪表</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2523"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2512"/>
         <source>Compass</source>
         <translation>指南针</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2528"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2517"/>
         <source>New Line (\n)</source>
         <translation>换行符（\n）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2529"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2518"/>
         <source>Carriage Return (\r)</source>
         <translation>回车符（\r）</translation>
     </message>
@@ -1701,12 +1728,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">回车符 + 换行符（\r\n）</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2534"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2523"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/ProjectModel.cpp" line="2535"/>
+        <location filename="../../src/JSON/ProjectModel.cpp" line="2524"/>
         <source>Linear Plot</source>
         <translation>线性图</translation>
     </message>
@@ -2199,44 +2226,43 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>Network</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="83"/>
         <source>Socket type</source>
         <translation>套接字类型</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="105"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="104"/>
         <source>Remote address</source>
         <translation>远程地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="126"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="125"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="160"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="159"/>
         <source>Local port</source>
         <translation>本地端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="165"/>
         <source>Type 0 for automatic port</source>
         <translation>输入 0 以自动分配端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="191"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="190"/>
         <source>Remote port</source>
         <translation>远程端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="220"/>
         <source>Multicast</source>
         <translation>多播</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="243"/>
         <source>No Delimiters</source>
-        <translation>无分隔符</translation>
+        <translation type="vanished">无分隔符</translation>
     </message>
     <message>
         <source>Ignore data delimiters</source>
@@ -2254,17 +2280,17 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>Plugins::Server</name>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="57"/>
+        <location filename="../../src/Plugins/Server.cpp" line="58"/>
         <source>Unable to start plugin TCP server</source>
         <translation>无法启动插件 TCP 服务器</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="166"/>
+        <location filename="../../src/Plugins/Server.cpp" line="167"/>
         <source>Plugin server</source>
         <translation>插件服务器</translation>
     </message>
     <message>
-        <location filename="../../src/Plugins/Server.cpp" line="167"/>
+        <location filename="../../src/Plugins/Server.cpp" line="168"/>
         <source>Invalid pending connection</source>
         <translation>无效的待连接</translation>
     </message>
@@ -2843,49 +2869,48 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>Serial</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="76"/>
         <source>COM Port</source>
         <translation>COM 端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="99"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="98"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="137"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="136"/>
         <source>Data Bits</source>
         <translation>数据位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="153"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="152"/>
         <source>Parity</source>
         <translation>奇偶校验</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="168"/>
         <source>Stop Bits</source>
         <translation>停止位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="184"/>
         <source>Flow Control</source>
         <translation>流控制</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="211"/>
         <source>Auto Reconnect</source>
         <translation>自动重新连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="229"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="228"/>
         <source>Send DTR Signal</source>
         <translation>发送 DTR 信号</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="246"/>
         <source>No Delimiters</source>
-        <translation>无分隔符</translation>
+        <translation type="vanished">无分隔符</translation>
     </message>
 </context>
 <context>
@@ -3277,7 +3302,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">隐藏所有坐标轴</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="831"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="832"/>
         <source>Status Panel</source>
         <translation>状态面板</translation>
     </message>
@@ -3285,7 +3310,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>UI::DashboardWidget</name>
     <message>
-        <location filename="../../src/UI/DashboardWidget.cpp" line="128"/>
+        <location filename="../../src/UI/DashboardWidget.cpp" line="129"/>
         <source>Invalid</source>
         <translation>无效</translation>
     </message>

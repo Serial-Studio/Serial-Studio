@@ -22,7 +22,6 @@
 
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 import QtCore as QtSettings
 
 import "Devices" as Devices
@@ -43,7 +42,6 @@ Item {
     property alias serialStopBits: serial.stopBits
     property alias serialFlowControl: serial.flowControl
     property alias serialAutoReconnect: serial.autoReconnect
-    property alias serialIgnoreDataDelimeters: serial.ignoreDataDelimeters
 
     property alias networkAddress: network.address
     property alias newtorkTcpPort: network.tcpPort
@@ -51,9 +49,6 @@ Item {
     property alias networkUdpLocalPort: network.udpLocalPort
     property alias networkUdpRemotePort: network.udpRemotePort
     property alias networkUdpMulticastEnabled: network.udpMulticastEnabled
-    property alias networkIgnoreDataDelimeters: network.ignoreDataDelimeters
-
-    property alias bleIgnoreDataDelimeters: bluetoothLE.ignoreDataDelimeters
   }
 
   //

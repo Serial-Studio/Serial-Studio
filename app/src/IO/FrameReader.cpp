@@ -169,10 +169,20 @@ void IO::FrameReader::processData(const QByteArray &data)
   // Project mode, obtain which frame detection method to use
   else if (m_operationMode == SerialStudio::ProjectFile)
   {
+    // Read using only an end delimiter
     if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
       bytesRead = readEndDelimetedFrames();
+
+    // Read using both a start & end delimiter
     else if (m_frameDetectionMode == SerialStudio::StartAndEndDelimiter)
       bytesRead = readStartEndDelimetedFrames();
+
+    // Process incoming data directly
+    else if (m_frameDetectionMode == SerialStudio::NoDelimiters)
+    {
+      bytesRead = data.size();
+      Q_EMIT frameReady(data);
+    }
   }
 
   // Handle quick plot data

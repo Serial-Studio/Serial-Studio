@@ -81,6 +81,7 @@ public:
 
   [[nodiscard]] QString jsonMapFilepath() const;
   [[nodiscard]] QString jsonMapFilename() const;
+  [[nodiscard]] JSON::FrameParser *frameParser() const;
   [[nodiscard]] SerialStudio::OperationMode operationMode() const;
 
 public slots:

@@ -24,9 +24,9 @@
   "toolbar_bottom": "#282a2d",
   "toolbar_border": "#3a3d42",
   "toolbar_separator": "#3a3d42",
-  "toolbar_checked_button_opacity": 0.3,
+  "toolbar_checked_button_opacity": 0.4,
   "toolbar_checked_button_border": "#4b4e51",
-  "toolbar_checked_button_background": "#35373a",
+  "toolbar_checked_button_background": "#18191B",
 
   "error": "#e06c75",
   "csv_switch": "#56b6c2",

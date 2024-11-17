@@ -1,22 +1,17 @@
 /**
- * This function splits a data frame using the project-specified separator,
- * allowing you to customize frame parsing for different project requirements.
+ * Splits a data frame into an array of elements using a comma separator.
  *
- * Global variables can maintain a constant output array, enabling a single
- * Serial Studio project to display information consistently, even with varying
- * frame types.
+ * Use this function to break a string (like "value1,value2,value3") into
+ * individual pieces, which can then be displayed or processed in your project.
  *
- * @param[in]  frame      The latest received frame as a string.
- * @param[in]  separator  The data separator defined in the JSON project.
- * @return     Array of strings containing the parsed frame elements.
+ * @param[in]  frame   A string containing the data frame.
+ *                     Example: "value1,value2,value3"
+ * @return     An array of strings with the split elements.
+ *             Example: ["value1", "value2", "value3"]
  *
- * @note Only data within the delimiters is processed.
- * @note Declare global variables outside @c parse() for state/configuration.
- *
- * @example
- * Given frame: "value1,value2,value3", separator: ","
- * Returns: ["value1", "value2", "value3"]
+ * @note You can declare global variables outside this function if needed
+ *       for storing settings or keeping state between calls.
  */
-function parse(frame, separator) {
-    return frame.split(separator);
+function parse(frame) {
+    return frame.split(',');
 }

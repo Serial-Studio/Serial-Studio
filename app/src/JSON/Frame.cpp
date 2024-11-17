@@ -42,7 +42,6 @@ void JSON::Frame::clear()
 {
   m_title = "";
   m_frameEnd = "";
-  m_separator = "";
   m_frameStart = "";
 
   m_groups.clear();
@@ -106,7 +105,6 @@ bool JSON::Frame::read(const QJsonObject &object)
     // Update title
     m_title = title;
     m_frameEnd = object.value(QStringLiteral("frameEnd")).toString();
-    m_separator = object.value(QStringLiteral("separator")).toString();
     m_frameStart = object.value(QStringLiteral("frameStart")).toString();
 
     // Generate groups & datasets from data frame
@@ -156,14 +154,6 @@ const QString &JSON::Frame::title() const
 const QString &JSON::Frame::frameEnd() const
 {
   return m_frameEnd;
-}
-
-/**
- * Returns the frame separator sequence.
- */
-const QString &JSON::Frame::separator() const
-{
-  return m_separator;
 }
 
 /**

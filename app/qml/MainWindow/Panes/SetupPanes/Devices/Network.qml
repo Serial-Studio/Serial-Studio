@@ -37,7 +37,6 @@ Item {
   property alias udpRemotePort: _udpRemotePort.text
   property alias socketType: _typeCombo.currentIndex
   property alias udpMulticastEnabled: _udpMulticast.checked
-  property alias ignoreDataDelimeters: _ignoreDataDelimeters.checked
 
   //
   // React to network manager events
@@ -233,24 +232,6 @@ Item {
         onCheckedChanged: {
           if (Cpp_IO_Network.udpMulticast !== checked)
             Cpp_IO_Network.udpMulticast = checked
-        }
-      }
-
-      //
-      // Ingore data delimeters checkbox
-      //
-      Label {
-        text: qsTr("No Delimiters") + ":"
-        opacity: _ignoreDataDelimeters.enabled ? 1 : 0.5
-      } CheckBox {
-        id: _ignoreDataDelimeters
-        opacity: enabled ? 1 : 0.5
-        Layout.alignment: Qt.AlignLeft
-        Layout.leftMargin: -8
-        checked: Cpp_IO_Network.ignoreDataDelimeters
-        onCheckedChanged: {
-          if (Cpp_IO_Network.ignoreDataDelimeters !== checked)
-            Cpp_IO_Network.ignoreDataDelimeters = checked
         }
       }
     }

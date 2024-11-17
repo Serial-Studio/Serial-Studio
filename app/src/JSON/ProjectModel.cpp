@@ -58,7 +58,6 @@ typedef enum
 typedef enum
 {
   kProjectView_Title,               /**< Represents the project title item. */
-  kProjectView_ItemSeparator,       /**< Represents the item separator. */
   kProjectView_FrameStartSequence,  /**< Represents the frame start sequence. */
   kProjectView_FrameEndSequence,    /**< Represents the frame end sequence. */
   kProjectView_FrameDecoder,        /**< Represents the frame decoder item. */
@@ -137,7 +136,6 @@ static quint16 TILE_SERVER_PORT = 2701;
  */
 JSON::ProjectModel::ProjectModel()
   : m_title("")
-  , m_separator("")
   , m_frameParserCode("")
   , m_frameEndSequence("")
   , m_frameStartSequence("")
@@ -739,7 +737,6 @@ bool JSON::ProjectModel::saveJsonFile()
   // Create JSON document & add properties
   QJsonObject json;
   json.insert("title", m_title);
-  json.insert("separator", m_separator);
   json.insert("decoder", m_frameDecoder);
   json.insert("frameEnd", m_frameEndSequence);
   json.insert("frameParser", m_frameParserCode);
@@ -823,8 +820,8 @@ void JSON::ProjectModel::setupExternalConnections()
  * @brief Initializes a new JSON project.
  *
  * This function clears the current groups, resets project properties
- * (such as the title, separator, frame decoder, and sequences), and sets
- * default values for the project.
+ * (such as the title, frame decoder, and sequences), and sets default values
+ * for the project.
  *
  * It also updates the internal models, removes the modified state, and
  * switches the view to the project view.
@@ -840,7 +837,6 @@ void JSON::ProjectModel::newJsonFile()
   m_actions.clear();
 
   // Reset project properties
-  m_separator = ",";
   m_frameDecoder = SerialStudio::PlainText;
   m_frameDetection = SerialStudio::EndDelimiterOnly;
   m_frameEndSequence = "\\n";
@@ -942,7 +938,6 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   // Read data from JSON document
   auto json = document.object();
   m_title = json.value("title").toString();
-  m_separator = json.value("separator").toString();
   m_frameEndSequence = json.value("frameEnd").toString();
   m_frameParserCode = json.value("frameParser").toString();
   m_frameStartSequence = json.value("frameStart").toString();
@@ -1333,10 +1328,11 @@ void JSON::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
   buildTreeModel();
   setModified(true);
 
-  // Select group item again to rebuild dataset model
-  for (auto i = m_groupItems.begin(); i != m_groupItems.end(); ++i)
+  // Select newly added dataset item
+  for (auto i = m_datasetItems.begin(); i != m_datasetItems.end(); ++i)
   {
-    if (i.value().groupId() == groupId)
+    if (i.value().datasetId() == dataset.datasetId()
+        && i.value().groupId() == dataset.groupId())
     {
       m_selectionModel->setCurrentIndex(i.key()->index(),
                                         QItemSelectionModel::ClearAndSelect);
@@ -1928,8 +1924,8 @@ void JSON::ProjectModel::buildTreeModel()
  * @brief Builds the project model that contains project configuration settings.
  *
  * This function creates a new `CustomModel` for managing and displaying
- * project-level settings such as the title, separator sequence, frame start
- * and end delimiters, data conversion method, and the Thunderforest API key.
+ * project-level settings such as the title, frame start and end delimiters,
+ * data conversion method, and the Thunderforest API key.
  *
  * Each item in the model is editable and has associated metadata like
  * placeholders and descriptions. The function also sets up a signal to handle
@@ -1999,28 +1995,20 @@ void JSON::ProjectModel::buildProjectModel()
   }
 
   // Add frame end sequence
-  auto frameEnd = new QStandardItem();
-  frameEnd->setEditable(true);
-  frameEnd->setData(TextField, WidgetType);
-  frameEnd->setData(m_frameEndSequence, EditableValue);
-  frameEnd->setData(tr("Frame End Delimeter"), ParameterName);
-  frameEnd->setData(kProjectView_FrameEndSequence, ParameterType);
-  frameEnd->setData(QStringLiteral("*/"), PlaceholderValue);
-  frameEnd->setData(tr("String marking the end of a frame"),
-                    ParameterDescription);
-  m_projectModel->appendRow(frameEnd);
-
-  // Add separator sequence
-  auto separator = new QStandardItem();
-  separator->setEditable(true);
-  separator->setData(TextField, WidgetType);
-  separator->setData(m_separator, EditableValue);
-  separator->setData(tr("Separator Sequence"), ParameterName);
-  separator->setData(kProjectView_ItemSeparator, ParameterType);
-  separator->setData(QStringLiteral(","), PlaceholderValue);
-  separator->setData(tr("String used to split items in a frame"),
-                     ParameterDescription);
-  m_projectModel->appendRow(separator);
+  if (m_frameDetection == SerialStudio::StartAndEndDelimiter
+      || m_frameDetection == SerialStudio::EndDelimiterOnly)
+  {
+    auto frameEnd = new QStandardItem();
+    frameEnd->setEditable(true);
+    frameEnd->setData(TextField, WidgetType);
+    frameEnd->setData(m_frameEndSequence, EditableValue);
+    frameEnd->setData(tr("Frame End Delimeter"), ParameterName);
+    frameEnd->setData(kProjectView_FrameEndSequence, ParameterType);
+    frameEnd->setData(QStringLiteral("*/"), PlaceholderValue);
+    frameEnd->setData(tr("String marking the end of a frame"),
+                      ParameterDescription);
+    m_projectModel->appendRow(frameEnd);
+  }
 
   // Add Thunderforest API Key
   auto thunderforest = new QStandardItem();
@@ -2505,6 +2493,7 @@ void JSON::ProjectModel::generateComboBoxModels()
   m_frameDetectionMethods.clear();
   m_frameDetectionMethods.append(tr("End Delimiter Only"));
   m_frameDetectionMethods.append(tr("Start + End Delimiter"));
+  m_frameDetectionMethods.append(tr("No Delimiters"));
 
   // Initialize group-level widgets
   m_groupWidgets.clear();
@@ -2565,6 +2554,50 @@ void JSON::ProjectModel::setModified(const bool modified)
  */
 void JSON::ProjectModel::setCurrentView(const CurrentView currentView)
 {
+  auto *parser = JSON::FrameBuilder::instance().frameParser();
+  if (parser && m_currentView == FrameParserView
+      && m_currentView != currentView)
+  {
+    if (parser->isModified())
+    {
+      bool changeView = false;
+      const auto ret = Misc::Utilities::showMessageBox(
+          tr("Save changes to frame parser code?"),
+          tr("Select 'Save' to keep your changes, 'Discard' to lose them "
+             "permanently, or 'Cancel' to return."),
+          tr("Save Changes"),
+          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+      if (ret == QMessageBox::Save)
+        changeView = parser->save(true);
+
+      else if (ret == QMessageBox::Discard)
+      {
+        changeView = true;
+        parser->readCode();
+      }
+
+      else if (ret == QMessageBox::Cancel)
+        changeView = false;
+
+      if (!changeView)
+      {
+        for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it)
+        {
+          if (it.value() == kFrameParser)
+          {
+            QTimer::singleShot(100, this, [=] {
+              selectionModel()->setCurrentIndex(
+                  it.key()->index(), QItemSelectionModel::ClearAndSelect);
+            });
+
+            break;
+          }
+        }
+      }
+    }
+  }
+
   m_currentView = currentView;
   Q_EMIT currentViewChanged();
 }
@@ -2726,8 +2759,8 @@ void JSON::ProjectModel::onActionItemChanged(QStandardItem *item)
 /**
  * @brief Handles changes made to a project item in the project model.
  *
- * This function processes changes to project items such as the title,
- * separator, frame sequences, decoder method, and Thunderforest API key.
+ * This function processes changes to project items such as the title, frame
+ * start/end sequences, decoder method, and Thunderforest API key.
  *
  * It updates the relevant internal members and emits signals to notify the
  * user interface of changes. After updating the internal state, it marks the
@@ -2752,9 +2785,6 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
     case kProjectView_Title:
       m_title = value.toString();
       Q_EMIT titleChanged();
-      break;
-    case kProjectView_ItemSeparator:
-      m_separator = value.toString();
       break;
     case kProjectView_FrameEndSequence:
       m_frameEndSequence = value.toString();

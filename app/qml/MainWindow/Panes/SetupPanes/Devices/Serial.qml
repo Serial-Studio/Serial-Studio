@@ -39,7 +39,6 @@ Item {
   property alias flowControl: _flowCombo.currentIndex
   property alias stopBits: _stopBitsCombo.currentIndex
   property alias autoReconnect: _autoreconnect.checked
-  property alias ignoreDataDelimeters: _ignoreDataDelimeters.checked
 
   //
   // Update listbox models when translation is changed
@@ -236,23 +235,6 @@ Item {
       onCheckedChanged: {
         if (Cpp_IO_Serial.dtrEnabled !== checked)
           Cpp_IO_Serial.dtrEnabled = checked
-      }
-    }
-
-    //
-    // Ignore data delimeters
-    //
-    Label {
-      text: qsTr("No Delimiters") + ":"
-      enabled: opacity == 1
-    } CheckBox {
-      id: _ignoreDataDelimeters
-      Layout.alignment: Qt.AlignLeft
-      Layout.leftMargin: -8
-      checked: Cpp_IO_Serial.ignoreDataDelimeters
-      onCheckedChanged: {
-        if (Cpp_IO_Serial.ignoreDataDelimeters !== checked)
-          Cpp_IO_Serial.ignoreDataDelimeters = checked
       }
     }
 

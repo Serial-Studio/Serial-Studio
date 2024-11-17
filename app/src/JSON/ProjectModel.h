@@ -303,7 +303,6 @@ private:
 
 private:
   QString m_title;
-  QString m_separator;
   QString m_frameParserCode;
   QString m_frameEndSequence;
   QString m_frameStartSequence;
