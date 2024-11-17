@@ -25,7 +25,7 @@ For simple cases, you can send data frame to MQTT from terminal, e.g.:
 `mosquitto_pub -m "100,50,75,89" -t "lte"`
 
 For complex situations, you can use Python (or another language for your choice) to retrieve and form the data frame.  
-An example script is contained in the file ![lte_mqtt.py](lte_mqtt.py)
+An example script is contained in the file [lte_mqtt.py](lte_mqtt.py)
 
 Install **paho** - Python client library for MQTT:  
 `sudo pacman -S python-paho-mqtt`
