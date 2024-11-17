@@ -14,7 +14,14 @@ Some examples also include Serial Studio project files (`*.json`) to simplify th
   - **README.md**: Setup and usage instructions.
   - **Screenshot**: Example view in Serial Studio.
   
-### 2. MPU6050
+### 2. LTE modem
+- **Description**: This example reads data of signal from LTE modem and transmits it over MQTT.
+- **Contents**:
+  - **lte_mqtt.py**: Python script for parsing data of signal from LTE modem API and send it over MQTT.
+  - **README.md**: Setup and usage instructions.
+  - **Screenshot**: Example view in Serial Studio.
+
+### 3. MPU6050
 - **Description**: This example captures motion and orientation data from an MPU6050 accelerometer and gyroscope. Processed data is sent to Serial Studio for real-time visualization on widgets like a g-meter or attitude indicator.
 - **Contents**:
   - **MPU6050.ino**: Arduino code for capturing and transmitting MPU6050 data.
@@ -22,14 +29,14 @@ Some examples also include Serial Studio project files (`*.json`) to simplify th
   - **README.md**: Detailed setup instructions, including Serial Studio configuration.
   - **Screenshots**: `project-setup.png` and `screenshot.png` provide visual references for Serial Studio setup and data visualization.
 
-### 3. PulseSensor
+### 4. PulseSensor
 - **Description**: This example filters and smooths pulse data from a heart rate sensor and visualizes it in Serial Studio using **quick plot mode**. The filtered pulse signal is transmitted for live monitoring and CSV logging.
 - **Contents**:
   - **PulseSensor.ino**: Arduino code for filtering and transmitting pulse data.
   - **README.md**: Step-by-step guide for setup and visualization in Serial Studio.
   - **Screenshots**: `csv.png` and `screenshot.png` for reference in CSV logging and Serial Studio visualization.
 
-### 4. TinyGPS
+### 5. TinyGPS
 - **Description**: This example reads GPS data (latitude, longitude, and altitude) from a GPS module and visualizes it on a map in Serial Studio.
 - **Contents**:
   - **TinyGPS.ino**: Arduino code for capturing and transmitting GPS data.
@@ -37,7 +44,7 @@ Some examples also include Serial Studio project files (`*.json`) to simplify th
   - **README.md**: Comprehensive setup instructions for GPS configuration, including Serial Studio setup.
   - **Screenshots**: `project-setup.png` and `screenshot.png` for guidance on map visualization in Serial Studio.
 
-### 5. UDP Function Generator
+### 6. UDP Function Generator
 
 - **Description**: This example generates real-time waveforms (sine, triangle, sawtooth, and square) and transmits them over an UDP socket locally. It is designed to generate data that can be visualized in **Serial Studio**, where you can observe and analyze the generated signals in real-time. The program is versatile and can also be used to stress-test Serial Studio's performance under continuous, high-frequency data streams.
 - **Contents**:
