@@ -28,7 +28,6 @@
 #include <QStyleFactory>
 
 #include "AppInfo.h"
-#include "SerialStudio.h"
 #include "Misc/ModuleManager.h"
 
 #ifdef Q_OS_WIN

@@ -40,9 +40,9 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
   {
     const auto &dataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
 
-    m_minY = dataset.min();
-    m_maxY = dataset.max();
     m_yLabel = dataset.title();
+    m_minY = qMin(dataset.min(), dataset.max());
+    m_maxY = qMax(dataset.min(), dataset.max());
 
     if (!dataset.units().isEmpty())
       m_yLabel += " (" + dataset.units() + ")";
@@ -200,8 +200,8 @@ void Widgets::Plot::calculateAutoScaleRange()
     ok &= !qFuzzyCompare(dataset.min(), dataset.max());
     if (ok)
     {
-      m_minY = qMin(m_minY, dataset.min());
-      m_maxY = qMax(m_maxY, dataset.max());
+      m_minY = qMin(dataset.min(), dataset.max());
+      m_maxY = qMax(dataset.min(), dataset.max());
     }
   }
 

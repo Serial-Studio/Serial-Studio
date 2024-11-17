@@ -41,9 +41,10 @@ Widgets::Gauge::Gauge(const int index, QQuickItem *parent)
     const auto &dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
 
     m_units = dataset.units();
-    m_minValue = dataset.min();
-    m_maxValue = dataset.max();
     m_alarmValue = dataset.alarm();
+    m_minValue = qMin(dataset.min(), dataset.max());
+    m_maxValue = qMax(dataset.min(), dataset.max());
+
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
             &Gauge::updateData);
   }
