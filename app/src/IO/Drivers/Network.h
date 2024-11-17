@@ -22,14 +22,14 @@
 
 #pragma once
 
-#include <IO/HAL_Driver.h>
-
 #include <QHostInfo>
 #include <QTcpSocket>
 #include <QUdpSocket>
 #include <QByteArray>
 #include <QHostAddress>
 #include <QAbstractSocket>
+
+#include "IO/HAL_Driver.h"
 
 namespace IO
 {

@@ -28,8 +28,7 @@
 #include <QByteArray>
 #include <QHostAddress>
 
-#include <JSON/Frame.h>
-#include <JSON/Dataset.h>
+#include "JSON/Frame.h"
 
 /**
  * Default TCP port to use for incoming connections, I choose 7777 because 7 is

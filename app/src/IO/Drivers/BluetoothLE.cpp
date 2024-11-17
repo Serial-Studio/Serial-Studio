@@ -22,7 +22,6 @@
 
 #include <QOperatingSystemVersion>
 
-#include "IO/Manager.h"
 #include "IO/Drivers/BluetoothLE.h"
 
 //------------------------------------------------------------------------------

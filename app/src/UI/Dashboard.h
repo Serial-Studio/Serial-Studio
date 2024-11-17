@@ -24,8 +24,9 @@
 
 #include <QFont>
 #include <QObject>
-#include <JSON/Frame.h>
-#include <SerialStudio.h>
+
+#include "JSON/Frame.h"
+#include "SerialStudio.h"
 
 // clang-format off
 #define GET_GROUP(type, index) UI::Dashboard::instance().getGroupWidget(type, index)

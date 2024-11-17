@@ -24,8 +24,9 @@
 
 #include <QObject>
 #include <QVector>
-#include <JSON/Group.h>
-#include <JSON/Dataset.h>
+
+#include "JSON/Group.h"
+#include "JSON/Dataset.h"
 
 /**
  * @typedef Curve

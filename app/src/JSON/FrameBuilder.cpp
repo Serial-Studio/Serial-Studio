@@ -27,7 +27,6 @@
 #include "Misc/Utilities.h"
 
 #include "CSV/Player.h"
-#include "MQTT/Client.h"
 #include "JSON/ProjectModel.h"
 #include "JSON/FrameBuilder.h"
 

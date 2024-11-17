@@ -26,7 +26,7 @@
 #include <QLowEnergyController>
 #include <QBluetoothDeviceDiscoveryAgent>
 
-#include <IO/HAL_Driver.h>
+#include "IO/HAL_Driver.h"
 
 namespace IO
 {

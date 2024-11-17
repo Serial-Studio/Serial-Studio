@@ -23,7 +23,7 @@
 #include <QPainter>
 #include <QClipboard>
 #include <QFontMetrics>
-#include <QGuiApplication>
+#include <QApplication>
 
 #include "IO/Console.h"
 #include "IO/Manager.h"

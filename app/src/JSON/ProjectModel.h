@@ -23,14 +23,16 @@
 #pragma once
 
 #include <QObject>
-#include <JSON/Group.h>
-#include <JSON/Action.h>
-#include <JSON/Dataset.h>
 #include <QStandardItemModel>
 #include <QItemSelectionModel>
-#include <Misc/OsmTemplateServer.h>
 
-#include <SerialStudio.h>
+#include "SerialStudio.h"
+
+#include "JSON/Group.h"
+#include "JSON/Action.h"
+#include "JSON/Dataset.h"
+
+#include "Misc/OsmTemplateServer.h"
 
 namespace JSON
 {

@@ -20,9 +20,10 @@
  * THE SOFTWARE.
  */
 
+#include "UI/Dashboard.h"
+
 #include "IO/Manager.h"
 #include "CSV/Player.h"
-#include "UI/Dashboard.h"
 #include "MQTT/Client.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"

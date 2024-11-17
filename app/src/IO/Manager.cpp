@@ -26,7 +26,6 @@
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
 
-#include "MQTT/Client.h"
 #include "Misc/Translator.h"
 
 #include <QApplication>

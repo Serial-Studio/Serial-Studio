@@ -28,9 +28,6 @@
 #include <QSettings>
 #include <QJsonObject>
 
-#include <QString>
-#include <QColor>
-
 /**
  * @brief Generates a styled QString using a format string and a variable number
  *        of QColor arguments.

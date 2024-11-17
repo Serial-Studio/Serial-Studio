@@ -31,8 +31,6 @@
 
 #include <qmqtt.h>
 
-#include "JSON/Frame.h"
-
 namespace MQTT
 {
 /**

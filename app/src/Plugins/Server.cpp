@@ -25,9 +25,10 @@
 #include <QJsonDocument>
 
 #include "IO/Manager.h"
-#include "JSON/FrameBuilder.h"
-#include "Misc/Utilities.h"
 #include "Plugins/Server.h"
+#include "JSON/FrameBuilder.h"
+
+#include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
 
 /**

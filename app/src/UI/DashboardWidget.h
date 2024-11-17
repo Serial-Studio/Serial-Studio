@@ -23,8 +23,8 @@
 #pragma once
 
 #include <QQuickItem>
-#include <UI/Dashboard.h>
-#include <Misc/TimerEvents.h>
+
+#include "SerialStudio.h"
 
 namespace UI
 {

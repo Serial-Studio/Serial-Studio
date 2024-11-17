@@ -22,8 +22,6 @@
 
 #pragma once
 
-#include <IO/HAL_Driver.h>
-
 #include <QObject>
 #include <QString>
 #include <QSettings>
@@ -31,6 +29,8 @@
 #include <QtSerialPort>
 #include <QTextCursor>
 #include <QQuickTextDocument>
+
+#include "IO/HAL_Driver.h"
 
 namespace IO
 {

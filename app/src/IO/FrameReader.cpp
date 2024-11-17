@@ -20,9 +20,8 @@
  * THE SOFTWARE.
  */
 
-#include "IO/Checksum.h"
 #include "FrameReader.h"
-
+#include "IO/Checksum.h"
 #include "JSON/FrameBuilder.h"
 #include "JSON/ProjectModel.h"
 

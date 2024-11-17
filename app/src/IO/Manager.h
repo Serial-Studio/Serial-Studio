@@ -25,9 +25,9 @@
 #include <QThread>
 #include <QObject>
 
-#include "HAL_Driver.h"
-#include "FrameReader.h"
 #include "SerialStudio.h"
+#include "IO/HAL_Driver.h"
+#include "IO/FrameReader.h"
 
 namespace IO
 {

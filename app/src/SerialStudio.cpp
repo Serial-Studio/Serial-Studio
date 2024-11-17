@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 
-#include <SerialStudio.h>
-#include <Misc/ThemeManager.h>
+#include "SerialStudio.h"
+#include "Misc/ThemeManager.h"
 
 #include <QJsonArray>
 

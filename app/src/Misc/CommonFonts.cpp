@@ -20,7 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include <QDebug>
 #include <QApplication>
 #include <QFontDatabase>
 
