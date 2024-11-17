@@ -47,7 +47,7 @@ gcc -o udp_function_generator udp_function_generator.c -lm
 On Windows, you will need to use:
 
 ```bash
-gcc -o udp_function_generator udp_function_generator.c -lws2_32 -lm
+gcc -o udp_function_generator.exe udp_function_generator.c -lws2_32 -lm
 ```
 
 ### 2. Run the Program
