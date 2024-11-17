@@ -15,9 +15,9 @@ Some examples also include Serial Studio project files (`*.json`) to simplify th
   - **Screenshot**: Example view in Serial Studio.
   
 ### 2. LTE modem
-- **Description**: This example reads data of signal from LTE modem and transmits it over MQTT.
+- **Description**: This example reads data of signal from LTE modem and transmits it over MQTT or UDP Socket.
 - **Contents**:
-  - **lte_mqtt.py**: Python script for parsing data of signal from LTE modem API and send it over MQTT.
+  - **lte_mqtt.py**: Python script for parsing data of signal from LTE modem API and send it over MQTT or UDP Socket.
   - **README.md**: Setup and usage instructions.
   - **Screenshot**: Example view in Serial Studio.
 

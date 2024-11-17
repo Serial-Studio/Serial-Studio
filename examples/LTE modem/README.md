@@ -44,6 +44,7 @@ Data frame will send to MQTT every 5 seconds.
 2. **Open Serial Studio and configure MQTT**:
 
    - Set the **Host**: 127.0.0.1
+   - Set the **Port**: 1883
    - Set the **Topic**: lte
    - Set the **Mode**: Subscriber
    - Set the **Keep Alive**: 600
@@ -57,3 +58,20 @@ Data frame will send to MQTT every 5 seconds.
 4. Use **Project editor** to configure dashboard.  
 
 ![Project Editor](doc/project_editor.png)
+
+
+## UDP Socket
+Solution with UDP Socket looks much simpler than MQTT.
+
+Run in terminal:  
+`python lte_udp.py`
+
+### Serial Studio Configuration for UDP Socket
+
+   - Set the **DEVICE SETUP**: I/O Interface: Network Socket
+   - Set the **Socket type**: UDP
+   - Set the **Remote address**: 127.0.0.1
+   - Set the **Local port**: 5005
+   - Set the **Ignore data delimeters**: True
+   - Click **Connect**  
+![Serial Studio Quick Plot](doc/udp.png)
