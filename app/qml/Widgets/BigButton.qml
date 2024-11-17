@@ -72,7 +72,9 @@ Item {
     visible: root.toolbarButton
     color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
     border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
-    opacity: root.checked ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0.0
+    opacity: (root.checked || _mouseArea.pressed) ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0.0
+
+    Behavior on opacity {NumberAnimation{}}
   }
 
   //
@@ -81,7 +83,10 @@ Item {
   ToolButton {
     checked: true
     anchors.fill: parent
-    visible: root.checked && !root.toolbarButton
+    visible: !root.toolbarButton
+    opacity: (root.checked || _mouseArea.pressed) ? 1 : 0
+
+    Behavior on opacity {NumberAnimation{}}
   }
 
   //
