@@ -115,17 +115,17 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="126"/>
         <source>Characteristic</source>
-        <translation type="unfinished"></translation>
+        <translation>特性</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="157"/>
         <source>Descriptor</source>
-        <translation type="unfinished"></translation>
+        <translation>描述符</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="186"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>无分隔符</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="236"/>
@@ -164,12 +164,12 @@
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="179"/>
+        <location filename="../../src/CSV/Player.cpp" line="184"/>
         <source>Select CSV file</source>
         <translation>选择 CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="180"/>
+        <location filename="../../src/CSV/Player.cpp" line="185"/>
         <source>CSV files</source>
         <translation>CSV 文件</translation>
     </message>
@@ -182,83 +182,83 @@
         <translation type="vanished">要使用此功能，必须先断开串口连接</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="292"/>
+        <location filename="../../src/CSV/Player.cpp" line="297"/>
         <source>Device Connection Active</source>
-        <translation type="unfinished"></translation>
+        <translation>设备连接已激活</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="293"/>
+        <location filename="../../src/CSV/Player.cpp" line="298"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>要使用此功能，您必须断开与设备的连接。您要继续吗？</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="358"/>
+        <location filename="../../src/CSV/Player.cpp" line="362"/>
         <source>Insufficient Data in CSV File</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV 文件中的数据不足</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="359"/>
+        <location filename="../../src/CSV/Player.cpp" line="363"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV 文件必须包含至少两帧（数据行）才能继续。请检查文件并重试。</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="529"/>
+        <location filename="../../src/CSV/Player.cpp" line="531"/>
         <source>Invalid CSV</source>
         <translation>无效的CSV文件</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="530"/>
+        <location filename="../../src/CSV/Player.cpp" line="532"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV文件不包含任何数据或标题。</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="540"/>
+        <location filename="../../src/CSV/Player.cpp" line="542"/>
         <source>Select a date/time column</source>
         <translation>选择日期/时间列</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="540"/>
-        <location filename="../../src/CSV/Player.cpp" line="550"/>
+        <location filename="../../src/CSV/Player.cpp" line="542"/>
+        <location filename="../../src/CSV/Player.cpp" line="552"/>
         <source>Set interval manually</source>
         <translation>手动设置间隔</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="542"/>
+        <location filename="../../src/CSV/Player.cpp" line="544"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV日期/时间选择</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="543"/>
+        <location filename="../../src/CSV/Player.cpp" line="545"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>选择如何处理日期/时间数据：</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="553"/>
+        <location filename="../../src/CSV/Player.cpp" line="555"/>
         <source>Set Interval</source>
         <translation>设置间隔</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="554"/>
+        <location filename="../../src/CSV/Player.cpp" line="556"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>请输入行之间的间隔（以毫秒为单位）：</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="568"/>
+        <location filename="../../src/CSV/Player.cpp" line="570"/>
         <source>Select Date/Time Column</source>
         <translation>选择日期/时间列</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="569"/>
+        <location filename="../../src/CSV/Player.cpp" line="571"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>请选择包含日期/时间数据的列：</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="579"/>
+        <location filename="../../src/CSV/Player.cpp" line="581"/>
         <source>Invalid Selection</source>
         <translation>无效的选择</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="579"/>
+        <location filename="../../src/CSV/Player.cpp" line="581"/>
         <source>The selected column is not valid.</source>
         <translation>所选列无效。</translation>
     </message>
@@ -267,12 +267,12 @@
         <translation type="vanished">为了使用此功能，您需要先断开串口连接</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="369"/>
+        <location filename="../../src/CSV/Player.cpp" line="373"/>
         <source>Cannot read CSV file</source>
         <translation>无法读取 CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="370"/>
+        <location filename="../../src/CSV/Player.cpp" line="374"/>
         <source>Please check file permissions &amp; location</source>
         <translation>请检查文件权限和位置</translation>
     </message>
@@ -557,7 +557,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="33"/>
         <source>modified</source>
-        <translation type="unfinished">已修改</translation>
+        <translation>已修改</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="83"/>
@@ -777,87 +777,86 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="248"/>
         <source>The BLE device has been disconnected</source>
-        <translation>BLE设备已断开连接</translation>
+        <translation type="vanished">BLE设备已断开连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="314"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="297"/>
         <source>Select Device</source>
         <translation>选择设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="308"/>
         <source>Select Service</source>
         <translation>选择服务</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="320"/>
         <source>Select Descriptor</source>
-        <translation type="unfinished"></translation>
+        <translation>选择描述符</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="332"/>
         <source>Select Characteristic</source>
-        <translation type="unfinished"></translation>
+        <translation>选择特性</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="482"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="465"/>
         <source>Error while configuring BLE service</source>
         <translation>配置BLE服务时出错</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="668"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="651"/>
         <source>Operation error</source>
         <translation>操作错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="671"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="654"/>
         <source>Characteristic write error</source>
         <translation>特性写入错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="674"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="657"/>
         <source>Descriptor write error</source>
         <translation>描述符写入错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="677"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="660"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="680"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="663"/>
         <source>Characteristic read error</source>
         <translation>特性读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="683"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="666"/>
         <source>Descriptor read error</source>
         <translation>描述符读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="683"/>
         <source>Bluetooth adapter is off!</source>
         <translation>蓝牙适配器已关闭！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="703"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="686"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>无效的蓝牙适配器！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="706"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="689"/>
         <source>Unsuported platform or operating system</source>
         <translation>不支持的平台或操作系统</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="692"/>
         <source>Unsupported discovery method</source>
         <translation>不支持的发现方法</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="712"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="695"/>
         <source>General I/O error</source>
         <translation>通用I/O错误</translation>
     </message>
@@ -2192,7 +2191,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="63"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="69"/>
         <source>Samples</source>
         <translation>样本</translation>
     </message>
@@ -2237,7 +2236,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="243"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>无分隔符</translation>
     </message>
     <message>
         <source>Ignore data delimiters</source>
@@ -2886,7 +2885,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="246"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>无分隔符</translation>
     </message>
 </context>
 <context>
@@ -2894,57 +2893,57 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="138"/>
         <source>Data Grids</source>
-        <translation type="unfinished">数据网格</translation>
+        <translation>数据网格</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="141"/>
         <source>Multiple Data Plots</source>
-        <translation type="unfinished">多数据绘图</translation>
+        <translation>多数据绘图</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="144"/>
         <source>Accelerometers</source>
-        <translation type="unfinished">加速度计</translation>
+        <translation>加速度计</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="147"/>
         <source>Gyroscopes</source>
-        <translation type="unfinished">陀螺仪</translation>
+        <translation>陀螺仪</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="150"/>
         <source>GPS</source>
-        <translation type="unfinished">GPS</translation>
+        <translation>GPS</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="153"/>
         <source>FFT Plots</source>
-        <translation type="unfinished">FFT绘图</translation>
+        <translation>FFT绘图</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="156"/>
         <source>LED Panels</source>
-        <translation type="unfinished">LED面板</translation>
+        <translation>LED面板</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="159"/>
         <source>Data Plots</source>
-        <translation type="unfinished">数据绘图</translation>
+        <translation>数据绘图</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="162"/>
         <source>Bars</source>
-        <translation type="unfinished">柱状图</translation>
+        <translation>柱状图</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="165"/>
         <source>Gauges</source>
-        <translation type="unfinished">仪表盘</translation>
+        <translation>仪表盘</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="168"/>
         <source>Compasses</source>
-        <translation type="unfinished">指南针</translation>
+        <translation>指南针</translation>
     </message>
 </context>
 <context>
@@ -3278,7 +3277,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">隐藏所有坐标轴</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="806"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="831"/>
         <source>Status Panel</source>
         <translation>状态面板</translation>
     </message>
@@ -3327,44 +3326,49 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>小部件设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="167"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="168"/>
         <source>Visualization Options</source>
         <translation>可视化选项</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="198"/>
         <source>Show both X and Y axes</source>
         <translation>显示X轴和Y轴</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="199"/>
         <source>Show only X axis</source>
         <translation>仅显示X轴</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="200"/>
         <source>Show only Y axis</source>
         <translation>仅显示Y轴</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="201"/>
         <source>Hide all axes</source>
         <translation>隐藏所有坐标轴</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="262"/>
         <source>Points:</source>
         <translation>点数：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="282"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="285"/>
         <source>Decimal places:</source>
         <translation>小数位数：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="304"/>
         <source>Columns:</source>
         <translation>列数：</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="324"/>
+        <source>Show Legends</source>
+        <translation>显示图例</translation>
     </message>
     <message>
         <source>Data Grids</source>
@@ -3411,17 +3415,17 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="401"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="424"/>
         <source>Clear Dashboard Data</source>
         <translation>清除仪表盘数据</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="432"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="455"/>
         <source>Display Console Window</source>
         <translation>显示控制台窗口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="468"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="491"/>
         <source>Adjust Plot Scales &amp; Positions</source>
         <translation>调整图表的比例和位置</translation>
     </message>

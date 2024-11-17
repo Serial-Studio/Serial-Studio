@@ -115,17 +115,17 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="126"/>
         <source>Characteristic</source>
-        <translation type="unfinished"></translation>
+        <translation>Характеристика</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="157"/>
         <source>Descriptor</source>
-        <translation type="unfinished"></translation>
+        <translation>Дескриптор</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="186"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Без разделителей</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="236"/>
@@ -164,12 +164,12 @@
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="179"/>
+        <location filename="../../src/CSV/Player.cpp" line="184"/>
         <source>Select CSV file</source>
         <translation>Выберите файл CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="180"/>
+        <location filename="../../src/CSV/Player.cpp" line="185"/>
         <source>CSV files</source>
         <translation>Файлы CSV</translation>
     </message>
@@ -182,83 +182,83 @@
         <translation type="vanished">Для использования этой функции необходимо отключиться от последовательного порта</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="292"/>
+        <location filename="../../src/CSV/Player.cpp" line="297"/>
         <source>Device Connection Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключение устройства активно</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="293"/>
+        <location filename="../../src/CSV/Player.cpp" line="298"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтобы использовать эту функцию, необходимо отключиться от устройства. Вы хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="358"/>
+        <location filename="../../src/CSV/Player.cpp" line="362"/>
         <source>Insufficient Data in CSV File</source>
-        <translation type="unfinished"></translation>
+        <translation>Недостаточно данных в файле CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="359"/>
+        <location filename="../../src/CSV/Player.cpp" line="363"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл CSV должен содержать как минимум два кадра (строки данных) для продолжения. Пожалуйста, проверьте файл и попробуйте снова.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="529"/>
+        <location filename="../../src/CSV/Player.cpp" line="531"/>
         <source>Invalid CSV</source>
         <translation>Неверный CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="530"/>
+        <location filename="../../src/CSV/Player.cpp" line="532"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>Файл CSV не содержит данных или заголовков.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="540"/>
+        <location filename="../../src/CSV/Player.cpp" line="542"/>
         <source>Select a date/time column</source>
         <translation>Выберите колонку с датой/временем</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="540"/>
-        <location filename="../../src/CSV/Player.cpp" line="550"/>
+        <location filename="../../src/CSV/Player.cpp" line="542"/>
+        <location filename="../../src/CSV/Player.cpp" line="552"/>
         <source>Set interval manually</source>
         <translation>Установить интервал вручную</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="542"/>
+        <location filename="../../src/CSV/Player.cpp" line="544"/>
         <source>CSV Date/Time Selection</source>
         <translation>Выбор даты/времени в CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="543"/>
+        <location filename="../../src/CSV/Player.cpp" line="545"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Выберите, как обрабатывать данные даты/времени:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="553"/>
+        <location filename="../../src/CSV/Player.cpp" line="555"/>
         <source>Set Interval</source>
         <translation>Установить интервал</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="554"/>
+        <location filename="../../src/CSV/Player.cpp" line="556"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Введите интервал между строками в миллисекундах:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="568"/>
+        <location filename="../../src/CSV/Player.cpp" line="570"/>
         <source>Select Date/Time Column</source>
         <translation>Выберите колонку с датой/временем</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="569"/>
+        <location filename="../../src/CSV/Player.cpp" line="571"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Выберите колонку, содержащую данные даты/времени:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="579"/>
+        <location filename="../../src/CSV/Player.cpp" line="581"/>
         <source>Invalid Selection</source>
         <translation>Неверный выбор</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="579"/>
+        <location filename="../../src/CSV/Player.cpp" line="581"/>
         <source>The selected column is not valid.</source>
         <translation>Выбранная колонка недействительна.</translation>
     </message>
@@ -267,12 +267,12 @@
         <translation type="vanished">Для использования этой функции необходимо отключиться от серийного порта</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="369"/>
+        <location filename="../../src/CSV/Player.cpp" line="373"/>
         <source>Cannot read CSV file</source>
         <translation>Не удается прочитать файл CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="370"/>
+        <location filename="../../src/CSV/Player.cpp" line="374"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Пожалуйста, проверьте разрешения и местоположение файла</translation>
     </message>
@@ -557,7 +557,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="33"/>
         <source>modified</source>
-        <translation type="unfinished">изменён</translation>
+        <translation>изменён</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="83"/>
@@ -777,77 +777,76 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="248"/>
         <source>The BLE device has been disconnected</source>
-        <translation>Устройство BLE было отключено</translation>
+        <translation type="vanished">Устройство BLE было отключено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="314"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="297"/>
         <source>Select Device</source>
         <translation>Выберите устройство</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="308"/>
         <source>Select Service</source>
         <translation>Выберите сервис</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="320"/>
         <source>Select Descriptor</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите дескриптор</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="332"/>
         <source>Select Characteristic</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите характеристику</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="482"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="465"/>
         <source>Error while configuring BLE service</source>
         <translation>Ошибка при настройке сервиса BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="668"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="651"/>
         <source>Operation error</source>
         <translation>Ошибка операции</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="671"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="654"/>
         <source>Characteristic write error</source>
         <translation>Ошибка записи характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="674"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="657"/>
         <source>Descriptor write error</source>
         <translation>Ошибка записи дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="677"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="660"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="680"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="663"/>
         <source>Characteristic read error</source>
         <translation>Ошибка чтения характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="683"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="666"/>
         <source>Descriptor read error</source>
         <translation>Ошибка чтения дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="683"/>
         <source>Bluetooth adapter is off!</source>
         <translation>Адаптер Bluetooth выключен!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="703"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="686"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Неверный адаптер Bluetooth!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="706"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="689"/>
         <source>Unsuported platform or operating system</source>
         <translation>Неподдерживаемая платформа или операционная система</translation>
     </message>
@@ -856,12 +855,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Неподдерживаемая платформа или операционная система</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="692"/>
         <source>Unsupported discovery method</source>
         <translation>Неподдерживаемый метод обнаружения</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="712"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="695"/>
         <source>General I/O error</source>
         <translation>Общая ошибка ввода/вывода</translation>
     </message>
@@ -2188,7 +2187,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="63"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="69"/>
         <source>Samples</source>
         <translation>Образцы</translation>
     </message>
@@ -2233,7 +2232,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="243"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Без разделителей</translation>
     </message>
     <message>
         <source>Ignore data delimiters</source>
@@ -2882,7 +2881,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="246"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Без разделителей</translation>
     </message>
 </context>
 <context>
@@ -2890,57 +2889,57 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="138"/>
         <source>Data Grids</source>
-        <translation type="unfinished">Таблицы данных</translation>
+        <translation>Таблицы данных</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="141"/>
         <source>Multiple Data Plots</source>
-        <translation type="unfinished">Несколько графиков данных</translation>
+        <translation>Несколько графиков данных</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="144"/>
         <source>Accelerometers</source>
-        <translation type="unfinished">Акселерометры</translation>
+        <translation>Акселерометры</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="147"/>
         <source>Gyroscopes</source>
-        <translation type="unfinished">Гироскопы</translation>
+        <translation>Гироскопы</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="150"/>
         <source>GPS</source>
-        <translation type="unfinished">GPS</translation>
+        <translation>GPS</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="153"/>
         <source>FFT Plots</source>
-        <translation type="unfinished">Графики FFT</translation>
+        <translation>Графики FFT</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="156"/>
         <source>LED Panels</source>
-        <translation type="unfinished">Светодиодные панели</translation>
+        <translation>Светодиодные панели</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="159"/>
         <source>Data Plots</source>
-        <translation type="unfinished">Графики данных</translation>
+        <translation>Графики данных</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="162"/>
         <source>Bars</source>
-        <translation type="unfinished">Столбцы</translation>
+        <translation>Столбцы</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="165"/>
         <source>Gauges</source>
-        <translation type="unfinished">Шкалы</translation>
+        <translation>Шкалы</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="168"/>
         <source>Compasses</source>
-        <translation type="unfinished">Компас</translation>
+        <translation>Компас</translation>
     </message>
 </context>
 <context>
@@ -3286,7 +3285,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Скрыть все оси</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="806"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="831"/>
         <source>Status Panel</source>
         <translation>Панель состояния</translation>
     </message>
@@ -3335,44 +3334,49 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>Настройка виджета</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="167"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="168"/>
         <source>Visualization Options</source>
         <translation>Параметры визуализации</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="198"/>
         <source>Show both X and Y axes</source>
         <translation>Показать обе оси (X и Y)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="199"/>
         <source>Show only X axis</source>
         <translation>Показать только ось X</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="200"/>
         <source>Show only Y axis</source>
         <translation>Показать только ось Y</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="201"/>
         <source>Hide all axes</source>
         <translation>Скрыть все оси</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="262"/>
         <source>Points:</source>
         <translation>Точки:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="282"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="285"/>
         <source>Decimal places:</source>
         <translation>Десятичные знаки:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="304"/>
         <source>Columns:</source>
         <translation>Колонки:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="324"/>
+        <source>Show Legends</source>
+        <translation>Показать легенды</translation>
     </message>
     <message>
         <source>Data Grids</source>
@@ -3419,17 +3423,17 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="401"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="424"/>
         <source>Clear Dashboard Data</source>
         <translation>Очистить данные панели</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="432"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="455"/>
         <source>Display Console Window</source>
         <translation>Показать окно консоли</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="468"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="491"/>
         <source>Adjust Plot Scales &amp; Positions</source>
         <translation>Настроить масштабы и положения</translation>
     </message>

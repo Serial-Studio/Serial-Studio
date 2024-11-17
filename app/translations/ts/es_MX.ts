@@ -115,17 +115,17 @@
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="126"/>
         <source>Characteristic</source>
-        <translation type="unfinished"></translation>
+        <translation>Característica</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="157"/>
         <source>Descriptor</source>
-        <translation type="unfinished"></translation>
+        <translation>Descriptor</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="186"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Sin delimitadores</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="236"/>
@@ -164,12 +164,12 @@
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="179"/>
+        <location filename="../../src/CSV/Player.cpp" line="184"/>
         <source>Select CSV file</source>
         <translation>Seleccionar archivo CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="180"/>
+        <location filename="../../src/CSV/Player.cpp" line="185"/>
         <source>CSV files</source>
         <translation>Archivos CSV</translation>
     </message>
@@ -182,83 +182,83 @@
         <translation type="vanished">Para utilizar esta función, es necesario desconectar del puerto serie</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="292"/>
+        <location filename="../../src/CSV/Player.cpp" line="297"/>
         <source>Device Connection Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Conexión del Dispositivo Activa</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="293"/>
+        <location filename="../../src/CSV/Player.cpp" line="298"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>Para usar esta función, debe desconectarse del dispositivo. ¿Desea continuar?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="358"/>
+        <location filename="../../src/CSV/Player.cpp" line="362"/>
         <source>Insufficient Data in CSV File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datos Insuficientes en el Archivo CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="359"/>
+        <location filename="../../src/CSV/Player.cpp" line="363"/>
         <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>El archivo CSV debe contener al menos dos cuadros (filas de datos) para continuar. Por favor, revise el archivo e intente nuevamente.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="529"/>
+        <location filename="../../src/CSV/Player.cpp" line="531"/>
         <source>Invalid CSV</source>
         <translation>CSV inválido</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="530"/>
+        <location filename="../../src/CSV/Player.cpp" line="532"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>El archivo CSV no contiene ningún dato o encabezados.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="540"/>
+        <location filename="../../src/CSV/Player.cpp" line="542"/>
         <source>Select a date/time column</source>
         <translation>Seleccione una columna de fecha/hora</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="540"/>
-        <location filename="../../src/CSV/Player.cpp" line="550"/>
+        <location filename="../../src/CSV/Player.cpp" line="542"/>
+        <location filename="../../src/CSV/Player.cpp" line="552"/>
         <source>Set interval manually</source>
         <translation>Establecer el intervalo manualmente</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="542"/>
+        <location filename="../../src/CSV/Player.cpp" line="544"/>
         <source>CSV Date/Time Selection</source>
         <translation>Selección de Fecha/Hora en CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="543"/>
+        <location filename="../../src/CSV/Player.cpp" line="545"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Elija cómo manejar los datos de fecha/hora:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="553"/>
+        <location filename="../../src/CSV/Player.cpp" line="555"/>
         <source>Set Interval</source>
         <translation>Establecer Intervalo</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="554"/>
+        <location filename="../../src/CSV/Player.cpp" line="556"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Por favor, introduzca el intervalo entre filas en milisegundos:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="568"/>
+        <location filename="../../src/CSV/Player.cpp" line="570"/>
         <source>Select Date/Time Column</source>
         <translation>Seleccione la Columna de Fecha/Hora</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="569"/>
+        <location filename="../../src/CSV/Player.cpp" line="571"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Por favor, seleccione la columna que contiene los datos de fecha/hora:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="579"/>
+        <location filename="../../src/CSV/Player.cpp" line="581"/>
         <source>Invalid Selection</source>
         <translation>Selección inválida</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="579"/>
+        <location filename="../../src/CSV/Player.cpp" line="581"/>
         <source>The selected column is not valid.</source>
         <translation>La columna seleccionada no es válida.</translation>
     </message>
@@ -267,12 +267,12 @@
         <translation type="vanished">Para usar esta función, es necesario desconectar del puerto serial</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="369"/>
+        <location filename="../../src/CSV/Player.cpp" line="373"/>
         <source>Cannot read CSV file</source>
         <translation>No se puede leer el archivo CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="370"/>
+        <location filename="../../src/CSV/Player.cpp" line="374"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Por favor, verifica los permisos y la ubicación del archivo</translation>
     </message>
@@ -557,7 +557,7 @@
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="33"/>
         <source>modified</source>
-        <translation type="unfinished">modificado</translation>
+        <translation>modificado</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="83"/>
@@ -777,87 +777,86 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>IO::Drivers::BluetoothLE</name>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="248"/>
         <source>The BLE device has been disconnected</source>
-        <translation>El dispositivo BLE se ha desconectado</translation>
+        <translation type="vanished">El dispositivo BLE se ha desconectado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="314"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="297"/>
         <source>Select Device</source>
         <translation>Seleccionar dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="308"/>
         <source>Select Service</source>
         <translation>Seleccionar servicio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="320"/>
         <source>Select Descriptor</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar Descriptor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="332"/>
         <source>Select Characteristic</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar Característica</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="482"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="465"/>
         <source>Error while configuring BLE service</source>
         <translation>Error al configurar el servicio BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="668"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="651"/>
         <source>Operation error</source>
         <translation>Error de operación</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="671"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="654"/>
         <source>Characteristic write error</source>
         <translation>Error al escribir la característica</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="674"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="657"/>
         <source>Descriptor write error</source>
         <translation>Error al escribir el descriptor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="677"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="660"/>
         <source>Unknown error</source>
         <translation>Error desconocido</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="680"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="663"/>
         <source>Characteristic read error</source>
         <translation>Error al leer la característica</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="683"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="666"/>
         <source>Descriptor read error</source>
         <translation>Error al leer el descriptor</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="700"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="683"/>
         <source>Bluetooth adapter is off!</source>
         <translation>¡El adaptador Bluetooth está apagado!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="703"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="686"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>¡Adaptador Bluetooth inválido!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="706"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="689"/>
         <source>Unsuported platform or operating system</source>
         <translation>Plataforma o sistema operativo no compatible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="709"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="692"/>
         <source>Unsupported discovery method</source>
         <translation>Método de descubrimiento no compatible</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="712"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="695"/>
         <source>General I/O error</source>
         <translation>Error general de I/O</translation>
     </message>
@@ -1332,7 +1331,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1980"/>
         <source>Frame Detection</source>
-        <translation type="unfinished">Detección de Tramas</translation>
+        <translation>Detección de Tramas</translation>
     </message>
     <message>
         <location filename="../../src/JSON/ProjectModel.cpp" line="1982"/>
@@ -2184,7 +2183,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>MultiPlot</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="63"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="69"/>
         <source>Samples</source>
         <translation>Muestras</translation>
     </message>
@@ -2229,7 +2228,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Network.qml" line="243"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Sin delimitadores</translation>
     </message>
     <message>
         <source>Ignore data delimiters</source>
@@ -2878,7 +2877,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="246"/>
         <source>No Delimiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Sin delimitadores</translation>
     </message>
 </context>
 <context>
@@ -2886,57 +2885,57 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
     <message>
         <location filename="../../src/SerialStudio.cpp" line="138"/>
         <source>Data Grids</source>
-        <translation type="unfinished">Cuadrículas de Datos</translation>
+        <translation>Cuadrículas de Datos</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="141"/>
         <source>Multiple Data Plots</source>
-        <translation type="unfinished">Gráficas de Datos Múltiples</translation>
+        <translation>Gráficas de Datos Múltiples</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="144"/>
         <source>Accelerometers</source>
-        <translation type="unfinished">Acelerómetros</translation>
+        <translation>Acelerómetros</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="147"/>
         <source>Gyroscopes</source>
-        <translation type="unfinished">Giroscopios</translation>
+        <translation>Giroscopios</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="150"/>
         <source>GPS</source>
-        <translation type="unfinished">GPS</translation>
+        <translation>GPS</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="153"/>
         <source>FFT Plots</source>
-        <translation type="unfinished">Gráficas FFT</translation>
+        <translation>Gráficas FFT</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="156"/>
         <source>LED Panels</source>
-        <translation type="unfinished">Paneles LED</translation>
+        <translation>Paneles LED</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="159"/>
         <source>Data Plots</source>
-        <translation type="unfinished">Gráficas de Datos</translation>
+        <translation>Gráficas de Datos</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="162"/>
         <source>Bars</source>
-        <translation type="unfinished">Barras</translation>
+        <translation>Barras</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="165"/>
         <source>Gauges</source>
-        <translation type="unfinished">Medidores</translation>
+        <translation>Medidores</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="168"/>
         <source>Compasses</source>
-        <translation type="unfinished">Brújulas</translation>
+        <translation>Brújulas</translation>
     </message>
 </context>
 <context>
@@ -3282,7 +3281,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation type="vanished">Ocultar todos los ejes</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="806"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="831"/>
         <source>Status Panel</source>
         <translation>Panel de estado</translation>
     </message>
@@ -3331,44 +3330,49 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation>Configuración de Widgets</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="167"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="168"/>
         <source>Visualization Options</source>
         <translation>Opciones de visualización</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="198"/>
         <source>Show both X and Y axes</source>
         <translation>Mostrar ambos ejes X e Y</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="199"/>
         <source>Show only X axis</source>
         <translation>Mostrar solo el eje X</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="200"/>
         <source>Show only Y axis</source>
         <translation>Mostrar solo el eje Y</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="201"/>
         <source>Hide all axes</source>
         <translation>Ocultar todos los ejes</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="262"/>
         <source>Points:</source>
         <translation>Puntos:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="282"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="285"/>
         <source>Decimal places:</source>
         <translation>Lugares decimales:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="304"/>
         <source>Columns:</source>
         <translation>Columnas:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="324"/>
+        <source>Show Legends</source>
+        <translation>Mostrar Leyendas</translation>
     </message>
     <message>
         <source>Data Grids</source>
@@ -3415,17 +3419,17 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation type="vanished">GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="401"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="424"/>
         <source>Clear Dashboard Data</source>
         <translation>Limpiar Tablero</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="432"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="455"/>
         <source>Display Console Window</source>
         <translation>Mostrar Consola</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="468"/>
+        <location filename="../../qml/MainWindow/Dashboard/ViewOptions.qml" line="491"/>
         <source>Adjust Plot Scales &amp; Positions</source>
         <translation>Ajustar escalas y posiciones</translation>
     </message>
