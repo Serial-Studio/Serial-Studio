@@ -59,7 +59,7 @@ Thank you for understanding and for helping improve the software!
 
 ---
 
-### **对于中国用户 / For Chinese Users, please delete this part if you speak English**
+### **对于中国用户 / For Chinese users, please delete this part if you speak English**
 
 ### **1. 描述问题**
 
