@@ -43,14 +43,14 @@ Some examples also include Serial Studio project files (`*.json`) to simplify th
 - **Contents**:
   - **udp_function_generator.c**: The main C program that generates waveforms and sends them via UDP.
   - **README.md**: Detailed setup and usage instructions for configuring and running the program with Serial Studio.
-  - **Screenshots**: Includes `serial-studio-setup.png` for configuration and `waveform-visualization.png` showcasing real-time waveform plots in Serial Studio.
+  - **Screenshot**: Example view in Serial Studio.
 - **Key Features**:
   - Generates multiple waveform types: sine, triangle, sawtooth, and square.
   - Configurable waveform properties: frequency, phase, and transmission interval.
   - Sends waveform data over UDP, making it ideal for network-based signal processing.
   - Option to print generated data for debugging and analysis.
   - Warns about high frequencies that may cause aliasing or distortion.
-- :warning: Using sub-millisecond intervals is likely to overload Serial Studio's event system, potentially causing crashes and/or hangs. If you encounter this issue, consider running Serial Studio with a debugger and sharing your findings to help improve and address this limitation in future releases. Your feedback is invaluable in making Serial Studio more robust!
+- :warning: Using sub-millisecond intervals can overload Serial Studio's event system, potentially causing crashes and/or hangs. If you encounter this issue, consider running Serial Studio with a debugger and sharing your findings to help improve and address this limitation in future releases. Your feedback is invaluable in making Serial Studio more robust!
 
 ## Getting Started
 
