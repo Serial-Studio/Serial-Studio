@@ -101,7 +101,6 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
-          checkable: true
           text: qsTr("Plot")
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
@@ -110,8 +109,7 @@ Widgets.Pane {
           onClicked: {
             const option = SerialStudio.DatasetPlot
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            if (checked !== value)
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
+            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
           }
         }
 
@@ -120,7 +118,6 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
-          checkable: true
           toolbarButton: false
           text: qsTr("FFT Plot")
           Layout.alignment: Qt.AlignVCenter
@@ -129,8 +126,7 @@ Widgets.Pane {
           onClicked: {
             const option = SerialStudio.DatasetFFT
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            if (checked !== value)
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
+            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
           }
         }
 
@@ -139,7 +135,6 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
-          checkable: true
           toolbarButton: false
           text: qsTr("Bar/Level")
           Layout.alignment: Qt.AlignVCenter
@@ -149,8 +144,7 @@ Widgets.Pane {
           onClicked: {
             const option = SerialStudio.DatasetBar
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            if (checked !== value)
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
+            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
           }
         }
 
@@ -159,7 +153,6 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
-          checkable: true
           text: qsTr("Gauge")
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
@@ -169,8 +162,7 @@ Widgets.Pane {
           onClicked: {
             const option = SerialStudio.DatasetGauge
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            if (checked !== value)
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
+            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
           }
         }
 
@@ -179,7 +171,6 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
-          checkable: true
           toolbarButton: false
           text: qsTr("Compass")
           Layout.alignment: Qt.AlignVCenter
@@ -189,8 +180,7 @@ Widgets.Pane {
           onClicked: {
             const option = SerialStudio.DatasetCompass
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            if (checked !== value)
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
+            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
           }
         }
 
@@ -199,7 +189,6 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
-          checkable: true
           text: qsTr("LED")
           toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
@@ -208,8 +197,7 @@ Widgets.Pane {
           onClicked: {
             const option = SerialStudio.DatasetLED
             const value = Cpp_JSON_ProjectModel.datasetOptions & option
-            if (checked !== value)
-              Cpp_JSON_ProjectModel.changeDatasetOption(option, checked)
+            Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
           }
         }
 
