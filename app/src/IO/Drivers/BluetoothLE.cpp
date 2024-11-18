@@ -527,7 +527,12 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
     // Enable notifications for the CCCD
     const auto &cccd = c.clientCharacteristicConfiguration();
     if (cccd.isValid())
-      m_service->writeDescriptor(cccd, QLowEnergyCharacteristic::CCCDEnableNotification);
+      m_service->writeDescriptor(
+          cccd, QLowEnergyCharacteristic::CCCDEnableNotification);
+
+    // Display current value
+    if (!c.value().isEmpty())
+      processData(c.value());
 
     // Re-populate available descriptors
     m_descriptors.clear();
