@@ -111,6 +111,7 @@ set(SOURCES
  src/CSV/Player.cpp
  src/CSV/Export.cpp
  src/MQTT/Client.cpp
+
  src/main.cpp
  src/SerialStudio.cpp
 )
@@ -159,6 +160,7 @@ set(HEADERS
  src/CSV/Export.h
  src/CSV/Player.h
  src/MQTT/Client.h
+ src/SIMD/SIMD.h
  src/AppInfo.h
  src/SerialStudio.h
 )

@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "SIMD/SIMD.h"
 #include "UI/Dashboard.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Widgets/MultiPlot.h"
@@ -219,6 +220,13 @@ void Widgets::MultiPlot::updateRange()
   if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
+  // Clear dataset curves
+  for (auto &dataset : m_data)
+  {
+    dataset.clear();
+    dataset.squeeze();
+  }
+
   // Clear the data
   m_data.clear();
   m_data.squeeze();
@@ -318,11 +326,13 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     // Loop through each dataset and find the min and max values
     for (const auto &dataset : m_data)
     {
-      for (const auto &point : dataset)
-      {
-        m_minY = qMin(m_minY, point.y());
-        m_maxY = qMax(m_maxY, point.y());
-      }
+      m_minY = qMin(m_minY, SIMD::findMin(dataset, [](const QPointF &p) {
+                      return p.y();
+                    }));
+
+      m_maxY = qMax(m_maxY, SIMD::findMax(dataset, [](const QPointF &p) {
+                      return p.y();
+                    }));
     }
 
     // If the min and max are the same, set the range to 0-1

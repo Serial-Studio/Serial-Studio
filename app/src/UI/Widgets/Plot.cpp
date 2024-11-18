@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#include "SIMD/SIMD.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Plot.h"
 
@@ -213,11 +214,8 @@ void Widgets::Plot::calculateAutoScaleRange()
     m_maxY = std::numeric_limits<double>::lowest();
 
     // Loop through the plot data and update the min and max
-    for (const auto &point : m_data)
-    {
-      m_minY = qMin(m_minY, point.y());
-      m_maxY = qMax(m_maxY, point.y());
-    }
+    m_minY = SIMD::findMin(m_data, [](const QPointF &p) { return p.y(); });
+    m_maxY = SIMD::findMax(m_data, [](const QPointF &p) { return p.y(); });
 
     // If min and max are the same, adjust the range
     if (qFuzzyCompare(m_minY, m_maxY))
