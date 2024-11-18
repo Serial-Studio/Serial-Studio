@@ -160,25 +160,14 @@ bool IO::Drivers::BluetoothLE::configurationOk() const
  */
 quint64 IO::Drivers::BluetoothLE::write(const QByteArray &data)
 {
-  if (m_service && m_selectedCharacteristic >= 0 && m_selectedDescriptor >= 0)
+  if (m_service && m_selectedCharacteristic >= 0 )
   {
     const auto &characteristic = m_characteristics.at(m_selectedCharacteristic);
     if (characteristic.isValid())
     {
-      const auto &descr = m_descriptors.at(m_selectedDescriptor);
-      if (descr.isValid())
-      {
-        m_service->writeDescriptor(descr, data);
+        m_service->writeCharacteristic(characteristic, data, QLowEnergyService::WriteWithResponse);
         return data.length();
-      }
-
-      else
-      {
-        qWarning() << "Failed to write data to BLE device: invalid descriptor";
-        return -1;
-      }
     }
-
     else
     {
       qWarning()
@@ -188,7 +177,7 @@ quint64 IO::Drivers::BluetoothLE::write(const QByteArray &data)
   }
 
   qWarning() << "Failed to write data to BLE device: ensure that a "
-                "characteristic and a descriptor are selected";
+                "characteristic is selected";
 
   return -1;
 }
