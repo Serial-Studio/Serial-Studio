@@ -29,6 +29,82 @@
 #include "Misc/ThemeManager.h"
 #include "JSON/FrameBuilder.h"
 
+//------------------------------------------------------------------------------
+// SIMD utility functions
+//------------------------------------------------------------------------------
+
+#include <x86/sse2.h>
+
+/**
+ * @brief Shifts elements in an array to the left and appends a new value.
+ *
+ * This function uses SIMD instructions to efficiently shift elements in an
+ * array to the left by one position. For arrays larger than the SIMD width, it
+ * processes elements in chunks.
+ *
+ * Remaining elements that do not fit in the SIMD width are processed using a
+ * scalar fallback loop.
+ *
+ * @param data Pointer to the array of `qreal` values (e.g., `double`).
+ * @param count The total number of elements in the array.
+ * @param newValue The value to set at the last position after the shift.
+ */
+static void SIMD_SHIFT(qreal *data, int count, qreal newValue)
+{
+  // Get the number of items that can be processed in a SIMD register
+  constexpr int simdWidth = sizeof(simde__m128d) / sizeof(qreal);
+
+  // Shift elements using SIMD operations
+  int i = 0;
+  for (; i + simdWidth <= count; i += simdWidth)
+  {
+    simde__m128d next = simde_mm_loadu_pd(data + i + 1);
+    simde_mm_storeu_pd(data + i, next);
+  }
+
+  // Handle remaining elements using a scalar loop
+  for (; i < count - 1; ++i)
+    data[i] = data[i + 1];
+
+  // Set the last value of the array
+  data[count - 1] = newValue;
+}
+
+/**
+ * @brief Initializes an array with a specific value using SIMD for bulk
+ *        operations.
+ *
+ * This function uses SIMD instructions to fill an array with a predetermined
+ * value. For arrays larger than the SIMD width, it processes elements in
+ * chunks.
+ *
+ * Remaining elements that do not fit in the SIMD width are processed using a
+ * scalar fallback loop.
+ *
+ * @param data Pointer to the array of `qreal` values (e.g., `double`).
+ * @param count The total number of elements in the array.
+ * @param value The value to initialize all elements in the array.
+ */
+static void SIMD_FILL(qreal *data, int count, qreal value)
+{
+  // Get the number of items that can be processed in a SIMD register
+  constexpr int simdWidth = sizeof(simde__m128d) / sizeof(qreal);
+
+  // SIMD bulk initialization
+  int i = 0;
+  simde__m128d fillValue = simde_mm_set1_pd(value);
+  for (; i + simdWidth <= count; i += simdWidth)
+    simde_mm_storeu_pd(data + i, fillValue);
+
+  // Handle remaining elements using a scalar loop
+  for (; i < count; ++i)
+    data[i] = value;
+}
+
+//------------------------------------------------------------------------------
+// UI::Dashboard implementation
+//------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the Dashboard object and establishes connections for
  *        various signal sources that may trigger data reset or frame
@@ -678,8 +754,7 @@ void UI::Dashboard::updatePlots()
     {
       m_linearPlotValues.append(Curve());
       m_linearPlotValues.last().resize(points() + 1);
-      std::fill(m_linearPlotValues.last().begin(),
-                m_linearPlotValues.last().end(), 0.0001);
+      SIMD_FILL(m_linearPlotValues.last().data(), points() + 1, 0);
     }
   }
 
@@ -693,8 +768,7 @@ void UI::Dashboard::updatePlots()
       const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
       m_fftPlotValues.append(Curve());
       m_fftPlotValues.last().resize(dataset.fftSamples());
-      std::fill(m_fftPlotValues.last().begin(), m_fftPlotValues.last().end(),
-                0);
+      SIMD_FILL(m_fftPlotValues.last().data(), points() + 1, 0);
     }
   }
 
@@ -712,8 +786,7 @@ void UI::Dashboard::updatePlots()
       for (int j = 0; j < group.datasetCount(); ++j)
       {
         m_multiplotValues[i][j].resize(points() + 1);
-        std::fill(m_multiplotValues[i][j].begin(),
-                  m_multiplotValues[i][j].end(), 0.0001);
+        SIMD_FILL(m_multiplotValues[i][j].data(), points() + 1, 0);
       }
     }
   }
@@ -724,8 +797,7 @@ void UI::Dashboard::updatePlots()
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
     auto *data = m_linearPlotValues[i].data();
     auto count = m_linearPlotValues[i].count();
-    memmove(data, data + 1, count * sizeof(qreal));
-    m_linearPlotValues[i][count - 1] = dataset.value().toDouble();
+    SIMD_SHIFT(data, count, dataset.value().toDouble());
   }
 
   // Append latest values to FFT plots data
@@ -734,8 +806,7 @@ void UI::Dashboard::updatePlots()
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     auto *data = m_fftPlotValues[i].data();
     auto count = m_fftPlotValues[i].count();
-    memmove(data, data + 1, count * sizeof(qreal));
-    m_fftPlotValues[i][count - 1] = dataset.value().toDouble();
+    SIMD_SHIFT(data, count, dataset.value().toDouble());
   }
 
   // Append latest values to multiplots data
@@ -747,8 +818,7 @@ void UI::Dashboard::updatePlots()
       const auto &dataset = group.datasets()[j];
       auto *data = m_multiplotValues[i][j].data();
       auto count = m_multiplotValues[i][j].count();
-      memmove(data, data + 1, count * sizeof(qreal));
-      m_multiplotValues[i][j][count - 1] = dataset.value().toDouble();
+      SIMD_SHIFT(data, count, dataset.value().toDouble());
     }
   }
 }

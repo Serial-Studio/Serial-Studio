@@ -300,16 +300,6 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T &pattern)
 }
 
 /**
- * @brief Searches for a pattern in the buffer using SIMD acceleration.
- *
- * This function uses SIMD instructions to accelerate the search for a pattern
- * in the circular buffer. It works for Intel/AMD (via SSE2) and ARM (via NEON).
- *
- * @param pattern The QByteArray representing the pattern to search for.
- * @return The index of the first occurrence of the pattern, or -1 if not found.
- */
-
-/**
  * @brief Computes the KMP table for a given p.
  *
  * Prepares the longest prefix suffix (LPS) table used by the KMP algorithm.

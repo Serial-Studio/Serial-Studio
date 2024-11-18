@@ -234,6 +234,7 @@ target_link_libraries(
  Qt6::PrintSupport
  Qt6::QuickControls2
 
+ simde
  qmqtt
  QRealFourier
  QSimpleUpdater

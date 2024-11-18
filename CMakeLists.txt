@@ -67,7 +67,6 @@ if(WIN32 AND MINGW)
   -Wall                # Enable most warning messages
   -Wextra              # Enable additional warning messages
   -fuse-linker-plugin  # Use LTO plugin to enable link-time optimization
-  -fexperimental-simd  # Enable experimental SIMD instructions
  )
  add_link_options(
   -Wl,--gc-sections    # Remove unused sections during linking
@@ -113,7 +112,6 @@ elseif(APPLE)
   -O2                     # Optimize for speed
   -Wall                   # Enable most warning messages
   -Wextra                 # Enable additional warning messages
-  -fexperimental-library  # Enable experimental SIMD instructions
  )
  add_link_options(
   -Wl,-dead_strip      # Remove unused code and data during linking
@@ -130,7 +128,6 @@ elseif(UNIX)
   -O2                  # Optimize for speed
   -Wall                # Enable most warning messages
   -Wextra              # Enable additional warning messages
-  -fexperimental-simd  # Enable experimental SIMD instructions
  )
  add_link_options(
   -Wl,--gc-sections    # Remove unused sections during linking
