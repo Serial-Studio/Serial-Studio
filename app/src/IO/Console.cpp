@@ -294,7 +294,7 @@ void IO::Console::clear()
   m_textBuffer.reserve(MAX_BUFFER_SIZE);
   m_isStartingLine = true;
   m_lastCharWasCR = false;
-  Q_EMIT dataReceived();
+  Q_EMIT saveAvailableChanged();
 }
 
 /**
@@ -485,9 +485,11 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   if (string.isEmpty())
     return;
 
-  auto data = string;
+  // Check if we should update the save available feature
+  const bool previousSaveAvailable = saveAvailable();
 
   // Omit leading \n if a trailing \r was already rendered from previous payload
+  auto data = string;
   if (m_lastCharWasCR && data.startsWith('\n'))
     data.removeFirst();
 
@@ -552,13 +554,13 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
     m_textBuffer.remove(0, excessSize);
   }
 
+  // Update save avaialable
+  if (saveAvailable() != previousSaveAvailable)
+    Q_EMIT saveAvailableChanged();
+
   // Update UI
   QMetaObject::invokeMethod(
-      this,
-      [=] {
-        Q_EMIT dataReceived();
-        Q_EMIT displayString(processedString);
-      },
+      this, [=] { Q_EMIT displayString(processedString); },
       Qt::QueuedConnection);
 }
 

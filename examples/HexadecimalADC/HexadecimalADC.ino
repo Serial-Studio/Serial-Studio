@@ -5,13 +5,13 @@
 //
 // This program reads data from six analog input pins (A0 to A5) on an Arduino.
 // It scales the raw analog readings (0-1023) to 8-bit values (0-255) and
-// transmits them as binary data over the serial port. 
+// transmits them as binary data over the serial port.
 //
 // Required Components:
 // - 6 analog sensors connected to the Arduino's analog pins (A0 to A5)
 //
 // Connections:
-// - Connect the signal outputs of the sensors to the analog pins A0 to A5 on 
+// - Connect the signal outputs of the sensors to the analog pins A0 to A5 on
 //   the Arduino.
 //
 // Baud Rate:
@@ -44,21 +44,16 @@ void setup() {
 //-----------------------------------------------------------------------------
 
 void loop() {
-  // Write the frame start delimiter ('$')
-  Serial.write('$');
-
   // Read the analog values from pins A0 to A5
-  // Map them from a 10-bit range (0-1023) to an 8-bit range (0-255)
-  // And send each value as a byte over serial communication
+  // Show each one of them over a range of values
+  Serial.write("$");
   Serial.write(map(analogRead(A0), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A1), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A2), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A3), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A4), 0, 1023, 0, 255));
   Serial.write(map(analogRead(A5), 0, 1023, 0, 255));
-
-  // Write the frame end delimiter (';') and a new line character
-  Serial.write(';');
+  Serial.write(";");
 
   // Small delay to manage the sampling rate
   delay(1);

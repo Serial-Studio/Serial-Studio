@@ -739,6 +739,7 @@ void Widgets::Terminal::setScrollOffsetY(const int offset)
   {
     m_scrollOffsetY = offset;
     Q_EMIT scrollOffsetYChanged();
+
     update();
   }
 }

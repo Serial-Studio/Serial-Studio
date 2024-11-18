@@ -27,6 +27,7 @@
 #include <QByteArray>
 
 #include "SerialStudio.h"
+#include "IO/CircularBuffer.h"
 
 namespace IO
 {
@@ -57,7 +58,6 @@ signals:
 public:
   explicit FrameReader(QObject *parent = nullptr);
 
-  [[nodiscard]] qsizetype maxBufferSize() const;
   [[nodiscard]] SerialStudio::OperationMode operationMode() const;
   [[nodiscard]] SerialStudio::FrameDetection frameDetectionMode() const;
 
@@ -68,26 +68,26 @@ public slots:
   void reset();
   void setupExternalConnections();
   void processData(const QByteArray &data);
-  void setMaxBufferSize(const qsizetype size);
   void setStartSequence(const QString &start);
   void setFinishSequence(const QString &finish);
   void setOperationMode(const SerialStudio::OperationMode mode);
   void setFrameDetectionMode(const SerialStudio::FrameDetection mode);
 
 private:
-  qsizetype readEndDelimetedFrames();
-  qsizetype readStartEndDelimetedFrames();
+  void readEndDelimetedFrames();
+  void readStartEndDelimetedFrames();
   ValidationStatus integrityChecks(const QByteArray &frame,
-                                   const QByteArray &cursor, qsizetype *bytes);
+                                   const QByteArray &delimeter,
+                                   qsizetype *bytes);
 
 private:
   bool m_enableCrc;
-  qsizetype m_maxBufferSize;
 
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
 
-  QByteArray m_dataBuffer;
+  CircularBuffer m_dataBuffer;
+
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QList<QByteArray> m_quickPlotEndSequences;

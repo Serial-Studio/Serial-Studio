@@ -37,23 +37,13 @@
 IO::FrameReader::FrameReader(QObject *parent)
   : QObject(parent)
   , m_enableCrc(false)
-  , m_maxBufferSize(1024 * 1024)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
+  , m_dataBuffer(1024 * 1024)
 {
   m_quickPlotEndSequences.append(QByteArray("\n"));
   m_quickPlotEndSequences.append(QByteArray("\r"));
   m_quickPlotEndSequences.append(QByteArray("\r\n"));
-}
-
-/**
- * @brief Retrieves the maximum buffer size allowed for the FrameReader.
- *
- * @return The maximum buffer size in bytes.
- */
-qsizetype IO::FrameReader::maxBufferSize() const
-{
-  return m_maxBufferSize;
 }
 
 /**
@@ -117,8 +107,6 @@ void IO::FrameReader::reset()
 {
   m_enableCrc = false;
   m_dataBuffer.clear();
-  m_dataBuffer.squeeze();
-  m_dataBuffer.reserve(m_maxBufferSize);
 }
 
 /**
@@ -160,66 +148,33 @@ void IO::FrameReader::processData(const QByteArray &data)
 {
   // Add incoming data to buffer
   m_dataBuffer.append(data);
-  qsizetype bytesRead = 0;
 
   // JSON mode, read until default frame start & end sequences are found
   if (m_operationMode == SerialStudio::DeviceSendsJSON)
-    bytesRead = readStartEndDelimetedFrames();
+    readStartEndDelimetedFrames();
 
   // Project mode, obtain which frame detection method to use
   else if (m_operationMode == SerialStudio::ProjectFile)
   {
     // Read using only an end delimiter
     if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
-      bytesRead = readEndDelimetedFrames();
+      readEndDelimetedFrames();
 
     // Read using both a start & end delimiter
     else if (m_frameDetectionMode == SerialStudio::StartAndEndDelimiter)
-      bytesRead = readStartEndDelimetedFrames();
+      readStartEndDelimetedFrames();
 
     // Process incoming data directly
     else if (m_frameDetectionMode == SerialStudio::NoDelimiters)
-    {
-      bytesRead = data.size();
-      Q_EMIT frameReady(data);
-    }
+      Q_EMIT frameReady(m_dataBuffer.read(data.size()));
   }
 
   // Handle quick plot data
   else if (m_operationMode == SerialStudio::QuickPlot)
-    bytesRead = readEndDelimetedFrames();
-
-  // Remove processed data from buffer
-  if (bytesRead > 0)
-    m_dataBuffer.remove(0, bytesRead);
-
-  // Truncate buffer if it exceeds the maximum allowed size
-  if (m_dataBuffer.size() > m_maxBufferSize)
-  {
-    qWarning() << "Data buffer exceeds maximum size; truncating to retain "
-                  "unprocessed data.";
-    m_dataBuffer = m_dataBuffer.right(m_maxBufferSize);
-  }
+    readEndDelimetedFrames();
 
   // Notify user interface about received raw data
   Q_EMIT dataReceived(data);
-}
-
-/**
- * @brief Sets the maximum buffer size for the FrameReader.
- *
- * Changes the maximum allowed size of the internal data buffer. Resets the
- * FrameReader state if the buffer size changes.
- *
- * @param size The new maximum buffer size in bytes.
- */
-void IO::FrameReader::setMaxBufferSize(const qsizetype size)
-{
-  if (m_maxBufferSize != size)
-  {
-    m_maxBufferSize = size;
-    reset();
-  }
 }
 
 /**
@@ -298,32 +253,29 @@ void IO::FrameReader::setFrameDetectionMode(
 /**
  * @brief Reads frames delimited by an end sequence from the buffer.
  *
- * Extracts frames from the data buffer that are terminated by a specified end
- * delimiter. Emits `frameReady` for each valid frame. Discards oversized frames
- * and truncates the buffer if it exceeds the maximum size.
- *
- * @return The number of bytes processed from the buffer.
+ * Extracts frames from the circular buffer that are terminated by a specified
+ * end delimiter. Emits `frameReady` for each valid frame. Handles oversized
+ * frames gracefully and stops processing if data is incomplete.
  */
-qsizetype IO::FrameReader::readEndDelimetedFrames()
+void IO::FrameReader::readEndDelimetedFrames()
 {
-  // Read all frames inside the buffer
-  qsizetype bytesProcessed = 0;
+  // Consume the buffer until no frames are found
   while (true)
   {
     // Initialize variables
     int endIndex = -1;
-    QByteArray delimeter;
+    QByteArray delimiter;
 
-    // Find the earliest finish sequence in the buffer (QuickPlot)
+    // Find the earliest finish sequence in the buffer (QuickPlot mode)
     if (m_operationMode == SerialStudio::QuickPlot)
     {
       for (const QByteArray &d : m_quickPlotEndSequences)
       {
-        int index = m_dataBuffer.indexOf(d, bytesProcessed);
+        int index = m_dataBuffer.findPatternKMP(d);
         if (index != -1 && (endIndex == -1 || index < endIndex))
         {
           endIndex = index;
-          delimeter = d;
+          delimiter = d;
         }
       }
     }
@@ -331,30 +283,29 @@ qsizetype IO::FrameReader::readEndDelimetedFrames()
     // Find the earliest finish sequence in the buffer (project mode)
     else if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
     {
-      delimeter = m_finishSequence;
-      int index = m_dataBuffer.indexOf(delimeter, bytesProcessed);
-      if (index != -1 && (endIndex == -1 || index < endIndex))
-        endIndex = index;
+      delimiter = m_finishSequence;
+      endIndex = m_dataBuffer.findPatternKMP(delimiter);
     }
 
-    // No complete line found
+    // No complete frame found
     if (endIndex == -1)
       break;
 
-    // Extract the frame up to the line break
-    int frameLength = endIndex - bytesProcessed;
-    QByteArray frame = m_dataBuffer.mid(bytesProcessed, frameLength);
+    // Extract the frame up to the delimiter
+    qsizetype frameLength = endIndex;
+    QByteArray frame = m_dataBuffer.peek(frameLength);
 
     // Parse frame if not empty
     if (!frame.isEmpty())
     {
       // Checksum verification & emit frame if valid
       qsizetype chop = 0;
-      auto result = integrityChecks(frame, m_dataBuffer, &chop);
+      auto result = integrityChecks(frame, delimiter, &chop);
       if (result == ValidationStatus::FrameOk)
       {
         Q_EMIT frameReady(frame);
-        bytesProcessed = endIndex + delimeter.size() + chop;
+        qsizetype bytesToRemove = endIndex + chop;
+        (void)m_dataBuffer.read(bytesToRemove);
       }
 
       // Incomplete data; wait for more data
@@ -363,121 +314,128 @@ qsizetype IO::FrameReader::readEndDelimetedFrames()
 
       // Invalid frame; skip past finish sequence
       else
-        bytesProcessed = endIndex + delimeter.size() + chop;
+      {
+        qsizetype bytesToRemove = endIndex + delimiter.size();
+        (void)m_dataBuffer.read(bytesToRemove);
+      }
     }
 
     // Empty frame; move past the finish sequence
     else
-      bytesProcessed = endIndex + delimeter.size();
+    {
+      qsizetype bytesToRemove = endIndex + delimiter.size();
+      (void)m_dataBuffer.read(bytesToRemove);
+    }
   }
-
-  // Return number of bytes read
-  return bytesProcessed;
 }
 
 /**
  * @brief Reads frames delimited by both start and end sequences from the
  * buffer.
  *
- * Extracts frames from the data buffer that are enclosed by a specified start
- * and end sequence. Validates frames using integrity checks (e.g., CRC) if
- * applicable, and emits `frameReady` for each valid frame.
- *
- * @return The number of bytes processed from the buffer.
+ * Extracts frames from the circular buffer that are enclosed by a specified
+ * start and end sequence. Validates frames using integrity checks (e.g., CRC)
+ * if applicable, and emits `frameReady` for each valid frame.
  */
-qsizetype IO::FrameReader::readStartEndDelimetedFrames()
+void IO::FrameReader::readStartEndDelimetedFrames()
 {
-  // Read all frames inside the buffer
-  qsizetype bytesProcessed = 0;
+  // Consume the buffer until no frames are found
   while (true)
   {
-    // Get start index
-    int sIndex = m_dataBuffer.indexOf(m_startSequence, bytesProcessed);
-    if (sIndex == -1)
+    // Find the first end sequence
+    int finishIndex = m_dataBuffer.findPatternKMP(m_finishSequence);
+    if (finishIndex == -1)
       break;
 
-    // Get end index
-    int fIndex = m_dataBuffer.indexOf(m_finishSequence,
-                                      sIndex + m_startSequence.size());
-    if (fIndex == -1)
-      break;
+    // Find the first start sequence and ensure its before the end sequence
+    int startIndex = m_dataBuffer.findPatternKMP(m_startSequence);
+    if (startIndex == -1 || startIndex >= finishIndex)
+    {
+      (void)m_dataBuffer.read(finishIndex + m_finishSequence.size());
+      continue;
+    }
+
+    // Calculate frame boundaries
+    qsizetype frameStart = startIndex + m_startSequence.size();
+    qsizetype frameLength = finishIndex - frameStart;
 
     // Extract the frame between start and finish sequences
-    int frameStart = sIndex + m_startSequence.size();
-    int frameLength = fIndex - frameStart;
-    QByteArray frame = m_dataBuffer.mid(frameStart, frameLength);
+    QByteArray frame = m_dataBuffer.peek(frameStart + frameLength)
+                           .mid(frameStart, frameLength);
 
-    // Parse frame if not empty
+    // Parse the frame if not empty
     if (!frame.isEmpty())
     {
       // Checksum verification & emit frame if valid
       qsizetype chop = 0;
-      auto result = integrityChecks(frame, m_dataBuffer, &chop);
+      auto result = integrityChecks(frame, m_finishSequence, &chop);
       if (result == ValidationStatus::FrameOk)
       {
         Q_EMIT frameReady(frame);
-        bytesProcessed = fIndex + m_finishSequence.size() + chop;
+        qsizetype bytesToRemove = finishIndex + chop;
+        (void)m_dataBuffer.read(bytesToRemove);
       }
 
       // Incomplete data; wait for more data
       else if (result == ValidationStatus::ChecksumIncomplete)
         break;
 
-      // Invalid frame; skip past finish sequence
+      // Invalid frame; discard up to the end sequence
       else
-        bytesProcessed = fIndex + m_finishSequence.size() + chop;
+      {
+        qsizetype bytesToRemove = finishIndex + m_finishSequence.size();
+        (void)m_dataBuffer.read(bytesToRemove);
+      }
     }
 
-    // Empty frame; move past the finish sequence
+    // Empty frame; discard up to the end sequence
     else
-      bytesProcessed = fIndex + m_finishSequence.size();
+    {
+      qsizetype bytesToRemove = finishIndex + m_finishSequence.size();
+      (void)m_dataBuffer.read(bytesToRemove);
+    }
   }
-
-  // Return number of bytes read
-  return bytesProcessed;
 }
 
 /**
  * @brief Performs integrity checks on a frame.
  *
  * Verifies the validity of a frame using CRC checks (CRC-8, CRC-16, or CRC-32)
- * if the appropriate headers are detected in the cursor. Updates the number of
- * bytes to be removed from the buffer and returns the validation status.
+ * if the appropriate headers are detected in the circular buffer. Updates the
+ * number of bytes to be removed from the buffer and returns the validation
+ * status.
  *
  * @param frame The frame data to validate.
- * @param cursor The current data buffer being processed.
  * @param bytes A pointer to the number of bytes to remove from the buffer.
  * @return The validation status as a `ValidationStatus` enum:
  *         - `FrameOk`: Frame is valid.
  *         - `ChecksumError`: CRC mismatch.
  *         - `ChecksumIncomplete`: Not enough data for validation.
  */
-IO::ValidationStatus IO::FrameReader::integrityChecks(const QByteArray &frame,
-                                                      const QByteArray &cursor,
-                                                      qsizetype *bytes)
+IO::ValidationStatus
+IO::FrameReader::integrityChecks(const QByteArray &frame,
+                                 const QByteArray &delimeter, qsizetype *bytes)
 {
   // Get finish sequence as byte array
-  auto crc8Header = m_finishSequence + "crc8:";
-  auto crc16Header = m_finishSequence + "crc16:";
-  auto crc32Header = m_finishSequence + "crc32:";
+  auto crc8Header = delimeter + "crc8:";
+  auto crc16Header = delimeter + "crc16:";
+  auto crc32Header = delimeter + "crc32:";
+
+  // Temporary buffer to peek at the required length of data
+  QByteArray cursor = m_dataBuffer.peek(m_dataBuffer.size());
 
   // Check CRC-8
   if (cursor.contains(crc8Header))
   {
-    // Enable the CRC flag
     m_enableCrc = true;
-    auto offset = cursor.indexOf(crc8Header) + crc8Header.length() - 1;
+    qsizetype offset = cursor.indexOf(crc8Header) + crc8Header.length() - 1;
 
     // Check if we have enough data in the buffer
-    if (cursor.length() >= offset + 1)
+    if (cursor.size() >= offset + 1)
     {
-      // Increment the number of bytes to remove from master buffer
       *bytes += crc8Header.length() + 1;
+      quint8 crc = static_cast<quint8>(cursor.at(offset + 1));
 
-      // Get 8-bit checksum
-      const quint8 crc = cursor.at(offset + 1);
-
-      // Compare checksums
       if (crc8(frame.data(), frame.length()) == crc)
         return ValidationStatus::FrameOk;
       else
@@ -488,22 +446,18 @@ IO::ValidationStatus IO::FrameReader::integrityChecks(const QByteArray &frame,
   // Check CRC-16
   else if (cursor.contains(crc16Header))
   {
-    // Enable the CRC flag
     m_enableCrc = true;
-    auto offset = cursor.indexOf(crc16Header) + crc16Header.length() - 1;
+    qsizetype offset = cursor.indexOf(crc16Header) + crc16Header.length() - 1;
 
     // Check if we have enough data in the buffer
-    if (cursor.length() >= offset + 2)
+    if (cursor.size() >= offset + 2)
     {
-      // Increment the number of bytes to remove from master buffer
       *bytes += crc16Header.length() + 2;
 
-      // Get 16-bit checksum
-      const quint8 a = cursor.at(offset + 1);
-      const quint8 b = cursor.at(offset + 2);
-      const quint16 crc = (a << 8) | (b & 0xff);
+      quint8 a = static_cast<quint8>(cursor.at(offset + 1));
+      quint8 b = static_cast<quint8>(cursor.at(offset + 2));
+      quint16 crc = (a << 8) | b;
 
-      // Compare checksums
       if (crc16(frame.data(), frame.length()) == crc)
         return ValidationStatus::FrameOk;
       else
@@ -514,24 +468,20 @@ IO::ValidationStatus IO::FrameReader::integrityChecks(const QByteArray &frame,
   // Check CRC-32
   else if (cursor.contains(crc32Header))
   {
-    // Enable the CRC flag
     m_enableCrc = true;
-    auto offset = cursor.indexOf(crc32Header) + crc32Header.length() - 1;
+    qsizetype offset = cursor.indexOf(crc32Header) + crc32Header.length() - 1;
 
     // Check if we have enough data in the buffer
-    if (cursor.length() >= offset + 4)
+    if (cursor.size() >= offset + 4)
     {
-      // Increment the number of bytes to remove from master buffer
       *bytes += crc32Header.length() + 4;
 
-      // Get 32-bit checksum
-      const quint8 a = cursor.at(offset + 1);
-      const quint8 b = cursor.at(offset + 2);
-      const quint8 c = cursor.at(offset + 3);
-      const quint8 d = cursor.at(offset + 4);
-      const quint32 crc = (a << 24) | (b << 16) | (c << 8) | (d & 0xff);
+      quint8 a = static_cast<quint8>(cursor.at(offset + 1));
+      quint8 b = static_cast<quint8>(cursor.at(offset + 2));
+      quint8 c = static_cast<quint8>(cursor.at(offset + 3));
+      quint8 d = static_cast<quint8>(cursor.at(offset + 4));
+      quint32 crc = (a << 24) | (b << 16) | (c << 8) | d;
 
-      // Compare checksums
       if (crc32(frame.data(), frame.length()) == crc)
         return ValidationStatus::FrameOk;
       else
@@ -542,7 +492,7 @@ IO::ValidationStatus IO::FrameReader::integrityChecks(const QByteArray &frame,
   // Buffer does not contain CRC code
   else if (!m_enableCrc)
   {
-    *bytes += m_finishSequence.length();
+    *bytes += delimeter.length();
     return ValidationStatus::FrameOk;
   }
 

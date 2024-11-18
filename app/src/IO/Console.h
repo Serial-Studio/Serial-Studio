@@ -50,7 +50,7 @@ class Console : public QObject
              NOTIFY showTimestampChanged)
   Q_PROPERTY(bool saveAvailable
              READ saveAvailable
-             NOTIFY dataReceived)
+             NOTIFY saveAvailableChanged)
   Q_PROPERTY(IO::Console::DataMode dataMode
              READ dataMode
              WRITE setDataMode
@@ -79,7 +79,6 @@ class Console : public QObject
 
 signals:
   void echoChanged();
-  void dataReceived();
   void dataModeChanged();
   void languageChanged();
   void lineEndingChanged();
@@ -87,6 +86,7 @@ signals:
   void historyItemChanged();
   void textDocumentChanged();
   void showTimestampChanged();
+  void saveAvailableChanged();
   void displayString(const QString &text);
 
 private:
