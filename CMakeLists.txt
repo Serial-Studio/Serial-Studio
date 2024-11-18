@@ -92,6 +92,7 @@ elseif(WIN32 AND MSVC)
   /GL                    # Enable whole program optimization
   /Zi                    # Generate debugging information in PDB files
   /MT                    # Use static runtime libraries
+  /openmp:experimental   # Add support for OpenMP
  )
  add_link_options(
   /OPT:REF               # Remove unreferenced functions/data
@@ -107,11 +108,12 @@ elseif(WIN32 AND MSVC)
 #
 # macOS-specific settings
 #
-elseif(APPLE)
+elseif(APPLE)   
  add_compile_options(
   -O3                     # Optimize for speed
   -Wall                   # Enable most warning messages
   -Wextra                 # Enable additional warning messages
+  -fopenmp-simd           # Add support for OpenMP
  )
  add_link_options(
   -Wl,-dead_strip      # Remove unused code and data during linking
@@ -128,6 +130,7 @@ elseif(UNIX)
   -O3                  # Optimize for speed
   -Wall                # Enable most warning messages
   -Wextra              # Enable additional warning messages
+  -fopenmp-simd        # Add support for OpenMP
  )
  add_link_options(
   -Wl,--gc-sections    # Remove unused sections during linking
