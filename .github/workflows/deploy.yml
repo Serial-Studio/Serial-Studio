@@ -235,7 +235,7 @@ jobs:
   # macOS (Intel) build
   #
   build-mac-intel:
-    runs-on: macos-12
+    runs-on: macos-13
     name: '🍎 macOS (Intel)'
     steps:
     - name: '🧰 Checkout'
