@@ -86,7 +86,7 @@ private:
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
 
-  CircularBuffer m_dataBuffer;
+  CircularBuffer<QByteArray, char> m_dataBuffer;
 
   QByteArray m_startSequence;
   QByteArray m_finishSequence;

@@ -82,7 +82,8 @@ IO::Manager::Manager()
   connect(qApp, &QApplication::aboutToQuit, this, [=] {
     disconnect(&m_frameReader);
     m_workerThread.quit();
-    m_workerThread.wait();
+    if (!m_workerThread.wait(100))
+      m_workerThread.terminate();
   });
 
   // Start the worker thread

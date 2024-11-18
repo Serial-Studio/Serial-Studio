@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include "IO/CircularBuffer.h"
 
 namespace IO
 {
@@ -175,10 +176,9 @@ private:
   bool m_isStartingLine;
   bool m_lastCharWasCR;
 
-  QStringList m_lines;
   QStringList m_historyItems;
 
   QString m_printFont;
-  QString m_textBuffer;
+  CircularBuffer<QByteArray, char> m_textBuffer;
 };
 } // namespace IO
