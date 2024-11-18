@@ -2,8 +2,9 @@
     "actions": [
     ],
     "decoder": 0,
+    "frameDetection": 1,
     "frameEnd": ";",
-    "frameParser": "/**\n * This function splits a data frame using the project-specified separator,\n * allowing you to customize frame parsing for different project requirements.\n *\n * Global variables can maintain a constant output array, enabling a single\n * Serial Studio project to display information consistently, even with varying\n * frame types.\n *\n * @param[in]  frame      The latest received frame as a string.\n * @param[in]  separator  The data separator defined in the JSON project.\n * @return     Array of strings containing the parsed frame elements.\n *\n * @note Only data within the delimiters is processed.\n * @note Declare global variables outside @c parse() for state/configuration.\n *\n * @example\n * Given frame: \"value1,value2,value3\", separator: \",\"\n * Returns: [\"value1\", \"value2\", \"value3\"]\n */\nfunction parse(frame, separator) {\n    return frame.split(separator);\n}\n",
+    "frameParser": "/**\n * Splits a data frame into an array of elements using a comma separator.\n *\n * Use this function to break a string (like \"value1,value2,value3\") into\n * individual pieces, which can then be displayed or processed in your project.\n *\n * @param[in]  frame   A string containing the data frame.\n *                     Example: \"value1,value2,value3\"\n * @return     An array of strings with the split elements.\n *             Example: [\"value1\", \"value2\", \"value3\"]\n *\n * @note You can declare global variables outside this function if needed\n *       for storing settings or keeping state between calls.\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
     "frameStart": "$",
     "groups": [
         {
@@ -12,6 +13,7 @@
                     "alarm": 0,
                     "fft": false,
                     "fftSamples": 1024,
+                    "fftSamplingRate": 0,
                     "graph": false,
                     "index": 1,
                     "led": false,
@@ -28,6 +30,7 @@
                     "alarm": 0,
                     "fft": false,
                     "fftSamples": 1024,
+                    "fftSamplingRate": 0,
                     "graph": false,
                     "index": 2,
                     "led": false,
@@ -44,6 +47,7 @@
                     "alarm": 0,
                     "fft": false,
                     "fftSamples": 1024,
+                    "fftSamplingRate": 0,
                     "graph": false,
                     "index": 3,
                     "led": false,
@@ -62,7 +66,6 @@
         }
     ],
     "mapTilerApiKey": "",
-    "separator": ",",
     "thunderforestApiKey": "",
     "title": "TinyGPS"
 }
