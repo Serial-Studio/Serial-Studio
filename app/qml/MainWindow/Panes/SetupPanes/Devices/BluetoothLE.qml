@@ -52,8 +52,7 @@ Item {
         enabled: !Cpp_IO_Manager.connected
         Layout.minimumWidth: Math.max(devLabel.implicitWidth,
                                       servLabel.implicitWidth,
-                                      charLabel.implicitWidth,
-                                      descriptorLabel.implicitWidth)
+                                      charLabel.implicitWidth)
       }
 
       ComboBox {
@@ -94,8 +93,7 @@ Item {
         text: qsTr("Service") + ":"
         Layout.minimumWidth: Math.max(devLabel.implicitWidth,
                                       servLabel.implicitWidth,
-                                      charLabel.implicitWidth,
-                                      descriptorLabel.implicitWidth)
+                                      charLabel.implicitWidth)
       }
 
       ComboBox {
@@ -121,8 +119,7 @@ Item {
         text: qsTr("Characteristic") + ":"
         Layout.minimumWidth: Math.max(devLabel.implicitWidth,
                                       servLabel.implicitWidth,
-                                      charLabel.implicitWidth,
-                                      descriptorLabel.implicitWidth)
+                                      charLabel.implicitWidth)
       }
 
       ComboBox {
@@ -133,37 +130,6 @@ Item {
         onCurrentIndexChanged: {
           if (currentIndex !== Cpp_IO_Bluetooth_LE.characteristicIndex)
             Cpp_IO_Bluetooth_LE.characteristicIndex = currentIndex
-        }
-      }
-    }
-
-    //
-    // Descriptor selector
-    //
-    RowLayout {
-      spacing: 4
-      Layout.fillWidth: true
-      enabled: opacity == 1
-      visible: characteristicSelector.visible
-      opacity: Cpp_IO_Bluetooth_LE.operatingSystemSupported && descriptorNames.count > 1 ? 1 : 0.5
-
-      Label {
-        id: descriptorLabel
-        text: qsTr("Descriptor") + ":"
-        Layout.minimumWidth: Math.max(devLabel.implicitWidth,
-                                      servLabel.implicitWidth,
-                                      charLabel.implicitWidth,
-                                      descriptorLabel.implicitWidth)
-      }
-
-      ComboBox {
-        id: descriptorNames
-        Layout.fillWidth: true
-        model: Cpp_IO_Bluetooth_LE.descriptorNames
-        currentIndex: Cpp_IO_Bluetooth_LE.descriptorIndex
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_Bluetooth_LE.descriptorIndex)
-            Cpp_IO_Bluetooth_LE.descriptorIndex = currentIndex
         }
       }
     }

@@ -52,9 +52,6 @@ class BluetoothLE : public HAL_Driver
   Q_PROPERTY(QStringList characteristicNames
              READ characteristicNames
              NOTIFY characteristicsChanged)
-  Q_PROPERTY(QStringList descriptorNames
-             READ descriptorNames
-             NOTIFY descriptorsChanged)
   Q_PROPERTY(int deviceIndex
              READ deviceIndex
              WRITE selectDevice
@@ -65,10 +62,6 @@ class BluetoothLE : public HAL_Driver
   Q_PROPERTY(bool operatingSystemSupported
              READ operatingSystemSupported
              CONSTANT)
-  Q_PROPERTY(int descriptorIndex
-             READ descriptorIndex
-             WRITE setDescriptorIndex
-             NOTIFY descriptorIndexChanged)
   Q_PROPERTY(int characteristicIndex
              READ characteristicIndex
              WRITE setCharacteristicIndex
@@ -78,11 +71,9 @@ class BluetoothLE : public HAL_Driver
 signals:
   void devicesChanged();
   void servicesChanged();
-  void descriptorsChanged();
   void deviceIndexChanged();
   void characteristicsChanged();
   void deviceConnectedChanged();
-  void descriptorIndexChanged();
   void characteristicIndexChanged();
   void error(const QString &message);
 
@@ -110,19 +101,16 @@ public:
 
   [[nodiscard]] int deviceCount() const;
   [[nodiscard]] int deviceIndex() const;
-  [[nodiscard]] int descriptorIndex() const;
   [[nodiscard]] int characteristicIndex() const;
 
   [[nodiscard]] QStringList deviceNames() const;
   [[nodiscard]] QStringList serviceNames() const;
-  [[nodiscard]] QStringList descriptorNames() const;
   [[nodiscard]] QStringList characteristicNames() const;
 
 public slots:
   void startDiscovery();
   void selectDevice(const int index);
   void selectService(const int index);
-  void setDescriptorIndex(const int index);
   void setCharacteristicIndex(const int index);
 
 private slots:
@@ -138,7 +126,6 @@ private slots:
 private:
   int m_deviceIndex;
   bool m_deviceConnected;
-  int m_selectedDescriptor;
   int m_selectedCharacteristic;
 
   QLowEnergyService *m_service;
@@ -147,11 +134,9 @@ private:
 
   QStringList m_deviceNames;
   QStringList m_serviceNames;
-  QStringList m_descriptorNames;
   QStringList m_characteristicNames;
 
   QList<QBluetoothDeviceInfo> m_devices;
-  QList<QLowEnergyDescriptor> m_descriptors;
   QList<QLowEnergyCharacteristic> m_characteristics;
 };
 } // namespace Drivers
