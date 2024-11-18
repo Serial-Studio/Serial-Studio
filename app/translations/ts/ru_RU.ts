@@ -552,6 +552,59 @@
     </message>
 </context>
 <context>
+    <name>FileTransmission</name>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="36"/>
+        <source>File Transmission</source>
+        <translation>Передача файла</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="119"/>
+        <source>File Selection:</source>
+        <translation>Выбор файла:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="137"/>
+        <source>Select File...</source>
+        <translation>Выбрать файл…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="154"/>
+        <source>Transmission Interval:</source>
+        <translation>Интервал передачи:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="178"/>
+        <source>msecs</source>
+        <translation>миллисекунды</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="207"/>
+        <source>Progress: %1</source>
+        <translation>Прогресс: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="223"/>
+        <source>Pause Transmission</source>
+        <translation>Приостановить</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="224"/>
+        <source>Resume Transmission</source>
+        <translation>Возобновить</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="225"/>
+        <source>Stop Transmission</source>
+        <translation>Остановить</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="226"/>
+        <source>Begin Transmission</source>
+        <translation>Начать</translation>
+    </message>
+</context>
+<context>
     <name>FrameParserView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="33"/>
@@ -935,6 +988,19 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     </message>
 </context>
 <context>
+    <name>IO::FileTransmission</name>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="85"/>
+        <source>No file selected...</source>
+        <translation>Файл не выбран…</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="121"/>
+        <source>Select file to transmit</source>
+        <translation>Выберите файл для передачи</translation>
+    </message>
+</context>
+<context>
     <name>IO::Manager</name>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="235"/>
@@ -1026,19 +1092,19 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::FrameParser</name>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="379"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="400"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="381"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="402"/>
         <source>The document has been modified!</source>
         <translation>Документ был изменён!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="380"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="401"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="382"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="403"/>
         <source>Are you sure you want to continue?</source>
         <translation>Вы уверены, что хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="409"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="411"/>
         <source>Select Javascript file to import</source>
         <translation>Выберите файл Javascript для импорта</translation>
     </message>
@@ -1054,7 +1120,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="236"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="246"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="248"/>
         <source>Frame parser error!</source>
         <translation>Ошибка парсера фреймов!</translation>
     </message>
@@ -1068,62 +1134,62 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>Функция ‘parse’ не объявлена или не может быть вызвана!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="247"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="249"/>
         <source>No valid &apos;parse&apos; function declaration found in the script!</source>
         <translation>В скрипте не найдено допустимого объявления функции ‘parse’!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="259"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="261"/>
         <source>Frame parser syntax error!</source>
         <translation>Синтаксическая ошибка парсера фреймов!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="260"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="262"/>
         <source>Error on line %1.</source>
         <translation>Ошибка в строке %1.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="271"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="273"/>
         <source>Generic error</source>
         <translation>Общая ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="274"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="276"/>
         <source>Evaluation error</source>
         <translation>Ошибка оценки</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="277"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="279"/>
         <source>Range error</source>
         <translation>Ошибка диапазона</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="280"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="282"/>
         <source>Reference error</source>
         <translation>Ошибка ссылки</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="283"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="285"/>
         <source>Syntax error</source>
         <translation>Синтаксическая ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="286"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="288"/>
         <source>Type error</source>
         <translation>Ошибка типа</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="291"/>
         <source>URI error</source>
         <translation>Ошибка URI</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="292"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="294"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="296"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="298"/>
         <source>Frame parser error detected!</source>
         <translation>Обнаружена ошибка парсера фреймов!</translation>
     </message>
@@ -3118,12 +3184,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Данные пока не получены</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="233"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="246"/>
         <source>Send Data to Device</source>
         <translation>Отправить данные на устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="322"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="335"/>
         <source>Echo</source>
         <translation>Эхо</translation>
     </message>
@@ -3132,17 +3198,17 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="311"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="324"/>
         <source>Show Timestamp</source>
         <translation>Показать временные метки</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="333"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="346"/>
         <source>Emulate VT-100</source>
         <translation>Эмуляция VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="355"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="368"/>
         <source>Display: %1</source>
         <translation>Отображение: %1</translation>
     </message>

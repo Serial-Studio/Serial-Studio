@@ -84,6 +84,11 @@ Item {
       id: acknowledgementsDialog
       source: "qrc:/qml/Dialogs/Acknowledgements.qml"
     }
+
+    DialogLoader {
+      id: fileTransmissionDialog
+      source: "qrc:/qml/Dialogs/FileTransmission.qml"
+    }
   }
 
   //
@@ -109,4 +114,5 @@ Item {
   function showExternalConsole()   { externalConsole.active = true }
   function showMqttConfiguration() { mqttConfiguration.active = true }
   function showAcknowledgements()  { acknowledgementsDialog.active = true }
+  function showFileTransmission()  { fileTransmissionDialog.active = true }
 }

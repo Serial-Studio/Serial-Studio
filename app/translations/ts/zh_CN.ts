@@ -552,6 +552,59 @@
     </message>
 </context>
 <context>
+    <name>FileTransmission</name>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="36"/>
+        <source>File Transmission</source>
+        <translation>文件传输</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="119"/>
+        <source>File Selection:</source>
+        <translation>文件选择：</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="137"/>
+        <source>Select File...</source>
+        <translation>选择文件…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="154"/>
+        <source>Transmission Interval:</source>
+        <translation>传输间隔：</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="178"/>
+        <source>msecs</source>
+        <translation>毫秒</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="207"/>
+        <source>Progress: %1</source>
+        <translation>进度：%1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="223"/>
+        <source>Pause Transmission</source>
+        <translation>暂停传输</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="224"/>
+        <source>Resume Transmission</source>
+        <translation>恢复传输</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="225"/>
+        <source>Stop Transmission</source>
+        <translation>停止传输</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="226"/>
+        <source>Begin Transmission</source>
+        <translation>开始传输</translation>
+    </message>
+</context>
+<context>
     <name>FrameParserView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="33"/>
@@ -931,6 +984,19 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     </message>
 </context>
 <context>
+    <name>IO::FileTransmission</name>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="85"/>
+        <source>No file selected...</source>
+        <translation>未选择文件…</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="121"/>
+        <source>Select file to transmit</source>
+        <translation>选择要传输的文件</translation>
+    </message>
+</context>
+<context>
     <name>IO::Manager</name>
     <message>
         <location filename="../../src/IO/Manager.cpp" line="235"/>
@@ -1022,19 +1088,19 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::FrameParser</name>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="379"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="400"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="381"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="402"/>
         <source>The document has been modified!</source>
         <translation>文档已被修改！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="380"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="401"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="382"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="403"/>
         <source>Are you sure you want to continue?</source>
         <translation>确定要继续吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="409"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="411"/>
         <source>Select Javascript file to import</source>
         <translation>选择要导入的 Javascript 文件</translation>
     </message>
@@ -1050,7 +1116,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     </message>
     <message>
         <location filename="../../src/JSON/FrameParser.cpp" line="236"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="246"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="248"/>
         <source>Frame parser error!</source>
         <translation>帧解析器错误！</translation>
     </message>
@@ -1064,62 +1130,62 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>未声明或无法调用函数 ‘parse’！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="247"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="249"/>
         <source>No valid &apos;parse&apos; function declaration found in the script!</source>
         <translation>脚本中未找到有效的 ‘parse’ 函数声明！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="259"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="261"/>
         <source>Frame parser syntax error!</source>
         <translation>帧解析器语法错误！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="260"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="262"/>
         <source>Error on line %1.</source>
         <translation>第 %1 行出错。</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="271"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="273"/>
         <source>Generic error</source>
         <translation>通用错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="274"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="276"/>
         <source>Evaluation error</source>
         <translation>评估错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="277"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="279"/>
         <source>Range error</source>
         <translation>范围错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="280"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="282"/>
         <source>Reference error</source>
         <translation>引用错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="283"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="285"/>
         <source>Syntax error</source>
         <translation>语法错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="286"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="288"/>
         <source>Type error</source>
         <translation>类型错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="289"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="291"/>
         <source>URI error</source>
         <translation>URI 错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="292"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="294"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="296"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="298"/>
         <source>Frame parser error detected!</source>
         <translation>检测到帧解析器错误！</translation>
     </message>
@@ -3122,7 +3188,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">尚未接收到数据</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="233"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="246"/>
         <source>Send Data to Device</source>
         <translation>发送数据到设备</translation>
     </message>
@@ -3131,22 +3197,22 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">自动滚动</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="311"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="324"/>
         <source>Show Timestamp</source>
         <translation>显示时间戳</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="322"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="335"/>
         <source>Echo</source>
         <translation>回显</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="333"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="346"/>
         <source>Emulate VT-100</source>
         <translation>模拟VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="355"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="368"/>
         <source>Display: %1</source>
         <translation>显示：%1</translation>
     </message>

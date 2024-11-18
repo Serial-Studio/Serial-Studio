@@ -52,5 +52,6 @@
         <file>Widgets/VisualRange.qml</file>
         <file>DialogLoader.qml</file>
         <file>main.qml</file>
+        <file>Dialogs/FileTransmission.qml</file>
     </qresource>
 </RCC>

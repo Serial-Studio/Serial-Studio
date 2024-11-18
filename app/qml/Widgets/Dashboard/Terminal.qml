@@ -222,6 +222,19 @@ Item {
     RowLayout {
       Layout.fillWidth: true
 
+      Button {
+        icon.width: 18
+        icon.height: 18
+        implicitHeight: 24
+        Layout.maximumWidth: 24
+        opacity: enabled ? 1 : 0.5
+        Layout.alignment: Qt.AlignVCenter
+        enabled: Cpp_IO_Manager.readWrite
+        onClicked: app.showFileTransmission()
+        icon.source: "qrc:/rcc/icons/buttons/attach.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
+      }
+
       TextField {
         id: send
         implicitHeight: 24

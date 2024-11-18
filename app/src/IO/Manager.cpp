@@ -86,7 +86,7 @@ IO::Manager::Manager()
 
   // Avoid crashing the app when quitting
   connect(qApp, &QApplication::aboutToQuit, this, [=] {
-    disconnect(&m_frameReader, nullptr, nullptr, nullptr);
+    disconnect(&m_frameReader);
     m_workerThread.quit();
     m_workerThread.wait();
   });
@@ -303,6 +303,8 @@ void IO::Manager::connectDevice()
     {
       connect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
               &FrameReader::processData, Qt::QueuedConnection);
+      QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
+                                Qt::QueuedConnection);
     }
 
     // Error opening the device
@@ -331,10 +333,6 @@ void IO::Manager::disconnectDevice()
 
     // Close driver device
     driver()->close();
-
-    // Clear the data buffer in the frame rader
-    QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
-                              Qt::QueuedConnection);
 
     // Update UI
     Q_EMIT driverChanged();

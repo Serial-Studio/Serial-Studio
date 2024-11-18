@@ -109,6 +109,7 @@
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
         <file>icons/buttons/apply.svg</file>
+        <file>icons/buttons/attach.svg</file>
         <file>icons/buttons/center.svg</file>
         <file>icons/buttons/clear.svg</file>
         <file>icons/buttons/close.svg</file>
@@ -119,6 +120,7 @@
         <file>icons/buttons/media-pause.svg</file>
         <file>icons/buttons/media-play.svg</file>
         <file>icons/buttons/media-prev.svg</file>
+        <file>icons/buttons/media-stop.svg</file>
         <file>icons/buttons/open.svg</file>
         <file>icons/buttons/print.svg</file>
         <file>icons/buttons/refresh.svg</file>
@@ -227,6 +229,7 @@
         <file>images/icon@1x.png</file>
         <file>images/icon@2x.png</file>
         <file>images/soldering-iron.svg</file>
+        <file>images/spinner.svg</file>
         <file>images/tip.svg</file>
         <file>images/tree.svg</file>
         <file>instruments/attitude_crosshair.svg</file>
@@ -259,7 +262,5 @@
         <file>themes/Resistance.json</file>
         <file>themes/Yaru Dark.json</file>
         <file>themes/Yaru Light.json</file>
-        <file>images/spinner.svg</file>
-        <file>icons/buttons/media-stop.svg</file>
     </qresource>
 </RCC>

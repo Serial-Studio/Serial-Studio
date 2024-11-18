@@ -99,6 +99,7 @@ set(SOURCES
  src/IO/Checksum.cpp
  src/IO/Console.cpp
  src/IO/Manager.cpp
+ src/IO/FileTransmission.cpp
  src/IO/FrameReader.cpp
  src/JSON/FrameParser.cpp
  src/JSON/ProjectModel.cpp
@@ -145,6 +146,7 @@ set(HEADERS
  src/IO/Manager.h
  src/IO/HAL_Driver.h
  src/IO/Checksum.h
+ src/IO/FileTransmission.h
  src/IO/FrameReader.h
  src/JSON/FrameParser.h
  src/JSON/ProjectModel.h

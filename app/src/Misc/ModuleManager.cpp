@@ -38,6 +38,8 @@
 
 #include "IO/Manager.h"
 #include "IO/Console.h"
+#include "IO/FileTransmission.h"
+
 #include "IO/Drivers/Serial.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
@@ -177,10 +179,11 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const
  */
 void Misc::ModuleManager::onQuit()
 {
+  Misc::TimerEvents::instance().stopTimers();
+
   CSV::Export::instance().closeFile();
   CSV::Player::instance().closeFile();
   IO::Manager::instance().disconnectDevice();
-  Misc::TimerEvents::instance().stopTimers();
   Plugins::Server::instance().removeConnection();
 }
 
@@ -255,6 +258,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscCommonFonts = &Misc::CommonFonts::instance();
   auto miscThemeManager = &Misc::ThemeManager::instance();
   auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
+  auto ioFileTransmission = &IO::FileTransmission::instance();
 
   // Initialize third-party modules
   auto updater = QSimpleUpdater::getInstance();
@@ -291,15 +295,15 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_JSON_FrameBuilder", frameBuilder);
   c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
-  c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
-  c->setContextProperty("Cpp_ModuleManager", this);
-  c->setContextProperty("Cpp_BuildDate", buildDate);
-  c->setContextProperty("Cpp_BuildTime", buildTime);
-  c->setContextProperty("Cpp_PrimaryScreen", qApp->primaryScreen());
+  c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);
 
   // Register app info with QML
-  c->setContextProperty("Cpp_AppName", qApp->applicationDisplayName());
+  c->setContextProperty("Cpp_BuildDate", buildDate);
+  c->setContextProperty("Cpp_BuildTime", buildTime);
   c->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
+  c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
+  c->setContextProperty("Cpp_PrimaryScreen", qApp->primaryScreen());
+  c->setContextProperty("Cpp_AppName", qApp->applicationDisplayName());
   c->setContextProperty("Cpp_AppVersion", qApp->applicationVersion());
   c->setContextProperty("Cpp_AppOrganization", qApp->organizationName());
   c->setContextProperty("Cpp_AppOrganizationDomain",
