@@ -150,7 +150,10 @@ qreal UI::Dashboard::smartInterval(const qreal min, const qreal max,
  */
 bool UI::Dashboard::available() const
 {
-  return totalWidgetCount() > 0;
+  return totalWidgetCount() > 0
+         && (IO::Manager::instance().connected()
+             || CSV::Player::instance().isOpen()
+             || MQTT::Client::instance().isSubscribed());
 }
 
 /**
