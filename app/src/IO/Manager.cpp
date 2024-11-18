@@ -285,7 +285,7 @@ void IO::Manager::toggleConnection()
 void IO::Manager::connectDevice()
 {
   // Configure current device
-  if (driver())
+  if (driver() && m_workerThread.isRunning())
   {
     // Set open flag
     QIODevice::OpenMode mode = QIODevice::ReadOnly;
