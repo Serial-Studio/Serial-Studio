@@ -303,8 +303,6 @@ void IO::Manager::connectDevice()
     {
       connect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
               &FrameReader::processData, Qt::QueuedConnection);
-      connect(driver(), &IO::HAL_Driver::payloadReceived, this,
-              &IO::Manager::processPayload, Qt::QueuedConnection);
     }
 
     // Error opening the device
@@ -330,8 +328,6 @@ void IO::Manager::disconnectDevice()
     // Disconnect bus signals/slots
     disconnect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
                &FrameReader::processData);
-    disconnect(driver(), &IO::HAL_Driver::payloadReceived, this,
-               &IO::Manager::processPayload);
 
     // Close driver device
     driver()->close();

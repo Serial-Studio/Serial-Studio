@@ -40,30 +40,12 @@ namespace IO
  */
 class HAL_Driver : public QObject
 {
-  // clang-format off
   Q_OBJECT
-  // clang-format on
 
 signals:
-  /**
-   * @brief Emitted when the driver's configuration changes.
-   */
   void configurationChanged();
-
-  /**
-   * @brief Emitted when data is successfully written to the device.
-   */
   void dataSent(const QByteArray &data);
-
-  /**
-   * @brief Emitted when data is received and should be appended to a buffer.
-   */
   void dataReceived(const QByteArray &data);
-
-  /**
-   * @brief Emitted when data is received and should be processed directly.
-   */
-  void payloadReceived(const QByteArray &data);
 
 public:
   /**
@@ -71,41 +53,14 @@ public:
    */
   virtual void close() = 0;
 
-  /**
-   * @brief Check if the device is open.
-   */
   [[nodiscard]] virtual bool isOpen() const = 0;
-
-  /**
-   * @brief Check if the device is ready for reading.
-   */
   [[nodiscard]] virtual bool isReadable() const = 0;
-
-  /**
-   * @brief Check if the device is ready for writing.
-   */
   [[nodiscard]] virtual bool isWritable() const = 0;
-
-  /**
-   * @brief Check if the device configuration is valid.
-   */
   [[nodiscard]] virtual bool configurationOk() const = 0;
-
-  /**
-   * @brief Write data to the device. Returns the number of bytes written.
-   */
   [[nodiscard]] virtual quint64 write(const QByteArray &data) = 0;
-
-  /**
-   * @brief Open the device in the specified mode.
-   */
   [[nodiscard]] virtual bool open(const QIODevice::OpenMode mode) = 0;
 
 protected:
-  /**
-   * Process incoming data.
-   * @param data The received data to process.
-   */
   void processData(const QByteArray &data)
   {
     QByteArray dataCopy(data);

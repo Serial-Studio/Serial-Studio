@@ -366,7 +366,7 @@ void JSON::FrameParser::paste()
  */
 void JSON::FrameParser::apply()
 {
-  (void) save(false);
+  (void)save(false);
 }
 
 /**
@@ -387,7 +387,7 @@ void JSON::FrameParser::reload()
 
   // Load default template
   m_textEdit.setPlainText(defaultCode());
-  (void) save(true);
+  (void)save(true);
 }
 
 /**
@@ -419,7 +419,7 @@ void JSON::FrameParser::import()
     {
       auto data = file.readAll();
       m_textEdit.setPlainText(QString::fromUtf8(data));
-      (void) save(true);
+      (void)save(true);
     }
   }
 }
