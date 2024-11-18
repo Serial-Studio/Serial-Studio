@@ -108,31 +108,30 @@
         <translation>设备</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="94"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="93"/>
         <source>Service</source>
         <translation>服务</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="121"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="119"/>
         <source>Characteristic</source>
         <translation>特性</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="152"/>
         <source>Descriptor</source>
-        <translation>描述符</translation>
+        <translation type="vanished">描述符</translation>
     </message>
     <message>
         <source>No Delimiters</source>
         <translation type="vanished">无分隔符</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="173"/>
         <source>Scanning....</source>
         <translation>正在扫描....</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="196"/>
         <source>Sorry, this system is not supported yet. We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
         <translation>抱歉，此系统尚不支持。我们会在 Qt 官方支持此操作系统后尽快更新 Serial Studio 以兼容。</translation>
     </message>
@@ -295,42 +294,42 @@
 <context>
     <name>DatasetView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="105"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="104"/>
         <source>Plot</source>
         <translation>绘图</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="122"/>
         <source>FFT Plot</source>
         <translation>FFT 绘图</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="144"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <source>Bar/Level</source>
         <translation>条形/等级</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="163"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="156"/>
         <source>Gauge</source>
         <translation>仪表</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="184"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="175"/>
         <source>Compass</source>
         <translation>指南针</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="203"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="192"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="229"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="217"/>
         <source>Duplicate</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="229"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -554,52 +553,52 @@
 <context>
     <name>FileTransmission</name>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="36"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="37"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="119"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="139"/>
         <source>File Selection:</source>
         <translation>文件选择：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="137"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="157"/>
         <source>Select File...</source>
         <translation>选择文件…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="154"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="174"/>
         <source>Transmission Interval:</source>
         <translation>传输间隔：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="178"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="198"/>
         <source>msecs</source>
         <translation>毫秒</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="207"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="227"/>
         <source>Progress: %1</source>
         <translation>进度：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="223"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
         <source>Pause Transmission</source>
         <translation>暂停传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="224"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="244"/>
         <source>Resume Transmission</source>
         <translation>恢复传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="225"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="245"/>
         <source>Stop Transmission</source>
         <translation>停止传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="226"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="246"/>
         <source>Begin Transmission</source>
         <translation>开始传输</translation>
     </message>
@@ -771,57 +770,57 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="198"/>
+        <location filename="../../src/IO/Console.cpp" line="194"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="199"/>
+        <location filename="../../src/IO/Console.cpp" line="195"/>
         <source>HEX</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="210"/>
+        <location filename="../../src/IO/Console.cpp" line="206"/>
         <source>No Line Ending</source>
         <translation>无行结束符</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="211"/>
+        <location filename="../../src/IO/Console.cpp" line="207"/>
         <source>New Line</source>
         <translation>换行</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="212"/>
+        <location filename="../../src/IO/Console.cpp" line="208"/>
         <source>Carriage Return</source>
         <translation>回车符</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="213"/>
+        <location filename="../../src/IO/Console.cpp" line="209"/>
         <source>CR + NL</source>
         <translation>回车符 + 换行符</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="224"/>
+        <location filename="../../src/IO/Console.cpp" line="220"/>
         <source>Plain Text</source>
         <translation>纯文本</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="225"/>
+        <location filename="../../src/IO/Console.cpp" line="221"/>
         <source>Hexadecimal</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="266"/>
+        <location filename="../../src/IO/Console.cpp" line="262"/>
         <source>Export Console Data</source>
         <translation>导出控制台数据</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="268"/>
+        <location filename="../../src/IO/Console.cpp" line="264"/>
         <source>Text Files</source>
         <translation>文本文件</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="282"/>
+        <location filename="../../src/IO/Console.cpp" line="278"/>
         <source>Error while exporting console data</source>
         <translation>导出控制台数据时出错</translation>
     </message>
@@ -833,82 +832,86 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">BLE设备已断开连接</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="296"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="280"/>
         <source>Select Device</source>
         <translation>选择设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="307"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="291"/>
         <source>Select Service</source>
         <translation>选择服务</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="319"/>
         <source>Select Descriptor</source>
-        <translation>选择描述符</translation>
+        <translation type="vanished">选择描述符</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="47"/>
+        <source>BLE I/O Module Error</source>
+        <translation>BLE 输入/输出模块错误</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="303"/>
         <source>Select Characteristic</source>
         <translation>选择特性</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="464"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="431"/>
         <source>Error while configuring BLE service</source>
         <translation>配置BLE服务时出错</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="650"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="570"/>
         <source>Operation error</source>
         <translation>操作错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="653"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="573"/>
         <source>Characteristic write error</source>
         <translation>特性写入错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="656"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="576"/>
         <source>Descriptor write error</source>
         <translation>描述符写入错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="659"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="579"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="662"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="582"/>
         <source>Characteristic read error</source>
         <translation>特性读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="665"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="585"/>
         <source>Descriptor read error</source>
         <translation>描述符读取错误</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="682"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="602"/>
         <source>Bluetooth adapter is off!</source>
         <translation>蓝牙适配器已关闭！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="685"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="605"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>无效的蓝牙适配器！</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="688"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="608"/>
         <source>Unsuported platform or operating system</source>
         <translation>不支持的平台或操作系统</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="691"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="611"/>
         <source>Unsupported discovery method</source>
         <translation>不支持的发现方法</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="694"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="614"/>
         <source>General I/O error</source>
         <translation>通用I/O错误</translation>
     </message>
@@ -986,12 +989,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::FileTransmission</name>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="85"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="86"/>
         <source>No file selected...</source>
         <translation>未选择文件…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="121"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="122"/>
         <source>Select file to transmit</source>
         <translation>选择要传输的文件</translation>
     </message>
@@ -999,17 +1002,17 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="235"/>
+        <location filename="../../src/IO/Manager.cpp" line="230"/>
         <source>Serial Port</source>
         <translation>串口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="236"/>
+        <location filename="../../src/IO/Manager.cpp" line="231"/>
         <source>Network Socket</source>
         <translation>网络套接字</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="237"/>
+        <location filename="../../src/IO/Manager.cpp" line="232"/>
         <source>Bluetooth LE</source>
         <translation>蓝牙低功耗</translation>
     </message>
@@ -3368,7 +3371,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">隐藏所有坐标轴</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="832"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="835"/>
         <source>Status Panel</source>
         <translation>状态面板</translation>
     </message>

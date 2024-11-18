@@ -108,31 +108,30 @@
         <translation>Устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="94"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="93"/>
         <source>Service</source>
         <translation>Сервис</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="121"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="119"/>
         <source>Characteristic</source>
         <translation>Характеристика</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="152"/>
         <source>Descriptor</source>
-        <translation>Дескриптор</translation>
+        <translation type="vanished">Дескриптор</translation>
     </message>
     <message>
         <source>No Delimiters</source>
         <translation type="vanished">Без разделителей</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="173"/>
         <source>Scanning....</source>
         <translation>Сканирование....</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml" line="196"/>
         <source>Sorry, this system is not supported yet. We&apos;ll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
         <translation>Извините, эта система пока не поддерживается. Мы обновим Serial Studio для работы с этой операционной системой, как только Qt официально добавит поддержку.</translation>
     </message>
@@ -295,42 +294,42 @@
 <context>
     <name>DatasetView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="105"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="104"/>
         <source>Plot</source>
         <translation>График</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="122"/>
         <source>FFT Plot</source>
         <translation>FFT График</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="144"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <source>Bar/Level</source>
         <translation>Полоса/Уровень</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="163"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="156"/>
         <source>Gauge</source>
         <translation>Шкала</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="184"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="175"/>
         <source>Compass</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="203"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="192"/>
         <source>LED</source>
         <translation>Светодиод</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="229"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="217"/>
         <source>Duplicate</source>
         <translation>Дублировать</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="229"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
@@ -554,52 +553,52 @@
 <context>
     <name>FileTransmission</name>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="36"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="37"/>
         <source>File Transmission</source>
         <translation>Передача файла</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="119"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="139"/>
         <source>File Selection:</source>
         <translation>Выбор файла:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="137"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="157"/>
         <source>Select File...</source>
         <translation>Выбрать файл…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="154"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="174"/>
         <source>Transmission Interval:</source>
         <translation>Интервал передачи:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="178"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="198"/>
         <source>msecs</source>
         <translation>миллисекунды</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="207"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="227"/>
         <source>Progress: %1</source>
         <translation>Прогресс: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="223"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
         <source>Pause Transmission</source>
         <translation>Приостановить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="224"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="244"/>
         <source>Resume Transmission</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="225"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="245"/>
         <source>Stop Transmission</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="226"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="246"/>
         <source>Begin Transmission</source>
         <translation>Начать</translation>
     </message>
@@ -771,57 +770,57 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Console</name>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="198"/>
+        <location filename="../../src/IO/Console.cpp" line="194"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="199"/>
+        <location filename="../../src/IO/Console.cpp" line="195"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="210"/>
+        <location filename="../../src/IO/Console.cpp" line="206"/>
         <source>No Line Ending</source>
         <translation>Без окончания строки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="211"/>
+        <location filename="../../src/IO/Console.cpp" line="207"/>
         <source>New Line</source>
         <translation>Новая строка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="212"/>
+        <location filename="../../src/IO/Console.cpp" line="208"/>
         <source>Carriage Return</source>
         <translation>Возврат каретки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="213"/>
+        <location filename="../../src/IO/Console.cpp" line="209"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="224"/>
+        <location filename="../../src/IO/Console.cpp" line="220"/>
         <source>Plain Text</source>
         <translation>Простой текст</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="225"/>
+        <location filename="../../src/IO/Console.cpp" line="221"/>
         <source>Hexadecimal</source>
         <translation>Шестнадцатеричный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="266"/>
+        <location filename="../../src/IO/Console.cpp" line="262"/>
         <source>Export Console Data</source>
         <translation>Экспорт данных консоли</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="268"/>
+        <location filename="../../src/IO/Console.cpp" line="264"/>
         <source>Text Files</source>
         <translation>Текстовые файлы</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Console.cpp" line="282"/>
+        <location filename="../../src/IO/Console.cpp" line="278"/>
         <source>Error while exporting console data</source>
         <translation>Ошибка при экспорте данных консоли</translation>
     </message>
@@ -833,72 +832,76 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Устройство BLE было отключено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="296"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="280"/>
         <source>Select Device</source>
         <translation>Выберите устройство</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="307"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="291"/>
         <source>Select Service</source>
         <translation>Выберите сервис</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="319"/>
         <source>Select Descriptor</source>
-        <translation>Выберите дескриптор</translation>
+        <translation type="vanished">Выберите дескриптор</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="47"/>
+        <source>BLE I/O Module Error</source>
+        <translation>Ошибка модуля ввода-вывода BLE</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="303"/>
         <source>Select Characteristic</source>
         <translation>Выберите характеристику</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="464"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="431"/>
         <source>Error while configuring BLE service</source>
         <translation>Ошибка при настройке сервиса BLE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="650"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="570"/>
         <source>Operation error</source>
         <translation>Ошибка операции</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="653"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="573"/>
         <source>Characteristic write error</source>
         <translation>Ошибка записи характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="656"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="576"/>
         <source>Descriptor write error</source>
         <translation>Ошибка записи дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="659"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="579"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="662"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="582"/>
         <source>Characteristic read error</source>
         <translation>Ошибка чтения характеристики</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="665"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="585"/>
         <source>Descriptor read error</source>
         <translation>Ошибка чтения дескриптора</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="682"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="602"/>
         <source>Bluetooth adapter is off!</source>
         <translation>Адаптер Bluetooth выключен!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="685"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="605"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>Неверный адаптер Bluetooth!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="688"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="608"/>
         <source>Unsuported platform or operating system</source>
         <translation>Неподдерживаемая платформа или операционная система</translation>
     </message>
@@ -907,12 +910,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Неподдерживаемая платформа или операционная система</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="691"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="611"/>
         <source>Unsupported discovery method</source>
         <translation>Неподдерживаемый метод обнаружения</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="694"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="614"/>
         <source>General I/O error</source>
         <translation>Общая ошибка ввода/вывода</translation>
     </message>
@@ -990,12 +993,12 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::FileTransmission</name>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="85"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="86"/>
         <source>No file selected...</source>
         <translation>Файл не выбран…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="121"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="122"/>
         <source>Select file to transmit</source>
         <translation>Выберите файл для передачи</translation>
     </message>
@@ -1003,17 +1006,17 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Manager</name>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="235"/>
+        <location filename="../../src/IO/Manager.cpp" line="230"/>
         <source>Serial Port</source>
         <translation>Сериал порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="236"/>
+        <location filename="../../src/IO/Manager.cpp" line="231"/>
         <source>Network Socket</source>
         <translation>Сетевой сокет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Manager.cpp" line="237"/>
+        <location filename="../../src/IO/Manager.cpp" line="232"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
@@ -3376,7 +3379,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">Скрыть все оси</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="832"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="835"/>
         <source>Status Panel</source>
         <translation>Панель состояния</translation>
     </message>
