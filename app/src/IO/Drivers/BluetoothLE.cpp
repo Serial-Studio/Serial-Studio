@@ -22,6 +22,7 @@
 
 #include <QOperatingSystemVersion>
 
+#include "Misc/Utilities.h"
 #include "IO/Drivers/BluetoothLE.h"
 
 //------------------------------------------------------------------------------
@@ -40,6 +41,12 @@ IO::Drivers::BluetoothLE::BluetoothLE()
 {
   connect(this, &IO::Drivers::BluetoothLE::deviceIndexChanged, this,
           &IO::Drivers::BluetoothLE::configurationChanged);
+
+  connect(this, &IO::Drivers::BluetoothLE::error, this,
+          [=](const QString &message) {
+            Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"),
+                                            message);
+          });
 }
 
 /**
