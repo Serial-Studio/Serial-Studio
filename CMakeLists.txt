@@ -63,7 +63,7 @@ add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 #
 if(WIN32 AND MINGW)
  add_compile_options(
-  -O2                  # Optimize for speed
+  -O3                  # Optimize for speed
   -Wall                # Enable most warning messages
   -Wextra              # Enable additional warning messages
   -fuse-linker-plugin  # Use LTO plugin to enable link-time optimization
@@ -109,7 +109,7 @@ elseif(WIN32 AND MSVC)
 #
 elseif(APPLE)
  add_compile_options(
-  -O2                     # Optimize for speed
+  -O3                     # Optimize for speed
   -Wall                   # Enable most warning messages
   -Wextra                 # Enable additional warning messages
  )
@@ -125,7 +125,7 @@ elseif(APPLE)
 #
 elseif(UNIX)
  add_compile_options(
-  -O2                  # Optimize for speed
+  -O3                  # Optimize for speed
   -Wall                # Enable most warning messages
   -Wextra              # Enable additional warning messages
  )

@@ -111,7 +111,6 @@ set(SOURCES
  src/CSV/Player.cpp
  src/CSV/Export.cpp
  src/MQTT/Client.cpp
-
  src/main.cpp
  src/SerialStudio.cpp
 )
