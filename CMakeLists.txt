@@ -22,7 +22,7 @@
 
 cmake_minimum_required(VERSION 3.19)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 #-------------------------------------------------------------------------------
 # Project information
@@ -67,6 +67,7 @@ if(WIN32 AND MINGW)
   -Wall                # Enable most warning messages
   -Wextra              # Enable additional warning messages
   -fuse-linker-plugin  # Use LTO plugin to enable link-time optimization
+  -fexperimental-simd  # Enable experimental SIMD instructions
  )
  add_link_options(
   -Wl,--gc-sections    # Remove unused sections during linking
@@ -109,9 +110,10 @@ elseif(WIN32 AND MSVC)
 #
 elseif(APPLE)
  add_compile_options(
-  -O2                  # Optimize for speed
-  -Wall                # Enable most warning messages
-  -Wextra              # Enable additional warning messages
+  -O2                     # Optimize for speed
+  -Wall                   # Enable most warning messages
+  -Wextra                 # Enable additional warning messages
+  -fexperimental-library  # Enable experimental SIMD instructions
  )
  add_link_options(
   -Wl,-dead_strip      # Remove unused code and data during linking
@@ -128,6 +130,7 @@ elseif(UNIX)
   -O2                  # Optimize for speed
   -Wall                # Enable most warning messages
   -Wextra              # Enable additional warning messages
+  -fexperimental-simd  # Enable experimental SIMD instructions
  )
  add_link_options(
   -Wl,--gc-sections    # Remove unused sections during linking

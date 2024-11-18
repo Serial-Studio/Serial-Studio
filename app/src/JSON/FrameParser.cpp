@@ -91,7 +91,7 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
 
   // Connect modification check signals
   connect(m_textEdit.document(), &QTextDocument::modificationChanged, this,
-          [=] { Q_EMIT modifiedChanged(); });
+          [=, this] { Q_EMIT modifiedChanged(); });
 
   // Load code from JSON model automatically
   connect(&JSON::ProjectModel::instance(),

@@ -122,12 +122,12 @@ void IO::FrameReader::setupExternalConnections()
   setFrameDetectionMode(JSON::ProjectModel::instance().frameDetection());
 
   connect(&JSON::FrameBuilder::instance(),
-          &JSON::FrameBuilder::operationModeChanged, this, [=] {
+          &JSON::FrameBuilder::operationModeChanged, this, [=, this] {
             setOperationMode(JSON::FrameBuilder::instance().operationMode());
           });
 
   connect(&JSON::ProjectModel::instance(),
-          &JSON::ProjectModel::frameDetectionChanged, this, [=] {
+          &JSON::ProjectModel::frameDetectionChanged, this, [=, this] {
             setFrameDetectionMode(
                 JSON::ProjectModel::instance().frameDetection());
           });

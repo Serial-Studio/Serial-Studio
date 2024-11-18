@@ -548,7 +548,7 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
   // Update UI
   QMetaObject::invokeMethod(
-      this, [=] { Q_EMIT displayString(processedString); },
+      this, [=, this] { Q_EMIT displayString(processedString); },
       Qt::QueuedConnection);
 }
 

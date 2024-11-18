@@ -65,7 +65,8 @@ protected:
   {
     QByteArray dataCopy(data);
     QMetaObject::invokeMethod(
-        this, [=] { Q_EMIT dataReceived(dataCopy); }, Qt::QueuedConnection);
+        this, [=, this] { Q_EMIT dataReceived(dataCopy); },
+        Qt::QueuedConnection);
   }
 };
 } // namespace IO

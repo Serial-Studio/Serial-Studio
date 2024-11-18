@@ -129,7 +129,7 @@ set_target_properties( ${PROJECT_NAME}
  PROPERTIES
  VERSION                   ${PROJECT_VERSION}
  SOVERSION                 ${PROJECT_VERSION_MAJOR}
- CXX_STANDARD              17
+ CXX_STANDARD              20
  CXX_STANDARD_REQUIRED     OFF  # Whether CXX_STANDARD is enforced
 )
 
