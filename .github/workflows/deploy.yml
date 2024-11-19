@@ -83,7 +83,7 @@ jobs:
         useLocalCache: true
 
     - name: '⚙️ Install Intel Compiler'
-    - uses: fortran-lang/setup-fortran@v1
+      uses: fortran-lang/setup-fortran@v1
       with:
         compiler: intel
         version: 2024.1
@@ -350,7 +350,7 @@ jobs:
         useLocalCache: true
 
     - name: '⚙️ Install Intel Compiler'
-    - uses: fortran-lang/setup-fortran@v1
+      uses: fortran-lang/setup-fortran@v1
       with:
         compiler: intel
         version: 2024.1
