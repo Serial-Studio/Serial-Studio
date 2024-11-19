@@ -275,7 +275,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=icc -DCMAKE_C_COMPILER=icpc -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
