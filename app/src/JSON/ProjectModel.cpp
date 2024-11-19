@@ -714,6 +714,14 @@ bool JSON::ProjectModel::saveJsonFile()
     return false;
   }
 
+  // Save and validate javascript code
+  auto *parser = JSON::FrameBuilder::instance().frameParser();
+  if (parser->isModified())
+  {
+    if (!parser->save(true))
+      return false;
+  }
+
   // Get file save path
   if (jsonFilePath().isEmpty())
   {

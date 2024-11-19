@@ -209,8 +209,8 @@ Widgets.Pane {
           //
           Widgets.BigButton {
             iconSize: 24
-            text: qsTr("Apply")
             toolbarButton: false
+            text: qsTr("Validate \& Save")
             onClicked: frameParser.apply()
             enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter

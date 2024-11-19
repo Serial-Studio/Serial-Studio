@@ -92,6 +92,10 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
   // Connect modification check signals
   connect(m_textEdit.document(), &QTextDocument::modificationChanged, this,
           [=] { Q_EMIT modifiedChanged(); });
+  connect(this, &JSON::FrameParser::modifiedChanged, this, [=] {
+    if (isModified() && !JSON::ProjectModel::instance().modified())
+      JSON::ProjectModel::instance().setModified(true);
+  });
 
   // Load code from JSON model automatically
   connect(&JSON::ProjectModel::instance(),
@@ -395,7 +399,11 @@ void JSON::FrameParser::paste()
  */
 void JSON::FrameParser::apply()
 {
-  (void)save(true);
+  if (save(false))
+  {
+    if (!JSON::ProjectModel::instance().jsonFileName().isEmpty())
+      JSON::ProjectModel::instance().saveJsonFile();
+  }
 }
 
 /**

@@ -273,6 +273,7 @@ public slots:
   void addGroup(const QString &title, const SerialStudio::GroupWidget widget);
   bool setGroupWidget(const int group, const SerialStudio::GroupWidget widget);
 
+  void setModified(const bool modified);
   void setFrameParserCode(const QString &code);
 
   void buildTreeModel();
@@ -285,7 +286,6 @@ private slots:
   void onJsonLoaded();
   void onGpsApiKeysChanged();
   void generateComboBoxModels();
-  void setModified(const bool modified);
   void setCurrentView(const CurrentView view);
   void onGroupItemChanged(QStandardItem *item);
   void onActionItemChanged(QStandardItem *item);
