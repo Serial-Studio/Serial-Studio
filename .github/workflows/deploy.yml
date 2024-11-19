@@ -265,17 +265,11 @@ jobs:
       with:
         node-version: 20
 
-    - name: '⚙️ Install Intel Compiler'
-      uses: fortran-lang/setup-fortran@v1
-      with:
-        compiler: intel-classic
-        version: 2021.10
-
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
