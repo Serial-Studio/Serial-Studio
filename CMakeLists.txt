@@ -141,6 +141,10 @@ elseif(UNIX)
  # add_link_options(-fsanitize=address)        # Link with Address Sanitizer
 endif()
 
+#-------------------------------------------------------------------------------
+# Fix linking on Linux
+#-------------------------------------------------------------------------------
+
 if (UNIX AND NOT APPLE)
  set(PROJECT_EXECUTABLE "serial-studio")
  set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
