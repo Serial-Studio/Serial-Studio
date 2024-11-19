@@ -210,14 +210,6 @@ qt_add_executable(
  MANUAL_FINALIZATION
 )
 
-qt_add_qml_module(
- ${PROJECT_EXECUTABLE}
- URI app
- VERSION 1.0
- QML_FILES ${QML_CODE}
- RESOURCE_PREFIX "/"
-)
-
 target_link_libraries(
  ${PROJECT_EXECUTABLE} PUBLIC
 
