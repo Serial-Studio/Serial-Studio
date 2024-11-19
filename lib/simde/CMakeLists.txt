@@ -62,7 +62,6 @@ else()
  add_compile_definitions(SIMDE_NO_NATIVE)
 endif()
 
-# Enable OpenMP SIMD support globally
 find_package(OpenMP QUIET)
 if(OpenMP_CXX_FOUND)
  if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
@@ -74,9 +73,4 @@ if(OpenMP_CXX_FOUND)
  message(STATUS "OpenMP SIMD support enabled globally")
 else()
  message(WARNING "OpenMP not found; SIMD performance may be suboptimal")
-endif()
-
-if(NOT (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang" OR CMAKE_C_COMPILER_ID STREQUAL "MSVC"))
- message(WARNING "Unknown compiler; using portable fallback")
- add_compile_definitions(SIMDE_NO_NATIVE)
 endif()
