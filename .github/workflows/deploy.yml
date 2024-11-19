@@ -29,8 +29,6 @@ env:
   PUBLISHER: "Alex Spataru"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
   QT_MODULES: qtserialport qtconnectivity qtpositioning qtlocation qtgraphs qtquick3d qt3d qtdatavis3d qtshadertools
-  WINDOWS_HPCKIT_URL: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/f07e32fa-b505-4b90-8a79-e328ce9ad9d6/intel-oneapi-hpc-toolkit-2025.0.0.822_offline.exe
-  WINDOWS_CPP_COMPONENTS: intel.oneapi.win.cpp-dpcpp-common
  
 #-------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -358,7 +356,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=icx -DCMAKE_C_COMPILER=icl -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DCMAKE_CXX_COMPILER=cc -DCMAKE_C_COMPILER=cxx -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
