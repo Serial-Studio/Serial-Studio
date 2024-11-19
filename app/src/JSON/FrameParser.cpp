@@ -238,11 +238,40 @@ bool JSON::FrameParser::loadScript(const QString &script)
     return false;
   }
 
-  // Check if the script contains a valid parse function declaration with
-  // exactly one argument
+  // Check if the script contains a valid parse function declaratio
   static QRegularExpression functionRegex(
-      R"(\bfunction\s+parse\s*\(\s*[a-zA-Z_$][a-zA-Z0-9_$]*\s*\))");
-  if (!functionRegex.match(script).hasMatch())
+      R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
+  auto match = functionRegex.match(script);
+  if (match.hasMatch())
+  {
+    // Extract argument names
+    QString firstArg = match.captured(1);
+    QString secondArg = match.captured(3);
+
+    // Warn about empty first argument
+    if (firstArg.isEmpty())
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Frame parser error!"),
+          tr("No valid 'parse' function declaration found in the script!"));
+      return false;
+    }
+
+    // Warn about deprecated second argument
+    if (!secondArg.isEmpty())
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Legacy frame parser function detected"),
+          tr("The 'parse' function has two arguments ('%1', '%2'), indicating "
+             "use of the old format. Please update it to the new format, which "
+             "only takes the frame data as an argument.")
+              .arg(firstArg, secondArg));
+      return false;
+    }
+  }
+
+  // Function doesn't match the expected declaration
+  else
   {
     Misc::Utilities::showMessageBox(
         tr("Frame parser error!"),
@@ -251,7 +280,7 @@ bool JSON::FrameParser::loadScript(const QString &script)
   }
 
   // Try to run parse() function
-  QJSValueList args = {"", ","};
+  QJSValueList args = {""};
   auto ret = fun.call(args);
 
   // Error on engine evaluation
@@ -366,7 +395,7 @@ void JSON::FrameParser::paste()
  */
 void JSON::FrameParser::apply()
 {
-  (void)save(false);
+  (void)save(true);
 }
 
 /**
@@ -429,9 +458,14 @@ void JSON::FrameParser::import()
  */
 void JSON::FrameParser::readCode()
 {
-  m_textEdit.setPlainText(ProjectModel::instance().frameParserCode());
   m_textEdit.document()->setModified(false);
-  (void)loadScript(m_textEdit.toPlainText());
+
+  const auto code = ProjectModel::instance().frameParserCode();
+  if (m_textEdit.toPlainText() != code)
+  {
+    m_textEdit.setPlainText(code);
+    (void)loadScript(code);
+  }
 }
 
 /**

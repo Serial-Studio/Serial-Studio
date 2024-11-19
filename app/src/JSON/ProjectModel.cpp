@@ -925,10 +925,6 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   if (document.isEmpty())
     return;
 
-  // Let the generator use the given JSON file
-  if (JSON::FrameBuilder::instance().jsonMapFilepath() != path)
-    JSON::FrameBuilder::instance().loadJsonMap(path);
-
   // Reset C++ model
   newJsonFile();
 
@@ -977,15 +973,57 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
   // Show project view
   setCurrentView(ProjectView);
 
+  // Reset modified flag
+  setModified(false);
+
+  // Detect legacy frame parser function
+  if (json.contains("separator"))
+  {
+    // Obtain separator value from project file
+    const auto separator = json.value("separator").toString();
+
+    // Detect if it's a simple legacy default function
+    static QRegularExpression legacyRegex(
+        R"(function\s+parse\s*\(\s*frame\s*,\s*separator\s*\)\s*\{\s*return\s+frame\.split\(separator\);\s*\})");
+    if (legacyRegex.match(m_frameParserCode).hasMatch())
+    {
+      // Migrate to new format
+      if (separator.length() > 1)
+        m_frameParserCode
+            = QStringLiteral(
+                  "/**\n * Automatically migrated frame parser function.\n "
+                  "*/\nfunction parse(frame) {\n    return "
+                  "frame.split(\"%1\");\n}")
+                  .arg(separator);
+      else
+        m_frameParserCode
+            = QStringLiteral(
+                  "/**\n * Automatically migrated frame parser function.\n "
+                  "*/\nfunction parse(frame) {\n    return "
+                  "frame.split(\'%1\');\n}")
+                  .arg(separator);
+
+      // Notify user about the change
+      Misc::Utilities::showMessageBox(
+          tr("Legacy frame parser function updated"),
+          tr("Your project used a legacy frame parser function with a "
+             "'separator' argument. It has been automatically migrated to "
+             "the new format."));
+      saveJsonFile();
+      return;
+    }
+  }
+
+  // Let the generator use the given JSON file
+  if (JSON::FrameBuilder::instance().jsonMapFilepath() != path)
+    JSON::FrameBuilder::instance().loadJsonMap(path);
+
   // Update UI
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
   Q_EMIT gpsApiKeysChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
-
-  // Reset modified flag
-  setModified(false);
 }
 
 //------------------------------------------------------------------------------
@@ -995,10 +1033,11 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
 /**
  * @brief Deletes the currently selected group.
  *
- * This function prompts the user for confirmation before deleting the currently
- * selected group. If the user confirms, the group is removed from the project,
- * and group and dataset IDs areregenerated. The tree model is rebuilt,
- * the modified flag is set, and the project item is selected in the UI.
+ * This function prompts the user for confirmation before deleting the
+ * currently selected group. If the user confirms, the group is removed from
+ * the project, and group and dataset IDs areregenerated. The tree model is
+ * rebuilt, the modified flag is set, and the project item is selected in the
+ * UI.
  */
 void JSON::ProjectModel::deleteCurrentGroup()
 {
@@ -1036,9 +1075,9 @@ void JSON::ProjectModel::deleteCurrentGroup()
 /**
  * @brief Deletes the currently action group.
  *
- * This function prompts the user for confirmation before deleting the currently
- * selected action. If the user confirms, the action is removed from the
- * project, and action IDs areregenerated. The tree model is rebuilt, the
+ * This function prompts the user for confirmation before deleting the
+ * currently selected action. If the user confirms, the action is removed from
+ * the project, and action IDs areregenerated. The tree model is rebuilt, the
  * modified flag is set, and the project item is selected in the UI.
  */
 void JSON::ProjectModel::deleteCurrentAction()
@@ -1073,11 +1112,11 @@ void JSON::ProjectModel::deleteCurrentAction()
 /**
  * @brief Deletes the currently selected dataset.
  *
- * This function prompts the user for confirmation before deleting the currently
- * selected dataset. If the user confirms, the dataset is removed from the
- * associated group, and dataset IDs within the group are reassigned.
- * The tree model is rebuilt, the modified flag is set, and the parent group is
- * selected in the UI.
+ * This function prompts the user for confirmation before deleting the
+ * currently selected dataset. If the user confirms, the dataset is removed
+ * from the associated group, and dataset IDs within the group are reassigned.
+ * The tree model is rebuilt, the modified flag is set, and the parent group
+ * is selected in the UI.
  */
 void JSON::ProjectModel::deleteCurrentDataset()
 {
@@ -1236,8 +1275,8 @@ void JSON::ProjectModel::duplicateCurrentDataset()
 /**
  * @brief Adds a new dataset to the currently selected group.
  *
- * This function creates a new dataset based on the provided option, assigns it
- * a unique title, ID, and frame index, and adds it to the selected group.
+ * This function creates a new dataset based on the provided option, assigns
+ * it a unique title, ID, and frame index, and adds it to the selected group.
  * The tree model is rebuilt, the modification flag is set, and the group is
  * reselected to rebuild the dataset model.
  *
@@ -1405,10 +1444,10 @@ void JSON::ProjectModel::changeDatasetOption(
 /**
  * @brief Adds a new action to the project.
  *
- * This function creates a new action, ensuring the title is unique by appending
- * a number if necessary. It then registers the action, updates the tree model,
- * and sets the modified flag. The newly added action is selected in the user
- * interface.
+ * This function creates a new action, ensuring the title is unique by
+ * appending a number if necessary. It then registers the action, updates the
+ * tree model, and sets the modified flag. The newly added action is selected
+ * in the user interface.
  */
 void JSON::ProjectModel::addAction()
 {
@@ -1469,10 +1508,10 @@ void JSON::ProjectModel::addAction()
 /**
  * @brief Adds a new group to the project with the specified title and widget.
  *
- * This function creates a new group, ensuring the title is unique by appending
- * a number if necessary. It then registers the group, sets its widget type,
- * updates the tree model, and sets the modified flag. The newly added group is
- * selected in the user interface.
+ * This function creates a new group, ensuring the title is unique by
+ * appending a number if necessary. It then registers the group, sets its
+ * widget type, updates the tree model, and sets the modified flag. The newly
+ * added group is selected in the user interface.
  *
  * @param title The desired title for the new group.
  * @param widget The widget type associated with the group.
@@ -1921,7 +1960,8 @@ void JSON::ProjectModel::buildTreeModel()
 }
 
 /**
- * @brief Builds the project model that contains project configuration settings.
+ * @brief Builds the project model that contains project configuration
+ * settings.
  *
  * This function creates a new `CustomModel` for managing and displaying
  * project-level settings such as the title, frame start and end delimiters,
@@ -1929,8 +1969,8 @@ void JSON::ProjectModel::buildTreeModel()
  *
  * Each item in the model is editable and has associated metadata like
  * placeholders and descriptions. The function also sets up a signal to handle
- * changes made to the model items and emits the `projectModelChanged()` signal
- * to update the user interface.
+ * changes made to the model items and emits the `projectModelChanged()`
+ * signal to update the user interface.
  */
 void JSON::ProjectModel::buildProjectModel()
 {
@@ -2042,7 +2082,8 @@ void JSON::ProjectModel::buildProjectModel()
 }
 
 /**
- * @brief Builds the group model for managing the settings of a specific group.
+ * @brief Builds the group model for managing the settings of a specific
+ * group.
  *
  * This function creates a new `CustomModel` to represent the settings of the
  * provided group. It includes editable fields such as the group's title and
@@ -2463,8 +2504,8 @@ void JSON::ProjectModel::onGpsApiKeysChanged()
  * in the project. It includes options for FFT window sizes, decoder methods,
  * group-level widgets, dataset-level widgets, and plotting options.
  *
- * These sources are re-generated when the language is changed to ensure proper
- * localization.
+ * These sources are re-generated when the language is changed to ensure
+ * proper localization.
  */
 void JSON::ProjectModel::generateComboBoxModels()
 {
@@ -2535,8 +2576,8 @@ void JSON::ProjectModel::generateComboBoxModels()
  * This function updates the modified flag of the project and emits the
  * `modifiedChanged()` signal to notify the user interface of the change.
  *
- * @param modified A boolean indicating whether the project has been modified (
- *                 true) or not (false).
+ * @param modified A boolean indicating whether the project has been modified
+ * ( true) or not (false).
  */
 void JSON::ProjectModel::setModified(const bool modified)
 {
@@ -2705,8 +2746,8 @@ void JSON::ProjectModel::onGroupItemChanged(QStandardItem *item)
  * icon, it updates the action data and rebuilds the tree model to reflect the
  * changes.
  *
- * If the action was modified, it sets the modified flag. Finally, it reselects
- * the action in the user interface.
+ * If the action was modified, it sets the modified flag. Finally, it
+ * reselects the action in the user interface.
  *
  * @param item A pointer to the modified `QStandardItem` representing the
  *             changed action property.
@@ -2921,7 +2962,8 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
 //------------------------------------------------------------------------------
 
 /**
- * @brief Handles changes in the current selection within the project structure.
+ * @brief Handles changes in the current selection within the project
+ * structure.
  *
  * This function responds to user navigation within the project structure by
  * checking the type of item selected (group, dataset, or root item).
@@ -3018,8 +3060,8 @@ int JSON::ProjectModel::nextDatasetIndex()
 /**
  * @brief Recursively saves the expanded state of tree view items.
  *
- * This function stores the expanded state of the given `QStandardItem` and its
- * child items in a `QHash`, with the item's text serving as the key.
+ * This function stores the expanded state of the given `QStandardItem` and
+ * its child items in a `QHash`, with the item's text serving as the key.
  *
  * The expanded state is saved recursively for all child items.
  *
@@ -3057,7 +3099,8 @@ void JSON::ProjectModel::saveExpandedStateMap(QStandardItem *item,
  *
  * @param item A pointer to the `QStandardItem` whose state is being restored.
  * @param map A reference to a `QHash` containing the saved expanded states.
- * @param title The current item's title, used to look up its state in the hash.
+ * @param title The current item's title, used to look up its state in the
+ * hash.
  */
 void JSON::ProjectModel::restoreExpandedStateMap(QStandardItem *item,
                                                  QHash<QString, bool> &map,
