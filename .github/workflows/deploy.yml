@@ -363,7 +363,6 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
         cmake --build . --config Release -j 16
         
     - name: '📦 Package application'
