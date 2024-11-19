@@ -123,7 +123,7 @@ elseif(APPLE)
 #
 # Intel C++ Compiler settings
 #
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel" OR CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
  add_compile_options(
   -O3                        # Optimize for speed
   -Wall                      # Enable most warning messages

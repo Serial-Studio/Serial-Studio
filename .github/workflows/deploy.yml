@@ -354,7 +354,7 @@ jobs:
       run: |
         curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/19196/w_BaseKit_p_2024.0.0.731_offline.exe
         start /wait w_BaseKit_p_2024.0.0.731_offline.exe -s --action install --components=ALL --eula accept --install-dir "C:\Intel\oneAPI"
-        cmd.exe /c "C:\Intel\oneAPI\setvars.bat
+        cmd.exe /c "C:\Intel\oneAPI\setvars.bat"
 
     - name: '🚧 Configure with CMake'
       run: |

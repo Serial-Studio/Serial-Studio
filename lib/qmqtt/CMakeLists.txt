@@ -14,7 +14,6 @@ else()
  set(library_install_component Devel)
 endif()
 
-
 set(ws_component)
 set(ws_libname)
 set(qt5_min_version "5.3.0")
@@ -98,11 +97,6 @@ endif()
 
 add_library(${PROJECT_NAME} ${library_build_type} ${SOURCES} ${PUBLIC_HEADERS} ${PRIVATE_HEADERS})
 target_link_libraries(${PROJECT_NAME} PUBLIC Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network ${ws_libname})
-target_compile_definitions(${PROJECT_NAME}
- PRIVATE
- QT_NO_CAST_FROM_ASCII
- QT_NO_CAST_TO_ASCII
-)
 
 target_include_directories(${PROJECT_NAME}
  PUBLIC
