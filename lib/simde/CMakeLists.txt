@@ -25,6 +25,9 @@ cmake_minimum_required(VERSION 3.19)
 add_library(simde INTERFACE)
 target_include_directories(simde INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
+#
+# ARM64 processor optimizations
+#
 if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
  message(STATUS "Detected ARM architecture")
 
@@ -43,10 +46,13 @@ if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
   add_compile_definitions(SIMDE_NO_NATIVE)
  endif()
 
+#
+# Intel/AMD processor optimizations
+#
 elseif(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(x86|x86_64|AMD64)")
  message(STATUS "Detected x86 architecture")
 
- if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
+ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
   add_compile_options(-msse2 -mavx -mavx2)
   message(STATUS "Enabled SSE2, AVX, and AVX2 optimizations for GCC/Clang")
  elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
@@ -57,11 +63,17 @@ elseif(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(x86|x86_64|AMD64)")
   add_compile_definitions(SIMDE_NO_NATIVE)
  endif()
 
+#
+# Emulate SIMD instructions on unknown procesors
+#
 else()
  message(WARNING "Unknown architecture; enabling portable fallback")
  add_compile_definitions(SIMDE_NO_NATIVE)
 endif()
 
+#
+# Enable OpenMP SIMD support globally
+#
 find_package(OpenMP QUIET)
 if(OpenMP_CXX_FOUND)
  if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
@@ -73,4 +85,12 @@ if(OpenMP_CXX_FOUND)
  message(STATUS "OpenMP SIMD support enabled globally")
 else()
  message(WARNING "OpenMP not found; SIMD performance may be suboptimal")
+endif()
+
+#
+# Fall-back to SIMD emulation on unknown compilers
+#
+if(NOT (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang" OR CMAKE_C_COMPILER_ID STREQUAL "MSVC"))
+ message(WARNING "Unknown compiler; using portable fallback")
+ add_compile_definitions(SIMDE_NO_NATIVE)
 endif()
