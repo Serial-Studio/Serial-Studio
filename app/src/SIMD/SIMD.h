@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <cmath>
 #include <cstddef>
 #include <algorithm>
 #include <x86/sse2.h>
