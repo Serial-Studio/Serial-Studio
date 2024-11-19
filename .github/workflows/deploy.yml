@@ -86,7 +86,7 @@ jobs:
       uses: fortran-lang/setup-fortran@v1
       with:
         compiler: intel
-        version: 2024.1
+        version: 2025.0
 
     - name: '🚧 Configure with CMake'
       run: |
@@ -97,7 +97,6 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        source /opt/intel/oneapi/setvars.sh
         cmake --build . --config Release -j 16
 
     - name: '📦 Create AppImage'
@@ -353,13 +352,12 @@ jobs:
       uses: fortran-lang/setup-fortran@v1
       with:
         compiler: intel
-        version: 2024.1
+        version: 2025.0
         
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
         cd build
-        cmd.exe /c "C:\Intel\oneAPI\setvars.bat
         cmake ../ -DCMAKE_CXX_COMPILER=icx -DCMAKE_C_COMPILER=icl -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
