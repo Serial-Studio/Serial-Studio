@@ -401,8 +401,18 @@ void JSON::FrameParser::apply()
 {
   if (save(false))
   {
-    if (!JSON::ProjectModel::instance().jsonFileName().isEmpty())
-      JSON::ProjectModel::instance().saveJsonFile();
+    auto &model = JSON::ProjectModel::instance();
+    if (!model.jsonFilePath().isEmpty())
+    {
+      const bool modified = model.modified();
+      const bool hasGroups = model.groupCount() > 0;
+      const bool hasDatasets = model.datasetCount() > 0;
+      if (modified && hasGroups && hasDatasets)
+      {
+        model.saveJsonFile();
+        model.displayFrameParserView();
+      }
+    }
   }
 }
 

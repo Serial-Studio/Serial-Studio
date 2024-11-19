@@ -276,6 +276,8 @@ public slots:
   void setModified(const bool modified);
   void setFrameParserCode(const QString &code);
 
+  void displayFrameParserView();
+
   void buildTreeModel();
   void buildProjectModel();
   void buildGroupModel(const JSON::Group &group);

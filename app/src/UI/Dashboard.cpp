@@ -696,7 +696,7 @@ void UI::Dashboard::updatePlots()
       const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
       m_fftPlotValues.append(Curve());
       m_fftPlotValues.last().resize(dataset.fftSamples());
-      SIMD::fill<qreal>(m_fftPlotValues.last().data(), points() + 1, 0);
+      SIMD::fill<qreal>(m_fftPlotValues.last().data(), dataset.fftSamples(), 0);
     }
   }
 

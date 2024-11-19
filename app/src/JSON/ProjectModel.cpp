@@ -689,7 +689,14 @@ bool JSON::ProjectModel::askSave()
     return false;
 
   if (ret == QMessageBox::Discard)
+  {
+    if (jsonFilePath().isEmpty())
+      newJsonFile();
+    else
+      openJsonFile(jsonFilePath());
+
     return true;
+  }
 
   return saveJsonFile();
 }
@@ -853,6 +860,10 @@ void JSON::ProjectModel::newJsonFile()
   m_frameStartSequence = "$";
   m_title = tr("Untitled Project");
   m_frameParserCode = JSON::FrameParser::defaultCode();
+
+  // Load frame parser code into code editor
+  if (JSON::FrameBuilder::instance().frameParser())
+    JSON::FrameBuilder::instance().frameParser()->readCode();
 
   // Update file path
   m_filePath = "";
@@ -1806,6 +1817,25 @@ void JSON::ProjectModel::setFrameParserCode(const QString &code)
   }
 }
 
+/**
+ * @brief Forces the Project Editor to show the frame parser code editor
+ */
+void JSON::ProjectModel::displayFrameParserView()
+{
+  for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it)
+  {
+    if (it.value() == kFrameParser)
+    {
+      QTimer::singleShot(100, this, [=] {
+        selectionModel()->setCurrentIndex(it.key()->index(),
+                                          QItemSelectionModel::ClearAndSelect);
+      });
+
+      break;
+    }
+  }
+}
+
 //------------------------------------------------------------------------------
 // Model generation code
 //------------------------------------------------------------------------------
@@ -2630,20 +2660,7 @@ void JSON::ProjectModel::setCurrentView(const CurrentView currentView)
         changeView = false;
 
       if (!changeView)
-      {
-        for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it)
-        {
-          if (it.value() == kFrameParser)
-          {
-            QTimer::singleShot(100, this, [=] {
-              selectionModel()->setCurrentIndex(
-                  it.key()->index(), QItemSelectionModel::ClearAndSelect);
-            });
-
-            break;
-          }
-        }
-      }
+        displayFrameParserView();
     }
   }
 
