@@ -65,7 +65,7 @@ MQTT::Client::Client()
           &MQTT::Client::resetStatistics);
 
   // Disconenct from current IO connection when MQTT client is subscribed
-  connect(this, &MQTT::Client::connectedChanged, this, [=, this] {
+  connect(this, &MQTT::Client::connectedChanged, this, [=] {
     if (isSubscribed())
     {
       if (IO::Manager::instance().connected())

@@ -48,27 +48,26 @@ UI::Dashboard::Dashboard()
   , m_axisVisibility(SerialStudio::AxisXY)
 {
   // clang-format off
-  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(); });
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] { resetData(); });
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=, this] { resetData(); });
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(); });
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(); });
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); });
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame, Qt::QueuedConnection);
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
-  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
-          [=, this] {
-            const bool subscribed = MQTT::Client::instance().isSubscribed();
-            const bool wasSubscribed
-                = !MQTT::Client::instance().isConnectedToHost()
-                  && MQTT::Client::instance().clientMode()
-                         == MQTT::ClientSubscriber;
-            if (subscribed || wasSubscribed)
-              resetData();
-          });
+  connect(
+      &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] {
+        const bool subscribed = MQTT::Client::instance().isSubscribed();
+        const bool wasSubscribed = !MQTT::Client::instance().isConnectedToHost()
+                                   && MQTT::Client::instance().clientMode()
+                                          == MQTT::ClientSubscriber;
+        if (subscribed || wasSubscribed)
+          resetData();
+      });
 
   // Update the dashboard widgets at 24 Hz
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
-          [=, this] {
+          [=] {
             if (m_updateRequired)
             {
               m_updateRequired = false;

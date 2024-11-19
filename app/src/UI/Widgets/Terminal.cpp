@@ -103,22 +103,20 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
           &Widgets::Terminal::append, Qt::QueuedConnection);
 
   // Clear the screen when device is connected/disconnected
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          [=, this] {
-            if (IO::Manager::instance().connected())
-              clear();
-          });
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] {
+    if (IO::Manager::instance().connected())
+      clear();
+  });
 
   // Redraw widget as soon as it is visible
-  connect(this, &Widgets::Terminal::visibleChanged, this, [=, this] {
+  connect(this, &Widgets::Terminal::visibleChanged, this, [=] {
     if (isVisible())
       update();
   });
 
   // Change character widths when changing language
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this,
-          [=, this] { setFont(Misc::CommonFonts::instance().monoFont()); });
+          this, [=] { setFont(Misc::CommonFonts::instance().monoFont()); });
 
   // Blink the cursor
   m_cursorTimer.start(200);
@@ -129,7 +127,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   // Redraw the widget only when necessary
   m_stateChanged = true;
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
-          [=, this] {
+          [=] {
             if (isVisible() && m_stateChanged)
             {
               m_stateChanged = false;

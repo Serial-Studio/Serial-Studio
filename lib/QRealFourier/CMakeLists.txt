@@ -34,7 +34,7 @@ project(QRealFourier CXX)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -108,16 +108,4 @@ target_link_libraries(
 target_include_directories(
  QRealFourier PUBLIC
  ${CMAKE_CURRENT_SOURCE_DIR}/headers
-)
-
-#-------------------------------------------------------------------------------
-# Configure unity build
-#-------------------------------------------------------------------------------
-
-set_target_properties(
- QRealFourier PROPERTIES
- UNITY_BUILD ON
- UNITY_BUILD_MODE BATCH
- UNITY_BUILD_BATCH_SIZE 128
- INTERPROCEDURAL_OPTIMIZATION TRUE
 )

@@ -79,7 +79,7 @@ IO::Manager::Manager()
           &IO::Manager::configurationChanged);
 
   // Avoid crashing the app when quitting
-  connect(qApp, &QApplication::aboutToQuit, this, [=, this] {
+  connect(qApp, &QApplication::aboutToQuit, this, [=] {
     disconnect(&m_frameReader);
     m_workerThread.quit();
     if (!m_workerThread.wait(100))
@@ -396,7 +396,7 @@ void IO::Manager::processPayload(const QByteArray &payload)
     QByteArray copy = payload;
     QMetaObject::invokeMethod(
         this,
-        [=, this] {
+        [=] {
           Q_EMIT dataReceived(copy);
           Q_EMIT frameReceived(copy);
         },
@@ -422,7 +422,7 @@ void IO::Manager::setStartSequence(const QString &sequence)
   if (m_workerThread.isRunning())
     QMetaObject::invokeMethod(
         &m_frameReader,
-        [=, this] { m_frameReader.setStartSequence(m_startSequence); },
+        [=] { m_frameReader.setStartSequence(m_startSequence); },
         Qt::QueuedConnection);
 
   Q_EMIT startSequenceChanged();
@@ -446,7 +446,7 @@ void IO::Manager::setFinishSequence(const QString &sequence)
   if (m_workerThread.isRunning())
     QMetaObject::invokeMethod(
         &m_frameReader,
-        [=, this] { m_frameReader.setFinishSequence(m_finishSequence); },
+        [=] { m_frameReader.setFinishSequence(m_finishSequence); },
         Qt::QueuedConnection);
 
   Q_EMIT finishSequenceChanged();

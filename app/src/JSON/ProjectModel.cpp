@@ -155,7 +155,7 @@ JSON::ProjectModel::ProjectModel()
   generateComboBoxModels();
 
   // Clear selection model when JSON file is changed
-  connect(this, &JSON::ProjectModel::jsonFileChanged, this, [=, this] {
+  connect(this, &JSON::ProjectModel::jsonFileChanged, this, [=] {
     if (m_selectionModel)
     {
       auto index = m_treeModel->index(0, 0);
@@ -788,7 +788,7 @@ void JSON::ProjectModel::setupExternalConnections()
 
   // Generate combo-boxes again when app is translated
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
-          this, [=, this] {
+          this, [=] {
             generateComboBoxModels();
             buildTreeModel();
 
@@ -2586,7 +2586,7 @@ void JSON::ProjectModel::setCurrentView(const CurrentView currentView)
         {
           if (it.value() == kFrameParser)
           {
-            QTimer::singleShot(100, this, [=, this] {
+            QTimer::singleShot(100, this, [=] {
               selectionModel()->setCurrentIndex(
                   it.key()->index(), QItemSelectionModel::ClearAndSelect);
             });

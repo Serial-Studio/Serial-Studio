@@ -256,7 +256,7 @@ void IO::FileTransmission::sendLine()
   {
     QMetaObject::invokeMethod(
         this,
-        [=, this] {
+        [=] {
           if (m_stream)
           {
             auto line = m_stream->readLine();

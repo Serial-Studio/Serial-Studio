@@ -486,7 +486,7 @@ void CSV::Player::updateData()
         const auto msecsToNextF = abs(currTime.msecsTo(nextTime));
 
         // Jump to next frame
-        QTimer::singleShot(msecsToNextF, Qt::PreciseTimer, this, [=, this] {
+        QTimer::singleShot(msecsToNextF, Qt::PreciseTimer, this, [=] {
           if (isOpen() && isPlaying() && framePosition() < frameCount())
           {
             ++m_framePos;

@@ -34,7 +34,7 @@ project(app LANGUAGES CXX)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #-------------------------------------------------------------------------------
@@ -277,18 +277,6 @@ install(
  DESTINATION /usr/share/applications
 )
 endif()
-
-#-------------------------------------------------------------------------------
-# Configure unity build
-#-------------------------------------------------------------------------------
-
-set_target_properties(
- ${PROJECT_EXECUTABLE} PROPERTIES
- UNITY_BUILD OFF
- UNITY_BUILD_MODE BATCH
- UNITY_BUILD_BATCH_SIZE 128
- INTERPROCEDURAL_OPTIMIZATION TRUE
-)
 
 #-------------------------------------------------------------------------------
 # Qt Deployment
