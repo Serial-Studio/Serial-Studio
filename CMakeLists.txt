@@ -149,21 +149,22 @@ elseif(UNIX)
   -Wl,--gc-sections    # Remove unused sections during linking
  )
 
+ set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
+ set(CMAKE_CXX_COMPILER_AR "/usr/bin/ar")
+ set(CMAKE_C_COMPILER_RANLIB "/usr/bin/ranlib")
+ set(CMAKE_CXX_COMPILER_RANLIB "/usr/bin/ranlib")
+
  # Uncomment if needed for debugging
  # add_compile_options(-g -fsanitize=address)  # Enable debugging and Address Sanitizer
  # add_link_options(-fsanitize=address)        # Link with Address Sanitizer
 endif()
 
 #-------------------------------------------------------------------------------
-# Fix linking on Linux
+# Set UNIX friendly name for app
 #-------------------------------------------------------------------------------
 
 if (UNIX AND NOT APPLE)
  set(PROJECT_EXECUTABLE "serial-studio")
- set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
- set(CMAKE_CXX_COMPILER_AR "/usr/bin/ar")
- set(CMAKE_C_COMPILER_RANLIB "/usr/bin/ranlib")
- set(CMAKE_CXX_COMPILER_RANLIB "/usr/bin/ranlib")
 endif()
 
 #-------------------------------------------------------------------------------
