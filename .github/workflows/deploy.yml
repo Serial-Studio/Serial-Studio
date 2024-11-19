@@ -86,7 +86,7 @@ jobs:
       uses: fortran-lang/setup-fortran@v1
       with:
         compiler: intel
-        version: 2025.0
+        version: 2024.1
 
     - name: '🚧 Configure with CMake'
       run: |
@@ -352,7 +352,7 @@ jobs:
       uses: fortran-lang/setup-fortran@v1
       with:
         compiler: intel
-        version: 2025.0
+        version: 2024.1
         
     - name: '🚧 Configure with CMake'
       run: |
