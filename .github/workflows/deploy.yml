@@ -268,14 +268,14 @@ jobs:
     - name: '⚙️ Install Intel Compiler'
       uses: fortran-lang/setup-fortran@v1
       with:
-        compiler: intel
-        version: 2024.1
+        compiler: intel-classic
+        version: 2021.10
 
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=icpx -DCMAKE_C_COMPILER=icx -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DCMAKE_CXX_COMPILER=icc -DCMAKE_C_COMPILER=icpc -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
