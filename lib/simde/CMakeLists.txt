@@ -52,7 +52,10 @@ if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
 elseif(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(x86|x86_64|AMD64)")
  message(STATUS "Detected x86 architecture")
 
- if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
+ if(CMAKE_C_COMPILER_ID STREQUAL "Intel")
+  add_compile_options(-msse2 -mavx -mavx2)
+  message(STATUS "Enabled SSE2, AVX, and AVX2 optimizations for Intel Compiler")
+ elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
   add_compile_options(-msse2 -mavx -mavx2)
   message(STATUS "Enabled SSE2, AVX, and AVX2 optimizations for GCC/Clang")
  elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
@@ -64,7 +67,7 @@ elseif(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(x86|x86_64|AMD64)")
  endif()
 
 #
-# Emulate SIMD instructions on unknown procesors
+# Emulate SIMD instructions on unknown processors
 #
 else()
  message(WARNING "Unknown architecture; enabling portable fallback")
@@ -78,6 +81,8 @@ find_package(OpenMP QUIET)
 if(OpenMP_CXX_FOUND)
  if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
   add_compile_options(/openmp:experimental)
+ elseif(CMAKE_C_COMPILER_ID STREQUAL "Intel")
+  add_compile_options(-qopenmp-simd)
  else()
   add_compile_options(${OpenMP_CXX_FLAGS})
  endif()
@@ -90,7 +95,7 @@ endif()
 #
 # Fall-back to SIMD emulation on unknown compilers
 #
-if(NOT (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang" OR CMAKE_C_COMPILER_ID STREQUAL "MSVC"))
+if(NOT (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang" OR CMAKE_C_COMPILER_ID STREQUAL "MSVC" OR CMAKE_C_COMPILER_ID STREQUAL "Intel"))
  message(WARNING "Unknown compiler; using portable fallback")
  add_compile_definitions(SIMDE_NO_NATIVE)
 endif()

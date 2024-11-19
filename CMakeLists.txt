@@ -121,6 +121,22 @@ elseif(APPLE)
  # add_link_options(-fsanitize=address)        # Link with Address Sanitizer
 
 #
+# Intel C++ Compiler settings
+#
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+ add_compile_options(
+  -O3                        # Optimize for speed
+  -Wall                      # Enable most warning messages
+  -Wextra                    # Enable additional warning messages
+  -xHost                     # Optimize for the host architecture
+  -qopenmp-simd              # Enable OpenMP support
+  -static-intel              # Static link compiler dependencies
+ )
+ add_link_options(
+  -Wl,--gc-sections          # Remove unused sections during linking
+ )
+
+#
 # Generic UNIX/Linux settings
 #
 elseif(UNIX)
