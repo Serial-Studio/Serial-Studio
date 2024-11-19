@@ -79,16 +79,27 @@ jobs:
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
-      
+
+    - name: '⚙️ Install Intel Compiler'
+      run: |
+        sudo apt-get update
+        wget -qO- https://apt.repos.intel.com/setup/intelproducts.repo | sudo tee /etc/apt/sources.list.d/intelproducts.list
+        sudo apt-key adv --fetch-keys "https://apt.repos.intel.com/INTEL-GPG-KEY.pub"
+        sudo apt-get update
+        sudo apt-get install -y intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
+        source /opt/intel/oneapi/setvars.sh
+
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_BUILD_TYPE=Release
+        source /opt/intel/oneapi/setvars.sh
+        cmake ../ -DCMAKE_CXX_COMPILER=icpx -DCMAKE_C_COMPILER=icx -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
         cd build
+        source /opt/intel/oneapi/setvars.sh
         cmake --build . --config Release -j 16
 
     - name: '📦 Create AppImage'
@@ -340,17 +351,25 @@ jobs:
       with:
         useLocalCache: true
 
+    - name: '⚙️ Install Intel Compiler'
+      run: |
+        choco install intel-oneapi-basekit -y
+        choco install intel-oneapi-dpcpp-compiler -y
+        call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
+
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
-        
+        call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
+        cmake ../ -DCMAKE_CXX_COMPILER=icx -DCMAKE_C_COMPILER=icl -DCMAKE_BUILD_TYPE=Release
+
     - name: '🚧 Build application'
       run: |
         cd build
+        call "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
         cmake --build . --config Release -j 16
-
+        
     - name: '📦 Package application'
       run: |
         cd build
