@@ -333,7 +333,7 @@ jobs:
         version: ${{env.QT_VERSION_WINDOWS}}
         modules: ${{env.QT_MODULES}}
         cache: 'true'
-        arch: win64_msvc2022_64
+        arch: win64_llvm_mingw
       
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -344,7 +344,8 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DCMAKE_BUILD_TYPE=Release
+        #cmake ../ -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
         
     - name: '🚧 Build application'
       run: |
