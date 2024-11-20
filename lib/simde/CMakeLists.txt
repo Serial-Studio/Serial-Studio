@@ -28,7 +28,7 @@ target_include_directories(simde INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 #
 # ARM64 processor optimizations
 #
-if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
  message(STATUS "Detected ARM architecture")
 
  include(CheckCXXCompilerFlag)
@@ -49,7 +49,7 @@ if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
 #
 # Intel/AMD processor optimizations
 #
-elseif(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(x86|x86_64|AMD64)")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86|x86_64|AMD64)")
  message(STATUS "Detected x86 architecture")
 
  if(CMAKE_C_COMPILER_ID STREQUAL "Intel" OR CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
