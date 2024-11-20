@@ -50,20 +50,13 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
 # Intel/AMD processor optimizations
 #
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86|x86_64|AMD64)")
- message(STATUS "Detected x86 architecture")
-
- if(CMAKE_C_COMPILER_ID STREQUAL "Intel" OR CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
-  add_compile_options(-msse2 -mavx -mavx2)
-  message(STATUS "Enabled SSE2, AVX, and AVX2 optimizations for Intel Compiler")
- elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
-  add_compile_options(-msse2 -mavx -mavx2)
-  message(STATUS "Enabled SSE2, AVX, and AVX2 optimizations for GCC/Clang")
- elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+ message(STATUS "Detected x86 architecture") 
+ if(MSVC)
   add_compile_options(/arch:AVX2)
   message(STATUS "Enabled AVX2 optimizations for MSVC")
  else()
-  message(WARNING "Unknown compiler on x86; falling back to portable mode")
-  add_compile_definitions(SIMDE_NO_NATIVE)
+  add_compile_options(-msse2 -mavx -mavx2)
+  message(STATUS "Enabled SSE2, AVX, and AVX2 optimizations for GCC & LLVM")
  endif()
 
 #
@@ -72,6 +65,7 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86|x86_64|AMD64)")
 else()
  message(WARNING "Unknown architecture; enabling portable fallback")
  add_compile_definitions(SIMDE_NO_NATIVE)
+ 
 endif()
 
 #
@@ -90,12 +84,4 @@ if(OpenMP_CXX_FOUND)
  message(STATUS "OpenMP SIMD support enabled globally")
 else()
  message(WARNING "OpenMP not found; SIMD performance may be suboptimal")
-endif()
-
-#
-# Fall-back to SIMD emulation on unknown compilers
-#
-if(NOT (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang" OR CMAKE_C_COMPILER_ID STREQUAL "MSVC" OR CMAKE_C_COMPILER_ID STREQUAL "Intel" OR CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM"))
- message(WARNING "Unknown compiler; using portable fallback")
- add_compile_definitions(SIMDE_NO_NATIVE)
 endif()
