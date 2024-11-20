@@ -282,12 +282,20 @@ install(
  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+set(deploy_tool_options_arg "")
+if(APPLE)
+ set(deploy_tool_options_arg --hardened-runtime)
+elseif(WIN32)
+ set(deploy_tool_options_arg --compiler-runtime --release)
+endif()
+
 qt_generate_deploy_qml_app_script(
  TARGET ${PROJECT_EXECUTABLE}
  OUTPUT_SCRIPT deploy_script
  MACOS_BUNDLE_POST_BUILD
  NO_UNSUPPORTED_PLATFORM_ERROR
  DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
+ DEPLOY_TOOL_OPTIONS ${deploy_tool_options_arg}
 )
 
 install(SCRIPT ${deploy_script})
