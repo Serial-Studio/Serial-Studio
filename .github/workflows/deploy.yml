@@ -40,7 +40,7 @@ jobs:
   #
   build-linux-x86_64:
     runs-on: ubuntu-22.04
-    name: '🐧 Ubuntu 22.04 (x86_64)'
+    name: '🐧 Linux (x86_64)'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
