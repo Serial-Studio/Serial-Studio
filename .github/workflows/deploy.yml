@@ -155,7 +155,7 @@ jobs:
   #
   # macOS (Universal) build
   #
-  build-mac-aarch64:
+  build-mac:
     runs-on: macos-latest
     name: '🍎 macOS (Universal)'
     steps:
@@ -289,8 +289,7 @@ jobs:
   upload:
       name: '🗂 Create release and upload artifacts'
       needs:
-        - build-mac-aarch64
-        - build-mac-intel
+        - build-mac
         - build-windows
         - build-linux
       runs-on: ubuntu-latest
