@@ -21,13 +21,14 @@
 #
 
 cmake_minimum_required(VERSION 3.19)
-set(CMAKE_CXX_STANDARD 17)
 
 #-------------------------------------------------------------------------------
 # Define project name & find Qt packages for correct CPack calls
 #-------------------------------------------------------------------------------
 
-project(Serial-Studio)
+project(Serial-Studio LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(
  Qt6 REQUIRED
@@ -121,7 +122,6 @@ elseif(WIN32 AND MSVC)
   /OPT:REF               # Remove unreferenced functions/data
   /OPT:ICF               # Remove identical COMDATs to reduce binary size
   /LTCG                  # Link-time code generation for further optimization
-  /DEBUG                 # Generate debugging information in the output binary
  )
 
  # Uncomment if needed for debugging with Address Sanitizer
@@ -138,7 +138,8 @@ elseif(APPLE)
   -Wextra                 # Enable additional warning messages
  )
  add_link_options(
-  -Wl,-dead_strip      # Remove unused code and data during linking
+  -Wl,-dead_strip         # Remove unused code and data during linking
+  -flto=full              # Link-time optimization
  )
  # Uncomment if needed for debugging
  # add_compile_options(-g -fsanitize=address)  # Enable debugging and Address Sanitizer
@@ -153,11 +154,11 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel" OR CMAKE_CXX_COMPILER_ID MATCHES "I
   -Wall                      # Enable most warning messages
   -Wextra                    # Enable additional warning messages
   -xHost                     # Optimize for the host architecture
-  -qopenmp-simd              # Enable OpenMP support
   -static-intel              # Static link compiler dependencies
  )
  add_link_options(
   -Wl,--gc-sections          # Remove unused sections during linking
+  -flto=full                 # Link-time optimization
  )
 
 #
@@ -171,6 +172,7 @@ elseif(UNIX)
  )
  add_link_options(
   -Wl,--gc-sections    # Remove unused sections during linking
+  -flto                # Link-time optimization
  )
 
  set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
