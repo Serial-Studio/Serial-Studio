@@ -286,7 +286,7 @@ set(deploy_tool_options_arg "")
 if(APPLE)
  set(deploy_tool_options_arg -hardened-runtime)
 elseif(WIN32)
- set(deploy_tool_options_arg --no-compiler-runtime --release)
+ set(deploy_tool_options_arg --no-compiler-runtime -force_openssl --release)
 endif()
 
 qt_generate_deploy_qml_app_script(
