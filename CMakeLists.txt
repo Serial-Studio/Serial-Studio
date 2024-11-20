@@ -21,8 +21,20 @@
 #
 
 cmake_minimum_required(VERSION 3.19)
-
 set(CMAKE_CXX_STANDARD 17)
+
+#-------------------------------------------------------------------------------
+# Define project name & find Qt packages for correct CPack calls
+#-------------------------------------------------------------------------------
+
+project(Serial-Studio)
+
+find_package(
+ Qt6 REQUIRED
+ COMPONENTS
+ Core
+ Qml
+)
 
 #-------------------------------------------------------------------------------
 # Project information
@@ -178,19 +190,6 @@ endif()
 if (UNIX AND NOT APPLE)
  set(PROJECT_EXECUTABLE "serial-studio")
 endif()
-
-#-------------------------------------------------------------------------------
-# Define project name & find Qt packages for correct CPack calls
-#-------------------------------------------------------------------------------
-
-project(Serial-Studio)
-
-find_package(
- Qt6 REQUIRED
- COMPONENTS
- Core
- Qml
-)
 
 #-------------------------------------------------------------------------------
 # Add subdirectories
