@@ -346,6 +346,11 @@ jobs:
       uses: lukka/get-cmake@latest
       with:
         useLocalCache: true
+
+    - name: '🛠 Setup MSVC Development Environment'
+      uses: TheMrMilchmann/setup-msvc-dev@v3
+      with:
+        arch: x64
         
     - name: '🚧 Configure with CMake'
       run: |
