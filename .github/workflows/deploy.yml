@@ -95,7 +95,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 16
+        cmake --build . --config Release -j 16 -DCMAKE_BUILD_TYPE=Release
 
     - name: '📦 Create AppImage'
       run: |
@@ -189,7 +189,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 16
+        cmake --build . --config Release -j 16 -DCMAKE_BUILD_TYPE=Release
 
     - name: '📦 Package application'
       run: |
@@ -275,7 +275,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 16
+        cmake --build . --config Release -j 16 -DCMAKE_BUILD_TYPE=Release
 
     - name: '📦 Package application'
       run: |
@@ -356,7 +356,7 @@ jobs:
     - name: '🚧 Build application'
       run: |
         cd build
-        cmake --build . --config Release -j 16
+        cmake --build . --config Release -j 16 -DCMAKE_BUILD_TYPE=Release
         
     - name: '📦 Package application'
       run: |
