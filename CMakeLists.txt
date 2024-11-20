@@ -115,6 +115,7 @@ elseif(WIN32 AND MSVC)
   /O2                    # Optimize for speed
   /W3                    # Warning level 3 (reasonable warnings without being too verbose)
   /GL                    # Enable whole program optimization
+  /MT                    # Link compiler runtime statically
  )
  add_link_options(
   /OPT:REF               # Remove unreferenced functions/data
