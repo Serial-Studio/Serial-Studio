@@ -55,6 +55,18 @@ add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
 add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 
 #-------------------------------------------------------------------------------
+# CPU architecture configuration
+#-------------------------------------------------------------------------------
+
+if(APPLE) 
+  if(CMAKE_OSX_ARCHITECTURES MATCHES "x86_64")
+    set(CMAKE_SYSTEM_PROCESSOR "x86_64")
+  elseif(CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
+    set(CMAKE_SYSTEM_PROCESSOR "arm64")
+  endif()
+endif()
+
+#-------------------------------------------------------------------------------
 # Compiler flags
 #-------------------------------------------------------------------------------
 
