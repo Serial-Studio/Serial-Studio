@@ -38,9 +38,9 @@ jobs:
   #
   # Linux build
   #
-  build-linux:
+  build-linux-x86_64:
     runs-on: ubuntu-22.04
-    name: '🐧 Ubuntu 22.04'
+    name: '🐧 Ubuntu 22.04 (x86_64)'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -114,7 +114,7 @@ jobs:
         rm linuxdeploy-x86_64.AppImage
         rm linuxdeploy-plugin-qt-x86_64.AppImage
         
-        mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+        mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
 
     - name: '📦 Create Native Packages'
       run: |
@@ -130,34 +130,34 @@ jobs:
         rm -rf AppDir
         rm linuxdeploy-plugin-native_packages-x86_64.AppImage
         
-        mv *.deb ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb
-        mv *.rpm ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.rpm
+        mv *.deb ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
+        mv *.rpm ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
           
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
 
     - name: '📤 Upload artifact: Debian Package'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
 
     - name: '📤 Upload artifact: RPM Package'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.rpm
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.rpm
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
 
 
   #
-  # macOS (Universal) build
+  # macOS (arm64) build
   #
-  build-mac:
+  build-mac-arm64:
     runs-on: macos-latest
-    name: '🍎 macOS (Universal)'
+    name: '🍎 macOS (arm64)'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -184,7 +184,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+        cmake ../ -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64"
 
     - name: '🚧 Build application'
       run: |
@@ -216,12 +216,12 @@ jobs:
         npm install --global create-dmg
         rm LICENSE.md
         create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
-        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg"
 
     - name: '📋 Notarize'
       uses: alex-spataru/xcode-notarize@v2
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
         appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
         appstore-connect-teamid: ${{secrets.NOTARIZATION_TEAMID}}
         appstore-connect-password: ${{secrets.NOTARIZATION_PASSWORD}}
@@ -229,20 +229,106 @@ jobs:
     - name: '📌 Staple'
       uses: BoundfoxStudios/action-xcode-staple@v1
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
 
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+
+  
+  #
+  # macOS (arm64) build
+  #
+  build-mac-x86_64:
+    runs-on: macos-latest
+    name: '🍎 macOS (x86_64)'
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v4
+
+    - name: '⚙️ Install Qt'
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{env.QT_VERSION_MACOS}}
+        modules: ${{env.QT_MODULES}}
+        arch: clang_64
+        cache: 'true'
+
+    - name: '⚙️ Install CMake'
+      uses: lukka/get-cmake@latest
+      with:
+        useLocalCache: true
+
+    - name: '⚙️ Install Node'
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: '🚧 Configure with CMake'
+      run: |
+        mkdir build
+        cd build
+        cmake ../ -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="x86_64"
+
+    - name: '🚧 Build application'
+      run: |
+        cd build
+        cmake --build . --config Release -j 16
+
+    - name: '📦 Package application'
+      run: |
+        cd build
+        cpack --verbose
+
+    - name: '🪪 Import Code Signing Certificate'
+      uses: apple-actions/import-codesign-certs@v2
+      with:
+        p12-file-base64: ${{secrets.CERTIFICATES_P12}}
+        p12-password: ${{secrets.CERTIFICATES_P12_PASSWORD}}
+
+    - name: '💿 Mount DMG and copy application'
+      run: |
+        VOLUME=$(yes | hdiutil attach ./build/*.dmg -nobrowse | grep "Volumes" | awk '{print $3}')
+        cp -a "$VOLUME/${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
+        hdiutil detach "$VOLUME"
+
+    - name: '✍🏻 Sign Application'
+      run: codesign --force --deep --options runtime --sign "${{secrets.DEVELOPER_ID}}" "${{env.APPLICATION}}.app"
+        
+    - name: '💽 Create nice DMG'
+      run: |
+        npm install --global create-dmg
+        rm LICENSE.md
+        create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg"
+
+    - name: '📋 Notarize'
+      uses: alex-spataru/xcode-notarize@v2
+      with:
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
+        appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
+        appstore-connect-teamid: ${{secrets.NOTARIZATION_TEAMID}}
+        appstore-connect-password: ${{secrets.NOTARIZATION_PASSWORD}}
+
+    - name: '📌 Staple'
+      uses: BoundfoxStudios/action-xcode-staple@v1
+      with:
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
+
+    - name: '📤 Upload artifact: DMG'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
         
   #
   # Windows build
   #
-  build-windows:
+  build-windows-x86_64:
     runs-on: windows-latest
-    name: '🧊 Windows'
+    name: '🧊 Windows (x86_64)'
     steps:
     - run: git config --global core.autocrlf input
     - name: '🧰 Checkout'
@@ -276,22 +362,23 @@ jobs:
       run: |
         cd build
         cpack --verbose
-        mv *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-        mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe ../
+        mv *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
+        mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe ../
         
     - name: '📤 Upload artifact: NSIS installer'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
 
   # Upload continuous build
   upload:
       name: '🗂 Create release and upload artifacts'
       needs:
-        - build-mac
-        - build-windows
-        - build-linux
+        - build-mac-arm64
+        - build-mac-x86_64
+        - build-windows-x86_64
+        - build-linux-x86_64
       runs-on: ubuntu-latest
       steps:
       - name: '📥 Download artifacts'
@@ -306,9 +393,10 @@ jobs:
             sudo apt-get install libfuse2
             wget -q https://github.com/TheAssassin/pyuploadtool/releases/download/continuous/pyuploadtool-x86_64.AppImage
             chmod +x pyuploadtool-x86_64.AppImage
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.deb
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.rpm
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux.AppImage
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.exe
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
 
