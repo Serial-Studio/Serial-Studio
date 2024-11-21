@@ -63,29 +63,14 @@ Here’s the list of required Qt modules:
 - Qt Quick Widgets
 - Qt Quick Controls 2
 
-### Cloning the Repository
-
-To clone the repository with the necessary submodules, run:
-
-```bash
-git clone https://github.com/Serial-Studio/Serial-Studio
-cd Serial-Studio
-```
-
-### Compiling the Application
-
 Once Qt is installed, you can compile the project by opening the **CMakeLists.txt** file in your preferred IDE or by using the command line:
 
 ```bash
 mkdir build
 cd build 
-cmake ../ -DCMAKE_BUILD_TYPE=Release
-cmake --build . --config Release -j 10
+cmake ../ 
+cmake --build . -j 16
 ```
-
-## License
-
-This project is licensed under the MIT License. For more details, see the [LICENSE](LICENSE.md) file.
 
 ## Support & Tipping
 
@@ -96,3 +81,7 @@ If this project has helped you or inspired you, consider supporting it with a do
 👉 [Donate/Tip Here](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE)
 
 Alternatively, if you ever find yourself in [Cancún, Mexico](https://en.wikipedia.org/wiki/Cancun) and want to buy me a drink in person, feel free to [send me a DM on Instagram](https://instagram.com/aspatru). I’d love to meet you!
+
+## License
+
+This project is licensed under the MIT License. For more details, see the [LICENSE](LICENSE.md) file.
