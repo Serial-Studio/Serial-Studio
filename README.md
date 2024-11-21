@@ -80,8 +80,6 @@ If this project has helped you or inspired you, consider supporting it with a do
 
 👉 [Donate/Tip Here](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE)
 
-Alternatively, if you ever find yourself in [Cancún, Mexico](https://en.wikipedia.org/wiki/Cancun) and want to buy me a drink in person, feel free to [send me a DM on Instagram](https://instagram.com/aspatru). I’d love to meet you!
-
 ## License
 
 This project is licensed under the MIT License. For more details, see the [LICENSE](LICENSE.md) file.
