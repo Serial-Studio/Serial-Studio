@@ -28,8 +28,17 @@ env:
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
-  QT_MODULES: qtserialport qtconnectivity qtpositioning qtlocation qtgraphs qtquick3d qt3d qtdatavis3d qtshadertools
- 
+  QT_MODULES: qt3d \
+              qtgraphs \
+              qtquick3d \
+              qtlocation \
+              qtdatavis3d \
+              qtserialport \
+              qtshadertools \
+              qtcore5compat \
+              qtpositioning \
+              qtconnectivity
+    
 #-------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
 #-------------------------------------------------------------------------------
