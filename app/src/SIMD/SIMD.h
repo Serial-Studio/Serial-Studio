@@ -25,7 +25,7 @@
 #include <cmath>
 #include <cstddef>
 #include <algorithm>
-#include <x86/avx.h>
+#include <x86/avx2.h>
 
 #include <QVector>
 #include <QPointF>

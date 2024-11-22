@@ -50,6 +50,7 @@ find_package(
  Core
  Quick
  Graphs
+ UiTools
  Widgets
  Location
  Bluetooth
@@ -221,6 +222,7 @@ target_link_libraries(
  Qt6::Quick
  Qt6::Graphs
  Qt6::Widgets
+ Qt6::UiTools
  Qt6::Location
  Qt6::Bluetooth
  Qt6::SerialPort
