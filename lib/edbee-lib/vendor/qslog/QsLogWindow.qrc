@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/QsLogWindow">
-        <file>images/icon-clear-16.png</file>
-        <file>images/icon-save-16.png</file>
-        <file>images/icon-copy-16.png</file>
-        <file>images/icon-pause-16.png</file>
-        <file>images/icon-resume-16.png</file>
-    </qresource>
-</RCC>
