@@ -1,5 +1,6 @@
 {
  "title": "Dominion",
+ "code-editor-theme": "Sunburst.tmTheme",
  "colors": {
   "groupbox_border": "#2d2f33",
   "groupbox_background": "#1a1c1e",

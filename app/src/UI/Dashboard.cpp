@@ -725,7 +725,7 @@ void UI::Dashboard::updatePlots()
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
     auto *data = m_linearPlotValues[i].data();
     auto count = m_linearPlotValues[i].count();
-    SIMD::shift<qreal>(data, count, dataset.value().toDouble());
+    SIMD::shift<qreal>(data, count, dataset.value().toFloat());
   }
 
   // Append latest values to FFT plots data
@@ -734,7 +734,7 @@ void UI::Dashboard::updatePlots()
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     auto *data = m_fftPlotValues[i].data();
     auto count = m_fftPlotValues[i].count();
-    SIMD::shift<qreal>(data, count, dataset.value().toDouble());
+    SIMD::shift<qreal>(data, count, dataset.value().toFloat());
   }
 
   // Append latest values to multiplots data
@@ -746,7 +746,7 @@ void UI::Dashboard::updatePlots()
       const auto &dataset = group.datasets()[j];
       auto *data = m_multiplotValues[i][j].data();
       auto count = m_multiplotValues[i][j].count();
-      SIMD::shift<qreal>(data, count, dataset.value().toDouble());
+      SIMD::shift<qreal>(data, count, dataset.value().toFloat());
     }
   }
 }

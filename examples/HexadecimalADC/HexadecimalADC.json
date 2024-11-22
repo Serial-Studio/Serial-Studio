@@ -4,7 +4,7 @@
     "decoder": 1,
     "frameDetection": 1,
     "frameEnd": ";",
-    "frameParser": "/**\n * This function parses a binary data frame (represented as a hexadecimal string),\n * and converts it into an array of decimal values (0-255).\n *\n * @param[in]  frame  The latest received frame as a hexadecimal string.\n * @return     Array of integers containing the parsed frame elements.\n */\nfunction parse(frame) {\n    let dataArray = [];\n    for (let i = 0; i < frame.length; i += 2) {\n        let hexByte = frame.substring(i, i + 2);\n        let decimalValue = parseInt(hexByte, 16);\n        dataArray.push(decimalValue * 5.0 / 255);\n    }\n\n    return dataArray;\n}",
+    "frameParser": "/**\n * This function parses a binary data frame (represented as a hexadecimal string),\n * and converts it into an array of decimal values ranging from 0 to 5 volts.\n *\n * @param[in]  frame  The latest received frame as a hexadecimal string.\n * @return     Array of integers containing the parsed frame elements.\n */\nfunction parse(frame) {\n    let dataArray = [];\n    for (let i = 0; i < frame.length; i += 2) {\n        let hexByte = frame.substring(i, i + 2);\n        let decimalValue = parseInt(hexByte, 16);\n        dataArray.push(decimalValue * 5.0 / 255);\n    }\n\n    return dataArray;\n}",
     "frameStart": "$",
     "groups": [
         {

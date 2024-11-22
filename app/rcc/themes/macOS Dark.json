@@ -1,5 +1,6 @@
 {
  "title": "macOS Dark",
+ "code-editor-theme": "Twilight.tmTheme",
  "colors": {
   "groupbox_border": "#4a4a4a",
   "groupbox_background": "#2b2b2b",

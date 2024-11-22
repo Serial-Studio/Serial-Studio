@@ -1,0 +1,69 @@
+-------------------
+QsLog version 2.1
+
+Changes:
+* Allowed checking if a destination of a certain type has already been added.
+* Allowed using fprintf instead of OutputDebugString on Windows.
+* Made building/running the example from QtCreator easier. Unfortunately I couldn't find a
+satisfactory way of doing this using pure qmake, so an env var is needed.
+* Added support for CMake builds (Qt5 only, courtesy of A.Gembe).
+
+Fixes:
+* Fixed build for Qt < 5.4 (courtesy of P.Hille).
+
+-------------------
+QsLog version 2.0
+
+Changes:
+* Added possibility to remove destinations.
+* Added unit tests for rotation and destination removal.
+
+Fixes:
+* Fixed rare codec error in combination with custom ICU.
+
+-------------------
+QsLog version 2.0b4
+
+Fixes:
+Fixed file name case error for Linux.
+
+Misc:
+* Moved to separate git repository.
+
+-------------------
+QsLog version 2.0b3
+
+Changes:
+* added functor logging destination (thanks to Omar Carey for providing a patch)
+
+-------------------
+QsLog version 2.0b2
+
+Changes:
+* function signature redefinition for file destination creation
+* added shared library build configuration. Credit goes to Xavier Lamien <laxathom@fedoraproject.org>
+for the Linux-specific config.
+* removed Symbian support
+* this version does not guarantee support for Nokia N9 devices, although it should in theory still
+work with them
+* workaround for Issue 8 - when used from an executable and a plugin QsLog only logs from the
+executable.
+* utility function to parse the level from an existing log message
+
+Known issues:
+* The current version will crash at program exit when using QS_LOG_SEPARATE_THREAD and linking
+with QsLog dynamically.
+
+-------------------
+QsLog version 2.0b1
+
+Changes:
+* destination pointers use shared pointer semantics
+* the file destination supports log rotation. As a consequence, log files are encoded as UTF-8 and
+the log appends rather than truncating on every startup when rotation is enabled.
+* added the posibility of disabling logging either at run time or compile time.
+* added the possibility of using a separate thread for writing to the log destinations.
+
+Fixes:
+* renamed the main.cpp example to avoid QtCreator confusion
+* offer a way to check if the destination creation has failed (for e.g files)

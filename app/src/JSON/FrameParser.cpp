@@ -34,16 +34,21 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"
 
-/**
- * Creates a subclass of @c QPlainTextEdit that allows us to call the given
- * protected/private @a function and pass the given @a event as a parameter to
- * the @a function.
- */
-#define DW_EXEC_EVENT(pointer, function, event)                                \
-  class PwnedWidget : public QPlainTextEdit                                    \
+#include "edbee/models/textdocument.h"
+#include "edbee/models/texteditorconfig.h"
+#include "edbee/models/textgrammar.h"
+#include "edbee/models/textundostack.h"
+#include "edbee/texteditorcontroller.h"
+#include "edbee/views/components/texteditorcomponent.h"
+#include "edbee/views/texteditorscrollarea.h"
+#include "edbee/views/textrenderer.h"
+#include "edbee/views/texttheme.h"
+
+#define DW_EXEC_EVENT(pointer, object, function, event)                        \
+  class PwnedWidget : public object                                            \
   {                                                                            \
   public:                                                                      \
-    using QPlainTextEdit::function;                                            \
+    using object::function;                                                    \
   };                                                                           \
   static_cast<PwnedWidget *>(pointer)->function(event);
 
@@ -62,7 +67,7 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
   setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
 
   // Widgets don't process touch events, disable it
-  setAcceptTouchEvents(false);
+  setAcceptTouchEvents(true);
 
   // Set item flags, we need these to forward Quick events to the widget
   setFlag(ItemHasContents, true);
@@ -70,12 +75,23 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
   setFlag(ItemAcceptsInputMethod, true);
   setAcceptedMouseButtons(Qt::AllButtons);
 
-  // Setup syntax highlighter
-  m_highlighter = new QSourceHighlite::QSourceHighliter(m_textEdit.document());
-  m_highlighter->setCurrentLanguage(QSourceHighlite::QSourceHighliter::CodeJs);
+  // Configure EDBEE
+  auto *edbee = edbee::Edbee::instance();
+  edbee->autoInit();
+  edbee->autoShutDownOnAppExit();
 
-  // Setup text editor
-  m_textEdit.setFont(Misc::CommonFonts::instance().monoFont());
+  // Create a text editor widget
+  m_widget = new edbee::TextEditorWidget();
+
+  // Configure the widget options
+  m_widget->config()->setUseTabChar(false);
+  m_widget->config()->setAutocompleteAutoShow(false);
+  m_widget->config()->setFont(Misc::CommonFonts::instance().monoFont());
+
+  // Read grammar file for Javascript
+  m_widget->textDocument()->setLanguageGrammar(
+      edbee->grammarManager()->readGrammarFile(
+          ":/rcc/edbee/syntaxfiles/JavaScript.tmLanguage"));
 
   // Configure JavaScript engine
   m_engine.installExtensions(QJSEngine::ConsoleExtension
@@ -90,7 +106,7 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
           this, &JSON::FrameParser::onThemeChanged);
 
   // Connect modification check signals
-  connect(m_textEdit.document(), &QTextDocument::modificationChanged, this,
+  connect(m_widget->textDocument(), &edbee::TextDocument::textChanged, this,
           [=] { Q_EMIT modifiedChanged(); });
   connect(this, &JSON::FrameParser::modifiedChanged, this, [=] {
     if (isModified() && !JSON::ProjectModel::instance().modified())
@@ -103,8 +119,8 @@ JSON::FrameParser::FrameParser(QQuickItem *parent)
           &JSON::FrameParser::readCode);
 
   // Bridge signals
-  connect(&m_textEdit, &QPlainTextEdit::textChanged, this,
-          &JSON::FrameParser::textChanged);
+  connect(m_widget->textDocument(), &edbee::TextDocument::textChanged, this,
+          [=] { Q_EMIT textChanged(); });
 
   // Resize widget to fit QtQuick item
   connect(this, &QQuickPaintedItem::widthChanged, this,
@@ -142,7 +158,7 @@ const QString &JSON::FrameParser::defaultCode()
  */
 QString JSON::FrameParser::text() const
 {
-  return m_textEdit.document()->toPlainText();
+  return m_widget->textDocument()->text();
 }
 
 /**
@@ -151,7 +167,7 @@ QString JSON::FrameParser::text() const
  */
 bool JSON::FrameParser::isModified() const
 {
-  return m_textEdit.document()->isModified();
+  return m_widget->textDocument()->textUndoStack()->size() > 0;
 }
 
 /**
@@ -180,6 +196,21 @@ QStringList JSON::FrameParser::parse(const QString &frame)
 }
 
 /**
+ * @brief Returns @c true whenever if there are any actions that can be undone.
+ */
+bool JSON::FrameParser::undoAvailable() const
+{
+  return isModified() && m_widget->textDocument()->textUndoStack()->canUndo();
+}
+/**
+ * @brief Returns @c true whenever if there are any actions that can be redone.
+ */
+bool JSON::FrameParser::redoAvailable() const
+{
+  return isModified() && m_widget->textDocument()->textUndoStack()->canRedo();
+}
+
+/**
  * @brief Validates the script and stores it into the project model.
  * @param silent if set to @c false, the user shall be notified that the script
  *               data was processed correctly.
@@ -189,10 +220,10 @@ QStringList JSON::FrameParser::parse(const QString &frame)
 bool JSON::FrameParser::save(const bool silent)
 {
   // Update text edit
-  if (loadScript(m_textEdit.toPlainText()))
+  if (loadScript(text()))
   {
-    m_textEdit.document()->setModified(false);
-    ProjectModel::instance().setFrameParserCode(m_textEdit.toPlainText());
+    ProjectModel::instance().setFrameParserCode(text());
+    m_widget->textDocument()->textUndoStack()->clear();
 
     // Show save messagebox
     if (!silent)
@@ -201,6 +232,7 @@ bool JSON::FrameParser::save(const bool silent)
           tr("No errors have been detected in the code."));
 
     // Everything good
+    Q_EMIT modifiedChanged();
     return true;
   }
 
@@ -344,7 +376,7 @@ bool JSON::FrameParser::loadScript(const QString &script)
  */
 void JSON::FrameParser::cut()
 {
-  m_textEdit.cut();
+  m_widget->controller()->executeCommand("cut");
 }
 
 /**
@@ -352,7 +384,7 @@ void JSON::FrameParser::cut()
  */
 void JSON::FrameParser::undo()
 {
-  m_textEdit.undo();
+  m_widget->controller()->executeCommand("undo");
 }
 
 /**
@@ -360,7 +392,7 @@ void JSON::FrameParser::undo()
  */
 void JSON::FrameParser::redo()
 {
-  m_textEdit.redo();
+  m_widget->controller()->executeCommand("redo");
 }
 
 /**
@@ -369,7 +401,7 @@ void JSON::FrameParser::redo()
 void JSON::FrameParser::help()
 {
   // clang-format off
-  const auto url = QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki/Project-Editor#frame-parser-function-view");
+  const auto url = QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki/Data-Flow-in-Serial-Studio#frame-parser-function");
   QDesktopServices::openUrl(QUrl(url));
   // clang-format on
 }
@@ -379,7 +411,7 @@ void JSON::FrameParser::help()
  */
 void JSON::FrameParser::copy()
 {
-  m_textEdit.copy();
+  m_widget->controller()->executeCommand("copy");
 }
 
 /**
@@ -387,11 +419,7 @@ void JSON::FrameParser::copy()
  */
 void JSON::FrameParser::paste()
 {
-  if (m_textEdit.canPaste())
-  {
-    m_textEdit.paste();
-    Q_EMIT modifiedChanged();
-  }
+  m_widget->controller()->executeCommand("paste");
 }
 
 /**
@@ -422,7 +450,7 @@ void JSON::FrameParser::apply()
 void JSON::FrameParser::reload()
 {
   // Document has been modified, ask user if he/she wants to continue
-  if (m_textEdit.document()->isModified())
+  if (isModified())
   {
     auto ret = Misc::Utilities::showMessageBox(
         tr("The document has been modified!"),
@@ -433,7 +461,7 @@ void JSON::FrameParser::reload()
   }
 
   // Load default template
-  m_textEdit.setPlainText(defaultCode());
+  m_widget->textDocument()->setText(defaultCode());
   (void)save(true);
 }
 
@@ -443,7 +471,7 @@ void JSON::FrameParser::reload()
 void JSON::FrameParser::import()
 {
   // Document has been modified, ask user if he/she wants to continue
-  if (m_textEdit.document()->isModified())
+  if (isModified())
   {
     auto ret = Misc::Utilities::showMessageBox(
         tr("The document has been modified!"),
@@ -464,8 +492,8 @@ void JSON::FrameParser::import()
     QFile file(path);
     if (file.open(QFile::ReadOnly))
     {
-      auto data = file.readAll();
-      m_textEdit.setPlainText(QString::fromUtf8(data));
+      m_widget->textDocument()->setText(QString::fromUtf8(file.readAll()));
+      file.close();
       (void)save(true);
     }
   }
@@ -476,13 +504,13 @@ void JSON::FrameParser::import()
  */
 void JSON::FrameParser::readCode()
 {
-  m_textEdit.document()->setModified(false);
-
   const auto code = ProjectModel::instance().frameParserCode();
-  if (m_textEdit.toPlainText() != code)
+  if (text() != code)
   {
-    m_textEdit.setPlainText(code);
+    m_widget->textDocument()->setText(code);
+    m_widget->textDocument()->textUndoStack()->clear();
     (void)loadScript(code);
+    Q_EMIT modifiedChanged();
   }
 }
 
@@ -491,7 +519,7 @@ void JSON::FrameParser::readCode()
  */
 void JSON::FrameParser::selectAll()
 {
-  m_textEdit.selectAll();
+  m_widget->controller()->executeCommand("sel_all");
 }
 
 /**
@@ -500,18 +528,11 @@ void JSON::FrameParser::selectAll()
  */
 void JSON::FrameParser::onThemeChanged()
 {
-  QPalette palette;
-  auto theme = &Misc::ThemeManager::instance();
-  palette.setColor(QPalette::Text, theme->getColor("text"));
-  palette.setColor(QPalette::Base, theme->getColor("base"));
-  palette.setColor(QPalette::Button, theme->getColor("button"));
-  palette.setColor(QPalette::Window, theme->getColor("window"));
-  palette.setColor(QPalette::Highlight, theme->getColor("highlight"));
-  palette.setColor(QPalette::HighlightedText,
-                   theme->getColor("highlighted_text"));
-  palette.setColor(QPalette::PlaceholderText,
-                   theme->getColor("placeholder_text"));
-  m_textEdit.setPalette(palette);
+  static const auto *t = &Misc::ThemeManager::instance();
+  const auto n = t->themeData().value("code-editor-theme").toString();
+  const auto f = QString(":/rcc/edbee/themes/%1").arg(n);
+  const auto d = edbee::Edbee::instance()->themeManager()->readThemeFile(f);
+  m_widget->textRenderer()->setTheme(d);
 }
 
 /**
@@ -520,9 +541,9 @@ void JSON::FrameParser::onThemeChanged()
  */
 void JSON::FrameParser::renderWidget()
 {
-  if (isVisible())
+  if (isVisible() && m_widget)
   {
-    m_pixmap = m_textEdit.grab();
+    m_pixmap = m_widget->grab();
     update();
   }
 }
@@ -534,7 +555,9 @@ void JSON::FrameParser::resizeWidget()
 {
   if (width() > 0 && height() > 0)
   {
-    m_textEdit.setFixedSize(width(), height());
+    m_widget->setFixedSize(width(), height());
+    m_widget->updateRendererViewport();
+    m_widget->updateComponents();
     renderWidget();
   }
 }
@@ -554,7 +577,8 @@ void JSON::FrameParser::paint(QPainter *painter)
  */
 void JSON::FrameParser::keyPressEvent(QKeyEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, keyPressEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                keyPressEvent, event);
 }
 
 /**
@@ -562,7 +586,8 @@ void JSON::FrameParser::keyPressEvent(QKeyEvent *event)
  */
 void JSON::FrameParser::keyReleaseEvent(QKeyEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, keyReleaseEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                keyReleaseEvent, event);
 }
 
 /**
@@ -570,7 +595,8 @@ void JSON::FrameParser::keyReleaseEvent(QKeyEvent *event)
  */
 void JSON::FrameParser::inputMethodEvent(QInputMethodEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, inputMethodEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                inputMethodEvent, event);
 }
 
 /**
@@ -578,7 +604,8 @@ void JSON::FrameParser::inputMethodEvent(QInputMethodEvent *event)
  */
 void JSON::FrameParser::focusInEvent(QFocusEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, focusInEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                focusInEvent, event);
 }
 
 /**
@@ -586,7 +613,8 @@ void JSON::FrameParser::focusInEvent(QFocusEvent *event)
  */
 void JSON::FrameParser::focusOutEvent(QFocusEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, focusOutEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                focusOutEvent, event);
 }
 
 /**
@@ -594,7 +622,8 @@ void JSON::FrameParser::focusOutEvent(QFocusEvent *event)
  */
 void JSON::FrameParser::mousePressEvent(QMouseEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, mousePressEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                mousePressEvent, event);
 }
 
 /**
@@ -602,7 +631,8 @@ void JSON::FrameParser::mousePressEvent(QMouseEvent *event)
  */
 void JSON::FrameParser::mouseMoveEvent(QMouseEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, mouseMoveEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                mouseMoveEvent, event);
 }
 
 /**
@@ -610,7 +640,8 @@ void JSON::FrameParser::mouseMoveEvent(QMouseEvent *event)
  */
 void JSON::FrameParser::mouseReleaseEvent(QMouseEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, mouseReleaseEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                mouseReleaseEvent, event);
 }
 
 /**
@@ -618,7 +649,8 @@ void JSON::FrameParser::mouseReleaseEvent(QMouseEvent *event)
  */
 void JSON::FrameParser::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, mouseDoubleClickEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                mouseDoubleClickEvent, event);
 }
 
 /**
@@ -626,7 +658,8 @@ void JSON::FrameParser::mouseDoubleClickEvent(QMouseEvent *event)
  */
 void JSON::FrameParser::wheelEvent(QWheelEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, wheelEvent, event);
+  DW_EXEC_EVENT(m_widget->textScrollArea(), edbee::TextEditorScrollArea,
+                wheelEvent, event);
 }
 
 /**
@@ -634,7 +667,8 @@ void JSON::FrameParser::wheelEvent(QWheelEvent *event)
  */
 void JSON::FrameParser::dragEnterEvent(QDragEnterEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, dragEnterEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                dragEnterEvent, event);
 }
 
 /**
@@ -642,7 +676,8 @@ void JSON::FrameParser::dragEnterEvent(QDragEnterEvent *event)
  */
 void JSON::FrameParser::dragMoveEvent(QDragMoveEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, dragMoveEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                dragMoveEvent, event);
 }
 
 /**
@@ -650,7 +685,8 @@ void JSON::FrameParser::dragMoveEvent(QDragMoveEvent *event)
  */
 void JSON::FrameParser::dragLeaveEvent(QDragLeaveEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, dragLeaveEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                dragLeaveEvent, event);
 }
 
 /**
@@ -658,5 +694,6 @@ void JSON::FrameParser::dragLeaveEvent(QDragLeaveEvent *event)
  */
 void JSON::FrameParser::dropEvent(QDropEvent *event)
 {
-  DW_EXEC_EVENT(&m_textEdit, dropEvent, event);
+  DW_EXEC_EVENT(m_widget->textEditorComponent(), edbee::TextEditorComponent,
+                dropEvent, event);
 }

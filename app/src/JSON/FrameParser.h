@@ -32,7 +32,8 @@
 #include <QJSValue>
 #include <QJSEngine>
 
-#include <qsourcehighliter.h>
+#include <edbee/edbee.h>
+#include <edbee/texteditorwidget.h>
 
 namespace JSON
 {
@@ -41,6 +42,8 @@ class FrameParser : public QQuickPaintedItem
   Q_OBJECT
   Q_PROPERTY(QString text READ text NOTIFY textChanged)
   Q_PROPERTY(bool isModified READ isModified NOTIFY modifiedChanged)
+  Q_PROPERTY(bool undoAvailable READ undoAvailable NOTIFY modifiedChanged)
+  Q_PROPERTY(bool redoAvailable READ redoAvailable NOTIFY modifiedChanged)
 
 signals:
   void textChanged();
@@ -55,6 +58,8 @@ public:
   [[nodiscard]] bool isModified() const;
   [[nodiscard]] QStringList parse(const QString &frame);
 
+  [[nodiscard]] bool undoAvailable() const;
+  [[nodiscard]] bool redoAvailable() const;
   [[nodiscard]] bool save(const bool silent = false);
   [[nodiscard]] bool loadScript(const QString &script);
 
@@ -99,7 +104,6 @@ private:
   QPixmap m_pixmap;
   QJSEngine m_engine;
   QJSValue m_parseFunction;
-  QPlainTextEdit m_textEdit;
-  QSourceHighlite::QSourceHighliter *m_highlighter;
+  edbee::TextEditorWidget *m_widget;
 };
 } // namespace JSON

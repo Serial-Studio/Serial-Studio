@@ -25,8 +25,8 @@ cmake_minimum_required(VERSION 3.19)
 add_subdirectory(simde)
 add_subdirectory(qmqtt)
 add_subdirectory(OpenSSL)
+add_subdirectory(edbee-lib)
 add_subdirectory(QRealFourier)
 add_subdirectory(QSimpleUpdater)
-add_subdirectory(QSourceHighlite)
 
 

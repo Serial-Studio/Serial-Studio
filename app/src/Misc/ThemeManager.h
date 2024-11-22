@@ -127,6 +127,7 @@ public:
   [[nodiscard]] int theme() const;
   [[nodiscard]] const QString &themeName() const;
   [[nodiscard]] const QJsonObject &colors() const;
+  [[nodiscard]] const QJsonObject &themeData() const;
   [[nodiscard]] const QStringList &availableThemes() const;
   [[nodiscard]] QColor getColor(const QString &name) const;
 
@@ -139,6 +140,7 @@ private:
 
   QSettings m_settings;
   QJsonObject m_colors;
+  QJsonObject m_themeData;
 
   QStringList m_availableThemes;
   QMap<QString, QJsonObject> m_themes;

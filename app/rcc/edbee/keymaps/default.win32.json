@@ -1,0 +1,20 @@
+// This is an extended json format, supporting comments
+// standard json doesn't support comments (which I think is plain stupid)
+// If you can parse a json file, skipping comments shouldn't be a problem
+[
+{
+	// "context": [
+	// 	{ "name": "env.os", "value": "win32" }
+	// ],	
+
+
+	// the default editor-key-bindings
+	// on Mac OS X Ctrl is automaticly swapped with Meta
+	// you can use Qt QKeySequence texts here, extended with the default key-names 
+	"bindings": [
+
+		{ "keys": "Ctrl+Alt+Up", "command": "add_caret_prev_line" },
+		{ "keys": "Ctrl+Alt+Down", "command": "add_caret_next_line" }
+	]
+}
+]

@@ -1,5 +1,6 @@
 {
  "title": "Outdoor Day",
+ "code-editor-theme": "IDLE.tmTheme",
  "colors": {
   "groupbox_border": "#e5e5e5",
   "groupbox_background": "#ffffff",

@@ -236,8 +236,8 @@ Widgets.Pane {
             text: qsTr("Undo")
             toolbarButton: false
             onClicked: frameParser.undo()
-            enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
+            enabled: frameParser.undoAvailable
             icon.source: "qrc:/rcc/icons/code-editor/undo.svg"
           }
 
@@ -249,8 +249,8 @@ Widgets.Pane {
             text: qsTr("Redo")
             toolbarButton: false
             onClicked: frameParser.redo()
-            enabled: frameParser.isModified
             Layout.alignment: Qt.AlignVCenter
+            enabled: frameParser.redoAvailable
             icon.source: "qrc:/rcc/icons/code-editor/redo.svg"
           }
 

@@ -69,6 +69,20 @@ else()
 endif()
 
 #
+# macOS OpenMP (use homebrew port)
+#
+if(APPLE)
+ include_directories(
+  "/opt/homebrew/opt/libomp/include"
+  "/opt/homebrew/opt/llvm/include"
+ )
+ link_directories(
+  "/opt/homebrew/opt/libomp/lib"
+  "/opt/homebrew/opt/llvm/lib"
+ )
+endif()
+
+#
 # Enable OpenMP SIMD support globally
 #
 find_package(OpenMP QUIET)

@@ -1,5 +1,6 @@
 {
  "title": "Outdoor Night",
+ "code-editor-theme": "Sunburst.tmTheme",
  "colors": {
   "groupbox_border": "#3a3d42",
   "groupbox_background": "#202326",

@@ -1,0 +1,981 @@
+{
+  "repository": {
+      "comment": {
+          "patterns": [
+              {
+                  "name": "comment.block.documentation.rust",
+                  "begin": "/\\*[\\*!](?![\\*/])",
+                  "end": "\\*/",
+                  "patterns": [
+                      {
+                          "begin": "(?x) (\\*\\b|\\b_)(?=\\S)                # Open\n  (?=\n    (\n      <[^>]*+>              # HTML tags\n      | (?<raw>`+)([^`]|(?!(?<!`)\\k<raw>(?!`))`)*+\\k<raw>\n                        # Raw\n      | \\\\[\\\\`*_{}\\[\\]()#.!+\\->]?+      # Escapes\n      | \\[\n      (\n          (?<square>          # Named group\n            [^\\[\\]\\\\]        # Match most chars\n            | \\\\.            # Escaped chars\n            | \\[ \\g<square>*+ \\]    # Nested brackets\n          )*+\n        \\]\n        (\n          (              # Reference Link\n            [ ]?          # Optional space\n            \\[[^\\]]*+\\]        # Ref name\n          )\n          | (              # Inline Link\n            \\(            # Opening paren\n              [ \\t]*+        # Optional whtiespace\n              <?(.*?)>?      # URL\n              [ \\t]*+        # Optional whtiespace\n              (          # Optional Title\n                (?<title>['\"])\n                (.*?)\n                \\k<title>\n              )?\n            \\)\n          )\n        )\n      )\n      | \\1\\1                # Must be bold closer\n      | (?!(?<=\\S)\\1).            # Everything besides\n                        # style closer\n    )++\n    (?<=\\S)(?=_\\b|\\*)\\1                # Close\n  )\n",
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.italic.markdown"
+                              }
+                          },
+                          "end": "(?<=\\S)(\\1)((?!\\1)|(?=\\1\\1))",
+                          "name": "markup.italic.markdown"
+                      },
+                      {
+                          "begin": "(?x)\n ((?<!\\w)\\*\\*\\b|\\b__)(?=\\S)                # Open\n (?=\n   (\n     <[^>]*+>              # HTML tags\n     | (?<raw>`+)([^`]|(?!(?<!`)\\k<raw>(?!`))`)*+\\k<raw>\n                       # Raw\n     | \\\\[\\\\`*_{}\\[\\]()#.!+\\->]?+      # Escapes\n     | \\[\n     (\n         (?<square>          # Named group\n           [^\\[\\]\\\\]        # Match most chars\n           | \\\\.            # Escaped chars\n           | \\[ \\g<square>*+ \\]    # Nested brackets\n         )*+\n       \\]\n       (\n         (              # Reference Link\n           [ ]?          # Optional space\n           \\[[^\\]]*+\\]        # Ref name\n         )\n         | (              # Inline Link\n           \\(            # Opening paren\n             [ \\t]*+        # Optional whitespace\n             <?(.*?)>?      # URL\n             [ \\t]*+        # Optional whitespace\n             (          # Optional Title\n               (?<title>['\"])\n               (.*?)\n               \\k<title>\n             )?\n           \\)\n         )\n       )\n     )\n     | (?!(?<=\\S)\\1).            # Everything besides\n                       # style closer\n   )++\n   (?<=\\S)(?=__\\b|\\*\\*)\\1                # Close\n )\n",
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.bold.markdown"
+                              }
+                          },
+                          "end": "(?<=\\S)(\\1)",
+                          "name": "markup.bold.markdown"
+                      },
+                      {
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.raw.markdown"
+                              },
+                              "3": {
+                                  "name": "punctuation.definition.raw.markdown"
+                              }
+                          },
+                          "match": "(`+)([^`]|(?!(?<!`)\\1(?!`))`)*+(\\1)",
+                          "name": "markup.inline.raw.string.markdown"
+                      },
+                      {
+                          "match": "(#{1})\\s*(?=[\\S[^#]])(.*?)\\s*(\\s+#+)?$\\n?",
+                          "name": "heading.markdown",
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.heading.markdown"
+                              },
+                              "2": {
+                                  "name": "entity.name.section.markdown"
+                              },
+                              "3": {
+                                  "name": "punctuation.definition.heading.markdown"
+                              }
+                          }
+                      },
+                      {
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.string.begin.markdown"
+                              },
+                              "2": {
+                                  "name": "string.other.link.title.markdown"
+                              },
+                              "4": {
+                                  "name": "punctuation.definition.string.end.markdown"
+                              },
+                              "5": {
+                                  "name": "punctuation.definition.metadata.markdown"
+                              },
+                              "6": {
+                                  "name": "punctuation.definition.link.markdown"
+                              },
+                              "7": {
+                                  "name": "markup.underline.link.markdown"
+                              },
+                              "8": {
+                                  "name": "punctuation.definition.link.markdown"
+                              },
+                              "9": {
+                                  "name": "string.other.link.description.title.markdown"
+                              },
+                              "10": {
+                                  "name": "punctuation.definition.string.begin.markdown"
+                              },
+                              "11": {
+                                  "name": "punctuation.definition.string.end.markdown"
+                              },
+                              "12": {
+                                  "name": "string.other.link.description.title.markdown"
+                              },
+                              "13": {
+                                  "name": "punctuation.definition.string.begin.markdown"
+                              },
+                              "14": {
+                                  "name": "punctuation.definition.string.end.markdown"
+                              },
+                              "15": {
+                                  "name": "punctuation.definition.metadata.markdown"
+                              }
+                          },
+                          "match": "(?x)\n  (\\[)((?<square>[^\\[\\]\\\\]|\\\\.|\\[\\g<square>*+\\])*+)(\\])\n                # Match the link text.\n  (\\()            # Opening paren for url\n    (<?)(.*?)(>?)      # The url\n    [ \\t]*          # Optional whitespace\n    (?:\n        ((\\().+?(\\)))    # Match title in parens…\n      | ((\").+?(\"))    # or in quotes.\n    )?            # Title is optional\n    \\s*            # Optional whitespace\n  (\\))\n",
+                          "name": "meta.link.inline.markdown"
+                      }
+                  ]
+              },
+              {
+                  "name": "comment.block.rust",
+                  "begin": "/\\*",
+                  "end": "\\*/"
+              },
+              {
+                  "name": "comment.line.documentation.rust",
+                  "begin": "//[!/](?=[^/])",
+                  "end": "$",
+                  "patterns": [
+                      {
+                          "begin": "(?x) (\\*\\b|\\b_)(?=\\S)                # Open\n  (?=\n    (\n      <[^>]*+>              # HTML tags\n      | (?<raw>`+)([^`]|(?!(?<!`)\\k<raw>(?!`))`)*+\\k<raw>\n                        # Raw\n      | \\\\[\\\\`*_{}\\[\\]()#.!+\\->]?+      # Escapes\n      | \\[\n      (\n          (?<square>          # Named group\n            [^\\[\\]\\\\]        # Match most chars\n            | \\\\.            # Escaped chars\n            | \\[ \\g<square>*+ \\]    # Nested brackets\n          )*+\n        \\]\n        (\n          (              # Reference Link\n            [ ]?          # Optional space\n            \\[[^\\]]*+\\]        # Ref name\n          )\n          | (              # Inline Link\n            \\(            # Opening paren\n              [ \\t]*+        # Optional whtiespace\n              <?(.*?)>?      # URL\n              [ \\t]*+        # Optional whtiespace\n              (          # Optional Title\n                (?<title>['\"])\n                (.*?)\n                \\k<title>\n              )?\n            \\)\n          )\n        )\n      )\n      | \\1\\1                # Must be bold closer\n      | (?!(?<=\\S)\\1).            # Everything besides\n                        # style closer\n    )++\n    (?<=\\S)(?=_\\b|\\*)\\1                # Close\n  )\n",
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.italic.markdown"
+                              }
+                          },
+                          "end": "(?<=\\S)(\\1)((?!\\1)|(?=\\1\\1))",
+                          "name": "markup.italic.markdown"
+                      },
+                      {
+                          "begin": "(?x)\n ((?<!\\w)\\*\\*\\b|\\b__)(?=\\S)                # Open\n (?=\n   (\n     <[^>]*+>              # HTML tags\n     | (?<raw>`+)([^`]|(?!(?<!`)\\k<raw>(?!`))`)*+\\k<raw>\n                       # Raw\n     | \\\\[\\\\`*_{}\\[\\]()#.!+\\->]?+      # Escapes\n     | \\[\n     (\n         (?<square>          # Named group\n           [^\\[\\]\\\\]        # Match most chars\n           | \\\\.            # Escaped chars\n           | \\[ \\g<square>*+ \\]    # Nested brackets\n         )*+\n       \\]\n       (\n         (              # Reference Link\n           [ ]?          # Optional space\n           \\[[^\\]]*+\\]        # Ref name\n         )\n         | (              # Inline Link\n           \\(            # Opening paren\n             [ \\t]*+        # Optional whitespace\n             <?(.*?)>?      # URL\n             [ \\t]*+        # Optional whitespace\n             (          # Optional Title\n               (?<title>['\"])\n               (.*?)\n               \\k<title>\n             )?\n           \\)\n         )\n       )\n     )\n     | (?!(?<=\\S)\\1).            # Everything besides\n                       # style closer\n   )++\n   (?<=\\S)(?=__\\b|\\*\\*)\\1                # Close\n )\n",
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.bold.markdown"
+                              }
+                          },
+                          "end": "(?<=\\S)(\\1)",
+                          "name": "markup.bold.markdown"
+                      },
+                      {
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.raw.markdown"
+                              },
+                              "3": {
+                                  "name": "punctuation.definition.raw.markdown"
+                              }
+                          },
+                          "match": "(`+)([^`]|(?!(?<!`)\\1(?!`))`)*+(\\1)",
+                          "name": "markup.inline.raw.string.markdown"
+                      },
+                      {
+                          "match": "(#{1})\\s*(?=[\\S[^#]])(.*?)\\s*(\\s+#+)?$\\n?",
+                          "name": "heading.markdown",
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.heading.markdown"
+                              },
+                              "2": {
+                                  "name": "entity.name.section.markdown"
+                              },
+                              "3": {
+                                  "name": "punctuation.definition.heading.markdown"
+                              }
+                          }
+                      },
+                      {
+                          "captures": {
+                              "1": {
+                                  "name": "punctuation.definition.string.begin.markdown"
+                              },
+                              "2": {
+                                  "name": "string.other.link.title.markdown"
+                              },
+                              "4": {
+                                  "name": "punctuation.definition.string.end.markdown"
+                              },
+                              "5": {
+                                  "name": "punctuation.definition.metadata.markdown"
+                              },
+                              "6": {
+                                  "name": "punctuation.definition.link.markdown"
+                              },
+                              "7": {
+                                  "name": "markup.underline.link.markdown"
+                              },
+                              "8": {
+                                  "name": "punctuation.definition.link.markdown"
+                              },
+                              "9": {
+                                  "name": "string.other.link.description.title.markdown"
+                              },
+                              "10": {
+                                  "name": "punctuation.definition.string.begin.markdown"
+                              },
+                              "11": {
+                                  "name": "punctuation.definition.string.end.markdown"
+                              },
+                              "12": {
+                                  "name": "string.other.link.description.title.markdown"
+                              },
+                              "13": {
+                                  "name": "punctuation.definition.string.begin.markdown"
+                              },
+                              "14": {
+                                  "name": "punctuation.definition.string.end.markdown"
+                              },
+                              "15": {
+                                  "name": "punctuation.definition.metadata.markdown"
+                              }
+                          },
+                          "match": "(?x)\n  (\\[)((?<square>[^\\[\\]\\\\]|\\\\.|\\[\\g<square>*+\\])*+)(\\])\n                # Match the link text.\n  (\\()            # Opening paren for url\n    (<?)(.*?)(>?)      # The url\n    [ \\t]*          # Optional whitespace\n    (?:\n        ((\\().+?(\\)))    # Match title in parens…\n      | ((\").+?(\"))    # or in quotes.\n    )?            # Title is optional\n    \\s*            # Optional whitespace\n  (\\))\n",
+                          "name": "meta.link.inline.markdown"
+                      }
+                  ]
+              },
+              {
+                  "name": "comment.line.double-slash.rust",
+                  "begin": "//",
+                  "end": "$"
+              }
+          ]
+      },
+      "entity": {
+          "patterns": [
+              {
+                  "match": "(?<=fn )([a-zA-Z][a-zA-Z0-9_]+)",
+                  "name": "entity.name.function.rust"
+              },
+              {
+                  "match": "(?!Err|Ok|Some)([a-zA-Z][a-zA-Z0-9_]+)(?=[(])",
+                  "name": "entity.name.function.rust"
+              },
+              {
+                  "match": "(?!Err|Ok|Some)([a-zA-Z]+)(?=[(])",
+                  "name": "entity.name.function.rust"
+              },
+              {
+                  "match": "([a-zA-Z][a-zA-Z0-9_]+)(\\<)(T)(\\>)(?=[(])",
+                  "name": "entity.name.function.rust",
+                  "captures": {
+                      "1": {
+                          "name": "entity.name.function.rust"
+                      },
+                      "2": {
+                          "name": "punctuation.definition.type.rust"
+                      },
+                      "3": {
+                          "name": "entity.name.type.generic.rust"
+                      },
+                      "4": {
+                          "name": "punctuation.definition.type.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "(impl) ([a-zA-Z_][a-zA-Z0-9:_<>]+) (for) ([a-zA-Z_][a-zA-Z0-9_]+) \\{",
+                  "captures": {
+                      "1": {
+                          "name": "storage.type.rust"
+                      },
+                      "2": {
+                          "name": "entity.name.type.implementation.rust"
+                      },
+                      "3": {
+                          "name": "storage.modifier.rust"
+                      },
+                      "4": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "(impl) ([a-zA-Z_][a-zA-Z0-9:]+)(?!for) \\{",
+                  "captures": {
+                      "1": {
+                          "name": "storage.type.rust"
+                      },
+                      "2": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "(?<=\\=) (?!loop)([a-zA-Z][_a-zA-Z0-9:]+)\\s(?=\\{)",
+                  "captures": {
+                      "1": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "(^\\s+|(Ok)\\()(?!loop)([a-zA-Z][_a-zA-Z0-9:]+)\\s(?=\\{)",
+                  "captures": {
+                      "2": {
+                          "name": "support.constant.core.rust"
+                      },
+                      "3": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "(Err|Ok|Some)(?=[(])",
+                  "name": "support.constant.core.rust"
+              },
+              {
+                  "name": "storage.type.rust",
+                  "match": "impl(?=<)"
+              },
+              {
+                  "match": "(mod)\\s([a-zA-Z_]+)",
+                  "captures": {
+                      "1": {
+                          "name": "storage.type.module.rust"
+                      },
+                      "2": {
+                          "name": "entity.name.type.module.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "\\b(enum|struct|trait|union)\\s+([a-zA-Z_][a-zA-Z0-9_]+)",
+                  "captures": {
+                      "1": {
+                          "name": "storage.type.rust"
+                      },
+                      "2": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              },
+              {
+                  "begin": "\\b(type)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+                  "end": ";",
+                  "beginCaptures": {
+                      "1": {
+                          "name": "storage.type.rust"
+                      },
+                      "2": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              }
+          ]
+      },
+      "operator": {
+          "patterns": [
+              {
+                  "name": "keyword.operator.member-access.rust",
+                  "match": "(\\.)(?=parse)"
+              },
+              {
+                  "name": "keyword.operator.member-access.rust",
+                  "match": "\\s(\\.)\\b"
+              },
+              {
+                  "name": "keyword.operator.member-access.rust",
+                  "match": "\\b(\\.)\\b"
+              },
+              {
+                  "name": "keyword.operator.member-access.rust",
+                  "match": "\\B(\\.)\\b"
+              },
+              {
+                  "name": "keyword.operator.member-access.rust",
+                  "match": "(\\.)(?=to_string)"
+              },
+              {
+                  "name": "keyword.operator.range.rust",
+                  "match": "(\\.\\.)"
+              },
+              {
+                  "name": "keyword.operator.path.rust",
+                  "match": "(\\:\\:)"
+              },
+              {
+                  "name": "keyword.operator.return-type.rust",
+                  "match": "(->)"
+              },
+              {
+                  "name": "keyword.operator.match.rust",
+                  "match": "(=>)"
+              },
+              {
+                  "name": "variable.language.ignored.rust",
+                  "match": "\\b(_)\\b"
+              },
+              {
+                  "name": "keyword.operator.error-propagation.rust",
+                  "match": "(?<=\\))(\\?)"
+              },
+              {
+                  "name": "keyword.operator.glob.rust",
+                  "match": "(?<=::)(\\*)(?=;)"
+              },
+              {
+                  "name": "keyword.operator.sigil.rust",
+                  "match": "[&*](?=[a-zA-Z0-9_\\(\\[\\|\\\"']+)"
+              },
+              {
+                  "name": "keyword.operator.assignment.rust",
+                  "match": "(\\=)"
+              },
+              {
+                  "name": "keyword.operator.assignment.rust",
+                  "match": "\\b(\\+=|-=|/=|\\*=|%=|\\^=|&=|\\|=|<<=|>>=|=)\\b"
+              },
+              {
+                  "name": "keyword.operator.arithmetic.rust",
+                  "match": "(!|\\+|-|/|\\*|%|\\^|\\||<<|>>)"
+              },
+              {
+                  "name": "keyword.operator.comparison.rust",
+                  "match": "(&&|\\|\\||==|!=)"
+              },
+              {
+                  "name": "keyword.operator.comparison.rust",
+                  "match": "\\s(<|>)"
+              },
+              {
+                  "name": "keyword.operator.comparison.rust",
+                  "match": "\\B(<=|>=)\\B"
+              }
+          ]
+      },
+      "storage": {
+          "patterns": [
+              {
+                  "name": "storage.modifier.external.rust",
+                  "match": "\\b(extern)\\b"
+              },
+              {
+                  "name": "storage.modifier.mutable.rust",
+                  "match": "\\b(mut)\\b"
+              },
+              {
+                  "name": "storage.modifier.box.rust",
+                  "match": "\\b(box)\\b"
+              },
+              {
+                  "name": "storage.modifier.const.rust",
+                  "match": "\\b(const)\\b"
+              },
+              {
+                  "name": "storage.modifier.visibility.rust",
+                  "match": "\\b(pub)\\b"
+              },
+              {
+                  "name": "storage.modifier.static.rust",
+                  "match": "\\b(static)\\b"
+              },
+              {
+                  "name": "storage.type.module.rust",
+                  "match": "\\b(mod)\\b"
+              },
+              {
+                  "name": "storage.type.function.rust",
+                  "match": "\\b(fn)\\b"
+              },
+              {
+                  "name": "storage.type.rust",
+                  "match": "\\b(let)\\b"
+              },
+              {
+                  "name": "storage.type.rust",
+                  "match": "(impl)(?=<)"
+              },
+              {
+                  "name": "storage.type.rust",
+                  "match": "\\b(enum|impl|struct|trait|union)\\b"
+              },
+              {
+                  "name": "entity.name.lifetime.rust",
+                  "match": "(?<=&)('[a-zA-Z_]+)(?!')"
+              }
+          ]
+      },
+      "support": {
+          "patterns": [
+              {
+                  "name": "support.function.builtin.rust",
+                  "match": "\\b(macro_rules|compile_error|format_args|env|option_env|concat_idents|concat|line|column|file|stringify|include|include_str|include_bytes|module_path|cfg)!"
+              },
+              {
+                  "name": "support.function.core.rust",
+                  "match": "\\b(panic|assert|assert_eq|assert_ne|debug_assert|debug_assert_eq|debug_assert_ne|try|write|writeln|unreachable|unimplemented)!"
+              },
+              {
+                  "name": "support.function.std.rust",
+                  "match": "\\b(format|print|println|eprint|eprintln|select|vec)!"
+              },
+              {
+                  "name": "support.function.log.rust",
+                  "match": "\\b(log|error|warn|info|debug|trace|log_enabled)!"
+              },
+              {
+                  "name": "support.constant.core.rust",
+                  "match": "\\b(None|Ok|Err)\\b"
+              },
+              {
+                  "name": "support.constant.core.rust",
+                  "match": "\\b(Some)"
+              }
+          ]
+      },
+      "constant": {
+          "patterns": [
+              {
+                  "comment": "Floating point literal (fraction)",
+                  "name": "constant.numeric.float.rust",
+                  "match": "\\b[0-9][0-9_]*\\.[0-9][0-9_]*([eE][+-]?[0-9_]+)?(f32|f64)?\\b"
+              },
+              {
+                  "comment": "Floating point literal (exponent)",
+                  "name": "constant.numeric.float.rust",
+                  "match": "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?[eE][+-]?[0-9_]+(f32|f64)?\\b"
+              },
+              {
+                  "comment": "Floating point literal (typed)",
+                  "name": "constant.numeric.float.rust",
+                  "match": "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?([eE][+-]?[0-9_]+)?(f32|f64)\\b"
+              },
+              {
+                  "comment": "Integer literal (decimal)",
+                  "name": "constant.numeric.integer.decimal.rust",
+                  "match": "\\b[0-9][0-9_]*([ui](8|16|32|64|128|s|size))?\\b"
+              },
+              {
+                  "comment": "Integer literal (hexadecimal)",
+                  "name": "constant.numeric.integer.hexadecimal.rust",
+                  "match": "\\b0x[a-fA-F0-9_]+([ui](8|16|32|64|128|s|size))?\\b"
+              },
+              {
+                  "comment": "Integer literal (octal)",
+                  "name": "constant.numeric.integer.octal.rust",
+                  "match": "\\b0o[0-7_]+([ui](8|16|32|64|128|s|size))?\\b"
+              },
+              {
+                  "comment": "Integer literal (binary)",
+                  "name": "constant.numeric.integer.binary.rust",
+                  "match": "\\b0b[01_]+([ui](8|16|32|64|128|s|size))?\\b"
+              },
+              {
+                  "name": "constant.language.boolean.rust",
+                  "match": "\\b(true|false)\\b"
+              }
+          ]
+      },
+      "keyword": {
+          "patterns": [
+              {
+                  "name": "variable.language.self.rust",
+                  "match": "\\b(self)\\b"
+              },
+              {
+                  "name": "keyword.other.unsafe.rust",
+                  "match": "\\b(unsafe)\\b"
+              },
+              {
+                  "name": "keyword.control.rust",
+                  "match": "\\b(break|continue|else|if|in|for|loop|match|return|while)\\b"
+              },
+              {
+                  "name": "keyword.other.rust",
+                  "match": "\\b(ref|use|super|move)\\b"
+              },
+              {
+                  "name": "keyword.other.where.rust",
+                  "match": "\\b(where)\\b"
+              },
+              {
+                  "name": "keyword.other.as.rust",
+                  "match": "(\\b(as)\\b)"
+              },
+              {
+                  "comment": "Reserved keyword",
+                  "name": "invalid.deprecated.rust",
+                  "match": "\\b(abstract|alignof|become|do|final|macro|offsetof|override|priv|proc|pure|sizeof|typeof|virtual|yield)\\b"
+              }
+          ]
+      },
+      "meta": {
+          "patterns": [
+              {
+                  "name": "meta.attribute.rust",
+                  "begin": "#\\!?\\[",
+                  "end": "\\]"
+              },
+              {
+                  "name": "meta.statement.if-let.rust",
+                  "match": "(if) (let)",
+                  "captures": {
+                      "1": {
+                          "name": "keyword.control.rust"
+                      },
+                      "2": {
+                          "name": "storage.type.rust"
+                      }
+                  }
+              }
+          ]
+      },
+      "punctuation": {
+          "patterns": [
+              {
+                  "name": "punctuation.separator.type.rust",
+                  "match": ":\\s+?(?=(&|bool|char|usize|isize|u8|u16|u32|u64|u128|i8|i16|i32|i64|i128|f32|f64|str|Self|Option|Result|String|Box|Vec|Path|PathBuf|HashMap))"
+              },
+              {
+                  "name": "punctuation.terminator.rust",
+                  "match": ";"
+              },
+              {
+                  "name": "punctuation.other.comma.rust",
+                  "match": ","
+              },
+              {
+                  "name": "punctuation.other.paren.rust",
+                  "match": "[)(]"
+              }
+          ]
+      },
+      "string": {
+          "patterns": [
+              {
+                  "name": "constant.character.escape.rust",
+                  "match": "\\\\(x[0-9A-Fa-f]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)"
+              },
+              {
+                  "name": "constant.character.rust",
+                  "match": "b?'([^'\\\\]|\\\\(x[0-9A-Fa-f]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.))'"
+              },
+              {
+                  "name": "string.quoted.double.rust",
+                  "begin": "b?\"",
+                  "end": "\"",
+                  "patterns": [
+                      {
+                          "name": "constant.character.escape.rust",
+                          "match": "\\\\(x[0-9A-Fa-f]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)"
+                      },
+                      {
+                          "name": "constant.other.placeholder.rust",
+                          "match": "(\\{)([a-zA-Z0-9_?:$.*<>]+)?(\\})"
+                      }
+                  ]
+              },
+              {
+                  "name": "string.quoted.double.raw.rust",
+                  "begin": "b?r(#*)\"",
+                  "end": "\"\\1"
+              }
+          ]
+      },
+      "type": {
+          "patterns": [
+              {
+                  "begin": "(\\:\\:{)",
+                  "beginCaptures": {
+                      "1": {
+                          "name": "keyword.operator.path.rust"
+                      }
+                  },
+                  "end": "}(;)",
+                  "endCaptures": {
+                      "1": {
+                          "name": "keyword.operator.path.rust"
+                      },
+                      "2": {
+                          "name": "punctuation.terminator.rust"
+                      }
+                  },
+                  "patterns": [
+                      {
+                          "name": "punctuation.other.comma.rust",
+                          "match": ","
+                      },
+                      {
+                          "name": "entity.name.type.rust",
+                          "match": "\\w+"
+                      }
+                  ]
+              },
+              {
+                  "match": "^(extern) (crate) ([_A-Za-z0-9]+)",
+                  "captures": {
+                      "1": {
+                          "name": "storage.modifier.external.rust"
+                      },
+                      "2": {
+                          "name": "keyword.other.rust"
+                      },
+                      "3": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "\\b([A-Za-z][_A-Za-z0-9]+)\\b(?=<[_a-zA-Z']+>)",
+                  "name": "entity.name.type.rust"
+              },
+              {
+                  "match": "([A-Za-z][_A-Za-z0-9]+)(?=::)",
+                  "name": "entity.name.type.mod.rust",
+                  "captures": {
+                      "2": {
+                          "name": "keyword.operator.path.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "((?<=::))([a-zA-Z_]+)",
+                  "captures": {
+                      "1": {
+                          "name": "keyword.operator.path.rust"
+                      },
+                      "2": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              },
+              {
+                  "name": "storage.type.core.rust",
+                  "match": "\\b(bool|char|usize|isize|u8|u16|u32|u64|u128|i8|i16|i32|i64|i128|f32|f64|str|Self|Option|Result)\\b"
+              },
+              {
+                  "name": "entity.name.type.hashmap.rust",
+                  "match": "HashMap"
+              },
+              {
+                  "match": "(?<=->\\s)(\\w+)",
+                  "captures": {
+                      "1": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "\\b(T|U)\\b",
+                  "captures": {
+                      "1": {
+                          "name": "entity.name.type.generic.rust"
+                      }
+                  }
+              },
+              {
+                  "name": "support.type.marker.rust",
+                  "match": "\\b(Copy|Send|Sized|Sync)\\b"
+              },
+              {
+                  "name": "support.type.core.rust",
+                  "match": "\\b(Drop|Fn|FnMut|FnOnce|Clone|PartialEq|PartialOrd|Eq|Ord|AsRef|AsMut|Into|From|Default|Iterator|Extend|IntoIterator|DoubleEndedIterator|ExactSizeIterator)\\b"
+              },
+              {
+                  "name": "storage.class.std.rust",
+                  "match": "\\b(Box|String|Vec|Path|PathBuf)\\b"
+              },
+              {
+                  "name": "support.type.std.rust",
+                  "match": "\\b(ToOwned|ToString|FromStr)\\b"
+              },
+              {
+                  "name": "entity.name.type.param.rust",
+                  "begin": "<(?![=<])",
+                  "end": "(?<![-])>",
+                  "beginCaptures": {
+                      "0": {
+                          "name": "punctuation.definition.type.rust"
+                      }
+                  },
+                  "endCaptures": {
+                      "0": {
+                          "name": "punctuation.definition.type.rust"
+                      }
+                  },
+                  "patterns": [
+                      {
+                          "name": "entity.name.type.param.rust",
+                          "begin": "<(?![=<])",
+                          "end": "(?<![-])>",
+                          "beginCaptures": {
+                              "0": {
+                                  "name": "punctuation.definition.type.rust"
+                              }
+                          },
+                          "endCaptures": {
+                              "0": {
+                                  "name": "punctuation.definition.type.rust"
+                              }
+                          }
+                      },
+                      {
+                          "name": "storage.modifier.lifetime.rust",
+                          "match": "'([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+                          "captures": {
+                              "1": {
+                                  "name": "entity.name.lifetime.rust"
+                              }
+                          }
+                      },
+                      {
+                          "match": "&(')([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+                          "captures": {
+                              "1": {
+                                  "name": "storage.modifier.lifetime.rust"
+                              },
+                              "2": {
+                                  "name": "entity.name.lifetime.rust"
+                              }
+                          }
+                      },
+                      {
+                          "name": "storage.type.rust",
+                          "match": "impl"
+                      },
+                      {
+                          "name": "punctuation.other.comma.rust",
+                          "match": ","
+                      },
+                      {
+                          "name": "variable.language.ignored.rust",
+                          "match": "\\b(_)\\b"
+                      }
+                  ]
+              }
+          ]
+      },
+      "variable": {
+          "patterns": [
+              {
+                  "match": "(let) (mut) ([a-zA-Z_][a-zA-Z0-9_]+)",
+                  "captures": {
+                      "1": {
+                          "name": "storage.type.rust"
+                      },
+                      "2": {
+                          "name": "storage.modifier.mutable.rust"
+                      },
+                      "3": {
+                          "name": "variable.other.mutable.rust"
+                      }
+                  }
+              },
+              {
+                  "name": "variable.other.rust",
+                  "match": "(?<!\\:\\s)([a-zA-Z_][a-zA-Z0-9_]*)\\s(?==)"
+              },
+              {
+                  "match": "([a-zA-Z_][a-zA-Z0-9_]+)(?=[:] )",
+                  "captures": {
+                      "1": {
+                          "name": "variable.other.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "(let) (mut) ([a-zA-Z_]+)",
+                  "captures": {
+                      "1": {
+                          "name": "storage.type.rust"
+                      },
+                      "2": {
+                          "name": "storage.modifier.mutable.rust"
+                      },
+                      "3": {
+                          "name": "variable.other.mutable.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "(?<!\\:\\s)([a-zA-Z_]\\s)(?==)",
+                  "captures": {
+                      "1": {
+                          "name": "variable.other.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "([a-zA-Z_]+)(?=[:] )",
+                  "captures": {
+                      "1": {
+                          "name": "variable.other.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "(let|pub)\\s([a-zA-Z0-9_]+)(\\:\\s)([a-zA-Z0-9_]+)",
+                  "captures": {
+                      "1": {
+                          "name": "storage.type.rust"
+                      },
+                      "2": {
+                          "name": "variable.other.rust"
+                      },
+                      "3": {
+                          "name": "punctuation.separator.type.rust"
+                      },
+                      "4": {
+                          "name": "entity.name.type.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "^\\s+(return\\s)?(?!self)([a-zA-Z0-9_]+)\\s+$",
+                  "captures": {
+                      "1": {
+                          "name": "keyword.control.rust"
+                      },
+                      "2": {
+                          "name": "variable.other.return-value.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "([|])(\\w+)([|])",
+                  "captures": {
+                      "1": {
+                          "name": "keyword.operator.rust"
+                      },
+                      "2": {
+                          "name": "variable.other.map.rust"
+                      },
+                      "3": {
+                          "name": "keyword.operator.rust"
+                      }
+                  }
+              },
+              {
+                  "match": "(?<=&|\\*)(?!mut|self)([a-zA-Z_]+)",
+                  "captures": {
+                      "1": {
+                          "name": "variable.other.ref.rust"
+                      }
+                  }
+              }
+          ]
+      }
+  },
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "rust",
+  "scopeName": "source.rust",
+  "patterns": [
+      {
+          "include": "#comment"
+      },
+      {
+          "include": "#constant"
+      },
+      {
+          "include": "#entity"
+      },
+      {
+          "include": "#meta"
+      },
+      {
+          "include": "#punctuation"
+      },
+      {
+          "include": "#string"
+      },
+      {
+          "include": "#support"
+      },
+      {
+          "include": "#type"
+      },
+      {
+          "include": "#unsorted"
+      },
+      {
+          "include": "#variable"
+      },
+      {
+          "include": "#operator"
+      },
+      {
+          "include": "#keyword"
+      },
+      {
+          "include": "#storage"
+      }
+  ]
+}

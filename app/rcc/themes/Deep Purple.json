@@ -1,5 +1,6 @@
 {
  "title": "Deep Purple",
+ "code-editor-theme": "Amy.tmTheme",
  "colors": {
   "groupbox_border": "#4c2f5d",
   "groupbox_background": "#2c1e3e",

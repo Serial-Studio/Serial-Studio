@@ -68,10 +68,9 @@ Misc::ThemeManager::ThemeManager()
     QFile file(QStringLiteral(":/rcc/themes/%1.json").arg(theme));
     if (file.open(QFile::ReadOnly))
     {
-      auto document = QJsonDocument::fromJson(file.readAll());
-      auto title = document.object().value("title").toString();
-      auto colors = document.object().value("colors").toObject();
-      m_themes.insert(title, colors);
+      const auto document = QJsonDocument::fromJson(file.readAll());
+      const auto title = document.object().value("title").toString();
+      m_themes.insert(title, document.object());
 
       file.close();
     }
@@ -122,6 +121,15 @@ const QJsonObject &Misc::ThemeManager::colors() const
 }
 
 /**
+ * @brief Fetches the current theme as a QJsonObject.
+ * @return QJsonObject containing all the properties of the loaded theme.
+ */
+const QJsonObject &Misc::ThemeManager::themeData() const
+{
+  return m_themeData;
+}
+
+/**
  * @brief Returns a list of theme names that are available.
  * @return QStringList containing the names of all loaded themes.
  */
@@ -158,11 +166,14 @@ void Misc::ThemeManager::setTheme(const int index)
   if (index < 0 || index >= availableThemes().count())
     filteredIndex = 0;
 
-  // Update the theme & obtain the colors
+  // Update the theme name
   m_theme = filteredIndex;
   m_settings.setValue("Theme", filteredIndex);
   m_themeName = availableThemes().at(filteredIndex);
-  m_colors = m_themes.value(m_themeName);
+
+  // Obtain the data for the theme name
+  m_themeData = m_themes.value(m_themeName);
+  m_colors = m_themeData.value("colors").toObject();
 
   // Tell OS if we prefer dark mode or light mode
   auto bg = getColor("base");

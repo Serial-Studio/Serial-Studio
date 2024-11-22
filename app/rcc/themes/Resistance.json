@@ -1,5 +1,6 @@
 {
  "title": "Resistance",
+ "code-editor-theme": "Twilight.tmTheme",
  "colors": {
   "groupbox_border": "#575554",
   "groupbox_background": "#2d2a29",

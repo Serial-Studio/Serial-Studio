@@ -1,5 +1,6 @@
 {
  "title": "Deep Red",
+ "code-editor-theme": "Sunburst.tmTheme",
  "colors": {
   "groupbox_border": "#8b2e2e",
   "groupbox_background": "#3d1b1b",

@@ -25,7 +25,7 @@
 #include <cmath>
 #include <cstddef>
 #include <algorithm>
-#include <x86/sse2.h>
+#include <x86/avx.h>
 
 #include <QVector>
 #include <QPointF>
@@ -51,13 +51,13 @@ template<typename T>
 inline void fill(T *data, size_t count, T value)
 {
   // Get the number of items that can be processed in a SIMD register
-  constexpr int simdWidth = sizeof(simde__m128d) / sizeof(T);
+  constexpr int simdWidth = sizeof(simde__m256d) / sizeof(T);
 
   // SIMD bulk initialization
   size_t i = 0;
-  simde__m128d fillValue = simde_mm_set1_pd(value);
+  simde__m256d fillValue = simde_mm256_set1_pd(value);
   for (; i + simdWidth <= count; i += simdWidth)
-    simde_mm_storeu_pd(data + i, fillValue);
+    simde_mm256_storeu_pd(data + i, fillValue);
 
   // Handle remaining elements using a scalar loop
   for (; i < count; ++i)
@@ -82,14 +82,14 @@ template<typename T>
 inline void shift(T *data, size_t count, T value)
 {
   // Get the number of items that can be processed in a SIMD register
-  constexpr int simdWidth = sizeof(simde__m128d) / sizeof(T);
+  constexpr int simdWidth = sizeof(simde__m256d) / sizeof(T);
 
   // Shift elements using SIMD operations
   size_t i = 0;
   for (; i + simdWidth <= count; i += simdWidth)
   {
-    simde__m128d next = simde_mm_loadu_pd(data + i + 1);
-    simde_mm_storeu_pd(data + i, next);
+    simde__m256d next = simde_mm256_loadu_pd(data + i + 1);
+    simde_mm256_storeu_pd(data + i, next);
   }
 
   // Handle remaining elements using a scalar loop
@@ -116,21 +116,21 @@ template<typename T>
 inline T findMin(const T *data, size_t count)
 {
   // Get the number of items that can be processed in a SIMD register
-  constexpr int simdWidth = sizeof(simde__m128d) / sizeof(T);
+  constexpr int simdWidth = sizeof(simde__m256d) / sizeof(T);
 
   // SIMD comparisons
   size_t i = 0;
-  simde__m128d minVec = simde_mm_set1_pd(data[0]);
+  simde__m256d minVec = simde_mm256_set1_pd(data[0]);
   for (; i + simdWidth <= count; i += simdWidth)
   {
-    simde__m128d values = simde_mm_loadu_pd(&data[i]);
-    minVec = simde_mm_min_pd(minVec, values);
+    simde__m256d values = simde_mm256_loadu_pd(&data[i]);
+    minVec = simde_mm256_min_pd(minVec, values);
   }
 
   // Reduce SIMD register to scalar
   T minVal = data[0];
   alignas(simdWidth) T buffer[simdWidth];
-  simde_mm_storeu_pd(buffer, minVec);
+  simde_mm256_storeu_pd(buffer, minVec);
   for (int j = 0; j < simdWidth; ++j)
     minVal = std::min<T>(minVal, buffer[j]);
 
@@ -157,21 +157,21 @@ template<typename T>
 inline T findMax(const T *data, size_t count)
 {
   // Get the number of items that can be processed in a SIMD register
-  constexpr int simdWidth = sizeof(simde__m128d) / sizeof(T);
+  constexpr int simdWidth = sizeof(simde__m256d) / sizeof(T);
 
   // SIMD comparisons
   size_t i = 0;
-  simde__m128d maxVec = simde_mm_set1_pd(data[0]);
+  simde__m256d maxVec = simde_mm256_set1_pd(data[0]);
   for (; i + simdWidth <= count; i += simdWidth)
   {
-    simde__m128d values = simde_mm_loadu_pd(&data[i]);
-    maxVec = simde_mm_max_pd(maxVec, values);
+    simde__m256d values = simde_mm256_loadu_pd(&data[i]);
+    maxVec = simde_mm256_max_pd(maxVec, values);
   }
 
   // Reduce SIMD register to scalar
   T maxVal = data[0];
   alignas(simdWidth) T buffer[simdWidth];
-  simde_mm_storeu_pd(buffer, maxVec);
+  simde_mm256_storeu_pd(buffer, maxVec);
   for (int j = 0; j < simdWidth; ++j)
     maxVal = std::max<T>(maxVal, buffer[j]);
 
@@ -204,23 +204,31 @@ template<typename Extractor>
 inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
 {
   // Get the number of items that can be processed in a SIMD register
-  constexpr int simdWidth = sizeof(simde__m128d) / sizeof(qreal);
+  constexpr int simdWidth = sizeof(simde__m256d) / sizeof(qreal);
 
-  // SIMD comparisons
+  // Prepare parameters for comparisons
   size_t i = 0;
   size_t count = data.size();
-  auto minVec = simde_mm_set1_pd(extractor(data[0]));
+  if (count == 0)
+    return 0;
+
+  // Initialize SIMD vector with the first extracted value
+  simde__m256d minVec = simde_mm256_set1_pd(extractor(data[0]));
+
+  // SIMD comparisons
   for (; i + simdWidth <= count; i += simdWidth)
   {
-    auto values = simde_mm_set_pd(extractor(data[i + 1]), extractor(data[i]));
-    minVec = simde_mm_min_pd(minVec, values);
+    simde__m256d values
+        = simde_mm256_set_pd(extractor(data[i + 3]), extractor(data[i + 2]),
+                             extractor(data[i + 1]), extractor(data[i]));
+    minVec = simde_mm256_min_pd(minVec, values);
   }
 
   // Reduce SIMD register to scalar
-  qreal minVal = extractor(data[0]);
-  alignas(16) qreal buffer[simdWidth];
-  simde_mm_storeu_pd(buffer, minVec);
-  for (int j = 0; j < simdWidth; ++j)
+  alignas(32) qreal buffer[simdWidth];
+  simde_mm256_storeu_pd(buffer, minVec);
+  qreal minVal = buffer[0];
+  for (int j = 1; j < simdWidth; ++j)
     minVal = std::min<qreal>(minVal, buffer[j]);
 
   // Scalar fallback for remaining elements
@@ -252,23 +260,31 @@ template<typename Extractor>
 inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
 {
   // Get the number of items that can be processed in a SIMD register
-  constexpr int simdWidth = sizeof(simde__m128d) / sizeof(qreal);
+  constexpr int simdWidth = sizeof(simde__m256d) / sizeof(qreal);
 
-  // SIMD comparisons
+  // Prepare parameters for comparisons
   size_t i = 0;
   size_t count = data.size();
-  auto maxVec = simde_mm_set1_pd(extractor(data[0]));
+  if (count == 0)
+    return 0;
+
+  // Initialize SIMD vector with the first extracted value
+  simde__m256d maxVec = simde_mm256_set1_pd(extractor(data[0]));
+
+  // SIMD comparisons
   for (; i + simdWidth <= count; i += simdWidth)
   {
-    auto values = simde_mm_set_pd(extractor(data[i + 1]), extractor(data[i]));
-    maxVec = simde_mm_max_pd(maxVec, values);
+    simde__m256d values
+        = simde_mm256_set_pd(extractor(data[i + 3]), extractor(data[i + 2]),
+                             extractor(data[i + 1]), extractor(data[i]));
+    maxVec = simde_mm256_max_pd(maxVec, values);
   }
 
   // Reduce SIMD register to scalar
-  qreal maxVal = extractor(data[0]);
-  alignas(16) qreal buffer[simdWidth];
-  simde_mm_storeu_pd(buffer, maxVec);
-  for (int j = 0; j < simdWidth; ++j)
+  alignas(32) qreal buffer[simdWidth];
+  simde_mm256_storeu_pd(buffer, maxVec);
+  qreal maxVal = buffer[0];
+  for (int j = 1; j < simdWidth; ++j)
     maxVal = std::max<qreal>(maxVal, buffer[j]);
 
   // Scalar fallback for remaining elements
