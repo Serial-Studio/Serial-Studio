@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     This color scheme is based on the dark Solarized color scheme,
+     originally created by Ethan Schoonover:
+
+     http://ethanschoonover.com/solarized/
+-->
+<style-scheme version="1.0" name="Solarized Dark">
+  <style name="Text" foreground="#839496" background="#002b36"/>
+  <style name="Link" foreground="#6c71c4"/>
+  <style name="Selection" foreground="#002b36" background="#586e75"/>
+  <style name="LineNumber" foreground="#586e75" background="#073642"/>
+  <style name="SearchResult" background="#073642"/>
+  <style name="SearchResultAlt1" foreground="#aaaaff" background="#363655"/>
+  <style name="SearchResultAlt2" foreground="#ffaaaa" background="#553636"/>
+  <style name="SearchResultContainingFunction" foreground="#839496" background="#002b36"/>
+  <style name="SearchScope" background="#073642"/>
+  <style name="Parentheses" foreground="#dc322f" background="#586e75" bold="true"/>
+  <style name="ParenthesesMismatch" foreground="#fdff2c" background="#d33682" bold="true"/>
+  <style name="AutoComplete" foreground="#000080" background="#c0c0ff"/>
+  <style name="CurrentLine" background="#124252"/>
+  <style name="CurrentLineNumber" foreground="#839496" bold="true"/>
+  <style name="Occurrences" background="#586e75"/>
+  <style name="Occurrences.Unused" foreground="#719e07"/>
+  <style name="Occurrences.Rename" background="#073642"/>
+  <style name="Number" foreground="#2aa198"/>
+  <style name="String" foreground="#2aa198"/>
+  <style name="Type" foreground="#b58900"/>
+  <style name="Local" foreground="#839496"/>
+  <style name="Parameter" foreground="#839496"/>
+  <style name="Global"/>
+  <style name="Field" foreground="#268bd2"/>
+  <style name="Static" foreground="#b58900" italic="true"/>
+  <style name="VirtualMethod" foreground="#839496" italic="true"/>
+  <style name="Function" foreground="#839496"/>
+  <style name="Macro" foreground="#839496"/>
+  <style name="Keyword" foreground="#709d06"/>
+  <style name="PrimitiveType" foreground="#808000"/>
+  <style name="Punctuation"/>
+  <style name="Operator" foreground="#839496"/>
+  <style name="Overloaded Operator" foreground="#839496"/>
+  <style name="Preprocessor" foreground="#cb4b16"/>
+  <style name="Label" foreground="#268bd2" bold="true"/>
+  <style name="Comment" foreground="#586e75" italic="true"/>
+  <style name="Doxygen.Comment" foreground="#586e75" italic="true"/>
+  <style name="Doxygen.Tag" foreground="#586e75"/>
+  <style name="VisualWhitespace" foreground="#586e75"/>
+  <style name="QmlLocalId" foreground="#657b83" italic="true"/>
+  <style name="QmlExternalId" foreground="#2aa198" italic="true"/>
+  <style name="QmlTypeId" foreground="#b58900"/>
+  <style name="QmlRootObjectProperty" foreground="#657b83" italic="true"/>
+  <style name="QmlScopeObjectProperty" foreground="#657b83" italic="true"/>
+  <style name="QmlExternalObjectProperty" foreground="#2aa198" italic="true"/>
+  <style name="JsScopeVar" foreground="#6c71c4" italic="true"/>
+  <style name="JsImportVar" foreground="#d33682" italic="true"/>
+  <style name="JsGlobalVar" foreground="#268bd2" italic="true"/>
+  <style name="QmlStateName" foreground="#657b83" italic="true"/>
+  <style name="Binding" foreground="#cb4b16"/>
+  <style name="DisabledCode" foreground="#586e75" background="#073642"/>
+  <style name="AddedLine" foreground="#709d06"/>
+  <style name="RemovedLine" foreground="#dc322f"/>
+  <style name="DiffFile" foreground="#268bd2"/>
+  <style name="DiffLocation" foreground="#b58900"/>
+  <style name="DiffFileLine" background="#ffff00"/>
+  <style name="DiffContextLine" background="#afd7e7"/>
+  <style name="DiffSourceLine" background="#ffdfdf"/>
+  <style name="DiffSourceChar" background="#ffafaf"/>
+  <style name="DiffDestLine" background="#dfffdf"/>
+  <style name="DiffDestChar" background="#afffaf"/>
+  <style name="LogChangeLine" foreground="#c00000"/>
+  <style name="LogAuthorName" foreground="#ceffe5"/>
+  <style name="LogCommitDate" foreground="#00ff00"/>
+  <style name="LogCommitHash" foreground="#ff0000"/>
+  <style name="LogCommitSubject" foreground="#d6cf9a"/>
+  <style name="LogDecoration" foreground="#ff00ff"/>
+  <style name="Warning" underlineColor="#b58900" underlineStyle="SingleUnderline"/>
+  <style name="WarningContext" underlineColor="#b58900" underlineStyle="DotLine"/>
+  <style name="Error" underlineColor="#dc322f" underlineStyle="SingleUnderline"/>
+  <style name="ErrorContext" underlineColor="#dc322f" underlineStyle="DotLine"/>
+  <style name="Declaration"/>
+</style-scheme>

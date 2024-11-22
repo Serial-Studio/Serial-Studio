@@ -1,0 +1,9 @@
+{
+    "root": {
+        "some array": [1, 2, 3],
+        "some string": "Hello world",
+        "some dbl": 2.121323,
+        "some bool": true,
+        "some null": null
+    }
+}

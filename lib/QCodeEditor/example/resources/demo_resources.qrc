@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>styles/drakula.xml</file>
+        <file>code_samples/cxx.cpp</file>
+        <file>code_samples/shader.glsl</file>
+        <file>code_samples/xml.xml</file>
+        <file>code_samples/json.json</file>
+        <file>code_samples/lua.lua</file>
+        <file>code_samples/python.py</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="Visual Studio Blue">
+  <style name="Text" foreground="#000000" background="#ffffff"/>
+  <style name="Link" foreground="#000000" background="#ffffff"/>
+  <style name="Selection" background="#add6ff"/>
+  <style name="LineNumber" foreground="#2b91af" background="#f8f8f9"/>
+  <style name="SearchResult" foreground="#000000" background="#ffffff"/>
+  <style name="SearchScope" foreground="#000000" background="#ffffff"/>
+  <style name="Parentheses"/>
+  <style name="ParenthesesMismatch" foreground="#393939" background="#ffffff" bold="true"/>
+  <style name="AutoComplete" foreground="#000080" background="#ffffff"/>
+  <style name="CurrentLine" foreground="#07080a" background="#eaeaf2"/>
+  <style name="CurrentLineNumber" foreground="#55aaff" background="#fcfdff" bold="true"/>
+  <style name="Occurrences" foreground="#000000" background="#ffffff"/>
+  <style name="Occurrences.Unused" foreground="#000000" background="#ffffff"/>
+  <style name="Occurrences.Rename" foreground="#000000" background="#ffffff"/>
+  <style name="Number" foreground="#505050" background="#ffffff"/>
+  <style name="String" foreground="#a31515" background="#ffffff"/>
+  <style name="Type" foreground="#2b91af" background="#ffffff"/>
+  <style name="Local" background="#ffffff"/>
+  <style name="Global" foreground="#000000" background="#ffffff"/>
+  <style name="Field" foreground="#000000" background="#ffffff"/>
+  <style name="Static" foreground="#2f4f4f" background="#ffffff"/>
+  <style name="VirtualMethod" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="Function" foreground="#000000" background="#ffffff"/>
+  <style name="Keyword" foreground="#0000ff" background="#ffffff"/>
+  <style name="PrimitiveType" foreground="#0000ff" background="#ffffff"/>
+  <style name="Operator" foreground="#000000" background="#ffffff"/>
+  <style name="Preprocessor" foreground="#6f008a" background="#ffffff"/>
+  <style name="Label" foreground="#000000" background="#ffffff"/>
+  <style name="Comment" foreground="#008000" background="#ffffff"/>
+  <style name="Doxygen.Comment" foreground="#646464" background="#ffffff" bold="true"/>
+  <style name="Doxygen.Tag" foreground="#6d6e70" background="#ffffff"/>
+  <style name="VisualWhitespace" foreground="#000000" background="#ffffff"/>
+  <style name="QmlLocalId" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="QmlExternalId" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="QmlTypeId" foreground="#000000" background="#ffffff"/>
+  <style name="QmlRootObjectProperty" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="QmlScopeObjectProperty" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="QmlExternalObjectProperty" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="JsScopeVar" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="JsImportVar" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="JsGlobalVar" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="QmlStateName" foreground="#000000" background="#ffffff" italic="true"/>
+  <style name="Binding" foreground="#000000" background="#ffffff"/>
+  <style name="DisabledCode" foreground="#6f6f6f" background="#ffffff"/>
+  <style name="AddedLine" foreground="#000000" background="#ffffff"/>
+  <style name="RemovedLine" foreground="#000000" background="#ffffff"/>
+  <style name="DiffFile" foreground="#000000" background="#ffffff"/>
+  <style name="DiffLocation" foreground="#000000" background="#ffffff"/>
+  <style name="DiffFileLine" foreground="#000000" background="#ffffff"/>
+  <style name="DiffContextLine" foreground="#000000" background="#ffffff"/>
+  <style name="DiffSourceLine" foreground="#000000" background="#ffffff"/>
+  <style name="DiffSourceChar" foreground="#000000" background="#ffffff"/>
+  <style name="DiffDestLine" foreground="#000000" background="#ffffff"/>
+  <style name="DiffDestChar" foreground="#000000" background="#ffffff"/>
+  <style name="LogChangeLine" foreground="#c00000"/>
+  <style name="Warning" underlineColor="#ffbe00"/>
+  <style name="WarningContext" underlineColor="#ffbe00"/>
+  <style name="Error" underlineColor="#ff0000" underlineStyle="SingleUnderline"/>
+  <style name="ErrorContext" underlineColor="#ff0000" underlineStyle="DotLine"/>
+  <style name="Declaration"/>
+  <style name="C_OUTPUT_ARGUMENT"/>
+</style-scheme>

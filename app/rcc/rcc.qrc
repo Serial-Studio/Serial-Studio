@@ -108,95 +108,6 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
-        <file>edbee/config/default.json</file>
-        <file>edbee/config/default.osx.json</file>
-        <file>edbee/config/default.win.json</file>
-        <file>edbee/config/default.x11.json</file>
-        <file>edbee/keymaps/default.json</file>
-        <file>edbee/keymaps/default.osx.json</file>
-        <file>edbee/keymaps/default.win32.json</file>
-        <file>edbee/syntaxfiles/ActionScript.tmLanguage</file>
-        <file>edbee/syntaxfiles/AppleScript.tmLanguage</file>
-        <file>edbee/syntaxfiles/ASP.tmLanguage</file>
-        <file>edbee/syntaxfiles/Batch File.tmLanguage</file>
-        <file>edbee/syntaxfiles/Bibtex.tmLanguage</file>
-        <file>edbee/syntaxfiles/Build.tmLanguage</file>
-        <file>edbee/syntaxfiles/C#.tmLanguage</file>
-        <file>edbee/syntaxfiles/C++.tmLanguage</file>
-        <file>edbee/syntaxfiles/C.tmLanguage</file>
-        <file>edbee/syntaxfiles/Clojure.tmLanguage</file>
-        <file>edbee/syntaxfiles/CoffeeScript.tmLanguage</file>
-        <file>edbee/syntaxfiles/CSS.tmLanguage</file>
-        <file>edbee/syntaxfiles/D.tmLanguage</file>
-        <file>edbee/syntaxfiles/Diff.tmLanguage</file>
-        <file>edbee/syntaxfiles/DOT.tmLanguage</file>
-        <file>edbee/syntaxfiles/Doxyfile.tmLanguage</file>
-        <file>edbee/syntaxfiles/Erlang.tmLanguage</file>
-        <file>edbee/syntaxfiles/Go.tmLanguage</file>
-        <file>edbee/syntaxfiles/Groovy.tmLanguage</file>
-        <file>edbee/syntaxfiles/Haskell.tmLanguage</file>
-        <file>edbee/syntaxfiles/HTML-ASP.tmLanguage</file>
-        <file>edbee/syntaxfiles/HTML.tmLanguage</file>
-        <file>edbee/syntaxfiles/Java.tmLanguage</file>
-        <file>edbee/syntaxfiles/JavaDoc.tmLanguage</file>
-        <file>edbee/syntaxfiles/JavaScript.tmLanguage</file>
-        <file>edbee/syntaxfiles/LaTeX Beamer.tmLanguage</file>
-        <file>edbee/syntaxfiles/LaTeX.tmLanguage</file>
-        <file>edbee/syntaxfiles/Lisp.tmLanguage</file>
-        <file>edbee/syntaxfiles/Lua.tmLanguage</file>
-        <file>edbee/syntaxfiles/Markdown.tmLanguage</file>
-        <file>edbee/syntaxfiles/Matlab.tmLanguage</file>
-        <file>edbee/syntaxfiles/MultiMarkdown.tmLanguage</file>
-        <file>edbee/syntaxfiles/Objective-C++.tmLanguage</file>
-        <file>edbee/syntaxfiles/Objective-C.tmLanguage</file>
-        <file>edbee/syntaxfiles/OCamlyacc.tmLanguage</file>
-        <file>edbee/syntaxfiles/Perl.tmLanguage</file>
-        <file>edbee/syntaxfiles/PHP.tmLanguage</file>
-        <file>edbee/syntaxfiles/Plain text.tmLanguage</file>
-        <file>edbee/syntaxfiles/Python.tmLanguage</file>
-        <file>edbee/syntaxfiles/R Console.tmLanguage</file>
-        <file>edbee/syntaxfiles/Rd (R Documentation).tmLanguage</file>
-        <file>edbee/syntaxfiles/RegExp.tmLanguage</file>
-        <file>edbee/syntaxfiles/reStructuredText.tmLanguage</file>
-        <file>edbee/syntaxfiles/Ruby Haml.tmLanguage</file>
-        <file>edbee/syntaxfiles/Ruby on Rails.tmLanguage</file>
-        <file>edbee/syntaxfiles/Ruby.tmLanguage</file>
-        <file>edbee/syntaxfiles/Rust.tmLanguage.json</file>
-        <file>edbee/syntaxfiles/Scala.tmLanguage</file>
-        <file>edbee/syntaxfiles/SCSS.tmLanguage</file>
-        <file>edbee/syntaxfiles/Shell-Unix-Generic.tmLanguage</file>
-        <file>edbee/syntaxfiles/SQL.tmLanguage</file>
-        <file>edbee/syntaxfiles/Tcl.tmLanguage</file>
-        <file>edbee/syntaxfiles/TeX Math.tmLanguage</file>
-        <file>edbee/syntaxfiles/TeX.tmLanguage</file>
-        <file>edbee/syntaxfiles/Textile.tmLanguage</file>
-        <file>edbee/syntaxfiles/XML.tmLanguage</file>
-        <file>edbee/syntaxfiles/XSL.tmLanguage</file>
-        <file>edbee/syntaxfiles/YAML.tmLanguage</file>
-        <file>edbee/themes/All Hallow's Eve.tmTheme</file>
-        <file>edbee/themes/Amy.tmTheme</file>
-        <file>edbee/themes/Blackboard.tmTheme</file>
-        <file>edbee/themes/Brilliance_Black.tmTheme</file>
-        <file>edbee/themes/Brilliance_Dull.tmTheme</file>
-        <file>edbee/themes/Cobalt.tmTheme</file>
-        <file>edbee/themes/Dawn.tmTheme</file>
-        <file>edbee/themes/Eiffel.tmTheme</file>
-        <file>edbee/themes/Espresso Libre.tmTheme</file>
-        <file>edbee/themes/IDLE.tmTheme</file>
-        <file>edbee/themes/iPlastic.tmTheme</file>
-        <file>edbee/themes/LAZY.tmTheme</file>
-        <file>edbee/themes/Mac Classic.tmTheme</file>
-        <file>edbee/themes/MagicWB (Amiga).tmTheme</file>
-        <file>edbee/themes/Monokai Bright.tmTheme</file>
-        <file>edbee/themes/Monokai.tmTheme</file>
-        <file>edbee/themes/Pastels on Dark.tmTheme</file>
-        <file>edbee/themes/Solarized (Dark).tmTheme</file>
-        <file>edbee/themes/Solarized (Light).tmTheme</file>
-        <file>edbee/themes/SpaceCadet.tmTheme</file>
-        <file>edbee/themes/Sunburst.tmTheme</file>
-        <file>edbee/themes/Twilight.tmTheme</file>
-        <file>edbee/themes/Zenburnesque.tmTheme</file>
-        <file>edbee/README.md</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/attach.svg</file>
         <file>icons/buttons/center.svg</file>
@@ -335,6 +246,19 @@
         <file>messages/Welcome_RU.txt</file>
         <file>messages/Welcome_ZH.txt</file>
         <file>scripts/frame-parser.js</file>
+        <file>styles/creator-dark.xml</file>
+        <file>styles/dark.xml</file>
+        <file>styles/default_classic.xml</file>
+        <file>styles/grayscale.xml</file>
+        <file>styles/inkpot.xml</file>
+        <file>styles/intellij.xml</file>
+        <file>styles/mabakor.xml</file>
+        <file>styles/modnokai_night_shift_v2.xml</file>
+        <file>styles/solarized-dark.xml</file>
+        <file>styles/solarized-light.xml</file>
+        <file>styles/summer.xml</file>
+        <file>styles/visualstudio-dark.xml</file>
+        <file>styles/visualstudio-light.xml</file>
         <file>themes/Breeze Dark.json</file>
         <file>themes/Breeze Light.json</file>
         <file>themes/Deep Blue.json</file>

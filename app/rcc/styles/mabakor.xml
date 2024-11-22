@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="Mabakor">
+  <style name="Text" foreground="#c0c0c0" background="#2e2f30"/>
+  <style name="Link" foreground="#7878c0"/>
+  <style name="Selection" foreground="#bec0c2" background="#1d545c"/>
+  <style name="LineNumber" foreground="#808080" background="#404244"/>
+  <style name="SearchResult" background="#8a7f2c"/>
+  <style name="SearchResultAlt1" foreground="#aaaaff" background="#363655"/>
+  <style name="SearchResultAlt2" foreground="#ffaaaa" background="#553636"/>
+  <style name="SearchResultContainingFunction"/>
+  <style name="SearchScope" background="#8a602c"/>
+  <style name="Parentheses" foreground="#bec0c2" background="#1d545c"/>
+  <style name="ParenthesesMismatch" background="#ff6aad"/>
+  <style name="AutoComplete" foreground="#2c408a" background="#9aa7d6"/>
+  <style name="CurrentLine" background="#373737"/>
+  <style name="CurrentLineNumber" foreground="#d6c540" bold="true"/>
+  <style name="Occurrences" background="#8a402c"/>
+  <style name="Occurrences.Unused" foreground="#8a7f2c"/>
+  <style name="Occurrences.Rename" foreground="#ffaaaa" background="#553636"/>
+  <style name="Number" foreground="#d66b6b"/>
+  <style name="String" foreground="#d66b6b"/>
+  <style name="Type" foreground="#9090c0"/>
+  <style name="Namespace" foreground="#9090c0"/>
+  <style name="Local" bold="true"/>
+  <style name="Parameter" bold="true"/>
+  <style name="Global" foreground="#8b96c0"/>
+  <style name="Field"/>
+  <style name="Static" foreground="#d66b6b"/>
+  <style name="VirtualMethod" italic="true"/>
+  <style name="Function"/>
+  <style name="Keyword" foreground="#d1d66b"/>
+  <style name="PrimitiveType" foreground="#9090c0"/>
+  <style name="Operator"/>
+  <style name="Overloaded Operator"/>
+  <style name="Punctuation"/>
+  <style name="Preprocessor" foreground="#d1d66b"/>
+  <style name="Macro"/>
+  <style name="Label" foreground="#d6c540"/>
+  <style name="Comment" foreground="#a8abb0" italic="true"/>
+  <style name="Doxygen.Comment" foreground="#65676a" bold="true" italic="true"/>
+  <style name="Doxygen.Tag" foreground="#66a334"/>
+  <style name="VisualWhitespace" foreground="#484848"/>
+  <style name="QmlLocalId" foreground="#9acfd6" italic="true"/>
+  <style name="QmlExternalId" foreground="#9aa7d6" italic="true"/>
+  <style name="QmlTypeId" foreground="#66a334"/>
+  <style name="QmlRootObjectProperty" italic="true"/>
+  <style name="QmlScopeObjectProperty" italic="true"/>
+  <style name="QmlExternalObjectProperty" foreground="#9aa7d6" italic="true"/>
+  <style name="JsScopeVar" foreground="#9acfd6" italic="true"/>
+  <style name="JsImportVar" foreground="#4564d6" italic="true"/>
+  <style name="JsGlobalVar" foreground="#4564d6" italic="true"/>
+  <style name="QmlStateName" foreground="#45c6d6" italic="true"/>
+  <style name="Binding" foreground="#ff6aad"/>
+  <style name="DisabledCode" foreground="#969696" background="#474747"/>
+  <style name="AddedLine" foreground="#45c6d6"/>
+  <style name="RemovedLine" foreground="#d65645"/>
+  <style name="DiffFile" foreground="#66a334"/>
+  <style name="DiffLocation" foreground="#d6c540"/>
+  <style name="DiffFileLine" background="#3c3c60"/>
+  <style name="DiffContextLine" background="#454550"/>
+  <style name="DiffSourceLine" background="#403d3e"/>
+  <style name="DiffSourceChar" background="#601e2d"/>
+  <style name="DiffDestLine" background="#3f403d"/>
+  <style name="DiffDestChar" background="#40601e"/>
+  <style name="LogChangeLine" foreground="#d65645"/>
+  <style name="LogAuthorName" foreground="#ceffe5"/>
+  <style name="LogCommitDate" foreground="#60c060"/>
+  <style name="LogCommitHash" foreground="#c06060"/>
+  <style name="LogCommitSubject" foreground="#d6cf9a"/>
+  <style name="LogDecoration" foreground="#c060c0"/>
+  <style name="Warning" underlineColor="#d6c545" underlineStyle="SingleUnderline"/>
+  <style name="WarningContext" underlineColor="#d6c545" underlineStyle="DotLine"/>
+  <style name="Error" underlineColor="#d65645" underlineStyle="SingleUnderline"/>
+  <style name="ErrorContext" underlineColor="#d65645" underlineStyle="DotLine"/>
+  <style name="Declaration"/>
+  <style name="FunctionDefinition"/>
+  <style name="OutputArgument" italic="true"/>
+  <style name="StaticMember"/>
+  <style name="CocoCodeAdded"/>
+  <style name="CocoPartiallyCovered" foreground="#808000"/>
+  <style name="CocoNotCovered" foreground="#ff0000"/>
+  <style name="CocoFullyCovered" foreground="#00ff00"/>
+  <style name="CocoManuallyValidated" foreground="#0000ff"/>
+  <style name="CocoDeadCode" foreground="#ff00ff"/>
+  <style name="CocoExecutionCountTooLow" foreground="#ff0000"/>
+  <style name="CocoNotCoveredInfo" foreground="#ff0000"/>
+  <style name="CocoCoveredInfo" foreground="#00ff00"/>
+  <style name="CocoManuallyValidatedInfo" foreground="#0000ff"/>
+  <style name="LastStyleSentinel"/>
+</style-scheme>

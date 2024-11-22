@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="Grayscale">
+  <style name="AddedLine" foreground="#636363"/>
+  <style name="Comment" foreground="#808080"/>
+  <style name="CurrentLine" foreground="#000000" background="#f2f2f2"/>
+  <style name="DiffFile"/>
+  <style name="DiffLocation"/>
+  <style name="DiffFileLine" foreground="#ffffff" background="#000000"/>
+  <style name="DiffContextLine" foreground="#ffffff" background="#7f7f7f"/>
+  <style name="DiffSourceLine" background="#d7d7d7"/>
+  <style name="DiffSourceChar" background="#afafaf"/>
+  <style name="DiffDestLine" background="#d7d7d7"/>
+  <style name="DiffDestChar" background="#afafaf"/>
+  <style name="Doxygen.Comment" foreground="#808080"/>
+  <style name="Doxygen.Tag" foreground="#808080" italic="true"/>
+  <style name="Field"/>
+  <style name="Function"/>
+  <style name="Macro"/>
+  <style name="Keyword" bold="true"/>
+  <style name="PrimitiveType" bold="true"/>
+  <style name="Label"/>
+  <style name="LineNumber" foreground="#c7c4c1" background="#efebe7"/>
+  <style name="Link" foreground="#0000ff"/>
+  <style name="Local"/>
+  <style name="Parameter"/>
+  <style name="Number" foreground="#3f3f3f"/>
+  <style name="Punctuation"/>
+  <style name="Operator"/>
+  <style name="Overloaded Operator"/>
+  <style name="Parentheses" background="#e3e3e3" bold="true"/>
+  <style name="ParenthesesMismatch" background="#808080"/>
+  <style name="AutoComplete" foreground="#303030" background="#d0d0d0"/>
+  <style name="Preprocessor" foreground="#5b5b5b" bold="true"/>
+  <style name="RemovedLine" foreground="#a0a0a4"/>
+  <style name="Static" italic="true"/>
+  <style name="String" foreground="#636363"/>
+  <style name="Text" foreground="#000000" background="#ffffff"/>
+  <style name="Type"/>
+  <style name="Namespace"/>
+  <style name="VirtualMethod" italic="true"/>
+  <style name="Occurrences.Unused" underlineColor="#8F8F8F" underlineStyle="SingleUnderline"/>
+  <style name="Warning" underlineColor="#505050" underlineStyle="SingleUnderline"/>
+  <style name="WarningContext" underlineColor="#505050" underlineStyle="DotLine"/>
+  <style name="Error" underlineColor="#000000" underlineStyle="WaveUnderline"/>
+  <style name="ErrorContext" underlineColor="#000000" underlineStyle="DotLine"/>
+
+  <!--
+  Relying on default colors for:
+
+  CurrentLineNumber
+  DisabledCode
+  LineNumber
+  SearchResult
+  SearchScope
+  Selection
+  Occurrences
+  Occurrences.Rename
+  VisualWhitespace
+
+  -->
+</style-scheme>

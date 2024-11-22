@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <section name="Keyword">
+        <name>break</name>
+        <name>continue</name>
+        <name>do</name>
+        <name>for</name>
+        <name>while</name>
+        <name>if</name>
+        <name>else</name>
+        <name>def</name>
+        <name>import</name>
+        <name>return</name>
+        <name>class</name>
+        <name>in</name>
+        <name>is</name>
+        <name>not</name>
+        <name>or</name>
+        <name>and</name>
+        <name>enumerate</name>
+    </section>
+    <section name="Function">
+        <name>min</name>
+        <name>max</name>
+        <name>len</name>
+    </section>
+    <section name="PrimitiveType">
+        <name>float</name>
+        <name>int</name>
+        <name>bool</name>
+        <name>True</name>
+        <name>False</name>
+        <name>str</name>
+        <name>unicode</name>
+        <name>byte</name>
+        <name>set</name>
+        <name>dict</name>
+    </section>
+</root>

@@ -23,17 +23,12 @@
 #pragma once
 
 #include <QEvent>
-#include <QObject>
-#include <QWidget>
 #include <QPainter>
-#include <QPlainTextEdit>
-#include <QQuickPaintedItem>
-
 #include <QJSValue>
 #include <QJSEngine>
-
-#include <edbee/edbee.h>
-#include <edbee/texteditorwidget.h>
+#include <QCodeEditor>
+#include <QSyntaxStyle>
+#include <QQuickPaintedItem>
 
 namespace JSON
 {
@@ -103,7 +98,8 @@ private:
 private:
   QPixmap m_pixmap;
   QJSEngine m_engine;
+  QSyntaxStyle m_style;
+  QCodeEditor m_widget;
   QJSValue m_parseFunction;
-  edbee::TextEditorWidget *m_widget;
 };
 } // namespace JSON

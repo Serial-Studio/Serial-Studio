@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="Dark">
+  <!--
+  Based on the default vim theme for a dark background, Linux console colors.
+  -->
+  <style name="AddedLine" foreground="#55ffff"/>
+  <style name="RemovedLine" foreground="#ff5555"/>
+  <style name="Comment" foreground="#55ffff"/>
+  <style name="CurrentLine" background="#232323"/>
+  <style name="CurrentLineNumber" foreground="#aaaaaa" bold="true"/>
+  <style name="DiffFile" foreground="#55ff55"/>
+  <style name="DiffLocation" foreground="#ffff55"/>
+  <style name="DisabledCode" foreground="#777777" background="#222222"/>
+  <style name="VisualWhitespace" foreground="#404040"/>
+  <style name="Doxygen.Comment" foreground="#55ffff"/>
+  <style name="Doxygen.Tag" foreground="#00a0a0"/>
+  <style name="Field"/>
+  <style name="Function"/>
+  <style name="Macro"/>
+  <style name="Global"/>
+  <style name="Keyword" foreground="#ffff55"/>
+  <style name="PrimitiveType" foreground="#ffff55"/>
+  <style name="Label" foreground="#ffff55"/>
+  <style name="LineNumber" foreground="#888888" background="#232323"/>
+  <style name="Link" foreground="#0055ff"/>
+  <style name="Local"/>
+  <style name="Parameter"/>
+  <style name="Number" foreground="#ff55ff"/>
+  <style name="Occurrences" background="#363636"/>
+  <style name="Occurrences.Rename" foreground="#ffaaaa" background="#553636"/>
+  <style name="Punctuation"/>
+  <style name="Operator" foreground="#aaaaaa"/>
+  <style name="Overloaded Operator"/>
+  <style name="Parentheses" foreground="#ff5555" background="#333333"/>
+  <style name="ParenthesesMismatch" background="#800080"/>
+  <style name="AutoComplete" foreground="#a0a0ff" background="#333333"/>
+  <style name="Preprocessor" foreground="#5555ff"/>
+  <style name="SearchResult" background="#555500"/>
+  <style name="SearchResultAlt1" foreground="#aaaaff" background="#363655"/>
+  <style name="SearchResultAlt2" foreground="#ffaaaa" background="#553636"/>
+  <style name="SearchResultContainingFunction" foreground="#aaaaaa" background="#000000"/>
+  <style name="SearchScope" background="#222200"/>
+  <style name="Selection" foreground="#000000" background="#aaaaaa"/>
+  <style name="Static" foreground="#55ff55" italic="true"/>
+  <style name="String" foreground="#ff55ff"/>
+  <style name="Text" foreground="#aaaaaa" background="#000000"/>
+  <style name="Type" foreground="#55ff55"/>
+  <style name="VirtualMethod" italic="true"/>
+  <style name="QmlTypeId" foreground="#55ff55"/>
+  <style name="Binding" foreground="#ff5555"/>
+  <style name="QmlLocalId" italic="true"/>
+  <style name="QmlRootObjectProperty" italic="true"/>
+  <style name="QmlScopeObjectProperty" italic="true"/>
+  <style name="QmlStateName" italic="true"/>
+  <style name="QmlExternalId" foreground="#aaaaff" italic="true"/>
+  <style name="QmlExternalObjectProperty" foreground="#aaaaff" italic="true"/>
+  <style name="JsScopeVar" foreground="#8888ff" italic="true"/>
+  <style name="JsImportVar" foreground="#8888ff" italic="true"/>
+  <style name="JsGlobalVar" foreground="#8888ff" italic="true"/>
+  <style name="DiffFileLine" foreground="#000000" background="#d7d700"/>
+  <style name="DiffContextLine" foreground="#000000" background="#8aaab6"/>
+  <style name="DiffSourceLine" background="#8c2d2d"/>
+  <style name="DiffSourceChar" foreground="#000000" background="#c34141"/>
+  <style name="DiffDestLine" background="#2d8c2d"/>
+  <style name="DiffDestChar" foreground="#000000" background="#41c341"/>
+  <style name="LogChangeLine" foreground="#808000"/>
+  <style name="LogAuthorName" foreground="#ceffe5"/>
+  <style name="LogCommitDate" foreground="#00ff00"/>
+  <style name="LogCommitHash" foreground="#ff0000"/>
+  <style name="LogCommitSubject" foreground="#d6cf9a"/>
+  <style name="LogDecoration" foreground="#ff00ff"/>
+</style-scheme>

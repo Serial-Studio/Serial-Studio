@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="Visual Studio Dark">
+  <style name="Text" foreground="#ebebeb" background="#1e1e1e"/>
+  <style name="Link"/>
+  <style name="Selection" background="#264f78"/>
+  <style name="LineNumber" foreground="#2b91af" background="#191919"/>
+  <style name="SearchResult"/>
+  <style name="SearchResultAlt1" foreground="#000033" background="#b6ccff"/>
+  <style name="SearchResultAlt2" foreground="#330000" background="#ffb6cc"/>
+  <style name="SearchResultContainingFunction"/>
+  <style name="SearchScope"/>
+  <style name="Parentheses"/>
+  <style name="ParenthesesMismatch"/>
+  <style name="AutoComplete"/>
+  <style name="CurrentLine" background="#0f0f0f"/>
+  <style name="CurrentLineNumber" foreground="#2b91af" bold="true"/>
+  <style name="Occurrences"/>
+  <style name="Occurrences.Unused"/>
+  <style name="Occurrences.Rename"/>
+  <style name="Number" foreground="#afd99c"/>
+  <style name="String" foreground="#d69d85"/>
+  <style name="Type" foreground="#3dcaac"/>
+  <style name="Namespace" foreground="#3dcaac"/>
+  <style name="Local"/>
+  <style name="Parameter" foreground="#9a9a9a"/>
+  <style name="Global"/>
+  <style name="Field"/>
+  <style name="Static" foreground="#b0df90"/>
+  <style name="VirtualMethod" italic="true"/>
+  <style name="Function"/>
+  <style name="Keyword" foreground="#398ecf"/>
+  <style name="PrimitiveType" foreground="#3a87d0"/>
+  <style name="Operator"/>
+  <style name="Overloaded Operator"/>
+  <style name="Punctuation"/>
+  <style name="Preprocessor" foreground="#b853c1"/>
+  <style name="Macro"/>
+  <style name="Label"/>
+  <style name="Comment" foreground="#57a64a"/>
+  <style name="Doxygen.Comment" foreground="#006400"/>
+  <style name="Doxygen.Tag" foreground="#5e7a71" bold="true"/>
+  <style name="VisualWhitespace"/>
+  <style name="QmlLocalId" italic="true"/>
+  <style name="QmlExternalId" italic="true"/>
+  <style name="QmlTypeId"/>
+  <style name="QmlRootObjectProperty" italic="true"/>
+  <style name="QmlScopeObjectProperty" italic="true"/>
+  <style name="QmlExternalObjectProperty" italic="true"/>
+  <style name="JsScopeVar" italic="true"/>
+  <style name="JsImportVar" italic="true"/>
+  <style name="JsGlobalVar" italic="true"/>
+  <style name="QmlStateName" italic="true"/>
+  <style name="Binding"/>
+  <style name="DisabledCode"/>
+  <style name="AddedLine"/>
+  <style name="RemovedLine"/>
+  <style name="DiffFile"/>
+  <style name="DiffLocation"/>
+  <style name="DiffFileLine"/>
+  <style name="DiffContextLine"/>
+  <style name="DiffSourceLine"/>
+  <style name="DiffSourceChar"/>
+  <style name="DiffDestLine"/>
+  <style name="DiffDestChar"/>
+  <style name="LogChangeLine" foreground="#c00000"/>
+  <style name="LogAuthorName" foreground="#007af4"/>
+  <style name="LogCommitDate" foreground="#006600"/>
+  <style name="LogCommitHash" foreground="#ff0000"/>
+  <style name="LogCommitSubject"/>
+  <style name="LogDecoration" foreground="#ff00ff"/>
+  <style name="Warning" underlineColor="#ffbe00"/>
+  <style name="WarningContext" underlineColor="#ffbe00"/>
+  <style name="Error" underlineColor="#ff0000" underlineStyle="SingleUnderline"/>
+  <style name="ErrorContext" underlineColor="#ff0000" underlineStyle="DotLine"/>
+  <style name="Declaration"/>
+  <style name="FunctionDefinition"/>
+  <style name="OutputArgument" italic="true"/>
+  <style name="StaticMember"/>
+  <style name="CocoCodeAdded"/>
+  <style name="CocoPartiallyCovered" foreground="#808000"/>
+  <style name="CocoNotCovered" foreground="#ff0000"/>
+  <style name="CocoFullyCovered" foreground="#00ff00"/>
+  <style name="CocoManuallyValidated" foreground="#0000ff"/>
+  <style name="CocoDeadCode" foreground="#ff00ff"/>
+  <style name="CocoExecutionCountTooLow" foreground="#ff0000"/>
+  <style name="CocoNotCoveredInfo" foreground="#ff0000"/>
+  <style name="CocoCoveredInfo" foreground="#00ff00"/>
+  <style name="CocoManuallyValidatedInfo" foreground="#0000ff"/>
+  <style name="LastStyleSentinel"/>
+</style-scheme>

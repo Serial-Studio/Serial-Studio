@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <section name="Keyword">
+        <name>break</name>
+        <name>case</name>
+        <name>catch</name>
+        <name>class</name>
+        <name>const</name>
+        <name>continue</name>
+        <name>debugger</name>
+        <name>default</name>
+        <name>delete</name>
+        <name>do</name>
+        <name>else</name>
+        <name>enum</name>
+        <name>export</name>
+        <name>extends</name>
+        <name>false</name>
+        <name>finally</name>
+        <name>for</name>
+        <name>function</name>
+        <name>if</name>
+        <name>import</name>
+        <name>in</name>
+        <name>instanceof</name>
+        <name>let</name>
+        <name>new</name>
+        <name>null</name>
+        <name>return</name>
+        <name>super</name>
+        <name>switch</name>
+        <name>this</name>
+        <name>throw</name>
+        <name>true</name>
+        <name>try</name>
+        <name>typeof</name>
+        <name>var</name>
+        <name>void</name>
+        <name>while</name>
+        <name>with</name>
+        <name>yield</name>
+    </section>
+    <section name="PrimitiveType">
+        <name>boolean</name>
+        <name>number</name>
+        <name>bigint</name>
+        <name>string</name>
+        <name>symbol</name>
+        <name>undefined</name>
+        <name>object</name>
+        <name>function</name>
+    </section>
+</root>

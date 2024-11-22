@@ -1,6 +1,6 @@
 {
  "title": "Default",
- "code-editor-theme": "LAZY.tmTheme",
+ "code-editor-theme": "default_classic",
  "colors": {
   "groupbox_border": "#c2c2c2",
   "groupbox_background": "#eff0f1",

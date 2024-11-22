@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>default_style.xml</file>
+        <file>languages/glsl.xml</file>
+        <file>languages/cpp.xml</file>
+        <file>languages/lua.xml</file>
+        <file>languages/python.xml</file>
+        <file>languages/javascript.xml</file>
+    </qresource>
+</RCC>

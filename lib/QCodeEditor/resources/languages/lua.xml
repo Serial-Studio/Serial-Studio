@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <section name="Keyword">
+        <name>break</name>
+        <name>do</name>
+        <name>else</name>
+        <name>elseif</name>
+        <name>end</name>
+        <name>false</name>
+        <name>for</name>
+        <name>function</name>
+        <name>if</name>
+        <name>in</name>
+        <name>repeat</name>
+        <name>return</name>
+        <name>then</name>
+        <name>until</name>
+        <name>while</name>
+    </section>
+    <section name="Type">
+        <name>local</name>
+        <name>nil</name>
+        <name>boolean</name>
+        <name>number</name>
+        <name>string</name>
+        <name>function</name>
+        <name>userdata</name>
+        <name>thread</name>
+        <name>table</name>
+    </section>
+    <section name="Operator">
+        <name>\+</name>
+        <name>\-</name>
+        <name>\*</name>
+        <name>\/</name>
+        <name>\%</name>
+        <name>\^</name>
+        <name>==</name>
+        <name>~=</name>
+        <name>&gt;</name>
+        <name>&lt;</name>
+        <name>&gt;=</name>
+        <name>&lt;=</name>
+        <name>and</name>
+        <name>or</name>
+        <name>not</name>
+        <name>\.\.</name>
+        <name>\#</name>
+    </section>
+</root>
