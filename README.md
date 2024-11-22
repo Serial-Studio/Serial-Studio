@@ -41,27 +41,13 @@ Visit the **[Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki)** for co
 
 ### Requirements
 
-To compile Serial Studio, the only required dependency is [Qt](http://www.qt.io/download-open-source/). The desktop application compiles with **Qt 6.8.0**.
+To compile Serial Studio, the only required dependency is [Qt](http://www.qt.io/download-open-source/), preferrably with all plugins & modules installed. The desktop application compiles with **Qt 6.8.0**.
 
 If you're compiling on GNU/Linux, you’ll also need to install `libgl1-mesa-dev`:
 
 ```bash
 sudo apt install libgl1-mesa-dev
 ```
-
-Here’s the list of required Qt modules:
-
-- Qt SVG
-- Qt Quick
-- Qt Widgets
-- Qt Location
-- Qt Bluetooth
-- Qt Networking
-- Qt Positioning
-- Qt Serial Port
-- Qt Print Support
-- Qt Quick Widgets
-- Qt Quick Controls 2
 
 Once Qt is installed, you can compile the project by opening the **CMakeLists.txt** file in your preferred IDE or by using the command line:
 
