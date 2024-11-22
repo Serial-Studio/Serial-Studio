@@ -30,49 +30,12 @@ Today, Serial Studio is a powerful and adaptable tool, suitable not only for Can
 - **Customizable frame analysis:** Provides the option to modify a JavaScript function to interpret incoming data frames, enabling the preprocessing of raw sensor data and handling of complex binary formats.
 - **MQTT publishing and receiving:** Sends and receives data over the internet, enabling real-time data visualization from anywhere in the world.
 
-## Installation
+Visit the **[Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki)** for comprehensive guides, including:
 
-You can download and install the latest version of Serial Studio for your preferred platform from [here](https://github.com/Serial-Studio/Serial-Studio/releases/latest).
-
-Here’s an updated version of your Linux installation instructions with the additional details:
-
-### Linux Installation
-
-For GNU/Linux users, there are multiple ways to install and run the application:
-
-#### 1. AppImage
-
-Download the AppImage file and ensure it has the correct executable permissions before running:
-
-```bash
-chmod +x SerialStudio-3.0.5-Linux-x86_64.AppImage
-./SerialStudio-3.0.5-Linux-x86_64.AppImage
-```
-
-*Note:* You may need to install libfuse2 for the AppImage to work. On Debian/Ubuntu-based systems, you can install it using:
-
-```bash
-sudo apt update
-sudo apt install libfuse2
-```
-
-You can integrate the Serial Studio *AppImage* into your system more easily using [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher/)..
-
-#### 2. DEB/RPM Packages (Experimental)
-
-You can also install Serial Studio using DEB or RPM packages, which are currently in an experimental stage. Please report any issues you encounter.
-
-For Debian-based distributions (e.g., Debian, Ubuntu, Linux Mint, etc):
-
-```bash
-sudo dpkg -i SerialStudio-3.0.5-Linux-x86_64.deb
-```
-
-For RPM-based distributions (e.g., Fedora, RHEL, OpenSUSE, etc):
-
-```bash
-sudo rpm -i SerialStudio-3.0.5-Linux-x86_64.rpm
-```
+- **Installation Instructions:** Set up Serial Studio on Windows, macOS, or Linux.  
+- **Quick Start Guide:** Learn how to connect your device and visualize data in minutes.  
+- **Advanced Topics:** Explore data flow, frame parsing, and building custom dashboards.
+- **Examples:** Examples with code, projects, and explanations to help you learn Serial Studio.
 
 ## Development
 
@@ -100,38 +63,23 @@ Here’s the list of required Qt modules:
 - Qt Quick Widgets
 - Qt Quick Controls 2
 
-### Cloning the Repository
-
-To clone the repository with the necessary submodules, run:
-
-```bash
-git clone https://github.com/Serial-Studio/Serial-Studio
-cd Serial-Studio
-```
-
-### Compiling the Application
-
 Once Qt is installed, you can compile the project by opening the **CMakeLists.txt** file in your preferred IDE or by using the command line:
 
 ```bash
 mkdir build
 cd build 
-cmake ../ -DCMAKE_BUILD_TYPE=Release
-cmake --build . --config Release -j 10
+cmake ../ 
+cmake --build . -j 16
 ```
 
-## Software Architecture
+## Support & Tipping
 
-Below is a simplified diagram illustrating how the different Serial Studio modules interact. For more detailed information, check out the full DOXYGEN documentation [here](https://serial-studio.github.io/hackers/).
+Open source software thrives on collaboration, creativity, and the generosity of its users. By supporting Serial Studio, you are directly contributing to its growth, sustainability, and ability to impact countless developers, makers, educators and innovators around the world.
 
-![Architecture](doc/architecture/architecture.png)
+If this project has helped you or inspired you, consider supporting it with a donation. Even small contributions make a big difference. Your generosity will keep this tool evolving and help more people to unlock their potential with open source software.
+
+👉 [Donate/Tip Here](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE)
 
 ## License
 
 This project is licensed under the MIT License. For more details, see the [LICENSE](LICENSE.md) file.
-
-## Support & Tipping
-
-If you find Serial Studio useful, consider supporting its development by [tipping through PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE).
-
-Alternatively, if you ever find yourself in [Cancún, Mexico](https://en.wikipedia.org/wiki/Cancun) and want to buy me a drink in person, feel free to [send me a DM on Instagram](https://instagram.com/aspatru). I’d love to meet you!
