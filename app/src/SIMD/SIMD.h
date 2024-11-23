@@ -452,7 +452,7 @@ inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
   for (int j = 1; j < simdWidth; ++j)
     minVal = std::min<qreal>(minVal, buffer[j]);
 
-#elif defined(CPU_ARM64) && !defined(SIMDE_NO_NATIVE)
+#elif defined(CPU_ARM64)
   // NEON or SVE implementation for ARM
   constexpr auto simdWith = sizeof(simde_float64x2_t) / sizeof(qreal);
   auto minVec = simde_vdupq_n_f64(extractor(data[0]));
@@ -552,7 +552,7 @@ inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
   for (int j = 1; j < simdWidth; ++j)
     maxVal = std::max<qreal>(maxVal, buffer[j]);
 
-#elif defined(CPU_ARM64) && !defined(SIMDE_NO_NATIVE)
+#elif defined(CPU_ARM64)
   // NEON or SVE implementation for ARM
   constexpr auto simdWith = sizeof(simde_float64x2_t) / sizeof(qreal);
   auto maxVec = simde_vdupq_n_f64(extractor(data[0]));
