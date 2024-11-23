@@ -152,7 +152,6 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel" OR CMAKE_CXX_COMPILER_ID MATCHES "I
   -O3                        # Optimize for speed
   -Wall                      # Enable most warning messages
   -Wextra                    # Enable additional warning messages
-  -xHost                     # Optimize for the host architecture
   -static-intel              # Static link compiler dependencies
  )
  add_link_options(

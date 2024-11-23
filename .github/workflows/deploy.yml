@@ -28,7 +28,7 @@ env:
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
-  QT_MODULES: qt3d qtgraphs qt5compat qtquick3d qtlocation qtdatavis3d qtserialport qtshadertools qtpositioning qtconnectivity
+  QT_MODULES: qt3d qtgraphs qtquick3d qtlocation qtdatavis3d qtserialport qtshadertools qtpositioning qtconnectivity
     
 #-------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -80,18 +80,17 @@ jobs:
       with:
         useLocalCache: true
 
-    #- name: '⚙️ Install Intel Compiler'
-    #  uses: fortran-lang/setup-fortran@v1
-    #  with:
-    #    compiler: intel
-    #    version: 2024.1
+    - name: '⚙️ Install Intel Compiler'
+      uses: fortran-lang/setup-fortran@v1
+      with:
+        compiler: intel
+        version: 2024.1
 
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
         cd build
-        #cmake ../ -DCMAKE_CXX_COMPILER=icpx -DCMAKE_C_COMPILER=icx -DCMAKE_BUILD_TYPE=Release
-        cmake ../ -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DCMAKE_CXX_COMPILER=icpx -DCMAKE_C_COMPILER=icx -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
