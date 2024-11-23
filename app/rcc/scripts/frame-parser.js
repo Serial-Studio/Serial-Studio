@@ -6,6 +6,7 @@
  *
  * @param[in]  frame   A string containing the data frame.
  *                     Example: "value1,value2,value3"
+ *
  * @return     An array of strings with the split elements.
  *             Example: ["value1", "value2", "value3"]
  *
