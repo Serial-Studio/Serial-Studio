@@ -225,7 +225,7 @@ jobs:
         mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg"
 
     - name: '📋 Notarize'
-      uses: alex-spataru/xcode-notarize@v2
+      uses: wpilibsuite/xcode-notarize@v3
       with:
         product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
         appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
@@ -316,7 +316,7 @@ jobs:
         mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg"
 
     - name: '📋 Notarize'
-      uses: alex-spataru/xcode-notarize@v2
+      uses: wpilibsuite/xcode-notarize@v3
       with:
         product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
         appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
