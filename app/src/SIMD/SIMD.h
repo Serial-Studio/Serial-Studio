@@ -253,7 +253,7 @@ inline T findMin(const T *data, size_t count)
   // Reduce SIMD register to scalar
   T minVal = data[0];
   T buffer[simdWidth];
-  simde_vst1q_f64(buffer, minVec); // Store SIMD vector to buffer
+  simde_vst1q_f64(buffer, minVec);
   for (size_t j = 0; j < simdWidth; ++j)
     minVal = std::min<T>(minVal, buffer[j]);
 
