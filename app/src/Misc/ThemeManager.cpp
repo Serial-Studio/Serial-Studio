@@ -42,28 +42,28 @@ Misc::ThemeManager::ThemeManager()
 {
   // Set theme files
   // clang-format off
-  m_availableThemes = {
-    QStringLiteral("Default"),
-    QStringLiteral("Outdoor Day"),
-    QStringLiteral("Outdoor Night"),
-    QStringLiteral("Breeze Light"),
-    QStringLiteral("Breeze Dark"),
-    QStringLiteral("macOS Light"),
-    QStringLiteral("macOS Dark"),
-    QStringLiteral("Yaru Light"),
-    QStringLiteral("Yaru Dark"),
-    QStringLiteral("Deep Purple"),
-    QStringLiteral("Deep Blue"),
-    QStringLiteral("Deep Red"),
-    QStringLiteral("Deep Green"),
-    QStringLiteral("Pulse"),
-    QStringLiteral("Resistance"),
-    QStringLiteral("Dominion"),
+  const QStringList themes = {
+    QStringLiteral("default"),
+    QStringLiteral("outdoor-day"),
+    QStringLiteral("outdoor-night"),
+    QStringLiteral("breeze-light"),
+    QStringLiteral("breeze-dark"),
+    QStringLiteral("macos-light"),
+    QStringLiteral("macos-dark"),
+    QStringLiteral("yaru-light"),
+    QStringLiteral("yaru-dark"),
+    QStringLiteral("deep-purple"),
+    QStringLiteral("deep-blue"),
+    QStringLiteral("deep-red"),
+    QStringLiteral("deep-green"),
+    QStringLiteral("pulse"),
+    QStringLiteral("resistance"),
+    QStringLiteral("dominion"),
   };
   // clang-format on
 
   // Load theme files
-  foreach (auto theme, m_availableThemes)
+  foreach (auto theme, themes)
   {
     QFile file(QStringLiteral(":/rcc/themes/%1.json").arg(theme));
     if (file.open(QFile::ReadOnly))
@@ -71,6 +71,7 @@ Misc::ThemeManager::ThemeManager()
       const auto document = QJsonDocument::fromJson(file.readAll());
       const auto title = document.object().value("title").toString();
       m_themes.insert(title, document.object());
+      m_availableThemes.append(title);
 
       file.close();
     }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="Breeze Light">
+  <!-- General Colors -->
+  <style name="Text" foreground="#232629" background="#f9f9f9"/>
+  <style name="Selection" background="#3daee9" foreground="#ffffff"/>
+  <style name="LineNumber" foreground="#929497" background="#f9f9f9"/>
+  <style name="CurrentLine" background="#e9e9e9"/>
+  <style name="CurrentLineNumber" foreground="#3daee9" bold="true"/>
+  <style name="Occurrences" background="#d4d4d4"/>
+  <style name="SearchResult" background="#ffe792" foreground="#232629"/>
+
+  <!-- Syntax Highlighting -->
+  <style name="Keyword" foreground="#007aff" bold="true"/>
+  <style name="Type" foreground="#5856d6"/>
+  <style name="Function" foreground="#ff9500"/>
+  <style name="Macro" foreground="#ffcc00"/>
+  <style name="String" foreground="#34c759"/>
+  <style name="Number" foreground="#ff3b30"/>
+  <style name="Comment" foreground="#8e8e93" italic="true"/>
+  <style name="Label" foreground="#ff2d55"/>
+  <style name="Operator" foreground="#007aff"/>
+  <style name="Punctuation" foreground="#232629"/>
+  <style name="Preprocessor" foreground="#af52de" italic="true"/>
+
+  <!-- Braces and Matching -->
+  <style name="Parentheses" background="#b1dff6" foreground="#232629"/>
+  <style name="ParenthesesMismatch" background="#ff3b30" foreground="#ffffff"/>
+
+  <!-- Errors and Warnings -->
+  <style name="Warning" underlineColor="#ffcc00" underlineStyle="SingleUnderline"/>
+  <style name="Error" underlineColor="#ff3b30" underlineStyle="SingleUnderline"/>
+  <style name="DisabledCode" foreground="#c7c7cc" italic="true"/>
+
+  <!-- Diff Highlighting -->
+  <style name="AddedLine" foreground="#34c759"/>
+  <style name="RemovedLine" foreground="#ff3b30"/>
+  <style name="DiffContextLine" background="#eff0f1"/>
+  <style name="DiffSourceLine" background="#ffe792"/>
+  <style name="DiffDestLine" background="#b4eeb4"/>
+</style-scheme>

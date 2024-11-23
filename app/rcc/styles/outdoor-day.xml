@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="Outdoor Day">
+  <!-- General Colors -->
+  <style name="Text" foreground="#000000" background="#ffffff"/>
+  <style name="Selection" background="#007aff" foreground="#ffffff"/>
+  <style name="LineNumber" foreground="#888888" background="#ffffff"/>
+  <style name="CurrentLine" background="#f1f1f1"/>
+  <style name="CurrentLineNumber" foreground="#007aff" bold="true"/>
+  <style name="Occurrences" background="#eaeaea"/>
+  <style name="SearchResult" background="#f5f5f5" foreground="#000000"/>
+
+  <!-- Syntax Highlighting -->
+  <style name="Keyword" foreground="#007aff" bold="true"/>
+  <style name="Type" foreground="#5856d6"/>
+  <style name="Function" foreground="#ff9500"/>
+  <style name="Macro" foreground="#ffcc00"/>
+  <style name="String" foreground="#34c759"/>
+  <style name="Number" foreground="#ff3b30"/>
+  <style name="Comment" foreground="#888888" italic="true"/>
+  <style name="Label" foreground="#af52de"/>
+  <style name="Operator" foreground="#007aff"/>
+  <style name="Punctuation" foreground="#000000"/>
+  <style name="Preprocessor" foreground="#af52de" italic="true"/>
+
+  <!-- Braces and Matching -->
+  <style name="Parentheses" background="#99CAFF" foreground="#000000"/>
+  <style name="ParenthesesMismatch" background="#ff3b30" foreground="#ffffff"/>
+
+  <!-- Errors and Warnings -->
+  <style name="Warning" underlineColor="#ffcc00" underlineStyle="SingleUnderline"/>
+  <style name="Error" underlineColor="#ff3b30" underlineStyle="SingleUnderline"/>
+  <style name="DisabledCode" foreground="#c7c7cc" italic="true"/>
+
+  <!-- Diff Highlighting -->
+  <style name="AddedLine" foreground="#34c759"/>
+  <style name="RemovedLine" foreground="#ff3b30"/>
+  <style name="DiffContextLine" background="#f7f7f7"/>
+  <style name="DiffSourceLine" background="#f0f0f0"/>
+  <style name="DiffDestLine" background="#eaeaea"/>
+</style-scheme>

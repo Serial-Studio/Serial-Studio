@@ -1,6 +1,6 @@
 {
  "title": "Yaru Light",
- "code-editor-theme": "intellij",
+ "code-editor-theme": "yaru-light",
  "colors": {
   "groupbox_border": "#cccccc",
   "groupbox_background": "#f8f8f8",

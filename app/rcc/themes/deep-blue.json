@@ -1,6 +1,6 @@
 {
  "title": "Deep Blue",
- "code-editor-theme": "Blackboard.tmTheme",
+ "code-editor-theme": "deep-blue",
  "colors": {
   "groupbox_border": "#354a5f",
   "groupbox_background": "#1b2a3d",

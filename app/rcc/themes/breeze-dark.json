@@ -1,6 +1,6 @@
 {
  "title": "Breeze Dark",
- "code-editor-theme": "Sunburst.tmTheme",
+ "code-editor-theme": "breeze-dark",
  "colors": {
   "groupbox_border": "#43494F",
   "groupbox_background": "#31363b",

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="macOS Light">
+  <!-- General Colors -->
+  <style name="Text" foreground="#1d1d1d" background="#ffffff"/>
+  <style name="Selection" background="#007aff" foreground="#ffffff"/>
+  <style name="LineNumber" foreground="#a9a9a9" background="#ffffff"/>
+  <style name="CurrentLine" background="#f0f0f0"/>
+  <style name="CurrentLineNumber" foreground="#007aff" bold="true"/>
+  <style name="Occurrences" background="#e7e7e7"/>
+  <style name="SearchResult" background="#f5f5f5" foreground="#1d1d1d"/>
+
+  <!-- Syntax Highlighting -->
+  <style name="Keyword" foreground="#007aff" bold="true"/>
+  <style name="Type" foreground="#5856d6"/>
+  <style name="Function" foreground="#ff9500"/>
+  <style name="Macro" foreground="#ffcc00"/>
+  <style name="String" foreground="#34c759"/>
+  <style name="Number" foreground="#ff3b30"/>
+  <style name="Comment" foreground="#8e8e93" italic="true"/>
+  <style name="Label" foreground="#af52de"/>
+  <style name="Operator" foreground="#007aff"/>
+  <style name="Punctuation" foreground="#1d1d1d"/>
+  <style name="Preprocessor" foreground="#af52de" italic="true"/>
+
+  <!-- Braces and Matching -->
+  <style name="Parentheses" background="#b3d7ff" foreground="#1d1d1d"/>
+  <style name="ParenthesesMismatch" background="#ff3b30" foreground="#ffffff"/>
+
+  <!-- Errors and Warnings -->
+  <style name="Warning" underlineColor="#ffcc00" underlineStyle="SingleUnderline"/>
+  <style name="Error" underlineColor="#ff3b30" underlineStyle="SingleUnderline"/>
+  <style name="DisabledCode" foreground="#c7c7cc" italic="true"/>
+
+  <!-- Diff Highlighting -->
+  <style name="AddedLine" foreground="#34c759"/>
+  <style name="RemovedLine" foreground="#ff3b30"/>
+  <style name="DiffContextLine" background="#f8f8f8"/>
+  <style name="DiffSourceLine" background="#f0f0f0"/>
+  <style name="DiffDestLine" background="#e7e7e7"/>
+</style-scheme>

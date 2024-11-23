@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="Yaru Light">
+  <!-- General Colors -->
+  <style name="Text" foreground="#3c3c3c" background="#ffffff"/>
+  <style name="Selection" background="#e95420" foreground="#ffffff"/>
+  <style name="LineNumber" foreground="#888888" background="#ffffff"/>
+  <style name="CurrentLine" background="#f7f7f7"/>
+  <style name="CurrentLineNumber" foreground="#e95420" bold="true"/>
+  <style name="Occurrences" background="#e0e0e0"/>
+  <style name="SearchResult" background="#eeeeee" foreground="#3c3c3c"/>
+
+  <!-- Syntax Highlighting -->
+  <style name="Keyword" foreground="#007aff" bold="true"/>
+  <style name="Type" foreground="#5856d6"/>
+  <style name="Function" foreground="#ff9500"/>
+  <style name="Macro" foreground="#ffcc00"/>
+  <style name="String" foreground="#34c759"/>
+  <style name="Number" foreground="#ff3b30"/>
+  <style name="Comment" foreground="#888888" italic="true"/>
+  <style name="Label" foreground="#af52de"/>
+  <style name="Operator" foreground="#007aff"/>
+  <style name="Punctuation" foreground="#3c3c3c"/>
+  <style name="Preprocessor" foreground="#af52de" italic="true"/>
+
+  <!-- Braces and Matching -->
+  <style name="Parentheses" background="#F6BBA6" foreground="#3c3c3c"/>
+  <style name="ParenthesesMismatch" background="#ff3b30" foreground="#ffffff"/>
+
+  <!-- Errors and Warnings -->
+  <style name="Warning" underlineColor="#ffcc00" underlineStyle="SingleUnderline"/>
+  <style name="Error" underlineColor="#e95420" underlineStyle="SingleUnderline"/>
+  <style name="DisabledCode" foreground="#cccccc" italic="true"/>
+
+  <!-- Diff Highlighting -->
+  <style name="AddedLine" foreground="#34c759"/>
+  <style name="RemovedLine" foreground="#ff3b30"/>
+  <style name="DiffContextLine" background="#f6f6f6"/>
+  <style name="DiffSourceLine" background="#eeeeee"/>
+  <style name="DiffDestLine" background="#e0e0e0"/>
+</style-scheme>

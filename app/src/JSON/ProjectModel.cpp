@@ -209,7 +209,11 @@ JSON::ProjectModel &JSON::ProjectModel::instance()
  */
 bool JSON::ProjectModel::modified() const
 {
-  return m_modified;
+  bool parserModified = false;
+  if (JSON::FrameBuilder::instance().frameParser())
+    parserModified = JSON::FrameBuilder::instance().frameParser()->isModified();
+
+  return m_modified || parserModified;
 }
 
 /**

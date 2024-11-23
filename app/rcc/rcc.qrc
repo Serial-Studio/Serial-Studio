@@ -246,34 +246,37 @@
         <file>messages/Welcome_RU.txt</file>
         <file>messages/Welcome_ZH.txt</file>
         <file>scripts/frame-parser.js</file>
-        <file>styles/creator-dark.xml</file>
-        <file>styles/dark.xml</file>
-        <file>styles/default_classic.xml</file>
-        <file>styles/grayscale.xml</file>
-        <file>styles/inkpot.xml</file>
-        <file>styles/intellij.xml</file>
-        <file>styles/mabakor.xml</file>
-        <file>styles/modnokai_night_shift_v2.xml</file>
-        <file>styles/solarized-dark.xml</file>
-        <file>styles/solarized-light.xml</file>
-        <file>styles/summer.xml</file>
-        <file>styles/visualstudio-dark.xml</file>
-        <file>styles/visualstudio-light.xml</file>
-        <file>themes/Breeze Dark.json</file>
-        <file>themes/Breeze Light.json</file>
-        <file>themes/Deep Blue.json</file>
-        <file>themes/Deep Green.json</file>
-        <file>themes/Deep Purple.json</file>
-        <file>themes/Deep Red.json</file>
-        <file>themes/Default.json</file>
-        <file>themes/Dominion.json</file>
-        <file>themes/macOS Dark.json</file>
-        <file>themes/macOS Light.json</file>
-        <file>themes/Outdoor Day.json</file>
-        <file>themes/Outdoor Night.json</file>
-        <file>themes/Pulse.json</file>
-        <file>themes/Resistance.json</file>
-        <file>themes/Yaru Dark.json</file>
-        <file>themes/Yaru Light.json</file>
+        <file>styles/breeze-dark.xml</file>
+        <file>styles/breeze-light.xml</file>
+        <file>styles/deep-blue.xml</file>
+        <file>styles/deep-green.xml</file>
+        <file>styles/deep-purple.xml</file>
+        <file>styles/deep-red.xml</file>
+        <file>styles/default.xml</file>
+        <file>styles/dominion.xml</file>
+        <file>styles/macos-dark.xml</file>
+        <file>styles/macos-light.xml</file>
+        <file>styles/outdoor-day.xml</file>
+        <file>styles/outdoor-night.xml</file>
+        <file>styles/pulse.xml</file>
+        <file>styles/resistance.xml</file>
+        <file>styles/yaru-dark.xml</file>
+        <file>styles/yaru-light.xml</file>
+        <file>themes/breeze-dark.json</file>
+        <file>themes/breeze-light.json</file>
+        <file>themes/deep-blue.json</file>
+        <file>themes/deep-green.json</file>
+        <file>themes/deep-purple.json</file>
+        <file>themes/deep-red.json</file>
+        <file>themes/default.json</file>
+        <file>themes/dominion.json</file>
+        <file>themes/macos-dark.json</file>
+        <file>themes/macos-light.json</file>
+        <file>themes/outdoor-day.json</file>
+        <file>themes/outdoor-night.json</file>
+        <file>themes/pulse.json</file>
+        <file>themes/resistance.json</file>
+        <file>themes/yaru-dark.json</file>
+        <file>themes/yaru-light.json</file>
     </qresource>
 </RCC>

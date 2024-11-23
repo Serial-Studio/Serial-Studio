@@ -1,6 +1,6 @@
 {
  "title": "Pulse",
- "code-editor-theme": "Twilight.tmTheme",
+ "code-editor-theme": "pulse",
  "colors": {
   "groupbox_border": "#4a4a4a",
   "groupbox_background": "#202020",

@@ -1,6 +1,6 @@
 {
  "title": "Yaru Dark",
- "code-editor-theme": "Twilight.tmTheme",
+ "code-editor-theme": "yaru-dark",
  "colors": {
   "groupbox_border": "#4a4a4a",
   "groupbox_background": "#2c2c2c",
