@@ -136,6 +136,7 @@ public:
   [[nodiscard]] QStringList lineEndings() const;
   [[nodiscard]] QStringList displayModes() const;
 
+  Q_INVOKABLE bool validateUserHex(const QString &text);
   Q_INVOKABLE QString formatUserHex(const QString &text);
 
 public slots:

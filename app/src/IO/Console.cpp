@@ -223,14 +223,36 @@ QStringList IO::Console::displayModes() const
 }
 
 /**
+ * Validates the given @a text to ensure it contains only valid HEX characters
+ * and consists of complete byte pairs (even-length string).
+ * Returns true if the input is valid, otherwise false.
+ */
+bool IO::Console::validateUserHex(const QString &text)
+{
+  // Remove spaces to check the actual HEX content
+  QString cleanText = text.simplified().remove(' ');
+
+  // Match the string against a HEX pattern (only [0-9A-Fa-f])
+  static QRegularExpression hexPattern("^[0-9A-Fa-f]*$");
+  if (!hexPattern.match(cleanText).hasMatch())
+    return false;
+
+  // Check for even length to ensure complete byte pairs
+  if (cleanText.length() % 2 != 0)
+    return false;
+
+  return true;
+}
+
+/**
  * Validates the given @a text and adds space to display the text in a
  * byte-oriented view
  */
 QString IO::Console::formatUserHex(const QString &text)
 {
-  // Remove spaces & stuff
-  auto data = text.simplified();
-  data = data.replace(QStringLiteral(" "), "");
+  // Remove spaces and ensure the input is a valid HEX string
+  static QRegularExpression exp("[^0-9A-Fa-f]");
+  QString data = text.simplified().remove(exp);
 
   // Convert to hex string with spaces between bytes
   QString str;
