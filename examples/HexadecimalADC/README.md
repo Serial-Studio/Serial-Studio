@@ -58,7 +58,7 @@ Here’s the custom JavaScript parser function used by this project:
  * @param[in]  frame  The latest received frame as a hexadecimal string.
  * @return     Array of integers containing the parsed frame elements.
  */
-function parse(frame, separator) {
+function parse(frame) {
     let dataArray = [];
     for (let i = 0; i < frame.length; i += 2) {
         let hexByte = frame.substring(i, i + 2);
