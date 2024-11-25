@@ -28,6 +28,10 @@
 #include <QVector>
 #include <QPointF>
 
+#ifdef _WIN32
+#  include <cmath>
+#endif
+
 #if defined(CPU_X86_64)
 #  include <x86/sse2.h>
 #endif
@@ -271,7 +275,7 @@ inline T findMax(const T *data, size_t count)
 
   // Reduce SIMD register to scalar
   T maxVal = data[0];
-  std::vector<T> buffer(simdWidth); // Replace VLAs with std::vector
+  std::vector<T> buffer(simdWidth);
   simde_mm_storeu_pd(buffer.data(), maxVec);
   for (size_t j = 0; j < simdWidth; ++j)
     maxVal = std::max<T>(maxVal, buffer[j]);
@@ -359,10 +363,10 @@ inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
   }
 
   // Reduce SIMD register to scalar
-  alignas(16) qreal buffer[sseWidth];
+  alignas(16) qreal buffer[simdWith];
   simde_mm_storeu_pd(buffer, minVec);
   qreal minVal = buffer[0];
-  for (int j = 1; j < sseWidth; ++j)
+  for (size_t j = 1; j < simdWith; ++j)
     minVal = std::min<qreal>(minVal, buffer[j]);
 
 #elif defined(CPU_ARM64)
@@ -438,10 +442,10 @@ inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
   }
 
   // Reduce SIMD register to scalar
-  alignas(16) qreal buffer[sseWidth];
+  alignas(16) qreal buffer[simdWith];
   simde_mm_storeu_pd(buffer, maxVec);
   qreal maxVal = buffer[0];
-  for (int j = 1; j < sseWidth; ++j)
+  for (size_t j = 1; j < simdWith; ++j)
     maxVal = std::max<qreal>(maxVal, buffer[j]);
 
 #elif defined(CPU_ARM64)
