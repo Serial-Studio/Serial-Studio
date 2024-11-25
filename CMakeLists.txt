@@ -88,79 +88,77 @@ endif()
 #
 if(WIN32 AND MINGW)
  add_compile_options(
-  -O3                  # Optimize for speed
-  -Wall                # Enable most warning messages
-  -Wextra              # Enable additional warning messages
-  -fuse-linker-plugin  # Use LTO plugin to enable link-time optimization
-  -ftree-vectorize     # Enable loop vectorization
+  -O3                            # Optimize for speed
+  -Wall                          # Enable most warning messages
+  -Wextra                        # Enable additional warning messages
+  -fuse-linker-plugin            # Use LTO plugin to enable link-time optimization
+  -ftree-vectorize               # Enable loop vectorization
+  -fno-fast-math                 # Standard-compliant floating point math
+  -fno-unsafe-math-optimizations # Use safe math only
  )
  add_link_options(
-  -Wl,--gc-sections    # Remove unused sections during linking
-  -fuse-linker-plugin  # Enable LTO during linking
+  -Wl,--gc-sections              # Remove unused sections during linking
+  -fuse-linker-plugin            # Enable LTO during linking
  )
 
- # Uncomment if needed for debugging
- # add_compile_options(-g -fsanitize=address)  # Enable debugging and Address Sanitizer
- # add_link_options(-fsanitize=address)        # Link with Address Sanitizer
 
 #
 # MSVC-specific settings
 #
 elseif(WIN32 AND MSVC)
  add_compile_options(
-  /permissive-           # Enable strict ISO compliance, disable MSVC extensions
-  /Zc:__cplusplus        # Correct __cplusplus value to reflect the C++ standard
-  /Zc:preprocessor       # Enable standards-conforming preprocessor
-  /MP                    # Multi-processor compilation for faster builds
-  /vmg                   # Use general pointer-to-member representation
-  /O2                    # Optimize for speed
-  /W3                    # Warning level 3 (reasonable warnings without being too verbose)
-  /GL                    # Enable whole program optimization
-  /MT                    # Link compiler runtime statically
+  /permissive-                   # Enable strict ISO compliance
+  /Zc:__cplusplus                # Correct __cplusplus value
+  /Zc:preprocessor               # Enable standards-conforming preprocessor
+  /MP                            # Multi-processor compilation for faster builds
+  /vmg                           # Use general pointer-to-member representation
+  /Ox                            # Optimize for speed
+  /W3                            # Warning level 3 messages
+  /GL                            # Enable whole program optimization
+  /MT                            # Link compiler runtime statically
+  /Qvec                          # Enable loop vectorization
+  /fp:strict                     # Standard-compliant floating point math
  )
  add_link_options(
-  /OPT:REF               # Remove unreferenced functions/data
-  /OPT:ICF               # Remove identical COMDATs to reduce binary size
-  /LTCG                  # Link-time code generation for further optimization
+  /OPT:REF                       # Remove unreferenced functions/data
+  /OPT:ICF                       # Remove identical COMDATs
+  /LTCG                          # Enable LTO during linkingn
  )
-
- # Uncomment if needed for debugging with Address Sanitizer
- # add_compile_options(/fsanitize=address)    # Enable Address Sanitizer
- # add_link_options(/fsanitize=address)       # Link with Address Sanitizer
 
 #
 # macOS-specific settings
 #
 elseif(APPLE)   
  add_compile_options(
-  -O3                     # Optimize for speed
-  -Wall                   # Enable most warning messages
-  -Wextra                 # Enable additional warning messages
-  -fvectorize             # Enable loop vectorization
-  -fslp-vectorize         # Enable SLP vectorization
+  -O3                            # Optimize for speed
+  -Wall                          # Enable most warning messages
+  -Wextra                        # Enable additional warning messages
+  -fvectorize                    # Enable loop vectorization
+  -fslp-vectorize                # Enable SLP vectorization
+  -fno-fast-math                 # Standard-compliant floating point math
+  -fno-unsafe-math-optimizations # Use safe math only
  )
  add_link_options(
-  -Wl,-dead_strip         # Remove unused code and data during linking
-  -flto=full              # Link-time optimization
+  -Wl,-dead_strip                # Remove unused code and data during linking
+  -flto=full                     # Link-time optimization
  )
- # Uncomment if needed for debugging
- # add_compile_options(-g -fsanitize=address)  # Enable debugging and Address Sanitizer
- # add_link_options(-fsanitize=address)        # Link with Address Sanitizer
 
 #
 # Intel C++ Compiler settings
 #
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel" OR CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
  add_compile_options(
-  -O3                        # Optimize for speed
-  -Wall                      # Enable most warning messages
-  -Wextra                    # Enable additional warning messages
-  -static-intel              # Static link compiler dependencies
-  -qopt-enable=vec           # Enable loop vectorization
+  -O3                            # Optimize for speed
+  -Wall                          # Enable most warning messages
+  -Wextra                        # Enable additional warning messages
+  -static-intel                  # Static link compiler dependencies
+  -fvectorize                    # Enable loop vectorization
+  -fslp-vectorize                # Enable SLP vectorization
+  -fp-model=precise              # Standard-compliant floating point math
  )
  add_link_options(
-  -Wl,--gc-sections          # Remove unused sections during linking
-  -flto=full                 # Link-time optimization
+  -Wl,--gc-sections              # Remove unused sections during linking
+  -flto=full                     # Link-time optimization
  )
 
 #
@@ -168,24 +166,23 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel" OR CMAKE_CXX_COMPILER_ID MATCHES "I
 #
 elseif(UNIX)
  add_compile_options(
-  -O3                  # Optimize for speed
-  -Wall                # Enable most warning messages
-  -Wextra              # Enable additional warning messages
-  -ftree-vectorize     # Enable loop vectorization
+  -O3                            # Optimize for speed
+  -Wall                          # Enable most warning messages
+  -Wextra                        # Enable additional warning messages
+  -ftree-vectorize               # Enable loop vectorization
+  -fno-fast-math                 # Standard-compliant floating point math
+  -fno-unsafe-math-optimizations # Use safe math only
  )
  add_link_options(
-  -Wl,--gc-sections    # Remove unused sections during linking
-  -flto                # Link-time optimization
+  -Wl,--gc-sections              # Remove unused sections during linking
+  -flto                          # Link-time optimization
  )
 
+ # Needed when compiling for OpenSUSE
  set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
  set(CMAKE_CXX_COMPILER_AR "/usr/bin/ar")
  set(CMAKE_C_COMPILER_RANLIB "/usr/bin/ranlib")
  set(CMAKE_CXX_COMPILER_RANLIB "/usr/bin/ranlib")
-
- # Uncomment if needed for debugging
- # add_compile_options(-g -fsanitize=address)  # Enable debugging and Address Sanitizer
- # add_link_options(-fsanitize=address)        # Link with Address Sanitizer
 endif()
 
 #-------------------------------------------------------------------------------
