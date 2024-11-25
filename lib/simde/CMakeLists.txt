@@ -50,13 +50,13 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
 # Intel/AMD processor optimizations
 #
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86|x86_64|AMD64)")
- message(STATUS "Detected x86 architecture") 
+ message(STATUS "Detected x86 architecture")
  if(MSVC)
-  target_compile_options(simde INTERFACE /arch:AVX2 /DCPU_X86_64)
-  message(STATUS "Enabled AVX2 optimizations for MSVC")
+  target_compile_options(simde INTERFACE /arch:SSE2 /DCPU_X86_64)
+  message(STATUS "Enabled SSE2 optimizations for MSVC")
  else()
-  target_compile_options(simde INTERFACE -mavx2 -DCPU_X86_64)
-  message(STATUS "Enabled AVX2 optimizations for GCC & LLVM")
+  target_compile_options(simde INTERFACE -msse2 -DCPU_X86_64)
+  message(STATUS "Enabled SSE2 optimizations for GCC & LLVM")
  endif()
 
 #
@@ -66,5 +66,4 @@ else()
  message(WARNING "Unknown architecture; enabling portable fallback")
  add_compile_definitions(SIMDE_NO_NATIVE)
  target_compile_options(simde INTERFACE -DSIMDE_NO_NATIVE)
- 
 endif()

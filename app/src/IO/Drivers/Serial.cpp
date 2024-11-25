@@ -784,7 +784,7 @@ void IO::Drivers::Serial::readSettings()
   list = m_settings.value("IO_BaudRates", stdBaudRates).toStringList();
 
   // Add any missing standard baud rate to saved user settings
-  for (const QString& rate : stdBaudRates)
+  for (const QString &rate : stdBaudRates)
   {
     if (!list.contains(rate))
       list.append(rate);
@@ -795,7 +795,7 @@ void IO::Drivers::Serial::readSettings()
   for (int i = 0; i < list.count(); ++i)
     m_baudRateList.append(list.at(i));
 
-    // Sort baud rate list
+  // Sort baud rate list
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
   for (auto i = 0; i < m_baudRateList.count() - 1; ++i)
   {

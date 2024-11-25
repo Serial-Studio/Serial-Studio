@@ -29,7 +29,7 @@
 #include <QPointF>
 
 #if defined(CPU_X86_64)
-#  include <x86/avx2.h>
+#  include <x86/sse2.h>
 #endif
 
 #if defined(CPU_ARM64)
@@ -59,14 +59,14 @@ template<typename T>
 inline void fill(T *data, size_t count, T value)
 {
 #if defined(CPU_X86_64)
-  // Use AVX2 for supported Intel/AMD processors
-  constexpr auto simdWidth = sizeof(simde__m256d) / sizeof(T);
+  // Use SSE2 for supported Intel/AMD processors
+  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
 
   // SIMD bulk initialization
   size_t i = 0;
-  auto fillValue = simde_mm256_set1_pd(value);
+  auto fillValue = simde_mm_set1_pd(value);
   for (; i + simdWidth <= count; i += simdWidth)
-    simde_mm256_storeu_pd(data + i, fillValue);
+    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), fillValue);
 
   // Handle remaining elements using a scalar loop
   for (; i < count; ++i)
@@ -81,20 +81,6 @@ inline void fill(T *data, size_t count, T value)
   // SIMD bulk initialization
   for (; i + simde_svcntd() <= count; i += simde_svcntd())
     simde_svst1_f64(pg, data + i, fillValue);
-
-  // Handle remaining elements using a scalar loop
-  for (; i < count; ++i)
-    data[i] = value;
-
-#elif defined(SIMDE_NO_NATIVE)
-  // Fallback to SSE
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
-
-  // SIMD bulk initialization
-  size_t i = 0;
-  auto fillValue = simde_mm_set1_pd(value);
-  for (; i + simdWidth <= count; i += simdWidth)
-    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), fillValue);
 
   // Handle remaining elements using a scalar loop
   for (; i < count; ++i)
@@ -128,14 +114,15 @@ inline void shift(T *data, size_t count, T newValue)
 {
 #if defined(CPU_X86_64)
   // Use AVX2 for supported Intel/AMD processors
-  constexpr auto simdWidth = sizeof(simde__m256d) / sizeof(T);
+  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
 
   // Shift elements using SIMD operations
   size_t i = 0;
   for (; i + simdWidth <= count; i += simdWidth)
   {
-    auto next = simde_mm256_loadu_pd(data + i + 1);
-    simde_mm256_storeu_pd(data + i, next);
+    auto next
+        = simde_mm_loadu_pd(reinterpret_cast<const double *>(data + i + 1));
+    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), next);
   }
 
   // Handle remaining elements using a scalar loop
@@ -156,26 +143,6 @@ inline void shift(T *data, size_t count, T newValue)
   {
     auto next = simde_svld1_f64(pg, data + i + 1);
     simde_svst1_f64(pg, data + i, next);
-  }
-
-  // Handle remaining elements using a scalar loop
-  for (; i < count - 1; ++i)
-    data[i] = data[i + 1];
-
-  // Set the last value of the array
-  data[count - 1] = newValue;
-
-#elif defined(SIMDE_NO_NATIVE)
-  // Fallback to SSE for unsupported platforms
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
-
-  // Shift elements using SIMD operations
-  size_t i = 0;
-  for (; i + simdWidth <= count; i += simdWidth)
-  {
-    auto next
-        = simde_mm_loadu_pd(reinterpret_cast<const double *>(data + i + 1));
-    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), next);
   }
 
   // Handle remaining elements using a scalar loop
@@ -212,22 +179,22 @@ template<typename T>
 inline T findMin(const T *data, size_t count)
 {
 #if defined(CPU_X86_64)
-  // Use AVX2 for supported Intel/AMD processors
-  constexpr auto simdWidth = sizeof(simde__m256d) / sizeof(T);
+  // Use SSE2 for supported Intel/AMD processors
+  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
 
   // SIMD comparisons
   size_t i = 0;
-  auto minVec = simde_mm256_set1_pd(data[0]);
+  auto minVec = simde_mm_set1_pd(data[0]);
   for (; i + simdWidth <= count; i += simdWidth)
   {
-    auto values = simde_mm256_loadu_pd(&data[i]);
-    minVec = simde_mm256_min_pd(minVec, values);
+    auto values = simde_mm_loadu_pd(&data[i]);
+    minVec = simde_mm_min_pd(minVec, values);
   }
 
   // Reduce SIMD register to scalar
   T minVal = data[0];
   std::vector<T> buffer(simdWidth); // Replace VLAs with std::vector
-  simde_mm256_storeu_pd(buffer.data(), minVec);
+  simde_mm_storeu_pd(buffer.data(), minVec);
   for (size_t j = 0; j < simdWidth; ++j)
     minVal = std::min<T>(minVal, buffer[j]);
 
@@ -254,32 +221,6 @@ inline T findMin(const T *data, size_t count)
   T minVal = data[0];
   T buffer[simdWidth];
   simde_vst1q_f64(buffer, minVec);
-  for (size_t j = 0; j < simdWidth; ++j)
-    minVal = std::min<T>(minVal, buffer[j]);
-
-  // Scalar fallback for remaining elements
-  for (; i < count; ++i)
-    minVal = std::min<T>(minVal, data[i]);
-
-  return minVal;
-
-#elif defined(SIMDE_NO_NATIVE)
-  // Fallback to SSE for unsupported platforms
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
-
-  // SIMD comparisons
-  size_t i = 0;
-  auto minVec = simde_mm_set1_pd(data[0]);
-  for (; i + simdWidth <= count; i += simdWidth)
-  {
-    auto values = simde_mm_loadu_pd(&data[i]);
-    minVec = simde_mm_min_pd(minVec, values);
-  }
-
-  // Reduce SIMD register to scalar
-  T minVal = data[0];
-  std::vector<T> buffer(simdWidth); // Replace VLAs with std::vector
-  simde_mm_storeu_pd(buffer.data(), minVec);
   for (size_t j = 0; j < simdWidth; ++j)
     minVal = std::min<T>(minVal, buffer[j]);
 
@@ -316,22 +257,22 @@ template<typename T>
 inline T findMax(const T *data, size_t count)
 {
 #if defined(CPU_X86_64)
-  // Use AVX2 for supported Intel/AMD processors
-  constexpr auto simdWidth = sizeof(simde__m256d) / sizeof(T);
+  // Use SSE2 for supported Intel/AMD processors
+  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
 
   // SIMD comparisons
   size_t i = 0;
-  auto maxVec = simde_mm256_set1_pd(data[0]);
+  auto maxVec = simde_mm_set1_pd(data[0]);
   for (; i + simdWidth <= count; i += simdWidth)
   {
-    auto values = simde_mm256_loadu_pd(&data[i]);
-    maxVec = simde_mm256_max_pd(maxVec, values);
+    auto values = simde_mm_loadu_pd(&data[i]);
+    maxVec = simde_mm_max_pd(maxVec, values);
   }
 
   // Reduce SIMD register to scalar
   T maxVal = data[0];
-  std::vector<T> buffer(simdWidth);
-  simde_mm256_storeu_pd(buffer.data(), maxVec);
+  std::vector<T> buffer(simdWidth); // Replace VLAs with std::vector
+  simde_mm_storeu_pd(buffer.data(), maxVec);
   for (size_t j = 0; j < simdWidth; ++j)
     maxVal = std::max<T>(maxVal, buffer[j]);
 
@@ -358,32 +299,6 @@ inline T findMax(const T *data, size_t count)
   T maxVal = data[0];
   T buffer[simdWidth];
   simde_vst1q_f64(buffer, maxVec);
-  for (size_t j = 0; j < simdWidth; ++j)
-    maxVal = std::max<T>(maxVal, buffer[j]);
-
-  // Scalar fallback for remaining elements
-  for (; i < count; ++i)
-    maxVal = std::max<T>(maxVal, data[i]);
-
-  return maxVal;
-
-#elif defined(SIMDE_NO_NATIVE)
-  // Fallback to SSE for unsupported platforms
-  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
-
-  // SIMD comparisons
-  size_t i = 0;
-  auto maxVec = simde_mm_set1_pd(data[0]);
-  for (; i + simdWidth <= count; i += simdWidth)
-  {
-    auto values = simde_mm_loadu_pd(&data[i]);
-    maxVec = simde_mm_max_pd(maxVec, values);
-  }
-
-  // Reduce SIMD register to scalar
-  T maxVal = data[0];
-  std::vector<T> buffer(simdWidth); // Replace VLAs with std::vector
-  simde_mm_storeu_pd(buffer.data(), maxVec);
   for (size_t j = 0; j < simdWidth; ++j)
     maxVal = std::max<T>(maxVal, buffer[j]);
 
@@ -432,24 +347,22 @@ inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
     return 0;
 
 #if defined(CPU_X86_64)
-  // AVX implementation for x86
-  constexpr auto simdWidth = sizeof(simde__m256d) / sizeof(qreal);
-  simde__m256d minVec = simde_mm256_set1_pd(extractor(data[0]));
+  // SSE2 implementation for x86
+  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(qreal);
+  auto minVec = simde_mm_set1_pd(extractor(data[0]));
 
   // SIMD comparisons
-  for (; i + simdWidth <= count; i += simdWidth)
+  for (; i + simdWith <= count; i += simdWith)
   {
-    simde__m256d values
-        = simde_mm256_set_pd(extractor(data[i + 3]), extractor(data[i + 2]),
-                             extractor(data[i + 1]), extractor(data[i]));
-    minVec = simde_mm256_min_pd(minVec, values);
+    auto values = simde_mm_set_pd(extractor(data[i + 1]), extractor(data[i]));
+    minVec = simde_mm_min_pd(minVec, values);
   }
 
   // Reduce SIMD register to scalar
-  alignas(32) qreal buffer[simdWidth];
-  simde_mm256_storeu_pd(buffer, minVec);
+  alignas(16) qreal buffer[sseWidth];
+  simde_mm_storeu_pd(buffer, minVec);
   qreal minVal = buffer[0];
-  for (int j = 1; j < simdWidth; ++j)
+  for (int j = 1; j < sseWidth; ++j)
     minVal = std::min<qreal>(minVal, buffer[j]);
 
 #elif defined(CPU_ARM64)
@@ -471,25 +384,6 @@ inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
   simde_vst1q_f64(buffer, minVec);
   qreal minVal = buffer[0];
   for (size_t j = 1; j < simdWith; ++j)
-    minVal = std::min<qreal>(minVal, buffer[j]);
-
-#elif defined(SIMDE_NO_NATIVE)
-  // SSE fallback for unsupported platforms
-  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(qreal);
-  auto minVec = simde_mm_set1_pd(extractor(data[0]));
-
-  // SIMD comparisons
-  for (; i + simdWith <= count; i += simdWith)
-  {
-    auto values = simde_mm_set_pd(extractor(data[i + 1]), extractor(data[i]));
-    minVec = simde_mm_min_pd(minVec, values);
-  }
-
-  // Reduce SIMD register to scalar
-  alignas(16) qreal buffer[sseWidth];
-  simde_mm_storeu_pd(buffer, minVec);
-  qreal minVal = buffer[0];
-  for (int j = 1; j < sseWidth; ++j)
     minVal = std::min<qreal>(minVal, buffer[j]);
 
 #else
@@ -532,24 +426,22 @@ inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
     return 0;
 
 #if defined(CPU_X86_64)
-  // AVX implementation for x86
-  constexpr auto simdWidth = sizeof(simde__m256d) / sizeof(qreal);
-  simde__m256d maxVec = simde_mm256_set1_pd(extractor(data[0]));
+  // SSE2 implementation for x86
+  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(qreal);
+  auto maxVec = simde_mm_set1_pd(extractor(data[0]));
 
   // SIMD comparisons
-  for (; i + simdWidth <= count; i += simdWidth)
+  for (; i + simdWith <= count; i += simdWith)
   {
-    simde__m256d values
-        = simde_mm256_set_pd(extractor(data[i + 3]), extractor(data[i + 2]),
-                             extractor(data[i + 1]), extractor(data[i]));
-    maxVec = simde_mm256_max_pd(maxVec, values);
+    auto values = simde_mm_set_pd(extractor(data[i + 1]), extractor(data[i]));
+    maxVec = simde_mm_max_pd(maxVec, values);
   }
 
   // Reduce SIMD register to scalar
-  alignas(32) qreal buffer[simdWidth];
-  simde_mm256_storeu_pd(buffer, maxVec);
+  alignas(16) qreal buffer[sseWidth];
+  simde_mm_storeu_pd(buffer, maxVec);
   qreal maxVal = buffer[0];
-  for (int j = 1; j < simdWidth; ++j)
+  for (int j = 1; j < sseWidth; ++j)
     maxVal = std::max<qreal>(maxVal, buffer[j]);
 
 #elif defined(CPU_ARM64)
@@ -571,25 +463,6 @@ inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
   simde_vst1q_f64(buffer, maxVec);
   qreal maxVal = buffer[0];
   for (size_t j = 1; j < simdWith; ++j)
-    maxVal = std::max<qreal>(maxVal, buffer[j]);
-
-#elif defined(SIMDE_NO_NATIVE)
-  // SSE fallback for unsupported platforms
-  constexpr auto simdWith = sizeof(simde__m128d) / sizeof(qreal);
-  auto maxVec = simde_mm_set1_pd(extractor(data[0]));
-
-  // SIMD comparisons
-  for (; i + simdWith <= count; i += simdWith)
-  {
-    auto values = simde_mm_set_pd(extractor(data[i + 1]), extractor(data[i]));
-    maxVec = simde_mm_max_pd(maxVec, values);
-  }
-
-  // Reduce SIMD register to scalar
-  alignas(16) qreal buffer[sseWidth];
-  simde_mm_storeu_pd(buffer, maxVec);
-  qreal maxVal = buffer[0];
-  for (int j = 1; j < sseWidth; ++j)
     maxVal = std::max<qreal>(maxVal, buffer[j]);
 
 #else
