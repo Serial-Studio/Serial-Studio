@@ -300,56 +300,6 @@ bool JSON::FrameParser::loadScript(const QString &script)
     return false;
   }
 
-  // Try to run parse() function
-  QJSValueList args = {""};
-  auto ret = fun.call(args);
-
-  // Error on engine evaluation
-  if (!errors.isEmpty())
-  {
-    Misc::Utilities::showMessageBox(
-        tr("Frame parser syntax error!"),
-        tr("Error on line %1.").arg(errors.first()));
-    return false;
-  }
-
-  // Error on function execution
-  else if (ret.isError())
-  {
-    QString errorStr;
-    switch (ret.errorType())
-    {
-      case QJSValue::GenericError:
-        errorStr = tr("Generic error");
-        break;
-      case QJSValue::EvalError:
-        errorStr = tr("Evaluation error");
-        break;
-      case QJSValue::RangeError:
-        errorStr = tr("Range error");
-        break;
-      case QJSValue::ReferenceError:
-        errorStr = tr("Reference error");
-        break;
-      case QJSValue::SyntaxError:
-        errorStr = tr("Syntax error");
-        break;
-      case QJSValue::TypeError:
-        errorStr = tr("Type error");
-        break;
-      case QJSValue::URIError:
-        errorStr = tr("URI error");
-        break;
-      default:
-        errorStr = tr("Unknown error");
-        break;
-    }
-
-    Misc::Utilities::showMessageBox(tr("Frame parser error detected!"),
-                                    errorStr);
-    return false;
-  }
-
   // We have reached this point without any errors, set function caller
   m_parseFunction = fun;
   return true;
