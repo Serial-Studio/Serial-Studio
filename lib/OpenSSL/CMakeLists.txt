@@ -20,7 +20,7 @@
 # THE SOFTWARE.
 #
 
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.20)
 
 function(target_link_openssl TARGET BASE_DIR)
  if(WIN32)

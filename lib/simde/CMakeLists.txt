@@ -20,7 +20,7 @@
 # THE SOFTWARE.
 #
 
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.20)
 
 add_library(simde INTERFACE)
 target_include_directories(simde INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -67,36 +67,4 @@ else()
  add_compile_definitions(SIMDE_NO_NATIVE)
  target_compile_options(simde INTERFACE -DSIMDE_NO_NATIVE)
  
-endif()
-
-#
-# macOS OpenMP (use homebrew port)
-#
-if(APPLE)
- include_directories(
-  "/opt/homebrew/opt/libomp/include"
-  "/opt/homebrew/opt/llvm/include"
- )
- link_directories(
-  "/opt/homebrew/opt/libomp/lib"
-  "/opt/homebrew/opt/llvm/lib"
- )
-endif()
-
-#
-# Enable OpenMP SIMD support globally
-#
-find_package(OpenMP QUIET)
-if(OpenMP_CXX_FOUND)
- if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-  add_compile_options(/openmp:experimental)
- elseif(CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
-  add_compile_options(-qopenmp-simd)
- else()
-  add_compile_options(${OpenMP_CXX_FLAGS})
- endif()
- add_compile_definitions(SIMDE_ENABLE_OPENMP)
- message(STATUS "OpenMP SIMD support enabled globally")
-else()
- message(WARNING "OpenMP not found; SIMD performance may be suboptimal")
 endif()
