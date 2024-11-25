@@ -243,8 +243,7 @@ bool JSON::FrameParser::save(const bool silent)
 bool JSON::FrameParser::loadScript(const QString &script)
 {
   // Ensure that engine is configured correctly
-  m_engine.installExtensions(QJSEngine::ConsoleExtension
-                             | QJSEngine::GarbageCollectionExtension);
+  m_engine.installExtensions(QJSEngine::AllExtensions);
 
   // Check if there are no general JS errors
   QStringList errors;
