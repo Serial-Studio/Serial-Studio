@@ -54,8 +54,8 @@ Once Qt is installed, you can compile the project by opening the **CMakeLists.tx
 ```bash
 mkdir build
 cd build 
-cmake ../ 
-cmake --build . -j 16
+cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j 16 
 ```
 
 ## Support & Tipping

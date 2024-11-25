@@ -210,8 +210,8 @@ void Widgets::Plot::calculateAutoScaleRange()
   if (!ok)
   {
     // Initialize values to ensure that min/max are set
-    m_minY = std::numeric_limits<double>::max();
-    m_maxY = std::numeric_limits<double>::lowest();
+    m_minY = std::numeric_limits<qreal>::max();
+    m_maxY = std::numeric_limits<qreal>::lowest();
 
     // Loop through the plot data and update the min and max
     m_minY = SIMD::findMin(m_data, [](const QPointF &p) { return p.y(); });

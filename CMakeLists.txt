@@ -38,6 +38,13 @@ find_package(
 )
 
 #-------------------------------------------------------------------------------
+# Options for build types
+#-------------------------------------------------------------------------------
+
+option(DEBUG_SANITIZER "Enable sanitizers for debug builds" OFF)
+option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" OFF)
+
+#-------------------------------------------------------------------------------
 # Project information
 #-------------------------------------------------------------------------------
 
@@ -68,6 +75,18 @@ add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
 add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 
 #-------------------------------------------------------------------------------
+# Set UNIX friendly name for app & fix OpenSUSE builds
+#-------------------------------------------------------------------------------
+
+if (UNIX AND NOT APPLE)
+ set(PROJECT_EXECUTABLE "serial-studio")
+ set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
+ set(CMAKE_CXX_COMPILER_AR "/usr/bin/ar")
+ set(CMAKE_C_COMPILER_RANLIB "/usr/bin/ranlib")
+ set(CMAKE_CXX_COMPILER_RANLIB "/usr/bin/ranlib")
+endif()
+
+#-------------------------------------------------------------------------------
 # CPU architecture configuration
 #-------------------------------------------------------------------------------
 
@@ -80,117 +99,114 @@ if(APPLE)
 endif()
 
 #-------------------------------------------------------------------------------
-# Compiler flags
+# Production optimization flags
 #-------------------------------------------------------------------------------
 
-#
-# MinGW-specific settings
-#
-if(WIN32 AND MINGW)
- add_compile_options(
-  -O3                            # Optimize for speed
-  -Wall                          # Enable most warning messages
-  -Wextra                        # Enable additional warning messages
-  -fuse-linker-plugin            # Use LTO plugin to enable link-time optimization
-  -ftree-vectorize               # Enable loop vectorization
-  -fno-fast-math                 # Standard-compliant floating point math
-  -fno-unsafe-math-optimizations # Use safe math only
- )
- add_link_options(
-  -Wl,--gc-sections              # Remove unused sections during linking
-  -fuse-linker-plugin            # Enable LTO during linking
- )
+if(PRODUCTION_OPTIMIZATION)
+ # MinGW-specific settings
+ if(WIN32 AND MINGW)
+  add_compile_options(
+   -O3                            # Optimize for speed
+   -Wall                          # Enable most warning messages
+   -Wextra                        # Enable additional warning messages
+   -fuse-linker-plugin            # Use LTO plugin
+   -ftree-vectorize               # Enable loop vectorization
+   -fno-fast-math                 # Standard-compliant floating point math
+   -fno-unsafe-math-optimizations # Use safe math only
+  )
+  add_link_options(
+   -Wl,--gc-sections              # Remove unused sections during linking
+   -fuse-linker-plugin            # Enable LTO during linking
+  )
 
+ # MSVC-specific settings
+ elseif(WIN32 AND MSVC)
+  add_compile_options(
+   /permissive-                   # Enable strict ISO compliance
+   /Zc:__cplusplus                # Correct __cplusplus value
+   /Zc:preprocessor               # Enable standards-conforming preprocessor
+   /MP                            # Multi-processor compilation
+   /vmg                           # Use general pointer-to-member representation
+   /Ox                            # Optimize for speed
+   /W3                            # Warning level 3 messages
+   /GL                            # Enable whole program optimization
+   /MT                            # Link compiler runtime statically
+   /Qvec                          # Enable loop vectorization
+   /fp:strict                     # Standard-compliant floating point math
+  )
+  add_link_options(
+   /OPT:REF                       # Remove unreferenced functions/data
+   /OPT:ICF                       # Remove identical COMDATs
+   /LTCG                          # Enable LTO during linkingn
+  )
 
-#
-# MSVC-specific settings
-#
-elseif(WIN32 AND MSVC)
- add_compile_options(
-  /permissive-                   # Enable strict ISO compliance
-  /Zc:__cplusplus                # Correct __cplusplus value
-  /Zc:preprocessor               # Enable standards-conforming preprocessor
-  /MP                            # Multi-processor compilation for faster builds
-  /vmg                           # Use general pointer-to-member representation
-  /Ox                            # Optimize for speed
-  /W3                            # Warning level 3 messages
-  /GL                            # Enable whole program optimization
-  /MT                            # Link compiler runtime statically
-  /Qvec                          # Enable loop vectorization
-  /fp:strict                     # Standard-compliant floating point math
- )
- add_link_options(
-  /OPT:REF                       # Remove unreferenced functions/data
-  /OPT:ICF                       # Remove identical COMDATs
-  /LTCG                          # Enable LTO during linkingn
- )
+ # macOS-specific settings
+ elseif(APPLE)
+  add_compile_options(
+   -O3                            # Optimize for speed
+   -Wall                          # Enable most warning messages
+   -Wextra                        # Enable additional warning messages
+   -fvectorize                    # Enable loop vectorization
+   -fslp-vectorize                # Enable SLP vectorization
+   -fno-fast-math                 # Standard-compliant floating point math
+   -fno-unsafe-math-optimizations # Use safe math only
+  )
+  add_link_options(
+   -Wl,-dead_strip                # Remove unused code and data during linking
+   -flto=full                     # Link-time optimization
+  )
 
-#
-# macOS-specific settings
-#
-elseif(APPLE)   
- add_compile_options(
-  -O3                            # Optimize for speed
-  -Wall                          # Enable most warning messages
-  -Wextra                        # Enable additional warning messages
-  -fvectorize                    # Enable loop vectorization
-  -fslp-vectorize                # Enable SLP vectorization
-  -fno-fast-math                 # Standard-compliant floating point math
-  -fno-unsafe-math-optimizations # Use safe math only
- )
- add_link_options(
-  -Wl,-dead_strip                # Remove unused code and data during linking
-  -flto=full                     # Link-time optimization
- )
+ # Intel LLVM-based C++ Compiler
+ elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
+  add_compile_options(
+   -O3                            # Optimize for speed
+   -Wall                          # Enable most warning messages
+   -Wextra                        # Enable additional warning messages
+   -static-intel                  # Static link compiler dependencies
+   -fvectorize                    # Enable loop vectorization
+   -fslp-vectorize                # Enable SLP vectorization
+   -fp-model=precise              # Standard-compliant floating point math
+  )
+  add_link_options(
+   -Wl,--gc-sections              # Remove unused sections during linking
+   -flto=full                     # Link-time optimization
+  )
 
-#
-# Intel C++ Compiler settings
-#
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel" OR CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
- add_compile_options(
-  -O3                            # Optimize for speed
-  -Wall                          # Enable most warning messages
-  -Wextra                        # Enable additional warning messages
-  -static-intel                  # Static link compiler dependencies
-  -fvectorize                    # Enable loop vectorization
-  -fslp-vectorize                # Enable SLP vectorization
-  -fp-model=precise              # Standard-compliant floating point math
- )
- add_link_options(
-  -Wl,--gc-sections              # Remove unused sections during linking
-  -flto=full                     # Link-time optimization
- )
-
-#
-# Generic UNIX/Linux settings
-#
-elseif(UNIX)
- add_compile_options(
-  -O3                            # Optimize for speed
-  -Wall                          # Enable most warning messages
-  -Wextra                        # Enable additional warning messages
-  -ftree-vectorize               # Enable loop vectorization
-  -fno-fast-math                 # Standard-compliant floating point math
-  -fno-unsafe-math-optimizations # Use safe math only
- )
- add_link_options(
-  -Wl,--gc-sections              # Remove unused sections during linking
-  -flto                          # Link-time optimization
- )
-
- # Needed when compiling for OpenSUSE
- set(CMAKE_C_COMPILER_AR "/usr/bin/ar")
- set(CMAKE_CXX_COMPILER_AR "/usr/bin/ar")
- set(CMAKE_C_COMPILER_RANLIB "/usr/bin/ranlib")
- set(CMAKE_CXX_COMPILER_RANLIB "/usr/bin/ranlib")
+ # Generic UNIX/Linux settings
+ elseif(UNIX)
+  add_compile_options(
+   -O3                            # Optimize for speed
+   -Wall                          # Enable most warning messages
+   -Wextra                        # Enable additional warning messages
+   -ftree-vectorize               # Enable loop vectorization
+   -fno-fast-math                 # Standard-compliant floating point math
+   -fno-unsafe-math-optimizations # Use safe math only
+  )
+  add_link_options(
+   -Wl,--gc-sections              # Remove unused sections during linking
+   -flto                          # Link-time optimization
+  )
+ endif()
 endif()
 
 #-------------------------------------------------------------------------------
-# Set UNIX friendly name for app
+# Sanitizer flags
 #-------------------------------------------------------------------------------
 
-if (UNIX AND NOT APPLE)
- set(PROJECT_EXECUTABLE "serial-studio")
+if(DEBUG_SANITIZER)
+ add_compile_options(
+  -fsanitize=address              # Enable AddressSanitizer
+  -fsanitize=undefined            # Enable UndefinedBehaviorSanitizer
+  -fsanitize=leak                 # Enable LeakSanitizer
+  -g                              # Generate debug symbols
+  -fno-omit-frame-pointer         # Preserve frame pointers
+ )
+
+ add_link_options(
+  -fsanitize=address              # Link AddressSanitizer
+  -fsanitize=undefined            # Link UndefinedBehaviorSanitizer
+  -fsanitize=leak                 # Link LeakSanitizer
+ )
 endif()
 
 #-------------------------------------------------------------------------------
@@ -199,3 +215,14 @@ endif()
 
 add_subdirectory(lib)
 add_subdirectory(app)
+
+#-------------------------------------------------------------------------------
+# Log compiler and linker flags
+#-------------------------------------------------------------------------------
+
+get_directory_property(SUBDIRECTORY_COMPILE_OPTIONS DIRECTORY lib COMPILE_OPTIONS)
+message(STATUS "LIB Compile Options: ${SUBDIRECTORY_COMPILE_OPTIONS}")
+
+get_directory_property(SUBDIRECTORY_COMPILE_OPTIONS DIRECTORY app COMPILE_OPTIONS)
+message(STATUS "APP Compile Options: ${SUBDIRECTORY_COMPILE_OPTIONS}")
+

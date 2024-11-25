@@ -43,8 +43,8 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem *parent)
   {
     // Obtain min/max values from datasets
     const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
-    m_minY = std::numeric_limits<double>::max();
-    m_maxY = std::numeric_limits<double>::lowest();
+    m_minY = std::numeric_limits<qreal>::max();
+    m_maxY = std::numeric_limits<qreal>::lowest();
     for (const auto &dataset : group.datasets())
     {
       m_labels.append(dataset.title());
@@ -299,8 +299,8 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   {
     const auto &group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
 
-    m_minY = std::numeric_limits<double>::max();
-    m_maxY = std::numeric_limits<double>::lowest();
+    m_minY = std::numeric_limits<qreal>::max();
+    m_maxY = std::numeric_limits<qreal>::lowest();
 
     for (const auto &dataset : group.datasets())
     {
@@ -320,8 +320,8 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
   if (!ok)
   {
     // Initialize values to ensure that min/max are set
-    m_minY = std::numeric_limits<double>::max();
-    m_maxY = std::numeric_limits<double>::lowest();
+    m_minY = std::numeric_limits<qreal>::max();
+    m_maxY = std::numeric_limits<qreal>::lowest();
 
     // Loop through each dataset and find the min and max values
     for (const auto &dataset : m_data)
