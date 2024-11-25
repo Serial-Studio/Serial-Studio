@@ -95,7 +95,5 @@ private:
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QList<QByteArray> m_quickPlotEndSequences;
-
-  QTimer m_timer;
 };
 } // namespace IO

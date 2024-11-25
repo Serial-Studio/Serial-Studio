@@ -271,16 +271,19 @@ Item {
             const cursorAtEnd = (currentCursorPosition === send.text.length)
 
             // Format the text
+            const originalText = send.text;
             const formattedText = Cpp_IO_Console.formatUserHex(send.text);
             const isValid = Cpp_IO_Console.validateUserHex(formattedText);
 
             // Update the text only if it has changed
-            if (send.text !== formattedText) {
+            if (originalText !== formattedText) {
               send.text = formattedText;
 
               // Restore the cursor position, adjusting for added spaces
               if (!cursorAtEnd) {
-                const adjustment = formattedText.length - send.text.length;
+                let spacesBeforeCursorOriginal = (originalText.slice(0, currentCursorPosition).match(/ /g) || []).length;
+                let spacesBeforeCursorFormatted = (formattedText.slice(0, currentCursorPosition).match(/ /g) || []).length;
+                const adjustment = spacesBeforeCursorFormatted - spacesBeforeCursorOriginal;
                 send.cursorPosition = Math.min(currentCursorPosition + adjustment, send.text.length);
               }
             }

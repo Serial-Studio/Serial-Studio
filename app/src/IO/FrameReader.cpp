@@ -21,6 +21,8 @@
  */
 
 #include "FrameReader.h"
+
+#include "IO/Manager.h"
 #include "IO/Checksum.h"
 #include "JSON/FrameBuilder.h"
 #include "JSON/ProjectModel.h"
@@ -146,6 +148,10 @@ void IO::FrameReader::setupExternalConnections()
  */
 void IO::FrameReader::processData(const QByteArray &data)
 {
+  // Stop if not connected
+  if (!IO::Manager::instance().connected())
+    return;
+
   // Add data to circular buffer
   m_dataBuffer.append(data);
 
@@ -236,8 +242,18 @@ void IO::FrameReader::setFrameDetectionMode(
   }
 }
 
+/**
+ * @brief IO::FrameReader::readFrames
+ */
 void IO::FrameReader::readFrames()
 {
+  // Stop parsing data when a device is disconnected
+  if (!IO::Manager::instance().connected() && m_dataBuffer.size() > 0)
+  {
+    reset();
+    return;
+  }
+
   // JSON mode, read until default frame start & end sequences are found
   if (m_operationMode == SerialStudio::DeviceSendsJSON)
     readStartEndDelimetedFrames();
