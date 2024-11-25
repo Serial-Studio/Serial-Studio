@@ -781,7 +781,7 @@ void IO::Drivers::Serial::readSettings()
 
   // Get value from settings
   QStringList list;
-  list = m_settings.value("IO_BaudRates", stdBaudRates).toStringList();
+  list = m_settings.value("SerialBaudRates", stdBaudRates).toStringList();
 
   // Add any missing standard baud rate to saved user settings
   for (const QString &rate : stdBaudRates)

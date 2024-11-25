@@ -34,7 +34,7 @@ Item {
   // Save settings
   //
   QtSettings.Settings {
-    category: "HardwareSettings"
+    category: "DeviceSetup"
     property alias serialDtr: serial.dtr
     property alias serialParity: serial.parity
     property alias serialBaudRate: serial.baudRate
