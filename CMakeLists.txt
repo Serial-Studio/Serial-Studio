@@ -92,6 +92,7 @@ if(WIN32 AND MINGW)
   -Wall                # Enable most warning messages
   -Wextra              # Enable additional warning messages
   -fuse-linker-plugin  # Use LTO plugin to enable link-time optimization
+  -ftree-vectorize     # Enable loop vectorization
  )
  add_link_options(
   -Wl,--gc-sections    # Remove unused sections during linking
@@ -135,6 +136,8 @@ elseif(APPLE)
   -O3                     # Optimize for speed
   -Wall                   # Enable most warning messages
   -Wextra                 # Enable additional warning messages
+  -fvectorize             # Enable loop vectorization
+  -fslp-vectorize         # Enable SLP vectorization
  )
  add_link_options(
   -Wl,-dead_strip         # Remove unused code and data during linking
@@ -153,6 +156,7 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel" OR CMAKE_CXX_COMPILER_ID MATCHES "I
   -Wall                      # Enable most warning messages
   -Wextra                    # Enable additional warning messages
   -static-intel              # Static link compiler dependencies
+  -qopt-enable=vec           # Enable loop vectorization
  )
  add_link_options(
   -Wl,--gc-sections          # Remove unused sections during linking
@@ -167,6 +171,7 @@ elseif(UNIX)
   -O3                  # Optimize for speed
   -Wall                # Enable most warning messages
   -Wextra              # Enable additional warning messages
+  -ftree-vectorize     # Enable loop vectorization
  )
  add_link_options(
   -Wl,--gc-sections    # Remove unused sections during linking

@@ -46,7 +46,7 @@ template<typename T, typename StorageType = uint8_t>
 class CircularBuffer
 {
 public:
-  explicit CircularBuffer(qsizetype capacity = 1024 * 1024);
+  explicit CircularBuffer(qsizetype capacity = 1024 * 1024 * 10);
 
   [[nodiscard]] StorageType &operator[](qsizetype index);
 

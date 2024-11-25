@@ -146,34 +146,20 @@ void IO::FrameReader::setupExternalConnections()
  */
 void IO::FrameReader::processData(const QByteArray &data)
 {
-  // Add incoming data to buffer
+  // Add data to circular buffer
   m_dataBuffer.append(data);
 
-  // JSON mode, read until default frame start & end sequences are found
-  if (m_operationMode == SerialStudio::DeviceSendsJSON)
-    readStartEndDelimetedFrames();
+  // Read frames in no-delimiter mode directly
+  if (m_operationMode == SerialStudio::ProjectFile
+      && m_frameDetectionMode == SerialStudio::NoDelimiters)
+    Q_EMIT frameReady(m_dataBuffer.read(data.size()));
 
-  // Project mode, obtain which frame detection method to use
-  else if (m_operationMode == SerialStudio::ProjectFile)
-  {
-    // Read using only an end delimiter
-    if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
-      readEndDelimetedFrames();
+  // Schedule a frame extraction as soon as possible without blocking the thread
+  else
+    QMetaObject::invokeMethod(this, &FrameReader::readFrames,
+                              Qt::QueuedConnection);
 
-    // Read using both a start & end delimiter
-    else if (m_frameDetectionMode == SerialStudio::StartAndEndDelimiter)
-      readStartEndDelimetedFrames();
-
-    // Process incoming data directly
-    else if (m_frameDetectionMode == SerialStudio::NoDelimiters)
-      Q_EMIT frameReady(m_dataBuffer.read(data.size()));
-  }
-
-  // Handle quick plot data
-  else if (m_operationMode == SerialStudio::QuickPlot)
-    readEndDelimetedFrames();
-
-  // Notify user interface about received raw data
+  // Notify UI of received data
   Q_EMIT dataReceived(data);
 }
 
@@ -250,6 +236,29 @@ void IO::FrameReader::setFrameDetectionMode(
   }
 }
 
+void IO::FrameReader::readFrames()
+{
+  // JSON mode, read until default frame start & end sequences are found
+  if (m_operationMode == SerialStudio::DeviceSendsJSON)
+    readStartEndDelimetedFrames();
+
+  // Project mode, obtain which frame detection method to use
+  else if (m_operationMode == SerialStudio::ProjectFile)
+  {
+    // Read using only an end delimiter
+    if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
+      readEndDelimetedFrames();
+
+    // Read using both a start & end delimiter
+    else if (m_frameDetectionMode == SerialStudio::StartAndEndDelimiter)
+      readStartEndDelimetedFrames();
+  }
+
+  // Handle quick plot data
+  else if (m_operationMode == SerialStudio::QuickPlot)
+    readEndDelimetedFrames();
+}
+
 /**
  * @brief Reads frames delimited by an end sequence from the buffer.
  *
@@ -259,8 +268,12 @@ void IO::FrameReader::setFrameDetectionMode(
  */
 void IO::FrameReader::readEndDelimetedFrames()
 {
-  // Consume the buffer until no frames are found
-  while (true)
+  // Cap the number of frames that we can read in a single call
+  int framesRead = 0;
+  constexpr int maxFrames = 100;
+
+  // Consume the buffer until
+  while (framesRead < maxFrames)
   {
     // Initialize variables
     int endIndex = -1;
@@ -326,6 +339,9 @@ void IO::FrameReader::readEndDelimetedFrames()
       qsizetype bytesToRemove = endIndex + delimiter.size();
       (void)m_dataBuffer.read(bytesToRemove);
     }
+
+    // Increment number of frames read
+    ++framesRead;
   }
 }
 

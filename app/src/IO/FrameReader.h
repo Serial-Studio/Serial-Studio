@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <QTimer>
 #include <QThread>
 #include <QObject>
 #include <QByteArray>
@@ -73,6 +74,9 @@ public slots:
   void setOperationMode(const SerialStudio::OperationMode mode);
   void setFrameDetectionMode(const SerialStudio::FrameDetection mode);
 
+private slots:
+  void readFrames();
+
 private:
   void readEndDelimetedFrames();
   void readStartEndDelimetedFrames();
@@ -91,5 +95,7 @@ private:
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QList<QByteArray> m_quickPlotEndSequences;
+
+  QTimer m_timer;
 };
 } // namespace IO
