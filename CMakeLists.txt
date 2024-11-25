@@ -228,7 +228,7 @@ endif()
 # Enable OpenMP SIMD support globally
 find_package(OpenMP QUIET)
 if(OpenMP_CXX_FOUND)
- if(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+ if(WIN32 and MSVC)
   add_compile_options(/openmp:experimental)
  elseif(CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
   add_compile_options(-qopenmp-simd)
