@@ -122,6 +122,7 @@ if(PRODUCTION_OPTIMIZATION)
  # MSVC-specific settings
  elseif(WIN32 AND MSVC)
   add_compile_options(
+   /openmp:experimental           # Add support for OpenMP
    /permissive-                   # Enable strict ISO compliance
    /Zc:__cplusplus                # Correct __cplusplus value
    /Zc:preprocessor               # Enable standards-conforming preprocessor
@@ -142,10 +143,20 @@ if(PRODUCTION_OPTIMIZATION)
 
  # macOS-specific settings
  elseif(APPLE)
+  include_directories(
+   "/opt/homebrew/opt/libomp/include"
+   "/opt/homebrew/opt/llvm/include"
+  )
+  link_directories(
+   "/opt/homebrew/opt/libomp/lib"
+   "/opt/homebrew/opt/llvm/lib"
+  )
+
   add_compile_options(
    -O3                            # Optimize for speed
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
+   -fopenmp=libomp                # Add support for OpenMP
    -fvectorize                    # Enable loop vectorization
    -fslp-vectorize                # Enable SLP vectorization
    -fno-fast-math                 # Standard-compliant floating point math
@@ -162,6 +173,7 @@ if(PRODUCTION_OPTIMIZATION)
    -O3                            # Optimize for speed
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
+   -qopenmp-simd                  # Add support for OpenMP
    -static-intel                  # Static link compiler dependencies
    -fvectorize                    # Enable loop vectorization
    -fslp-vectorize                # Enable SLP vectorization
@@ -178,6 +190,7 @@ if(PRODUCTION_OPTIMIZATION)
    -O3                            # Optimize for speed
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
+   -fopenmp                       # Add support for OpenMP
    -ftree-vectorize               # Enable loop vectorization
    -fno-fast-math                 # Standard-compliant floating point math
    -fno-unsafe-math-optimizations # Use safe math only
@@ -207,38 +220,6 @@ if(DEBUG_SANITIZER)
   -fsanitize=undefined            # Link UndefinedBehaviorSanitizer
   -fsanitize=leak                 # Link LeakSanitizer
  )
-endif()
-
-#-------------------------------------------------------------------------------
-# Add OpenMP support
-#-------------------------------------------------------------------------------
-
-# macOS OpenMP (use homebrew port)
-if(APPLE)
- include_directories(
-  "/opt/homebrew/opt/libomp/include"
-  "/opt/homebrew/opt/llvm/include"
- )
- link_directories(
-  "/opt/homebrew/opt/libomp/lib"
-  "/opt/homebrew/opt/llvm/lib"
- )
-endif()
-
-# Enable OpenMP SIMD support globally
-find_package(OpenMP QUIET)
-if(OpenMP_CXX_FOUND)
- if(WIN32 and MSVC)
-  add_compile_options(/openmp:experimental)
- elseif(CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
-  add_compile_options(-qopenmp-simd)
- else()
-  add_compile_options(${OpenMP_CXX_FLAGS})
- endif()
- add_compile_definitions(SIMDE_ENABLE_OPENMP)
- message(STATUS "OpenMP SIMD support enabled globally")
-else()
- message(WARNING "OpenMP not found; SIMD performance may be suboptimal")
 endif()
 
 #-------------------------------------------------------------------------------
