@@ -775,21 +775,27 @@ void IO::Drivers::Serial::readSettings()
 {
   // Register standard baud rates
   QStringList stdBaudRates
-      = {"300",    "1200",   "2400",   "4800",    "9600",
-         "19200",  "38400",  "57600",  "74880",   "115200",
-         "230400", "250000", "500000", "1000000", "2000000"};
+      = {"110",    "150",    "300",    "1200",  "2400",   "4800",
+         "9600",   "19200",  "38400",  "57600", "115200", "230400",
+         "256000", "460800", "576000", "921600"};
 
   // Get value from settings
   QStringList list;
-  list = m_settings.value("IO_DataSource_Serial__BaudRates", stdBaudRates)
-             .toStringList();
+  list = m_settings.value("IO_BaudRates", stdBaudRates).toStringList();
 
-  // Convert QStringList to QVector
+  // Add any missing standard baud rate to saved user settings
+  for (const QString& rate : stdBaudRates)
+  {
+    if (!list.contains(rate))
+      list.append(rate);
+  }
+
+  // Ensure that baud rate list is ordered correctly
   m_baudRateList.clear();
   for (int i = 0; i < list.count(); ++i)
     m_baudRateList.append(list.at(i));
 
-  // Sort baud rate list
+    // Sort baud rate list
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
   for (auto i = 0; i < m_baudRateList.count() - 1; ++i)
   {
