@@ -268,7 +268,7 @@ Item {
           if (hexCheckbox.checked) {
             // Get the current cursor position
             const currentCursorPosition = send.cursorPosition;
-            const cursorAtEnd = (currentCursorPosition === send.text.length)
+            const cursorAtEnd = (currentCursorPosition === send.text.length);
 
             // Format the text
             const originalText = send.text;
@@ -281,9 +281,21 @@ Item {
 
               // Restore the cursor position, adjusting for added spaces
               if (!cursorAtEnd) {
+                // Remove spaces from originalText and formattedText to compare lengths
+                const cleanedOriginalText = originalText.replace(/ /g, '');
+                const cleanedFormattedText = formattedText.replace(/ /g, '');
+
+                // Calculate the difference in length due to formatting
+                const lengthDifference = cleanedFormattedText.length - cleanedOriginalText.length;
+
+                // Count spaces before the cursor in both texts
                 let spacesBeforeCursorOriginal = (originalText.slice(0, currentCursorPosition).match(/ /g) || []).length;
                 let spacesBeforeCursorFormatted = (formattedText.slice(0, currentCursorPosition).match(/ /g) || []).length;
-                const adjustment = spacesBeforeCursorFormatted - spacesBeforeCursorOriginal;
+
+                // Calculate adjustment factor
+                const adjustment = spacesBeforeCursorFormatted - spacesBeforeCursorOriginal + lengthDifference;
+
+                // Restore the cursor position with adjustment
                 send.cursorPosition = Math.min(currentCursorPosition + adjustment, send.text.length);
               }
             }
@@ -309,6 +321,18 @@ Item {
         Keys.onDownPressed: {
           Cpp_IO_Console.historyDown()
           send.text = Cpp_IO_Console.currentHistoryString
+        }
+
+        //
+        // Clear text when device is disconnected
+        //
+        Connections {
+          target: Cpp_IO_Manager
+
+          function onConnectedChanged() {
+            if (!Cpp_IO_Manager.connected)
+              send.clear()
+          }
         }
       }
 
