@@ -284,7 +284,7 @@ install(
 
 set(deploy_tool_options_arg "")
 if(APPLE)
- set(deploy_tool_options_arg -hardened-runtime)
+ set(deploy_tool_options_arg -hardened-runtime -appstore-compliant)
 elseif(WIN32)
  set(deploy_tool_options_arg --no-compiler-runtime -force-openssl --release)
 endif()
