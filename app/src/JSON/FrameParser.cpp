@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QJSEngine>
 #include <QFileDialog>
+#include <QLineNumberArea>
 #include <QDesktopServices>
 #include <QRegularExpression>
 #include <QJavascriptHighlighter>
@@ -558,7 +559,13 @@ void JSON::FrameParser::focusOutEvent(QFocusEvent *event)
  */
 void JSON::FrameParser::mousePressEvent(QMouseEvent *event)
 {
-  DW_EXEC_EVENT(&m_widget, mousePressEvent, event);
+  auto pos = event->position();
+  pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
+  QMouseEvent eventCopy(event->type(), pos, event->globalPosition(),
+                        event->button(), event->buttons(), event->modifiers(),
+                        event->pointingDevice());
+
+  DW_EXEC_EVENT(&m_widget, mousePressEvent, &eventCopy);
 }
 
 /**
@@ -566,7 +573,13 @@ void JSON::FrameParser::mousePressEvent(QMouseEvent *event)
  */
 void JSON::FrameParser::mouseMoveEvent(QMouseEvent *event)
 {
-  DW_EXEC_EVENT(&m_widget, mouseMoveEvent, event);
+  auto pos = event->position();
+  pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
+  QMouseEvent eventCopy(event->type(), pos, event->globalPosition(),
+                        event->button(), event->buttons(), event->modifiers(),
+                        event->pointingDevice());
+
+  DW_EXEC_EVENT(&m_widget, mouseMoveEvent, &eventCopy);
 }
 
 /**
@@ -574,7 +587,13 @@ void JSON::FrameParser::mouseMoveEvent(QMouseEvent *event)
  */
 void JSON::FrameParser::mouseReleaseEvent(QMouseEvent *event)
 {
-  DW_EXEC_EVENT(&m_widget, mouseReleaseEvent, event);
+  auto pos = event->position();
+  pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
+  QMouseEvent eventCopy(event->type(), pos, event->globalPosition(),
+                        event->button(), event->buttons(), event->modifiers(),
+                        event->pointingDevice());
+
+  DW_EXEC_EVENT(&m_widget, mouseReleaseEvent, &eventCopy);
 }
 
 /**
@@ -582,7 +601,13 @@ void JSON::FrameParser::mouseReleaseEvent(QMouseEvent *event)
  */
 void JSON::FrameParser::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  DW_EXEC_EVENT(&m_widget, mouseDoubleClickEvent, event);
+  auto pos = event->position();
+  pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
+  QMouseEvent eventCopy(event->type(), pos, event->globalPosition(),
+                        event->button(), event->buttons(), event->modifiers(),
+                        event->pointingDevice());
+
+  DW_EXEC_EVENT(&m_widget, mouseDoubleClickEvent, &eventCopy);
 }
 
 /**

@@ -625,6 +625,11 @@ QCompleter *QCodeEditor::completer() const
   return m_completer;
 }
 
+QLineNumberArea* QCodeEditor::lineNumberArea() const
+{
+  return m_lineNumberArea;
+}
+
 QChar QCodeEditor::charUnderCursor(int offset) const
 {
   auto block = textCursor().blockNumber();

@@ -106,6 +106,12 @@ public:
    */
   QCompleter *completer() const;
 
+  /**
+   * @brief Method for accessing the linenumber area
+   * @return Pointer to the @c QLineNumberArea used by the widget
+   */
+  QLineNumberArea *lineNumberArea() const;
+
 public Q_SLOTS:
 
   /**
