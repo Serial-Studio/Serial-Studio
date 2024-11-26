@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Serial Studio
-Comment=Multi-purpose data visualization & processing program
+Comment=Flexible data visualization software for embedded devices and projects
 Exec=serial-studio
 Terminal=false
 Type=Application
