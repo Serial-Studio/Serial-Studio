@@ -71,8 +71,5 @@ private:
   QFont m_uiFont;
   QFont m_monoFont;
   QFont m_boldUiFont;
-
-  QString m_uiName;
-  QString m_monoName;
 };
 } // namespace Misc

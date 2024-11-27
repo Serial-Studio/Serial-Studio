@@ -2311,6 +2311,17 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   m_selectedDataset = dataset;
   m_datasetModel = new CustomModel(this);
 
+  // Get which optional parameters should be displayed
+  const bool showWidget = currentDatasetIsEditable();
+  const bool showFFTOptions = dataset.fft();
+  const bool showLedOptions = dataset.led();
+  const bool showMinMax = dataset.graph() || dataset.widget() == "gauge"
+                          || dataset.widget() == "bar"
+                          || m_selectedGroup.widget() == "multiplot";
+  const bool showAlarm = dataset.led() || dataset.widget() == "gauge"
+                         || dataset.widget() == "bar"
+                         || m_selectedGroup.widget() == "datagrid";
+
   // Add dataset title
   auto title = new QStandardItem();
   title->setEditable(true);
@@ -2346,7 +2357,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   m_datasetModel->appendRow(units);
 
   // Add widget combobox item
-  if (currentDatasetIsEditable())
+  if (showWidget)
   {
     // Get appropiate widget index for current dataset
     int widgetIndex = 0;
@@ -2377,39 +2388,48 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     m_datasetModel->appendRow(widget);
   }
 
-  // Add minimum value
-  auto min = new QStandardItem();
-  min->setEditable(true);
-  min->setData(FloatField, WidgetType);
-  min->setData(dataset.min(), EditableValue);
-  min->setData(tr("Minimum Value"), ParameterName);
-  min->setData(kDatasetView_Min, ParameterType);
-  min->setData(0, PlaceholderValue);
-  min->setData(tr("Required for bar/gauge widgets"), ParameterDescription);
-  m_datasetModel->appendRow(min);
+  // Add minimum/maximum values
+  if (showMinMax)
+  {
+    // Add minimum value
+    auto min = new QStandardItem();
+    min->setEditable(true);
+    min->setData(FloatField, WidgetType);
+    min->setData(dataset.min(), EditableValue);
+    min->setData(tr("Minimum Value"), ParameterName);
+    min->setData(kDatasetView_Min, ParameterType);
+    min->setData(0, PlaceholderValue);
+    min->setData(tr("Required for range widgets, optional for plots"),
+                 ParameterDescription);
+    m_datasetModel->appendRow(min);
 
-  // Add maximum value
-  auto max = new QStandardItem();
-  max->setEditable(true);
-  max->setData(FloatField, WidgetType);
-  max->setData(dataset.max(), EditableValue);
-  max->setData(tr("Maximum Value"), ParameterName);
-  max->setData(kDatasetView_Max, ParameterType);
-  max->setData(0, PlaceholderValue);
-  max->setData(tr("Required for bar/gauge widgets"), ParameterDescription);
-  m_datasetModel->appendRow(max);
+    // Add maximum value
+    auto max = new QStandardItem();
+    max->setEditable(true);
+    max->setData(FloatField, WidgetType);
+    max->setData(dataset.max(), EditableValue);
+    max->setData(tr("Maximum Value"), ParameterName);
+    max->setData(kDatasetView_Max, ParameterType);
+    max->setData(0, PlaceholderValue);
+    max->setData(tr("Required for range widgets, optional for plots"),
+                 ParameterDescription);
+    m_datasetModel->appendRow(max);
+  }
 
   // Add alarm value
-  auto alarm = new QStandardItem();
-  alarm->setEditable(true);
-  alarm->setData(FloatField, WidgetType);
-  alarm->setData(dataset.alarm(), EditableValue);
-  alarm->setData(tr("Alarm Value"), ParameterName);
-  alarm->setData(kDatasetView_Alarm, ParameterType);
-  alarm->setData(0, PlaceholderValue);
-  alarm->setData(tr("Triggers alarm in bar widgets and LED panels"),
-                 ParameterDescription);
-  m_datasetModel->appendRow(alarm);
+  if (showAlarm)
+  {
+    auto alarm = new QStandardItem();
+    alarm->setEditable(true);
+    alarm->setData(FloatField, WidgetType);
+    alarm->setData(dataset.alarm(), EditableValue);
+    alarm->setData(tr("Alarm Value"), ParameterName);
+    alarm->setData(kDatasetView_Alarm, ParameterType);
+    alarm->setData(0, PlaceholderValue);
+    alarm->setData(tr("Triggers alarm in bar widgets and LED panels"),
+                   ParameterDescription);
+    m_datasetModel->appendRow(alarm);
+  }
 
   // Get appropiate plotting mode index for current dataset
   int plotIndex = 0;
@@ -2451,34 +2471,38 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   fft->setData(tr("Plot frequency-domain data"), ParameterDescription);
   m_datasetModel->appendRow(fft);
 
-  // Get FFT window size index
-  const auto windowSize = QString::number(dataset.fftSamples());
-  int windowIndex = m_fftSamples.indexOf(windowSize);
-  if (windowIndex < 0)
-    windowIndex = 7;
+  // FFT-specific options
+  if (showFFTOptions)
+  {
+    // Get FFT window size index
+    const auto windowSize = QString::number(dataset.fftSamples());
+    int windowIndex = m_fftSamples.indexOf(windowSize);
+    if (windowIndex < 0)
+      windowIndex = 7;
 
-  // Add FFT window size
-  auto fftWindow = new QStandardItem();
-  fftWindow->setEditable(true);
-  fftWindow->setData(ComboBox, WidgetType);
-  fftWindow->setData(m_fftSamples, ComboBoxData);
-  fftWindow->setData(windowIndex, EditableValue);
-  fftWindow->setData(tr("FFT Window Size"), ParameterName);
-  fftWindow->setData(kDatasetView_FFT_Samples, ParameterType);
-  fftWindow->setData(tr("Samples for FFT calculation"), ParameterDescription);
-  m_datasetModel->appendRow(fftWindow);
+    // Add FFT window size
+    auto fftWindow = new QStandardItem();
+    fftWindow->setEditable(true);
+    fftWindow->setData(ComboBox, WidgetType);
+    fftWindow->setData(m_fftSamples, ComboBoxData);
+    fftWindow->setData(windowIndex, EditableValue);
+    fftWindow->setData(tr("FFT Window Size"), ParameterName);
+    fftWindow->setData(kDatasetView_FFT_Samples, ParameterType);
+    fftWindow->setData(tr("Samples for FFT calculation"), ParameterDescription);
+    m_datasetModel->appendRow(fftWindow);
 
-  // Add FFT sampling rate
-  auto fftSamplingRate = new QStandardItem();
-  fftSamplingRate->setEditable(true);
-  fftSamplingRate->setData(IntField, WidgetType);
-  fftSamplingRate->setData(100, PlaceholderValue);
-  fftSamplingRate->setData(dataset.fftSamplingRate(), EditableValue);
-  fftSamplingRate->setData(tr("FFT Sampling Rate"), ParameterName);
-  fftSamplingRate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
-  fftSamplingRate->setData(tr("Sampling rate (Hz) for FFT calculation"),
-                           ParameterDescription);
-  m_datasetModel->appendRow(fftSamplingRate);
+    // Add FFT sampling rate
+    auto fftSamplingRate = new QStandardItem();
+    fftSamplingRate->setEditable(true);
+    fftSamplingRate->setData(IntField, WidgetType);
+    fftSamplingRate->setData(100, PlaceholderValue);
+    fftSamplingRate->setData(dataset.fftSamplingRate(), EditableValue);
+    fftSamplingRate->setData(tr("FFT Sampling Rate"), ParameterName);
+    fftSamplingRate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
+    fftSamplingRate->setData(tr("Sampling rate (Hz) for FFT calculation"),
+                             ParameterDescription);
+    m_datasetModel->appendRow(fftSamplingRate);
+  }
 
   // Add LED panel checkbox
   auto led = new QStandardItem();
@@ -2492,15 +2516,18 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   m_datasetModel->appendRow(led);
 
   // Add LED High value
-  auto ledHigh = new QStandardItem();
-  ledHigh->setEditable(true);
-  ledHigh->setData(FloatField, WidgetType);
-  ledHigh->setData(dataset.ledHigh(), EditableValue);
-  ledHigh->setData(tr("LED High (On) Value"), ParameterName);
-  ledHigh->setData(kDatasetView_LED_High, ParameterType);
-  ledHigh->setData(0, PlaceholderValue);
-  ledHigh->setData(tr("Threshold for LED on"), ParameterDescription);
-  m_datasetModel->appendRow(ledHigh);
+  if (showLedOptions)
+  {
+    auto ledHigh = new QStandardItem();
+    ledHigh->setEditable(true);
+    ledHigh->setData(FloatField, WidgetType);
+    ledHigh->setData(dataset.ledHigh(), EditableValue);
+    ledHigh->setData(tr("LED High (On) Value"), ParameterName);
+    ledHigh->setData(kDatasetView_LED_High, ParameterType);
+    ledHigh->setData(0, PlaceholderValue);
+    ledHigh->setData(tr("Threshold for LED on"), ParameterDescription);
+    m_datasetModel->appendRow(ledHigh);
+  }
 
   // Handle edits
   connect(m_datasetModel, &CustomModel::itemChanged, this,
@@ -2937,12 +2964,15 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       break;
     case kDatasetView_Widget:
       m_selectedDataset.m_widget = widgets.at(value.toInt());
+      buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_FFT:
       m_selectedDataset.m_fft = value.toBool();
+      buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_LED:
       m_selectedDataset.m_led = value.toBool();
+      buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_LED_High:
       m_selectedDataset.m_ledHigh = value.toFloat();
@@ -2950,6 +2980,7 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
     case kDatasetView_Plot:
       m_selectedDataset.m_graph = plotOptions.at(value.toInt()).first;
       m_selectedDataset.m_log = plotOptions.at(value.toInt()).second;
+      buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_Min:
       m_selectedDataset.m_min = value.toFloat();

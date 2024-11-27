@@ -32,14 +32,15 @@
 Misc::CommonFonts::CommonFonts()
 {
   // Platform-specific font selection
+  QString monoFont;
 #ifdef Q_OS_LINUX
-  m_monoName = QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
+  monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
 #elif defined(Q_OS_MAC)
-  m_monoName = QStringLiteral("Menlo");
+  monoFont = QStringLiteral("Menlo");
 #elif defined(Q_OS_WIN)
-  m_monoName = QStringLiteral("Consolas");
+  monoFont = QStringLiteral("Consolas");
 #else
-  m_monoName = QStringLiteral("Courier");
+  monoFont = QStringLiteral("Courier");
 #endif
 
   // Set the UI font to the system default
@@ -48,12 +49,12 @@ Misc::CommonFonts::CommonFonts()
   m_boldUiFont.setBold(true);
 
   // Setup monospace font
-  m_monoFont = QFont(m_monoName);
+  m_monoFont = QFont(monoFont);
   m_monoFont.setPointSizeF(m_uiFont.pointSizeF());
   m_monoFont.setStyleHint(QFont::Monospace);
 
   // Verify that the font was loaded correctly
-  if (m_monoFont.family() != m_monoName)
+  if (m_monoFont.family() != monoFont)
     m_monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 }
 
@@ -114,7 +115,7 @@ QFont Misc::CommonFonts::customUiFont(const qreal fraction, const bool bold)
  */
 QFont Misc::CommonFonts::customMonoFont(const qreal fraction)
 {
-  QFont font = QFontDatabase::font(m_monoName, QStringLiteral("Regular"), 12);
+  QFont font = m_monoFont;
   font.setPointSizeF(m_monoFont.pointSizeF() * qMax(0.1, fraction));
   return font;
 }
