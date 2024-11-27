@@ -35,6 +35,7 @@
  */
 JSON::FrameBuilder::FrameBuilder()
   : m_opMode(SerialStudio::ProjectFile)
+  , m_frameParser(nullptr)
 {
   // Read JSON map location
   auto path = m_settings.value("json_map_location", "").toString();

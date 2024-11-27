@@ -727,7 +727,7 @@ bool JSON::ProjectModel::saveJsonFile()
 
   // Save and validate javascript code
   auto *parser = JSON::FrameBuilder::instance().frameParser();
-  if (parser->isModified())
+  if (parser && parser->isModified())
   {
     if (!parser->save(true))
       return false;

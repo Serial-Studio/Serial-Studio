@@ -153,7 +153,10 @@ QString JSON::FrameParser::text() const
  */
 bool JSON::FrameParser::isModified() const
 {
-  return m_widget.document()->isModified();
+  if (m_widget.document())
+    return m_widget.document()->isModified();
+
+  return false;
 }
 
 /**
@@ -186,14 +189,20 @@ QStringList JSON::FrameParser::parse(const QString &frame)
  */
 bool JSON::FrameParser::undoAvailable() const
 {
-  return isModified() && m_widget.document()->isUndoAvailable();
+  if (m_widget.document())
+    return isModified() && m_widget.document()->isUndoAvailable();
+
+  return false;
 }
 /**
  * @brief Returns @c true whenever if there are any actions that can be redone.
  */
 bool JSON::FrameParser::redoAvailable() const
 {
-  return isModified() && m_widget.document()->isRedoAvailable();
+  if (m_widget.document())
+    return isModified() && m_widget.document()->isRedoAvailable();
+
+  return false;
 }
 
 /**
