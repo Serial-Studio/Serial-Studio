@@ -66,7 +66,7 @@ Widgets.Pane {
     Rectangle {
       z: 2
       id: header
-      height: visible ? 64 : 0
+      height: actionsLayout.implicitHeight + 12
       visible: Cpp_UI_Dashboard.actionCount > 0
       color: Cpp_ThemeManager.colors["groupbox_background"]
       anchors {
@@ -76,6 +76,7 @@ Widgets.Pane {
       }
 
       RowLayout {
+        id: actionsLayout
         spacing: 4
 
         anchors {
@@ -90,11 +91,11 @@ Widgets.Pane {
           delegate: Widgets.BigButton {
             icon.width: 24
             icon.height: 24
+            toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             text: Cpp_UI_Dashboard.actionTitles[index]
             icon.source: Cpp_UI_Dashboard.actionIcons[index]
             onClicked: Cpp_UI_Dashboard.activateAction(index)
-            palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           }
         }
 

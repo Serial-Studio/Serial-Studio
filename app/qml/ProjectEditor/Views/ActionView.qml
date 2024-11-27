@@ -101,9 +101,9 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
+          toolbarButton: false
           text: qsTr("Change Icon")
           Layout.alignment: Qt.AlignVCenter
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/actions/" + Cpp_JSON_ProjectModel.actionIcon + ".svg"
           onClicked: {
             actionIconPicker.selectedIcon = Cpp_JSON_ProjectModel.actionIcon
@@ -123,10 +123,10 @@ Widgets.Pane {
         //
         Widgets.BigButton {
           iconSize: 24
+          toolbarButton: false
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentAction()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
         }
 
@@ -136,9 +136,9 @@ Widgets.Pane {
         Widgets.BigButton {
           iconSize: 24
           text: qsTr("Delete")
+          toolbarButton: false
           Layout.alignment: Qt.AlignVCenter
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentAction()
-          palette.buttonText: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
         }
       }
