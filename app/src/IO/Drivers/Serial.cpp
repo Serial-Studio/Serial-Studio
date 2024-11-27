@@ -724,7 +724,13 @@ void IO::Drivers::Serial::refreshSerialDevices()
   // Search for available ports and add them to the lsit
   auto validPortList = validPorts();
   Q_FOREACH (QSerialPortInfo info, validPortList)
+  {
+#ifdef Q_OS_WIN
+    ports.append(info.portName());
+#else
     ports.append(info.systemLocation());
+#endif
+  }
 
   // Update list only if necessary
   if (portList() != ports)

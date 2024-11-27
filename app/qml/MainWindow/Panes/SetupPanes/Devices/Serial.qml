@@ -77,12 +77,12 @@ Item {
       enabled: !Cpp_IO_Manager.connected
     } ComboBox {
       id: _portCombo
-      editable: true
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.portList
       enabled: !Cpp_IO_Manager.connected
       currentIndex: Cpp_IO_Serial.portIndex
+      editable: Qt.platform.os !== "windows"
       onCurrentIndexChanged: {
         if (enabled) {
           if (currentIndex !== Cpp_IO_Serial.portIndex)
@@ -91,8 +91,8 @@ Item {
       }
 
       onAccepted: {
-        if (find(editText) === -1)
-          Cpp_IO_Serial.registerDevice(editText)
+        if (_portCombo.editable && _portCombo.find(_portCombo.editText) === -1)
+          Cpp_IO_Serial.registerDevice(_portCombo.editText)
       }
     }
 
