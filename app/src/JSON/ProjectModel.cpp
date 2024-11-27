@@ -702,7 +702,7 @@ bool JSON::ProjectModel::askSave()
     return true;
   }
 
-  return saveJsonFile();
+  return saveJsonFile(false);
 }
 
 /**
@@ -715,7 +715,7 @@ bool JSON::ProjectModel::askSave()
  *
  * @return True if the project was saved successfully, false otherwise.
  */
-bool JSON::ProjectModel::saveJsonFile()
+bool JSON::ProjectModel::saveJsonFile(const bool askPath)
 {
   // Validate project title
   if (m_title.isEmpty())
@@ -734,7 +734,7 @@ bool JSON::ProjectModel::saveJsonFile()
   }
 
   // Get file save path
-  if (jsonFilePath().isEmpty())
+  if (jsonFilePath().isEmpty() || askPath)
   {
     const auto name = jsonProjectsPath() + "/" + title() + ".json";
     auto path = QFileDialog::getSaveFileName(nullptr, tr("Save JSON project"),
@@ -1032,7 +1032,7 @@ void JSON::ProjectModel::openJsonFile(const QString &path)
           tr("Your project used a legacy frame parser function with a "
              "'separator' argument. It has been automatically migrated to "
              "the new format."));
-      saveJsonFile();
+      saveJsonFile(false);
       return;
     }
   }

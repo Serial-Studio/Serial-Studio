@@ -250,7 +250,7 @@ public:
   [[nodiscard]] CustomModel *datasetModel() const;
 
   Q_INVOKABLE bool askSave();
-  Q_INVOKABLE bool saveJsonFile();
+  Q_INVOKABLE bool saveJsonFile(const bool askPath = false);
 
 public slots:
   void setupExternalConnections();

@@ -931,78 +931,137 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>IO::Drivers::Serial</name>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="52"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="53"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="335"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="56"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="57"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="345"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="387"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="208"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="229"/>
         <source>Failed to connect to serial port device</source>
         <translation>无法连接到串口设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="229"/>
         <source>No Device</source>
-        <translation>无设备</translation>
+        <translation type="vanished">无设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="316"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="722"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="326"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="750"/>
         <source>Select Port</source>
         <translation>选择端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="346"/>
         <source>Even</source>
         <translation>偶</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="347"/>
         <source>Odd</source>
         <translation>奇</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="338"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="348"/>
         <source>Space</source>
         <translation>空格</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="339"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="349"/>
         <source>Mark</source>
         <translation>标记</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="378"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="388"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="379"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="389"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="533"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="559"/>
         <source>&quot;%1&quot; is not a valid path</source>
         <translation>“%1” 不是有效路径</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="534"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="560"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>请键入另一路径以注册自定义串口设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="588"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="614"/>
         <source>Baud rate registered successfully</source>
         <translation>波特率成功注册</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="589"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="615"/>
         <source>Rate &quot;%1&quot; has been added to baud rate list</source>
         <translation>速率“%1”已添加到波特率列表中</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="834"/>
+        <source>Critical serial port error</source>
+        <translation>串口严重错误</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="938"/>
+        <source>No error occurred.</source>
+        <translation>没有发生错误。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="939"/>
+        <source>The specified device could not be found. Please check the connection and try again.</source>
+        <translation>找不到指定的设备。请检查连接并重试。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="940"/>
+        <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
+        <translation>权限被拒绝。确保应用程序具有对设备的必要访问权限。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="941"/>
+        <source>Failed to open the device. It may already be in use or unavailable.</source>
+        <translation>无法打开设备。设备可能已被占用或不可用。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="942"/>
+        <source>An error occurred while writing data to the device.</source>
+        <translation>写入设备数据时发生错误。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="943"/>
+        <source>An error occurred while reading data from the device.</source>
+        <translation>从设备读取数据时发生错误。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="944"/>
+        <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
+        <translation>发生严重资源错误。设备可能已断开连接或无法访问。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="945"/>
+        <source>The requested operation is not supported on this device.</source>
+        <translation>此设备不支持请求的操作。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="946"/>
+        <source>An unknown error occurred. Please check the device and try again.</source>
+        <translation>发生未知错误。请检查设备并重试。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="947"/>
+        <source>The operation timed out. The device may not be responding.</source>
+        <translation>操作超时。设备可能没有响应。</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="948"/>
+        <source>The device is not open. Please open the device before attempting this operation.</source>
+        <translation>设备未打开。请在尝试此操作之前打开设备。</translation>
     </message>
 </context>
 <context>
@@ -1057,52 +1116,52 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="108"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="109"/>
         <source>Select JSON map file</source>
         <translation>选择JSON映射文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="110"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="111"/>
         <source>JSON files</source>
         <translation>JSON文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="156"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="157"/>
         <source>JSON parse error</source>
         <translation>JSON解析错误</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="186"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="187"/>
         <source>Invalid JSON project format</source>
         <translation>JSON 项目格式无效</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="199"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="200"/>
         <source>Cannot read JSON file</source>
         <translation>无法读取JSON文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="200"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="201"/>
         <source>Please check file permissions &amp; location</source>
         <translation>请检查文件权限和位置</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="357"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="358"/>
         <source>Channel %1</source>
         <translation>通道 %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="385"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="386"/>
         <source>Multiple Plots</source>
         <translation>多个绘图</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="372"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="373"/>
         <source>Data Grid</source>
         <translation>数据网格</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="367"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="368"/>
         <source>Quick Plot</source>
         <translation>快速绘图</translation>
     </message>
@@ -1110,36 +1169,36 @@ Use the toolbar buttons above to add a dataset to this group.</source>
 <context>
     <name>JSON::FrameParser</name>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="392"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="413"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="401"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
         <source>The document has been modified!</source>
         <translation>文档已被修改！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="393"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="414"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="402"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="423"/>
         <source>Are you sure you want to continue?</source>
         <translation>确定要继续吗？</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="431"/>
         <source>Select Javascript file to import</source>
         <translation>选择要导入的 Javascript 文件</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="218"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="227"/>
         <source>Frame parser code updated successfully!</source>
         <translation>帧解析器代码更新成功！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="219"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="228"/>
         <source>No errors have been detected in the code.</source>
         <translation>代码中未检测到任何错误。</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="258"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="277"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="299"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="267"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="286"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="308"/>
         <source>Frame parser error!</source>
         <translation>帧解析器错误！</translation>
     </message>
@@ -1148,23 +1207,23 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation type="vanished">未声明 parse() 函数！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="259"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="268"/>
         <source>The &apos;parse&apos; function is not declared or is not callable!</source>
         <translation>未声明或无法调用函数 ‘parse’！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="278"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="300"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="287"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="309"/>
         <source>No valid &apos;parse&apos; function declaration found in the script!</source>
         <translation>脚本中未找到有效的 ‘parse’ 函数声明！</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="286"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="295"/>
         <source>Legacy frame parser function detected</source>
         <translation>检测到旧版帧解析函数</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="287"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="296"/>
         <source>The &apos;parse&apos; function has two arguments (&apos;%1&apos;, &apos;%2&apos;), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
         <translation>‘parse’ 函数有两个参数（’%1’, ‘%2’），表示使用了旧格式。请更新为新格式，该格式仅接受帧数据作为参数。</translation>
     </message>
@@ -3336,7 +3395,7 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="324"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="340"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="339"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
@@ -3351,14 +3410,19 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>新建</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="149"/>
+        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="138"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="148"/>
         <source>Save</source>
         <translation>保存</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="159"/>
+        <source>Save As</source>
+        <translation>另存为</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="181"/>

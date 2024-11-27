@@ -931,78 +931,137 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>IO::Drivers::Serial</name>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="52"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="53"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="335"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="377"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="56"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="57"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="345"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="387"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="208"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="229"/>
         <source>Failed to connect to serial port device</source>
         <translation>No se pudo conectar al dispositivo de puerto serie</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="229"/>
         <source>No Device</source>
-        <translation>Sin dispositivo</translation>
+        <translation type="vanished">Sin dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="316"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="722"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="326"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="750"/>
         <source>Select Port</source>
         <translation>Seleccionar puerto</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="336"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="346"/>
         <source>Even</source>
         <translation>Par</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="347"/>
         <source>Odd</source>
         <translation>Impar</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="338"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="348"/>
         <source>Space</source>
         <translation>Espacio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="339"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="349"/>
         <source>Mark</source>
         <translation>Marca</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="378"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="388"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="379"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="389"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="533"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="559"/>
         <source>&quot;%1&quot; is not a valid path</source>
         <translation>“%1” no es una ruta válida</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="534"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="560"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Por favor, escriba otra ruta para registrar un dispositivo serie personalizado</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="588"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="614"/>
         <source>Baud rate registered successfully</source>
         <translation>Velocidad de transmisión registrada correctamente</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="589"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="615"/>
         <source>Rate &quot;%1&quot; has been added to baud rate list</source>
         <translation>La velocidad &quot;%1&quot; ha sido agregada a la lista de velocidades de transmisión</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="834"/>
+        <source>Critical serial port error</source>
+        <translation>Error crítico en el puerto serie</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="938"/>
+        <source>No error occurred.</source>
+        <translation>No ocurrió ningún error.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="939"/>
+        <source>The specified device could not be found. Please check the connection and try again.</source>
+        <translation>No se pudo encontrar el dispositivo especificado. Por favor, revise la conexión e intente nuevamente.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="940"/>
+        <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
+        <translation>Permiso denegado. Asegúrese de que la aplicación tenga los derechos de acceso necesarios para el dispositivo.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="941"/>
+        <source>Failed to open the device. It may already be in use or unavailable.</source>
+        <translation>No se pudo abrir el dispositivo. Es posible que ya esté en uso o no esté disponible.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="942"/>
+        <source>An error occurred while writing data to the device.</source>
+        <translation>Ocurrió un error al escribir datos en el dispositivo.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="943"/>
+        <source>An error occurred while reading data from the device.</source>
+        <translation>Ocurrió un error al leer datos del dispositivo.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="944"/>
+        <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
+        <translation>Se produjo un error crítico de recursos. Es posible que el dispositivo se haya desconectado o ya no esté accesible.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="945"/>
+        <source>The requested operation is not supported on this device.</source>
+        <translation>La operación solicitada no es compatible con este dispositivo.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="946"/>
+        <source>An unknown error occurred. Please check the device and try again.</source>
+        <translation>Ocurrió un error desconocido. Por favor, revise el dispositivo e intente nuevamente.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="947"/>
+        <source>The operation timed out. The device may not be responding.</source>
+        <translation>La operación excedió el tiempo de espera. Es posible que el dispositivo no esté respondiendo.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="948"/>
+        <source>The device is not open. Please open the device before attempting this operation.</source>
+        <translation>El dispositivo no está abierto. Por favor, abra el dispositivo antes de intentar esta operación.</translation>
     </message>
 </context>
 <context>
@@ -1057,52 +1116,52 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>JSON::FrameBuilder</name>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="108"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="109"/>
         <source>Select JSON map file</source>
         <translation>Seleccionar archivo de mapa JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="110"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="111"/>
         <source>JSON files</source>
         <translation>Archivos JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="156"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="157"/>
         <source>JSON parse error</source>
         <translation>Error al analizar JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="186"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="187"/>
         <source>Invalid JSON project format</source>
         <translation>Proyecto JSON inválido</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="199"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="200"/>
         <source>Cannot read JSON file</source>
         <translation>No se puede leer el archivo JSON</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="200"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="201"/>
         <source>Please check file permissions &amp; location</source>
         <translation>Por favor, verifica los permisos y la ubicación del archivo</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="357"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="358"/>
         <source>Channel %1</source>
         <translation>Canal %1</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="385"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="386"/>
         <source>Multiple Plots</source>
         <translation>Gráficas Múltiples</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="372"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="373"/>
         <source>Data Grid</source>
         <translation>Cuadrícula de Datos</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameBuilder.cpp" line="367"/>
+        <location filename="../../src/JSON/FrameBuilder.cpp" line="368"/>
         <source>Quick Plot</source>
         <translation>Gráfico Rápido</translation>
     </message>
@@ -1110,36 +1169,36 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
 <context>
     <name>JSON::FrameParser</name>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="392"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="413"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="401"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
         <source>The document has been modified!</source>
         <translation>¡El documento ha sido modificado!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="393"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="414"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="402"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="423"/>
         <source>Are you sure you want to continue?</source>
         <translation>¿Estás seguro de que quieres continuar?</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="422"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="431"/>
         <source>Select Javascript file to import</source>
         <translation>Seleccionar archivo Javascript para importar</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="218"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="227"/>
         <source>Frame parser code updated successfully!</source>
         <translation>¡Código del parser de tramas actualizado con éxito!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="219"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="228"/>
         <source>No errors have been detected in the code.</source>
         <translation>No se han detectado errores en el código.</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="258"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="277"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="299"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="267"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="286"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="308"/>
         <source>Frame parser error!</source>
         <translation>¡Error en el parser de tramas!</translation>
     </message>
@@ -1148,23 +1207,23 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation type="vanished">¡No se ha declarado la función parse()!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="259"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="268"/>
         <source>The &apos;parse&apos; function is not declared or is not callable!</source>
         <translation>¡La función ‘parse’ no está declarada o no es invocable!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="278"/>
-        <location filename="../../src/JSON/FrameParser.cpp" line="300"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="287"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="309"/>
         <source>No valid &apos;parse&apos; function declaration found in the script!</source>
         <translation>¡No se encontró una declaración válida de la función ‘parse’ en el script!</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="286"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="295"/>
         <source>Legacy frame parser function detected</source>
         <translation>Función de análisis de tramas obsoleta detectada</translation>
     </message>
     <message>
-        <location filename="../../src/JSON/FrameParser.cpp" line="287"/>
+        <location filename="../../src/JSON/FrameParser.cpp" line="296"/>
         <source>The &apos;parse&apos; function has two arguments (&apos;%1&apos;, &apos;%2&apos;), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
         <translation>La función ‘parse’ tiene dos argumentos (’%1’, ‘%2’), lo que indica el uso del formato antiguo. Por favor, actualícela al nuevo formato, que solo toma los datos de la trama como argumento.</translation>
     </message>
@@ -3328,7 +3387,7 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="324"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="340"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="339"/>
         <source>Disconnect</source>
         <translation>Desconectar</translation>
     </message>
@@ -3355,14 +3414,19 @@ Usa los botones de la barra de herramientas de arriba para agregar un conjunto d
         <translation>Nuevo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="149"/>
+        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="138"/>
         <source>Open</source>
         <translation>Abrir</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="148"/>
         <source>Save</source>
         <translation>Guardar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="159"/>
+        <source>Save As</source>
+        <translation>Guardar Como</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/Toolbar.qml" line="181"/>

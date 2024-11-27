@@ -132,17 +132,6 @@ Rectangle {
     }
 
     //
-    // Separator
-    //
-    Rectangle {
-      width: 1
-      Layout.fillHeight: true
-      Layout.maximumHeight: 64
-      Layout.alignment: Qt.AlignVCenter
-      color: Cpp_ThemeManager.colors["toolbar_separator"]
-    }
-
-    //
     // Open
     //
     Widgets.BigButton {
@@ -158,9 +147,20 @@ Rectangle {
     Widgets.BigButton {
       text: qsTr("Save")
       Layout.alignment: Qt.AlignVCenter
-      enabled: Cpp_JSON_ProjectModel.modified && Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
-      onClicked: Cpp_JSON_ProjectModel.saveJsonFile()
+      onClicked: Cpp_JSON_ProjectModel.saveJsonFile(false)
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/save.svg"
+      enabled: Cpp_JSON_ProjectModel.modified && Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
+    }
+
+    //
+    // Save
+    //
+    Widgets.BigButton {
+      text: qsTr("Save As")
+      Layout.alignment: Qt.AlignVCenter
+      onClicked: Cpp_JSON_ProjectModel.saveJsonFile(true)
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/save-as.svg"
+      enabled: Cpp_JSON_ProjectModel.modified && Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
     }
 
     //

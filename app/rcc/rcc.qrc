@@ -182,6 +182,7 @@
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
+        <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>
         <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
