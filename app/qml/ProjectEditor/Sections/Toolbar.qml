@@ -153,14 +153,14 @@ Rectangle {
     }
 
     //
-    // Save
+    // Save As
     //
     Widgets.BigButton {
       text: qsTr("Save As")
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_JSON_ProjectModel.saveJsonFile(true)
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/save-as.svg"
-      enabled: Cpp_JSON_ProjectModel.modified && Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
+      enabled: Cpp_JSON_ProjectModel.groupCount > 0 && Cpp_JSON_ProjectModel.datasetCount > 0
     }
 
     //
