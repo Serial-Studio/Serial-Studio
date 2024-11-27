@@ -43,7 +43,7 @@ while True:
     dlfrequency = int(get_value('dlfrequency'))
 
     print(f'{datetime.datetime.now().strftime("%H-%M-%S")} CELL={cell} RSRQ={rsrq} RSRP={rsrp} RSSI={rssi} SINR={sinr}')
-    data_frame = f'{rsrq},{rsrp},{rssi},{sinr},{cell}'
+    data_frame = f'/*{cell} ,{rsrq},{rsrp},{rssi},{sinr}*/\n'
     # print(frame)
     sock.sendto(data_frame.encode('utf-8'), (udp_ip, udp_port))
 
