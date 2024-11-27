@@ -189,6 +189,7 @@ private:
   bool m_dtrEnabled;
   bool m_autoReconnect;
   int m_lastSerialDeviceIndex;
+  bool m_usingCustomSerialPort;
 
   qint32 m_baudRate;
   QSettings m_settings;

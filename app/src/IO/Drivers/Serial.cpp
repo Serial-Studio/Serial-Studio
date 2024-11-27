@@ -38,6 +38,7 @@ IO::Drivers::Serial::Serial()
   : m_port(nullptr)
   , m_dtrEnabled(true)
   , m_autoReconnect(false)
+  , m_usingCustomSerialPort(false)
   , m_lastSerialDeviceIndex(0)
   , m_portIndex(0)
 {
@@ -190,13 +191,16 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
     // Create new serial port handler for native serial ports
     if (m_deviceNames.contains(name))
     {
-      const auto handler = validPorts().at(portId - 1);
-      m_port = new QSerialPort(handler);
+      m_usingCustomSerialPort = false;
+      m_port = new QSerialPort(validPorts().at(portId - 1));
     }
 
     // Create a new serial port handler for user-specified serial ports
     else if (m_customDevices.contains(name))
+    {
+      m_usingCustomSerialPort = true;
       m_port = new QSerialPort(name);
+    }
 
     // Configure serial port
     port()->setParity(parity());
@@ -447,8 +451,11 @@ void IO::Drivers::Serial::disconnectDevice()
     port()->deleteLater();
   }
 
-  // Reset pointer
+  // Reset pointer & device status
   m_port = nullptr;
+  m_usingCustomSerialPort = false;
+
+  // Update user interface
   Q_EMIT portChanged();
   Q_EMIT availablePortsChanged();
 }
@@ -805,11 +812,29 @@ void IO::Drivers::Serial::refreshSerialDevices()
  */
 void IO::Drivers::Serial::handleError(QSerialPort::SerialPortError error)
 {
+  // Ignore if port is not open
+  if (port())
+  {
+    if (!port()->isOpen())
+      return;
+  }
+
+  // Log error
   if (error != QSerialPort::NoError)
   {
+    // Ingore resource lock errors on virtual serial ports
+    if (m_usingCustomSerialPort)
+    {
+      if (error == QSerialPort::UnsupportedOperationError
+          || error == QSerialPort::ResourceError)
+        return;
+    }
+
+    // Display error
     Misc::Utilities::showMessageBox(tr("Critical serial port error"),
                                     m_errorDescriptions[error]);
 
+    // Disconnect from device
     Manager::instance().disconnectDevice();
   }
 }
