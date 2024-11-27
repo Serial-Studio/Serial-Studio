@@ -44,9 +44,6 @@ class Serial : public HAL_Driver
 {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QString portName
-             READ portName
-             NOTIFY portChanged)
   Q_PROPERTY(bool autoReconnect
              READ autoReconnect
              WRITE setAutoReconnect
@@ -136,7 +133,6 @@ public:
   [[nodiscard]] quint64 write(const QByteArray &data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
 
-  [[nodiscard]] QString portName() const;
   [[nodiscard]] QSerialPort *port() const;
   [[nodiscard]] bool autoReconnect() const;
 
@@ -180,6 +176,7 @@ private slots:
   void onReadyRead();
   void readSettings();
   void writeSettings();
+  void populateErrors();
   void refreshSerialDevices();
   void handleError(QSerialPort::SerialPortError error);
 
@@ -206,9 +203,12 @@ private:
   quint8 m_stopBitsIndex;
   quint8 m_flowControlIndex;
 
-  QStringList m_portList;
-  QStringList m_baudRateList;
+  QStringList m_deviceNames;
   QStringList m_customDevices;
+  QStringList m_deviceLocations;
+
+  QStringList m_baudRateList;
+  QMap<QSerialPort::SerialPortError, QString> m_errorDescriptions;
 };
 } // namespace Drivers
 } // namespace IO

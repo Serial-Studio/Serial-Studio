@@ -325,7 +325,6 @@ Rectangle {
       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
 
-
       //
       // Connect/disconnect device when button is clicked
       //

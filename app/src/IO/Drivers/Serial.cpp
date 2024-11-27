@@ -41,6 +41,9 @@ IO::Drivers::Serial::Serial()
   , m_lastSerialDeviceIndex(0)
   , m_portIndex(0)
 {
+  // Populate error list
+  populateErrors();
+
   // Read settings
   readSettings();
 
@@ -55,6 +58,10 @@ IO::Drivers::Serial::Serial()
   // Update connect button status when user selects a serial device
   connect(this, &IO::Drivers::Serial::portIndexChanged, this,
           &IO::Drivers::Serial::configurationChanged);
+
+  // Update error list when language is changed
+  connect(this, &IO::Drivers::Serial::languageChanged, this,
+          &IO::Drivers::Serial::populateErrors);
 }
 
 /**
@@ -177,8 +184,19 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
     m_lastSerialDeviceIndex = m_portIndex;
     Q_EMIT portIndexChanged();
 
-    // Create new serial port handler
-    m_port = new QSerialPort(ports.at(portId));
+    // Get port name from device list
+    const auto name = ports.at(portId);
+
+    // Create new serial port handler for native serial ports
+    if (m_deviceNames.contains(name))
+    {
+      const auto handler = validPorts().at(portId - 1);
+      m_port = new QSerialPort(handler);
+    }
+
+    // Create a new serial port handler for user-specified serial ports
+    else if (m_customDevices.contains(name))
+      m_port = new QSerialPort(name);
 
     // Configure serial port
     port()->setParity(parity());
@@ -196,7 +214,6 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
     {
       connect(port(), &QIODevice::readyRead, this,
               &IO::Drivers::Serial::onReadyRead);
-
       port()->setDataTerminalReady(dtrEnabled());
       return true;
     }
@@ -217,17 +234,6 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
 //------------------------------------------------------------------------------
 // Driver specifics
 //------------------------------------------------------------------------------
-
-/**
- * Returns the name of the current serial port device
- */
-QString IO::Drivers::Serial::portName() const
-{
-  if (port())
-    return port()->portName();
-
-  return tr("No Device");
-}
 
 /**
  * Returns the pointer to the current serial port handler
@@ -309,8 +315,8 @@ quint8 IO::Drivers::Serial::flowControlIndex() const
  */
 QStringList IO::Drivers::Serial::portList() const
 {
-  if (m_portList.count() > 0)
-    return m_portList + m_customDevices;
+  if (m_deviceNames.count() > 0)
+    return m_deviceNames + m_customDevices;
 
   else
     return QStringList{tr("Select Port")};
@@ -456,6 +462,7 @@ void IO::Drivers::Serial::setupExternalConnections()
   // Build serial devices list and refresh it every second
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &IO::Drivers::Serial::refreshSerialDevices);
+
   // Update lists when language changes
   connect(&Misc::Translator::instance(), &Misc::Translator::languageChanged,
           this, &IO::Drivers::Serial::languageChanged);
@@ -516,21 +523,33 @@ void IO::Drivers::Serial::setPortIndex(const quint8 portIndex)
   Q_EMIT portIndexChanged();
 }
 
+/**
+ * @brief Registers a custom serial device.
+ *
+ * This function allows the registration of a custom serial device by verifying
+ * the validity of the provided path and ensuring it is not already registered.
+ * If the path is valid and not yet registered, it is added to the list of
+ * custom devices.
+ *
+ * @param device The file path of the device to register.
+ */
 void IO::Drivers::Serial::registerDevice(const QString &device)
 {
-  QFile path(device);
+  const auto trimmedPath = device.simplified();
+
+  QFile path(trimmedPath);
   if (path.exists())
   {
-    if (!m_customDevices.contains(device))
+    if (!m_customDevices.contains(trimmedPath))
     {
-      m_customDevices.append(device);
-      refreshSerialDevices();
+      m_customDevices.append(trimmedPath);
+      Q_EMIT availablePortsChanged();
     }
   }
 
   else
     Misc::Utilities::showMessageBox(
-        tr("\"%1\" is not a valid path").arg(device),
+        tr("\"%1\" is not a valid path").arg(trimmedPath),
         tr("Please type another path to register a custom serial device"));
 }
 
@@ -718,25 +737,28 @@ void IO::Drivers::Serial::refreshSerialDevices()
 {
   // Create device list, starting with dummy header
   // (for a more friendly UI when no devices are attached)
-  QStringList ports;
-  ports.append(tr("Select Port"));
+  QStringList names;
+  QStringList locations;
+  locations.append("/dev/null");
+  names.append(tr("Select Port"));
 
   // Search for available ports and add them to the lsit
   auto validPortList = validPorts();
   Q_FOREACH (QSerialPortInfo info, validPortList)
   {
-#ifdef Q_OS_WIN
-    ports.append(info.portName());
-#else
-    ports.append(info.systemLocation());
-#endif
+    if (!info.isNull())
+    {
+      names.append(info.portName());
+      locations.append(info.systemLocation());
+    }
   }
 
   // Update list only if necessary
-  if (portList() != ports)
+  if (m_deviceNames != names)
   {
     // Update list
-    m_portList = ports;
+    m_deviceNames = names;
+    m_deviceLocations = locations;
 
     // Update current port index
     bool indexChanged = false;
@@ -784,7 +806,12 @@ void IO::Drivers::Serial::refreshSerialDevices()
 void IO::Drivers::Serial::handleError(QSerialPort::SerialPortError error)
 {
   if (error != QSerialPort::NoError)
+  {
+    Misc::Utilities::showMessageBox(tr("Critical serial port error"),
+                                    m_errorDescriptions[error]);
+
     Manager::instance().disconnectDevice();
+  }
 }
 
 /**
@@ -870,6 +897,31 @@ void IO::Drivers::Serial::writeSettings()
 
   // Save list to memory
   m_settings.setValue(QStringLiteral("IO_DataSource_Serial__BaudRates"), list);
+}
+
+/**
+ * @brief Populates the error descriptions for the serial port driver.
+ *
+ * This function initializes a mapping of QSerialPort error codes to their
+ * corresponding human-readable descriptions. These descriptions provide
+ * detailed context and, where applicable, suggestions for resolving the error.
+ */
+void IO::Drivers::Serial::populateErrors()
+{
+  // clang-format off
+  m_errorDescriptions.clear();
+  m_errorDescriptions.insert(QSerialPort::NoError, tr("No error occurred."));
+  m_errorDescriptions.insert(QSerialPort::DeviceNotFoundError, tr("The specified device could not be found. Please check the connection and try again."));
+  m_errorDescriptions.insert(QSerialPort::PermissionError, tr("Permission denied. Ensure the application has the necessary access rights to the device."));
+  m_errorDescriptions.insert(QSerialPort::OpenError, tr("Failed to open the device. It may already be in use or unavailable."));
+  m_errorDescriptions.insert(QSerialPort::WriteError, tr("An error occurred while writing data to the device."));
+  m_errorDescriptions.insert(QSerialPort::ReadError, tr("An error occurred while reading data from the device."));
+  m_errorDescriptions.insert(QSerialPort::ResourceError, tr("A critical resource error occurred. The device may have been disconnected or is no longer accessible."));
+  m_errorDescriptions.insert(QSerialPort::UnsupportedOperationError, tr("The requested operation is not supported on this device."));
+  m_errorDescriptions.insert(QSerialPort::UnknownError, tr("An unknown error occurred. Please check the device and try again."));
+  m_errorDescriptions.insert(QSerialPort::TimeoutError, tr("The operation timed out. The device may not be responding."));
+  m_errorDescriptions.insert(QSerialPort::NotOpenError, tr("The device is not open. Please open the device before attempting this operation."));
+  // clang-format on
 }
 
 /**
