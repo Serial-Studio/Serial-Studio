@@ -88,7 +88,11 @@ IO::Drivers::Serial &IO::Drivers::Serial::instance()
 void IO::Drivers::Serial::close()
 {
   if (isOpen())
+  {
     port()->close();
+    port()->deleteLater();
+    m_port = nullptr;
+  }
 }
 
 /**
@@ -163,13 +167,13 @@ quint64 IO::Drivers::Serial::write(const QByteArray &data)
 bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
 {
   // Ignore the first item of the list (Select Port)
-  auto ports = validPorts();
-  auto portId = portIndex() - 1;
-  if (portId >= 0 && portId < validPorts().count())
+  auto ports = portList();
+  auto portId = portIndex();
+  if (portId >= 1 && portId < ports.count())
   {
     // Update port index variable & disconnect from current serial port
     disconnectDevice();
-    m_portIndex = portId + 1;
+    m_portIndex = portId;
     m_lastSerialDeviceIndex = m_portIndex;
     Q_EMIT portIndexChanged();
 
@@ -195,6 +199,13 @@ bool IO::Drivers::Serial::open(const QIODevice::OpenMode mode)
 
       port()->setDataTerminalReady(dtrEnabled());
       return true;
+    }
+
+    // Display error
+    else
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Failed to connect to serial port device"), port()->errorString());
     }
   }
 
@@ -299,7 +310,7 @@ quint8 IO::Drivers::Serial::flowControlIndex() const
 QStringList IO::Drivers::Serial::portList() const
 {
   if (m_portList.count() > 0)
-    return m_portList;
+    return m_portList + m_customDevices;
 
   else
     return QStringList{tr("Select Port")};
@@ -497,13 +508,30 @@ void IO::Drivers::Serial::setDtrEnabled(const bool enabled)
  */
 void IO::Drivers::Serial::setPortIndex(const quint8 portIndex)
 {
-  auto portId = portIndex - 1;
-  if (portId >= 0 && portId < validPorts().count())
+  if (portIndex >= 0 && portIndex < portList().count())
     m_portIndex = portIndex;
   else
     m_portIndex = 0;
 
   Q_EMIT portIndexChanged();
+}
+
+void IO::Drivers::Serial::registerDevice(const QString &device)
+{
+  QFile path(device);
+  if (path.exists())
+  {
+    if (!m_customDevices.contains(device))
+    {
+      m_customDevices.append(device);
+      refreshSerialDevices();
+    }
+  }
+
+  else
+    Misc::Utilities::showMessageBox(
+        tr("\"%1\" is not a valid path").arg(device),
+        tr("Please type another path to register a custom serial device"));
 }
 
 /**
@@ -696,13 +724,7 @@ void IO::Drivers::Serial::refreshSerialDevices()
   // Search for available ports and add them to the lsit
   auto validPortList = validPorts();
   Q_FOREACH (QSerialPortInfo info, validPortList)
-  {
-    if (!info.isNull())
-    {
-      QString p = info.portName() + "  " + info.description();
-      ports.append(p);
-    }
-  }
+    ports.append(info.systemLocation());
 
   // Update list only if necessary
   if (portList() != ports)

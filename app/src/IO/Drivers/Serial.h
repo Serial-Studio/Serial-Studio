@@ -169,6 +169,7 @@ public slots:
   void setDtrEnabled(const bool enabled);
   void setParity(const quint8 parityIndex);
   void setPortIndex(const quint8 portIndex);
+  void registerDevice(const QString &device);
   void appendBaudRate(const QString &baudRate);
   void setDataBits(const quint8 dataBitsIndex);
   void setStopBits(const quint8 stopBitsIndex);
@@ -207,6 +208,7 @@ private:
 
   QStringList m_portList;
   QStringList m_baudRateList;
+  QStringList m_customDevices;
 };
 } // namespace Drivers
 } // namespace IO

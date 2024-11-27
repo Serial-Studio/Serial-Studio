@@ -77,6 +77,7 @@ Item {
       enabled: !Cpp_IO_Manager.connected
     } ComboBox {
       id: _portCombo
+      editable: true
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.portList
@@ -87,6 +88,11 @@ Item {
           if (currentIndex !== Cpp_IO_Serial.portIndex)
             Cpp_IO_Serial.portIndex = currentIndex
         }
+      }
+
+      onAccepted: {
+        if (find(editText) === -1)
+          Cpp_IO_Serial.registerDevice(editText)
       }
     }
 

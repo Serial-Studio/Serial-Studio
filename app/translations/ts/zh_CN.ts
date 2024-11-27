@@ -75,12 +75,12 @@
 <context>
     <name>ActionView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="104"/>
+        <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="105"/>
         <source>Change Icon</source>
         <translation>更换图标</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="126"/>
+        <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <source>Duplicate</source>
         <translation>复制</translation>
     </message>
@@ -933,59 +933,74 @@ Use the toolbar buttons above to add a dataset to this group.</source>
     <message>
         <location filename="../../src/IO/Drivers/Serial.cpp" line="52"/>
         <location filename="../../src/IO/Drivers/Serial.cpp" line="53"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="324"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="366"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="335"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="377"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="218"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="208"/>
+        <source>Failed to connect to serial port device</source>
+        <translation>无法连接到串口设备</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="229"/>
         <source>No Device</source>
         <translation>无设备</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="305"/>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="694"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="316"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="722"/>
         <source>Select Port</source>
         <translation>选择端口</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="325"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="336"/>
         <source>Even</source>
         <translation>偶</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="326"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="337"/>
         <source>Odd</source>
         <translation>奇</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="327"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="338"/>
         <source>Space</source>
         <translation>空格</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="328"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="339"/>
         <source>Mark</source>
         <translation>标记</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="367"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="378"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="368"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="379"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="560"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="533"/>
+        <source>&quot;%1&quot; is not a valid path</source>
+        <translation>“%1” 不是有效路径</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="534"/>
+        <source>Please type another path to register a custom serial device</source>
+        <translation>请键入另一路径以注册自定义串口设备</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="588"/>
         <source>Baud rate registered successfully</source>
         <translation>波特率成功注册</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Serial.cpp" line="561"/>
+        <location filename="../../src/IO/Drivers/Serial.cpp" line="589"/>
         <source>Rate &quot;%1&quot; has been added to baud rate list</source>
         <translation>速率“%1”已添加到波特率列表中</translation>
     </message>
@@ -2990,37 +3005,37 @@ Use the toolbar buttons above to add a dataset to this group.</source>
         <translation>COM 端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="104"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="136"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="142"/>
         <source>Data Bits</source>
         <translation>数据位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="152"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="158"/>
         <source>Parity</source>
         <translation>奇偶校验</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="168"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="174"/>
         <source>Stop Bits</source>
         <translation>停止位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="184"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="190"/>
         <source>Flow Control</source>
         <translation>流控制</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="217"/>
         <source>Auto Reconnect</source>
         <translation>自动重新连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml" line="234"/>
         <source>Send DTR Signal</source>
         <translation>发送 DTR 信号</translation>
     </message>
