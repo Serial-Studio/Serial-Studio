@@ -5,14 +5,14 @@ import time
 import datetime
 import xml.etree.ElementTree as ET
 import re
-import socket
+import serial
 
 # -------------------------- CONFIGURATION --------------------------------
 
 url_api = 'http://192.168.9.1/api/device/signal' # Address modem API
 cycle_time = 5                                   # Pause between data frame
-udp_ip = '127.0.0.1'                             # UDP target IP
-udp_port = 5005                                  # UDP target port
+serial_port = '/tmp/ttyV1'                       # Serial port address
+serial_speed = 9600                              # Serial port baudrate
 
 # -------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ def get_value(marker):
     # print('string=', string, ' value=', value)
     return value
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+serialPort = serial.Serial(port=serial_port, baudrate=serial_speed, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
 
 while True:
     xml_data = requests.get(url_api).text
@@ -45,6 +45,6 @@ while True:
     print(f'{datetime.datetime.now().strftime("%H-%M-%S")} CELL={cell} RSRQ={rsrq} RSRP={rsrp} RSSI={rssi} SINR={sinr}')
     data_frame = f'/*{cell} ,{rsrq},{rsrp},{rssi},{sinr}*/\n'
     # print(frame)
-    sock.sendto(data_frame.encode('utf-8'), (udp_ip, udp_port))
+    serialPort.write(data_frame.encode('utf-8'))
 
     time.sleep(cycle_time)
