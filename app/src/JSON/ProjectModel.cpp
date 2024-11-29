@@ -3045,7 +3045,7 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       buildDatasetModel(m_selectedDataset);
       break;
     case kDatasetView_LED_High:
-      m_selectedDataset.m_ledHigh = value.toFloat();
+      m_selectedDataset.m_ledHigh = value.toDouble();
       break;
     case kDatasetView_Plot:
       m_selectedDataset.m_graph = plotOptions.at(value.toInt()).first;
@@ -3056,13 +3056,13 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       m_selectedDataset.m_xAxisId = value.toInt();
       break;
     case kDatasetView_Min:
-      m_selectedDataset.m_min = value.toFloat();
+      m_selectedDataset.m_min = value.toDouble();
       break;
     case kDatasetView_Max:
-      m_selectedDataset.m_max = value.toFloat();
+      m_selectedDataset.m_max = value.toDouble();
       break;
     case kDatasetView_Alarm:
-      m_selectedDataset.m_alarm = value.toFloat();
+      m_selectedDataset.m_alarm = value.toDouble();
       break;
     case kDatasetView_FFT_Samples:
       m_selectedDataset.m_fftSamples = m_fftSamples.at(value.toInt()).toInt();
