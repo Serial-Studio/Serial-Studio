@@ -224,6 +224,8 @@ public:
   [[nodiscard]] QString selectedText() const;
   [[nodiscard]] QString selectedIcon() const;
 
+  [[nodiscard]] QStringList xDataSources() const;
+
   [[nodiscard]] const QString actionIcon() const;
   [[nodiscard]] const QStringList &availableActionIcons() const;
 

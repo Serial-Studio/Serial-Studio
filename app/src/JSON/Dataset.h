@@ -83,6 +83,8 @@ public:
   [[nodiscard]] double max() const;
   [[nodiscard]] double alarm() const;
   [[nodiscard]] double ledHigh() const;
+
+  [[nodiscard]] int xAxisId() const;
   [[nodiscard]] int fftSamples() const;
   [[nodiscard]] int fftSamplingRate() const;
 
@@ -121,6 +123,7 @@ private:
   int m_fftSamplingRate;
 
   int m_groupId;
+  int m_xAxisId;
   int m_datasetId;
 
   friend class JSON::ProjectModel;

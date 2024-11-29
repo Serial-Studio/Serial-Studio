@@ -73,19 +73,20 @@ typedef enum
 // clang-format off
 typedef enum
 {
-  kDatasetView_Title,         /**< Represents the dataset title item. */
-  kDatasetView_Index,         /**< Represents the dataset frame index item. */
-  kDatasetView_Units,         /**< Represents the dataset units item. */
-  kDatasetView_Widget,        /**< Represents the dataset widget item. */
-  kDatasetView_FFT,           /**< Represents the FFT plot checkbox item. */
-  kDatasetView_LED,           /**< Represents the LED panel checkbox item. */
-  kDatasetView_LED_High,      /**< Represents the LED high (on) value item. */
-  kDatasetView_Plot,          /**< Represents the dataset plot mode item. */
-  kDatasetView_Min,           /**< Represents the dataset minimum value item. */
-  kDatasetView_Max,           /**< Represents the dataset maximum value item. */
-  kDatasetView_Alarm,         /**< Represents the dataset alarm value item. */
-  kDatasetView_FFT_Samples,    /**< Represents the FFT window size item. */
+  kDatasetView_Title,            /**< Represents the dataset title item. */
+  kDatasetView_Index,            /**< Represents the dataset frame index item. */
+  kDatasetView_Units,            /**< Represents the dataset units item. */
+  kDatasetView_Widget,           /**< Represents the dataset widget item. */
+  kDatasetView_FFT,              /**< Represents the FFT plot checkbox item. */
+  kDatasetView_LED,              /**< Represents the LED panel checkbox item. */
+  kDatasetView_LED_High,         /**< Represents the LED high (on) value item. */
+  kDatasetView_Plot,             /**< Represents the dataset plot mode item. */
+  kDatasetView_Min,              /**< Represents the dataset minimum value item. */
+  kDatasetView_Max,              /**< Represents the dataset maximum value item. */
+  kDatasetView_Alarm,            /**< Represents the dataset alarm value item. */
+  kDatasetView_FFT_Samples,      /**< Represents the FFT window size item. */
   kDatasetView_FFT_SamplingRate, /**< Represents the FFT sampling rate item. */
+  kDatasetView_xAxis             /**< Represents the plot X axis item. */
 } DatasetItem;
 // clang-format on
 
@@ -345,6 +346,39 @@ QString JSON::ProjectModel::selectedIcon() const
   const auto index = m_selectionModel->currentIndex();
   const auto data = m_treeModel->data(index, TreeViewIcon);
   return data.toString();
+}
+
+/**
+ * @brief Retrieves a list of available X-axis data sources.
+ *
+ * This function returns a list of X-axis data source names. It includes a
+ * default entry ("Samples") and all registered datasets from the project model.
+ * Each dataset is identified by its title and the title of the group it belongs
+ * to.
+ *
+ * @return A `QStringList` containing the names of X-axis data sources.
+ */
+QStringList JSON::ProjectModel::xDataSources() const
+{
+  QStringList list;
+  list.append(tr("Samples"));
+
+  QMap<int, QString> registeredDatasets;
+  for (const auto &group : m_groups)
+  {
+    for (const auto &dataset : group.datasets())
+    {
+      const auto index = dataset.index();
+      if (!registeredDatasets.contains(index))
+      {
+        const auto t = QString("%1 (%2)").arg(dataset.title(), group.title());
+        registeredDatasets.insert(index, t);
+        list.append(t);
+      }
+    }
+  }
+
+  return list;
 }
 
 /**
@@ -2315,6 +2349,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   const bool showWidget = currentDatasetIsEditable();
   const bool showFFTOptions = dataset.fft();
   const bool showLedOptions = dataset.led();
+  const bool showPlotOptions = dataset.graph();
   const bool showMinMax = dataset.graph() || dataset.widget() == "gauge"
                           || dataset.widget() == "bar"
                           || m_selectedGroup.widget() == "multiplot";
@@ -2388,6 +2423,90 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     m_datasetModel->appendRow(widget);
   }
 
+  // Get appropiate plotting mode index for current dataset
+  int plotIndex = 0;
+  bool found = false;
+  const auto currentPair = qMakePair(dataset.graph(), dataset.log());
+  for (auto it = m_plotOptions.begin(); it != m_plotOptions.end();
+       ++it, ++plotIndex)
+  {
+    if (it.key() == currentPair)
+    {
+      found = true;
+      break;
+    }
+  }
+
+  // If not found, reset the index to 0
+  if (!found)
+    plotIndex = 0;
+
+  // Add plotting mode
+  auto plot = new QStandardItem();
+  plot->setEditable(true);
+  plot->setData(ComboBox, WidgetType);
+  plot->setData(m_plotOptions.values(), ComboBoxData);
+  plot->setData(plotIndex, EditableValue);
+  plot->setData(tr("Oscilloscope Plot"), ParameterName);
+  plot->setData(kDatasetView_Plot, ParameterType);
+  plot->setData(tr("Plot data in real-time"), ParameterDescription);
+  m_datasetModel->appendRow(plot);
+
+  // Add FFT checkbox
+  auto fft = new QStandardItem();
+  fft->setEditable(true);
+  fft->setData(CheckBox, WidgetType);
+  fft->setData(dataset.fft(), EditableValue);
+  fft->setData(tr("FFT Plot"), ParameterName);
+  fft->setData(kDatasetView_FFT, ParameterType);
+  fft->setData(0, PlaceholderValue);
+  fft->setData(tr("Plot frequency-domain data"), ParameterDescription);
+  m_datasetModel->appendRow(fft);
+
+  // Add LED panel checkbox
+  auto led = new QStandardItem();
+  led->setEditable(true);
+  led->setData(CheckBox, WidgetType);
+  led->setData(dataset.led(), EditableValue);
+  led->setData(tr("Show in LED Panel"), ParameterName);
+  led->setData(kDatasetView_LED, ParameterType);
+  led->setData(0, PlaceholderValue);
+  led->setData(tr("Quick status monitoring"), ParameterDescription);
+  m_datasetModel->appendRow(led);
+
+  // Add X-axis selector
+  if (showPlotOptions)
+  {
+    // Ensure X-axis ID is reset to "Samples" when an invalid index is set
+    int xAxisIdx = 0;
+    for (const auto &group : m_groups)
+    {
+      for (const auto &dataset : group.datasets())
+      {
+        const auto index = dataset.index();
+        if (index == m_selectedDataset.xAxisId())
+        {
+          xAxisIdx = index;
+          break;
+        }
+      }
+
+      if (xAxisIdx != 0)
+        break;
+    }
+
+    // Construct item
+    auto xAxis = new QStandardItem();
+    xAxis->setEditable(true);
+    xAxis->setData(ComboBox, WidgetType);
+    xAxis->setData(xAxisIdx, EditableValue);
+    xAxis->setData(xDataSources(), ComboBoxData);
+    xAxis->setData(kDatasetView_xAxis, ParameterType);
+    xAxis->setData(tr("X-Axis Source"), ParameterName);
+    xAxis->setData(tr("Data series for the X-Axis"), ParameterDescription);
+    m_datasetModel->appendRow(xAxis);
+  }
+
   // Add minimum/maximum values
   if (showMinMax)
   {
@@ -2431,46 +2550,6 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     m_datasetModel->appendRow(alarm);
   }
 
-  // Get appropiate plotting mode index for current dataset
-  int plotIndex = 0;
-  bool found = false;
-  const auto currentPair = qMakePair(dataset.graph(), dataset.log());
-  for (auto it = m_plotOptions.begin(); it != m_plotOptions.end();
-       ++it, ++plotIndex)
-  {
-    if (it.key() == currentPair)
-    {
-      found = true;
-      break;
-    }
-  }
-
-  // If not found, reset the index to 0
-  if (!found)
-    plotIndex = 0;
-
-  // Add plotting mode
-  auto plot = new QStandardItem();
-  plot->setEditable(true);
-  plot->setData(ComboBox, WidgetType);
-  plot->setData(m_plotOptions.values(), ComboBoxData);
-  plot->setData(plotIndex, EditableValue);
-  plot->setData(tr("Oscilloscope Plot"), ParameterName);
-  plot->setData(kDatasetView_Plot, ParameterType);
-  plot->setData(tr("Plot data in real-time"), ParameterDescription);
-  m_datasetModel->appendRow(plot);
-
-  // Add FFT checkbox
-  auto fft = new QStandardItem();
-  fft->setEditable(true);
-  fft->setData(CheckBox, WidgetType);
-  fft->setData(dataset.fft(), EditableValue);
-  fft->setData(tr("FFT Plot"), ParameterName);
-  fft->setData(kDatasetView_FFT, ParameterType);
-  fft->setData(0, PlaceholderValue);
-  fft->setData(tr("Plot frequency-domain data"), ParameterDescription);
-  m_datasetModel->appendRow(fft);
-
   // FFT-specific options
   if (showFFTOptions)
   {
@@ -2503,17 +2582,6 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
                              ParameterDescription);
     m_datasetModel->appendRow(fftSamplingRate);
   }
-
-  // Add LED panel checkbox
-  auto led = new QStandardItem();
-  led->setEditable(true);
-  led->setData(CheckBox, WidgetType);
-  led->setData(dataset.led(), EditableValue);
-  led->setData(tr("Show in LED Panel"), ParameterName);
-  led->setData(kDatasetView_LED, ParameterType);
-  led->setData(0, PlaceholderValue);
-  led->setData(tr("Quick status monitoring"), ParameterDescription);
-  m_datasetModel->appendRow(led);
 
   // Add LED High value
   if (showLedOptions)
@@ -2981,6 +3049,9 @@ void JSON::ProjectModel::onDatasetItemChanged(QStandardItem *item)
       m_selectedDataset.m_graph = plotOptions.at(value.toInt()).first;
       m_selectedDataset.m_log = plotOptions.at(value.toInt()).second;
       buildDatasetModel(m_selectedDataset);
+      break;
+    case kDatasetView_xAxis:
+      m_selectedDataset.m_xAxisId = value.toInt();
       break;
     case kDatasetView_Min:
       m_selectedDataset.m_min = value.toFloat();

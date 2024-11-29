@@ -66,9 +66,10 @@ Widgets.Pane {
     Rectangle {
       z: 2
       id: header
-      height: actionsLayout.implicitHeight + 12
-      visible: Cpp_UI_Dashboard.actionCount > 0
       color: Cpp_ThemeManager.colors["groupbox_background"]
+      height: visible ? actionsLayout.implicitHeight + 12 : 0
+      visible: Cpp_UI_Dashboard.actionCount > 0 && !Cpp_CSV_Player.isOpen
+
       anchors {
         top: parent.top
         left: parent.left
@@ -122,8 +123,8 @@ Widgets.Pane {
       contentWidth: width
       anchors.leftMargin: 8
       anchors.bottomMargin: 8
-      anchors.topMargin: header.height + 8
       contentHeight: grid.height
+      anchors.topMargin: header.height + 8
 
       ScrollBar.vertical: ScrollBar {
         id: scroll

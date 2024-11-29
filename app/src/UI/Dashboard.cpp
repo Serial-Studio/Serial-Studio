@@ -449,6 +449,22 @@ QStringList UI::Dashboard::actionTitles() const
 }
 
 /**
+ * @brief Provides access to the map of dataset objects.
+ *
+ * This function returns a constant reference to the map that associates dataset
+ * indexes with their corresponding `JSON::Dataset` objects.
+ *
+ * @return A constant reference to the `QMap` mapping dataset indexes (`int`)
+ *         to their respective `JSON::Dataset` objects.
+ *
+ * @note The map can be used to retrieve datasets by their index.
+ */
+const QMap<int, JSON::Dataset> &UI::Dashboard::datasets() const
+{
+  return m_datasets;
+}
+
+/**
  * @brief Provides access to a specific group widget based on widget type and
  *        relative index.
  *
@@ -493,48 +509,52 @@ const JSON::Frame &UI::Dashboard::currentFrame()
 
 /**
  * @brief Provides the FFT plot values currently displayed on the dashboard.
- * @return A reference to a QVector containing the FFT Curve data.
+ * @return A reference to a QVector containing the FFT PlotDataY data.
  */
-const QVector<Curve> &UI::Dashboard::fftPlotValues()
+const PlotDataY &UI::Dashboard::fftData(const int index) const
 {
-  return m_fftPlotValues;
+  return m_fftValues[index];
 }
 
 /**
  * @brief Provides the linear plot values currently displayed on the dashboard.
- * @return A reference to a QVector containing the linear Curve data.
+ * @return A reference to a QVector containing the linear PlotDataY data.
  */
-const QVector<Curve> &UI::Dashboard::linearPlotValues()
+const LineSeries &UI::Dashboard::plotData(const int index) const
 {
-  return m_linearPlotValues;
+  return m_pltValues[index];
 }
 
 /**
  * @brief Provides the values for multiplot visuals on the dashboard.
- * @return A reference to a QVector containing MultipleCurves data.
+ * @return A reference to a QVector containing MultiPlotDataY data.
  */
-const QVector<MultipleCurves> &UI::Dashboard::multiplotValues()
+const MultiLineSeries &UI::Dashboard::multiplotData(const int index) const
 {
-  return m_multiplotValues;
+  return m_multipltValues[index];
 }
 
 /**
- * @brief Sets the number of data points displayed in the dashboard plots.
- *        Clears existing multiplot and linear plot values and emits the
- *        @c pointsChanged signal.
+ * @brief Sets the number of data points for the dashboard plots.
  *
- * @param points The new point/sample count.
+ * This function updates the total number of points (samples) used in the plots
+ * and reconfigures the data structures for linear and multi-line series to
+ * reflect the new point count.
+ *
+ * @param points The new number of data points (samples).
  */
 void UI::Dashboard::setPoints(const int points)
 {
   if (m_points != points)
   {
+    // Update number of points
     m_points = points;
-    m_multiplotValues.clear();
-    m_linearPlotValues.clear();
-    m_multiplotValues.squeeze();
-    m_linearPlotValues.squeeze();
 
+    // Update plot data structures
+    configureLineSeries();
+    configureMultiLineSeries();
+
+    // Update the UI
     Q_EMIT pointsChanged();
   }
 }
@@ -592,12 +612,18 @@ void UI::Dashboard::setShowLegends(const bool enabled)
 void UI::Dashboard::resetData(const bool notify)
 {
   // Clear plotting data
-  m_fftPlotValues.clear();
-  m_multiplotValues.clear();
-  m_linearPlotValues.clear();
-  m_fftPlotValues.squeeze();
-  m_multiplotValues.squeeze();
-  m_linearPlotValues.squeeze();
+  m_fftValues.clear();
+  m_pltValues.clear();
+  m_multipltValues.clear();
+
+  // Free memory associated with the containers of the plotting data
+  m_fftValues.squeeze();
+  m_pltValues.squeeze();
+  m_multipltValues.squeeze();
+
+  // Clear X/Y axis arrays
+  m_xAxisData.clear();
+  m_yAxisData.clear();
 
   // Clear widget & action structures
   m_widgetCount = 0;
@@ -662,79 +688,60 @@ void UI::Dashboard::setWidgetVisible(const SerialStudio::DashboardWidget widget,
 }
 
 /**
- * @brief Updates plot data for linear, FFT, and multiplot widgets on the
- *        dashboard.
+ * @brief Updates the plot data for all dashboard widgets.
  *
- * This function checks and initializes the data structures for each plot type
- * (linear plots, FFT plots, and multiplots) if needed.
+ * This function ensures that the data structures for FFT plots, linear plots,
+ * and multiplots are correctly initialized and updated with the latest values
+ * from the datasets. It handles reinitialization if the widget count changes
+ * and shifts data to accommodate new samples.
  *
- * It then appends the latest values from the data sources to these plots by
- * shifting older data back and adding new data to the end.
+ * @note This function is typically called in real-time to keep plots
+ *       synchronized with incoming data.
  */
 void UI::Dashboard::updatePlots()
 {
-  // Check if we need to re-initialize linear plots data
-  if (m_linearPlotValues.count() != widgetCount(SerialStudio::DashboardPlot))
-  {
-    m_linearPlotValues.clear();
-    m_linearPlotValues.squeeze();
-    for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i)
-    {
-      m_linearPlotValues.append(Curve());
-      m_linearPlotValues.last().resize(points() + 1);
-      SIMD::fill<qreal>(m_linearPlotValues.last().data(), points() + 1, 0);
-    }
-  }
-
   // Check if we need to re-initialize FFT plots data
-  if (m_fftPlotValues.count() != widgetCount(SerialStudio::DashboardFFT))
-  {
-    m_fftPlotValues.clear();
-    m_fftPlotValues.squeeze();
-    for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
-    {
-      const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-      m_fftPlotValues.append(Curve());
-      m_fftPlotValues.last().resize(dataset.fftSamples());
-      SIMD::fill<qreal>(m_fftPlotValues.last().data(), dataset.fftSamples(), 0);
-    }
-  }
+  if (m_fftValues.count() != widgetCount(SerialStudio::DashboardFFT))
+    configureFftSeries();
+
+  // Check if we need to re-initialize linear plots data
+  if (m_pltValues.count() != widgetCount(SerialStudio::DashboardPlot))
+    configureLineSeries();
 
   // Check if we need to re-initialize multiplot data
-  if (m_multiplotValues.count()
-      != widgetCount(SerialStudio::DashboardMultiPlot))
-  {
-    m_multiplotValues.clear();
-    m_multiplotValues.squeeze();
-    for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
-    {
-      const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
-      m_multiplotValues.append(MultipleCurves());
-      m_multiplotValues.last().resize(group.datasetCount());
-      for (int j = 0; j < group.datasetCount(); ++j)
-      {
-        m_multiplotValues[i][j].resize(points() + 1);
-        SIMD::fill<qreal>(m_multiplotValues[i][j].data(), points() + 1, 0);
-      }
-    }
-  }
-
-  // Append latest values to linear plots data
-  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i)
-  {
-    const auto &dataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    auto *data = m_linearPlotValues[i].data();
-    auto count = m_linearPlotValues[i].count();
-    SIMD::shift<qreal>(data, count, dataset.value().toFloat());
-  }
+  if (m_multipltValues.count() != widgetCount(SerialStudio::DashboardMultiPlot))
+    configureMultiLineSeries();
 
   // Append latest values to FFT plots data
   for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
   {
     const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-    auto *data = m_fftPlotValues[i].data();
-    auto count = m_fftPlotValues[i].count();
+    auto *data = m_fftValues[i].data();
+    auto count = m_fftValues[i].count();
     SIMD::shift<qreal>(data, count, dataset.value().toFloat());
+  }
+
+  // Append latest values to linear plots data
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i)
+  {
+    const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
+    if (m_datasets.contains(yDataset.xAxisId()))
+    {
+      const auto &xDataset = m_datasets[yDataset.xAxisId()];
+      auto *xData = m_xAxisData[xDataset.index()].data();
+      auto *yData = m_yAxisData[yDataset.index()].data();
+      auto xCount = m_xAxisData[xDataset.index()].count();
+      auto yCount = m_yAxisData[yDataset.index()].count();
+      SIMD::shift<qreal>(xData, xCount, xDataset.value().toFloat());
+      SIMD::shift<qreal>(yData, yCount, yDataset.value().toFloat());
+    }
+
+    else
+    {
+      auto *data = m_yAxisData[yDataset.index()].data();
+      auto count = m_yAxisData[yDataset.index()].count();
+      SIMD::shift<qreal>(data, count, yDataset.value().toFloat());
+    }
   }
 
   // Append latest values to multiplots data
@@ -744,10 +751,161 @@ void UI::Dashboard::updatePlots()
     for (int j = 0; j < group.datasetCount(); ++j)
     {
       const auto &dataset = group.datasets()[j];
-      auto *data = m_multiplotValues[i][j].data();
-      auto count = m_multiplotValues[i][j].count();
+      auto *data = m_multipltValues[i].y[j].data();
+      auto count = m_multipltValues[i].y[j].count();
       SIMD::shift<qreal>(data, count, dataset.value().toFloat());
     }
+  }
+}
+
+/**
+ * @brief Configures the FFT series data structure for the dashboard.
+ *
+ * This function clears existing FFT values and initializes the data structure
+ * for each FFT plot widget with a predefined number of samples, filling it with
+ * zeros.
+ *
+ * @note Typically called during dashboard setup or reset to prepare FFT plot
+ *       widgets for rendering.
+ */
+void UI::Dashboard::configureFftSeries()
+{
+  // Clear memory
+  m_fftValues.clear();
+  m_fftValues.squeeze();
+
+  // Construct FFT plot data structure
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i)
+  {
+    const auto &dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
+    m_fftValues.append(PlotDataY());
+    m_fftValues.last().resize(dataset.fftSamples());
+    SIMD::fill<qreal>(m_fftValues.last().data(), dataset.fftSamples(), 0);
+  }
+}
+
+/**
+ * @brief Configures the line series data structure for the dashboard.
+ *
+ * This function clears and reinitializes the X-axis and Y-axis data arrays,
+ * as well as the plot values structure (`m_pltValues`). It associates each
+ * dataset with its respective X and Y data, creating `LineSeries` objects
+ * for plotting.
+ *
+ * - If a dataset specifies an X-axis source, the corresponding data is used.
+ * - Otherwise, the default X-axis (based on sample points) is used.
+ *
+ * @note Typically called during dashboard setup or reset to prepare plot
+ *       widgets for rendering.
+ */
+void UI::Dashboard::configureLineSeries()
+{
+  // Clear memory
+  m_xAxisData.clear();
+  m_yAxisData.clear();
+  m_pltValues.clear();
+  m_pltValues.squeeze();
+
+  // Reset default X-axis data
+  m_defaultXAxis.clear();
+  m_defaultXAxis.squeeze();
+  m_defaultXAxis.reserve(points() + 1);
+  for (int i = 0; i < points() + 1; ++i)
+    m_defaultXAxis.append(i);
+
+  // Construct X/Y axis data arrays
+  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
+  {
+    // Obtain list of datasets for a widget type
+    const auto &datasets = i.value();
+
+    // Iterate over all the datasets
+    for (auto d = datasets.begin(); d != datasets.end(); ++d)
+    {
+      if (d->graph())
+      {
+        // Register X-axis
+        PlotDataY yAxis;
+        m_yAxisData.insert(d->index(), yAxis);
+
+        // Register X-axis
+        int xSource = d->xAxisId();
+        if (!m_xAxisData.contains(xSource))
+        {
+          PlotDataX xAxis;
+          if (m_datasets.contains(xSource))
+            m_xAxisData.insert(xSource, xAxis);
+        }
+      }
+    }
+  }
+
+  // Construct plot values structure
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i)
+  {
+    // Obtain Y-axis data
+    const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
+
+    // Add X-axis data & generate a line series with X/Y data
+    if (m_datasets.contains(yDataset.xAxisId()))
+    {
+      const auto &xDataset = m_datasets[yDataset.xAxisId()];
+      m_xAxisData[xDataset.index()].resize(points() + 1);
+      m_yAxisData[yDataset.index()].resize(points() + 1);
+      SIMD::fill<qreal>(m_xAxisData[xDataset.index()].data(), points() + 1, 0);
+      SIMD::fill<qreal>(m_yAxisData[yDataset.index()].data(), points() + 1, 0);
+
+      LineSeries series;
+      series.x = &m_xAxisData[xDataset.index()];
+      series.y = &m_yAxisData[yDataset.index()];
+      m_pltValues.append(series);
+    }
+
+    // Only use Y-axis data, use samples/points as X-axis
+    else
+    {
+      m_yAxisData[yDataset.index()].resize(points() + 1);
+      SIMD::fill<qreal>(m_yAxisData[yDataset.index()].data(), points() + 1, 0);
+
+      LineSeries series;
+      series.x = &m_defaultXAxis;
+      series.y = &m_yAxisData[yDataset.index()];
+      m_pltValues.append(series);
+    }
+  }
+}
+
+/**
+ * @brief Configures the multi-line series data structure for the dashboard.
+ *
+ * This function initializes the data structure used for multi-plot widgets.
+ * It assigns the default X-axis to all multi-line series and creates a
+ * `PlotDataY` vector for each dataset in the group, initializing it with zeros.
+ *
+ * @note Typically called during dashboard setup or reset to prepare multi-plot
+ *       widgets for rendering.
+ */
+void UI::Dashboard::configureMultiLineSeries()
+{
+  // Clear data
+  m_multipltValues.clear();
+  m_multipltValues.squeeze();
+
+  // Construct multi-plot values structure
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
+  {
+    const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
+
+    MultiLineSeries series;
+    series.x = &m_defaultXAxis;
+    for (int j = 0; j < group.datasetCount(); ++j)
+    {
+      series.y.append(PlotDataY());
+      series.y.last().resize(points() + 1);
+      SIMD::fill<qreal>(series.y.last().data(), points() + 1, 0);
+    }
+
+    m_multipltValues.append(series);
   }
 }
 
@@ -803,6 +961,7 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
     Q_EMIT actionCountChanged();
 
   // Update widget data structures
+  m_datasets.clear();
   JSON::Group ledPanel;
   for (const auto &group : frame.groups())
   {
@@ -816,6 +975,7 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
 
     for (const auto &dataset : group.datasets())
     {
+      m_datasets.insert(dataset.index(), dataset);
       auto keys = SerialStudio::getDashboardWidgets(dataset);
       for (const auto &key : keys)
       {
@@ -903,6 +1063,11 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
         ++m_widgetCount;
       }
     }
+
+    // Clear plot data setup
+    m_fftValues.clear();
+    m_pltValues.clear();
+    m_multipltValues.clear();
 
     // Update user interface
     Q_EMIT widgetCountChanged();
