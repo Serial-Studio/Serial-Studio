@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(qmqtt VERSION 1.0.3)
+project(qmqtt)
 
 option(${PROJECT_NAME}_SHARED "Build a shared library.  Turn off for static." OFF)
 option(${PROJECT_NAME}_WEBSOCKETS "Enable WebSockets for MQTT" OFF)
