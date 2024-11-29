@@ -2,7 +2,7 @@
 
 ## **Overview**
 
-This project demonstrates how to simulate and visualize the Lorenz attractor, a chaotic system of differential equations, using an Arduino board and [Serial Studio](https://serial-studio.github.io/). The Arduino program calculates the Lorenz system's chaotic trajectory in real-time and sends the resulting data (\(x\), \(y\), \(z\)) to Serial Studio for plotting.
+This project demonstrates how to simulate and visualize the Lorenz attractor, a chaotic system of differential equations, using an Arduino board and [Serial Studio](https://serial-studio.github.io/). The Arduino program calculates the Lorenz system's chaotic trajectory in real-time and sends the resulting data ($x$, $y$, $z$) to Serial Studio for plotting.
 
 The Lorenz system, introduced by Edward Lorenz in 1963, is a set of three coupled differential equations commonly used to model atmospheric convection. Its iconic "butterfly-shaped" attractor has become a symbol of chaos theory. For more information on the Lorenz system, visit [this article](https://marksmath.org/visualization/LorenzExperiment/).
 
@@ -13,6 +13,8 @@ The Lorenz system, introduced by Edward Lorenz in 1963, is a set of three couple
 ## **Lorenz System Basics**
 
 The system is governed by the following equations:
+
+$$
 \[
 \frac{dx}{dt} = \sigma (y - x)
 \]
@@ -22,11 +24,12 @@ The system is governed by the following equations:
 \[
 \frac{dz}{dt} = x y - \beta z
 \]
+$$
 
 Where:
-- \( \sigma \) (sigma): Rate of rotation (set to 10.0)
-- \( \rho \) (rho): Height of the attractor (set to 28.0)
-- \( \beta \) (beta): Damping factor (set to \( 8/3 \))
+- $\sigma$ (sigma): Rate of rotation (set to $10.0$)
+- $\rho$ (rho): Height of the attractor (set to $28.0$)
+- $\beta$ (beta): Damping factor (set to $\frac{8}{3}$)
 
 The Arduino program uses the **Euler method** for numerical integration to calculate the system's state over time.
 
@@ -36,7 +39,7 @@ The Arduino program uses the **Euler method** for numerical integration to calcu
 
 - **Real-Time Visualization**: View the Lorenz attractor's chaotic motion in real time.
 - **Custom X-Axis Configuration**: Use Serial Studio's project editor to select datasets as X-axis sources.
-- **Dynamic Visualization**: Plot \(x\), \(y\), and \(z\) values on 2D or 3D graphs using Serial Studio.
+- **Dynamic Visualization**: Plot $x$, $y$, and $z$ values on 2D or 3D graphs using Serial Studio.
 
 ---
 
@@ -116,10 +119,10 @@ void loop() {
 
 1. Open Serial Studio and click the **Project Editor**.
 2. Create a new project or import the provided `LorenzAttractor.json` file.
-4. Add three datasets for \(x\), \(y\), and \(z\), specifying their respective configurations:
-   - Dataset \(x\): Use \(y\) as the X-axis source.
-   - Dataset \(y\): Use \(z\) as the X-axis source.
-   - Dataset \(z\): Use \(x\) as the X-axis source.
+4. Add three datasets for $\(x\)$, $\(y\)$, and $\(z\)$, specifying their respective configurations:
+   - Dataset $x$: Use $y$ as the X-axis source.
+   - Dataset $y$: Use $z$ as the X-axis source.
+   - Dataset $z$: Use $x$ as the X-axis source.
 
 ### **2. Plotting the Lorenz Attractor**
 
