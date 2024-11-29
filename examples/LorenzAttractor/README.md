@@ -15,15 +15,13 @@ The Lorenz system, introduced by Edward Lorenz in 1963, is a set of three couple
 The system is governed by the following equations:
 
 $$
-\[
 \frac{dx}{dt} = \sigma (y - x)
-\]
-\[
+$$
+$$
 \frac{dy}{dt} = x (\rho - z) - y
-\]
-\[
+$$
+$$
 \frac{dz}{dt} = x y - \beta z
-\]
 $$
 
 Where:
