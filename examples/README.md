@@ -14,15 +14,7 @@ Some examples also include Serial Studio project files (`*.json`) to simplify th
   - **README.md**: Setup and usage instructions.
   - **Screenshot**: Example view in Serial Studio.
   
-### 2. Lorenz Attractor
-- **Description**: This example simulates the Lorenz attractor, a set of chaotic differential equations, and transmits its $x$, $y$, and $z$ values over serial. Serial Studio visualizes these values in real-time, producing the iconic butterfly-shaped Lorenz attractor.
-- **Contents**:
-  - **LorenzAttractor.ino**: Arduino code for simulating and transmitting Lorenz attractor data.
-  - **LorenzAttractor.json**: Serial Studio project file for configuring plots with $x$, $y$, and $z$ datasets.
-  - **README.md**: Comprehensive setup guide for running the simulation and visualizing it in Serial Studio.
-  - **Screenshots**: Includes references to `project-setup.png` and `lorenz-example.png` for visual guidance on project setup and attractor visualization.
-  
-### 3. LTE modem
+### 2. LTE modem
 - **Description**: This example reads data of signal quality from LTE modem and transmits it over Virtual Serial Port, MQTT or UDP Socket.
 - **Contents**:
   - **lte.json**: Serial Studio project file for visualizing data of signal quality from LTE modem.
@@ -31,6 +23,14 @@ Some examples also include Serial Studio project files (`*.json`) to simplify th
   - **lte_udp.py**: Python script for parsing data and send it over UDP Socket.
   - **README.md**: Setup and usage instructions.
   - **Screenshot**: Example view in Serial Studio.
+ 
+### 3. Lorenz Attractor
+- **Description**: This example simulates the Lorenz attractor, a set of chaotic differential equations, and transmits its $x$, $y$, and $z$ values over serial. Serial Studio visualizes these values in real-time, producing the iconic butterfly-shaped Lorenz attractor.
+- **Contents**:
+  - **LorenzAttractor.ino**: Arduino code for simulating and transmitting Lorenz attractor data.
+  - **LorenzAttractor.json**: Serial Studio project file for configuring plots with $x$, $y$, and $z$ datasets.
+  - **README.md**: Comprehensive setup guide for running the simulation and visualizing it in Serial Studio.
+  - **Screenshots**: Includes references to `project-setup.png` and `lorenz-example.png` for visual guidance on project setup and attractor visualization.
 
 ### 4. MPU6050
 - **Description**: This example captures motion and orientation data from an MPU6050 accelerometer and gyroscope. Processed data is sent to Serial Studio for real-time visualization on widgets like a g-meter or attitude indicator.
