@@ -722,25 +722,29 @@ void UI::Dashboard::updatePlots()
   }
 
   // Append latest values to linear plots data
+  QSet<int> xAxesMoved;
+  QSet<int> yAxesMoved;
   for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i)
   {
+    // Shift Y-axis points
     const auto &yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    if (m_datasets.contains(yDataset.xAxisId()))
+    if (!yAxesMoved.contains(yDataset.index()))
     {
-      const auto &xDataset = m_datasets[yDataset.xAxisId()];
-      auto *xData = m_xAxisData[xDataset.index()].data();
+      yAxesMoved.insert(yDataset.index());
       auto *yData = m_yAxisData[yDataset.index()].data();
-      auto xCount = m_xAxisData[xDataset.index()].count();
       auto yCount = m_yAxisData[yDataset.index()].count();
-      SIMD::shift<qreal>(xData, xCount, xDataset.value().toDouble());
       SIMD::shift<qreal>(yData, yCount, yDataset.value().toDouble());
     }
 
-    else
+    // Shift X-axis points
+    const auto xAxisId = yDataset.xAxisId();
+    if (m_datasets.contains(xAxisId) && !xAxesMoved.contains(xAxisId))
     {
-      auto *data = m_yAxisData[yDataset.index()].data();
-      auto count = m_yAxisData[yDataset.index()].count();
-      SIMD::shift<qreal>(data, count, yDataset.value().toDouble());
+      xAxesMoved.insert(xAxisId);
+      const auto &xDataset = m_datasets[xAxisId];
+      auto *xData = m_xAxisData[xAxisId].data();
+      auto xCount = m_xAxisData[xAxisId].count();
+      SIMD::shift<qreal>(xData, xCount, xDataset.value().toDouble());
     }
   }
 
