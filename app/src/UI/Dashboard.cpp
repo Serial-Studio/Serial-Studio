@@ -807,11 +807,10 @@ void UI::Dashboard::configureLineSeries()
   m_pltValues.squeeze();
 
   // Reset default X-axis data
-  m_defaultXAxis.clear();
-  m_defaultXAxis.squeeze();
-  m_defaultXAxis.reserve(points() + 1);
-  for (int i = 0; i < points() + 1; ++i)
-    m_defaultXAxis.append(i);
+  m_pltXAxis.clear();
+  m_pltXAxis.squeeze();
+  m_pltXAxis.resize(points() + 1);
+  SIMD::fill_range<qreal>(m_pltXAxis.data(), m_pltXAxis.count(), 0);
 
   // Construct X/Y axis data arrays
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i)
@@ -868,7 +867,7 @@ void UI::Dashboard::configureLineSeries()
       SIMD::fill<qreal>(m_yAxisData[yDataset.index()].data(), points() + 1, 0);
 
       LineSeries series;
-      series.x = &m_defaultXAxis;
+      series.x = &m_pltXAxis;
       series.y = &m_yAxisData[yDataset.index()];
       m_pltValues.append(series);
     }
@@ -891,13 +890,19 @@ void UI::Dashboard::configureMultiLineSeries()
   m_multipltValues.clear();
   m_multipltValues.squeeze();
 
+  // Reset default X-axis data
+  m_multipltXAxis.clear();
+  m_multipltXAxis.squeeze();
+  m_multipltXAxis.resize(points() + 1);
+  SIMD::fill_range<qreal>(m_multipltXAxis.data(), m_multipltXAxis.count(), 0);
+
   // Construct multi-plot values structure
   for (int i = 0; i < widgetCount(SerialStudio::DashboardMultiPlot); ++i)
   {
     const auto &group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
 
     MultiLineSeries series;
-    series.x = &m_defaultXAxis;
+    series.x = &m_multipltXAxis;
     for (int j = 0; j < group.datasetCount(); ++j)
     {
       series.y.append(PlotDataY());

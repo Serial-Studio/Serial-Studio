@@ -170,7 +170,8 @@ private:
   bool m_updateRequired;
   SerialStudio::AxisVisibility m_axisVisibility;
 
-  PlotDataX m_defaultXAxis;
+  PlotDataX m_pltXAxis;
+  PlotDataX m_multipltXAxis;
   QMap<int, PlotDataX> m_xAxisData;
   QMap<int, PlotDataY> m_yAxisData;
 

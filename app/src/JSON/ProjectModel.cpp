@@ -363,20 +363,22 @@ QStringList JSON::ProjectModel::xDataSources() const
   QStringList list;
   list.append(tr("Samples"));
 
-  QMap<int, QString> registeredDatasets;
+  QMap<int, QString> datasets;
   for (const auto &group : m_groups)
   {
     for (const auto &dataset : group.datasets())
     {
       const auto index = dataset.index();
-      if (!registeredDatasets.contains(index))
+      if (!datasets.contains(index))
       {
         const auto t = QString("%1 (%2)").arg(dataset.title(), group.title());
-        registeredDatasets.insert(index, t);
-        list.append(t);
+        datasets.insert(index, t);
       }
     }
   }
+
+  for (auto it = datasets.cbegin(); it != datasets.cend(); ++it)
+    list.append(it.value());
 
   return list;
 }
