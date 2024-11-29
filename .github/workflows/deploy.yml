@@ -373,18 +373,24 @@ jobs:
         cd build
         cmake --build . --config Release -j 16
         
+    - name: '⚙️ Add msbuild to PATH'
+      uses: microsoft/setup-msbuild@v2
+      
+    - name: '⚙️ Install WiX'
+      run: dotnet tool install --global wix
+        
     - name: '📦 Package application'
       run: |
         cd build
         cpack --verbose
-        mv *.exe ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
-        mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe ../
+        mv *.msi ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
+        mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi ../
         
     - name: '📤 Upload artifact: NSIS installer'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
 
   # Upload continuous build
   upload:
@@ -413,5 +419,5 @@ jobs:
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.exe
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
 
