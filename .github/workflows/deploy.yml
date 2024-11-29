@@ -386,7 +386,7 @@ jobs:
         mv *.msi ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi ../
         
-    - name: '📤 Upload artifact: NSIS installer'
+    - name: '📤 Upload artifact: MSI installer'
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
