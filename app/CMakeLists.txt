@@ -346,7 +346,10 @@ if(NOT CPACK_GENERATOR)
   set(CPACK_WIX_UPGRADE_GUID           "a21bfa96-8805-4c47-8fa7-3b3daee6efce")
   set(CPACK_WIX_PROGRAM_MENU_FOLDER    ".")
   set(CPACK_WIX_ARCHITECTURE           "x64")
-  #set(CPACK_WIX_SHORTCUTS              "${PROJECT_DISPNAME};[INSTALLDIR]\\bin\\${PROJECT_EXECUTABLE}.exe")
+  set_property(INSTALL
+    "bin/$<TARGET_FILE_NAME:${PROJECT_EXECUTABLE}>"
+    PROPERTY CPACK_START_MENU_SHORTCUTS "${PROJECT_DISPNAME}"
+  )
 
  elseif(APPLE)
   set(CPACK_GENERATOR                             "DragNDrop")
