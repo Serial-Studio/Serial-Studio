@@ -1,0 +1,74 @@
+{
+    "actions": [
+    ],
+    "decoder": 0,
+    "frameDetection": 0,
+    "frameEnd": "\\n",
+    "frameParser": "/**\n * Splits a data frame into an array of elements using a comma separator.\n *\n * Use this function to break a string (like \"value1,value2,value3\") into\n * individual pieces, which can then be displayed or processed in your project.\n *\n * @param[in]  frame   A string containing the data frame.\n *                     Example: \"value1,value2,value3\"\n *\n * @return     An array of strings with the split elements.\n *             Example: [\"value1\", \"value2\", \"value3\"]\n *\n * @note You can declare global variables outside this function if needed\n *       for storing settings or keeping state between calls.\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
+    "frameStart": "$",
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 20,
+                    "min": -20,
+                    "title": "X",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "xAxis": 2
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 30,
+                    "min": -30,
+                    "title": "Y",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "xAxis": 3
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "max": 50,
+                    "min": 0,
+                    "title": "Z",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "xAxis": 1
+                }
+            ],
+            "title": "Values",
+            "widget": "multiplot"
+        }
+    ],
+    "mapTilerApiKey": "",
+    "thunderforestApiKey": "",
+    "title": "Lorenz Attractor"
+}
