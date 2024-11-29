@@ -56,9 +56,9 @@ Item {
     xMax: root.model.maxX
     yMin: root.model.minY
     yMax: root.model.maxY
-    xLabel: qsTr("Samples")
     curveColors: [root.color]
     yLabel: root.model.yLabel
+    xLabel: root.model.xLabel
     xAxis.tickInterval: root.model.xTickInterval
     yAxis.tickInterval: root.model.yTickInterval
     Component.onCompleted: graph.addSeries(lineSeries)

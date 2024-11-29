@@ -23,6 +23,30 @@
 #include "JSON/Action.h"
 
 /**
+ * @brief Reads a value from a QJsonObject based on a key, returning a default
+ *        value if the key does not exist.
+ *
+ * This function checks if the given key exists in the provided QJsonObject.
+ * If the key is found, it returns the associated value. Otherwise, it returns
+ * the specified default value.
+ *
+ * @param object The QJsonObject to read the data from.
+ * @param key The key to look for in the QJsonObject.
+ * @param defaultValue The value to return if the key is not found in the
+ * QJsonObject.
+ * @return The value associated with the key, or the defaultValue if the key is
+ * not present.
+ */
+static QVariant SAFE_READ(const QJsonObject &object, const QString &key,
+                          const QVariant &defaultValue)
+{
+  if (object.contains(key))
+    return object.value(key);
+
+  return defaultValue;
+}
+
+/**
  * @brief Constructs an Action object with a specified action ID.
  *
  * This constructor initializes the action with the provided ID, and sets
@@ -124,11 +148,10 @@ bool JSON::Action::read(const QJsonObject &object)
 {
   if (!object.isEmpty())
   {
-    m_icon = object.value(QStringLiteral("icon")).toString();
-    m_txData = object.value(QStringLiteral("txData")).toString();
-    m_eolSequence = object.value(QStringLiteral("eol")).toString();
-    m_title = object.value(QStringLiteral("title")).toString().simplified();
-
+    m_txData = SAFE_READ(object, "txData", "").toString();
+    m_eolSequence = SAFE_READ(object, "eol", "").toString();
+    m_icon = SAFE_READ(object, "icon", "").toString().simplified();
+    m_title = SAFE_READ(object, "title", "").toString().simplified();
     return true;
   }
 

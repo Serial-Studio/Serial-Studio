@@ -26,6 +26,8 @@
 #include <QVector>
 #include <QLineSeries>
 
+#include "JSON/Dataset.h"
+
 namespace Widgets
 {
 /**
@@ -35,6 +37,7 @@ class Plot : public QQuickItem
 {
   Q_OBJECT
   Q_PROPERTY(QString yLabel READ yLabel CONSTANT)
+  Q_PROPERTY(QString xLabel READ xLabel CONSTANT)
   Q_PROPERTY(qreal minX READ minX NOTIFY rangeChanged)
   Q_PROPERTY(qreal maxX READ maxX NOTIFY rangeChanged)
   Q_PROPERTY(qreal minY READ minY NOTIFY rangeChanged)
@@ -60,6 +63,7 @@ public:
   [[nodiscard]] qreal xTickInterval() const;
   [[nodiscard]] qreal yTickInterval() const;
   [[nodiscard]] const QString &yLabel() const;
+  [[nodiscard]] const QString &xLabel() const;
 
 public slots:
   void draw(QLineSeries *series);
@@ -70,12 +74,18 @@ private slots:
   void calculateAutoScaleRange();
 
 private:
+  template<typename Extractor>
+  bool computeMinMaxValues(qreal &min, qreal &max, const JSON::Dataset &dataset,
+                           const bool addPadding, Extractor extractor);
+
+private:
   int m_index;
   qreal m_minX;
   qreal m_maxX;
   qreal m_minY;
   qreal m_maxY;
   QString m_yLabel;
+  QString m_xLabel;
   QVector<QPointF> m_data;
 };
 } // namespace Widgets

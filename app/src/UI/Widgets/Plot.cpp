@@ -39,14 +39,26 @@ Widgets::Plot::Plot(const int index, QQuickItem *parent)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
-    const auto &dataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+    const auto &yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
 
-    m_yLabel = dataset.title();
-    m_minY = qMin(dataset.min(), dataset.max());
-    m_maxY = qMax(dataset.min(), dataset.max());
+    m_minY = qMin(yDataset.min(), yDataset.max());
+    m_maxY = qMax(yDataset.min(), yDataset.max());
 
-    if (!dataset.units().isEmpty())
-      m_yLabel += " (" + dataset.units() + ")";
+    const auto xAxisId = yDataset.xAxisId();
+    if (UI::Dashboard::instance().datasets().contains(xAxisId))
+    {
+      const auto &xDataset = UI::Dashboard::instance().datasets()[xAxisId];
+      m_xLabel = xDataset.title();
+      if (!xDataset.units().isEmpty())
+        m_xLabel += " (" + xDataset.units() + ")";
+    }
+
+    else
+      m_xLabel = tr("Samples");
+
+    m_yLabel = yDataset.title();
+    if (!yDataset.units().isEmpty())
+      m_yLabel += " (" + yDataset.units() + ")";
 
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
             &Plot::updateData);
@@ -122,6 +134,15 @@ const QString &Widgets::Plot::yLabel() const
 }
 
 /**
+ * @brief Returns the X-axis label.
+ * @return The X-axis label.
+ */
+const QString &Widgets::Plot::xLabel() const
+{
+  return m_xLabel;
+}
+
+/**
  * @brief Draws the data on the given QLineSeries.
  * @param series The QLineSeries to draw the data on.
  */
@@ -145,16 +166,27 @@ void Widgets::Plot::updateData()
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
   {
-    const auto &plotData = UI::Dashboard::instance().linearPlotValues();
+    // Get plotting data
+    const auto &plotData = UI::Dashboard::instance().plotData(m_index);
+    const auto X = plotData.x;
+    const auto Y = plotData.y;
 
-    if (m_index >= 0 && plotData.count() > m_index)
+    // Resize series array if required
+    if (m_data.count() != X->count())
+      m_data.resize(X->count());
+
+    // Convert data to a list of points
+    int i = 0;
+    for (auto x = X->begin(); x != X->end(); ++x)
     {
-      const auto &values = plotData[m_index];
-      if (m_data.count() != values.count())
-        m_data.resize(UI::Dashboard::instance().points());
+      if (Y->count() > i)
+      {
+        m_data[i] = QPointF(*x, Y->at(i));
+        ++i;
+      }
 
-      for (int i = 0; i < values.count(); ++i)
-        m_data[i] = QPointF(i, values[i]);
+      else
+        break;
     }
   }
 }
@@ -164,45 +196,137 @@ void Widgets::Plot::updateData()
  */
 void Widgets::Plot::updateRange()
 {
-  // Reserve the number of points in the dashboard
+  // Clear memory
   m_data.clear();
   m_data.squeeze();
   m_data.resize(UI::Dashboard::instance().points() + 1);
 
-  // Update x-axis
-  m_minX = 0;
-  m_maxX = UI::Dashboard::instance().points();
+  // Obtain dataset information
+  if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
+  {
+    const auto &yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+    if (yD.xAxisId() > 0)
+    {
+      const auto &xD = UI::Dashboard::instance().datasets()[yD.xAxisId()];
+      m_minX = xD.min();
+      m_maxX = xD.max();
+    }
+
+    else
+    {
+      m_minX = 0;
+      m_maxX = UI::Dashboard::instance().points();
+    }
+  }
 
   // Update the plot
   Q_EMIT rangeChanged();
 }
 
 /**
- * @brief Calculates the auto-scale range for the Y-axis.
+ * @brief Calculates the auto-scale range for both X and Y axes of the plot.
+ *
+ * This function determines the minimum and maximum values for the X and Y axes
+ * of the plot based on the associated dataset. If the X-axis data source is set
+ * to a specific dataset, its range is computed; otherwise, the range defaults
+ * to `[0, points]`. For the Y-axis, the range is always determined from the
+ * dataset values.
+ *
+ * @note The function emits the `rangeChanged()` signal if either the X or Y
+ *       range is updated.
  */
 void Widgets::Plot::calculateAutoScaleRange()
 {
+  // Validate that the dataset exists
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
+    return;
+
+  // Initialize parameters
+  bool xChanged = false;
+  bool yChanged = false;
+
+  // Obtain scale range for Y-axis
+  // clang-format off
+  const auto &yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
+  yChanged = computeMinMaxValues(m_minY, m_maxY, yDataset, true, [](const QPointF &p) { return p.y(); });
+  // clang-format on
+
+  // Obtain range scale for X-axis
+  // clang-format off
+  if (UI::Dashboard::instance().datasets().contains(yDataset.xAxisId()))
+  {
+    const auto &xDataset = UI::Dashboard::instance().datasets()[yDataset.xAxisId()];
+    xChanged = computeMinMaxValues(m_minX, m_maxX, xDataset, false, [](const QPointF &p) { return p.x(); });
+  }
+  // clang-format on
+
+  // X-axis data source set to samples, use [0, points] as range
+  else
+  {
+    const auto points = UI::Dashboard::instance().points();
+
+    if (m_minX != 0 || m_maxX != points)
+    {
+      m_minX = 0;
+      m_maxX = points;
+      xChanged = true;
+    }
+  }
+
+  // Update user interface
+  if (xChanged || yChanged)
+    Q_EMIT rangeChanged();
+}
+
+/**
+ * @brief Computes the minimum and maximum values for a given axis of the plot.
+ *
+ * This templated function calculates the minimum and maximum values for a plot
+ * axis (either X or Y) using the provided dataset and an extractor function. If
+ * the dataset has no valid range or is empty, a fallback range `[0, 1]` or an
+ * adjusted range is applied.
+ *
+ * @tparam Extractor A callable object (e.g., lambda) used to extract values
+ *                   from data points.
+ *
+ * @param min Reference to the variable storing the minimum value.
+ * @param max Reference to the variable storing the maximum value.
+ * @param dataset The dataset to compute the range from.
+ * @param extractor A function used to extract axis-specific values (e.g.,
+ *                  `p.y()` or `p.x()`).
+ *
+ * @return `true` if the computed range differs from the previous range, `false`
+ * otherwise.
+ *
+ * @note If the dataset has the same minimum and maximum values, the range is
+ * adjusted to provide a better display.
+ */
+template<typename Extractor>
+bool Widgets::Plot::computeMinMaxValues(qreal &min, qreal &max,
+                                        const JSON::Dataset &dataset,
+                                        const bool addPadding,
+                                        Extractor extractor)
+{
   // Store previous values
   bool ok = true;
-  const auto prevMinY = m_minY;
-  const auto prevMaxY = m_maxY;
+  const auto prevMinY = min;
+  const auto prevMaxY = max;
 
   // If the data is empty, set the range to 0-1
   if (m_data.isEmpty())
   {
-    m_minY = 0;
-    m_maxY = 1;
+    min = 0;
+    max = 1;
   }
 
   // Obtain min/max values from datasets
-  else if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index))
+  else
   {
-    const auto &dataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
     ok &= !qFuzzyCompare(dataset.min(), dataset.max());
     if (ok)
     {
-      m_minY = qMin(dataset.min(), dataset.max());
-      m_maxY = qMax(dataset.min(), dataset.max());
+      min = qMin(dataset.min(), dataset.max());
+      max = qMax(dataset.min(), dataset.max());
     }
   }
 
@@ -210,49 +334,52 @@ void Widgets::Plot::calculateAutoScaleRange()
   if (!ok)
   {
     // Initialize values to ensure that min/max are set
-    m_minY = std::numeric_limits<qreal>::max();
-    m_maxY = std::numeric_limits<qreal>::lowest();
+    min = std::numeric_limits<qreal>::max();
+    max = std::numeric_limits<qreal>::lowest();
 
     // Loop through the plot data and update the min and max
-    m_minY = SIMD::findMin(m_data, [](const QPointF &p) { return p.y(); });
-    m_maxY = SIMD::findMax(m_data, [](const QPointF &p) { return p.y(); });
+    min = SIMD::findMin(m_data, extractor);
+    max = SIMD::findMax(m_data, extractor);
 
     // If min and max are the same, adjust the range
-    if (qFuzzyCompare(m_minY, m_maxY))
+    if (qFuzzyCompare(min, max))
     {
-      if (qFuzzyIsNull(m_minY))
+      if (qFuzzyIsNull(min))
       {
-        m_minY = -1;
-        m_maxY = 1;
+        min = -1;
+        max = 1;
       }
 
       else
       {
-        double absValue = qAbs(m_minY);
-        m_minY = m_minY - absValue * 0.1;
-        m_maxY = m_maxY + absValue * 0.1;
+        double absValue = qAbs(min);
+        min = min - absValue * 0.1;
+        min = max + absValue * 0.1;
       }
     }
 
     // If the min and max are not the same, set the range to 10% more
-    else
+    else if (addPadding)
     {
-      double range = m_maxY - m_minY;
-      m_minY -= range * 0.1;
-      m_maxY += range * 0.1;
+      double range = max - min;
+      min -= range * 0.1;
+      max += range * 0.1;
     }
 
     // Round to integer numbers
-    m_maxY = std::ceil(m_maxY);
-    m_minY = std::floor(m_minY);
-    if (qFuzzyCompare(m_maxY, m_minY))
+    max = std::ceil(max);
+    min = std::floor(min);
+    if (qFuzzyCompare(max, min) && addPadding)
     {
-      m_minY -= 1;
-      m_maxY += 1;
+      min -= 1;
+      max += 1;
     }
   }
 
   // Update user interface if required
-  if (qFuzzyCompare(prevMinY, m_minY) || qFuzzyCompare(prevMaxY, m_maxY))
-    Q_EMIT rangeChanged();
+  if (qFuzzyCompare(prevMinY, min) || qFuzzyCompare(prevMaxY, max))
+    return true;
+
+  // Data not changed
+  return false;
 }

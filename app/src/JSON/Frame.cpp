@@ -23,6 +23,30 @@
 #include "JSON/Frame.h"
 
 /**
+ * @brief Reads a value from a QJsonObject based on a key, returning a default
+ *        value if the key does not exist.
+ *
+ * This function checks if the given key exists in the provided QJsonObject.
+ * If the key is found, it returns the associated value. Otherwise, it returns
+ * the specified default value.
+ *
+ * @param object The QJsonObject to read the data from.
+ * @param key The key to look for in the QJsonObject.
+ * @param defaultValue The value to return if the key is not found in the
+ * QJsonObject.
+ * @return The value associated with the key, or the defaultValue if the key is
+ * not present.
+ */
+static QVariant SAFE_READ(const QJsonObject &object, const QString &key,
+                          const QVariant &defaultValue)
+{
+  if (object.contains(key))
+    return object.value(key);
+
+  return defaultValue;
+}
+
+/**
  * Destructor function, free memory used by the @c Group objects before
  * destroying an instance of this class.
  */
@@ -96,16 +120,15 @@ bool JSON::Frame::read(const QJsonObject &object)
   // Get title & groups array
   const auto groups = object.value(QStringLiteral("groups")).toArray();
   const auto actions = object.value(QStringLiteral("actions")).toArray();
-  const auto title
-      = object.value(QStringLiteral("title")).toString().simplified();
+  const auto title = SAFE_READ(object, "title", "").toString().simplified();
 
   // We need to have a project title and at least one group
   if (!title.isEmpty() && !groups.isEmpty())
   {
     // Update title
     m_title = title;
-    m_frameEnd = object.value(QStringLiteral("frameEnd")).toString();
-    m_frameStart = object.value(QStringLiteral("frameStart")).toString();
+    m_frameEnd = SAFE_READ(object, "frameEnd", "").toString();
+    m_frameStart = SAFE_READ(object, "frameStart", "").toString();
 
     // Generate groups & datasets from data frame
     for (auto i = 0; i < groups.count(); ++i)

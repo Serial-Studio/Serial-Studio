@@ -99,6 +99,77 @@ inline void fill(T *data, size_t count, T value)
 }
 
 /**
+ * @brief Adds a range of values from begin to end into an array using SIMD for
+ * bulk operations.
+ *
+ * This function uses SIMD instructions to fill an array with a sequence of
+ * values starting from a specified `begin` value and incrementing by 1 for each
+ * element.
+ *
+ * For arrays larger than the SIMD width, it processes elements in chunks.
+ * Remaining elements that do not fit in the SIMD width are processed using
+ * a scalar fallback loop.
+ *
+ * @param data Pointer to the array of values.
+ * @param count The total number of elements in the array.
+ * @param begin The starting value for the range.
+ */
+template<typename T>
+inline void fill_range(T *data, size_t count, T begin)
+{
+#if defined(CPU_X86_64)
+  // Use SSE2 for supported Intel/AMD processors
+  size_t i = 0;
+  const auto step = static_cast<double>(1);
+  const auto start = static_cast<double>(begin);
+  constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
+
+  // SIMD bulk initialization
+  for (; i + simdWidth <= count; i += simdWidth)
+  {
+    auto range = simde_mm_set_pd(start + step * (i + 1), start + step * i);
+    simde_mm_storeu_pd(reinterpret_cast<double *>(data + i), range);
+  }
+
+  // Handle remaining elements using a scalar loop
+  for (; i < count; ++i)
+    data[i] = static_cast<T>(begin + i);
+
+#elif defined(CPU_ARM64)
+  // ARM SVE scalable vector-based initialization
+  size_t i = 0;
+  const auto pg = simde_svptrue_b64();
+  const size_t simdWidth = simde_svcntd();
+
+  // Dynamically allocate memory for lane offsets
+  std::vector<double> laneOffsets(simdWidth);
+  for (size_t j = 0; j < simdWidth; ++j)
+    laneOffsets[j] = static_cast<double>(j);
+
+  // Load lane offsets into a vector
+  auto laneOffsetsVector = simde_svld1_f64(pg, laneOffsets.data());
+
+  // SIMD bulk initialization
+  for (; i + simdWidth <= count; i += simdWidth)
+  {
+    const auto base = simde_svdup_f64(static_cast<double>(begin + i));
+    const auto rangeValues = simde_svadd_f64_z(pg, base, laneOffsetsVector);
+    simde_svst1_f64(pg, reinterpret_cast<double *>(data + i), rangeValues);
+  }
+
+  // Handle remaining elements using a scalar loop
+  for (; i < count; ++i)
+    data[i] = static_cast<T>(begin + i);
+
+#else
+  // Generic fallback when no SIMD support is available
+  for (size_t i = 0; i < count; ++i)
+    data[i] = static_cast<T>(begin + i);
+
+#endif
+}
+
+/**
  * @brief Shifts elements in an array to the left and appends a new value.
  *
  * This function uses SIMD instructions to efficiently shift elements in an

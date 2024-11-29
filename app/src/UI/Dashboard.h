@@ -134,14 +134,16 @@ public:
   [[nodiscard]] QStringList actionTitles() const;
 
   // clang-format off
+  [[nodiscard]] const QMap<int, JSON::Dataset> &datasets() const;
   [[nodiscard]] const JSON::Group &getGroupWidget(const SerialStudio::DashboardWidget widget, const int index) const;
   [[nodiscard]] const JSON::Dataset &getDatasetWidget(const SerialStudio::DashboardWidget widget, const int index) const;
   // clang-format on
 
   [[nodiscard]] const JSON::Frame &currentFrame();
-  [[nodiscard]] const QVector<Curve> &fftPlotValues();
-  [[nodiscard]] const QVector<Curve> &linearPlotValues();
-  [[nodiscard]] const QVector<MultipleCurves> &multiplotValues();
+
+  [[nodiscard]] const PlotDataY &fftData(const int index) const;
+  [[nodiscard]] const LineSeries &plotData(const int index) const;
+  [[nodiscard]] const MultiLineSeries &multiplotData(const int index) const;
 
 public slots:
   void setPoints(const int points);
@@ -155,6 +157,9 @@ public slots:
 
 private slots:
   void updatePlots();
+  void configureFftSeries();
+  void configureLineSeries();
+  void configureMultiLineSeries();
   void processFrame(const JSON::Frame &frame);
 
 private:
@@ -165,11 +170,17 @@ private:
   bool m_updateRequired;
   SerialStudio::AxisVisibility m_axisVisibility;
 
-  QVector<Curve> m_fftPlotValues;
-  QVector<Curve> m_linearPlotValues;
-  QVector<MultipleCurves> m_multiplotValues;
+  PlotDataX m_pltXAxis;
+  PlotDataX m_multipltXAxis;
+  QMap<int, PlotDataX> m_xAxisData;
+  QMap<int, PlotDataY> m_yAxisData;
+
+  QVector<PlotDataY> m_fftValues;
+  QVector<LineSeries> m_pltValues;
+  QVector<MultiLineSeries> m_multipltValues;
 
   QVector<JSON::Action> m_actions;
+  QMap<int, JSON::Dataset> m_datasets;
   QList<SerialStudio::DashboardWidget> m_availableWidgets;
   QMap<int, QPair<SerialStudio::DashboardWidget, int>> m_widgetMap;
   QMap<SerialStudio::DashboardWidget, QVector<bool>> m_widgetVisibility;

@@ -146,15 +146,12 @@ void Widgets::FFTPlot::updateData()
   if (!isEnabled())
     return;
 
-  // Get the plot data
-  auto dash = &UI::Dashboard::instance();
-  auto plotData = dash->fftPlotValues();
-
-  // If the plot data is valid, update the data
-  if (plotData.count() > m_index)
+  if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index))
   {
+    // Get the plot data
+    const auto &data = UI::Dashboard::instance().fftData(m_index);
+
     // Obtain samples from data
-    const auto &data = plotData.at(m_index);
     for (int i = 0; i < m_size; ++i)
       m_samples[i] = static_cast<float>(data[i]);
 

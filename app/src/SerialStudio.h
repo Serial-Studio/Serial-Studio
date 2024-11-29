@@ -29,16 +29,60 @@
 #include "JSON/Dataset.h"
 
 /**
- * @typedef Curve
- * @brief Defines a plot series or curve as a vector of real (qreal) values.
+ * @typedef PlotDataX
+ * @brief Represents the unique X-axis data points for a plot.
+ *
+ * The X-axis data points are stored as a set of unique `qreal` values.
+ * This ensures that each X value is distinct, which is essential for correct
+ * rendering of the plot. The set is inherently ordered in ascending order.
  */
-typedef QVector<qreal> Curve;
+typedef QVector<qreal> PlotDataX;
 
 /**
- * @typedef MultipleCurves
- * @brief Defines a collection of curves, used for representing multiple plots.
+ * @typedef PlotDataY
+ * @brief Represents the Y-axis data points for a single curve.
+ *
+ * The Y-axis data points are stored as a vector of `qreal` values.
+ * Unlike X-axis data, Y values can have duplicates and are directly
+ * mapped to the corresponding X values during plotting.
  */
-typedef QVector<Curve> MultipleCurves;
+typedef QVector<qreal> PlotDataY;
+
+/**
+ * @typedef MultiPlotDataY
+ * @brief Represents Y-axis data for multiple curves in a multiplot.
+ *
+ * A vector of `PlotDataY` structures, where each element represents
+ * the Y-axis data for one curve in a multiplot widget. This allows
+ * managing multiple curves independently.
+ */
+typedef QVector<PlotDataY> MultiPlotDataY;
+
+/**
+ * @typedef LineSeries
+ * @brief Represents a paired series of X-axis and Y-axis data for a plot.
+ *
+ * The `LineSeries` type is defined as a `QPair` containing:
+ * - A pointer to `PlotDataX`, which holds the unique X-axis values.
+ * - A pointer to `PlotDataY`, which holds the Y-axis values.
+ *
+ * This type simplifies data processing by tightly coupling the related X and Y
+ * data for a plot, ensuring that they are always accessed and managed together.
+ */
+typedef struct
+{
+  PlotDataX *x;
+  PlotDataY *y;
+} LineSeries;
+
+/**
+ * @typedef MultiLineSeries
+ */
+typedef struct
+{
+  PlotDataX *x;
+  QList<PlotDataY> y;
+} MultiLineSeries;
 
 /**
  * @class SerialStudio

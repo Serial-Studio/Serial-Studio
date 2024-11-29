@@ -194,19 +194,15 @@ void Widgets::MultiPlot::updateData()
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
   {
-    const auto &plotData = UI::Dashboard::instance().multiplotValues();
-    if (m_index >= 0 && plotData.count() > m_index)
+    const auto &data = UI::Dashboard::instance().multiplotData(m_index);
+    for (int i = 0; i < data.y.count(); ++i)
     {
-      const auto &curves = plotData[m_index];
-      for (int i = 0; i < curves.count(); ++i)
-      {
-        const auto &values = curves[i];
-        if (m_data[i].count() != values.count())
-          m_data[i].resize(values.count());
+      const auto &series = data.y[i];
+      if (m_data[i].count() != series.count())
+        m_data[i].resize(series.count());
 
-        for (int j = 0; j < values.count(); ++j)
-          m_data[i][j] = QPointF(j, values[j]);
-      }
+      for (int j = 0; j < series.count(); ++j)
+        m_data[i][j] = QPointF(data.x->at(j), series[j]);
     }
   }
 }

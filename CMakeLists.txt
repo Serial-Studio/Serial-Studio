@@ -128,11 +128,10 @@ if(PRODUCTION_OPTIMIZATION)
    /Zc:preprocessor               # Enable standards-conforming preprocessor
    /MP                            # Multi-processor compilation
    /vmg                           # Use general pointer-to-member representation
-   /Ox                            # Optimize for speed
+   /O2                            # Optimize for speed
    /W3                            # Warning level 3 messages
    /GL                            # Enable whole program optimization
    /MT                            # Link compiler runtime statically
-   /Qvec                          # Enable loop vectorization
    /fp:strict                     # Standard-compliant floating point math
   )
   add_link_options(
@@ -174,7 +173,7 @@ if(PRODUCTION_OPTIMIZATION)
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
    -qopenmp-simd                  # Add support for OpenMP
-   -static-intel                  # Static link compiler dependencies
+   -static                        # Static link compiler dependencies
    -fvectorize                    # Enable loop vectorization
    -fslp-vectorize                # Enable SLP vectorization
    -fp-model=precise              # Standard-compliant floating point math
