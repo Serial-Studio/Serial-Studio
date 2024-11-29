@@ -54,7 +54,7 @@ No additional hardware is required beyond the Arduino. Ensure the Arduino is con
 
 ## **Arduino Sketch**
 
-The provided Arduino code simulates the Lorenz attractor and transmits the calculated values (\(x\), \(y\), \(z\)) to Serial Studio. Here's the complete code:
+The provided Arduino code simulates the Lorenz attractor and transmits the calculated values $x$, $y$ and $z$ to Serial Studio. Here's the complete code:
 
 ```cpp
 //
