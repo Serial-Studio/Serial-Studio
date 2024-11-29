@@ -174,7 +174,7 @@ if(PRODUCTION_OPTIMIZATION)
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
    -qopenmp-simd                  # Add support for OpenMP
-   -static-intel                  # Static link compiler dependencies
+   -static                        # Static link compiler dependencies
    -fvectorize                    # Enable loop vectorization
    -fslp-vectorize                # Enable SLP vectorization
    -fp-model=precise              # Standard-compliant floating point math
