@@ -755,7 +755,12 @@ void IO::Drivers::Serial::refreshSerialDevices()
   {
     if (!info.isNull())
     {
+#ifdef Q_OS_WIN
+      names.append(info.portName() + "  " + info.description());
+#else
       names.append(info.portName());
+#endif
+
       locations.append(info.systemLocation());
     }
   }
