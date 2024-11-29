@@ -236,11 +236,21 @@ jobs:
       with:
         product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
 
+    - name: '✍🏻 Create Package file'
+      run: |
+        productbuild --component "${{env.APPLICATION}}.app" /Applications --sign "${{secrets.DEVELOPER_ID}}" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.pkg
+
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+
+    - name: '📤 Upload artifact: PKG'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.pkg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.pkg
 
   
   #
@@ -327,11 +337,21 @@ jobs:
       with:
         product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
 
+    - name: '✍🏻 Create Package file'
+      run: |
+        productbuild --component "${{env.APPLICATION}}.app" /Applications --sign "${{secrets.DEVELOPER_ID}}" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.pkg
+
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
+
+    - name: '📤 Upload artifact: PKG'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.pkg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.pkg
         
   #
   # Windows build
