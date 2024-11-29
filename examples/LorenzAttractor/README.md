@@ -8,8 +8,6 @@ The Lorenz system, introduced by Edward Lorenz in 1963, is a set of three couple
 
 ![Lorenz Attractor in Serial Studio](doc/screenshot.png)
 
----
-
 ## **Lorenz System Basics**
 
 The system is governed by the following equations:
@@ -31,15 +29,11 @@ Where:
 
 The Arduino program uses the **Euler method** for numerical integration to calculate the system's state over time.
 
----
-
 ## **Project Features**
 
 - **Real-Time Visualization**: View the Lorenz attractor's chaotic motion in real time.
 - **Custom X-Axis Configuration**: Use Serial Studio's project editor to select datasets as X-axis sources.
 - **Dynamic Visualization**: Plot $x$, $y$, and $z$ values on 2D or 3D graphs using Serial Studio.
-
----
 
 ## **Hardware Setup**
 
@@ -49,8 +43,6 @@ The Arduino program uses the **Euler method** for numerical integration to calcu
 
 ### **Connections**
 No additional hardware is required beyond the Arduino. Ensure the Arduino is connected to your computer via USB.
-
----
 
 ## **Arduino Sketch**
 
@@ -109,8 +101,6 @@ void loop() {
 }
 ```
 
----
-
 ## **Serial Studio Configuration**
 
 ### **1. Setting Up the Project**
@@ -132,15 +122,11 @@ Here’s how your project editor should look:
 
 ![Serial Studio Project Setup](doc/project-setup.png)
 
----
-
 ## **Custom X-Axis Example**
 
 With Serial Studio's new custom X-axis feature, you can map any dataset to serve as the X-axis source for plots. This is particularly useful for:
 - Plotting values against elapsed time or packet numbers.
 - Creating advanced visualizations like the Lorenz attractor.
-
----
 
 ## **Troubleshooting**
 
