@@ -15,10 +15,10 @@ Some examples also include Serial Studio project files (`*.json`) to simplify th
   - **Screenshot**: Example view in Serial Studio.
   
 ### 2. Lorenz Attractor
-- **Description**: This example simulates the Lorenz attractor, a set of chaotic differential equations, and transmits its \(x\), \(y\), and \(z\) values over serial. Serial Studio visualizes these values in real-time, producing the iconic butterfly-shaped Lorenz attractor.
+- **Description**: This example simulates the Lorenz attractor, a set of chaotic differential equations, and transmits its $x$, $y$, and $z$ values over serial. Serial Studio visualizes these values in real-time, producing the iconic butterfly-shaped Lorenz attractor.
 - **Contents**:
   - **LorenzAttractor.ino**: Arduino code for simulating and transmitting Lorenz attractor data.
-  - **LorenzAttractor.json**: Serial Studio project file for configuring plots with \(x\), \(y\), and \(z\) datasets.
+  - **LorenzAttractor.json**: Serial Studio project file for configuring plots with $x$, $y$, and $z$ datasets.
   - **README.md**: Comprehensive setup guide for running the simulation and visualizing it in Serial Studio.
   - **Screenshots**: Includes references to `project-setup.png` and `lorenz-example.png` for visual guidance on project setup and attractor visualization.
   
