@@ -32,7 +32,6 @@
       pkgs.mkShell {
         packages = with pkgs; [
           gcc14Stdenv
-          cmake
           gdb
           # coreutils
           # gnumake
@@ -41,8 +40,30 @@
         buildInputs = with pkgsUnstable; [
           qt6.full
           qt6.qtbase
+          qt6.qtdoc
+          qt6.qtsvg
+          qt6.qtquick3d
+          qt6.qtwebengine
+          qt6.qtwayland
+          qt6.qtserialport
+          qt6.qtshadertools
+          qt6.qt5compat
+          qt6.qtdeclarative
+          qt6.qtquicktimeline
+          # qt6.qtbase
+          # qt6.qtquick3d
+          # qt6.qtdeclarative
+          openssl
+          # qt6.wrapQtAppsHook
+        ];
+        nativeBuildInputs = with pkgsUnstable;  [
+          cmake
+          pkg-config
+          qt6.qttools
           qt6.wrapQtAppsHook
         ];
+        # QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
+
 
         # # set the environment variables that Qt apps expect
         # shellHook = ''
