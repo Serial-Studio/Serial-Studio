@@ -151,13 +151,12 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
 
-
   #
-  # macOS (arm64) build
+  # macOS build
   #
-  build-mac-arm64:
+  build-mac-universal:
     runs-on: macos-latest
-    name: '🍎 macOS (arm64)'
+    name: '🍎 macOS (Universal)'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v4
@@ -189,7 +188,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_C_COMPILER="/opt/homebrew/opt/llvm/bin/clang" -DCMAKE_CXX_COMPILER="/opt/homebrew/opt/llvm/bin/clang++" -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64"
+        cmake ../ -DCMAKE_C_COMPILER="/opt/homebrew/opt/llvm/bin/clang" -DCMAKE_CXX_COMPILER="/opt/homebrew/opt/llvm/bin/clang++" -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 
     - name: '🚧 Build application'
       run: |
@@ -201,11 +200,17 @@ jobs:
         cd build
         cpack --verbose
 
-    - name: '🪪 Import Code Signing Certificate'
+    - name: '🪪 Import Application Distribution Certificate'
       uses: apple-actions/import-codesign-certs@v2
       with:
-        p12-file-base64: ${{secrets.CERTIFICATES_P12}}
-        p12-password: ${{secrets.CERTIFICATES_P12_PASSWORD}}
+        p12-file-base64: ${{secrets.APPLE_APPID_P12_DATA}}
+        p12-password: ${{secrets.APPLE_APPID_P12_PASSWORD}}
+
+    - name: '🪪 Import Installer Distribution Certificate'
+      uses: apple-actions/import-codesign-certs@v2
+      with:
+        p12-file-base64: ${{secrets.APPLE_INSTALLER_P12_DATA}}
+        p12-password: ${{secrets.APPLE_INSTALLER_P12_PASSWORD}}
 
     - name: '💿 Mount DMG and copy application'
       run: |
@@ -214,145 +219,44 @@ jobs:
         hdiutil detach "$VOLUME"
 
     - name: '✍🏻 Sign Application'
-      run: codesign --force --deep --options runtime --sign "${{secrets.DEVELOPER_ID}}" "${{env.APPLICATION}}.app"
+      run: codesign --force --deep --options runtime --sign "${{secrets.APPLE_APPID_TEAM_ID}}" "${{env.APPLICATION}}.app"
         
     - name: '💽 Create nice DMG'
       run: |
         npm install --global create-dmg
         rm LICENSE.md
         create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
-        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg"
 
     - name: '📋 Notarize'
       uses: wpilibsuite/xcode-notarize@v3
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
-        appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
-        appstore-connect-teamid: ${{secrets.NOTARIZATION_TEAMID}}
-        appstore-connect-password: ${{secrets.NOTARIZATION_PASSWORD}}
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
+        appstore-connect-username: ${{secrets.APPLE_NOTARIZATION_USERNAME}}
+        appstore-connect-teamid: ${{secrets.APPLE_NOTARIZATION_TEAMID}}
+        appstore-connect-password: ${{secrets.APPLE_NOTARIZATION_PASSWORD}}
 
     - name: '📌 Staple'
       uses: BoundfoxStudios/action-xcode-staple@v1
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
 
-    - name: '✍🏻 Create Package file'
+    - name: '📦 Create Package file'
       run: |
-        productbuild --component "${{env.APPLICATION}}.app" /Applications --sign "${{secrets.DEVELOPER_ID}}" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.pkg
+        productbuild --component "${{env.APPLICATION}}.app" /Applications --sign "${{secrets.APPLE_INSTALLER_TEAM_ID}}" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.pkg
 
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
 
     - name: '📤 Upload artifact: PKG'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.pkg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.pkg
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.pkg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.pkg
 
-  
-  #
-  # macOS (intel) build
-  #
-  build-mac-x86_64:
-    runs-on: macos-latest
-    name: '🍎 macOS (x86_64)'
-    steps:
-    - name: '🧰 Checkout'
-      uses: actions/checkout@v4
-
-    - name: '⚙️ Install Qt'
-      uses: jurplel/install-qt-action@v4
-      with:
-        version: ${{env.QT_VERSION_MACOS}}
-        modules: ${{env.QT_MODULES}}
-        arch: clang_64
-        cache: 'true'
-
-    - name: '⚙️ Install CMake'
-      uses: lukka/get-cmake@latest
-      with:
-        useLocalCache: true
-
-    - name: '⚙️ Install Node'
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-
-    - name: '⚙️ Install OpenMp'
-      run: |
-        brew update
-        brew install llvm libomp
-
-    - name: '🚧 Configure with CMake'
-      run: |
-        mkdir build
-        cd build
-        cmake ../ -DCMAKE_C_COMPILER="/opt/homebrew/opt/llvm/bin/clang" -DCMAKE_CXX_COMPILER="/opt/homebrew/opt/llvm/bin/clang++" -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="x86_64"
-
-    - name: '🚧 Build application'
-      run: |
-        cd build
-        cmake --build . --config Release -j 16
-
-    - name: '📦 Package application'
-      run: |
-        cd build
-        cpack --verbose
-
-    - name: '🪪 Import Code Signing Certificate'
-      uses: apple-actions/import-codesign-certs@v2
-      with:
-        p12-file-base64: ${{secrets.CERTIFICATES_P12}}
-        p12-password: ${{secrets.CERTIFICATES_P12_PASSWORD}}
-
-    - name: '💿 Mount DMG and copy application'
-      run: |
-        VOLUME=$(yes | hdiutil attach ./build/*.dmg -nobrowse | grep "Volumes" | awk '{print $3}')
-        cp -a "$VOLUME/${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
-        hdiutil detach "$VOLUME"
-
-    - name: '✍🏻 Sign Application'
-      run: codesign --force --deep --options runtime --sign "${{secrets.DEVELOPER_ID}}" "${{env.APPLICATION}}.app"
-        
-    - name: '💽 Create nice DMG'
-      run: |
-        npm install --global create-dmg
-        rm LICENSE.md
-        create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
-        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg"
-
-    - name: '📋 Notarize'
-      uses: wpilibsuite/xcode-notarize@v3
-      with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
-        appstore-connect-username: ${{secrets.NOTARIZATION_USERNAME}}
-        appstore-connect-teamid: ${{secrets.NOTARIZATION_TEAMID}}
-        appstore-connect-password: ${{secrets.NOTARIZATION_PASSWORD}}
-
-    - name: '📌 Staple'
-      uses: BoundfoxStudios/action-xcode-staple@v1
-      with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
-
-    - name: '✍🏻 Create Package file'
-      run: |
-        productbuild --component "${{env.APPLICATION}}.app" /Applications --sign "${{secrets.DEVELOPER_ID}}" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.pkg
-
-    - name: '📤 Upload artifact: DMG'
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
-
-    - name: '📤 Upload artifact: PKG'
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.pkg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.pkg
-        
   #
   # Windows build
   #
@@ -416,8 +320,7 @@ jobs:
   upload:
       name: '🗂 Create release and upload artifacts'
       needs:
-        - build-mac-arm64
-        - build-mac-x86_64
+        - build-mac-universal
         - build-windows-x86_64
         - build-linux-x86_64
       runs-on: ubuntu-latest
@@ -437,7 +340,6 @@ jobs:
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x86_64.dmg
+            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
 
