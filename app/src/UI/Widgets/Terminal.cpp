@@ -991,7 +991,7 @@ void Widgets::Terminal::initBuffer()
 {
   m_data.clear();
   m_data.squeeze();
-  m_data.reserve(1024 * 100);
+  m_data.reserve(1024 * 1024);
 }
 
 /**
