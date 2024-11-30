@@ -195,17 +195,11 @@ jobs:
         cd build
         cpack --verbose
 
-    - name: '🪪 Import Application Distribution Certificate'
+    - name: '🪪 Import Certificates'
       uses: apple-actions/import-codesign-certs@v2
       with:
-        p12-file-base64: ${{secrets.APPLE_APPID_P12_DATA}}
-        p12-password: ${{secrets.APPLE_APPID_P12_PASSWORD}}
-
-    - name: '🪪 Import Installer Distribution Certificate'
-      uses: apple-actions/import-codesign-certs@v2
-      with:
-        p12-file-base64: ${{secrets.APPLE_INSTALLER_P12_DATA}}
-        p12-password: ${{secrets.APPLE_INSTALLER_P12_PASSWORD}}
+        p12-file-base64: ${{secrets.APPLE_CERTIFICATES_P12}}
+        p12-password: ${{secrets.APPLE_CERTIFICATES_P12_PASSWORD}}
 
     - name: '💿 Mount DMG and copy application'
       run: |
