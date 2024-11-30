@@ -179,16 +179,11 @@ jobs:
       with:
         node-version: 20
 
-    - name: '⚙️ Install OpenMp'
-      run: |
-        brew update
-        brew install llvm libomp
-
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_C_COMPILER="/opt/homebrew/opt/llvm/bin/clang" -DCMAKE_CXX_COMPILER="/opt/homebrew/opt/llvm/bin/clang++" -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 
     - name: '🚧 Build application'
       run: |
