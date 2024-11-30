@@ -228,7 +228,7 @@ jobs:
     - name: '📌 Staple'
       uses: BoundfoxStudios/action-xcode-staple@v1
       with:
-        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
 
     - name: '📦 Create Package file'
       run: |
