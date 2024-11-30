@@ -130,20 +130,10 @@ if(PRODUCTION_OPTIMIZATION)
 
  # macOS-specific settings
  elseif(APPLE)
-  include_directories(
-   "/opt/homebrew/opt/libomp/include"
-   "/opt/homebrew/opt/llvm/include"
-  )
-  link_directories(
-   "/opt/homebrew/opt/libomp/lib"
-   "/opt/homebrew/opt/llvm/lib"
-  )
-
   add_compile_options(
    -O3                            # Optimize for speed
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
-   -fopenmp=libomp                # Add support for OpenMP
    -fvectorize                    # Enable loop vectorization
    -fslp-vectorize                # Enable SLP vectorization
    -fno-fast-math                 # Standard-compliant floating point math
