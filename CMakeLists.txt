@@ -126,6 +126,7 @@ if(PRODUCTION_OPTIMIZATION)
    /OPT:REF                       # Remove unreferenced functions/data
    /OPT:ICF                       # Remove identical COMDATs
    /LTCG                          # Enable LTO during linkingn
+   /NODEFAULTLIB:msvcrt.lib       # Exclude dynamic runtime
   )
 
  # macOS-specific settings
