@@ -230,10 +230,6 @@ jobs:
       with:
         product-path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
 
-    - name: '📦 Create Package file'
-      run: |
-        productbuild --component "${{env.APPLICATION}}.app" /Applications --sign "${{secrets.APPLE_INSTALLER_TEAM_ID}}" ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.pkg
-
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v4
       with:
