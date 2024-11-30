@@ -236,12 +236,6 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
 
-    - name: '📤 Upload artifact: PKG'
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.pkg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.pkg
-
   #
   # Windows build
   #
