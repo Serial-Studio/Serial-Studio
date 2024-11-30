@@ -127,6 +127,7 @@ if(PRODUCTION_OPTIMIZATION)
    /OPT:ICF                       # Remove identical COMDATs
    /LTCG                          # Enable LTO during linkingn
    /NODEFAULTLIB:msvcrt.lib       # Exclude dynamic runtime
+   /IGNORE:4286                   # Ignore Qt libucrt warning
   )
 
  # macOS-specific settings
