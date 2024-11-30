@@ -196,7 +196,7 @@ jobs:
         cpack --verbose
 
     - name: '🪪 Import Certificates'
-      uses: apple-actions/import-codesign-certs@v3
+      uses: alex-spataru/import-codesign-certs@v4
       with:
         p12-file-base64: ${{secrets.APPLE_CERTIFICATES_P12}}
         p12-password: ${{secrets.APPLE_CERTIFICATES_P12_PASSWORD}}
