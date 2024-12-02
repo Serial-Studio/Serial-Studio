@@ -252,8 +252,8 @@ static void attachToConsole()
 {
   if (AttachConsole(ATTACH_PARENT_PROCESS))
   {
-    (void)freopen("CONOUT$", "w", stdout);
-    (void)freopen("CONOUT$", "w", stderr);
+    (void)freopen_s(nullptr, "CONOUT$", "w", stdout);
+    (void)freopen_s(nullptr, "CONOUT$", "w", stderr);
     printf("\n");
   }
 }
@@ -280,7 +280,7 @@ static char **adjustArgumentsForFreeType(int &argc, char **argv)
 
   // Copy original argv into newArgv
   for (int i = 0; i < argc; ++i)
-    newArgv[i] = strdup(argv[i]);
+    newArgv[i] = _strdup(argv[i]);
 
   // Add new arguments to the end
   newArgv[argc] = const_cast<char *>(platformArgument);

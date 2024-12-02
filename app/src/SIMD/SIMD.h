@@ -32,14 +32,7 @@
 #  include <cmath>
 #endif
 
-#if defined(CPU_X86_64)
-#  include <x86/sse2.h>
-#endif
-
-#if defined(CPU_ARM64)
-#  include <arm/sve.h>
-#  include <arm/neon.h>
-#endif
+#include <x86/sse2.h>
 
 namespace SIMD
 {
@@ -62,8 +55,7 @@ namespace SIMD
 template<typename T>
 inline void fill(T *data, size_t count, T value)
 {
-#if defined(CPU_X86_64)
-  // Use SSE2 for supported Intel/AMD processors
+  // Obtain register width for SIMD operations
   constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
 
   // SIMD bulk initialization
@@ -75,27 +67,6 @@ inline void fill(T *data, size_t count, T value)
   // Handle remaining elements using a scalar loop
   for (; i < count; ++i)
     data[i] = value;
-
-#elif defined(CPU_ARM64)
-  // ARM SVE scalable vector-based initialization
-  size_t i = 0;
-  auto pg = simde_svptrue_b64();
-  auto fillValue = simde_svdup_f64(value);
-
-  // SIMD bulk initialization
-  for (; i + simde_svcntd() <= count; i += simde_svcntd())
-    simde_svst1_f64(pg, data + i, fillValue);
-
-  // Handle remaining elements using a scalar loop
-  for (; i < count; ++i)
-    data[i] = value;
-
-#else
-  // Generic fallback when no SIMD support is available
-  for (size_t i = 0; i < count; ++i)
-    data[i] = value;
-
-#endif
 }
 
 /**
@@ -117,8 +88,7 @@ inline void fill(T *data, size_t count, T value)
 template<typename T>
 inline void fill_range(T *data, size_t count, T begin)
 {
-#if defined(CPU_X86_64)
-  // Use SSE2 for supported Intel/AMD processors
+  // Obtain register width for SIMD operations
   size_t i = 0;
   const auto step = static_cast<double>(1);
   const auto start = static_cast<double>(begin);
@@ -134,39 +104,6 @@ inline void fill_range(T *data, size_t count, T begin)
   // Handle remaining elements using a scalar loop
   for (; i < count; ++i)
     data[i] = static_cast<T>(begin + i);
-
-#elif defined(CPU_ARM64)
-  // ARM SVE scalable vector-based initialization
-  size_t i = 0;
-  const auto pg = simde_svptrue_b64();
-  const size_t simdWidth = simde_svcntd();
-
-  // Dynamically allocate memory for lane offsets
-  std::vector<double> laneOffsets(simdWidth);
-  for (size_t j = 0; j < simdWidth; ++j)
-    laneOffsets[j] = static_cast<double>(j);
-
-  // Load lane offsets into a vector
-  auto laneOffsetsVector = simde_svld1_f64(pg, laneOffsets.data());
-
-  // SIMD bulk initialization
-  for (; i + simdWidth <= count; i += simdWidth)
-  {
-    const auto base = simde_svdup_f64(static_cast<double>(begin + i));
-    const auto rangeValues = simde_svadd_f64_z(pg, base, laneOffsetsVector);
-    simde_svst1_f64(pg, reinterpret_cast<double *>(data + i), rangeValues);
-  }
-
-  // Handle remaining elements using a scalar loop
-  for (; i < count; ++i)
-    data[i] = static_cast<T>(begin + i);
-
-#else
-  // Generic fallback when no SIMD support is available
-  for (size_t i = 0; i < count; ++i)
-    data[i] = static_cast<T>(begin + i);
-
-#endif
 }
 
 /**
@@ -187,8 +124,7 @@ inline void fill_range(T *data, size_t count, T begin)
 template<typename T>
 inline void shift(T *data, size_t count, T newValue)
 {
-#if defined(CPU_X86_64)
-  // Use AVX2 for supported Intel/AMD processors
+  // Obtain register width for SIMD operations
   constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
 
   // Shift elements using SIMD operations
@@ -206,36 +142,6 @@ inline void shift(T *data, size_t count, T newValue)
 
   // Set the last value of the array
   data[count - 1] = newValue;
-
-#elif defined(CPU_ARM64)
-  // ARM SVE scalable vector-based implementation
-  size_t i = 0;
-  auto pg = simde_svptrue_b64();
-  const auto simdWidth = simde_svcntd();
-
-  // Shift elements using SIMD operations
-  for (; i + simdWidth <= count; i += simdWidth)
-  {
-    auto next = simde_svld1_f64(pg, data + i + 1);
-    simde_svst1_f64(pg, data + i, next);
-  }
-
-  // Handle remaining elements using a scalar loop
-  for (; i < count - 1; ++i)
-    data[i] = data[i + 1];
-
-  // Set the last value of the array
-  data[count - 1] = newValue;
-
-#else
-  // Generic scalar fallback for unsupported platforms
-  for (size_t i = 0; i < count - 1; ++i)
-    data[i] = data[i + 1];
-
-  // Set the last value of the array
-  data[count - 1] = newValue;
-
-#endif
 }
 
 /**
@@ -253,8 +159,7 @@ inline void shift(T *data, size_t count, T newValue)
 template<typename T>
 inline T findMin(const T *data, size_t count)
 {
-#if defined(CPU_X86_64)
-  // Use SSE2 for supported Intel/AMD processors
+  // Obtain register width for SIMD operations
   constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
 
   // SIMD comparisons
@@ -268,7 +173,7 @@ inline T findMin(const T *data, size_t count)
 
   // Reduce SIMD register to scalar
   T minVal = data[0];
-  std::vector<T> buffer(simdWidth); // Replace VLAs with std::vector
+  std::vector<T> buffer(simdWidth);
   simde_mm_storeu_pd(buffer.data(), minVec);
   for (size_t j = 0; j < simdWidth; ++j)
     minVal = std::min<T>(minVal, buffer[j]);
@@ -278,42 +183,6 @@ inline T findMin(const T *data, size_t count)
     minVal = std::min<T>(minVal, data[i]);
 
   return minVal;
-
-#elif defined(CPU_ARM64)
-  // ARM NEON implementation
-  constexpr auto simdWidth = sizeof(simde_float64x2_t) / sizeof(T);
-
-  // SIMD comparisons
-  size_t i = 0;
-  auto minVec = simde_vdupq_n_f64(data[0]);
-  for (; i + simdWidth <= count; i += simdWidth)
-  {
-    auto values = simde_vld1q_f64(&data[i]);
-    minVec = simde_vminq_f64(minVec, values);
-  }
-
-  // Reduce SIMD register to scalar
-  T minVal = data[0];
-  T buffer[simdWidth];
-  simde_vst1q_f64(buffer, minVec);
-  for (size_t j = 0; j < simdWidth; ++j)
-    minVal = std::min<T>(minVal, buffer[j]);
-
-  // Scalar fallback for remaining elements
-  for (; i < count; ++i)
-    minVal = std::min<T>(minVal, data[i]);
-
-  return minVal;
-
-#else
-  // Generic scalar fallback for unsupported platforms
-  T minVal = data[0];
-  for (size_t i = 1; i < count; ++i)
-    minVal = std::min<T>(minVal, data[i]);
-
-  return minVal;
-
-#endif
 }
 
 /**
@@ -331,8 +200,7 @@ inline T findMin(const T *data, size_t count)
 template<typename T>
 inline T findMax(const T *data, size_t count)
 {
-#if defined(CPU_X86_64)
-  // Use SSE2 for supported Intel/AMD processors
+  // Obtain register width for SIMD operations
   constexpr auto simdWidth = sizeof(simde__m128d) / sizeof(T);
 
   // SIMD comparisons
@@ -356,42 +224,6 @@ inline T findMax(const T *data, size_t count)
     maxVal = std::max<T>(maxVal, data[i]);
 
   return maxVal;
-
-#elif defined(CPU_ARM64)
-  // ARM NEON implementation
-  constexpr auto simdWidth = sizeof(simde_float64x2_t) / sizeof(T);
-
-  // SIMD comparisons
-  size_t i = 0;
-  auto maxVec = simde_vdupq_n_f64(data[0]);
-  for (; i + simdWidth <= count; i += simdWidth)
-  {
-    auto values = simde_vld1q_f64(&data[i]);
-    maxVec = simde_vmaxq_f64(maxVec, values);
-  }
-
-  // Reduce SIMD register to scalar
-  T maxVal = data[0];
-  T buffer[simdWidth];
-  simde_vst1q_f64(buffer, maxVec);
-  for (size_t j = 0; j < simdWidth; ++j)
-    maxVal = std::max<T>(maxVal, buffer[j]);
-
-  // Scalar fallback for remaining elements
-  for (; i < count; ++i)
-    maxVal = std::max<T>(maxVal, data[i]);
-
-  return maxVal;
-
-#else
-  // Generic scalar fallback for unsupported platforms
-  T maxVal = data[0];
-  for (size_t i = 1; i < count; ++i)
-    maxVal = std::max<T>(maxVal, data[i]);
-
-  return maxVal;
-
-#endif
 }
 
 /**
@@ -421,8 +253,7 @@ inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
   if (count == 0)
     return 0;
 
-#if defined(CPU_X86_64)
-  // SSE2 implementation for x86
+  // Obtain register width for SIMD operations
   constexpr auto simdWith = sizeof(simde__m128d) / sizeof(qreal);
   auto minVec = simde_mm_set1_pd(extractor(data[0]));
 
@@ -439,32 +270,6 @@ inline qreal findMin(const QVector<QPointF> &data, Extractor extractor)
   qreal minVal = buffer[0];
   for (size_t j = 1; j < simdWith; ++j)
     minVal = std::min<qreal>(minVal, buffer[j]);
-
-#elif defined(CPU_ARM64)
-  // NEON or SVE implementation for ARM
-  constexpr auto simdWith = sizeof(simde_float64x2_t) / sizeof(qreal);
-  auto minVec = simde_vdupq_n_f64(extractor(data[0]));
-
-  // SIMD comparisons
-  for (; i + simdWith <= count; i += simdWith)
-  {
-    alignas(16) qreal temp[simdWith]
-        = {extractor(data[i]), extractor(data[i + 1])};
-    auto values = simde_vld1q_f64(temp);
-    minVec = simde_vminq_f64(minVec, values);
-  }
-
-  // Reduce SIMD register to scalar
-  qreal buffer[simdWith];
-  simde_vst1q_f64(buffer, minVec);
-  qreal minVal = buffer[0];
-  for (size_t j = 1; j < simdWith; ++j)
-    minVal = std::min<qreal>(minVal, buffer[j]);
-
-#else
-  // Generic scalar fallback
-  qreal minVal = extractor(data[0]);
-#endif
 
   // Scalar fallback for remaining elements
   for (; i < count; ++i)
@@ -500,8 +305,7 @@ inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
   if (count == 0)
     return 0;
 
-#if defined(CPU_X86_64)
-  // SSE2 implementation for x86
+  // Obtain register width for SIMD operations
   constexpr auto simdWith = sizeof(simde__m128d) / sizeof(qreal);
   auto maxVec = simde_mm_set1_pd(extractor(data[0]));
 
@@ -518,32 +322,6 @@ inline qreal findMax(const QVector<QPointF> &data, Extractor extractor)
   qreal maxVal = buffer[0];
   for (size_t j = 1; j < simdWith; ++j)
     maxVal = std::max<qreal>(maxVal, buffer[j]);
-
-#elif defined(CPU_ARM64)
-  // NEON or SVE implementation for ARM
-  constexpr auto simdWith = sizeof(simde_float64x2_t) / sizeof(qreal);
-  auto maxVec = simde_vdupq_n_f64(extractor(data[0]));
-
-  // SIMD comparisons
-  for (; i + simdWith <= count; i += simdWith)
-  {
-    alignas(16) qreal temp[simdWith]
-        = {extractor(data[i]), extractor(data[i + 1])};
-    auto values = simde_vld1q_f64(temp);
-    maxVec = simde_vmaxq_f64(maxVec, values);
-  }
-
-  // Reduce SIMD register to scalar
-  qreal buffer[simdWith];
-  simde_vst1q_f64(buffer, maxVec);
-  qreal maxVal = buffer[0];
-  for (size_t j = 1; j < simdWith; ++j)
-    maxVal = std::max<qreal>(maxVal, buffer[j]);
-
-#else
-  // Generic scalar fallback
-  qreal maxVal = extractor(data[0]);
-#endif
 
   // Scalar fallback for remaining elements
   for (; i < count; ++i)

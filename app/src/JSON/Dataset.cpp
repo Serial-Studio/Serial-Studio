@@ -63,10 +63,10 @@ JSON::Dataset::Dataset(const int groupId, const int datasetId)
   , m_min(0)
   , m_alarm(0)
   , m_ledHigh(1)
-  , m_xAxisId(-1)
   , m_fftSamples(256)
   , m_fftSamplingRate(100)
   , m_groupId(groupId)
+  , m_xAxisId(-1)
   , m_datasetId(datasetId)
 {
 }

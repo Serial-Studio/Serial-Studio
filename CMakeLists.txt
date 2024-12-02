@@ -87,18 +87,6 @@ if (UNIX AND NOT APPLE)
 endif()
 
 #-------------------------------------------------------------------------------
-# CPU architecture configuration
-#-------------------------------------------------------------------------------
-
-if(APPLE) 
-  if(CMAKE_OSX_ARCHITECTURES MATCHES "x86_64")
-    set(CMAKE_SYSTEM_PROCESSOR "x86_64")
-  elseif(CMAKE_OSX_ARCHITECTURES MATCHES "arm64")
-    set(CMAKE_SYSTEM_PROCESSOR "arm64")
-  endif()
-endif()
-
-#-------------------------------------------------------------------------------
 # Production optimization flags
 #-------------------------------------------------------------------------------
 
@@ -138,24 +126,16 @@ if(PRODUCTION_OPTIMIZATION)
    /OPT:REF                       # Remove unreferenced functions/data
    /OPT:ICF                       # Remove identical COMDATs
    /LTCG                          # Enable LTO during linkingn
+   /NODEFAULTLIB:msvcrt.lib       # Exclude dynamic runtime
+   /IGNORE:4286                   # Ignore Qt libucrt warning
   )
 
  # macOS-specific settings
  elseif(APPLE)
-  include_directories(
-   "/opt/homebrew/opt/libomp/include"
-   "/opt/homebrew/opt/llvm/include"
-  )
-  link_directories(
-   "/opt/homebrew/opt/libomp/lib"
-   "/opt/homebrew/opt/llvm/lib"
-  )
-
   add_compile_options(
    -O3                            # Optimize for speed
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
-   -fopenmp=libomp                # Add support for OpenMP
    -fvectorize                    # Enable loop vectorization
    -fslp-vectorize                # Enable SLP vectorization
    -fno-fast-math                 # Standard-compliant floating point math
@@ -176,6 +156,7 @@ if(PRODUCTION_OPTIMIZATION)
    -static                        # Static link compiler dependencies
    -fvectorize                    # Enable loop vectorization
    -fslp-vectorize                # Enable SLP vectorization
+   -msse2                         # Enable SSE2 targeting
    -fp-model=precise              # Standard-compliant floating point math
   )
   add_link_options(
@@ -192,6 +173,7 @@ if(PRODUCTION_OPTIMIZATION)
    -fopenmp                       # Add support for OpenMP
    -ftree-vectorize               # Enable loop vectorization
    -fno-fast-math                 # Standard-compliant floating point math
+   -msse2                         # Enable SSE2 targeting
    -fno-unsafe-math-optimizations # Use safe math only
   )
   add_link_options(

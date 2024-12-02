@@ -25,7 +25,7 @@
 #-------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.20)
-project(app LANGUAGES CXX)
+project(app LANGUAGES CXX VERSION ${PROJECT_VERSION})
 
 #-------------------------------------------------------------------------------
 # C++ options
@@ -315,7 +315,7 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE      ${PROJECT_DESCRIPTION_FILE})
 set(CPACK_PACKAGE_FILE_NAME             ${PROJECT_FILE_NAME})
 set(CPACK_RESOURCE_FILE_LICENSE         ${PROJECT_FILE_LICENSE})
 
-set(CPACK_MONOLITHIC_INSTALL OFF)
+set(CPACK_MONOLITHIC_INSTALL ON)
 
 if(WIN32)
  set(CPACK_PACKAGE_ICON              "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\icon.ico")
@@ -327,15 +327,18 @@ endif()
 
 if(NOT CPACK_GENERATOR)
  if(WIN32)
-  set(CPACK_GENERATOR                             "NSIS")
-  set(CPACK_NSIS_MANIFEST_DPI_AWARE               ON)
-  set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL  ON)
-  set(CPACK_NSIS_DISPLAY_NAME                     "${CPACK_PACKAGE_NAME}")
-  set(CPACK_NSIS_MUI_FINISHPAGE_RUN               "${PROJECT_EXECUTABLE}")
-  set(CPACK_NSIS_INSTALLED_ICON_NAME              "$INSTDIR\\\\bin\\\\${PROJECT_EXECUTABLE}.exe")
-  set(CPACK_NSIS_MUI_ICON                         "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\icon.ico")
-  set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS         "Delete '$SMPROGRAMS\\\\${PROJECT_DISPNAME}.lnk'")
-  set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS           "CreateShortCut '$SMPROGRAMS\\\\${PROJECT_DISPNAME}.lnk' '$INSTDIR\\\\bin\\\\${PROJECT_EXECUTABLE}.exe'")
+  set(CPACK_GENERATOR "WIX")
+  set(CPACK_WIX_PRODUCT_ICON           "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\icon.ico")
+  set(CPACK_WIX_UI_BANNER              "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\banner.bmp")
+  set(CPACK_WIX_UI_DIALOG              "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\dialog.bmp")
+  set(CPACK_WIX_LICENSE_RTF            "${CMAKE_CURRENT_SOURCE_DIR}\\\\deploy\\\\windows\\\\license.rtf")
+  set(CPACK_WIX_PROPERTY_ARPHELPLINK   "${PROJECT_CONTACT}")
+  set(CPACK_WIX_PROPERTY_ARPCONTACT    "${PROJECT_CONTACT}")
+  set(CPACK_WIX_UPGRADE_GUID           "a21bfa96-8805-4c47-8fa7-3b3daee6efce")
+  set(CPACK_WIX_PROGRAM_MENU_FOLDER    ".")
+  set(CPACK_WIX_ARCHITECTURE           "x64")
+  set(CPACK_PACKAGE_EXECUTABLES        ${PROJECT_EXECUTABLE} "${PROJECT_DISPNAME}")
+
  elseif(APPLE)
   set(CPACK_GENERATOR                             "DragNDrop")
  else()
