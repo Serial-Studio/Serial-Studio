@@ -56,9 +56,6 @@ int32_t z = 0;    // Initial Z value
 // Time step (scaled by 1000)
 const int32_t dt = 10;  // 0.01 scaled by 1000
 
-// Interval between data transmissions (microseconds)
-const unsigned long transmissionInterval = 1000;
-
 // Queue for asynchronous data transmission
 QueueHandle_t dataQueue;
 
@@ -82,7 +79,7 @@ void simulationTask(void *param) {
     xQueueSend(dataQueue, &data, portMAX_DELAY);
 
     // Maintain consistent time step
-    vTaskDelay(pdMS_TO_TICKS(1));
+    vTaskDelay(pdMS_TO_TICKS(dt));
   }
 }
 
