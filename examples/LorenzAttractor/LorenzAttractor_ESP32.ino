@@ -93,7 +93,6 @@ void serialTask(void *param) {
   while (true) {
     int32_t data[3];
     if (xQueueReceive(dataQueue, &data, portMAX_DELAY)) {
-      // Convert data back to float for serial output
       Serial.print(data[0] / 1000.0, 6);
       Serial.print(",");
       Serial.print(data[1] / 1000.0, 6);
