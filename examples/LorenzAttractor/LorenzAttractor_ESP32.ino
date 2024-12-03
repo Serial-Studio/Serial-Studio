@@ -6,7 +6,7 @@
 // This program is specifically designed for the ESP32 microcontroller and simulates
 // the Lorenz system using fixed-point arithmetic. The Lorenz system is a set of
 // three chaotic differential equations, and the program transmits the generated
-// data (x, y, z) over the serial port. The output is ideal for visualizing the 
+// data (x, y, z) over the serial port. The output is ideal for visualizing the
 // Lorenz attractor in real-time using tools like Serial Studio.
 //
 // Lorenz System Parameters:
@@ -43,31 +43,37 @@
 
 #include <Arduino.h>
 
-// Parameters for the Lorenz system (scaled by 1000 for fixed-point arithmetic)
-const int32_t sigma = 10000;  // σ: 10.0 scaled by 1000
-const int32_t rho = 28000;    // ρ: 28.0 scaled by 1000
-const int32_t beta = 2666;    // β: 8/3 scaled by 1000
-
-// Initial conditions (scaled by 1000)
-int32_t x = 100;  // Initial X value (0.1 scaled by 1000)
-int32_t y = 0;    // Initial Y value
-int32_t z = 0;    // Initial Z value
-
-// Time step (scaled by 1000)
-const int32_t dt = 10;  // 0.01 scaled by 1000
-
 // Queue for asynchronous data transmission
-QueueHandle_t dataQueue;
+QueueHandle_t DATA_QUEUE;
 
 ///
 /// Task to calculate the Lorenz system state
 ///
 void simulationTask(void *param) {
+  // Parameters for the Lorenz system (scaled by 1000 for fixed-point arithmetic)
+  const int32_t sigma = 10000;  // σ: 10.0 scaled by 1000
+  const int32_t rho = 28000;    // ρ: 28.0 scaled by 1000
+  const int32_t beta = 2666;    // β: 8/3 scaled by 1000
+
+  // Initial conditions (scaled by 1000)
+  int32_t x = 100;
+  int32_t y = 0;  
+  int32_t z = 0;
+
+  // Initialize derivatives
+  int32_t dx = 0;
+  int32_t dy = 0;
+  int32_t dz = 0;
+
+  // Time step (scaled by 1000)
+  const int32_t dt = 10; 
+
+  // Task loop
   while (true) {
     // Calculate the derivatives (scaled by 1000)
-    int32_t dx = ((sigma * (y - x)) / 1000) * dt / 1000;
-    int32_t dy = (((x * (rho - z)) / 1000 - y) * dt) / 1000;
-    int32_t dz = (((x * y) / 1000 - (beta * z) / 1000) * dt) / 1000;
+    dx = ((sigma * (y - x)) / 1000) * dt / 1000;
+    dy = (((x * (rho - z)) / 1000 - y) * dt) / 1000;
+    dz = (((x * y) / 1000 - (beta * z) / 1000) * dt) / 1000;
 
     // Integrate the derivatives to update the system's state
     x += dx;
@@ -75,8 +81,8 @@ void simulationTask(void *param) {
     z += dz;
 
     // Send data to the queue
-    int32_t data[3] = {x, y, z};
-    xQueueSend(dataQueue, &data, portMAX_DELAY);
+    int32_t data[3] = { x, y, z };
+    xQueueSend(DATA_QUEUE, &data, portMAX_DELAY);
 
     // Maintain consistent time step
     vTaskDelay(pdMS_TO_TICKS(dt));
@@ -89,7 +95,7 @@ void simulationTask(void *param) {
 void serialTask(void *param) {
   while (true) {
     int32_t data[3];
-    if (xQueueReceive(dataQueue, &data, portMAX_DELAY)) {
+    if (xQueueReceive(DATA_QUEUE, &data, portMAX_DELAY)) {
       Serial.print(data[0] / 1000.0, 6);
       Serial.print(",");
       Serial.print(data[1] / 1000.0, 6);
@@ -105,10 +111,11 @@ void serialTask(void *param) {
 void setup() {
   // Initialize Serial communication
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial)
+    ;
 
   // Create a queue to hold Lorenz system data
-  dataQueue = xQueueCreate(10, sizeof(int32_t[3]));
+  DATA_QUEUE = xQueueCreate(10, sizeof(int32_t[3]));
 
   // Create tasks for simulation and data transmission
   xTaskCreate(simulationTask, "SimulationTask", 4096, NULL, 1, NULL);
