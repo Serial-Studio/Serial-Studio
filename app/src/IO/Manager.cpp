@@ -78,6 +78,10 @@ IO::Manager::Manager()
   connect(this, &IO::Manager::busTypeChanged, this,
           &IO::Manager::configurationChanged);
 
+  // Automatically check/unckeck connected button when configuration changes
+  connect(this, &IO::Manager::configurationChanged, this,
+          &IO::Manager::connectedChanged);
+
   // Avoid crashing the app when quitting
   connect(qApp, &QApplication::aboutToQuit, this, [=] {
     disconnect(&m_frameReader);

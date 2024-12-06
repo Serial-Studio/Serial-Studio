@@ -52,6 +52,12 @@ IO::Drivers::Network::Network()
   connect(this, &IO::Drivers::Network::portChanged, this,
           &IO::Drivers::Network::configurationChanged);
 
+  // Update open state when socket states change
+  connect(&m_tcpSocket, &QUdpSocket::stateChanged, this,
+          [=] { Q_EMIT configurationChanged(); });
+  connect(&m_udpSocket, &QUdpSocket::stateChanged, this,
+          [=] { Q_EMIT configurationChanged(); });
+
   // Report socket errors
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
   connect(&m_tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
@@ -105,12 +111,24 @@ void IO::Drivers::Network::close()
  */
 bool IO::Drivers::Network::isOpen() const
 {
-  if (socketType() == QAbstractSocket::UdpSocket)
-    return m_udpSocket.isOpen();
-  else if (socketType() == QAbstractSocket::TcpSocket)
-    return m_tcpSocket.isOpen();
+  bool open = false;
+  auto state = QAbstractSocket::UnconnectedState;
 
-  return false;
+  if (socketType() == QAbstractSocket::UdpSocket)
+  {
+    open = m_udpSocket.isOpen();
+    state = m_udpSocket.state();
+  }
+
+  else if (socketType() == QAbstractSocket::TcpSocket)
+  {
+    open = m_tcpSocket.isOpen();
+    state = m_tcpSocket.state();
+  }
+
+  return open
+         && (state == QUdpSocket::ConnectedState
+             || state == QUdpSocket::BoundState);
 }
 
 /**

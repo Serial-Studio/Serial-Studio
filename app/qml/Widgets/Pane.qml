@@ -98,6 +98,14 @@ Controls.GroupBox {
       }
     }
 
+    MouseArea {
+      anchors.fill: parent
+      onDoubleClicked: {
+        if (root.buttonIcon !== "")
+          root.actionButtonClicked()
+      }
+    }
+
     RowLayout {
       spacing: 4
       anchors.leftMargin: 0

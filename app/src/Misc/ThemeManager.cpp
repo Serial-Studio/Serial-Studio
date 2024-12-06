@@ -177,8 +177,8 @@ void Misc::ThemeManager::setTheme(const int index)
   m_colors = m_themeData.value("colors").toObject();
 
   // Tell OS if we prefer dark mode or light mode
-  auto bg = getColor("base");
-  auto fg = getColor("text");
+  const auto bg = getColor(QStringLiteral("base"));
+  const auto fg = getColor(QStringLiteral("text"));
   if (fg.lightness() > bg.lightness())
     qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
   else
