@@ -95,10 +95,11 @@ typedef enum
 // clang-format off
 typedef enum
 {
-  kActionView_Title, /**< Represents the action title item. */
-  kActionView_Icon,  /**< Represents the icon item. */
-  kActionView_EOL,   /**< Represents the EOL (end of line) item. */
-  kActionView_Data   /**< Represents the TX data item. */
+  kActionView_Title,   /**< Represents the action title item. */
+  kActionView_Icon,    /**< Represents the icon item. */
+  kActionView_EOL,     /**< Represents the EOL (end of line) item. */
+  kActionView_Data,    /**< Represents the TX data item. */
+  kActionView_Binary,  /**< Represents the binary data transmision status */
 } ActionItem;
 // clang-format on
 
@@ -2267,45 +2268,75 @@ void JSON::ProjectModel::buildActionModel(const JSON::Action &action)
   icon->setData(tr("Icon to display in the dashboard"), ParameterDescription);
   m_actionModel->appendRow(icon);
 
-  // Add action data
-  auto data = new QStandardItem();
-  data->setEditable(true);
-  data->setData(TextField, WidgetType);
-  data->setData(action.txData(), EditableValue);
-  data->setData(tr("TX Data"), ParameterName);
-  data->setData(kActionView_Data, ParameterType);
-  data->setData(tr("Command"), PlaceholderValue);
-  data->setData(tr("Data to transmit when the action is triggered."),
-                ParameterDescription);
-  m_actionModel->appendRow(data);
+  // Add binary selector checkbox
+  auto binaryData = new QStandardItem();
+  binaryData->setEditable(true);
+  binaryData->setData(CheckBox, WidgetType);
+  binaryData->setData(action.binaryData(), EditableValue);
+  binaryData->setData(tr("Binary Data"), ParameterName);
+  binaryData->setData(kActionView_Binary, ParameterType);
+  binaryData->setData(0, PlaceholderValue);
+  binaryData->setData(tr("Send binary data when the action is triggered."),
+                      ParameterDescription);
+  m_actionModel->appendRow(binaryData);
 
-  // Get appropiate end of line index for current action
-  int eolIndex = 0;
-  bool found = false;
-  for (auto it = m_eolSequences.begin(); it != m_eolSequences.end();
-       ++it, ++eolIndex)
+  // Add binary action data
+  if (action.binaryData())
   {
-    if (it.key() == action.eolSequence())
-    {
-      found = true;
-      break;
-    }
+    auto data = new QStandardItem();
+    data->setEditable(true);
+    data->setData(HexTextField, WidgetType);
+    data->setData(action.txData(), EditableValue);
+    data->setData(tr("TX Data (Hex)"), ParameterName);
+    data->setData(kActionView_Data, ParameterType);
+    data->setData(tr("Command"), PlaceholderValue);
+    data->setData(tr("Data to transmit when the action is triggered."),
+                  ParameterDescription);
+    m_actionModel->appendRow(data);
   }
 
-  // If not found, reset the index to 0
-  if (!found)
-    eolIndex = 0;
+  // Add action data (non-binary)
+  else
+  {
+    auto data = new QStandardItem();
+    data->setEditable(true);
+    data->setData(TextField, WidgetType);
+    data->setData(action.txData(), EditableValue);
+    data->setData(tr("TX Data"), ParameterName);
+    data->setData(kActionView_Data, ParameterType);
+    data->setData(tr("Command"), PlaceholderValue);
+    data->setData(tr("Data to transmit when the action is triggered."),
+                  ParameterDescription);
+    m_actionModel->appendRow(data);
 
-  // Add EOL combobox
-  auto eol = new QStandardItem();
-  eol->setEditable(true);
-  eol->setData(ComboBox, WidgetType);
-  eol->setData(m_eolSequences.values(), ComboBoxData);
-  eol->setData(eolIndex, EditableValue);
-  eol->setData(tr("EOL Sequence"), ParameterName);
-  eol->setData(kActionView_EOL, ParameterType);
-  eol->setData(tr("End-of-line (EOL) sequence to use"), ParameterDescription);
-  m_actionModel->appendRow(eol);
+    // Get appropiate end of line index for current action
+    int eolIndex = 0;
+    bool found = false;
+    for (auto it = m_eolSequences.begin(); it != m_eolSequences.end();
+         ++it, ++eolIndex)
+    {
+      if (it.key() == action.eolSequence())
+      {
+        found = true;
+        break;
+      }
+    }
+
+    // If not found, reset the index to 0
+    if (!found)
+      eolIndex = 0;
+
+    // Add EOL combobox
+    auto eol = new QStandardItem();
+    eol->setEditable(true);
+    eol->setData(ComboBox, WidgetType);
+    eol->setData(m_eolSequences.values(), ComboBoxData);
+    eol->setData(eolIndex, EditableValue);
+    eol->setData(tr("EOL Sequence"), ParameterName);
+    eol->setData(kActionView_EOL, ParameterType);
+    eol->setData(tr("End-of-line (EOL) sequence to use"), ParameterDescription);
+    m_actionModel->appendRow(eol);
+  }
 
   // Handle edits
   connect(m_actionModel, &CustomModel::itemChanged, this,
@@ -2908,6 +2939,10 @@ void JSON::ProjectModel::onActionItemChanged(QStandardItem *item)
     case kActionView_Icon:
       m_selectedAction.m_icon = value.toString();
       Q_EMIT actionModelChanged();
+      break;
+    case kActionView_Binary:
+      m_selectedAction.m_binaryData = value.toBool();
+      buildActionModel(m_selectedAction);
       break;
     default:
       break;

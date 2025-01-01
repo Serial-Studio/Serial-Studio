@@ -138,6 +138,8 @@ public:
   Q_INVOKABLE bool validateUserHex(const QString &text);
   Q_INVOKABLE QString formatUserHex(const QString &text);
 
+  static QByteArray hexToBytes(const QString &data);
+
 public slots:
   void save();
   void clear();
@@ -159,7 +161,6 @@ private slots:
   void onDataReceived(const QByteArray &data);
 
 private:
-  QByteArray hexToBytes(const QString &data);
   QString dataToString(const QByteArray &data);
   QString plainTextStr(const QByteArray &data);
   QString hexadecimalStr(const QByteArray &data);

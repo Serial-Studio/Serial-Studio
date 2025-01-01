@@ -55,6 +55,7 @@ static QVariant SAFE_READ(const QJsonObject &object, const QString &key,
  */
 JSON::Action::Action(const int actionId)
   : m_actionId(actionId)
+  , m_binaryData(false)
   , m_icon("Play Property")
   , m_title("")
   , m_txData("")
@@ -70,6 +71,16 @@ JSON::Action::Action(const int actionId)
 int JSON::Action::actionId() const
 {
   return m_actionId;
+}
+
+/**
+ * @brief Checks if the user wants to send binary data to the connected device.
+ *
+ * @return @c true if binary data encoding is enabled, @c false otherwise.
+ */
+bool JSON::Action::binaryData() const
+{
+  return m_binaryData;
 }
 
 /**
@@ -126,6 +137,7 @@ QJsonObject JSON::Action::serialize() const
   object.insert(QStringLiteral("icon"), m_icon);
   object.insert(QStringLiteral("txData"), m_txData);
   object.insert(QStringLiteral("eol"), m_eolSequence);
+  object.insert(QStringLiteral("binary"), m_binaryData);
   object.insert(QStringLiteral("title"), m_title.simplified());
   return object;
 }
@@ -147,6 +159,7 @@ bool JSON::Action::read(const QJsonObject &object)
 {
   if (!object.isEmpty())
   {
+    m_binaryData = SAFE_READ(object, "binary", false).toBool();
     m_txData = SAFE_READ(object, "txData", "").toString();
     m_eolSequence = SAFE_READ(object, "eol", "").toString();
     m_icon = SAFE_READ(object, "icon", "").toString().simplified();

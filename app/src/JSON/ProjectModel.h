@@ -181,6 +181,7 @@ public:
   enum EditorWidget
   {
     TextField,
+    HexTextField,
     IntField,
     FloatField,
     CheckBox,

@@ -49,6 +49,8 @@ public:
   Action(const int actionId = -1);
 
   [[nodiscard]] int actionId() const;
+  [[nodiscard]] bool binaryData() const;
+
   [[nodiscard]] const QString &icon() const;
   [[nodiscard]] const QString &title() const;
   [[nodiscard]] const QString &txData() const;
@@ -59,6 +61,8 @@ public:
 
 private:
   int m_actionId;
+  bool m_binaryData;
+
   QString m_icon;
   QString m_title;
   QString m_txData;

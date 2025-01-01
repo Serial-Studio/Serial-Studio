@@ -23,6 +23,7 @@
 
 #include "SIMD/SIMD.h"
 #include "IO/Manager.h"
+#include "IO/Console.h"
 #include "CSV/Player.h"
 #include "MQTT/Client.h"
 #include "Misc/TimerEvents.h"
@@ -568,8 +569,14 @@ void UI::Dashboard::activateAction(const int index)
   if (index >= 0 && index < m_actions.count())
   {
     const auto &action = m_actions[index];
-    const auto &data = action.txData() + action.eolSequence();
-    IO::Manager::instance().writeData(data.toUtf8());
+
+    QByteArray bin;
+    if (action.binaryData())
+      bin = IO::Console::hexToBytes(action.txData());
+    else
+      bin = QString(action.txData() + action.eolSequence()).toUtf8();
+
+    IO::Manager::instance().writeData(bin);
   }
 }
 
