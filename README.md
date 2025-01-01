@@ -17,8 +17,6 @@ The tool was born out of my experience in multiple CanSat-based competitions, wh
 
 Today, Serial Studio is a powerful and adaptable tool, suitable not only for CanSat competitions but for any data acquisition and visualization project. It supports data retrieval from a wide range of sources, including hardware and software serial ports, MQTT, Bluetooth Low Energy (BLE), and network sockets (TCP/UDP).
 
-*Read this document in other languages*: [Español](doc/README_ES.md) [简体中文](doc/README_ZH.md) [Deutsch](doc/README_DE.md) [Русский](doc/README_RU.md) [Français](doc/README_FR.md)
-
 ![Software usage](doc/screenshot.png)
 
 ## Features
@@ -41,7 +39,7 @@ Visit the **[Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki)** for co
 
 ### Requirements
 
-To compile Serial Studio, the only required dependency is [Qt](http://www.qt.io/download-open-source/), preferrably with all plugins & modules installed. The desktop application compiles with **Qt 6.8.0**.
+To compile Serial Studio, the only required dependency is [Qt](http://www.qt.io/download-open-source/), preferrably with all plugins & modules installed. The desktop application compiles with **Qt 6.8.1**.
 
 If you're compiling on GNU/Linux, you’ll also need to install `libgl1-mesa-dev`:
 
@@ -58,14 +56,22 @@ cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
 cmake --build . -j 16 
 ```
 
-## Support & Tipping
+## Support & Licensing
 
-Open source software thrives on collaboration, creativity, and the generosity of its users. By supporting Serial Studio, you are directly contributing to its growth, sustainability, and ability to impact countless developers, makers, educators and innovators around the world.
+Open source software thrives on the collaboration and support of its users. By contributing to Serial Studio, you help ensure its growth, sustainability, and positive impact on developers, educators, and makers worldwide.
 
-If this project has helped you or inspired you, consider supporting it with a donation. Even small contributions make a big difference. Your generosity will keep this tool evolving and help more people to unlock their potential with open source software.
+If Serial Studio has helped you, consider supporting its development in one of the following ways:
 
-👉 [Donate/Tip Here](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE)
+- 👉 [**Make a Donation:**](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE) Even small contributions help keep this tool evolving. 
+- 👉 [**Get a Commercial License:**](https://serial-studio.com/) For businesses and professional users, unlock priority support and unrestricted features.  
+
+Your support makes a difference! Thank you for being part of the Serial Studio journey!
 
 ## License
 
-This project is licensed under the MIT License. For more details, see the [LICENSE](LICENSE.md) file.
+Serial Studio is dual-licensed under the [GNU General Public License v3 (GPLv3)](https://www.gnu.org/licenses/gpl-3.0.html) for open-source users and a Commercial License for business and professional use.
+
+- **Open Source Use:** Free under the GPLv3 license. Limitations apply, such as 30-minute session restrictions and limited dashboard widgets.
+- **Commercial Use:** Requires a Commercial License for businesses or professional users, offering unlimited usage, MQTT streaming, and priority support.
+
+For more details, see the [LICENSE](LICENSE.md) file or visit [https://serial-studio.com](https://serial-studio.com).
