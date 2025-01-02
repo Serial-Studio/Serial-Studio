@@ -472,7 +472,7 @@ ColumnLayout {
                   const adjustment = spacesBeforeCursorFormatted - spacesBeforeCursorOriginal + lengthDifference;
 
                   // Restore the cursor position with adjustment
-                  _hexComponent.cursorPosition = Math.min(currentCursorPosition + adjustment, send.text.length);
+                  _hexComponent.cursorPosition = Math.min(currentCursorPosition + adjustment, _hexComponent.text.length);
                 }
               }
 
