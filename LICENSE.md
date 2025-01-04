@@ -41,7 +41,7 @@ Commercial users benefit from:
   software  under a different name or identity without explicit, written 
   permission from the original author.
 - Commercial users may use the software in their business or enterprise 
-  applications, provided they comply with the above restrictions.
+  applications, provided they comply with the above restriction.
 
 For details on the Commercial License or to purchase a license, visit the 
 official website (https://serial-studio.com).
