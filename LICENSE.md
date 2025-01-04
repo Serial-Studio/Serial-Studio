@@ -77,15 +77,15 @@ Additional Notes
 Examples of Permitted and Prohibited Use 
 ========================================
 
-- **Permitted under GPLv3:**  
-  - Running Serial Studio for an university research project.  
-  - Including it in an open-source IoT platform.  
-  - Using it for personal and non-commercial projects.
+**Permitted under GPLv3:**  
+- Running Serial Studio for an university research project.  
+- Including it in an open-source IoT platform.  
+- Using it for personal and non-commercial projects.
 
-- **Prohibited without a Commercial License:**  
-  - Using Serial Studio as part of a commercial product offered to customers.  
-  - Deploying Serial Studio in an enterprise environment without purchasing the 
-    Commercial License.  
+**Prohibited without a Commercial License:**  
+- Using Serial Studio as part of a commercial product offered to customers.  
+- Deploying Serial Studio in an enterprise environment without purchasing the 
+  Commercial License.  
 
 ### For More Information  
 
