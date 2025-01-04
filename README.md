@@ -1,6 +1,6 @@
 # Serial Studio
 
-<a href="#">
+<a href="https://github.com/Serial-Studio/Serial-Studio/tree/master/doc/assets">
     <img width="192px" height="192px" src="doc/icon.svg" align="right" />
 </a>
 
