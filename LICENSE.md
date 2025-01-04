@@ -30,7 +30,8 @@ this program. If not, see <https://www.gnu.org/licenses/>.
 
 Commercial License
 ==================
-For business or professional use, a Commercial License is required. 
+For business or professional use, purchasing a Commercial License is required. 
+
 Commercial users benefit from:
 - Unlimited usage of the software without time restrictions.
 - Access to MQTT streaming and unrestricted dashboard widgets.
@@ -40,8 +41,9 @@ Commercial users benefit from:
 - Commercial users may not repackage, modify, rebrand, or redistribute the 
   software  under a different name or identity without explicit, written 
   permission from the original author.
-- Commercial users may use the software in their business or enterprise 
-  applications, provided they comply with the above restriction.
+- Commercial users may use the software in their business, enterprise or
+  otherwise propietary applications, provided they comply with the above
+  restriction.
 
 For details on the Commercial License or to purchase a license, visit the 
 official website (https://serial-studio.com).
