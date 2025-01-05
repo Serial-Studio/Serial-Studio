@@ -4,7 +4,7 @@ This folder contains design assets, including the featured `icon_scaled.svg` fil
 
 ## Icon Preview
 
-![icon_scaled.svg preview](icon_scaled.svg)
+<img width="256px" height="256px" src="icon_scaled.svg"/>
 
 ## Credits & License
 
