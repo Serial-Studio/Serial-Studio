@@ -25,8 +25,8 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QApplication>
-#include <QDesktopServices>
 #include <QStandardPaths>
+#include <QDesktopServices>
 
 #include "IO/Manager.h"
 #include "CSV/Player.h"
@@ -36,8 +36,8 @@
 #include "JSON/FrameBuilder.h"
 
 /**
- * Connect JSON Parser & Serial Manager signals to begin registering JSON
- * dataframes into JSON list.
+ * Constructor function, configures the path in which Serial Studio shall
+ * automatically write generated CSV files.
  */
 CSV::Export::Export()
   : m_exportEnabled(true)
@@ -49,7 +49,7 @@ CSV::Export::Export()
 }
 
 /**
- * Close file & finnish write-operations before destroying the class
+ * Close file & finnish write-operations before destroying the class.
  */
 CSV::Export::~Export()
 {
@@ -57,7 +57,7 @@ CSV::Export::~Export()
 }
 
 /**
- * Returns a pointer to the only instance of this class
+ * Returns a pointer to the only instance of this class.
  */
 CSV::Export &CSV::Export::instance()
 {
@@ -66,7 +66,7 @@ CSV::Export &CSV::Export::instance()
 }
 
 /**
- * Returns @c true if the CSV output file is open
+ * Returns @c true if the CSV output file is open.
  */
 bool CSV::Export::isOpen() const
 {
@@ -74,23 +74,11 @@ bool CSV::Export::isOpen() const
 }
 
 /**
- * Returns @c true if CSV export is enabled
+ * Returns @c true if CSV export is enabled.
  */
 bool CSV::Export::exportEnabled() const
 {
   return m_exportEnabled;
-}
-
-/**
- * Open the current CSV file in the Explorer/Finder window
- */
-void CSV::Export::openCurrentCsv()
-{
-  if (isOpen())
-    Misc::Utilities::revealFile(m_csvFile.fileName());
-  else
-    Misc::Utilities::showMessageBox(tr("CSV file not open"),
-                                    tr("Cannot find CSV export file!"));
 }
 
 /**
@@ -108,7 +96,7 @@ void CSV::Export::setupExternalConnections()
 }
 
 /**
- * Enables or disables data export
+ * Enables or disables data export.
  */
 void CSV::Export::setExportEnabled(const bool enabled)
 {
@@ -124,7 +112,7 @@ void CSV::Export::setExportEnabled(const bool enabled)
 }
 
 /**
- * Write all remaining JSON frames & close the CSV file
+ * Write all remaining JSON frames & close the CSV file.
  */
 void CSV::Export::closeFile()
 {
@@ -238,8 +226,8 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
   const auto &rxTime = frame.rxDateTime;
 
   // Get file name
-  const auto fileName
-      = rxTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + ".csv";
+  const auto fileName = rxTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"))
+                        + QStringLiteral(".csv");
 
   // Get path
   const QString path = QStringLiteral("%1/%2/").arg(m_csvPath, data.title());
@@ -247,7 +235,7 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
   // Generate file path if required
   QDir dir(path);
   if (!dir.exists())
-    dir.mkpath(".");
+    dir.mkpath(QStringLiteral("."));
 
   // Open file
   m_csvFile.setFileName(dir.filePath(fileName));
@@ -314,7 +302,7 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
 }
 
 /**
- * Appends the latest frame from the device to the output buffer
+ * Appends the latest frame from the device to the output buffer.
  */
 void CSV::Export::registerFrame(const JSON::Frame &frame)
 {

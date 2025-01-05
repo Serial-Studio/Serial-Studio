@@ -20,17 +20,11 @@
  */
 
 #include <QFile>
-#include <QPrinter>
 #include <QDateTime>
-#include <QFileDialog>
-#include <QPrintDialog>
-#include <QTextDocument>
 
 #include "IO/Manager.h"
 #include "IO/Console.h"
-#include "Misc/Utilities.h"
 #include "Misc/Translator.h"
-#include "Misc/CommonFonts.h"
 
 /**
  * Generates a hexdump of the given data
@@ -88,7 +82,7 @@ IO::Console::Console()
   , m_showTimestamp(false)
   , m_isStartingLine(true)
   , m_lastCharWasCR(false)
-  , m_textBuffer(1024 * 1024)
+  , m_textBuffer(10 * 1024)
 {
   clear();
 }
@@ -108,14 +102,6 @@ IO::Console &IO::Console::instance()
 bool IO::Console::echo() const
 {
   return m_echo;
-}
-
-/**
- * Returns @c true if data buffer contains information that the user can export.
- */
-bool IO::Console::saveAvailable() const
-{
-  return m_textBuffer.size() > 0;
 }
 
 /**
@@ -314,37 +300,6 @@ QByteArray IO::Console::hexToBytes(const QString &data)
 }
 
 /**
- * Allows the user to export the information displayed on the console
- */
-void IO::Console::save()
-{
-  // No data buffer received, abort
-  if (!saveAvailable())
-    return;
-
-  // Get file name
-  auto path = QFileDialog::getSaveFileName(nullptr, tr("Export Console Data"),
-                                           QDir::homePath(),
-                                           tr("Text Files") + " (*.txt)");
-
-  // Create file
-  if (!path.isEmpty())
-  {
-    QFile file(path);
-    if (file.open(QFile::WriteOnly))
-    {
-      file.write(m_textBuffer.peek(m_textBuffer.size()));
-      file.close();
-      Misc::Utilities::revealFile(path);
-    }
-
-    else
-      Misc::Utilities::showMessageBox(tr("Error while exporting console data"),
-                                      file.errorString());
-  }
-}
-
-/**
  * Deletes all the text displayed by the current QML text document
  */
 void IO::Console::clear()
@@ -352,7 +307,6 @@ void IO::Console::clear()
   m_textBuffer.clear();
   m_isStartingLine = true;
   m_lastCharWasCR = false;
-  Q_EMIT saveAvailableChanged();
 }
 
 /**
@@ -452,35 +406,6 @@ void IO::Console::send(const QString &data)
 }
 
 /**
- * Creates a text document with current console output & prints it using native
- * system libraries/toolkits.
- */
-void IO::Console::print()
-{
-  // Create text document
-  QTextDocument document;
-  document.setPlainText(
-      QString::fromUtf8(m_textBuffer.peek(m_textBuffer.size())));
-
-  // Set font
-  auto font = Misc::CommonFonts::instance().customMonoFont(0.8);
-  document.setDefaultFont(font);
-
-  // Create printer object
-  QPrinter printer(QPrinter::PrinterResolution);
-  printer.setFullPage(true);
-  printer.setDocName(qApp->applicationDisplayName());
-  printer.setPageOrientation(QPageLayout::Portrait);
-
-  // Show print dialog
-  QPrintDialog printDialog(&printer, nullptr);
-  if (printDialog.exec() == QDialog::Accepted)
-  {
-    document.print(&printer);
-  }
-}
-
-/**
  * Enables/disables displaying a timestamp of each received data block.
  */
 void IO::Console::setShowTimestamp(const bool enabled)
@@ -544,9 +469,6 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   if (string.isEmpty())
     return;
 
-  // Check if we should update the save available feature
-  const bool previousSaveAvailable = saveAvailable();
-
   // Omit leading \n if a trailing \r was already rendered from previous payload
   auto data = string;
   if (m_lastCharWasCR && data.startsWith('\n'))
@@ -605,10 +527,6 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
   // Add data to saved text buffer
   m_textBuffer.append(processedString.toUtf8());
-
-  // Update save avaialable
-  if (saveAvailable() != previousSaveAvailable)
-    Q_EMIT saveAvailableChanged();
 
   // Update UI
   QMetaObject::invokeMethod(

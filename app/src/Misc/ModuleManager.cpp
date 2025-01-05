@@ -37,6 +37,7 @@
 
 #include "IO/Manager.h"
 #include "IO/Console.h"
+#include "IO/ConsoleExport.h"
 #include "IO/FileTransmission.h"
 
 #include "IO/Drivers/Serial.h"
@@ -255,6 +256,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto projectModel = &JSON::ProjectModel::instance();
   auto miscTimerEvents = &Misc::TimerEvents::instance();
   auto miscCommonFonts = &Misc::CommonFonts::instance();
+  auto ioConsoleExport = &IO::ConsoleExport::instance();
   auto miscThemeManager = &Misc::ThemeManager::instance();
   auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
   auto ioFileTransmission = &IO::FileTransmission::instance();
@@ -294,6 +296,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_JSON_FrameBuilder", frameBuilder);
   c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
+  c->setContextProperty("Cpp_IO_ConsoleExport", ioConsoleExport);
   c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);
 
   // Register app info with QML
@@ -318,6 +321,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   ioManager->setupExternalConnections();
   projectModel->setupExternalConnections();
   frameBuilder->setupExternalConnections();
+  ioConsoleExport->setupExternalConnections();
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);
