@@ -578,6 +578,9 @@ QString IO::Console::plainTextStr(const QByteArray &data)
 QString IO::Console::hexadecimalStr(const QByteArray &data)
 {
   std::ostringstream oss;
-  oss << Hexdump(data.data(), data.size()) << "\n";
+
+  Hexdump dump(data.data(), data.size());
+  oss << dump << "\n";
+
   return QString::fromStdString(oss.str());
 }
