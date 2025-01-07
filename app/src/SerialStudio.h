@@ -142,6 +142,9 @@ public:
     PlainText,   /**< Standard decoding, interprets data as plain text. */
     Hexadecimal, /**< Decodes data assuming a hexadecimal-encoded format. */
     Base64       /**< Decodes data assuming a Base64-encoded format. */
+    /* IMPORTANT: When adding other modes, please don't modify the order of the
+     *            enums to ensure backward compatiblity with previous project
+     *            files!! */
   };
   Q_ENUM(DecoderMethod)
 
@@ -153,15 +156,19 @@ public:
    * of a data frame in a continuous stream. Each value represents a specific
    * detection method.
    */
+  // clang-format off
   enum FrameDetection
   {
-    EndDelimiterOnly,     /**< Detects frames based only on an end delimiter. */
-    StartAndEndDelimiter, /**< Detects frames based on both start and end
-                               delimiters. */
-    NoDelimiters          /**< Disables frame detection and processes incoming
-                               data directly */
+    EndDelimiterOnly     = 0x00, /**< Detects frames based only on an end delimiter. */
+    StartAndEndDelimiter = 0x01, /**< Detects frames based on both start and end delimiters. */
+    NoDelimiters         = 0x02, /**< Disables frame detection and processes incoming data directly */
+    StartDelimiterOnly   = 0x03  /**< Detects frames with only a header */
+    /* IMPORTANT: When adding other modes, please don't modify the order of the
+     *            enums to ensure backward compatiblity with previous project
+     *            files!! */
   };
   Q_ENUM(FrameDetection)
+  // clang-format on
 
   /**
    * @enum OperationMode
@@ -176,6 +183,9 @@ public:
     ProjectFile, /**< Builds the dashboard using a predefined project file. */
     DeviceSendsJSON, /**< Builds the dashboard from device-sent JSON. */
     QuickPlot,       /**< Quick and simple data plotting mode. */
+    /* IMPORTANT: When adding other modes, please don't modify the order of the
+     *            enums to ensure backward compatiblity with previous project
+     *            files!! */
   };
   Q_ENUM(OperationMode)
 

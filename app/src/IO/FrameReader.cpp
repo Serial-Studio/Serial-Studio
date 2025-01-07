@@ -153,6 +153,7 @@ void IO::FrameReader::processData(const QByteArray &data)
 
   // Add data to circular buffer
   m_dataBuffer.append(data);
+  Q_EMIT dataReceived(data);
 
   // Read frames in no-delimiter mode directly
   if (m_operationMode == SerialStudio::ProjectFile
@@ -163,9 +164,6 @@ void IO::FrameReader::processData(const QByteArray &data)
   else
     QMetaObject::invokeMethod(this, &FrameReader::readFrames,
                               Qt::QueuedConnection);
-
-  // Notify UI of received data
-  Q_EMIT dataReceived(data);
 }
 
 /**
@@ -264,6 +262,10 @@ void IO::FrameReader::readFrames()
     if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly)
       readEndDelimetedFrames();
 
+    // Read using only a start delimeter
+    else if (m_frameDetectionMode == SerialStudio::StartDelimiterOnly)
+      readStartDelimitedFrames();
+
     // Read using both a start & end delimiter
     else if (m_frameDetectionMode == SerialStudio::StartAndEndDelimiter)
       readStartEndDelimetedFrames();
@@ -354,6 +356,59 @@ void IO::FrameReader::readEndDelimetedFrames()
       qsizetype bytesToRemove = endIndex + delimiter.size();
       (void)m_dataBuffer.read(bytesToRemove);
     }
+
+    // Increment number of frames read
+    ++framesRead;
+  }
+}
+
+/**
+ * @brief Reads frames delimited by a start sequence from the buffer.
+ *
+ * Extracts frames from the circular buffer that are bounded by specified
+ * start delimiters. Emits `frameReady` for each valid frame.
+ */
+void IO::FrameReader::readStartDelimitedFrames()
+{
+  // Cap the number of frames that we can read in a single call
+  int framesRead = 0;
+  constexpr int maxFrames = 100;
+
+  // Consume the buffer until
+  while (framesRead < maxFrames)
+  {
+    // Initialize variables
+    int startIndex = -1;
+    int nextStartIndex = -1;
+
+    // Find the first start sequence in the buffer (project mode)
+    startIndex = m_dataBuffer.findPatternKMP(m_startSequence);
+    if (startIndex == -1)
+      break;
+
+    // Find the next start sequence after the current one
+    nextStartIndex = m_dataBuffer.findPatternKMP(
+        m_startSequence, startIndex + m_startSequence.size());
+    if (nextStartIndex == -1 || nextStartIndex == startIndex
+        || nextStartIndex < startIndex)
+      break;
+
+    // Extract the frame from the buffer
+    qsizetype frameStart = startIndex + m_startSequence.size();
+    qsizetype frameLength = nextStartIndex - frameStart;
+    QByteArray frame = m_dataBuffer.peek(frameStart + frameLength)
+                           .mid(frameStart, frameLength);
+
+    // Parse frame if not empty
+    if (!frame.isEmpty())
+    {
+      Q_EMIT frameReady(frame);
+      (void)m_dataBuffer.read(frameStart + frameLength);
+    }
+
+    // Avoid infinite loops when getting a frame length of 0
+    else
+      (void)m_dataBuffer.read(frameStart);
 
     // Increment number of frames read
     ++framesRead;

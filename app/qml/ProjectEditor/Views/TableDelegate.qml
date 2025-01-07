@@ -386,10 +386,12 @@ ColumnLayout {
             currentIndex: editableValue
             font: Cpp_Misc_CommonFonts.monoFont
             onCurrentIndexChanged: {
-              root.modelPointer.setData(
-                    view.index(row, column),
-                    currentIndex,
-                    ProjectModel.EditableValue)
+              if (currentIndex !== editableValue) {
+                root.modelPointer.setData(
+                      view.index(row, column),
+                      currentIndex,
+                      ProjectModel.EditableValue)
+              }
             }
           }
         }

@@ -78,6 +78,7 @@ private slots:
 
 private:
   void readEndDelimetedFrames();
+  void readStartDelimitedFrames();
   void readStartEndDelimetedFrames();
   ValidationStatus integrityChecks(const QByteArray &frame,
                                    const QByteArray &delimeter,

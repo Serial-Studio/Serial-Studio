@@ -340,6 +340,8 @@ private:
   QStringList m_fftSamples;
   QStringList m_decoderOptions;
   QStringList m_frameDetectionMethods;
+  QList<SerialStudio::FrameDetection> m_frameDetectionMethodsValues;
+
   QMap<QString, QString> m_eolSequences;
   QMap<QString, QString> m_groupWidgets;
   QMap<QString, QString> m_datasetWidgets;
