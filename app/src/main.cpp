@@ -87,7 +87,8 @@ int main(int argc, char **argv)
 
   // Linux specific initialization code
 #ifdef Q_OS_LINUX
-  setupAppImageIcon(APP_EXECUTABLE, QStringLiteral(":/rcc/images/icon@2x.png"));
+  setupAppImageIcon(APP_EXECUTABLE,
+                    QStringLiteral(":/rcc/images/appimage_icon.png"));
 #endif
 
   // Avoid 200% scaling on 150% scaling...
