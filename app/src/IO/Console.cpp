@@ -24,7 +24,6 @@
 
 #include "IO/Manager.h"
 #include "IO/Console.h"
-#include "IO/HexDump.h"
 #include "Misc/Translator.h"
 
 /**
@@ -557,19 +556,25 @@ QString IO::Console::dataToString(const QByteArray &data)
 QString IO::Console::plainTextStr(const QByteArray &data)
 {
   // Filter out non-printable characters, but keep line breaks
-  QByteArray filteredData;
+  QString filteredData;
   filteredData.reserve(data.size());
   for (int i = 0; i < data.size(); ++i)
   {
-    unsigned char c = static_cast<unsigned char>(data[i]);
-    if (std::isprint(c) || std::isspace(c) || c == '\r' || c == '\n')
-      filteredData.append(c);
+    bool printable = false;
+    printable |= (data[i] == '\r');
+    printable |= (data[i] == '\n');
+    printable |= std::isprint(static_cast<unsigned char>(data[i]));
+    printable |= std::iscntrl(static_cast<unsigned char>(data[i]));
+    printable |= std::isspace(static_cast<unsigned char>(data[i]));
+
+    if (printable)
+      filteredData += data[i];
     else
-      filteredData.append('.');
+      filteredData += '.';
   }
 
-  // Convert the filtered data to QString using UTF-8 as default
-  return QString::fromUtf8(filteredData);
+  // Return the filtered data
+  return filteredData;
 }
 
 /**
@@ -577,10 +582,48 @@ QString IO::Console::plainTextStr(const QByteArray &data)
  */
 QString IO::Console::hexadecimalStr(const QByteArray &data)
 {
-  std::ostringstream oss;
+  // Initialize parameters
+  QString out;
+  constexpr auto rowSize = 16;
 
-  Hexdump dump(data.data(), data.size());
-  oss << dump << "\n";
+  // Print hexadecimal row by row
+  for (int i = 0; i < data.length(); i += rowSize)
+  {
+    // Add offset to output
+    out += QStringLiteral("0x%1: ").arg(i, 6, 16, QLatin1Char('0'));
 
-  return QString::fromStdString(oss.str());
+    // Print hexadecimal bytes
+    for (int j = 0; j < rowSize; ++j)
+    {
+      if (i + j < data.length())
+      {
+        out += QStringLiteral("%1 ").arg(
+            static_cast<unsigned char>(data[i + j]), 2, 16, QLatin1Char('0'));
+      }
+
+      else
+        out += QStringLiteral("   ");
+    }
+
+    // Add ASCII representation
+    out += QStringLiteral(" | ");
+    for (int j = 0; j < rowSize; ++j)
+    {
+      if (i + j < data.length())
+      {
+        char c = data[i + j];
+        if (std::isprint(static_cast<unsigned char>(c)))
+          out += c;
+        else
+          out += '.';
+      }
+    }
+
+    // Add line break
+    out += "\n";
+  }
+
+  // Add additional line break & return data
+  out += "\n";
+  return out;
 }
