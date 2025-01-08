@@ -590,25 +590,32 @@ QString IO::Console::hexadecimalStr(const QByteArray &data)
   for (int i = 0; i < data.length(); i += rowSize)
   {
     // Add offset to output
-    out += QStringLiteral("0x%1: ").arg(i, 6, 16, QLatin1Char('0'));
+    out += QStringLiteral("%1 | ").arg(i, 6, 16, QLatin1Char('0'));
 
     // Print hexadecimal bytes
     for (int j = 0; j < rowSize; ++j)
     {
+      // Print existing data
       if (i + j < data.length())
       {
         out += QStringLiteral("%1 ").arg(
             static_cast<unsigned char>(data[i + j]), 2, 16, QLatin1Char('0'));
       }
 
+      // Space out inexistent data
       else
         out += QStringLiteral("   ");
+
+      // Add padding in 8th byte
+      if ((j + 1) == 8)
+        out += ' ';
     }
 
     // Add ASCII representation
-    out += QStringLiteral(" | ");
+    out += QStringLiteral("| ");
     for (int j = 0; j < rowSize; ++j)
     {
+      // Add existing data
       if (i + j < data.length())
       {
         char c = data[i + j];
@@ -617,10 +624,14 @@ QString IO::Console::hexadecimalStr(const QByteArray &data)
         else
           out += '.';
       }
+
+      // Add space for inexisting data
+      else
+        out += ' ';
     }
 
     // Add line break
-    out += "\n";
+    out += QStringLiteral(" |\n");
   }
 
   // Add additional line break & return data
