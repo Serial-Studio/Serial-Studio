@@ -114,13 +114,13 @@ signals:
 
 private:
   explicit ThemeManager();
-
-public:
-  static ThemeManager &instance();
   ThemeManager(ThemeManager &&) = delete;
   ThemeManager(const ThemeManager &) = delete;
   ThemeManager &operator=(ThemeManager &&) = delete;
   ThemeManager &operator=(const ThemeManager &) = delete;
+
+public:
+  static ThemeManager &instance();
 
   [[nodiscard]] int theme() const;
   [[nodiscard]] const QString &themeName() const;
