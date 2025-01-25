@@ -5,7 +5,7 @@
 > 2. Understanding and meeting the conditions required to distribute commercial software using Qt.  
 > 3. Implementation of an activation mechanism for the commercial version.  
 >   
-> Please note:  
+> **Please note:**  
 > - The limitations outlined in the "Additional Notice" section are not yet in effect.  
 > - The terms and conditions for the commercial license are still subject to change.  
 >   
