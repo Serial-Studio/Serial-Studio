@@ -323,6 +323,7 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T &pattern,
   // Pattern not found
   return -1;
 }
+
 /**
  * @brief Computes the KMP table for a given p.
  *
