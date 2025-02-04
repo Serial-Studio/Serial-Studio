@@ -1,9 +1,9 @@
 > [!IMPORTANT]  
 > **Current Licensing Information for Serial Studio**  
 > Serial Studio is currently distributed exclusively under the GNU General Public License v3 (GPLv3) until I complete the following steps:  
-> 1. Acquisition of a commercial Qt License.  
-> 2. Understanding and meeting the conditions required to distribute commercial software using Qt.  
-> 3. Implementation of an activation mechanism for the commercial version.  
+> 1. [x] Acquisition of a commercial Qt License.  
+> 2. [ ] Understanding and meeting the conditions required to distribute commercial software using Qt.  
+> 3. [ ] Implementation of an activation mechanism for the commercial version.  
 >   
 > **Please note:**  
 > - The limitations outlined in the "Additional Notice" section are not yet in effect.  
