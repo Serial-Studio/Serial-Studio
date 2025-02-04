@@ -113,8 +113,10 @@ Window {
   // every now and then to the user.
   //
   function showAutomatically() {
-    closeBt.text = qsTr("Later")
-    showNormal()
+    if (!Cpp_CommercialBuild) {
+      closeBt.text = qsTr("Later")
+      showNormal()
+    }
   }
 
   //
@@ -205,7 +207,7 @@ Window {
             Layout.maximumWidth: title.implicitWidth
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
             text: qsTr("Serial Studio is free & open-source software supported by volunteers. " +
-                       "Consider donating to support development efforts :)")
+                       "Consider donating or buying a commercial license to support development efforts :)")
           }
 
           Item {
@@ -230,24 +232,36 @@ Window {
         spacing: 4
         Layout.fillWidth: true
 
-        Item {
-          Layout.fillWidth: true
-        }
-
         Button {
           id: closeBt
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
         }
 
+        Item {
+          Layout.fillWidth: true
+        }
+
         Button {
-          highlighted: true
           text: qsTr("Donate")
+          Layout.alignment: Qt.AlignVCenter
+          onClicked: {
+            root.close()
+            Qt.openUrlExternally("https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE")
+          }
+        }
+
+        Button {
+          text: qsTr("Buy")
+          highlighted: true
           Keys.onEnterPressed: clicked()
           Keys.onReturnPressed: clicked()
           Layout.alignment: Qt.AlignVCenter
           Component.onCompleted: forceActiveFocus()
-          onClicked: Qt.openUrlExternally("https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE")
+          onClicked: {
+            root.close()
+            Qt.openUrlExternally("https://www.serial-studio.com/")
+          }
         }
       }
     }

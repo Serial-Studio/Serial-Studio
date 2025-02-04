@@ -22,7 +22,6 @@
 cmake_minimum_required(VERSION 3.20)
 
 add_subdirectory(simde)
-add_subdirectory(qmqtt)
 add_subdirectory(OpenSSL)
 add_subdirectory(QCodeEditor)
 add_subdirectory(QRealFourier)

@@ -21,14 +21,15 @@
 
 #pragma once
 
-#include <QObject>
-#include <QPointer>
-#include <QHostInfo>
-#include <QByteArray>
-#include <QHostAddress>
-#include <QSslConfiguration>
+#ifdef COMMERCIAL_BUILD
 
-#include <qmqtt.h>
+#  include <QtMqtt>
+#  include <QObject>
+#  include <QPointer>
+#  include <QHostInfo>
+#  include <QByteArray>
+#  include <QHostAddress>
+#  include <QSslConfiguration>
 
 namespace MQTT
 {
@@ -228,9 +229,9 @@ private slots:
   void onConnectedChanged();
   void sendFrame(const QByteArray &frame);
   void lookupFinished(const QHostInfo &info);
-  void onError(const QMQTT::ClientError error);
+  // void onError(const QMQTT::ClientError error);
   void onSslErrors(const QList<QSslError> &errors);
-  void onMessageReceived(const QMQTT::Message &message);
+  // void onMessageReceived(const QMQTT::Message &message);
 
 private:
   void regenerateClient();
@@ -243,7 +244,8 @@ private:
   QString m_caFilePath;
   quint16 m_sentMessages;
   MQTTClientMode m_clientMode;
-  QPointer<QMQTT::Client> m_client;
   QSslConfiguration m_sslConfiguration;
 };
 } // namespace MQTT
+
+#endif

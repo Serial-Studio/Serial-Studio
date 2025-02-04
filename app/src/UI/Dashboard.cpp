@@ -55,6 +55,7 @@ UI::Dashboard::Dashboard()
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
+#ifdef COMMERCIAL_BUILD
   connect(
       &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] {
         const bool subscribed = MQTT::Client::instance().isSubscribed();
@@ -64,6 +65,7 @@ UI::Dashboard::Dashboard()
         if (subscribed || wasSubscribed)
           resetData();
       });
+#endif
 
   // Update the dashboard widgets at 24 Hz
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
@@ -155,10 +157,15 @@ qreal UI::Dashboard::smartInterval(const qreal min, const qreal max,
  */
 bool UI::Dashboard::available() const
 {
-  return totalWidgetCount() > 0
-         && (IO::Manager::instance().connected()
-             || CSV::Player::instance().isOpen()
-             || MQTT::Client::instance().isSubscribed());
+  bool hasWidgets = totalWidgetCount() > 0;
+  bool dataAvailable = IO::Manager::instance().connected();
+  dataAvailable |= CSV::Player::instance().isOpen();
+
+#ifdef COMMERCIAL_BUILD
+  dataAvailable |= MQTT::Client::instance().isSubscribed();
+#endif
+
+  return hasWidgets && dataAvailable;
 }
 
 /**

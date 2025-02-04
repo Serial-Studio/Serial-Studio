@@ -34,7 +34,7 @@ Widgets.SmartWindow {
   category: "MainWindow"
   minimumWidth: layout.implicitWidth
   minimumHeight: layout.implicitHeight
-  title: qsTr("%1 - %2").arg(documentTitle).arg(Cpp_AppName)
+  title: qsTr("%1 - %2 (%3)").arg(documentTitle).arg(Cpp_AppName).arg(commercialBuild)
 
   //
   // Custom properties
@@ -43,6 +43,8 @@ Widgets.SmartWindow {
   property string documentTitle: ""
   property bool firstValidFrame: false
   property bool automaticUpdates: false
+  readonly property string commercialBuild: Cpp_CommercialBuild ? qsTr("Commercial") :
+                                                                  qsTr("Open Source")
 
   //
   // Save settings
@@ -131,13 +133,7 @@ Widgets.SmartWindow {
       if (root.firstValidFrame)
         return
 
-      const frameValid = Cpp_UI_Dashboard.frameValid()
-      const deviceConnected = Cpp_IO_Manager.connected
-      const csvPlayerActive = Cpp_CSV_Player.isOpen
-      const mqttSubscribed = Cpp_MQTT_Client.isConnectedToHost && Cpp_MQTT_Client.clientMode === 1
-      const dataAvailable = deviceConnected || csvPlayerActive || mqttSubscribed
-
-      if (dataAvailable && frameValid) {
+      if (Cpp_UI_Dashboard.frameValid() && Cpp_UI_Dashboard.available) {
         setup.hide()
         root.showDashboard()
         root.firstValidFrame = true

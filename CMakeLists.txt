@@ -41,6 +41,7 @@ find_package(
 #-------------------------------------------------------------------------------
 
 option(DEBUG_SANITIZER "Enable sanitizers for debug builds" OFF)
+option(COMMERCIAL_BUILD "Enable features that require Qt Commercial" OFF)
 option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" OFF)
 
 #-------------------------------------------------------------------------------
@@ -72,6 +73,10 @@ add_definitions(-DPROJECT_CONTACT="${PROJECT_CONTACT}")
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
 add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
+
+if(COMMERCIAL_BUILD)
+  add_definitions(-DCOMMERCIAL_BUILD)
+endif()
 
 #-------------------------------------------------------------------------------
 # Set UNIX friendly name for app & fix OpenSUSE builds

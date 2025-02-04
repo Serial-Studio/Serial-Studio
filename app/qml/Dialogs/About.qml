@@ -168,6 +168,7 @@ Window {
 
         ColumnLayout {
           spacing: 0
+          id: logoLayout
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
 
@@ -177,43 +178,45 @@ Window {
           }
 
           Item {
-            implicitHeight: 8
+            implicitHeight: 2
           }
 
           Label {
-            opacity: 0.5
+            opacity: 0.8
             text: qsTr("Version %1").arg(Cpp_AppVersion)
             font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
+          }
+
+          Item {
+            implicitHeight: 4
+          }
+
+          Label {
+            opacity: 0.8
+            text: qsTr("Copyright © %1 %2").arg(root.year).arg(Cpp_AppOrganization)
           }
         }
       }
 
-      Label {
-        opacity: 0.8
-        Layout.fillWidth: true
-        Layout.maximumWidth: 320
-        font: Cpp_Misc_CommonFonts.uiFont
-        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-        text: qsTr("Copyright © 2020-%1 %2.").arg(root.year).arg(Cpp_AppOrganization)
-      }
 
       Label {
         opacity: 0.8
         Layout.fillWidth: true
-        Layout.maximumWidth: 320
-        font: Cpp_Misc_CommonFonts.uiFont
+        Layout.maximumWidth: 360
+        visible: !Cpp_CommercialBuild
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-        text: qsTr("The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.")
+        text: qsTr("%1 is free software: you can redistribute it and/or modify " +
+                   "it under the terms of the GNU General Public License as " +
+                   "published by the Free Software Foundation; either version " +
+                   "3 of the License, or (at your option) any later version.\n\n" +
+                   "%1 is distributed in the hope that it will be useful, but " +
+                   "WITHOUT ANY WARRANTY; without even the implied warranty of " +
+                   "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. " +
+                   "See the GNU General Public License for more details.").arg(Cpp_AppName)
       }
 
       Item {
         implicitHeight: 8
-      }
-
-      Button {
-        text: qsTr("License")
-        Layout.fillWidth: true
-        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md")
       }
 
       Button {
@@ -231,6 +234,7 @@ Window {
       Button {
         Layout.fillWidth: true
         text: qsTr("Make a Donation")
+        visible: !Cpp_CommercialBuild
         onClicked: donateDialog.show()
       }
 

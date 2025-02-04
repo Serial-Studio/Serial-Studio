@@ -19,30 +19,32 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
  */
 
-#include <QFile>
-#include <QFileDialog>
+#ifdef COMMERCIAL_BUILD
 
-#include "IO/Manager.h"
-#include "MQTT/Client.h"
-#include "Misc/Utilities.h"
+#  include <QFile>
+#  include <QFileDialog>
+
+#  include "IO/Manager.h"
+#  include "MQTT/Client.h"
+#  include "Misc/Utilities.h"
 
 //----------------------------------------------------------------------------
 // Suppress deprecated warnings
 //----------------------------------------------------------------------------
 
-#if defined(__GNUC__) || defined(__clang__)
-#  define DISABLE_DEPRECATED_WARNING                                           \
-    _Pragma("GCC diagnostic push")                                             \
-        _Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
-#  define ENABLE_DEPRECATED_WARNING _Pragma("GCC diagnostic pop")
-#elif defined(_MSC_VER)
-#  define DISABLE_DEPRECATED_WARNING                                           \
-    __pragma(warning(push)) __pragma(warning(disable : 4996))
-#  define ENABLE_DEPRECATED_WARNING __pragma(warning(pop))
-#else
-#  define DISABLE_DEPRECATED_WARNING
-#  define ENABLE_DEPRECATED_WARNING
-#endif
+#  if defined(__GNUC__) || defined(__clang__)
+#    define DISABLE_DEPRECATED_WARNING                                         \
+      _Pragma("GCC diagnostic push")                                           \
+          _Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
+#    define ENABLE_DEPRECATED_WARNING _Pragma("GCC diagnostic pop")
+#  elif defined(_MSC_VER)
+#    define DISABLE_DEPRECATED_WARNING                                         \
+      __pragma(warning(push)) __pragma(warning(disable : 4996))
+#    define ENABLE_DEPRECATED_WARNING __pragma(warning(pop))
+#  else
+#    define DISABLE_DEPRECATED_WARNING
+#    define ENABLE_DEPRECATED_WARNING
+#  endif
 
 /**
  * Constructor function
@@ -280,13 +282,13 @@ QStringList MQTT::Client::mqttVersions() const
  */
 QStringList MQTT::Client::sslProtocols() const
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+#  if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
   return QStringList{tr("System default"), "TLS v1.0", "TLS v1.1", "TLS v1.2"};
-#else
+#  else
   return QStringList{
       tr("System default"),  "TLS v1.0",  "TLS v1.1",  "TLS v1.2",
       "TLS v1.3 (or later)", "DTLS v1.0", "DTLS v1.2", "DTLS v1.2 (or later)"};
-#endif
+#  endif
 }
 
 /**
@@ -458,7 +460,7 @@ void MQTT::Client::loadCaFile(const QString &path)
  */
 void MQTT::Client::setSslProtocol(const int index)
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+#  if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
   switch (index)
   {
     case 0:
@@ -476,7 +478,7 @@ void MQTT::Client::setSslProtocol(const int index)
     default:
       break;
   }
-#else
+#  else
   switch (index)
   {
     case 0:
@@ -512,7 +514,7 @@ void MQTT::Client::setSslProtocol(const int index)
     default:
       break;
   }
-#endif
+#  endif
 
   regenerateClient();
   Q_EMIT sslProtocolChanged();
@@ -900,3 +902,5 @@ void MQTT::Client::regenerateClient()
   connect(m_client, &QMQTT::Client::disconnected, this,
           &MQTT::Client::onConnectedChanged);
 }
+
+#endif

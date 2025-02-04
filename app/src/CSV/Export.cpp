@@ -314,14 +314,19 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
   if (CSV::Player::instance().isOpen())
     return;
 
-  // Don't save CSV data when the device/service is not connected
-  if (!IO::Manager::instance().connected()
-      && !MQTT::Client::instance().isSubscribed())
-    return;
-
   // Ignore if frame is invalid
   if (!frame.isValid())
     return;
+
+  // Don't save CSV data when the device/service is not connected
+#ifdef COMMERCIAL_BUID
+  if (!IO::Manager::instance().connected()
+      && !MQTT::Client::instance().isSubscribed())
+    return;
+#else
+  if (!IO::Manager::instance().connected())
+    return;
+#endif
 
   // Register raw frame to list
   TimestampFrame tframe;
