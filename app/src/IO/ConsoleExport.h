@@ -22,35 +22,12 @@
 #pragma once
 
 #include <QFile>
-#include <QVector>
 #include <QObject>
-#include <QVariant>
-#include <QDateTime>
 #include <QTextStream>
-#include <QJsonObject>
 
-#include "JSON/Frame.h"
-
-namespace CSV
+namespace IO
 {
-/**
- * @brief The Export class
- *
- * The CSV export class receives data from the @c IO::Manager class and
- * exports the received frames into a CSV file selected by the user.
- *
- * CSV-data is generated periodically each time the @c Misc::TimerEvents
- * low-frequency timer expires (e.g. every 1 second). The idea behind this
- * is to allow exporting data, but avoid freezing the application when serial
- * data is received continuously.
- */
-typedef struct
-{
-  JSON::Frame data;
-  QDateTime rxDateTime;
-} TimestampFrame;
-
-class Export : public QObject
+class ConsoleExport : public QObject
 {
   // clang-format off
   Q_OBJECT
@@ -68,16 +45,16 @@ signals:
   void enabledChanged();
 
 private:
-  explicit Export();
-  Export(Export &&) = delete;
-  Export(const Export &) = delete;
-  Export &operator=(Export &&) = delete;
-  Export &operator=(const Export &) = delete;
+  explicit ConsoleExport();
+  ConsoleExport(ConsoleExport &&) = delete;
+  ConsoleExport(const ConsoleExport &) = delete;
+  ConsoleExport &operator=(ConsoleExport &&) = delete;
+  ConsoleExport &operator=(const ConsoleExport &) = delete;
 
-  ~Export();
+  ~ConsoleExport();
 
 public:
-  static Export &instance();
+  static ConsoleExport &instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;
@@ -88,17 +65,15 @@ public slots:
   void setExportEnabled(const bool enabled);
 
 private slots:
-  void writeValues();
-  void registerFrame(const JSON::Frame &frame);
+  void writeData();
+  void createFile();
+  void registerData(const QString &data);
 
 private:
-  QVector<QPair<int, QString>> createCsvFile(const CSV::TimestampFrame &frame);
-
-private:
-  QFile m_csvFile;
-  QString m_csvPath;
+  QFile m_file;
+  QString m_buffer;
+  QString m_filePath;
   bool m_exportEnabled;
   QTextStream m_textStream;
-  QVector<TimestampFrame> m_frames;
 };
-} // namespace CSV
+} // namespace IO

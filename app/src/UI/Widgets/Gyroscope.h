@@ -35,6 +35,9 @@ class Gyroscope : public QQuickItem
   Q_PROPERTY(qreal roll READ roll NOTIFY updated)
   Q_PROPERTY(qreal pitch READ pitch NOTIFY updated)
 
+  Q_PROPERTY(qreal airspeed READ airspeed NOTIFY updated) // //NEW LINE FOR AIRSPEED EDITED
+  Q_PROPERTY(qreal altitude READ altitude NOTIFY updated) // //NEW LINE FOR altitude EDITED
+
 signals:
   void updated();
 
@@ -44,15 +47,20 @@ public:
   [[nodiscard]] qreal yaw() const;
   [[nodiscard]] qreal roll() const;
   [[nodiscard]] qreal pitch() const;
+  [[nodiscard]] qreal airspeed() const; // //NEW LINE FOR AIRSPEED EDITED
+  [[nodiscard]] qreal altitude() const; // //NEW LINE FOR altitude EDITED
 
 private slots:
   void updateData();
 
 private:
   int m_index;
+  // Store the index for the airspeed dataset
   qreal m_yaw;
   qreal m_roll;
   qreal m_pitch;
+  qreal m_airspeed; //NEW LINE FOR AIRSPEED EDITED
+  qreal m_altitude; //NEW LINE FOR altitude EDITED
   QElapsedTimer m_timer;
 };
 

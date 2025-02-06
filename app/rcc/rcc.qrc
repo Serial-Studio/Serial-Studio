@@ -222,6 +222,8 @@
         <file>images/action.svg</file>
         <file>images/code.svg</file>
         <file>images/crosshair.svg</file>
+	<file>images/chevron-up-circle.svg</file>
+	<file>images/up-chevron.svg</file>
         <file>images/donate-qr.svg</file>
         <file>images/drag-and-drop.svg</file>
         <file>images/hammer.svg</file>

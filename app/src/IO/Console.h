@@ -48,9 +48,6 @@ class Console : public QObject
              READ showTimestamp
              WRITE setShowTimestamp
              NOTIFY showTimestampChanged)
-  Q_PROPERTY(bool saveAvailable
-             READ saveAvailable
-             NOTIFY saveAvailableChanged)
   Q_PROPERTY(IO::Console::DataMode dataMode
              READ dataMode
              WRITE setDataMode
@@ -86,7 +83,6 @@ signals:
   void historyItemChanged();
   void textDocumentChanged();
   void showTimestampChanged();
-  void saveAvailableChanged();
   void displayString(const QString &text);
 
 private:
@@ -123,7 +119,6 @@ public:
   static Console &instance();
 
   [[nodiscard]] bool echo() const;
-  [[nodiscard]] bool saveAvailable() const;
   [[nodiscard]] bool showTimestamp() const;
 
   [[nodiscard]] DataMode dataMode() const;
@@ -141,9 +136,7 @@ public:
   static QByteArray hexToBytes(const QString &data);
 
 public slots:
-  void save();
   void clear();
-  void print();
   void historyUp();
   void historyDown();
   void setupExternalConnections();

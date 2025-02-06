@@ -152,23 +152,6 @@ Item {
       text: qsTr("Clear")
       opacity: enabled ? 1 : 0.5
       onTriggered: root.clear()
-      enabled: Cpp_IO_Console.saveAvailable
-    }
-
-    MenuSeparator {}
-
-    MenuItem {
-      opacity: enabled ? 1 : 0.5
-      text: qsTr("Print")
-      enabled: Cpp_IO_Console.saveAvailable
-      onTriggered: Cpp_IO_Console.print()
-    }
-
-    MenuItem {
-      opacity: enabled ? 1 : 0.5
-      text: qsTr("Save as") + "..."
-      onTriggered: Cpp_IO_Console.save()
-      enabled: Cpp_IO_Console.saveAvailable
     }
   }
 
@@ -421,29 +404,6 @@ Item {
         }
       }
 
-      Button {
-        icon.width: 18
-        icon.height: 18
-        implicitHeight: 24
-        Layout.maximumWidth: 32
-        opacity: enabled ? 1 : 0.5
-        onClicked: Cpp_IO_Console.save()
-        enabled: Cpp_IO_Console.saveAvailable
-        icon.source: "qrc:/rcc/icons/buttons/save.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
-      }
-
-      Button {
-        icon.width: 18
-        icon.height: 18
-        implicitHeight: 24
-        Layout.maximumWidth: 32
-        opacity: enabled ? 1 : 0.5
-        onClicked: Cpp_IO_Console.print()
-        enabled: Cpp_IO_Console.saveAvailable
-        icon.source: "qrc:/rcc/icons/buttons/print.svg"
-        icon.color: Cpp_ThemeManager.colors["button_text"]
-      }
 
       Button {
         icon.width: 18
@@ -452,7 +412,6 @@ Item {
         onClicked: root.clear()
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5
-        enabled: Cpp_IO_Console.saveAvailable
         icon.source: "qrc:/rcc/icons/buttons/clear.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }

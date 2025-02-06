@@ -1744,27 +1744,35 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     grp.m_widget = "gyro";
 
     // Create datasets
-    JSON::Dataset x, y, z;
+    JSON::Dataset x, y, z, airspeed, altitude;//added new for airspeed & altitude
 
     // Set dataset IDs
     x.m_datasetId = 0;
     y.m_datasetId = 1;
     z.m_datasetId = 2;
+    airspeed.m_datasetId = 3; // new dataset for airspeed
+    altitude.m_datasetId = 4; // new dataset for altitude
 
     // Register parent group for the datasets
     x.m_groupId = groupId;
     y.m_groupId = groupId;
     z.m_groupId = groupId;
+    airspeed.m_groupId = groupId; //added new for airspeed
+    altitude.m_groupId = groupId; // new dataset for altitude
 
     // Set dataset indexes
     x.m_index = nextDatasetIndex();
     y.m_index = nextDatasetIndex() + 1;
     z.m_index = nextDatasetIndex() + 2;
+    airspeed.m_index = nextDatasetIndex() + 3; // new index for airspeed
+    altitude.m_index = nextDatasetIndex() + 4; // new dataset for altitude
 
     // Set measurement units
     x.m_units = "deg/s";
     y.m_units = "deg/s";
     z.m_units = "deg/s";
+    airspeed.m_units = "m/s"; //added new for airspeed
+    altitude.m_units = "m"; //added new for altitude
 
     // Set dataset properties
     x.m_widget = "x";
@@ -1776,11 +1784,20 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     x.m_title = tr("Gyro %1").arg("X");
     y.m_title = tr("Gyro %1").arg("Y");
     z.m_title = tr("Gyro %1").arg("Z");
+    airspeed.m_widget = "airspeed"; // identifier for altitude
+    airspeed.m_graph = true;  // if you want to graph the altitude value, otherwise, set as needed
+    airspeed.m_title = tr("airspeed"); // title for altitude
+    altitude.m_widget = "altitude"; // identifier for altitude
+    altitude.m_graph = true;  // if you want to graph the altitude value, otherwise, set as needed
+    altitude.m_title = tr("altitude"); // title for altitude
+
 
     // Add datasets to group
     grp.m_datasets.append(x);
     grp.m_datasets.append(y);
     grp.m_datasets.append(z);
+    grp.m_datasets.append(airspeed);  // append airspeed dataset
+    grp.m_datasets.append(altitude);  // append altitude dataset
   }
 
   // Map widget

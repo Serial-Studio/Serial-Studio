@@ -20,17 +20,11 @@
  */
 
 #include <QFile>
-#include <QPrinter>
 #include <QDateTime>
-#include <QFileDialog>
-#include <QPrintDialog>
-#include <QTextDocument>
 
 #include "IO/Manager.h"
 #include "IO/Console.h"
-#include "Misc/Utilities.h"
 #include "Misc/Translator.h"
-#include "Misc/CommonFonts.h"
 
 /**
  * Generates a hexdump of the given data
@@ -88,7 +82,7 @@ IO::Console::Console()
   , m_showTimestamp(false)
   , m_isStartingLine(true)
   , m_lastCharWasCR(false)
-  , m_textBuffer(1024 * 1024)
+  , m_textBuffer(10 * 1024)
 {
   clear();
 }
@@ -110,13 +104,6 @@ bool IO::Console::echo() const
   return m_echo;
 }
 
-/**
- * Returns @c true if data buffer contains information that the user can export.
- */
-bool IO::Console::saveAvailable() const
-{
-  return m_textBuffer.size() > 0;
-}
 
 /**
  * Returns @c true if a timestamp should be shown before each displayed data
@@ -314,37 +301,6 @@ QByteArray IO::Console::hexToBytes(const QString &data)
 }
 
 /**
- * Allows the user to export the information displayed on the console
- */
-void IO::Console::save()
-{
-  // No data buffer received, abort
-  if (!saveAvailable())
-    return;
-
-  // Get file name
-  auto path = QFileDialog::getSaveFileName(nullptr, tr("Export Console Data"),
-                                           QDir::homePath(),
-                                           tr("Text Files") + " (*.txt)");
-
-  // Create file
-  if (!path.isEmpty())
-  {
-    QFile file(path);
-    if (file.open(QFile::WriteOnly))
-    {
-      file.write(m_textBuffer.peek(m_textBuffer.size()));
-      file.close();
-      Misc::Utilities::revealFile(path);
-    }
-
-    else
-      Misc::Utilities::showMessageBox(tr("Error while exporting console data"),
-                                      file.errorString());
-  }
-}
-
-/**
  * Deletes all the text displayed by the current QML text document
  */
 void IO::Console::clear()
@@ -352,7 +308,6 @@ void IO::Console::clear()
   m_textBuffer.clear();
   m_isStartingLine = true;
   m_lastCharWasCR = false;
-  Q_EMIT saveAvailableChanged();
 }
 
 /**
@@ -405,6 +360,66 @@ void IO::Console::setupExternalConnections()
           this, &IO::Console::languageChanged);
 }
 
+// Calculates the Fletcher-16 checksum for a QByteArray
+static unsigned short fletcher16(unsigned short cksum_init,
+                                 const unsigned char *data,
+                                 unsigned int size)
+{
+  unsigned char a = (unsigned char)(cksum_init & 0xFF);
+  unsigned char b = (unsigned char)((cksum_init >> 8) & 0xFF);
+
+  for (unsigned int i = 0; i < size; i++)
+  {
+    a += data[i];
+    b += a;
+  }
+
+  return (static_cast<unsigned short>(b) << 8) | a;
+}
+
+
+
+static QByteArray buildControlPacket(quint8 controlType, float value)
+{
+  // Packet layout:
+  // [0]  = 0x47
+  // [1]  = 0x41
+  // [2]  = 0x03
+  // [3:4] = 0x03 (unsigned short) -> 2 bytes
+  // [5]  = controlType
+  // [6:9] = float (value)
+  //[10:11]= Fletcher-16 checksum
+
+  QByteArray packet;
+  packet.append(char(0x47)); // pre1
+  packet.append(char(0x41)); // pre2
+  packet.append(char(0x03)); // packid
+
+  // packlen = 5, which is 0x0005 in little-endian
+  unsigned short packlen = 5;
+  packet.append(reinterpret_cast<const char*>(&packlen), sizeof(packlen));
+
+  // controlType
+  packet.append(char(controlType));
+
+  //controltarget (float) - 4 bytes
+  packet.append(reinterpret_cast<const char*>(&value), sizeof(value));
+
+  // ----- Compute Fletcher-16 over these bytes -----
+  unsigned short csum = fletcher16(
+      0,                             // start with c=0
+      reinterpret_cast<const unsigned char*>(packet.data()),
+      packet.size()
+      );
+
+  // 5) Append 2-byte CRC at the end, little-endian
+  packet.append(static_cast<char>(csum & 0xFF));
+  packet.append(static_cast<char>((csum >> 8) & 0xFF));
+
+  return packet;
+}
+
+
 /**
  * Sends the given @a data to the currently connected device using the options
  * specified by the user with the rest of the functions of this class.
@@ -418,9 +433,58 @@ void IO::Console::send(const QString &data)
   if (!Manager::instance().connected())
     return;
 
-  // Add user command to history
+         // Add user command to history
   if (!data.isEmpty())
     addToHistory(data);
+
+         // ----------------------------------------------------------
+         // 1) Intercept user commands for special packet encoding
+         // ----------------------------------------------------------
+         // We'll convert the user string to lowercase and trim to simplify matching
+  QString lowerData = data.trimmed().toLower();
+
+         // --- BANK ANGLE COMMAND ---
+         // Check if it begins with "bank angle" (ignoring how many spaces/equal signs afterward)
+  if (lowerData.startsWith("bank angle"))
+  {
+    int eqIndex = lowerData.indexOf('=');
+    if (eqIndex != -1)
+    {
+      // Extract and convert everything after '=' into float
+      float value = lowerData.mid(eqIndex + 1).trimmed().toFloat();
+
+             // For "bank angle", we said controlType = 0
+      QByteArray bin = buildControlPacket(0, value);
+
+             // Send it out
+      Manager::instance().writeData(bin);
+      return; // Done
+    }
+  }
+
+         // --- COG COMMAND ---
+         // Check if it begins with "cog"
+  else if (lowerData.startsWith("cog"))
+  {
+    int eqIndex = lowerData.indexOf('=');
+    if (eqIndex != -1)
+    {
+      // Extract and convert everything after '=' into float
+      float value = lowerData.mid(eqIndex + 1).trimmed().toFloat();
+
+             // For "COG", we said controlType = 1
+      QByteArray bin = buildControlPacket(1, value);
+
+             // Send it out
+      Manager::instance().writeData(bin);
+      return;
+    }
+  }
+
+
+// ----------------------------------------------------------
+// 2) If no special command, fall back to normal data handling
+// ----------------------------------------------------------
 
   // Convert data to byte array
   QByteArray bin;
@@ -449,35 +513,6 @@ void IO::Console::send(const QString &data)
   // Write data to device
   if (!bin.isEmpty())
     Manager::instance().writeData(bin);
-}
-
-/**
- * Creates a text document with current console output & prints it using native
- * system libraries/toolkits.
- */
-void IO::Console::print()
-{
-  // Create text document
-  QTextDocument document;
-  document.setPlainText(
-      QString::fromUtf8(m_textBuffer.peek(m_textBuffer.size())));
-
-  // Set font
-  auto font = Misc::CommonFonts::instance().customMonoFont(0.8);
-  document.setDefaultFont(font);
-
-  // Create printer object
-  QPrinter printer(QPrinter::PrinterResolution);
-  printer.setFullPage(true);
-  printer.setDocName(qApp->applicationDisplayName());
-  printer.setPageOrientation(QPageLayout::Portrait);
-
-  // Show print dialog
-  QPrintDialog printDialog(&printer, nullptr);
-  if (printDialog.exec() == QDialog::Accepted)
-  {
-    document.print(&printer);
-  }
 }
 
 /**
@@ -544,9 +579,6 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   if (string.isEmpty())
     return;
 
-  // Check if we should update the save available feature
-  const bool previousSaveAvailable = saveAvailable();
-
   // Omit leading \n if a trailing \r was already rendered from previous payload
   auto data = string;
   if (m_lastCharWasCR && data.startsWith('\n'))
@@ -605,10 +637,6 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
 
   // Add data to saved text buffer
   m_textBuffer.append(processedString.toUtf8());
-
-  // Update save avaialable
-  if (saveAvailable() != previousSaveAvailable)
-    Q_EMIT saveAvailableChanged();
 
   // Update UI
   QMetaObject::invokeMethod(

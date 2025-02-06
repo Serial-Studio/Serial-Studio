@@ -67,11 +67,11 @@ Widgets.Pane {
   Settings {
     category: "SetupPanel"
 
-    property alias tabIndex: tab.currentIndex
-    property alias csvExport: csvLogging.checked
-    property alias driver: driverCombo.currentIndex
     property alias language: settings.language
+    property alias csvExport: csvLogging.checked
     property alias tcpPlugins: settings.tcpPlugins
+    property alias consoleExport: consoleLogging.checked
+    property alias selectedDriver: driverCombo.currentIndex
   }
 
   //
@@ -122,7 +122,7 @@ Widgets.Pane {
       }
 
       //
-      // Device type selector
+      //Driver selection
       //
       Label {
         text: qsTr("Device Setup") + ":"
@@ -141,21 +141,21 @@ Widgets.Pane {
       }
 
       //
-      // CSV generator
-      //
-      Switch {
-        id: csvLogging
-        Layout.leftMargin: -6
-        text: qsTr("Create CSV File")
-        Layout.alignment: Qt.AlignLeft
-        checked: Cpp_CSV_Export.exportEnabled
-        palette.highlight: Cpp_ThemeManager.colors["csv_switch"]
+      // // CSV generator
+      // //
+      // Switch {
+      //   id: csvLogging
+      //   Layout.leftMargin: -6
+      //   text: qsTr("Create CSV File")
+      //   Layout.alignment: Qt.AlignLeft
+      //   checked: Cpp_CSV_Export.exportEnabled
+      //   palette.highlight: Cpp_ThemeManager.colors["csv_switch"]
 
-        onCheckedChanged:  {
-          if (Cpp_CSV_Export.exportEnabled !== checked)
-            Cpp_CSV_Export.exportEnabled = checked
-        }
-      }
+      //   onCheckedChanged:  {
+      //     if (Cpp_CSV_Export.exportEnabled !== checked)
+      //       Cpp_CSV_Export.exportEnabled = checked
+      //   }
+      // }
 
       //
       // Spacer
@@ -173,6 +173,7 @@ Widgets.Pane {
         color: Cpp_ThemeManager.colors["pane_section_label"]
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } RadioButton {
+        Layout.leftMargin: -6
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("No Parsing (Device Sends JSON Data)")
@@ -183,6 +184,7 @@ Widgets.Pane {
             Cpp_JSON_FrameBuilder.operationMode = SerialStudio.DeviceSendsJSON
         }
       } RadioButton {
+        Layout.leftMargin: -6
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Quick Plot (Comma Separated Values)")
@@ -193,6 +195,7 @@ Widgets.Pane {
             Cpp_JSON_FrameBuilder.operationMode = SerialStudio.QuickPlot
         }
       } RadioButton {
+        Layout.leftMargin: -6
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Parse via JSON Project File")
@@ -216,6 +219,59 @@ Widgets.Pane {
         text: (Cpp_JSON_FrameBuilder.jsonMapFilename.length ?
                  qsTr("Change Project File (%1)").arg(Cpp_JSON_FrameBuilder.jsonMapFilename) :
                  qsTr("Select Project File") + "...")
+      }
+
+      //
+      // Spacer
+      //
+      Item {
+        implicitHeight: 4
+      }
+
+      //
+      // Data export switches
+      //
+      Label {
+        text: qsTr("Data Export") + ":"
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+        color: Cpp_ThemeManager.colors["pane_section_label"]
+        Component.onCompleted: font.capitalization = Font.AllUppercase
+      }
+
+      //
+      // CSV generator
+      //
+      CheckBox {
+        id: csvLogging
+        Layout.leftMargin: -6
+        Layout.maximumHeight: 18
+        text: qsTr("Create CSV File")
+        Layout.alignment: Qt.AlignLeft
+        checked: Cpp_CSV_Export.exportEnabled
+        Layout.maximumWidth: root.maxItemWidth
+
+        onCheckedChanged:  {
+          if (Cpp_CSV_Export.exportEnabled !== checked)
+            Cpp_CSV_Export.exportEnabled = checked
+        }
+      }
+
+      //
+      // Console data export
+      //
+      CheckBox {
+        id: consoleLogging
+        Layout.leftMargin: -6
+        Layout.maximumHeight: 18
+        Layout.alignment: Qt.AlignLeft
+        text: qsTr("Export Console Data")
+        Layout.maximumWidth: root.maxItemWidth
+        checked: Cpp_IO_ConsoleExport.exportEnabled
+
+        onCheckedChanged:  {
+          if (Cpp_IO_ConsoleExport.exportEnabled !== checked)
+            Cpp_IO_ConsoleExport.exportEnabled = checked
+        }
       }
 
       //

@@ -184,18 +184,19 @@ Item {
           id: positionIndicator
           width: sourceItem.width
           height: sourceItem.height
-          anchorPoint: Qt.point(sourceItem.width / 2, sourceItem.height/ 2)
+          anchorPoint: Qt.point(sourceItem.width / 2, sourceItem.height/ 2) //check if true center for new icon
           coordinate: QtPositioning.coordinate(root.latitude, root.longitude)
           sourceItem: Button {
             flat: true
-            width: 128
-            height: 128
-            icon.width: 96
-            icon.height: 96
+            width: 128 //=viewbox/4
+            height: 128//adjust as needed
+            icon.width: 96 //adjust as needed
+            icon.height: 96 //adjust as needed
             background: Item {}
             icon.color: "#D8343D"
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/images/crosshair.svg"
+            //icon.source: "qrc:/rcc/images/chevron-up-circle.svg"
           }
         }
 

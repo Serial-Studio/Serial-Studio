@@ -36,8 +36,8 @@
 #include "JSON/FrameBuilder.h"
 
 /**
- * Connect JSON Parser & Serial Manager signals to begin registering JSON
- * dataframes into JSON list.
+ *  Constructor function, configures the path in which Serial Studio shall
+ * automatically write generated CSV files.
  */
 CSV::Export::Export()
   : m_exportEnabled(true)
@@ -81,17 +81,6 @@ bool CSV::Export::exportEnabled() const
   return m_exportEnabled;
 }
 
-/**
- * Open the current CSV file in the Explorer/Finder window
- */
-void CSV::Export::openCurrentCsv()
-{
-  if (isOpen())
-    Misc::Utilities::revealFile(m_csvFile.fileName());
-  else
-    Misc::Utilities::showMessageBox(tr("CSV file not open"),
-                                    tr("Cannot find CSV export file!"));
-}
 
 /**
  * Configures the signal/slot connections with the rest of the modules of the
@@ -238,8 +227,8 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
   const auto &rxTime = frame.rxDateTime;
 
   // Get file name
-  const auto fileName
-      = rxTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + ".csv";
+  const auto fileName = rxTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"))
+                        + QStringLiteral(".csv");
 
   // Get path
   const QString path = QStringLiteral("%1/%2/").arg(m_csvPath, data.title());
@@ -247,7 +236,7 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
   // Generate file path if required
   QDir dir(path);
   if (!dir.exists())
-    dir.mkpath(".");
+    dir.mkpath(QStringLiteral("."));
 
   // Open file
   m_csvFile.setFileName(dir.filePath(fileName));

@@ -31,9 +31,10 @@
  * Constructor function
  */
 IO::FileTransmission::FileTransmission()
+    : m_filePos(0) // Initialize file position
 {
   // Set stream object pointer to null
-  m_stream = nullptr;
+  //m_stream = nullptr; commented this out becasue no longer using Qtextstream so no need mstream anymore
 
   // Send a line to the serial device periodically
   m_timer.setInterval(100);
@@ -93,13 +94,22 @@ QString IO::FileTransmission::fileName() const
 int IO::FileTransmission::transmissionProgress() const
 {
   // No file open or invalid size -> progress set to 0%
-  if (!fileOpen() || m_file.size() <= 0 || !m_stream)
+  if (!fileOpen() || m_file.size() <= 0)
     return 0;
 
-  // Return progress as percentage
+  // Use our internal file pointer position vs. total size
+  qreal sent = static_cast<qreal>(m_filePos);
+  qreal total = static_cast<qreal>(m_file.size());
+  qreal ratio = (total == 0) ? 0 : (sent / total);
+
+         // Return progress as a percentage
+  return static_cast<int>(ratio * 100);
+
+  /* Return progress as percentage - REMOVED BECAUSE NO LONGER USING mstream in binary file transmission
   qreal txb = m_stream->pos();
   qreal len = m_file.size();
   return qMin(1.0, (txb / len)) * 100;
+  */
 }
 
 /**
@@ -128,20 +138,33 @@ void IO::FileTransmission::openFile()
   if (fileOpen())
     closeFile();
 
-  // Try to open the file as read-only
+  // Try to open the file as read-only (binary by default)
   m_file.setFileName(path);
   if (m_file.open(QFile::ReadOnly))
   {
-    m_stream = new QTextStream(&m_file);
+    // Reset position
+    m_filePos = 0;
 
     emit fileChanged();
     emit transmissionProgressChanged();
   }
-
-  // Log open errors
   else
+  {
     qWarning() << "File open error" << m_file.errorString();
+  }
 }
+
+
+  /* Try to open the file as read-only - COMMENTED OUT BECAUSE THIS WAS FOR TEXT FILE
+  m_file.setFileName(path);
+  if (m_file.open(QFile::ReadOnly))
+  {
+    m_stream = new QTextStream(&m_file); //QTextStream only good for reading and writing file as text not for raw binary data
+
+    emit fileChanged();
+    emit transmissionProgressChanged();
+  }
+*/
 
 /**
  * Closes the currently selected file
@@ -155,13 +178,16 @@ void IO::FileTransmission::closeFile()
   if (m_file.isOpen())
     m_file.close();
 
-  // Reset text stream handler
+  // Reset position
+  m_filePos = 0;
+
+  /* Reset text stream handler - COMMENTED OUT BECAUSE NOT USING QSTREAM ANYMORE IN BINARY FILE UPLOAD
   if (m_stream)
   {
     delete m_stream;
     m_stream = nullptr;
   }
-
+*/
   // Emit signals to update the UI
   emit fileChanged();
   emit transmissionProgressChanged();
@@ -190,7 +216,8 @@ void IO::FileTransmission::beginTransmission()
     // If file has already been sent, reset text stream position
     if (transmissionProgress() == 100)
     {
-      m_stream->seek(0);
+      m_filePos = 0;
+      //m_stream->seek(0); REMOVED CAUSE NO LONGER USING MSTREAM IN BINARY FILE UPLOAD
       emit transmissionProgressChanged();
     }
 
@@ -250,7 +277,35 @@ void IO::FileTransmission::sendLine()
   if (!IO::Manager::instance().connected())
     return;
 
-  // Send next line to device
+  // We’ll send data in chunks rather than lines - FOR BINARY
+  const qint64 chunkSize = 64; // adjust as needed
+  if (!m_file.isOpen())
+    return;
+
+  // Check if we’re at the end
+  if (m_filePos >= m_file.size())
+  {
+    // Reached end of file, stop transmission
+    stopTransmission();
+    return;
+  }
+
+  // Read from current position
+  m_file.seek(m_filePos);
+
+  QByteArray data = m_file.read(chunkSize);
+  if (!data.isEmpty())
+  {
+    // Write raw bytes directly to the serial port
+    IO::Manager::instance().writeData(data);
+
+           // Update position
+    m_filePos += data.size();
+
+           // Update progress
+    emit transmissionProgressChanged();
+  }
+  /* Send next line to device - REMOVED BECAUSE NO LONGER USING MSTREAM
   if (m_stream && !m_stream->atEnd())
   {
     QMetaObject::invokeMethod(
@@ -258,19 +313,19 @@ void IO::FileTransmission::sendLine()
         [=] {
           if (m_stream)
           {
-            auto line = m_stream->readLine();
+            auto line = m_stream->readLine(); //readLine() is only good for reading and writing file as text not for raw binary data
             if (!line.isEmpty())
             {
-              if (!line.endsWith("\n"))
-                line.append("\n");
+              //if (!line.endsWith("\n"))
+                //line.append("\n");
 
-              IO::Manager::instance().writeData(line.toUtf8());
+              IO::Manager::instance().writeData(line.toUtf8()); // UTF* cannot read
               emit transmissionProgressChanged();
             }
           }
         },
         Qt::QueuedConnection);
-  }
+  }*/
 
   // Reached end of file, stop transmission
   else

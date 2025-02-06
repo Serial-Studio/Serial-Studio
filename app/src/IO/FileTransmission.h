@@ -24,7 +24,7 @@
 #include <QFile>
 #include <QTimer>
 #include <QObject>
-#include <QTextStream>
+//#include <QTextStream> REMOVED SINCE ONLY DOING BINARY UPLOAD NOW
 
 namespace IO
 {
@@ -87,6 +87,7 @@ private slots:
 private:
   QFile m_file;
   QTimer m_timer;
-  QTextStream *m_stream;
+  qint64 m_filePos;  // ADDED Track how many bytes have been read/sent so far
+  //QTextStream *m_stream; REMOVED SINCE using ''m_filePos' instead
 };
 } // namespace IO

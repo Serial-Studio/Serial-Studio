@@ -33,6 +33,8 @@ Widgets::Gyroscope::Gyroscope(const int index, QQuickItem *parent)
   , m_yaw(0)
   , m_roll(0)
   , m_pitch(0)
+  , m_airspeed(0) //NEW LINE FOR AIRSPEED EDITED
+  , m_altitude(0) //NEW LINE FOR altitude EDITED
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
   {
@@ -69,6 +71,17 @@ qreal Widgets::Gyroscope::pitch() const
   return m_pitch;
 }
 
+qreal Widgets::Gyroscope::airspeed() const
+{
+  return m_airspeed;
+}
+
+qreal Widgets::Gyroscope::altitude() const
+{
+  return m_altitude;
+}
+
+
 /**
  * @brief Updates the gyroscope data from the Dashboard.
  *
@@ -85,20 +98,22 @@ void Widgets::Gyroscope::updateData()
   {
     // Get the gyroscope data and validate the dataset count
     const auto &gyro = GET_GROUP(SerialStudio::DashboardGyroscope, m_index);
-    if (gyro.datasetCount() != 3)
+    if (gyro.datasetCount() != 5) //changed to 5 because added airspeed and altitude
       return;
 
     // Backup previous readings
     const qreal previousYaw = m_yaw;
     const qreal previousRoll = m_roll;
     const qreal previousPitch = m_pitch;
+    const qreal previousAirspeed = m_airspeed; //NEW LINE FOR AIRSPEED EDITED
+    const qreal previousAltitude = m_altitude; //NEW LINE FOR altitude EDITED
 
     // Obtain delta-T for integration
-    const qreal deltaT = qMax(1, m_timer.elapsed()) / 1000.0;
-    m_timer.restart();
+    //const qreal deltaT = qMax(1, m_timer.elapsed()) / 1000.0;
+    //m_timer.restart();
 
     // Update the pitch, roll, and yaw values by integration
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0; i < 5; ++i) //NEW LINE FOR AIRSPEED & altitude EDITED - INCREASED FROM 3 TO 5
     {
       // Obtain dataset
       const auto &dataset = gyro.getDataset(i);
@@ -111,15 +126,24 @@ void Widgets::Gyroscope::updateData()
                           (dataset.widget() == QStringLiteral("roll"));
       const bool isPitch = (dataset.widget() == QStringLiteral("x")) ||
                            (dataset.widget() == QStringLiteral("pitch"));
+
+      const bool isAirspeed = (dataset.widget() == QStringLiteral("airspeed")); //new line for airspeed
       // clang-format on
 
-      // Update orientation angles
+      const bool isAltitude = (dataset.widget() == QStringLiteral("altitude")); //new line for altitude
+      // clang-format on
+
+      // Update orientation angles (changed to remove deltaT and +=
       if (isYaw)
-        m_yaw += angle * deltaT;
+        m_yaw = angle;
       else if (isRoll)
-        m_roll += angle * deltaT;
+        m_roll = angle;
       else if (isPitch)
-        m_pitch += angle * deltaT;
+        m_pitch = angle;
+      else if (isAirspeed) //NEW LINE FOR AIRSPEED EDITED
+        m_airspeed = angle;
+      else if (isAltitude) //NEW LINE FOR altitude EDITED
+        m_altitude = angle;
     }
 
     // Normalize yaw angle from -180 to 180
@@ -143,7 +167,9 @@ void Widgets::Gyroscope::updateData()
     // Request a repaint of the widget
     if (!qFuzzyCompare(m_yaw, previousYaw)
         || !qFuzzyCompare(m_roll, previousRoll)
-        || !qFuzzyCompare(m_pitch, previousPitch))
+        || !qFuzzyCompare(m_pitch, previousPitch)
+        || !qFuzzyCompare(m_airspeed, previousAirspeed) //ADDED airspeed
+        || !qFuzzyCompare(m_altitude, previousAltitude)) //ADDED altitude
       Q_EMIT updated();
   }
 }
