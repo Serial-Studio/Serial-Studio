@@ -245,7 +245,6 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto csvPlayer = &CSV::Player::instance();
   auto ioManager = &IO::Manager::instance();
   auto ioConsole = &IO::Console::instance();
-  auto mqttClient = &MQTT::Client::instance();
   auto uiDashboard = &UI::Dashboard::instance();
   auto ioSerial = &IO::Drivers::Serial::instance();
   auto pluginsBridge = &Plugins::Server::instance();
@@ -256,10 +255,16 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto projectModel = &JSON::ProjectModel::instance();
   auto miscTimerEvents = &Misc::TimerEvents::instance();
   auto miscCommonFonts = &Misc::CommonFonts::instance();
+  auto ioConsoleExport = &IO::ConsoleExport::instance();
   auto miscThemeManager = &Misc::ThemeManager::instance();
   auto ioConsoleExport = &IO::ConsoleExport::instance();
   auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
   auto ioFileTransmission = &IO::FileTransmission::instance();
+
+  // Initialize commerical-only MQTT modules
+#ifdef COMMERCIAL_BUILD
+  auto mqttClient = &MQTT::Client::instance();
+#endif
 
   // Initialize third-party modules
   auto updater = QSimpleUpdater::getInstance();
@@ -275,6 +280,13 @@ void Misc::ModuleManager::initializeQmlInterface()
   const auto buildDate = QStringLiteral(__DATE__);
   const auto buildTime = QStringLiteral(__TIME__);
 
+  // Get build type (open source or commercial)
+#ifdef COMMERCIAL_BUILD
+  const bool commercialBuild = true;
+#else
+  const bool commercialBuild = false;
+#endif
+
   // Register C++ modules with QML
   const auto c = m_engine.rootContext();
   c->setContextProperty("Cpp_Updater", updater);
@@ -284,7 +296,6 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_Console", ioConsole);
   c->setContextProperty("Cpp_IO_Manager", ioManager);
   c->setContextProperty("Cpp_IO_Network", ioNetwork);
-  c->setContextProperty("Cpp_MQTT_Client", mqttClient);
   c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
   c->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
   c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
@@ -296,13 +307,18 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_JSON_FrameBuilder", frameBuilder);
   c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
-   c->setContextProperty("Cpp_IO_ConsoleExport", ioConsoleExport);
   c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);
+
+  // Register commercial-only C++ modules
+#ifdef COMMERCIAL_BUILD
+  c->setContextProperty("Cpp_MQTT_Client", mqttClient);
+#endif
 
   // Register app info with QML
   c->setContextProperty("Cpp_BuildDate", buildDate);
   c->setContextProperty("Cpp_BuildTime", buildTime);
   c->setContextProperty("Cpp_AppUpdaterUrl", APP_UPDATER_URL);
+  c->setContextProperty("Cpp_CommercialBuild", commercialBuild);
   c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
   c->setContextProperty("Cpp_PrimaryScreen", qApp->primaryScreen());
   c->setContextProperty("Cpp_AppName", qApp->applicationDisplayName());
@@ -322,6 +338,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   projectModel->setupExternalConnections();
   frameBuilder->setupExternalConnections();
   ioConsoleExport->setupExternalConnections();
+
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);
 }

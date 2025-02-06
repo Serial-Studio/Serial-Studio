@@ -28,9 +28,17 @@
       <stop offset="1" stop-color="#2b36b3"/>
     </linearGradient>
     <linearGradient id="linear-gradient-3" x1="700.34" y1="414.89" x2="589.33" y2="295.42" xlink:href="#linear-gradient-2"/>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feOffset dx="0" dy="10" in="SourceAlpha" result="offset"/>
+      <feGaussianBlur in="offset" stdDeviation="10" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 0.3 0" result="shadow"/>
+      <feMerge>
+        <feMergeNode in="shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <!-- Generator: Adobe Illustrator 28.6.0, SVG Export Plug-In . SVG Version: 1.2.0 Build 709)  -->
-  <g>
+  <g transform="translate(96, 96) scale(0.8125)" filter="url(#shadow)">
     <g id="Layer_1">
       <g>
         <rect class="cls-4" y="0" width="1024" height="1024" rx="250" ry="250"/>

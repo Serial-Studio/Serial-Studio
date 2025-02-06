@@ -625,7 +625,7 @@ QCompleter *QCodeEditor::completer() const
   return m_completer;
 }
 
-QLineNumberArea* QCodeEditor::lineNumberArea() const
+QLineNumberArea *QCodeEditor::lineNumberArea() const
 {
   return m_lineNumberArea;
 }

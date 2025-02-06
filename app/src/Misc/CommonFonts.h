@@ -50,13 +50,12 @@ signals:
 
 private:
   explicit CommonFonts();
-
-public:
   CommonFonts(CommonFonts &&) = delete;
   CommonFonts(const CommonFonts &) = delete;
   CommonFonts &operator=(CommonFonts &&) = delete;
   CommonFonts &operator=(const CommonFonts &) = delete;
 
+public:
   static CommonFonts &instance();
 
   [[nodiscard]] const QFont &uiFont() const;

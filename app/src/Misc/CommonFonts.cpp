@@ -44,8 +44,14 @@ Misc::CommonFonts::CommonFonts()
 
   // Set the UI font to the system default
   m_uiFont = QApplication::font();
+
+  // Configure bold font
   m_boldUiFont = m_uiFont;
+#ifdef Q_OS_LINUX
+  m_boldUiFont.setWeight(QFont::DemiBold);
+#else
   m_boldUiFont.setBold(true);
+#endif
 
   // Setup monospace font
   m_monoFont = QFont(monoFont);

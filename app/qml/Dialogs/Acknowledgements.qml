@@ -162,10 +162,22 @@ Window {
         }
       }
 
-      Button {
-        text: qsTr("Close")
-        onClicked: root.close()
-        Layout.alignment: Qt.AlignRight
+      RowLayout {
+        Layout.fillWidth: true
+
+        Item {
+          Layout.fillWidth: true
+        }
+
+        Button {
+          text: qsTr("About Qt...")
+          onClicked: Cpp_Misc_Utilities.aboutQt()
+        }
+
+        Button {
+          text: qsTr("Close")
+          onClicked: root.close()
+        }
       }
     }
   }

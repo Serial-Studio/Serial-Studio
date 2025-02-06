@@ -122,7 +122,7 @@ Widgets.Pane {
       }
 
       //
-      //Driver selection
+
       //
       Label {
         text: qsTr("Device Setup") + ":"
@@ -139,23 +139,6 @@ Widgets.Pane {
             Cpp_IO_Manager.busType = currentIndex
         }
       }
-
-      //
-      // // CSV generator
-      // //
-      // Switch {
-      //   id: csvLogging
-      //   Layout.leftMargin: -6
-      //   text: qsTr("Create CSV File")
-      //   Layout.alignment: Qt.AlignLeft
-      //   checked: Cpp_CSV_Export.exportEnabled
-      //   palette.highlight: Cpp_ThemeManager.colors["csv_switch"]
-
-      //   onCheckedChanged:  {
-      //     if (Cpp_CSV_Export.exportEnabled !== checked)
-      //       Cpp_CSV_Export.exportEnabled = checked
-      //   }
-      // }
 
       //
       // Spacer

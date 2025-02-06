@@ -26,49 +26,6 @@
 #include "IO/Console.h"
 #include "Misc/Translator.h"
 
-/**
- * Generates a hexdump of the given data
- */
-static QString HexDump(const char *data, const size_t size)
-{
-  QString result;
-  char ascii[17];
-  ascii[16] = '\0';
-
-  for (size_t i = 0; i < size; ++i)
-  {
-    char hexBuffer[4];
-    snprintf(hexBuffer, sizeof(hexBuffer), "%02X ",
-             static_cast<quint8>(data[i]));
-    result += hexBuffer;
-
-    if (data[i] >= ' ' && data[i] <= '~')
-      ascii[i % 16] = data[i];
-    else
-      ascii[i % 16] = '.';
-
-    if ((i + 1) % 8 == 0 || i + 1 == size)
-    {
-      result += ' ';
-      if ((i + 1) % 16 == 0)
-        result += QString("|  %1 \n").arg(ascii);
-
-      else if (i + 1 == size)
-      {
-        ascii[(i + 1) % 16] = '\0';
-
-        if ((i + 1) % 16 <= 8)
-          result += ' ';
-        for (size_t j = (i + 1) % 16; j < 16; ++j)
-          result += "   ";
-
-        result += QString("|  %1 \n").arg(ascii);
-      }
-    }
-  }
-
-  return result;
-}
 
 /**
  * Constructor function
@@ -626,10 +583,10 @@ void IO::Console::append(const QString &string, const bool addTimestamp)
   // Process lines
   while (!tokens.isEmpty())
   {
-    if (m_isStartingLine)
+    auto token = tokens.first();
+    if (m_isStartingLine && !token.simplified().isEmpty())
       processedString.append(timestamp);
 
-    auto token = tokens.first();
     processedString.append(token);
     m_isStartingLine = (token == QStringLiteral("\n"));
     tokens.removeFirst();
@@ -699,16 +656,36 @@ QString IO::Console::dataToString(const QByteArray &data)
 }
 
 /**
- * Converts the given @a data into an UTF-8 string
+ * @brief Converts a QByteArray to a QString, preserving printable characters
+ *        and line breaks.
+ *
+ * Non-printable characters are replaced with a dot ('.') for readability.
+ *
+ * @param data The QByteArray to convert.
+ * @return QString A human-readable string representation of the input data.
  */
 QString IO::Console::plainTextStr(const QByteArray &data)
 {
-  QString str = QString::fromUtf8(data);
+  // Filter out non-printable characters, but keep line breaks
+  QString filteredData;
+  filteredData.reserve(data.size());
+  for (int i = 0; i < data.size(); ++i)
+  {
+    bool printable = false;
+    printable |= (data[i] == '\r');
+    printable |= (data[i] == '\n');
+    printable |= std::isprint(static_cast<unsigned char>(data[i]));
+    printable |= std::iscntrl(static_cast<unsigned char>(data[i]));
+    printable |= std::isspace(static_cast<unsigned char>(data[i]));
 
-  if (str.toUtf8() != data)
-    str = QString::fromLatin1(data);
+    if (printable)
+      filteredData += data[i];
+    else
+      filteredData += '.';
+  }
 
-  return str;
+  // Return the filtered data
+  return filteredData;
 }
 
 /**
@@ -716,21 +693,59 @@ QString IO::Console::plainTextStr(const QByteArray &data)
  */
 QString IO::Console::hexadecimalStr(const QByteArray &data)
 {
-  // Remove line breaks from data
-  QByteArray copy = data;
+  // Initialize parameters
+  QString out;
+  constexpr auto rowSize = 16;
 
-  // Convert data to string with dump every ~80 chars
-  QString str;
-  const int characters = 80;
-  for (int i = 0; i < copy.length(); i += characters)
+  // Print hexadecimal row by row
+  for (int i = 0; i < data.length(); i += rowSize)
   {
-    QByteArray line;
-    for (int j = 0; j < qMin(characters, copy.length() - i); ++j)
-      line.append(copy.at(i + j));
+    // Add offset to output
+    out += QStringLiteral("%1 | ").arg(i, 6, 16, QLatin1Char('0'));
 
-    str.append(HexDump(line.data(), line.size()));
+    // Print hexadecimal bytes
+    for (int j = 0; j < rowSize; ++j)
+    {
+      // Print existing data
+      if (i + j < data.length())
+      {
+        out += QStringLiteral("%1 ").arg(
+            static_cast<unsigned char>(data[i + j]), 2, 16, QLatin1Char('0'));
+      }
+
+      // Space out inexistent data
+      else
+        out += QStringLiteral("   ");
+
+      // Add padding in 8th byte
+      if ((j + 1) == 8)
+        out += ' ';
+    }
+
+    // Add ASCII representation
+    out += QStringLiteral("| ");
+    for (int j = 0; j < rowSize; ++j)
+    {
+      // Add existing data
+      if (i + j < data.length())
+      {
+        char c = data[i + j];
+        if (std::isprint(static_cast<unsigned char>(c)))
+          out += c;
+        else
+          out += '.';
+      }
+
+      // Add space for inexisting data
+      else
+        out += ' ';
+    }
+
+    // Add line break
+    out += QStringLiteral(" |\n");
   }
 
-  // Return string
-  return str;
+  // Add additional line break & return data
+  out += "\n";
+  return out;
 }

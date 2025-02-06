@@ -110,15 +110,6 @@ Widgets.Pane {
       title: widget.widgetTitle
 
       //
-      // Make window stay on top
-      //
-      Component.onCompleted: {
-        window.flags = Qt.Dialog |
-            Qt.WindowTitleHint |
-            Qt.WindowCloseButtonHint
-      }
-
-      //
       // Close window instead of app
       //
       Shortcut {

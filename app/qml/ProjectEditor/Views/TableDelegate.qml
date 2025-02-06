@@ -87,20 +87,17 @@ ColumnLayout {
       }
 
       Item {
-        width: 4
+        width: 8
       }
 
-      TextField {
+      Label {
         text: qsTr("Value")
-        readOnly: true
-        selectByMouse: false
         Layout.alignment: Qt.AlignVCenter
         Layout.minimumWidth: root.valueWidth
         Layout.maximumWidth: root.valueWidth
         horizontalAlignment: Label.AlignLeft
         font: Cpp_Misc_CommonFonts.boldUiFont
         color: Cpp_ThemeManager.colors["table_fg_header"]
-        background: Item {}
       }
 
       Rectangle {
@@ -128,18 +125,18 @@ ColumnLayout {
   //
   // Table items
   //
-  TreeView {
+  TableView {
     id: view
     clip: true
     reuseItems: false
     Layout.fillWidth: true
     model: root.modelPointer
-    boundsBehavior: TreeView.StopAtBounds
+    boundsBehavior: TableView.StopAtBounds
     Layout.minimumHeight: root.rowHeight * rows
     Layout.maximumHeight: root.rowHeight * rows
 
     //
-    // Table "row" delegate
+    // Table row delegate
     //
     delegate: Item {
       id: item
@@ -148,12 +145,7 @@ ColumnLayout {
 
       required property int row
       required property int column
-      required property int depth
       required property bool current
-      required property bool expanded
-      required property bool isTreeNode
-      required property int hasChildren
-      required property TreeView treeView
 
       //
       // Row background
@@ -203,7 +195,7 @@ ColumnLayout {
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["table_separator"]
         } Item {
-          width: 4
+          width: 8
         }
 
         //
@@ -386,10 +378,12 @@ ColumnLayout {
             currentIndex: editableValue
             font: Cpp_Misc_CommonFonts.monoFont
             onCurrentIndexChanged: {
-              root.modelPointer.setData(
-                    view.index(row, column),
-                    currentIndex,
-                    ProjectModel.EditableValue)
+              if (currentIndex !== editableValue) {
+                root.modelPointer.setData(
+                      view.index(row, column),
+                      currentIndex,
+                      ProjectModel.EditableValue)
+              }
             }
           }
         }

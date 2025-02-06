@@ -249,15 +249,19 @@ Rectangle {
     //
     // MQTT Setup
     //
-    Widgets.BigButton {
-      text: qsTr("MQTT")
+    Loader {
+      active: Cpp_CommercialBuild
       Layout.alignment: Qt.AlignVCenter
-      onClicked: app.showMqttConfiguration()
-      icon.source: Cpp_MQTT_Client.isConnectedToHost ?
-                     (Cpp_MQTT_Client.clientMode === 1 ?
-                        "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
-                        "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
-                     "qrc:/rcc/icons/toolbar/mqtt.svg"
+
+      sourceComponent: Widgets.BigButton {
+        text: qsTr("MQTT")
+        onClicked: app.showMqttConfiguration()
+        icon.source: Cpp_MQTT_Client.isConnectedToHost ?
+                       (Cpp_MQTT_Client.clientMode === 1 ?
+                          "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
+                          "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
+                       "qrc:/rcc/icons/toolbar/mqtt.svg"
+      }
     }
 
     //
@@ -267,6 +271,7 @@ Rectangle {
       implicitWidth: 1
       Layout.fillHeight: true
       Layout.maximumHeight: 64
+      visible: Cpp_CommercialBuild
       Layout.alignment: Qt.AlignVCenter
       color: Cpp_ThemeManager.colors["toolbar_separator"]
     }

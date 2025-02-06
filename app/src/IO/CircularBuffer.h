@@ -58,7 +58,7 @@ public:
   [[nodiscard]] T read(qsizetype size);
   [[nodiscard]] T peek(qsizetype size) const;
 
-  [[nodiscard]] int findPatternKMP(const T &pattern);
+  [[nodiscard]] int findPatternKMP(const T &pattern, const int pos = 0);
 
 private:
   [[nodiscard]] std::vector<int> computeKMPTable(const T &p) const;
@@ -253,41 +253,66 @@ T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
 }
 
 /**
- * @brief Searches for a pattern in the buffer using the KMP algorithm.
+ * @brief Searches for a pattern in the circular buffer using the KMP algorithm.
  *
- * Implements the Knuth-Morris-Pratt algorithm to efficiently find a pattern in
- * the buffer.
+ * This function uses the Knuth-Morris-Pratt (KMP) string matching algorithm
+ * to efficiently find the first occurrence of a given pattern within the
+ * circular buffer, starting from a specified position. The circular nature of
+ * the buffer is correctly handled to ensure accurate matching, even if the
+ * pattern spans the end of the buffer and the beginning.
  *
- * @param pattern The QByteArray representing the pattern to search for.
- * @return The index of the first occurrence of the pattern, or -1 if not found.
+ * @tparam T The type of elements stored in the pattern and the buffer.
+ * @tparam StorageType The type of storage used for the circular buffer.
+ * @param pattern The pattern to search for in the buffer.
+ * @param pos The starting position (relative to the logical start of the
+ *            buffer) for the search. Defaults to the beginning if set to 0.
+ *
+ * @return The index (relative to the logical start of the buffer) of the first
+ *         occurrence of the pattern, or -1 if the pattern is not found.
+ *
+ * @warning If the `pattern` is empty or its size exceeds the current size of
+ *          the buffer, the function returns -1 immediately.
+ *
+ * @pre The buffer must be properly initialized, and the pattern should not
+ *      exceed the capacity of the buffer.
  */
 template<typename T, typename StorageType>
-int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T &pattern)
+int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T &pattern,
+                                                       const int pos)
 {
   std::lock_guard<std::mutex> lock(m_mutex);
 
+  // Validate search pattern
   if (pattern.isEmpty() || m_size < pattern.size())
     return -1;
 
+  // Start search at `pos`
   std::vector<int> lps = computeKMPTable(pattern);
-  qsizetype bufferIdx = m_head;
+  qsizetype bufferIdx = (m_head + pos) % m_capacity;
+  int i = pos, j = 0;
 
-  int i = 0, j = 0;
   while (i < m_size)
   {
+    // Compare current buffer character with the pattern
     if (m_buffer[bufferIdx] == pattern[j])
     {
       i++;
       j++;
       bufferIdx = (bufferIdx + 1) % m_capacity;
 
+      // If the whole pattern is matched, return the logical start index
       if (j == pattern.size())
-        return i - j;
+      {
+        int matchStart = i - j;
+        return matchStart;
+      }
     }
 
+    // Mismatch after some matches, fall back in pattern
     else if (j != 0)
       j = lps[j - 1];
 
+    // Mismatch at the start, move forward
     else
     {
       i++;
@@ -295,6 +320,7 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T &pattern)
     }
   }
 
+  // Pattern not found
   return -1;
 }
 

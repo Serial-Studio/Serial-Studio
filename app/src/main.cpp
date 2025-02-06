@@ -87,7 +87,8 @@ int main(int argc, char **argv)
 
   // Linux specific initialization code
 #ifdef Q_OS_LINUX
-  setupAppImageIcon(APP_EXECUTABLE, QStringLiteral(":/rcc/images/icon@2x.png"));
+  setupAppImageIcon(APP_EXECUTABLE,
+                    QStringLiteral(":/rcc/images/appimage_icon.png"));
 #endif
 
   // Avoid 200% scaling on 150% scaling...
@@ -207,27 +208,23 @@ static void setupAppImageIcon(const QString &appExecutableName,
   const QString pixmapFile = pixmapPath + appExecutableName + ".png";
   // clang-format on
 
-  // Check if the icon file already exists to avoid redundant copying
-  if (!QFileInfo::exists(pixmapFile))
+  // Ensure the directory exists; create it if it doesn't
+  QDir dir;
+  if (!dir.exists(pixmapPath) && !dir.mkpath(pixmapPath))
+    return;
+
+  // Copy the icon from resources to the destination
+  QFile resourceFile(iconResourcePath);
+  if (resourceFile.open(QIODevice::ReadOnly))
   {
-    // Ensure the directory exists; create it if it doesn't
-    QDir dir;
-    if (!dir.exists(pixmapPath) && !dir.mkpath(pixmapPath))
-      return;
-
-    // Copy the icon from resources to the destination
-    QFile resourceFile(iconResourcePath);
-    if (resourceFile.open(QIODevice::ReadOnly))
+    QFile localFile(pixmapFile);
+    if (localFile.open(QIODevice::WriteOnly))
     {
-      QFile localFile(pixmapFile);
-      if (localFile.open(QIODevice::WriteOnly))
-      {
-        localFile.write(resourceFile.readAll());
-        localFile.close();
-      }
-
-      resourceFile.close();
+      localFile.write(resourceFile.readAll());
+      localFile.close();
     }
+
+    resourceFile.close();
   }
 }
 #endif

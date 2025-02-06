@@ -25,8 +25,8 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QApplication>
-#include <QDesktopServices>
 #include <QStandardPaths>
+#include <QDesktopServices>
 
 #include "IO/Manager.h"
 #include "CSV/Player.h"
@@ -36,7 +36,6 @@
 #include "JSON/FrameBuilder.h"
 
 /**
- *  Constructor function, configures the path in which Serial Studio shall
  * automatically write generated CSV files.
  */
 CSV::Export::Export()
@@ -49,7 +48,7 @@ CSV::Export::Export()
 }
 
 /**
- * Close file & finnish write-operations before destroying the class
+ * Close file & finnish write-operations before destroying the class.
  */
 CSV::Export::~Export()
 {
@@ -57,7 +56,7 @@ CSV::Export::~Export()
 }
 
 /**
- * Returns a pointer to the only instance of this class
+ * Returns a pointer to the only instance of this class.
  */
 CSV::Export &CSV::Export::instance()
 {
@@ -66,7 +65,7 @@ CSV::Export &CSV::Export::instance()
 }
 
 /**
- * Returns @c true if the CSV output file is open
+ * Returns @c true if the CSV output file is open.
  */
 bool CSV::Export::isOpen() const
 {
@@ -74,13 +73,12 @@ bool CSV::Export::isOpen() const
 }
 
 /**
- * Returns @c true if CSV export is enabled
+ * Returns @c true if CSV export is enabled.
  */
 bool CSV::Export::exportEnabled() const
 {
   return m_exportEnabled;
 }
-
 
 /**
  * Configures the signal/slot connections with the rest of the modules of the
@@ -97,7 +95,7 @@ void CSV::Export::setupExternalConnections()
 }
 
 /**
- * Enables or disables data export
+ * Enables or disables data export.
  */
 void CSV::Export::setExportEnabled(const bool enabled)
 {
@@ -113,7 +111,7 @@ void CSV::Export::setExportEnabled(const bool enabled)
 }
 
 /**
- * Write all remaining JSON frames & close the CSV file
+ * Write all remaining JSON frames & close the CSV file.
  */
 void CSV::Export::closeFile()
 {
@@ -303,7 +301,7 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
 }
 
 /**
- * Appends the latest frame from the device to the output buffer
+ * Appends the latest frame from the device to the output buffer.
  */
 void CSV::Export::registerFrame(const JSON::Frame &frame)
 {
@@ -315,14 +313,19 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
   if (CSV::Player::instance().isOpen())
     return;
 
-  // Don't save CSV data when the device/service is not connected
-  if (!IO::Manager::instance().connected()
-      && !MQTT::Client::instance().isSubscribed())
-    return;
-
   // Ignore if frame is invalid
   if (!frame.isValid())
     return;
+
+  // Don't save CSV data when the device/service is not connected
+#ifdef COMMERCIAL_BUID
+  if (!IO::Manager::instance().connected()
+      && !MQTT::Client::instance().isSubscribed())
+    return;
+#else
+  if (!IO::Manager::instance().connected())
+    return;
+#endif
 
   // Register raw frame to list
   TimestampFrame tframe;

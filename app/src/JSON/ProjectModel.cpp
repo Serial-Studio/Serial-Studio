@@ -2107,7 +2107,8 @@ void JSON::ProjectModel::buildProjectModel()
   frameDetection->setEditable(true);
   frameDetection->setData(ComboBox, WidgetType);
   frameDetection->setData(m_frameDetectionMethods, ComboBoxData);
-  frameDetection->setData(m_frameDetection, EditableValue);
+  frameDetection->setData(
+      m_frameDetectionMethodsValues.indexOf(m_frameDetection), EditableValue);
   frameDetection->setData(tr("Frame Detection"), ParameterName);
   frameDetection->setData(kProjectView_FrameDetection, ParameterType);
   frameDetection->setData(tr("Strategy used for identifying frame data"),
@@ -2115,7 +2116,8 @@ void JSON::ProjectModel::buildProjectModel()
   m_projectModel->appendRow(frameDetection);
 
   // Add frame start sequence
-  if (m_frameDetection == SerialStudio::StartAndEndDelimiter)
+  if (m_frameDetection == SerialStudio::StartAndEndDelimiter
+      || m_frameDetection == SerialStudio::StartDelimiterOnly)
   {
     auto frameStart = new QStandardItem();
     frameStart->setEditable(true);
@@ -2718,9 +2720,15 @@ void JSON::ProjectModel::generateComboBoxModels()
 
   // Initialize frame detection methods
   m_frameDetectionMethods.clear();
+  m_frameDetectionMethodsValues.clear();
   m_frameDetectionMethods.append(tr("End Delimiter Only"));
+  m_frameDetectionMethods.append(tr("Start Delimiter Only"));
   m_frameDetectionMethods.append(tr("Start + End Delimiter"));
   m_frameDetectionMethods.append(tr("No Delimiters"));
+  m_frameDetectionMethodsValues.append(SerialStudio::EndDelimiterOnly);
+  m_frameDetectionMethodsValues.append(SerialStudio::StartDelimiterOnly);
+  m_frameDetectionMethodsValues.append(SerialStudio::StartAndEndDelimiter);
+  m_frameDetectionMethodsValues.append(SerialStudio::NoDelimiters);
 
   // Initialize group-level widgets
   m_groupWidgets.clear();
@@ -3014,8 +3022,7 @@ void JSON::ProjectModel::onProjectItemChanged(QStandardItem *item)
       m_frameDecoder = static_cast<SerialStudio::DecoderMethod>(value.toInt());
       break;
     case kProjectView_FrameDetection:
-      m_frameDetection
-          = static_cast<SerialStudio::FrameDetection>(value.toInt());
+      m_frameDetection = m_frameDetectionMethodsValues.at(value.toInt());
       Q_EMIT frameDetectionChanged();
       buildProjectModel();
       break;

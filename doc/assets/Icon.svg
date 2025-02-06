@@ -16,12 +16,20 @@
 
       .cls-4 {
         fill: url(#linear-gradient);
+        filter: url(#drop-shadow-1);
       }
     </style>
     <linearGradient id="linear-gradient" x1="-6.72" y1="512" x2="990.13" y2="512" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#1983ca"/>
       <stop offset="1" stop-color="#2b36b3"/>
     </linearGradient>
+    <filter id="drop-shadow-1" filterUnits="userSpaceOnUse">
+      <feOffset dx="0" dy="78.97"/>
+      <feGaussianBlur result="blur" stdDeviation="39.49"/>
+      <feFlood flood-color="#000" flood-opacity=".4"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
     <linearGradient id="linear-gradient-2" x1="525.34" y1="456.46" x2="450.2" y2="822.96" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#fff"/>
       <stop offset=".97" stop-color="#2359bd"/>
