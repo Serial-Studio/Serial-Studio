@@ -23,6 +23,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import SerialStudio
 import "../../Widgets" as Widgets
 
 Widgets.Pane {
@@ -31,13 +32,27 @@ Widgets.Pane {
   icon: "qrc:/rcc/icons/panes/dashboard.svg"
 
   //
-  // Hacks for calculating cell width
+  // Compute the widget cell sizes & layout that wastes less screen area
   //
-  property int columns: 4
-  property int appliedColumns: Cpp_UI_Dashboard.totalWidgetCount === 1 ? 1 : Math.min(columns, Math.max(1, Math.floor((page.width - 16) / 140)))
-  readonly property int cellSpacerWidths: Math.max(0, (appliedColumns - 1)) * 4
-  readonly property int cellWidth: Math.max(140, (page.width - 16 - cellSpacerWidths) / appliedColumns)
-  readonly property int cellHeight: cellWidth * (2 / 3)
+  AdaptiveGridLayout {
+    id: adaptiveLayout
+
+    minColumns: 1
+    maxColumns: 10
+    minCellWidth: 264
+    cellHeightFactor: 2/3
+    rowSpacing: grid.rowSpacing
+    containerWidth: flickable.width
+    containerHeight: flickable.height
+    columnSpacing: grid.columnSpacing
+    cellCount: Cpp_UI_Dashboard.totalWidgetCount
+
+    onLayoutChanged: {
+      const contentX = flickable.contentX
+      flickable.contentX = -1
+      flickable.contentX = contentX
+    }
+  }
 
   //
   // Put everything into a flickable to enable scrolling
@@ -118,12 +133,15 @@ Widgets.Pane {
     //
     Flickable {
       id: flickable
-      anchors.fill: parent
+      clip: false
       contentWidth: width
-      anchors.leftMargin: 8
-      anchors.bottomMargin: 8
       contentHeight: grid.height
-      anchors.topMargin: header.height + 8
+
+      anchors {
+        fill: parent
+        margins: 8
+        topMargin: header.height + 8
+      }
 
       ScrollBar.vertical: ScrollBar {
         id: scroll
@@ -151,8 +169,8 @@ Widgets.Pane {
           let item = grid.children[i]
           let itemTop = item.y
           let itemLeft = item.x
-          let itemRight = item.x + cellWidth
-          let itemBottom = item.y + cellHeight
+          let itemRight = item.x + adaptiveLayout.cellWidth
+          let itemBottom = item.y + adaptiveLayout.cellHeight
 
           // Check if the item is within the viewport bounds
           let isVisibleVertically = (itemBottom > viewportTop) && (itemTop < viewportBottom)
@@ -164,24 +182,15 @@ Widgets.Pane {
       }
 
       //
-      // Obtain which widgets to render when user changes widget sizes
+      // Generate the widget grid
       //
-      Connections {
-        target: root
-        function onColumnsChanged() {
-          const contentX = flickable.contentX
-          flickable.contentX = -1
-          flickable.contentX = contentX
-        }
-      }
-
       Grid {
         id: grid
         rowSpacing: 4
         columnSpacing: 4
         width: parent.width
         height: childrenRect.height
-        columns: root.appliedColumns
+        columns: adaptiveLayout.columns
 
         Timer {
           id: timer
@@ -213,8 +222,8 @@ Widgets.Pane {
 
         WidgetModel {
           id: model
-          cellWidth: root.cellWidth
-          cellHeight: root.cellHeight
+          cellWidth: adaptiveLayout.cellWidth
+          cellHeight: adaptiveLayout.cellHeight
           model: Cpp_UI_Dashboard.totalWidgetCount
         }
       }

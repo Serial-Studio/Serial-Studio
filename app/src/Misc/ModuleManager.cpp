@@ -56,6 +56,7 @@
 
 #include "UI/Dashboard.h"
 #include "UI/DashboardWidget.h"
+#include "UI/AdaptiveGridLayout.h"
 
 #include "UI/Widgets/Bar.h"
 #include "UI/Widgets/GPS.h"
@@ -229,6 +230,10 @@ void Misc::ModuleManager::registerQmlTypes()
 
   // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
+
+  // Register custom QML helper elements
+  qmlRegisterType<UI::AdaptiveGridLayout>("SerialStudio", 1, 0,
+                                          "AdaptiveGridLayout");
 
   // Regsiter common Serial Studio enums & values
   qmlRegisterType<SerialStudio>("SerialStudio", 1, 0, "SerialStudio");

@@ -84,9 +84,11 @@ Item {
       //
       Label {
         text: qsTr("Theme") + ":"
+        visible: Cpp_CommercialBuild
       } ComboBox {
         id: _themeCombo
         Layout.fillWidth: true
+        visible: Cpp_CommercialBuild
         currentIndex: Cpp_ThemeManager.theme
         model: Cpp_ThemeManager.availableThemes
         onCurrentIndexChanged: {

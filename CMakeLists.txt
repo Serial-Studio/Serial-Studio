@@ -75,7 +75,7 @@ add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
 add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 
 if(COMMERCIAL_BUILD)
-  add_definitions(-DCOMMERCIAL_BUILD)
+  add_compile_definitions(COMMERCIAL_BUILD)
 endif()
 
 #-------------------------------------------------------------------------------

@@ -38,8 +38,7 @@ namespace UI
 
 /**
  * @class UI::Dashboard
- * @brief Real-time dashboard manager for displaying data-driven widgets and p
- *        lots.
+ * @brief Real-time dashboard manager for displaying data-driven widgets.
  *
  * The `Dashboard` class creates and maintains the model used for generating a
  * dashboard user interface, updating various widgets such as plots, multiplots,

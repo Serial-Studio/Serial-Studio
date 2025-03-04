@@ -2509,6 +2509,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   m_datasetModel->appendRow(led);
 
   // Add X-axis selector
+#ifdef COMMERCIAL_BUILD
   if (showPlotOptions)
   {
     // Ensure X-axis ID is reset to "Samples" when an invalid index is set
@@ -2540,6 +2541,7 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
     xAxis->setData(tr("Data series for the X-Axis"), ParameterDescription);
     m_datasetModel->appendRow(xAxis);
   }
+#endif
 
   // Add minimum/maximum values
   if (showMinMax)

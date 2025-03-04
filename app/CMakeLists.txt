@@ -72,8 +72,17 @@ set(QT_LIBS
 )
 
 if (COMMERCIAL_BUILD)
-  set(QT_LIBS ${QT_LIBS} Qt6::Mqtt)
-  set(QT_MODULES ${QT_MODULES} Mqtt)
+  set(QT_LIBS
+    ${QT_LIBS}
+    Qt6::Mqtt
+    Qt6::SerialBus
+  )
+
+  set(QT_MODULES
+    ${QT_MODULES}
+    Mqtt
+    SerialBus
+  )
 endif()
 
 find_package(
@@ -100,6 +109,7 @@ set(SOURCES
   src/Misc/Translator.cpp
   src/Misc/ModuleManager.cpp
   src/Misc/TimerEvents.cpp
+  src/UI/AdaptiveGridLayout.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/Widgets/LEDPanel.cpp
@@ -145,6 +155,7 @@ set(HEADERS
   src/Misc/ThemeManager.h
   src/Misc/TimerEvents.h
   src/Misc/Translator.h
+  src/UI/AdaptiveGridLayout.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
   src/UI/Widgets/GPS.h
@@ -173,7 +184,6 @@ set(HEADERS
   src/IO/CircularBuffer.h
   src/IO/FileTransmission.h
   src/IO/FrameReader.h
-
   src/JSON/FrameParser.h
   src/JSON/ProjectModel.h
   src/JSON/Frame.h

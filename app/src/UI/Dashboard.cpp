@@ -58,10 +58,10 @@ UI::Dashboard::Dashboard()
 #ifdef COMMERCIAL_BUILD
   connect(
       &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] {
-        const bool subscribed = MQTT::Client::instance().isSubscribed();
-        const bool wasSubscribed = !MQTT::Client::instance().isConnectedToHost()
-                                   && MQTT::Client::instance().clientMode()
-                                          == MQTT::ClientSubscriber;
+        const bool subscribed = MQTT::Client::instance().isSubscriber();
+        const bool wasSubscribed = !MQTT::Client::instance().isConnected()
+                                   && MQTT::Client::instance().isSubscriber();
+
         if (subscribed || wasSubscribed)
           resetData();
       });
@@ -162,7 +162,7 @@ bool UI::Dashboard::available() const
   dataAvailable |= CSV::Player::instance().isOpen();
 
 #ifdef COMMERCIAL_BUILD
-  dataAvailable |= MQTT::Client::instance().isSubscribed();
+  dataAvailable |= MQTT::Client::instance().isSubscriber();
 #endif
 
   return hasWidgets && dataAvailable;

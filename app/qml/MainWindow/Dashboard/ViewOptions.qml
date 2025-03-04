@@ -37,11 +37,6 @@ Widgets.Pane {
   icon: "qrc:/rcc/icons/panes/structure.svg"
 
   //
-  // Signals
-  //
-  property int widgetColumns: Math.round(columns.value)
-
-  //
   // Maps the slider position to points
   // https://stackoverflow.com/a/846249
   //
@@ -76,7 +71,6 @@ Widgets.Pane {
   Settings {
     category: "Dashboard"
     property alias points: plotPoints.value
-    property alias columns: columns.value
     property alias showLegends: legends.checked
     property alias decimalPlaces: decimalPlaces.value
     property alias axisOptions: axisVisibility.currentIndex
@@ -294,26 +288,6 @@ Widgets.Pane {
           } Label {
             text: Cpp_UI_Dashboard.precision
             visible: Cpp_UI_Dashboard.precisionWidgetVisible
-          }
-
-          //
-          // Number of plot points slider
-          //
-          Label {
-            text: qsTr("Columns:")
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 1
-          } Slider {
-            id: columns
-            to: 10
-            from: 1
-            value: 3
-            Layout.fillWidth: true
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 1
-            onValueChanged: root.widgetColumns = Math.round(value)
-            Component.onCompleted: root.widgetColumns = Math.round(value)
-          } Label {
-            text: Math.round(columns.value)
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 1
           }
 
           //

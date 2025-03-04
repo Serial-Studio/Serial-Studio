@@ -43,6 +43,7 @@ Misc::ThemeManager::ThemeManager()
   // clang-format off
   const QStringList themes = {
     QStringLiteral("default"),
+#ifdef COMMERCIAL_BUILD
     QStringLiteral("outdoor-day"),
     QStringLiteral("outdoor-night"),
     QStringLiteral("breeze-light"),
@@ -58,6 +59,7 @@ Misc::ThemeManager::ThemeManager()
     QStringLiteral("pulse"),
     QStringLiteral("resistance"),
     QStringLiteral("dominion"),
+#endif
   };
   // clang-format on
 
@@ -77,7 +79,11 @@ Misc::ThemeManager::ThemeManager()
   }
 
   // Set application theme
+#ifdef COMMERCIAL_BUILD
   setTheme(m_settings.value("Theme", 0).toInt());
+#else
+  setTheme(0);
+#endif
 
   // Automatically react to theme changes
   qApp->installEventFilter(this);

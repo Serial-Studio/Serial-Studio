@@ -89,6 +89,5 @@ RowLayout {
     Layout.fillWidth: true
     Layout.fillHeight: true
     Layout.minimumWidth: 240
-    columns: viewOptions.widgetColumns
   }
 }

@@ -199,9 +199,14 @@ public:
    */
   enum class BusType
   {
-    Serial,     /**< Serial port communication. */
-    Network,    /**< Network socket communication. */
-    BluetoothLE /**< Bluetooth Low Energy communication. */
+    Serial,      /**< Serial port communication. */
+    Network,     /**< Network socket communication. */
+    BluetoothLE, /**< Bluetooth Low Energy communication. */
+
+#ifdef COMMERCIAL_BUILD
+    ModBus, /**< MODBUS communication */
+    CanBus, /**< CANBUS communication */
+#endif
   };
   Q_ENUM(BusType)
 

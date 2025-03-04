@@ -324,10 +324,15 @@ Rectangle {
       font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.minimumWidth: metrics.width + 16
       Layout.maximumWidth: metrics.width + 16
-      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !Cpp_MQTT_Client.isSubscribed
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
+
+      //
+      // Enable/disable the connect button
+      //
+      readonly property bool mqttConnected: Cpp_CommercialBuild ? Cpp_MQTT_Client.isSubscriber : false
+      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !mqttConnected
 
       //
       // Connect/disconnect device when button is clicked

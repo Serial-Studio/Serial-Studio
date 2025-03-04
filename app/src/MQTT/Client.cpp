@@ -9,7 +9,7 @@
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY{} without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
@@ -21,886 +21,570 @@
 
 #ifdef COMMERCIAL_BUILD
 
-#  include <QFile>
-#  include <QFileDialog>
+// clang-format off
+#include <QFile>
+#include <QFileDialog>
+#include <QInputDialog>
+// clang-format on
 
-#  include "IO/Manager.h"
-#  include "MQTT/Client.h"
-#  include "Misc/Utilities.h"
+// clang-format off
+#include "IO/Manager.h"
+#include "MQTT/Client.h"
+#include "Misc/Utilities.h"
+// clang-format on
 
-//----------------------------------------------------------------------------
-// Suppress deprecated warnings
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Constructor & singleton access functions
+//------------------------------------------------------------------------------
 
-#  if defined(__GNUC__) || defined(__clang__)
-#    define DISABLE_DEPRECATED_WARNING                                         \
-      _Pragma("GCC diagnostic push")                                           \
-          _Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
-#    define ENABLE_DEPRECATED_WARNING _Pragma("GCC diagnostic pop")
-#  elif defined(_MSC_VER)
-#    define DISABLE_DEPRECATED_WARNING                                         \
-      __pragma(warning(push)) __pragma(warning(disable : 4996))
-#    define ENABLE_DEPRECATED_WARNING __pragma(warning(pop))
-#  else
-#    define DISABLE_DEPRECATED_WARNING
-#    define ENABLE_DEPRECATED_WARNING
-#  endif
-
-/**
- * Constructor function
- */
 MQTT::Client::Client()
-  : m_topic("")
-  , m_lookupActive(false)
-  , m_sentMessages(0)
-  , m_clientMode(MQTTClientMode::ClientPublisher)
-  , m_client(nullptr)
+  : m_publisher(false)
+  , m_sslEnabled(false)
 {
-  // Configure new client
-  regenerateClient();
+  // Initialize MQTT versions model
+  m_mqttVersions.insert(tr("MQTT 3.1"), QMqttClient::MQTT_3_1);
+  m_mqttVersions.insert(tr("MQTT 3.1.1"), QMqttClient::MQTT_3_1_1);
+  m_mqttVersions.insert(tr("MQTT 5.0"), QMqttClient::MQTT_5_0);
 
-  // Send data periodically & reset statistics when disconnected/connected to a
-  connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
-          &MQTT::Client::sendFrame);
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this,
-          &MQTT::Client::resetStatistics);
+  // Initialize SSL protocols model
+  m_sslProtocols.insert(tr("TLS 1.2"), QSsl::TlsV1_2);
+  m_sslProtocols.insert(tr("TLS 1.3"), QSsl::TlsV1_3);
+  m_sslProtocols.insert(tr("TLS 1.3 or Later"), QSsl::TlsV1_3OrLater);
+  m_sslProtocols.insert(tr("DTLS 1.2 or Later"), QSsl::DtlsV1_2OrLater);
+  m_sslProtocols.insert(tr("Any Protocol"), QSsl::AnyProtocol);
+  m_sslProtocols.insert(tr("Secure Protocols Only"), QSsl::SecureProtocols);
 
-  // Disconenct from current IO connection when MQTT client is subscribed
-  connect(this, &MQTT::Client::connectedChanged, this, [=] {
-    if (isSubscribed())
-    {
-      if (IO::Manager::instance().connected())
-        IO::Manager::instance().disconnectDevice();
-    }
-  });
+  // Initialize SSL peer verify modes model
+  m_peerVerifyModes.insert(tr("None"), QSslSocket::VerifyNone);
+  m_peerVerifyModes.insert(tr("Query Peer"), QSslSocket::QueryPeer);
+  m_peerVerifyModes.insert(tr("Verify Peer"), QSslSocket::VerifyPeer);
+  m_peerVerifyModes.insert(tr("Auto Verify Peer"), QSslSocket::AutoVerifyPeer);
+
+  // Set SSL and MQTT handlers into a known state
+  m_client.setProtocolVersion(QMqttClient::MQTT_5_0);
+  m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
+  m_sslConfiguration.setPeerVerifyMode(QSslSocket::QueryPeer);
 }
 
-/**
- * Destructor function
- */
-MQTT::Client::~Client()
-{
-  delete m_client;
-}
-
-/**
- * Returns a pointer to the only instance of this class
- */
 MQTT::Client &MQTT::Client::instance()
 {
-  static Client singleton;
-  return singleton;
+  static Client instance;
+  return instance;
 }
 
-/**
- * Returns the quality-of-service option, available values:
- * - 0: at most once
- * - 1: at least once
- * - 2: exactly once
- */
-quint8 MQTT::Client::qos() const
+//------------------------------------------------------------------------------
+// Member access functions
+//------------------------------------------------------------------------------
+
+quint8 MQTT::Client::mode() const
 {
-  Q_ASSERT(m_client);
-  return m_client->willQos();
+  return m_mode;
 }
 
-/**
- * Returns @c true if the retain flag is enabled
- */
-bool MQTT::Client::retain() const
+bool MQTT::Client::isConnected() const
 {
-  Q_ASSERT(m_client);
-  return m_client->willRetain();
+  return m_client.state() == QMqttClient::Connected;
 }
 
-/**
- * Returns the TCP port number used for the MQTT connection
- */
+bool MQTT::Client::isPublisher() const
+{
+  return m_mode == 1;
+}
+
+bool MQTT::Client::isSubscriber() const
+{
+  return m_mode == 0;
+}
+
+bool MQTT::Client::cleanSession() const
+{
+  return m_client.cleanSession();
+}
+
+QString MQTT::Client::clientId() const
+{
+  return m_client.clientId();
+}
+
+QString MQTT::Client::hostname() const
+{
+  return m_client.hostname();
+}
+
+QString MQTT::Client::username() const
+{
+  return m_client.username();
+}
+
+QString MQTT::Client::password() const
+{
+  return m_client.password();
+}
+
+QString MQTT::Client::topicFilter() const
+{
+  return m_topicFilter;
+}
+
+quint8 MQTT::Client::willQoS() const
+{
+  return m_client.willQoS();
+}
+
+bool MQTT::Client::willRetain() const
+{
+  return m_client.willRetain();
+}
+
+QString MQTT::Client::willTopic() const
+{
+  return m_client.willTopic();
+}
+
+QString MQTT::Client::willMessage() const
+{
+  return m_client.willMessage();
+}
+
 quint16 MQTT::Client::port() const
 {
-  Q_ASSERT(m_client);
-  return m_client->port();
+  return m_client.port();
 }
 
-/**
- * Returns the MQTT topic used
- */
-QString MQTT::Client::topic() const
+quint16 MQTT::Client::keepAlive() const
 {
-  return m_topic;
+  return m_client.keepAlive();
 }
 
-/**
- * Returns the selected SSL/TLS protocol index
- */
-int MQTT::Client::sslProtocol() const
+bool MQTT::Client::autoKeepAlive() const
 {
-  return m_sslProtocol;
+  return m_client.autoKeepAlive();
 }
 
-/**
- * Returns the index of the MQTT version, corresponding to the list returned by
- * the
- * @c mqttVersions() function.
- */
-int MQTT::Client::mqttVersion() const
+quint8 MQTT::Client::mqttVersion() const
 {
-  Q_ASSERT(m_client);
-
-  switch (m_client->version())
+  quint8 index = 0;
+  for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i)
   {
-    case QMQTT::V3_1_0:
-      return 0;
+    if (i.value() == m_client.protocolVersion())
       break;
-    case QMQTT::V3_1_1:
-      return 1;
-      break;
-    default:
-      return -1;
-      break;
+
+    ++index;
   }
+
+  return index;
 }
 
-/**
- * Returns @c true if SSL/TLS is enabled
- */
+const QStringList &MQTT::Client::mqttVersions() const
+{
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i)
+      list.append(i.key());
+  }
+
+  return list;
+}
+
 bool MQTT::Client::sslEnabled() const
 {
   return m_sslEnabled;
 }
 
-/**
- * Returns the client mode, which can have the following values:
- * - Publisher
- * - Subscriber
- */
-int MQTT::Client::clientMode() const
+quint8 MQTT::Client::sslProtocol() const
 {
-  return m_clientMode;
+  quint8 index = 0;
+  for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i)
+  {
+    if (i.value() == m_sslConfiguration.protocol())
+      break;
+
+    ++index;
+  }
+
+  return index;
 }
 
-/**
- * Returns the MQTT username
- */
-QString MQTT::Client::username() const
+int MQTT::Client::peerVerifyDepth() const
 {
-  Q_ASSERT(m_client);
-  return m_client->username();
+  return m_sslConfiguration.peerVerifyDepth();
 }
 
-/**
- * Returns the MQTT password
- */
-QString MQTT::Client::password() const
+quint8 MQTT::Client::peerVerifyMode() const
 {
-  Q_ASSERT(m_client);
-  return QString::fromUtf8(m_client->password());
+  quint8 index = 0;
+  for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i)
+  {
+    if (i.value() == m_sslConfiguration.peerVerifyMode())
+      break;
+
+    ++index;
+  }
+
+  return index;
 }
 
-/**
- * Returns the MQTT client ID
- */
-QString MQTT::Client::clientId() const
+const QStringList &MQTT::Client::caCertificates() const
 {
-  Q_ASSERT(m_client);
-  return m_client->clientId();
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(tr("Use System Database"));
+    list.append(tr("Load From Folder..."));
+  }
+
+  return list;
 }
 
-/**
- * Returns the IP address of the MQTT broker/server
- */
-QString MQTT::Client::host() const
+const QStringList &MQTT::Client::modes() const
 {
-  Q_ASSERT(m_client);
-  return m_client->hostName();
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    list.append(tr("MQTT Subscriber"));
+    list.append(tr("MQTT Publisher"));
+  }
+
+  return list;
 }
 
-/**
- * Returns the keep-alive timeout interval used by the MQTT client.
- */
-quint16 MQTT::Client::keepAlive() const
+const QStringList &MQTT::Client::sslProtocols() const
 {
-  Q_ASSERT(m_client);
-  return m_client->keepAlive();
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i)
+      list.append(i.key());
+  }
+
+  return list;
 }
 
-/**
- * Returns @c true if the MQTT module is currently performing a DNS lookup of
- * the MQTT broker/server domain.
- */
-bool MQTT::Client::lookupActive() const
+const QStringList &MQTT::Client::peerVerifyModes() const
 {
-  return m_lookupActive;
+  static QStringList list;
+  if (list.isEmpty())
+  {
+    for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i)
+      list.append(i.key());
+  }
+
+  return list;
 }
 
-/**
- * Returns @c true if the MQTT module is connected to the broker, the topic is
- * not empty and the client is configured to act as an MQTT subscriber.
- */
-bool MQTT::Client::isSubscribed() const
+QMqttClient &MQTT::Client::client()
 {
-  return isConnectedToHost() && !topic().isEmpty()
-         && clientMode() == ClientSubscriber;
+  return m_client;
 }
 
-/**
- * Returns @c true if the MQTT module is connected to a MQTT broker/server.
- */
-bool MQTT::Client::isConnectedToHost() const
-{
-  Q_ASSERT(m_client);
-  return m_client->isConnectedToHost();
-}
+//------------------------------------------------------------------------------
+// Public slots
+//------------------------------------------------------------------------------
 
-/**
- * Returns a list with the available quality-of-service modes.
- */
-QStringList MQTT::Client::qosLevels() const
-{
-  return QStringList{tr("0: At most once"), tr("1: At least once"),
-                     tr("2: Exactly once")};
-}
+void MQTT::Client::openConnection() {}
+void MQTT::Client::closeConnection() {}
 
-/**
- * Returns a list with the available client operation modes.
- */
-QStringList MQTT::Client::clientModes() const
-{
-  return QStringList{tr("Publisher"), tr("Subscriber")};
-}
-
-/**
- * Returns a list with the supported MQTT versions
- */
-QStringList MQTT::Client::mqttVersions() const
-{
-  return QStringList{"MQTT 3.1.0", "MQTT 3.1.1"};
-}
-
-/**
- * Returns a list with the supported SSL/TLS protocols
- */
-QStringList MQTT::Client::sslProtocols() const
-{
-#  if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-  return QStringList{tr("System default"), "TLS v1.0", "TLS v1.1", "TLS v1.2"};
-#  else
-  return QStringList{
-      tr("System default"),  "TLS v1.0",  "TLS v1.1",  "TLS v1.2",
-      "TLS v1.3 (or later)", "DTLS v1.0", "DTLS v1.2", "DTLS v1.2 (or later)"};
-#  endif
-}
-
-/**
- * Returns the path of the currently loaded *.ca file
- */
-QString MQTT::Client::caFilePath() const
-{
-  return m_caFilePath;
-}
-
-/**
- * Prompts the user to select a *.ca file and loads the certificate
- * into the SSL configuration.
- */
-void MQTT::Client::loadCaFile()
-{
-  // Prompt user to select a CA file
-  // clang-format off
-  auto path = QFileDialog::getOpenFileName(nullptr,
-                                           tr("Select CA file"),
-                                           QDir::homePath());
-  // clang-format on
-
-  // Try to load the *.ca file
-  loadCaFile(path);
-}
-
-/**
- * Tries to establish a TCP connection with the MQTT broker/server.
- */
-void MQTT::Client::connectToHost()
-{
-  Q_ASSERT(m_client);
-  m_client->connectToHost();
-}
-
-/**
- * Connects/disconnects the application from the current MQTT broker. This
- * function is used as a convenience for the connect/disconnect button.
- */
 void MQTT::Client::toggleConnection()
 {
-  if (isConnectedToHost())
-    disconnectFromHost();
+  if (isConnected())
+    closeConnection();
   else
-    connectToHost();
+    openConnection();
 }
 
-/**
- * Disconnects from the MQTT broker/server
- */
-void MQTT::Client::disconnectFromHost()
+void MQTT::Client::setMode(const quint8 mode)
 {
-  Q_ASSERT(m_client);
-  m_client->disconnectFromHost();
+  Q_ASSERT(mode >= 0 && mode <= 1);
+  m_mode = mode;
 }
 
-/**
- * Changes the quality of service level of the MQTT client.
- */
-void MQTT::Client::setQos(const quint8 qos)
-{
-  Q_ASSERT(m_client);
-  m_client->setWillQos(qos);
-  Q_EMIT qosChanged();
-}
-
-/**
- * Performs a DNS lookup for the given @a host name
- */
-void MQTT::Client::lookup(const QString &host)
-{
-  m_lookupActive = true;
-  Q_EMIT lookupActiveChanged();
-  QHostInfo::lookupHost(host.simplified(), this, &MQTT::Client::lookupFinished);
-}
-
-/**
- * Changes the TCP port number used for the MQTT communications.
- */
-void MQTT::Client::setPort(const quint16 port)
-{
-  Q_ASSERT(m_client);
-  m_client->setPort(port);
-  Q_EMIT portChanged();
-}
-
-/**
- * Changes the IP address of the MQTT broker/host
- */
-void MQTT::Client::setHost(const QString &host)
-{
-  Q_ASSERT(m_client);
-  m_client->setHostName(host);
-  Q_EMIT hostChanged();
-}
-
-/**
- * If set to @c true, the @c retain flag shall be appended to the MQTT message
- * so that new clients connecting to the broker will immediately receive the
- * last "good" message.
- */
-void MQTT::Client::setRetain(const bool retain)
-{
-  Q_ASSERT(m_client);
-  m_client->setWillRetain(retain);
-  Q_EMIT retainChanged();
-}
-
-/**
- * Changes the operation mode of the MQTT client. Possible values are:
- * - Publisher
- * - Subscriber
- */
-void MQTT::Client::setClientMode(const int mode)
-{
-  m_clientMode = static_cast<MQTTClientMode>(mode);
-  Q_EMIT clientModeChanged();
-}
-
-/**
- * Changes the MQTT topic used by the client.
- */
 void MQTT::Client::setTopic(const QString &topic)
 {
-  m_topic = topic;
-  Q_EMIT topicChanged();
+  m_topicFilter = topic;
+  m_topicName.setName(topic);
 }
 
-/**
- * Reads the CA file in the given @a path and loads it into the
- * SSL configuration handler for the MQTT connection.
- */
-void MQTT::Client::loadCaFile(const QString &path)
+void MQTT::Client::setClientId(const QString &id)
 {
-  // Save *.ca file path
-  m_caFilePath = path;
-  Q_EMIT caFilePathChanged();
-
-  // Empty path, abort
-  if (path.isEmpty())
-    return;
-
-  // Try to read file contents
-  QByteArray data;
-  QFile file(path);
-  if (file.open(QFile::ReadOnly))
-  {
-    data = file.readAll();
-    file.close();
-  }
-
-  // Read error, alert user
-  else
-  {
-    Misc::Utilities::showMessageBox(tr("Cannot open CA file!"),
-                                    file.errorString());
-    file.close();
-    return;
-  }
-
-  // Load certificate into SSL configuration
-  m_sslConfiguration.setCaCertificates(QSslCertificate::fromData(data));
-  regenerateClient();
+  m_client.setClientId(id);
 }
 
-/**
- * Changes the SSL protocol version to use for the MQTT connection.
- */
-void MQTT::Client::setSslProtocol(const int index)
+void MQTT::Client::setHostname(const QString &hostname)
 {
-#  if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-  switch (index)
-  {
-    case 0:
-      m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
-      break;
-    case 1:
-      m_sslConfiguration.setProtocol(QSsl::TlsV1_0);
-      break;
-    case 2:
-      m_sslConfiguration.setProtocol(QSsl::TlsV1_1);
-      break;
-    case 3:
-      m_sslConfiguration.setProtocol(QSsl::TlsV1_2);
-      break;
-    default:
-      break;
-  }
-#  else
-  switch (index)
-  {
-    case 0:
-      m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
-      break;
-    case 1:
-      DISABLE_DEPRECATED_WARNING
-      m_sslConfiguration.setProtocol(QSsl::TlsV1_0);
-      ENABLE_DEPRECATED_WARNING
-      break;
-    case 2:
-      DISABLE_DEPRECATED_WARNING
-      m_sslConfiguration.setProtocol(QSsl::TlsV1_1);
-      ENABLE_DEPRECATED_WARNING
-      break;
-    case 3:
-      m_sslConfiguration.setProtocol(QSsl::TlsV1_2);
-      break;
-    case 4:
-      m_sslConfiguration.setProtocol(QSsl::TlsV1_3OrLater);
-      break;
-    case 5:
-      DISABLE_DEPRECATED_WARNING
-      m_sslConfiguration.setProtocol(QSsl::DtlsV1_0);
-      ENABLE_DEPRECATED_WARNING
-      break;
-    case 6:
-      m_sslConfiguration.setProtocol(QSsl::DtlsV1_2);
-      break;
-    case 7:
-      m_sslConfiguration.setProtocol(QSsl::DtlsV1_2OrLater);
-      break;
-    default:
-      break;
-  }
-#  endif
-
-  regenerateClient();
-  Q_EMIT sslProtocolChanged();
+  m_client.setHostname(hostname);
 }
 
-/**
- * Enables/disables SSL/TLS communications with the MQTT broker
- */
+void MQTT::Client::setUsername(const QString &username)
+{
+  m_client.setUsername(username);
+}
+
+void MQTT::Client::setPassword(const QString &password)
+{
+  m_client.setPassword(password);
+}
+
+void MQTT::Client::setCleanSession(const bool cleanSession)
+{
+  m_client.setCleanSession(cleanSession);
+}
+
+void MQTT::Client::setWillQoS(const quint8 qos)
+{
+  m_client.setWillQoS(qos);
+}
+
+void MQTT::Client::setWillRetain(const bool retain)
+{
+  m_client.setWillRetain(retain);
+}
+
+void MQTT::Client::setWillTopic(const QString &topic)
+{
+  m_client.setWillTopic(topic);
+}
+
+void MQTT::Client::setWillMessage(const QString &message)
+{
+  m_client.setWillMessage(message.toUtf8());
+}
+
+void MQTT::Client::setPort(const quint16 port)
+{
+  m_client.setPort(port);
+}
+
+void MQTT::Client::setKeepAlive(const quint16 keepAlive)
+{
+  m_client.setKeepAlive(keepAlive);
+}
+
+void MQTT::Client::setAutoKeepAlive(const bool keepAlive)
+{
+  m_client.setAutoKeepAlive(keepAlive);
+}
+
+void MQTT::Client::setMqttVersion(const quint8 version)
+{
+  quint8 index = 0;
+  for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i)
+  {
+    if (index == version)
+    {
+      m_client.setProtocolVersion(i.value());
+      break;
+    }
+
+    ++index;
+  }
+}
+
+void MQTT::Client::addCaCertificates()
+{
+  auto path = QFileDialog::getExistingDirectory(
+      nullptr, tr("Select PEM Certificates Directory"),
+      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+
+  if (!path.isEmpty())
+    m_sslConfiguration.addCaCertificates(path);
+}
+
 void MQTT::Client::setSslEnabled(const bool enabled)
 {
   m_sslEnabled = enabled;
-  regenerateClient();
-  Q_EMIT sslEnabledChanged();
+  Q_EMIT sslConfigurationChanged();
 }
 
-/**
- * Changes the username used to connect to the MQTT broker/server
- */
-void MQTT::Client::setUsername(const QString &username)
+void MQTT::Client::setPeerVerifyDepth(const int depth)
 {
-  Q_ASSERT(m_client);
-  m_client->setUsername(username);
-  Q_EMIT usernameChanged();
+  m_sslConfiguration.setPeerVerifyDepth(depth);
+  Q_EMIT sslConfigurationChanged();
 }
 
-/**
- * Changes the password used to connect to the MQTT broker/server
- */
-void MQTT::Client::setPassword(const QString &password)
+void MQTT::Client::setSslProtocol(const quint8 protocol)
 {
-  Q_ASSERT(m_client);
-  m_client->setPassword(password.toUtf8());
-  Q_EMIT passwordChanged();
-}
-
-/**
- * Changes the client ID used for the MQTT connection.
- */
-void MQTT::Client::setClientId(const QString &clientId)
-{
-  Q_ASSERT(m_client);
-  m_client->setClientId(clientId);
-  Q_EMIT clientIdChanged();
-}
-
-/**
- * Sets the maximum time interval that is permitted to elapse between the point
- * at which the Client finishes transmitting one Control Packet and the point it
- * starts sending the next packet.
- */
-void MQTT::Client::setKeepAlive(const quint16 keepAlive)
-{
-  Q_ASSERT(m_client);
-  m_client->setKeepAlive(keepAlive);
-  Q_EMIT keepAliveChanged();
-}
-
-/**
- * Changes the MQTT version used to connect to the MQTT broker/server
- */
-void MQTT::Client::setMqttVersion(const int versionIndex)
-{
-  Q_ASSERT(m_client);
-
-  switch (versionIndex)
+  quint8 index = 0;
+  for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i)
   {
-    case 0:
-      m_client->setVersion(QMQTT::V3_1_0);
-      break;
-    case 1:
-      m_client->setVersion(QMQTT::V3_1_1);
-      break;
-    default:
-      break;
-  }
-
-  Q_EMIT mqttVersionChanged();
-}
-
-/**
- * Clears the JSON frames & sets the sent messages to 0
- */
-void MQTT::Client::resetStatistics()
-{
-  m_sentMessages = 0;
-}
-
-/**
- * Subscribe/unsubscripe to the set MQTT topic when the connection state is
- * changed.
- */
-void MQTT::Client::onConnectedChanged()
-{
-  Q_ASSERT(m_client);
-
-  if (isConnectedToHost())
-    m_client->subscribe(topic());
-  else
-    m_client->unsubscribe(topic());
-}
-
-/**
- * @brief Sends a data frame to the MQTT broker
- *
- * @param frame The frame containing the data to be sent.
- */
-void MQTT::Client::sendFrame(const QByteArray &frame)
-{
-  Q_ASSERT(m_client);
-
-  // Ignore if device is not connected
-  if (!IO::Manager::instance().connected())
-    return;
-
-  // Ignore if client is not connected
-  else if (!isConnectedToHost())
-    return;
-
-  // Ignore if mode is not set to publisher
-  else if (clientMode() != ClientPublisher)
-    return;
-
-  // Create & send MQTT message
-  if (!frame.isEmpty())
-  {
-    QMQTT::Message message(m_sentMessages, topic(), frame);
-    m_client->publish(message);
-    ++m_sentMessages;
-  }
-}
-
-/**
- * Sets the host IP address when the lookup finishes.
- * If the lookup fails, the error code/string shall be shown to the user in a
- * messagebox.
- */
-void MQTT::Client::lookupFinished(const QHostInfo &info)
-{
-  m_lookupActive = false;
-  Q_EMIT lookupActiveChanged();
-
-  if (info.error() == QHostInfo::NoError)
-  {
-    auto addresses = info.addresses();
-    if (addresses.count() >= 1)
+    if (index == protocol)
     {
-      setHost(addresses.first().toString());
-      return;
+      m_sslConfiguration.setProtocol(i.value());
+      Q_EMIT sslConfigurationChanged();
+      break;
     }
-  }
 
-  Misc::Utilities::showMessageBox(tr("IP address lookup error"),
-                                  info.errorString());
+    ++index;
+  }
 }
 
-/**
- * Displays any MQTT-related error with a GUI message-box
- */
-void MQTT::Client::onError(const QMQTT::ClientError error)
+void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
 {
-  QString str;
+  quint8 index = 0;
+  for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i)
+  {
+    if (index == verifyMode)
+    {
+      m_sslConfiguration.setPeerVerifyMode(i.value());
+      Q_EMIT sslConfigurationChanged();
+      break;
+    }
 
+    ++index;
+  }
+}
+
+//------------------------------------------------------------------------------
+// Private slots
+//------------------------------------------------------------------------------
+
+void MQTT::Client::publishMessage(const QByteArray &data)
+{
+  if (isConnected() && isPublisher() && !data.isEmpty())
+    m_client.publish(m_topicName, data);
+}
+
+void MQTT::Client::onStateChanged(QMqttClient::ClientState state)
+{
+  Q_EMIT connectedChanged();
+}
+
+void MQTT::Client::onErrorChanged(QMqttClient::ClientError error)
+{
+  QString title;
+  QString message;
   switch (error)
   {
-    case QMQTT::UnknownError:
-      str = tr("Unknown error");
+    case QMqttClient::NoError:
       break;
-    case QMQTT::SocketConnectionRefusedError:
-      str = tr("Connection refused");
+
+    case QMqttClient::InvalidProtocolVersion:
+      title = tr("Invalid MQTT Protocol Version");
+      message = tr("The MQTT broker rejected the connection due to an "
+                   "unsupported protocol version. Ensure that your client and "
+                   "broker support the same protocol version.");
       break;
-    case QMQTT::SocketRemoteHostClosedError:
-      str = tr("Remote host closed the connection");
+
+    case QMqttClient::IdRejected:
+      title = tr("Client ID Rejected");
+      message = tr("The broker rejected the client ID. It may be malformed, "
+                   "too long, or already in use. Try using a different client "
+                   "ID.");
       break;
-    case QMQTT::SocketHostNotFoundError:
-      str = tr("Host not found");
+
+    case QMqttClient::ServerUnavailable:
+      title = tr("MQTT Server Unavailable");
+      message = tr("The network connection was established, but the broker is "
+                   "currently unavailable. Verify the broker status and try "
+                   "again later.");
       break;
-    case QMQTT::SocketAccessError:
-      str = tr("Socket access error");
+
+    case QMqttClient::BadUsernameOrPassword:
+      title = tr("Authentication Error");
+      message = tr("The username or password provided is incorrect or "
+                   "malformed. Double-check your credentials and try again.");
       break;
-    case QMQTT::SocketResourceError:
-      str = tr("Socket resource error");
+
+    case QMqttClient::NotAuthorized:
+      title = tr("Authorization Error");
+      message = tr("The MQTT broker denied the connection due to insufficient "
+                   "permissions. Ensure that your account has the necessary "
+                   "access rights.");
       break;
-    case QMQTT::SocketTimeoutError:
-      str = tr("Socket timeout");
+
+    case QMqttClient::TransportInvalid:
+      title = tr("Network or Transport Error");
+      message = tr("A network or transport layer issue occurred, causing an "
+                   "unexpected connection failure. "
+                   "Check your network connection and broker settings.");
       break;
-    case QMQTT::SocketDatagramTooLargeError:
-      str = tr("Socket datagram too large");
+
+    case QMqttClient::ProtocolViolation:
+      title = tr("MQTT Protocol Violation");
+      message = tr("The client detected a violation of the MQTT protocol and "
+                   "closed the connection. Check your MQTT implementation for "
+                   "compliance.");
       break;
-    case QMQTT::SocketNetworkError:
-      str = tr("Network error");
+
+    case QMqttClient::UnknownError:
+      title = tr("Unknown Error");
+      message = tr("An unexpected error occurred. Check the logs for more "
+                   "details or restart the application.");
       break;
-    case QMQTT::SocketAddressInUseError:
-      str = tr("Address in use");
+
+    case QMqttClient::Mqtt5SpecificError:
+      title = tr("MQTT 5 Error");
+      message = tr("An MQTT protocol level 5 error occurred. "
+                   "Check the broker logs or reason codes for more details.");
       break;
-    case QMQTT::SocketAddressNotAvailableError:
-      str = tr("Address not available");
-      break;
-    case QMQTT::SocketUnsupportedSocketOperationError:
-      str = tr("Unsupported socket operation");
-      break;
-    case QMQTT::SocketUnfinishedSocketOperationError:
-      str = tr("Unfinished socket operation");
-      break;
-    case QMQTT::SocketProxyAuthenticationRequiredError:
-      str = tr("Proxy authentication required");
-      break;
-    case QMQTT::SocketSslHandshakeFailedError:
-      str = tr("SSL handshake failed");
-      break;
-    case QMQTT::SocketProxyConnectionRefusedError:
-      str = tr("Proxy connection refused");
-      break;
-    case QMQTT::SocketProxyConnectionClosedError:
-      str = tr("Proxy connection closed");
-      break;
-    case QMQTT::SocketProxyConnectionTimeoutError:
-      str = tr("Proxy connection timeout");
-      break;
-    case QMQTT::SocketProxyNotFoundError:
-      str = tr("Proxy not found");
-      break;
-    case QMQTT::SocketProxyProtocolError:
-      str = tr("Proxy protocol error");
-      break;
-    case QMQTT::SocketOperationError:
-      str = tr("Operation error");
-      break;
-    case QMQTT::SocketSslInternalError:
-      str = tr("SSL internal error");
-      break;
-    case QMQTT::SocketSslInvalidUserDataError:
-      str = tr("Invalid SSL user data");
-      break;
-    case QMQTT::SocketTemporaryError:
-      str = tr("Socket temprary error");
-      break;
-    case QMQTT::MqttUnacceptableProtocolVersionError:
-      str = tr("Unacceptable MQTT protocol");
-      break;
-    case QMQTT::MqttIdentifierRejectedError:
-      str = tr("MQTT identifier rejected");
-      break;
-    case QMQTT::MqttServerUnavailableError:
-      str = tr("MQTT server unavailable");
-      break;
-    case QMQTT::MqttBadUserNameOrPasswordError:
-      str = tr("Bad MQTT username or password");
-      break;
-    case QMQTT::MqttNotAuthorizedError:
-      str = tr("MQTT authorization error");
-      break;
-    case QMQTT::MqttNoPingResponse:
-      str = tr("MQTT no ping response");
-      break;
+
     default:
-      str = "";
       break;
   }
 
-  if (!str.isEmpty())
-    Misc::Utilities::showMessageBox(tr("MQTT client error"), str);
+  if (!title.isEmpty() && !message.isEmpty())
+    Misc::Utilities::showMessageBox(title, message);
 }
 
-/**
- * Displays the SSL errors that occur and allows the user to decide if he/she
- * wants to ignore those errors.
- */
-void MQTT::Client::onSslErrors(const QList<QSslError> &errors)
+void MQTT::Client::onAuthenticationRequested(
+    const QMqttAuthenticationProperties &p)
 {
-  Q_ASSERT(m_client);
-
-  Q_FOREACH (auto error, errors)
+  // Ensure MQTT 5.0 is used for extended authentication
+  if (m_client.protocolVersion() != QMqttClient::MQTT_5_0)
   {
-    auto ret = Misc::Utilities::showMessageBox(
-        tr("MQTT client SSL/TLS error, ignore?"), error.errorString(),
-        qApp->applicationDisplayName(),
-        QMessageBox::Ignore | QMessageBox::Abort);
-
-    if (ret == QMessageBox::Abort)
-    {
-      disconnectFromHost();
-      abort();
-    }
+    Misc::Utilities::showMessageBox(tr("Authentication Error"),
+                                    tr("Extended authentication is required, "
+                                       "but MQTT 5.0 is not enabled."));
+    return;
   }
 
-  m_client->ignoreSslErrors();
-}
+  // Retrieve authentication method requested by broker
+  QString authMethod = p.authenticationMethod();
+  if (authMethod.isEmpty())
+    authMethod = tr("Unknown");
 
-/**
- * Reads the given MQTT @a message and instructs the @c IO::Manager module to
- * process received data directly.
- */
-void MQTT::Client::onMessageReceived(const QMQTT::Message &message)
-{
-  // Ignore if client mode is not set to suscriber
-  if (clientMode() != ClientSubscriber)
+  // Alert user
+  Misc::Utilities::showMessageBox(
+      tr("MQTT Authentication Required"),
+      tr("The MQTT broker requires authentication using method: \"%1\".\n\n"
+         "Please provide the necessary credentials.")
+          .arg(authMethod));
+
+  // Get user name
+  bool ok;
+  const auto username
+      = QInputDialog::getText(nullptr, tr("Enter MQTT Username"),
+                              tr("Username:"), QLineEdit::Normal, "", &ok);
+  if (!ok || username.isEmpty())
     return;
 
-  // Get message data
-  auto mtopic = message.topic();
-  auto mpayld = message.payload();
-
-  // Ignore if topic is not equal to current topic
-  if (topic() != mtopic)
+  // Get password
+  const auto password
+      = QInputDialog::getText(nullptr, tr("Enter MQTT Password"),
+                              tr("Password:"), QLineEdit::Password, "", &ok);
+  if (!ok || password.isEmpty())
     return;
 
-  // Let IO manager process incoming data
-  QMetaObject::invokeMethod(
-      this, [=] { IO::Manager::instance().processPayload(mpayld); },
-      Qt::QueuedConnection);
+  // Fill authentication properties
+  QMqttAuthenticationProperties authProps;
+  authProps.setAuthenticationMethod(authMethod);
+  authProps.setAuthenticationData(
+      QString("%1:%2").arg(username, password).toUtf8().toBase64());
+
+  // Try authentication again
+  m_client.authenticate(authProps);
 }
 
-/**
- * Creates a new MQTT client instance, this approach is required in order to
- * allow the MQTT module to support both non-encrypted and TLS connections.
- */
-void MQTT::Client::regenerateClient()
+void MQTT::Client::onAuthenticationFinished(
+    const QMqttAuthenticationProperties &p)
 {
-  // Init. default MQTT configuration
-  quint8 qos = 0;
-  QString user = "";
-  bool retain = false;
-  QString password = "";
-  quint16 keepAlive = 60;
-  quint16 port = defaultPort();
-  QString host = defaultHost();
-  QMQTT::MQTTVersion version = QMQTT::V3_1_1;
-  QString clientId = QStringLiteral("SerialStudio");
 
-  // There is an existing client, copy its configuration and delete it from
-  // memory
-  if (m_client)
+  if (!p.reason().isEmpty())
   {
-    port = m_client->port();
-
-    qos = m_client->willQos();
-    user = m_client->username();
-    version = m_client->version();
-    clientId = m_client->clientId();
-    retain = m_client->willRetain();
-    keepAlive = m_client->keepAlive();
-    host = m_client->host().toString();
-    password = QString::fromUtf8(m_client->password());
-
-    disconnect(m_client, &QMQTT::Client::error, nullptr, 0);
-    disconnect(m_client, &QMQTT::Client::received, nullptr, 0);
-    disconnect(m_client, &QMQTT::Client::connected, nullptr, 0);
-    disconnect(m_client, &QMQTT::Client::sslErrors, nullptr, 0);
-    disconnect(m_client, &QMQTT::Client::disconnected, nullptr, 0);
-
-    m_client->disconnectFromHost();
-    delete m_client;
+    Misc::Utilities::showMessageBox(
+        tr("MQTT Authentication Failed"),
+        tr("Authentication failed: %.").arg(p.reason()));
   }
-
-  // Configure MQTT client depending on SSL/TLS configuration
-  if (sslEnabled())
-    m_client = new QMQTT::Client(host, port, m_sslConfiguration);
-  else
-    m_client = new QMQTT::Client(QHostAddress(host), port);
-
-  // Set client ID
-  m_client->setClientId(qApp->applicationDisplayName());
-
-  // Set MQTT client options
-  m_client->setWillQos(qos);
-  m_client->setUsername(user);
-  m_client->setVersion(version);
-  m_client->setClientId(clientId);
-  m_client->setWillRetain(retain);
-  m_client->setKeepAlive(keepAlive);
-  m_client->setPassword(password.toUtf8());
-
-  // Connect signals/slots
-  connect(m_client, &QMQTT::Client::error, this, &MQTT::Client::onError);
-  connect(m_client, &QMQTT::Client::sslErrors, this,
-          &MQTT::Client::onSslErrors);
-  connect(m_client, &QMQTT::Client::received, this,
-          &MQTT::Client::onMessageReceived);
-  connect(m_client, &QMQTT::Client::connected, this,
-          &MQTT::Client::connectedChanged);
-  connect(m_client, &QMQTT::Client::connected, this,
-          &MQTT::Client::onConnectedChanged);
-  connect(m_client, &QMQTT::Client::disconnected, this,
-          &MQTT::Client::connectedChanged);
-  connect(m_client, &QMQTT::Client::disconnected, this,
-          &MQTT::Client::onConnectedChanged);
 }
 
 #endif
