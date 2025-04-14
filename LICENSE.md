@@ -51,8 +51,8 @@ For business or professional use of the official **precompiled binary**, a Comme
 - You may not create a competing product based on Serial Studio without a separate licensing agreement.
 - All rights not expressly granted remain with the original author.
 
-> [!IMPORTANT]  
-> **Again:** the commercial license only covers the distributed binary.  
+> [!NOTE]  
+> The commercial license only covers the distributed binary.  
 > If you access the source code, your use is governed exclusively by the GPLv3.
 
 ## Additional Notes
