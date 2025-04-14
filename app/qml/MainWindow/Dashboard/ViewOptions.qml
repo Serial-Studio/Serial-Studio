@@ -371,20 +371,26 @@ Widgets.Pane {
           //
           Label {
             text: qsTr("Show Area Under Plots:") + " "
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)
           } CheckBox {
             id: areaUnderPlot
             implicitHeight: 18
             Layout.leftMargin: -8
             Layout.alignment: Qt.AlignLeft
             checked: Cpp_UI_Dashboard.showAreaUnderPlots
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)
             onCheckedChanged: {
               if (checked !== Cpp_UI_Dashboard.showAreaUnderPlots)
                 Cpp_UI_Dashboard.showAreaUnderPlots = checked
             }
           } Item {
-            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1)
           }
         }
 

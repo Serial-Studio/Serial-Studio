@@ -91,9 +91,4 @@ Item {
       color: Qt.rgba(root.color.r, root.color.g, root.color.b, 0.2)
     }
   }
-
-  MouseArea {
-    anchors.fill: parent
-    acceptedButtons: Qt.NoButton
-  }
 }

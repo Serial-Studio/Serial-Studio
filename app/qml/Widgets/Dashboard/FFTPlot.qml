@@ -41,7 +41,12 @@ Item {
     repeat: true
     interval: 1000 / 24
     running: root.visible
-    onTriggered: root.model.draw(lineSeries)
+    onTriggered: {
+      root.model.draw(upperSeries)
+      lowerSeries.clear()
+      lowerSeries.append(root.model.minX, root.model.minY)
+      lowerSeries.append(root.model.maxX, root.model.minY)
+    }
   }
 
   //
@@ -60,13 +65,30 @@ Item {
     xLabel: qsTr("Frequency (Hz)")
     xAxis.tickInterval: root.model.xTickInterval
     yAxis.tickInterval: root.model.yTickInterval
-    Component.onCompleted: graph.addSeries(lineSeries)
+    Component.onCompleted: {
+      graph.addSeries(areaSeries)
+      graph.addSeries(upperSeries)
+      graph.addSeries(lowerSeries)
+    }
 
-    //
-    // Curve element
-    //
     LineSeries {
-      id: lineSeries
+      id: upperSeries
+      width: 2
+    }
+
+    LineSeries {
+      id: lowerSeries
+      width: 0
+      visible: false
+    }
+
+    AreaSeries {
+      id: areaSeries
+      upperSeries: upperSeries
+      lowerSeries: lowerSeries
+      borderColor: "transparent"
+      visible: Cpp_UI_Dashboard.showAreaUnderPlots
+      color: Qt.rgba(root.color.r, root.color.g, root.color.b, 0.2)
     }
   }
 }
