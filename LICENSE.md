@@ -79,4 +79,5 @@ Users modifying the GPLv3 version are responsible for maintaining compatibility 
 ## For More Information
 
 Learn more or purchase a commercial license: [https://serial-studio.com](https://serial-studio.com)
+
 Licensing questions or custom inquiries: [alex@serial-studio.com](mailto:alex@serial-studio.com)
