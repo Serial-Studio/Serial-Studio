@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
@@ -72,12 +72,17 @@ class Console : public QObject
   Q_PROPERTY(QStringList displayModes
              READ displayModes
              NOTIFY languageChanged)
+  Q_PROPERTY(int scrollback
+             READ scrollback
+             WRITE setScrollback
+             NOTIFY scrollbackChanged)
   // clang-format on
 
 signals:
   void echoChanged();
   void dataModeChanged();
   void languageChanged();
+  void scrollbackChanged();
   void lineEndingChanged();
   void displayModeChanged();
   void historyItemChanged();
@@ -121,6 +126,7 @@ public:
   [[nodiscard]] bool echo() const;
   [[nodiscard]] bool showTimestamp() const;
 
+  [[nodiscard]] int scrollback() const;
   [[nodiscard]] DataMode dataMode() const;
   [[nodiscard]] LineEnding lineEnding() const;
   [[nodiscard]] DisplayMode displayMode() const;
@@ -142,6 +148,7 @@ public slots:
   void setupExternalConnections();
   void send(const QString &data);
   void setEcho(const bool enabled);
+  void setScrollback(const int lines);
   void setShowTimestamp(const bool enabled);
   void setDataMode(const IO::Console::DataMode &mode);
   void setLineEnding(const IO::Console::LineEnding &mode);
@@ -163,6 +170,7 @@ private:
   LineEnding m_lineEnding;
   DisplayMode m_displayMode;
 
+  int m_scrollback;
   int m_historyItem;
 
   bool m_echo;

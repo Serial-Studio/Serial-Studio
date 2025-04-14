@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <QPainter>
@@ -100,6 +100,8 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
   // Receive data from the IO::Console handler
   connect(&IO::Console::instance(), &IO::Console::displayString, this,
           &Widgets::Terminal::append, Qt::QueuedConnection);
+  connect(&IO::Console::instance(), &IO::Console::scrollbackChanged, this,
+          &Widgets::Terminal::onScrollbackChanged, Qt::QueuedConnection);
 
   // Clear the screen when device is connected/disconnected
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] {
@@ -810,6 +812,16 @@ void Widgets::Terminal::onThemeChanged()
 }
 
 /**
+ * Reacts to the scrollback change event.
+ */
+void Widgets::Terminal::onScrollbackChanged()
+{
+  auto lines = IO::Console::instance().scrollback();
+  while (m_data.length() > lines - 1)
+    m_data.removeFirst();
+}
+
+/**
  * @brief Appends a string of data to the terminal, processing each character
  *        accordingly.
  *
@@ -874,6 +886,10 @@ void Widgets::Terminal::append(const QString &data)
  */
 void Widgets::Terminal::appendString(const QString &string)
 {
+  // Remove lines from scrollback
+  // while (m_data.length() > IO::Console::instance().scrollback() - 1)
+  //  m_data.removeFirst();
+
   // Register each character in the provided string
   foreach (QChar character, string)
   {
@@ -980,8 +996,7 @@ void Widgets::Terminal::removeStringFromCursor(const Direction direction,
 /**
  * @brief Initializes the terminal's data buffer.
  *
- * Clears the existing data buffer and reserves memory for 1024 * 100 lines of
- * terminal content.
+ * Clears the existing data buffer and reservers memory for the scrollback.
  *
  * This function is typically used to reset the terminal state, ensuring
  * efficient memory management for upcoming operations.
@@ -990,7 +1005,7 @@ void Widgets::Terminal::initBuffer()
 {
   m_data.clear();
   m_data.squeeze();
-  m_data.reserve(1024 * 1024);
+  m_data.reserve(IO::Console::instance().scrollback());
 }
 
 /**

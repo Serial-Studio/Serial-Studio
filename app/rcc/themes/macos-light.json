@@ -25,7 +25,7 @@
   "toolbar_bottom": "#f5f5f5",
   "toolbar_border": "#d0d0d0",
   "toolbar_separator": "#d0d0d0",
-  "toolbar_checked_button_opacity": 1.0,
+  "toolbar_checked_button_opacity": 0.7,
   "toolbar_checked_button_border": "#e2e2e2",
   "toolbar_checked_button_background": "#e7e7e7",
 

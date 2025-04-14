@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import QtCore
@@ -37,32 +37,67 @@ Widgets.Pane {
   icon: "qrc:/rcc/icons/panes/structure.svg"
 
   //
-  // Maps the slider position to points
-  // https://stackoverflow.com/a/846249
+  // Generate the list of allowed point values for the slider
+  // These are the values we want the user to be able to pick:
+  //  - From 10 to 100 → steps of 10
+  //  - From 200 to 1000 → steps of 100
+  //  - From 2000 to 10000 → steps of 1000
   //
-  function logslider(position) {
-    var minp = 0;
-    var maxp = 100;
-    var minv = Math.log(10);
-    var maxv = Math.log(10000);
-    var scale = (maxv - minv) / (maxp - minp);
-    var value = Math.exp(minv + scale * (position - minp));
-    var roundedValue = Math.round(value / 10) * 10;
-    return roundedValue.toFixed(0);
+  readonly property var allowedPoints: {
+    var i = 0;
+    var result = [];
+
+    for (i = 10; i <= 100; i += 10)
+      result.push(i);
+    for (i = 200; i <= 1000; i += 100)
+      result.push(i);
+    for (i = 2000; i <= 10000; i += 1000)
+      result.push(i);
+
+    return result;
   }
 
   //
-  // Maps the points value to the slider position
-  // https://stackoverflow.com/a/846249
+  // Precompute the positions that correspond to each allowed point value.
+  // Why? Because the slider is on a log scale (0–100), not a linear scale.
+  // We convert each point value to a slider position using the formula:
+  //    pos = (log(value) - log(min)) * scale
   //
-  function logposition(value) {
-    var minp = 0
-    var maxp = 100
-    var minv = Math.log(10)
-    var maxv = Math.log(10000)
-    var scale = (maxv - minv) / (maxp - minp)
-    var result = (Math.log(value) - minv) / scale + minp;
-    return result.toFixed(0)
+  readonly property var allowedPositions: {
+    var allowed = root.allowedPoints;
+    var minv = Math.log(10);
+    var maxv = Math.log(10000);
+    var scale = 100 / (maxv - minv);
+    var positions = [];
+
+    for (var i = 0; i < allowed.length; i++) {
+      var value = allowed[i];
+      var pos = (Math.log(value) - minv) * scale;
+      positions.push({ value: value, position: pos });
+    }
+
+    return positions;
+  }
+
+  //
+  // Given a slider position (0–100), find the closest allowed position from
+  // the precomputed list. This is used to snap the slider to valid values as
+  // the user moves it.
+  //
+  function snapToAllowedValue(position) {
+    var positions = root.allowedPositions;
+    var closest = positions[0];
+    var minDiff = Math.abs(position - closest.position);
+
+    for (var i = 1; i < positions.length; i++) {
+      var diff = Math.abs(position - positions[i].position);
+      if (diff < minDiff) {
+        closest = positions[i];
+        minDiff = diff;
+      }
+    }
+
+    return closest;
   }
 
   //
@@ -74,6 +109,7 @@ Widgets.Pane {
     property alias showLegends: legends.checked
     property alias decimalPlaces: decimalPlaces.value
     property alias axisOptions: axisVisibility.currentIndex
+    property alias showAreaUnderPlot: areaUnderPlot.checked
   }
 
   //
@@ -252,22 +288,40 @@ Widgets.Pane {
           // Number of plot points slider
           //
           Label {
-            text: qsTr("Points:")
+            text: qsTr("Points:") + " "
             visible: Cpp_UI_Dashboard.pointsWidgetVisible
           } Slider {
             id: plotPoints
             from: 0
             to: 100
+            stepSize: 0.1
+            implicitHeight: 18
             Layout.fillWidth: true
-            value: logposition(100)
             visible: Cpp_UI_Dashboard.pointsWidgetVisible
+
+            value: {
+              var val = Cpp_UI_Dashboard.points;
+              var minv = Math.log(10);
+              var maxv = Math.log(10000);
+              var scale = 100 / (maxv - minv);
+              return (Math.log(val) - minv) * scale;
+            }
+
+            onMoved: {
+              var snapped = snapToAllowedValue(value);
+              value = snapped.position;
+
+              if (Cpp_UI_Dashboard.points !== snapped.value)
+                Cpp_UI_Dashboard.points = snapped.value;
+            }
+
             onValueChanged: {
-              var log = logslider(value)
-              if (Cpp_UI_Dashboard.points !== log)
-                Cpp_UI_Dashboard.points = log
+              var snapped = snapToAllowedValue(value);
+              if (Cpp_UI_Dashboard.points !== snapped.value)
+                Cpp_UI_Dashboard.points = snapped.value;
             }
           } Label {
-            text: logslider(plotPoints.value)
+            text: snapToAllowedValue(plotPoints.value).value
             visible: Cpp_UI_Dashboard.pointsWidgetVisible
           }
 
@@ -275,13 +329,14 @@ Widgets.Pane {
           // Number of decimal places
           //
           Label {
-            text: qsTr("Decimal places:")
+            text: qsTr("Decimal places:") + " "
             visible: Cpp_UI_Dashboard.precisionWidgetVisible
           } Slider {
             id: decimalPlaces
             to: 6
             from: 0
             value: 2
+            implicitHeight: 18
             Layout.fillWidth: true
             visible: Cpp_UI_Dashboard.precisionWidgetVisible
             onValueChanged: Cpp_UI_Dashboard.precision = value
@@ -294,10 +349,11 @@ Widgets.Pane {
           // Show Legends
           //
           Label {
-            text: qsTr("Show Legends")
+            text: qsTr("Show Legends:") + " "
             visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
           } CheckBox {
             id: legends
+            implicitHeight: 18
             Layout.leftMargin: -8
             Layout.alignment: Qt.AlignLeft
             checked: Cpp_UI_Dashboard.showLegends
@@ -308,6 +364,27 @@ Widgets.Pane {
             }
           } Item {
             visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
+          }
+
+          //
+          // Show Area Under Plot
+          //
+          Label {
+            text: qsTr("Show Area Under Plots:") + " "
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1
+          } CheckBox {
+            id: areaUnderPlot
+            implicitHeight: 18
+            Layout.leftMargin: -8
+            Layout.alignment: Qt.AlignLeft
+            checked: Cpp_UI_Dashboard.showAreaUnderPlots
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1
+            onCheckedChanged: {
+              if (checked !== Cpp_UI_Dashboard.showAreaUnderPlots)
+                Cpp_UI_Dashboard.showAreaUnderPlots = checked
+            }
+          } Item {
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1
           }
         }
 

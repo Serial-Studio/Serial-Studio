@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include "ThemeManager.h"
@@ -43,7 +43,8 @@ Misc::ThemeManager::ThemeManager()
   // clang-format off
   const QStringList themes = {
     QStringLiteral("default"),
-#ifdef COMMERCIAL_BUILD
+    QStringLiteral("orbbyt-light"),
+    QStringLiteral("orbbyt-dark"),
     QStringLiteral("outdoor-day"),
     QStringLiteral("outdoor-night"),
     QStringLiteral("breeze-light"),
@@ -59,7 +60,6 @@ Misc::ThemeManager::ThemeManager()
     QStringLiteral("pulse"),
     QStringLiteral("resistance"),
     QStringLiteral("dominion"),
-#endif
   };
   // clang-format on
 
@@ -79,11 +79,7 @@ Misc::ThemeManager::ThemeManager()
   }
 
   // Set application theme
-#ifdef COMMERCIAL_BUILD
   setTheme(m_settings.value("Theme", 0).toInt());
-#else
-  setTheme(0);
-#endif
 
   // Automatically react to theme changes
   qApp->installEventFilter(this);

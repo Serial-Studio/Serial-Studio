@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import QtCore
@@ -34,7 +34,7 @@ Widgets.SmartWindow {
   category: "MainWindow"
   minimumWidth: layout.implicitWidth
   minimumHeight: layout.implicitHeight
-  title: qsTr("%1 - %2 (%3)").arg(documentTitle).arg(Cpp_AppName).arg(commercialBuild)
+  title: qsTr("%1 - %2").arg(documentTitle).arg(Cpp_AppName)
 
   //
   // Custom properties
@@ -43,8 +43,6 @@ Widgets.SmartWindow {
   property string documentTitle: ""
   property bool firstValidFrame: false
   property bool automaticUpdates: false
-  readonly property string commercialBuild: Cpp_CommercialBuild ? qsTr("Commercial") :
-                                                                  qsTr("Open Source")
 
   //
   // Save settings

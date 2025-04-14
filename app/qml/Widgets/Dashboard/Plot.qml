@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import QtQuick
@@ -41,13 +41,18 @@ Item {
     repeat: true
     interval: 1000 / 24
     running: root.visible
-    onTriggered: root.model.draw(lineSeries)
+    onTriggered: {
+      root.model.draw(upperSeries)
+      lowerSeries.clear()
+      lowerSeries.append(root.model.minX, root.model.minY)
+      lowerSeries.append(root.model.maxX, root.model.minY)
+    }
   }
 
   //
   // Plot widget
   //
-  Plot {
+  PlotWidget {
     id: plot
     anchors.margins: 8
     anchors.fill: parent
@@ -60,13 +65,35 @@ Item {
     xLabel: root.model.xLabel
     xAxis.tickInterval: root.model.xTickInterval
     yAxis.tickInterval: root.model.yTickInterval
-    Component.onCompleted: graph.addSeries(lineSeries)
-
-    //
-    // Curve element
-    //
-    LineSeries {
-      id: lineSeries
+    Component.onCompleted: {
+      graph.addSeries(areaSeries)
+      graph.addSeries(upperSeries)
+      graph.addSeries(lowerSeries)
     }
+
+    LineSeries {
+      id: upperSeries
+      width: 2
+    }
+
+    LineSeries {
+      id: lowerSeries
+      width: 0
+      visible: false
+    }
+
+    AreaSeries {
+      id: areaSeries
+      upperSeries: upperSeries
+      lowerSeries: lowerSeries
+      borderColor: "transparent"
+      visible: Cpp_UI_Dashboard.showAreaUnderPlots
+      color: Qt.rgba(root.color.r, root.color.g, root.color.b, 0.2)
+    }
+  }
+
+  MouseArea {
+    anchors.fill: parent
+    acceptedButtons: Qt.NoButton
   }
 }

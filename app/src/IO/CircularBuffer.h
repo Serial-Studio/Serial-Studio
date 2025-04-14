@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
@@ -51,6 +51,7 @@ public:
 
   void clear();
   void append(const T &data);
+  void setCapacity(const qsizetype capacity);
 
   [[nodiscard]] qsizetype size() const;
   [[nodiscard]] qsizetype freeSpace() const;
@@ -162,6 +163,17 @@ void IO::CircularBuffer<T, StorageType>::append(const T &data)
   }
 
   m_size += dataSize;
+}
+
+/**
+ * Clears the buffer and modifies it's maximum capacity.
+ */
+template<typename T, typename StorageType>
+void IO::CircularBuffer<T, StorageType>::setCapacity(const qsizetype capacity)
+{
+  clear();
+  m_capacity = capacity;
+  m_buffer.resize(capacity);
 }
 
 /**

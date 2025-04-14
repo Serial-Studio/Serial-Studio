@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
@@ -136,6 +136,7 @@ public slots:
 private slots:
   void toggleCursor();
   void onThemeChanged();
+  void onScrollbackChanged();
   void append(const QString &data);
   void appendString(const QString &string);
   void removeStringFromCursor(const Direction direction = RightDirection,

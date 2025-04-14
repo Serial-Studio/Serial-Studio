@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
-# SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 
 #-------------------------------------------------------------------------------
@@ -45,10 +45,12 @@ set(QT_MODULES
   Gui
   Qml
   Core
+  Mqtt
   Quick
   Graphs
   Widgets
   Location
+  SerialBus
   Bluetooth
   SerialPort
   Positioning
@@ -61,29 +63,17 @@ set(QT_LIBS
   Qt6::Svg
   Qt6::Gui
   Qt6::Qml
+  Qt6::Mqtt
   Qt6::Quick
   Qt6::Graphs
   Qt6::Widgets
   Qt6::Location
+  Qt6::SerialBus
   Qt6::Bluetooth
   Qt6::SerialPort
   Qt6::Positioning
   Qt6::QuickControls2
 )
-
-if (COMMERCIAL_BUILD)
-  set(QT_LIBS
-    ${QT_LIBS}
-    Qt6::Mqtt
-    Qt6::SerialBus
-  )
-
-  set(QT_MODULES
-    ${QT_MODULES}
-    Mqtt
-    SerialBus
-  )
-endif()
 
 find_package(
   Qt6 REQUIRED

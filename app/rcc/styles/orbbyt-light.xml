@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme version="1.0" name="Orbbyt Light">
+  <!-- General Colors -->
+  <style name="Text" foreground="#1e293b" background="#fcfcfd"/>
+  <style name="Selection" background="#3b82f6" foreground="#feffff"/>
+  <style name="LineNumber" foreground="#94a3b8" background="#fcfcfd"/>
+  <style name="CurrentLine" background="#f4f5f7"/>
+  <style name="CurrentLineNumber" foreground="#3b82f6" bold="true"/>
+  <style name="Occurrences" background="#e2e8f0"/>
+  <style name="SearchResult" background="#f3f6f9" foreground="#1e293b"/>
+
+  <!-- Syntax Highlighting -->
+  <style name="Keyword" foreground="#2563eb" bold="true"/>
+  <style name="Type" foreground="#8b5cf6"/>
+  <style name="Function" foreground="#f97316"/>
+  <style name="Macro" foreground="#facc15"/>
+  <style name="String" foreground="#16a34a"/>
+  <style name="Number" foreground="#dc2626"/>
+  <style name="Comment" foreground="#94a3b8" italic="true"/>
+  <style name="Label" foreground="#eab308"/>
+  <style name="Operator" foreground="#3b82f6"/>
+  <style name="Punctuation" foreground="#1e293b"/>
+  <style name="Preprocessor" foreground="#8b5cf6" italic="true"/>
+
+  <!-- Braces and Matching -->
+  <style name="Parentheses" background="#e0f2fe" foreground="#1e293b"/>
+  <style name="ParenthesesMismatch" background="#dc2626" foreground="#feffff"/>
+
+  <!-- Errors and Warnings -->
+  <style name="Warning" underlineColor="#facc15" underlineStyle="SingleUnderline"/>
+  <style name="Error" underlineColor="#dc2626" underlineStyle="SingleUnderline"/>
+  <style name="DisabledCode" foreground="#d1d5db" italic="true"/>
+
+  <!-- Diff Highlighting -->
+  <style name="AddedLine" foreground="#16a34a"/>
+  <style name="RemovedLine" foreground="#dc2626"/>
+  <style name="DiffContextLine" background="#f1f5f9"/>
+  <style name="DiffSourceLine" background="#f3f6f9"/>
+  <style name="DiffDestLine" background="#d9fbd9"/>
+</style-scheme>

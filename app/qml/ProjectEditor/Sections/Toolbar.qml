@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import QtQuick
@@ -138,6 +138,17 @@ Rectangle {
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_JSON_ProjectModel.openJsonFile()
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/open.svg"
+    }
+
+    //
+    // Separator
+    //
+    Rectangle {
+      width: 1
+      Layout.fillHeight: true
+      Layout.maximumHeight: 64
+      Layout.alignment: Qt.AlignVCenter
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
 
     //

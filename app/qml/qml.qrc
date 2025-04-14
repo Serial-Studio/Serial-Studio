@@ -47,7 +47,7 @@
         <file>Widgets/CircularSlider.qml</file>
         <file>Widgets/JSONDropArea.qml</file>
         <file>Widgets/Pane.qml</file>
-        <file>Widgets/Plot.qml</file>
+        <file>Widgets/PlotWidget.qml</file>
         <file>Widgets/SmartWindow.qml</file>
         <file>Widgets/VisualRange.qml</file>
         <file>DialogLoader.qml</file>

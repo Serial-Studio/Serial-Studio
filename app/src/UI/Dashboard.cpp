@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include "UI/Dashboard.h"
@@ -45,6 +45,7 @@ UI::Dashboard::Dashboard()
   , m_widgetCount(0)
   , m_showLegends(true)
   , m_updateRequired(false)
+  , m_showAreaUnderPlots(true)
   , m_axisVisibility(SerialStudio::AxisXY)
 {
   // clang-format off
@@ -55,7 +56,6 @@ UI::Dashboard::Dashboard()
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
-#ifdef COMMERCIAL_BUILD
   connect(
       &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] {
         const bool subscribed = MQTT::Client::instance().isSubscriber();
@@ -65,7 +65,6 @@ UI::Dashboard::Dashboard()
         if (subscribed || wasSubscribed)
           resetData();
       });
-#endif
 
   // Update the dashboard widgets at 24 Hz
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
@@ -175,6 +174,15 @@ bool UI::Dashboard::available() const
 bool UI::Dashboard::showLegends() const
 {
   return m_showLegends;
+}
+
+/**
+ * @brief Returns @c true whenever the user has enabled the option to show
+ *        an area under plot widgets.
+ */
+bool UI::Dashboard::showAreaUnderPlots() const
+{
+  return m_showAreaUnderPlots;
 }
 
 /**
@@ -660,6 +668,16 @@ void UI::Dashboard::resetData(const bool notify)
     Q_EMIT widgetCountChanged();
     Q_EMIT widgetVisibilityChanged();
   }
+}
+
+/**
+ * @brief Instructs plot widgets to display (or hide) the area under the line.
+ * @param enabled The new enabled setting.
+ */
+void UI::Dashboard::setShowAreaUnderPlots(const bool enabled)
+{
+  m_showAreaUnderPlots = enabled;
+  Q_EMIT showAreaUnderPlotsChanged();
 }
 
 /**

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
@@ -73,6 +73,7 @@ class Dashboard : public QObject
   Q_PROPERTY(QStringList availableWidgetIcons READ availableWidgetIcons NOTIFY widgetCountChanged)
   Q_PROPERTY(QStringList availableWidgetTitles READ availableWidgetTitles NOTIFY widgetCountChanged)
   Q_PROPERTY(QList<SerialStudio::DashboardWidget> availableWidgets READ availableWidgets NOTIFY widgetCountChanged)
+  Q_PROPERTY(bool showAreaUnderPlots READ showAreaUnderPlots WRITE setShowAreaUnderPlots NOTIFY showAreaUnderPlotsChanged)
   Q_PROPERTY(SerialStudio::AxisVisibility axisVisibility READ axisVisibility WRITE setAxisVisibility NOTIFY axisVisibilityChanged)
   // clang-format on
 
@@ -86,6 +87,7 @@ signals:
   void widgetCountChanged();
   void axisVisibilityChanged();
   void widgetVisibilityChanged();
+  void showAreaUnderPlotsChanged();
 
 private:
   explicit Dashboard();
@@ -101,6 +103,7 @@ public:
 
   [[nodiscard]] bool available() const;
   [[nodiscard]] bool showLegends() const;
+  [[nodiscard]] bool showAreaUnderPlots() const;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool precisionWidgetVisible() const;
   [[nodiscard]] bool axisOptionsWidgetVisible() const;
@@ -149,6 +152,7 @@ public slots:
   void setPrecision(const int precision);
   void setShowLegends(const bool enabled);
   void resetData(const bool notify = true);
+  void setShowAreaUnderPlots(const bool enabled);
   void setAxisVisibility(const SerialStudio::AxisVisibility option);
   void setWidgetVisible(const SerialStudio::DashboardWidget widget,
                         const int index, const bool visible);
@@ -166,6 +170,7 @@ private:
   int m_widgetCount;
   bool m_showLegends;
   bool m_updateRequired;
+  bool m_showAreaUnderPlots;
   SerialStudio::AxisVisibility m_axisVisibility;
 
   PlotDataX m_pltXAxis;

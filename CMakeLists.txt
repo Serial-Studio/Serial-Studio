@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
-# SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 
 cmake_minimum_required(VERSION 3.20)
@@ -41,7 +41,6 @@ find_package(
 #-------------------------------------------------------------------------------
 
 option(DEBUG_SANITIZER "Enable sanitizers for debug builds" OFF)
-option(COMMERCIAL_BUILD "Enable features that require Qt Commercial" OFF)
 option(PRODUCTION_OPTIMIZATION "Enable production optimization flags" OFF)
 
 #-------------------------------------------------------------------------------
@@ -74,10 +73,6 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
 add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 
-if(COMMERCIAL_BUILD)
-  add_compile_definitions(COMMERCIAL_BUILD)
-endif()
-
 #-------------------------------------------------------------------------------
 # Set UNIX friendly name for app & fix OpenSUSE builds
 #-------------------------------------------------------------------------------
@@ -98,7 +93,7 @@ if(PRODUCTION_OPTIMIZATION)
  # MinGW-specific settings
  if(WIN32 AND MINGW)
   add_compile_options(
-   -O3                            # Optimize for speed
+   -O2                            # Optimize for speed
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
    -fuse-linker-plugin            # Use LTO plugin
@@ -137,7 +132,7 @@ if(PRODUCTION_OPTIMIZATION)
  # macOS-specific settings
  elseif(APPLE)
   add_compile_options(
-   -O3                            # Optimize for speed
+   -O2                            # Optimize for speed
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
    -fvectorize                    # Enable loop vectorization
@@ -153,7 +148,7 @@ if(PRODUCTION_OPTIMIZATION)
  # Intel LLVM-based C++ Compiler
  elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
   add_compile_options(
-   -O3                            # Optimize for speed
+   -O2                            # Optimize for speed
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
    -qopenmp-simd                  # Add support for OpenMP
@@ -171,7 +166,7 @@ if(PRODUCTION_OPTIMIZATION)
  # Generic UNIX/Linux settings
  elseif(UNIX)
   add_compile_options(
-   -O3                            # Optimize for speed
+   -O2                            # Optimize for speed
    -Wall                          # Enable most warning messages
    -Wextra                        # Enable additional warning messages
    -fopenmp                       # Add support for OpenMP

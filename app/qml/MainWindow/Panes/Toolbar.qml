@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import QtQuick
@@ -249,19 +249,14 @@ Rectangle {
     //
     // MQTT Setup
     //
-    Loader {
-      active: Cpp_CommercialBuild
-      Layout.alignment: Qt.AlignVCenter
-
-      sourceComponent: Widgets.BigButton {
-        text: qsTr("MQTT")
-        onClicked: app.showMqttConfiguration()
-        icon.source: Cpp_MQTT_Client.isConnectedToHost ?
-                       (Cpp_MQTT_Client.clientMode === 1 ?
-                          "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
-                          "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
-                       "qrc:/rcc/icons/toolbar/mqtt.svg"
-      }
+    Widgets.BigButton {
+      text: qsTr("MQTT")
+      onClicked: app.showMqttConfiguration()
+      icon.source: Cpp_MQTT_Client.isConnectedToHost ?
+                     (Cpp_MQTT_Client.clientMode === 1 ?
+                        "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
+                        "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
+                     "qrc:/rcc/icons/toolbar/mqtt.svg"
     }
 
     //
@@ -271,7 +266,6 @@ Rectangle {
       implicitWidth: 1
       Layout.fillHeight: true
       Layout.maximumHeight: 64
-      visible: Cpp_CommercialBuild
       Layout.alignment: Qt.AlignVCenter
       color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
@@ -331,8 +325,7 @@ Rectangle {
       //
       // Enable/disable the connect button
       //
-      readonly property bool mqttConnected: Cpp_CommercialBuild ? Cpp_MQTT_Client.isSubscriber : false
-      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !mqttConnected
+      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !Cpp_MQTT_Client.isSubscriber
 
       //
       // Connect/disconnect device when button is clicked

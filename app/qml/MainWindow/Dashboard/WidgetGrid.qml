@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import QtQuick
@@ -42,9 +42,9 @@ Widgets.Pane {
     minCellWidth: 264
     cellHeightFactor: 2/3
     rowSpacing: grid.rowSpacing
-    containerWidth: flickable.width
     containerHeight: flickable.height
     columnSpacing: grid.columnSpacing
+    containerWidth: flickable.width - 8
     cellCount: Cpp_UI_Dashboard.totalWidgetCount
 
     onLayoutChanged: {
@@ -139,8 +139,9 @@ Widgets.Pane {
 
       anchors {
         fill: parent
-        margins: 8
-        topMargin: header.height + 8
+        margins: 4
+        rightMargin: 2
+        topMargin: header.height + 4
       }
 
       ScrollBar.vertical: ScrollBar {

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import QtQuick
@@ -84,11 +84,9 @@ Item {
       //
       Label {
         text: qsTr("Theme") + ":"
-        visible: Cpp_CommercialBuild
       } ComboBox {
         id: _themeCombo
         Layout.fillWidth: true
-        visible: Cpp_CommercialBuild
         currentIndex: Cpp_ThemeManager.theme
         model: Cpp_ThemeManager.availableThemes
         onCurrentIndexChanged: {
@@ -96,6 +94,24 @@ Item {
             Cpp_ThemeManager.setTheme(currentIndex)
         }
       }
+
+      //
+      // Console scrollback
+      //
+      /*Label {
+        text: qsTr("Scrollback (Lines)") + ":"
+      } SpinBox {
+        id: _scrollback
+        from: 100
+        to: 10000
+        editable: true
+        Layout.fillWidth: true
+        value: Cpp_IO_Console.scrollback
+        onValueChanged: {
+          if (Cpp_IO_Console.scrollback !== value)
+            Cpp_IO_Console.scrollback = value
+        }
+      }*/
 
       //
       // Plugins enabled
@@ -135,7 +151,7 @@ Item {
     // Spacer
     //
     Item {
-      Layout.minimumHeight: 16
+      Layout.minimumHeight: 8
     }
 
     //
@@ -170,6 +186,7 @@ Item {
     //
     Item {
       Layout.fillHeight: true
+      Layout.minimumHeight: 16
     }
   }
 }

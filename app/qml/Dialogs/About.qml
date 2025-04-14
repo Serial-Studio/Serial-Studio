@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later OR Commercial
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 import QtQuick
@@ -203,7 +203,6 @@ Window {
         opacity: 0.8
         Layout.fillWidth: true
         Layout.maximumWidth: 360
-        visible: !Cpp_CommercialBuild
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("%1 is free software: you can redistribute it and/or modify " +
                    "it under the terms of the GNU General Public License as " +
@@ -234,7 +233,6 @@ Window {
       Button {
         Layout.fillWidth: true
         text: qsTr("Make a Donation")
-        visible: !Cpp_CommercialBuild
         onClicked: donateDialog.show()
       }
 
