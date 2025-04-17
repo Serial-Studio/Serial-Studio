@@ -19,7 +19,7 @@ Like this project? Consider supporting it by purchasing the Pro version:
 → https://store.serial-studio.com/
 
 Pro includes awesome extras like:
-✓ Full MQTT support
+✓ MQTT support
 ✓ CANBus and Modbus decoding
 ✓ XY plotting and 3D visualization
 ✓ Business-friendly binary license (no GPL obligations)

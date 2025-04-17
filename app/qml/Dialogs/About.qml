@@ -232,7 +232,7 @@ Window {
 
       Button {
         Layout.fillWidth: true
-        text: qsTr("Make a Donation")
+        text: qsTr("Serial Studio Pro")
         onClicked: donateDialog.show()
       }
 

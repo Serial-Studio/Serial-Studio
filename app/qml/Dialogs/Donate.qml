@@ -31,9 +31,9 @@ Window {
   //
   // Window options
   //
-  title: qsTr("Donate")
   width: minimumWidth
   height: minimumHeight
+  title: qsTr("Support Serial Studio")
   minimumWidth: column.implicitWidth + 32
   maximumWidth: column.implicitWidth + 32
   minimumHeight: column.implicitHeight + root.titlebarHeight + 32
@@ -172,7 +172,7 @@ Window {
         Image {
           sourceSize: Qt.size(120, 120)
           Layout.alignment: Qt.AlignVCenter
-          source: "qrc:/rcc/images/donate-qr.svg"
+          source: "qrc:/rcc/images/buy-qr.svg"
 
           Rectangle {
             border.width: 2
@@ -207,7 +207,7 @@ Window {
             Layout.maximumWidth: title.implicitWidth
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
             text: qsTr("Serial Studio is free & open-source software supported by volunteers. " +
-                       "Consider donating or buying a commercial license to support development efforts :)")
+                       "Consider donating or obtaining a Pro license to support development efforts :)")
           }
 
           Item {
@@ -252,15 +252,15 @@ Window {
         }
 
         Button {
-          text: qsTr("Buy")
           highlighted: true
           Keys.onEnterPressed: clicked()
           Keys.onReturnPressed: clicked()
           Layout.alignment: Qt.AlignVCenter
           Component.onCompleted: forceActiveFocus()
+          text: " " + qsTr("Get Serial Studio Pro") + " "
           onClicked: {
             root.close()
-            Qt.openUrlExternally("https://www.serial-studio.com/")
+            Qt.openUrlExternally("https://store.serial-studio.com/")
           }
         }
       }

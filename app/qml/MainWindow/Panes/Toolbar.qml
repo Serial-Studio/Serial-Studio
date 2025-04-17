@@ -255,8 +255,8 @@ Rectangle {
       sourceComponent: Widgets.BigButton {
         text: qsTr("MQTT")
         onClicked: app.showMqttConfiguration()
-        icon.source: Cpp_MQTT_Client.isConnectedToHost ?
-                       (Cpp_MQTT_Client.clientMode === 1 ?
+        icon.source: Cpp_MQTT_Client.isConnected ?
+                       (Cpp_MQTT_Client.isSubscriber ?
                           "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
                           "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
                        "qrc:/rcc/icons/toolbar/mqtt.svg"
@@ -316,25 +316,35 @@ Rectangle {
     // Connect/Disconnect button
     //
     Widgets.BigButton {
-      checked: Cpp_IO_Manager.connected
       Layout.alignment: Qt.AlignVCenter
       implicitWidth: metrics.width + 16
       font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.minimumWidth: metrics.width + 16
       Layout.maximumWidth: metrics.width + 16
+      checked: Cpp_IO_Manager.connected || mqttSubscriber
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
 
       //
+      // Get MQTT status
+      //
+      readonly property bool mqttSubscriber: Cpp_QtCommercial_Available ? (Cpp_MQTT_Client.isConnected && Cpp_MQTT_Client.isSubscriber) : false
+
+      //
       // Enable/disable the connect button
       //
-      enabled: Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !Cpp_MQTT_Client.isSubscriber
+      enabled: (Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen) || mqttSubscriber
 
       //
       // Connect/disconnect device when button is clicked
       //
-      onClicked: Cpp_IO_Manager.toggleConnection()
+      onClicked: {
+        if (mqttSubscriber)
+          Cpp_MQTT_Client.toggleConnection()
+        else
+          Cpp_IO_Manager.toggleConnection()
+      }
 
       //
       // Obtain maximum width of the button

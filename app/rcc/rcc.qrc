@@ -181,8 +181,8 @@
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
-        <file>icons/project-editor/toolbar/save.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
+        <file>icons/project-editor/toolbar/save.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>
         <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
@@ -220,12 +220,12 @@
         <file>icons/toolbar/project-setup.svg</file>
         <file>icons/toolbar/structure.svg</file>
         <file>images/action.svg</file>
+        <file>images/appimage_icon.png</file>
+        <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
         <file>images/crosshair.svg</file>
-        <file>images/donate-qr.svg</file>
         <file>images/drag-and-drop.svg</file>
         <file>images/hammer.svg</file>
-        <file>images/appimage_icon.png</file>
         <file>images/icon-small@1x.png</file>
         <file>images/icon-small@2x.png</file>
         <file>images/icon@1x.png</file>
@@ -240,13 +240,19 @@
         <file>instruments/compass_background.svg</file>
         <file>instruments/compass_case.svg</file>
         <file>instruments/compass_needle.svg</file>
+        <file>messages/gpl3/Welcome_DE.txt</file>
+        <file>messages/gpl3/Welcome_EN.txt</file>
+        <file>messages/gpl3/Welcome_ES.txt</file>
+        <file>messages/gpl3/Welcome_FR.txt</file>
+        <file>messages/gpl3/Welcome_RU.txt</file>
+        <file>messages/gpl3/Welcome_ZH.txt</file>
+        <file>messages/pro/Welcome_DE.txt</file>
+        <file>messages/pro/Welcome_EN.txt</file>
+        <file>messages/pro/Welcome_ES.txt</file>
+        <file>messages/pro/Welcome_FR.txt</file>
+        <file>messages/pro/Welcome_RU.txt</file>
+        <file>messages/pro/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
-        <file>messages/Welcome_DE.txt</file>
-        <file>messages/Welcome_EN.txt</file>
-        <file>messages/Welcome_ES.txt</file>
-        <file>messages/Welcome_FR.txt</file>
-        <file>messages/Welcome_RU.txt</file>
-        <file>messages/Welcome_ZH.txt</file>
         <file>scripts/frame-parser.js</file>
         <file>styles/breeze-dark.xml</file>
         <file>styles/breeze-light.xml</file>
@@ -258,6 +264,8 @@
         <file>styles/dominion.xml</file>
         <file>styles/macos-dark.xml</file>
         <file>styles/macos-light.xml</file>
+        <file>styles/orbbyt-dark.xml</file>
+        <file>styles/orbbyt-light.xml</file>
         <file>styles/outdoor-day.xml</file>
         <file>styles/outdoor-night.xml</file>
         <file>styles/pulse.xml</file>
@@ -274,15 +282,13 @@
         <file>themes/dominion.json</file>
         <file>themes/macos-dark.json</file>
         <file>themes/macos-light.json</file>
+        <file>themes/orbbyt-dark.json</file>
+        <file>themes/orbbyt-light.json</file>
         <file>themes/outdoor-day.json</file>
         <file>themes/outdoor-night.json</file>
         <file>themes/pulse.json</file>
         <file>themes/resistance.json</file>
         <file>themes/yaru-dark.json</file>
         <file>themes/yaru-light.json</file>
-        <file>themes/orbbyt-dark.json</file>
-        <file>themes/orbbyt-light.json</file>
-        <file>styles/orbbyt-dark.xml</file>
-        <file>styles/orbbyt-light.xml</file>
     </qresource>
 </RCC>

@@ -1,0 +1,22 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+Bienvenue sur Serial Studio ! Pour commencer :
+1. Sélectionnez un port COM et un débit en bauds dans le volet des
+   dispositifs à droite.
+2. Si la connexion série est réussie et que les données sont correctement
+   interprétées, ce volet se fermera automatiquement, révélant le tableau de bord.
+3. Sinon, utilisez la Console pour dépanner et identifier le problème.
+
+Utilisez les boutons de la barre d'outils pour accéder aux fonctionnalités dont
+vous avez besoin.
+
+Si vous rencontrez des problèmes, veuillez les signaler ici :
+→ https://github.com/Serial-Studio/Serial-Studio/issues
+
+Pour des ressources supplémentaires, y compris la documentation et l'intégration
+avec vos projets embarqués, visitez le wiki :
+→ https://github.com/Serial-Studio/Serial-Studio/wiki
+
+Astuce : Utilisez l’Éditeur de Projet pour créer et modifier des projets.

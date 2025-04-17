@@ -1338,9 +1338,9 @@ void Widgets::Terminal::replaceData(qsizetype x, qsizetype y, QChar byte)
     byte = '.';
 
   // Replace or insert the character at the cursor position
-  if (x < currentLine.size())
+  if (x < currentLine.size() && x >= 0)
     currentLine[x] = byte;
-  else
+  else if (x >= 0)
     currentLine.append(byte);
 }
 

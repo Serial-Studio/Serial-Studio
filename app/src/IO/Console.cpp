@@ -592,6 +592,7 @@ QString IO::Console::plainTextStr(const QByteArray &data)
     printable |= std::isprint(static_cast<unsigned char>(data[i]));
     printable |= std::iscntrl(static_cast<unsigned char>(data[i]));
     printable |= std::isspace(static_cast<unsigned char>(data[i]));
+    printable &= (data[i] != '\0');
 
     if (printable)
       filteredData += data[i];

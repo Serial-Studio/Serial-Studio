@@ -29,11 +29,6 @@ Window {
   id: root
 
   //
-  // Custom properties
-  //
-  readonly property int year: new Date().getFullYear()
-
-  //
   // Window options
   //
   width: minimumWidth
@@ -110,20 +105,30 @@ Window {
   // Save settings
   //
   Settings {
-    property alias version: _version.currentIndex
-    property alias mode: _mode.currentIndex
+    category: "mqtt"
+
     property alias host: _host.text
     property alias port: _port.text
-    property alias qos: _qos.currentIndex
+    //property alias clientId: _clientID.text
     property alias keepAlive: _keepAlive.text
-    property alias topic: _topic.text
-    property alias retain: _retain.checked
-    property alias user: _user.text
+    property alias cleanSession: _cleanSession.checked
+
+    property alias username: _username.text
     property alias password: _password.text
-    property alias clientId: _clientId.text
-    property alias ssl: _ssl.checked
-    property alias certificate: _certificateMode.currentIndex
-    property alias protocol: _protocols.currentIndex
+
+    property alias version: _version.currentIndex
+    property alias mode: _mode.currentIndex
+    property alias topic: _topic.text
+
+    property alias willRetain: _willRetain.checked
+    property alias willQoS: _willQoS.currentIndex
+    property alias willTopic: _willTopic.text
+    property alias willMessage: _willMessage.text
+
+    property alias sslEnabled: _enableSSL.checked
+    property alias sslProtocol: _sslProtocol.currentIndex
+    property alias sslVerifyDepth: _verifyDepth.text
+    property alias sslVerifyMode: _verifyMode.currentIndex
   }
 
   //
@@ -132,6 +137,17 @@ Window {
   Shortcut {
     sequences: [StandardKey.Close]
     onActivated: root.close()
+  }
+
+  //
+  // Highlight MQTT topic control if backend requires it
+  //
+  Connections {
+    target: Cpp_MQTT_Client
+    function onHighlightMqttTopicControl() {
+      _tab.currentIndex = 2
+      _topic.forceActiveFocus()
+    }
   }
 
   //
@@ -162,462 +178,425 @@ Window {
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-    //
-    // Window controls
-    //
     ColumnLayout {
       id: column
-      spacing: 8
+      spacing: 12
       anchors.centerIn: parent
 
-      GroupBox {
+      //
+      // Tab bar
+      //
+      TabBar {
+        id: _tab
+        implicitHeight: 24
         Layout.fillWidth: true
 
-        background: Rectangle {
-          radius: 2
-          border.width: 1
-          color: Cpp_ThemeManager.colors["groupbox_background"]
-          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        TabButton {
+          text: qsTr("General")
+          height: _tab.height + 3
+          width: implicitWidth + 2 * 8
         }
 
-        GridLayout {
-          columns: 2
-          rowSpacing: 0
+        TabButton {
+          text: qsTr("Authentication")
+          height: _tab.height + 3
+          width: implicitWidth + 2 * 8
+        }
+
+        TabButton {
+          text: qsTr("MQTT Options")
+          height: _tab.height + 3
+          width: implicitWidth + 2 * 8
+        }
+
+        TabButton {
+          text: qsTr("SSL Properties")
+          height: _tab.height + 3
+          width: implicitWidth + 2 * 8
+        }
+      }
+
+      //
+      // Tab bar contents
+      //
+      StackLayout {
+        id: stack
+        clip: true
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        currentIndex: _tab.currentIndex
+        Layout.topMargin: -parent.spacing - 1
+        implicitHeight: Math.max(connectionSettings.implicitHeight,
+                                 authentication.implicitHeight,
+                                 mqttOptions.implicitHeight,
+                                 sslProperties.implicitHeight)
+
+        //
+        // Connection settings
+        //
+        Item {
+          id: connectionSettings
           Layout.fillWidth: true
-          columnSpacing: 8
+          Layout.fillHeight: true
+          implicitHeight: connectionSettingsLayout.implicitHeight + 16
 
-          //
-          // Version & mode titles
-          //
-          Label {
-            text: qsTr("Version") + ":"
-          } Label {
-            text: qsTr("Mode") + ":"
+          Rectangle {
+            radius: 2
+            border.width: 1
+            anchors.fill: parent
+            color: Cpp_ThemeManager.colors["groupbox_background"]
+            border.color: Cpp_ThemeManager.colors["groupbox_border"]
           }
 
-          //
-          // MQTT version
-          //
-          ComboBox {
-            id: _version
-            Layout.fillWidth: true
-            Layout.minimumWidth: 256
-            model: Cpp_MQTT_Client.mqttVersions
-            currentIndex: Cpp_MQTT_Client.mqttVersion
-            onCurrentIndexChanged: {
-              if (Cpp_MQTT_Client.mqttVersion !== currentIndex)
-                Cpp_MQTT_Client.mqttVersion = currentIndex
-            }
-          }
+          GridLayout {
+            id: connectionSettingsLayout
 
-          //
-          // Client mode version
-          //
-          ComboBox {
-            id: _mode
-            Layout.fillWidth: true
-            Layout.minimumWidth: 256
-            model: Cpp_MQTT_Client.clientModes
-            currentIndex: Cpp_MQTT_Client.clientMode
-            onCurrentIndexChanged: {
-              if (Cpp_MQTT_Client.clientMode !== currentIndex)
-                Cpp_MQTT_Client.clientMode = currentIndex
-            }
-          }
+            columns: 2
+            rowSpacing: 4
+            columnSpacing: 4
+            anchors.margins: 8
+            anchors.fill: parent
 
-          //
-          // Spacers
-          //
-          Item {
-            implicitHeight: 8
-          } Item {
-            implicitHeight: 8
-          }
-
-          //
-          // QOS Level & Keep Alive
-          //
-          Label {
-            opacity: enabled ? 1 : 0.5
-            text: qsTr("QOS Level") + ":"
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          } Label {
-            opacity: enabled ? 1 : 0.5
-            text: qsTr("Keep Alive (s)") + ":"
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          }
-
-          //
-          // QOS
-          //
-          ComboBox {
-            id: _qos
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            model: Cpp_MQTT_Client.qosLevels
-            currentIndex: Cpp_MQTT_Client.qos
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-
-            onCurrentIndexChanged: {
-              if (Cpp_MQTT_Client.qos !== currentIndex)
-                Cpp_MQTT_Client.qos = currentIndex
-            }
-          }
-
-          //
-          // Keep alive
-          //
-          TextField {
-            id: _keepAlive
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            placeholderText: Cpp_MQTT_Client.keepAlive
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-            Component.onCompleted: text = Cpp_MQTT_Client.keepAlive
-
-            onTextChanged: {
-              if (Cpp_MQTT_Client.keepAlive !== text && text.length > 0)
-                Cpp_MQTT_Client.keepAlive = text
-
-              if (text.length === 0)
-                Cpp_MQTT_Client.keepAlive = 1
-            }
-
-            validator: IntValidator {
-              bottom: 1
-              top: 65535
-            }
-          }
-
-          //
-          // Spacers
-          //
-          Item {
-            implicitHeight: 8
-          } Item {
-            implicitHeight: 8
-          }
-
-          //
-          // Host & port titles
-          //
-          Label {
-            text: qsTr("Host") + ":"
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          } Label {
-            text: qsTr("Port") + ":"
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          }
-
-          //
-          // Host
-          //
-          TextField {
-            id: _host
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-            placeholderText: Cpp_MQTT_Client.defaultHost
-
-            onTextChanged: {
-              if (Cpp_MQTT_Client.host !== text && text.length > 0)
-                Cpp_MQTT_Client.host = text
-
-              else if (text.length === 0)
-                Cpp_MQTT_Client.host = Cpp_MQTT_Client.defaultHost
-            }
-          }
-
-          //
-          // Port
-          //
-          TextField {
-            id: _port
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-            placeholderText: Cpp_MQTT_Client.defaultPort
-            Component.onCompleted: text = Cpp_MQTT_Client.port
-
-            onTextChanged: {
-              if (Cpp_MQTT_Client.port !== text && text.length > 0)
-                Cpp_MQTT_Client.port = text
-
-              if (text.length === 0)
-                Cpp_MQTT_Client.port = Cpp_MQTT_Client.defaultPort
-            }
-
-            validator: IntValidator {
-              bottom: 0
-              top: 65535
-            }
-          }
-
-          //
-          // Spacers
-          //
-          Item {
-            implicitHeight: 8
-          } Item {
-            implicitHeight: 8
-          }
-
-          //
-          // Topic & retain labels
-          //
-          Label {
-            text: qsTr("Topic") + ":"
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          } Label {
-            text: qsTr("Retain") + ":"
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          }
-
-          //
-          // Topic
-          //
-          TextField {
-            id: _topic
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            text: Cpp_MQTT_Client.topic
-            placeholderText: qsTr("MQTT Topic")
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-
-            onTextChanged: {
-              if (Cpp_MQTT_Client.topic !== text)
-                Cpp_MQTT_Client.topic = text
-            }
-          }
-
-          //
-          // Retain checkbox
-          //
-          CheckBox {
-            id: _retain
-            Layout.leftMargin: -6
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            text: qsTr("Add Retain Flag")
-            checked: Cpp_MQTT_Client.retain
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-
-            onCheckedChanged: {
-              if (Cpp_MQTT_Client.retain != checked)
-                Cpp_MQTT_Client.retain = checked
-            }
-          }
-
-          //
-          // Spacers
-          //
-          Item {
-            implicitHeight: 8
-          } Item {
-            implicitHeight: 8
-          }
-
-          //
-          // Username & password titles
-          //
-          Label {
-            text: qsTr("User") + ":"
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          } Label {
-            text: qsTr("Password") + ":"
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          }
-
-          //
-          // Username
-          //
-          TextField {
-            id: _user
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            text: Cpp_MQTT_Client.username
-            placeholderText: qsTr("MQTT Username")
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-
-            onTextChanged: {
-              if (Cpp_MQTT_Client.username !== text)
-                Cpp_MQTT_Client.username = text
-            }
-          }
-
-          //
-          // Password
-          //
-          RowLayout {
-            Layout.fillWidth: true
-            spacing: 8
-
+            Label { text: qsTr("Host") + ":" }
             TextField {
-              id: _password
+              id: _host
               Layout.fillWidth: true
-              opacity: enabled ? 1 : 0.5
-              echoMode: TextField.Password
-              text: Cpp_MQTT_Client.password
-              placeholderText: qsTr("MQTT Password")
-              enabled: !Cpp_MQTT_Client.isConnectedToHost
-
+              placeholderText: "127.0.0.1"
+              text: Cpp_MQTT_Client.hostname
               onTextChanged: {
-                if (Cpp_MQTT_Client.password !== text)
-                  Cpp_MQTT_Client.password = text
+                if (Cpp_MQTT_Client.hostname !== text)
+                  Cpp_MQTT_Client.hostname = text
               }
             }
 
-            Button {
-              checkable: true
-              icon.color: palette.text
-              Layout.maximumWidth: height
-              Layout.alignment: Qt.AlignVCenter
-              icon.source: "qrc:/rcc/icons/buttons/visibility.svg"
-              onCheckedChanged: _password.echoMode = (checked ? TextField.Normal :
-                                                                TextField.Password)
-            }
-          }
-
-          //
-          // Spacers
-          //
-          Item {
-            implicitHeight: 8
-          } Item {
-            implicitHeight: 8
-          }
-
-          //
-          // Client ID + SSL Switch
-          //
-          Label {
-            text: qsTr("Client ID:")
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          } Label {
-            text: qsTr("Enable SSL/TLS:")
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-          }
-
-          //
-          // Client ID
-          //
-          TextField {
-            id: _clientId
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            text: Cpp_MQTT_Client.clientId
-            placeholderText: qsTr("MQTT Client ID")
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-
-            onTextChanged: {
-              if (Cpp_MQTT_Client.clientId !== text)
-                Cpp_MQTT_Client.clientId = text
-            }
-          }
-
-          //
-          // SSL/TLS switch
-          //
-          Switch {
-            id: _ssl
-            opacity: enabled ? 1 : 0.5
-            Layout.leftMargin: -8
-            checked: Cpp_MQTT_Client.sslEnabled
-            enabled: !Cpp_MQTT_Client.isConnectedToHost
-
-            onCheckedChanged: {
-              if (Cpp_MQTT_Client.sslEnabled !== checked)
-                Cpp_MQTT_Client.sslEnabled = checked
-            }
-          }
-
-          //
-          // Spacers
-          //
-          Item {
-            implicitHeight: 8
-          } Item {
-            implicitHeight: 8
-          }
-
-          //
-          // SSL Protocol & certificate titles
-          //
-          Label {
-            text: qsTr("Protocol:")
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
-          } Label {
-            text: qsTr("Certificate:")
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
-          }
-
-          //
-          // SSL/TLS protocol selection
-          //
-          ComboBox {
-            id: _protocols
-            Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            model: Cpp_MQTT_Client.sslProtocols
-            enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
-
-            onCurrentIndexChanged: {
-              if (currentIndex !== Cpp_MQTT_Client.sslProtocol)
-                Cpp_MQTT_Client.sslProtocol = currentIndex
-            }
-          }
-
-          //
-          // Certificate selection
-          //
-          RowLayout {
-            spacing: 8
-            Layout.fillWidth: true
-
-            ComboBox {
-              id: _certificateMode
+            Label { text: qsTr("Port") + ":" }
+            TextField {
+              id: _port
               Layout.fillWidth: true
-              opacity: enabled ? 1 : 0.5
-              enabled: !Cpp_MQTT_Client.isConnectedToHost && _ssl.checked
-              model: [
-                qsTr("Use System Database"),
-                qsTr("Custom CA File")
-              ]
-
-              onCurrentIndexChanged: {
-                if (currentIndex === 0)
-                  Cpp_MQTT_Client.loadCaFile("")
+              placeholderText: "1883"
+              text: Cpp_MQTT_Client.port
+              inputMethodHints: Qt.ImhDigitsOnly
+              validator: IntValidator { bottom: 0; top: 65535 }
+              onTextChanged: {
+                if (Cpp_MQTT_Client.port !== parseInt(text))
+                  Cpp_MQTT_Client.port = parseInt(text)
               }
             }
 
-            Button {
-              icon.color: palette.text
-              opacity: enabled ? 1 : 0.5
-              Layout.maximumWidth: height
-              Layout.alignment: Qt.AlignVCenter
-              onClicked: Cpp_MQTT_Client.loadCaFile()
-              icon.source: "qrc:/rcc/icons/buttons/open.svg"
-              enabled: _certificateMode.currentIndex === 1  && _ssl.checked
+            /*Label { text: qsTr("Client ID") + ":" }
+            TextField {
+              id: _clientID
+              Layout.fillWidth: true
+              text: Cpp_MQTT_Client.clientId
+              onTextChanged: {
+                if (Cpp_MQTT_Client.clientId !== text)
+                  Cpp_MQTT_Client.clientId = text
+              }
+            }*/
+
+            Label { text: qsTr("Keep Alive (s)") + ":" }
+            TextField {
+              id: _keepAlive
+              Layout.fillWidth: true
+              text: Cpp_MQTT_Client.keepAlive.toString()
+              inputMethodHints: Qt.ImhDigitsOnly
+              validator: IntValidator { bottom: 1; top: 65535 }
+              onTextChanged: {
+                if (Cpp_MQTT_Client.keepAlive !== parseInt(text))
+                  Cpp_MQTT_Client.keepAlive = parseInt(text)
+              }
             }
+
+            Label { text: qsTr("Clean Session") + ":" }
+            Switch {
+              id: _cleanSession
+              Layout.leftMargin: -8
+              checked: Cpp_MQTT_Client.cleanSession
+              onCheckedChanged: {
+                if (Cpp_MQTT_Client.cleanSession !== checked)
+                  Cpp_MQTT_Client.cleanSession = checked
+              }
+            }
+
+            Item { Layout.fillHeight: true }
+            Item { Layout.fillHeight: true }
+          }
+        }
+
+        //
+        // Authentication
+        //
+        Item {
+          id: authentication
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          implicitHeight: authenticationLayout.implicitHeight + 16
+
+          Rectangle {
+            radius: 2
+            border.width: 1
+            anchors.fill: parent
+            color: Cpp_ThemeManager.colors["groupbox_background"]
+            border.color: Cpp_ThemeManager.colors["groupbox_border"]
           }
 
-          //
-          // Spacers
-          //
-          Item {
-            implicitHeight: 8
-          } Item {
-            implicitHeight: 8
+          GridLayout {
+            id: authenticationLayout
+
+            columns: 2
+            rowSpacing: 4
+            columnSpacing: 4
+            anchors.margins: 8
+            anchors.fill: parent
+
+            Label { text: qsTr("Username") + ":" }
+            TextField {
+              id: _username
+              Layout.fillWidth: true
+              text: Cpp_MQTT_Client.username
+              placeholderText: qsTr("MQTT Username")
+              onTextChanged: {
+                if (Cpp_MQTT_Client.username !== text)
+                  Cpp_MQTT_Client.username = text
+              }
+            }
+
+            Label { text: qsTr("Password") + ":" }
+            RowLayout {
+              spacing: 4
+              Layout.fillWidth: true
+
+              TextField {
+                id: _password
+                Layout.fillWidth: true
+                echoMode: TextInput.Password
+                text: Cpp_MQTT_Client.password
+                placeholderText: qsTr("MQTT Password")
+                onTextChanged: {
+                  if (Cpp_MQTT_Client.password !== text)
+                    Cpp_MQTT_Client.password = text
+                }
+              }
+
+              Button {
+                checkable: true
+                icon.color: palette.text
+                Layout.maximumWidth: height
+                Layout.alignment: Qt.AlignVCenter
+                icon.source: "qrc:/rcc/icons/buttons/visibility.svg"
+                onCheckedChanged: _password.echoMode = (checked ? TextField.Normal :
+                                                                  TextField.Password)
+              }
+            }
+
+            Item { Layout.fillHeight: true }
+            Item { Layout.fillHeight: true }
+          }
+        }
+
+        //
+        // MQTT options
+        //
+        Item {
+          id: mqttOptions
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          implicitHeight: mqttOptionsLayout.implicitHeight + 16
+
+          Rectangle {
+            radius: 2
+            border.width: 1
+            anchors.fill: parent
+            color: Cpp_ThemeManager.colors["groupbox_background"]
+            border.color: Cpp_ThemeManager.colors["groupbox_border"]
+          }
+
+          GridLayout {
+            id: mqttOptionsLayout
+
+            columns: 2
+            rowSpacing: 4
+            columnSpacing: 4
+            anchors.margins: 8
+            anchors.fill: parent
+
+            Label { text: qsTr("Version") + ":" }
+            ComboBox {
+              id: _version
+              Layout.fillWidth: true
+              model: Cpp_MQTT_Client.mqttVersions
+              currentIndex: Cpp_MQTT_Client.mqttVersion
+              onCurrentIndexChanged: {
+                if (Cpp_MQTT_Client.mqttVersion !== currentIndex)
+                  Cpp_MQTT_Client.mqttVersion = currentIndex
+              }
+            }
+
+            Label { text: qsTr("Mode") + ":" }
+            ComboBox {
+              id: _mode
+              Layout.fillWidth: true
+              model: Cpp_MQTT_Client.modes
+              currentIndex: Cpp_MQTT_Client.mode
+              onCurrentIndexChanged: {
+                if (Cpp_MQTT_Client.mode !== currentIndex)
+                  Cpp_MQTT_Client.mode = currentIndex
+              }
+            }
+
+            Label { text: qsTr("Topic") + ":" }
+            TextField {
+              id: _topic
+              Layout.fillWidth: true
+              text: Cpp_MQTT_Client.topicFilter
+              placeholderText: qsTr("e.g. sensors/temperature or home/+/status")
+              onTextChanged: {
+                if (Cpp_MQTT_Client.topicFilter !== text)
+                  Cpp_MQTT_Client.topicFilter = text
+              }
+            }
+
+            Label { text: qsTr("Will Retain") + ":" }
+            Switch {
+              id: _willRetain
+              Layout.leftMargin: -8
+              checked: Cpp_MQTT_Client.willRetain
+              onCheckedChanged: {
+                if (Cpp_MQTT_Client.willRetain !== checked)
+                  Cpp_MQTT_Client.willRetain = checked
+              }
+            }
+
+            Label { text: qsTr("Will QoS") + ":" }
+            ComboBox {
+              id: _willQoS
+              model: ["0", "1", "2"]
+              Layout.fillWidth: true
+              currentIndex: Cpp_MQTT_Client.willQoS
+              onCurrentIndexChanged: {
+                if (Cpp_MQTT_Client.willQoS !== currentIndex)
+                  Cpp_MQTT_Client.willQoS = currentIndex
+              }
+            }
+
+            Label { text: qsTr("Will Topic") + ":" }
+            TextField {
+              id: _willTopic
+              Layout.fillWidth: true
+              text: Cpp_MQTT_Client.willTopic
+              placeholderText: qsTr("e.g. device/alerts/offline")
+              onTextChanged: {
+                if (Cpp_MQTT_Client.willTopic !== text)
+                  Cpp_MQTT_Client.willTopic = text
+              }
+            }
+
+            Label { text: qsTr("Will Message") + ":" }
+            TextField {
+              id: _willMessage
+              Layout.fillWidth: true
+              text: Cpp_MQTT_Client.willMessage
+              placeholderText: qsTr("e.g. Device unexpectedly disconnected")
+              onTextChanged: {
+                if (Cpp_MQTT_Client.willMessage !== text)
+                  Cpp_MQTT_Client.willMessage = text
+              }
+            }
+
+            Item { Layout.fillHeight: true }
+            Item { Layout.fillHeight: true }
+          }
+        }
+
+        //
+        // SSL Properties
+        //
+        Item {
+          id: sslProperties
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          implicitHeight: sslPropertiesLayout.implicitHeight + 16
+
+          Rectangle {
+            radius: 2
+            border.width: 1
+            anchors.fill: parent
+            color: Cpp_ThemeManager.colors["groupbox_background"]
+            border.color: Cpp_ThemeManager.colors["groupbox_border"]
+          }
+
+          GridLayout {
+            id: sslPropertiesLayout
+
+            columns: 2
+            rowSpacing: 4
+            columnSpacing: 4
+            anchors.margins: 8
+            anchors.fill: parent
+
+            Label { text: qsTr("Enable SSL") + ":" }
+            Switch {
+              id: _enableSSL
+              Layout.leftMargin: -8
+              checked: Cpp_MQTT_Client.sslEnabled
+              onCheckedChanged: {
+                if (Cpp_MQTT_Client.sslEnabled !== checked)
+                  Cpp_MQTT_Client.sslEnabled = checked
+              }
+            }
+
+            Label { text: qsTr("SSL Protocol") + ":"
+              opacity: enabled ? 1 : 0.8
+              enabled: Cpp_MQTT_Client.sslEnabled
+            } ComboBox {
+              id: _sslProtocol
+              Layout.fillWidth: true
+              opacity: enabled ? 1 : 0.8
+              enabled: Cpp_MQTT_Client.sslEnabled
+              model: Cpp_MQTT_Client.sslProtocols
+              currentIndex: Cpp_MQTT_Client.sslProtocol
+              onCurrentIndexChanged: {
+                if (Cpp_MQTT_Client.sslProtocol !== currentIndex)
+                  Cpp_MQTT_Client.sslProtocol = currentIndex
+              }
+            }
+
+            Label { text: qsTr("Verify Depth") + ":"
+              opacity: enabled ? 1 : 0.8
+              enabled: Cpp_MQTT_Client.sslEnabled
+            } TextField {
+              id: _verifyDepth
+              Layout.fillWidth: true
+              opacity: enabled ? 1 : 0.8
+              enabled: Cpp_MQTT_Client.sslEnabled
+              text: Cpp_MQTT_Client.peerVerifyDepth.toString()
+              inputMethodHints: Qt.ImhDigitsOnly
+              validator: IntValidator { bottom: 0; top: 10 }
+              onTextChanged: {
+                if (Cpp_MQTT_Client.peerVerifyDepth !== parseInt(text))
+                  Cpp_MQTT_Client.peerVerifyDepth = parseInt(text)
+              }
+            }
+
+            Label {
+              text: qsTr("Verify Mode") + ":"
+              opacity: enabled ? 1 : 0.8
+              enabled: Cpp_MQTT_Client.sslEnabled
+            } ComboBox {
+              id: _verifyMode
+              Layout.fillWidth: true
+              opacity: enabled ? 1 : 0.8
+              enabled: Cpp_MQTT_Client.sslEnabled
+              model: Cpp_MQTT_Client.peerVerifyModes
+              currentIndex: Cpp_MQTT_Client.peerVerifyMode
+              onCurrentIndexChanged: {
+                if (Cpp_MQTT_Client.peerVerifyMode !== currentIndex)
+                  Cpp_MQTT_Client.peerVerifyMode = currentIndex
+              }
+            }
+
+            Item { Layout.fillHeight: true }
+            Item { Layout.fillHeight: true }
           }
         }
       }
@@ -626,14 +605,14 @@ Window {
       // Buttons
       //
       RowLayout {
-        spacing: 4
-        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignRight
+        spacing: 12
 
         Button {
           icon.width: 18
           icon.height: 18
+          text: qsTr("Close")
           onClicked: root.close()
-          text: qsTr("Close") + "  "
           Layout.alignment: Qt.AlignVCenter
           icon.source: "qrc:/rcc/icons/buttons/close.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
@@ -648,12 +627,15 @@ Window {
           icon.height: 18
           highlighted: true
           Layout.alignment: Qt.AlignVCenter
-          checked: Cpp_MQTT_Client.isConnectedToHost
+          checked: Cpp_MQTT_Client.isConnected
           onClicked: Cpp_MQTT_Client.toggleConnection()
           icon.color: Cpp_ThemeManager.colors["button_text"]
-          text: (checked ? qsTr("Disconnect") : qsTr("Connect")) + "  "
-          icon.source: checked ? "qrc:/rcc/icons/buttons/connected.svg" :
-                                 "qrc:/rcc/icons/buttons/disconnected.svg"
+          text: Cpp_MQTT_Client.isConnected ? qsTr("Disconnect") : qsTr("Connect")
+          icon.source: Cpp_MQTT_Client.isConnected ? "qrc:/rcc/icons/buttons/connected.svg" :
+                                                     "qrc:/rcc/icons/buttons/disconnected.svg"
+
+          opacity: enabled ? 1 : 0.8
+          enabled: Cpp_MQTT_Client.isSubscriber ? !Cpp_IO_Manager.connected : true
         }
       }
     }

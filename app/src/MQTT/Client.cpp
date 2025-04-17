@@ -64,8 +64,33 @@ MQTT::Client::Client()
   m_client.setProtocolVersion(QMqttClient::MQTT_5_0);
   m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
   m_sslConfiguration.setPeerVerifyMode(QSslSocket::QueryPeer);
+
+  // Configure signals/slots between QtMQTT and this module
+  connect(&m_client, &QMqttClient::stateChanged, this,
+          &MQTT::Client::onStateChanged);
+  connect(&m_client, &QMqttClient::errorChanged, this,
+          &MQTT::Client::onErrorChanged);
+  connect(&m_client, &QMqttClient::authenticationFinished, this,
+          &MQTT::Client::onAuthenticationFinished);
+  connect(&m_client, &QMqttClient::authenticationRequested, this,
+          &MQTT::Client::onAuthenticationRequested);
+  connect(&m_client, &QMqttClient::messageReceived, this,
+          &MQTT::Client::onMessageReceived);
+
+  // Publish incoming data frames
+  connect(&IO::Manager::instance(), &IO::Manager::dataReceived, this,
+          &MQTT::Client::publishMessage);
+
+  // Set default parameters
+  setPort(1883);
+  setPeerVerifyDepth(10);
+  setHostname("127.0.0.1");
 }
 
+/**
+ * @brief Returns the singleton instance of the MQTT Client.
+ * @return Reference to the shared MQTT::Client instance.
+ */
 MQTT::Client &MQTT::Client::instance()
 {
   static Client instance;
@@ -76,91 +101,145 @@ MQTT::Client &MQTT::Client::instance()
 // Member access functions
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Returns the current client mode (publisher or subscriber).
+ */
 quint8 MQTT::Client::mode() const
 {
   return m_mode;
 }
 
+/**
+ * @brief Checks if the client is currently connected to the broker
+ */
 bool MQTT::Client::isConnected() const
 {
   return m_client.state() == QMqttClient::Connected;
 }
 
+/**
+ * @brief Returns true if the client is in publisher mode.
+ */
 bool MQTT::Client::isPublisher() const
 {
   return m_mode == 1;
 }
 
+/**
+ * @brief Returns true if the client is in subscriber mode.
+ */
 bool MQTT::Client::isSubscriber() const
 {
   return m_mode == 0;
 }
 
+/**
+ * @brief Returns whether the MQTT clean session flag is set.
+ */
 bool MQTT::Client::cleanSession() const
 {
   return m_client.cleanSession();
 }
 
+/**
+ * @brief Returns the current MQTT client ID.
+ */
 QString MQTT::Client::clientId() const
 {
   return m_client.clientId();
 }
 
+/**
+ * @brief Returns the hostname of the MQTT broker.
+ */
 QString MQTT::Client::hostname() const
 {
   return m_client.hostname();
 }
 
+/**
+ * @brief Returns the username used for authentication.
+ */
 QString MQTT::Client::username() const
 {
   return m_client.username();
 }
 
+/**
+ * @brief Returns the password used for authentication.
+ */
 QString MQTT::Client::password() const
 {
   return m_client.password();
 }
 
+/**
+ * @brief Returns the MQTT topic filter being used.
+ */
 QString MQTT::Client::topicFilter() const
 {
   return m_topicFilter;
 }
 
+/**
+ * @brief Returns the QoS level for the "Will" message.
+ */
 quint8 MQTT::Client::willQoS() const
 {
   return m_client.willQoS();
 }
 
+/**
+ * @brief Returns whether the "Will" message should be retained.
+ */
 bool MQTT::Client::willRetain() const
 {
   return m_client.willRetain();
 }
 
+/**
+ * @brief Returns the topic for the "Will" message.
+ */
 QString MQTT::Client::willTopic() const
 {
   return m_client.willTopic();
 }
 
+/**
+ * @brief Returns the message content of the "Will" message.
+ */
 QString MQTT::Client::willMessage() const
 {
   return m_client.willMessage();
 }
 
+/**
+ * @brief Returns the port number used to connect to the broker.
+ */
 quint16 MQTT::Client::port() const
 {
   return m_client.port();
 }
 
+/**
+ * @brief Returns the keep-alive interval in seconds.
+ */
 quint16 MQTT::Client::keepAlive() const
 {
   return m_client.keepAlive();
 }
 
+/**
+ * @brief Returns whether automatic keep-alive is enabled.
+ */
 bool MQTT::Client::autoKeepAlive() const
 {
   return m_client.autoKeepAlive();
 }
 
+/**
+ * @brief Returns the index of the selected MQTT protocol version.
+ */
 quint8 MQTT::Client::mqttVersion() const
 {
   quint8 index = 0;
@@ -175,6 +254,9 @@ quint8 MQTT::Client::mqttVersion() const
   return index;
 }
 
+/**
+ * @brief Returns the list of supported MQTT protocol version names.
+ */
 const QStringList &MQTT::Client::mqttVersions() const
 {
   static QStringList list;
@@ -187,11 +269,17 @@ const QStringList &MQTT::Client::mqttVersions() const
   return list;
 }
 
+/**
+ * @brief Returns true if SSL is enabled for connections.
+ */
 bool MQTT::Client::sslEnabled() const
 {
   return m_sslEnabled;
 }
 
+/**
+ * @brief Returns the index of the currently selected SSL protocol.
+ */
 quint8 MQTT::Client::sslProtocol() const
 {
   quint8 index = 0;
@@ -206,11 +294,17 @@ quint8 MQTT::Client::sslProtocol() const
   return index;
 }
 
+/**
+ * @brief Returns the peer verify depth used in SSL configuration.
+ */
 int MQTT::Client::peerVerifyDepth() const
 {
   return m_sslConfiguration.peerVerifyDepth();
 }
 
+/**
+ * @brief Returns the index of the selected peer verification mode.
+ */
 quint8 MQTT::Client::peerVerifyMode() const
 {
   quint8 index = 0;
@@ -225,6 +319,9 @@ quint8 MQTT::Client::peerVerifyMode() const
   return index;
 }
 
+/**
+ * @brief Returns the available certificate authority (CA) options.
+ */
 const QStringList &MQTT::Client::caCertificates() const
 {
   static QStringList list;
@@ -237,6 +334,9 @@ const QStringList &MQTT::Client::caCertificates() const
   return list;
 }
 
+/**
+ * @brief Returns the list of supported client modes (Publisher/Subscriber).
+ */
 const QStringList &MQTT::Client::modes() const
 {
   static QStringList list;
@@ -249,6 +349,9 @@ const QStringList &MQTT::Client::modes() const
   return list;
 }
 
+/**
+ * @brief Returns the list of supported SSL protocols.
+ */
 const QStringList &MQTT::Client::sslProtocols() const
 {
   static QStringList list;
@@ -261,6 +364,9 @@ const QStringList &MQTT::Client::sslProtocols() const
   return list;
 }
 
+/**
+ * @brief Returns the list of supported SSL peer verification modes.
+ */
 const QStringList &MQTT::Client::peerVerifyModes() const
 {
   static QStringList list;
@@ -273,6 +379,9 @@ const QStringList &MQTT::Client::peerVerifyModes() const
   return list;
 }
 
+/**
+ * @brief Provides direct access to the underlying QMqttClient instance.
+ */
 QMqttClient &MQTT::Client::client()
 {
   return m_client;
@@ -282,9 +391,81 @@ QMqttClient &MQTT::Client::client()
 // Public slots
 //------------------------------------------------------------------------------
 
-void MQTT::Client::openConnection() {}
-void MQTT::Client::closeConnection() {}
+/**
+ * @brief Opens a connection to the MQTT broker.
+ *
+ * Configures the internal QMqttClient instance with the current parameters and
+ * attempts to establish a connection to the broker. If SSL is enabled, sets the
+ * appropriate SSL configuration.
+ */
+void MQTT::Client::openConnection()
+{
+  // Already connected, nothing to do
+  if (isConnected())
+    return;
 
+  // Verify that MQTT topic is set
+  if (m_topicFilter.isEmpty())
+  {
+    if (isPublisher())
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Missing MQTT Topic"),
+          tr("You must specify a topic before connecting as a publisher."),
+          tr("Configuration Error"));
+      Q_EMIT highlightMqttTopicControl();
+      return;
+    }
+
+    else
+    {
+      Misc::Utilities::showMessageBox(
+          tr("MQTT Topic Not Set"),
+          tr("You won't receive any messages until a topic is configured."),
+          tr("Configuration Warning"));
+      Q_EMIT highlightMqttTopicControl();
+    }
+  }
+
+  // Apply topic name if in publisher mode
+  if (isPublisher())
+  {
+    m_topicName.setName(m_topicFilter);
+    if (!m_topicName.isValid())
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Invalid MQTT Topic"),
+          tr("The topic \"%1\" is not valid.").arg(m_topicFilter),
+          tr("Configuration Error"));
+      Q_EMIT highlightMqttTopicControl();
+      return;
+    }
+  }
+
+  // Connect the client
+  if (m_sslEnabled)
+    m_client.connectToHostEncrypted(m_sslConfiguration);
+  else
+    m_client.connectToHost();
+}
+
+/**
+ * @brief Closes the current connection to the broker.
+ *
+ * Gracefully disconnects the internal QMqttClient. This is a no-op if the
+ * client is already disconnected.
+ */
+void MQTT::Client::closeConnection()
+{
+  if (!isConnected())
+    return;
+
+  m_client.disconnectFromHost();
+}
+
+/**
+ * @brief Toggles the connection state (connect/disconnect).
+ */
 void MQTT::Client::toggleConnection()
 {
   if (isConnected())
@@ -293,78 +474,139 @@ void MQTT::Client::toggleConnection()
     openConnection();
 }
 
+/**
+ * @brief Sets the client mode (0=subscriber, 1=publisher).
+ * @param mode Index of the desired mode.
+ */
 void MQTT::Client::setMode(const quint8 mode)
 {
   Q_ASSERT(mode >= 0 && mode <= 1);
   m_mode = mode;
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the topic for subscription or publishing.
+ * @param topic Topic name string.
+ */
 void MQTT::Client::setTopic(const QString &topic)
 {
   m_topicFilter = topic;
   m_topicName.setName(topic);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the MQTT client ID.
+ */
 void MQTT::Client::setClientId(const QString &id)
 {
   m_client.setClientId(id);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the broker hostname.
+ */
 void MQTT::Client::setHostname(const QString &hostname)
 {
   m_client.setHostname(hostname);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the username for authentication.
+ */
 void MQTT::Client::setUsername(const QString &username)
 {
   m_client.setUsername(username);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the password for authentication.
+ */
 void MQTT::Client::setPassword(const QString &password)
 {
   m_client.setPassword(password);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Enables or disables MQTT clean session flag.
+ */
 void MQTT::Client::setCleanSession(const bool cleanSession)
 {
   m_client.setCleanSession(cleanSession);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the QoS level for the "Will" message.
+ */
 void MQTT::Client::setWillQoS(const quint8 qos)
 {
   m_client.setWillQoS(qos);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Enables or disables message retention for the "Will" message.
+ */
 void MQTT::Client::setWillRetain(const bool retain)
 {
   m_client.setWillRetain(retain);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the topic for the "Will" message.
+ */
 void MQTT::Client::setWillTopic(const QString &topic)
 {
   m_client.setWillTopic(topic);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the message content for the "Will" message.
+ */
 void MQTT::Client::setWillMessage(const QString &message)
 {
   m_client.setWillMessage(message.toUtf8());
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the connection port for the broker.
+ */
 void MQTT::Client::setPort(const quint16 port)
 {
   m_client.setPort(port);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the keep-alive interval.
+ */
 void MQTT::Client::setKeepAlive(const quint16 keepAlive)
 {
   m_client.setKeepAlive(keepAlive);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Enables or disables automatic keep-alive.
+ */
 void MQTT::Client::setAutoKeepAlive(const bool keepAlive)
 {
   m_client.setAutoKeepAlive(keepAlive);
+  Q_EMIT mqttConfigurationChanged();
 }
 
+/**
+ * @brief Sets the MQTT protocol version by index.
+ */
 void MQTT::Client::setMqttVersion(const quint8 version)
 {
   quint8 index = 0;
@@ -373,6 +615,7 @@ void MQTT::Client::setMqttVersion(const quint8 version)
     if (index == version)
     {
       m_client.setProtocolVersion(i.value());
+      Q_EMIT mqttConfigurationChanged();
       break;
     }
 
@@ -380,6 +623,9 @@ void MQTT::Client::setMqttVersion(const quint8 version)
   }
 }
 
+/**
+ * @brief Opens a file dialog to add CA certificates to the SSL config.
+ */
 void MQTT::Client::addCaCertificates()
 {
   auto path = QFileDialog::getExistingDirectory(
@@ -390,18 +636,27 @@ void MQTT::Client::addCaCertificates()
     m_sslConfiguration.addCaCertificates(path);
 }
 
+/**
+ * @brief Enables or disables SSL usage.
+ */
 void MQTT::Client::setSslEnabled(const bool enabled)
 {
   m_sslEnabled = enabled;
   Q_EMIT sslConfigurationChanged();
 }
 
+/**
+ * @brief Sets the peer verification depth in SSL config.
+ */
 void MQTT::Client::setPeerVerifyDepth(const int depth)
 {
   m_sslConfiguration.setPeerVerifyDepth(depth);
   Q_EMIT sslConfigurationChanged();
 }
 
+/**
+ * @brief Sets the SSL protocol by index.
+ */
 void MQTT::Client::setSslProtocol(const quint8 protocol)
 {
   quint8 index = 0;
@@ -418,6 +673,9 @@ void MQTT::Client::setSslProtocol(const quint8 protocol)
   }
 }
 
+/**
+ * @brief Sets the peer verification mode by index.
+ */
 void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
 {
   quint8 index = 0;
@@ -438,17 +696,48 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
 // Private slots
 //------------------------------------------------------------------------------
 
+/**
+ * @brief Publishes a message to the broker if connected and in publisher mode.
+ */
 void MQTT::Client::publishMessage(const QByteArray &data)
 {
-  if (isConnected() && isPublisher() && !data.isEmpty())
+  if (isConnected() && isPublisher() && m_topicName.isValid()
+      && !data.isEmpty())
     m_client.publish(m_topicName, data);
 }
 
+/**
+ * @brief Handles changes in the client's connection state.
+ *
+ * Emits the connectedChanged() signal whenever the connection state changes.
+ * If the client transitions to the Connected state and is in subscriber mode,
+ * this will attempt to subscribe to the configured topic filter with QoS 0.
+ * Displays an error message if the subscription fails.
+ *
+ * @param state The new connection state of the QMqttClient.
+ */
 void MQTT::Client::onStateChanged(QMqttClient::ClientState state)
 {
   Q_EMIT connectedChanged();
+  if (state == QMqttClient::Connected && isSubscriber()
+      && !m_topicFilter.isEmpty())
+  {
+    QMqttTopicFilter filter;
+    filter.setFilter(m_topicFilter);
+
+    auto *sub = m_client.subscribe(filter, 0);
+    if (!sub || sub->state() == QMqttSubscription::Error)
+    {
+      Misc::Utilities::showMessageBox(
+          tr("Subscription Error"),
+          tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter));
+    }
+  }
 }
 
+/**
+ * @brief Responds to error changes by showing a user-friendly message.
+ */
 void MQTT::Client::onErrorChanged(QMqttClient::ClientError error)
 {
   QString title;
@@ -526,6 +815,24 @@ void MQTT::Client::onErrorChanged(QMqttClient::ClientError error)
     Misc::Utilities::showMessageBox(title, message);
 }
 
+/**
+ * @brief Handles the result of an authentication attempt.
+ */
+void MQTT::Client::onAuthenticationFinished(
+    const QMqttAuthenticationProperties &p)
+{
+
+  if (!p.reason().isEmpty())
+  {
+    Misc::Utilities::showMessageBox(
+        tr("MQTT Authentication Failed"),
+        tr("Authentication failed: %.").arg(p.reason()));
+  }
+}
+
+/**
+ * @brief Handles extended authentication requests from the broker.
+ */
 void MQTT::Client::onAuthenticationRequested(
     const QMqttAuthenticationProperties &p)
 {
@@ -575,15 +882,39 @@ void MQTT::Client::onAuthenticationRequested(
   m_client.authenticate(authProps);
 }
 
-void MQTT::Client::onAuthenticationFinished(
-    const QMqttAuthenticationProperties &p)
+/**
+ * @brief Handles incoming MQTT messages.
+ *
+ * This slot is called when the client receives a message from the broker.
+ * It processes the message only if:
+ * - The message payload is non-empty
+ * - The client is in subscriber mode
+ * - The topic matches the currently configured subscription topic
+ *
+ * If all conditions are met, the message payload is passed to IO::Manager
+ * for processing via a queued Qt method invocation.
+ *
+ * @param message The received MQTT message payload.
+ * @param topic The topic associated with the received message.
+ */
+void MQTT::Client::onMessageReceived(const QByteArray &message,
+                                     const QMqttTopicName &topic)
 {
-
-  if (!p.reason().isEmpty())
+  // Only process if data is not empty
+  if (!message.isEmpty())
   {
-    Misc::Utilities::showMessageBox(
-        tr("MQTT Authentication Failed"),
-        tr("Authentication failed: %.").arg(p.reason()));
+    // Ignore if client mode is not set to suscriber
+    if (!isSubscriber())
+      return;
+
+    // Ignore if topic is not equal to current topic
+    if (m_topicName != topic)
+      return;
+
+    // Let IO manager process incoming data
+    QMetaObject::invokeMethod(
+        this, [=] { IO::Manager::instance().processPayload(message); },
+        Qt::QueuedConnection);
   }
 }
 

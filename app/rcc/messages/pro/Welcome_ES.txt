@@ -1,0 +1,22 @@
+▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
+
+¡Bienvenido a Serial Studio! Para comenzar:
+1. Selecciona un puerto COM y la velocidad de baudios en el panel de dispositivos
+   a la derecha.
+2. Si la conexión serial es exitosa y los datos se interpretan correctamente,
+   este panel se cerrará automáticamente, mostrando el tablero.
+3. Si no, utiliza la Consola para identificar y solucionar el problema.
+
+Usa los botones de la barra de herramientas para acceder a las funciones que
+necesitas.
+
+Si encuentras algún problema, por favor repórtalo aquí:
+→ https://github.com/Serial-Studio/Serial-Studio/issues
+
+Para más recursos, incluyendo documentación e integración con tus proyectos
+embebidos, visita el wiki:
+→ https://github.com/Serial-Studio/Serial-Studio/wiki
+
+Consejo: Usa el Editor de Proyectos para crear y personalizar archivos de proyecto.

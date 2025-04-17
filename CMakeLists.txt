@@ -130,80 +130,80 @@ if(PRODUCTION_OPTIMIZATION)
       -fuse-linker-plugin            # Enable LTO during linking
    )
 
-# MSVC-specific settings
-elseif(WIN32 AND MSVC)
-   add_compile_options(
-      /openmp:experimental           # Add support for OpenMP
-      /permissive-                   # Enable strict ISO compliance
-      /Zc:__cplusplus                # Correct __cplusplus value
-      /Zc:preprocessor               # Enable standards-conforming preprocessor
-      /MP                            # Multi-processor compilation
-      /vmg                           # Use general pointer-to-member representation
-      /O2                            # Optimize for speed
-      /W3                            # Warning level 3 messages
-      /GL                            # Enable whole program optimization
-      /MT                            # Link compiler runtime statically
-      /fp:strict                     # Standard-compliant floating point math
+   # MSVC-specific settings
+   elseif(WIN32 AND MSVC)
+      add_compile_options(
+         /openmp:experimental           # Add support for OpenMP
+         /permissive-                   # Enable strict ISO compliance
+         /Zc:__cplusplus                # Correct __cplusplus value
+         /Zc:preprocessor               # Enable standards-conforming preprocessor
+         /MP                            # Multi-processor compilation
+         /vmg                           # Use general pointer-to-member representation
+         /O2                            # Optimize for speed
+         /W3                            # Warning level 3 messages
+         /GL                            # Enable whole program optimization
+         /MT                            # Link compiler runtime statically
+         /fp:strict                     # Standard-compliant floating point math
+      )
+   add_link_options(
+      /OPT:REF                       # Remove unreferenced functions/data
+      /OPT:ICF                       # Remove identical COMDATs
+      /LTCG                          # Enable LTO during linkingn
+      /NODEFAULTLIB:msvcrt.lib       # Exclude dynamic runtime
+      /IGNORE:4286                   # Ignore Qt libucrt warning
    )
-add_link_options(
-   /OPT:REF                       # Remove unreferenced functions/data
-   /OPT:ICF                       # Remove identical COMDATs
-   /LTCG                          # Enable LTO during linkingn
-   /NODEFAULTLIB:msvcrt.lib       # Exclude dynamic runtime
-   /IGNORE:4286                   # Ignore Qt libucrt warning
-)
 
-# macOS-specific settings
-elseif(APPLE)
-   add_compile_options(
-      -O2                            # Optimize for speed
-      -Wall                          # Enable most warning messages
-      -Wextra                        # Enable additional warning messages
-      -fvectorize                    # Enable loop vectorization
-      -fslp-vectorize                # Enable SLP vectorization
-      -fno-fast-math                 # Standard-compliant floating point math
-      -fno-unsafe-math-optimizations # Use safe math only
+   # macOS-specific settings
+   elseif(APPLE)
+      add_compile_options(
+         -O2                            # Optimize for speed
+         -Wall                          # Enable most warning messages
+         -Wextra                        # Enable additional warning messages
+         -fvectorize                    # Enable loop vectorization
+         -fslp-vectorize                # Enable SLP vectorization
+         -fno-fast-math                 # Standard-compliant floating point math
+         -fno-unsafe-math-optimizations # Use safe math only
+      )
+   add_link_options(
+      -Wl,-dead_strip                # Remove unused code and data during linking
+      -flto=full                     # Link-time optimization
    )
-add_link_options(
-   -Wl,-dead_strip                # Remove unused code and data during linking
-   -flto=full                     # Link-time optimization
-)
 
-# Intel LLVM-based C++ Compiler
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
-   add_compile_options(
-      -O2                            # Optimize for speed
-      -Wall                          # Enable most warning messages
-      -Wextra                        # Enable additional warning messages
-      -qopenmp-simd                  # Add support for OpenMP
-      -static                        # Static link compiler dependencies
-      -fvectorize                    # Enable loop vectorization
-      -fslp-vectorize                # Enable SLP vectorization
-      -msse2                         # Enable SSE2 targeting
-      -fp-model=precise              # Standard-compliant floating point math
+   # Intel LLVM-based C++ Compiler
+   elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
+      add_compile_options(
+         -O2                            # Optimize for speed
+         -Wall                          # Enable most warning messages
+         -Wextra                        # Enable additional warning messages
+         -qopenmp-simd                  # Add support for OpenMP
+         -static                        # Static link compiler dependencies
+         -fvectorize                    # Enable loop vectorization
+         -fslp-vectorize                # Enable SLP vectorization
+         -msse2                         # Enable SSE2 targeting
+         -fp-model=precise              # Standard-compliant floating point math
+      )
+   add_link_options(
+      -Wl,--gc-sections              # Remove unused sections during linking
+      -flto=full                     # Link-time optimization
    )
-add_link_options(
-   -Wl,--gc-sections              # Remove unused sections during linking
-   -flto=full                     # Link-time optimization
-)
 
-# Generic UNIX/Linux settings
-elseif(UNIX)
-   add_compile_options(
-      -O2                            # Optimize for speed
-      -Wall                          # Enable most warning messages
-      -Wextra                        # Enable additional warning messages
-      -fopenmp                       # Add support for OpenMP
-      -ftree-vectorize               # Enable loop vectorization
-      -fno-fast-math                 # Standard-compliant floating point math
-      -msse2                         # Enable SSE2 targeting
-      -fno-unsafe-math-optimizations # Use safe math only
+   # Generic UNIX/Linux settings
+   elseif(UNIX)
+      add_compile_options(
+         -O2                            # Optimize for speed
+         -Wall                          # Enable most warning messages
+         -Wextra                        # Enable additional warning messages
+         -fopenmp                       # Add support for OpenMP
+         -ftree-vectorize               # Enable loop vectorization
+         -fno-fast-math                 # Standard-compliant floating point math
+         -msse2                         # Enable SSE2 targeting
+         -fno-unsafe-math-optimizations # Use safe math only
+      )
+   add_link_options(
+      -Wl,--gc-sections              # Remove unused sections during linking
+      -flto                          # Link-time optimization
    )
-add_link_options(
-   -Wl,--gc-sections              # Remove unused sections during linking
-   -flto                          # Link-time optimization
-)
-endif()
+   endif()
 endif()
 
 #-------------------------------------------------------------------------------
@@ -218,12 +218,11 @@ if(DEBUG_SANITIZER)
       -g                              # Generate debug symbols
       -fno-omit-frame-pointer         # Preserve frame pointers
    )
-
-add_link_options(
-   -fsanitize=address              # Link AddressSanitizer
-   -fsanitize=undefined            # Link UndefinedBehaviorSanitizer
-   -fsanitize=leak                 # Link LeakSanitizer
-)
+   add_link_options(
+      -fsanitize=address              # Link AddressSanitizer
+      -fsanitize=undefined            # Link UndefinedBehaviorSanitizer
+      -fsanitize=leak                 # Link LeakSanitizer
+   )
 endif()
 
 #-------------------------------------------------------------------------------
