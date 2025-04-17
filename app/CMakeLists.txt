@@ -76,7 +76,7 @@ set(QT_LIBS
 )
 
 # Add required modules for Pro version if needed
-if(HAS_QT_COMMERCIAL)
+if(USE_QT_COMMERCIAL)
   set(QT_MODULES
     ${QT_MODULES}
     Mqtt

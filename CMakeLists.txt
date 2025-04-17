@@ -79,16 +79,22 @@ add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 
 if(NOT DEFINED USE_QT_COMMERCIAL)
    find_package(Qt6 COMPONENTS Mqtt SerialBus OPTIONAL_COMPONENTS)
-
-   if (Qt6_Mqtt_FOUND AND Qt6_SerialBus_FOUND)
-      set(HAS_QT_COMMERCIAL ON CACHE BOOL "Enable features that require Qt Commercial" FORCE)
+   if(TARGET Qt6::Mqtt AND TARGET Qt6::SerialBus)
+      set(USE_QT_COMMERCIAL ON CACHE BOOL "Enable features that require Qt Commercial" FORCE)
+      message(STATUS "Qt6::Mqtt and Qt6::SerialBus found — enabling USE_QT_COMMERCIAL")
    else()
-      set(HAS_QT_COMMERCIAL OFF CACHE BOOL "Enable features that require Qt Commercial" FORCE)
+      set(USE_QT_COMMERCIAL OFF CACHE BOOL "Enable features that require Qt Commercial" FORCE)
+      message(WARNING "Qt6::Mqtt and/or Qt6::SerialBus NOT found — disabling USE_QT_COMMERCIAL")
    endif()
+else()
+   message(STATUS "USE_QT_COMMERCIAL explicitly set to '${USE_QT_COMMERCIAL}'...skipping auto-detection")
 endif()
 
-if(HAS_QT_COMMERCIAL)
+if(USE_QT_COMMERCIAL)
    add_compile_definitions(USE_QT_COMMERCIAL)
+   message(STATUS "Defining USE_QT_COMMERCIAL for compiler")
+else()
+   message(STATUS "USE_QT_COMMERCIAL not enabled — skipping related definitions")
 endif()
 
 #-------------------------------------------------------------------------------
