@@ -62,16 +62,22 @@ Open source software thrives on the collaboration and support of its users. By c
 
 If Serial Studio has helped you, consider supporting its development in one of the following ways:
 
-- 👉 [**Make a Donation:**](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE) Even small contributions help keep this tool evolving. 
-- 👉 [**Get a Commercial License:**](https://serial-studio.com/) For businesses and professional users, unlock priority support and unrestricted features.  
+- 👉 [**Make a Donation:**](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE) Every contribution helps keep this project alive and evolving. 
+- 👉 [**Get a Commercial License:**](https://serial-studio.com/) For companies and professional users, the Pro version includes additional features, a business-friendly license (no GPL obligations), and priority support.
 
 Your support makes a difference! Thank you for being part of the Serial Studio journey!
 
 ## License
 
-Serial Studio is dual-licensed under the [GNU General Public License v3 (GPLv3)](https://www.gnu.org/licenses/gpl-3.0.html) for open-source users and a Commercial License for business and professional use.
+Serial Studio is dual-licensed:
 
-- **Open Source Use:** Free under the GPLv3 license. Limitations apply, such as 30-minute session restrictions and limited dashboard widgets.
-- **Commercial Use:** Requires a Commercial License for businesses or professional users, offering unlimited usage, MQTT streaming, and priority support.
+### Open Source (GPLv3):
+You are free to use, modify, and redistribute this software under the terms of the GNU General Public License v3, provided that any derivative works are also released under GPL.
+
+### Commercial License:
+For businesses and professionals who require a closed-source or redistribution-safe license, the Commercial License offers:
+- Legal peace of mind (no GPL requirements).
+- Access to Pro features (MQTT, CANBus, Modbus, advanced plotting, etc.).
+- Priority support and feature requests.
 
 For more details, see the [LICENSE](LICENSE.md) file or visit [https://serial-studio.com](https://serial-studio.com).
