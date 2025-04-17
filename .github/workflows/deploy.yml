@@ -27,8 +27,9 @@ env:
   UNIXNAME: "serial-studio"
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
+  QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
-  QT_MODULES: qt3d qtgraphs qtquick3d qtlocation qtdatavis3d qtserialport qtshadertools qtpositioning qtconnectivity
+  QT_MODULES: qt3d qtgraphs qtquick3d qtlocation qtdatavis3d qtserialport qtshadertools qtpositioning qtconnectivity mqtt
     
 #-------------------------------------------------------------------------------
 # Workflow jobs (GNU/Linux, macOS & Windows)
@@ -245,7 +246,7 @@ jobs:
   #
   build-windows-x86_64:
     runs-on: windows-latest
-    name: '🧊 Windows (x86_64)'
+    name: '🧊 Windows (x86_64)'      
     steps:
     - run: git config --global core.autocrlf input
     - name: '🧰 Checkout'
