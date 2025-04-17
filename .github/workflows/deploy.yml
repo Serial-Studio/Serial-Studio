@@ -19,9 +19,9 @@ on:
 
 env:
   VERSION: "3.0.6"
-  QT_VERSION_LINUX: 6.8.1
-  QT_VERSION_MACOS: 6.8.1
-  QT_VERSION_WINDOWS: 6.8.1
+  QT_VERSION_LINUX: 6.9.0
+  QT_VERSION_MACOS: 6.9.0
+  QT_VERSION_WINDOWS: 6.9.0
   EXECUTABLE: "Serial-Studio"
   APPLICATION: "Serial Studio"
   UNIXNAME: "serial-studio"
@@ -125,13 +125,13 @@ jobs:
         chmod +x linuxdeploy-plugin-native_packages-x86_64.AppImage
         
         fakeroot ./linuxdeploy-plugin-native_packages-x86_64.AppImage --appdir AppDir --build deb
-        fakeroot ./linuxdeploy-plugin-native_packages-x86_64.AppImage --appdir AppDir --build rpm
+        #fakeroot ./linuxdeploy-plugin-native_packages-x86_64.AppImage --appdir AppDir --build rpm
         
         rm -rf AppDir
         rm linuxdeploy-plugin-native_packages-x86_64.AppImage
         
         mv *.deb ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
-        mv *.rpm ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
+        #mv *.rpm ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
           
     - name: '📤 Upload artifact: AppImage'
       uses: actions/upload-artifact@v4
@@ -145,11 +145,11 @@ jobs:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
 
-    - name: '📤 Upload artifact: RPM Package'
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
+    #- name: '📤 Upload artifact: RPM Package'
+    #  uses: actions/upload-artifact@v4
+    #  with:
+    #    name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
+    #    path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
 
   #
   # macOS build
@@ -317,7 +317,7 @@ jobs:
             wget -q https://github.com/TheAssassin/pyuploadtool/releases/download/continuous/pyuploadtool-x86_64.AppImage
             chmod +x pyuploadtool-x86_64.AppImage
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
+            #./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
             ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
