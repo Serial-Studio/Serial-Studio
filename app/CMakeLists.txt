@@ -46,12 +46,10 @@ set(QT_MODULES
   Gui
   Qml
   Core
-  Mqtt
   Quick
   Graphs
   Widgets
   Location
-  SerialBus
   Bluetooth
   SerialPort
   Positioning
