@@ -171,7 +171,7 @@ jobs:
         pw: ${{secrets.QT_PASSWORD}}
         email: ${{secrets.QT_USERNAME}}
         version: ${{env.QT_VERSION_MACOS}}
-        aqtsource: 'git+https://github.com/miurahr/aqtinstall'
+        aqtsource: 'git+https://github.com/alex-spataru/aqtinstall@patch-1'
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
