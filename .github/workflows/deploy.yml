@@ -48,15 +48,15 @@ jobs:
     - name: '⚙️ Install Qt'
       uses: Kidev/install-qt-action@v4.6.0
       with:
-        version: ${{env.QT_VERSION_LINUX}}
-        modules: ${{env.QT_MODULES}}
+        cache: true
         target: desktop
         arch: linux_gcc_64
-        cache: true
-        aqtsource: 'git+https://github.com/Kidev/aqtinstall.git@install_qt_commercial'
         use-official: true
-        email: ${{secrets.QT_USERNAME}}
+        modules: ${{env.QT_MODULES}}
         pw: ${{secrets.QT_PASSWORD}}
+        email: ${{secrets.QT_USERNAME}}
+        version: ${{env.QT_VERSION_LINUX}}
+        aqtsource: 'git+https://github.com/miurahr/aqtinstall'
 
     - name: '⚙️ Install dependencies'
       run: |
@@ -85,17 +85,11 @@ jobs:
       with:
         useLocalCache: true
 
-    - name: '⚙️ Install Intel Compiler'
-      uses: fortran-lang/setup-fortran@v1
-      with:
-        compiler: intel
-        version: 2024.1
-
     - name: '🚧 Configure with CMake'
       run: |
         mkdir build
         cd build
-        cmake ../ -DCMAKE_CXX_COMPILER=icpx -DCMAKE_C_COMPILER=icx -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+        cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
 
     - name: '🚧 Build application'
       run: |
@@ -169,15 +163,15 @@ jobs:
     - name: '⚙️ Install Qt'
       uses: Kidev/install-qt-action@v4.6.0
       with:
-        version: ${{env.QT_VERSION_MACOS}}
-        modules: ${{env.QT_MODULES}}
         cache: true
         arch: clang_64
         target: desktop
-        aqtsource: 'git+https://github.com/Kidev/aqtinstall.git@install_qt_commercial'
         use-official: true
+        modules: ${{env.QT_MODULES}}
+        pw: ${{secrets.QT_PASSWORD}}
         email: ${{secrets.QT_USERNAME}}
-        pw: ${{secrets.QT_PASSWORD}}'
+        version: ${{env.QT_VERSION_MACOS}}
+        aqtsource: 'git+https://github.com/miurahr/aqtinstall'
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
@@ -260,14 +254,14 @@ jobs:
     - name: '⚙️ Install Qt'
       uses: Kidev/install-qt-action@v4.6.0
       with:
-        version: ${{env.QT_VERSION_WINDOWS}}
-        modules: ${{env.QT_MODULES}}
         cache: true
         target: desktop
-        aqtsource: 'git+https://github.com/Kidev/aqtinstall.git@install_qt_commercial'
         use-official: true
-        email: ${{secrets.QT_USERNAME}}
+        modules: ${{env.QT_MODULES}}
         pw: ${{secrets.QT_PASSWORD}}
+        email: ${{secrets.QT_USERNAME}}
+        version: ${{env.QT_VERSION_WINDOWS}}
+        aqtsource: 'git+https://github.com/miurahr/aqtinstall'
       
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@latest
