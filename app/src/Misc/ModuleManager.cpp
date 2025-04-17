@@ -51,7 +51,6 @@
 #include "Misc/ThemeManager.h"
 #include "Misc/ModuleManager.h"
 
-#include "MQTT/Client.h"
 #include "Plugins/Server.h"
 
 #include "UI/Dashboard.h"
@@ -70,6 +69,10 @@
 #include "UI/Widgets/Gyroscope.h"
 #include "UI/Widgets/MultiPlot.h"
 #include "UI/Widgets/Accelerometer.h"
+
+#ifdef USE_QT_COMMERCIAL
+#  include "MQTT/Client.h"
+#endif
 
 /**
  * @brief Custom message handler for Qt debug, warning, critical, and fatal
@@ -250,7 +253,6 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto csvPlayer = &CSV::Player::instance();
   auto ioManager = &IO::Manager::instance();
   auto ioConsole = &IO::Console::instance();
-  auto mqttClient = &MQTT::Client::instance();
   auto uiDashboard = &UI::Dashboard::instance();
   auto ioSerial = &IO::Drivers::Serial::instance();
   auto pluginsBridge = &Plugins::Server::instance();
@@ -265,6 +267,14 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscThemeManager = &Misc::ThemeManager::instance();
   auto ioBluetoothLE = &IO::Drivers::BluetoothLE::instance();
   auto ioFileTransmission = &IO::FileTransmission::instance();
+
+  // Initialize commercial modules
+#ifdef USE_QT_COMMERCIAL
+  const bool qtCommercialAvailable = true;
+  auto mqttClient = &MQTT::Client::instance();
+#else
+  const bool qtCommercialAvailable = false;
+#endif
 
   // Initialize third-party modules
   auto updater = QSimpleUpdater::getInstance();
@@ -289,7 +299,6 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_Console", ioConsole);
   c->setContextProperty("Cpp_IO_Manager", ioManager);
   c->setContextProperty("Cpp_IO_Network", ioNetwork);
-  c->setContextProperty("Cpp_MQTT_Client", mqttClient);
   c->setContextProperty("Cpp_UI_Dashboard", uiDashboard);
   c->setContextProperty("Cpp_NativeWindow", &m_nativeWindow);
   c->setContextProperty("Cpp_Plugins_Bridge", pluginsBridge);
@@ -303,6 +312,12 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
   c->setContextProperty("Cpp_IO_ConsoleExport", ioConsoleExport);
   c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);
+  c->setContextProperty("Cpp_QtCommercial_Available", qtCommercialAvailable);
+
+  // Register commercial C++ modules with QML
+#ifdef USE_QT_COMMERCIAL
+  c->setContextProperty("Cpp_MQTT_Client", mqttClient);
+#endif
 
   // Register app info with QML
   c->setContextProperty("Cpp_BuildDate", buildDate);

@@ -284,10 +284,10 @@ bool JSON::Dataset::read(const QJsonObject &object)
     if (m_value.isEmpty())
       m_value = QStringLiteral("--.--");
 
-#ifdef COMMERCIAL_BUILD
+#ifdef USE_QT_COMMERCIAL
     m_xAxisId = SAFE_READ(object, "xAxis", 0).toInt();
 #else
-    m_xAxisId = -1;
+    m_xAxisId = 0;
 #endif
 
     return true;

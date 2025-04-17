@@ -202,8 +202,7 @@ public:
     Serial,      /**< Serial port communication. */
     Network,     /**< Network socket communication. */
     BluetoothLE, /**< Bluetooth Low Energy communication. */
-
-#ifdef COMMERCIAL_BUILD
+#ifdef USE_QT_COMMERCIAL
     ModBus, /**< MODBUS communication */
     CanBus, /**< CANBUS communication */
 #endif

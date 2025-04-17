@@ -21,6 +21,8 @@
 
 #pragma once
 
+#ifdef USE_QT_COMMERCIAL
+
 // clang-format off
 #include <QtMqtt>
 #include <QObject>
@@ -135,3 +137,5 @@ private:
   QMap<QString, QSslSocket::PeerVerifyMode> m_peerVerifyModes;
 };
 } // namespace MQTT
+
+#endif

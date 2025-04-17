@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <style-scheme version="1.0" name="Orbbyt Light">
   <!-- General Colors -->
-  <style name="Text" foreground="#1e293b" background="#fcfcfd"/>
+  <style name="Text" foreground="#1e293b" background="#feffff"/>
   <style name="Selection" background="#3b82f6" foreground="#feffff"/>
-  <style name="LineNumber" foreground="#94a3b8" background="#fcfcfd"/>
+  <style name="LineNumber" foreground="#94a3b8" background="#feffff"/>
   <style name="CurrentLine" background="#f4f5f7"/>
   <style name="CurrentLineNumber" foreground="#3b82f6" bold="true"/>
   <style name="Occurrences" background="#e2e8f0"/>

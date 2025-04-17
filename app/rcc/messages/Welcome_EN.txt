@@ -1,20 +1,26 @@
 ▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
-░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄s▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Welcome to Serial Studio! To get started:
-1. Select a COM port and baud rate from the Devices pane on the right.
-2. If the serial connection is successful and data is correctly interpreted,
-   this pane will close automatically, revealing the dashboard.
-3. If not, use the Console to troubleshoot and identify the issue.
+Serial Studio v%1
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 
-Use the toolbar buttons to access the features you need.
+This software is licensed under the GNU General Public License v3.0 (GPLv3).
 
-If you encounter any issues, please report them here:
-→ https://github.com/Serial-Studio/Serial-Studio/issues
+You are free to use, modify, and redistribute this software under the terms
+of the GPL, provided that all derivative works also remain open source.
 
-For additional resources, including documentation and integration with your
-embedded projects, visit the wiki:
-→ https://github.com/Serial-Studio/Serial-Studio/wiki
+→ Full license: https://www.gnu.org/licenses/gpl-3.0.html
+→ Source code: https://github.com/serial-studio/serial-studio
 
-Pro Tip: Use the Project Editor to create and customize project files.
+New to Serial Studio? Click the "Help" toolbar button to get started.
+
+Like this project? Consider supporting it by purchasing the Pro version:
+→ https://store.serial-studio.com/
+
+Pro includes awesome extras like:
+✓ Full MQTT support
+✓ CANBus and Modbus decoding
+✓ XY plotting and 3D visualization
+✓ Business-friendly binary license (no GPL obligations)
+✓ Plus more tools to take your embedded workflow further

@@ -40,6 +40,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Add external dependencies (Qt)
 #-------------------------------------------------------------------------------
 
+# Specify required modules for FOSS version
 set(QT_MODULES
   Svg
   Gui
@@ -58,31 +59,45 @@ set(QT_MODULES
   QuickControls2
 )
 
+# Specify required libraries for FOSS version
 set(QT_LIBS
   Qt6::Core
   Qt6::Svg
   Qt6::Gui
   Qt6::Qml
-  Qt6::Mqtt
   Qt6::Quick
   Qt6::Graphs
   Qt6::Widgets
   Qt6::Location
-  Qt6::SerialBus
   Qt6::Bluetooth
   Qt6::SerialPort
   Qt6::Positioning
   Qt6::QuickControls2
 )
 
+# Add required modules for Pro version if needed
+if(HAS_QT_COMMERCIAL)
+  set(QT_MODULES
+    ${QT_MODULES}
+    Mqtt
+    SerialBus
+  )
+  set(QT_LIBS
+    ${QT_LIBS}
+    Qt6::Mqtt
+    Qt6::SerialBus
+  )
+endif()
+
+# Find the Qt package and its modules
 find_package(
   Qt6 REQUIRED
   COMPONENTS
   ${QT_MODULES}
 )
 
+# Qt project setup & policies
 qt_standard_project_setup()
-
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
 

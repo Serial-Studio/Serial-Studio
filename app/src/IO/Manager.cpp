@@ -232,12 +232,10 @@ QStringList IO::Manager::availableBuses() const
   list.append(tr("Serial Port"));
   list.append(tr("Network Socket"));
   list.append(tr("Bluetooth LE"));
-
-#ifdef COMMERCIAL_BUILD
-  list.append(tr("Modbus (Experimental)"));
-  list.append(tr("CAN Bus (Experimental)"));
+#ifdef USE_QT_COMMERCIAL
+  list.append(tr("Modbus"));
+  list.append(tr("CAN Bus"));
 #endif
-
   return list;
 }
 

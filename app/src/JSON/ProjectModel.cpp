@@ -2508,8 +2508,8 @@ void JSON::ProjectModel::buildDatasetModel(const JSON::Dataset &dataset)
   led->setData(tr("Quick status monitoring"), ParameterDescription);
   m_datasetModel->appendRow(led);
 
-  // Add X-axis selector
-#ifdef COMMERCIAL_BUILD
+// Add X-axis selector
+#ifdef USE_QT_COMMERCIAL
   if (showPlotOptions)
   {
     // Ensure X-axis ID is reset to "Samples" when an invalid index is set

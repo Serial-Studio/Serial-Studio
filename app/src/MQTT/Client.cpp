@@ -19,6 +19,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#ifdef USE_QT_COMMERCIAL
+
 // clang-format off
 #include <QFile>
 #include <QFileDialog>
@@ -584,3 +586,5 @@ void MQTT::Client::onAuthenticationFinished(
         tr("Authentication failed: %.").arg(p.reason()));
   }
 }
+
+#endif

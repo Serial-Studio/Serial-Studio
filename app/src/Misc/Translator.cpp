@@ -119,7 +119,7 @@ QString Misc::Translator::welcomeConsoleText() const
   QFile file(":/rcc/messages/Welcome_" + lang + ".txt");
   if (file.open(QFile::ReadOnly))
   {
-    text = QString::fromUtf8(file.readAll());
+    text = QString::fromUtf8(file.readAll()).arg(qApp->applicationVersion());
     file.close();
   }
 
