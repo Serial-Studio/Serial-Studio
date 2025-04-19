@@ -56,6 +56,8 @@ cmake --build . -j$(nproc)
 
 If you build Serial Studio using an open-source Qt installation, the resulting binary is automatically licensed under the terms of the GNU GPLv3. You are free to use and distribute that build as long as you comply with the GPL.
 
+The GPLv3 build excludes MQTT, CAN/Modbus, 3D plotting, and other features available in with a Commercial License. Most of these features depend on Qt modules that are difficult to support with open-source builds.
+
 ## Support & Licensing
 Serial Studio is developed and maintained by [Alex Spataru](https://github.com/alex-spataru).  
 It is open source and community-driven, with commercial options available for users who need advanced features or business-friendly licensing.
