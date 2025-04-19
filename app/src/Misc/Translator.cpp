@@ -126,21 +126,24 @@ QString Misc::Translator::welcomeConsoleText() const
   if (Licensing::LemonSqueezy::instance().isActivated())
     path = ":/rcc/messages/pro/Welcome_" + lang + ".txt";
 #else
-  QString path = ":/rcc/messages/free/Welcome_" + lang + ".txt";
+  QString path = ":/rcc/messages/gpl3/Welcome_" + lang + ".txt";
 #endif
 
   // Read welcome text from resources
   QFile file(path);
   if (file.open(QFile::ReadOnly))
   {
+#ifdef USE_QT_COMMERCIAL
     if (path.contains("pro"))
     {
       text = QString::fromUtf8(file.readAll())
                  .arg(Licensing::LemonSqueezy::instance().appName());
     }
-
     else
       text = QString::fromUtf8(file.readAll());
+#else
+    text = QString::fromUtf8(file.readAll());
+#endif
 
     file.close();
   }

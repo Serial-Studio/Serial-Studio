@@ -129,12 +129,15 @@ Item {
   //
   // Re-load welcome text when Pro version is activated/deactivated
   //
-  Connections {
-    enabled: Cpp_QtCommercial_Available
-    target: Cpp_Licensing_LemonSqueezy
-
-    function onActivatedChanged() {
-      root.showWelcomeGuide()
+  Loader {
+    active: Cpp_QtCommercial_Available
+    sourceComponent: Item {
+      Connections {
+        target: Cpp_Licensing_LemonSqueezy
+        function onActivatedChanged() {
+          root.showWelcomeGuide()
+        }
+      }
     }
   }
 

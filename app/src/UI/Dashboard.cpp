@@ -25,10 +25,13 @@
 #include "IO/Manager.h"
 #include "IO/Console.h"
 #include "CSV/Player.h"
-#include "MQTT/Client.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/ThemeManager.h"
 #include "JSON/FrameBuilder.h"
+
+#ifdef USE_QT_COMMERCIAL
+#  include "MQTT/Client.h"
+#endif
 
 //------------------------------------------------------------------------------
 // UI::Dashboard implementation

@@ -30,10 +30,13 @@
 
 #include "IO/Manager.h"
 #include "CSV/Player.h"
-#include "MQTT/Client.h"
 #include "Misc/Utilities.h"
 #include "Misc/TimerEvents.h"
 #include "JSON/FrameBuilder.h"
+
+#ifdef USE_QT_COMMERCIAL
+#  include "MQTT/Client.h"
+#endif
 
 /**
  * Constructor function, configures the path in which Serial Studio shall
@@ -319,9 +322,9 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
     return;
 
   // Don't save CSV data when the device/service is not connected
-#ifdef COMMERCIAL_BUID
+#ifdef USE_QT_COMMERCIAL
   if (!IO::Manager::instance().connected()
-      && !MQTT::Client::instance().isSubscribed())
+      && !MQTT::Client::instance().isSubscriber())
     return;
 #else
   if (!IO::Manager::instance().connected())
