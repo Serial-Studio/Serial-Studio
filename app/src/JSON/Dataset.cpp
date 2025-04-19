@@ -21,6 +21,10 @@
 
 #include "JSON/Dataset.h"
 
+#ifdef USE_QT_COMMERCIAL
+#  include "Licensing/LemonSqueezy.h"
+#endif
+
 /**
  * @brief Reads a value from a QJsonObject based on a key, returning a default
  *        value if the key does not exist.
@@ -284,10 +288,10 @@ bool JSON::Dataset::read(const QJsonObject &object)
     if (m_value.isEmpty())
       m_value = QStringLiteral("--.--");
 
-#ifdef USE_QT_COMMERCIAL
-    m_xAxisId = SAFE_READ(object, "xAxis", 0).toInt();
-#else
     m_xAxisId = 0;
+#ifdef USE_QT_COMMERCIAL
+    if (Licensing::LemonSqueezy::instance().isActivated())
+      m_xAxisId = SAFE_READ(object, "xAxis", 0).toInt();
 #endif
 
     return true;

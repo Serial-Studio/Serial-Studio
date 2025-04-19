@@ -264,7 +264,8 @@ bool JSON::FrameParser::loadScript(const QString &script)
   {
     Misc::Utilities::showMessageBox(
         tr("Frame parser error!"),
-        tr("The 'parse' function is not declared or is not callable!"));
+        tr("The 'parse' function is not declared or is not callable!"),
+        QMessageBox::Critical);
     return false;
   }
 
@@ -283,7 +284,8 @@ bool JSON::FrameParser::loadScript(const QString &script)
     {
       Misc::Utilities::showMessageBox(
           tr("Frame parser error!"),
-          tr("No valid 'parse' function declaration found in the script!"));
+          tr("No valid 'parse' function declaration found in the script!"),
+          QMessageBox::Critical);
       return false;
     }
 
@@ -295,7 +297,8 @@ bool JSON::FrameParser::loadScript(const QString &script)
           tr("The 'parse' function has two arguments ('%1', '%2'), indicating "
              "use of the old format. Please update it to the new format, which "
              "only takes the frame data as an argument.")
-              .arg(firstArg, secondArg));
+              .arg(firstArg, secondArg),
+          QMessageBox::Warning);
       return false;
     }
   }
@@ -305,7 +308,8 @@ bool JSON::FrameParser::loadScript(const QString &script)
   {
     Misc::Utilities::showMessageBox(
         tr("Frame parser error!"),
-        tr("No valid 'parse' function declaration found in the script!"));
+        tr("No valid 'parse' function declaration found in the script!"),
+        QMessageBox::Critical);
     return false;
   }
 
@@ -398,8 +402,8 @@ void JSON::FrameParser::reload()
   {
     auto ret = Misc::Utilities::showMessageBox(
         tr("The document has been modified!"),
-        tr("Are you sure you want to continue?"), qAppName(),
-        QMessageBox::Yes | QMessageBox::No);
+        tr("Are you sure you want to continue?"), QMessageBox::Question,
+        qAppName(), QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::No)
       return;
   }
@@ -419,8 +423,8 @@ void JSON::FrameParser::import()
   {
     auto ret = Misc::Utilities::showMessageBox(
         tr("The document has been modified!"),
-        tr("Are you sure you want to continue?"), qAppName(),
-        QMessageBox::Yes | QMessageBox::No);
+        tr("Are you sure you want to continue?"), QMessageBox::Question,
+        qAppName(), QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::No)
       return;
   }

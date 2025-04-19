@@ -43,8 +43,8 @@ IO::Drivers::BluetoothLE::BluetoothLE()
 
   connect(this, &IO::Drivers::BluetoothLE::error, this,
           [=](const QString &message) {
-            Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"),
-                                            message);
+            Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"), message,
+                                            QMessageBox::Critical);
           });
 }
 

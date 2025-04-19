@@ -29,6 +29,9 @@
 #include <QAbstractButton>
 #include <QDesktopServices>
 
+#include <QSpacerItem>
+#include <QGridLayout>
+
 #include "AppInfo.h"
 #include "Misc/Utilities.h"
 
@@ -61,43 +64,76 @@ void Misc::Utilities::rebootApplication()
 }
 
 /**
+ * @brief Returns a @c QPixmap object with the appropiate resolution for the
+ * screen.
+ *
+ * Returns a @c QPixmap object that loads the image at the given @a path. In the
+ * case that the application is being executed on a HiDPI screen, the the scaled
+ * version of the image will be automatically loaded.
+ *
+ * @param path location of the image to load
+ */
+QPixmap Misc::Utilities::getHiDpiPixmap(const QString &path)
+{
+  const auto dpr = qApp->devicePixelRatio();
+  const int ratio = qMin<int>(2, static_cast<int>(ceil(dpr)));
+
+  QString filename;
+  auto list = path.split(".");
+  const auto extension = list.last();
+  for (int i = 0; i < list.count() - 1; ++i)
+    filename.append(list.at(i));
+
+  filename.append(QStringLiteral("@"));
+  filename.append(QString::number(ratio));
+  filename.append(QStringLiteral("x."));
+  filename.append(extension);
+
+  return filename;
+}
+
+/**
  * Asks the user if he/she wants the application to check for updates
  * automatically
  */
 bool Misc::Utilities::askAutomaticUpdates()
 {
-  const int result
-      = showMessageBox(tr("Check for updates automatically?"),
-                       tr("Should %1 automatically check for updates? "
-                          "You can always check for updates manually from "
-                          "the \"About\" dialog")
-                           .arg(APP_NAME),
-                       APP_NAME, QMessageBox::Yes | QMessageBox::No);
+  const int result = showMessageBox(
+      tr("Check for updates automatically?"),
+      tr("Should %1 automatically check for updates? "
+         "You can always check for updates manually from "
+         "the \"About\" dialog")
+          .arg(APP_NAME),
+      QMessageBox::NoIcon, APP_NAME, QMessageBox::Yes | QMessageBox::No);
   return result == QMessageBox::Yes;
 }
 
 /**
  * Shows a macOS-like message box with the given properties
  */
-int Misc::Utilities::showMessageBox(const QString &text,
-                                    const QString &informativeText,
-                                    const QString &windowTitle,
-                                    const QMessageBox::StandardButtons &bt)
+int Misc::Utilities::showMessageBox(
+    const QString &text, const QString &informativeText, QMessageBox::Icon icon,
+    const QString &windowTitle, QMessageBox::StandardButtons bt,
+    QMessageBox::StandardButton defaultButton, const ButtonTextMap &buttonTexts)
 {
-  // Get app icon
-  QPixmap icon;
-  if (qApp->devicePixelRatio() >= 2)
-    icon.load(":/rcc/images/icon-small@2x.png");
-  else
-    icon.load(":/rcc/images/icon-small@1x.png");
 
   // Create message box & set options
   QMessageBox box;
-  box.setIconPixmap(icon);
   box.setStandardButtons(bt);
   box.setWindowTitle(windowTitle);
-  box.setText("<h3>" + text + "</h3>");
+  box.setWindowFlag(Qt::WindowStaysOnTopHint, true);
+  if (defaultButton != QMessageBox::NoButton)
+    box.setDefaultButton(defaultButton);
+
+  // Set title & informative text
+  box.setText(QStringLiteral("<h3>") + text + QStringLiteral("</h3>"));
   box.setInformativeText(informativeText);
+
+  // Set icon
+  if (icon == QMessageBox::NoIcon)
+    box.setIconPixmap(getHiDpiPixmap(":/rcc/images/icon-small.png"));
+  else
+    box.setIcon(icon);
 
   // Add button translations
   if (bt & QMessageBox::Ok)
@@ -136,6 +172,17 @@ int Misc::Utilities::showMessageBox(const QString &text,
     box.button(QMessageBox::Reset)->setText(tr("Reset"));
   if (bt & QMessageBox::RestoreDefaults)
     box.button(QMessageBox::RestoreDefaults)->setText(tr("Restore defaults"));
+
+  // Change text in buttons
+  for (auto it = buttonTexts.constBegin(); it != buttonTexts.constEnd(); ++it)
+    box.button(it.key())->setText(" " + it.value() + " ");
+
+  // Resize message box
+  // clang-format off
+  auto *spacer = new QSpacerItem(320, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+  auto *layout = qobject_cast<QGridLayout *>(box.layout());
+  layout->addItem(spacer, layout->rowCount(), 0, 1, layout->columnCount());
+  // clang-format on
 
   // Show message box & return user decision to caller
   return box.exec();

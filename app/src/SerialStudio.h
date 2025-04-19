@@ -199,7 +199,7 @@ public:
    */
   enum class BusType
   {
-    Serial,      /**< Serial port communication. */
+    UART,        /**< Serial port communication. */
     Network,     /**< Network socket communication. */
     BluetoothLE, /**< Bluetooth Low Energy communication. */
 #ifdef USE_QT_COMMERCIAL

@@ -44,6 +44,7 @@ Window {
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |
+        Qt.WindowStaysOnTopHint |
         Qt.WindowCloseButtonHint
   }
 

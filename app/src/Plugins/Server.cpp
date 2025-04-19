@@ -55,7 +55,8 @@ Plugins::Server::Server()
   if (!m_server.listen(QHostAddress::Any, PLUGINS_TCP_PORT))
   {
     Misc::Utilities::showMessageBox(tr("Unable to start plugin TCP server"),
-                                    m_server.errorString());
+                                    m_server.errorString(),
+                                    QMessageBox::Warning);
     m_server.close();
   }
 }
@@ -164,7 +165,8 @@ void Plugins::Server::acceptConnection()
   if (!socket && enabled())
   {
     Misc::Utilities::showMessageBox(tr("Plugin server"),
-                                    tr("Invalid pending connection"));
+                                    tr("Invalid pending connection"),
+                                    QMessageBox::Critical);
     return;
   }
 

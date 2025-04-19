@@ -410,7 +410,7 @@ void MQTT::Client::openConnection()
       Misc::Utilities::showMessageBox(
           tr("Missing MQTT Topic"),
           tr("You must specify a topic before connecting as a publisher."),
-          tr("Configuration Error"));
+          QMessageBox::Critical, tr("Configuration Error"));
       Q_EMIT highlightMqttTopicControl();
       return;
     }
@@ -420,7 +420,7 @@ void MQTT::Client::openConnection()
       Misc::Utilities::showMessageBox(
           tr("MQTT Topic Not Set"),
           tr("You won't receive any messages until a topic is configured."),
-          tr("Configuration Warning"));
+          QMessageBox::Warning, tr("Configuration Warning"));
       Q_EMIT highlightMqttTopicControl();
     }
   }
@@ -434,7 +434,7 @@ void MQTT::Client::openConnection()
       Misc::Utilities::showMessageBox(
           tr("Invalid MQTT Topic"),
           tr("The topic \"%1\" is not valid.").arg(m_topicFilter),
-          tr("Configuration Error"));
+          QMessageBox::Critical, tr("Configuration Error"));
       Q_EMIT highlightMqttTopicControl();
       return;
     }
@@ -728,7 +728,8 @@ void MQTT::Client::onStateChanged(QMqttClient::ClientState state)
     {
       Misc::Utilities::showMessageBox(
           tr("Subscription Error"),
-          tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter));
+          tr("Failed to subscribe to topic \"%1\".").arg(m_topicFilter),
+          QMessageBox::Critical);
     }
   }
 }
@@ -810,7 +811,7 @@ void MQTT::Client::onErrorChanged(QMqttClient::ClientError error)
   }
 
   if (!title.isEmpty() && !message.isEmpty())
-    Misc::Utilities::showMessageBox(title, message);
+    Misc::Utilities::showMessageBox(title, message, QMessageBox::Critical);
 }
 
 /**
@@ -824,7 +825,7 @@ void MQTT::Client::onAuthenticationFinished(
   {
     Misc::Utilities::showMessageBox(
         tr("MQTT Authentication Failed"),
-        tr("Authentication failed: %.").arg(p.reason()));
+        tr("Authentication failed: %.").arg(p.reason()), QMessageBox::Warning);
   }
 }
 
@@ -839,7 +840,8 @@ void MQTT::Client::onAuthenticationRequested(
   {
     Misc::Utilities::showMessageBox(tr("Authentication Error"),
                                     tr("Extended authentication is required, "
-                                       "but MQTT 5.0 is not enabled."));
+                                       "but MQTT 5.0 is not enabled."),
+                                    QMessageBox::Warning);
     return;
   }
 
@@ -853,7 +855,8 @@ void MQTT::Client::onAuthenticationRequested(
       tr("MQTT Authentication Required"),
       tr("The MQTT broker requires authentication using method: \"%1\".\n\n"
          "Please provide the necessary credentials.")
-          .arg(authMethod));
+          .arg(authMethod),
+      QMessageBox::Information);
 
   // Get user name
   bool ok;

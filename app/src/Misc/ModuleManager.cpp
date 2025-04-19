@@ -40,7 +40,7 @@
 #include "IO/ConsoleExport.h"
 #include "IO/FileTransmission.h"
 
-#include "IO/Drivers/Serial.h"
+#include "IO/Drivers/UART.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
 
@@ -260,7 +260,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto ioManager = &IO::Manager::instance();
   auto ioConsole = &IO::Console::instance();
   auto uiDashboard = &UI::Dashboard::instance();
-  auto ioSerial = &IO::Drivers::Serial::instance();
+  auto ioSerial = &IO::Drivers::UART::instance();
   auto pluginsBridge = &Plugins::Server::instance();
   auto miscUtilities = &Misc::Utilities::instance();
   auto ioNetwork = &IO::Drivers::Network::instance();

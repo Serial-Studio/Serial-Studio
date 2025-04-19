@@ -130,7 +130,7 @@ set(SOURCES
   src/UI/Widgets/MultiPlot.cpp
   src/Plugins/Server.cpp
   src/IO/Drivers/Network.cpp
-  src/IO/Drivers/Serial.cpp
+  src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
   src/IO/Checksum.cpp
   src/IO/Console.cpp
@@ -178,7 +178,7 @@ set(HEADERS
   src/Platform/NativeWindow.h
   src/Misc/OsmTemplateServer.h
   src/IO/Console.h
-  src/IO/Drivers/Serial.h
+  src/IO/Drivers/UART.h
   src/IO/Drivers/Network.h
   src/IO/Drivers/BluetoothLE.h
   src/IO/Manager.h

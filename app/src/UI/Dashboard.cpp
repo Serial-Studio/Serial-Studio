@@ -1022,7 +1022,7 @@ void UI::Dashboard::processFrame(const JSON::Frame &frame)
     {
       m_datasets.insert(dataset.index(), dataset);
       auto keys = SerialStudio::getDashboardWidgets(dataset);
-      for (const auto &key : keys)
+      for (const auto &key : std::as_const(keys))
       {
         if (key == SerialStudio::DashboardLED)
           ledPanel.m_datasets.append(dataset);

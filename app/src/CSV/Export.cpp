@@ -245,7 +245,8 @@ CSV::Export::createCsvFile(const CSV::TimestampFrame &frame)
   if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
   {
     Misc::Utilities::showMessageBox(tr("CSV File Error"),
-                                    tr("Cannot open CSV file for writing!"));
+                                    tr("Cannot open CSV file for writing!"),
+                                    QMessageBox::Critical);
     closeFile();
     return QVector<QPair<int, QString>>();
   }

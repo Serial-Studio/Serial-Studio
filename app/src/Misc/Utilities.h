@@ -25,6 +25,8 @@
 #include <QMessageBox>
 #include <QApplication>
 
+typedef QMap<QMessageBox::StandardButton, QString> ButtonTextMap;
+
 namespace Misc
 {
 /**
@@ -41,14 +43,18 @@ class Utilities : public QObject
 public:
   static Utilities &instance();
   static void rebootApplication();
+  static QPixmap getHiDpiPixmap(const QString &path);
+
   Q_INVOKABLE bool askAutomaticUpdates();
 
   // clang-format off
-  static int showMessageBox(
-                 const QString &text,
-                 const QString &informativeText = "",
-                 const QString &windowTitle = "",
-                 const QMessageBox::StandardButtons &bt = QMessageBox::Ok);
+  static int showMessageBox(const QString& text,
+                            const QString& informativeText = "",
+                            QMessageBox::Icon icon = QMessageBox::NoIcon,
+                            const QString& windowTitle = "",
+                            QMessageBox::StandardButtons bt = QMessageBox::Ok,
+                            QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
+                            const ButtonTextMap& buttonTexts = ButtonTextMap());
   // clang-format on
 
 public slots:

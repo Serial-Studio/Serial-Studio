@@ -522,5 +522,6 @@ void IO::Drivers::Network::onErrorOccurred(
     error = QString::number(socketError);
 
   Manager::instance().disconnectDevice();
-  Misc::Utilities::showMessageBox(tr("Network socket error"), error);
+  Misc::Utilities::showMessageBox(tr("Network socket error"), error,
+                                  QMessageBox::Critical);
 }

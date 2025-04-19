@@ -127,6 +127,7 @@ private slots:
 
 private:
   bool m_writeEnabled;
+  bool m_connectedFlag;
   SerialStudio::BusType m_busType;
 
   HAL_Driver *m_driver;

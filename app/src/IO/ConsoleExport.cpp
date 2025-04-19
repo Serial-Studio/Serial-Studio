@@ -181,7 +181,8 @@ void IO::ConsoleExport::createFile()
   if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text))
   {
     Misc::Utilities::showMessageBox(tr("Console Output File Error"),
-                                    tr("Cannot open file for writing!"));
+                                    tr("Cannot open file for writing!"),
+                                    QMessageBox::Critical);
     closeFile();
     return;
   }

@@ -1,5 +1,5 @@
 /*
- * Serial Studio - https://serial-studio.github.io/
+ * UART Studio - https://serial-studio.github.io/
  *
  * Copyright (C) 2020-2025 Alex Spataru <https://aspatru.com>
  *
@@ -36,10 +36,10 @@ namespace IO
 namespace Drivers
 {
 /**
- * @brief The Serial class
+ * @brief The UART class
  * Serial Studio "driver" class to interact with serial port devices.
  */
-class Serial : public HAL_Driver
+class UART : public HAL_Driver
 {
   // clang-format off
   Q_OBJECT
@@ -112,16 +112,16 @@ signals:
   void connectionError(const QString &name);
 
 private:
-  explicit Serial();
-  Serial(Serial &&) = delete;
-  Serial(const Serial &) = delete;
-  Serial &operator=(Serial &&) = delete;
-  Serial &operator=(const Serial &) = delete;
+  explicit UART();
+  UART(UART &&) = delete;
+  UART(const UART &) = delete;
+  UART &operator=(UART &&) = delete;
+  UART &operator=(const UART &) = delete;
 
-  ~Serial();
+  ~UART();
 
 public:
-  static Serial &instance();
+  static UART &instance();
 
   void close() override;
 

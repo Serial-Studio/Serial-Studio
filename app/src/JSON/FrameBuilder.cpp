@@ -29,6 +29,10 @@
 #include "JSON/ProjectModel.h"
 #include "JSON/FrameBuilder.h"
 
+#ifdef USE_QT_COMMERCIAL
+#  include "Licensing/LemonSqueezy.h"
+#endif
+
 /**
  * Initializes the JSON Parser class and connects appropiate SIGNALS/SLOTS
  */
@@ -44,6 +48,15 @@ JSON::FrameBuilder::FrameBuilder()
   // Obtain operation mode from settings
   auto m = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
   setOperationMode(static_cast<SerialStudio::OperationMode>(m));
+
+  // Reload JSON map file when license is activated
+#ifdef USE_QT_COMMERCIAL
+  connect(&Licensing::LemonSqueezy::instance(),
+          &Licensing::LemonSqueezy::activatedChanged, this, [=] {
+            if (!jsonMapFilepath().isEmpty())
+              loadJsonMap(jsonMapFilepath());
+          });
+#endif
 }
 
 /**
@@ -120,7 +133,7 @@ void JSON::FrameBuilder::loadJsonMap()
 void JSON::FrameBuilder::setupExternalConnections()
 {
   connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
-          &JSON::FrameBuilder::readData, Qt::QueuedConnection);
+          &JSON::FrameBuilder::readData, Qt::DirectConnection);
 }
 
 /**
@@ -153,8 +166,8 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
       m_frame.clear();
       m_jsonMap.close();
       setJsonPathSetting("");
-      Misc::Utilities::showMessageBox(tr("JSON parse error"),
-                                      error.errorString());
+      Misc::Utilities::showMessageBox(
+          tr("JSON parse error"), error.errorString(), QMessageBox::Critical);
     }
 
     // JSON contains no errors, load compacted JSON document & save settings
@@ -197,7 +210,7 @@ void JSON::FrameBuilder::loadJsonMap(const QString &path)
     setJsonPathSetting("");
     Misc::Utilities::showMessageBox(
         tr("Cannot read JSON file"),
-        tr("Please check file permissions & location"));
+        tr("Please check file permissions & location"), QMessageBox::Critical);
     m_jsonMap.close();
   }
 
@@ -350,7 +363,7 @@ void JSON::FrameBuilder::readData(const QByteArray &data)
     // Create datasets from the data
     int channel = 1;
     QVector<JSON::Dataset> datasets;
-    for (const auto &field : fields)
+    for (const auto &field : std::as_const(fields))
     {
       JSON::Dataset dataset;
       dataset.m_index = channel;

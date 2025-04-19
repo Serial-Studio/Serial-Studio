@@ -20,7 +20,7 @@
  */
 
 #include "IO/Manager.h"
-#include "IO/Drivers/Serial.h"
+#include "IO/Drivers/UART.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/BluetoothLE.h"
 
@@ -92,7 +92,7 @@ IO::Manager::Manager()
   m_workerThread.start(QThread::HighestPriority);
 
   // Set default data interface to serial port
-  setBusType(SerialStudio::BusType::Serial);
+  setBusType(SerialStudio::BusType::UART);
 }
 
 /**
@@ -302,15 +302,15 @@ void IO::Manager::connectDevice()
     // Open device & instruct frame reader to obtain data from it
     if (driver()->open(mode))
     {
+      QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
+                                Qt::BlockingQueuedConnection);
+
       connect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
               &FrameReader::processData, Qt::QueuedConnection);
       connect(&m_frameReader, &IO::FrameReader::frameReady, this,
               &IO::Manager::frameReceived, Qt::QueuedConnection);
       connect(&m_frameReader, &IO::FrameReader::dataReceived, this,
               &IO::Manager::dataReceived, Qt::QueuedConnection);
-
-      QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
-                                Qt::QueuedConnection);
     }
 
     // Error opening the device
@@ -333,21 +333,19 @@ void IO::Manager::disconnectDevice()
 {
   if (driver())
   {
+    // Close driver device
+    driver()->close();
+
     // Disconnect frame reader
     if (m_workerThread.isRunning())
     {
+      QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
+                                Qt::BlockingQueuedConnection);
+
+      disconnect(&m_frameReader);
       disconnect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
                  &FrameReader::processData);
-      disconnect(&m_frameReader, &IO::FrameReader::frameReady, this,
-                 &IO::Manager::frameReceived);
-      disconnect(&m_frameReader, &IO::FrameReader::dataReceived, this,
-                 &IO::Manager::dataReceived);
-      QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
-                                Qt::QueuedConnection);
     }
-
-    // Close driver device
-    driver()->close();
 
     // Update UI
     Q_EMIT driverChanged();
@@ -482,8 +480,8 @@ void IO::Manager::setBusType(const SerialStudio::BusType &driver)
   m_busType = driver;
 
   // Try to open a serial port connection
-  if (busType() == SerialStudio::BusType::Serial)
-    setDriver(static_cast<HAL_Driver *>(&(Drivers::Serial::instance())));
+  if (busType() == SerialStudio::BusType::UART)
+    setDriver(static_cast<HAL_Driver *>(&(Drivers::UART::instance())));
 
   // Try to open a network connection
   else if (busType() == SerialStudio::BusType::Network)

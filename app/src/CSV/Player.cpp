@@ -296,7 +296,7 @@ void CSV::Player::openFile(const QString &filePath)
         tr("Device Connection Active"),
         tr("To use this feature, you must disconnect from the device. "
            "Do you want to proceed?"),
-        qAppName(), QMessageBox::No | QMessageBox::Yes);
+        QMessageBox::Warning, qAppName(), QMessageBox::No | QMessageBox::Yes);
     if (response == QMessageBox::Yes)
       IO::Manager::instance().disconnectDevice();
     else
@@ -360,7 +360,8 @@ void CSV::Player::openFile(const QString &filePath)
       Misc::Utilities::showMessageBox(
           tr("Insufficient Data in CSV File"),
           tr("The CSV file must contain at least two frames (data rows) to "
-             "proceed. Please check the file and try again."));
+             "proceed. Please check the file and try again."),
+          QMessageBox::Critical);
       closeFile();
     }
   }
@@ -370,7 +371,7 @@ void CSV::Player::openFile(const QString &filePath)
   {
     Misc::Utilities::showMessageBox(
         tr("Cannot read CSV file"),
-        tr("Please check file permissions & location"));
+        tr("Please check file permissions & location"), QMessageBox::Critical);
     closeFile();
   }
 }
@@ -528,7 +529,8 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
   {
     Misc::Utilities::showMessageBox(
         tr("Invalid CSV"),
-        tr("The CSV file does not contain any data or headers."));
+        tr("The CSV file does not contain any data or headers."),
+        QMessageBox::Critical);
     return false;
   }
 
@@ -576,8 +578,9 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
       int columnIndex = headerLabels.indexOf(column);
       if (columnIndex == -1)
       {
-        Misc::Utilities::showMessageBox(
-            tr("Invalid Selection"), tr("The selected column is not valid."));
+        Misc::Utilities::showMessageBox(tr("Invalid Selection"),
+                                        tr("The selected column is not valid."),
+                                        QMessageBox::Critical);
         return false;
       }
 

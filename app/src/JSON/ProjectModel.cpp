@@ -722,7 +722,8 @@ bool JSON::ProjectModel::askSave()
 
   auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to save your changes?"),
-      tr("You have unsaved modifications in this project!"), APP_NAME,
+      tr("You have unsaved modifications in this project!"),
+      QMessageBox::Question, APP_NAME,
       QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
   if (ret == QMessageBox::Cancel)
@@ -757,7 +758,8 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   if (m_title.isEmpty())
   {
     Misc::Utilities::showMessageBox(tr("Project error"),
-                                    tr("Project title cannot be empty!"));
+                                    tr("Project title cannot be empty!"),
+                                    QMessageBox::Warning);
     return false;
   }
 
@@ -785,7 +787,8 @@ bool JSON::ProjectModel::saveJsonFile(const bool askPath)
   QFile file(m_filePath);
   if (!file.open(QFile::WriteOnly))
   {
-    Misc::Utilities::showMessageBox(tr("File open error"), file.errorString());
+    Misc::Utilities::showMessageBox(tr("File open error"), file.errorString(),
+                                    QMessageBox::Critical);
     return false;
   }
 
@@ -1103,8 +1106,8 @@ void JSON::ProjectModel::deleteCurrentGroup()
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title()),
-      tr("This action cannot be undone. Do you wish to proceed?"), APP_NAME,
-      QMessageBox::Yes | QMessageBox::No);
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
   // Validate the user input
   if (ret != QMessageBox::Yes)
@@ -1144,8 +1147,8 @@ void JSON::ProjectModel::deleteCurrentAction()
   // Ask the user for confirmation
   const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title()),
-      tr("This action cannot be undone. Do you wish to proceed?"), APP_NAME,
-      QMessageBox::Yes | QMessageBox::No);
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
   // Validate the user input
   if (ret != QMessageBox::Yes)
@@ -1183,8 +1186,8 @@ void JSON::ProjectModel::deleteCurrentDataset()
   const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete dataset \"%1\"?")
           .arg(m_selectedDataset.title()),
-      tr("This action cannot be undone. Do you wish to proceed?"), APP_NAME,
-      QMessageBox::Yes | QMessageBox::No);
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
 
   // Validate the user input
   if (ret != QMessageBox::Yes)
@@ -1670,8 +1673,8 @@ bool JSON::ProjectModel::setGroupWidget(const int group,
     {
       auto ret = Misc::Utilities::showMessageBox(
           tr("Are you sure you want to change the group-level widget?"),
-          tr("Existing datasets for this group will be deleted"), APP_NAME,
-          QMessageBox::Yes | QMessageBox::No);
+          tr("Existing datasets for this group will be deleted"),
+          QMessageBox::Question, APP_NAME, QMessageBox::Yes | QMessageBox::No);
       if (ret == QMessageBox::No)
         return false;
       else
@@ -2785,7 +2788,7 @@ void JSON::ProjectModel::setCurrentView(const CurrentView currentView)
           tr("Save changes to frame parser code?"),
           tr("Select 'Save' to keep your changes, 'Discard' to lose them "
              "permanently, or 'Cancel' to return."),
-          tr("Save Changes"),
+          QMessageBox::Question, tr("Save Changes"),
           QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
       if (ret == QMessageBox::Save)
