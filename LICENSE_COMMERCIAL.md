@@ -22,6 +22,24 @@ With a valid commercial license, you may:
 - Access and enable all paid features (e.g., MQTT, CANBus, XY plotting, etc.).
 - Receive priority technical support (via email, GitHub issues, or optional video support).
 
+2A. Personal and Evaluation Use (Without a Commercial License)
+
+If you do not hold a valid commercial license, you are granted a limited, non-exclusive, non-transferable, revocable right to use the official precompiled binary of the Software strictly for:
+
+- **Personal, non-commercial use**, or
+- **Short-term evaluation purposes**
+
+Under this limited grant:
+
+- Access to Pro features is disabled or restricted.
+- You may not use the Software in any business, corporate, institutional, educational, or revenue-generating context.
+- You may not integrate or deploy the Software within any system that is provided to third parties, clients, or customers.
+- You may not use the Software as part of a workflow that contributes to a commercial product or service.
+
+**This grant does not include any rights to redistribute, sublicense, or use the Software in any public-facing or monetized capacity.**
+
+Violation of this section will be considered a breach of this Agreement and may result in termination of access, legal liability, and/or other enforcement actions as permitted by law.
+
 ## 3. Restrictions
 
 Unless you receive **explicit, written permission** from the Licensor, you may **not**:
@@ -88,4 +106,4 @@ For licensing, commercial inquiries, or legal questions, contact:
 <https://github.com/alex-spataru>  
 <https://serial-studio.com>
 
-By purchasing or activating a commercial license, you acknowledge that you have read, understood, and agreed to be bound by the terms of this Agreement.
+By downloading, installing, or running the official Serial Studio binary, you acknowledge that you have read, understood, and agreed to be bound by the terms of this Agreement, including its limitations on commercial use.
