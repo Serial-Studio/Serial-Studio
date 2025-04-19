@@ -173,7 +173,7 @@ Window {
           Layout.alignment: Qt.AlignVCenter
 
           Label {
-            text: Cpp_AppName
+            text: app.appName
             font: Cpp_Misc_CommonFonts.customUiFont(2, true)
           }
 
@@ -203,6 +203,7 @@ Window {
         opacity: 0.8
         Layout.fillWidth: true
         Layout.maximumWidth: 360
+        visible: !app.proVersion
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("%1 is free software: you can redistribute it and/or modify " +
                    "it under the terms of the GNU General Public License as " +
@@ -220,6 +221,13 @@ Window {
 
       Button {
         Layout.fillWidth: true
+        text: qsTr("License Management")
+        onClicked: app.showLicenseDialog()
+        visible: Cpp_QtCommercial_Available
+      }
+
+      Button {
+        Layout.fillWidth: true
         text: qsTr("Website")
         onClicked: Qt.openUrlExternally("https://serial-studio.com/")
       }
@@ -231,8 +239,9 @@ Window {
       }
 
       Button {
+        text: qsTr("Donate")
         Layout.fillWidth: true
-        text: qsTr("Serial Studio Pro")
+        visible: !app.proVersion
         onClicked: donateDialog.show()
       }
 
@@ -240,12 +249,6 @@ Window {
         Layout.fillWidth: true
         text: qsTr("Report Bug")
         onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
-      }
-
-      Button {
-        Layout.fillWidth: true
-        text: qsTr("Documentation")
-        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
       }
 
       Button {

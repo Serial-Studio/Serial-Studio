@@ -32,6 +32,12 @@ Item {
   id: app
 
   //
+  // Define application name
+  //
+  readonly property string appName: proVersion ? Cpp_Licensing_LemonSqueezy.appName : "Serial Studio"
+  readonly property bool proVersion: Cpp_QtCommercial_Available ? Cpp_Licensing_LemonSqueezy.isActivated : false
+
+  //
   // Check for updates (non-silent mode)
   //
   function checkForUpdates() {
@@ -88,6 +94,11 @@ Item {
       id: fileTransmissionDialog
       source: "qrc:/qml/Dialogs/FileTransmission.qml"
     }
+
+    DialogLoader {
+      id: licenseDialog
+      source: "qrc:/qml/Dialogs/LicenseManagement.qml"
+    }
   }
 
   //
@@ -106,12 +117,22 @@ Item {
   }
 
   //
-  // Dialog display functions
+  // Dialog display functions (FOSS)
   //
   function showAboutDialog()       { aboutDialog.active = true }
   function showProjectEditor()     { projectEditor.displayWindow() }
   function showExternalConsole()   { externalConsole.active = true }
-  function showMqttConfiguration() { mqttConfiguration.active = true }
   function showAcknowledgements()  { acknowledgementsDialog.active = true }
   function showFileTransmission()  { fileTransmissionDialog.active = true }
+
+  //
+  // Dialog display functions (commercial)
+  //
+  function showLicenseDialog() {
+    if (Cpp_QtCommercial_Available)
+      licenseDialog.active = true
+  } function showMqttConfiguration() {
+    if (Cpp_QtCommercial_Available)
+      mqttConfiguration.active = true
+  }
 }

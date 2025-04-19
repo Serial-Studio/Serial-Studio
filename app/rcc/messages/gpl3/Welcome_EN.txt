@@ -1,12 +1,10 @@
 ▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ░█▀▀█ ▒█░░░ 　 ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█
-░▀▀▀▄▄ ▒█▀▀▀ ▒█▄s▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
+░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Serial Studio v%1
 Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 
 This software is licensed under the GNU General Public License v3.0 (GPLv3).
-
 You are free to use, modify, and redistribute this software under the terms
 of the GPL, provided that all derivative works also remain open source.
 
@@ -20,7 +18,7 @@ Like this project? Consider supporting it by purchasing the Pro version:
 
 Pro includes awesome extras like:
 ✓ MQTT support
-✓ CANBus and Modbus decoding
+✓ CAN and Modbus decoding
 ✓ XY plotting and 3D visualization
 ✓ Business-friendly binary license (no GPL obligations)
 ✓ Plus more tools to take your embedded workflow further

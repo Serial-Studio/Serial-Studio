@@ -229,7 +229,7 @@ const QString &IO::Manager::finishSequence() const
 QStringList IO::Manager::availableBuses() const
 {
   QStringList list;
-  list.append(tr("Serial Port"));
+  list.append(tr("UART/COM"));
   list.append(tr("Network Socket"));
   list.append(tr("Bluetooth LE"));
 #ifdef USE_QT_COMMERCIAL

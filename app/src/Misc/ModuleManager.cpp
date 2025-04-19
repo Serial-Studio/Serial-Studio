@@ -72,6 +72,7 @@
 
 #ifdef USE_QT_COMMERCIAL
 #  include "MQTT/Client.h"
+#  include "Licensing/LemonSqueezy.h"
 #endif
 
 /**
@@ -248,6 +249,11 @@ void Misc::ModuleManager::registerQmlTypes()
  */
 void Misc::ModuleManager::initializeQmlInterface()
 {
+  // Initialize licensing module first
+#ifdef USE_QT_COMMERCIAL
+  auto lemonSqueezy = &Licensing::LemonSqueezy::instance();
+#endif
+
   // Initialize modules
   auto csvExport = &CSV::Export::instance();
   auto csvPlayer = &CSV::Player::instance();
@@ -317,6 +323,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Register commercial C++ modules with QML
 #ifdef USE_QT_COMMERCIAL
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);
+  c->setContextProperty("Cpp_Licensing_LemonSqueezy", lemonSqueezy);
 #endif
 
   // Register app info with QML
@@ -345,4 +352,10 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);
+
+  // Try to contact activation server to validate license
+#ifdef USE_QT_COMMERCIAL
+  if (!lemonSqueezy->licensingData().isEmpty())
+    QMetaObject::invokeMethod(lemonSqueezy, &Licensing::LemonSqueezy::validate);
+#endif
 }

@@ -21,6 +21,10 @@
 
 #include "Misc/Translator.h"
 
+#ifdef USE_QT_COMMERCIAL
+#  include "Licensing/LemonSqueezy.h"
+#endif
+
 /**
  * Constructor function
  */
@@ -115,14 +119,25 @@ QString Misc::Translator::welcomeConsoleText() const
       break;
   }
 
+  // Define fallback text & default message path
   QString text = QObject::tr("Failed to load welcome text :(");
-  QFile file(":/rcc/messages/gpl3/Welcome_" + lang + ".txt");
+  QString path = ":/rcc/messages/gpl3/Welcome_" + lang + ".txt";
+
+#ifdef USE_QT_COMMERCIAL
+  // Load welcome text for Pro users
+  if (Licensing::LemonSqueezy::instance().isActivated())
+    path = ":/rcc/messages/pro/Welcome_" + lang + ".txt";
+#endif
+
+  // Read welcome text from resources
+  QFile file(path);
   if (file.open(QFile::ReadOnly))
   {
-    text = QString::fromUtf8(file.readAll()).arg(qApp->applicationVersion());
+    text = QString::fromUtf8(file.readAll());
     file.close();
   }
 
+  // Return obtained data
   return text;
 }
 

@@ -2,17 +2,22 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-欢迎使用 Serial Studio！开始使用：
-1. 在右侧的设备面板中选择一个 COM 端口和波特率。
-2. 如果串行连接成功且数据正确解析，面板将自动关闭并显示仪表盘。
-3. 如果未成功，请使用控制台进行故障排查并识别问题。
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 
-使用工具栏按钮访问所需功能。
+本软件基于 GNU 通用公共许可证第 3.0 版 (GPLv3) 授权。你可以自由
+使用、修改和分发本软件，前提是所有衍生作品也必须保持开源。
 
-如果遇到任何问题，请在此报告：
-→ https://github.com/Serial-Studio/Serial-Studio/issues
+→ 完整许可证：https://www.gnu.org/licenses/gpl-3.0.html
+→ 源代码：https://github.com/serial-studio/serial-studio
 
-有关更多资源，包括文档及与嵌入式项目的集成，请访问 Wiki：
-→ https://github.com/Serial-Studio/Serial-Studio/wiki
+第一次使用 Serial Studio？点击工具栏上的“帮助”按钮开始吧。
 
-提示：使用项目编辑器创建和自定义项目文件。
+喜欢这个项目？欢迎通过购买 Pro 版支持我们：
+→ https://store.serial-studio.com/
+
+Pro 版包含强大功能，例如：
+✓ 支持 MQTT
+✓ CAN 和 Modbus 解码
+✓ XY 图表与 3D 可视化
+✓ 适合商业使用的二进制许可证（无 GPL 义务）
+✓ 还有更多助力嵌入式开发的工具

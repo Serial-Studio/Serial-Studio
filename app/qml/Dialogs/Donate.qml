@@ -113,10 +113,8 @@ Window {
   // every now and then to the user.
   //
   function showAutomatically() {
-    //if (!Cpp_CommercialBuild) {
-      closeBt.text = qsTr("Later")
+    if (!app.proVersion)
       showNormal()
-    //}
   }
 
   //
@@ -124,7 +122,6 @@ Window {
   // the "about" window.
   //
   function show() {
-    closeBt.text = qsTr("Close")
     showNormal()
   }
 
@@ -233,9 +230,13 @@ Window {
         Layout.fillWidth: true
 
         Button {
-          id: closeBt
+          icon.width: 18
+          icon.height: 18
+          text: qsTr("Close")
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
+          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.color: Cpp_ThemeManager.colors["button_text"]
         }
 
         Item {
@@ -243,8 +244,12 @@ Window {
         }
 
         Button {
+          icon.width: 18
+          icon.height: 18
           text: qsTr("Donate")
           Layout.alignment: Qt.AlignVCenter
+          icon.source: "qrc:/rcc/icons/buttons/paypal.svg"
+          icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: {
             root.close()
             Qt.openUrlExternally("https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE")
@@ -252,12 +257,16 @@ Window {
         }
 
         Button {
+          icon.width: 18
+          icon.height: 18
           highlighted: true
           Keys.onEnterPressed: clicked()
           Keys.onReturnPressed: clicked()
           Layout.alignment: Qt.AlignVCenter
           Component.onCompleted: forceActiveFocus()
+          icon.source: "qrc:/rcc/icons/buttons/buy.svg"
           text: " " + qsTr("Get Serial Studio Pro") + " "
+          icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: {
             root.close()
             Qt.openUrlExternally("https://store.serial-studio.com/")

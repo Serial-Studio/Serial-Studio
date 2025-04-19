@@ -123,7 +123,7 @@ public slots:
   void setBusType(const SerialStudio::BusType &driver);
 
 private slots:
-  void setDriver(HAL_Driver *driver);
+  void setDriver(IO::HAL_Driver *driver);
 
 private:
   bool m_writeEnabled;

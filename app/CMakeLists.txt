@@ -80,11 +80,11 @@ if(USE_QT_COMMERCIAL)
     Mqtt
     SerialBus
   )
-  set(QT_LIBS
-    ${QT_LIBS}
-    Qt6::Mqtt
-    Qt6::SerialBus
-  )
+set(QT_LIBS
+  ${QT_LIBS}
+  Qt6::Mqtt
+  Qt6::SerialBus
+)
 endif()
 
 # Find the Qt package and its modules
@@ -105,6 +105,7 @@ qt_policy(SET QTP0004 NEW)
 
 include_directories(src)
 
+# Specify required sources for FOSS version
 set(SOURCES
   src/Misc/ThemeManager.cpp
   src/Misc/CommonFonts.cpp
@@ -146,11 +147,11 @@ set(SOURCES
   src/JSON/Group.cpp
   src/CSV/Player.cpp
   src/CSV/Export.cpp
-  src/MQTT/Client.cpp
   src/main.cpp
   src/SerialStudio.cpp
 )
 
+# Specify required headers for FOSS version
 set(HEADERS
   src/Misc/ModuleManager.h
   src/Misc/Utilities.h
@@ -196,11 +197,28 @@ set(HEADERS
   src/JSON/FrameBuilder.h
   src/CSV/Export.h
   src/CSV/Player.h
-  src/MQTT/Client.h
   src/SIMD/SIMD.h
   src/AppInfo.h
   src/SerialStudio.h
 )
+
+# Add headers & sources for commercial build
+if(USE_QT_COMMERCIAL)
+  set(HEADERS
+    ${HEADERS}
+    src/MQTT/Client.h
+    src/Licensing/MachineID.h
+    src/Licensing/SimpleCrypt.h
+    src/Licensing/LemonSqueezy.h
+  )
+  set(SOURCES
+    ${SOURCES}
+    src/MQTT/Client.cpp
+    src/Licensing/MachineID.cpp
+    src/Licensing/SimpleCrypt.cpp
+    src/Licensing/LemonSqueezy.cpp
+  )
+endif()
 
 #-------------------------------------------------------------------------------
 # Platform-specific configuration

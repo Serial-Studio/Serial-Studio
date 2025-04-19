@@ -9,7 +9,7 @@
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY{} without even the implied warranty of
+ * but WITHOUT ANY WARRANTY without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
@@ -18,8 +18,6 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
-#ifdef USE_QT_COMMERCIAL
 
 // clang-format off
 #include <QFile>
@@ -917,5 +915,3 @@ void MQTT::Client::onMessageReceived(const QByteArray &message,
         Qt::QueuedConnection);
   }
 }
-
-#endif

@@ -141,6 +141,7 @@ Window {
       id: column
       spacing: 8
       anchors.centerIn: parent
+      Layout.topMargin: -root.titlebarHeight / 2
 
       ScrollView {
         Layout.fillWidth: true
@@ -165,18 +166,27 @@ Window {
       RowLayout {
         Layout.fillWidth: true
 
+        Button {
+          icon.width: 18
+          icon.height: 18
+          text: qsTr("Close")
+          onClicked: root.close()
+          Layout.alignment: Qt.AlignVCenter
+          icon.source: "qrc:/rcc/icons/buttons/close.svg"
+          icon.color: Cpp_ThemeManager.colors["button_text"]
+        }
+
         Item {
           Layout.fillWidth: true
         }
 
         Button {
+          icon.width: 18
+          icon.height: 18
           text: qsTr("About Qt...")
           onClicked: Cpp_Misc_Utilities.aboutQt()
-        }
-
-        Button {
-          text: qsTr("Close")
-          onClicked: root.close()
+          icon.source: "qrc:/rcc/icons/buttons/info.svg"
+          icon.color: Cpp_ThemeManager.colors["button_text"]
         }
       }
     }

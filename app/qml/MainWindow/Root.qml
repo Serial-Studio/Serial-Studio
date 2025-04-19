@@ -34,7 +34,7 @@ Widgets.SmartWindow {
   category: "MainWindow"
   minimumWidth: layout.implicitWidth
   minimumHeight: layout.implicitHeight
-  title: qsTr("%1 - %2").arg(documentTitle).arg(Cpp_AppName)
+  title: qsTr("%1 - %2").arg(documentTitle).arg(app.appName)
 
   //
   // Custom properties

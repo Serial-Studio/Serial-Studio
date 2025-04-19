@@ -127,6 +127,18 @@ Item {
   }
 
   //
+  // Re-load welcome text when Pro version is activated/deactivated
+  //
+  Connections {
+    enabled: Cpp_QtCommercial_Available
+    target: Cpp_Licensing_LemonSqueezy
+
+    function onActivatedChanged() {
+      root.showWelcomeGuide()
+    }
+  }
+
+  //
   // Right-click context menu
   //
   Menu {

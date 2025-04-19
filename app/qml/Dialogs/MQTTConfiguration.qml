@@ -100,7 +100,6 @@ Window {
     }
   }
 
-
   //
   // Save settings
   //
@@ -383,7 +382,8 @@ Window {
                 icon.color: palette.text
                 Layout.maximumWidth: height
                 Layout.alignment: Qt.AlignVCenter
-                icon.source: "qrc:/rcc/icons/buttons/visibility.svg"
+                icon.source: checked ? "qrc:/rcc/icons/buttons/invisible.svg" :
+                                       "qrc:/rcc/icons/buttons/visible.svg"
                 onCheckedChanged: _password.echoMode = (checked ? TextField.Normal :
                                                                   TextField.Password)
               }

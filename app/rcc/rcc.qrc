@@ -108,24 +108,31 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
+        <file>icons/buttons/activate.svg</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/attach.svg</file>
+        <file>icons/buttons/buy.svg</file>
         <file>icons/buttons/center.svg</file>
         <file>icons/buttons/clear.svg</file>
         <file>icons/buttons/close.svg</file>
         <file>icons/buttons/connected.svg</file>
+        <file>icons/buttons/deactivate.svg</file>
         <file>icons/buttons/disconnected.svg</file>
         <file>icons/buttons/expand.svg</file>
+        <file>icons/buttons/info.svg</file>
+        <file>icons/buttons/invisible.svg</file>
+        <file>icons/buttons/lemonsqueezy.svg</file>
         <file>icons/buttons/media-next.svg</file>
         <file>icons/buttons/media-pause.svg</file>
         <file>icons/buttons/media-play.svg</file>
         <file>icons/buttons/media-prev.svg</file>
         <file>icons/buttons/media-stop.svg</file>
         <file>icons/buttons/open.svg</file>
+        <file>icons/buttons/paypal.svg</file>
         <file>icons/buttons/print.svg</file>
         <file>icons/buttons/refresh.svg</file>
         <file>icons/buttons/save.svg</file>
-        <file>icons/buttons/visibility.svg</file>
+        <file>icons/buttons/visible.svg</file>
         <file>icons/code-editor/apply.svg</file>
         <file>icons/code-editor/copy.svg</file>
         <file>icons/code-editor/cut.svg</file>
@@ -150,6 +157,11 @@
         <file>icons/dashboard/plot.svg</file>
         <file>icons/dashboard/show-all.svg</file>
         <file>icons/dashboard/view.svg</file>
+        <file>icons/licensing/devices.svg</file>
+        <file>icons/licensing/email.svg</file>
+        <file>icons/licensing/plan.svg</file>
+        <file>icons/licensing/user.svg</file>
+        <file>icons/licensing/uuid.svg</file>
         <file>icons/panes/clear.svg</file>
         <file>icons/panes/console.svg</file>
         <file>icons/panes/dashboard.svg</file>
@@ -220,6 +232,8 @@
         <file>icons/toolbar/project-setup.svg</file>
         <file>icons/toolbar/structure.svg</file>
         <file>images/action.svg</file>
+        <file>images/activation@1x.png</file>
+        <file>images/activation@2x.png</file>
         <file>images/appimage_icon.png</file>
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
@@ -290,5 +304,6 @@
         <file>themes/resistance.json</file>
         <file>themes/yaru-dark.json</file>
         <file>themes/yaru-light.json</file>
+        <file>icons/licensing/key.svg</file>
     </qresource>
 </RCC>

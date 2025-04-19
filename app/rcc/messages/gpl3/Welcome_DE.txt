@@ -2,22 +2,25 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-Willkommen bei Serial Studio! So fangen Sie an:
-1. Wählen Sie einen COM-Port und eine Baudrate im Gerätebereich rechts aus.
-2. Wenn die serielle Verbindung erfolgreich ist und die Daten korrekt
-   interpretiert werden, schließt sich dieser Bereich automatisch und das
-   Dashboard wird angezeigt.
-3. Andernfalls verwenden Sie die Konsole, um das Problem zu identifizieren und
-   zu beheben.
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 
-Verwenden Sie die Schaltflächen in der Symbolleiste, um auf die gewünschten
-Funktionen zuzugreifen.
+Diese Software ist unter der GNU General Public License Version 3.0
+(GPLv3) lizenziert. Du darfst sie frei verwenden, ändern und
+weiterverbreiten, solange alle abgeleiteten Werke ebenfalls
+Open-Source bleiben.
 
-Wenn Sie auf ein Problem stoßen, melden Sie es bitte hier:
-→ https://github.com/Serial-Studio/Serial-Studio/issues
+→ Vollständige Lizenz: https://www.gnu.org/licenses/gpl-3.0.html
+→ Quellcode: https://github.com/serial-studio/serial-studio
 
-Für weitere Ressourcen, einschließlich Dokumentation und Integration mit Ihren
-Embedded-Projekten, besuchen Sie das Wiki:
-→ https://github.com/Serial-Studio/Serial-Studio/wiki
+Neu bei Serial Studio? Klicke auf den "Hilfe"-Button in der
+Werkzeugleiste, um loszulegen.
 
-Tipp: Verwenden Sie den Projekteditor, um Projektdateien zu erstellen und anzupassen.
+Dir gefällt das Projekt? Unterstütze es durch den Kauf der Pro-Version:
+→ https://store.serial-studio.com/
+
+Pro enthält coole Extras wie:
+✓ MQTT-Unterstützung
+✓ CAN- und Modbus-Dekodierung
+✓ XY-Diagramme und 3D-Visualisierung
+✓ Unternehmensfreundliche Binärlizenz (ohne GPL-Verpflichtungen)
+✓ Und weitere Tools für deinen Embedded-Workflow
