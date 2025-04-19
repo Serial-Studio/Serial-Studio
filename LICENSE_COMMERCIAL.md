@@ -88,4 +88,4 @@ For licensing, commercial inquiries, or legal questions, contact:
 <https://github.com/alex-spataru>  
 <https://serial-studio.com>
 
-By purchasing or activating a commercial license, you acknowledge that you have read, understood, and agreed to be bound by the terms of this Agreement.
+By downloading, installing, or running the official Serial Studio binary, you acknowledge that you have read, understood, and agreed to be bound by the terms of this Agreement, including its limitations on commercial use.
