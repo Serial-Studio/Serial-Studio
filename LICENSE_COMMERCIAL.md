@@ -22,7 +22,7 @@ With a valid commercial license, you may:
 - Access and enable all paid features (e.g., MQTT, CANBus, XY plotting, etc.).
 - Receive priority technical support (via email, GitHub issues, or optional video support).
 
-2A. Personal and Evaluation Use (Without a Commercial License)
+### 2A. Personal and Evaluation Use (Without a Commercial License)
 
 If you do not hold a valid commercial license, you are granted a limited, non-exclusive, non-transferable, revocable right to use the official precompiled binary of the Software strictly for:
 
