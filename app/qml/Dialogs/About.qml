@@ -230,8 +230,8 @@ Window {
         opacity: 0.8
         Layout.fillWidth: true
         Layout.maximumWidth: 360
-        visible: Cpp_QtCommercial_Available && app.proVersion
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        visible: Cpp_QtCommercial_Available && app.proVersion
         text: qsTr("This configuration is licensed for commercial and proprietary use. " +
                    "It may be used in closed-source and commercial applications, " +
                    "subject to the terms of the commercial license.")
@@ -244,8 +244,8 @@ Window {
         opacity: 0.8
         Layout.fillWidth: true
         Layout.maximumWidth: 360
-        visible: Cpp_QtCommercial_Available && !app.proVersion
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        visible: Cpp_QtCommercial_Available && !app.proVersion
         text: qsTr("This configuration is for personal use only. Commercial use is prohibited " +
                    "unless a valid commercial license is activated.")
       }

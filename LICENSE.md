@@ -4,81 +4,97 @@ Copyright &copy; 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 
 All rights reserved where applicable.
 
-Serial Studio is released under a **dual-license model**:
+Serial Studio is distributed under a **dual-license model**:
 
-- The **GPLv3 license** applies to the *source code*.
+- The **GNU General Public License v3 (GPLv3)** applies to the *source code*.
 - The **Commercial License** applies to all *official precompiled binaries*.
 
-**The source code will always remain licensed under GPLv3.**
+The source code will always remain licensed under GPLv3. However, **official binaries are not GPLv3-licensed** and require a commercial license for commercial or proprietary use.
 
-If you download a precompiled binary from the official website, GitHub Releases, or any other channel managed by the author (Alex Spataru), your usage is governed by the **Commercial License**, even if you do not activate the Pro features.
+## 1. GNU General Public License v3 (GPLv3)
 
-To use Serial Studio under the GNU General Public License v3 (GPLv3), you must either **compile the source code yourself** using an open-source Qt setup, or install it via a package manager that explicitly distributes a GPL3-compliant build.
+You may use, modify, and redistribute the **source code** of Serial Studio under the terms of the [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
 
-## GNU General Public License v3 (GPLv3)
-You may use, modify, and redistribute the source code under the terms of the GNU GPLv3, as published by the Free Software Foundation.
+### Conditions:
+- You **must** build Serial Studio yourself from source, using a GPL-compliant version of Qt (e.g. from the [open-source Qt edition](https://www.qt.io/download-open-source)) **or**
+- Obtain a GPLv3-compliant build from a trusted third party (e.g., official Linux distribution or package manager) that uses GPL-compatible dependencies.
+- You **must** preserve the GPLv3 license and all copyright notices.
+- You **must not** use any proprietary Qt modules or commercially licensed dependencies in your GPLv3 build.
 
-Full license: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
+Package manager builds (e.g., from Ubuntu, Arch AUR, etc.) are permitted only if they are built using a fully GPLv3-compliant toolchain (including Qt). The author does not guarantee or certify the GPL-compliance of third-party builds, use them at your own risk.
 
-**To use Serial Studio under GPLv3:**
-- Build it yourself from source using a free/open-source Qt installation.
-- Or install it from a trusted package manager that distributes GPLv3 builds.
+### Permitted Under GPLv3:
+- Forking or modifying the source code for personal, academic, or open-source projects.
+- Using your self-built version in a commercial setting, **only if** you fully comply with GPLv3 (including code disclosure, license propagation, etc.).
+- Embedding GPLv3-compiled builds into other open-source software (GPL-compatible).
 
-### Highlights
-- Full access to the source code.
-- Use permitted for personal, academic, and commercial purposes under GPL terms.
-- Must retain GPLv3 when redistributing or modifying.
+### Not Permitted Under GPLv3:
+- Using official precompiled binaries (from serial-studio.com, GitHub, etc.) under GPLv3 — they're not GPL-licensed.
+- Using non-GPL-compliant Qt builds (e.g., closed-source or proprietary modules).
+- Reusing the name “Serial Studio”, logos, or trademarks — these are **not** covered by the GPL.
 
-### Limitations
-- GPLv3 **does not apply** to official precompiled binaries.
-- GPL builds **exclude** certain Pro-only features (see below).
+**Note:** GPL-licensed builds **exclude** paid features such as MQTT, CANBus, and 3D visualization.
 
-## Commercial License
-All official **precompiled binaries** (e.g., from [serial-studio.com](https://serial-studio.com), GitHub Releases, or other official channels managed by the author) are distributed under a **Commercial License Agreement**.
+## 2. Commercial License Agreement
 
-Downloading the binary **does not** grant you rights to use it in commercial or proprietary environments. You are **only granted commercial usage rights after purchasing a valid Pro license**.
+All **official precompiled binaries** (e.g., from [serial-studio.com](https://serial-studio.com), GitHub Releases, or any channel managed by Alex Spataru) are licensed under the terms of the **Serial Studio Commercial License Agreement**.
 
-Activation is required to unlock both the Pro features and the right to use the binary commercially.
+### Key Terms:
+- You **may not** use official binaries in commercial, enterprise, or proprietary environments without purchasing a valid license.
+- You **may only use the binaries for personal or evaluation purposes** unless a license is purchased.
+- Activation is required to unlock Pro features **and** obtain commercial usage rights.
 
-Until a license is purchased and activated, use of the binary is limited to **personal and evaluation purposes only**.
+If you download an official binary, you are agreeing to be bound by the Commercial License terms.
 
-### Commercial License Benefits
-- Access to Pro features:
-  - MQTT integration.
-  - CANBus & Modbus decoding.
-  - XY plotting & 3D visualization.
-- Priority technical support (email, GitHub, optional video calls).
-- Use in commercial or proprietary environments without GPL-related concerns.
+Full Commercial License: [https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE_COMMERCIAL.md](https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE_COMMERCIAL.md)
 
-## Scope of Use (with valid Pro license)
-#### Permitted
-- Internal use in commercial or enterprise environments.
-- Embedding in proprietary workflows or customer-facing systems.
+### Commercial License Benefits (with valid license):
+- Pro features:
+  - MQTT integration
+  - CANBus / Modbus decoding
+  - XY plotting and 3D visualization
+- Use in commercial or enterprise environments
+- Priority support (email, GitHub, optional video support)
 
-#### Restricted
-- Redistribution, reverse engineering, or rebranding.
-- Creating a competing product based on Serial Studio without written permission from the author.
+### Restrictions (Even with a license):
+- You **may not** redistribute, reverse engineer, or rebrand the official binaries.
+- You **may not** create competing or derivative commercial products based on Serial Studio without written consent.
 
-If you require GPLv3 freedoms (including use without a commercial license),  
-you must build the application from source using an open-source Qt installation,  
-or use a GPL-compliant build provided by a trusted package manager.
+## 3. Licensing Compliance Notes
 
-## Not Allowed Without a Commercial License
-- Embedding the official binary into a commercial or proprietary product.
-- Using the official binary in corporate or enterprise environments.
-- Offering the official binary as part of any paid service or commercial bundle.
+### Qt Licensing:
+Serial Studio relies on the Qt framework. You are responsible for ensuring your Qt build is GPL-compatible. If you use a commercially licensed Qt build, your resulting build is **not GPL-compliant** and **may not be used without appropriate Qt licensing**.
 
-## Permitted Under GPLv3 (Source-Only Use)
-- Forking or modifying the code for personal, academic, or open-source projects.
-- Embedding the GPL-compiled build into other open-source software.
-- Using the GPL build in a commercial setting, **only if** you compiled it yourself  
-  and fully comply with GPLv3 obligations.
+When in doubt, use [open-source Qt](https://www.qt.io/download-open-source) and **avoid any closed-source Qt modules**.
 
-You are free to use Serial Studio under the GPLv3 license, but only if you compile it yourself or use a GPL-compliant build from a trusted source.
+### Contributor Terms:
+By contributing code, documentation, or any intellectual property to Serial Studio, you **grant the maintainer (Alex Spataru) a perpetual, irrevocable right** to license your contributions under:
+- GPLv3 (for open-source distribution), **and**
+- A commercial license (for use in official precompiled binaries).
 
-**No support, warranty, or endorsement is provided by the author for unofficial or third-party builds. Use them at your own risk.**
+This is required to maintain the dual-licensing model. If you do not agree, do not submit contributions.
 
-## Questions or Licensing Help
-- Learn more or purchase a license: [https://serial-studio.com](https://serial-studio.com)
-- Licensing questions or custom terms: [alex@serial-studio.com](mailto:alex@serial-studio.com)
-- Source code repository: [https://github.com/serial-studio/serial-studio](https://github.com/serial-studio/serial-studio)
+## 4. Trademark & Branding
+
+The name **“Serial Studio”**, associated logos, icons, and branding elements are **trademarks** of Alex Spataru. These **may not be reused** in derivative projects, forks, or redistributed versions without **explicit written permission**.
+
+Forks must choose a different name and remove all Serial Studio branding to avoid confusion.
+
+## 5. No Warranty
+
+To the fullest extent permitted by law:
+
+> THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHOR OR COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Commercial licensees may receive limited support, but **no guarantee is offered** unless explicitly stated in a paid support contract.
+
+## Summary
+
+| Usage                                | Requirements                                          |
+|--------------------------------------|-------------------------------------------------------|
+| Build from source (GPLv3)            | Free, must use open-source Qt, follow GPL terms       |
+| Use official binary (non-commercial) | Free for personal use, no Pro features                |
+| Use official binary (commercial)     | Requires valid license, activation, no redistribution |
+
+Still got questions? Think you're a legal edge case?  
+Reach out via [GitHub Issues](https://github.com/Serial-Studio/Serial-Studio/issues) or [email](mailto:alex@serial-studio.com).
