@@ -35,49 +35,56 @@ Visit the **[Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki)** for co
 - **Advanced Topics:** Explore data flow, frame parsing, and building custom dashboards.
 - **Examples:** Examples with code, projects, and explanations to help you learn Serial Studio.
 
-## Development
+### Building Serial Studio
 
-### Requirements
+To build Serial Studio from source, the only required dependency is [Qt](https://www.qt.io/download-open-source/) (preferably with all plugins and modules installed). The application is built using **Qt 6.8.1**.
 
-To compile Serial Studio, the only required dependency is [Qt](http://www.qt.io/download-open-source/), preferrably with all plugins & modules installed. The desktop application compiles with **Qt 6.8.1**.
-
-If you're compiling on GNU/Linux, you’ll also need to install `libgl1-mesa-dev`:
+If you're compiling on GNU/Linux, install the following additional packages:
 
 ```bash
-sudo apt install libgl1-mesa-dev
+sudo apt install libgl1-mesa-dev build-essential
 ```
 
-Once Qt is installed, you can compile the project by opening the **CMakeLists.txt** file in your preferred IDE or by using the command line:
+Once Qt is installed, you can compile the project by opening `CMakeLists.txt` in your preferred IDE or using the terminal:
 
-```bash
+```
 mkdir build
-cd build 
+cd build
 cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
-cmake --build . -j 16 
+cmake --build . -j$(nproc)
 ```
+
+If you build Serial Studio using an open-source Qt installation, the resulting binary is automatically licensed under the terms of the GNU GPLv3. You are free to use and distribute that build as long as you comply with the GPL.
 
 ## Support & Licensing
+Serial Studio is developed and maintained by [Alex Spataru](https://github.com/alex-spataru).  
+It is open source and community-driven, with commercial options available for users who need advanced features or business-friendly licensing.
 
-Open source software thrives on the collaboration and support of its users. By contributing to Serial Studio, you help ensure its growth, sustainability, and positive impact on developers, educators, and makers worldwide.
+If Serial Studio is useful to you, consider supporting its development in one of the following ways:
 
-If Serial Studio has helped you, consider supporting its development in one of the following ways:
+- [**Donate via PayPal**](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE) – Helps keep the project active and sustainable.
+- [**Purchase a Commercial License**](https://serial-studio.com) – Required for commercial use of the official binary. Includes Pro features and priority support.
 
-- 👉 [**Make a Donation:**](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE) Every contribution helps keep this project alive and evolving. 
-- 👉 [**Get a Commercial License:**](https://serial-studio.com/) For companies and professional users, the Pro version includes additional features, a business-friendly license (no GPL obligations), and priority support.
-
-Your support makes a difference! Thank you for being part of the Serial Studio journey!
+Commercial licenses directly fund continued development, bug fixes, and new features.
 
 ## License
+Serial Studio is distributed under a dual-license model. For full licensing terms, see [LICENSE.md](LICENSE.md). 
 
-Serial Studio is dual-licensed:
+#### Open Source (GPLv3)
+The source code is licensed under the GNU General Public License v3 (GPLv3). You can use, modify, and redistribute the source code under GPL terms, as long as any derivative works are also released under GPLv3.
 
-### Open Source (GPLv3):
-You are free to use, modify, and redistribute this software under the terms of the GNU General Public License v3, provided that any derivative works are also released under GPL.
+To use Serial Studio under GPLv3:
+- You must compile it yourself using an open-source Qt installation, or
+- Install it from a trusted package manager that distributes GPL-compliant builds.
 
-### Commercial License:
-For businesses and professionals who require a closed-source or redistribution-safe license, the Commercial License offers:
-- Legal peace of mind (no GPL requirements).
-- Access to Pro features (MQTT, CANBus, Modbus, advanced plotting, etc.).
-- Priority support and feature requests.
+The GPL license does not apply to the official precompiled binaries.
 
-For more details, see the [LICENSE](LICENSE.md) file or visit [https://serial-studio.com](https://serial-studio.com).
+### Commercial License
+All official binaries downloaded from [serial-studio.com](https://serial-studio.com/), GitHub Releases, or other channels maintained by the author are covered by a Commercial License.
+
+A paid license is required to:
+- Use the official binary in any commercial, enterprise, or proprietary environment.
+- Access Pro features (MQTT, CANBus, Modbus, advanced plotting, etc.).
+- Receive priority support.
+
+Without a valid license, use of the binary is limited to personal and evaluation purposes only.
