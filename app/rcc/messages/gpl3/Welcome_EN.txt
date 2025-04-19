@@ -22,3 +22,5 @@ Pro includes awesome extras like:
 ✓ XY plotting and 3D visualization
 ✓ Business-friendly binary license (no GPL obligations)
 ✓ Plus more tools to take your embedded workflow further
+
+→ Learn more: https://serial-studio.com/

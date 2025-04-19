@@ -2,21 +2,24 @@
 ░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░ 　 ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
-¡Bienvenido a Serial Studio! Para comenzar:
-1. Selecciona un puerto COM y la velocidad de baudios en el panel de dispositivos
-   a la derecha.
-2. Si la conexión serial es exitosa y los datos se interpretan correctamente,
-   este panel se cerrará automáticamente, mostrando el tablero.
-3. Si no, utiliza la Consola para identificar y solucionar el problema.
+Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Todos los derechos reservados.
 
-Usa los botones de la barra de herramientas para acceder a las funciones que
-necesitas.
+¡Gracias por usar %1 y por apoyar el software de código abierto!
 
-Si encuentras algún problema, por favor repórtalo aquí:
-→ https://github.com/Serial-Studio/Serial-Studio/issues
+Esta versión está licenciada bajo un acuerdo comercial y está aprobada para
+uso en entornos comerciales y propietarios.
 
-Para más recursos, incluyendo documentación e integración con tus proyectos
-embebidos, visita el wiki:
-→ https://github.com/Serial-Studio/Serial-Studio/wiki
+→ Soporte: alex@serial-studio.com
+→ Agendar llamada: https://calendly.com/serial-studio
+→ Portal del cliente: https://store.serial-studio.com/billing
 
-Consejo: Usa el Editor de Proyectos para crear y personalizar archivos de proyecto.
+Tus funciones Pro incluyen:
+✓ Integración con MQTT
+✓ Decodificación de CAN y Modbus
+✓ Visualización XY y 3D
+✓ Soporte prioritario
+✓ Licencia amigable para empresas
+✓ Actualizaciones continuas
+
+→ Más información: https://serial-studio.com/

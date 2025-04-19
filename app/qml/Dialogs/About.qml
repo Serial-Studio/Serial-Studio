@@ -195,15 +195,23 @@ Window {
             opacity: 0.8
             text: qsTr("Copyright © %1 %2").arg(root.year).arg(Cpp_AppOrganization)
           }
+
+          Label {
+            opacity: 0.8
+            text: qsTr("All Rights Reserved")
+            visible: Cpp_QtCommercial_Available
+          }
         }
       }
 
-
+      //
+      // GPLv3 License label for Qt open source build
+      //
       Label {
         opacity: 0.8
         Layout.fillWidth: true
         Layout.maximumWidth: 360
-        visible: !app.proVersion
+        visible: !Cpp_QtCommercial_Available
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("%1 is free software: you can redistribute it and/or modify " +
                    "it under the terms of the GNU General Public License as " +
@@ -215,10 +223,60 @@ Window {
                    "See the GNU General Public License for more details.").arg(Cpp_AppName)
       }
 
+      //
+      // License label for activated commercial-build
+      //
+      Label {
+        opacity: 0.8
+        Layout.fillWidth: true
+        Layout.maximumWidth: 360
+        visible: Cpp_QtCommercial_Available && app.proVersion
+        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        text: qsTr("This configuration is licensed for commercial and proprietary use. " +
+                   "It may be used in closed-source and commercial applications, " +
+                   "subject to the terms of the commercial license.")
+      }
+
+      //
+      // License label for non-activated commercial-build
+      //
+      Label {
+        opacity: 0.8
+        Layout.fillWidth: true
+        Layout.maximumWidth: 360
+        visible: Cpp_QtCommercial_Available && !app.proVersion
+        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        text: qsTr("This configuration is for personal use only. Commercial use is prohibited " +
+                   "unless a valid commercial license is activated.")
+      }
+
+      //
+      // License label for all commercial builds
+      //
+      Label {
+        opacity: 0.7
+        Layout.fillWidth: true
+        Layout.maximumWidth: 360
+        visible: Cpp_QtCommercial_Available
+        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        text: qsTr("This software is provided 'as is' without warranty of " +
+                   "any kind, express or implied, including but not limited " +
+                   "to the warranties of merchantability or fitness for a " +
+                   "particular purpose. In no event shall the author be " +
+                   "liable for any damages arising from the use of this " +
+                   "software.")
+      }
+
+      //
+      // Spacer
+      //
       Item {
         implicitHeight: 8
       }
 
+      //
+      // License management
+      //
       Button {
         Layout.fillWidth: true
         text: qsTr("License Management")
@@ -226,18 +284,27 @@ Window {
         visible: Cpp_QtCommercial_Available
       }
 
+      //
+      // Website
+      //
       Button {
         Layout.fillWidth: true
         text: qsTr("Website")
         onClicked: Qt.openUrlExternally("https://serial-studio.com/")
       }
 
+      //
+      // Check for updates
+      //
       Button {
         Layout.fillWidth: true
         text: qsTr("Check for Updates")
         onClicked: app.checkForUpdates()
       }
 
+      //
+      // Donate button (free & GPL3)
+      //
       Button {
         text: qsTr("Donate")
         Layout.fillWidth: true
@@ -245,22 +312,34 @@ Window {
         onClicked: donateDialog.show()
       }
 
+      //
+      // Report bug
+      //
       Button {
         Layout.fillWidth: true
         text: qsTr("Report Bug")
         onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
       }
 
+      //
+      // Acknowledgements
+      //
       Button {
         Layout.fillWidth: true
         text: qsTr("Acknowledgements")
         onClicked: app.showAcknowledgements()
       }
 
+      //
+      // Spacer
+      //
       Item {
         implicitHeight: 8
       }
 
+      //
+      // Close button
+      //
       Button {
         text: qsTr("Close")
         Layout.fillWidth: true

@@ -3,26 +3,25 @@
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
 Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Tous droits réservés.
 
-Ce logiciel est sous licence Licence Publique Générale GNU version 3.0
-(GPLv3). Vous êtes libre d’utiliser, de modifier et de redistribuer ce
-logiciel selon les termes de la GPL, à condition que tous les travaux
-dérivés restent également open source.
+Cette version de Serial Studio est gratuite pour un usage personnel et
+d’évaluation uniquement. L’utilisation commerciale est interdite sans une
+licence Pro valide.
 
-→ Licence complète : https://www.gnu.org/licenses/gpl-3.0.html
+→ Besoin d’une licence commerciale ? https://store.serial-studio.com/
+
+Vous êtes libre de compiler Serial Studio vous-même sous les termes de la
+licence GNU GPLv3 en utilisant une installation Qt open source.
+
 → Code source : https://github.com/serial-studio/serial-studio
 
-Nouveau sur Serial Studio ? Cliquez sur le bouton "Aide" dans la barre
+Nouveau sur Serial Studio ? Cliquez sur le bouton « Aide » dans la barre
 d’outils pour commencer.
 
-Vous aimez ce projet ? Pensez à le soutenir en achetant la version Pro :
-→ https://store.serial-studio.com/
-
-La version Pro inclut des fonctionnalités géniales comme :
-✓ Support de MQTT
+La version Pro inclut des fonctionnalités supplémentaires telles que :
+✓ Support MQTT
 ✓ Décodage CAN et Modbus
 ✓ Graphiques XY et visualisation 3D
-✓ Licence binaire adaptée aux entreprises (sans obligations GPL)
-✓ Et plus d’outils pour booster votre flux de travail embarqué
-
-→ En savoir plus : https://serial-studio.com/
+✓ Licence binaire adaptée à un usage commercial (sans obligations GPL)
+✓ Et plus d’outils pour booster votre workflow embarqué

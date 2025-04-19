@@ -343,11 +343,7 @@ void Licensing::LemonSqueezy::deactivate()
  */
 void Licensing::LemonSqueezy::openCustomerPortal()
 {
-  QString url = QStringLiteral("https://store.serial-studio.com/my-orders");
-  if (!m_customerEmail.isEmpty())
-    url = QStringLiteral("https://store.serial-studio.com/my-orders?email=%1")
-              .arg(m_customerEmail);
-
+  auto url = QStringLiteral("https://store.serial-studio.com/billing");
   QDesktopServices::openUrl(QUrl(url));
 }
 

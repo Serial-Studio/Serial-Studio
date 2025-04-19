@@ -3,26 +3,25 @@
 ▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█ 　 ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█
 
 Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
+Alle Rechte vorbehalten.
 
-Diese Software ist unter der GNU General Public License Version 3.0
-(GPLv3) lizenziert. Du darfst sie frei verwenden, ändern und
-weiterverbreiten, solange alle abgeleiteten Werke ebenfalls
-Open-Source bleiben.
+Diese Version von Serial Studio ist nur für den persönlichen Gebrauch und zu
+Evaluierungszwecken kostenlos. Kommerzielle Nutzung ist ohne eine gültige
+Pro-Lizenz nicht gestattet.
 
-→ Vollständige Lizenz: https://www.gnu.org/licenses/gpl-3.0.html
+→ Kommerzielle Lizenz benötigt? https://store.serial-studio.com/
+
+Sie können Serial Studio selbst unter den Bedingungen der GNU GPLv3 mithilfe
+einer Open-Source-Qt-Installation kompilieren.
+
 → Quellcode: https://github.com/serial-studio/serial-studio
 
-Neu bei Serial Studio? Klicke auf den "Hilfe"-Button in der
-Werkzeugleiste, um loszulegen.
+Neu bei Serial Studio? Klicken Sie auf die Schaltfläche „Hilfe“ in der
+Symbolleiste, um zu starten.
 
-Dir gefällt das Projekt? Unterstütze es durch den Kauf der Pro-Version:
-→ https://store.serial-studio.com/
-
-Pro enthält coole Extras wie:
+Die Pro-Version bietet zusätzliche Funktionen wie:
 ✓ MQTT-Unterstützung
 ✓ CAN- und Modbus-Dekodierung
 ✓ XY-Diagramme und 3D-Visualisierung
 ✓ Unternehmensfreundliche Binärlizenz (ohne GPL-Verpflichtungen)
-✓ Und weitere Tools für deinen Embedded-Workflow
-
-→ Mehr erfahren: https://serial-studio.com/
+✓ Und weitere Tools für optimierte Embedded-Workflows

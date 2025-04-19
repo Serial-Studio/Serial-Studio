@@ -121,19 +121,27 @@ QString Misc::Translator::welcomeConsoleText() const
 
   // Define fallback text & default message path
   QString text = QObject::tr("Failed to load welcome text :(");
-  QString path = ":/rcc/messages/gpl3/Welcome_" + lang + ".txt";
-
 #ifdef USE_QT_COMMERCIAL
-  // Load welcome text for Pro users
+  QString path = ":/rcc/messages/free/Welcome_" + lang + ".txt";
   if (Licensing::LemonSqueezy::instance().isActivated())
     path = ":/rcc/messages/pro/Welcome_" + lang + ".txt";
+#else
+  QString path = ":/rcc/messages/free/Welcome_" + lang + ".txt";
 #endif
 
   // Read welcome text from resources
   QFile file(path);
   if (file.open(QFile::ReadOnly))
   {
-    text = QString::fromUtf8(file.readAll());
+    if (path.contains("pro"))
+    {
+      text = QString::fromUtf8(file.readAll())
+                 .arg(Licensing::LemonSqueezy::instance().appName());
+    }
+
+    else
+      text = QString::fromUtf8(file.readAll());
+
     file.close();
   }
 

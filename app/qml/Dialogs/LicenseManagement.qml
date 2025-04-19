@@ -169,6 +169,7 @@ Window {
             Layout.minimumHeight: 128
             Layout.maximumHeight: 128
             sourceSize: Qt.size(128, 128)
+            visible: !Cpp_Licensing_LemonSqueezy.isActivated
             Layout.alignment: Qt.AlignVCenter
             source: {
               if (Screen.pixelDensity >= 2)
@@ -309,7 +310,7 @@ Window {
               GridLayout {
                 columns: 3
                 rowSpacing: 6
-                columnSpacing: 4
+                columnSpacing: 8
                 Layout.fillWidth: true
 
                 Image {
@@ -343,7 +344,7 @@ Window {
                   sourceSize.height: 18
                   source: "qrc:/rcc/icons/licensing/email.svg"
                 } Label {
-                  text: qsTr("E-Mail Address") + ":"
+                  text: qsTr("Licensee E-Mail") + ":"
                   font: Cpp_Misc_CommonFonts.boldUiFont
                 } Label {
                   Layout.fillWidth: true
@@ -438,11 +439,11 @@ Window {
           Button {
             icon.width: 18
             icon.height: 18
-            text: qsTr("Close")
-            onClicked: root.close()
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/buttons/close.svg"
+            text: qsTr("Customer Portal") + " "
             icon.color: Cpp_ThemeManager.colors["button_text"]
+            icon.source: "qrc:/rcc/icons/buttons/lemonsqueezy.svg"
+            onClicked: Cpp_Licensing_LemonSqueezy.openCustomerPortal()
           }
 
           Item {

@@ -5,21 +5,21 @@
 Copyright (c) 2020–2025 Alex Spataru <https://github.com/alex-spataru>
 All Rights Reserved.
 
-Thank you for using %1, and for supporting open source!
+This version of Serial Studio is free for personal and evaluation use only.
+Commercial use is not permitted without a valid Pro license.
 
-This version is licensed under a commercial agreement and is approved for
-use in commercial and proprietary environments.
+→ Need a commercial license? https://store.serial-studio.com/
 
-→ Support: alex@serial-studio.com
-→ Schedule a call: https://calendly.com/serial-studio
-→ Customer portal: https://store.serial-studio.com/billing
+You are free to build Serial Studio yourself under the terms of the GNU GPLv3
+using an open-source installation of Qt.
 
-Your Pro features include:
-✓ MQTT integration
+→ Source code: https://github.com/serial-studio/serial-studio
+
+New to Serial Studio? Click the “Help” toolbar button to get started.
+
+Pro includes awesome extras like:
+✓ MQTT support
 ✓ CAN and Modbus decoding
-✓ XY and 3D visualization
-✓ Priority support
-✓ Business-friendly license
-✓ Continuous updates
-
-→ Learn more: https://serial-studio.com/
+✓ XY plotting and 3D visualization
+✓ Business-friendly binary license (no GPL obligations)
+✓ Plus more tools to take your embedded workflow further

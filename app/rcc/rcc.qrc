@@ -305,5 +305,11 @@
         <file>themes/yaru-dark.json</file>
         <file>themes/yaru-light.json</file>
         <file>icons/licensing/key.svg</file>
+        <file>messages/free/Welcome_DE.txt</file>
+        <file>messages/free/Welcome_EN.txt</file>
+        <file>messages/free/Welcome_ES.txt</file>
+        <file>messages/free/Welcome_FR.txt</file>
+        <file>messages/free/Welcome_RU.txt</file>
+        <file>messages/free/Welcome_ZH.txt</file>
     </qresource>
 </RCC>
