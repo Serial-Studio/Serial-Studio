@@ -2,7 +2,9 @@
 > **Serial Studio is currently distributed exclusively under the GNU General Public License v3 (GPLv3)** until the following steps are completed:  
 > 1. [x] Acquisition of a commercial Qt license.  
 > 2. [x] Compliance with Qt's requirements for commercial software distribution.  
-> 3. [ ] Implementation of a license activation system for the commercial version.  
+> 3. [x] Implementation of a license activation system for the commercial version.
+> 4. [ ] Implementation of extra features (CAN bus, Modbus & 3D plots).
+> 5. [ ] Development of main website & store activation.  
 > 
 > Terms for the Commercial License may change prior to the full release.  
 > The goal is to officially transition to the dual-license model starting with **Serial Studio v3.0.7**.
