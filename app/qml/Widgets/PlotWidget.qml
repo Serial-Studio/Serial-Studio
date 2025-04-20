@@ -113,6 +113,12 @@ Item {
     }
 
     //
+    // Zoom controls
+    //
+    zoomAreaEnabled: true
+    zoomStyle: GraphsView.ZoomStyle.Center
+
+    //
     // Customize Y axis
     //
     axisY: ValueAxis {
@@ -120,6 +126,17 @@ Item {
       subTickCount: 1
       tickAnchor: root.yMin
       visible: root.yLabelVisible
+
+      onPanChanged: {
+        if (pan !== 0)
+          pan = 0
+      }
+
+      onZoomChanged: {
+        let z = Math.max(1, zoom)
+        if (zoom !== z)
+          zoom = z
+      }
     }
 
     //
@@ -130,6 +147,17 @@ Item {
       subTickCount: 1
       tickAnchor: root.xMin
       visible: root.xLabelVisible
+
+      onPanChanged: {
+        if (pan !== 0)
+          pan = 0
+      }
+
+      onZoomChanged: {
+        let z = Math.max(1, zoom)
+        if (zoom !== z)
+          zoom = z
+      }
     }
   }
 
