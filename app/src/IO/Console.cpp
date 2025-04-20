@@ -586,18 +586,17 @@ QString IO::Console::plainTextStr(const QByteArray &data)
   filteredData.reserve(data.size());
   for (int i = 0; i < data.size(); ++i)
   {
-    bool printable = false;
-    printable |= (data[i] == '\r');
-    printable |= (data[i] == '\n');
-    printable |= std::isprint(static_cast<unsigned char>(data[i]));
-    printable |= std::iscntrl(static_cast<unsigned char>(data[i]));
-    printable |= std::isspace(static_cast<unsigned char>(data[i]));
-    printable &= (data[i] != '\0');
+    // clang-format off
+    unsigned char ch = static_cast<unsigned char>(data[i]);
+    bool printable = (data[i] == '\r') ||
+                     (data[i] == '\n') ||
+                      std::isprint(ch) ||
+                      std::iscntrl(ch) ||
+                      std::isspace(ch);
+    // clang-format on
 
-    if (printable)
-      filteredData += data[i];
-    else
-      filteredData += '.';
+    printable = printable && (data[i] != '\0');
+    filteredData += printable ? data[i] : '.';
   }
 
   // Return the filtered data
