@@ -91,7 +91,7 @@ uint32_t IO::crc32(const char *data, const int length)
     crc = crc ^ data[i];
     for (int j = 8; j >= 0; j--)
     {
-      mask = -(crc & 1);
+      mask = 0 - (crc & 1);
       crc = (crc >> 1) ^ (0xEDB88320 & mask);
     }
   }

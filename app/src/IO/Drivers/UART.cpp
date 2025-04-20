@@ -522,7 +522,7 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
  */
 void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 {
-  if (portIndex >= 0 && portIndex < portList().count())
+  if (portIndex < portList().count())
     m_portIndex = portIndex;
   else
     m_portIndex = 0;
