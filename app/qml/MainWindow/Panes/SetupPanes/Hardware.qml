@@ -21,82 +21,101 @@
 
 import QtQuick
 import QtQuick.Layouts
-import QtCore as QtSettings
 
-import "Devices" as Devices
+import SerialStudio
+import "Drivers" as Drivers
 
-Item {
+Rectangle {
   id: root
+  radius: 2
+  border.width: 1
   implicitHeight: layout.implicitHeight + 32
+  color: Cpp_ThemeManager.colors["groupbox_background"]
+  border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
   //
-  // Save settings
+  // Create list of device panels
   //
-  QtSettings.Settings {
-    category: "DeviceSetup"
-
-    property alias serialDtr: serial.dtr
-    property alias serialParity: serial.parity
-    property alias serialBaudRate: serial.baudRate
-    property alias serialDataBits: serial.dataBits
-    property alias serialStopBits: serial.stopBits
-    property alias serialFlowControl: serial.flowControl
-    property alias serialAutoReconnect: serial.autoReconnect
-
-    property alias networkAddress: network.address
-    property alias newtorkTcpPort: network.tcpPort
-    property alias networkSocketType: network.socketType
-    property alias networkUdpLocalPort: network.udpLocalPort
-    property alias networkUdpRemotePort: network.udpRemotePort
-    property alias networkUdpMulticastEnabled: network.udpMulticastEnabled
-  }
+  property var buses: []
 
   //
-  // Background
+  // Device configuration
   //
-  Rectangle {
-    radius: 2
-    border.width: 1
-    anchors.fill: parent
-    color: Cpp_ThemeManager.colors["groupbox_background"]
-    border.color: Cpp_ThemeManager.colors["groupbox_border"]
-  }
-
-  //
-  // Layout
-  //
-  ColumnLayout {
+  StackLayout {
     id: layout
+    clip: true
     anchors.margins: 8
     anchors.fill: parent
+    currentIndex: Cpp_IO_Manager.busType
+    implicitHeight: {
+      let maxHeight = 0;
+      for (let i = 0; i < root.buses.length; ++i) {
+        const item = root.buses[i];
+        if (item && item.implicitHeight > maxHeight) {
+          maxHeight = item.implicitHeight;
+        }
+      }
 
-    //
-    // Device configuration
-    //
-    StackLayout {
-      id: stack
-      clip: true
+      return maxHeight + 32;
+    }
+
+    Loader {
+      active: true
+      asynchronous: true
       Layout.fillWidth: true
       Layout.fillHeight: true
-      currentIndex: Cpp_IO_Manager.busType
-      implicitHeight: Math.max(serial.implicitHeight, network.implicitHeight, bluetoothLE.implicitHeight)
-
-      Devices.Serial {
-        id: serial
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+      sourceComponent: Component {
+        Drivers.UART {
+          Component.onCompleted: root.buses.push(this)
+        }
       }
+    }
 
-      Devices.Network {
-        id: network
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+    Loader {
+      active: true
+      asynchronous: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      sourceComponent: Component {
+        Drivers.Network {
+          Component.onCompleted: root.buses.push(this)
+        }
       }
+    }
 
-      Devices.BluetoothLE {
-        id: bluetoothLE
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+    Loader {
+      active: true
+      asynchronous: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      sourceComponent: Component {
+        Drivers.BluetoothLE {
+          Component.onCompleted: root.buses.push(this)
+        }
+      }
+    }
+
+    Loader {
+      asynchronous: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      active: Cpp_QtCommercial_Available
+      sourceComponent: Component {
+        Drivers.Modbus {
+          Component.onCompleted: root.buses.push(this)
+        }
+      }
+    }
+
+    Loader {
+      asynchronous: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      active: Cpp_QtCommercial_Available
+      sourceComponent: Component {
+        Drivers.CANBus {
+          Component.onCompleted: root.buses.push(this)
+        }
       }
     }
   }

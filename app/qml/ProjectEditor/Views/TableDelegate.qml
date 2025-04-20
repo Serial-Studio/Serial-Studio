@@ -208,19 +208,21 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.TextField
           visible: model.widgetType === ProjectModel.TextField
 
-          sourceComponent: TextField {
-            text: model.editableValue
-            font: Cpp_Misc_CommonFonts.monoFont
-            placeholderText: model.placeholderValue
-            color: Cpp_ThemeManager.colors["table_text"]
-            onTextEdited: {
-              root.modelPointer.setData(
-                    view.index(row, column),
-                    text,
-                    ProjectModel.EditableValue)
-            }
+          sourceComponent: Component {
+            TextField {
+              text: model.editableValue
+              font: Cpp_Misc_CommonFonts.monoFont
+              placeholderText: model.placeholderValue
+              color: Cpp_ThemeManager.colors["table_text"]
+              onTextEdited: {
+                root.modelPointer.setData(
+                      view.index(row, column),
+                      text,
+                      ProjectModel.EditableValue)
+              }
 
-            background: Item {}
+              background: Item {}
+            }
           }
         }
 
@@ -234,50 +236,52 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.IconPicker
           visible: model.widgetType === ProjectModel.IconPicker
 
-          sourceComponent: RowLayout {
-            id: layout
+          sourceComponent: Component {
+            RowLayout {
+              id: layout
 
-            Connections {
-              target: actionIconPicker
+              Connections {
+                target: actionIconPicker
 
-              function onIconSelected(icon) {
-                if (layout.visible)
-                  model.editableValue = icon
-              }
-            }
-
-            TextField {
-              readOnly: true
-              Layout.fillWidth: true
-              text: model.editableValue
-              Layout.alignment: Qt.AlignVCenter
-              font: Cpp_Misc_CommonFonts.monoFont
-              placeholderText: model.placeholderValue
-              color: Cpp_ThemeManager.colors["table_text"]
-              background: Item {}
-            }
-
-            Item {
-              width: 2
-            }
-
-            Button {
-              icon.width: 16
-              icon.height: 16
-              Layout.maximumWidth: 32
-              Layout.alignment: Qt.AlignVCenter
-              icon.color: Cpp_ThemeManager.colors["table_text"]
-              icon.source: "qrc:/rcc/icons/project-editor/open.svg"
-              onClicked: {
-                actionIconPicker.selectedIcon = model.editableValue
-                actionIconPicker.showNormal()
+                function onIconSelected(icon) {
+                  if (layout.visible)
+                    model.editableValue = icon
+                }
               }
 
-              background: Item {}
-            }
+              TextField {
+                readOnly: true
+                Layout.fillWidth: true
+                text: model.editableValue
+                Layout.alignment: Qt.AlignVCenter
+                font: Cpp_Misc_CommonFonts.monoFont
+                placeholderText: model.placeholderValue
+                color: Cpp_ThemeManager.colors["table_text"]
+                background: Item {}
+              }
 
-            Item {
-              width: 2
+              Item {
+                width: 2
+              }
+
+              Button {
+                icon.width: 16
+                icon.height: 16
+                Layout.maximumWidth: 32
+                Layout.alignment: Qt.AlignVCenter
+                icon.color: Cpp_ThemeManager.colors["table_text"]
+                icon.source: "qrc:/rcc/icons/project-editor/open.svg"
+                onClicked: {
+                  actionIconPicker.selectedIcon = model.editableValue
+                  actionIconPicker.showNormal()
+                }
+
+                background: Item {}
+              }
+
+              Item {
+                width: 2
+              }
             }
           }
         }
@@ -292,28 +296,30 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.IntField
           visible: model.widgetType === ProjectModel.IntField
 
-          sourceComponent: TextField {
-            text: model.editableValue
-            font: Cpp_Misc_CommonFonts.monoFont
-            placeholderText: model.placeholderValue
-            color: Cpp_ThemeManager.colors["table_text"]
+          sourceComponent: Component {
+            TextField {
+              text: model.editableValue
+              font: Cpp_Misc_CommonFonts.monoFont
+              placeholderText: model.placeholderValue
+              color: Cpp_ThemeManager.colors["table_text"]
 
-            onTextEdited: {
-              const num = Number(text);
-              if (!isNaN(num) && num > 0) {
-                root.modelPointer.setData(
-                      view.index(row, column),
-                      Number(text),
-                      ProjectModel.EditableValue)
+              onTextEdited: {
+                const num = Number(text);
+                if (!isNaN(num) && num > 0) {
+                  root.modelPointer.setData(
+                        view.index(row, column),
+                        Number(text),
+                        ProjectModel.EditableValue)
+                }
               }
-            }
 
-            validator: IntValidator {
-              bottom: 1
-              top: 1000000
-            }
+              validator: IntValidator {
+                bottom: 1
+                top: 1000000
+              }
 
-            background: Item {}
+              background: Item {}
+            }
           }
         }
 
@@ -327,35 +333,37 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.FloatField
           visible: model.widgetType === ProjectModel.FloatField
 
-          sourceComponent: TextField {
-            text: model.editableValue
-            font: Cpp_Misc_CommonFonts.monoFont
-            placeholderText: model.placeholderValue
-            color: Cpp_ThemeManager.colors["table_text"]
+          sourceComponent: Component {
+            TextField {
+              text: model.editableValue
+              font: Cpp_Misc_CommonFonts.monoFont
+              placeholderText: model.placeholderValue
+              color: Cpp_ThemeManager.colors["table_text"]
 
-            onTextEdited: {
-              // Don't convert or set the data if it's an incomplete number
-              if (text === "-" || text === "." || text === "-.")
-                return;
+              onTextEdited: {
+                // Don't convert or set the data if it's an incomplete number
+                if (text === "-" || text === "." || text === "-.")
+                  return;
 
-              // Convert to number only if the input is valid
-              const num = Number(text);
-              if (!isNaN(num)) {
-                root.modelPointer.setData(
-                      view.index(row, column),
-                      num,
-                      ProjectModel.EditableValue
-                      );
+                // Convert to number only if the input is valid
+                const num = Number(text);
+                if (!isNaN(num)) {
+                  root.modelPointer.setData(
+                        view.index(row, column),
+                        num,
+                        ProjectModel.EditableValue
+                        );
+                }
               }
-            }
 
-            validator: DoubleValidator {
-              id: validator
-              bottom: -1000000
-              top: 1000000
-            }
+              validator: DoubleValidator {
+                id: validator
+                bottom: -1000000
+                top: 1000000
+              }
 
-            background: Item {}
+              background: Item {}
+            }
           }
         }
 
@@ -372,17 +380,19 @@ ColumnLayout {
           property var comboBoxData: model.comboBoxData
           property var editableValue: model.editableValue
 
-          sourceComponent: ComboBox {
-            flat: true
-            model: comboBoxData
-            currentIndex: editableValue
-            font: Cpp_Misc_CommonFonts.monoFont
-            onCurrentIndexChanged: {
-              if (currentIndex !== editableValue) {
-                root.modelPointer.setData(
-                      view.index(row, column),
-                      currentIndex,
-                      ProjectModel.EditableValue)
+          sourceComponent: Component {
+            ComboBox {
+              flat: true
+              model: comboBoxData
+              currentIndex: editableValue
+              font: Cpp_Misc_CommonFonts.monoFont
+              onCurrentIndexChanged: {
+                if (currentIndex !== editableValue) {
+                  root.modelPointer.setData(
+                        view.index(row, column),
+                        currentIndex,
+                        ProjectModel.EditableValue)
+                }
               }
             }
           }
@@ -401,16 +411,18 @@ ColumnLayout {
           property var comboBoxData: model.comboBoxData
           property var editableValue: model.editableValue
 
-          sourceComponent: ComboBox {
-            flat: true
-            model: [qsTr("No"), qsTr("Yes")]
-            currentIndex: editableValue ? 1 : 0
-            font: Cpp_Misc_CommonFonts.monoFont
-            onCurrentIndexChanged: {
-              root.modelPointer.setData(
-                    view.index(row, column),
-                    currentIndex === 1,
-                    ProjectModel.EditableValue)
+          sourceComponent: Component {
+            ComboBox {
+              flat: true
+              model: [qsTr("No"), qsTr("Yes")]
+              currentIndex: editableValue ? 1 : 0
+              font: Cpp_Misc_CommonFonts.monoFont
+              onCurrentIndexChanged: {
+                root.modelPointer.setData(
+                      view.index(row, column),
+                      currentIndex === 1,
+                      ProjectModel.EditableValue)
+              }
             }
           }
         }
@@ -425,64 +437,66 @@ ColumnLayout {
           active: model.widgetType === ProjectModel.HexTextField
           visible: model.widgetType === ProjectModel.HexTextField
 
-          sourceComponent: TextField {
-            id: _hexComponent
-            text: model.editableValue
-            font: Cpp_Misc_CommonFonts.monoFont
-            placeholderText: model.placeholderValue
-            color: Cpp_ThemeManager.colors["table_text"]
+          sourceComponent: Component {
+            TextField {
+              id: _hexComponent
+              text: model.editableValue
+              font: Cpp_Misc_CommonFonts.monoFont
+              placeholderText: model.placeholderValue
+              color: Cpp_ThemeManager.colors["table_text"]
 
-            //
-            // Add space automatically in hex view
-            //
-            onTextChanged: {
-              // Get the current cursor position
-              const currentCursorPosition = _hexComponent.cursorPosition;
-              const cursorAtEnd = (currentCursorPosition === _hexComponent.text.length);
+              //
+              // Add space automatically in hex view
+              //
+              onTextChanged: {
+                // Get the current cursor position
+                const currentCursorPosition = _hexComponent.cursorPosition;
+                const cursorAtEnd = (currentCursorPosition === _hexComponent.text.length);
 
-              // Format the text
-              const originalText = _hexComponent.text;
-              const formattedText = Cpp_IO_Console.formatUserHex(_hexComponent.text);
-              const isValid = Cpp_IO_Console.validateUserHex(formattedText);
+                // Format the text
+                const originalText = _hexComponent.text;
+                const formattedText = Cpp_IO_Console.formatUserHex(_hexComponent.text);
+                const isValid = Cpp_IO_Console.validateUserHex(formattedText);
 
-              // Update the text only if it has changed
-              if (originalText !== formattedText) {
-                _hexComponent.text = formattedText;
+                // Update the text only if it has changed
+                if (originalText !== formattedText) {
+                  _hexComponent.text = formattedText;
 
-                // Restore the cursor position, adjusting for added spaces
-                if (!cursorAtEnd) {
-                  // Remove spaces from originalText and formattedText to compare lengths
-                  const cleanedOriginalText = originalText.replace(/ /g, '');
-                  const cleanedFormattedText = formattedText.replace(/ /g, '');
+                  // Restore the cursor position, adjusting for added spaces
+                  if (!cursorAtEnd) {
+                    // Remove spaces from originalText and formattedText to compare lengths
+                    const cleanedOriginalText = originalText.replace(/ /g, '');
+                    const cleanedFormattedText = formattedText.replace(/ /g, '');
 
-                  // Calculate the difference in length due to formatting
-                  const lengthDifference = cleanedFormattedText.length - cleanedOriginalText.length;
+                    // Calculate the difference in length due to formatting
+                    const lengthDifference = cleanedFormattedText.length - cleanedOriginalText.length;
 
-                  // Count spaces before the cursor in both texts
-                  let spacesBeforeCursorOriginal = (originalText.slice(0, currentCursorPosition).match(/ /g) || []).length;
-                  let spacesBeforeCursorFormatted = (formattedText.slice(0, currentCursorPosition).match(/ /g) || []).length;
+                    // Count spaces before the cursor in both texts
+                    let spacesBeforeCursorOriginal = (originalText.slice(0, currentCursorPosition).match(/ /g) || []).length;
+                    let spacesBeforeCursorFormatted = (formattedText.slice(0, currentCursorPosition).match(/ /g) || []).length;
 
-                  // Calculate adjustment factor
-                  const adjustment = spacesBeforeCursorFormatted - spacesBeforeCursorOriginal + lengthDifference;
+                    // Calculate adjustment factor
+                    const adjustment = spacesBeforeCursorFormatted - spacesBeforeCursorOriginal + lengthDifference;
 
-                  // Restore the cursor position with adjustment
-                  _hexComponent.cursorPosition = Math.min(currentCursorPosition + adjustment, _hexComponent.text.length);
+                    // Restore the cursor position with adjustment
+                    _hexComponent.cursorPosition = Math.min(currentCursorPosition + adjustment, _hexComponent.text.length);
+                  }
                 }
+
+                // Update the palette based on validation
+                _hexComponent.color = isValid
+                    ? Cpp_ThemeManager.colors["table_text"]
+                    : Cpp_ThemeManager.colors["alarm"]
+
+                // Set model data
+                root.modelPointer.setData(
+                      view.index(row, column),
+                      formattedText,
+                      ProjectModel.EditableValue)
               }
 
-              // Update the palette based on validation
-              _hexComponent.color = isValid
-                  ? Cpp_ThemeManager.colors["table_text"]
-                  : Cpp_ThemeManager.colors["alarm"]
-
-              // Set model data
-              root.modelPointer.setData(
-                    view.index(row, column),
-                    formattedText,
-                    ProjectModel.EditableValue)
+              background: Item {}
             }
-
-            background: Item {}
           }
         }
 

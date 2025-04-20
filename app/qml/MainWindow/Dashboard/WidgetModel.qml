@@ -37,9 +37,11 @@ Repeater {
     // Uncomment to verify that lazy widget rendering is working
     //Behavior on opacity {NumberAnimation{}}
 
-    sourceComponent: WidgetDelegate {
-      widgetIndex: index
-      active: loader.visible && loader.widgetInViewPort
+    sourceComponent: Component {
+      WidgetDelegate {
+        widgetIndex: index
+        active: loader.visible && loader.widgetInViewPort
+      }
     }
 
     Connections {

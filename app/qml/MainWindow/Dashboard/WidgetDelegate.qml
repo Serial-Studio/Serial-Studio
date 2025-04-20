@@ -100,106 +100,108 @@ Widgets.Pane {
     asynchronous: true
     onLoaded: windowLoader.item.showNormal()
 
-    sourceComponent: Window {
-      id: window
-      width: 640
-      height: 480
-      visible: false
-      minimumWidth: 640 / 2
-      minimumHeight: 480 / 2
-      title: widget.widgetTitle
+    sourceComponent: Component {
+      Window {
+        id: window
+        width: 640
+        height: 480
+        visible: false
+        minimumWidth: 640 / 2
+        minimumHeight: 480 / 2
+        title: widget.widgetTitle
 
-      //
-      // Close window instead of app
-      //
-      Shortcut {
-        sequences: [StandardKey.Close]
-        onActivated: window.close()
-      }
-
-      //
-      // Destroy widget on close
-      //
-      onClosing: {
-        Cpp_NativeWindow.removeWindow(window)
-        windowLoader.active = false
-      }
-
-      //
-      // Native window registration
-      //
-      property real titlebarHeight: 0
-      onVisibleChanged: {
-        if (visible) {
-          Cpp_NativeWindow.addWindow(window, Cpp_ThemeManager.colors["widget_window"])
-          window.titlebarHeight = Cpp_NativeWindow.titlebarHeight(window)
+        //
+        // Close window instead of app
+        //
+        Shortcut {
+          sequences: [StandardKey.Close]
+          onActivated: window.close()
         }
-      }
-
-      //
-      // Background + window title on macOS
-      //
-      Rectangle {
-        anchors.fill: parent
-        color: Cpp_ThemeManager.colors["widget_window"]
 
         //
-        // Drag the window anywhere
+        // Destroy widget on close
         //
-        DragHandler {
-          target: null
-          onActiveChanged: {
-            if (active)
-              window.startSystemMove()
+        onClosing: {
+          Cpp_NativeWindow.removeWindow(window)
+          windowLoader.active = false
+        }
+
+        //
+        // Native window registration
+        //
+        property real titlebarHeight: 0
+        onVisibleChanged: {
+          if (visible) {
+            Cpp_NativeWindow.addWindow(window, Cpp_ThemeManager.colors["widget_window"])
+            window.titlebarHeight = Cpp_NativeWindow.titlebarHeight(window)
           }
         }
 
         //
-        // Titlebar text
+        // Background + window title on macOS
         //
-        Label {
-          text: window.title
-          visible: window.titlebarHeight > 0
-          color: Cpp_ThemeManager.colors["text"]
-          font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
-
-          anchors {
-            topMargin: 6
-            top: parent.top
-            horizontalCenter: parent.horizontalCenter
-          }
-        }
-      }
-
-      //
-      // Dashboard widget item
-      //
-      DashboardWidget {
-        id: windowWidget
-        anchors.margins: 4
-        anchors.fill: parent
-        visible: window.visible
-        widgetIndex: root.widgetIndex
-        anchors.topMargin: window.titlebarHeight
-
-        Loader {
-          id: windowWidgetLoader
-          asynchronous: true
+        Rectangle {
           anchors.fill: parent
-          source: windowWidget.widgetQmlPath
-          onLoaded: {
-            if (item && windowWidget.widgetModel) {
-              item.color = windowWidget.widgetColor
-              item.model = windowWidget.widgetModel
+          color: Cpp_ThemeManager.colors["widget_window"]
+
+          //
+          // Drag the window anywhere
+          //
+          DragHandler {
+            target: null
+            onActiveChanged: {
+              if (active)
+                window.startSystemMove()
             }
           }
 
-          Connections {
-            target: Cpp_ThemeManager
+          //
+          // Titlebar text
+          //
+          Label {
+            text: window.title
+            visible: window.titlebarHeight > 0
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
 
-            function onThemeChanged() {
-              if (windowWidgetLoader.item !== null)
-                windowWidgetLoader.item.color = windowWidget.widgetColor
+            anchors {
+              topMargin: 6
+              top: parent.top
+              horizontalCenter: parent.horizontalCenter
+            }
+          }
+        }
+
+        //
+        // Dashboard widget item
+        //
+        DashboardWidget {
+          id: windowWidget
+          anchors.margins: 4
+          anchors.fill: parent
+          visible: window.visible
+          widgetIndex: root.widgetIndex
+          anchors.topMargin: window.titlebarHeight
+
+          Loader {
+            id: windowWidgetLoader
+            asynchronous: true
+            anchors.fill: parent
+            source: windowWidget.widgetQmlPath
+            onLoaded: {
+              if (item && windowWidget.widgetModel) {
+                item.color = windowWidget.widgetColor
+                item.model = windowWidget.widgetModel
+              }
+            }
+
+            Connections {
+              target: Cpp_ThemeManager
+
+              function onThemeChanged() {
+                if (windowWidgetLoader.item !== null)
+                  windowWidgetLoader.item.color = windowWidget.widgetColor
+              }
             }
           }
         }

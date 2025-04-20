@@ -131,7 +131,7 @@ Item {
   //
   Loader {
     active: Cpp_QtCommercial_Available
-    sourceComponent: Item {
+    sourceComponent: Component {
       Connections {
         target: Cpp_Licensing_LemonSqueezy
         function onActivatedChanged() {

@@ -252,14 +252,16 @@ Rectangle {
     //
     Loader {
       active: Cpp_QtCommercial_Available
-      sourceComponent: Widgets.BigButton {
-        text: qsTr("MQTT")
-        onClicked: app.showMqttConfiguration()
-        icon.source: Cpp_MQTT_Client.isConnected ?
-                       (Cpp_MQTT_Client.isSubscriber ?
-                          "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
-                          "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
-                       "qrc:/rcc/icons/toolbar/mqtt.svg"
+      sourceComponent: Component {
+        Widgets.BigButton {
+          text: qsTr("MQTT")
+          onClicked: app.showMqttConfiguration()
+          icon.source: Cpp_MQTT_Client.isConnected ?
+                         (Cpp_MQTT_Client.isSubscriber ?
+                            "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
+                            "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
+                         "qrc:/rcc/icons/toolbar/mqtt.svg"
+        }
       }
     }
 

@@ -207,6 +207,8 @@ if(USE_QT_COMMERCIAL)
   set(HEADERS
     ${HEADERS}
     src/MQTT/Client.h
+    src/IO/Drivers/CANBus.h
+    src/IO/Drivers/Modbus.h
     src/Licensing/MachineID.h
     src/Licensing/SimpleCrypt.h
     src/Licensing/LemonSqueezy.h
@@ -214,6 +216,8 @@ if(USE_QT_COMMERCIAL)
   set(SOURCES
     ${SOURCES}
     src/MQTT/Client.cpp
+    src/IO/Drivers/CANBus.cpp
+    src/IO/Drivers/Modbus.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp
     src/Licensing/LemonSqueezy.cpp
@@ -238,9 +242,9 @@ set(QML_SRC
   qml/MainWindow/Dashboard/WidgetDelegate.qml
   qml/MainWindow/Dashboard/WidgetGrid.qml
   qml/MainWindow/Dashboard/WidgetModel.qml
-  qml/MainWindow/Panes/SetupPanes/Devices/BluetoothLE.qml
-  qml/MainWindow/Panes/SetupPanes/Devices/Network.qml
-  qml/MainWindow/Panes/SetupPanes/Devices/Serial.qml
+  qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml
+  qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml
+  qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml
   qml/MainWindow/Panes/SetupPanes/Hardware.qml
   qml/MainWindow/Panes/SetupPanes/Settings.qml
   qml/MainWindow/Panes/Console.qml
@@ -286,6 +290,8 @@ if(USE_QT_COMMERCIAL)
     ${QML_SRC}
     qml/Dialogs/MQTTConfiguration.qml
     qml/Dialogs/LicenseManagement.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
   )
 endif()
 
