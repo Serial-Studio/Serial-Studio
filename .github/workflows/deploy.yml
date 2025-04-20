@@ -334,6 +334,8 @@ jobs:
           tag: 'continuous'
           prerelease: true
           allowUpdates: true
+          removeArtifacts: true
+          replacesArtifacts: true
           name: 'Continuous Build'
           #generateReleaseNotes: true
           artifacts: "*.deb,*.rpm,*.AppImage,*.dmg,*.exe,*.msi"
