@@ -107,7 +107,8 @@ git commit -m "$COMMIT_MSG"
 # Ask user if they want to push
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 read -rp "Push to origin/$BRANCH? [y/N] " PUSH_CONFIRM
-if [[ "${PUSH_CONFIRM,,}" == "y" ]]; then
+PUSH_CONFIRM_LOWER=$(echo "$PUSH_CONFIRM" | tr '[:upper:]' '[:lower:]')
+if [[ "$PUSH_CONFIRM_LOWER" == "y" ]]; then
     git push origin "$BRANCH"
     echo "Changes pushed."
 else
