@@ -325,7 +325,8 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
   // Don't save CSV data when the device/service is not connected
 #ifdef USE_QT_COMMERCIAL
   if (!IO::Manager::instance().connected()
-      && !MQTT::Client::instance().isSubscriber())
+      && !(MQTT::Client::instance().isConnected()
+          && MQTT::Client::instance().isSubscriber()))
     return;
 #else
   if (!IO::Manager::instance().connected())
