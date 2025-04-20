@@ -275,18 +275,19 @@ Window {
       //
       Button {
         Layout.fillWidth: true
-        text: qsTr("License Management")
+        text: qsTr("Manage License")
         onClicked: app.showLicenseDialog()
         visible: Cpp_QtCommercial_Available
       }
 
       //
-      // Website
+      // Donate button (free & GPL3)
       //
       Button {
+        text: qsTr("Donate")
         Layout.fillWidth: true
-        text: qsTr("Website")
-        onClicked: Qt.openUrlExternally("https://serial-studio.com/")
+        visible: !app.proVersion
+        onClicked: donateDialog.show()
       }
 
       //
@@ -299,13 +300,12 @@ Window {
       }
 
       //
-      // Donate button (free & GPL3)
+      // License Agreement
       //
       Button {
-        text: qsTr("Donate")
         Layout.fillWidth: true
-        visible: !app.proVersion
-        onClicked: donateDialog.show()
+        text: qsTr("License Agreement")
+        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md")
       }
 
       //
@@ -324,6 +324,15 @@ Window {
         Layout.fillWidth: true
         text: qsTr("Acknowledgements")
         onClicked: app.showAcknowledgements()
+      }
+
+      //
+      // Website
+      //
+      Button {
+        Layout.fillWidth: true
+        text: qsTr("Website")
+        onClicked: Qt.openUrlExternally("https://serial-studio.com/")
       }
 
       //
