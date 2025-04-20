@@ -319,8 +319,14 @@ jobs:
       
       - name: '🔐 Generate SHA256 checksums'
         run: |
-          find . -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) -exec sha256sum {} \; | tee checksums.txt
-          echo -e "## SHA256 Checksums\n\n\`\`\`\n$(cat checksums.txt)\n\`\`\`" > release-body.md
+          echo "| File | SHA256 Checksum |" > release-body.md
+          echo "|------|------------------|" >> release-body.md
+      
+          find . -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) | while read -r file; do
+            hash=$(sha256sum "$file" | awk '{print $1}')
+            filename=$(basename "$file")
+            echo "| $filename | \`$hash\` |"
+          done >> release-body.md
       
       - name: '🚀 Create Release'
         uses: ncipollo/release-action@v1
