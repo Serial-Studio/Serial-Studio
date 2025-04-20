@@ -326,7 +326,7 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
 #ifdef USE_QT_COMMERCIAL
   if (!IO::Manager::instance().connected()
       && !(MQTT::Client::instance().isConnected()
-          && MQTT::Client::instance().isSubscriber()))
+           && MQTT::Client::instance().isSubscriber()))
     return;
 #else
   if (!IO::Manager::instance().connected())

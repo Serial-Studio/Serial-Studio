@@ -64,7 +64,7 @@ private:
 public:
   [[nodiscard]] static MachineID &instance();
   [[nodiscard]] const QString &machineId() const;
-  [[nodiscard]] const quint64 machineSpecificKey() const;
+  [[nodiscard]] quint64 machineSpecificKey() const;
 
 private:
   void readInformation();

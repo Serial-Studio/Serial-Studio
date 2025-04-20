@@ -47,9 +47,9 @@
  */
 Licensing::SimpleCrypt::SimpleCrypt()
   : m_key(0)
+  , m_lastError(ErrorNoError)
   , m_compressionMode(CompressionAuto)
   , m_protectionMode(ProtectionChecksum)
-  , m_lastError(ErrorNoError)
 {
 }
 
@@ -58,9 +58,9 @@ Licensing::SimpleCrypt::SimpleCrypt()
  */
 Licensing::SimpleCrypt::SimpleCrypt(quint64 key)
   : m_key(key)
+  , m_lastError(ErrorNoError)
   , m_compressionMode(CompressionAuto)
   , m_protectionMode(ProtectionChecksum)
-  , m_lastError(ErrorNoError)
 {
   splitKey();
 }

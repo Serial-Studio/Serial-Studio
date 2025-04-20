@@ -86,7 +86,7 @@ const QString &Licensing::MachineID::machineId() const
  * @return A 64-bit unsigned integer representing the machine-specific
  *         encryption key.
  */
-const quint64 Licensing::MachineID::machineSpecificKey() const
+quint64 Licensing::MachineID::machineSpecificKey() const
 {
   return m_machineSpecificKey;
 }
