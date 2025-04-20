@@ -35,7 +35,7 @@ Item {
   // Define application name
   //
   readonly property string appName: proVersion ? Cpp_Licensing_LemonSqueezy.appName : "Serial Studio"
-  readonly property string appIcon: proVersion ? "qrc:/rcc/logo/icon-pro.png" : "qrc:/rcc/logo/icon-pro.png"
+  readonly property string appIcon: proVersion ? "qrc:/rcc/logo/icon-pro.png" : "qrc:/rcc/logo/icon.png"
   readonly property bool proVersion: Cpp_QtCommercial_Available ? Cpp_Licensing_LemonSqueezy.isActivated : false
 
   //
@@ -62,8 +62,7 @@ Item {
   //
   MainWindow.MainWindow {
     id: mainWindow
-    Component.onCompleted: mainWindow.displayWindow()
-    //onClosing: (close) => app.handleClose(close)
+    onClosing: (close) => app.handleClose(close)
 
     Dialogs.IconPicker {
       id: actionIconPicker
