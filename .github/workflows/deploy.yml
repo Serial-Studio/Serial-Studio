@@ -306,36 +306,53 @@ jobs:
 
   # Upload continuous build
   upload:
-      name: '🗂 Create release and upload artifacts'
-      needs:
-        - build-mac-universal
-        - build-windows-x86_64
-        - build-linux-x86_64
-        
-      runs-on: ubuntu-latest
-      steps:
+    name: '🗂 Create release and upload artifacts'
+    needs:
+      - build-mac-universal
+      - build-windows-x86_64
+      - build-linux-x86_64
+  
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: continuous
+  
+    steps:
       - name: '📥 Download artifacts'
         uses: actions/download-artifact@v4
-      
-      - name: '🔐 Generate SHA256 checksums'
+        with:
+          path: ./artifacts
+          merge-multiple: true
+  
+      - name: '🗑️ Delete previous release and tag if exists'
         run: |
-          echo "| File | SHA256 Checksum |" > release-body.md
-          echo "|------|------------------|" >> release-body.md
-      
-          find . -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) | while read -r file; do
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" &>/dev/null; then
+            echo "Release '$RELEASE_TAG' exists. Deleting..."
+            gh release delete "$RELEASE_TAG" --cleanup-tag --yes --repo "$GITHUB_REPOSITORY" || echo "Failed to delete release. Ignoring."
+          else
+            echo "No release named '$RELEASE_TAG' found. Skipping delete."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: '🔐 Generate SHA256 checksums with sizes'
+        run: |
+          echo "| File | SHA256 Checksum | Size |" > release-body.md
+          echo "|------|------------------|------|" >> release-body.md
+  
+          find ./artifacts -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) | sort | while read -r file; do
             hash=$(sha256sum "$file" | awk '{print $1}')
             filename=$(basename "$file")
-            echo "| \`$filename\` | \`$hash\` |"
+            size=$(stat --format="%s" "$file")
+            echo "| \`$filename\` | \`$hash\` | \`${size} bytes\` |"
           done >> release-body.md
-      
+  
       - name: '🚀 Create Release'
         uses: ncipollo/release-action@v1
         with:
-          tag: 'continuous'
+          tag: ${{ env.RELEASE_TAG }}
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
           name: 'Continuous Build'
-          #generateReleaseNotes: true
-          artifacts: "*.deb,*.rpm,*.AppImage,*.dmg,*.exe,*.msi"
+          artifacts: "artifacts/*.{deb,rpm,AppImage,dmg,exe,msi}"
           bodyFile: release-body.md
