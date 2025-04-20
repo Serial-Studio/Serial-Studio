@@ -35,6 +35,7 @@ Item {
   // Define application name
   //
   readonly property string appName: proVersion ? Cpp_Licensing_LemonSqueezy.appName : "Serial Studio"
+  readonly property string appIcon: proVersion ? "qrc:/rcc/logo/icon-pro.png" : "qrc:/rcc/logo/icon-pro.png"
   readonly property bool proVersion: Cpp_QtCommercial_Available ? Cpp_Licensing_LemonSqueezy.isActivated : false
 
   //
@@ -59,9 +60,10 @@ Item {
   //
   // Main window + subdialogs
   //
-  MainWindow.Root {
+  MainWindow.MainWindow {
     id: mainWindow
-    onClosing: (close) => app.handleClose(close)
+    Component.onCompleted: mainWindow.displayWindow()
+    //onClosing: (close) => app.handleClose(close)
 
     Dialogs.IconPicker {
       id: actionIconPicker
@@ -77,34 +79,34 @@ Item {
 
     DialogLoader {
       id: mqttConfiguration
-      source: "qrc:/qml/Dialogs/MQTTConfiguration.qml"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/MQTTConfiguration.qml"
     }
 
     DialogLoader {
       id: aboutDialog
-      source: "qrc:/qml/Dialogs/About.qml"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/About.qml"
     }
 
     DialogLoader {
       id: acknowledgementsDialog
-      source: "qrc:/qml/Dialogs/Acknowledgements.qml"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/Acknowledgements.qml"
     }
 
     DialogLoader {
       id: fileTransmissionDialog
-      source: "qrc:/qml/Dialogs/FileTransmission.qml"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/FileTransmission.qml"
     }
 
     DialogLoader {
       id: licenseDialog
-      source: "qrc:/qml/Dialogs/LicenseManagement.qml"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/LicenseManagement.qml"
     }
   }
 
   //
   // Project Editor
   //
-  ProjectEditor.Root {
+  ProjectEditor.ProjectEditor {
     id: projectEditor
   }
 
@@ -113,7 +115,7 @@ Item {
   //
   DialogLoader {
     id: externalConsole
-    source: "qrc:/qml/Dialogs/ExternalConsole.qml"
+    source: "qrc:/serial-studio.com/gui/qml/Dialogs/ExternalConsole.qml"
   }
 
   //

@@ -339,7 +339,8 @@ void Misc::ModuleManager::initializeQmlInterface()
                         qApp->organizationDomain());
 
   // Load main.qml
-  m_engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+  m_engine.load(
+      QUrl(QStringLiteral("qrc:/serial-studio.com/gui/qml/main.qml")));
 
   // Setup singleton module interconnections
   ioSerial->setupExternalConnections();

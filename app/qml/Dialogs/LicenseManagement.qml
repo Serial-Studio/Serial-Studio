@@ -174,9 +174,9 @@ Window {
             Layout.alignment: Qt.AlignVCenter
             source: {
               if (Screen.pixelDensity >= 2)
-                return "qrc:/rcc/images/activation@2x.png"
+                return "qrc:/rcc/logo/activation@2x.png"
 
-              return "qrc:/rcc/images/activation@1x.png"
+              return "qrc:/rcc/logo/activation@1x.png"
             }
           }
 
@@ -319,12 +319,12 @@ Window {
                   sourceSize.height: 18
                   source: "qrc:/rcc/icons/licensing/plan.svg"
                 } Label {
-                  text: qsTr("Payment Plan") + ":"
+                  text: qsTr("Product") + ":"
                   font: Cpp_Misc_CommonFonts.boldUiFont
                 } Label {
                   Layout.fillWidth: true
                   wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-                  text: Cpp_Licensing_LemonSqueezy.variantName
+                  text: Cpp_AppName + " " + Cpp_Licensing_LemonSqueezy.variantName
                 }
 
                 Image {
@@ -358,14 +358,14 @@ Window {
                   sourceSize.height: 18
                   source: "qrc:/rcc/icons/licensing/devices.svg"
                 } Label {
-                  text: qsTr("Activations") + ":"
+                  text: qsTr("Device Usage") + ":"
                   font: Cpp_Misc_CommonFonts.boldUiFont
                 } Label {
                   Layout.fillWidth: true
                   wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                   text: Cpp_Licensing_LemonSqueezy.seatLimit < 0
-                        ? qsTr("%1 seats in use (Unlimited plan)").arg(Cpp_Licensing_LemonSqueezy.seatUsage)
-                        : qsTr("%1 of %2 seats used")
+                        ? qsTr("%1 devices in use (Unlimited plan)").arg(Cpp_Licensing_LemonSqueezy.seatUsage)
+                        : qsTr("%1 of %2 devices used")
                   .arg(Cpp_Licensing_LemonSqueezy.seatUsage)
                   .arg(Cpp_Licensing_LemonSqueezy.seatLimit)
                 }

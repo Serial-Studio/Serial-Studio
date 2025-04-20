@@ -157,14 +157,9 @@ Window {
           Layout.maximumWidth: 128
           Layout.minimumHeight: 128
           Layout.maximumHeight: 128
-          Layout.alignment: Qt.AlignVCenter
           sourceSize: Qt.size(128, 128)
-          source: {
-            if (Screen.pixelDensity >= 2)
-              return "qrc:/rcc/images/icon@2x.png"
-
-            return "qrc:/rcc/images/icon@1x.png"
-          }
+          Layout.alignment: Qt.AlignVCenter
+          source: Cpp_Misc_Utilities.hdpiImagePath(app.appIcon)
         }
 
         ColumnLayout {

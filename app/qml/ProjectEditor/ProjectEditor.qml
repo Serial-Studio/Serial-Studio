@@ -119,7 +119,7 @@ Widgets.SmartWindow {
       //
       // Toolbar
       //
-      Sections.Toolbar {
+      Sections.ProjectToolbar {
         z: 2
         Layout.fillWidth: true
       }

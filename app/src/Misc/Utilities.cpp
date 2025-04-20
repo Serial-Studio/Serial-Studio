@@ -68,28 +68,14 @@ void Misc::Utilities::rebootApplication()
  * screen.
  *
  * Returns a @c QPixmap object that loads the image at the given @a path. In the
- * case that the application is being executed on a HiDPI screen, the the scaled
+ * case that the application is being executed on a HiDPI screen, the scaled
  * version of the image will be automatically loaded.
  *
  * @param path location of the image to load
  */
 QPixmap Misc::Utilities::getHiDpiPixmap(const QString &path)
 {
-  const auto dpr = qApp->devicePixelRatio();
-  const int ratio = qMin<int>(2, static_cast<int>(ceil(dpr)));
-
-  QString filename;
-  auto list = path.split(".");
-  const auto extension = list.last();
-  for (int i = 0; i < list.count() - 1; ++i)
-    filename.append(list.at(i));
-
-  filename.append(QStringLiteral("@"));
-  filename.append(QString::number(ratio));
-  filename.append(QStringLiteral("x."));
-  filename.append(extension);
-
-  return filename;
+  return QPixmap(hdpiImagePath(path));
 }
 
 /**
@@ -106,6 +92,34 @@ bool Misc::Utilities::askAutomaticUpdates()
           .arg(APP_NAME),
       QMessageBox::NoIcon, APP_NAME, QMessageBox::Yes | QMessageBox::No);
   return result == QMessageBox::Yes;
+}
+
+/**
+ * @brief Returns a @c file path for the image with the appropiate resolution
+ *       for the screen.
+ *
+ * In the case that the application is being executed on a HiDPI screen, the
+ * scaled version of the image will be automatically returned.
+ *
+ * @param path location of the image to load
+ */
+QString Misc::Utilities::hdpiImagePath(const QString &path)
+{
+  const auto dpr = qApp->devicePixelRatio();
+  const int ratio = qMin<int>(2, static_cast<int>(ceil(dpr)));
+
+  QString filename;
+  auto list = path.split(".");
+  const auto extension = list.last();
+  for (int i = 0; i < list.count() - 1; ++i)
+    filename.append(list.at(i));
+
+  filename.append(QStringLiteral("@"));
+  filename.append(QString::number(ratio));
+  filename.append(QStringLiteral("x."));
+  filename.append(extension);
+
+  return filename;
 }
 
 /**
@@ -131,7 +145,7 @@ int Misc::Utilities::showMessageBox(
 
   // Set icon
   if (icon == QMessageBox::NoIcon)
-    box.setIconPixmap(getHiDpiPixmap(":/rcc/images/icon-small.png"));
+    box.setIconPixmap(getHiDpiPixmap(":/rcc/images/icon.png"));
   else
     box.setIcon(icon);
 

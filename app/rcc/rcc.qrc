@@ -159,6 +159,7 @@
         <file>icons/dashboard/view.svg</file>
         <file>icons/licensing/devices.svg</file>
         <file>icons/licensing/email.svg</file>
+        <file>icons/licensing/key.svg</file>
         <file>icons/licensing/plan.svg</file>
         <file>icons/licensing/user.svg</file>
         <file>icons/licensing/uuid.svg</file>
@@ -232,18 +233,11 @@
         <file>icons/toolbar/project-setup.svg</file>
         <file>icons/toolbar/structure.svg</file>
         <file>images/action.svg</file>
-        <file>images/activation@1x.png</file>
-        <file>images/activation@2x.png</file>
-        <file>images/appimage_icon.png</file>
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
         <file>images/crosshair.svg</file>
         <file>images/drag-and-drop.svg</file>
         <file>images/hammer.svg</file>
-        <file>images/icon-small@1x.png</file>
-        <file>images/icon-small@2x.png</file>
-        <file>images/icon@1x.png</file>
-        <file>images/icon@2x.png</file>
         <file>images/soldering-iron.svg</file>
         <file>images/spinner.svg</file>
         <file>images/tip.svg</file>
@@ -254,6 +248,21 @@
         <file>instruments/compass_background.svg</file>
         <file>instruments/compass_case.svg</file>
         <file>instruments/compass_needle.svg</file>
+        <file>logo/activation@1x.png</file>
+        <file>logo/activation@2x.png</file>
+        <file>logo/dekstop-icon.png</file>
+        <file>logo/icon-pro-small@1x.png</file>
+        <file>logo/icon-pro-small@2x.png</file>
+        <file>logo/icon-pro@1x.png</file>
+        <file>logo/icon-pro@2x.png</file>
+        <file>logo/icon@1x.png</file>
+        <file>logo/icon@2x.png</file>
+        <file>messages/free/Welcome_DE.txt</file>
+        <file>messages/free/Welcome_EN.txt</file>
+        <file>messages/free/Welcome_ES.txt</file>
+        <file>messages/free/Welcome_FR.txt</file>
+        <file>messages/free/Welcome_RU.txt</file>
+        <file>messages/free/Welcome_ZH.txt</file>
         <file>messages/gpl3/Welcome_DE.txt</file>
         <file>messages/gpl3/Welcome_EN.txt</file>
         <file>messages/gpl3/Welcome_ES.txt</file>
@@ -304,12 +313,5 @@
         <file>themes/resistance.json</file>
         <file>themes/yaru-dark.json</file>
         <file>themes/yaru-light.json</file>
-        <file>icons/licensing/key.svg</file>
-        <file>messages/free/Welcome_DE.txt</file>
-        <file>messages/free/Welcome_EN.txt</file>
-        <file>messages/free/Welcome_ES.txt</file>
-        <file>messages/free/Welcome_FR.txt</file>
-        <file>messages/free/Welcome_RU.txt</file>
-        <file>messages/free/Welcome_ZH.txt</file>
     </qresource>
 </RCC>
