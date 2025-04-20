@@ -336,15 +336,13 @@ jobs:
   
       - name: '🔐 Generate SHA256 checksums with sizes'
         run: |
-          echo "| File | SHA256 Checksum | Size |" > release-body.md
-          echo "|------|------------------|------|" >> release-body.md
+          echo "| File | SHA256 Checksum |" > release-body.md
+          echo "|------|-----------------|" >> release-body.md
       
           find ./artifacts -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) | sort | while read -r file; do
             hash=$(sha256sum "$file" | awk '{print $1}')
             filename=$(basename "$file")
-            size=$(stat --format="%s" "$file")
-            size_mb=$(awk "BEGIN {printf \"%.2f\", $size/1024/1024}")
-            echo "| \`$filename\` | \`$hash\` | \`${size_mb} MB\` |"
+            echo "| \`$filename\` | \`$hash\` |"
           done >> release-body.md
   
       - name: '🚀 Create Release'
