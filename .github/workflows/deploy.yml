@@ -329,6 +329,6 @@ jobs:
           prerelease: true
           allowUpdates: true
           name: 'Continuous Build'
-          generateReleaseNotes: true
+          #generateReleaseNotes: true
           artifacts: "*.deb,*.rpm,*.AppImage,*.dmg,*.exe,*.msi"
           bodyFile: release-body.md
