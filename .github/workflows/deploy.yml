@@ -338,12 +338,13 @@ jobs:
         run: |
           echo "| File | SHA256 Checksum | Size |" > release-body.md
           echo "|------|------------------|------|" >> release-body.md
-  
+      
           find ./artifacts -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) | sort | while read -r file; do
             hash=$(sha256sum "$file" | awk '{print $1}')
             filename=$(basename "$file")
             size=$(stat --format="%s" "$file")
-            echo "| \`$filename\` | \`$hash\` | \`${size} bytes\` |"
+            size_mb=$(awk "BEGIN {printf \"%.2f\", $size/1024/1024}")
+            echo "| \`$filename\` | \`$hash\` | \`${size_mb} MB\` |"
           done >> release-body.md
   
       - name: '🚀 Create Release'
@@ -354,5 +355,11 @@ jobs:
           allowUpdates: true
           replacesArtifacts: true
           name: 'Continuous Build'
-          artifacts: "artifacts/*.{deb,rpm,AppImage,dmg,exe,msi}"
+          artifacts: |
+            artifacts/*.deb,
+            artifacts/*.rpm,
+            artifacts/*.AppImage,
+            artifacts/*.dmg,
+            artifacts/*.exe,
+            artifacts/*.msi
           bodyFile: release-body.md
