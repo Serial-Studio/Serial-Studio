@@ -431,6 +431,7 @@ void Updater::setUpdateAvailable(const bool available)
   QMessageBox box;
   box.setTextFormat(Qt::RichText);
   box.setIcon(QMessageBox::Information);
+  box.setWindowFlag(Qt::WindowStaysOnTopHint, true);
 
   if (updateAvailable() && (notifyOnUpdate() || notifyOnFinish()))
   {

@@ -214,6 +214,7 @@ void Downloader::installUpdate()
   QMessageBox box;
   box.setIcon(QMessageBox::Question);
   box.setDefaultButton(QMessageBox::Ok);
+  box.setWindowFlag(Qt::WindowStaysOnTopHint, true);
   box.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
   box.setInformativeText(tr("Click \"OK\" to begin installing the update"));
 
@@ -257,6 +258,7 @@ void Downloader::cancelDownload()
     QMessageBox box;
     box.setWindowTitle(tr("Updater"));
     box.setIcon(QMessageBox::Question);
+    box.setWindowFlag(Qt::WindowStaysOnTopHint, true);
     box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
     QString text = tr("Are you sure you want to cancel the download?");
