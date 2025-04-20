@@ -311,23 +311,24 @@ jobs:
         - build-mac-universal
         - build-windows-x86_64
         - build-linux-x86_64
+        
       runs-on: ubuntu-latest
       steps:
       - name: '📥 Download artifacts'
         uses: actions/download-artifact@v4
-      - name: '🗂 Inspect directory after downloading artifacts'
-        run: ls -alFR
-      - name: '🚀 Create release and upload artifacts'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: '🔐 Generate SHA256 checksums'
         run: |
-            sudo apt-get update
-            sudo apt-get install libfuse2
-            wget -q https://github.com/TheAssassin/pyuploadtool/releases/download/continuous/pyuploadtool-x86_64.AppImage
-            chmod +x pyuploadtool-x86_64.AppImage
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.deb
-            #./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.rpm
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x86_64.AppImage
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-Universal.dmg
-            ./pyuploadtool-x86_64.AppImage **/${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-x86_64.msi
-
+          find . -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) -exec sha256sum {} \; | tee checksums.txt
+          echo -e "## SHA256 Checksums\n\n\`\`\`\n$(cat checksums.txt)\n\`\`\`" > release-body.md
+      
+      - name: '🚀 Create Release'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: 'continuous'
+          prerelease: true
+          allowUpdates: true
+          name: 'Continuous Build'
+          generateReleaseNotes: true
+          artifacts: "*.deb,*.rpm,*.AppImage,*.dmg,*.exe,*.msi"
+          bodyFile: release-body.md
