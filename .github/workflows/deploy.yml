@@ -325,7 +325,7 @@ jobs:
           find . -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" -o -name "*.dmg" -o -name "*.exe" -o -name "*.msi" \) | while read -r file; do
             hash=$(sha256sum "$file" | awk '{print $1}')
             filename=$(basename "$file")
-            echo "| $filename | \`$hash\` |"
+            echo "| \`$filename\` | \`$hash\` |"
           done >> release-body.md
       
       - name: '🚀 Create Release'
