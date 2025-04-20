@@ -1005,6 +1005,7 @@ void Widgets::Terminal::initBuffer()
 {
   m_data.clear();
   m_data.squeeze();
+  m_scrollOffsetY = 0;
   m_data.reserve(IO::Console::instance().scrollback());
 }
 

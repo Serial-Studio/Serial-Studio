@@ -183,6 +183,91 @@ Window {
       anchors.centerIn: parent
 
       //
+      // Commercial license required pane
+      //
+      Rectangle {
+        radius: 2
+        border.width: 1
+        Layout.fillWidth: true
+        visible: !app.proVersion
+        implicitWidth: showSomeSupport.implicitWidth + 32
+        implicitHeight: showSomeSupport.implicitHeight + 32
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+        RowLayout {
+          spacing: 12
+          id: showSomeSupport
+          anchors.margins: 16
+          anchors.fill: parent
+
+          Image {
+            Layout.minimumWidth: 96
+            Layout.maximumWidth: 96
+            Layout.minimumHeight: 96
+            Layout.maximumHeight: 96
+            sourceSize: Qt.size(96, 96)
+            Layout.alignment: Qt.AlignVCenter
+            source: Cpp_Misc_Utilities.hdpiImagePath("qrc:/rcc/logo/icon-pro.png")
+          }
+
+          ColumnLayout {
+            spacing: 0
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+
+            Label {
+              id: title
+              Layout.fillWidth: true
+              font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
+              text: qsTr("MQTT is a Pro Feature")
+            }
+
+            Item {
+              implicitHeight: 4
+            }
+
+            Label {
+              Layout.fillWidth: true
+              wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+              Layout.maximumWidth: Math.max(256, title.implicitWidth)
+              text: qsTr("Activate your license or visit the store to unlock MQTT support.")
+            }
+
+            Item {
+              implicitHeight: 12
+            }
+
+            RowLayout {
+              Layout.fillWidth: true
+
+              Button {
+                icon.width: 18
+                icon.height: 18
+                text: qsTr("Buy License") + "  "
+                onClicked: Cpp_Licensing_LemonSqueezy.buy()
+                icon.source: "qrc:/rcc/icons/buttons/buy.svg"
+                icon.color: Cpp_ThemeManager.colors["button_text"]
+              }
+
+              Button {
+                icon.width: 18
+                icon.height: 18
+                text: qsTr("Activate") + "  "
+                onClicked: app.showLicenseDialog()
+                icon.source: "qrc:/rcc/icons/buttons/activate.svg"
+                icon.color: Cpp_ThemeManager.colors["button_text"]
+              }
+
+              Item {
+                Layout.fillWidth: true
+              }
+            }
+          }
+        }
+      }
+
+      //
       // Tab bar
       //
       TabBar {
@@ -235,6 +320,7 @@ Window {
         //
         Item {
           id: connectionSettings
+
           Layout.fillWidth: true
           Layout.fillHeight: true
           implicitHeight: connectionSettingsLayout.implicitHeight + 16
@@ -249,6 +335,9 @@ Window {
 
           GridLayout {
             id: connectionSettingsLayout
+
+            enabled: app.proVersion
+            opacity: enabled ? 1 : 0.8
 
             columns: 2
             rowSpacing: 4
@@ -342,6 +431,9 @@ Window {
           GridLayout {
             id: authenticationLayout
 
+            enabled: app.proVersion
+            opacity: enabled ? 1 : 0.8
+
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
@@ -413,6 +505,9 @@ Window {
 
           GridLayout {
             id: mqttOptionsLayout
+
+            enabled: app.proVersion
+            opacity: enabled ? 1 : 0.8
 
             columns: 2
             rowSpacing: 4
@@ -528,6 +623,9 @@ Window {
           GridLayout {
             id: sslPropertiesLayout
 
+            enabled: app.proVersion
+            opacity: enabled ? 1 : 0.8
+
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
@@ -635,7 +733,9 @@ Window {
                                                      "qrc:/rcc/icons/buttons/disconnected.svg"
 
           opacity: enabled ? 1 : 0.8
-          enabled: Cpp_MQTT_Client.isSubscriber ? !Cpp_IO_Manager.connected : true
+          enabled: app.proVersion ?
+                     (Cpp_MQTT_Client.isSubscriber ? !Cpp_IO_Manager.connected : true) :
+                     false
         }
       }
     }

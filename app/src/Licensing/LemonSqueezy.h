@@ -132,6 +132,7 @@ public:
   [[nodiscard]] const QJsonObject &licensingData() const;
 
 public slots:
+  void buy();
   void activate();
   void validate();
   void deactivate();

@@ -19,17 +19,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-// clang-format off
 #include <QFile>
 #include <QFileDialog>
 #include <QInputDialog>
-// clang-format on
 
-// clang-format off
 #include "IO/Manager.h"
 #include "MQTT/Client.h"
 #include "Misc/Utilities.h"
-// clang-format on
+#include "Licensing/LemonSqueezy.h"
 
 //------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -74,6 +71,14 @@ MQTT::Client::Client()
           &MQTT::Client::onAuthenticationRequested);
   connect(&m_client, &QMqttClient::messageReceived, this,
           &MQTT::Client::onMessageReceived);
+
+  // Disconnect from MQTT server when Serial Studio is deactivated
+  connect(&Licensing::LemonSqueezy::instance(),
+          &Licensing::LemonSqueezy::activatedChanged, this, [=] {
+            if (isConnected()
+                && !Licensing::LemonSqueezy::instance().isActivated())
+              closeConnection();
+          });
 
   // Publish incoming data frames
   connect(&IO::Manager::instance(), &IO::Manager::dataReceived, this,
@@ -402,6 +407,19 @@ void MQTT::Client::openConnection()
   if (isConnected())
     return;
 
+  // Stop if Serial Studio is not activated
+  if (!Licensing::LemonSqueezy::instance().isActivated())
+  {
+    Misc::Utilities::showMessageBox(
+        tr("MQTT Feature Requires a Commercial License"),
+        tr("Connecting to MQTT brokers is only available with a valid Serial "
+           "Studio commercial license.\n\n"
+           "To unlock this feature, please activate your license or visit the "
+           "store."),
+        QMessageBox::Warning);
+    return;
+  }
+
   // Verify that MQTT topic is set
   if (m_topicFilter.isEmpty())
   {
@@ -699,6 +717,9 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
  */
 void MQTT::Client::publishMessage(const QByteArray &data)
 {
+  if (!Licensing::LemonSqueezy::instance().isActivated())
+    return;
+
   if (isConnected() && isPublisher() && m_topicName.isValid()
       && !data.isEmpty())
     m_client.publish(m_topicName, data);
@@ -901,6 +922,10 @@ void MQTT::Client::onAuthenticationRequested(
 void MQTT::Client::onMessageReceived(const QByteArray &message,
                                      const QMqttTopicName &topic)
 {
+  // Stop if Serial Studio is not activated
+  if (!Licensing::LemonSqueezy::instance().isActivated())
+    return;
+
   // Only process if data is not empty
   if (!message.isEmpty())
   {

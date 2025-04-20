@@ -211,6 +211,15 @@ const QJsonObject &Licensing::LemonSqueezy::licensingData() const
 //------------------------------------------------------------------------------
 
 /**
+ * @brief Opens the Lemon Squeezy product link for Serial Studio Pro.
+ */
+void Licensing::LemonSqueezy::buy()
+{
+  auto url = QStringLiteral("https://store.serial-studio.com/");
+  QDesktopServices::openUrl(QUrl(url));
+}
+
+/**
  * @brief Activates the license key using the Lemon Squeezy API.
  *
  * Sends the machine ID and license key to the API. On success,
@@ -338,8 +347,7 @@ void Licensing::LemonSqueezy::deactivate()
 /**
  * @brief Opens the Lemon Squeezy customer portal in the default browser.
  *
- * If the customer email is available, it's pre-filled in the portal URL.
- * Allows the user to manage licenses, billing, and view orders.
+ * The portal allows the user to manage licenses, billing, and view orders.
  */
 void Licensing::LemonSqueezy::openCustomerPortal()
 {

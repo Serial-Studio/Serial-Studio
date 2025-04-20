@@ -170,14 +170,9 @@ Window {
             Layout.minimumHeight: 128
             Layout.maximumHeight: 128
             sourceSize: Qt.size(128, 128)
-            visible: !Cpp_Licensing_LemonSqueezy.isActivated
             Layout.alignment: Qt.AlignVCenter
-            source: {
-              if (Screen.pixelDensity >= 2)
-                return "qrc:/rcc/logo/activation@2x.png"
-
-              return "qrc:/rcc/logo/activation@1x.png"
-            }
+            visible: !Cpp_Licensing_LemonSqueezy.isActivated
+            source: Cpp_Misc_Utilities.hdpiImagePath("qrc:/rcc/logo/activation.png")
           }
 
           //
@@ -455,16 +450,16 @@ Window {
             icon.width: 18
             icon.height: 18
             text: qsTr("Buy License") + "  "
+            onClicked: Cpp_Licensing_LemonSqueezy.buy()
             icon.source: "qrc:/rcc/icons/buttons/buy.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
-            onClicked: Qt.openUrlExternally("https://store.serial-studio.com")
           }
 
           Button {
             icon.width: 18
             icon.height: 18
-            text: qsTr("Activate")
             opacity: enabled ? 1 : 0.5
+            text: qsTr("Activate") + "  "
             visible: !Cpp_Licensing_LemonSqueezy.isActivated
             onClicked: Cpp_Licensing_LemonSqueezy.activate()
             icon.source: "qrc:/rcc/icons/buttons/activate.svg"
