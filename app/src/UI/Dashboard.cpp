@@ -52,34 +52,38 @@ UI::Dashboard::Dashboard()
   , m_axisVisibility(SerialStudio::AxisXY)
 {
   // clang-format off
-  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(); });
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(); });
-  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); });
+  connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=] { resetData(true); }, Qt::QueuedConnection);
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] { resetData(true); }, Qt::QueuedConnection);
+  connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::jsonFileMapChanged, this, [=] { resetData(); }, Qt::QueuedConnection);
   connect(&JSON::FrameBuilder::instance(), &JSON::FrameBuilder::frameChanged, this, &UI::Dashboard::processFrame, Qt::QueuedConnection);
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
 #ifdef USE_QT_COMMERCIAL
   connect(
-      &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [=] {
+      &MQTT::Client::instance(), &MQTT::Client::connectedChanged, this,
+      [=] {
         const bool subscribed = MQTT::Client::instance().isSubscriber();
         const bool wasSubscribed = !MQTT::Client::instance().isConnected()
                                    && MQTT::Client::instance().isSubscriber();
 
         if (subscribed || wasSubscribed)
-          resetData();
-      });
+          resetData(true);
+      },
+      Qt::QueuedConnection);
 #endif
 
   // Update the dashboard widgets at 24 Hz
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
-          [=] {
-            if (m_updateRequired)
-            {
-              m_updateRequired = false;
-              Q_EMIT updated();
-            }
-          });
+  connect(
+      &Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout24Hz, this,
+      [=] {
+        if (m_updateRequired)
+        {
+          m_updateRequired = false;
+          Q_EMIT updated();
+        }
+      },
+      Qt::QueuedConnection);
 }
 
 /**
@@ -161,15 +165,7 @@ qreal UI::Dashboard::smartInterval(const qreal min, const qreal max,
  */
 bool UI::Dashboard::available() const
 {
-  bool hasWidgets = totalWidgetCount() > 0;
-  bool dataAvailable = IO::Manager::instance().connected();
-  dataAvailable |= CSV::Player::instance().isOpen();
-
-#ifdef USE_QT_COMMERCIAL
-  dataAvailable |= MQTT::Client::instance().isSubscriber();
-#endif
-
-  return hasWidgets && dataAvailable;
+  return totalWidgetCount() > 0 && streamAvailable();
 }
 
 /**
@@ -179,6 +175,25 @@ bool UI::Dashboard::available() const
 bool UI::Dashboard::showLegends() const
 {
   return m_showLegends;
+}
+
+/**
+ * @brief Checks if the dashboard is currently available, determined by the
+ *        data stream sources.
+ *
+ * @return True if at least one data source/stream is active.
+ */
+bool UI::Dashboard::streamAvailable() const
+{
+  bool available = IO::Manager::instance().connected();
+  available |= CSV::Player::instance().isOpen();
+
+#ifdef USE_QT_COMMERCIAL
+  available |= MQTT::Client::instance().isConnected()
+               && MQTT::Client::instance().isSubscriber();
+#endif
+
+  return available;
 }
 
 /**
@@ -667,6 +682,8 @@ void UI::Dashboard::resetData(const bool notify)
   // Notify user interface
   if (notify)
   {
+    m_updateRequired = true;
+
     Q_EMIT updated();
     Q_EMIT dataReset();
     Q_EMIT actionCountChanged();
@@ -980,7 +997,7 @@ void UI::Dashboard::configureMultiLineSeries()
 void UI::Dashboard::processFrame(const JSON::Frame &frame)
 {
   // Validate frame
-  if (!frame.isValid())
+  if (!frame.isValid() || !streamAvailable())
     return;
 
   // Get previous counts & title

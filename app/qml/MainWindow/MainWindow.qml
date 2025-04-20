@@ -131,7 +131,7 @@ Widgets.SmartWindow {
       if (root.firstValidFrame)
         return
 
-      if (Cpp_UI_Dashboard.frameValid() && Cpp_UI_Dashboard.available) {
+      if (Cpp_UI_Dashboard.available) {
         setup.hide()
         root.showDashboard()
         root.firstValidFrame = true

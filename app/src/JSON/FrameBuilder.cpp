@@ -133,7 +133,7 @@ void JSON::FrameBuilder::loadJsonMap()
 void JSON::FrameBuilder::setupExternalConnections()
 {
   connect(&IO::Manager::instance(), &IO::Manager::frameReceived, this,
-          &JSON::FrameBuilder::readData, Qt::DirectConnection);
+          &JSON::FrameBuilder::readData, Qt::QueuedConnection);
 }
 
 /**

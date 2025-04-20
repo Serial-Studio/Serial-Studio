@@ -317,8 +317,9 @@ void IO::Manager::connectDevice()
     else
       disconnectDevice();
 
-    // Update UI
-    Q_EMIT connectedChanged();
+    // Enqueue a UI update request
+    QMetaObject::invokeMethod(
+        this, [=] { Q_EMIT connectedChanged(); }, Qt::QueuedConnection);
   }
 }
 
@@ -347,9 +348,14 @@ void IO::Manager::disconnectDevice()
                  &FrameReader::processData);
     }
 
-    // Update UI
-    Q_EMIT driverChanged();
-    Q_EMIT connectedChanged();
+    // Enqueue a UI update request
+    QMetaObject::invokeMethod(
+        this,
+        [=] {
+          Q_EMIT driverChanged();
+          Q_EMIT connectedChanged();
+        },
+        Qt::QueuedConnection);
   }
 }
 

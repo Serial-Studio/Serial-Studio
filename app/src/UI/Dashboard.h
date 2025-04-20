@@ -103,6 +103,7 @@ public:
 
   [[nodiscard]] bool available() const;
   [[nodiscard]] bool showLegends() const;
+  [[nodiscard]] bool streamAvailable() const;
   [[nodiscard]] bool showAreaUnderPlots() const;
   [[nodiscard]] bool pointsWidgetVisible() const;
   [[nodiscard]] bool precisionWidgetVisible() const;
