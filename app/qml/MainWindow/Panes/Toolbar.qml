@@ -318,6 +318,7 @@ Rectangle {
     // Connect/Disconnect button
     //
     Widgets.BigButton {
+      id: _connectButton
       Layout.alignment: Qt.AlignVCenter
       implicitWidth: metrics.width + 16
       font: Cpp_Misc_CommonFonts.boldUiFont

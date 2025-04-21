@@ -192,7 +192,7 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Remote port") + ":"
         enabled: !Cpp_IO_Manager.connected
-        visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
+        visible: Cpp_IO_Network.socketTypeIndex === 1 && !_udpMulticast.checked
       } TextField {
         id: _udpRemotePort
         Layout.fillWidth: true
@@ -200,7 +200,7 @@ Item {
         enabled: !Cpp_IO_Manager.connected
         placeholderText: Cpp_IO_Network.defaultUdpRemotePort
         Component.onCompleted: text = Cpp_IO_Network.udpRemotePort
-        visible: Cpp_IO_Network.socketTypeIndex === 1 && !udpMulticastEnabled
+        visible: Cpp_IO_Network.socketTypeIndex === 1 && !_udpMulticast.checked
 
         onTextChanged: {
           if (Cpp_IO_Network.udpRemotePort !== text && text.length > 0)

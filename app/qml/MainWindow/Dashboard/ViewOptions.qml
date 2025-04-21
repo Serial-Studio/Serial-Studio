@@ -460,7 +460,8 @@ Widgets.Pane {
 
           Button {
             Layout.fillWidth: true
-            onClicked: Cpp_UI_Dashboard.resetData()
+            checked: Cpp_IO_Manager.paused
+            onClicked: Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
 
             RowLayout {
               id: layout1
@@ -468,7 +469,53 @@ Widgets.Pane {
               anchors.centerIn: parent
               width: Math.max(layout1.implicitWidth,
                               layout2.implicitWidth,
-                              layout3.implicitWidth)
+                              layout3.implicitWidth,
+                              layout4.implicitWidth)
+
+              Image {
+                sourceSize: Qt.size(18, 18)
+                Layout.alignment: Qt.AlignVCenter
+                source: Cpp_IO_Manager.paused ? "qrc:/rcc/icons/panes/resume.svg" :
+                                                "qrc:/rcc/icons/panes/pause.svg"
+              }
+
+              Label {
+                Layout.alignment: Qt.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                font: Cpp_Misc_CommonFonts.boldUiFont
+                color: Cpp_ThemeManager.colors["button_text"]
+                text: Cpp_IO_Manager.paused ? qsTr("Resume (%1)").arg(shortcutText) :
+                                              qsTr("Pause (%1)").arg(shortcutText)
+
+                property string shortcutText: {
+                  var os = Qt.platform.os
+                  if (os === "osx")
+                    return qsTr("⌘ + P")
+                  else if (os === "windows")
+                    return qsTr("Ctrl + P")
+                  else
+                    return qsTr("Ctrl + P")
+                }
+              }
+
+              Item {
+                Layout.fillWidth: true
+              }
+            }
+          }
+
+          Button {
+            Layout.fillWidth: true
+            onClicked: Cpp_UI_Dashboard.resetData()
+
+            RowLayout {
+              id: layout2
+              spacing: 8
+              anchors.centerIn: parent
+              width: Math.max(layout1.implicitWidth,
+                              layout2.implicitWidth,
+                              layout3.implicitWidth,
+                              layout4.implicitWidth)
 
               Image {
                 sourceSize: Qt.size(18, 18)
@@ -494,12 +541,13 @@ Widgets.Pane {
             onClicked: app.showExternalConsole()
 
             RowLayout {
-              id: layout2
+              id: layout3
               spacing: 8
               anchors.centerIn: parent
               width: Math.max(layout1.implicitWidth,
                               layout2.implicitWidth,
-                              layout3.implicitWidth)
+                              layout3.implicitWidth,
+                              layout4.implicitWidth)
 
               Image {
                 sourceSize: Qt.size(18, 18)
@@ -527,12 +575,13 @@ Widgets.Pane {
             visible: false //Cpp_UI_Dashboard.plotCount > 0 || Cpp_UI_Dashboard.multiPlotCount > 0
 
             RowLayout {
-              id: layout3
+              id: layout4
               spacing: 8
               anchors.centerIn: parent
               width: Math.max(layout1.implicitWidth,
                               layout2.implicitWidth,
-                              layout3.implicitWidth)
+                              layout3.implicitWidth,
+                              layout4.implicitWidth)
 
               Image {
                 sourceSize: Qt.size(18, 18)

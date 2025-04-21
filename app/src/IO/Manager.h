@@ -23,6 +23,7 @@
 
 #include <QThread>
 #include <QObject>
+#include <QKeyEvent>
 
 #include "SerialStudio.h"
 #include "IO/HAL_Driver.h"
@@ -53,6 +54,10 @@ class Manager : public QObject
   Q_PROPERTY(bool connected
              READ connected
              NOTIFY connectedChanged)
+  Q_PROPERTY(bool paused
+             READ paused
+             WRITE setPaused
+             NOTIFY pausedChanged)
   Q_PROPERTY(SerialStudio::BusType busType
              READ busType
              WRITE setBusType
@@ -75,6 +80,7 @@ class Manager : public QObject
 
 signals:
   void driverChanged();
+  void pausedChanged();
   void busTypeChanged();
   void busListChanged();
   void connectedChanged();
@@ -97,6 +103,7 @@ private:
 public:
   static Manager &instance();
 
+  [[nodiscard]] bool paused();
   [[nodiscard]] bool readOnly();
   [[nodiscard]] bool readWrite();
   [[nodiscard]] bool connected();
@@ -116,6 +123,7 @@ public slots:
   void toggleConnection();
   void disconnectDevice();
   void setupExternalConnections();
+  void setPaused(const bool paused);
   void setWriteEnabled(const bool enabled);
   void processPayload(const QByteArray &payload);
   void setStartSequence(const QString &sequence);
@@ -125,9 +133,13 @@ public slots:
 private slots:
   void setDriver(IO::HAL_Driver *driver);
 
+protected:
+  bool eventFilter(QObject *obj, QEvent *event) override;
+  bool handleKeyPress(QKeyEvent *keyEvent);
+
 private:
+  bool m_paused;
   bool m_writeEnabled;
-  bool m_connectedFlag;
   SerialStudio::BusType m_busType;
 
   HAL_Driver *m_driver;

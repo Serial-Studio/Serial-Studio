@@ -110,9 +110,6 @@ Item {
   } Shortcut {
     onActivated: Cpp_IO_Console.save()
     sequences: [StandardKey.Save, StandardKey.SaveAs]
-  } Shortcut {
-    onActivated: Cpp_IO_Console.print()
-    sequences: [StandardKey.Print]
   }
 
   //

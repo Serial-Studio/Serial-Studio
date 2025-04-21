@@ -64,11 +64,15 @@ static QString ADD_ESCAPE_SEQUENCES(const QString &str)
  * By default, the manager is configured for serial communication.
  */
 IO::Manager::Manager()
-  : m_writeEnabled(true)
+  : m_paused(false)
+  , m_writeEnabled(true)
   , m_driver(nullptr)
   , m_startSequence(QStringLiteral("/*"))
   , m_finishSequence(QStringLiteral("*/"))
 {
+  // Listen for keyboard events for pausing/unpausing streaming
+  qApp->installEventFilter(this);
+
   // Move the frame parser worker to its dedicated thread
   m_frameReader.moveToThread(&m_workerThread);
 
@@ -107,6 +111,11 @@ IO::Manager &IO::Manager::instance()
 {
   static Manager instance;
   return instance;
+}
+
+bool IO::Manager::paused()
+{
+  return m_paused;
 }
 
 /**
@@ -302,15 +311,26 @@ void IO::Manager::connectDevice()
     // Open device & instruct frame reader to obtain data from it
     if (driver()->open(mode))
     {
+      setPaused(false);
       QMetaObject::invokeMethod(&m_frameReader, &FrameReader::reset,
                                 Qt::BlockingQueuedConnection);
 
       connect(driver(), &IO::HAL_Driver::dataReceived, &m_frameReader,
               &FrameReader::processData, Qt::QueuedConnection);
-      connect(&m_frameReader, &IO::FrameReader::frameReady, this,
-              &IO::Manager::frameReceived, Qt::QueuedConnection);
-      connect(&m_frameReader, &IO::FrameReader::dataReceived, this,
-              &IO::Manager::dataReceived, Qt::QueuedConnection);
+      connect(
+          &m_frameReader, &IO::FrameReader::frameReady, this,
+          [this](const QByteArray &frame) {
+            if (!paused())
+              Q_EMIT frameReceived(frame);
+          },
+          Qt::QueuedConnection);
+      connect(
+          &m_frameReader, &IO::FrameReader::dataReceived, this,
+          [this](const QByteArray &data) {
+            if (!paused())
+              Q_EMIT dataReceived(data);
+          },
+          Qt::QueuedConnection);
     }
 
     // Error opening the device
@@ -336,6 +356,7 @@ void IO::Manager::disconnectDevice()
   {
     // Close driver device
     driver()->close();
+    setPaused(false);
 
     // Disconnect frame reader
     if (m_workerThread.isRunning())
@@ -375,6 +396,16 @@ void IO::Manager::setupExternalConnections()
   QMetaObject::invokeMethod(&m_frameReader,
                             &FrameReader::setupExternalConnections,
                             Qt::QueuedConnection);
+}
+
+/**
+ * @brief Enables or disables real time data streaming to other modules of
+ *        the application without disconnecting the device.
+ */
+void IO::Manager::setPaused(const bool paused)
+{
+  m_paused = paused && connected();
+  Q_EMIT pausedChanged();
 }
 
 /**
@@ -540,4 +571,54 @@ void IO::Manager::setDriver(HAL_Driver *driver)
     Q_EMIT driverChanged();
     Q_EMIT configurationChanged();
   }
+}
+
+/**
+ * @brief Event filter to capture and handle key events for playback controls.
+ *
+ * This function intercepts key events when a device is open and routes
+ * them to `handleKeyPress` for processing. If the key event corresponds to a
+ * playback control (e.g., play/pause, next, previous), the event is handled;
+ * otherwise, it is passed to the default event filter.
+ *
+ * @param obj The object that the event is dispatched to.
+ * @param event The event being processed.
+ * @return true if the event was handled, false otherwise.
+ */
+bool IO::Manager::eventFilter(QObject *obj, QEvent *event)
+{
+  if (connected() && event->type() == QEvent::KeyPress)
+  {
+    auto *keyEvent = static_cast<QKeyEvent *>(event);
+    return handleKeyPress(keyEvent);
+  }
+
+  return QObject::eventFilter(obj, event);
+}
+
+/**
+ * @brief Handles key press events to control playback actions via shortcuts.
+ *
+ * This function is called by the `eventFilter` when a key press event occurs.
+ * It checks for specific key combinations used for playback control.
+ *
+ * Supported shortcuts:
+ * - Ctrl+Space or Ctrl+H: Toggles play/pause.
+ *
+ * Raw Space is intentionally ignored to avoid interference with text input
+ * fields.
+ *
+ * @param keyEvent The key event to handle.
+ * @return true if the event was handled, false otherwise.
+ */
+bool IO::Manager::handleKeyPress(QKeyEvent *keyEvent)
+{
+  if ((keyEvent->modifiers() & Qt::ControlModifier)
+      && keyEvent->key() == Qt::Key_P)
+  {
+    setPaused(!paused());
+    return true;
+  }
+
+  return false;
 }
