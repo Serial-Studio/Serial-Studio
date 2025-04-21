@@ -178,6 +178,15 @@ bool UI::Dashboard::showLegends() const
 }
 
 /**
+ * @brief Returns @c true whenever the user has enabled the option to show
+ *        a crosshair when the mouse is over a plot-based widget.
+ */
+bool UI::Dashboard::showCrosshairs() const
+{
+  return m_showCrosshairs;
+}
+
+/**
  * @brief Checks if the dashboard is currently available, determined by the
  *        data stream sources.
  *
@@ -690,6 +699,16 @@ void UI::Dashboard::resetData(const bool notify)
     Q_EMIT widgetCountChanged();
     Q_EMIT widgetVisibilityChanged();
   }
+}
+
+/**
+ * @brief Instructs plot widgets to display (or hide) the mouse crosshairs.
+ * @param enabled The new enabled setting.
+ */
+void UI::Dashboard::setShowCrosshairs(const bool enabled)
+{
+  m_showCrosshairs = enabled;
+  Q_EMIT showCrosshairsChanged();
 }
 
 /**

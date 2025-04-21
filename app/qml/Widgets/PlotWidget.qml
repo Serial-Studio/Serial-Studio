@@ -44,6 +44,16 @@ Item {
   property alias curveColors: _theme.seriesColors
 
   //
+  // Enable or disable showing crosshairs
+  //
+  property bool showCrosshairs: false
+
+  //
+  // Automatically focus the mouse area
+  //
+  Component.onCompleted: _overlayMouse.forceActiveFocus()
+
+  //
   // Set axis visibility based on user options and/or widget size
   //
   readonly property bool yLabelVisible: root.height >= 120 && (Cpp_UI_Dashboard.axisVisibility & SerialStudio.AxisY)
@@ -73,14 +83,39 @@ Item {
     const y = yViewStart + yVisibleRange * (1 - (mouseY / _graph.plotArea.height))
 
     // Update labels
-    _xPosLabel.text = "x = " + x.toFixed(2)
-    _yPosLabel.text = "y = " + y.toFixed(2)
+    _xPosLabel.text = x.toFixed(2)
+    _yPosLabel.text = y.toFixed(2)
+  }
+
+  //
+  // Translates pixel movement into world units and adjusts the axis pan
+  // accordingly. It ensures that the visible window stays within the axis
+  // bounds, preventing overscroll.
+  //
+  function adjustAxisPan(axis, axisLength, cursorPos, dPx, inverted) {
+    // Convert pixels to plot units (whatever they might be)
+    const fullRange = axis.max - axis.min
+    const visibleRange = fullRange / axis.zoom
+    const unitPerPixel = fullRange / axisLength
+
+    // Calculate new pan
+    const pxDiff = (inverted ? -dPx : dPx)
+    const zoomDampeningFactor = 1 / axis.zoom
+    let newPan = axis.pan + pxDiff * unitPerPixel * zoomDampeningFactor
+
+    // Clamp the pan so the view doesn't go beyond the axis bounds
+    const maxPan = (axis.max - (axis.min + visibleRange)) / 2
+    const minPan = (axis.min - (axis.max - visibleRange)) / 2
+    newPan = Math.min(Math.max(newPan, minPan), maxPan)
+
+    // Update the axis pan
+    axis.pan = newPan
   }
 
   //
   // Applies zoom centered on the cursor position and adjusts pan to keep the
   // same world point under the cursor, this results in a behavior similar
-  // to zooming in CAD programs...
+  // to zooming in CAD programs.
   //
   function applyCursorZoom(axis, oldZoom, newZoom, cursorPos, axisLength, inverted) {
     // Ensure that zoom level stays limited
@@ -132,23 +167,35 @@ Item {
   GraphsView {
     id: _graph
     anchors {
+      margins: 2
+      leftMargin: 4
+      rightMargin: 4
       top: parent.top
       right: parent.right
-      topMargin: root.yLabelVisible ? 4 : 0
-      leftMargin: root.yLabelVisible ? 2 : 0
-      rightMargin: root.xLabelVisible ? 4 : 0
-      bottomMargin: root.xLabelVisible ? 2 : 0
-      left: root.yLabelVisible ? _yLabelContainer.right : parent.left
-      bottom: root.xLabelVisible ? _xLabelContainer.top : parent.bottom
+      left: _yLabelContainer.right
+      bottom: _xLabelContainer.top
     }
 
     //
-    // Modify the margins depending on axis visibilty
+    // Set margins
     //
-    marginTop: root.yLabelVisible ? 8 : 0
-    marginRight: root.xLabelVisible ? 8 : 0
-    marginLeft: root.yLabelVisible ? -8 : (root.xLabelVisible ? -40 : -60)
-    marginBottom: root.xLabelVisible ? -8 : (root.yLabelVisible ? -20 : -40)
+    marginTop: 8
+    marginRight: 8
+    marginBottom: 8
+    marginLeft: root.showCrosshairs && !yLabelVisible ? yLabelMargin : -8
+    readonly property real yLabelMargin: Math.max(_maxYMetric.width, _minYMetric.width) + 8 + _yPosLabel.padding * 2
+
+    TextMetrics {
+      text: yMax
+      id: _maxYMetric
+      font: _yPosLabel.font
+    }
+
+    TextMetrics {
+      text: yMin
+      id: _minYMetric
+      font: _yPosLabel.font
+    }
 
     //
     // Set plot colors
@@ -227,9 +274,6 @@ Item {
     height: _graph.plotArea.height
     x: _graph.x + _graph.plotArea.x
     y: _graph.y + _graph.plotArea.y
-    opacity: _overlayMouse.containsMouse ? 1 : 0
-
-    Behavior on opacity { NumberAnimation {} }
 
     //
     // MouseArea for interactive graph navigation and inspection
@@ -247,7 +291,24 @@ Item {
 
       hoverEnabled: true
       anchors.fill: parent
-      cursorShape: Qt.CrossCursor
+      preventStealing: true
+      acceptedButtons: Qt.LeftButton
+      cursorShape: dragging ? Qt.ClosedHandCursor : Qt.CrossCursor
+
+      //
+      // Custom properties for drag handling
+      //
+      property real _lastX: 0
+      property real _lastY: 0
+      readonly property bool dragging: containsPress && _axisX.zoom > 1
+
+      //
+      // Drag state handling
+      //
+      onContainsPressChanged: {
+        _lastX = _overlayMouse.mouseX
+        _lastY = _overlayMouse.mouseY
+      }
 
       //
       // Handle mouse wheel zoom interaction:
@@ -259,31 +320,31 @@ Item {
       // - Mark the wheel event as handled to prevent propagation
       //
       onWheel: (wheel) => {
-        // Abort if not mouse is not in plot
-        if (!containsMouse)
-          return
+                 // Abort if not mouse is not in plot
+                 if (!containsMouse)
+                 return
 
-        // Obtain X/Y position relative to graph
-        const localX = mouseX - _graph.plotArea.x
-        const localY = mouseY - _graph.plotArea.y
+                 // Obtain X/Y position relative to graph
+                 const localX = mouseX - _graph.plotArea.x
+                 const localY = mouseY - _graph.plotArea.y
 
-        // Calculate new zoom factor
-        const zoomFactor = 1.15
-        const direction = wheel.angleDelta.y > 0 ? -1 : 1
-        const factor = Math.pow(zoomFactor, direction)
+                 // Calculate new zoom factor
+                 const zoomFactor = 1.15
+                 const delta = wheel.angleDelta.y / 120
+                 const factor = Math.pow(zoomFactor, -delta)
 
-        // Calculate new zoom values for both axes
-        const newZoomX = _axisX.zoom * factor
-        const newZoomY = _axisY.zoom * factor
+                 // Calculate new zoom values for both axes
+                 const newZoomX = _axisX.zoom * factor
+                 const newZoomY = _axisY.zoom * factor
 
-        // Zoom & navigate through the graph
-        root.applyCursorZoom(_axisX, _axisX.zoom, newZoomX, localX, _graph.plotArea.width, false)
-        root.applyCursorZoom(_axisY, _axisY.zoom, newZoomY, localY, _graph.plotArea.height, true)
+                 // Zoom & navigate through the graph
+                 root.applyCursorZoom(_axisX, _axisX.zoom, newZoomX, localX, _graph.plotArea.width, false)
+                 root.applyCursorZoom(_axisY, _axisY.zoom, newZoomY, localY, _graph.plotArea.height, true)
 
-        // Update crosshair labels to reflect new view window
-        root.updateCrosshairLabels(localX, localY)
-        wheel.accepted = true
-      }
+                 // Update crosshair labels to reflect new view window
+                 root.updateCrosshairLabels(localX, localY)
+                 wheel.accepted = true
+               }
 
       //
       // Handle mouse movement over the plot area:
@@ -296,41 +357,41 @@ Item {
       // - Update value labels to reflect current cursor world coordinates
       //
       onPositionChanged: (mouse) => {
-        // Abort if not mouse is not in plot
-        if (!containsMouse)
-          return
+                           // Abort if not mouse is not in plot
+                           if (!containsMouse)
+                           return
 
-        // Obtain graph size
-        const graphW = _graph.plotArea.width
-        const graphH = _graph.plotArea.height
+                           // Obtain graph size
+                           const graphW = _graph.plotArea.width
+                           const graphH = _graph.plotArea.height
 
-        // Crosshair position
-        _verCrosshair.x = mouse.x
-        _horCrosshair.y = mouse.y
-        _verCrosshair.requestPaint()
-        _horCrosshair.requestPaint()
+                           // Crosshair position
+                           _verCrosshair.x = mouse.x
+                           _horCrosshair.y = mouse.y
+                           _verCrosshair.requestPaint()
+                           _horCrosshair.requestPaint()
 
-        // Flip Y label left/right
-        if (mouse.x > graphW - _yPosLabel.width) {
-          _yPosLabel.anchors.right = undefined
-          _yPosLabel.anchors.left = parent.left
-        } else {
-          _yPosLabel.anchors.left = undefined
-          _yPosLabel.anchors.right = parent.right
-        }
+                           // Update values
+                           updateCrosshairLabels(mouse.x, mouse.y)
 
-        // Flip X label top/bottom
-        if (mouse.y < _xPosLabel.height) {
-          _xPosLabel.anchors.top = undefined
-          _xPosLabel.anchors.bottom = parent.bottom
-        } else {
-          _xPosLabel.anchors.bottom = undefined
-          _xPosLabel.anchors.top = parent.top
-        }
+                           // Micro-pan when dragging
+                           if (_overlayMouse.dragging) {
+                             // Obtain drag distance
+                             const dx = mouse.x - _lastX
+                             const dy = mouse.y - _lastY
 
-        // Update values
-        updateCrosshairLabels(mouse.x, mouse.y)
-      }
+                             // Update pan
+                             root.adjustAxisPan(_axisX, _graph.plotArea.width, mouse.x, dx, true)
+                             root.adjustAxisPan(_axisY, _graph.plotArea.height, mouse.y, dy, false)
+
+                             // Update drag start point
+                             _lastX = mouse.x
+                             _lastY = mouse.y
+
+                             // Update crosshair values again
+                             root.updateCrosshairLabels(mouse.x, mouse.y)
+                           }
+                         }
     }
 
     //
@@ -339,24 +400,19 @@ Item {
     Canvas {
       id: _verCrosshair
       width: 2
+      visible: root.showCrosshairs && _overlayMouse.containsMouse
 
       onPaint: {
         var ctx = getContext("2d")
         ctx.clearRect(0, 0, width, height)
         ctx.strokeStyle = Cpp_ThemeManager.colors["polar_indicator"]
         ctx.setLineDash([4, 4])
-
-        const labelTop = _xPosLabel.y
-        const labelBottom = labelTop + _xPosLabel.height
+        ctx.lineDashOffset = 0
 
         ctx.beginPath()
         ctx.moveTo(0.5, 0)
-        ctx.lineTo(0.5, labelTop)
-        ctx.moveTo(1.5, 0)
-        ctx.lineTo(1.5, labelTop)
-        ctx.moveTo(0.5, labelBottom)
         ctx.lineTo(0.5, height)
-        ctx.moveTo(1.5, labelBottom)
+        ctx.moveTo(1.5, 0)
         ctx.lineTo(1.5, height)
         ctx.stroke()
       }
@@ -372,6 +428,7 @@ Item {
     //
     Canvas {
       id: _horCrosshair
+      visible: root.showCrosshairs && _overlayMouse.containsMouse
 
       height: 2
       onPaint: {
@@ -379,18 +436,12 @@ Item {
         ctx.clearRect(0, 0, width, height)
         ctx.strokeStyle = Cpp_ThemeManager.colors["polar_indicator"]
         ctx.setLineDash([4, 4])
-
-        const labelLeft = _yPosLabel.x
-        const labelRight = labelLeft + _yPosLabel.width
+        ctx.lineDashOffset = 0
 
         ctx.beginPath()
         ctx.moveTo(0, 0.5)
-        ctx.lineTo(labelLeft, 0.5)
-        ctx.moveTo(0, 1.5)
-        ctx.lineTo(labelLeft, 1.5)
-        ctx.moveTo(labelRight, 0.5)
         ctx.lineTo(width, 0.5)
-        ctx.moveTo(labelRight, 1.5)
+        ctx.moveTo(0, 1.5)
         ctx.lineTo(width, 1.5)
         ctx.stroke()
       }
@@ -408,17 +459,17 @@ Item {
       id: _xPosLabel
 
       padding: 4
-      visible: _overlayMouse.containsMouse
       font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
-      color: Cpp_ThemeManager.colors["polar_indicator"]
+      color: Cpp_ThemeManager.colors["widget_base"]
+      visible: root.showCrosshairs && _overlayMouse.containsMouse
+
       background: Rectangle {
-        radius: 2
         opacity: 0.8
-        color: Cpp_ThemeManager.colors["widget_base"]
+        color: Cpp_ThemeManager.colors["polar_indicator"]
       }
 
       anchors {
-        top: parent.top
+        top: parent.bottom
         horizontalCenter: _verCrosshair.horizontalCenter
       }
     }
@@ -430,17 +481,17 @@ Item {
       id: _yPosLabel
 
       padding: 4
-      visible: _overlayMouse.containsMouse
       font: Cpp_Misc_CommonFonts.customMonoFont(0.8)
-      color: Cpp_ThemeManager.colors["polar_indicator"]
+      color: Cpp_ThemeManager.colors["widget_base"]
+      visible: root.showCrosshairs && _overlayMouse.containsMouse
+
       background: Rectangle {
-        radius: 2
         opacity: 0.8
-        color: Cpp_ThemeManager.colors["widget_base"]
+        color: Cpp_ThemeManager.colors["polar_indicator"]
       }
 
       anchors {
-        right: parent.right
+        right: parent.left
         verticalCenter: _horCrosshair.verticalCenter
       }
     }

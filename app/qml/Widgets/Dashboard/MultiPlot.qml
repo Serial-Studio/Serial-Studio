@@ -72,6 +72,7 @@ Item {
       curveColors: root.model.colors
       xAxis.tickInterval: root.model.xTickInterval
       yAxis.tickInterval: root.model.yTickInterval
+      showCrosshairs: Cpp_UI_Dashboard.showCrosshairs
 
       //
       // Register curves

@@ -72,6 +72,7 @@ class Dashboard : public QObject
   Q_PROPERTY(bool axisOptionsWidgetVisible READ axisOptionsWidgetVisible NOTIFY widgetCountChanged)
   Q_PROPERTY(QStringList availableWidgetIcons READ availableWidgetIcons NOTIFY widgetCountChanged)
   Q_PROPERTY(QStringList availableWidgetTitles READ availableWidgetTitles NOTIFY widgetCountChanged)
+  Q_PROPERTY(bool showCrosshairs READ showCrosshairs WRITE setShowCrosshairs NOTIFY showCrosshairsChanged)
   Q_PROPERTY(QList<SerialStudio::DashboardWidget> availableWidgets READ availableWidgets NOTIFY widgetCountChanged)
   Q_PROPERTY(bool showAreaUnderPlots READ showAreaUnderPlots WRITE setShowAreaUnderPlots NOTIFY showAreaUnderPlotsChanged)
   Q_PROPERTY(SerialStudio::AxisVisibility axisVisibility READ axisVisibility WRITE setAxisVisibility NOTIFY axisVisibilityChanged)
@@ -85,6 +86,7 @@ signals:
   void showLegendsChanged();
   void actionCountChanged();
   void widgetCountChanged();
+  void showCrosshairsChanged();
   void axisVisibilityChanged();
   void widgetVisibilityChanged();
   void showAreaUnderPlotsChanged();
@@ -103,6 +105,7 @@ public:
 
   [[nodiscard]] bool available() const;
   [[nodiscard]] bool showLegends() const;
+  [[nodiscard]] bool showCrosshairs() const;
   [[nodiscard]] bool streamAvailable() const;
   [[nodiscard]] bool showAreaUnderPlots() const;
   [[nodiscard]] bool pointsWidgetVisible() const;
@@ -153,6 +156,7 @@ public slots:
   void setPrecision(const int precision);
   void setShowLegends(const bool enabled);
   void resetData(const bool notify = true);
+  void setShowCrosshairs(const bool enabled);
   void setShowAreaUnderPlots(const bool enabled);
   void setAxisVisibility(const SerialStudio::AxisVisibility option);
   void setWidgetVisible(const SerialStudio::DashboardWidget widget,
@@ -171,6 +175,7 @@ private:
   int m_widgetCount;
   bool m_showLegends;
   bool m_updateRequired;
+  bool m_showCrosshairs;
   bool m_showAreaUnderPlots;
   SerialStudio::AxisVisibility m_axisVisibility;
 

@@ -108,6 +108,7 @@ Widgets.Pane {
     property alias points: plotPoints.value
     property alias showLegends: legends.checked
     property alias decimalPlaces: decimalPlaces.value
+    property alias showCrosshairs: crosshairs.checked
     property alias axisOptions: axisVisibility.currentIndex
     property alias showAreaUnderPlot: areaUnderPlot.checked
   }
@@ -364,6 +365,36 @@ Widgets.Pane {
             }
           } Item {
             visible: Cpp_UI_Dashboard.totalWidgetCount > 0 && Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1
+          }
+
+          //
+          // Show crosshairs
+          //
+          Label {
+            text: qsTr("Show Crosshairs:") + " "
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
+                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1)
+          } CheckBox {
+            id: crosshairs
+            implicitHeight: 18
+            Layout.leftMargin: -8
+            Layout.alignment: Qt.AlignLeft
+            checked: Cpp_UI_Dashboard.showCrosshairs
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
+                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1)
+            onCheckedChanged: {
+              if (checked !== Cpp_UI_Dashboard.showCrosshairs)
+                Cpp_UI_Dashboard.showCrosshairs = checked
+            }
+          } Item {
+            visible: Cpp_UI_Dashboard.totalWidgetCount > 0 &&
+                     (Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardFFT) >= 1 ||
+                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardPlot) >= 1 ||
+                      Cpp_UI_Dashboard.widgetCount(SerialStudio.DashboardMultiPlot) >= 1)
           }
 
           //

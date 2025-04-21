@@ -65,6 +65,8 @@ Item {
     xLabel: qsTr("Frequency (Hz)")
     xAxis.tickInterval: root.model.xTickInterval
     yAxis.tickInterval: root.model.yTickInterval
+    showCrosshairs: Cpp_UI_Dashboard.showCrosshairs
+
     Component.onCompleted: {
       graph.addSeries(areaSeries)
       graph.addSeries(upperSeries)

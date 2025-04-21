@@ -148,6 +148,7 @@ Window {
       anchors.centerIn: parent
 
       RowLayout {
+        id: _logo
         spacing: 8
         Layout.fillWidth: true
 
@@ -205,8 +206,9 @@ Window {
       Label {
         opacity: 0.8
         Layout.fillWidth: true
-        Layout.maximumWidth: 360
+        Layout.minimumWidth: 360
         visible: !Cpp_QtCommercial_Available
+        Layout.maximumWidth: _logo.implicitWidth
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("%1 is free software: you can redistribute it and/or modify " +
                    "it under the terms of the GNU General Public License as " +
@@ -224,7 +226,7 @@ Window {
       Label {
         opacity: 0.8
         Layout.fillWidth: true
-        Layout.maximumWidth: 360
+        Layout.maximumWidth: _logo.implicitWidth
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         visible: Cpp_QtCommercial_Available && app.proVersion
         text: qsTr("This configuration is licensed for commercial and proprietary use. " +
@@ -238,7 +240,7 @@ Window {
       Label {
         opacity: 0.8
         Layout.fillWidth: true
-        Layout.maximumWidth: 360
+        Layout.maximumWidth: _logo.implicitWidth
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         visible: Cpp_QtCommercial_Available && !app.proVersion
         text: qsTr("This configuration is for personal use only. Commercial use is prohibited " +
@@ -251,8 +253,8 @@ Window {
       Label {
         opacity: 0.7
         Layout.fillWidth: true
-        Layout.maximumWidth: 360
         visible: Cpp_QtCommercial_Available
+        Layout.maximumWidth: _logo.implicitWidth
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         text: qsTr("This software is provided 'as is' without warranty of " +
                    "any kind, express or implied, including but not limited " +

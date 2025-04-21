@@ -584,51 +584,32 @@ void IO::Manager::setDriver(HAL_Driver *driver)
 }
 
 /**
- * @brief Event filter to capture and handle key events for playback controls.
+ * @brief Intercepts key press events to toggle the paused state when
+ *        Ctrl+P is pressed.
  *
- * This function intercepts key events when a device is open and routes
- * them to `handleKeyPress` for processing. If the key event corresponds to a
- * playback control (e.g., play/pause, next, previous), the event is handled;
- * otherwise, it is passed to the default event filter.
+ * If the manager is connected and the user presses Ctrl+P, the data streaming
+ * paused state is toggled (just like flipping a HOLD switch).
  *
- * @param obj The object that the event is dispatched to.
- * @param event The event being processed.
- * @return true if the event was handled, false otherwise.
+ * All other events are passed on to the default QObject filter.
+ *
+ * @param obj   The object the event is dispatched to.
+ * @param event The event being filtered.
+ * @return true if the event was handled (Ctrl+P detected and acted upon);
+ *              false otherwise.
  */
 bool IO::Manager::eventFilter(QObject *obj, QEvent *event)
 {
   if (isConnected() && event->type() == QEvent::KeyPress)
   {
-    auto *keyEvent = static_cast<QKeyEvent *>(event);
-    return handleKeyPress(keyEvent);
+    const auto *e = static_cast<QKeyEvent *>(event);
+    if ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_P)
+    {
+      setPaused(!paused());
+      return true;
+    }
+
+    return false;
   }
 
   return QObject::eventFilter(obj, event);
-}
-
-/**
- * @brief Handles key press events to control playback actions via shortcuts.
- *
- * This function is called by the `eventFilter` when a key press event occurs.
- * It checks for specific key combinations used for playback control.
- *
- * Supported shortcuts:
- * - Ctrl+Space or Ctrl+H: Toggles play/pause.
- *
- * Raw Space is intentionally ignored to avoid interference with text input
- * fields.
- *
- * @param keyEvent The key event to handle.
- * @return true if the event was handled, false otherwise.
- */
-bool IO::Manager::handleKeyPress(QKeyEvent *keyEvent)
-{
-  if ((keyEvent->modifiers() & Qt::ControlModifier)
-      && keyEvent->key() == Qt::Key_P)
-  {
-    setPaused(!paused());
-    return true;
-  }
-
-  return false;
 }

@@ -135,7 +135,6 @@ private slots:
 
 protected:
   bool eventFilter(QObject *obj, QEvent *event) override;
-  bool handleKeyPress(QKeyEvent *keyEvent);
 
 private:
   bool m_paused;
