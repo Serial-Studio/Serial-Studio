@@ -48,6 +48,7 @@ UI::Dashboard::Dashboard()
   , m_widgetCount(0)
   , m_showLegends(true)
   , m_updateRequired(false)
+  , m_showCrosshairs(true)
   , m_showAreaUnderPlots(true)
   , m_axisVisibility(SerialStudio::AxisXY)
 {
