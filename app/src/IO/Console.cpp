@@ -330,7 +330,7 @@ void IO::Console::setupExternalConnections()
 }
 
 /**
- * Sends the given @a data to the currently connected device using the options
+ * Sends the given @a data to the currently isConnected device using the options
  * specified by the user with the rest of the functions of this class.
  *
  * @note @c data is added to the history of sent commands, regardless if the
@@ -339,7 +339,7 @@ void IO::Console::setupExternalConnections()
 void IO::Console::send(const QString &data)
 {
   // Check conditions
-  if (!Manager::instance().connected())
+  if (!Manager::instance().isConnected())
     return;
 
   // Add user command to history

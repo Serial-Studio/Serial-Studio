@@ -301,7 +301,6 @@ Item {
           return
 
         // Obtain graph size
-        const margin = 40
         const graphW = _graph.plotArea.width
         const graphH = _graph.plotArea.height
 
@@ -312,7 +311,7 @@ Item {
         _horCrosshair.requestPaint()
 
         // Flip Y label left/right
-        if (mouse.x > graphW - margin) {
+        if (mouse.x > graphW - _yPosLabel.width) {
           _yPosLabel.anchors.right = undefined
           _yPosLabel.anchors.left = parent.left
         } else {
@@ -321,7 +320,7 @@ Item {
         }
 
         // Flip X label top/bottom
-        if (mouse.y < margin) {
+        if (mouse.y < _xPosLabel.height) {
           _xPosLabel.anchors.top = undefined
           _xPosLabel.anchors.bottom = parent.bottom
         } else {
@@ -346,10 +345,18 @@ Item {
         ctx.clearRect(0, 0, width, height)
         ctx.strokeStyle = Cpp_ThemeManager.colors["polar_indicator"]
         ctx.setLineDash([4, 4])
+
+        const labelTop = _xPosLabel.y
+        const labelBottom = labelTop + _xPosLabel.height
+
         ctx.beginPath()
         ctx.moveTo(0.5, 0)
-        ctx.lineTo(0.5, height)
+        ctx.lineTo(0.5, labelTop)
         ctx.moveTo(1.5, 0)
+        ctx.lineTo(1.5, labelTop)
+        ctx.moveTo(0.5, labelBottom)
+        ctx.lineTo(0.5, height)
+        ctx.moveTo(1.5, labelBottom)
         ctx.lineTo(1.5, height)
         ctx.stroke()
       }
@@ -372,10 +379,18 @@ Item {
         ctx.clearRect(0, 0, width, height)
         ctx.strokeStyle = Cpp_ThemeManager.colors["polar_indicator"]
         ctx.setLineDash([4, 4])
+
+        const labelLeft = _yPosLabel.x
+        const labelRight = labelLeft + _yPosLabel.width
+
         ctx.beginPath()
         ctx.moveTo(0, 0.5)
-        ctx.lineTo(width, 0.5)
+        ctx.lineTo(labelLeft, 0.5)
         ctx.moveTo(0, 1.5)
+        ctx.lineTo(labelLeft, 1.5)
+        ctx.moveTo(labelRight, 0.5)
+        ctx.lineTo(width, 0.5)
+        ctx.moveTo(labelRight, 1.5)
         ctx.lineTo(width, 1.5)
         ctx.stroke()
       }

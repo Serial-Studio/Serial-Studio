@@ -26,8 +26,20 @@ Loader {
   active: false
   asynchronous: true
 
+  property var dialog: null
+
+  function activate() {
+    if (!active)
+      active = true
+
+    else if (dialog) {
+      dialog.raise()
+      dialog.requestActivate()
+    }
+  }
+
   onLoaded: {
-    var dialog = item
+    root.dialog = item
     dialog.show()
     dialog.onClosing.connect(function() {
       root.active = false;

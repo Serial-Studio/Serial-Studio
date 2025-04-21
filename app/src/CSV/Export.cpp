@@ -96,6 +96,10 @@ void CSV::Export::setupExternalConnections()
           this, &Export::registerFrame, Qt::QueuedConnection);
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::timeout1Hz, this,
           &Export::writeValues);
+  connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [=] {
+    if (IO::Manager::instance().paused())
+      closeFile();
+  });
 }
 
 /**
@@ -190,7 +194,7 @@ void CSV::Export::writeValues()
     {
       // Print value for current pair
       const auto fieldIndex = indexHeaderPairs[i].first;
-      m_textStream << fieldValues.value(fieldIndex, QStringLiteral(""));
+      m_textStream << fieldValues.value(fieldIndex, QLatin1String(""));
 
       // Add comma or newline based on the position in the row
       if (i < indexHeaderPairs.count() - 1)
@@ -324,7 +328,7 @@ void CSV::Export::registerFrame(const JSON::Frame &frame)
 
   // Don't save CSV data when the device/service is not connected
 #ifdef USE_QT_COMMERCIAL
-  if (!IO::Manager::instance().connected()
+  if (!IO::Manager::instance().isConnected()
       && !(MQTT::Client::instance().isConnected()
            && MQTT::Client::instance().isSubscriber()))
     return;

@@ -269,7 +269,7 @@ Window {
           icon.color: Cpp_ThemeManager.colors["button_text"]
           onClicked: {
             root.close()
-            Qt.openUrlExternally("https://store.serial-studio.com/")
+            Qt.openUrlExternally("https://store.serial-studio.com/buy/ba46c099-0d51-4d98-9154-6be5c35bc1ec")
           }
         }
       }

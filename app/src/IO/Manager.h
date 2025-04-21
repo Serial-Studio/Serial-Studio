@@ -51,8 +51,8 @@ class Manager : public QObject
   Q_PROPERTY(bool readWrite
              READ readWrite
              NOTIFY connectedChanged)
-  Q_PROPERTY(bool connected
-             READ connected
+  Q_PROPERTY(bool isConnected
+             READ isConnected
              NOTIFY connectedChanged)
   Q_PROPERTY(bool paused
              READ paused
@@ -106,7 +106,7 @@ public:
   [[nodiscard]] bool paused();
   [[nodiscard]] bool readOnly();
   [[nodiscard]] bool readWrite();
-  [[nodiscard]] bool connected();
+  [[nodiscard]] bool isConnected();
   [[nodiscard]] bool configurationOk();
 
   [[nodiscard]] HAL_Driver *driver();

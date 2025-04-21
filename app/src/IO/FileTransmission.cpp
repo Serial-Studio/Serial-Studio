@@ -73,7 +73,7 @@ bool IO::FileTransmission::active() const
  */
 bool IO::FileTransmission::fileOpen() const
 {
-  return m_file.isOpen() && IO::Manager::instance().connected();
+  return m_file.isOpen() && IO::Manager::instance().isConnected();
 }
 
 /**
@@ -185,7 +185,7 @@ void IO::FileTransmission::stopTransmission()
 void IO::FileTransmission::beginTransmission()
 {
   // Only allow transmission if serial device is open
-  if (IO::Manager::instance().connected())
+  if (IO::Manager::instance().isConnected())
   {
     // If file has already been sent, reset text stream position
     if (transmissionProgress() == 100)
@@ -247,7 +247,7 @@ void IO::FileTransmission::sendLine()
     return;
 
   // Device not open, abort
-  if (!IO::Manager::instance().connected())
+  if (!IO::Manager::instance().isConnected())
     return;
 
   // Send next line to device

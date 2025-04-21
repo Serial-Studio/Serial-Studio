@@ -45,7 +45,6 @@ Window {
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |
-        Qt.WindowStaysOnTopHint |
         Qt.WindowCloseButtonHint
   }
 
@@ -734,7 +733,7 @@ Window {
 
           opacity: enabled ? 1 : 0.8
           enabled: app.proVersion ?
-                     (Cpp_MQTT_Client.isSubscriber ? !Cpp_IO_Manager.connected : true) :
+                     (Cpp_MQTT_Client.isSubscriber ? !Cpp_IO_Manager.isConnected : true) :
                      false
         }
       }

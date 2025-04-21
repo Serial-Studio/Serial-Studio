@@ -94,6 +94,9 @@ Window {
 
       root.showNormal()
     }
+
+    root.raise()
+    root.requestActivate()
   }
 
   //

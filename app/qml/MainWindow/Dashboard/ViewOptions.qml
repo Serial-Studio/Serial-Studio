@@ -460,7 +460,9 @@ Widgets.Pane {
 
           Button {
             Layout.fillWidth: true
+            opacity: enabled ? 1 : 0.5
             checked: Cpp_IO_Manager.paused
+            enabled: Cpp_IO_Manager.isConnected
             onClicked: Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
 
             RowLayout {

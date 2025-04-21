@@ -185,7 +185,7 @@ bool UI::Dashboard::showLegends() const
  */
 bool UI::Dashboard::streamAvailable() const
 {
-  bool available = IO::Manager::instance().connected();
+  bool available = IO::Manager::instance().isConnected();
   available |= CSV::Player::instance().isOpen();
 
 #ifdef USE_QT_COMMERCIAL

@@ -70,7 +70,7 @@ Item {
         id: _langCombo
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.connected
+        enabled: !Cpp_IO_Manager.isConnected
         currentIndex: Cpp_Misc_Translator.language
         model: Cpp_Misc_Translator.availableLanguages
         onCurrentIndexChanged: {

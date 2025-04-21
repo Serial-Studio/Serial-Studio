@@ -120,20 +120,20 @@ Item {
   //
   // Dialog display functions (FOSS)
   //
-  function showAboutDialog()       { aboutDialog.active = true }
+  function showAboutDialog()       { aboutDialog.activate() }
+  function showExternalConsole()   { externalConsole.activate() }
   function showProjectEditor()     { projectEditor.displayWindow() }
-  function showExternalConsole()   { externalConsole.active = true }
-  function showAcknowledgements()  { acknowledgementsDialog.active = true }
-  function showFileTransmission()  { fileTransmissionDialog.active = true }
+  function showAcknowledgements()  { acknowledgementsDialog.activate() }
+  function showFileTransmission()  { fileTransmissionDialog.activate() }
 
   //
   // Dialog display functions (commercial)
   //
   function showLicenseDialog() {
     if (Cpp_QtCommercial_Available)
-      licenseDialog.active = true
+      licenseDialog.activate()
   } function showMqttConfiguration() {
     if (Cpp_QtCommercial_Available)
-      mqttConfiguration.active = true
+      mqttConfiguration.activate()
   }
 }

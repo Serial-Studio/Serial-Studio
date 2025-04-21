@@ -326,7 +326,7 @@ Widgets.SmartWindow {
     //
     Widgets.JSONDropArea {
       anchors.fill: parent
-      enabled: !Cpp_IO_Manager.connected
+      enabled: !Cpp_IO_Manager.isConnected
     }
   }
 }

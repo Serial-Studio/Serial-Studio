@@ -48,7 +48,7 @@ Item {
         id: devLabel
         opacity: enabled ? 1 : 0.5
         text: qsTr("Device") + ":"
-        enabled: !Cpp_IO_Manager.connected
+        enabled: !Cpp_IO_Manager.isConnected
         Layout.minimumWidth: Math.max(devLabel.implicitWidth,
                                       servLabel.implicitWidth,
                                       charLabel.implicitWidth)
@@ -58,7 +58,7 @@ Item {
         id: _deviceCombo
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.connected
+        enabled: !Cpp_IO_Manager.isConnected
         model: Cpp_IO_Bluetooth_LE.deviceNames
         onCurrentIndexChanged: {
           if (currentIndex !== Cpp_IO_Bluetooth_LE.currentDevice)
@@ -72,7 +72,7 @@ Item {
         implicitWidth: 24
         implicitHeight: 24
         opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.connected
+        enabled: !Cpp_IO_Manager.isConnected
         onClicked: Cpp_IO_Bluetooth_LE.startDiscovery()
         icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]

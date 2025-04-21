@@ -162,7 +162,7 @@ Rectangle {
       Layout.alignment: Qt.AlignVCenter
       onClicked: Cpp_CSV_Player.openFile()
       icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
-      enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.connected
+      enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.isConnected
     }
 
     //
@@ -324,7 +324,7 @@ Rectangle {
       font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.minimumWidth: metrics.width + 16
       Layout.maximumWidth: metrics.width + 16
-      checked: Cpp_IO_Manager.connected || mqttSubscriber
+      checked: Cpp_IO_Manager.isConnected || mqttSubscriber
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
                              "qrc:/rcc/icons/toolbar/disconnect.svg"

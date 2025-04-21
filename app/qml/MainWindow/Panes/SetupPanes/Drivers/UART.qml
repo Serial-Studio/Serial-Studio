@@ -77,13 +77,13 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("COM Port") + ":"
-      enabled: !Cpp_IO_Manager.connected
+      enabled: !Cpp_IO_Manager.isConnected
     } ComboBox {
       id: _portCombo
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.portList
-      enabled: !Cpp_IO_Manager.connected
+      enabled: !Cpp_IO_Manager.isConnected
       currentIndex: Cpp_IO_Serial.portIndex
       editable: Qt.platform.os !== "windows"
       onCurrentIndexChanged: {

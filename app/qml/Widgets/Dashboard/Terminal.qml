@@ -324,7 +324,7 @@ Item {
           target: Cpp_IO_Manager
 
           function onConnectedChanged() {
-            if (!Cpp_IO_Manager.connected)
+            if (!Cpp_IO_Manager.isConnected)
               send.clear()
           }
         }

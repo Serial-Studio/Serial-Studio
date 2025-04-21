@@ -113,46 +113,56 @@ IO::Manager &IO::Manager::instance()
   return instance;
 }
 
+/**
+ * @brief Indicates whether data streaming is currently paused while the data
+ *        source remains connected.
+ *
+ * This state is similar to pressing the "HOLD" button on an oscilloscope—data
+ * acquisition is temporarily halted, but the input connection is still active.
+ *
+ * @return true if streaming is paused but the source is still connected;
+ *              false otherwise.
+ */
 bool IO::Manager::paused()
 {
-  return m_paused;
+  return isConnected() && m_paused;
 }
 
 /**
  * @brief Checks if the Manager is in read-only mode.
  *
- * Read-only mode is determined by whether the device is connected and
+ * Read-only mode is determined by whether the device is isConnected and
  * write operations are disabled.
  *
  * @return True if the Manager is in read-only mode, false otherwise.
  */
 bool IO::Manager::readOnly()
 {
-  return connected() && !m_writeEnabled;
+  return isConnected() && !m_writeEnabled;
 }
 
 /**
  * @brief Checks if the Manager is in read-write mode.
  *
- * Read-write mode is determined by whether the device is connected and
+ * Read-write mode is determined by whether the device is isConnected and
  * write operations are enabled.
  *
  * @return True if the Manager is in read-write mode, false otherwise.
  */
 bool IO::Manager::readWrite()
 {
-  return connected() && m_writeEnabled;
+  return isConnected() && m_writeEnabled;
 }
 
 /**
- * @brief Checks if the Manager is connected to a device.
+ * @brief Checks if the Manager is isConnected to a device.
  *
  * Determines the connection state by checking the driver status or the MQTT
  * subscription status.
  *
- * @return True if a device is connected or subscribed, false otherwise.
+ * @return True if a device is isConnected or subscribed, false otherwise.
  */
-bool IO::Manager::connected()
+bool IO::Manager::isConnected()
 {
   if (driver())
     return driver()->isOpen();
@@ -249,18 +259,18 @@ QStringList IO::Manager::availableBuses() const
 }
 
 /**
- * @brief Writes data to the connected device.
+ * @brief Writes data to the isConnected device.
  *
- * Sends the specified data to the connected device through the active driver.
+ * Sends the specified data to the isConnected device through the active driver.
  * Emits the `dataSent` signal upon successful transmission.
  *
  * @param data The data to be written.
  * @return The number of bytes written, or -1 if an error occurs or no device is
- *         connected.
+ *         isConnected.
  */
 qint64 IO::Manager::writeData(const QByteArray &data)
 {
-  if (connected())
+  if (isConnected())
   {
     const auto bytes = driver()->write(data);
 
@@ -280,12 +290,12 @@ qint64 IO::Manager::writeData(const QByteArray &data)
 /**
  * @brief Toggles the connection state of the Manager.
  *
- * If the Manager is currently connected, it disconnects the device. If it is
- * not connected, it attempts to establish a connection.
+ * If the Manager is currently isConnected, it disconnects the device. If it is
+ * not isConnected, it attempts to establish a connection.
  */
 void IO::Manager::toggleConnection()
 {
-  if (connected())
+  if (isConnected())
     disconnectDevice();
   else
     connectDevice();
@@ -404,7 +414,7 @@ void IO::Manager::setupExternalConnections()
  */
 void IO::Manager::setPaused(const bool paused)
 {
-  m_paused = paused && connected();
+  m_paused = paused && isConnected();
   Q_EMIT pausedChanged();
 }
 
@@ -587,7 +597,7 @@ void IO::Manager::setDriver(HAL_Driver *driver)
  */
 bool IO::Manager::eventFilter(QObject *obj, QEvent *event)
 {
-  if (connected() && event->type() == QEvent::KeyPress)
+  if (isConnected() && event->type() == QEvent::KeyPress)
   {
     auto *keyEvent = static_cast<QKeyEvent *>(event);
     return handleKeyPress(keyEvent);

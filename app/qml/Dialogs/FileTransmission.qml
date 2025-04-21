@@ -50,7 +50,6 @@ Window {
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |
-        Qt.WindowStaysOnTopHint |
         Qt.WindowCloseButtonHint
   }
 
@@ -60,7 +59,7 @@ Window {
   Connections {
     target: Cpp_IO_Manager
     function onConnectedChanged() {
-      if (!Cpp_IO_Manager.connected)
+      if (!Cpp_IO_Manager.isConnected)
         root.close()
     }
   }

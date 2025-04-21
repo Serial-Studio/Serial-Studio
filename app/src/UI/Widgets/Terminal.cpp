@@ -105,7 +105,7 @@ Widgets::Terminal::Terminal(QQuickItem *parent)
 
   // Clear the screen when device is connected/disconnected
   connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=] {
-    if (IO::Manager::instance().connected())
+    if (IO::Manager::instance().isConnected())
       clear();
   });
 

@@ -37,7 +37,7 @@ Widgets.Pane {
   // Create an external window when user clicks on the action button of the pane
   //
   buttonIcon: "qrc:/rcc/icons/buttons/expand.svg"
-  onActionButtonClicked: windowLoader.active = true
+  onActionButtonClicked: windowLoader.activate()
 
   //
   // Disable widget rendering when it is not visible on the user's screen
@@ -100,6 +100,23 @@ Widgets.Pane {
     asynchronous: true
     onLoaded: windowLoader.item.showNormal()
 
+    property Window window: null
+
+    function activate() {
+      if (!active)
+        active = true
+
+      else if (window) {
+        window.raise()
+        window.requestActivate()
+      }
+
+      else {
+        active = false
+        active = true
+      }
+    }
+
     sourceComponent: Component {
       Window {
         id: window
@@ -109,6 +126,7 @@ Widgets.Pane {
         minimumWidth: 640 / 2
         minimumHeight: 480 / 2
         title: widget.widgetTitle
+        Component.onCompleted: windowLoader.window = this
 
         //
         // Close window instead of app
@@ -123,6 +141,7 @@ Widgets.Pane {
         //
         onClosing: {
           Cpp_NativeWindow.removeWindow(window)
+          windowLoader.window = null
           windowLoader.active = false
         }
 

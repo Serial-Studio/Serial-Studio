@@ -148,7 +148,7 @@ void IO::FrameReader::setupExternalConnections()
 void IO::FrameReader::processData(const QByteArray &data)
 {
   // Stop if not connected
-  if (!IO::Manager::instance().connected())
+  if (!IO::Manager::instance().isConnected())
     return;
 
   // Add data to circular buffer
@@ -245,7 +245,7 @@ void IO::FrameReader::setFrameDetectionMode(
 void IO::FrameReader::readFrames()
 {
   // Stop parsing data when a device is disconnected
-  if (!IO::Manager::instance().connected() && m_dataBuffer.size() > 0)
+  if (!IO::Manager::instance().isConnected() && m_dataBuffer.size() > 0)
   {
     reset();
     return;

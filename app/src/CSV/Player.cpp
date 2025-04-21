@@ -262,7 +262,7 @@ void CSV::Player::previousFrame()
  * @brief Opens a CSV file, processes its data, and prepares it for playback.
  *
  * This function attempts to open the specified CSV file for reading and
- * processes the data for replaying. It checks if a device is connected and,
+ * processes the data for replaying. It checks if a device is isConnected and,
  * if so, asks the user to disconnect it.
  *
  * The function reads the CSV file into a string matrix (`m_csvData`), validates
@@ -290,7 +290,7 @@ void CSV::Player::openFile(const QString &filePath)
   closeFile();
 
   // Device is connected, warn user & disconnect
-  if (IO::Manager::instance().connected())
+  if (IO::Manager::instance().isConnected())
   {
     auto response = Misc::Utilities::showMessageBox(
         tr("Device Connection Active"),

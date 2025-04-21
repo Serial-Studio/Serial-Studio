@@ -132,7 +132,7 @@ void IO::ConsoleExport::setExportEnabled(const bool enabled)
 void IO::ConsoleExport::writeData()
 {
   // Device not connected, abort
-  if (!IO::Manager::instance().connected())
+  if (!IO::Manager::instance().isConnected())
     return;
 
   // Export is disabled, abort

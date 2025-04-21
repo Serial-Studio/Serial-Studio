@@ -49,7 +49,6 @@ Window {
   Component.onCompleted: {
     root.flags = Qt.Dialog |
         Qt.WindowTitleHint |
-        Qt.WindowStaysOnTopHint |
         Qt.WindowCloseButtonHint
   }
 
@@ -276,8 +275,8 @@ Window {
       Button {
         Layout.fillWidth: true
         text: qsTr("Manage License")
-        onClicked: app.showLicenseDialog()
         visible: Cpp_QtCommercial_Available
+        onClicked: app.showLicenseDialog()
       }
 
       //
